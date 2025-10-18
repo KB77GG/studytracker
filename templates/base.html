@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>学习计划与打卡系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+  <header class="topbar">
+    <h1>学习计划与打卡系统</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">首页</a>
+      {% if current_user.is_authenticated %}
+        {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
+          <a href="{{ url_for('teacher_plans') }}">教师工作台</a>
+          <a href="{{ url_for('report_page') }}">汇总报告</a>
+          <a href="{{ url_for('bulk_page') }}">批量添加</a>
+        {% endif %}
+        {% if current_user.role == 'student' %}
+          <a href="{{ url_for('student_today') }}">今日计划</a>
+        {% endif %}
+        {% if current_user.role == 'admin' %}
+          <a href="{{ url_for('users_page') }}">用户管理</a>
+        {% endif %}
+        {% if current_user.role == 'admin' %}
+          <a href="{{ url_for('tasks_page') }}">旧版任务</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}">退出</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">登录</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for msg in messages %}
+            <li>{{ msg }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      const list = document.querySelectorAll('.flashes, .flash, .alert, .message');
+      list.forEach(function(el){
+        el.style.transition = 'opacity 0.8s ease';
+        setTimeout(function(){ el.style.opacity = '0'; }, 2500); // 2.5s fade start
+        setTimeout(function(){ el.remove(); }, 3500);            // 3.5s remove
+      });
+    });
+  </script>
+</body>
+</html>

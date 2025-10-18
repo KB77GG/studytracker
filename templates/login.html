@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>账号登录</h2>
+<form method="post">
+  <p><label>用户名：</label><input name="username" required></p>
+  <p><label>密码：</label><input name="password" type="password" required></p>
+  <p><button type="submit">登录</button></p>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}<p style="color:#c00">{{ messages[0] }}</p>{% endif %}
+  {% endwith %}
+</form>
+{% endblock %}

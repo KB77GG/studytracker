@@ -1,0 +1,575 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>辅导任务记录</h2>
+
+<form method="post" style="margin-bottom:16px;">
+  <label>日期：</label>
+  <input type="date" name="date" value="{{ today }}">
+  <label>学生：</label>
+  <input name="student_name" placeholder="学生姓名" required style="width:140px;">
+  <label>类别：</label>
+  <select name="category" required>
+    <optgroup label="基础">
+      <option value="基础-四级词汇">四级词汇</option>
+      <option value="基础-语法练习">语法练习</option>
+      <option value="基础-口语素材朗读">口语素材朗读</option>
+    </optgroup>
+    <optgroup label="雅思">
+      <option value="雅思-听力-精听">听力-精听</option>
+      <option value="雅思-听力-听力单词">听力-听力单词</option>
+      <option value="雅思-阅读-精读">阅读-精读</option>
+      <option value="雅思-阅读-四级单词/阅读词汇">阅读-四级单词/阅读词汇</option>
+      <option value="雅思-口语-一对一对练">口语-一对一对练</option>
+      <option value="雅思-写作-翻译句子">写作-翻译句子</option>
+      <option value="雅思-写作-作文逻辑链训练">写作-作文逻辑链训练</option>
+    </optgroup>
+    <optgroup label="托福">
+      <option value="托福-听力-精听">听力-精听</option>
+      <option value="托福-听力-听力单词">听力-听力单词</option>
+      <option value="托福-阅读-精读">阅读-精读</option>
+      <option value="托福-阅读-阅读词汇">阅读-阅读词汇</option>
+      <option value="托福-口语-素材朗读">口语-素材朗读</option>
+      <option value="托福-口语-背诵">口语-背诵</option>
+      <option value="托福-写作-翻译句子">写作-翻译句子</option>
+      <option value="托福-写作-作文逻辑链训练">写作-作文逻辑链训练</option>
+    </optgroup>
+  </select>
+  <label>任务描述：</label>
+  <input name="detail" placeholder="如：精听 TPO1 S3 / 四级词汇 Day2" required style="min-width:240px;">
+  <label>状态：</label>
+  <select name="status">
+    <option value="pending">未开始</option>
+    <option value="progress">进行中</option>
+    <option value="done">已完成</option>
+  </select>
+  <label>预计用时（分钟）：</label>
+  <input type="number" name="planned_minutes" min="0" placeholder="例如 60">
+  <label>正确率（0-100）：</label>
+  <input type="number" name="accuracy" min="0" max="100" step="0.1" placeholder="可选">
+  <label>备注：</label>
+  <input name="note" placeholder="可选">
+
+  <button type="submit">添加</button>
+</form>
+
+<div id="filters" style="margin:10px 0 6px; display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center;">
+  <label>筛学生：</label>
+  <input id="filterStudent" placeholder="输入学生姓名的一部分" style="width:160px;">
+
+  <label>筛类别：</label>
+  <select id="filterCategory" style="min-width:220px;">
+    <option value="">全部</option>
+    <optgroup label="基础">
+      <option value="基础-四级词汇">四级词汇</option>
+      <option value="基础-语法练习">语法练习</option>
+      <option value="基础-口语素材朗读">口语素材朗读</option>
+    </optgroup>
+    <optgroup label="雅思">
+      <option value="雅思-听力-精听">听力-精听</option>
+      <option value="雅思-听力-听力单词">听力-听力单词</option>
+      <option value="雅思-阅读-精读">阅读-精读</option>
+      <option value="雅思-阅读-四级单词/阅读词汇">阅读-四级单词/阅读词汇</option>
+      <option value="雅思-口语-一对一对练">口语-一对一对练</option>
+      <option value="雅思-写作-翻译句子">写作-翻译句子</option>
+      <option value="雅思-写作-作文逻辑链训练">写作-作文逻辑链训练</option>
+    </optgroup>
+    <optgroup label="托福">
+      <option value="托福-听力-精听">听力-精听</option>
+      <option value="托福-听力-听力单词">听力-听力单词</option>
+      <option value="托福-阅读-精读">阅读-精读</option>
+      <option value="托福-阅读-阅读词汇">阅读-阅读词汇</option>
+      <option value="托福-口语-素材朗读">口语-素材朗读</option>
+      <option value="托福-口语-背诵">口语-背诵</option>
+      <option value="托福-写作-翻译句子">写作-翻译句子</option>
+      <option value="托福-写作-作文逻辑链训练">写作-作文逻辑链训练</option>
+    </optgroup>
+  </select>
+
+  <label>筛状态：</label>
+  <select id="filterStatus">
+    <option value="">全部</option>
+    <option value="pending">未开始</option>
+    <option value="progress">进行中</option>
+    <option value="done">已完成</option>
+  </select>
+
+  <button id="filterClear" type="button">清除筛选</button>
+  <span id="filterStat" style="color:var(--muted);"></span>
+</div>
+
+{% set grouped = items|sort(attribute='student_name')|groupby('student_name') %}
+<div class="task-accordion">
+  {% for group in grouped %}
+  {% set student = group.grouper|default('未填写学生', true) %}
+  <details class="student-group" data-student="{{ student }}" {% if loop.first %}open{% endif %}>
+    <summary>
+      <span class="student-name">{{ student }}</span>
+      <span class="student-summary">
+        <span class="student-count">任务数 {{ group.list|length }}</span>
+      </span>
+    </summary>
+    <div class="student-tasks">
+      <table class="task-table task-subtable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>日期</th>
+            <th>类别</th>
+            <th>任务</th>
+            <th>状态</th>
+            <th>用时</th>
+            <th>完成率</th>
+            <th>正确率</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in group.list %}
+          <tr data-id="{{ t.id }}" data-student="{{ student }}" data-planned="{{ t.planned_minutes or 0 }}" data-actual="{{ (t.actual_minutes * 60)|int if t.actual_minutes is defined else 0 }}">
+            <td class="task-id">{{ t.id }}</td>
+            <td class="task-date">{{ t.date }}</td>
+            <td class="task-category">{{ t.category }}</td>
+            <td class="task-detail">{{ t.detail }}</td>
+            <td>
+              <span class="badge {{ 'status-pending' if t.status=='pending' else ('status-progress' if t.status=='progress' else 'status-done') }}">{{ "未开始" if t.status=="pending" else ("进行中" if t.status=="progress" else "已完成") }}</span>
+            </td>
+            <td class="task-time">—</td>
+            <td class="task-progress">{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}%</td>
+            <td class="task-accuracy">{{ "%.1f"|format(t.accuracy or 0) }}%</td>
+            <td class="task-note">{{ t.note }}</td>
+            <td>
+              <select class="status-select">
+                <option value="pending" {{ 'selected' if t.status=='pending' else '' }}>未开始</option>
+                <option value="progress" {{ 'selected' if t.status=='progress' else '' }}>进行中</option>
+                <option value="done" {{ 'selected' if t.status=='done' else '' }}>已完成</option>
+              </select>
+              <span class="timer" aria-label="计时" title="计时">00:00:00</span>
+              <button class="btn-start" type="button">开始计时</button>
+              <button class="btn-pause" type="button" style="display:none;">暂停</button>
+              <button class="btn-stop" type="button" style="display:none;">结束</button>
+              <button class="btn-edit" type="button">编辑</button>
+              <button class="btn-delete" type="button">删除</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  {% endfor %}
+</div>
+
+<style>
+.task-accordion{ display:flex; flex-direction:column; gap:14px; margin-top:8px; }
+.student-group{ border:1px solid var(--border, #dcdfe6); border-radius:10px; background:var(--card, #fff); overflow:hidden; }
+.student-group summary{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; cursor:pointer; font-weight:600; background:var(--table-header, #f7f7fa); }
+.student-group summary::-webkit-details-marker{ display:none; }
+.student-group[open] > summary{ border-bottom:1px solid var(--border, #dcdfe6); }
+.student-name{ font-size:1.05rem; color:var(--text-strong, #333); }
+.student-summary{ display:flex; align-items:center; gap:12px; color:var(--muted); font-size:0.9rem; }
+.student-tasks{ padding:0 12px 12px; }
+.task-subtable{ width:100%; border-collapse:collapse; margin-top:8px; }
+.task-subtable thead th{ background:transparent; }
+.task-subtable tbody tr td.task-detail{ position:relative; padding-left:2em; }
+.task-subtable tbody tr td.task-detail::before{
+  content:'├──';
+  position:absolute;
+  left:0;
+  color:var(--muted);
+  font-family:monospace;
+}
+.task-subtable tbody tr:last-child td.task-detail::before{ content:'└──'; }
+/* 简洁对话框样式 */
+.modal.hidden{ display:none; }
+.modal{ position: fixed; inset: 0; z-index: 50; }
+.modal .backdrop{ position: absolute; inset: 0; background: rgba(0,0,0,.35); }
+.modal .card{
+  position: relative; 
+  margin: 8vh auto 0; 
+  width: min(560px, 92vw);
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+.modal .card h3{ margin: 0 0 12px; }
+.modal .row{ display:flex; flex-direction: column; gap:6px; margin-bottom:10px; }
+.modal .actions{ display:flex; justify-content:flex-end; gap:8px; margin-top: 8px; }
+.modal input[type="text"]{ width:100%; }
+
+/* 表格用时显示 */
+.task-time{ white-space:nowrap; min-width:160px; }
+.task-time.exceed{ color:#b00020; font-weight:600; }
+</style>
+
+<div id="editModal" class="modal hidden" aria-modal="true" role="dialog">
+  <div id="editBackdrop" class="backdrop"></div>
+  <div class="card">
+    <h3>编辑任务</h3>
+    <div class="row">
+      <label for="editDetail">任务内容</label>
+      <input id="editDetail" type="text" placeholder="请输入任务内容">
+    </div>
+    <div class="row">
+      <label for="editNote">备注</label>
+      <input id="editNote" type="text" placeholder="请输入备注（可留空）">
+    </div>
+    <div class="row">
+      <label for="editPlanned">预计用时（分钟）</label>
+      <input id="editPlanned" type="number" min="0" placeholder="例如 60">
+    </div>
+    <div class="row">
+      <label for="editAccuracy">正确率（0-100）</label>
+      <input id="editAccuracy" type="number" min="0" max="100" step="0.1" placeholder="如 85.5">
+    </div>
+    <div class="actions">
+      <button id="editCancel" type="button">取消</button>
+      <button id="editSave" type="button">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.btn-delete').forEach(btn => {
+  btn.addEventListener('click', async e => {
+    const row = e.target.closest('tr');
+    const id = row.dataset.id;
+    if (!confirm('确定要删除这条任务吗？')) return;
+    const res = await fetch(`/api/tasks/${id}/delete`, {method:'POST'});
+    const data = await res.json();
+    if (data.ok) {
+      const group = row.closest('.student-group');
+      row.remove();
+      if (group && !group.querySelector('tr[data-id]')){
+        group.remove();
+      }
+      if (window.applyTaskFilters) window.applyTaskFilters();
+      alert('已删除');
+    } else {
+      alert('删除失败');
+    }
+  });
+});
+
+/* ==== 编辑对话框（替代 prompt） ==== */
+let editingRow = null;
+
+function openEditModal(row){
+  editingRow = row;
+  const detail = row.querySelector('.task-detail')?.textContent?.trim() || '';
+  const note = row.querySelector('.task-note')?.textContent?.trim() || '';
+  document.getElementById('editDetail').value = detail;
+  document.getElementById('editNote').value = note;
+  const planned = row.dataset.planned || 0;
+  document.getElementById('editPlanned').value = planned;
+  const accCell = row.querySelector('.task-accuracy');
+  const accVal = accCell ? parseFloat(accCell.textContent) || 0 : 0;
+  document.getElementById('editAccuracy').value = accVal;
+  document.getElementById('editModal').classList.remove('hidden');
+}
+
+function closeEditModal(){
+  document.getElementById('editModal').classList.add('hidden');
+  editingRow = null;
+}
+
+document.querySelectorAll('.btn-edit').forEach(btn => {
+  btn.addEventListener('click', e => {
+    const row = e.target.closest('tr');
+    openEditModal(row);
+  });
+});
+
+document.getElementById('editCancel').addEventListener('click', e => {
+  e.preventDefault();
+  closeEditModal();
+});
+
+document.getElementById('editBackdrop').addEventListener('click', () => {
+  closeEditModal();
+});
+
+document.getElementById('editSave').addEventListener('click', async e => {
+  e.preventDefault();
+  if (!editingRow) return;
+  const id = editingRow.dataset.id;
+  const newDetail = document.getElementById('editDetail').value.trim();
+  const newNote = document.getElementById('editNote').value.trim();
+  const newPlanned = parseInt(document.getElementById('editPlanned').value.trim() || '0');
+  const newAccuracy = parseFloat(document.getElementById('editAccuracy').value.trim() || '0');
+
+  try {
+    const res = await fetch(`/api/tasks/${id}/edit`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({detail: newDetail, note: newNote, planned_minutes: newPlanned, accuracy: newAccuracy})
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'update_failed');
+    // 更新表格
+    editingRow.querySelector('.task-detail').textContent = data.task.detail;
+    editingRow.querySelector('.task-note').textContent = data.task.note || '';
+    editingRow.dataset.planned = newPlanned;
+    const accCell = editingRow.querySelector('.task-accuracy');
+    if (accCell) accCell.textContent = `${data.task.accuracy.toFixed(1)}%`;
+    const timeCell = editingRow.querySelector('.task-time');
+    if(timeCell) timeCell.textContent = `计划:${newPlanned} 分 ｜ 实际:${Math.round(Number(editingRow.dataset.actual||0)/60)} 分`;
+    // 同步完成率
+    const progCell = editingRow.querySelector('.task-progress');
+    if (progCell){
+      const actualSec = Number(editingRow.dataset.actual||0);
+      const pct = newPlanned > 0 ? Math.round((actualSec/60)/newPlanned*1000)/10 : 0;
+      progCell.textContent = `${pct.toFixed(1)}%`;
+    }
+    if (window.applyTaskFilters) window.applyTaskFilters();
+    closeEditModal();
+  } catch (err) {
+    alert('更新失败，请稍后重试');
+  }
+});
+
+/** 状态下拉：无刷新更新状态并同步徽章显示 */
+document.querySelectorAll('.status-select').forEach(sel => {
+  sel.addEventListener('change', async e => {
+    const row = e.target.closest('tr');
+    const id = row.dataset.id;
+    const val = e.target.value; // pending / progress / done
+    try {
+      const res = await fetch(`/api/tasks/${id}/edit`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({status: val})
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'update_failed');
+      // 更新徽章文本与样式
+      const badge = row.querySelector('.badge');
+      if (badge) {
+        badge.classList.remove('status-pending','status-progress','status-done');
+        if (val === 'pending') {
+          badge.textContent = '未开始';
+          badge.classList.add('status-pending');
+        } else if (val === 'progress') {
+          badge.textContent = '进行中';
+          badge.classList.add('status-progress');
+        } else {
+          badge.textContent = '已完成';
+          badge.classList.add('status-done');
+        }
+      }
+      if (window.applyTaskFilters) window.applyTaskFilters();
+    } catch (err) {
+      alert('状态更新失败，请重试');
+      // 失败时回滚选择
+      const old = row.querySelector('.badge')?.textContent?.trim();
+      if (old === '未开始') e.target.value = 'pending';
+      else if (old === '进行中') e.target.value = 'progress';
+      else e.target.value = 'done';
+    }
+  });
+});
+// === 筛选逻辑（前端过滤当前列表） ===
+(function(){
+  const studentInp = document.getElementById('filterStudent');
+  const catSel = document.getElementById('filterCategory');
+  const statusSel = document.getElementById('filterStatus');
+  const clearBtn = document.getElementById('filterClear');
+  const stat = document.getElementById('filterStat');
+
+  function norm(s){ return (s||'').toLowerCase().trim(); }
+
+  function apply(){
+    const kw = norm(studentInp?.value);
+    const cat = catSel?.value || '';
+    const st = statusSel?.value || ''; // pending/progress/done/''
+    let showCount = 0;
+
+    const dataRows = Array.from(document.querySelectorAll('tr[data-id]'));
+    dataRows.forEach(row => {
+      const student = norm(row.dataset.student);
+      const category = (row.querySelector('.task-category')?.textContent || '').trim();
+      const badge = row.querySelector('.badge');
+      const status = badge?.classList.contains('status-done') ? 'done' : (badge?.classList.contains('status-progress') ? 'progress' : 'pending');
+
+      let ok = true;
+      if (kw && (!student || !student.includes(kw))) ok = false;
+      if (ok && cat && category !== cat) ok = false;
+      if (ok && st && status !== st) ok = false;
+
+      row.style.display = ok ? '' : 'none';
+      if (ok) showCount++;
+    });
+
+    const groups = Array.from(document.querySelectorAll('.student-group'));
+    groups.forEach(group => {
+      const rows = Array.from(group.querySelectorAll('tr[data-id]'));
+      const visibleRows = rows.filter(r => r.style.display !== 'none');
+      const hasVisible = visibleRows.length > 0;
+      group.style.display = hasVisible ? '' : 'none';
+      const countEl = group.querySelector('.student-count');
+      if (countEl){
+        const total = rows.length;
+        const visibleCount = visibleRows.length;
+        countEl.textContent = visibleCount === total ? `任务数 ${total}` : `任务数 ${visibleCount} / ${total}`;
+      }
+    });
+
+    const totalRows = dataRows.length;
+    if (stat) stat.textContent = `显示 ${showCount} / ${totalRows} 条`;
+  }
+
+  window.applyTaskFilters = apply;
+
+  // 简单防抖
+  let timer = null;
+  studentInp && studentInp.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(apply, 200);
+  });
+  catSel && catSel.addEventListener('change', apply);
+  statusSel && statusSel.addEventListener('change', apply);
+  clearBtn && clearBtn.addEventListener('click', () => {
+    if (studentInp) studentInp.value = '';
+    if (catSel) catSel.value = '';
+    if (statusSel) statusSel.value = '';
+    apply();
+  });
+
+  // 初始化统计
+  apply();
+})();
+// === 计时逻辑：开始 / 暂停 / 结束（可多段累计） ===
+(function(){
+  const intervals = new Map(); // 行 -> intervalId
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function fmt(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; return `${pad(h)}:${pad(m)}:${pad(s)}`; }
+  function minutes(sec){ return Math.round(sec/60); }
+
+  function updateUsage(row, runningSec = 0){
+    const planned = Number(row.dataset.planned || 0); // 分钟
+    const actualBase = Number(row.dataset.actual || 0); // 秒
+    const totalSec = actualBase + runningSec; // 若在计时中，加上当前段
+    const cell = row.querySelector('.task-time');
+    if (!cell) return;
+    const left = planned > 0 ? `计划:${planned} 分` : `计划:—`;
+    const right = `实际:${minutes(totalSec)} 分`;
+    cell.textContent = `${left} ｜ ${right}`;
+    // 同步完成率显示（保留 1 位小数）
+    const progCell = row.querySelector('.task-progress');
+    if (progCell){
+      const donePct = planned > 0 ? Math.round((totalSec/60) / planned * 1000) / 10 : 0;
+      progCell.textContent = `${donePct.toFixed(1)}%`;
+    }
+    if (planned>0 && totalSec >= planned*60) cell.classList.add('exceed'); else cell.classList.remove('exceed');
+  }
+
+  document.querySelectorAll('tr[data-id]').forEach(row => {
+    const startBtn = row.querySelector('.btn-start');
+    const pauseBtn = row.querySelector('.btn-pause');
+    const stopBtn  = row.querySelector('.btn-stop');
+    const timerEl  = row.querySelector('.timer');
+    const taskId   = row.dataset.id;
+
+    let startTs = null; // 本段开始时间（ms）
+
+    // 初始渲染用时
+    updateUsage(row, 0);
+
+    // 开始/继续
+    startBtn && startBtn.addEventListener('click', async () => {
+      try{
+        const res = await fetch('/api/session/start', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ task_id: Number(taskId) })
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error||'start_failed');
+        row.dataset.sessionId = String(data.session_id);
+        startTs = Date.now();
+        if (intervals.has(row)) clearInterval(intervals.get(row));
+        intervals.set(row, setInterval(()=>{
+          const sec = Math.floor((Date.now()-startTs)/1000);
+          if (timerEl) timerEl.textContent = fmt(sec);
+          updateUsage(row, sec);
+        },1000));
+        if (timerEl) timerEl.textContent = '00:00:00';
+        startBtn.textContent = '继续计时';
+        startBtn.style.display = 'none';
+        pauseBtn.style.display = '';
+        stopBtn.style.display  = '';
+        const statusSel = row.querySelector('.status-select');
+        if (statusSel && statusSel.value !== 'progress'){
+          statusSel.value='progress';
+          statusSel.dispatchEvent(new Event('change'));
+        }
+      }catch(e){ alert('开始计时失败，请重试'); }
+    });
+
+    // 暂停（结束当前段，但不改变任务完成状态）
+    pauseBtn && pauseBtn.addEventListener('click', async () => {
+      const sid = row.dataset.sessionId;
+      if (!sid){ alert('没有进行中的计时'); return; }
+      try{
+        const res = await fetch(`/api/session/stop/${sid}`, { method:'POST' });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error||'stop_failed');
+        const addSec = Number(data.seconds||0);
+        row.dataset.actual = String(Number(row.dataset.actual||0) + addSec);
+        updateUsage(row, 0);
+      }catch(e){ alert('暂停失败，请重试'); return; }
+      finally{
+        if (intervals.has(row)) { clearInterval(intervals.get(row)); intervals.delete(row); }
+        startTs = null;
+        pauseBtn.style.display = 'none';
+        startBtn.style.display = '';
+        // 停止计时后，仍允许直接“结束”
+      }
+    });
+
+    // 结束（若有在计时的段，先停止，再完成）
+    stopBtn && stopBtn.addEventListener('click', async () => {
+      // 若有未停止的会话，先停止
+      const sid = row.dataset.sessionId;
+      if (sid){
+        try{
+          const res = await fetch(`/api/session/stop/${sid}`, { method:'POST' });
+          const data = await res.json();
+          if (data && data.ok){
+            const addSec = Number(data.seconds||0);
+            row.dataset.actual = String(Number(row.dataset.actual||0) + addSec);
+          }
+        }catch(e){ /* 忽略，继续收尾 */ }
+      }
+      if (intervals.has(row)) { clearInterval(intervals.get(row)); intervals.delete(row); }
+      startTs = null;
+      updateUsage(row, 0);
+      if (timerEl) timerEl.textContent = '00:00:00';
+      startBtn.style.display = '';
+      pauseBtn.style.display = 'none';
+      stopBtn.style.display  = 'none';
+      // 可选：结束后自动设为“已完成”
+      const statusSel = row.querySelector('.status-select');
+      if (statusSel){
+        statusSel.value = 'done';
+        statusSel.dispatchEvent(new Event('change'));
+      }
+    });
+  });
+
+  // 删除时清理 interval（事件委托）
+  document.addEventListener('click', e => {
+    if (e.target && e.target.classList.contains('btn-delete')){
+      const row = e.target.closest('tr[data-id]');
+      setTimeout(()=>{
+        if (row && !document.body.contains(row) && intervals.has(row)){
+          clearInterval(intervals.get(row));
+          intervals.delete(row);
+        }
+      }, 300);
+    }
+  });
+})();
+</script>
+{% endblock %}

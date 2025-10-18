@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ student.full_name }} 学习周报</h2>
+<p class="muted">{{ start_date }} — {{ end_date }}</p>
+
+{% if not readonly %}
+  <div class="share-box">
+    <label>家长查看链接</label>
+    {% if token %}
+      <div class="share-link">
+        <input type="text" id="shareLink" readonly value="{{ request.url_root.rstrip('/') }}/parent/report/{{ token }}">
+        <button type="button" id="copyShare">复制</button>
+      </div>
+    {% else %}
+      <p class="muted">尚未生成 token，可在教师工作台刷新链接。</p>
+    {% endif %}
+  </div>
+{% endif %}
+
+<section class="card summary">
+  <div class="summary-grid">
+    <div>
+      <h3>累计计划</h3>
+      <p>{{ planned_minutes_total }} 分钟</p>
+    </div>
+    <div>
+      <h3>实际完成</h3>
+      <p>{{ actual_minutes_total }} 分钟</p>
+    </div>
+    <div>
+      <h3>完成率</h3>
+      <p>{{ completion_rate }}%</p>
+    </div>
+    <div>
+      <h3>提交项目</h3>
+      <p>{{ reviewed_items }} / {{ total_items }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h3>模块用时分布</h3>
+  {% if module_breakdown %}
+    <ul class="module-breakdown">
+      {% for module, data in module_breakdown.items() %}
+        <li>
+          <strong>{{ module }}</strong>
+          <span>计划 {{ data.planned }} 分 ｜ 实际 {{ data.actual }} 分</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">暂无数据</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h3>每日完成情况</h3>
+  {% if daily_items %}
+    {% for day, items in daily_items.items() %}
+      <article class="daily-card">
+        <header><strong>{{ day }}</strong></header>
+        <table>
+          <thead>
+            <tr>
+              <th>任务</th>
+              <th>计划</th>
+              <th>实际</th>
+              <th>审核</th>
+              <th>老师评语</th>
+              <th>证据</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+              <tr>
+                <td>
+                  {{ item.module }} · {{ item.task_name }}
+                  {% if item.custom_title %}<div class="muted">{{ item.custom_title }}</div>{% endif %}
+                </td>
+                <td>{{ item.planned_minutes }} 分</td>
+                <td>{{ (item.actual_seconds or 0) // 60 }} 分{% if item.manual_minutes %}（手动 {{ item.manual_minutes }} 分）{% endif %}</td>
+                <td>
+                  {% if item.review_status == item.REVIEW_APPROVED %}
+                    <span class="tag approved">通过</span>
+                  {% elif item.review_status == item.REVIEW_PARTIAL %}
+                    <span class="tag partial">部分完成</span>
+                  {% elif item.review_status == item.REVIEW_REJECTED %}
+                    <span class="tag rejected">未完成</span>
+                  {% else %}
+                    <span class="tag waiting">待审核</span>
+                  {% endif %}
+                </td>
+                <td>{% if item.review_comment %}{{ item.review_comment }}{% else %}<span class="muted">—</span>{% endif %}</td>
+                {% set ev_count = item.evidences | selectattr('is_deleted', 'equalto', False) | list | length %}
+                <td>{% if ev_count %}已提交 {{ ev_count }} 条{% else %}<span class="muted">未上传</span>{% endif %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </article>
+    {% endfor %}
+  {% else %}
+    <p class="muted">本周暂无打卡记录。</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h3>成绩/测评记录</h3>
+  {% if score_records %}
+    <ul class="score-list">
+      {% for score in score_records %}
+        <li>
+          <strong>{{ score.taken_on }} · {{ score.assessment_name }}</strong>
+          {% if score.total_score %}<span>总分：{{ score.total_score }}</span>{% endif %}
+          {% if score.component_scores %}
+            <div class="muted small">
+              {% for key, value in score.component_scores.items() %}
+                {{ key }}：{{ value }}{% if not loop.last %}；{% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if score.notes %}<div class="muted small">{{ score.notes }}</div>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">尚未录入测评成绩。</p>
+  {% endif %}
+</section>
+
+{% if not readonly %}
+<script>
+const copyBtn = document.getElementById('copyShare');
+if(copyBtn){
+  copyBtn.addEventListener('click', () => {
+    const input = document.getElementById('shareLink');
+    if(!input) return;
+    navigator.clipboard.writeText(input.value).then(()=>{
+      copyBtn.textContent = '已复制';
+      setTimeout(()=> copyBtn.textContent='复制', 1500);
+    });
+  });
+}
+</script>
+{% endif %}
+{% endblock %}

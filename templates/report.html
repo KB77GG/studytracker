@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>汇总报告</h2>
+
+<div class="card" style="margin-bottom:12px;">
+  <form method="get" action="{{ url_for('report_page') }}" style="display:flex; gap:12px; flex-wrap:wrap; align-items:end;">
+    <div style="display:flex; flex-direction:column;">
+      <label>开始日期</label>
+      <input type="date" name="start" value="{{ filters.start }}">
+    </div>
+    <div style="display:flex; flex-direction:column;">
+      <label>结束日期</label>
+      <input type="date" name="end" value="{{ filters.end }}">
+    </div>
+    <div style="display:flex; flex-direction:column;">
+      <label>学生</label>
+      <input type="text" name="student" placeholder="精确匹配" value="{{ filters.student }}">
+    </div>
+    <div style="display:flex; flex-direction:column; min-width:280px;">
+      <label>类别</label>
+      <input type="text" name="category" placeholder="如：雅思-听力-精听" value="{{ filters.category }}">
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button type="submit">筛选</button>
+      <a class="btn-secondary" href="{{ url_for('report_page') }}">清空</a>
+      <a class="btn-secondary" href="{{ url_for('tasks_page') }}">返回任务</a>
+      <a class="btn-secondary" href="{{ url_for('export_report_excel') }}">导出 Excel 报告</a>
+    </div>
+  </form>
+</div>
+
+<div class="card" style="margin-bottom:12px;">
+  <div style="display:flex; gap:18px; flex-wrap:wrap;">
+    <div>学生数：<strong>{{ totals.students }}</strong></div>
+    <div>任务总数：<strong>{{ totals.tasks }}</strong></div>
+    <div>完成任务：<strong>{{ totals.done }}</strong></div>
+    <div>计划用时总计：<strong>{{ totals.planned_minutes_sum }} 分</strong></div>
+    <div>实际用时总计：<strong>{{ totals.actual_minutes_sum }} 分</strong></div>
+  </div>
+</div>
+
+<table class="task-table">
+  <tr>
+    <th>学生</th>
+    <th>总数</th>
+    <th>未开始</th>
+    <th>进行中</th>
+    <th>已完成</th>
+    <th>完成率</th>
+    <th>计划用时(总/均)</th>
+    <th>实际用时(总/均)</th>
+    <th>时间范围</th>
+  </tr>
+  {% for r in summary %}
+  <tr>
+    <td>{{ r.student }}</td>
+    <td>{{ r.total }}</td>
+    <td>{{ r.pending }}</td>
+    <td>{{ r.progress }}</td>
+    <td>{{ r.done }}</td>
+    <td>{{ r.done_rate }}%</td>
+    <td>{{ r.planned_minutes_sum }} / {{ r.avg_planned }}</td>
+    <td>{{ r.actual_minutes_sum }} / {{ r.avg_actual }}</td>
+    <td>
+      {% if r.first_date and r.last_date %}
+        {{ r.first_date }} — {{ r.last_date }}
+      {% else %}
+        —
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% if not summary or summary|length == 0 %}
+  <div class="alert" style="margin-top:10px;">没有数据，试试放宽筛选条件。</div>
+{% endif %}
+
+<hr>
+<h3>可视化统计</h3>
+<canvas id="timeChart" width="800" height="400"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res = await fetch('/api/report/summary');
+    const data = await res.json();
+    if (!data.ok) return;
+
+    const labels = data.summary.map(x => x.student);
+    const planned = data.summary.map(x => x.planned_minutes);
+    const actual = data.summary.map(x => x.actual_minutes);
+
+    const ctx = document.getElementById('timeChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: '计划用时 (分钟)',
+            data: planned,
+            backgroundColor: 'rgba(47,142,135,0.6)',
+          },
+          {
+            label: '实际用时 (分钟)',
+            data: actual,
+            backgroundColor: 'rgba(255,99,132,0.6)',
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: { display: true, text: '各学生任务用时对比图' }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  } catch (err) {
+    console.error('加载图表失败', err);
+  }
+});
+
+async function loadStudentAccuracy(name){
+  if(!name) return;
+  const res = await fetch(`/api/report/student/${encodeURIComponent(name)}`);
+  const data = await res.json();
+  if(!data.ok) return;
+
+  // 按“类别 + 日期”聚合正确率（平均）
+  const catMap = new Map(); // category -> Map(date -> [sum, count])
+  for(const r of data.records){
+    const cat = r.category || '未分类';
+    const d = r.date || '未填';
+    const acc = (typeof r.accuracy === 'number') ? r.accuracy : 0;
+    if(!catMap.has(cat)) catMap.set(cat, new Map());
+    const dateMap = catMap.get(cat);
+    if(!dateMap.has(d)) dateMap.set(d, [0,0]);
+    const v = dateMap.get(d); v[0] += acc; v[1] += 1;
+  }
+
+  // 汇总全量日期作为横轴
+  const allDates = Array.from(new Set(
+    [...catMap.values()].flatMap(m => Array.from(m.keys()))
+  )).sort();
+
+  // 为每个类别生成一个数据集
+  const datasets = [];
+  for(const [cat, dateMap] of catMap){
+    const points = allDates.map(d => {
+      const v = dateMap.get(d);
+      return v ? +(v[0] / v[1]).toFixed(1) : 0;
+    });
+    datasets.push({
+      label: cat,
+      data: points,
+      borderWidth: 2,
+      fill: false
+    });
+  }
+
+  const ctx2 = document.getElementById('accuracyChart').getContext('2d');
+  if(accuracyChartInstance){ accuracyChartInstance.destroy(); }
+  accuracyChartInstance = new Chart(ctx2, {
+    type: 'line',
+    data: { labels: allDates, datasets },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      scales: { y: { beginAtZero: true, max: 100 } },
+      plugins: {
+        title: { display: true, text: `${name} 各类别正确率趋势(%)` },
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+}
+</script>
+{% endblock %}

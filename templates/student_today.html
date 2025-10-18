@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>今日计划</h2>
+
+{% if plan %}
+  <section class="card student-plan">
+    <header>
+      <h3>{{ plan.plan_date }} · {{ plan.student.full_name }}</h3>
+      {% if plan.notes %}<p class="muted">{{ plan.notes }}</p>{% endif %}
+    </header>
+    <div class="plan-items">
+      {% for item in plan.items | selectattr("is_deleted", "equalto", False) | list %}
+        <article class="plan-item"
+                 data-id="{{ item.id }}"
+                 data-planned="{{ item.planned_minutes }}"
+                 data-actual-seconds="{{ item.actual_seconds or 0 }}"
+                 data-manual-minutes="{{ item.manual_minutes or 0 }}"
+                 data-student-status="{{ item.student_status }}"
+                 data-review-status="{{ item.review_status }}">
+          <header>
+            <div class="title">
+              <strong>{{ item.module }} · {{ item.task_name }}</strong>
+            </div>
+            {% if item.custom_title %}<div class="muted">{{ item.custom_title }}</div>{% endif %}
+            {% if item.instructions %}<div class="muted small">目标：{{ item.instructions }}</div>{% endif %}
+          </header>
+          <div class="timing">
+            <span class="timer" aria-label="计时">00:00:00</span>
+            <span class="usage">计划：{{ item.planned_minutes }} 分 ｜ 实际：{{ (item.actual_seconds or 0) // 60 }} 分</span>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn-start">开始计时</button>
+            <button type="button" class="btn-stop" data-session="" style="display:none;">停止</button>
+            <button type="button" class="btn-reset" {% if item.student_status == item.STUDENT_SUBMITTED and item.review_status == item.REVIEW_PENDING %}{% else %}style="display:none;"{% endif %}>撤回提交</button>
+          </div>
+          <div class="submit-section">
+            <form class="submit-form">
+              <label>若未计时，可手动填写分钟
+                <input type="number" name="manual_minutes" min="0" value="{{ item.manual_minutes or '' }}">
+              </label>
+              <label>自评 / 感受
+                <input type="text" name="comment" placeholder="可写做题情况或难点" value="{{ item.student_comment or '' }}">
+              </label>
+              <button type="submit">提交给老师</button>
+            </form>
+            <form class="evidence-form" enctype="multipart/form-data">
+              <label>上传证据（图片/音频/文档）
+                <input type="file" name="file" accept=".png,.jpg,.jpeg,.gif,.pdf,.mp3,.mp4,.wav,.doc,.docx">
+              </label>
+              <button type="submit">上传</button>
+            </form>
+          </div>
+          {% set evidences = item.evidences | selectattr("is_deleted", "equalto", False) | list %}
+          <div class="evidence-list">
+            <strong>已上传证据（{{ evidences|length }}）</strong>
+            {% if evidences %}
+              <ul>
+                {% for ev in evidences %}
+                  <li>{{ ev.file_type|upper }} · {{ ev.original_filename or '附件' }}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="muted">尚未上传，可在完成任务后添加。</p>
+            {% endif %}
+          </div>
+          <footer class="status-footer">
+            <span>状态：
+              {% if item.student_status == item.STUDENT_SUBMITTED %}
+                <em class="tag submitted">已提交，等待老师审核</em>
+              {% elif item.student_status == item.STUDENT_IN_PROGRESS %}
+                <em class="tag progress">进行中</em>
+              {% else %}
+                <em class="tag pending">未开始</em>
+              {% endif %}
+            </span>
+            <span>老师审核：
+              {% if item.review_status == item.REVIEW_APPROVED %}
+                <em class="tag approved">已通过</em>
+              {% elif item.review_status == item.REVIEW_PARTIAL %}
+                <em class="tag partial">部分完成</em>
+              {% elif item.review_status == item.REVIEW_REJECTED %}
+                <em class="tag rejected">未通过</em>
+              {% else %}
+                <em class="tag waiting">待审核</em>
+              {% endif %}
+            </span>
+            {% if item.review_comment %}
+              <div class="muted small">老师评语：{{ item.review_comment }}</div>
+            {% endif %}
+          </footer>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+{% else %}
+  <p class="muted">今天暂无计划，请联系老师确认安排。</p>
+{% endif %}
+
+{% if recent_plans %}
+  <section class="card recent-plans">
+    <h3>近期计划</h3>
+    <ul>
+      {% for rp in recent_plans %}
+        <li>{{ rp.plan_date }}：共 {{ rp.items | selectattr("is_deleted", "equalto", False) | list | length }} 项任务</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}
+
+<script>
+const itemNodes = Array.from(document.querySelectorAll('.plan-item'));
+const intervals = new Map();
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function fmt(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; return `${pad(h)}:${pad(m)}:${pad(s)}`; }
+
+function updateUsage(el, extraSeconds=0){
+  const planned = Number(el.dataset.planned || 0);
+  const actual = Number(el.dataset.actualSeconds || 0) + extraSeconds;
+  const usage = el.querySelector('.usage');
+  if(usage){
+    const plannedTxt = planned ? `计划：${planned} 分` : '计划：—';
+    const actualTxt = `实际：${Math.round(actual/60)} 分`;
+    usage.textContent = `${plannedTxt} ｜ ${actualTxt}`;
+  }
+}
+
+async function startTimer(el){
+  const id = el.dataset.id;
+  try{
+    const res = await fetch(`/api/student/plan-items/${id}/timer/start`, {method:'POST'});
+    const data = await res.json();
+    if(!data.ok){
+      alert('无法开始计时：' + (data.error || '未知错误'));
+      return;
+    }
+    el.dataset.sessionId = data.session_id;
+    el.dataset.timerStart = Date.now();
+    const timerEl = el.querySelector('.timer');
+    if(timerEl){
+      timerEl.textContent = '00:00:00';
+    }
+    const stopBtn = el.querySelector('.btn-stop');
+    if(stopBtn){
+      stopBtn.style.display = '';
+      stopBtn.dataset.session = data.session_id;
+    }
+    el.querySelector('.btn-start').textContent = '继续计时';
+    const interval = setInterval(()=>{
+      const runningSec = Math.floor((Date.now() - Number(el.dataset.timerStart)) / 1000);
+      if(timerEl) timerEl.textContent = fmt(runningSec);
+      updateUsage(el, runningSec);
+    }, 1000);
+    intervals.set(el, interval);
+    el.dataset.studentStatus = 'in_progress';
+  }catch(err){
+    console.error(err);
+    alert('计时启动失败，请稍后再试。');
+  }
+}
+
+async function stopTimer(el){
+  const sessionId = el.dataset.sessionId;
+  if(!sessionId){
+    alert('当前没有进行中的计时。');
+    return;
+  }
+  const id = el.dataset.id;
+  try{
+    const res = await fetch(`/api/student/plan-items/${id}/timer/${sessionId}/stop`, {method:'POST'});
+    const data = await res.json();
+    if(!data.ok){
+      alert('停止计时失败：' + (data.error || '未知错误'));
+      return;
+    }
+    el.dataset.actualSeconds = data.actual_seconds;
+    updateUsage(el);
+    const timerEl = el.querySelector('.timer');
+    if(timerEl) timerEl.textContent = '00:00:00';
+    const stopBtn = el.querySelector('.btn-stop');
+    if(stopBtn) stopBtn.style.display = 'none';
+    if(intervals.has(el)){
+      clearInterval(intervals.get(el));
+      intervals.delete(el);
+    }
+  }catch(err){
+    console.error(err);
+    alert('停止计时失败，请稍后再试。');
+  }
+}
+
+async function submitItem(el, form){
+  const id = el.dataset.id;
+  const manualMinutes = Number(form.manual_minutes.value || 0);
+  const comment = form.comment.value.trim();
+  try{
+    const res = await fetch(`/api/student/plan-items/${id}/submit`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({manual_minutes: manualMinutes, comment})
+    });
+    const data = await res.json();
+    if(!data.ok){
+      alert('提交失败：' + (data.error || '未知错误'));
+      return;
+    }
+    el.dataset.actualSeconds = data.item.actual_seconds;
+    el.dataset.manualMinutes = data.item.manual_minutes;
+    el.dataset.studentStatus = data.item.student_status;
+    el.dataset.reviewStatus = data.item.review_status;
+    updateUsage(el);
+    el.querySelector('.btn-reset').style.display = '';
+    alert('已提交老师审核！');
+  }catch(err){
+    console.error(err);
+    alert('提交失败，请稍后再试。');
+  }
+}
+
+async function resetSubmission(el){
+  const id = el.dataset.id;
+  try{
+    const res = await fetch(`/api/student/plan-items/${id}/reset-status`, {method:'POST'});
+    const data = await res.json();
+    if(!data.ok){
+      alert('无法撤回：' + (data.error || '未知错误'));
+      return;
+    }
+    alert('已撤回提交，可重新编辑。');
+    el.querySelector('.btn-reset').style.display = 'none';
+    el.dataset.studentStatus = data.item.student_status;
+    el.dataset.reviewStatus = data.item.review_status;
+  }catch(err){
+    console.error(err);
+    alert('撤回失败，请稍后再试。');
+  }
+}
+
+async function uploadEvidence(el, form){
+  const fileInput = form.querySelector('input[type="file"]');
+  if(!fileInput.files.length){
+    alert('请选择文件后再上传。');
+    return;
+  }
+  const id = el.dataset.id;
+  const fd = new FormData();
+  fd.append('file', fileInput.files[0]);
+  try{
+    const res = await fetch(`/api/student/plan-items/${id}/evidence`, {
+      method:'POST',
+      body: fd
+    });
+    const data = await res.json();
+    if(!data.ok){
+      alert('上传失败：' + (data.error || '未知错误'));
+      return;
+    }
+    alert('上传成功，老师审核时会查看。');
+    fileInput.value = '';
+  }catch(err){
+    console.error(err);
+    alert('上传失败，请稍后再试。');
+  }
+}
+
+itemNodes.forEach(el => {
+  updateUsage(el);
+  const studentStatus = el.dataset.studentStatus;
+  const reviewStatus = el.dataset.reviewStatus;
+  const startBtn = el.querySelector('.btn-start');
+  const stopBtn = el.querySelector('.btn-stop');
+  const resetBtn = el.querySelector('.btn-reset');
+  const submitForm = el.querySelector('.submit-form');
+  const evidenceForm = el.querySelector('.evidence-form');
+
+  if(studentStatus === 'submitted' && reviewStatus === 'pending' && resetBtn){
+    resetBtn.style.display = '';
+  }
+
+  if(startBtn) startBtn.addEventListener('click', () => startTimer(el));
+  if(stopBtn) stopBtn.addEventListener('click', () => stopTimer(el));
+  if(resetBtn) resetBtn.addEventListener('click', () => resetSubmission(el));
+  if(submitForm) submitForm.addEventListener('submit', e => {
+    e.preventDefault();
+    submitItem(el, submitForm);
+  });
+  if(evidenceForm) evidenceForm.addEventListener('submit', e => {
+    e.preventDefault();
+    uploadEvidence(el, evidenceForm);
+  });
+});
+</script>
+{% endblock %}

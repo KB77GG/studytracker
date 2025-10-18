@@ -1,0 +1,438 @@
+from datetime import datetime
+
+from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import check_password_hash, generate_password_hash
+
+db = SQLAlchemy()
+
+
+class TimestampMixin:
+    """Add created_at / updated_at columns to track record lifecycle."""
+
+    created_at = db.Column(
+        db.DateTime, default=datetime.utcnow, nullable=False, index=True
+    )
+    updated_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
+        nullable=False,
+        index=True,
+    )
+
+
+class SoftDeleteMixin:
+    """Optional soft-delete flag for business records."""
+
+    is_deleted = db.Column(db.Boolean, default=False, nullable=False, index=True)
+
+
+class User(db.Model, UserMixin, TimestampMixin):
+    """Unified user table with role-based access."""
+
+    __tablename__ = "user"
+
+    ROLE_ADMIN = "admin"
+    ROLE_TEACHER = "teacher"
+    ROLE_ASSISTANT = "assistant"
+    ROLE_STUDENT = "student"
+    ROLE_PARENT = "parent"
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True)
+    display_name = db.Column(db.String(64))
+    password_hash = db.Column(db.String(128), nullable=False)
+    role = db.Column(db.String(20), default=ROLE_ASSISTANT, nullable=False, index=True)
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+
+    # Relationships populated further down the file (e.g., student_profile, plans).
+
+    def set_password(self, password: str) -> None:
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password: str) -> bool:
+        return check_password_hash(self.password_hash, password)
+
+    def get_id(self) -> str:
+        return str(self.id)
+
+
+class StudentProfile(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Master data for each student; optionally linked to a user login."""
+
+    __tablename__ = "student_profile"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), unique=True)
+    full_name = db.Column(db.String(64), nullable=False, index=True)
+    nickname = db.Column(db.String(64))
+    grade_level = db.Column(db.String(32))
+    exam_target = db.Column(db.String(32))  # 基础 / 雅思 / 托福 / 其他
+    guardian_name = db.Column(db.String(64))
+    guardian_contact = db.Column(db.String(64))
+    guardian_view_token = db.Column(db.String(64), unique=True, index=True)
+    notes = db.Column(db.Text)
+    primary_teacher_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    user = db.relationship("User", foreign_keys=[user_id], backref="student_profile")
+    primary_teacher = db.relationship(
+        "User",
+        foreign_keys=[primary_teacher_id],
+        backref=db.backref("primary_students", lazy="dynamic"),
+    )
+
+
+class TeacherStudentLink(db.Model, TimestampMixin):
+    """Junction table to manage teacher → student assignments."""
+
+    __tablename__ = "teacher_student_link"
+
+    id = db.Column(db.Integer, primary_key=True)
+    teacher_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    student_id = db.Column(
+        db.Integer, db.ForeignKey("student_profile.id"), nullable=False
+    )
+    role = db.Column(db.String(32), default="coach", nullable=False)  # coach / reviewer
+    is_primary = db.Column(db.Boolean, default=False, nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    teacher = db.relationship(
+        "User",
+        foreign_keys=[teacher_id],
+        backref=db.backref("student_links", lazy="dynamic"),
+    )
+    student = db.relationship(
+        "StudentProfile",
+        backref=db.backref("teacher_links", lazy="dynamic", cascade="all, delete-orphan"),
+    )
+    creator = db.relationship("User", foreign_keys=[created_by])
+
+    __table_args__ = (
+        db.UniqueConstraint("teacher_id", "student_id", name="uq_teacher_student"),
+    )
+
+
+class TaskCatalog(db.Model, TimestampMixin, SoftDeleteMixin):
+    """
+    Reference list of granular tasks (三级分类：考试体系 / 模块 / 具体任务).
+    Used by计划和模板，确保统计口径统一。
+    """
+
+    __tablename__ = "task_catalog"
+
+    id = db.Column(db.Integer, primary_key=True)
+    exam_system = db.Column(db.String(32), nullable=False, index=True)  # 基础/雅思/托福...
+    module = db.Column(db.String(32), nullable=False, index=True)  # 听力/阅读/口语/写作/词汇/语法
+    task_name = db.Column(db.String(64), nullable=False, index=True)
+    description = db.Column(db.Text)
+    default_minutes = db.Column(db.Integer, default=0, nullable=False)
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    creator = db.relationship("User", backref=db.backref("created_tasks", lazy="dynamic"))
+
+    __table_args__ = (
+        db.UniqueConstraint(
+            "exam_system",
+            "module",
+            "task_name",
+            name="uq_task_catalog_unique",
+        ),
+    )
+
+
+class PlanTemplate(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Reusable task bundle (e.g., 雅思听力日常包)."""
+
+    __tablename__ = "plan_template"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.Text)
+    creator_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+    default_recurrence = db.Column(
+        db.String(32), default="once", nullable=False
+    )  # once / daily / weekdays / custom
+
+    creator = db.relationship(
+        "User", backref=db.backref("plan_templates", lazy="dynamic")
+    )
+
+
+class PlanTemplateItem(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Items under a plan template, preserving order and defaults."""
+
+    __tablename__ = "plan_template_item"
+
+    id = db.Column(db.Integer, primary_key=True)
+    template_id = db.Column(db.Integer, db.ForeignKey("plan_template.id"), nullable=False)
+    catalog_id = db.Column(db.Integer, db.ForeignKey("task_catalog.id"))
+    exam_system = db.Column(db.String(32), nullable=False)
+    module = db.Column(db.String(32), nullable=False)
+    task_name = db.Column(db.String(64), nullable=False)
+    instructions = db.Column(db.Text)
+    default_minutes = db.Column(db.Integer, default=0, nullable=False)
+    order_index = db.Column(db.Integer, default=0, nullable=False)
+
+    template = db.relationship(
+        "PlanTemplate",
+        backref=db.backref(
+            "items", lazy="dynamic", cascade="all, delete-orphan", order_by="PlanTemplateItem.order_index"
+        ),
+    )
+    catalog = db.relationship("TaskCatalog", backref="template_items")
+
+
+class StudyPlan(db.Model, TimestampMixin, SoftDeleteMixin):
+    """A daily plan for a student, authored by a teacher."""
+
+    __tablename__ = "study_plan"
+
+    STATUS_DRAFT = "draft"
+    STATUS_PUBLISHED = "published"
+    STATUS_LOCKED = "locked"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("student_profile.id"), nullable=False)
+    plan_date = db.Column(db.Date, nullable=False, index=True)
+    window_start = db.Column(db.Time)
+    window_end = db.Column(db.Time)
+    status = db.Column(db.String(20), default=STATUS_DRAFT, nullable=False, index=True)
+    notes = db.Column(db.Text)
+    template_id = db.Column(db.Integer, db.ForeignKey("plan_template.id"))
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    published_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+    published_at = db.Column(db.DateTime)
+    finalized_at = db.Column(db.DateTime)
+
+    student = db.relationship(
+        "StudentProfile",
+        backref=db.backref("study_plans", lazy="dynamic", cascade="all, delete-orphan"),
+    )
+    template = db.relationship("PlanTemplate", backref="instantiated_plans")
+    creator = db.relationship("User", foreign_keys=[created_by], backref="authored_plans")
+    publisher = db.relationship("User", foreign_keys=[published_by])
+
+    __table_args__ = (
+        db.UniqueConstraint("student_id", "plan_date", name="uq_plan_student_date"),
+    )
+
+
+class PlanItem(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Specific task scheduled within a study plan."""
+
+    __tablename__ = "plan_item"
+
+    REVIEW_PENDING = "pending"
+    REVIEW_APPROVED = "approved"
+    REVIEW_PARTIAL = "partial"
+    REVIEW_REJECTED = "rejected"
+
+    STUDENT_PENDING = "pending"
+    STUDENT_IN_PROGRESS = "in_progress"
+    STUDENT_SUBMITTED = "submitted"
+
+    id = db.Column(db.Integer, primary_key=True)
+    plan_id = db.Column(db.Integer, db.ForeignKey("study_plan.id"), nullable=False, index=True)
+    template_item_id = db.Column(db.Integer, db.ForeignKey("plan_template_item.id"))
+    catalog_id = db.Column(db.Integer, db.ForeignKey("task_catalog.id"))
+
+    exam_system = db.Column(db.String(32), nullable=False, index=True)
+    module = db.Column(db.String(32), nullable=False, index=True)
+    task_name = db.Column(db.String(64), nullable=False)
+    custom_title = db.Column(db.String(128))
+    instructions = db.Column(db.Text)
+    order_index = db.Column(db.Integer, default=0, nullable=False)
+
+    planned_minutes = db.Column(db.Integer, default=0, nullable=False)
+    planned_start = db.Column(db.Time)
+    planned_end = db.Column(db.Time)
+
+    student_status = db.Column(db.String(20), default=STUDENT_PENDING, nullable=False)
+    student_comment = db.Column(db.String(255))
+    submitted_at = db.Column(db.DateTime)
+
+    actual_seconds = db.Column(db.Integer, default=0, nullable=False)
+    manual_minutes = db.Column(db.Integer, default=0, nullable=False)
+
+    review_status = db.Column(db.String(20), default=REVIEW_PENDING, nullable=False, index=True)
+    review_comment = db.Column(db.String(255))
+    review_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+    review_at = db.Column(db.DateTime)
+    locked = db.Column(db.Boolean, default=False, nullable=False)
+
+    plan = db.relationship(
+        "StudyPlan",
+        backref=db.backref("items", lazy="selectin", cascade="all, delete-orphan"),
+    )
+    template_item = db.relationship("PlanTemplateItem")
+    catalog = db.relationship("TaskCatalog")
+    reviewer = db.relationship("User", foreign_keys=[review_by])
+
+
+class PlanItemSession(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Timer segments recorded by students, later rolled up to PlanItem.actual_seconds."""
+
+    __tablename__ = "plan_item_session"
+
+    id = db.Column(db.Integer, primary_key=True)
+    plan_item_id = db.Column(db.Integer, db.ForeignKey("plan_item.id"), nullable=False, index=True)
+    started_at = db.Column(db.DateTime, nullable=False)
+    ended_at = db.Column(db.DateTime)
+    duration_seconds = db.Column(db.Integer, default=0, nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    source = db.Column(db.String(32), default="manual", nullable=False)  # manual / timer
+    device_info = db.Column(db.String(128))
+
+    plan_item = db.relationship(
+        "PlanItem",
+        backref=db.backref("sessions", lazy="selectin", cascade="all, delete-orphan"),
+    )
+    creator = db.relationship("User", backref=db.backref("plan_sessions", lazy="dynamic"))
+
+    def close(self, ended_at: datetime) -> None:
+        if self.ended_at:
+            return
+        self.ended_at = ended_at
+        self.duration_seconds = max(
+            0, int((self.ended_at - self.started_at).total_seconds())
+        )
+
+
+class PlanEvidence(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Evidence uploaded by students (photos, audio, documents)."""
+
+    __tablename__ = "plan_evidence"
+
+    id = db.Column(db.Integer, primary_key=True)
+    plan_item_id = db.Column(db.Integer, db.ForeignKey("plan_item.id"), nullable=False, index=True)
+    uploader_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    file_type = db.Column(db.String(20), nullable=False)  # image / audio / doc / other
+    storage_path = db.Column(db.String(256), nullable=False)
+    preview_path = db.Column(db.String(256))
+    original_filename = db.Column(db.String(128))
+    file_size = db.Column(db.Integer, default=0, nullable=False)
+    note = db.Column(db.String(255))
+    sha256 = db.Column(db.String(64))
+
+    plan_item = db.relationship(
+        "PlanItem",
+        backref=db.backref("evidences", lazy="selectin", cascade="all, delete-orphan"),
+    )
+    uploader = db.relationship("User", backref=db.backref("uploaded_evidence", lazy="dynamic"))
+
+
+class PlanReviewLog(db.Model, TimestampMixin):
+    """Audit trail for teacher reviews (通过 / 部分 / 未完成)."""
+
+    __tablename__ = "plan_review_log"
+
+    id = db.Column(db.Integer, primary_key=True)
+    plan_item_id = db.Column(db.Integer, db.ForeignKey("plan_item.id"), nullable=False)
+    reviewer_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    from_status = db.Column(db.String(20))
+    to_status = db.Column(db.String(20), nullable=False)
+    comment = db.Column(db.String(255))
+    decided_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    originated_from = db.Column(db.String(32), default="manual", nullable=False)  # manual / bulk / api
+
+    plan_item = db.relationship(
+        "PlanItem",
+        backref=db.backref("review_logs", lazy="selectin", cascade="all, delete-orphan"),
+    )
+    reviewer = db.relationship("User", backref=db.backref("review_logs", lazy="dynamic"))
+
+
+class ScoreRecord(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Assessment scores to correlate投入-产出."""
+
+    __tablename__ = "score_record"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("student_profile.id"), nullable=False, index=True)
+    exam_system = db.Column(db.String(32), nullable=False, index=True)
+    assessment_name = db.Column(db.String(128), nullable=False)
+    taken_on = db.Column(db.Date, nullable=False, index=True)
+    total_score = db.Column(db.Float)
+    component_scores = db.Column(db.JSON)  # {"listening": 6.5, "reading": 7.0, ...}
+    notes = db.Column(db.Text)
+    recorded_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+
+    student = db.relationship(
+        "StudentProfile",
+        backref=db.backref("score_records", lazy="dynamic", cascade="all, delete-orphan"),
+    )
+    recorder = db.relationship("User", backref=db.backref("score_entries", lazy="dynamic"))
+
+
+class AuditLogEntry(db.Model):
+    """Generic audit log for critical mutations across the system."""
+
+    __tablename__ = "audit_log_entry"
+
+    id = db.Column(db.Integer, primary_key=True)
+    entity_type = db.Column(db.String(64), nullable=False, index=True)
+    entity_id = db.Column(db.Integer, nullable=False, index=True)
+    action = db.Column(db.String(32), nullable=False)  # create / update / delete / review
+    field = db.Column(db.String(64))
+    old_value = db.Column(db.Text)
+    new_value = db.Column(db.Text)
+    actor_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)
+    metadata = db.Column(db.JSON)
+
+    actor = db.relationship("User", backref=db.backref("audit_logs", lazy="dynamic"))
+
+
+# ---- Legacy models (kept temporarily for compatibility with existing views) ----
+
+
+class Task(db.Model):
+    """Legacy task entity used by当前页面；后续将由 PlanItem 取代。"""
+
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String(10), index=True)  # YYYY-MM-DD
+    student_name = db.Column(db.String(64), index=True)
+    category = db.Column(db.String(32))
+    detail = db.Column(db.String(200))
+    status = db.Column(db.String(12), default="pending")  # pending / progress / done
+    note = db.Column(db.String(200))
+    accuracy = db.Column(db.Float, default=0.0)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    planned_minutes = db.Column(db.Integer, default=0)
+    actual_seconds = db.Column(db.Integer, default=0)
+    started_at = db.Column(db.DateTime)
+    ended_at = db.Column(db.DateTime)
+
+    creator = db.relationship("User", backref=db.backref("legacy_tasks", lazy="dynamic"))
+
+    def __repr__(self) -> str:
+        return f"<Task {self.student_name} {self.category} {self.status}>"
+
+
+class StudySession(db.Model):
+    """Legacy timer segments; superseded by PlanItemSession."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"))
+    started_at = db.Column(db.DateTime, nullable=False)
+    ended_at = db.Column(db.DateTime)
+    seconds = db.Column(db.Integer, default=0)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    task = db.relationship("Task", backref=db.backref("sessions", lazy="dynamic"))
+    creator = db.relationship("User", backref=db.backref("legacy_sessions", lazy="dynamic"))
+
+    def close(self, ended_at: datetime) -> None:
+        if self.ended_at:
+            return
+        self.ended_at = ended_at
+        delta = (self.ended_at - self.started_at).total_seconds()
+        self.seconds = max(0, int(delta))
+
+    def __repr__(self) -> str:
+        return f"<StudySession id={self.id} task={self.task_id} sec={self.seconds}>"

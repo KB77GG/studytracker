@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>用户管理</h2>
+
+<form method="POST" class="user-form">
+  <input type="hidden" name="action" value="create">
+  <label>用户名：</label>
+  <input type="text" name="username" required>
+  <label>密码：</label>
+  <input type="password" name="password" required>
+  <label>角色：</label>
+  <select name="role">
+    <option value="teacher">老师</option>
+    <option value="assistant">助教</option>
+    <option value="student">学生</option>
+    <option value="admin">管理员</option>
+  </select>
+  <button type="submit">创建用户</button>
+</form>
+
+<hr>
+
+<table class="user-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>用户名</th>
+      <th>角色</th>
+      <th>状态</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr data-user-id="{{ u.id }}">
+      <td>{{ u.id }}</td>
+      <td>{{ u.username }}</td>
+      <td>{{ u.role }}</td>
+      <td class="status-cell">{{ "启用" if u.is_active else "停用" }}</td>
+      <td>
+        {% if u.id != current_user.id %}
+          <button type="button" class="toggle-btn" data-uid="{{ u.id }}">
+            {{ "停用" if u.is_active else "启用" }}
+          </button>
+          <button type="button" class="delete-btn" data-uid="{{ u.id }}">删除</button>
+          <button type="button" class="pwd-btn" data-uid="{{ u.id }}">修改密码</button>
+        {% else %}
+          <em>当前登录用户</em>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 启用/停用
+  const buttons = document.querySelectorAll('.toggle-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const uid = btn.dataset.uid;
+      try {
+        const resp = await fetch(`/api/users/${uid}/toggle`, { method: 'POST' });
+        const data = await resp.json();
+        if (!data.ok) { alert('操作失败：' + (data.error || '')); return; }
+        const isActive = data.user.is_active;
+        btn.textContent = isActive ? '停用' : '启用';
+        const row = btn.closest('tr');
+        row.querySelector('.status-cell').textContent = isActive ? '启用' : '停用';
+      } catch (e) { alert('网络错误，请稍后再试'); }
+    });
+  });
+
+  // 删除
+  const delBtns = document.querySelectorAll('.delete-btn');
+  delBtns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const uid = btn.dataset.uid;
+      if (!confirm('确定删除该用户吗？')) return;
+      try {
+        const resp = await fetch(`/api/users/${uid}/delete`, { method: 'POST' });
+        const data = await resp.json();
+        if (!data.ok) { alert('删除失败：' + (data.error || '')); return; }
+        const row = btn.closest('tr');
+        row.parentNode.removeChild(row);
+      } catch (e) { alert('网络错误，请稍后再试'); }
+    });
+  });
+
+  // 修改密码
+  const pwdBtns = document.querySelectorAll('.pwd-btn');
+  pwdBtns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const uid = btn.dataset.uid;
+      const newPwd = prompt('请输入新密码（至少 6 位）：');
+      if (newPwd === null) return;
+      const trimmed = (newPwd || '').trim();
+      if (trimmed.length < 6) { alert('密码太短，请重新输入（至少 6 位）'); return; }
+      try {
+        const resp = await fetch(`/api/users/${uid}/password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ new_password: trimmed })
+        });
+        const data = await resp.json();
+        if (!data.ok) { alert('修改失败：' + (data.error || '')); return; }
+        alert('密码已更新');
+      } catch (e) { alert('网络错误，请稍后再试'); }
+    });
+  });
+});
+</script>
+{% endblock %}
