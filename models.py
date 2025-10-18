@@ -382,7 +382,7 @@ class AuditLogEntry(db.Model):
     new_value = db.Column(db.Text)
     actor_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)
-    metadata = db.Column(db.JSON)
+    metadata_payload = db.Column(db.JSON)
 
     actor = db.relationship("User", backref=db.backref("audit_logs", lazy="dynamic"))
 
