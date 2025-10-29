@@ -1,4 +1,5 @@
 import os
+import re
 import secrets
 from pathlib import Path
 from collections import defaultdict
@@ -6,6 +7,7 @@ from datetime import date, datetime, timedelta
 
 from flask import (
     Flask,
+    current_app,
     flash,
     jsonify,
     redirect,
@@ -23,9 +25,11 @@ from flask_login import (
 )
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm import joinedload
-from sqlalchemy import false
+from sqlalchemy import false, inspect, text
 
 from config import Config
+from pypinyin import lazy_pinyin
+from api import init_app as init_api
 from models import (
     AuditLogEntry,
     PlanEvidence,
@@ -49,6 +53,7 @@ from models import (
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
+init_api(app)
 
 UPLOAD_ROOT = Path(app.config.get("UPLOAD_FOLDER", Path(app.root_path) / "uploads"))
 UPLOAD_ROOT.mkdir(parents=True, exist_ok=True)
@@ -58,6 +63,26 @@ ALLOWED_EVIDENCE_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "pdf", "mp3", "mp4",
 
 def allowed_evidence(filename: str) -> bool:
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EVIDENCE_EXTENSIONS
+
+
+def ensure_legacy_schema() -> None:
+    """Ensure legacy Task table has columns expected by the assistant view."""
+
+    inspector = inspect(db.engine)
+    if "task" not in inspector.get_table_names():
+        return
+    columns = {col["name"] for col in inspector.get_columns("task")}
+    if "completion_rate" in columns:
+        return
+    try:
+        with db.engine.begin() as conn:
+            conn.execute(text("ALTER TABLE task ADD COLUMN completion_rate FLOAT"))
+    except Exception as exc:  # pragma: no cover - best-effort safeguard
+        current_app.logger.warning("Failed to add completion_rate to task table: %s", exc)
+
+
+with app.app_context():
+    ensure_legacy_schema()
 
 # Flask-Login 配置
 login_manager = LoginManager(app)
@@ -166,6 +191,87 @@ def ensure_guardian_token(student: StudentProfile) -> str:
         db.session.commit()
     return student.guardian_view_token
 
+
+def _slugify_name(full_name: str) -> str:
+    base = "".join(lazy_pinyin(full_name, errors="ignore"))
+    base = re.sub(r"[^a-z0-9]", "", base.lower())
+    return base or "student"
+
+
+class AccountCreationError(Exception):
+    """Raised when automatic account provisioning fails."""
+
+    def __init__(self, message: str, code: str = "error"):
+        super().__init__(message)
+        self.code = code
+
+
+def create_student_parent_accounts(full_name: str) -> dict[str, str]:
+    """Create paired student + parent accounts and return their credentials."""
+
+    clean_name = (full_name or "").strip()
+    if not clean_name:
+        raise AccountCreationError("请填写学生姓名。", code="missing_full_name")
+
+    student_username = clean_name
+    parent_username = f"{clean_name}家长"
+
+    conflict = (
+        db.session.query(User.username)
+        .filter(User.username.in_([student_username, parent_username]))
+        .first()
+    )
+    if conflict:
+        raise AccountCreationError("已存在同名账号，请检查后再试。", code="duplicate_username")
+
+    slug = _slugify_name(clean_name)
+    student_password = f"{slug}123"
+    parent_password = f"{slug}123prt"
+
+    student_user = User(
+        username=student_username,
+        role=User.ROLE_STUDENT,
+        display_name=clean_name,
+    )
+    student_user.set_password(student_password)
+    db.session.add(student_user)
+
+    parent_user = User(
+        username=parent_username,
+        role=User.ROLE_PARENT,
+        display_name=f"{clean_name}家长",
+    )
+    parent_user.set_password(parent_password)
+    db.session.add(parent_user)
+    db.session.flush()
+
+    profile_kwargs = {
+        "user_id": student_user.id,
+        "full_name": clean_name,
+        "guardian_view_token": secrets.token_urlsafe(16),
+    }
+    if hasattr(StudentProfile, "primary_parent_id"):
+        profile_kwargs["primary_parent_id"] = parent_user.id
+    elif hasattr(StudentProfile, "primary_parent"):
+        profile_kwargs["primary_parent"] = parent_user
+    profile = StudentProfile(**profile_kwargs)
+    db.session.add(profile)
+    try:
+        db.session.commit()
+    except Exception as exc:  # noqa: BLE001
+        db.session.rollback()
+        current_app.logger.exception(
+            "Automatic account creation failed for %s", clean_name
+        )
+        raise AccountCreationError(f"创建账号失败：{exc}", code="db_error") from exc
+
+    return {
+        "student_username": student_username,
+        "student_password": student_password,
+        "parent_username": parent_username,
+        "parent_password": parent_password,
+    }
+
 # ---- 用户管理页：创建/停用/删除 ----
 @app.route("/users", methods=["GET", "POST"])
 @login_required
@@ -182,6 +288,7 @@ def users_page():
                 User.ROLE_TEACHER,
                 User.ROLE_ASSISTANT,
                 User.ROLE_STUDENT,
+                User.ROLE_PARENT,
             }
             if role not in allowed_roles:
                 role = User.ROLE_ASSISTANT
@@ -204,6 +311,17 @@ def users_page():
                         db.session.add(profile)
                     db.session.commit()
                     flash("创建成功")
+        elif action == "auto_student":
+            try:
+                creds = create_student_parent_accounts(request.form.get("full_name"))
+            except AccountCreationError as exc:
+                flash(str(exc))
+            else:
+                flash(
+                    "学生账号：{student_username} / {student_password}；家长账号：{parent_username} / {parent_password}".format(
+                        **creds
+                    )
+                )
         elif action == "toggle":
             uid = int(request.form.get("user_id"))
             u = User.query.get(uid)
@@ -262,6 +380,18 @@ def api_change_password(uid):
     u.set_password(new_password)
     db.session.commit()
     return jsonify({"ok": True})
+
+@app.post("/api/users/auto-student")
+@login_required
+@admin_required
+def api_auto_create_student():
+    data = request.get_json(silent=True) or {}
+    try:
+        creds = create_student_parent_accounts(data.get("full_name"))
+    except AccountCreationError as exc:
+        status = 400 if exc.code in {"missing_full_name", "duplicate_username"} else 500
+        return jsonify({"ok": False, "error": exc.code, "message": str(exc)}), status
+    return jsonify({"ok": True, "data": creds})
 
 
 @app.route("/teacher/plans", methods=["GET"])
@@ -447,6 +577,8 @@ def _plan_item_payload(item: PlanItem) -> dict:
         "review_comment": item.review_comment,
         "student_comment": item.student_comment,
         "submitted_at": item.submitted_at.isoformat() if item.submitted_at else None,
+        "student_reset_count": item.student_reset_count,
+        "evidence_policy": item.evidence_policy,
         "sessions": [
             {
                 "id": sess.id,
@@ -461,6 +593,8 @@ def _plan_item_payload(item: PlanItem) -> dict:
                 "id": ev.id,
                 "file_type": ev.file_type,
                 "note": ev.note,
+                "original_filename": ev.original_filename,
+                "text_content": ev.text_content,
                 "uploaded_at": ev.created_at.isoformat() if hasattr(ev, "created_at") else None,
             }
             for ev in evidences
@@ -836,6 +970,21 @@ def api_create_plan():
             if not (exam_system and module and task_name):
                 return jsonify({"ok": False, "error": "missing_task_fields"}), 400
 
+        raw_policy = item.get("evidence_policy")
+        if isinstance(raw_policy, str):
+            evidence_policy = raw_policy.strip().lower()
+        else:
+            evidence_policy = PlanItem.EVIDENCE_OPTIONAL
+        allowed_policies = {
+            PlanItem.EVIDENCE_OPTIONAL,
+            PlanItem.EVIDENCE_TEXT,
+            PlanItem.EVIDENCE_IMAGE,
+            PlanItem.EVIDENCE_AUDIO,
+            PlanItem.EVIDENCE_REQUIRED,
+        }
+        if evidence_policy not in allowed_policies:
+            evidence_policy = PlanItem.EVIDENCE_OPTIONAL
+
         plan_item = PlanItem(
             plan=plan,
             catalog_id=catalog_id,
@@ -846,6 +995,7 @@ def api_create_plan():
             instructions=instructions,
             planned_minutes=planned_minutes,
             order_index=idx,
+            evidence_policy=evidence_policy,
         )
         db.session.add(plan_item)
 
@@ -988,6 +1138,11 @@ def tasks_page():
         actual_minutes = round(int(t.actual_seconds or 0) / 60, 1)
         planned = int(t.planned_minutes or 0)
         progress = round(actual_minutes / planned * 100, 1) if planned > 0 else 0
+        manual_progress = (
+            float(t.completion_rate)
+            if t.completion_rate is not None
+            else None
+        )
         enriched_items.append({
             "id": t.id,
             "date": t.date,
@@ -999,6 +1154,8 @@ def tasks_page():
             "planned_minutes": planned,
             "actual_minutes": actual_minutes,
             "progress": progress,
+            "completion_rate": manual_progress,
+            "accuracy": float(t.accuracy or 0.0),
         })
     return render_template("tasks.html", items=enriched_items, today=date.today().isoformat())
 
@@ -1073,6 +1230,16 @@ def api_task_edit(tid):
             t.actual_seconds = max(0, as_)
         except Exception:
             return jsonify({"ok": False, "error": "invalid_actual"}), 400
+    if "completion_rate" in data:
+        val = data.get("completion_rate")
+        if val in ("", None):
+            t.completion_rate = None
+        else:
+            try:
+                comp = float(val)
+            except (TypeError, ValueError):
+                return jsonify({"ok": False, "error": "invalid_completion"}), 400
+            t.completion_rate = min(100.0, max(0.0, comp))
 
     db.session.commit()
     return jsonify({
@@ -1085,7 +1252,8 @@ def api_task_edit(tid):
             "detail": t.detail,
             "status": t.status,
             "note": t.note,
-            "accuracy": t.accuracy
+            "accuracy": t.accuracy,
+            "completion_rate": t.completion_rate,
         }
     })
 

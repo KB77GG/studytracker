@@ -46,6 +46,8 @@ class User(db.Model, UserMixin, TimestampMixin):
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), default=ROLE_ASSISTANT, nullable=False, index=True)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
+    auth_token_hash = db.Column(db.String(128))
+    token_issued_at = db.Column(db.DateTime)
 
     # Relationships populated further down the file (e.g., student_profile, plans).
 
@@ -57,6 +59,14 @@ class User(db.Model, UserMixin, TimestampMixin):
 
     def get_id(self) -> str:
         return str(self.id)
+
+    def set_api_token(self, token_hash: str) -> None:
+        self.auth_token_hash = token_hash
+        self.token_issued_at = datetime.utcnow()
+
+    def clear_api_token(self) -> None:
+        self.auth_token_hash = None
+        self.token_issued_at = None
 
 
 class StudentProfile(db.Model, TimestampMixin, SoftDeleteMixin):
@@ -75,12 +85,22 @@ class StudentProfile(db.Model, TimestampMixin, SoftDeleteMixin):
     guardian_view_token = db.Column(db.String(64), unique=True, index=True)
     notes = db.Column(db.Text)
     primary_teacher_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    primary_parent_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
-    user = db.relationship("User", foreign_keys=[user_id], backref="student_profile")
+    user = db.relationship(
+        "User",
+        foreign_keys=[user_id],
+        backref=db.backref("student_profile", uselist=False),
+    )
     primary_teacher = db.relationship(
         "User",
         foreign_keys=[primary_teacher_id],
         backref=db.backref("primary_students", lazy="dynamic"),
+    )
+    primary_parent = db.relationship(
+        "User",
+        foreign_keys=[primary_parent_id],
+        backref=db.backref("linked_children", lazy="dynamic"),
     )
 
 
@@ -226,6 +246,12 @@ class PlanItem(db.Model, TimestampMixin, SoftDeleteMixin):
 
     __tablename__ = "plan_item"
 
+    EVIDENCE_OPTIONAL = "optional"
+    EVIDENCE_TEXT = "text"
+    EVIDENCE_IMAGE = "image"
+    EVIDENCE_AUDIO = "audio"
+    EVIDENCE_REQUIRED = "required"
+
     REVIEW_PENDING = "pending"
     REVIEW_APPROVED = "approved"
     REVIEW_PARTIAL = "partial"
@@ -263,6 +289,14 @@ class PlanItem(db.Model, TimestampMixin, SoftDeleteMixin):
     review_by = db.Column(db.Integer, db.ForeignKey("user.id"))
     review_at = db.Column(db.DateTime)
     locked = db.Column(db.Boolean, default=False, nullable=False)
+    student_reset_count = db.Column(db.Integer, default=0, nullable=False)
+    evidence_policy = db.Column(
+        db.String(20),
+        default=EVIDENCE_OPTIONAL,
+        nullable=False,
+        index=True,
+        doc="optional/text/image/audio/required（任意类型）",
+    )
 
     plan = db.relationship(
         "StudyPlan",
@@ -317,6 +351,7 @@ class PlanEvidence(db.Model, TimestampMixin, SoftDeleteMixin):
     file_size = db.Column(db.Integer, default=0, nullable=False)
     note = db.Column(db.String(255))
     sha256 = db.Column(db.String(64))
+    text_content = db.Column(db.Text)
 
     plan_item = db.relationship(
         "PlanItem",
@@ -401,6 +436,7 @@ class Task(db.Model):
     status = db.Column(db.String(12), default="pending")  # pending / progress / done
     note = db.Column(db.String(200))
     accuracy = db.Column(db.Float, default=0.0)
+    completion_rate = db.Column(db.Float)
     created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     planned_minutes = db.Column(db.Integer, default=0)
