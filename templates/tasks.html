@@ -2,12 +2,12 @@
 {% block page_subtitle %}Task Management{% endblock %}
 {% block page_title %}辅导任务记录{% endblock %}
 {% block header_actions %}
-  <div class="segmented-control">
-    <button type="button" class="segmented-control__btn is-active">Week</button>
-    <button type="button" class="segmented-control__btn">Month</button>
-    <button type="button" class="segmented-control__btn">Year</button>
-  </div>
-  <a class="btn" href="#taskForm">+ New Task</a>
+<div class="segmented-control">
+  <button type="button" class="segmented-control__btn is-active">Week</button>
+  <button type="button" class="segmented-control__btn">Month</button>
+  <button type="button" class="segmented-control__btn">Year</button>
+</div>
+<a class="btn" href="#taskForm">+ New Task</a>
 {% endblock %}
 {% block content %}
 {% set stats = stats or {"total":0,"completed":0,"total_minutes":0,"avg_accuracy":0} %}
@@ -59,7 +59,8 @@
           <td>{{ task.date }}</td>
           <td>{{ task.actual_minutes }} 分</td>
           <td>
-            <span class="badge {{ 'status-pending' if task.status=='pending' else ('status-progress' if task.status=='progress' else 'status-done') }}">
+            <span
+              class="badge {{ 'status-pending' if task.status=='pending' else ('status-progress' if task.status=='progress' else 'status-done') }}">
               {{ "未开始" if task.status=="pending" else ("进行中" if task.status=="progress" else "已完成") }}
             </span>
           </td>
@@ -68,7 +69,7 @@
       </tbody>
     </table>
     {% else %}
-      <p class="stat-meta">暂无任务</p>
+    <p class="stat-meta">暂无任务</p>
     {% endif %}
   </div>
   <div>
@@ -83,7 +84,8 @@
           <div class="avatar">{{ stu.name[:1] }}</div>
           <div>
             <div class="user-name">{{ stu.name }}</div>
-            <div class="stat-meta">{{ stu.tasks }} tasks{% if stu.accuracy is not none %} · {{ '%.1f'|format(stu.accuracy) }}%{% endif %}</div>
+            <div class="stat-meta">{{ stu.tasks }} tasks{% if stu.accuracy is not none %} · {{
+              '%.1f'|format(stu.accuracy) }}%{% endif %}</div>
           </div>
         </div>
         <span class="minutes">{{ '%.1f'|format(stu.minutes/60 if stu.minutes else 0) }}h</span>
@@ -91,17 +93,14 @@
       {% endfor %}
     </ul>
     {% else %}
-      <p class="stat-meta">暂无学生数据</p>
+    <p class="stat-meta">暂无学生数据</p>
     {% endif %}
   </div>
 </section>
 
 <section class="card-section">
-<h2>任务记录与计时</h2>
+  <h2>任务记录与计时</h2>
 
-{% set student_names = items | map(attribute='student_name') | select | list | unique %}
-
-<form id="taskForm" method="post" class="task-form">
   <div class="task-form-row">
     <div class="field">
       <label for="taskDate">日期</label>
@@ -109,7 +108,13 @@
     </div>
     <div class="field">
       <label for="taskStudent">学生</label>
-      <input id="taskStudent" name="student_name" list="studentOptions" placeholder="输入或选择学生姓名" required autocomplete="off">
+      <input id="taskStudent" name="student_name" list="studentOptions" placeholder="输入或选择学生姓名" required
+        autocomplete="off">
+      <datalist id="studentOptions">
+        {% for name in all_students %}
+        <option value="{{ name }}">
+          {% endfor %}
+      </datalist>
     </div>
     <div class="field field--wide">
       <label for="taskCategory">任务类别</label>
@@ -162,997 +167,1134 @@
     </div>
   </div>
   <input id="taskDetail" type="hidden" name="detail" value="">
-</form>
+  </form>
 
-<datalist id="studentOptions">
-  {% for name in student_names %}
+  <datalist id="studentOptions">
+    {% for name in student_names %}
     <option value="{{ name }}">
-  {% endfor %}
-</datalist>
+      {% endfor %}
+  </datalist>
 
-<details class="filter-panel" open>
-  <summary>筛选任务</summary>
-  <div class="filter-content">
-    <label>学生
-      <input id="filterStudent" placeholder="输入学生姓名的一部分">
-    </label>
-    <label>类别
-      <select id="filterCategory">
-        <option value="">全部</option>
-        <optgroup label="基础">
-          <option value="基础-四级词汇">四级词汇巩固</option>
-          <option value="基础-每日记忆计划">每日记忆计划</option>
-          <option value="基础-课堂抽查">课堂随机抽查</option>
-          <option value="基础-语法单选练习">语法单选练习</option>
-          <option value="基础-翻译句子练习">翻译句子练习</option>
-          <option value="基础-口语素材朗读">口语素材朗读</option>
-        </optgroup>
-        <optgroup label="雅思">
-          <option value="雅思-听力-精听">听力精听</option>
-          <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
-          <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
-          <option value="雅思-阅读-精读">阅读精读</option>
-          <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
-          <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
-          <option value="雅思-口语-常见题库问答">常见题库问答</option>
-          <option value="雅思-写作-句型与语法">句型与语法纠正</option>
-          <option value="雅思-写作-翻译句子">写作翻译句子</option>
-          <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
-        </optgroup>
-        <optgroup label="托福">
-          <option value="托福-听力-精听">听力精听</option>
-          <option value="托福-听力-速记训练">速记关键信息训练</option>
-          <option value="托福-阅读-精读">阅读深度分析</option>
-          <option value="托福-阅读-词汇复述">专项词汇复述</option>
-          <option value="托福-口语-完整演练">口语全程对练</option>
-          <option value="托福-口语-模拟考试">口语模拟考试</option>
-          <option value="托福-写作-观点论据">写作观点-论据梳理</option>
-          <option value="托福-写作-逻辑链">写作逻辑链扩展</option>
-          <option value="托福-语法-练习">语法单选练习</option>
-        </optgroup>
-      </select>
-    </label>
-    <label>状态
-      <select id="filterStatus">
-        <option value="">全部</option>
-        <option value="pending">未开始</option>
-        <option value="progress">进行中</option>
-        <option value="done">已完成</option>
-      </select>
-    </label>
-    <button id="filterClear" type="button">清除筛选</button>
-    <span id="filterStat"></span>
-  </div>
-</details>
-
-{% set grouped = items|sort(attribute='student_name')|groupby('student_name') %}
-<div class="task-accordion">
-  {% for group in grouped %}
-  {% set student = group.grouper|default('未填写学生', true) %}
-  <details class="student-group" data-student="{{ student }}" {% if loop.first %}open{% endif %}>
-    <summary>
-      <span class="student-name">{{ student }}</span>
-      <span class="student-summary">
-        <span class="student-count">任务数 {{ group.list|length }}</span>
-      </span>
-    </summary>
-    <div class="student-tasks">
-      <table class="task-table task-subtable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>日期</th>
-            <th>类别</th>
-            <th>任务</th>
-            <th>状态</th>
-            <th>用时</th>
-            <th>完成率</th>
-            <th>正确率</th>
-            <th>备注</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for t in group.list %}
-          <tr data-id="{{ t.id }}" data-student="{{ student }}" data-planned="{{ t.planned_minutes or 0 }}" data-actual="{{ (t.actual_minutes * 60)|int if t.actual_minutes is defined else 0 }}" data-completion="{{ '%.1f'|format(t.completion_rate) if t.completion_rate is not none else '' }}" data-auto-progress="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}">
-            <td class="task-id">{{ t.id }}</td>
-            <td class="task-date">{{ t.date }}</td>
-            <td class="task-category">{{ t.category }}</td>
-            <td class="task-detail">{{ t.detail }}</td>
-            <td>
-              <span class="badge {{ 'status-pending' if t.status=='pending' else ('status-progress' if t.status=='progress' else 'status-done') }}">{{ "未开始" if t.status=="pending" else ("进行中" if t.status=="progress" else "已完成") }}</span>
-            </td>
-            <td class="task-time">计划:{{ t.planned_minutes or 0 }} 分 ｜ 实际:{{ '%.1f'|format(t.actual_minutes or 0) }} 分</td>
-            {% set manual_completion = t.completion_rate %}
-            {% set display_completion = manual_completion if manual_completion is not none else (t.progress if t.progress is defined else 0) %}
-            <td class="task-progress" data-auto="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}">
-              <div class="percent-input">
-                <input type="number" class="progress-input" value="{{ '%.1f'|format(display_completion or 0) }}" min="0" max="100" step="0.1" aria-label="完成率">
-                <span class="progress-suffix">%</span>
-              </div>
-              {% if t.planned_minutes %}
-              <div class="progress-hint">计时：{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}%</div>
-              {% endif %}
-            </td>
-            <td class="task-accuracy">
-              <div class="percent-input">
-                <input type="number" class="accuracy-input" value="{{ '%.1f'|format(t.accuracy or 0) }}" min="0" max="100" step="0.1" aria-label="正确率">
-                <span class="accuracy-suffix">%</span>
-              </div>
-            </td>
-            <td class="task-note">{{ t.note }}</td>
-            <td>
-              <select class="status-select">
-                <option value="pending" {{ 'selected' if t.status=='pending' else '' }}>未开始</option>
-                <option value="progress" {{ 'selected' if t.status=='progress' else '' }}>进行中</option>
-                <option value="done" {{ 'selected' if t.status=='done' else '' }}>已完成</option>
-              </select>
-              <span class="timer" aria-label="计时" title="计时">00:00:00</span>
-              <button class="btn-start" type="button">开始计时</button>
-              <button class="btn-pause" type="button" style="display:none;">暂停</button>
-              <button class="btn-stop" type="button" style="display:none;">结束</button>
-              <button class="btn-edit" type="button">编辑</button>
-              <button class="btn-delete" type="button">删除</button>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+  <details class="filter-panel" open>
+    <summary>筛选任务</summary>
+    <div class="filter-content">
+      <label>学生
+        <input id="filterStudent" placeholder="输入学生姓名的一部分">
+      </label>
+      <label>类别
+        <select id="filterCategory">
+          <option value="">全部</option>
+          <optgroup label="基础">
+            <option value="基础-四级词汇">四级词汇巩固</option>
+            <option value="基础-每日记忆计划">每日记忆计划</option>
+            <option value="基础-课堂抽查">课堂随机抽查</option>
+            <option value="基础-语法单选练习">语法单选练习</option>
+            <option value="基础-翻译句子练习">翻译句子练习</option>
+            <option value="基础-口语素材朗读">口语素材朗读</option>
+          </optgroup>
+          <optgroup label="雅思">
+            <option value="雅思-听力-精听">听力精听</option>
+            <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
+            <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
+            <option value="雅思-阅读-精读">阅读精读</option>
+            <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
+            <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
+            <option value="雅思-口语-常见题库问答">常见题库问答</option>
+            <option value="雅思-写作-句型与语法">句型与语法纠正</option>
+            <option value="雅思-写作-翻译句子">写作翻译句子</option>
+            <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
+          </optgroup>
+          <optgroup label="托福">
+            <option value="托福-听力-精听">听力精听</option>
+            <option value="托福-听力-速记训练">速记关键信息训练</option>
+            <option value="托福-阅读-精读">阅读深度分析</option>
+            <option value="托福-阅读-词汇复述">专项词汇复述</option>
+            <option value="托福-口语-完整演练">口语全程对练</option>
+            <option value="托福-口语-模拟考试">口语模拟考试</option>
+            <option value="托福-写作-观点论据">写作观点-论据梳理</option>
+            <option value="托福-写作-逻辑链">写作逻辑链扩展</option>
+            <option value="托福-语法-练习">语法单选练习</option>
+          </optgroup>
+        </select>
+      </label>
+      <label>状态
+        <select id="filterStatus">
+          <option value="">全部</option>
+          <option value="pending">未开始</option>
+          <option value="progress">进行中</option>
+          <option value="done">已完成</option>
+        </select>
+      </label>
+      <button id="filterClear" type="button">清除筛选</button>
+      <span id="filterStat"></span>
     </div>
   </details>
-  {% endfor %}
-</div>
 
-<style>
-.task-form{
-  margin: 0 0 16px;
-  padding: 12px 16px;
-  border: 1px solid var(--line, #e4e7ed);
-  border-radius: 12px;
-  background: var(--card, #fff);
-  box-shadow: var(--shadow, 0 1px 3px rgba(0,0,0,0.05));
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.task-form-row{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 16px;
-}
-.task-form .field{
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 140px;
-}
-.task-form .field label{
-  font-size: 13px;
-  color: var(--muted);
-}
-.task-form .field input,
-.task-form .field select{
-  height: 36px;
-  padding: 6px 10px;
-  border: 1px solid var(--line, #e4e7ed);
-  border-radius: 8px;
-  font-size: 14px;
-}
-.task-form .field input:focus,
-.task-form .field select:focus{
-  border-color: var(--brand-light, #40A6A0);
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(47,142,135,.12);
-}
-.task-form .field--wide{ flex: 1 1 260px; min-width: 240px; }
-.task-form .field--grow{ flex: 1 1 200px; }
-.task-form .field--action{
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  min-width: 120px;
-}
-.task-form .btn-primary{
-  padding: 9px 20px;
-  border-radius: 8px;
-  border: none;
-  background: var(--brand, #2F8E87);
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background .15s ease;
-}
-.task-form .btn-primary:hover{ background: var(--brand-dark, #277C78); }
+  {% set grouped = items|sort(attribute='student_name')|groupby('student_name') %}
+  <div class="task-accordion">
+    {% for group in grouped %}
+    {% set student = group.grouper|default('未填写学生', true) %}
+    <details class="student-group" data-student="{{ student }}" {% if loop.first %}open{% endif %}>
+      <summary>
+        <span class="student-name">{{ student }}</span>
+        <span class="student-summary">
+          <span class="student-count">任务数 {{ group.list|length }}</span>
+        </span>
+      </summary>
+      <div class="student-tasks">
+        <table class="task-table task-subtable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>日期</th>
+              <th>类别</th>
+              <th>任务</th>
+              <th>状态</th>
+              <th>用时</th>
+              <th>完成率</th>
+              <th>正确率</th>
+              <th>备注</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in group.list %}
+            <tr data-id="{{ t.id }}" data-student="{{ student }}" data-planned="{{ t.planned_minutes or 0 }}"
+              data-actual="{{ (t.actual_minutes * 60)|int if t.actual_minutes is defined else 0 }}"
+              data-completion="{{ '%.1f'|format(t.completion_rate) if t.completion_rate is not none else '' }}"
+              data-auto-progress="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}">
+              <td class="task-id">{{ t.id }}</td>
+              <td class="task-date">{{ t.date }}</td>
+              <td class="task-category">{{ t.category }}</td>
+              <td class="task-detail">{{ t.detail }}</td>
+              <td>
+                <span
+                  class="badge {{ 'status-pending' if t.status=='pending' else ('status-progress' if t.status=='progress' else 'status-done') }}">{{
+                  "未开始" if t.status=="pending" else ("进行中" if t.status=="progress" else "已完成") }}</span>
+              </td>
+              <td class="task-time">计划:{{ t.planned_minutes or 0 }} 分 ｜ 实际:{{ '%.1f'|format(t.actual_minutes or 0) }} 分
+              </td>
+              {% set manual_completion = t.completion_rate %}
+              {% set display_completion = manual_completion if manual_completion is not none else (t.progress if
+              t.progress is defined else 0) %}
+              <td class="task-progress" data-auto="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}">
+                <div class="percent-input">
+                  <input type="number" class="progress-input" value="{{ '%.1f'|format(display_completion or 0) }}"
+                    min="0" max="100" step="0.1" aria-label="完成率">
+                  <span class="progress-suffix">%</span>
+                </div>
+                {% if t.planned_minutes %}
+                <div class="progress-hint">计时：{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}%</div>
+                {% endif %}
+              </td>
+              <td class="task-accuracy">
+                <div class="percent-input">
+                  <input type="number" class="accuracy-input" value="{{ '%.1f'|format(t.accuracy or 0) }}" min="0"
+                    max="100" step="0.1" aria-label="正确率">
+                  <span class="accuracy-suffix">%</span>
+                </div>
+              </td>
+              <td class="task-note">{{ t.note }}</td>
+              <td>
+                <select class="status-select">
+                  <option value="pending" {{ 'selected' if t.status=='pending' else '' }}>未开始</option>
+                  <option value="progress" {{ 'selected' if t.status=='progress' else '' }}>进行中</option>
+                  <option value="done" {{ 'selected' if t.status=='done' else '' }}>已完成</option>
+                </select>
+                <span class="timer" aria-label="计时" title="计时">00:00:00</span>
+                <button class="btn-start" type="button">开始计时</button>
+                <button class="btn-pause" type="button" style="display:none;">暂停</button>
+                <button class="btn-stop" type="button" style="display:none;">结束</button>
+                <button class="btn-edit" type="button">编辑</button>
+                <button class="btn-delete" type="button">删除</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+    {% endfor %}
+  </div>
 
-.filter-panel{
-  margin: 12px 0 8px;
-  border: 1px solid var(--line, #e4e7ed);
-  border-radius: 10px;
-  background: var(--card, #fff);
-  box-shadow: var(--shadow, 0 1px 3px rgba(0,0,0,0.05));
-}
-.filter-panel > summary{
-  cursor: pointer;
-  font-weight: 600;
-  padding: 10px 14px;
-  list-style: none;
-}
-.filter-panel[open] > summary{
-  border-bottom: 1px solid var(--line, #e4e7ed);
-}
-.filter-panel summary::-webkit-details-marker{ display:none; }
-.filter-content{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 16px;
-  padding: 12px 14px 14px;
-  align-items: center;
-}
-.filter-content label{
-  display:flex;
-  flex-direction: column;
-  gap:6px;
-  font-size:13px;
-  color: var(--muted);
-}
-.filter-content input,
-.filter-content select{
-  width: 180px;
-  height: 32px;
-  border:1px solid var(--line, #e4e7ed);
-  border-radius:8px;
-  padding:4px 8px;
-  font-size:13px;
-}
-.filter-content button{
-  padding: 6px 14px;
-  border-radius: 8px;
-  border: none;
-  background:#eef2f5;
-  color:#3b3f45;
-  cursor:pointer;
-}
-.filter-content #filterStat{
-  color: var(--muted);
-  font-size: 13px;
-}
-.percent-input{
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-}
-.accuracy-input,
-.progress-input{
-  width: 70px;
-  text-align: right;
-  padding-right: 22px;
-}
-.accuracy-suffix,
-.progress-suffix{
-  margin-left: -18px;
-  color: var(--muted);
-  font-size: 13px;
-}
-.progress-hint{
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 12px;
-  white-space: nowrap;
-}
-.task-accordion{ display:flex; flex-direction:column; gap:14px; margin-top:8px; }
-.student-group{ border:1px solid var(--border, #dcdfe6); border-radius:10px; background:var(--card, #fff); overflow:hidden; }
-.student-group summary{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; cursor:pointer; font-weight:600; background:var(--table-header, #f7f7fa); }
-.student-group summary::-webkit-details-marker{ display:none; }
-.student-group[open] > summary{ border-bottom:1px solid var(--border, #dcdfe6); }
-.student-name{ font-size:1.05rem; color:var(--text-strong, #333); }
-.student-summary{ display:flex; align-items:center; gap:12px; color:var(--muted); font-size:0.9rem; }
-.student-tasks{ padding:0 12px 12px; }
-.task-subtable{ width:100%; border-collapse:collapse; margin-top:8px; }
-.task-subtable thead th{ background:transparent; }
-.task-subtable tbody tr td.task-detail{ position:relative; padding-left:2em; }
-.task-subtable tbody tr td.task-detail::before{
-  content:'├──';
-  position:absolute;
-  left:0;
-  color:var(--muted);
-  font-family:monospace;
-}
-.task-subtable tbody tr:last-child td.task-detail::before{ content:'└──'; }
-/* 简洁对话框样式 */
-.modal.hidden{ display:none; }
-.modal{ position: fixed; inset: 0; z-index: 50; }
-.modal .backdrop{ position: absolute; inset: 0; background: rgba(0,0,0,.35); }
-.modal .card{
-  position: relative; 
-  margin: 8vh auto 0; 
-  width: min(560px, 92vw);
-  background: var(--card);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  padding: 16px;
-}
-.modal .card h3{ margin: 0 0 12px; }
-.modal .row{ display:flex; flex-direction: column; gap:6px; margin-bottom:10px; }
-.modal .actions{ display:flex; justify-content:flex-end; gap:8px; margin-top: 8px; }
-.modal input[type="text"]{ width:100%; }
+  <style>
+    .task-form {
+      margin: 0 0 16px;
+      padding: 12px 16px;
+      border: 1px solid var(--line, #e4e7ed);
+      border-radius: 12px;
+      background: var(--card, #fff);
+      box-shadow: var(--shadow, 0 1px 3px rgba(0, 0, 0, 0.05));
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-/* 表格用时显示 */
-.task-time{ white-space:nowrap; min-width:180px; }
-.task-time.exceed{ color:#b00020; font-weight:600; }
-</style>
+    .task-form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 16px;
+    }
 
-<div id="editModal" class="modal hidden" aria-modal="true" role="dialog">
-  <div id="editBackdrop" class="backdrop"></div>
-  <div class="card">
-    <h3>编辑任务</h3>
-    <div class="row">
-      <label for="editDetail">任务内容</label>
-      <input id="editDetail" type="text" placeholder="请输入任务内容">
-    </div>
-    <div class="row">
-      <label for="editNote">备注</label>
-      <input id="editNote" type="text" placeholder="请输入备注（可留空）">
-    </div>
-    <div class="row">
-      <label for="editPlanned">预计用时（分钟）</label>
-      <input id="editPlanned" type="number" min="0" placeholder="例如 60">
-    </div>
-    <div class="row">
-      <label for="editAccuracy">正确率（0-100）</label>
-      <input id="editAccuracy" type="number" min="0" max="100" step="0.1" placeholder="如 85.5">
-    </div>
-    <div class="row">
-      <label for="editProgress">完成率（0-100）</label>
-      <input id="editProgress" type="number" min="0" max="100" step="0.1" placeholder="如 75">
-    </div>
-    <div class="actions">
-      <button id="editCancel" type="button">取消</button>
-      <button id="editSave" type="button">保存</button>
+    .task-form .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 140px;
+    }
+
+    .task-form .field label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .task-form .field input,
+    .task-form .field select {
+      height: 36px;
+      padding: 6px 10px;
+      border: 1px solid var(--line, #e4e7ed);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .task-form .field input:focus,
+    .task-form .field select:focus {
+      border-color: var(--brand-light, #40A6A0);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(47, 142, 135, .12);
+    }
+
+    .task-form .field--wide {
+      flex: 1 1 260px;
+      min-width: 240px;
+    }
+
+    .task-form .field--grow {
+      flex: 1 1 200px;
+    }
+
+    .task-form .field--action {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      min-width: 120px;
+    }
+
+    .task-form .btn-primary {
+      padding: 9px 20px;
+      border-radius: 8px;
+      border: none;
+      background: var(--brand, #2F8E87);
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background .15s ease;
+    }
+
+    .task-form .btn-primary:hover {
+      background: var(--brand-dark, #277C78);
+    }
+
+    .filter-panel {
+      margin: 12px 0 8px;
+      border: 1px solid var(--line, #e4e7ed);
+      border-radius: 10px;
+      background: var(--card, #fff);
+      box-shadow: var(--shadow, 0 1px 3px rgba(0, 0, 0, 0.05));
+    }
+
+    .filter-panel>summary {
+      cursor: pointer;
+      font-weight: 600;
+      padding: 10px 14px;
+      list-style: none;
+    }
+
+    .filter-panel[open]>summary {
+      border-bottom: 1px solid var(--line, #e4e7ed);
+    }
+
+    .filter-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .filter-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 16px;
+      padding: 12px 14px 14px;
+      align-items: center;
+    }
+
+    .filter-content label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .filter-content input,
+    .filter-content select {
+      width: 180px;
+      height: 32px;
+      border: 1px solid var(--line, #e4e7ed);
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 13px;
+    }
+
+    .filter-content button {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: none;
+      background: #eef2f5;
+      color: #3b3f45;
+      cursor: pointer;
+    }
+
+    .filter-content #filterStat {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .percent-input {
+      display: inline-flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .accuracy-input,
+    .progress-input {
+      width: 70px;
+      text-align: right;
+      padding-right: 22px;
+    }
+
+    .accuracy-suffix,
+    .progress-suffix {
+      margin-left: -18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .progress-hint {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .task-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .student-group {
+      border: 1px solid var(--border, #dcdfe6);
+      border-radius: 10px;
+      background: var(--card, #fff);
+      overflow: hidden;
+    }
+
+    .student-group summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      background: var(--table-header, #f7f7fa);
+    }
+
+    .student-group summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .student-group[open]>summary {
+      border-bottom: 1px solid var(--border, #dcdfe6);
+    }
+
+    .student-name {
+      font-size: 1.05rem;
+      color: var(--text-strong, #333);
+    }
+
+    .student-summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .student-tasks {
+      padding: 0 12px 12px;
+    }
+
+    .task-subtable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    .task-subtable thead th {
+      background: transparent;
+    }
+
+    .task-subtable tbody tr td.task-detail {
+      position: relative;
+      padding-left: 2em;
+    }
+
+    .task-subtable tbody tr td.task-detail::before {
+      content: '├──';
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+      font-family: monospace;
+    }
+
+    .task-subtable tbody tr:last-child td.task-detail::before {
+      content: '└──';
+    }
+
+    /* 简洁对话框样式 */
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+    }
+
+    .modal .backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .35);
+    }
+
+    .modal .card {
+      position: relative;
+      margin: 8vh auto 0;
+      width: min(560px, 92vw);
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .modal .card h3 {
+      margin: 0 0 12px;
+    }
+
+    .modal .row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .modal .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .modal input[type="text"] {
+      width: 100%;
+    }
+
+    /* 表格用时显示 */
+    .task-time {
+      white-space: nowrap;
+      min-width: 180px;
+    }
+
+    .task-time.exceed {
+      color: #b00020;
+      font-weight: 600;
+    }
+  </style>
+
+  <div id="editModal" class="modal hidden" aria-modal="true" role="dialog">
+    <div id="editBackdrop" class="backdrop"></div>
+    <div class="card">
+      <h3>编辑任务</h3>
+      <div class="row">
+        <label for="editDetail">任务内容</label>
+        <input id="editDetail" type="text" placeholder="请输入任务内容">
+      </div>
+      <div class="row">
+        <label for="editNote">备注</label>
+        <input id="editNote" type="text" placeholder="请输入备注（可留空）">
+      </div>
+      <div class="row">
+        <label for="editPlanned">预计用时（分钟）</label>
+        <input id="editPlanned" type="number" min="0" placeholder="例如 60">
+      </div>
+      <div class="row">
+        <label for="editAccuracy">正确率（0-100）</label>
+        <input id="editAccuracy" type="number" min="0" max="100" step="0.1" placeholder="如 85.5">
+      </div>
+      <div class="row">
+        <label for="editProgress">完成率（0-100）</label>
+        <input id="editProgress" type="number" min="0" max="100" step="0.1" placeholder="如 75">
+      </div>
+      <div class="actions">
+        <button id="editCancel" type="button">取消</button>
+        <button id="editSave" type="button">保存</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-const taskForm = document.getElementById('taskForm');
-const categorySelect = document.getElementById('taskCategory');
-const detailHidden = document.getElementById('taskDetail');
-if (taskForm && categorySelect && detailHidden){
-  const syncDetail = () => {
-    const option = categorySelect.options[categorySelect.selectedIndex];
-    detailHidden.value = option ? option.textContent.trim() : '';
-  };
-  syncDetail();
-  categorySelect.addEventListener('change', syncDetail);
-  taskForm.addEventListener('submit', syncDetail);
-}
-
-const formatPercent = (value) => Number.isFinite(value) ? value.toFixed(1) : '0.0';
-
-function bindAccuracyInputs(scope = document){
-  scope.querySelectorAll('.accuracy-input').forEach(input => {
-    const initial = parseFloat(input.value);
-    const formatted = formatPercent(initial);
-    input.value = formatted;
-    input.dataset.prevAccuracy = formatted;
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') input.blur();
-    });
-    input.addEventListener('blur', async () => {
-      const row = input.closest('tr[data-id]');
-      if (!row) return;
-      const previous = parseFloat(input.dataset.prevAccuracy || '0') || 0;
-      const value = parseFloat(input.value || '0');
-      if (!Number.isFinite(value)) {
-        input.value = formatPercent(previous);
-        return;
-      }
-      if (Math.abs(value - previous) < 0.05) {
-        input.value = formatPercent(previous);
-        return;
-      }
-      try{
-        input.disabled = true;
-        const res = await fetch(`/api/tasks/${row.dataset.id}/edit`, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({accuracy: value})
-        });
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.error || 'update_failed');
-        const clean = formatPercent(data.task.accuracy);
-        input.value = clean;
-        input.dataset.prevAccuracy = clean;
-      }catch(err){
-        alert('更新正确率失败，请稍后再试');
-        input.value = formatPercent(previous);
-        input.dataset.prevAccuracy = formatPercent(previous);
-      }finally{
-        input.disabled = false;
-      }
-    });
-  });
-}
-bindAccuracyInputs();
-
-function bindProgressInputs(scope = document){
-  scope.querySelectorAll('.progress-input').forEach(input => {
-    const row = input.closest('tr[data-id]');
-    const manual = row?.dataset?.completion || '';
-    if (manual !== '') {
-      const formatted = formatPercent(parseFloat(manual));
-      input.value = formatted;
-      input.dataset.prevProgress = formatted;
-    } else {
-      const auto = parseFloat(row?.dataset?.autoProgress || input.value || '0');
-      const formatted = formatPercent(auto);
-      input.value = formatted;
-      input.dataset.prevProgress = '';
+  <script>
+    const taskForm = document.getElementById('taskForm');
+    const categorySelect = document.getElementById('taskCategory');
+    const detailHidden = document.getElementById('taskDetail');
+    if (taskForm && categorySelect && detailHidden) {
+      const syncDetail = () => {
+        const option = categorySelect.options[categorySelect.selectedIndex];
+        detailHidden.value = option ? option.textContent.trim() : '';
+      };
+      syncDetail();
+      categorySelect.addEventListener('change', syncDetail);
+      taskForm.addEventListener('submit', syncDetail);
     }
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') input.blur();
-    });
-    input.addEventListener('blur', async () => {
-      const hostRow = input.closest('tr[data-id]');
-      if (!hostRow) return;
-      const previousRaw = input.dataset.prevProgress ?? '';
-      const autoVal = parseFloat(hostRow.dataset.autoProgress || '0');
-      const trimmed = input.value.trim();
-      let payloadValue;
-      if (trimmed === '') {
-        if (previousRaw === '') return;
-        payloadValue = null;
-      } else {
-        const value = parseFloat(trimmed);
-        if (!Number.isFinite(value)) {
-          input.value = previousRaw ? formatPercent(parseFloat(previousRaw)) : formatPercent(autoVal);
-          return;
-        }
-        if (previousRaw === '' && Math.abs(value - autoVal) < 0.05) {
-          input.value = formatPercent(autoVal);
-          return;
-        }
-        if (previousRaw !== '' && Math.abs(value - parseFloat(previousRaw)) < 0.05) {
-          input.value = formatPercent(parseFloat(previousRaw));
-          return;
-        }
-        payloadValue = value;
-      }
-      try{
-        input.disabled = true;
-        const res = await fetch(`/api/tasks/${hostRow.dataset.id}/edit`, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({completion_rate: payloadValue})
+
+    const formatPercent = (value) => Number.isFinite(value) ? value.toFixed(1) : '0.0';
+
+    function bindAccuracyInputs(scope = document) {
+      scope.querySelectorAll('.accuracy-input').forEach(input => {
+        const initial = parseFloat(input.value);
+        const formatted = formatPercent(initial);
+        input.value = formatted;
+        input.dataset.prevAccuracy = formatted;
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') input.blur();
         });
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.error || 'update_failed');
-        const serverVal = data.task.completion_rate;
-        if (serverVal === null || serverVal === undefined) {
-          const formatted = formatPercent(autoVal);
-          input.value = formatted;
-          input.dataset.prevProgress = '';
-          hostRow.dataset.completion = '';
-        } else {
-          const formatted = formatPercent(parseFloat(serverVal));
+        input.addEventListener('blur', async () => {
+          const row = input.closest('tr[data-id]');
+          if (!row) return;
+          const previous = parseFloat(input.dataset.prevAccuracy || '0') || 0;
+          const value = parseFloat(input.value || '0');
+          if (!Number.isFinite(value)) {
+            input.value = formatPercent(previous);
+            return;
+          }
+          if (Math.abs(value - previous) < 0.05) {
+            input.value = formatPercent(previous);
+            return;
+          }
+          try {
+            input.disabled = true;
+            const res = await fetch(`/api/tasks/${row.dataset.id}/edit`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ accuracy: value })
+            });
+            const data = await res.json();
+            if (!data.ok) throw new Error(data.error || 'update_failed');
+            const clean = formatPercent(data.task.accuracy);
+            input.value = clean;
+            input.dataset.prevAccuracy = clean;
+          } catch (err) {
+            alert('更新正确率失败，请稍后再试');
+            input.value = formatPercent(previous);
+            input.dataset.prevAccuracy = formatPercent(previous);
+          } finally {
+            input.disabled = false;
+          }
+        });
+      });
+    }
+    bindAccuracyInputs();
+
+    function bindProgressInputs(scope = document) {
+      scope.querySelectorAll('.progress-input').forEach(input => {
+        const row = input.closest('tr[data-id]');
+        const manual = row?.dataset?.completion || '';
+        if (manual !== '') {
+          const formatted = formatPercent(parseFloat(manual));
           input.value = formatted;
           input.dataset.prevProgress = formatted;
-          hostRow.dataset.completion = formatted;
-        }
-      }catch(err){
-        alert('更新完成率失败，请稍后再试');
-        if (previousRaw && previousRaw !== '') {
-          const prev = parseFloat(previousRaw);
-          input.value = formatPercent(prev);
         } else {
-          input.value = formatPercent(autoVal);
+          const auto = parseFloat(row?.dataset?.autoProgress || input.value || '0');
+          const formatted = formatPercent(auto);
+          input.value = formatted;
+          input.dataset.prevProgress = '';
         }
-      }finally{
-        input.disabled = false;
-      }
-    });
-  });
-}
-bindProgressInputs();
-
-document.querySelectorAll('.btn-delete').forEach(btn => {
-  btn.addEventListener('click', async e => {
-    const row = e.target.closest('tr');
-    const id = row.dataset.id;
-    if (!confirm('确定要删除这条任务吗？')) return;
-    const res = await fetch(`/api/tasks/${id}/delete`, {method:'POST'});
-    const data = await res.json();
-    if (data.ok) {
-      const group = row.closest('.student-group');
-      row.remove();
-      if (group && !group.querySelector('tr[data-id]')){
-        group.remove();
-      }
-      if (window.applyTaskFilters) window.applyTaskFilters();
-      alert('已删除');
-    } else {
-      alert('删除失败');
-    }
-  });
-});
-
-/* ==== 编辑对话框（替代 prompt） ==== */
-let editingRow = null;
-
-function openEditModal(row){
-  editingRow = row;
-  const detail = row.querySelector('.task-detail')?.textContent?.trim() || '';
-  const note = row.querySelector('.task-note')?.textContent?.trim() || '';
-  document.getElementById('editDetail').value = detail;
-  document.getElementById('editNote').value = note;
-  const planned = parseInt(row.dataset.planned || '0', 10) || 0;
-  document.getElementById('editPlanned').value = planned;
-  const accInput = row.querySelector('.accuracy-input');
-  const accVal = accInput ? parseFloat(accInput.value) || 0 : 0;
-  document.getElementById('editAccuracy').value = formatPercent(accVal);
-  const progressField = document.getElementById('editProgress');
-  const manualCompletion = row.dataset.completion || '';
-  const autoProgress = row.dataset.autoProgress || '';
-  progressField.value = manualCompletion;
-  if (!manualCompletion && autoProgress) {
-    progressField.placeholder = `参考 ${autoProgress}%`;
-  } else {
-    progressField.placeholder = '如 75';
-  }
-  document.getElementById('editModal').classList.remove('hidden');
-}
-
-function closeEditModal(){
-  document.getElementById('editModal').classList.add('hidden');
-  const progressField = document.getElementById('editProgress');
-  progressField.value = '';
-  progressField.placeholder = '如 75';
-  editingRow = null;
-}
-
-document.querySelectorAll('.btn-edit').forEach(btn => {
-  btn.addEventListener('click', e => {
-  const row = e.target.closest('tr');
-  openEditModal(row);
-});
-});
-
-document.getElementById('editCancel').addEventListener('click', e => {
-  e.preventDefault();
-  closeEditModal();
-});
-
-document.getElementById('editBackdrop').addEventListener('click', () => {
-  closeEditModal();
-});
-
-document.getElementById('editSave').addEventListener('click', async e => {
-  e.preventDefault();
-  if (!editingRow) return;
-  const id = editingRow.dataset.id;
-  const newDetail = document.getElementById('editDetail').value.trim();
-  const newNote = document.getElementById('editNote').value.trim();
-  let newPlanned = parseInt(document.getElementById('editPlanned').value.trim() || '0', 10);
-  if (!Number.isFinite(newPlanned)) newPlanned = 0;
-  let newAccuracy = parseFloat(document.getElementById('editAccuracy').value.trim() || '0');
-  if (!Number.isFinite(newAccuracy)) newAccuracy = 0;
-  const progressRaw = document.getElementById('editProgress').value.trim();
-  let newProgress = null;
-  if (progressRaw !== '') {
-    newProgress = parseFloat(progressRaw);
-    if (!Number.isFinite(newProgress)) {
-      alert('完成率请输入数字。');
-      return;
-    }
-    if (newProgress < 0 || newProgress > 100) {
-      alert('完成率应在 0 到 100 之间。');
-      return;
-    }
-  }
-
-  try {
-    const res = await fetch(`/api/tasks/${id}/edit`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        detail: newDetail,
-        note: newNote,
-        planned_minutes: newPlanned,
-        accuracy: newAccuracy,
-        completion_rate: newProgress
-      })
-    });
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'update_failed');
-    // 更新表格
-    editingRow.querySelector('.task-detail').textContent = data.task.detail;
-    editingRow.querySelector('.task-note').textContent = data.task.note || '';
-    editingRow.dataset.planned = newPlanned;
-    const accCell = editingRow.querySelector('.task-accuracy');
-    if (accCell) {
-      const accInput = accCell.querySelector('.accuracy-input');
-      if (accInput){
-        const clean = formatPercent(data.task.accuracy);
-        accInput.value = clean;
-        accInput.dataset.prevAccuracy = clean;
-      }
-    }
-    const timeCell = editingRow.querySelector('.task-time');
-    if(timeCell){
-      const actualMin = Math.round(Number(editingRow.dataset.actual||0) / 6) / 10;
-      timeCell.textContent = `计划:${newPlanned} 分 ｜ 实际:${formatPercent(actualMin)} 分`;
-    }
-    // 同步完成率
-    const progCell = editingRow.querySelector('.task-progress');
-    if (progCell){
-      const actualSec = Number(editingRow.dataset.actual||0);
-      const pct = newPlanned > 0 ? Math.round((actualSec/60)/newPlanned*1000)/10 : 0;
-      const autoFormatted = formatPercent(pct);
-      editingRow.dataset.autoProgress = autoFormatted;
-      progCell.dataset.auto = autoFormatted;
-      const hint = progCell.querySelector('.progress-hint');
-      if (hint){
-        if (newPlanned > 0){
-          hint.textContent = `计时：${autoFormatted}%`;
-        }else{
-          hint.textContent = '';
-        }
-      }
-      const progressInput = progCell.querySelector('.progress-input');
-      if (progressInput){
-        const serverManual = data.task.completion_rate;
-        if (serverManual === null || serverManual === undefined){
-          progressInput.value = autoFormatted;
-          progressInput.dataset.prevProgress = '';
-          editingRow.dataset.completion = '';
-        }else{
-          const formatted = formatPercent(serverManual);
-          progressInput.value = formatted;
-          progressInput.dataset.prevProgress = formatted;
-          editingRow.dataset.completion = formatted;
-        }
-      }
-    }
-    if (window.applyTaskFilters) window.applyTaskFilters();
-    closeEditModal();
-  } catch (err) {
-    alert('更新失败，请稍后重试');
-  }
-});
-
-/** 状态下拉：无刷新更新状态并同步徽章显示 */
-document.querySelectorAll('.status-select').forEach(sel => {
-  sel.addEventListener('change', async e => {
-    const row = e.target.closest('tr');
-    const id = row.dataset.id;
-    const val = e.target.value; // pending / progress / done
-    try {
-      const res = await fetch(`/api/tasks/${id}/edit`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({status: val})
-      });
-      const data = await res.json();
-      if (!data.ok) throw new Error(data.error || 'update_failed');
-      // 更新徽章文本与样式
-      const badge = row.querySelector('.badge');
-      if (badge) {
-        badge.classList.remove('status-pending','status-progress','status-done');
-        if (val === 'pending') {
-          badge.textContent = '未开始';
-          badge.classList.add('status-pending');
-        } else if (val === 'progress') {
-          badge.textContent = '进行中';
-          badge.classList.add('status-progress');
-        } else {
-          badge.textContent = '已完成';
-          badge.classList.add('status-done');
-        }
-      }
-      const startBtn = row.querySelector('.btn-start');
-      const pauseBtn = row.querySelector('.btn-pause');
-      const stopBtn = row.querySelector('.btn-stop');
-      if (val === 'done') {
-        row.dataset.timerComplete = 'true';
-        startBtn && (startBtn.style.display = 'none');
-        pauseBtn && (pauseBtn.style.display = 'none');
-        stopBtn && (stopBtn.style.display = 'none');
-      } else {
-        row.dataset.timerComplete = 'false';
-        if (startBtn) {
-          if (row.dataset.sessionId) {
-            startBtn.style.display = 'none';
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') input.blur();
+        });
+        input.addEventListener('blur', async () => {
+          const hostRow = input.closest('tr[data-id]');
+          if (!hostRow) return;
+          const previousRaw = input.dataset.prevProgress ?? '';
+          const autoVal = parseFloat(hostRow.dataset.autoProgress || '0');
+          const trimmed = input.value.trim();
+          let payloadValue;
+          if (trimmed === '') {
+            if (previousRaw === '') return;
+            payloadValue = null;
           } else {
-            const actualSeconds = Number(row.dataset.actual || 0);
-            startBtn.textContent = actualSeconds > 0 ? '继续计时' : '开始计时';
-            startBtn.disabled = false;
-            startBtn.style.display = '';
+            const value = parseFloat(trimmed);
+            if (!Number.isFinite(value)) {
+              input.value = previousRaw ? formatPercent(parseFloat(previousRaw)) : formatPercent(autoVal);
+              return;
+            }
+            if (previousRaw === '' && Math.abs(value - autoVal) < 0.05) {
+              input.value = formatPercent(autoVal);
+              return;
+            }
+            if (previousRaw !== '' && Math.abs(value - parseFloat(previousRaw)) < 0.05) {
+              input.value = formatPercent(parseFloat(previousRaw));
+              return;
+            }
+            payloadValue = value;
+          }
+          try {
+            input.disabled = true;
+            const res = await fetch(`/api/tasks/${hostRow.dataset.id}/edit`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ completion_rate: payloadValue })
+            });
+            const data = await res.json();
+            if (!data.ok) throw new Error(data.error || 'update_failed');
+            const serverVal = data.task.completion_rate;
+            if (serverVal === null || serverVal === undefined) {
+              const formatted = formatPercent(autoVal);
+              input.value = formatted;
+              input.dataset.prevProgress = '';
+              hostRow.dataset.completion = '';
+            } else {
+              const formatted = formatPercent(parseFloat(serverVal));
+              input.value = formatted;
+              input.dataset.prevProgress = formatted;
+              hostRow.dataset.completion = formatted;
+            }
+          } catch (err) {
+            alert('更新完成率失败，请稍后再试');
+            if (previousRaw && previousRaw !== '') {
+              const prev = parseFloat(previousRaw);
+              input.value = formatPercent(prev);
+            } else {
+              input.value = formatPercent(autoVal);
+            }
+          } finally {
+            input.disabled = false;
+          }
+        });
+      });
+    }
+    bindProgressInputs();
+
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+      btn.addEventListener('click', async e => {
+        const row = e.target.closest('tr');
+        const id = row.dataset.id;
+        if (!confirm('确定要删除这条任务吗？')) return;
+        const res = await fetch(`/api/tasks/${id}/delete`, { method: 'POST' });
+        const data = await res.json();
+        if (data.ok) {
+          const group = row.closest('.student-group');
+          row.remove();
+          if (group && !group.querySelector('tr[data-id]')) {
+            group.remove();
+          }
+          if (window.applyTaskFilters) window.applyTaskFilters();
+          alert('已删除');
+        } else {
+          alert('删除失败');
+        }
+      });
+    });
+
+    /* ==== 编辑对话框（替代 prompt） ==== */
+    let editingRow = null;
+
+    function openEditModal(row) {
+      editingRow = row;
+      const detail = row.querySelector('.task-detail')?.textContent?.trim() || '';
+      const note = row.querySelector('.task-note')?.textContent?.trim() || '';
+      document.getElementById('editDetail').value = detail;
+      document.getElementById('editNote').value = note;
+      const planned = parseInt(row.dataset.planned || '0', 10) || 0;
+      document.getElementById('editPlanned').value = planned;
+      const accInput = row.querySelector('.accuracy-input');
+      const accVal = accInput ? parseFloat(accInput.value) || 0 : 0;
+      document.getElementById('editAccuracy').value = formatPercent(accVal);
+      const progressField = document.getElementById('editProgress');
+      const manualCompletion = row.dataset.completion || '';
+      const autoProgress = row.dataset.autoProgress || '';
+      progressField.value = manualCompletion;
+      if (!manualCompletion && autoProgress) {
+        progressField.placeholder = `参考 ${autoProgress}%`;
+      } else {
+        progressField.placeholder = '如 75';
+      }
+      document.getElementById('editModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').classList.add('hidden');
+      const progressField = document.getElementById('editProgress');
+      progressField.value = '';
+      progressField.placeholder = '如 75';
+      editingRow = null;
+    }
+
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const row = e.target.closest('tr');
+        openEditModal(row);
+      });
+    });
+
+    document.getElementById('editCancel').addEventListener('click', e => {
+      e.preventDefault();
+      closeEditModal();
+    });
+
+    document.getElementById('editBackdrop').addEventListener('click', () => {
+      closeEditModal();
+    });
+
+    document.getElementById('editSave').addEventListener('click', async e => {
+      e.preventDefault();
+      if (!editingRow) return;
+      const id = editingRow.dataset.id;
+      const newDetail = document.getElementById('editDetail').value.trim();
+      const newNote = document.getElementById('editNote').value.trim();
+      let newPlanned = parseInt(document.getElementById('editPlanned').value.trim() || '0', 10);
+      if (!Number.isFinite(newPlanned)) newPlanned = 0;
+      let newAccuracy = parseFloat(document.getElementById('editAccuracy').value.trim() || '0');
+      if (!Number.isFinite(newAccuracy)) newAccuracy = 0;
+      const progressRaw = document.getElementById('editProgress').value.trim();
+      let newProgress = null;
+      if (progressRaw !== '') {
+        newProgress = parseFloat(progressRaw);
+        if (!Number.isFinite(newProgress)) {
+          alert('完成率请输入数字。');
+          return;
+        }
+        if (newProgress < 0 || newProgress > 100) {
+          alert('完成率应在 0 到 100 之间。');
+          return;
+        }
+      }
+
+      try {
+        const res = await fetch(`/api/tasks/${id}/edit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            detail: newDetail,
+            note: newNote,
+            planned_minutes: newPlanned,
+            accuracy: newAccuracy,
+            completion_rate: newProgress
+          })
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'update_failed');
+        // 更新表格
+        editingRow.querySelector('.task-detail').textContent = data.task.detail;
+        editingRow.querySelector('.task-note').textContent = data.task.note || '';
+        editingRow.dataset.planned = newPlanned;
+        const accCell = editingRow.querySelector('.task-accuracy');
+        if (accCell) {
+          const accInput = accCell.querySelector('.accuracy-input');
+          if (accInput) {
+            const clean = formatPercent(data.task.accuracy);
+            accInput.value = clean;
+            accInput.dataset.prevAccuracy = clean;
           }
         }
-        if (!row.dataset.sessionId) {
+        const timeCell = editingRow.querySelector('.task-time');
+        if (timeCell) {
+          const actualMin = Math.round(Number(editingRow.dataset.actual || 0) / 6) / 10;
+          timeCell.textContent = `计划:${newPlanned} 分 ｜ 实际:${formatPercent(actualMin)} 分`;
+        }
+        // 同步完成率
+        const progCell = editingRow.querySelector('.task-progress');
+        if (progCell) {
+          const actualSec = Number(editingRow.dataset.actual || 0);
+          const pct = newPlanned > 0 ? Math.round((actualSec / 60) / newPlanned * 1000) / 10 : 0;
+          const autoFormatted = formatPercent(pct);
+          editingRow.dataset.autoProgress = autoFormatted;
+          progCell.dataset.auto = autoFormatted;
+          const hint = progCell.querySelector('.progress-hint');
+          if (hint) {
+            if (newPlanned > 0) {
+              hint.textContent = `计时：${autoFormatted}%`;
+            } else {
+              hint.textContent = '';
+            }
+          }
+          const progressInput = progCell.querySelector('.progress-input');
+          if (progressInput) {
+            const serverManual = data.task.completion_rate;
+            if (serverManual === null || serverManual === undefined) {
+              progressInput.value = autoFormatted;
+              progressInput.dataset.prevProgress = '';
+              editingRow.dataset.completion = '';
+            } else {
+              const formatted = formatPercent(serverManual);
+              progressInput.value = formatted;
+              progressInput.dataset.prevProgress = formatted;
+              editingRow.dataset.completion = formatted;
+            }
+          }
+        }
+        if (window.applyTaskFilters) window.applyTaskFilters();
+        closeEditModal();
+      } catch (err) {
+        alert('更新失败，请稍后重试');
+      }
+    });
+
+    /** 状态下拉：无刷新更新状态并同步徽章显示 */
+    document.querySelectorAll('.status-select').forEach(sel => {
+      sel.addEventListener('change', async e => {
+        const row = e.target.closest('tr');
+        const id = row.dataset.id;
+        const val = e.target.value; // pending / progress / done
+        try {
+          const res = await fetch(`/api/tasks/${id}/edit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: val })
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'update_failed');
+          // 更新徽章文本与样式
+          const badge = row.querySelector('.badge');
+          if (badge) {
+            badge.classList.remove('status-pending', 'status-progress', 'status-done');
+            if (val === 'pending') {
+              badge.textContent = '未开始';
+              badge.classList.add('status-pending');
+            } else if (val === 'progress') {
+              badge.textContent = '进行中';
+              badge.classList.add('status-progress');
+            } else {
+              badge.textContent = '已完成';
+              badge.classList.add('status-done');
+            }
+          }
+          const startBtn = row.querySelector('.btn-start');
+          const pauseBtn = row.querySelector('.btn-pause');
+          const stopBtn = row.querySelector('.btn-stop');
+          if (val === 'done') {
+            row.dataset.timerComplete = 'true';
+            startBtn && (startBtn.style.display = 'none');
+            pauseBtn && (pauseBtn.style.display = 'none');
+            stopBtn && (stopBtn.style.display = 'none');
+          } else {
+            row.dataset.timerComplete = 'false';
+            if (startBtn) {
+              if (row.dataset.sessionId) {
+                startBtn.style.display = 'none';
+              } else {
+                const actualSeconds = Number(row.dataset.actual || 0);
+                startBtn.textContent = actualSeconds > 0 ? '继续计时' : '开始计时';
+                startBtn.disabled = false;
+                startBtn.style.display = '';
+              }
+            }
+            if (!row.dataset.sessionId) {
+              pauseBtn && (pauseBtn.style.display = 'none');
+              stopBtn && (stopBtn.style.display = 'none');
+            }
+          }
+          if (window.applyTaskFilters) window.applyTaskFilters();
+        } catch (err) {
+          alert('状态更新失败，请重试');
+          // 失败时回滚选择
+          const old = row.querySelector('.badge')?.textContent?.trim();
+          if (old === '未开始') e.target.value = 'pending';
+          else if (old === '进行中') e.target.value = 'progress';
+          else e.target.value = 'done';
+        }
+      });
+    });
+    // === 筛选逻辑（前端过滤当前列表） ===
+    (function () {
+      const studentInp = document.getElementById('filterStudent');
+      const catSel = document.getElementById('filterCategory');
+      const statusSel = document.getElementById('filterStatus');
+      const clearBtn = document.getElementById('filterClear');
+      const stat = document.getElementById('filterStat');
+
+      function norm(s) { return (s || '').toLowerCase().trim(); }
+
+      function apply() {
+        const kw = norm(studentInp?.value);
+        const cat = catSel?.value || '';
+        const st = statusSel?.value || ''; // pending/progress/done/''
+        let showCount = 0;
+
+        const dataRows = Array.from(document.querySelectorAll('tr[data-id]'));
+        dataRows.forEach(row => {
+          const student = norm(row.dataset.student);
+          const category = (row.querySelector('.task-category')?.textContent || '').trim();
+          const badge = row.querySelector('.badge');
+          const status = badge?.classList.contains('status-done') ? 'done' : (badge?.classList.contains('status-progress') ? 'progress' : 'pending');
+
+          let ok = true;
+          if (kw && (!student || !student.includes(kw))) ok = false;
+          if (ok && cat && category !== cat) ok = false;
+          if (ok && st && status !== st) ok = false;
+
+          row.style.display = ok ? '' : 'none';
+          if (ok) showCount++;
+        });
+
+        const groups = Array.from(document.querySelectorAll('.student-group'));
+        groups.forEach(group => {
+          const rows = Array.from(group.querySelectorAll('tr[data-id]'));
+          const visibleRows = rows.filter(r => r.style.display !== 'none');
+          const hasVisible = visibleRows.length > 0;
+          group.style.display = hasVisible ? '' : 'none';
+          const countEl = group.querySelector('.student-count');
+          if (countEl) {
+            const total = rows.length;
+            const visibleCount = visibleRows.length;
+            countEl.textContent = visibleCount === total ? `任务数 ${total}` : `任务数 ${visibleCount} / ${total}`;
+          }
+        });
+
+        const totalRows = dataRows.length;
+        if (stat) stat.textContent = `显示 ${showCount} / ${totalRows} 条`;
+      }
+
+      window.applyTaskFilters = apply;
+
+      // 简单防抖
+      let timer = null;
+      studentInp && studentInp.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(apply, 200);
+      });
+      catSel && catSel.addEventListener('change', apply);
+      statusSel && statusSel.addEventListener('change', apply);
+      clearBtn && clearBtn.addEventListener('click', () => {
+        if (studentInp) studentInp.value = '';
+        if (catSel) catSel.value = '';
+        if (statusSel) statusSel.value = '';
+        apply();
+      });
+
+      // 初始化统计
+      apply();
+    })();
+    // === 计时逻辑：开始 / 暂停 / 结束（可多段累计） ===
+    (function () {
+      const intervals = new Map(); // 行 -> intervalId
+
+      function pad(n) { return String(n).padStart(2, '0'); }
+      function fmt(sec) { const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60; return `${pad(h)}:${pad(m)}:${pad(s)}`; }
+      function minutes(sec) { return Math.round((sec / 60) * 10) / 10; }
+
+      function updateUsage(row, runningSec = 0) {
+        const planned = Number(row.dataset.planned || 0); // 分钟
+        const actualBase = Number(row.dataset.actual || 0); // 秒
+        const totalSec = actualBase + runningSec; // 若在计时中，加上当前段
+        const cell = row.querySelector('.task-time');
+        if (!cell) return;
+        const left = planned > 0 ? `计划:${planned} 分` : `计划:—`;
+        const right = `实际:${formatPercent(minutes(totalSec))} 分`;
+        cell.textContent = `${left} ｜ ${right}`;
+        // 同步完成率显示（保留 1 位小数）
+        const progCell = row.querySelector('.task-progress');
+        if (progCell) {
+          const donePct = planned > 0 ? Math.round((totalSec / 60) / planned * 1000) / 10 : 0;
+          const formatted = formatPercent(donePct);
+          row.dataset.autoProgress = formatted;
+          progCell.dataset.auto = formatted;
+          const hint = progCell.querySelector('.progress-hint');
+          if (hint) {
+            if (planned > 0) {
+              hint.textContent = `计时：${formatted}%`;
+            } else {
+              hint.textContent = '';
+            }
+          }
+          const manual = row.dataset.completion || '';
+          if (manual === '') {
+            const progressInput = progCell.querySelector('.progress-input');
+            if (progressInput) {
+              progressInput.value = formatted;
+              progressInput.dataset.prevProgress = '';
+            }
+          }
+        }
+        if (planned > 0 && totalSec >= planned * 60) cell.classList.add('exceed'); else cell.classList.remove('exceed');
+      }
+
+      document.querySelectorAll('tr[data-id]').forEach(row => {
+        const startBtn = row.querySelector('.btn-start');
+        const pauseBtn = row.querySelector('.btn-pause');
+        const stopBtn = row.querySelector('.btn-stop');
+        const timerEl = row.querySelector('.timer');
+        const taskId = row.dataset.id;
+        const statusSel = row.querySelector('.status-select');
+
+        let startTs = null; // 本段开始时间（ms）
+        let sessionBase = Number(row.dataset.actual || 0); // 当前段开始前的累计秒
+
+        // 初始渲染用时
+        updateUsage(row, 0);
+        if (timerEl) timerEl.textContent = fmt(sessionBase);
+        if (!row.dataset.timerComplete) {
+          row.dataset.timerComplete = statusSel?.value === 'done' ? 'true' : 'false';
+        }
+        if (startBtn) {
+          const actualSeconds = Number(row.dataset.actual || 0);
+          startBtn.textContent = actualSeconds > 0 ? '继续计时' : '开始计时';
+          if (statusSel?.value === 'done') {
+            startBtn.style.display = 'none';
+          }
+        }
+        if (statusSel?.value === 'done') {
           pauseBtn && (pauseBtn.style.display = 'none');
           stopBtn && (stopBtn.style.display = 'none');
         }
-      }
-      if (window.applyTaskFilters) window.applyTaskFilters();
-    } catch (err) {
-      alert('状态更新失败，请重试');
-      // 失败时回滚选择
-      const old = row.querySelector('.badge')?.textContent?.trim();
-      if (old === '未开始') e.target.value = 'pending';
-      else if (old === '进行中') e.target.value = 'progress';
-      else e.target.value = 'done';
-    }
-  });
-});
-// === 筛选逻辑（前端过滤当前列表） ===
-(function(){
-  const studentInp = document.getElementById('filterStudent');
-  const catSel = document.getElementById('filterCategory');
-  const statusSel = document.getElementById('filterStatus');
-  const clearBtn = document.getElementById('filterClear');
-  const stat = document.getElementById('filterStat');
 
-  function norm(s){ return (s||'').toLowerCase().trim(); }
-
-  function apply(){
-    const kw = norm(studentInp?.value);
-    const cat = catSel?.value || '';
-    const st = statusSel?.value || ''; // pending/progress/done/''
-    let showCount = 0;
-
-    const dataRows = Array.from(document.querySelectorAll('tr[data-id]'));
-    dataRows.forEach(row => {
-      const student = norm(row.dataset.student);
-      const category = (row.querySelector('.task-category')?.textContent || '').trim();
-      const badge = row.querySelector('.badge');
-      const status = badge?.classList.contains('status-done') ? 'done' : (badge?.classList.contains('status-progress') ? 'progress' : 'pending');
-
-      let ok = true;
-      if (kw && (!student || !student.includes(kw))) ok = false;
-      if (ok && cat && category !== cat) ok = false;
-      if (ok && st && status !== st) ok = false;
-
-      row.style.display = ok ? '' : 'none';
-      if (ok) showCount++;
-    });
-
-    const groups = Array.from(document.querySelectorAll('.student-group'));
-    groups.forEach(group => {
-      const rows = Array.from(group.querySelectorAll('tr[data-id]'));
-      const visibleRows = rows.filter(r => r.style.display !== 'none');
-      const hasVisible = visibleRows.length > 0;
-      group.style.display = hasVisible ? '' : 'none';
-      const countEl = group.querySelector('.student-count');
-      if (countEl){
-        const total = rows.length;
-        const visibleCount = visibleRows.length;
-        countEl.textContent = visibleCount === total ? `任务数 ${total}` : `任务数 ${visibleCount} / ${total}`;
-      }
-    });
-
-    const totalRows = dataRows.length;
-    if (stat) stat.textContent = `显示 ${showCount} / ${totalRows} 条`;
-  }
-
-  window.applyTaskFilters = apply;
-
-  // 简单防抖
-  let timer = null;
-  studentInp && studentInp.addEventListener('input', () => {
-    clearTimeout(timer);
-    timer = setTimeout(apply, 200);
-  });
-  catSel && catSel.addEventListener('change', apply);
-  statusSel && statusSel.addEventListener('change', apply);
-  clearBtn && clearBtn.addEventListener('click', () => {
-    if (studentInp) studentInp.value = '';
-    if (catSel) catSel.value = '';
-    if (statusSel) statusSel.value = '';
-    apply();
-  });
-
-  // 初始化统计
-  apply();
-})();
-// === 计时逻辑：开始 / 暂停 / 结束（可多段累计） ===
-(function(){
-  const intervals = new Map(); // 行 -> intervalId
-
-  function pad(n){ return String(n).padStart(2,'0'); }
-  function fmt(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; return `${pad(h)}:${pad(m)}:${pad(s)}`; }
-  function minutes(sec){ return Math.round((sec/60) * 10) / 10; }
-
-  function updateUsage(row, runningSec = 0){
-    const planned = Number(row.dataset.planned || 0); // 分钟
-    const actualBase = Number(row.dataset.actual || 0); // 秒
-    const totalSec = actualBase + runningSec; // 若在计时中，加上当前段
-    const cell = row.querySelector('.task-time');
-    if (!cell) return;
-    const left = planned > 0 ? `计划:${planned} 分` : `计划:—`;
-    const right = `实际:${formatPercent(minutes(totalSec))} 分`;
-    cell.textContent = `${left} ｜ ${right}`;
-    // 同步完成率显示（保留 1 位小数）
-    const progCell = row.querySelector('.task-progress');
-    if (progCell){
-      const donePct = planned > 0 ? Math.round((totalSec/60) / planned * 1000) / 10 : 0;
-      const formatted = formatPercent(donePct);
-      row.dataset.autoProgress = formatted;
-      progCell.dataset.auto = formatted;
-      const hint = progCell.querySelector('.progress-hint');
-      if (hint){
-        if (planned > 0){
-          hint.textContent = `计时：${formatted}%`;
-        }else{
-          hint.textContent = '';
-        }
-      }
-      const manual = row.dataset.completion || '';
-      if (manual === ''){
-        const progressInput = progCell.querySelector('.progress-input');
-        if (progressInput){
-          progressInput.value = formatted;
-          progressInput.dataset.prevProgress = '';
-        }
-      }
-    }
-    if (planned>0 && totalSec >= planned*60) cell.classList.add('exceed'); else cell.classList.remove('exceed');
-  }
-
-  document.querySelectorAll('tr[data-id]').forEach(row => {
-    const startBtn = row.querySelector('.btn-start');
-    const pauseBtn = row.querySelector('.btn-pause');
-    const stopBtn  = row.querySelector('.btn-stop');
-    const timerEl  = row.querySelector('.timer');
-    const taskId   = row.dataset.id;
-    const statusSel = row.querySelector('.status-select');
-
-    let startTs = null; // 本段开始时间（ms）
-    let sessionBase = Number(row.dataset.actual || 0); // 当前段开始前的累计秒
-
-    // 初始渲染用时
-    updateUsage(row, 0);
-    if (timerEl) timerEl.textContent = fmt(sessionBase);
-    if (!row.dataset.timerComplete) {
-      row.dataset.timerComplete = statusSel?.value === 'done' ? 'true' : 'false';
-    }
-    if (startBtn) {
-      const actualSeconds = Number(row.dataset.actual || 0);
-      startBtn.textContent = actualSeconds > 0 ? '继续计时' : '开始计时';
-      if (statusSel?.value === 'done') {
-        startBtn.style.display = 'none';
-      }
-    }
-    if (statusSel?.value === 'done') {
-      pauseBtn && (pauseBtn.style.display = 'none');
-      stopBtn && (stopBtn.style.display = 'none');
-    }
-
-    // 开始/继续
-    startBtn && startBtn.addEventListener('click', async () => {
-      try{
-        const res = await fetch('/api/session/start', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ task_id: Number(taskId) })
+        // 开始/继续
+        startBtn && startBtn.addEventListener('click', async () => {
+          try {
+            const res = await fetch('/api/session/start', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ task_id: Number(taskId) })
+            });
+            const data = await res.json();
+            if (!data.ok) throw new Error(data.error || 'start_failed');
+            row.dataset.sessionId = String(data.session_id);
+            startTs = Date.now();
+            sessionBase = Number(row.dataset.actual || 0);
+            if (intervals.has(row)) clearInterval(intervals.get(row));
+            row.dataset.timerComplete = 'false';
+            intervals.set(row, setInterval(() => {
+              const sec = Math.floor((Date.now() - startTs) / 1000);
+              const total = sessionBase + sec;
+              if (timerEl) timerEl.textContent = fmt(total);
+              updateUsage(row, sec);
+            }, 1000));
+            if (timerEl) timerEl.textContent = fmt(sessionBase);
+            startBtn.textContent = '继续计时';
+            startBtn.style.display = 'none';
+            pauseBtn.style.display = '';
+            stopBtn.style.display = '';
+            if (statusSel && statusSel.value !== 'progress') {
+              statusSel.value = 'progress';
+              statusSel.dispatchEvent(new Event('change'));
+            }
+          } catch (e) { alert('开始计时失败，请重试'); }
         });
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.error||'start_failed');
-        row.dataset.sessionId = String(data.session_id);
-        startTs = Date.now();
-        sessionBase = Number(row.dataset.actual || 0);
-        if (intervals.has(row)) clearInterval(intervals.get(row));
-        row.dataset.timerComplete = 'false';
-        intervals.set(row, setInterval(()=>{
-          const sec = Math.floor((Date.now()-startTs)/1000);
-          const total = sessionBase + sec;
-          if (timerEl) timerEl.textContent = fmt(total);
-          updateUsage(row, sec);
-        },1000));
-        if (timerEl) timerEl.textContent = fmt(sessionBase);
-        startBtn.textContent = '继续计时';
-        startBtn.style.display = 'none';
-        pauseBtn.style.display = '';
-        stopBtn.style.display  = '';
-        if (statusSel && statusSel.value !== 'progress'){
-          statusSel.value='progress';
-          statusSel.dispatchEvent(new Event('change'));
-        }
-      }catch(e){ alert('开始计时失败，请重试'); }
-    });
 
-    // 暂停（结束当前段，但不改变任务完成状态）
-    pauseBtn && pauseBtn.addEventListener('click', async () => {
-      const sid = row.dataset.sessionId;
-      if (!sid){ alert('没有进行中的计时'); return; }
-      const elapsed = startTs ? Math.max(0, Math.floor((Date.now() - startTs)/1000)) : 0;
-      pauseBtn.disabled = true;
-      stopBtn && (stopBtn.disabled = true);
-      let stopSucceeded = false;
-      try{
-        const opts = { method:'POST' };
-        if (elapsed > 0){
-          opts.headers = {'Content-Type':'application/json'};
-          opts.body = JSON.stringify({ seconds: elapsed });
-        }
-        const res = await fetch(`/api/session/stop/${sid}`, opts);
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.error||'stop_failed');
-        const addSec = Number.isFinite(elapsed) && elapsed > 0 ? elapsed : Number(data.seconds||0);
-        const updated = Number(row.dataset.actual||0) + addSec;
-        row.dataset.actual = String(updated);
-        sessionBase = updated;
-        updateUsage(row, 0);
-        if (timerEl) timerEl.textContent = fmt(updated);
-        stopSucceeded = true;
-      }catch(e){ alert('暂停失败，请重试'); return; }
-      finally{
-        if (intervals.has(row)) { clearInterval(intervals.get(row)); intervals.delete(row); }
-        startTs = null;
-        if (stopSucceeded) {
-          row.dataset.sessionId = '';
-        }
-        pauseBtn.style.display = 'none';
-        pauseBtn.disabled = false;
-        startBtn.style.display = '';
-        startBtn.disabled = false;
-        startBtn.textContent = '继续计时';
-        stopBtn && (stopBtn.disabled = false);
-        // 停止计时后，仍允许直接“结束”
-      }
-    });
-
-    // 结束（若有在计时的段，先停止，再完成）
-    stopBtn && stopBtn.addEventListener('click', async () => {
-      // 若有未停止的会话，先停止
-      const sid = row.dataset.sessionId;
-      if (sid){
-        try{
-          const elapsed = startTs ? Math.max(0, Math.floor((Date.now() - startTs)/1000)) : 0;
-          const opts = { method:'POST' };
-          if (elapsed > 0){
-            opts.headers = {'Content-Type':'application/json'};
-            opts.body = JSON.stringify({ seconds: elapsed });
-          }
-          const res = await fetch(`/api/session/stop/${sid}`, opts);
-          const data = await res.json();
-          if (data && data.ok){
-            const addSec = Number.isFinite(elapsed) && elapsed > 0 ? elapsed : Number(data.seconds||0);
-            const updated = Number(row.dataset.actual||0) + addSec;
+        // 暂停（结束当前段，但不改变任务完成状态）
+        pauseBtn && pauseBtn.addEventListener('click', async () => {
+          const sid = row.dataset.sessionId;
+          if (!sid) { alert('没有进行中的计时'); return; }
+          const elapsed = startTs ? Math.max(0, Math.floor((Date.now() - startTs) / 1000)) : 0;
+          pauseBtn.disabled = true;
+          stopBtn && (stopBtn.disabled = true);
+          let stopSucceeded = false;
+          try {
+            const opts = { method: 'POST' };
+            if (elapsed > 0) {
+              opts.headers = { 'Content-Type': 'application/json' };
+              opts.body = JSON.stringify({ seconds: elapsed });
+            }
+            const res = await fetch(`/api/session/stop/${sid}`, opts);
+            const data = await res.json();
+            if (!data.ok) throw new Error(data.error || 'stop_failed');
+            const addSec = Number.isFinite(elapsed) && elapsed > 0 ? elapsed : Number(data.seconds || 0);
+            const updated = Number(row.dataset.actual || 0) + addSec;
             row.dataset.actual = String(updated);
             sessionBase = updated;
+            updateUsage(row, 0);
+            if (timerEl) timerEl.textContent = fmt(updated);
+            stopSucceeded = true;
+          } catch (e) { alert('暂停失败，请重试'); return; }
+          finally {
+            if (intervals.has(row)) { clearInterval(intervals.get(row)); intervals.delete(row); }
+            startTs = null;
+            if (stopSucceeded) {
+              row.dataset.sessionId = '';
+            }
+            pauseBtn.style.display = 'none';
+            pauseBtn.disabled = false;
+            startBtn.style.display = '';
+            startBtn.disabled = false;
+            startBtn.textContent = '继续计时';
+            stopBtn && (stopBtn.disabled = false);
+            // 停止计时后，仍允许直接“结束”
           }
-        }catch(e){ /* 忽略，继续收尾 */ }
-      }
-      if (intervals.has(row)) { clearInterval(intervals.get(row)); intervals.delete(row); }
-      startTs = null;
-      updateUsage(row, 0);
-      if (timerEl) timerEl.textContent = fmt(Number(row.dataset.actual || 0));
-      row.dataset.sessionId = '';
-      row.dataset.timerComplete = 'true';
-      startBtn.style.display = 'none';
-      startBtn.disabled = false;
-      pauseBtn.style.display = 'none';
-      stopBtn.style.display  = 'none';
-      // 可选：结束后自动设为“已完成”
-      if (statusSel){
-        statusSel.value = 'done';
-        statusSel.dispatchEvent(new Event('change'));
-      }
-    });
-  });
+        });
 
-  // 删除时清理 interval（事件委托）
-  document.addEventListener('click', e => {
-    if (e.target && e.target.classList.contains('btn-delete')){
-      const row = e.target.closest('tr[data-id]');
-      setTimeout(()=>{
-        if (row && !document.body.contains(row) && intervals.has(row)){
-          clearInterval(intervals.get(row));
-          intervals.delete(row);
+        // 结束（若有在计时的段，先停止，再完成）
+        stopBtn && stopBtn.addEventListener('click', async () => {
+          // 若有未停止的会话，先停止
+          const sid = row.dataset.sessionId;
+          if (sid) {
+            try {
+              const elapsed = startTs ? Math.max(0, Math.floor((Date.now() - startTs) / 1000)) : 0;
+              const opts = { method: 'POST' };
+              if (elapsed > 0) {
+                opts.headers = { 'Content-Type': 'application/json' };
+                opts.body = JSON.stringify({ seconds: elapsed });
+              }
+              const res = await fetch(`/api/session/stop/${sid}`, opts);
+              const data = await res.json();
+              if (data && data.ok) {
+                const addSec = Number.isFinite(elapsed) && elapsed > 0 ? elapsed : Number(data.seconds || 0);
+                const updated = Number(row.dataset.actual || 0) + addSec;
+                row.dataset.actual = String(updated);
+                sessionBase = updated;
+              }
+            } catch (e) { /* 忽略，继续收尾 */ }
+          }
+          if (intervals.has(row)) { clearInterval(intervals.get(row)); intervals.delete(row); }
+          startTs = null;
+          updateUsage(row, 0);
+          if (timerEl) timerEl.textContent = fmt(Number(row.dataset.actual || 0));
+          row.dataset.sessionId = '';
+          row.dataset.timerComplete = 'true';
+          startBtn.style.display = 'none';
+          startBtn.disabled = false;
+          pauseBtn.style.display = 'none';
+          stopBtn.style.display = 'none';
+          // 可选：结束后自动设为“已完成”
+          if (statusSel) {
+            statusSel.value = 'done';
+            statusSel.dispatchEvent(new Event('change'));
+          }
+        });
+      });
+
+      // 删除时清理 interval（事件委托）
+      document.addEventListener('click', e => {
+        if (e.target && e.target.classList.contains('btn-delete')) {
+          const row = e.target.closest('tr[data-id]');
+          setTimeout(() => {
+            if (row && !document.body.contains(row) && intervals.has(row)) {
+              clearInterval(intervals.get(row));
+              intervals.delete(row);
+            }
+          }, 300);
         }
-      }, 300);
-    }
-  });
-})();
-</script>
+      });
+    })();
+  </script>
 </section>
 {% endblock %}

@@ -1242,6 +1242,10 @@ def tasks_page():
     top_students.sort(key=lambda item: item["minutes"], reverse=True)
     top_students = top_students[:5]
     recent_tasks = enriched_items[:5]
+
+    # 获取所有学生用于下拉框
+    all_students = [s.full_name for s in StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.full_name).all()]
+
     return render_template(
         "tasks.html",
         items=enriched_items,
@@ -1249,6 +1253,7 @@ def tasks_page():
         stats=stats_payload,
         top_students=top_students,
         recent_tasks=recent_tasks,
+        all_students=all_students,
     )
 
 # ---- AJAX: 删除任务 ----
