@@ -9,7 +9,8 @@
 </div>
 <a class="btn" href="#taskForm">+ New Task</a>
 {% endblock %}
-{% block content %}
+{% block content %}{% endblock %}
+{% block content_dashboard %}
 {% set stats = stats or {"total":0,"completed":0,"total_minutes":0,"avg_accuracy":0} %}
 <section class="stat-grid">
   <article class="stat-card">
