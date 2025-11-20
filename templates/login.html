@@ -1,12 +1,192 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>账号登录</h2>
-<form method="post">
-  <p><label>用户名：</label><input name="username" required></p>
-  <p><label>密码：</label><input name="password" type="password" required></p>
-  <p><button type="submit">登录</button></p>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}<p style="color:#c00">{{ messages[0] }}</p>{% endif %}
-  {% endwith %}
-</form>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Sage Path Logo" class="login-logo">
+      <h2>欢迎回来</h2>
+      <p class="subtitle">请登录您的账号</p>
+    </div>
+
+    <form method="post" class="login-form">
+      <div class="form-group">
+        <label for="username">用户名</label>
+        <input type="text" id="username" name="username" placeholder="请输入用户名" required autofocus>
+      </div>
+
+      <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" placeholder="请输入密码" required>
+      </div>
+
+      <button type="submit" class="btn-login">登录</button>
+
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div class="login-flash">
+        {{ messages[0] }}
+      </div>
+      {% endif %}
+      {% endwith %}
+    </form>
+  </div>
+</div>
+
+<style>
+  /* 覆盖 base.html 可能的默认样式，确保登录页全屏居中 */
+  body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 如果 base.html 有 topbar，这里可能需要隐藏它，或者让它显示。
+     通常登录页是独立的。如果 base.html 的 header 干扰了，可以用 CSS 隐藏。
+     这里假设 base.html 的结构允许我们这样做。
+  */
+  .topbar {
+    display: none;
+  }
+
+  /* 隐藏顶部导航栏，让登录页更沉浸 */
+  .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #2F8E87 0%, #1B5E59 100%);
+    /* 使用品牌色渐变背景 */
+    position: fixed;
+    /* 强制覆盖全屏 */
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  .login-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 32px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .login-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 16px;
+    border-radius: 16px;
+    /* 如果 logo 是方形的，给点圆角 */
+  }
+
+  .login-header h2 {
+    margin: 0 0 8px;
+    color: #1f2d3d;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .subtitle {
+    margin: 0 0 32px;
+    color: #8492a6;
+    font-size: 14px;
+  }
+
+  .login-form {
+    text-align: left;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #3c4858;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0e6ed;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.2s;
+    background: #f8f9fb;
+  }
+
+  .form-group input:focus {
+    border-color: #2F8E87;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(47, 142, 135, 0.15);
+    outline: none;
+  }
+
+  .btn-login {
+    width: 100%;
+    padding: 14px;
+    background: #2F8E87;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+
+  .btn-login:hover {
+    background: #257a74;
+  }
+
+  .btn-login:active {
+    transform: scale(0.98);
+  }
+
+  .login-flash {
+    margin-top: 20px;
+    padding: 10px;
+    background: #fff1f0;
+    border: 1px solid #ffa39e;
+    color: #cf1322;
+    border-radius: 8px;
+    font-size: 13px;
+    text-align: center;
+  }
+</style>
 {% endblock %}
