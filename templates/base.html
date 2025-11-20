@@ -6,33 +6,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="{{ 'dashboard-body' if current_user.is_authenticated else '' }}">
+{% if current_user.is_authenticated %}
+  {% set endpoint = request.endpoint or '' %}
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <span class="brand-icon">S</span>
+        <div>
+          <div class="brand-title">StudyTrack</div>
+          <div class="brand-sub">教师工作台</div>
+        </div>
+      </div>
+      <div class="sidebar__nav">
+        <p class="nav-label">Main</p>
+        <a class="nav-link {{ 'is-active' if endpoint == 'index' else '' }}" href="{{ url_for('index') }}">Overview</a>
+        {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
+        <a class="nav-link {{ 'is-active' if endpoint == 'teacher_plans' else '' }}" href="{{ url_for('teacher_plans') }}">Students</a>
+        {% endif %}
+        {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
+        <a class="nav-link {{ 'is-active' if endpoint == 'tasks_page' else '' }}" href="{{ url_for('tasks_page') }}">Task Management</a>
+        {% endif %}
+        {% if current_user.role == 'student' %}
+        <a class="nav-link {{ 'is-active' if endpoint == 'student_today' else '' }}" href="{{ url_for('student_today') }}">My Plan</a>
+        {% endif %}
+        <p class="nav-label">Analysis</p>
+        {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
+        <a class="nav-link {{ 'is-active' if endpoint == 'report_page' else '' }}" href="{{ url_for('report_page') }}">Reports</a>
+        {% endif %}
+        {% if current_user.role == 'admin' %}
+        <a class="nav-link {{ 'is-active' if endpoint == 'bulk_page' else '' }}" href="{{ url_for('bulk_page') }}">Bulk Add</a>
+        <a class="nav-link {{ 'is-active' if endpoint == 'users_page' else '' }}" href="{{ url_for('users_page') }}">Users</a>
+        {% endif %}
+        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+      </div>
+      <div class="sidebar__user">
+        <div class="avatar">{{ current_user.display_name[:1] if current_user.display_name else (current_user.username[:1] if current_user.is_authenticated else 'G') }}</div>
+        <div>
+          <div class="user-name">{{ current_user.display_name or current_user.username }}</div>
+          <div class="user-role">{{ current_user.role|capitalize }}</div>
+        </div>
+      </div>
+    </aside>
+    <div class="main-panel">
+      <header class="main-header">
+        <div>
+          <p class="eyebrow">{% block page_subtitle %}Dashboard Overview{% endblock %}</p>
+          <h1>{% block page_title %}学习计划与打卡系统{% endblock %}</h1>
+        </div>
+        <div class="header-actions">
+          {% block header_actions %}{% endblock %}
+        </div>
+      </header>
+      <main class="panel-content">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flashes">
+              {% for msg in messages %}
+                <li>{{ msg }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+{% else %}
   <header class="topbar">
     <h1>学习计划与打卡系统</h1>
     <nav>
       <a href="{{ url_for('index') }}">首页</a>
-      {% if current_user.is_authenticated %}
-        {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
-          <a href="{{ url_for('teacher_plans') }}">教师工作台</a>
-          <a href="{{ url_for('report_page') }}">汇总报告</a>
-          <a href="{{ url_for('bulk_page') }}">批量添加</a>
-        {% endif %}
-        {% if current_user.role == 'student' %}
-          <a href="{{ url_for('student_today') }}">今日计划</a>
-        {% endif %}
-        {% if current_user.role == 'admin' %}
-          <a href="{{ url_for('users_page') }}">用户管理</a>
-        {% endif %}
-        {% if current_user.role == 'admin' %}
-          <a href="{{ url_for('tasks_page') }}">旧版任务</a>
-        {% endif %}
-        <a href="{{ url_for('logout') }}">退出</a>
-      {% else %}
-        <a href="{{ url_for('login') }}">登录</a>
-      {% endif %}
+      <a href="{{ url_for('login') }}">登录</a>
     </nav>
   </header>
-
   <main class="container">
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -45,15 +92,16 @@
     {% endwith %}
     {% block content %}{% endblock %}
   </main>
-  <script>
-    document.addEventListener('DOMContentLoaded', function(){
-      const list = document.querySelectorAll('.flashes, .flash, .alert, .message');
-      list.forEach(function(el){
-        el.style.transition = 'opacity 0.8s ease';
-        setTimeout(function(){ el.style.opacity = '0'; }, 2500); // 2.5s fade start
-        setTimeout(function(){ el.remove(); }, 3500);            // 3.5s remove
-      });
+{% endif %}
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    const list = document.querySelectorAll('.flashes, .flash, .alert, .message');
+    list.forEach(function(el){
+      el.style.transition = 'opacity 0.8s ease';
+      setTimeout(function(){ el.style.opacity = '0'; }, 2500);
+      setTimeout(function(){ el.remove(); }, 3500);
     });
-  </script>
+  });
+</script>
 </body>
 </html>

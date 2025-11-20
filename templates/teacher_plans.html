@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+{% set evidence_policy_labels = {
+  'text': '文字稿',
+  'image': '截图/照片',
+  'audio': '音频',
+  'required': '需上传证据',
+  'optional': '可选'
+} %}
 <h2>教师工作台</h2>
 
 <div class="teacher-toolbar">
@@ -91,6 +98,10 @@
                 计划 {{ item.planned_minutes }} 分 ｜ 实际 {{ (item.actual_seconds or 0) // 60 }} 分
                 {% if item.manual_minutes %}（手动填写 {{ item.manual_minutes }} 分）{% endif %}
               </div>
+              <div class="muted small">证据要求：{{ evidence_policy_labels.get(item.evidence_policy or 'optional', '可选') }}</div>
+              {% if item.student_reset_count %}
+                <div class="muted small">学生曾撤回 {{ item.student_reset_count }} 次</div>
+              {% endif %}
               {% if item.student_comment %}
                 <div class="pending-comment">学生反馈：{{ item.student_comment }}</div>
               {% endif %}
@@ -98,8 +109,13 @@
               {% if evidences %}
                 <ul class="pending-evidence">
                   {% for ev in evidences %}
-                    <li>证据 {{ loop.index }} · {{ ev.file_type|upper }}
-                      <a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank" rel="noopener">下载</a>
+                    <li>
+                      {% if ev.file_type == 'text' %}
+                        文字稿 {{ loop.index }}：{{ ev.text_content or '（无内容）' }}
+                      {% else %}
+                        证据 {{ loop.index }} · {{ ev.file_type|upper }}
+                        <a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank" rel="noopener">下载</a>
+                      {% endif %}
                     </li>
                   {% endfor %}
                 </ul>
@@ -158,6 +174,7 @@
                   <div>{{ item.module }} · {{ item.task_name }}</div>
                   {% if item.custom_title %}<div class="muted">{{ item.custom_title }}</div>{% endif %}
                   {% if item.instructions %}<div class="muted">{{ item.instructions }}</div>{% endif %}
+                  <div class="muted small">证据要求：{{ evidence_policy_labels.get(item.evidence_policy or 'optional', '可选') }}</div>
                 </td>
                 <td>{{ item.planned_minutes }} 分</td>
                 <td>{{ (item.actual_seconds or 0) // 60 }} 分{% if item.manual_minutes %}（手动 {{ item.manual_minutes }} 分）{% endif %}</td>
@@ -168,6 +185,9 @@
                     <span class="badge status-progress">进行中</span>
                   {% else %}
                     <span class="badge status-pending">未开始</span>
+                  {% endif %}
+                  {% if item.student_reset_count %}
+                    <div class="muted small">已撤回 {{ item.student_reset_count }} 次</div>
                   {% endif %}
                 </td>
                 <td>
@@ -189,7 +209,13 @@
                   {% if evidences %}
                     <ul class="evidence-list">
                       {% for ev in evidences %}
-                        <li><a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank" rel="noopener">证据 {{ loop.index }}</a></li>
+                        <li>
+                          {% if ev.file_type == 'text' %}
+                            文字稿：{{ ev.text_content or '（无内容）' }}
+                          {% else %}
+                            <a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank" rel="noopener">证据 {{ loop.index }}</a>
+                          {% endif %}
+                        </li>
                       {% endfor %}
                     </ul>
                   {% else %}

@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>学生任务洞察报告</h2>
+
+<div class="report-card card">
+  <form id="studentReportForm" method="get" action="{{ url_for('report_student_view') }}">
+    <input type="hidden" name="period" id="periodField" value="{{ report_payload.filters.period }}">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>快捷区间</label>
+        <div class="range-buttons">
+          <button type="button" class="range-btn" data-period="7">最近7天</button>
+          <button type="button" class="range-btn" data-period="14">最近14天</button>
+          <button type="button" class="range-btn" data-period="30">最近30天</button>
+          <button type="button" class="range-btn" data-period="custom">自定义</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label for="startDate">开始日期</label>
+        <input id="startDate" type="date" name="start" value="{{ report_payload.filters.start }}">
+      </div>
+      <div class="filter-group">
+        <label for="endDate">结束日期</label>
+        <input id="endDate" type="date" name="end" value="{{ report_payload.filters.end }}">
+      </div>
+      <div class="filter-group">
+        <label for="studentSelect">学生</label>
+        <select id="studentSelect" name="student" required>
+          {% for stu in available_students %}
+            <option value="{{ stu }}" {% if stu == selected_student %}selected{% endif %}>{{ stu }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="categoryInput">类别</label>
+        <input id="categoryInput" type="text" name="category" placeholder="如：雅思-听力-精听" value="{{ report_payload.filters.category or '' }}">
+      </div>
+      <div class="filter-actions">
+        <button type="submit" class="btn-primary">应用筛选</button>
+        <a class="btn-secondary" href="{{ url_for('report_student_view') }}">清空</a>
+        <button type="button" id="exportBtn" class="btn-secondary" {% if not selected_student %}disabled{% endif %}>导出 Excel</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% if not selected_student %}
+  <div class="alert">当前没有任何学生数据可供展示。</div>
+{% elif not report_payload.hasData %}
+  <div class="alert">「{{ selected_student }}」在当前筛选条件下没有数据，试试调整日期或类别。</div>
+{% else %}
+<div class="metrics-grid">
+  <div class="metric-card">
+    <div class="metric-label">任务总数</div>
+    <div class="metric-value">{{ student_summary.total }}</div>
+    <div class="metric-note">时间范围 {{ report_payload.filters.start }} ~ {{ report_payload.filters.end }}</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">完成任务</div>
+    <div class="metric-value">{{ student_summary.done }}</div>
+    <div class="metric-note">完成率 {{ '%.1f'|format(student_summary.done_rate) }}%</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">总学习时长</div>
+    <div class="metric-value">{{ '%.2f'|format(report_payload.cards.total_hours) }} h</div>
+    <div class="metric-note">日均 {{ '%.2f'|format(report_payload.cards.avg_daily_hours) }} h</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">平均正确率</div>
+    <div class="metric-value">{{ '%.1f'|format(student_summary.avg_accuracy) }}%</div>
+    <div class="metric-note">平均完成率 {{ student_summary.avg_completion is not none and ('%.1f%%'|format(student_summary.avg_completion)) or '—' }}</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">常练分类</div>
+    {% if report_payload.cards.top_category %}
+      <div class="metric-value">{{ report_payload.cards.top_category.name }}</div>
+      <div class="metric-note">{{ '%.2f'|format(report_payload.cards.top_category.hours) }} 小时累计</div>
+    {% else %}
+      <div class="metric-value">—</div>
+      <div class="metric-note">暂无分类数据</div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="charts-grid">
+  <div class="chart-card chart-card--wide">
+    <div class="chart-title">每日任务完成情况</div>
+    <canvas id="dailyTasksChart"></canvas>
+  </div>
+  <div class="chart-card chart-card--wide">
+    <div class="chart-title">每日用时分布（分钟）</div>
+    <canvas id="dailyCategoryChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">分类用时占比</div>
+    <canvas id="categoryShareChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">分类平均正确率</div>
+    <canvas id="accuracyCategoryChart"></canvas>
+  </div>
+</div>
+
+<div class="card summary-card">
+  <div class="summary-header">
+    <h3>{{ selected_student }} 的任务列表</h3>
+    <span>共 {{ student_records|length }} 条记录</span>
+  </div>
+  <div class="table-wrap">
+    <table class="task-table report-table">
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>类别</th>
+          <th>任务</th>
+          <th>状态</th>
+          <th>计划 (分)</th>
+          <th>实际 (分)</th>
+          <th>完成率</th>
+          <th>正确率</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in student_records %}
+        <tr>
+          <td>{{ row.date or '—' }}</td>
+          <td>{{ row.category or '未分类' }}</td>
+          <td>{{ row.detail }}</td>
+          <td>
+            {% if row.status == 'done' %}已完成
+            {% elif row.status == 'progress' %}进行中
+            {% else %}未开始{% endif %}
+          </td>
+          <td>{{ row.planned_minutes }}</td>
+          <td>{{ '%.1f'|format(row.actual_minutes) }}</td>
+          <td>
+            {% if row.completion_rate is not none %}
+              {{ '%.1f'|format(row.completion_rate) }}%
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td>{{ '%.1f'|format(row.accuracy) }}%</td>
+          <td>{{ row.note }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+<style>
+.report-card{
+  margin-bottom:16px;
+  padding:16px 20px;
+}
+.filter-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:flex-end;
+}
+.filter-group{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:160px;
+}
+.filter-group label{
+  font-size:13px;
+  color:var(--muted,#6b7785);
+}
+.filter-group input,
+.filter-group select{
+  height:36px;
+  padding:6px 10px;
+  border:1px solid var(--line,#e4e7ed);
+  border-radius:8px;
+  font-size:14px;
+}
+.range-buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.range-btn{
+  border:1px solid var(--line,#e4e7ed);
+  background:#f7f9fc;
+  color:#3b3f45;
+  border-radius:18px;
+  padding:6px 14px;
+  font-size:13px;
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.range-btn.active{
+  background:var(--brand,#2F8E87);
+  color:#fff;
+  border-color:var(--brand,#2F8E87);
+}
+.filter-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.metrics-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+  margin-bottom:18px;
+}
+.metric-card{
+  background:var(--card,#fff);
+  border-radius:12px;
+  padding:16px;
+  box-shadow:var(--shadow,0 1px 3px rgba(0,0,0,0.08));
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.metric-label{
+  font-size:13px;
+  color:var(--muted,#6b7785);
+}
+.metric-value{
+  font-size:22px;
+  font-weight:600;
+  color:var(--text-strong,#1f2d3d);
+}
+.metric-note{
+  font-size:12px;
+  color:var(--muted,#6b7785);
+}
+.charts-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:16px;
+  margin-bottom:20px;
+}
+.chart-card{
+  background:var(--card,#fff);
+  border-radius:12px;
+  padding:16px;
+  box-shadow:var(--shadow,0 1px 4px rgba(0,0,0,0.08));
+}
+.chart-card--wide{
+  grid-column:span 2;
+}
+.chart-title{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:8px;
+  color:var(--text-strong,#1f2d3d);
+}
+.summary-card{
+  margin-top:24px;
+  padding:16px;
+}
+.summary-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.summary-header span{
+  color:var(--muted,#6b7785);
+  font-size:13px;
+}
+.table-wrap{
+  overflow:auto;
+}
+.report-table th,
+.report-table td{
+  text-align:center;
+  white-space:nowrap;
+}
+.alert{
+  padding:14px 18px;
+  background:#fff7e6;
+  border:1px solid #ffe2b8;
+  border-radius:10px;
+  color:#8a5a00;
+}
+@media (max-width: 960px){
+  .chart-card--wide{
+    grid-column:span 1;
+  }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const REPORT_DATA = {{ report_payload|tojson }};
+const SELECTED_STUDENT = {{ selected_student|tojson }};
+
+function initRangeButtons(){
+  const form = document.getElementById('studentReportForm');
+  const periodField = document.getElementById('periodField');
+  const startInput = document.getElementById('startDate');
+  const endInput = document.getElementById('endDate');
+  const buttons = Array.from(document.querySelectorAll('.range-btn'));
+
+  function setActive(period){
+    buttons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.period === period);
+    });
+  }
+
+  setActive(REPORT_DATA.filters.period || '7');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const period = btn.dataset.period;
+      periodField.value = period;
+      if (period === 'custom'){
+        setActive('custom');
+        (startInput || {}).focus?.();
+      } else {
+        form.submit();
+      }
+    });
+  });
+
+  [startInput, endInput].forEach(input => {
+    if (!input) return;
+    input.addEventListener('change', () => {
+      periodField.value = 'custom';
+      setActive('custom');
+    });
+  });
+}
+
+function initStudentSelect(){
+  const select = document.getElementById('studentSelect');
+  const form = document.getElementById('studentReportForm');
+  if (!select || !form) return;
+  select.addEventListener('change', () => form.submit());
+}
+
+function initExport(){
+  const btn = document.getElementById('exportBtn');
+  const form = document.getElementById('studentReportForm');
+  if (!btn || !form) return;
+  if (!SELECTED_STUDENT){
+    btn.disabled = true;
+    return;
+  }
+  btn.addEventListener('click', () => {
+    const params = new URLSearchParams(new FormData(form));
+    window.location.href = `/report/export?${params.toString()}`;
+  });
+}
+
+function assembleDataset(rawDatasets){
+  const palette = ['#2F8E87','#4B6CB7','#FF6F61','#FFB400','#6F42C1','#20C997','#FF8C42','#17A2B8'];
+  return rawDatasets.map((item, idx) => {
+    const color = palette[idx % palette.length];
+    return {
+      label: item.label,
+      data: item.data,
+      backgroundColor: color + '66',
+      borderColor: color,
+      borderWidth: 1,
+      stack: 'stack1'
+    };
+  });
+}
+
+function createCharts(){
+  if (!REPORT_DATA.hasData) return;
+  const charts = REPORT_DATA.charts || {};
+
+  const dailyCtx = document.getElementById('dailyTasksChart');
+  if (dailyCtx && charts.dailyTasks){
+    new Chart(dailyCtx, {
+      type: 'bar',
+      data: {
+        labels: charts.dailyTasks.labels,
+        datasets: [
+          { label: '已完成', data: charts.dailyTasks.datasets.completed, backgroundColor: '#2F8E87AA', stack: 'stack0' },
+          { label: '进行中', data: charts.dailyTasks.datasets.inProgress, backgroundColor: '#FFB400AA', stack: 'stack0' },
+          { label: '未开始', data: charts.dailyTasks.datasets.pending, backgroundColor: '#E2E8F0', stack: 'stack0' }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } },
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  }
+
+  const categoryCtx = document.getElementById('dailyCategoryChart');
+  if (categoryCtx && charts.dailyCategoryMinutes){
+    new Chart(categoryCtx, {
+      type: 'bar',
+      data: {
+        labels: charts.dailyCategoryMinutes.labels,
+        datasets: assembleDataset(charts.dailyCategoryMinutes.datasets)
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } },
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  }
+
+  const shareCtx = document.getElementById('categoryShareChart');
+  if (shareCtx && charts.categoryShare){
+    new Chart(shareCtx, {
+      type: 'doughnut',
+      data: {
+        labels: charts.categoryShare.labels,
+        datasets: [{
+          data: charts.categoryShare.data,
+          backgroundColor: ['#2F8E87','#4B6CB7','#FF6F61','#FFB400','#6F42C1','#20C997','#17A2B8'],
+        }]
+      },
+      options: { plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+
+  const accCatCtx = document.getElementById('accuracyCategoryChart');
+  if (accCatCtx && charts.accuracyByCategory){
+    new Chart(accCatCtx, {
+      type: 'bar',
+      data: {
+        labels: charts.accuracyByCategory.labels,
+        datasets: [{
+          label: '平均正确率 (%)',
+          data: charts.accuracyByCategory.data,
+          backgroundColor: '#4B6CB7'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true, max: 100 } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initRangeButtons();
+  initStudentSelect();
+  initExport();
+  createCharts();
+});
+</script>
+{% endblock %}

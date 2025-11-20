@@ -1,6 +1,103 @@
 {% extends "base.html" %}
+{% block page_subtitle %}Task Management{% endblock %}
+{% block page_title %}辅导任务记录{% endblock %}
+{% block header_actions %}
+  <div class="segmented-control">
+    <button type="button" class="segmented-control__btn is-active">Week</button>
+    <button type="button" class="segmented-control__btn">Month</button>
+    <button type="button" class="segmented-control__btn">Year</button>
+  </div>
+  <a class="btn" href="#taskForm">+ New Task</a>
+{% endblock %}
 {% block content %}
-<h2>辅导任务记录</h2>
+{% set stats = stats or {"total":0,"completed":0,"total_minutes":0,"avg_accuracy":0} %}
+<section class="stat-grid">
+  <article class="stat-card">
+    <p class="stat-label">Total Tasks</p>
+    <div class="stat-value">{{ stats.total }}</div>
+    <div class="stat-meta">全部记录</div>
+  </article>
+  <article class="stat-card">
+    <p class="stat-label">Completed</p>
+    <div class="stat-value">{{ stats.completed }}</div>
+    <div class="stat-meta">完成率 {{ '%.1f'|format((stats.completed / stats.total * 100) if stats.total else 0) }}%</div>
+  </article>
+  <article class="stat-card">
+    <p class="stat-label">Total Study Time</p>
+    <div class="stat-value">{{ '%.1f'|format(stats.total_minutes/60 if stats.total_minutes else 0) }}h</div>
+    <div class="stat-meta">累计 {{ stats.total_minutes }} 分钟</div>
+  </article>
+  <article class="stat-card">
+    <p class="stat-label">Avg Accuracy</p>
+    <div class="stat-value">{{ '%.1f'|format(stats.avg_accuracy) }}%</div>
+    <div class="stat-meta">教师人工填写</div>
+  </article>
+</section>
+
+<section class="card-section two-col">
+  <div>
+    <div class="card-header">
+      <h3>Recent Tasks</h3>
+      <div class="pill">{{ recent_tasks|length }} 最新记录</div>
+    </div>
+    {% if recent_tasks %}
+    <table>
+      <thead>
+        <tr>
+          <th>学生</th>
+          <th>类别</th>
+          <th>日期</th>
+          <th>用时</th>
+          <th>状态</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in recent_tasks %}
+        <tr>
+          <td>{{ task.student_name or "未填写学生" }}</td>
+          <td>{{ task.category }}</td>
+          <td>{{ task.date }}</td>
+          <td>{{ task.actual_minutes }} 分</td>
+          <td>
+            <span class="badge {{ 'status-pending' if task.status=='pending' else ('status-progress' if task.status=='progress' else 'status-done') }}">
+              {{ "未开始" if task.status=="pending" else ("进行中" if task.status=="progress" else "已完成") }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p class="stat-meta">暂无任务</p>
+    {% endif %}
+  </div>
+  <div>
+    <div class="card-header">
+      <h3>Top Students</h3>
+    </div>
+    {% if top_students %}
+    <ul class="top-students">
+      {% for stu in top_students %}
+      <li class="student-pill">
+        <div class="info">
+          <div class="avatar">{{ stu.name[:1] }}</div>
+          <div>
+            <div class="user-name">{{ stu.name }}</div>
+            <div class="stat-meta">{{ stu.tasks }} tasks{% if stu.accuracy is not none %} · {{ '%.1f'|format(stu.accuracy) }}%{% endif %}</div>
+          </div>
+        </div>
+        <span class="minutes">{{ '%.1f'|format(stu.minutes/60 if stu.minutes else 0) }}h</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p class="stat-meta">暂无学生数据</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="card-section">
+<h2>任务记录与计时</h2>
 
 {% set student_names = items | map(attribute='student_name') | select | list | unique %}
 
@@ -751,6 +848,31 @@ document.querySelectorAll('.status-select').forEach(sel => {
           badge.classList.add('status-done');
         }
       }
+      const startBtn = row.querySelector('.btn-start');
+      const pauseBtn = row.querySelector('.btn-pause');
+      const stopBtn = row.querySelector('.btn-stop');
+      if (val === 'done') {
+        row.dataset.timerComplete = 'true';
+        startBtn && (startBtn.style.display = 'none');
+        pauseBtn && (pauseBtn.style.display = 'none');
+        stopBtn && (stopBtn.style.display = 'none');
+      } else {
+        row.dataset.timerComplete = 'false';
+        if (startBtn) {
+          if (row.dataset.sessionId) {
+            startBtn.style.display = 'none';
+          } else {
+            const actualSeconds = Number(row.dataset.actual || 0);
+            startBtn.textContent = actualSeconds > 0 ? '继续计时' : '开始计时';
+            startBtn.disabled = false;
+            startBtn.style.display = '';
+          }
+        }
+        if (!row.dataset.sessionId) {
+          pauseBtn && (pauseBtn.style.display = 'none');
+          stopBtn && (stopBtn.style.display = 'none');
+        }
+      }
       if (window.applyTaskFilters) window.applyTaskFilters();
     } catch (err) {
       alert('状态更新失败，请重试');
@@ -882,6 +1004,7 @@ document.querySelectorAll('.status-select').forEach(sel => {
     const stopBtn  = row.querySelector('.btn-stop');
     const timerEl  = row.querySelector('.timer');
     const taskId   = row.dataset.id;
+    const statusSel = row.querySelector('.status-select');
 
     let startTs = null; // 本段开始时间（ms）
     let sessionBase = Number(row.dataset.actual || 0); // 当前段开始前的累计秒
@@ -889,6 +1012,20 @@ document.querySelectorAll('.status-select').forEach(sel => {
     // 初始渲染用时
     updateUsage(row, 0);
     if (timerEl) timerEl.textContent = fmt(sessionBase);
+    if (!row.dataset.timerComplete) {
+      row.dataset.timerComplete = statusSel?.value === 'done' ? 'true' : 'false';
+    }
+    if (startBtn) {
+      const actualSeconds = Number(row.dataset.actual || 0);
+      startBtn.textContent = actualSeconds > 0 ? '继续计时' : '开始计时';
+      if (statusSel?.value === 'done') {
+        startBtn.style.display = 'none';
+      }
+    }
+    if (statusSel?.value === 'done') {
+      pauseBtn && (pauseBtn.style.display = 'none');
+      stopBtn && (stopBtn.style.display = 'none');
+    }
 
     // 开始/继续
     startBtn && startBtn.addEventListener('click', async () => {
@@ -903,6 +1040,7 @@ document.querySelectorAll('.status-select').forEach(sel => {
         startTs = Date.now();
         sessionBase = Number(row.dataset.actual || 0);
         if (intervals.has(row)) clearInterval(intervals.get(row));
+        row.dataset.timerComplete = 'false';
         intervals.set(row, setInterval(()=>{
           const sec = Math.floor((Date.now()-startTs)/1000);
           const total = sessionBase + sec;
@@ -914,7 +1052,6 @@ document.querySelectorAll('.status-select').forEach(sel => {
         startBtn.style.display = 'none';
         pauseBtn.style.display = '';
         stopBtn.style.display  = '';
-        const statusSel = row.querySelector('.status-select');
         if (statusSel && statusSel.value !== 'progress'){
           statusSel.value='progress';
           statusSel.dispatchEvent(new Event('change'));
@@ -926,22 +1063,39 @@ document.querySelectorAll('.status-select').forEach(sel => {
     pauseBtn && pauseBtn.addEventListener('click', async () => {
       const sid = row.dataset.sessionId;
       if (!sid){ alert('没有进行中的计时'); return; }
+      const elapsed = startTs ? Math.max(0, Math.floor((Date.now() - startTs)/1000)) : 0;
+      pauseBtn.disabled = true;
+      stopBtn && (stopBtn.disabled = true);
+      let stopSucceeded = false;
       try{
-        const res = await fetch(`/api/session/stop/${sid}`, { method:'POST' });
+        const opts = { method:'POST' };
+        if (elapsed > 0){
+          opts.headers = {'Content-Type':'application/json'};
+          opts.body = JSON.stringify({ seconds: elapsed });
+        }
+        const res = await fetch(`/api/session/stop/${sid}`, opts);
         const data = await res.json();
         if (!data.ok) throw new Error(data.error||'stop_failed');
-        const addSec = Number(data.seconds||0);
+        const addSec = Number.isFinite(elapsed) && elapsed > 0 ? elapsed : Number(data.seconds||0);
         const updated = Number(row.dataset.actual||0) + addSec;
         row.dataset.actual = String(updated);
         sessionBase = updated;
         updateUsage(row, 0);
         if (timerEl) timerEl.textContent = fmt(updated);
+        stopSucceeded = true;
       }catch(e){ alert('暂停失败，请重试'); return; }
       finally{
         if (intervals.has(row)) { clearInterval(intervals.get(row)); intervals.delete(row); }
         startTs = null;
+        if (stopSucceeded) {
+          row.dataset.sessionId = '';
+        }
         pauseBtn.style.display = 'none';
+        pauseBtn.disabled = false;
         startBtn.style.display = '';
+        startBtn.disabled = false;
+        startBtn.textContent = '继续计时';
+        stopBtn && (stopBtn.disabled = false);
         // 停止计时后，仍允许直接“结束”
       }
     });
@@ -952,10 +1106,16 @@ document.querySelectorAll('.status-select').forEach(sel => {
       const sid = row.dataset.sessionId;
       if (sid){
         try{
-          const res = await fetch(`/api/session/stop/${sid}`, { method:'POST' });
+          const elapsed = startTs ? Math.max(0, Math.floor((Date.now() - startTs)/1000)) : 0;
+          const opts = { method:'POST' };
+          if (elapsed > 0){
+            opts.headers = {'Content-Type':'application/json'};
+            opts.body = JSON.stringify({ seconds: elapsed });
+          }
+          const res = await fetch(`/api/session/stop/${sid}`, opts);
           const data = await res.json();
           if (data && data.ok){
-            const addSec = Number(data.seconds||0);
+            const addSec = Number.isFinite(elapsed) && elapsed > 0 ? elapsed : Number(data.seconds||0);
             const updated = Number(row.dataset.actual||0) + addSec;
             row.dataset.actual = String(updated);
             sessionBase = updated;
@@ -966,11 +1126,13 @@ document.querySelectorAll('.status-select').forEach(sel => {
       startTs = null;
       updateUsage(row, 0);
       if (timerEl) timerEl.textContent = fmt(Number(row.dataset.actual || 0));
-      startBtn.style.display = '';
+      row.dataset.sessionId = '';
+      row.dataset.timerComplete = 'true';
+      startBtn.style.display = 'none';
+      startBtn.disabled = false;
       pauseBtn.style.display = 'none';
       stopBtn.style.display  = 'none';
       // 可选：结束后自动设为“已完成”
-      const statusSel = row.querySelector('.status-select');
       if (statusSel){
         statusSel.value = 'done';
         statusSel.dispatchEvent(new Event('change'));
@@ -992,4 +1154,5 @@ document.querySelectorAll('.status-select').forEach(sel => {
   });
 })();
 </script>
+</section>
 {% endblock %}

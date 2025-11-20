@@ -69,16 +69,59 @@ def ensure_legacy_schema() -> None:
     """Ensure legacy Task table has columns expected by the assistant view."""
 
     inspector = inspect(db.engine)
-    if "task" not in inspector.get_table_names():
-        return
-    columns = {col["name"] for col in inspector.get_columns("task")}
-    if "completion_rate" in columns:
-        return
-    try:
-        with db.engine.begin() as conn:
-            conn.execute(text("ALTER TABLE task ADD COLUMN completion_rate FLOAT"))
-    except Exception as exc:  # pragma: no cover - best-effort safeguard
-        current_app.logger.warning("Failed to add completion_rate to task table: %s", exc)
+    tables = set(inspector.get_table_names())
+
+    if "task" in tables:
+        columns = {col["name"] for col in inspector.get_columns("task")}
+        if "completion_rate" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(text("ALTER TABLE task ADD COLUMN completion_rate FLOAT"))
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                current_app.logger.warning(
+                    "Failed to add completion_rate to task table: %s", exc
+                )
+
+    if "plan_item" in tables:
+        columns = {col["name"] for col in inspector.get_columns("plan_item")}
+        if "student_reset_count" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(
+                            "ALTER TABLE plan_item "
+                            "ADD COLUMN student_reset_count INTEGER NOT NULL DEFAULT 0"
+                        )
+                    )
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                current_app.logger.warning(
+                    "Failed to add student_reset_count to plan_item table: %s", exc
+                )
+        if "evidence_policy" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(
+                            "ALTER TABLE plan_item "
+                            "ADD COLUMN evidence_policy VARCHAR(20) DEFAULT 'optional'"
+                        )
+                    )
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                current_app.logger.warning(
+                    "Failed to add evidence_policy to plan_item table: %s", exc
+                )
+    if "plan_evidence" in tables:
+        columns = {col["name"] for col in inspector.get_columns("plan_evidence")}
+        if "text_content" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text("ALTER TABLE plan_evidence ADD COLUMN text_content TEXT")
+                    )
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                current_app.logger.warning(
+                    "Failed to add text_content to plan_evidence table: %s", exc
+                )
 
 
 with app.app_context():
@@ -1128,6 +1171,7 @@ def tasks_page():
             db.session.add(t)
             db.session.commit()
             flash("已添加")
+            return redirect(url_for("tasks_page"))
         else:
             flash("请填写：学生、类别、任务描述")
     # 列表：按创建倒序，最多显示最近 30 条
@@ -1143,6 +1187,7 @@ def tasks_page():
             if t.completion_rate is not None
             else None
         )
+        accuracy_value = float(t.accuracy) if t.accuracy is not None else None
         enriched_items.append({
             "id": t.id,
             "date": t.date,
@@ -1155,9 +1200,56 @@ def tasks_page():
             "actual_minutes": actual_minutes,
             "progress": progress,
             "completion_rate": manual_progress,
-            "accuracy": float(t.accuracy or 0.0),
+            "accuracy": accuracy_value,
         })
-    return render_template("tasks.html", items=enriched_items, today=date.today().isoformat())
+    total_tasks = len(enriched_items)
+    completed_tasks = sum(1 for t in enriched_items if t["status"] == "done")
+    total_minutes = round(sum((t["actual_minutes"] or 0) for t in enriched_items), 1)
+    accuracy_values = [t["accuracy"] for t in enriched_items if t["accuracy"] is not None]
+    avg_accuracy = round(sum(accuracy_values) / len(accuracy_values), 1) if accuracy_values else 0.0
+    stats_payload = {
+        "total": total_tasks,
+        "completed": completed_tasks,
+        "total_minutes": total_minutes,
+        "avg_accuracy": avg_accuracy,
+    }
+    top_map = {}
+    for t in enriched_items:
+        key = (t["student_name"] or "").strip() or "未填写学生"
+        entry = top_map.setdefault(
+            key, {"minutes": 0.0, "tasks": 0, "accuracy_sum": 0.0, "accuracy_cnt": 0}
+        )
+        entry["minutes"] += t["actual_minutes"] or 0.0
+        entry["tasks"] += 1
+        if t["accuracy"] is not None:
+            entry["accuracy_sum"] += t["accuracy"]
+            entry["accuracy_cnt"] += 1
+    top_students = []
+    for name, payload in top_map.items():
+        avg_acc = (
+            round(payload["accuracy_sum"] / payload["accuracy_cnt"], 1)
+            if payload["accuracy_cnt"]
+            else None
+        )
+        top_students.append(
+            {
+                "name": name,
+                "minutes": round(payload["minutes"], 1),
+                "tasks": payload["tasks"],
+                "accuracy": avg_acc,
+            }
+        )
+    top_students.sort(key=lambda item: item["minutes"], reverse=True)
+    top_students = top_students[:5]
+    recent_tasks = enriched_items[:5]
+    return render_template(
+        "tasks.html",
+        items=enriched_items,
+        today=date.today().isoformat(),
+        stats=stats_payload,
+        top_students=top_students,
+        recent_tasks=recent_tasks,
+    )
 
 # ---- AJAX: 删除任务 ----
 @app.post("/api/tasks/<int:tid>/delete")
@@ -1289,8 +1381,19 @@ def api_session_stop(sid):
     sess = StudySession.query.get_or_404(sid)
     if sess.created_by != current_user.id and current_user.role != "admin":
         return jsonify({"ok": False, "error": "no_permission"}), 403
+    payload = request.get_json(silent=True) or {}
+    seconds_hint = payload.get("seconds")
+    if isinstance(seconds_hint, (int, float)):
+        seconds_hint = max(0, int(seconds_hint))
+    else:
+        seconds_hint = None
+
     if not sess.ended_at:
-        sess.close(datetime.utcnow())
+        if seconds_hint is not None:
+            ended_at = sess.started_at + timedelta(seconds=seconds_hint)
+        else:
+            ended_at = datetime.utcnow()
+        sess.close(ended_at)
         # 若有关联任务则累加实际用时，并填写 ended_at（如未填）
         if sess.task_id:
             t = Task.query.get(sess.task_id)
@@ -1300,7 +1403,7 @@ def api_session_stop(sid):
                     t.started_at = sess.started_at
                 t.ended_at = sess.ended_at  # 最后一次结束时间
         db.session.commit()
-    return jsonify({"ok": True, "session_id": sess.id, "seconds": sess.seconds})
+    return jsonify({"ok": True, "session_id": sess.id, "seconds": sess.seconds or 0})
 # ---- 设置任务的预计用时（分钟）----
 @app.post("/api/tasks/<int:tid>/plan")
 @login_required
@@ -1403,198 +1506,457 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 # ---- 学生任务汇总报告 ----
-@app.route("/report", methods=["GET"]) 
-@login_required
-def report_page():
-    """
-    汇总每位学生的任务：总数、各状态数量、计划/实际用时（总和与平均）。
-    可选筛选：start（开始日期 YYYY-MM-DD）、end（结束日期 YYYY-MM-DD）、category、student。
-    """
-    q = Task.query
 
-    # 读取筛选参数
-    start = (request.args.get("start") or "").strip()
-    end   = (request.args.get("end") or "").strip()
-    category = (request.args.get("category") or "").strip()
-    student  = (request.args.get("student") or "").strip()
+def _safe_report_date(value):
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value, "%Y-%m-%d").date()
+    except ValueError:
+        return None
 
-    # 日期过滤（闭区间）
-    if start:
-        q = q.filter(Task.date >= start)
-    if end:
-        q = q.filter(Task.date <= end)
-    if category:
-        q = q.filter(Task.category == category)
-    if student:
-        q = q.filter(Task.student_name == student)
 
-    rows = q.all()
+def _extract_report_students():
+    values = request.args.getlist("student")
+    if not values:
+        single = (request.args.get("student") or "").strip()
+        if single:
+            values = [single]
+    cleaned = []
+    seen = set()
+    for val in values:
+        name = (val or "").strip()
+        if name and name not in seen:
+            seen.add(name)
+            cleaned.append(name)
+    return cleaned
 
-    # 聚合
-    acc = defaultdict(lambda: {
-        "total": 0,
-        "pending": 0,
-        "progress": 0,
-        "done": 0,
-        "planned_minutes_sum": 0,
-        "actual_seconds_sum": 0,
-        "first_date": None,
-        "last_date": None,
-    })
 
-    for t in rows:
-        key = t.student_name or "(未填写)"
-        a = acc[key]
-        a["total"] += 1
-        a[t.status] = a.get(t.status, 0) + 1
-        a["planned_minutes_sum"] += int(t.planned_minutes or 0)
-        a["actual_seconds_sum"] += int(t.actual_seconds or 0)
-        # 记录时间范围
-        d = t.date or ""
-        if d:
-            if a["first_date"] is None or d < a["first_date"]:
-                a["first_date"] = d
-            if a["last_date"] is None or d > a["last_date"]:
-                a["last_date"] = d
+def _parse_report_filters():
+    today = date.today()
+    period_param = (request.args.get("period") or "").strip()
+    if period_param in {"7", "14", "30"}:
+        default_days = int(period_param)
+    else:
+        default_days = 7
 
-    # 整理为列表并计算派生字段
-    summary = []
-    totals = {
-        "students": 0,
-        "tasks": 0,
-        "planned_minutes_sum": 0,
-        "actual_seconds_sum": 0,
-        "done": 0,
+    start_raw = (request.args.get("start") or "").strip()
+    end_raw = (request.args.get("end") or "").strip()
+
+    start_date = _safe_report_date(start_raw)
+    end_date = _safe_report_date(end_raw)
+
+    if not end_date:
+        end_date = today
+    if not start_date:
+        start_date = end_date - timedelta(days=max(default_days, 1) - 1)
+
+    if start_date > end_date:
+        start_date, end_date = end_date, start_date
+
+    period_value = period_param or str(default_days)
+    if (start_raw and not period_param) or (end_raw and not period_param):
+        period_value = "custom"
+
+    return {
+        "start": start_date,
+        "end": end_date,
+        "start_str": start_date.isoformat(),
+        "end_str": end_date.isoformat(),
+        "category": (request.args.get("category") or "").strip(),
+        "students": _extract_report_students(),
+        "period": period_value,
     }
-    for stu, a in acc.items():
-        avg_planned = round(a["planned_minutes_sum"]/a["total"], 1) if a["total"] else 0
-        avg_actual_min = round((a["actual_seconds_sum"]/60)/a["total"], 1) if a["total"] else 0
-        done_rate = round((a["done"]*100.0)/a["total"], 1) if a["total"] else 0
-        summary.append({
-            "student": stu,
-            "total": a["total"],
-            "pending": a.get("pending", 0),
-            "progress": a.get("progress", 0),
-            "done": a.get("done", 0),
-            "done_rate": done_rate,                   # 完成率 %
-            "planned_minutes_sum": a["planned_minutes_sum"],
-            "actual_minutes_sum": round(a["actual_seconds_sum"]/60),
-            "avg_planned": avg_planned,               # 平均计划分钟/任务
-            "avg_actual": avg_actual_min,             # 平均实际分钟/任务
-            "first_date": a["first_date"],
-            "last_date": a["last_date"],
-        })
-        totals["students"] += 1
-        totals["tasks"] += a["total"]
-        totals["planned_minutes_sum"] += a["planned_minutes_sum"]
-        totals["actual_seconds_sum"] += a["actual_seconds_sum"]
-        totals["done"] += a.get("done", 0)
 
-    # 排序：按完成率/任务数/学生名
-    summary.sort(key=lambda r: (-r["done_rate"], -r["total"], r["student"]))
 
-    return render_template(
-        "report.html",
-        summary=summary,
-        totals={
-            **totals,
-            "actual_minutes_sum": round(totals["actual_seconds_sum"]/60)
-        },
-        filters={
-            "start": start,
-            "end": end,
-            "category": category,
-            "student": student,
+def _iter_date_labels(start_date, end_date):
+    labels = []
+    current = start_date
+    while current <= end_date:
+        labels.append(current.isoformat())
+        current += timedelta(days=1)
+    return labels
+
+
+def _query_report_tasks(filters):
+    q = Task.query
+    if filters.get("start"):
+        q = q.filter(Task.date >= filters["start_str"])
+    if filters.get("end"):
+        q = q.filter(Task.date <= filters["end_str"])
+    if filters.get("category"):
+        q = q.filter(Task.category == filters["category"])
+    if filters.get("students"):
+        q = q.filter(Task.student_name.in_(filters["students"]))
+    return q.order_by(Task.date.asc()).all()
+
+
+def _available_report_students():
+    rows = (
+        db.session.query(Task.student_name)
+        .filter(Task.student_name.isnot(None))
+        .filter(Task.student_name != "")
+        .distinct()
+        .order_by(Task.student_name.asc())
+        .all()
+    )
+    return [row[0] for row in rows]
+
+
+def _build_report_payload(tasks, filters):
+    summary_map = defaultdict(
+        lambda: {
+            "total": 0,
+            "pending": 0,
+            "progress": 0,
+            "done": 0,
+            "planned_minutes_sum": 0,
+            "actual_seconds_sum": 0,
+            "first_date": None,
+            "last_date": None,
+            "accuracy_sum": 0.0,
+            "accuracy_count": 0,
+            "completion_sum": 0.0,
+            "completion_count": 0,
         }
     )
+
+    daily_counts = defaultdict(lambda: {"total": 0, "pending": 0, "progress": 0, "done": 0})
+    category_daily_minutes = defaultdict(lambda: defaultdict(float))
+    category_totals = defaultdict(float)
+    accuracy_by_category = defaultdict(lambda: {"sum": 0.0, "count": 0})
+
+    completion_values = []
+    accuracy_values = []
+    actual_seconds_total = 0
+    planned_minutes_total = 0
+    total_done = 0
+
+    for task in tasks:
+        student = (task.student_name or "").strip() or "未填写学生"
+        status = (task.status or "pending").lower()
+        if status not in {"pending", "progress", "done"}:
+            status = "pending"
+
+        planned_minutes = max(0, int(task.planned_minutes or 0))
+        actual_seconds = max(0, int(task.actual_seconds or 0))
+        actual_minutes = actual_seconds / 60.0
+
+        completion = task.completion_rate
+        if completion is None and planned_minutes > 0:
+            completion = (actual_minutes / planned_minutes) * 100.0
+        if completion is not None:
+            completion = round(float(completion), 1)
+            completion_values.append(completion)
+
+        accuracy = task.accuracy
+        if accuracy is not None:
+            accuracy = round(float(accuracy), 1)
+            accuracy_values.append(accuracy)
+
+        entry = summary_map[student]
+        entry["total"] += 1
+        entry[status] += 1
+        entry["planned_minutes_sum"] += planned_minutes
+        entry["actual_seconds_sum"] += actual_seconds
+
+        if accuracy is not None:
+            entry["accuracy_sum"] += accuracy
+            entry["accuracy_count"] += 1
+        if completion is not None:
+            entry["completion_sum"] += completion
+            entry["completion_count"] += 1
+
+        task_date_obj = _safe_report_date(task.date)
+        if task_date_obj:
+            date_key = task_date_obj.isoformat()
+            stats = daily_counts[date_key]
+            stats["total"] += 1
+            stats[status] += 1
+
+            category = (task.category or "").strip() or "未分类"
+            category_daily_minutes[category][date_key] += actual_minutes
+            category_totals[category] += actual_minutes
+
+            if accuracy is not None:
+                cat_acc = accuracy_by_category[category]
+                cat_acc["sum"] += accuracy
+                cat_acc["count"] += 1
+
+            if entry["first_date"] is None or date_key < entry["first_date"]:
+                entry["first_date"] = date_key
+            if entry["last_date"] is None or date_key > entry["last_date"]:
+                entry["last_date"] = date_key
+
+        actual_seconds_total += actual_seconds
+        planned_minutes_total += planned_minutes
+        if status == "done":
+            total_done += 1
+
+    summary = []
+    for student, data in summary_map.items():
+        total = data["total"]
+        actual_minutes_sum = round(data["actual_seconds_sum"] / 60.0, 1)
+        avg_planned = round(data["planned_minutes_sum"] / total, 1) if total else 0.0
+        avg_actual = round(actual_minutes_sum / total, 1) if total else 0.0
+        done_rate = round(data["done"] * 100.0 / total, 1) if total else 0.0
+        avg_accuracy = (
+            round(data["accuracy_sum"] / data["accuracy_count"], 1)
+            if data["accuracy_count"]
+            else 0.0
+        )
+        avg_completion = (
+            round(data["completion_sum"] / data["completion_count"], 1)
+            if data["completion_count"]
+            else None
+        )
+        summary.append(
+            {
+                "student": student,
+                "total": total,
+                "pending": data["pending"],
+                "progress": data["progress"],
+                "done": data["done"],
+                "done_rate": done_rate,
+                "avg_completion": avg_completion,
+                "avg_accuracy": avg_accuracy,
+                "planned_minutes_sum": data["planned_minutes_sum"],
+                "actual_minutes_sum": actual_minutes_sum,
+                "avg_planned": avg_planned,
+                "avg_actual": avg_actual,
+                "first_date": data["first_date"],
+                "last_date": data["last_date"],
+            }
+        )
+
+    summary.sort(key=lambda r: (-r["done_rate"], -r["total"], r["student"]))
+
+    totals = {
+        "students": len(summary_map),
+        "tasks": len(tasks),
+        "planned_minutes_sum": planned_minutes_total,
+        "actual_minutes_sum": round(actual_seconds_total / 60.0, 1),
+        "done": total_done,
+        "avg_completion": (
+            round(sum(completion_values) / len(completion_values), 1)
+            if completion_values
+            else None
+        ),
+        "avg_accuracy": (
+            round(sum(accuracy_values) / len(accuracy_values), 1) if accuracy_values else None
+        ),
+    }
+
+    date_labels = _iter_date_labels(filters["start"], filters["end"])
+    daily_task_chart = {
+        "labels": date_labels,
+        "datasets": {
+            "assigned": [daily_counts.get(day, {}).get("total", 0) for day in date_labels],
+            "completed": [daily_counts.get(day, {}).get("done", 0) for day in date_labels],
+            "inProgress": [daily_counts.get(day, {}).get("progress", 0) for day in date_labels],
+            "pending": [daily_counts.get(day, {}).get("pending", 0) for day in date_labels],
+        },
+    }
+
+    sorted_categories = sorted(
+        category_totals.items(), key=lambda item: item[1], reverse=True
+    )
+    top_categories = [cat for cat, _ in sorted_categories[:5]]
+    category_datasets = []
+    for cat in top_categories:
+        date_map = category_daily_minutes[cat]
+        category_datasets.append(
+            {"label": cat, "data": [round(date_map.get(day, 0.0), 2) for day in date_labels]}
+        )
+    if len(sorted_categories) > len(top_categories):
+        other_by_date = {day: 0.0 for day in date_labels}
+        for cat, _total in sorted_categories[len(top_categories) :]:
+            for day, minutes in category_daily_minutes[cat].items():
+                other_by_date[day] = other_by_date.get(day, 0.0) + minutes
+        category_datasets.append(
+            {"label": "其他", "data": [round(other_by_date.get(day, 0.0), 2) for day in date_labels]}
+        )
+
+    category_share_labels = [cat for cat, _ in sorted_categories[:5]]
+    category_share_data = [round(total, 2) for _, total in sorted_categories[:5]]
+    if len(sorted_categories) > 5:
+        other_total = sum(total for _, total in sorted_categories[5:])
+        category_share_labels.append("其他")
+        category_share_data.append(round(other_total, 2))
+
+    accuracy_by_student_labels = [row["student"] for row in summary]
+    accuracy_by_student_data = [row["avg_accuracy"] for row in summary]
+
+    accuracy_by_category_labels = []
+    accuracy_by_category_data = []
+    for cat, stats in sorted(accuracy_by_category.items(), key=lambda item: item[0]):
+        if stats["count"]:
+            accuracy_by_category_labels.append(cat)
+            accuracy_by_category_data.append(round(stats["sum"] / stats["count"], 1))
+
+    total_hours = round(actual_seconds_total / 3600.0, 2)
+    day_count = max(1, len(date_labels))
+    avg_daily_hours = round(total_hours / day_count, 2) if day_count else 0.0
+    avg_completion_rate = totals["avg_completion"]
+    if avg_completion_rate is None:
+        avg_completion_rate = (
+            round(total_done * 100.0 / len(tasks), 1) if tasks else 0.0
+        )
+
+    top_category = None
+    if sorted_categories:
+        cat_name, minutes = sorted_categories[0]
+        top_category = {
+            "name": cat_name,
+            "hours": round(minutes / 60.0, 2),
+        }
+
+    cards = {
+        "total_tasks": len(tasks),
+        "completed_tasks": total_done,
+        "avg_completion_rate": avg_completion_rate,
+        "total_hours": total_hours,
+        "avg_daily_hours": avg_daily_hours,
+        "top_category": top_category,
+        "avg_accuracy": totals["avg_accuracy"] or 0.0,
+        "total_students": totals["students"],
+    }
+
+    return {
+        "filters": {
+            "start": filters["start_str"],
+            "end": filters["end_str"],
+            "category": filters.get("category"),
+            "students": filters.get("students", []),
+            "period": filters.get("period"),
+        },
+        "summary": summary,
+        "totals": totals,
+        "cards": cards,
+        "charts": {
+            "dailyTasks": daily_task_chart,
+            "dailyCategoryMinutes": {"labels": date_labels, "datasets": category_datasets},
+            "categoryShare": {"labels": category_share_labels, "data": category_share_data},
+            "accuracyByStudent": {
+                "labels": accuracy_by_student_labels,
+                "data": accuracy_by_student_data,
+            },
+            "accuracyByCategory": {
+                "labels": accuracy_by_category_labels,
+                "data": accuracy_by_category_data,
+            },
+        },
+        "availableStudents": _available_report_students(),
+        "dateLabels": date_labels,
+        "hasData": bool(tasks),
+    }
+
+
+@app.route("/report", methods=["GET"])
+@login_required
+def report_page():
+    filters = _parse_report_filters()
+    tasks = _query_report_tasks(filters)
+    payload = _build_report_payload(tasks, filters)
+    return render_template(
+        "report.html",
+        report_payload=payload,
+        summary=payload["summary"],
+        totals=payload["totals"],
+        filters=payload["filters"],
+    )
+
+
+@app.route("/report/student-view", methods=["GET"])
+@login_required
+def report_student_view():
+    filters = _parse_report_filters()
+    available_students = _available_report_students()
+    selected = filters["students"][0] if filters["students"] else None
+    if not selected and available_students:
+        selected = available_students[0]
+        filters["students"] = [selected]
+    elif selected:
+        filters["students"] = [selected]
+
+    tasks = _query_report_tasks(filters) if selected else []
+    payload = _build_report_payload(tasks, filters)
+
+    student_summary = payload["summary"][0] if payload["summary"] else None
+    records = [
+        {
+            "id": task.id,
+            "date": task.date,
+            "category": task.category,
+            "detail": task.detail,
+            "status": task.status,
+            "planned_minutes": int(task.planned_minutes or 0),
+            "actual_minutes": round(int(task.actual_seconds or 0) / 60.0, 1),
+            "completion_rate": float(task.completion_rate)
+            if task.completion_rate is not None
+            else None,
+            "accuracy": float(task.accuracy or 0.0),
+            "note": task.note or "",
+        }
+        for task in tasks
+    ]
+    records.sort(key=lambda row: row["date"] or "", reverse=True)
+
+    return render_template(
+        "report_student.html",
+        selected_student=selected,
+        report_payload=payload,
+        student_summary=student_summary,
+        student_records=records,
+        available_students=available_students,
+    )
+
 
 # ---- JSON: 汇总统计报告（所有学生）----
 @app.get("/api/report/summary")
 @login_required
 def api_report_summary():
-    """
-    返回所有学生的任务汇总数据（JSON格式）
-    支持参数：start, end, category
-    """
-    q = Task.query
-    start = (request.args.get("start") or "").strip()
-    end = (request.args.get("end") or "").strip()
-    category = (request.args.get("category") or "").strip()
-
-    if start:
-        q = q.filter(Task.date >= start)
-    if end:
-        q = q.filter(Task.date <= end)
-    if category:
-        q = q.filter(Task.category == category)
-
-    rows = q.all()
-
-    from collections import defaultdict as _dd
-    acc = _dd(lambda: {"total":0,"done":0,"progress":0,"pending":0,
-                       "planned":0,"actual":0})
-    for t in rows:
-        key = t.student_name or "(未填写)"
-        a = acc[key]
-        a["total"] += 1
-        a[t.status] = a.get(t.status, 0) + 1
-        a["planned"] += int(t.planned_minutes or 0)
-        a["actual"] += int(t.actual_seconds or 0)
-
-    result = []
-    for stu, a in acc.items():
-        result.append({
-            "student": stu,
-            "total": a["total"],
-            "done": a.get("done", 0),
-            "progress": a.get("progress", 0),
-            "pending": a.get("pending", 0),
-            "done_rate": round(a.get("done",0) * 100.0 / a["total"], 1) if a["total"] else 0,
-            "planned_minutes": a["planned"],
-            "actual_minutes": round(a["actual"] / 60, 1)
-        })
-    return jsonify({"ok": True, "summary": result})
+    filters = _parse_report_filters()
+    tasks = _query_report_tasks(filters)
+    payload = _build_report_payload(tasks, filters)
+    return jsonify({"ok": True, "data": payload})
 
 
 # ---- JSON: 单个学生的详细任务曲线 ----
 @app.get("/api/report/student/<name>")
 @login_required
 def api_report_student(name):
-    """
-    返回单个学生的任务详细信息，用于前端生成趋势图。
-    支持参数：start, end, category
-    """
-    q = Task.query.filter_by(student_name=name)
-    start = (request.args.get("start") or "").strip()
-    end = (request.args.get("end") or "").strip()
-    category = (request.args.get("category") or "").strip()
+    filters = _parse_report_filters()
+    filters["students"] = [name]
+    tasks = _query_report_tasks(filters)
+    payload = _build_report_payload(tasks, filters)
+    records = [
+        {
+            "id": task.id,
+            "date": task.date,
+            "category": task.category,
+            "detail": task.detail,
+            "status": task.status,
+            "planned": int(task.planned_minutes or 0),
+            "actual": round(int(task.actual_seconds or 0) / 60.0, 1),
+            "completion_rate": float(task.completion_rate)
+            if task.completion_rate is not None
+            else None,
+            "accuracy": float(task.accuracy or 0.0),
+            "note": task.note,
+        }
+        for task in tasks
+    ]
+    return jsonify({"ok": True, "student": name, "records": records, "summary": payload})
 
-    if start:
-        q = q.filter(Task.date >= start)
-    if end:
-        q = q.filter(Task.date <= end)
-    if category:
-        q = q.filter(Task.category == category)
 
-    rows = q.order_by(Task.date.asc()).all()
-    data = [{
-        "date": t.date,
-        "category": t.category,
-        "status": t.status,
-        "planned": int(t.planned_minutes or 0),
-        "actual": round(int(t.actual_seconds or 0) / 60, 1),
-        "accuracy": float(t.accuracy or 0.0),
-    } for t in rows]
-
-    return jsonify({"ok": True, "student": name, "records": data})
-
-# 提供一个 JSON 版本（便于将来前端图表或导出）
 @app.get("/api/report")
 @login_required
 def api_report():
-    # 直接复用页面逻辑的核心部分（简单实现）
-    with app.test_request_context():
-        return report_page()
+    filters = _parse_report_filters()
+    tasks = _query_report_tasks(filters)
+    payload = _build_report_payload(tasks, filters)
+    return jsonify({"ok": True, "data": payload})
 
 # ---- 导出汇总报告为 Excel（含完成率与平均正确率）----
 from io import BytesIO
@@ -1602,84 +1964,118 @@ from flask import send_file
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font
 
+try:
+    from weasyprint import HTML, CSS
+except ImportError:  # pragma: no cover - optional dependency
+    HTML = None
+    CSS = None
+
 @app.route("/report/export", methods=["GET"])
 @login_required
 def export_report_excel():
-    """
-    导出所有学生（可筛选）的任务汇总为 Excel：
-    列：学生、任务总数、完成率%、平均正确率%、计划用时(分)、实际用时(分)
-    支持 query 参数：start, end, category, student
-    """
-    q = Task.query
+    filters = _parse_report_filters()
+    tasks = _query_report_tasks(filters)
+    payload = _build_report_payload(tasks, filters)
 
-    start = (request.args.get("start") or "").strip()
-    end = (request.args.get("end") or "").strip()
-    category = (request.args.get("category") or "").strip()
-    student = (request.args.get("student") or "").strip()
+    selected_students = payload["filters"].get("students") or []
+    single_student = selected_students[0] if len(selected_students) == 1 else None
+    if selected_students:
+        tasks = [
+            task
+            for task in tasks
+            if ((task.student_name or "").strip() or "未填写学生") in selected_students
+        ]
 
-    if start:
-        q = q.filter(Task.date >= start)
-    if end:
-        q = q.filter(Task.date <= end)
-    if category:
-        q = q.filter(Task.category == category)
-    if student:
-        q = q.filter(Task.student_name == student)
-
-    rows = q.all()
-
-    # 聚合：按学生名汇总
-    agg = {}
-    for t in rows:
-        key = t.student_name or "(未填写)"
-        if key not in agg:
-            agg[key] = {
-                "total": 0,
-                "done": 0,
-                "planned": 0,
-                "actual_sec": 0,
-                "acc_sum": 0.0,
-            }
-        a = agg[key]
-        a["total"] += 1
-        if (t.status or "") == "done":
-            a["done"] += 1
-        a["planned"] += int(t.planned_minutes or 0)
-        a["actual_sec"] += int(t.actual_seconds or 0)
-        a["acc_sum"] += float(t.accuracy or 0.0)
-
-    # 生成 Excel
     wb = Workbook()
-    ws = wb.active
-    ws.title = "任务汇总"
+    summary_ws = wb.active
+    summary_ws.title = f"{single_student}-汇总" if single_student else "汇总"
 
-    headers = ["学生", "任务总数", "完成率 (%)", "平均正确率 (%)", "计划用时 (分钟)", "实际用时 (分钟)"]
-    ws.append(headers)
+    summary_headers = [
+        "学生",
+        "任务总数",
+        "未开始",
+        "进行中",
+        "已完成",
+        "完成率 (%)",
+        "平均完成率 (%)",
+        "平均正确率 (%)",
+        "计划用时 (分钟)",
+        "实际用时 (分钟)",
+    ]
+    summary_ws.append(summary_headers)
 
-    # 表头样式
-    bold = Font(bold=True)
-    center = Alignment(horizontal="center")
-    for cell in ws[1]:
-        cell.font = bold
-        cell.alignment = center
+    header_font = Font(bold=True)
+    header_alignment = Alignment(horizontal="center")
+    for cell in summary_ws[1]:
+        cell.font = header_font
+        cell.alignment = header_alignment
 
-    # 数据行
-    # 为了稳定输出顺序，按学生名排序
-    for stu in sorted(agg.keys()):
-        a = agg[stu]
-        total = a["total"]
-        done_rate = round(a["done"] * 100.0 / total, 1) if total else 0.0
-        avg_acc = round(a["acc_sum"] / total, 1) if total else 0.0
-        actual_min = round(a["actual_sec"] / 60.0, 1)
-        ws.append([stu, total, done_rate, avg_acc, a["planned"], actual_min])
+    summary_rows = payload["summary"]
+    if selected_students:
+        summary_rows = [
+            row for row in summary_rows if row["student"] in selected_students
+        ]
 
-    # 自适应列宽
-    for col in ws.columns:
-        max_len = max(len(str(cell.value)) if cell.value is not None else 0 for cell in col)
-        col_letter = col[0].column_letter
-        ws.column_dimensions[col_letter].width = min(max_len + 2, 40)
+    for row in summary_rows:
+        avg_completion = row.get("avg_completion")
+        summary_ws.append(
+            [
+                row["student"],
+                row["total"],
+                row["pending"],
+                row["progress"],
+                row["done"],
+                row["done_rate"],
+                avg_completion if avg_completion is not None else "",
+                row["avg_accuracy"],
+                row["planned_minutes_sum"],
+                row["actual_minutes_sum"],
+            ]
+        )
 
-    # 写入字节流并返回
+    for column in summary_ws.columns:
+        max_len = max(len(str(cell.value)) if cell.value is not None else 0 for cell in column)
+        summary_ws.column_dimensions[column[0].column_letter].width = min(max_len + 2, 40)
+
+    detail_title = f"{single_student}-任务明细" if single_student else "任务明细"
+    detail_ws = wb.create_sheet(detail_title)
+    detail_headers = [
+        "学生",
+        "日期",
+        "类别",
+        "任务",
+        "状态",
+        "计划 (分钟)",
+        "实际 (分钟)",
+        "完成率 (%)",
+        "正确率 (%)",
+        "备注",
+    ]
+    detail_ws.append(detail_headers)
+    for cell in detail_ws[1]:
+        cell.font = header_font
+        cell.alignment = header_alignment
+
+    for task in tasks:
+        detail_ws.append(
+            [
+                (task.student_name or "").strip() or "未填写学生",
+                task.date,
+                task.category or "",
+                task.detail or "",
+                task.status or "",
+                int(task.planned_minutes or 0),
+                round(int(task.actual_seconds or 0) / 60.0, 1),
+                float(task.completion_rate) if task.completion_rate is not None else "",
+                float(task.accuracy or 0.0),
+                task.note or "",
+            ]
+        )
+
+    for column in detail_ws.columns:
+        max_len = max(len(str(cell.value)) if cell.value is not None else 0 for cell in column)
+        detail_ws.column_dimensions[column[0].column_letter].width = min(max_len + 2, 60)
+
     buf = BytesIO()
     wb.save(buf)
     buf.seek(0)
@@ -1689,4 +2085,101 @@ def export_report_excel():
         as_attachment=True,
         download_name=filename,
         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+
+
+@app.route("/report/export/pdf", methods=["GET"])
+@login_required
+def export_report_pdf():
+    if HTML is None or CSS is None:
+        flash("服务器未安装 PDF 导出依赖（weasyprint），请联系管理员。")
+        referrer = request.referrer or url_for("report_page")
+        return redirect(referrer)
+
+    filters = _parse_report_filters()
+    tasks = _query_report_tasks(filters)
+    payload = _build_report_payload(tasks, filters)
+
+    selected_students = payload["filters"].get("students") or []
+    single_student = selected_students[0] if len(selected_students) == 1 else None
+
+    summary_rows = payload["summary"]
+    if selected_students:
+        summary_rows = [
+            row for row in summary_rows if row["student"] in selected_students
+        ]
+        tasks = [
+            task
+            for task in tasks
+            if ((task.student_name or "").strip() or "未填写学生") in selected_students
+        ]
+
+    task_rows = [
+        {
+            "student": (task.student_name or "").strip() or "未填写学生",
+            "date": task.date,
+            "category": task.category or "",
+            "detail": task.detail or "",
+            "status": task.status or "",
+            "planned_minutes": int(task.planned_minutes or 0),
+            "actual_minutes": round(int(task.actual_seconds or 0) / 60.0, 1),
+            "completion_rate": (
+                f"{float(task.completion_rate):.1f}%"
+                if task.completion_rate is not None
+                else "—"
+            ),
+            "accuracy": (
+                f"{float(task.accuracy or 0.0):.1f}%"
+                if task.accuracy is not None
+                else "0.0%"
+            ),
+            "note": task.note or "",
+        }
+        for task in tasks
+    ]
+
+    generated_at = datetime.now()
+    html = render_template(
+        "report_pdf.html",
+        generated_at=generated_at,
+        filters=payload["filters"],
+        cards=payload["cards"],
+        summary=summary_rows,
+        tasks=task_rows,
+        selected_students=selected_students,
+        single_student=single_student,
+    )
+
+    css = CSS(
+        string="""
+@page { size: A4; margin: 18mm 16mm 20mm 16mm; }
+body { font-family: 'Microsoft YaHei', 'PingFang SC', 'Source Han Sans', sans-serif; color: #1f2d3d; font-size: 11pt; }
+h1 { font-size: 18pt; margin: 0 0 4mm; color: #0E8F87; }
+.meta { font-size: 9.5pt; color: #5f6c7b; margin-bottom: 6mm; }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-bottom: 8mm; }
+.card { border: 1px solid #cfe5e3; border-radius: 8px; padding: 6mm; background: #f9fdfc; }
+.card-title { font-size: 9pt; color: #5f6c7b; margin-bottom: 2mm; }
+.card-value { font-size: 15pt; font-weight: 600; color: #0E6F6A; }
+.section-title { font-size: 13pt; font-weight: 600; margin: 0 0 4mm; color: #0E6F6A; }
+table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 6mm; }
+th, td { border: 1px solid #dce8e6; padding: 3mm 2.5mm; text-align: center; }
+th { background: #f1f6f5; font-weight: 600; color: #3a4a4a; }
+tbody tr:nth-child(odd) { background: #fbfdfc; }
+.note { font-size: 9pt; color: #5f6c7b; margin-top: 4mm; }
+"""
+    )
+
+    pdf_stream = BytesIO()
+    HTML(string=html, base_url=request.base_url).write_pdf(
+        target=pdf_stream, stylesheets=[css]
+    )
+    pdf_stream.seek(0)
+
+    filename_student = single_student if single_student else "all"
+    filename = f"report_{filename_student}_{date.today().isoformat()}.pdf"
+    return send_file(
+        pdf_stream,
+        as_attachment=True,
+        download_name=filename,
+        mimetype="application/pdf",
     )

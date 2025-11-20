@@ -1,184 +1,966 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>汇总报告</h2>
 
-<div class="card" style="margin-bottom:12px;">
-  <form method="get" action="{{ url_for('report_page') }}" style="display:flex; gap:12px; flex-wrap:wrap; align-items:end;">
-    <div style="display:flex; flex-direction:column;">
-      <label>开始日期</label>
-      <input type="date" name="start" value="{{ filters.start }}">
+<section class="report-hero">
+  <div class="hero-inner">
+    <div class="hero-heading">
+      <div class="hero-title">
+        <h1>学习任务汇总报告</h1>
+        <p>快速洞察全体学生的学习投入与任务完成情况</p>
+      </div>
+      <div class="hero-actions">
+        <button type="button" id="exportBtn" class="hero-export">导出 Excel</button>
+        <button type="button" id="exportPdfBtn" class="hero-export hero-export--outline">导出 PDF</button>
+      </div>
     </div>
-    <div style="display:flex; flex-direction:column;">
-      <label>结束日期</label>
-      <input type="date" name="end" value="{{ filters.end }}">
-    </div>
-    <div style="display:flex; flex-direction:column;">
-      <label>学生</label>
-      <input type="text" name="student" placeholder="精确匹配" value="{{ filters.student }}">
-    </div>
-    <div style="display:flex; flex-direction:column; min-width:280px;">
-      <label>类别</label>
-      <input type="text" name="category" placeholder="如：雅思-听力-精听" value="{{ filters.category }}">
-    </div>
-    <div style="display:flex; gap:8px;">
-      <button type="submit">筛选</button>
-      <a class="btn-secondary" href="{{ url_for('report_page') }}">清空</a>
-      <a class="btn-secondary" href="{{ url_for('tasks_page') }}">返回任务</a>
-      <a class="btn-secondary" href="{{ url_for('export_report_excel') }}">导出 Excel 报告</a>
-    </div>
-  </form>
-</div>
+    <form id="reportFilterForm" class="hero-form" method="get" action="{{ url_for('report_page') }}">
+      <input type="hidden" name="period" id="periodField" value="{{ report_payload.filters.period }}">
+      <div class="filter-row">
+        <div class="filter-group filter-group--range">
+          <label>快捷区间</label>
+          <div class="range-buttons">
+            <button type="button" class="range-btn" data-period="7">最近7天</button>
+            <button type="button" class="range-btn" data-period="30">最近30天</button>
+            <button type="button" class="range-btn" data-period="custom">自定义</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label for="startDate">开始日期</label>
+          <input id="startDate" type="date" name="start" value="{{ report_payload.filters.start }}">
+        </div>
+        <div class="filter-group">
+          <label for="endDate">结束日期</label>
+          <input id="endDate" type="date" name="end" value="{{ report_payload.filters.end }}">
+        </div>
+        <div class="filter-group filter-group--students">
+          <label>学生</label>
+          <div class="student-combo" id="studentCombo">
+            <button type="button" class="student-combo__control" id="studentComboTrigger">
+              <span id="studentComboLabel">全部学生</span>
+              <span class="student-combo__arrow">▼</span>
+            </button>
+            <div class="student-combo__dropdown" id="studentComboDropdown">
+              <input id="studentComboSearch" class="student-combo__search" type="text" placeholder="搜索学生...">
+              <div class="student-combo__options" id="studentComboOptions">
+                {% for stu in report_payload.availableStudents %}
+                <label class="student-option" data-value="{{ stu }}">
+                  <input type="checkbox" value="{{ stu }}" {% if stu in report_payload.filters.students %}checked{% endif %}>
+                  <span>{{ stu }}</span>
+                </label>
+                {% endfor %}
+              </div>
+              <div class="student-combo__footer">
+                <button type="button" class="student-combo__action" id="studentComboSelectAll">全选</button>
+                <button type="button" class="student-combo__action" id="studentComboClear">清空</button>
+              </div>
+            </div>
+          </div>
+          <div id="studentTags" class="tag-list"></div>
+          <div id="studentHiddenFields"></div>
+        </div>
+        <div class="filter-group">
+          <label for="categoryInput">类别</label>
+          <input id="categoryInput" type="text" name="category" placeholder="如：雅思-听力-精听" value="{{ report_payload.filters.category or '' }}">
+        </div>
+        <div class="filter-actions">
+          <button type="submit" class="btn-primary">应用筛选</button>
+          <a class="btn-secondary" href="{{ url_for('report_page') }}">清空</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
 
-<div class="card" style="margin-bottom:12px;">
-  <div style="display:flex; gap:18px; flex-wrap:wrap;">
-    <div>学生数：<strong>{{ totals.students }}</strong></div>
-    <div>任务总数：<strong>{{ totals.tasks }}</strong></div>
-    <div>完成任务：<strong>{{ totals.done }}</strong></div>
-    <div>计划用时总计：<strong>{{ totals.planned_minutes_sum }} 分</strong></div>
-    <div>实际用时总计：<strong>{{ totals.actual_minutes_sum }} 分</strong></div>
+{% if not report_payload.hasData %}
+  <div class="alert">没有符合条件的数据，试试调整筛选条件。</div>
+{% else %}
+<div class="metrics-grid">
+  <div class="metric-card">
+    <div class="metric-label">任务总数</div>
+    <div class="metric-value">{{ report_payload.cards.total_tasks }}</div>
+    <div class="metric-note">覆盖 {{ report_payload.cards.total_students }} 位学生</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">已完成</div>
+    <div class="metric-value">{{ report_payload.cards.completed_tasks }}</div>
+    <div class="metric-note">完成率 {{ '%.1f'|format(report_payload.cards.avg_completion_rate) }}%</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">总时长</div>
+    <div class="metric-value">{{ '%.2f'|format(report_payload.cards.total_hours) }} h</div>
+    <div class="metric-note">日均 {{ '%.2f'|format(report_payload.cards.avg_daily_hours) }} h</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">平均正确率</div>
+    <div class="metric-value">{{ '%.1f'|format(report_payload.cards.avg_accuracy) }}%</div>
+    <div class="metric-note">所有任务平均值</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">最耗时分类</div>
+    {% if report_payload.cards.top_category %}
+      <div class="metric-value">{{ report_payload.cards.top_category.name }}</div>
+      <div class="metric-note">{{ '%.2f'|format(report_payload.cards.top_category.hours) }} 小时</div>
+    {% else %}
+      <div class="metric-value">—</div>
+      <div class="metric-note">暂无数据</div>
+    {% endif %}
   </div>
 </div>
 
-<table class="task-table">
-  <tr>
-    <th>学生</th>
-    <th>总数</th>
-    <th>未开始</th>
-    <th>进行中</th>
-    <th>已完成</th>
-    <th>完成率</th>
-    <th>计划用时(总/均)</th>
-    <th>实际用时(总/均)</th>
-    <th>时间范围</th>
-  </tr>
-  {% for r in summary %}
-  <tr>
-    <td>{{ r.student }}</td>
-    <td>{{ r.total }}</td>
-    <td>{{ r.pending }}</td>
-    <td>{{ r.progress }}</td>
-    <td>{{ r.done }}</td>
-    <td>{{ r.done_rate }}%</td>
-    <td>{{ r.planned_minutes_sum }} / {{ r.avg_planned }}</td>
-    <td>{{ r.actual_minutes_sum }} / {{ r.avg_actual }}</td>
-    <td>
-      {% if r.first_date and r.last_date %}
-        {{ r.first_date }} — {{ r.last_date }}
-      {% else %}
-        —
-      {% endif %}
-    </td>
-  </tr>
-  {% endfor %}
-</table>
+<div class="charts-grid">
+  <div class="chart-card chart-card--wide">
+    <div class="chart-title">每日任务完成情况</div>
+    <canvas id="dailyTasksChart"></canvas>
+  </div>
+  <div class="chart-card chart-card--wide">
+    <div class="chart-title">每日用时分布（分钟）</div>
+    <canvas id="dailyCategoryChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">分类用时占比</div>
+    <canvas id="categoryShareChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">学生平均正确率</div>
+    <canvas id="accuracyStudentChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">分类平均正确率</div>
+    <canvas id="accuracyCategoryChart"></canvas>
+  </div>
+</div>
 
-{% if not summary or summary|length == 0 %}
-  <div class="alert" style="margin-top:10px;">没有数据，试试放宽筛选条件。</div>
+<div class="card summary-card">
+  <div class="summary-header">
+    <h3>学生任务统计</h3>
+    <span>共 {{ summary|length }} 位学生</span>
+  </div>
+  <div class="table-wrap">
+    <table class="task-table report-table">
+      <thead>
+        <tr>
+          <th>学生</th>
+          <th>任务总数</th>
+          <th>未开始</th>
+          <th>进行中</th>
+          <th>已完成</th>
+          <th>完成率</th>
+          <th>平均完成率</th>
+          <th>平均正确率</th>
+          <th>计划用时(总/均)</th>
+          <th>实际用时(总/均)</th>
+          <th>时间范围</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in summary %}
+        <tr>
+          <td>{{ r.student }}</td>
+          <td>{{ r.total }}</td>
+          <td>{{ r.pending }}</td>
+          <td>{{ r.progress }}</td>
+          <td>{{ r.done }}</td>
+          <td>{{ '%.1f'|format(r.done_rate) }}%</td>
+          <td>
+            {% if r.avg_completion is not none %}
+              {{ '%.1f'|format(r.avg_completion) }}%
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td>{{ '%.1f'|format(r.avg_accuracy) }}%</td>
+          <td>{{ r.planned_minutes_sum }} / {{ '%.1f'|format(r.avg_planned) }}</td>
+          <td>{{ '%.1f'|format(r.actual_minutes_sum) }} / {{ '%.1f'|format(r.avg_actual) }}</td>
+          <td>
+            {% if r.first_date and r.last_date %}
+              {{ r.first_date }} — {{ r.last_date }}
+            {% else %}
+              —
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endif %}
 
-<hr>
-<h3>可视化统计</h3>
-<canvas id="timeChart" width="800" height="400"></canvas>
+<style>
+.report-card{
+  margin-bottom: 16px;
+  padding: 16px 20px;
+}
+.report-hero{
+  position:relative;
+  margin-bottom:24px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#0E8F87 0%,#22B5AD 55%,#4FD0C1 100%);
+  color:#fff;
+  overflow:visible;
+  box-shadow:0 18px 40px rgba(14,143,135,0.22);
+}
+.hero-inner{
+  position:relative;
+  padding:28px 32px 32px;
+  backdrop-filter:blur(4px);
+}
+.hero-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:20px;
+}
+.hero-title h1{
+  font-size:26px;
+  font-weight:700;
+  letter-spacing:0.5px;
+  margin:0 0 6px;
+  color:#f6fffd;
+}
+.hero-title p{
+  margin:0;
+  font-size:14px;
+  color:rgba(255,255,255,0.78);
+}
+.hero-actions{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.hero-export{
+  border:1px solid rgba(255,255,255,0.6);
+  background:rgba(255,255,255,0.12);
+  color:#fff;
+  padding:10px 18px;
+  border-radius:999px;
+  font-size:13px;
+  transition:all .2s ease;
+  cursor:pointer;
+  backdrop-filter: blur(4px);
+}
+.hero-export:hover{
+  background:#fff;
+  color:#0E8F87;
+}
+.hero-export--outline{
+  background:rgba(255,255,255,0.04);
+}
+.hero-export--outline:hover{
+  background:#fff;
+  color:#0E8F87;
+}
+.hero-form{
+  background:rgba(255,255,255,0.18);
+  border-radius:16px;
+  padding:18px 20px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.filter-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:flex-end;
+}
+.filter-group{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:160px;
+}
+.filter-group label{
+  font-size:13px;
+  color:var(--muted,#6b7785);
+}
+.filter-group input,
+.filter-group select{
+  height:36px;
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,0.55);
+  border-radius:8px;
+  font-size:14px;
+  background:rgba(255,255,255,0.85);
+  color:#164A45;
+}
+.filter-group input::placeholder{
+  color:rgba(22,74,69,0.55);
+}
+
+.student-combo{
+  position:relative;
+  min-width:220px;
+}
+.student-combo__control{
+  width:100%;
+  height:36px;
+  padding:6px 12px;
+  border:1px solid var(--line,#e4e7ed);
+  border-radius:8px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:13px;
+  color:var(--text,#2c3e50);
+  cursor:pointer;
+}
+.student-combo__control:focus{
+  outline:2px solid var(--brand,#2F8E87);
+  outline-offset:2px;
+}
+.student-combo__arrow{
+  font-size:11px;
+  color:var(--muted,#6b7785);
+  transition:transform .15s ease;
+}
+.student-combo.open .student-combo__arrow{
+  transform:rotate(180deg);
+}
+.student-combo__dropdown{
+  display:none;
+  position:absolute;
+  top:calc(100% + 6px);
+  left:0;
+  right:0;
+  padding:10px;
+  background:#fff;
+  border:1px solid var(--line,#e4e7ed);
+  border-radius:10px;
+  box-shadow:0 12px 30px rgba(15,23,42,0.12);
+  z-index:60;
+}
+.student-combo__dropdown.open{
+  display:block;
+}
+.student-combo__search{
+  width:100%;
+  height:32px;
+  border:1px solid var(--line,#e4e7ed);
+  border-radius:6px;
+  padding:4px 10px;
+  font-size:13px;
+  margin-bottom:8px;
+  color:#164A45;
+}
+.student-combo__search::placeholder{
+  color:rgba(22,74,69,0.45);
+}
+.student-combo__options{
+  max-height:180px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.student-option{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  font-size:13px;
+  padding:4px 6px;
+  border-radius:6px;
+  cursor:pointer;
+  color:#164A45;
+}
+.student-option:hover{
+  background:#f5f8ff;
+}
+.student-option input{
+  accent-color:var(--brand,#2F8E87);
+}
+.student-option span{
+  color:inherit;
+}
+.student-option.hidden{
+  display:none;
+}
+.student-combo__footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:8px;
+  gap:8px;
+}
+.student-combo__action{
+  flex:1;
+  border:1px solid var(--line,#e4e7ed);
+  background:#f5f6f8;
+  border-radius:6px;
+  padding:4px 0;
+  font-size:12px;
+  cursor:pointer;
+  color:#4a4f5e;
+}
+.student-combo__action:hover{
+  background:#e8f2f1;
+  color:var(--brand,#2F8E87);
+}
+.tag-list{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.tag{
+  background:#f0f4ff;
+  color:#2f4f80;
+  padding:2px 8px;
+  border-radius:12px;
+  font-size:12px;
+}
+#studentHiddenFields{
+  display:none;
+}
+.range-buttons{
+  display:flex;
+  gap:8px;
+}
+.range-btn{
+  border:1px solid var(--line,#e4e7ed);
+  background:#f7f9fc;
+  color:#3b3f45;
+  border-radius:18px;
+  padding:6px 14px;
+  font-size:13px;
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.range-btn.active{
+  background:var(--brand,#2F8E87);
+  color:#fff;
+  border-color:var(--brand,#2F8E87);
+}
+.filter-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.btn-primary{
+  background:#fff;
+  color:#0E8F87;
+  padding:8px 18px;
+  border-radius:999px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-primary:hover{
+  background:#E8FFFA;
+}
+.btn-secondary{
+  padding:8px 16px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.22);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.45);
+  text-decoration:none;
+  font-size:13px;
+}
+.btn-secondary:hover{
+  background:rgba(255,255,255,0.4);
+}
+.metrics-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+  margin-bottom:18px;
+}
+.metric-card{
+  background:#fff;
+  border-radius:12px;
+  padding:16px;
+  box-shadow:0 10px 26px rgba(14,143,135,0.08);
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  border:1px solid #E4F4F2;
+}
+.metric-label{
+  font-size:13px;
+  color:var(--muted,#6b7785);
+}
+.metric-value{
+  font-size:22px;
+  font-weight:600;
+  color:#0E6F6A;
+}
+.metric-note{
+  font-size:12px;
+  color:var(--muted,#6b7785);
+}
+.charts-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:16px;
+  margin-bottom:20px;
+}
+.chart-card{
+  background:var(--card,#fff);
+  border-radius:12px;
+  padding:16px;
+  box-shadow:var(--shadow,0 1px 4px rgba(0,0,0,0.08));
+}
+.chart-card--wide{
+  grid-column:span 2;
+}
+.chart-card{
+  background:#fff;
+  border:1px solid #E4F4F2;
+}
+.chart-title{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:8px;
+  color:var(--text-strong,#1f2d3d);
+}
+.summary-card{
+  margin-top:24px;
+  padding:16px;
+}
+.summary-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.summary-header span{
+  color:var(--muted,#6b7785);
+  font-size:13px;
+}
+.table-wrap{
+  overflow:auto;
+}
+.report-table th,
+.report-table td{
+  text-align:center;
+  white-space:nowrap;
+}
+.alert{
+  padding:14px 18px;
+  background:#fff7e6;
+  border:1px solid #ffe2b8;
+  border-radius:10px;
+  color:#8a5a00;
+}
+@media (max-width: 960px){
+  .chart-card--wide{
+    grid-column:span 1;
+  }
+}
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const res = await fetch('/api/report/summary');
-    const data = await res.json();
-    if (!data.ok) return;
+const REPORT_DATA = {{ report_payload|tojson }};
+const BRAND_COLORS = {
+  deepTeal: '#0E8F87',
+  aqua: '#22B5AD',
+  mint: '#52D2C5',
+  lightMint: '#8AE2D6',
+  paleMint: '#C7F3EB',
+  amber: '#FFC983',
+  coral: '#F98B6E',
+  magenta: '#F26E9A',
+  violet: '#7C93FF',
+  lavender: '#9A87FF',
+  slate: '#5F6C7B',
+  neutral: '#E8EFF6'
+};
+const CATEGORY_BASE_COLORS = [
+  BRAND_COLORS.deepTeal,
+  BRAND_COLORS.aqua,
+  BRAND_COLORS.mint,
+  BRAND_COLORS.lightMint,
+  BRAND_COLORS.paleMint,
+  BRAND_COLORS.amber,
+  BRAND_COLORS.coral,
+  BRAND_COLORS.magenta,
+  BRAND_COLORS.violet,
+  BRAND_COLORS.lavender
+];
+const CATEGORY_COLOR_MAP = new Map();
 
-    const labels = data.summary.map(x => x.student);
-    const planned = data.summary.map(x => x.planned_minutes);
-    const actual = data.summary.map(x => x.actual_minutes);
+function initRangeButtons(){
+  const form = document.getElementById('reportFilterForm');
+  const periodField = document.getElementById('periodField');
+  const startInput = document.getElementById('startDate');
+  const endInput = document.getElementById('endDate');
+  const buttons = Array.from(document.querySelectorAll('.range-btn'));
 
-    const ctx = document.getElementById('timeChart').getContext('2d');
-    new Chart(ctx, {
+  function setActive(period){
+    buttons.forEach(btn => {
+      if (btn.dataset.period === period){
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+
+  setActive(REPORT_DATA.filters.period || '7');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const period = btn.dataset.period;
+      periodField.value = period;
+      if (period === 'custom'){
+        setActive('custom');
+        (startInput || {}).focus?.();
+      } else {
+        form.submit();
+      }
+    });
+  });
+
+  [startInput, endInput].forEach(input => {
+    if (!input) return;
+    input.addEventListener('change', () => {
+      periodField.value = 'custom';
+      setActive('custom');
+    });
+  });
+}
+
+function initStudentFilter(){
+  const combo = document.getElementById('studentCombo');
+  const trigger = document.getElementById('studentComboTrigger');
+  const dropdown = document.getElementById('studentComboDropdown');
+  const search = document.getElementById('studentComboSearch');
+  const optionsWrap = document.getElementById('studentComboOptions');
+  const tags = document.getElementById('studentTags');
+  const label = document.getElementById('studentComboLabel');
+  const hiddenWrap = document.getElementById('studentHiddenFields');
+  const selectAllBtn = document.getElementById('studentComboSelectAll');
+  const clearBtn = document.getElementById('studentComboClear');
+  const form = document.getElementById('reportFilterForm');
+  if (!combo || !trigger || !dropdown || !optionsWrap || !label || !hiddenWrap || !form) return;
+
+  const optionElements = Array.from(optionsWrap.querySelectorAll('.student-option'));
+  const checkboxes = optionElements.map(opt => opt.querySelector('input[type="checkbox"]'));
+  const selected = new Set(
+    checkboxes.filter(cb => cb.checked).map(cb => cb.value)
+  );
+  let submitTimer = null;
+
+  function scheduleSubmit(){
+    if (submitTimer) clearTimeout(submitTimer);
+    submitTimer = setTimeout(() => form.submit(), 150);
+  }
+
+  function updateLabel(){
+    if (!selected.size){
+      label.textContent = '全部学生';
+      return;
+    }
+    const values = Array.from(selected);
+    if (values.length === 1){
+      label.textContent = values[0];
+    } else {
+      label.textContent = `已选 ${values.length} 人`;
+    }
+  }
+
+  function renderTags(){
+    if (!tags) return;
+    tags.innerHTML = '';
+    const values = Array.from(selected);
+    if (!values.length){
+      const span = document.createElement('span');
+      span.className = 'tag';
+      span.textContent = '全部学生';
+      tags.appendChild(span);
+      return;
+    }
+    values.slice(0, 5).forEach(name => {
+      const span = document.createElement('span');
+      span.className = 'tag';
+      span.textContent = name;
+      tags.appendChild(span);
+    });
+    if (values.length > 5){
+      const more = document.createElement('span');
+      more.className = 'tag';
+      more.textContent = `+${values.length - 5}`;
+      tags.appendChild(more);
+    }
+  }
+
+  function syncHiddenFields(){
+    hiddenWrap.innerHTML = '';
+    selected.forEach(name => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'student';
+      input.value = name;
+      hiddenWrap.appendChild(input);
+    });
+  }
+
+  function applySelection(opts){
+    const silent = Boolean(opts && opts.silent);
+    updateLabel();
+    renderTags();
+    syncHiddenFields();
+    if (!silent){
+      scheduleSubmit();
+    }
+  }
+
+  function toggleDropdown(force){
+    const willOpen = typeof force === 'boolean' ? force : !dropdown.classList.contains('open');
+    dropdown.classList.toggle('open', willOpen);
+    combo.classList.toggle('open', willOpen);
+    if (willOpen){
+      search?.focus();
+    }
+  }
+
+  trigger.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    toggleDropdown();
+  });
+
+  document.addEventListener('click', (evt) => {
+    if (!combo.contains(evt.target)){
+      toggleDropdown(false);
+    }
+  });
+
+  search?.addEventListener('input', () => {
+    const keyword = search.value.trim().toLowerCase();
+    optionElements.forEach(opt => {
+      const text = (opt.dataset.value || '').toLowerCase();
+      opt.classList.toggle('hidden', Boolean(keyword) && !text.includes(keyword));
+    });
+  });
+
+  search?.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape'){
+      toggleDropdown(false);
+      trigger.focus();
+    } else if (evt.key === 'Enter'){
+      evt.preventDefault();
+    }
+  });
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked){
+        selected.add(cb.value);
+      } else {
+        selected.delete(cb.value);
+      }
+      applySelection();
+    });
+  });
+
+  selectAllBtn?.addEventListener('click', () => {
+    checkboxes.forEach(cb => {
+      cb.checked = true;
+      selected.add(cb.value);
+    });
+    applySelection();
+  });
+
+  clearBtn?.addEventListener('click', () => {
+    checkboxes.forEach(cb => { cb.checked = false; });
+    selected.clear();
+    applySelection();
+  });
+
+  applySelection({ silent: true });
+}
+
+function initExport(){
+  const btn = document.getElementById('exportBtn');
+  const pdfBtn = document.getElementById('exportPdfBtn');
+  const form = document.getElementById('reportFilterForm');
+  if (!form) return;
+  if (btn){
+    btn.addEventListener('click', () => {
+      const params = new URLSearchParams(new FormData(form));
+      window.location.href = `/report/export?${params.toString()}`;
+    });
+  }
+  if (pdfBtn){
+    pdfBtn.addEventListener('click', () => {
+      const params = new URLSearchParams(new FormData(form));
+      window.location.href = `/report/export/pdf?${params.toString()}`;
+    });
+  }
+}
+
+function assembleDataset(rawDatasets, palette){
+  const colors = palette || CATEGORY_BASE_COLORS;
+  return rawDatasets.map((item, idx) => {
+    const color = getCategoryColor(item.label, idx, colors);
+    return {
+      label: item.label,
+      data: item.data,
+      backgroundColor: color + '66',
+      borderColor: color,
+      borderWidth: 1,
+      stack: 'stack1'
+    };
+  });
+}
+
+function getCategoryColor(label, idx = 0, palette = CATEGORY_BASE_COLORS){
+  if (!label) {
+    return palette[idx % palette.length];
+  }
+  if (!CATEGORY_COLOR_MAP.has(label)){
+    CATEGORY_COLOR_MAP.set(label, palette[CATEGORY_COLOR_MAP.size % palette.length]);
+  }
+  return CATEGORY_COLOR_MAP.get(label);
+}
+
+function createCharts(){
+  if (!REPORT_DATA.hasData) return;
+  const charts = REPORT_DATA.charts || {};
+
+  const dailyCtx = document.getElementById('dailyTasksChart');
+  if (dailyCtx && charts.dailyTasks){
+    new Chart(dailyCtx, {
       type: 'bar',
       data: {
-        labels: labels,
+        labels: charts.dailyTasks.labels,
         datasets: [
           {
-            label: '计划用时 (分钟)',
-            data: planned,
-            backgroundColor: 'rgba(47,142,135,0.6)',
+            label: '已完成',
+            data: charts.dailyTasks.datasets.completed,
+            backgroundColor: BRAND_COLORS.deepTeal + 'DD',
+            stack: 'stack0'
           },
           {
-            label: '实际用时 (分钟)',
-            data: actual,
-            backgroundColor: 'rgba(255,99,132,0.6)',
+            label: '进行中',
+            data: charts.dailyTasks.datasets.inProgress,
+            backgroundColor: BRAND_COLORS.amber + 'CC',
+            stack: 'stack0'
+          },
+          {
+            label: '未开始',
+            data: charts.dailyTasks.datasets.pending,
+            backgroundColor: BRAND_COLORS.neutral,
+            stack: 'stack0'
           }
         ]
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: { position: 'top' },
-          title: { display: true, text: '各学生任务用时对比图' }
-        },
+        interaction: { mode: 'index', intersect: false },
         scales: {
-          y: { beginAtZero: true }
+          x: {
+            stacked: true,
+            grid: { display: false }
+          },
+          y: {
+            stacked: true,
+            beginAtZero: true,
+            grid: { color: '#EBF3F2' }
+          }
+        },
+        plugins: {
+          legend: { position: 'bottom' }
         }
       }
     });
-  } catch (err) {
-    console.error('加载图表失败', err);
-  }
-});
-
-async function loadStudentAccuracy(name){
-  if(!name) return;
-  const res = await fetch(`/api/report/student/${encodeURIComponent(name)}`);
-  const data = await res.json();
-  if(!data.ok) return;
-
-  // 按“类别 + 日期”聚合正确率（平均）
-  const catMap = new Map(); // category -> Map(date -> [sum, count])
-  for(const r of data.records){
-    const cat = r.category || '未分类';
-    const d = r.date || '未填';
-    const acc = (typeof r.accuracy === 'number') ? r.accuracy : 0;
-    if(!catMap.has(cat)) catMap.set(cat, new Map());
-    const dateMap = catMap.get(cat);
-    if(!dateMap.has(d)) dateMap.set(d, [0,0]);
-    const v = dateMap.get(d); v[0] += acc; v[1] += 1;
   }
 
-  // 汇总全量日期作为横轴
-  const allDates = Array.from(new Set(
-    [...catMap.values()].flatMap(m => Array.from(m.keys()))
-  )).sort();
-
-  // 为每个类别生成一个数据集
-  const datasets = [];
-  for(const [cat, dateMap] of catMap){
-    const points = allDates.map(d => {
-      const v = dateMap.get(d);
-      return v ? +(v[0] / v[1]).toFixed(1) : 0;
-    });
-    datasets.push({
-      label: cat,
-      data: points,
-      borderWidth: 2,
-      fill: false
-    });
-  }
-
-  const ctx2 = document.getElementById('accuracyChart').getContext('2d');
-  if(accuracyChartInstance){ accuracyChartInstance.destroy(); }
-  accuracyChartInstance = new Chart(ctx2, {
-    type: 'line',
-    data: { labels: allDates, datasets },
-    options: {
-      responsive: true,
-      interaction: { mode: 'index', intersect: false },
-      scales: { y: { beginAtZero: true, max: 100 } },
-      plugins: {
-        title: { display: true, text: `${name} 各类别正确率趋势(%)` },
-        legend: { position: 'bottom' }
+  const categoryCtx = document.getElementById('dailyCategoryChart');
+  if (categoryCtx && charts.dailyCategoryMinutes){
+    new Chart(categoryCtx, {
+      type: 'bar',
+      data: {
+        labels: charts.dailyCategoryMinutes.labels,
+        datasets: assembleDataset(charts.dailyCategoryMinutes.datasets)
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { stacked: true, grid: { display: false } },
+          y: { stacked: true, beginAtZero: true, grid: { color: '#EBF3F2' } }
+        },
+        plugins: {
+          legend: { position: 'bottom' }
+        }
       }
-    }
-  });
+    });
+  }
+
+  const shareCtx = document.getElementById('categoryShareChart');
+  if (shareCtx && charts.categoryShare){
+    const shareColors = charts.categoryShare.labels.map((label, idx) =>
+      getCategoryColor(label, idx)
+    );
+    new Chart(shareCtx, {
+      type: 'doughnut',
+      data: {
+        labels: charts.categoryShare.labels,
+        datasets: [{
+          data: charts.categoryShare.data,
+          backgroundColor: shareColors,
+        }]
+      },
+      options: { plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+
+  const accStuCtx = document.getElementById('accuracyStudentChart');
+  if (accStuCtx && charts.accuracyByStudent){
+    new Chart(accStuCtx, {
+      type: 'bar',
+      data: {
+        labels: charts.accuracyByStudent.labels,
+        datasets: [{
+          label: '平均正确率 (%)',
+          data: charts.accuracyByStudent.data,
+          backgroundColor: BRAND_COLORS.violet,
+        }]
+      },
+      options: {
+        responsive: true,
+        indexAxis: 'y',
+        scales: { x: { beginAtZero: true, max: 100 } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  const accCatCtx = document.getElementById('accuracyCategoryChart');
+  if (accCatCtx && charts.accuracyByCategory){
+    const accColors = charts.accuracyByCategory.labels.map((label, idx) =>
+      getCategoryColor(label, idx)
+    );
+    new Chart(accCatCtx, {
+      type: 'bar',
+      data: {
+        labels: charts.accuracyByCategory.labels,
+        datasets: [{
+          label: '平均正确率 (%)',
+          data: charts.accuracyByCategory.data,
+          backgroundColor: accColors
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true, max: 100, grid: { color: '#EBF3F2' } },
+          x: { grid: { display: false } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  initRangeButtons();
+  initStudentFilter();
+  initExport();
+  createCharts();
+});
 </script>
 {% endblock %}

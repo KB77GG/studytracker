@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <title>学习任务汇总报告</title>
+</head>
+<body>
+  <h1>学习任务汇总报告</h1>
+  <div class="meta">
+    生成时间：{{ generated_at.strftime("%Y-%m-%d %H:%M") }}<br>
+    时间范围：{{ filters.start }} ～ {{ filters.end }}
+    {% if single_student %}
+    <br>学生：{{ single_student }}
+    {% elif filters.students %}
+    <br>学生：{{ ', '.join(filters.students) }}
+    {% endif %}
+    {% if filters.category %}
+    <br>类别：{{ filters.category }}
+    {% endif %}
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-title">任务总数</div>
+      <div class="card-value">{{ cards.total_tasks }}</div>
+      <div class="card-title">覆盖学生：{{ cards.total_students }}</div>
+    </div>
+    <div class="card">
+      <div class="card-title">已完成</div>
+      <div class="card-value">{{ cards.completed_tasks }}</div>
+      <div class="card-title">完成率：{{ '%.1f'|format(cards.avg_completion_rate) }}%</div>
+    </div>
+    <div class="card">
+      <div class="card-title">学习总时长</div>
+      <div class="card-value">{{ '%.2f'|format(cards.total_hours) }} h</div>
+      <div class="card-title">日均：{{ '%.2f'|format(cards.avg_daily_hours) }} h</div>
+    </div>
+    <div class="card">
+      <div class="card-title">平均正确率</div>
+      <div class="card-value">{{ '%.1f'|format(cards.avg_accuracy) }}%</div>
+      {% if cards.top_category %}
+      <div class="card-title">最耗时分类：{{ cards.top_category.name }}（{{ '%.2f'|format(cards.top_category.hours) }} h）</div>
+      {% else %}
+      <div class="card-title">最耗时分类：—</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">学生概览</div>
+    <table>
+      <thead>
+        <tr>
+          <th>学生</th>
+          <th>任务总数</th>
+          <th>未开始</th>
+          <th>进行中</th>
+          <th>已完成</th>
+          <th>完成率</th>
+          <th>平均完成率</th>
+          <th>平均正确率</th>
+          <th>计划用时 (总/均)</th>
+          <th>实际用时 (总/均)</th>
+          <th>时间范围</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in summary %}
+        <tr>
+          <td>{{ row.student }}</td>
+          <td>{{ row.total }}</td>
+          <td>{{ row.pending }}</td>
+          <td>{{ row.progress }}</td>
+          <td>{{ row.done }}</td>
+          <td>{{ '%.1f'|format(row.done_rate) }}%</td>
+          <td>
+            {% if row.avg_completion is not none %}
+              {{ '%.1f'|format(row.avg_completion) }}%
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td>{{ '%.1f'|format(row.avg_accuracy) }}%</td>
+          <td>{{ row.planned_minutes_sum }} / {{ '%.1f'|format(row.avg_planned) }}</td>
+          <td>{{ '%.1f'|format(row.actual_minutes_sum) }} / {{ '%.1f'|format(row.avg_actual) }}</td>
+          <td>
+            {% if row.first_date and row.last_date %}
+              {{ row.first_date }} ～ {{ row.last_date }}
+            {% else %}
+              —
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">任务明细</div>
+    <table>
+      <thead>
+        <tr>
+          <th>学生</th>
+          <th>日期</th>
+          <th>类别</th>
+          <th>任务</th>
+          <th>状态</th>
+          <th>计划 (分钟)</th>
+          <th>实际 (分钟)</th>
+          <th>完成率</th>
+          <th>正确率</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+        <tr>
+          <td>{{ task.student }}</td>
+          <td>{{ task.date }}</td>
+          <td>{{ task.category }}</td>
+          <td>{{ task.detail }}</td>
+          <td>
+            {% if task.status == 'done' %}已完成
+            {% elif task.status == 'progress' %}进行中
+            {% elif task.status == 'pending' %}未开始
+            {% else %}{{ task.status or '—' }}{% endif %}
+          </td>
+          <td>{{ task.planned_minutes }}</td>
+          <td>{{ '%.1f'|format(task.actual_minutes) }}</td>
+          <td>{{ task.completion_rate }}</td>
+          <td>{{ task.accuracy }}</td>
+          <td>{{ task.note }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    注：本报告由系统自动生成，仅供内部参考使用。
+  </div>
+</body>
+</html>
