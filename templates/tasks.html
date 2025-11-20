@@ -102,72 +102,73 @@
 <section class="card-section">
   <h2>任务记录与计时</h2>
 
-  <div class="task-form-row">
-    <div class="field">
-      <label for="taskDate">日期</label>
-      <input id="taskDate" type="date" name="date" value="{{ today }}" required>
+  <form id="taskForm" method="post" action="{{ url_for('tasks_page') }}">
+    <div class="task-form-row">
+      <div class="field">
+        <label for="taskDate">日期</label>
+        <input id="taskDate" type="date" name="date" value="{{ today }}" required>
+      </div>
+      <div class="field">
+        <label for="taskStudent">学生</label>
+        <input id="taskStudent" name="student_name" list="studentOptions" placeholder="输入或选择学生姓名" required
+          autocomplete="off">
+        <datalist id="studentOptions">
+          {% for name in all_students %}
+          <option value="{{ name }}">
+            {% endfor %}
+        </datalist>
+      </div>
+      <div class="field field--wide">
+        <label for="taskCategory">任务类别</label>
+        <select id="taskCategory" name="category" required>
+          <optgroup label="基础">
+            <option value="基础-四级词汇">四级词汇巩固</option>
+            <option value="基础-每日记忆计划">每日记忆计划</option>
+            <option value="基础-课堂抽查">课堂随机抽查</option>
+            <option value="基础-语法单选练习">语法单选练习</option>
+            <option value="基础-翻译句子练习">翻译句子练习</option>
+            <option value="基础-口语素材朗读">口语素材朗读</option>
+          </optgroup>
+          <optgroup label="雅思">
+            <option value="雅思-听力-精听">听力精听</option>
+            <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
+            <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
+            <option value="雅思-阅读-精读">阅读精读</option>
+            <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
+            <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
+            <option value="雅思-口语-常见题库问答">常见题库问答</option>
+            <option value="雅思-写作-句型与语法">句型与语法纠正</option>
+            <option value="雅思-写作-翻译句子">写作翻译句子</option>
+            <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
+          </optgroup>
+          <optgroup label="托福">
+            <option value="托福-听力-精听">听力精听</option>
+            <option value="托福-听力-速记训练">速记关键信息训练</option>
+            <option value="托福-阅读-精读">阅读深度分析</option>
+            <option value="托福-阅读-词汇复述">专项词汇复述</option>
+            <option value="托福-口语-完整演练">口语全程对练</option>
+            <option value="托福-口语-模拟考试">口语模拟考试</option>
+            <option value="托福-写作-观点论据">写作观点-论据梳理</option>
+            <option value="托福-写作-逻辑链">写作逻辑链扩展</option>
+            <option value="托福-语法-练习">语法单选练习</option>
+          </optgroup>
+        </select>
+      </div>
     </div>
-    <div class="field">
-      <label for="taskStudent">学生</label>
-      <input id="taskStudent" name="student_name" list="studentOptions" placeholder="输入或选择学生姓名" required
-        autocomplete="off">
-      <datalist id="studentOptions">
-        {% for name in all_students %}
-        <option value="{{ name }}">
-          {% endfor %}
-      </datalist>
+    <div class="task-form-row">
+      <div class="field">
+        <label for="taskPlanned">预计用时（分钟）</label>
+        <input id="taskPlanned" type="number" name="planned_minutes" min="0" placeholder="例如 45">
+      </div>
+      <div class="field field--grow">
+        <label for="taskNote">备注</label>
+        <input id="taskNote" type="text" name="note" placeholder="可选，补充提示或材料">
+      </div>
+      <div class="field field--action">
+        <button class="btn-primary" type="submit">添加</button>
+      </div>
     </div>
-    <div class="field field--wide">
-      <label for="taskCategory">任务类别</label>
-      <select id="taskCategory" name="category" required>
-        <optgroup label="基础">
-          <option value="基础-四级词汇">四级词汇巩固</option>
-          <option value="基础-每日记忆计划">每日记忆计划</option>
-          <option value="基础-课堂抽查">课堂随机抽查</option>
-          <option value="基础-语法单选练习">语法单选练习</option>
-          <option value="基础-翻译句子练习">翻译句子练习</option>
-          <option value="基础-口语素材朗读">口语素材朗读</option>
-        </optgroup>
-        <optgroup label="雅思">
-          <option value="雅思-听力-精听">听力精听</option>
-          <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
-          <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
-          <option value="雅思-阅读-精读">阅读精读</option>
-          <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
-          <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
-          <option value="雅思-口语-常见题库问答">常见题库问答</option>
-          <option value="雅思-写作-句型与语法">句型与语法纠正</option>
-          <option value="雅思-写作-翻译句子">写作翻译句子</option>
-          <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
-        </optgroup>
-        <optgroup label="托福">
-          <option value="托福-听力-精听">听力精听</option>
-          <option value="托福-听力-速记训练">速记关键信息训练</option>
-          <option value="托福-阅读-精读">阅读深度分析</option>
-          <option value="托福-阅读-词汇复述">专项词汇复述</option>
-          <option value="托福-口语-完整演练">口语全程对练</option>
-          <option value="托福-口语-模拟考试">口语模拟考试</option>
-          <option value="托福-写作-观点论据">写作观点-论据梳理</option>
-          <option value="托福-写作-逻辑链">写作逻辑链扩展</option>
-          <option value="托福-语法-练习">语法单选练习</option>
-        </optgroup>
-      </select>
-    </div>
-  </div>
-  <div class="task-form-row">
-    <div class="field">
-      <label for="taskPlanned">预计用时（分钟）</label>
-      <input id="taskPlanned" type="number" name="planned_minutes" min="0" placeholder="例如 45">
-    </div>
-    <div class="field field--grow">
-      <label for="taskNote">备注</label>
-      <input id="taskNote" type="text" name="note" placeholder="可选，补充提示或材料">
-    </div>
-    <div class="field field--action">
-      <button class="btn-primary" type="submit">添加</button>
-    </div>
-  </div>
-  <input id="taskDetail" type="hidden" name="detail" value="">
+    <input id="taskDetail" type="hidden" name="detail" value="">
   </form>
 
   <datalist id="studentOptions">
