@@ -1,13 +1,15 @@
 <!doctype html>
 <html lang="zh">
+
 <head>
   <meta charset="utf-8">
   <title>学习计划与打卡系统</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 </head>
+
 <body class="{{ 'dashboard-body' if current_user.is_authenticated else '' }}">
-{% if current_user.is_authenticated %}
+  {% if current_user.is_authenticated %}
   {% set endpoint = request.endpoint or '' %}
   <div class="app-shell">
     <aside class="sidebar">
@@ -22,26 +24,33 @@
         <p class="nav-label">Main</p>
         <a class="nav-link {{ 'is-active' if endpoint == 'index' else '' }}" href="{{ url_for('index') }}">Overview</a>
         {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
-        <a class="nav-link {{ 'is-active' if endpoint == 'teacher_plans' else '' }}" href="{{ url_for('teacher_plans') }}">Students</a>
+        <a class="nav-link {{ 'is-active' if endpoint == 'teacher_plans' else '' }}"
+          href="{{ url_for('teacher_plans') }}">Students</a>
         {% endif %}
         {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
-        <a class="nav-link {{ 'is-active' if endpoint == 'tasks_page' else '' }}" href="{{ url_for('tasks_page') }}">Task Management</a>
+        <a class="nav-link {{ 'is-active' if endpoint == 'tasks_page' else '' }}"
+          href="{{ url_for('tasks_page') }}">Task Management</a>
         {% endif %}
         {% if current_user.role == 'student' %}
-        <a class="nav-link {{ 'is-active' if endpoint == 'student_today' else '' }}" href="{{ url_for('student_today') }}">My Plan</a>
+        <a class="nav-link {{ 'is-active' if endpoint == 'student_today' else '' }}"
+          href="{{ url_for('student_today') }}">My Plan</a>
         {% endif %}
         <p class="nav-label">Analysis</p>
         {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
-        <a class="nav-link {{ 'is-active' if endpoint == 'report_page' else '' }}" href="{{ url_for('report_page') }}">Reports</a>
+        <a class="nav-link {{ 'is-active' if endpoint == 'report_page' else '' }}"
+          href="{{ url_for('report_page') }}">Reports</a>
         {% endif %}
         {% if current_user.role == 'admin' %}
-        <a class="nav-link {{ 'is-active' if endpoint == 'bulk_page' else '' }}" href="{{ url_for('bulk_page') }}">Bulk Add</a>
-        <a class="nav-link {{ 'is-active' if endpoint == 'users_page' else '' }}" href="{{ url_for('users_page') }}">Users</a>
+        <a class="nav-link {{ 'is-active' if endpoint == 'bulk_page' else '' }}" href="{{ url_for('bulk_page') }}">Bulk
+          Add</a>
+        <a class="nav-link {{ 'is-active' if endpoint == 'users_page' else '' }}"
+          href="{{ url_for('users_page') }}">Users</a>
         {% endif %}
         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
       </div>
       <div class="sidebar__user">
-        <div class="avatar">{{ current_user.display_name[:1] if current_user.display_name else (current_user.username[:1] if current_user.is_authenticated else 'G') }}</div>
+        <div class="avatar">{{ current_user.display_name[:1] if current_user.display_name else
+          (current_user.username[:1] if current_user.is_authenticated else 'G') }}</div>
         <div>
           <div class="user-name">{{ current_user.display_name or current_user.username }}</div>
           <div class="user-role">{{ current_user.role|capitalize }}</div>
@@ -60,19 +69,19 @@
       </header>
       <main class="panel-content">
         {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <ul class="flashes">
-              {% for msg in messages %}
-                <li>{{ msg }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
+        {% if messages %}
+        <ul class="flashes">
+          {% for msg in messages %}
+          <li>{{ msg }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
         {% endwith %}
-        {% block content %}{% endblock %}
+        {% block content_dashboard %}{% endblock %}
       </main>
     </div>
   </div>
-{% else %}
+  {% else %}
   <header class="topbar">
     <h1>学习计划与打卡系统</h1>
     <nav>
@@ -82,26 +91,36 @@
   </header>
   <main class="container">
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class="flashes">
-          {% for msg in messages %}
-            <li>{{ msg }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+    {% if messages %}
+    <ul class="flashes">
+      {% for msg in messages %}
+      <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
     {% endwith %}
-    {% block content %}{% endblock %}
+    {% block content_public %}{% endblock %}
   </main>
-{% endif %}
-<script>
-  document.addEventListener('DOMContentLoaded', function(){
-    const list = document.querySelectorAll('.flashes, .flash, .alert, .message');
-    list.forEach(function(el){
-      el.style.transition = 'opacity 0.8s ease';
-      setTimeout(function(){ el.style.opacity = '0'; }, 2500);
-      setTimeout(function(){ el.remove(); }, 3500);
+  {% endif %}
+
+  {# Define the main content block that delegates to the specific blocks above #}
+  {% block content %}
+  {% if current_user.is_authenticated %}
+  {{ self.content_dashboard() }}
+  {% else %}
+  {{ self.content_public() }}
+  {% endif %}
+  {% endblock %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const list = document.querySelectorAll('.flashes, .flash, .alert, .message');
+      list.forEach(function (el) {
+        el.style.transition = 'opacity 0.8s ease';
+        setTimeout(function () { el.style.opacity = '0'; }, 2500);
+        setTimeout(function () { el.remove(); }, 3500);
+      });
     });
-  });
-</script>
+  </script>
 </body>
+
 </html>
