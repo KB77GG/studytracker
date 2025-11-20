@@ -3,9 +3,12 @@
 {% block page_title %}辅导任务记录{% endblock %}
 {% block header_actions %}
 <div class="segmented-control">
-  <button type="button" class="segmented-control__btn is-active">Week</button>
-  <button type="button" class="segmented-control__btn">Month</button>
-  <button type="button" class="segmented-control__btn">Year</button>
+  <button type="button" class="segmented-control__btn {{ 'is-active' if period == 'week' else '' }}"
+    onclick="location.href='?period=week'">Week</button>
+  <button type="button" class="segmented-control__btn {{ 'is-active' if period == 'month' else '' }}"
+    onclick="location.href='?period=month'">Month</button>
+  <button type="button" class="segmented-control__btn {{ 'is-active' if period == 'year' else '' }}"
+    onclick="location.href='?period=year'">Year</button>
 </div>
 <a class="btn" href="#taskForm">+ New Task</a>
 {% endblock %}

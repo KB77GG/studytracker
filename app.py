@@ -1174,8 +1174,22 @@ def tasks_page():
             return redirect(url_for("tasks_page"))
         else:
             flash("请填写：学生、类别、任务描述")
-    # 列表：按创建倒序，最多显示最近 30 条
-    items = Task.query.order_by(Task.id.desc()).limit(30).all()
+    # Filter by period
+    period = request.args.get("period", "week")
+    today_obj = date.today()
+    if period == "month":
+        start_date = today_obj - timedelta(days=30)
+    elif period == "year":
+        start_date = today_obj - timedelta(days=365)
+    else:  # week
+        start_date = today_obj - timedelta(days=7)
+
+    # Query tasks within the date range
+    items = (
+        Task.query.filter(Task.date >= start_date.isoformat())
+        .order_by(Task.date.desc(), Task.id.desc())
+        .all()
+    )
     # 为每个任务计算衍生字段：实际分钟、进度百分比
     enriched_items = []
     for t in items:
@@ -1254,6 +1268,7 @@ def tasks_page():
         top_students=top_students,
         recent_tasks=recent_tasks,
         all_students=all_students,
+        period=period,
     )
 
 # ---- AJAX: 删除任务 ----
