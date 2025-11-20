@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block content %}
+{% block content %}{% endblock %}
+{% block content_dashboard %}
 <h2>用户管理</h2>
 
 <form method="POST" class="user-form" id="auto-student-form">
@@ -50,13 +51,13 @@
       <td class="status-cell">{{ "启用" if u.is_active else "停用" }}</td>
       <td>
         {% if u.id != current_user.id %}
-          <button type="button" class="toggle-btn" data-uid="{{ u.id }}">
-            {{ "停用" if u.is_active else "启用" }}
-          </button>
-          <button type="button" class="delete-btn" data-uid="{{ u.id }}">删除</button>
-          <button type="button" class="pwd-btn" data-uid="{{ u.id }}">修改密码</button>
+        <button type="button" class="toggle-btn" data-uid="{{ u.id }}">
+          {{ "停用" if u.is_active else "启用" }}
+        </button>
+        <button type="button" class="delete-btn" data-uid="{{ u.id }}">删除</button>
+        <button type="button" class="pwd-btn" data-uid="{{ u.id }}">修改密码</button>
         {% else %}
-          <em>当前登录用户</em>
+        <em>当前登录用户</em>
         {% endif %}
       </td>
     </tr>
@@ -65,112 +66,112 @@
 </table>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // 自动创建学生 + 家长账号
-  const autoForm = document.getElementById('auto-student-form');
-  if (autoForm && window.fetch) {
-    const submitBtn = autoForm.querySelector('button[type="submit"]');
-    const resultBox = document.getElementById('auto-student-result');
-    const originalBtnText = submitBtn ? submitBtn.textContent : '';
+  document.addEventListener('DOMContentLoaded', function () {
+    // 自动创建学生 + 家长账号
+    const autoForm = document.getElementById('auto-student-form');
+    if (autoForm && window.fetch) {
+      const submitBtn = autoForm.querySelector('button[type="submit"]');
+      const resultBox = document.getElementById('auto-student-result');
+      const originalBtnText = submitBtn ? submitBtn.textContent : '';
 
-    autoForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const fullNameInput = autoForm.querySelector('[name="full_name"]');
-      const fullName = (fullNameInput ? fullNameInput.value : '').trim();
-      if (!fullName) {
-        alert('请填写学生姓名。');
-        return;
-      }
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = '创建中...';
-      }
-      try {
-        const resp = await fetch('/api/users/auto-student', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ full_name: fullName }),
-        });
-        const data = await resp.json().catch(() => ({}));
-        if (!resp.ok || !data.ok) {
-          const message = data && data.message ? data.message : '创建失败，请稍后再试。';
-          alert(message);
+      autoForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const fullNameInput = autoForm.querySelector('[name="full_name"]');
+        const fullName = (fullNameInput ? fullNameInput.value : '').trim();
+        if (!fullName) {
+          alert('请填写学生姓名。');
           return;
         }
-        autoForm.reset();
-        if (resultBox) {
-          resultBox.hidden = false;
-          resultBox.innerHTML = `
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = '创建中...';
+        }
+        try {
+          const resp = await fetch('/api/users/auto-student', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ full_name: fullName }),
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (!resp.ok || !data.ok) {
+            const message = data && data.message ? data.message : '创建失败，请稍后再试。';
+            alert(message);
+            return;
+          }
+          autoForm.reset();
+          if (resultBox) {
+            resultBox.hidden = false;
+            resultBox.innerHTML = `
             <strong>学生账号：</strong>${data.data.student_username} / ${data.data.student_password}<br>
             <strong>家长账号：</strong>${data.data.parent_username} / ${data.data.parent_password}
           `;
+          }
+        } catch (err) {
+          console.error(err);
+          alert('网络错误，请稍后再试。');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText || '一键创建学生+家长账号';
+          }
         }
-      } catch (err) {
-        console.error(err);
-        alert('网络错误，请稍后再试。');
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalBtnText || '一键创建学生+家长账号';
-        }
-      }
-    });
-  }
+      });
+    }
 
-  // 启用/停用
-  const buttons = document.querySelectorAll('.toggle-btn');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const uid = btn.dataset.uid;
-      try {
-        const resp = await fetch(`/api/users/${uid}/toggle`, { method: 'POST' });
-        const data = await resp.json();
-        if (!data.ok) { alert('操作失败：' + (data.error || '')); return; }
-        const isActive = data.user.is_active;
-        btn.textContent = isActive ? '停用' : '启用';
-        const row = btn.closest('tr');
-        row.querySelector('.status-cell').textContent = isActive ? '启用' : '停用';
-      } catch (e) { alert('网络错误，请稍后再试'); }
+    // 启用/停用
+    const buttons = document.querySelectorAll('.toggle-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const uid = btn.dataset.uid;
+        try {
+          const resp = await fetch(`/api/users/${uid}/toggle`, { method: 'POST' });
+          const data = await resp.json();
+          if (!data.ok) { alert('操作失败：' + (data.error || '')); return; }
+          const isActive = data.user.is_active;
+          btn.textContent = isActive ? '停用' : '启用';
+          const row = btn.closest('tr');
+          row.querySelector('.status-cell').textContent = isActive ? '启用' : '停用';
+        } catch (e) { alert('网络错误，请稍后再试'); }
+      });
+    });
+
+    // 删除
+    const delBtns = document.querySelectorAll('.delete-btn');
+    delBtns.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const uid = btn.dataset.uid;
+        if (!confirm('确定删除该用户吗？')) return;
+        try {
+          const resp = await fetch(`/api/users/${uid}/delete`, { method: 'POST' });
+          const data = await resp.json();
+          if (!data.ok) { alert('删除失败：' + (data.error || '')); return; }
+          const row = btn.closest('tr');
+          row.parentNode.removeChild(row);
+        } catch (e) { alert('网络错误，请稍后再试'); }
+      });
+    });
+
+    // 修改密码
+    const pwdBtns = document.querySelectorAll('.pwd-btn');
+    pwdBtns.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const uid = btn.dataset.uid;
+        const newPwd = prompt('请输入新密码（至少 6 位）：');
+        if (newPwd === null) return;
+        const trimmed = (newPwd || '').trim();
+        if (trimmed.length < 6) { alert('密码太短，请重新输入（至少 6 位）'); return; }
+        try {
+          const resp = await fetch(`/api/users/${uid}/password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ new_password: trimmed })
+          });
+          const data = await resp.json();
+          if (!data.ok) { alert('修改失败：' + (data.error || '')); return; }
+          alert('密码已更新');
+        } catch (e) { alert('网络错误，请稍后再试'); }
+      });
     });
   });
-
-  // 删除
-  const delBtns = document.querySelectorAll('.delete-btn');
-  delBtns.forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const uid = btn.dataset.uid;
-      if (!confirm('确定删除该用户吗？')) return;
-      try {
-        const resp = await fetch(`/api/users/${uid}/delete`, { method: 'POST' });
-        const data = await resp.json();
-        if (!data.ok) { alert('删除失败：' + (data.error || '')); return; }
-        const row = btn.closest('tr');
-        row.parentNode.removeChild(row);
-      } catch (e) { alert('网络错误，请稍后再试'); }
-    });
-  });
-
-  // 修改密码
-  const pwdBtns = document.querySelectorAll('.pwd-btn');
-  pwdBtns.forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const uid = btn.dataset.uid;
-      const newPwd = prompt('请输入新密码（至少 6 位）：');
-      if (newPwd === null) return;
-      const trimmed = (newPwd || '').trim();
-      if (trimmed.length < 6) { alert('密码太短，请重新输入（至少 6 位）'); return; }
-      try {
-        const resp = await fetch(`/api/users/${uid}/password`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ new_password: trimmed })
-        });
-        const data = await resp.json();
-        if (!data.ok) { alert('修改失败：' + (data.error || '')); return; }
-        alert('密码已更新');
-      } catch (e) { alert('网络错误，请稍后再试'); }
-    });
-  });
-});
 </script>
 {% endblock %}

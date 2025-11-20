@@ -1,7 +1,6 @@
-
-
 {% extends "base.html" %}
-{% block content %}
+{% block content %}{% endblock %}
+{% block content_dashboard %}
 <h2>批量添加任务</h2>
 
 <div class="card">
@@ -37,30 +36,36 @@
 </div>
 
 {% if msg %}
-  <div class="alert">{{ msg }}</div>
+<div class="alert">{{ msg }}</div>
 {% endif %}
 
 {% if preview and preview|length %}
-  <h3 style="margin-top:18px;">预览（{{ preview|length }} 条）</h3>
-  <table class="task-table">
-    <tr><th>#</th><th>学生</th><th>类别</th><th>任务</th><th>备注</th></tr>
-    {% for it in preview %}
-    <tr>
-      <td>{{ loop.index }}</td>
-      <td>{{ it.student }}</td>
-      <td>{{ it.category }}</td>
-      <td>{{ it.detail }}</td>
-      <td>{{ it.note }}</td>
-    </tr>
-    {% endfor %}
-  </table>
-  <form method="post" style="margin-top:10px;">
-    <input type="hidden" name="date" value="{{ today }}">
-    <input type="hidden" name="status" value="pending">
-    <textarea name="lines" style="display:none;">{% for it in preview -%}
+<h3 style="margin-top:18px;">预览（{{ preview|length }} 条）</h3>
+<table class="task-table">
+  <tr>
+    <th>#</th>
+    <th>学生</th>
+    <th>类别</th>
+    <th>任务</th>
+    <th>备注</th>
+  </tr>
+  {% for it in preview %}
+  <tr>
+    <td>{{ loop.index }}</td>
+    <td>{{ it.student }}</td>
+    <td>{{ it.category }}</td>
+    <td>{{ it.detail }}</td>
+    <td>{{ it.note }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<form method="post" style="margin-top:10px;">
+  <input type="hidden" name="date" value="{{ today }}">
+  <input type="hidden" name="status" value="pending">
+  <textarea name="lines" style="display:none;">{% for it in preview -%}
 {{ it.student }} | {{ it.category }} | {{ it.detail }}{% if it.note %} | {{ it.note }}{% endif %}
 {%- endfor %}</textarea>
-    <button type="submit" name="action" value="create">确认创建这些任务</button>
-  </form>
+  <button type="submit" name="action" value="create">确认创建这些任务</button>
+</form>
 {% endif %}
 {% endblock %}
