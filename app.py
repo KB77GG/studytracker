@@ -2172,20 +2172,296 @@ def export_report_pdf():
 
     css = CSS(
         string="""
-@page { size: A4; margin: 18mm 16mm 20mm 16mm; }
-body { font-family: 'Noto Sans CJK SC', 'WenQuanYi Zen Hei', 'WenQuanYi Micro Hei', sans-serif; color: #1f2d3d; font-size: 11pt; }
-h1 { font-size: 18pt; margin: 0 0 4mm; color: #0E8F87; }
-.meta { font-size: 9.5pt; color: #5f6c7b; margin-bottom: 6mm; }
-.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-bottom: 8mm; }
-.card { border: 1px solid #cfe5e3; border-radius: 8px; padding: 6mm; background: #f9fdfc; }
-.card-title { font-size: 9pt; color: #5f6c7b; margin-bottom: 2mm; }
-.card-value { font-size: 15pt; font-weight: 600; color: #0E6F6A; }
-.section-title { font-size: 13pt; font-weight: 600; margin: 0 0 4mm; color: #0E6F6A; }
-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 6mm; }
-th, td { border: 1px solid #dce8e6; padding: 3mm 2.5mm; text-align: center; }
-th { background: #f1f6f5; font-weight: 600; color: #3a4a4a; }
-tbody tr:nth-child(odd) { background: #fbfdfc; }
-.note { font-size: 9pt; color: #5f6c7b; margin-top: 4mm; }
+@page {
+  size: A4;
+  margin: 20mm 16mm 22mm 16mm;
+  @top-center {
+    content: "Sage Path 学习管理系统";
+    font-size: 8pt;
+    color: #5f6c7b;
+    padding-bottom: 3mm;
+    border-bottom: 1px solid #e0e6ed;
+  }
+  @bottom-center {
+    content: "第 " counter(page) " 页，共 " counter(pages) " 页";
+    font-size: 8pt;
+    color: #5f6c7b;
+  }
+}
+
+/* Base Styles */
+body {
+  font-family: 'Noto Sans CJK SC', 'WenQuanYi Zen Hei', 'WenQuanYi Micro Hei', sans-serif;
+  color: #1f2d3d;
+  font-size: 10pt;
+  line-height: 1.5;
+}
+
+/* Header Section with Logo */
+.header-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8mm;
+  padding-bottom: 5mm;
+  border-bottom: 3px solid #2F8E87;
+}
+
+.logo-container {
+  margin-right: 6mm;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.title-group {
+  flex: 1;
+}
+
+h1 {
+  font-size: 22pt;
+  margin: 0 0 2mm;
+  color: #2F8E87;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.title-underline {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #2F8E87 0%, #5FBAB4 100%);
+  border-radius: 2px;
+}
+
+/* Meta Information */
+.meta {
+  background: #f8fafa;
+  padding: 4mm;
+  border-radius: 8px;
+  border-left: 3px solid #2F8E87;
+  margin-bottom: 6mm;
+  font-size: 9.5pt;
+}
+
+.meta-row {
+  margin-bottom: 2mm;
+}
+
+.meta-row:last-child {
+  margin-bottom: 0;
+}
+
+.meta-label {
+  font-weight: 600;
+  color: #2F8E87;
+}
+
+/* Section Divider */
+.section-divider {
+  height: 2px;
+  background: linear-gradient(90deg, #2F8E87 0%, transparent 100%);
+  margin: 6mm 0;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4mm;
+  margin-bottom: 6mm;
+}
+
+.card {
+  border: 1px solid #d1e7e5;
+  border-radius: 10px;
+  padding: 5mm;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fdfc 100%);
+  box-shadow: 0 2px 4px rgba(47, 142, 135, 0.08);
+  text-align: center;
+}
+
+.card-icon {
+  font-size: 20pt;
+  margin-bottom: 2mm;
+}
+
+.card-content {
+  text-align: center;
+}
+
+.card-title {
+  font-size: 8.5pt;
+  color: #5f6c7b;
+  margin-bottom: 2mm;
+  font-weight: 500;
+}
+
+.card-value {
+  font-size: 18pt;
+  font-weight: 700;
+  color: #2F8E87;
+  margin-bottom: 2mm;
+}
+
+.card-subtitle {
+  font-size: 7.5pt;
+  color: #8492a6;
+  line-height: 1.4;
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #e8ecf5;
+  border-radius: 2px;
+  margin-top: 2mm;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2F8E87 0%, #5FBAB4 100%);
+  border-radius: 2px;
+}
+
+/* Section Title */
+h2.section-title {
+  font-size: 14pt;
+  font-weight: 700;
+  margin: 0 0 4mm;
+  color: #2F8E87;
+  display: flex;
+  align-items: center;
+  padding-bottom: 2mm;
+  border-bottom: 2px solid #e8ecf5;
+}
+
+.section-icon {
+  margin-right: 2mm;
+  font-size: 14pt;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin-bottom: 6mm;
+}
+
+th, td {
+  border: 1px solid #d1e7e5;
+  padding: 2.5mm 2mm;
+  text-align: center;
+}
+
+th {
+  background: linear-gradient(180deg, #2F8E87 0%, #287f78 100%);
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 9pt;
+}
+
+tbody tr:nth-child(odd) {
+  background: #fbfdfc;
+}
+
+tbody tr:nth-child(even) {
+  background: #ffffff;
+}
+
+tbody tr:hover {
+  background: #f0f7f6;
+}
+
+/* Special Table Cells */
+.student-name {
+  font-weight: 600;
+  color: #2F8E87;
+}
+
+.highlight-done {
+  font-weight: 700;
+  color: #10b981;
+}
+
+.highlight-accuracy {
+  font-weight: 600;
+  color: #f59e0b;
+}
+
+.category-cell {
+  font-size: 8pt;
+  color: #5f6c7b;
+}
+
+.detail-cell {
+  text-align: left;
+  font-size: 8pt;
+}
+
+.date-range {
+  font-size: 7.5pt;
+  line-height: 1.3;
+  color: #5f6c7b;
+}
+
+.note-cell {
+  text-align: left;
+  font-size: 7.5pt;
+  color: #8492a6;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 1mm 2.5mm;
+  border-radius: 4px;
+  font-size: 7.5pt;
+  font-weight: 600;
+}
+
+.status-done {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-progress {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-pending {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Page Break */
+.page-break {
+  page-break-before: always;
+}
+
+/* Footer Note */
+.footer-note {
+  display: flex;
+  align-items: center;
+  margin-top: 8mm;
+  padding: 4mm;
+  background: #f8fafa;
+  border-radius: 8px;
+  border-left: 3px solid #2F8E87;
+  font-size: 8.5pt;
+  color: #5f6c7b;
+}
+
+.footer-icon {
+  margin-right: 2mm;
+  font-size: 12pt;
+}
 """
     )
 
