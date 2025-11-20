@@ -2172,8 +2172,9 @@ def export_report_pdf():
 
     css = CSS(
         string="""
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600&display=swap');
 @page { size: A4; margin: 18mm 16mm 20mm 16mm; }
-body { font-family: 'Microsoft YaHei', 'PingFang SC', 'Source Han Sans', sans-serif; color: #1f2d3d; font-size: 11pt; }
+body { font-family: 'Noto Sans SC', sans-serif; color: #1f2d3d; font-size: 11pt; }
 h1 { font-size: 18pt; margin: 0 0 4mm; color: #0E8F87; }
 .meta { font-size: 9.5pt; color: #5f6c7b; margin-bottom: 6mm; }
 .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-bottom: 8mm; }
