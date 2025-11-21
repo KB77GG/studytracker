@@ -5,7 +5,7 @@
   </view>
 
   <view class="task-list" wx:if="{{tasks.length > 0}}">
-    <view class="task-card" wx:for="{{tasks}}" wx:key="id" bindtap="goToTaskDetail" data-id="{{id}}">
+    <view class="task-card" wx:for="{{tasks}}" wx:key="id" bindtap="goToTaskDetail" data-id="{{item.id}}">
       <view class="task-header">
         <text class="task-module">{{item.module}}</text>
         <text class="task-status {{item.status}}">{{item.statusText}}</text>
