@@ -504,14 +504,59 @@ def teacher_plans():
     )
     if current_user.role != User.ROLE_ADMIN:
         if accessible_ids:
-            pending_items_query = pending_items_query.filter(
-                PlanItem.plan.has(StudyPlan.student_id.in_(accessible_ids))
-            )
+            # 对于 Task 表，我们只能通过 student_name 过滤，这比较麻烦
+            # 先获取所有待审核 Task，再在内存中过滤
+            pass
         else:
             pending_items_query = pending_items_query.filter(false())
     pending_items = pending_items_query.order_by(PlanItem.created_at.asc()).all()
 
-    # ensure guardian tokens for accessible students (lazy creation)
+    pending_reviews = []
+    # 1. 添加 PlanItem (新版)
+    for item in pending_items:
+        pending_reviews.append({
+            "type": "plan_item",
+            "id": item.id,
+            "student_name": item.plan.student.full_name,
+            "task_name": item.task_name,
+            "submitted_at": item.submitted_at,
+            "time_ago": time_ago(item.submitted_at) if item.submitted_at else "",
+        })
+
+    # 2. 添加 Task (旧版/当前使用)
+    # 查找已提交但未完成(status!='done')的任务
+    legacy_tasks_query = Task.query.filter(
+        Task.student_submitted.is_(True),
+        Task.status != 'done'
+    )
+    
+    legacy_tasks = legacy_tasks_query.order_by(Task.submitted_at.asc()).all()
+    
+    for task in legacy_tasks:
+        # 权限过滤：检查该学生是否在老师的管辖范围内
+        # 如果是管理员，或者学生名字在 accessible_students 列表中
+        is_accessible = False
+        if current_user.role == User.ROLE_ADMIN:
+            is_accessible = True
+        else:
+            # 这里通过名字匹配，虽然不够严谨但可行
+            for s in students:
+                if s.full_name == task.student_name:
+                    is_accessible = True
+                    break
+        
+        if is_accessible:
+            pending_reviews.append({
+                "type": "legacy_task", # 标记为旧版任务
+                "id": task.id,
+                "student_name": task.student_name,
+                "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
+                "submitted_at": task.submitted_at,
+                "time_ago": time_ago(task.submitted_at) if task.submitted_at else "",
+            })
+
+    # 按提交时间排序
+    pending_reviews.sort(key=lambda x: x['submitted_at'] or datetime.min)
     token_map = {}
     for stu in students:
         if stu.guardian_view_token:
@@ -1185,11 +1230,14 @@ def tasks_page():
         start_date = today_obj - timedelta(days=7)
 
     # Query tasks within the date range
-    items = (
-        Task.query.filter(Task.date >= start_date.isoformat())
-        .order_by(Task.date.desc(), Task.id.desc())
-        .all()
-    )
+    query = Task.query.filter(Task.date >= start_date.isoformat())
+    
+    # Filter by student_name if provided
+    filter_student = request.args.get("student_name")
+    if filter_student:
+        query = query.filter(Task.student_name == filter_student)
+        
+    items = query.order_by(Task.date.desc(), Task.id.desc()).all()
     # 为每个任务计算衍生字段：实际分钟、进度百分比
     enriched_items = []
     for t in items:

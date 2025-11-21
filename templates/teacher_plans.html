@@ -83,63 +83,72 @@
 
   <section class="card pending-review">
     <h3>待审核提交</h3>
-    {% if pending_items %}
+    {% if pending_reviews %}
     <div class="pending-list">
-      {% for item in pending_items %}
-      <article class="pending-item" data-item-id="{{ item.id }}">
+      {% for review in pending_reviews %}
+      <article class="pending-item">
         <header>
-          <strong>{{ item.plan.student.full_name }}</strong>
-          <span class="muted">{{ item.plan.plan_date }}</span>
+          <strong>{{ review.student_name }}</strong>
+          <span class="muted">{{ review.time_ago }}</span>
         </header>
         <div class="pending-body">
-          <div class="pending-task">{{ item.module }} · {{ item.task_name }}</div>
-          {% if item.custom_title %}<div class="muted">备注：{{ item.custom_title }}</div>{% endif %}
-          {% if item.instructions %}<div class="muted">目标说明：{{ item.instructions }}</div>{% endif %}
-          <div class="pending-meta">
-            计划 {{ item.planned_minutes }} 分 ｜ 实际 {{ (item.actual_seconds or 0) // 60 }} 分
-            {% if item.manual_minutes %}（手动填写 {{ item.manual_minutes }} 分）{% endif %}
+          <div class="pending-task">{{ review.task_name }}</div>
+          <div class="pending-actions" style="margin-top: 8px;">
+            {% if review.type == 'plan_item' %}
+            <span class="badge status-pending">PlanItem</span>
+            {% else %}
+            <a href="{{ url_for('tasks_page', student_name=review.student_name) }}" class="btn-small"
+              style="text-decoration: none; background: #eee; padding: 2px 8px; border-radius: 4px; color: #333;">去审核</a>
+            {% endif %}
           </div>
-          <div class="muted small">证据要求：{{ evidence_policy_labels.get(item.evidence_policy or 'optional', '可选') }}</div>
-          {% if item.student_reset_count %}
-          <div class="muted small">学生曾撤回 {{ item.student_reset_count }} 次</div>
-          {% endif %}
-          {% if item.student_comment %}
-          <div class="pending-comment">学生反馈：{{ item.student_comment }}</div>
-          {% endif %}
-          {% set evidences = item.evidences | selectattr("is_deleted", "equalto", False) | list %}
-          {% if evidences %}
-          <ul class="pending-evidence">
-            {% for ev in evidences %}
-            <li>
-              {% if ev.file_type == 'text' %}
-              文字稿 {{ loop.index }}：{{ ev.text_content or '（无内容）' }}
-              {% else %}
-              证据 {{ loop.index }} · {{ ev.file_type|upper }}
-              <a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank"
-                rel="noopener">下载</a>
-              {% endif %}
-            </li>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <div class="muted">无证据文件</div>
-          {% endif %}
         </div>
-        <footer>
-          <textarea class="review-comment" placeholder="评语（可选）"></textarea>
-          <div class="review-actions">
-            <button type="button" class="btn-review" data-status="approved">通过</button>
-            <button type="button" class="btn-review" data-status="partial">部分完成</button>
-            <button type="button" class="btn-review" data-status="rejected">未完成</button>
-          </div>
-        </footer>
       </article>
       {% endfor %}
     </div>
     {% else %}
     <p class="muted">暂无待审核任务。</p>
     {% endif %}
-  </section>
+</div>
+<div class="muted small">证据要求：{{ evidence_policy_labels.get(item.evidence_policy or 'optional', '可选') }}</div>
+{% if item.student_reset_count %}
+<div class="muted small">学生曾撤回 {{ item.student_reset_count }} 次</div>
+{% endif %}
+{% if item.student_comment %}
+<div class="pending-comment">学生反馈：{{ item.student_comment }}</div>
+{% endif %}
+{% set evidences = item.evidences | selectattr("is_deleted", "equalto", False) | list %}
+{% if evidences %}
+<ul class="pending-evidence">
+  {% for ev in evidences %}
+  <li>
+    {% if ev.file_type == 'text' %}
+    文字稿 {{ loop.index }}：{{ ev.text_content or '（无内容）' }}
+    {% else %}
+    证据 {{ loop.index }} · {{ ev.file_type|upper }}
+    <a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank" rel="noopener">下载</a>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="muted">无证据文件</div>
+{% endif %}
+</div>
+<footer>
+  <textarea class="review-comment" placeholder="评语（可选）"></textarea>
+  <div class="review-actions">
+    <button type="button" class="btn-review" data-status="approved">通过</button>
+    <button type="button" class="btn-review" data-status="partial">部分完成</button>
+    <button type="button" class="btn-review" data-status="rejected">未完成</button>
+  </div>
+</footer>
+</article>
+{% endfor %}
+</div>
+{% else %}
+<p class="muted">暂无待审核任务。</p>
+{% endif %}
+</section>
 </div>
 
 <section class="card plan-overview">
