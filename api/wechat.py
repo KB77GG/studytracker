@@ -3,7 +3,7 @@ from flask import Blueprint, current_app, jsonify, request
 from models import User, StudentProfile, ParentStudentLink, db
 from .auth_utils import issue_token
 
-wechat_bp = Blueprint("wechat", __name__, url_prefix="/wechat")
+wechat_bp = Blueprint("wechat", __name__)
 
 # 微信小程序配置
 WECHAT_APP_ID = "wx75cdd8fc1ca68c69"
