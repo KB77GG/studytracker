@@ -98,6 +98,43 @@ def get_student_today_tasks():
     })
 
 
+@mp_bp.route("/student/tasks/<int:task_id>", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def get_task_detail(task_id):
+    """获取单个任务详情"""
+    from models import Task
+    
+    user = request.current_api_user
+    task = Task.query.get(task_id)
+    
+    if not task:
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+        
+    # 简单权限验证
+    if task.student_name != user.student_profile.full_name:
+         return jsonify({"ok": False, "error": "forbidden"}), 403
+
+    status = "pending"
+    if task.student_submitted:
+        status = "submitted"
+    elif task.actual_seconds and task.actual_seconds > 0:
+        status = "in_progress"
+
+    return jsonify({
+        "ok": True,
+        "task": {
+            "id": task.id,
+            "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
+            "module": task.category or "其他",
+            "exam_system": "",
+            "instructions": task.note or "",
+            "planned_minutes": task.planned_minutes,
+            "status": status,
+            "is_locked": False,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        }
+    })
+
 @mp_bp.route("/student/tasks/<int:task_id>/submit", methods=["POST"])
 @require_api_user(User.ROLE_STUDENT)
 def submit_task(task_id):

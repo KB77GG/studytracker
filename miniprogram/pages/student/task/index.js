@@ -34,19 +34,34 @@ Page({
     },
 
     async fetchTaskDetail() {
-        // 这里简化处理，实际应该调用后端API获取单个任务详情
-        // 暂时从首页传递过来的数据中模拟
-        // TODO: 实现 GET /miniprogram/student/tasks/:id
-        this.setData({
-            task: {
-                task_name: '口语练习 - TPO 1',
-                module: 'Speaking',
-                planned_minutes: 30,
-                instructions: '请朗读 TPO 1 Passage 1，录音上传。要求发音清晰，流利度良好。',
-                student_status: 'pending'
-            },
-            statusText: '待完成'
-        })
+        wx.showLoading({ title: '加载中...' })
+        try {
+            const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
+            if (res.ok && res.task) {
+                this.setData({
+                    task: res.task,
+                    statusText: this.getStatusText(res.task.status)
+                })
+            } else {
+                wx.showToast({ title: '获取任务详情失败', icon: 'none' })
+            }
+        } catch (err) {
+            console.error(err)
+            wx.showToast({ title: '加载失败', icon: 'none' })
+        } finally {
+            wx.hideLoading()
+        }
+    },
+
+    getStatusText(status) {
+        const map = {
+            'pending': '待完成',
+            'in_progress': '进行中',
+            'submitted': '已提交',
+            'approved': '已通过',
+            'rejected': '需修改'
+        }
+        return map[status] || '未知'
     },
 
     startRecord() {
