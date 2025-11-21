@@ -23,7 +23,6 @@
   </view>
 
   <view class="empty-state" wx:else>
-    <image src="/static/empty.png" mode="aspectFit" class="empty-img"></image>
     <text>今天没有任务哦，休息一下吧~</text>
   </view>
 </view>

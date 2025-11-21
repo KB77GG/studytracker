@@ -116,10 +116,13 @@ Page({
                     this.handleRoleRedirect(this.data.targetRole)
                 }, 1500)
             } else {
-                wx.showToast({ title: res.error || '绑定失败', icon: 'none' })
+                console.error('Bind error:', res)
+                const errorMsg = res.error || '绑定失败'
+                wx.showToast({ title: errorMsg, icon: 'none', duration: 3000 })
             }
         } catch (err) {
-            wx.showToast({ title: '请求错误', icon: 'none' })
+            console.error('Request error:', err)
+            wx.showToast({ title: '请求错误: ' + JSON.stringify(err), icon: 'none', duration: 3000 })
         } finally {
             wx.hideLoading()
         }

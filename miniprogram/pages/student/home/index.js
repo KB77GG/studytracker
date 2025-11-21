@@ -22,15 +22,23 @@ Page({
         wx.showLoading({ title: '加载中...' })
         try {
             const res = await request('/miniprogram/student/tasks/today')
-            if (res.ok) {
+            console.log('Tasks response:', res)
+
+            if (res.ok && res.tasks) {
                 const tasks = res.tasks.map(t => ({
-                    ...t,
+                    id: t.id,
+                    task_name: t.task_name,
+                    module: t.module,
+                    planned_minutes: t.planned_minutes,
+                    status: t.status,
                     statusText: this.getStatusText(t.status)
                 }))
                 this.setData({ tasks })
+            } else {
+                this.setData({ tasks: [] })
             }
         } catch (err) {
-            console.error(err)
+            console.error('Fetch tasks error:', err)
             wx.showToast({ title: '加载失败', icon: 'none' })
         } finally {
             wx.hideLoading()

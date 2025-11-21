@@ -52,6 +52,8 @@ def upload_file():
 @require_api_user(User.ROLE_STUDENT)
 def get_student_today_tasks():
     """获取学生今日任务"""
+    from models import Task
+    
     user = request.current_api_user
     student = user.student_profile
     if not student:
@@ -59,37 +61,42 @@ def get_student_today_tasks():
         
     today = date.today()
     
-    # 获取今日计划
-    plan = StudyPlan.query.filter_by(
-        student_id=student.id, 
-        plan_date=today
-    ).first()
+    # 从 Task 表查询今日任务
+    tasks = Task.query.filter_by(
+        student_id=student.id,
+        task_date=today
+    ).all()
     
-    if not plan:
-        return jsonify({"ok": True, "tasks": [], "message": "今日无计划"})
+    if not tasks:
+        return jsonify({"ok": True, "tasks": [], "message": "今日无任务"})
         
     tasks_data = []
-    for item in plan.items:
+    for task in tasks:
+        # 判断状态
+        status = "pending"
+        if task.student_submitted:
+            status = "submitted"
+        elif task.actual_seconds and task.actual_seconds > 0:
+            status = "in_progress"
+            
         tasks_data.append({
-            "id": item.id,
-            "task_name": item.task_name,
-            "module": item.module,
-            "exam_system": item.exam_system,
-            "instructions": item.instructions,
-            "planned_minutes": item.planned_minutes,
-            "status": item.student_status, # pending / in_progress / submitted
-            "is_locked": item.locked,
-            "evidence_policy": item.evidence_policy,
-            "submitted_at": item.submitted_at.isoformat() if item.submitted_at else None,
-            "review_status": item.review_status
+            "id": task.id,
+            "task_name": task.task_name,
+            "module": task.module or "其他",
+            "exam_system": task.exam_system,
+            "instructions": task.task_notes or "",
+            "planned_minutes": task.planned_minutes,
+            "status": status,
+            "is_locked": task.locked,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
         })
         
     return jsonify({
         "ok": True, 
         "date": today.isoformat(),
-        "tasks": tasks_data,
-        "plan_status": plan.status
+        "tasks": tasks_data
     })
+
 
 @mp_bp.route("/student/tasks/<int:task_id>/submit", methods=["POST"])
 @require_api_user(User.ROLE_STUDENT)
