@@ -95,10 +95,18 @@ def bind_role():
     用户选择是"学生"还是"家长"，并提供相应的信息进行验证绑定
     """
     from .auth_utils import require_api_user
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    logger.info("=== bind_role called ===")
+    logger.info(f"Headers: {dict(request.headers)}")
     
     # 获取 token
     auth_header = request.headers.get("Authorization", "")
+    logger.info(f"Auth header: {auth_header[:50] if auth_header else 'None'}...")
+    
     if not auth_header.startswith("Bearer "):
+        logger.error("Missing Bearer token")
         return jsonify({"ok": False, "error": "missing_token"}), 401
     
     token = auth_header.split(" ", 1)[1]
