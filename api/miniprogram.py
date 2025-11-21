@@ -139,50 +139,67 @@ def get_task_detail(task_id):
 @require_api_user(User.ROLE_STUDENT)
 def submit_task(task_id):
     """学生提交任务"""
-    user = request.current_api_user
-    item = PlanItem.query.get(task_id)
+    from models import Task
     
-    if not item:
-        return jsonify({"ok": False, "error": "task_not_found"}), 404
-        
-    # 验证该任务是否属于当前学生
-    if item.plan.student_id != user.student_profile.id:
-        return jsonify({"ok": False, "error": "forbidden"}), 403
-        
+    user = request.current_api_user
     data = request.get_json()
     note = data.get("note")
     evidence_files = data.get("evidence_files", []) # List of URLs
     duration = data.get("duration_seconds", 0)
     
-    # 更新任务状态
-    item.student_status = PlanItem.STUDENT_SUBMITTED
-    item.submitted_at = datetime.utcnow()
-    item.student_comment = note
-    
-    # 如果有实际耗时
-    if duration > 0:
-        item.actual_seconds = duration
-        
-    # 保存证据文件
-    # 这里我们使用 PlanEvidence 表
-    for file_url in evidence_files:
-        # 简单判断类型
-        file_type = "image"
-        if file_url.endswith(".mp3") or file_url.endswith(".wav"):
-            file_type = "audio"
+    # 1. 尝试查找 Task (旧版)
+    task = Task.query.get(task_id)
+    if task:
+        # 验证权限
+        if task.student_name != user.student_profile.full_name:
+            return jsonify({"ok": False, "error": "forbidden"}), 403
             
-        evidence = PlanEvidence(
-            plan_item_id=item.id,
-            uploader_id=user.id,
-            file_type=file_type,
-            storage_path=file_url, # 这里存 URL
-            original_filename=os.path.basename(file_url)
-        )
-        db.session.add(evidence)
+        task.student_submitted = True
+        task.submitted_at = datetime.now()
+        task.student_note = note
+        task.evidence_photos = json.dumps(evidence_files) # 旧版字段存 JSON
         
-    db.session.commit()
-    
-    return jsonify({"ok": True})
+        if duration > 0:
+            task.actual_seconds = duration
+            
+        db.session.commit()
+        return jsonify({"ok": True})
+
+    # 2. 尝试查找 PlanItem (新版)
+    item = PlanItem.query.get(task_id)
+    if item:
+        # 验证该任务是否属于当前学生
+        if item.plan.student_id != user.student_profile.id:
+            return jsonify({"ok": False, "error": "forbidden"}), 403
+            
+        # 更新任务状态
+        item.student_status = PlanItem.STUDENT_SUBMITTED
+        item.submitted_at = datetime.now()
+        item.student_comment = note
+        
+        # 如果有实际耗时
+        if duration > 0:
+            item.actual_seconds = duration
+            
+        # 保存证据文件
+        for file_url in evidence_files:
+            file_type = "image"
+            if file_url.endswith(".mp3") or file_url.endswith(".wav"):
+                file_type = "audio"
+                
+            evidence = PlanEvidence(
+                plan_item_id=item.id,
+                uploader_id=user.id,
+                file_type=file_type,
+                storage_path=file_url,
+                original_filename=os.path.basename(file_url)
+            )
+            db.session.add(evidence)
+            
+        db.session.commit()
+        return jsonify({"ok": True})
+
+    return jsonify({"ok": False, "error": "task_not_found"}), 404
 
 @mp_bp.route("/student/stats", methods=["GET"])
 @require_api_user(User.ROLE_STUDENT)
