@@ -426,7 +426,7 @@ def api_change_password(uid):
 
 @app.post("/api/users/auto-student")
 @login_required
-@admin_required
+@role_required(User.ROLE_ADMIN, User.ROLE_ASSISTANT)
 def api_auto_create_student():
     data = request.get_json(silent=True) or {}
     try:
