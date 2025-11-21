@@ -63,8 +63,8 @@ def get_student_today_tasks():
     
     # 从 Task 表查询今日任务
     tasks = Task.query.filter_by(
-        student_id=student.id,
-        task_date=today
+        student_name=student.full_name,
+        date=today.isoformat()
     ).all()
     
     if not tasks:
@@ -81,13 +81,13 @@ def get_student_today_tasks():
             
         tasks_data.append({
             "id": task.id,
-            "task_name": task.task_name,
-            "module": task.module or "其他",
-            "exam_system": task.exam_system,
-            "instructions": task.task_notes or "",
+            "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
+            "module": task.category or "其他",
+            "exam_system": "",
+            "instructions": task.note or "",
             "planned_minutes": task.planned_minutes,
             "status": status,
-            "is_locked": task.locked,
+            "is_locked": False,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
         })
         
