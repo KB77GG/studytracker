@@ -1242,6 +1242,16 @@ def tasks_page():
             else None
         )
         accuracy_value = float(t.accuracy) if t.accuracy is not None else None
+        
+        # 解析证据照片
+        evidence_photos = []
+        if t.evidence_photos:
+            try:
+                import json
+                evidence_photos = json.loads(t.evidence_photos)
+            except:
+                pass
+        
         enriched_items.append({
             "id": t.id,
             "date": t.date,
@@ -1255,6 +1265,9 @@ def tasks_page():
             "progress": progress,
             "completion_rate": manual_progress,
             "accuracy": accuracy_value,
+            "student_submitted": t.student_submitted,
+            "evidence_photos": evidence_photos,
+            "student_note": t.student_note,
         })
     total_tasks = len(enriched_items)
     completed_tasks = sum(1 for t in enriched_items if t["status"] == "done")

@@ -255,6 +255,7 @@
               <th>类别</th>
               <th>任务</th>
               <th>状态</th>
+              <th>证据</th>
               <th>用时</th>
               <th>完成率</th>
               <th>正确率</th>
@@ -276,6 +277,25 @@
                 <span
                   class="badge {{ 'status-pending' if t.status=='pending' else ('status-progress' if t.status=='progress' else 'status-done') }}">{{
                   "未开始" if t.status=="pending" else ("进行中" if t.status=="progress" else "已完成") }}</span>
+                {% if t.student_submitted %}
+                <span class="badge" style="background: #2196f3; color: white; margin-left: 4px;">已提交</span>
+                {% endif %}
+              </td>
+              <td class="task-evidence">
+                {% if t.evidence_photos %}
+                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                  {% for photo_url in t.evidence_photos %}
+                  <a href="{{ photo_url }}" target="_blank" rel="noopener">
+                    <img src="{{ photo_url }}" alt="证据"
+                      style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                  </a>
+                  {% endfor %}
+                </div>
+                {% elif t.student_note %}
+                <span class="muted" style="font-size: 0.85em;">{{ t.student_note[:20] }}...</span>
+                {% else %}
+                <span class="muted">无</span>
+                {% endif %}
               </td>
               <td class="task-time">计划:{{ t.planned_minutes or 0 }} 分 ｜ 实际:{{ '%.1f'|format(t.actual_minutes or 0) }} 分
               </td>
