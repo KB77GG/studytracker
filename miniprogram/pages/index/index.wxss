@@ -1,0 +1,92 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50rpx;
+  height: 100vh;
+  box-sizing: border-box;
+  background-color: #f8f9fa;
+}
+
+.logo-area {
+  margin-top: 100rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 100rpx;
+}
+
+.logo {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.btn-primary {
+  background-color: #07c160;
+  color: white;
+  width: 80%;
+  border-radius: 50rpx;
+}
+
+.role-select-area, .bind-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.subtitle {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 40rpx;
+}
+
+.role-cards {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.role-card {
+  background: white;
+  padding: 40rpx;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+  width: 200rpx;
+}
+
+.role-icon {
+  font-size: 60rpx;
+  margin-bottom: 20rpx;
+}
+
+.input {
+  background: white;
+  width: 80%;
+  padding: 20rpx;
+  margin-bottom: 30rpx;
+  border-radius: 10rpx;
+  border: 1rpx solid #eee;
+}
+
+.btn-group {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.btn-secondary {
+  background-color: #f0f0f0;
+  color: #666;
+}

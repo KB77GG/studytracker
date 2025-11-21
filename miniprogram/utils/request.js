@@ -1,0 +1,44 @@
+const app = getApp()
+
+const request = (url, options = {}) => {
+    return new Promise((resolve, reject) => {
+        // 获取 App 实例（如果 request.js 在 app.js 之前加载，可能需要动态获取）
+        // 这里假设 request 在页面中使用，此时 app 已经初始化
+        const baseUrl = getApp().globalData.baseUrl
+        const token = getApp().globalData.token
+
+        let header = options.header || {}
+        if (token) {
+            header['Authorization'] = `Bearer ${token}`
+        }
+
+        wx.request({
+            url: `${baseUrl}${url}`,
+            method: options.method || 'GET',
+            data: options.data || {},
+            header: header,
+            success: (res) => {
+                if (res.statusCode >= 200 && res.statusCode < 300) {
+                    resolve(res.data)
+                } else if (res.statusCode === 401) {
+                    // Token 过期或无效
+                    wx.removeStorageSync('token')
+                    getApp().globalData.token = null
+                    wx.reLaunch({
+                        url: '/pages/index/index',
+                    })
+                    reject(res)
+                } else {
+                    reject(res)
+                }
+            },
+            fail: (err) => {
+                reject(err)
+            }
+        })
+    })
+}
+
+module.exports = {
+    request
+}

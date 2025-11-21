@@ -1,0 +1,37 @@
+<view class="container">
+  <view class="logo-area">
+    <image class="logo" src="/static/logo.jpg" mode="aspectFit"></image>
+    <text class="title">Study Tracker</text>
+  </view>
+
+  <view class="login-area" wx:if="{{!hasToken}}">
+    <button class="btn-primary" bindtap="handleLogin">微信一键登录</button>
+  </view>
+
+  <view class="role-select-area" wx:if="{{hasToken && isGuest}}">
+    <text class="subtitle">请选择您的身份</text>
+    <view class="role-cards">
+      <view class="role-card" bindtap="selectRole" data-role="student">
+        <text class="role-icon">🎓</text>
+        <text class="role-name">我是学生</text>
+      </view>
+      <view class="role-card" bindtap="selectRole" data-role="parent">
+        <text class="role-icon">👨‍👩‍👧</text>
+        <text class="role-name">我是家长</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 绑定表单 -->
+  <view class="bind-form" wx:if="{{showBindForm}}">
+    <text class="subtitle">绑定{{targetRole === 'student' ? '学生' : '家长'}}信息</text>
+    
+    <input class="input" placeholder="请输入姓名" model:value="{{bindName}}" />
+    <input wx:if="{{targetRole === 'parent'}}" class="input" placeholder="请输入手机号" model:value="{{bindPhone}}" />
+    
+    <view class="btn-group">
+      <button class="btn-secondary" bindtap="cancelBind">取消</button>
+      <button class="btn-primary" bindtap="confirmBind">确认绑定</button>
+    </view>
+  </view>
+</view>

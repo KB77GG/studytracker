@@ -47,7 +47,9 @@ class User(db.Model, UserMixin, TimestampMixin):
     role = db.Column(db.String(20), default=ROLE_ASSISTANT, nullable=False, index=True)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     auth_token_hash = db.Column(db.String(128))
-    token_issued_at = db.Column(db.DateTime)
+    wechat_openid = db.Column(db.String(64), index=True)
+    wechat_unionid = db.Column(db.String(64), index=True)
+    wechat_nickname = db.Column(db.String(64))
 
     # Relationships populated further down the file (e.g., student_profile, plans).
 
@@ -86,6 +88,8 @@ class StudentProfile(db.Model, TimestampMixin, SoftDeleteMixin):
     notes = db.Column(db.Text)
     primary_teacher_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     primary_parent_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    
+    wechat_openid = db.Column(db.String(64), index=True)
 
     user = db.relationship(
         "User",
@@ -101,6 +105,27 @@ class StudentProfile(db.Model, TimestampMixin, SoftDeleteMixin):
         "User",
         foreign_keys=[primary_parent_id],
         backref=db.backref("linked_children", lazy="dynamic"),
+    )
+
+
+class ParentStudentLink(db.Model, TimestampMixin):
+    """Link between a parent (User) and a student (by name string)."""
+    
+    __tablename__ = "parent_student_link"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    student_name = db.Column(db.String(64), nullable=False)
+    relation = db.Column(db.String(32))  # 父亲/母亲/其他
+    is_active = db.Column(db.Boolean, default=True)
+    
+    parent = db.relationship(
+        "User",
+        backref=db.backref("student_links_as_parent", lazy="dynamic")
+    )
+    
+    __table_args__ = (
+        db.UniqueConstraint("parent_id", "student_name", name="uq_parent_student"),
     )
 
 
@@ -443,6 +468,12 @@ class Task(db.Model):
     actual_seconds = db.Column(db.Integer, default=0)
     started_at = db.Column(db.DateTime)
     ended_at = db.Column(db.DateTime)
+    
+    # Mini Program Fields
+    student_submitted = db.Column(db.Boolean, default=False)
+    submitted_at = db.Column(db.DateTime)
+    evidence_photos = db.Column(db.Text)  # JSON array of URLs
+    student_note = db.Column(db.Text)
 
     creator = db.relationship("User", backref=db.backref("legacy_tasks", lazy="dynamic"))
 
