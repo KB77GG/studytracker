@@ -94,56 +94,65 @@ def bind_role():
     绑定身份接口
     用户选择是"学生"还是"家长"，并提供相应的信息进行验证绑定
     """
-    # 这里需要验证 token，但为了方便绑定流程，也可以在 login 后直接调用
-    # 暂时假设前端会在 header 带上 token
     from .auth_utils import require_api_user
     
-    @require_api_user()
-    def _bind_logic():
-        user = request.current_api_user
-        data = request.get_json()
-        role = data.get("role") # student / parent
-        
-        if role == "student":
-            # 学生绑定逻辑：通过姓名和暗号（或者其他验证方式）
-            # 目前简单实现：通过姓名匹配现有的 StudentProfile
-            student_name = data.get("name")
-            if not student_name:
-                return jsonify({"ok": False, "error": "missing_name"}), 400
-            
-            profile = StudentProfile.query.filter_by(full_name=student_name).first()
-            if not profile:
-                return jsonify({"ok": False, "error": "student_not_found"}), 404
-            
-            if profile.user_id and profile.user_id != user.id:
-                return jsonify({"ok": False, "error": "already_bound"}), 400
-            
-            # 绑定
-            profile.user_id = user.id
-            profile.wechat_openid = user.wechat_openid
-            user.role = User.ROLE_STUDENT
-            user.display_name = student_name
-            db.session.commit()
-            
-            return jsonify({"ok": True, "role": "student"})
-            
-        elif role == "parent":
-            # 家长绑定逻辑
-            # 简单的：创建家长记录
-            parent_name = data.get("name")
-            phone = data.get("phone")
-            
-            if not parent_name:
-                return jsonify({"ok": False, "error": "missing_name"}), 400
-                
-            user.role = User.ROLE_PARENT
-            user.display_name = parent_name
-            # 这里可以扩展 ParentProfile 表，目前先存 User 表
-            db.session.commit()
-            
-            return jsonify({"ok": True, "role": "parent"})
-            
-        else:
-            return jsonify({"ok": False, "error": "invalid_role"}), 400
+    # 获取 token
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        return jsonify({"ok": False, "error": "missing_token"}), 401
+    
+    token = auth_header.split(" ", 1)[1]
+    try:
+        import jwt
+        payload = jwt.decode(
+            token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
+        )
+    except:
+        return jsonify({"ok": False, "error": "invalid_token"}), 401
 
-    return _bind_logic()
+    user = User.query.get(int(payload.get("sub", 0)))
+    if not user or not user.is_active:
+        return jsonify({"ok": False, "error": "user_inactive"}), 403
+    
+    data = request.get_json()
+    role = data.get("role") # student / parent
+    
+    if role == "student":
+        # 学生绑定逻辑：通过姓名匹配现有的 StudentProfile
+        student_name = data.get("name")
+        if not student_name:
+            return jsonify({"ok": False, "error": "missing_name"}), 400
+        
+        profile = StudentProfile.query.filter_by(full_name=student_name).first()
+        if not profile:
+            return jsonify({"ok": False, "error": "student_not_found"}), 404
+        
+        if profile.user_id and profile.user_id != user.id:
+            return jsonify({"ok": False, "error": "already_bound"}), 400
+        
+        # 绑定
+        profile.user_id = user.id
+        profile.wechat_openid = user.wechat_openid
+        user.role = User.ROLE_STUDENT
+        user.display_name = student_name
+        db.session.commit()
+        
+        return jsonify({"ok": True, "role": "student"})
+        
+    elif role == "parent":
+        # 家长绑定逻辑
+        parent_name = data.get("name")
+        phone = data.get("phone")
+        
+        if not parent_name:
+            return jsonify({"ok": False, "error": "missing_name"}), 400
+            
+        user.role = User.ROLE_PARENT
+        user.display_name = parent_name
+        db.session.commit()
+        
+        return jsonify({"ok": True, "role": "parent"})
+        
+    else:
+        return jsonify({"ok": False, "error": "invalid_role"}), 400
+
