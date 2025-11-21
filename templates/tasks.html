@@ -285,9 +285,11 @@
                 {% if t.evidence_photos %}
                 <div style="display: flex; gap: 4px; flex-wrap: wrap;">
                   {% for photo_url in t.evidence_photos %}
-                  <a href="{{ photo_url }}" target="_blank" rel="noopener">
-                    <img src="{{ photo_url }}" alt="证据"
-                      style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer;">
+                  {% set full_url = photo_url if photo_url.startswith('http') else ('https://studytracker.xin' +
+                  photo_url) %}
+                  <a href="{{ full_url }}" target="_blank" rel="noopener">
+                    <img src="{{ full_url }}" alt="证据"
+                      style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid #ddd;">
                   </a>
                   {% endfor %}
                 </div>
