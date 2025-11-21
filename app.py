@@ -1300,6 +1300,48 @@ def tasks_page():
     # 获取所有学生用于下拉框
     all_students = [s.full_name for s in StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.full_name).all()]
 
+    # --- 待审核提交 (Pending Reviews) ---
+    # 1. PlanItem (新版)
+    pending_items_query = PlanItem.query.filter(
+        PlanItem.review_status == PlanItem.REVIEW_PENDING,
+        PlanItem.student_status == PlanItem.STUDENT_SUBMITTED,
+        PlanItem.is_deleted.is_(False),
+        PlanItem.plan.has(StudyPlan.is_deleted.is_(False)),
+    ).options(
+        joinedload(PlanItem.plan).joinedload(StudyPlan.student),
+    )
+    pending_items = pending_items_query.order_by(PlanItem.created_at.asc()).all()
+
+    pending_reviews = []
+    for item in pending_items:
+        pending_reviews.append({
+            "type": "plan_item",
+            "id": item.id,
+            "student_name": item.plan.student.full_name,
+            "task_name": item.task_name,
+            "submitted_at": item.submitted_at,
+            "time_ago": time_ago(item.submitted_at) if item.submitted_at else "",
+        })
+
+    # 2. Task (旧版)
+    pending_legacy_tasks = Task.query.filter(
+        Task.student_submitted == True,
+        Task.status != 'done'
+    ).all()
+
+    for task in pending_legacy_tasks:
+        pending_reviews.append({
+            "type": "legacy_task",
+            "id": task.id,
+            "student_name": task.student_name,
+            "task_name": f"{task.category} {task.detail or ''}",
+            "submitted_at": task.submitted_at,
+            "time_ago": time_ago(task.submitted_at) if task.submitted_at else "",
+        })
+
+    # 按提交时间排序
+    pending_reviews.sort(key=lambda x: x['submitted_at'] or datetime.min, reverse=True)
+
     return render_template(
         "tasks.html",
         items=enriched_items,
@@ -1309,6 +1351,7 @@ def tasks_page():
         recent_tasks=recent_tasks,
         all_students=all_students,
         period=period,
+        pending_reviews=pending_reviews,
     )
 
 # ---- AJAX: 删除任务 ----

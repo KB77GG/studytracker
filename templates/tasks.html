@@ -322,6 +322,36 @@
     {% endfor %}
   </div>
 
+  <!-- 待审核提交 -->
+  <div class="card" style="margin-top: 24px; padding: 20px;">
+    <h3>待审核提交</h3>
+    {% if pending_reviews %}
+    <div class="pending-list" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+      {% for review in pending_reviews %}
+      <article class="pending-item" style="border: 1px solid #e4e7ed; border-radius: 8px; padding: 12px;">
+        <header style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <strong>{{ review.student_name }}</strong>
+          <span class="muted" style="font-size: 0.9em;">{{ review.time_ago }}</span>
+        </header>
+        <div class="pending-body">
+          <div class="pending-task" style="margin-bottom: 8px;">{{ review.task_name }}</div>
+          <div class="pending-actions">
+            {% if review.type == 'plan_item' %}
+            <span class="badge status-pending">PlanItem</span>
+            {% else %}
+            <a href="{{ url_for('tasks_page', student_name=review.student_name) }}" class="btn-small"
+              style="text-decoration: none; background: #4caf50; padding: 4px 12px; border-radius: 4px; color: white; font-size: 0.9em;">去审核</a>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted" style="margin-top: 16px;">暂无待审核任务。</p>
+    {% endif %}
+  </div>
+
   <style>
     .task-form {
       margin: 0 0 16px;
