@@ -50,6 +50,32 @@ from models import (
     Task,
 )
 
+def time_ago(dt):
+    """Helper to format time difference"""
+    if not dt:
+        return ""
+    if isinstance(dt, str):
+        try:
+            dt = datetime.fromisoformat(dt)
+        except ValueError:
+            return dt
+            
+    now = datetime.now()
+    diff = now - dt
+    seconds = diff.total_seconds()
+    
+    if seconds < 60:
+        return "刚刚"
+    elif seconds < 3600:
+        return f"{int(seconds // 60)}分钟前"
+    elif seconds < 86400:
+        return f"{int(seconds // 3600)}小时前"
+    elif seconds < 2592000: # 30 days
+        return f"{int(seconds // 86400)}天前"
+    else:
+        return dt.strftime("%Y-%m-%d")
+
+
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
