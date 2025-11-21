@@ -190,61 +190,7 @@
   </section>
 </div>
 
-<td>
-  {% if item.student_status == item.STUDENT_SUBMITTED %}
-  <span class="badge status-done">已提交</span>
-  {% elif item.student_status == item.STUDENT_IN_PROGRESS %}
-  <span class="badge status-progress">进行中</span>
-  {% else %}
-  <span class="badge status-pending">未开始</span>
-  {% endif %}
-  {% if item.student_reset_count %}
-  <div class="muted small">已撤回 {{ item.student_reset_count }} 次</div>
-  {% endif %}
-</td>
-<td>
-  {% if item.review_status == item.REVIEW_APPROVED %}
-  <span class="badge status-done">通过</span>
-  {% elif item.review_status == item.REVIEW_PARTIAL %}
-  <span class="badge status-progress">部分</span>
-  {% elif item.review_status == item.REVIEW_REJECTED %}
-  <span class="badge status-pending">未完成</span>
-  {% else %}
-  <span class="badge status-pending">待审核</span>
-  {% endif %}
-  {% if item.review_comment %}
-  <div class="muted small">评语：{{ item.review_comment }}</div>
-  {% endif %}
-</td>
-<td>
-  {% set evidences = item.evidences | selectattr("is_deleted", "equalto", False) | list %}
-  {% if evidences %}
-  <ul class="evidence-list">
-    {% for ev in evidences %}
-    <li>
-      {% if ev.file_type == 'text' %}
-      文字稿：{{ ev.text_content or '（无内容）' }}
-      {% else %}
-      <a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank" rel="noopener">证据 {{
-        loop.index }}</a>
-      {% endif %}
-    </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-  <span class="muted">无</span>
-  {% endif %}
-</td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
-</article>
-{% endfor %}
-{% else %}
-<p class="muted">该日暂无计划。</p>
-{% endif %}
-</section>
+
 
 <script>
 
