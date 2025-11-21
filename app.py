@@ -1276,8 +1276,8 @@ def tasks_page():
 @login_required
 def api_task_delete(tid):
     t = Task.query.get_or_404(tid)
-    # 权限：创建者或管理员可删
-    if t.created_by != current_user.id and current_user.role != "admin":
+    # 权限：创建者、管理员或助教可删
+    if t.created_by != current_user.id and current_user.role not in ["admin", "assistant"]:
         return jsonify({"ok": False, "error": "no_permission"}), 403
     db.session.delete(t)
     db.session.commit()
@@ -1288,8 +1288,8 @@ def api_task_delete(tid):
 @login_required
 def api_task_edit(tid):
     t = Task.query.get_or_404(tid)
-    # 权限：创建者或管理员可改
-    if t.created_by != current_user.id and current_user.role != "admin":
+    # 权限：创建者、管理员或助教可改
+    if t.created_by != current_user.id and current_user.role not in ["admin", "assistant"]:
         return jsonify({"ok": False, "error": "no_permission"}), 403
 
     data = request.get_json(silent=True) or {}
@@ -1388,7 +1388,7 @@ def api_session_start():
     # 若关联了任务：首次开始则写入 Task.started_at（仅当为空）
     if task_id:
         t = Task.query.get(task_id)
-        if t and t.created_by in (current_user.id,) or (current_user.role == "admin"):
+        if t and (t.created_by == current_user.id or current_user.role in ["admin", "assistant"]):
             if not t.started_at:
                 t.started_at = sess.started_at
 
@@ -1399,7 +1399,7 @@ def api_session_start():
 @login_required
 def api_session_stop(sid):
     sess = StudySession.query.get_or_404(sid)
-    if sess.created_by != current_user.id and current_user.role != "admin":
+    if sess.created_by != current_user.id and current_user.role not in ["admin", "assistant"]:
         return jsonify({"ok": False, "error": "no_permission"}), 403
     payload = request.get_json(silent=True) or {}
     seconds_hint = payload.get("seconds")
@@ -1429,7 +1429,7 @@ def api_session_stop(sid):
 @login_required
 def api_task_plan(tid):
     t = Task.query.get_or_404(tid)
-    if t.created_by != current_user.id and current_user.role != "admin":
+    if t.created_by != current_user.id and current_user.role not in ["admin", "assistant"]:
         return jsonify({"ok": False, "error": "no_permission"}), 403
     data = request.get_json(silent=True) or {}
     try:
@@ -1445,7 +1445,7 @@ def api_task_plan(tid):
 @login_required
 def api_task_time_reset(tid):
     t = Task.query.get_or_404(tid)
-    if t.created_by != current_user.id and current_user.role != "admin":
+    if t.created_by != current_user.id and current_user.role not in ["admin", "assistant"]:
         return jsonify({"ok": False, "error": "no_permission"}), 403
     t.actual_seconds = 0
     t.started_at = None
