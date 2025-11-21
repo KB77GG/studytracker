@@ -6,9 +6,9 @@ from .auth_utils import issue_token
 wechat_bp = Blueprint("wechat", __name__, url_prefix="/wechat")
 
 # 微信小程序配置
-WECHAT_APP_ID = "wx43ac836a9f623a0d"
+WECHAT_APP_ID = "wx75cdd8fc1ca68c69"
 # TODO: 需要用户提供 AppSecret，或者从环境变量/配置中读取
-WECHAT_APP_SECRET = "YOUR_WECHAT_APP_SECRET" 
+WECHAT_APP_SECRET = "d50cb0a992515238c9807950fed29bf1" 
 
 def get_wechat_session(code):
     """Exchange code for session_key and openid."""
