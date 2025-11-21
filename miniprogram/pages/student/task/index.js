@@ -38,9 +38,11 @@ Page({
         try {
             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
             if (res.ok && res.task) {
+                const isSpeaking = res.task.module && (res.task.module.includes('口语') || res.task.module.includes('Speaking'))
                 this.setData({
                     task: res.task,
-                    statusText: this.getStatusText(res.task.status)
+                    statusText: this.getStatusText(res.task.status),
+                    showAudio: isSpeaking
                 })
             } else {
                 wx.showToast({ title: '获取任务详情失败', icon: 'none' })

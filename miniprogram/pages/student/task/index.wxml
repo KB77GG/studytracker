@@ -19,8 +19,8 @@
     </view>
   </view>
 
-  <!-- 录音区域 -->
-  <view class="upload-section">
+  <!-- 录音区域 (仅口语任务显示) -->
+  <view class="upload-section" wx:if="{{showAudio}}">
     <text class="section-title">📢 口语录音</text>
     <view class="audio-recorder">
       <button class="record-btn {{recording ? 'recording' : ''}}" 
