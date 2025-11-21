@@ -171,6 +171,13 @@ def index():
         return redirect(url_for("student_today"))
     return render_template("index.html")
 
+# 静态文件路由 - 提供上传文件访问
+@app.route("/uploads/<path:filename>")
+def uploaded_file(filename):
+    """提供上传文件的访问"""
+    from flask import send_from_directory
+    return send_from_directory(UPLOAD_ROOT, filename)
+
 # 登录路由
 @app.route("/login", methods=["GET", "POST"])
 def login():
