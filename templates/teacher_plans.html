@@ -108,47 +108,8 @@
     {% else %}
     <p class="muted">暂无待审核任务。</p>
     {% endif %}
-</div>
-<div class="muted small">证据要求：{{ evidence_policy_labels.get(item.evidence_policy or 'optional', '可选') }}</div>
-{% if item.student_reset_count %}
-<div class="muted small">学生曾撤回 {{ item.student_reset_count }} 次</div>
-{% endif %}
-{% if item.student_comment %}
-<div class="pending-comment">学生反馈：{{ item.student_comment }}</div>
-{% endif %}
-{% set evidences = item.evidences | selectattr("is_deleted", "equalto", False) | list %}
-{% if evidences %}
-<ul class="pending-evidence">
-  {% for ev in evidences %}
-  <li>
-    {% if ev.file_type == 'text' %}
-    文字稿 {{ loop.index }}：{{ ev.text_content or '（无内容）' }}
-    {% else %}
-    证据 {{ loop.index }} · {{ ev.file_type|upper }}
-    <a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank" rel="noopener">下载</a>
-    {% endif %}
-  </li>
-  {% endfor %}
-</ul>
-{% else %}
-<div class="muted">无证据文件</div>
-{% endif %}
-</div>
-<footer>
-  <textarea class="review-comment" placeholder="评语（可选）"></textarea>
-  <div class="review-actions">
-    <button type="button" class="btn-review" data-status="approved">通过</button>
-    <button type="button" class="btn-review" data-status="partial">部分完成</button>
-    <button type="button" class="btn-review" data-status="rejected">未完成</button>
-  </div>
-</footer>
-</article>
-{% endfor %}
-</div>
-{% else %}
-<p class="muted">暂无待审核任务。</p>
-{% endif %}
-</section>
+
+  </section>
 </div>
 
 <section class="card plan-overview">
