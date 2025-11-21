@@ -525,7 +525,7 @@ def teacher_plans():
     # 权限过滤（如果是普通老师/助教，可能只能看自己关联的学生？目前 Task 表没有关联 ID，暂时不做严格过滤，或者依赖 student_name）
     # 这里为了简单，先显示所有，或者后续根据 TeacherStudentLink 过滤 student_name
     
-    tasks = tasks_query.order_by(Task.created_at.desc()).all()
+    tasks = tasks_query.order_by(Task.id.desc()).all()
 
     # --- 待审核提交 (Pending Reviews) ---
     # 1. PlanItem (新版)
