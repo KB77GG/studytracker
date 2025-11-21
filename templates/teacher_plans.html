@@ -19,67 +19,145 @@
 </div>
 
 <div class="teacher-grid">
-  <section class="card plan-builder">
-    <h3>创建 / 更新计划</h3>
-    {% if students %}
-    <form id="planForm">
-      <div class="form-row">
-        <label>学生</label>
-        <select id="planStudent" name="student_id" required>
-          <option value="">请选择学生</option>
-          {% for stu in students %}
-          <option value="{{ stu.id }}">{{ stu.full_name }}{% if stu.nickname %}（{{ stu.nickname }}）{% endif %}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="guardian-token" id="guardianTokenBox" hidden>
-        <span class="token-label">家长查看链接：</span>
-        <input type="text" readonly id="guardianTokenValue">
-        <div class="token-actions">
-          <button type="button" id="copyTokenBtn">复制链接</button>
-          <button type="button" id="refreshTokenBtn">刷新链接</button>
-        </div>
-      </div>
-      <div class="form-row">
-        <label>计划日期</label>
-        <input type="date" id="planDateInput" name="plan_date" value="{{ selected_date }}" required>
-      </div>
-      <div class="form-row">
-        <label>备注</label>
-        <textarea id="planNotes" name="notes" rows="2" placeholder="可选：写给学生的提示或重点"></textarea>
-      </div>
-      <div class="form-row check-row">
-        <label>
-          <input type="checkbox" id="planReplace" name="replace">
-          若已有计划，覆盖并重新生成
-        </label>
-      </div>
-      <hr>
-      <div class="plan-builder-catalog">
-        <div class="catalog-panel">
-          <h4>任务库</h4>
-          <input type="search" id="taskSearch" placeholder="搜索：考试体系 / 模块 / 任务名">
-          <div class="catalog-list" id="catalogList">
-            <!-- filled by JS -->
+  <div class="main-column">
+    <section class="card task-builder">
+      <h3>创建新任务</h3>
+      <form method="post" action="{{ url_for('teacher_plans') }}">
+        <div class="form-row">
+          <div class="field">
+            <label>日期</label>
+            <input type="date" name="date" value="{{ selected_date }}" required>
+          </div>
+          <div class="field">
+            <label>学生</label>
+            <input name="student_name" list="studentOptions" placeholder="输入或选择学生姓名" required autocomplete="off"
+              style="width: 100%;">
+            <datalist id="studentOptions">
+              {% for name in all_students %}
+              <option value="{{ name }}">
+                {% endfor %}
+            </datalist>
           </div>
         </div>
-        <div class="selected-panel">
-          <h4>计划任务</h4>
-          <p class="muted">点击任务库中的“添加”按钮即可加入。可在此调整顺序、时长或说明。</p>
-          <ul id="selectedTasks" class="selected-list">
-            <!-- filled by JS -->
-          </ul>
-          <div class="selected-summary" id="selectedSummary">共 0 项，计划用时 0 分钟</div>
+        <div class="form-row">
+          <div class="field field--wide">
+            <label>任务类别</label>
+            <select name="category" required style="width: 100%;">
+              <optgroup label="基础">
+                <option value="基础-四级词汇">四级词汇巩固</option>
+                <option value="基础-每日记忆计划">每日记忆计划</option>
+                <option value="基础-课堂抽查">课堂随机抽查</option>
+                <option value="基础-语法单选练习">语法单选练习</option>
+                <option value="基础-翻译句子练习">翻译句子练习</option>
+                <option value="基础-口语素材朗读">口语素材朗读</option>
+              </optgroup>
+              <optgroup label="雅思">
+                <option value="雅思-听力-精听">听力精听</option>
+                <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
+                <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
+                <option value="雅思-阅读-精读">阅读精读</option>
+                <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
+                <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
+                <option value="雅思-口语-常见题库问答">常见题库问答</option>
+                <option value="雅思-写作-句型与语法">句型与语法纠正</option>
+                <option value="雅思-写作-翻译句子">写作翻译句子</option>
+                <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
+              </optgroup>
+              <optgroup label="托福">
+                <option value="托福-听力-精听">听力精听</option>
+                <option value="托福-听力-速记训练">速记关键信息训练</option>
+                <option value="托福-阅读-精读">阅读深度分析</option>
+                <option value="托福-阅读-长难句">长难句分析</option>
+                <option value="托福-口语-独立题">独立口语练习</option>
+                <option value="托福-口语-综合题">综合口语练习</option>
+                <option value="托福-写作-独立写作">独立写作练习</option>
+                <option value="托福-写作-综合写作">综合写作练习</option>
+              </optgroup>
+              <optgroup label="其他">
+                <option value="其他-综合英语">综合英语能力</option>
+                <option value="其他-模拟考试">全真模拟考试</option>
+                <option value="其他-专项训练">专项弱点突破</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>预计用时 (分钟)</label>
+            <input type="number" name="planned_minutes" placeholder="例如 45">
+          </div>
+          <div class="field field--wide">
+            <label>备注</label>
+            <input type="text" name="detail" placeholder="可选，补充提示或材料" style="width: 100%;">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit">添加任务</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card task-list-section" style="margin-top: 20px;">
+      <div class="card-header">
+        <h3>任务列表</h3>
+        <div class="filters">
+          <form method="get" style="display: flex; gap: 10px; align-items: center;">
+            <input type="hidden" name="date" value="{{ selected_date }}">
+            <select name="student_name" onchange="this.form.submit()">
+              <option value="">全部学生</option>
+              {% for name in all_students %}
+              <option value="{{ name }}" {% if request.args.get('student_name')==name %}selected{% endif %}>{{ name }}
+              </option>
+              {% endfor %}
+            </select>
+          </form>
         </div>
       </div>
-      <div class="form-actions">
-        <button type="submit">保存计划</button>
-      </div>
-    </form>
-    {% else %}
-    <p>当前没有可管理的学生，请先在用户管理中设置学生档案并关联教师。</p>
-    {% endif %}
-  </section>
+
+      {% if tasks %}
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>学生</th>
+            <th>类别</th>
+            <th>备注</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks %}
+          <tr>
+            <td>{{ task.id }}</td>
+            <td>{{ task.student_name }}</td>
+            <td>{{ task.category }}</td>
+            <td>{{ task.detail }}</td>
+            <td>
+              <span
+                class="badge {{ 'status-pending' if task.status=='pending' else ('status-progress' if task.status=='progress' else 'status-done') }}">
+                {{ "未开始" if task.status=="pending" else ("进行中" if task.status=="progress" else "已完成") }}
+              </span>
+              {% if task.student_submitted %}
+              <span class="badge status-submitted">已提交</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn-small">编辑</a>
+              <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post" style="display:inline;"
+                onsubmit="return confirm('确定删除吗？');">
+                <button type="submit" class="btn-small btn-danger">删除</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="muted">该日暂无任务。</p>
+      {% endif %}
+    </section>
+  </div>
 
   <section class="card pending-review">
     <h3>待审核提交</h3>
@@ -112,346 +190,64 @@
   </section>
 </div>
 
-<section class="card plan-overview">
-  <h3>当天计划概览</h3>
-  {% if plans %}
-  {% for plan in plans %}
-  <article class="plan-card">
-    <header>
-      <div>
-        <strong>{{ plan.student.full_name }}</strong>
-        <span class="muted">（{{ plan.plan_date }}）</span>
-      </div>
-      {% if plan.notes %}
-      <div class="plan-notes">{{ plan.notes }}</div>
-      {% endif %}
-    </header>
-    <table class="plan-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>任务</th>
-          <th>计划</th>
-          <th>实际</th>
-          <th>学生状态</th>
-          <th>审核状态</th>
-          <th>证据</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in plan.items | selectattr("is_deleted", "equalto", False) | list %}
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td>
-            <div>{{ item.module }} · {{ item.task_name }}</div>
-            {% if item.custom_title %}<div class="muted">{{ item.custom_title }}</div>{% endif %}
-            {% if item.instructions %}<div class="muted">{{ item.instructions }}</div>{% endif %}
-            <div class="muted small">证据要求：{{ evidence_policy_labels.get(item.evidence_policy or 'optional', '可选') }}
-            </div>
-          </td>
-          <td>{{ item.planned_minutes }} 分</td>
-          <td>{{ (item.actual_seconds or 0) // 60 }} 分{% if item.manual_minutes %}（手动 {{ item.manual_minutes }} 分）{%
-            endif %}</td>
-          <td>
-            {% if item.student_status == item.STUDENT_SUBMITTED %}
-            <span class="badge status-done">已提交</span>
-            {% elif item.student_status == item.STUDENT_IN_PROGRESS %}
-            <span class="badge status-progress">进行中</span>
-            {% else %}
-            <span class="badge status-pending">未开始</span>
-            {% endif %}
-            {% if item.student_reset_count %}
-            <div class="muted small">已撤回 {{ item.student_reset_count }} 次</div>
-            {% endif %}
-          </td>
-          <td>
-            {% if item.review_status == item.REVIEW_APPROVED %}
-            <span class="badge status-done">通过</span>
-            {% elif item.review_status == item.REVIEW_PARTIAL %}
-            <span class="badge status-progress">部分</span>
-            {% elif item.review_status == item.REVIEW_REJECTED %}
-            <span class="badge status-pending">未完成</span>
-            {% else %}
-            <span class="badge status-pending">待审核</span>
-            {% endif %}
-            {% if item.review_comment %}
-            <div class="muted small">评语：{{ item.review_comment }}</div>
-            {% endif %}
-          </td>
-          <td>
-            {% set evidences = item.evidences | selectattr("is_deleted", "equalto", False) | list %}
-            {% if evidences %}
-            <ul class="evidence-list">
-              {% for ev in evidences %}
-              <li>
-                {% if ev.file_type == 'text' %}
-                文字稿：{{ ev.text_content or '（无内容）' }}
-                {% else %}
-                <a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank"
-                  rel="noopener">证据 {{ loop.index }}</a>
-                {% endif %}
-              </li>
-              {% endfor %}
-            </ul>
-            {% else %}
-            <span class="muted">无</span>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </article>
-  {% endfor %}
+<td>
+  {% if item.student_status == item.STUDENT_SUBMITTED %}
+  <span class="badge status-done">已提交</span>
+  {% elif item.student_status == item.STUDENT_IN_PROGRESS %}
+  <span class="badge status-progress">进行中</span>
   {% else %}
-  <p class="muted">该日暂无计划。</p>
+  <span class="badge status-pending">未开始</span>
   {% endif %}
+  {% if item.student_reset_count %}
+  <div class="muted small">已撤回 {{ item.student_reset_count }} 次</div>
+  {% endif %}
+</td>
+<td>
+  {% if item.review_status == item.REVIEW_APPROVED %}
+  <span class="badge status-done">通过</span>
+  {% elif item.review_status == item.REVIEW_PARTIAL %}
+  <span class="badge status-progress">部分</span>
+  {% elif item.review_status == item.REVIEW_REJECTED %}
+  <span class="badge status-pending">未完成</span>
+  {% else %}
+  <span class="badge status-pending">待审核</span>
+  {% endif %}
+  {% if item.review_comment %}
+  <div class="muted small">评语：{{ item.review_comment }}</div>
+  {% endif %}
+</td>
+<td>
+  {% set evidences = item.evidences | selectattr("is_deleted", "equalto", False) | list %}
+  {% if evidences %}
+  <ul class="evidence-list">
+    {% for ev in evidences %}
+    <li>
+      {% if ev.file_type == 'text' %}
+      文字稿：{{ ev.text_content or '（无内容）' }}
+      {% else %}
+      <a href="{{ url_for('teacher_download_evidence', evidence_id=ev.id) }}" target="_blank" rel="noopener">证据 {{
+        loop.index }}</a>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <span class="muted">无</span>
+  {% endif %}
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</article>
+{% endfor %}
+{% else %}
+<p class="muted">该日暂无计划。</p>
+{% endif %}
 </section>
 
 <script>
-  const catalogData = {{ catalog_payload| tojson }};
-  const studentsPayload = {{ students_payload| tojson }};
-  const tokenMap = {{ token_map| tojson }};
 
-  const catalogListEl = document.getElementById('catalogList');
-  const selectedListEl = document.getElementById('selectedTasks');
-  const summaryEl = document.getElementById('selectedSummary');
-  const planForm = document.getElementById('planForm');
-  const planStudent = document.getElementById('planStudent');
-  const guardianTokenBox = document.getElementById('guardianTokenBox');
-  const guardianTokenValue = document.getElementById('guardianTokenValue');
-  const refreshTokenBtn = document.getElementById('refreshTokenBtn');
-  const copyTokenBtn = document.getElementById('copyTokenBtn');
-  const taskSearch = document.getElementById('taskSearch');
-
-  let selectedItems = [];
-  const createUid = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `uid_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-
-  function renderCatalog(list) {
-    catalogListEl.innerHTML = '';
-    if (!list.length) {
-      catalogListEl.innerHTML = '<p class="muted">没有匹配的任务。</p>';
-      return;
-    }
-    list.forEach(item => {
-      const el = document.createElement('div');
-      el.className = 'catalog-item';
-      el.innerHTML = `
-      <div class="catalog-info">
-        <strong>${item.exam_system} · ${item.module}</strong>
-        <div>${item.task_name}</div>
-        ${item.description ? `<div class="muted small">${item.description}</div>` : ''}
-      </div>
-      <button type="button" data-id="${item.id}">添加</button>
-    `;
-      el.querySelector('button').addEventListener('click', () => addItem(item));
-      catalogListEl.appendChild(el);
-    });
-  }
-
-  function addItem(catalogItem) {
-    const newItem = {
-      uid: createUid(),
-      catalog_id: catalogItem.id,
-      exam_system: catalogItem.exam_system,
-      module: catalogItem.module,
-      task_name: catalogItem.task_name,
-      planned_minutes: catalogItem.default_minutes || 30,
-      instructions: '',
-      custom_title: ''
-    };
-    selectedItems.push(newItem);
-    renderSelected();
-  }
-
-  function renderSelected() {
-    selectedListEl.innerHTML = '';
-    let total = 0;
-    selectedItems.forEach((item, index) => {
-      total += Number(item.planned_minutes || 0);
-      const li = document.createElement('li');
-      li.className = 'selected-item';
-      li.dataset.uid = item.uid;
-      li.innerHTML = `
-      <div class="selected-header">
-        <span>${index + 1}. ${item.exam_system} · ${item.module}</span>
-        <strong>${item.task_name}</strong>
-      </div>
-      <div class="selected-controls">
-        <label>计划分钟
-          <input type="number" min="0" value="${item.planned_minutes}">
-        </label>
-        <label>自定义标题
-          <input type="text" value="${item.custom_title || ''}">
-        </label>
-        <label>说明
-          <input type="text" value="${item.instructions || ''}">
-        </label>
-      </div>
-      <div class="selected-actions">
-        <button type="button" data-action="up">上移</button>
-        <button type="button" data-action="down">下移</button>
-        <button type="button" data-action="remove" class="danger">删除</button>
-      </div>
-    `;
-      const [minutesInput, titleInput, instructionsInput] = li.querySelectorAll('input');
-      minutesInput.addEventListener('change', e => {
-        const val = Number(e.target.value || 0);
-        item.planned_minutes = val >= 0 ? val : 0;
-        renderSelected();
-      });
-      titleInput.addEventListener('input', e => item.custom_title = e.target.value.trim());
-      instructionsInput.addEventListener('input', e => item.instructions = e.target.value.trim());
-      li.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', () => handleSelectedAction(item.uid, btn.dataset.action));
-      });
-      selectedListEl.appendChild(li);
-    });
-    summaryEl.textContent = `共 ${selectedItems.length} 项，计划用时 ${total} 分钟`;
-  }
-
-  function handleSelectedAction(uid, action) {
-    const idx = selectedItems.findIndex(it => it.uid === uid);
-    if (idx === -1) return;
-    if (action === 'remove') {
-      selectedItems.splice(idx, 1);
-    } else if (action === 'up' && idx > 0) {
-      [selectedItems[idx - 1], selectedItems[idx]] = [selectedItems[idx], selectedItems[idx - 1]];
-    } else if (action === 'down' && idx < selectedItems.length - 1) {
-      [selectedItems[idx + 1], selectedItems[idx]] = [selectedItems[idx], selectedItems[idx + 1]];
-    }
-    renderSelected();
-  }
-
-  function filterCatalog() {
-    const keyword = (taskSearch.value || '').toLowerCase().trim();
-    if (!keyword) {
-      renderCatalog(catalogData);
-      return;
-    }
-    const filtered = catalogData.filter(item =>
-      [item.exam_system, item.module, item.task_name, item.description]
-        .join(' ')
-        .toLowerCase()
-        .includes(keyword)
-    );
-    renderCatalog(filtered);
-  }
-
-  if (taskSearch) {
-    taskSearch.addEventListener('input', () => {
-      window.clearTimeout(taskSearch._timer);
-      taskSearch._timer = setTimeout(filterCatalog, 150);
-    });
-  }
-
-  if (planForm) {
-    planForm.addEventListener('submit', async e => {
-      e.preventDefault();
-      if (!selectedItems.length) {
-        alert('请先从任务库中添加至少一项任务。');
-        return;
-      }
-      const studentId = planStudent.value;
-      if (!studentId) {
-        alert('请选择学生。');
-        return;
-      }
-      const payload = {
-        student_id: studentId,
-        plan_date: document.getElementById('planDateInput').value,
-        notes: document.getElementById('planNotes').value.trim(),
-        replace: document.getElementById('planReplace').checked,
-        items: selectedItems.map(item => ({
-          catalog_id: item.catalog_id,
-          planned_minutes: item.planned_minutes,
-          instructions: item.instructions,
-          custom_title: item.custom_title
-        }))
-      };
-      try {
-        const res = await fetch('/api/plans', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (!data.ok) {
-          alert('保存失败：' + (data.error || 'unknown'));
-          return;
-        }
-        window.location.reload();
-      } catch (err) {
-        console.error(err);
-        alert('保存失败，请稍后再试。');
-      }
-    });
-  }
-
-  function updateGuardianTokenDisplay(studentId) {
-    const info = studentsPayload.find(x => String(x.id) === String(studentId));
-    if (!info) {
-      guardianTokenBox.hidden = true;
-      return;
-    }
-    const baseUrl = window.location.origin;
-    const token = info.token;
-    if (token) {
-      guardianTokenValue.value = `${baseUrl}/parent/report/${token}`;
-    } else {
-      guardianTokenValue.value = '尚未生成链接';
-    }
-    guardianTokenBox.hidden = false;
-  }
-
-  if (planStudent) {
-    planStudent.addEventListener('change', () => {
-      updateGuardianTokenDisplay(planStudent.value);
-    });
-  }
-
-  if (copyTokenBtn) {
-    copyTokenBtn.addEventListener('click', () => {
-      if (!guardianTokenValue.value) {
-        alert('暂无可复制的链接');
-        return;
-      }
-      navigator.clipboard.writeText(guardianTokenValue.value).then(() => {
-        copyTokenBtn.textContent = '已复制';
-        setTimeout(() => copyTokenBtn.textContent = '复制链接', 1500);
-      });
-    });
-  }
-
-  if (refreshTokenBtn) {
-    refreshTokenBtn.addEventListener('click', async () => {
-      const studentId = planStudent.value;
-      if (!studentId) {
-        alert('请先选择学生');
-        return;
-      }
-      try {
-        const res = await fetch(`/api/students/${studentId}/guardian-token`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'refresh' })
-        });
-        const data = await res.json();
-        if (!data.ok) {
-          alert('生成失败：' + (data.error || 'unknown'));
-          return;
-        }
-        const target = studentsPayload.find(x => String(x.id) === String(studentId));
-        if (target) {
-          target.token = data.token;
-        }
-        guardianTokenValue.value = `${window.location.origin}/parent/report/${data.token}`;
-      } catch (err) {
-        console.error(err);
-        alert('生成失败，请稍后再试。');
-      }
-    });
-  }
 
   document.querySelectorAll('.pending-item .btn-review').forEach(btn => {
     btn.addEventListener('click', async () => {

@@ -25,11 +25,11 @@
         <a class="nav-link {{ 'is-active' if endpoint == 'index' else '' }}" href="{{ url_for('index') }}">Overview</a>
         {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
         <a class="nav-link {{ 'is-active' if endpoint == 'teacher_plans' else '' }}"
-          href="{{ url_for('teacher_plans') }}">Students</a>
+          href="{{ url_for('teacher_plans') }}">Task Management</a>
         {% endif %}
         {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
         <a class="nav-link {{ 'is-active' if endpoint == 'tasks_page' else '' }}"
-          href="{{ url_for('tasks_page') }}">Task Management</a>
+          href="{{ url_for('tasks_page') }}">Records</a>
         {% endif %}
         {% if current_user.role == 'student' %}
         <a class="nav-link {{ 'is-active' if endpoint == 'student_today' else '' }}"

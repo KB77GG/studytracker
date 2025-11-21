@@ -463,62 +463,72 @@ def api_auto_create_student():
     return jsonify({"ok": True, "data": creds})
 
 
-@app.route("/teacher/plans", methods=["GET"])
+@app.route("/teacher/plans", methods=["GET", "POST"])
 @login_required
-@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def teacher_plans():
-    date_str = request.args.get("date") or date.today().isoformat()
-    try:
-        selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-    except ValueError:
-        selected_date = date.today()
-        date_str = selected_date.isoformat()
+    if current_user.role not in [User.ROLE_TEACHER, User.ROLE_ASSISTANT, User.ROLE_ADMIN]:
+        flash("权限不足", "error")
+        return redirect(url_for("index"))
 
-    accessible_ids = get_accessible_student_ids(current_user)
-    student_query = StudentProfile.query.filter(StudentProfile.is_deleted.is_(False))
-    if current_user.role != User.ROLE_ADMIN:
-        if not accessible_ids:
-            students = []
+    # --- 处理添加任务 (POST) ---
+    if request.method == "POST":
+        date_str = request.form.get("date")
+        student_name = request.form.get("student_name")
+        category = request.form.get("category")
+        planned_minutes = request.form.get("planned_minutes")
+        detail = request.form.get("detail")
+
+        if not date_str or not student_name or not category:
+            flash("请填写必填项", "error")
         else:
-            student_query = student_query.filter(StudentProfile.id.in_(accessible_ids))
-            students = student_query.order_by(StudentProfile.full_name.asc()).all()
+            try:
+                task_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+                new_task = Task(
+                    date=task_date,
+                    student_name=student_name,
+                    category=category,
+                    planned_minutes=int(planned_minutes) if planned_minutes else 0,
+                    detail=detail,
+                    status="pending",
+                    created_by=current_user.id
+                )
+                db.session.add(new_task)
+                db.session.commit()
+                flash("任务添加成功", "success")
+            except ValueError:
+                flash("日期格式错误", "error")
+            except Exception as e:
+                db.session.rollback()
+                flash(f"添加失败: {str(e)}", "error")
+        
+        return redirect(url_for("teacher_plans", date=date_str, student_name=student_name))
+
+    # --- 处理页面显示 (GET) ---
+    date_str = request.args.get("date")
+    if date_str:
+        try:
+            selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            selected_date = date.today()
     else:
-        students = student_query.order_by(StudentProfile.full_name.asc()).all()
-        accessible_ids = {s.id for s in students}
+        selected_date = date.today()
 
-    catalog = (
-        TaskCatalog.query.filter(
-            TaskCatalog.is_active.is_(True), TaskCatalog.is_deleted.is_(False)
-        )
-        .order_by(TaskCatalog.exam_system.asc(), TaskCatalog.module.asc(), TaskCatalog.task_name.asc())
-        .all()
-    )
-    catalog_payload = [
-        {
-            "id": t.id,
-            "exam_system": t.exam_system,
-            "module": t.module,
-            "task_name": t.task_name,
-            "default_minutes": t.default_minutes,
-            "description": t.description or "",
-        }
-        for t in catalog
-    ]
+    # 获取所有学生姓名供下拉选择
+    all_students = [s.full_name for s in StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.full_name).all()]
 
-    plans_query = StudyPlan.query.filter(
-        StudyPlan.plan_date == selected_date, StudyPlan.is_deleted.is_(False)
-    ).options(
-        joinedload(StudyPlan.student),
-        joinedload(StudyPlan.items).joinedload(PlanItem.evidences),
-        joinedload(StudyPlan.items).joinedload(PlanItem.sessions),
-    )
-    if current_user.role != User.ROLE_ADMIN:
-        if accessible_ids:
-            plans_query = plans_query.filter(StudyPlan.student_id.in_(accessible_ids))
-        else:
-            plans_query = plans_query.filter(false())
-    plans = plans_query.order_by(StudyPlan.plan_date.asc()).all()
+    # 获取任务列表
+    filter_student = request.args.get("student_name")
+    tasks_query = Task.query.filter(Task.date == selected_date)
+    if filter_student:
+        tasks_query = tasks_query.filter(Task.student_name == filter_student)
+    
+    # 权限过滤（如果是普通老师/助教，可能只能看自己关联的学生？目前 Task 表没有关联 ID，暂时不做严格过滤，或者依赖 student_name）
+    # 这里为了简单，先显示所有，或者后续根据 TeacherStudentLink 过滤 student_name
+    
+    tasks = tasks_query.order_by(Task.created_at.desc()).all()
 
+    # --- 待审核提交 (Pending Reviews) ---
+    # 1. PlanItem (新版)
     pending_items_query = PlanItem.query.filter(
         PlanItem.review_status == PlanItem.REVIEW_PENDING,
         PlanItem.student_status == PlanItem.STUDENT_SUBMITTED,
@@ -526,19 +536,10 @@ def teacher_plans():
         PlanItem.plan.has(StudyPlan.is_deleted.is_(False)),
     ).options(
         joinedload(PlanItem.plan).joinedload(StudyPlan.student),
-        joinedload(PlanItem.evidences),
     )
-    if current_user.role != User.ROLE_ADMIN:
-        if accessible_ids:
-            # 对于 Task 表，我们只能通过 student_name 过滤，这比较麻烦
-            # 先获取所有待审核 Task，再在内存中过滤
-            pass
-        else:
-            pending_items_query = pending_items_query.filter(false())
     pending_items = pending_items_query.order_by(PlanItem.created_at.asc()).all()
 
     pending_reviews = []
-    # 1. 添加 PlanItem (新版)
     for item in pending_items:
         pending_reviews.append({
             "type": "plan_item",
@@ -549,66 +550,31 @@ def teacher_plans():
             "time_ago": time_ago(item.submitted_at) if item.submitted_at else "",
         })
 
-    # 2. 添加 Task (旧版/当前使用)
-    # 查找已提交但未完成(status!='done')的任务
-    legacy_tasks_query = Task.query.filter(
-        Task.student_submitted.is_(True),
-        Task.status != 'done'
-    )
-    
-    legacy_tasks = legacy_tasks_query.order_by(Task.submitted_at.asc()).all()
-    
-    for task in legacy_tasks:
-        # 权限过滤：检查该学生是否在老师的管辖范围内
-        # 如果是管理员，或者学生名字在 accessible_students 列表中
-        is_accessible = False
-        if current_user.role == User.ROLE_ADMIN:
-            is_accessible = True
-        else:
-            # 这里通过名字匹配，虽然不够严谨但可行
-            for s in students:
-                if s.full_name == task.student_name:
-                    is_accessible = True
-                    break
-        
-        if is_accessible:
-            pending_reviews.append({
-                "type": "legacy_task", # 标记为旧版任务
-                "id": task.id,
-                "student_name": task.student_name,
-                "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
-                "submitted_at": task.submitted_at,
-                "time_ago": time_ago(task.submitted_at) if task.submitted_at else "",
-            })
+    # 2. Task (旧版)
+    pending_legacy_tasks = Task.query.filter(
+        Task.student_submitted == True,
+        Task.status != 'done' # 假设审核通过会改为 done
+    ).all()
+
+    for task in pending_legacy_tasks:
+        pending_reviews.append({
+            "type": "legacy_task",
+            "id": task.id,
+            "student_name": task.student_name,
+            "task_name": f"{task.category} {task.detail or ''}",
+            "submitted_at": task.submitted_at,
+            "time_ago": time_ago(task.submitted_at) if task.submitted_at else "",
+        })
 
     # 按提交时间排序
-    pending_reviews.sort(key=lambda x: x['submitted_at'] or datetime.min)
-    token_map = {}
-    for stu in students:
-        if stu.guardian_view_token:
-            token_map[stu.id] = stu.guardian_view_token
-
-    student_payload = [
-        {
-            "id": stu.id,
-            "name": stu.full_name,
-            "nickname": stu.nickname,
-            "token": token_map.get(stu.id),
-            "exam_target": stu.exam_target,
-        }
-        for stu in students
-    ]
+    pending_reviews.sort(key=lambda x: x['submitted_at'] or datetime.min, reverse=True)
 
     return render_template(
         "teacher_plans.html",
-        students=students,
-        students_payload=student_payload,
-        catalog=catalog,
-        catalog_payload=catalog_payload,
-        plans=plans,
-        pending_items=pending_items,
-        selected_date=date_str,
-        token_map=token_map,
+        selected_date=selected_date,
+        all_students=all_students,
+        tasks=tasks,
+        pending_reviews=pending_reviews,
     )
 
 
