@@ -1,3 +1,69 @@
 <view class="container">
-  <text>Task Detail Page</text>
+  <view class="task-header">
+    <text class="task-title">{{task.task_name}}</text>
+    <text class="task-module">{{task.module}}</text>
+  </view>
+
+  <view class="task-info-card">
+    <view class="info-row">
+      <text class="label">计划时长</text>
+      <text class="value">{{task.planned_minutes}} 分钟</text>
+    </view>
+    <view class="info-row">
+      <text class="label">任务说明</text>
+      <text class="value">{{task.instructions || '暂无说明'}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">状态</text>
+      <text class="value status-{{task.student_status}}">{{statusText}}</text>
+    </view>
+  </view>
+
+  <!-- 录音区域 -->
+  <view class="upload-section">
+    <text class="section-title">📢 口语录音</text>
+    <view class="audio-recorder">
+      <button class="record-btn {{recording ? 'recording' : ''}}" 
+              bindtouchstart="startRecord" 
+              bindtouchend="stopRecord">
+        {{recording ? '松开结束' : '按住录音'}}
+      </button>
+      <text class="duration" wx:if="{{recordDuration > 0}}">{{recordDuration}}秒</text>
+    </view>
+    
+    <view class="audio-list" wx:if="{{audioFiles.length > 0}}">
+      <view class="audio-item" wx:for="{{audioFiles}}" wx:key="index">
+        <text class="audio-name">录音 {{index + 1}}</text>
+        <button class="btn-play" size="mini" bindtap="playAudio" data-url="{{item}}">播放</button>
+        <button class="btn-delete" size="mini" bindtap="deleteAudio" data-index="{{index}}">删除</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 图片上传区域 -->
+  <view class="upload-section">
+    <text class="section-title">📷 作业照片</text>
+    <view class="image-grid">
+      <view class="image-item" wx:for="{{images}}" wx:key="index">
+        <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}"></image>
+        <icon type="clear" size="20" class="delete-icon" bindtap="deleteImage" data-index="{{index}}"></icon>
+      </view>
+      <view class="image-item add-btn" bindtap="chooseImage" wx:if="{{images.length < 9}}">
+        <text>+</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="upload-section">
+    <text class="section-title">💬 备注（可选）</text>
+    <textarea class="note-input" placeholder="写下你的学习笔记或遇到的问题..." model:value="{{note}}" maxlength="300"></textarea>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="action-buttons">
+    <button class="btn-submit" bindtap="submitTask" disabled="{{submitting}}">
+      {{submitting ? '提交中...' : '提交任务'}}
+    </button>
+  </view>
 </view>

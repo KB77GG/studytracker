@@ -1,3 +1,29 @@
 <view class="container">
-  <text>Student Home</text>
+  <view class="header">
+    <text class="title">今日任务</text>
+    <text class="date">{{dateStr}}</text>
+  </view>
+
+  <view class="task-list" wx:if="{{tasks.length > 0}}">
+    <view class="task-card" wx:for="{{tasks}}" wx:key="id" bindtap="goToTaskDetail" data-id="{{id}}">
+      <view class="task-header">
+        <text class="task-module">{{item.module}}</text>
+        <text class="task-status {{item.status}}">{{item.statusText}}</text>
+      </view>
+      <view class="task-body">
+        <text class="task-name">{{item.task_name}}</text>
+        <text class="task-info">计划: {{item.planned_minutes}}分钟</text>
+      </view>
+      <view class="task-footer">
+        <text class="task-action" wx:if="{{item.status === 'pending'}}">去完成 ></text>
+        <text class="task-action" wx:elif="{{item.status === 'submitted'}}">已提交</text>
+        <text class="task-action" wx:else>查看详情 ></text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <image src="/static/empty.png" mode="aspectFit" class="empty-img"></image>
+    <text>今天没有任务哦，休息一下吧~</text>
+  </view>
 </view>
