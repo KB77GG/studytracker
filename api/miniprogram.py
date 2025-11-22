@@ -74,7 +74,9 @@ def get_student_today_tasks():
     for task in tasks:
         # 判断状态
         status = "pending"
-        if task.student_submitted:
+        if task.status == "done":
+            status = "completed"
+        elif task.student_submitted:
             status = "submitted"
         elif task.actual_seconds and task.actual_seconds > 0:
             status = "in_progress"
@@ -84,11 +86,15 @@ def get_student_today_tasks():
             "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
             "module": task.category or "其他",
             "exam_system": "",
-            "instructions": task.note or "",
+            "instructions": task.note or "", # 这里note作为任务说明
             "planned_minutes": task.planned_minutes,
             "status": status,
             "is_locked": False,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+            # 反馈字段
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "teacher_note": task.note, # 暂时复用note，前端需区分展示场景
         })
         
     return jsonify({
@@ -115,7 +121,9 @@ def get_task_detail(task_id):
          return jsonify({"ok": False, "error": "forbidden"}), 403
 
     status = "pending"
-    if task.student_submitted:
+    if task.status == "done":
+        status = "completed"
+    elif task.student_submitted:
         status = "submitted"
     elif task.actual_seconds and task.actual_seconds > 0:
         status = "in_progress"
@@ -132,6 +140,12 @@ def get_task_detail(task_id):
             "status": status,
             "is_locked": False,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+            # 反馈字段
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "teacher_note": task.note,
+            "student_note": task.student_note,
+            "evidence_photos": json.loads(task.evidence_photos) if task.evidence_photos else []
         }
     })
 

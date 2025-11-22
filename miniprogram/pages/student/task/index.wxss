@@ -201,3 +201,21 @@
 .btn-submit[disabled] {
   background: #ccc;
 }
+
+.feedback-card {
+  background: #e8f5e9;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  border: 1rpx solid #c8e6c9;
+}
+
+.highlight {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.status-completed {
+  color: #4caf50;
+  font-weight: bold;
+}

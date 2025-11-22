@@ -39,10 +39,20 @@ Page({
             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
             if (res.ok && res.task) {
                 const isSpeaking = res.task.module && (res.task.module.includes('口语') || res.task.module.includes('Speaking'))
+
+                // 处理图片URL
+                const baseUrl = getApp().globalData.baseUrl
+                const images = (res.task.evidence_photos || []).map(url => {
+                    if (url.startsWith('http')) return url
+                    return `${baseUrl}${url}`
+                })
+
                 this.setData({
                     task: res.task,
                     statusText: this.getStatusText(res.task.status),
-                    showAudio: isSpeaking
+                    showAudio: isSpeaking,
+                    images: images,
+                    note: res.task.student_note || ''
                 })
             } else {
                 wx.showToast({ title: '获取任务详情失败', icon: 'none' })
@@ -59,7 +69,8 @@ Page({
         const map = {
             'pending': '待完成',
             'in_progress': '进行中',
-            'submitted': '已提交',
+            'submitted': '审核中',
+            'completed': '已完成',
             'approved': '已通过',
             'rejected': '需修改'
         }

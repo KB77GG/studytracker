@@ -15,14 +15,31 @@
     </view>
     <view class="info-row">
       <text class="label">状态</text>
-      <text class="value status-{{task.student_status}}">{{statusText}}</text>
+      <text class="value status-{{task.status}}">{{statusText}}</text>
+    </view>
+  </view>
+
+  <!-- 老师反馈 (仅已完成显示) -->
+  <view class="feedback-card" wx:if="{{task.status === 'completed'}}">
+    <view class="section-title">👩‍🏫 老师反馈</view>
+    <view class="info-row" wx:if="{{task.accuracy !== null}}">
+      <text class="label">正确率</text>
+      <text class="value highlight">{{task.accuracy}}%</text>
+    </view>
+    <view class="info-row" wx:if="{{task.completion_rate !== null}}">
+      <text class="label">完成率</text>
+      <text class="value highlight">{{task.completion_rate}}%</text>
+    </view>
+    <view class="info-row" wx:if="{{task.teacher_note}}">
+      <text class="label">评语</text>
+      <text class="value">{{task.teacher_note}}</text>
     </view>
   </view>
 
   <!-- 录音区域 (仅口语任务显示) -->
   <view class="upload-section" wx:if="{{showAudio}}">
     <text class="section-title">📢 口语录音</text>
-    <view class="audio-recorder">
+    <view class="audio-recorder" wx:if="{{task.status !== 'submitted' && task.status !== 'completed'}}">
       <button class="record-btn {{recording ? 'recording' : ''}}" 
               bindtouchstart="startRecord" 
               bindtouchend="stopRecord">
@@ -35,7 +52,7 @@
       <view class="audio-item" wx:for="{{audioFiles}}" wx:key="index">
         <text class="audio-name">录音 {{index + 1}}</text>
         <button class="btn-play" size="mini" bindtap="playAudio" data-url="{{item}}">播放</button>
-        <button class="btn-delete" size="mini" bindtap="deleteAudio" data-index="{{index}}">删除</button>
+        <button class="btn-delete" size="mini" bindtap="deleteAudio" data-index="{{index}}" wx:if="{{task.status !== 'submitted' && task.status !== 'completed'}}">删除</button>
       </view>
     </view>
   </view>
@@ -46,9 +63,9 @@
     <view class="image-grid">
       <view class="image-item" wx:for="{{images}}" wx:key="index">
         <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}"></image>
-        <icon type="clear" size="20" class="delete-icon" bindtap="deleteImage" data-index="{{index}}"></icon>
+        <icon type="clear" size="20" class="delete-icon" bindtap="deleteImage" data-index="{{index}}" wx:if="{{task.status !== 'submitted' && task.status !== 'completed'}}"></icon>
       </view>
-      <view class="image-item add-btn" bindtap="chooseImage" wx:if="{{images.length < 9}}">
+      <view class="image-item add-btn" bindtap="chooseImage" wx:if="{{images.length < 9 && task.status !== 'submitted' && task.status !== 'completed'}}">
         <text>+</text>
       </view>
     </view>
@@ -57,13 +74,16 @@
   <!-- 备注 -->
   <view class="upload-section">
     <text class="section-title">💬 备注（可选）</text>
-    <textarea class="note-input" placeholder="写下你的学习笔记或遇到的问题..." model:value="{{note}}" maxlength="300"></textarea>
+    <textarea class="note-input" placeholder="写下你的学习笔记或遇到的问题..." model:value="{{note}}" maxlength="300" disabled="{{task.status === 'submitted' || task.status === 'completed'}}"></textarea>
   </view>
 
   <!-- 提交按钮 -->
-  <view class="action-buttons">
+  <view class="action-buttons" wx:if="{{task.status !== 'submitted' && task.status !== 'completed'}}">
     <button class="btn-submit" bindtap="submitTask" disabled="{{submitting}}">
       {{submitting ? '提交中...' : '提交任务'}}
     </button>
+  </view>
+  <view class="action-buttons" wx:elif="{{task.status === 'submitted'}}">
+    <button class="btn-submit" disabled>已提交，等待老师审核</button>
   </view>
 </view>

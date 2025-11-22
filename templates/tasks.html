@@ -1083,6 +1083,66 @@
         }
       });
     });
+
+    /** 行内编辑：正确率与完成率自动保存 */
+    function setupInlineEdit(selector, fieldName) {
+      document.querySelectorAll(selector).forEach(input => {
+        input.addEventListener('change', async e => {
+          const row = e.target.closest('tr');
+          const id = row.dataset.id;
+          let val = parseFloat(e.target.value);
+
+          if (!Number.isFinite(val)) {
+            alert('请输入有效的数字');
+            e.target.value = e.target.dataset.prev || '';
+            return;
+          }
+          if (val < 0 || val > 100) {
+            alert('数值必须在 0 到 100 之间');
+            e.target.value = e.target.dataset.prev || '';
+            return;
+          }
+
+          try {
+            const payload = {};
+            payload[fieldName] = val;
+
+            const res = await fetch(`/api/tasks/${id}/edit`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (!data.ok) throw new Error(data.error || 'update_failed');
+
+            // 更新成功，保存当前值为上次有效值
+            e.target.dataset.prev = val;
+
+            // 如果是完成率，更新 dataset.completion
+            if (fieldName === 'completion_rate') {
+              row.dataset.completion = val;
+            }
+
+            // 视觉反馈（可选：闪烁一下边框）
+            e.target.style.borderColor = '#4caf50';
+            setTimeout(() => e.target.style.borderColor = '', 1000);
+
+          } catch (err) {
+            alert('保存失败，请重试');
+            e.target.value = e.target.dataset.prev || '';
+          }
+        });
+
+        // 初始化 prev 值
+        if (input.value) {
+          input.dataset.prev = input.value;
+        }
+      });
+    }
+
+    setupInlineEdit('.accuracy-input', 'accuracy');
+    setupInlineEdit('.progress-input', 'completion_rate');
+
     // === 筛选逻辑（前端过滤当前列表） ===
     (function () {
       const studentInp = document.getElementById('filterStudent');

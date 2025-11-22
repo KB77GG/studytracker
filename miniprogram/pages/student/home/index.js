@@ -50,7 +50,8 @@ Page({
         const map = {
             'pending': '待完成',
             'in_progress': '进行中',
-            'submitted': '已提交',
+            'submitted': '审核中',
+            'completed': '已完成',
             'approved': '已通过',
             'rejected': '需修改'
         }
