@@ -1485,6 +1485,84 @@ def api_task_edit(tid):
     })
 
 
+# ---- 批改任务页面和API ----
+@app.route("/tasks/<int:tid>/review")
+@login_required
+def review_task_page(tid):
+    """批改任务页面"""
+    task = Task.query.get_or_404(tid)
+    evidence_photos = []
+    if task.evidence_photos:
+        try:
+            import json
+            evidence_photos = json.loads(task.evidence_photos)
+        except:
+            pass
+    return render_template("review_task.html", task=task, evidence_photos=evidence_photos)
+
+
+@app.post("/api/tasks/<int:tid>/review")
+@login_required
+def api_review_task(tid):
+    """提交批改（图片+音频+文本）"""
+    task = Task.query.get_or_404(tid)
+    
+    # 1. Handle Image Upload (Annotated)
+    if "feedback_image" in request.files:
+        f = request.files["feedback_image"]
+        if f and f.filename:
+            filename = f"feedback_img_{tid}_{uuid.uuid4().hex}.png"
+            path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            f.save(path)
+            task.feedback_image = f"/uploads/{filename}"
+            
+    # 2. Handle Audio Upload
+    if "feedback_audio" in request.files:
+        f = request.files["feedback_audio"]
+        if f and f.filename:
+            # Save original (likely webm)
+            raw_filename = f"feedback_audio_{tid}_{uuid.uuid4().hex}.webm"
+            raw_path = os.path.join(app.config["UPLOAD_FOLDER"], raw_filename)
+            f.save(raw_path)
+            
+            # Convert to MP3 using ffmpeg
+            mp3_filename = raw_filename.replace(".webm", ".mp3")
+            mp3_path = os.path.join(app.config["UPLOAD_FOLDER"], mp3_filename)
+            
+            try:
+                subprocess.run(
+                    ["ffmpeg", "-i", raw_path, "-acodec", "libmp3lame", "-y", mp3_path],
+                    check=True,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+                task.feedback_audio = f"/uploads/{mp3_filename}"
+                # Clean up webm file
+                os.remove(raw_path)
+            except Exception as e:
+                current_app.logger.error(f"Audio conversion failed: {e}")
+
+    # 3. Update Text Fields
+    data = request.form
+    if "accuracy" in data:
+        try:
+            task.accuracy = float(data["accuracy"])
+        except:
+            pass
+    if "completion_rate" in data:
+        try:
+            task.completion_rate = float(data["completion_rate"])
+        except:
+            pass
+    if "note" in data:
+        task.note = data["note"]
+        
+    task.status = "done"
+    db.session.commit()
+    
+    return jsonify({"ok": True})
+
+
 # ---- 计时会话：开始/结束 ----
 
 
