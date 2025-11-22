@@ -1490,6 +1490,11 @@ def api_task_edit(tid):
 @login_required
 def review_task_page(tid):
     """批改任务页面"""
+    # 权限检查：只有老师、助教、管理员可以批改
+    if current_user.role not in ["teacher", "assistant", "admin"]:
+        flash("您没有权限访问此页面", "error")
+        return redirect(url_for("index"))
+    
     task = Task.query.get_or_404(tid)
     evidence_photos = []
     if task.evidence_photos:
@@ -1505,6 +1510,10 @@ def review_task_page(tid):
 @login_required
 def api_review_task(tid):
     """提交批改（图片+音频+文本）"""
+    # 权限检查：只有老师、助教、管理员可以批改
+    if current_user.role not in ["teacher", "assistant", "admin"]:
+        return jsonify({"ok": False, "error": "no_permission"}), 403
+    
     task = Task.query.get_or_404(tid)
     
     # 1. Handle Image Upload (Annotated)
