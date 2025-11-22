@@ -332,7 +332,7 @@
                 <button class="btn-start" type="button">开始计时</button>
                 <button class="btn-pause" type="button" style="display:none;">暂停</button>
                 <button class="btn-stop" type="button" style="display:none;">结束</button>
-                {% if task.student_submitted and task.status != 'done' %}
+                {% if t.student_submitted and t.status != 'done' %}
                 <button class="btn-review" type="button"
                   style="background-color: #277C78; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">批改</button>
                 {% endif %}
