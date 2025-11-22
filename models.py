@@ -474,6 +474,10 @@ class Task(db.Model):
     submitted_at = db.Column(db.DateTime)
     evidence_photos = db.Column(db.Text)  # JSON array of URLs
     student_note = db.Column(db.Text)
+    
+    # Teacher Feedback
+    feedback_audio = db.Column(db.String(200))
+    feedback_image = db.Column(db.String(200))
 
     creator = db.relationship("User", backref=db.backref("legacy_tasks", lazy="dynamic"))
 

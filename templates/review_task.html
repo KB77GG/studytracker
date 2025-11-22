@@ -1,0 +1,407 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="review-container">
+    <div class="review-header">
+        <h2>批改任务: {{ task.student_name }} - {{ task.category }}</h2>
+        <a href="/tasks" class="back-link">返回列表</a>
+    </div>
+
+    <div class="review-layout">
+        <!-- Left: Image List -->
+        <div class="image-list">
+            <h3>学生提交</h3>
+            {% for photo in evidence_photos %}
+            <img src="{{ photo }}" class="thumb" onclick="loadImage('{{ photo }}')">
+            {% else %}
+            <p class="no-data">无图片</p>
+            {% endfor %}
+            <div class="canvas-controls">
+                <button type="button" onclick="setPenColor('red')" class="color-btn red active"></button>
+                <button type="button" onclick="setPenColor('blue')" class="color-btn blue"></button>
+                <button type="button" onclick="setPenColor('green')" class="color-btn green"></button>
+                <button type="button" onclick="clearCanvas()" class="control-btn">清除画布</button>
+            </div>
+        </div>
+
+        <!-- Center: Canvas -->
+        <div class="canvas-wrapper">
+            <canvas id="reviewCanvas"></canvas>
+            <div id="canvasPlaceholder">请点击左侧图片加载</div>
+        </div>
+
+        <!-- Right: Feedback Form -->
+        <div class="feedback-panel">
+            <h3>反馈与评分</h3>
+
+            <div class="form-group">
+                <label>语音反馈</label>
+                <div class="audio-recorder">
+                    <button type="button" id="recordBtn" class="record-btn">按住录音</button>
+                    <audio id="audioPreview" controls style="display:none; margin-top:10px; width:100%"></audio>
+                    <div id="recordStatus" class="status-text"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>正确率 (0-100)</label>
+                <input type="number" id="accuracy" value="{{ task.accuracy or '' }}" min="0" max="100" step="0.1">
+            </div>
+
+            <div class="form-group">
+                <label>完成率 (0-100)</label>
+                <input type="number" id="completionRate" value="{{ task.completion_rate or '' }}" min="0" max="100"
+                    step="0.1">
+            </div>
+
+            <div class="form-group">
+                <label>评语</label>
+                <textarea id="note" rows="4">{{ task.note or '' }}</textarea>
+            </div>
+
+            <button type="button" id="submitBtn" class="submit-btn">提交批改</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+<style>
+    .review-container {
+        padding: 20px;
+        height: calc(100vh - 60px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .review-layout {
+        display: flex;
+        gap: 20px;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .image-list {
+        width: 150px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: auto;
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .thumb {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        cursor: pointer;
+        border: 2px solid transparent;
+        border-radius: 4px;
+    }
+
+    .thumb:hover {
+        border-color: #277C78;
+    }
+
+    .canvas-wrapper {
+        flex: 1;
+        background: #e0e0e0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #canvasPlaceholder {
+        color: #666;
+    }
+
+    .feedback-panel {
+        width: 300px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        overflow-y: auto;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .record-btn {
+        width: 100%;
+        padding: 10px;
+        background: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .record-btn.recording {
+        background: #ff4d4f;
+        color: white;
+        border-color: #ff4d4f;
+    }
+
+    .submit-btn {
+        margin-top: auto;
+        padding: 12px;
+        background: #277C78;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .canvas-controls {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .color-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+    }
+
+    .color-btn.active {
+        transform: scale(1.2);
+        border-color: #333;
+    }
+
+    .color-btn.red {
+        background: red;
+    }
+
+    .color-btn.blue {
+        background: blue;
+    }
+
+    .color-btn.green {
+        background: green;
+    }
+
+    .control-btn {
+        width: 100%;
+        padding: 5px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    let canvas;
+    let audioBlob = null;
+    let mediaRecorder;
+    let audioChunks = [];
+    let currentImageScale = 1;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Init Fabric Canvas
+        const wrapper = document.querySelector('.canvas-wrapper');
+        const width = wrapper.clientWidth;
+        const height = wrapper.clientHeight;
+
+        // Create canvas element dynamically to fit wrapper
+        const canvasEl = document.getElementById('reviewCanvas');
+        canvasEl.width = width;
+        canvasEl.height = height;
+
+        canvas = new fabric.Canvas('reviewCanvas', {
+            isDrawingMode: true,
+            width: width,
+            height: height
+        });
+
+        canvas.freeDrawingBrush.width = 3;
+        canvas.freeDrawingBrush.color = 'red';
+
+        // Audio Recording
+        const recordBtn = document.getElementById('recordBtn');
+        const audioPreview = document.getElementById('audioPreview');
+        const statusText = document.getElementById('recordStatus');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            recordBtn.addEventListener('mousedown', startRecording);
+            recordBtn.addEventListener('mouseup', stopRecording);
+            recordBtn.addEventListener('mouseleave', stopRecording);
+
+            // Touch events for mobile/tablet
+            recordBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startRecording(); });
+            recordBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopRecording(); });
+        } else {
+            statusText.textContent = "您的浏览器不支持录音";
+            recordBtn.disabled = true;
+        }
+
+        function startRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') return;
+
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                    mediaRecorder.onstop = () => {
+                        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioPreview.src = audioUrl;
+                        audioPreview.style.display = 'block';
+                        statusText.textContent = "录音已完成";
+                    };
+                    mediaRecorder.start();
+                    recordBtn.classList.add('recording');
+                    recordBtn.textContent = "松开结束";
+                    statusText.textContent = "录音中...";
+                })
+                .catch(err => {
+                    console.error(err);
+                    statusText.textContent = "无法访问麦克风";
+                });
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                recordBtn.classList.remove('recording');
+                recordBtn.textContent = "按住录音";
+
+                // Stop all tracks
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        // Submit
+        document.getElementById('submitBtn').addEventListener('click', async () => {
+            const formData = new FormData();
+
+            // 1. Get Canvas Image
+            if (canvas.getObjects().length > 0 || canvas.backgroundImage) {
+                // Convert canvas to blob
+                // Note: We need to handle scaling back if we want high res, 
+                // but for now screen res is fine.
+                const dataUrl = canvas.toDataURL({ format: 'png' });
+                const res = await fetch(dataUrl);
+                const blob = await res.blob();
+                formData.append('feedback_image', blob, 'feedback.png');
+            }
+
+            // 2. Get Audio
+            if (audioBlob) {
+                formData.append('feedback_audio', audioBlob, 'feedback.webm');
+            }
+
+            // 3. Text Data
+            formData.append('accuracy', document.getElementById('accuracy').value);
+            formData.append('completion_rate', document.getElementById('completionRate').value);
+            formData.append('note', document.getElementById('note').value);
+
+            // Submit
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = "提交中...";
+
+            try {
+                const resp = await fetch('/api/tasks/{{ task.id }}/review', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await resp.json();
+                if (result.ok) {
+                    alert('批改完成！');
+                    window.location.href = '/tasks';
+                } else {
+                    alert('提交失败: ' + (result.error || '未知错误'));
+                    btn.disabled = false;
+                    btn.textContent = "提交批改";
+                }
+            } catch (err) {
+                console.error(err);
+                alert('网络错误');
+                btn.disabled = false;
+                btn.textContent = "提交批改";
+            }
+        });
+    });
+
+    function loadImage(url) {
+        document.getElementById('canvasPlaceholder').style.display = 'none';
+        fabric.Image.fromURL(url, function (img) {
+            // Scale image to fit canvas
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+            const imgRatio = img.width / img.height;
+            const canvasRatio = canvasWidth / canvasHeight;
+
+            if (imgRatio > canvasRatio) {
+                img.scaleToWidth(canvasWidth);
+            } else {
+                img.scaleToHeight(canvasHeight);
+            }
+
+            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+                originX: 'left',
+                originY: 'top',
+                left: (canvasWidth - img.getScaledWidth()) / 2,
+                top: (canvasHeight - img.getScaledHeight()) / 2
+            });
+
+            // Clear previous drawings? Maybe ask user. For now, clear.
+            canvas.clear();
+            // Re-set background (clear removes it)
+            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+                originX: 'left',
+                originY: 'top',
+                left: (canvasWidth - img.getScaledWidth()) / 2,
+                top: (canvasHeight - img.getScaledHeight()) / 2
+            });
+        }, { crossOrigin: 'anonymous' });
+    }
+
+    function setPenColor(color) {
+        canvas.freeDrawingBrush.color = color;
+        document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.color-btn.${color}`).classList.add('active');
+    }
+
+    function clearCanvas() {
+        // Keep background, clear objects
+        const bg = canvas.backgroundImage;
+        canvas.clear();
+        if (bg) {
+            canvas.setBackgroundImage(bg, canvas.renderAll.bind(canvas));
+        }
+    }
+</script>
+{% endblock %}

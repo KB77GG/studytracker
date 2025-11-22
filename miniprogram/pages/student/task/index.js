@@ -14,7 +14,10 @@ Page({
         audioFiles: [],
         images: [],
         note: '',
-        submitting: false
+        submitting: false,
+        showAudio: false,
+        playingFeedback: false,
+        baseUrl: 'https://studytracker.xin'
     },
 
     onLoad(options) {
@@ -199,5 +202,38 @@ Page({
                 fail: reject
             })
         })
+    },
+
+    // 播放老师语音反馈
+    playFeedbackAudio() {
+        const audioUrl = `${this.data.baseUrl}${this.data.task.feedback_audio}`;
+        const innerAudioContext = wx.createInnerAudioContext();
+
+        if (this.data.playingFeedback) {
+            innerAudioContext.stop();
+            this.setData({ playingFeedback: false });
+        } else {
+            innerAudioContext.src = audioUrl;
+            innerAudioContext.play();
+            this.setData({ playingFeedback: true });
+
+            innerAudioContext.onEnded(() => {
+                this.setData({ playingFeedback: false });
+            });
+
+            innerAudioContext.onError((res) => {
+                wx.showToast({ title: '播放失败', icon: 'none' });
+                this.setData({ playingFeedback: false });
+            });
+        }
+    },
+
+    // 预览批注图片
+    previewFeedbackImage() {
+        const imageUrl = `${this.data.baseUrl}${this.data.task.feedback_image}`;
+        wx.previewImage({
+            urls: [imageUrl],
+            current: imageUrl
+        });
     }
 })

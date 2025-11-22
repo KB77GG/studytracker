@@ -22,6 +22,23 @@
   <!-- 老师反馈 (仅已完成显示) -->
   <view class="feedback-card" wx:if="{{task.status === 'completed'}}">
     <view class="section-title">👩‍🏫 老师反馈</view>
+    
+    <!-- 批注图片 -->
+    <view class="feedback-image" wx:if="{{task.feedback_image}}">
+      <text class="label">批注图片</text>
+      <image src="{{baseUrl}}{{task.feedback_image}}" mode="aspectFit" bindtap="previewFeedbackImage" class="annotated-image"></image>
+    </view>
+    
+    <!-- 语音反馈 -->
+    <view class="feedback-audio" wx:if="{{task.feedback_audio}}">
+      <text class="label">语音反馈</text>
+      <view class="audio-player">
+        <button class="btn-play-feedback" bindtap="playFeedbackAudio" size="mini">
+          {{playingFeedback ? '暂停' : '播放'}}
+        </button>
+      </view>
+    </view>
+    
     <view class="info-row" wx:if="{{task.accuracy !== null}}">
       <text class="label">正确率</text>
       <text class="value highlight">{{task.accuracy}}%</text>

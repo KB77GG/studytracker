@@ -219,3 +219,26 @@
   color: #4caf50;
   font-weight: bold;
 }
+
+.feedback-image {
+  margin: 20rpx 0;
+}
+
+.annotated-image {
+  width: 100%;
+  border-radius: 10rpx;
+  margin-top: 10rpx;
+}
+
+.feedback-audio {
+  margin: 20rpx 0;
+}
+
+.audio-player {
+  margin-top: 10rpx;
+}
+
+.btn-play-feedback {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}

@@ -333,8 +333,8 @@
                 <button class="btn-pause" type="button" style="display:none;">暂停</button>
                 <button class="btn-stop" type="button" style="display:none;">结束</button>
                 {% if t.student_submitted and t.status != 'done' %}
-                <button class="btn-review" type="button"
-                  style="background-color: #277C78; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">批改</button>
+                <a href="/tasks/{{ t.id }}/review" target="_blank" class="btn-review"
+                  style="display:inline-block; text-decoration:none; background-color: #277C78; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">批改</a>
                 {% endif %}
                 <button class="btn-edit" type="button">编辑</button>
                 <button class="btn-delete" type="button">删除</button>
@@ -948,12 +948,14 @@
       });
     });
 
+    /*
     document.querySelectorAll('.btn-review').forEach(btn => {
       btn.addEventListener('click', e => {
         const row = e.target.closest('tr');
         openEditModal(row, true);
       });
     });
+    */
 
     document.getElementById('editCancel').addEventListener('click', e => {
       e.preventDefault();

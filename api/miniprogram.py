@@ -145,7 +145,9 @@ def get_task_detail(task_id):
             "completion_rate": task.completion_rate,
             "teacher_note": task.note,
             "student_note": task.student_note,
-            "evidence_photos": json.loads(task.evidence_photos) if task.evidence_photos else []
+            "evidence_photos": json.loads(task.evidence_photos) if task.evidence_photos else [],
+            "feedback_image": task.feedback_image,
+            "feedback_audio": task.feedback_audio
         }
     })
 
