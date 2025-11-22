@@ -332,6 +332,10 @@
                 <button class="btn-start" type="button">开始计时</button>
                 <button class="btn-pause" type="button" style="display:none;">暂停</button>
                 <button class="btn-stop" type="button" style="display:none;">结束</button>
+                {% if task.student_submitted and task.status != 'done' %}
+                <button class="btn-review" type="button"
+                  style="background-color: #277C78; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">批改</button>
+                {% endif %}
                 <button class="btn-edit" type="button">编辑</button>
                 <button class="btn-delete" type="button">删除</button>
               </td>
@@ -683,7 +687,15 @@
   <div id="editModal" class="modal hidden" aria-modal="true" role="dialog">
     <div id="editBackdrop" class="backdrop"></div>
     <div class="card">
-      <h3>编辑任务</h3>
+      <h3 id="modalTitle">编辑任务</h3>
+      <div class="row">
+        <label for="editStatus">状态</label>
+        <select id="editStatus" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+          <option value="pending">未开始</option>
+          <option value="progress">进行中</option>
+          <option value="done">已完成</option>
+        </select>
+      </div>
       <div class="row">
         <label for="editDetail">任务内容</label>
         <input id="editDetail" type="text" placeholder="请输入任务内容">
@@ -707,6 +719,8 @@
       <div class="actions">
         <button id="editCancel" type="button">取消</button>
         <button id="editSave" type="button">保存</button>
+        <button id="editComplete" type="button"
+          style="background-color: #277C78; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; display: none;">完成批改</button>
       </div>
     </div>
   </div>
@@ -877,8 +891,22 @@
     /* ==== 编辑对话框（替代 prompt） ==== */
     let editingRow = null;
 
-    function openEditModal(row) {
+    function openEditModal(row, isReview = false) {
       editingRow = row;
+      const title = document.getElementById('modalTitle');
+      const saveBtn = document.getElementById('editSave');
+      const completeBtn = document.getElementById('editComplete');
+
+      if (isReview) {
+        title.textContent = '批改任务';
+        saveBtn.style.display = 'none';
+        completeBtn.style.display = 'inline-block';
+      } else {
+        title.textContent = '编辑任务';
+        saveBtn.style.display = 'inline-block';
+        completeBtn.style.display = 'none';
+      }
+
       const detail = row.querySelector('.task-detail')?.textContent?.trim() || '';
       const note = row.querySelector('.task-note')?.textContent?.trim() || '';
       document.getElementById('editDetail').value = detail;
@@ -888,6 +916,11 @@
       const accInput = row.querySelector('.accuracy-input');
       const accVal = accInput ? parseFloat(accInput.value) || 0 : 0;
       document.getElementById('editAccuracy').value = formatPercent(accVal);
+
+      const statusSelect = row.querySelector('.status-select');
+      const currentStatus = statusSelect ? statusSelect.value : 'pending';
+      document.getElementById('editStatus').value = currentStatus;
+
       const progressField = document.getElementById('editProgress');
       const manualCompletion = row.dataset.completion || '';
       const autoProgress = row.dataset.autoProgress || '';
@@ -911,7 +944,14 @@
     document.querySelectorAll('.btn-edit').forEach(btn => {
       btn.addEventListener('click', e => {
         const row = e.target.closest('tr');
-        openEditModal(row);
+        openEditModal(row, false);
+      });
+    });
+
+    document.querySelectorAll('.btn-review').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const row = e.target.closest('tr');
+        openEditModal(row, true);
       });
     });
 
@@ -948,6 +988,8 @@
         }
       }
 
+      const newStatus = document.getElementById('editStatus').value;
+
       try {
         const res = await fetch(`/api/tasks/${id}/edit`, {
           method: 'POST',
@@ -957,7 +999,8 @@
             note: newNote,
             planned_minutes: newPlanned,
             accuracy: newAccuracy,
-            completion_rate: newProgress
+            completion_rate: newProgress,
+            status: newStatus
           })
         });
         const data = await res.json();
@@ -1012,10 +1055,28 @@
           }
         }
         if (window.applyTaskFilters) window.applyTaskFilters();
+
+        // Update status select and badge
+        const statusSelect = editingRow.querySelector('.status-select');
+        if (statusSelect) {
+          statusSelect.value = data.task.status;
+          // Trigger change event to update badge
+          statusSelect.dispatchEvent(new Event('change'));
+        }
+
         closeEditModal();
       } catch (err) {
         alert('更新失败，请稍后重试');
       }
+    });
+
+    document.getElementById('editComplete').addEventListener('click', async e => {
+      e.preventDefault();
+      if (!editingRow) return;
+      // Force status to done
+      document.getElementById('editStatus').value = 'done';
+      // Trigger save click
+      document.getElementById('editSave').click();
     });
 
     /** 状态下拉：无刷新更新状态并同步徽章显示 */
