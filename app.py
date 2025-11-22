@@ -332,6 +332,16 @@ def create_student_parent_accounts(full_name: str) -> dict[str, str]:
         profile_kwargs["primary_parent"] = parent_user
     profile = StudentProfile(**profile_kwargs)
     db.session.add(profile)
+    
+    # [NEW] Create ParentStudentLink for Miniprogram support
+    link = ParentStudentLink(
+        parent_id=parent_user.id,
+        student_name=clean_name,
+        relation="家长",
+        is_active=True
+    )
+    db.session.add(link)
+
     try:
         db.session.commit()
     except Exception as exc:  # noqa: BLE001
