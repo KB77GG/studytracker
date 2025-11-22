@@ -1,3 +1,39 @@
 <view class="container">
-  <text>Parent Report Page</text>
+  <view class="header">
+    <text class="title">{{studentName}}的学习周报</text>
+  </view>
+
+  <block wx:if="{{stats && stats.weekly}}">
+    <!-- 图表卡片 -->
+    <view class="chart-card">
+      <view class="card-title">本周完成率趋势</view>
+      <view class="chart-container">
+        <view class="bar-group" wx:for="{{stats.weekly}}" wx:key="date">
+          <view class="bar-wrapper">
+            <view class="bar" style="height: {{item.rate}}%; background: {{item.rate >= 80 ? '#4caf50' : (item.rate >= 60 ? '#ff9800' : '#f44336')}}"></view>
+          </view>
+          <text class="date-label">{{item.date}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 详细数据列表 -->
+    <view class="list-card">
+      <view class="card-title">每日详情</view>
+      <view class="data-list">
+        <view class="list-header">
+          <text class="col">日期</text>
+          <text class="col">总任务</text>
+          <text class="col">已完成</text>
+          <text class="col">完成率</text>
+        </view>
+        <view class="list-item" wx:for="{{stats.weekly}}" wx:key="date">
+          <text class="col">{{item.date}}</text>
+          <text class="col">{{item.total}}</text>
+          <text class="col">{{item.completed}}</text>
+          <text class="col {{item.rate >= 80 ? 'good' : (item.rate >= 60 ? 'fair' : 'poor')}}">{{item.rate}}%</text>
+        </view>
+      </view>
+    </view>
+  </block>
 </view>

@@ -306,3 +306,128 @@ def get_child_report():
         report_data["summary"] = f"今日计划 {total_count} 项任务，已完成 {completed_count} 项。"
         
     return jsonify({"ok": True, "report": report_data})
+
+# --- 家长接口 ---
+
+@mp_bp.route("/parent/students", methods=["GET"])
+@require_api_user(User.ROLE_PARENT)
+def get_parent_students():
+    """获取家长绑定的学生列表"""
+    user = request.current_api_user
+    
+    # 通过 ParentStudentLink 查询
+    links = ParentStudentLink.query.filter_by(
+        parent_id=user.id,
+        is_active=True
+    ).all()
+    
+    students = []
+    for link in links:
+        students.append({
+            "name": link.student_name,
+            "relation": link.relation or "家长"
+        })
+        
+    return jsonify({
+        "ok": True,
+        "students": students
+    })
+
+@mp_bp.route("/parent/stats", methods=["GET"])
+@require_api_user(User.ROLE_PARENT)
+def get_parent_stats():
+    """获取指定学生的统计数据"""
+    from models import Task
+    
+    user = request.current_api_user
+    student_name = request.args.get("student_name")
+    
+    if not student_name:
+        return jsonify({"ok": False, "error": "missing_student_name"}), 400
+        
+    # 验证绑定关系
+    link = ParentStudentLink.query.filter_by(
+        parent_id=user.id,
+        student_name=student_name,
+        is_active=True
+    ).first()
+    
+    if not link:
+        return jsonify({"ok": False, "error": "student_not_bound"}), 403
+        
+    today = date.today()
+    
+    # 1. 今日任务概览
+    today_tasks = Task.query.filter_by(
+        student_name=student_name,
+        date=today.isoformat()
+    ).all()
+    
+    total_tasks = len(today_tasks)
+    completed_count = 0
+    pending_review_count = 0
+    in_progress_count = 0
+    
+    for t in today_tasks:
+        if t.status == "done":
+            completed_count += 1
+        elif t.student_submitted:
+            pending_review_count += 1
+        elif t.actual_seconds and t.actual_seconds > 0:
+            in_progress_count += 1
+            
+    completion_rate = round(completed_count / total_tasks * 100) if total_tasks > 0 else 0
+    
+    # 2. 最近动态 (最近完成的5个任务)
+    recent_tasks = Task.query.filter(
+        Task.student_name == student_name,
+        Task.status == "done"
+    ).order_by(Task.date.desc(), Task.id.desc()).limit(5).all()
+    
+    recent_feed = []
+    for t in recent_tasks:
+        recent_feed.append({
+            "id": t.id,
+            "date": t.date,
+            "category": t.category,
+            "detail": t.detail,
+            "accuracy": t.accuracy,
+            "completion_rate": t.completion_rate,
+            "teacher_note": t.note
+        })
+
+    # 3. 本周趋势 (过去7天)
+    from datetime import timedelta
+    weekly_stats = []
+    for i in range(6, -1, -1):
+        day = today - timedelta(days=i)
+        day_str = day.isoformat()
+        
+        day_tasks = Task.query.filter_by(
+            student_name=student_name,
+            date=day_str
+        ).all()
+        
+        d_total = len(day_tasks)
+        d_completed = sum(1 for t in day_tasks if t.status == "done")
+        d_rate = round(d_completed / d_total * 100) if d_total > 0 else 0
+        
+        weekly_stats.append({
+            "date": day.strftime("%m-%d"),
+            "total": d_total,
+            "completed": d_completed,
+            "rate": d_rate
+        })
+        
+    return jsonify({
+        "ok": True,
+        "today": {
+            "total": total_tasks,
+            "completed": completed_count,
+            "pending": pending_review_count,
+            "in_progress": in_progress_count,
+            "rate": completion_rate
+        },
+        "recent": recent_feed,
+        "weekly": weekly_stats
+    })

@@ -1,3 +1,81 @@
 <view class="container">
-  <text>Parent Home</text>
+  <block wx:if="{{students.length > 0}}">
+    <!-- 顶部栏 -->
+    <view class="header">
+      <view class="date">{{todayDate}}</view>
+      <picker bindchange="switchStudent" value="{{currentStudentIndex}}" range="{{students}}" range-key="name">
+        <view class="student-picker">
+          <text class="current-student">{{students[currentStudentIndex].name}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 概览卡片 -->
+    <view class="stats-card">
+      <view class="stats-header">
+        <text class="stats-title">今日概览</text>
+        <view class="stats-rate">
+          <text class="rate-num">{{stats.today.rate}}</text>
+          <text class="rate-unit">%</text>
+          <text class="rate-label">完成率</text>
+        </view>
+      </view>
+      <view class="stats-grid">
+        <view class="grid-item">
+          <text class="num">{{stats.today.pending}}</text>
+          <text class="label">待审核</text>
+        </view>
+        <view class="grid-item">
+          <text class="num">{{stats.today.completed}}</text>
+          <text class="label">已完成</text>
+        </view>
+        <view class="grid-item">
+          <text class="num">{{stats.today.in_progress}}</text>
+          <text class="label">进行中</text>
+        </view>
+        <view class="grid-item">
+          <text class="num">{{stats.today.total}}</text>
+          <text class="label">总任务</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最近动态 -->
+    <view class="section-title">最近动态</view>
+    <view class="feed-list">
+      <block wx:if="{{stats.recent.length > 0}}">
+        <view class="feed-item" wx:for="{{stats.recent}}" wx:key="id">
+          <view class="feed-header">
+            <view class="feed-meta">
+              <text class="feed-cat">{{item.category}}</text>
+              <text class="feed-date">{{item.date}}</text>
+            </view>
+            <view class="feed-score" wx:if="{{item.accuracy !== null}}">
+              正确率 <text class="highlight">{{item.accuracy}}%</text>
+            </view>
+            <view class="feed-score" wx:elif="{{item.completion_rate !== null}}">
+              完成率 <text class="highlight">{{item.completion_rate}}%</text>
+            </view>
+          </view>
+          <view class="feed-content">
+            <text class="feed-detail">{{item.detail}}</text>
+          </view>
+          <view class="feed-feedback" wx:if="{{item.teacher_note}}">
+            <text class="feedback-label">老师评语：</text>
+            <text class="feedback-text">{{item.teacher_note}}</text>
+          </view>
+        </view>
+      </block>
+      <view wx:else class="empty-feed">
+        暂无最近动态
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="empty-state">
+      <text>未绑定任何学生，请联系管理员。</text>
+    </view>
+  </block>
 </view>
