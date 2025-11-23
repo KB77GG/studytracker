@@ -48,4 +48,9 @@
       </view>
     </view>
   </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section">
+    <button class="btn-logout" bindtap="handleLogout">退出登录</button>
+  </view>
 </view>

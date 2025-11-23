@@ -51,6 +51,7 @@ Page({
                     id: t.id,
                     task_name: t.task_name,
                     module: t.module,
+                    moduleClass: this.getModuleClass(t.module),
                     planned_minutes: t.planned_minutes,
                     status: t.status,
                     statusText: this.getStatusText(t.status),
@@ -79,6 +80,15 @@ Page({
             // wx.hideLoading()
             this.setData({ loading: false })
         }
+    },
+
+    getModuleClass(module) {
+        const map = {
+            '语文': 'chinese',
+            '数学': 'math',
+            '英语': 'english'
+        }
+        return map[module] || ''
     },
 
     getStatusText(status) {

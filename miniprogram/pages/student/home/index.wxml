@@ -28,7 +28,7 @@
   <view class="task-list" wx:if="{{tasks.length > 0}}">
     <view class="task-card {{item.isDone ? 'done' : ''}}" wx:for="{{tasks}}" wx:key="id" bindtap="goToTaskDetail" data-id="{{item.id}}">
       <view class="card-left">
-        <view class="task-icon {{item.module}}">{{item.module[0]}}</view>
+        <view class="task-icon {{item.moduleClass}}">{{item.module[0]}}</view>
         <view class="task-content">
           <text class="task-name">{{item.task_name}}</text>
           <text class="task-time">⏱️ {{item.planned_minutes}}分钟</text>

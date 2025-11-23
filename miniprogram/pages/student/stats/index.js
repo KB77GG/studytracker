@@ -48,5 +48,26 @@ Page({
                 }
             })
         })
+    },
+
+    handleLogout() {
+        wx.showModal({
+            title: '提示',
+            content: '确定要退出登录吗？',
+            success: (res) => {
+                if (res.confirm) {
+                    wx.removeStorageSync('token')
+                    wx.removeStorageSync('userInfo')
+                    wx.removeStorageSync('role')
+                    app.globalData.token = null
+                    app.globalData.userInfo = null
+                    app.globalData.role = null
+
+                    wx.reLaunch({
+                        url: '/pages/index/index'
+                    })
+                }
+            }
+        })
     }
 })
