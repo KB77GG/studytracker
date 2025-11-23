@@ -130,8 +130,12 @@ Page({
 
     async handleDebugUnbind() {
         try {
+            console.log('Attempting to unbind...')
             const res = await request('/wechat/unbind', { method: 'POST' })
+            console.log('Unbind response:', res)
+
             if (res.ok) {
+                wx.showToast({ title: '解绑成功', icon: 'success' })
                 wx.removeStorageSync('token')
                 wx.removeStorageSync('userInfo')
                 wx.removeStorageSync('role')
@@ -144,10 +148,13 @@ Page({
                     isGuest: true,
                     showBindForm: false
                 })
+            } else {
+                console.error('Unbind failed, response not ok:', res)
+                wx.showToast({ title: `解绑失败: ${res.error || '未知错误'}`, icon: 'none', duration: 3000 })
             }
         } catch (err) {
-            console.error(err)
-            wx.showToast({ title: '解绑失败', icon: 'none' })
+            console.error('Unbind error:', err)
+            wx.showToast({ title: `解绑失败: ${JSON.stringify(err)}`, icon: 'none', duration: 3000 })
         }
     }
 })
