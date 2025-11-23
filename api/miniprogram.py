@@ -1,13 +1,13 @@
 import os
 import json
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from flask import Blueprint, jsonify, request, current_app, url_for
 from werkzeug.utils import secure_filename
 from sqlalchemy import func, and_
 
 from models import (
     db, User, StudentProfile, StudyPlan, PlanItem, 
-    PlanEvidence, ParentStudentLink, TaskCatalog
+    PlanEvidence, ParentStudentLink, TaskCatalog, Task
 )
 from .auth_utils import require_api_user
 
