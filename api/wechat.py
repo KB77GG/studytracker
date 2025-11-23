@@ -136,70 +136,80 @@ def bind_role():
     data = request.get_json()
     role = data.get("role") # student / parent
     
-    if role == "student":
-        # 学生绑定逻辑：通过姓名匹配现有的 StudentProfile
-        student_name = data.get("name")
-        if not student_name:
-            return jsonify({"ok": False, "error": "missing_name"}), 400
-        
-        profile = StudentProfile.query.filter_by(full_name=student_name).first()
-        if not profile:
-            return jsonify({"ok": False, "error": "student_not_found"}), 404
-        
-        if profile.user_id and profile.user_id != user.id:
-            return jsonify({"ok": False, "error": "already_bound"}), 400
-        
-        # 绑定
-        profile.user_id = user.id
-        profile.wechat_openid = user.wechat_openid
-        user.role = User.ROLE_STUDENT
-        user.display_name = student_name
-        db.session.commit()
-        
-        return jsonify({"ok": True, "role": "student"})
-        
-    elif role == "parent":
-        # 家长绑定逻辑
-        parent_name = data.get("name")
-        phone = data.get("phone")
-        student_name = data.get("student_name")  # 新增：孩子姓名
-        
-        if not parent_name:
-            return jsonify({"ok": False, "error": "missing_name"}), 400
-        
-        if not student_name:
-            return jsonify({"ok": False, "error": "missing_student_name"}), 400
+    try:
+        if role == "student":
+            student_name = data.get("name")
+            if not student_name:
+                return jsonify({"ok": False, "error": "missing_name"}), 400
+                
+            # 查找学生档案
+            profile = StudentProfile.query.filter_by(full_name=student_name).first()
+            if not profile:
+                return jsonify({"ok": False, "error": "student_not_found"}), 404
+                
+            # 检查是否已被绑定
+            if profile.user_id and profile.user_id != user.id:
+                # 检查绑定该学生的用户是否还存在且绑定了微信
+                bound_user = User.query.get(profile.user_id)
+                if bound_user and bound_user.wechat_openid:
+                    return jsonify({"ok": False, "error": "already_bound"}), 400
             
-        # 验证学生是否存在
-        student_profile = StudentProfile.query.filter_by(full_name=student_name).first()
-        if not student_profile:
-            return jsonify({"ok": False, "error": "student_not_found", "message": f"未找到学生'{student_name}'，请确认姓名是否正确"}), 404
-            
-        user.role = User.ROLE_PARENT
-        user.display_name = parent_name
-        db.session.commit()
-        
-        # 创建家长-学生关联
-        # 先检查是否已存在关联
-        existing_link = ParentStudentLink.query.filter_by(
-            parent_id=user.id,
-            student_name=student_name
-        ).first()
-        
-        if not existing_link:
-            link = ParentStudentLink(
-                parent_id=user.id,
-                student_name=student_name,
-                relation="家长",
-                is_active=True
-            )
-            db.session.add(link)
+            # 绑定
+            profile.user_id = user.id
+            profile.wechat_openid = user.wechat_openid
+            user.role = User.ROLE_STUDENT
+            user.display_name = student_name
             db.session.commit()
-        
-        return jsonify({"ok": True, "role": "parent"})
-        
-    else:
-        return jsonify({"ok": False, "error": "invalid_role"}), 400
+            
+            return jsonify({"ok": True, "role": "student"})
+            
+        elif role == "parent":
+            # 家长绑定逻辑
+            parent_name = data.get("name")
+            phone = data.get("phone")
+            student_name = data.get("student_name")  # 新增：孩子姓名
+            
+            if not parent_name:
+                return jsonify({"ok": False, "error": "missing_name"}), 400
+            
+            if not student_name:
+                return jsonify({"ok": False, "error": "missing_student_name"}), 400
+                
+            # 验证学生是否存在
+            student_profile = StudentProfile.query.filter_by(full_name=student_name).first()
+            if not student_profile:
+                return jsonify({"ok": False, "error": "student_not_found", "message": f"未找到学生'{student_name}'，请确认姓名是否正确"}), 404
+                
+            user.role = User.ROLE_PARENT
+            user.display_name = parent_name
+            db.session.commit()
+            
+            # 创建家长-学生关联
+            # 先检查是否已存在关联
+            existing_link = ParentStudentLink.query.filter_by(
+                parent_id=user.id,
+                student_name=student_name
+            ).first()
+            
+            if not existing_link:
+                link = ParentStudentLink(
+                    parent_id=user.id,
+                    student_name=student_name,
+                    relation="家长",
+                    is_active=True
+                )
+                db.session.add(link)
+                db.session.commit()
+            
+            return jsonify({"ok": True, "role": "parent"})
+            
+        else:
+            return jsonify({"ok": False, "error": "invalid_role"}), 400
+            
+    except Exception as e:
+        logger.error(f"Bind role error: {str(e)}")
+        db.session.rollback()
+        return jsonify({"ok": False, "error": "server_error", "message": str(e)}), 500
 
 @wechat_bp.route("/unbind", methods=["POST"])
 def unbind_wechat():
