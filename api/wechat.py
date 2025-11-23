@@ -152,13 +152,39 @@ def bind_role():
         # 家长绑定逻辑
         parent_name = data.get("name")
         phone = data.get("phone")
+        student_name = data.get("student_name")  # 新增：孩子姓名
         
         if not parent_name:
             return jsonify({"ok": False, "error": "missing_name"}), 400
+        
+        if not student_name:
+            return jsonify({"ok": False, "error": "missing_student_name"}), 400
+            
+        # 验证学生是否存在
+        student_profile = StudentProfile.query.filter_by(full_name=student_name).first()
+        if not student_profile:
+            return jsonify({"ok": False, "error": "student_not_found", "message": f"未找到学生'{student_name}'，请确认姓名是否正确"}), 404
             
         user.role = User.ROLE_PARENT
         user.display_name = parent_name
         db.session.commit()
+        
+        # 创建家长-学生关联
+        # 先检查是否已存在关联
+        existing_link = ParentStudentLink.query.filter_by(
+            parent_id=user.id,
+            student_name=student_name
+        ).first()
+        
+        if not existing_link:
+            link = ParentStudentLink(
+                parent_id=user.id,
+                student_name=student_name,
+                relation="家长",
+                is_active=True
+            )
+            db.session.add(link)
+            db.session.commit()
         
         return jsonify({"ok": True, "role": "parent"})
         

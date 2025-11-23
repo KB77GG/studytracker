@@ -3,17 +3,6 @@
 {% block content_dashboard %}
 <h2>用户管理</h2>
 
-<form method="POST" class="user-form" id="auto-student-form">
-  <input type="hidden" name="action" value="auto_student">
-  <label>学生姓名：</label>
-  <input type="text" name="full_name" placeholder="例如：张三" required>
-  <button type="submit">一键创建学生+家长账号</button>
-  <p class="hint">
-    学生账号：姓名；密码：姓名拼音+123。家长账号：姓名家长；密码：姓名拼音+123+prt。
-  </p>
-</form>
-<div id="auto-student-result" class="auto-result" hidden></div>
-
 <form method="POST" class="user-form">
   <input type="hidden" name="action" value="create">
   <label>用户名：</label>
@@ -68,56 +57,6 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     // 自动创建学生 + 家长账号
-    const autoForm = document.getElementById('auto-student-form');
-    if (autoForm && window.fetch) {
-      const submitBtn = autoForm.querySelector('button[type="submit"]');
-      const resultBox = document.getElementById('auto-student-result');
-      const originalBtnText = submitBtn ? submitBtn.textContent : '';
-
-      autoForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const fullNameInput = autoForm.querySelector('[name="full_name"]');
-        const fullName = (fullNameInput ? fullNameInput.value : '').trim();
-        if (!fullName) {
-          alert('请填写学生姓名。');
-          return;
-        }
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = '创建中...';
-        }
-        try {
-          const resp = await fetch('/api/users/auto-student', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ full_name: fullName }),
-          });
-          const data = await resp.json().catch(() => ({}));
-          if (!resp.ok || !data.ok) {
-            const message = data && data.message ? data.message : '创建失败，请稍后再试。';
-            alert(message);
-            return;
-          }
-          autoForm.reset();
-          if (resultBox) {
-            resultBox.hidden = false;
-            resultBox.innerHTML = `
-            <strong>学生账号：</strong>${data.data.student_username} / ${data.data.student_password}<br>
-            <strong>家长账号：</strong>${data.data.parent_username} / ${data.data.parent_password}
-          `;
-          }
-        } catch (err) {
-          console.error(err);
-          alert('网络错误，请稍后再试。');
-        } finally {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalBtnText || '一键创建学生+家长账号';
-          }
-        }
-      });
-    }
-
     // 启用/停用
     const buttons = document.querySelectorAll('.toggle-btn');
     buttons.forEach(btn => {

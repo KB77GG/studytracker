@@ -8,6 +8,7 @@ Page({
         showBindForm: false,
         targetRole: '',
         bindName: '',
+        bindStudentName: '',
         bindPhone: ''
     },
 
@@ -99,15 +100,28 @@ Page({
             return
         }
 
+        // 家长绑定时需要填写孩子姓名
+        if (this.data.targetRole === 'parent' && !this.data.bindStudentName) {
+            wx.showToast({ title: '请输入孩子的姓名', icon: 'none' })
+            return
+        }
+
         wx.showLoading({ title: '绑定中...' })
         try {
+            const requestData = {
+                role: this.data.targetRole,
+                name: this.data.bindName,
+                phone: this.data.bindPhone
+            }
+
+            // 家长角色需要提供学生姓名
+            if (this.data.targetRole === 'parent') {
+                requestData.student_name = this.data.bindStudentName
+            }
+
             const res = await request('/wechat/bind', {
                 method: 'POST',
-                data: {
-                    role: this.data.targetRole,
-                    name: this.data.bindName,
-                    phone: this.data.bindPhone
-                }
+                data: requestData
             })
 
             if (res.ok) {

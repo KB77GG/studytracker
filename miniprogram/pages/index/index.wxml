@@ -51,6 +51,11 @@
       </view>
       
       <view class="input-group" wx:if="{{targetRole === 'parent'}}">
+        <text class="input-label">孩子姓名</text>
+        <input class="input-field" placeholder="请输入孩子的姓名" model:value="{{bindStudentName}}" />
+      </view>
+
+      <view class="input-group" wx:if="{{targetRole === 'parent'}}">
         <text class="input-label">手机号</text>
         <input class="input-field" type="number" placeholder="请输入手机号码" model:value="{{bindPhone}}" />
       </view>
