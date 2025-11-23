@@ -100,7 +100,7 @@ def wechat_login():
         if "no such column: parent_student_link.created_at" in str(e):
             try:
                 from sqlalchemy import text
-                from models import db
+                # db is already imported globally
                 logger.info("Attempting to auto-fix database schema in login...")
                 db.session.rollback()
                 db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
