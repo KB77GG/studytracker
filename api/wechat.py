@@ -171,13 +171,33 @@ def unbind_wechat():
     [Debug] 解除微信绑定
     用于测试时切换账号
     """
-    from .auth_utils import require_api_user
+    # 手动解析 token（类似 bind_role 的做法）
+    auth_header = request.headers.get("Authorization", "")
     
-    @require_api_user()
-    def _unbind(user):
-        user.wechat_openid = None
-        db.session.commit()
-        return jsonify({"ok": True, "message": "Unbound successfully"})
-        
-    return _unbind()
+    if not auth_header.startswith("Bearer "):
+        return jsonify({"ok": False, "error": "missing_token"}), 401
+    
+    token = auth_header.split(" ", 1)[1]
+    try:
+        import jwt
+        payload = jwt.decode(
+            token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
+        )
+        user_id = payload.get("user_id")
+        if not user_id:
+            return jsonify({"ok": False, "error": "invalid_token"}), 401
+            
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"ok": False, "error": "user_not_found"}), 404
+            
+    except:
+        return jsonify({"ok": False, "error": "invalid_token"}), 401
+    
+    # 执行解绑
+    user.wechat_openid = None
+    db.session.commit()
+    
+    return jsonify({"ok": True, "message": "Unbound successfully"})
+
 
