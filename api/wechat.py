@@ -209,7 +209,7 @@ def unbind_wechat():
         payload = jwt.decode(
             token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
         )
-        user_id = payload.get("user_id")
+        user_id = payload.get("sub")
         if not user_id:
             return jsonify({"ok": False, "error": "invalid_token"}), 401
             
