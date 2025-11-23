@@ -13,6 +13,21 @@
         "navigationBarTitleText": "学习计划与打卡",
         "navigationBarTextStyle": "black"
     },
+    "tabBar": {
+        "color": "#999999",
+        "selectedColor": "#667eea",
+        "backgroundColor": "#ffffff",
+        "list": [
+            {
+                "pagePath": "pages/student/home/index",
+                "text": "任务"
+            },
+            {
+                "pagePath": "pages/student/stats/index",
+                "text": "我的"
+            }
+        ]
+    },
     "sitemapLocation": "sitemap.json",
     "style": "v2"
 }
