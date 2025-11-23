@@ -33,4 +33,8 @@
       <button class="btn-primary" bindtap="confirmBind">确认绑定</button>
     </view>
   </view>
+
+  <view class="debug-area" style="margin-top: 100rpx;">
+    <button size="mini" type="warn" bindtap="handleDebugUnbind">Debug: 解除绑定</button>
+  </view>
 </view>

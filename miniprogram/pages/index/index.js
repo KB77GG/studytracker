@@ -126,5 +126,28 @@ Page({
         } finally {
             wx.hideLoading()
         }
+    },
+
+    async handleDebugUnbind() {
+        try {
+            const res = await request('/miniprogram/auth/unbind', { method: 'POST' })
+            if (res.ok) {
+                wx.removeStorageSync('token')
+                wx.removeStorageSync('userInfo')
+                wx.removeStorageSync('role')
+                app.globalData.token = null
+                app.globalData.userInfo = null
+                app.globalData.role = null
+
+                this.setData({
+                    hasToken: false,
+                    isGuest: true,
+                    showBindForm: false
+                })
+            }
+        } catch (err) {
+            console.error(err)
+            wx.showToast({ title: '解绑失败', icon: 'none' })
+        }
     }
 })

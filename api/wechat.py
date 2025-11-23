@@ -64,9 +64,10 @@ def wechat_login():
             password_hash="N/A" # 微信用户无密码
         )
         db.session.add(user)
-        db.session.commit()
     
-    # 3. 发放 Token
+    db.session.commit()
+    
+    # 重新发放 token (角色已变更)
     _, token = issue_token(user)
     
     return jsonify({
@@ -163,4 +164,20 @@ def bind_role():
         
     else:
         return jsonify({"ok": False, "error": "invalid_role"}), 400
+
+@wechat_bp.route("/unbind", methods=["POST"])
+def unbind_wechat():
+    """
+    [Debug] 解除微信绑定
+    用于测试时切换账号
+    """
+    from .auth_utils import require_api_user
+    
+    @require_api_user()
+    def _unbind(user):
+        user.wechat_openid = None
+        db.session.commit()
+        return jsonify({"ok": True, "message": "Unbound successfully"})
+        
+    return _unbind()
 
