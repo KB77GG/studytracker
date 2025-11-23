@@ -51,41 +51,43 @@ Page({
     },
 
     handleUnbind() {
-        const app = getApp()
         wx.showModal({
-            title: '解除绑定',
-            content: '确定要解除微信绑定吗？解绑后需要重新选择身份。',
-            success: (res) => {
+            title: '提示',
+            content: '确定要解除绑定并退出吗？',
+            confirmText: '解绑',
+            success: async (res) => {
                 if (res.confirm) {
-                    wx.request({
-                        url: `${app.globalData.baseUrl}/wechat/unbind`,
-                        method: 'POST',
-                        header: {
-                            'Authorization': `Bearer ${app.globalData.token}`
-                        },
-                        success: (res) => {
-                            if (res.data.ok) {
-                                wx.showToast({ title: '解绑成功', icon: 'success' })
-                                // 清除本地数据
-                                wx.removeStorageSync('token')
-                                wx.removeStorageSync('userInfo')
-                                wx.removeStorageSync('role')
-                                app.globalData.token = null
-                                app.globalData.userInfo = null
-                                app.globalData.role = null
+                    wx.showLoading({ title: '处理中...' })
+                    try {
+                        // 尝试调用后端解绑
+                        await new Promise((resolve) => {
+                            wx.request({
+                                url: `${app.globalData.baseUrl}/wechat/unbind`,
+                                method: 'POST',
+                                header: { 'Authorization': `Bearer ${app.globalData.token}` },
+                                complete: resolve // 无论成功失败都继续
+                            })
+                        })
 
-                                // 跳转到登录页
-                                wx.reLaunch({
-                                    url: '/pages/index/index'
-                                })
-                            } else {
-                                wx.showToast({ title: '解绑失败', icon: 'none' })
-                            }
-                        },
-                        fail: () => {
-                            wx.showToast({ title: '请求失败', icon: 'none' })
-                        }
-                    })
+                        // 强制登出逻辑
+                        wx.clearStorageSync()
+                        app.globalData.token = null
+                        app.globalData.userInfo = null
+                        app.globalData.role = null
+
+                        wx.showToast({ title: '已解绑', icon: 'success' })
+                        setTimeout(() => {
+                            wx.reLaunch({ url: '/pages/index/index' })
+                        }, 1500)
+
+                    } catch (err) {
+                        console.error('Unbind error:', err)
+                        // 异常保底
+                        wx.clearStorageSync()
+                        wx.reLaunch({ url: '/pages/index/index' })
+                    } finally {
+                        wx.hideLoading()
+                    }
                 }
             }
         })
@@ -97,9 +99,7 @@ Page({
             content: '确定要退出登录吗？',
             success: (res) => {
                 if (res.confirm) {
-                    wx.removeStorageSync('token')
-                    wx.removeStorageSync('userInfo')
-                    wx.removeStorageSync('role')
+                    wx.clearStorageSync()
                     app.globalData.token = null
                     app.globalData.userInfo = null
                     app.globalData.role = null
