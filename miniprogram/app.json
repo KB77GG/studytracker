@@ -20,11 +20,15 @@
         "list": [
             {
                 "pagePath": "pages/student/home/index",
-                "text": "任务"
+                "text": "任务",
+                "iconPath": "images/tabbar/task.png",
+                "selectedIconPath": "images/tabbar/task_active.png"
             },
             {
                 "pagePath": "pages/student/stats/index",
-                "text": "我的"
+                "text": "我的",
+                "iconPath": "images/tabbar/profile.png",
+                "selectedIconPath": "images/tabbar/profile_active.png"
             }
         ]
     },
