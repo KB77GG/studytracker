@@ -1,29 +1,49 @@
 <view class="container">
-  <view class="header">
-    <text class="title">今日任务</text>
-    <text class="date">{{dateStr}}</text>
+  <!-- 顶部欢迎区 -->
+  <view class="header-section">
+    <view class="greeting">
+      <text class="hello">{{greeting}}，{{userInfo.nickName}}</text>
+      <text class="sub-text">准备好开始今天的学习了吗？</text>
+    </view>
+    <view class="date-badge">{{dateStr}}</view>
   </view>
 
+  <!-- 进度卡片 -->
+  <view class="progress-card">
+    <view class="progress-info">
+      <text class="progress-label">今日完成度</text>
+      <text class="progress-value">{{progress.completed}}/{{progress.total}}</text>
+    </view>
+    <view class="progress-bar-bg">
+      <view class="progress-bar-fill" style="width: {{progress.percent}}%"></view>
+    </view>
+    <text class="progress-tips" wx:if="{{progress.percent === 100}}">太棒了！今日任务全部完成 🎉</text>
+    <text class="progress-tips" wx:elif="{{progress.percent > 0}}">继续加油，保持节奏！💪</text>
+    <text class="progress-tips" wx:else>千里之行，始于足下 🚀</text>
+  </view>
+
+  <!-- 任务列表 -->
+  <view class="section-title">我的任务</view>
+  
   <view class="task-list" wx:if="{{tasks.length > 0}}">
-    <view class="task-card" wx:for="{{tasks}}" wx:key="id" bindtap="goToTaskDetail" data-id="{{item.id}}">
-      <view class="task-header">
-        <text class="task-module">{{item.module}}</text>
-        <text class="task-status {{item.status}}">{{item.statusText}}</text>
+    <view class="task-card {{item.isDone ? 'done' : ''}}" wx:for="{{tasks}}" wx:key="id" bindtap="goToTaskDetail" data-id="{{item.id}}">
+      <view class="card-left">
+        <view class="task-icon {{item.module}}">{{item.module[0]}}</view>
+        <view class="task-content">
+          <text class="task-name">{{item.task_name}}</text>
+          <text class="task-time">⏱️ {{item.planned_minutes}}分钟</text>
+        </view>
       </view>
-      <view class="task-body">
-        <text class="task-name">{{item.task_name}}</text>
-        <text class="task-info">计划: {{item.planned_minutes}}分钟</text>
-      </view>
-      <view class="task-footer">
-        <text class="task-action" wx:if="{{item.status === 'pending'}}">去完成 ></text>
-        <text class="task-action" wx:elif="{{item.status === 'submitted'}}">审核中</text>
-        <text class="task-action" wx:elif="{{item.status === 'completed'}}">已完成</text>
-        <text class="task-action" wx:else>查看详情 ></text>
+      <view class="card-right">
+        <view class="status-badge {{item.status}}">{{item.statusText}}</view>
       </view>
     </view>
   </view>
 
+  <!-- 空状态 -->
   <view class="empty-state" wx:else>
-    <text>今天没有任务哦，休息一下吧~</text>
+    <image class="empty-img" src="/images/empty-box.png" mode="aspectFit" wx:if="{{false}}"></image> <!-- 暂时隐藏图片 -->
+    <text class="empty-text">今天没有任务哦</text>
+    <text class="empty-sub">好好休息，明天继续加油！</text>
   </view>
 </view>

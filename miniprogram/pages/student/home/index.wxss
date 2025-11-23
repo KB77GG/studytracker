@@ -2,101 +2,192 @@
   padding: 30rpx;
   background-color: #f8f9fa;
   min-height: 100vh;
+  padding-bottom: 50rpx;
 }
 
-.header {
+/* Header */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 40rpx;
 }
 
-.title {
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #333;
-  display: block;
-}
-
-.date {
-  font-size: 28rpx;
-  color: #888;
-  margin-top: 10rpx;
-}
-
-.task-list {
+.greeting {
   display: flex;
   flex-direction: column;
-  gap: 30rpx;
 }
 
-.task-card {
-  background: white;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+.hello {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
 }
 
-.task-header {
+.sub-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.date-badge {
+  background: #eef2f7;
+  color: #667eea;
+  padding: 10rpx 20rpx;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+/* Progress Card */
+.progress-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24rpx;
+  padding: 40rpx;
+  color: white;
+  margin-bottom: 50rpx;
+  box-shadow: 0 10rpx 20rpx rgba(118, 75, 162, 0.3);
+}
+
+.progress-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20rpx;
 }
 
-.task-module {
-  font-size: 24rpx;
-  color: #666;
-  background: #f0f0f0;
-  padding: 4rpx 12rpx;
-  border-radius: 8rpx;
+.progress-label {
+  font-size: 28rpx;
+  opacity: 0.9;
 }
 
-.task-status {
-  font-size: 24rpx;
+.progress-value {
+  font-size: 32rpx;
   font-weight: bold;
 }
 
-.task-status.pending { color: #ff9800; }
-.task-status.submitted { color: #2196f3; }
-.task-status.completed { color: #4caf50; }
-.task-status.approved { color: #4caf50; }
-.task-status.rejected { color: #f44336; }
-
-.task-body {
+.progress-bar-bg {
+  height: 12rpx;
+  background: rgba(255,255,255,0.3);
+  border-radius: 6rpx;
   margin-bottom: 20rpx;
+  overflow: hidden;
 }
 
-.task-name {
+.progress-bar-fill {
+  height: 100%;
+  background: white;
+  border-radius: 6rpx;
+  transition: width 0.5s ease;
+}
+
+.progress-tips {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+/* Task List */
+.section-title {
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
-  display: block;
-  margin-bottom: 8rpx;
+  margin-bottom: 30rpx;
 }
 
-.task-info {
-  font-size: 26rpx;
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.task-card {
+  background: white;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.03);
+  transition: all 0.2s;
+}
+
+.task-card:active {
+  transform: scale(0.98);
+}
+
+.task-card.done {
+  opacity: 0.8;
+  background: #fcfcfc;
+}
+
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.task-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: bold;
   color: #666;
 }
 
-.task-footer {
-  border-top: 1rpx solid #eee;
-  padding-top: 20rpx;
-  text-align: right;
+/* 简单的模块颜色区分 */
+.task-icon.语文 { background: #ffebee; color: #ef5350; }
+.task-icon.数学 { background: #e3f2fd; color: #42a5f5; }
+.task-icon.英语 { background: #e8f5e9; color: #66bb6a; }
+
+.task-content {
+  display: flex;
+  flex-direction: column;
 }
 
-.task-action {
-  font-size: 26rpx;
-  color: #07c160;
+.task-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.task-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.status-badge {
+  font-size: 24rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 10rpx;
   font-weight: 500;
 }
 
+.status-badge.pending { background: #fff3e0; color: #ff9800; }
+.status-badge.submitted { background: #e3f2fd; color: #2196f3; }
+.status-badge.completed { background: #e8f5e9; color: #4caf50; }
+.status-badge.rejected { background: #ffebee; color: #f44336; }
+
+/* Empty State */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 200rpx;
+  padding-top: 100rpx;
 }
 
-.empty-img {
-  width: 200rpx;
-  height: 200rpx;
-  margin-bottom: 30rpx;
+.empty-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.empty-sub {
+  font-size: 26rpx;
+  color: #999;
 }
