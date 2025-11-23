@@ -130,7 +130,7 @@ Page({
 
     async handleDebugUnbind() {
         try {
-            const res = await request('/miniprogram/auth/unbind', { method: 'POST' })
+            const res = await request('/wechat/unbind', { method: 'POST' })
             if (res.ok) {
                 wx.removeStorageSync('token')
                 wx.removeStorageSync('userInfo')
