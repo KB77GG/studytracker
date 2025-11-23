@@ -124,12 +124,20 @@ def wechat_login():
         return jsonify({"ok": False, "error": "server_error", "message": str(e)}), 500
 
 def _check_profile_exists(user):
-    if user.role == User.ROLE_STUDENT:
-        return StudentProfile.query.filter_by(user_id=user.id).first() is not None
-    elif user.role == User.ROLE_PARENT:
-        # 家长可能有多个关联，只要有记录就算有 profile
-        return ParentStudentLink.query.filter_by(parent_id=user.id).first() is not None
-    return False
+    try:
+        if user.role == User.ROLE_STUDENT:
+            return StudentProfile.query.filter_by(user_id=user.id).first() is not None
+        elif user.role == User.ROLE_PARENT:
+            # 家长可能有多个关联，只要有记录就算有 profile
+            return ParentStudentLink.query.filter_by(parent_id=user.id).first() is not None
+        return False
+    except Exception as e:
+        # 如果查询失败（例如表结构问题），返回 False 而不是抛出异常
+        # 这样不会影响登录流程
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.warning(f"Error checking profile: {str(e)}")
+        return False
 
 @wechat_bp.route("/bind", methods=["POST"])
 def bind_role():
