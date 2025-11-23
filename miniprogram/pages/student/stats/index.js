@@ -50,6 +50,47 @@ Page({
         })
     },
 
+    handleUnbind() {
+        const app = getApp()
+        wx.showModal({
+            title: '解除绑定',
+            content: '确定要解除微信绑定吗？解绑后需要重新选择身份。',
+            success: (res) => {
+                if (res.confirm) {
+                    wx.request({
+                        url: `${app.globalData.baseUrl}/wechat/unbind`,
+                        method: 'POST',
+                        header: {
+                            'Authorization': `Bearer ${app.globalData.token}`
+                        },
+                        success: (res) => {
+                            if (res.data.ok) {
+                                wx.showToast({ title: '解绑成功', icon: 'success' })
+                                // 清除本地数据
+                                wx.removeStorageSync('token')
+                                wx.removeStorageSync('userInfo')
+                                wx.removeStorageSync('role')
+                                app.globalData.token = null
+                                app.globalData.userInfo = null
+                                app.globalData.role = null
+
+                                // 跳转到登录页
+                                wx.reLaunch({
+                                    url: '/pages/index/index'
+                                })
+                            } else {
+                                wx.showToast({ title: '解绑失败', icon: 'none' })
+                            }
+                        },
+                        fail: () => {
+                            wx.showToast({ title: '请求失败', icon: 'none' })
+                        }
+                    })
+                }
+            }
+        })
+    },
+
     handleLogout() {
         wx.showModal({
             title: '提示',

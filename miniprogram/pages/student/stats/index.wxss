@@ -173,6 +173,18 @@
 .logout-section {
   margin-top: 60rpx;
   padding: 0 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.btn-unbind {
+  background: #fff;
+  color: #ff9800;
+  border: 1rpx solid #ff9800;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  padding: 18rpx 0;
 }
 
 .btn-logout {
