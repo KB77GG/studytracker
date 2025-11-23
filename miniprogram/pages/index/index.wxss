@@ -47,35 +47,19 @@
   animation: fadeInDown 0.8s ease-out;
 }
 
-.logo-placeholder {
-  width: 140rpx;
-  height: 140rpx;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 40rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24rpx;
-  backdrop-filter: blur(10rpx);
-  border: 2rpx solid rgba(255, 255, 255, 0.3);
-}
-
-.logo-icon {
-  font-size: 70rpx;
-}
-
-.app-name {
-  font-size: 48rpx;
-  font-weight: bold;
-  letter-spacing: 2rpx;
-  margin-bottom: 10rpx;
-  text-shadow: 0 4rpx 8rpx rgba(0,0,0,0.1);
+.brand-logo {
+  width: 460rpx;
+  border-radius: 24rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.15);
 }
 
 .slogan {
   font-size: 28rpx;
-  opacity: 0.8;
+  opacity: 0.9;
   font-weight: 300;
+  letter-spacing: 4rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.2);
 }
 
 /* 主卡片 */
