@@ -36,60 +36,81 @@ def wechat_login():
     if not code:
         return jsonify({"ok": False, "error": "missing_code"}), 400
 
-    # 1. 获取 openid
-    wx_data = get_wechat_session(code)
-    if "errcode" in wx_data and wx_data["errcode"] != 0:
-        return jsonify({"ok": False, "error": "wechat_api_error", "details": wx_data}), 400
-    
-    openid = wx_data.get("openid")
-    unionid = wx_data.get("unionid")
-    
-    if not openid:
-        return jsonify({"ok": False, "error": "no_openid"}), 400
+    try:
+        # 1. 获取 openid
+        wx_data = get_wechat_session(code)
+        if "errcode" in wx_data and wx_data["errcode"] != 0:
+            return jsonify({"ok": False, "error": "wechat_api_error", "details": wx_data}), 400
+        
+        openid = wx_data.get("openid")
+        unionid = wx_data.get("unionid")
+        
+        if not openid:
+            return jsonify({"ok": False, "error": "no_openid"}), 400
 
-    # 2. 查找用户
-    user = User.query.filter_by(wechat_openid=openid).first()
-    
-    is_new_user = False
-    if not user:
-        # 如果是新用户，暂时创建一个未绑定的用户
-        # 具体的角色绑定（学生/家长）将在后续步骤完成
-        is_new_user = True
+        # 2. 查找用户
+        user = User.query.filter_by(wechat_openid=openid).first()
         
-        # 生成一个唯一的 username
-        import time
-        import random
-        base_username = f"wx_{openid[:8]}"
-        username = base_username
-        
-        # 检查用户名是否存在，如果存在则添加随机后缀
-        while User.query.filter_by(username=username).first():
-            username = f"{base_username}_{int(time.time())}_{random.randint(100, 999)}"
+        is_new_user = False
+        if not user:
+            # 如果是新用户，暂时创建一个未绑定的用户
+            # 具体的角色绑定（学生/家长）将在后续步骤完成
+            is_new_user = True
             
-        user = User(
-            username=username,
-            wechat_openid=openid,
-            wechat_unionid=unionid,
-            role="guest", # 初始角色为 guest，绑定后更新
-            password_hash="N/A" # 微信用户无密码
-        )
-        db.session.add(user)
-    
-    db.session.commit()
-    
-    # 重新发放 token (角色已变更)
-    _, token = issue_token(user)
-    
-    return jsonify({
-        "ok": True,
-        "token": token,
-        "user": {
-            "id": user.id,
-            "role": user.role,
-            "is_new": is_new_user,
-            "has_profile": _check_profile_exists(user)
-        }
-    })
+            # 生成一个唯一的 username
+            import time
+            import random
+            base_username = f"wx_{openid[:8]}"
+            username = base_username
+            
+            # 检查用户名是否存在，如果存在则添加随机后缀
+            while User.query.filter_by(username=username).first():
+                username = f"{base_username}_{int(time.time())}_{random.randint(100, 999)}"
+                
+            user = User(
+                username=username,
+                wechat_openid=openid,
+                wechat_unionid=unionid,
+                role="guest", # 初始角色为 guest，绑定后更新
+                password_hash="N/A" # 微信用户无密码
+            )
+            db.session.add(user)
+        
+        db.session.commit()
+        
+        # 重新发放 token (角色已变更)
+        _, token = issue_token(user)
+        
+        return jsonify({
+            "ok": True,
+            "token": token,
+            "user": {
+                "id": user.id,
+                "role": user.role,
+                "is_new": is_new_user,
+                "has_profile": _check_profile_exists(user)
+            }
+        })
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Login error: {str(e)}")
+        
+        # 自动修复数据库缺失列的问题
+        if "no such column: parent_student_link.created_at" in str(e):
+            try:
+                from sqlalchemy import text
+                from models import db
+                logger.info("Attempting to auto-fix database schema in login...")
+                db.session.rollback()
+                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                db.session.commit()
+                return jsonify({"ok": False, "error": "server_error", "message": "系统已自动修复数据库结构，请重新点击登录按钮重试！"}), 500
+            except Exception as fix_err:
+                logger.error(f"Auto-fix failed: {str(fix_err)}")
+                
+        return jsonify({"ok": False, "error": "server_error", "message": str(e)}), 500
 
 def _check_profile_exists(user):
     if user.role == User.ROLE_STUDENT:
