@@ -1,9 +1,10 @@
 /* 页面容器：深色渐变背景 */
+/* 页面容器：清新晨光渐变背景 */
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); /* 经典的深海夕阳渐变 */
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); /* 或者清新的蓝天渐变，这里选深蓝更有质感 */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 最终决定：深紫蓝渐变，稳重且现代 */
+  /* 之前的深色：background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  /* 新的清新蓝绿渐变，呼应 Sage Logo */
+  background: linear-gradient(180deg, #e0f2f1 0%, #80deea 100%); 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,26 +13,26 @@
   overflow: hidden;
 }
 
-/* 背景装饰圆 */
+/* 背景装饰圆 - 改为白色半透明，增加通透感 */
 .bg-circle-1 {
   position: absolute;
   top: -100rpx;
   left: -100rpx;
-  width: 400rpx;
-  height: 400rpx;
-  background: rgba(255, 255, 255, 0.1);
+  width: 500rpx;
+  height: 500rpx;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
   border-radius: 50%;
-  filter: blur(40rpx);
+  filter: blur(20rpx);
   animation: float 10s infinite ease-in-out;
 }
 
 .bg-circle-2 {
   position: absolute;
-  bottom: -50rpx;
-  right: -50rpx;
-  width: 300rpx;
-  height: 300rpx;
-  background: rgba(255, 255, 255, 0.1);
+  bottom: 0;
+  right: -100rpx;
+  width: 600rpx;
+  height: 600rpx;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
   border-radius: 50%;
   filter: blur(30rpx);
   animation: float 8s infinite ease-in-out reverse;
@@ -44,39 +45,42 @@
 
 /* 品牌区域 */
 .brand-area {
-  margin-top: 120rpx;
+  margin-top: 100rpx; /* 稍微上移 */
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: white;
-  margin-bottom: 60rpx;
+  color: #00695c; /* 改为深青色文字，在浅色背景上更清晰 */
+  margin-bottom: 40rpx; /* 拉近与卡片的距离 */
   z-index: 1;
   animation: fadeInDown 0.8s ease-out;
 }
 
 .brand-logo {
-  width: 460rpx;
-  border-radius: 40rpx; /* 更大的圆角 */
-  margin-bottom: 30rpx;
-  box-shadow: 0 20rpx 60rpx rgba(0,0,0,0.2);
-  border: 4rpx solid rgba(255, 255, 255, 0.2); /* 增加半透明边框 */
+  width: 400rpx; /* 稍微缩小一点，更精致 */
+  border-radius: 40rpx;
+  margin-bottom: 20rpx;
+  /* 柔和的投影，让白底Logo自然浮起 */
+  box-shadow: 0 20rpx 40rpx rgba(0, 105, 92, 0.1); 
+  border: none; /* 去掉边框，更融合 */
 }
 
 .slogan {
-  font-size: 28rpx;
-  opacity: 0.95;
-  font-weight: 300;
-  letter-spacing: 8rpx; /* 增加字间距 */
-  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.2);
+  font-size: 30rpx;
+  opacity: 0.8;
+  font-weight: 500;
+  letter-spacing: 6rpx;
+  color: #004d40; /* 深色文字 */
+  text-shadow: none; /* 去掉阴影，更干净 */
 }
 
 /* 主卡片 */
 .main-card {
   width: 100%;
-  background: rgba(255, 255, 255, 0.98); /* 稍微不透明一点 */
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 48rpx;
   padding: 60rpx 40rpx;
-  box-shadow: 0 30rpx 90rpx rgba(0, 0, 0, 0.2);
+  /* 更轻盈的投影 */
+  box-shadow: 0 20rpx 60rpx rgba(0, 105, 92, 0.1);
   z-index: 10;
   animation: fadeInUp 0.8s ease-out 0.2s backwards;
   min-height: 400rpx;
