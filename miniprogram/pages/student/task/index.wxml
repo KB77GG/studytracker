@@ -103,4 +103,7 @@
   <view class="action-buttons" wx:elif="{{task.status === 'submitted'}}">
     <button class="btn-submit" disabled>已提交，等待老师审核</button>
   </view>
+
+  <!-- 撒花特效 Canvas -->
+  <canvas type="2d" id="confetti" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; display: {{showConfetti ? 'block' : 'none'}}"></canvas>
 </view>

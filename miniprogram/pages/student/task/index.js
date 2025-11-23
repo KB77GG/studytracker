@@ -166,10 +166,11 @@ Page({
             })
 
             if (res.ok) {
+                this.runConfetti() // 触发撒花
                 wx.showToast({ title: '提交成功！', icon: 'success' })
                 setTimeout(() => {
                     wx.navigateBack()
-                }, 1500)
+                }, 2000) // 延长到2秒，让动画播完
             } else {
                 wx.showToast({ title: res.error || '提交失败', icon: 'none' })
             }
@@ -235,5 +236,64 @@ Page({
             urls: [imageUrl],
             current: imageUrl
         });
+    },
+
+    // --- 撒花特效 ---
+    runConfetti() {
+        this.setData({ showConfetti: true })
+        const query = wx.createSelectorQuery()
+        query.select('#confetti')
+            .fields({ node: true, size: true })
+            .exec((res) => {
+                const canvas = res[0].node
+                const ctx = canvas.getContext('2d')
+                const width = res[0].width
+                const height = res[0].height
+
+                canvas.width = width * 2 // Retina 屏优化
+                canvas.height = height * 2
+                ctx.scale(2, 2)
+
+                const particles = []
+                const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff']
+
+                for (let i = 0; i < 100; i++) {
+                    particles.push({
+                        x: width / 2,
+                        y: height / 2,
+                        vx: (Math.random() - 0.5) * 20,
+                        vy: (Math.random() - 0.5) * 20 - 10,
+                        life: 100 + Math.random() * 50,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        size: Math.random() * 5 + 5
+                    })
+                }
+
+                const render = () => {
+                    ctx.clearRect(0, 0, width, height)
+                    let active = false
+
+                    particles.forEach(p => {
+                        if (p.life > 0) {
+                            active = true
+                            p.life--
+                            p.x += p.vx
+                            p.y += p.vy
+                            p.vy += 0.5 // 重力
+
+                            ctx.fillStyle = p.color
+                            ctx.fillRect(p.x, p.y, p.size, p.size)
+                        }
+                    })
+
+                    if (active) {
+                        canvas.requestAnimationFrame(render)
+                    } else {
+                        this.setData({ showConfetti: false })
+                    }
+                }
+
+                canvas.requestAnimationFrame(render)
+            })
     }
 })
