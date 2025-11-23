@@ -67,9 +67,4 @@
     </view>
 
   </view>
-
-  <!-- Debug 按钮 (保持在底部) -->
-  <view class="debug-area">
-    <text class="debug-link" bindtap="handleDebugUnbind">解除绑定 (Debug)</text>
-  </view>
 </view>
