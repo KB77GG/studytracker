@@ -129,6 +129,12 @@ Page({
     },
 
     async handleDebugUnbind() {
+        // 先检查是否有 token
+        if (!app.globalData.token) {
+            wx.showToast({ title: '请先登录', icon: 'none' })
+            return
+        }
+
         try {
             console.log('Attempting to unbind...')
             const res = await request('/wechat/unbind', { method: 'POST' })
