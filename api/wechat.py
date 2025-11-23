@@ -97,15 +97,26 @@ def wechat_login():
         logger.error(f"Login error: {str(e)}")
         
         # 自动修复数据库缺失列的问题
-        if "no such column: parent_student_link.created_at" in str(e):
+        err_str = str(e).lower()
+        if "no such column" in err_str and "parent_student_link" in err_str:
             try:
                 from sqlalchemy import text
                 # db is already imported globally
                 logger.info("Attempting to auto-fix database schema in login...")
                 db.session.rollback()
-                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
-                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
-                db.session.commit()
+                
+                try:
+                    db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                    db.session.commit()
+                except:
+                    db.session.rollback()
+                    
+                try:
+                    db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                    db.session.commit()
+                except:
+                    db.session.rollback()
+                    
                 return jsonify({"ok": False, "error": "server_error", "message": "系统已自动修复数据库结构，请重新点击登录按钮重试！"}), 500
             except Exception as fix_err:
                 logger.error(f"Auto-fix failed: {str(fix_err)}")
@@ -232,13 +243,26 @@ def bind_role():
         db.session.rollback()
         
         # 自动修复数据库缺失列的问题
-        if "no such column: parent_student_link.created_at" in str(e):
+        err_str = str(e).lower()
+        if "no such column" in err_str and "parent_student_link" in err_str:
             try:
                 from sqlalchemy import text
+                # db is already imported globally
                 logger.info("Attempting to auto-fix database schema...")
-                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
-                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
-                db.session.commit()
+                db.session.rollback()
+                
+                try:
+                    db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                    db.session.commit()
+                except:
+                    db.session.rollback()
+                    
+                try:
+                    db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                    db.session.commit()
+                except:
+                    db.session.rollback()
+                    
                 return jsonify({"ok": False, "error": "server_error", "message": "系统已自动修复数据库结构，请重新点击绑定按钮重试！"}), 500
             except Exception as fix_err:
                 logger.error(f"Auto-fix failed: {str(fix_err)}")
