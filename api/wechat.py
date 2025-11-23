@@ -55,9 +55,19 @@ def wechat_login():
         # 如果是新用户，暂时创建一个未绑定的用户
         # 具体的角色绑定（学生/家长）将在后续步骤完成
         is_new_user = True
-        # 生成一个临时的 username
+        
+        # 生成一个唯一的 username
+        import time
+        import random
+        base_username = f"wx_{openid[:8]}"
+        username = base_username
+        
+        # 检查用户名是否存在，如果存在则添加随机后缀
+        while User.query.filter_by(username=username).first():
+            username = f"{base_username}_{int(time.time())}_{random.randint(100, 999)}"
+            
         user = User(
-            username=f"wx_{openid[:8]}",
+            username=username,
             wechat_openid=openid,
             wechat_unionid=unionid,
             role="guest", # 初始角色为 guest，绑定后更新
