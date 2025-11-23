@@ -510,3 +510,31 @@ def get_parent_stats():
         "recent": recent_feed,
         "weekly": weekly_stats
     })
+
+@mp_bp.route("/debug/fix_db", methods=["GET"])
+def debug_fix_db():
+    """临时修复数据库结构"""
+    from models import db
+    from sqlalchemy import text
+    
+    try:
+        # 尝试添加 created_at
+        try:
+            db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            # 忽略错误（可能已存在）
+            pass
+            
+        # 尝试添加 updated_at
+        try:
+            db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            pass
+            
+        return jsonify({"ok": True, "message": "Database schema updated"})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500

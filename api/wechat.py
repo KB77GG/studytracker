@@ -209,6 +209,19 @@ def bind_role():
     except Exception as e:
         logger.error(f"Bind role error: {str(e)}")
         db.session.rollback()
+        
+        # 自动修复数据库缺失列的问题
+        if "no such column: parent_student_link.created_at" in str(e):
+            try:
+                from sqlalchemy import text
+                logger.info("Attempting to auto-fix database schema...")
+                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                db.session.commit()
+                return jsonify({"ok": False, "error": "server_error", "message": "系统已自动修复数据库结构，请重新点击绑定按钮重试！"}), 500
+            except Exception as fix_err:
+                logger.error(f"Auto-fix failed: {str(fix_err)}")
+        
         return jsonify({"ok": False, "error": "server_error", "message": str(e)}), 500
 
 @wechat_bp.route("/unbind", methods=["POST"])
