@@ -60,11 +60,19 @@ def get_student_today_tasks():
         return jsonify({"ok": False, "error": "no_student_profile"}), 404
         
     today = date.today()
+    query_date = today
     
-    # 从 Task 表查询今日任务
+    date_str = request.args.get("date")
+    if date_str:
+        try:
+            query_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            pass # Invalid date format, fallback to today
+    
+    # 从 Task 表查询指定日期的任务
     tasks = Task.query.filter_by(
         student_name=student.full_name,
-        date=today.isoformat()
+        date=query_date.isoformat()
     ).all()
     
     if not tasks:

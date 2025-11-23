@@ -5,7 +5,11 @@
       <text class="hello">{{greeting}}，{{userInfo.nickName}}</text>
       <text class="sub-text">准备好开始今天的学习了吗？</text>
     </view>
-    <view class="date-badge">{{dateStr}}</view>
+    <picker mode="date" value="{{currentDate}}" bindchange="handleDateChange">
+      <view class="date-badge">
+        {{dateStr}} <text class="picker-arrow">▼</text>
+      </view>
+    </picker>
   </view>
 
   <!-- 进度卡片 -->

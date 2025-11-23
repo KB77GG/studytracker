@@ -4,6 +4,7 @@ const { request } = require('../../../utils/request.js')
 Page({
     data: {
         dateStr: '',
+        currentDate: '', // YYYY-MM-DD 格式，用于 picker value 和 API 参数
         greeting: '',
         userInfo: null,
         tasks: [],
@@ -17,8 +18,15 @@ Page({
 
     onLoad() {
         this.updateGreeting()
+        const now = new Date()
+        const year = now.getFullYear()
+        const month = (now.getMonth() + 1).toString().padStart(2, '0')
+        const day = now.getDate().toString().padStart(2, '0')
+        const dateString = `${year}-${month}-${day}`
+
         this.setData({
-            dateStr: new Date().toLocaleDateString(),
+            dateStr: `${year}/${month}/${day}`,
+            currentDate: dateString,
             userInfo: app.globalData.userInfo || { nickName: '同学' }
         })
     },
@@ -26,6 +34,16 @@ Page({
     onShow() {
         this.fetchTasks()
         this.updateGreeting()
+    },
+
+    handleDateChange(e) {
+        const date = e.detail.value // YYYY-MM-DD
+        const [year, month, day] = date.split('-')
+        this.setData({
+            currentDate: date,
+            dateStr: `${year}/${month}/${day}`
+        })
+        this.fetchTasks()
     },
 
     updateGreeting() {
@@ -43,7 +61,7 @@ Page({
     async fetchTasks() {
         // wx.showLoading({ title: '加载中...' }) // 移除 loading 以免闪烁
         try {
-            const res = await request('/miniprogram/student/tasks/today')
+            const res = await request(`/miniprogram/student/tasks/today?date=${this.data.currentDate}`)
             console.log('Tasks response:', res)
 
             if (res.ok && res.tasks) {
