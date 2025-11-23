@@ -1,0 +1,171 @@
+.container {
+  padding: 30rpx;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding-bottom: 50rpx;
+}
+
+.header {
+  margin-bottom: 40rpx;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.level {
+  font-size: 24rpx;
+  color: #666;
+  background: #e0e0e0;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  margin-top: 8rpx;
+  align-self: flex-start;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30rpx;
+  margin-bottom: 40rpx;
+}
+
+.stat-card {
+  background: white;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.stat-card.fire .value { color: #ff5722; }
+.stat-card.time .value { color: #2196f3; }
+
+.icon {
+  font-size: 48rpx;
+  margin-bottom: 10rpx;
+}
+
+.value {
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 4rpx;
+}
+
+.label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  display: block;
+}
+
+/* Chart */
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 300rpx;
+  padding-top: 40rpx;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.bar-wrapper {
+  height: 200rpx;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10rpx;
+}
+
+.bar {
+  width: 20rpx;
+  background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+  border-radius: 10rpx;
+  transition: height 0.5s ease;
+}
+
+.day-label {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* Badges */
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 16rpx;
+}
+
+.badge-icon {
+  font-size: 60rpx;
+  margin-bottom: 10rpx;
+}
+
+.badge-name {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.badge-desc {
+  font-size: 20rpx;
+  color: #999;
+}

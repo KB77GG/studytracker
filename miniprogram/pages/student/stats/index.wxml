@@ -1,3 +1,51 @@
 <view class="container">
-  <text>Student Stats Page</text>
+  <!-- 头部用户信息 -->
+  <view class="header">
+    <view class="user-info">
+      <view class="avatar">S</view>
+      <view class="info-text">
+        <text class="username">我的学习档案</text>
+        <text class="level">Lv.{{stats.level || 1}} 学习者</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 核心数据卡片 -->
+  <view class="stats-grid">
+    <view class="stat-card fire">
+      <view class="icon">🔥</view>
+      <view class="value">{{stats.streak || 0}}</view>
+      <view class="label">连续打卡(天)</view>
+    </view>
+    <view class="stat-card time">
+      <view class="icon">⏱️</view>
+      <view class="value">{{stats.total_hours || 0}}</view>
+      <view class="label">累计学习(小时)</view>
+    </view>
+  </view>
+
+  <!-- 本周趋势 -->
+  <view class="section">
+    <view class="section-title">📊 本周学习趋势</view>
+    <view class="chart-container">
+      <view class="bar-group" wx:for="{{stats.weekly_activity}}" wx:key="date">
+        <view class="bar-wrapper">
+          <view class="bar" style="height: {{item.count * 20 + 10}}rpx; max-height: 200rpx;"></view>
+        </view>
+        <text class="day-label">{{item.day_label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 勋章墙 -->
+  <view class="section">
+    <view class="section-title">🏆 我的勋章</view>
+    <view class="badges-grid">
+      <view class="badge-item" wx:for="{{stats.badges}}" wx:key="id">
+        <view class="badge-icon">{{item.icon}}</view>
+        <text class="badge-name">{{item.name}}</text>
+        <text class="badge-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
 </view>

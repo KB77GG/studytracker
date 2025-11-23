@@ -224,14 +224,83 @@ def get_student_stats():
     user = request.current_api_user
     student = user.student_profile
     
-    # 简单统计：本周完成任务数，总学习时长
-    # 这里可以根据需求扩展
+    # 使用 Task 表进行统计
+    student_name = student.full_name
     
+    # 1. 累计学习时长 (小时)
+    total_seconds = db.session.query(func.sum(Task.actual_seconds)).filter(
+        Task.student_name == student_name,
+        Task.status == 'done'
+    ).scalar() or 0
+    total_hours = round(total_seconds / 3600, 1)
+    
+    # 2. 连续打卡天数 (Streak)
+    # 获取所有有完成任务的日期，按倒序排列
+    completed_dates = db.session.query(Task.date).filter(
+        Task.student_name == student_name,
+        Task.status == 'done'
+    ).distinct().order_by(Task.date.desc()).all()
+    
+    streak = 0
+    if completed_dates:
+        today = date.today()
+        last_date_str = completed_dates[0][0] # YYYY-MM-DD string
+        try:
+            last_date = datetime.strptime(last_date_str, "%Y-%m-%d").date()
+            # 如果最后一次打卡是今天或昨天，则连续有效
+            if (today - last_date).days <= 1:
+                streak = 1
+                current_check = last_date
+                for i in range(1, len(completed_dates)):
+                    prev_date_str = completed_dates[i][0]
+                    prev_date = datetime.strptime(prev_date_str, "%Y-%m-%d").date()
+                    if (current_check - prev_date).days == 1:
+                        streak += 1
+                        current_check = prev_date
+                    else:
+                        break
+        except:
+            pass
+
+    # 3. 本周活跃度 (过去7天)
+    today = date.today()
+    week_dates = [(today - timedelta(days=i)) for i in range(6, -1, -1)]
+    weekly_activity = []
+    
+    for d in week_dates:
+        d_str = d.isoformat()
+        count = Task.query.filter(
+            Task.student_name == student_name,
+            Task.date == d_str,
+            Task.status == 'done'
+        ).count()
+        weekly_activity.append({
+            "date": d.strftime("%m-%d"),
+            "count": count,
+            "day_label": ["周一","周二","周三","周四","周五","周六","周日"][d.weekday()]
+        })
+
+    # 4. 简单勋章判断
+    badges = []
+    if streak >= 3:
+        badges.append({"id": "streak_3", "name": "坚持不懈", "icon": "🔥", "desc": "连续打卡3天"})
+    if streak >= 7:
+        badges.append({"id": "streak_7", "name": "习惯养成", "icon": "📅", "desc": "连续打卡7天"})
+    if total_hours >= 10:
+        badges.append({"id": "hours_10", "name": "学习新星", "icon": "⭐", "desc": "累计学习10小时"})
+    
+    # 如果没有勋章，给一个鼓励勋章
+    if not badges:
+        badges.append({"id": "newbie", "name": "初出茅庐", "icon": "🌱", "desc": "开始你的学习之旅"})
+
     return jsonify({
         "ok": True,
         "stats": {
-            "completed_tasks": 0, # TODO: 实现具体统计逻辑
-            "study_hours": 0
+            "streak": streak,
+            "total_hours": total_hours,
+            "weekly_activity": weekly_activity,
+            "badges": badges,
+            "level": int(total_hours // 5) + 1  # 简单等级计算：每5小时升一级
         }
     })
 
