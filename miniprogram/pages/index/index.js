@@ -35,8 +35,15 @@ Page({
                             wx.setStorageSync('token', result.token)
                             this.setData({ hasToken: true })
 
-                            // 处理角色跳转
-                            this.handleRoleRedirect(result.user.role)
+                            // 如果用户没有绑定身份（has_profile 为 false），显示角色选择
+                            // 否则直接跳转到对应角色的首页
+                            if (!result.user.has_profile) {
+                                // 显示角色选择
+                                this.setData({ isGuest: true })
+                            } else {
+                                // 已绑定，直接跳转
+                                this.handleRoleRedirect(result.user.role)
+                            }
                         } else {
                             wx.showToast({ title: '登录失败', icon: 'none' })
                         }
