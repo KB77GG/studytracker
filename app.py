@@ -399,17 +399,24 @@ def users_page():
                         db.session.add(profile)
                     db.session.commit()
                     flash("创建成功")
-        elif action == "auto_student":
-            try:
-                creds = create_student_parent_accounts(request.form.get("full_name"))
-            except AccountCreationError as exc:
-                flash(str(exc))
+        elif action == "create_student":
+            # 仅创建学生档案，不创建User账号（学生将通过微信小程序绑定）
+            full_name = request.form.get("full_name", "").strip()
+            if not full_name:
+                flash("请输入学生姓名")
             else:
-                flash(
-                    "学生账号：{student_username} / {student_password}；家长账号：{parent_username} / {parent_password}".format(
-                        **creds
+                # 检查是否已存在同名学生
+                existing = StudentProfile.query.filter_by(full_name=full_name, is_deleted=False).first()
+                if existing:
+                    flash(f"学生"{full_name}"已存在")
+                else:
+                    profile = StudentProfile(
+                        full_name=full_name,
+                        guardian_view_token=secrets.token_urlsafe(16),
                     )
-                )
+                    db.session.add(profile)
+                    db.session.commit()
+                    flash(f"学生档案"{full_name}"创建成功，学生可通过微信小程序绑定")
         elif action == "toggle":
             uid = int(request.form.get("user_id"))
             u = User.query.get(uid)
@@ -424,9 +431,18 @@ def users_page():
                 db.session.delete(u)
                 db.session.commit()
                 flash("用户已删除")
+        elif action == "delete_student":
+            # 删除学生档案
+            student_id = int(request.form.get("student_id"))
+            student = StudentProfile.query.get(student_id)
+            if student:
+                student.is_deleted = True
+                db.session.commit()
+                flash(f"学生档案"{student.full_name}"已删除")
 
     users = User.query.order_by(User.id.asc()).all()
-    return render_template("users.html", users=users)
+    students = StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.id.asc()).all()
+    return render_template("users.html", users=users, students=students)
 
  # ---- AJAX: 启用/停用 切换（无刷新）----
 @app.post("/api/users/<int:uid>/toggle")
