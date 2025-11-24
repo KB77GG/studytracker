@@ -106,6 +106,13 @@ Page({
     },
 
     cancelBind() {
+        // 如果是从其他页面 navigateTo 过来的，直接返回
+        const pages = getCurrentPages()
+        if (pages.length > 1) {
+            wx.navigateBack()
+            return
+        }
+
         this.setData({
             showBindForm: false,
             isGuest: true

@@ -67,7 +67,7 @@ Page({
     },
 
     navigateToAddStudent() {
-        wx.reLaunch({
+        wx.navigateTo({
             url: '/pages/index/index?action=bind_parent'
         })
     },
