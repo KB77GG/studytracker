@@ -9,13 +9,18 @@
         <text class="date">{{todayDate}}</text>
         <text class="greeting">家长，您好</text>
       </view>
-      <picker bindchange="switchStudent" value="{{currentStudentIndex}}" range="{{students}}" range-key="name">
-        <view class="student-picker">
-          <image class="picker-icon" src="/images/icons/student.png" wx:if="{{false}}"></image>
-          <text class="current-student">{{students[currentStudentIndex].name}}</text>
-          <text class="picker-arrow">▼</text>
+      <view class="header-right">
+        <picker bindchange="switchStudent" value="{{currentStudentIndex}}" range="{{students}}" range-key="name">
+          <view class="student-picker">
+            <image class="picker-icon" src="/images/icons/student.png" wx:if="{{false}}"></image>
+            <text class="current-student">{{students[currentStudentIndex].name}}</text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+        <view class="add-student-btn" bindtap="navigateToAddStudent">
+          <text class="add-icon">+</text>
         </view>
-      </picker>
+      </view>
     </view>
 
     <!-- 概览卡片 -->

@@ -66,6 +66,12 @@ Page({
         this.fetchStats(this.data.students[index].name)
     },
 
+    navigateToAddStudent() {
+        wx.reLaunch({
+            url: '/pages/index/index?action=bind_parent'
+        })
+    },
+
     viewReport() {
         const student = this.data.students[this.data.currentStudentIndex]
         wx.navigateTo({

@@ -66,6 +66,31 @@
   color: #999;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.add-student-btn {
+  width: 60rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.03);
+}
+
+.add-icon {
+  font-size: 40rpx;
+  color: #277C78;
+  font-weight: 300;
+  margin-top: -4rpx;
+}
+
 /* 通用卡片样式 */
 .glass-card {
   background: #fff;

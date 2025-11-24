@@ -12,7 +12,18 @@ Page({
         bindPhone: ''
     },
 
-    onLoad() {
+    onLoad(options) {
+        // 支持直接进入绑定模式（用于添加第二个孩子）
+        if (options && options.action === 'bind_parent') {
+            this.setData({
+                hasToken: true,
+                isGuest: false,
+                showBindForm: true,
+                targetRole: 'parent'
+            })
+            return
+        }
+
         if (app.globalData.token) {
             this.setData({ hasToken: true })
             this.checkUserRole()
