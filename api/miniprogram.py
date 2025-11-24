@@ -513,28 +513,56 @@ def get_parent_stats():
 
 @mp_bp.route("/debug/fix_db", methods=["GET"])
 def debug_fix_db():
-    """临时修复数据库结构"""
+    """临时修复数据库结构 - 增强版"""
     from models import db
     from sqlalchemy import text
     
+    result = {
+        "ok": True,
+        "logs": [],
+        "columns_before": [],
+        "columns_after": []
+    }
+    
     try:
-        # 尝试添加 created_at
+        # 1. 检查现有列
         try:
-            db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
-            db.session.commit()
+            rows = db.session.execute(text("PRAGMA table_info(parent_student_link)")).fetchall()
+            result["columns_before"] = [row[1] for row in rows] # row[1] is name
         except Exception as e:
-            db.session.rollback()
-            # 忽略错误（可能已存在）
-            pass
+            result["logs"].append(f"Error checking columns: {str(e)}")
             
-        # 尝试添加 updated_at
+        # 2. 尝试添加 created_at
+        if "created_at" not in result["columns_before"]:
+            try:
+                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                db.session.commit()
+                result["logs"].append("Added created_at")
+            except Exception as e:
+                db.session.rollback()
+                result["logs"].append(f"Failed to add created_at: {str(e)}")
+        else:
+            result["logs"].append("created_at already exists")
+            
+        # 3. 尝试添加 updated_at
+        if "updated_at" not in result["columns_before"]:
+            try:
+                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                db.session.commit()
+                result["logs"].append("Added updated_at")
+            except Exception as e:
+                db.session.rollback()
+                result["logs"].append(f"Failed to add updated_at: {str(e)}")
+        else:
+            result["logs"].append("updated_at already exists")
+
+        # 4. 再次检查
         try:
-            db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
-            db.session.commit()
+            rows = db.session.execute(text("PRAGMA table_info(parent_student_link)")).fetchall()
+            result["columns_after"] = [row[1] for row in rows]
         except Exception as e:
-            db.session.rollback()
-            pass
+            result["logs"].append(f"Error checking columns after: {str(e)}")
             
-        return jsonify({"ok": True, "message": "Database schema updated"})
+        return jsonify(result)
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
