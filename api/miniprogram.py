@@ -547,7 +547,8 @@ def debug_fix_db():
         # 3. 尝试添加 updated_at
         if "updated_at" not in result["columns_before"]:
             try:
-                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                # 使用固定时间字符串作为默认值，避免 SQLite "non-constant default" 错误
+                db.session.execute(text("ALTER TABLE parent_student_link ADD COLUMN updated_at DATETIME DEFAULT '2000-01-01 00:00:00'"))
                 db.session.commit()
                 result["logs"].append("Added updated_at")
             except Exception as e:
