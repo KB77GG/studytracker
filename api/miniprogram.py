@@ -498,6 +498,32 @@ def get_parent_stats():
             "rate": d_rate
         })
         
+    # 3. 学科分布统计 (最近30天)
+    thirty_days_ago = today - timedelta(days=30)
+    recent_tasks = Task.query.filter(
+        Task.student_name == student_name,
+        Task.date >= thirty_days_ago.isoformat()
+    ).all()
+    
+    subject_counts = {}
+    total_recent = 0
+    for t in recent_tasks:
+        cat = t.category or "其他"
+        subject_counts[cat] = subject_counts.get(cat, 0) + 1
+        total_recent += 1
+        
+    subject_stats = []
+    for cat, count in subject_counts.items():
+        percent = round(count / total_recent * 100) if total_recent > 0 else 0
+        subject_stats.append({
+            "subject": cat,
+            "count": count,
+            "percent": percent
+        })
+    
+    # 按数量降序排序
+    subject_stats.sort(key=lambda x: x["count"], reverse=True)
+    
     return jsonify({
         "ok": True,
         "today": {
@@ -508,7 +534,8 @@ def get_parent_stats():
             "rate": completion_rate
         },
         "recent": recent_feed,
-        "weekly": weekly_stats
+        "weekly": weekly_stats,
+        "subjects": subject_stats
     })
 
 @mp_bp.route("/debug/fix_db", methods=["GET"])

@@ -1,64 +1,102 @@
+/* 全局容器 */
 .container {
   padding: 30rpx;
-  background: #f7f7fa;
   min-height: 100vh;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
+/* 背景渐变 */
+.bg-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 400rpx;
+  background: linear-gradient(180deg, #E0F7FA 0%, #F7F7FA 100%);
+  z-index: -1;
+}
+
+/* 顶部栏 */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30rpx;
+  padding-top: 10rpx;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
 }
 
 .date {
-  font-size: 36rpx;
-  font-weight: bold;
+  font-size: 40rpx;
+  font-weight: 800;
   color: #333;
+  margin-bottom: 4rpx;
+}
+
+.greeting {
+  font-size: 24rpx;
+  color: #666;
 }
 
 .student-picker {
   display: flex;
   align-items: center;
-  background: #fff;
-  padding: 10rpx 20rpx;
-  border-radius: 30rpx;
-  border: 1rpx solid #e0e0e0;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 12rpx 24rpx;
+  border-radius: 40rpx;
+  border: 1rpx solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.03);
 }
 
 .current-student {
   font-size: 28rpx;
+  font-weight: 600;
   color: #333;
   margin-right: 10rpx;
 }
 
 .picker-arrow {
-  font-size: 24rpx;
+  font-size: 20rpx;
   color: #999;
 }
 
-.stats-card {
+/* 通用卡片样式 */
+.glass-card {
   background: #fff;
-  border-radius: 20rpx;
+  border-radius: 24rpx;
   padding: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
-  margin-bottom: 40rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.04);
+  margin-bottom: 30rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.6);
 }
 
+/* 概览卡片 */
 .stats-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 30rpx;
-  border-bottom: 1rpx solid #f0f0f0;
   padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f5f5f5;
 }
 
 .stats-title {
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
+  display: block;
+}
+
+.stats-subtitle {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
 }
 
 .stats-rate {
@@ -67,19 +105,21 @@
 }
 
 .rate-num {
-  font-size: 48rpx;
-  font-weight: bold;
+  font-size: 56rpx;
+  font-weight: 800;
   color: #277C78;
+  line-height: 1;
 }
 
 .rate-unit {
   font-size: 24rpx;
   color: #277C78;
   margin-left: 4rpx;
+  font-weight: bold;
 }
 
 .rate-label {
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #999;
   margin-left: 10rpx;
 }
@@ -108,60 +148,186 @@
   color: #999;
 }
 
-.section-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
+/* 图表区域 */
+.section-header {
   margin-bottom: 20rpx;
 }
 
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-title-large {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #333;
+}
+
+.mt-40 {
+  margin-top: 40rpx;
+  margin-bottom: 20rpx;
+}
+
+/* 柱状图 */
+.bar-chart {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 200rpx;
+  padding-top: 20rpx;
+}
+
+.bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 12%;
+}
+
+.bar-column {
+  width: 100%;
+  height: 150rpx;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 10rpx;
+}
+
+.bar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 8rpx;
+  transition: height 0.5s ease;
+}
+
+.bar-label {
+  font-size: 20rpx;
+  color: #999;
+}
+
+/* 学科分布进度条 */
+.subject-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.subject-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.subject-name {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.subject-count {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.progress-track {
+  height: 12rpx;
+  background: #f0f0f0;
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #277C78, #4DB6AC);
+  border-radius: 6rpx;
+}
+
+/* 最近动态列表 (时间轴样式) */
 .feed-list {
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
+  gap: 0;
 }
 
 .feed-item {
+  display: flex;
+  margin-bottom: 0;
+}
+
+.feed-left {
+  width: 40rpx;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20rpx;
+}
+
+.feed-line {
+  position: absolute;
+  top: 20rpx;
+  bottom: -20rpx;
+  width: 2rpx;
+  background: #e0e0e0;
+  z-index: 0;
+}
+
+.feed-item:last-child .feed-line {
+  display: none;
+}
+
+.feed-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  z-index: 1;
+  margin-top: 10rpx;
+  border: 4rpx solid #fff;
+  box-shadow: 0 0 0 2rpx #e0e0e0;
+}
+
+.dot-green {
+  background: #4CAF50;
+  box-shadow: 0 0 0 2rpx #4CAF50;
+}
+
+.dot-blue {
+  background: #2196F3;
+  box-shadow: 0 0 0 2rpx #2196F3;
+}
+
+.feed-right {
+  flex: 1;
   background: #fff;
   border-radius: 16rpx;
   padding: 24rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.03);
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.03);
 }
 
 .feed-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 16rpx;
-}
-
-.feed-meta {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
+  margin-bottom: 12rpx;
 }
 
 .feed-cat {
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #277C78;
-  background: #e0f2f1;
+  background: rgba(39, 124, 120, 0.1);
   padding: 4rpx 12rpx;
-  border-radius: 8rpx;
+  border-radius: 6rpx;
+  font-weight: 500;
 }
 
 .feed-date {
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #999;
-}
-
-.feed-score {
-  font-size: 26rpx;
-  color: #666;
-}
-
-.highlight {
-  color: #277C78;
-  font-weight: bold;
-  font-size: 30rpx;
 }
 
 .feed-content {
@@ -171,24 +337,39 @@
 .feed-detail {
   font-size: 28rpx;
   color: #333;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
-.feed-feedback {
-  background: #f9f9f9;
-  padding: 16rpx;
-  border-radius: 8rpx;
+.feed-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  border-top: 1rpx solid #f9f9f9;
+  padding-top: 16rpx;
 }
 
-.feedback-label {
+.feed-score {
   font-size: 24rpx;
-  color: #999;
-  margin-right: 8rpx;
+  color: #666;
 }
 
-.feedback-text {
-  font-size: 26rpx;
+.highlight {
+  color: #277C78;
+  font-weight: bold;
+  font-size: 28rpx;
+}
+
+.feed-teacher-note {
+  font-size: 24rpx;
   color: #666;
+  background: #fff9c4;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  display: inline-block;
+}
+
+.note-icon {
+  margin-right: 6rpx;
 }
 
 .empty-feed, .empty-state {
