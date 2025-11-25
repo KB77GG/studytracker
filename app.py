@@ -408,7 +408,7 @@ def users_page():
                 # 检查是否已存在同名学生
                 existing = StudentProfile.query.filter_by(full_name=full_name, is_deleted=False).first()
                 if existing:
-                    flash(f"学生"{full_name}"已存在")
+                    flash(f"学生'{full_name}'已存在")
                 else:
                     profile = StudentProfile(
                         full_name=full_name,
@@ -416,7 +416,7 @@ def users_page():
                     )
                     db.session.add(profile)
                     db.session.commit()
-                    flash(f"学生档案"{full_name}"创建成功，学生可通过微信小程序绑定")
+                    flash(f"学生档案'{full_name}'创建成功，学生可通过微信小程序绑定")
         elif action == "toggle":
             uid = int(request.form.get("user_id"))
             u = User.query.get(uid)
@@ -438,7 +438,7 @@ def users_page():
             if student:
                 student.is_deleted = True
                 db.session.commit()
-                flash(f"学生档案"{student.full_name}"已删除")
+                flash(f"学生档案'{student.full_name}'已删除")
 
     users = User.query.order_by(User.id.asc()).all()
     students = StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.id.asc()).all()

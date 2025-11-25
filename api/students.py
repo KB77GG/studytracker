@@ -12,6 +12,8 @@ from models import (
     PlanItemSession,
     StudyPlan,
     User,
+    StudentProfile,
+    ParentStudentLink,
     db,
 )
 
@@ -102,25 +104,31 @@ def api_me():
             "guardian_token": user.student_profile.guardian_view_token,
         }
     elif user.role == User.ROLE_PARENT:
-        kids = (
-            StudentProfile.query.filter(
-                StudentProfile.primary_parent_id == user.id,
-                StudentProfile.is_deleted.is_(False),
-            )
-            .all()
-        )
+        # Use ParentStudentLink to find children
+        links = ParentStudentLink.query.filter_by(
+            parent_id=user.id,
+            is_active=True
+        ).all()
+        
         updated = False
-        for kid in kids:
-            if not kid.guardian_view_token:
-                kid.guardian_view_token = token_urlsafe(16)
-                updated = True
-            children.append(
-                {
-                    "student_id": kid.id,
-                    "full_name": kid.full_name,
-                    "guardian_token": kid.guardian_view_token,
-                }
-            )
+        for link in links:
+            # Find student profile by name
+            kid = StudentProfile.query.filter_by(
+                full_name=link.student_name,
+                is_deleted=False
+            ).first()
+            
+            if kid:
+                if not kid.guardian_view_token:
+                    kid.guardian_view_token = token_urlsafe(16)
+                    updated = True
+                children.append(
+                    {
+                        "student_id": kid.id,
+                        "full_name": kid.full_name,
+                        "guardian_token": kid.guardian_view_token,
+                    }
+                )
         if updated:
             db.session.commit()
     return jsonify(

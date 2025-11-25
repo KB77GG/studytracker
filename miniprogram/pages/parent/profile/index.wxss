@@ -1,0 +1,77 @@
+.container {
+  padding: 20rpx;
+  background: #f7f7fa;
+  min-height: 100vh;
+}
+
+.user-card {
+  background: white;
+  padding: 40rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  background: #f0f2f5;
+  border-radius: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30rpx;
+}
+
+.avatar image {
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.info .name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.info .role {
+  font-size: 24rpx;
+  color: #666;
+  background: #f0f2f5;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  display: inline-block;
+}
+
+.action-list {
+  background: white;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.action-item {
+  padding: 30rpx 40rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1rpx solid #f0f0f0;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.action-item:last-child {
+  border-bottom: none;
+}
+
+.action-item.logout {
+  color: #ff4d4f;
+}
+
+.arrow {
+  color: #ccc;
+  font-size: 24rpx;
+}

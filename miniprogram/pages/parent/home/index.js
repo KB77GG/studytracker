@@ -18,6 +18,14 @@ Page({
         this.fetchStudents()
     },
 
+    onShow() {
+        if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+            this.getTabBar().setData({
+                selected: 0
+            })
+        }
+    },
+
     onPullDownRefresh() {
         if (this.data.students.length > 0) {
             this.fetchStats(this.data.students[this.data.currentStudentIndex].name)

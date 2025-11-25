@@ -5,7 +5,8 @@
         "pages/student/task/index",
         "pages/student/stats/index",
         "pages/parent/home/index",
-        "pages/parent/report/index"
+        "pages/parent/report/index",
+        "pages/parent/profile/index"
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -14,6 +15,7 @@
         "navigationBarTextStyle": "black"
     },
     "tabBar": {
+        "custom": true,
         "color": "#999999",
         "selectedColor": "#667eea",
         "backgroundColor": "#ffffff",
@@ -26,6 +28,18 @@
             },
             {
                 "pagePath": "pages/student/stats/index",
+                "text": "我的",
+                "iconPath": "images/tabbar/profile.png",
+                "selectedIconPath": "images/tabbar/profile_active.png"
+            },
+            {
+                "pagePath": "pages/parent/home/index",
+                "text": "报告",
+                "iconPath": "images/tabbar/task.png",
+                "selectedIconPath": "images/tabbar/task_active.png"
+            },
+            {
+                "pagePath": "pages/parent/profile/index",
                 "text": "我的",
                 "iconPath": "images/tabbar/profile.png",
                 "selectedIconPath": "images/tabbar/profile_active.png"
