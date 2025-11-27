@@ -8,11 +8,9 @@ def init_app(app):
     from api.wechat import wechat_bp
     from api.students import api_bp
     from api.miniprogram import mp_bp
-    from api.guardians import guardian_bp
     from api.materials import material_bp  # New material bank API
 
     app.register_blueprint(wechat_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(mp_bp)
-    app.register_blueprint(guardian_bp)
     app.register_blueprint(material_bp)  # Register material bank
