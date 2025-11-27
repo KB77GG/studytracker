@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}材料库管理{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">📚 材料库管理</h4>
+                    <button class="btn btn-primary" onclick="window.location.href='/materials/create'">
+                        <i class="fas fa-plus"></i> 创建新材料
+                    </button>
+                </div>
+                <div class="card-body">
+                    <!-- 筛选栏 -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <select class="form-control" id="typeFilter" onchange="filterMaterials()">
+                                <option value="">全部类型</option>
+                                <option value="grammar">语法练习</option>
+                                <option value="translation">翻译练习</option>
+                                <option value="speaking">口语朗读</option>
+                                <option value="writing">写作训练</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="searchInput" placeholder="搜索材料标题..."
+                                onkeyup="filterMaterials()">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-secondary btn-block" onclick="loadMaterials()">
+                                <i class="fas fa-sync"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 材料列表 -->
+                    <div id="materialsList">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="sr-only">加载中...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let allMaterials = [];
+
+    // 加载材料列表
+    async function loadMaterials() {
+        const typeFilter = document.getElementById('typeFilter').value;
+        const searchInput = document.getElementById('searchInput').value;
+
+        try {
+            let url = '/api/materials?';
+            if (typeFilter) url += `type=${typeFilter}&`;
+            if (searchInput) url += `search=${encodeURIComponent(searchInput)}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.ok) {
+                allMaterials = data.materials;
+                renderMaterials(allMaterials);
+            } else {
+                showError('加载失败：' + (data.error || '未知错误'));
+            }
+        } catch (err) {
+            showError('网络错误：' + err.message);
+        }
+    }
+
+    // 渲染材料列表
+    function renderMaterials(materials) {
+        const container = document.getElementById('materialsList');
+
+        if (materials.length === 0) {
+            container.innerHTML = `
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-inbox fa-3x mb-3"></i>
+                <p>暂无材料</p>
+            </div>
+        `;
+            return;
+        }
+
+        const typeLabels = {
+            'grammar': '语法',
+            'translation': '翻译',
+            'speaking': '口语',
+            'writing': '写作'
+        };
+
+        const typeColors = {
+            'grammar': 'primary',
+            'translation': 'success',
+            'speaking': 'warning',
+            'writing': 'info'
+        };
+
+        let html = '<div class="list-group">';
+        materials.forEach(m => {
+            html += `
+            <div class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">
+                        <span class="badge badge-${typeColors[m.type] || 'secondary'} mr-2">
+                            ${typeLabels[m.type] || m.type}
+                        </span>
+                        ${m.title}
+                    </h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewMaterial(${m.id})">
+                            <i class="fas fa-eye"></i> 查看
+                        </button>
+                        <button class="btn btn-sm btn-outline-success" onclick="createTaskFromMaterial(${m.id})">
+                            <i class="fas fa-paper-plane"></i> 发布任务
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning" onclick="editMaterial(${m.id})">
+                            <i class="fas fa-edit"></i> 编辑
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteMaterial(${m.id})">
+                            <i class="fas fa-trash"></i> 删除
+                        </button>
+                    </div>
+                </div>
+                <p class="mb-1 text-muted">${m.description || '暂无说明'}</p>
+                <small>
+                    <i class="fas fa-list-ol"></i> ${m.question_count} 题 | 
+                    <i class="fas fa-calendar"></i> ${m.created_at}
+                </small>
+            </div>
+        `;
+        });
+        html += '</div>';
+
+        container.innerHTML = html;
+    }
+
+    // 筛选材料
+    function filterMaterials() {
+        loadMaterials();
+    }
+
+    // 查看材料详情
+    function viewMaterial(id) {
+        window.location.href = `/materials/${id}`;
+    }
+
+    // 编辑材料
+    function editMaterial(id) {
+        window.location.href = `/materials/${id}/edit`;
+    }
+
+    // 从材料创建任务
+    function createTaskFromMaterial(id) {
+        window.location.href = `/tasks/create?material_id=${id}`;
+    }
+
+    // 删除材料
+    async function deleteMaterial(id) {
+        if (!confirm('确定要删除这份材料吗？')) return;
+
+        try {
+            const response = await fetch(`/api/materials/${id}`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+
+            if (data.ok) {
+                alert('删除成功！');
+                loadMaterials();
+            } else {
+                showError('删除失败：' + (data.error || '未知错误'));
+            }
+        } catch (err) {
+            showError('网络错误：' + err.message);
+        }
+    }
+
+    // 显示错误
+    function showError(message) {
+        alert(message);
+    }
+
+    // 页面加载时执行
+    document.addEventListener('DOMContentLoaded', function () {
+        loadMaterials();
+    });
+</script>
+
+<style>
+    .list-group-item {
+        transition: all 0.2s;
+    }
+
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+        transform: translateX(5px);
+    }
+</style>
+{% endblock %}

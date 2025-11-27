@@ -979,17 +979,6 @@ def api_catalog_tasks():
         .order_by(TaskCatalog.exam_system, TaskCatalog.module, TaskCatalog.task_name)
         .all()
     )
-    return jsonify(
-        {
-            "ok": True,
-            "tasks": [
-                {
-                    "id": t.id,
-                    "exam_system": t.exam_system,
-                    "module": t.module,
-                    "task_name": t.task_name,
-                    "description": t.description,
-                    "default_minutes": t.default_minutes,
                 }
                 for t in tasks
             ],
@@ -2697,3 +2686,46 @@ tbody tr:hover {
         download_name=filename,
         mimetype="application/pdf",
     )
+
+# ============================================================================
+# Material Bank Web Routes
+# ============================================================================
+
+@app.route("/materials")
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def materials_list():
+    """Material bank list page."""
+    return render_template("materials.html")
+
+
+@app.route("/materials/create")
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def materials_create():
+    """Create new material."""
+    return render_template("material_form.html")
+
+
+@app.route("/materials/<int:material_id>")
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def materials_view(material_id):
+    """View material details."""
+    from models import MaterialBank
+    material = MaterialBank.query.filter_by(id=material_id, is_deleted=False).first_or_404()
+    return render_template("material_view.html", material=material)
+
+
+@app.route("/materials/<int:material_id>/edit")
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def materials_edit(material_id):
+    """Edit material."""
+    from models import MaterialBank
+    material = MaterialBank.query.filter_by(id=material_id, is_deleted=False).first_or_404()
+    return render_template("material_form.html", material=material)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}{{ material.title }} - 材料详情{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <a href="/materials" class="btn btn-outline-secondary btn-sm mr-2">
+                            <i class="fas fa-arrow-left"></i> 返回列表
+                        </a>
+                        <h4 class="d-inline-block mb-0 align-middle">{{ material.title }}</h4>
+                        {% if material.type == 'grammar' %}
+                        <span class="badge badge-primary ml-2">语法练习</span>
+                        {% elif material.type == 'translation' %}
+                        <span class="badge badge-success ml-2">翻译练习</span>
+                        {% elif material.type == 'speaking' %}
+                        <span class="badge badge-warning ml-2">口语朗读</span>
+                        {% elif material.type == 'writing' %}
+                        <span class="badge badge-info ml-2">写作训练</span>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <button class="btn btn-success" onclick="createTaskFromMaterial({{ material.id }})">
+                            <i class="fas fa-paper-plane"></i> 发布任务
+                        </button>
+                        <a href="/materials/{{ material.id }}/edit" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> 编辑
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- 知识点说明 -->
+                    {% if material.description %}
+                    <div class="alert alert-info">
+                        <h5><i class="fas fa-info-circle"></i> 知识点说明</h5>
+                        <p class="mb-0" style="white-space: pre-wrap;">{{ material.description }}</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- 题目列表 -->
+                    <h5 class="mt-4 mb-3">题目列表 ({{ material.questions.count() }}题)</h5>
+
+                    <div class="questions-container">
+                        {% for question in material.questions %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="card-title text-muted">题目 {{ question.sequence }}</h6>
+                                    <span class="badge badge-light">{{ question.points }}分</span>
+                                </div>
+
+                                <p class="card-text lead">{{ question.content }}</p>
+
+                                {% if question.options.count() > 0 %}
+                                <div class="options-list ml-3 mb-3">
+                                    {% for option in question.options %}
+                                    <div class="option-item">
+                                        <span class="badge badge-secondary">{{ option.option_key }}</span>
+                                        {{ option.option_text }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                <div class="alert alert-secondary mb-0 py-2">
+                                    <strong>参考答案：</strong>
+                                    <span class="text-success font-weight-bold">{{ question.reference_answer or '未设置'
+                                        }}</span>
+                                    {% if question.hint %}
+                                    <br>
+                                    <small class="text-muted">提示：{{ question.hint }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5 text-muted">
+                            <p>暂无题目</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function createTaskFromMaterial(id) {
+        // TODO: 跳转到任务发布页面，并预选该材料
+        window.location.href = `/tasks/create?material_id=${id}`;
+    }
+</script>
+{% endblock %}

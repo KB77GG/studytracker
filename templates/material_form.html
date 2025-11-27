@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}{{ '编辑' if material else '创建' }}材料{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">{{ '📝 编辑材料' if material else '➕ 创建新材料' }}</h4>
+                </div>
+                <div class="card-body">
+                    <form id="materialForm">
+                        <!-- 基本信息 -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>标题 *</label>
+                                    <input type="text" class="form-control" id="title" required
+                                        value="{{ material.title if material else '' }}"
+                                        placeholder="例如：主谓一致-either/or结构">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>类型 *</label>
+                                    <select class="form-control" id="type" required>
+                                        <option value="">选择类型</option>
+                                        <option value="grammar" {{ 'selected' if material and material.type=='grammar'
+                                            else '' }}>语法练习</option>
+                                        <option value="translation" {{ 'selected' if material and
+                                            material.type=='translation' else '' }}>翻译练习</option>
+                                        <option value="speaking" {{ 'selected' if material and material.type=='speaking'
+                                            else '' }}>口语朗读</option>
+                                        <option value="writing" {{ 'selected' if material and material.type=='writing'
+                                            else '' }}>写作训练</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>知识点说明</label>
+                            <textarea class="form-control" id="description" rows="3"
+                                placeholder="粘贴知识点说明（如：Either...or 连接主语时，谓语动词与靠近的主语保持一致...）">{{ material.description if material else '' }}</textarea>
+                        </div>
+
+                        <hr>
+
+                        <!-- 题目导入方式 -->
+                        <div class="form-group">
+                            <label class="font-weight-bold">题目导入方式</label>
+                            <div class="btn-group d-block" role="group">
+                                <button type="button" class="btn btn-outline-primary" onclick="showTab('paste')">
+                                    <i class="fas fa-clipboard"></i> 从Word复制粘贴
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="showTab('manual')">
+                                    <i class="fas fa-keyboard"></i> 手动添加
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 粘贴导入标签页 -->
+                        <div id="pasteTab" style="display: block;">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5>步骤1：粘贴题目</h5>
+                                    <textarea class="form-control mb-3" id="pastedQuestions" rows="15"
+                                        placeholder="粘贴Word题目内容，例如：&#10;&#10;1. Either the mayor or the council members ___ expected...&#10;   A. is&#10;   B. are&#10;   C. was&#10;   D. be&#10;&#10;2. Neither the students nor the teacher ___ ready.&#10;   A. is&#10;   B. are&#10;   ..."></textarea>
+                                    <button type="button" class="btn btn-success" onclick="parseQuestions()">
+                                        <i class="fas fa-lightbulb"></i> 智能识别题目
+                                    </button>
+
+                                    <hr>
+
+                                    <h5>步骤2：粘贴答案</h5>
+                                    <textarea class="form-control mb-3" id="pastedAnswers" rows="8"
+                                        placeholder="粘贴答案列表，例如：&#10;&#10;1. B&#10;2. A&#10;3. C&#10;..."></textarea>
+                                    <button type="button" class="btn btn-success" onclick="parseAnswers()">
+                                        <i class="fas fa-check"></i> 匹配答案
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 手动添加标签页 -->
+                        <div id="manualTab" style="display: none;">
+                            <button type="button" class="btn btn-primary mb-3" onclick="addQuestion()">
+                                <i class="fas fa-plus"></i> 添加题目
+                            </button>
+                        </div>
+
+                        <hr>
+
+                        <!-- 题目列表预览 -->
+                        <div class="form-group">
+                            <label class="font-weight-bold">题目列表 <span id="questionCount"
+                                    class="badge badge-info">0</span></label>
+                            <div id="questionsList" class="border rounded p-3"
+                                style="max-height: 500px; overflow-y: auto;">
+                                <p class="text-muted text-center">暂无题目</p>
+                            </div>
+                        </div>
+
+                        <!-- 提交按钮 -->
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> 保存材料
+                            </button>
+                            <a href="/materials" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> 取消
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let questions = [];
+
+    // 切换标签页
+    function showTab(tab) {
+        document.getElementById('pasteTab').style.display = tab === 'paste' ? 'block' : 'none';
+        document.getElementById('manualTab').style.display = tab === 'manual' ? 'block' : 'none';
+    }
+
+    // 智能识别题目
+    async function parseQuestions() {
+        const text = document.getElementById('pastedQuestions').value.trim();
+        if (!text) {
+            alert('请先粘贴题目内容');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/materials/parse', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            const data = await response.json();
+
+            if (data.ok) {
+                questions = data.questions;
+                renderQuestions();
+                alert(`成功识别 ${questions.length} 道题目！`);
+            } else {
+                alert('识别失败：' + (data.error || '未知错误'));
+            }
+        } catch (err) {
+            alert('网络错误：' + err.message);
+        }
+    }
+
+    // 匹配答案
+    async function parseAnswers() {
+        const text = document.getElementById('pastedAnswers').value.trim();
+        if (!text) {
+            alert('请先粘贴答案列表');
+            return;
+        }
+
+        if (questions.length === 0) {
+            alert('请先识别题目');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/materials/parse-answers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            const data = await response.json();
+
+            if (data.ok) {
+                // 匹配答案到题目
+                questions.forEach(q => {
+                    if (data.answers[q.sequence]) {
+                        q.reference_answer = data.answers[q.sequence];
+                    }
+                });
+                renderQuestions();
+                alert('答案匹配成功！');
+            } else {
+                alert('匹配失败：' + (data.error || '未知错误'));
+            }
+        } catch (err) {
+            alert('网络错误：' + err.message);
+        }
+    }
+
+    // 渲染题目列表
+    function renderQuestions() {
+        const container = document.getElementById('questionsList');
+        document.getElementById('questionCount').textContent = questions.length;
+
+        if (questions.length === 0) {
+            container.innerHTML = '<p class="text-muted text-center">暂无题目</p>';
+            return;
+        }
+
+        let html = '';
+        questions.forEach((q, index) => {
+            html += `
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6>题目 ${q.sequence}</h6>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removeQuestion(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <p class="mb-2">${q.content}</p>
+                    ${q.options ? q.options.map(opt => `
+                        <div class="ml-3">
+                            <small class="badge badge-light">${opt.key}</small> ${opt.text}
+                        </div>
+                    `).join('') : ''}
+                    <small class="text-success">
+                        <strong>参考答案：</strong>${q.reference_answer || '未设置'}
+                    </small>
+                </div>
+            </div>
+        `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    // 移除题目
+    function removeQuestion(index) {
+        if (confirm('确定删除这道题目吗？')) {
+            questions.splice(index, 1);
+            renderQuestions();
+        }
+    }
+
+    // 提交表单
+    document.getElementById('materialForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const title = document.getElementById('title').value.trim();
+        const type = document.getElementById('type').value;
+        const description = document.getElementById('description').value.trim();
+
+        if (!title || !type) {
+            alert('请填写标题和类型');
+            return;
+        }
+
+        if (questions.length === 0) {
+            alert('请至少添加一道题目');
+            return;
+        }
+
+        const payload = {
+            title,
+            type,
+            description,
+            questions
+        };
+
+        try {
+            const response = await fetch('/api/materials', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+
+            if (data.ok) {
+                alert('保存成功！');
+                window.location.href = '/materials';
+            } else {
+                alert('保存失败：' + (data.error || '未知错误'));
+            }
+        } catch (err) {
+            alert('网络错误：' + err.message);
+        }
+    });
+</script>
+{% endblock %}
