@@ -274,15 +274,17 @@ def parse_answers():
     text = data.get('text', '')
     
     answers = {}
-    lines = text.split('\n')
+    answers = {}
     
-    for line in lines:
-        line = line.strip()
-        # Match: "1. B" or "1、B" or "1. Answer: B"
-        match = re.match(r'^(\d+)[.、]\s*(?:Answer:)?\s*([A-D])$', line, re.IGNORECASE)
-        if match:
-            question_num = int(match.group(1))
-            answer = match.group(2).upper()
-            answers[question_num] = answer
+    # Normalize text: replace Chinese punctuation with English
+    text = text.replace('：', ':').replace('、', '.')
+    
+    # Regex to find all "1. A" or "1. Answer: A" patterns
+    # Handles multiple answers on one line
+    matches = re.findall(r'(\d+)\s*[.]\s*(?:Answer:)?\s*([A-D])', text, re.IGNORECASE)
+    
+    for num_str, ans_str in matches:
+        question_num = int(num_str)
+        answers[question_num] = ans_str.upper()
     
     return jsonify({"ok": True, "answers": answers})
