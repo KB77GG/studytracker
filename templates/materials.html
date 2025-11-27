@@ -63,7 +63,9 @@
             if (typeFilter) url += `type=${typeFilter}&`;
             if (searchInput) url += `search=${encodeURIComponent(searchInput)}`;
 
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                credentials: 'include'
+            });
             const data = await response.json();
 
             if (data.ok) {
@@ -170,7 +172,8 @@
 
         try {
             const response = await fetch(`/api/materials/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'include'
             });
             const data = await response.json();
 
