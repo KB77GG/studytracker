@@ -4,10 +4,15 @@ api_bp = Blueprint("api_v1", __name__, url_prefix="/api/v1")
 
 
 def init_app(app):
-    from . import auth, students, guardians  # noqa: F401
-    from .wechat import wechat_bp
-    from .miniprogram import mp_bp
+    """Register all API blueprints."""
+    from api.wechat import wechat_bp
+    from api.students import api_bp
+    from api.miniprogram import mp_bp
+    from api.guardians import guardian_bp
+    from api.materials import material_bp  # New material bank API
 
+    app.register_blueprint(wechat_bp)
     app.register_blueprint(api_bp)
-    app.register_blueprint(wechat_bp, url_prefix="/api/wechat")
-    app.register_blueprint(mp_bp, url_prefix="/api/miniprogram")
+    app.register_blueprint(mp_bp)
+    app.register_blueprint(guardian_bp)
+    app.register_blueprint(material_bp)  # Register material bank

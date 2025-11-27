@@ -28,7 +28,13 @@
       <view class="stats-header">
         <view class="stats-title-group">
           <text class="stats-title">今日概览</text>
-          <text class="stats-subtitle">实时更新</text>
+          <view class="update-info">
+            <text class="stats-subtitle" wx:if="{{lastUpdateTime}}">{{lastUpdateTime}} 更新</text>
+            <view class="live-indicator" wx:if="{{stats.isStudying}}">
+              <view class="live-dot"></view>
+              <text class="live-text">实时学习中</text>
+            </view>
+          </view>
         </view>
         <view class="stats-rate">
           <text class="rate-num">{{stats.today.rate}}</text>

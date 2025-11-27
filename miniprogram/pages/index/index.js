@@ -46,6 +46,12 @@ Page({
                             wx.setStorageSync('token', result.token)
                             this.setData({ hasToken: true })
 
+                            // Save role to storage
+                            if (result.user.role) {
+                                wx.setStorageSync('role', result.user.role)
+                                app.globalData.role = result.user.role
+                            }
+
                             // 如果用户没有绑定身份（has_profile 为 false），显示角色选择
                             // 否则直接跳转到对应角色的首页
                             if (!result.user.has_profile) {
@@ -76,6 +82,8 @@ Page({
         try {
             const res = await request('/v1/me')
             if (res.ok) {
+                wx.setStorageSync('role', res.data.role)
+                app.globalData.role = res.data.role
                 this.handleRoleRedirect(res.data.role)
             }
         } catch (err) {
@@ -151,6 +159,8 @@ Page({
 
             if (res.ok) {
                 wx.showToast({ title: '绑定成功', icon: 'success' })
+                wx.setStorageSync('role', this.data.targetRole)
+                app.globalData.role = this.data.targetRole
                 setTimeout(() => {
                     this.handleRoleRedirect(this.data.targetRole)
                 }, 1500)

@@ -469,6 +469,10 @@ class Task(db.Model):
     started_at = db.Column(db.DateTime)
     ended_at = db.Column(db.DateTime)
     
+    # Material Bank Fields
+    material_id = db.Column(db.Integer, db.ForeignKey("material_bank.id"), index=True)
+    grading_mode = db.Column(db.String(50), default="image")  # image/material/hybrid
+    
     # Mini Program Fields
     student_submitted = db.Column(db.Boolean, default=False)
     submitted_at = db.Column(db.DateTime)
@@ -480,9 +484,102 @@ class Task(db.Model):
     feedback_image = db.Column(db.String(200))
 
     creator = db.relationship("User", backref=db.backref("legacy_tasks", lazy="dynamic"))
+    material = db.relationship("MaterialBank", backref=db.backref("tasks", lazy="dynamic"))
 
     def __repr__(self) -> str:
         return f"<Task {self.student_name} {self.category} {self.status}>"
+
+
+# ============================================================================
+# Material Bank System (Structured Questions)
+# ============================================================================
+
+class MaterialBank(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Material bank for structured learning materials."""
+    
+    __tablename__ = "material_bank"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    type = db.Column(db.String(50), nullable=False, index=True)  # grammar/translation/speaking/writing
+    description = db.Column(db.Text)  # Knowledge points explanation
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+    is_active = db.Column(db.Boolean, default=True, nullable=False, index=True)
+    
+    # Relationships
+    creator = db.relationship("User", backref=db.backref("materials", lazy="dynamic"))
+    questions = db.relationship("Question", backref="material", lazy="dynamic", cascade="all, delete-orphan")
+    
+    def __repr__(self):
+        return f"<MaterialBank {self.id}: {self.title}>"
+
+
+class Question(db.Model, TimestampMixin):
+    """Individual question within a material."""
+    
+    __tablename__ = "question"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    material_id = db.Column(db.Integer, db.ForeignKey("material_bank.id"), nullable=False, index=True)
+    sequence = db.Column(db.Integer, nullable=False)  # Order in material (1, 2, 3...)
+    question_type = db.Column(db.String(50), nullable=False)  # text/audio/choice
+    content = db.Column(db.Text, nullable=False)  # Question text
+    reference_answer = db.Column(db.Text)  # Reference answer (for teacher)
+    hint = db.Column(db.Text)  # Optional hint for students
+    points = db.Column(db.Integer, default=1)  # Points for this question
+    
+    # Relationships
+    options = db.relationship("QuestionOption", backref="question", lazy="dynamic", cascade="all, delete-orphan")
+    answers = db.relationship("StudentAnswer", backref="question", lazy="dynamic")
+    
+    def __repr__(self):
+        return f"<Question {self.id}: {self.sequence}. {self.content[:30]}...>"
+
+
+class QuestionOption(db.Model):
+    """Multiple choice options for questions."""
+    
+    __tablename__ = "question_option"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey("question.id"), nullable=False, index=True)
+    option_key = db.Column(db.String(10), nullable=False)  # A, B, C, D
+    option_text = db.Column(db.Text, nullable=False)
+    
+    def __repr__(self):
+        return f"<QuestionOption {self.option_key}: {self.option_text[:20]}...>"
+
+
+class StudentAnswer(db.Model, TimestampMixin):
+    """Student answers to questions."""
+    
+    __tablename__ = "student_answer"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    question_id = db.Column(db.Integer, db.ForeignKey("question.id"), nullable=False, index=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    
+    # Answer content
+    answer_type = db.Column(db.String(50), nullable=False)  # text/audio/choice
+    text_answer = db.Column(db.Text)  # For text/choice questions
+    audio_url = db.Column(db.String(500))  # For audio questions
+    submitted_at = db.Column(db.DateTime)
+    
+    # Grading
+    reviewed = db.Column(db.Boolean, default=False, nullable=False, index=True)
+    is_correct = db.Column(db.Boolean)  # Optional: correct/incorrect
+    teacher_comment = db.Column(db.Text)  # Teacher's feedback
+    reviewed_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+    reviewed_at = db.Column(db.DateTime)
+    
+    # Relationships
+    task = db.relationship("Task", backref=db.backref("student_answers", lazy="dynamic"))
+    student = db.relationship("User", foreign_keys=[student_id], backref=db.backref("my_answers", lazy="dynamic"))
+    reviewer = db.relationship("User", foreign_keys=[reviewed_by], backref=db.backref("reviewed_answers", lazy="dynamic"))
+    
+    def __repr__(self):
+        return f"<StudentAnswer task={self.task_id} q={self.question_id} student={self.student_id}>"
 
 
 class StudySession(db.Model):

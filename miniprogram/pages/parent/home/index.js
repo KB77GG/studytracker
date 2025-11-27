@@ -7,7 +7,8 @@ Page({
         currentStudentIndex: 0,
         stats: null,
         loading: true,
-        todayDate: ''
+        todayDate: '',
+        lastUpdateTime: null
     },
 
     onLoad() {
@@ -56,7 +57,13 @@ Page({
         try {
             const res = await request(`/miniprogram/parent/stats?student_name=${encodeURIComponent(studentName)}`)
             if (res.ok) {
-                this.setData({ stats: res })
+                const now = new Date()
+                const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+
+                this.setData({
+                    stats: res,
+                    lastUpdateTime: timeStr
+                })
             }
         } catch (err) {
             console.error(err)

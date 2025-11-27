@@ -133,6 +133,22 @@ Page({
     },
 
     async submitTask() {
+        // Check if timer was used (reminder for students who forgot to start timer)
+        const actualSeconds = this.data.task.actual_seconds || 0
+        if (actualSeconds < 60) { // Less than 1 minute
+            const res = await wx.showModal({
+                title: '提醒',
+                content: '您还没有记录学习时间（或时间少于1分钟）。\n\n建议：返回首页启动计时器记录真实学习时长。\n\n确定要继续提交吗？',
+                confirmText: '继续提交',
+                cancelText: '返回',
+                confirmColor: '#667eea'
+            })
+
+            if (!res.confirm) {
+                return // User chose to go back
+            }
+        }
+
         if (this.data.audioFiles.length === 0 && this.data.images.length === 0) {
             wx.showToast({ title: '请上传录音或照片', icon: 'none' })
             return

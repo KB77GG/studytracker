@@ -13,7 +13,9 @@ Page({
             completed: 0,
             percent: 0
         },
-        loading: true
+        loading: true,
+        activeTimerId: null,
+        timerInterval: null
     },
 
     onLoad() {
@@ -39,6 +41,80 @@ Page({
         }
         this.fetchTasks()
         this.updateGreeting()
+
+        // Restore timer if there's an active one in storage
+        this.restoreTimerIfNeeded()
+    },
+
+    // Restore timer state from storage
+    restoreTimerIfNeeded() {
+        try {
+            const activeTimer = wx.getStorageSync('activeTimer')
+            if (!activeTimer || !activeTimer.taskId) return
+
+            const { taskId, sessionId, startTime } = activeTimer
+
+            // Calculate elapsed time
+            const now = Date.now()
+            const elapsedMs = now - startTime
+            const elapsedSeconds = Math.floor(elapsedMs / 1000)
+
+            // Find the task in current tasks list
+            const taskIndex = this.data.tasks.findIndex(t => t.id === taskId)
+            if (taskIndex === -1) {
+                // Task not found, clear storage
+                wx.removeStorageSync('activeTimer')
+                return
+            }
+
+            // Restore timer state
+            const tasks = this.data.tasks.map(task => {
+                if (task.id === taskId) {
+                    const planned = task.planned_minutes * 60
+                    const isOvertime = elapsedSeconds > planned
+
+                    return {
+                        ...task,
+                        timerStatus: 'running',
+                        sessionId: sessionId,
+                        elapsedSeconds: elapsedSeconds,
+                        displayTime: this.formatTime(elapsedSeconds),
+                        plannedTime: this.formatTime(planned),
+                        isOvertime: isOvertime
+                    }
+                }
+                return task
+            })
+
+            this.setData({
+                tasks,
+                activeTimerId: taskId
+            })
+
+            // Restart interval
+            if (this.data.timerInterval) {
+                clearInterval(this.data.timerInterval)
+            }
+            const interval = setInterval(() => {
+                this.updateTimerDisplay()
+            }, 1000)
+            this.setData({ timerInterval: interval })
+
+            console.log(`Timer restored: ${elapsedSeconds}s elapsed`)
+
+        } catch (err) {
+            console.error('Failed to restore timer:', err)
+        }
+    },
+
+    onHide() {
+        // Clear interval when page is hidden to prevent memory leaks
+        if (this.data.timerInterval) {
+            clearInterval(this.data.timerInterval)
+            this.setData({ timerInterval: null })
+        }
+        // Note: We don't clear activeTimer storage here, 
+        // so it can be restored when page is shown again
     },
 
     handleDateChange(e) {
@@ -78,7 +154,14 @@ Page({
                     planned_minutes: t.planned_minutes,
                     status: t.status,
                     statusText: this.getStatusText(t.status),
-                    isDone: t.status === 'completed' || t.status === 'submitted'
+                    isDone: t.status === 'completed' || t.status === 'submitted',
+                    // Timer state
+                    timerStatus: 'idle',
+                    elapsedSeconds: 0,
+                    displayTime: '00:00',
+                    plannedTime: this.formatTime(t.planned_minutes * 60),
+                    isOvertime: false,
+                    sessionId: null
                 }))
 
                 // 计算进度
@@ -131,5 +214,183 @@ Page({
         wx.navigateTo({
             url: `/pages/student/task/index?id=${taskId}`,
         })
+    },
+
+    // Timer helper: format seconds to MM:SS
+    formatTime(seconds) {
+        const mins = Math.floor(seconds / 60)
+        const secs = seconds % 60
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+    },
+
+    // Update timer display every second
+    updateTimerDisplay() {
+        const tasks = this.data.tasks.map(task => {
+            if (task.id === this.data.activeTimerId && task.timerStatus === 'running') {
+                const elapsed = task.elapsedSeconds + 1
+                const planned = task.planned_minutes * 60
+                const isOvertime = elapsed > planned
+
+                return {
+                    ...task,
+                    elapsedSeconds: elapsed,
+                    displayTime: this.formatTime(elapsed),
+                    isOvertime: isOvertime,
+                    timerStatus: 'running'
+                }
+            }
+            return task
+        })
+        this.setData({ tasks })
+    },
+
+    // Start timer
+    async startTimer(e) {
+        const taskId = e.currentTarget.dataset.id
+
+        try {
+            // Call backend to create session
+            const res = await request(`/students/plan-items/${taskId}/timer/start`, {
+                method: 'POST'
+            })
+
+            if (res.ok) {
+                const tasks = this.data.tasks.map(task => {
+                    if (task.id === taskId) {
+                        return {
+                            ...task,
+                            timerStatus: 'running',
+                            sessionId: res.data.session_id,
+                            elapsedSeconds: 0,
+                            displayTime: '00:00',
+                            plannedTime: this.formatTime(task.planned_minutes * 60),
+                            isOvertime: false
+                        }
+                    }
+                    return task
+                })
+
+                this.setData({
+                    tasks,
+                    activeTimerId: taskId
+                })
+
+                // Start interval
+                if (this.data.timerInterval) {
+                    clearInterval(this.data.timerInterval)
+                }
+                const interval = setInterval(() => {
+                    this.updateTimerDisplay()
+                }, 1000)
+                this.setData({ timerInterval: interval })
+
+                // Save to storage
+                wx.setStorageSync('activeTimer', {
+                    taskId,
+                    sessionId: res.data.session_id,
+                    startTime: Date.now()
+                })
+            }
+        } catch (err) {
+            console.error('Start timer error:', err)
+            wx.showToast({ title: '启动计时失败', icon: 'none' })
+        }
+    },
+
+    // Pause timer
+    pauseTimer(e) {
+        const taskId = e.currentTarget.dataset.id
+
+        if (this.data.timerInterval) {
+            clearInterval(this.data.timerInterval)
+            this.setData({ timerInterval: null })
+        }
+
+        const tasks = this.data.tasks.map(task => {
+            if (task.id === taskId) {
+                return { ...task, timerStatus: 'paused' }
+            }
+            return task
+        })
+
+        this.setData({ tasks })
+    },
+
+    // Resume timer
+    resumeTimer(e) {
+        const taskId = e.currentTarget.dataset.id
+
+        const tasks = this.data.tasks.map(task => {
+            if (task.id === taskId) {
+                return { ...task, timerStatus: 'running' }
+            }
+            return task
+        })
+
+        this.setData({
+            tasks,
+            activeTimerId: taskId
+        })
+
+        // Restart interval
+        if (this.data.timerInterval) {
+            clearInterval(this.data.timerInterval)
+        }
+        const interval = setInterval(() => {
+            this.updateTimerDisplay()
+        }, 1000)
+        this.setData({ timerInterval: interval })
+    },
+
+    // Stop timer
+    async stopTimer(e) {
+        const taskId = e.currentTarget.dataset.id
+        const task = this.data.tasks.find(t => t.id === taskId)
+
+        if (!task) return
+
+        try {
+            // Call backend to stop session
+            const res = await request(`/students/plan-items/${taskId}/timer/${task.sessionId}/stop`, {
+                method: 'POST'
+            })
+
+            if (res.ok) {
+                // Clear interval
+                if (this.data.timerInterval) {
+                    clearInterval(this.data.timerInterval)
+                    this.setData({ timerInterval: null })
+                }
+
+                // Update task status
+                const tasks = this.data.tasks.map(t => {
+                    if (t.id === taskId) {
+                        return {
+                            ...t,
+                            timerStatus: 'idle',
+                            elapsedSeconds: 0,
+                            displayTime: '00:00'
+                        }
+                    }
+                    return t
+                })
+
+                this.setData({
+                    tasks,
+                    activeTimerId: null
+                })
+
+                // Clear storage
+                wx.removeStorageSync('activeTimer')
+
+                wx.showToast({ title: '计时已保存', icon: 'success' })
+
+                // Refresh tasks
+                this.fetchTasks()
+            }
+        } catch (err) {
+            console.error('Stop timer error:', err)
+            wx.showToast({ title: '保存失败', icon: 'none' })
+        }
     }
 })

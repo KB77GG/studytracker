@@ -524,8 +524,37 @@ def get_parent_stats():
     # 按数量降序排序
     subject_stats.sort(key=lambda x: x["count"], reverse=True)
     
+    # 4. 检测是否正在学习（有活跃的计时器）
+    # 查找最近10分钟内启动的活跃计时会话
+    is_studying = False
+    try:
+        from models import PlanItemSession
+        from datetime import datetime
+        
+        # 获取学生档案
+        student_profile = StudentProfile.query.filter_by(
+            full_name=student_name,
+            is_deleted=False
+        ).first()
+        
+        if student_profile:
+            # 查找活跃的计时会话（最近10分钟内启动且未结束）
+            ten_min_ago = datetime.now() - timedelta(minutes=10)
+            active_session = PlanItemSession.query.join(PlanItem).join(StudyPlan).filter(
+                StudyPlan.student_id == student_profile.id,
+                PlanItemSession.start_time >= ten_min_ago,
+                PlanItemSession.end_time.is_(None)
+            ).first()
+            
+            is_studying = active_session is not None
+    except Exception as e:
+        # 如果查询失败（比如表不存在），默认不显示
+        import logging
+        logging.getLogger(__name__).warning(f"Failed to check isStudying: {e}")
+    
     return jsonify({
         "ok": True,
+        "isStudying": is_studying,
         "today": {
             "total": total_tasks,
             "completed": completed_count,

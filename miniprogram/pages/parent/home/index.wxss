@@ -190,9 +190,51 @@
   color: #333;
 }
 
-.mt-40 {
-  margin-top: 40rpx;
-  margin-bottom: 20rpx;
+/* Update Time & Live Indicator */
+.stats-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.update-info {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.live-dot {
+  width: 12rpx;
+  height: 12rpx;
+  background: #4CAF50;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.live-text {
+  font-size: 20rpx;
+  color: #4CAF50;
+  font-weight: 500;
 }
 
 /* 柱状图 */

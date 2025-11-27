@@ -191,3 +191,83 @@
   font-size: 26rpx;
   color: #999;
 }
+
+/* Timer Section */
+.task-card {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.card-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.timer-section {
+  margin-top: 24rpx;
+  padding-top: 20rpx;
+  border-top: 1px solid #f0f0f0;
+}
+
+.timer-display {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.timer-label {
+  font-size: 28rpx;
+}
+
+.timer-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #667eea;
+  font-family: 'Courier New', monospace;
+}
+
+.timer-text.overtime {
+  color: #ff9800;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.timer-controls {
+  display: flex;
+  gap: 16rpx;
+}
+
+.timer-btn {
+  flex: 1;
+  font-size: 24rpx;
+  padding: 12rpx 20rpx;
+  border-radius: 12rpx;
+  border: none;
+}
+
+.timer-btn.start {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.timer-btn.pause {
+  background: #ff9800;
+  color: white;
+}
+
+.timer-btn.resume {
+  background: #4caf50;
+  color: white;
+}
+
+.timer-btn.stop {
+  background: #f44336;
+  color: white;
+}
