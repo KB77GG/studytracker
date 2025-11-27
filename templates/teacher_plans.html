@@ -39,151 +39,181 @@
             </datalist>
           </div>
         </div>
-        <div class="form-row">
-          <div class="field field--wide">
-            <label>任务类别</label>
-            <select name="category" required style="width: 100%;">
-              <optgroup label="基础">
-                <option value="基础-四级词汇">四级词汇巩固</option>
-                <option value="基础-每日记忆计划">每日记忆计划</option>
-                <option value="基础-课堂抽查">课堂随机抽查</option>
-                <option value="基础-语法单选练习">语法单选练习</option>
-                <option value="基础-翻译句子练习">翻译句子练习</option>
-                <option value="基础-口语素材朗读">口语素材朗读</option>
-              </optgroup>
-              <optgroup label="雅思">
-                <option value="雅思-听力-精听">听力精听</option>
-                <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
-                <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
-                <option value="雅思-阅读-精读">阅读精读</option>
-                <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
-                <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
-                <option value="雅思-口语-常见题库问答">常见题库问答</option>
-                <option value="雅思-写作-句型与语法">句型与语法纠正</option>
-                <option value="雅思-写作-翻译句子">写作翻译句子</option>
-                <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
-              </optgroup>
-              <optgroup label="托福">
-                <option value="托福-听力-精听">听力精听</option>
-                <option value="托福-听力-速记训练">速记关键信息训练</option>
-                <option value="托福-阅读-精读">阅读深度分析</option>
-                <option value="托福-阅读-长难句">长难句分析</option>
-                <option value="托福-口语-独立题">独立口语练习</option>
-                <option value="托福-口语-综合题">综合口语练习</option>
-                <option value="托福-写作-独立写作">独立写作练习</option>
-                <option value="托福-写作-综合写作">综合写作练习</option>
-              </optgroup>
-              <optgroup label="其他">
-                <option value="其他-综合英语">综合英语能力</option>
-                <option value="其他-模拟考试">全真模拟考试</option>
-                <option value="其他-专项训练">专项弱点突破</option>
-              </optgroup>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label>预计用时 (分钟)</label>
-            <input type="number" name="planned_minutes" placeholder="例如 45">
-          </div>
-          <div class="field field--wide">
-            <label>备注</label>
-            <input type="text" name="detail" placeholder="可选，补充提示或材料" style="width: 100%;">
-          </div>
-        </div>
-        <div class="form-actions">
-          <button type="submit">添加任务</button>
-        </div>
-      </form>
-    </section>
-
-    <section class="card task-list-section" style="margin-top: 20px;">
-      <div class="card-header">
-        <h3>任务列表</h3>
-        <div class="filters">
-          <form method="get" style="display: flex; gap: 10px; align-items: center;">
-            <input type="hidden" name="date" value="{{ selected_date }}">
-            <select name="student_name" onchange="this.form.submit()">
-              <option value="">全部学生</option>
-              {% for name in all_students %}
-              <option value="{{ name }}" {% if request.args.get('student_name')==name %}selected{% endif %}>{{ name }}
-              </option>
-              {% endfor %}
-            </select>
-          </form>
-        </div>
-      </div>
-
-      {% if tasks %}
-      <table class="task-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>学生</th>
-            <th>类别</th>
-            <th>备注</th>
-            <th>状态</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for task in tasks %}
-          <tr>
-            <td>{{ task.id }}</td>
-            <td>{{ task.student_name }}</td>
-            <td>{{ task.category }}</td>
-            <td>{{ task.detail }}</td>
-            <td>
-              <span
-                class="badge {{ 'status-pending' if task.status=='pending' else ('status-progress' if task.status=='progress' else 'status-done') }}">
-                {{ "未开始" if task.status=="pending" else ("进行中" if task.status=="progress" else "已完成") }}
-              </span>
-              {% if task.student_submitted %}
-              <span class="badge status-submitted">已提交</span>
-              {% endif %}
-            </td>
-            <td>
-              <!-- 编辑和删除功能待实现 -->
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <p class="muted">该日暂无任务。</p>
-      {% endif %}
-    </section>
   </div>
 
-  <section class="card pending-review">
-    <h3>待审核提交</h3>
-    {% if pending_reviews %}
-    <div class="pending-list">
-      {% for review in pending_reviews %}
-      <article class="pending-item">
-        <header>
-          <strong>{{ review.student_name }}</strong>
-          <span class="muted">{{ review.time_ago }}</span>
-        </header>
-        <div class="pending-body">
-          <div class="pending-task">{{ review.task_name }}</div>
-          <div class="pending-actions" style="margin-top: 8px;">
-            {% if review.type == 'plan_item' %}
-            <span class="badge status-pending">PlanItem</span>
-            {% else %}
-            <a href="{{ url_for('tasks_page', student_name=review.student_name) }}" class="btn-small"
-              style="text-decoration: none; background: #eee; padding: 2px 8px; border-radius: 4px; color: #333;">去审核</a>
-            {% endif %}
-          </div>
-        </div>
-      </article>
-      {% endfor %}
+  <!-- 任务来源切换 -->
+  <div class="form-row">
+    <div class="field field--wide">
+      <label>任务来源</label>
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-outline-primary active" onclick="toggleTaskSource('custom')">
+          <input type="radio" name="task_source" value="custom" checked> 自定义任务
+        </label>
+        <label class="btn btn-outline-success" onclick="toggleTaskSource('material')">
+          <input type="radio" name="task_source" value="material"> 从材料库选择
+        </label>
+      </div>
     </div>
-    {% else %}
-    <p class="muted">暂无待审核任务。</p>
-    {% endif %}
+  </div>
 
+  <!-- 材料选择区域 (默认隐藏) -->
+  <div class="form-row" id="materialSelectRow" style="display: none;">
+    <div class="field field--wide">
+      <label>选择材料</label>
+      <select name="material_id" id="materialIdSelect" style="width: 100%;">
+        <option value="">-- 请选择材料 --</option>
+        {% for m in all_materials %}
+        <option value="{{ m.id }}" data-type="{{ m.type }}">{{ m.title }} ({{ m.question_count }}题)</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row" id="categoryRow">
+    <div class="field field--wide">
+      <label>任务类别</label>
+      <select name="category" required style="width: 100%;">
+        <optgroup label="基础">
+          <option value="基础-四级词汇">四级词汇巩固</option>
+          <option value="基础-每日记忆计划">每日记忆计划</option>
+          <option value="基础-课堂抽查">课堂随机抽查</option>
+          <option value="基础-语法单选练习">语法单选练习</option>
+          <option value="基础-翻译句子练习">翻译句子练习</option>
+          <option value="基础-口语素材朗读">口语素材朗读</option>
+        </optgroup>
+        <optgroup label="雅思">
+          <option value="雅思-听力-精听">听力精听</option>
+          <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
+          <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
+          <option value="雅思-阅读-精读">阅读精读</option>
+          <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
+          <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
+          <option value="雅思-口语-常见题库问答">常见题库问答</option>
+          <option value="雅思-写作-句型与语法">句型与语法纠正</option>
+          <option value="雅思-写作-翻译句子">写作翻译句子</option>
+          <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
+        </optgroup>
+        <optgroup label="托福">
+          <option value="托福-听力-精听">听力精听</option>
+          <option value="托福-听力-速记训练">速记关键信息训练</option>
+          <option value="托福-阅读-精读">阅读深度分析</option>
+          <option value="托福-阅读-长难句">长难句分析</option>
+          <option value="托福-口语-独立题">独立口语练习</option>
+          <option value="托福-口语-综合题">综合口语练习</option>
+          <option value="托福-写作-独立写作">独立写作练习</option>
+          <option value="托福-写作-综合写作">综合写作练习</option>
+        </optgroup>
+        <optgroup label="其他">
+          <option value="其他-综合英语">综合英语能力</option>
+          <option value="其他-模拟考试">全真模拟考试</option>
+          <option value="其他-专项训练">专项弱点突破</option>
+        </optgroup>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="field">
+      <label>预计用时 (分钟)</label>
+      <input type="number" name="planned_minutes" placeholder="例如 45">
+    </div>
+    <div class="field field--wide">
+      <label>备注</label>
+      <input type="text" name="detail" placeholder="可选，补充提示或材料" style="width: 100%;">
+    </div>
+  </div>
+  <div class="form-actions">
+    <button type="submit">添加任务</button>
+  </div>
+  </form>
   </section>
+
+  <section class="card task-list-section" style="margin-top: 20px;">
+    <div class="card-header">
+      <h3>任务列表</h3>
+      <div class="filters">
+        <form method="get" style="display: flex; gap: 10px; align-items: center;">
+          <input type="hidden" name="date" value="{{ selected_date }}">
+          <select name="student_name" onchange="this.form.submit()">
+            <option value="">全部学生</option>
+            {% for name in all_students %}
+            <option value="{{ name }}" {% if request.args.get('student_name')==name %}selected{% endif %}>{{ name }}
+            </option>
+            {% endfor %}
+          </select>
+        </form>
+      </div>
+    </div>
+
+    {% if tasks %}
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>学生</th>
+          <th>类别</th>
+          <th>备注</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+        <tr>
+          <td>{{ task.id }}</td>
+          <td>{{ task.student_name }}</td>
+          <td>{{ task.category }}</td>
+          <td>{{ task.detail }}</td>
+          <td>
+            <span
+              class="badge {{ 'status-pending' if task.status=='pending' else ('status-progress' if task.status=='progress' else 'status-done') }}">
+              {{ "未开始" if task.status=="pending" else ("进行中" if task.status=="progress" else "已完成") }}
+            </span>
+            {% if task.student_submitted %}
+            <span class="badge status-submitted">已提交</span>
+            {% endif %}
+          </td>
+          <td>
+            <!-- 编辑和删除功能待实现 -->
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="muted">该日暂无任务。</p>
+    {% endif %}
+  </section>
+</div>
+
+<section class="card pending-review">
+  <h3>待审核提交</h3>
+  {% if pending_reviews %}
+  <div class="pending-list">
+    {% for review in pending_reviews %}
+    <article class="pending-item">
+      <header>
+        <strong>{{ review.student_name }}</strong>
+        <span class="muted">{{ review.time_ago }}</span>
+      </header>
+      <div class="pending-body">
+        <div class="pending-task">{{ review.task_name }}</div>
+        <div class="pending-actions" style="margin-top: 8px;">
+          {% if review.type == 'plan_item' %}
+          <span class="badge status-pending">PlanItem</span>
+          {% else %}
+          <a href="{{ url_for('tasks_page', student_name=review.student_name) }}" class="btn-small"
+            style="text-decoration: none; background: #eee; padding: 2px 8px; border-radius: 4px; color: #333;">去审核</a>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="muted">暂无待审核任务。</p>
+  {% endif %}
+
+</section>
 </div>
 
 
@@ -226,5 +256,52 @@
   {% if students %}
   updateGuardianTokenDisplay(planStudent.value);
   {% endif %}
+
+  // 切换任务来源
+  function toggleTaskSource(source) {
+    const materialRow = document.getElementById('materialSelectRow');
+    const categoryRow = document.getElementById('categoryRow');
+    const materialSelect = document.getElementById('materialIdSelect');
+    const categorySelect = document.querySelector('select[name="category"]');
+    const detailInput = document.querySelector('input[name="detail"]');
+
+    // 移除之前的 active 类
+    document.querySelectorAll('input[name="task_source"]').forEach(input => {
+      input.parentElement.classList.remove('active');
+      if (input.value === source) {
+        input.parentElement.classList.add('active');
+        input.checked = true;
+      }
+    });
+
+    if (source === 'material') {
+      materialRow.style.display = 'flex';
+      // categoryRow.style.display = 'none'; // 可以选择保留类别作为补充，或者隐藏
+
+      materialSelect.required = true;
+      categorySelect.required = false;
+
+      // 自动填充备注
+      materialSelect.onchange = function () {
+        if (this.value) {
+          const option = this.options[this.selectedIndex];
+          detailInput.value = option.text;
+
+          // 尝试自动匹配类别
+          const type = option.getAttribute('data-type');
+          // 这里可以根据 type 自动选择 category，暂时略过
+        }
+      };
+    } else {
+      materialRow.style.display = 'none';
+      categoryRow.style.display = 'flex';
+
+      materialSelect.required = false;
+      materialSelect.value = "";
+      categorySelect.required = true;
+
+      materialSelect.onchange = null;
+    }
+  }
 </script>
 {% endblock %}

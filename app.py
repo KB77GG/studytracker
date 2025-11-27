@@ -513,11 +513,23 @@ def teacher_plans():
         planned_minutes = request.form.get("planned_minutes")
         detail = request.form.get("detail")
 
-        if not date_str or not student_name or not category:
+        material_id = request.form.get("material_id")
+        
+        if not date_str or not student_name:
             flash("请填写必填项", "error")
+        elif not category and not material_id:
+             flash("请选择任务类别或关联材料", "error")
         else:
             try:
                 task_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+                
+                # 如果选择了材料，自动设置类别（如果未填）和评分模式
+                grading_mode = "image"
+                if material_id:
+                    grading_mode = "material"
+                    if not category:
+                        category = "材料练习" # 默认类别
+
                 new_task = Task(
                     date=task_date,
                     student_name=student_name,
@@ -525,7 +537,9 @@ def teacher_plans():
                     planned_minutes=int(planned_minutes) if planned_minutes else 0,
                     detail=detail,
                     status="pending",
-                    created_by=current_user.id
+                    created_by=current_user.id,
+                    material_id=int(material_id) if material_id else None,
+                    grading_mode=grading_mode
                 )
                 db.session.add(new_task)
                 db.session.commit()
@@ -550,6 +564,9 @@ def teacher_plans():
 
     # 获取所有学生姓名供下拉选择
     all_students = [s.full_name for s in StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.full_name).all()]
+
+    # 获取所有材料供选择
+    all_materials = MaterialBank.query.order_by(MaterialBank.created_at.desc()).all()
 
     # 获取任务列表
     filter_student = request.args.get("student_name")
@@ -608,6 +625,7 @@ def teacher_plans():
         "teacher_plans.html",
         selected_date=selected_date,
         all_students=all_students,
+        all_materials=all_materials,
         tasks=tasks,
         pending_reviews=pending_reviews,
     )
