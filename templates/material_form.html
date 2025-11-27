@@ -181,8 +181,15 @@
 
             if (data.ok) {
                 // 匹配答案到题目
+                console.log('Parsed answers:', data.answers);
                 questions.forEach(q => {
-                    if (data.answers[q.sequence]) {
+                    // 尝试匹配 sequence (可能是数字或字符串)
+                    const key = String(q.sequence);
+                    console.log(`Matching question ${key}:`, data.answers[key]);
+
+                    if (data.answers[key]) {
+                        q.reference_answer = data.answers[key];
+                    } else if (data.answers[q.sequence]) {
                         q.reference_answer = data.answers[q.sequence];
                     }
                 });
