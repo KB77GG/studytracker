@@ -100,14 +100,7 @@
   </main>
   {% endif %}
 
-  {# Define the main content block that delegates to the specific blocks above #}
-  {% block content %}
-  {% if current_user.is_authenticated %}
-  {{ self.content_dashboard() }}
-  {% else %}
-  {{ self.content_public() }}
-  {% endif %}
-  {% endblock %}
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const list = document.querySelectorAll('.flashes, .flash, .alert, .message');
