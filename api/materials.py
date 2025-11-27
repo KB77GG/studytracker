@@ -163,12 +163,43 @@ def update_material(material_id):
     
     data = request.get_json()
     
+    # Update basic info
     if 'title' in data:
         material.title = data['title']
     if 'type' in data:
         material.type = data['type']
     if 'description' in data:
         material.description = data['description']
+    
+    # If questions are provided, replace all questions
+    if 'questions' in data:
+        # Delete existing questions (cascade will delete options)
+        Question.query.filter_by(material_id=material_id).delete()
+        
+        # Create new questions
+        questions_data = data.get('questions', [])
+        for q_data in questions_data:
+            question = Question(
+                material_id=material.id,
+                sequence=q_data.get('sequence'),
+                question_type=q_data.get('question_type', 'choice'),
+                content=q_data.get('content'),
+                reference_answer=q_data.get('reference_answer'),
+                hint=q_data.get('hint'),
+                points=q_data.get('points', 1)
+            )
+            db.session.add(question)
+            db.session.flush()
+            
+            # Create options for choice questions
+            if q_data.get('options'):
+                for opt in q_data['options']:
+                    option = QuestionOption(
+                        question_id=question.id,
+                        option_key=opt['key'],
+                        option_text=opt['text']
+                    )
+                    db.session.add(option)
     
     material.updated_at = datetime.utcnow()
     db.session.commit()

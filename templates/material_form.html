@@ -120,7 +120,22 @@
 </div>
 
 <script>
+    // Initialize questions array (empty for create, pre-filled for edit)
     let questions = [];
+
+    {% if questions_json %}
+    // Edit mode: load existing questions
+    try {
+        questions = {{ questions_json | safe }
+    };
+    // Render questions immediately after page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        renderQuestions();
+    });
+    } catch (e) {
+        console.error('Failed to parse questions:', e);
+    }
+    {% endif %}
 
     // 切换标签页
     function showTab(tab) {
@@ -274,24 +289,32 @@
             questions
         };
 
-        try {
-            const response = await fetch('/api/materials', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-                credentials: 'include'
-            });
-            const data = await response.json();
+        // Detect edit mode by checking if material exists
+        const isEditMode = {{ 'true' if material else 'false' }
+    };
+    const materialId = {{ material.id if material else 'null' }};
 
-            if (data.ok) {
-                alert('保存成功！');
-                window.location.href = '/materials';
-            } else {
-                alert('保存失败：' + (data.error || '未知错误'));
-            }
-        } catch (err) {
-            alert('网络错误：' + err.message);
+    const url = isEditMode ? `/api/materials/${materialId}` : '/api/materials';
+    const method = isEditMode ? 'PUT' : 'POST';
+
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        });
+        const data = await response.json();
+
+        if (data.ok) {
+            alert('保存成功！');
+            window.location.href = '/materials';
+        } else {
+            alert('保存失败：' + (data.error || '未知错误'));
         }
+    } catch (err) {
+        alert('网络错误：' + err.message);
+    }
     });
 </script>
 {% endblock %}

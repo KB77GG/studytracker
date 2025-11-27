@@ -2751,9 +2751,31 @@ def materials_view(material_id):
 @role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def materials_edit(material_id):
     """Edit material."""
-    from models import MaterialBank
+    from models import MaterialBank, Question, QuestionOption
+    import json
+    
     material = MaterialBank.query.filter_by(id=material_id, is_deleted=False).first_or_404()
-    return render_template("material_form.html", material=material)
+    
+    # Fetch all questions for this material
+    questions = Question.query.filter_by(material_id=material_id).order_by(Question.sequence).all()
+    
+    questions_data = []
+    for q in questions:
+        options = QuestionOption.query.filter_by(question_id=q.id).order_by(QuestionOption.option_key).all()
+        questions_data.append({
+            "sequence": q.sequence,
+            "content": q.content,
+            "question_type": q.question_type,
+            "reference_answer": q.reference_answer,
+            "hint": q.hint,
+            "points": q.points,
+            "options": [{"key": opt.option_key, "text": opt.option_text} for opt in options]
+        })
+    
+    # Pass questions as JSON string to template
+    questions_json = json.dumps(questions_data, ensure_ascii=False)
+    
+    return render_template("material_form.html", material=material, questions_json=questions_json)
 
 
 if __name__ == "__main__":
