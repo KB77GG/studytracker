@@ -979,6 +979,17 @@ def api_catalog_tasks():
         .order_by(TaskCatalog.exam_system, TaskCatalog.module, TaskCatalog.task_name)
         .all()
     )
+    return jsonify(
+        {
+            "ok": True,
+            "tasks": [
+                {
+                    "id": t.id,
+                    "exam_system": t.exam_system,
+                    "module": t.module,
+                    "task_name": t.task_name,
+                    "description": t.description,
+                    "default_minutes": t.default_minutes,
                 }
                 for t in tasks
             ],
