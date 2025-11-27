@@ -167,8 +167,8 @@ def load_user(user_id):
 @app.route("/")
 @login_required
 def index():
-    if current_user.role in (User.ROLE_TEACHER, User.ROLE_ASSISTANT):
-        return redirect(url_for("teacher_plans"))
+    if current_user.role in (User.ROLE_TEACHER, User.ROLE_ASSISTANT, User.ROLE_ADMIN):
+        return redirect(url_for("materials_list"))
     if current_user.role == User.ROLE_STUDENT:
         return redirect(url_for("student_today"))
     return render_template("index.html")
