@@ -83,20 +83,29 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
-# Fix for Windows browsers that send Content-Type with charset parameter
-@app.before_request
-def normalize_content_type():
+# WSGI Middleware to normalize Content-Type BEFORE Flask processes it
+class ContentTypeNormalizerMiddleware:
     """
-    Fix Windows browser compatibility issue where Content-Type header 
-    includes charset parameter (e.g., 'application/x-www-form-urlencoded; charset=UTF-8')
-    which Flask might reject with HTTP 415 error.
+    WSGI middleware to fix Windows browser compatibility.
+    Normalizes 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'
+    to 'Content-Type: application/x-www-form-urlencoded' to prevent HTTP 415 errors.
     """
-    if request.method in ['POST', 'PUT', 'PATCH']:
-        content_type = request.headers.get('Content-Type', '')
-        # Normalize form-urlencoded Content-Type by removing charset
+    def __init__(self, app):
+        self.app = app
+    
+    def __call__(self, environ, start_response):
+        # Get Content-Type from WSGI environ
+        content_type = environ.get('CONTENT_TYPE', '')
+        
+        # Normalize form-urlencoded Content-Type by removing charset parameter
         if 'application/x-www-form-urlencoded' in content_type and '; charset=' in content_type.lower():
-            # Extract just the MIME type without parameters
-            request.environ['CONTENT_TYPE'] = 'application/x-www-form-urlencoded'
+            # Extract just the MIME type without parameters  
+            environ['CONTENT_TYPE'] = 'application/x-www-form-urlencoded'
+        
+        return self.app(environ, start_response)
+
+# Wrap the Flask app with our middleware
+app.wsgi_app = ContentTypeNormalizerMiddleware(app.wsgi_app)
 
 init_api(app)
 
