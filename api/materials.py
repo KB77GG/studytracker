@@ -305,17 +305,51 @@ def parse_answers():
     text = data.get('text', '')
     
     answers = {}
-    answers = {}
     
     # Normalize text: replace Chinese punctuation with English
     text = text.replace('：', ':').replace('、', '.')
     
-    # Regex to find all "1. A" or "1. Answer: A" patterns
-    # Handles multiple answers on one line
-    matches = re.findall(r'(\d+)\s*[.]\s*(?:Answer:)?\s*([A-D])', text, re.IGNORECASE)
+    # Strategy 1: Look for multiple choice patterns (multiple on one line)
+    # e.g. "1. A 2. B" or "7. B/C"
+    # Regex explanation:
+    # (\d+)       : Capture Group 1 - Question number
+    # \s*[.]\s*   : Dot separator with optional whitespace
+    # (?:Answer:)? : Optional "Answer:" prefix
+    # \s*         : Optional whitespace
+    # ([A-E]+(?:/[A-E]+)*) : Capture Group 2 - Answer (e.g. "A", "AB", "B/C")
+    choice_matches = re.findall(r'(\d+)\s*[.]\s*(?:Answer:)?\s*([A-E]+(?:/[A-E]+)*)', text, re.IGNORECASE)
     
-    for num_str, ans_str in matches:
-        question_num = int(num_str)
-        answers[question_num] = ans_str.upper()
+    for num_str, ans_str in choice_matches:
+        answers[int(num_str)] = ans_str.upper()
+    
+    # Strategy 2: Look for text answers (one per line)
+    # This handles "1. The government built..."
+    lines = text.split('\n')
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+            
+        # Check if line looks like it contains multiple choice answers (handled by Strategy 1)
+        # e.g. "1. A 2. B" - we skip these lines to avoid overwriting with partial text
+        if re.search(r'\d+\s*[.]\s*[A-E]\s+\d+', line):
+            continue
+            
+        # Match "Number. Content"
+        match = re.match(r'^(\d+)\s*[.]\s*(.+)$', line)
+        if match:
+            seq = int(match.group(1))
+            content = match.group(2).strip()
+            
+            # Only use this if we haven't found a choice answer for this sequence
+            # OR if the content is clearly longer than a choice answer (e.g. > 5 chars)
+            # This prevents "1. A" (text match) from overwriting "1. A" (choice match), which is fine,
+            # but helps if Strategy 1 missed something.
+            if seq not in answers or len(content) > 5:
+                # Special case: if content is just "A" or "B", treat as choice
+                if re.match(r'^[A-E]$', content, re.IGNORECASE):
+                    answers[seq] = content.upper()
+                else:
+                    answers[seq] = content
     
     return jsonify({"ok": True, "answers": answers})
