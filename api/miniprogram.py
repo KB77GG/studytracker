@@ -11,7 +11,7 @@ from models import (
 )
 from .auth_utils import require_api_user
 
-mp_bp = Blueprint("miniprogram", __name__, url_prefix="/miniprogram")
+mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 
 # --- 通用接口 ---
 
