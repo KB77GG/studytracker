@@ -518,134 +518,16 @@ def api_auto_create_student():
 @app.route("/teacher/plans", methods=["GET", "POST"])
 @login_required
 def teacher_plans():
+    """
+    DEPRECATED: Redirects to /tasks page.
+    Material bank selection has been integrated into the main tasks page.
+    """
     if current_user.role not in [User.ROLE_TEACHER, User.ROLE_ASSISTANT, User.ROLE_ADMIN]:
         flash("权限不足", "error")
         return redirect(url_for("index"))
-
-    # --- 处理添加任务 (POST) ---
-    if request.method == "POST":
-        date_str = request.form.get("date")
-        student_name = request.form.get("student_name")
-        category = request.form.get("category")
-        planned_minutes = request.form.get("planned_minutes")
-        detail = request.form.get("detail")
-
-        material_id = request.form.get("material_id")
-        
-        if not date_str or not student_name:
-            flash("请填写必填项", "error")
-        elif not category and not material_id:
-             flash("请选择任务类别或关联材料", "error")
-        else:
-            try:
-                task_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-                
-                # 如果选择了材料，自动设置类别（如果未填）和评分模式
-                grading_mode = "image"
-                if material_id:
-                    grading_mode = "material"
-                    if not category:
-                        category = "材料练习" # 默认类别
-
-                new_task = Task(
-                    date=task_date,
-                    student_name=student_name,
-                    category=category,
-                    planned_minutes=int(planned_minutes) if planned_minutes else 0,
-                    detail=detail,
-                    status="pending",
-                    created_by=current_user.id,
-                    material_id=int(material_id) if material_id else None,
-                    grading_mode=grading_mode
-                )
-                db.session.add(new_task)
-                db.session.commit()
-                flash("任务添加成功", "success")
-            except ValueError:
-                flash("日期格式错误", "error")
-            except Exception as e:
-                db.session.rollback()
-                flash(f"添加失败: {str(e)}", "error")
-        
-        return redirect(url_for("teacher_plans", date=date_str, student_name=student_name))
-
-    # --- 处理页面显示 (GET) ---
-    date_str = request.args.get("date")
-    if date_str:
-        try:
-            selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-        except ValueError:
-            selected_date = date.today()
-    else:
-        selected_date = date.today()
-
-    # 获取所有学生姓名供下拉选择
-    all_students = [s.full_name for s in StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.full_name).all()]
-
-    # 获取所有材料供选择
-    all_materials = MaterialBank.query.order_by(MaterialBank.created_at.desc()).all()
-
-    # 获取任务列表
-    filter_student = request.args.get("student_name")
-    tasks_query = Task.query.filter(Task.date == selected_date)
-    if filter_student:
-        tasks_query = tasks_query.filter(Task.student_name == filter_student)
     
-    # 权限过滤（如果是普通老师/助教，可能只能看自己关联的学生？目前 Task 表没有关联 ID，暂时不做严格过滤，或者依赖 student_name）
-    # 这里为了简单，先显示所有，或者后续根据 TeacherStudentLink 过滤 student_name
-    
-    tasks = tasks_query.order_by(Task.id.desc()).all()
-
-    # --- 待审核提交 (Pending Reviews) ---
-    # 1. PlanItem (新版)
-    pending_items_query = PlanItem.query.filter(
-        PlanItem.review_status == PlanItem.REVIEW_PENDING,
-        PlanItem.student_status == PlanItem.STUDENT_SUBMITTED,
-        PlanItem.is_deleted.is_(False),
-        PlanItem.plan.has(StudyPlan.is_deleted.is_(False)),
-    ).options(
-        joinedload(PlanItem.plan).joinedload(StudyPlan.student),
-    )
-    pending_items = pending_items_query.order_by(PlanItem.created_at.asc()).all()
-
-    pending_reviews = []
-    for item in pending_items:
-        pending_reviews.append({
-            "type": "plan_item",
-            "id": item.id,
-            "student_name": item.plan.student.full_name,
-            "task_name": item.task_name,
-            "submitted_at": item.submitted_at,
-            "time_ago": time_ago(item.submitted_at) if item.submitted_at else "",
-        })
-
-    # 2. Task (旧版)
-    pending_legacy_tasks = Task.query.filter(
-        Task.student_submitted == True,
-        Task.status != 'done' # 假设审核通过会改为 done
-    ).all()
-
-    for task in pending_legacy_tasks:
-        pending_reviews.append({
-            "type": "legacy_task",
-            "id": task.id,
-            "student_name": task.student_name,
-            "task_name": f"{task.category} {task.detail or ''}",
-            "submitted_at": task.submitted_at,
-            "time_ago": time_ago(task.submitted_at) if task.submitted_at else "",
-        })
-
-    # 按提交时间排序
-    pending_reviews.sort(key=lambda x: x['submitted_at'] or datetime.min, reverse=True)
-
-    return render_template(
-        "teacher_plans.html",
-        selected_date=selected_date,
-        all_students=all_students,
-        all_materials=all_materials,
-        tasks=tasks,
-        pending_reviews=pending_reviews,
-    )
+    flash("任务管理已迁移到新页面", "info")
+    return redirect(url_for("tasks_page"))
 
 
 # ---- Student dashboard & APIs ----
@@ -1263,7 +1145,23 @@ def tasks_page():
         detail = request.form.get("detail", "").strip()
         status = request.form.get("status", "pending")
         note = request.form.get("note", "").strip()
-        if student and category and detail:
+        material_id = request.form.get("material_id")
+        
+        # Validate: need either category or material_id
+        if not student:
+            flash("请填写学生姓名")
+        elif not category and not material_id:
+            flash("请选择任务类别或材料")
+        elif not detail:
+            flash("请填写任务描述")
+        else:
+            # Set grading mode based on material selection
+            grading_mode = "image"
+            if material_id:
+                grading_mode = "material"
+                if not category:
+                    category = "材料练习"
+            
             t = Task(
                 date=d,
                 student_name=student,
@@ -1274,13 +1172,13 @@ def tasks_page():
                 created_by=current_user.id,
                 planned_minutes=int(request.form.get("planned_minutes", 0) or 0),
                 accuracy=min(100.0, max(0.0, float(request.form.get("accuracy", 0) or 0))),
+                material_id=int(material_id) if material_id else None,
+                grading_mode=grading_mode,
             )
             db.session.add(t)
             db.session.commit()
             flash("已添加")
             return redirect(url_for("tasks_page"))
-        else:
-            flash("请填写：学生、类别、任务描述")
     # Filter by period
     period = request.args.get("period", "week")
     today_obj = date.today()
@@ -1382,6 +1280,19 @@ def tasks_page():
 
     # 获取所有学生用于下拉框
     all_students = [s.full_name for s in StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.full_name).all()]
+    
+    # 获取所有材料用于材料库选择
+    from models import MaterialBank, Question
+    materials_query = MaterialBank.query.filter_by(is_deleted=False, is_active=True).order_by(MaterialBank.created_at.desc()).all()
+    all_materials = []
+    for m in materials_query:
+        question_count = Question.query.filter_by(material_id=m.id).count()
+        all_materials.append({
+            "id": m.id,
+            "title": m.title,
+            "type": m.type,
+            "question_count": question_count
+        })
 
     # --- 待审核提交 (Pending Reviews) ---
     # 1. PlanItem (新版)
@@ -1434,6 +1345,7 @@ def tasks_page():
         recent_tasks=recent_tasks,
         all_students=all_students,
         period=period,
+        all_materials=all_materials,
         pending_reviews=pending_reviews,
     )
 

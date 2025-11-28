@@ -121,6 +121,38 @@
             {% endfor %}
         </datalist>
       </div>
+
+      <!-- 任务来源切换 -->
+      <div class="field field--wide">
+        <label>任务来源</label>
+        <div style="display: flex; gap: 12px;">
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="radio" name="task_source" value="custom" checked onchange="toggleTaskSource('custom')">
+            <span>自定义任务</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="radio" name="task_source" value="material" onchange="toggleTaskSource('material')">
+            <span>从材料库选择</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 材料选择区域 (默认隐藏) -->
+    <div class="task-form-row" id="materialSelectRow" style="display: none;">
+      <div class="field field--wide">
+        <label for="materialIdSelect">选择材料</label>
+        <select name="material_id" id="materialIdSelect" style="width: 100%;" onchange="onMaterialSelected()">
+          <option value="">-- 请选择材料 --</option>
+          {% for m in all_materials %}
+          <option value="{{ m.id }}" data-title="{{ m.title }}" data-type="{{ m.type }}">{{ m.title }} ({{
+            m.question_count }}题)</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="task-form-row" id="categoryRow">
       <div class="field field--wide">
         <label for="taskCategory">任务类别</label>
         <select id="taskCategory" name="category" required>
@@ -726,6 +758,46 @@
   </div>
 
   <script>
+    // Material Bank Selection Functions
+    function toggleTaskSource(source) {
+      const materialRow = document.getElementById('materialSelectRow');
+      const categoryRow = document.getElementById('categoryRow');
+      const categorySelect = document.getElementById('taskCategory');
+      const materialSelect = document.getElementById('materialIdSelect');
+
+      if (source === 'material') {
+        // Show material selection, hide category
+        materialRow.style.display = 'flex';
+        categoryRow.style.display = 'none';
+        categorySelect.removeAttribute('required');
+        // Clear category selection
+        categorySelect.value = '';
+      } else {
+        // Show category, hide material selection
+        materialRow.style.display = 'none';
+        categoryRow.style.display = 'flex';
+        categorySelect.setAttribute('required', 'required');
+        // Clear material selection
+        materialSelect.value = '';
+        document.getElementById('taskNote').value = '';
+      }
+    }
+
+    function onMaterialSelected() {
+      const materialSelect = document.getElementById('materialIdSelect');
+      const noteInput = document.getElementById('taskNote');
+      const selectedOption = materialSelect.options[materialSelect.selectedIndex];
+
+      if (selectedOption && selectedOption.value) {
+        // Auto-fill note with material title
+        const materialTitle = selectedOption.getAttribute('data-title');
+        noteInput.value = materialTitle || '';
+      } else {
+        noteInput.value = '';
+      }
+    }
+
+    // Rest of existing JavaScript
     const taskForm = document.getElementById('taskForm');
     const categorySelect = document.getElementById('taskCategory');
     const detailHidden = document.getElementById('taskDetail');
