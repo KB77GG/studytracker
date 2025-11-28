@@ -10,7 +10,7 @@ def init_app(app):
     from api.miniprogram import mp_bp
     from api.materials import material_bp  # New material bank API
 
-    app.register_blueprint(wechat_bp)
+    app.register_blueprint(wechat_bp, url_prefix="/api/wechat")  # Restore url_prefix
     app.register_blueprint(api_bp)
     app.register_blueprint(mp_bp)
     app.register_blueprint(material_bp)  # Register material bank

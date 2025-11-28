@@ -82,32 +82,8 @@ def time_ago(dt):
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
-
-# WSGI Middleware to normalize Content-Type BEFORE Flask processes it
-class ContentTypeNormalizerMiddleware:
-    """
-    WSGI middleware to fix Windows browser compatibility.
-    Normalizes 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'
-    to 'Content-Type: application/x-www-form-urlencoded' to prevent HTTP 415 errors.
-    """
-    def __init__(self, app):
-        self.app = app
-    
-    def __call__(self, environ, start_response):
-        # Get Content-Type from WSGI environ
-        content_type = environ.get('CONTENT_TYPE', '')
-        
-        # Normalize form-urlencoded Content-Type by removing charset parameter
-        if 'application/x-www-form-urlencoded' in content_type and '; charset=' in content_type.lower():
-            # Extract just the MIME type without parameters  
-            environ['CONTENT_TYPE'] = 'application/x-www-form-urlencoded'
-        
-        return self.app(environ, start_response)
-
-# Wrap the Flask app with our middleware
-app.wsgi_app = ContentTypeNormalizerMiddleware(app.wsgi_app)
-
 init_api(app)
+
 
 UPLOAD_ROOT = Path(app.config.get("UPLOAD_FOLDER", Path(app.root_path) / "uploads"))
 UPLOAD_ROOT.mkdir(parents=True, exist_ok=True)
