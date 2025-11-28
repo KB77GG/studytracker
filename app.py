@@ -78,9 +78,26 @@ def time_ago(dt):
         return dt.strftime("%Y-%m-%d")
 
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
+
+# Fix for Windows browsers that send Content-Type with charset parameter
+@app.before_request
+def normalize_content_type():
+    """
+    Fix Windows browser compatibility issue where Content-Type header 
+    includes charset parameter (e.g., 'application/x-www-form-urlencoded; charset=UTF-8')
+    which Flask might reject with HTTP 415 error.
+    """
+    if request.method in ['POST', 'PUT', 'PATCH']:
+        content_type = request.headers.get('Content-Type', '')
+        # Normalize form-urlencoded Content-Type by removing charset
+        if 'application/x-www-form-urlencoded' in content_type and '; charset=' in content_type.lower():
+            # Extract just the MIME type without parameters
+            request.environ['CONTENT_TYPE'] = 'application/x-www-form-urlencoded'
+
 init_api(app)
 
 UPLOAD_ROOT = Path(app.config.get("UPLOAD_FOLDER", Path(app.root_path) / "uploads"))
