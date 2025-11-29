@@ -5,7 +5,9 @@
 
   <!-- 品牌区域 -->
   <view class="brand-area">
-    <image class="brand-logo" src="/images/logo.jpg" mode="widthFix"></image>
+    <!-- <image class="brand-logo" src="/images/logo.jpg" mode="widthFix"></image> -->
+    <text class="app-name">StudyTracker</text>
+    <text class="sub-name">by Sage path edu.</text>
     <text class="slogan">让每一次进步都看得见</text>
   </view>
 
@@ -18,7 +20,18 @@
         <text class="h1">欢迎回来</text>
         <text class="p">请登录以继续您的学习之旅</text>
       </view>
-      <button class="btn-primary" bindtap="handleLogin">
+      
+      <!-- 隐私协议勾选 -->
+      <view class="privacy-section">
+        <checkbox-group bindchange="handlePrivacyChange">
+          <label class="privacy-label">
+            <checkbox value="agree" checked="{{privacyAgreed}}" color="#07c160" style="transform:scale(0.7)"/>
+            <text class="privacy-text">我已阅读并同意 <text class="link" catchtap="openPrivacyContract">《用户协议》</text> 和 <text class="link" catchtap="openPrivacyContract">《隐私政策》</text></text>
+          </label>
+        </checkbox-group>
+      </view>
+
+      <button class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" bindtap="handleLogin">
         <text class="wechat-icon">💬</text> 微信一键登录
       </button>
     </view>

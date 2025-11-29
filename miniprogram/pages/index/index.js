@@ -9,7 +9,14 @@ Page({
         targetRole: '',
         bindName: '',
         bindStudentName: '',
-        bindPhone: ''
+        bindPhone: '',
+        privacyAgreed: false
+    },
+
+    handlePrivacyChange(e) {
+        this.setData({
+            privacyAgreed: e.detail.value.length > 0
+        })
     },
 
     onLoad(options) {
@@ -30,7 +37,21 @@ Page({
         }
     },
 
+    openPrivacyContract() {
+        wx.openPrivacyContract({
+            success: () => { },
+            fail: () => {
+                wx.showToast({ title: '打开失败', icon: 'none' })
+            }
+        })
+    },
+
     handleLogin() {
+        if (!this.data.privacyAgreed) {
+            wx.showToast({ title: '请先阅读并同意隐私协议', icon: 'none' })
+            return
+        }
+
         wx.showLoading({ title: '登录中...' })
         wx.login({
             success: async (res) => {
