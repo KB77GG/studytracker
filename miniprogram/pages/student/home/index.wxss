@@ -254,11 +254,9 @@
   border-radius: 32rpx;
   border: none;
   text-align: center;
+  cursor: pointer;
 }
 
-.timer-btn::after {
-  border: none;
-}
 
 .timer-btn.start {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
