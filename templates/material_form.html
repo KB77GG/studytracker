@@ -188,14 +188,12 @@
 
     {% if questions_json %}
     // Edit mode: load existing questions
-    try {
-        questions = {{ questions_json | safe }
-    };
-    };
-    // Render questions immediately after page loads
-    document.addEventListener('DOMContentLoaded', function () {
-        renderQuestions();
-    });
+    questions = {{ questions_json | safe }};
+    } catch (e) {
+        // Render questions immediately after page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            renderQuestions();
+        });
     } catch (e) {
         console.error('Failed to parse questions:', e);
     }
