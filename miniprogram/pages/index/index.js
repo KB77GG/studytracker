@@ -6,11 +6,25 @@ Page({
         hasToken: false,
         isGuest: false,
         showBindForm: false,
+        showLoginForm: false,  // 新增：控制是否显示登录表单
         targetRole: '',
         bindName: '',
         bindStudentName: '',
         bindPhone: '',
         privacyAgreed: false
+    },
+
+    showLogin() {
+        // 显示登录表单
+        this.setData({
+            showLoginForm: true,
+            privacyAgreed: true  // 默认勾选（因为点击"开始使用"已表示同意）
+        })
+    },
+
+    backToWelcome() {
+        // 返回欢迎页
+        this.setData({ showLoginForm: false })
     },
 
     handlePrivacyChange(e) {

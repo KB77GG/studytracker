@@ -14,8 +14,35 @@
   <!-- 主卡片区域 -->
   <view class="main-card">
     
+    <!-- 0. 欢迎引导页（新增） -->
+    <view class="welcome-intro" wx:if="{{!hasToken && !showLoginForm}}">
+      <view class="intro-content">
+        <text class="intro-title">📚 智能学习管理</text>
+        <view class="feature-list">
+          <view class="feature-item">
+            <text class="feature-icon">✅</text>
+            <text class="feature-text">任务打卡 - 每日学习进度一目了然</text>
+          </view>
+          <view class="feature-item">
+            <text class="feature-icon">📊</text>
+            <text class="feature-text">数据统计 - 可视化学习成果</text>
+          </view>
+          <view class="feature-item">
+            <text class="feature-icon">🎯</text>
+            <text class="feature-text">智能材料 - 口语朗读、写作训练</text>
+          </view>
+          <view class="feature-item">
+            <text class="feature-icon">👨‍👩‍👧</text>
+            <text class="feature-text">家长监督 - 随时了解孩子学习情况</text>
+          </view>
+        </view>
+        <button class="btn-start" bindtap="showLogin">开始使用</button>
+        <text class="tip-text">点击上方按钮即表示同意用户协议和隐私政策</text>
+      </view>
+    </view>
+    
     <!-- 1. 登录引导 -->
-    <view class="login-section" wx:if="{{!hasToken}}">
+    <view class="login-section" wx:if="{{!hasToken && showLoginForm}}">
       <view class="welcome-text">
         <text class="h1">欢迎回来</text>
         <text class="p">请登录以继续您的学习之旅</text>
@@ -34,6 +61,7 @@
       <button class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" bindtap="handleLogin">
         <text class="wechat-icon">💬</text> 微信一键登录
       </button>
+      <button class="btn-back" bindtap="backToWelcome">返回</button>
     </view>
 
     <!-- 2. 角色选择 -->
