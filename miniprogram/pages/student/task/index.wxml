@@ -52,28 +52,28 @@
     <view wx:if="{{task.material.type === 'speaking_reading'}}">
       <view class="material-section">
         <view class="subtitle">词汇表达</view>
-        <view class="word-list-vertical">
-          <view class="word-row" wx:for="{{vocabularyWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">
-            <text class="play-icon">{{(currentPlayingText === item && isPlaying) ? '⏸' : '🔊'}}</text>
-            <text class="word-text">{{item}}</text>
-          </view>
+        <view class="word-cloud">
+          <text class="word-tag" wx:for="{{vocabularyWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">
+            {{item}}
+          </text>
         </view>
       </view>
 
       <view class="material-section">
         <view class="subtitle">句型表达</view>
-        <view class="sentence-list">
-          <view class="sentence-row" wx:for="{{sentenceWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">
-             <text class="play-icon">{{(currentPlayingText === item && isPlaying) ? '⏸' : '🔊'}}</text>
-             <text class="sentence-text">{{item}}</text>
-          </view>
+        <view class="word-cloud">
+          <text class="word-tag" wx:for="{{sentenceWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">
+            {{item}}
+          </text>
         </view>
       </view>
 
       <view class="material-section">
         <view class="subtitle">示范段落</view>
-        <view class="paragraph-box">
-          <text class="paragraph-text" user-select>{{paragraphText}}</text>
+        <view class="word-cloud">
+          <text class="word-tag" wx:for="{{paragraphWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">
+            {{item}}
+          </text>
         </view>
       </view>
     </view>

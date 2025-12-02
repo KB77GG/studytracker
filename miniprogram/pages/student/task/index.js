@@ -363,21 +363,30 @@ Page({
 
         const q = task.material.questions[0]
 
-        // 分割词汇表达 - 按换行或分号分割，保持短语完整性
+        // 提取所有英文单词的辅助函数
+        const extractWords = (text) => {
+            if (!text) return []
+            // 匹配英文单词（包括连字符）
+            const words = text.match(/[a-zA-Z]+(?:-[a-zA-Z]+)*/g) || []
+            return words.filter(w => w.length > 0)
+        }
+
+        // 词汇表达 - 提取所有英文单词
         const vocabulary = q.content || ''
-        const vocabularyWords = vocabulary.split(/[\n;]+/).map(w => w.trim()).filter(w => w.length > 0)
+        const vocabularyWords = extractWords(vocabulary)
 
-        // 分割句型表达 - 按换行分割
+        // 句型表达 - 提取所有英文单词
         const sentences = q.hint || ''
-        const sentenceWords = sentences.split(/[\n]+/).map(w => w.trim()).filter(w => w.length > 0)
+        const sentenceWords = extractWords(sentences)
 
-        // 示范段落 - 保持完整文本
+        // 示范段落 - 提取所有英文单词
         const paragraphText = q.reference_answer || ''
+        const paragraphWords = extractWords(paragraphText)
 
         this.setData({
             vocabularyWords,
             sentenceWords,
-            paragraphText
+            paragraphWords
         })
     },
 
