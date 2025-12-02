@@ -53,10 +53,10 @@
           </text>
         </view>
         <view class="timer-controls">
-          <button wx:if="{{item.timerStatus === 'idle'}}" class="timer-btn start" catchtap="startTimer" data-id="{{item.id}}" size="mini">开始</button>
-          <button wx:if="{{item.timerStatus === 'running'}}" class="timer-btn pause" catchtap="pauseTimer" data-id="{{item.id}}" size="mini">暂停</button>
-          <button wx:if="{{item.timerStatus === 'paused'}}" class="timer-btn resume" catchtap="resumeTimer" data-id="{{item.id}}" size="mini">继续</button>
-          <button wx:if="{{item.timerStatus === 'running' || item.timerStatus === 'paused'}}" class="timer-btn stop" catchtap="stopTimer" data-id="{{item.id}}" size="mini">结束</button>
+          <button wx:if="{{item.timerStatus === 'idle'}}" class="timer-btn start" catchtap="startTimer" data-id="{{item.id}}">开始</button>
+          <button wx:if="{{item.timerStatus === 'running'}}" class="timer-btn pause" catchtap="pauseTimer" data-id="{{item.id}}">暂停</button>
+          <button wx:if="{{item.timerStatus === 'paused'}}" class="timer-btn resume" catchtap="resumeTimer" data-id="{{item.id}}">继续</button>
+          <button wx:if="{{item.timerStatus === 'running' || item.timerStatus === 'paused'}}" class="timer-btn stop" catchtap="stopTimer" data-id="{{item.id}}">结束</button>
         </view>
       </view>
     </view>

@@ -395,19 +395,20 @@
 
 .word-tag {
   display: inline-block;
-  padding: 10rpx 18rpx;
-  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-  border: 2rpx solid #667eea40;
-  border-radius: 20rpx;
-  font-size: 30rpx;
+  padding: 4rpx 8rpx;
+  background: transparent;
+  border: none;
+  border-radius: 8rpx;
+  font-size: 34rpx;
   color: #333;
   cursor: pointer;
-  transition: all 0.2s;
+  margin: 0 2rpx;
+  line-height: 1.6;
+  transition: all 0.1s;
 }
 
 .word-tag:active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  transform: scale(0.95);
-  border-color: #667eea;
+  background: #e0e7ff;
+  color: #667eea;
+  transform: scale(0.98);
 }
