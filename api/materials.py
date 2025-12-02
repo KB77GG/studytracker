@@ -108,41 +108,92 @@ def create_material():
         return auth_check
     
     data = request.get_json()
+    material_type = data.get('type')
     
     # Create material
     material = MaterialBank(
         title=data.get('title'),
-        type=data.get('type'),
+        type=material_type,
         description=data.get('description', ''),
         created_by=current_user.id
     )
     db.session.add(material)
     db.session.flush()  # Get material.id
     
-    # Create questions
-    questions_data = data.get('questions', [])
-    for q_data in questions_data:
+    # Handle different material types
+    if material_type == 'grammar':
+        # Grammar: traditional questions with options
+        questions_data = data.get('questions', [])
+        for q_data in questions_data:
+            question = Question(
+                material_id=material.id,
+                sequence=q_data.get('sequence'),
+                question_type=q_data.get('question_type', 'choice'),
+                content=q_data.get('content'),
+                reference_answer=q_data.get('reference_answer'),
+                hint=q_data.get('hint'),
+                points=q_data.get('points', 1)
+            )
+            db.session.add(question)
+            db.session.flush()
+            
+            # Create options for choice questions
+            if q_data.get('options'):
+                for opt in q_data['options']:
+                    option = QuestionOption(
+                        question_id=question.id,
+                        option_key=opt['key'],
+                        option_text=opt['text']
+                    )
+                    db.session.add(option)
+    
+    elif material_type == 'writing_logic':
+        # Writing logic chain: single question with essay data
         question = Question(
             material_id=material.id,
-            sequence=q_data.get('sequence'),
-            question_type=q_data.get('question_type', 'choice'),
-            content=q_data.get('content'),
-            reference_answer=q_data.get('reference_answer'),
-            hint=q_data.get('hint'),
-            points=q_data.get('points', 1)
+            sequence=1,
+            question_type='writing_logic',
+            content=data.get('essay_full'),  # Full essay
+            hint=data.get('essay_blank'),  # Blank version with labels
+            reference_answer=data.get('essay_answers')  # Answer list
         )
         db.session.add(question)
-        db.session.flush()
+    
+    elif material_type == 'speaking_reading':
+        # Speaking reading: single question with vocabulary, patterns, and paragraph
+        question = Question(
+            material_id=material.id,
+            sequence=1,
+            question_type='speaking_reading',
+            content=data.get('vocabulary', ''),  # Vocabulary expressions
+            hint=data.get('sentence_patterns', ''),  # Sentence patterns
+            reference_answer=data.get('sample_paragraph', '')  # Sample paragraph
+        )
+        db.session.add(question)
+    
+    elif material_type == 'speaking_part1':
+        # Speaking Part 1: multiple questions, each as a separate record
+        questions_text = data.get('part1_questions', '')
+        questions_list = [q.strip() for q in questions_text.strip().split('\n') if q.strip()]
         
-        # Create options for choice questions
-        if q_data.get('options'):
-            for opt in q_data['options']:
-                option = QuestionOption(
-                    question_id=question.id,
-                    option_key=opt['key'],
-                    option_text=opt['text']
-                )
-                db.session.add(option)
+        for i, question_text in enumerate(questions_list, 1):
+            question = Question(
+                material_id=material.id,
+                sequence=i,
+                question_type='speaking_part1',
+                content=question_text
+            )
+            db.session.add(question)
+    
+    elif material_type == 'speaking_part2':
+        # Speaking Part 2: single question with topic card
+        question = Question(
+            material_id=material.id,
+            sequence=1,
+            question_type='speaking_part2',
+            content=data.get('part2_topic')  # Topic card text
+        )
+        db.session.add(question)
     
     db.session.commit()
     

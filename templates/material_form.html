@@ -25,16 +25,18 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>类型 *</label>
-                                    <select class="form-control" id="type" required>
+                                    <select class="form-control" id="type" required onchange="handleTypeChange()">
                                         <option value="">选择类型</option>
                                         <option value="grammar" {{ 'selected' if material and material.type=='grammar'
                                             else '' }}>语法练习</option>
-                                        <option value="translation" {{ 'selected' if material and
-                                            material.type=='translation' else '' }}>翻译练习</option>
-                                        <option value="speaking" {{ 'selected' if material and material.type=='speaking'
-                                            else '' }}>口语朗读</option>
-                                        <option value="writing" {{ 'selected' if material and material.type=='writing'
-                                            else '' }}>写作训练</option>
+                                        <option value="writing_logic" {{ 'selected' if material and
+                                            material.type=='writing_logic' else '' }}>写作逻辑链训练</option>
+                                        <option value="speaking_reading" {{ 'selected' if material and
+                                            material.type=='speaking_reading' else '' }}>口语朗读材料</option>
+                                        <option value="speaking_part1" {{ 'selected' if material and
+                                            material.type=='speaking_part1' else '' }}>口语题库Part1</option>
+                                        <option value="speaking_part2" {{ 'selected' if material and
+                                            material.type=='speaking_part2' else '' }}>口语题库Part2</option>
                                     </select>
                                 </div>
                             </div>
@@ -48,47 +50,108 @@
 
                         <hr>
 
-                        <!-- 题目导入方式 -->
-                        <div class="form-group">
-                            <label class="font-weight-bold">题目导入方式</label>
-                            <div class="btn-group d-block" role="group">
-                                <button type="button" class="btn btn-outline-primary" onclick="showTab('paste')">
-                                    <i class="fas fa-clipboard"></i> 从Word复制粘贴
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary" onclick="showTab('manual')">
-                                    <i class="fas fa-keyboard"></i> 手动添加
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 粘贴导入标签页 -->
-                        <div id="pasteTab" style="display: block;">
-                            <div class="card bg-light">
-                                <div class="card-body">
-                                    <h5>步骤1：粘贴题目</h5>
-                                    <textarea class="form-control mb-3" id="pastedQuestions" rows="15"
-                                        placeholder="粘贴Word题目内容，例如：&#10;&#10;1. Either the mayor or the council members ___ expected...&#10;   A. is&#10;   B. are&#10;   C. was&#10;   D. be&#10;&#10;2. Neither the students nor the teacher ___ ready.&#10;   A. is&#10;   B. are&#10;   ..."></textarea>
-                                    <button type="button" class="btn btn-success" onclick="parseQuestions()">
-                                        <i class="fas fa-lightbulb"></i> 智能识别题目
+                        <!-- Grammar (语法练习) - Original import method -->
+                        <div id="grammarInput" style="display: none;">
+                            <div class="form-group">
+                                <label class="font-weight-bold">题目导入方式</label>
+                                <div class="btn-group d-block" role="group">
+                                    <button type="button" class="btn btn-outline-primary" onclick="showTab('paste')">
+                                        <i class="fas fa-clipboard"></i> 从Word复制粘贴
                                     </button>
-
-                                    <hr>
-
-                                    <h5>步骤2：粘贴答案</h5>
-                                    <textarea class="form-control mb-3" id="pastedAnswers" rows="8"
-                                        placeholder="粘贴答案列表，例如：&#10;&#10;1. B&#10;2. A&#10;3. C&#10;..."></textarea>
-                                    <button type="button" class="btn btn-success" onclick="parseAnswers()">
-                                        <i class="fas fa-check"></i> 匹配答案
+                                    <button type="button" class="btn btn-outline-secondary" onclick="showTab('manual')">
+                                        <i class="fas fa-keyboard"></i> 手动添加
                                     </button>
                                 </div>
                             </div>
+
+                            <div id="pasteTab" style="display: block;">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5>步骤1：粘贴题目</h5>
+                                        <textarea class="form-control mb-3" id="pastedQuestions" rows="15"
+                                            placeholder="粘贴Word题目内容，例如：&#10;&#10;1. Either the mayor or the council members ___ expected...&#10;   A. is&#10;   B. are&#10;   C. was&#10;   D. be&#10;&#10;2. Neither the students nor the teacher ___ ready.&#10;   A. is&#10;   B. are&#10;   ..."></textarea>
+                                        <button type="button" class="btn btn-success" onclick="parseQuestions()">
+                                            <i class="fas fa-lightbulb"></i> 智能识别题目
+                                        </button>
+
+                                        <hr>
+
+                                        <h5>步骤2：粘贴答案</h5>
+                                        <textarea class="form-control mb-3" id="pastedAnswers" rows="8"
+                                            placeholder="粘贴答案列表，例如：&#10;&#10;1. B&#10;2. A&#10;3. C&#10;..."></textarea>
+                                        <button type="button" class="btn btn-success" onclick="parseAnswers()">
+                                            <i class="fas fa-check"></i> 匹配答案
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="manualTab" style="display: none;">
+                                <button type="button" class="btn btn-primary mb-3" onclick="addQuestion()">
+                                    <i class="fas fa-plus"></i> 添加题目
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- 手动添加标签页 -->
-                        <div id="manualTab" style="display: none;">
-                            <button type="button" class="btn btn-primary mb-3" onclick="addQuestion()">
-                                <i class="fas fa-plus"></i> 添加题目
-                            </button>
+                        <!-- Writing Logic (写作逻辑链训练) -->
+                        <div id="writingLogicInput" style="display: none;">
+                            <div class="form-group">
+                                <label class="font-weight-bold">完整范文</label>
+                                <textarea class="form-control" id="essayFull" rows="10"
+                                    placeholder="粘贴完整范文（Paragraph 1-4）..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">填空版（带标签）</label>
+                                <textarea class="form-control" id="essayBlank" rows="10"
+                                    placeholder="粘贴填空版本，例如：&#10;【背景】Remote work has expanded due to __________ and global health crises.&#10;【立场】I believe this is a largely __________ development..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">答案列表（用 / 分隔）</label>
+                                <textarea class="form-control" id="essayAnswers" rows="3"
+                                    placeholder="digital technology / positive / work–life balance / productivity / environment / ..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Speaking Reading (口语朗读材料) -->
+                        <div id="speakingReadingInput" style="display: none;">
+                            <div class="form-group">
+                                <label class="font-weight-bold">词汇表达</label>
+                                <textarea class="form-control" id="vocabulary" rows="6"
+                                    placeholder="粘贴词汇表达，例如：&#10;· be into / be fond of / be crazy about → 喜欢&#10;· chill out / wind down → 放松&#10;..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">句型表达</label>
+                                <textarea class="form-control" id="sentencePatterns" rows="6"
+                                    placeholder="粘贴句型表达，例如：&#10;· One of my biggest hobbies is…, because it helps me to…&#10;· Whenever I feel stressed, I usually…&#10;..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold">示范段落</label>
+                                <textarea class="form-control" id="sampleParagraph" rows="8"
+                                    placeholder="粘贴示范段落..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Speaking Part 1 (口语题库Part1) -->
+                        <div id="speakingPart1Input" style="display: none;">
+                            <div class="form-group">
+                                <label class="font-weight-bold">问题列表（每行一个问题）</label>
+                                <textarea class="form-control" id="part1Questions" rows="10"
+                                    placeholder="粘贴问题列表，每行一个问题，例如：&#10;What sort of things do you find difficult to remember?&#10;What do you do when you need to remember something important?&#10;Did you find it easier to remember things when you were a child?&#10;..."></textarea>
+                                <small class="form-text text-muted">提示：每个问题会被拆分为独立的条目，可以单独分配给学生</small>
+                            </div>
+                        </div>
+
+                        <!-- Speaking Part 2 (口语题库Part2) -->
+                        <div id="speakingPart2Input" style="display: none;">
+                            <div class="form-group">
+                                <label class="font-weight-bold">话题卡片</label>
+                                <textarea class="form-control" id="part2Topic" rows="10"
+                                    placeholder="粘贴话题卡片，例如：&#10;Describe an area of science (physics, biology, psychology, etc.) that you are interested in.&#10;You should say:&#10;o What it is&#10;o When you knew it&#10;o How you learnt it&#10;o And explain why you are interested in it"></textarea>
+                            </div>
                         </div>
 
                         <hr>
@@ -136,6 +199,31 @@
         console.error('Failed to parse questions:', e);
     }
     {% endif %}
+
+    // Handle material type change
+    function handleTypeChange() {
+        const type = document.getElementById('type').value;
+
+        // Hide all input areas
+        document.getElementById('grammarInput').style.display = 'none';
+        document.getElementById('writingLogicInput').style.display = 'none';
+        document.getElementById('speakingReadingInput').style.display = 'none';
+        document.getElementById('speakingPart1Input').style.display = 'none';
+        document.getElementById('speakingPart2Input').style.display = 'none';
+
+        // Show the selected type's input area
+        if (type === 'grammar') {
+            document.getElementById('grammarInput').style.display = 'block';
+        } else if (type === 'writing_logic') {
+            document.getElementById('writingLogicInput').style.display = 'block';
+        } else if (type === 'speaking_reading') {
+            document.getElementById('speakingReadingInput').style.display = 'block';
+        } else if (type === 'speaking_part1') {
+            document.getElementById('speakingPart1Input').style.display = 'block';
+        } else if (type === 'speaking_part2') {
+            document.getElementById('speakingPart2Input').style.display = 'block';
+        }
+    }
 
     // 切换标签页
     function showTab(tab) {
@@ -277,17 +365,76 @@
             return;
         }
 
-        if (questions.length === 0) {
-            alert('请至少添加一道题目');
-            return;
-        }
-
-        const payload = {
+        let payload = {
             title,
             type,
-            description,
-            questions
+            description
         };
+
+        // Collect data based on material type
+        if (type === 'grammar') {
+            // Grammar: use existing questions array
+            if (questions.length === 0) {
+                alert('请至少添加一道题目');
+                return;
+            }
+            payload.questions = questions;
+
+        } else if (type === 'writing_logic') {
+            // Writing logic chain
+            const essayFull = document.getElementById('essayFull').value.trim();
+            const essayBlank = document.getElementById('essayBlank').value.trim();
+            const essayAnswers = document.getElementById('essayAnswers').value.trim();
+
+            if (!essayFull || !essayBlank || !essayAnswers) {
+                alert('请填写完整范文、填空版和答案列表');
+                return;
+            }
+
+            payload.essay_full = essayFull;
+            payload.essay_blank = essayBlank;
+            payload.essay_answers = essayAnswers;
+
+        } else if (type === 'speaking_reading') {
+            // Speaking reading material
+            const vocabulary = document.getElementById('vocabulary').value.trim();
+            const sentencePatterns = document.getElementById('sentencePatterns').value.trim();
+            const sampleParagraph = document.getElementById('sampleParagraph').value.trim();
+
+            if (!vocabulary && !sentencePatterns && !sampleParagraph) {
+                alert('请至少填写一项内容');
+                return;
+            }
+
+            payload.vocabulary = vocabulary;
+            payload.sentence_patterns = sentencePatterns;
+            payload.sample_paragraph = sampleParagraph;
+
+        } else if (type === 'speaking_part1') {
+            // Speaking Part 1 questions
+            const part1Questions = document.getElementById('part1Questions').value.trim();
+
+            if (!part1Questions) {
+                alert('请填写问题列表');
+                return;
+            }
+
+            payload.part1_questions = part1Questions;
+
+        } else if (type === 'speaking_part2') {
+            // Speaking Part 2 topic card
+            const part2Topic = document.getElementById('part2Topic').value.trim();
+
+            if (!part2Topic) {
+                alert('请填写话题卡片');
+                return;
+            }
+
+            payload.part2_topic = part2Topic;
+        } else {
+            alert('未知的材料类型');
+            return;
+        }
 
         // Detect edit mode by checking if material exists
         const isEditMode = {{ 'true' if material else 'false' }
