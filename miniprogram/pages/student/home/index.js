@@ -250,7 +250,7 @@ Page({
 
         try {
             // Call backend to create session
-            const res = await request(`/students/plan-items/${taskId}/timer/start`, {
+            const res = await request(`/student/plan-items/${taskId}/timer/start`, {
                 method: 'POST'
             })
 
@@ -260,7 +260,7 @@ Page({
                         return {
                             ...task,
                             timerStatus: 'running',
-                            sessionId: res.data.session_id,
+                            sessionId: res.session_id, // Note: backend returns session_id directly in res for app.py
                             elapsedSeconds: 0,
                             displayTime: '00:00',
                             plannedTime: this.formatTime(task.planned_minutes * 60),
@@ -287,7 +287,7 @@ Page({
                 // Save to storage
                 wx.setStorageSync('activeTimer', {
                     taskId,
-                    sessionId: res.data.session_id,
+                    sessionId: res.session_id,
                     startTime: Date.now()
                 })
             }
@@ -320,6 +320,15 @@ Page({
     resumeTimer(e) {
         const taskId = e.currentTarget.dataset.id
 
+        // Restart interval
+        if (this.data.timerInterval) {
+            clearInterval(this.data.timerInterval)
+        }
+        const interval = setInterval(() => {
+            this.updateTimerDisplay()
+        }, 1000)
+        this.setData({ timerInterval: interval })
+
         const tasks = this.data.tasks.map(task => {
             if (task.id === taskId) {
                 return { ...task, timerStatus: 'running' }
@@ -331,15 +340,6 @@ Page({
             tasks,
             activeTimerId: taskId
         })
-
-        // Restart interval
-        if (this.data.timerInterval) {
-            clearInterval(this.data.timerInterval)
-        }
-        const interval = setInterval(() => {
-            this.updateTimerDisplay()
-        }, 1000)
-        this.setData({ timerInterval: interval })
     },
 
     // Stop timer
@@ -351,7 +351,7 @@ Page({
 
         try {
             // Call backend to stop session
-            const res = await request(`/students/plan-items/${taskId}/timer/${task.sessionId}/stop`, {
+            const res = await request(`/student/plan-items/${taskId}/timer/${task.sessionId}/stop`, {
                 method: 'POST'
             })
 
