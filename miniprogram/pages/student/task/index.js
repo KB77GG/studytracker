@@ -17,7 +17,13 @@ Page({
         submitting: false,
         showAudio: false,
         playingFeedback: false,
-        baseUrl: 'https://studytracker.xin'
+        baseUrl: 'https://studytracker.xin',
+        // TTS相关
+        ttsSpeed: 1.0,
+        vocabularyWords: [],
+        sentenceWords: [],
+        paragraphWords: [],
+        ttsAudio: null
     },
 
     onLoad(options) {
@@ -57,6 +63,11 @@ Page({
                     images: images,
                     note: res.task.student_note || ''
                 })
+
+                // 如果是口语朗读材料，分割单词
+                if (res.task.material && res.task.material.type === 'speaking_reading') {
+                    this.splitWords()
+                }
             } else {
                 wx.showToast({ title: '获取任务详情失败', icon: 'none' })
             }
@@ -311,5 +322,125 @@ Page({
 
                 canvas.requestAnimationFrame(render)
             })
+    },
+
+    // ========== TTS 功能 ==========
+
+    /**
+     * 分割文本为单词数组
+     */
+    splitWords() {
+        const { task } = this.data
+        if (!task.material || !task.material.questions || !task.material.questions[0]) {
+            return
+        }
+
+        const q = task.material.questions[0]
+
+        // 分割词汇表达
+        const vocabulary = q.content || ''
+        const vocabularyWords = vocabulary.split(/[\s\n,;.!?]+/).filter(w => w.trim().length > 0)
+
+        // 分割句型表达
+        const sentences = q.hint || ''
+        const sentenceWords = sentences.split(/[\s\n,;.!?]+/).filter(w => w.trim().length > 0)
+
+        // 分割示范段落
+        const paragraph = q.reference_answer || ''
+        const paragraphWords = paragraph.split(/[\s\n,;.!?]+/).filter(w => w.trim().length > 0)
+
+        this.setData({
+            vocabularyWords,
+            sentenceWords,
+            paragraphWords
+        })
+    },
+
+    /**
+     * 设置语速
+     */
+    setSpeed(e) {
+        const speed = parseFloat(e.currentTarget.dataset.speed)
+        this.setData({ ttsSpeed: speed })
+    },
+
+    /**
+     * 朗读整段文本
+     */
+    async playText(e) {
+        const text = e.currentTarget.dataset.text
+        if (!text) {
+            wx.showToast({ title: '内容为空', icon: 'none' })
+            return
+        }
+
+        wx.showLoading({ title: '生成中...' })
+
+        try {
+            const res = await request('/tts/synthesize', {
+                method: 'POST',
+                data: {
+                    text: text,
+                    speed: this.data.ttsSpeed
+                }
+            })
+
+            if (res.ok && res.audio_url) {
+                // 停止当前播放
+                if (this.data.ttsAudio) {
+                    this.data.ttsAudio.stop()
+                }
+
+                // 创建音频实例
+                const audio = wx.createInnerAudioContext()
+                audio.src = this.data.baseUrl + res.audio_url
+                audio.play()
+
+                this.setData({ ttsAudio: audio })
+
+                audio.onError((err) => {
+                    console.error('音频播放错误:', err)
+                    wx.showToast({ title: '播放失败', icon: 'none' })
+                })
+            } else {
+                wx.showToast({ title: '生成失败', icon: 'none' })
+            }
+        } catch (err) {
+            console.error('TTS错误:', err)
+            wx.showToast({ title: '生成失败', icon: 'none' })
+        } finally {
+            wx.hideLoading()
+        }
+    },
+
+    /**
+     * 朗读单个单词
+     */
+    async playWord(e) {
+        const word = e.currentTarget.dataset.word
+        if (!word) return
+
+        try {
+            const res = await request('/tts/word', {
+                method: 'POST',
+                data: { word }
+            })
+
+            if (res.ok && res.audio_url) {
+                // 停止当前播放
+                if (this.data.ttsAudio) {
+                    this.data.ttsAudio.stop()
+                }
+
+                // 创建音频实例
+                const audio = wx.createInnerAudioContext()
+                audio.src = this.data.baseUrl + res.audio_url
+                audio.play()
+
+                this.setData({ ttsAudio: audio })
+            }
+        } catch (err) {
+            console.error('单词朗读错误:', err)
+        }
     }
 })

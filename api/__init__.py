@@ -9,8 +9,10 @@ def init_app(app):
     from api.students import api_bp
     from api.miniprogram import mp_bp
     from api.materials import material_bp  # New material bank API
+    from api.tts import tts_bp  # TTS API
 
     app.register_blueprint(wechat_bp, url_prefix="/api/wechat")  # Restore url_prefix
     app.register_blueprint(api_bp)
     app.register_blueprint(mp_bp)
     app.register_blueprint(material_bp)  # Register material bank
+    app.register_blueprint(tts_bp)  # Register TTS

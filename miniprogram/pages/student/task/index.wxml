@@ -50,17 +50,56 @@
 
     <!-- 3. 口语朗读 -->
     <view wx:if="{{task.material.type === 'speaking_reading'}}">
-      <view class="material-section">
-        <text class="subtitle">词汇表达</text>
-        <text class="content-text" user-select>{{task.material.questions[0].content}}</text>
+      <!-- 语速控制 -->
+      <view class="tts-controls">
+        <text class="control-label">语速：</text>
+        <view class="speed-buttons">
+          <button class="speed-btn {{ttsSpeed === 0.7 ? 'active' : ''}}" bindtap="setSpeed" data-speed="0.7" size="mini">慢速</button>
+          <button class="speed-btn {{ttsSpeed === 1.0 ? 'active' : ''}}" bindtap="setSpeed" data-speed="1.0" size="mini">正常</button>
+          <button class="speed-btn {{ttsSpeed === 1.3 ? 'active' : ''}}" bindtap="setSpeed" data-speed="1.3" size="mini">快速</button>
+        </view>
       </view>
+
       <view class="material-section">
-        <text class="subtitle">句型表达</text>
-        <text class="content-text" user-select>{{task.material.questions[0].hint}}</text>
+        <view class="subtitle-with-play">
+          <text class="subtitle">词汇表达</text>
+          <button class="play-btn" bindtap="playText" data-text="{{task.material.questions[0].content}}" size="mini">
+            🔊 朗读
+          </button>
+        </view>
+        <view class="word-list">
+          <text class="word-item" wx:for="{{vocabularyWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">
+            {{item}}
+          </text>
+        </view>
       </view>
+
       <view class="material-section">
-        <text class="subtitle">示范段落</text>
-        <text class="content-text" user-select>{{task.material.questions[0].reference_answer}}</text>
+        <view class="subtitle-with-play">
+          <text class="subtitle">句型表达</text>
+          <button class="play-btn" bindtap="playText" data-text="{{task.material.questions[0].hint}}" size="mini">
+            🔊 朗读
+          </button>
+        </view>
+        <view class="word-list">
+          <text class="word-item" wx:for="{{sentenceWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">
+            {{item}}
+          </text>
+        </view>
+      </view>
+
+      <view class="material-section">
+        <view class="subtitle-with-play">
+          <text class="subtitle">示范段落</text>
+          <button class="play-btn" bindtap="playText" data-text="{{task.material.questions[0].reference_answer}}" size="mini">
+            🔊 朗读整段
+          </button>
+        </view>
+        <view class="word-list">
+          <text class="word-item" wx:for="{{paragraphWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">
+            {{item}}
+          </text>
+        </view>
       </view>
     </view>
 
