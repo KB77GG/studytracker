@@ -290,6 +290,11 @@ Page({
                     sessionId: res.session_id,
                     startTime: Date.now()
                 })
+
+                // Navigate to task detail page
+                wx.navigateTo({
+                    url: `/pages/student/task/index?id=${taskId}`
+                })
             }
         } catch (err) {
             console.error('Start timer error:', err)
