@@ -19,6 +19,7 @@ Page({
         playingFeedback: false,
         baseUrl: 'https://studytracker.xin',
         // TTS相关
+        ttsProvider: 'azure',  // 可选: 'iflytek' 或 'azure'
         ttsSpeed: 1.0,
         vocabularyWords: [],
         sentenceWords: [],
@@ -70,7 +71,10 @@ Page({
         try {
             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
             if (res.ok && res.task) {
-                const isSpeaking = res.task.module && (res.task.module.includes('口语') || res.task.module.includes('Speaking'))
+                // 检查是否是口语任务（通过 module 或 material.type）
+                const isSpeaking =
+                    (res.task.module && (res.task.module.includes('口语') || res.task.module.includes('Speaking'))) ||
+                    (res.task.material && res.task.material.type && res.task.material.type.startsWith('speaking'))
 
                 // 处理图片URL
                 const baseUrl = getApp().globalData.baseUrl
@@ -412,11 +416,15 @@ Page({
         wx.showLoading({ title: '准备中...' })
 
         try {
-            const res = await request('/tts/synthesize', {
+            // 根据 provider 选择 API 端点
+            const endpoint = this.data.ttsProvider === 'azure' ? '/azure-tts/synthesize' : '/tts/synthesize'
+
+            const res = await request(endpoint, {
                 method: 'POST',
                 data: {
                     text: text,
-                    speed: this.data.ttsSpeed
+                    speed: this.data.ttsSpeed,
+                    voice: this.data.ttsProvider === 'azure' ? 'en-US-JennyNeural' : undefined
                 }
             })
 
@@ -457,9 +465,15 @@ Page({
         wx.showLoading({ title: '准备中...' })
 
         try {
-            const res = await request('/tts/word', {
+            // 根据 provider 选择 API 端点
+            const endpoint = this.data.ttsProvider === 'azure' ? '/azure-tts/word' : '/tts/word'
+
+            const res = await request(endpoint, {
                 method: 'POST',
-                data: { word }
+                data: {
+                    word,
+                    voice: this.data.ttsProvider === 'azure' ? 'en-US-JennyNeural' : undefined
+                }
             })
 
             if (res.ok && res.audio_url) {
