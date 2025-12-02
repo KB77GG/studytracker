@@ -24,9 +24,9 @@ CACHE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', '
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 
-def get_cache_path(text, speed=1.0):
-    """Generate cache file path based on text and speed."""
-    cache_key = f"{text}_{speed}"
+def get_cache_path(text, speed=1.0, voice="catherine"):
+    """Generate cache file path based on text, speed and voice."""
+    cache_key = f"{text}_{speed}_{voice}"
     file_hash = hashlib.md5(cache_key.encode('utf-8')).hexdigest()
     return os.path.join(CACHE_DIR, f"{file_hash}.mp3")
 
@@ -65,20 +65,20 @@ def generate_auth_url():
     return f"wss://{host}{path}?{urlencode(params)}"
 
 
-def synthesize_speech(text, speed=1.0, voice="x2_enhuan"):
+def synthesize_speech(text, speed=1.0, voice="catherine"):
     """
     Synthesize speech using iFlytek TTS API.
     
     Args:
         text: Text to synthesize
         speed: Speech speed (0.5 - 2.0)
-        voice: Voice name (x2_enhuan for English female)
+        voice: Voice name (catherine for English female)
     
     Returns:
         Audio data in bytes
     """
     # Check cache first
-    cache_path = get_cache_path(text, speed)
+    cache_path = get_cache_path(text, speed, voice)
     if os.path.exists(cache_path):
         with open(cache_path, 'rb') as f:
             return f.read()
@@ -179,7 +179,7 @@ def synthesize():
             return jsonify({"ok": False, "error": "synthesis_failed"}), 500
         
         # Generate cache URL
-        cache_path = get_cache_path(text, speed)
+        cache_path = get_cache_path(text, speed, voice="catherine")
         cache_filename = os.path.basename(cache_path)
         audio_url = f"/static/tts_cache/{cache_filename}"
         
@@ -211,7 +211,7 @@ def synthesize_word():
             return jsonify({"ok": False, "error": "synthesis_failed"}), 500
         
         # Generate cache URL
-        cache_path = get_cache_path(word, 1.0)
+        cache_path = get_cache_path(word, 1.0, voice="catherine")
         cache_filename = os.path.basename(cache_path)
         audio_url = f"/static/tts_cache/{cache_filename}"
         

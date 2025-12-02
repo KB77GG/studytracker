@@ -22,14 +22,37 @@ Page({
         ttsSpeed: 1.0,
         vocabularyWords: [],
         sentenceWords: [],
-        paragraphWords: [],
-        ttsAudio: null
+        paragraphText: '',
+        ttsContext: null,
+        currentPlayingText: null,
+        isPlaying: false
     },
 
     onLoad(options) {
         this.setData({ taskId: options.id })
         this.fetchTaskDetail()
         this.setupRecorder()
+        this.initTTS()
+    },
+
+    onUnload() {
+        if (this.data.ttsContext) {
+            this.data.ttsContext.destroy()
+        }
+    },
+
+    initTTS() {
+        const ctx = wx.createInnerAudioContext()
+        ctx.onPlay(() => this.setData({ isPlaying: true }))
+        ctx.onPause(() => this.setData({ isPlaying: false }))
+        ctx.onStop(() => this.setData({ isPlaying: false, currentPlayingText: null }))
+        ctx.onEnded(() => this.setData({ isPlaying: false, currentPlayingText: null }))
+        ctx.onError((res) => {
+            console.error('TTS Error:', res)
+            this.setData({ isPlaying: false, currentPlayingText: null })
+            wx.showToast({ title: '播放出错', icon: 'none' })
+        })
+        this.setData({ ttsContext: ctx })
     },
 
     setupRecorder() {
@@ -337,22 +360,21 @@ Page({
 
         const q = task.material.questions[0]
 
-        // 分割词汇表达
+        // 分割词汇表达 - 按换行或分号分割，保持短语完整性
         const vocabulary = q.content || ''
-        const vocabularyWords = vocabulary.split(/[\s\n,;.!?]+/).filter(w => w.trim().length > 0)
+        const vocabularyWords = vocabulary.split(/[\n;]+/).map(w => w.trim()).filter(w => w.length > 0)
 
-        // 分割句型表达
+        // 分割句型表达 - 按换行分割
         const sentences = q.hint || ''
-        const sentenceWords = sentences.split(/[\s\n,;.!?]+/).filter(w => w.trim().length > 0)
+        const sentenceWords = sentences.split(/[\n]+/).map(w => w.trim()).filter(w => w.length > 0)
 
-        // 分割示范段落
-        const paragraph = q.reference_answer || ''
-        const paragraphWords = paragraph.split(/[\s\n,;.!?]+/).filter(w => w.trim().length > 0)
+        // 示范段落 - 保持完整文本
+        const paragraphText = q.reference_answer || ''
 
         this.setData({
             vocabularyWords,
             sentenceWords,
-            paragraphWords
+            paragraphText
         })
     },
 
@@ -365,7 +387,7 @@ Page({
     },
 
     /**
-     * 朗读整段文本
+     * 朗读/暂停文本
      */
     async playText(e) {
         const text = e.currentTarget.dataset.text
@@ -374,7 +396,20 @@ Page({
             return
         }
 
-        wx.showLoading({ title: '生成中...' })
+        const ctx = this.data.ttsContext
+
+        // 如果点击的是当前正在播放/暂停的文本
+        if (this.data.currentPlayingText === text) {
+            if (this.data.isPlaying) {
+                ctx.pause()
+            } else {
+                ctx.play()
+            }
+            return
+        }
+
+        // 如果是新的文本
+        wx.showLoading({ title: '准备中...' })
 
         try {
             const res = await request('/tts/synthesize', {
@@ -386,22 +421,9 @@ Page({
             })
 
             if (res.ok && res.audio_url) {
-                // 停止当前播放
-                if (this.data.ttsAudio) {
-                    this.data.ttsAudio.stop()
-                }
-
-                // 创建音频实例
-                const audio = wx.createInnerAudioContext()
-                audio.src = this.data.baseUrl + res.audio_url
-                audio.play()
-
-                this.setData({ ttsAudio: audio })
-
-                audio.onError((err) => {
-                    console.error('音频播放错误:', err)
-                    wx.showToast({ title: '播放失败', icon: 'none' })
-                })
+                ctx.src = this.data.baseUrl + res.audio_url
+                ctx.play()
+                this.setData({ currentPlayingText: text })
             } else {
                 wx.showToast({ title: '生成失败', icon: 'none' })
             }
@@ -420,6 +442,20 @@ Page({
         const word = e.currentTarget.dataset.word
         if (!word) return
 
+        const ctx = this.data.ttsContext
+
+        // 如果点击的是当前正在播放的单词，则暂停/继续
+        if (this.data.currentPlayingText === word) {
+            if (this.data.isPlaying) {
+                ctx.pause()
+            } else {
+                ctx.play()
+            }
+            return
+        }
+
+        wx.showLoading({ title: '准备中...' })
+
         try {
             const res = await request('/tts/word', {
                 method: 'POST',
@@ -427,20 +463,17 @@ Page({
             })
 
             if (res.ok && res.audio_url) {
-                // 停止当前播放
-                if (this.data.ttsAudio) {
-                    this.data.ttsAudio.stop()
-                }
-
-                // 创建音频实例
-                const audio = wx.createInnerAudioContext()
-                audio.src = this.data.baseUrl + res.audio_url
-                audio.play()
-
-                this.setData({ ttsAudio: audio })
+                ctx.src = this.data.baseUrl + res.audio_url
+                ctx.play()
+                this.setData({ currentPlayingText: word })
+            } else {
+                wx.showToast({ title: '生成失败', icon: 'none' })
             }
         } catch (err) {
             console.error('单词朗读错误:', err)
+            wx.showToast({ title: '生成失败，请重试', icon: 'none' })
+        } finally {
+            wx.hideLoading()
         }
     }
 })

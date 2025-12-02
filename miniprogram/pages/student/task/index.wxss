@@ -383,3 +383,65 @@
   color: white;
   transform: scale(0.95);
 }
+
+/* 改进的单词/句子列表样式 */
+.word-list-vertical,
+.sentence-list {
+  margin-top: 10rpx;
+}
+
+.word-row,
+.sentence-row {
+  display: flex;
+  align-items: center;
+  padding: 15rpx 20rpx;
+  background: #f8f9fa;
+  border-radius: 10rpx;
+  margin-bottom: 10rpx;
+  transition: background 0.2s;
+}
+
+.word-row:active,
+.sentence-row:active {
+  background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+}
+
+.play-icon {
+  font-size: 28rpx;
+  margin-right: 15rpx;
+  flex-shrink: 0;
+  width: 30rpx;
+  text-align: center;
+}
+
+.word-text,
+.sentence-text {
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.6;
+  flex: 1;
+  word-break: break-word;
+}
+
+/* 段落显示样式 */
+.paragraph-box {
+  margin-top: 15rpx;
+  padding: 25rpx;
+  background: #ffffff;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 12rpx;
+  line-height: 1.8;
+}
+
+.paragraph-text {
+  font-size: 32rpx;
+  color: #333;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.paragraph-text.playing {
+  background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+  padding: 10rpx;
+  border-radius: 8rpx;
+}
