@@ -19,8 +19,7 @@ Page({
         playingFeedback: false,
         baseUrl: 'https://studytracker.xin',
         // TTS相关
-        ttsProvider: 'azure',  // 可选: 'iflytek' 或 'azure'
-        ttsSpeed: 1.0,
+        ttsProvider: 'iflytek',  // 使用科大讯飞（单词点读）
         vocabularyWords: [],
         sentenceWords: [],
         paragraphText: '',
@@ -380,67 +379,6 @@ Page({
             sentenceWords,
             paragraphText
         })
-    },
-
-    /**
-     * 设置语速
-     */
-    setSpeed(e) {
-        const speed = parseFloat(e.currentTarget.dataset.speed)
-        this.setData({ ttsSpeed: speed })
-    },
-
-    /**
-     * 朗读/暂停文本
-     */
-    async playText(e) {
-        const text = e.currentTarget.dataset.text
-        if (!text) {
-            wx.showToast({ title: '内容为空', icon: 'none' })
-            return
-        }
-
-        const ctx = this.data.ttsContext
-
-        // 如果点击的是当前正在播放/暂停的文本
-        if (this.data.currentPlayingText === text) {
-            if (this.data.isPlaying) {
-                ctx.pause()
-            } else {
-                ctx.play()
-            }
-            return
-        }
-
-        // 如果是新的文本
-        wx.showLoading({ title: '准备中...' })
-
-        try {
-            // 根据 provider 选择 API 端点
-            const endpoint = this.data.ttsProvider === 'azure' ? '/azure-tts/synthesize' : '/tts/synthesize'
-
-            const res = await request(endpoint, {
-                method: 'POST',
-                data: {
-                    text: text,
-                    speed: this.data.ttsSpeed,
-                    voice: this.data.ttsProvider === 'azure' ? 'en-US-JennyNeural' : undefined
-                }
-            })
-
-            if (res.ok && res.audio_url) {
-                ctx.src = this.data.baseUrl + res.audio_url
-                ctx.play()
-                this.setData({ currentPlayingText: text })
-            } else {
-                wx.showToast({ title: '生成失败', icon: 'none' })
-            }
-        } catch (err) {
-            console.error('TTS错误:', err)
-            wx.showToast({ title: '生成失败', icon: 'none' })
-        } finally {
-            wx.hideLoading()
-        }
     },
 
     /**
