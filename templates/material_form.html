@@ -191,6 +191,7 @@
     try {
         questions = {{ questions_json | safe }
     };
+    };
     // Render questions immediately after page loads
     document.addEventListener('DOMContentLoaded', function () {
         renderQuestions();
