@@ -19,6 +19,68 @@
     </view>
   </view>
 
+
+  <!-- 学习材料区域 -->
+  <view class="material-card" wx:if="{{task.material}}">
+    <view class="section-title">📚 学习材料</view>
+    
+    <!-- 1. 语法练习 / 翻译练习 -->
+    <view wx:if="{{task.material.type === 'grammar' || task.material.type === 'translation'}}">
+      <view class="question-item" wx:for="{{task.material.questions}}" wx:key="id">
+        <text class="question-content">{{index + 1}}. {{item.content}}</text>
+        <view class="options" wx:if="{{item.options && item.options.length > 0}}">
+          <view class="option-item" wx:for="{{item.options}}" wx:for-item="opt" wx:key="key">
+            <text>{{opt.key}}. {{opt.text}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 2. 写作逻辑链 -->
+    <view wx:if="{{task.material.type === 'writing_logic'}}">
+      <view class="material-section">
+        <text class="subtitle">完整范文</text>
+        <text class="content-text" user-select>{{task.material.questions[0].content}}</text>
+      </view>
+      <view class="material-section">
+        <text class="subtitle">填空练习</text>
+        <text class="content-text" user-select>{{task.material.questions[0].hint}}</text>
+      </view>
+    </view>
+
+    <!-- 3. 口语朗读 -->
+    <view wx:if="{{task.material.type === 'speaking_reading'}}">
+      <view class="material-section">
+        <text class="subtitle">词汇表达</text>
+        <text class="content-text" user-select>{{task.material.questions[0].content}}</text>
+      </view>
+      <view class="material-section">
+        <text class="subtitle">句型表达</text>
+        <text class="content-text" user-select>{{task.material.questions[0].hint}}</text>
+      </view>
+      <view class="material-section">
+        <text class="subtitle">示范段落</text>
+        <text class="content-text" user-select>{{task.material.questions[0].reference_answer}}</text>
+      </view>
+    </view>
+
+    <!-- 4. 口语 Part 1 -->
+    <view wx:if="{{task.material.type === 'speaking_part1'}}">
+      <view class="question-list">
+        <view class="question-item" wx:for="{{task.material.questions}}" wx:key="id">
+          <text class="question-content">{{index + 1}}. {{item.content}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 5. 口语 Part 2 -->
+    <view wx:if="{{task.material.type === 'speaking_part2'}}">
+      <view class="topic-card">
+        <text class="content-text" user-select>{{task.material.questions[0].content}}</text>
+      </view>
+    </view>
+  </view>
+
   <!-- 老师反馈 (仅已完成显示) -->
   <view class="feedback-card" wx:if="{{task.status === 'completed'}}">
     <view class="section-title">👩‍🏫 老师反馈</view>

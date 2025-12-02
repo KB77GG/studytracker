@@ -242,3 +242,70 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
+
+/* 学习材料样式 */
+.material-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.material-section {
+  margin-bottom: 30rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 10rpx;
+  display: block;
+  background: #f0f2f5;
+  padding: 10rpx 20rpx;
+  border-radius: 10rpx;
+}
+
+.content-text {
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  display: block;
+}
+
+.question-item {
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.question-item:last-child {
+  border-bottom: none;
+}
+
+.question-content {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.options {
+  margin-top: 10rpx;
+  padding-left: 20rpx;
+}
+
+.option-item {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 5rpx;
+}
+
+.topic-card {
+  background: #fff9c4;
+  padding: 30rpx;
+  border-radius: 10rpx;
+  border: 1rpx dashed #fbc02d;
+}

@@ -136,6 +136,30 @@ def get_task_detail(task_id):
     elif task.actual_seconds and task.actual_seconds > 0:
         status = "in_progress"
 
+    # 获取关联的材料信息
+    material_data = None
+    if task.material:
+        questions = []
+        for q in task.material.questions:
+            options = [{"key": opt.option_key, "text": opt.option_text} for opt in q.options]
+            questions.append({
+                "id": q.id,
+                "sequence": q.sequence,
+                "type": q.question_type,
+                "content": q.content,
+                "hint": q.hint,
+                "reference_answer": q.reference_answer,
+                "options": options
+            })
+        
+        material_data = {
+            "id": task.material.id,
+            "title": task.material.title,
+            "type": task.material.type,
+            "description": task.material.description,
+            "questions": questions
+        }
+
     return jsonify({
         "ok": True,
         "task": {
@@ -155,7 +179,9 @@ def get_task_detail(task_id):
             "student_note": task.student_note,
             "evidence_photos": json.loads(task.evidence_photos) if task.evidence_photos else [],
             "feedback_image": task.feedback_image,
-            "feedback_audio": task.feedback_audio
+            "feedback_audio": task.feedback_audio,
+            # 材料信息
+            "material": material_data
         }
     })
 
