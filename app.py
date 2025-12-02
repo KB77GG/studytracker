@@ -1132,6 +1132,13 @@ def tasks_page():
         note = request.form.get("note", "").strip()
         material_id = request.form.get("material_id")
         
+        # 如果选择了材料，自动填充描述
+        if material_id and not detail:
+            from models import MaterialBank
+            material = MaterialBank.query.get(int(material_id))
+            if material:
+                detail = material.title
+        
         # Validate: need either category or material_id
         if not student:
             flash("请填写学生姓名")
