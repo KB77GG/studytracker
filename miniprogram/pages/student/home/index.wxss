@@ -242,6 +242,8 @@
 .timer-controls {
   display: flex;
   gap: 16rpx;
+  position: relative;
+  z-index: 10;
 }
 
 .timer-btn {

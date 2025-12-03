@@ -246,13 +246,23 @@ Page({
 
     // Start timer
     async startTimer(e) {
+        console.log('Start button clicked', e) // Debug log
         const taskId = e.currentTarget.dataset.id
+        console.log('Task ID:', taskId) // Debug log
+
+        if (!taskId) {
+            console.error('No task ID found')
+            wx.showToast({ title: '任务ID丢失', icon: 'none' })
+            return
+        }
 
         try {
+            wx.showLoading({ title: '启动中...' }) // Visual feedback
             // Call backend to create session
             const res = await request(`/student/plan-items/${taskId}/timer/start`, {
                 method: 'POST'
             })
+            console.log('Start timer response:', res) // Debug log
 
             if (res.ok) {
                 const tasks = this.data.tasks.map(task => {
