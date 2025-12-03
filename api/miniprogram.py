@@ -7,7 +7,8 @@ from sqlalchemy import func, and_
 
 from models import (
     db, User, StudentProfile, StudyPlan, PlanItem, 
-    PlanEvidence, ParentStudentLink, TaskCatalog, Task
+    PlanEvidence, ParentStudentLink, TaskCatalog, Task,
+    PlanItemSession
 )
 from .auth_utils import require_api_user
 
@@ -250,6 +251,78 @@ def submit_task(task_id):
         return jsonify({"ok": True})
 
     return jsonify({"ok": False, "error": "task_not_found"}), 404
+
+@mp_bp.route("/student/tasks/<int:task_id>/timer/start", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def start_timer(task_id):
+    """Start timer for a task"""
+    user = request.current_api_user
+    
+    # Try to find PlanItem
+    item = PlanItem.query.get(task_id)
+    if not item:
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+        
+    # Verify ownership
+    if item.plan.student_id != user.student_profile.id:
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    
+    # Create session
+    now = datetime.utcnow()
+    session = PlanItemSession(
+        plan_item=item,
+        started_at=now,
+        created_by=user.id,
+        source="timer"
+    )
+    db.session.add(session)
+    
+    # Update status if pending
+    if item.student_status == PlanItem.STUDENT_PENDING:
+        item.student_status = PlanItem.STUDENT_IN_PROGRESS
+        
+    db.session.commit()
+    
+    return jsonify({
+        "ok": True,
+        "session_id": session.id,
+        "started_at": now.isoformat()
+    })
+
+
+@mp_bp.route("/student/tasks/<int:task_id>/timer/<int:session_id>/stop", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def stop_timer(task_id, session_id):
+    """Stop timer for a task"""
+    user = request.current_api_user
+    
+    # Verify session belongs to user
+    session = PlanItemSession.query.get(session_id)
+    if not session or session.plan_item.plan.student_id != user.student_profile.id:
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    
+    # Update session end time
+    if not session.ended_at:
+        session.ended_at = datetime.utcnow()
+        duration = int((session.ended_at - session.started_at).total_seconds())
+        
+        # Update plan item actual_seconds
+        item = session.plan_item
+        if item.actual_seconds:
+            item.actual_seconds += duration
+        else:
+            item.actual_seconds = duration
+            
+        db.session.commit()
+        
+        return jsonify({
+            "ok": True,
+            "duration": duration,
+            "ended_at": session.ended_at.isoformat()
+        })
+    
+    return jsonify({"ok": False, "error": "already_stopped"}), 400
+
 
 @mp_bp.route("/student/stats", methods=["GET"])
 @require_api_user(User.ROLE_STUDENT)

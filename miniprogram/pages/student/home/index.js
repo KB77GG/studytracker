@@ -258,8 +258,8 @@ Page({
 
         try {
             wx.showLoading({ title: '启动中...' }) // Visual feedback
-            // Call backend to create session
-            const res = await request(`/student/plan-items/${taskId}/timer/start`, {
+            // Call backend to create session - use miniprogram API
+            const res = await request(`/miniprogram/student/tasks/${taskId}/timer/start`, {
                 method: 'POST'
             })
             console.log('Start timer response:', res) // Debug log
@@ -365,8 +365,8 @@ Page({
         if (!task) return
 
         try {
-            // Call backend to stop session
-            const res = await request(`/student/plan-items/${taskId}/timer/${task.sessionId}/stop`, {
+            // Call backend to stop session - use miniprogram API
+            const res = await request(`/miniprogram/student/tasks/${taskId}/timer/${task.sessionId}/stop`, {
                 method: 'POST'
             })
 
