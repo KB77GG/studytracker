@@ -25,6 +25,7 @@ App({
         userInfo: null,
         token: null,
         role: null,
-        baseUrl: 'https://studytracker.xin/api'
+        baseUrl: 'https://studytracker.xin/api',
+        activeTimer: null
     }
 })

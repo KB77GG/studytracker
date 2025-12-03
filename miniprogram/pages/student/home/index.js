@@ -49,7 +49,16 @@ Page({
     // Restore timer state from storage
     restoreTimerIfNeeded() {
         try {
-            const activeTimer = wx.getStorageSync('activeTimer')
+            // First check app.globalData, if not found check storage
+            let activeTimer = getApp().globalData.activeTimer
+            if (!activeTimer) {
+                activeTimer = wx.getStorageSync('activeTimer')
+                if (activeTimer && activeTimer.taskId) {
+                    // Sync to app.globalData
+                    getApp().globalData.activeTimer = activeTimer
+                }
+            }
+
             if (!activeTimer || !activeTimer.taskId) return
 
             const { taskId, sessionId, startTime } = activeTimer
@@ -62,8 +71,9 @@ Page({
             // Find the task in current tasks list
             const taskIndex = this.data.tasks.findIndex(t => t.id === taskId)
             if (taskIndex === -1) {
-                // Task not found, clear storage
+                // Task not found, clear storage and globalData
                 wx.removeStorageSync('activeTimer')
+                getApp().globalData.activeTimer = null
                 return
             }
 
@@ -91,7 +101,7 @@ Page({
                 activeTimerId: taskId
             })
 
-            // Restart interval
+            // Start update interval
             if (this.data.timerInterval) {
                 clearInterval(this.data.timerInterval)
             }
@@ -102,8 +112,8 @@ Page({
 
             console.log(`Timer restored: ${elapsedSeconds}s elapsed`)
 
-        } catch (err) {
-            console.error('Failed to restore timer:', err)
+        } catch (e) {
+            console.error('Restore timer error:', e)
         }
     },
 
@@ -256,6 +266,32 @@ Page({
             return
         }
 
+        // Check if there's already an active timer for this task
+        const activeTimer = getApp().globalData.activeTimer
+        if (activeTimer && activeTimer.taskId === taskId) {
+            // Timer already running for this task, just navigate to task page
+            wx.navigateTo({
+                url: `/pages/student/task/index?id=${taskId}`
+            })
+            return
+        }
+
+        // If there's an active timer for a different task, warn user
+        if (activeTimer && activeTimer.taskId !== taskId) {
+            const res = await wx.showModal({
+                title: '提示',
+                content: '您有另一个任务正在计时中，是否要停止当前计时并开始新任务？',
+                confirmText: '开始新任务',
+                cancelText: '取消'
+            })
+
+            if (!res.confirm) return
+
+            // User confirmed, clear old timer
+            getApp().globalData.activeTimer = null
+            wx.removeStorageSync('activeTimer')
+        }
+
         try {
             wx.showLoading({ title: '启动中...' }) // Visual feedback
             // Call backend to create session - use miniprogram API
@@ -263,6 +299,7 @@ Page({
                 method: 'POST'
             })
             console.log('Start timer response:', res) // Debug log
+            wx.hideLoading()
 
             if (res.ok) {
                 const tasks = this.data.tasks.map(task => {
@@ -270,7 +307,7 @@ Page({
                         return {
                             ...task,
                             timerStatus: 'running',
-                            sessionId: res.session_id, // Note: backend returns session_id directly in res for app.py
+                            sessionId: res.session_id,
                             elapsedSeconds: 0,
                             displayTime: '00:00',
                             plannedTime: this.formatTime(task.planned_minutes * 60),
@@ -309,6 +346,7 @@ Page({
                 })
             }
         } catch (err) {
+            wx.hideLoading()
             console.error('Start timer error:', err)
             wx.showToast({ title: '启动计时失败', icon: 'none' })
         }
