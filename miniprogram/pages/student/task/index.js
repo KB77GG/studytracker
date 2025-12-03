@@ -28,6 +28,7 @@ Page({
         isPlaying: false,
         // Timer related
         timerRunning: false,
+        timerPaused: false,
         displayTime: '00:00',
         plannedTime: '00:00',
         timerInterval: null,
@@ -224,8 +225,35 @@ Page({
     },
 
     pauseTimer() {
-        // TODO: Implement pause functionality
-        wx.showToast({ title: '暂停功能开发中', icon: 'none' })
+        if (!this.data.timerRunning || this.data.timerPaused) return
+
+        // Clear interval
+        if (this.data.timerInterval) {
+            clearInterval(this.data.timerInterval)
+        }
+
+        this.setData({
+            timerPaused: true,
+            timerInterval: null
+        })
+
+        wx.showToast({ title: '计时已暂停', icon: 'none' })
+    },
+
+    resumeTimer() {
+        if (!this.data.timerRunning || !this.data.timerPaused) return
+
+        // Resume interval
+        const interval = setInterval(() => {
+            this.updateTimer()
+        }, 1000)
+
+        this.setData({
+            timerPaused: false,
+            timerInterval: interval
+        })
+
+        wx.showToast({ title: '计时继续', icon: 'none' })
     },
 
     async stopTimer() {

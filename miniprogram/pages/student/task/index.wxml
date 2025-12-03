@@ -30,7 +30,8 @@
       <text class="timer-target">/ {{plannedTime}}</text>
     </view>
     <view class="timer-actions">
-      <view class="timer-btn pause" catchtap="pauseTimer">暂停</view>
+      <view wx:if="{{!timerPaused}}" class="timer-btn pause" catchtap="pauseTimer">暂停</view>
+      <view wx:if="{{timerPaused}}" class="timer-btn resume" catchtap="resumeTimer">继续</view>
       <view class="timer-btn stop" catchtap="stopTimer">结束</view>
     </view>
   </view>
