@@ -462,26 +462,26 @@
 }
 
 /* 单词云样式（横向排列） */
+/* 单词列表样式（竖向排列） */
 .word-cloud {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12rpx;
+  flex-direction: column;
+  gap: 15rpx;
   margin-top: 15rpx;
   padding: 10rpx 0;
 }
 
 .word-tag {
-  display: inline-block;
-  padding: 4rpx 8rpx;
-  background: transparent;
+  display: block;
+  padding: 15rpx 20rpx;
+  background: #f8f9fa;
   border: none;
-  border-radius: 8rpx;
-  font-size: 34rpx;
+  border-radius: 10rpx;
+  font-size: 32rpx;
   color: #333;
   cursor: pointer;
-  margin: 0 2rpx;
   line-height: 1.6;
-  transition: all 0.1s;
+  transition: all 0.2s;
 }
 
 .word-tag:active {
