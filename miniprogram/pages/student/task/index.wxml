@@ -19,6 +19,22 @@
     </view>
   </view>
 
+  <!-- Timer Display -->
+  <view class="timer-card" wx:if="{{timerRunning}}">
+    <view class="timer-header">
+      <text class="timer-icon">⏱️</text>
+      <text class="timer-label">当前计时</text>
+    </view>
+    <view class="timer-display">
+      <text class="timer-time">{{displayTime}}</text>
+      <text class="timer-target">/ {{plannedTime}}</text>
+    </view>
+    <view class="timer-actions">
+      <view class="timer-btn pause" catchtap="pauseTimer">暂停</view>
+      <view class="timer-btn stop" catchtap="stopTimer">结束</view>
+    </view>
+  </view>
+
 
   <!-- 学习材料区域 -->
   <view class="material-card" wx:if="{{task.material}}">

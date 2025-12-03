@@ -25,19 +25,73 @@ Page({
         paragraphText: '',
         ttsContext: null,
         currentPlayingText: null,
-        isPlaying: false
+        isPlaying: false,
+        // Timer related
+        timerRunning: false,
+        displayTime: '00:00',
+        plannedTime: '00:00',
+        timerInterval: null,
+        elapsedSeconds: 0
     },
 
     onLoad(options) {
-        this.setData({ taskId: options.id })
+        this.setData({ taskId: parseInt(options.id) })
         this.fetchTaskDetail()
         this.setupRecorder()
         this.initTTS()
+        this.checkTimer()
+    },
+
+    checkTimer() {
+        // Check if there's a running timer for this task
+        const activeTimer = app.globalData.activeTimer
+        if (activeTimer && activeTimer.taskId === this.data.taskId) {
+            // Restore timer state
+            const elapsed = Math.floor((Date.now() - activeTimer.startTime) / 1000)
+            this.setData({
+                timerRunning: true,
+                elapsedSeconds: elapsed,
+                displayTime: this.formatTime(elapsed),
+                plannedTime: this.formatTime((this.data.task.planned_minutes || 20) * 60)
+            })
+
+            // Start interval
+            const interval = setInterval(() => {
+                this.updateTimer()
+            }, 1000)
+            this.setData({ timerInterval: interval })
+        }
+    },
+
+    updateTimer() {
+        if (!this.data.timerRunning) return
+
+        const activeTimer = app.globalData.activeTimer
+        if (!activeTimer) {
+            this.stopTimerDisplay()
+            return
+        }
+
+        const elapsed = Math.floor((Date.now() - activeTimer.startTime) / 1000)
+        this.setData({
+            elapsedSeconds: elapsed,
+            displayTime: this.formatTime(elapsed)
+        })
+    },
+
+    formatTime(seconds) {
+        const mins = Math.floor(seconds / 60)
+        const secs = seconds % 60
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
     },
 
     onUnload() {
         if (this.data.ttsContext) {
             this.data.ttsContext.destroy()
+        }
+        // Clear timer interval but keep timer running in background
+        if (this.data.timerInterval) {
+            clearInterval(this.data.timerInterval)
         }
     },
 
@@ -167,6 +221,58 @@ Page({
         const index = e.currentTarget.dataset.index
         const images = this.data.images.filter((_, i) => i !== index)
         this.setData({ images })
+    },
+
+    pauseTimer() {
+        // TODO: Implement pause functionality
+        wx.showToast({ title: '暂停功能开发中', icon: 'none' })
+    },
+
+    async stopTimer() {
+        if (!this.data.timerRunning) return
+
+        const res = await wx.showModal({
+            title: '结束计时',
+            content: '确定要结束当前计时吗？',
+            confirmText: '确定',
+            cancelText: '取消'
+        })
+
+        if (!res.confirm) return
+
+        try {
+            const activeTimer = app.globalData.activeTimer
+            if (!activeTimer) return
+
+            // Call backend to stop timer
+            const stopRes = await request(`/miniprogram/student/tasks/${this.data.taskId}/timer/${activeTimer.sessionId}/stop`, {
+                method: 'POST'
+            })
+
+            if (stopRes.ok) {
+                // Clear timer state
+                this.stopTimerDisplay()
+                app.globalData.activeTimer = null
+                wx.removeStorageSync('activeTimer')
+
+                wx.showToast({ title: '计时已结束', icon: 'success' })
+            }
+        } catch (err) {
+            console.error('Stop timer error:', err)
+            wx.showToast({ title: '结束计时失败', icon: 'none' })
+        }
+    },
+
+    stopTimerDisplay() {
+        if (this.data.timerInterval) {
+            clearInterval(this.data.timerInterval)
+        }
+        this.setData({
+            timerRunning: false,
+            timerInterval: null,
+            displayTime: '00:00',
+            elapsedSeconds: 0
+        })
     },
 
     async submitTask() {

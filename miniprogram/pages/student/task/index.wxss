@@ -32,6 +32,83 @@
   margin-bottom: 30rpx;
 }
 
+/* Timer Card */
+.timer-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  color: white;
+}
+
+.timer-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.timer-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.timer-label {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.timer-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 25rpx;
+}
+
+.timer-time {
+  font-size: 72rpx;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
+.timer-target {
+  font-size: 36rpx;
+  margin-left: 16rpx;
+  opacity: 0.8;
+  font-family: 'Courier New', monospace;
+}
+
+.timer-actions {
+  display: flex;
+  gap: 20rpx;
+  justify-content: center;
+}
+
+.timer-btn {
+  flex: 1;
+  max-width: 200rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  text-align: center;
+  border-radius: 32rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.timer-btn.pause {
+  background: rgba(255, 255, 255, 0.25);
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+}
+
+.timer-btn.stop {
+  background: rgba(244, 67, 54, 0.9);
+}
+
+.timer-btn:active {
+  opacity: 0.7;
+}
+
+
 .info-row {
   display: flex;
   justify-content: space-between;

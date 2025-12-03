@@ -294,12 +294,14 @@ Page({
                 }, 1000)
                 this.setData({ timerInterval: interval })
 
-                // Save to storage
-                wx.setStorageSync('activeTimer', {
+                // Save to storage and globalData
+                const timerData = {
                     taskId,
                     sessionId: res.session_id,
                     startTime: Date.now()
-                })
+                }
+                wx.setStorageSync('activeTimer', timerData)
+                getApp().globalData.activeTimer = timerData
 
                 // Navigate to task detail page
                 wx.navigateTo({
