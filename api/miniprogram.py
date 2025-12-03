@@ -258,7 +258,22 @@ def start_timer(task_id):
     """Start timer for a task"""
     user = request.current_api_user
     
-    # Try to find PlanItem
+    # Try to find Task (old format) first
+    task = Task.query.get(task_id)
+    if task:
+        # Verify ownership
+        if task.student_name != user.student_profile.full_name:
+            return jsonify({"ok": False, "error": "forbidden"}), 403
+        
+        # For old Task format, we don't create session, just return success
+        # The miniprogram will handle timer locally
+        return jsonify({
+            "ok": True,
+            "session_id": task_id,  # Use task_id as session_id for compatibility
+            "started_at": datetime.utcnow().isoformat()
+        })
+    
+    # Try to find PlanItem (new format)
     item = PlanItem.query.get(task_id)
     if not item:
         return jsonify({"ok": False, "error": "task_not_found"}), 404
@@ -267,7 +282,7 @@ def start_timer(task_id):
     if item.plan.student_id != user.student_profile.id:
         return jsonify({"ok": False, "error": "forbidden"}), 403
     
-    # Create session
+    # Create session for new format
     now = datetime.utcnow()
     session = PlanItemSession(
         plan_item=item,
@@ -296,7 +311,19 @@ def stop_timer(task_id, session_id):
     """Stop timer for a task"""
     user = request.current_api_user
     
-    # Verify session belongs to user
+    # Check if this is a legacy Task (session_id == task_id)
+    if session_id == task_id:
+        task = Task.query.get(task_id)
+        if task and task.student_name == user.student_profile.full_name:
+            # For old Task format, just return success
+            # Timer duration is handled by miniprogram locally
+            return jsonify({
+                "ok": True,
+                "duration": 0,  # Placeholder
+                "ended_at": datetime.utcnow().isoformat()
+            })
+    
+    # Handle new PlanItem format with sessions
     session = PlanItemSession.query.get(session_id)
     if not session or session.plan_item.plan.student_id != user.student_profile.id:
         return jsonify({"ok": False, "error": "forbidden"}), 403
