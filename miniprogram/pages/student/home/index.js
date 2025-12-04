@@ -156,23 +156,29 @@ Page({
             console.log('Tasks response:', res)
 
             if (res.ok && res.tasks) {
-                const tasks = res.tasks.map(t => ({
-                    id: t.id,
-                    task_name: t.task_name,
-                    module: t.module,
-                    moduleClass: this.getModuleClass(t.module),
-                    planned_minutes: t.planned_minutes,
-                    status: t.status,
-                    statusText: this.getStatusText(t.status),
-                    isDone: t.status === 'completed' || t.status === 'submitted',
-                    // Timer state
-                    timerStatus: 'idle',
-                    elapsedSeconds: 0,
-                    displayTime: '00:00',
-                    plannedTime: this.formatTime(t.planned_minutes * 60),
-                    isOvertime: false,
-                    sessionId: null
-                }))
+                const tasks = res.tasks.map(t => {
+                    // Use actual_seconds from backend, default to 0 if not present
+                    const actualSeconds = t.actual_seconds || 0
+                    const plannedSeconds = t.planned_minutes * 60
+
+                    return {
+                        id: t.id,
+                        task_name: t.task_name,
+                        module: t.module,
+                        moduleClass: this.getModuleClass(t.module),
+                        planned_minutes: t.planned_minutes,
+                        status: t.status,
+                        statusText: this.getStatusText(t.status),
+                        isDone: t.status === 'completed' || t.status === 'submitted',
+                        // Timer state - show actual time spent from backend
+                        timerStatus: 'idle',
+                        elapsedSeconds: actualSeconds,
+                        displayTime: this.formatTime(actualSeconds),
+                        plannedTime: this.formatTime(plannedSeconds),
+                        isOvertime: actualSeconds > plannedSeconds,
+                        sessionId: null
+                    }
+                })
 
                 // 计算进度
                 const total = tasks.length
