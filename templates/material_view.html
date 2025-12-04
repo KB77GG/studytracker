@@ -53,7 +53,44 @@
                                     <span class="badge badge-light">{{ question.points }}分</span>
                                 </div>
 
-                                <p class="card-text lead">{{ question.content }}</p>
+                                {% if material.type == 'speaking_reading' %}
+                                <!-- 口语朗读特殊显示 -->
+                                <div class="mb-3">
+                                    <h6 class="font-weight-bold text-primary">词汇表达</h6>
+                                    <p class="mb-2 pl-3 border-left" style="white-space: pre-wrap;">{{ question.content
+                                        }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <h6 class="font-weight-bold text-info">句型表达</h6>
+                                    <p class="mb-2 pl-3 border-left" style="white-space: pre-wrap;">{{ question.hint }}
+                                    </p>
+                                </div>
+                                <div class="mb-0">
+                                    <h6 class="font-weight-bold text-success">示范段落</h6>
+                                    <div class="p-3 bg-light rounded" style="white-space: pre-wrap;">{{
+                                        question.reference_answer }}</div>
+                                </div>
+
+                                {% elif material.type == 'writing_logic' %}
+                                <!-- 写作逻辑特殊显示 -->
+                                <div class="mb-3">
+                                    <h6 class="font-weight-bold">完整范文</h6>
+                                    <div class="p-3 bg-light rounded mb-2" style="white-space: pre-wrap;">{{
+                                        question.content }}</div>
+                                </div>
+                                <div class="mb-3">
+                                    <h6 class="font-weight-bold">填空练习</h6>
+                                    <div class="p-3 bg-light rounded mb-2" style="white-space: pre-wrap;">{{
+                                        question.hint }}</div>
+                                </div>
+                                <div class="alert alert-secondary mb-0 py-2">
+                                    <strong>答案：</strong>
+                                    <span class="text-success">{{ question.reference_answer }}</span>
+                                </div>
+
+                                {% else %}
+                                <!-- 默认显示 (语法/翻译/口语Part1/2) -->
+                                <p class="card-text lead" style="white-space: pre-wrap;">{{ question.content }}</p>
 
                                 {% if question.options.count() > 0 %}
                                 <div class="options-list ml-3 mb-3">
@@ -66,15 +103,20 @@
                                 </div>
                                 {% endif %}
 
+                                {% if question.reference_answer or question.hint %}
                                 <div class="alert alert-secondary mb-0 py-2">
+                                    {% if question.reference_answer %}
                                     <strong>参考答案：</strong>
-                                    <span class="text-success font-weight-bold">{{ question.reference_answer or '未设置'
-                                        }}</span>
+                                    <span class="text-success font-weight-bold">{{ question.reference_answer }}</span>
+                                    {% endif %}
+
                                     {% if question.hint %}
-                                    <br>
+                                    {% if question.reference_answer %}<br>{% endif %}
                                     <small class="text-muted">提示：{{ question.hint }}</small>
                                     {% endif %}
                                 </div>
+                                {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                         {% else %}
