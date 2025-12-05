@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block page_title %}作业批改{% endblock %}
+{% block page_subtitle %}Grading Center{% endblock %}
+
+{% block content_dashboard %}
+<div class="card">
+    <div class="card-header">
+        <h3>待批改作业</h3>
+        <div class="filters">
+            <!-- Future filters can go here -->
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>提交时间</th>
+                    <th>学生</th>
+                    <th>任务内容</th>
+                    <th>材料类型</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.submitted_at.strftime('%Y-%m-%d %H:%M') if task.submitted_at else 'Unknown' }}</td>
+                    <td>{{ task.student_name }}</td>
+                    <td>
+                        <div class="text-truncate" style="max-width: 300px;">
+                            {{ task.detail }}
+                        </div>
+                        {% if task.category %}
+                        <span class="badge badge-sm badge-outline">{{ task.category }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.grading_mode == 'material' %}
+                        <span class="badge badge-purple">材料库</span>
+                        {% else %}
+                        <span class="badge badge-blue">图片/音频</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="status-dot status-warning"></span> 待批改
+                    </td>
+                    <td>
+                        <a href="{{ url_for('grading_detail', task_id=task.id) }}" class="btn btn-sm btn-primary">
+                            批改
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        🎉 太棒了！所有作业都已批改完成。
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .badge-purple {
+        background-color: #f3e8ff;
+        color: #7e22ce;
+    }
+
+    .badge-blue {
+        background-color: #e0f2fe;
+        color: #0369a1;
+    }
+
+    .text-truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+{% endblock %}

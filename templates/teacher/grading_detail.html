@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block page_title %}作业详情与批改{% endblock %}
+{% block page_subtitle %}Grading / {{ task.student_name }}{% endblock %}
+
+{% block header_actions %}
+<a href="{{ url_for('grading_list') }}" class="btn btn-outline">返回列表</a>
+{% endblock %}
+
+{% block content_dashboard %}
+<div class="grid-layout">
+    <!-- Left Column: Student Submission -->
+    <div class="submission-panel">
+        <div class="card">
+            <div class="card-header">
+                <h3>学生提交内容</h3>
+                <span class="text-muted">{{ task.submitted_at.strftime('%Y-%m-%d %H:%M') if task.submitted_at else ''
+                    }}</span>
+            </div>
+            <div class="card-body">
+                <!-- Task Info -->
+                <div class="info-group">
+                    <label>任务描述</label>
+                    <p class="info-text">{{ task.detail }}</p>
+                </div>
+
+                <!-- Student Note -->
+                {% if task.student_note %}
+                <div class="info-group">
+                    <label>学生留言</label>
+                    <div class="student-note-box">
+                        {{ task.student_note }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Evidence: Photos -->
+                {% if evidence_photos %}
+                <div class="info-group">
+                    <label>图片证据</label>
+                    <div class="evidence-grid">
+                        {% for photo in evidence_photos %}
+                        <div class="evidence-item">
+                            <a href="{{ photo }}" target="_blank">
+                                <img src="{{ photo }}" alt="Evidence">
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Evidence: Audio (if any, usually in feedback_audio for now or separate field?) -->
+                <!-- Note: Current Task model stores audio in feedback_audio? No, that's teacher feedback. 
+             Student audio might be in evidence_photos (as mp3 url) or we need to check how it's stored.
+             Based on miniprogram.py, audio is stored in PlanEvidence table for PlanItem, 
+             but for Task it seems mixed in evidence_photos or not explicitly handled?
+             Let's assume evidence_photos might contain audio urls too, or we check file extension.
+        -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Grading Form -->
+    <div class="grading-panel">
+        <div class="card">
+            <div class="card-header">
+                <h3>评分与反馈</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('grading_submit', task_id=task.id) }}">
+
+                    <!-- Score / Accuracy -->
+                    <div class="form-group">
+                        <label for="accuracy">正确率 / 得分 (%)</label>
+                        <div class="input-group">
+                            <input type="number" id="accuracy" name="accuracy" class="form-control"
+                                value="{{ task.accuracy or '' }}" step="0.5" min="0" max="100">
+                            <span class="input-suffix">%</span>
+                        </div>
+                        <small class="form-text text-muted">对于完成类任务，可直接填 100</small>
+                    </div>
+
+                    <!-- Completion Rate -->
+                    <div class="form-group">
+                        <label for="completion_rate">完成度 (%)</label>
+                        <div class="input-group">
+                            <input type="number" id="completion_rate" name="completion_rate" class="form-control"
+                                value="{{ task.completion_rate or 100 }}" step="1" min="0" max="100">
+                            <span class="input-suffix">%</span>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Text -->
+                    <div class="form-group">
+                        <label for="feedback_text">教师评语</label>
+                        <textarea id="feedback_text" name="feedback_text" class="form-control" rows="6"
+                            placeholder="请输入详细的反馈意见...">{{ task.feedback_text or '' }}</textarea>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <button type="button" class="btn btn-xs btn-outline" onclick="insertFeedback('做得很好！继续保持。')">👍
+                            做得很好</button>
+                        <button type="button" class="btn btn-xs btn-outline"
+                            onclick="insertFeedback('注意单词拼写，下次细心一点。')">📝 注意拼写</button>
+                        <button type="button" class="btn btn-xs btn-outline" onclick="insertFeedback('发音很清晰，语调自然。')">🎤
+                            发音清晰</button>
+                    </div>
+
+                    <div class="form-actions mt-4">
+                        <button type="submit" class="btn btn-primary btn-block">提交评分</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function insertFeedback(text) {
+        const textarea = document.getElementById('feedback_text');
+        textarea.value += (textarea.value ? '\n' : '') + text;
+    }
+</script>
+
+<style>
+    .grid-layout {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .grid-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .student-note-box {
+        background: #f8fafc;
+        padding: 10px;
+        border-radius: 4px;
+        border-left: 3px solid #64748b;
+        color: #334155;
+    }
+
+    .evidence-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+    }
+
+    .evidence-item img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid #e2e8f0;
+        cursor: zoom-in;
+    }
+
+    .quick-actions {
+        margin-top: 10px;
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .input-suffix {
+        padding: 0 10px;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-left: none;
+        height: 38px;
+        /* Match input height */
+        display: flex;
+        align-items: center;
+        border-radius: 0 4px 4px 0;
+    }
+
+    .input-group .form-control {
+        border-radius: 4px 0 0 4px;
+    }
+</style>
+{% endblock %}

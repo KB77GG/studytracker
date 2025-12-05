@@ -1343,6 +1343,74 @@ def tasks_page():
         pending_reviews=pending_reviews,
     )
 
+# ---- Grading Interface ----
+
+@app.route("/teacher/grading")
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def grading_list():
+    # List tasks that are submitted by students but not yet marked as done
+    tasks = Task.query.filter(
+        Task.student_submitted == True,
+        Task.status != 'done'
+    ).order_by(Task.submitted_at.desc()).all()
+    
+    return render_template("teacher/grading_list.html", tasks=tasks)
+
+@app.route("/teacher/grading/<int:task_id>")
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def grading_detail(task_id):
+    task = Task.query.get_or_404(task_id)
+    
+    # Parse evidence photos
+    evidence_photos = []
+    if task.evidence_photos:
+        try:
+            evidence_photos = json.loads(task.evidence_photos)
+        except:
+            evidence_photos = []
+            
+    return render_template(
+        "teacher/grading_detail.html", 
+        task=task,
+        evidence_photos=evidence_photos
+    )
+
+@app.route("/teacher/grading/<int:task_id>/submit", methods=["POST"])
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def grading_submit(task_id):
+    task = Task.query.get_or_404(task_id)
+    
+    accuracy = request.form.get("accuracy")
+    completion_rate = request.form.get("completion_rate")
+    feedback_text = request.form.get("feedback_text")
+    
+    if accuracy:
+        try:
+            task.accuracy = float(accuracy)
+        except ValueError:
+            pass
+    
+    if completion_rate:
+        try:
+            task.completion_rate = float(completion_rate)
+        except ValueError:
+            pass
+        
+    if feedback_text:
+        task.feedback_text = feedback_text
+        
+    # Mark as done
+    task.status = "done"
+    
+    db.session.commit()
+    
+    flash("评分已提交", "success")
+    return redirect(url_for("grading_list"))
+
+
 # ---- AJAX: 删除任务 ----
 @app.post("/api/tasks/<int:tid>/delete")
 @login_required

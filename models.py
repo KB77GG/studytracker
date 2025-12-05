@@ -480,6 +480,7 @@ class Task(db.Model):
     student_note = db.Column(db.Text)
     
     # Teacher Feedback
+    feedback_text = db.Column(db.Text)  # Teacher's written feedback
     feedback_audio = db.Column(db.String(200))
     feedback_image = db.Column(db.String(200))
 
