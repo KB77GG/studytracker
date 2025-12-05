@@ -27,6 +27,8 @@
           href="{{ url_for('materials_list') }}">Material Bank</a>
         <a class="nav-link {{ 'is-active' if endpoint == 'tasks_page' else '' }}"
           href="{{ url_for('tasks_page') }}">Task Management</a>
+        <a class="nav-link {{ 'is-active' if 'course_plan' in endpoint else '' }}"
+          href="{{ url_for('course_plan_list') }}">Course Plans</a>
         {% endif %}
         {% if current_user.role == 'student' %}
         <a class="nav-link {{ 'is-active' if endpoint == 'student_today' else '' }}"
