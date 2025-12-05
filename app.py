@@ -2782,10 +2782,15 @@ def course_plan_list():
     return render_template("admin/course_plan_list.html", plans=plans)
 
 @app.route("/admin/course-plan/create")
+@app.route("/admin/course-plan/<int:plan_id>/edit")
 @login_required
 @role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
-def course_plan_create():
-    return render_template("admin/course_plan_create.html")
+def course_plan_create(plan_id=None):
+    plan_data = None
+    if plan_id:
+        plan = CoursePlan.query.get_or_404(plan_id)
+        plan_data = json.dumps(plan.plan_data, ensure_ascii=False)
+    return render_template("admin/course_plan_create.html", initial_data=plan_data)
 
 @app.route("/api/course-plans", methods=["POST"])
 @login_required

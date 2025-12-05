@@ -775,10 +775,16 @@
             }
         };
 
-        return <StudyPlanForm initialData={initialData} onGenerate={handleGenerate} isGenerating={isGenerating} />;
+        return React.createElement(StudyPlanForm, {
+            initialData: initialData,
+            onGenerate: handleGenerate,
+            isGenerating: isGenerating
+        });
     };
 
+    const initialData = {{ initial_data | safe if initial_data else 'null' }};
+
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
+    root.render(React.createElement(App));
 </script>
 {% endblock %}

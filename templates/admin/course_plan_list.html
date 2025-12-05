@@ -30,7 +30,8 @@
                     <td>{{ plan.creator.display_name }}</td>
                     <td>{{ plan.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
                     <td>
-                        <a href="#" class="btn btn-sm btn-outline">查看</a>
+                        <a href="{{ url_for('course_plan_create', plan_id=plan.id) }}"
+                            class="btn btn-sm btn-outline">查看/编辑</a>
                         <a href="{{ url_for('export_course_plan_pdf', plan_id=plan.id) }}" target="_blank"
                             class="btn btn-sm btn-primary">下载PDF</a>
                     </td>
