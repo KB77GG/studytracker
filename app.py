@@ -2868,5 +2868,8 @@ def export_course_plan_pdf(plan_id):
     
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = f"attachment; filename={plan.title}.pdf"
+    # Use URL encoding for Chinese characters in filename
+    from urllib.parse import quote
+    filename = quote(f"{plan.title}.pdf")
+    response.headers["Content-Disposition"] = f"attachment; filename*=UTF-8''{filename}"
     return response
