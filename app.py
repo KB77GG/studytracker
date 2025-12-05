@@ -49,7 +49,9 @@ from models import (
     db,
     # Legacy models
     StudySession,
+    StudySession,
     Task,
+    CoursePlan,
 )
 
 def time_ago(dt):
@@ -2701,3 +2703,95 @@ def materials_edit(material_id):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+# --- Course Plan Generator Routes ---
+
+@app.route("/admin/course-plan")
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
+def course_plan_list():
+    plans = CoursePlan.query.filter_by(is_deleted=False).order_by(CoursePlan.created_at.desc()).all()
+    return render_template("admin/course_plan_list.html", plans=plans)
+
+@app.route("/admin/course-plan/create")
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
+def course_plan_create():
+    return render_template("admin/course_plan_create.html")
+
+@app.route("/api/course-plans", methods=["POST"])
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
+def save_course_plan():
+    data = request.json
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+        
+    student_info = data.get("student", {})
+    student_name = student_info.get("name")
+    
+    if not student_name:
+        return jsonify({"error": "Student name is required"}), 400
+        
+    # Find or create student profile
+    student_profile = StudentProfile.query.filter_by(full_name=student_name).first()
+    if not student_profile:
+        student_profile = StudentProfile(
+            full_name=student_name,
+            grade_level=student_info.get("currentGradeAndPlan", "")[:32], # Truncate if needed
+            notes=f"Created via Course Plan Generator on {datetime.now().strftime('%Y-%m-%d')}"
+        )
+        db.session.add(student_profile)
+        db.session.flush() # Get ID
+        
+    # Create Plan
+    title = f"{student_name} - 雅思学习方案 ({datetime.now().strftime('%Y-%m-%d')})"
+    
+    plan = CoursePlan(
+        student_id=student_profile.id,
+        created_by=current_user.id,
+        plan_data=data,
+        title=title
+    )
+    
+    db.session.add(plan)
+    db.session.commit()
+    
+    return jsonify({"ok": True, "id": plan.id})
+
+@app.route("/api/course-plans/<int:plan_id>/pdf")
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
+def export_course_plan_pdf(plan_id):
+    plan = CoursePlan.query.get_or_404(plan_id)
+    
+    # Prepare data for template
+    data = plan.plan_data
+    student = data.get("student", {})
+    phases = data.get("phases", [])
+    pricing = data.get("pricing", [])
+    
+    # Calculate totals
+    total_amount = sum(row.get("subtotal", 0) for row in pricing)
+    
+    html = render_template(
+        "admin/course_plan_pdf.html",
+        plan=plan,
+        student=student,
+        phases=phases,
+        pricing=pricing,
+        total_amount=total_amount,
+        generated_at=datetime.now()
+    )
+    
+    css = CSS(string="""
+        @page { size: A4; margin: 20mm; }
+        body { font-family: "Noto Sans CJK SC", sans-serif; }
+    """)
+    
+    pdf = HTML(string=html).write_pdf(stylesheets=[css])
+    
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = f"attachment; filename={plan.title}.pdf"
+    return response

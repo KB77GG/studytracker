@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <title>{{ plan.title }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+
+            @bottom-center {
+                content: "Sage Path 睿然国际教育";
+                font-size: 9pt;
+                color: #666;
+            }
+        }
+
+        body {
+            font-family: "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+            color: #333;
+            line-height: 1.6;
+            font-size: 11pt;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #0f766e;
+        }
+
+        /* Brand Color */
+        h1 {
+            font-size: 24pt;
+            text-align: center;
+            margin-bottom: 5mm;
+        }
+
+        h2 {
+            font-size: 16pt;
+            border-bottom: 2px solid #0f766e;
+            padding-bottom: 2mm;
+            margin-top: 10mm;
+        }
+
+        h3 {
+            font-size: 13pt;
+            margin-top: 5mm;
+            margin-bottom: 2mm;
+            color: #115e59;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 10mm;
+        }
+
+        .logo {
+            font-size: 30pt;
+            margin-bottom: 5mm;
+        }
+
+        .subtitle {
+            font-size: 14pt;
+            color: #666;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5mm;
+            margin-bottom: 5mm;
+        }
+
+        .info-item {
+            margin-bottom: 3mm;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .phase-box {
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 5mm;
+            margin-bottom: 5mm;
+            background-color: #f8fafc;
+        }
+
+        .phase-meta {
+            font-size: 10pt;
+            color: #64748b;
+            margin-bottom: 3mm;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 2mm;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5mm;
+        }
+
+        th,
+        td {
+            border: 1px solid #cbd5e1;
+            padding: 3mm;
+            text-align: center;
+            font-size: 10pt;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .total-row td {
+            font-weight: bold;
+            background-color: #f0fdfa;
+            color: #0f766e;
+        }
+
+        .footer {
+            margin-top: 20mm;
+            text-align: center;
+            font-size: 9pt;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="logo">🎓 Sage Path</div>
+        <h1>雅思学习规划方案</h1>
+        <div class="subtitle">{{ student.name }}</div>
+    </div>
+
+    <h2>1. 学生基本信息</h2>
+    <div class="info-grid">
+        <div class="info-item"><span class="label">当前年级/规划：</span>{{ student.currentGradeAndPlan }}</div>
+        <div class="info-item"><span class="label">目标考试时间：</span>{{ student.examDate }}</div>
+        <div class="info-item"><span class="label">目标总分：</span>{{ student.targetTotalScore }}</div>
+        <div class="info-item"><span class="label">单科要求：</span>{{ student.targetSubScore }}</div>
+    </div>
+
+    <h2>2. 课程阶段规划</h2>
+    {% for phase in phases %}
+    <div class="phase-box">
+        <h3>{{ phase.name }}</h3>
+        <div class="phase-meta">
+            时间：{{ phase.timeRange }} | 频率：{{ phase.weeklySchedule }} | 时长：{{ phase.lessonLength }}
+        </div>
+
+        {% if phase.showFocus %}
+        <div class="focus-section">
+            <strong>🎯 训练重点：</strong>
+            <ul>
+                {% if phase.focusListening %}<li><strong>听力：</strong>{{ phase.focusListening }}</li>{% endif %}
+                {% if phase.focusReading %}<li><strong>阅读：</strong>{{ phase.focusReading }}</li>{% endif %}
+                {% if phase.focusWriting %}<li><strong>写作：</strong>{{ phase.focusWriting }}</li>{% endif %}
+                {% if phase.focusSpeaking %}<li><strong>口语：</strong>{{ phase.focusSpeaking }}</li>{% endif %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if phase.showMaterials %}
+        <div class="material-section" style="margin-top: 3mm;">
+            <strong>📚 教辅与任务：</strong>
+            <div style="white-space: pre-wrap; margin-top: 1mm; color: #475569;">{{ phase.teachingMaterialTasks }}</div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div style="page-break-inside: avoid;">
+        <h2>3. 课时与费用预算</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>阶段</th>
+                    <th>科目</th>
+                    <th>单次(h)</th>
+                    <th>课次</th>
+                    <th>总时(h)</th>
+                    <th>单价</th>
+                    <th>小计</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in pricing %}
+                <tr>
+                    <td>{{ row.phase }}</td>
+                    <td>{{ row.subject }}</td>
+                    <td>{{ row.duration }}</td>
+                    <td>{{ row.count }}</td>
+                    <td>{{ row.totalDuration }}</td>
+                    <td>{{ row.unitPrice }}</td>
+                    <td class="text-right">{{ row.subtotal }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="6" class="text-right">合计</td>
+                    <td class="text-right">¥ {{ "{:,.0f}".format(total_amount) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        生成时间：{{ generated_at.strftime('%Y-%m-%d %H:%M') }}
+    </div>
+</body>
+
+</html>

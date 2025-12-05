@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="header-row">
+        <h1>雅思学习方案管理</h1>
+        <a href="{{ url_for('course_plan_create') }}" class="btn btn-primary">
+            <span class="icon">+</span> 新建方案
+        </a>
+    </div>
+
+    <div class="card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>方案标题</th>
+                    <th>学生姓名</th>
+                    <th>创建人</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in plans %}
+                <tr>
+                    <td>{{ plan.id }}</td>
+                    <td>{{ plan.title or '未命名方案' }}</td>
+                    <td>{{ plan.student.full_name if plan.student else '未知' }}</td>
+                    <td>{{ plan.creator.display_name }}</td>
+                    <td>{{ plan.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-outline">查看</a>
+                        <a href="#" class="btn btn-sm btn-outline">下载PDF</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">暂无方案，请点击右上角新建</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .data-table th {
+        font-weight: 600;
+        color: #666;
+    }
+
+    .text-center {
+        text-align: center;
+        color: #999;
+        padding: 2rem;
+    }
+</style>
+{% endblock %}

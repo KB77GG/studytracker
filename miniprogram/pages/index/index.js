@@ -18,7 +18,7 @@ Page({
         // 显示登录表单
         this.setData({
             showLoginForm: true,
-            privacyAgreed: true  // 默认勾选（因为点击"开始使用"已表示同意）
+            privacyAgreed: false  // 默认为false，必须用户手动勾选
         })
     },
 

@@ -604,3 +604,28 @@ class StudySession(db.Model):
 
     def __repr__(self) -> str:
         return f"<StudySession id={self.id} task={self.task_id} sec={self.seconds}>"
+
+class CoursePlan(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Stores generated IELTS study plans."""
+
+    __tablename__ = "course_plan"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(
+        db.Integer, db.ForeignKey("student_profile.id"), nullable=False
+    )
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+
+    # Store the full JSON structure from the frontend
+    # { student: {...}, phases: [...], pricing: [...] }
+    plan_data = db.Column(db.JSON, nullable=False)
+
+    # Metadata for easier querying
+    title = db.Column(db.String(200))  # e.g. "张三 - 2025雅思规划"
+    
+    # Relationships
+    student = db.relationship("StudentProfile", backref="course_plans")
+    creator = db.relationship("User", backref="created_course_plans")
+
+    def __repr__(self):
+        return f"<CoursePlan {self.title}>"
