@@ -34,6 +34,8 @@
                             class="btn btn-sm btn-outline">查看/编辑</a>
                         <a href="{{ url_for('export_course_plan_pdf', plan_id=plan.id) }}" target="_blank"
                             class="btn btn-sm btn-primary">下载PDF</a>
+                        <button onclick="deletePlan({{ plan.id }}, '{{ plan.title }}')" class="btn btn-sm"
+                            style="background:#ef4444;color:white;">删除</button>
                     </td>
                 </tr>
                 {% else %}
@@ -77,4 +79,28 @@
         padding: 2rem;
     }
 </style>
+
+<script>
+    async function deletePlan(planId, planTitle) {
+        if (!confirm(`确定要删除方案 "${planTitle}" 吗？此操作不可恢复。`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/course-plans/${planId}`, {
+                method: 'DELETE',
+                credentials: 'same-origin'
+            });
+
+            if (response.ok) {
+                alert('删除成功');
+                location.reload();
+            } else {
+                alert('删除失败，请重试');
+            }
+        } catch (error) {
+            alert('删除失败：' + error.message);
+        }
+    }
+</script>
 {% endblock %}

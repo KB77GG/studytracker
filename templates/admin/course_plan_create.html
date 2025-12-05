@@ -113,9 +113,16 @@
 
     // --- COMPONENT ---
     const StudyPlanForm = ({ initialData, onGenerate, isGenerating }) => {
-        const [student, setStudent] = useState(initialData.student);
-        const [phases, setPhases] = useState(initialData.phases);
-        const [pricing, setPricing] = useState(initialData.pricing);
+        // Properly handle initialData - use it if provided, otherwise use defaults
+        const [student, setStudent] = useState(initialData?.student || {
+            name: "",
+            currentGradeAndPlan: "",
+            examDate: "",
+            targetTotalScore: "",
+            targetSubScore: ""
+        });
+        const [phases, setPhases] = useState(initialData?.phases || []);
+        const [pricing, setPricing] = useState(initialData?.pricing || []);
 
         // Initialize exam date if empty
         useEffect(() => {

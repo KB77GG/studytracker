@@ -2834,6 +2834,15 @@ def save_course_plan():
     
     return jsonify({"ok": True, "id": plan.id})
 
+@app.route("/api/course-plans/<int:plan_id>", methods=["DELETE"])
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
+def delete_course_plan(plan_id):
+    plan = CoursePlan.query.get_or_404(plan_id)
+    plan.is_deleted = True
+    db.session.commit()
+    return jsonify({"ok": True})
+
 @app.route("/api/course-plans/<int:plan_id>/pdf")
 @login_required
 @role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
