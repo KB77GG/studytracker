@@ -37,6 +37,8 @@
                                             material.type=='speaking_part1' else '' }}>口语题库Part1</option>
                                         <option value="speaking_part2" {{ 'selected' if material and
                                             material.type=='speaking_part2' else '' }}>口语题库Part2</option>
+                                        <option value="translation" {{ 'selected' if material and
+                                            material.type=='translation' else '' }}>翻译练习</option>
                                     </select>
                                 </div>
                             </div>
@@ -46,6 +48,45 @@
                             <label>知识点说明</label>
                             <textarea class="form-control" id="description" rows="3"
                                 placeholder="粘贴知识点说明（如：Either...or 连接主语时，谓语动词与靠近的主语保持一致...）">{{ material.description if material else '' }}</textarea>
+                        </div>
+
+                        <!-- 翻译练习专用输入区 -->
+                        <div id="translationInput" style="display:none;">
+                            <div class="card mb-3">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">📝 翻译练习录入</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-info">
+                                        <strong>提示：</strong>翻译练习将自动创建一个题目，包含原句、骨架、语法要点和参考译文。
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label><strong>1. 英文原句 *</strong></label>
+                                        <textarea class="form-control" id="translationSentence" rows="2"
+                                            placeholder="例如：It was not until the late nineteenth century that widespread sanitation reforms began to reduce urban mortality."></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label><strong>2. 骨架填空</strong></label>
+                                        <textarea class="form-control" id="translationSkeleton" rows="3"
+                                            placeholder="例如：【形式强调结构】It was not until ______ that [主语] ______ [谓语] ______ [不定式] ______"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label><strong>3. 语法要点</strong></label>
+                                        <textarea class="form-control" id="translationGrammar" rows="3"
+                                            placeholder="例如：" It was … that …"强调时间；"not
+                                            until"把真正动作放在that从句里。"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label><strong>4. 参考译文</strong></label>
+                                        <textarea class="form-control" id="translationReference" rows="2"
+                                            placeholder="例如：直到19世纪末期，广泛的卫生改革才开始降低城市死亡率。"></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <hr>
@@ -209,6 +250,7 @@
         document.getElementById('speakingReadingInput').style.display = 'none';
         document.getElementById('speakingPart1Input').style.display = 'none';
         document.getElementById('speakingPart2Input').style.display = 'none';
+        document.getElementById('translationInput').style.display = 'none';
 
         // Show the selected type's input area
         if (type === 'grammar') {
@@ -221,6 +263,8 @@
             document.getElementById('speakingPart1Input').style.display = 'block';
         } else if (type === 'speaking_part2') {
             document.getElementById('speakingPart2Input').style.display = 'block';
+        } else if (type === 'translation') {
+            document.getElementById('translationInput').style.display = 'block';
         }
     }
 
@@ -430,13 +474,32 @@
             }
 
             payload.part2_topic = part2Topic;
+
+        } else if (type === 'translation') {
+            // Translation exercise
+            const sentence = document.getElementById('translationSentence').value.trim();
+            const skeleton = document.getElementById('translationSkeleton').value.trim();
+            const grammar = document.getElementById('translationGrammar').value.trim();
+            const reference = document.getElementById('translationReference').value.trim();
+
+            if (!sentence) {
+                alert('请至少填写英文原句');
+                return;
+            }
+
+            payload.sentence = sentence;
+            payload.skeleton = skeleton;
+            payload.grammar = grammar;
+            payload.reference = reference;
+
         } else {
             alert('未知的材料类型');
             return;
         }
 
         // Detect edit mode by checking if material exists
-        const isEditMode = {{ 'true' if material else 'false' }};
+        const isEditMode = {{ 'true' if material else 'false' }
+    };
     const materialId = {{ material.id if material else 'null' }};
 
     const url = isEditMode ? `/api/materials/${materialId}` : '/api/materials';

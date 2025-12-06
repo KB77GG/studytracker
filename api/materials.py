@@ -195,6 +195,19 @@ def create_material():
         )
         db.session.add(question)
     
+    elif material_type == 'translation':
+        # Translation exercise: single question with sentence, skeleton, grammar, and reference
+        question = Question(
+            material_id=material.id,
+            sequence=1,
+            question_type='translation',
+            content=data.get('sentence', ''),  # Original English sentence
+            hint=data.get('skeleton', ''),  # Sentence skeleton structure
+            explanation=data.get('grammar', ''),  # Grammar points
+            reference_answer=data.get('reference', '')  # Reference translation
+        )
+        db.session.add(question)
+    
     db.session.commit()
     
     return jsonify({"ok": True, "material_id": material.id})

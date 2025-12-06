@@ -527,6 +527,7 @@ class Question(db.Model, TimestampMixin):
     content = db.Column(db.Text, nullable=False)  # Question text
     reference_answer = db.Column(db.Text)  # Reference answer (for teacher)
     hint = db.Column(db.Text)  # Optional hint for students
+    explanation = db.Column(db.Text)  # Grammar explanation for translation exercises
     points = db.Column(db.Integer, default=1)  # Points for this question
     
     # Relationships
