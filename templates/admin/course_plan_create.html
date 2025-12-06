@@ -725,10 +725,11 @@
     };
 
     // --- APP ROOT ---
-    const App = () => {
+    const App = ({ serverData }) => {
         const [isGenerating, setIsGenerating] = useState(false);
 
-        const initialData = {
+        // Use server data if provided, otherwise use defaults for new plan
+        const initialData = serverData || {
             student: {
                 name: "",
                 currentGradeAndPlan: "",
@@ -789,9 +790,10 @@
         });
     };
 
-    const initialData = {{ initial_data | safe if initial_data else 'null' }};
+    // Receive data from server (Jinja2 template)
+    const serverInitialData = {{ initial_data | safe if initial_data else 'null' }};
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(React.createElement(App));
+    root.render(React.createElement(App, { serverData: serverInitialData }));
 </script>
 {% endblock %}
