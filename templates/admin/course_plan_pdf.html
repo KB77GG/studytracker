@@ -7,12 +7,27 @@
     <style>
         @page {
             size: A4;
-            margin: 20mm;
+            margin: 15mm 20mm 20mm 20mm;
 
-            @bottom-center {
-                content: "Sage Path 睿然国际教育";
+            @top-left {
+                content: "{{ student.name }} 雅思学习规划";
                 font-size: 9pt;
                 color: #666;
+                font-family: "Noto Sans CJK SC", sans-serif;
+            }
+
+            @top-right {
+                content: "{{ generated_at.strftime('%Y年%m月') }}";
+                font-size: 9pt;
+                color: #666;
+                font-family: "Noto Sans CJK SC", sans-serif;
+            }
+
+            @bottom-center {
+                content: "Sage Path 睿然国际教育 | 咨询电话：400-xxx-xxxx";
+                font-size: 8pt;
+                color: #999;
+                font-family: "Noto Sans CJK SC", sans-serif;
             }
         }
 
@@ -20,7 +35,7 @@
             font-family: "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
             color: #333;
             line-height: 1.6;
-            font-size: 11pt;
+            font-size: 10.5pt;
         }
 
         h1,
@@ -29,51 +44,60 @@
             color: #0f766e;
         }
 
-        /* Brand Color */
         h1 {
-            font-size: 24pt;
+            font-size: 22pt;
             text-align: center;
             margin-bottom: 5mm;
+            margin-top: 3mm;
         }
 
         h2 {
-            font-size: 16pt;
+            font-size: 15pt;
             border-bottom: 2px solid #0f766e;
             padding-bottom: 2mm;
             margin-top: 10mm;
         }
 
         h3 {
-            font-size: 13pt;
-            margin-top: 5mm;
+            font-size: 12pt;
+            margin-top: 0;
             margin-bottom: 2mm;
             color: #115e59;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 10mm;
+            margin-bottom: 8mm;
+            padding-bottom: 5mm;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .logo {
-            font-size: 30pt;
-            margin-bottom: 5mm;
+            max-width: 200px;
+            height: auto;
+            margin: 0 auto 3mm;
+            display: block;
         }
 
         .subtitle {
-            font-size: 14pt;
+            font-size: 13pt;
             color: #666;
+            font-weight: 500;
         }
 
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 5mm;
+            gap: 4mm;
             margin-bottom: 5mm;
+            background: #f8fafc;
+            padding: 5mm;
+            border-radius: 4px;
         }
 
         .info-item {
-            margin-bottom: 3mm;
+            margin-bottom: 2mm;
+            font-size: 10pt;
         }
 
         .label {
@@ -81,41 +105,121 @@
             color: #555;
         }
 
+        /* 阶段盒子 - 不同颜色主题 */
         .phase-box {
-            border: 1px solid #e2e8f0;
+            border-left: 4px solid #0f766e;
             border-radius: 4px;
             padding: 5mm;
             margin-bottom: 5mm;
             background-color: #f8fafc;
+            page-break-inside: avoid;
+        }
+
+        .phase-box.phase-foundation {
+            border-left-color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        .phase-box.phase-intensive {
+            border-left-color: #0f766e;
+            background-color: #f0fdfa;
+        }
+
+        .phase-box.phase-advanced {
+            border-left-color: #d97706;
+            background-color: #fffbeb;
         }
 
         .phase-meta {
-            font-size: 10pt;
+            font-size: 9.5pt;
             color: #64748b;
             margin-bottom: 3mm;
-            border-bottom: 1px solid #e2e8f0;
             padding-bottom: 2mm;
+            border-bottom: 1px dotted #cbd5e1;
         }
 
+        .focus-section,
+        .material-section {
+            margin-top: 3mm;
+        }
+
+        .focus-section ul,
+        .material-section ul {
+            margin: 2mm 0;
+            padding-left: 5mm;
+        }
+
+        .focus-section li,
+        .material-section li {
+            margin-bottom: 1.5mm;
+            font-size: 10pt;
+        }
+
+        /* 优化表格 - 调整列宽 */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 5mm;
+            font-size: 9.5pt;
         }
 
         th,
         td {
             border: 1px solid #cbd5e1;
-            padding: 3mm;
+            padding: 2.5mm;
             text-align: center;
-            font-size: 10pt;
         }
 
         th {
-            background-color: #f1f5f9;
+            background-color: #0f766e;
             font-weight: bold;
-            color: #334155;
+            color: white;
         }
+
+        /* 优化列宽 - 让重要信息更突出 */
+        table th:nth-child(1),
+        table td:nth-child(1) {
+            width: 18%;
+        }
+
+        /* 阶段 */
+        table th:nth-child(2),
+        table td:nth-child(2) {
+            width: 12%;
+        }
+
+        /* 科目 - 加宽 */
+        table th:nth-child(3),
+        table td:nth-child(3) {
+            width: 10%;
+        }
+
+        /* 单次 */
+        table th:nth-child(4),
+        table td:nth-child(4) {
+            width: 10%;
+        }
+
+        /* 课次 - 加宽 */
+        table th:nth-child(5),
+        table td:nth-child(5) {
+            width: 10%;
+        }
+
+        /* 总时 */
+        table th:nth-child(6),
+        table td:nth-child(6) {
+            width: 15%;
+        }
+
+        /* 单价 - 加宽 */
+        table th:nth-child(7),
+        table td:nth-child(7) {
+            width: 25%;
+            font-weight: bold;
+        }
+
+        /* 小计 - 最宽且加粗 */
 
         .text-left {
             text-align: left;
@@ -129,20 +233,14 @@
             font-weight: bold;
             background-color: #f0fdfa;
             color: #0f766e;
-        }
-
-        .footer {
-            margin-top: 20mm;
-            text-align: center;
-            font-size: 9pt;
-            color: #94a3b8;
+            font-size: 11pt;
         }
     </style>
 </head>
 
 <body>
     <div class="header">
-        <div class="logo">🎓 Sage Path</div>
+        <img src="data:image/jpeg;base64,{{ logo_base64 }}" alt="Sage Path Logo" class="logo">
         <h1>雅思学习规划方案</h1>
         <div class="subtitle">{{ student.name }}</div>
     </div>
@@ -157,7 +255,16 @@
 
     <h2>2. 课程阶段规划</h2>
     {% for phase in phases %}
-    <div class="phase-box">
+    {% set phase_class = '' %}
+    {% if '基础' in phase.name or '夯实' in phase.name %}
+    {% set phase_class = 'phase-foundation' %}
+    {% elif '强化' in phase.name or '冲刺' in phase.name %}
+    {% set phase_class = 'phase-intensive' %}
+    {% elif '高分' in phase.name or '突破' in phase.name %}
+    {% set phase_class = 'phase-advanced' %}
+    {% endif %}
+
+    <div class="phase-box {{ phase_class }}">
         <h3>{{ phase.name }}</h3>
         <div class="phase-meta">
             时间：{{ phase.timeRange }} | 频率：{{ phase.weeklySchedule }} | 时长：{{ phase.lessonLength }}
@@ -176,9 +283,10 @@
         {% endif %}
 
         {% if phase.showMaterials %}
-        <div class="material-section" style="margin-top: 3mm;">
+        <div class="material-section">
             <strong>📚 教辅与任务：</strong>
-            <div style="white-space: pre-wrap; margin-top: 1mm; color: #475569;">{{ phase.teachingMaterialTasks }}</div>
+            <div style="white-space: pre-wrap; margin-top: 1mm; color: #475569; font-size: 9.5pt;">{{
+                phase.teachingMaterialTasks }}</div>
         </div>
         {% endif %}
     </div>

@@ -2858,6 +2858,16 @@ def export_course_plan_pdf(plan_id):
     # Calculate totals
     total_amount = sum(row.get("subtotal", 0) for row in pricing)
     
+    # Load and encode logo as base64
+    import base64
+    logo_path = os.path.join(app.static_folder, 'sagepath_logo.jpg')
+    logo_base64 = ""
+    try:
+        with open(logo_path, 'rb') as f:
+            logo_base64 = base64.b64encode(f.read()).decode('utf-8')
+    except:
+        pass  # If logo doesn't exist, template will handle gracefully
+    
     html = render_template(
         "admin/course_plan_pdf.html",
         plan=plan,
@@ -2865,7 +2875,8 @@ def export_course_plan_pdf(plan_id):
         phases=phases,
         pricing=pricing,
         total_amount=total_amount,
-        generated_at=datetime.now()
+        generated_at=datetime.now(),
+        logo_base64=logo_base64
     )
     
     css = CSS(string="""
