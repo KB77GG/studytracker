@@ -175,6 +175,8 @@ def load_user(user_id):
 def index():
     if current_user.role in (User.ROLE_TEACHER, User.ROLE_ASSISTANT, User.ROLE_ADMIN):
         return redirect(url_for("materials_list"))
+    if current_user.role == User.ROLE_COURSE_PLANNER:
+        return redirect(url_for("course_plan_list"))
     if current_user.role == User.ROLE_STUDENT:
         return redirect(url_for("student_today"))
     return render_template("index.html")
@@ -383,6 +385,7 @@ def users_page():
                 User.ROLE_ASSISTANT,
                 User.ROLE_STUDENT,
                 User.ROLE_PARENT,
+                User.ROLE_COURSE_PLANNER,
             }
             if role not in allowed_roles:
                 role = User.ROLE_ASSISTANT
@@ -2778,7 +2781,7 @@ if __name__ == "__main__":
 
 @app.route("/admin/course-plan")
 @login_required
-@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_COURSE_PLANNER)
 def course_plan_list():
     plans = CoursePlan.query.filter_by(is_deleted=False).order_by(CoursePlan.created_at.desc()).all()
     return render_template("admin/course_plan_list.html", plans=plans)
@@ -2786,7 +2789,7 @@ def course_plan_list():
 @app.route("/admin/course-plan/create")
 @app.route("/admin/course-plan/<int:plan_id>/edit")
 @login_required
-@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_COURSE_PLANNER)
 def course_plan_create(plan_id=None):
     plan_data = None
     if plan_id:
@@ -2796,7 +2799,7 @@ def course_plan_create(plan_id=None):
 
 @app.route("/api/course-plans", methods=["POST"])
 @login_required
-@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER)
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_COURSE_PLANNER)
 def save_course_plan():
     data = request.json
     if not data:

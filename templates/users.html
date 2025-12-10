@@ -39,7 +39,7 @@
           {% endif %}
         </td>
         <td>
-          <form method="POST" style="display: inline;" onsubmit="return confirm('确定删除学生档案" {{ s.full_name }}"吗？');">
+          <form method="POST" style="display: inline;" onsubmit="return confirm('确定删除学生档案 {{ s.full_name }} 吗？');">
             <input type="hidden" name="action" value="delete_student">
             <input type="hidden" name="student_id" value="{{ s.id }}">
             <button type="submit" class="delete-btn" style="padding: 4px 8px;">删除</button>
@@ -67,6 +67,7 @@
   <select name="role">
     <option value="teacher">老师</option>
     <option value="assistant">助教</option>
+    <option value="course_planner">排课专员</option>
     <option value="admin">管理员</option>
   </select>
   <button type="submit">创建用户</button>

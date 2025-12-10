@@ -38,6 +38,7 @@ class User(db.Model, UserMixin, TimestampMixin):
     ROLE_ASSISTANT = "assistant"
     ROLE_STUDENT = "student"
     ROLE_PARENT = "parent"
+    ROLE_COURSE_PLANNER = "course_planner"
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)
