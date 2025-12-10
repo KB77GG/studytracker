@@ -6,7 +6,7 @@ import sys
 
 def add_explanation_column():
     try:
-        conn = sqlite3.connect('study_tracker.db')
+        conn = sqlite3.connect('app.db')
         cursor = conn.cursor()
         
         # Check if column exists
