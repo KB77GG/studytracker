@@ -107,8 +107,8 @@
 听力学科词汇背诵，一对一听写，加强单词发音熟悉程度，建立音形对照关系
 《睿然口语题库》一对一对练，模拟考试场景，增加考试熟悉程度`,
         "阅读专项": "《睿然雅思阅读长难句精讲》\n《剑桥雅思真题阅读分册》\n《九分达人阅读》",
-        "口语专项": "《睿然雅思口语当季题库》\n《雅思口语多米诺》\nTED演讲精选跟读材料",
-        "写作专项": "《顾家北手把手教你雅思写作》\n《睿然高分范文集》\nSimon写作视频课笔记"
+        "口语专项": "《睿然雅思口语题库》\n《睿然雅思口语素材朗读》\n一对一口语对练",
+        "写作专项": "《睿然雅思写作逻辑琏训练》\n《睿然雅思写作题库素材积累》\n《睿然雅思写作翻译练习》"
     };
 
     // --- COMPONENT ---
@@ -181,7 +181,15 @@
         const applyMaterialPreset = (id, presetName) => {
             const preset = MATERIAL_PRESETS[presetName];
             if (preset) {
-                setPhases(phases.map(p => p.id === id ? { ...p, teachingMaterialTasks: preset } : p));
+                setPhases(phases.map(p => {
+                    if (p.id === id) {
+                        const currentText = p.teachingMaterialTasks || "";
+                        // If text exists, append with newline; otherwise just set it
+                        const newText = currentText ? `${currentText}\n${preset}` : preset;
+                        return { ...p, teachingMaterialTasks: newText };
+                    }
+                    return p;
+                }));
             }
         };
 
