@@ -117,20 +117,24 @@ Page({
         this.playAudio();
     },
 
-    // 播放音频
+    // 播放音频 - 使用微信内置语音合成
     playAudio() {
         const { currentWord, accent, isPlaying } = this.data;
         if (!currentWord || isPlaying) return;
 
-        const audioPath = accent === 'uk' ? currentWord.audio_uk : currentWord.audio_us;
-        if (!audioPath) {
-            wx.showToast({ title: '音频不可用', icon: 'none' });
-            return;
-        }
-
-        const audioUrl = `${app.globalData.baseUrl}/${audioPath}`;
-
         this.setData({ isPlaying: true });
+
+        // 使用微信内置TTS播放单词
+        // 注意：微信小程序没有内置TTS，我们用 wx.getBackgroundAudioManager 或者第三方方案
+        // 这里先使用一个简化方案：调用有道词典API
+        const word = currentWord.word;
+
+        // 有道词典发音API (免费，支持英美音)
+        // 美音: https://dict.youdao.com/dictvoice?audio={word}&type=2
+        // 英音: https://dict.youdao.com/dictvoice?audio={word}&type=1
+        const audioType = accent === 'uk' ? 1 : 2;
+        const audioUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=${audioType}`;
+
         this.audioContext.src = audioUrl;
         this.audioContext.play();
     },

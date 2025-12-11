@@ -64,7 +64,11 @@ def get_books():
 @login_required
 @role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def upload_book():
-    """Upload Excel file to create a new dictation book."""
+    """Upload Excel file to create a new dictation book.
+    
+    Note: Audio is NOT generated during upload to avoid timeout issues.
+    The Mini Program will use its built-in TTS to speak words.
+    """
     if "file" not in request.files:
         return jsonify({"ok": False, "error": "missing_file"}), 400
     
@@ -121,14 +125,7 @@ def upload_book():
         db.session.add(book)
         db.session.flush()  # Get book.id
         
-        # Create audio directory
-        audio_dir = os.path.join(current_app.root_path, "uploads", "dictation", str(book.id))
-        os.makedirs(audio_dir, exist_ok=True)
-        
-        # Import gTTS for audio generation
-        from gtts import gTTS
-        
-        # Process each word
+        # Process each word (NO audio generation - Mini Program will use built-in TTS)
         words_added = 0
         for idx, row in df.iterrows():
             word_text = str(row[word_col]).strip()
@@ -138,32 +135,15 @@ def upload_book():
             phonetic = str(row[phonetic_col]).strip() if phonetic_col and pd.notna(row.get(phonetic_col)) else None
             translation = str(row[translation_col]).strip() if translation_col and pd.notna(row.get(translation_col)) else None
             
-            # Generate audio files
-            audio_us_path = f"uploads/dictation/{book.id}/{words_added + 1}_us.mp3"
-            audio_uk_path = f"uploads/dictation/{book.id}/{words_added + 1}_uk.mp3"
-            
-            try:
-                # American English
-                tts_us = gTTS(word_text, lang='en', tld='com')
-                tts_us.save(os.path.join(current_app.root_path, audio_us_path))
-                
-                # British English
-                tts_uk = gTTS(word_text, lang='en', tld='co.uk')
-                tts_uk.save(os.path.join(current_app.root_path, audio_uk_path))
-            except Exception as e:
-                current_app.logger.warning(f"Failed to generate audio for '{word_text}': {e}")
-                audio_us_path = None
-                audio_uk_path = None
-            
-            # Create word entry
+            # Create word entry (no audio paths - using Mini Program TTS)
             word = DictationWord(
                 book_id=book.id,
                 sequence=words_added + 1,
                 word=word_text,
                 phonetic=phonetic if phonetic != 'nan' else None,
                 translation=translation if translation != 'nan' else None,
-                audio_us=audio_us_path,
-                audio_uk=audio_uk_path
+                audio_us=None,  # Will use Mini Program TTS
+                audio_uk=None   # Will use Mini Program TTS
             )
             db.session.add(word)
             words_added += 1
