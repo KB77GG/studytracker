@@ -554,8 +554,7 @@
         }
 
         // Detect edit mode by checking if material exists
-        const isEditMode = {{ 'true' if material else 'false' }
-    };
+        const isEditMode = {{ 'true' if material else 'false' }};
     const materialId = {{ material.id if material else 'null' }};
 
     const url = isEditMode ? `/api/materials/${materialId}` : '/api/materials';
