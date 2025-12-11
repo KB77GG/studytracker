@@ -69,7 +69,9 @@
                         <div class="tab-pane fade" id="dictation" role="tabpanel">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h5 class="mb-0">听写词库</h5>
-                                <small class="text-muted">创建词库请点击"创建新材料"选择"听写词库"类型</small>
+                                <button class="btn btn-success" data-toggle="modal" data-target="#uploadBookModal">
+                                    <i class="fas fa-upload"></i> 上传Excel词库
+                                </button>
                             </div>
 
                             <!-- 词库列表 -->
@@ -83,6 +85,49 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 上传词库 Modal -->
+<div class="modal fade" id="uploadBookModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">📚 上传听写词库</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadBookForm">
+                    <div class="form-group">
+                        <label>词库名称 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="bookTitle" placeholder="如：雅思王语料库 章3-1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>词库描述</label>
+                        <textarea class="form-control" id="bookDescription" rows="2" placeholder="可选，简短描述"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Excel文件 <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control-file" id="bookFile" accept=".xlsx,.xls" required>
+                        <small class="text-muted">Excel需包含列：单词、音标(可选)、释义(可选)</small>
+                    </div>
+                </form>
+                <div id="uploadProgress" style="display:none;">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                    </div>
+                    <p class="text-center mt-2">正在处理词库，请稍候...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-success" onclick="uploadBook()">
+                    <i class="fas fa-upload"></i> 上传词库
+                </button>
             </div>
         </div>
     </div>
@@ -185,6 +230,55 @@
         html += '</div>';
 
         container.innerHTML = html;
+    }
+
+    // 上传词库
+    async function uploadBook() {
+        const title = document.getElementById('bookTitle').value.trim();
+        const description = document.getElementById('bookDescription').value.trim();
+        const fileInput = document.getElementById('bookFile');
+
+        if (!title) {
+            alert('请输入词库名称');
+            return;
+        }
+        if (!fileInput.files.length) {
+            alert('请选择Excel文件');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('file', fileInput.files[0]);
+
+        // Show progress
+        document.getElementById('uploadBookForm').style.display = 'none';
+        document.getElementById('uploadProgress').style.display = 'block';
+
+        try {
+            const response = await fetch('/api/dictation/books', {
+                method: 'POST',
+                credentials: 'include',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.ok) {
+                alert(`成功创建词库！共 ${data.book.word_count} 个单词`);
+                $('#uploadBookModal').modal('hide');
+                loadDictationBooks();
+                // Reset form
+                document.getElementById('uploadBookForm').reset();
+            } else {
+                alert('上传失败：' + (data.message || data.error));
+            }
+        } catch (err) {
+            alert('网络错误：' + err.message);
+        } finally {
+            document.getElementById('uploadBookForm').style.display = 'block';
+            document.getElementById('uploadProgress').style.display = 'none';
+        }
     }
 
     // 查看词库
