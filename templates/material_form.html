@@ -13,20 +13,13 @@
                 <div class="card-body">
                     <form id="materialForm">
                         <!-- 基本信息 -->
+                        <!-- 类型选择 - 放在第一位 -->
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>标题 *</label>
-                                    <input type="text" class="form-control" id="title" required
-                                        value="{{ material.title if material else '' }}"
-                                        placeholder="例如：主谓一致-either/or结构">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>类型 *</label>
+                                    <label>材料类型 <span class="text-danger">*</span></label>
                                     <select class="form-control" id="type" required onchange="handleTypeChange()">
-                                        <option value="">选择类型</option>
+                                        <option value="">请先选择材料类型</option>
                                         <option value="grammar" {{ 'selected' if material and material.type=='grammar'
                                             else '' }}>语法练习</option>
                                         <option value="writing_logic" {{ 'selected' if material and
@@ -42,6 +35,18 @@
                                         <option value="dictation" {{ 'selected' if material and
                                             material.type=='dictation' else '' }}>听写词库</option>
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 标题和说明 -->
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>标题 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="title" required
+                                        value="{{ material.title if material else '' }}"
+                                        placeholder="例如：主谓一致-either/or结构">
                                 </div>
                             </div>
                         </div>
@@ -549,11 +554,12 @@
         }
 
         // Detect edit mode by checking if material exists
-        const isEditMode = {{ 'true' if material else 'false' }};
-        const materialId = {{ material.id if material else 'null' }};
+        const isEditMode = {{ 'true' if material else 'false' }
+    };
+    const materialId = {{ material.id if material else 'null' }};
 
-        const url = isEditMode ? `/api/materials/${materialId}` : '/api/materials';
-        const method = isEditMode ? 'PUT' : 'POST';
+    const url = isEditMode ? `/api/materials/${materialId}` : '/api/materials';
+    const method = isEditMode ? 'PUT' : 'POST';
 
     try {
         const response = await fetch(url, {
