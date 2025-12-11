@@ -115,7 +115,7 @@
                         <input type="file" class="form-control-file" id="bookFile" accept=".xlsx,.xls" required>
                         <small class="text-muted">
                             Excel需包含列：单词、音标(可选)、释义(可选)<br>
-                            系统会自动生成英/美双版本发音
+                            小程序播放时使用有道词典发音（英/美双版本）
                         </small>
                     </div>
                 </form>
@@ -123,13 +123,13 @@
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
                     </div>
-                    <p class="text-center mt-2">正在处理并生成音频，请稍候...</p>
+                    <p class="text-center mt-2">正在处理词库，请稍候...</p>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-success" onclick="uploadBook()">
-                    <i class="fas fa-upload"></i> 上传并生成音频
+                    <i class="fas fa-upload"></i> 上传词库
                 </button>
             </div>
         </div>
