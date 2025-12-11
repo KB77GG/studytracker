@@ -632,3 +632,68 @@ class CoursePlan(db.Model, TimestampMixin, SoftDeleteMixin):
 
     def __repr__(self):
         return f"<CoursePlan {self.title}>"
+
+
+# ============================================================================
+# Dictation System (Listening Practice)
+# ============================================================================
+
+class DictationBook(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Word book/list for dictation practice."""
+    
+    __tablename__ = "dictation_book"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    word_count = db.Column(db.Integer, default=0, nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    is_active = db.Column(db.Boolean, default=True, nullable=False, index=True)
+    
+    # Relationships
+    creator = db.relationship("User", backref=db.backref("dictation_books", lazy="dynamic"))
+    words = db.relationship("DictationWord", backref="book", lazy="dynamic", cascade="all, delete-orphan")
+    
+    def __repr__(self):
+        return f"<DictationBook {self.title}>"
+
+
+class DictationWord(db.Model, TimestampMixin):
+    """Individual word entry in a dictation book."""
+    
+    __tablename__ = "dictation_word"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+    sequence = db.Column(db.Integer, nullable=False)  # Order in book (1, 2, 3...)
+    word = db.Column(db.String(100), nullable=False)
+    phonetic = db.Column(db.String(100))  # IPA phonetic notation
+    translation = db.Column(db.Text)  # Chinese translation/meaning
+    audio_us = db.Column(db.String(200))  # American English audio path
+    audio_uk = db.Column(db.String(200))  # British English audio path
+    
+    def __repr__(self):
+        return f"<DictationWord {self.word}>"
+
+
+class DictationRecord(db.Model, TimestampMixin):
+    """Student's dictation answer record."""
+    
+    __tablename__ = "dictation_record"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), index=True)  # Optional: linked task
+    book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+    word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
+    student_answer = db.Column(db.String(100))
+    is_correct = db.Column(db.Boolean, nullable=False)
+    
+    # Relationships
+    student = db.relationship("User", backref=db.backref("dictation_records", lazy="dynamic"))
+    book = db.relationship("DictationBook", backref=db.backref("records", lazy="dynamic"))
+    word = db.relationship("DictationWord", backref=db.backref("records", lazy="dynamic"))
+    task = db.relationship("Task", backref=db.backref("dictation_records", lazy="dynamic"))
+    
+    def __repr__(self):
+        return f"<DictationRecord student={self.student_id} word={self.word_id} correct={self.is_correct}>"
