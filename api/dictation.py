@@ -9,6 +9,7 @@ from flask import Blueprint, current_app, jsonify, request, send_file
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
+from sqlalchemy.orm import joinedload
 from models import db, User, DictationBook, DictationWord, DictationRecord, Task
 
 dictation_bp = Blueprint("dictation", __name__, url_prefix="/api/dictation")
@@ -43,7 +44,7 @@ def role_required(*roles):
 @login_required
 def get_books():
     """Get all dictation books."""
-    books = DictationBook.query.filter_by(is_deleted=False, is_active=True).order_by(DictationBook.created_at.desc()).all()
+    books = DictationBook.query.options(joinedload(DictationBook.creator)).filter_by(is_deleted=False, is_active=True).order_by(DictationBook.created_at.desc()).all()
     return jsonify({
         "ok": True,
         "books": [
