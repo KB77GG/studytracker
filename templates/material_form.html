@@ -39,6 +39,8 @@
                                             material.type=='speaking_part2' else '' }}>口语题库Part2</option>
                                         <option value="translation" {{ 'selected' if material and
                                             material.type=='translation' else '' }}>翻译练习</option>
+                                        <option value="dictation" {{ 'selected' if material and
+                                            material.type=='dictation' else '' }}>听写词库</option>
                                     </select>
                                 </div>
                             </div>
@@ -187,6 +189,27 @@
                             </div>
                         </div>
 
+                        <!-- 听写词库专用输入区 -->
+                        <div id="dictationInput" style="display:none;">
+                            <div class="card mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">🎧 听写词库上传</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold">Excel文件 <span
+                                                class="text-danger">*</span></label>
+                                        <input type="file" class="form-control-file" id="dictationFile"
+                                            accept=".xlsx,.xls">
+                                        <small class="text-muted">Excel需包含列：单词、音标(可选)、释义(可选)</small>
+                                    </div>
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle"></i> 上传后系统将自动导入单词，小程序播放时使用有道词典发音
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <hr>
 
                         <!-- 题目列表预览 -->
@@ -243,6 +266,7 @@
         document.getElementById('speakingPart1Input').style.display = 'none';
         document.getElementById('speakingPart2Input').style.display = 'none';
         document.getElementById('translationInput').style.display = 'none';
+        document.getElementById('dictationInput').style.display = 'none';
 
         // Show the selected type's input area
         if (type === 'grammar') {
@@ -257,6 +281,8 @@
             document.getElementById('speakingPart2Input').style.display = 'block';
         } else if (type === 'translation') {
             document.getElementById('translationInput').style.display = 'block';
+        } else if (type === 'dictation') {
+            document.getElementById('dictationInput').style.display = 'block';
         }
     }
 
@@ -466,7 +492,7 @@
             }
 
             p
-    ayload.part2_topic = part2Topic;
+            payload.part2_topic = part2Topic;
 
         } else if (type === 'translation') {
             // Translation exercise
@@ -483,13 +509,48 @@
             payload.sentence = sentence;
             payload.skeleton = skeleton;
             payload.grammar = grammar;
-            payload.reference        } else {
+            payload.reference = reference;
+
+        } else if (type === 'dictation') {
+            // Dictation: use FormData to upload file
+            const fileInput = document.getElementById('dictationFile');
+            if (!fileInput.files.length) {
+                alert('请选择Excel文件');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch('/api/dictation/books', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+                const data = await response.json();
+
+                if (data.ok) {
+                    alert(`成功创建词库！共 ${data.book.word_count} 个单词`);
+                    window.location.href = '/materials';
+                } else {
+                    alert('上传失败：' + (data.message || data.error));
+                }
+            } catch (err) {
+                alert('网络错误：' + err.message);
+            }
+            return; // Early return for dictation
+
+        } else {
             alert('未知的材料类型');
             return;
         }
 
         // Detect edit mode by checking if material exists
-        const isEditMode = {{ 'true' if material else 'false' }};
+        const isEditMode = {{ 'true' if material else 'false' }
+    };
     const materialId = {{ material.id if material else 'null' }};
 
     const url = isEditMode ? `/api/materials/${materialId}` : '/api/materials';
