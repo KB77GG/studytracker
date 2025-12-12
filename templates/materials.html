@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-end">
                     <!-- Tabs -->
                     <ul class="nav nav-tabs card-header-tabs" id="materialTabs" role="tablist">
                         <li class="nav-item">
@@ -22,6 +22,9 @@
                             </a>
                         </li>
                     </ul>
+                    <button class="btn btn-sm btn-primary" onclick="window.location.href='/materials/create'">
+                        <i class="fas fa-plus"></i> 创建新材料
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="tab-content" id="materialTabContent">
@@ -29,9 +32,6 @@
                         <div class="tab-pane fade show active" id="materials" role="tabpanel">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h5 class="mb-0">材料列表</h5>
-                                <button class="btn btn-primary" onclick="window.location.href='/materials/create'">
-                                    <i class="fas fa-plus"></i> 创建新材料
-                                </button>
                             </div>
                             <!-- 筛选栏 -->
                             <div class="row mb-3">
