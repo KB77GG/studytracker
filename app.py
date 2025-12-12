@@ -1140,11 +1140,23 @@ def tasks_page():
         material_id = request.form.get("material_id")
         
         # 如果选择了材料，自动填充描述
-        if material_id and not detail:
-            from models import MaterialBank
-            material = MaterialBank.query.get(int(material_id))
-            if material:
-                detail = material.title
+        material_data = None
+        dictation_book_data = None
+        
+        if material_id:
+            from models import MaterialBank, DictationBook
+            
+            if material_id.startswith("dictation-"):
+                 # It's a dictation book
+                 book_id = int(material_id.split("-")[1])
+                 dictation_book_data = DictationBook.query.get(book_id)
+                 if dictation_book_data and not detail:
+                     detail = dictation_book_data.title
+            else:
+                # It's a standard material
+                material_data = MaterialBank.query.get(int(material_id))
+                if material_data and not detail:
+                    detail = material_data.title
         
         # Validate: need either category or material_id
         if not student:
@@ -1171,7 +1183,8 @@ def tasks_page():
                 created_by=current_user.id,
                 planned_minutes=int(request.form.get("planned_minutes", 0) or 0),
                 accuracy=min(100.0, max(0.0, float(request.form.get("accuracy", 0) or 0))),
-                material_id=int(material_id) if material_id else None,
+                material_id=int(material_id) if material_id and not material_id.startswith("dictation-") else None,
+                dictation_book_id=int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None,
                 grading_mode=grading_mode,
             )
             db.session.add(t)
@@ -1290,7 +1303,19 @@ def tasks_page():
             "id": m.id,
             "title": m.title,
             "type": m.type,
-            "question_count": question_count
+            "type": m.type,
+            "question_count": f"{question_count}题"
+        })
+
+    # Add Dictation Books to material dropdown
+    from models import DictationBook
+    dictation_books = DictationBook.query.filter_by(is_deleted=False, is_active=True).order_by(DictationBook.created_at.desc()).all()
+    for book in dictation_books:
+        all_materials.append({
+            "id": f"dictation-{book.id}",  # Special ID format to distinguish
+            "title": book.title,
+            "type": "听写词库",
+            "question_count": f"{book.word_count}词"
         })
 
     # --- 待审核提交 (Pending Reviews) ---
