@@ -38,7 +38,10 @@ Page({
         wx.request({
             url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${taskId}`,
             method: 'GET',
-            header: { 'Cookie': wx.getStorageSync('cookie') },
+            header: {
+                'Cookie': wx.getStorageSync('cookie'),
+                'Authorization': `Bearer ${wx.getStorageSync('token')}`
+            },
             success: (res) => {
                 if (res.data.ok) {
                     const task = res.data.task;
@@ -243,7 +246,8 @@ Page({
             method: 'POST',
             header: {
                 'Cookie': wx.getStorageSync('cookie'),
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${wx.getStorageSync('token')}`
             },
             data: {
                 accuracy: accuracy,
