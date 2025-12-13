@@ -42,19 +42,30 @@ Page({
             success: (res) => {
                 if (res.data.ok) {
                     const task = res.data.task;
-                    const material = task.material || {};
 
+                    // Read from root task object
                     this.setData({
                         bookTitle: task.task_name,
-                        rangeStart: material.dictation_word_start,
-                        rangeEnd: material.dictation_word_end
+                        rangeStart: task.dictation_word_start,
+                        rangeEnd: task.dictation_word_end
                     });
 
-                    if (material.dictation_book_id) {
-                        this.setData({ bookId: material.dictation_book_id });
-                        this.fetchWords(material.dictation_book_id);
+                    if (task.dictation_book_id) {
+                        this.setData({ bookId: task.dictation_book_id });
+                        this.fetchWords(task.dictation_book_id);
+                    } else {
+                        wx.hideLoading();
+                        wx.showToast({ title: '任务配置错误: dictation_book_id missing', icon: 'none' });
                     }
+                } else {
+                    wx.hideLoading();
+                    wx.showToast({ title: 'API Error: ' + res.data.message, icon: 'none' });
                 }
+            },
+            fail: (err) => {
+                wx.hideLoading();
+                console.error(err);
+                wx.showToast({ title: 'Network Error', icon: 'none' });
             }
         });
     },

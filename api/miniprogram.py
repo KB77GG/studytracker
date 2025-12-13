@@ -188,6 +188,10 @@ def get_task_detail(task_id):
             "evidence_photos": json.loads(task.evidence_photos) if task.evidence_photos else [],
             "feedback_image": task.feedback_image,
             "feedback_audio": task.feedback_audio,
+            # Dictation Info
+            "dictation_book_id": task.dictation_book_id,
+            "dictation_word_start": task.dictation_word_start,
+            "dictation_word_end": task.dictation_word_end,
             # 材料信息
             "material": material_data
         }
