@@ -15,10 +15,11 @@ Page({
         wx.showLoading({ title: '加载词库...' });
 
         wx.request({
-            url: `${app.globalData.baseUrl}/api/dictation/books`,
+            url: `${app.globalData.baseUrl}/dictation/books`,
             method: 'GET',
             header: {
-                'Cookie': wx.getStorageSync('cookie')
+                'Cookie': wx.getStorageSync('cookie'),
+                'Authorization': `Bearer ${wx.getStorageSync('token')}`
             },
             success: (res) => {
                 wx.hideLoading();
