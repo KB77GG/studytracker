@@ -83,12 +83,25 @@ Page({
                 wx.hideLoading();
                 if (res.data.ok) {
                     let words = res.data.words;
+                    console.log('Fetched words:', words.length);
 
                     // Apply Range Filter if set
                     if (this.data.rangeStart || this.data.rangeEnd) {
                         const start = (this.data.rangeStart || 1) - 1; // 0-based
                         const end = this.data.rangeEnd || words.length;
+                        console.log('Filtering range:', start, end);
                         words = words.slice(start, end);
+                    }
+                    console.log('Final words:', words.length);
+
+                    if (words.length === 0) {
+                        wx.showModal({
+                            title: '提示',
+                            content: '该范围内没有单词 (或加载失败)',
+                            showCancel: false,
+                            success: () => wx.navigateBack()
+                        });
+                        return;
                     }
 
                     this.setData({
@@ -99,16 +112,7 @@ Page({
                         currentIndex: 0
                     });
 
-                    if (words.length > 0) {
-                        this.loadWord(0);
-                    } else {
-                        wx.showModal({
-                            title: '提示',
-                            content: '该范围内没有单词',
-                            showCancel: false,
-                            success: () => wx.navigateBack()
-                        });
-                    }
+                    this.loadWord(0);
                 } else {
                     wx.showToast({ title: '加载失败', icon: 'none' });
                 }
