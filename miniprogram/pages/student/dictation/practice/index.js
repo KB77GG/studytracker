@@ -83,8 +83,12 @@ Page({
     fetchWords: function (id) {
         if (!this.data.taskId) wx.showLoading({ title: '加载单词...' });
 
+        const url = `${app.globalData.baseUrl}/dictation/books/${id}`;
+        console.log("fetchWords Requesting:", url);
+        console.log("Authorization:", `Bearer ${wx.getStorageSync('token')}`);
+
         wx.request({
-            url: `${app.globalData.baseUrl}/dictation/books/${id}`,
+            url: url,
             method: 'GET',
             header: {
                 'Cookie': wx.getStorageSync('cookie'),
