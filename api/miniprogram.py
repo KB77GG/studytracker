@@ -121,81 +121,85 @@ def get_student_today_tasks():
 def get_task_detail(task_id):
     """获取单个任务详情"""
     from models import Task
-    
-    user = request.current_api_user
-    task = Task.query.get(task_id)
-    
-    if not task:
-        return jsonify({"ok": False, "error": "task_not_found"}), 404
+    try:
+        user = request.current_api_user
+        task = Task.query.get(task_id)
         
-    # 简单权限验证
-    if task.student_name != user.student_profile.full_name:
-         return jsonify({"ok": False, "error": "forbidden"}), 403
+        if not task:
+            return jsonify({"ok": False, "error": "task_not_found"}), 404
+            
+        # 简单权限验证
+        if task.student_name != user.student_profile.full_name:
+             return jsonify({"ok": False, "error": "forbidden"}), 403
 
-    status = "pending"
-    if task.status == "done":
-        status = "completed"
-    elif task.student_submitted:
-        status = "submitted"
-    elif task.actual_seconds and task.actual_seconds > 0:
-        status = "in_progress"
+        status = "pending"
+        if task.status == "done":
+            status = "completed"
+        elif task.student_submitted:
+            status = "submitted"
+        elif task.actual_seconds and task.actual_seconds > 0:
+            status = "in_progress"
 
-    # 获取关联的材料信息
-    material_data = None
-    if task.material:
-        questions = []
-        for q in task.material.questions:
-            options = [{"key": opt.option_key, "text": opt.option_text} for opt in q.options]
-            questions.append({
-                "id": q.id,
-                "sequence": q.sequence,
-                "type": q.question_type,
-                "content": q.content,
-                "hint": q.hint,
-                "reference_answer": q.reference_answer,
-                "options": options
-            })
-        
-        material_data = {
-            "material_id": task.material.id,
-            "dictation_book_id": task.dictation_book_id,
-            "dictation_word_start": task.dictation_word_start,
-            "dictation_word_end": task.dictation_word_end,
-            "actual_seconds": task.actual_seconds,
-            "title": task.material.title,
-            "type": task.material.type,
-            "description": task.material.description,
-            "questions": questions
-        }
+        # 获取关联的材料信息
+        material_data = None
+        if task.material:
+            questions = []
+            for q in task.material.questions:
+                options = [{"key": opt.option_key, "text": opt.option_text} for opt in q.options]
+                questions.append({
+                    "id": q.id,
+                    "sequence": q.sequence,
+                    "type": q.question_type,
+                    "content": q.content,
+                    "hint": q.hint,
+                    "reference_answer": q.reference_answer,
+                    "options": options
+                })
+            
+            material_data = {
+                "material_id": task.material.id,
+                "dictation_book_id": task.dictation_book_id,
+                "dictation_word_start": task.dictation_word_start,
+                "dictation_word_end": task.dictation_word_end,
+                "actual_seconds": task.actual_seconds,
+                "title": task.material.title,
+                "type": task.material.type,
+                "description": task.material.description,
+                "questions": questions
+            }
 
-    return jsonify({
-        "ok": True,
-        "task": {
-            "id": task.id,
-            "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
-            "module": task.category or "其他",
-            "exam_system": "",
-            "instructions": task.note or "",
-            "planned_minutes": task.planned_minutes,
-            "status": status,
-            "is_locked": False,
-            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
-            # 反馈字段
-            "accuracy": task.accuracy,
-            "completion_rate": task.completion_rate,
-            "teacher_note": task.note,
-            "student_note": task.student_note,
-            "evidence_photos": json.loads(task.evidence_photos) if task.evidence_photos else [],
-            "feedback_image": task.feedback_image,
-            "feedback_audio": task.feedback_audio,
-            # Dictation Info
-            "dictation_book_id": task.dictation_book_id,
-            "dictation_word_start": task.dictation_word_start,
-            "dictation_word_end": task.dictation_word_end,
-            # 材料信息
-            "material": material_data
-        }
-    })
+        return jsonify({
+            "ok": True,
+            "task": {
+                "id": task.id,
+                "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
+                "module": task.category or "其他",
+                "exam_system": "",
+                "instructions": task.note or "",
+                "planned_minutes": task.planned_minutes,
+                "status": status,
+                "is_locked": False,
+                "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+                # 反馈字段
+                "accuracy": task.accuracy,
+                "completion_rate": task.completion_rate,
+                "teacher_note": task.note,
+                "student_note": task.student_note,
+                "evidence_photos": json.loads(task.evidence_photos) if task.evidence_photos else [],
+                "feedback_image": task.feedback_image,
+                "feedback_audio": task.feedback_audio,
+                # Dictation Info
+                "dictation_book_id": task.dictation_book_id,
+                "dictation_word_start": task.dictation_word_start,
+                "dictation_word_end": task.dictation_word_end,
+                # 材料信息
+                "material": material_data
+            }
+        })
+    except Exception as e:
+        import traceback
+        current_app.logger.error(traceback.format_exc())
+        return jsonify({"ok": False, "message": str(e), "error": str(e)}), 500
 
 @mp_bp.route("/student/tasks/<int:task_id>/submit", methods=["POST"])
 @require_api_user(User.ROLE_STUDENT)
