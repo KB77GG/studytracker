@@ -1207,6 +1207,7 @@ def tasks_page():
         start_date = today_obj - timedelta(days=7)
 
     # Query tasks within the date range
+    # Query tasks within the date range
     query = Task.query.filter(Task.date >= start_date.isoformat())
     
     # Filter by student_name if provided
@@ -1215,6 +1216,15 @@ def tasks_page():
         query = query.filter(Task.student_name == filter_student)
         
     items = query.order_by(Task.date.desc(), Task.id.desc()).all()
+    
+    # [NEW] Pre-fetch active sessions for the current user
+    active_sessions = StudySession.query.filter(
+        StudySession.created_by == current_user.id,
+        StudySession.ended_at.is_(None),
+        StudySession.task_id.in_([t.id for t in items])
+    ).all()
+    active_session_map = {s.task_id: s for s in active_sessions}
+
     # 为每个任务计算衍生字段：实际分钟、进度百分比
     enriched_items = []
     for t in items:
@@ -1228,6 +1238,11 @@ def tasks_page():
         )
         accuracy_value = float(t.accuracy) if t.accuracy is not None else None
         
+        # Check for active session
+        sess = active_session_map.get(t.id)
+        current_session_id = sess.id if sess else None
+        current_session_start = sess.started_at.isoformat() + "Z" if sess else None
+
         # 解析证据照片
         evidence_photos = []
         if t.evidence_photos:
@@ -1236,7 +1251,7 @@ def tasks_page():
                 evidence_photos = json.loads(t.evidence_photos)
             except:
                 pass
-        
+
         enriched_items.append({
             "id": t.id,
             "date": t.date,
@@ -1253,6 +1268,8 @@ def tasks_page():
             "student_submitted": t.student_submitted,
             "evidence_photos": evidence_photos,
             "student_note": t.student_note,
+            "session_id": current_session_id,
+            "session_start": current_session_start,
         })
     total_tasks = len(enriched_items)
     completed_tasks = sum(1 for t in enriched_items if t["status"] == "done")

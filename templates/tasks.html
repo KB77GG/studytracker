@@ -322,7 +322,8 @@
             <tr data-id="{{ t.id }}" data-student="{{ student }}" data-planned="{{ t.planned_minutes or 0 }}"
               data-actual="{{ (t.actual_minutes * 60)|int if t.actual_minutes is defined else 0 }}"
               data-completion="{{ '%.1f'|format(t.completion_rate) if t.completion_rate is not none else '' }}"
-              data-auto-progress="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}">
+              data-auto-progress="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}"
+              data-session-id="{{ t.session_id or '' }}" data-session-start="{{ t.session_start or '' }}">
               <td class="task-id">{{ t.id }}</td>
               <td class="task-date">{{ t.date }}</td>
               <td class="task-category">{{ t.category }}</td>
@@ -1445,22 +1446,50 @@
         let startTs = null; // 本段开始时间（ms）
         let sessionBase = Number(row.dataset.actual || 0); // 当前段开始前的累计秒
 
-        // 初始渲染用时
+        // 初始渲染
         updateUsage(row, 0);
         if (timerEl) timerEl.textContent = fmt(sessionBase);
-        if (!row.dataset.timerComplete) {
-          row.dataset.timerComplete = statusSel?.value === 'done' ? 'true' : 'false';
-        }
-        if (startBtn) {
-          const actualSeconds = Number(row.dataset.actual || 0);
-          startBtn.textContent = actualSeconds > 0 ? '继续计时' : '开始计时';
-          if (statusSel?.value === 'done') {
+
+        // Auto-resume timer if session is active
+        const initSid = row.dataset.sessionId;
+        const initStart = row.dataset.sessionStart;
+        if (initSid && initStart) {
+          startTs = new Date(initStart).getTime();
+          // Start interval
+          if (intervals.has(row)) clearInterval(intervals.get(row));
+          intervals.set(row, setInterval(() => {
+            const sec = Math.floor((Date.now() - startTs) / 1000);
+            const total = sessionBase + sec;
+            if (timerEl) timerEl.textContent = fmt(total);
+            updateUsage(row, sec);
+          }, 1000));
+          // Update UI state
+          if (startBtn) {
+            startBtn.textContent = '继续计时';
             startBtn.style.display = 'none';
           }
-        }
-        if (statusSel?.value === 'done') {
-          pauseBtn && (pauseBtn.style.display = 'none');
-          stopBtn && (stopBtn.style.display = 'none');
+          if (pauseBtn) pauseBtn.style.display = '';
+          if (stopBtn) stopBtn.style.display = '';
+
+          // Immediately update once
+          const elapsed = Math.floor((Date.now() - startTs) / 1000);
+          if (timerEl) timerEl.textContent = fmt(sessionBase + elapsed);
+          updateUsage(row, elapsed);
+        } else {
+          if (!row.dataset.timerComplete) {
+            row.dataset.timerComplete = statusSel?.value === 'done' ? 'true' : 'false';
+          }
+          if (startBtn) {
+            const actualSeconds = Number(row.dataset.actual || 0);
+            startBtn.textContent = actualSeconds > 0 ? '继续计时' : '开始计时';
+            if (statusSel?.value === 'done') {
+              startBtn.style.display = 'none';
+            }
+          }
+          if (statusSel?.value === 'done') {
+            pauseBtn && (pauseBtn.style.display = 'none');
+            stopBtn && (stopBtn.style.display = 'none');
+          }
         }
 
         // 开始/继续
