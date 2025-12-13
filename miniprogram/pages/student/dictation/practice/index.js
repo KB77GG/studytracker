@@ -84,10 +84,11 @@ Page({
         if (!this.data.taskId) wx.showLoading({ title: '加载单词...' });
 
         wx.request({
-            url: `${app.globalData.baseUrl}/api/dictation/books/${id}`,
+            url: `${app.globalData.baseUrl}/dictation/books/${id}`,
             method: 'GET',
             header: {
-                'Cookie': wx.getStorageSync('cookie')
+                'Cookie': wx.getStorageSync('cookie'),
+                'Authorization': `Bearer ${wx.getStorageSync('token')}`
             },
             success: (res) => {
                 wx.hideLoading();
