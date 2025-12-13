@@ -142,13 +142,35 @@
     <div class="task-form-row" id="materialSelectRow" style="display: none;">
       <div class="field field--wide">
         <label for="materialIdSelect">选择材料</label>
-        <select name="material_id" id="materialIdSelect" style="width: 100%;" onchange="onMaterialSelected()">
-          <option value="">-- 请选择材料 --</option>
+        <select class="form-select" id="material_id" name="material_id" onchange="toggleDetailInput()">
+          <option value="">-- 选择材料 --</option>
           {% for m in all_materials %}
-          <option value="{{ m.id }}" data-title="{{ m.title }}" data-type="{{ m.type }}">{{ m.title }} ({{
-            m.question_count }})</option>
+          <option value="{{ m.id }}" data-title="{{ m.title }}" data-type="{{ m.type }}"
+            data-count="{{ m.question_count }}">{{ m.title }} ({{ m.question_count }})</option>
           {% endfor %}
         </select>
+
+        <!-- Dictation Range Inputs (Hidden by default) -->
+        <div id="dictation-range-group" class="mt-2" style="display: none;">
+          <div class="row g-2 align-items-center">
+            <div class="col-auto">
+              <span class="form-text">范围: 第</span>
+            </div>
+            <div class="col">
+              <input type="number" class="form-control form-control-sm" name="dictation_word_start" placeholder="1"
+                min="1">
+            </div>
+            <div class="col-auto">
+              <span class="form-text">至</span>
+            </div>
+            <div class="col">
+              <input type="number" class="form-control form-control-sm" name="dictation_word_end" placeholder="全部">
+            </div>
+            <div class="col-auto">
+              <span class="form-text">词</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -783,17 +805,37 @@
       }
     }
 
-    function onMaterialSelected() {
-      const materialSelect = document.getElementById('materialIdSelect');
-      const noteInput = document.getElementById('taskNote');
-      const selectedOption = materialSelect.options[materialSelect.selectedIndex];
+    function toggleDetailInput() {
+      var select = document.getElementById("material_id");
+      var option = select.options[select.selectedIndex];
+      var detailInput = document.getElementById("detail");
+      var rangeGroup = document.getElementById("dictation-range-group");
 
-      if (selectedOption && selectedOption.value) {
-        // Auto-fill note with material title
-        const materialTitle = selectedOption.getAttribute('data-title');
-        noteInput.value = materialTitle || '';
+      if (select.value) {
+        var title = option.getAttribute("data-title");
+        var type = option.getAttribute("data-type");
+
+        // Set detail content
+        if (title) {
+          detailInput.value = title;
+        }
+
+        // Show range inputs only for Dictation Books
+        if (select.value.startsWith("dictation-")) {
+          rangeGroup.style.display = "block";
+
+          // Auto-fill max count as placeholder
+          var countStr = option.getAttribute("data-count"); // "xxx 词"
+          if (countStr) {
+            var maxCount = countStr.replace(/\D/g, ''); // Extract number
+            document.getElementsByName("dictation_word_end")[0].placeholder = "共 " + maxCount;
+          }
+        } else {
+          rangeGroup.style.display = "none";
+        }
       } else {
-        noteInput.value = '';
+        detailInput.value = "";
+        rangeGroup.style.display = "none";
       }
     }
 

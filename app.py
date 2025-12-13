@@ -1173,6 +1173,9 @@ def tasks_page():
                 if not category:
                     category = "材料练习"
             
+            dictation_word_start = request.form.get("dictation_word_start")
+            dictation_word_end = request.form.get("dictation_word_end")
+
             t = Task(
                 date=d,
                 student_name=student,
@@ -1185,6 +1188,8 @@ def tasks_page():
                 accuracy=min(100.0, max(0.0, float(request.form.get("accuracy", 0) or 0))),
                 material_id=int(material_id) if material_id and not material_id.startswith("dictation-") else None,
                 dictation_book_id=int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None,
+                dictation_word_start=int(dictation_word_start) if dictation_word_start else 1,
+                dictation_word_end=int(dictation_word_end) if dictation_word_end else None,
                 grading_mode=grading_mode,
             )
             db.session.add(t)

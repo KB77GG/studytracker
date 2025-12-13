@@ -170,6 +170,9 @@ Page({
                         status: t.status,
                         statusText: this.getStatusText(t.status),
                         isDone: t.status === 'completed' || t.status === 'submitted',
+                        // Dictation Fields
+                        dictationBookId: t.dictation_book_id,
+
                         // Timer state - show actual time spent from backend
                         timerStatus: 'idle',
                         elapsedSeconds: actualSeconds,
@@ -271,11 +274,19 @@ Page({
             wx.showToast({ title: '任务ID丢失', icon: 'none' })
             return
         }
+        const activeTimer = getApp().globalData.activeTimer
+
+        // Dictation Routing
+        const task = this.data.tasks.find(t => t.id === taskId)
+        if (task && task.dictationBookId) {
+            wx.navigateTo({
+                url: `/pages/student/dictation/practice/index?taskId=${taskId}&id=${task.dictationBookId}`
+            })
+            return
+        }
 
         // Check if there's already an active timer for this task
-        const activeTimer = getApp().globalData.activeTimer
         if (activeTimer && activeTimer.taskId === taskId) {
-            // Timer already running for this task, just navigate to task page
             wx.navigateTo({
                 url: `/pages/student/task/index?id=${taskId}`
             })

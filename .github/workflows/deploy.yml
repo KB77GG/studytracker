@@ -1,0 +1,52 @@
+name: Deploy to Alibaba Cloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            # 设置错误立即停止
+            set -e
+            
+            echo "🚀 Starting deployment..."
+            cd /root/apps/studytracker
+            
+            # 1. 拉取最新代码
+            echo "📦 Pulling latest code..."
+            git pull origin main
+            
+            # 2. 安装系统依赖 (虽然通常不需要每次都跑，但为了保险起见保留)
+            # 注意：apt-get update 可能会比较慢，如果没有新依赖可以注释掉
+            # apt-get update && apt-get install -y python3-pip python3-cffi python3-brotli libpango-1.0-0 libpangoft2-1.0-0 fonts-noto-cjk
+            
+            # 3. 更新 Python 环境
+            echo "🐍 Installing Python dependencies..."
+            .venv/bin/pip install -r requirements.txt
+            
+            # 4. 执行数据库迁移 (按需增加新的脚本)
+            echo "🗄️ Running migrations..."
+            .venv/bin/python3 create_plan_table.py
+            .venv/bin/python3 add_feedback_column.py
+            .venv/bin/python3 add_explanation_column.py
+            .venv/bin/python3 add_dictation_book_id.py
+            
+            # 5. 重启服务
+            echo "🔄 Restarting service..."
+            systemctl restart studytracker
+            
+            echo "✅ Deployment successful!"

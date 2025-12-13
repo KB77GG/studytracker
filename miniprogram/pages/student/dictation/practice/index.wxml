@@ -1,0 +1,50 @@
+<view class="practice-container">
+  <!-- Header -->
+  <view class="status-bar">
+    <view class="book-title">{{bookTitle}}</view>
+    <view class="progress-info">{{currentIndex + 1}} / {{totalWords}}</view>
+  </view>
+
+  <!-- Word Card -->
+  <view class="word-card">
+    <!-- Play Button -->
+    <view class="play-btn" bindtap="playCurrentWord" hover-class="btn-hover">
+      <view class="play-icon"></view>
+    </view>
+    <view class="play-hint">点击播放单词发音</view>
+
+    <!-- Input Area (Only show when not revealing answer) -->
+    <view class="input-area" wx:if="{{!showResult}}">
+      <input class="word-input" 
+             placeholder="听音输入单词" 
+             focus="{{inputFocus}}" 
+             value="{{inputValue}}"
+             bindinput="onInput"
+             confirm-type="done"
+             bindconfirm="checkAnswer"/>
+    </view>
+
+    <!-- Result Feedback (Show after check) -->
+    <view class="result-feedback" wx:else>
+      <text class="correct-word">{{currentWord.word}}</text>
+      <view>
+        <text class="phonetic">[{{currentWord.phonetic || '-'}}]</text>
+      </view>
+      <text class="translation">{{currentWord.translation || '暂无释义'}}</text>
+      
+      <!-- User Answer Display -->
+      <view style="margin-top: 20rpx; font-size: 28rpx; color: {{isCorrect ? '#67C23A' : '#F56C6C'}}">
+        <text wx:if="{{isCorrect}}">✓ 回答正确</text>
+        <text wx:else>✗ 你的答案: {{inputValue}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Action Bar -->
+  <view class="action-bar">
+    <button wx:if="{{!showResult}}" class="submit-btn" bindtap="checkAnswer">提交</button>
+    <button wx:else class="submit-btn next" bindtap="nextWord">
+      {{currentIndex + 1 === totalWords ? '完成练习' : '下一个'}}
+    </button>
+  </view>
+</view>

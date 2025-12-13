@@ -473,6 +473,8 @@ class Task(db.Model):
     # Material Bank Fields
     material_id = db.Column(db.Integer, db.ForeignKey("material_bank.id"), index=True)
     dictation_book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), index=True)
+    dictation_word_start = db.Column(db.Integer, default=1)  # 1-based index
+    dictation_word_end = db.Column(db.Integer)              # Inclusive
     grading_mode = db.Column(db.String(50), default="image")  # image/material/hybrid
     
     # Mini Program Fields

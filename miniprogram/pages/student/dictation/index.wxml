@@ -1,99 +1,26 @@
-<!--听写练习页面 - 睿然品牌风格-->
-<view class="container" wx:if="{{!loading && !completed}}">
-  <!-- 顶部导航 -->
+<!-- pages/student/dictation/index.wxml -->
+<view class="container">
   <view class="header">
-    <view class="header-left">
-      <text class="logo">睿然</text>
-      <text class="chapter">{{bookTitle}}</text>
-    </view>
-    <view class="accent-toggle">
-      <view class="accent-btn {{accent === 'uk' ? 'active' : ''}}" bindtap="switchAccent" data-accent="uk">🇬🇧</view>
-      <view class="accent-btn {{accent === 'us' ? 'active' : ''}}" bindtap="switchAccent" data-accent="us">🇺🇸</view>
-    </view>
+    <view class="title">听写词库</view>
+    <view class="subtitle">选择词书开始练习</view>
   </view>
 
-  <!-- 练习主体 -->
-  <view class="practice-area">
-    <text class="prompt-text">根据发音写出单词</text>
+  <view class="book-list">
+    <view class="book-card" wx:for="{{books}}" wx:key="id" bindtap="startPractice" data-id="{{item.id}}" data-title="{{item.title}}">
+      <view class="book-icon">📚</view>
+      <view class="book-info">
+        <view class="book-name">{{item.title}}</view>
+        <view class="book-meta">
+          <text class="count">{{item.word_count}} 词</text>
+          <text class="divider">|</text>
+          <text class="desc">{{item.description || '暂无描述'}}</text>
+        </view>
+      </view>
+      <view class="action-btn">练习</view>
+    </view>
     
-    <view class="input-area">
-      <input 
-        class="word-input" 
-        placeholder="输入单词"
-        value="{{userAnswer}}"
-        bindinput="onInput"
-        bindconfirm="submitAnswer"
-        confirm-type="done"
-        focus="{{inputFocus}}"
-        adjust-position="{{true}}"
-      />
-      <view class="submit-btn" bindtap="submitAnswer">提交</view>
-    </view>
-
-    <view class="play-btn {{isPlaying ? 'playing' : ''}}" bindtap="playAudio">
-      <text class="play-icon-text">🔊</text>
+    <view wx:if="{{books.length === 0}}" class="empty-state">
+      <text>暂无听写词库</text>
     </view>
   </view>
-
-  <!-- 进度条 -->
-  <view class="progress-area">
-    <view class="progress-bar">
-      <view class="progress-fill" style="width: {{progress}}%"></view>
-    </view>
-    <text class="progress-text">{{currentIndex + 1}}/{{totalWords}}</text>
-  </view>
-</view>
-
-<!-- 答题结果弹窗 -->
-<view class="result-overlay" wx:if="{{showResult}}" bindtap="nextWord">
-  <view class="result-card" catchtap="stopPropagation">
-    <text class="result-icon {{isCorrect ? 'correct' : 'wrong'}}">
-      {{isCorrect ? '✓' : '✗'}}
-    </text>
-    <text class="result-word">{{currentWord.word}}</text>
-    <text class="result-phonetic">{{currentWord.phonetic || ''}}</text>
-    <text class="result-translation">{{currentWord.translation || ''}}</text>
-    <text class="result-your-answer" wx:if="{{!isCorrect}}">
-      你的答案: {{userAnswer}}
-    </text>
-    <view class="next-btn" bindtap="nextWord">
-      {{currentIndex + 1 >= totalWords ? '查看成绩' : '下一题'}}
-    </view>
-  </view>
-</view>
-
-<!-- 完成页面 -->
-<view class="complete-page" wx:if="{{completed}}">
-  <text class="complete-icon">🎉</text>
-  <text class="complete-title">练习完成！</text>
-  
-  <view class="stats-card">
-    <view class="stat-row">
-      <text class="stat-label">总题数</text>
-      <text class="stat-value">{{totalWords}}</text>
-    </view>
-    <view class="stat-row">
-      <text class="stat-label">正确</text>
-      <text class="stat-value" style="color: #4caf50;">{{correctCount}}</text>
-    </view>
-    <view class="stat-row">
-      <text class="stat-label">错误</text>
-      <text class="stat-value" style="color: #f44336;">{{totalWords - correctCount}}</text>
-    </view>
-    <view class="stat-row">
-      <text class="stat-label">正确率</text>
-      <text class="stat-value accuracy">{{accuracy}}%</text>
-    </view>
-  </view>
-
-  <view class="action-btns">
-    <view class="action-btn secondary" bindtap="restartPractice">重新练习</view>
-    <view class="action-btn primary" bindtap="goBack">返回</view>
-  </view>
-</view>
-
-<!-- 加载中 -->
-<view class="loading" wx:if="{{loading}}">
-  <view class="weui-loading"></view>
-  <text class="loading-text">加载中...</text>
 </view>

@@ -100,6 +100,9 @@ def get_student_today_tasks():
             "status": status,
             "is_locked": False,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+            "dictation_book_id": task.dictation_book_id, # Add this
+            "dictation_word_start": task.dictation_word_start,
+            "dictation_word_end": task.dictation_word_end,
             # 反馈字段
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
@@ -154,7 +157,11 @@ def get_task_detail(task_id):
             })
         
         material_data = {
-            "id": task.material.id,
+            "material_id": task.material.id,
+            "dictation_book_id": task.dictation_book_id,
+            "dictation_word_start": task.dictation_word_start,
+            "dictation_word_end": task.dictation_word_end,
+            "actual_seconds": task.actual_seconds,
             "title": task.material.title,
             "type": task.material.type,
             "description": task.material.description,
