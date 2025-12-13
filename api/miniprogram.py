@@ -208,6 +208,7 @@ def submit_task(task_id):
     note = data.get("note")
     evidence_files = data.get("evidence_files", []) # List of URLs
     duration = data.get("duration_seconds", 0)
+    accuracy = data.get("accuracy") # Optional float 0-100
     
     # 1. 尝试查找 Task (旧版)
     task = Task.query.get(task_id)
@@ -218,11 +219,21 @@ def submit_task(task_id):
             
         task.student_submitted = True
         task.submitted_at = datetime.now()
-        task.student_note = note
-        task.evidence_photos = json.dumps(evidence_files) # 旧版字段存 JSON
+        
+        # Merge wrong words into note if provided
+        final_note = note
+        if data.get("wrong_words"):
+             wrong_summary = f"[错题记录] {data.get('wrong_words')}"
+             final_note = f"{note}\n{wrong_summary}" if note else wrong_summary
+        
+        task.student_note = final_note
+        task.evidence_photos = json.dumps(evidence_files)
         
         if duration > 0:
             task.actual_seconds = duration
+            
+        if accuracy is not None:
+            task.accuracy = float(accuracy)
             
         db.session.commit()
         return jsonify({"ok": True})

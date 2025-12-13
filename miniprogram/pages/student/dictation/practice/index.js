@@ -162,29 +162,32 @@ Page({
     },
 
     checkAnswer: function () {
-        if (this.data.showResult) return; // Prevent double submit
+        if (this.data.showResult) return;
 
         const input = this.data.inputValue.trim().toLowerCase();
         const target = this.data.currentWord.word.toLowerCase();
+        const isCorrect = input === target;
 
         if (!input) {
             wx.showToast({ title: '请输入单词', icon: 'none' });
             return;
         }
 
-        const isCorrect = input === target;
+        if (!isCorrect) {
+            const wrongList = this.data.wrongWords;
+            wrongList.push(`${this.data.currentWord.word} (写成了: ${input})`);
+            this.setData({ wrongWords: wrongList });
+        } else {
+            this.setData({ correctCount: this.data.correctCount + 1 });
+        }
 
         this.setData({
             showResult: true,
             isCorrect: isCorrect
         });
 
-        // Play sound effect (optional) if needed
         if (isCorrect) {
             wx.showToast({ title: '正确!', icon: 'success', duration: 1000 });
-            // Logic to record attempt could be added here
-        } else {
-            // Logic for incorrect
         }
     },
 
@@ -193,14 +196,62 @@ Page({
         if (nextIndex < this.data.totalWords) {
             this.loadWord(nextIndex);
         } else {
-            wx.showModal({
-                title: '恭喜',
-                content: '本词库练习完成！',
-                showCancel: false,
-                success: () => {
+            this.finishPractice();
+        }
+    },
+
+    finishPractice: function () {
+        const total = this.data.totalWords;
+        const correct = this.data.correctCount;
+        const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
+
+        let content = `正确率: ${accuracy}%`;
+        if (this.data.wrongWords.length > 0) {
+            content += `\n错词: ${this.data.wrongWords.length} 个`;
+        }
+
+        wx.showModal({
+            title: '练习完成',
+            content: content,
+            confirmText: '提交结果',
+            showCancel: !this.data.taskId, // If it's a task, force submit (kind of)
+            success: (res) => {
+                if (res.confirm && this.data.taskId) {
+                    this.submitTaskResult(accuracy, this.data.wrongWords);
+                } else if (res.confirm || !this.data.taskId) {
                     wx.navigateBack();
                 }
-            });
-        }
+            }
+        });
+    },
+
+    submitTaskResult: function (accuracy, wrongWords) {
+        wx.showLoading({ title: '提交中...' });
+        wx.request({
+            url: `${app.globalData.baseUrl}/api/miniprogram/student/tasks/${this.data.taskId}/submit`,
+            method: 'POST',
+            header: {
+                'Cookie': wx.getStorageSync('cookie'),
+                'Content-Type': 'application/json'
+            },
+            data: {
+                accuracy: accuracy,
+                wrong_words: wrongWords.join(', '),
+                duration_seconds: 0 // Could handle timing later
+            },
+            success: (res) => {
+                wx.hideLoading();
+                if (res.data.ok) {
+                    wx.showToast({ title: '提交成功', icon: 'success' });
+                    setTimeout(() => wx.navigateBack(), 1500);
+                } else {
+                    wx.showToast({ title: '提交失败', icon: 'none' });
+                }
+            },
+            fail: () => {
+                wx.hideLoading();
+                wx.showToast({ title: '网络错误', icon: 'none' });
+            }
+        });
     }
 })
