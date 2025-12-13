@@ -36,7 +36,7 @@ Page({
     fetchTask: function (taskId) {
         wx.showLoading({ title: '加载任务...' });
         wx.request({
-            url: `${app.globalData.baseUrl}/api/miniprogram/student/tasks/${taskId}`,
+            url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${taskId}`,
             method: 'GET',
             header: { 'Cookie': wx.getStorageSync('cookie') },
             success: (res) => {
@@ -59,7 +59,14 @@ Page({
                     }
                 } else {
                     wx.hideLoading();
-                    wx.showToast({ title: 'API Error: ' + res.data.message, icon: 'none' });
+                    console.log('API Error Data:', res.data);
+                    let msg = '';
+                    if (typeof res.data === 'string') {
+                        msg = 'Server Error (HTML/String)';
+                    } else {
+                        msg = res.data.message || res.data.error || 'Unknown Error';
+                    }
+                    wx.showToast({ title: 'Err: ' + msg, icon: 'none' });
                 }
             },
             fail: (err) => {
@@ -232,7 +239,7 @@ Page({
     submitTaskResult: function (accuracy, wrongWords) {
         wx.showLoading({ title: '提交中...' });
         wx.request({
-            url: `${app.globalData.baseUrl}/api/miniprogram/student/tasks/${this.data.taskId}/submit`,
+            url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${this.data.taskId}/submit`,
             method: 'POST',
             header: {
                 'Cookie': wx.getStorageSync('cookie'),
