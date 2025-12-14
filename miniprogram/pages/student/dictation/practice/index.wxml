@@ -1,4 +1,5 @@
 <view class="practice-container">
+  <view style="height: env(safe-area-inset-top);"></view>
   <!-- Header -->
   <view class="status-bar">
     <view class="book-title">{{bookTitle}}</view>

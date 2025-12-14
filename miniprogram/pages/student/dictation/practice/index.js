@@ -16,6 +16,8 @@ Page({
         inputError: false,
         autoPlay: false,
         practiceStart: null,
+        accumulatedSeconds: 0,
+        isSubmitting: false,
 
         // UI State
         inputValue: '',
@@ -144,7 +146,8 @@ Page({
                         words: words,
                         totalWords: words.length,
                         currentIndex: 0,
-                        practiceStart: Date.now()
+                        practiceStart: Date.now(),
+                        accumulatedSeconds: 0
                     });
 
                     const resumeIndex = this.loadProgress(words.length);
@@ -260,7 +263,7 @@ Page({
         const total = this.data.totalWords;
         const correct = this.data.correctCount;
         const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
-        const durationSeconds = this.data.practiceStart ? Math.floor((Date.now() - this.data.practiceStart) / 1000) : 0;
+        const durationSeconds = this.computeDurationSeconds();
 
         let content = `正确率: ${accuracy}%`;
         if (this.data.wrongWords.length > 0) {
@@ -286,7 +289,17 @@ Page({
         });
     },
 
+    computeDurationSeconds() {
+        let elapsed = this.data.accumulatedSeconds;
+        if (this.data.practiceStart) {
+            elapsed += Math.floor((Date.now() - this.data.practiceStart) / 1000);
+        }
+        return elapsed;
+    },
+
     submitTaskResult: function (accuracy, wrongWords, durationSeconds = 0) {
+        if (this.data.isSubmitting) return;
+        this.setData({ isSubmitting: true });
         wx.showLoading({ title: '提交中...' });
         wx.request({
             url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${this.data.taskId}/submit`,
@@ -314,6 +327,9 @@ Page({
             fail: () => {
                 wx.hideLoading();
                 wx.showToast({ title: '网络错误', icon: 'none' });
+            },
+            complete: () => {
+                this.setData({ isSubmitting: false });
             }
         });
     },
@@ -348,6 +364,31 @@ Page({
             wx.removeStorageSync(this.data.progressKey);
         } catch (e) {
             console.warn('Failed to clear progress', e);
+        }
+    },
+
+    // 生命周期：隐藏/卸载时累计时间
+    onHide() {
+        this.pauseTimer();
+    },
+
+    onUnload() {
+        this.pauseTimer();
+    },
+
+    pauseTimer() {
+        if (this.data.practiceStart) {
+            const elapsed = Math.floor((Date.now() - this.data.practiceStart) / 1000);
+            this.setData({
+                accumulatedSeconds: this.data.accumulatedSeconds + elapsed,
+                practiceStart: null
+            });
+        }
+    },
+
+    resumeTimer() {
+        if (!this.data.practiceStart) {
+            this.setData({ practiceStart: Date.now() });
         }
     },
 
