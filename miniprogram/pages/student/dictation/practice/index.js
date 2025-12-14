@@ -8,6 +8,7 @@ Page({
         currentIndex: 0,
         currentWord: {},
         totalWords: 0,
+        progressKey: null,
 
         // UI State
         inputValue: '',
@@ -23,6 +24,11 @@ Page({
         } else if (options.id) {
             this.setData({ bookId: options.id });
             this.fetchWords(options.id);
+        }
+
+        // Prepare progress key once we know taskId/bookId later
+        if (options.taskId || options.id) {
+            this.setData({ progressKey: this.buildProgressKey(options.taskId, options.id) });
         }
 
         // Create Audio Context
@@ -52,6 +58,7 @@ Page({
                         rangeStart: task.dictation_word_start,
                         rangeEnd: task.dictation_word_end
                     });
+                    this.setData({ progressKey: this.buildProgressKey(taskId, task.dictation_book_id, task.dictation_word_start, task.dictation_word_end) });
 
                     if (task.dictation_book_id) {
                         this.setData({ bookId: task.dictation_book_id });
@@ -127,7 +134,8 @@ Page({
                         currentIndex: 0
                     });
 
-                    this.loadWord(0);
+                    const resumeIndex = this.loadProgress(words.length);
+                    this.loadWord(resumeIndex);
                 } else {
                     wx.showToast({ title: '加载失败', icon: 'none' });
                 }
@@ -155,6 +163,7 @@ Page({
             isCorrect: false,
             inputFocus: true
         });
+        this.saveProgress(index);
 
         // Auto play
         setTimeout(() => {
@@ -263,6 +272,7 @@ Page({
                 wx.hideLoading();
                 if (res.data.ok) {
                     wx.showToast({ title: '提交成功', icon: 'success' });
+                    this.clearProgress();
                     setTimeout(() => wx.navigateBack(), 1500);
                 } else {
                     wx.showToast({ title: '提交失败', icon: 'none' });
@@ -273,5 +283,38 @@ Page({
                 wx.showToast({ title: '网络错误', icon: 'none' });
             }
         });
+    },
+
+    // --- Progress Persistence ---
+    buildProgressKey(taskId, bookId, start, end) {
+        const startVal = start || this.data.rangeStart || '';
+        const endVal = end || this.data.rangeEnd || '';
+        if (taskId) return `dictation_progress_task_${taskId}_${startVal}_${endVal}`;
+        if (bookId) return `dictation_progress_book_${bookId}_${startVal}_${endVal}`;
+        return null;
+    },
+
+    saveProgress(index) {
+        if (!this.data.progressKey) return;
+        wx.setStorageSync(this.data.progressKey, { index });
+    },
+
+    loadProgress(totalWords) {
+        if (!this.data.progressKey) return 0;
+        const saved = wx.getStorageSync(this.data.progressKey);
+        if (saved && typeof saved.index === 'number') {
+            const idx = Math.max(0, Math.min(saved.index, totalWords - 1));
+            return idx;
+        }
+        return 0;
+    },
+
+    clearProgress() {
+        if (!this.data.progressKey) return;
+        try {
+            wx.removeStorageSync(this.data.progressKey);
+        } catch (e) {
+            console.warn('Failed to clear progress', e);
+        }
     }
 })
