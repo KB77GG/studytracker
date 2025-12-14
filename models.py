@@ -612,7 +612,7 @@ class StudySession(db.Model):
         return f"<StudySession id={self.id} task={self.task_id} sec={self.seconds}>"
 
 class CoursePlan(db.Model, TimestampMixin, SoftDeleteMixin):
-    """Stores generated IELTS study plans."""
+    """Stores generated IELTS/TOEFL study plans."""
 
     __tablename__ = "course_plan"
 

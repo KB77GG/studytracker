@@ -10,7 +10,7 @@
             margin: 12mm 20mm 18mm 20mm;
 
             @top-left {
-                content: "{{ student.name }} 雅思学习规划";
+                content: "{{ student.name }} {{ exam_label }}学习规划";
                 font-size: 9pt;
                 color: #666;
                 font-family: "Noto Sans CJK SC", sans-serif;
@@ -242,12 +242,13 @@
 <body>
     <div class="header">
         <img src="data:image/jpeg;base64,{{ logo_base64 }}" alt="Sage Path Logo" class="logo">
-        <h1>雅思学习规划方案</h1>
-        <div class="subtitle">{{ student.name }}</div>
+        <h1>{{ exam_label }}学习规划方案</h1>
+        <div class="subtitle">{{ student.name }} · {{ exam_label }}方案</div>
     </div>
 
     <h2>1. 学生基本信息</h2>
     <div class="info-grid">
+        <div class="info-item"><span class="label">考试类型：</span>{{ exam_label }}</div>
         <div class="info-item"><span class="label">当前年级/规划：</span>{{ student.currentGradeAndPlan }}</div>
         <div class="info-item"><span class="label">目标考试时间：</span>{{ student.examDate }}</div>
         <div class="info-item"><span class="label">目标总分：</span>{{ student.targetTotalScore }}</div>

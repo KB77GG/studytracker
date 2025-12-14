@@ -2870,7 +2870,9 @@ def save_course_plan():
         db.session.flush() # Get ID
         
     # Create Plan
-    title = f"{student_name} - 雅思学习方案 ({datetime.now().strftime('%Y-%m-%d')})"
+    exam_type = (student_info.get("examType") or "IELTS").upper()
+    exam_label = "托福" if exam_type == "TOEFL" else "雅思"
+    title = f"{student_name} - {exam_label}学习方案 ({datetime.now().strftime('%Y-%m-%d')})"
     
     plan = CoursePlan(
         student_id=student_profile.id,
@@ -2904,6 +2906,8 @@ def export_course_plan_pdf(plan_id):
     student = data.get("student", {})
     phases = data.get("phases", [])
     pricing = data.get("pricing", [])
+    exam_type = (student.get("examType") or "IELTS").upper()
+    exam_label = "托福" if exam_type == "TOEFL" else "雅思"
     
     # Calculate totals
     total_amount = sum(row.get("subtotal", 0) for row in pricing)
@@ -2926,7 +2930,8 @@ def export_course_plan_pdf(plan_id):
         pricing=pricing,
         total_amount=total_amount,
         generated_at=datetime.now(),
-        logo_base64=logo_base64
+        logo_base64=logo_base64,
+        exam_label=exam_label,
     )
     
     css = CSS(string="""

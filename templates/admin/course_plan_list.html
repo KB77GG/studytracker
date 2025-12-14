@@ -3,7 +3,7 @@
 {% block content_dashboard %}
 <div class="container">
     <div class="header-row">
-        <h1>雅思学习方案管理</h1>
+        <h1>学习方案管理（雅思/托福）</h1>
         <a href="{{ url_for('course_plan_create') }}" class="btn btn-primary">
             <span class="icon">+</span> 新建方案
         </a>
@@ -16,6 +16,7 @@
                     <th>ID</th>
                     <th>方案标题</th>
                     <th>学生姓名</th>
+                    <th>考试类型</th>
                     <th>创建人</th>
                     <th>创建时间</th>
                     <th>操作</th>
@@ -23,10 +24,13 @@
             </thead>
             <tbody>
                 {% for plan in plans %}
+                {% set exam_type = plan.plan_data.get('student', {}).get('examType', 'IELTS') %}
+                {% set exam_label = '托福' if exam_type == 'TOEFL' else '雅思' %}
                 <tr>
                     <td>{{ plan.id }}</td>
                     <td>{{ plan.title or '未命名方案' }}</td>
                     <td>{{ plan.student.full_name if plan.student else '未知' }}</td>
+                    <td>{{ exam_label }}</td>
                     <td>{{ plan.creator.display_name }}</td>
                     <td>{{ plan.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
                     <td>
@@ -40,7 +44,7 @@
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="6" class="text-center">暂无方案，请点击右上角新建</td>
+                    <td colspan="7" class="text-center">暂无方案，请点击右上角新建</td>
                 </tr>
                 {% endfor %}
             </tbody>

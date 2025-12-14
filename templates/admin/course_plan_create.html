@@ -64,7 +64,30 @@
 
 
     // --- CONSTANTS & DATA HELPERS ---
-    const SCORE_OPTIONS = ["4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"];
+    const EXAM_TYPES = [
+        { value: "IELTS", label: "雅思 IELTS" },
+        { value: "TOEFL", label: "托福 TOEFL" },
+    ];
+
+    const EXAM_LABELS = {
+        IELTS: "雅思",
+        TOEFL: "托福",
+    };
+
+    const SCORE_OPTIONS = {
+        IELTS: ["4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"],
+        TOEFL: ["60", "65", "70", "75", "80", "85", "90", "95", "100", "105", "110", "115", "120"],
+    };
+
+    const SUB_SCORE_OPTIONS = {
+        IELTS: ["4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"],
+        TOEFL: ["15", "18", "20", "22", "24", "26", "28", "30"],
+    };
+
+    const SUBJECT_OPTIONS = {
+        IELTS: ["雅思听力", "雅思阅读", "雅思写作", "雅思口语"],
+        TOEFL: ["托福听力", "托福阅读", "托福写作", "托福口语"],
+    };
 
     const getNext24Months = () => {
         const dates = [];
@@ -79,48 +102,138 @@
     const EXAM_DATES = getNext24Months();
 
     const FOCUS_PRESETS = {
-        "基础夯实 (5.5分目标)": {
-            L: "Section 1/2 场景词汇听写，基础定位技巧，数字/拼写专项训练",
-            R: "基础语法长难句分析，题型扫盲，填空题/判断题解题技巧",
-            W: "小作文数据表达积累，大作文基础句型与逻辑框架搭建",
-            S: "Part 1 话题素材积累，发音纠正，流利度基础训练"
+        IELTS: {
+            "基础夯实 (5.5分目标)": {
+                L: "Section 1/2 场景词汇听写，基础定位技巧，数字/拼写专项训练",
+                R: "基础语法长难句分析，题型扫盲，填空题/判断题解题技巧",
+                W: "小作文数据表达积累，大作文基础句型与逻辑框架搭建",
+                S: "Part 1 话题素材积累，发音纠正，流利度基础训练"
+            },
+            "强化冲刺 (6.5分目标)": {
+                L: "Section 3/4 选择题/配对题技巧，同义替换积累，倍速听音训练",
+                R: "段落主旨题/Heading题攻克，平行阅读法训练，长文快速定位",
+                W: "大作文审题与论点扩展，高分词汇替换，逻辑连接词运用",
+                S: "Part 2 串题技巧，Part 3 抽象话题思维拓展，地道习语使用"
+            },
+            "高分突破 (7.0+目标)": {
+                L: "全真模考抗干扰训练，精听跟读，弱读/连读语音现象攻克",
+                R: "限时模考训练，错题深度归因，学术类文章结构拆解",
+                W: "各类话题范文精析，批判性思维训练，文章连贯性与一致性提升",
+                S: "全真模拟面试，高难度话题即兴表达，复杂语法结构灵活运用"
+            }
         },
-        "强化冲刺 (6.5分目标)": {
-            L: "Section 3/4 选择题/配对题技巧，同义替换积累，倍速听音训练",
-            R: "段落主旨题/Heading题攻克，平行阅读法训练，长文快速定位",
-            W: "大作文审题与论点扩展，高分词汇替换，逻辑连接词运用",
-            S: "Part 2 串题技巧，Part 3 抽象话题思维拓展，地道习语使用"
-        },
-        "高分突破 (7.0+目标)": {
-            L: "全真模考抗干扰训练，精听跟读，弱读/连读语音现象攻克",
-            R: "限时模考训练，错题深度归因，学术类文章结构拆解",
-            W: "各类话题范文精析，批判性思维训练，文章连贯性与一致性提升",
-            S: "全真模拟面试，高难度话题即兴表达，复杂语法结构灵活运用"
+        TOEFL: {
+            "基础救生圈 (Foundation & Survival)": {
+                L: "听音辨义：高中3500+托福听力高频词，每日100词，正确率>90%；单词听写每日30-50词；盲听磨耳：TPO Conversation 每日2-3篇，30秒语音概括。",
+                R: "长难句拆解：每日3-5句，只圈主谓宾，解决“看不懂”。",
+                W: "模板肌肉记忆：综合/独立模板每日限时敲1遍（≤3分钟）。",
+                S: "原音跟读：TPO Task1/2 文本模仿语音语调，每日10-15分钟录音。"
+            },
+            "进阶强化 (Development & Logic)": {
+                L: "句子听写：TPO Lecture 每日3-5句，检查介词/冠词/时态；信号词捕捉：每日1篇记录提示词+核心名词。",
+                R: "段落总结：每日2段 TPO 文章，用中文一句话概括排除细节干扰。",
+                W: "语料造句：高级短语/句型每日3句，融入当天写作话题。",
+                S: "关键词复述：TPO Task2/3/4 每日1题，看笔记做60秒复述，覆盖要点。"
+            },
+            "高分冲刺 (Advanced & Polishing)": {
+                L: "倍速虐耳：TPO Lecture 1.2x-1.25x 每日1篇，做题或复述，标记错题原因。",
+                R: "限时刷题：18分钟完成一篇阅读，隔日1篇，主攻定位与抗干扰。",
+                W: "段落改写：每周2次，用地道表达和多样句式升级旧稿，伴随错题归因。",
+                S: "One Take 挑战：每日Task1随机题，一次录音45秒，逼真考试压力。"
+            }
         }
     };
 
     const MATERIAL_PRESETS = {
-        "标准套餐": `《睿然语法训练》夯实语法基础，增加语法知识点熟悉程度和运用能力
+        IELTS: {
+            "标准套餐": `《睿然语法训练》夯实语法基础，增加语法知识点熟悉程度和运用能力
 《睿然口语材料朗读训练》熟悉基本表达，提升语言流利程度
 《睿然写作逻辑链训练》增加大作文框架熟悉度，建立思维逻辑习惯
 基础词汇背诵，一对一听写
 听力学科词汇背诵，一对一听写，加强单词发音熟悉程度，建立音形对照关系
 《睿然口语题库》一对一对练，模拟考试场景，增加考试熟悉程度`,
-        "阅读专项": "《睿然雅思阅读长难句精讲》\n《剑桥雅思真题阅读分册》\n《九分达人阅读》",
-        "口语专项": "《睿然雅思口语题库》\n《睿然雅思口语素材朗读》\n一对一口语对练",
-        "写作专项": "《睿然雅思写作逻辑琏训练》\n《睿然雅思写作题库素材积累》\n《睿然雅思写作翻译练习》"
+            "阅读专项": "《睿然雅思阅读长难句精讲》\n《剑桥雅思真题阅读分册》\n《九分达人阅读》",
+            "口语专项": "《睿然雅思口语题库》\n《睿然雅思口语素材朗读》\n一对一口语对练",
+            "写作专项": "《睿然雅思写作逻辑琏训练》\n《睿然雅思写作题库素材积累》\n《睿然雅思写作翻译练习》"
+        },
+        TOEFL: {
+            "基础救生圈 (Foundation & Survival)": `词汇：听音辨义（高中3500+托福听力高频）每日100词，正确率>90%才算打卡。
+听力：单词听写每日30-50词，错词罚抄/重听；盲听磨耳：TPO Conversation 每日2-3篇，提交30秒语音概括。
+阅读：长难句拆解每日3-5句，只圈主谓宾并截图。
+口语：原音跟读 TPO Task1/2 每日10-15分钟录音，关注流利度。
+写作：模板肌肉记忆综合或独立模板每日限时敲1遍（≤3分钟），截图打卡。`,
+            "进阶强化 (Development & Logic)": `词汇：同义词配对每日5组，练替换表达。
+听力：句子听写 TPO Lecture 每日3-5句（留意介词/冠词/时态）；信号词捕捉每日1篇，记录提示词及核心名词。
+阅读：段落总结每日2段，用中文一句话概括排除细节干扰。
+口语：关键词复述 TPO Task2/3/4 每日1题，按笔记复述60秒录音。
+写作：语料造句每日3句，使用当日高级短语/句型，老师点评语法。`,
+            "高分冲刺 (Advanced & Polishing)": `听力：倍速虐耳 TPO Lecture 每日1篇（1.2x-1.25x），做题或复述并提交正确率截图。
+阅读：限时刷题隔日1篇，18分钟完成，超时即失败。
+口语：One Take挑战每日1题，仅一次录音机会，说满45秒。
+写作：段落改写每周2次，用地道词汇和多样句式升级旧稿，上传前后对比。
+综合：模考后做错题归因，标记是词汇/定位/逻辑理解问题。`
+        }
     };
+
+    const TOEFL_PHASE_LIBRARY = [
+        {
+            name: "第一阶段：基础救生圈 (Foundation & Survival)",
+            timeRange: "",
+            weeklySchedule: "每日词汇听辨+听写，盲听TPO，长难句拆解，模板练习",
+            lessonLength: "1.5小时",
+            showFocus: true,
+            showMaterials: true,
+            focusListening: "听音辨义：高中3500+托福高频，每日100词，正确率>90%；单词听写每日30-50词，错词重听/罚抄；盲听磨耳：TPO Conversation 每日2-3篇，30秒语音概括。",
+            focusReading: "长难句拆解：每日3-5句，只圈主谓宾，打通语法理解。",
+            focusWriting: "模板肌肉记忆：综合/独立写作模板每日限时敲1遍（≤3分钟）。",
+            focusSpeaking: "原音跟读：TPO Task1/2 文本模仿语音语调，每日10-15分钟录音。",
+            teachingMaterialTasks: ""
+        },
+        {
+            name: "第二阶段：进阶强化 (Development & Logic)",
+            timeRange: "",
+            weeklySchedule: "每日精听+笔记，同义替换，段落总结，复述与造句",
+            lessonLength: "1.5小时",
+            showFocus: true,
+            showMaterials: true,
+            focusListening: "句子听写：TPO Lecture 每日3-5句，关注介词/冠词/时态；信号词捕捉：每日1篇记录提示词+核心名词。",
+            focusReading: "段落总结：每日2段 TPO 文章，用中文一句话概括，压缩信息。",
+            focusWriting: "语料造句：高级短语/句型每日3句，应用当天写作话题。",
+            focusSpeaking: "关键词复述：TPO Task2/3/4 每日1题，按笔记做60秒复述，覆盖要点。",
+            teachingMaterialTasks: ""
+        },
+        {
+            name: "第三阶段：高分冲刺 (Advanced & Polishing)",
+            timeRange: "",
+            weeklySchedule: "倍速听力 + 限时阅读 + One Take 口语 + 段落改写",
+            lessonLength: "1.5小时",
+            showFocus: true,
+            showMaterials: true,
+            focusListening: "倍速虐耳：TPO Lecture 1.2x-1.25x 每日1篇，做题或复述，标记错题原因。",
+            focusReading: "限时刷题：18分钟完成一篇阅读，隔日1篇，培养定位和抗干扰。",
+            focusWriting: "段落改写：每周2次，用地道表达与多样句式升级旧稿，结合错题归因。",
+            focusSpeaking: "One Take 挑战：每日Task1随机题，一次录音45秒，逼真考试压力。",
+            teachingMaterialTasks: ""
+        }
+    ];
 
     // --- COMPONENT ---
     const StudyPlanForm = ({ initialData, onGenerate, isGenerating }) => {
-        // Properly handle initialData - use it if provided, otherwise use defaults
-        const [student, setStudent] = useState(initialData?.student || {
-            name: "",
-            currentGradeAndPlan: "",
-            examDate: "",
-            targetTotalScore: "",
-            targetSubScore: ""
-        });
+        const buildInitialStudent = () => {
+            const examType = initialData?.student?.examType || "IELTS";
+            const defaultTotal = examType === "TOEFL" ? "90" : "6.5";
+            const defaultSub = examType === "TOEFL" ? "22" : "6.0";
+            return {
+                name: initialData?.student?.name || "",
+                currentGradeAndPlan: initialData?.student?.currentGradeAndPlan || "",
+                examDate: initialData?.student?.examDate || "",
+                targetTotalScore: initialData?.student?.targetTotalScore || defaultTotal,
+                targetSubScore: initialData?.student?.targetSubScore || defaultSub,
+                examType,
+            };
+        };
+
+        const [student, setStudent] = useState(buildInitialStudent());
         const [phases, setPhases] = useState(initialData?.phases || []);
         const [pricing, setPricing] = useState(initialData?.pricing || []);
 
@@ -131,9 +244,69 @@
             }
         }, []);
 
-        // Student Handlers
         const handleStudentChange = (e) => {
-            setStudent({ ...student, [e.target.name]: e.target.value });
+            const { name, value } = e.target;
+            if (name === "examType") {
+                const totalOptions = SCORE_OPTIONS[value] || [];
+                const subOptions = SUB_SCORE_OPTIONS[value] || [];
+                const updatedTotal = totalOptions.includes(student.targetTotalScore) ? student.targetTotalScore : (value === "TOEFL" ? "90" : "6.5");
+                const updatedSub = student.targetSubScore === "无要求"
+                    ? "无要求"
+                    : (subOptions.includes(student.targetSubScore) ? student.targetSubScore : (value === "TOEFL" ? "22" : "6.0"));
+
+                setStudent(prev => ({
+                    ...prev,
+                    examType: value,
+                    targetTotalScore: updatedTotal,
+                    targetSubScore: updatedSub,
+                }));
+
+                setPricing(rows => rows.map(row => {
+                    const options = SUBJECT_OPTIONS[value] || [];
+                    return options.includes(row.subject) ? row : { ...row, subject: options[0] || row.subject };
+                }));
+            } else {
+                setStudent({ ...student, [name]: value });
+            }
+        };
+
+        const focusPresets = FOCUS_PRESETS[student.examType] || {};
+        const materialPresets = MATERIAL_PRESETS[student.examType] || {};
+        const examLabel = EXAM_LABELS[student.examType] || "雅思/托福";
+        const scoreOptions = SCORE_OPTIONS[student.examType] || [];
+        const subScoreOptions = SUB_SCORE_OPTIONS[student.examType] || [];
+        const subjectOptions = SUBJECT_OPTIONS[student.examType] || SUBJECT_OPTIONS.IELTS;
+        const teachingPlaceholder = student.examType === "TOEFL"
+            ? "例如：盲听 TPO Conversation + 同义词配对每日任务..."
+            : "例如：《睿然雅思阅读教辅》Unit 1–3...";
+
+        const displayTotalScoreOptions = [...scoreOptions];
+        if (student.targetTotalScore && !displayTotalScoreOptions.includes(student.targetTotalScore)) {
+            displayTotalScoreOptions.unshift(student.targetTotalScore);
+        }
+        const displaySubScoreOptions = [...subScoreOptions];
+        if (student.targetSubScore && student.targetSubScore !== "无要求" && !displaySubScoreOptions.includes(student.targetSubScore)) {
+            displaySubScoreOptions.unshift(student.targetSubScore);
+        }
+
+        const buildToeflPhasesWithMaterials = () => TOEFL_PHASE_LIBRARY.map(phase => ({
+            ...phase,
+            id: crypto.randomUUID(),
+            teachingMaterialTasks: MATERIAL_PRESETS.TOEFL?.[phase.name] || phase.teachingMaterialTasks || "",
+        }));
+
+        const applyToeflPreset = () => {
+            setStudent(prev => ({
+                ...prev,
+                examType: "TOEFL",
+                targetTotalScore: SCORE_OPTIONS.TOEFL.includes(prev.targetTotalScore) ? prev.targetTotalScore : "90",
+                targetSubScore: prev.targetSubScore === "无要求" ? "无要求" : (SUB_SCORE_OPTIONS.TOEFL.includes(prev.targetSubScore) ? prev.targetSubScore : "22"),
+            }));
+            setPhases(buildToeflPhasesWithMaterials());
+            setPricing(rows => rows.map(row => {
+                const options = SUBJECT_OPTIONS.TOEFL;
+                return options.includes(row.subject) ? row : { ...row, subject: options[0] || row.subject };
+            }));
         };
 
         // Phase Handlers
@@ -166,7 +339,7 @@
         };
 
         const applyFocusPreset = (id, presetName) => {
-            const preset = FOCUS_PRESETS[presetName];
+            const preset = focusPresets[presetName];
             if (preset) {
                 setPhases(phases.map(p => p.id === id ? {
                     ...p,
@@ -179,7 +352,7 @@
         };
 
         const applyMaterialPreset = (id, presetName) => {
-            const preset = MATERIAL_PRESETS[presetName];
+            const preset = materialPresets[presetName];
             if (preset) {
                 setPhases(phases.map(p => {
                     if (p.id === id) {
@@ -198,7 +371,7 @@
             const newRow = {
                 id: crypto.randomUUID(),
                 phase: phases.length > 0 ? phases[0].name.split("：")[0] : "",
-                subject: "雅思阅读",
+                subject: subjectOptions[0] || "",
                 duration: 1.5,
                 count: 0,
                 totalDuration: 0,
@@ -253,7 +426,10 @@
                     <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
                         Sage Path <span className="text-brand-600">睿然国际教育</span>
                     </h1>
-                    <p className="text-slate-500 mt-2 font-medium">雅思学习方案生成系统</p>
+                    <p className="text-slate-500 mt-2 font-medium flex items-center gap-2">
+                        雅思 / 托福学习方案生成系统
+                        <span className="px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-semibold">{examLabel}方案</span>
+                    </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8">
@@ -295,6 +471,25 @@
 
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        考试类型
+                                    </label>
+                                    <div className="relative">
+                                        <select
+                                            name="examType"
+                                            value={student.examType}
+                                            onChange={handleStudentChange}
+                                            className="w-full rounded-lg border-slate-200 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-2.5 border appearance-none bg-white"
+                                        >
+                                            {EXAM_TYPES.map(option => (
+                                                <option key={option.value} value={option.value}>{option.label}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-3 w-4 h-4 text-slate-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">
                                         目标考试时间
                                     </label>
                                     <div className="relative">
@@ -325,7 +520,7 @@
                                             onChange={handleStudentChange}
                                             className="w-full rounded-lg border-slate-200 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-2.5 border appearance-none bg-white"
                                         >
-                                            {SCORE_OPTIONS.map(score => (
+                                            {displayTotalScoreOptions.map(score => (
                                                 <option key={score} value={score}>{score}分</option>
                                             ))}
                                         </select>
@@ -345,7 +540,7 @@
                                             className="w-full rounded-lg border-slate-200 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-2.5 border appearance-none bg-white"
                                         >
                                             <option value="无要求">无要求</option>
-                                            {SCORE_OPTIONS.map(score => (
+                                            {displaySubScoreOptions.map(score => (
                                                 <option key={score} value={score}>不低于 {score}</option>
                                             ))}
                                         </select>
@@ -364,7 +559,7 @@
                                         value={student.currentGradeAndPlan}
                                         onChange={handleStudentChange}
                                         className="w-full rounded-lg border-slate-200 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-2.5 border"
-                                        placeholder="描述学生年级、留学目的地、当前英语水平或雅思成绩..."
+                                        placeholder="描述学生年级、留学目的地、当前英语水平或考试成绩..."
                                     />
                                 </div>
                             </div>
@@ -382,13 +577,23 @@
                                     课程阶段规划
                                 </h2>
                             </div>
-                            <button
-                                type="button"
-                                onClick={addPhase}
-                                className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-brand-700 bg-brand-50 hover:bg-brand-100 transition-colors"
-                            >
-                                <Plus className="h-4 w-4 mr-1.5" /> 添加阶段
-                            </button>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    type="button"
+                                    onClick={applyToeflPreset}
+                                    className="inline-flex items-center px-4 py-2 border border-brand-200 text-sm leading-4 font-medium rounded-lg text-brand-700 bg-white hover:bg-brand-50 transition-colors"
+                                    title="一键填充托福三阶段模板"
+                                >
+                                    <Wand2 className="h-4 w-4 mr-1.5" /> 托福三阶段模板
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={addPhase}
+                                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-brand-700 bg-brand-50 hover:bg-brand-100 transition-colors"
+                                >
+                                    <Plus className="h-4 w-4 mr-1.5" /> 添加阶段
+                                </button>
+                            </div>
                         </div>
 
                         {phases.map((phase, index) => (
@@ -481,7 +686,7 @@
                                                         defaultValue=""
                                                     >
                                                         <option value="" disabled>✨ 快速填充 (选择模板)</option>
-                                                        {Object.keys(FOCUS_PRESETS).map(key => (
+                                                        {Object.keys(focusPresets).map(key => (
                                                             <option key={key} value={key}>{key}</option>
                                                         ))}
                                                     </select>
@@ -541,7 +746,7 @@
                                                         defaultValue=""
                                                     >
                                                         <option value="" disabled>✨ 快速填充 (选择模板)</option>
-                                                        {Object.keys(MATERIAL_PRESETS).map(key => (
+                                                        {Object.keys(materialPresets).map(key => (
                                                             <option key={key} value={key}>{key}</option>
                                                         ))}
                                                     </select>
@@ -562,7 +767,7 @@
                                                         rows={4}
                                                         value={phase.teachingMaterialTasks}
                                                         onChange={(e) => handlePhaseChange(phase.id, "teachingMaterialTasks", e.target.value)}
-                                                        placeholder="例如：《睿然雅思阅读教辅》Unit 1–3..."
+                                                        placeholder={teachingPlaceholder}
                                                         className="w-full rounded-md border-brand-200 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-2 border bg-white"
                                                     />
                                                 </div>
@@ -625,10 +830,9 @@
                                                     onChange={(e) => handlePricingChange(row.id, "subject", e.target.value)}
                                                     className="w-full text-sm border-slate-300 rounded p-1.5 border bg-white"
                                                 >
-                                                    <option value="雅思听力">雅思听力</option>
-                                                    <option value="雅思阅读">雅思阅读</option>
-                                                    <option value="雅思写作">雅思写作</option>
-                                                    <option value="雅思口语">雅思口语</option>
+                                                    {Array.from(new Set([...(subjectOptions || []), row.subject].filter(Boolean))).map(subject => (
+                                                        <option key={subject} value={subject}>{subject}</option>
+                                                    ))}
                                                 </select>
                                             </td>
                                             <td className="px-4 py-3">
@@ -742,6 +946,7 @@
                 name: "",
                 currentGradeAndPlan: "",
                 examDate: "",
+                examType: "IELTS",
                 targetTotalScore: "6.5",
                 targetSubScore: "6.0"
             },
