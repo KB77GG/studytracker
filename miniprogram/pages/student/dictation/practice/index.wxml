@@ -15,7 +15,7 @@
 
     <!-- Input Area (Only show when not revealing answer) -->
     <view class="input-area" wx:if="{{!showResult}}">
-      <input class="word-input" 
+      <input class="word-input {{inputError ? 'incorrect' : ''}}" 
              placeholder="听音输入单词" 
              focus="{{inputFocus}}" 
              value="{{inputValue}}"
@@ -31,6 +31,10 @@
         <text class="phonetic">[{{currentWord.phonetic || '-'}}]</text>
       </view>
       <text class="translation">{{currentWord.translation || '暂无释义'}}</text>
+      <view class="compare-block">
+        <view class="answer-row wrong">你的拼写：{{userAnswer || '（空）'}}</view>
+        <view class="answer-row correct">正确拼写：{{currentWord.word}}</view>
+      </view>
       
       <!-- User Answer Display -->
       <view style="margin-top: 20rpx; font-size: 28rpx; color: {{isCorrect ? '#67C23A' : '#F56C6C'}}">

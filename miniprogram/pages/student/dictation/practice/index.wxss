@@ -164,6 +164,27 @@
   margin-top: 10rpx;
 }
 
+.compare-block {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  border: 2rpx solid #f0f1f5;
+}
+
+.answer-row {
+  font-size: 28rpx;
+  margin-bottom: 10rpx;
+}
+
+.answer-row.wrong {
+  color: #F56C6C;
+}
+
+.answer-row.correct {
+  color: #67C23A;
+}
+
 /* Action Bar */
 .action-bar {
   margin-top: 60rpx;

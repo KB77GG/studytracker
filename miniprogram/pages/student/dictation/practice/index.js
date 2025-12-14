@@ -9,6 +9,10 @@ Page({
         currentWord: {},
         totalWords: 0,
         progressKey: null,
+        wrongWords: [],
+        correctCount: 0,
+        userAnswer: '',
+        inputError: false,
 
         // UI State
         inputValue: '',
@@ -161,7 +165,9 @@ Page({
             inputValue: '',
             showResult: false,
             isCorrect: false,
-            inputFocus: true
+            inputFocus: true,
+            inputError: false,
+            userAnswer: ''
         });
         this.saveProgress(index);
 
@@ -211,7 +217,9 @@ Page({
 
         this.setData({
             showResult: true,
-            isCorrect: isCorrect
+            isCorrect: isCorrect,
+            userAnswer: input,
+            inputError: !isCorrect
         });
 
         if (isCorrect) {
