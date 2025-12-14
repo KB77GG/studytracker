@@ -289,6 +289,20 @@
             displaySubScoreOptions.unshift(student.targetSubScore);
         }
 
+        // Ensure pricing rows always have a valid subject for current exam type
+        useEffect(() => {
+            const opts = subjectOptions || [];
+            if (!opts.length) return;
+            setPricing(rows =>
+                rows.map(row => {
+                    if (!row.subject || !opts.includes(row.subject)) {
+                        return { ...row, subject: opts[0] };
+                    }
+                    return row;
+                })
+            );
+        }, [subjectOptions]);
+
         const buildToeflPhasesWithMaterials = () => TOEFL_PHASE_LIBRARY.map(phase => ({
             ...phase,
             id: crypto.randomUUID(),
@@ -830,6 +844,9 @@
                                                     onChange={(e) => handlePricingChange(row.id, "subject", e.target.value)}
                                                     className="w-full text-sm border-slate-300 rounded p-1.5 border bg-white"
                                                 >
+                                                    {(!subjectOptions || !subjectOptions.length) && (
+                                                        <option value="">请选择科目</option>
+                                                    )}
                                                     {Array.from(new Set([...(subjectOptions || []), row.subject].filter(Boolean))).map(subject => (
                                                         <option key={subject} value={subject}>{subject}</option>
                                                     ))}
