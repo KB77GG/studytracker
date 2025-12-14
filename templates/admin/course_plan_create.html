@@ -842,7 +842,7 @@
                                                 <select
                                                     value={row.subject}
                                                     onChange={(e) => handlePricingChange(row.id, "subject", e.target.value)}
-                                                    className="w-full text-sm border-slate-300 rounded p-1.5 border bg-white"
+                                                    className="w-full min-w-[140px] text-sm border-slate-300 rounded p-1.5 border bg-white"
                                                 >
                                                     {(!subjectOptions || !subjectOptions.length) && (
                                                         <option value="">请选择科目</option>
