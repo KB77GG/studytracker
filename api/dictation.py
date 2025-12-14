@@ -5,12 +5,44 @@ Handles word book management, Excel upload, TTS generation, and practice records
 
 import os
 from datetime import datetime
+from functools import wraps
+import jwt
 from flask import Blueprint, current_app, jsonify, request, send_file
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from sqlalchemy.orm import joinedload
 from models import db, User, DictationBook, DictationWord, DictationRecord, Task
+
+
+def require_session_or_bearer(fn):
+    """Allow either Flask-Login session or Authorization Bearer token."""
+
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        if current_user.is_authenticated:
+            return fn(*args, **kwargs)
+
+        auth_header = request.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
+            token = auth_header.split(" ", 1)[1]
+            try:
+                payload = jwt.decode(
+                    token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
+                )
+            except jwt.PyJWTError:
+                return jsonify({"ok": False, "error": "invalid_token"}), 401
+
+            user = User.query.get(int(payload.get("sub", 0)))
+            if not user or not user.is_active:
+                return jsonify({"ok": False, "error": "forbidden"}), 403
+
+            request.current_api_user = user
+            return fn(*args, **kwargs)
+
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+
+    return wrapper
 
 dictation_bp = Blueprint("dictation", __name__, url_prefix="/api/dictation")
 
@@ -41,7 +73,7 @@ def role_required(*roles):
 # ============================================================================
 
 @dictation_bp.route("/books", methods=["GET"])
-@login_required
+@require_session_or_bearer
 def get_books():
     """Get all dictation books."""
     books = DictationBook.query.options(joinedload(DictationBook.creator)).filter_by(is_deleted=False, is_active=True).order_by(DictationBook.created_at.desc()).all()
@@ -169,7 +201,7 @@ def upload_book():
 
 
 @dictation_bp.route("/books/<int:book_id>", methods=["GET"])
-@login_required
+@require_session_or_bearer
 def get_book(book_id):
     """Get a specific book with its words."""
     book = DictationBook.query.filter_by(id=book_id, is_deleted=False).first_or_404()
@@ -215,7 +247,7 @@ def delete_book(book_id):
 # ============================================================================
 
 @dictation_bp.route("/words/<int:word_id>/audio", methods=["GET"])
-@login_required
+@require_session_or_bearer
 def get_word_audio(word_id):
     """Get audio file for a word. Use ?accent=uk for British, default is American."""
     word = DictationWord.query.get_or_404(word_id)
