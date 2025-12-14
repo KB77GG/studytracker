@@ -774,42 +774,70 @@ def api_student_upload_evidence(item_id):
 
 
 def _build_parent_report(student: StudentProfile, start_date: date, end_date: date):
-    items = (
-        PlanItem.query.join(StudyPlan)
-        .filter(
-            StudyPlan.student_id == student.id,
-            StudyPlan.plan_date >= start_date,
-            StudyPlan.plan_date <= end_date,
-            StudyPlan.is_deleted.is_(False),
-            PlanItem.is_deleted.is_(False),
+    def _collect_stats(range_start: date, range_end: date):
+        items = (
+            PlanItem.query.join(StudyPlan)
+            .filter(
+                StudyPlan.student_id == student.id,
+                StudyPlan.plan_date >= range_start,
+                StudyPlan.plan_date <= range_end,
+                StudyPlan.is_deleted.is_(False),
+                PlanItem.is_deleted.is_(False),
+            )
+            .options(joinedload(PlanItem.plan))
+            .order_by(StudyPlan.plan_date.asc(), PlanItem.order_index.asc())
+            .all()
         )
-        .options(joinedload(PlanItem.plan))
-        .order_by(StudyPlan.plan_date.asc(), PlanItem.order_index.asc())
-        .all()
-    )
 
-    filtered_items = [
-        item
-        for item in items
-        if item.review_status in (PlanItem.REVIEW_APPROVED, PlanItem.REVIEW_PARTIAL, PlanItem.REVIEW_REJECTED)
-    ]
-    total_items = len(items)
-    reviewed_items = len(filtered_items)
+        filtered_items = [
+            item
+            for item in items
+            if item.review_status
+            in (
+                PlanItem.REVIEW_APPROVED,
+                PlanItem.REVIEW_PARTIAL,
+                PlanItem.REVIEW_REJECTED,
+            )
+        ]
+        total_items = len(items)
+        reviewed_items = len(filtered_items)
 
-    planned_total = sum(item.planned_minutes for item in items)
-    actual_total = sum((item.actual_seconds or 0) for item in items)
-    manual_total = sum((item.manual_minutes or 0) * 60 for item in items)
+        planned_total = sum(item.planned_minutes for item in items)
+        actual_total = sum((item.actual_seconds or 0) for item in items)
+        manual_total = sum((item.manual_minutes or 0) * 60 for item in items)
 
-    module_breakdown = defaultdict(lambda: {"planned": 0, "actual": 0})
-    daily = defaultdict(list)
-    for item in items:
-        module_breakdown[item.module]["planned"] += item.planned_minutes
-        module_breakdown[item.module]["actual"] += int((item.actual_seconds or 0) / 60)
-        daily[item.plan.plan_date].append(item)
+        module_breakdown = defaultdict(lambda: {"planned": 0, "actual": 0})
+        daily = defaultdict(list)
+        for item in items:
+            module_breakdown[item.module]["planned"] += item.planned_minutes
+            module_breakdown[item.module]["actual"] += int(
+                (item.actual_seconds or 0) / 60
+            )
+            daily[item.plan.plan_date].append(item)
 
-    completion_rate = (
-        round(reviewed_items * 100.0 / total_items, 1) if total_items else 0.0
-    )
+        completion_rate = (
+            round(reviewed_items * 100.0 / total_items, 1) if total_items else 0.0
+        )
+
+        return {
+            "items": items,
+            "daily": daily,
+            "planned_total": planned_total,
+            "actual_total": actual_total,
+            "manual_total": manual_total,
+            "module_breakdown": module_breakdown,
+            "completion_rate": completion_rate,
+            "reviewed_items": reviewed_items,
+            "total_items": total_items,
+        }
+
+    # Current week stats
+    cur = _collect_stats(start_date, end_date)
+
+    # Previous period for comparison
+    prev_end = start_date - timedelta(days=1)
+    prev_start = prev_end - timedelta(days=6)
+    prev = _collect_stats(prev_start, prev_end)
 
     score_records = (
         ScoreRecord.query.filter(
@@ -821,19 +849,89 @@ def _build_parent_report(student: StudentProfile, start_date: date, end_date: da
         .all()
     )
 
+    def delta(cur_val: float, prev_val: float) -> float:
+        return round(cur_val - prev_val, 1)
+
+    module_sorted = sorted(
+        cur["module_breakdown"].items(),
+        key=lambda kv: kv[1]["actual"],
+        reverse=True,
+    )
+
+    # Highlights / risks heuristic
+    highlights = []
+    risks = []
+    if cur["completion_rate"] >= 85:
+        highlights.append("完成率优秀，继续保持当前节奏。")
+    elif cur["completion_rate"] >= 70:
+        highlights.append("完成率较稳定，可适度提升难度或任务量。")
+    else:
+        risks.append("完成率偏低，需督促按时提交。")
+
+    if module_sorted:
+        top_mod, top_data = module_sorted[0]
+        highlights.append(f"{top_mod}投入最多（实际 {top_data['actual']} 分）")
+
+    if cur["actual_total"] < cur["planned_total"] * 0.6:
+        risks.append("实际用时明显低于计划，建议查原因或调整计划。")
+
+    # Sample evidences (up to 3)
+    sample_evidences = []
+    for item in cur["items"]:
+        evs = [
+            ev
+            for ev in getattr(item, "evidences", []) or []
+            if not getattr(ev, "is_deleted", False)
+        ]
+        if not evs:
+            continue
+        for ev in evs:
+            sample_evidences.append(
+                {
+                    "task": item.task_name,
+                    "module": item.module,
+                    "url": ev.storage_path,
+                    "type": ev.file_type or "file",
+                }
+            )
+            if len(sample_evidences) >= 3:
+                break
+        if len(sample_evidences) >= 3:
+            break
+
+    # Classification summary
+    classification = [
+        {"module": mod, "planned": data["planned"], "actual": data["actual"]}
+        for mod, data in module_sorted
+    ]
+
     return {
         "student": student,
         "start_date": start_date,
         "end_date": end_date,
-        "items": items,
-        "daily_items": dict(sorted(daily.items())),
-        "planned_minutes_total": planned_total,
-        "actual_minutes_total": round(actual_total / 60),
-        "manual_minutes_total": round(manual_total / 60),
-        "completion_rate": completion_rate,
-        "module_breakdown": dict(module_breakdown),
-        "reviewed_items": reviewed_items,
-        "total_items": total_items,
+        "items": cur["items"],
+        "daily_items": dict(sorted(cur["daily"].items())),
+        "planned_minutes_total": cur["planned_total"],
+        "actual_minutes_total": round(cur["actual_total"] / 60),
+        "manual_minutes_total": round(cur["manual_total"] / 60),
+        "completion_rate": cur["completion_rate"],
+        "module_breakdown": dict(cur["module_breakdown"]),
+        "reviewed_items": cur["reviewed_items"],
+        "total_items": cur["total_items"],
+        "comparison": {
+            "completion_delta": delta(cur["completion_rate"], prev["completion_rate"]),
+            "actual_delta": delta(
+                round(cur["actual_total"] / 60, 1),
+                round(prev["actual_total"] / 60, 1),
+            ),
+            "planned_delta": delta(
+                round(cur["planned_total"], 1), round(prev["planned_total"], 1)
+            ),
+        },
+        "highlights": highlights,
+        "risks": risks,
+        "sample_evidences": sample_evidences,
+        "classification": classification,
         "score_records": score_records,
     }
 

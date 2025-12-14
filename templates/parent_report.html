@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ student.full_name }} 学习周报</h2>
-<p class="muted">{{ start_date }} — {{ end_date }}</p>
+<div class="report-header">
+  <div>
+    <h2>{{ student.full_name }} 学习周报</h2>
+    <p class="muted">{{ start_date }} — {{ end_date }}</p>
+  </div>
+  <div class="export-actions">
+    <button class="btn ghost" onclick="window.print()">导出 PDF/打印</button>
+  </div>
+</div>
 
 {% if not readonly %}
   <div class="share-box">
@@ -17,19 +24,51 @@
   </div>
 {% endif %}
 
+<section class="card highlight-card">
+  <div class="highlight-column">
+    <div class="tag good">本周亮点</div>
+    {% if highlights %}
+      <ul>
+        {% for h in highlights %}<li>{{ h }}</li>{% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">暂无亮点</p>
+    {% endif %}
+  </div>
+  <div class="highlight-column">
+    <div class="tag warn">关注风险</div>
+    {% if risks %}
+      <ul>
+        {% for r in risks %}<li>{{ r }}</li>{% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">本周无明显风险</p>
+    {% endif %}
+  </div>
+</section>
+
 <section class="card summary">
   <div class="summary-grid">
     <div>
       <h3>累计计划</h3>
       <p>{{ planned_minutes_total }} 分钟</p>
+      <span class="delta {{ comparison.planned_delta >=0 and 'up' or 'down' }}">
+        {{ comparison.planned_delta >=0 and '▲' or '▼' }} {{ comparison.planned_delta }} 分
+      </span>
     </div>
     <div>
       <h3>实际完成</h3>
       <p>{{ actual_minutes_total }} 分钟</p>
+      <span class="delta {{ comparison.actual_delta >=0 and 'up' or 'down' }}">
+        {{ comparison.actual_delta >=0 and '▲' or '▼' }} {{ comparison.actual_delta }} 分
+      </span>
     </div>
     <div>
       <h3>完成率</h3>
       <p>{{ completion_rate }}%</p>
+      <span class="delta {{ comparison.completion_delta >=0 and 'up' or 'down' }}">
+        {{ comparison.completion_delta >=0 and '▲' or '▼' }} {{ comparison.completion_delta }}%
+      </span>
     </div>
     <div>
       <h3>提交项目</h3>
@@ -40,12 +79,12 @@
 
 <section class="card">
   <h3>模块用时分布</h3>
-  {% if module_breakdown %}
+  {% if classification %}
     <ul class="module-breakdown">
-      {% for module, data in module_breakdown.items() %}
+      {% for row in classification %}
         <li>
-          <strong>{{ module }}</strong>
-          <span>计划 {{ data.planned }} 分 ｜ 实际 {{ data.actual }} 分</span>
+          <strong>{{ row.module }}</strong>
+          <span>计划 {{ row.planned }} 分 ｜ 实际 {{ row.actual }} 分</span>
         </li>
       {% endfor %}
     </ul>
@@ -128,6 +167,179 @@
     <p class="muted">尚未录入测评成绩。</p>
   {% endif %}
 </section>
+
+<section class="card">
+  <h3>作业示例（证据）</h3>
+  {% if sample_evidences %}
+    <div class="evidence-grid">
+      {% for ev in sample_evidences %}
+        <div class="evidence-card">
+          <div class="muted small">{{ ev.module }} · {{ ev.task }}</div>
+          {% if ev.type == 'audio' %}
+            <audio controls src="{{ ev.url }}" style="width:100%; margin-top:8px;"></audio>
+          {% else %}
+            <a href="{{ ev.url }}" target="_blank" class="evidence-link">查看文件</a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">本周暂未上传作业示例。</p>
+  {% endif %}
+</section>
+
+<style>
+  .report-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .export-actions .btn{
+    padding:8px 12px;
+    border-radius:10px;
+    border:1px solid #d0d7de;
+    background:#f6f8fa;
+    cursor:pointer;
+  }
+  .highlight-card{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:12px;
+  }
+  .highlight-column{
+    background:#f7f9fb;
+    border-radius:12px;
+    padding:12px;
+  }
+  .highlight-column ul{
+    padding-left:18px;
+    margin:8px 0 0;
+  }
+  .tag.good{
+    display:inline-block;
+    background:#e8f5e9;
+    color:#2e7d32;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+  }
+  .tag.warn{
+    display:inline-block;
+    background:#fff3e0;
+    color:#e65100;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+  }
+  .summary-grid h3 {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+  }
+  .summary-grid p {
+    font-size: 24px;
+    margin: 6px 0;
+    font-weight: 700;
+  }
+  .delta{
+    font-size:12px;
+    font-weight:600;
+  }
+  .delta.up{color:#2e7d32;}
+  .delta.down{color:#c62828;}
+
+  .module-breakdown {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .evidence-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
+  }
+  .evidence-card{
+    padding:10px;
+    border:1px solid #eef2f7;
+    border-radius:10px;
+    background:#fafbfc;
+  }
+  .evidence-link{
+    display:inline-block;
+    margin-top:6px;
+    color:#2b6cb0;
+    text-decoration:underline;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+  }
+  table th,
+  table td {
+    border: 1px solid #e5e7eb;
+    padding: 8px;
+    text-align: left;
+  }
+  table th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #374151;
+  }
+  .tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+  .tag.approved { background: #ecfdf3; color: #14804a; }
+  .tag.partial { background: #fff7e6; color: #d97706; }
+  .tag.rejected { background: #fef2f2; color: #b91c1c; }
+  .tag.waiting { background: #eef2ff; color: #4338ca; }
+  .score-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .score-list li {
+    padding: 10px 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+  }
+  .muted { color: #6b7280; }
+  .muted.small { font-size: 12px; }
+  .card {
+    margin-top: 16px;
+    padding: 14px;
+  }
+  @media (max-width: 768px) {
+    .summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .report-header{
+      flex-direction:column;
+      align-items:flex-start;
+    }
+  }
+</style>
 
 {% if not readonly %}
 <script>
