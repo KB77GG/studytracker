@@ -272,7 +272,7 @@
 
 .btn-submit {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2C8A82 0%, #1F6C65 100%);
   color: white;
   border-radius: 50rpx;
   font-size: 32rpx;
@@ -320,7 +320,7 @@
 }
 
 .btn-play-feedback {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2C8A82 0%, #1F6C65 100%);
   color: white;
 }
 
@@ -421,9 +421,9 @@
 }
 
 .speed-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2C8A82 0%, #1F6C65 100%);
   color: white;
-  border-color: #667eea;
+  border-color: #1F6C65;
 }
 
 .subtitle-with-play {
@@ -460,7 +460,7 @@
 }
 
 .word-item:active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2C8A82 0%, #1F6C65 100%);
   color: white;
   transform: scale(0.95);
 }
@@ -489,7 +489,7 @@
 }
 
 .word-tag:active {
-  background: #e0e7ff;
-  color: #667eea;
+  background: #E5F3F1;
+  color: #1F6C65;
   transform: scale(0.98);
 }

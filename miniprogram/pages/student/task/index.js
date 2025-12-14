@@ -312,7 +312,7 @@ Page({
                 content: '您还没有记录学习时间（或时间少于1分钟）。\n\n建议：返回首页启动计时器记录真实学习时长。\n\n确定要继续提交吗？',
                 confirmText: '继续提交',
                 cancelText: '返回',
-                confirmColor: '#667eea'
+                confirmColor: '#1F6C65'
             })
 
             if (!res.confirm) {

@@ -2,7 +2,7 @@ Component({
     data: {
         selected: 0,
         color: "#7A7E83",
-        selectedColor: "#667eea",
+        selectedColor: "#1F6C65",
         list: [], // Will be set based on role
         studentList: [{
             pagePath: "/pages/student/home/index",
