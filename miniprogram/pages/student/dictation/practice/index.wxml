@@ -12,6 +12,13 @@
       <view class="play-icon"></view>
     </view>
     <view class="play-hint">点击播放单词发音</view>
+    <view class="play-controls">
+      <button class="mini-btn" size="mini" bindtap="playCurrentWord">重播</button>
+      <view class="switch-row">
+        <text>连播</text>
+        <switch checked="{{autoPlay}}" bindchange="onToggleAutoPlay"></switch>
+      </view>
+    </view>
 
     <!-- Input Area (Only show when not revealing answer) -->
     <view class="input-area" wx:if="{{!showResult}}">

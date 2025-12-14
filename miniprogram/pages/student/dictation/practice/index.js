@@ -10,9 +10,12 @@ Page({
         totalWords: 0,
         progressKey: null,
         wrongWords: [],
+        wrongWordsDetail: [],
         correctCount: 0,
         userAnswer: '',
         inputError: false,
+        autoPlay: false,
+        practiceStart: null,
 
         // UI State
         inputValue: '',
@@ -40,6 +43,11 @@ Page({
         this.audioCtx.onError((res) => {
             console.error('Audio Error:', res.errMsg);
             wx.showToast({ title: '音频播放失败', icon: 'none' });
+        });
+        this.audioCtx.onEnded(() => {
+            if (this.data.autoPlay && this.data.showResult) {
+                this.nextWord();
+            }
         });
     },
 
@@ -135,7 +143,8 @@ Page({
                         bookTitle: this.data.taskId ? this.data.bookTitle : res.data.book.title,
                         words: words,
                         totalWords: words.length,
-                        currentIndex: 0
+                        currentIndex: 0,
+                        practiceStart: Date.now()
                     });
 
                     const resumeIndex = this.loadProgress(words.length);
@@ -189,6 +198,10 @@ Page({
         this.audioCtx.play();
     },
 
+    onToggleAutoPlay(e) {
+        this.setData({ autoPlay: e.detail.value });
+    },
+
     onInput: function (e) {
         this.setData({
             inputValue: e.detail.value
@@ -209,8 +222,15 @@ Page({
 
         if (!isCorrect) {
             const wrongList = this.data.wrongWords;
+            const wrongDetail = this.data.wrongWordsDetail;
             wrongList.push(`${this.data.currentWord.word} (写成了: ${input})`);
-            this.setData({ wrongWords: wrongList });
+            wrongDetail.push({
+                word: this.data.currentWord.word,
+                translation: this.data.currentWord.translation,
+                phonetic: this.data.currentWord.phonetic,
+                wrong: input
+            });
+            this.setData({ wrongWords: wrongList, wrongWordsDetail: wrongDetail });
         } else {
             this.setData({ correctCount: this.data.correctCount + 1 });
         }
@@ -240,6 +260,7 @@ Page({
         const total = this.data.totalWords;
         const correct = this.data.correctCount;
         const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
+        const durationSeconds = this.data.practiceStart ? Math.floor((Date.now() - this.data.practiceStart) / 1000) : 0;
 
         let content = `正确率: ${accuracy}%`;
         if (this.data.wrongWords.length > 0) {
@@ -249,19 +270,23 @@ Page({
         wx.showModal({
             title: '练习完成',
             content: content,
-            confirmText: '提交结果',
-            showCancel: !this.data.taskId, // If it's a task, force submit (kind of)
+            confirmText: this.data.taskId ? '提交结果' : '返回',
+            cancelText: this.data.wrongWords.length ? '重练错词' : '再听一遍',
+            showCancel: true,
             success: (res) => {
                 if (res.confirm && this.data.taskId) {
-                    this.submitTaskResult(accuracy, this.data.wrongWords);
+                    this.submitTaskResult(accuracy, this.data.wrongWords, durationSeconds);
                 } else if (res.confirm || !this.data.taskId) {
+                    this.clearProgress();
                     wx.navigateBack();
+                } else if (res.cancel && this.data.wrongWords.length) {
+                    this.restartWrongWords();
                 }
             }
         });
     },
 
-    submitTaskResult: function (accuracy, wrongWords) {
+    submitTaskResult: function (accuracy, wrongWords, durationSeconds = 0) {
         wx.showLoading({ title: '提交中...' });
         wx.request({
             url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${this.data.taskId}/submit`,
@@ -274,7 +299,7 @@ Page({
             data: {
                 accuracy: accuracy,
                 wrong_words: wrongWords.join(', '),
-                duration_seconds: 0 // Could handle timing later
+                duration_seconds: durationSeconds
             },
             success: (res) => {
                 wx.hideLoading();
@@ -324,5 +349,32 @@ Page({
         } catch (e) {
             console.warn('Failed to clear progress', e);
         }
+    },
+
+    // 重练错词
+    restartWrongWords() {
+        if (!this.data.wrongWordsDetail.length) {
+            this.loadWord(0);
+            return;
+        }
+        const wrongOnly = this.data.wrongWordsDetail.map((w, idx) => ({
+            id: idx + 1,
+            word: w.word,
+            translation: w.translation,
+            phonetic: w.phonetic
+        }));
+        this.setData({
+            words: wrongOnly,
+            totalWords: wrongOnly.length,
+            currentIndex: 0,
+            wrongWords: [],
+            wrongWordsDetail: [],
+            correctCount: 0,
+            showResult: false,
+            inputValue: '',
+            userAnswer: '',
+            practiceStart: Date.now()
+        });
+        this.loadWord(0);
     }
 })
