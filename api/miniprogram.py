@@ -223,6 +223,7 @@ def submit_task(task_id):
             
         task.student_submitted = True
         task.submitted_at = datetime.now()
+        task.status = "done"  # 标记完成
         
         # Merge wrong words into note if provided
         final_note = note
@@ -238,6 +239,7 @@ def submit_task(task_id):
             
         if accuracy is not None:
             task.accuracy = float(accuracy)
+            task.completion_rate = 100.0
             
         db.session.commit()
         return jsonify({"ok": True})
