@@ -294,6 +294,8 @@ def start_timer(task_id):
             return jsonify({"ok": False, "error": "forbidden"}), 403
         
         # For old Task format, we don't create session, just return success
+        task.status = "in_progress"
+        db.session.commit()
         # The miniprogram will handle timer locally
         return jsonify({
             "ok": True,
@@ -323,6 +325,7 @@ def start_timer(task_id):
     # Update status if pending
     if item.student_status == PlanItem.STUDENT_PENDING:
         item.student_status = PlanItem.STUDENT_IN_PROGRESS
+        item.started_at = now
         
     db.session.commit()
     
