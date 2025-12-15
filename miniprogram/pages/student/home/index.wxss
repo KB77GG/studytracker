@@ -11,6 +11,7 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 40rpx;
+  gap: 16rpx;
 }
 
 .greeting {
@@ -37,6 +38,16 @@
   border-radius: 30rpx;
   font-size: 24rpx;
   font-weight: 500;
+}
+
+.sub-btn {
+  border: 1px solid #20756F;
+  color: #20756F;
+  background: #EAF6F4;
+  padding: 8rpx 16rpx;
+  border-radius: 24rpx;
+  font-size: 22rpx;
+  line-height: 1.6;
 }
 
 /* Progress Card */

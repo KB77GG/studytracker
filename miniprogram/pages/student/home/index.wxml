@@ -10,6 +10,7 @@
         {{dateStr}} <text class="picker-arrow">▼</text>
       </view>
     </picker>
+    <button class="sub-btn" size="mini" bindtap="requestSubscribe" wx:if="{{!hasSubscribed}}">开启任务提醒</button>
   </view>
 
   <!-- 进度卡片 -->

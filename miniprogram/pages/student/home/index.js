@@ -15,7 +15,8 @@ Page({
         },
         loading: true,
         activeTimerId: null,
-        timerInterval: null
+        timerInterval: null,
+        hasSubscribed: false
     },
 
     onLoad() {
@@ -44,6 +45,9 @@ Page({
 
         // Restore timer if there's an active one in storage
         this.restoreTimerIfNeeded()
+
+        const subFlag = wx.getStorageSync('task_subscribed') || false
+        this.setData({ hasSubscribed: subFlag })
     },
 
     // Restore timer state from storage
@@ -115,6 +119,26 @@ Page({
         } catch (e) {
             console.error('Restore timer error:', e)
         }
+    },
+
+    requestSubscribe() {
+        const tmplId = 'GElWxP8srvY_TwH-h69q4XcmgLyNZBsvjp6rSt8dhUU'
+        wx.requestSubscribeMessage({
+            tmplIds: [tmplId],
+            success: (res) => {
+                if (res[tmplId] === 'accept') {
+                    wx.setStorageSync('task_subscribed', true)
+                    this.setData({ hasSubscribed: true })
+                    wx.showToast({ title: '提醒已开启', icon: 'success' })
+                } else {
+                    wx.showToast({ title: '已拒绝或未选择', icon: 'none' })
+                }
+            },
+            fail: (err) => {
+                console.warn('subscribe fail', err)
+                wx.showToast({ title: '订阅失败', icon: 'none' })
+            }
+        })
     },
 
     onHide() {
