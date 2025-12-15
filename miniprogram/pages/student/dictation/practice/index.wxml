@@ -52,6 +52,10 @@
         <text wx:if="{{isCorrect}}">✓ 回答正确</text>
         <text wx:else>✗ 你的答案: {{inputValue}}</text>
       </view>
+
+      <view class="retry-bar" wx:if="{{wrongWordsDetail.length > 0}}">
+        <button class="mini-btn ghost" size="mini" bindtap="restartWrongWords">重练错词</button>
+      </view>
     </view>
   </view>
 

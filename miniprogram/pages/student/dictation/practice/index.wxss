@@ -125,12 +125,24 @@
   line-height: 60rpx;
 }
 
+.mini-btn.ghost{
+  background: #EAF6F4;
+  border-color: #20756F;
+  color: #20756F;
+}
+
 .switch-row {
   display: flex;
   align-items: center;
   gap: 10rpx;
   color: #606266;
   font-size: 26rpx;
+}
+
+.retry-bar{
+  margin-top: 20rpx;
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* Input Area */
