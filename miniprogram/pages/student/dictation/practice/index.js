@@ -58,6 +58,7 @@ Page({
 
     fetchTask: function (taskId) {
         wx.showLoading({ title: '加载任务...' });
+        this.startBackendTimer(taskId);
         wx.request({
             url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${taskId}`,
             method: 'GET',
@@ -100,6 +101,21 @@ Page({
                 wx.hideLoading();
                 console.error(err);
                 wx.showToast({ title: 'Network Error', icon: 'none' });
+            }
+        });
+    },
+
+    startBackendTimer(taskId) {
+        if (!taskId) return;
+        wx.request({
+            url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${taskId}/timer/start`,
+            method: 'POST',
+            header: {
+                'Cookie': wx.getStorageSync('cookie'),
+                'Authorization': `Bearer ${wx.getStorageSync('token')}`
+            },
+            fail: (err) => {
+                console.warn('start timer failed', err);
             }
         });
     },
