@@ -16,6 +16,12 @@
   padding: 0 10rpx;
 }
 
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:16rpx;
+}
+
 .book-title {
   font-size: 28rpx;
   font-weight: 600;
@@ -33,6 +39,15 @@
   background: rgba(54, 165, 157, 0.12);
   padding: 6rpx 20rpx;
   border-radius: 30rpx;
+}
+
+.timer-pill{
+  padding: 6rpx 16rpx;
+  background: #EAF6F4;
+  color: #20756F;
+  border-radius: 30rpx;
+  font-weight: 600;
+  font-size: 24rpx;
 }
 
 /* Card */

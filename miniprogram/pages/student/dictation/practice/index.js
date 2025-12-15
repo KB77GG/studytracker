@@ -18,6 +18,8 @@ Page({
         practiceStart: null,
         accumulatedSeconds: 0,
         isSubmitting: false,
+        displayTime: '00:00',
+        ticker: null,
 
         // UI State
         inputValue: '',
@@ -51,6 +53,7 @@ Page({
                 this.nextWord();
             }
         });
+        this.startTicker();
     },
 
     fetchTask: function (taskId) {
@@ -365,15 +368,18 @@ Page({
         } catch (e) {
             console.warn('Failed to clear progress', e);
         }
+        this.stopTicker();
     },
 
     // 生命周期：隐藏/卸载时累计时间
     onHide() {
         this.pauseTimer();
+        this.stopTicker();
     },
 
     onUnload() {
         this.pauseTimer();
+        this.stopTicker();
     },
 
     pauseTimer() {
@@ -390,6 +396,7 @@ Page({
         if (!this.data.practiceStart) {
             this.setData({ practiceStart: Date.now() });
         }
+        this.startTicker();
     },
 
     // 重练错词
@@ -417,5 +424,23 @@ Page({
             practiceStart: Date.now()
         });
         this.loadWord(0);
+        this.startTicker();
+    },
+
+    startTicker() {
+        if (this.data.ticker) return;
+        this.data.ticker = setInterval(() => {
+            const seconds = this.computeDurationSeconds();
+            const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const s = String(seconds % 60).padStart(2, '0');
+            this.setData({ displayTime: `${m}:${s}` });
+        }, 1000);
+    },
+
+    stopTicker() {
+        if (this.data.ticker) {
+            clearInterval(this.data.ticker);
+            this.data.ticker = null;
+        }
     }
 })

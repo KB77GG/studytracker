@@ -3,7 +3,10 @@
   <!-- Header -->
   <view class="status-bar">
     <view class="book-title">{{bookTitle}}</view>
-    <view class="progress-info">{{currentIndex + 1}} / {{totalWords}}</view>
+    <view class="header-right">
+      <view class="progress-info">{{currentIndex + 1}} / {{totalWords}}</view>
+      <view class="timer-pill">{{displayTime}}</view>
+    </view>
   </view>
 
   <!-- Word Card -->
