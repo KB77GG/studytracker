@@ -31,8 +31,8 @@
 }
 
 .date-badge {
-  background: #eef2f7;
-  color: #667eea;
+  background: #EAF6F4;
+  color: #20756F;
   padding: 10rpx 20rpx;
   border-radius: 30rpx;
   font-size: 24rpx;
@@ -41,7 +41,7 @@
 
 /* Progress Card */
 .progress-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   border-radius: 24rpx;
   padding: 40rpx;
   color: white;
@@ -225,7 +225,7 @@
 .timer-text {
   font-size: 32rpx;
   font-weight: bold;
-  color: #667eea;
+  color: #20756F;
   font-family: 'Courier New', monospace;
 }
 
@@ -261,8 +261,9 @@
 
 
 .timer-btn.start {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   color: white;
+  box-shadow: 0 8rpx 16rpx rgba(32, 117, 111, 0.18);
 }
 
 .timer-btn.pause {

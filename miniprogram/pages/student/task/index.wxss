@@ -6,7 +6,7 @@
 }
 
 .task-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   padding: 40rpx;
   border-radius: 20rpx;
   margin-bottom: 30rpx;
@@ -34,7 +34,7 @@
 
 /* Timer Card */
 .timer-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   border-radius: 20rpx;
   padding: 30rpx;
   margin-bottom: 30rpx;
@@ -272,11 +272,12 @@
 
 .btn-submit {
   width: 100%;
-  background: linear-gradient(135deg, #2C8A82 0%, #1F6C65 100%);
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   color: white;
   border-radius: 50rpx;
   font-size: 32rpx;
   padding: 25rpx 0;
+  box-shadow: 0 8rpx 16rpx rgba(32, 117, 111, 0.18);
 }
 
 .btn-submit[disabled] {
@@ -320,7 +321,7 @@
 }
 
 .btn-play-feedback {
-  background: linear-gradient(135deg, #2C8A82 0%, #1F6C65 100%);
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   color: white;
 }
 
@@ -421,9 +422,9 @@
 }
 
 .speed-btn.active {
-  background: linear-gradient(135deg, #2C8A82 0%, #1F6C65 100%);
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   color: white;
-  border-color: #1F6C65;
+  border-color: #20756F;
 }
 
 .subtitle-with-play {
