@@ -34,6 +34,7 @@ from sqlalchemy import false, inspect, text
 from config import Config
 from pypinyin import lazy_pinyin
 from api import init_app as init_api
+from api.wechat import send_subscribe_message
 from models import (
     AuditLogEntry,
     PlanEvidence,
@@ -1292,6 +1293,20 @@ def tasks_page():
             )
             db.session.add(t)
             db.session.commit()
+            # Try sending subscription notification if openid exists
+            student_profile = StudentProfile.query.filter_by(full_name=student, is_deleted=False).first()
+            if student_profile and student_profile.user and student_profile.user.wechat_openid:
+                template_id = current_app.config.get("WECHAT_TASK_TEMPLATE_ID", "GElWxP8srvY_TwH-h69q4XcmgLyNZBsvjp6rSt8dhUU")
+                data = {
+                    "thing1": {"value": detail[:20]},
+                    "time2": {"value": f"{d} 08:00"},
+                    "time3": {"value": f"{d} 23:59"},
+                    "thing4": {"value": "学习任务"}
+                }
+                try:
+                    send_subscribe_message(student_profile.user.wechat_openid, template_id, data)
+                except Exception as exc:
+                    current_app.logger.warning("Failed to send subscribe message: %s", exc)
             flash("已添加")
             return redirect(url_for("tasks_page"))
     # Filter by period

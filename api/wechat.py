@@ -1,21 +1,75 @@
 import requests
+import time
 from flask import Blueprint, current_app, jsonify, request
 from models import User, StudentProfile, ParentStudentLink, db
 from .auth_utils import issue_token
 
 wechat_bp = Blueprint("wechat", __name__)
 
-# 微信小程序配置
-WECHAT_APP_ID = "wx75cdd8fc1ca68c69"
-# TODO: 需要用户提供 AppSecret，或者从环境变量/配置中读取
-WECHAT_APP_SECRET = "d50cb0a992515238c9807950fed29bf1" 
+# Token cache for subscribe message
+_token_cache = {"value": None, "expires_at": 0}
+
+def _get_wechat_config():
+    appid = current_app.config.get("WECHAT_APPID") or current_app.config.get("WECHAT_APP_ID")
+    secret = current_app.config.get("WECHAT_SECRET") or current_app.config.get("WECHAT_APP_SECRET")
+    # Fallback to previous constants if present in config (avoid hardcoding secrets)
+    return appid, secret
+
+def _get_access_token():
+    now = time.time()
+    if _token_cache["value"] and now < _token_cache["expires_at"]:
+        return _token_cache["value"]
+
+    appid, secret = _get_wechat_config()
+    if not appid or not secret:
+        current_app.logger.warning("WECHAT_APPID/WECHAT_SECRET not configured")
+        return None
+
+    resp = requests.get(
+        "https://api.weixin.qq.com/cgi-bin/token",
+        params={
+            "grant_type": "client_credential",
+            "appid": appid,
+            "secret": secret,
+        },
+        timeout=5,
+    )
+    data = resp.json()
+    if "access_token" in data:
+        _token_cache["value"] = data["access_token"]
+        _token_cache["expires_at"] = now + int(data.get("expires_in", 7200)) - 200
+        return _token_cache["value"]
+    current_app.logger.error("Failed to fetch access_token: %s", data)
+    return None
+
+def send_subscribe_message(openid: str, template_id: str, data: dict, page: str = "pages/student/home/index") -> bool:
+    token = _get_access_token()
+    if not token:
+        return False
+    payload = {
+        "touser": openid,
+        "template_id": template_id,
+        "page": page,
+        "data": data,
+    }
+    resp = requests.post(
+        f"https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token={token}",
+        json=payload,
+        timeout=5,
+    )
+    res = resp.json()
+    if res.get("errcode") == 0:
+        return True
+    current_app.logger.error("Send subscribe fail: %s", res)
+    return False
 
 def get_wechat_session(code):
     """Exchange code for session_key and openid."""
     url = "https://api.weixin.qq.com/sns/jscode2session"
+    appid, secret = _get_wechat_config()
     params = {
-        "appid": WECHAT_APP_ID,
-        "secret": current_app.config.get("WECHAT_APP_SECRET", WECHAT_APP_SECRET),
+        "appid": appid,
+        "secret": secret,
         "js_code": code,
         "grant_type": "authorization_code"
     }
@@ -311,5 +365,3 @@ def unbind_wechat():
     db.session.commit()
     
     return jsonify({"ok": True, "message": "Unbound successfully"})
-
-

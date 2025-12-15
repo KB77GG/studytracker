@@ -15,3 +15,8 @@ class Config:
 
     # 证据文件保存目录
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
+
+    # WeChat credentials (from environment)
+    WECHAT_APPID = os.environ.get("WECHAT_APPID") or os.environ.get("WECHAT_APP_ID") or "wx75cdd8fc1ca68c69"
+    WECHAT_SECRET = os.environ.get("WECHAT_SECRET") or os.environ.get("WECHAT_APP_SECRET") or "d50cb0a992515238c9807950fed29bf1"
+    WECHAT_TASK_TEMPLATE_ID = os.environ.get("WECHAT_TASK_TEMPLATE_ID", "GElWxP8srvY_TwH-h69q4XcmgLyNZBsvjp6rSt8dhUU")
