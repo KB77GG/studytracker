@@ -1061,7 +1061,10 @@
       const editBtn = e.target.closest('.btn-edit');
       if (editBtn) {
         const row = editBtn.closest('tr[data-id]');
-        if (row) openEditModal(row, false);
+        if (!row) return;
+        e.preventDefault();
+        e.stopPropagation();
+        openEditModal(row, false);
       }
     });
 
