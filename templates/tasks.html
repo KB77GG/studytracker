@@ -1012,6 +1012,9 @@
       const title = document.getElementById('modalTitle');
       const saveBtn = document.getElementById('editSave');
       const completeBtn = document.getElementById('editComplete');
+      const modal = document.getElementById('editModal');
+      // Store current row id on modal for fallback
+      modal.dataset.editingId = row?.dataset?.id || '';
 
       if (isReview) {
         title.textContent = '批改任务';
@@ -1046,7 +1049,6 @@
       } else {
         progressField.placeholder = '如 75';
       }
-      const modal = document.getElementById('editModal');
       modal.classList.remove('hidden');
       modal.style.display = 'block';
     }
@@ -1105,6 +1107,13 @@
 
     editSaveBtn && editSaveBtn.addEventListener('click', async e => {
       e.preventDefault();
+      if (!editingRow) {
+        // Fallback: try to resolve row from modal dataset
+        const mid = document.getElementById('editModal')?.dataset?.editingId;
+        if (mid) {
+          editingRow = document.querySelector(`tr[data-id="${mid}"]`);
+        }
+      }
       if (!editingRow) {
         console.warn('no editing row');
         return;
