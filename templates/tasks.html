@@ -1065,7 +1065,10 @@
     window.handleEditClick = handleEditClick;
 
     function closeEditModal() {
-      document.getElementById('editModal').classList.add('hidden');
+      const modal = document.getElementById('editModal');
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+      modal.dataset.editingId = '';
       const progressField = document.getElementById('editProgress');
       progressField.value = '';
       progressField.placeholder = '如 75';
