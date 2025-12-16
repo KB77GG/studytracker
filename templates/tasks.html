@@ -391,7 +391,7 @@
                 <a href="/tasks/{{ t.id }}/review" target="_blank" class="btn-review"
                   style="display:inline-block; text-decoration:none; background-color: #277C78; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">批改</a>
                 {% endif %}
-                <button class="btn-edit" type="button">编辑</button>
+                <button class="btn-edit" type="button" onclick="openEditModal(this.closest('tr'), false)">编辑</button>
                 <button class="btn-delete" type="button">删除</button>
               </td>
             </tr>
