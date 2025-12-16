@@ -1090,18 +1090,25 @@
     });
     */
 
-    document.getElementById('editCancel').addEventListener('click', e => {
+    const editCancelBtn = document.getElementById('editCancel');
+    const editSaveBtn = document.getElementById('editSave');
+    const editBackdrop = document.getElementById('editBackdrop');
+
+    editCancelBtn && editCancelBtn.addEventListener('click', e => {
       e.preventDefault();
       closeEditModal();
     });
 
-    document.getElementById('editBackdrop').addEventListener('click', () => {
+    editBackdrop && editBackdrop.addEventListener('click', () => {
       closeEditModal();
     });
 
-    document.getElementById('editSave').addEventListener('click', async e => {
+    editSaveBtn && editSaveBtn.addEventListener('click', async e => {
       e.preventDefault();
-      if (!editingRow) return;
+      if (!editingRow) {
+        console.warn('no editing row');
+        return;
+      }
       const id = editingRow.dataset.id;
       const newDetail = document.getElementById('editDetail').value.trim();
       const newNote = document.getElementById('editNote').value.trim();
@@ -1201,6 +1208,7 @@
 
         closeEditModal();
       } catch (err) {
+        console.error(err);
         alert('更新失败，请稍后重试');
       }
     });
