@@ -1007,6 +1007,7 @@
     let editingRow = null;
 
     function openEditModal(row, isReview = false) {
+      console.log('openEditModal', row?.dataset?.id);
       editingRow = row;
       const title = document.getElementById('modalTitle');
       const saveBtn = document.getElementById('editSave');
@@ -1045,7 +1046,9 @@
       } else {
         progressField.placeholder = '如 75';
       }
-      document.getElementById('editModal').classList.remove('hidden');
+      const modal = document.getElementById('editModal');
+      modal.classList.remove('hidden');
+      modal.style.display = 'block';
     }
     window.openEditModal = openEditModal;
 
@@ -1054,6 +1057,7 @@
       ev.stopPropagation();
       const row = ev.target.closest('tr[data-id]');
       if (!row) return;
+      console.log('handleEditClick', row.dataset.id);
       openEditModal(row, false);
     }
     window.handleEditClick = handleEditClick;
