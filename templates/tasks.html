@@ -1056,11 +1056,12 @@
       editingRow = null;
     }
 
-    document.querySelectorAll('.btn-edit').forEach(btn => {
-      btn.addEventListener('click', e => {
-        const row = e.target.closest('tr');
-        openEditModal(row, false);
-      });
+    document.addEventListener('click', e => {
+      const editBtn = e.target.closest('.btn-edit');
+      if (editBtn) {
+        const row = editBtn.closest('tr[data-id]');
+        if (row) openEditModal(row, false);
+      }
     });
 
     /*
