@@ -2,54 +2,65 @@
 {% block content_public %}
 <div class="login-container">
   <div class="login-card">
-    <div class="login-header">
-      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Sage Path Logo" class="login-logo">
-      <h2>欢迎回来</h2>
-      <p class="subtitle">请登录您的账号</p>
+    <div class="login-hero">
+      <div class="logo-row">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Sage Path Logo" class="login-logo">
+        <div class="brand-text">
+          <div class="brand-title">Sage Path</div>
+          <div class="brand-sub">睿然学习助手</div>
+        </div>
+      </div>
+      <h2>让每一次进步都看得见</h2>
+      <ul>
+        <li>任务打卡与进度可视</li>
+        <li>批改反馈一目了然</li>
+        <li>家长联动，安心陪伴</li>
+      </ul>
     </div>
 
-    <form method="post" class="login-form">
-      <div class="form-group">
-        <label for="username">用户名</label>
-        <input type="text" id="username" name="username" placeholder="请输入用户名" required autofocus>
+    <div class="login-panel">
+      <div class="login-header">
+        <h3>欢迎回来</h3>
+        <p class="subtitle">请登录您的账号</p>
       </div>
 
-      <div class="form-group">
-        <label for="password">密码</label>
-        <input type="password" id="password" name="password" placeholder="请输入密码" required>
-      </div>
+      <form method="post" class="login-form">
+        <div class="form-group">
+          <label for="username">用户名</label>
+          <input type="text" id="username" name="username" placeholder="请输入用户名" required autofocus>
+        </div>
 
-      <button type="submit" class="btn-login">登录</button>
+        <div class="form-group">
+          <label for="password">密码</label>
+          <input type="password" id="password" name="password" placeholder="请输入密码" required>
+        </div>
 
-      {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <div class="login-flash">
-        {{ messages[0] }}
-      </div>
-      {% endif %}
-      {% endwith %}
-    </form>
+        <button type="submit" class="btn-login">登录</button>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="login-flash">
+          {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
+      </form>
+    </div>
   </div>
 </div>
 
 <style>
   /* 覆盖 base.html 可能的默认样式，确保登录页全屏居中 */
   body {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    background: radial-gradient(circle at 20% 20%, rgba(54, 165, 157, 0.12), transparent 30%),
+                radial-gradient(circle at 80% 10%, rgba(32, 117, 111, 0.14), transparent 28%),
+                #f5f7fa;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
 
-  /* 如果 base.html 有 topbar，这里可能需要隐藏它，或者让它显示。
-     通常登录页是独立的。如果 base.html 的 header 干扰了，可以用 CSS 隐藏。
-     这里假设 base.html 的结构允许我们这样做。
-  */
-  .topbar {
-    display: none;
-  }
-
-  /* 隐藏顶部导航栏，让登录页更沉浸 */
+  .topbar { display: none; }
   .container {
     max-width: 100% !important;
     margin: 0 !important;
@@ -69,23 +80,22 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: linear-gradient(135deg, #2F8E87 0%, #1B5E59 100%);
-    /* 使用品牌色渐变背景 */
+    background: transparent;
     position: fixed;
-    /* 强制覆盖全屏 */
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: 1;
   }
 
   .login-card {
     background: #ffffff;
-    width: 100%;
-    max-width: 400px;
-    padding: 40px 32px;
-    border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    width: min(960px, 94vw);
+    padding: 32px;
+    border-radius: 20px;
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.12);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 24px;
     animation: slideUp 0.5s ease-out;
   }
 
@@ -101,85 +111,110 @@
     }
   }
 
-  .login-logo {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    margin-bottom: 16px;
+  .login-hero {
+    background: linear-gradient(135deg, rgba(54, 165, 157, 0.1), rgba(32, 117, 111, 0.06));
     border-radius: 16px;
-    /* 如果 logo 是方形的，给点圆角 */
+    padding: 24px;
+    border: 1px solid rgba(32, 117, 111, 0.08);
   }
-
-  .login-header h2 {
-    margin: 0 0 8px;
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .login-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+  .brand-title {
+    font-weight: 700;
     color: #1f2d3d;
-    font-size: 24px;
+  }
+  .brand-sub {
+    color: #6b7280;
+    font-size: 13px;
+  }
+  .login-hero h2 {
+    margin: 4px 0 12px;
+    color: #20756F;
+    font-size: 20px;
     font-weight: 700;
   }
+  .login-hero ul {
+    padding-left: 18px;
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.6;
+    font-size: 14px;
+  }
 
+  .login-panel {
+    padding: 8px;
+  }
+  .login-header h3 {
+    margin: 0 0 6px;
+    color: #1f2d3d;
+    font-size: 22px;
+    font-weight: 700;
+  }
   .subtitle {
-    margin: 0 0 32px;
+    margin: 0 0 24px;
     color: #8492a6;
     font-size: 14px;
   }
-
   .login-form {
     text-align: left;
   }
-
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
-
   .form-group label {
     display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 500;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
     color: #3c4858;
   }
-
   .form-group input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 12px 14px;
     border: 1px solid #e0e6ed;
     border-radius: 12px;
-    font-size: 15px;
+    font-size: 14px;
     transition: all 0.2s;
     background: #f8f9fb;
   }
-
   .form-group input:focus {
-    border-color: #2F8E87;
+    border-color: #20756F;
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(47, 142, 135, 0.15);
+    box-shadow: 0 0 0 3px rgba(32, 117, 111, 0.12);
     outline: none;
   }
-
   .btn-login {
     width: 100%;
-    padding: 14px;
-    background: #2F8E87;
+    padding: 12px;
+    background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
     color: #fff;
     border: none;
     border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    margin-top: 8px;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    margin-top: 6px;
+    box-shadow: 0 10px 18px rgba(32, 117, 111, 0.18);
   }
-
   .btn-login:hover {
-    background: #257a74;
+    background: linear-gradient(135deg, #3ebcb3 0%, #1f6c65 100%);
   }
-
   .btn-login:active {
     transform: scale(0.98);
   }
-
   .login-flash {
-    margin-top: 20px;
+    margin-top: 16px;
     padding: 10px;
     background: #fff1f0;
     border: 1px solid #ffa39e;
@@ -187,6 +222,14 @@
     border-radius: 8px;
     font-size: 13px;
     text-align: center;
+  }
+
+  @media (max-width: 840px) {
+    .login-card {
+      grid-template-columns: 1fr;
+      padding: 24px;
+    }
+    .login-hero { display: none; }
   }
 </style>
 {% endblock %}
