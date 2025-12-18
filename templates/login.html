@@ -115,10 +115,15 @@
   }
 
   .login-hero {
+    position: relative;
     background: linear-gradient(135deg, rgba(54, 165, 157, 0.1), rgba(32, 117, 111, 0.06));
     border-radius: 16px;
-    padding: 20px 20px 16px;
+    padding: 20px 20px 120px;
     border: 1px solid rgba(32, 117, 111, 0.08);
+    background-image: url("{{ url_for('static', filename='login_illustration.svg') }}");
+    background-repeat: no-repeat;
+    background-position: center 85%;
+    background-size: 92% auto;
   }
   .logo-row {
     display: flex;
@@ -162,6 +167,7 @@
     width: 100%;
     max-width: 340px;
     filter: saturate(0.9);
+    display: none; /* 背景图已经覆盖，这里隐藏 img 防止重复 */
   }
 
   .login-panel {
