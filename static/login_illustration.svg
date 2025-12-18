@@ -1,0 +1,37 @@
+<svg width="600" height="420" viewBox="0 0 600 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="50" y1="50" x2="520" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAF6F4"/>
+      <stop offset="1" stop-color="#D7EEE8"/>
+    </linearGradient>
+    <linearGradient id="book" x1="150" y1="200" x2="450" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#36A59D"/>
+      <stop offset="1" stop-color="#20756F"/>
+    </linearGradient>
+  </defs>
+  <rect x="30" y="40" width="540" height="330" rx="32" fill="url(#bg)"/>
+  <circle cx="140" cy="110" r="12" fill="#20756F" opacity="0.12"/>
+  <circle cx="480" cy="90" r="20" fill="#36A59D" opacity="0.1"/>
+  <path d="M200 260C200 230 260 210 300 210C340 210 400 230 400 260V320H200V260Z" fill="#fff" stroke="#20756F" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M220 230V300" stroke="#36A59D" stroke-width="3" stroke-linecap="round"/>
+  <path d="M380 230V300" stroke="#36A59D" stroke-width="3" stroke-linecap="round"/>
+  <rect x="215" y="240" width="70" height="10" rx="3" fill="#E0EAE7"/>
+  <rect x="315" y="240" width="70" height="10" rx="3" fill="#E0EAE7"/>
+  <rect x="215" y="260" width="70" height="10" rx="3" fill="#E0EAE7"/>
+  <rect x="315" y="260" width="70" height="10" rx="3" fill="#E0EAE7"/>
+  <path d="M260 190C260 170 280 155 300 155C320 155 340 170 340 190V210H260V190Z" fill="#fff" stroke="#20756F" stroke-width="3"/>
+  <circle cx="280" cy="185" r="6" fill="#20756F"/>
+  <circle cx="320" cy="185" r="6" fill="#20756F"/>
+  <path d="M290 200C295 205 305 205 310 200" stroke="#20756F" stroke-width="3" stroke-linecap="round"/>
+  <rect x="95" y="280" width="60" height="40" rx="10" fill="#20756F"/>
+  <rect x="115" y="265" width="40" height="16" rx="8" fill="#36A59D" opacity="0.9"/>
+  <path d="M115 320L105 340H155L145 320" fill="#EAF6F4"/>
+  <rect x="445" y="280" width="60" height="40" rx="10" fill="#20756F"/>
+  <rect x="445" y="265" width="40" height="16" rx="8" fill="#36A59D" opacity="0.9"/>
+  <path d="M445 320L435 340H485L475 320" fill="#EAF6F4"/>
+  <path d="M140 200L130 180H190L180 200" fill="#36A59D" opacity="0.2"/>
+  <path d="M470 200L460 180H520L510 200" fill="#36A59D" opacity="0.2"/>
+  <text x="300" y="120" text-anchor="middle" fill="#20756F" font-size="22" font-family="Arial" font-weight="700">Learn & Grow</text>
+  <text x="300" y="145" text-anchor="middle" fill="#4B5563" font-size="13" font-family="Arial">让每一次进步都看得见</text>
+  <path d="M250 330H350" stroke="url(#book)" stroke-width="8" stroke-linecap="round" opacity="0.35"/>
+</svg>

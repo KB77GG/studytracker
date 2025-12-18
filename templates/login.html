@@ -10,6 +10,9 @@
           <div class="brand-sub">睿然学习助手</div>
         </div>
       </div>
+      <div class="hero-illus">
+        <img src="{{ url_for('static', filename='login_illustration.svg') }}" alt="Learn and Grow" loading="lazy">
+      </div>
       <h2>让每一次进步都看得见</h2>
       <ul>
         <li>任务打卡与进度可视</li>
@@ -114,7 +117,7 @@
   .login-hero {
     background: linear-gradient(135deg, rgba(54, 165, 157, 0.1), rgba(32, 117, 111, 0.06));
     border-radius: 16px;
-    padding: 24px;
+    padding: 20px 20px 16px;
     border: 1px solid rgba(32, 117, 111, 0.08);
   }
   .logo-row {
@@ -138,7 +141,7 @@
     font-size: 13px;
   }
   .login-hero h2 {
-    margin: 4px 0 12px;
+    margin: 4px 0 10px;
     color: #20756F;
     font-size: 20px;
     font-weight: 700;
@@ -149,6 +152,16 @@
     color: #4b5563;
     line-height: 1.6;
     font-size: 14px;
+  }
+  .hero-illus {
+    width: 100%;
+    margin: 6px 0 10px;
+    text-align: center;
+  }
+  .hero-illus img {
+    width: 100%;
+    max-width: 340px;
+    filter: saturate(0.9);
   }
 
   .login-panel {
