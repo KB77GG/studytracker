@@ -37,8 +37,30 @@
           </view>
         </view>
         <button class="btn-start" bindtap="showLogin">开始使用</button>
+        <button class="btn-ghost" bindtap="showPreview">先随便看看</button>
         <text class="tip-text">点击上方按钮即表示同意用户协议和隐私政策</text>
       </view>
+    </view>
+
+    <!-- 预览区：无需登录 -->
+    <view class="preview-section" wx:if="{{showPreview}}">
+      <text class="section-title">功能预览</text>
+      <view class="preview-grid">
+        <view class="preview-card">
+          <text class="preview-title">任务列表</text>
+          <text class="preview-desc">查看每日任务与完成度示例，不登录也可浏览界面。</text>
+        </view>
+        <view class="preview-card">
+          <text class="preview-title">数据概览</text>
+          <text class="preview-desc">进度统计、正确率示意，让你先了解功能布局。</text>
+        </view>
+        <view class="preview-card">
+          <text class="preview-title">批改反馈</text>
+          <text class="preview-desc">查看批改反馈样例，体验交互流程。</text>
+        </view>
+      </view>
+      <button class="btn-primary" bindtap="showLogin">去登录体验完整功能</button>
+      <button class="btn-back" bindtap="backToWelcome">返回</button>
     </view>
     
     <!-- 1. 登录引导 -->

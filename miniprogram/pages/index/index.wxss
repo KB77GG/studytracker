@@ -403,6 +403,17 @@
   text-align: center;
 }
 
+.btn-ghost {
+  width: 100%;
+  height: 80rpx;
+  background: #f0f2f5;
+  color: #4b5563;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  margin-top: 12rpx;
+  border: 1px solid #e5e7eb;
+}
+
 .btn-back {
   width: 100%;
   height: 80rpx;
@@ -412,4 +423,30 @@
   font-size: 28rpx;
   margin-top: 20rpx;
   border: none;
+}
+
+.preview-section {
+  margin-top: 24rpx;
+}
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200rpx, 1fr));
+  gap: 16rpx;
+  margin: 16rpx 0 20rpx;
+}
+.preview-card {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 14rpx;
+  padding: 16rpx;
+}
+.preview-title {
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 6rpx;
+}
+.preview-desc {
+  font-size: 24rpx;
+  color: #4b5563;
+  line-height: 1.5;
 }

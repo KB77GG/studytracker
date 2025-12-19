@@ -11,7 +11,8 @@ Page({
         bindName: '',
         bindStudentName: '',
         bindPhone: '',
-        privacyAgreed: false
+        privacyAgreed: false,
+        showPreview: false
     },
 
     showLogin() {
@@ -24,13 +25,17 @@ Page({
 
     backToWelcome() {
         // 返回欢迎页
-        this.setData({ showLoginForm: false })
+        this.setData({ showLoginForm: false, showPreview: false })
     },
 
     handlePrivacyChange(e) {
         this.setData({
             privacyAgreed: e.detail.value.length > 0
         })
+    },
+
+    showPreview() {
+        this.setData({ showPreview: true, showLoginForm: false })
     },
 
     onLoad(options) {
