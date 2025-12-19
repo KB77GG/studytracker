@@ -4,9 +4,12 @@ Handles word book management, Excel upload, TTS generation, and practice records
 """
 
 import os
+import re
+from pathlib import Path
 from datetime import datetime
 from functools import wraps
 import jwt
+import requests
 from flask import Blueprint, current_app, jsonify, request, send_file
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
@@ -263,6 +266,41 @@ def get_word_audio(word_id):
         return jsonify({"ok": False, "error": "audio_file_missing"}), 404
     
     return send_file(full_path, mimetype="audio/mpeg")
+
+
+# ============================================================================
+# Simple TTS proxy & cache (Youdao) for mini-program playback
+# ============================================================================
+
+@dictation_bp.route("/tts", methods=["GET"])
+def proxy_tts():
+    """Proxy TTS audio to avoid external domain failures; includes simple file cache."""
+    word = (request.args.get("word") or "").strip()
+    if not word:
+        return jsonify({"ok": False, "error": "missing_word"}), 400
+
+    safe_name = re.sub(r"[^a-zA-Z0-9_-]+", "_", word.lower()) or "tts"
+    tts_dir = Path(current_app.config.get("UPLOAD_FOLDER", Path(current_app.root_path) / "uploads")) / "tts_cache"
+    tts_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = tts_dir / f"{safe_name}.mp3"
+
+    if cache_path.exists():
+        try:
+            return send_file(cache_path, mimetype="audio/mpeg")
+        except Exception:
+            cache_path.unlink(missing_ok=True)
+
+    url = f"https://dict.youdao.com/dictvoice?audio={requests.utils.quote(word)}&type=2"
+    try:
+        resp = requests.get(url, timeout=10)
+        if resp.status_code == 200 and resp.content:
+            cache_path.write_bytes(resp.content)
+            return send_file(cache_path, mimetype="audio/mpeg")
+        current_app.logger.warning("TTS fetch failed %s: %s", word, resp.status_code)
+        return jsonify({"ok": False, "error": "tts_fetch_failed"}), 502
+    except Exception as exc:
+        current_app.logger.warning("TTS proxy error for %s: %s", word, exc)
+        return jsonify({"ok": False, "error": "tts_proxy_error"}), 502
 
 
 # ============================================================================

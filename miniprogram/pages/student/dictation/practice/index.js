@@ -212,10 +212,8 @@ Page({
         const word = this.data.currentWord.word;
         if (!word) return;
 
-        // Use generic TTS API
-        // Option 1: Youdao (High quality, widely used)
-        const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
-
+        // Use backend TTS proxy with cache
+        const url = `${app.globalData.baseUrl}/dictation/tts?word=${encodeURIComponent(word.trim())}`;
         this.audioCtx.src = url;
         this.audioCtx.play();
     },
