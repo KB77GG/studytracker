@@ -44,8 +44,18 @@ Page({
 
         // Create Audio Context
         this.audioCtx = wx.createInnerAudioContext();
+        this.audioCtx.obeyMuteSwitch = false;
+        this.audioCtx.autoplay = false;
         this.audioCtx.onError((res) => {
             console.error('Audio Error:', res.errMsg);
+            // fallback to direct youdao if proxy fails
+            if (!this.fallbackTried && this.data.currentWord.word) {
+                this.fallbackTried = true;
+                const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(this.data.currentWord.word.trim())}&type=2`;
+                this.audioCtx.src = direct;
+                this.audioCtx.play();
+                return;
+            }
             wx.showToast({ title: '音频播放失败', icon: 'none' });
         });
         this.audioCtx.onEnded(() => {
@@ -213,7 +223,9 @@ Page({
         if (!word) return;
 
         // Use backend TTS proxy with cache
-        const url = `${app.globalData.baseUrl}/dictation/tts?word=${encodeURIComponent(word.trim())}`;
+        this.fallbackTried = false;
+        const trimmed = word.trim();
+        const url = `${app.globalData.baseUrl}/dictation/tts?word=${encodeURIComponent(trimmed)}`;
         this.audioCtx.src = url;
         this.audioCtx.play();
     },
