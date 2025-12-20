@@ -222,12 +222,43 @@ Page({
         const word = this.data.currentWord.word;
         if (!word) return;
 
-        // Use backend TTS proxy with cache
         this.fallbackTried = false;
         const trimmed = word.trim();
-        const url = `${app.globalData.baseUrl}/dictation/tts?word=${encodeURIComponent(trimmed)}`;
-        this.audioCtx.src = url;
-        this.audioCtx.play();
+        const proxyUrl = `${app.globalData.baseUrl}/dictation/tts?word=${encodeURIComponent(trimmed)}`;
+
+        // Prefer下载到本地再播放，提升稳定性
+        wx.downloadFile({
+            url: proxyUrl,
+            success: (res) => {
+                if (res.statusCode === 200 && res.tempFilePath) {
+                    this.audioCtx.src = res.tempFilePath;
+                    this.audioCtx.play();
+                } else {
+                    this.useYoudaoFallback(trimmed);
+                }
+            },
+            fail: () => {
+                this.useYoudaoFallback(trimmed);
+            }
+        });
+    },
+
+    useYoudaoFallback(word) {
+        const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
+        wx.downloadFile({
+            url: direct,
+            success: (res) => {
+                if (res.statusCode === 200 && res.tempFilePath) {
+                    this.audioCtx.src = res.tempFilePath;
+                    this.audioCtx.play();
+                } else {
+                    wx.showToast({ title: '音频获取失败', icon: 'none' });
+                }
+            },
+            fail: () => {
+                wx.showToast({ title: '音频获取失败', icon: 'none' });
+            }
+        });
     },
 
     onToggleAutoPlay(e) {
