@@ -896,6 +896,13 @@ def _extract_schedule_fields(item: dict):
     start_time = item.get("start_time") or item.get("start_at") or item.get("datetime")
     end_time = item.get("end_time") or item.get("end_at") or item.get("end_datetime")
     teacher_name = item.get("teacher_name") or item.get("teacher") or "老师待定"
+    student_name = (
+        item.get("student_name")
+        or item.get("student")
+        or item.get("studentName")
+        or item.get("student_full_name")
+        or item.get("studentFullName")
+    )
     schedule_date = item.get("schedule_date") or item.get("date")
 
     # 拼成完整时间，避免仅有时分导致订阅模板校验失败
@@ -908,7 +915,7 @@ def _extract_schedule_fields(item: dict):
     else:
         end_dt = end_time
 
-    return schedule_id, student_id, teacher_id, course_name, start_dt, end_dt, teacher_name
+    return schedule_id, student_id, teacher_id, course_name, start_dt, end_dt, teacher_name, student_name
 
 
 @mp_bp.route("/send_tomorrow_class_reminders", methods=["POST"])
@@ -933,7 +940,7 @@ def send_tomorrow_class_reminders():
     sent = 0
     dedupe = set()
     for item in schedules_list:
-        schedule_id, student_id, teacher_id, course_name, start_time, end_time, teacher_name = _extract_schedule_fields(item)
+        schedule_id, student_id, teacher_id, course_name, start_time, end_time, teacher_name, _student_name = _extract_schedule_fields(item)
         if schedule_id and schedule_id in dedupe:
             continue
         if schedule_id:
@@ -1004,8 +1011,27 @@ def teacher_schedules():
     schedules = schedules or []
 
     normalized = []
+    student_name_map = None
     for item in schedules:
-        sid, student_id, teacher_id, course_name, start_dt, end_dt, teacher_name = _extract_schedule_fields(item)
+        sid, student_id, teacher_id, course_name, start_dt, end_dt, teacher_name, student_name = _extract_schedule_fields(item)
+        if not student_name and student_id:
+            if student_name_map is None:
+                student_name_map = {}
+                student_ids = {student_id}
+                for sched_item in schedules:
+                    _, sched_student_id, _, _, _, _, _, _ = _extract_schedule_fields(sched_item)
+                    if sched_student_id:
+                        student_ids.add(sched_student_id)
+                if student_ids:
+                    profiles = StudentProfile.query.filter(
+                        StudentProfile.scheduler_student_id.in_(student_ids)
+                    ).all()
+                    student_name_map = {
+                        profile.scheduler_student_id: profile.full_name
+                        for profile in profiles
+                        if profile.scheduler_student_id
+                    }
+            student_name = student_name_map.get(student_id)
         normalized.append({
             "schedule_id": sid,
             "student_id": student_id,
@@ -1014,6 +1040,7 @@ def teacher_schedules():
             "start_time": start_dt,
             "end_time": end_dt,
             "teacher_name": teacher_name,
+            "student_name": student_name,
             "schedule_date": item.get("schedule_date") or item.get("date"),
         })
 

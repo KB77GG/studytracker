@@ -12,6 +12,11 @@
     </view>
   </view>
 
+  <view class="view-switch">
+    <button class="switch-btn {{viewMode==='week'?'active':''}}" size="mini" data-mode="week" bindtap="switchView">周视图</button>
+    <button class="switch-btn {{viewMode==='list'?'active':''}}" size="mini" data-mode="list" bindtap="switchView">列表</button>
+  </view>
+
   <view wx:if="{{bindRequired}}" class="bind-panel">
     <view class="bind-title">绑定排课老师ID</view>
     <view class="bind-desc">请填写排课系统中的老师ID，绑定后即可查看课表。</view>
@@ -26,31 +31,61 @@
   <view wx:else>
     <view wx:if="{{loading}}" class="loading">加载中...</view>
     <view wx:else>
-      <block wx:if="{{schedules.length === 0}}">
-        <view class="empty">暂无课表</view>
+      <block wx:if="{{viewMode === 'week'}}">
+        <view wx:if="{{schedules.length === 0}}" class="empty">暂无课表</view>
+        <view wx:else class="week-view">
+          <scroll-view scroll-x class="week-scroll">
+            <view class="week-row">
+              <view class="time-col">
+                <view class="day-header time-header">时间</view>
+                <view class="time-slot" wx:for="{{timeSlots}}" wx:key="*this" wx:for-item="slot" style="height: {{hourHeight}}rpx;">
+                  {{slot}}
+                </view>
+              </view>
+              <view class="day-col" wx:for="{{weekDays}}" wx:key="date" wx:for-item="day">
+                <view class="day-header">{{day.label}}</view>
+                <view class="day-grid" style="height: {{gridHeight}}rpx;">
+                  <view class="grid-line" wx:for="{{timeSlots}}" wx:key="*this" wx:for-item="slot" style="height: {{hourHeight}}rpx;"></view>
+                  <view class="schedule-block" wx:for="{{day.items}}" wx:key="schedule_id" wx:for-item="item" style="{{item.style}}">
+                    <text class="block-time">{{item.timeLabel}}</text>
+                    <text class="block-title">{{item.course_name}}</text>
+                    <text class="block-meta">学生 {{item.student_name || '—'}}</text>
+                    <text class="block-meta">老师 {{item.teacher_name || '—'}}</text>
+                    <button class="feedback-btn" size="mini" data-id="{{item.schedule_id}}" bindtap="handleFeedback">添加反馈</button>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
       </block>
-      <block wx:for="{{schedules}}" wx:key="date">
-        <view class="group">
-          <view class="group-title">{{item.date}}</view>
-          <view class="card" wx:for="{{item.items}}" wx:key="schedule_id">
-            <view class="row">
-              <text class="label">课程</text>
-              <text class="value">{{item.course_name}}</text>
-            </view>
-            <view class="row">
-              <text class="label">时间</text>
-              <text class="value">{{item.start_time}} - {{item.end_time}}</text>
-            </view>
-            <view class="row">
-              <text class="label">学生</text>
-              <text class="value">{{item.student_name || '—'}}</text>
-            </view>
-            <view class="row">
-              <text class="label">老师</text>
-              <text class="value">{{item.teacher_name || '—'}}</text>
+      <block wx:else>
+        <block wx:if="{{schedules.length === 0}}">
+          <view class="empty">暂无课表</view>
+        </block>
+        <block wx:for="{{schedules}}" wx:key="date">
+          <view class="group">
+            <view class="group-title">{{item.date}}</view>
+            <view class="card" wx:for="{{item.items}}" wx:key="schedule_id">
+              <view class="row">
+                <text class="label">课程</text>
+                <text class="value">{{item.course_name}}</text>
+              </view>
+              <view class="row">
+                <text class="label">时间</text>
+                <text class="value">{{item.start_time}} - {{item.end_time}}</text>
+              </view>
+              <view class="row">
+                <text class="label">学生</text>
+                <text class="value">{{item.student_name || '—'}}</text>
+              </view>
+              <view class="row">
+                <text class="label">老师</text>
+                <text class="value">{{item.teacher_name || '—'}}</text>
+              </view>
             </view>
           </view>
-        </view>
+        </block>
       </block>
     </view>
   </view>
