@@ -1,5 +1,7 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
+const TASK_TEMPLATE_ID = 'GElWxP8srvY_TwH-h69q4XcmgLyNZBsvjp6rSt8dhUU'
+const COURSE_TEMPLATE_ID = 'AehPa5pMUTnQqXgq-q-wxTAMZyVU-qdkxaO9rbpo-QI'
 
 Page({
     data: {
@@ -16,7 +18,8 @@ Page({
         loading: true,
         activeTimerId: null,
         timerInterval: null,
-        hasSubscribed: false
+        hasSubscribed: false,
+        notebookCount: 0
     },
 
     onLoad() {
@@ -41,6 +44,7 @@ Page({
             })
         }
         this.fetchTasks()
+        this.loadNotebookCount()
         this.updateGreeting()
 
         // Restore timer if there's an active one in storage
@@ -48,6 +52,7 @@ Page({
 
         const subFlag = wx.getStorageSync('task_subscribed') || false
         this.setData({ hasSubscribed: subFlag })
+        this.loadNotebookCount()
     },
 
     // Restore timer state from storage
@@ -122,11 +127,12 @@ Page({
     },
 
     requestSubscribe() {
-        const tmplId = 'GElWxP8srvY_TwH-h69q4XcmgLyNZBsvjp6rSt8dhUU'
+        const tmplIds = [TASK_TEMPLATE_ID, COURSE_TEMPLATE_ID]
         wx.requestSubscribeMessage({
-            tmplIds: [tmplId],
+            tmplIds,
             success: (res) => {
-                if (res[tmplId] === 'accept') {
+                const accepted = tmplIds.some(id => res[id] === 'accept')
+                if (accepted) {
                     wx.setStorageSync('task_subscribed', true)
                     this.setData({ hasSubscribed: true })
                     wx.showToast({ title: '提醒已开启', icon: 'success' })
@@ -139,6 +145,25 @@ Page({
                 wx.showToast({ title: '订阅失败', icon: 'none' })
             }
         })
+    },
+
+    goNotebook() {
+        wx.navigateTo({
+            url: '/pages/student/notebook/index'
+        })
+    },
+
+    loadNotebookCount() {
+        try {
+            const list = wx.getStorageSync('dictation_notebook') || []
+            if (Array.isArray(list)) {
+                this.setData({ notebookCount: list.length })
+            } else {
+                this.setData({ notebookCount: 0 })
+            }
+        } catch (e) {
+            this.setData({ notebookCount: 0 })
+        }
     },
 
     onHide() {
@@ -184,12 +209,15 @@ Page({
                     // Use actual_seconds from backend, default to 0 if not present
                     const actualSeconds = t.actual_seconds || 0
                     const plannedSeconds = t.planned_minutes * 60
+                    const iconInfo = this.getModuleIcon(t.module || t.task_name || '')
 
                     return {
                         id: t.id,
                         task_name: t.task_name,
                         module: t.module,
                         moduleClass: this.getModuleClass(t.module),
+                        iconText: iconInfo.text,
+                        iconClass: iconInfo.cls,
                         planned_minutes: t.planned_minutes,
                         status: t.status,
                         statusText: this.getStatusText(t.status),
@@ -238,6 +266,26 @@ Page({
             '英语': 'english'
         }
         return map[module] || ''
+    },
+
+    getModuleIcon(text) {
+        const lower = text.toLowerCase()
+        if (lower.includes('听') || lower.includes('听力') || lower.includes('朗读')) {
+            return { text: 'L', cls: 'listening' } // Listening
+        }
+        if (lower.includes('读') || lower.includes('阅读')) {
+            return { text: 'R', cls: 'reading' }
+        }
+        if (lower.includes('写') || lower.includes('作文') || lower.includes('写作')) {
+            return { text: 'W', cls: 'writing' }
+        }
+        if (lower.includes('词') || lower.includes('单词') || lower.includes('词汇')) {
+            return { text: 'V', cls: 'vocab' }
+        }
+        if (lower.includes('口语')) {
+            return { text: 'S', cls: 'speaking' }
+        }
+        return { text: 'T', cls: 'default' };
     },
 
     getStatusText(status) {

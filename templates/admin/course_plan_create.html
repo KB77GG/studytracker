@@ -67,26 +67,31 @@
     const EXAM_TYPES = [
         { value: "IELTS", label: "雅思 IELTS" },
         { value: "TOEFL", label: "托福 TOEFL" },
+        { value: "TOEFL_JUNIOR", label: "托福 Junior" },
     ];
 
     const EXAM_LABELS = {
         IELTS: "雅思",
         TOEFL: "托福",
+        TOEFL_JUNIOR: "托福 Junior",
     };
 
     const SCORE_OPTIONS = {
         IELTS: ["4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"],
         TOEFL: ["60", "65", "70", "75", "80", "85", "90", "95", "100", "105", "110", "115", "120"],
+        TOEFL_JUNIOR: ["750+", "800+", "850+"],
     };
 
     const SUB_SCORE_OPTIONS = {
         IELTS: ["4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"],
         TOEFL: ["15", "18", "20", "22", "24", "26", "28", "30"],
+        TOEFL_JUNIOR: ["210+", "250+", "280+"],
     };
 
     const SUBJECT_OPTIONS = {
-        IELTS: ["雅思听力", "雅思阅读", "雅思写作", "雅思口语"],
-        TOEFL: ["托福听力", "托福阅读", "托福写作", "托福口语"],
+        IELTS: ["雅思听力", "雅思阅读", "雅思写作", "雅思口语", "赠课"],
+        TOEFL: ["托福听力", "托福阅读", "托福写作", "托福口语", "赠课"],
+        TOEFL_JUNIOR: ["听力理解", "语言形式与含义", "阅读理解", "赠课"],
     };
 
     const getNext24Months = () => {
@@ -141,6 +146,26 @@
                 W: "段落改写：每周2次，用地道表达和多样句式升级旧稿，伴随错题归因。",
                 S: "One Take 挑战：每日Task1随机题，一次录音45秒，逼真考试压力。"
             }
+        },
+        TOEFL_JUNIOR: {
+            "基础提升 (600-750)": {
+                L: "听力理解：日常校园场景+学术听力，先做短对话听要点，再做长对话/短讲，建立听音辨义词库。",
+                R: "阅读理解：句子改写/信息匹配，练习快速定位与同义替换识别，适当精读词汇与句法。",
+                W: "语言形式与含义：语法填空+词汇搭配专项，巩固动词时态、主谓一致、介词搭配。",
+                S: "策略：全真分科计时演练，记录错题类型（词汇/语法/定位），建立错题本。"
+            },
+            "进阶冲刺 (750-800)": {
+                L: "听力：长对话/讲座精听+跟读，整理信号词与转折关系，积累学科常用词。",
+                R: "阅读：段落主旨与细节定位并练习同义替换，限时完成原题并复盘。",
+                W: "语言形式与含义：高频语法结构（非谓语、从句、倒装）专项练习，词根词缀扩展词汇。",
+                S: "策略：全科套题计时（Listening 40min / Language 25min / Reading 50min），复盘错题原因。"
+            },
+            "高分冲刺 (800-850+)": {
+                L: "听力：倍速精听+跟读复述，关注细节题/推断题，积累学科表达。",
+                R: "阅读：限时全真+精讲，训练长难句拆解和替换词识别，保持正确率稳定。",
+                W: "语言形式与含义：混合题型综合训练，快速检查语法逻辑与词汇搭配。",
+                S: "策略：模拟整套115分钟考试，控制节奏与检查时间，错题分类复盘。"
+            }
         }
     };
 
@@ -172,6 +197,11 @@
 口语：One Take挑战每日1题，仅一次录音机会，说满45秒。
 写作：段落改写每周2次，用地道词汇和多样句式升级旧稿，上传前后对比。
 综合：模考后做错题归因，标记是词汇/定位/逻辑理解问题。`
+        },
+        TOEFL_JUNIOR: {
+            "基础提升 (600-750)": `听力：校园/学术场景词汇听辨+短对话练习；阅读：句子改写与信息定位；语言形式：时态、主谓一致、基础搭配专项；全真分科计时演练并做错题本。`,
+            "进阶冲刺 (750-800)": `听力：长对话/短讲精听+跟读；阅读：限时套题复盘同义替换；语言形式：非谓语、从句、词根词缀词汇；全科套题计时（40+25+50）。`,
+            "高分冲刺 (800-850+)": `听力：倍速精听细节/推断题；阅读：长难句拆解+替换词识别；语言形式：混合题快速检查；模拟整套115分钟并分类复盘错题。`
         }
     };
 
@@ -218,11 +248,11 @@
     ];
 
     // --- COMPONENT ---
-    const StudyPlanForm = ({ initialData, onGenerate, isGenerating }) => {
+    const StudyPlanForm = ({ initialData, onGenerate, isGenerating, onDownload, planId }) => {
         const buildInitialStudent = () => {
             const examType = initialData?.student?.examType || "IELTS";
-            const defaultTotal = examType === "TOEFL" ? "90" : "6.5";
-            const defaultSub = examType === "TOEFL" ? "22" : "6.0";
+            const defaultTotal = examType === "TOEFL" ? "90" : (examType === "TOEFL_JUNIOR" ? "800+" : "6.5");
+            const defaultSub = examType === "TOEFL" ? "22" : (examType === "TOEFL_JUNIOR" ? "250+" : "6.0");
             return {
                 name: initialData?.student?.name || "",
                 currentGradeAndPlan: initialData?.student?.currentGradeAndPlan || "",
@@ -236,6 +266,9 @@
         const [student, setStudent] = useState(buildInitialStudent());
         const [phases, setPhases] = useState(initialData?.phases || []);
         const [pricing, setPricing] = useState(initialData?.pricing || []);
+        const [discountedTotalOverride, setDiscountedTotalOverride] = useState(
+            initialData?.discountedTotalOverride ?? null
+        );
 
         // Initialize exam date if empty
         useEffect(() => {
@@ -276,8 +309,9 @@
         const scoreOptions = SCORE_OPTIONS[student.examType] || [];
         const subScoreOptions = SUB_SCORE_OPTIONS[student.examType] || [];
         const subjectOptions = SUBJECT_OPTIONS[student.examType] || SUBJECT_OPTIONS.IELTS;
-        const teachingPlaceholder = student.examType === "TOEFL"
-            ? "例如：盲听 TPO Conversation + 同义词配对每日任务..."
+        const isToeflFamily = student.examType === "TOEFL" || student.examType === "TOEFL_JUNIOR";
+        const teachingPlaceholder = isToeflFamily
+            ? "例如：托福/Junior 分科练习说明，如听力精听+语法词汇专项..."
             : "例如：《睿然雅思阅读教辅》Unit 1–3...";
 
         const displayTotalScoreOptions = [...scoreOptions];
@@ -391,6 +425,8 @@
                 totalDuration: 0,
                 unitPrice: 800,
                 subtotal: 0,
+                discountPercent: 0,
+                discountedSubtotal: 0,
             };
             setPricing([...pricing, newRow]);
         };
@@ -409,10 +445,14 @@
                             const c = field === "count" ? Number(value) : r.count;
                             updatedRow.totalDuration = d * c;
                             updatedRow.subtotal = updatedRow.totalDuration * r.unitPrice;
+                            const rate = (updatedRow.discountPercent || 0) / 100;
+                            updatedRow.discountedSubtotal = updatedRow.subtotal * (1 - rate);
                         }
                         if (field === "unitPrice") {
                             const p = Number(value);
                             updatedRow.subtotal = r.totalDuration * p;
+                            const rate = (updatedRow.discountPercent || 0) / 100;
+                            updatedRow.discountedSubtotal = updatedRow.subtotal * (1 - rate);
                         }
                         return updatedRow;
                     }
@@ -425,9 +465,44 @@
             return pricing.reduce((sum, row) => sum + row.subtotal, 0);
         };
 
+        const calculateDiscountedTotal = () => {
+            return pricing.reduce((sum, row) => sum + (row.discountedSubtotal ?? row.subtotal ?? 0), 0);
+        };
+
+        const getFinalTotal = () => {
+            if (discountedTotalOverride !== null && discountedTotalOverride !== undefined && discountedTotalOverride !== "") {
+                return Number(discountedTotalOverride) || 0;
+            }
+            return calculateDiscountedTotal();
+        };
+        const hasDiscount = pricing.some(row => (row.discountPercent || 0) > 0);
+        const showDiscountTotal = hasDiscount || (discountedTotalOverride !== null && discountedTotalOverride !== undefined && discountedTotalOverride !== "");
+
+        const applyDiscount = (id) => {
+            const percentStr = prompt("输入折扣百分比（如 10 表示 9 折）");
+            if (percentStr === null) return;
+            const percent = Number(percentStr);
+            if (Number.isNaN(percent) || percent < 0 || percent > 100) {
+                alert("请输入 0-100 的数字");
+                return;
+            }
+            setPricing(prev =>
+                prev.map(r => {
+                    if (r.id !== id) return r;
+                    const rate = percent / 100;
+                    const subtotal = r.subtotal || 0;
+                    return {
+                        ...r,
+                        discountPercent: percent,
+                        discountedSubtotal: subtotal * (1 - rate)
+                    };
+                })
+            );
+        };
+
         const handleSubmit = (e) => {
             e.preventDefault();
-            onGenerate({ student, phases, pricing });
+            onGenerate({ student, phases, pricing, discountedTotalOverride });
         };
 
         return (
@@ -883,6 +958,7 @@
                                                     onChange={(e) => handlePricingChange(row.id, "unitPrice", Number(e.target.value))}
                                                     className="w-24 text-sm border-slate-300 rounded p-1.5 border bg-white"
                                                 >
+                                                    <option value={0}>0（赠送）</option>
                                                     <option value={800}>800</option>
                                                     <option value={750}>750</option>
                                                     <option value={700}>700</option>
@@ -898,7 +974,19 @@
                                                         onChange={(e) => handlePricingChange(row.id, "subtotal", Number(e.target.value))}
                                                         className="w-24 text-sm border-slate-300 rounded p-1.5 border font-medium"
                                                     />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => applyDiscount(row.id)}
+                                                        className="ml-2 text-brand-600 text-xs border border-brand-200 rounded px-2 py-1 hover:bg-brand-50"
+                                                    >
+                                                        应用折扣{row.discountPercent ? `(${row.discountPercent}%)` : ''}
+                                                    </button>
                                                 </div>
+                                                {row.discountPercent > 0 && (
+                                                    <div className="text-xs text-rose-600 mt-1">
+                                                        折后：¥{(row.discountedSubtotal || 0).toFixed(0)}
+                                                    </div>
+                                                )}
                                             </td>
                                             <td className="px-6 py-3 whitespace-nowrap text-right text-sm font-medium">
                                                 <button
@@ -920,13 +1008,45 @@
                                         </td>
                                         <td></td>
                                     </tr>
+                                    {showDiscountTotal && (
+                                        <tr className="bg-brand-50/50 font-bold">
+                                            <td colSpan={6} className="px-6 py-4 text-right text-sm text-brand-900">
+                                                折扣后总价
+                                            </td>
+                                            <td className="px-6 py-4 text-left text-base text-brand-700">
+                                                <div className="flex items-center gap-2">
+                                                    <span>¥</span>
+                                                    <input
+                                                        type="number"
+                                                        value={discountedTotalOverride ?? calculateDiscountedTotal()}
+                                                        onChange={(e) => setDiscountedTotalOverride(e.target.value)}
+                                                        className="w-32 text-sm border-slate-300 rounded p-1.5 border font-medium"
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
                     </section>
 
                     {/* Action Button */}
-                    <div className="flex justify-center pt-8 pb-20">
+                    <div className="flex justify-center gap-4 pt-8 pb-20">
+                        <button
+                            type="button"
+                            onClick={onDownload}
+                            disabled={!planId || isGenerating}
+                            className={`
+                flex items-center justify-center px-6 py-4 text-lg font-medium rounded-full border
+                ${(!planId || isGenerating) ? 'text-slate-400 border-slate-200 bg-white cursor-not-allowed' : 'text-brand-700 border-brand-200 bg-white hover:bg-brand-50 hover:shadow-lg transition-all duration-150'}
+              `}
+                        >
+                            <BookOpen className="-ml-1 mr-3 h-5 w-5" />
+                            下载 PDF
+                        </button>
+
                         <button
                             type="submit"
                             disabled={isGenerating}
@@ -956,6 +1076,7 @@
     // --- APP ROOT ---
     const App = ({ serverData }) => {
         const [isGenerating, setIsGenerating] = useState(false);
+        const [planId, setPlanId] = useState(serverData?.id || null);
 
         // Use server data if provided, otherwise use defaults for new plan
         const initialData = serverData || {
@@ -987,6 +1108,10 @@
         };
 
         const handleGenerate = async (data) => {
+            // 如果是编辑，保留 id 以便后端更新
+            if (planId) {
+                data.id = planId;
+            }
             setIsGenerating(true);
             try {
                 const response = await fetch('/api/course-plans', {
@@ -999,9 +1124,8 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    alert('方案保存成功！PDF 即将开始下载...');
-                    // Automatically trigger PDF download
-                    window.location.href = `/api/course-plans/${result.id}/pdf`;
+                    setPlanId(result.id);
+                    alert('方案已保存');
                 } else {
                     alert('保存失败，请重试');
                 }
@@ -1013,10 +1137,20 @@
             }
         };
 
+        const handleDownload = () => {
+            if (!planId) {
+                alert('请先保存方案，再导出 PDF');
+                return;
+            }
+            window.open(`/api/course-plans/${planId}/pdf`, '_blank');
+        };
+
         return React.createElement(StudyPlanForm, {
             initialData: initialData,
             onGenerate: handleGenerate,
-            isGenerating: isGenerating
+            isGenerating: isGenerating,
+            onDownload: handleDownload,
+            planId
         });
     };
 

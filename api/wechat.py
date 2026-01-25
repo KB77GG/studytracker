@@ -179,6 +179,8 @@ def wechat_login():
 
 def _check_profile_exists(user):
     try:
+        if user.role in {User.ROLE_TEACHER, User.ROLE_ASSISTANT, User.ROLE_ADMIN, User.ROLE_COURSE_PLANNER}:
+            return True
         if user.role == User.ROLE_STUDENT:
             return StudentProfile.query.filter_by(user_id=user.id).first() is not None
         elif user.role == User.ROLE_PARENT:
@@ -296,7 +298,17 @@ def bind_role():
                 db.session.commit()
             
             return jsonify({"ok": True, "role": "parent"})
-            
+        
+        elif role == "teacher":
+            teacher_name = data.get("name")
+            if not teacher_name:
+                return jsonify({"ok": False, "error": "missing_name"}), 400
+            # 仅设置角色和显示名，排课ID由后台管理员填入
+            user.role = User.ROLE_TEACHER
+            user.display_name = teacher_name
+            db.session.commit()
+            return jsonify({"ok": True, "role": "teacher"})
+
         else:
             return jsonify({"ok": False, "error": "invalid_role"}), 400
             
@@ -329,6 +341,87 @@ def bind_role():
             except Exception as fix_err:
                 logger.error(f"Auto-fix failed: {str(fix_err)}")
         
+        return jsonify({"ok": False, "error": "server_error", "message": str(e)}), 500
+
+
+@wechat_bp.route("/bind_existing", methods=["POST"])
+def bind_existing_account():
+    """Bind current WeChat user to an existing teacher account (username/password)."""
+    import logging
+    import jwt
+
+    logger = logging.getLogger(__name__)
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        return jsonify({"ok": False, "error": "missing_token"}), 401
+
+    token = auth_header.split(" ", 1)[1]
+    try:
+        payload = jwt.decode(
+            token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
+        )
+    except Exception:
+        return jsonify({"ok": False, "error": "invalid_token"}), 401
+
+    current_user = User.query.get(int(payload.get("sub", 0)))
+    if not current_user or not current_user.is_active:
+        return jsonify({"ok": False, "error": "user_inactive"}), 403
+
+    if current_user.role in {User.ROLE_STUDENT, User.ROLE_PARENT}:
+        return jsonify({"ok": False, "error": "role_conflict"}), 400
+
+    data = request.get_json() or {}
+    username = (data.get("username") or "").strip()
+    password = data.get("password") or ""
+    if not username or not password:
+        return jsonify({"ok": False, "error": "missing_credentials"}), 400
+
+    target = User.query.filter_by(username=username).first()
+    if not target or not target.check_password(password):
+        return jsonify({"ok": False, "error": "invalid_credentials"}), 400
+    if not target.is_active:
+        return jsonify({"ok": False, "error": "user_inactive"}), 403
+    if target.role != User.ROLE_TEACHER:
+        return jsonify({"ok": False, "error": "not_teacher"}), 400
+
+    current_openid = current_user.wechat_openid
+    if not current_openid:
+        return jsonify({"ok": False, "error": "missing_openid"}), 400
+
+    if target.wechat_openid and target.wechat_openid != current_openid:
+        return jsonify({"ok": False, "error": "wechat_already_bound"}), 409
+
+    try:
+        if target.id != current_user.id:
+            target.wechat_openid = current_openid
+            if current_user.wechat_unionid:
+                target.wechat_unionid = current_user.wechat_unionid
+            if current_user.scheduler_teacher_id and not target.scheduler_teacher_id:
+                target.scheduler_teacher_id = current_user.scheduler_teacher_id
+                current_user.scheduler_teacher_id = None
+
+            current_user.wechat_openid = None
+            current_user.wechat_unionid = None
+            current_user.wechat_nickname = None
+            if current_user.role == "guest":
+                current_user.is_active = False
+
+        if not target.display_name:
+            target.display_name = target.username
+
+        _, jwt_token = issue_token(target)
+        return jsonify({
+            "ok": True,
+            "token": jwt_token,
+            "user": {
+                "id": target.id,
+                "role": target.role,
+                "display_name": target.display_name,
+            }
+        })
+    except Exception as e:
+        logger.error("Bind existing account error: %s", str(e))
+        db.session.rollback()
         return jsonify({"ok": False, "error": "server_error", "message": str(e)}), 500
 
 @wechat_bp.route("/unbind", methods=["POST"])

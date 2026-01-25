@@ -51,33 +51,39 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30rpx;
-  margin-bottom: 40rpx;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
+  margin-bottom: 32rpx;
 }
 
 .stat-card {
-  background: white;
-  padding: 30rpx;
-  border-radius: 20rpx;
+  background: #f5f8f7;
+  padding: 28rpx;
+  border-radius: 18rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+  border: 1rpx solid #e4eeeb;
 }
 
-.stat-card.fire .value { color: #ff5722; }
-.stat-card.time .value { color: #2196f3; }
+.stat-card.fire .value { color: #fb8c00; }
+.stat-card.time .value { color: #20756F; }
 
-.icon {
-  font-size: 48rpx;
-  margin-bottom: 10rpx;
+.icon-dot {
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 50%;
+  margin-bottom: 12rpx;
 }
+
+.icon-dot.fire { background: linear-gradient(135deg, #ffb74d, #fb8c00); box-shadow: 0 0 0 8rpx rgba(251,140,0,0.12); }
+.icon-dot.time { background: linear-gradient(135deg, #36A59D, #20756F); box-shadow: 0 0 0 8rpx rgba(32,117,111,0.12); }
 
 .value {
-  font-size: 48rpx;
-  font-weight: bold;
-  margin-bottom: 4rpx;
+  font-size: 56rpx;
+  font-weight: 800;
+  font-family: 'DIN Alternate', 'Roboto Condensed', 'Montserrat', sans-serif;
+  margin-bottom: 6rpx;
 }
 
 .label {
@@ -86,11 +92,11 @@
 }
 
 .section {
-  background: white;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  margin-bottom: 30rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+  background: #fff;
+  border-radius: 18rpx;
+  padding: 28rpx;
+  margin-bottom: 28rpx;
+  box-shadow: 0 8rpx 18rpx rgba(0,0,0,0.04);
 }
 
 .section-title {
@@ -106,8 +112,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  height: 300rpx;
-  padding-top: 40rpx;
+  height: 360rpx;
+  padding: 10rpx 6rpx 0 6rpx;
 }
 
 .bar-group {
@@ -118,56 +124,59 @@
 }
 
 .bar-wrapper {
-  height: 200rpx;
+  height: 260rpx;
   display: flex;
   align-items: flex-end;
   margin-bottom: 10rpx;
 }
 
 .bar {
-  width: 20rpx;
-  background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
-  border-radius: 10rpx;
+  width: 28rpx;
+  background: linear-gradient(to top, #20756F 0%, #36A59D 100%);
+  border-radius: 14rpx;
   transition: height 0.5s ease;
 }
 
 .day-label {
   font-size: 22rpx;
-  color: #999;
+  color: #95a3aa;
 }
 
 /* Badges */
-.badges-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20rpx;
+.badge-strip {
+  white-space: nowrap;
+  width: 100%;
+  padding-bottom: 6rpx;
 }
 
 .badge-item {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 20rpx;
-  background: #f8f9fa;
-  border-radius: 16rpx;
+  padding: 18rpx 20rpx;
+  background: linear-gradient(135deg, #f0f7ff, #e8f5e9);
+  border-radius: 18rpx;
+  margin-right: 16rpx;
+  min-width: 160rpx;
+  box-shadow: 0 6rpx 12rpx rgba(0,0,0,0.06);
 }
 
 .badge-icon {
-  font-size: 60rpx;
-  margin-bottom: 10rpx;
+  font-size: 52rpx;
+  margin-bottom: 8rpx;
 }
 
 .badge-name {
   font-size: 26rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 6rpx;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 4rpx;
 }
 
 .badge-desc {
-  font-size: 20rpx;
-  color: #999;
+  font-size: 22rpx;
+  color: #7a8a90;
 }
 
 .logout-section {

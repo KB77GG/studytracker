@@ -2,13 +2,15 @@
     "pages": [
         "pages/index/index",
         "pages/student/home/index",
+        "pages/student/notebook/index",
         "pages/student/task/index",
         "pages/student/stats/index",
         "pages/student/dictation/index",
         "pages/student/dictation/practice/index",
         "pages/parent/home/index",
         "pages/parent/report/index",
-        "pages/parent/profile/index"
+        "pages/parent/profile/index",
+        "pages/teacher/home/index"
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -25,6 +27,12 @@
             {
                 "pagePath": "pages/student/home/index",
                 "text": "任务",
+                "iconPath": "images/tabbar/task.png",
+                "selectedIconPath": "images/tabbar/task_active.png"
+            },
+            {
+                "pagePath": "pages/student/notebook/index",
+                "text": "错词本",
                 "iconPath": "images/tabbar/task.png",
                 "selectedIconPath": "images/tabbar/task_active.png"
             },

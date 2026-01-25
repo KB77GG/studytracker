@@ -79,6 +79,7 @@
       <th>ID</th>
       <th>用户名</th>
       <th>角色</th>
+      <th>排课教师ID</th>
       <th>状态</th>
       <th>操作</th>
     </tr>
@@ -89,6 +90,13 @@
       <td>{{ u.id }}</td>
       <td>{{ u.username }}</td>
       <td>{{ u.role }}</td>
+      <td>
+        {% if u.role == 'teacher' %}
+        <input type="number" class="sched-input" data-uid="{{ u.id }}" value="{{ u.scheduler_teacher_id or '' }}" style="width: 120px;">
+        {% else %}
+        —
+        {% endif %}
+      </td>
       <td class="status-cell">{{ "启用" if u.is_active else "停用" }}</td>
       <td>
         {% if u.id != current_user.id %}
@@ -159,6 +167,28 @@
           const data = await resp.json();
           if (!data.ok) { alert('修改失败：' + (data.error || '')); return; }
           alert('密码已更新');
+        } catch (e) { alert('网络错误，请稍后再试'); }
+      });
+    });
+
+    // 设置排课教师ID
+    const schedInputs = document.querySelectorAll('.sched-input');
+    schedInputs.forEach(input => {
+      input.addEventListener('change', async () => {
+        const uid = input.dataset.uid;
+        const val = input.value;
+        try {
+          const resp = await fetch(`/api/users/${uid}/scheduler_teacher`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scheduler_teacher_id: val })
+          });
+          const data = await resp.json();
+          if (!data.ok) {
+            alert('保存失败：' + (data.error || ''));
+          } else {
+            alert('已保存');
+          }
         } catch (e) { alert('网络错误，请稍后再试'); }
       });
     });

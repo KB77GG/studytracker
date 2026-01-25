@@ -53,9 +53,6 @@
         <text wx:else>✗ 你的答案: {{inputValue}}</text>
       </view>
 
-      <view class="retry-bar" wx:if="{{wrongWordsDetail.length > 0}}">
-        <button class="mini-btn ghost" size="mini" bindtap="restartWrongWords">重练错词</button>
-      </view>
     </view>
   </view>
 
@@ -65,5 +62,29 @@
     <button wx:else class="submit-btn next" bindtap="nextWord">
       {{currentIndex + 1 === totalWords ? '完成练习' : '下一个'}}
     </button>
+  </view>
+
+  <!-- Summary & Wrong Words -->
+  <view wx:if="{{finished}}" class="summary-panel">
+    <view class="summary-title">本轮完成</view>
+    <view class="summary-row">准确率：{{summaryInfo.accuracy}}%（{{summaryInfo.correct}} / {{summaryInfo.total}}）</view>
+    <view class="summary-row" wx:if="{{summaryInfo.wrongCount > 0}}">
+      错词：{{summaryInfo.wrongCount}} 个
+    </view>
+    <view class="summary-note" wx:if="{{summaryInfo.wrongCount > 0}}">
+      已自动收录到错词本（累计 {{notebookCount}} 词）
+    </view>
+
+    <view class="wrong-list" wx:if="{{wrongWordsDetail.length > 0}}">
+      <view class="list-title">错词列表</view>
+      <view class="tag-list">
+        <view class="tag" wx:for="{{wrongWordsDetail}}" wx:key="word">
+          {{item.word}}
+        </view>
+      </view>
+      <button class="mini-btn ghost" style="margin-top:16rpx" bindtap="restartWrongWords">开始错词重练</button>
+    </view>
+
+    <button class="submit-btn" style="margin-top:20rpx" bindtap="returnAfterFinish">返回</button>
   </view>
 </view>

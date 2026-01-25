@@ -27,9 +27,10 @@ const request = (url, options = {}) => {
                     wx.reLaunch({
                         url: '/pages/index/index',
                     })
-                    reject(res)
+                    resolve({ ok: false, error: 'unauthorized', statusCode: res.statusCode })
                 } else {
-                    reject(res)
+                    // 返回后由调用方自行处理错误信息
+                    resolve(Object.assign({ ok: false, statusCode: res.statusCode }, res.data || {}))
                 }
             },
             fail: (err) => {

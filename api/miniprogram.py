@@ -1,6 +1,7 @@
 import os
 import json
 from datetime import datetime, date, timedelta
+import requests
 from flask import Blueprint, jsonify, request, current_app, url_for
 from werkzeug.utils import secure_filename
 from sqlalchemy import func, and_
@@ -11,6 +12,7 @@ from models import (
     PlanItemSession
 )
 from .auth_utils import require_api_user
+from .wechat import send_subscribe_message
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 
@@ -780,3 +782,239 @@ def debug_fix_db():
         return jsonify(result)
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@mp_bp.route("/bind_scheduler_student", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def bind_scheduler_student():
+    """绑定排课系统的学生ID到当前学生档案"""
+    data = request.get_json() or {}
+    scheduler_student_id = data.get("scheduler_student_id")
+    student_name = (data.get("student_name") or "").strip()
+
+    if not scheduler_student_id:
+        return jsonify({"ok": False, "error": "missing_scheduler_student_id"}), 400
+
+    user = request.current_api_user
+    profile = user.student_profile
+    if not profile:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    if student_name and student_name != profile.full_name:
+        return jsonify({"ok": False, "error": "name_mismatch"}), 400
+
+    existing = StudentProfile.query.filter(
+        StudentProfile.scheduler_student_id == scheduler_student_id,
+        StudentProfile.id != profile.id,
+    ).first()
+    if existing:
+        return jsonify({"ok": False, "error": "scheduler_id_taken"}), 409
+
+    profile.scheduler_student_id = scheduler_student_id
+    db.session.commit()
+    return jsonify({"ok": True, "scheduler_student_id": scheduler_student_id})
+
+
+@mp_bp.route("/bind_scheduler_teacher", methods=["POST"])
+@require_api_user(User.ROLE_TEACHER)
+def bind_scheduler_teacher():
+    """绑定排课系统的教师ID到当前教师账号"""
+    data = request.get_json() or {}
+    scheduler_teacher_id = data.get("scheduler_teacher_id")
+    if not scheduler_teacher_id:
+        return jsonify({"ok": False, "error": "missing_scheduler_teacher_id"}), 400
+
+    user = request.current_api_user
+    existing = User.query.filter(
+        User.scheduler_teacher_id == scheduler_teacher_id,
+        User.id != user.id,
+    ).first()
+    if existing:
+        return jsonify({"ok": False, "error": "scheduler_id_taken"}), 409
+
+    user.scheduler_teacher_id = scheduler_teacher_id
+    db.session.commit()
+    return jsonify({"ok": True, "scheduler_teacher_id": scheduler_teacher_id})
+
+
+def _fetch_tomorrow_schedules():
+    base_url = current_app.config.get("SCHEDULER_BASE_URL")
+    token = current_app.config.get("SCHEDULER_PUSH_TOKEN")
+    if not base_url or not token:
+        return None, "scheduler_config_missing"
+    try:
+        resp = requests.get(
+            f"{base_url}/api/schedules/tomorrow",
+            headers={"X-Push-Token": token},
+            timeout=5,
+        )
+        if resp.status_code != 200:
+            current_app.logger.warning("Scheduler API error: %s %s", resp.status_code, resp.text)
+            return None, "scheduler_api_error"
+        return resp.json(), None
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.error("Scheduler API request failed: %s", exc)
+        return None, "scheduler_request_failed"
+
+
+def _fetch_range_schedules(days=7, teacher_id=None):
+    """调用排课系统 range 接口，返回指定天数内的课表。"""
+    base_url = current_app.config.get("SCHEDULER_BASE_URL")
+    token = current_app.config.get("SCHEDULER_PUSH_TOKEN")
+    if not base_url or not token:
+        return None, "scheduler_config_missing"
+
+    today = date.today()
+    start = today.isoformat()
+    end = (today + timedelta(days=days)).isoformat()
+    params = {"start": start, "end": end}
+    if teacher_id is not None:
+        params["teacher_id"] = teacher_id
+
+    try:
+        resp = requests.get(
+            f"{base_url}/api/schedules/range",
+            headers={"X-Push-Token": token},
+            params=params,
+            timeout=5,
+        )
+        if resp.status_code != 200:
+            current_app.logger.warning("Scheduler range API error: %s %s", resp.status_code, resp.text)
+            return None, "scheduler_api_error"
+        return resp.json(), None
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.error("Scheduler range API request failed: %s", exc)
+        return None, "scheduler_request_failed"
+
+
+def _extract_schedule_fields(item: dict):
+    """兼容字段提取"""
+    schedule_id = item.get("schedule_id") or item.get("id")
+    student_id = item.get("student_id") or item.get("scheduler_student_id")
+    teacher_id = item.get("teacher_id")
+    course_name = item.get("course_name") or item.get("name") or "课程"
+    start_time = item.get("start_time") or item.get("start_at") or item.get("datetime")
+    end_time = item.get("end_time") or item.get("end_at") or item.get("end_datetime")
+    teacher_name = item.get("teacher_name") or item.get("teacher") or "老师待定"
+    schedule_date = item.get("schedule_date") or item.get("date")
+
+    # 拼成完整时间，避免仅有时分导致订阅模板校验失败
+    if schedule_date and start_time and len(str(start_time)) <= 5:
+        start_dt = f"{schedule_date} {start_time}"
+    else:
+        start_dt = start_time
+    if schedule_date and end_time and len(str(end_time)) <= 5:
+        end_dt = f"{schedule_date} {end_time}"
+    else:
+        end_dt = end_time
+
+    return schedule_id, student_id, teacher_id, course_name, start_dt, end_dt, teacher_name
+
+
+@mp_bp.route("/send_tomorrow_class_reminders", methods=["POST"])
+@require_api_user(User.ROLE_ADMIN, User.ROLE_TEACHER)
+def send_tomorrow_class_reminders():
+    """向绑定了 scheduler_student_id 的学生/家长推送明日课程提醒"""
+    template_id = current_app.config.get("WECHAT_TASK_TEMPLATE_ID")
+    if not template_id:
+        return jsonify({"ok": False, "error": "missing_template_id"}), 400
+
+    schedules, err = _fetch_tomorrow_schedules()
+    if err:
+        return jsonify({"ok": False, "error": err}), 400
+    if not schedules:
+        return jsonify({"ok": True, "sent": 0, "total": 0})
+
+    if isinstance(schedules, dict):
+        schedules_list = schedules.get("schedules") or schedules.get("data") or []
+    else:
+        schedules_list = schedules
+
+    sent = 0
+    dedupe = set()
+    for item in schedules_list:
+        schedule_id, student_id, teacher_id, course_name, start_time, end_time, teacher_name = _extract_schedule_fields(item)
+        if schedule_id and schedule_id in dedupe:
+            continue
+        if schedule_id:
+            dedupe.add(schedule_id)
+        # 学生+家长
+        if student_id:
+            profile = StudentProfile.query.filter_by(scheduler_student_id=student_id).first()
+            if profile:
+                openids = []
+                if profile.user and profile.user.wechat_openid:
+                    openids.append(profile.user.wechat_openid)
+                parent_links = ParentStudentLink.query.filter_by(student_name=profile.full_name).all()
+                for link in parent_links:
+                    parent = User.query.get(link.parent_id)
+                    if parent and parent.wechat_openid:
+                        openids.append(parent.wechat_openid)
+                if openids:
+                    data = {
+                        "thing27": {"value": course_name[:20]},
+                        "time6": {"value": str(start_time)[:32]},
+                        "time38": {"value": str(end_time or start_time)[:32]},
+                        "thing15": {"value": teacher_name[:20]},
+                    }
+                    for oid in openids:
+                        if send_subscribe_message(oid, template_id, data, page="pages/student/home/index"):
+                            sent += 1
+
+        # 老师
+        if teacher_id:
+            teacher = User.query.filter_by(scheduler_teacher_id=teacher_id, role=User.ROLE_TEACHER).first()
+            if teacher and teacher.wechat_openid:
+                data_t = {
+                    "thing27": {"value": course_name[:20]},
+                    "time6": {"value": str(start_time)[:32]},
+                    "time38": {"value": str(end_time or start_time)[:32]},
+                    "thing15": {"value": teacher_name[:20]},
+                }
+                if send_subscribe_message(teacher.wechat_openid, template_id, data_t, page="pages/student/home/index"):
+                    sent += 1
+
+    return jsonify({"ok": True, "sent": sent, "total": len(schedules_list)})
+
+
+@mp_bp.route("/teacher/schedules", methods=["GET"])
+@require_api_user(User.ROLE_TEACHER)
+def teacher_schedules():
+    """老师查看未来课表（默认7天，可传 days=30），要求已绑定 scheduler_teacher_id。"""
+    days = request.args.get("days", 7)
+    try:
+        days = int(days)
+    except Exception:
+        days = 7
+    days = max(1, min(days, 60))  # 限制 1-60 天
+
+    user = request.current_api_user
+    if not user.scheduler_teacher_id:
+        current_app.logger.warning(
+            "teacher_schedules missing scheduler_teacher_id user=%s role=%s",
+            user.id, user.role
+        )
+        return jsonify({"ok": False, "error": "missing_scheduler_teacher_id"}), 400
+
+    data, err = _fetch_range_schedules(days=days, teacher_id=user.scheduler_teacher_id)
+    if err:
+        return jsonify({"ok": False, "error": err}), 400
+
+    schedules = data.get("schedules") if isinstance(data, dict) else data
+    schedules = schedules or []
+
+    normalized = []
+    for item in schedules:
+        sid, student_id, teacher_id, course_name, start_dt, end_dt, teacher_name = _extract_schedule_fields(item)
+        normalized.append({
+            "schedule_id": sid,
+            "student_id": student_id,
+            "teacher_id": teacher_id,
+            "course_name": course_name,
+            "start_time": start_dt,
+            "end_time": end_dt,
+            "teacher_name": teacher_name,
+            "schedule_date": item.get("schedule_date") or item.get("date"),
+        })
+
+    return jsonify({"ok": True, "days": days, "count": len(normalized), "schedules": normalized})

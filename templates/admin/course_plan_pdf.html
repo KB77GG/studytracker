@@ -317,13 +317,23 @@
                     <td>{{ row.count }}</td>
                     <td>{{ row.totalDuration }}</td>
                     <td>{{ row.unitPrice }}</td>
-                    <td class="text-right">{{ row.subtotal }}</td>
+                    <td class="text-right">¥ {{ row.subtotal }}</td>
                 </tr>
                 {% endfor %}
                 <tr class="total-row">
                     <td colspan="6" class="text-right">合计</td>
                     <td class="text-right">¥ {{ "{:,.0f}".format(total_amount) }}</td>
                 </tr>
+                {% if show_discount_total %}
+                <tr class="total-row">
+                    <td colspan="6" class="text-right">折扣后总价</td>
+                    <td class="text-right">¥ {{ "{:,.0f}".format(discounted_total) }}</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="6" class="text-right">折扣后总价(最终)</td>
+                    <td class="text-right">¥ {{ "{:,.0f}".format(final_total) }}</td>
+                </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>

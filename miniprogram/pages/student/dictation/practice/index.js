@@ -20,6 +20,11 @@ Page({
         isSubmitting: false,
         displayTime: '00:00',
         ticker: null,
+        isLoadingAudio: false,
+        playToken: 0,
+        reviewingWrongWords: false,
+        finished: false,
+        summaryInfo: null,
 
         // UI State
         inputValue: '',
@@ -42,20 +47,54 @@ Page({
             this.setData({ progressKey: this.buildProgressKey(options.taskId, options.id) });
         }
 
+        // Load notebook count
+        this.loadNotebookCount();
+        this.loadLastWrong();
+
         // Create Audio Context
+        wx.setInnerAudioOption({
+            obeyMuteSwitch: false,
+            speakerOn: true
+        });
+        wx.setInnerAudioOption({
+            obeyMuteSwitch: false,
+            speakerOn: true
+        });
         this.audioCtx = wx.createInnerAudioContext();
         this.audioCtx.obeyMuteSwitch = false;
         this.audioCtx.autoplay = false;
-        this.audioCtx.onError((res) => {
-            console.error('Audio Error:', res.errMsg);
-            // fallback to direct youdao if proxy fails
-            if (!this.fallbackTried && this.data.currentWord.word) {
-                this.fallbackTried = true;
-                const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(this.data.currentWord.word.trim())}&type=2`;
-                this.audioCtx.src = direct;
+        this.playTokenCounter = 0;
+        this.pendingPlayToken = null;
+        this.currentDownloadTask = null;
+        this.audioCtx.onCanplay(() => {
+            if (this.pendingPlayToken && this.pendingPlayToken === this.playTokenCounter) {
+                this.pendingPlayToken = null;
                 this.audioCtx.play();
+            }
+        });
+        this.audioCtx.onPlay(() => {
+            this.setData({ isLoadingAudio: false });
+        });
+        this.audioCtx.onStop(() => {
+            this.setData({ isLoadingAudio: false });
+        });
+        this.audioCtx.onError((res) => {
+            const errMsg = res && res.errMsg ? String(res.errMsg) : '';
+            if (errMsg.includes('interrupted by a new load request')) {
                 return;
             }
+            if (this.pendingPlayToken !== this.playTokenCounter) {
+                return;
+            }
+            console.error('Audio Error:', errMsg);
+            if (!this.fallbackTried && this.data.currentWord.word) {
+                this.fallbackTried = true;
+                const trimmed = this.data.currentWord.word.trim();
+                const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(trimmed)}&type=2`;
+                this.downloadAndPlay(direct, trimmed, this.playTokenCounter, true);
+                return;
+            }
+            this.setData({ isLoadingAudio: false });
             wx.showToast({ title: '音频播放失败', icon: 'none' });
         });
         this.audioCtx.onEnded(() => {
@@ -192,12 +231,6 @@ Page({
         });
     },
 
-    onUnload: function () {
-        if (this.audioCtx) {
-            this.audioCtx.destroy();
-        }
-    },
-
     loadWord: function (index) {
         const word = this.data.words[index];
         this.setData({
@@ -212,7 +245,6 @@ Page({
         });
         this.saveProgress(index);
 
-        // Auto play
         setTimeout(() => {
             this.playCurrentWord();
         }, 500);
@@ -222,41 +254,61 @@ Page({
         const word = this.data.currentWord.word;
         if (!word) return;
 
-        this.fallbackTried = false;
         const trimmed = word.trim();
-        const proxyUrl = `${app.globalData.baseUrl}/dictation/tts?word=${encodeURIComponent(trimmed)}`;
+        this.fallbackTried = false;
+        this.playTokenCounter = (this.playTokenCounter || 0) + 1;
+        const token = this.playTokenCounter;
+        this.pendingPlayToken = token;
+        this.setData({ isLoadingAudio: true, playToken: token });
 
-        // Prefer下载到本地再播放，提升稳定性
-        wx.downloadFile({
-            url: proxyUrl,
-            success: (res) => {
-                if (res.statusCode === 200 && res.tempFilePath) {
-                    this.audioCtx.src = res.tempFilePath;
-                    this.audioCtx.play();
-                } else {
-                    this.useYoudaoFallback(trimmed);
-                }
-            },
-            fail: () => {
-                this.useYoudaoFallback(trimmed);
-            }
-        });
+        this.abortAudioDownload();
+        if (this.audioCtx && this.audioCtx.src) {
+            try {
+                this.audioCtx.stop();
+            } catch (e) {}
+        }
+
+        const proxyUrl = `${app.globalData.baseUrl}/dictation/tts?word=${encodeURIComponent(trimmed)}`;
+        this.downloadAndPlay(proxyUrl, trimmed, token, false);
     },
 
-    useYoudaoFallback(word) {
-        const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
-        wx.downloadFile({
-            url: direct,
+    abortAudioDownload() {
+        if (this.currentDownloadTask && this.currentDownloadTask.abort) {
+            try {
+                this.currentDownloadTask.abort();
+            } catch (e) {}
+        }
+        this.currentDownloadTask = null;
+    },
+
+    downloadAndPlay(url, word, token, isFallback) {
+        this.abortAudioDownload();
+        this.currentDownloadTask = wx.downloadFile({
+            url: url,
             success: (res) => {
+                this.currentDownloadTask = null;
+                if (token !== this.playTokenCounter) return;
                 if (res.statusCode === 200 && res.tempFilePath) {
+                    this.pendingPlayToken = token;
                     this.audioCtx.src = res.tempFilePath;
-                    this.audioCtx.play();
+                } else if (!isFallback) {
+                    const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
+                    this.downloadAndPlay(direct, word, token, true);
                 } else {
+                    this.setData({ isLoadingAudio: false });
                     wx.showToast({ title: '音频获取失败', icon: 'none' });
                 }
             },
             fail: () => {
-                wx.showToast({ title: '音频获取失败', icon: 'none' });
+                this.currentDownloadTask = null;
+                if (token !== this.playTokenCounter) return;
+                if (!isFallback) {
+                    const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
+                    this.downloadAndPlay(direct, word, token, true);
+                } else {
+                    this.setData({ isLoadingAudio: false });
+                    wx.showToast({ title: '音频获取失败', icon: 'none' });
+                }
             }
         });
     },
@@ -325,28 +377,56 @@ Page({
         const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
         const durationSeconds = this.computeDurationSeconds();
 
-        let content = `正确率: ${accuracy}%`;
-        if (this.data.wrongWords.length > 0) {
-            content += `\n错词: ${this.data.wrongWords.length} 个`;
+        if (this.data.reviewingWrongWords) {
+            wx.showModal({
+                title: '错词练习完成',
+                content: '已完成错词复习。',
+                showCancel: false,
+                success: () => wx.navigateBack()
+            });
+            return;
         }
 
-        wx.showModal({
-            title: '练习完成',
-            content: content,
-            confirmText: this.data.taskId ? '提交结果' : '返回',
-            cancelText: this.data.wrongWords.length ? '重练错词' : '再听一遍',
-            showCancel: true,
-            success: (res) => {
-                if (res.confirm && this.data.taskId) {
-                    this.submitTaskResult(accuracy, this.data.wrongWords, durationSeconds);
-                } else if (res.confirm || !this.data.taskId) {
-                    this.clearProgress();
-                    wx.navigateBack();
-                } else if (res.cancel && this.data.wrongWords.length) {
-                    this.restartWrongWords();
-                }
+        const summaryInfo = {
+            accuracy,
+            correct,
+            total,
+            wrongCount: this.data.wrongWordsDetail.length
+        };
+        // 保存最后一次错词列表，便于离开页面后再重练
+        if (this.data.wrongWordsDetail.length > 0) {
+            try {
+                wx.setStorageSync('dictation_last_wrong', this.data.wrongWordsDetail);
+            } catch (e) {
+                console.warn('save last wrong failed', e);
             }
-        });
+        }
+
+        // 如果有任务，先提交，再展示摘要
+        if (this.data.taskId) {
+            this.submitTaskResult(accuracy, this.data.wrongWords, durationSeconds, {
+                keepOpen: true,
+                onSuccess: () => {
+                    if (this.data.wrongWordsDetail.length > 0) {
+                        this.appendToNotebook(this.data.wrongWordsDetail);
+                    }
+                    this.setData({
+                        finished: true,
+                        summaryInfo
+                    });
+                    wx.showToast({ title: '提交成功', icon: 'success' });
+                }
+            });
+        } else {
+            if (this.data.wrongWordsDetail.length > 0) {
+                this.appendToNotebook(this.data.wrongWordsDetail);
+            }
+            this.setData({
+                finished: true,
+                summaryInfo
+            });
+            wx.showToast({ title: '练习结束', icon: 'success' });
+        }
     },
 
     computeDurationSeconds() {
@@ -357,7 +437,7 @@ Page({
         return elapsed;
     },
 
-    submitTaskResult: function (accuracy, wrongWords, durationSeconds = 0) {
+    submitTaskResult: function (accuracy, wrongWords, durationSeconds = 0, options = {}) {
         if (this.data.isSubmitting) return;
         this.setData({ isSubmitting: true });
         wx.showLoading({ title: '提交中...' });
@@ -377,9 +457,13 @@ Page({
             success: (res) => {
                 wx.hideLoading();
                 if (res.data.ok) {
-                    wx.showToast({ title: '提交成功', icon: 'success' });
                     this.clearProgress();
-                    setTimeout(() => wx.navigateBack(), 1500);
+                    if (options.onSuccess) {
+                        options.onSuccess();
+                    }
+                    if (!options.keepOpen) {
+                        setTimeout(() => wx.navigateBack(), 1500);
+                    }
                 } else {
                     wx.showToast({ title: '提交失败', icon: 'none' });
                 }
@@ -437,6 +521,11 @@ Page({
     onUnload() {
         this.pauseTimer();
         this.stopTicker();
+        this.abortAudioDownload();
+        if (this.audioCtx) {
+            this.audioCtx.destroy();
+            this.audioCtx = null;
+        }
     },
 
     pauseTimer() {
@@ -458,11 +547,23 @@ Page({
 
     // 重练错词
     restartWrongWords() {
-        if (!this.data.wrongWordsDetail.length) {
-            this.loadWord(0);
+        let wrongDetail = this.data.wrongWordsDetail;
+        if (!wrongDetail.length) {
+            try {
+                const saved = wx.getStorageSync('dictation_last_wrong') || [];
+                if (Array.isArray(saved) && saved.length) {
+                    wrongDetail = saved;
+                    this.setData({ wrongWordsDetail: saved });
+                }
+            } catch (e) {
+                console.warn('load last wrong failed', e);
+            }
+        }
+        if (!wrongDetail.length) {
+            wx.showToast({ title: '没有错词可重练', icon: 'none' });
             return;
         }
-        const wrongOnly = this.data.wrongWordsDetail.map((w, idx) => ({
+        const wrongOnly = wrongDetail.map((w, idx) => ({
             id: idx + 1,
             word: w.word,
             translation: w.translation,
@@ -478,10 +579,64 @@ Page({
             showResult: false,
             inputValue: '',
             userAnswer: '',
-            practiceStart: Date.now()
+            practiceStart: Date.now(),
+            reviewingWrongWords: true,
+            finished: false
         });
         this.loadWord(0);
         this.startTicker();
+    },
+
+    returnAfterFinish() {
+        this.clearProgress();
+        wx.navigateBack();
+    },
+
+    // ---------- Notebook (local) ----------
+    loadLastWrong() {
+        try {
+            const saved = wx.getStorageSync('dictation_last_wrong') || [];
+            if (Array.isArray(saved) && saved.length) {
+                this.setData({ wrongWordsDetail: saved });
+            }
+        } catch (e) {
+            console.warn('loadLastWrong error', e);
+        }
+    },
+
+    loadNotebookCount() {
+        try {
+            const list = wx.getStorageSync('dictation_notebook') || [];
+            this.setData({ notebookCount: Array.isArray(list) ? list.length : 0 });
+        } catch (e) {
+            console.warn('loadNotebookCount error', e);
+            this.setData({ notebookCount: 0 });
+        }
+    },
+
+    appendToNotebook(words) {
+        try {
+            const list = wx.getStorageSync('dictation_notebook') || [];
+            const map = new Map();
+            if (Array.isArray(list)) {
+                list.forEach(item => map.set((item.word || '').toLowerCase(), item));
+            }
+            (words || []).forEach(w => {
+                const key = (w.word || '').toLowerCase();
+                if (!key) return;
+                map.set(key, {
+                    word: w.word,
+                    translation: w.translation,
+                    phonetic: w.phonetic,
+                    updatedAt: Date.now()
+                });
+            });
+            const newList = Array.from(map.values());
+            wx.setStorageSync('dictation_notebook', newList);
+            this.setData({ notebookCount: newList.length });
+        } catch (e) {
+            console.warn('appendToNotebook error', e);
+        }
     },
 
     startTicker() {

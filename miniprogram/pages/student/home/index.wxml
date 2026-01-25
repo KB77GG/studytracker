@@ -1,72 +1,83 @@
 <view class="container">
-  <!-- 顶部欢迎区 -->
-  <view class="header-section">
-    <view class="greeting">
-      <text class="hello">{{greeting}}，{{userInfo.nickName}}</text>
-      <text class="sub-text">准备好开始今天的学习了吗？</text>
-    </view>
-    <picker mode="date" value="{{currentDate}}" bindchange="handleDateChange">
-      <view class="date-badge">
-        {{dateStr}} <text class="picker-arrow">▼</text>
+  <scroll-view scroll-y class="page-scroll">
+    <!-- 顶部欢迎区 -->
+    <view class="header-section">
+      <view class="greeting">
+        <text class="hello">{{greeting}}，{{userInfo.nickName}}</text>
+        <text class="sub-text">准备好开始今天的学习了吗？</text>
       </view>
-    </picker>
-    <button class="sub-btn" size="mini" bindtap="requestSubscribe" wx:if="{{!hasSubscribed}}">开启任务提醒</button>
-  </view>
-
-  <!-- 进度卡片 -->
-  <view class="progress-card">
-    <view class="progress-info">
-      <text class="progress-label">今日完成度</text>
-      <text class="progress-value">{{progress.completed}}/{{progress.total}}</text>
+      <picker mode="date" value="{{currentDate}}" bindchange="handleDateChange">
+        <view class="date-badge">
+          {{dateStr}} <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+      <button class="sub-btn" size="mini" bindtap="requestSubscribe" wx:if="{{!hasSubscribed}}">开启任务提醒</button>
     </view>
-    <view class="progress-bar-bg">
-      <view class="progress-bar-fill" style="width: {{progress.percent}}%"></view>
-    </view>
-    <text class="progress-tips" wx:if="{{progress.percent === 100}}">太棒了！今日任务全部完成 🎉</text>
-    <text class="progress-tips" wx:elif="{{progress.percent > 0}}">继续加油，保持节奏！💪</text>
-    <text class="progress-tips" wx:else>千里之行，始于足下 🚀</text>
-  </view>
 
-  <!-- 任务列表 -->
-  <view class="section-title">我的任务</view>
-  
-  <view class="task-list" wx:if="{{tasks.length > 0}}">
-    <view class="task-card {{item.isDone ? 'done' : ''}}" wx:for="{{tasks}}" wx:key="id">
-      <view class="card-main" bindtap="goToTaskDetail" data-id="{{item.id}}">
-        <view class="card-left">
-          <view class="task-icon {{item.moduleClass}}">{{item.module[0]}}</view>
-          <view class="task-content">
-            <text class="task-name">{{item.task_name}}</text>
-            <text class="task-time">预计 {{item.planned_minutes}}分钟</text>
+    <!-- 进度卡片 -->
+    <view class="progress-card">
+      <view class="progress-info">
+        <text class="progress-label">今日完成度</text>
+        <text class="progress-value">{{progress.completed}}/{{progress.total}}</text>
+      </view>
+      <view class="progress-bar-bg">
+        <view class="progress-bar-fill" style="width: {{progress.percent}}%"></view>
+      </view>
+      <text class="progress-tips" wx:if="{{progress.percent === 100}}">太棒了！今日任务全部完成 🎉</text>
+      <text class="progress-tips" wx:elif="{{progress.percent > 0}}">继续加油，保持节奏！💪</text>
+      <text class="progress-tips" wx:else>千里之行，始于足下 🚀</text>
+    </view>
+
+    <!-- Notebook entry -->
+    <view class="notebook-entry" bindtap="goNotebook">
+      <view>
+        <view class="note-title">错词本</view>
+        <view class="note-desc">查看并复习错词</view>
+      </view>
+      <view class="note-count" wx:if="{{notebookCount > 0}}">已收录 {{notebookCount}} 词</view>
+    </view>
+
+    <!-- 任务列表 -->
+    <view class="section-title">我的任务</view>
+    
+    <view class="task-list" wx:if="{{tasks.length > 0}}">
+      <view class="task-card {{item.isDone ? 'done' : ''}}" wx:for="{{tasks}}" wx:key="id">
+        <view class="card-main" bindtap="goToTaskDetail" data-id="{{item.id}}">
+          <view class="card-left">
+            <view class="task-icon {{item.iconClass}}">{{item.iconText}}</view>
+            <view class="task-content">
+              <text class="task-name">{{item.task_name}}</text>
+              <text class="task-time">预计 {{item.planned_minutes}}分钟</text>
+            </view>
+          </view>
+          <view class="card-right">
+            <view class="status-badge {{item.status}}">{{item.statusText}}</view>
           </view>
         </view>
-        <view class="card-right">
-          <view class="status-badge {{item.status}}">{{item.statusText}}</view>
-        </view>
-      </view>
-      
-      <!-- Timer Section -->
-      <view class="timer-section" wx:if="{{!item.isDone}}">
-        <view class="timer-display {{item.timerStatus}}">
-          <text class="timer-label">⏱️</text>
-          <text class="timer-text {{item.isOvertime ? 'overtime' : ''}}">
-            {{item.displayTime}} / {{item.plannedTime}}
-          </text>
-        </view>
-        <view class="timer-controls">
-          <view wx:if="{{item.timerStatus === 'idle'}}" class="timer-btn start" catchtap="startTimer" data-id="{{item.id}}">开始</view>
-          <view wx:if="{{item.timerStatus === 'running'}}" class="timer-btn pause" catchtap="pauseTimer" data-id="{{item.id}}">暂停</view>
-          <view wx:if="{{item.timerStatus === 'paused'}}" class="timer-btn resume" catchtap="resumeTimer" data-id="{{item.id}}">继续</view>
-          <view wx:if="{{item.timerStatus === 'running' || item.timerStatus === 'paused'}}" class="timer-btn stop" catchtap="stopTimer" data-id="{{item.id}}">结束</view>
+        
+        <!-- Timer Section -->
+        <view class="timer-section" wx:if="{{!item.isDone}}">
+          <view class="timer-display {{item.timerStatus}}">
+            <text class="timer-label">⏱️</text>
+            <text class="timer-text {{item.isOvertime ? 'overtime' : ''}}">
+              {{item.displayTime}} / {{item.plannedTime}}
+            </text>
+          </view>
+          <view class="timer-controls">
+            <view wx:if="{{item.timerStatus === 'idle'}}" class="timer-btn start" catchtap="startTimer" data-id="{{item.id}}">开始</view>
+            <view wx:if="{{item.timerStatus === 'running'}}" class="timer-btn pause" catchtap="pauseTimer" data-id="{{item.id}}">暂停</view>
+            <view wx:if="{{item.timerStatus === 'paused'}}" class="timer-btn resume" catchtap="resumeTimer" data-id="{{item.id}}">继续</view>
+            <view wx:if="{{item.timerStatus === 'running' || item.timerStatus === 'paused'}}" class="timer-btn stop" catchtap="stopTimer" data-id="{{item.id}}">结束</view>
+          </view>
         </view>
       </view>
     </view>
-  </view>
 
-  <!-- 空状态 -->
-  <view class="empty-state" wx:else>
-    <image class="empty-img" src="/images/empty-box.png" mode="aspectFit" wx:if="{{false}}"></image> <!-- 暂时隐藏图片 -->
-    <text class="empty-text">今天没有任务哦</text>
-    <text class="empty-sub">好好休息，明天继续加油！</text>
-  </view>
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <image class="empty-img" src="/images/empty-box.png" mode="aspectFit" wx:if="{{false}}"></image> <!-- 暂时隐藏图片 -->
+      <text class="empty-text">今天没有任务哦</text>
+      <text class="empty-sub">好好休息，明天继续加油！</text>
+    </view>
+  </scroll-view>
 </view>

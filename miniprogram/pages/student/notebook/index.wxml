@@ -1,0 +1,28 @@
+<view class="page">
+  <view class="page-header">
+    <view class="title">错词本</view>
+    <view class="count">共 {{list.length}} 词</view>
+  </view>
+
+  <view wx:if="{{!list.length && !isLoading}}" class="empty">
+    <text>还没有错词记录</text>
+  </view>
+
+  <scroll-view wx:else scroll-y class="list">
+    <view class="card" wx:for="{{list}}" wx:key="word">
+      <view class="card-header">
+        <view class="word">{{item.word}}</view>
+        <view class="phonetic">[{{item.phonetic || '-'}}]</view>
+      </view>
+      <view class="trans">{{item.translation || '暂无释义'}}</view>
+      <view class="card-actions">
+        <button size="mini" class="ghost" data-word="{{item.word}}" bindtap="playWord">播放</button>
+        <button size="mini" class="danger" data-word="{{item.word}}" bindtap="deleteItem">删除</button>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="footer">
+    <button class="clear-btn" bindtap="clearAll">清空错词本</button>
+  </view>
+</view>

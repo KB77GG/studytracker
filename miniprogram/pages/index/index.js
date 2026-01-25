@@ -6,11 +6,17 @@ Page({
         hasToken: false,
         isGuest: false,
         showBindForm: false,
+        showExistingBindForm: false,
         showLoginForm: false,  // 新增：控制是否显示登录表单
+        privacyNeedAuth: false,
+        landingAgreed: false,
         targetRole: '',
         bindName: '',
         bindStudentName: '',
         bindPhone: '',
+        existingUsername: '',
+        existingPassword: '',
+        existingLoading: false,
         privacyAgreed: false,
         showPreview: false
     },
@@ -34,11 +40,25 @@ Page({
         })
     },
 
+    handleLandingPrivacyChange(e) {
+        this.setData({
+            landingAgreed: e.detail.value.length > 0
+        })
+    },
+
     showPreview() {
         this.setData({ showPreview: true, showLoginForm: false })
     },
 
     onLoad(options) {
+        // 检查隐私授权状态
+        wx.getPrivacySetting({
+            success: (res) => {
+                this.setData({ privacyNeedAuth: !!res.needAuthorization })
+            },
+            fail: () => { }
+        })
+
         // 支持直接进入绑定模式（用于添加第二个孩子）
         if (options && options.action === 'bind_parent') {
             this.setData({
@@ -65,10 +85,35 @@ Page({
         })
     },
 
+    startUse() {
+        // 欢迎页勾选一次
+        if (!this.data.landingAgreed) {
+            wx.showToast({ title: '请先阅读并同意隐私政策', icon: 'none' })
+            return
+        }
+        // 同步勾选状态，进入登录
+        this.setData({
+            showLoginForm: true,
+            privacyAgreed: true
+        })
+    },
+
     handleLogin() {
         if (!this.data.privacyAgreed) {
             wx.showToast({ title: '请先阅读并同意隐私协议', icon: 'none' })
             return
+        }
+
+        // 若平台要求弹出隐私协议，先调用官方弹窗
+        if (this.data.privacyNeedAuth) {
+            try {
+                wx.openPrivacyContract({
+                    success: () => { },
+                    fail: () => { wx.showToast({ title: '请先查看隐私政策', icon: 'none' }) }
+                })
+            } catch (e) {
+                // ignore
+            }
         }
 
         wx.showLoading({ title: '登录中...' })
@@ -111,6 +156,10 @@ Page({
                         wx.hideLoading()
                     }
                 }
+            },
+            fail: () => {
+                wx.hideLoading()
+                wx.showToast({ title: '微信登录失败', icon: 'none' })
             }
         })
     },
@@ -138,6 +187,8 @@ Page({
             wx.reLaunch({ url: '/pages/student/home/index' })
         } else if (role === 'parent') {
             wx.reLaunch({ url: '/pages/parent/home/index' })
+        } else if (role === 'teacher') {
+            wx.reLaunch({ url: '/pages/teacher/home/index' })
         } else {
             // guest or other
             this.setData({ isGuest: true })
@@ -149,7 +200,26 @@ Page({
         this.setData({
             targetRole: role,
             showBindForm: true,
+            showExistingBindForm: false,
             isGuest: false // 隐藏选择卡片
+        })
+    },
+
+    showExistingBind() {
+        this.setData({
+            showExistingBindForm: true,
+            showBindForm: false,
+            isGuest: false
+        })
+    },
+
+    cancelExistingBind() {
+        this.setData({
+            showExistingBindForm: false,
+            existingUsername: '',
+            existingPassword: '',
+            existingLoading: false,
+            isGuest: true
         })
     },
 
@@ -163,6 +233,7 @@ Page({
 
         this.setData({
             showBindForm: false,
+            showExistingBindForm: false,
             isGuest: true
         })
     },
@@ -214,6 +285,52 @@ Page({
             wx.showToast({ title: '请求错误: ' + JSON.stringify(err), icon: 'none', duration: 3000 })
         } finally {
             wx.hideLoading()
+        }
+    },
+
+    async confirmExistingBind() {
+        const username = (this.data.existingUsername || '').trim()
+        const password = this.data.existingPassword || ''
+        if (!username || !password) {
+            wx.showToast({ title: '请输入用户名和密码', icon: 'none' })
+            return
+        }
+
+        this.setData({ existingLoading: true })
+        try {
+            const res = await request('/wechat/bind_existing', {
+                method: 'POST',
+                data: { username, password }
+            })
+            if (res && res.ok) {
+                app.globalData.token = res.token
+                wx.setStorageSync('token', res.token)
+                if (res.user && res.user.role) {
+                    wx.setStorageSync('role', res.user.role)
+                    app.globalData.role = res.user.role
+                }
+                wx.showToast({ title: '绑定成功', icon: 'success' })
+                this.setData({
+                    showExistingBindForm: false,
+                    existingUsername: '',
+                    existingPassword: '',
+                    existingLoading: false
+                })
+                this.handleRoleRedirect(res.user.role)
+            } else {
+                let msg = (res && res.error) || '绑定失败'
+                if (res && res.error === 'invalid_credentials') msg = '用户名或密码错误'
+                if (res && res.error === 'not_teacher') msg = '该账号不是老师角色'
+                if (res && res.error === 'wechat_already_bound') msg = '该账号已绑定其他微信'
+                if (res && res.error === 'user_inactive') msg = '账号已停用'
+                if (res && res.error === 'role_conflict') msg = '当前微信已绑定学生/家长，无法合并'
+                wx.showToast({ title: msg, icon: 'none', duration: 3000 })
+            }
+        } catch (err) {
+            console.error('Bind existing error:', err)
+            wx.showToast({ title: '请求错误', icon: 'none' })
+        } finally {
+            this.setData({ existingLoading: false })
         }
     },
 

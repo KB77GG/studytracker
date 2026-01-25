@@ -51,6 +51,7 @@ class User(db.Model, UserMixin, TimestampMixin):
     wechat_openid = db.Column(db.String(64), index=True)
     wechat_unionid = db.Column(db.String(64), index=True)
     wechat_nickname = db.Column(db.String(64))
+    scheduler_teacher_id = db.Column(db.Integer, unique=True, index=True)
 
     # Relationships populated further down the file (e.g., student_profile, plans).
 
@@ -91,6 +92,7 @@ class StudentProfile(db.Model, TimestampMixin, SoftDeleteMixin):
     primary_parent_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     
     wechat_openid = db.Column(db.String(64), index=True)
+    scheduler_student_id = db.Column(db.Integer, unique=True, index=True)
 
     user = db.relationship(
         "User",

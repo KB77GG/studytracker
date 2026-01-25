@@ -2,104 +2,72 @@
 /* 页面容器：清新晨光渐变背景 */
 .container {
   min-height: 100vh;
-  /* 之前的深色：background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
-  /* 新的清新蓝绿渐变，呼应 Sage Logo */
-  background: linear-gradient(180deg, #e0f2f1 0%, #80deea 100%); 
+  background: linear-gradient(180deg, #e9f6f4 0%, #d2efe9 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 40rpx;
+  padding: 0 32rpx 40rpx;
   position: relative;
   overflow: hidden;
 }
 
-/* 背景装饰圆 - 改为白色半透明，增加通透感 */
-.bg-circle-1 {
-  position: absolute;
-  top: -100rpx;
-  left: -100rpx;
-  width: 500rpx;
-  height: 500rpx;
-  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-  border-radius: 50%;
-  filter: blur(20rpx);
-  animation: float 10s infinite ease-in-out;
-}
-
-.bg-circle-2 {
-  position: absolute;
-  bottom: 0;
-  right: -100rpx;
-  width: 600rpx;
-  height: 600rpx;
-  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
-  border-radius: 50%;
-  filter: blur(30rpx);
-  animation: float 8s infinite ease-in-out reverse;
-}
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(20rpx, 20rpx); }
-}
-
-/* 品牌区域 */
-.brand-area {
-  margin-top: 100rpx; /* 稍微上移 */
+.hero {
+  margin-top: 60rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #00695c; /* 改为深青色文字，在浅色背景上更清晰 */
-  margin-bottom: 40rpx; /* 拉近与卡片的距离 */
-  z-index: 1;
-  animation: fadeInDown 0.8s ease-out;
-}
-
-.brand-logo {
-  display: none; /* 隐藏图片 */
+  gap: 6rpx;
+  color: #0e5c54;
 }
 
 .app-name {
-  font-size: 60rpx;
-  font-weight: 900;
-  color: #004d40;
-  letter-spacing: 2rpx;
-  margin-bottom: 10rpx;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 70rpx;
+  font-weight: 800;
+  letter-spacing: 1rpx;
+  font-family: 'Poppins', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .sub-name {
-  font-size: 28rpx;
-  color: #00695c;
-  opacity: 0.8;
-  margin-bottom: 30rpx;
+  font-size: 30rpx;
+  color: #1c8b7f;
+  opacity: 0.9;
   font-style: italic;
-  letter-spacing: 1rpx;
 }
 
 .slogan {
   font-size: 30rpx;
-  opacity: 0.6;
-  font-weight: 500;
-  letter-spacing: 6rpx;
-  color: #004d40;
-  text-shadow: none;
+  color: #1f6c65;
+  opacity: 0.75;
+  letter-spacing: 4rpx;
+  margin-top: 10rpx;
 }
 
 /* 主卡片 */
 .main-card {
   width: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 48rpx;
-  padding: 60rpx 40rpx;
-  /* 更轻盈的投影 */
-  box-shadow: 0 20rpx 60rpx rgba(0, 105, 92, 0.1);
+  background: #fff;
+  border-radius: 52rpx;
+  padding: 60rpx 40rpx 52rpx;
+  box-shadow: 0 18rpx 45rpx rgba(0, 0, 0, 0.05);
   z-index: 10;
-  animation: fadeInUp 0.8s ease-out 0.2s backwards;
+  animation: fadeInUp 0.6s ease-out 0.1s backwards;
   min-height: 400rpx;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-bottom: 10rpx;
+  justify-content: center;
+}
+
+.card-icon {
+  width: 48rpx;
+  height: 48rpx;
 }
 
 /* 1. 登录引导 */
@@ -130,7 +98,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #42d392 0%, #647eff 100%); /* 蓝绿渐变，更有科技感 */
+  background: linear-gradient(135deg, #20756F 0%, #36A59D 100%);
   color: white;
   width: 100%;
   height: 110rpx; /* 稍微加高 */
@@ -150,9 +118,73 @@
   box-shadow: 0 10rpx 20rpx rgba(66, 211, 146, 0.2);
 }
 
-.wechat-icon {
-  margin-right: 16rpx;
+.welcome-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.intro-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.intro-icon {
+  font-size: 40rpx;
+}
+
+.intro-title {
   font-size: 36rpx;
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: 1rpx;
+}
+
+.feature-list {
+  margin: 24rpx 0 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  background: #fff;
+  border-radius: 26rpx;
+  padding: 20rpx;
+  box-shadow: 0 10rpx 24rpx rgba(0,0,0,0.05);
+}
+
+.feature-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.feature-title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #1f2d3d;
+}
+
+.feature-desc {
+  font-size: 26rpx;
+  color: #7a8a90;
+}
+
+.feature-emoji {
+  font-size: 40rpx;
+  width: 60rpx;
+  text-align: center;
 }
 
 /* 隐私协议 */
@@ -243,6 +275,17 @@
 .role-desc {
   font-size: 22rpx;
   opacity: 0.7;
+}
+
+.bind-existing-link {
+  margin-top: 36rpx;
+  width: 100%;
+  height: 80rpx;
+  background: #effaf7;
+  color: #1f6c65;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  border: 1px solid #cfe7e3;
 }
 
 /* 3. 绑定表单 */

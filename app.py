@@ -157,6 +157,59 @@ def ensure_legacy_schema() -> None:
                 current_app.logger.warning(
                     "Failed to add text_content to plan_evidence table: %s", exc
                 )
+    if "student_profile" in tables:
+        columns = {col["name"] for col in inspector.get_columns("student_profile")}
+        if "scheduler_student_id" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text("ALTER TABLE student_profile ADD COLUMN scheduler_student_id INTEGER")
+                    )
+            except Exception as exc:  # pragma: no cover
+                current_app.logger.warning(
+                    "Failed to add scheduler_student_id to student_profile table: %s", exc
+                )
+        try:
+            existing_indexes = {idx["name"] for idx in inspector.get_indexes("student_profile")}
+            if "ix_student_profile_scheduler_student_id" not in existing_indexes:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(
+                            "CREATE UNIQUE INDEX IF NOT EXISTS "
+                            "ix_student_profile_scheduler_student_id "
+                            "ON student_profile (scheduler_student_id)"
+                        )
+                    )
+        except Exception as exc:  # pragma: no cover
+            current_app.logger.warning(
+                "Failed to ensure index on student_profile.scheduler_student_id: %s", exc
+            )
+    if "user" in tables:
+        columns = {col["name"] for col in inspector.get_columns("user")}
+        if "scheduler_teacher_id" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text("ALTER TABLE user ADD COLUMN scheduler_teacher_id INTEGER")
+                    )
+            except Exception as exc:  # pragma: no cover
+                current_app.logger.warning(
+                    "Failed to add scheduler_teacher_id to user table: %s", exc
+                )
+        try:
+            existing_indexes = {idx["name"] for idx in inspector.get_indexes("user")}
+            if "ix_user_scheduler_teacher_id" not in existing_indexes:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(
+                            "CREATE UNIQUE INDEX IF NOT EXISTS "
+                            "ix_user_scheduler_teacher_id ON user (scheduler_teacher_id)"
+                        )
+                    )
+        except Exception as exc:  # pragma: no cover
+            current_app.logger.warning(
+                "Failed to ensure index on user.scheduler_teacher_id: %s", exc
+            )
 
 
 with app.app_context():
@@ -494,6 +547,36 @@ def api_change_password(uid):
     u.set_password(new_password)
     db.session.commit()
     return jsonify({"ok": True})
+
+# ---- AJAX: 设置/清除教师排课ID ----
+@app.post("/api/users/<int:uid>/scheduler_teacher")
+@login_required
+@admin_required
+def api_set_scheduler_teacher(uid):
+    u = User.query.get_or_404(uid)
+    data = request.get_json(silent=True) or {}
+    value = data.get("scheduler_teacher_id")
+    # 仅老师账号可设置
+    if u.role != User.ROLE_TEACHER:
+        return jsonify({"ok": False, "error": "not_teacher"}), 400
+    if value in (None, "", "null"):
+        u.scheduler_teacher_id = None
+        db.session.commit()
+        return jsonify({"ok": True, "scheduler_teacher_id": None})
+    try:
+        value_int = int(value)
+    except Exception:
+        return jsonify({"ok": False, "error": "invalid_id"}), 400
+    # 防占用
+    exists = User.query.filter(
+        User.scheduler_teacher_id == value_int,
+        User.id != u.id
+    ).first()
+    if exists:
+        return jsonify({"ok": False, "error": "id_taken"}), 409
+    u.scheduler_teacher_id = value_int
+    db.session.commit()
+    return jsonify({"ok": True, "scheduler_teacher_id": value_int})
 
 @app.post("/api/users/auto-student")
 @login_required
@@ -2954,7 +3037,9 @@ def course_plan_create(plan_id=None):
     plan_data = None
     if plan_id:
         plan = CoursePlan.query.get_or_404(plan_id)
-        plan_data = json.dumps(plan.plan_data, ensure_ascii=False)
+        plan_payload = dict(plan.plan_data or {})
+        plan_payload["id"] = plan.id
+        plan_data = json.dumps(plan_payload, ensure_ascii=False)
     return render_template("admin/course_plan_create.html", initial_data=plan_data)
 
 @app.route("/api/course-plans", methods=["POST"])
@@ -2964,7 +3049,8 @@ def save_course_plan():
     data = request.json
     if not data:
         return jsonify({"error": "No data provided"}), 400
-        
+    
+    plan_id = data.get("id")
     student_info = data.get("student", {})
     student_name = student_info.get("name")
     
@@ -2982,19 +3068,27 @@ def save_course_plan():
         db.session.add(student_profile)
         db.session.flush() # Get ID
         
-    # Create Plan
     exam_type = (student_info.get("examType") or "IELTS").upper()
-    exam_label = "托福" if exam_type == "TOEFL" else "雅思"
+    exam_label = "托福" if exam_type.startswith("TOEFL") else "雅思"
     title = f"{student_name} - {exam_label}学习方案 ({datetime.now().strftime('%Y-%m-%d')})"
+
+    # Update existing plan if id provided, else create new
+    if plan_id:
+        plan = CoursePlan.query.get(plan_id)
+        if not plan:
+            return jsonify({"error": "Plan not found"}), 404
+        plan.student_id = student_profile.id
+        plan.plan_data = data
+        plan.title = title
+    else:
+        plan = CoursePlan(
+            student_id=student_profile.id,
+            created_by=current_user.id,
+            plan_data=data,
+            title=title
+        )
+        db.session.add(plan)
     
-    plan = CoursePlan(
-        student_id=student_profile.id,
-        created_by=current_user.id,
-        plan_data=data,
-        title=title
-    )
-    
-    db.session.add(plan)
     db.session.commit()
     
     return jsonify({"ok": True, "id": plan.id})
@@ -3020,10 +3114,41 @@ def export_course_plan_pdf(plan_id):
     phases = data.get("phases", [])
     pricing = data.get("pricing", [])
     exam_type = (student.get("examType") or "IELTS").upper()
-    exam_label = "托福" if exam_type == "TOEFL" else "雅思"
+    exam_label = "托福" if exam_type.startswith("TOEFL") else "雅思"
     
     # Calculate totals
     total_amount = sum(row.get("subtotal", 0) for row in pricing)
+    discounted_total = sum(row.get("discountedSubtotal", row.get("subtotal", 0)) for row in pricing)
+    final_total = data.get("discountedTotalOverride")
+    has_override = final_total not in (None, "", "null")
+    if not has_override:
+        final_total = discounted_total
+    try:
+        final_total = float(final_total)
+    except Exception:
+        final_total = discounted_total
+    
+    has_discount = False
+    for row in pricing:
+        try:
+            percent = float(row.get("discountPercent") or 0)
+        except Exception:
+            percent = 0
+        try:
+            subtotal = float(row.get("subtotal") or 0)
+        except Exception:
+            subtotal = 0
+        try:
+            if row.get("discountedSubtotal") is None:
+                discounted_subtotal = subtotal
+            else:
+                discounted_subtotal = float(row.get("discountedSubtotal"))
+        except Exception:
+            discounted_subtotal = subtotal
+        if percent > 0 or discounted_subtotal < subtotal:
+            has_discount = True
+            break
+    show_discount_total = has_discount or has_override
     
     # Load and encode logo as base64
     import base64
@@ -3042,6 +3167,9 @@ def export_course_plan_pdf(plan_id):
         phases=phases,
         pricing=pricing,
         total_amount=total_amount,
+        discounted_total=discounted_total,
+        final_total=final_total,
+        show_discount_total=show_discount_total,
         generated_at=datetime.now(),
         logo_base64=logo_base64,
         exam_label=exam_label,
