@@ -197,6 +197,10 @@ Page({
 
     selectRole(e) {
         const role = e.currentTarget.dataset.role
+        if (role === 'teacher') {
+            this.showExistingBind()
+            return
+        }
         this.setData({
             targetRole: role,
             showBindForm: true,

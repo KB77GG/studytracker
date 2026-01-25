@@ -126,7 +126,6 @@
           <text class="role-desc">查看课表 · 订阅提醒</text>
         </view>
       </view>
-      <button class="bind-existing-link" bindtap="showExistingBind">已有老师账号？用账号密码绑定</button>
     </view>
 
     <!-- 2.5 绑定已有账号 -->
@@ -153,7 +152,7 @@
     <!-- 3. 绑定表单 -->
     <view class="bind-section" wx:if="{{showBindForm}}">
       <text class="section-title">完善信息</text>
-      <text class="section-subtitle">绑定{{targetRole === 'student' ? '学生' : (targetRole === 'parent' ? '家长' : '老师')}}身份以开始使用</text>
+      <text class="section-subtitle">绑定{{targetRole === 'student' ? '学生' : '家长'}}身份以开始使用</text>
       
       <view class="input-group">
         <text class="input-label">姓名</text>

@@ -2,7 +2,7 @@
   <view class="header">
     <view class="title">老师课表</view>
     <view class="actions">
-      <button class="sub-btn" size="mini" bindtap="requestSubscribe">
+      <button class="sub-btn" size="mini" disabled="{{hasSubscribed}}" bindtap="requestSubscribe">
         {{hasSubscribed ? '已订阅提醒' : '订阅提醒'}}
       </button>
       <view class="range-switch">

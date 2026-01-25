@@ -102,6 +102,10 @@ Page({
     },
 
     requestSubscribe() {
+        if (this.data.hasSubscribed) {
+            wx.showToast({ title: '已开启提醒', icon: 'none' })
+            return
+        }
         const tmplIds = [COURSE_TEMPLATE_ID]
         wx.requestSubscribeMessage({
             tmplIds,
