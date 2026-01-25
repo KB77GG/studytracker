@@ -182,6 +182,30 @@
   background: rgba(245, 108, 108, 0.1);
 }
 
+.hint-card {
+  margin-top: 20rpx;
+  background: #f0f9ff;
+  border: 2rpx dashed #7dd3fc;
+  border-radius: 16rpx;
+  padding: 16rpx 20rpx;
+  text-align: left;
+}
+
+.hint-label {
+  font-size: 24rpx;
+  color: #0284c7;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.hint-text {
+  font-size: 28rpx;
+  color: #0f172a;
+  line-height: 1.5;
+  display: block;
+}
+
 /* Result Feedback */
 .result-feedback {
   width: 100%;

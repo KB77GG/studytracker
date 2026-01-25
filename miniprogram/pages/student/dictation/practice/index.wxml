@@ -33,6 +33,10 @@
              bindinput="onInput"
              confirm-type="done"
              bindconfirm="checkAnswer"/>
+      <view class="hint-card" wx:if="{{showHint}}">
+        <text class="hint-label">提示</text>
+        <text class="hint-text">{{currentWord.translation || '暂无释义'}}</text>
+      </view>
     </view>
 
     <!-- Result Feedback (Show after check) -->

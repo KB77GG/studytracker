@@ -30,7 +30,9 @@ Page({
         inputValue: '',
         showResult: false,
         isCorrect: false,
-        inputFocus: true
+        inputFocus: true,
+        showHint: false,
+        attemptCount: 0
     },
 
     onLoad: function (options) {
@@ -241,7 +243,9 @@ Page({
             isCorrect: false,
             inputFocus: true,
             inputError: false,
-            userAnswer: ''
+            userAnswer: '',
+            showHint: false,
+            attemptCount: 0
         });
         this.saveProgress(index);
 
@@ -319,7 +323,8 @@ Page({
 
     onInput: function (e) {
         this.setData({
-            inputValue: e.detail.value
+            inputValue: e.detail.value,
+            inputError: false
         });
     },
 
@@ -329,13 +334,29 @@ Page({
         const input = this.data.inputValue.trim().toLowerCase();
         const target = this.data.currentWord.word.toLowerCase();
         const isCorrect = input === target;
+        const attempts = this.data.attemptCount || 0;
 
         if (!input) {
             wx.showToast({ title: '请输入单词', icon: 'none' });
             return;
         }
 
-        if (!isCorrect) {
+        if (isCorrect) {
+            if (attempts === 0) {
+                this.setData({ correctCount: this.data.correctCount + 1 });
+            }
+            this.setData({
+                showResult: true,
+                isCorrect: true,
+                userAnswer: input,
+                inputError: false,
+                attemptCount: attempts + 1
+            });
+            wx.showToast({ title: '正确!', icon: 'success', duration: 1000 });
+            return;
+        }
+
+        if (attempts === 0) {
             const wrongList = this.data.wrongWords;
             const wrongDetail = this.data.wrongWordsDetail;
             wrongList.push(`${this.data.currentWord.word} (写成了: ${input})`);
@@ -345,21 +366,26 @@ Page({
                 phonetic: this.data.currentWord.phonetic,
                 wrong: input
             });
-            this.setData({ wrongWords: wrongList, wrongWordsDetail: wrongDetail });
-        } else {
-            this.setData({ correctCount: this.data.correctCount + 1 });
+            this.setData({
+                wrongWords: wrongList,
+                wrongWordsDetail: wrongDetail,
+                showHint: true,
+                inputValue: '',
+                inputError: true,
+                attemptCount: attempts + 1,
+                inputFocus: true
+            });
+            wx.showToast({ title: '再试一次', icon: 'none' });
+            return;
         }
 
         this.setData({
             showResult: true,
-            isCorrect: isCorrect,
+            isCorrect: false,
             userAnswer: input,
-            inputError: !isCorrect
+            inputError: true,
+            attemptCount: attempts + 1
         });
-
-        if (isCorrect) {
-            wx.showToast({ title: '正确!', icon: 'success', duration: 1000 });
-        }
     },
 
     nextWord: function () {
@@ -581,7 +607,10 @@ Page({
             userAnswer: '',
             practiceStart: Date.now(),
             reviewingWrongWords: true,
-            finished: false
+            finished: false,
+            showHint: false,
+            attemptCount: 0,
+            inputError: false
         });
         this.loadWord(0);
         this.startTicker();
