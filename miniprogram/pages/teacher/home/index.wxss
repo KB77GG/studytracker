@@ -110,9 +110,24 @@
 }
 
 .group-title {
-  font-size: 14px;
-  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
+}
+
+.group-date {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.group-count {
+  font-size: 12px;
+  color: #64748b;
+  background: #e2f3f1;
+  padding: 2px 8px;
+  border-radius: 999px;
 }
 
 .card {
@@ -121,22 +136,60 @@
   padding: 12px;
   box-shadow: 0 4px 10px rgba(15, 118, 110, 0.08);
   border: 1px solid #e2e8f0;
+  border-left: 4px solid #0f766e;
   margin-bottom: 10px;
 }
 
-.row {
+.card-head {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.course-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.course-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  flex: 1;
+}
+
+.time-pill {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.meta-row {
+  display: flex;
+  gap: 12px;
+}
+
+.meta-item {
+  flex: 1;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 8px;
+}
+
+.meta-label {
+  font-size: 12px;
+  color: #64748b;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.meta-value {
   font-size: 14px;
-  margin: 4px 0;
-}
-
-.label {
-  color: #94a3b8;
-}
-
-.value {
   color: #0f172a;
   font-weight: 600;
 }

@@ -70,11 +70,18 @@ Page({
         list.forEach(item => {
             const date = item.schedule_date || (item.start_time || '').split(' ')[0] || '待定'
             if (!map[date]) map[date] = []
-            map[date].push(item)
+            const color = this.pickSubjectColor(item.course_name || '')
+            map[date].push({
+                ...item,
+                timeRange: this.formatTimeRange(item.start_time, item.end_time),
+                accentColor: color.border,
+                accentBg: color.bg
+            })
         })
         return Object.keys(map).sort().map(date => ({
             date,
-            items: map[date]
+            items: map[date],
+            count: map[date].length
         }))
     },
 
@@ -195,6 +202,24 @@ Page({
             startLabel: startPart ? this.formatTime(startPart) : '',
             endLabel: endPart ? this.formatTime(endPart) : ''
         }
+    },
+
+    formatTimeRange(startValue, endValue) {
+        const startPart = this.parseTimePart(startValue)
+        const endPart = this.parseTimePart(endValue)
+        const startLabel = startPart ? this.formatTime(startPart) : this.extractTimeText(startValue)
+        const endLabel = endPart ? this.formatTime(endPart) : this.extractTimeText(endValue)
+        if (startLabel && endLabel) return `${startLabel}-${endLabel}`
+        return startLabel || endLabel || '待定'
+    },
+
+    extractTimeText(value) {
+        if (!value) return ''
+        const str = String(value)
+        if (str.includes(' ')) {
+            return str.split(' ')[1] || str
+        }
+        return str
     },
 
     pickSubjectColor(name) {

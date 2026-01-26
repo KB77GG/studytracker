@@ -65,23 +65,27 @@
         </block>
         <block wx:for="{{schedules}}" wx:key="date">
           <view class="group">
-            <view class="group-title">{{item.date}}</view>
-            <view class="card" wx:for="{{item.items}}" wx:key="schedule_id">
-              <view class="row">
-                <text class="label">课程</text>
-                <text class="value">{{item.course_name}}</text>
+            <view class="group-title">
+              <text class="group-date">{{item.date}}</text>
+              <text class="group-count">{{item.count}}节</text>
+            </view>
+            <view class="card" wx:for="{{item.items}}" wx:key="schedule_id" style="border-left-color: {{item.accentColor}};">
+              <view class="card-head">
+                <view class="course-dot" style="background: {{item.accentColor}};"></view>
+                <text class="course-title">{{item.course_name}}</text>
+                <view class="time-pill" style="background: {{item.accentBg}}; color: {{item.accentColor}};">
+                  {{item.timeRange}}
+                </view>
               </view>
-              <view class="row">
-                <text class="label">时间</text>
-                <text class="value">{{item.start_time}} - {{item.end_time}}</text>
-              </view>
-              <view class="row">
-                <text class="label">学生</text>
-                <text class="value">{{item.student_name || '—'}}</text>
-              </view>
-              <view class="row">
-                <text class="label">老师</text>
-                <text class="value">{{item.teacher_name || '—'}}</text>
+              <view class="meta-row">
+                <view class="meta-item">
+                  <text class="meta-label">学生</text>
+                  <text class="meta-value">{{item.student_name || '—'}}</text>
+                </view>
+                <view class="meta-item">
+                  <text class="meta-label">老师</text>
+                  <text class="meta-value">{{item.teacher_name || '—'}}</text>
+                </view>
               </view>
             </view>
           </view>
