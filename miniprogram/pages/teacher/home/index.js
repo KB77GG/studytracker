@@ -16,6 +16,8 @@ Page({
         bindLoading: false,
         viewMode: 'week',
         weekDays: [],
+        selectedDate: '',
+        selectedItems: [],
         timeSlots: [],
         gridStartHour: DEFAULT_START_HOUR,
         gridEndHour: DEFAULT_END_HOUR,
@@ -46,8 +48,8 @@ Page({
                 this.setData({
                     schedules: grouped,
                     weekDays: weekData.days,
-                    timeSlots: weekData.timeSlots,
-                    gridHeight: weekData.gridHeight,
+                    selectedDate: weekData.selectedDate,
+                    selectedItems: weekData.selectedItems,
                     bindRequired: false
                 })
             } else {
@@ -86,68 +88,64 @@ Page({
     },
 
     buildWeekView(list) {
-        const startHour = this.data.gridStartHour || DEFAULT_START_HOUR
-        const endHour = this.data.gridEndHour || DEFAULT_END_HOUR
-        const hourHeight = this.data.hourHeight || HOUR_HEIGHT
-        const minuteHeight = hourHeight / 60
-        const daysCount = this.data.viewDays || 7
-
+        const weekStart = this.getWeekStartDate(new Date())
         const days = []
         const dayMap = {}
-        for (let i = 0; i < daysCount; i += 1) {
-            const d = new Date()
-            d.setDate(d.getDate() + i)
+        for (let i = 0; i < 7; i += 1) {
+            const d = new Date(weekStart)
+            d.setDate(weekStart.getDate() + i)
             const date = this.formatDate(d)
-            const label = this.formatDayLabel(d)
-            const day = { date, label, items: [] }
+            const weekday = this.formatWeekday(d)
+            const day = {
+                date,
+                weekday,
+                dayNum: d.getDate(),
+                isToday: date === this.formatDate(new Date()),
+                items: [],
+                dots: [],
+                count: 0
+            }
             dayMap[date] = day
             days.push(day)
         }
 
-        const extraDays = {}
         list.forEach(item => {
-            const date = item.schedule_date || (item.start_time || '').split(' ')[0] || '待定'
-            let target = dayMap[date]
-            if (!target) {
-                if (!extraDays[date]) {
-                    extraDays[date] = {
-                        date,
-                        label: date === '待定' ? '待定' : date.slice(5),
-                        items: []
-                    }
-                }
-                target = extraDays[date]
-            }
-            const timeInfo = this.parseTimeRange(item, startHour, endHour)
-            const top = Math.max(0, timeInfo.startMinutes - startHour * 60) * minuteHeight
-            const height = Math.max(48, (timeInfo.endMinutes - timeInfo.startMinutes) * minuteHeight)
+            const date = item.schedule_date || (item.start_time || '').split(' ')[0] || ''
+            const target = dayMap[date]
+            if (!target) return
+            const timeInfo = this.parseTimeRange(item, 0, 24)
             const color = this.pickSubjectColor(item.course_name || '')
-            const timeLabel = timeInfo.startLabel && timeInfo.endLabel
-                ? `${timeInfo.startLabel}-${timeInfo.endLabel}`
-                : '待定'
             target.items.push({
                 ...item,
-                _startMinutes: timeInfo.startMinutes,
-                timeLabel,
-                style: `top:${top}rpx;height:${height}rpx;background:${color.bg};border-left:6rpx solid ${color.border};`
+                timeRange: this.formatTimeRange(item.start_time, item.end_time),
+                accentColor: color.border,
+                accentBg: color.bg,
+                _startMinutes: timeInfo.startMinutes
             })
         })
 
-        Object.keys(extraDays).sort().forEach(key => days.push(extraDays[key]))
-
         days.forEach(day => {
             day.items.sort((a, b) => (a._startMinutes || 0) - (b._startMinutes || 0))
+            day.count = day.items.length
+            const dots = []
+            day.items.forEach(item => {
+                if (item.accentColor && !dots.includes(item.accentColor)) {
+                    dots.push(item.accentColor)
+                }
+            })
+            day.dots = dots.slice(0, 3)
         })
 
-        const timeSlots = []
-        for (let h = startHour; h < endHour; h += 1) {
-            timeSlots.push(`${String(h).padStart(2, '0')}:00`)
+        const today = this.formatDate(new Date())
+        let selectedDate = this.data.selectedDate
+        if (!selectedDate || !dayMap[selectedDate]) {
+            selectedDate = dayMap[today] ? today : days[0].date
         }
 
         return {
             days,
-            timeSlots,
-            gridHeight: (endHour - startHour) * hourHeight
+            selectedDate,
+            selectedItems: dayMap[selectedDate] ? dayMap[selectedDate].items : []
         }
     },
 
@@ -158,10 +156,18 @@ Page({
         return `${y}-${m}-${d}`
     },
 
-    formatDayLabel(dateObj) {
+    formatWeekday(dateObj) {
         const days = ['日', '一', '二', '三', '四', '五', '六']
-        const dateStr = this.formatDate(dateObj)
-        return `${dateStr.slice(5)} 周${days[dateObj.getDay()]}`
+        return `周${days[dateObj.getDay()]}`
+    },
+
+    getWeekStartDate(dateObj) {
+        const d = new Date(dateObj)
+        const day = d.getDay()
+        const diff = (day + 6) % 7
+        d.setDate(d.getDate() - diff)
+        d.setHours(0, 0, 0, 0)
+        return d
     },
 
     parseTimePart(value) {
@@ -234,12 +240,29 @@ Page({
 
     switchView(e) {
         const mode = e.currentTarget.dataset.mode || 'week'
+        if (mode === 'week' && this.data.viewDays !== 7) {
+            this.setData({ viewMode: mode, viewDays: 7 }, () => this.fetchSchedules())
+            return
+        }
         this.setData({ viewMode: mode })
     },
 
     switchRange(e) {
         const days = Number(e.currentTarget.dataset.days) || 7
-        this.setData({ viewDays: days }, () => this.fetchSchedules())
+        const next = { viewDays: days }
+        if (days === 30 && this.data.viewMode === 'week') {
+            next.viewMode = 'list'
+        }
+        this.setData(next, () => this.fetchSchedules())
+    },
+
+    selectDay(e) {
+        const date = e.currentTarget.dataset.date
+        const day = this.data.weekDays.find(item => item.date === date)
+        this.setData({
+            selectedDate: date,
+            selectedItems: day ? day.items : []
+        })
     },
 
     async bindSchedulerTeacher() {

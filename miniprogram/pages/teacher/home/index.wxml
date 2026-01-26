@@ -32,31 +32,38 @@
     <view wx:if="{{loading}}" class="loading">加载中...</view>
     <view wx:else>
       <block wx:if="{{viewMode === 'week'}}">
-        <view wx:if="{{schedules.length === 0}}" class="empty">暂无课表</view>
-        <view wx:else class="week-view">
-          <scroll-view scroll-x class="week-scroll">
-            <view class="week-row">
-              <view class="time-col">
-                <view class="day-header time-header">时间</view>
-                <view class="time-slot" wx:for="{{timeSlots}}" wx:key="*this" wx:for-item="slot" style="height: {{hourHeight}}rpx;">
-                  {{slot}}
-                </view>
+        <view wx:if="{{weekDays.length === 0}}" class="empty">暂无课表</view>
+        <view wx:else class="calendar-view">
+          <view class="calendar-row">
+            <view class="calendar-day {{item.date === selectedDate ? 'active' : ''}} {{item.isToday ? 'today' : ''}}" wx:for="{{weekDays}}" wx:key="date" wx:for-item="item" data-date="{{item.date}}" bindtap="selectDay">
+              <text class="calendar-weekday">{{item.weekday}}</text>
+              <text class="calendar-date">{{item.dayNum}}</text>
+              <view class="calendar-dots" wx:if="{{item.dots.length}}">
+                <view class="calendar-dot" wx:for="{{item.dots}}" wx:key="*this" wx:for-item="dot" style="background: {{dot}};"></view>
               </view>
-              <view class="day-col" wx:for="{{weekDays}}" wx:key="date" wx:for-item="day">
-                <view class="day-header">{{day.label}}</view>
-                <view class="day-grid" style="height: {{gridHeight}}rpx;">
-                  <view class="grid-line" wx:for="{{timeSlots}}" wx:key="*this" wx:for-item="slot" style="height: {{hourHeight}}rpx;"></view>
-                  <view class="schedule-block" wx:for="{{day.items}}" wx:key="schedule_id" wx:for-item="item" style="{{item.style}}">
-                    <text class="block-time">{{item.timeLabel}}</text>
-                    <text class="block-title">{{item.course_name}}</text>
-                    <text class="block-meta">学生 {{item.student_name || '—'}}</text>
-                    <text class="block-meta">老师 {{item.teacher_name || '—'}}</text>
-                    <button class="feedback-btn" size="mini" data-id="{{item.schedule_id}}" bindtap="handleFeedback">添加反馈</button>
-                  </view>
-                </view>
-              </view>
+              <text class="calendar-count" wx:if="{{item.count}}">{{item.count}}</text>
             </view>
-          </scroll-view>
+          </view>
+
+          <view class="day-detail">
+            <view class="detail-header">
+              <text class="detail-date">{{selectedDate}}</text>
+              <text class="detail-count">{{selectedItems.length}}节</text>
+            </view>
+            <block wx:if="{{selectedItems.length === 0}}">
+              <view class="empty">当天暂无课程</view>
+            </block>
+            <block wx:for="{{selectedItems}}" wx:key="schedule_id">
+              <view class="detail-card" style="border-left-color: {{item.accentColor}};">
+                <view class="detail-time" style="color: {{item.accentColor}};">{{item.timeRange}}</view>
+                <view class="detail-main">
+                  <text class="detail-title">{{item.course_name}}</text>
+                  <text class="detail-meta">学生 {{item.student_name || '—'}}</text>
+                  <text class="detail-meta">老师 {{item.teacher_name || '—'}}</text>
+                </view>
+              </view>
+            </block>
+          </view>
         </view>
       </block>
       <block wx:else>
