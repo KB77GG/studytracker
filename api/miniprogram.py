@@ -1010,7 +1010,11 @@ def _extract_schedule_fields(item: dict):
 
 def _infer_subject(course_name: str):
     name = (course_name or "").strip()
-    return name or "其他"
+    if not name:
+        return "其他"
+    if "雅思听力" in name:
+        return "雅思听力"
+    return name
 
 
 def _parse_time_minutes(value):
