@@ -1009,17 +1009,7 @@ def _extract_schedule_fields(item: dict):
 
 
 def _infer_subject(course_name: str):
-    name = course_name or ""
-    if "听力" in name:
-        return "听力"
-    if "阅读" in name:
-        return "阅读"
-    if "口语" in name:
-        return "口语"
-    if "写作" in name:
-        return "写作"
-    if "词汇" in name:
-        return "词汇"
+    name = (course_name or "").strip()
     return name or "其他"
 
 
