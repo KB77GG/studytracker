@@ -1,0 +1,39 @@
+<view class="page">
+  <view class="header">
+    <view>
+      <text class="title">当月课时统计</text>
+      <text class="subtitle">按科目汇总</text>
+    </view>
+    <picker mode="date" fields="month" value="{{month}}" bindchange="onMonthChange">
+      <view class="month-pill">{{month}}</view>
+    </picker>
+  </view>
+
+  <view class="content">
+    <view wx:if="{{loading}}" class="loading">加载中...</view>
+    <view wx:else>
+      <view wx:if="{{subjects.length === 0}}" class="empty">暂无课时数据</view>
+      <view wx:else class="stat-list">
+        <view class="stat-row" wx:for="{{subjects}}" wx:key="subject">
+          <text class="stat-subject">{{item.subject}}</text>
+          <view class="stat-values">
+            <text class="stat-session">{{item.sessions}}节</text>
+            <text class="stat-hours">{{item.hours}}h</text>
+          </view>
+        </view>
+        <view class="stat-row total" wx:if="{{total}}">
+          <text class="stat-subject">合计</text>
+          <view class="stat-values">
+            <text class="stat-session">{{total.sessions}}节</text>
+            <text class="stat-hours">{{total.hours}}h</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-nav">
+    <view class="nav-item" bindtap="goSchedule">课表</view>
+    <view class="nav-item active">课时统计</view>
+  </view>
+</view>

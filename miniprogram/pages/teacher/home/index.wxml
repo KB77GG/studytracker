@@ -12,11 +12,6 @@
     </view>
   </view>
 
-  <view class="view-switch" wx:if="{{viewDays !== 7}}">
-    <button class="switch-btn {{viewMode==='week'?'active':''}}" size="mini" data-mode="week" bindtap="switchView">周视图</button>
-    <button class="switch-btn {{viewMode==='list'?'active':''}}" size="mini" data-mode="list" bindtap="switchView">列表</button>
-  </view>
-
   <view wx:if="{{bindRequired}}" class="bind-panel">
     <view class="bind-title">绑定排课老师ID</view>
     <view class="bind-desc">请填写排课系统中的老师ID，绑定后即可查看课表。</view>
@@ -61,6 +56,27 @@
                   <text class="detail-meta">学生 {{item.student_name || '—'}}</text>
                   <text class="detail-meta">老师 {{item.teacher_name || '—'}}</text>
                 </view>
+                <view class="detail-footer">
+                  <text class="feedback-tag {{item.feedback ? 'done' : ''}}">{{item.feedback ? '已反馈' : '待反馈'}}</text>
+                  <button
+                    class="feedback-btn {{item.feedback ? 'done' : ''}}"
+                    size="mini"
+                    data-schedule-uid="{{item.schedule_uid}}"
+                    data-schedule-id="{{item.schedule_id}}"
+                    data-student-id="{{item.student_id}}"
+                    data-student-name="{{item.student_name}}"
+                    data-course-name="{{item.course_name}}"
+                    data-start-time="{{item.start_time}}"
+                    data-end-time="{{item.end_time}}"
+                    data-teacher-name="{{item.teacher_name}}"
+                    data-schedule-date="{{item.schedule_date}}"
+                    data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
+                    data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
+                    bindtap="openFeedback"
+                  >
+                    {{item.feedback ? '修改反馈' : '上课反馈'}}
+                  </button>
+                </view>
               </view>
             </block>
           </view>
@@ -94,10 +110,36 @@
                   <text class="meta-value">{{item.teacher_name || '—'}}</text>
                 </view>
               </view>
+              <view class="card-footer">
+                <text class="feedback-tag {{item.feedback ? 'done' : ''}}">{{item.feedback ? '已反馈' : '待反馈'}}</text>
+                <button
+                  class="feedback-btn {{item.feedback ? 'done' : ''}}"
+                  size="mini"
+                  data-schedule-uid="{{item.schedule_uid}}"
+                  data-schedule-id="{{item.schedule_id}}"
+                  data-student-id="{{item.student_id}}"
+                  data-student-name="{{item.student_name}}"
+                  data-course-name="{{item.course_name}}"
+                  data-start-time="{{item.start_time}}"
+                  data-end-time="{{item.end_time}}"
+                  data-teacher-name="{{item.teacher_name}}"
+                  data-schedule-date="{{item.schedule_date}}"
+                  data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
+                  data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
+                  bindtap="openFeedback"
+                >
+                  {{item.feedback ? '修改反馈' : '上课反馈'}}
+                </button>
+              </view>
             </view>
           </view>
         </block>
       </block>
     </view>
+  </view>
+
+  <view class="bottom-nav">
+    <view class="nav-item active">课表</view>
+    <view class="nav-item" bindtap="goStats">课时统计</view>
   </view>
 </view>

@@ -1,0 +1,28 @@
+<view class="container">
+  <view class="header">
+    <text class="title">{{singleMode ? '课堂反馈详情' : '课堂反馈'}}</text>
+    <text class="subtitle">{{studentName}}</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+  <block wx:else>
+    <view wx:if="{{feedbacks.length === 0}}" class="empty">暂无课堂反馈</view>
+    <view class="feedback-card" wx:for="{{feedbacks}}" wx:key="id">
+      <view class="feedback-head">
+        <text class="feedback-course">{{item.course_name || '课堂反馈'}}</text>
+        <text class="feedback-date">{{item.schedule_date || ''}}</text>
+      </view>
+      <text class="feedback-time">{{item.start_time || ''}}{{item.end_time ? (' - ' + item.end_time) : ''}}</text>
+      <text class="feedback-teacher">老师 {{item.teacher_name || '—'}}</text>
+      <text class="feedback-text">{{item.feedback_text}}</text>
+      <image
+        wx:if="{{item.feedback_image}}"
+        class="feedback-image"
+        src="{{baseUrl}}{{item.feedback_image}}"
+        mode="aspectFill"
+        data-url="{{baseUrl}}{{item.feedback_image}}"
+        bindtap="previewFeedbackImage"
+      ></image>
+    </view>
+  </block>
+</view>

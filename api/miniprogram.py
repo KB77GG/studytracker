@@ -1,15 +1,17 @@
 import os
 import json
+import hashlib
 from datetime import datetime, date, timedelta
+from urllib.parse import quote
 import requests
 from flask import Blueprint, jsonify, request, current_app, url_for
 from werkzeug.utils import secure_filename
 from sqlalchemy import func, and_
 
 from models import (
-    db, User, StudentProfile, StudyPlan, PlanItem, 
+    db, User, StudentProfile, StudyPlan, PlanItem,
     PlanEvidence, ParentStudentLink, TaskCatalog, Task,
-    PlanItemSession
+    PlanItemSession, ClassFeedback
 )
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message
@@ -710,6 +712,17 @@ def get_parent_stats():
         # 如果查询失败（比如表不存在），默认不显示
         import logging
         logging.getLogger(__name__).warning(f"Failed to check isStudying: {e}")
+
+    feedback_list = []
+    feedback_total = 0
+    try:
+        feedback_query = ClassFeedback.query.filter_by(student_name=student_name)
+        feedback_total = feedback_query.count()
+        feedback_items = feedback_query.order_by(ClassFeedback.created_at.desc()).limit(3).all()
+        feedback_list = [_serialize_class_feedback(item) for item in feedback_items]
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Failed to load class feedback: {e}")
     
     return jsonify({
         "ok": True,
@@ -723,9 +736,81 @@ def get_parent_stats():
         },
         "recent": recent_feed,
         "weekly": weekly_stats,
-        "subjects": subject_stats
+        "subjects": subject_stats,
+        "feedback": feedback_list,
+        "feedback_total": feedback_total
     })
 
+
+@mp_bp.route("/parent/feedback", methods=["GET"])
+@require_api_user(User.ROLE_PARENT)
+def get_parent_feedback():
+    """获取指定学生的课堂反馈列表"""
+    user = request.current_api_user
+    student_name = (request.args.get("student_name") or "").strip()
+    if not student_name:
+        return jsonify({"ok": False, "error": "missing_student_name"}), 400
+
+    link = ParentStudentLink.query.filter_by(
+        parent_id=user.id,
+        student_name=student_name,
+        is_active=True
+    ).first()
+    if not link:
+        return jsonify({"ok": False, "error": "student_not_bound"}), 403
+
+    limit = request.args.get("limit", 30)
+    try:
+        limit = int(limit)
+    except (TypeError, ValueError):
+        limit = 30
+    limit = max(1, min(limit, 100))
+
+    try:
+        query = ClassFeedback.query.filter_by(student_name=student_name)
+        total = query.count()
+        items = query.order_by(ClassFeedback.created_at.desc()).limit(limit).all()
+        feedback_list = [_serialize_class_feedback(item) for item in items]
+        return jsonify({"ok": True, "total": total, "feedback": feedback_list})
+    except Exception as exc:
+        msg = str(exc).lower()
+        if "no such table" in msg and "class_feedback" in msg:
+            return jsonify({"ok": False, "error": "feedback_table_missing"}), 500
+        current_app.logger.error("Failed to load parent feedback: %s", exc)
+        return jsonify({"ok": False, "error": "load_failed"}), 500
+
+
+@mp_bp.route("/parent/feedback/detail", methods=["GET"])
+@require_api_user(User.ROLE_PARENT)
+def get_parent_feedback_detail():
+    """获取单条课堂反馈详情"""
+    user = request.current_api_user
+    feedback_id = request.args.get("feedback_id")
+    try:
+        feedback_id = int(feedback_id)
+    except (TypeError, ValueError):
+        return jsonify({"ok": False, "error": "missing_feedback_id"}), 400
+
+    try:
+        feedback = ClassFeedback.query.get(feedback_id)
+        if not feedback:
+            return jsonify({"ok": False, "error": "feedback_not_found"}), 404
+
+        link = ParentStudentLink.query.filter_by(
+            parent_id=user.id,
+            student_name=feedback.student_name,
+            is_active=True
+        ).first()
+        if not link:
+            return jsonify({"ok": False, "error": "student_not_bound"}), 403
+
+        return jsonify({"ok": True, "feedback": _serialize_class_feedback(feedback)})
+    except Exception as exc:
+        msg = str(exc).lower()
+        if "no such table" in msg and "class_feedback" in msg:
+            return jsonify({"ok": False, "error": "feedback_table_missing"}), 500
+        current_app.logger.error("Failed to load feedback detail: %s", exc)
+        return jsonify({"ok": False, "error": "load_failed"}), 500
 @mp_bp.route("/debug/fix_db", methods=["GET"])
 def debug_fix_db():
     """临时修复数据库结构 - 增强版"""
@@ -857,17 +942,14 @@ def _fetch_tomorrow_schedules():
         return None, "scheduler_request_failed"
 
 
-def _fetch_range_schedules(days=7, teacher_id=None):
-    """调用排课系统 range 接口，返回指定天数内的课表。"""
+def _fetch_range_schedules_by_dates(start: date, end: date, teacher_id=None):
+    """调用排课系统 range 接口，返回指定日期范围内的课表。"""
     base_url = current_app.config.get("SCHEDULER_BASE_URL")
     token = current_app.config.get("SCHEDULER_PUSH_TOKEN")
     if not base_url or not token:
         return None, "scheduler_config_missing"
 
-    today = date.today()
-    start = today.isoformat()
-    end = (today + timedelta(days=days)).isoformat()
-    params = {"start": start, "end": end}
+    params = {"start": start.isoformat(), "end": end.isoformat()}
     if teacher_id is not None:
         params["teacher_id"] = teacher_id
 
@@ -885,6 +967,14 @@ def _fetch_range_schedules(days=7, teacher_id=None):
     except Exception as exc:  # pragma: no cover
         current_app.logger.error("Scheduler range API request failed: %s", exc)
         return None, "scheduler_request_failed"
+
+
+def _fetch_range_schedules(days=7, teacher_id=None):
+    """调用排课系统 range 接口，返回指定天数内的课表。"""
+    today = date.today()
+    start = today
+    end = today + timedelta(days=days)
+    return _fetch_range_schedules_by_dates(start, end, teacher_id=teacher_id)
 
 
 def _extract_schedule_fields(item: dict):
@@ -916,6 +1006,65 @@ def _extract_schedule_fields(item: dict):
         end_dt = end_time
 
     return schedule_id, student_id, teacher_id, course_name, start_dt, end_dt, teacher_name, student_name
+
+
+def _infer_subject(course_name: str):
+    name = course_name or ""
+    if "听力" in name:
+        return "听力"
+    if "阅读" in name:
+        return "阅读"
+    if "口语" in name:
+        return "口语"
+    if "写作" in name:
+        return "写作"
+    if "词汇" in name:
+        return "词汇"
+    return name or "其他"
+
+
+def _parse_time_minutes(value):
+    if not value:
+        return None
+    time_str = str(value)
+    if " " in time_str:
+        time_str = time_str.split(" ")[1]
+    parts = time_str.split(":")
+    if not parts or len(parts) < 2:
+        return None
+    try:
+        hour = int(parts[0])
+        minute = int(parts[1])
+    except ValueError:
+        return None
+    if hour < 0 or hour > 23 or minute < 0 or minute > 59:
+        return None
+    return hour * 60 + minute
+
+
+def _build_schedule_uid(schedule_id, teacher_id, student_id, course_name, start_time):
+    if schedule_id:
+        return f"id:{schedule_id}"
+    raw = f"{teacher_id or ''}|{student_id or ''}|{course_name or ''}|{start_time or ''}"
+    digest = hashlib.sha1(raw.encode("utf-8")).hexdigest()[:24]
+    return f"hash:{digest}"
+
+
+def _serialize_class_feedback(feedback: ClassFeedback):
+    return {
+        "id": feedback.id,
+        "schedule_uid": feedback.schedule_uid,
+        "schedule_id": feedback.schedule_id,
+        "student_name": feedback.student_name,
+        "teacher_name": feedback.teacher_name,
+        "course_name": feedback.course_name,
+        "start_time": feedback.start_time,
+        "end_time": feedback.end_time,
+        "schedule_date": feedback.schedule_date,
+        "feedback_text": feedback.feedback_text,
+        "feedback_image": feedback.feedback_image,
+        "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
+    }
 
 
 @mp_bp.route("/send_tomorrow_class_reminders", methods=["POST"])
@@ -984,6 +1133,135 @@ def send_tomorrow_class_reminders():
     return jsonify({"ok": True, "sent": sent, "total": len(schedules_list)})
 
 
+@mp_bp.route("/teacher/feedback", methods=["POST"])
+@require_api_user(User.ROLE_TEACHER)
+def submit_class_feedback():
+    """老师提交课程反馈并推送给家长。"""
+    data = request.get_json() or {}
+    feedback_text = (data.get("feedback_text") or "").strip()
+    if not feedback_text:
+        return jsonify({"ok": False, "error": "missing_feedback_text"}), 400
+
+    user = request.current_api_user
+    schedule_id = data.get("schedule_id")
+    schedule_date = data.get("schedule_date")
+    course_name = data.get("course_name") or ""
+    start_time = data.get("start_time") or ""
+    end_time = data.get("end_time") or ""
+    teacher_name = data.get("teacher_name") or user.display_name or user.username
+    feedback_image = data.get("feedback_image")
+
+    scheduler_student_id = data.get("student_id")
+    try:
+        scheduler_student_id = int(scheduler_student_id) if scheduler_student_id is not None else None
+    except (TypeError, ValueError):
+        scheduler_student_id = None
+
+    student_name = (data.get("student_name") or "").strip()
+    profile = None
+    if scheduler_student_id:
+        profile = StudentProfile.query.filter_by(scheduler_student_id=scheduler_student_id).first()
+        if profile and not student_name:
+            student_name = profile.full_name
+
+    if not schedule_date and start_time and " " in start_time:
+        schedule_date = start_time.split(" ")[0]
+
+    schedule_uid = data.get("schedule_uid")
+    if not schedule_uid:
+        schedule_uid = _build_schedule_uid(
+            schedule_id,
+            user.scheduler_teacher_id,
+            scheduler_student_id,
+            course_name,
+            start_time,
+        )
+
+    feedback = ClassFeedback.query.filter_by(schedule_uid=schedule_uid).first()
+    if feedback and feedback.teacher_id != user.id:
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+
+    is_new = feedback is None
+    if is_new:
+        feedback = ClassFeedback(schedule_uid=schedule_uid, teacher_id=user.id)
+        db.session.add(feedback)
+
+    feedback.schedule_id = str(schedule_id) if schedule_id is not None else None
+    feedback.scheduler_student_id = scheduler_student_id
+    feedback.student_name = student_name or None
+    feedback.teacher_name = teacher_name
+    feedback.course_name = course_name
+    feedback.start_time = start_time
+    feedback.end_time = end_time
+    feedback.schedule_date = schedule_date
+    feedback.feedback_text = feedback_text
+    feedback.feedback_image = feedback_image
+
+    try:
+        db.session.commit()
+    except Exception as exc:
+        db.session.rollback()
+        msg = str(exc).lower()
+        if "no such table" in msg and "class_feedback" in msg:
+            return jsonify({"ok": False, "error": "feedback_table_missing"}), 500
+        current_app.logger.error("Failed to save class feedback: %s", exc)
+        return jsonify({"ok": False, "error": "save_failed"}), 500
+
+    template_id = current_app.config.get("WECHAT_FEEDBACK_TEMPLATE_ID")
+    push_sent = 0
+    push_error = None
+
+    openids = []
+    target_name = student_name
+    if not target_name and profile:
+        target_name = profile.full_name
+
+    if target_name:
+        links = ParentStudentLink.query.filter_by(student_name=target_name, is_active=True).all()
+        for link in links:
+            parent = User.query.get(link.parent_id)
+            if parent and parent.wechat_openid:
+                openids.append(parent.wechat_openid)
+
+    openids = list(dict.fromkeys(openids))
+
+    if not template_id:
+        push_error = "missing_template_id"
+    elif not openids:
+        push_error = "no_parent_openid"
+    else:
+        time_value = start_time or schedule_date or ""
+        payload = {
+            "thing2": {"value": (target_name or "学生")[:20]},
+            "thing1": {"value": (course_name or "课程")[:20]},
+            "phrase4": {"value": feedback_text[:20]},
+            "time3": {"value": str(time_value)[:32]},
+        }
+        page = f"pages/parent/feedback/index?feedback_id={feedback.id}"
+        if target_name:
+            page = f"{page}&student={quote(target_name)}"
+        for oid in openids:
+            if send_subscribe_message(oid, template_id, payload, page=page):
+                push_sent += 1
+
+    if push_sent > 0:
+        feedback.push_success = True
+        feedback.pushed_at = datetime.now()
+        try:
+            db.session.commit()
+        except Exception as exc:
+            db.session.rollback()
+            current_app.logger.warning("Failed to update push status: %s", exc)
+
+    return jsonify({
+        "ok": True,
+        "feedback": _serialize_class_feedback(feedback),
+        "push_sent": push_sent,
+        "push_error": push_error,
+        "created": is_new,
+    })
+
+
 @mp_bp.route("/teacher/schedules", methods=["GET"])
 @require_api_user(User.ROLE_TEACHER)
 def teacher_schedules():
@@ -1032,8 +1310,10 @@ def teacher_schedules():
                         if profile.scheduler_student_id
                     }
             student_name = student_name_map.get(student_id)
+        schedule_uid = _build_schedule_uid(sid, teacher_id or user.scheduler_teacher_id, student_id, course_name, start_dt)
         normalized.append({
             "schedule_id": sid,
+            "schedule_uid": schedule_uid,
             "student_id": student_id,
             "teacher_id": teacher_id,
             "course_name": course_name,
@@ -1044,4 +1324,106 @@ def teacher_schedules():
             "schedule_date": item.get("schedule_date") or item.get("date"),
         })
 
+    feedback_map = {}
+    try:
+        schedule_uids = [item["schedule_uid"] for item in normalized if item.get("schedule_uid")]
+        if schedule_uids:
+            feedbacks = ClassFeedback.query.filter(ClassFeedback.schedule_uid.in_(schedule_uids)).all()
+            feedback_map = {feedback.schedule_uid: feedback for feedback in feedbacks}
+    except Exception as exc:
+        current_app.logger.warning("Class feedback lookup failed: %s", exc)
+
+    for item in normalized:
+        feedback = feedback_map.get(item.get("schedule_uid"))
+        if feedback:
+            item["feedback"] = {
+                "id": feedback.id,
+                "text": feedback.feedback_text,
+                "image": feedback.feedback_image,
+                "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
+            }
+        else:
+            item["feedback"] = None
+
     return jsonify({"ok": True, "days": days, "count": len(normalized), "schedules": normalized})
+
+
+@mp_bp.route("/teacher/monthly_stats", methods=["GET"])
+@require_api_user(User.ROLE_TEACHER)
+def teacher_monthly_stats():
+    """老师查看当月课时统计（按科目汇总）。"""
+    user = request.current_api_user
+    if not user.scheduler_teacher_id:
+        return jsonify({"ok": False, "error": "missing_scheduler_teacher_id"}), 400
+
+    month_str = request.args.get("month")
+    today = date.today()
+    if month_str:
+        try:
+            year, month = month_str.split("-")
+            year = int(year)
+            month = int(month)
+        except Exception:
+            year = today.year
+            month = today.month
+    else:
+        year = today.year
+        month = today.month
+
+    import calendar
+
+    last_day = calendar.monthrange(year, month)[1]
+    start_date = date(year, month, 1)
+    end_date = date(year, month, last_day)
+
+    data, err = _fetch_range_schedules_by_dates(start_date, end_date, teacher_id=user.scheduler_teacher_id)
+    if err:
+        return jsonify({"ok": False, "error": err}), 400
+
+    schedules = data.get("schedules") if isinstance(data, dict) else data
+    schedules = schedules or []
+
+    stats_map = {}
+    total_minutes = 0
+    total_sessions = 0
+
+    for item in schedules:
+        _sid, _student_id, _teacher_id, course_name, start_dt, end_dt, _teacher_name, _student_name = _extract_schedule_fields(item)
+        subject = _infer_subject(course_name)
+        start_min = _parse_time_minutes(start_dt)
+        end_min = _parse_time_minutes(end_dt)
+        if start_min is None:
+            duration = 60
+        else:
+            if end_min is None:
+                duration = 60
+            else:
+                if end_min <= start_min:
+                    end_min = start_min + 60
+                duration = max(30, end_min - start_min)
+
+        if subject not in stats_map:
+            stats_map[subject] = {"subject": subject, "minutes": 0, "sessions": 0}
+        stats_map[subject]["minutes"] += duration
+        stats_map[subject]["sessions"] += 1
+        total_minutes += duration
+        total_sessions += 1
+
+    subjects = list(stats_map.values())
+    for item in subjects:
+        item["hours"] = round(item["minutes"] / 60, 1)
+
+    subjects.sort(key=lambda x: (-x["minutes"], x["subject"]))
+
+    total = {
+        "sessions": total_sessions,
+        "minutes": total_minutes,
+        "hours": round(total_minutes / 60, 1),
+    }
+
+    return jsonify({
+        "ok": True,
+        "month": f"{year:04d}-{month:02d}",
+        "subjects": subjects,
+        "total": total,
+    })

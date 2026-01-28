@@ -8,13 +8,15 @@ Page({
         stats: null,
         loading: true,
         todayDate: '',
-        lastUpdateTime: null
+        lastUpdateTime: null,
+        baseUrl: ''
     },
 
     onLoad() {
         const now = new Date()
         this.setData({
-            todayDate: `${now.getMonth() + 1}月${now.getDate()}日`
+            todayDate: `${now.getMonth() + 1}月${now.getDate()}日`,
+            baseUrl: app.globalData.baseUrl || ''
         })
         this.fetchStudents()
     },
@@ -91,6 +93,13 @@ Page({
         const student = this.data.students[this.data.currentStudentIndex]
         wx.navigateTo({
             url: `/pages/parent/report/index?student=${encodeURIComponent(student.name)}`
+        })
+    },
+
+    viewAllFeedback() {
+        const student = this.data.students[this.data.currentStudentIndex]
+        wx.navigateTo({
+            url: `/pages/parent/feedback/index?student=${encodeURIComponent(student.name)}`
         })
     }
 })

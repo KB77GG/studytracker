@@ -52,12 +52,16 @@ Page({
 
     onLoad(options) {
         // 检查隐私授权状态
-        wx.getPrivacySetting({
-            success: (res) => {
-                this.setData({ privacyNeedAuth: !!res.needAuthorization })
-            },
-            fail: () => { }
-        })
+        if (typeof wx.getPrivacySetting === 'function') {
+            wx.getPrivacySetting({
+                success: (res) => {
+                    this.setData({ privacyNeedAuth: !!res.needAuthorization })
+                },
+                fail: () => { }
+            })
+        } else {
+            this.setData({ privacyNeedAuth: false })
+        }
 
         // 支持直接进入绑定模式（用于添加第二个孩子）
         if (options && options.action === 'bind_parent') {
@@ -77,12 +81,16 @@ Page({
     },
 
     openPrivacyContract() {
-        wx.openPrivacyContract({
-            success: () => { },
-            fail: () => {
-                wx.showToast({ title: '打开失败', icon: 'none' })
-            }
-        })
+        if (typeof wx.openPrivacyContract === 'function') {
+            wx.openPrivacyContract({
+                success: () => { },
+                fail: () => {
+                    wx.showToast({ title: '打开失败', icon: 'none' })
+                }
+            })
+        } else {
+            wx.showToast({ title: '当前版本不支持', icon: 'none' })
+        }
     },
 
     startUse() {

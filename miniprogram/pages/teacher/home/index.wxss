@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
   background: #f6f8fa;
-  padding: 16px;
+  padding: 16px 16px 90px;
   box-sizing: border-box;
 }
 
@@ -239,7 +239,13 @@
 }
 
 .calendar-day.today {
-  border-color: #0f766e;
+  border-color: transparent;
+  background: #f0fdf9;
+}
+
+.calendar-day.today .calendar-weekday,
+.calendar-day.today .calendar-date {
+  color: #0f766e;
 }
 
 .calendar-day.active {
@@ -338,4 +344,66 @@
   font-size: 12px;
   color: #64748b;
   display: block;
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 20px;
+  display: flex;
+  gap: 12px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.1);
+}
+
+.nav-item {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.nav-item.active {
+  background: #0f766e;
+  color: #fff;
+  font-weight: 700;
+}
+
+.detail-footer,
+.card-footer {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.feedback-tag {
+  font-size: 11px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.feedback-tag.done {
+  color: #0f766e;
+  background: #dcfce7;
+}
+
+.feedback-btn {
+  background: #0f766e;
+  color: #fff;
+  border-radius: 12px;
+  padding: 0 10px;
+}
+
+.feedback-btn.done {
+  background: #1d4ed8;
 }

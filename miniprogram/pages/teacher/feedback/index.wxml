@@ -1,0 +1,57 @@
+<view class="container">
+  <view class="header">
+    <text class="title">上课反馈</text>
+    <text class="subtitle">{{schedule.schedule_date || ''}}</text>
+  </view>
+
+  <view class="card">
+    <view class="info-row">
+      <text class="label">课程</text>
+      <text class="value">{{schedule.course_name || '—'}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">时间</text>
+      <text class="value">{{schedule.start_time || '—'}} {{schedule.end_time ? ('- ' + schedule.end_time) : ''}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">学生</text>
+      <text class="value">{{schedule.student_name || '—'}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">老师</text>
+      <text class="value">{{schedule.teacher_name || '—'}}</text>
+    </view>
+  </view>
+
+  <view class="form">
+    <text class="form-label">反馈内容</text>
+    <textarea
+      class="textarea"
+      placeholder="填写本节课表现、作业建议等"
+      maxlength="400"
+      value="{{feedbackText}}"
+      bindinput="handleInput"
+    ></textarea>
+    <view class="counter">{{feedbackText.length}}/400</view>
+  </view>
+
+  <view class="form">
+    <view class="image-header">
+      <text class="form-label">反馈图片</text>
+      <text class="image-tip">可选</text>
+    </view>
+    <view class="image-uploader">
+      <view class="image-preview" wx:if="{{feedbackImage}}">
+        <image class="preview-img" src="{{imagePreviewUrl}}" mode="aspectFill" bindtap="previewImage"></image>
+        <button class="remove-btn" size="mini" bindtap="removeImage">删除</button>
+      </view>
+      <button class="upload-btn" size="mini" loading="{{uploadingImage}}" disabled="{{uploadingImage}}" bindtap="chooseImage">
+        {{feedbackImage ? '更换图片' : '添加图片'}}
+      </button>
+    </view>
+  </view>
+
+  <button class="submit-btn" loading="{{saving}}" disabled="{{saving}}" bindtap="submitFeedback">
+    提交反馈
+  </button>
+</view>

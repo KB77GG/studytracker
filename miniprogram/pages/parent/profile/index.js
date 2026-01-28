@@ -1,9 +1,11 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
+const FEEDBACK_TEMPLATE_ID = 'jh8kXPp8x2qnzE3g894HlDzdJ5j7ItGHVG0Qx6oD7PA'
 
 Page({
     data: {
-        userInfo: null
+        userInfo: null,
+        feedbackSubscribed: false
     },
 
     onShow() {
@@ -18,6 +20,35 @@ Page({
         if (userInfo) {
             this.setData({ userInfo })
         }
+        const feedbackSubscribed = wx.getStorageSync('feedback_subscribed') || false
+        this.setData({ feedbackSubscribed })
+    },
+
+    requestFeedbackSubscribe() {
+        if (this.data.feedbackSubscribed) {
+            wx.showToast({ title: '已订阅课堂反馈', icon: 'none' })
+            return
+        }
+        if (!FEEDBACK_TEMPLATE_ID) {
+            wx.showToast({ title: '模板未配置', icon: 'none' })
+            return
+        }
+        wx.requestSubscribeMessage({
+            tmplIds: [FEEDBACK_TEMPLATE_ID],
+            success: (res) => {
+                if (res[FEEDBACK_TEMPLATE_ID] === 'accept') {
+                    wx.setStorageSync('feedback_subscribed', true)
+                    this.setData({ feedbackSubscribed: true })
+                    wx.showToast({ title: '订阅成功', icon: 'success' })
+                } else {
+                    wx.showToast({ title: '已拒绝或未选择', icon: 'none' })
+                }
+            },
+            fail: (err) => {
+                console.warn('subscribe fail', err)
+                wx.showToast({ title: '订阅失败', icon: 'none' })
+            }
+        })
     },
 
     async handleUnbind() {

@@ -249,11 +249,8 @@ Page({
 
     switchRange(e) {
         const days = Number(e.currentTarget.dataset.days) || 7
-        const next = { viewDays: days }
-        if (days === 30 && this.data.viewMode === 'week') {
-            next.viewMode = 'list'
-        }
-        this.setData(next, () => this.fetchSchedules())
+        const nextMode = days === 30 ? 'list' : 'week'
+        this.setData({ viewDays: days, viewMode: nextMode }, () => this.fetchSchedules())
     },
 
     selectDay(e) {
@@ -263,6 +260,10 @@ Page({
             selectedDate: date,
             selectedItems: day ? day.items : []
         })
+    },
+
+    goStats() {
+        wx.redirectTo({ url: '/pages/teacher/stats/index' })
     },
 
     async bindSchedulerTeacher() {
@@ -326,7 +327,27 @@ Page({
         })
     },
 
-    handleFeedback(e) {
-        wx.showToast({ title: '功能筹备中', icon: 'none' })
+    openFeedback(e) {
+        const data = e.currentTarget.dataset || {}
+        const params = {
+            schedule_uid: data.scheduleUid,
+            schedule_id: data.scheduleId,
+            student_id: data.studentId,
+            student_name: data.studentName,
+            course_name: data.courseName,
+            start_time: data.startTime,
+            end_time: data.endTime,
+            teacher_name: data.teacherName,
+            schedule_date: data.scheduleDate,
+            feedback_text: data.feedbackText,
+            feedback_image: data.feedbackImage
+        }
+        const query = Object.keys(params)
+            .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')
+            .map(key => `${key}=${encodeURIComponent(params[key])}`)
+            .join('&')
+        wx.navigateTo({
+            url: `/pages/teacher/feedback/index?${query}`
+        })
     }
 })

@@ -98,6 +98,40 @@
       </view>
     </view>
 
+    <!-- 课堂反馈 -->
+    <view class="section-header mt-40 feedback-header">
+      <text class="section-title-large">课堂反馈</text>
+      <text
+        class="section-link"
+        wx:if="{{stats.feedback_total > (stats.feedback ? stats.feedback.length : 0)}}"
+        bindtap="viewAllFeedback"
+      >
+        查看全部
+      </text>
+    </view>
+    <view class="feedback-list">
+      <block wx:if="{{stats.feedback && stats.feedback.length > 0}}">
+        <view class="feedback-card" wx:for="{{stats.feedback}}" wx:key="id">
+          <view class="feedback-head">
+            <text class="feedback-course">{{item.course_name || '课堂反馈'}}</text>
+            <text class="feedback-date">{{item.schedule_date || ''}}</text>
+          </view>
+          <text class="feedback-time">{{item.start_time || ''}}{{item.end_time ? (' - ' + item.end_time) : ''}}</text>
+          <text class="feedback-teacher">老师 {{item.teacher_name || '—'}}</text>
+          <text class="feedback-text">{{item.feedback_text}}</text>
+          <image
+            wx:if="{{item.feedback_image}}"
+            class="feedback-image"
+            src="{{baseUrl}}{{item.feedback_image}}"
+            mode="aspectFill"
+          ></image>
+        </view>
+      </block>
+      <view wx:else class="empty-feed">
+        暂无课堂反馈
+      </view>
+    </view>
+
     <!-- 最近动态 -->
     <view class="section-header mt-40">
       <text class="section-title-large">最近动态</text>

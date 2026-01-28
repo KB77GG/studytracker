@@ -10,6 +10,10 @@
   </view>
 
   <view class="action-list">
+    <view class="action-item" bindtap="requestFeedbackSubscribe">
+      <text>{{feedbackSubscribed ? '已订阅课堂反馈' : '订阅课堂反馈'}}</text>
+      <text class="arrow">></text>
+    </view>
     <view class="action-item" bindtap="handleUnbind">
       <text>解除微信绑定</text>
       <text class="arrow">></text>

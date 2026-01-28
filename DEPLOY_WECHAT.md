@@ -30,9 +30,24 @@ pip3 install requests pyjwt
 python3 migrate_wechat.py
 ```
 
+如需启用课堂反馈功能，请创建反馈表：
+```bash
+python3 create_class_feedback_table.py
+```
+
+如果已经创建过表，需要补充图片字段：
+```bash
+python3 add_class_feedback_image.py
+```
+
 ### 步骤 5：配置 AppSecret
 打开 `api/wechat.py`，找到 `WECHAT_APP_SECRET`，填入您的小程序 AppSecret。
 或者，您可以在 `config.py` 中添加 `WECHAT_APP_SECRET = '您的密钥'`。
+
+课堂反馈订阅消息需要配置环境变量：
+```
+WECHAT_FEEDBACK_TEMPLATE_ID=你的反馈模板ID
+```
 
 ### 步骤 6：重启服务
 ```bash
@@ -46,5 +61,8 @@ systemctl restart studytracker
 3. 目录选择：`/Users/zhouxin/Desktop/studytracker/miniprogram`。
 4. AppID 使用：`wx43ac836a9f623a0d`。
 5. 确保在详情设置中勾选 **"不校验合法域名..."**（开发阶段）。
+
+课堂反馈订阅模板 ID 需要同步到小程序端：
+`miniprogram/pages/parent/profile/index.js` 的 `FEEDBACK_TEMPLATE_ID`。
 
 现在您应该可以预览小程序，并尝试点击"微信一键登录"了！

@@ -497,6 +497,35 @@ class Task(db.Model):
         return f"<Task {self.student_name} {self.category} {self.status}>"
 
 
+# ---- Class Feedback (Scheduler) ----
+
+class ClassFeedback(db.Model, TimestampMixin):
+    """Teacher feedback for a scheduled class (external scheduler)."""
+
+    __tablename__ = "class_feedback"
+
+    id = db.Column(db.Integer, primary_key=True)
+    schedule_uid = db.Column(db.String(64), unique=True, nullable=False, index=True)
+    schedule_id = db.Column(db.String(64), index=True)
+    scheduler_student_id = db.Column(db.Integer, index=True)
+    student_name = db.Column(db.String(64), index=True)
+    teacher_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    teacher_name = db.Column(db.String(64))
+    course_name = db.Column(db.String(128))
+    start_time = db.Column(db.String(32))
+    end_time = db.Column(db.String(32))
+    schedule_date = db.Column(db.String(10), index=True)
+    feedback_text = db.Column(db.Text, nullable=False)
+    feedback_image = db.Column(db.String(200))
+    pushed_at = db.Column(db.DateTime)
+    push_success = db.Column(db.Boolean, default=False, nullable=False)
+
+    teacher = db.relationship("User", backref=db.backref("class_feedback", lazy="dynamic"))
+
+    def __repr__(self) -> str:
+        return f"<ClassFeedback {self.schedule_uid}>"
+
+
 # ============================================================================
 # Material Bank System (Structured Questions)
 # ============================================================================

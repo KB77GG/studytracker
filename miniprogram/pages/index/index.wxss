@@ -2,59 +2,120 @@
 /* 页面容器：清新晨光渐变背景 */
 .container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #e9f6f4 0%, #d2efe9 100%);
+  background: linear-gradient(180deg, #eef7f6 0%, #e4f2ef 52%, #f7f9fb 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 32rpx 40rpx;
+  padding: 0 28rpx 48rpx;
   position: relative;
   overflow: hidden;
 }
 
+.bg-circle-1,
+.bg-circle-2 {
+  position: absolute;
+  border-radius: 999px;
+  opacity: 0.8;
+  z-index: 0;
+}
+
+.bg-circle-1 {
+  width: 520rpx;
+  height: 520rpx;
+  background: rgba(25, 132, 123, 0.18);
+  top: -220rpx;
+  left: -180rpx;
+}
+
+.bg-circle-2 {
+  width: 620rpx;
+  height: 620rpx;
+  background: rgba(92, 128, 255, 0.12);
+  top: 220rpx;
+  right: -260rpx;
+}
+
 .hero {
-  margin-top: 60rpx;
+  margin-top: 96rpx;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6rpx;
+  gap: 10rpx;
   color: #0e5c54;
+  padding: 0 6rpx;
+  z-index: 1;
 }
 
 .app-name {
-  font-size: 70rpx;
+  font-size: 68rpx;
   font-weight: 800;
-  letter-spacing: 1rpx;
-  font-family: 'Poppins', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  letter-spacing: 2rpx;
+  font-family: "Avenir Next", "DIN Alternate", "Futura", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  text-align: center;
 }
 
 .sub-name {
-  font-size: 30rpx;
+  font-size: 24rpx;
   color: #1c8b7f;
-  opacity: 0.9;
-  font-style: italic;
+  opacity: 0.75;
+  letter-spacing: 2rpx;
+  text-transform: uppercase;
+  align-self: flex-end;
+  text-align: right;
+  width: 100%;
 }
 
 .slogan {
-  font-size: 30rpx;
-  color: #1f6c65;
-  opacity: 0.75;
-  letter-spacing: 4rpx;
-  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #567c76;
+  opacity: 0.68;
+  letter-spacing: 2rpx;
+  margin-top: 4rpx;
+  align-self: flex-end;
+  text-align: right;
+  width: 100%;
+}
+
+.hero-confirm {
+  margin-top: 82rpx;
+}
+
+.hero-confirm .app-name {
+  font-size: 48rpx;
+  color: #7a8a87;
+  letter-spacing: 1rpx;
+}
+
+.hero-confirm .sub-name,
+.hero-confirm .slogan {
+  font-size: 20rpx;
+  color: #9aa8a4;
+  opacity: 0.7;
+  letter-spacing: 1rpx;
 }
 
 /* 主卡片 */
 .main-card {
   width: 100%;
   background: #fff;
-  border-radius: 52rpx;
-  padding: 60rpx 40rpx 52rpx;
-  box-shadow: 0 18rpx 45rpx rgba(0, 0, 0, 0.05);
+  border-radius: 44rpx;
+  padding: 52rpx 36rpx 46rpx;
+  box-shadow: 0 24rpx 60rpx rgba(15, 118, 110, 0.08);
+  border: 1rpx solid rgba(15, 118, 110, 0.08);
   z-index: 10;
   animation: fadeInUp 0.6s ease-out 0.1s backwards;
   min-height: 400rpx;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-top: 36rpx;
+}
+
+.confirm-mode .main-card {
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: none;
+  border: 1rpx solid rgba(15, 118, 110, 0.06);
 }
 
 .card-header {
@@ -79,43 +140,50 @@
 
 .welcome-text {
   text-align: center;
-  margin-bottom: 60rpx;
+  margin-bottom: 48rpx;
 }
 
 .h1 {
-  font-size: 44rpx; /* 更大 */
+  font-size: 42rpx;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #12211f;
   display: block;
-  margin-bottom: 16rpx;
-  letter-spacing: 2rpx;
+  margin-bottom: 14rpx;
+  letter-spacing: 1rpx;
 }
 
 .p {
-  font-size: 28rpx;
-  color: #666;
+  font-size: 26rpx;
+  color: #6b7c7a;
+  letter-spacing: 0.5rpx;
+}
+
+.status-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2a3c3a;
   letter-spacing: 1rpx;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #20756F 0%, #36A59D 100%);
+  background: linear-gradient(135deg, #1f6c65 0%, #2a867f 100%);
   color: white;
   width: 100%;
-  height: 110rpx; /* 稍微加高 */
-  border-radius: 55rpx;
+  height: 96rpx;
+  border-radius: 58rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 34rpx;
-  font-weight: bold;
-  box-shadow: 0 20rpx 40rpx rgba(66, 211, 146, 0.3);
+  font-size: 32rpx;
+  font-weight: 700;
+  box-shadow: 0 12rpx 24rpx rgba(46, 168, 157, 0.2);
   transition: all 0.2s;
-  letter-spacing: 2rpx;
+  letter-spacing: 1rpx;
 }
 
 .btn-primary:active {
   transform: scale(0.98);
-  box-shadow: 0 10rpx 20rpx rgba(66, 211, 146, 0.2);
+  box-shadow: 0 6rpx 14rpx rgba(46, 168, 157, 0.16);
 }
 
 .welcome-intro {
@@ -127,7 +195,8 @@
 .intro-content {
   display: flex;
   flex-direction: column;
-  gap: 18rpx;
+  gap: 12rpx;
+  padding-top: 18rpx;
 }
 
 .intro-title-wrap {
@@ -141,57 +210,79 @@
 }
 
 .intro-title {
-  font-size: 36rpx;
+  font-size: 38rpx;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #12211f;
   letter-spacing: 1rpx;
 }
 
 .feature-list {
-  margin: 24rpx 0 30rpx;
+  margin: 10rpx 0 20rpx;
   display: flex;
   flex-direction: column;
-  gap: 18rpx;
+  gap: 16rpx;
 }
 
 .feature-item {
   display: flex;
   align-items: center;
   gap: 16rpx;
-  background: #fff;
-  border-radius: 26rpx;
-  padding: 20rpx;
-  box-shadow: 0 10rpx 24rpx rgba(0,0,0,0.05);
+  background: #fbfefe;
+  border-radius: 24rpx;
+  padding: 22rpx 26rpx;
+  border: 1rpx solid rgba(15, 118, 110, 0.04);
+  box-shadow: 0 4rpx 12rpx rgba(15, 118, 110, 0.03);
+  border-left: 6rpx solid #d5efe9;
+}
+
+.feature-item:nth-child(2) {
+  border-left-color: #eef2ff;
+}
+
+.feature-item:nth-child(3) {
+  border-left-color: #fff7ec;
+}
+
+.feature-item:nth-child(4) {
+  border-left-color: #fbeef1;
 }
 
 .feature-texts {
   display: flex;
   flex-direction: column;
   gap: 4rpx;
+  margin-top: -2rpx;
 }
 
 .feature-title {
-  font-size: 34rpx;
-  font-weight: 800;
+  font-size: 32rpx;
+  font-weight: 600;
   color: #1f2d3d;
 }
 
 .feature-desc {
-  font-size: 26rpx;
-  color: #7a8a90;
+  font-size: 24rpx;
+  color: #a3b0b5;
 }
 
 .feature-emoji {
-  font-size: 40rpx;
-  width: 60rpx;
+  font-size: 32rpx;
+  width: 64rpx;
+  height: 64rpx;
   text-align: center;
+  border-radius: 18rpx;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 18rpx rgba(0, 0, 0, 0.06);
 }
 
 /* 隐私协议 */
 .privacy-section {
   width: 100%;
-  margin-bottom: 30rpx;
-  padding: 0 10rpx;
+  margin-bottom: 20rpx;
+  padding: 0 6rpx;
 }
 
 .privacy-label {
@@ -200,22 +291,21 @@
 }
 
 .privacy-text {
-  font-size: 24rpx;
-  color: #666;
-  line-height: 1.4;
-  margin-left: 10rpx;
+  font-size: 22rpx;
+  color: #a0aeb3;
+  line-height: 1.5;
+  margin-left: 8rpx;
   flex: 1;
 }
 
 .link {
-  color: #00695c;
+  color: #1f6c65;
   display: inline;
 }
 
 .btn-disabled {
-  opacity: 0.6;
-  filter: grayscale(0.5);
-  pointer-events: none; /* 禁止点击 */
+  opacity: 1;
+  filter: none;
 }
 
 /* 2. 角色选择 */
@@ -359,69 +449,21 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 欢迎引导页样式 */
-.welcome-intro {
-  padding: 40rpx 0;
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.intro-content {
-  text-align: center;
-}
-
-.intro-title {
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #333;
-  display: block;
-  margin-bottom: 60rpx;
-}
-
-.feature-list {
-  margin-bottom: 60rpx;
-  text-align: left;
-}
-
-.feature-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 30rpx;
-  padding: 20rpx;
-  background: #f8f9fa;
-  border-radius: 15rpx;
-  transition: all 0.3s;
-}
-
-.feature-item:hover {
-  background: #e9ecef;
-}
-
-.feature-icon {
-  font-size: 40rpx;
-  margin-right: 20rpx;
-  flex-shrink: 0;
-}
-
-.feature-text {
-  font-size: 28rpx;
-  color: #555;
-  line-height: 1.5;
-}
-
+/* 欢迎引导页按钮与预览区 */
 .btn-start {
   width: 100%;
-  height: 100rpx;
-  background: linear-gradient(135deg, #2C8A82 0%, #1F6C65 100%);
+  height: 92rpx;
+  background: linear-gradient(135deg, #1f6c65 0%, #2a867f 100%);
   color: white;
-  border-radius: 50rpx;
-  font-size: 32rpx;
-  font-weight: bold;
+  border-radius: 56rpx;
+  font-size: 30rpx;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10rpx 30rpx rgba(44, 138, 130, 0.25);
+  box-shadow: 0 12rpx 24rpx rgba(46, 168, 157, 0.2);
   border: none;
-  margin-bottom: 20rpx;
+  margin-bottom: 26rpx;
 }
 
 .btn-start:active {
@@ -437,23 +479,23 @@
 
 .btn-ghost {
   width: 100%;
-  height: 80rpx;
-  background: #f0f2f5;
-  color: #4b5563;
+  height: 78rpx;
+  background: #f3f6f8;
+  color: #3b4d57;
   border-radius: 40rpx;
-  font-size: 28rpx;
-  margin-top: 12rpx;
-  border: 1px solid #e5e7eb;
+  font-size: 26rpx;
+  margin-top: 32rpx;
+  border: 1px solid #e0e7eb;
 }
 
 .btn-back {
   width: 100%;
-  height: 80rpx;
-  background: #f0f0f0;
-  color: #666;
+  height: 78rpx;
+  background: #f1f5f7;
+  color: #5c6b73;
   border-radius: 40rpx;
-  font-size: 28rpx;
-  margin-top: 20rpx;
+  font-size: 26rpx;
+  margin-top: 18rpx;
   border: none;
 }
 
