@@ -548,7 +548,7 @@ class ScheduleSnapshot(db.Model, TimestampMixin):
     teacher = db.relationship("User", backref=db.backref("schedule_snapshots", lazy="dynamic"))
 
     def __repr__(self) -> str:
-        return f\"<ScheduleSnapshot {self.schedule_uid} {self.status}>\"
+        return f"<ScheduleSnapshot {self.schedule_uid} {self.status}>"
 
 # ============================================================================
 # Material Bank System (Structured Questions)
