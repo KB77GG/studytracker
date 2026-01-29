@@ -5,7 +5,13 @@ const request = (url, options = {}) => {
         // 获取 App 实例（如果 request.js 在 app.js 之前加载，可能需要动态获取）
         // 这里假设 request 在页面中使用，此时 app 已经初始化
         const baseUrl = getApp().globalData.baseUrl
-        const token = getApp().globalData.token
+        let token = getApp().globalData.token
+        if (!token) {
+            token = wx.getStorageSync('token')
+            if (token) {
+                getApp().globalData.token = token
+            }
+        }
 
         let header = options.header || {}
         if (token) {

@@ -8,7 +8,7 @@ from flask import current_app, jsonify, request
 
 from models import User, db
 
-TOKEN_TTL_HOURS = 12
+TOKEN_TTL_HOURS = 168
 
 
 def _hash_token(raw: str) -> str:
