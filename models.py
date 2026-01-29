@@ -526,6 +526,30 @@ class ClassFeedback(db.Model, TimestampMixin):
         return f"<ClassFeedback {self.schedule_uid}>"
 
 
+class ScheduleSnapshot(db.Model, TimestampMixin):
+    """Snapshot of schedules for change detection."""
+
+    __tablename__ = "schedule_snapshot"
+
+    id = db.Column(db.Integer, primary_key=True)
+    schedule_uid = db.Column(db.String(64), unique=True, nullable=False, index=True)
+    schedule_id = db.Column(db.String(64), index=True)
+    teacher_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    scheduler_teacher_id = db.Column(db.Integer, index=True)
+    student_id = db.Column(db.Integer, index=True)
+    student_name = db.Column(db.String(64), index=True)
+    course_name = db.Column(db.String(128))
+    start_time = db.Column(db.String(32))
+    end_time = db.Column(db.String(32))
+    schedule_date = db.Column(db.String(10), index=True)
+    status = db.Column(db.String(16), default="active", nullable=False)
+    last_seen = db.Column(db.DateTime, index=True)
+
+    teacher = db.relationship("User", backref=db.backref("schedule_snapshots", lazy="dynamic"))
+
+    def __repr__(self) -> str:
+        return f\"<ScheduleSnapshot {self.schedule_uid} {self.status}>\"
+
 # ============================================================================
 # Material Bank System (Structured Questions)
 # ============================================================================

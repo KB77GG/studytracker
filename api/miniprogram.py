@@ -11,7 +11,7 @@ from sqlalchemy import func, and_
 from models import (
     db, User, StudentProfile, StudyPlan, PlanItem,
     PlanEvidence, ParentStudentLink, TaskCatalog, Task,
-    PlanItemSession, ClassFeedback
+    PlanItemSession, ClassFeedback, ScheduleSnapshot
 )
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message
@@ -1061,19 +1061,53 @@ def _serialize_class_feedback(feedback: ClassFeedback):
     }
 
 
+def _collect_student_openids(student_id, student_name):
+    openids = []
+    profile = None
+    if student_id:
+        profile = StudentProfile.query.filter_by(scheduler_student_id=student_id).first()
+    if not profile and student_name:
+        profile = StudentProfile.query.filter_by(full_name=student_name).first()
+    if profile:
+        if profile.user and profile.user.wechat_openid:
+            openids.append(profile.user.wechat_openid)
+        links = ParentStudentLink.query.filter_by(student_name=profile.full_name, is_active=True).all()
+        for link in links:
+            parent = User.query.get(link.parent_id)
+            if parent and parent.wechat_openid:
+                openids.append(parent.wechat_openid)
+    return list(dict.fromkeys(openids))
+
+
+def _collect_teacher_openid(scheduler_teacher_id):
+    if not scheduler_teacher_id:
+        return None
+    teacher = User.query.filter_by(scheduler_teacher_id=scheduler_teacher_id, role=User.ROLE_TEACHER).first()
+    if teacher and teacher.wechat_openid:
+        return teacher.wechat_openid
+    return None
+
+
 @mp_bp.route("/send_tomorrow_class_reminders", methods=["POST"])
 @require_api_user(User.ROLE_ADMIN, User.ROLE_TEACHER)
 def send_tomorrow_class_reminders():
     """向绑定了 scheduler_student_id 的学生/家长推送明日课程提醒"""
+    result = send_tomorrow_class_reminders_internal()
+    if result.get("ok"):
+        return jsonify(result)
+    return jsonify(result), 400
+
+
+def send_tomorrow_class_reminders_internal():
     template_id = current_app.config.get("WECHAT_TASK_TEMPLATE_ID")
     if not template_id:
-        return jsonify({"ok": False, "error": "missing_template_id"}), 400
+        return {"ok": False, "error": "missing_template_id"}
 
     schedules, err = _fetch_tomorrow_schedules()
     if err:
-        return jsonify({"ok": False, "error": err}), 400
+        return {"ok": False, "error": err}
     if not schedules:
-        return jsonify({"ok": True, "sent": 0, "total": 0})
+        return {"ok": True, "sent": 0, "total": 0}
 
     if isinstance(schedules, dict):
         schedules_list = schedules.get("schedules") or schedules.get("data") or []
@@ -1083,49 +1117,146 @@ def send_tomorrow_class_reminders():
     sent = 0
     dedupe = set()
     for item in schedules_list:
-        schedule_id, student_id, teacher_id, course_name, start_time, end_time, teacher_name, _student_name = _extract_schedule_fields(item)
+        schedule_id, student_id, teacher_id, course_name, start_time, end_time, teacher_name, student_name = _extract_schedule_fields(item)
         if schedule_id and schedule_id in dedupe:
             continue
         if schedule_id:
             dedupe.add(schedule_id)
         # 学生+家长
-        if student_id:
-            profile = StudentProfile.query.filter_by(scheduler_student_id=student_id).first()
-            if profile:
-                openids = []
-                if profile.user and profile.user.wechat_openid:
-                    openids.append(profile.user.wechat_openid)
-                parent_links = ParentStudentLink.query.filter_by(student_name=profile.full_name).all()
-                for link in parent_links:
-                    parent = User.query.get(link.parent_id)
-                    if parent and parent.wechat_openid:
-                        openids.append(parent.wechat_openid)
-                if openids:
-                    data = {
-                        "thing27": {"value": course_name[:20]},
-                        "time6": {"value": str(start_time)[:32]},
-                        "time38": {"value": str(end_time or start_time)[:32]},
-                        "thing15": {"value": teacher_name[:20]},
-                    }
-                    for oid in openids:
-                        if send_subscribe_message(oid, template_id, data, page="pages/student/home/index"):
-                            sent += 1
-
-        # 老师
-        if teacher_id:
-            teacher = User.query.filter_by(scheduler_teacher_id=teacher_id, role=User.ROLE_TEACHER).first()
-            if teacher and teacher.wechat_openid:
-                data_t = {
-                    "thing27": {"value": course_name[:20]},
-                    "time6": {"value": str(start_time)[:32]},
-                    "time38": {"value": str(end_time or start_time)[:32]},
-                    "thing15": {"value": teacher_name[:20]},
-                }
-                if send_subscribe_message(teacher.wechat_openid, template_id, data_t, page="pages/student/home/index"):
+        openids = _collect_student_openids(student_id, student_name)
+        if openids:
+            data = {
+                "thing27": {"value": (course_name or "课程")[:20]},
+                "time6": {"value": str(start_time)[:32]},
+                "time38": {"value": str(end_time or start_time)[:32]},
+                "thing15": {"value": (teacher_name or "")[:20]},
+            }
+            for oid in openids:
+                if send_subscribe_message(oid, template_id, data, page="pages/student/home/index"):
                     sent += 1
 
-    return jsonify({"ok": True, "sent": sent, "total": len(schedules_list)})
+        # 老师
+        teacher_openid = _collect_teacher_openid(teacher_id)
+        if teacher_openid:
+            data_t = {
+                "thing27": {"value": (course_name or "课程")[:20]},
+                "time6": {"value": str(start_time)[:32]},
+                "time38": {"value": str(end_time or start_time)[:32]},
+                "thing15": {"value": (teacher_name or "")[:20]},
+            }
+            if send_subscribe_message(teacher_openid, template_id, data_t, page="pages/teacher/home/index"):
+                sent += 1
 
+    return {"ok": True, "sent": sent, "total": len(schedules_list)}
+
+
+def check_schedule_changes_internal(days=7):
+    """检查课表变化并推送新增/取消提醒。"""
+    template_id = current_app.config.get("WECHAT_TASK_TEMPLATE_ID")
+    if not template_id:
+        return {"ok": False, "error": "missing_template_id"}
+
+    teachers = User.query.filter(
+        User.role == User.ROLE_TEACHER,
+        User.scheduler_teacher_id.isnot(None)
+    ).all()
+
+    start_date = date.today()
+    end_date = start_date + timedelta(days=days)
+    added = 0
+    removed = 0
+    sent = 0
+
+    for teacher in teachers:
+        data, err = _fetch_range_schedules_by_dates(start_date, end_date, teacher_id=teacher.scheduler_teacher_id)
+        if err:
+            continue
+        schedules = data.get("schedules") if isinstance(data, dict) else data
+        schedules = schedules or []
+
+        current_uids = set()
+        for item in schedules:
+            schedule_id, student_id, teacher_id, course_name, start_time, end_time, teacher_name, student_name = _extract_schedule_fields(item)
+            schedule_date = item.get("schedule_date") or item.get("date")
+            if not schedule_date and start_time and " " in str(start_time):
+                schedule_date = str(start_time).split(" ")[0]
+
+            uid = _build_schedule_uid(schedule_id, teacher.scheduler_teacher_id, student_id, course_name, start_time)
+            current_uids.add(uid)
+            snapshot = ScheduleSnapshot.query.filter_by(schedule_uid=uid).first()
+            if not snapshot:
+                snapshot = ScheduleSnapshot(
+                    schedule_uid=uid,
+                    teacher_id=teacher.id,
+                    scheduler_teacher_id=teacher.scheduler_teacher_id,
+                )
+                db.session.add(snapshot)
+                is_new = True
+            else:
+                is_new = snapshot.status != "active"
+
+            snapshot.schedule_id = str(schedule_id) if schedule_id is not None else None
+            snapshot.student_id = student_id
+            snapshot.student_name = student_name
+            snapshot.course_name = course_name
+            snapshot.start_time = start_time
+            snapshot.end_time = end_time
+            snapshot.schedule_date = schedule_date
+            snapshot.status = "active"
+            snapshot.last_seen = datetime.now()
+
+            if is_new:
+                added += 1
+                change_label = "新增"
+                openids = _collect_student_openids(student_id, student_name)
+                teacher_openid = _collect_teacher_openid(teacher.scheduler_teacher_id)
+                if teacher_openid:
+                    openids.append(teacher_openid)
+                openids = list(dict.fromkeys(openids))
+                data_msg = {
+                    "thing27": {"value": f"[{change_label}]{(course_name or '课程')}"[:20]},
+                    "time6": {"value": str(start_time)[:32]},
+                    "time38": {"value": str(end_time or start_time)[:32]},
+                    "thing15": {"value": (teacher_name or "")[:20]},
+                }
+                for oid in openids:
+                    if send_subscribe_message(oid, template_id, data_msg, page="pages/teacher/home/index"):
+                        sent += 1
+
+        # 检测取消的课程
+        existing = ScheduleSnapshot.query.filter(
+            ScheduleSnapshot.teacher_id == teacher.id,
+            ScheduleSnapshot.status == "active",
+            ScheduleSnapshot.schedule_date >= start_date.isoformat(),
+            ScheduleSnapshot.schedule_date <= end_date.isoformat(),
+        ).all()
+        for snapshot in existing:
+            if snapshot.schedule_uid not in current_uids:
+                snapshot.status = "removed"
+                removed += 1
+                change_label = "取消"
+                openids = _collect_student_openids(snapshot.student_id, snapshot.student_name)
+                teacher_openid = _collect_teacher_openid(teacher.scheduler_teacher_id)
+                if teacher_openid:
+                    openids.append(teacher_openid)
+                openids = list(dict.fromkeys(openids))
+                data_msg = {
+                    "thing27": {"value": f"[{change_label}]{(snapshot.course_name or '课程')}"[:20]},
+                    "time6": {"value": str(snapshot.start_time)[:32]},
+                    "time38": {"value": str(snapshot.end_time or snapshot.start_time)[:32]},
+                    "thing15": {"value": ""[:20]},
+                }
+                for oid in openids:
+                    if send_subscribe_message(oid, template_id, data_msg, page="pages/teacher/home/index"):
+                        sent += 1
+
+    try:
+        db.session.commit()
+    except Exception as exc:
+        db.session.rollback()
+        current_app.logger.warning("Schedule snapshot commit failed: %s", exc)
+
+    return {"ok": True, "added": added, "removed": removed, "sent": sent}
 
 @mp_bp.route("/teacher/feedback", methods=["POST"])
 @require_api_user(User.ROLE_TEACHER)
