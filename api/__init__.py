@@ -12,6 +12,7 @@ def init_app(app):
     from api.tts import tts_bp  # TTS API
     from api.azure_tts import azure_tts_bp  # Azure TTS API
     from api.dictation import dictation_bp  # Dictation API
+    from api.ielts_eval import eval_bp  # IELTS speaking eval API
 
     app.register_blueprint(wechat_bp, url_prefix="/api/wechat")  # Restore url_prefix
     app.register_blueprint(api_bp)
@@ -20,3 +21,4 @@ def init_app(app):
     app.register_blueprint(tts_bp)  # Register TTS
     app.register_blueprint(azure_tts_bp)  # Register Azure TTS
     app.register_blueprint(dictation_bp)  # Register Dictation
+    app.register_blueprint(eval_bp)  # Register IELTS eval

@@ -116,6 +116,14 @@ def ensure_legacy_schema() -> None:
                 current_app.logger.warning(
                     "Failed to add completion_rate to task table: %s", exc
                 )
+        if "question_ids" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(text("ALTER TABLE task ADD COLUMN question_ids TEXT"))
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                current_app.logger.warning(
+                    "Failed to add question_ids to task table: %s", exc
+                )
 
     if "plan_item" in tables:
         columns = {col["name"] for col in inspector.get_columns("plan_item")}
@@ -1320,6 +1328,8 @@ def tasks_page():
         status = request.form.get("status", "pending")
         note = request.form.get("note", "").strip()
         material_id = request.form.get("material_id")
+        question_ids_raw = (request.form.get("question_ids") or "").strip()
+        question_ids = question_ids_raw if question_ids_raw else None
         
         # 如果选择了材料，自动填充描述
         material_data = None
@@ -1334,11 +1344,14 @@ def tasks_page():
                  dictation_book_data = DictationBook.query.get(book_id)
                  if dictation_book_data and not detail:
                      detail = dictation_book_data.title
+                 question_ids = None
             else:
                 # It's a standard material
                 material_data = MaterialBank.query.get(int(material_id))
                 if material_data and not detail:
                     detail = material_data.title
+                if not material_data or material_data.type not in {"speaking_part1", "speaking_part2", "speaking_part2_3"}:
+                    question_ids = None
         
         # Validate: need either category or material_id
         if not student:
@@ -1369,6 +1382,7 @@ def tasks_page():
                 planned_minutes=int(request.form.get("planned_minutes", 0) or 0),
                 accuracy=min(100.0, max(0.0, float(request.form.get("accuracy", 0) or 0))),
                 material_id=int(material_id) if material_id and not material_id.startswith("dictation-") else None,
+                question_ids=question_ids,
                 dictation_book_id=int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None,
                 dictation_word_start=int(dictation_word_start) if dictation_word_start else 1,
                 dictation_word_end=int(dictation_word_end) if dictation_word_end else None,

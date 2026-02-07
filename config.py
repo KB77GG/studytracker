@@ -28,3 +28,10 @@ class Config:
     # Scheduler system integration
     SCHEDULER_BASE_URL = os.environ.get("SCHEDULER_BASE_URL", "http://aliyun-server:5000")
     SCHEDULER_PUSH_TOKEN = os.environ.get("SCHEDULER_PUSH_TOKEN")
+
+    # DeepSeek API (IELTS speaking evaluation)
+    DEEPSEEK_API_BASE = os.environ.get("DEEPSEEK_API_BASE", "https://api.deepseek.com")
+    DEEPSEEK_CHAT_URL = os.environ.get("DEEPSEEK_CHAT_URL")
+    DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
+    DEEPSEEK_MODEL = os.environ.get("DEEPSEEK_MODEL", "deepseek-chat")
+    DEEPSEEK_TIMEOUT = os.environ.get("DEEPSEEK_TIMEOUT", "30")

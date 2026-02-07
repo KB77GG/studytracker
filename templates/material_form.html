@@ -30,6 +30,8 @@
                                             material.type=='speaking_part1' else '' }}>口语题库Part1</option>
                                         <option value="speaking_part2" {{ 'selected' if material and
                                             material.type=='speaking_part2' else '' }}>口语题库Part2</option>
+                                        <option value="speaking_part2_3" {{ 'selected' if material and
+                                            material.type=='speaking_part2_3' else '' }}>口语题库Part2+3</option>
                                         <option value="translation" {{ 'selected' if material and
                                             material.type=='translation' else '' }}>翻译练习</option>
                                         <option value="dictation" {{ 'selected' if material and
@@ -149,7 +151,7 @@
                             <div class="form-group">
                                 <label class="font-weight-bold">问题列表（每行一个问题）</label>
                                 <textarea class="form-control" id="part1Questions" rows="10"
-                                    placeholder="粘贴问题列表，每行一个问题，例如：&#10;What sort of things do you find difficult to remember?&#10;What do you do when you need to remember something important?&#10;Did you find it easier to remember things when you were a child?&#10;..."></textarea>
+                                    placeholder="粘贴问题列表，支持两种格式：&#10;&#10;格式1（每行一个问题）：&#10;What sort of things do you find difficult to remember?&#10;What do you do when you need to remember something important?&#10;&#10;格式2（按话题分组）：&#10;1. Plants (植物)&#10;* Do you keep plants at home?&#10;* What plant did you grow when you were young?&#10;* Do you know anything about growing a plant?"></textarea>
                                 <small class="form-text text-muted">提示：每个问题会被拆分为独立的条目，可以单独分配给学生</small>
                             </div>
                         </div>
@@ -160,6 +162,15 @@
                                 <label class="font-weight-bold">话题卡片</label>
                                 <textarea class="form-control" id="part2Topic" rows="10"
                                     placeholder="粘贴话题卡片，例如：&#10;Describe an area of science (physics, biology, psychology, etc.) that you are interested in.&#10;You should say:&#10;o What it is&#10;o When you knew it&#10;o How you learnt it&#10;o And explain why you are interested in it"></textarea>
+                            </div>
+                        </div>
+                        <!-- Speaking Part 2 + 3 (口语题库Part2+3) -->
+                        <div id="speakingPart23Input" style="display: none;">
+                            <div class="form-group">
+                                <label class="font-weight-bold">话题卡片（多条）</label>
+                                <textarea class="form-control" id="part23Topics" rows="12"
+                                    placeholder="粘贴多条话题卡片，每条之间空一行。例如：&#10;Describe a person you know who enjoys growing plants.&#10;You should say:&#10;• How you know this person&#10;• What plants this person enjoys growing&#10;• Where this person grows plants&#10;• And explain why you think this person enjoys growing these plants.&#10;&#10;Describe a time when someone apologized to you.&#10;You should say:&#10;• When it was&#10;• Who apologized to you&#10;• Why he/she apologized&#10;• And explain whether you accepted the apology"></textarea>
+                                <small class="form-text text-muted">提示：每条话题卡片用空行分隔，会按顺序拆分保存</small>
                             </div>
                         </div>
 
@@ -270,6 +281,7 @@
         document.getElementById('speakingReadingInput').style.display = 'none';
         document.getElementById('speakingPart1Input').style.display = 'none';
         document.getElementById('speakingPart2Input').style.display = 'none';
+        document.getElementById('speakingPart23Input').style.display = 'none';
         document.getElementById('translationInput').style.display = 'none';
         document.getElementById('dictationInput').style.display = 'none';
 
@@ -284,6 +296,8 @@
             document.getElementById('speakingPart1Input').style.display = 'block';
         } else if (type === 'speaking_part2') {
             document.getElementById('speakingPart2Input').style.display = 'block';
+        } else if (type === 'speaking_part2_3') {
+            document.getElementById('speakingPart23Input').style.display = 'block';
         } else if (type === 'translation') {
             document.getElementById('translationInput').style.display = 'block';
         } else if (type === 'dictation') {
@@ -496,8 +510,18 @@
                 return;
             }
 
-            p
             payload.part2_topic = part2Topic;
+
+        } else if (type === 'speaking_part2_3') {
+            // Speaking Part 2+3 topic cards
+            const part23Topics = document.getElementById('part23Topics').value.trim();
+
+            if (!part23Topics) {
+                alert('请填写话题卡片');
+                return;
+            }
+
+            payload.part23_topics = part23Topics;
 
         } else if (type === 'translation') {
             // Translation exercise

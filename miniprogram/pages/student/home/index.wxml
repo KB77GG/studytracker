@@ -36,6 +36,14 @@
       </view>
       <view class="note-count" wx:if="{{notebookCount > 0}}">已收录 {{notebookCount}} 词</view>
     </view>
+    
+    <view class="hammer-entry" bindtap="goHammer">
+      <view>
+        <view class="note-title">Hammer 口语对练</view>
+        <view class="note-desc">逻辑梳理 + 高分改写</view>
+      </view>
+      <view class="note-count">进入</view>
+    </view>
 
     <!-- 任务列表 -->
     <view class="section-title">我的任务</view>

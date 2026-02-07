@@ -173,6 +173,20 @@
         </div>
       </div>
     </div>
+    <div class="task-form-row" id="questionSelectRow" style="display: none;">
+      <div class="field field--wide">
+        <label>选择题目（口语题库）</label>
+        <div style="display:flex; gap: 8px; margin-bottom: 8px;">
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="selectAllQuestions(true)">全选</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="selectAllQuestions(false)">取消全选</button>
+        </div>
+        <div id="questionListContainer" style="max-height: 240px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
+          <div class="text-muted">请选择材料后加载题目</div>
+        </div>
+        <small class="form-text text-muted">不勾选则默认布置全部题目</small>
+        <input id="questionIds" type="hidden" name="question_ids" value="">
+      </div>
+    </div>
 
     <div class="task-form-row" id="categoryRow">
       <div class="field field--wide">
@@ -806,11 +820,60 @@
       }
     }
 
-    function toggleDetailInput() {
+    function renderQuestionCheckboxes(questions) {
+      const container = document.getElementById("questionListContainer");
+      const questionIds = document.getElementById("questionIds");
+      if (!container || !questionIds) return;
+      questionIds.value = "";
+
+      if (!questions || questions.length === 0) {
+        container.innerHTML = '<div class="text-muted">暂无题目</div>';
+        return;
+      }
+
+      container.innerHTML = questions.map(q => {
+        const seq = q.sequence ? `${q.sequence}. ` : '';
+        const content = q.content || '';
+        return `
+          <label style="display:block; margin-bottom:6px;">
+            <input class="question-checkbox" type="checkbox" value="${q.id}" />
+            <span style="margin-left:6px;">${seq}${content}</span>
+          </label>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.question-checkbox').forEach(cb => {
+        cb.addEventListener('change', syncQuestionIds);
+      });
+    }
+
+    function syncQuestionIds() {
+      const questionIds = document.getElementById("questionIds");
+      const container = document.getElementById("questionListContainer");
+      if (!questionIds || !container) return;
+      const ids = Array.from(container.querySelectorAll('.question-checkbox:checked')).map(cb => Number(cb.value));
+      questionIds.value = ids.length ? JSON.stringify(ids) : "";
+    }
+
+    function selectAllQuestions(checked) {
+      const container = document.getElementById("questionListContainer");
+      if (!container) return;
+      container.querySelectorAll('.question-checkbox').forEach(cb => {
+        cb.checked = checked;
+      });
+      syncQuestionIds();
+    }
+
+    async function toggleDetailInput() {
       var select = document.getElementById("material_id");
       var option = select.options[select.selectedIndex];
       var detailInput = document.getElementById("taskDetail"); // Correct ID
       var rangeGroup = document.getElementById("dictation-range-group");
+      var questionRow = document.getElementById("questionSelectRow");
+      var questionIds = document.getElementById("questionIds");
+
+      if (questionRow) questionRow.style.display = "none";
+      if (questionIds) questionIds.value = "";
 
       if (select.value) {
         var title = option.getAttribute("data-title");
@@ -828,11 +891,29 @@
           // Auto-fill max count as placeholder
           var countStr = option.getAttribute("data-count"); // "xxx 词"
           if (countStr) {
-            var maxCount = countStr.replace(/\D/g, ''); // Extract number
+            var maxCount = countStr.replace(/\\D/g, ''); // Extract number
             document.getElementsByName("dictation_word_end")[0].placeholder = "共 " + maxCount;
           }
         } else {
           rangeGroup.style.display = "none";
+        }
+
+        const speakingTypes = ['speaking_part1', 'speaking_part2', 'speaking_part2_3'];
+        if (type && speakingTypes.includes(type)) {
+          if (questionRow) questionRow.style.display = "flex";
+          const container = document.getElementById("questionListContainer");
+          if (container) container.innerHTML = '<div class="text-muted">加载题目中...</div>';
+          try {
+            const res = await fetch(`/api/materials/${select.value}`, { credentials: 'include' });
+            const data = await res.json();
+            if (data.ok && data.material && Array.isArray(data.material.questions)) {
+              renderQuestionCheckboxes(data.material.questions);
+            } else {
+              if (container) container.innerHTML = '<div class="text-muted">题目加载失败</div>';
+            }
+          } catch (err) {
+            if (container) container.innerHTML = '<div class="text-muted">题目加载失败</div>';
+          }
         }
       } else {
         detailInput.value = "";

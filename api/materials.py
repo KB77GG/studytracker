@@ -174,7 +174,9 @@ def create_material():
     elif material_type == 'speaking_part1':
         # Speaking Part 1: multiple questions, each as a separate record
         questions_text = data.get('part1_questions', '')
-        questions_list = [q.strip() for q in questions_text.strip().split('\n') if q.strip()]
+        questions_list = _parse_speaking_part1(questions_text)
+        if not questions_list:
+            questions_list = [q.strip() for q in questions_text.strip().split('\n') if q.strip()]
         
         for i, question_text in enumerate(questions_list, 1):
             question = Question(
@@ -194,6 +196,19 @@ def create_material():
             content=data.get('part2_topic')  # Topic card text
         )
         db.session.add(question)
+
+    elif material_type == 'speaking_part2_3':
+        # Speaking Part 2+3: multiple topic cards, each stored as one question
+        cards_text = data.get('part23_topics', '')
+        cards = _parse_speaking_part23(cards_text)
+        for i, card in enumerate(cards, 1):
+            question = Question(
+                material_id=material.id,
+                sequence=i,
+                question_type='speaking_part2_3',
+                content=card,
+            )
+            db.session.add(question)
     
     elif material_type == 'translation':
         # Translation exercise: single question with sentence, skeleton, grammar, and reference
@@ -264,6 +279,39 @@ def update_material(material_id):
                         option_text=opt['text']
                     )
                     db.session.add(option)
+    elif material.type == 'speaking_part1' and data.get('part1_questions'):
+        Question.query.filter_by(material_id=material_id).delete()
+        questions_list = _parse_speaking_part1(data.get('part1_questions', ''))
+        if not questions_list:
+            questions_list = [q.strip() for q in data.get('part1_questions', '').split('\n') if q.strip()]
+        for i, question_text in enumerate(questions_list, 1):
+            question = Question(
+                material_id=material.id,
+                sequence=i,
+                question_type='speaking_part1',
+                content=question_text
+            )
+            db.session.add(question)
+    elif material.type == 'speaking_part2' and data.get('part2_topic'):
+        Question.query.filter_by(material_id=material_id).delete()
+        question = Question(
+            material_id=material.id,
+            sequence=1,
+            question_type='speaking_part2',
+            content=data.get('part2_topic')
+        )
+        db.session.add(question)
+    elif material.type == 'speaking_part2_3' and data.get('part23_topics'):
+        Question.query.filter_by(material_id=material_id).delete()
+        cards = _parse_speaking_part23(data.get('part23_topics', ''))
+        for i, card in enumerate(cards, 1):
+            question = Question(
+                material_id=material.id,
+                sequence=i,
+                question_type='speaking_part2_3',
+                content=card,
+            )
+            db.session.add(question)
     
     material.updated_at = datetime.utcnow()
     db.session.commit()
@@ -293,6 +341,45 @@ def delete_material(material_id):
 # ============================================================================
 # Question Parsing Utilities
 # ============================================================================
+
+def _parse_speaking_part1(text: str) -> list[str]:
+    lines = [ln.strip() for ln in (text or '').split('\n')]
+    questions: list[str] = []
+    current_topic = ''
+    has_topic = False
+
+    for line in lines:
+        if not line:
+            continue
+
+        header_match = re.match(r'^(\d+)[.、)]\s*(.+)$', line)
+        if header_match:
+            current_topic = header_match.group(2).strip()
+            has_topic = True
+            continue
+
+        bullet_match = re.match(r'^[*•\-]\s*(.+)$', line)
+        if bullet_match:
+            question_text = bullet_match.group(1).strip()
+        else:
+            question_text = line
+
+        if not question_text:
+            continue
+
+        if has_topic and current_topic:
+            question_text = f"{current_topic} - {question_text}"
+        questions.append(question_text)
+
+    return questions
+
+
+def _parse_speaking_part23(text: str) -> list[str]:
+    raw = (text or '').strip()
+    if not raw:
+        return []
+    blocks = re.split(r'\n\s*\n+', raw)
+    return [block.strip() for block in blocks if block.strip()]
 
 @material_bp.route('/parse', methods=['POST'])
 @login_required

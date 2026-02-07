@@ -11,10 +11,12 @@ from sqlalchemy import func, and_
 from models import (
     db, User, StudentProfile, StudyPlan, PlanItem,
     PlanEvidence, ParentStudentLink, TaskCatalog, Task,
-    PlanItemSession, ClassFeedback, ScheduleSnapshot
+    PlanItemSession, ClassFeedback, ScheduleSnapshot,
+    MaterialBank, Question
 )
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message
+from .ielts_eval import run_ielts_eval
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 
@@ -49,7 +51,116 @@ def upload_file():
         # 假设 Nginx 配置了 /uploads/ 映射到 upload_folder
         file_url = f"/uploads/{unique_filename}"
         
-        return jsonify({"ok": True, "url": file_url})
+    return jsonify({"ok": True, "url": file_url})
+
+
+@mp_bp.route("/speaking/assigned", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def get_speaking_assigned():
+    """Get speaking tasks with material questions for a student (default today)."""
+    user = request.current_api_user
+    student = user.student_profile
+    if not student:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    date_str = request.args.get("date")
+    if date_str:
+        try:
+            query_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            query_date = date.today()
+    else:
+        query_date = date.today()
+
+    tasks = Task.query.filter_by(
+        student_name=student.full_name,
+        date=query_date.isoformat()
+    ).all()
+
+    speaking_types = {"speaking_part1", "speaking_part2", "speaking_part2_3"}
+    results = []
+    for task in tasks:
+        if not task.material or task.material.type not in speaking_types:
+            continue
+        selected_ids = None
+        if task.question_ids:
+            try:
+                loaded = json.loads(task.question_ids)
+                if isinstance(loaded, list):
+                    selected_ids = {int(x) for x in loaded if str(x).isdigit()}
+            except Exception:
+                selected_ids = None
+        questions = []
+        for q in task.material.questions.order_by(Question.sequence).all():
+            if selected_ids is not None and q.id not in selected_ids:
+                continue
+            questions.append({
+                "id": q.id,
+                "sequence": q.sequence,
+                "type": q.question_type,
+                "content": q.content,
+                "hint": q.hint,
+                "reference_answer": q.reference_answer,
+            })
+        results.append({
+            "task_id": task.id,
+            "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
+            "material": {
+                "id": task.material.id,
+                "title": task.material.title,
+                "type": task.material.type,
+                "description": task.material.description,
+                "questions": questions,
+            }
+        })
+
+    return jsonify({"ok": True, "date": query_date.isoformat(), "tasks": results})
+
+
+@mp_bp.route("/speaking/random", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def get_speaking_random():
+    """Get a random speaking question by part."""
+    part = (request.args.get("part") or "Part1").strip()
+    part = part if part.startswith("Part") else f"Part{part}"
+
+    if part == "Part1":
+        types = ["speaking_part1"]
+    elif part == "Part2":
+        types = ["speaking_part2", "speaking_part2_3"]
+    else:
+        types = ["speaking_part2_3"]
+
+    question = (
+        Question.query.join(MaterialBank)
+        .filter(MaterialBank.is_deleted.is_(False))
+        .filter(MaterialBank.is_active.is_(True))
+        .filter(Question.question_type.in_(types))
+        .order_by(func.random())
+        .first()
+    )
+
+    if not question:
+        return jsonify({"ok": False, "error": "no_question_found"}), 404
+
+    return jsonify({
+        "ok": True,
+        "question": {
+            "id": question.id,
+            "sequence": question.sequence,
+            "type": question.question_type,
+            "content": question.content,
+            "material_id": question.material_id,
+        }
+    })
+
+
+@mp_bp.route("/speaking/evaluate", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def evaluate_speaking():
+    data = request.get_json(silent=True) or {}
+    payload, status = run_ielts_eval(data)
+    return jsonify(payload), status
 
 # --- 学生接口 ---
 
@@ -147,8 +258,19 @@ def get_task_detail(task_id):
         # 获取关联的材料信息
         material_data = None
         if task.material:
+            selected_ids = None
+            if task.question_ids:
+                try:
+                    loaded = json.loads(task.question_ids)
+                    if isinstance(loaded, list):
+                        selected_ids = {int(x) for x in loaded if str(x).isdigit()}
+                except Exception:
+                    selected_ids = None
+
             questions = []
             for q in task.material.questions:
+                if selected_ids is not None and q.id not in selected_ids:
+                    continue
                 options = [{"key": opt.option_key, "text": opt.option_text} for opt in q.options]
                 questions.append({
                     "id": q.id,
@@ -1390,13 +1512,20 @@ def submit_class_feedback():
 @mp_bp.route("/teacher/schedules", methods=["GET"])
 @require_api_user(User.ROLE_TEACHER)
 def teacher_schedules():
-    """老师查看未来课表（默认7天，可传 days=30），要求已绑定 scheduler_teacher_id。"""
+    """老师查看课表（默认未来7天 + 过去2天，可传 days/past_days），要求已绑定 scheduler_teacher_id。"""
     days = request.args.get("days", 7)
     try:
         days = int(days)
     except Exception:
         days = 7
     days = max(1, min(days, 60))  # 限制 1-60 天
+
+    past_days = request.args.get("past_days", 2)
+    try:
+        past_days = int(past_days)
+    except Exception:
+        past_days = 2
+    past_days = max(0, min(past_days, 14))  # 限制 0-14 天
 
     user = request.current_api_user
     if not user.scheduler_teacher_id:
@@ -1406,7 +1535,9 @@ def teacher_schedules():
         )
         return jsonify({"ok": False, "error": "missing_scheduler_teacher_id"}), 400
 
-    data, err = _fetch_range_schedules(days=days, teacher_id=user.scheduler_teacher_id)
+    start_date = date.today() - timedelta(days=past_days)
+    end_date = date.today() + timedelta(days=days)
+    data, err = _fetch_range_schedules_by_dates(start_date, end_date, teacher_id=user.scheduler_teacher_id)
     if err:
         return jsonify({"ok": False, "error": err}), 400
 
@@ -1470,7 +1601,13 @@ def teacher_schedules():
         else:
             item["feedback"] = None
 
-    return jsonify({"ok": True, "days": days, "count": len(normalized), "schedules": normalized})
+    return jsonify({
+        "ok": True,
+        "days": days,
+        "past_days": past_days,
+        "count": len(normalized),
+        "schedules": normalized
+    })
 
 
 @mp_bp.route("/teacher/monthly_stats", methods=["GET"])
