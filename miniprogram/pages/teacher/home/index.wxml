@@ -1,15 +1,17 @@
 <view class="page">
   <view class="header">
-    <view class="title">老师课表</view>
-    <view class="actions">
-      <button class="sub-btn" size="mini" disabled="{{hasSubscribed}}" bindtap="requestSubscribe">
-        {{hasSubscribed ? '已订阅提醒' : '订阅提醒'}}
-      </button>
+    <view class="header-row">
+      <view class="title">老师课表</view>
       <view class="view-switch">
         <button class="switch-btn {{viewMode==='list' ? 'active' : ''}}" size="mini" data-mode="list" bindtap="switchView">列表</button>
         <button class="switch-btn {{viewMode==='calendar' ? 'active' : ''}}" size="mini" data-mode="calendar" bindtap="switchView">日历</button>
       </view>
-      <view class="range-switch">
+    </view>
+    <view class="header-row secondary">
+      <button class="sub-btn" size="mini" disabled="{{hasSubscribed}}" bindtap="requestSubscribe">
+        {{hasSubscribed ? '已订阅提醒' : '订阅提醒'}}
+      </button>
+      <view class="range-switch segmented">
         <button class="range-btn {{viewDays===7?'active':''}}" size="mini" data-days="7" bindtap="switchRange">7天</button>
         <button class="range-btn {{viewDays===30?'active':''}}" size="mini" data-days="30" bindtap="switchRange">30天</button>
       </view>

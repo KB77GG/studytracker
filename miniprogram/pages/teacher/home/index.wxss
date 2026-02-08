@@ -7,9 +7,20 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 12px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.header-row.secondary {
+  gap: 10px;
 }
 
 .title {
@@ -18,18 +29,14 @@
   color: #0f766e;
 }
 
-.actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
 .sub-btn {
   background: #0f766e;
   color: #fff;
-  border-radius: 16px;
-  padding: 0 12px;
+  border-radius: 14px;
+  padding: 0 10px;
+  font-size: 12px;
+  height: 28px;
+  line-height: 28px;
 }
 
 .sub-btn[disabled] {
@@ -43,17 +50,42 @@
 }
 
 .range-btn {
-  border: 1px solid #d0e7e2;
+  border: 1px solid #cfe7e2;
   color: #0f766e;
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 0 10px;
   background: #fff;
+  font-size: 11px;
+  height: 26px;
+  line-height: 26px;
 }
 
 .range-btn.active {
   background: #0f766e;
   color: #fff;
   border-color: #0f766e;
+}
+
+.range-switch.segmented {
+  background: #ecf7f5;
+  padding: 2px;
+  border-radius: 14px;
+  border: 1px solid #d5ece8;
+}
+
+.range-switch.segmented .range-btn {
+  border: none;
+  background: transparent;
+  color: #0f766e;
+  padding: 0 12px;
+  height: 26px;
+  line-height: 26px;
+}
+
+.range-switch.segmented .range-btn.active {
+  background: #0f766e;
+  color: #fff;
+  border-radius: 12px;
 }
 
 .bind-panel {
@@ -198,7 +230,6 @@
 .view-switch {
   display: flex;
   gap: 4px;
-  margin-bottom: 12px;
 }
 
 .switch-btn {
@@ -208,8 +239,8 @@
   padding: 0 6px;
   background: #fff;
   font-size: 11px;
-  height: 24px;
-  line-height: 24px;
+  height: 26px;
+  line-height: 26px;
 }
 
 .switch-btn.active {
