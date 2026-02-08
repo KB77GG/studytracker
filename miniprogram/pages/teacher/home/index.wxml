@@ -5,9 +5,9 @@
       <button class="sub-btn" size="mini" disabled="{{hasSubscribed}}" bindtap="requestSubscribe">
         {{hasSubscribed ? '已订阅提醒' : '订阅提醒'}}
       </button>
-      <view class="view-switch" wx:if="{{viewDays===7}}">
+      <view class="view-switch">
         <button class="switch-btn {{viewMode==='list' ? 'active' : ''}}" size="mini" data-mode="list" bindtap="switchView">列表</button>
-        <button class="switch-btn {{viewMode==='week' ? 'active' : ''}}" size="mini" data-mode="week" bindtap="switchView">日历</button>
+        <button class="switch-btn {{viewMode==='calendar' ? 'active' : ''}}" size="mini" data-mode="calendar" bindtap="switchView">日历</button>
       </view>
       <view class="range-switch">
         <button class="range-btn {{viewDays===7?'active':''}}" size="mini" data-days="7" bindtap="switchRange">7天</button>
@@ -30,14 +30,19 @@
   <view wx:else>
     <view wx:if="{{loading}}" class="loading">加载中...</view>
     <view wx:else>
-      <block wx:if="{{viewMode === 'week'}}">
-        <view wx:if="{{weekDays.length === 0}}" class="empty">暂无课表</view>
+      <block wx:if="{{viewMode === 'calendar'}}">
+        <view wx:if="{{monthDays.length === 0}}" class="empty">暂无课表</view>
         <view wx:else class="calendar-view">
-          <view class="calendar-row">
-            <view class="calendar-day {{item.date === selectedDate ? 'active' : ''}} {{item.isToday ? 'today' : ''}}" wx:for="{{weekDays}}" wx:key="date" wx:for-item="item" data-date="{{item.date}}" bindtap="selectDay">
-              <text class="calendar-weekday">{{item.weekday}}</text>
-              <text class="calendar-date">{{item.dayNum}}</text>
-              <view class="calendar-dots" wx:if="{{item.dots.length}}">
+          <view class="month-header">
+            <text class="month-title">{{monthLabel}}</text>
+          </view>
+          <view class="week-header">
+            <text class="week-cell" wx:for="{{weekHeaders}}" wx:key="*this">{{item}}</text>
+          </view>
+          <view class="month-grid">
+            <view class="month-cell {{item.isPlaceholder ? 'placeholder' : ''}} {{item.date === selectedDate ? 'active' : ''}} {{item.isToday ? 'today' : ''}}" wx:for="{{monthDays}}" wx:key="index" wx:for-item="item" data-date="{{item.date}}" bindtap="selectDay">
+              <text class="cell-date">{{item.dayNum}}</text>
+              <view class="calendar-dots" wx:if="{{item.dots && item.dots.length}}">
                 <view class="calendar-dot" wx:for="{{item.dots}}" wx:key="*this" wx:for-item="dot" style="background: {{dot}};"></view>
               </view>
               <text class="calendar-count" wx:if="{{item.count}}">{{item.count}}</text>

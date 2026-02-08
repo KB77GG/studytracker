@@ -14,8 +14,11 @@ Page({
         bindRequired: false,
         schedulerTeacherId: '',
         bindLoading: false,
-        viewMode: 'week',
+        viewMode: 'calendar',
         weekDays: [],
+        monthDays: [],
+        monthLabel: '',
+        weekHeaders: ['一', '二', '三', '四', '五', '六', '日'],
         selectedDate: '',
         selectedItems: [],
         timeSlots: [],
@@ -45,11 +48,14 @@ Page({
                 const list = res.schedules || []
                 const grouped = this.groupByDate(list)
                 const weekData = this.buildWeekView(list)
+                const monthData = this.buildMonthView(list)
                 this.setData({
                     schedules: grouped,
                     weekDays: weekData.days,
-                    selectedDate: weekData.selectedDate,
-                    selectedItems: weekData.selectedItems,
+                    monthDays: monthData.days,
+                    monthLabel: monthData.label,
+                    selectedDate: monthData.selectedDate || weekData.selectedDate,
+                    selectedItems: monthData.selectedItems || weekData.selectedItems,
                     bindRequired: false
                 })
             } else {
@@ -149,6 +155,72 @@ Page({
         }
     },
 
+    buildMonthView(list) {
+        const base = this.data.selectedDate ? new Date(this.data.selectedDate) : new Date()
+        const year = base.getFullYear()
+        const month = base.getMonth()
+        const monthLabel = `${year}年${month + 1}月`
+        const firstDay = new Date(year, month, 1)
+        const daysInMonth = new Date(year, month + 1, 0).getDate()
+        const startOffset = (firstDay.getDay() + 6) % 7
+
+        const dayMap = {}
+        list.forEach(item => {
+            const date = item.schedule_date || (item.start_time || '').split(' ')[0] || ''
+            if (!date) return
+            if (!dayMap[date]) dayMap[date] = []
+            const timeInfo = this.parseTimeRange(item, 0, 24)
+            const color = this.pickSubjectColor(item.course_name || '')
+            dayMap[date].push({
+                ...item,
+                timeRange: this.formatTimeRange(item.start_time, item.end_time),
+                accentColor: color.border,
+                accentBg: color.bg,
+                _startMinutes: timeInfo.startMinutes
+            })
+        })
+
+        const days = []
+        for (let i = 0; i < startOffset; i += 1) {
+            days.push({ isPlaceholder: true })
+        }
+
+        for (let day = 1; day <= daysInMonth; day += 1) {
+            const dateObj = new Date(year, month, day)
+            const date = this.formatDate(dateObj)
+            const items = (dayMap[date] || []).sort((a, b) => (a._startMinutes || 0) - (b._startMinutes || 0))
+            const dots = []
+            items.forEach(item => {
+                if (item.accentColor && !dots.includes(item.accentColor)) dots.push(item.accentColor)
+            })
+            days.push({
+                date,
+                dayNum: day,
+                isToday: date === this.formatDate(new Date()),
+                items,
+                dots: dots.slice(0, 3),
+                count: items.length
+            })
+        }
+
+        while (days.length % 7 !== 0) {
+            days.push({ isPlaceholder: true })
+        }
+
+        const today = this.formatDate(new Date())
+        let selectedDate = this.data.selectedDate
+        if (!selectedDate || !dayMap[selectedDate]) {
+            selectedDate = dayMap[today] ? today : (dayMap[days[0]?.date] ? days[0].date : today)
+        }
+
+        return {
+            days,
+            label: monthLabel,
+            selectedDate,
+            selectedItems: dayMap[selectedDate] || []
+        }
+    },
+
     formatDate(dateObj) {
         const y = dateObj.getFullYear()
         const m = String(dateObj.getMonth() + 1).padStart(2, '0')
@@ -239,23 +311,20 @@ Page({
     },
 
     switchView(e) {
-        const mode = e.currentTarget.dataset.mode || 'week'
-        if (mode === 'week' && this.data.viewDays !== 7) {
-            this.setData({ viewMode: mode, viewDays: 7 }, () => this.fetchSchedules())
-            return
-        }
+        const mode = e.currentTarget.dataset.mode || 'list'
         this.setData({ viewMode: mode })
     },
 
     switchRange(e) {
         const days = Number(e.currentTarget.dataset.days) || 7
-        const nextMode = days === 30 ? 'list' : 'week'
-        this.setData({ viewDays: days, viewMode: nextMode }, () => this.fetchSchedules())
+        this.setData({ viewDays: days }, () => this.fetchSchedules())
     },
 
     selectDay(e) {
         const date = e.currentTarget.dataset.date
-        const day = this.data.weekDays.find(item => item.date === date)
+        if (!date) return
+        const day = this.data.monthDays.find(item => item.date === date)
+            || this.data.weekDays.find(item => item.date === date)
         this.setData({
             selectedDate: date,
             selectedItems: day ? day.items : []

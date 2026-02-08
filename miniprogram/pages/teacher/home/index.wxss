@@ -197,16 +197,19 @@
 
 .view-switch {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   margin-bottom: 12px;
 }
 
 .switch-btn {
   border: 1px solid #d0e7e2;
   color: #0f766e;
-  border-radius: 14px;
-  padding: 0 10px;
+  border-radius: 12px;
+  padding: 0 6px;
   background: #fff;
+  font-size: 11px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .switch-btn.active {
@@ -219,7 +222,33 @@
   margin-top: 4px;
 }
 
-.calendar-row {
+.month-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.month-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.week-header {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  margin-bottom: 6px;
+  padding: 0 4px;
+}
+
+.week-cell {
+  text-align: center;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.month-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 4px;
@@ -230,42 +259,46 @@
   margin-bottom: 12px;
 }
 
-.calendar-day {
+.month-cell {
   position: relative;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 6px 2px;
   text-align: center;
   background: #f8fafc;
   border: 1px solid transparent;
+  min-height: 54px;
   min-width: 0;
 }
 
-.calendar-day.today {
+.month-cell.placeholder {
+  background: transparent;
+  border-color: transparent;
+}
+
+.month-cell.placeholder .cell-date,
+.month-cell.placeholder .calendar-dots,
+.month-cell.placeholder .calendar-count {
+  visibility: hidden;
+}
+
+.month-cell.today {
   border-color: transparent;
   background: #f0fdf9;
 }
 
-.calendar-day.today .calendar-weekday,
-.calendar-day.today .calendar-date {
+.month-cell.today .cell-date {
   color: #0f766e;
 }
 
-.calendar-day.active {
+.month-cell.active {
   background: #e6f4f1;
   border-color: #0f766e;
 }
 
-.calendar-weekday {
-  font-size: 10px;
-  color: #64748b;
-  display: block;
-}
-
-.calendar-date {
-  font-size: 14px;
+.cell-date {
+  font-size: 13px;
   font-weight: 700;
   color: #0f172a;
-  margin-top: 2px;
   display: block;
 }
 
@@ -294,21 +327,21 @@
 }
 
 @media (max-width: 360px) {
-  .calendar-row {
+  .month-grid {
     gap: 3px;
     padding: 4px;
   }
 
-  .calendar-day {
+  .month-cell {
     padding: 4px 1px;
   }
 
-  .calendar-weekday {
+  .week-cell {
     font-size: 9px;
   }
 
-  .calendar-date {
-    font-size: 12px;
+  .cell-date {
+    font-size: 11px;
   }
 }
 
