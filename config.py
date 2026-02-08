@@ -35,3 +35,11 @@ class Config:
     DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
     DEEPSEEK_MODEL = os.environ.get("DEEPSEEK_MODEL", "deepseek-chat")
     DEEPSEEK_TIMEOUT = os.environ.get("DEEPSEEK_TIMEOUT", "30")
+
+    # Aliyun ASR (DashScope Model Studio)
+    ALIYUN_API_KEY = os.environ.get("ALIYUN_API_KEY")
+    ALIYUN_ASR_MODEL = os.environ.get("ALIYUN_ASR_MODEL", "paraformer-v2")
+    ALIYUN_ASR_REGION = os.environ.get("ALIYUN_ASR_REGION", "cn-beijing")
+    ALIYUN_ASR_HOST = os.environ.get("ALIYUN_ASR_HOST", "")
+    ALIYUN_ASR_POLL_INTERVAL = os.environ.get("ALIYUN_ASR_POLL_INTERVAL", "1.0")
+    ALIYUN_ASR_MAX_WAIT = os.environ.get("ALIYUN_ASR_MAX_WAIT", "45")

@@ -22,6 +22,11 @@
         "navigationBarTitleText": "学习计划与打卡",
         "navigationBarTextStyle": "black"
     },
+    "permission": {
+        "scope.record": {
+            "desc": "用于录音转写与口语评估"
+        }
+    },
     "tabBar": {
         "custom": true,
         "color": "#999999",

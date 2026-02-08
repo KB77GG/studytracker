@@ -14,6 +14,10 @@ Page({
     loadingQuestion: false,
     loadingEval: false,
     result: null,
+    isRecording: false,
+    recordStatus: '',
+    uploadingAudio: false,
+    transcribingAudio: false,
     part2Options: [
       { value: '', label: '不指定' },
       { value: 'person_place', label: '人物/地点' },
@@ -26,7 +30,29 @@ Page({
   },
 
   onLoad() {
+    this.setupRecorder()
     this.loadAssigned()
+  },
+
+  setupRecorder() {
+    this.recorderManager = wx.getRecorderManager()
+    this.recorderManager.onStart(() => {
+      this.setData({ isRecording: true, recordStatus: '录音中...' })
+    })
+    this.recorderManager.onStop((res) => {
+      const tempFilePath = res && res.tempFilePath
+      this.setData({ isRecording: false, recordStatus: '录音完成，处理中...' })
+      if (tempFilePath) {
+        this.handleAudioFile(tempFilePath)
+      } else {
+        this.setData({ recordStatus: '录音失败，请重试' })
+        wx.showToast({ title: '录音失败', icon: 'none' })
+      }
+    })
+    this.recorderManager.onError(() => {
+      this.setData({ isRecording: false, recordStatus: '录音失败，请重试' })
+      wx.showToast({ title: '录音失败', icon: 'none' })
+    })
   },
 
   async loadAssigned() {
@@ -147,13 +173,14 @@ Page({
     this.setData({ answerText: e.detail.value })
   },
 
-  async submitEval() {
+  async submitEval(e) {
+    const auto = e === true
     if (!this.data.answerText) {
-      wx.showToast({ title: '请先输入回答', icon: 'none' })
+      if (!auto) wx.showToast({ title: '请先输入回答', icon: 'none' })
       return
     }
     if (!this.data.questionText) {
-      wx.showToast({ title: '请先获取题目', icon: 'none' })
+      if (!auto) wx.showToast({ title: '请先获取题目', icon: 'none' })
       return
     }
 
@@ -202,5 +229,130 @@ Page({
       chinese_style_correction: Array.isArray(data.chinese_style_correction) ? data.chinese_style_correction : [],
       lexical_upgrade: Array.isArray(data.lexical_upgrade) ? data.lexical_upgrade : []
     }
+  },
+
+  toggleRecord() {
+    if (this.data.isRecording) {
+      this.stopRecord()
+    } else {
+      this.startRecord()
+    }
+  },
+
+  startRecord() {
+    if (this.data.isRecording) return
+    wx.getSetting({
+      success: (res) => {
+        if (res.authSetting && res.authSetting['scope.record']) {
+          this.beginRecord()
+        } else {
+          wx.authorize({
+            scope: 'scope.record',
+            success: () => this.beginRecord(),
+            fail: () => {
+              wx.showModal({
+                title: '需要麦克风权限',
+                content: '请在设置中开启麦克风权限后再使用录音',
+                showCancel: false,
+                success: () => wx.openSetting()
+              })
+            }
+          })
+        }
+      },
+      fail: () => {
+        wx.showToast({ title: '无法获取权限', icon: 'none' })
+      }
+    })
+  },
+
+  beginRecord() {
+    this.setData({ recordStatus: '准备录音...', result: null })
+    this.recorderManager.start({
+      duration: 120000,
+      sampleRate: 16000,
+      numberOfChannels: 1,
+      encodeBitRate: 96000,
+      format: 'mp3'
+    })
+  },
+
+  stopRecord() {
+    if (!this.data.isRecording) return
+    this.recorderManager.stop()
+  },
+
+  async handleAudioFile(tempFilePath) {
+    this.setData({ uploadingAudio: true, transcribingAudio: false })
+    let uploadedUrl = ''
+    try {
+      uploadedUrl = await this.uploadAudio(tempFilePath)
+    } catch (e) {
+      this.setData({ uploadingAudio: false, recordStatus: '上传失败，请重试' })
+      wx.showToast({ title: '上传失败', icon: 'none' })
+      return
+    }
+    this.setData({ uploadingAudio: false, transcribingAudio: true })
+
+    try {
+      const res = await request('/miniprogram/speaking/transcribe', {
+        method: 'POST',
+        data: { audio_url: uploadedUrl }
+      })
+      if (!res.ok) {
+        wx.showToast({ title: res.error || '转写失败', icon: 'none' })
+        this.setData({ recordStatus: '转写失败，请重试' })
+        return
+      }
+      const transcript = res.transcript || ''
+      this.setData({ answerText: transcript, recordStatus: transcript ? '转写完成' : '未识别到内容' })
+
+      if (!transcript) {
+        wx.showToast({ title: '未识别到内容', icon: 'none' })
+        return
+      }
+
+      if (!this.data.questionText) {
+        await this.nextQuestion()
+      }
+      await this.submitEval(true)
+    } catch (e) {
+      wx.showToast({ title: '转写失败', icon: 'none' })
+      this.setData({ recordStatus: '转写失败，请重试' })
+    } finally {
+      this.setData({ transcribingAudio: false })
+    }
+  },
+
+  uploadAudio(tempFilePath) {
+    return new Promise((resolve, reject) => {
+      const baseUrl = getApp().globalData.baseUrl
+      let token = getApp().globalData.token || wx.getStorageSync('token')
+      const header = {}
+      if (token) {
+        header['Authorization'] = `Bearer ${token}`
+      }
+
+      wx.uploadFile({
+        url: `${baseUrl}/miniprogram/upload`,
+        filePath: tempFilePath,
+        name: 'file',
+        header,
+        formData: { filename: 'hammer_recording.mp3' },
+        success: (res) => {
+          try {
+            const data = JSON.parse(res.data || '{}')
+            if (data.ok && data.url) {
+              resolve(data.url)
+            } else {
+              reject(new Error(data.error || 'upload_failed'))
+            }
+          } catch (err) {
+            reject(err)
+          }
+        },
+        fail: (err) => reject(err)
+      })
+    })
   }
 })

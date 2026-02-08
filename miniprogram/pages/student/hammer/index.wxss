@@ -151,6 +151,34 @@
   margin-bottom: 16rpx;
 }
 
+.record-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+  flex-wrap: wrap;
+}
+
+.btn-record {
+  background: #eef7f6;
+  color: #1f6f68;
+  border: 1rpx solid #cfe8e4;
+  border-radius: 16rpx;
+  padding: 12rpx 18rpx;
+  font-size: 24rpx;
+}
+
+.btn-record.active {
+  background: #1f6f68;
+  color: #fff;
+  border-color: #1f6f68;
+}
+
+.record-tip {
+  font-size: 22rpx;
+  color: #6c7a7a;
+}
+
 .btn-primary {
   background: #1f6f68;
   color: #fff;

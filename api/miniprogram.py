@@ -17,6 +17,7 @@ from models import (
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message
 from .ielts_eval import run_ielts_eval
+from .aliyun_asr import transcribe_audio_url
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 
@@ -161,6 +162,24 @@ def evaluate_speaking():
     data = request.get_json(silent=True) or {}
     payload, status = run_ielts_eval(data)
     return jsonify(payload), status
+
+
+@mp_bp.route("/speaking/transcribe", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def transcribe_speaking_audio():
+    data = request.get_json(silent=True) or {}
+    file_url = (data.get("audio_url") or data.get("file_url") or "").strip()
+    if not file_url:
+        return jsonify({"ok": False, "error": "missing_audio_url"}), 400
+
+    if not file_url.startswith("http"):
+        base_url = request.host_url.rstrip("/")
+        file_url = f"{base_url}{file_url if file_url.startswith('/') else '/' + file_url}"
+
+    ok, payload = transcribe_audio_url(file_url)
+    if not ok:
+        return jsonify({"ok": False, **payload}), 500
+    return jsonify({"ok": True, **payload})
 
 # --- 学生接口 ---
 

@@ -36,6 +36,12 @@
 
   <view class="card">
     <view class="section-title">我的回答</view>
+    <view class="record-row">
+      <button class="btn-record {{isRecording ? 'active' : ''}}" bindtap="toggleRecord" loading="{{uploadingAudio || transcribingAudio}}">
+        {{isRecording ? '停止录音' : '开始录音'}}
+      </button>
+      <text class="record-tip">{{recordStatus}}</text>
+    </view>
     <textarea class="answer" placeholder="输入你的回答..." value="{{answerText}}" bindinput="handleAnswerInput"></textarea>
     <button class="btn-primary" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText}}">开始评估</button>
   </view>
