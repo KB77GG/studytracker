@@ -22,6 +22,7 @@
   display: flex;
   gap: 8px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .sub-btn {
@@ -220,10 +221,10 @@
 
 .calendar-row {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
   background: #fff;
-  padding: 8px;
+  padding: 6px;
   border-radius: 14px;
   border: 1px solid #e2e8f0;
   margin-bottom: 12px;
@@ -232,10 +233,11 @@
 .calendar-day {
   position: relative;
   border-radius: 12px;
-  padding: 8px 4px;
+  padding: 6px 2px;
   text-align: center;
   background: #f8fafc;
   border: 1px solid transparent;
+  min-width: 0;
 }
 
 .calendar-day.today {
@@ -254,13 +256,13 @@
 }
 
 .calendar-weekday {
-  font-size: 11px;
+  font-size: 10px;
   color: #64748b;
   display: block;
 }
 
 .calendar-date {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #0f172a;
   margin-top: 2px;
@@ -282,13 +284,32 @@
 
 .calendar-count {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  font-size: 10px;
+  top: 2px;
+  right: 2px;
+  font-size: 9px;
   background: #0f766e;
   color: #fff;
   padding: 0 4px;
   border-radius: 999px;
+}
+
+@media (max-width: 360px) {
+  .calendar-row {
+    gap: 3px;
+    padding: 4px;
+  }
+
+  .calendar-day {
+    padding: 4px 1px;
+  }
+
+  .calendar-weekday {
+    font-size: 9px;
+  }
+
+  .calendar-date {
+    font-size: 12px;
+  }
 }
 
 .day-detail {
