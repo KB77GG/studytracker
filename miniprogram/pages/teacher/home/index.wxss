@@ -8,7 +8,7 @@
 .header {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 12px;
 }
 
@@ -30,18 +30,20 @@
 }
 
 .sub-btn {
-  background: #0f766e;
-  color: #fff;
-  border-radius: 14px;
-  padding: 0 10px;
+  background: #f0f7f6;
+  color: #0f766e;
+  border-radius: 15px;
+  padding: 0 12px;
   font-size: 12px;
-  height: 28px;
-  line-height: 28px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #d2ebe7;
 }
 
 .sub-btn[disabled] {
-  background: #94a3b8;
-  color: #f8fafc;
+  background: #edf2f7;
+  color: #94a3b8;
+  border-color: #e2e8f0;
 }
 
 .range-switch {
@@ -52,12 +54,12 @@
 .range-btn {
   border: 1px solid #cfe7e2;
   color: #0f766e;
-  border-radius: 12px;
-  padding: 0 10px;
+  border-radius: 15px;
+  padding: 0 12px;
   background: #fff;
-  font-size: 11px;
-  height: 26px;
-  line-height: 26px;
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
 }
 
 .range-btn.active {
@@ -67,9 +69,9 @@
 }
 
 .range-switch.segmented {
-  background: #ecf7f5;
+  background: #eef7f6;
   padding: 2px;
-  border-radius: 14px;
+  border-radius: 16px;
   border: 1px solid #d5ece8;
 }
 
@@ -78,14 +80,15 @@
   background: transparent;
   color: #0f766e;
   padding: 0 12px;
-  height: 26px;
-  line-height: 26px;
+  height: 30px;
+  line-height: 30px;
 }
 
 .range-switch.segmented .range-btn.active {
-  background: #0f766e;
-  color: #fff;
-  border-radius: 12px;
+  background: #ffffff;
+  color: #0f766e;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(15, 118, 110, 0.12);
 }
 
 .bind-panel {
@@ -233,14 +236,14 @@
 }
 
 .switch-btn {
-  border: 1px solid #d0e7e2;
+  border: 1px solid #cfe7e2;
   color: #0f766e;
-  border-radius: 12px;
-  padding: 0 6px;
-  background: #fff;
-  font-size: 11px;
-  height: 26px;
-  line-height: 26px;
+  border-radius: 15px;
+  padding: 0 12px;
+  background: #ffffff;
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
 }
 
 .switch-btn.active {
