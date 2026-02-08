@@ -272,6 +272,52 @@ def get_word_audio(word_id):
 # Simple TTS proxy & cache (Youdao) for mini-program playback
 # ============================================================================
 
+def _dashscope_tts(text: str) -> bytes | None:
+    """Fallback TTS using Aliyun DashScope (Model Studio)."""
+    api_key = current_app.config.get("ALIYUN_API_KEY")
+    if not api_key:
+        return None
+
+    model = current_app.config.get("ALIYUN_TTS_MODEL", "qwen3-tts-flash")
+    voice = current_app.config.get("ALIYUN_TTS_VOICE", "Cherry")
+    language_type = current_app.config.get("ALIYUN_TTS_LANGUAGE", "English")
+    region = (current_app.config.get("ALIYUN_ASR_REGION") or "cn-beijing").lower()
+    host = current_app.config.get("ALIYUN_ASR_HOST")
+    if host:
+        host = host.replace("https://", "").replace("http://", "").strip("/")
+    else:
+        host = "dashscope.aliyuncs.com" if region.startswith("cn") else "dashscope-intl.aliyuncs.com"
+
+    url = f"https://{host}/api/v1/services/aigc/multimodal-generation/generation"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": model,
+        "input": {
+            "text": text,
+            "voice": voice,
+            "language_type": language_type
+        }
+    }
+    try:
+        resp = requests.post(url, headers=headers, json=payload, timeout=15)
+        if resp.status_code != 200:
+            return None
+        data = resp.json()
+        audio_url = data.get("output", {}).get("audio", {}).get("url")
+        if not audio_url:
+            return None
+        audio_resp = requests.get(audio_url, timeout=15)
+        if audio_resp.status_code == 200 and audio_resp.content:
+            return audio_resp.content
+    except Exception:
+        return None
+
+    return None
+
+
 @dictation_bp.route("/tts", methods=["GET"])
 def proxy_tts():
     """Proxy TTS audio to avoid external domain failures; includes simple file cache."""
@@ -296,11 +342,17 @@ def proxy_tts():
         if resp.status_code == 200 and resp.content:
             cache_path.write_bytes(resp.content)
             return send_file(cache_path, mimetype="audio/mpeg")
-        current_app.logger.warning("TTS fetch failed %s: %s", word, resp.status_code)
-        return jsonify({"ok": False, "error": "tts_fetch_failed"}), 502
+        current_app.logger.warning("Youdao TTS fetch failed %s: %s", word, resp.status_code)
     except Exception as exc:
-        current_app.logger.warning("TTS proxy error for %s: %s", word, exc)
-        return jsonify({"ok": False, "error": "tts_proxy_error"}), 502
+        current_app.logger.warning("Youdao TTS proxy error for %s: %s", word, exc)
+
+    # Aliyun TTS fallback
+    audio = _dashscope_tts(word)
+    if audio:
+        cache_path.write_bytes(audio)
+        return send_file(cache_path, mimetype="audio/mpeg")
+
+    return jsonify({"ok": False, "error": "tts_fetch_failed"}), 502
 
 
 # ============================================================================
