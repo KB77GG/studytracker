@@ -16,6 +16,8 @@ Page({
     result: null,
     isRecording: false,
     recordStatus: '',
+    recordFormat: 'aac',
+    recordFallbackTried: false,
     uploadingAudio: false,
     transcribingAudio: false,
     part2Options: [
@@ -49,9 +51,21 @@ Page({
         wx.showToast({ title: '录音失败', icon: 'none' })
       }
     })
-    this.recorderManager.onError(() => {
+    this.recorderManager.onError((err) => {
+      const errMsg = err && err.errMsg ? String(err.errMsg) : ''
+      if (!this.data.recordFallbackTried) {
+        const nextFormat = this.data.recordFormat === 'aac' ? 'mp3' : 'aac'
+        this.setData({
+          isRecording: false,
+          recordFormat: nextFormat,
+          recordFallbackTried: true,
+          recordStatus: '录音失败，已切换兼容模式'
+        })
+        wx.showToast({ title: '录音失败，已切换格式', icon: 'none' })
+        return
+      }
       this.setData({ isRecording: false, recordStatus: '录音失败，请重试' })
-      wx.showToast({ title: '录音失败', icon: 'none' })
+      wx.showToast({ title: errMsg || '录音失败', icon: 'none' })
     })
   },
 
@@ -270,10 +284,7 @@ Page({
     this.setData({ recordStatus: '准备录音...', result: null })
     this.recorderManager.start({
       duration: 120000,
-      sampleRate: 16000,
-      numberOfChannels: 1,
-      encodeBitRate: 96000,
-      format: 'mp3'
+      format: this.data.recordFormat
     })
   },
 
