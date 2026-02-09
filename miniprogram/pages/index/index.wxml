@@ -102,7 +102,7 @@
       <button class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" bindtap="handleLogin">
         微信一键登录
       </button>
-      <button class="btn-back" bindtap="backToWelcome">返回</button>
+      <button class="btn-back" bindtap="backToWelcome">取消登录</button>
     </view>
 
     <!-- 2. 角色选择 -->
