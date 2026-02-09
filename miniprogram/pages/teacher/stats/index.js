@@ -54,6 +54,22 @@ Page({
         this.setData({ month: value }, () => this.fetchStats())
     },
 
+    handleLogout() {
+        wx.showModal({
+            title: '退出登录',
+            content: '确定要退出登录吗？',
+            success: (res) => {
+                if (!res.confirm) return
+                wx.removeStorageSync('token')
+                wx.removeStorageSync('role')
+                const app = getApp()
+                app.globalData.token = null
+                app.globalData.role = null
+                wx.reLaunch({ url: '/pages/index/index' })
+            }
+        })
+    },
+
     goSchedule() {
         wx.redirectTo({ url: '/pages/teacher/home/index' })
     }

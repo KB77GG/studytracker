@@ -32,6 +32,10 @@
     </view>
   </view>
 
+  <view class="logout-card">
+    <button class="btn-logout" bindtap="handleLogout">退出登录</button>
+  </view>
+
   <view class="bottom-nav">
     <view class="nav-item" bindtap="goSchedule">课表</view>
     <view class="nav-item active">课时统计</view>
