@@ -16,8 +16,8 @@ Page({
     result: null,
     isRecording: false,
     recordStatus: '',
-    recordFormat: 'aac',
-    recordFallbackTried: false,
+    recordFormats: ['aac', 'mp3', 'wav'],
+    recordFormatIndex: 0,
     uploadingAudio: false,
     transcribingAudio: false,
     part2Options: [
@@ -53,19 +53,39 @@ Page({
     })
     this.recorderManager.onError((err) => {
       const errMsg = err && err.errMsg ? String(err.errMsg) : ''
-      if (!this.data.recordFallbackTried) {
-        const nextFormat = this.data.recordFormat === 'aac' ? 'mp3' : 'aac'
-        this.setData({
-          isRecording: false,
-          recordFormat: nextFormat,
-          recordFallbackTried: true,
-          recordStatus: '录音失败，已切换兼容模式'
-        })
-        wx.showToast({ title: '录音失败，已切换格式', icon: 'none' })
-        return
-      }
-      this.setData({ isRecording: false, recordStatus: '录音失败，请重试' })
-      wx.showToast({ title: errMsg || '录音失败', icon: 'none' })
+      this.setData({ isRecording: false })
+
+      wx.getSetting({
+        success: (res) => {
+          if (!res.authSetting || !res.authSetting['scope.record']) {
+            wx.showModal({
+              title: '需要麦克风权限',
+              content: '请在设置中开启麦克风权限后再使用录音',
+              showCancel: false,
+              success: () => wx.openSetting()
+            })
+            this.setData({ recordStatus: '录音失败：未授权麦克风' })
+            return
+          }
+
+          if (this.data.recordFormatIndex < this.data.recordFormats.length - 1) {
+            const nextIndex = this.data.recordFormatIndex + 1
+            this.setData({
+              recordFormatIndex: nextIndex,
+              recordStatus: '录音失败，已切换格式请重试'
+            })
+            wx.showToast({ title: '录音失败，已切换格式', icon: 'none' })
+            return
+          }
+
+          this.setData({ recordStatus: `录音失败：${errMsg || '请重试'}` })
+          wx.showToast({ title: errMsg || '录音失败', icon: 'none' })
+        },
+        fail: () => {
+          this.setData({ recordStatus: `录音失败：${errMsg || '请重试'}` })
+          wx.showToast({ title: errMsg || '录音失败', icon: 'none' })
+        }
+      })
     })
   },
 
@@ -282,9 +302,10 @@ Page({
 
   beginRecord() {
     this.setData({ recordStatus: '准备录音...', result: null })
+    const format = this.data.recordFormats[this.data.recordFormatIndex] || 'aac'
     this.recorderManager.start({
       duration: 120000,
-      format: this.data.recordFormat
+      format
     })
   },
 
