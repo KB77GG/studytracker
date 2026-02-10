@@ -3,6 +3,27 @@ import os
 # 获取当前文件所在的文件夹路径
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
+def _load_env_file(path: str) -> None:
+    """Load environment variables from a .env file if present."""
+    if not os.path.exists(path):
+        return
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            for raw_line in f:
+                line = raw_line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip().strip("'").strip('"')
+                if key and key not in os.environ:
+                    os.environ[key] = value
+    except Exception:
+        # Fail silently to avoid blocking app startup
+        pass
+
+_load_env_file(os.path.join(BASE_DIR, ".env"))
+
 class Config:
     # 用于 Flask 的安全密钥（后面我们可以改成更安全的随机值）
     SECRET_KEY = "dev-key-change-later"
