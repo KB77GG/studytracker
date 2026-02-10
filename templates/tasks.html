@@ -170,6 +170,7 @@
               <span class="form-text">词</span>
             </div>
           </div>
+          <div id="dictation-range-hint" class="form-text text-muted" style="margin-top: 6px;"></div>
         </div>
       </div>
     </div>
@@ -795,6 +796,8 @@
   </div>
 
   <script>
+    const dictationRangeHints = {{ dictation_range_hints | tojson }};
+
     // Material Bank Selection Functions
     function toggleTaskSource(source) {
       const materialRow = document.getElementById('materialSelectRow');
@@ -894,8 +897,10 @@
             var maxCount = countStr.replace(/\\D/g, ''); // Extract number
             document.getElementsByName("dictation_word_end")[0].placeholder = "共 " + maxCount;
           }
+          updateDictationRangeSuggestion();
         } else {
           rangeGroup.style.display = "none";
+          updateDictationRangeSuggestion(true);
         }
 
         const speakingTypes = ['speaking_part1', 'speaking_part2', 'speaking_part2_3'];
@@ -918,7 +923,56 @@
       } else {
         detailInput.value = "";
         rangeGroup.style.display = "none";
+        updateDictationRangeSuggestion(true);
       }
+    }
+
+    function updateDictationRangeSuggestion(forceClear = false) {
+      const hintEl = document.getElementById("dictation-range-hint");
+      const studentInput = document.getElementById("taskStudent");
+      const materialSelect = document.getElementById("material_id");
+      const startInput = document.getElementsByName("dictation_word_start")[0];
+      const endInput = document.getElementsByName("dictation_word_end")[0];
+
+      if (!hintEl || !studentInput || !materialSelect || !startInput || !endInput) return;
+
+      if (forceClear) {
+        hintEl.textContent = "";
+        return;
+      }
+
+      const studentName = (studentInput.value || "").trim();
+      const materialValue = materialSelect.value || "";
+
+      if (!studentName || !materialValue.startsWith("dictation-")) {
+        hintEl.textContent = "";
+        return;
+      }
+
+      const bookId = materialValue.replace("dictation-", "");
+      const studentMap = dictationRangeHints[studentName];
+      const hint = studentMap ? studentMap[bookId] : null;
+
+      if (!hint) {
+        hintEl.textContent = "";
+        return;
+      }
+
+      const lastStart = hint.start || 1;
+      const lastEnd = hint.end;
+      const lastRange = lastEnd ? `${lastStart}-${lastEnd}` : `${lastStart}-全部`;
+      let text = `上次范围：${lastRange}`;
+      if (hint.last_date) {
+        text += `（${hint.last_date}）`;
+      }
+      if (hint.next_start) {
+        text += `，建议起始：${hint.next_start}`;
+        if (!startInput.value || startInput.dataset.autofill === "1") {
+          startInput.value = hint.next_start;
+          startInput.dataset.autofill = "1";
+        }
+      }
+      hintEl.textContent = text;
     }
 
     // Rest of existing JavaScript
@@ -936,6 +990,19 @@
     }
 
     const formatPercent = (value) => Number.isFinite(value) ? value.toFixed(1) : '0.0';
+
+    const taskStudentInput = document.getElementById("taskStudent");
+    if (taskStudentInput) {
+      taskStudentInput.addEventListener("change", () => updateDictationRangeSuggestion());
+      taskStudentInput.addEventListener("blur", () => updateDictationRangeSuggestion());
+    }
+
+    const dictationStartInput = document.getElementsByName("dictation_word_start")[0];
+    if (dictationStartInput) {
+      dictationStartInput.addEventListener("input", () => {
+        dictationStartInput.dataset.autofill = "0";
+      });
+    }
 
     function bindAccuracyInputs(scope = document) {
       scope.querySelectorAll('.accuracy-input').forEach(input => {

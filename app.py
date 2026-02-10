@@ -1550,6 +1550,30 @@ def tasks_page():
             "question_count": f"{book.word_count}词"
         })
 
+    # Dictation range hints: latest assigned range per student & dictation book
+    dictation_range_hints = {}
+    dictation_tasks = (
+        Task.query.filter(Task.dictation_book_id.isnot(None))
+        .order_by(Task.id.desc())
+        .all()
+    )
+    for t in dictation_tasks:
+        student_key = (t.student_name or "").strip()
+        if not student_key or not t.dictation_book_id:
+            continue
+        student_map = dictation_range_hints.setdefault(student_key, {})
+        book_key = str(t.dictation_book_id)
+        if book_key in student_map:
+            continue
+        start_val = int(t.dictation_word_start or 1)
+        end_val = int(t.dictation_word_end) if t.dictation_word_end else None
+        student_map[book_key] = {
+            "start": start_val,
+            "end": end_val,
+            "next_start": (end_val + 1) if end_val else None,
+            "last_date": t.date,
+        }
+
     # --- 待审核提交 (Pending Reviews) ---
     # 1. PlanItem (新版)
     pending_items_query = PlanItem.query.filter(
@@ -1603,6 +1627,7 @@ def tasks_page():
         period=period,
         all_materials=all_materials,
         pending_reviews=pending_reviews,
+        dictation_range_hints=dictation_range_hints,
     )
 
 # ---- Grading Interface ----
