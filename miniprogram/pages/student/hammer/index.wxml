@@ -63,6 +63,11 @@
 
     <view class="section-title">高分改写</view>
     <text class="rewrite">{{result.rewrite_high_band.paragraph}}</text>
+    <view class="tts-row">
+      <button class="btn-tts" bindtap="playRewriteAudio" loading="{{ttsLoading}}">
+        {{ttsPlaying ? '播放中...' : '播放改写'}}
+      </button>
+    </view>
     <view class="list" wx:if="{{result.rewrite_high_band.logic_tips.length}}">
       <text class="list-item" wx:for="{{result.rewrite_high_band.logic_tips}}" wx:key="*this">• {{item}}</text>
     </view>

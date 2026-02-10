@@ -18,6 +18,7 @@ from .auth_utils import require_api_user
 from .wechat import send_subscribe_message
 from .ielts_eval import run_ielts_eval
 from .aliyun_asr import transcribe_audio_url
+from .aliyun_tts import synthesize_text
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 
@@ -180,6 +181,41 @@ def transcribe_speaking_audio():
     if not ok:
         return jsonify({"ok": False, **payload}), 500
     return jsonify({"ok": True, **payload})
+
+
+@mp_bp.route("/speaking/tts", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def speaking_tts():
+    data = request.get_json(silent=True) or {}
+    text = (data.get("text") or "").strip()
+    if not text:
+        return jsonify({"ok": False, "error": "missing_text"}), 400
+    if len(text) > 2000:
+        return jsonify({"ok": False, "error": "text_too_long"}), 400
+
+    upload_folder = current_app.config.get("UPLOAD_FOLDER", "uploads")
+    tts_dir = os.path.join(upload_folder, "tts_cache")
+    os.makedirs(tts_dir, exist_ok=True)
+    cache_key = hashlib.md5(text.encode("utf-8")).hexdigest()
+    filename = f"hammer_{cache_key}.mp3"
+    file_path = os.path.join(tts_dir, filename)
+    file_url = f"/uploads/tts_cache/{filename}"
+
+    if os.path.exists(file_path):
+        return jsonify({"ok": True, "audio_url": file_url})
+
+    ok, payload = synthesize_text(text)
+    if not ok:
+        return jsonify({"ok": False, **payload}), 500
+
+    audio_bytes = payload.get("audio_bytes") or b""
+    if not audio_bytes:
+        return jsonify({"ok": False, "error": "tts_empty_audio"}), 500
+
+    with open(file_path, "wb") as f:
+        f.write(audio_bytes)
+
+    return jsonify({"ok": True, "audio_url": file_url})
 
 # --- 学生接口 ---
 

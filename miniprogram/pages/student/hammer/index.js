@@ -20,6 +20,10 @@ Page({
     recordFormatIndex: 0,
     uploadingAudio: false,
     transcribingAudio: false,
+    ttsLoading: false,
+    ttsPlaying: false,
+    ttsText: '',
+    ttsUrl: '',
     part2Options: [
       { value: '', label: '不指定' },
       { value: 'person_place', label: '人物/地点' },
@@ -33,7 +37,20 @@ Page({
 
   onLoad() {
     this.setupRecorder()
+    this.setupAudioPlayer()
     this.loadAssigned()
+  },
+
+  setupAudioPlayer() {
+    this.audioPlayer = wx.createInnerAudioContext()
+    this.audioPlayer.obeyMuteSwitch = false
+    this.audioPlayer.onEnded(() => {
+      this.setData({ ttsPlaying: false })
+    })
+    this.audioPlayer.onError(() => {
+      this.setData({ ttsPlaying: false })
+      wx.showToast({ title: '播放失败', icon: 'none' })
+    })
   },
 
   setupRecorder() {
@@ -263,6 +280,54 @@ Page({
       chinese_style_correction: Array.isArray(data.chinese_style_correction) ? data.chinese_style_correction : [],
       lexical_upgrade: Array.isArray(data.lexical_upgrade) ? data.lexical_upgrade : []
     }
+  },
+
+  async playRewriteAudio() {
+    const paragraph = this.data.result?.rewrite_high_band?.paragraph || ''
+    if (!paragraph) {
+      wx.showToast({ title: '暂无改写内容', icon: 'none' })
+      return
+    }
+
+    if (this.data.ttsLoading) return
+    if (this.data.ttsPlaying) {
+      try {
+        this.audioPlayer.stop()
+      } catch (e) {}
+      this.setData({ ttsPlaying: false })
+    }
+
+    if (paragraph === this.data.ttsText && this.data.ttsUrl) {
+      this.playAudioUrl(this.data.ttsUrl)
+      return
+    }
+
+    this.setData({ ttsLoading: true })
+    try {
+      const res = await request('/miniprogram/speaking/tts', {
+        method: 'POST',
+        data: { text: paragraph }
+      })
+      if (!res.ok || !res.audio_url) {
+        wx.showToast({ title: res.error || '获取音频失败', icon: 'none' })
+        return
+      }
+      this.setData({ ttsText: paragraph, ttsUrl: res.audio_url })
+      this.playAudioUrl(res.audio_url)
+    } catch (e) {
+      wx.showToast({ title: '获取音频失败', icon: 'none' })
+    } finally {
+      this.setData({ ttsLoading: false })
+    }
+  },
+
+  playAudioUrl(audioUrl) {
+    const baseUrl = getApp().globalData.baseUrl || ''
+    const rootUrl = baseUrl.replace(/\/api\/?$/, '')
+    const finalUrl = audioUrl.startsWith('http') ? audioUrl : `${rootUrl}${audioUrl}`
+    this.audioPlayer.src = finalUrl
+    this.audioPlayer.play()
+    this.setData({ ttsPlaying: true })
   },
 
   toggleRecord() {

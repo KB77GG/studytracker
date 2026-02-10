@@ -216,6 +216,21 @@
   margin-bottom: 12rpx;
 }
 
+.tts-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 12rpx;
+}
+
+.btn-tts {
+  background: #eef7f6;
+  color: #1f6f68;
+  border: 1rpx solid #cfe8e4;
+  border-radius: 14rpx;
+  padding: 8rpx 16rpx;
+  font-size: 22rpx;
+}
+
 .feedback-card {
   background: #f8fafb;
   border-radius: 16rpx;
