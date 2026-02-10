@@ -12,7 +12,7 @@ from models import (
     db, User, StudentProfile, StudyPlan, PlanItem,
     PlanEvidence, ParentStudentLink, TaskCatalog, Task,
     PlanItemSession, ClassFeedback, ScheduleSnapshot,
-    MaterialBank, Question
+    MaterialBank, Question, SpeakingSession, SpeakingMessage
 )
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message
@@ -162,6 +162,31 @@ def get_speaking_random():
 def evaluate_speaking():
     data = request.get_json(silent=True) or {}
     payload, status = run_ielts_eval(data)
+
+    session_id = data.get("session_id")
+    if session_id and payload.get("ok") and payload.get("result"):
+        user = request.current_api_user
+        student = user.student_profile
+        if student:
+            session = SpeakingSession.query.filter_by(
+                id=session_id, student_id=student.id
+            ).first()
+            if session:
+                transcript = (data.get("transcript") or "").strip()
+                user_msg = SpeakingMessage(
+                    session_id=session.id,
+                    role="user",
+                    content=transcript or None,
+                )
+                assistant_msg = SpeakingMessage(
+                    session_id=session.id,
+                    role="assistant",
+                    content=None,
+                    result_json=json.dumps(payload["result"], ensure_ascii=False),
+                )
+                db.session.add(user_msg)
+                db.session.add(assistant_msg)
+                db.session.commit()
     return jsonify(payload), status
 
 
@@ -181,6 +206,126 @@ def transcribe_speaking_audio():
     if not ok:
         return jsonify({"ok": False, **payload}), 500
     return jsonify({"ok": True, **payload})
+
+
+@mp_bp.route("/speaking/session", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def create_speaking_session():
+    data = request.get_json(silent=True) or {}
+    question = (data.get("question") or "").strip()
+    part = (data.get("part") or "").strip() or "Part1"
+    question_type = (data.get("question_type") or "").strip()
+    source = (data.get("source") or "").strip()
+    part2_topic = (data.get("part2_topic") or "").strip()
+
+    if not question:
+        return jsonify({"ok": False, "error": "missing_question"}), 400
+
+    user = request.current_api_user
+    student = user.student_profile
+    if not student:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    session = SpeakingSession(
+        student_id=student.id,
+        part=part,
+        question=question,
+        question_type=question_type or None,
+        source=source or None,
+        part2_topic=part2_topic or None,
+    )
+    db.session.add(session)
+    db.session.flush()
+
+    system_msg = SpeakingMessage(
+        session_id=session.id,
+        role="system",
+        content=question,
+    )
+    db.session.add(system_msg)
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "session_id": session.id,
+        "messages": [
+            {"id": system_msg.id, "role": "system", "content": system_msg.content}
+        ],
+    })
+
+
+@mp_bp.route("/speaking/session/<int:session_id>", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def get_speaking_session(session_id: int):
+    user = request.current_api_user
+    student = user.student_profile
+    if not student:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    session = SpeakingSession.query.filter_by(
+        id=session_id, student_id=student.id
+    ).first()
+    if not session:
+        return jsonify({"ok": False, "error": "session_not_found"}), 404
+
+    messages = []
+    for msg in session.messages.order_by(SpeakingMessage.created_at).all():
+        payload = {
+            "id": msg.id,
+            "role": msg.role,
+            "content": msg.content,
+            "audio_url": msg.audio_url,
+        }
+        if msg.result_json:
+            try:
+                payload["result"] = json.loads(msg.result_json)
+            except Exception:
+                payload["result"] = None
+        messages.append(payload)
+
+    return jsonify({
+        "ok": True,
+        "session": {
+            "id": session.id,
+            "part": session.part,
+            "question": session.question,
+            "question_type": session.question_type,
+            "source": session.source,
+            "part2_topic": session.part2_topic,
+        },
+        "messages": messages,
+    })
+
+
+@mp_bp.route("/speaking/sessions", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def list_speaking_sessions():
+    user = request.current_api_user
+    student = user.student_profile
+    if not student:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    limit = min(int(request.args.get("limit", 20)), 50)
+    sessions = (
+        SpeakingSession.query.filter_by(student_id=student.id)
+        .order_by(SpeakingSession.created_at.desc())
+        .limit(limit)
+        .all()
+    )
+    return jsonify({
+        "ok": True,
+        "sessions": [
+            {
+                "id": s.id,
+                "part": s.part,
+                "question": s.question,
+                "question_type": s.question_type,
+                "source": s.source,
+                "created_at": s.created_at.isoformat() if s.created_at else None,
+            }
+            for s in sessions
+        ],
+    })
 
 
 @mp_bp.route("/speaking/tts", methods=["POST"])

@@ -14,6 +14,8 @@ Page({
     loadingQuestion: false,
     loadingEval: false,
     result: null,
+    messages: [],
+    currentSessionId: null,
     isRecording: false,
     recordStatus: '',
     recordFormats: ['aac', 'mp3', 'wav'],
@@ -145,14 +147,14 @@ Page({
   switchPart(e) {
     const part = e.currentTarget.dataset.part
     if (!part || part === this.data.currentPart) return
-    this.setData({ currentPart: part, result: null })
+    this.setData({ currentPart: part, result: null, messages: [], currentSessionId: null })
     this.nextQuestion()
   },
 
   switchSource(e) {
     const mode = e.currentTarget.dataset.mode
     if (!mode || mode === this.data.sourceMode) return
-    this.setData({ sourceMode: mode })
+    this.setData({ sourceMode: mode, messages: [], currentSessionId: null })
     this.nextQuestion()
   },
 
@@ -166,7 +168,7 @@ Page({
   },
 
   async nextQuestion() {
-    this.setData({ loadingQuestion: true, result: null })
+    this.setData({ loadingQuestion: true, result: null, messages: [], currentSessionId: null })
     const part = this.data.currentPart
     const useAssigned = this.data.sourceMode === 'assigned'
 
@@ -182,6 +184,7 @@ Page({
           assignedIndex: index + 1,
           loadingQuestion: false
         })
+        await this.createSession('assigned')
         return
       }
       this.setData({ sourceMode: 'random' })
@@ -211,6 +214,7 @@ Page({
           questionType: res.question.type,
           loadingQuestion: false
         })
+        await this.createSession('random')
         return
       }
       wx.showToast({ title: '暂无题目', icon: 'none' })
@@ -218,6 +222,38 @@ Page({
       wx.showToast({ title: '获取题目失败', icon: 'none' })
     }
     this.setData({ loadingQuestion: false })
+  },
+
+  async createSession(source) {
+    const question = (this.data.questionText || '').trim()
+    if (!question) return
+    const payload = {
+      part: this.data.currentPart,
+      question,
+      question_type: this.data.questionType,
+      source: source || this.data.sourceMode
+    }
+    if (this.data.currentPart !== 'Part1' && this.data.selectedFramework) {
+      payload.part2_topic = this.data.selectedFramework
+    }
+
+    try {
+      const res = await request('/miniprogram/speaking/session', {
+        method: 'POST',
+        data: payload
+      })
+      if (res.ok) {
+        const messages = Array.isArray(res.messages) ? res.messages : []
+        this.setData({
+          currentSessionId: res.session_id || null,
+          messages: messages.length ? messages : [{ role: 'system', content: question }]
+        })
+      } else {
+        this.setData({ messages: [{ role: 'system', content: question }] })
+      }
+    } catch (e) {
+      this.setData({ messages: [{ role: 'system', content: question }] })
+    }
   },
 
   handleAnswerInput(e) {
@@ -238,11 +274,17 @@ Page({
     const payload = {
       part: this.data.currentPart,
       question: this.data.questionText,
-      transcript: this.data.answerText
+      transcript: this.data.answerText,
+      session_id: this.data.currentSessionId
     }
 
     if (this.data.currentPart !== 'Part1' && this.data.selectedFramework) {
       payload.part2_topic = this.data.selectedFramework
+    }
+
+    if (!payload.session_id) {
+      await this.createSession(this.data.sourceMode)
+      payload.session_id = this.data.currentSessionId
     }
 
     this.setData({ loadingEval: true })
@@ -253,7 +295,10 @@ Page({
       })
       if (res.ok && res.result) {
         const normalized = this.normalizeResult(res.result)
-        this.setData({ result: normalized })
+        const messages = this.data.messages.slice()
+        messages.push({ role: 'user', content: this.data.answerText })
+        messages.push({ role: 'assistant', result: normalized })
+        this.setData({ result: normalized, messages })
       } else {
         wx.showToast({ title: res.error || '评估失败', icon: 'none' })
       }
@@ -282,8 +327,9 @@ Page({
     }
   },
 
-  async playRewriteAudio() {
-    const paragraph = this.data.result?.rewrite_high_band?.paragraph || ''
+  async playRewriteAudio(e) {
+    const text = e && e.currentTarget && e.currentTarget.dataset ? e.currentTarget.dataset.text : ''
+    const paragraph = text || this.data.result?.rewrite_high_band?.paragraph || ''
     if (!paragraph) {
       wx.showToast({ title: '暂无改写内容', icon: 'none' })
       return

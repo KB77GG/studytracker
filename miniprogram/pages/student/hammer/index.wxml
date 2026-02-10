@@ -28,10 +28,84 @@
     <button class="btn-outline" bindtap="nextQuestion" loading="{{loadingQuestion}}">换一题</button>
   </view>
 
-  <view class="card">
-    <view class="section-title">题目</view>
-    <text class="question-text">{{questionText || '点击“换一题”获取题目'}}</text>
-    <text class="question-meta" wx:if="{{questionMeta}}">{{questionMeta}}</text>
+  <view class="card chat-card">
+    <view class="section-title">对话记录</view>
+    <view class="empty" wx:if="{{messages.length === 0}}">暂无记录，点击“换一题”开始</view>
+    <view class="chat-list" wx:else>
+      <view class="chat-row {{item.role}}" wx:for="{{messages}}" wx:key="index">
+        <view class="bubble {{item.role}}">
+          <view wx:if="{{item.role === 'system'}}">
+            <text class="bubble-label">题目</text>
+            <text class="bubble-text">{{item.content}}</text>
+          </view>
+          <view wx:elif="{{item.role === 'user'}}">
+            <text class="bubble-label">我</text>
+            <text class="bubble-text">{{item.content}}</text>
+          </view>
+          <view wx:else>
+            <text class="bubble-label">反馈</text>
+            <view class="assistant-block" wx:if="{{item.result}}">
+              <view class="assistant-title">逻辑梳理</view>
+              <view class="logic-block" wx:if="{{item.result && item.result.logic_outline && item.result.logic_outline.zh.length}}">
+                <text class="block-title">中文</text>
+                <view class="list">
+                  <text class="list-item" wx:for="{{item.result.logic_outline.zh}}" wx:key="*this">• {{item}}</text>
+                </view>
+              </view>
+              <view class="logic-block" wx:if="{{item.result && item.result.logic_outline && item.result.logic_outline.en.length}}">
+                <text class="block-title">English</text>
+                <view class="list">
+                  <text class="list-item" wx:for="{{item.result.logic_outline.en}}" wx:key="*this">• {{item}}</text>
+                </view>
+              </view>
+            </view>
+
+            <view class="assistant-block" wx:if="{{item.result}}">
+              <view class="assistant-title">高分改写</view>
+              <text class="rewrite">{{item.result.rewrite_high_band.paragraph}}</text>
+              <view class="tts-row">
+                <button class="btn-tts" bindtap="playRewriteAudio" data-text="{{item.result.rewrite_high_band.paragraph}}" loading="{{ttsLoading}}">
+                  {{ttsPlaying ? '播放中...' : '播放改写'}}
+                </button>
+              </view>
+              <view class="list" wx:if="{{item.result.rewrite_high_band.logic_tips.length}}">
+                <text class="list-item" wx:for="{{item.result.rewrite_high_band.logic_tips}}" wx:key="*this">• {{item}}</text>
+              </view>
+            </view>
+
+            <view class="assistant-block" wx:if="{{item.result && item.result.sentence_feedback.length}}">
+              <view class="assistant-title">句子纠错</view>
+              <view class="feedback-card" wx:for="{{item.result.sentence_feedback}}" wx:key="index">
+                <text class="fb-original">原句：{{item.original}}</text>
+                <text class="fb-correct">修正：{{item.correction}}</text>
+                <text class="fb-note">{{item.explain_cn}}</text>
+              </view>
+            </view>
+
+            <view class="assistant-block" wx:if="{{item.result && item.result.chinese_style_correction.length}}">
+              <view class="assistant-title">中式表达纠正</view>
+              <view class="feedback-card" wx:for="{{item.result.chinese_style_correction}}" wx:key="index">
+                <text class="fb-original">原句：{{item.original}}</text>
+                <text class="fb-correct">地道：{{item.native_like}}</text>
+                <text class="fb-note">{{item.note}}</text>
+              </view>
+            </view>
+
+            <view class="assistant-block" wx:if="{{item.result && item.result.lexical_upgrade.length}}">
+              <view class="assistant-title">词汇升级</view>
+              <view class="feedback-card" wx:for="{{item.result.lexical_upgrade}}" wx:key="index">
+                <text class="fb-original">from：{{item.from}}</text>
+                <text class="fb-correct">to：{{item.to.join(' / ')}}</text>
+                <text class="fb-note">{{item.constraint}}</text>
+              </view>
+            </view>
+            <view class="assistant-block" wx:else>
+              <text class="bubble-text">暂无反馈内容</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 
   <view class="card">
@@ -46,51 +120,4 @@
     <button class="btn-primary" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText}}">开始评估</button>
   </view>
 
-  <view class="card" wx:if="{{result}}">
-    <view class="section-title">逻辑梳理</view>
-    <view class="logic-block" wx:if="{{result.logic_outline.zh.length}}">
-      <text class="block-title">中文</text>
-      <view class="list">
-        <text class="list-item" wx:for="{{result.logic_outline.zh}}" wx:key="*this">• {{item}}</text>
-      </view>
-    </view>
-    <view class="logic-block" wx:if="{{result.logic_outline.en.length}}">
-      <text class="block-title">English</text>
-      <view class="list">
-        <text class="list-item" wx:for="{{result.logic_outline.en}}" wx:key="*this">• {{item}}</text>
-      </view>
-    </view>
-
-    <view class="section-title">高分改写</view>
-    <text class="rewrite">{{result.rewrite_high_band.paragraph}}</text>
-    <view class="tts-row">
-      <button class="btn-tts" bindtap="playRewriteAudio" loading="{{ttsLoading}}">
-        {{ttsPlaying ? '播放中...' : '播放改写'}}
-      </button>
-    </view>
-    <view class="list" wx:if="{{result.rewrite_high_band.logic_tips.length}}">
-      <text class="list-item" wx:for="{{result.rewrite_high_band.logic_tips}}" wx:key="*this">• {{item}}</text>
-    </view>
-
-    <view class="section-title" wx:if="{{result.sentence_feedback.length}}">句子纠错</view>
-    <view class="feedback-card" wx:for="{{result.sentence_feedback}}" wx:key="index">
-      <text class="fb-original">原句：{{item.original}}</text>
-      <text class="fb-correct">修正：{{item.correction}}</text>
-      <text class="fb-note">{{item.explain_cn}}</text>
-    </view>
-
-    <view class="section-title" wx:if="{{result.chinese_style_correction.length}}">中式表达纠正</view>
-    <view class="feedback-card" wx:for="{{result.chinese_style_correction}}" wx:key="index">
-      <text class="fb-original">原句：{{item.original}}</text>
-      <text class="fb-correct">地道：{{item.native_like}}</text>
-      <text class="fb-note">{{item.note}}</text>
-    </view>
-
-    <view class="section-title" wx:if="{{result.lexical_upgrade.length}}">词汇升级</view>
-    <view class="feedback-card" wx:for="{{result.lexical_upgrade}}" wx:key="index">
-      <text class="fb-original">from：{{item.from}}</text>
-      <text class="fb-correct">to：{{item.to.join(' / ')}}</text>
-      <text class="fb-note">{{item.constraint}}</text>
-    </view>
-  </view>
 </view>

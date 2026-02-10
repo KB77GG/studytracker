@@ -756,3 +756,44 @@ class DictationRecord(db.Model, TimestampMixin):
     
     def __repr__(self):
         return f"<DictationRecord student={self.student_id} word={self.word_id} correct={self.is_correct}>"
+
+
+class SpeakingSession(db.Model, TimestampMixin):
+    """Speaking practice session for a student."""
+
+    __tablename__ = "speaking_session"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(
+        db.Integer, db.ForeignKey("student_profile.id"), nullable=False, index=True
+    )
+    part = db.Column(db.String(16), nullable=False)
+    question = db.Column(db.Text, nullable=False)
+    question_type = db.Column(db.String(32))
+    source = db.Column(db.String(16))
+    part2_topic = db.Column(db.String(32))
+
+    student = db.relationship(
+        "StudentProfile",
+        backref=db.backref("speaking_sessions", lazy="dynamic", cascade="all, delete-orphan"),
+    )
+
+
+class SpeakingMessage(db.Model, TimestampMixin):
+    """Chat-style messages for speaking sessions."""
+
+    __tablename__ = "speaking_message"
+
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(
+        db.Integer, db.ForeignKey("speaking_session.id"), nullable=False, index=True
+    )
+    role = db.Column(db.String(16), nullable=False)  # system/user/assistant
+    content = db.Column(db.Text)
+    result_json = db.Column(db.Text)
+    audio_url = db.Column(db.Text)
+
+    session = db.relationship(
+        "SpeakingSession",
+        backref=db.backref("messages", lazy="dynamic", cascade="all, delete-orphan"),
+    )

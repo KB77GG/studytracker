@@ -26,7 +26,7 @@ fi
 
 # 3. 服务器远程更新
 echo "☁️  正在连接服务器更新代码..."
-ssh root@$SERVER_IP "apt-get update && apt-get install -y python3-pip python3-cffi python3-brotli libpango-1.0-0 libpangoft2-1.0-0 fonts-noto-cjk && cd $REMOTE_DIR && git pull && .venv/bin/pip install -r requirements.txt && .venv/bin/python3 create_plan_table.py && .venv/bin/python3 add_feedback_column.py && .venv/bin/python3 add_explanation_column.py && .venv/bin/python3 add_dictation_book_id.py && .venv/bin/python3 add_dictation_range_columns.py && systemctl restart studytracker"
+ssh root@$SERVER_IP "apt-get update && apt-get install -y python3-pip python3-cffi python3-brotli libpango-1.0-0 libpangoft2-1.0-0 fonts-noto-cjk && cd $REMOTE_DIR && git pull && .venv/bin/pip install -r requirements.txt && .venv/bin/python3 create_plan_table.py && .venv/bin/python3 create_speaking_tables.py && .venv/bin/python3 add_feedback_column.py && .venv/bin/python3 add_explanation_column.py && .venv/bin/python3 add_dictation_book_id.py && .venv/bin/python3 add_dictation_range_columns.py && systemctl restart studytracker"
 
 if [ $? -eq 0 ]; then
     echo "✅ 部署成功！"

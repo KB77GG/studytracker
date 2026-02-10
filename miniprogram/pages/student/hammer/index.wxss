@@ -34,6 +34,13 @@
   margin-bottom: 20rpx;
 }
 
+.empty {
+  text-align: center;
+  font-size: 22rpx;
+  color: #7a8b8b;
+  padding: 12rpx 0;
+}
+
 .section-title {
   font-size: 28rpx;
   font-weight: 700;
@@ -137,6 +144,76 @@
   color: #7b8a8a;
   margin-top: 8rpx;
   display: block;
+}
+
+.chat-card {
+  padding-bottom: 12rpx;
+}
+
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.chat-row {
+  display: flex;
+}
+
+.chat-row.user {
+  justify-content: flex-end;
+}
+
+.chat-row.system,
+.chat-row.assistant {
+  justify-content: flex-start;
+}
+
+.bubble {
+  max-width: 90%;
+  padding: 16rpx;
+  border-radius: 18rpx;
+  background: #f7f9fa;
+  border: 1rpx solid #e6ebed;
+}
+
+.bubble.system {
+  background: #f2f6f5;
+  border-color: #dfe8e6;
+}
+
+.bubble.user {
+  background: #e8f6f3;
+  border-color: #cfe8e4;
+}
+
+.bubble.assistant {
+  background: #ffffff;
+  border-color: #e6ebed;
+}
+
+.bubble-label {
+  font-size: 22rpx;
+  color: #6b7c7a;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.bubble-text {
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: #1f2d2c;
+}
+
+.assistant-block {
+  margin-top: 12rpx;
+}
+
+.assistant-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #2a3c3a;
+  margin-bottom: 8rpx;
 }
 
 .answer {
