@@ -19,8 +19,74 @@ from .wechat import send_subscribe_message
 from .ielts_eval import run_ielts_eval
 from .aliyun_asr import transcribe_audio_url
 from .aliyun_tts import synthesize_text
+from .tencent_soe import evaluate_pronunciation
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
+
+
+def _safe_float(value, default=0.0):
+    try:
+        return round(float(value), 1)
+    except (TypeError, ValueError):
+        return default
+
+
+def _merge_pronunciation_result(result: dict, ext: dict) -> dict:
+    if not isinstance(result, dict):
+        return result
+
+    band = _safe_float(ext.get("band_9"), 0.0)
+    scores = result.get("scores") if isinstance(result.get("scores"), dict) else {}
+    old_pron = _safe_float(scores.get("pronunciation"), 0.0)
+    if band > 0:
+        scores["pronunciation"] = band
+    elif old_pron > 0:
+        scores["pronunciation"] = old_pron
+
+    fc = _safe_float(scores.get("fluency_coherence"), 0.0)
+    lr = _safe_float(scores.get("lexical_resource"), 0.0)
+    ga = _safe_float(scores.get("grammar_range_accuracy"), 0.0)
+    pr = _safe_float(scores.get("pronunciation"), 0.0)
+    valid = [x for x in [fc, lr, ga, pr] if x > 0]
+    if valid:
+        scores["overall"] = round(sum(valid) / len(valid), 1)
+    result["scores"] = scores
+
+    criteria = (
+        result.get("criteria_feedback")
+        if isinstance(result.get("criteria_feedback"), dict)
+        else {}
+    )
+    pron = (
+        criteria.get("pronunciation")
+        if isinstance(criteria.get("pronunciation"), dict)
+        else {}
+    )
+    audio_obs = (
+        pron.get("audio_observations")
+        if isinstance(pron.get("audio_observations"), list)
+        else []
+    )
+    suggested = ext.get("suggested_score_100")
+    if suggested is not None:
+        audio_obs.insert(0, f"Tencent SOE SuggestedScore: {round(float(suggested), 1)}/100")
+    if ext.get("pron_accuracy") is not None:
+        audio_obs.append(f"PronAccuracy: {ext.get('pron_accuracy')}")
+    if ext.get("pron_fluency") is not None:
+        audio_obs.append(f"PronFluency: {ext.get('pron_fluency')}")
+    if ext.get("pron_completion") is not None:
+        audio_obs.append(f"PronCompletion: {ext.get('pron_completion')}")
+    pron["audio_observations"] = audio_obs
+    if band > 0:
+        pron["band"] = band
+    pron["confidence"] = "high"
+    pron["limitation_note"] = "Pronunciation band is calibrated by Tencent SOE acoustic scoring."
+    pron["engine"] = "tencent_soe"
+    pron["engine_request_id"] = ext.get("request_id")
+    pron["engine_session_id"] = ext.get("session_id")
+    criteria["pronunciation"] = pron
+    result["criteria_feedback"] = criteria
+    return result
 
 # --- 通用接口 ---
 
@@ -163,6 +229,25 @@ def evaluate_speaking():
     data = request.get_json(silent=True) or {}
     payload, status = run_ielts_eval(data)
 
+    pronunciation_payload = None
+    pronunciation_error = None
+    audio_url = (data.get("audio_url") or "").strip()
+    transcript = (data.get("transcript") or "").strip()
+    if payload.get("ok") and payload.get("result") and audio_url and transcript:
+        if not audio_url.startswith("http"):
+            base_url = request.host_url.rstrip("/")
+            audio_url = f"{base_url}{audio_url if audio_url.startswith('/') else '/' + audio_url}"
+        pron_ok, pron_res = evaluate_pronunciation(audio_url, transcript)
+        if pron_ok:
+            payload["result"] = _merge_pronunciation_result(payload["result"], pron_res)
+            pronunciation_payload = pron_res
+            payload["pronunciation_engine"] = {
+                "engine": pron_res.get("engine"),
+                "request_id": pron_res.get("request_id"),
+            }
+        else:
+            pronunciation_error = pron_res
+
     session_id = data.get("session_id")
     if session_id and payload.get("ok") and payload.get("result"):
         user = request.current_api_user
@@ -180,12 +265,14 @@ def evaluate_speaking():
                     "asr_model": data.get("asr_model"),
                     "asr_task_id": data.get("asr_task_id"),
                     "transcription_url": data.get("transcription_url"),
+                    "pronunciation_engine": pronunciation_payload if isinstance(pronunciation_payload, dict) else None,
+                    "pronunciation_engine_error": pronunciation_error if isinstance(pronunciation_error, dict) else None,
                 }
                 user_msg = SpeakingMessage(
                     session_id=session.id,
                     role="user",
                     content=transcript or None,
-                    audio_url=audio_url,
+                    audio_url=(data.get("audio_url") or "").strip() or None,
                     meta_json=json.dumps(meta_payload, ensure_ascii=False),
                 )
                 assistant_msg = SpeakingMessage(
@@ -204,6 +291,8 @@ def evaluate_speaking():
                 db.session.add(user_msg)
                 db.session.add(assistant_msg)
                 db.session.commit()
+    elif pronunciation_error:
+        payload["pronunciation_engine_error"] = pronunciation_error
     return jsonify(payload), status
 
 

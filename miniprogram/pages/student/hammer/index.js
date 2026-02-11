@@ -18,7 +18,7 @@ Page({
     currentSessionId: null,
     isRecording: false,
     recordStatus: '',
-    recordFormats: ['aac', 'mp3', 'wav'],
+    recordFormats: ['mp3', 'wav', 'aac'],
     recordFormatIndex: 0,
     uploadingAudio: false,
     transcribingAudio: false,
