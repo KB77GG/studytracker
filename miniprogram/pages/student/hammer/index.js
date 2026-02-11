@@ -26,6 +26,11 @@ Page({
     ttsPlaying: false,
     ttsText: '',
     ttsUrl: '',
+    lastAudioUrl: '',
+    lastAudioMetrics: null,
+    lastAsrModel: '',
+    lastAsrTaskId: '',
+    lastTranscriptionUrl: '',
     part2Options: [
       { value: '', label: '不指定' },
       { value: 'person_place', label: '人物/地点' },
@@ -147,14 +152,35 @@ Page({
   switchPart(e) {
     const part = e.currentTarget.dataset.part
     if (!part || part === this.data.currentPart) return
-    this.setData({ currentPart: part, result: null, messages: [], currentSessionId: null })
+    this.setData({
+      currentPart: part,
+      result: null,
+      messages: [],
+      currentSessionId: null,
+      answerText: '',
+      lastAudioUrl: '',
+      lastAudioMetrics: null,
+      lastAsrModel: '',
+      lastAsrTaskId: '',
+      lastTranscriptionUrl: ''
+    })
     this.nextQuestion()
   },
 
   switchSource(e) {
     const mode = e.currentTarget.dataset.mode
     if (!mode || mode === this.data.sourceMode) return
-    this.setData({ sourceMode: mode, messages: [], currentSessionId: null })
+    this.setData({
+      sourceMode: mode,
+      messages: [],
+      currentSessionId: null,
+      answerText: '',
+      lastAudioUrl: '',
+      lastAudioMetrics: null,
+      lastAsrModel: '',
+      lastAsrTaskId: '',
+      lastTranscriptionUrl: ''
+    })
     this.nextQuestion()
   },
 
@@ -168,7 +194,18 @@ Page({
   },
 
   async nextQuestion() {
-    this.setData({ loadingQuestion: true, result: null, messages: [], currentSessionId: null })
+    this.setData({
+      loadingQuestion: true,
+      result: null,
+      messages: [],
+      currentSessionId: null,
+      answerText: '',
+      lastAudioUrl: '',
+      lastAudioMetrics: null,
+      lastAsrModel: '',
+      lastAsrTaskId: '',
+      lastTranscriptionUrl: ''
+    })
     const part = this.data.currentPart
     const useAssigned = this.data.sourceMode === 'assigned'
 
@@ -257,7 +294,14 @@ Page({
   },
 
   handleAnswerInput(e) {
-    this.setData({ answerText: e.detail.value })
+    this.setData({
+      answerText: e.detail.value,
+      lastAudioUrl: '',
+      lastAudioMetrics: null,
+      lastAsrModel: '',
+      lastAsrTaskId: '',
+      lastTranscriptionUrl: ''
+    })
   },
 
   async submitEval(e) {
@@ -277,6 +321,11 @@ Page({
       transcript: this.data.answerText,
       session_id: this.data.currentSessionId
     }
+    if (this.data.lastAudioUrl) payload.audio_url = this.data.lastAudioUrl
+    if (this.data.lastAudioMetrics) payload.audio_metrics = this.data.lastAudioMetrics
+    if (this.data.lastAsrModel) payload.asr_model = this.data.lastAsrModel
+    if (this.data.lastAsrTaskId) payload.asr_task_id = this.data.lastAsrTaskId
+    if (this.data.lastTranscriptionUrl) payload.transcription_url = this.data.lastTranscriptionUrl
 
     if (this.data.currentPart !== 'Part1' && this.data.selectedFramework) {
       payload.part2_topic = this.data.selectedFramework
@@ -296,7 +345,12 @@ Page({
       if (res.ok && res.result) {
         const normalized = this.normalizeResult(res.result)
         const messages = this.data.messages.slice()
-        messages.push({ role: 'user', content: this.data.answerText })
+        messages.push({
+          role: 'user',
+          content: this.data.answerText,
+          audio_url: this.data.lastAudioUrl || '',
+          meta: { audio_metrics: this.data.lastAudioMetrics || null }
+        })
         messages.push({ role: 'assistant', result: normalized })
         this.setData({ result: normalized, messages })
       } else {
@@ -310,20 +364,97 @@ Page({
 
   normalizeResult(result) {
     const data = result || {}
+    const scores = data.scores || {}
+    const criteria = data.criteria_feedback || {}
+    const fluency = criteria.fluency_coherence || {}
+    const lexical = criteria.lexical_resource || {}
+    const grammar = criteria.grammar_range_accuracy || {}
+    const pronunciation = criteria.pronunciation || {}
+    const logicFramework = fluency.logic_framework || {}
     const logic = data.logic_outline || {}
     const rewrite = data.rewrite_high_band || {}
+    const sentenceFeedback = Array.isArray(grammar.sentence_corrections)
+      ? grammar.sentence_corrections
+      : Array.isArray(data.sentence_feedback)
+      ? data.sentence_feedback
+      : []
+    const chineseStyleCorrection = Array.isArray(lexical.expression_corrections)
+      ? lexical.expression_corrections
+      : Array.isArray(data.chinese_style_correction)
+      ? data.chinese_style_correction
+      : []
+    const lexicalUpgrade = Array.isArray(lexical.vocabulary_upgrades)
+      ? lexical.vocabulary_upgrades.map(item => ({
+        from: item.from || '',
+        to: Array.isArray(item.to) ? item.to : item.to ? [item.to] : [],
+        constraint: item.usage_note || item.constraint || ''
+      }))
+      : Array.isArray(data.lexical_upgrade)
+      ? data.lexical_upgrade
+      : []
+
     return {
+      scores: {
+        fluency_coherence: Number(scores.fluency_coherence || fluency.band || 0),
+        lexical_resource: Number(scores.lexical_resource || lexical.band || 0),
+        grammar_range_accuracy: Number(scores.grammar_range_accuracy || grammar.band || 0),
+        pronunciation: Number(scores.pronunciation || pronunciation.band || 0),
+        overall: Number(scores.overall || 0)
+      },
+      criteria_feedback: {
+        fluency_coherence: {
+          band: Number(fluency.band || scores.fluency_coherence || 0),
+          plus: Array.isArray(fluency.plus) ? fluency.plus : [],
+          minus: Array.isArray(fluency.minus) ? fluency.minus : [],
+          logic_framework: {
+            outline_zh: Array.isArray(logicFramework.outline_zh) ? logicFramework.outline_zh : [],
+            outline_en: Array.isArray(logicFramework.outline_en) ? logicFramework.outline_en : [],
+            upgrade_tips: Array.isArray(logicFramework.upgrade_tips) ? logicFramework.upgrade_tips : []
+          }
+        },
+        lexical_resource: {
+          band: Number(lexical.band || scores.lexical_resource || 0),
+          plus: Array.isArray(lexical.plus) ? lexical.plus : [],
+          minus: Array.isArray(lexical.minus) ? lexical.minus : []
+        },
+        grammar_range_accuracy: {
+          band: Number(grammar.band || scores.grammar_range_accuracy || 0),
+          plus: Array.isArray(grammar.plus) ? grammar.plus : [],
+          minus: Array.isArray(grammar.minus) ? grammar.minus : []
+        },
+        pronunciation: {
+          band: Number(pronunciation.band || scores.pronunciation || 0),
+          plus: Array.isArray(pronunciation.plus) ? pronunciation.plus : [],
+          minus: Array.isArray(pronunciation.minus) ? pronunciation.minus : [],
+          audio_observations: Array.isArray(pronunciation.audio_observations) ? pronunciation.audio_observations : [],
+          confidence: pronunciation.confidence || '',
+          limitation_note: pronunciation.limitation_note || ''
+        }
+      },
       logic_outline: {
-        zh: Array.isArray(logic.zh) ? logic.zh : [],
-        en: Array.isArray(logic.en) ? logic.en : []
+        zh: Array.isArray(logicFramework.outline_zh)
+          ? logicFramework.outline_zh
+          : Array.isArray(logic.zh)
+          ? logic.zh
+          : [],
+        en: Array.isArray(logicFramework.outline_en)
+          ? logicFramework.outline_en
+          : Array.isArray(logic.en)
+          ? logic.en
+          : []
       },
       rewrite_high_band: {
         paragraph: rewrite.paragraph || rewrite.rewrite || '',
-        logic_tips: Array.isArray(rewrite.logic_tips) ? rewrite.logic_tips : []
+        logic_tips: Array.isArray(rewrite.logic_tips)
+          ? rewrite.logic_tips
+          : Array.isArray(logicFramework.upgrade_tips)
+          ? logicFramework.upgrade_tips
+          : []
       },
-      sentence_feedback: Array.isArray(data.sentence_feedback) ? data.sentence_feedback : [],
-      chinese_style_correction: Array.isArray(data.chinese_style_correction) ? data.chinese_style_correction : [],
-      lexical_upgrade: Array.isArray(data.lexical_upgrade) ? data.lexical_upgrade : []
+      sentence_feedback: sentenceFeedback,
+      chinese_style_correction: chineseStyleCorrection,
+      lexical_upgrade: lexicalUpgrade,
+      next_step: Array.isArray(data.next_step) ? data.next_step : []
     }
   },
 
@@ -344,7 +475,7 @@ Page({
     }
 
     if (paragraph === this.data.ttsText && this.data.ttsUrl) {
-      this.playAudioUrl(this.data.ttsUrl)
+      this.playAudioUrl(this.data.ttsUrl, { trackTts: true })
       return
     }
 
@@ -359,7 +490,7 @@ Page({
         return
       }
       this.setData({ ttsText: paragraph, ttsUrl: res.audio_url })
-      this.playAudioUrl(res.audio_url)
+      this.playAudioUrl(res.audio_url, { trackTts: true })
     } catch (e) {
       wx.showToast({ title: '获取音频失败', icon: 'none' })
     } finally {
@@ -367,13 +498,23 @@ Page({
     }
   },
 
-  playAudioUrl(audioUrl) {
+  playMessageAudio(e) {
+    const audioUrl = e && e.currentTarget && e.currentTarget.dataset ? e.currentTarget.dataset.url : ''
+    if (!audioUrl) {
+      wx.showToast({ title: '暂无录音', icon: 'none' })
+      return
+    }
+    this.playAudioUrl(audioUrl, { trackTts: false })
+  },
+
+  playAudioUrl(audioUrl, options = {}) {
+    const trackTts = !!options.trackTts
     const baseUrl = getApp().globalData.baseUrl || ''
     const rootUrl = baseUrl.replace(/\/api\/?$/, '')
     const finalUrl = audioUrl.startsWith('http') ? audioUrl : `${rootUrl}${audioUrl}`
     this.audioPlayer.src = finalUrl
     this.audioPlayer.play()
-    this.setData({ ttsPlaying: true })
+    this.setData({ ttsPlaying: trackTts })
   },
 
   toggleRecord() {
@@ -448,7 +589,15 @@ Page({
         return
       }
       const transcript = res.transcript || ''
-      this.setData({ answerText: transcript, recordStatus: transcript ? '转写完成' : '未识别到内容' })
+      this.setData({
+        answerText: transcript,
+        recordStatus: transcript ? '转写完成' : '未识别到内容',
+        lastAudioUrl: uploadedUrl,
+        lastAudioMetrics: res.audio_metrics || null,
+        lastAsrModel: res.model || '',
+        lastAsrTaskId: res.task_id || '',
+        lastTranscriptionUrl: res.transcription_url || ''
+      })
 
       if (!transcript) {
         wx.showToast({ title: '未识别到内容', icon: 'none' })

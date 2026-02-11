@@ -41,9 +41,46 @@
           <view wx:elif="{{item.role === 'user'}}">
             <text class="bubble-label">我</text>
             <text class="bubble-text">{{item.content}}</text>
+            <button class="btn-audio-replay" wx:if="{{item.audio_url}}" bindtap="playMessageAudio" data-url="{{item.audio_url}}">回听录音</button>
           </view>
           <view wx:else>
             <text class="bubble-label">反馈</text>
+            <view class="assistant-block" wx:if="{{item.result && item.result.scores}}">
+              <view class="assistant-title">官方评分四项</view>
+              <view class="score-grid">
+                <view class="score-item">
+                  <text class="score-label">F&C</text>
+                  <text class="score-value">{{item.result.scores.fluency_coherence}}</text>
+                </view>
+                <view class="score-item">
+                  <text class="score-label">LR</text>
+                  <text class="score-value">{{item.result.scores.lexical_resource}}</text>
+                </view>
+                <view class="score-item">
+                  <text class="score-label">GRA</text>
+                  <text class="score-value">{{item.result.scores.grammar_range_accuracy}}</text>
+                </view>
+                <view class="score-item">
+                  <text class="score-label">PR</text>
+                  <text class="score-value">{{item.result.scores.pronunciation}}</text>
+                </view>
+                <view class="score-item overall">
+                  <text class="score-label">Overall</text>
+                  <text class="score-value">{{item.result.scores.overall}}</text>
+                </view>
+              </view>
+            </view>
+
+            <view class="assistant-block" wx:if="{{item.result && item.result.criteria_feedback && item.result.criteria_feedback.fluency_coherence}}">
+              <view class="assistant-title">Fluency & Coherence（含逻辑框架）</view>
+              <view class="list" wx:if="{{item.result.criteria_feedback.fluency_coherence.plus.length}}">
+                <text class="list-item" wx:for="{{item.result.criteria_feedback.fluency_coherence.plus}}" wx:key="*this">+ {{item}}</text>
+              </view>
+              <view class="list" wx:if="{{item.result.criteria_feedback.fluency_coherence.minus.length}}">
+                <text class="list-item" wx:for="{{item.result.criteria_feedback.fluency_coherence.minus}}" wx:key="*this">- {{item}}</text>
+              </view>
+            </view>
+
             <view class="assistant-block" wx:if="{{item.result}}">
               <view class="assistant-title">逻辑梳理</view>
               <view class="logic-block" wx:if="{{item.result && item.result.logic_outline && item.result.logic_outline.zh.length}}">
@@ -83,7 +120,7 @@
             </view>
 
             <view class="assistant-block" wx:if="{{item.result && item.result.chinese_style_correction.length}}">
-              <view class="assistant-title">中式表达纠正</view>
+              <view class="assistant-title">Lexical Resource：中式表达纠正</view>
               <view class="feedback-card" wx:for="{{item.result.chinese_style_correction}}" wx:key="index">
                 <text class="fb-original">原句：{{item.original}}</text>
                 <text class="fb-correct">地道：{{item.native_like}}</text>
@@ -92,14 +129,36 @@
             </view>
 
             <view class="assistant-block" wx:if="{{item.result && item.result.lexical_upgrade.length}}">
-              <view class="assistant-title">词汇升级</view>
+              <view class="assistant-title">Lexical Resource：词汇升级</view>
               <view class="feedback-card" wx:for="{{item.result.lexical_upgrade}}" wx:key="index">
                 <text class="fb-original">from：{{item.from}}</text>
                 <text class="fb-correct">to：{{item.to.join(' / ')}}</text>
                 <text class="fb-note">{{item.constraint}}</text>
               </view>
             </view>
-            <view class="assistant-block" wx:else>
+
+            <view class="assistant-block" wx:if="{{item.result && item.result.criteria_feedback && item.result.criteria_feedback.pronunciation}}">
+              <view class="assistant-title">Pronunciation（语音估计）</view>
+              <view class="list" wx:if="{{item.result.criteria_feedback.pronunciation.plus.length}}">
+                <text class="list-item" wx:for="{{item.result.criteria_feedback.pronunciation.plus}}" wx:key="*this">+ {{item}}</text>
+              </view>
+              <view class="list" wx:if="{{item.result.criteria_feedback.pronunciation.minus.length}}">
+                <text class="list-item" wx:for="{{item.result.criteria_feedback.pronunciation.minus}}" wx:key="*this">- {{item}}</text>
+              </view>
+              <view class="list" wx:if="{{item.result.criteria_feedback.pronunciation.audio_observations.length}}">
+                <text class="list-item" wx:for="{{item.result.criteria_feedback.pronunciation.audio_observations}}" wx:key="*this">• {{item}}</text>
+              </view>
+              <text class="fb-note" wx:if="{{item.result.criteria_feedback.pronunciation.confidence}}">置信度：{{item.result.criteria_feedback.pronunciation.confidence}}</text>
+              <text class="fb-note" wx:if="{{item.result.criteria_feedback.pronunciation.limitation_note}}">{{item.result.criteria_feedback.pronunciation.limitation_note}}</text>
+            </view>
+
+            <view class="assistant-block" wx:if="{{item.result && item.result.next_step && item.result.next_step.length}}">
+              <view class="assistant-title">下一步练习建议</view>
+              <view class="list">
+                <text class="list-item" wx:for="{{item.result.next_step}}" wx:key="*this">• {{item}}</text>
+              </view>
+            </view>
+            <view class="assistant-block" wx:if="{{!item.result}}">
               <text class="bubble-text">暂无反馈内容</text>
             </view>
           </view>

@@ -792,6 +792,7 @@ class SpeakingMessage(db.Model, TimestampMixin):
     content = db.Column(db.Text)
     result_json = db.Column(db.Text)
     audio_url = db.Column(db.Text)
+    meta_json = db.Column(db.Text)
 
     session = db.relationship(
         "SpeakingSession",

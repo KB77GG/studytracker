@@ -173,16 +173,33 @@ def evaluate_speaking():
             ).first()
             if session:
                 transcript = (data.get("transcript") or "").strip()
+                audio_url = (data.get("audio_url") or "").strip() or None
+                audio_metrics = data.get("audio_metrics")
+                meta_payload = {
+                    "audio_metrics": audio_metrics if isinstance(audio_metrics, dict) else {},
+                    "asr_model": data.get("asr_model"),
+                    "asr_task_id": data.get("asr_task_id"),
+                    "transcription_url": data.get("transcription_url"),
+                }
                 user_msg = SpeakingMessage(
                     session_id=session.id,
                     role="user",
                     content=transcript or None,
+                    audio_url=audio_url,
+                    meta_json=json.dumps(meta_payload, ensure_ascii=False),
                 )
                 assistant_msg = SpeakingMessage(
                     session_id=session.id,
                     role="assistant",
                     content=None,
                     result_json=json.dumps(payload["result"], ensure_ascii=False),
+                    meta_json=json.dumps(
+                        {
+                            "model": payload.get("model"),
+                            "usage": payload.get("usage"),
+                        },
+                        ensure_ascii=False,
+                    ),
                 )
                 db.session.add(user_msg)
                 db.session.add(assistant_msg)
@@ -270,11 +287,20 @@ def get_speaking_session(session_id: int):
 
     messages = []
     for msg in session.messages.order_by(SpeakingMessage.created_at).all():
+        meta = {}
+        if msg.meta_json:
+            try:
+                parsed_meta = json.loads(msg.meta_json)
+                if isinstance(parsed_meta, dict):
+                    meta = parsed_meta
+            except Exception:
+                meta = {}
         payload = {
             "id": msg.id,
             "role": msg.role,
             "content": msg.content,
             "audio_url": msg.audio_url,
+            "meta": meta,
         }
         if msg.result_json:
             try:

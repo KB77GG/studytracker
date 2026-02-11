@@ -21,13 +21,14 @@ def _build_prompt(payload: dict[str, Any]) -> list[dict[str, str]]:
     part2_topic = payload.get("part2_topic") or payload.get("topic_type") or ""
 
     system = (
-        "You are an IELTS Speaking evaluator. Follow IELTS band descriptors strictly. "
-        "Return JSON only, no extra text. Output fields exactly as specified. "
-        "Do not invent facts beyond the student's answer. Keep feedback concise and actionable."
+        "You are an IELTS Speaking evaluator and coach. "
+        "Follow official IELTS Speaking descriptors strictly. "
+        "Return JSON only with valid syntax. Do not include markdown. "
+        "Do not invent facts beyond the student's transcript and provided audio metrics."
     )
 
     user = {
-        "task": "Evaluate IELTS speaking response and provide feedback.",
+        "task": "Evaluate IELTS speaking response and provide official-criteria feedback + optimized rewrite.",
         "part": part,
         "question": question,
         "transcript": transcript,
@@ -40,50 +41,76 @@ def _build_prompt(payload: dict[str, Any]) -> list[dict[str, str]]:
                 "pronunciation": "number",
                 "overall": "number"
             },
-            "strengths": ["string"],
-            "improvements": ["string"],
-            "sentence_feedback": [
-                {
-                    "original": "string",
-                    "issue_type": ["grammar|collocation|logic|wording|chinese_style"],
-                    "correction": "string",
-                    "explain_cn": "string",
-                    "severity": "low|mid|high"
+            "criteria_feedback": {
+                "fluency_coherence": {
+                    "band": "number",
+                    "plus": ["string"],
+                    "minus": ["string"],
+                    "logic_framework": {
+                        "outline_zh": ["string"],
+                        "outline_en": ["string"],
+                        "upgrade_tips": ["string"]
+                    }
+                },
+                "lexical_resource": {
+                    "band": "number",
+                    "plus": ["string"],
+                    "minus": ["string"],
+                    "expression_corrections": [
+                        {
+                            "original": "string",
+                            "native_like": "string",
+                            "note": "string"
+                        }
+                    ],
+                    "vocabulary_upgrades": [
+                        {
+                            "from": "string",
+                            "to": ["string", "string"],
+                            "usage_note": "string"
+                        }
+                    ]
+                },
+                "grammar_range_accuracy": {
+                    "band": "number",
+                    "plus": ["string"],
+                    "minus": ["string"],
+                    "sentence_corrections": [
+                        {
+                            "original": "string",
+                            "issue_type": ["grammar|collocation|logic|wording"],
+                            "correction": "string",
+                            "explain_cn": "string",
+                            "severity": "low|mid|high"
+                        }
+                    ]
+                },
+                "pronunciation": {
+                    "band": "number",
+                    "plus": ["string"],
+                    "minus": ["string"],
+                    "audio_observations": ["string"],
+                    "confidence": "low|medium|high",
+                    "limitation_note": "string"
                 }
-            ],
-            "chinese_style_correction": [
-                {
-                    "original": "string",
-                    "native_like": "string",
-                    "note": "string"
-                }
-            ],
-            "lexical_upgrade": [
-                {
-                    "from": "string",
-                    "to": ["string", "string"],
-                    "constraint": "string"
-                }
-            ],
-            "logic_outline": {
-                "zh": ["string"],
-                "en": ["string"]
             },
             "rewrite_high_band": {
                 "target_band": "string",
                 "paragraph": "string",
                 "logic_tips": ["string"]
             },
-            "grading_notes": ["string"]
+            "next_step": ["string"]
         },
         "rules": [
             "For Part1: keep the rewrite concise and within 2-4 sentences.",
             "For Part2: include basic info, anecdote, and explanation/feelings; keep clear timeline.",
             "For Part3: include at least two viewpoints with reasons and examples.",
-            "logic_outline must be bilingual (Chinese + English) and reflect the student's content.",
+            "Fluency & Coherence must include logic framework coaching, not only score.",
+            "Lexical Resource must include Chinese-style expression correction + vocabulary upgrades.",
+            "Grammar Range & Accuracy must include sentence-level corrections.",
+            "Pronunciation should use audio_metrics when available. If audio_metrics are limited, still give a cautious estimate and include limitation_note.",
             "rewrite_high_band must include one coherent paragraph and logic_tips as bullet points.",
-            "logic_tips should use Chinese explanations and include key English connectors (for example: When it comes to, If I remember correctly, At first, Then, Finally, As for the reasons why, First of all, What's more).",
-            "Focus on logic and structure in feedback and rewrite."
+            "logic_tips should be Chinese guidance with key English connectors (for example: When it comes to, If I remember correctly, At first, Then, Finally, As for the reasons why, First of all, What's more)."
         ],
         "part2_frameworks": {
             "person_place": [
@@ -139,6 +166,221 @@ def _extract_json(text: str) -> tuple[bool, Any]:
         return False, {"raw_text": text}
 
 
+def _safe_num(value: Any, default: float = 0.0) -> float:
+    try:
+        return round(float(value), 1)
+    except (TypeError, ValueError):
+        return default
+
+
+def _list_of_str(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    result: list[str] = []
+    for item in value:
+        if item is None:
+            continue
+        text = str(item).strip()
+        if text:
+            result.append(text)
+    return result
+
+
+def _normalize_sentence_feedback(items: Any) -> list[dict[str, Any]]:
+    if not isinstance(items, list):
+        return []
+    result: list[dict[str, Any]] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        issue_type = item.get("issue_type")
+        if isinstance(issue_type, list):
+            issue_types = [str(x).strip() for x in issue_type if str(x).strip()]
+        elif issue_type:
+            issue_types = [str(issue_type).strip()]
+        else:
+            issue_types = []
+        result.append(
+            {
+                "original": str(item.get("original") or "").strip(),
+                "issue_type": issue_types,
+                "correction": str(item.get("correction") or "").strip(),
+                "explain_cn": str(item.get("explain_cn") or "").strip(),
+                "severity": str(item.get("severity") or "").strip() or "mid",
+            }
+        )
+    return [x for x in result if x["original"] or x["correction"]]
+
+
+def _normalize_native_corrections(items: Any) -> list[dict[str, str]]:
+    if not isinstance(items, list):
+        return []
+    result: list[dict[str, str]] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        result.append(
+            {
+                "original": str(item.get("original") or "").strip(),
+                "native_like": str(item.get("native_like") or "").strip(),
+                "note": str(item.get("note") or "").strip(),
+            }
+        )
+    return [x for x in result if x["original"] or x["native_like"]]
+
+
+def _normalize_vocab_upgrades(items: Any) -> list[dict[str, Any]]:
+    if not isinstance(items, list):
+        return []
+    result: list[dict[str, Any]] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        to_value = item.get("to")
+        if isinstance(to_value, list):
+            to_list = [str(x).strip() for x in to_value if str(x).strip()]
+        elif to_value:
+            to_list = [str(to_value).strip()]
+        else:
+            to_list = []
+        result.append(
+            {
+                "from": str(item.get("from") or "").strip(),
+                "to": to_list,
+                "constraint": str(
+                    item.get("constraint") or item.get("usage_note") or ""
+                ).strip(),
+            }
+        )
+    return [x for x in result if x["from"] or x["to"]]
+
+
+def _normalize_result(parsed: Any, target_band: str) -> dict[str, Any]:
+    data = parsed if isinstance(parsed, dict) else {}
+    raw_scores = data.get("scores") if isinstance(data.get("scores"), dict) else {}
+    criteria = (
+        data.get("criteria_feedback")
+        if isinstance(data.get("criteria_feedback"), dict)
+        else {}
+    )
+    fc = criteria.get("fluency_coherence") if isinstance(criteria.get("fluency_coherence"), dict) else {}
+    lr = criteria.get("lexical_resource") if isinstance(criteria.get("lexical_resource"), dict) else {}
+    ga = criteria.get("grammar_range_accuracy") if isinstance(criteria.get("grammar_range_accuracy"), dict) else {}
+    pr = criteria.get("pronunciation") if isinstance(criteria.get("pronunciation"), dict) else {}
+
+    logic_framework = (
+        fc.get("logic_framework")
+        if isinstance(fc.get("logic_framework"), dict)
+        else {}
+    )
+    outline_zh = _list_of_str(
+        logic_framework.get("outline_zh")
+        if logic_framework
+        else data.get("logic_outline", {}).get("zh")
+        if isinstance(data.get("logic_outline"), dict)
+        else []
+    )
+    outline_en = _list_of_str(
+        logic_framework.get("outline_en")
+        if logic_framework
+        else data.get("logic_outline", {}).get("en")
+        if isinstance(data.get("logic_outline"), dict)
+        else []
+    )
+
+    sentence_feedback = _normalize_sentence_feedback(
+        ga.get("sentence_corrections") if ga else data.get("sentence_feedback")
+    )
+    chinese_style = _normalize_native_corrections(
+        lr.get("expression_corrections") if lr else data.get("chinese_style_correction")
+    )
+    lexical_upgrade = _normalize_vocab_upgrades(
+        lr.get("vocabulary_upgrades") if lr else data.get("lexical_upgrade")
+    )
+
+    rewrite = (
+        data.get("rewrite_high_band")
+        if isinstance(data.get("rewrite_high_band"), dict)
+        else {}
+    )
+
+    scores = {
+        "fluency_coherence": _safe_num(
+            raw_scores.get("fluency_coherence"), _safe_num(fc.get("band"), 0.0)
+        ),
+        "lexical_resource": _safe_num(
+            raw_scores.get("lexical_resource"), _safe_num(lr.get("band"), 0.0)
+        ),
+        "grammar_range_accuracy": _safe_num(
+            raw_scores.get("grammar_range_accuracy"), _safe_num(ga.get("band"), 0.0)
+        ),
+        "pronunciation": _safe_num(
+            raw_scores.get("pronunciation"), _safe_num(pr.get("band"), 0.0)
+        ),
+        "overall": _safe_num(raw_scores.get("overall"), 0.0),
+    }
+    if scores["overall"] == 0.0:
+        core = [
+            scores["fluency_coherence"],
+            scores["lexical_resource"],
+            scores["grammar_range_accuracy"],
+            scores["pronunciation"],
+        ]
+        valid = [x for x in core if x > 0]
+        if valid:
+            scores["overall"] = round(sum(valid) / len(valid), 1)
+
+    criteria_feedback = {
+        "fluency_coherence": {
+            "band": _safe_num(fc.get("band"), scores["fluency_coherence"]),
+            "plus": _list_of_str(fc.get("plus")),
+            "minus": _list_of_str(fc.get("minus")),
+            "logic_framework": {
+                "outline_zh": outline_zh,
+                "outline_en": outline_en,
+                "upgrade_tips": _list_of_str(logic_framework.get("upgrade_tips")),
+            },
+        },
+        "lexical_resource": {
+            "band": _safe_num(lr.get("band"), scores["lexical_resource"]),
+            "plus": _list_of_str(lr.get("plus")),
+            "minus": _list_of_str(lr.get("minus")),
+            "expression_corrections": chinese_style,
+            "vocabulary_upgrades": lexical_upgrade,
+        },
+        "grammar_range_accuracy": {
+            "band": _safe_num(ga.get("band"), scores["grammar_range_accuracy"]),
+            "plus": _list_of_str(ga.get("plus")),
+            "minus": _list_of_str(ga.get("minus")),
+            "sentence_corrections": sentence_feedback,
+        },
+        "pronunciation": {
+            "band": _safe_num(pr.get("band"), scores["pronunciation"]),
+            "plus": _list_of_str(pr.get("plus")),
+            "minus": _list_of_str(pr.get("minus")),
+            "audio_observations": _list_of_str(pr.get("audio_observations")),
+            "confidence": str(pr.get("confidence") or "low"),
+            "limitation_note": str(pr.get("limitation_note") or "").strip(),
+        },
+    }
+
+    normalized = {
+        "scores": scores,
+        "criteria_feedback": criteria_feedback,
+        "logic_outline": {"zh": outline_zh, "en": outline_en},
+        "sentence_feedback": sentence_feedback,
+        "chinese_style_correction": chinese_style,
+        "lexical_upgrade": lexical_upgrade,
+        "rewrite_high_band": {
+            "target_band": str(rewrite.get("target_band") or target_band),
+            "paragraph": str(rewrite.get("paragraph") or rewrite.get("rewrite") or "").strip(),
+            "logic_tips": _list_of_str(rewrite.get("logic_tips")),
+        },
+        "next_step": _list_of_str(data.get("next_step")),
+    }
+    return normalized
+
+
 def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
     transcript = data.get("transcript") or data.get("student_answer")
     if not transcript:
@@ -190,9 +432,10 @@ def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
         .get("content", "")
     )
     ok, parsed = _extract_json(content)
+    normalized = _normalize_result(parsed, str(data.get("target_band") or "7.0")) if ok else None
     return {
         "ok": ok,
-        "result": parsed,
+        "result": normalized if ok else parsed,
         "raw": content if not ok else None,
         "usage": raw.get("usage"),
         "model": raw.get("model", model),
