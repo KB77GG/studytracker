@@ -77,6 +77,17 @@ class Config:
     )
     ALIYUN_ORAL_AUTH_TIMEOUT = os.environ.get("ALIYUN_ORAL_AUTH_TIMEOUT", "10")
     ALIYUN_ORAL_WARRANT_AVAILABLE = os.environ.get("ALIYUN_ORAL_WARRANT_AVAILABLE", "7200")
+    ALIYUN_ORAL_TASK_SUBMIT_URL = os.environ.get(
+        "ALIYUN_ORAL_TASK_SUBMIT_URL",
+        "https://aiservice.ssapi.cn/api/v1/oralEvaluation/classTaskSubmit",
+    )
+    ALIYUN_ORAL_TASK_QUERY_URL = os.environ.get(
+        "ALIYUN_ORAL_TASK_QUERY_URL",
+        "https://aiservice.ssapi.cn/api/v1/oralEvaluation/classTaskQuery",
+    )
+    ALIYUN_ORAL_TASK_TIMEOUT = os.environ.get("ALIYUN_ORAL_TASK_TIMEOUT", "12")
+    ALIYUN_ORAL_TASK_MAX_WAIT = os.environ.get("ALIYUN_ORAL_TASK_MAX_WAIT", "20")
+    ALIYUN_ORAL_TASK_POLL_INTERVAL = os.environ.get("ALIYUN_ORAL_TASK_POLL_INTERVAL", "1.0")
 
     # Tencent SOE (spoken pronunciation engine)
     TENCENT_SOE_ENABLED = os.environ.get("TENCENT_SOE_ENABLED", "0")

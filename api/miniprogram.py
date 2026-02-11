@@ -21,6 +21,7 @@ from .aliyun_asr import transcribe_audio_url
 from .aliyun_tts import synthesize_text
 from .tencent_soe import evaluate_pronunciation
 from .aliyun_oral_warrant import create_oral_warrant
+from .aliyun_oral_task import run_oral_task
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 
@@ -85,6 +86,84 @@ def _merge_pronunciation_result(result: dict, ext: dict) -> dict:
     pron["engine"] = "tencent_soe"
     pron["engine_request_id"] = ext.get("request_id")
     pron["engine_session_id"] = ext.get("session_id")
+    criteria["pronunciation"] = pron
+    result["criteria_feedback"] = criteria
+    return result
+
+
+def _collect_numeric_scores(payload):
+    values = []
+    if isinstance(payload, dict):
+        for _, value in payload.items():
+            if isinstance(value, (int, float)):
+                values.append(float(value))
+            elif isinstance(value, dict):
+                values.extend(_collect_numeric_scores(value))
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict):
+                        values.extend(_collect_numeric_scores(item))
+                    elif isinstance(item, (int, float)):
+                        values.append(float(item))
+    return values
+
+
+def _merge_aliyun_oral_result(result: dict, oral: dict) -> dict:
+    if not isinstance(result, dict):
+        return result
+
+    oral_result = oral.get("result") if isinstance(oral.get("result"), dict) else {}
+    scores = result.get("scores") if isinstance(result.get("scores"), dict) else {}
+    criteria = (
+        result.get("criteria_feedback")
+        if isinstance(result.get("criteria_feedback"), dict)
+        else {}
+    )
+    pron = (
+        criteria.get("pronunciation")
+        if isinstance(criteria.get("pronunciation"), dict)
+        else {}
+    )
+    audio_obs = (
+        pron.get("audio_observations")
+        if isinstance(pron.get("audio_observations"), list)
+        else []
+    )
+
+    numeric_scores = [x for x in _collect_numeric_scores(oral_result) if 0 <= x <= 100]
+    band = 0.0
+    if numeric_scores:
+        best = max(numeric_scores)
+        band = round(min(9.0, max(0.0, best * 9.0 / 100.0)), 1)
+        audio_obs.insert(0, f"Aliyun oral score (max): {round(best, 1)}/100")
+
+    if band > 0:
+        scores["pronunciation"] = band
+        pron["band"] = band
+
+    fc = _safe_float(scores.get("fluency_coherence"), 0.0)
+    lr = _safe_float(scores.get("lexical_resource"), 0.0)
+    ga = _safe_float(scores.get("grammar_range_accuracy"), 0.0)
+    pr = _safe_float(scores.get("pronunciation"), 0.0)
+    valid = [x for x in [fc, lr, ga, pr] if x > 0]
+    if valid:
+        scores["overall"] = round(sum(valid) / len(valid), 1)
+    result["scores"] = scores
+
+    status = oral.get("status")
+    if status:
+        audio_obs.append(f"Aliyun oral task status: {status}")
+    taskid = oral.get("taskid")
+    if taskid:
+        audio_obs.append(f"Aliyun oral task id: {taskid}")
+    pron["audio_observations"] = audio_obs
+    pron["confidence"] = "high" if band > 0 else "medium"
+    pron["limitation_note"] = (
+        "Pronunciation uses Aliyun oral evaluation task output."
+        if band > 0
+        else "Aliyun oral task returned limited numeric scores; pronunciation kept as estimate."
+    )
+    pron["engine"] = "aliyun_oral"
     criteria["pronunciation"] = pron
     result["criteria_feedback"] = criteria
     return result
@@ -230,6 +309,8 @@ def evaluate_speaking():
     data = request.get_json(silent=True) or {}
     payload, status = run_ielts_eval(data)
 
+    user = request.current_api_user
+    student = user.student_profile
     pronunciation_payload = None
     pronunciation_error = None
     audio_url = (data.get("audio_url") or "").strip()
@@ -249,10 +330,41 @@ def evaluate_speaking():
         else:
             pronunciation_error = pron_res
 
+    oral_payload = None
+    oral_error = None
+    oral_eval = data.get("oral_evaluation")
+    if payload.get("ok") and payload.get("result") and isinstance(oral_eval, dict):
+        payload["result"] = _merge_aliyun_oral_result(payload["result"], oral_eval)
+        oral_payload = oral_eval
+        payload["oral_engine"] = {"engine": "aliyun_oral", "source": "client_payload"}
+
+    if payload.get("ok") and payload.get("result") and student:
+        record_ids = data.get("oral_record_ids")
+        warrant_id = str(data.get("oral_warrant_id") or "").strip()
+        appid = str(current_app.config.get("ALIYUN_ORAL_APP_KEY") or "").strip()
+        if isinstance(record_ids, list):
+            record_id_list = [str(x).strip() for x in record_ids if str(x).strip()]
+        elif isinstance(record_ids, str) and record_ids.strip():
+            record_id_list = [record_ids.strip()]
+        else:
+            record_id_list = []
+
+        if record_id_list and warrant_id and appid:
+            oral_ok, oral_res = run_oral_task(
+                appid=appid,
+                user_id=f"student_{student.id}",
+                warrant_id=warrant_id,
+                record_id_list=record_id_list,
+            )
+            if oral_ok:
+                payload["result"] = _merge_aliyun_oral_result(payload["result"], oral_res)
+                oral_payload = oral_res
+                payload["oral_engine"] = {"engine": "aliyun_oral", "source": "server_task"}
+            else:
+                oral_error = oral_res
+
     session_id = data.get("session_id")
     if session_id and payload.get("ok") and payload.get("result"):
-        user = request.current_api_user
-        student = user.student_profile
         if student:
             session = SpeakingSession.query.filter_by(
                 id=session_id, student_id=student.id
@@ -268,6 +380,8 @@ def evaluate_speaking():
                     "transcription_url": data.get("transcription_url"),
                     "pronunciation_engine": pronunciation_payload if isinstance(pronunciation_payload, dict) else None,
                     "pronunciation_engine_error": pronunciation_error if isinstance(pronunciation_error, dict) else None,
+                    "oral_engine": oral_payload if isinstance(oral_payload, dict) else None,
+                    "oral_engine_error": oral_error if isinstance(oral_error, dict) else None,
                 }
                 user_msg = SpeakingMessage(
                     session_id=session.id,
@@ -292,8 +406,10 @@ def evaluate_speaking():
                 db.session.add(user_msg)
                 db.session.add(assistant_msg)
                 db.session.commit()
-    elif pronunciation_error:
+    if pronunciation_error:
         payload["pronunciation_engine_error"] = pronunciation_error
+    if oral_error:
+        payload["oral_engine_error"] = oral_error
     return jsonify(payload), status
 
 
@@ -333,6 +449,45 @@ def get_oral_warrant():
     ok, payload = create_oral_warrant(user_id=user_id, user_client_ip=user_client_ip)
     if not ok:
         return jsonify({"ok": False, **payload}), 500
+    return jsonify({"ok": True, **payload})
+
+
+@mp_bp.route("/speaking/oral/task", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def evaluate_oral_task():
+    """Run Aliyun oral evaluation task using record_id list returned by client SDK."""
+    data = request.get_json(silent=True) or {}
+    user = request.current_api_user
+    student = user.student_profile
+    if not student:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    warrant_id = str(data.get("warrant_id") or "").strip()
+    record_ids = data.get("record_ids")
+    if isinstance(record_ids, list):
+        record_id_list = [str(x).strip() for x in record_ids if str(x).strip()]
+    elif isinstance(record_ids, str) and record_ids.strip():
+        record_id_list = [record_ids.strip()]
+    else:
+        record_id_list = []
+
+    if not warrant_id:
+        return jsonify({"ok": False, "error": "missing_warrant_id"}), 400
+    if not record_id_list:
+        return jsonify({"ok": False, "error": "missing_record_ids"}), 400
+
+    appid = str(current_app.config.get("ALIYUN_ORAL_APP_KEY") or "").strip()
+    if not appid:
+        return jsonify({"ok": False, "error": "missing_aliyun_oral_appid"}), 500
+
+    ok, payload = run_oral_task(
+        appid=appid,
+        user_id=f"student_{student.id}",
+        warrant_id=warrant_id,
+        record_id_list=record_id_list,
+    )
+    if not ok:
+        return jsonify({"ok": False, **payload}), 502
     return jsonify({"ok": True, **payload})
 
 

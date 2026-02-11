@@ -1,4 +1,5 @@
 const { request } = require('../../../utils/request.js')
+const oralSdkBridge = require('../../../utils/aliyun_oral_sdk.js')
 
 Page({
   data: {
@@ -26,6 +27,17 @@ Page({
     ttsPlaying: false,
     ttsText: '',
     ttsUrl: '',
+    inputMode: 'standard',
+    oralModeOptions: [
+      { value: 'standard', label: '标准评估' },
+      { value: 'oral_sdk', label: '发音增强(beta)' }
+    ],
+    oralWarrantId: '',
+    oralWarrantExpire: '',
+    oralWarrantLoading: false,
+    oralEngineStatus: '',
+    lastOralEvaluation: null,
+    lastOralWarrantId: '',
     lastAudioUrl: '',
     lastAudioMetrics: null,
     lastAsrModel: '',
@@ -113,6 +125,19 @@ Page({
     })
   },
 
+  resetAnswerArtifacts() {
+    return {
+      lastAudioUrl: '',
+      lastAudioMetrics: null,
+      lastAsrModel: '',
+      lastAsrTaskId: '',
+      lastTranscriptionUrl: '',
+      lastOralEvaluation: null,
+      lastOralWarrantId: '',
+      oralEngineStatus: ''
+    }
+  },
+
   async loadAssigned() {
     try {
       const res = await request('/miniprogram/speaking/assigned')
@@ -158,11 +183,7 @@ Page({
       messages: [],
       currentSessionId: null,
       answerText: '',
-      lastAudioUrl: '',
-      lastAudioMetrics: null,
-      lastAsrModel: '',
-      lastAsrTaskId: '',
-      lastTranscriptionUrl: ''
+      ...this.resetAnswerArtifacts()
     })
     this.nextQuestion()
   },
@@ -175,13 +196,46 @@ Page({
       messages: [],
       currentSessionId: null,
       answerText: '',
-      lastAudioUrl: '',
-      lastAudioMetrics: null,
-      lastAsrModel: '',
-      lastAsrTaskId: '',
-      lastTranscriptionUrl: ''
+      ...this.resetAnswerArtifacts()
     })
     this.nextQuestion()
+  },
+
+  async switchInputMode(e) {
+    const mode = e.currentTarget.dataset.mode
+    if (!mode || mode === this.data.inputMode) return
+    this.setData({
+      inputMode: mode,
+      ...this.resetAnswerArtifacts()
+    })
+    if (mode === 'oral_sdk') {
+      await this.ensureOralWarrant()
+    }
+  },
+
+  async ensureOralWarrant(force = false) {
+    if (this.data.inputMode !== 'oral_sdk') return true
+    if (!force && this.data.oralWarrantId) return true
+    if (this.data.oralWarrantLoading) return false
+    this.setData({ oralWarrantLoading: true, oralEngineStatus: '正在获取口语凭证...' })
+    try {
+      const res = await request('/miniprogram/speaking/oral/warrant')
+      if (!res.ok || !res.warrant_id) {
+        this.setData({ oralEngineStatus: `口语凭证失败：${res.error || '请稍后重试'}` })
+        return false
+      }
+      this.setData({
+        oralWarrantId: res.warrant_id,
+        oralWarrantExpire: res.warrant_available || '',
+        oralEngineStatus: '口语凭证已就绪'
+      })
+      return true
+    } catch (e) {
+      this.setData({ oralEngineStatus: '口语凭证失败：网络异常' })
+      return false
+    } finally {
+      this.setData({ oralWarrantLoading: false })
+    }
   },
 
   handleFrameworkChange(e) {
@@ -200,11 +254,7 @@ Page({
       messages: [],
       currentSessionId: null,
       answerText: '',
-      lastAudioUrl: '',
-      lastAudioMetrics: null,
-      lastAsrModel: '',
-      lastAsrTaskId: '',
-      lastTranscriptionUrl: ''
+      ...this.resetAnswerArtifacts()
     })
     const part = this.data.currentPart
     const useAssigned = this.data.sourceMode === 'assigned'
@@ -296,11 +346,7 @@ Page({
   handleAnswerInput(e) {
     this.setData({
       answerText: e.detail.value,
-      lastAudioUrl: '',
-      lastAudioMetrics: null,
-      lastAsrModel: '',
-      lastAsrTaskId: '',
-      lastTranscriptionUrl: ''
+      ...this.resetAnswerArtifacts()
     })
   },
 
@@ -326,6 +372,8 @@ Page({
     if (this.data.lastAsrModel) payload.asr_model = this.data.lastAsrModel
     if (this.data.lastAsrTaskId) payload.asr_task_id = this.data.lastAsrTaskId
     if (this.data.lastTranscriptionUrl) payload.transcription_url = this.data.lastTranscriptionUrl
+    if (this.data.lastOralEvaluation) payload.oral_evaluation = this.data.lastOralEvaluation
+    if (this.data.lastOralWarrantId) payload.oral_warrant_id = this.data.lastOralWarrantId
 
     if (this.data.currentPart !== 'Part1' && this.data.selectedFramework) {
       payload.part2_topic = this.data.selectedFramework
@@ -349,7 +397,10 @@ Page({
           role: 'user',
           content: this.data.answerText,
           audio_url: this.data.lastAudioUrl || '',
-          meta: { audio_metrics: this.data.lastAudioMetrics || null }
+          meta: {
+            audio_metrics: this.data.lastAudioMetrics || null,
+            oral_evaluation: this.data.lastOralEvaluation || null
+          }
         })
         messages.push({ role: 'assistant', result: normalized })
         this.setData({ result: normalized, messages })
@@ -517,6 +568,63 @@ Page({
     this.setData({ ttsPlaying: trackTts })
   },
 
+  async runOralEnhancement(params) {
+    if (this.data.inputMode !== 'oral_sdk') return null
+
+    const ready = await this.ensureOralWarrant()
+    if (!ready || !this.data.oralWarrantId) {
+      return { ok: false, error: 'missing_warrant_id' }
+    }
+
+    if (!oralSdkBridge || typeof oralSdkBridge.evaluate !== 'function') {
+      return { ok: false, error: 'oral_sdk_bridge_missing' }
+    }
+
+    const sdkPayload = {
+      warrantId: this.data.oralWarrantId,
+      appId: getApp().globalData.oralAppId || '',
+      question: this.data.questionText,
+      transcript: params.transcript || '',
+      tempFilePath: params.tempFilePath || '',
+      audioUrl: params.audioUrl || '',
+      part: this.data.currentPart
+    }
+
+    try {
+      const sdkRes = await oralSdkBridge.evaluate(sdkPayload)
+      if (!sdkRes || !sdkRes.ok) {
+        return { ok: false, error: (sdkRes && sdkRes.error) || 'oral_sdk_eval_failed' }
+      }
+
+      const oralEvaluation = (sdkRes.data && typeof sdkRes.data === 'object') ? sdkRes.data : {}
+      if (Array.isArray(sdkRes.recordIds) && sdkRes.recordIds.length) {
+        const serverRes = await request('/miniprogram/speaking/oral/task', {
+          method: 'POST',
+          data: {
+            warrant_id: this.data.oralWarrantId,
+            record_ids: sdkRes.recordIds
+          }
+        })
+        if (serverRes.ok) {
+          return {
+            ok: true,
+            evaluation: {
+              taskid: serverRes.taskid,
+              status: serverRes.status,
+              result: serverRes.result || {},
+              raw: serverRes.raw || {},
+              source: 'aliyun_oral_task'
+            }
+          }
+        }
+      }
+
+      return { ok: true, evaluation: oralEvaluation }
+    } catch (e) {
+      return { ok: false, error: 'oral_sdk_eval_failed' }
+    }
+  },
+
   toggleRecord() {
     if (this.data.isRecording) {
       this.stopRecord()
@@ -596,12 +704,36 @@ Page({
         lastAudioMetrics: res.audio_metrics || null,
         lastAsrModel: res.model || '',
         lastAsrTaskId: res.task_id || '',
-        lastTranscriptionUrl: res.transcription_url || ''
+        lastTranscriptionUrl: res.transcription_url || '',
+        lastOralEvaluation: null,
+        lastOralWarrantId: ''
       })
 
       if (!transcript) {
         wx.showToast({ title: '未识别到内容', icon: 'none' })
         return
+      }
+
+      if (this.data.inputMode === 'oral_sdk') {
+        this.setData({ oralEngineStatus: '正在进行发音增强评测...' })
+        const oralRes = await this.runOralEnhancement({
+          transcript,
+          tempFilePath,
+          audioUrl: uploadedUrl
+        })
+        if (oralRes && oralRes.ok) {
+          this.setData({
+            lastOralEvaluation: oralRes.evaluation || null,
+            lastOralWarrantId: this.data.oralWarrantId,
+            oralEngineStatus: '发音增强评测完成'
+          })
+        } else {
+          const err = oralRes && oralRes.error ? oralRes.error : '未启用SDK'
+          this.setData({
+            lastOralEvaluation: null,
+            oralEngineStatus: `发音增强未完成：${err}`
+          })
+        }
       }
 
       if (!this.data.questionText) {
