@@ -13,9 +13,14 @@ def _md5_hex(text: str) -> str:
 
 
 def _build_request_sign(payload: dict[str, Any], app_secret: str) -> str:
-    # Official signing rule: include app_secret as a parameter in sorted key-value pairs, then md5.
-    signing_payload = dict(payload)
-    signing_payload["app_secret"] = app_secret
+    # Official signing rule signs only app_secret + required request fields.
+    signing_payload = {
+        "appid": payload.get("appid"),
+        "timestamp": payload.get("timestamp"),
+        "user_id": payload.get("user_id"),
+        "user_client_ip": payload.get("user_client_ip"),
+        "app_secret": app_secret,
+    }
     pairs: list[str] = []
     for key in sorted(signing_payload.keys()):
         value = signing_payload.get(key)
