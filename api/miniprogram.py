@@ -20,6 +20,7 @@ from .ielts_eval import run_ielts_eval
 from .aliyun_asr import transcribe_audio_url
 from .aliyun_tts import synthesize_text
 from .tencent_soe import evaluate_pronunciation
+from .aliyun_oral_warrant import create_oral_warrant
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 
@@ -309,6 +310,27 @@ def transcribe_speaking_audio():
         file_url = f"{base_url}{file_url if file_url.startswith('/') else '/' + file_url}"
 
     ok, payload = transcribe_audio_url(file_url)
+    if not ok:
+        return jsonify({"ok": False, **payload}), 500
+    return jsonify({"ok": True, **payload})
+
+
+@mp_bp.route("/speaking/oral/warrant", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def get_oral_warrant():
+    """Create temporary warrant_id for Aliyun oral evaluation SDK."""
+    user = request.current_api_user
+    student = user.student_profile
+    if not student:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    user_id = f"student_{student.id}"
+    user_client_ip = (
+        request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+        or request.remote_addr
+        or "127.0.0.1"
+    )
+    ok, payload = create_oral_warrant(user_id=user_id, user_client_ip=user_client_ip)
     if not ok:
         return jsonify({"ok": False, **payload}), 500
     return jsonify({"ok": True, **payload})

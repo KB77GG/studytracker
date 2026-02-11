@@ -67,6 +67,16 @@ class Config:
     ALIYUN_TTS_MODEL = os.environ.get("ALIYUN_TTS_MODEL", "qwen3-tts-flash")
     ALIYUN_TTS_VOICE = os.environ.get("ALIYUN_TTS_VOICE", "Cherry")
     ALIYUN_TTS_LANGUAGE = os.environ.get("ALIYUN_TTS_LANGUAGE", "English")
+    ALIYUN_AICONTENT_AK_ID = os.environ.get("ALIYUN_AICONTENT_AK_ID")
+    ALIYUN_AICONTENT_AK_SECRET = os.environ.get("ALIYUN_AICONTENT_AK_SECRET")
+    ALIYUN_ORAL_APP_KEY = os.environ.get("ALIYUN_ORAL_APP_KEY")
+    ALIYUN_ORAL_APP_SECRET = os.environ.get("ALIYUN_ORAL_APP_SECRET")
+    ALIYUN_ORAL_AUTH_ENDPOINTS = os.environ.get(
+        "ALIYUN_ORAL_AUTH_ENDPOINTS",
+        "https://api.cloud.ssapi.cn/auth/authorize,https://gate-01.api.cloud.ssapi.cn/auth/authorize,https://gate-02.api.cloud.ssapi.cn/auth/authorize,https://gate-03.api.cloud.ssapi.cn/auth/authorize",
+    )
+    ALIYUN_ORAL_AUTH_TIMEOUT = os.environ.get("ALIYUN_ORAL_AUTH_TIMEOUT", "10")
+    ALIYUN_ORAL_WARRANT_AVAILABLE = os.environ.get("ALIYUN_ORAL_WARRANT_AVAILABLE", "7200")
 
     # Tencent SOE (spoken pronunciation engine)
     TENCENT_SOE_ENABLED = os.environ.get("TENCENT_SOE_ENABLED", "0")
