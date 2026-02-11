@@ -33,6 +33,7 @@ Page({
       { value: 'oral_sdk', label: '发音增强(beta)' }
     ],
     oralWarrantId: '',
+    oralAppId: '',
     oralWarrantExpire: '',
     oralWarrantLoading: false,
     oralEngineStatus: '',
@@ -215,7 +216,7 @@ Page({
 
   async ensureOralWarrant(force = false) {
     if (this.data.inputMode !== 'oral_sdk') return true
-    if (!force && this.data.oralWarrantId) return true
+    if (!force && this.data.oralWarrantId && this.data.oralAppId) return true
     if (this.data.oralWarrantLoading) return false
     this.setData({ oralWarrantLoading: true, oralEngineStatus: '正在获取口语凭证...' })
     try {
@@ -226,6 +227,7 @@ Page({
       }
       this.setData({
         oralWarrantId: res.warrant_id,
+        oralAppId: res.appid || '',
         oralWarrantExpire: res.warrant_available || '',
         oralEngineStatus: '口语凭证已就绪'
       })
@@ -582,7 +584,7 @@ Page({
 
     const sdkPayload = {
       warrantId: this.data.oralWarrantId,
-      appId: getApp().globalData.oralAppId || '',
+      appId: this.data.oralAppId || '',
       question: this.data.questionText,
       transcript: params.transcript || '',
       tempFilePath: params.tempFilePath || '',

@@ -449,7 +449,11 @@ def get_oral_warrant():
     ok, payload = create_oral_warrant(user_id=user_id, user_client_ip=user_client_ip)
     if not ok:
         return jsonify({"ok": False, **payload}), 500
-    return jsonify({"ok": True, **payload})
+    return jsonify({
+        "ok": True,
+        "appid": str(current_app.config.get("ALIYUN_ORAL_APP_KEY") or ""),
+        **payload
+    })
 
 
 @mp_bp.route("/speaking/oral/task", methods=["POST"])
