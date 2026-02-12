@@ -111,6 +111,7 @@ function evaluate(params = {}) {
       filePath: tempFilePath,
       name: 'audio',
       url,
+      timeout: 15000,
       header: {
         'Request-Index': 0
       },

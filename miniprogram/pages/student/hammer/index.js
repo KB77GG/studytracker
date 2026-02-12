@@ -16,8 +16,11 @@ Page({
     loadingEval: false,
     result: null,
     messages: [],
+    chatScrollTop: 0,
     currentSessionId: null,
     isRecording: false,
+    recordBusy: false,
+    discardNextRecording: false,
     recordStatus: '',
     recordFormats: ['mp3', 'wav', 'aac'],
     recordFormatIndex: 0,
@@ -61,6 +64,26 @@ Page({
     this.loadAssigned()
   },
 
+  onHide() {
+    this.cleanupRecordAndAudio()
+  },
+
+  onUnload() {
+    this.cleanupRecordAndAudio()
+  },
+
+  cleanupRecordAndAudio() {
+    try {
+      if (this.data.isRecording && this.recorderManager) {
+        this.setData({ discardNextRecording: true, recordBusy: true, recordStatus: '已停止录音' })
+        this.recorderManager.stop()
+      }
+    } catch (e) {}
+    try {
+      if (this.audioPlayer) this.audioPlayer.stop()
+    } catch (e) {}
+  },
+
   setupAudioPlayer() {
     this.audioPlayer = wx.createInnerAudioContext()
     this.audioPlayer.obeyMuteSwitch = false
@@ -76,11 +99,18 @@ Page({
   setupRecorder() {
     this.recorderManager = wx.getRecorderManager()
     this.recorderManager.onStart(() => {
-      this.setData({ isRecording: true, recordStatus: '录音中...' })
+      this.setData({ isRecording: true, recordBusy: false, recordStatus: '录音中...' })
     })
     this.recorderManager.onStop((res) => {
       const tempFilePath = res && res.tempFilePath
-      this.setData({ isRecording: false, recordStatus: '录音完成，处理中...' })
+      const shouldDiscard = !!this.data.discardNextRecording
+      this.setData({
+        isRecording: false,
+        recordBusy: false,
+        discardNextRecording: false,
+        recordStatus: shouldDiscard ? '已取消本次录音，可重新练习' : '录音完成，处理中...'
+      })
+      if (shouldDiscard) return
       if (tempFilePath) {
         this.handleAudioFile(tempFilePath)
       } else {
@@ -90,7 +120,11 @@ Page({
     })
     this.recorderManager.onError((err) => {
       const errMsg = err && err.errMsg ? String(err.errMsg) : ''
-      this.setData({ isRecording: false })
+      this.setData({ isRecording: false, recordBusy: false, discardNextRecording: false })
+      if (errMsg.includes('is recording or paused')) {
+        this.setData({ recordStatus: '检测到录音未结束，请先点“停止录音”' })
+        return
+      }
 
       wx.getSetting({
         success: (res) => {
@@ -137,6 +171,10 @@ Page({
       lastOralWarrantId: '',
       oralEngineStatus: ''
     }
+  },
+
+  scrollChatToBottom() {
+    this.setData({ chatScrollTop: this.data.chatScrollTop + 100000 })
   },
 
   async loadAssigned() {
@@ -337,11 +375,14 @@ Page({
           currentSessionId: res.session_id || null,
           messages: messages.length ? messages : [{ role: 'system', content: question }]
         })
+        this.scrollChatToBottom()
       } else {
         this.setData({ messages: [{ role: 'system', content: question }] })
+        this.scrollChatToBottom()
       }
     } catch (e) {
       this.setData({ messages: [{ role: 'system', content: question }] })
+      this.scrollChatToBottom()
     }
   },
 
@@ -390,7 +431,8 @@ Page({
     try {
       const res = await request('/miniprogram/speaking/evaluate', {
         method: 'POST',
-        data: payload
+        data: payload,
+        timeout: 25000
       })
       if (res.ok && res.result) {
         const normalized = this.normalizeResult(res.result)
@@ -406,11 +448,18 @@ Page({
         })
         messages.push({ role: 'assistant', result: normalized })
         this.setData({ result: normalized, messages })
+        this.scrollChatToBottom()
       } else {
-        wx.showToast({ title: res.error || '评估失败', icon: 'none' })
+        const err = res.error || '评估失败'
+        const msg = err === 'deepseek_request_failed'
+          ? '评估超时，请稍后重试'
+          : err === 'deepseek_http_error'
+          ? '评估服务繁忙，请稍后重试'
+          : err
+        wx.showToast({ title: msg, icon: 'none' })
       }
     } catch (e) {
-      wx.showToast({ title: '评估失败', icon: 'none' })
+      wx.showToast({ title: '网络异常，请重试', icon: 'none' })
     }
     this.setData({ loadingEval: false })
   },
@@ -627,16 +676,10 @@ Page({
     }
   },
 
-  toggleRecord() {
-    if (this.data.isRecording) {
-      this.stopRecord()
-    } else {
-      this.startRecord()
-    }
-  },
-
   startRecord() {
-    if (this.data.isRecording) return
+    if (this.data.isRecording || this.data.recordBusy || this.data.uploadingAudio || this.data.transcribingAudio) {
+      return
+    }
     wx.getSetting({
       success: (res) => {
         if (res.authSetting && res.authSetting['scope.record']) {
@@ -663,17 +706,47 @@ Page({
   },
 
   beginRecord() {
-    this.setData({ recordStatus: '准备录音...', result: null })
-    const format = this.data.recordFormats[this.data.recordFormatIndex] || 'aac'
-    this.recorderManager.start({
-      duration: 120000,
-      format
+    this.setData({
+      recordStatus: '准备录音...',
+      result: null,
+      recordBusy: true,
+      discardNextRecording: false
     })
+    const format = this.data.recordFormats[this.data.recordFormatIndex] || 'aac'
+    try {
+      this.recorderManager.start({
+        duration: 120000,
+        format
+      })
+    } catch (e) {
+      this.setData({ recordBusy: false, recordStatus: '启动录音失败，请重试' })
+      wx.showToast({ title: '启动录音失败', icon: 'none' })
+    }
   },
 
   stopRecord() {
-    if (!this.data.isRecording) return
-    this.recorderManager.stop()
+    if (!this.data.isRecording || this.data.recordBusy) return
+    this.setData({ recordBusy: true, recordStatus: '停止录音中...' })
+    try {
+      this.recorderManager.stop()
+    } catch (e) {
+      this.setData({ recordBusy: false, isRecording: false, recordStatus: '停止录音失败，请重试' })
+      wx.showToast({ title: '停止录音失败', icon: 'none' })
+    }
+  },
+
+  retryRecord() {
+    if (this.data.isRecording) {
+      this.setData({ discardNextRecording: true })
+      this.stopRecord()
+    }
+    this.setData({
+      answerText: '',
+      result: null,
+      recordBusy: false,
+      recordStatus: '已清空，可重新录音',
+      ...this.resetAnswerArtifacts()
+    })
   },
 
   async handleAudioFile(tempFilePath) {
@@ -733,7 +806,8 @@ Page({
           const err = oralRes && oralRes.error ? oralRes.error : '未启用SDK'
           this.setData({
             lastOralEvaluation: null,
-            oralEngineStatus: `发音增强未完成：${err}`
+            oralEngineStatus: `发音增强未完成：${err}（已回退标准评估）`,
+            inputMode: 'standard'
           })
         }
       }
@@ -741,7 +815,7 @@ Page({
       if (!this.data.questionText) {
         await this.nextQuestion()
       }
-      await this.submitEval(true)
+      this.setData({ recordStatus: '转写完成，可点击发送评估' })
     } catch (e) {
       wx.showToast({ title: '转写失败', icon: 'none' })
       this.setData({ recordStatus: '转写失败，请重试' })

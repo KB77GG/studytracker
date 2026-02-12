@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import time
 from typing import Any
 
 import requests
@@ -392,9 +393,18 @@ def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
         return {"ok": False, "error": "missing_deepseek_key"}, 500
 
     base_url = (config.get("DEEPSEEK_API_BASE") or "https://api.deepseek.com").rstrip("/")
-    chat_url = config.get("DEEPSEEK_CHAT_URL") or f"{base_url}/v1/chat/completions"
+    chat_url = (config.get("DEEPSEEK_CHAT_URL") or "").strip()
+    chat_urls: list[str] = []
+    if chat_url:
+        chat_urls.append(chat_url)
+        if chat_url.endswith("/v1/chat/completions"):
+            chat_urls.append(chat_url.replace("/v1/chat/completions", "/chat/completions"))
+    else:
+        chat_urls.append(f"{base_url}/v1/chat/completions")
+        chat_urls.append(f"{base_url}/chat/completions")
     model = config.get("DEEPSEEK_MODEL") or "deepseek-chat"
-    timeout = float(config.get("DEEPSEEK_TIMEOUT") or 30)
+    timeout = float(config.get("DEEPSEEK_TIMEOUT") or 12)
+    retries = int(config.get("DEEPSEEK_RETRIES") or 0)
 
     messages = _build_prompt(data)
     payload = {
@@ -404,28 +414,62 @@ def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
         "max_tokens": 1400,
     }
 
-    try:
-        resp = requests.post(
-            chat_url,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-            },
-            json=payload,
-            timeout=timeout,
-        )
-    except requests.RequestException as exc:
-        return {"ok": False, "error": "deepseek_request_failed", "details": str(exc)}, 502
+    first_url = chat_urls[0]
+    attempt_plan = [first_url] * max(1, retries + 1)
+    attempt_plan.extend(chat_urls[1:])
+    last_error: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = None
+    final_url = first_url
 
-    if resp.status_code >= 400:
-        return {
-            "ok": False,
-            "error": "deepseek_http_error",
-            "status": resp.status_code,
-            "details": resp.text,
-        }, 502
+    for idx, url in enumerate(attempt_plan):
+        final_url = url
+        try:
+            resp = requests.post(
+                url,
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json=payload,
+                timeout=timeout,
+            )
+        except requests.RequestException as exc:
+            last_error = {"error": "deepseek_request_failed", "details": str(exc), "endpoint": url}
+            if idx < len(attempt_plan) - 1:
+                time.sleep(0.35)
+                continue
+            return {"ok": False, **last_error}, 502
 
-    raw = resp.json()
+        if resp.status_code >= 400:
+            status_error = {
+                "error": "deepseek_http_error",
+                "status": resp.status_code,
+                "details": resp.text[:600],
+                "endpoint": url,
+            }
+            if resp.status_code in {408, 429, 500, 502, 503, 504} and idx < len(attempt_plan) - 1:
+                last_error = status_error
+                time.sleep(0.35)
+                continue
+            return {"ok": False, **status_error}, 502
+
+        try:
+            raw = resp.json()
+        except ValueError:
+            last_error = {
+                "error": "deepseek_invalid_json",
+                "details": resp.text[:600],
+                "endpoint": url,
+            }
+            if idx < len(attempt_plan) - 1:
+                time.sleep(0.35)
+                continue
+            return {"ok": False, **last_error}, 502
+        break
+
+    if raw is None:
+        return {"ok": False, **(last_error or {"error": "deepseek_request_failed"})}, 502
+
     content = (
         raw.get("choices", [{}])[0]
         .get("message", {})
@@ -439,6 +483,7 @@ def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
         "raw": content if not ok else None,
         "usage": raw.get("usage"),
         "model": raw.get("model", model),
+        "endpoint": final_url,
     }, 200
 
 

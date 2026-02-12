@@ -3,6 +3,7 @@
   background: #f6f7f9;
   min-height: 100vh;
   box-sizing: border-box;
+  padding-bottom: 460rpx;
 }
 
 .hero {
@@ -150,10 +151,17 @@
   padding-bottom: 12rpx;
 }
 
+.chat-scroll {
+  height: 56vh;
+  min-height: 220rpx;
+  max-height: 980rpx;
+}
+
 .chat-list {
   display: flex;
   flex-direction: column;
   gap: 16rpx;
+  padding-right: 4rpx;
 }
 
 .chat-row {
@@ -262,52 +270,115 @@
   color: #1e5f59;
 }
 
-.answer {
-  width: 100%;
-  min-height: 220rpx;
-  background: #f8f9fa;
-  border-radius: 16rpx;
-  padding: 16rpx;
-  box-sizing: border-box;
-  font-size: 24rpx;
-  color: #202828;
-  margin-bottom: 16rpx;
-}
-
-.record-row {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-  margin-bottom: 16rpx;
-  flex-wrap: wrap;
-}
-
 .btn-record {
-  background: #eef7f6;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 64rpx;
+  line-height: 64rpx;
+  border-radius: 999rpx;
+  padding: 0;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.btn-record-start {
+  background: #eaf6f4;
   color: #1f6f68;
   border: 1rpx solid #cfe8e4;
-  border-radius: 16rpx;
-  padding: 12rpx 18rpx;
-  font-size: 24rpx;
 }
 
-.btn-record.active {
+.btn-record-stop {
   background: #1f6f68;
   color: #fff;
   border-color: #1f6f68;
 }
 
+.btn-record-retry {
+  background: #f3f5f6;
+  color: #5f6f6f;
+  border: 1rpx solid #dfe4e7;
+}
+
 .record-tip {
   font-size: 22rpx;
   color: #6c7a7a;
+  line-height: 1.5;
 }
 
-.btn-primary {
+.composer-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16rpx 20rpx calc(16rpx + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(246, 247, 249, 0) 0%, rgba(246, 247, 249, 0.96) 30%, rgba(246, 247, 249, 1) 100%);
+  z-index: 30;
+}
+
+.composer-card {
+  background: #fff;
+  border-radius: 24rpx;
+  border: 1rpx solid #e5eceb;
+  box-shadow: 0 8rpx 28rpx rgba(26, 49, 47, 0.12);
+  padding: 18rpx;
+}
+
+.composer-input {
+  width: 100%;
+  max-height: 220rpx;
+  min-height: 92rpx;
+  background: #f6f8f8;
+  border-radius: 16rpx;
+  padding: 14rpx 16rpx;
+  box-sizing: border-box;
+  font-size: 24rpx;
+  color: #1f2d2c;
+}
+
+.composer-record-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-top: 12rpx;
+}
+
+.composer-footer {
+  margin-top: 12rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.composer-footer .record-tip {
+  flex: 1;
+  min-height: 32rpx;
+}
+
+.btn-send-icon {
+  width: 76rpx;
+  min-width: 76rpx;
+  height: 76rpx;
+  line-height: 76rpx;
+  border-radius: 50%;
+  padding: 0;
   background: #1f6f68;
   color: #fff;
-  border-radius: 16rpx;
-  padding: 14rpx;
-  font-size: 26rpx;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-arrow {
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 1;
+  transform: translateY(-2rpx);
+}
+
+.btn-send-icon[disabled] {
+  background: #d8dede;
+  color: #8b9595;
 }
 
 .logic-block {

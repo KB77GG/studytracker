@@ -23,6 +23,7 @@ const request = (url, options = {}) => {
             method: options.method || 'GET',
             data: options.data || {},
             header: header,
+            timeout: options.timeout || 60000,
             success: (res) => {
                 if (res.statusCode >= 200 && res.statusCode < 300) {
                     resolve(res.data)
