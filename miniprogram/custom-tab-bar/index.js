@@ -16,6 +16,8 @@ Component({
             let path = ''
             if (type === 'task') {
                 path = `<circle cx="16" cy="16" r="12" fill="none" stroke="${c}" stroke-width="2.4"/><path d="M11.5 16.5l3.5 3.5 6.5-7.5" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`
+            } else if (type === 'hammer') {
+                path = `<path d="M10 13.5l4.8-4.8 2.4 2.4-4.8 4.8z" fill="none" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/><path d="M17.5 11l4.8 4.8-1.9 1.9-4.8-4.8z" fill="none" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/><path d="M9.7 22.3l4.9-4.9" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>`
             } else if (type === 'note') {
                 path = `<rect x="9.5" y="9" width="13" height="14" rx="2.5" fill="none" stroke="${c}" stroke-width="2.4"/><path d="M16 9v14" stroke="${c}" stroke-width="2.4"/><path d="M12 13h4" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/><path d="M12 17h4" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>`
             } else if (type === 'user') {
@@ -40,10 +42,10 @@ Component({
                 selectedIconPath: buildIcon('user', brand)
             },
             {
-                pagePath: "/pages/student/notebook/index",
-                text: "错词本",
-                iconPath: buildIcon('note', gray),
-                selectedIconPath: buildIcon('note', brand)
+                pagePath: "/pages/student/hammer/index",
+                text: "Hammer",
+                iconPath: buildIcon('hammer', gray),
+                selectedIconPath: buildIcon('hammer', brand)
             }
         ]
 
