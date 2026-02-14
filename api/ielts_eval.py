@@ -393,17 +393,9 @@ def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
         return {"ok": False, "error": "missing_deepseek_key"}, 500
 
     base_url = (config.get("DEEPSEEK_API_BASE") or "https://api.deepseek.com").rstrip("/")
-    chat_url = (config.get("DEEPSEEK_CHAT_URL") or "").strip()
-    chat_urls: list[str] = []
-    if chat_url:
-        chat_urls.append(chat_url)
-        if chat_url.endswith("/v1/chat/completions"):
-            chat_urls.append(chat_url.replace("/v1/chat/completions", "/chat/completions"))
-    else:
-        chat_urls.append(f"{base_url}/v1/chat/completions")
-        chat_urls.append(f"{base_url}/chat/completions")
+    chat_url = (config.get("DEEPSEEK_CHAT_URL") or "").strip() or f"{base_url}/v1/chat/completions"
     model = config.get("DEEPSEEK_MODEL") or "deepseek-chat"
-    timeout = float(config.get("DEEPSEEK_TIMEOUT") or 12)
+    timeout = float(config.get("DEEPSEEK_TIMEOUT") or 35)
     retries = int(config.get("DEEPSEEK_RETRIES") or 0)
 
     messages = _build_prompt(data)
@@ -411,15 +403,13 @@ def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
         "model": model,
         "messages": messages,
         "temperature": 0.2,
-        "max_tokens": 1400,
+        "max_tokens": 1200,
     }
 
-    first_url = chat_urls[0]
-    attempt_plan = [first_url] * max(1, retries + 1)
-    attempt_plan.extend(chat_urls[1:])
+    attempt_plan = [chat_url] * max(1, retries + 1)
     last_error: dict[str, Any] | None = None
     raw: dict[str, Any] | None = None
-    final_url = first_url
+    final_url = chat_url
 
     for idx, url in enumerate(attempt_plan):
         final_url = url

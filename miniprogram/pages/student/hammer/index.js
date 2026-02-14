@@ -432,7 +432,7 @@ Page({
       const res = await request('/miniprogram/speaking/evaluate', {
         method: 'POST',
         data: payload,
-        timeout: 25000
+        timeout: 70000
       })
       if (res.ok && res.result) {
         const normalized = this.normalizeResult(res.result)
