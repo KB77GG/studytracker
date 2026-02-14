@@ -111,7 +111,8 @@ def _build_prompt(payload: dict[str, Any]) -> list[dict[str, str]]:
             "Grammar Range & Accuracy must include sentence-level corrections.",
             "Pronunciation should use audio_metrics when available. If audio_metrics are limited, still give a cautious estimate and include limitation_note.",
             "rewrite_high_band must include one coherent paragraph and logic_tips as bullet points.",
-            "logic_tips should be Chinese guidance with key English connectors (for example: When it comes to, If I remember correctly, At first, Then, Finally, As for the reasons why, First of all, What's more)."
+            "logic_tips should be Chinese guidance with key English connectors (for example: When it comes to, If I remember correctly, At first, Then, Finally, As for the reasons why, First of all, What's more).",
+            "Keep output concise to avoid truncation: plus/minus each <=2 items; sentence_corrections <=2; expression_corrections <=2; vocabulary_upgrades <=3; logic_tips <=3; next_step <=3."
         ],
         "part2_frameworks": {
             "person_place": [
@@ -403,7 +404,8 @@ def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
         "model": model,
         "messages": messages,
         "temperature": 0.2,
-        "max_tokens": 1200,
+        "max_tokens": 1500,
+        "response_format": {"type": "json_object"},
     }
 
     attempt_plan = [chat_url] * max(1, retries + 1)
