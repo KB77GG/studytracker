@@ -4,6 +4,11 @@
     <text class="subtitle">口语对练 · 逻辑梳理 · 高分改写</text>
   </view>
 
+  <view class="chat-toolbar">
+    <button class="toolbar-btn" bindtap="openSessionDrawer">会话记录</button>
+    <button class="toolbar-btn primary" bindtap="startNewSession">新对话</button>
+  </view>
+
   <view class="card">
     <view class="section-title">模式设置</view>
     <view class="tabs">
@@ -32,6 +37,11 @@
       </picker>
     </view>
 
+    <view class="session-meta" wx:if="{{activeSessionId}}">
+      <text>当前会话 #{{activeSessionId}}</text>
+      <text class="session-meta-question">{{questionText}}</text>
+    </view>
+
     <button class="btn-outline" bindtap="nextQuestion" loading="{{loadingQuestion}}">换一题</button>
   </view>
 
@@ -50,6 +60,10 @@
               <text class="bubble-label">我</text>
               <text class="bubble-text">{{item.content}}</text>
               <button class="btn-audio-replay" wx:if="{{item.audio_url}}" bindtap="playMessageAudio" data-url="{{item.audio_url}}">回听录音</button>
+              <view class="msg-actions">
+                <text class="msg-action" bindtap="reuseUserMessage" data-content="{{item.content}}">重评</text>
+                <text class="msg-action danger" bindtap="deleteMessageLocal" data-index="{{index}}">删除</text>
+              </view>
             </view>
             <view wx:else>
               <text class="bubble-label">反馈</text>
@@ -169,9 +183,33 @@
               <view class="assistant-block" wx:if="{{!item.result}}">
                 <text class="bubble-text">暂无反馈内容</text>
               </view>
+              <view class="msg-actions">
+                <text class="msg-action" bindtap="favoriteAssistantMessage" data-index="{{index}}">收藏</text>
+                <text class="msg-action danger" bindtap="deleteMessageLocal" data-index="{{index}}">删除</text>
+              </view>
             </view>
           </view>
         </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="session-mask" wx:if="{{sessionDrawerOpen}}" bindtap="closeSessionDrawer"></view>
+  <view class="session-drawer {{sessionDrawerOpen ? 'open' : ''}}">
+    <view class="session-drawer-head">
+      <text class="session-drawer-title">练习记录</text>
+      <text class="session-drawer-close" bindtap="closeSessionDrawer">关闭</text>
+    </view>
+    <button class="session-new-btn" bindtap="startNewSession">+ 新对话</button>
+    <view class="session-empty" wx:if="{{sessionLoading}}">加载中...</view>
+    <view class="session-empty" wx:elif="{{sessionList.length===0}}">暂无记录</view>
+    <scroll-view class="session-list" scroll-y="true" wx:else>
+      <view class="session-item {{item.id===activeSessionId ? 'active' : ''}}" wx:for="{{sessionList}}" wx:key="id" bindtap="openSessionFromList" data-id="{{item.id}}">
+        <view class="session-item-top">
+          <text class="session-part">{{item.part}}</text>
+          <text class="session-time">{{item.createdLabel}}</text>
+        </view>
+        <text class="session-preview">{{item.preview}}</text>
       </view>
     </scroll-view>
   </view>

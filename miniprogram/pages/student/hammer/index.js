@@ -55,19 +55,26 @@ Page({
       { value: 'storyline', label: '叙述故事' }
     ],
     selectedFramework: '',
-    selectedFrameworkLabel: '不指定'
+    selectedFrameworkLabel: '不指定',
+    sessionDrawerOpen: false,
+    sessionLoading: false,
+    sessionLoadingDetail: false,
+    sessionList: [],
+    activeSessionId: null
   },
 
   onLoad() {
     this.setupRecorder()
     this.setupAudioPlayer()
     this.loadAssigned()
+    this.loadSessionList(true)
   },
 
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 2 })
     }
+    this.loadSessionList(true)
   },
 
   onHide() {
@@ -183,6 +190,131 @@ Page({
     this.setData({ chatScrollTop: this.data.chatScrollTop + 100000 })
   },
 
+  formatSessionDate(iso) {
+    if (!iso) return ''
+    const text = String(iso).replace('T', ' ').replace('Z', '')
+    return text.slice(0, 16)
+  },
+
+  normalizeSessionItem(item = {}) {
+    const question = String(item.question || '').trim()
+    return {
+      id: Number(item.id || 0),
+      part: item.part || 'Part1',
+      question,
+      source: item.source || 'random',
+      createdAt: item.created_at || '',
+      createdLabel: this.formatSessionDate(item.created_at),
+      preview: question.length > 42 ? `${question.slice(0, 42)}...` : question
+    }
+  },
+
+  async loadSessionList(silent = false) {
+    if (!silent) this.setData({ sessionLoading: true })
+    try {
+      const res = await request('/miniprogram/speaking/sessions?limit=30')
+      if (res.ok && Array.isArray(res.sessions)) {
+        this.setData({
+          sessionList: res.sessions.map(item => this.normalizeSessionItem(item))
+        })
+      } else if (!silent) {
+        wx.showToast({ title: res.error || '加载会话失败', icon: 'none' })
+      }
+    } catch (e) {
+      if (!silent) wx.showToast({ title: '加载会话失败', icon: 'none' })
+    } finally {
+      if (!silent) this.setData({ sessionLoading: false })
+    }
+  },
+
+  openSessionDrawer() {
+    this.setData({ sessionDrawerOpen: true })
+    this.loadSessionList()
+  },
+
+  closeSessionDrawer() {
+    this.setData({ sessionDrawerOpen: false })
+  },
+
+  async startNewSession() {
+    this.closeSessionDrawer()
+    this.setData({
+      currentSessionId: null,
+      activeSessionId: null,
+      messages: [],
+      answerText: '',
+      result: null,
+      ...this.resetAnswerArtifacts()
+    })
+    await this.nextQuestion()
+    await this.loadSessionList(true)
+  },
+
+  async openSessionFromList(e) {
+    const sessionId = Number(e.currentTarget.dataset.id || 0)
+    if (!sessionId || this.data.sessionLoadingDetail) return
+    const item = (this.data.sessionList || []).find(x => Number(x.id) === sessionId)
+    this.setData({ sessionLoadingDetail: true })
+    try {
+      const res = await request(`/miniprogram/speaking/session/${sessionId}`)
+      if (!res.ok || !res.session) {
+        wx.showToast({ title: res.error || '加载记录失败', icon: 'none' })
+        return
+      }
+      const session = res.session || {}
+      const rawMessages = Array.isArray(res.messages) ? res.messages : []
+      const messages = rawMessages.map((msg) => {
+        const role = msg.role || 'assistant'
+        if (role === 'assistant') {
+          const rawResult = msg.result && typeof msg.result === 'object' ? msg.result : null
+          return {
+            role: 'assistant',
+            result: rawResult ? this.normalizeResult(rawResult) : null
+          }
+        }
+        if (role === 'user') {
+          return {
+            role: 'user',
+            content: msg.content || '',
+            audio_url: msg.audio_url || '',
+            meta: msg.meta || {}
+          }
+        }
+        return {
+          role: 'system',
+          content: msg.content || session.question || this.data.questionText || ''
+        }
+      })
+
+      this.setData({
+        currentSessionId: session.id,
+        activeSessionId: session.id,
+        currentPart: session.part || this.data.currentPart,
+        questionText: session.question || this.data.questionText,
+        questionType: session.question_type || this.data.questionType,
+        questionMeta: `历史记录 · ${(item && item.createdLabel) || this.formatSessionDate(session.created_at || '') || '会话'}`,
+        sourceMode: session.source || this.data.sourceMode,
+        selectedFramework: session.part2_topic || '',
+        selectedFrameworkLabel: this.getFrameworkLabel(session.part2_topic || ''),
+        messages: messages.length ? messages : [{ role: 'system', content: session.question || '' }],
+        answerText: '',
+        result: null,
+        ...this.resetAnswerArtifacts()
+      })
+      this.closeSessionDrawer()
+      this.scrollChatToBottom()
+    } catch (e) {
+      wx.showToast({ title: '加载记录失败', icon: 'none' })
+    } finally {
+      this.setData({ sessionLoadingDetail: false })
+    }
+  },
+
+  getFrameworkLabel(value) {
+    const found = (this.data.part2Options || []).find(item => item.value === value)
+    return found ? found.label : '不指定'
+  },
+
   async loadAssigned() {
     try {
       const res = await request('/miniprogram/speaking/assigned')
@@ -227,6 +359,7 @@ Page({
       result: null,
       messages: [],
       currentSessionId: null,
+      activeSessionId: null,
       answerText: '',
       ...this.resetAnswerArtifacts()
     })
@@ -240,6 +373,7 @@ Page({
       sourceMode: mode,
       messages: [],
       currentSessionId: null,
+      activeSessionId: null,
       answerText: '',
       ...this.resetAnswerArtifacts()
     })
@@ -299,6 +433,7 @@ Page({
       result: null,
       messages: [],
       currentSessionId: null,
+      activeSessionId: null,
       answerText: '',
       ...this.resetAnswerArtifacts()
     })
@@ -379,9 +514,11 @@ Page({
         const messages = Array.isArray(res.messages) ? res.messages : []
         this.setData({
           currentSessionId: res.session_id || null,
+          activeSessionId: res.session_id || null,
           messages: messages.length ? messages : [{ role: 'system', content: question }]
         })
         this.scrollChatToBottom()
+        this.loadSessionList(true)
       } else {
         this.setData({ messages: [{ role: 'system', content: question }] })
         this.scrollChatToBottom()
@@ -397,6 +534,38 @@ Page({
       answerText: e.detail.value,
       ...this.resetAnswerArtifacts()
     })
+  },
+
+  reuseUserMessage(e) {
+    const text = (e.currentTarget.dataset.content || '').trim()
+    if (!text) return
+    this.setData({ answerText: text })
+    wx.showToast({ title: '已填入输入框', icon: 'none' })
+  },
+
+  deleteMessageLocal(e) {
+    const index = Number(e.currentTarget.dataset.index)
+    const list = this.data.messages || []
+    if (Number.isNaN(index) || index < 0 || index >= list.length) return
+    if ((list[index] || {}).role === 'system') return
+    const messages = list.slice(0, index).concat(list.slice(index + 1))
+    this.setData({ messages })
+  },
+
+  favoriteAssistantMessage(e) {
+    const index = Number(e.currentTarget.dataset.index)
+    const list = this.data.messages || []
+    const msg = list[index]
+    if (!msg || msg.role !== 'assistant' || !msg.result) return
+    const favorites = wx.getStorageSync('hammer_feedback_favorites') || []
+    favorites.unshift({
+      createdAt: Date.now(),
+      question: this.data.questionText || '',
+      part: this.data.currentPart,
+      result: msg.result
+    })
+    wx.setStorageSync('hammer_feedback_favorites', favorites.slice(0, 80))
+    wx.showToast({ title: '已收藏', icon: 'success' })
   },
 
   async submitEval(e) {
@@ -455,6 +624,7 @@ Page({
         messages.push({ role: 'assistant', result: normalized })
         this.setData({ result: normalized, messages })
         this.scrollChatToBottom()
+        this.loadSessionList(true)
       } else {
         const err = res.error || '评估失败'
         const msg = err === 'deepseek_request_failed'
