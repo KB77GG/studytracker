@@ -24,15 +24,42 @@
   </view>
 
   <view class="form">
-    <text class="form-label">反馈内容</text>
+    <text class="form-label">作业完成情况</text>
     <textarea
-      class="textarea"
-      placeholder="填写本节课表现、作业建议等"
-      maxlength="400"
-      value="{{feedbackText}}"
-      bindinput="handleInput"
+      class="textarea section-textarea"
+      placeholder="填写作业完成度、准确率、存在的问题"
+      maxlength="200"
+      value="{{feedbackForm.homeworkStatus}}"
+      data-field="homeworkStatus"
+      bindinput="handleSectionInput"
     ></textarea>
-    <view class="counter">{{feedbackText.length}}/400</view>
+    <view class="counter">{{feedbackForm.homeworkStatus.length}}/200</view>
+  </view>
+
+  <view class="form">
+    <text class="form-label">课堂表现及问题</text>
+    <textarea
+      class="textarea section-textarea"
+      placeholder="填写课堂专注度、互动表现、关键问题"
+      maxlength="240"
+      value="{{feedbackForm.classPerformance}}"
+      data-field="classPerformance"
+      bindinput="handleSectionInput"
+    ></textarea>
+    <view class="counter">{{feedbackForm.classPerformance.length}}/240</view>
+  </view>
+
+  <view class="form">
+    <text class="form-label">建议及作业</text>
+    <textarea
+      class="textarea section-textarea"
+      placeholder="填写课后建议与下次课前作业安排"
+      maxlength="200"
+      value="{{feedbackForm.suggestionHomework}}"
+      data-field="suggestionHomework"
+      bindinput="handleSectionInput"
+    ></textarea>
+    <view class="counter">{{feedbackForm.suggestionHomework.length}}/200</view>
   </view>
 
   <view class="form">

@@ -6,6 +6,57 @@ const decodeParam = (value) => {
     return decodeURIComponent(value)
 }
 
+const SECTION_FIELDS = [
+    { key: 'homeworkStatus', label: '作业完成情况' },
+    { key: 'classPerformance', label: '课堂表现及问题' },
+    { key: 'suggestionHomework', label: '建议及作业' }
+]
+
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+const extractSection = (content, label, nextLabels) => {
+    if (!content) return ''
+    const escapedLabel = escapeRegExp(label)
+    const escapedNext = nextLabels.map(escapeRegExp).join('|')
+    const pattern = escapedNext
+        ? `${escapedLabel}[：:][ \\t]*([\\s\\S]*?)(?=\\n\\s*(?:${escapedNext})[：:]|$)`
+        : `${escapedLabel}[：:][ \\t]*([\\s\\S]*)$`
+    const match = content.match(new RegExp(pattern))
+    return match && match[1] ? match[1].trim() : ''
+}
+
+const parseFeedbackSections = (text) => {
+    const normalized = (text || '').replace(/\r\n/g, '\n').trim()
+    if (!normalized) {
+        return {
+            homeworkStatus: '',
+            classPerformance: '',
+            suggestionHomework: ''
+        }
+    }
+
+    const hasStructuredTitle = SECTION_FIELDS.some((item) => (
+        normalized.includes(`${item.label}：`) || normalized.includes(`${item.label}:`)
+    ))
+    if (!hasStructuredTitle) {
+        return {
+            homeworkStatus: '',
+            classPerformance: normalized,
+            suggestionHomework: ''
+        }
+    }
+
+    return {
+        homeworkStatus: extractSection(normalized, SECTION_FIELDS[0].label, [SECTION_FIELDS[1].label, SECTION_FIELDS[2].label]),
+        classPerformance: extractSection(normalized, SECTION_FIELDS[1].label, [SECTION_FIELDS[2].label]),
+        suggestionHomework: extractSection(normalized, SECTION_FIELDS[2].label, [])
+    }
+}
+
+const buildFeedbackText = (feedbackForm) => SECTION_FIELDS
+    .map((item) => `${item.label}：${(feedbackForm[item.key] || '').trim()}`)
+    .join('\n\n')
+
 Page({
     data: {
         schedule: {
@@ -19,7 +70,11 @@ Page({
             teacher_name: '',
             schedule_date: ''
         },
-        feedbackText: '',
+        feedbackForm: {
+            homeworkStatus: '',
+            classPerformance: '',
+            suggestionHomework: ''
+        },
         feedbackImage: '',
         imagePreviewUrl: '',
         saving: false,
@@ -43,14 +98,17 @@ Page({
             schedule.schedule_date = schedule.start_time.split(' ')[0]
         }
         const feedbackText = decodeParam(options.feedback_text)
+        const feedbackForm = parseFeedbackSections(feedbackText)
         const feedbackImage = decodeParam(options.feedback_image)
         const baseUrl = app.globalData.baseUrl || ''
         const imagePreviewUrl = this.buildImageUrl(feedbackImage, baseUrl)
-        this.setData({ schedule, feedbackText, feedbackImage, imagePreviewUrl, baseUrl })
+        this.setData({ schedule, feedbackForm, feedbackImage, imagePreviewUrl, baseUrl })
     },
 
-    handleInput(e) {
-        this.setData({ feedbackText: e.detail.value })
+    handleSectionInput(e) {
+        const field = e.currentTarget.dataset.field
+        if (!field) return
+        this.setData({ [`feedbackForm.${field}`]: e.detail.value })
     },
 
     buildImageUrl(path, baseUrl) {
@@ -128,11 +186,8 @@ Page({
     },
 
     async submitFeedback() {
-        const feedbackText = (this.data.feedbackText || '').trim()
-        if (!feedbackText) {
-            wx.showToast({ title: '请输入反馈内容', icon: 'none' })
-            return
-        }
+        const feedbackForm = this.data.feedbackForm || {}
+        const feedbackText = buildFeedbackText(feedbackForm)
 
         this.setData({ saving: true })
         wx.showLoading({ title: '提交中...' })
