@@ -152,11 +152,6 @@ Page({
             url: '/pages/student/notebook/index'
         })
     },
-    goHammer() {
-        wx.navigateTo({
-            url: '/pages/student/hammer/index'
-        })
-    },
 
     loadNotebookCount() {
         try {

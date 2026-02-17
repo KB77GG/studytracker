@@ -203,7 +203,7 @@
     <button class="session-new-btn" bindtap="startNewSession">+ 新对话</button>
     <view class="session-empty" wx:if="{{sessionLoading}}">加载中...</view>
     <view class="session-empty" wx:elif="{{sessionList.length===0}}">暂无记录</view>
-    <scroll-view class="session-list" scroll-y="true" wx:else>
+    <scroll-view class="session-list" scroll-y="true" enhanced="true" show-scrollbar="true" wx:else>
       <view class="session-item {{item.id===activeSessionId ? 'active' : ''}}" wx:for="{{sessionList}}" wx:key="id" bindtap="openSessionFromList" data-id="{{item.id}}">
         <view class="session-item-top">
           <text class="session-part">{{item.part}}</text>
@@ -216,14 +216,19 @@
 
   <view class="composer-wrap">
     <view class="composer-card">
-      <textarea
-        class="composer-input"
-        placeholder="输入你的回答..."
-        value="{{answerText}}"
-        bindinput="handleAnswerInput"
-        maxlength="-1"
-        auto-height
-      />
+      <view class="composer-input-row">
+        <textarea
+          class="composer-input"
+          placeholder="输入你的回答..."
+          value="{{answerText}}"
+          bindinput="handleAnswerInput"
+          maxlength="-1"
+          auto-height
+        />
+        <button class="btn-send-icon" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText}}">
+          <text wx:if="{{!loadingEval}}" class="send-arrow">↑</text>
+        </button>
+      </view>
 
       <view class="composer-record-row">
         <button class="btn-record btn-record-start" bindtap="startRecord" disabled="{{isRecording || recordBusy || uploadingAudio || transcribingAudio}}" loading="{{recordBusy && !isRecording}}">
@@ -237,12 +242,7 @@
         </button>
       </view>
 
-      <view class="composer-footer">
-        <text class="record-tip">{{recordStatus}}</text>
-        <button class="btn-send-icon" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText}}">
-          <text wx:if="{{!loadingEval}}" class="send-arrow">↑</text>
-        </button>
-      </view>
+      <text class="record-tip" wx:if="{{recordStatus}}">{{recordStatus}}</text>
     </view>
   </view>
 </view>

@@ -193,9 +193,9 @@
 }
 
 .chat-scroll {
-  height: 56vh;
-  min-height: 220rpx;
-  max-height: 980rpx;
+  height: 34vh;
+  min-height: 200rpx;
+  max-height: 620rpx;
 }
 
 .chat-list {
@@ -229,6 +229,8 @@
 .bubble.system {
   background: #f2f6f5;
   border-color: #dfe8e6;
+  max-width: 100%;
+  padding: 12rpx 14rpx;
 }
 
 .bubble.user {
@@ -252,6 +254,16 @@
   font-size: 24rpx;
   line-height: 1.6;
   color: #1f2d2c;
+}
+
+.bubble.system .bubble-label {
+  margin-bottom: 4rpx;
+  font-size: 20rpx;
+}
+
+.bubble.system .bubble-text {
+  font-size: 22rpx;
+  line-height: 1.5;
 }
 
 .btn-audio-replay {
@@ -329,11 +341,11 @@
 .btn-record {
   flex: 1 1 0;
   min-width: 0;
-  height: 64rpx;
-  line-height: 64rpx;
+  height: 58rpx;
+  line-height: 58rpx;
   border-radius: 999rpx;
   padding: 0;
-  font-size: 22rpx;
+  font-size: 21rpx;
   font-weight: 600;
 }
 
@@ -359,14 +371,15 @@
   font-size: 22rpx;
   color: #6c7a7a;
   line-height: 1.5;
+  margin-top: 10rpx;
 }
 
 .composer-wrap {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
-  padding: 16rpx 20rpx calc(16rpx + env(safe-area-inset-bottom));
+  bottom: calc(48px + env(safe-area-inset-bottom));
+  padding: 10rpx 20rpx 10rpx;
   background: linear-gradient(180deg, rgba(246, 247, 249, 0) 0%, rgba(246, 247, 249, 0.96) 30%, rgba(246, 247, 249, 1) 100%);
   z-index: 30;
 }
@@ -376,16 +389,22 @@
   border-radius: 24rpx;
   border: 1rpx solid #e5eceb;
   box-shadow: 0 8rpx 28rpx rgba(26, 49, 47, 0.12);
-  padding: 18rpx;
+  padding: 12rpx;
+}
+
+.composer-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10rpx;
 }
 
 .composer-input {
-  width: 100%;
-  max-height: 220rpx;
-  min-height: 92rpx;
+  flex: 1;
+  max-height: 150rpx;
+  min-height: 64rpx;
   background: #f6f8f8;
-  border-radius: 16rpx;
-  padding: 14rpx 16rpx;
+  border-radius: 20rpx;
+  padding: 12rpx 16rpx;
   box-sizing: border-box;
   font-size: 24rpx;
   color: #1f2d2c;
@@ -395,26 +414,14 @@
   display: flex;
   align-items: center;
   gap: 10rpx;
-  margin-top: 12rpx;
-}
-
-.composer-footer {
-  margin-top: 12rpx;
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-}
-
-.composer-footer .record-tip {
-  flex: 1;
-  min-height: 32rpx;
+  margin-top: 10rpx;
 }
 
 .btn-send-icon {
-  width: 76rpx;
-  min-width: 76rpx;
-  height: 76rpx;
-  line-height: 76rpx;
+  width: 68rpx;
+  min-width: 68rpx;
+  height: 68rpx;
+  line-height: 68rpx;
   border-radius: 50%;
   padding: 0;
   background: #1f6f68;
@@ -426,7 +433,7 @@
 }
 
 .send-arrow {
-  font-size: 34rpx;
+  font-size: 30rpx;
   font-weight: 700;
   line-height: 1;
   transform: translateY(-2rpx);
@@ -451,7 +458,7 @@
   position: fixed;
   left: 0;
   top: 0;
-  bottom: 0;
+  bottom: calc(48px + env(safe-area-inset-bottom));
   width: 74%;
   max-width: 560rpx;
   background: #ffffff;
@@ -463,6 +470,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .session-drawer.open {
@@ -507,6 +515,7 @@
 
 .session-list {
   flex: 1;
+  min-height: 0;
 }
 
 .session-item {
