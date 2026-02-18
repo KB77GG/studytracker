@@ -3,7 +3,7 @@
   background: #f6f7f9;
   min-height: 100vh;
   box-sizing: border-box;
-  padding-bottom: 500rpx;
+  padding-bottom: 380rpx;
 }
 
 .hero {
@@ -193,9 +193,9 @@
 }
 
 .chat-scroll {
-  height: 34vh;
+  height: auto;
   min-height: 200rpx;
-  max-height: 620rpx;
+  max-height: 56vh;
 }
 
 .chat-list {
@@ -338,40 +338,11 @@
   color: #1e5f59;
 }
 
-.btn-record {
-  flex: 1 1 0;
-  min-width: 0;
-  height: 58rpx;
-  line-height: 58rpx;
-  border-radius: 999rpx;
-  padding: 0;
-  font-size: 21rpx;
-  font-weight: 600;
-}
-
-.btn-record-start {
-  background: #eaf6f4;
-  color: #1f6f68;
-  border: 1rpx solid #cfe8e4;
-}
-
-.btn-record-stop {
-  background: #1f6f68;
-  color: #fff;
-  border-color: #1f6f68;
-}
-
-.btn-record-retry {
-  background: #f3f5f6;
-  color: #5f6f6f;
-  border: 1rpx solid #dfe4e7;
-}
-
 .record-tip {
-  font-size: 22rpx;
+  font-size: 20rpx;
   color: #6c7a7a;
-  line-height: 1.5;
-  margin-top: 10rpx;
+  line-height: 1.4;
+  margin-top: 8rpx;
 }
 
 .composer-wrap {
@@ -386,22 +357,22 @@
 
 .composer-card {
   background: #fff;
-  border-radius: 24rpx;
+  border-radius: 26rpx;
   border: 1rpx solid #e5eceb;
   box-shadow: 0 8rpx 28rpx rgba(26, 49, 47, 0.12);
-  padding: 12rpx;
+  padding: 14rpx;
 }
 
 .composer-input-row {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 10rpx;
 }
 
 .composer-input {
   flex: 1;
-  max-height: 150rpx;
-  min-height: 64rpx;
+  max-height: 160rpx;
+  min-height: 70rpx;
   background: #f6f8f8;
   border-radius: 20rpx;
   padding: 12rpx 16rpx;
@@ -410,18 +381,19 @@
   color: #1f2d2c;
 }
 
-.composer-record-row {
+.composer-action-row {
   display: flex;
   align-items: center;
-  gap: 10rpx;
+  justify-content: space-between;
+  gap: 12rpx;
   margin-top: 10rpx;
 }
 
 .btn-send-icon {
-  width: 68rpx;
-  min-width: 68rpx;
-  height: 68rpx;
-  line-height: 68rpx;
+  width: 70rpx;
+  min-width: 70rpx;
+  height: 70rpx;
+  line-height: 70rpx;
   border-radius: 50%;
   padding: 0;
   background: #1f6f68;
@@ -440,8 +412,106 @@
 }
 
 .btn-send-icon[disabled] {
-  background: #d8dede;
-  color: #8b9595;
+  background: #cfd9d8;
+  color: #eef2f2;
+}
+
+.btn-oral-toggle {
+  height: 52rpx;
+  line-height: 52rpx;
+  border-radius: 999rpx;
+  padding: 0 18rpx;
+  font-size: 21rpx;
+  color: #566565;
+  background: #f1f4f4;
+  border: 1rpx solid #e2e8e7;
+}
+
+.btn-oral-toggle.active {
+  color: #1f6f68;
+  background: #e8f5f3;
+  border-color: #c7e6e2;
+}
+
+.composer-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.btn-mic {
+  width: 60rpx;
+  min-width: 60rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 24rpx;
+  color: #425756;
+  background: #eff3f3;
+  border: 1rpx solid #dbe3e2;
+}
+
+.recording-strip {
+  margin-top: 10rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.recording-btn {
+  width: 58rpx;
+  min-width: 58rpx;
+  height: 58rpx;
+  line-height: 58rpx;
+  border-radius: 50%;
+  padding: 0;
+  text-align: center;
+  font-size: 30rpx;
+  background: #f0f3f3;
+  color: #3d5150;
+  border: 1rpx solid #d7e1df;
+}
+
+.recording-btn.confirm {
+  background: #1f6f68;
+  color: #fff;
+  border-color: #1f6f68;
+}
+
+.recording-wave-wrap {
+  flex: 1;
+  min-width: 0;
+  height: 58rpx;
+  border-radius: 999rpx;
+  background: #f6f8f8;
+  border: 1rpx solid #e6edec;
+  padding: 0 14rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.recording-wave {
+  flex: 1;
+  height: 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  overflow: hidden;
+}
+
+.wave-bar {
+  width: 3rpx;
+  min-height: 8rpx;
+  border-radius: 999rpx;
+  background: #1f2d2c;
+}
+
+.recording-time {
+  font-size: 22rpx;
+  color: #1f2d2c;
+  font-weight: 600;
 }
 
 .session-mask {

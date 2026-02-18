@@ -23,13 +23,6 @@
       <text class="source-tip" wx:if="{{sourceMode==='assigned' && assignedCount===0}}">暂无已布置题目，自动使用随机题</text>
     </view>
 
-    <view class="source-row">
-      <view class="pill {{inputMode==='standard' ? 'active' : ''}}" data-mode="standard" bindtap="switchInputMode">标准评估</view>
-      <view class="pill {{inputMode==='oral_sdk' ? 'active' : ''}}" data-mode="oral_sdk" bindtap="switchInputMode">发音增强(beta)</view>
-      <text class="source-tip" wx:if="{{inputMode==='oral_sdk' && oralWarrantLoading}}">正在获取口语凭证...</text>
-      <text class="source-tip" wx:if="{{inputMode==='oral_sdk' && oralEngineStatus}}">{{oralEngineStatus}}</text>
-    </view>
-
     <view class="framework" wx:if="{{currentPart !== 'Part1'}}">
       <text class="label">框架提示（可选）</text>
       <picker mode="selector" range="{{part2Options}}" range-key="label" bindchange="handleFrameworkChange">
@@ -225,24 +218,39 @@
           maxlength="-1"
           auto-height
         />
-        <button class="btn-send-icon" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText}}">
+        <button class="btn-send-icon" wx:if="{{voiceUiMode !== 'recording'}}" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText || isRecording || recordBusy || uploadingAudio || transcribingAudio}}">
           <text wx:if="{{!loadingEval}}" class="send-arrow">↑</text>
         </button>
       </view>
 
-      <view class="composer-record-row">
-        <button class="btn-record btn-record-start" bindtap="startRecord" disabled="{{isRecording || recordBusy || uploadingAudio || transcribingAudio}}" loading="{{recordBusy && !isRecording}}">
-          开始录音
+      <view class="composer-action-row" wx:if="{{voiceUiMode !== 'recording'}}">
+        <button class="btn-oral-toggle {{inputMode==='oral_sdk' ? 'active' : ''}}" bindtap="toggleComposerOralMode" loading="{{oralWarrantLoading && inputMode==='oral_sdk'}}" disabled="{{isRecording || uploadingAudio || transcribingAudio}}">
+          发音增强{{inputMode==='oral_sdk' ? '开' : '关'}}
         </button>
-        <button class="btn-record btn-record-stop" bindtap="stopRecord" disabled="{{!isRecording || recordBusy}}" loading="{{recordBusy && isRecording}}">
-          停止录音
+        <view class="composer-actions-right">
+          <button class="btn-mic" bindtap="onMicTap" disabled="{{isRecording || recordBusy || uploadingAudio || transcribingAudio}}">
+            <text>麦</text>
+          </button>
+        </view>
+      </view>
+
+      <view class="recording-strip" wx:if="{{voiceUiMode === 'recording'}}">
+        <button class="recording-btn cancel" bindtap="handleRecordCancel" disabled="{{recordBusy}}">
+          <text>✕</text>
         </button>
-        <button class="btn-record btn-record-retry" bindtap="retryRecord" disabled="{{isRecording || uploadingAudio || transcribingAudio}}">
-          重新练习
+        <view class="recording-wave-wrap">
+          <view class="recording-wave">
+            <view class="wave-bar" wx:for="{{waveBars}}" wx:key="index" style="height: {{item}}rpx;"></view>
+          </view>
+          <text class="recording-time">{{recordTimerLabel}}</text>
+        </view>
+        <button class="recording-btn confirm" bindtap="handleRecordConfirm" disabled="{{recordBusy}}">
+          <text>✓</text>
         </button>
       </view>
 
       <text class="record-tip" wx:if="{{recordStatus}}">{{recordStatus}}</text>
+      <text class="record-tip" wx:if="{{inputMode==='oral_sdk' && oralEngineStatus}}">{{oralEngineStatus}}</text>
     </view>
   </view>
 </view>

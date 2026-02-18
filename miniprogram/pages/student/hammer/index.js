@@ -1,6 +1,14 @@
 const { request } = require('../../../utils/request.js')
 const oralSdkBridge = require('../../../utils/aliyun_oral_sdk.js')
 
+const WAVE_BAR_COUNT = 64
+
+function buildWaveBars(active = false) {
+  const min = active ? 10 : 6
+  const max = active ? 30 : 10
+  return Array.from({ length: WAVE_BAR_COUNT }, () => Math.floor(Math.random() * (max - min + 1)) + min)
+}
+
 Page({
   data: {
     currentPart: 'Part1',
@@ -60,7 +68,11 @@ Page({
     sessionLoading: false,
     sessionLoadingDetail: false,
     sessionList: [],
-    activeSessionId: null
+    activeSessionId: null,
+    voiceUiMode: 'idle',
+    recordDurationSec: 0,
+    recordTimerLabel: '00:00',
+    waveBars: buildWaveBars(false)
   },
 
   onLoad() {
@@ -86,6 +98,7 @@ Page({
   },
 
   cleanupRecordAndAudio() {
+    this.stopRecordingTicker()
     try {
       if (this.data.isRecording && this.recorderManager) {
         this.setData({ discardNextRecording: true, recordBusy: true, recordStatus: '已停止录音' })
@@ -112,14 +125,25 @@ Page({
   setupRecorder() {
     this.recorderManager = wx.getRecorderManager()
     this.recorderManager.onStart(() => {
-      this.setData({ isRecording: true, recordBusy: false, recordStatus: '录音中...' })
+      this.startRecordingTicker()
+      this.setData({
+        isRecording: true,
+        recordBusy: false,
+        voiceUiMode: 'recording',
+        recordStatus: '录音中...'
+      })
     })
     this.recorderManager.onStop((res) => {
       const tempFilePath = res && res.tempFilePath
       const shouldDiscard = !!this.data.discardNextRecording
+      this.stopRecordingTicker()
       this.setData({
         isRecording: false,
         recordBusy: false,
+        voiceUiMode: 'idle',
+        recordDurationSec: 0,
+        recordTimerLabel: '00:00',
+        waveBars: buildWaveBars(false),
         discardNextRecording: false,
         recordStatus: shouldDiscard ? '已取消本次录音，可重新练习' : '录音完成，处理中...'
       })
@@ -133,7 +157,16 @@ Page({
     })
     this.recorderManager.onError((err) => {
       const errMsg = err && err.errMsg ? String(err.errMsg) : ''
-      this.setData({ isRecording: false, recordBusy: false, discardNextRecording: false })
+      this.stopRecordingTicker()
+      this.setData({
+        isRecording: false,
+        recordBusy: false,
+        discardNextRecording: false,
+        voiceUiMode: 'idle',
+        recordDurationSec: 0,
+        recordTimerLabel: '00:00',
+        waveBars: buildWaveBars(false)
+      })
       if (errMsg.includes('is recording or paused')) {
         this.setData({ recordStatus: '检测到录音未结束，请先点“停止录音”' })
         return
@@ -390,6 +423,23 @@ Page({
     if (mode === 'oral_sdk') {
       await this.ensureOralWarrant()
     }
+  },
+
+  async toggleComposerOralMode() {
+    const mode = this.data.inputMode === 'oral_sdk' ? 'standard' : 'oral_sdk'
+    if (mode === 'oral_sdk') {
+      this.setData({
+        inputMode: mode,
+        ...this.resetAnswerArtifacts()
+      })
+      await this.ensureOralWarrant()
+      return
+    }
+    this.setData({
+      inputMode: mode,
+      ...this.resetAnswerArtifacts(),
+      oralEngineStatus: ''
+    })
   },
 
   async ensureOralWarrant(force = false) {
@@ -881,6 +931,10 @@ Page({
     })
   },
 
+  onMicTap() {
+    this.startRecord()
+  },
+
   beginRecord() {
     this.setData({
       recordStatus: '准备录音...',
@@ -900,6 +954,20 @@ Page({
     }
   },
 
+  handleRecordCancel() {
+    if (!this.data.isRecording || this.data.recordBusy) return
+    this.setData({
+      discardNextRecording: true,
+      recordStatus: '已取消录音'
+    })
+    this.stopRecord()
+  },
+
+  handleRecordConfirm() {
+    if (!this.data.isRecording || this.data.recordBusy) return
+    this.stopRecord()
+  },
+
   stopRecord() {
     if (!this.data.isRecording || this.data.recordBusy) return
     this.setData({ recordBusy: true, recordStatus: '停止录音中...' })
@@ -916,13 +984,51 @@ Page({
       this.setData({ discardNextRecording: true })
       this.stopRecord()
     }
+    this.stopRecordingTicker()
     this.setData({
       answerText: '',
       result: null,
+      voiceUiMode: 'idle',
+      recordDurationSec: 0,
+      recordTimerLabel: '00:00',
+      waveBars: buildWaveBars(false),
       recordBusy: false,
       recordStatus: '已清空，可重新录音',
       ...this.resetAnswerArtifacts()
     })
+  },
+
+  formatRecordTimer(totalSec = 0) {
+    const mm = String(Math.floor(totalSec / 60)).padStart(2, '0')
+    const ss = String(totalSec % 60).padStart(2, '0')
+    return `${mm}:${ss}`
+  },
+
+  startRecordingTicker() {
+    this.stopRecordingTicker()
+    this.waveTimer = setInterval(() => {
+      this.setData({
+        waveBars: buildWaveBars(true)
+      })
+    }, 180)
+    this.durationTimer = setInterval(() => {
+      const nextSec = this.data.recordDurationSec + 1
+      this.setData({
+        recordDurationSec: nextSec,
+        recordTimerLabel: this.formatRecordTimer(nextSec)
+      })
+    }, 1000)
+  },
+
+  stopRecordingTicker() {
+    if (this.waveTimer) {
+      clearInterval(this.waveTimer)
+      this.waveTimer = null
+    }
+    if (this.durationTimer) {
+      clearInterval(this.durationTimer)
+      this.durationTimer = null
+    }
   },
 
   async handleAudioFile(tempFilePath) {
