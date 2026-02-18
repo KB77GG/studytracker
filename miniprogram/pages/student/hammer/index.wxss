@@ -450,6 +450,49 @@
   color: #425756;
   background: #eff3f3;
   border: 1rpx solid #dbe3e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mic-icon {
+  width: 28rpx;
+  height: 28rpx;
+  position: relative;
+}
+
+.mic-head {
+  width: 16rpx;
+  height: 18rpx;
+  border: 3rpx solid #445958;
+  border-radius: 10rpx;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+}
+
+.mic-stem {
+  width: 3rpx;
+  height: 7rpx;
+  background: #445958;
+  border-radius: 999rpx;
+  position: absolute;
+  left: 50%;
+  top: 17rpx;
+  transform: translateX(-50%);
+}
+
+.mic-base {
+  width: 14rpx;
+  height: 3rpx;
+  background: #445958;
+  border-radius: 999rpx;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
 }
 
 .recording-strip {

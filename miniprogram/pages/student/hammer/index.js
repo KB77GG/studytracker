@@ -99,6 +99,7 @@ Page({
 
   cleanupRecordAndAudio() {
     this.stopRecordingTicker()
+    this.clearRecordStopGuard()
     try {
       if (this.data.isRecording && this.recorderManager) {
         this.setData({ discardNextRecording: true, recordBusy: true, recordStatus: '已停止录音' })
@@ -136,6 +137,7 @@ Page({
     this.recorderManager.onStop((res) => {
       const tempFilePath = res && res.tempFilePath
       const shouldDiscard = !!this.data.discardNextRecording
+      this.clearRecordStopGuard()
       this.stopRecordingTicker()
       this.setData({
         isRecording: false,
@@ -157,6 +159,7 @@ Page({
     })
     this.recorderManager.onError((err) => {
       const errMsg = err && err.errMsg ? String(err.errMsg) : ''
+      this.clearRecordStopGuard()
       this.stopRecordingTicker()
       this.setData({
         isRecording: false,
@@ -903,6 +906,9 @@ Page({
   },
 
   startRecord() {
+    if (this.data.recordBusy && !this.data.isRecording && !this.data.uploadingAudio && !this.data.transcribingAudio) {
+      this.setData({ recordBusy: false })
+    }
     if (this.data.isRecording || this.data.recordBusy || this.data.uploadingAudio || this.data.transcribingAudio) {
       return
     }
@@ -971,6 +977,7 @@ Page({
   stopRecord() {
     if (!this.data.isRecording || this.data.recordBusy) return
     this.setData({ recordBusy: true, recordStatus: '停止录音中...' })
+    this.startRecordStopGuard()
     try {
       this.recorderManager.stop()
     } catch (e) {
@@ -1028,6 +1035,31 @@ Page({
     if (this.durationTimer) {
       clearInterval(this.durationTimer)
       this.durationTimer = null
+    }
+  },
+
+  startRecordStopGuard() {
+    this.clearRecordStopGuard()
+    this.recordStopGuard = setTimeout(() => {
+      if (this.data.isRecording || this.data.recordBusy) {
+        this.stopRecordingTicker()
+        this.setData({
+          isRecording: false,
+          recordBusy: false,
+          voiceUiMode: 'idle',
+          recordDurationSec: 0,
+          recordTimerLabel: '00:00',
+          waveBars: buildWaveBars(false),
+          recordStatus: '录音已结束，可再次点击麦克风录音'
+        })
+      }
+    }, 5000)
+  },
+
+  clearRecordStopGuard() {
+    if (this.recordStopGuard) {
+      clearTimeout(this.recordStopGuard)
+      this.recordStopGuard = null
     }
   },
 

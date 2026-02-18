@@ -228,8 +228,12 @@
           发音增强{{inputMode==='oral_sdk' ? '开' : '关'}}
         </button>
         <view class="composer-actions-right">
-          <button class="btn-mic" bindtap="onMicTap" disabled="{{isRecording || recordBusy || uploadingAudio || transcribingAudio}}">
-            <text>麦</text>
+          <button class="btn-mic" bindtap="onMicTap" disabled="{{isRecording || uploadingAudio || transcribingAudio}}">
+            <view class="mic-icon" aria-label="mic">
+              <view class="mic-head"></view>
+              <view class="mic-stem"></view>
+              <view class="mic-base"></view>
+            </view>
           </button>
         </view>
       </view>
