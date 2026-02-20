@@ -127,22 +127,6 @@
   color: #7a8b8b;
 }
 
-.session-meta {
-  margin-bottom: 14rpx;
-  padding: 10rpx 14rpx;
-  border-radius: 14rpx;
-  background: #f4f8f7;
-  display: flex;
-  flex-direction: column;
-  gap: 4rpx;
-  color: #57706e;
-  font-size: 21rpx;
-}
-
-.session-meta-question {
-  color: #2c3f3d;
-}
-
 .framework {
   display: flex;
   align-items: center;
@@ -189,13 +173,25 @@
 }
 
 .chat-card {
-  padding-bottom: 12rpx;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+.chat-title {
+  margin: 0 0 12rpx;
+  padding: 0 6rpx;
 }
 
 .chat-scroll {
   height: auto;
   min-height: 200rpx;
-  max-height: 56vh;
+  max-height: 60vh;
+  padding: 18rpx;
+  border-radius: 20rpx;
+  background: #fff;
+  box-shadow: 0 8rpx 22rpx rgba(0,0,0,0.05);
 }
 
 .chat-list {
@@ -365,8 +361,7 @@
 
 .composer-input-row {
   display: flex;
-  align-items: center;
-  gap: 10rpx;
+  align-items: stretch;
 }
 
 .composer-input {
@@ -390,10 +385,10 @@
 }
 
 .btn-send-icon {
-  width: 70rpx;
-  min-width: 70rpx;
-  height: 70rpx;
-  line-height: 70rpx;
+  width: 60rpx;
+  min-width: 60rpx;
+  height: 60rpx;
+  line-height: 60rpx;
   border-radius: 50%;
   padding: 0;
   background: #1f6f68;
@@ -405,7 +400,7 @@
 }
 
 .send-arrow {
-  font-size: 30rpx;
+  font-size: 28rpx;
   font-weight: 700;
   line-height: 1;
   transform: translateY(-2rpx);

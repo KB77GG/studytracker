@@ -30,16 +30,11 @@
       </picker>
     </view>
 
-    <view class="session-meta" wx:if="{{activeSessionId}}">
-      <text>当前会话 #{{activeSessionId}}</text>
-      <text class="session-meta-question">{{questionText}}</text>
-    </view>
-
     <button class="btn-outline" bindtap="nextQuestion" loading="{{loadingQuestion}}">换一题</button>
   </view>
 
   <view class="card chat-card">
-    <view class="section-title">对话记录</view>
+    <view class="section-title chat-title">对话</view>
     <scroll-view class="chat-scroll" scroll-y="true" scroll-top="{{chatScrollTop}}" scroll-with-animation="true">
       <view class="empty" wx:if="{{messages.length === 0}}">暂无记录，点击“换一题”开始</view>
       <view class="chat-list" wx:else>
@@ -218,9 +213,6 @@
           maxlength="-1"
           auto-height
         />
-        <button class="btn-send-icon" wx:if="{{voiceUiMode !== 'recording'}}" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText || isRecording || recordBusy || uploadingAudio || transcribingAudio}}">
-          <text wx:if="{{!loadingEval}}" class="send-arrow">↑</text>
-        </button>
       </view>
 
       <view class="composer-action-row" wx:if="{{voiceUiMode !== 'recording'}}">
@@ -234,6 +226,9 @@
               <view class="mic-stem"></view>
               <view class="mic-base"></view>
             </view>
+          </button>
+          <button class="btn-send-icon" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText || isRecording || recordBusy || uploadingAudio || transcribingAudio}}">
+            <text wx:if="{{!loadingEval}}" class="send-arrow">↑</text>
           </button>
         </view>
       </view>
