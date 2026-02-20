@@ -217,7 +217,7 @@
 
       <view class="composer-action-row" wx:if="{{voiceUiMode !== 'recording'}}">
         <button class="btn-oral-toggle {{inputMode==='oral_sdk' ? 'active' : ''}}" bindtap="toggleComposerOralMode" loading="{{oralWarrantLoading && inputMode==='oral_sdk'}}" disabled="{{isRecording || uploadingAudio || transcribingAudio}}">
-          发音增强{{inputMode==='oral_sdk' ? '开' : '关'}}
+          ✦ 发音增强{{inputMode==='oral_sdk' ? '开' : '关'}}
         </button>
         <view class="composer-actions-right">
           <button class="btn-mic" bindtap="onMicTap" disabled="{{isRecording || uploadingAudio || transcribingAudio}}">
@@ -228,7 +228,10 @@
             </view>
           </button>
           <button class="btn-send-icon" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText || isRecording || recordBusy || uploadingAudio || transcribingAudio}}">
-            <text wx:if="{{!loadingEval}}" class="send-arrow">↑</text>
+            <view wx:if="{{!loadingEval}}" class="send-glyph">
+              <view class="send-glyph-line"></view>
+              <view class="send-glyph-head"></view>
+            </view>
           </button>
         </view>
       </view>
