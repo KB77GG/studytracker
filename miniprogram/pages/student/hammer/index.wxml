@@ -9,28 +9,34 @@
     <button class="toolbar-btn primary" bindtap="startNewSession">新对话</button>
   </view>
 
-  <view class="card">
-    <view class="section-title">模式设置</view>
-    <view class="tabs">
-      <view class="tab {{currentPart==='Part1' ? 'active' : ''}}" data-part="Part1" bindtap="switchPart">Part 1</view>
-      <view class="tab {{currentPart==='Part2' ? 'active' : ''}}" data-part="Part2" bindtap="switchPart">Part 2</view>
-      <view class="tab {{currentPart==='Part3' ? 'active' : ''}}" data-part="Part3" bindtap="switchPart">Part 3</view>
+  <view class="card config-card">
+    <view class="config-head" bindtap="toggleConfigPanel">
+      <text class="section-title config-title">模式设置</text>
+      <text class="config-arrow {{configCollapsed ? 'collapsed' : ''}}">⌃</text>
     </view>
 
-    <view class="source-row">
-      <view class="pill {{sourceMode==='assigned' ? 'active' : ''}}" data-mode="assigned" bindtap="switchSource">已布置</view>
-      <view class="pill {{sourceMode==='random' ? 'active' : ''}}" data-mode="random" bindtap="switchSource">随机</view>
-      <text class="source-tip" wx:if="{{sourceMode==='assigned' && assignedCount===0}}">暂无已布置题目，自动使用随机题</text>
-    </view>
+    <view wx:if="{{!configCollapsed}}">
+      <view class="tabs">
+        <view class="tab {{currentPart==='Part1' ? 'active' : ''}}" data-part="Part1" bindtap="switchPart">Part 1</view>
+        <view class="tab {{currentPart==='Part2' ? 'active' : ''}}" data-part="Part2" bindtap="switchPart">Part 2</view>
+        <view class="tab {{currentPart==='Part3' ? 'active' : ''}}" data-part="Part3" bindtap="switchPart">Part 3</view>
+      </view>
 
-    <view class="framework" wx:if="{{currentPart !== 'Part1'}}">
-      <text class="label">框架提示（可选）</text>
-      <picker mode="selector" range="{{part2Options}}" range-key="label" bindchange="handleFrameworkChange">
-        <view class="picker">{{selectedFrameworkLabel}}</view>
-      </picker>
-    </view>
+      <view class="source-row">
+        <view class="pill {{sourceMode==='assigned' ? 'active' : ''}}" data-mode="assigned" bindtap="switchSource">已布置</view>
+        <view class="pill {{sourceMode==='random' ? 'active' : ''}}" data-mode="random" bindtap="switchSource">随机</view>
+        <text class="source-tip" wx:if="{{sourceMode==='assigned' && assignedCount===0}}">暂无已布置题目，自动使用随机题</text>
+      </view>
 
-    <button class="btn-outline" bindtap="nextQuestion" loading="{{loadingQuestion}}">换一题</button>
+      <view class="framework" wx:if="{{currentPart !== 'Part1'}}">
+        <text class="label">框架提示（可选）</text>
+        <picker mode="selector" range="{{part2Options}}" range-key="label" bindchange="handleFrameworkChange">
+          <view class="picker">{{selectedFrameworkLabel}}</view>
+        </picker>
+      </view>
+
+      <button class="btn-outline" bindtap="nextQuestion" loading="{{loadingQuestion}}">换一题</button>
+    </view>
   </view>
 
   <view class="card chat-card">

@@ -64,6 +64,7 @@ Page({
     ],
     selectedFramework: '',
     selectedFrameworkLabel: '不指定',
+    configCollapsed: false,
     sessionDrawerOpen: false,
     sessionLoading: false,
     sessionLoadingDetail: false,
@@ -431,6 +432,10 @@ Page({
       ...this.resetAnswerArtifacts()
     })
     this.nextQuestion()
+  },
+
+  toggleConfigPanel() {
+    this.setData({ configCollapsed: !this.data.configCollapsed })
   },
 
   switchSource(e) {

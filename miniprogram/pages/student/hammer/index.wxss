@@ -35,6 +35,32 @@
   margin-bottom: 20rpx;
 }
 
+.config-card {
+  padding-bottom: 20rpx;
+}
+
+.config-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.config-title {
+  margin-bottom: 0;
+}
+
+.config-arrow {
+  font-size: 24rpx;
+  color: #5e7170;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease;
+}
+
+.config-arrow.collapsed {
+  transform: rotate(180deg);
+}
+
 .chat-toolbar {
   display: flex;
   gap: 14rpx;
