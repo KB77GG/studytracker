@@ -69,6 +69,7 @@ Page({
     sessionLoadingDetail: false,
     sessionList: [],
     activeSessionId: null,
+    linkedPart23: null,
     voiceUiMode: 'idle',
     recordDurationSec: 0,
     recordTimerLabel: '00:00',
@@ -277,6 +278,7 @@ Page({
     this.setData({
       currentSessionId: null,
       activeSessionId: null,
+      linkedPart23: null,
       messages: [],
       answerText: '',
       result: null,
@@ -335,6 +337,14 @@ Page({
         messages: messages.length ? messages : [{ role: 'system', content: session.question || '' }],
         answerText: '',
         result: null,
+        linkedPart23: (session.question_type === 'speaking_part2_3')
+          ? {
+              questionText: session.question || '',
+              questionType: session.question_type || '',
+              questionMeta: `历史记录 · ${(item && item.createdLabel) || this.formatSessionDate(session.created_at || '') || '会话'}`,
+              sourceMode: session.source || this.data.sourceMode
+            }
+          : null,
         ...this.resetAnswerArtifacts()
       })
       this.closeSessionDrawer()
@@ -390,12 +400,33 @@ Page({
   switchPart(e) {
     const part = e.currentTarget.dataset.part
     if (!part || part === this.data.currentPart) return
+    const isPart23Switch =
+      (this.data.currentPart === 'Part2' || this.data.currentPart === 'Part3') &&
+      (part === 'Part2' || part === 'Part3')
+    const linked = this.data.linkedPart23
+    if (isPart23Switch && linked && linked.questionText) {
+      this.setData({
+        currentPart: part,
+        result: null,
+        messages: [],
+        currentSessionId: null,
+        activeSessionId: null,
+        answerText: '',
+        questionText: linked.questionText,
+        questionMeta: linked.questionMeta || this.data.questionMeta,
+        questionType: linked.questionType || 'speaking_part2_3',
+        ...this.resetAnswerArtifacts()
+      })
+      this.createSession(linked.sourceMode || this.data.sourceMode)
+      return
+    }
     this.setData({
       currentPart: part,
       result: null,
       messages: [],
       currentSessionId: null,
       activeSessionId: null,
+      linkedPart23: null,
       answerText: '',
       ...this.resetAnswerArtifacts()
     })
@@ -410,6 +441,7 @@ Page({
       messages: [],
       currentSessionId: null,
       activeSessionId: null,
+      linkedPart23: null,
       answerText: '',
       ...this.resetAnswerArtifacts()
     })
@@ -487,6 +519,7 @@ Page({
       messages: [],
       currentSessionId: null,
       activeSessionId: null,
+      linkedPart23: null,
       answerText: '',
       ...this.resetAnswerArtifacts()
     })
@@ -502,6 +535,14 @@ Page({
           questionText: item.content,
           questionMeta: `已布置 · ${item.materialTitle || '题库'}`,
           questionType: item.type,
+          linkedPart23: (item.type === 'speaking_part2_3')
+            ? {
+                questionText: item.content,
+                questionType: item.type,
+                questionMeta: `已布置 · ${item.materialTitle || '题库'}`,
+                sourceMode: 'assigned'
+              }
+            : null,
           assignedIndex: index + 1,
           loadingQuestion: false
         })
@@ -533,6 +574,14 @@ Page({
           questionText: res.question.content,
           questionMeta: '随机题',
           questionType: res.question.type,
+          linkedPart23: (res.question.type === 'speaking_part2_3')
+            ? {
+                questionText: res.question.content,
+                questionType: res.question.type,
+                questionMeta: '随机题',
+                sourceMode: 'random'
+              }
+            : null,
           loadingQuestion: false
         })
         await this.createSession('random')
