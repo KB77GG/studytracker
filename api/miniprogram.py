@@ -108,6 +108,23 @@ def _collect_numeric_scores(payload):
     return values
 
 
+def _split_part23_sections(content: str) -> tuple[str, str]:
+    text = (content or "").replace("\r\n", "\n").strip()
+    if not text:
+        return "", ""
+    lines = text.split("\n")
+    part3_index = -1
+    for idx, line in enumerate(lines):
+        if line.strip().lower().startswith("part 3"):
+            part3_index = idx
+            break
+    if part3_index < 0:
+        return text, ""
+    part2 = "\n".join(lines[:part3_index]).strip()
+    part3 = "\n".join(lines[part3_index + 1:]).strip()
+    return part2, part3
+
+
 def _merge_aliyun_oral_result(result: dict, oral: dict) -> dict:
     if not isinstance(result, dict):
         return result
@@ -279,14 +296,24 @@ def get_speaking_random():
     else:
         types = ["speaking_part2_3"]
 
-    question = (
+    base_query = (
         Question.query.join(MaterialBank)
         .filter(MaterialBank.is_deleted.is_(False))
         .filter(MaterialBank.is_active.is_(True))
         .filter(Question.question_type.in_(types))
-        .order_by(func.random())
-        .first()
     )
+
+    question = None
+    for _ in range(8):
+        candidate = base_query.order_by(func.random()).first()
+        if not candidate:
+            break
+        if part == "Part2" and candidate.question_type == "speaking_part2_3":
+            part2_text, _ = _split_part23_sections(candidate.content or "")
+            if not part2_text:
+                continue
+        question = candidate
+        break
 
     if not question:
         return jsonify({"ok": False, "error": "no_question_found"}), 404

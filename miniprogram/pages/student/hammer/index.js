@@ -247,6 +247,33 @@ Page({
     }
   },
 
+  splitPart23Question(text) {
+    const raw = String(text || '').replace(/\r\n/g, '\n').trim()
+    if (!raw) return { part2: '', part3: '' }
+    const lines = raw.split('\n')
+    const part3Index = lines.findIndex((line) => /^part\s*3\b/i.test(line.trim()))
+    if (part3Index < 0) {
+      return { part2: raw, part3: '' }
+    }
+    const part2 = lines.slice(0, part3Index).join('\n').trim()
+    const part3 = lines.slice(part3Index + 1).join('\n').trim()
+    return { part2, part3 }
+  },
+
+  getDisplayQuestion(text, part, questionType) {
+    const raw = String(text || '').trim()
+    if (!raw) return ''
+    if (questionType !== 'speaking_part2_3') return raw
+    const sections = this.splitPart23Question(raw)
+    if (part === 'Part2') {
+      return sections.part2 || raw
+    }
+    if (part === 'Part3') {
+      return sections.part3 ? `Part 3\n${sections.part3}` : raw
+    }
+    return raw
+  },
+
   async loadSessionList(silent = false) {
     if (!silent) this.setData({ sessionLoading: true })
     try {
@@ -301,6 +328,9 @@ Page({
         return
       }
       const session = res.session || {}
+      const sessionPart = session.part || this.data.currentPart
+      const sessionQuestionType = session.question_type || this.data.questionType
+      const sessionQuestion = session.question || this.data.questionText || ''
       const rawMessages = Array.isArray(res.messages) ? res.messages : []
       const messages = rawMessages.map((msg) => {
         const role = msg.role || 'assistant'
@@ -321,7 +351,11 @@ Page({
         }
         return {
           role: 'system',
-          content: msg.content || session.question || this.data.questionText || ''
+          content: this.getDisplayQuestion(
+            msg.content || sessionQuestion,
+            sessionPart,
+            sessionQuestionType
+          )
         }
       })
 
@@ -329,8 +363,8 @@ Page({
         currentSessionId: session.id,
         activeSessionId: session.id,
         currentPart: session.part || this.data.currentPart,
-        questionText: session.question || this.data.questionText,
-        questionType: session.question_type || this.data.questionType,
+        questionText: sessionQuestion,
+        questionType: sessionQuestionType,
         questionMeta: `历史记录 · ${(item && item.createdLabel) || this.formatSessionDate(session.created_at || '') || '会话'}`,
         sourceMode: session.source || this.data.sourceMode,
         selectedFramework: session.part2_topic || '',
@@ -566,15 +600,27 @@ Page({
       return list.filter(q => q.type === 'speaking_part1')
     }
     if (part === 'Part2') {
-      return list.filter(q => q.type === 'speaking_part2' || q.type === 'speaking_part2_3')
+      return list.filter((q) => {
+        if (q.type === 'speaking_part2') return true
+        if (q.type !== 'speaking_part2_3') return false
+        const sections = this.splitPart23Question(q.content || '')
+        return !!sections.part2
+      })
     }
     return list.filter(q => q.type === 'speaking_part2_3')
   },
 
-  async loadRandomQuestion(part) {
+  async loadRandomQuestion(part, retry = 0) {
     try {
       const res = await request(`/miniprogram/speaking/random?part=${part}`)
       if (res.ok && res.question) {
+        const isInvalidPart2Card =
+          part === 'Part2' &&
+          res.question.type === 'speaking_part2_3' &&
+          !this.splitPart23Question(res.question.content || '').part2
+        if (isInvalidPart2Card && retry < 5) {
+          return this.loadRandomQuestion(part, retry + 1)
+        }
         this.setData({
           questionText: res.question.content,
           questionMeta: '随机题',
@@ -602,6 +648,11 @@ Page({
   async createSession(source) {
     const question = (this.data.questionText || '').trim()
     if (!question) return
+    const displayQuestion = this.getDisplayQuestion(
+      question,
+      this.data.currentPart,
+      this.data.questionType
+    )
     const payload = {
       part: this.data.currentPart,
       question,
@@ -622,16 +673,30 @@ Page({
         this.setData({
           currentSessionId: res.session_id || null,
           activeSessionId: res.session_id || null,
-          messages: messages.length ? messages : [{ role: 'system', content: question }]
+          messages: messages.length
+            ? messages.map((msg) => {
+                if ((msg.role || '') === 'system') {
+                  return {
+                    role: 'system',
+                    content: this.getDisplayQuestion(
+                      msg.content || question,
+                      this.data.currentPart,
+                      this.data.questionType
+                    )
+                  }
+                }
+                return msg
+              })
+            : [{ role: 'system', content: displayQuestion }]
         })
         this.scrollChatToBottom()
         this.loadSessionList(true)
       } else {
-        this.setData({ messages: [{ role: 'system', content: question }] })
+        this.setData({ messages: [{ role: 'system', content: displayQuestion }] })
         this.scrollChatToBottom()
       }
     } catch (e) {
-      this.setData({ messages: [{ role: 'system', content: question }] })
+      this.setData({ messages: [{ role: 'system', content: this.getDisplayQuestion(question, this.data.currentPart, this.data.questionType) }] })
       this.scrollChatToBottom()
     }
   },

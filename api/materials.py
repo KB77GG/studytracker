@@ -374,11 +374,69 @@ def _parse_speaking_part1(text: str) -> list[str]:
     return questions
 
 
+def _looks_like_part23_title(line: str) -> bool:
+    text = (line or "").strip()
+    if not text:
+        return False
+    lower = text.lower()
+
+    # Not a card title
+    if text.startswith(('*', '•', '-', '·')):
+        return False
+    if re.match(r"^part\s*3\b", lower):
+        return False
+    if re.match(r"^you should say[:：]?$", lower):
+        return False
+    if re.match(r"^describe\b", lower):
+        return False
+    if re.search(r"[?？!！。]$", text):
+        return False
+
+    # Typical title patterns
+    if re.match(r"^\d+[.)、]\s*", text):
+        return True
+    if re.search(r"[（(].+[)）]", text):
+        return True
+    if re.search(r"[\u4e00-\u9fff]", text) and len(text) <= 40:
+        return True
+    if re.match(r"^[A-Z][A-Za-z0-9/&,'\-\s]{2,40}$", text):
+        return True
+    return False
+
+
 def _parse_speaking_part23(text: str) -> list[str]:
-    raw = (text or '').strip()
+    raw = (text or "").replace("\r\n", "\n").strip()
     if not raw:
         return []
-    blocks = re.split(r'\n\s*\n+', raw)
+
+    lines = raw.split("\n")
+    cards: list[str] = []
+    current: list[str] = []
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            if current and current[-1] != "":
+                current.append("")
+            continue
+
+        if _looks_like_part23_title(stripped) and current:
+            block = "\n".join(current).strip()
+            if block:
+                cards.append(block)
+            current = []
+
+        current.append(stripped)
+
+    if current:
+        block = "\n".join(current).strip()
+        if block:
+            cards.append(block)
+
+    if cards:
+        return cards
+
+    blocks = re.split(r"\n\s*\n+", raw)
     return [block.strip() for block in blocks if block.strip()]
 
 @material_bp.route('/parse', methods=['POST'])
