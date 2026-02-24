@@ -44,7 +44,7 @@
             <view class="bullet-dot"></view>
             <text class="topic-bullet-text">{{q}}</text>
           </view>
-          <view class="topic-expand" wx:if="{{topicQuestionsAll.length > topicQuestionsPreview.length}}" bindtap="togglePart3Expand">
+          <view class="topic-expand" wx:if="{{showPart3Expand}}" bindtap="togglePart3Expand">
             <text>{{part3Expanded ? '收起' : '展开全部'}}</text>
             <image class="topic-expand-icon {{part3Expanded ? 'expanded' : ''}}" src="/assets/icons/chevron-down.svg" mode="aspectFit" />
           </view>
@@ -54,14 +54,21 @@
           <text class="topic-title">{{topicTitle}}</text>
           <text class="topic-prompt" wx:if="{{topicPromptLine}}">{{topicPromptLine}}</text>
 
-          <view class="topic-bullets" wx:if="{{(topicExpanded ? topicCueLines : topicCuePreview).length}}">
-            <view class="topic-bullet" wx:for="{{topicExpanded ? topicCueLines : topicCuePreview}}" wx:for-item="line" wx:key="index">
+          <view class="topic-bullets" wx:if="{{topicExpanded}}">
+            <view class="topic-bullet" wx:for="{{topicCueLines}}" wx:for-item="line" wx:key="index">
               <view class="bullet-dot"></view>
               <text class="topic-bullet-text">{{line}}</text>
             </view>
           </view>
 
-          <view class="topic-expand" wx:if="{{topicCueLines.length > topicCuePreview.length}}" bindtap="toggleTopicExpand">
+          <view class="topic-bullets" wx:else>
+            <view class="topic-bullet" wx:for="{{topicCuePreview}}" wx:for-item="line" wx:key="index">
+              <view class="bullet-dot"></view>
+              <text class="topic-bullet-text">{{line}}</text>
+            </view>
+          </view>
+
+          <view class="topic-expand" wx:if="{{showTopicExpand}}" bindtap="toggleTopicExpand">
             <text>{{topicExpanded ? '收起题目' : '展开题目'}}</text>
             <image class="topic-expand-icon {{topicExpanded ? 'expanded' : ''}}" src="/assets/icons/chevron-down.svg" mode="aspectFit" />
           </view>

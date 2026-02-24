@@ -38,11 +38,13 @@ Page({
     topicPromptLine: '',
     topicCueLines: [],
     topicCuePreview: [],
+    showTopicExpand: false,
     topicBodyLines: [],
     topicBodyPreview: [],
     topicExpanded: false,
     topicQuestionsAll: [],
     topicQuestionsPreview: [],
+    showPart3Expand: false,
     part3Expanded: false,
     isNearBottom: true,
     showToBottom: false,
@@ -333,11 +335,13 @@ Page({
         topicPromptLine: '',
         topicCueLines: [],
         topicCuePreview: [],
+        showTopicExpand: false,
         topicBodyLines: [],
         topicBodyPreview: [],
         topicExpanded: false,
         topicQuestionsAll: [],
         topicQuestionsPreview: [],
+        showPart3Expand: false,
         part3Expanded: false
       })
       return
@@ -352,11 +356,13 @@ Page({
         topicPromptLine: '',
         topicCueLines: [],
         topicCuePreview: [],
+        showTopicExpand: false,
         topicBodyLines: [],
         topicBodyPreview: [],
         topicExpanded: false,
         topicQuestionsAll: normalized,
         topicQuestionsPreview: normalized.slice(0, 2),
+        showPart3Expand: normalized.length > 2,
         part3Expanded: false
       })
       return
@@ -392,11 +398,13 @@ Page({
       topicPromptLine: promptLine,
       topicCueLines: cueLines,
       topicCuePreview: cueLines.slice(0, 3),
+      showTopicExpand: cueLines.length > 3,
       topicBodyLines: body,
       topicBodyPreview: body.slice(0, 2),
       topicExpanded: false,
       topicQuestionsAll: [],
       topicQuestionsPreview: [],
+      showPart3Expand: false,
       part3Expanded: false
     })
   },
