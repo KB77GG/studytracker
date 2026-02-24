@@ -20,11 +20,36 @@ Page({
     questionMeta: '',
     questionType: '',
     answerText: '',
+    canSend: false,
     loadingQuestion: false,
     loadingEval: false,
     result: null,
     messages: [],
     chatScrollTop: 0,
+    showMoreMenu: false,
+    showModeSheet: false,
+    showQuickActions: false,
+    showContextMenu: false,
+    contextMenuTargetId: '',
+    contextMenuItems: [],
+    sheetTouchStartY: 0,
+    topicTitle: '',
+    topicSubtitle: '',
+    topicPromptLine: '',
+    topicCueLines: [],
+    topicCuePreview: [],
+    topicBodyLines: [],
+    topicBodyPreview: [],
+    topicExpanded: false,
+    topicQuestionsAll: [],
+    topicQuestionsPreview: [],
+    part3Expanded: false,
+    isNearBottom: true,
+    showToBottom: false,
+    keyboardHeight: 0,
+    scrollAnchorId: 'chat-anchor',
+    composerTransform: 'translateY(0px)',
+    toBottomTransform: 'translateY(0px)',
     currentSessionId: null,
     isRecording: false,
     recordBusy: false,
@@ -64,7 +89,6 @@ Page({
     ],
     selectedFramework: '',
     selectedFrameworkLabel: '不指定',
-    configCollapsed: false,
     sessionDrawerOpen: false,
     sessionLoading: false,
     sessionLoadingDetail: false,
@@ -88,10 +112,22 @@ Page({
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 2 })
     }
+    this.syncKeyboardShift(0)
+    this.measureMessageScrollHeight()
     this.loadSessionList(true)
   },
 
+  onReady() {
+    this.measureMessageScrollHeight()
+  },
+
   onHide() {
+    this.setData({
+      showMoreMenu: false,
+      showModeSheet: false,
+      showQuickActions: false,
+      showContextMenu: false
+    })
     this.cleanupRecordAndAudio()
   },
 
@@ -224,8 +260,184 @@ Page({
     }
   },
 
+  makeMessageId(prefix = 'msg') {
+    return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+  },
+
+  createMessage(role, extra = {}) {
+    return Object.assign(
+      {
+        id: this.makeMessageId(role),
+        role,
+        type: 'text',
+        content: '',
+        status: 'sent',
+        time: Date.now()
+      },
+      extra
+    )
+  },
+
+  appendMessage(msg, forceScroll = false) {
+    const messages = (this.data.messages || []).concat([msg])
+    this.setData({ messages }, () => {
+      this.maybeScrollToBottom(forceScroll)
+    })
+  },
+
+  appendSystemMessage(content) {
+    const text = String(content || '').trim()
+    if (!text) return
+    this.appendMessage(
+      this.createMessage('system', {
+        type: 'tips',
+        content: text
+      })
+    )
+  },
+
+  updateMessageStatus(messageId, status, errorText = '') {
+    const next = (this.data.messages || []).map((item) => {
+      if (item.id !== messageId) return item
+      return Object.assign({}, item, {
+        status,
+        errorText: status === 'failed' ? (errorText || '发送失败') : ''
+      })
+    })
+    this.setData({ messages: next })
+  },
+
+  maybeScrollToBottom(force = false) {
+    if (!force && !this.data.isNearBottom) {
+      this.setData({ showToBottom: true })
+      return
+    }
+    this.scrollChatToBottom()
+  },
+
+  refreshTopicPresentation() {
+    const displayQuestion = this.getDisplayQuestion(
+      this.data.questionText,
+      this.data.currentPart,
+      this.data.questionType
+    )
+    const lines = String(displayQuestion || '')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+
+    if (!lines.length) {
+      this.setData({
+        topicTitle: '',
+        topicSubtitle: '',
+        topicPromptLine: '',
+        topicCueLines: [],
+        topicCuePreview: [],
+        topicBodyLines: [],
+        topicBodyPreview: [],
+        topicExpanded: false,
+        topicQuestionsAll: [],
+        topicQuestionsPreview: [],
+        part3Expanded: false
+      })
+      return
+    }
+
+    if (this.data.currentPart === 'Part3') {
+      const stripped = lines.filter((line) => !/^part\s*3\b/i.test(line))
+      const normalized = stripped.map((line) => line.replace(/^[•*\-\u2022]\s*/, '').trim()).filter(Boolean)
+      this.setData({
+        topicTitle: 'Part 3 深入讨论',
+        topicSubtitle: this.data.questionMeta || '',
+        topicPromptLine: '',
+        topicCueLines: [],
+        topicCuePreview: [],
+        topicBodyLines: [],
+        topicBodyPreview: [],
+        topicExpanded: false,
+        topicQuestionsAll: normalized,
+        topicQuestionsPreview: normalized.slice(0, 2),
+        part3Expanded: false
+      })
+      return
+    }
+
+    const title = lines[0]
+    const body = lines
+      .slice(1)
+      .map((line) => line.replace(/^[•*\-\u2022]\s*/, '').trim())
+      .filter(Boolean)
+
+    let promptLine = ''
+    let cueLines = []
+    if (body.length === 1) {
+      promptLine = body[0]
+    } else if (body.length > 1) {
+      const first = body[0]
+      const lower = first.toLowerCase()
+      const looksLikePrompt =
+        /you should say|you should explain|you should mention|you should include|describe|talk about|please|请|你应/.test(lower) ||
+        /[:：]$/.test(first)
+      if (looksLikePrompt) {
+        promptLine = first
+        cueLines = body.slice(1)
+      } else {
+        cueLines = body
+      }
+    }
+
+    this.setData({
+      topicTitle: title,
+      topicSubtitle: this.data.questionMeta || '',
+      topicPromptLine: promptLine,
+      topicCueLines: cueLines,
+      topicCuePreview: cueLines.slice(0, 3),
+      topicBodyLines: body,
+      topicBodyPreview: body.slice(0, 2),
+      topicExpanded: false,
+      topicQuestionsAll: [],
+      topicQuestionsPreview: [],
+      part3Expanded: false
+    })
+  },
+
+  syncKeyboardShift(height = 0) {
+    const px = Number(height) || 0
+    this.setData({
+      keyboardHeight: px,
+      composerTransform: `translateY(-${px}px)`,
+      toBottomTransform: `translateY(-${px}px)`
+    })
+  },
+
+  closeTransientPanels() {
+    if (!this.data.showMoreMenu && !this.data.showQuickActions && !this.data.showContextMenu) return
+    this.setData({
+      showMoreMenu: false,
+      showQuickActions: false,
+      showContextMenu: false
+    })
+  },
+
+  noop() {},
+
+  measureMessageScrollHeight() {
+    wx.createSelectorQuery()
+      .in(this)
+      .select('.message-scroll')
+      .boundingClientRect((rect) => {
+        if (!rect || !rect.height) return
+        this.messageScrollClientHeight = rect.height
+      })
+      .exec()
+  },
+
   scrollChatToBottom() {
-    this.setData({ chatScrollTop: this.data.chatScrollTop + 100000 })
+    this.setData({
+      chatScrollTop: this.data.chatScrollTop + 100000,
+      isNearBottom: true,
+      showToBottom: false
+    })
   },
 
   formatSessionDate(iso) {
@@ -293,12 +505,72 @@ Page({
   },
 
   openSessionDrawer() {
-    this.setData({ sessionDrawerOpen: true })
+    this.setData({
+      sessionDrawerOpen: true,
+      showMoreMenu: false,
+      showModeSheet: false,
+      showQuickActions: false,
+      showContextMenu: false
+    })
     this.loadSessionList()
   },
 
   closeSessionDrawer() {
     this.setData({ sessionDrawerOpen: false })
+  },
+
+  toggleMoreMenu() {
+    this.setData({
+      showMoreMenu: !this.data.showMoreMenu,
+      showModeSheet: false,
+      showContextMenu: false
+    })
+  },
+
+  openModeSheet() {
+    this.setData({
+      showModeSheet: true,
+      showMoreMenu: false,
+      showQuickActions: false,
+      showContextMenu: false
+    })
+  },
+
+  closeModeSheet() {
+    this.setData({ showModeSheet: false })
+  },
+
+  onSheetTouchStart(e) {
+    const touch = e.changedTouches && e.changedTouches[0]
+    if (!touch) return
+    this.setData({ sheetTouchStartY: touch.clientY })
+  },
+
+  onSheetTouchEnd(e) {
+    const touch = e.changedTouches && e.changedTouches[0]
+    if (!touch) return
+    const delta = touch.clientY - (this.data.sheetTouchStartY || 0)
+    if (delta > 80) this.closeModeSheet()
+  },
+
+  handleMoreAction(e) {
+    const action = e.currentTarget.dataset.action
+    this.setData({ showMoreMenu: false })
+    if (action === 'history') {
+      this.openSessionDrawer()
+      return
+    }
+    if (action === 'new') {
+      this.startNewSession()
+      return
+    }
+    if (action === 'help') {
+      wx.showModal({
+        title: '口语对练使用说明',
+        content: '先选择 Part 和题源，作答后点击发送获得评分反馈。长按消息可复制或删除。',
+        showCancel: false
+      })
+    }
   },
 
   async startNewSession() {
@@ -309,7 +581,12 @@ Page({
       linkedPart23: null,
       messages: [],
       answerText: '',
+      canSend: false,
       result: null,
+      showModeSheet: false,
+      showQuickActions: false,
+      showMoreMenu: false,
+      showContextMenu: false,
       ...this.resetAnswerArtifacts()
     })
     await this.nextQuestion()
@@ -332,32 +609,34 @@ Page({
       const sessionQuestionType = session.question_type || this.data.questionType
       const sessionQuestion = session.question || this.data.questionText || ''
       const rawMessages = Array.isArray(res.messages) ? res.messages : []
+      const displayQuestion = this.getDisplayQuestion(
+        sessionQuestion,
+        sessionPart,
+        sessionQuestionType
+      )
       const messages = rawMessages.map((msg) => {
         const role = msg.role || 'assistant'
         if (role === 'assistant') {
           const rawResult = msg.result && typeof msg.result === 'object' ? msg.result : null
-          return {
-            role: 'assistant',
+          return this.createMessage('assistant', {
             result: rawResult ? this.normalizeResult(rawResult) : null
-          }
+          })
         }
         if (role === 'user') {
-          return {
-            role: 'user',
+          return this.createMessage('user', {
             content: msg.content || '',
             audio_url: msg.audio_url || '',
-            meta: msg.meta || {}
-          }
+            meta: msg.meta || {},
+            status: 'sent'
+          })
         }
-        return {
-          role: 'system',
-          content: this.getDisplayQuestion(
-            msg.content || sessionQuestion,
-            sessionPart,
-            sessionQuestionType
-          )
-        }
-      })
+        const sys = this.getDisplayQuestion(msg.content || '', sessionPart, sessionQuestionType)
+        if (sys && sys.trim() === displayQuestion.trim()) return null
+        return this.createMessage('system', {
+          type: 'tips',
+          content: sys || '已加载历史会话'
+        })
+      }).filter(Boolean)
 
       this.setData({
         currentSessionId: session.id,
@@ -369,9 +648,14 @@ Page({
         sourceMode: session.source || this.data.sourceMode,
         selectedFramework: session.part2_topic || '',
         selectedFrameworkLabel: this.getFrameworkLabel(session.part2_topic || ''),
-        messages: messages.length ? messages : [{ role: 'system', content: session.question || '' }],
+        messages,
         answerText: '',
+        canSend: false,
         result: null,
+        showModeSheet: false,
+        showQuickActions: false,
+        showMoreMenu: false,
+        showContextMenu: false,
         linkedPart23: (session.question_type === 'speaking_part2_3')
           ? {
               questionText: session.question || '',
@@ -381,6 +665,8 @@ Page({
             }
           : null,
         ...this.resetAnswerArtifacts()
+      }, () => {
+        this.refreshTopicPresentation()
       })
       this.closeSessionDrawer()
       this.scrollChatToBottom()
@@ -447,10 +733,16 @@ Page({
         currentSessionId: null,
         activeSessionId: null,
         answerText: '',
+        canSend: false,
         questionText: linked.questionText,
         questionMeta: linked.questionMeta || this.data.questionMeta,
         questionType: linked.questionType || 'speaking_part2_3',
+        showModeSheet: false,
+        part3Expanded: false,
+        topicExpanded: false,
         ...this.resetAnswerArtifacts()
+      }, () => {
+        this.refreshTopicPresentation()
       })
       this.createSession(linked.sourceMode || this.data.sourceMode)
       return
@@ -463,13 +755,13 @@ Page({
       activeSessionId: null,
       linkedPart23: null,
       answerText: '',
+      canSend: false,
+      showModeSheet: false,
+      part3Expanded: false,
+      topicExpanded: false,
       ...this.resetAnswerArtifacts()
     })
     this.nextQuestion()
-  },
-
-  toggleConfigPanel() {
-    this.setData({ configCollapsed: !this.data.configCollapsed })
   },
 
   switchSource(e) {
@@ -482,6 +774,8 @@ Page({
       activeSessionId: null,
       linkedPart23: null,
       answerText: '',
+      canSend: false,
+      showModeSheet: false,
       ...this.resetAnswerArtifacts()
     })
     this.nextQuestion()
@@ -551,6 +845,15 @@ Page({
     })
   },
 
+  handleFrameworkTagTap(e) {
+    const value = e.currentTarget.dataset.value || ''
+    const nextValue = this.data.selectedFramework === value ? '' : value
+    this.setData({
+      selectedFramework: nextValue,
+      selectedFrameworkLabel: this.getFrameworkLabel(nextValue)
+    })
+  },
+
   async nextQuestion() {
     this.setData({
       loadingQuestion: true,
@@ -560,6 +863,13 @@ Page({
       activeSessionId: null,
       linkedPart23: null,
       answerText: '',
+      canSend: false,
+      showModeSheet: false,
+      showMoreMenu: false,
+      showQuickActions: false,
+      showContextMenu: false,
+      part3Expanded: false,
+      topicExpanded: false,
       ...this.resetAnswerArtifacts()
     })
     const part = this.data.currentPart
@@ -584,8 +894,11 @@ Page({
             : null,
           assignedIndex: index + 1,
           loadingQuestion: false
+        }, () => {
+          this.refreshTopicPresentation()
         })
         await this.createSession('assigned')
+        this.appendSystemMessage('已切换新题，可直接作答 ✓')
         return
       }
       this.setData({ sourceMode: 'random' })
@@ -634,8 +947,11 @@ Page({
               }
             : null,
           loadingQuestion: false
+        }, () => {
+          this.refreshTopicPresentation()
         })
         await this.createSession('random')
+        this.appendSystemMessage('已切换新题，可直接作答 ✓')
         return
       }
       wx.showToast({ title: '暂无题目', icon: 'none' })
@@ -669,57 +985,76 @@ Page({
         data: payload
       })
       if (res.ok) {
-        const messages = Array.isArray(res.messages) ? res.messages : []
         this.setData({
           currentSessionId: res.session_id || null,
-          activeSessionId: res.session_id || null,
-          messages: messages.length
-            ? messages.map((msg) => {
-                if ((msg.role || '') === 'system') {
-                  return {
-                    role: 'system',
-                    content: this.getDisplayQuestion(
-                      msg.content || question,
-                      this.data.currentPart,
-                      this.data.questionType
-                    )
-                  }
-                }
-                return msg
-              })
-            : [{ role: 'system', content: displayQuestion }]
+          activeSessionId: res.session_id || null
         })
-        this.scrollChatToBottom()
         this.loadSessionList(true)
-      } else {
-        this.setData({ messages: [{ role: 'system', content: displayQuestion }] })
-        this.scrollChatToBottom()
+      } else if (!this.data.messages.length) {
+        this.setData({
+          messages: [
+            this.createMessage('system', {
+              type: 'tips',
+              content: displayQuestion
+            })
+          ]
+        })
       }
     } catch (e) {
-      this.setData({ messages: [{ role: 'system', content: this.getDisplayQuestion(question, this.data.currentPart, this.data.questionType) }] })
-      this.scrollChatToBottom()
+      if (!this.data.messages.length) {
+        this.setData({
+          messages: [
+            this.createMessage('system', {
+              type: 'tips',
+              content: this.getDisplayQuestion(question, this.data.currentPart, this.data.questionType)
+            })
+          ]
+        })
+      }
     }
   },
 
   handleAnswerInput(e) {
+    const value = e.detail.value || ''
     this.setData({
-      answerText: e.detail.value,
+      answerText: value,
+      canSend: !!String(value).trim(),
       ...this.resetAnswerArtifacts()
     })
+  },
+
+  onComposerFocus(e) {
+    if (e && e.detail && typeof e.detail.height === 'number') {
+      this.syncKeyboardShift(e.detail.height)
+    }
+  },
+
+  onComposerBlur() {
+    this.syncKeyboardShift(0)
+  },
+
+  onComposerKeyboardHeightChange(e) {
+    const height = e && e.detail ? Number(e.detail.height || 0) : 0
+    this.syncKeyboardShift(height)
   },
 
   reuseUserMessage(e) {
     const text = (e.currentTarget.dataset.content || '').trim()
     if (!text) return
-    this.setData({ answerText: text })
+    this.setData({ answerText: text, canSend: true })
     wx.showToast({ title: '已填入输入框', icon: 'none' })
   },
 
   deleteMessageLocal(e) {
-    const index = Number(e.currentTarget.dataset.index)
     const list = this.data.messages || []
+    const msgId = e.currentTarget.dataset.id
+    let index = -1
+    if (msgId) {
+      index = list.findIndex((item) => item.id === msgId)
+    } else {
+      index = Number(e.currentTarget.dataset.index)
+    }
     if (Number.isNaN(index) || index < 0 || index >= list.length) return
-    if ((list[index] || {}).role === 'system') return
     const messages = list.slice(0, index).concat(list.slice(index + 1))
     this.setData({ messages })
   },
@@ -740,9 +1075,210 @@ Page({
     wx.showToast({ title: '已收藏', icon: 'success' })
   },
 
+  toggleQuickActions() {
+    this.setData({
+      showQuickActions: !this.data.showQuickActions,
+      showMoreMenu: false,
+      showContextMenu: false
+    })
+  },
+
+  handleQuickActionTap(e) {
+    const action = e.currentTarget.dataset.action
+    if (!action) return
+    if (action === 'toggle_oral') {
+      this.toggleComposerOralMode()
+      this.setData({ showQuickActions: false })
+      return
+    }
+
+    let snippet = ''
+    if (action === 'framework_person') {
+      snippet = 'When it comes to this person, I would like to say...'
+    } else if (action === 'framework_place') {
+      snippet = 'As for this place, what impressed me most is...'
+    } else if (action === 'high_band') {
+      snippet = 'From my perspective, one compelling reason is that...'
+    } else if (action === 'followup') {
+      snippet = '请基于我的答案继续追问一个问题。'
+    } else if (action === 'proofread') {
+      snippet = '请帮我做句子纠错并给一个更高分版本。'
+    }
+
+    if (snippet) {
+      const joined = this.data.answerText ? `${this.data.answerText}\n${snippet}` : snippet
+      this.setData({ answerText: joined, canSend: !!String(joined).trim() })
+    }
+    this.setData({ showQuickActions: false })
+  },
+
+  togglePart3Expand() {
+    this.setData({ part3Expanded: !this.data.part3Expanded })
+  },
+
+  toggleTopicExpand() {
+    this.setData({ topicExpanded: !this.data.topicExpanded })
+  },
+
+  onMessageScroll(e) {
+    const detail = e.detail || {}
+    const top = Number(detail.scrollTop || 0)
+    const height = Number(detail.scrollHeight || 0)
+    const client = Number(detail.clientHeight || this.messageScrollClientHeight || 0)
+    if (!this.messageScrollClientHeight) this.measureMessageScrollHeight()
+    if (!client || !height) return
+    const nearBottom = height - (top + client) < 120
+    this.setData({
+      isNearBottom: nearBottom,
+      showToBottom: !nearBottom
+    })
+  },
+
+  scrollToBottom() {
+    this.scrollChatToBottom()
+  },
+
+  async handleMessageLongPress(e) {
+    const msgId = e.currentTarget.dataset.id
+    const index = (this.data.messages || []).findIndex((item) => item.id === msgId)
+    if (index < 0) return
+    const message = this.data.messages[index]
+    const items = [
+      { action: 'copy', label: '复制', icon: '/assets/icons/copy.svg' },
+      { action: 'delete', label: '删除', icon: '/assets/icons/trash.svg' }
+    ]
+    if (message.role === 'assistant') {
+      items.push(
+        { action: 'correct', label: '纠错（占位）', icon: '/assets/icons/retry.svg' },
+        { action: 'polish', label: '润色（占位）', icon: '/assets/icons/retry.svg' }
+      )
+    }
+    if (message.role === 'user' && message.status === 'failed') {
+      items.push({ action: 'retry', label: '重试', icon: '/assets/icons/retry.svg' })
+    }
+    this.setData({
+      showContextMenu: true,
+      contextMenuTargetId: msgId,
+      contextMenuItems: items
+    })
+  },
+
+  closeContextMenu() {
+    if (!this.data.showContextMenu) return
+    this.setData({ showContextMenu: false, contextMenuTargetId: '', contextMenuItems: [] })
+  },
+
+  async handleContextMenuAction(e) {
+    const action = e.currentTarget.dataset.action
+    const targetId = this.data.contextMenuTargetId
+    this.closeContextMenu()
+    if (!action || !targetId) return
+    const list = this.data.messages || []
+    const index = list.findIndex((item) => item.id === targetId)
+    if (index < 0) return
+    const message = list[index]
+    if (action === 'copy') {
+      const text = message.content || this.extractAssistantText(message.result)
+      if (!text) return
+      wx.setClipboardData({ data: text })
+      return
+    }
+    if (action === 'delete') {
+      const next = list.slice()
+      next.splice(index, 1)
+      this.setData({ messages: next })
+      return
+    }
+    if (action === 'retry') {
+      await this.retryMessageEval({ currentTarget: { dataset: { id: targetId } } })
+      return
+    }
+    wx.showToast({ title: '功能占位，后续可接入', icon: 'none' })
+  },
+
+  extractAssistantText(result) {
+    if (!result) return ''
+    const lines = []
+    if (result.rewrite_high_band && result.rewrite_high_band.paragraph) {
+      lines.push(result.rewrite_high_band.paragraph)
+    }
+    if (Array.isArray(result.next_step) && result.next_step.length) {
+      lines.push(`建议：${result.next_step.join('；')}`)
+    }
+    return lines.join('\n')
+  },
+
+  buildEvalPayload(transcript, sessionId = null, extra = {}) {
+    const payload = {
+      part: this.data.currentPart,
+      question: this.data.questionText,
+      transcript,
+      session_id: sessionId || this.data.currentSessionId
+    }
+    if (this.data.currentPart !== 'Part1' && this.data.selectedFramework) {
+      payload.part2_topic = this.data.selectedFramework
+    }
+    if (extra.audio_url || this.data.lastAudioUrl) payload.audio_url = extra.audio_url || this.data.lastAudioUrl
+    if (extra.audio_metrics || this.data.lastAudioMetrics) payload.audio_metrics = extra.audio_metrics || this.data.lastAudioMetrics
+    if (extra.asr_model || this.data.lastAsrModel) payload.asr_model = extra.asr_model || this.data.lastAsrModel
+    if (extra.asr_task_id || this.data.lastAsrTaskId) payload.asr_task_id = extra.asr_task_id || this.data.lastAsrTaskId
+    if (extra.transcription_url || this.data.lastTranscriptionUrl) payload.transcription_url = extra.transcription_url || this.data.lastTranscriptionUrl
+    if (extra.oral_evaluation || this.data.lastOralEvaluation) payload.oral_evaluation = extra.oral_evaluation || this.data.lastOralEvaluation
+    if (extra.oral_warrant_id || this.data.lastOralWarrantId) payload.oral_warrant_id = extra.oral_warrant_id || this.data.lastOralWarrantId
+    return payload
+  },
+
+  mapEvalError(errorCode = '') {
+    if (errorCode === 'deepseek_request_failed') return '评估超时，请稍后重试'
+    if (errorCode === 'deepseek_http_error') return '评估服务繁忙，请稍后重试'
+    if (errorCode === 'missing_deepseek_key') return '评估服务未配置'
+    return errorCode || '评估失败'
+  },
+
+  async ensureSessionExists() {
+    if (this.data.currentSessionId) return this.data.currentSessionId
+    await this.createSession(this.data.sourceMode)
+    return this.data.currentSessionId
+  },
+
+  async performEvalForMessage(messageId, payload) {
+    this.setData({ loadingEval: true })
+    try {
+      const res = await request('/miniprogram/speaking/evaluate', {
+        method: 'POST',
+        data: payload,
+        timeout: 70000
+      })
+      if (!res.ok || !res.result) {
+        const errText = this.mapEvalError(res.error || '评估失败')
+        this.updateMessageStatus(messageId, 'failed', errText)
+        wx.showToast({ title: errText, icon: 'none' })
+        return false
+      }
+
+      const normalized = this.normalizeResult(res.result)
+      this.updateMessageStatus(messageId, 'sent')
+      this.appendMessage(this.createMessage('assistant', { result: normalized }))
+      this.setData({
+        result: normalized,
+        ...this.resetAnswerArtifacts()
+      })
+      this.loadSessionList(true)
+      return true
+    } catch (e) {
+      this.updateMessageStatus(messageId, 'failed', '网络异常，请重试')
+      wx.showToast({ title: '网络异常，请重试', icon: 'none' })
+      return false
+    } finally {
+      this.setData({ loadingEval: false })
+    }
+  },
+
   async submitEval(e) {
+    if (this.data.loadingEval) return
+    const transcript = (this.data.answerText || '').trim()
     const auto = e === true
-    if (!this.data.answerText) {
+    if (!transcript) {
       if (!auto) wx.showToast({ title: '请先输入回答', icon: 'none' })
       return
     }
@@ -751,65 +1287,55 @@ Page({
       return
     }
 
-    const payload = {
-      part: this.data.currentPart,
-      question: this.data.questionText,
-      transcript: this.data.answerText,
-      session_id: this.data.currentSessionId
+    const snapshot = {
+      audio_url: this.data.lastAudioUrl || '',
+      audio_metrics: this.data.lastAudioMetrics || null,
+      asr_model: this.data.lastAsrModel || '',
+      asr_task_id: this.data.lastAsrTaskId || '',
+      transcription_url: this.data.lastTranscriptionUrl || '',
+      oral_evaluation: this.data.lastOralEvaluation || null,
+      oral_warrant_id: this.data.lastOralWarrantId || ''
     }
-    if (this.data.lastAudioUrl) payload.audio_url = this.data.lastAudioUrl
-    if (this.data.lastAudioMetrics) payload.audio_metrics = this.data.lastAudioMetrics
-    if (this.data.lastAsrModel) payload.asr_model = this.data.lastAsrModel
-    if (this.data.lastAsrTaskId) payload.asr_task_id = this.data.lastAsrTaskId
-    if (this.data.lastTranscriptionUrl) payload.transcription_url = this.data.lastTranscriptionUrl
-    if (this.data.lastOralEvaluation) payload.oral_evaluation = this.data.lastOralEvaluation
-    if (this.data.lastOralWarrantId) payload.oral_warrant_id = this.data.lastOralWarrantId
+    const userMessageId = this.makeMessageId('user')
+    this.appendMessage(
+      this.createMessage('user', {
+        id: userMessageId,
+        content: transcript,
+        status: 'sending',
+        audio_url: snapshot.audio_url,
+        meta: snapshot
+      }),
+      true
+    )
+    this.setData({ answerText: '', canSend: false, showQuickActions: false })
 
-    if (this.data.currentPart !== 'Part1' && this.data.selectedFramework) {
-      payload.part2_topic = this.data.selectedFramework
+    const sessionId = await this.ensureSessionExists()
+    if (!sessionId) {
+      this.updateMessageStatus(userMessageId, 'failed', '会话初始化失败，请重试')
+      wx.showToast({ title: '会话初始化失败', icon: 'none' })
+      return
     }
 
-    if (!payload.session_id) {
-      await this.createSession(this.data.sourceMode)
-      payload.session_id = this.data.currentSessionId
-    }
+    const payload = this.buildEvalPayload(transcript, sessionId, snapshot)
+    await this.performEvalForMessage(userMessageId, payload)
+  },
 
-    this.setData({ loadingEval: true })
-    try {
-      const res = await request('/miniprogram/speaking/evaluate', {
-        method: 'POST',
-        data: payload,
-        timeout: 70000
-      })
-      if (res.ok && res.result) {
-        const normalized = this.normalizeResult(res.result)
-        const messages = this.data.messages.slice()
-        messages.push({
-          role: 'user',
-          content: this.data.answerText,
-          audio_url: this.data.lastAudioUrl || '',
-          meta: {
-            audio_metrics: this.data.lastAudioMetrics || null,
-            oral_evaluation: this.data.lastOralEvaluation || null
-          }
-        })
-        messages.push({ role: 'assistant', result: normalized })
-        this.setData({ result: normalized, messages })
-        this.scrollChatToBottom()
-        this.loadSessionList(true)
-      } else {
-        const err = res.error || '评估失败'
-        const msg = err === 'deepseek_request_failed'
-          ? '评估超时，请稍后重试'
-          : err === 'deepseek_http_error'
-          ? '评估服务繁忙，请稍后重试'
-          : err
-        wx.showToast({ title: msg, icon: 'none' })
-      }
-    } catch (e) {
-      wx.showToast({ title: '网络异常，请重试', icon: 'none' })
+  async retryMessageEval(e) {
+    if (this.data.loadingEval) return
+    const msgId = e.currentTarget.dataset.id
+    const msg = (this.data.messages || []).find((item) => item.id === msgId)
+    if (!msg || msg.role !== 'user') return
+    const transcript = (msg.content || '').trim()
+    if (!transcript) return
+    this.updateMessageStatus(msg.id, 'sending')
+    const sessionId = this.data.currentSessionId || await this.ensureSessionExists()
+    if (!sessionId) {
+      this.updateMessageStatus(msg.id, 'failed', '会话初始化失败，请重试')
+      wx.showToast({ title: '会话初始化失败', icon: 'none' })
+      return
     }
-    this.setData({ loadingEval: false })
+    const payload = this.buildEvalPayload(transcript, sessionId, msg.meta || {})
+    await this.performEvalForMessage(msg.id, payload)
   },
 
   normalizeResult(result) {
@@ -842,6 +1368,13 @@ Page({
       : Array.isArray(data.lexical_upgrade)
       ? data.lexical_upgrade
       : []
+    const nextStepList = Array.isArray(data.next_step) ? data.next_step : []
+    const summaryPool = []
+    if (Array.isArray(fluency.plus) && fluency.plus[0]) summaryPool.push(fluency.plus[0])
+    if (Array.isArray(lexical.plus) && lexical.plus[0]) summaryPool.push(lexical.plus[0])
+    if (Array.isArray(grammar.plus) && grammar.plus[0]) summaryPool.push(grammar.plus[0])
+    if (nextStepList[0]) summaryPool.push(`建议：${nextStepList[0]}`)
+    const summaryText = summaryPool.join(' ').trim()
 
     return {
       scores: {
@@ -904,7 +1437,8 @@ Page({
       sentence_feedback: sentenceFeedback,
       chinese_style_correction: chineseStyleCorrection,
       lexical_upgrade: lexicalUpgrade,
-      next_step: Array.isArray(data.next_step) ? data.next_step : []
+      next_step: nextStepList,
+      summary_text: summaryText
     }
   },
 
@@ -1025,6 +1559,7 @@ Page({
   },
 
   startRecord() {
+    this.setData({ showQuickActions: false, showMoreMenu: false, showContextMenu: false })
     if (this.data.recordBusy && !this.data.isRecording && !this.data.uploadingAudio && !this.data.transcribingAudio) {
       this.setData({ recordBusy: false })
     }
@@ -1113,6 +1648,7 @@ Page({
     this.stopRecordingTicker()
     this.setData({
       answerText: '',
+      canSend: false,
       result: null,
       voiceUiMode: 'idle',
       recordDurationSec: 0,
@@ -1207,6 +1743,7 @@ Page({
       const transcript = res.transcript || ''
       this.setData({
         answerText: transcript,
+        canSend: !!String(transcript).trim(),
         recordStatus: transcript ? '转写完成' : '未识别到内容',
         lastAudioUrl: uploadedUrl,
         lastAudioMetrics: res.audio_metrics || null,

@@ -1,191 +1,298 @@
-<view class="container">
-  <view class="hero">
-    <text class="brand">HAMMER</text>
-    <text class="subtitle">口语对练 · 逻辑梳理 · 高分改写</text>
-  </view>
+<view class="page-shell">
+  <view class="top-nav" catchtap="closeTransientPanels">
+    <button class="nav-icon-btn" catchtap="openSessionDrawer" aria-label="打开练习记录">
+      <image class="header-icon" src="/assets/icons/history.svg" mode="aspectFit" />
+    </button>
 
-  <view class="chat-toolbar">
-    <button class="toolbar-btn" bindtap="openSessionDrawer">会话记录</button>
-    <button class="toolbar-btn primary" bindtap="startNewSession">新对话</button>
-  </view>
-
-  <view class="card config-card">
-    <view class="config-head" bindtap="toggleConfigPanel">
-      <text class="section-title config-title">模式设置</text>
-      <text class="config-arrow {{configCollapsed ? 'collapsed' : ''}}">⌃</text>
+    <view class="nav-title-wrap">
+      <text class="nav-title-brand">Sage Path</text>
+      <text class="nav-title-rest">口语对练</text>
     </view>
 
-    <view wx:if="{{!configCollapsed}}">
-      <view class="tabs">
-        <view class="tab {{currentPart==='Part1' ? 'active' : ''}}" data-part="Part1" bindtap="switchPart">Part 1</view>
-        <view class="tab {{currentPart==='Part2' ? 'active' : ''}}" data-part="Part2" bindtap="switchPart">Part 2</view>
-        <view class="tab {{currentPart==='Part3' ? 'active' : ''}}" data-part="Part3" bindtap="switchPart">Part 3</view>
-      </view>
-
-      <view class="source-row">
-        <view class="pill {{sourceMode==='assigned' ? 'active' : ''}}" data-mode="assigned" bindtap="switchSource">已布置</view>
-        <view class="pill {{sourceMode==='random' ? 'active' : ''}}" data-mode="random" bindtap="switchSource">随机</view>
-        <text class="source-tip" wx:if="{{sourceMode==='assigned' && assignedCount===0}}">暂无已布置题目，自动使用随机题</text>
-      </view>
-
-      <view class="framework" wx:if="{{currentPart !== 'Part1'}}">
-        <text class="label">框架提示（可选）</text>
-        <picker mode="selector" range="{{part2Options}}" range-key="label" bindchange="handleFrameworkChange">
-          <view class="picker">{{selectedFrameworkLabel}}</view>
-        </picker>
-      </view>
-
-      <button class="btn-outline" bindtap="nextQuestion" loading="{{loadingQuestion}}">换一题</button>
-    </view>
+    <button class="part-selector" catchtap="openModeSheet" aria-label="切换练习 Part">
+      <image class="part-icon" src="/assets/icons/settings.svg" mode="aspectFit" />
+      <text class="part-text">{{currentPart}}</text>
+      <image class="part-chevron" src="/assets/icons/chevron-down.svg" mode="aspectFit" />
+    </button>
   </view>
 
-  <view class="card chat-card">
-    <view class="section-title chat-title">对话</view>
-    <scroll-view class="chat-scroll" scroll-y="true" scroll-top="{{chatScrollTop}}" scroll-with-animation="true">
-      <view class="empty" wx:if="{{messages.length === 0}}">暂无记录，点击“换一题”开始</view>
-      <view class="chat-list" wx:else>
-        <view class="chat-row {{item.role}}" wx:for="{{messages}}" wx:key="index">
-          <view class="bubble {{item.role}}">
-            <view wx:if="{{item.role === 'system'}}">
-              <text class="bubble-label">题目</text>
-              <text class="bubble-text">{{item.content}}</text>
+  <scroll-view
+    class="message-scroll"
+    scroll-y="true"
+    enhanced="true"
+    show-scrollbar="true"
+    scroll-with-animation="true"
+    scroll-top="{{chatScrollTop}}"
+    bindscroll="onMessageScroll"
+    bindtap="closeTransientPanels"
+  >
+    <view class="message-list">
+      <view class="topic-card" wx:if="{{questionText}}" bindtap="closeTransientPanels">
+        <view class="topic-header">
+          <view class="topic-head-left">
+            <text class="part-tag">{{currentPart}}</text>
+            <text class="random-label">{{questionMeta || (sourceMode==='assigned' ? '已布置' : '随机题')}}</text>
+          </view>
+          <button class="change-btn" bindtap="nextQuestion" loading="{{loadingQuestion}}">
+            <image class="change-icon" src="/assets/icons/refresh.svg" mode="aspectFit" />
+            <text>换题</text>
+          </button>
+        </view>
+
+        <view wx:if="{{currentPart==='Part3'}}" class="topic-part3-block">
+          <view class="topic-bullet" wx:for="{{part3Expanded ? topicQuestionsAll : topicQuestionsPreview}}" wx:for-item="q" wx:key="index">
+            <view class="bullet-dot"></view>
+            <text class="topic-bullet-text">{{q}}</text>
+          </view>
+          <view class="topic-expand" wx:if="{{topicQuestionsAll.length > topicQuestionsPreview.length}}" bindtap="togglePart3Expand">
+            <text>{{part3Expanded ? '收起' : '展开全部'}}</text>
+            <image class="topic-expand-icon {{part3Expanded ? 'expanded' : ''}}" src="/assets/icons/chevron-down.svg" mode="aspectFit" />
+          </view>
+        </view>
+
+        <view wx:else>
+          <text class="topic-title">{{topicTitle}}</text>
+          <text class="topic-prompt" wx:if="{{topicPromptLine}}">{{topicPromptLine}}</text>
+
+          <view class="topic-bullets" wx:if="{{(topicExpanded ? topicCueLines : topicCuePreview).length}}">
+            <view class="topic-bullet" wx:for="{{topicExpanded ? topicCueLines : topicCuePreview}}" wx:for-item="line" wx:key="index">
+              <view class="bullet-dot"></view>
+              <text class="topic-bullet-text">{{line}}</text>
             </view>
-            <view wx:elif="{{item.role === 'user'}}">
-              <text class="bubble-label">我</text>
-              <text class="bubble-text">{{item.content}}</text>
-              <button class="btn-audio-replay" wx:if="{{item.audio_url}}" bindtap="playMessageAudio" data-url="{{item.audio_url}}">回听录音</button>
-              <view class="msg-actions">
-                <text class="msg-action" bindtap="reuseUserMessage" data-content="{{item.content}}">重评</text>
-                <text class="msg-action danger" bindtap="deleteMessageLocal" data-index="{{index}}">删除</text>
-              </view>
-            </view>
-            <view wx:else>
-              <text class="bubble-label">反馈</text>
-              <view class="assistant-block" wx:if="{{item.result && item.result.scores}}">
-                <view class="assistant-title">官方评分四项</view>
-                <view class="score-grid">
-                  <view class="score-item">
-                    <text class="score-label">F&C</text>
-                    <text class="score-value">{{item.result.scores.fluency_coherence}}</text>
-                  </view>
-                  <view class="score-item">
-                    <text class="score-label">LR</text>
-                    <text class="score-value">{{item.result.scores.lexical_resource}}</text>
-                  </view>
-                  <view class="score-item">
-                    <text class="score-label">GRA</text>
-                    <text class="score-value">{{item.result.scores.grammar_range_accuracy}}</text>
-                  </view>
-                  <view class="score-item">
-                    <text class="score-label">PR</text>
-                    <text class="score-value">{{item.result.scores.pronunciation}}</text>
-                  </view>
-                  <view class="score-item overall">
-                    <text class="score-label">Overall</text>
-                    <text class="score-value">{{item.result.scores.overall}}</text>
-                  </view>
-                </view>
-              </view>
+          </view>
 
-              <view class="assistant-block" wx:if="{{item.result && item.result.criteria_feedback && item.result.criteria_feedback.fluency_coherence}}">
-                <view class="assistant-title">Fluency & Coherence（含逻辑框架）</view>
-                <view class="list" wx:if="{{item.result.criteria_feedback.fluency_coherence.plus.length}}">
-                  <text class="list-item" wx:for="{{item.result.criteria_feedback.fluency_coherence.plus}}" wx:key="*this">+ {{item}}</text>
-                </view>
-                <view class="list" wx:if="{{item.result.criteria_feedback.fluency_coherence.minus.length}}">
-                  <text class="list-item" wx:for="{{item.result.criteria_feedback.fluency_coherence.minus}}" wx:key="*this">- {{item}}</text>
-                </view>
-              </view>
+          <view class="topic-expand" wx:if="{{topicCueLines.length > topicCuePreview.length}}" bindtap="toggleTopicExpand">
+            <text>{{topicExpanded ? '收起题目' : '展开题目'}}</text>
+            <image class="topic-expand-icon {{topicExpanded ? 'expanded' : ''}}" src="/assets/icons/chevron-down.svg" mode="aspectFit" />
+          </view>
+        </view>
+      </view>
 
-              <view class="assistant-block" wx:if="{{item.result}}">
-                <view class="assistant-title">逻辑梳理</view>
-                <view class="logic-block" wx:if="{{item.result && item.result.logic_outline && item.result.logic_outline.zh.length}}">
-                  <text class="block-title">中文</text>
-                  <view class="list">
-                    <text class="list-item" wx:for="{{item.result.logic_outline.zh}}" wx:key="*this">• {{item}}</text>
-                  </view>
-                </view>
-                <view class="logic-block" wx:if="{{item.result && item.result.logic_outline && item.result.logic_outline.en.length}}">
-                  <text class="block-title">English</text>
-                  <view class="list">
-                    <text class="list-item" wx:for="{{item.result.logic_outline.en}}" wx:key="*this">• {{item}}</text>
-                  </view>
-                </view>
-              </view>
+      <view class="empty-state" wx:if="{{messages.length===0}}">准备好了就开始回答吧</view>
 
-              <view class="assistant-block" wx:if="{{item.result}}">
-                <view class="assistant-title">高分改写</view>
-                <text class="rewrite">{{item.result.rewrite_high_band.paragraph}}</text>
-                <view class="tts-row">
-                  <button class="btn-tts" bindtap="playRewriteAudio" data-text="{{item.result.rewrite_high_band.paragraph}}" loading="{{ttsLoading}}">
-                    {{ttsPlaying ? '播放中...' : '播放改写'}}
-                  </button>
-                </view>
-                <view class="list" wx:if="{{item.result.rewrite_high_band.logic_tips.length}}">
-                  <text class="list-item" wx:for="{{item.result.rewrite_high_band.logic_tips}}" wx:key="*this">• {{item}}</text>
-                </view>
-              </view>
+      <block wx:for="{{messages}}" wx:for-item="msg" wx:key="id">
+        <view class="system-row" wx:if="{{msg.role==='system'}}">
+          <view class="system-strip">{{msg.content}}</view>
+        </view>
 
-              <view class="assistant-block" wx:if="{{item.result && item.result.sentence_feedback.length}}">
-                <view class="assistant-title">句子纠错</view>
-                <view class="feedback-card" wx:for="{{item.result.sentence_feedback}}" wx:key="index">
-                  <text class="fb-original">原句：{{item.original}}</text>
-                  <text class="fb-correct">修正：{{item.correction}}</text>
-                  <text class="fb-note">{{item.explain_cn}}</text>
-                </view>
-              </view>
-
-              <view class="assistant-block" wx:if="{{item.result && item.result.chinese_style_correction.length}}">
-                <view class="assistant-title">Lexical Resource：中式表达纠正</view>
-                <view class="feedback-card" wx:for="{{item.result.chinese_style_correction}}" wx:key="index">
-                  <text class="fb-original">原句：{{item.original}}</text>
-                  <text class="fb-correct">地道：{{item.native_like}}</text>
-                  <text class="fb-note">{{item.note}}</text>
-                </view>
-              </view>
-
-              <view class="assistant-block" wx:if="{{item.result && item.result.lexical_upgrade.length}}">
-                <view class="assistant-title">Lexical Resource：词汇升级</view>
-                <view class="feedback-card" wx:for="{{item.result.lexical_upgrade}}" wx:key="index">
-                  <text class="fb-original">from：{{item.from}}</text>
-                  <text class="fb-correct">to：{{item.to.join(' / ')}}</text>
-                  <text class="fb-note">{{item.constraint}}</text>
-                </view>
-              </view>
-
-              <view class="assistant-block" wx:if="{{item.result && item.result.criteria_feedback && item.result.criteria_feedback.pronunciation}}">
-                <view class="assistant-title">Pronunciation（语音估计）</view>
-                <view class="list" wx:if="{{item.result.criteria_feedback.pronunciation.plus.length}}">
-                  <text class="list-item" wx:for="{{item.result.criteria_feedback.pronunciation.plus}}" wx:key="*this">+ {{item}}</text>
-                </view>
-                <view class="list" wx:if="{{item.result.criteria_feedback.pronunciation.minus.length}}">
-                  <text class="list-item" wx:for="{{item.result.criteria_feedback.pronunciation.minus}}" wx:key="*this">- {{item}}</text>
-                </view>
-                <view class="list" wx:if="{{item.result.criteria_feedback.pronunciation.audio_observations.length}}">
-                  <text class="list-item" wx:for="{{item.result.criteria_feedback.pronunciation.audio_observations}}" wx:key="*this">• {{item}}</text>
-                </view>
-                <text class="fb-note" wx:if="{{item.result.criteria_feedback.pronunciation.confidence}}">置信度：{{item.result.criteria_feedback.pronunciation.confidence}}</text>
-                <text class="fb-note" wx:if="{{item.result.criteria_feedback.pronunciation.limitation_note}}">{{item.result.criteria_feedback.pronunciation.limitation_note}}</text>
-              </view>
-
-              <view class="assistant-block" wx:if="{{item.result && item.result.next_step && item.result.next_step.length}}">
-                <view class="assistant-title">下一步练习建议</view>
-                <view class="list">
-                  <text class="list-item" wx:for="{{item.result.next_step}}" wx:key="*this">• {{item}}</text>
-                </view>
-              </view>
-              <view class="assistant-block" wx:if="{{!item.result}}">
-                <text class="bubble-text">暂无反馈内容</text>
-              </view>
-              <view class="msg-actions">
-                <text class="msg-action" bindtap="favoriteAssistantMessage" data-index="{{index}}">收藏</text>
-                <text class="msg-action danger" bindtap="deleteMessageLocal" data-index="{{index}}">删除</text>
+        <view class="bubble-row user" wx:elif="{{msg.role==='user'}}" data-id="{{msg.id}}" bindlongpress="handleMessageLongPress">
+          <view class="avatar user-av">我</view>
+          <view class="bubble user">
+            <text class="bubble-text">{{msg.content}}</text>
+            <view class="user-meta-row">
+              <button class="small-link" wx:if="{{msg.audio_url}}" bindtap="playMessageAudio" data-url="{{msg.audio_url}}">回听录音</button>
+              <text class="status-text" wx:if="{{msg.status==='sending'}}">发送中...</text>
+              <view class="status-text failed" wx:if="{{msg.status==='failed'}}">
+                <text>{{msg.errorText || '发送失败'}}</text>
+                <text class="retry-text" bindtap="retryMessageEval" data-id="{{msg.id}}">重试</text>
               </view>
             </view>
           </view>
         </view>
+
+        <view class="bubble-row ai" wx:else data-id="{{msg.id}}" bindlongpress="handleMessageLongPress">
+          <view class="avatar ai-av">🤖</view>
+
+          <view class="assistant-stack">
+            <view class="bubble ai">
+              <text class="bubble-text">{{msg.content || (msg.result ? 'Great start! Let me give you detailed feedback on your response.' : '暂无反馈内容')}}</text>
+            </view>
+
+            <view class="feedback-card" wx:if="{{msg.result && msg.result.scores}}">
+              <view class="feedback-title">
+                <text class="feedback-star">☆</text>
+                <text>AI 评分反馈</text>
+              </view>
+              <view class="score-row">
+                <view class="score-pill"><text class="score-label">流利度</text><text class="score-val">{{msg.result.scores.fluency_coherence}}</text></view>
+                <view class="score-pill"><text class="score-label">词汇量</text><text class="score-val">{{msg.result.scores.lexical_resource}}</text></view>
+                <view class="score-pill"><text class="score-label">语法</text><text class="score-val">{{msg.result.scores.grammar_range_accuracy}}</text></view>
+                <view class="score-pill"><text class="score-label">发音</text><text class="score-val">{{msg.result.scores.pronunciation}}</text></view>
+              </view>
+              <text class="overall-score" wx:if="{{msg.result.scores.overall}}">Overall: {{msg.result.scores.overall}}</text>
+              <text class="feedback-text">{{msg.result.summary_text || '继续保持，建议在表达层次和词汇多样性上进一步提升。'}}</text>
+            </view>
+
+            <view class="assistant-block" wx:if="{{msg.result && msg.result.criteria_feedback && msg.result.criteria_feedback.fluency_coherence}}">
+              <text class="assistant-title">Fluency & Coherence（含逻辑框架）</text>
+              <text class="line-item" wx:for="{{msg.result.criteria_feedback.fluency_coherence.plus}}" wx:for-item="line" wx:key="*this">+ {{line}}</text>
+              <text class="line-item minus" wx:for="{{msg.result.criteria_feedback.fluency_coherence.minus}}" wx:for-item="line" wx:key="*this">- {{line}}</text>
+            </view>
+
+            <view class="assistant-block" wx:if="{{msg.result && msg.result.logic_outline}}">
+              <text class="assistant-title">逻辑梳理</text>
+              <text class="line-item" wx:for="{{msg.result.logic_outline.zh}}" wx:for-item="line" wx:key="*this">• {{line}}</text>
+              <text class="line-item" wx:for="{{msg.result.logic_outline.en}}" wx:for-item="line" wx:key="*this">• {{line}}</text>
+            </view>
+
+            <view class="assistant-block" wx:if="{{msg.result && msg.result.rewrite_high_band && msg.result.rewrite_high_band.paragraph}}">
+              <text class="assistant-title">高分改写</text>
+              <text class="bubble-text">{{msg.result.rewrite_high_band.paragraph}}</text>
+              <button class="small-link" bindtap="playRewriteAudio" data-text="{{msg.result.rewrite_high_band.paragraph}}" loading="{{ttsLoading}}">{{ttsPlaying ? '播放中...' : '播放改写'}}</button>
+              <text class="line-item" wx:for="{{msg.result.rewrite_high_band.logic_tips}}" wx:for-item="tip" wx:key="*this">• {{tip}}</text>
+            </view>
+
+            <view class="assistant-block" wx:if="{{msg.result && msg.result.sentence_feedback.length}}">
+              <text class="assistant-title">句子纠错</text>
+              <view class="detail-card" wx:for="{{msg.result.sentence_feedback}}" wx:for-item="fb" wx:key="index">
+                <text class="line-item">原句：{{fb.original}}</text>
+                <text class="line-item highlight">修正：{{fb.correction}}</text>
+                <text class="line-item tip">{{fb.explain_cn}}</text>
+              </view>
+            </view>
+
+            <view class="assistant-block" wx:if="{{msg.result && msg.result.chinese_style_correction.length}}">
+              <text class="assistant-title">Lexical Resource：中式表达纠正</text>
+              <view class="detail-card" wx:for="{{msg.result.chinese_style_correction}}" wx:for-item="fb" wx:key="index">
+                <text class="line-item">原句：{{fb.original}}</text>
+                <text class="line-item highlight">地道：{{fb.native_like}}</text>
+                <text class="line-item tip">{{fb.note}}</text>
+              </view>
+            </view>
+
+            <view class="assistant-block" wx:if="{{msg.result && msg.result.lexical_upgrade.length}}">
+              <text class="assistant-title">Lexical Resource：词汇升级</text>
+              <view class="detail-card" wx:for="{{msg.result.lexical_upgrade}}" wx:for-item="lex" wx:key="index">
+                <text class="line-item">from：{{lex.from}}</text>
+                <text class="line-item highlight">to：{{lex.to.join(' / ')}}</text>
+                <text class="line-item tip">{{lex.constraint}}</text>
+              </view>
+            </view>
+
+            <view class="assistant-block" wx:if="{{msg.result && msg.result.next_step.length}}">
+              <text class="assistant-title">下一步练习建议</text>
+              <text class="line-item" wx:for="{{msg.result.next_step}}" wx:for-item="step" wx:key="*this">• {{step}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <view class="bottom-pad"></view>
+    </view>
+  </scroll-view>
+
+  <button class="to-bottom-btn" wx:if="{{showToBottom}}" bindtap="scrollToBottom" style="transform: {{toBottomTransform}};">
+    <image class="to-bottom-icon" src="/assets/icons/arrow-down.svg" mode="aspectFit" />
+  </button>
+
+  <view class="composer-wrap" style="transform: {{composerTransform}};">
+    <view class="composer-panel">
+      <view class="quick-actions" wx:if="{{showQuickActions}}">
+        <view class="quick-item" data-action="toggle_oral" bindtap="handleQuickActionTap">{{inputMode==='oral_sdk' ? '发音增强：开' : '发音增强：关'}}</view>
+        <view class="quick-item" data-action="framework_person" bindtap="handleQuickActionTap">人物框架提示</view>
+        <view class="quick-item" data-action="framework_place" bindtap="handleQuickActionTap">地点框架提示</view>
+        <view class="quick-item" data-action="high_band" bindtap="handleQuickActionTap">插入高分句型</view>
+        <view class="quick-item" data-action="followup" bindtap="handleQuickActionTap">追问/纠错/润色</view>
       </view>
-    </scroll-view>
+
+      <view class="recording-strip" wx:if="{{voiceUiMode === 'recording'}}">
+        <button class="recording-btn" bindtap="handleRecordCancel" disabled="{{recordBusy}}">
+          <text class="recording-btn-text">✕</text>
+        </button>
+        <view class="recording-wave-wrap">
+          <view class="recording-wave">
+            <view class="wave-bar" wx:for="{{waveBars}}" wx:key="index" style="height: {{item}}rpx;"></view>
+          </view>
+          <text class="recording-time">{{recordTimerLabel}}</text>
+        </view>
+        <button class="recording-btn confirm" bindtap="handleRecordConfirm" disabled="{{recordBusy}}">
+          <text class="recording-btn-text">✓</text>
+        </button>
+      </view>
+
+      <view class="composer-row" wx:else>
+        <button class="input-add-btn" bindtap="toggleQuickActions" aria-label="更多操作">
+          <image class="plus-icon" src="/assets/icons/plus.svg" mode="aspectFit" />
+        </button>
+
+        <view class="composer-input-wrap">
+          <textarea
+            class="input-field"
+            placeholder="点击麦克风开始录音..."
+            placeholder-style="color: #5A7472;"
+            value="{{answerText}}"
+            bindinput="handleAnswerInput"
+            bindfocus="onComposerFocus"
+            bindblur="onComposerBlur"
+            bindkeyboardheightchange="onComposerKeyboardHeightChange"
+            maxlength="-1"
+            auto-height
+            cursor-spacing="32"
+          />
+        </view>
+
+        <button
+          class="mic-btn {{isRecording ? 'recording' : ''}}"
+          wx:if="{{!canSend}}"
+          bindtap="onMicTap"
+          disabled="{{isRecording || recordBusy || uploadingAudio || transcribingAudio}}"
+          aria-label="开始录音"
+        >
+          <image class="mic-icon" src="/assets/icons/mic.svg" mode="aspectFit" />
+        </button>
+
+        <button
+          class="send-btn {{canSend ? 'show' : ''}}"
+          wx:else
+          bindtap="submitEval"
+          disabled="{{loadingEval || isRecording || recordBusy || uploadingAudio || transcribingAudio}}"
+          loading="{{loadingEval}}"
+          aria-label="发送评估"
+        >
+          <image class="send-icon" src="/assets/icons/send.svg" mode="aspectFit" />
+        </button>
+      </view>
+
+      <view class="record-status-pill" wx:if="{{recordStatus}}">{{recordStatus}}</view>
+      <view class="record-status-pill" wx:if="{{inputMode==='oral_sdk' && oralEngineStatus}}">{{oralEngineStatus}}</view>
+    </view>
+  </view>
+
+  <view class="context-mask" wx:if="{{showContextMenu}}" bindtap="closeContextMenu"></view>
+  <view class="context-menu" wx:if="{{showContextMenu}}">
+    <view class="context-item" wx:for="{{contextMenuItems}}" wx:key="action" data-action="{{item.action}}" bindtap="handleContextMenuAction">
+      <image class="context-icon" src="{{item.icon}}" mode="aspectFit" />
+      <text class="context-label">{{item.label}}</text>
+    </view>
+  </view>
+
+  <view class="sheet-mask" wx:if="{{showModeSheet}}" bindtap="closeModeSheet"></view>
+  <view class="mode-sheet {{showModeSheet ? 'open' : ''}}" wx:if="{{showModeSheet}}" catchtouchmove="noop" bindtouchstart="onSheetTouchStart" bindtouchend="onSheetTouchEnd">
+    <view class="sheet-handle"></view>
+
+    <view class="sheet-section">
+      <text class="sheet-label">Part</text>
+      <view class="segmented">
+        <view class="seg-item {{currentPart==='Part1' ? 'active' : ''}}" data-part="Part1" bindtap="switchPart">Part 1</view>
+        <view class="seg-item {{currentPart==='Part2' ? 'active' : ''}}" data-part="Part2" bindtap="switchPart">Part 2</view>
+        <view class="seg-item {{currentPart==='Part3' ? 'active' : ''}}" data-part="Part3" bindtap="switchPart">Part 3</view>
+      </view>
+    </view>
+
+    <view class="sheet-section">
+      <text class="sheet-label">题源</text>
+      <view class="segmented compact">
+        <view class="seg-item {{sourceMode==='assigned' ? 'active' : ''}}" data-mode="assigned" bindtap="switchSource">已布置</view>
+        <view class="seg-item {{sourceMode==='random' ? 'active' : ''}}" data-mode="random" bindtap="switchSource">随机</view>
+      </view>
+      <text class="sheet-tip" wx:if="{{sourceMode==='assigned' && assignedCount===0}}">暂无已布置题目，自动使用随机题</text>
+    </view>
+
+    <view class="sheet-section" wx:if="{{currentPart!=='Part1'}}">
+      <text class="sheet-label">框架提示</text>
+      <view class="chip-wrap">
+        <view class="chip {{selectedFramework==='' ? 'active' : ''}}" data-value="" bindtap="handleFrameworkTagTap">不指定</view>
+        <view class="chip {{selectedFramework===opt.value ? 'active' : ''}}" wx:for="{{part2Options}}" wx:for-item="opt" wx:key="value" data-value="{{opt.value}}" bindtap="handleFrameworkTagTap" wx:if="{{opt.value}}">{{opt.label}}</view>
+      </view>
+    </view>
+
+    <view class="sheet-actions">
+      <button class="sheet-btn" bindtap="nextQuestion" loading="{{loadingQuestion}}">
+        <image class="sheet-btn-icon" src="/assets/icons/refresh.svg" mode="aspectFit" />
+        <text>换一题</text>
+      </button>
+      <button class="sheet-btn ghost" bindtap="startNewSession">新对话</button>
+    </view>
   </view>
 
   <view class="session-mask" wx:if="{{sessionDrawerOpen}}" bindtap="closeSessionDrawer"></view>
@@ -195,8 +302,10 @@
       <text class="session-drawer-close" bindtap="closeSessionDrawer">关闭</text>
     </view>
     <button class="session-new-btn" bindtap="startNewSession">+ 新对话</button>
+
     <view class="session-empty" wx:if="{{sessionLoading}}">加载中...</view>
     <view class="session-empty" wx:elif="{{sessionList.length===0}}">暂无记录</view>
+
     <scroll-view class="session-list" scroll-y="true" enhanced="true" show-scrollbar="true" wx:else>
       <view class="session-item {{item.id===activeSessionId ? 'active' : ''}}" wx:for="{{sessionList}}" wx:key="id" bindtap="openSessionFromList" data-id="{{item.id}}">
         <view class="session-item-top">
@@ -206,59 +315,5 @@
         <text class="session-preview">{{item.preview}}</text>
       </view>
     </scroll-view>
-  </view>
-
-  <view class="composer-wrap">
-    <view class="composer-card">
-      <view class="composer-input-row">
-        <textarea
-          class="composer-input"
-          placeholder="输入你的回答..."
-          value="{{answerText}}"
-          bindinput="handleAnswerInput"
-          maxlength="-1"
-          auto-height
-        />
-      </view>
-
-      <view class="composer-action-row" wx:if="{{voiceUiMode !== 'recording'}}">
-        <button class="btn-oral-toggle {{inputMode==='oral_sdk' ? 'active' : ''}}" bindtap="toggleComposerOralMode" loading="{{oralWarrantLoading && inputMode==='oral_sdk'}}" disabled="{{isRecording || uploadingAudio || transcribingAudio}}">
-          ✦ 发音增强{{inputMode==='oral_sdk' ? '开' : '关'}}
-        </button>
-        <view class="composer-actions-right">
-          <button class="btn-mic" bindtap="onMicTap" disabled="{{isRecording || uploadingAudio || transcribingAudio}}">
-            <view class="mic-icon" aria-label="mic">
-              <view class="mic-head"></view>
-              <view class="mic-stem"></view>
-              <view class="mic-base"></view>
-            </view>
-          </button>
-          <button class="btn-send-icon" bindtap="submitEval" loading="{{loadingEval}}" disabled="{{!answerText || isRecording || recordBusy || uploadingAudio || transcribingAudio}}">
-            <view wx:if="{{!loadingEval}}" class="send-glyph">
-              <view class="send-glyph-line"></view>
-              <view class="send-glyph-head"></view>
-            </view>
-          </button>
-        </view>
-      </view>
-
-      <view class="recording-strip" wx:if="{{voiceUiMode === 'recording'}}">
-        <button class="recording-btn cancel" bindtap="handleRecordCancel" disabled="{{recordBusy}}">
-          <text>✕</text>
-        </button>
-        <view class="recording-wave-wrap">
-          <view class="recording-wave">
-            <view class="wave-bar" wx:for="{{waveBars}}" wx:key="index" style="height: {{item}}rpx;"></view>
-          </view>
-          <text class="recording-time">{{recordTimerLabel}}</text>
-        </view>
-        <button class="recording-btn confirm" bindtap="handleRecordConfirm" disabled="{{recordBusy}}">
-          <text>✓</text>
-        </button>
-      </view>
-
-      <text class="record-tip" wx:if="{{recordStatus}}">{{recordStatus}}</text>
-      <text class="record-tip" wx:if="{{inputMode==='oral_sdk' && oralEngineStatus}}">{{oralEngineStatus}}</text>
-    </view>
   </view>
 </view>

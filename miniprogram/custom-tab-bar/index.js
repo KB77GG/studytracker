@@ -2,7 +2,7 @@ Component({
     data: {
         selected: 0,
         color: "#9aa5b1",
-        selectedColor: "#1f8a82",
+        selectedColor: "#3a8c82",
         list: [], // Will be set based on role
         studentList: [],
         parentList: []
@@ -18,6 +18,8 @@ Component({
                 path = `<circle cx="16" cy="16" r="12" fill="none" stroke="${c}" stroke-width="2.4"/><path d="M11.5 16.5l3.5 3.5 6.5-7.5" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`
             } else if (type === 'hammer') {
                 path = `<path d="M10 13.5l4.8-4.8 2.4 2.4-4.8 4.8z" fill="none" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/><path d="M17.5 11l4.8 4.8-1.9 1.9-4.8-4.8z" fill="none" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/><path d="M9.7 22.3l4.9-4.9" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>`
+            } else if (type === 'practice') {
+                path = `<rect x="12" y="5" width="8" height="14" rx="4" fill="none" stroke="${c}" stroke-width="2.4"/><path d="M16 19v4.5" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/><path d="M11 23.5h10" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/><path d="M8.5 13.5c0 4.1 3.3 7.5 7.5 7.5s7.5-3.4 7.5-7.5" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>`
             } else if (type === 'note') {
                 path = `<rect x="9.5" y="9" width="13" height="14" rx="2.5" fill="none" stroke="${c}" stroke-width="2.4"/><path d="M16 9v14" stroke="${c}" stroke-width="2.4"/><path d="M12 13h4" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/><path d="M12 17h4" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>`
             } else if (type === 'user') {
@@ -43,9 +45,9 @@ Component({
             },
             {
                 pagePath: "/pages/student/hammer/index",
-                text: "Hammer",
-                iconPath: buildIcon('hammer', gray),
-                selectedIconPath: buildIcon('hammer', brand)
+                text: "对练",
+                iconPath: buildIcon('practice', gray),
+                selectedIconPath: buildIcon('practice', brand)
             }
         ]
 
