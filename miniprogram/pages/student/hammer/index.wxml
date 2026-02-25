@@ -1,5 +1,5 @@
 <view class="page-shell">
-  <view class="top-nav" catchtap="closeTransientPanels">
+  <view class="top-nav" style="padding-top: {{statusBarHeight + 12}}px;" catchtap="closeTransientPanels">
     <button class="nav-icon-btn" catchtap="openSessionDrawer" aria-label="打开练习记录">
       <image class="header-icon" src="/assets/icons/history.svg" mode="aspectFit" />
     </button>

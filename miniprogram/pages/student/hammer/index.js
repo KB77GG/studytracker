@@ -100,10 +100,15 @@ Page({
     voiceUiMode: 'idle',
     recordDurationSec: 0,
     recordTimerLabel: '00:00',
-    waveBars: buildWaveBars(false)
+    waveBars: buildWaveBars(false),
+    statusBarHeight: 44
   },
 
   onLoad() {
+    try {
+      const sysInfo = wx.getSystemInfoSync()
+      this.setData({ statusBarHeight: sysInfo.statusBarHeight || 44 })
+    } catch (e) {}
     this.setupRecorder()
     this.setupAudioPlayer()
     this.loadAssigned()
@@ -1100,14 +1105,34 @@ Page({
       return
     }
 
-    let snippet = ''
     if (action === 'framework_person') {
-      snippet = 'When it comes to this person, I would like to say...'
-    } else if (action === 'framework_place') {
-      snippet = 'As for this place, what impressed me most is...'
-    } else if (action === 'high_band') {
-      snippet = 'From my perspective, one compelling reason is that...'
-    } else if (action === 'followup') {
+      this.setData({
+        selectedFramework: 'person_place',
+        selectedFrameworkLabel: '人物/地点',
+        showQuickActions: false
+      })
+      this.appendSystemMessage('💡 已选择「人物框架」—— 可参考：开头介绍 → 具体故事 → 感受总结。框架已同步后台评分，直接回答即可。')
+      return
+    }
+
+    if (action === 'framework_place') {
+      this.setData({
+        selectedFramework: 'person_place',
+        selectedFrameworkLabel: '人物/地点',
+        showQuickActions: false
+      })
+      this.appendSystemMessage('💡 已选择「地点框架」—— 可参考：地点介绍 → 印象最深的细节 → 感受/原因。框架已同步后台评分，直接回答即可。')
+      return
+    }
+
+    if (action === 'high_band') {
+      this.setData({ showQuickActions: false })
+      this.appendSystemMessage('💡 高分句型参考：From my perspective... / One compelling reason is that... / What struck me most was... / It goes without saying that... 直接在回答中自然使用即可。')
+      return
+    }
+
+    let snippet = ''
+    if (action === 'followup') {
       snippet = '请基于我的答案继续追问一个问题。'
     } else if (action === 'proofread') {
       snippet = '请帮我做句子纠错并给一个更高分版本。'
