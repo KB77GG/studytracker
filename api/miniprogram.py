@@ -330,14 +330,67 @@ def get_speaking_random():
     })
 
 
+def _load_conversation_history(session, student_id, limit=6):
+    """Load last N messages from a session as compressed history for the AI prompt."""
+    recent_msgs = (
+        SpeakingMessage.query
+        .filter_by(session_id=session.id)
+        .filter(SpeakingMessage.role.in_(["user", "assistant"]))
+        .order_by(SpeakingMessage.created_at.desc())
+        .limit(limit)
+        .all()
+    )
+    recent_msgs.reverse()
+    history = []
+    for msg in recent_msgs:
+        if msg.role == "user" and msg.content:
+            history.append({
+                "role": "user",
+                "summary": msg.content[:300],
+            })
+        elif msg.role == "assistant":
+            meta = {}
+            if msg.meta_json:
+                try:
+                    meta = json.loads(msg.meta_json)
+                except Exception:
+                    pass
+            result = {}
+            if msg.result_json:
+                try:
+                    result = json.loads(msg.result_json)
+                except Exception:
+                    pass
+            history.append({
+                "role": "assistant",
+                "reply_text": msg.content or result.get("reply_text", ""),
+                "follow_up": meta.get("follow_up_question", result.get("follow_up_question", "")),
+                "overall_score": result.get("scores", {}).get("overall", 0),
+            })
+    return history
+
+
 @mp_bp.route("/speaking/evaluate", methods=["POST"])
 @require_api_user(User.ROLE_STUDENT)
 def evaluate_speaking():
     data = request.get_json(silent=True) or {}
+
+    # Inject conversation history for multi-turn context
+    user = request.current_api_user
+    student = user.student_profile if user else None
+    session_id = data.get("session_id")
+    if session_id and student:
+        session = SpeakingSession.query.filter_by(
+            id=session_id, student_id=student.id
+        ).first()
+        if session:
+            data["conversation_history"] = _load_conversation_history(session, student.id)
+
     payload, status = run_ielts_eval(data)
 
-    user = request.current_api_user
-    student = user.student_profile
+    if not student:
+        user = request.current_api_user
+        student = user.student_profile if user else None
     pronunciation_payload = None
     pronunciation_error = None
     audio_url = (data.get("audio_url") or "").strip()
@@ -417,15 +470,18 @@ def evaluate_speaking():
                     audio_url=(data.get("audio_url") or "").strip() or None,
                     meta_json=json.dumps(meta_payload, ensure_ascii=False),
                 )
+                reply_text = (payload["result"].get("reply_text") or "").strip()
+                follow_up_question = (payload["result"].get("follow_up_question") or "").strip()
                 assistant_msg = SpeakingMessage(
                     session_id=session.id,
                     role="assistant",
-                    content=None,
+                    content=reply_text or None,
                     result_json=json.dumps(payload["result"], ensure_ascii=False),
                     meta_json=json.dumps(
                         {
                             "model": payload.get("model"),
                             "usage": payload.get("usage"),
+                            "follow_up_question": follow_up_question,
                         },
                         ensure_ascii=False,
                     ),
@@ -437,6 +493,8 @@ def evaluate_speaking():
         payload["pronunciation_engine_error"] = pronunciation_error
     if oral_error:
         payload["oral_engine_error"] = oral_error
+    if payload.get("result"):
+        payload["follow_up_question"] = (payload["result"].get("follow_up_question") or "").strip()
     return jsonify(payload), status
 
 

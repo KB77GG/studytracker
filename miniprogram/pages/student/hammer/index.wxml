@@ -97,12 +97,25 @@
           </view>
         </view>
 
+        <view class="bubble-row ai" wx:elif="{{msg.role==='assistant' && msg.type==='typing'}}" data-id="{{msg.id}}">
+          <view class="avatar ai-av">🤖</view>
+          <view class="assistant-stack">
+            <view class="bubble ai typing-bubble">
+              <view class="typing-dots">
+                <view class="typing-dot"></view>
+                <view class="typing-dot"></view>
+                <view class="typing-dot"></view>
+              </view>
+            </view>
+          </view>
+        </view>
+
         <view class="bubble-row ai" wx:else data-id="{{msg.id}}" bindlongpress="handleMessageLongPress">
           <view class="avatar ai-av">🤖</view>
 
           <view class="assistant-stack">
             <view class="bubble ai">
-              <text class="bubble-text">{{msg.content || (msg.result ? 'Great start! Let me give you detailed feedback on your response.' : '暂无反馈内容')}}</text>
+              <text class="bubble-text">{{msg.content || (msg.result ? '让我来看看你的回答...' : '暂无反馈内容')}}</text>
             </view>
 
             <view class="feedback-card" wx:if="{{msg.result && msg.result.scores}}">
@@ -173,6 +186,18 @@
           </view>
         </view>
       </block>
+
+      <view class="quick-reply-row" wx:if="{{quickReplies.length > 0}}">
+        <view
+          class="quick-reply-chip"
+          wx:for="{{quickReplies}}"
+          wx:key="action"
+          data-action="{{item.action}}"
+          bindtap="handleQuickReply"
+        >
+          <text>{{item.label}}</text>
+        </view>
+      </view>
 
       <view class="bottom-pad"></view>
     </view>

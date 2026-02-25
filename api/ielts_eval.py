@@ -28,12 +28,15 @@ def _build_prompt(payload: dict[str, Any]) -> list[dict[str, str]]:
         "Do not invent facts beyond the student's transcript and provided audio metrics."
     )
 
+    conversation_history = payload.get("conversation_history") or []
+
     user = {
-        "task": "Evaluate IELTS speaking response and provide official-criteria feedback + optimized rewrite.",
+        "task": "Evaluate IELTS speaking response and provide official-criteria feedback + optimized rewrite. Also respond conversationally as an examiner.",
         "part": part,
         "question": question,
         "transcript": transcript,
         "audio_metrics": audio_metrics,
+        "conversation_history": conversation_history,
         "output_schema": {
             "scores": {
                 "fluency_coherence": "number",
@@ -100,7 +103,9 @@ def _build_prompt(payload: dict[str, Any]) -> list[dict[str, str]]:
                 "paragraph": "string",
                 "logic_tips": ["string"]
             },
-            "next_step": ["string"]
+            "next_step": ["string"],
+            "reply_text": "string (2-3 natural conversational sentences as an IELTS examiner responding to the student. Reference specific things the student said. Be warm and encouraging but honest. Do NOT repeat scores or list corrections here.)",
+            "follow_up_question": "string (a single natural IELTS examiner follow-up question. For Part1: a related personal question. For Part2: ask to elaborate on a detail mentioned. For Part3: a deeper discussion question that pushes critical thinking.)"
         },
         "rules": [
             "For Part1: keep the rewrite concise and within 2-4 sentences.",
@@ -112,7 +117,10 @@ def _build_prompt(payload: dict[str, Any]) -> list[dict[str, str]]:
             "Pronunciation should use audio_metrics when available. If audio_metrics are limited, still give a cautious estimate and include limitation_note.",
             "rewrite_high_band must include one coherent paragraph and logic_tips as bullet points.",
             "logic_tips should be Chinese guidance with key English connectors (for example: When it comes to, If I remember correctly, At first, Then, Finally, As for the reasons why, First of all, What's more).",
-            "Keep output concise to avoid truncation: plus/minus each <=2 items; sentence_corrections <=2; expression_corrections <=2; vocabulary_upgrades <=3; logic_tips <=3; next_step <=3."
+            "Keep output concise to avoid truncation: plus/minus each <=2 items; sentence_corrections <=2; expression_corrections <=2; vocabulary_upgrades <=3; logic_tips <=3; next_step <=3.",
+            "reply_text must be 2-3 natural sentences like an examiner speaking face-to-face. Reference specific content from the student's transcript. Be warm but constructive. Use English.",
+            "follow_up_question must be a single natural question that continues the conversation and is appropriate for the IELTS Part being practiced.",
+            "If conversation_history is provided, reference it naturally in reply_text (e.g. acknowledge improvement or recurring issues). follow_up_question should build on the conversation thread. If the student is answering a previous follow-up, evaluate in that context."
         ],
         "part2_frameworks": {
             "person_place": [
@@ -379,6 +387,8 @@ def _normalize_result(parsed: Any, target_band: str) -> dict[str, Any]:
             "logic_tips": _list_of_str(rewrite.get("logic_tips")),
         },
         "next_step": _list_of_str(data.get("next_step")),
+        "reply_text": str(data.get("reply_text") or "").strip(),
+        "follow_up_question": str(data.get("follow_up_question") or "").strip(),
     }
     return normalized
 
@@ -404,7 +414,7 @@ def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
         "model": model,
         "messages": messages,
         "temperature": 0.2,
-        "max_tokens": 1500,
+        "max_tokens": 2000,
         "response_format": {"type": "json_object"},
     }
 

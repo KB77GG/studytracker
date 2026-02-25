@@ -101,7 +101,9 @@ Page({
     recordDurationSec: 0,
     recordTimerLabel: '00:00',
     waveBars: buildWaveBars(false),
-    statusBarHeight: 44
+    statusBarHeight: 44,
+    pendingFollowUp: '',
+    quickReplies: []
   },
 
   onLoad() {
@@ -301,6 +303,11 @@ Page({
         content: text
       })
     )
+  },
+
+  removeMessage(messageId) {
+    const messages = (this.data.messages || []).filter(m => m.id !== messageId)
+    this.setData({ messages })
   },
 
   updateMessageStatus(messageId, status, errorText = '') {
@@ -1032,6 +1039,7 @@ Page({
     this.setData({
       answerText: value,
       canSend: !!String(value).trim(),
+      quickReplies: [],
       ...this.resetAnswerArtifacts()
     })
   },
@@ -1143,6 +1151,28 @@ Page({
       this.setData({ answerText: joined, canSend: !!String(joined).trim() })
     }
     this.setData({ showQuickActions: false })
+  },
+
+  handleQuickReply(e) {
+    const action = e.currentTarget.dataset.action
+    this.setData({ quickReplies: [] })
+    if (action === 'answer_followup') {
+      wx.showToast({ title: '请录音或输入回答', icon: 'none' })
+      return
+    }
+    if (action === 'retry_question') {
+      this.setData({
+        answerText: '',
+        canSend: false,
+        ...this.resetAnswerArtifacts()
+      })
+      this.appendSystemMessage('同一题目，重新回答 ✓')
+      return
+    }
+    if (action === 'next_question') {
+      this.nextQuestion()
+      return
+    }
   },
 
   togglePart3Expand() {
@@ -1275,13 +1305,24 @@ Page({
   },
 
   async performEvalForMessage(messageId, payload) {
-    this.setData({ loadingEval: true })
+    this.setData({ loadingEval: true, quickReplies: [] })
+
+    const typingId = this.makeMessageId('typing')
+    this.appendMessage(this.createMessage('assistant', {
+      id: typingId,
+      type: 'typing',
+      content: ''
+    }), true)
+
     try {
       const res = await request('/miniprogram/speaking/evaluate', {
         method: 'POST',
         data: payload,
         timeout: 70000
       })
+
+      this.removeMessage(typingId)
+
       if (!res.ok || !res.result) {
         const errText = this.mapEvalError(res.error || '评估失败')
         this.updateMessageStatus(messageId, 'failed', errText)
@@ -1290,15 +1331,45 @@ Page({
       }
 
       const normalized = this.normalizeResult(res.result)
+      const replyText = normalized.reply_text || ''
       this.updateMessageStatus(messageId, 'sent')
-      this.appendMessage(this.createMessage('assistant', { result: normalized }))
+      this.appendMessage(this.createMessage('assistant', {
+        content: replyText,
+        result: normalized
+      }))
       this.setData({
         result: normalized,
         ...this.resetAnswerArtifacts()
       })
+
+      const followUp = res.follow_up_question || normalized.follow_up_question || ''
+      if (followUp) {
+        this.setData({ pendingFollowUp: followUp })
+        setTimeout(() => {
+          this.appendMessage(this.createMessage('assistant', {
+            type: 'follow_up',
+            content: followUp
+          }), true)
+
+          const quickReplies = [
+            { label: '🎤 回答追问', action: 'answer_followup' },
+            { label: '🔄 再试一次', action: 'retry_question' },
+            { label: '➡️ 换一题', action: 'next_question' }
+          ]
+          this.setData({ quickReplies })
+        }, 800)
+      } else {
+        const quickReplies = [
+          { label: '🔄 再试一次', action: 'retry_question' },
+          { label: '➡️ 换一题', action: 'next_question' }
+        ]
+        this.setData({ quickReplies })
+      }
+
       this.loadSessionList(true)
       return true
     } catch (e) {
+      this.removeMessage(typingId)
       this.updateMessageStatus(messageId, 'failed', '网络异常，请重试')
       wx.showToast({ title: '网络异常，请重试', icon: 'none' })
       return false
@@ -1340,7 +1411,7 @@ Page({
       }),
       true
     )
-    this.setData({ answerText: '', canSend: false, showQuickActions: false })
+    this.setData({ answerText: '', canSend: false, showQuickActions: false, quickReplies: [] })
 
     const sessionId = await this.ensureSessionExists()
     if (!sessionId) {
@@ -1471,7 +1542,9 @@ Page({
       chinese_style_correction: chineseStyleCorrection,
       lexical_upgrade: lexicalUpgrade,
       next_step: nextStepList,
-      summary_text: summaryText
+      summary_text: summaryText,
+      reply_text: data.reply_text || '',
+      follow_up_question: data.follow_up_question || ''
     }
   },
 
@@ -1592,7 +1665,7 @@ Page({
   },
 
   startRecord() {
-    this.setData({ showQuickActions: false, showMoreMenu: false, showContextMenu: false })
+    this.setData({ showQuickActions: false, showMoreMenu: false, showContextMenu: false, quickReplies: [] })
     if (this.data.recordBusy && !this.data.isRecording && !this.data.uploadingAudio && !this.data.transcribingAudio) {
       this.setData({ recordBusy: false })
     }
