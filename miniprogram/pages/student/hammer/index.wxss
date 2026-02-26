@@ -67,10 +67,10 @@ page {
 }
 
 .nav-icon-btn {
-  width: 80rpx;
-  height: 80rpx;
+  width: 72rpx;
+  height: 72rpx;
   border: none;
-  border-radius: 24rpx;
+  border-radius: 22rpx;
   background: var(--primary-light);
   border: 1.5rpx solid var(--primary-mid);
   padding: 0;
@@ -93,35 +93,40 @@ page {
   align-items: baseline;
   justify-content: center;
   gap: 8rpx;
+  overflow: hidden;
 }
 
 .nav-title-brand {
-  font-size: 34rpx;
+  font-size: 32rpx;
   font-weight: 700;
   color: var(--primary);
   font-family: 'Noto Serif SC', serif;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-title-rest {
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 700;
   color: var(--text);
   font-family: 'Noto Serif SC', serif;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .part-selector {
   flex: 0 0 auto;
-  min-height: 64rpx;
+  min-height: 60rpx;
   border-radius: 40rpx;
   border: 1.5rpx solid var(--primary-mid);
   background: var(--primary-light);
-  padding: 0 18rpx;
+  padding: 0 14rpx;
   margin: 0;
   display: inline-flex;
   align-items: center;
-  gap: 8rpx;
+  gap: 6rpx;
 }
 
 .part-icon {
