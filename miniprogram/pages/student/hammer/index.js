@@ -103,7 +103,8 @@ Page({
     waveBars: buildWaveBars(false),
     statusBarHeight: 44,
     pendingFollowUp: '',
-    quickReplies: []
+    quickReplies: [],
+    isGuest: false
   },
 
   onLoad() {
@@ -111,6 +112,9 @@ Page({
       const sysInfo = wx.getSystemInfoSync()
       this.setData({ statusBarHeight: sysInfo.statusBarHeight || 44 })
     } catch (e) {}
+    // Guest mode detection
+    const isGuest = !!getApp().globalData.guestMode
+    this.setData({ isGuest })
     this.setupRecorder()
     this.setupAudioPlayer()
     this.loadAssigned()
@@ -142,6 +146,11 @@ Page({
 
   onUnload() {
     this.cleanupRecordAndAudio()
+  },
+
+  goLogin() {
+    getApp().globalData.guestMode = false
+    wx.reLaunch({ url: '/pages/index/index' })
   },
 
   cleanupRecordAndAudio() {
@@ -1418,6 +1427,19 @@ Page({
 
   async submitEval(e) {
     if (this.data.loadingEval) return
+    // Guest mode auth guard
+    if (this.data.isGuest) {
+      wx.showModal({
+        title: '需要登录',
+        content: '登录后即可提交回答并获取评估反馈',
+        confirmText: '去登录',
+        cancelText: '继续浏览',
+        success: (res) => {
+          if (res.confirm) this.goLogin()
+        }
+      })
+      return
+    }
     const transcript = (this.data.answerText || '').trim()
     const auto = e === true
     if (!transcript) {

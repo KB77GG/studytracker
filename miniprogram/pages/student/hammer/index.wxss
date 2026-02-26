@@ -17,6 +17,32 @@ page {
   color: var(--text);
 }
 
+/* Guest mode banner */
+.guest-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #e8f5e9, #e0f2f1);
+  padding: 12rpx 24rpx;
+  padding-bottom: 12rpx;
+  position: relative;
+  z-index: 120;
+}
+.guest-text {
+  font-size: 24rpx;
+  color: #555;
+  flex: 1;
+}
+.guest-login-btn {
+  background: #1f6c65;
+  color: #fff;
+  font-size: 24rpx;
+  padding: 8rpx 28rpx;
+  border-radius: 24rpx;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
 .page-shell {
   position: relative;
   height: 100vh;

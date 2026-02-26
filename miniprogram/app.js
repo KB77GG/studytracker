@@ -55,6 +55,7 @@ App({
         userInfo: null,
         token: null,
         role: null,
+        guestMode: false,
         baseUrl: 'https://studytracker.xin/api',
         activeTimer: null
     }

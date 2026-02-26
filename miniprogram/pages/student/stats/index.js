@@ -9,7 +9,8 @@ Page({
             weekly_activity: [],
             badges: []
         },
-        loading: true
+        loading: true,
+        isGuest: false
     },
 
     onShow() {
@@ -18,13 +19,29 @@ Page({
                 selected: 1
             })
         }
-        this.fetchStats()
+        // Guest mode detection
+        const isGuest = !!getApp().globalData.guestMode
+        this.setData({ isGuest })
+        if (!isGuest) {
+            this.fetchStats()
+        } else {
+            this.setData({ loading: false })
+        }
     },
 
     onPullDownRefresh() {
+        if (this.data.isGuest) {
+            wx.stopPullDownRefresh()
+            return
+        }
         this.fetchStats().then(() => {
             wx.stopPullDownRefresh()
         })
+    },
+
+    goLogin() {
+        getApp().globalData.guestMode = false
+        wx.reLaunch({ url: '/pages/index/index' })
     },
 
     fetchStats() {
@@ -44,11 +61,13 @@ Page({
                         resolve()
                     } else {
                         console.error('Fetch stats failed:', res.data.error)
+                        this.setData({ loading: false })
                         reject()
                     }
                 },
                 fail: (err) => {
                     console.error('Request failed:', err)
+                    this.setData({ loading: false })
                     reject()
                 }
             })

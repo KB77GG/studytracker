@@ -1,4 +1,9 @@
 <view class="page-shell">
+  <!-- 访客模式提示条 -->
+  <view class="guest-banner" wx:if="{{isGuest}}" style="padding-top: {{statusBarHeight + 8}}px;">
+    <text class="guest-text">访客模式浏览中 · 登录解锁全部功能</text>
+    <view class="guest-login-btn" bindtap="goLogin">登录</view>
+  </view>
   <view class="top-nav" style="padding-top: {{statusBarHeight + 12}}px;" catchtap="closeTransientPanels">
     <button class="nav-icon-btn" catchtap="openSessionDrawer" aria-label="打开练习记录">
       <image class="header-icon" src="/assets/icons/history.svg" mode="aspectFit" />

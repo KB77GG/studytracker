@@ -47,7 +47,9 @@ Page({
     },
 
     showPreview() {
-        this.setData({ showPreview: true, showLoginForm: false })
+        // Navigate directly into student pages in guest mode (WeChat review compliance)
+        app.globalData.guestMode = true
+        wx.reLaunch({ url: '/pages/student/home/index' })
     },
 
     onLoad(options) {
@@ -136,6 +138,7 @@ Page({
 
                         if (result.ok) {
                             app.globalData.token = result.token
+                            app.globalData.guestMode = false
                             wx.setStorageSync('token', result.token)
                             this.setData({ hasToken: true })
 
@@ -191,6 +194,7 @@ Page({
     },
 
     handleRoleRedirect(role) {
+        app.globalData.guestMode = false
         if (role === 'student') {
             wx.reLaunch({ url: '/pages/student/home/index' })
         } else if (role === 'parent') {

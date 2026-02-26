@@ -19,7 +19,8 @@ Page({
         activeTimerId: null,
         timerInterval: null,
         hasSubscribed: false,
-        notebookCount: 0
+        notebookCount: 0,
+        isGuest: false
     },
 
     onLoad() {
@@ -43,6 +44,10 @@ Page({
                 selected: 0
             })
         }
+        // Guest mode detection
+        const isGuest = !!getApp().globalData.guestMode
+        this.setData({ isGuest })
+
         this.fetchTasks()
         this.loadNotebookCount()
         this.updateGreeting()
@@ -184,6 +189,11 @@ Page({
             dateStr: `${year}/${month}/${day}`
         })
         this.fetchTasks()
+    },
+
+    goLogin() {
+        getApp().globalData.guestMode = false
+        wx.reLaunch({ url: '/pages/index/index' })
     },
 
     updateGreeting() {

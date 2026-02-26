@@ -1,4 +1,9 @@
 <view class="container">
+  <!-- 访客模式提示条 -->
+  <view class="guest-banner" wx:if="{{isGuest}}">
+    <text class="guest-text">访客模式浏览中 · 登录查看学习数据</text>
+    <view class="guest-login-btn" bindtap="goLogin">登录</view>
+  </view>
   <!-- 头部用户信息 -->
   <view class="header">
     <view class="user-info">

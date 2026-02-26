@@ -5,6 +5,31 @@
   box-sizing: border-box;
 }
 
+/* Guest mode banner */
+.guest-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #e8f5e9, #e0f2f1);
+  border-radius: 16rpx;
+  padding: 16rpx 24rpx;
+  margin-bottom: 20rpx;
+}
+.guest-text {
+  font-size: 24rpx;
+  color: #555;
+  flex: 1;
+}
+.guest-login-btn {
+  background: #1f6c65;
+  color: #fff;
+  font-size: 24rpx;
+  padding: 8rpx 28rpx;
+  border-radius: 24rpx;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
 .page-scroll {
   height: calc(100vh - 120rpx);
   box-sizing: border-box;

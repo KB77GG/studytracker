@@ -31,9 +31,12 @@ const request = (url, options = {}) => {
                     // Token 过期或无效
                     wx.removeStorageSync('token')
                     getApp().globalData.token = null
-                    wx.reLaunch({
-                        url: '/pages/index/index',
-                    })
+                    // In guest mode, don't redirect — just return error so pages show empty state
+                    if (!getApp().globalData.guestMode) {
+                        wx.reLaunch({
+                            url: '/pages/index/index',
+                        })
+                    }
                     resolve({ ok: false, error: 'unauthorized', statusCode: res.statusCode })
                 } else {
                     // 返回后由调用方自行处理错误信息
