@@ -54,16 +54,27 @@ page {
 
 .top-nav {
   flex-shrink: 0;
-  min-height: 112rpx;
-  padding: 16rpx 24rpx;
-  padding-top: calc(env(safe-area-inset-top, 20px) + 16rpx);
+  padding: 12rpx 24rpx 14rpx;
   background: var(--surface);
   border-bottom: 1rpx solid var(--border);
   box-shadow: var(--shadow-sm);
   display: flex;
-  align-items: center;
-  gap: 12rpx;
+  flex-direction: column;
+  gap: 10rpx;
   z-index: 20;
+}
+
+.nav-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10rpx;
+}
+
+.nav-btn-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .nav-icon-btn {
@@ -89,29 +100,18 @@ page {
   height: 34rpx;
 }
 
-.nav-title-wrap {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 8rpx;
-}
-
 .nav-title-brand {
-  font-size: 32rpx;
+  font-size: 36rpx;
   font-weight: 700;
   color: var(--primary);
   font-family: 'Noto Serif SC', serif;
-  white-space: nowrap;
 }
 
 .nav-title-rest {
-  font-size: 30rpx;
+  font-size: 34rpx;
   font-weight: 700;
   color: var(--text);
   font-family: 'Noto Serif SC', serif;
-  white-space: nowrap;
 }
 
 .part-selector {
@@ -119,13 +119,11 @@ page {
   border-radius: 40rpx;
   border: 1.5rpx solid var(--primary-mid);
   background: var(--primary-light);
-  padding: 0 14rpx;
+  padding: 0 16rpx;
   margin: 0;
   display: inline-flex;
   align-items: center;
-  gap: 6rpx;
-  flex: 0 0 auto;
-  min-width: 0;
+  gap: 8rpx;
   box-sizing: border-box;
 }
 
