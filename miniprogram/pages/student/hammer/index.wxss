@@ -68,6 +68,8 @@ page {
 
 .nav-icon-btn {
   width: 72rpx;
+  min-width: 72rpx;
+  max-width: 72rpx;
   height: 72rpx;
   border: none;
   border-radius: 22rpx;
@@ -78,7 +80,8 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
+  flex: 0 0 72rpx;
+  box-sizing: border-box;
 }
 
 .header-icon {
@@ -93,7 +96,6 @@ page {
   align-items: baseline;
   justify-content: center;
   gap: 8rpx;
-  overflow: hidden;
 }
 
 .nav-title-brand {
@@ -102,8 +104,6 @@ page {
   color: var(--primary);
   font-family: 'Noto Serif SC', serif;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .nav-title-rest {
@@ -112,12 +112,9 @@ page {
   color: var(--text);
   font-family: 'Noto Serif SC', serif;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .part-selector {
-  flex: 0 0 auto;
   min-height: 60rpx;
   border-radius: 40rpx;
   border: 1.5rpx solid var(--primary-mid);
@@ -127,6 +124,9 @@ page {
   display: inline-flex;
   align-items: center;
   gap: 6rpx;
+  flex: 0 0 auto;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .part-icon {
