@@ -387,7 +387,8 @@ def _normalize_result(parsed: Any, target_band: str) -> dict[str, Any]:
             "logic_tips": _list_of_str(rewrite.get("logic_tips")),
         },
         "next_step": _list_of_str(data.get("next_step")),
-        "reply_text": str(data.get("reply_text") or "").strip(),
+        "reply_text": str(data.get("reply_text") or "").strip()
+            or "Good effort! Let me give you some detailed feedback on your response.",
         "follow_up_question": str(data.get("follow_up_question") or "").strip(),
     }
     return normalized

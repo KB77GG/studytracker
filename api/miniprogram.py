@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import hashlib
 from datetime import datetime, date, timedelta
@@ -330,6 +331,30 @@ def get_speaking_random():
     })
 
 
+_CONTROL_CHAR_RE = re.compile(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]')
+_PROMPT_INJECTION_RE = re.compile(
+    r'(ignore\s+(previous|above|all)\s+instructions|'
+    r'system\s*:\s*|'
+    r'you\s+are\s+now\s+|'
+    r'forget\s+(everything|all|your)\s+|'
+    r'new\s+instructions?\s*:)',
+    re.IGNORECASE
+)
+
+
+def _sanitize_transcript(text: str, max_len: int = 300) -> str:
+    """Strip control chars, truncate, and neutralize obvious prompt injection patterns."""
+    if not text:
+        return ""
+    # Remove control characters (keep newlines and tabs)
+    cleaned = _CONTROL_CHAR_RE.sub('', text)
+    # Truncate to max_len
+    cleaned = cleaned[:max_len].strip()
+    # Neutralize prompt-injection-style phrases by wrapping in brackets
+    cleaned = _PROMPT_INJECTION_RE.sub(r'[\1]', cleaned)
+    return cleaned
+
+
 def _load_conversation_history(session, student_id, limit=6):
     """Load last N messages from a session as compressed history for the AI prompt."""
     recent_msgs = (
@@ -343,11 +368,20 @@ def _load_conversation_history(session, student_id, limit=6):
     recent_msgs.reverse()
     history = []
     for msg in recent_msgs:
-        if msg.role == "user" and msg.content:
-            history.append({
-                "role": "user",
-                "summary": msg.content[:300],
-            })
+        if msg.role == "user":
+            # Old data may have content=None; fall back to transcript from meta_json
+            user_text = (msg.content or "").strip()
+            if not user_text and msg.meta_json:
+                try:
+                    _meta = json.loads(msg.meta_json)
+                    user_text = str(_meta.get("transcript") or "").strip()
+                except Exception:
+                    pass
+            if user_text:
+                history.append({
+                    "role": "user",
+                    "summary": _sanitize_transcript(user_text[:300]),
+                })
         elif msg.role == "assistant":
             meta = {}
             if msg.meta_json:
@@ -361,11 +395,16 @@ def _load_conversation_history(session, student_id, limit=6):
                     result = json.loads(msg.result_json)
                 except Exception:
                     pass
+            # reply_text: prefer msg.content, then result_json field, then empty
+            reply_text = (msg.content or "").strip() or str(result.get("reply_text") or "").strip()
+            # follow_up: prefer meta_json field, then result_json field
+            follow_up = str(meta.get("follow_up_question") or result.get("follow_up_question") or "").strip()
+            scores = result.get("scores") if isinstance(result.get("scores"), dict) else {}
             history.append({
                 "role": "assistant",
-                "reply_text": msg.content or result.get("reply_text", ""),
-                "follow_up": meta.get("follow_up_question", result.get("follow_up_question", "")),
-                "overall_score": result.get("scores", {}).get("overall", 0),
+                "reply_text": reply_text,
+                "follow_up": follow_up,
+                "overall_score": scores.get("overall", 0),
             })
     return history
 

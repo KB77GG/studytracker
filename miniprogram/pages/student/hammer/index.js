@@ -145,6 +145,12 @@ Page({
   },
 
   cleanupRecordAndAudio() {
+    // Clear pending follow-up timer
+    if (this._followUpTimer) {
+      clearTimeout(this._followUpTimer)
+      this._followUpTimer = null
+    }
+    this._evalInFlight = false
     this.stopRecordingTicker()
     this.clearRecordStopGuard()
     try {
@@ -1156,20 +1162,33 @@ Page({
   handleQuickReply(e) {
     const action = e.currentTarget.dataset.action
     this.setData({ quickReplies: [] })
+
+    // Cancel any pending follow-up timer
+    if (this._followUpTimer) {
+      clearTimeout(this._followUpTimer)
+      this._followUpTimer = null
+    }
+
     if (action === 'answer_followup') {
+      // Keep the follow-up question visible as context; focus the input
       wx.showToast({ title: '请录音或输入回答', icon: 'none' })
       return
     }
     if (action === 'retry_question') {
+      // Clear answer + follow-up context, keep same question & session
       this.setData({
         answerText: '',
         canSend: false,
+        pendingFollowUp: '',
+        result: null,
         ...this.resetAnswerArtifacts()
       })
       this.appendSystemMessage('同一题目，重新回答 ✓')
       return
     }
     if (action === 'next_question') {
+      // Full reset: clears messages, session, result, follow-up state
+      this.setData({ pendingFollowUp: '' })
       this.nextQuestion()
       return
     }
@@ -1305,7 +1324,19 @@ Page({
   },
 
   async performEvalForMessage(messageId, payload) {
-    this.setData({ loadingEval: true, quickReplies: [] })
+    // Re-entry guard: prevent double submission
+    if (this._evalInFlight) return false
+    this._evalInFlight = true
+
+    // Clear any orphaned typing bubbles from previous calls
+    const cleaned = (this.data.messages || []).filter(m => m.type !== 'typing')
+    this.setData({ messages: cleaned, loadingEval: true, quickReplies: [] })
+
+    // Clear any pending follow-up timer
+    if (this._followUpTimer) {
+      clearTimeout(this._followUpTimer)
+      this._followUpTimer = null
+    }
 
     const typingId = this.makeMessageId('typing')
     this.appendMessage(this.createMessage('assistant', {
@@ -1345,25 +1376,31 @@ Page({
       const followUp = res.follow_up_question || normalized.follow_up_question || ''
       if (followUp) {
         this.setData({ pendingFollowUp: followUp })
-        setTimeout(() => {
-          this.appendMessage(this.createMessage('assistant', {
-            type: 'follow_up',
-            content: followUp
-          }), true)
+        // Use setData callback to wait for main reply render before appending follow-up
+        this.setData({}, () => {
+          this._followUpTimer = setTimeout(() => {
+            this._followUpTimer = null
+            this.appendMessage(this.createMessage('assistant', {
+              type: 'follow_up',
+              content: followUp
+            }), true)
 
-          const quickReplies = [
-            { label: '🎤 回答追问', action: 'answer_followup' },
+            this.setData({
+              quickReplies: [
+                { label: '🎤 回答追问', action: 'answer_followup' },
+                { label: '🔄 再试一次', action: 'retry_question' },
+                { label: '➡️ 换一题', action: 'next_question' }
+              ]
+            })
+          }, 400)
+        })
+      } else {
+        this.setData({
+          quickReplies: [
             { label: '🔄 再试一次', action: 'retry_question' },
             { label: '➡️ 换一题', action: 'next_question' }
           ]
-          this.setData({ quickReplies })
-        }, 800)
-      } else {
-        const quickReplies = [
-          { label: '🔄 再试一次', action: 'retry_question' },
-          { label: '➡️ 换一题', action: 'next_question' }
-        ]
-        this.setData({ quickReplies })
+        })
       }
 
       this.loadSessionList(true)
@@ -1374,6 +1411,7 @@ Page({
       wx.showToast({ title: '网络异常，请重试', icon: 'none' })
       return false
     } finally {
+      this._evalInFlight = false
       this.setData({ loadingEval: false })
     }
   },
@@ -1543,7 +1581,7 @@ Page({
       lexical_upgrade: lexicalUpgrade,
       next_step: nextStepList,
       summary_text: summaryText,
-      reply_text: data.reply_text || '',
+      reply_text: data.reply_text || 'Good effort! Let me give you some detailed feedback on your response.',
       follow_up_question: data.follow_up_question || ''
     }
   },
