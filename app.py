@@ -3686,6 +3686,15 @@ def stage_report_create(report_id=None):
         stage_data["focus_points_text"] = (request.form.get("focus_points_text") or "").strip()
         stage_data["suggestions_text"] = (request.form.get("suggestions_text") or "").strip()
 
+        stage_data["visible_sections"] = {
+            "overview": request.form.get("sec_overview") == "1",
+            "subjects": request.form.get("sec_subjects") == "1",
+            "class_summary": request.form.get("sec_class_summary") == "1",
+            "mock_exam": request.form.get("sec_mock_exam") == "1",
+            "focus": request.form.get("sec_focus") == "1",
+            "suggestions": request.form.get("sec_suggestions") == "1",
+        }
+
         title = (request.form.get("title") or "").strip()
         if not title:
             title = _stage_report_title(selected_student, start_date, end_date)
@@ -3809,6 +3818,8 @@ def export_stage_report_pdf(report_id):
     except Exception:
         logo_base64 = ""
 
+    visible_sections = data.get("visible_sections", {})
+
     html = render_template(
         "admin/stage_report_pdf.html",
         report=report,
@@ -3821,6 +3832,7 @@ def export_stage_report_pdf(report_id):
         suggestions=suggestions,
         generated_at=datetime.now(),
         logo_base64=logo_base64,
+        secs=visible_sections,
     )
 
     css = CSS(string="""
