@@ -2481,6 +2481,17 @@ def _build_stage_report_payload(student: StudentProfile, start_date: date, end_d
         .order_by(StudyPlan.plan_date.asc(), PlanItem.order_index.asc())
         .all()
     )
+    legacy_tasks = []
+    if not items and student and student.full_name:
+        legacy_tasks = (
+            Task.query.filter(
+                Task.student_name == student.full_name,
+                Task.date >= start_date.isoformat(),
+                Task.date <= end_date.isoformat(),
+            )
+            .order_by(Task.date.asc(), Task.id.asc())
+            .all()
+        )
 
     module_map = defaultdict(
         lambda: {
@@ -2493,44 +2504,85 @@ def _build_stage_report_payload(student: StudentProfile, start_date: date, end_d
             "total": 0,
             "contents": [],
             "content_seen": set(),
+            "mastery_sum": 0.0,
+            "mastery_count": 0,
         }
     )
 
-    for item in items:
-        module = (item.module or "").strip() or "未分类"
-        row = module_map[module]
-        row["total"] += 1
-        row["planned_minutes"] += int(item.planned_minutes or 0)
-        row["actual_minutes"] += int((item.actual_seconds or 0) / 60) + int(item.manual_minutes or 0)
+    if items:
+        for item in items:
+            module = (item.module or "").strip() or "未分类"
+            row = module_map[module]
+            row["total"] += 1
+            row["planned_minutes"] += int(item.planned_minutes or 0)
+            row["actual_minutes"] += int((item.actual_seconds or 0) / 60) + int(item.manual_minutes or 0)
 
-        review_status = item.review_status or PlanItem.REVIEW_PENDING
-        if review_status == PlanItem.REVIEW_APPROVED:
-            row["approved"] += 1
-        elif review_status == PlanItem.REVIEW_PARTIAL:
-            row["partial"] += 1
-        elif review_status == PlanItem.REVIEW_REJECTED:
-            row["rejected"] += 1
-        else:
-            row["pending"] += 1
+            review_status = item.review_status or PlanItem.REVIEW_PENDING
+            mastery_value = 0.35
+            if review_status == PlanItem.REVIEW_APPROVED:
+                row["approved"] += 1
+                mastery_value = 1.0
+            elif review_status == PlanItem.REVIEW_PARTIAL:
+                row["partial"] += 1
+                mastery_value = 0.65
+            elif review_status == PlanItem.REVIEW_REJECTED:
+                row["rejected"] += 1
+                mastery_value = 0.2
+            else:
+                row["pending"] += 1
 
-        content_name = (item.custom_title or item.task_name or "").strip()
-        if (
-            content_name
-            and content_name not in row["content_seen"]
-            and len(row["contents"]) < 8
-        ):
-            row["contents"].append(content_name)
-            row["content_seen"].add(content_name)
+            row["mastery_sum"] += mastery_value
+            row["mastery_count"] += 1
+
+            content_name = (item.custom_title or item.task_name or "").strip()
+            if (
+                content_name
+                and content_name not in row["content_seen"]
+                and len(row["contents"]) < 8
+            ):
+                row["contents"].append(content_name)
+                row["content_seen"].add(content_name)
+    else:
+        for task in legacy_tasks:
+            raw_category = (task.category or "").strip() or "未分类"
+            parts = [part for part in raw_category.split("-") if part]
+            module = parts[1] if len(parts) >= 2 else parts[0]
+            row = module_map[module]
+            row["total"] += 1
+            row["planned_minutes"] += int(task.planned_minutes or 0)
+            row["actual_minutes"] += int((task.actual_seconds or 0) / 60)
+
+            task_status = (task.status or "pending").lower()
+            status_value = 0.2
+            if task_status == "done":
+                row["approved"] += 1
+                status_value = 0.85
+            elif task_status == "progress" or task_status == "in_progress":
+                row["partial"] += 1
+                status_value = 0.55
+            else:
+                row["pending"] += 1
+
+            accuracy_value = float(task.accuracy or 0.0)
+            if accuracy_value > 0:
+                status_value = max(status_value, min(1.0, accuracy_value / 100.0))
+            row["mastery_sum"] += status_value
+            row["mastery_count"] += 1
+
+            content_name = (task.detail or raw_category).strip()
+            if (
+                content_name
+                and content_name not in row["content_seen"]
+                and len(row["contents"]) < 8
+            ):
+                row["contents"].append(content_name)
+                row["content_seen"].add(content_name)
 
     subject_rows = []
     for module, row in module_map.items():
         total = row["total"]
         reviewed = row["approved"] + row["partial"] + row["rejected"]
-        mastery_score = (
-            (row["approved"] * 1.0 + row["partial"] * 0.65 + row["rejected"] * 0.2) / total
-            if total
-            else 0.0
-        )
+        mastery_score = (row["mastery_sum"] / row["mastery_count"]) if row["mastery_count"] else 0.0
         review_rate = round(reviewed * 100.0 / total, 1) if total else 0.0
         execution_rate = (
             round(row["actual_minutes"] * 100.0 / row["planned_minutes"], 1)
@@ -2562,13 +2614,19 @@ def _build_stage_report_payload(student: StudentProfile, start_date: date, end_d
 
     subject_rows.sort(key=lambda entry: entry["planned_minutes"], reverse=True)
 
-    total_items = len(items)
-    reviewed_items = sum(
-        1
-        for item in items
-        if item.review_status
-        in (PlanItem.REVIEW_APPROVED, PlanItem.REVIEW_PARTIAL, PlanItem.REVIEW_REJECTED)
-    )
+    if items:
+        total_items = len(items)
+        reviewed_items = sum(
+            1
+            for item in items
+            if item.review_status
+            in (PlanItem.REVIEW_APPROVED, PlanItem.REVIEW_PARTIAL, PlanItem.REVIEW_REJECTED)
+        )
+    else:
+        total_items = len(legacy_tasks)
+        reviewed_items = sum(
+            1 for task in legacy_tasks if (task.status or "").lower() in {"done", "progress", "in_progress"}
+        )
     planned_total = sum(row["planned_minutes"] for row in subject_rows)
     actual_total = sum(row["actual_minutes"] for row in subject_rows)
     stage_completion_rate = round(reviewed_items * 100.0 / total_items, 1) if total_items else 0.0
