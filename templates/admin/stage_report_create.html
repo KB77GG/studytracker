@@ -118,12 +118,30 @@
         <label class="toggle" title="在 PDF 中显示/隐藏此模块"><input type="checkbox" {{ 'checked' if secs.get('class_summary', true) }}><span class="slider"></span></label>
       </div>
       <div class="panel-body">
-        <textarea
-          id="class_summary_text"
-          name="class_summary_text"
-          rows="4"
-          placeholder="请填写听说读写四门课程整体上课情况总结（课堂内容、课堂表现、问题与改进计划等）..."
-        >{{ stage_data.class_summary_text or '' }}</textarea>
+        <div class="table-wrap">
+          <table class="branded-table">
+            <thead>
+              <tr>
+                <th style="width: 14%;">学科</th>
+                <th>上课情况总结</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in stage_data.class_summary_rows or [] %}
+              <tr>
+                <td class="subject-cell">{{ row.subject }}</td>
+                <td>
+                  <textarea
+                    name="class_summary_{{ loop.index0 }}"
+                    rows="3"
+                    placeholder="请填写{{ row.subject }}上课情况总结..."
+                  >{{ row.summary or '' }}</textarea>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 

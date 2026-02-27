@@ -2752,6 +2752,7 @@ def _build_stage_report_data(student: StudentProfile, start_date: date, end_date
         "latest_score": payload["latest_score"],
         "predicted_score": payload["predicted_score"],
         "prediction_basis": payload["prediction_basis"],
+        "class_summary_rows": _default_class_summary_rows(),
         "class_summary_text": "",
         "mock_review_rows": _default_mock_review_rows(),
         "next_stage_plan_text": next_stage_plan_text,
@@ -2773,6 +2774,37 @@ def _default_class_summary_rows(existing_rows=None):
         if subject:
             existing_map[subject] = row.get("summary") or ""
     return [{"subject": subject, "summary": existing_map.get(subject, "")} for subject in subjects]
+
+
+def _class_rows_from_legacy_text(raw_text: str):
+    """Best-effort parser for old single-text class summary content."""
+    rows = _default_class_summary_rows()
+    if not raw_text:
+        return rows
+
+    subject_set = {row["subject"] for row in rows}
+    mapping = {row["subject"]: "" for row in rows}
+    lines = [line.strip() for line in str(raw_text).splitlines() if line.strip()]
+    current_subject = None
+
+    for line in lines:
+        matched = None
+        for subject in subject_set:
+            if line.startswith(subject + "：") or line.startswith(subject + ":"):
+                matched = subject
+                payload = line.split("：", 1)[1] if "：" in line else line.split(":", 1)[1]
+                mapping[subject] = payload.strip()
+                current_subject = subject
+                break
+        if matched:
+            continue
+        if current_subject:
+            if mapping[current_subject]:
+                mapping[current_subject] += "\n" + line
+            else:
+                mapping[current_subject] = line
+
+    return [{"subject": row["subject"], "summary": mapping.get(row["subject"], "")} for row in rows]
 
 
 def _default_mock_review_rows(existing_rows=None):
@@ -3698,8 +3730,17 @@ def stage_report_create(report_id=None):
                 row["teacher_comment"] = teacher_comment
         stage_data["subject_rows"] = subject_rows
 
-        stage_data["class_summary_text"] = (
-            request.form.get("class_summary_text") or ""
+        class_summary_rows = []
+        for idx, row in enumerate(_default_class_summary_rows()):
+            class_summary_rows.append(
+                {
+                    "subject": row["subject"],
+                    "summary": (request.form.get(f"class_summary_{idx}") or "").strip(),
+                }
+            )
+        stage_data["class_summary_rows"] = class_summary_rows
+        stage_data["class_summary_text"] = "\n".join(
+            f"{row['subject']}：{row['summary']}" for row in class_summary_rows if row["summary"]
         ).strip()
 
         mock_review_rows = []
@@ -3784,6 +3825,9 @@ def stage_report_create(report_id=None):
         stage_data["overall_comment"] = ""
     if stage_data.get("class_summary_text") is None:
         stage_data["class_summary_text"] = ""
+    stage_data["class_summary_rows"] = _default_class_summary_rows(
+        stage_data.get("class_summary_rows")
+    )
     stage_data["mock_review_rows"] = _default_mock_review_rows(
         stage_data.get("mock_review_rows")
     )
@@ -3793,14 +3837,10 @@ def stage_report_create(report_id=None):
         ).strip()
         stage_data["next_stage_plan_text"] = legacy_combined
 
-    if stage_data.get("class_summary_text") is None:
-        legacy_rows = _default_class_summary_rows(stage_data.get("class_summary_rows"))
-        stage_data["class_summary_text"] = "\n".join(
-            f"{row['subject']}：{row['summary']}" for row in legacy_rows if (row.get("summary") or "").strip()
-        ).strip()
-    stage_data["mock_review_rows"] = _default_mock_review_rows(
-        stage_data.get("mock_review_rows")
-    )
+    if not any((row.get("summary") or "").strip() for row in stage_data["class_summary_rows"]):
+        stage_data["class_summary_rows"] = _class_rows_from_legacy_text(
+            stage_data.get("class_summary_text") or ""
+        )
 
     title_value = report.title if report else _stage_report_title(selected_student, start_date, end_date) if selected_student else "阶段学习报告"
 
@@ -3844,12 +3884,11 @@ def export_stage_report_pdf(report_id):
 
     data = report.report_data or {}
     subject_rows = data.get("subject_rows") or []
-    class_summary_text = (data.get("class_summary_text") or "").strip()
-    if not class_summary_text:
-        legacy_rows = _default_class_summary_rows(data.get("class_summary_rows"))
-        class_summary_text = "\n".join(
-            f"{row['subject']}：{row['summary']}" for row in legacy_rows if (row.get("summary") or "").strip()
-        ).strip()
+    class_summary_rows = _default_class_summary_rows(data.get("class_summary_rows"))
+    if not any((row.get("summary") or "").strip() for row in class_summary_rows):
+        class_summary_rows = _class_rows_from_legacy_text(
+            (data.get("class_summary_text") or "").strip()
+        )
     mock_review_rows = _default_mock_review_rows(data.get("mock_review_rows"))
     next_stage_plan_text = (data.get("next_stage_plan_text") or "").strip()
     if not next_stage_plan_text:
@@ -3875,7 +3914,7 @@ def export_stage_report_pdf(report_id):
         student=report.student,
         data=data,
         subject_rows=subject_rows,
-        class_summary_text=class_summary_text,
+        class_summary_rows=class_summary_rows,
         mock_review_rows=mock_review_rows,
         next_stage_plan_text=next_stage_plan_text,
         generated_at=datetime.now(),

@@ -150,9 +150,22 @@
 
   {% if secs.get('class_summary', true) %}
   <h2>{{ ns.n }}. 听说读写上课情况总结</h2>{% set ns.n = ns.n + 1 %}
-  <div class="accent-box teal">
-    {{ (class_summary_text or '暂无上课情况总结。') | replace('\n', '<br>') | safe }}
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%;">学科</th>
+        <th>上课情况总结</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in class_summary_rows %}
+      <tr>
+        <td><strong>{{ row.subject }}</strong></td>
+        <td>{{ (row.summary or '—') | replace('\n', '<br>') | safe }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   {% endif %}
 
   {% if secs.get('mock_exam', true) %}
