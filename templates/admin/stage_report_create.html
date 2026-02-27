@@ -78,12 +78,12 @@
       </div>
     </section>
 
-    <!-- ── 各学科学习情况 ── -->
+    <!-- ── 课后教辅完成情况 ── -->
     <section class="card panel togglable {{ '' if secs.get('subjects', true) else 'collapsed' }}" data-key="subjects">
       <input type="hidden" name="sec_subjects" value="{{ '1' if secs.get('subjects', true) else '0' }}">
       <div class="panel-head">
         <div class="panel-head-icon">📚</div>
-        <h2>各学科学习情况</h2>
+        <h2>课后教辅完成情况</h2>
         <label class="toggle" title="在 PDF 中显示/隐藏此模块"><input type="checkbox" {{ 'checked' if secs.get('subjects', true) }}><span class="slider"></span></label>
       </div>
       <div class="panel-body">
@@ -118,14 +118,12 @@
         <label class="toggle" title="在 PDF 中显示/隐藏此模块"><input type="checkbox" {{ 'checked' if secs.get('class_summary', true) }}><span class="slider"></span></label>
       </div>
       <div class="panel-body">
-        <div class="skill-grid">
-          {% for row in stage_data.class_summary_rows or [] %}
-          <div class="skill-card">
-            <div class="skill-label">{{ row.subject }}</div>
-            <textarea name="class_summary_{{ loop.index0 }}" rows="3" placeholder="请填写{{ row.subject }}上课内容、课堂表现...">{{ row.summary or '' }}</textarea>
-          </div>
-          {% endfor %}
-        </div>
+        <textarea
+          id="class_summary_text"
+          name="class_summary_text"
+          rows="4"
+          placeholder="请填写听说读写四门课程整体上课情况总结（课堂内容、课堂表现、问题与改进计划等）..."
+        >{{ stage_data.class_summary_text or '' }}</textarea>
       </div>
     </section>
 
@@ -138,35 +136,46 @@
         <label class="toggle" title="在 PDF 中显示/隐藏此模块"><input type="checkbox" {{ 'checked' if secs.get('mock_exam', true) }}><span class="slider"></span></label>
       </div>
       <div class="panel-body">
-        <textarea id="mock_exam_review_text" name="mock_exam_review_text" rows="4"
-          placeholder="请填写本阶段模考表现、分项问题、提分策略和下阶段模考安排..."
-        >{{ stage_data.mock_exam_review_text or '' }}</textarea>
+        <div class="table-wrap">
+          <table class="branded-table">
+            <thead>
+              <tr>
+                <th style="width: 12%;">学科</th>
+                <th style="width: 18%;">正确率</th>
+                <th style="width: 18%;">模考成绩</th>
+                <th>老师点评</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in stage_data.mock_review_rows or [] %}
+              <tr>
+                <td class="subject-cell">{{ row.subject }}</td>
+                <td><input name="mock_accuracy_{{ loop.index0 }}" value="{{ row.accuracy_rate or '' }}" placeholder="如 78%"></td>
+                <td><input name="mock_score_{{ loop.index0 }}" value="{{ row.mock_score or '' }}" placeholder="如 6.0"></td>
+                <td><input name="mock_comment_{{ loop.index0 }}" value="{{ row.teacher_comment or '' }}" placeholder="如：审题稳定，细节仍需加强"></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <!-- ── 下阶段学习重点 ── -->
-    <section class="card panel togglable {{ '' if secs.get('focus', true) else 'collapsed' }}" data-key="focus">
-      <input type="hidden" name="sec_focus" value="{{ '1' if secs.get('focus', true) else '0' }}">
+    <!-- ── 下阶段学习重点与建议 ── -->
+    <section class="card panel togglable {{ '' if secs.get('next_plan', (secs.get('focus', true) or secs.get('suggestions', true))) else 'collapsed' }}" data-key="next_plan">
+      <input type="hidden" name="sec_next_plan" value="{{ '1' if secs.get('next_plan', (secs.get('focus', true) or secs.get('suggestions', true))) else '0' }}">
       <div class="panel-head">
         <div class="panel-head-icon">🔑</div>
-        <h2>下阶段学习重点</h2>
-        <label class="toggle" title="在 PDF 中显示/隐藏此模块"><input type="checkbox" {{ 'checked' if secs.get('focus', true) }}><span class="slider"></span></label>
+        <h2>下阶段学习重点与建议</h2>
+        <label class="toggle" title="在 PDF 中显示/隐藏此模块"><input type="checkbox" {{ 'checked' if secs.get('next_plan', (secs.get('focus', true) or secs.get('suggestions', true))) }}><span class="slider"></span></label>
       </div>
       <div class="panel-body">
-        <textarea id="focus_points_text" name="focus_points_text" rows="5">{{ stage_data.focus_points_text or '' }}</textarea>
-      </div>
-    </section>
-
-    <!-- ── 下阶段学习建议 ── -->
-    <section class="card panel togglable {{ '' if secs.get('suggestions', true) else 'collapsed' }}" data-key="suggestions">
-      <input type="hidden" name="sec_suggestions" value="{{ '1' if secs.get('suggestions', true) else '0' }}">
-      <div class="panel-head">
-        <div class="panel-head-icon">💡</div>
-        <h2>下阶段学习建议</h2>
-        <label class="toggle" title="在 PDF 中显示/隐藏此模块"><input type="checkbox" {{ 'checked' if secs.get('suggestions', true) }}><span class="slider"></span></label>
-      </div>
-      <div class="panel-body">
-        <textarea id="suggestions_text" name="suggestions_text" rows="5">{{ stage_data.suggestions_text or '' }}</textarea>
+        <textarea
+          id="next_stage_plan_text"
+          name="next_stage_plan_text"
+          rows="6"
+          placeholder="请填写下阶段重点与建议（可按学科分段）..."
+        >{{ stage_data.next_stage_plan_text or '' }}</textarea>
       </div>
     </section>
 

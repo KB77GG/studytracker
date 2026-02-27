@@ -2738,6 +2738,7 @@ def _serialize_score_record(score: ScoreRecord) -> dict:
 
 def _build_stage_report_data(student: StudentProfile, start_date: date, end_date: date) -> dict:
     payload = _build_stage_report_payload(student, start_date, end_date)
+    next_stage_plan_text = "\n".join(payload["focus_points"] + payload["suggestions"]).strip()
     return {
         "subject_rows": payload["subject_rows"],
         "score_scope_label": payload["score_scope_label"],
@@ -2751,6 +2752,9 @@ def _build_stage_report_data(student: StudentProfile, start_date: date, end_date
         "latest_score": payload["latest_score"],
         "predicted_score": payload["predicted_score"],
         "prediction_basis": payload["prediction_basis"],
+        "class_summary_text": "",
+        "mock_review_rows": _default_mock_review_rows(),
+        "next_stage_plan_text": next_stage_plan_text,
         "focus_points_text": "\n".join(payload["focus_points"]),
         "suggestions_text": "\n".join(payload["suggestions"]),
         "overall_comment": payload["stage_overall_comment"],
@@ -2769,6 +2773,32 @@ def _default_class_summary_rows(existing_rows=None):
         if subject:
             existing_map[subject] = row.get("summary") or ""
     return [{"subject": subject, "summary": existing_map.get(subject, "")} for subject in subjects]
+
+
+def _default_mock_review_rows(existing_rows=None):
+    subjects = ["听力", "口语", "阅读", "写作"]
+    existing_map = {}
+    for row in existing_rows or []:
+        subject = (row.get("subject") or "").strip()
+        if subject:
+            existing_map[subject] = row
+
+    rows = []
+    for subject in subjects:
+        found = existing_map.get(subject, {})
+        rows.append(
+            {
+                "subject": subject,
+                "accuracy_rate": (found.get("accuracy_rate") or "").strip()
+                if isinstance(found.get("accuracy_rate"), str)
+                else (str(found.get("accuracy_rate")) if found.get("accuracy_rate") is not None else ""),
+                "mock_score": (found.get("mock_score") or "").strip()
+                if isinstance(found.get("mock_score"), str)
+                else (str(found.get("mock_score")) if found.get("mock_score") is not None else ""),
+                "teacher_comment": (found.get("teacher_comment") or "").strip(),
+            }
+        )
+    return rows
 
 
 @app.route("/report", methods=["GET"])
@@ -3668,31 +3698,36 @@ def stage_report_create(report_id=None):
                 row["teacher_comment"] = teacher_comment
         stage_data["subject_rows"] = subject_rows
 
-        class_summary_rows = []
-        default_rows = _default_class_summary_rows()
-        for idx, row in enumerate(default_rows):
-            class_summary_rows.append(
+        stage_data["class_summary_text"] = (
+            request.form.get("class_summary_text") or ""
+        ).strip()
+
+        mock_review_rows = []
+        for idx, row in enumerate(_default_mock_review_rows()):
+            mock_review_rows.append(
                 {
                     "subject": row["subject"],
-                    "summary": (request.form.get(f"class_summary_{idx}") or "").strip(),
+                    "accuracy_rate": (request.form.get(f"mock_accuracy_{idx}") or "").strip(),
+                    "mock_score": (request.form.get(f"mock_score_{idx}") or "").strip(),
+                    "teacher_comment": (request.form.get(f"mock_comment_{idx}") or "").strip(),
                 }
             )
-        stage_data["class_summary_rows"] = class_summary_rows
-        stage_data["mock_exam_review_text"] = (
-            request.form.get("mock_exam_review_text") or ""
+        stage_data["mock_review_rows"] = mock_review_rows
+        stage_data["next_stage_plan_text"] = (
+            request.form.get("next_stage_plan_text") or ""
         ).strip()
 
         stage_data["overall_comment"] = (request.form.get("overall_comment") or "").strip()
-        stage_data["focus_points_text"] = (request.form.get("focus_points_text") or "").strip()
-        stage_data["suggestions_text"] = (request.form.get("suggestions_text") or "").strip()
+        # Legacy fields kept for compatibility with older exports/records.
+        stage_data["focus_points_text"] = stage_data["next_stage_plan_text"]
+        stage_data["suggestions_text"] = ""
 
         stage_data["visible_sections"] = {
             "overview": request.form.get("sec_overview") == "1",
             "subjects": request.form.get("sec_subjects") == "1",
             "class_summary": request.form.get("sec_class_summary") == "1",
             "mock_exam": request.form.get("sec_mock_exam") == "1",
-            "focus": request.form.get("sec_focus") == "1",
-            "suggestions": request.form.get("sec_suggestions") == "1",
+            "next_plan": request.form.get("sec_next_plan") == "1",
         }
 
         title = (request.form.get("title") or "").strip()
@@ -3747,11 +3782,25 @@ def stage_report_create(report_id=None):
         stage_data["suggestions_text"] = ""
     if stage_data.get("overall_comment") is None:
         stage_data["overall_comment"] = ""
-    stage_data["class_summary_rows"] = _default_class_summary_rows(
-        stage_data.get("class_summary_rows")
+    if stage_data.get("class_summary_text") is None:
+        stage_data["class_summary_text"] = ""
+    stage_data["mock_review_rows"] = _default_mock_review_rows(
+        stage_data.get("mock_review_rows")
     )
-    if stage_data.get("mock_exam_review_text") is None:
-        stage_data["mock_exam_review_text"] = ""
+    if stage_data.get("next_stage_plan_text") is None:
+        legacy_combined = "\n".join(
+            [value for value in [stage_data.get("focus_points_text"), stage_data.get("suggestions_text")] if value]
+        ).strip()
+        stage_data["next_stage_plan_text"] = legacy_combined
+
+    if stage_data.get("class_summary_text") is None:
+        legacy_rows = _default_class_summary_rows(stage_data.get("class_summary_rows"))
+        stage_data["class_summary_text"] = "\n".join(
+            f"{row['subject']}：{row['summary']}" for row in legacy_rows if (row.get("summary") or "").strip()
+        ).strip()
+    stage_data["mock_review_rows"] = _default_mock_review_rows(
+        stage_data.get("mock_review_rows")
+    )
 
     title_value = report.title if report else _stage_report_title(selected_student, start_date, end_date) if selected_student else "阶段学习报告"
 
@@ -3795,18 +3844,18 @@ def export_stage_report_pdf(report_id):
 
     data = report.report_data or {}
     subject_rows = data.get("subject_rows") or []
-    class_summary_rows = _default_class_summary_rows(data.get("class_summary_rows"))
-    mock_exam_review_text = data.get("mock_exam_review_text") or ""
-    focus_points = [
-        line.strip()
-        for line in (data.get("focus_points_text") or "").splitlines()
-        if line.strip()
-    ]
-    suggestions = [
-        line.strip()
-        for line in (data.get("suggestions_text") or "").splitlines()
-        if line.strip()
-    ]
+    class_summary_text = (data.get("class_summary_text") or "").strip()
+    if not class_summary_text:
+        legacy_rows = _default_class_summary_rows(data.get("class_summary_rows"))
+        class_summary_text = "\n".join(
+            f"{row['subject']}：{row['summary']}" for row in legacy_rows if (row.get("summary") or "").strip()
+        ).strip()
+    mock_review_rows = _default_mock_review_rows(data.get("mock_review_rows"))
+    next_stage_plan_text = (data.get("next_stage_plan_text") or "").strip()
+    if not next_stage_plan_text:
+        next_stage_plan_text = "\n".join(
+            [value for value in [data.get("focus_points_text"), data.get("suggestions_text")] if value]
+        ).strip()
 
     import base64
 
@@ -3826,10 +3875,9 @@ def export_stage_report_pdf(report_id):
         student=report.student,
         data=data,
         subject_rows=subject_rows,
-        class_summary_rows=class_summary_rows,
-        mock_exam_review_text=mock_exam_review_text,
-        focus_points=focus_points,
-        suggestions=suggestions,
+        class_summary_text=class_summary_text,
+        mock_review_rows=mock_review_rows,
+        next_stage_plan_text=next_stage_plan_text,
         generated_at=datetime.now(),
         logo_base64=logo_base64,
         secs=visible_sections,

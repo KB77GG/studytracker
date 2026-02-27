@@ -124,7 +124,7 @@
   {% endif %}
 
   {% if secs.get('subjects', true) %}
-  <h2>{{ ns.n }}. 各学科学习情况</h2>{% set ns.n = ns.n + 1 %}
+  <h2>{{ ns.n }}. 课后教辅完成情况</h2>{% set ns.n = ns.n + 1 %}
   <table>
     <thead><tr>
       <th style="width:14%;">学科模块</th><th style="width:24%;">本阶段学习内容</th>
@@ -150,47 +150,39 @@
 
   {% if secs.get('class_summary', true) %}
   <h2>{{ ns.n }}. 听说读写上课情况总结</h2>{% set ns.n = ns.n + 1 %}
-  <div class="skill-cards">
-    {% for row in class_summary_rows %}
-    <div class="skill-card">
-      <div class="skill-name">{{ row.subject }}</div>
-      <div class="skill-body">{{ (row.summary or '—') | replace('\n', '<br>') | safe }}</div>
-    </div>
-    {% endfor %}
+  <div class="accent-box teal">
+    {{ (class_summary_text or '暂无上课情况总结。') | replace('\n', '<br>') | safe }}
   </div>
   {% endif %}
 
   {% if secs.get('mock_exam', true) %}
   <h2>{{ ns.n }}. 模考点评</h2>{% set ns.n = ns.n + 1 %}
-  <div class="accent-box amber">
-    {{ (mock_exam_review_text or '暂无模考点评。') | replace('\n', '<br>') | safe }}
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%;">学科</th>
+        <th style="width: 16%;">正确率</th>
+        <th style="width: 16%;">模考成绩</th>
+        <th>老师点评</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in mock_review_rows %}
+      <tr>
+        <td><strong>{{ row.subject }}</strong></td>
+        <td>{{ row.accuracy_rate or '—' }}</td>
+        <td>{{ row.mock_score or '—' }}</td>
+        <td>{{ row.teacher_comment or '—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   {% endif %}
 
-  {# Focus & Suggestions: side-by-side if both visible, full-width if only one #}
-  {% set show_focus = secs.get('focus', true) %}
-  {% set show_suggest = secs.get('suggestions', true) %}
-
-  {% if show_focus and show_suggest %}
-  <div class="two-col">
-    <div class="accent-box teal">
-      <h3>{{ ns.n }}. 下阶段学习重点</h3>{% set ns.n = ns.n + 1 %}
-      <ul>{% for item in focus_points %}<li>{{ item }}</li>{% else %}<li>暂无</li>{% endfor %}</ul>
-    </div>
-    <div class="accent-box blue">
-      <h3>{{ ns.n }}. 下阶段学习建议</h3>{% set ns.n = ns.n + 1 %}
-      <ul>{% for item in suggestions %}<li>{{ item }}</li>{% else %}<li>暂无</li>{% endfor %}</ul>
-    </div>
-  </div>
-  {% elif show_focus %}
-  <h2>{{ ns.n }}. 下阶段学习重点</h2>{% set ns.n = ns.n + 1 %}
-  <div class="accent-box teal">
-    <ul>{% for item in focus_points %}<li>{{ item }}</li>{% else %}<li>暂无</li>{% endfor %}</ul>
-  </div>
-  {% elif show_suggest %}
-  <h2>{{ ns.n }}. 下阶段学习建议</h2>{% set ns.n = ns.n + 1 %}
+  {% if secs.get('next_plan', (secs.get('focus', true) or secs.get('suggestions', true))) %}
+  <h2>{{ ns.n }}. 下阶段学习重点与建议</h2>{% set ns.n = ns.n + 1 %}
   <div class="accent-box blue">
-    <ul>{% for item in suggestions %}<li>{{ item }}</li>{% else %}<li>暂无</li>{% endfor %}</ul>
+    {{ (next_stage_plan_text or '暂无下阶段学习重点与建议。') | replace('\n', '<br>') | safe }}
   </div>
   {% endif %}
 </body>
