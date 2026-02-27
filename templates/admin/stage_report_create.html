@@ -6,9 +6,14 @@
 {% block content_dashboard %}
 <div class="stage-wrap">
   <form method="post" class="stage-form">
+    <!-- ── 基础信息 ── -->
     <section class="card panel">
       <div class="panel-head">
-        <h2>报告基础信息</h2>
+        <div class="panel-head-icon">📋</div>
+        <div>
+          <h2>报告基础信息</h2>
+          <p class="panel-desc">选择学生和阶段区间，系统自动计算分析数据</p>
+        </div>
       </div>
       <div class="field-grid">
         <div class="field field-title">
@@ -37,29 +42,49 @@
       <div class="actions">
         <button type="submit" class="btn btn-primary">保存报告</button>
         {% if report %}
-        <a class="btn btn-outline" href="{{ url_for('export_stage_report_pdf', report_id=report.id) }}" target="_blank">下载PDF</a>
+        <a class="btn btn-pdf" href="{{ url_for('export_stage_report_pdf', report_id=report.id) }}" target="_blank">📄 下载PDF</a>
         {% endif %}
         <a class="btn btn-outline" href="{{ url_for('stage_report_list') }}">返回列表</a>
         <a
           id="regenerateLink"
           class="btn btn-outline"
           href="{{ url_for('stage_report_create', student_id=selected_student.id if selected_student else '', start=start_date.isoformat() if start_date else '', end=end_date.isoformat() if end_date else '') }}"
-        >重新生成分析</a>
+        >🔄 重新生成分析</a>
       </div>
     </section>
 
     {% if stage_data %}
+    <!-- ── 阶段概览 ── -->
     <section class="card panel">
       <div class="panel-head">
+        <div class="panel-head-icon">📊</div>
         <h2>阶段概览</h2>
       </div>
       <div class="metrics">
-        <div class="metric"><span>阶段任务</span><strong>{{ stage_data.total_items or 0 }}</strong></div>
-        <div class="metric"><span>审核完成</span><strong>{{ stage_data.reviewed_items or 0 }} / {{ stage_data.total_items or 0 }}</strong></div>
-        <div class="metric"><span>完成率</span><strong>{{ stage_data.stage_completion_rate or 0 }}%</strong></div>
-        <div class="metric"><span>平均掌握度</span><strong>{{ stage_data.avg_mastery or 0 }}%</strong></div>
-        <div class="metric"><span>计划时长</span><strong>{{ stage_data.planned_total or 0 }} 分</strong></div>
-        <div class="metric"><span>实际时长</span><strong>{{ stage_data.actual_total or 0 }} 分</strong></div>
+        <div class="metric">
+          <span>阶段任务</span>
+          <strong>{{ stage_data.total_items or 0 }}</strong>
+        </div>
+        <div class="metric">
+          <span>审核完成</span>
+          <strong>{{ stage_data.reviewed_items or 0 }} / {{ stage_data.total_items or 0 }}</strong>
+        </div>
+        <div class="metric {{ 'metric-good' if (stage_data.stage_completion_rate or 0) >= 80 else ('metric-warn' if (stage_data.stage_completion_rate or 0) >= 50 else 'metric-low') }}">
+          <span>完成率</span>
+          <strong>{{ stage_data.stage_completion_rate or 0 }}%</strong>
+        </div>
+        <div class="metric {{ 'metric-good' if (stage_data.avg_mastery or 0) >= 80 else ('metric-warn' if (stage_data.avg_mastery or 0) >= 50 else 'metric-low') }}">
+          <span>平均掌握度</span>
+          <strong>{{ stage_data.avg_mastery or 0 }}%</strong>
+        </div>
+        <div class="metric">
+          <span>计划时长</span>
+          <strong>{{ stage_data.planned_total or 0 }} 分</strong>
+        </div>
+        <div class="metric">
+          <span>实际时长</span>
+          <strong>{{ stage_data.actual_total or 0 }} 分</strong>
+        </div>
       </div>
       <div class="field">
         <label for="overall_comment">总体阶段评价</label>
@@ -67,12 +92,14 @@
       </div>
     </section>
 
+    <!-- ── 各学科学习情况 ── -->
     <section class="card panel">
       <div class="panel-head">
+        <div class="panel-head-icon">📚</div>
         <h2>各学科学习情况</h2>
       </div>
       <div class="table-wrap">
-        <table>
+        <table class="branded-table">
           <thead>
             <tr>
               <th>学科模块</th>
@@ -86,16 +113,20 @@
           <tbody>
             {% for row in stage_data.subject_rows or [] %}
             <tr>
-              <td>{{ row.module }}</td>
+              <td class="subject-cell">{{ row.module }}</td>
               <td>{{ row.content_text }}</td>
-              <td>{{ row.mastery_label }}（{{ row.mastery_score }}%）</td>
+              <td>
+                <span class="mastery-badge {{ 'badge-good' if row.mastery_score >= 80 else ('badge-warn' if row.mastery_score >= 50 else 'badge-low') }}">
+                  {{ row.mastery_label }}（{{ row.mastery_score }}%）
+                </span>
+              </td>
               <td>{{ row.planned_minutes }} / {{ row.actual_minutes }} 分</td>
               <td>{{ row.review_rate }}%</td>
               <td><input name="teacher_comment_{{ loop.index0 }}" value="{{ row.teacher_comment or '' }}"></td>
             </tr>
             {% else %}
             <tr>
-              <td colspan="6" class="muted">暂无学科学习数据。</td>
+              <td colspan="6" class="muted" style="text-align:center;">暂无学科学习数据。</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -103,34 +134,26 @@
       </div>
     </section>
 
+    <!-- ── 听说读写上课情况 ── -->
     <section class="card panel">
       <div class="panel-head">
+        <div class="panel-head-icon">🎓</div>
         <h2>听说读写上课情况总结（教师填写）</h2>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 120px;">学科</th>
-              <th>上课情况总结（自由填写）</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in stage_data.class_summary_rows or [] %}
-            <tr>
-              <td>{{ row.subject }}</td>
-              <td>
-                <textarea name="class_summary_{{ loop.index0 }}" rows="3" placeholder="请填写{{ row.subject }}上课内容、课堂表现、问题与改进计划...">{{ row.summary or '' }}</textarea>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      <div class="skill-grid">
+        {% for row in stage_data.class_summary_rows or [] %}
+        <div class="skill-card">
+          <div class="skill-label">{{ row.subject }}</div>
+          <textarea name="class_summary_{{ loop.index0 }}" rows="4" placeholder="请填写{{ row.subject }}上课内容、课堂表现、问题与改进计划...">{{ row.summary or '' }}</textarea>
+        </div>
+        {% endfor %}
       </div>
     </section>
 
-    <section class="card panel">
+    <!-- ── 模考点评 ── -->
+    <section class="card panel panel-accent-amber">
       <div class="panel-head">
+        <div class="panel-head-icon">🎯</div>
         <h2>模考点评（自由编辑）</h2>
       </div>
       <div class="field">
@@ -143,37 +166,67 @@
       </div>
     </section>
 
+    <!-- ── 重点与建议 ── -->
     <section class="card panel text-grid">
-      <div class="field">
-        <label for="focus_points_text">下阶段学习重点（可编辑）</label>
+      <div class="text-col text-col-focus">
+        <div class="text-col-head">🔑 下阶段学习重点</div>
         <textarea id="focus_points_text" name="focus_points_text" rows="7">{{ stage_data.focus_points_text or '' }}</textarea>
       </div>
-      <div class="field">
-        <label for="suggestions_text">下阶段学习建议（可编辑）</label>
+      <div class="text-col text-col-suggest">
+        <div class="text-col-head">💡 下阶段学习建议</div>
         <textarea id="suggestions_text" name="suggestions_text" rows="7">{{ stage_data.suggestions_text or '' }}</textarea>
       </div>
     </section>
     {% else %}
-    <section class="card panel muted">暂无可生成数据，请先补充学生和阶段信息。</section>
+    <section class="card panel muted" style="text-align:center;padding:40px;">暂无可生成数据，请先补充学生和阶段信息。</section>
     {% endif %}
   </form>
 </div>
 
 <style>
+  .stage-wrap {
+    max-width: 1200px;
+  }
   .stage-form {
     display: grid;
-    gap: 14px;
+    gap: 16px;
   }
   .panel {
-    padding: 14px;
+    padding: 18px 20px;
+    border-radius: 14px;
+  }
+
+  /* ── Panel heads ── */
+  .panel-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .panel-head-icon {
+    font-size: 22px;
+    line-height: 1;
   }
   .panel-head h2 {
-    font-size: 22px;
-    margin: 0 0 10px 0;
+    font-size: 20px;
+    margin: 0;
+    color: #0f766e;
   }
+  .panel-desc {
+    margin: 2px 0 0 0;
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  /* ── Accent borders ── */
+  .panel-accent-amber {
+    border-left: 4px solid #d97706;
+  }
+
+  /* ── Field grid ── */
   .field-grid {
     display: grid;
-    gap: 10px;
+    gap: 12px;
     grid-template-columns: 2fr 1fr 1fr 1fr;
   }
   .field-title {
@@ -184,6 +237,7 @@
     font-size: 12px;
     color: #6b7280;
     margin-bottom: 6px;
+    font-weight: 600;
   }
   input,
   select,
@@ -191,11 +245,23 @@
     width: 100%;
     border: 1px solid #dbe2ea;
     border-radius: 10px;
-    padding: 9px 10px;
+    padding: 9px 12px;
     background: #fff;
+    font-size: 14px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
   }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: #0f766e;
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+  }
+
+  /* ── Actions ── */
   .actions {
-    margin-top: 12px;
+    margin-top: 14px;
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
@@ -205,27 +271,66 @@
     background: #fff;
     color: #334155 !important;
   }
+  .btn-outline:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+  }
+  .btn-pdf {
+    border: 1px solid #0f766e;
+    background: #f0fdfa;
+    color: #0f766e !important;
+    font-weight: 600;
+  }
+  .btn-pdf:hover {
+    background: #ccfbf1;
+  }
+
+  /* ── Metrics ── */
   .metrics {
     display: grid;
     grid-template-columns: repeat(6, minmax(120px, 1fr));
     gap: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
   .metric {
     border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 12px;
+    padding: 12px;
     background: #fbfdff;
+    border-top: 3px solid #e5e7eb;
+    transition: transform 0.15s;
+  }
+  .metric:hover {
+    transform: translateY(-1px);
   }
   .metric span {
     font-size: 12px;
     color: #6b7280;
     display: block;
+    margin-bottom: 2px;
   }
   .metric strong {
-    font-size: 20px;
+    font-size: 22px;
     line-height: 1.2;
+    color: #1f2937;
   }
+  .metric-good {
+    border-top-color: #10b981;
+    background: #f0fdf4;
+  }
+  .metric-good strong { color: #059669; }
+  .metric-warn {
+    border-top-color: #f59e0b;
+    background: #fffbeb;
+  }
+  .metric-warn strong { color: #d97706; }
+  .metric-low {
+    border-top-color: #ef4444;
+    background: #fef2f2;
+  }
+  .metric-low strong { color: #dc2626; }
+
+  /* ── Tables ── */
   .table-wrap {
     overflow-x: auto;
   }
@@ -233,28 +338,109 @@
     width: 100%;
     border-collapse: collapse;
   }
-  th,
-  td {
-    border: 1px solid #e5e7eb;
-    padding: 8px;
-    text-align: left;
-    vertical-align: top;
-  }
-  th {
-    background: #f8fafc;
+  .branded-table th {
+    background: #0f766e;
+    color: #fff;
     font-size: 13px;
+    font-weight: 600;
+    padding: 10px 8px;
+    border: none;
+    border-bottom: 2px solid #0d6962;
   }
-  .text-grid {
+  .branded-table td {
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 10px 8px;
+    vertical-align: middle;
+    font-size: 14px;
+  }
+  .branded-table tbody tr:hover {
+    background: #f0fdfa;
+  }
+  .branded-table tbody tr:nth-child(even) {
+    background: #f8fcfb;
+  }
+  .branded-table tbody tr:nth-child(even):hover {
+    background: #ecfdf5;
+  }
+  .subject-cell {
+    font-weight: 600;
+    color: #0f766e;
+  }
+
+  /* ── Mastery badges ── */
+  .mastery-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-good { background: #dcfce7; color: #166534; }
+  .badge-warn { background: #fef3c7; color: #92400e; }
+  .badge-low  { background: #fee2e2; color: #991b1b; }
+
+  /* ── Skill cards ── */
+  .skill-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
+  .skill-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px;
+    background: #fafcfb;
+  }
+  .skill-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f766e;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #d1d5db;
+  }
+  .skill-card textarea {
+    border-color: #e5e7eb;
+    background: #fff;
+    border-radius: 8px;
+  }
+
+  /* ── Text grid (focus + suggestions) ── */
+  .text-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .text-col {
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .text-col-focus {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+  }
+  .text-col-suggest {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+  }
+  .text-col-head {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .text-col-focus .text-col-head { color: #0f766e; }
+  .text-col-suggest .text-col-head { color: #2563eb; }
+  .text-col textarea {
+    background: #fff;
+    border-radius: 8px;
+  }
+
   .muted {
     color: #6b7280;
   }
-  .small {
-    font-size: 12px;
-  }
+
+  /* ── Responsive ── */
   @media (max-width: 1200px) {
     .field-grid {
       grid-template-columns: 1fr 1fr;
@@ -267,7 +453,7 @@
     .field-grid {
       grid-template-columns: 1fr;
     }
-    .text-grid {
+    .text-grid, .skill-grid {
       grid-template-columns: 1fr;
     }
     .metrics {

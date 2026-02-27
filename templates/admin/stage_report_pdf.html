@@ -6,109 +6,226 @@
   <style>
     @page {
       size: A4;
-      margin: 14mm 18mm 16mm 18mm;
+      margin: 12mm 20mm 18mm 20mm;
+      @top-left {
+        content: "{{ (student.full_name if student else '') }} 阶段学习报告";
+        font-size: 9pt;
+        color: #666;
+        font-family: "Noto Sans CJK SC", sans-serif;
+      }
+      @top-right {
+        content: "{{ report.start_date }} ~ {{ report.end_date }}";
+        font-size: 9pt;
+        color: #666;
+        font-family: "Noto Sans CJK SC", sans-serif;
+      }
       @bottom-center {
         content: "Sage Path 睿然国际教育";
         font-size: 8pt;
-        color: #6b7280;
+        color: #999;
+        font-family: "Noto Sans CJK SC", sans-serif;
       }
     }
+
     body {
       font-family: "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
       color: #1f2937;
       font-size: 10.5pt;
       line-height: 1.55;
     }
+
+    /* ── Header ── */
     .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 2px solid #0f766e;
-      padding-bottom: 8px;
-      margin-bottom: 12px;
+      text-align: center;
+      margin-bottom: 6mm;
+      padding-bottom: 4mm;
+      border-bottom: 1px solid #e2e8f0;
     }
     .logo {
-      width: 110px;
+      max-width: 140px;
       height: auto;
+      margin: 0 auto 2mm;
+      display: block;
     }
-    .brand {
-      text-align: right;
-    }
-    .brand h1 {
-      margin: 0 0 2px 0;
-      font-size: 18pt;
+    .header h1 {
+      font-size: 22pt;
       color: #0f766e;
+      margin: 0 0 2mm 0;
     }
-    .brand p {
-      margin: 0;
-      color: #4b5563;
-      font-size: 9pt;
-    }
-    .meta {
-      background: #f7fbfb;
-      border: 1px solid #d9ecea;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-    .meta-row {
-      margin: 2px 0;
-    }
-    .label {
-      font-weight: 700;
-      color: #0f766e;
-      margin-right: 4px;
-    }
-    h2 {
+    .header .subtitle {
       font-size: 13pt;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* ── Meta info grid ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3mm;
+      margin-bottom: 5mm;
+      background: #f8fafa;
+      padding: 4mm;
+      border-radius: 4px;
+      border: 1px solid #e8f0ef;
+    }
+    .info-item {
+      font-size: 10pt;
+    }
+    .info-item .label {
+      font-weight: bold;
       color: #0f766e;
-      margin: 14px 0 8px 0;
-      border-left: 3px solid #0f766e;
-      padding-left: 8px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 9pt;
+
+    /* ── Section headings ── */
+    h2 {
+      font-size: 15pt;
+      color: #0f766e;
+      border-bottom: 2px solid #0f766e;
+      padding-bottom: 2mm;
+      margin-top: 8mm;
+      margin-bottom: 4mm;
     }
-    th, td {
-      border: 1px solid #dbe6ec;
-      padding: 6px;
-      vertical-align: top;
-      text-align: left;
-    }
-    th {
-      background: #f0f8f7;
-      font-weight: 700;
-    }
+
+    /* ── Metric cards ── */
     .cards {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 8px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 4mm;
     }
     .card {
       border: 1px solid #dbe6ec;
-      border-radius: 8px;
-      padding: 8px;
+      border-radius: 6px;
+      padding: 7px 8px;
       background: #fbfefe;
+      border-top: 3px solid #0f766e;
     }
     .card .title {
       font-size: 8pt;
       color: #6b7280;
+      margin-bottom: 2px;
     }
     .card .value {
-      font-size: 13pt;
+      font-size: 14pt;
       font-weight: 700;
       color: #0f766e;
     }
-    ul {
+
+    /* ── Overall comment ── */
+    .overall-comment {
+      background: #f0fdfa;
+      border-left: 4px solid #0f766e;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-bottom: 4mm;
+      font-size: 10pt;
+      color: #374151;
+      line-height: 1.6;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      margin-bottom: 4mm;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 5px 6px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #0f766e;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    tbody tr:nth-child(even) {
+      background: #f8fcfb;
+    }
+
+    /* ── Class summary section cards ── */
+    .skill-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 4mm;
+    }
+    .skill-card {
+      border: 1px solid #dbe6ec;
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #fbfefe;
+      page-break-inside: avoid;
+    }
+    .skill-card .skill-name {
+      font-size: 10pt;
+      font-weight: 700;
+      color: #0f766e;
+      margin-bottom: 4px;
+      padding-bottom: 3px;
+      border-bottom: 1px dotted #cbd5e1;
+    }
+    .skill-card .skill-body {
+      font-size: 9.5pt;
+      color: #374151;
+      line-height: 1.55;
+    }
+
+    /* ── Mock exam section ── */
+    .review-box {
+      background: #fffbeb;
+      border-left: 4px solid #d97706;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-bottom: 4mm;
+      font-size: 10pt;
+      color: #374151;
+      line-height: 1.6;
+    }
+
+    /* ── Focus / suggestions ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      page-break-inside: avoid;
+    }
+    .list-box {
+      border-radius: 6px;
+      padding: 8px 12px;
+      page-break-inside: avoid;
+    }
+    .list-box.focus {
+      background: #f0fdfa;
+      border: 1px solid #99d8cf;
+    }
+    .list-box.suggest {
+      background: #eff6ff;
+      border: 1px solid #93c5fd;
+    }
+    .list-box h3 {
+      font-size: 11pt;
+      margin: 0 0 4px 0;
+    }
+    .list-box.focus h3 {
+      color: #0f766e;
+    }
+    .list-box.suggest h3 {
+      color: #2563eb;
+    }
+    .list-box ul {
       margin: 0;
-      padding-left: 18px;
+      padding-left: 16px;
     }
-    li {
-      margin-bottom: 5px;
+    .list-box li {
+      margin-bottom: 4px;
+      font-size: 9.5pt;
+      line-height: 1.5;
     }
+
     .small {
       color: #6b7280;
       font-size: 8.5pt;
@@ -116,26 +233,25 @@
   </style>
 </head>
 <body>
+  <!-- ── Header ── -->
   <div class="header">
-    <div>
-      {% if logo_base64 %}
-      <img src="data:image/jpeg;base64,{{ logo_base64 }}" alt="Sage Path" class="logo">
-      {% endif %}
-    </div>
-    <div class="brand">
-      <h1>阶段学习报告</h1>
-      <p>Sage Path 睿然国际教育</p>
-    </div>
+    {% if logo_base64 %}
+    <img src="data:image/jpeg;base64,{{ logo_base64 }}" alt="Sage Path Logo" class="logo">
+    {% endif %}
+    <h1>阶段学习报告</h1>
+    <div class="subtitle">{{ (student.full_name if student else '未知') }} · {{ report.start_date }} 至 {{ report.end_date }}</div>
   </div>
 
-  <div class="meta">
-    <div class="meta-row"><span class="label">学生：</span>{{ student.full_name if student else '未知' }}</div>
-    <div class="meta-row"><span class="label">阶段区间：</span>{{ report.start_date }} 至 {{ report.end_date }}</div>
-    <div class="meta-row"><span class="label">报告标题：</span>{{ report.title or '阶段学习报告' }}</div>
-    <div class="meta-row"><span class="label">出具时间：</span>{{ generated_at.strftime('%Y-%m-%d %H:%M') }}</div>
+  <!-- ── Meta ── -->
+  <div class="info-grid">
+    <div class="info-item"><span class="label">学生姓名：</span>{{ student.full_name if student else '未知' }}</div>
+    <div class="info-item"><span class="label">出具时间：</span>{{ generated_at.strftime('%Y-%m-%d %H:%M') }}</div>
+    <div class="info-item"><span class="label">阶段区间：</span>{{ report.start_date }} 至 {{ report.end_date }}</div>
+    <div class="info-item"><span class="label">报告标题：</span>{{ report.title or '阶段学习报告' }}</div>
   </div>
 
-  <h2>阶段概览</h2>
+  <!-- ── 1. Overview ── -->
+  <h2>1. 阶段概览</h2>
   <div class="cards">
     <div class="card"><div class="title">阶段任务</div><div class="value">{{ data.total_items or 0 }}</div></div>
     <div class="card"><div class="title">审核完成率</div><div class="value">{{ data.stage_completion_rate or 0 }}%</div></div>
@@ -143,24 +259,27 @@
     <div class="card"><div class="title">计划时长</div><div class="value">{{ data.planned_total or 0 }}分</div></div>
     <div class="card"><div class="title">实际时长</div><div class="value">{{ data.actual_total or 0 }}分</div></div>
   </div>
-  <p>{{ data.overall_comment or '' }}</p>
+  {% if data.overall_comment %}
+  <div class="overall-comment">{{ data.overall_comment }}</div>
+  {% endif %}
 
-  <h2>各学科学习情况</h2>
+  <!-- ── 2. Subject learning ── -->
+  <h2>2. 各学科学习情况</h2>
   <table>
     <thead>
       <tr>
-        <th>学科模块</th>
-        <th>本阶段学习内容</th>
-        <th>掌握情况</th>
-        <th>计划/实际时长</th>
-        <th>审核率</th>
-        <th>阶段评价</th>
+        <th style="width:14%;">学科模块</th>
+        <th style="width:24%;">本阶段学习内容</th>
+        <th style="width:14%;">掌握情况</th>
+        <th style="width:14%;">计划/实际</th>
+        <th style="width:10%;">审核率</th>
+        <th style="width:24%;">阶段评价</th>
       </tr>
     </thead>
     <tbody>
       {% for row in subject_rows %}
       <tr>
-        <td>{{ row.module }}</td>
+        <td><strong>{{ row.module }}</strong></td>
         <td>{{ row.content_text }}</td>
         <td>{{ row.mastery_label }}（{{ row.mastery_score }}%）</td>
         <td>{{ row.planned_minutes }} / {{ row.actual_minutes }} 分</td>
@@ -168,48 +287,50 @@
         <td>{{ row.teacher_comment }}</td>
       </tr>
       {% else %}
-      <tr><td colspan="6">暂无学科数据</td></tr>
+      <tr><td colspan="6" style="text-align:center;color:#9ca3af;">暂无学科数据</td></tr>
       {% endfor %}
     </tbody>
   </table>
 
-  <h2>听说读写上课情况总结</h2>
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 90px;">学科</th>
-        <th>上课情况总结</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in class_summary_rows %}
-      <tr>
-        <td>{{ row.subject }}</td>
-        <td>{{ (row.summary or '—') | replace('\n', '<br>') | safe }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <h2>模考点评</h2>
-  <p>{{ (mock_exam_review_text or '暂无模考点评。') | replace('\n', '<br>') | safe }}</p>
-
-  <h2>下阶段学习重点</h2>
-  <ul>
-    {% for item in focus_points %}
-    <li>{{ item }}</li>
-    {% else %}
-    <li>暂无</li>
+  <!-- ── 3. Class summary ── -->
+  <h2>3. 听说读写上课情况总结</h2>
+  <div class="skill-cards">
+    {% for row in class_summary_rows %}
+    <div class="skill-card">
+      <div class="skill-name">{{ row.subject }}</div>
+      <div class="skill-body">{{ (row.summary or '—') | replace('\n', '<br>') | safe }}</div>
+    </div>
     {% endfor %}
-  </ul>
+  </div>
 
-  <h2>下阶段学习建议</h2>
-  <ul>
-    {% for item in suggestions %}
-    <li>{{ item }}</li>
-    {% else %}
-    <li>暂无</li>
-    {% endfor %}
-  </ul>
+  <!-- ── 4. Mock exam ── -->
+  <h2>4. 模考点评</h2>
+  <div class="review-box">
+    {{ (mock_exam_review_text or '暂无模考点评。') | replace('\n', '<br>') | safe }}
+  </div>
+
+  <!-- ── 5 & 6. Focus + Suggestions side by side ── -->
+  <div class="two-col">
+    <div class="list-box focus">
+      <h3>5. 下阶段学习重点</h3>
+      <ul>
+        {% for item in focus_points %}
+        <li>{{ item }}</li>
+        {% else %}
+        <li>暂无</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="list-box suggest">
+      <h3>6. 下阶段学习建议</h3>
+      <ul>
+        {% for item in suggestions %}
+        <li>{{ item }}</li>
+        {% else %}
+        <li>暂无</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 </body>
 </html>
