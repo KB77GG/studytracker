@@ -5,41 +5,51 @@
 
 {% block content_dashboard %}
 <div class="stage-wrap">
-  <section class="card">
-    <form method="post" class="form-grid">
-      <div class="field span-2">
-        <label for="title">报告标题</label>
-        <input id="title" name="title" value="{{ title_value }}">
+  <form method="post" class="stage-form">
+    <section class="card panel">
+      <div class="panel-head">
+        <h2>报告基础信息</h2>
       </div>
-      <div class="field">
-        <label for="student_id">学生</label>
-        <select id="student_id" name="student_id" required>
-          {% for student in students %}
-          <option value="{{ student.id }}" {% if selected_student and student.id == selected_student.id %}selected{% endif %}>
-            {{ student.full_name }}
-          </option>
-          {% endfor %}
-        </select>
+      <div class="field-grid">
+        <div class="field field-title">
+          <label for="title">报告标题</label>
+          <input id="title" name="title" value="{{ title_value }}">
+        </div>
+        <div class="field">
+          <label for="student_id">学生</label>
+          <select id="student_id" name="student_id" required>
+            {% for student in students %}
+            <option value="{{ student.id }}" {% if selected_student and student.id == selected_student.id %}selected{% endif %}>
+              {{ student.full_name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label for="start_date">阶段开始</label>
+          <input id="start_date" type="date" name="start_date" value="{{ start_date.isoformat() if start_date else '' }}">
+        </div>
+        <div class="field">
+          <label for="end_date">阶段结束</label>
+          <input id="end_date" type="date" name="end_date" value="{{ end_date.isoformat() if end_date else '' }}">
+        </div>
       </div>
-      <div class="field">
-        <label for="start_date">阶段开始</label>
-        <input id="start_date" type="date" name="start_date" value="{{ start_date.isoformat() if start_date else '' }}">
-      </div>
-      <div class="field">
-        <label for="end_date">阶段结束</label>
-        <input id="end_date" type="date" name="end_date" value="{{ end_date.isoformat() if end_date else '' }}">
-      </div>
-      <div class="actions span-2">
+      <div class="actions">
         <button type="submit" class="btn btn-primary">保存报告</button>
         {% if report %}
         <a class="btn btn-outline" href="{{ url_for('export_stage_report_pdf', report_id=report.id) }}" target="_blank">下载PDF</a>
         {% endif %}
         <a class="btn btn-outline" href="{{ url_for('stage_report_list') }}">返回列表</a>
-        <a class="btn btn-outline" href="{{ url_for('stage_report_create', student_id=selected_student.id if selected_student else '', start= start_date.isoformat() if start_date else '', end=end_date.isoformat() if end_date else '') }}">按当前条件重新生成分析</a>
+        <a class="btn btn-outline" href="{{ url_for('stage_report_create', student_id=selected_student.id if selected_student else '', start=start_date.isoformat() if start_date else '', end=end_date.isoformat() if end_date else '') }}">重新生成分析</a>
       </div>
+    </section>
 
-      {% if stage_data %}
-      <div class="metrics span-2">
+    {% if stage_data %}
+    <section class="card panel">
+      <div class="panel-head">
+        <h2>阶段概览</h2>
+      </div>
+      <div class="metrics">
         <div class="metric"><span>阶段任务</span><strong>{{ stage_data.total_items or 0 }}</strong></div>
         <div class="metric"><span>审核完成</span><strong>{{ stage_data.reviewed_items or 0 }} / {{ stage_data.total_items or 0 }}</strong></div>
         <div class="metric"><span>完成率</span><strong>{{ stage_data.stage_completion_rate or 0 }}%</strong></div>
@@ -47,99 +57,114 @@
         <div class="metric"><span>计划时长</span><strong>{{ stage_data.planned_total or 0 }} 分</strong></div>
         <div class="metric"><span>实际时长</span><strong>{{ stage_data.actual_total or 0 }} 分</strong></div>
       </div>
-
-      <div class="span-2">
-        <h3>总体阶段评价</h3>
-        <textarea name="overall_comment" rows="3">{{ stage_data.overall_comment or '' }}</textarea>
+      <div class="field">
+        <label for="overall_comment">总体阶段评价</label>
+        <textarea id="overall_comment" name="overall_comment" rows="3">{{ stage_data.overall_comment or '' }}</textarea>
       </div>
+    </section>
 
-      <div class="span-2">
-        <h3>各学科学习情况</h3>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>学科模块</th>
-                <th>学习内容</th>
-                <th>掌握度</th>
-                <th>计划/实际</th>
-                <th>审核率</th>
-                <th>老师评价（可编辑）</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for row in stage_data.subject_rows or [] %}
-              <tr>
-                <td>{{ row.module }}</td>
-                <td>{{ row.content_text }}</td>
-                <td>{{ row.mastery_label }}（{{ row.mastery_score }}%）</td>
-                <td>{{ row.planned_minutes }} / {{ row.actual_minutes }} 分</td>
-                <td>{{ row.review_rate }}%</td>
-                <td><input name="teacher_comment_{{ loop.index0 }}" value="{{ row.teacher_comment or '' }}"></td>
-              </tr>
-              {% else %}
-              <tr><td colspan="6" class="muted">暂无学科学习数据。</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+    <section class="card panel">
+      <div class="panel-head">
+        <h2>各学科学习情况</h2>
       </div>
-
-      <div class="span-2 score-section">
-        <div>
-          <h3>{{ stage_data.score_scope_label or '分数记录' }}</h3>
-          <ul class="score-list">
-            {% for score in stage_data.score_records or [] %}
-            <li>
-              <strong>{{ score.taken_on }} · {{ score.assessment_name }}</strong>
-              <span>{% if score.total_score is not none %}总分 {{ score.total_score }}{% else %}未记录总分{% endif %}</span>
-              {% if score.component_scores %}
-              <div class="muted small">
-                {% for key, value in score.component_scores.items() %}
-                {{ key }}: {{ value }}{% if not loop.last %}；{% endif %}
-                {% endfor %}
-              </div>
-              {% endif %}
-            </li>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>学科模块</th>
+              <th>学习内容</th>
+              <th>掌握度</th>
+              <th>计划/实际</th>
+              <th>审核率</th>
+              <th>老师评价（可编辑）</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in stage_data.subject_rows or [] %}
+            <tr>
+              <td>{{ row.module }}</td>
+              <td>{{ row.content_text }}</td>
+              <td>{{ row.mastery_label }}（{{ row.mastery_score }}%）</td>
+              <td>{{ row.planned_minutes }} / {{ row.actual_minutes }} 分</td>
+              <td>{{ row.review_rate }}%</td>
+              <td><input name="teacher_comment_{{ loop.index0 }}" value="{{ row.teacher_comment or '' }}"></td>
+            </tr>
             {% else %}
-            <li class="muted">暂无分数记录。</li>
+            <tr>
+              <td colspan="6" class="muted">暂无学科学习数据。</td>
+            </tr>
             {% endfor %}
-          </ul>
-        </div>
-        <div class="prediction-box">
-          <h4>分数判断</h4>
-          <p>最近分数：{% if stage_data.latest_score is not none %}{{ stage_data.latest_score }}{% else %}暂无{% endif %}</p>
-          <p>预估下阶段分数：{% if stage_data.predicted_score is not none %}{{ stage_data.predicted_score }}{% else %}暂无{% endif %}</p>
-          <p class="muted small">{{ stage_data.prediction_basis or '' }}</p>
-        </div>
+          </tbody>
+        </table>
       </div>
+    </section>
 
+    <section class="card panel score-grid">
       <div>
-        <h3>下阶段学习重点（可编辑）</h3>
-        <textarea name="focus_points_text" rows="7">{{ stage_data.focus_points_text or '' }}</textarea>
+        <div class="panel-head">
+          <h2>{{ stage_data.score_scope_label or '分数记录' }}</h2>
+        </div>
+        <ul class="score-list">
+          {% for score in stage_data.score_records or [] %}
+          <li>
+            <strong>{{ score.taken_on }} · {{ score.assessment_name }}</strong>
+            <span>{% if score.total_score is not none %}总分 {{ score.total_score }}{% else %}未记录总分{% endif %}</span>
+            {% if score.component_scores %}
+            <div class="muted small">
+              {% for key, value in score.component_scores.items() %}
+              {{ key }}: {{ value }}{% if not loop.last %}；{% endif %}
+              {% endfor %}
+            </div>
+            {% endif %}
+          </li>
+          {% else %}
+          <li class="muted">暂无分数记录。</li>
+          {% endfor %}
+        </ul>
       </div>
-      <div>
-        <h3>下阶段学习建议（可编辑）</h3>
-        <textarea name="suggestions_text" rows="7">{{ stage_data.suggestions_text or '' }}</textarea>
+      <div class="prediction-box">
+        <h3>分数判断</h3>
+        <p>最近分数：{% if stage_data.latest_score is not none %}{{ stage_data.latest_score }}{% else %}暂无{% endif %}</p>
+        <p>预估下阶段分数：{% if stage_data.predicted_score is not none %}{{ stage_data.predicted_score }}{% else %}暂无{% endif %}</p>
+        <p class="muted small">{{ stage_data.prediction_basis or '' }}</p>
       </div>
-      {% else %}
-      <div class="span-2 muted">暂无可生成数据，请先补充学生和阶段信息。</div>
-      {% endif %}
-    </form>
-  </section>
+    </section>
+
+    <section class="card panel text-grid">
+      <div class="field">
+        <label for="focus_points_text">下阶段学习重点（可编辑）</label>
+        <textarea id="focus_points_text" name="focus_points_text" rows="7">{{ stage_data.focus_points_text or '' }}</textarea>
+      </div>
+      <div class="field">
+        <label for="suggestions_text">下阶段学习建议（可编辑）</label>
+        <textarea id="suggestions_text" name="suggestions_text" rows="7">{{ stage_data.suggestions_text or '' }}</textarea>
+      </div>
+    </section>
+    {% else %}
+    <section class="card panel muted">暂无可生成数据，请先补充学生和阶段信息。</section>
+    {% endif %}
+  </form>
 </div>
 
 <style>
-  .stage-wrap .card {
-    padding: 16px;
-  }
-  .form-grid {
+  .stage-form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 14px;
   }
-  .span-2 {
-    grid-column: 1 / -1;
+  .panel {
+    padding: 14px;
+  }
+  .panel-head h2 {
+    font-size: 22px;
+    margin: 0 0 10px 0;
+  }
+  .field-grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+  .field-title {
+    min-width: 280px;
   }
   .field label {
     display: block;
@@ -157,18 +182,21 @@
     background: #fff;
   }
   .actions {
+    margin-top: 12px;
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
   }
   .btn-outline {
-    border: 1px solid #dbe2ea;
-    background: #f8fafc;
+    border: 1px solid #c9d4df;
+    background: #fff;
+    color: #334155 !important;
   }
   .metrics {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(6, minmax(120px, 1fr));
     gap: 10px;
+    margin-bottom: 12px;
   }
   .metric {
     border: 1px solid #e5e7eb;
@@ -182,10 +210,11 @@
     display: block;
   }
   .metric strong {
-    font-size: 18px;
+    font-size: 20px;
+    line-height: 1.2;
   }
   .table-wrap {
-    overflow: auto;
+    overflow-x: auto;
   }
   table {
     width: 100%;
@@ -202,7 +231,7 @@
     background: #f8fafc;
     font-size: 13px;
   }
-  .score-section {
+  .score-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 12px;
@@ -225,6 +254,16 @@
     border-radius: 10px;
     padding: 10px;
     background: #f8fafc;
+    align-self: start;
+  }
+  .prediction-box h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+  .text-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
   .muted {
     color: #6b7280;
@@ -232,12 +271,24 @@
   .small {
     font-size: 12px;
   }
+  @media (max-width: 1200px) {
+    .field-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .metrics {
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+    }
+  }
   @media (max-width: 960px) {
-    .form-grid {
+    .field-grid {
       grid-template-columns: 1fr;
     }
-    .score-section {
+    .score-grid,
+    .text-grid {
       grid-template-columns: 1fr;
+    }
+    .metrics {
+      grid-template-columns: repeat(2, minmax(120px, 1fr));
     }
   }
 </style>
