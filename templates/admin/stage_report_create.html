@@ -40,7 +40,11 @@
         <a class="btn btn-outline" href="{{ url_for('export_stage_report_pdf', report_id=report.id) }}" target="_blank">下载PDF</a>
         {% endif %}
         <a class="btn btn-outline" href="{{ url_for('stage_report_list') }}">返回列表</a>
-        <a class="btn btn-outline" href="{{ url_for('stage_report_create', student_id=selected_student.id if selected_student else '', start=start_date.isoformat() if start_date else '', end=end_date.isoformat() if end_date else '') }}">重新生成分析</a>
+        <a
+          id="regenerateLink"
+          class="btn btn-outline"
+          href="{{ url_for('stage_report_create', student_id=selected_student.id if selected_student else '', start=start_date.isoformat() if start_date else '', end=end_date.isoformat() if end_date else '') }}"
+        >重新生成分析</a>
       </div>
     </section>
 
@@ -292,4 +296,73 @@
     }
   }
 </style>
+
+<script>
+  (function () {
+    const isCreateMode = {{ 'true' if not report else 'false' }};
+    if (!isCreateMode) return;
+
+    const studentEl = document.getElementById('student_id');
+    const startEl = document.getElementById('start_date');
+    const endEl = document.getElementById('end_date');
+    const titleEl = document.getElementById('title');
+    const regenerateLink = document.getElementById('regenerateLink');
+    if (!studentEl || !startEl || !endEl) return;
+
+    const baseUrl = "{{ url_for('stage_report_create') }}";
+    let titleTouched = false;
+
+    function buildTitle() {
+      const studentName = studentEl.options[studentEl.selectedIndex]?.text?.trim() || "";
+      const start = startEl.value || "";
+      const end = endEl.value || "";
+      if (!studentName) return "阶段学习报告";
+      if (start && end) return `${studentName} 阶段学习报告 (${start} 至 ${end})`;
+      return `${studentName} 阶段学习报告`;
+    }
+
+    function buildQuery() {
+      const params = new URLSearchParams();
+      if (studentEl.value) params.set('student_id', studentEl.value);
+      if (startEl.value) params.set('start', startEl.value);
+      if (endEl.value) params.set('end', endEl.value);
+      return params.toString();
+    }
+
+    function syncRegenerateLink() {
+      if (!regenerateLink) return;
+      const qs = buildQuery();
+      regenerateLink.href = qs ? `${baseUrl}?${qs}` : baseUrl;
+    }
+
+    function maybeSyncTitle() {
+      if (!titleEl) return;
+      if (titleTouched) return;
+      titleEl.value = buildTitle();
+    }
+
+    function refreshAnalysis() {
+      const qs = buildQuery();
+      window.location.href = qs ? `${baseUrl}?${qs}` : baseUrl;
+    }
+
+    if (titleEl) {
+      titleEl.addEventListener('input', () => {
+        titleTouched = true;
+      });
+    }
+
+    function onFilterChange() {
+      maybeSyncTitle();
+      syncRegenerateLink();
+      refreshAnalysis();
+    }
+
+    studentEl.addEventListener('change', onFilterChange);
+    startEl.addEventListener('change', onFilterChange);
+    endEl.addEventListener('change', onFilterChange);
+    maybeSyncTitle();
+    syncRegenerateLink();
+  })();
+</script>
 {% endblock %}
