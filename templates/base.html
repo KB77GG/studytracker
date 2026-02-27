@@ -45,6 +45,10 @@
         <a class="nav-link {{ 'is-active' if endpoint == 'report_page' else '' }}"
           href="{{ url_for('report_page') }}">Reports</a>
         {% endif %}
+        {% if current_user.role == 'admin' or current_user.username == '陈悦' or current_user.display_name == '陈悦' %}
+        <a class="nav-link {{ 'is-active' if 'stage_report' in endpoint else '' }}"
+          href="{{ url_for('stage_report_list') }}">Stage Reports</a>
+        {% endif %}
         {% if current_user.role == 'admin' %}
         <a class="nav-link {{ 'is-active' if endpoint == 'bulk_page' else '' }}" href="{{ url_for('bulk_page') }}">Bulk
           Add</a>

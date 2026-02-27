@@ -693,6 +693,28 @@ class CoursePlan(db.Model, TimestampMixin, SoftDeleteMixin):
         return f"<CoursePlan {self.title}>"
 
 
+class StageReport(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Stores editable phase/stage study reports for each student."""
+
+    __tablename__ = "stage_report"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(
+        db.Integer, db.ForeignKey("student_profile.id"), nullable=False, index=True
+    )
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    start_date = db.Column(db.Date, nullable=False, index=True)
+    end_date = db.Column(db.Date, nullable=False, index=True)
+    title = db.Column(db.String(200))
+    report_data = db.Column(db.JSON, nullable=False)
+
+    student = db.relationship("StudentProfile", backref="stage_reports")
+    creator = db.relationship("User", backref="created_stage_reports")
+
+    def __repr__(self):
+        return f"<StageReport {self.title}>"
+
+
 # ============================================================================
 # Dictation System (Listening Practice)
 # ============================================================================

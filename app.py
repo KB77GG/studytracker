@@ -55,6 +55,7 @@ from models import (
     StudySession,
     Task,
     CoursePlan,
+    StageReport,
 )
 
 def time_ago(dt):
@@ -219,6 +220,13 @@ def ensure_legacy_schema() -> None:
                 "Failed to ensure index on user.scheduler_teacher_id: %s", exc
             )
 
+    try:
+        StageReport.__table__.create(bind=db.engine, checkfirst=True)
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.warning(
+            "Failed to ensure stage_report table exists: %s", exc
+        )
+
 
 with app.app_context():
     ensure_legacy_schema()
@@ -302,6 +310,35 @@ def role_required(*roles):
         return wrapper
 
     return decorator
+
+
+SPECIAL_STAGE_REPORT_USERS = {"陈悦"}
+
+
+def can_access_stage_report(user: User) -> bool:
+    """Allow only admins and explicitly whitelisted user names."""
+
+    if not user or not user.is_authenticated:
+        return False
+    if user.role == User.ROLE_ADMIN:
+        return True
+    names = {(user.username or "").strip(), (user.display_name or "").strip()}
+    return any(name in SPECIAL_STAGE_REPORT_USERS for name in names if name)
+
+
+def stage_report_access_required(view_fn):
+    @wraps(view_fn)
+    def wrapper(*args, **kwargs):
+        if not current_user.is_authenticated:
+            return login_manager.unauthorized()
+        if not can_access_stage_report(current_user):
+            if request.accept_mimetypes.best == "application/json":
+                return jsonify({"ok": False, "error": "forbidden"}), 403
+            flash("无权限访问阶段学习报告。")
+            return redirect(url_for("index"))
+        return view_fn(*args, **kwargs)
+
+    return wrapper
 
 
 def get_accessible_student_ids(user: User) -> set[int]:
@@ -2386,6 +2423,286 @@ def _build_report_payload(tasks, filters):
     }
 
 
+def _available_stage_report_students():
+    return (
+        StudentProfile.query.filter(StudentProfile.is_deleted.is_(False))
+        .order_by(StudentProfile.full_name.asc())
+        .all()
+    )
+
+
+def _parse_stage_report_filters(students):
+    today = date.today()
+    start_raw = (request.args.get("start") or "").strip()
+    end_raw = (request.args.get("end") or "").strip()
+    start_date = _safe_report_date(start_raw)
+    end_date = _safe_report_date(end_raw)
+
+    if not end_date:
+        end_date = today
+    if not start_date:
+        start_date = end_date - timedelta(days=59)
+    if start_date > end_date:
+        start_date, end_date = end_date, start_date
+
+    selected_student_id = request.args.get("student_id", type=int)
+    student_ids = {student.id for student in students}
+    if selected_student_id not in student_ids:
+        selected_student_id = students[0].id if students else None
+
+    return {
+        "student_id": selected_student_id,
+        "start": start_date,
+        "end": end_date,
+        "start_str": start_date.isoformat(),
+        "end_str": end_date.isoformat(),
+    }
+
+
+def _mastery_label(score_value: float) -> str:
+    if score_value >= 0.85:
+        return "掌握较好"
+    if score_value >= 0.65:
+        return "基本掌握"
+    return "需重点提升"
+
+
+def _build_stage_report_payload(student: StudentProfile, start_date: date, end_date: date):
+    items = (
+        PlanItem.query.join(StudyPlan)
+        .filter(
+            StudyPlan.student_id == student.id,
+            StudyPlan.plan_date >= start_date,
+            StudyPlan.plan_date <= end_date,
+            StudyPlan.is_deleted.is_(False),
+            PlanItem.is_deleted.is_(False),
+        )
+        .options(joinedload(PlanItem.plan))
+        .order_by(StudyPlan.plan_date.asc(), PlanItem.order_index.asc())
+        .all()
+    )
+
+    module_map = defaultdict(
+        lambda: {
+            "planned_minutes": 0,
+            "actual_minutes": 0,
+            "approved": 0,
+            "partial": 0,
+            "rejected": 0,
+            "pending": 0,
+            "total": 0,
+            "contents": [],
+            "content_seen": set(),
+        }
+    )
+
+    for item in items:
+        module = (item.module or "").strip() or "未分类"
+        row = module_map[module]
+        row["total"] += 1
+        row["planned_minutes"] += int(item.planned_minutes or 0)
+        row["actual_minutes"] += int((item.actual_seconds or 0) / 60) + int(item.manual_minutes or 0)
+
+        review_status = item.review_status or PlanItem.REVIEW_PENDING
+        if review_status == PlanItem.REVIEW_APPROVED:
+            row["approved"] += 1
+        elif review_status == PlanItem.REVIEW_PARTIAL:
+            row["partial"] += 1
+        elif review_status == PlanItem.REVIEW_REJECTED:
+            row["rejected"] += 1
+        else:
+            row["pending"] += 1
+
+        content_name = (item.custom_title or item.task_name or "").strip()
+        if (
+            content_name
+            and content_name not in row["content_seen"]
+            and len(row["contents"]) < 8
+        ):
+            row["contents"].append(content_name)
+            row["content_seen"].add(content_name)
+
+    subject_rows = []
+    for module, row in module_map.items():
+        total = row["total"]
+        reviewed = row["approved"] + row["partial"] + row["rejected"]
+        mastery_score = (
+            (row["approved"] * 1.0 + row["partial"] * 0.65 + row["rejected"] * 0.2) / total
+            if total
+            else 0.0
+        )
+        review_rate = round(reviewed * 100.0 / total, 1) if total else 0.0
+        execution_rate = (
+            round(row["actual_minutes"] * 100.0 / row["planned_minutes"], 1)
+            if row["planned_minutes"] > 0
+            else 0.0
+        )
+        mastery_text = _mastery_label(mastery_score)
+        content_text = "、".join(row["contents"]) if row["contents"] else "暂无任务记录"
+        if mastery_score >= 0.85:
+            teacher_comment = "任务完成质量稳定，可进入更高难度训练。"
+        elif mastery_score >= 0.65:
+            teacher_comment = "已具备基础能力，建议通过限时训练提升稳定性。"
+        else:
+            teacher_comment = "建议先补基础再提速，优先解决高频错误。"
+
+        subject_rows.append(
+            {
+                "module": module,
+                "content_text": content_text,
+                "planned_minutes": row["planned_minutes"],
+                "actual_minutes": row["actual_minutes"],
+                "review_rate": review_rate,
+                "execution_rate": execution_rate,
+                "mastery_score": round(mastery_score * 100, 1),
+                "mastery_label": mastery_text,
+                "teacher_comment": teacher_comment,
+            }
+        )
+
+    subject_rows.sort(key=lambda entry: entry["planned_minutes"], reverse=True)
+
+    total_items = len(items)
+    reviewed_items = sum(
+        1
+        for item in items
+        if item.review_status
+        in (PlanItem.REVIEW_APPROVED, PlanItem.REVIEW_PARTIAL, PlanItem.REVIEW_REJECTED)
+    )
+    planned_total = sum(row["planned_minutes"] for row in subject_rows)
+    actual_total = sum(row["actual_minutes"] for row in subject_rows)
+    stage_completion_rate = round(reviewed_items * 100.0 / total_items, 1) if total_items else 0.0
+    avg_mastery = (
+        round(sum(row["mastery_score"] for row in subject_rows) / len(subject_rows), 1)
+        if subject_rows
+        else 0.0
+    )
+
+    phase_score_records = (
+        ScoreRecord.query.filter(
+            ScoreRecord.student_id == student.id,
+            ScoreRecord.is_deleted.is_(False),
+            ScoreRecord.taken_on >= start_date,
+            ScoreRecord.taken_on <= end_date,
+        )
+        .order_by(ScoreRecord.taken_on.desc())
+        .all()
+    )
+    recent_score_records = (
+        ScoreRecord.query.filter(
+            ScoreRecord.student_id == student.id,
+            ScoreRecord.is_deleted.is_(False),
+        )
+        .order_by(ScoreRecord.taken_on.desc())
+        .limit(5)
+        .all()
+    )
+    score_records = phase_score_records or recent_score_records
+    score_scope_label = "阶段内模考/测评分数" if phase_score_records else "近期模考/测评分数（阶段内暂无）"
+
+    ordered_for_estimate = sorted(
+        [record for record in recent_score_records if record.total_score is not None],
+        key=lambda record: record.taken_on,
+    )
+    latest_score = ordered_for_estimate[-1].total_score if ordered_for_estimate else None
+    predicted_score = None
+    prediction_basis = "暂无可用分数记录"
+    if latest_score is not None:
+        if len(ordered_for_estimate) >= 2:
+            latest_delta = ordered_for_estimate[-1].total_score - ordered_for_estimate[-2].total_score
+            predicted_score = round(ordered_for_estimate[-1].total_score + latest_delta * 0.5, 1)
+            prediction_basis = "基于最近两次总分趋势做线性外推"
+        else:
+            predicted_score = round(ordered_for_estimate[-1].total_score, 1)
+            prediction_basis = "仅有一次分数记录，预估分等于最近分数"
+
+    weak_subjects = sorted(subject_rows, key=lambda row: row["mastery_score"])
+    focus_points = []
+    for row in weak_subjects[:2]:
+        focus_points.append(
+            f"{row['module']}：当前{row['mastery_label']}，建议围绕“{row['content_text'].split('、')[0]}”做专项强化。"
+        )
+    if not focus_points and subject_rows:
+        focus_points.append(f"{subject_rows[0]['module']}：保持当前训练节奏，逐步提高题目难度。")
+    if not focus_points:
+        focus_points.append("当前阶段暂无任务记录，建议先制定分学科的周计划。")
+
+    suggestions = []
+    if stage_completion_rate < 70:
+        suggestions.append("优先提高作业提交和审核通过率，建议固定每日提交时段。")
+    if planned_total > 0 and actual_total < planned_total * 0.75:
+        suggestions.append("实际学习时长偏低，建议每周增加 2-3 次限时训练。")
+    if avg_mastery < 70:
+        suggestions.append("先补薄弱知识点再做套题，避免无效刷题。")
+    if not suggestions:
+        suggestions.append("保持当前节奏，下一阶段重点放在稳定输出和错题复盘。")
+
+    if total_items == 0:
+        stage_overall_comment = "该阶段暂无学习任务数据，建议先补充阶段计划后再出具报告。"
+    elif stage_completion_rate >= 85 and avg_mastery >= 75:
+        stage_overall_comment = "该阶段执行度和掌握度整体良好，可在下一阶段提高难度并增加综合训练。"
+    elif stage_completion_rate >= 70:
+        stage_overall_comment = "该阶段整体达标，但学科表现存在差异，建议对薄弱模块做专项提分。"
+    else:
+        stage_overall_comment = "该阶段执行度偏低，建议先修复学习节奏与提交习惯，再推进冲分训练。"
+
+    return {
+        "student": student,
+        "start_date": start_date,
+        "end_date": end_date,
+        "subject_rows": subject_rows,
+        "score_records": score_records,
+        "score_scope_label": score_scope_label,
+        "total_items": total_items,
+        "reviewed_items": reviewed_items,
+        "planned_total": planned_total,
+        "actual_total": actual_total,
+        "stage_completion_rate": stage_completion_rate,
+        "avg_mastery": avg_mastery,
+        "latest_score": latest_score,
+        "predicted_score": predicted_score,
+        "prediction_basis": prediction_basis,
+        "focus_points": focus_points,
+        "suggestions": suggestions,
+        "stage_overall_comment": stage_overall_comment,
+    }
+
+
+def _serialize_score_record(score: ScoreRecord) -> dict:
+    return {
+        "taken_on": score.taken_on.isoformat() if score.taken_on else "",
+        "assessment_name": score.assessment_name,
+        "total_score": score.total_score,
+        "component_scores": score.component_scores or {},
+        "notes": score.notes or "",
+    }
+
+
+def _build_stage_report_data(student: StudentProfile, start_date: date, end_date: date) -> dict:
+    payload = _build_stage_report_payload(student, start_date, end_date)
+    return {
+        "subject_rows": payload["subject_rows"],
+        "score_scope_label": payload["score_scope_label"],
+        "score_records": [_serialize_score_record(score) for score in payload["score_records"]],
+        "total_items": payload["total_items"],
+        "reviewed_items": payload["reviewed_items"],
+        "planned_total": payload["planned_total"],
+        "actual_total": payload["actual_total"],
+        "stage_completion_rate": payload["stage_completion_rate"],
+        "avg_mastery": payload["avg_mastery"],
+        "latest_score": payload["latest_score"],
+        "predicted_score": payload["predicted_score"],
+        "prediction_basis": payload["prediction_basis"],
+        "focus_points_text": "\n".join(payload["focus_points"]),
+        "suggestions_text": "\n".join(payload["suggestions"]),
+        "overall_comment": payload["stage_overall_comment"],
+    }
+
+
+def _stage_report_title(student: StudentProfile, start_date: date, end_date: date) -> str:
+    return f"{student.full_name} 阶段学习报告 ({start_date.isoformat()} 至 {end_date.isoformat()})"
+
+
 @app.route("/report", methods=["GET"])
 @login_required
 def report_page():
@@ -3056,9 +3373,6 @@ def materials_edit(material_id):
     return render_template("material_form.html", material=material, questions_json=questions_json)
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
 # --- Course Plan Generator Routes ---
 
 @app.route("/admin/course-plan")
@@ -3228,3 +3542,212 @@ def export_course_plan_pdf(plan_id):
     filename = quote(f"{plan.title}.pdf")
     response.headers["Content-Disposition"] = f"attachment; filename*=UTF-8''{filename}"
     return response
+
+
+# --- Stage Report Routes ---
+
+@app.route("/admin/stage-report")
+@login_required
+@stage_report_access_required
+def stage_report_list():
+    reports = (
+        StageReport.query.filter(StageReport.is_deleted.is_(False))
+        .options(joinedload(StageReport.student), joinedload(StageReport.creator))
+        .order_by(StageReport.updated_at.desc())
+        .all()
+    )
+    return render_template("admin/stage_report_list.html", reports=reports)
+
+
+@app.route("/admin/stage-report/create", methods=["GET", "POST"])
+@app.route("/admin/stage-report/<int:report_id>/edit", methods=["GET", "POST"])
+@login_required
+@stage_report_access_required
+def stage_report_create(report_id=None):
+    students = _available_stage_report_students()
+    report = None
+    if report_id is not None:
+        report = StageReport.query.filter(
+            StageReport.id == report_id,
+            StageReport.is_deleted.is_(False),
+        ).first_or_404()
+
+    if request.method == "POST":
+        student_id = request.form.get("student_id", type=int)
+        selected_student = StudentProfile.query.filter(
+            StudentProfile.id == student_id,
+            StudentProfile.is_deleted.is_(False),
+        ).first()
+        if not selected_student:
+            flash("请选择有效学生。")
+            return redirect(url_for("stage_report_list"))
+
+        start_date = _safe_report_date((request.form.get("start_date") or "").strip())
+        end_date = _safe_report_date((request.form.get("end_date") or "").strip())
+        if not end_date:
+            end_date = date.today()
+        if not start_date:
+            start_date = end_date - timedelta(days=59)
+        if start_date > end_date:
+            start_date, end_date = end_date, start_date
+
+        stage_data = _build_stage_report_data(selected_student, start_date, end_date)
+
+        subject_rows = stage_data.get("subject_rows") or []
+        for idx, row in enumerate(subject_rows):
+            teacher_comment = (request.form.get(f"teacher_comment_{idx}") or "").strip()
+            if teacher_comment:
+                row["teacher_comment"] = teacher_comment
+        stage_data["subject_rows"] = subject_rows
+
+        stage_data["overall_comment"] = (request.form.get("overall_comment") or "").strip()
+        stage_data["focus_points_text"] = (request.form.get("focus_points_text") or "").strip()
+        stage_data["suggestions_text"] = (request.form.get("suggestions_text") or "").strip()
+
+        title = (request.form.get("title") or "").strip()
+        if not title:
+            title = _stage_report_title(selected_student, start_date, end_date)
+
+        if report:
+            report.student_id = selected_student.id
+            report.start_date = start_date
+            report.end_date = end_date
+            report.title = title
+            report.report_data = stage_data
+        else:
+            report = StageReport(
+                student_id=selected_student.id,
+                created_by=current_user.id,
+                start_date=start_date,
+                end_date=end_date,
+                title=title,
+                report_data=stage_data,
+            )
+            db.session.add(report)
+
+        db.session.commit()
+        flash("阶段学习报告已保存。")
+        return redirect(url_for("stage_report_create", report_id=report.id))
+
+    if report:
+        selected_student = report.student
+        start_date = report.start_date
+        end_date = report.end_date
+        stage_data = dict(report.report_data or {})
+    else:
+        filters = _parse_stage_report_filters(students)
+        selected_student = None
+        if filters["student_id"] is not None:
+            selected_student = next(
+                (student for student in students if student.id == filters["student_id"]),
+                None,
+            )
+        start_date = filters["start"]
+        end_date = filters["end"]
+        stage_data = (
+            _build_stage_report_data(selected_student, start_date, end_date)
+            if selected_student
+            else {}
+        )
+
+    if stage_data.get("focus_points_text") is None:
+        stage_data["focus_points_text"] = ""
+    if stage_data.get("suggestions_text") is None:
+        stage_data["suggestions_text"] = ""
+    if stage_data.get("overall_comment") is None:
+        stage_data["overall_comment"] = ""
+
+    title_value = report.title if report else _stage_report_title(selected_student, start_date, end_date) if selected_student else "阶段学习报告"
+
+    return render_template(
+        "admin/stage_report_create.html",
+        report=report,
+        students=students,
+        selected_student=selected_student,
+        start_date=start_date,
+        end_date=end_date,
+        stage_data=stage_data,
+        title_value=title_value,
+    )
+
+
+@app.post("/admin/stage-report/<int:report_id>/delete")
+@login_required
+@stage_report_access_required
+def delete_stage_report(report_id):
+    report = StageReport.query.filter(
+        StageReport.id == report_id,
+        StageReport.is_deleted.is_(False),
+    ).first_or_404()
+    report.is_deleted = True
+    db.session.commit()
+    flash("阶段学习报告已删除。")
+    return redirect(url_for("stage_report_list"))
+
+
+@app.route("/api/stage-reports/<int:report_id>/pdf")
+@login_required
+@stage_report_access_required
+def export_stage_report_pdf(report_id):
+    if HTML is None or CSS is None:
+        return jsonify({"ok": False, "error": "weasyprint_not_installed"}), 500
+
+    report = StageReport.query.filter(
+        StageReport.id == report_id,
+        StageReport.is_deleted.is_(False),
+    ).first_or_404()
+
+    data = report.report_data or {}
+    subject_rows = data.get("subject_rows") or []
+    score_records = data.get("score_records") or []
+    focus_points = [
+        line.strip()
+        for line in (data.get("focus_points_text") or "").splitlines()
+        if line.strip()
+    ]
+    suggestions = [
+        line.strip()
+        for line in (data.get("suggestions_text") or "").splitlines()
+        if line.strip()
+    ]
+
+    import base64
+
+    logo_path = os.path.join(app.static_folder, "sagepath_logo.jpg")
+    logo_base64 = ""
+    try:
+        with open(logo_path, "rb") as f:
+            logo_base64 = base64.b64encode(f.read()).decode("utf-8")
+    except Exception:
+        logo_base64 = ""
+
+    html = render_template(
+        "admin/stage_report_pdf.html",
+        report=report,
+        student=report.student,
+        data=data,
+        subject_rows=subject_rows,
+        score_records=score_records,
+        focus_points=focus_points,
+        suggestions=suggestions,
+        generated_at=datetime.now(),
+        logo_base64=logo_base64,
+    )
+
+    css = CSS(string="""
+        @page { size: A4; margin: 18mm; }
+        body { font-family: "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    """)
+    pdf = HTML(string=html).write_pdf(stylesheets=[css])
+
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    from urllib.parse import quote
+
+    filename = quote(f"{report.title or '阶段学习报告'}.pdf")
+    response.headers["Content-Disposition"] = f"attachment; filename*=UTF-8''{filename}"
+    return response
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
