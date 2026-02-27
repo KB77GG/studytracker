@@ -103,34 +103,43 @@
       </div>
     </section>
 
-    <section class="card panel score-grid">
-      <div>
-        <div class="panel-head">
-          <h2>{{ stage_data.score_scope_label or '分数记录' }}</h2>
-        </div>
-        <ul class="score-list">
-          {% for score in stage_data.score_records or [] %}
-          <li>
-            <strong>{{ score.taken_on }} · {{ score.assessment_name }}</strong>
-            <span>{% if score.total_score is not none %}总分 {{ score.total_score }}{% else %}未记录总分{% endif %}</span>
-            {% if score.component_scores %}
-            <div class="muted small">
-              {% for key, value in score.component_scores.items() %}
-              {{ key }}: {{ value }}{% if not loop.last %}；{% endif %}
-              {% endfor %}
-            </div>
-            {% endif %}
-          </li>
-          {% else %}
-          <li class="muted">暂无分数记录。</li>
-          {% endfor %}
-        </ul>
+    <section class="card panel">
+      <div class="panel-head">
+        <h2>听说读写上课情况总结（教师填写）</h2>
       </div>
-      <div class="prediction-box">
-        <h3>分数判断</h3>
-        <p>最近分数：{% if stage_data.latest_score is not none %}{{ stage_data.latest_score }}{% else %}暂无{% endif %}</p>
-        <p>预估下阶段分数：{% if stage_data.predicted_score is not none %}{{ stage_data.predicted_score }}{% else %}暂无{% endif %}</p>
-        <p class="muted small">{{ stage_data.prediction_basis or '' }}</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 120px;">学科</th>
+              <th>上课情况总结（自由填写）</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in stage_data.class_summary_rows or [] %}
+            <tr>
+              <td>{{ row.subject }}</td>
+              <td>
+                <textarea name="class_summary_{{ loop.index0 }}" rows="3" placeholder="请填写{{ row.subject }}上课内容、课堂表现、问题与改进计划...">{{ row.summary or '' }}</textarea>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card panel">
+      <div class="panel-head">
+        <h2>模考点评（自由编辑）</h2>
+      </div>
+      <div class="field">
+        <textarea
+          id="mock_exam_review_text"
+          name="mock_exam_review_text"
+          rows="6"
+          placeholder="请填写本阶段模考表现、分项问题、提分策略和下阶段模考安排..."
+        >{{ stage_data.mock_exam_review_text or '' }}</textarea>
       </div>
     </section>
 
@@ -235,35 +244,6 @@
     background: #f8fafc;
     font-size: 13px;
   }
-  .score-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 12px;
-  }
-  .score-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 8px;
-  }
-  .score-list li {
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 10px;
-    background: #fafcff;
-  }
-  .prediction-box {
-    border: 1px dashed #cbd5e1;
-    border-radius: 10px;
-    padding: 10px;
-    background: #f8fafc;
-    align-self: start;
-  }
-  .prediction-box h3 {
-    margin-top: 0;
-    margin-bottom: 8px;
-  }
   .text-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -287,7 +267,6 @@
     .field-grid {
       grid-template-columns: 1fr;
     }
-    .score-grid,
     .text-grid {
       grid-template-columns: 1fr;
     }

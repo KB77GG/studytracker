@@ -142,7 +142,6 @@
     <div class="card"><div class="title">平均掌握度</div><div class="value">{{ data.avg_mastery or 0 }}%</div></div>
     <div class="card"><div class="title">计划时长</div><div class="value">{{ data.planned_total or 0 }}分</div></div>
     <div class="card"><div class="title">实际时长</div><div class="value">{{ data.actual_total or 0 }}分</div></div>
-    <div class="card"><div class="title">预估分数</div><div class="value">{{ data.predicted_score if data.predicted_score is not none else '暂无' }}</div></div>
   </div>
   <p>{{ data.overall_comment or '' }}</p>
 
@@ -174,25 +173,26 @@
     </tbody>
   </table>
 
-  <h2>{{ data.score_scope_label or '分数记录' }}</h2>
-  <ul>
-    {% for score in score_records %}
-    <li>
-      <strong>{{ score.taken_on }} · {{ score.assessment_name }}</strong>
-      {% if score.total_score is not none %}（总分 {{ score.total_score }}）{% endif %}
-      {% if score.component_scores %}
-      <div class="small">
-        {% for key, value in score.component_scores.items() %}
-        {{ key }}: {{ value }}{% if not loop.last %}；{% endif %}
-        {% endfor %}
-      </div>
-      {% endif %}
-    </li>
-    {% else %}
-    <li>暂无分数记录。</li>
-    {% endfor %}
-  </ul>
-  <p class="small">{{ data.prediction_basis or '' }}</p>
+  <h2>听说读写上课情况总结</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 90px;">学科</th>
+        <th>上课情况总结</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in class_summary_rows %}
+      <tr>
+        <td>{{ row.subject }}</td>
+        <td>{{ (row.summary or '—') | replace('\n', '<br>') | safe }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>模考点评</h2>
+  <p>{{ (mock_exam_review_text or '暂无模考点评。') | replace('\n', '<br>') | safe }}</p>
 
   <h2>下阶段学习重点</h2>
   <ul>

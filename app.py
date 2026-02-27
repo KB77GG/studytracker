@@ -2761,6 +2761,16 @@ def _stage_report_title(student: StudentProfile, start_date: date, end_date: dat
     return f"{student.full_name} 阶段学习报告 ({start_date.isoformat()} 至 {end_date.isoformat()})"
 
 
+def _default_class_summary_rows(existing_rows=None):
+    subjects = ["听力", "口语", "阅读", "写作"]
+    existing_map = {}
+    for row in existing_rows or []:
+        subject = (row.get("subject") or "").strip()
+        if subject:
+            existing_map[subject] = row.get("summary") or ""
+    return [{"subject": subject, "summary": existing_map.get(subject, "")} for subject in subjects]
+
+
 @app.route("/report", methods=["GET"])
 @login_required
 def report_page():
@@ -3658,6 +3668,20 @@ def stage_report_create(report_id=None):
                 row["teacher_comment"] = teacher_comment
         stage_data["subject_rows"] = subject_rows
 
+        class_summary_rows = []
+        default_rows = _default_class_summary_rows()
+        for idx, row in enumerate(default_rows):
+            class_summary_rows.append(
+                {
+                    "subject": row["subject"],
+                    "summary": (request.form.get(f"class_summary_{idx}") or "").strip(),
+                }
+            )
+        stage_data["class_summary_rows"] = class_summary_rows
+        stage_data["mock_exam_review_text"] = (
+            request.form.get("mock_exam_review_text") or ""
+        ).strip()
+
         stage_data["overall_comment"] = (request.form.get("overall_comment") or "").strip()
         stage_data["focus_points_text"] = (request.form.get("focus_points_text") or "").strip()
         stage_data["suggestions_text"] = (request.form.get("suggestions_text") or "").strip()
@@ -3714,6 +3738,11 @@ def stage_report_create(report_id=None):
         stage_data["suggestions_text"] = ""
     if stage_data.get("overall_comment") is None:
         stage_data["overall_comment"] = ""
+    stage_data["class_summary_rows"] = _default_class_summary_rows(
+        stage_data.get("class_summary_rows")
+    )
+    if stage_data.get("mock_exam_review_text") is None:
+        stage_data["mock_exam_review_text"] = ""
 
     title_value = report.title if report else _stage_report_title(selected_student, start_date, end_date) if selected_student else "阶段学习报告"
 
@@ -3757,7 +3786,8 @@ def export_stage_report_pdf(report_id):
 
     data = report.report_data or {}
     subject_rows = data.get("subject_rows") or []
-    score_records = data.get("score_records") or []
+    class_summary_rows = _default_class_summary_rows(data.get("class_summary_rows"))
+    mock_exam_review_text = data.get("mock_exam_review_text") or ""
     focus_points = [
         line.strip()
         for line in (data.get("focus_points_text") or "").splitlines()
@@ -3785,7 +3815,8 @@ def export_stage_report_pdf(report_id):
         student=report.student,
         data=data,
         subject_rows=subject_rows,
-        score_records=score_records,
+        class_summary_rows=class_summary_rows,
+        mock_exam_review_text=mock_exam_review_text,
         focus_points=focus_points,
         suggestions=suggestions,
         generated_at=datetime.now(),
