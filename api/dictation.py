@@ -5,6 +5,8 @@ Handles word book management, Excel upload, TTS generation, and practice records
 
 import os
 import re
+import subprocess
+import tempfile
 from pathlib import Path
 from datetime import datetime
 from functools import wraps
@@ -317,10 +319,38 @@ def _dashscope_tts(text: str) -> bytes | None:
             return None
         audio_resp = requests.get(audio_url, timeout=15)
         if audio_resp.status_code == 200 and audio_resp.content:
-            return audio_resp.content
+            raw = audio_resp.content
+            # Convert WAV → MP3 via ffmpeg for smaller file size
+            return _wav_to_mp3(raw) or raw
     except Exception as exc:
         current_app.logger.warning("DashScope TTS error for %s: %s", text, exc)
 
+    return None
+
+
+def _wav_to_mp3(raw_audio: bytes) -> bytes | None:
+    """Convert WAV/PCM audio bytes to MP3 using ffmpeg. Returns None on failure."""
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_in:
+            tmp_in.write(raw_audio)
+            tmp_in_path = tmp_in.name
+        tmp_out_path = tmp_in_path.replace(".wav", ".mp3")
+        result = subprocess.run(
+            ["ffmpeg", "-y", "-i", tmp_in_path, "-codec:a", "libmp3lame",
+             "-b:a", "64k", "-ar", "48000", "-ac", "1", tmp_out_path],
+            capture_output=True, timeout=10
+        )
+        if result.returncode == 0 and os.path.exists(tmp_out_path):
+            mp3_bytes = Path(tmp_out_path).read_bytes()
+            return mp3_bytes if mp3_bytes else None
+    except Exception:
+        return None
+    finally:
+        for p in (tmp_in_path, tmp_out_path):
+            try:
+                os.unlink(p)
+            except OSError:
+                pass
     return None
 
 
