@@ -36,7 +36,10 @@ Page({
     },
 
     onLoad: function (options) {
-        if (options.taskId) {
+        if (options.mode === 'retry_wrong') {
+            // Launched from notebook or home for wrong-word practice
+            this._initRetryWrongWords(options.source || 'last');
+        } else if (options.taskId) {
             this.setData({ taskId: options.taskId });
             this.fetchTask(options.taskId);
         } else if (options.id) {
@@ -404,9 +407,15 @@ Page({
         const durationSeconds = this.computeDurationSeconds();
 
         if (this.data.reviewingWrongWords) {
+            // 从错词本中移除本次答对的单词
+            this._removeCorrectWordsFromNotebook();
+            const stillWrong = this.data.wrongWordsDetail.length;
+            const msg = stillWrong > 0
+                ? `答对 ${correct}/${total}，仍有 ${stillWrong} 词待巩固`
+                : `全部答对！已从错词本移除`;
             wx.showModal({
                 title: '错词练习完成',
-                content: '已完成错词复习。',
+                content: msg,
                 showCancel: false,
                 success: () => wx.navigateBack()
             });
@@ -571,6 +580,52 @@ Page({
         this.startTicker();
     },
 
+    // 从 onLoad 启动错词重练（由错词本或首页发起）
+    _initRetryWrongWords(source) {
+        let wrongDetail = [];
+        const storageKey = source === 'notebook' ? 'dictation_notebook' : 'dictation_last_wrong';
+        try {
+            const saved = wx.getStorageSync(storageKey) || [];
+            if (Array.isArray(saved) && saved.length) {
+                wrongDetail = saved;
+            }
+        } catch (e) {
+            console.warn('load wrong words failed', e);
+        }
+        if (!wrongDetail.length) {
+            wx.showToast({ title: '没有错词可重练', icon: 'none' });
+            setTimeout(() => wx.navigateBack(), 1200);
+            return;
+        }
+        const wrongOnly = wrongDetail.map((w, idx) => ({
+            id: idx + 1,
+            word: w.word,
+            translation: w.translation,
+            phonetic: w.phonetic
+        }));
+        this.setData({
+            bookTitle: source === 'notebook' ? '错词本重练' : '上次错词重练',
+            words: wrongOnly,
+            totalWords: wrongOnly.length,
+            currentIndex: 0,
+            wrongWords: [],
+            wrongWordsDetail: [],
+            correctCount: 0,
+            showResult: false,
+            inputValue: '',
+            userAnswer: '',
+            practiceStart: Date.now(),
+            reviewingWrongWords: true,
+            retrySource: source,
+            finished: false,
+            showHint: false,
+            attemptCount: 0,
+            inputError: false
+        });
+        this.loadWord(0);
+        this.startTicker();
+    },
+
     // 重练错词
     restartWrongWords() {
         let wrongDetail = this.data.wrongWordsDetail;
@@ -640,6 +695,43 @@ Page({
         } catch (e) {
             console.warn('loadNotebookCount error', e);
             this.setData({ notebookCount: 0 });
+        }
+    },
+
+    // 错词重练后，从错词本中移除本次答对的词
+    _removeCorrectWordsFromNotebook() {
+        try {
+            // 本次练习的所有单词
+            const allWords = this.data.words || [];
+            // 本次仍然答错的单词
+            const stillWrongSet = new Set(
+                (this.data.wrongWordsDetail || []).map(w => (w.word || '').toLowerCase())
+            );
+            // 答对的单词 = 全部 - 仍然答错的
+            const correctWords = allWords
+                .map(w => (w.word || '').toLowerCase())
+                .filter(w => w && !stillWrongSet.has(w));
+
+            if (!correctWords.length) return;
+
+            const correctSet = new Set(correctWords);
+            const notebook = wx.getStorageSync('dictation_notebook') || [];
+            if (!Array.isArray(notebook)) return;
+            const updated = notebook.filter(
+                item => !correctSet.has((item.word || '').toLowerCase())
+            );
+            wx.setStorageSync('dictation_notebook', updated);
+
+            // 同时清理 dictation_last_wrong 中答对的词
+            const lastWrong = wx.getStorageSync('dictation_last_wrong') || [];
+            if (Array.isArray(lastWrong) && lastWrong.length) {
+                const updatedLast = lastWrong.filter(
+                    item => !correctSet.has((item.word || '').toLowerCase())
+                );
+                wx.setStorageSync('dictation_last_wrong', updatedLast);
+            }
+        } catch (e) {
+            console.warn('_removeCorrectWordsFromNotebook error', e);
         }
     },
 

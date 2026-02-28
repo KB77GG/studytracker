@@ -23,21 +23,72 @@
   color: #909399;
 }
 
+/* ── 上次错词 banner ── */
+.last-wrong-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1px solid #fed7aa;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.banner-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.banner-icon {
+  font-size: 40rpx;
+}
+
+.banner-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.banner-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #9a3412;
+}
+
+.banner-desc {
+  font-size: 22rpx;
+  color: #c2410c;
+  margin-top: 2rpx;
+}
+
+.banner-btn {
+  background: #ea580c;
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 10rpx 24rpx;
+  border-radius: 24rpx;
+  flex-shrink: 0;
+}
+
+/* ── 空状态 ── */
 .empty {
   margin-top: 80rpx;
   text-align: center;
   color: #909399;
 }
 
+/* ── 列表 ── */
 .list {
-  max-height: calc(100vh - 220rpx);
+  max-height: calc(100vh - 380rpx);
 }
 
 .card {
   background: #fff;
   border-radius: 16rpx;
   padding: 20rpx;
-  box-shadow: 0 6rpx 18rpx rgba(0,0,0,0.05);
+  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.05);
   margin-bottom: 16rpx;
 }
 
@@ -71,8 +122,8 @@
 }
 
 button.ghost {
-  background: #EAF6F4;
-  color: #20756F;
+  background: #eaf6f4;
+  color: #20756f;
   border: 1px solid #c8e8e3;
 }
 
@@ -82,8 +133,21 @@ button.danger {
   border: 1px solid #f5c6cb;
 }
 
+/* ── 底部按钮 ── */
 .footer {
   margin-top: 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.retry-all-btn {
+  width: 100%;
+  background: #0f766e;
+  color: #fff;
+  border-radius: 12rpx;
+  font-weight: 600;
+  font-size: 30rpx;
 }
 
 .clear-btn {
