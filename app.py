@@ -94,6 +94,19 @@ init_api(app)
 UPLOAD_ROOT = Path(app.config.get("UPLOAD_FOLDER", Path(app.root_path) / "uploads"))
 UPLOAD_ROOT.mkdir(parents=True, exist_ok=True)
 
+
+@app.after_request
+def _add_cache_headers(response):
+    """Prevent browser caching for admin HTML pages and PDFs."""
+    if response.content_type and (
+        "text/html" in response.content_type
+        or "application/pdf" in response.content_type
+    ):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
 ALLOWED_EVIDENCE_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "pdf", "mp3", "mp4", "wav", "doc", "docx"}
 
 

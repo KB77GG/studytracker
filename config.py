@@ -28,6 +28,9 @@ class Config:
     # 用于 Flask 的安全密钥（后面我们可以改成更安全的随机值）
     SECRET_KEY = "dev-key-change-later"
 
+    # Always reload templates when source changes (prevents stale cache)
+    TEMPLATES_AUTO_RELOAD = True
+
     # 数据库路径：在当前项目文件夹下自动生成 app.db
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, "app.db")
 
