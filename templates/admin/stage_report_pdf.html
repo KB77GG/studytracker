@@ -55,6 +55,13 @@
     }
     .card .title { font-size: 8pt; color: #6b7280; margin-bottom: 2px; }
     .card .value { font-size: 14pt; font-weight: 700; color: #0f766e; }
+    /* Conditional color coding for metric cards */
+    .card-good { border-top-color: #10b981; background: #f0fdf4; }
+    .card-good .value { color: #059669; }
+    .card-warn { border-top-color: #f59e0b; background: #fffbeb; }
+    .card-warn .value { color: #d97706; }
+    .card-low  { border-top-color: #ef4444; background: #fef2f2; }
+    .card-low  .value { color: #dc2626; }
     .overall-comment {
       background: #f0fdfa; border-left: 4px solid #0f766e; border-radius: 4px;
       padding: 8px 12px; margin-bottom: 4mm; font-size: 10pt; color: #374151; line-height: 1.6;
@@ -113,8 +120,8 @@
   <h2>{{ ns.n }}. 阶段概览</h2>{% set ns.n = ns.n + 1 %}
   <div class="cards">
     <div class="card"><div class="title">阶段任务</div><div class="value">{{ data.total_items or 0 }}</div></div>
-    <div class="card"><div class="title">审核完成率</div><div class="value">{{ data.stage_completion_rate or 0 }}%</div></div>
-    <div class="card"><div class="title">平均掌握度</div><div class="value">{{ data.avg_mastery or 0 }}%</div></div>
+    <div class="card {{ 'card-good' if (data.stage_completion_rate or 0) >= 80 else ('card-warn' if (data.stage_completion_rate or 0) >= 50 else 'card-low') }}"><div class="title">审核完成率</div><div class="value">{{ data.stage_completion_rate or 0 }}%</div></div>
+    <div class="card {{ 'card-good' if (data.avg_mastery or 0) >= 80 else ('card-warn' if (data.avg_mastery or 0) >= 50 else 'card-low') }}"><div class="title">平均掌握度</div><div class="value">{{ data.avg_mastery or 0 }}%</div></div>
     <div class="card"><div class="title">计划时长</div><div class="value">{{ data.planned_total or 0 }}分</div></div>
     <div class="card"><div class="title">实际时长</div><div class="value">{{ data.actual_total or 0 }}分</div></div>
   </div>
