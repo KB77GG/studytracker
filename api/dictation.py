@@ -335,8 +335,9 @@ def _wav_to_mp3(raw_audio: bytes) -> bytes | None:
             tmp_in.write(raw_audio)
             tmp_in_path = tmp_in.name
         tmp_out_path = tmp_in_path.replace(".wav", ".mp3")
+        ffmpeg_bin = "/usr/bin/ffmpeg"
         result = subprocess.run(
-            ["ffmpeg", "-y", "-i", tmp_in_path, "-codec:a", "libmp3lame",
+            [ffmpeg_bin, "-y", "-i", tmp_in_path, "-codec:a", "libmp3lame",
              "-b:a", "64k", "-ar", "48000", "-ac", "1", tmp_out_path],
             capture_output=True, timeout=10
         )
