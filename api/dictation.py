@@ -269,11 +269,13 @@ def get_word_audio(word_id):
 
 
 # ============================================================================
-# Simple TTS proxy & cache (Youdao) for mini-program playback
+# TTS proxy & cache for mini-program playback
+# Primary: Aliyun DashScope (neural TTS, accurate for all word forms)
+# Fallback: Youdao dictvoice (fast but unreliable for inflected forms)
 # ============================================================================
 
 def _dashscope_tts(text: str) -> bytes | None:
-    """Fallback TTS using Aliyun DashScope (Model Studio)."""
+    """Primary TTS using Aliyun DashScope (neural model, handles plurals/tenses)."""
     api_key = current_app.config.get("ALIYUN_API_KEY")
     if not api_key:
         return None
@@ -299,11 +301,15 @@ def _dashscope_tts(text: str) -> bytes | None:
             "text": text,
             "voice": voice,
             "language_type": language_type
+        },
+        "parameters": {
+            "format": "mp3"
         }
     }
     try:
         resp = requests.post(url, headers=headers, json=payload, timeout=15)
         if resp.status_code != 200:
+            current_app.logger.warning("DashScope TTS failed %s: %s", text, resp.status_code)
             return None
         data = resp.json()
         audio_url = data.get("output", {}).get("audio", {}).get("url")
@@ -312,15 +318,28 @@ def _dashscope_tts(text: str) -> bytes | None:
         audio_resp = requests.get(audio_url, timeout=15)
         if audio_resp.status_code == 200 and audio_resp.content:
             return audio_resp.content
-    except Exception:
-        return None
+    except Exception as exc:
+        current_app.logger.warning("DashScope TTS error for %s: %s", text, exc)
 
+    return None
+
+
+def _youdao_tts(text: str) -> bytes | None:
+    """Fallback TTS using Youdao dictvoice (fast but dictionary-based)."""
+    url = f"https://dict.youdao.com/dictvoice?audio={requests.utils.quote(text)}&type=2"
+    try:
+        resp = requests.get(url, timeout=10)
+        if resp.status_code == 200 and resp.content:
+            return resp.content
+        current_app.logger.warning("Youdao TTS fetch failed %s: %s", text, resp.status_code)
+    except Exception as exc:
+        current_app.logger.warning("Youdao TTS proxy error for %s: %s", text, exc)
     return None
 
 
 @dictation_bp.route("/tts", methods=["GET"])
 def proxy_tts():
-    """Proxy TTS audio to avoid external domain failures; includes simple file cache."""
+    """Proxy TTS audio with file cache. Aliyun primary, Youdao fallback."""
     word = (request.args.get("word") or "").strip()
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
@@ -336,18 +355,14 @@ def proxy_tts():
         except Exception:
             cache_path.unlink(missing_ok=True)
 
-    url = f"https://dict.youdao.com/dictvoice?audio={requests.utils.quote(word)}&type=2"
-    try:
-        resp = requests.get(url, timeout=10)
-        if resp.status_code == 200 and resp.content:
-            cache_path.write_bytes(resp.content)
-            return send_file(cache_path, mimetype="audio/mpeg")
-        current_app.logger.warning("Youdao TTS fetch failed %s: %s", word, resp.status_code)
-    except Exception as exc:
-        current_app.logger.warning("Youdao TTS proxy error for %s: %s", word, exc)
-
-    # Aliyun TTS fallback
+    # Primary: Aliyun DashScope (neural TTS — correct for plurals, tenses, etc.)
     audio = _dashscope_tts(word)
+    if audio:
+        cache_path.write_bytes(audio)
+        return send_file(cache_path, mimetype="audio/mpeg")
+
+    # Fallback: Youdao dictvoice (dictionary pronunciation lookup)
+    audio = _youdao_tts(word)
     if audio:
         cache_path.write_bytes(audio)
         return send_file(cache_path, mimetype="audio/mpeg")
