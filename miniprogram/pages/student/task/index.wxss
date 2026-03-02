@@ -163,17 +163,18 @@
   width: 200rpx;
   height: 200rpx;
   border-radius: 50%;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   color: white;
   font-size: 28rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
+  box-shadow: 0 10rpx 30rpx rgba(32, 117, 111, 0.3);
 }
 
 .record-btn.recording {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background: linear-gradient(135deg, #f56c6c 0%, #e74c3c 100%);
   animation: pulse 1s infinite;
 }
 
@@ -435,7 +436,7 @@
 }
 
 .play-btn {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   color: white;
   font-size: 24rpx;
   padding: 8rpx 20rpx;

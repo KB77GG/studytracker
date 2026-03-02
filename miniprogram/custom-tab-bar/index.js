@@ -2,7 +2,7 @@ Component({
     data: {
         selected: 0,
         color: "#9aa5b1",
-        selectedColor: "#3a8c82",
+        selectedColor: "#20756F",
         list: [], // Will be set based on role
         studentList: [],
         parentList: []

@@ -1,16 +1,16 @@
 page {
-  --primary: #3a8c82;
-  --primary-dark: #2a6b62;
-  --primary-light: #eaf4f3;
-  --primary-mid: #c2e0dc;
+  --primary: #36A59D;
+  --primary-dark: #20756F;
+  --primary-light: #EAF6F4;
+  --primary-mid: #c8e8e3;
   --text: #1a2b2a;
   --text-secondary: #5a7472;
   --surface: #ffffff;
   --bg: #f5faf9;
   --surface-gray: #f7f8fa;
-  --border: #d4e8e6;
-  --shadow-sm: 0 4rpx 24rpx rgba(58, 140, 130, 0.1);
-  --shadow-md: 0 8rpx 32rpx rgba(58, 140, 130, 0.14);
+  --border: #c8e8e3;
+  --shadow-sm: 0 4rpx 24rpx rgba(32, 117, 111, 0.1);
+  --shadow-md: 0 8rpx 32rpx rgba(32, 117, 111, 0.14);
   --tabbar-height: 60px;
 
   background: var(--bg);
@@ -360,14 +360,14 @@ page {
   padding: 20rpx 24rpx;
   font-size: 28rpx;
   line-height: 1.6;
-  box-shadow: 0 4rpx 16rpx rgba(58, 140, 130, 0.12);
+  box-shadow: 0 4rpx 16rpx rgba(32, 117, 111, 0.12);
 }
 
 .bubble.user {
   background: var(--primary);
   color: #ffffff;
   border-bottom-right-radius: 8rpx;
-  box-shadow: 0 4rpx 16rpx rgba(58, 140, 130, 0.2);
+  box-shadow: 0 4rpx 16rpx rgba(32, 117, 111, 0.2);
 }
 
 .bubble.ai {
@@ -503,7 +503,7 @@ page {
   border: 1rpx solid var(--border);
   border-radius: 28rpx;
   padding: 18rpx 20rpx;
-  box-shadow: 0 2rpx 12rpx rgba(58, 140, 130, 0.08);
+  box-shadow: 0 2rpx 12rpx rgba(32, 117, 111, 0.08);
 }
 
 .assistant-title {
@@ -555,13 +555,13 @@ page {
   height: 72rpx;
   border: none;
   border-radius: 50%;
-  background: rgba(58, 140, 130, 0.94);
+  background: rgba(32, 117, 111, 0.94);
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 58;
-  box-shadow: 0 6rpx 20rpx rgba(58, 140, 130, 0.35);
+  box-shadow: 0 6rpx 20rpx rgba(32, 117, 111, 0.35);
 }
 
 .to-bottom-icon {
@@ -576,7 +576,7 @@ page {
   bottom: calc(var(--tabbar-height) + env(safe-area-inset-bottom));
   background: var(--surface);
   border-top: 1rpx solid var(--border);
-  box-shadow: 0 -8rpx 40rpx rgba(58, 140, 130, 0.08);
+  box-shadow: 0 -8rpx 40rpx rgba(32, 117, 111, 0.08);
   padding: 12rpx 16rpx calc(20rpx + env(safe-area-inset-bottom));
   z-index: 60;
   box-sizing: border-box;
@@ -656,7 +656,7 @@ page {
 
 .input-field:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 6rpx rgba(58, 140, 130, 0.12);
+  box-shadow: 0 0 0 6rpx rgba(32, 117, 111, 0.12);
 }
 
 .mic-btn,
@@ -672,7 +672,7 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8rpx 24rpx rgba(58, 140, 130, 0.35);
+  box-shadow: 0 8rpx 24rpx rgba(32, 117, 111, 0.35);
 }
 
 .mic-btn.recording {
@@ -1095,11 +1095,11 @@ button[disabled] {
 @keyframes pulse {
   0%,
   100% {
-    box-shadow: 0 8rpx 24rpx rgba(58, 140, 130, 0.35);
+    box-shadow: 0 8rpx 24rpx rgba(32, 117, 111, 0.35);
   }
 
   50% {
-    box-shadow: 0 8rpx 40rpx rgba(58, 140, 130, 0.6);
+    box-shadow: 0 8rpx 40rpx rgba(32, 117, 111, 0.6);
     transform: scale(1.06);
   }
 }

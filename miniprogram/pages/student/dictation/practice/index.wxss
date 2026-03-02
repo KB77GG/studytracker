@@ -84,13 +84,13 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 60rpx;
-  box-shadow: 0 10rpx 30rpx rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10rpx 30rpx rgba(32, 117, 111, 0.3);
   transition: all 0.2s ease;
 }
 
 .play-btn:active {
   transform: scale(0.95);
-  box-shadow: 0 5rpx 15rpx rgba(102, 126, 234, 0.2);
+  box-shadow: 0 5rpx 15rpx rgba(32, 117, 111, 0.2);
 }
 
 .play-icon {
@@ -184,8 +184,8 @@
 
 .hint-card {
   margin-top: 20rpx;
-  background: #f0f9ff;
-  border: 2rpx dashed #7dd3fc;
+  background: #EAF6F4;
+  border: 2rpx dashed #c8e8e3;
   border-radius: 16rpx;
   padding: 16rpx 20rpx;
   text-align: left;
@@ -193,7 +193,7 @@
 
 .hint-label {
   font-size: 24rpx;
-  color: #0284c7;
+  color: #20756F;
   font-weight: 700;
   display: block;
   margin-bottom: 6rpx;
@@ -271,7 +271,7 @@
 .submit-btn {
   width: 80%;
   height: 100rpx;
-  background: #333;
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
   color: #fff;
   font-size: 34rpx;
   font-weight: 600;
@@ -279,7 +279,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8rpx 20rpx rgba(32, 117, 111, 0.18);
 }
 
 .summary-panel {
