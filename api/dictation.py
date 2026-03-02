@@ -272,8 +272,8 @@ def get_word_audio(word_id):
 
 # ============================================================================
 # TTS proxy & cache for mini-program playback
-# Primary: Aliyun DashScope (neural TTS, accurate for all word forms)
-# Fallback: Youdao dictvoice (fast but unreliable for inflected forms)
+# Hybrid strategy: Youdao first (natural dictionary recordings for base forms)
+# → quality check via MPEG header → DashScope for inflected/unknown forms
 # ============================================================================
 
 def _dashscope_tts(text: str) -> bytes | None:
@@ -356,7 +356,7 @@ def _wav_to_mp3(raw_audio: bytes) -> bytes | None:
 
 
 def _youdao_tts(text: str) -> bytes | None:
-    """Fallback TTS using Youdao dictvoice (fast but dictionary-based)."""
+    """Youdao dictvoice — high-quality for base forms, weak for inflected."""
     url = f"https://dict.youdao.com/dictvoice?audio={requests.utils.quote(text)}&type=2"
     try:
         resp = requests.get(url, timeout=10)
@@ -368,9 +368,34 @@ def _youdao_tts(text: str) -> bytes | None:
     return None
 
 
+def _is_high_quality_mp3(data: bytes) -> bool:
+    """Check MPEG version in frame header.
+
+    Youdao returns MPEG v1 (48 kHz, real recording) for base-form words and
+    MPEG v2 (24 kHz, synthesized — often drops inflections) for unknown forms.
+    Returns True only when the audio is a genuine v1 recording.
+    """
+    if not data or len(data) < 4:
+        return False
+    # Scan for the first valid MPEG frame sync (0xFF followed by 0xE0+ mask)
+    limit = min(len(data) - 1, 1024)
+    for i in range(limit):
+        if data[i] == 0xFF and (data[i + 1] & 0xE0) == 0xE0:
+            version_bits = (data[i + 1] >> 3) & 0x03
+            return version_bits == 3  # 3 → MPEG v1, high quality
+    return False
+
+
 @dictation_bp.route("/tts", methods=["GET"])
 def proxy_tts():
-    """Proxy TTS audio with file cache. Aliyun primary, Youdao fallback."""
+    """Proxy TTS audio with file cache.
+
+    Strategy (hybrid):
+    1. Try Youdao first — dictionary recordings sound the most natural.
+    2. Check the MPEG version; v1 = real recording → use it.
+    3. If v2 (synthesized, likely wrong for inflected forms) → use DashScope.
+    4. If DashScope also fails, fall back to whatever Youdao returned.
+    """
     word = (request.args.get("word") or "").strip()
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
@@ -386,16 +411,21 @@ def proxy_tts():
         except Exception:
             cache_path.unlink(missing_ok=True)
 
-    # Primary: Aliyun DashScope (neural TTS — correct for plurals, tenses, etc.)
-    audio = _dashscope_tts(word)
-    if audio:
-        cache_path.write_bytes(audio)
+    # 1. Try Youdao (best for base-form words)
+    youdao_audio = _youdao_tts(word)
+    if youdao_audio and _is_high_quality_mp3(youdao_audio):
+        cache_path.write_bytes(youdao_audio)
         return send_file(cache_path, mimetype="audio/mpeg")
 
-    # Fallback: Youdao dictvoice (dictionary pronunciation lookup)
-    audio = _youdao_tts(word)
-    if audio:
-        cache_path.write_bytes(audio)
+    # 2. Youdao returned low-quality synthesis → use DashScope neural TTS
+    ds_audio = _dashscope_tts(word)
+    if ds_audio:
+        cache_path.write_bytes(ds_audio)
+        return send_file(cache_path, mimetype="audio/mpeg")
+
+    # 3. DashScope failed too → use whatever Youdao gave us
+    if youdao_audio:
+        cache_path.write_bytes(youdao_audio)
         return send_file(cache_path, mimetype="audio/mpeg")
 
     return jsonify({"ok": False, "error": "tts_fetch_failed"}), 502
