@@ -58,8 +58,8 @@ class Config:
     DEEPSEEK_CHAT_URL = os.environ.get("DEEPSEEK_CHAT_URL")
     DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
     DEEPSEEK_MODEL = os.environ.get("DEEPSEEK_MODEL", "deepseek-chat")
-    DEEPSEEK_TIMEOUT = os.environ.get("DEEPSEEK_TIMEOUT", "35")
-    DEEPSEEK_RETRIES = os.environ.get("DEEPSEEK_RETRIES", "0")
+    DEEPSEEK_TIMEOUT = os.environ.get("DEEPSEEK_TIMEOUT", "90")
+    DEEPSEEK_RETRIES = os.environ.get("DEEPSEEK_RETRIES", "1")
 
     # Aliyun ASR (DashScope Model Studio)
     ALIYUN_API_KEY = os.environ.get("ALIYUN_API_KEY")
