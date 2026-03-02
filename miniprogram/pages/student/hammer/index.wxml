@@ -211,7 +211,29 @@
   </button>
 
   <view class="composer-wrap" style="transform: {{composerTransform}};">
-    <view class="composer-panel">
+    <!-- Call mode panel -->
+    <view class="call-panel" wx:if="{{callMode}}">
+      <view class="call-status-row">
+        <view class="call-pulse {{callStep === 'recording' ? 'pulse-rec' : callStep === 'speaking' ? 'pulse-speak' : 'pulse-think'}}"></view>
+        <text class="call-step-label">{{callStep === 'recording' ? '轮到你说...' : callStep === 'transcribing' ? '识别中...' : callStep === 'evaluating' ? 'AI 思考中...' : callStep === 'speaking' ? 'AI 回复中...' : '连接中...'}}</text>
+        <text class="call-timer">{{callTimerLabel}}</text>
+      </view>
+      <view class="call-wave" wx:if="{{callStep === 'recording' && isRecording}}">
+        <view class="wave-bar" wx:for="{{waveBars}}" wx:key="index" style="height: {{item}}rpx;"></view>
+      </view>
+      <view class="call-loading" wx:elif="{{callStep !== 'recording'}}">
+        <view class="call-dot"></view>
+        <view class="call-dot"></view>
+        <view class="call-dot"></view>
+      </view>
+      <view class="call-bottom-row">
+        <button class="call-stop-speak" wx:if="{{callStep === 'recording' && isRecording}}" bindtap="handleRecordConfirm" disabled="{{recordBusy}}">说完了</button>
+        <button class="call-hangup" bindtap="endCallMode">挂断</button>
+      </view>
+    </view>
+
+    <!-- Normal composer panel -->
+    <view class="composer-panel" wx:else>
       <view class="quick-actions" wx:if="{{showQuickActions}}">
         <view class="quick-item" data-action="toggle_oral" bindtap="handleQuickActionTap">{{inputMode==='oral_sdk' ? '发音增强：开' : '发音增强：关'}}</view>
         <view class="quick-item" data-action="framework_person" bindtap="handleQuickActionTap">人物框架提示</view>
@@ -220,7 +242,7 @@
         <view class="quick-item" data-action="followup" bindtap="handleQuickActionTap">追问/纠错/润色</view>
       </view>
 
-      <view class="recording-strip" wx:if="{{voiceUiMode === 'recording'}}">
+      <view class="recording-strip" wx:if="{{voiceUiMode === 'recording' && !callMode}}">
         <button class="recording-btn" bindtap="handleRecordCancel" disabled="{{recordBusy}}">
           <text class="recording-btn-text">✕</text>
         </button>
@@ -255,6 +277,15 @@
             cursor-spacing="32"
           />
         </view>
+
+        <button
+          class="call-start-btn"
+          wx:if="{{!canSend && !isRecording && !recordBusy && !uploadingAudio && !transcribingAudio && questionText}}"
+          bindtap="startCallMode"
+          aria-label="通话模式"
+        >
+          <text class="call-start-icon">📞</text>
+        </button>
 
         <button
           class="mic-btn {{isRecording ? 'recording' : ''}}"

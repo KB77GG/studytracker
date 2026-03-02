@@ -104,7 +104,11 @@ Page({
     statusBarHeight: 44,
     pendingFollowUp: '',
     quickReplies: [],
-    isGuest: false
+    isGuest: false,
+    callMode: false,
+    callDurationSec: 0,
+    callTimerLabel: '00:00',
+    callStep: ''
   },
 
   onLoad() {
@@ -154,6 +158,10 @@ Page({
   },
 
   cleanupRecordAndAudio() {
+    this._stopCallTimer()
+    if (this.data.callMode) {
+      this.setData({ callMode: false, callStep: '' })
+    }
     // Clear pending follow-up timer
     if (this._followUpTimer) {
       clearTimeout(this._followUpTimer)
@@ -178,10 +186,12 @@ Page({
     this.audioPlayer.obeyMuteSwitch = false
     this.audioPlayer.onEnded(() => {
       this.setData({ ttsPlaying: false })
+      if (this.data.callMode) this._callNextRound()
     })
     this.audioPlayer.onError(() => {
       this.setData({ ttsPlaying: false })
-      wx.showToast({ title: '播放失败', icon: 'none' })
+      if (!this.data.callMode) wx.showToast({ title: '播放失败', icon: 'none' })
+      if (this.data.callMode) this._callNextRound()
     })
   },
 
@@ -1382,6 +1392,22 @@ Page({
         ...this.resetAnswerArtifacts()
       })
 
+      // Call mode: auto-play reply via TTS, skip quick-reply UI
+      if (this.data.callMode) {
+        const followUp = res.follow_up_question || normalized.follow_up_question || ''
+        const speakText = replyText + (followUp ? '. ' + followUp : '')
+        if (followUp) {
+          this.setData({ pendingFollowUp: followUp })
+          this.appendMessage(this.createMessage('assistant', {
+            type: 'follow_up',
+            content: followUp
+          }), true)
+        }
+        this.loadSessionList(true)
+        this._callPlayReply(speakText)
+        return true
+      }
+
       const followUp = res.follow_up_question || normalized.follow_up_question || ''
       if (followUp) {
         this.setData({ pendingFollowUp: followUp })
@@ -1895,6 +1921,7 @@ Page({
       return
     }
     this.setData({ uploadingAudio: false, transcribingAudio: true })
+    if (this.data.callMode) this.setData({ callStep: 'transcribing' })
 
     try {
       const res = await request('/miniprogram/speaking/transcribe', {
@@ -1922,6 +1949,17 @@ Page({
 
       if (!transcript) {
         wx.showToast({ title: '未识别到内容', icon: 'none' })
+        if (this.data.callMode) {
+          // No speech detected, restart recording
+          setTimeout(() => { if (this.data.callMode) this._callNextRound() }, 500)
+        }
+        return
+      }
+
+      // Call mode: auto-submit after transcription
+      if (this.data.callMode) {
+        this.setData({ callStep: 'evaluating', recordStatus: '正在评估...' })
+        this.submitEval(true)
         return
       }
 
@@ -1957,6 +1995,112 @@ Page({
       this.setData({ recordStatus: '转写失败，请重试' })
     } finally {
       this.setData({ transcribingAudio: false })
+    }
+  },
+
+  // ─── Call mode (phone-call-style conversation) ───
+
+  startCallMode() {
+    if (this.data.callMode) return
+    if (this.data.isGuest) {
+      wx.showModal({
+        title: '需要登录',
+        content: '登录后即可使用通话模式',
+        confirmText: '去登录',
+        cancelText: '取消',
+        success: (res) => { if (res.confirm) this.goLogin() }
+      })
+      return
+    }
+    if (!this.data.questionText) {
+      wx.showToast({ title: '请先获取题目', icon: 'none' })
+      return
+    }
+    // Keep screen on during call
+    wx.setKeepScreenOn({ keepScreenOn: true })
+    this.setData({
+      callMode: true,
+      callDurationSec: 0,
+      callTimerLabel: '00:00',
+      callStep: 'recording',
+      showQuickActions: false,
+      showMoreMenu: false,
+      quickReplies: [],
+      answerText: '',
+      canSend: false
+    })
+    this._startCallTimer()
+    this.startRecord()
+  },
+
+  endCallMode() {
+    if (!this.data.callMode) return
+    this._stopCallTimer()
+    wx.setKeepScreenOn({ keepScreenOn: false })
+    // Stop TTS if playing
+    if (this.data.ttsPlaying) {
+      try { this.audioPlayer.stop() } catch (e) {}
+    }
+    // Stop recording if active
+    if (this.data.isRecording) {
+      this.setData({ discardNextRecording: true })
+      try { this.recorderManager.stop() } catch (e) {}
+    }
+    this.setData({
+      callMode: false,
+      callStep: '',
+      callDurationSec: 0,
+      callTimerLabel: '00:00',
+      ttsPlaying: false,
+      ttsLoading: false
+    })
+  },
+
+  async _callPlayReply(text) {
+    if (!text || !this.data.callMode) return
+    this.setData({ callStep: 'speaking', ttsLoading: true })
+    try {
+      const res = await request('/miniprogram/speaking/tts', {
+        method: 'POST',
+        data: { text }
+      })
+      if (!this.data.callMode) return  // user hung up
+      if (!res.ok || !res.audio_url) {
+        this.setData({ ttsLoading: false })
+        if (this.data.callMode) this._callNextRound()
+        return
+      }
+      this.setData({ ttsLoading: false })
+      this.playAudioUrl(res.audio_url, { trackTts: true })
+      // onEnded callback will trigger _callNextRound
+    } catch (e) {
+      this.setData({ ttsLoading: false })
+      if (this.data.callMode) this._callNextRound()
+    }
+  },
+
+  _callNextRound() {
+    if (!this.data.callMode) return
+    this.setData({ callStep: 'recording' })
+    setTimeout(() => {
+      if (this.data.callMode) this.startRecord()
+    }, 800)
+  },
+
+  _startCallTimer() {
+    this._stopCallTimer()
+    this._callTimer = setInterval(() => {
+      const next = this.data.callDurationSec + 1
+      const mm = String(Math.floor(next / 60)).padStart(2, '0')
+      const ss = String(next % 60).padStart(2, '0')
+      this.setData({ callDurationSec: next, callTimerLabel: `${mm}:${ss}` })
+    }, 1000)
+  },
+
+  _stopCallTimer() {
+    if (this._callTimer) {
+      clearInterval(this._callTimer)
+      this._callTimer = null
     }
   },
 
