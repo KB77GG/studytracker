@@ -394,6 +394,108 @@ def _normalize_result(parsed: Any, target_band: str) -> dict[str, Any]:
     return normalized
 
 
+def _build_quick_prompt(payload: dict[str, Any]) -> list[dict[str, str]]:
+    """Lightweight prompt for call mode — reply + follow-up only, no scoring."""
+    part = payload.get("part") or "Part1"
+    question = payload.get("question") or ""
+    transcript = payload.get("transcript") or ""
+    conversation_history = payload.get("conversation_history") or []
+
+    system = (
+        "You are a friendly IELTS Speaking examiner having a live practice conversation. "
+        "Return JSON only. No markdown."
+    )
+    user = json.dumps({
+        "task": "Respond conversationally to the student's answer, then ask a follow-up question. Keep it natural and concise.",
+        "part": part,
+        "question": question,
+        "transcript": transcript,
+        "conversation_history": conversation_history[-6:],
+        "output_schema": {
+            "reply_text": "string (1-2 sentences: briefly acknowledge what the student said, give one quick tip if needed. Be warm. Use English.)",
+            "follow_up_question": "string (one natural follow-up question appropriate for this IELTS Part.)",
+            "quick_score": "number (rough overall band estimate 1-9, half bands allowed)"
+        },
+        "rules": [
+            "Keep reply_text to 1-2 short sentences maximum.",
+            "follow_up_question must be a single question continuing the conversation.",
+            "quick_score is a rough estimate — don't overthink it.",
+            "Do NOT include detailed criteria feedback, corrections, or rewrites."
+        ]
+    }, ensure_ascii=False)
+
+    return [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user},
+    ]
+
+
+def run_quick_reply(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
+    """Lightweight eval for call mode — fast reply without full scoring."""
+    transcript = data.get("transcript") or ""
+    if not transcript:
+        return {"ok": False, "error": "missing_transcript"}, 400
+
+    config = current_app.config
+    api_key = config.get("DEEPSEEK_API_KEY")
+    if not api_key:
+        return {"ok": False, "error": "missing_deepseek_key"}, 500
+
+    base_url = (config.get("DEEPSEEK_API_BASE") or "https://api.deepseek.com").rstrip("/")
+    chat_url = (config.get("DEEPSEEK_CHAT_URL") or "").strip() or f"{base_url}/v1/chat/completions"
+    model = config.get("DEEPSEEK_MODEL") or "deepseek-chat"
+    timeout = float(config.get("DEEPSEEK_TIMEOUT") or 90)
+
+    messages = _build_quick_prompt(data)
+    req_payload = {
+        "model": model,
+        "messages": messages,
+        "temperature": 0.4,
+        "max_tokens": 300,
+        "response_format": {"type": "json_object"},
+    }
+
+    try:
+        resp = requests.post(
+            chat_url,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json=req_payload,
+            timeout=timeout,
+        )
+    except requests.RequestException as exc:
+        return {"ok": False, "error": "deepseek_request_failed", "details": str(exc)}, 502
+
+    if resp.status_code >= 400:
+        return {"ok": False, "error": "deepseek_http_error", "status": resp.status_code}, 502
+
+    try:
+        raw = resp.json()
+    except ValueError:
+        return {"ok": False, "error": "deepseek_invalid_json"}, 502
+
+    content = raw.get("choices", [{}])[0].get("message", {}).get("content", "")
+    ok, parsed = _extract_json(content)
+    if not ok:
+        return {"ok": False, "error": "invalid_json_response", "raw": content}, 502
+
+    return {
+        "ok": True,
+        "reply_text": (parsed.get("reply_text") or "").strip(),
+        "follow_up_question": (parsed.get("follow_up_question") or "").strip(),
+        "quick_score": _safe_num(parsed.get("quick_score"), 0),
+        "result": {
+            "reply_text": (parsed.get("reply_text") or "").strip(),
+            "follow_up_question": (parsed.get("follow_up_question") or "").strip(),
+            "scores": {"overall": _safe_num(parsed.get("quick_score"), 0)},
+        },
+        "usage": raw.get("usage"),
+        "model": raw.get("model", model),
+    }, 200
+
+
 def run_ielts_eval(data: dict[str, Any]) -> tuple[dict[str, Any], int]:
     transcript = data.get("transcript") or data.get("student_answer")
     if not transcript:

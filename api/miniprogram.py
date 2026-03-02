@@ -17,7 +17,7 @@ from models import (
 )
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message
-from .ielts_eval import run_ielts_eval
+from .ielts_eval import run_ielts_eval, run_quick_reply
 from .aliyun_asr import transcribe_audio_url
 from .aliyun_tts import synthesize_text
 from .tencent_soe import evaluate_pronunciation
@@ -746,6 +746,64 @@ def list_speaking_sessions():
             for s in sessions
         ],
     })
+
+
+@mp_bp.route("/speaking/quick-reply", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def quick_reply_speaking():
+    """Lightweight eval for call mode — fast reply without full scoring."""
+    data = request.get_json(silent=True) or {}
+
+    user = request.current_api_user
+    student = user.student_profile if user else None
+    session_id = data.get("session_id")
+    if session_id and student:
+        session = SpeakingSession.query.filter_by(
+            id=session_id, student_id=student.id
+        ).first()
+        if session:
+            data["conversation_history"] = _load_conversation_history(session, student.id)
+
+    payload, status = run_quick_reply(data)
+
+    if session_id and payload.get("ok") and student:
+        session = SpeakingSession.query.filter_by(
+            id=session_id, student_id=student.id
+        ).first()
+        if session:
+            transcript = (data.get("transcript") or "").strip()
+            audio_url = (data.get("audio_url") or "").strip() or None
+            user_msg = SpeakingMessage(
+                session_id=session.id,
+                role="user",
+                content=transcript or None,
+                audio_url=audio_url,
+                meta_json=json.dumps({
+                    "audio_url": audio_url,
+                    "mode": "call",
+                }, ensure_ascii=False),
+            )
+            reply_text = (payload.get("reply_text") or "").strip()
+            follow_up = (payload.get("follow_up_question") or "").strip()
+            assistant_msg = SpeakingMessage(
+                session_id=session.id,
+                role="assistant",
+                content=reply_text or None,
+                result_json=json.dumps(payload.get("result") or {}, ensure_ascii=False),
+                meta_json=json.dumps({
+                    "model": payload.get("model"),
+                    "usage": payload.get("usage"),
+                    "follow_up_question": follow_up,
+                    "mode": "call",
+                }, ensure_ascii=False),
+            )
+            db.session.add(user_msg)
+            db.session.add(assistant_msg)
+            db.session.commit()
+
+    if payload.get("result"):
+        payload["follow_up_question"] = (payload["result"].get("follow_up_question") or "").strip()
+    return jsonify(payload), status
 
 
 @mp_bp.route("/speaking/tts", methods=["POST"])

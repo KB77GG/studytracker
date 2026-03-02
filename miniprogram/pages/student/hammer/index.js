@@ -1392,22 +1392,6 @@ Page({
         ...this.resetAnswerArtifacts()
       })
 
-      // Call mode: auto-play reply via TTS, skip quick-reply UI
-      if (this.data.callMode) {
-        const followUp = res.follow_up_question || normalized.follow_up_question || ''
-        const speakText = replyText + (followUp ? '. ' + followUp : '')
-        if (followUp) {
-          this.setData({ pendingFollowUp: followUp })
-          this.appendMessage(this.createMessage('assistant', {
-            type: 'follow_up',
-            content: followUp
-          }), true)
-        }
-        this.loadSessionList(true)
-        this._callPlayReply(speakText)
-        return true
-      }
-
       const followUp = res.follow_up_question || normalized.follow_up_question || ''
       if (followUp) {
         this.setData({ pendingFollowUp: followUp })
@@ -1956,10 +1940,10 @@ Page({
         return
       }
 
-      // Call mode: auto-submit after transcription
+      // Call mode: use lightweight quick-reply instead of full eval
       if (this.data.callMode) {
         this.setData({ callStep: 'evaluating', recordStatus: '正在评估...' })
-        this.submitEval(true)
+        this._callSubmit(transcript)
         return
       }
 
@@ -2054,6 +2038,70 @@ Page({
       ttsPlaying: false,
       ttsLoading: false
     })
+  },
+
+  async _callSubmit(transcript) {
+    if (!this.data.callMode || !transcript) return
+    const userMessageId = this.makeMessageId('user')
+    this.appendMessage(this.createMessage('user', {
+      id: userMessageId,
+      content: transcript,
+      status: 'sending',
+      audio_url: this.data.lastAudioUrl || ''
+    }), true)
+    this.setData({ answerText: '', canSend: false })
+
+    const sessionId = await this.ensureSessionExists()
+    if (!sessionId) {
+      this.updateMessageStatus(userMessageId, 'failed', '会话初始化失败')
+      if (this.data.callMode) this._callNextRound()
+      return
+    }
+
+    try {
+      const res = await request('/miniprogram/speaking/quick-reply', {
+        method: 'POST',
+        data: {
+          part: this.data.currentPart,
+          question: this.data.questionText,
+          transcript,
+          session_id: sessionId,
+          audio_url: this.data.lastAudioUrl || ''
+        },
+        timeout: 30000
+      })
+
+      if (!this.data.callMode) return
+
+      if (!res.ok) {
+        this.updateMessageStatus(userMessageId, 'failed', '回复失败')
+        if (this.data.callMode) this._callNextRound()
+        return
+      }
+
+      this.updateMessageStatus(userMessageId, 'sent')
+      const replyText = res.reply_text || ''
+      const followUp = res.follow_up_question || ''
+      if (replyText) {
+        this.appendMessage(this.createMessage('assistant', {
+          content: replyText,
+          result: res.result || null
+        }))
+      }
+      if (followUp) {
+        this.setData({ pendingFollowUp: followUp })
+        this.appendMessage(this.createMessage('assistant', {
+          type: 'follow_up',
+          content: followUp
+        }), true)
+      }
+      this.loadSessionList(true)
+      const speakText = replyText + (followUp ? '. ' + followUp : '')
+      this._callPlayReply(speakText)
+    } catch (e) {
+      this.updateMessageStatus(userMessageId, 'failed', '网络异常')
+      if (this.data.callMode) this._callNextRound()
+    }
   },
 
   async _callPlayReply(text) {
