@@ -1665,6 +1665,7 @@ def tasks_page():
             "id": item.id,
             "student_name": item.plan.student.full_name,
             "task_name": item.task_name,
+            "student_comment": item.student_comment or "",
             "submitted_at": item.submitted_at,
             "time_ago": time_ago(item.submitted_at) if item.submitted_at else "",
         })

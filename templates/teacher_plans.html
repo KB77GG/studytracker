@@ -190,16 +190,32 @@
   {% if pending_reviews %}
   <div class="pending-list">
     {% for review in pending_reviews %}
-    <article class="pending-item">
+    <article class="pending-item" data-item-id="{{ review.id }}" data-review-type="{{ review.type }}">
       <header>
         <strong>{{ review.student_name }}</strong>
         <span class="muted">{{ review.time_ago }}</span>
       </header>
       <div class="pending-body">
         <div class="pending-task">{{ review.task_name }}</div>
+        {% if review.type == 'plan_item' and review.student_comment %}
+        <div style="margin-top: 6px; padding: 6px 8px; background: #f0f7ff; border-radius: 6px; font-size: 0.85em; color: #555;">
+          学生备注：{{ review.student_comment }}
+        </div>
+        {% endif %}
         <div class="pending-actions" style="margin-top: 8px;">
           {% if review.type == 'plan_item' %}
-          <span class="badge status-pending">PlanItem</span>
+          <div class="review-actions" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+            <input type="text" class="review-comment" placeholder="批注/评语（可选）"
+              style="width: 100%; padding: 6px 10px; border: 1px solid #dcdfe6; border-radius: 6px; font-size: 0.9em; box-sizing: border-box;">
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-review" data-status="approved"
+                style="flex: 1; padding: 6px 12px; border: none; border-radius: 6px; background: #277C78; color: #fff; cursor: pointer;">通过</button>
+              <button class="btn-review" data-status="partial"
+                style="flex: 1; padding: 6px 12px; border: none; border-radius: 6px; background: #e6a23c; color: #fff; cursor: pointer;">部分完成</button>
+              <button class="btn-review" data-status="rejected"
+                style="flex: 1; padding: 6px 12px; border: none; border-radius: 6px; background: #f56c6c; color: #fff; cursor: pointer;">退回</button>
+            </div>
+          </div>
           {% else %}
           <a href="{{ url_for('tasks_page', student_name=review.student_name) }}" class="btn-small"
             style="text-decoration: none; background: #eee; padding: 2px 8px; border-radius: 4px; color: #333;">去审核</a>

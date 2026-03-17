@@ -424,16 +424,32 @@
     {% if pending_reviews %}
     <div class="pending-list" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
       {% for review in pending_reviews %}
-      <article class="pending-item" style="border: 1px solid #e4e7ed; border-radius: 8px; padding: 12px;">
+      <article class="pending-item" data-item-id="{{ review.id }}" data-review-type="{{ review.type }}" style="border: 1px solid #e4e7ed; border-radius: 8px; padding: 12px;">
         <header style="display: flex; justify-content: space-between; margin-bottom: 8px;">
           <strong>{{ review.student_name }}</strong>
           <span class="muted" style="font-size: 0.9em;">{{ review.time_ago }}</span>
         </header>
         <div class="pending-body">
           <div class="pending-task" style="margin-bottom: 8px;">{{ review.task_name }}</div>
+          {% if review.type == 'plan_item' and review.student_comment %}
+          <div style="margin-bottom: 8px; padding: 8px; background: #f0f7ff; border-radius: 6px; font-size: 0.9em; color: #555;">
+            学生备注：{{ review.student_comment }}
+          </div>
+          {% endif %}
           <div class="pending-actions">
             {% if review.type == 'plan_item' %}
-            <span class="badge status-pending">PlanItem</span>
+            <div class="review-actions" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+              <input type="text" class="review-comment" placeholder="批注/评语（可选）"
+                style="width: 100%; padding: 6px 10px; border: 1px solid #dcdfe6; border-radius: 6px; font-size: 0.9em; box-sizing: border-box;">
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-review" data-status="approved"
+                  style="flex: 1; padding: 6px 12px; border: none; border-radius: 6px; background: #277C78; color: #fff; cursor: pointer; font-size: 0.9em;">通过</button>
+                <button class="btn-review" data-status="partial"
+                  style="flex: 1; padding: 6px 12px; border: none; border-radius: 6px; background: #e6a23c; color: #fff; cursor: pointer; font-size: 0.9em;">部分完成</button>
+                <button class="btn-review" data-status="rejected"
+                  style="flex: 1; padding: 6px 12px; border: none; border-radius: 6px; background: #f56c6c; color: #fff; cursor: pointer; font-size: 0.9em;">退回</button>
+              </div>
+            </div>
             {% else %}
             <a href="{{ url_for('tasks_page', student_name=review.student_name) }}" class="btn-small"
               style="text-decoration: none; background: #4caf50; padding: 4px 12px; border-radius: 4px; color: white; font-size: 0.9em;">去审核</a>
@@ -1804,6 +1820,39 @@
         }
       });
     })();
+
+    // PlanItem review buttons
+    document.querySelectorAll('.pending-item .btn-review').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const container = btn.closest('.pending-item');
+        if (container.dataset.reviewType !== 'plan_item') return;
+        const comment = container.querySelector('.review-comment').value.trim();
+        const itemId = container.dataset.itemId;
+        const status = btn.dataset.status;
+        container.querySelectorAll('.btn-review').forEach(b => b.disabled = true);
+        try {
+          const res = await fetch(`/api/plan-items/${itemId}/review`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status, comment })
+          });
+          const data = await res.json();
+          if (!data.ok) {
+            alert('审核失败：' + (data.error || '未知错误'));
+            container.querySelectorAll('.btn-review').forEach(b => b.disabled = false);
+            return;
+          }
+          const labels = { approved: '已通过', partial: '部分完成', rejected: '已退回' };
+          container.querySelector('.review-actions').innerHTML =
+            `<span style="color: #277C78; font-weight: 600;">✓ ${labels[status] || status}</span>`;
+          container.style.opacity = '0.6';
+        } catch (err) {
+          console.error(err);
+          alert('审核失败，请稍后再试。');
+          container.querySelectorAll('.btn-review').forEach(b => b.disabled = false);
+        }
+      });
+    });
   </script>
 </section>
 {% endblock %}
