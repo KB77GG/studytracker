@@ -402,8 +402,8 @@
                 <button class="btn-stop" type="button" style="display:none;">结束</button>
                 <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
                   {% if t.student_submitted and not t.dictation_book_id and not t.speaking_book_id %}
-                  <a href="/tasks/{{ t.id }}/review" target="_blank" class="btn-review"
-                    style="display:inline-block; text-decoration:none; background-color:#277C78; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-size:12px; line-height:1.4;">批改</a>
+                  <a href="/tasks/{{ t.id }}/review" target="_blank"
+                    style="display:inline-block; text-decoration:none; background:var(--brand); color:#fff; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:inherit; font-family:inherit; line-height:normal;">批改</a>
                   {% endif %}
                   <button class="btn-edit" type="button" onclick="handleEditClick(event)">编辑</button>
                   <button class="btn-delete" type="button">删除</button>
