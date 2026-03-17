@@ -20,6 +20,7 @@
                 <button type="button" onclick="setPenColor('red')" class="color-btn red active"></button>
                 <button type="button" onclick="setPenColor('blue')" class="color-btn blue"></button>
                 <button type="button" onclick="setPenColor('green')" class="color-btn green"></button>
+                <button type="button" onclick="undoLast()" class="control-btn">撤销</button>
                 <button type="button" onclick="clearCanvas()" class="control-btn">清除画布</button>
             </div>
         </div>
@@ -393,6 +394,14 @@
         canvas.freeDrawingBrush.color = color;
         document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelector(`.color-btn.${color}`).classList.add('active');
+    }
+
+    function undoLast() {
+        const objects = canvas.getObjects();
+        if (objects.length > 0) {
+            canvas.remove(objects[objects.length - 1]);
+            canvas.renderAll();
+        }
     }
 
     function clearCanvas() {
