@@ -64,8 +64,8 @@
           <td>{{ task.actual_minutes }} 分</td>
           <td>
             <span
-              class="badge {{ 'status-pending' if task.status=='pending' else ('status-progress' if task.status=='progress' else 'status-done') }}">
-              {{ "未开始" if task.status=="pending" else ("进行中" if task.status=="progress" else "已完成") }}
+              class="badge {{ 'status-pending' if task.status=='pending' else ('status-progress' if task.status=='progress' else ('status-submitted' if task.status=='submitted' else 'status-done')) }}">
+              {{ "未开始" if task.status=="pending" else ("进行中" if task.status=="progress" else ("待批改" if task.status=="submitted" else "已完成")) }}
             </span>
           </td>
         </tr>
@@ -345,11 +345,8 @@
               <td class="task-detail">{{ t.detail }}</td>
               <td>
                 <span
-                  class="badge {{ 'status-pending' if t.status=='pending' else ('status-progress' if t.status=='progress' else 'status-done') }}">{{
-                  "未开始" if t.status=="pending" else ("进行中" if t.status=="progress" else "已完成") }}</span>
-                {% if t.student_submitted %}
-                <span class="badge" style="background: #2196f3; color: white; margin-left: 4px;">已提交</span>
-                {% endif %}
+                  class="badge {{ 'status-pending' if t.status=='pending' else ('status-progress' if t.status=='progress' else ('status-submitted' if t.status=='submitted' else 'status-done')) }}">{{
+                  "未开始" if t.status=="pending" else ("进行中" if t.status=="progress" else ("待批改" if t.status=="submitted" else "已完成")) }}</span>
               </td>
               <td class="task-evidence">
                 {% if t.evidence_photos %}
@@ -396,13 +393,14 @@
                 <select class="status-select">
                   <option value="pending" {{ 'selected' if t.status=='pending' else '' }}>未开始</option>
                   <option value="progress" {{ 'selected' if t.status=='progress' else '' }}>进行中</option>
+                  <option value="submitted" {{ 'selected' if t.status=='submitted' else '' }}>待批改</option>
                   <option value="done" {{ 'selected' if t.status=='done' else '' }}>已完成</option>
                 </select>
                 <span class="timer" aria-label="计时" title="计时">00:00:00</span>
                 <button class="btn-start" type="button">开始计时</button>
                 <button class="btn-pause" type="button" style="display:none;">暂停</button>
                 <button class="btn-stop" type="button" style="display:none;">结束</button>
-                {% if t.student_submitted and t.status != 'done' %}
+                {% if t.status == 'submitted' %}
                 <a href="/tasks/{{ t.id }}/review" target="_blank" class="btn-review"
                   style="display:inline-block; text-decoration:none; background-color: #277C78; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">批改</a>
                 {% endif %}
@@ -1415,13 +1413,16 @@
           // 更新徽章文本与样式
           const badge = row.querySelector('.badge');
           if (badge) {
-            badge.classList.remove('status-pending', 'status-progress', 'status-done');
+            badge.classList.remove('status-pending', 'status-progress', 'status-submitted', 'status-done');
             if (val === 'pending') {
               badge.textContent = '未开始';
               badge.classList.add('status-pending');
             } else if (val === 'progress') {
               badge.textContent = '进行中';
               badge.classList.add('status-progress');
+            } else if (val === 'submitted') {
+              badge.textContent = '待批改';
+              badge.classList.add('status-submitted');
             } else {
               badge.textContent = '已完成';
               badge.classList.add('status-done');

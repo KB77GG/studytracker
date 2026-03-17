@@ -878,11 +878,11 @@ def get_student_today_tasks():
         status = "pending"
         if task.status == "done":
             status = "completed"
-        elif task.student_submitted:
+        elif task.status == "submitted" or task.student_submitted:
             status = "submitted"
         elif task.actual_seconds and task.actual_seconds > 0:
             status = "in_progress"
-            
+
         tasks_data.append({
             "id": task.id,
             "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
@@ -931,7 +931,7 @@ def get_task_detail(task_id):
         status = "pending"
         if task.status == "done":
             status = "completed"
-        elif task.student_submitted:
+        elif task.status == "submitted" or task.student_submitted:
             status = "submitted"
         elif task.actual_seconds and task.actual_seconds > 0:
             status = "in_progress"
@@ -1034,7 +1034,7 @@ def submit_task(task_id):
             
         task.student_submitted = True
         task.submitted_at = datetime.now()
-        task.status = "done"  # 标记完成
+        task.status = "submitted"  # 待批改
         
         # Merge wrong words into note if provided
         final_note = note
@@ -1418,7 +1418,7 @@ def get_parent_stats():
     for t in today_tasks:
         if t.status == "done":
             completed_count += 1
-        elif t.student_submitted:
+        elif t.status == "submitted" or t.student_submitted:
             pending_review_count += 1
         elif t.actual_seconds and t.actual_seconds > 0:
             in_progress_count += 1

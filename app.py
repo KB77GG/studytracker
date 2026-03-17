@@ -1673,7 +1673,7 @@ def tasks_page():
     # 2. Task (旧版)
     pending_legacy_tasks = Task.query.filter(
         Task.student_submitted == True,
-        Task.status != 'done'
+        Task.status.in_(['submitted', 'progress', 'pending'])
     ).all()
 
     for task in pending_legacy_tasks:
@@ -1709,10 +1709,10 @@ def tasks_page():
 @login_required
 @role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def grading_list():
-    # List tasks that are submitted by students but not yet marked as done
+    # List tasks that are submitted by students but not yet graded
     tasks = Task.query.filter(
         Task.student_submitted == True,
-        Task.status != 'done'
+        Task.status.in_(['submitted', 'progress', 'pending'])
     ).order_by(Task.submitted_at.desc()).all()
     
     return render_template("teacher/grading_list.html", tasks=tasks)

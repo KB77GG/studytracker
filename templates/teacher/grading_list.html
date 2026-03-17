@@ -47,7 +47,7 @@
                         <span class="status-dot status-warning"></span> 待批改
                     </td>
                     <td>
-                        <a href="{{ url_for('grading_detail', task_id=task.id) }}" class="btn btn-sm btn-primary">
+                        <a href="/tasks/{{ task.id }}/review" target="_blank" class="btn btn-sm btn-primary">
                             批改
                         </a>
                     </td>
