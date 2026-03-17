@@ -1670,10 +1670,12 @@ def tasks_page():
             "time_ago": time_ago(item.submitted_at) if item.submitted_at else "",
         })
 
-    # 2. Task (旧版)
+    # 2. Task (旧版) — 排除听写和跟读任务（自动评分，不需要人工批改）
     pending_legacy_tasks = Task.query.filter(
         Task.student_submitted == True,
-        Task.status.in_(['submitted', 'progress', 'pending'])
+        Task.status.in_(['submitted', 'progress', 'pending']),
+        Task.dictation_book_id.is_(None),
+        Task.speaking_book_id.is_(None)
     ).all()
 
     for task in pending_legacy_tasks:
@@ -1709,10 +1711,12 @@ def tasks_page():
 @login_required
 @role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def grading_list():
-    # List tasks that are submitted by students but not yet graded
+    # List tasks that are submitted by students but not yet graded (排除听写和跟读)
     tasks = Task.query.filter(
         Task.student_submitted == True,
-        Task.status.in_(['submitted', 'progress', 'pending'])
+        Task.status.in_(['submitted', 'progress', 'pending']),
+        Task.dictation_book_id.is_(None),
+        Task.speaking_book_id.is_(None)
     ).order_by(Task.submitted_at.desc()).all()
     
     return render_template("teacher/grading_list.html", tasks=tasks)
