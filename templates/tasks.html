@@ -400,7 +400,7 @@
                 <button class="btn-start" type="button">开始计时</button>
                 <button class="btn-pause" type="button" style="display:none;">暂停</button>
                 <button class="btn-stop" type="button" style="display:none;">结束</button>
-                {% if t.status == 'submitted' %}
+                {% if t.student_submitted %}
                 <a href="/tasks/{{ t.id }}/review" target="_blank" class="btn-review"
                   style="display:inline-block; text-decoration:none; background-color: #277C78; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">批改</a>
                 {% endif %}
