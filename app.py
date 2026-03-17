@@ -1385,15 +1385,23 @@ def tasks_page():
         material_data = None
         dictation_book_data = None
         
+        speaking_book_data = None
         if material_id:
-            from models import MaterialBank, DictationBook
-            
+            from models import MaterialBank, DictationBook, SpeakingBook
+
             if material_id.startswith("dictation-"):
                  # It's a dictation book
                  book_id = int(material_id.split("-")[1])
                  dictation_book_data = DictationBook.query.get(book_id)
                  if dictation_book_data and not detail:
                      detail = dictation_book_data.title
+                 question_ids = None
+            elif material_id.startswith("speaking-"):
+                 # It's a speaking book (listen & repeat)
+                 book_id = int(material_id.split("-")[1])
+                 speaking_book_data = SpeakingBook.query.get(book_id)
+                 if speaking_book_data and not detail:
+                     detail = speaking_book_data.title
                  question_ids = None
             else:
                 # It's a standard material
@@ -1431,11 +1439,14 @@ def tasks_page():
                 created_by=current_user.id,
                 planned_minutes=int(request.form.get("planned_minutes", 0) or 0),
                 accuracy=min(100.0, max(0.0, float(request.form.get("accuracy", 0) or 0))),
-                material_id=int(material_id) if material_id and not material_id.startswith("dictation-") else None,
+                material_id=int(material_id) if material_id and not material_id.startswith(("dictation-", "speaking-")) else None,
                 question_ids=question_ids,
                 dictation_book_id=int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None,
                 dictation_word_start=int(dictation_word_start) if dictation_word_start else 1,
                 dictation_word_end=int(dictation_word_end) if dictation_word_end else None,
+                speaking_book_id=int(material_id.split("-")[1]) if material_id and material_id.startswith("speaking-") else None,
+                speaking_phrase_start=int(request.form.get("speaking_phrase_start") or 1),
+                speaking_phrase_end=int(request.form.get("speaking_phrase_end")) if request.form.get("speaking_phrase_end") else None,
                 grading_mode=grading_mode,
             )
             db.session.add(t)
@@ -1598,6 +1609,17 @@ def tasks_page():
             "title": book.title,
             "type": "听写词库",
             "question_count": f"{book.word_count}词"
+        })
+
+    # Add Speaking Books to material dropdown
+    from models import SpeakingBook
+    speaking_books = SpeakingBook.query.filter_by(is_deleted=False, is_active=True).order_by(SpeakingBook.created_at.desc()).all()
+    for book in speaking_books:
+        all_materials.append({
+            "id": f"speaking-{book.id}",
+            "title": book.title,
+            "type": "跟读练习",
+            "question_count": f"{book.phrase_count}句"
         })
 
     # Dictation range hints: latest assigned range per student & dictation book

@@ -478,6 +478,9 @@ class Task(db.Model):
     dictation_book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), index=True)
     dictation_word_start = db.Column(db.Integer, default=1)  # 1-based index
     dictation_word_end = db.Column(db.Integer)              # Inclusive
+    speaking_book_id = db.Column(db.Integer, db.ForeignKey("speaking_book.id"), index=True)
+    speaking_phrase_start = db.Column(db.Integer, default=1)
+    speaking_phrase_end = db.Column(db.Integer)
     grading_mode = db.Column(db.String(50), default="image")  # image/material/hybrid
     
     # Mini Program Fields
@@ -778,6 +781,43 @@ class DictationRecord(db.Model, TimestampMixin):
     
     def __repr__(self):
         return f"<DictationRecord student={self.student_id} word={self.word_id} correct={self.is_correct}>"
+
+
+# ---- Speaking Practice (Listen & Repeat) ----
+
+class SpeakingBook(db.Model, TimestampMixin, SoftDeleteMixin):
+    """Phrase book for listen-and-repeat speaking practice."""
+
+    __tablename__ = "speaking_book"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    topic_category = db.Column(db.String(100))  # e.g. museum, hotel, fitness center
+    phrase_count = db.Column(db.Integer, default=0, nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    is_active = db.Column(db.Boolean, default=True, nullable=False, index=True)
+
+    creator = db.relationship("User", backref=db.backref("speaking_books", lazy="dynamic"))
+    phrases = db.relationship("SpeakingPhrase", backref="book", lazy="dynamic", cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f"<SpeakingBook {self.title}>"
+
+
+class SpeakingPhrase(db.Model, TimestampMixin):
+    """Individual phrase/sentence in a speaking book."""
+
+    __tablename__ = "speaking_phrase"
+
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("speaking_book.id"), nullable=False, index=True)
+    sequence = db.Column(db.Integer, nullable=False)
+    phrase = db.Column(db.String(500), nullable=False)
+    translation = db.Column(db.Text)
+
+    def __repr__(self):
+        return f"<SpeakingPhrase {self.phrase[:40]}>"
 
 
 class SpeakingSession(db.Model, TimestampMixin):

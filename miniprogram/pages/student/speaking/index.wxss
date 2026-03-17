@@ -1,0 +1,96 @@
+.container {
+  padding: 30rpx;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 40rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: #909399;
+}
+
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.book-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.book-card:active {
+  transform: scale(0.98);
+}
+
+.book-icon {
+  font-size: 60rpx;
+  margin-right: 30rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: #EAF6F4;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-info {
+  flex: 1;
+}
+
+.book-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 10rpx;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-meta {
+  font-size: 24rpx;
+  color: #909399;
+  display: flex;
+  align-items: center;
+}
+
+.divider {
+  margin: 0 10rpx;
+  color: #e4e7ed;
+}
+
+.action-btn {
+  padding: 12rpx 30rpx;
+  background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
+  color: #fff;
+  font-size: 26rpx;
+  border-radius: 30rpx;
+  font-weight: 600;
+  box-shadow: 0 6rpx 14rpx rgba(32, 117, 111, 0.18);
+}
+
+.empty-state {
+  text-align: center;
+  color: #909399;
+  margin-top: 100rpx;
+}

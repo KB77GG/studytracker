@@ -1,0 +1,25 @@
+<view class="container">
+  <view class="header">
+    <view class="title">跟读练习</view>
+    <view class="subtitle">Listen and Repeat \u00b7 选择话题开始练习</view>
+  </view>
+
+  <view class="book-list">
+    <view class="book-card" wx:for="{{books}}" wx:key="id" bindtap="startPractice" data-id="{{item.id}}" data-title="{{item.title}}">
+      <view class="book-icon">\ud83c\udf99\ufe0f</view>
+      <view class="book-info">
+        <view class="book-name">{{item.title}}</view>
+        <view class="book-meta">
+          <text class="count">{{item.phrase_count}} \u53e5</text>
+          <text class="divider">|</text>
+          <text class="desc">{{item.description || item.topic_category || 'Listen & Repeat'}}</text>
+        </view>
+      </view>
+      <view class="action-btn">\u7ec3\u4e60</view>
+    </view>
+
+    <view wx:if="{{books.length === 0 && !loading}}" class="empty-state">
+      <text>\u6682\u65e0\u8ddf\u8bfb\u7ec3\u4e60</text>
+    </view>
+  </view>
+</view>

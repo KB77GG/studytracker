@@ -234,6 +234,8 @@ Page({
                         isDone: t.status === 'completed' || t.status === 'submitted',
                         // Dictation Fields
                         dictationBookId: t.dictation_book_id,
+                        // Speaking Fields
+                        speakingBookId: t.speaking_book_id,
 
                         // Timer state - show actual time spent from backend
                         timerStatus: 'idle',
@@ -363,6 +365,14 @@ Page({
         if (task && task.dictationBookId) {
             wx.navigateTo({
                 url: `/pages/student/dictation/practice/index?taskId=${taskId}&id=${task.dictationBookId}`
+            })
+            return
+        }
+
+        // Speaking Routing
+        if (task && task.speakingBookId) {
+            wx.navigateTo({
+                url: `/pages/student/speaking/practice/index?taskId=${taskId}&id=${task.speakingBookId}`
             })
             return
         }

@@ -1,0 +1,64 @@
+<view class="practice-container">
+  <view style="height: env(safe-area-inset-top);"></view>
+
+  <!-- Header -->
+  <view class="status-bar" wx:if="{{!finished}}">
+    <view class="book-title">{{bookTitle}}</view>
+    <view class="header-right">
+      <view class="progress-info">{{currentIndex + 1}} / {{totalPhrases}}</view>
+      <view class="timer-pill">{{displayTime}}</view>
+    </view>
+  </view>
+
+  <!-- Main Practice Card -->
+  <block wx:if="{{!finished && totalPhrases > 0}}">
+    <view class="word-card">
+      <!-- Play Button -->
+      <view class="play-btn {{isLoadingAudio ? 'loading' : ''}}" bindtap="playCurrentPhrase" hover-class="btn-hover">
+        <view class="play-icon"></view>
+      </view>
+      <view class="play-hint">{{isLoadingAudio ? '加载中...' : '点击播放，听后跟读'}}</view>
+
+      <!-- Chinese Translation (always visible) -->
+      <view class="translation-area">
+        <text class="translation-text">{{currentPhrase.translation || ''}}</text>
+      </view>
+
+      <!-- Revealed English text -->
+      <view class="reveal-area" wx:if="{{revealed}}">
+        <text class="phrase-text">{{currentPhrase.phrase}}</text>
+      </view>
+
+      <!-- Reveal button -->
+      <button wx:if="{{!revealed}}" class="reveal-btn" bindtap="revealPhrase">显示原文</button>
+
+      <!-- Recording controls -->
+      <view class="record-controls" wx:if="{{revealed}}">
+        <button class="record-btn {{isRecording ? 'recording' : ''}}"
+                bindtouchstart="startRecording" bindtouchend="stopRecording">
+          {{isRecording ? '松开结束' : '按住录音'}}
+        </button>
+        <button wx:if="{{recordFilePath}}" class="playback-btn" bindtap="playRecording">
+          {{isPlayingRecord ? '播放中...' : '播放录音'}}
+        </button>
+      </view>
+    </view>
+
+    <!-- Navigation -->
+    <view class="nav-bar">
+      <button class="nav-btn" bindtap="prevPhrase" disabled="{{currentIndex === 0}}">上一句</button>
+      <button class="nav-btn primary" bindtap="nextPhrase">
+        {{currentIndex + 1 === totalPhrases ? '完成练习' : '下一句'}}
+      </button>
+    </view>
+  </block>
+
+  <!-- Completion Summary -->
+  <view wx:if="{{finished}}" class="summary-panel">
+    <view class="summary-icon">&#10004;</view>
+    <view class="summary-title">跟读练习完成</view>
+    <view class="summary-row">完成句数：{{completedCount}} / {{totalPhrases}}</view>
+    <view class="summary-row">练习时长：{{displayTime}}</view>
+    <button class="submit-btn" style="margin-top:40rpx" bindtap="returnAfterFinish">返回</button>
+  </view>
+</view>

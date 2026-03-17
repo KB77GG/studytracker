@@ -400,7 +400,10 @@ def proxy_tts():
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
 
-    safe_name = re.sub(r"[^a-zA-Z0-9_-]+", "_", word.lower()) or "tts"
+    # Use MD5 hash for long texts (sentences) to avoid filename issues
+    import hashlib
+    raw_safe = re.sub(r"[^a-zA-Z0-9_-]+", "_", word.lower()) or "tts"
+    safe_name = raw_safe if len(raw_safe) <= 80 else hashlib.md5(word.lower().encode()).hexdigest()
     tts_dir = Path(current_app.config.get("UPLOAD_FOLDER", Path(current_app.root_path) / "uploads")) / "tts_cache"
     tts_dir.mkdir(parents=True, exist_ok=True)
     cache_path = tts_dir / f"{safe_name}.mp3"
