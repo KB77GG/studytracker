@@ -1034,23 +1034,25 @@ def submit_task(task_id):
             
         task.student_submitted = True
         task.submitted_at = datetime.now()
-        task.status = "submitted"  # 待批改
-        
+
         # Merge wrong words into note if provided
         final_note = note
         if data.get("wrong_words"):
              wrong_summary = f"[错题记录] {data.get('wrong_words')}"
              final_note = f"{note}\n{wrong_summary}" if note else wrong_summary
-        
+
         task.student_note = final_note
         task.evidence_photos = json.dumps(evidence_files)
-        
+
         if duration > 0:
             task.actual_seconds = duration
-            
+
         if accuracy is not None:
             task.accuracy = float(accuracy)
             task.completion_rate = 100.0
+            task.status = "done"  # 自动评分任务(听写/跟读)直接完成
+        else:
+            task.status = "submitted"  # 需人工批改
             
         db.session.commit()
         return jsonify({"ok": True})
