@@ -69,6 +69,9 @@
                                     <button type="button" class="btn btn-outline-primary" onclick="showTab('paste')">
                                         <i class="fas fa-clipboard"></i> 从Word复制粘贴
                                     </button>
+                                    <button type="button" class="btn btn-outline-info" onclick="showTab('pdf')">
+                                        <i class="fas fa-file-pdf"></i> 上传PDF
+                                    </button>
                                     <button type="button" class="btn btn-outline-secondary" onclick="showTab('manual')">
                                         <i class="fas fa-keyboard"></i> 手动添加
                                     </button>
@@ -93,6 +96,22 @@
                                         <button type="button" class="btn btn-success" onclick="parseAnswers()">
                                             <i class="fas fa-check"></i> 匹配答案
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="pdfTab" style="display: none;">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5>上传PDF文件</h5>
+                                        <p class="text-muted">支持从PPT导出的PDF、中高考/雅思/托福语法真题PDF等，系统将自动识别题目、选项、答案和解析。</p>
+                                        <div class="form-group">
+                                            <input type="file" class="form-control-file" id="pdfFile" accept=".pdf">
+                                        </div>
+                                        <button type="button" class="btn btn-info" onclick="parsePdf()" id="parsePdfBtn">
+                                            <i class="fas fa-magic"></i> 解析PDF
+                                        </button>
+                                        <span id="pdfStatus" class="ml-2 text-muted"></span>
                                     </div>
                                 </div>
                             </div>
@@ -308,7 +327,45 @@
     // 切换标签页
     function showTab(tab) {
         document.getElementById('pasteTab').style.display = tab === 'paste' ? 'block' : 'none';
+        document.getElementById('pdfTab').style.display = tab === 'pdf' ? 'block' : 'none';
         document.getElementById('manualTab').style.display = tab === 'manual' ? 'block' : 'none';
+    }
+
+    // PDF上传解析
+    async function parsePdf() {
+        const fileInput = document.getElementById('pdfFile');
+        if (!fileInput.files.length) {
+            alert('请先选择PDF文件');
+            return;
+        }
+
+        const btn = document.getElementById('parsePdfBtn');
+        const status = document.getElementById('pdfStatus');
+        btn.disabled = true;
+        status.textContent = '正在解析PDF...';
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        try {
+            const response = await fetch('/api/materials/parse-pdf', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.ok && data.questions.length > 0) {
+                questions = data.questions;
+                renderQuestions();
+                status.innerHTML = '<span class="text-success">成功识别 ' + data.questions.length + ' 道题目（含答案和解析）</span>';
+            } else {
+                status.innerHTML = '<span class="text-danger">未识别到题目，请检查PDF格式</span>';
+            }
+        } catch (e) {
+            status.innerHTML = '<span class="text-danger">解析失败: ' + e.message + '</span>';
+        } finally {
+            btn.disabled = false;
+        }
     }
 
     // 智能识别题目
@@ -416,6 +473,8 @@
                     <small class="text-success">
                         <strong>参考答案：</strong>${q.reference_answer || '未设置'}
                     </small>
+                    ${q.explanation ? `<br><small class="text-muted"><strong>解析：</strong>${q.explanation.substring(0, 100)}${q.explanation.length > 100 ? '...' : ''}</small>` : ''}
+                    ${q.hint ? `<br><small class="text-info"><strong>${q.hint}</strong></small>` : ''}
                 </div>
             </div>
         `;

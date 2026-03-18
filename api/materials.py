@@ -132,6 +132,7 @@ def create_material():
                 content=q_data.get('content'),
                 reference_answer=q_data.get('reference_answer'),
                 hint=q_data.get('hint'),
+                explanation=q_data.get('explanation', ''),
                 points=q_data.get('points', 1)
             )
             db.session.add(question)
@@ -562,3 +563,250 @@ def parse_answers():
                     answers[seq] = content
     
     return jsonify({"ok": True, "answers": answers})
+
+
+@material_bp.route('/parse-pdf', methods=['POST'])
+@login_required
+def parse_pdf():
+    """Parse grammar questions from uploaded PDF (e.g. exam papers from PPT exports)."""
+    auth_check = require_teacher()
+    if auth_check:
+        return auth_check
+
+    if 'file' not in request.files:
+        return jsonify({"ok": False, "error": "no_file"}), 400
+
+    file = request.files['file']
+    if not file.filename.lower().endswith('.pdf'):
+        return jsonify({"ok": False, "error": "must_be_pdf"}), 400
+
+    import pdfplumber
+    import tempfile
+    import os
+
+    # Save to temp file
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
+    file.save(tmp.name)
+    tmp.close()
+
+    try:
+        with pdfplumber.open(tmp.name) as pdf:
+            all_text = []
+            for page in pdf.pages:
+                text = page.extract_text()
+                if text:
+                    all_text.append(text)
+            full_text = '\n'.join(all_text)
+    finally:
+        os.unlink(tmp.name)
+
+    # Parse questions from the extracted text
+    questions = _parse_pdf_questions(full_text)
+
+    return jsonify({"ok": True, "questions": questions, "raw_text_length": len(full_text)})
+
+
+def _parse_pdf_questions(text):
+    """Parse grammar questions from PDF text.
+
+    Expected format per question:
+      N.(source info)Question stem with ______ blank.
+      A.option1  B.option2
+      C.option3  D.option4
+      答案 X  explanation text...
+      [Optional: 思路分析 / 方法技巧 sections]
+    """
+    # Clean up duplicated header artifacts like 栏栏目目引索引
+    text = re.sub(r'栏+目+引?索?引?', '', text)
+
+    # Split into question blocks using the numbered pattern
+    # Pattern: digit(s) followed by .( which indicates start of a question
+    q_starts = list(re.finditer(r'(?:^|\n)\s*(\d+)\s*\.\s*\(', text))
+
+    questions = []
+    for i, match in enumerate(q_starts):
+        start = match.start()
+        end = q_starts[i + 1].start() if i + 1 < len(q_starts) else len(text)
+        block = text[start:end].strip()
+
+        q = _parse_single_question(block, i + 1)
+        if q:
+            questions.append(q)
+
+    # If no questions found with source pattern, try simpler numbering
+    if not questions:
+        q_starts = list(re.finditer(r'(?:^|\n)\s*(\d+)\s*[.、]\s*', text))
+        for i, match in enumerate(q_starts):
+            start = match.start()
+            end = q_starts[i + 1].start() if i + 1 < len(q_starts) else len(text)
+            block = text[start:end].strip()
+            q = _parse_single_question_simple(block, int(match.group(1)))
+            if q:
+                questions.append(q)
+
+    return questions
+
+
+def _parse_single_question(block, fallback_seq):
+    """Parse a single question block with source info pattern like N.(2019江西,30)."""
+    # Extract question number and source
+    header = re.match(r'(\d+)\s*\.\s*\(([^)]+)\)\s*', block)
+    if not header:
+        return None
+
+    seq = int(header.group(1))
+    source = header.group(2).strip()
+    rest = block[header.end():]
+
+    # Find answer section
+    ans_match = re.search(r'答案\s+([A-D])\s+', rest)
+    if not ans_match:
+        # Try without space after letter
+        ans_match = re.search(r'答案\s+([A-D])', rest)
+
+    answer = ans_match.group(1) if ans_match else ''
+    explanation = ''
+
+    if ans_match:
+        # Everything after "答案 X" up to 思路分析/方法技巧 is explanation
+        exp_text = rest[ans_match.end():]
+        # Remove 思路分析 and 方法技巧 sections
+        exp_text = re.split(r'思路分析|方法技巧', exp_text)[0]
+        explanation = exp_text.strip()
+        # The question+options part is before the answer
+        q_part = rest[:ans_match.start()].strip()
+    else:
+        q_part = rest.strip()
+
+    # Parse options from q_part
+    # Options can be on same line: "A.xxx B.xxx" or separate lines: "A.xxx\nB.xxx"
+    # Find all options
+    opt_pattern = r'([A-D])\.\s*([^\n]+?)(?=\s+[B-D]\.|$|\n)'
+    options = []
+
+    # Try to find the options area (last lines of q_part that contain A. B. C. D.)
+    lines = q_part.split('\n')
+    stem_lines = []
+    option_lines = []
+    found_options = False
+
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        # Check if line starts with or contains A. pattern
+        if re.match(r'^[A-D]\.', line) or (not found_options and re.search(r'\bA\.', line)):
+            option_lines.append(line)
+            found_options = True
+        elif found_options and re.match(r'^[A-D]\.', line):
+            option_lines.append(line)
+        else:
+            if not found_options:
+                stem_lines.append(line)
+            else:
+                # Could be continuation of options on new line
+                if re.search(r'^[A-D]\.', line):
+                    option_lines.append(line)
+                else:
+                    stem_lines.append(line)
+
+    stem = ' '.join(stem_lines).strip()
+    # Clean up stem - remove multiple spaces
+    stem = re.sub(r'\s{2,}', ' ', stem)
+
+    # Parse individual options from option_lines
+    opt_text = ' '.join(option_lines)
+    # Split by option letter pattern
+    opt_matches = re.findall(r'([A-D])\.\s*(\S+(?:\s+\S+)*?)(?=\s+[B-D]\.\s*\S|$)', opt_text)
+
+    for key, text in opt_matches:
+        options.append({'key': key, 'text': text.strip()})
+
+    # If we didn't get options, try a different approach
+    if len(options) < 2:
+        options = []
+        for line in option_lines:
+            single_opts = re.findall(r'([A-D])\.\s*(.+?)(?=\s{2,}[A-D]\.|$)', line)
+            if single_opts:
+                for key, text in single_opts:
+                    options.append({'key': key, 'text': text.strip()})
+            else:
+                m = re.match(r'([A-D])\.\s*(.+)', line)
+                if m:
+                    options.append({'key': m.group(1), 'text': m.group(2).strip()})
+
+    # Add source to hint
+    hint = f"来源: {source}"
+
+    return {
+        'sequence': seq,
+        'content': stem,
+        'question_type': 'choice',
+        'reference_answer': answer,
+        'explanation': explanation,
+        'hint': hint,
+        'points': 1,
+        'options': options
+    }
+
+
+def _parse_single_question_simple(block, seq):
+    """Parse a simple question block without source info."""
+    # Find answer section
+    ans_match = re.search(r'答案\s+([A-D])', block)
+    answer = ans_match.group(1) if ans_match else ''
+    explanation = ''
+
+    if ans_match:
+        exp_text = block[ans_match.end():]
+        exp_text = re.split(r'思路分析|方法技巧', exp_text)[0]
+        explanation = exp_text.strip()
+        q_part = block[:ans_match.start()].strip()
+    else:
+        q_part = block.strip()
+
+    # Remove leading number
+    q_part = re.sub(r'^\d+\s*[.、]\s*', '', q_part)
+
+    lines = q_part.split('\n')
+    stem_lines = []
+    option_lines = []
+
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        if re.match(r'^[A-D]\.', line) or re.search(r'\bA\.', line):
+            option_lines.append(line)
+        elif option_lines and re.match(r'^[C-D]\.', line):
+            option_lines.append(line)
+        else:
+            if not option_lines:
+                stem_lines.append(line)
+
+    stem = ' '.join(stem_lines).strip()
+    stem = re.sub(r'\s{2,}', ' ', stem)
+
+    opt_text = ' '.join(option_lines)
+    options = []
+    opt_matches = re.findall(r'([A-D])\.\s*(\S+(?:\s+\S+)*?)(?=\s+[B-D]\.\s*\S|$)', opt_text)
+    for key, text in opt_matches:
+        options.append({'key': key, 'text': text.strip()})
+
+    if len(options) < 2:
+        options = []
+        for line in option_lines:
+            m = re.match(r'([A-D])\.\s*(.+)', line)
+            if m:
+                options.append({'key': m.group(1), 'text': m.group(2).strip()})
+
+    return {
+        'sequence': seq,
+        'content': stem,
+        'question_type': 'choice',
+        'reference_answer': answer,
+        'explanation': explanation,
+        'hint': '',
+        'points': 1,
+        'options': options
+    } if stem else None
