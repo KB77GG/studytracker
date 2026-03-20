@@ -167,7 +167,7 @@
               <input type="number" class="form-control form-control-sm" name="dictation_word_end" placeholder="全部">
             </div>
             <div class="col-auto">
-              <span class="form-text">词</span>
+              <span class="form-text range-unit-label">词</span>
             </div>
           </div>
           <div id="dictation-range-hint" class="form-text text-muted" style="margin-top: 6px;"></div>
@@ -903,17 +903,23 @@
           detailInput.value = title;
         }
 
-        // Show range inputs only for Dictation Books
-        if (select.value.startsWith("dictation-")) {
+        // Show range inputs for Dictation Books and Grammar materials
+        var isDict = select.value.startsWith("dictation-");
+        var isGrammar = (type === "grammar");
+        if (isDict || isGrammar) {
           rangeGroup.style.display = "block";
 
+          // Update unit label
+          var unitLabel = rangeGroup.querySelector(".range-unit-label");
+          if (unitLabel) unitLabel.textContent = isDict ? "词" : "题";
+
           // Auto-fill max count as placeholder
-          var countStr = option.getAttribute("data-count"); // "xxx 词"
+          var countStr = option.getAttribute("data-count"); // "xxx题" or "xxx词"
           if (countStr) {
-            var maxCount = countStr.replace(/\\D/g, ''); // Extract number
+            var maxCount = countStr.replace(/\D/g, ''); // Extract number
             document.getElementsByName("dictation_word_end")[0].placeholder = "共 " + maxCount;
           }
-          updateDictationRangeSuggestion();
+          if (isDict) updateDictationRangeSuggestion();
         } else {
           rangeGroup.style.display = "none";
           updateDictationRangeSuggestion(true);

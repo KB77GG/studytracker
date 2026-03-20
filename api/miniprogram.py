@@ -948,10 +948,20 @@ def get_task_detail(task_id):
                 except Exception:
                     selected_ids = None
 
+            # For grammar materials, use dictation_word_start/end as question range
+            q_start = task.dictation_word_start or 1
+            q_end = task.dictation_word_end
+            is_ranged = task.material.type == "grammar" and (q_start > 1 or q_end is not None)
+
             questions = []
             for q in task.material.questions:
                 if selected_ids is not None and q.id not in selected_ids:
                     continue
+                if is_ranged and q.sequence is not None:
+                    if q.sequence < q_start:
+                        continue
+                    if q_end is not None and q.sequence > q_end:
+                        continue
                 options = [{"key": opt.option_key, "text": opt.option_text} for opt in q.options]
                 questions.append({
                     "id": q.id,
