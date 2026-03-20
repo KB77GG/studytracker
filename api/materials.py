@@ -606,6 +606,110 @@ def parse_pdf():
     return jsonify({"ok": True, "questions": questions, "raw_text_length": len(full_text)})
 
 
+def _ensure_blank_marker(stem, options, answer):
+    """Ensure the question stem contains a ______ blank marker.
+
+    PDF underlines are often graphic elements lost during text extraction.
+    This function tries all option texts at every word boundary to find the
+    position where inserting an option best reconstructs the original sentence.
+    """
+    if '___' in stem or '______' in stem:
+        return stem  # Already has blank marker
+
+    # Collect all option texts (any could be the answer)
+    opt_texts = [opt['text'] for opt in options if opt.get('text')]
+    if not opt_texts:
+        return stem
+
+    # For each option, try inserting it at every word boundary.
+    # Score by checking if the inserted text creates bigrams that exist
+    # elsewhere in common English (simple: check if left+answer or answer+right
+    # forms a known pattern). But simpler: the correct position is where
+    # the option text is NOT already present as a substring.
+
+    # Use the longest option text for better matching
+    opt_texts_sorted = sorted(opt_texts, key=len, reverse=True)
+    words = stem.split(' ')
+
+    # Skip if a multi-word option text is already in stem (blank is elsewhere)
+    # Don't skip for single-word options (articles, short words often appear naturally)
+    for ot in opt_texts:
+        if len(ot.split()) > 1 and ot.lower() in stem.lower():
+            return stem
+
+    best_pos = -1
+    best_score = -1
+
+    for opt_t in opt_texts_sorted[:2]:  # Try top 2 longest options
+        opt_words = opt_t.split()
+        for i in range(1, len(words)):  # Skip position 0
+            # Build the sentence with option inserted
+            left_word = words[i - 1].rstrip('.,;:!?"\u2019\u201d').lower()
+            right_word = words[i].lstrip('.,;:!?"\u2018\u201c').lower() if i < len(words) else ''
+            first_opt = opt_words[0].lower()
+            last_opt = opt_words[-1].lower()
+
+            score = 0
+
+            # Subject + verb pattern (most common blank type)
+            subjects = {'i', 'he', 'she', 'we', 'they', 'it', 'you', 'who', 'that',
+                        'which', 'people', 'students', 'children', 'animals', 'doctors',
+                        'teachers', 'scientists', 'everyone', 'someone', 'nobody'}
+            if left_word in subjects:
+                score += 3
+
+            # After dialogue dash pattern: —...subject verb
+            if left_word in subjects and i >= 2:
+                prev2 = words[i-2] if i >= 2 else ''
+                if prev2.startswith('—') or prev2.startswith('-'):
+                    score += 2
+
+            # Verb + preposition/object pattern
+            preps = {'to', 'the', 'a', 'an', 'in', 'on', 'at', 'for', 'by', 'with',
+                     'from', 'up', 'out', 'as', 'about', 'into', 'over'}
+            if right_word in preps:
+                score += 1
+
+            # After auxiliary/modal
+            auxs = {'will', 'would', 'shall', 'should', 'can', 'could', 'may',
+                    'might', 'must', 'have', 'has', 'had', 'do', 'does', 'did',
+                    "don't", "doesn't", "didn't", "won't", "can't", "haven't",
+                    "hasn't", "hadn't", 'not', 'never', 'already', 'just', 'also'}
+            if left_word in auxs:
+                score += 3
+
+            # After 'be' verbs (passive/continuous)
+            if left_word in ('is', 'are', 'was', 'were', 'be', 'been', 'being'):
+                score += 2
+
+            # Article blanks: check if options are articles (the/a/an/∅)
+            is_article_q = all(o.lower().strip() in ('the', 'a', 'an', '/', '∅', '') for o in opt_texts if o.strip())
+            if is_article_q:
+                # Articles go before nouns/adjectives (capitalized words or common patterns)
+                # Look for position where an article naturally fits: before adjective/noun
+                if right_word and right_word[0].isalpha() and left_word in (
+                    'in', 'of', 'on', 'at', 'for', 'by', 'with', 'from', 'to',
+                    'is', 'are', 'was', 'were', 'lies'):
+                    score += 3
+                # Beginning of sentence (after period or dash)
+                if i == 1 or (i >= 1 and words[i-1].endswith(('.', '!', '?'))):
+                    score += 2
+
+            # Penalty: left word is a preposition (unlikely blank after prep for verb questions)
+            if left_word in preps and score == 0 and not is_article_q:
+                score -= 1
+
+            if score > best_score:
+                best_score = score
+                best_pos = i
+
+    if best_pos >= 0 and best_score >= 2:
+        words.insert(best_pos, '______')
+        return ' '.join(words)
+
+    return stem
+
+
 def _parse_pdf_questions(text):
     """Parse grammar questions from PDF text.
 
@@ -735,6 +839,9 @@ def _parse_single_question(block, fallback_seq):
                 if m:
                     options.append({'key': m.group(1), 'text': m.group(2).strip()})
 
+    # Add blank marker if missing (PDF graphics-based underlines are lost during text extraction)
+    stem = _ensure_blank_marker(stem, options, answer)
+
     # Add source to hint
     hint = f"来源: {source}"
 
@@ -799,6 +906,9 @@ def _parse_single_question_simple(block, seq):
             m = re.match(r'([A-D])\.\s*(.+)', line)
             if m:
                 options.append({'key': m.group(1), 'text': m.group(2).strip()})
+
+    # Add blank marker if missing
+    stem = _ensure_blank_marker(stem, options, answer)
 
     return {
         'sequence': seq,
