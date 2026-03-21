@@ -70,7 +70,7 @@
                                         <i class="fas fa-clipboard"></i> 从Word复制粘贴
                                     </button>
                                     <button type="button" class="btn btn-outline-info" onclick="showTab('pdf')">
-                                        <i class="fas fa-file-pdf"></i> 上传PDF
+                                        <i class="fas fa-file-pdf"></i> 上传PPT/PDF
                                     </button>
                                     <button type="button" class="btn btn-outline-secondary" onclick="showTab('manual')">
                                         <i class="fas fa-keyboard"></i> 手动添加
@@ -103,13 +103,13 @@
                             <div id="pdfTab" style="display: none;">
                                 <div class="card bg-light">
                                     <div class="card-body">
-                                        <h5>上传PDF文件</h5>
-                                        <p class="text-muted">支持从PPT导出的PDF、中高考/雅思/托福语法真题PDF等，系统将自动识别题目、选项、答案和解析。</p>
+                                        <h5>上传PPT/PDF文件</h5>
+                                        <p class="text-muted">支持PPTX（推荐，填空保留完整）和PDF格式。中高考/雅思/托福语法真题等，系统将自动识别题目、选项、答案和解析。</p>
                                         <div class="form-group">
-                                            <input type="file" class="form-control-file" id="pdfFile" accept=".pdf">
+                                            <input type="file" class="form-control-file" id="pdfFile" accept=".pdf,.pptx">
                                         </div>
                                         <button type="button" class="btn btn-info" onclick="parsePdf()" id="parsePdfBtn">
-                                            <i class="fas fa-magic"></i> 解析PDF
+                                            <i class="fas fa-magic"></i> 解析文件
                                         </button>
                                         <span id="pdfStatus" class="ml-2 text-muted"></span>
                                     </div>
@@ -335,14 +335,16 @@
     async function parsePdf() {
         const fileInput = document.getElementById('pdfFile');
         if (!fileInput.files.length) {
-            alert('请先选择PDF文件');
+            alert('请先选择文件');
             return;
         }
 
         const btn = document.getElementById('parsePdfBtn');
         const status = document.getElementById('pdfStatus');
+        const fname = fileInput.files[0].name;
+        const isPptx = fname.toLowerCase().endsWith('.pptx');
         btn.disabled = true;
-        status.textContent = '正在解析PDF...';
+        status.textContent = isPptx ? '正在解析PPT...' : '正在解析PDF...';
 
         const formData = new FormData();
         formData.append('file', fileInput.files[0]);

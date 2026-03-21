@@ -568,7 +568,7 @@ def parse_answers():
 @material_bp.route('/parse-pdf', methods=['POST'])
 @login_required
 def parse_pdf():
-    """Parse grammar questions from uploaded PDF (e.g. exam papers from PPT exports)."""
+    """Parse grammar questions from uploaded PDF or PPTX file."""
     auth_check = require_teacher()
     if auth_check:
         return auth_check
@@ -577,14 +577,22 @@ def parse_pdf():
         return jsonify({"ok": False, "error": "no_file"}), 400
 
     file = request.files['file']
-    if not file.filename.lower().endswith('.pdf'):
-        return jsonify({"ok": False, "error": "must_be_pdf"}), 400
+    filename = file.filename.lower()
 
+    if filename.endswith('.pptx'):
+        return _parse_pptx_upload(file)
+    elif filename.endswith('.pdf'):
+        return _parse_pdf_upload(file)
+    else:
+        return jsonify({"ok": False, "error": "unsupported_format", "message": "请上传 PDF 或 PPTX 文件"}), 400
+
+
+def _parse_pdf_upload(file):
+    """Parse grammar questions from PDF file."""
     import pdfplumber
     import tempfile
     import os
 
-    # Save to temp file
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
     file.save(tmp.name)
     tmp.close()
@@ -600,10 +608,163 @@ def parse_pdf():
     finally:
         os.unlink(tmp.name)
 
-    # Parse questions from the extracted text
     questions = _parse_pdf_questions(full_text)
-
     return jsonify({"ok": True, "questions": questions, "raw_text_length": len(full_text)})
+
+
+def _parse_pptx_upload(file):
+    """Parse grammar questions from PPTX file. Much better than PDF for preserving blanks."""
+    import zipfile
+    import tempfile
+    import os
+    from lxml import etree
+
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.pptx')
+    file.save(tmp.name)
+    tmp.close()
+
+    questions = []
+    try:
+        with zipfile.ZipFile(tmp.name) as z:
+            slide_files = sorted(
+                [f for f in z.namelist() if f.startswith('ppt/slides/slide') and f.endswith('.xml')],
+                key=lambda x: int(re.search(r'(\d+)', x.split('/')[-1]).group(1))
+            )
+            ns = {'a': 'http://schemas.openxmlformats.org/drawingml/2006/main'}
+
+            for sf in slide_files:
+                with z.open(sf) as f:
+                    tree = etree.parse(f)
+
+                # Extract all paragraphs from the slide
+                paragraphs = tree.findall('.//a:p', ns)
+                slide_text = []
+                for p in paragraphs:
+                    runs = p.findall('.//a:t', ns)
+                    para_text = ''.join(r.text for r in runs if r.text)
+                    if para_text.strip():
+                        slide_text.append(para_text.strip())
+
+                full_slide = '\n'.join(slide_text)
+                if not full_slide.strip():
+                    continue
+
+                # Try to parse question from this slide
+                q = _parse_pptx_slide(full_slide)
+                if q:
+                    questions.append(q)
+    finally:
+        os.unlink(tmp.name)
+
+    # Re-number sequences
+    for i, q in enumerate(questions):
+        q['sequence'] = i + 1
+
+    return jsonify({"ok": True, "questions": questions, "source": "pptx"})
+
+
+def _parse_pptx_slide(text):
+    """Parse a single slide's text into a question dict.
+
+    PPT slides typically have format:
+      N.(source) stem with 　　 blank.
+      A.opt1　　B.opt2　　C.opt3　　D.opt4
+      答案    X　explanation...
+    """
+    # Normalize whitespace: full-width spaces → blank marker
+    # PPT uses multiple full-width spaces (　) or regular spaces for blanks
+    # Replace sequences of full-width spaces (with optional regular spaces) with ______
+    text_normalized = re.sub(r'[　\u3000]{2,}[\s]*', ' ______ ', text)
+    text_normalized = re.sub(r'\s*______\s*', ' ______ ', text_normalized)
+
+    # Must have a question number pattern
+    q_match = re.match(r'(\d+)\s*[.、．]\s*(?:\(([^)]*)\))?\s*(.*)', text_normalized, re.DOTALL)
+    if not q_match:
+        return None
+
+    seq = int(q_match.group(1))
+    source = q_match.group(2) or ''
+    rest = q_match.group(3).strip()
+
+    # Find answer section
+    ans_match = re.search(r'答案\s*([A-D])\s*', rest)
+    if not ans_match:
+        return None
+
+    answer = ans_match.group(1)
+    q_part = rest[:ans_match.start()].strip()
+
+    # Extract explanation (everything after "答案 X" up to 知识拓展/易错警示)
+    exp_text = rest[ans_match.end():]
+    exp_text = re.split(r'知识拓展|易错警示|方法技巧|思路分析', exp_text)[0]
+    explanation = exp_text.strip()
+    # Clean up explanation - remove leading punctuation
+    explanation = re.sub(r'^[　\s]+', '', explanation)
+
+    # Split stem and options
+    # Options pattern: A.xxx B.xxx or A.xxx\nB.xxx
+    # Find where options start
+    lines = q_part.split('\n')
+    stem_lines = []
+    option_lines = []
+    found_options = False
+
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        if re.match(r'^[A-D][.、．]', line) or (not found_options and re.search(r'\bA[.、．]', line)):
+            option_lines.append(line)
+            found_options = True
+        elif found_options and re.match(r'^[B-D][.、．]', line):
+            option_lines.append(line)
+        else:
+            if not found_options:
+                stem_lines.append(line)
+
+    stem = ' '.join(stem_lines).strip()
+    # Clean extra spaces but preserve ______
+    stem = re.sub(r'\s{2,}', ' ', stem)
+
+    # Parse options - PPT often uses 　　 to separate options on one line
+    opt_text = ' '.join(option_lines)
+    # Normalize option separators
+    opt_text = re.sub(r'[　\u3000]+', '  ', opt_text)
+
+    options = []
+    # Try matching options
+    opt_matches = re.findall(r'([A-D])[.、．]\s*(.+?)(?=\s{2,}[B-D][.、．]|$)', opt_text)
+    for key, text in opt_matches:
+        options.append({'key': key, 'text': text.strip()})
+
+    if len(options) < 2:
+        # Fallback: split by option letter
+        options = []
+        parts = re.split(r'(?=[A-D][.、．])', opt_text)
+        for part in parts:
+            m = re.match(r'([A-D])[.、．]\s*(.+)', part.strip())
+            if m:
+                options.append({'key': m.group(1), 'text': m.group(2).strip()})
+
+    if not options or not stem:
+        return None
+
+    # Ensure blank marker exists
+    if '______' not in stem and '___' not in stem:
+        stem = _ensure_blank_marker(stem, options, answer)
+
+    hint = f"来源: {source}" if source else ''
+
+    return {
+        'sequence': seq,
+        'content': stem,
+        'question_type': 'choice',
+        'reference_answer': answer,
+        'explanation': explanation,
+        'hint': hint,
+        'points': 1,
+        'options': options
+    }
 
 
 def _ensure_blank_marker(stem, options, answer):
