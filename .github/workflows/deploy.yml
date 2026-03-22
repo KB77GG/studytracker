@@ -44,6 +44,7 @@ jobs:
             .venv/bin/python3 add_feedback_column.py
             .venv/bin/python3 add_explanation_column.py
             .venv/bin/python3 add_dictation_book_id.py
+            .venv/bin/python3 add_book_type_column.py
             
             # 5. 重启服务
             echo "🔄 Restarting service..."
