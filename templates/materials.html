@@ -69,7 +69,26 @@
                         <div class="tab-pane fade" id="dictation" role="tabpanel">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h5 class="mb-0">听写词库</h5>
-                                <small class="text-muted">💡 创建词库请点击"创建新材料"选择"听写词库"类型</small>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-info" onclick="document.getElementById('vocabPdfUploadArea').style.display = document.getElementById('vocabPdfUploadArea').style.display === 'none' ? 'block' : 'none'">
+                                        📄 上传翻译词汇PDF
+                                    </button>
+                                    <small class="text-muted ml-2">💡 或点击"创建新材料"选择"听写词库"类型</small>
+                                </div>
+                            </div>
+
+                            <!-- 翻译词汇PDF上传区域 -->
+                            <div id="vocabPdfUploadArea" style="display: none;" class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <h6>上传翻译词汇PDF（看中文写英文）</h6>
+                                    <p class="text-muted small">支持托福/雅思写作词汇等中英对照PDF，系统自动按话题分类</p>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control form-control-sm mb-2" id="vocabPdfTitle" placeholder="词库标题（选填，默认用文件名）">
+                                        <input type="file" class="form-control-file" id="vocabPdfFile" accept=".pdf">
+                                    </div>
+                                    <button class="btn btn-info btn-sm mt-2" onclick="uploadVocabPdf()" id="vocabPdfBtn">上传并创建词库</button>
+                                    <span id="vocabPdfStatus" class="ml-2 small"></span>
+                                </div>
                             </div>
 
                             <!-- 词库列表 -->
@@ -181,6 +200,50 @@
     }
 
 
+    // 上传翻译词汇PDF
+    async function uploadVocabPdf() {
+        const fileInput = document.getElementById('vocabPdfFile');
+        const titleInput = document.getElementById('vocabPdfTitle');
+        const btn = document.getElementById('vocabPdfBtn');
+        const status = document.getElementById('vocabPdfStatus');
+
+        if (!fileInput.files.length) {
+            alert('请先选择PDF文件');
+            return;
+        }
+
+        btn.disabled = true;
+        status.innerHTML = '<span class="text-info">正在解析上传中...</span>';
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        if (titleInput.value.trim()) {
+            formData.append('title', titleInput.value.trim());
+        }
+
+        try {
+            const response = await fetch('/api/dictation/books/upload-vocab-pdf', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+            const data = await response.json();
+
+            if (data.ok) {
+                status.innerHTML = `<span class="text-success">成功创建词库「${data.title}」，共 ${data.word_count} 个词条</span>`;
+                loadDictationBooks();
+                fileInput.value = '';
+                titleInput.value = '';
+            } else {
+                status.innerHTML = `<span class="text-danger">失败: ${data.message || data.error}</span>`;
+            }
+        } catch (e) {
+            status.innerHTML = `<span class="text-danger">上传失败: ${e.message}</span>`;
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
     // 渲染听写词库列表
     function renderDictationBooks(books) {
         const container = document.getElementById('dictationBooksList');
@@ -201,7 +264,7 @@
             <div class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">
-                        <span class="badge badge-success mr-2">🎧 听写</span>
+                        <span class="badge ${b.book_type === 'translation' ? 'badge-info' : 'badge-success'} mr-2">${b.book_type === 'translation' ? '🔤 翻译' : '🎧 听写'}</span>
                         ${b.title}
                     </h5>
                     <div>

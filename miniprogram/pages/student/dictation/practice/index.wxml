@@ -1,94 +1,150 @@
 <view class="practice-container">
   <view style="height: env(safe-area-inset-top);"></view>
-  <!-- Header -->
-  <view class="status-bar">
-    <view class="book-title">{{bookTitle}}</view>
-    <view class="header-right">
-      <view class="progress-info">{{currentIndex + 1}} / {{totalWords}}</view>
-      <view class="timer-pill">{{displayTime}}</view>
-    </view>
-  </view>
 
-  <!-- Word Card -->
-  <view class="word-card">
-    <!-- Play Button -->
-    <view class="play-btn" bindtap="playCurrentWord" hover-class="btn-hover">
-      <view class="play-icon"></view>
-    </view>
-    <view class="play-hint">点击播放单词发音</view>
-    <view class="play-controls">
-      <button class="mini-btn" size="mini" bindtap="playCurrentWord">重播</button>
-      <view class="switch-row">
-        <text>连播</text>
-        <switch checked="{{autoPlay}}" bindchange="onToggleAutoPlay"></switch>
+  <!-- ========== FAMILIARIZATION PHASE ========== -->
+  <block wx:if="{{phase === 'familiarize'}}">
+    <!-- Header -->
+    <view class="status-bar">
+      <view class="book-title">{{bookTitle}}</view>
+      <view class="header-right">
+        <view class="progress-info">{{famIndex + 1}} / {{totalWords}}</view>
+        <view class="timer-pill fam-timer">{{famTimerDisplay}}</view>
       </view>
     </view>
 
-    <!-- Input Area (Only show when not revealing answer) -->
-    <view class="input-area" wx:if="{{!showResult}}">
-      <input class="word-input {{inputError ? 'incorrect' : ''}}" 
-             placeholder="听音输入单词" 
-             focus="{{inputFocus}}" 
-             value="{{inputValue}}"
-             bindinput="onInput"
-             confirm-type="done"
-             bindconfirm="checkAnswer"/>
-      <view class="hint-card" wx:if="{{showHint}}">
-        <text class="hint-label">提示</text>
-        <text class="hint-text">{{currentWord.translation || '暂无释义'}}</text>
+    <!-- Familiarization Card -->
+    <view class="word-card fam-card">
+      <!-- Play Button -->
+      <view class="play-btn" bindtap="playFamWord" hover-class="btn-hover">
+        <view class="play-icon"></view>
+      </view>
+      <view class="play-hint">听发音，想拼写</view>
+
+      <!-- Translation (always shown) -->
+      <view class="fam-translation">{{words[famIndex].translation || '暂无释义'}}</view>
+
+      <!-- Revealed spelling + phonetic -->
+      <view class="fam-reveal-area" wx:if="{{famRevealed}}">
+        <text class="fam-word">{{words[famIndex].word}}</text>
+        <text class="fam-phonetic" wx:if="{{words[famIndex].phonetic}}">[{{words[famIndex].phonetic}}]</text>
+      </view>
+
+      <!-- Reveal button -->
+      <button wx:if="{{!famRevealed}}" class="fam-reveal-btn" bindtap="revealFamWord">显示拼写</button>
+    </view>
+
+    <!-- Navigation: Prev / Next -->
+    <view class="fam-nav">
+      <button class="fam-nav-btn" bindtap="prevFamWord">上一个</button>
+      <button class="fam-nav-btn" bindtap="nextFamWord">下一个</button>
+    </view>
+
+    <!-- Start Test button -->
+    <view class="action-bar">
+      <button class="submit-btn" bindtap="startTest">跳过熟悉，开始听写</button>
+    </view>
+  </block>
+
+  <!-- ========== TEST PHASE (existing UI, unchanged) ========== -->
+  <block wx:elif="{{phase === 'test'}}">
+    <!-- Header -->
+    <view class="status-bar">
+      <view class="book-title">{{bookTitle}}</view>
+      <view class="header-right">
+        <view class="progress-info">{{currentIndex + 1}} / {{totalWords}}</view>
+        <view class="timer-pill">{{displayTime}}</view>
       </view>
     </view>
 
-    <!-- Result Feedback (Show after check) -->
-    <view class="result-feedback" wx:else>
-      <text class="correct-word">{{currentWord.word}}</text>
-      <view>
-        <text class="phonetic">[{{currentWord.phonetic || '-'}}]</text>
-      </view>
-      <text class="translation">{{currentWord.translation || '暂无释义'}}</text>
-      <view class="compare-block">
-        <view class="answer-row wrong">你的拼写：{{userAnswer || '（空）'}}</view>
-        <view class="answer-row correct">正确拼写：{{currentWord.word}}</view>
-      </view>
-      
-      <!-- User Answer Display -->
-      <view style="margin-top: 20rpx; font-size: 28rpx; color: {{isCorrect ? '#67C23A' : '#F56C6C'}}">
-        <text wx:if="{{isCorrect}}">✓ 回答正确</text>
-        <text wx:else>✗ 你的答案: {{inputValue}}</text>
-      </view>
+    <!-- Word Card -->
+    <view class="word-card">
+      <!-- Translation Mode: Show Chinese prompt -->
+      <block wx:if="{{isTranslation}}">
+        <view class="translation-prompt">
+          <text class="translation-chinese">{{currentWord.translation || ''}}</text>
+          <text class="translation-hint">请写出对应的英文表达</text>
+        </view>
+      </block>
+      <!-- Dictation Mode: Play Button -->
+      <block wx:else>
+        <view class="play-btn" bindtap="playCurrentWord" hover-class="btn-hover">
+          <view class="play-icon"></view>
+        </view>
+        <view class="play-hint">点击播放单词发音</view>
+        <view class="play-controls">
+          <button class="mini-btn" size="mini" bindtap="playCurrentWord">重播</button>
+          <view class="switch-row">
+            <text>连播</text>
+            <switch checked="{{autoPlay}}" bindchange="onToggleAutoPlay"></switch>
+          </view>
+        </view>
+      </block>
 
-    </view>
-  </view>
-
-  <!-- Action Bar -->
-  <view class="action-bar">
-    <button wx:if="{{!showResult}}" class="submit-btn" bindtap="checkAnswer">提交</button>
-    <button wx:else class="submit-btn next" bindtap="nextWord">
-      {{currentIndex + 1 === totalWords ? '完成练习' : '下一个'}}
-    </button>
-  </view>
-
-  <!-- Summary & Wrong Words -->
-  <view wx:if="{{finished}}" class="summary-panel">
-    <view class="summary-title">本轮完成</view>
-    <view class="summary-row">准确率：{{summaryInfo.accuracy}}%（{{summaryInfo.correct}} / {{summaryInfo.total}}）</view>
-    <view class="summary-row" wx:if="{{summaryInfo.wrongCount > 0}}">
-      错词：{{summaryInfo.wrongCount}} 个
-    </view>
-    <view class="summary-note" wx:if="{{summaryInfo.wrongCount > 0}}">
-      已自动收录到错词本（累计 {{notebookCount}} 词）
-    </view>
-
-    <view class="wrong-list" wx:if="{{wrongWordsDetail.length > 0}}">
-      <view class="list-title">错词列表</view>
-      <view class="tag-list">
-        <view class="tag" wx:for="{{wrongWordsDetail}}" wx:key="word">
-          {{item.word}}
+      <!-- Input Area (Only show when not revealing answer) -->
+      <view class="input-area" wx:if="{{!showResult}}">
+        <input class="word-input {{inputError ? 'incorrect' : ''}}"
+               placeholder="{{isTranslation ? '输入英文表达' : '听音输入单词'}}"
+               focus="{{inputFocus}}"
+               value="{{inputValue}}"
+               bindinput="onInput"
+               confirm-type="done"
+               bindconfirm="checkAnswer"/>
+        <view class="hint-card" wx:if="{{showHint && !isTranslation}}">
+          <text class="hint-label">提示</text>
+          <text class="hint-text">{{currentWord.translation || '暂无释义'}}</text>
         </view>
       </view>
-      <button class="mini-btn ghost" style="margin-top:16rpx" bindtap="restartWrongWords">开始错词重练</button>
+
+      <!-- Result Feedback (Show after check) -->
+      <view class="result-feedback" wx:else>
+        <text class="correct-word">{{currentWord.word}}</text>
+        <view>
+          <text class="phonetic">[{{currentWord.phonetic || '-'}}]</text>
+        </view>
+        <text class="translation">{{currentWord.translation || '暂无释义'}}</text>
+        <view class="compare-block">
+          <view class="answer-row wrong">你的拼写：{{userAnswer || '（空）'}}</view>
+          <view class="answer-row correct">正确拼写：{{currentWord.word}}</view>
+        </view>
+
+        <!-- User Answer Display -->
+        <view style="margin-top: 20rpx; font-size: 28rpx; color: {{isCorrect ? '#67C23A' : '#F56C6C'}}">
+          <text wx:if="{{isCorrect}}">✓ 回答正确</text>
+          <text wx:else>✗ 你的答案: {{inputValue}}</text>
+        </view>
+      </view>
     </view>
 
-    <button class="submit-btn" style="margin-top:20rpx" bindtap="returnAfterFinish">返回</button>
-  </view>
+    <!-- Action Bar -->
+    <view class="action-bar">
+      <button wx:if="{{!showResult}}" class="submit-btn" bindtap="checkAnswer">提交</button>
+      <button wx:else class="submit-btn next" bindtap="nextWord">
+        {{currentIndex + 1 === totalWords ? '完成练习' : '下一个'}}
+      </button>
+    </view>
+
+    <!-- Summary & Wrong Words -->
+    <view wx:if="{{finished}}" class="summary-panel">
+      <view class="summary-title">本轮完成</view>
+      <view class="summary-row">准确率：{{summaryInfo.accuracy}}%（{{summaryInfo.correct}} / {{summaryInfo.total}}）</view>
+      <view class="summary-row" wx:if="{{summaryInfo.wrongCount > 0}}">
+        错词：{{summaryInfo.wrongCount}} 个
+      </view>
+      <view class="summary-note" wx:if="{{summaryInfo.wrongCount > 0}}">
+        已自动收录到错词本（累计 {{notebookCount}} 词）
+      </view>
+
+      <view class="wrong-list" wx:if="{{wrongWordsDetail.length > 0}}">
+        <view class="list-title">错词列表</view>
+        <view class="tag-list">
+          <view class="tag" wx:for="{{wrongWordsDetail}}" wx:key="word">
+            {{item.word}}
+          </view>
+        </view>
+        <button class="mini-btn ghost" style="margin-top:16rpx" bindtap="restartWrongWords">开始错词重练</button>
+      </view>
+
+      <button class="submit-btn" style="margin-top:20rpx" bindtap="returnAfterFinish">返回</button>
+    </view>
+  </block>
 </view>

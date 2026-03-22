@@ -393,3 +393,97 @@
   from { opacity: 0; transform: translateY(10rpx); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ========== Familiarization Phase ========== */
+.fam-card {
+  padding-bottom: 50rpx;
+}
+
+.fam-translation {
+  font-size: 32rpx;
+  color: #606266;
+  margin: 20rpx 0 30rpx;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.fam-reveal-area {
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+  margin-bottom: 10rpx;
+}
+
+.fam-word {
+  font-size: 52rpx;
+  font-weight: 700;
+  color: #2c3e50;
+  display: block;
+  margin-bottom: 10rpx;
+  letter-spacing: 2rpx;
+}
+
+.fam-phonetic {
+  font-size: 28rpx;
+  color: #909399;
+  font-family: Arial, sans-serif;
+}
+
+.fam-reveal-btn {
+  background: #EAF6F4 !important;
+  color: #20756F !important;
+  border: 2rpx dashed #20756F !important;
+  border-radius: 16rpx;
+  padding: 20rpx 60rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  margin: 10rpx 0;
+}
+
+.fam-nav {
+  display: flex;
+  justify-content: center;
+  gap: 30rpx;
+  margin: 30rpx 0;
+}
+
+.fam-nav-btn {
+  background: #fff !important;
+  border: 2rpx solid #dcdfe6 !important;
+  color: #606266 !important;
+  border-radius: 999rpx;
+  padding: 0 50rpx;
+  height: 76rpx;
+  line-height: 76rpx;
+  font-size: 28rpx;
+}
+
+.fam-nav-btn:active {
+  background: #f5f5f5 !important;
+}
+
+.fam-timer {
+  color: #E6A23C !important;
+  background: #FDF6EC !important;
+}
+
+/* Translation Mode Styles */
+.translation-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 20rpx;
+}
+
+.translation-chinese {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 16rpx;
+  line-height: 1.4;
+}
+
+.translation-hint {
+  font-size: 26rpx;
+  color: #999;
+}

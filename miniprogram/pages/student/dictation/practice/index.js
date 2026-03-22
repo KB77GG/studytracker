@@ -26,6 +26,13 @@ Page({
         finished: false,
         summaryInfo: null,
 
+        // Familiarization phase
+        phase: 'loading',       // 'loading' | 'familiarize' | 'test'
+        famIndex: 0,
+        famRevealed: false,
+        famTimerSeconds: 1200,  // 20 minutes
+        famTimerDisplay: '20:00',
+
         // UI State
         inputValue: '',
         showResult: false,
@@ -107,7 +114,6 @@ Page({
                 this.nextWord();
             }
         });
-        this.startTicker();
     },
 
     fetchTask: function (taskId) {
@@ -125,10 +131,12 @@ Page({
                     const task = res.data.task;
 
                     // Read from root task object
+                    const isTranslation = task.dictation_book_type === 'translation';
                     this.setData({
                         bookTitle: task.task_name,
                         rangeStart: task.dictation_word_start,
-                        rangeEnd: task.dictation_word_end
+                        rangeEnd: task.dictation_word_end,
+                        isTranslation: isTranslation
                     });
                     this.setData({ progressKey: this.buildProgressKey(taskId, task.dictation_book_id, task.dictation_word_start, task.dictation_word_end) });
 
@@ -213,6 +221,10 @@ Page({
                         return;
                     }
 
+                    // Detect translation mode from book info
+                    const bookType = res.data.book.book_type || 'dictation';
+                    const isTranslation = this.data.isTranslation || bookType === 'translation';
+
                     this.setData({
                         // Only update title if not set by task
                         bookTitle: this.data.taskId ? this.data.bookTitle : res.data.book.title,
@@ -220,11 +232,24 @@ Page({
                         totalWords: words.length,
                         currentIndex: 0,
                         practiceStart: Date.now(),
-                        accumulatedSeconds: 0
+                        accumulatedSeconds: 0,
+                        isTranslation: isTranslation
                     });
 
                     const resumeIndex = this.loadProgress(words.length);
-                    this.loadWord(resumeIndex);
+                    if (resumeIndex > 0) {
+                        // Resuming mid-test: skip familiarization
+                        this.setData({ phase: 'test' });
+                        this.loadWord(resumeIndex);
+                        this.startTicker();
+                    } else if (this.data.isTranslation) {
+                        // Translation mode: skip familiarization, go straight to test
+                        this.setData({ phase: 'test' });
+                        this.loadWord(0);
+                        this.startTicker();
+                    } else {
+                        this.enterFamiliarization();
+                    }
                 } else {
                     wx.showToast({ title: '加载失败', icon: 'none' });
                 }
@@ -335,8 +360,19 @@ Page({
         if (this.data.showResult) return;
 
         const input = this.data.inputValue.trim().toLowerCase();
-        const target = this.data.currentWord.word.toLowerCase();
-        const isCorrect = input === target;
+        let target = this.data.currentWord.word.toLowerCase();
+        let isCorrect = input === target;
+
+        // Translation mode: more flexible matching
+        if (!isCorrect && this.data.isTranslation) {
+            // Strip POS tags like "n. ", "adj. ", "v. ", "vt. ", "vi. ", "adv. "
+            const stripped = target.replace(/^(n\.|v\.|vt\.|vi\.|adj\.|adv\.|n\.&\w*\.?)\s*/i, '').trim();
+            // Accept any variant separated by / or ≈
+            const variants = stripped.split(/\s*[/≈]\s*/).map(v => v.trim().toLowerCase()).filter(v => v);
+            isCorrect = variants.some(v => input === v || v === input);
+            // Also check if input matches the stripped version itself
+            if (!isCorrect && input === stripped) isCorrect = true;
+        }
         const attempts = this.data.attemptCount || 0;
 
         if (!input) {
@@ -524,7 +560,17 @@ Page({
 
     saveProgress(index) {
         if (!this.data.progressKey) return;
-        wx.setStorageSync(this.data.progressKey, { index });
+        let elapsed = this.data.accumulatedSeconds || 0;
+        if (this.data.practiceStart) {
+            elapsed += Math.floor((Date.now() - this.data.practiceStart) / 1000);
+        }
+        wx.setStorageSync(this.data.progressKey, {
+            index,
+            correctCount: this.data.correctCount,
+            wrongWords: this.data.wrongWords,
+            wrongWordsDetail: this.data.wrongWordsDetail,
+            accumulatedSeconds: elapsed
+        });
     },
 
     loadProgress(totalWords) {
@@ -532,6 +578,17 @@ Page({
         const saved = wx.getStorageSync(this.data.progressKey);
         if (saved && typeof saved.index === 'number') {
             const idx = Math.max(0, Math.min(saved.index, totalWords - 1));
+            // Restore accumulated results from previous sessions
+            if (saved.correctCount != null) {
+                this.setData({
+                    correctCount: saved.correctCount,
+                    wrongWords: saved.wrongWords || [],
+                    wrongWordsDetail: saved.wrongWordsDetail || []
+                });
+            }
+            if (saved.accumulatedSeconds) {
+                this.setData({ accumulatedSeconds: saved.accumulatedSeconds });
+            }
             return idx;
         }
         return 0;
@@ -551,11 +608,21 @@ Page({
     onHide() {
         this.pauseTimer();
         this.stopTicker();
+        this.stopFamTimer();
+    },
+
+    onShow() {
+        if (this.data.phase === 'familiarize' && this.data.famTimerSeconds > 0) {
+            this.startFamTimer();
+        } else if (this.data.phase === 'test') {
+            this.resumeTimer();
+        }
     },
 
     onUnload() {
         this.pauseTimer();
         this.stopTicker();
+        this.stopFamTimer();
         this.abortAudioDownload();
         if (this.audioCtx) {
             this.audioCtx.destroy();
@@ -604,6 +671,7 @@ Page({
             phonetic: w.phonetic
         }));
         this.setData({
+            phase: 'test',
             bookTitle: source === 'notebook' ? '错词本重练' : '上次错词重练',
             words: wrongOnly,
             totalWords: wrongOnly.length,
@@ -758,6 +826,89 @@ Page({
         } catch (e) {
             console.warn('appendToNotebook error', e);
         }
+    },
+
+    // ========== Familiarization Phase ==========
+    enterFamiliarization() {
+        this.setData({
+            phase: 'familiarize',
+            famIndex: 0,
+            famRevealed: false,
+            famTimerSeconds: 1200,
+            famTimerDisplay: '20:00',
+            currentWord: this.data.words[0] || {}
+        });
+        this.startFamTimer();
+        setTimeout(() => this.playCurrentWord(), 500);
+    },
+
+    startFamTimer() {
+        this.stopFamTimer();
+        this.famTimerInterval = setInterval(() => {
+            let seconds = this.data.famTimerSeconds - 1;
+            if (seconds <= 0) {
+                this.stopFamTimer();
+                wx.showToast({ title: '熟悉时间到，开始听写', icon: 'none', duration: 2000 });
+                setTimeout(() => this.startTest(), 1500);
+                return;
+            }
+            const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const s = String(seconds % 60).padStart(2, '0');
+            this.setData({
+                famTimerSeconds: seconds,
+                famTimerDisplay: `${m}:${s}`
+            });
+        }, 1000);
+    },
+
+    stopFamTimer() {
+        if (this.famTimerInterval) {
+            clearInterval(this.famTimerInterval);
+            this.famTimerInterval = null;
+        }
+    },
+
+    playFamWord() {
+        const word = this.data.words[this.data.famIndex];
+        if (!word) return;
+        this.setData({ currentWord: word });
+        this.playCurrentWord();
+    },
+
+    revealFamWord() {
+        this.setData({ famRevealed: true });
+    },
+
+    nextFamWord() {
+        const nextIdx = this.data.famIndex + 1;
+        if (nextIdx >= this.data.totalWords) {
+            this.setData({ famIndex: 0, famRevealed: false, currentWord: this.data.words[0] || {} });
+        } else {
+            this.setData({ famIndex: nextIdx, famRevealed: false, currentWord: this.data.words[nextIdx] || {} });
+        }
+        setTimeout(() => this.playCurrentWord(), 300);
+    },
+
+    prevFamWord() {
+        const prevIdx = this.data.famIndex - 1;
+        if (prevIdx < 0) {
+            const last = this.data.totalWords - 1;
+            this.setData({ famIndex: last, famRevealed: false, currentWord: this.data.words[last] || {} });
+        } else {
+            this.setData({ famIndex: prevIdx, famRevealed: false, currentWord: this.data.words[prevIdx] || {} });
+        }
+        setTimeout(() => this.playCurrentWord(), 300);
+    },
+
+    startTest() {
+        this.stopFamTimer();
+        this.setData({
+            phase: 'test',
+            practiceStart: Date.now(),
+            accumulatedSeconds: 0
+        });
+        this.loadWord(0);
+        this.startTicker();
     },
 
     startTicker() {

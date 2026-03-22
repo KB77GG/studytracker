@@ -733,7 +733,9 @@ class DictationBook(db.Model, TimestampMixin, SoftDeleteMixin):
     word_count = db.Column(db.Integer, default=0, nullable=False)
     created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     is_active = db.Column(db.Boolean, default=True, nullable=False, index=True)
-    
+    # 'dictation' = hear word, type spelling; 'translation' = see Chinese, type English
+    book_type = db.Column(db.String(20), default='dictation', nullable=False)
+
     # Relationships
     creator = db.relationship("User", backref=db.backref("dictation_books", lazy="dynamic"))
     words = db.relationship("DictationWord", backref="book", lazy="dynamic", cascade="all, delete-orphan")

@@ -894,6 +894,7 @@ def get_student_today_tasks():
             "is_locked": False,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
             "dictation_book_id": task.dictation_book_id,
+            "dictation_book_type": task.dictation_book.book_type if task.dictation_book_id and task.dictation_book else "dictation",
             "dictation_word_start": task.dictation_word_start,
             "dictation_word_end": task.dictation_word_end,
             "speaking_book_id": task.speaking_book_id,

@@ -90,6 +90,7 @@ def get_books():
                 "title": book.title,
                 "description": book.description,
                 "word_count": book.word_count,
+                "book_type": book.book_type or "dictation",
                 "created_at": book.created_at.isoformat() if book.created_at else None,
                 "creator": book.creator.display_name or book.creator.username if book.creator else None
             }
@@ -219,6 +220,7 @@ def get_book(book_id):
             "title": book.title,
             "description": book.description,
             "word_count": book.word_count,
+            "book_type": book.book_type or "dictation",
             "created_at": book.created_at.isoformat() if book.created_at else None
         },
         "words": [
@@ -556,3 +558,138 @@ def get_book_stats(book_id):
         "accuracy": round(len(correct) / len(attempted) * 100, 1) if attempted else 0,
         "wrong_words": wrong_words
     })
+
+
+@dictation_bp.route("/books/upload-vocab-pdf", methods=["POST"])
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def upload_vocab_pdf():
+    """Upload a Chinese-English vocabulary PDF (e.g. TOEFL writing vocab).
+    Creates a DictationBook with book_type='translation'.
+    Practice mode: show Chinese, student types English.
+    """
+    if "file" not in request.files:
+        return jsonify({"ok": False, "error": "missing_file"}), 400
+
+    file = request.files["file"]
+    title = request.form.get("title", "").strip()
+    topic_filter = request.form.get("topic", "").strip()  # Optional: only import one topic
+
+    if not file.filename or not file.filename.lower().endswith('.pdf'):
+        return jsonify({"ok": False, "error": "must_be_pdf"}), 400
+
+    import pdfplumber
+
+    # Save to temp file
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
+    file.save(tmp.name)
+    tmp.close()
+
+    try:
+        with pdfplumber.open(tmp.name) as pdf:
+            all_text = []
+            for page in pdf.pages:
+                text = page.extract_text()
+                if text:
+                    all_text.append(text)
+            full_text = '\n'.join(all_text)
+    finally:
+        os.unlink(tmp.name)
+
+    # Parse vocab entries
+    entries = _parse_vocab_pdf(full_text)
+
+    if not entries:
+        return jsonify({"ok": False, "error": "no_entries", "message": "未识别到词汇条目"}), 400
+
+    # If topic filter specified, only keep entries from that topic
+    if topic_filter:
+        entries = [e for e in entries if e['topic'] == topic_filter]
+        if not entries:
+            return jsonify({"ok": False, "error": "no_entries_for_topic"}), 400
+
+    if not title:
+        title = os.path.splitext(file.filename)[0]
+
+    # Create book
+    book = DictationBook(
+        title=title,
+        description=f"翻译练习 - 看中文写英文 ({len(entries)}词)",
+        word_count=len(entries),
+        created_by=current_user.id,
+        book_type='translation'
+    )
+    db.session.add(book)
+    db.session.flush()
+
+    for i, entry in enumerate(entries):
+        word = DictationWord(
+            book_id=book.id,
+            sequence=i + 1,
+            word=entry['english'],
+            translation=entry['chinese'],
+            phonetic=entry.get('topic', '')  # Store topic in phonetic field
+        )
+        db.session.add(word)
+
+    book.word_count = len(entries)
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "book_id": book.id,
+        "title": book.title,
+        "word_count": len(entries),
+        "topics": list(set(e['topic'] for e in entries))
+    })
+
+
+def _parse_vocab_pdf(full_text):
+    """Parse Chinese-English vocabulary pairs from PDF text.
+
+    Expected format: one entry per line, Chinese text followed by English text.
+    Topics are English-only header lines (e.g. 'Education', 'Technology').
+    """
+    entries = []
+    current_topic = "General"
+    lines = full_text.split('\n')
+
+    # POS tags that often separate Chinese from English
+    pos_tags = r'(?:n\.|v\.|vt\.|vi\.|adj\.|adv\.|n\.&|v\.&|vt\.&)'
+
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+
+        # Skip title/header lines
+        if '托福' in line or '1000' in line or '分话题' in line:
+            continue
+
+        # Topic header (single English words like "Education", "Technology")
+        if re.match(r'^[A-Z][a-z]+(?:\s+(?:and|&)\s+[A-Z][a-z]+)*$', line):
+            current_topic = line
+            continue
+
+        # Method 1: Split at POS tag
+        m = re.match(r'^(.+?)\s+(' + pos_tags + r'\s*.+)$', line)
+        if m and re.search(r'[\u4e00-\u9fff]', m.group(1)):
+            entries.append({
+                'chinese': m.group(1).strip(),
+                'english': m.group(2).strip(),
+                'topic': current_topic
+            })
+            continue
+
+        # Method 2: Chinese text followed by English text (no POS tag)
+        m = re.match(
+            r'^(.*[\u4e00-\u9fff\uff09\u201d）】」]+)\s+'
+            r'((?:[a-zA-Z]|the |a |be |to ).+)$', line)
+        if m and len(m.group(1).strip()) >= 1 and len(m.group(2).strip()) >= 2:
+            entries.append({
+                'chinese': m.group(1).strip(),
+                'english': m.group(2).strip(),
+                'topic': current_topic
+            })
+
+    return entries
