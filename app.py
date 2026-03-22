@@ -1905,14 +1905,19 @@ def api_review_task(tid):
     
     task = Task.query.get_or_404(tid)
     
-    # 1. Handle Image Upload (Annotated)
-    if "feedback_image" in request.files:
-        f = request.files["feedback_image"]
-        if f and f.filename:
-            filename = f"feedback_img_{tid}_{uuid.uuid4().hex}.png"
-            path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            f.save(path)
-            task.feedback_image = f"/uploads/{filename}"
+    # 1. Handle Image Upload(s) (Annotated) — supports multiple files
+    feedback_files = request.files.getlist("feedback_image")
+    if feedback_files:
+        saved_paths = []
+        for f in feedback_files:
+            if f and f.filename:
+                filename = f"feedback_img_{tid}_{uuid.uuid4().hex}.png"
+                path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                f.save(path)
+                saved_paths.append(f"/uploads/{filename}")
+        if saved_paths:
+            # Store multiple paths joined by comma; first one also goes to feedback_image
+            task.feedback_image = ",".join(saved_paths)
             
     # 2. Handle Audio Upload
     if "feedback_audio" in request.files:

@@ -24,8 +24,14 @@
                 <button type="button" onclick="setPenColor('red')" class="color-btn red active"></button>
                 <button type="button" onclick="setPenColor('blue')" class="color-btn blue"></button>
                 <button type="button" onclick="setPenColor('green')" class="color-btn green"></button>
+                <span class="toolbar-sep"></span>
+                <button type="button" onclick="zoomIn()" class="toolbar-btn">🔍+ 放大</button>
+                <button type="button" onclick="zoomOut()" class="toolbar-btn">🔍- 缩小</button>
+                <button type="button" onclick="zoomReset()" class="toolbar-btn">1:1 适配</button>
+                <span class="toolbar-sep"></span>
                 <button type="button" onclick="undoLast()" class="toolbar-btn">↩ 撤销</button>
                 <button type="button" onclick="clearCanvas()" class="toolbar-btn">清除画布</button>
+                <span id="zoomLevel" class="zoom-label">100%</span>
             </div>
             <div class="canvas-wrapper">
                 <canvas id="reviewCanvas"></canvas>
@@ -231,6 +237,24 @@
     .toolbar-btn:hover {
         background: #e8e8e8;
     }
+
+    .toolbar-sep {
+        width: 1px;
+        height: 20px;
+        background: #ddd;
+        margin: 0 4px;
+    }
+
+    .zoom-label {
+        font-size: 12px;
+        color: #666;
+        margin-left: auto;
+    }
+
+    .thumb.active {
+        border-color: #277C78;
+        box-shadow: 0 0 6px rgba(39, 124, 120, 0.5);
+    }
 </style>
 
 <script>
@@ -238,7 +262,11 @@
     let audioBlob = null;
     let mediaRecorder;
     let audioChunks = [];
-    let currentImageScale = 1;
+
+    // Per-image annotation storage: url -> { objects: [...], zoom, vpTransform }
+    const imageAnnotations = {};
+    let currentImageUrl = null;
+    let currentZoom = 1;
 
     document.addEventListener('DOMContentLoaded', () => {
         // Init Fabric Canvas
@@ -246,7 +274,6 @@
         const width = wrapper.clientWidth;
         const height = wrapper.clientHeight;
 
-        // Create canvas element dynamically to fit wrapper
         const canvasEl = document.getElementById('reviewCanvas');
         canvasEl.width = width;
         canvasEl.height = height;
@@ -260,6 +287,51 @@
         canvas.freeDrawingBrush.width = 3;
         canvas.freeDrawingBrush.color = 'red';
 
+        // Mouse wheel zoom
+        canvas.on('mouse:wheel', function (opt) {
+            const delta = opt.e.deltaY;
+            let zoom = canvas.getZoom();
+            zoom *= 0.999 ** delta;
+            zoom = Math.min(Math.max(0.2, zoom), 5);
+            canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+            currentZoom = zoom;
+            updateZoomLabel();
+            opt.e.preventDefault();
+            opt.e.stopPropagation();
+        });
+
+        // Pan with middle mouse button or Alt+drag
+        let isPanning = false;
+        let lastPanX, lastPanY;
+
+        canvas.on('mouse:down', function (opt) {
+            if (opt.e.altKey || opt.e.button === 1) {
+                isPanning = true;
+                canvas.isDrawingMode = false;
+                canvas.selection = false;
+                lastPanX = opt.e.clientX;
+                lastPanY = opt.e.clientY;
+                opt.e.preventDefault();
+            }
+        });
+        canvas.on('mouse:move', function (opt) {
+            if (isPanning) {
+                const vpt = canvas.viewportTransform;
+                vpt[4] += opt.e.clientX - lastPanX;
+                vpt[5] += opt.e.clientY - lastPanY;
+                lastPanX = opt.e.clientX;
+                lastPanY = opt.e.clientY;
+                canvas.requestRenderAll();
+            }
+        });
+        canvas.on('mouse:up', function () {
+            if (isPanning) {
+                isPanning = false;
+                canvas.isDrawingMode = true;
+                canvas.selection = false;
+            }
+        });
+
         // Audio Recording
         const recordBtn = document.getElementById('recordBtn');
         const audioPreview = document.getElementById('audioPreview');
@@ -269,8 +341,6 @@
             recordBtn.addEventListener('mousedown', startRecording);
             recordBtn.addEventListener('mouseup', stopRecording);
             recordBtn.addEventListener('mouseleave', stopRecording);
-
-            // Touch events for mobile/tablet
             recordBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startRecording(); });
             recordBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopRecording(); });
         } else {
@@ -280,7 +350,6 @@
 
         function startRecording() {
             if (mediaRecorder && mediaRecorder.state === 'recording') return;
-
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then(stream => {
                     mediaRecorder = new MediaRecorder(stream);
@@ -288,8 +357,7 @@
                     mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
                     mediaRecorder.onstop = () => {
                         audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        audioPreview.src = audioUrl;
+                        audioPreview.src = URL.createObjectURL(audioBlob);
                         audioPreview.style.display = 'block';
                         statusText.textContent = "录音已完成";
                     };
@@ -309,38 +377,52 @@
                 mediaRecorder.stop();
                 recordBtn.classList.remove('recording');
                 recordBtn.textContent = "按住录音";
-
-                // Stop all tracks
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
             }
         }
 
-        // Submit
+        // Submit — save all annotated images
         document.getElementById('submitBtn').addEventListener('click', async () => {
+            // Save current image annotations first
+            saveCurrentAnnotations();
+
             const formData = new FormData();
 
-            // 1. Get Canvas Image
-            if (canvas.getObjects().length > 0 || canvas.backgroundImage) {
-                // Convert canvas to blob
-                // Note: We need to handle scaling back if we want high res, 
-                // but for now screen res is fine.
+            // Generate annotated images for ALL images that have annotations
+            const allUrls = Array.from(document.querySelectorAll('.thumb')).map(t => t.src);
+            let hasAnnotation = false;
+
+            for (let i = 0; i < allUrls.length; i++) {
+                const url = allUrls[i];
+                const ann = imageAnnotations[url];
+                if (ann && ann.objects && ann.objects.length > 0) {
+                    hasAnnotation = true;
+                    // Render this image + its annotations to a temp canvas
+                    const blob = await renderAnnotatedImage(url, ann);
+                    if (blob) {
+                        formData.append('feedback_image', blob, `feedback_${i}.png`);
+                    }
+                }
+            }
+
+            // If no annotations on any image but current canvas has background, still send it
+            if (!hasAnnotation && canvas.backgroundImage) {
                 const dataUrl = canvas.toDataURL({ format: 'png' });
                 const res = await fetch(dataUrl);
                 const blob = await res.blob();
                 formData.append('feedback_image', blob, 'feedback.png');
             }
 
-            // 2. Get Audio
+            // Audio
             if (audioBlob) {
                 formData.append('feedback_audio', audioBlob, 'feedback.webm');
             }
 
-            // 3. Text Data
+            // Text data
             formData.append('accuracy', document.getElementById('accuracy').value);
             formData.append('completion_rate', document.getElementById('completionRate').value);
             formData.append('note', document.getElementById('note').value);
 
-            // Submit
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.textContent = "提交中...";
@@ -366,40 +448,137 @@
                 btn.textContent = "提交批改";
             }
         });
+
+        // Auto-load first image
+        const firstThumb = document.querySelector('.thumb');
+        if (firstThumb) {
+            firstThumb.click();
+        }
     });
 
+    // Save annotations for the current image
+    function saveCurrentAnnotations() {
+        if (!currentImageUrl) return;
+        const objects = canvas.getObjects().map(obj => obj.toJSON());
+        imageAnnotations[currentImageUrl] = {
+            objects: objects,
+            zoom: canvas.getZoom(),
+            vpTransform: canvas.viewportTransform.slice()
+        };
+    }
+
+    // Render a single annotated image to a blob (for submission)
+    function renderAnnotatedImage(url, ann) {
+        return new Promise((resolve) => {
+            fabric.Image.fromURL(url, function (img) {
+                const tmpCanvas = new fabric.StaticCanvas(null, {
+                    width: canvas.width,
+                    height: canvas.height
+                });
+
+                // Fit image same way as loadImage
+                const cw = tmpCanvas.width, ch = tmpCanvas.height;
+                const imgRatio = img.width / img.height;
+                const cRatio = cw / ch;
+                if (imgRatio > cRatio) { img.scaleToWidth(cw); } else { img.scaleToHeight(ch); }
+
+                tmpCanvas.setBackgroundImage(img, () => {
+                    // Add all annotation objects
+                    fabric.util.enlivenObjects(ann.objects, function (objs) {
+                        objs.forEach(o => tmpCanvas.add(o));
+                        tmpCanvas.renderAll();
+                        const dataUrl = tmpCanvas.toDataURL({ format: 'png' });
+                        fetch(dataUrl).then(r => r.blob()).then(b => resolve(b));
+                    });
+                }, {
+                    originX: 'left', originY: 'top',
+                    left: (cw - img.getScaledWidth()) / 2,
+                    top: (ch - img.getScaledHeight()) / 2
+                });
+            }, { crossOrigin: 'anonymous' });
+        });
+    }
+
     function loadImage(url) {
+        // Save annotations of the image we're leaving
+        saveCurrentAnnotations();
+
         document.getElementById('canvasPlaceholder').style.display = 'none';
+
+        // Highlight active thumbnail
+        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.thumb').forEach(t => {
+            if (t.src === url || t.getAttribute('onclick').includes(url)) t.classList.add('active');
+        });
+
+        currentImageUrl = url;
+
         fabric.Image.fromURL(url, function (img) {
+            // Reset zoom and pan
+            canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+            currentZoom = 1;
+            updateZoomLabel();
+
             // Scale image to fit canvas
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
+            const cw = canvas.width, ch = canvas.height;
             const imgRatio = img.width / img.height;
-            const canvasRatio = canvasWidth / canvasHeight;
+            const cRatio = cw / ch;
+            if (imgRatio > cRatio) { img.scaleToWidth(cw); } else { img.scaleToHeight(ch); }
 
-            if (imgRatio > canvasRatio) {
-                img.scaleToWidth(canvasWidth);
-            } else {
-                img.scaleToHeight(canvasHeight);
-            }
-
-            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-                originX: 'left',
-                originY: 'top',
-                left: (canvasWidth - img.getScaledWidth()) / 2,
-                top: (canvasHeight - img.getScaledHeight()) / 2
-            });
-
-            // Clear previous drawings? Maybe ask user. For now, clear.
+            // Clear canvas
             canvas.clear();
-            // Re-set background (clear removes it)
-            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-                originX: 'left',
-                originY: 'top',
-                left: (canvasWidth - img.getScaledWidth()) / 2,
-                top: (canvasHeight - img.getScaledHeight()) / 2
+
+            // Set background image
+            canvas.setBackgroundImage(img, () => {
+                // Restore saved annotations if any
+                const saved = imageAnnotations[url];
+                if (saved && saved.objects && saved.objects.length > 0) {
+                    fabric.util.enlivenObjects(saved.objects, function (objs) {
+                        objs.forEach(o => canvas.add(o));
+                        // Restore zoom/pan state
+                        if (saved.zoom) {
+                            canvas.setZoom(saved.zoom);
+                            currentZoom = saved.zoom;
+                            updateZoomLabel();
+                        }
+                        if (saved.vpTransform) {
+                            canvas.setViewportTransform(saved.vpTransform);
+                        }
+                        canvas.renderAll();
+                    });
+                } else {
+                    canvas.renderAll();
+                }
+            }, {
+                originX: 'left', originY: 'top',
+                left: (cw - img.getScaledWidth()) / 2,
+                top: (ch - img.getScaledHeight()) / 2
             });
         }, { crossOrigin: 'anonymous' });
+    }
+
+    function updateZoomLabel() {
+        const el = document.getElementById('zoomLevel');
+        if (el) el.textContent = Math.round(currentZoom * 100) + '%';
+    }
+
+    function zoomIn() {
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        canvas.zoomToPoint({ x: canvas.width / 2, y: canvas.height / 2 }, currentZoom);
+        updateZoomLabel();
+    }
+
+    function zoomOut() {
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        canvas.zoomToPoint({ x: canvas.width / 2, y: canvas.height / 2 }, currentZoom);
+        updateZoomLabel();
+    }
+
+    function zoomReset() {
+        currentZoom = 1;
+        canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+        canvas.setZoom(1);
+        updateZoomLabel();
     }
 
     function setPenColor(color) {
@@ -417,7 +596,6 @@
     }
 
     function clearCanvas() {
-        // Keep background, clear objects
         const bg = canvas.backgroundImage;
         canvas.clear();
         if (bg) {
