@@ -13,7 +13,8 @@ from models import (
     db, User, StudentProfile, StudyPlan, PlanItem,
     PlanEvidence, ParentStudentLink, TaskCatalog, Task,
     PlanItemSession, ClassFeedback, ScheduleSnapshot,
-    MaterialBank, Question, SpeakingSession, SpeakingMessage
+    MaterialBank, Question, SpeakingSession, SpeakingMessage,
+    DictationBook
 )
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message
@@ -894,7 +895,7 @@ def get_student_today_tasks():
             "is_locked": False,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
             "dictation_book_id": task.dictation_book_id,
-            "dictation_book_type": task.dictation_book.book_type if task.dictation_book_id and task.dictation_book else "dictation",
+            "dictation_book_type": (lambda b: b.book_type if b else "dictation")(DictationBook.query.get(task.dictation_book_id) if task.dictation_book_id else None),
             "dictation_word_start": task.dictation_word_start,
             "dictation_word_end": task.dictation_word_end,
             "speaking_book_id": task.speaking_book_id,
