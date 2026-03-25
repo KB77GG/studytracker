@@ -55,8 +55,8 @@ Page({
         // Restore timer if there's an active one in storage
         this.restoreTimerIfNeeded()
 
-        const subFlag = wx.getStorageSync('task_subscribed') || false
-        this.setData({ hasSubscribed: subFlag })
+        // 每次进入首页都尝试请求订阅（一次性订阅需反复获取配额）
+        this.autoRequestSubscribe()
         this.loadNotebookCount()
     },
 
@@ -131,6 +131,7 @@ Page({
         }
     },
 
+    // 用户主动点击按钮订阅（带 toast 反馈）
     requestSubscribe() {
         const tmplIds = [TASK_TEMPLATE_ID, COURSE_TEMPLATE_ID]
         wx.requestSubscribeMessage({
@@ -138,17 +139,29 @@ Page({
             success: (res) => {
                 const accepted = tmplIds.some(id => res[id] === 'accept')
                 if (accepted) {
-                    wx.setStorageSync('task_subscribed', true)
                     this.setData({ hasSubscribed: true })
                     wx.showToast({ title: '提醒已开启', icon: 'success' })
                 } else {
-                    wx.showToast({ title: '已拒绝或未选择', icon: 'none' })
+                    wx.showToast({ title: '请勾选"总是保持以上选择"以长期接收提醒', icon: 'none', duration: 3000 })
                 }
             },
             fail: (err) => {
                 console.warn('subscribe fail', err)
-                wx.showToast({ title: '订阅失败', icon: 'none' })
             }
+        })
+    },
+
+    // 每次进入页面自动静默请求订阅（积累配额）
+    autoRequestSubscribe() {
+        if (getApp().globalData.guestMode) return
+        const tmplIds = [TASK_TEMPLATE_ID, COURSE_TEMPLATE_ID]
+        wx.requestSubscribeMessage({
+            tmplIds,
+            success: (res) => {
+                const accepted = tmplIds.some(id => res[id] === 'accept')
+                this.setData({ hasSubscribed: accepted })
+            },
+            fail: () => {} // 静默失败，不打扰用户
         })
     },
 

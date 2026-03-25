@@ -30,8 +30,8 @@ Page({
 
     onShow() {
         this.fetchSchedules()
-        const subFlag = wx.getStorageSync('task_subscribed') || false
-        this.setData({ hasSubscribed: subFlag })
+        // 每次进入首页都尝试请求订阅（一次性订阅需反复获取配额）
+        this.autoRequestSubscribe()
         if (typeof this.getTabBar === 'function' && this.getTabBar()) {
             this.getTabBar().setData({ selected: 0 })
         }
@@ -371,28 +371,36 @@ Page({
         }
     },
 
+    // 用户主动点击按钮订阅
     requestSubscribe() {
-        if (this.data.hasSubscribed) {
-            wx.showToast({ title: '已开启提醒', icon: 'none' })
-            return
-        }
         const tmplIds = [COURSE_TEMPLATE_ID]
         wx.requestSubscribeMessage({
             tmplIds,
             success: (res) => {
                 const accepted = tmplIds.some(id => res[id] === 'accept')
                 if (accepted) {
-                    wx.setStorageSync('task_subscribed', true)
                     this.setData({ hasSubscribed: true })
                     wx.showToast({ title: '提醒已开启', icon: 'success' })
                 } else {
-                    wx.showToast({ title: '已拒绝或未选择', icon: 'none' })
+                    wx.showToast({ title: '请勾选"总是保持以上选择"以长期接收提醒', icon: 'none', duration: 3000 })
                 }
             },
             fail: (err) => {
                 console.warn('subscribe fail', err)
-                wx.showToast({ title: '订阅失败', icon: 'none' })
             }
+        })
+    },
+
+    // 每次进入页面自动请求订阅（积累配额）
+    autoRequestSubscribe() {
+        const tmplIds = [COURSE_TEMPLATE_ID]
+        wx.requestSubscribeMessage({
+            tmplIds,
+            success: (res) => {
+                const accepted = tmplIds.some(id => res[id] === 'accept')
+                this.setData({ hasSubscribed: accepted })
+            },
+            fail: () => {}
         })
     },
 
