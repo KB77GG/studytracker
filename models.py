@@ -862,3 +862,180 @@ class SpeakingMessage(db.Model, TimestampMixin):
         "SpeakingSession",
         backref=db.backref("messages", lazy="dynamic", cascade="all, delete-orphan"),
     )
+
+
+# ============================================================================
+# Entrance Test (入学英语水平测试) — 完全独立的数据表，不与现有 studytracker
+# 业务表存在外键关联（除了 created_by/reviewer_id 指向 user 表），可以随时
+# 整体下线而不影响在读学生功能。
+# ============================================================================
+
+
+class EntranceTestPaper(db.Model, TimestampMixin):
+    """入学测试试卷模板。"""
+
+    __tablename__ = "entrance_test_paper"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    exam_type = db.Column(db.String(20), nullable=False, index=True)  # general/ielts/toefl/toefl_junior
+    level = db.Column(db.String(40), nullable=False, index=True)  # e.g. general_a2, ielts_45_60
+    description = db.Column(db.Text)
+    is_active = db.Column(db.Boolean, default=False, nullable=False, index=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    sections = db.relationship(
+        "EntranceTestSection",
+        backref="paper",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+        order_by="EntranceTestSection.sequence",
+    )
+
+    def __repr__(self):
+        return f"<EntranceTestPaper {self.id}: {self.title}>"
+
+
+class EntranceTestSection(db.Model, TimestampMixin):
+    """试卷分节：listening / reading / writing。"""
+
+    __tablename__ = "entrance_test_section"
+
+    id = db.Column(db.Integer, primary_key=True)
+    paper_id = db.Column(db.Integer, db.ForeignKey("entrance_test_paper.id"), nullable=False, index=True)
+    section_type = db.Column(db.String(20), nullable=False)  # listening/reading/writing
+    sequence = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(200))
+    instructions = db.Column(db.Text)
+    audio_url = db.Column(db.String(500))  # 仅 listening
+    passage = db.Column(db.Text)  # 仅 reading
+    duration_minutes = db.Column(db.Integer)
+
+    questions = db.relationship(
+        "EntranceTestQuestion",
+        backref="section",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+        order_by="EntranceTestQuestion.sequence",
+    )
+
+    def __repr__(self):
+        return f"<EntranceTestSection {self.id}: {self.section_type} #{self.sequence}>"
+
+
+class EntranceTestQuestion(db.Model, TimestampMixin):
+    """单道题目。"""
+
+    __tablename__ = "entrance_test_question"
+
+    id = db.Column(db.Integer, primary_key=True)
+    section_id = db.Column(db.Integer, db.ForeignKey("entrance_test_section.id"), nullable=False, index=True)
+    sequence = db.Column(db.Integer, nullable=False)
+    question_type = db.Column(db.String(20), nullable=False)  # single_choice/short_answer/essay
+    stem = db.Column(db.Text, nullable=False)
+    options_json = db.Column(db.Text)  # JSON: [{"key":"A","text":"..."}, ...]
+    correct_answer = db.Column(db.String(500))  # "B" / 标准短答案 / NULL for essay
+    points = db.Column(db.Integer, default=1, nullable=False)
+    reference_answer = db.Column(db.Text)  # essay 参考答案 / 评分要点
+
+    def __repr__(self):
+        return f"<EntranceTestQuestion {self.id}: {self.question_type} #{self.sequence}>"
+
+
+class EntranceTestInvitation(db.Model, TimestampMixin):
+    """老师为意向学生生成的专属测试邀请链接。"""
+
+    __tablename__ = "entrance_test_invitation"
+
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String(64), nullable=False, unique=True, index=True)
+    paper_id = db.Column(db.Integer, db.ForeignKey("entrance_test_paper.id"))
+
+    student_name = db.Column(db.String(100), nullable=False)
+    student_phone = db.Column(db.String(50))
+    student_age = db.Column(db.Integer)
+    student_grade = db.Column(db.String(50))
+    has_studied_target = db.Column(db.Boolean, default=False, nullable=False)
+    target_exam = db.Column(db.String(20))  # ielts/toefl/toefl_junior
+
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    started_at = db.Column(db.DateTime)
+    submitted_at = db.Column(db.DateTime)
+    status = db.Column(db.String(20), default="pending", nullable=False, index=True)
+    # pending / in_progress / submitted / graded
+
+    paper = db.relationship("EntranceTestPaper")
+    creator = db.relationship("User", foreign_keys=[created_by])
+
+    def __repr__(self):
+        return f"<EntranceTestInvitation {self.id}: {self.student_name} [{self.status}]>"
+
+
+class EntranceTestAttempt(db.Model, TimestampMixin):
+    """一次完整作答记录（与 invitation 1:1）。"""
+
+    __tablename__ = "entrance_test_attempt"
+
+    id = db.Column(db.Integer, primary_key=True)
+    invitation_id = db.Column(
+        db.Integer,
+        db.ForeignKey("entrance_test_invitation.id"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    paper_id = db.Column(db.Integer, db.ForeignKey("entrance_test_paper.id"), nullable=False)
+
+    started_at = db.Column(db.DateTime)
+    submitted_at = db.Column(db.DateTime)
+
+    auto_score_listening = db.Column(db.Integer, default=0, nullable=False)
+    auto_score_reading = db.Column(db.Integer, default=0, nullable=False)
+    auto_score_total_max = db.Column(db.Integer, default=0, nullable=False)
+
+    writing_score = db.Column(db.Float)
+    writing_comment = db.Column(db.Text)
+    speaking_score = db.Column(db.Float)
+    speaking_comment = db.Column(db.Text)
+
+    overall_level = db.Column(db.String(50))
+    overall_comment = db.Column(db.Text)
+
+    reviewer_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    reviewed_at = db.Column(db.DateTime)
+    report_pdf_path = db.Column(db.String(500))
+
+    invitation = db.relationship("EntranceTestInvitation", backref=db.backref("attempt", uselist=False))
+    paper = db.relationship("EntranceTestPaper")
+    reviewer = db.relationship("User", foreign_keys=[reviewer_id])
+    answers = db.relationship(
+        "EntranceTestAnswer",
+        backref="attempt",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+    )
+
+    def __repr__(self):
+        return f"<EntranceTestAttempt {self.id} invitation={self.invitation_id}>"
+
+
+class EntranceTestAnswer(db.Model, TimestampMixin):
+    """单题作答记录。"""
+
+    __tablename__ = "entrance_test_answer"
+
+    id = db.Column(db.Integer, primary_key=True)
+    attempt_id = db.Column(
+        db.Integer, db.ForeignKey("entrance_test_attempt.id"), nullable=False, index=True
+    )
+    question_id = db.Column(
+        db.Integer, db.ForeignKey("entrance_test_question.id"), nullable=False, index=True
+    )
+    answer_text = db.Column(db.Text)
+    is_correct = db.Column(db.Boolean)  # 客观题自动判分；主观题为 NULL
+    points_earned = db.Column(db.Integer)
+
+    question = db.relationship("EntranceTestQuestion")
+
+    def __repr__(self):
+        return f"<EntranceTestAnswer attempt={self.attempt_id} q={self.question_id}>"
