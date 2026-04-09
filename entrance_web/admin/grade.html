@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>入学测试 · 批改</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="max-w-7xl mx-auto p-4 md:p-6">
+
+  <header class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-3">
+      <img src="../assets/logo.png" class="h-10">
+      <div>
+        <div class="font-bold text-teal-700">入学测试 · 批改中心</div>
+        <div class="text-xs text-gray-500" id="student-brief">—</div>
+      </div>
+    </div>
+    <div class="flex gap-3 text-sm">
+      <a href="invitations.html" class="text-teal-600 hover:underline">← 邀请列表</a>
+    </div>
+  </header>
+
+  <div id="loading" class="bg-white rounded-xl shadow p-8 text-center text-gray-500">加载中...</div>
+  <div id="error-box" class="hidden bg-red-50 border-l-4 border-red-500 p-4 text-red-700 rounded"></div>
+
+  <div id="content" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+    <!-- Left: answers -->
+    <div class="lg:col-span-2 bg-white rounded-xl shadow p-6">
+      <h2 class="text-lg font-bold text-gray-800 mb-4">📝 学生作答</h2>
+      <div id="auto-summary" class="bg-teal-50 rounded p-3 mb-4 text-sm"></div>
+      <div id="answers-list" class="space-y-4"></div>
+    </div>
+
+    <!-- Right: grade form -->
+    <div class="bg-white rounded-xl shadow p-6 h-fit sticky top-4">
+      <h2 class="text-lg font-bold text-gray-800 mb-4">✍️ 老师评分</h2>
+      <form id="grade-form" class="space-y-4">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">写作分数</label>
+          <input name="writing_score" type="number" step="0.5" class="w-full border border-gray-300 rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">写作评语</label>
+          <textarea name="writing_comment" rows="3" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">口语分数（线下）</label>
+          <input name="speaking_score" type="number" step="0.5" class="w-full border border-gray-300 rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">口语评语</label>
+          <textarea name="speaking_comment" rows="3" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">建议级别</label>
+          <input name="overall_level" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="IELTS 6.0-6.5 / A2+ …">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">总体评语</label>
+          <textarea name="overall_comment" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 rounded">保存评分</button>
+        <a id="pdf-link" href="#" target="_blank" class="block w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 rounded">下载 PDF 报告</a>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/admin.js"></script>
+<script>initGradePage();</script>
+</body>
+</html>

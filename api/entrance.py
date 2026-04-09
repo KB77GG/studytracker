@@ -9,12 +9,21 @@ Phase 2: business logic implementation.
 - 主观题（essay）等老师人工录入
 """
 
+import base64
 import json
+import os
 import secrets
 from datetime import datetime
+from urllib.parse import quote
 
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, jsonify, request, current_app, render_template, make_response
 from flask_login import login_required, current_user
+
+try:
+    from weasyprint import HTML, CSS
+except ImportError:  # pragma: no cover
+    HTML = None
+    CSS = None
 
 from models import (
     db,
@@ -572,11 +581,89 @@ def admin_report_pdf(attempt_id):
     err = _admin_required()
     if err:
         return err
-    # PDF generation will be implemented in Phase 3 alongside the template
-    return jsonify(
-        {
-            "ok": False,
-            "error": "not_implemented_yet",
-            "message": "PDF 报告生成将在 Phase 3 与前端一起实现",
-        }
-    ), 501
+    if HTML is None:
+        return jsonify({"ok": False, "error": "weasyprint_not_installed"}), 500
+
+    attempt = EntranceTestAttempt.query.get_or_404(attempt_id)
+    invitation = attempt.invitation
+    paper = EntranceTestPaper.query.get(attempt.paper_id)
+    if not paper:
+        return jsonify({"ok": False, "error": "paper_missing"}), 404
+
+    # Build answer lookup
+    answers_by_q = {a.question_id: a for a in attempt.answers}
+
+    sections_data = []
+    section_type_labels = {
+        "listening": "听力",
+        "reading": "阅读",
+        "writing": "写作",
+    }
+    for section in sorted(paper.sections, key=lambda s: s.sequence):
+        qs = []
+        for q in sorted(section.questions, key=lambda x: x.sequence):
+            opts = []
+            if q.options_json:
+                try:
+                    opts = json.loads(q.options_json)
+                except Exception:
+                    opts = []
+            ans = answers_by_q.get(q.id)
+            qs.append({
+                "stem": q.stem,
+                "options": opts,
+                "question_type": q.question_type,
+                "correct_answer": q.correct_answer,
+                "student_answer": ans.answer_text if ans else None,
+                "is_correct": ans.is_correct if ans else None,
+            })
+        sections_data.append({
+            "title": section.title,
+            "section_type": section.section_type,
+            "section_type_label": section_type_labels.get(section.section_type, section.section_type),
+            "questions": qs,
+        })
+
+    # Embed logo
+    logo_base64 = ""
+    logo_path = os.path.join(current_app.static_folder, "sagepath_entrance_logo.png")
+    try:
+        with open(logo_path, "rb") as f:
+            logo_base64 = base64.b64encode(f.read()).decode("utf-8")
+    except Exception:
+        logo_base64 = ""
+
+    target_exam_label = {
+        "ielts": "IELTS 雅思",
+        "toefl": "TOEFL 托福",
+        "toefl_junior": "TOEFL Junior 小托福",
+    }.get(invitation.target_exam or "", invitation.target_exam or "—")
+
+    reviewer_name = None
+    if attempt.reviewer_id:
+        reviewer = User.query.get(attempt.reviewer_id)
+        reviewer_name = reviewer.username if reviewer else None
+
+    html = render_template(
+        "entrance_report_pdf.html",
+        invitation=invitation,
+        attempt=attempt,
+        paper=paper,
+        sections=sections_data,
+        logo_base64=logo_base64,
+        target_exam_label=target_exam_label,
+        reviewer_name=reviewer_name,
+        generated_at=datetime.now(),
+    )
+
+    css = CSS(string="""
+        @page { size: A4; margin: 16mm; }
+        body { font-family: "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    """)
+    pdf_bytes = HTML(string=html).write_pdf(stylesheets=[css])
+
+    response = make_response(pdf_bytes)
+    response.headers["Content-Type"] = "application/pdf"
+    filename = quote(f"入学测试报告_{invitation.student_name or attempt.id}.pdf")
+    response.headers["Content-Disposition"] = f"inline; filename*=UTF-8''{filename}"
+    return response

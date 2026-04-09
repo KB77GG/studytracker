@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>入学测试 · 题库管理</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="max-w-5xl mx-auto p-4 md:p-8">
+  <header class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-3">
+      <img src="../assets/logo.png" class="h-10">
+      <div>
+        <div class="font-bold text-teal-700">入学测试 · 题库管理</div>
+        <div class="text-xs text-gray-500">Sage Path · 睿然国际教育</div>
+      </div>
+    </div>
+    <a href="invitations.html" class="text-teal-600 hover:underline text-sm">← 邀请管理</a>
+  </header>
+
+  <div id="auth-error" class="hidden bg-red-50 border-l-4 border-red-500 p-4 text-red-700 rounded mb-4"></div>
+
+  <div class="bg-white rounded-xl shadow p-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">📚 试卷列表</h2>
+    <p class="text-xs text-gray-500 mb-3">Phase 3 初版：支持启用/停用。后续 Phase 4 会加题目编辑界面 + AI 题库生成。</p>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-gray-50 text-left text-gray-600">
+          <th class="p-3">标题</th>
+          <th class="p-3">考试</th>
+          <th class="p-3">级别</th>
+          <th class="p-3">状态</th>
+          <th class="p-3">操作</th>
+        </tr>
+      </thead>
+      <tbody id="paper-list"><tr><td colspan="5" class="p-8 text-center text-gray-400">加载中...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+<script src="../assets/admin.js"></script>
+<script>initPapersPage();</script>
+</body>
+</html>
