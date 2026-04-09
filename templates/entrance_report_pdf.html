@@ -4,124 +4,351 @@
 <meta charset="UTF-8">
 <title>入学英语水平测试报告 - {{ invitation.student_name }}</title>
 <style>
-  body { font-family: "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; color: #1f2937; font-size: 11pt; line-height: 1.55; }
-  .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #0d9488; padding-bottom: 12px; margin-bottom: 18px; }
-  .header .brand { display: flex; align-items: center; gap: 12px; }
-  .header img { height: 56px; }
-  .header .org { font-size: 14pt; font-weight: bold; color: #0f766e; }
-  .header .doc-title { font-size: 13pt; color: #374151; }
-  h1 { font-size: 18pt; text-align: center; color: #0f766e; margin: 8px 0 18px; }
-  h2 { font-size: 13pt; color: #0f766e; border-left: 4px solid #0d9488; padding-left: 8px; margin-top: 18px; margin-bottom: 8px; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-  th, td { border: 1px solid #d1d5db; padding: 6px 10px; text-align: left; vertical-align: top; font-size: 10pt; }
-  th { background: #f0fdfa; color: #134e4a; }
-  .info-table td:first-child { width: 22%; background: #f9fafb; font-weight: 600; }
-  .score-table th, .score-table td { text-align: center; }
-  .score-big { font-size: 16pt; font-weight: bold; color: #0d9488; }
-  .comment-box { background: #f9fafb; border-left: 4px solid #0d9488; padding: 10px 14px; white-space: pre-wrap; font-size: 10.5pt; }
-  .question { margin-bottom: 10px; padding: 8px 10px; border: 1px solid #e5e7eb; border-radius: 4px; page-break-inside: avoid; }
-  .question .stem { font-weight: 600; margin-bottom: 4px; }
-  .question .answer { font-size: 10pt; color: #374151; }
+  @page {
+    size: A4;
+    margin: 18mm 16mm 16mm 16mm;
+    @bottom-center {
+      content: "Sage Path · 睿然国际教育  ·  第 " counter(page) " / " counter(pages) " 页";
+      font-family: "Noto Sans CJK SC", sans-serif;
+      font-size: 8pt;
+      color: #9ca3af;
+    }
+  }
+
+  body {
+    font-family: "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+    color: #1f2937;
+    font-size: 10.5pt;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ====== Header (table-based for WeasyPrint reliability) ====== */
+  .header {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+  }
+  .header td { vertical-align: middle; padding: 0; border: none; }
+  .header .logo-cell { width: 90px; }
+  .header .logo-cell img { width: 80px; height: 80px; object-fit: contain; }
+  .header .brand-cell { padding-left: 14px; }
+  .header .brand-org {
+    font-size: 17pt;
+    font-weight: bold;
+    color: #0f766e;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .header .brand-sub {
+    font-size: 10pt;
+    color: #6b7280;
+    margin-top: 2px;
+    letter-spacing: 2px;
+  }
+  .header .meta-cell {
+    text-align: right;
+    font-size: 8.5pt;
+    color: #6b7280;
+    white-space: nowrap;
+    width: 180px;
+  }
+  .header .meta-cell .report-no {
+    font-family: "Courier New", monospace;
+    font-size: 10pt;
+    color: #0f766e;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+
+  .divider {
+    height: 3px;
+    background: linear-gradient(to right, #0d9488 0%, #5eead4 60%, transparent 100%);
+    margin: 4px 0 18px;
+  }
+
+  .doc-title {
+    text-align: center;
+    font-size: 16pt;
+    font-weight: bold;
+    color: #134e4a;
+    letter-spacing: 4px;
+    margin: 10px 0 22px;
+  }
+  .doc-title::before,
+  .doc-title::after {
+    content: "◆";
+    color: #5eead4;
+    font-size: 10pt;
+    margin: 0 12px;
+    vertical-align: middle;
+  }
+
+  /* ====== Section heading ====== */
+  h2 {
+    font-size: 12pt;
+    color: #0f766e;
+    margin: 20px 0 10px;
+    padding: 0 0 0 10px;
+    border-left: 4px solid #0d9488;
+    letter-spacing: 1px;
+  }
+
+  /* ====== Info table ====== */
+  table { width: 100%; border-collapse: collapse; }
+  .info-table { border: 1px solid #d1d5db; border-radius: 4px; overflow: hidden; }
+  .info-table td {
+    border: 1px solid #e5e7eb;
+    padding: 8px 12px;
+    font-size: 10pt;
+  }
+  .info-table td.label {
+    width: 18%;
+    background: #f0fdfa;
+    color: #134e4a;
+    font-weight: 600;
+  }
+
+  /* ====== Score hero ====== */
+  .score-hero {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 6px 0;
+    margin-top: 4px;
+  }
+  .score-hero .cell {
+    background: #f0fdfa;
+    border: 1px solid #99f6e4;
+    border-radius: 6px;
+    padding: 14px 4px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .score-hero .cell .lbl {
+    display: block;
+    font-size: 9pt;
+    color: #134e4a;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+  .score-hero .cell .val {
+    display: block;
+    font-size: 20pt;
+    font-weight: bold;
+    color: #0d9488;
+    line-height: 1.1;
+  }
+  .score-hero .cell.level {
+    background: #0d9488;
+    border-color: #0d9488;
+  }
+  .score-hero .cell.level .lbl { color: #ccfbf1; }
+  .score-hero .cell.level .val { color: #ffffff; font-size: 14pt; letter-spacing: 1px; }
+  .score-note { font-size: 8.5pt; color: #9ca3af; margin-top: 6px; text-align: right; }
+
+  /* ====== Comment box ====== */
+  .comment-box {
+    background: #f9fafb;
+    border-left: 4px solid #0d9488;
+    padding: 12px 16px;
+    white-space: pre-wrap;
+    font-size: 10pt;
+    color: #374151;
+    border-radius: 0 4px 4px 0;
+  }
+  .two-col { width: 100%; border-collapse: separate; border-spacing: 10px 0; margin-top: 4px; }
+  .two-col td { vertical-align: top; width: 50%; }
+  .two-col h3 {
+    font-size: 10.5pt;
+    color: #0f766e;
+    margin: 0 0 6px 0;
+  }
+
+  /* ====== Question cards ====== */
+  .section-title {
+    background: #ecfdf5;
+    border-left: 3px solid #10b981;
+    padding: 8px 12px;
+    font-weight: bold;
+    color: #065f46;
+    margin: 14px 0 8px;
+    font-size: 10.5pt;
+    border-radius: 0 4px 4px 0;
+  }
+  .question {
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 5px;
+    page-break-inside: avoid;
+    background: #ffffff;
+  }
+  .question .stem { font-weight: 600; margin-bottom: 6px; color: #111827; }
+  .question .options { font-size: 9.5pt; color: #6b7280; margin: 0 0 6px 0; }
+  .question .answer-row { font-size: 9.5pt; color: #4b5563; }
+  .question .student-ans { color: #0f172a; font-weight: 600; }
   .correct { color: #059669; font-weight: 600; }
   .wrong { color: #dc2626; font-weight: 600; }
-  .pending { color: #d97706; font-weight: 600; }
-  .section-title { background: #ecfdf5; padding: 6px 10px; border-radius: 4px; font-weight: bold; color: #065f46; margin-top: 12px; }
-  .sign-area { margin-top: 24px; display: flex; justify-content: space-between; }
-  .sign-area .box { width: 45%; border-top: 1px solid #9ca3af; padding-top: 6px; text-align: center; font-size: 10pt; color: #4b5563; }
-  .footer { margin-top: 20px; text-align: center; font-size: 9pt; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 8px; }
+  .pending {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 8.5pt;
+    font-weight: 600;
+  }
+  .tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 8pt;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .tag-correct { background: #d1fae5; color: #065f46; }
+  .tag-wrong { background: #fee2e2; color: #991b1b; }
+
+  /* ====== Sign area ====== */
+  .sign-area {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: separate;
+    border-spacing: 40px 0;
+  }
+  .sign-area td {
+    width: 50%;
+    border-top: 1px solid #9ca3af;
+    padding-top: 8px;
+    text-align: center;
+    font-size: 9.5pt;
+    color: #4b5563;
+  }
+  .sign-area td .label { color: #9ca3af; font-size: 8.5pt; margin-bottom: 4px; display: block; }
+  .sign-area td .name { color: #111827; font-weight: 600; font-size: 10pt; }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="brand">
-    {% if logo_base64 %}<img src="data:image/png;base64,{{ logo_base64 }}" alt="logo">{% endif %}
-    <div>
-      <div class="org">Sage Path · 睿然国际教育</div>
-      <div class="doc-title">入学英语水平测试诊断报告</div>
-    </div>
-  </div>
-  <div style="text-align: right; font-size: 9pt; color: #6b7280;">
-    报告编号：ET-{{ "%06d"|format(attempt.id) }}<br>
-    生成时间：{{ generated_at.strftime('%Y-%m-%d %H:%M') }}
-  </div>
-</div>
+<!-- Header: logo + org name + report no -->
+<table class="header">
+  <tr>
+    {% if logo_base64 %}
+    <td class="logo-cell"><img src="data:image/png;base64,{{ logo_base64 }}" alt="logo"></td>
+    {% endif %}
+    <td class="brand-cell">
+      <div class="brand-org">Sage Path · 睿然国际教育</div>
+      <div class="brand-sub">SINGAPORE · EDUCATION</div>
+    </td>
+    <td class="meta-cell">
+      <div class="report-no">ET-{{ "%06d"|format(attempt.id) }}</div>
+      生成时间：{{ generated_at.strftime('%Y-%m-%d %H:%M') }}
+    </td>
+  </tr>
+</table>
+<div class="divider"></div>
+
+<div class="doc-title">入学英语水平测试诊断报告</div>
 
 <h2>一、学生基本信息</h2>
 <table class="info-table">
-  <tr><td>学生姓名</td><td>{{ invitation.student_name or '—' }}</td><td>年龄</td><td>{{ invitation.student_age or '—' }}</td></tr>
-  <tr><td>年级</td><td>{{ invitation.student_grade or '—' }}</td><td>联系电话</td><td>{{ invitation.student_phone or '—' }}</td></tr>
-  <tr><td>目标考试</td><td>{{ target_exam_label }}</td><td>是否系统学过</td><td>{{ '是' if invitation.has_studied_target else '否' }}</td></tr>
-  <tr><td>测试试卷</td><td colspan="3">{{ paper.title }}（{{ paper.description or '' }}）</td></tr>
-  <tr><td>测试时间</td><td colspan="3">{{ attempt.submitted_at.strftime('%Y-%m-%d %H:%M') if attempt.submitted_at else '—' }}</td></tr>
+  <tr>
+    <td class="label">学生姓名</td><td>{{ invitation.student_name or '—' }}</td>
+    <td class="label">年龄</td><td>{{ invitation.student_age or '—' }}</td>
+  </tr>
+  <tr>
+    <td class="label">年级</td><td>{{ invitation.student_grade or '—' }}</td>
+    <td class="label">联系电话</td><td>{{ invitation.student_phone or '—' }}</td>
+  </tr>
+  <tr>
+    <td class="label">目标考试</td><td>{{ target_exam_label }}</td>
+    <td class="label">是否系统学过</td><td>{{ '是' if invitation.has_studied_target else '否' }}</td>
+  </tr>
+  <tr>
+    <td class="label">测试试卷</td>
+    <td colspan="3">{{ paper.title }}{% if paper.description %}　<span style="color:#6b7280;font-size:9pt;">{{ paper.description }}</span>{% endif %}</td>
+  </tr>
+  <tr>
+    <td class="label">测试时间</td>
+    <td colspan="3">{{ attempt.submitted_at.strftime('%Y-%m-%d %H:%M') if attempt.submitted_at else '—' }}</td>
+  </tr>
 </table>
 
 <h2>二、各项成绩汇总</h2>
-<table class="score-table">
+<table class="score-hero">
   <tr>
-    <th>听力（客观）</th>
-    <th>阅读（客观）</th>
-    <th>写作（老师评分）</th>
-    <th>口语（线下）</th>
-    <th>建议级别</th>
-  </tr>
-  <tr>
-    <td><span class="score-big">{{ attempt.auto_score_listening or 0 }}</span></td>
-    <td><span class="score-big">{{ attempt.auto_score_reading or 0 }}</span></td>
-    <td><span class="score-big">{{ attempt.writing_score if attempt.writing_score is not none else '—' }}</span></td>
-    <td><span class="score-big">{{ attempt.speaking_score if attempt.speaking_score is not none else '—' }}</span></td>
-    <td><span class="score-big" style="font-size:12pt;">{{ attempt.overall_level or '待定' }}</span></td>
+    <td class="cell"><span class="lbl">听力（客观）</span><span class="val">{{ attempt.auto_score_listening or 0 }}</span></td>
+    <td class="cell"><span class="lbl">阅读（客观）</span><span class="val">{{ attempt.auto_score_reading or 0 }}</span></td>
+    <td class="cell"><span class="lbl">写作（老师）</span><span class="val">{{ attempt.writing_score if attempt.writing_score is not none else '—' }}</span></td>
+    <td class="cell"><span class="lbl">口语（线下）</span><span class="val">{{ attempt.speaking_score if attempt.speaking_score is not none else '—' }}</span></td>
+    <td class="cell level"><span class="lbl">建议级别</span><span class="val">{{ attempt.overall_level or '待定' }}</span></td>
   </tr>
 </table>
-<p style="font-size: 9pt; color: #6b7280;">* 听力 / 阅读为客观题自动评分；写作 / 口语为老师人工评定。</p>
+<div class="score-note">* 听力 / 阅读为客观题自动评分；写作 / 口语为老师人工评定。</div>
 
 {% if attempt.overall_comment %}
 <h2>三、总体评语与建议</h2>
 <div class="comment-box">{{ attempt.overall_comment }}</div>
 {% endif %}
 
-{% if attempt.writing_comment %}
-<h2>四、写作评语</h2>
-<div class="comment-box">{{ attempt.writing_comment }}</div>
+{% if attempt.writing_comment or attempt.speaking_comment %}
+<h2>四、单项评语</h2>
+<table class="two-col">
+  <tr>
+    {% if attempt.writing_comment %}
+    <td>
+      <h3>✍️ 写作评语</h3>
+      <div class="comment-box">{{ attempt.writing_comment }}</div>
+    </td>
+    {% endif %}
+    {% if attempt.speaking_comment %}
+    <td>
+      <h3>🗣️ 口语评语</h3>
+      <div class="comment-box">{{ attempt.speaking_comment }}</div>
+    </td>
+    {% endif %}
+  </tr>
+</table>
 {% endif %}
 
-{% if attempt.speaking_comment %}
-<h2>五、口语评语</h2>
-<div class="comment-box">{{ attempt.speaking_comment }}</div>
-{% endif %}
-
-<h2>六、题目作答详情</h2>
+<h2>五、题目作答详情</h2>
 {% for section in sections %}
-  <div class="section-title">{{ section.title }}（{{ section.section_type_label }}）</div>
+  <div class="section-title">{{ section.title }}　·　{{ section.section_type_label }}</div>
   {% for q in section.questions %}
     <div class="question">
       <div class="stem">{{ loop.index }}. {{ q.stem }}</div>
       {% if q.options %}
-        <div style="font-size: 10pt; color: #4b5563; margin: 2px 0;">
-          {% for opt in q.options %}{{ opt.key }}. {{ opt.text }}　{% endfor %}
+        <div class="options">
+          {% for opt in q.options %}<b>{{ opt.key }}.</b> {{ opt.text }}　{% endfor %}
         </div>
       {% endif %}
-      <div class="answer">学生作答：<b>{{ q.student_answer or '（未作答）' }}</b></div>
-      {% if q.question_type != 'essay' %}
-        <div class="answer">标准答案：{{ q.correct_answer or '—' }} ·
-          {% if q.is_correct %}<span class="correct">✓ 正确</span>
-          {% else %}<span class="wrong">✗ 错误</span>{% endif %}
-        </div>
-      {% else %}
-        <div class="answer"><span class="pending">主观题（老师评阅）</span></div>
-      {% endif %}
+      <div class="answer-row">
+        学生作答：<span class="student-ans">{{ q.student_answer or '（未作答）' }}</span>
+        {% if q.question_type != 'essay' %}
+          　·　标准答案：<b>{{ q.correct_answer or '—' }}</b>
+          　{% if q.is_correct %}<span class="tag tag-correct">✓ 正确</span>{% else %}<span class="tag tag-wrong">✗ 错误</span>{% endif %}
+        {% else %}
+          　<span class="pending">主观题（老师评阅）</span>
+        {% endif %}
+      </div>
     </div>
   {% endfor %}
 {% endfor %}
 
-<div class="sign-area">
-  <div class="box">批改老师：{{ reviewer_name or '—' }}<br>{{ attempt.reviewed_at.strftime('%Y-%m-%d') if attempt.reviewed_at else '' }}</div>
-  <div class="box">机构盖章</div>
-</div>
-
-<div class="footer">
-  本报告由 Sage Path · 睿然国际教育 入学测试系统自动生成，仅供学员与家长参考。
-</div>
+<table class="sign-area">
+  <tr>
+    <td>
+      <span class="label">批改老师</span>
+      <span class="name">{{ reviewer_name or '—' }}</span>
+      <div style="font-size:8.5pt;color:#9ca3af;margin-top:2px;">{{ attempt.reviewed_at.strftime('%Y-%m-%d') if attempt.reviewed_at else '' }}</div>
+    </td>
+    <td>
+      <span class="label">机构盖章</span>
+      <span class="name">Sage Path · 睿然国际教育</span>
+    </td>
+  </tr>
+</table>
 
 </body>
 </html>
