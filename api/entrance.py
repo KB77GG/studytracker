@@ -786,9 +786,11 @@ def admin_delete_paper(paper_id):
     if err:
         return err
     paper = EntranceTestPaper.query.get_or_404(paper_id)
-    # Prevent deletion if any attempt exists
-    has_attempt = EntranceTestAttempt.query.filter_by(paper_id=paper.id).first()
-    if has_attempt:
+    # Prevent deletion if any invitation/attempt refers to this paper.
+    # SQLite FK enforcement is off by default → we check explicitly to avoid orphan rows.
+    if EntranceTestInvitation.query.filter_by(paper_id=paper.id).first():
+        return jsonify({"ok": False, "error": "paper_has_invitations"}), 400
+    if EntranceTestAttempt.query.filter_by(paper_id=paper.id).first():
         return jsonify({"ok": False, "error": "paper_has_attempts"}), 400
     db.session.delete(paper)  # cascades to sections/questions
     db.session.commit()
