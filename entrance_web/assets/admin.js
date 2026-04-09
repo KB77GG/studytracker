@@ -243,13 +243,17 @@ async function initPapersPage() {
     }
     tbody.innerHTML = res.papers.map(p => `
       <tr class="border-t">
-        <td class="p-3">${esc(p.title)}</td>
+        <td class="p-3">${esc(p.title)}<div class="text-xs text-gray-500">${p.section_count || 0} 节</div></td>
         <td class="p-3 text-xs">${EXAM_LABELS[p.exam_type] || p.exam_type}</td>
         <td class="p-3 text-xs">${esc(p.level || '')}</td>
         <td class="p-3">${p.is_active
           ? '<span class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs">已启用</span>'
           : '<span class="px-2 py-1 rounded bg-gray-100 text-gray-700 text-xs">草稿</span>'}</td>
-        <td class="p-3"><button onclick="togglePaper(${p.id})" class="text-teal-600 hover:underline text-xs">${p.is_active ? '停用' : '启用'}</button></td>
+        <td class="p-3 text-xs space-x-2">
+          <a href="edit.html?paper_id=${p.id}" class="text-teal-600 hover:underline">编辑</a>
+          <button onclick="togglePaper(${p.id})" class="text-teal-600 hover:underline">${p.is_active ? '停用' : '启用'}</button>
+          <button onclick="deletePaper(${p.id})" class="text-red-500 hover:underline">删除</button>
+        </td>
       </tr>
     `).join('');
   } catch (e) {
@@ -261,7 +265,29 @@ async function togglePaper(id) {
   try {
     await apiFetch(`${API}/admin/papers/${id}/toggle`, { method: 'POST' });
     initPapersPage();
-  } catch (e) {
-    alert('操作失败：' + e.message);
-  }
+  } catch (e) { alert('操作失败：' + e.message); }
+}
+
+async function deletePaper(id) {
+  if (!confirm('确定删除此试卷？已有作答记录的试卷无法删除。')) return;
+  try {
+    await apiFetch(`${API}/admin/papers/${id}`, { method: 'DELETE' });
+    initPapersPage();
+  } catch (e) { alert('删除失败：' + e.message); }
+}
+
+async function createNewPaper() {
+  const title = prompt('新试卷标题：');
+  if (!title) return;
+  const exam_type = prompt('考试类型 (general / ielts / toefl / toefl_junior)：', 'general');
+  if (!exam_type) return;
+  const level = prompt('级别 code (如 general_a2 / ielts_60_75)：', '');
+  try {
+    const res = await apiFetch(`${API}/admin/papers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, exam_type, level: level || '', description: '' }),
+    });
+    location.href = `edit.html?paper_id=${res.paper_id}`;
+  } catch (e) { alert('创建失败：' + e.message); }
 }

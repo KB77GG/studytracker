@@ -667,3 +667,255 @@ def admin_report_pdf(attempt_id):
     filename = quote(f"入学测试报告_{invitation.student_name or attempt.id}.pdf")
     response.headers["Content-Disposition"] = f"inline; filename*=UTF-8''{filename}"
     return response
+
+
+# ============================================================================
+# Phase 4: Upload + Paper/Section/Question CRUD
+# ============================================================================
+
+from werkzeug.utils import secure_filename
+
+_ALLOWED_AUDIO_EXT = {"mp3", "m4a", "wav", "ogg", "aac"}
+_ALLOWED_PDF_EXT = {"pdf"}
+
+
+def _upload_root():
+    root = os.path.join(current_app.root_path, "uploads", "entrance")
+    os.makedirs(os.path.join(root, "audio"), exist_ok=True)
+    os.makedirs(os.path.join(root, "pdf"), exist_ok=True)
+    return root
+
+
+def _ext_ok(filename, allowed):
+    if "." not in filename:
+        return False
+    return filename.rsplit(".", 1)[1].lower() in allowed
+
+
+def _save_upload(file_storage, subdir, allowed_ext):
+    if not file_storage or not file_storage.filename:
+        return None, "no_file"
+    if not _ext_ok(file_storage.filename, allowed_ext):
+        return None, "invalid_extension"
+    safe = secure_filename(file_storage.filename)
+    # Prefix with token to avoid collisions
+    unique = f"{secrets.token_urlsafe(8)}_{safe}"
+    dest_dir = os.path.join(_upload_root(), subdir)
+    full_path = os.path.join(dest_dir, unique)
+    file_storage.save(full_path)
+    url = f"/uploads/entrance/{subdir}/{unique}"
+    return url, None
+
+
+@entrance_bp.route("/admin/upload/audio", methods=["POST"])
+@login_required
+def admin_upload_audio():
+    err = _admin_required()
+    if err:
+        return err
+    f = request.files.get("file")
+    url, e = _save_upload(f, "audio", _ALLOWED_AUDIO_EXT)
+    if e:
+        return jsonify({"ok": False, "error": e}), 400
+    return jsonify({"ok": True, "url": url, "filename": os.path.basename(url)})
+
+
+@entrance_bp.route("/admin/upload/pdf", methods=["POST"])
+@login_required
+def admin_upload_pdf():
+    """Upload reference PDF for a paper (original test material archive)."""
+    err = _admin_required()
+    if err:
+        return err
+    f = request.files.get("file")
+    url, e = _save_upload(f, "pdf", _ALLOWED_PDF_EXT)
+    if e:
+        return jsonify({"ok": False, "error": e}), 400
+    return jsonify({"ok": True, "url": url, "filename": os.path.basename(url)})
+
+
+# ---- Paper CRUD ----
+
+
+@entrance_bp.route("/admin/papers", methods=["POST"])
+@login_required
+def admin_create_paper():
+    err = _admin_required()
+    if err:
+        return err
+    data = request.get_json(silent=True) or {}
+    title = (data.get("title") or "").strip()
+    exam_type = (data.get("exam_type") or "").strip()
+    level = (data.get("level") or "").strip()
+    if not title or not exam_type:
+        return jsonify({"ok": False, "error": "missing_title_or_exam_type"}), 400
+    paper = EntranceTestPaper(
+        title=title,
+        exam_type=exam_type,
+        level=level,
+        description=(data.get("description") or "").strip(),
+        is_active=bool(data.get("is_active", False)),
+        created_by=current_user.id,
+    )
+    db.session.add(paper)
+    db.session.commit()
+    return jsonify({"ok": True, "paper_id": paper.id})
+
+
+@entrance_bp.route("/admin/papers/<int:paper_id>", methods=["PATCH"])
+@login_required
+def admin_update_paper(paper_id):
+    err = _admin_required()
+    if err:
+        return err
+    paper = EntranceTestPaper.query.get_or_404(paper_id)
+    data = request.get_json(silent=True) or {}
+    for field in ("title", "exam_type", "level", "description"):
+        if field in data:
+            setattr(paper, field, (data.get(field) or "").strip())
+    if "is_active" in data:
+        paper.is_active = bool(data["is_active"])
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+@entrance_bp.route("/admin/papers/<int:paper_id>", methods=["DELETE"])
+@login_required
+def admin_delete_paper(paper_id):
+    err = _admin_required()
+    if err:
+        return err
+    paper = EntranceTestPaper.query.get_or_404(paper_id)
+    # Prevent deletion if any attempt exists
+    has_attempt = EntranceTestAttempt.query.filter_by(paper_id=paper.id).first()
+    if has_attempt:
+        return jsonify({"ok": False, "error": "paper_has_attempts"}), 400
+    db.session.delete(paper)  # cascades to sections/questions
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+# ---- Section CRUD ----
+
+
+@entrance_bp.route("/admin/papers/<int:paper_id>/sections", methods=["POST"])
+@login_required
+def admin_create_section(paper_id):
+    err = _admin_required()
+    if err:
+        return err
+    paper = EntranceTestPaper.query.get_or_404(paper_id)
+    data = request.get_json(silent=True) or {}
+    section_type = (data.get("section_type") or "").strip()
+    if section_type not in ("listening", "reading", "writing"):
+        return jsonify({"ok": False, "error": "invalid_section_type"}), 400
+    next_seq = (paper.sections.count() or 0) + 1
+    section = EntranceTestSection(
+        paper_id=paper.id,
+        section_type=section_type,
+        sequence=data.get("sequence", next_seq),
+        title=(data.get("title") or "").strip(),
+        instructions=(data.get("instructions") or "").strip(),
+        audio_url=(data.get("audio_url") or None),
+        passage=(data.get("passage") or None),
+        duration_minutes=data.get("duration_minutes"),
+    )
+    db.session.add(section)
+    db.session.commit()
+    return jsonify({"ok": True, "section_id": section.id})
+
+
+@entrance_bp.route("/admin/sections/<int:section_id>", methods=["PATCH"])
+@login_required
+def admin_update_section(section_id):
+    err = _admin_required()
+    if err:
+        return err
+    section = EntranceTestSection.query.get_or_404(section_id)
+    data = request.get_json(silent=True) or {}
+    for field in ("title", "instructions", "audio_url", "passage"):
+        if field in data:
+            val = data.get(field)
+            setattr(section, field, val if val != "" else None)
+    if "duration_minutes" in data:
+        dm = data.get("duration_minutes")
+        section.duration_minutes = int(dm) if dm else None
+    if "sequence" in data:
+        section.sequence = int(data["sequence"])
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+@entrance_bp.route("/admin/sections/<int:section_id>", methods=["DELETE"])
+@login_required
+def admin_delete_section(section_id):
+    err = _admin_required()
+    if err:
+        return err
+    section = EntranceTestSection.query.get_or_404(section_id)
+    db.session.delete(section)
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+# ---- Question CRUD ----
+
+
+def _question_payload(data, question=None):
+    q = question or EntranceTestQuestion()
+    q.question_type = data.get("question_type", q.question_type or "single_choice")
+    q.stem = (data.get("stem") or "").strip()
+    opts = data.get("options")
+    if opts is not None:
+        # opts: list of {key, text}
+        q.options_json = json.dumps(opts, ensure_ascii=False) if opts else None
+    q.correct_answer = (data.get("correct_answer") or "").strip() or None
+    q.reference_answer = (data.get("reference_answer") or "").strip() or None
+    try:
+        q.points = int(data.get("points") or 1)
+    except (TypeError, ValueError):
+        q.points = 1
+    return q
+
+
+@entrance_bp.route("/admin/sections/<int:section_id>/questions", methods=["POST"])
+@login_required
+def admin_create_question(section_id):
+    err = _admin_required()
+    if err:
+        return err
+    section = EntranceTestSection.query.get_or_404(section_id)
+    data = request.get_json(silent=True) or {}
+    q = _question_payload(data)
+    q.section_id = section.id
+    q.sequence = data.get("sequence") or ((section.questions.count() or 0) + 1)
+    db.session.add(q)
+    db.session.commit()
+    return jsonify({"ok": True, "question_id": q.id})
+
+
+@entrance_bp.route("/admin/questions/<int:question_id>", methods=["PATCH"])
+@login_required
+def admin_update_question(question_id):
+    err = _admin_required()
+    if err:
+        return err
+    q = EntranceTestQuestion.query.get_or_404(question_id)
+    data = request.get_json(silent=True) or {}
+    _question_payload(data, q)
+    if "sequence" in data:
+        q.sequence = int(data["sequence"])
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+@entrance_bp.route("/admin/questions/<int:question_id>", methods=["DELETE"])
+@login_required
+def admin_delete_question(question_id):
+    err = _admin_required()
+    if err:
+        return err
+    q = EntranceTestQuestion.query.get_or_404(question_id)
+    db.session.delete(q)
+    db.session.commit()
+    return jsonify({"ok": True})

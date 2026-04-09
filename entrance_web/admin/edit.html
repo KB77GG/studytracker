@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>入学测试 · 试卷编辑</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  textarea { font-family: inherit; }
+  .q-card { transition: all 0.15s; }
+  details > summary { cursor: pointer; list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] > summary .arrow { transform: rotate(90deg); }
+  .arrow { display: inline-block; transition: transform 0.15s; }
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="max-w-6xl mx-auto p-4 md:p-6">
+
+  <header class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-3">
+      <img src="../assets/logo.png" class="h-10">
+      <div>
+        <div class="font-bold text-teal-700">入学测试 · 试卷编辑</div>
+        <div class="text-xs text-gray-500" id="paper-brief">—</div>
+      </div>
+    </div>
+    <div class="flex gap-3 text-sm">
+      <a href="papers.html" class="text-teal-600 hover:underline">← 试卷列表</a>
+    </div>
+  </header>
+
+  <div id="loading" class="bg-white rounded-xl shadow p-8 text-center text-gray-500">加载中...</div>
+  <div id="error-box" class="hidden bg-red-50 border-l-4 border-red-500 p-4 text-red-700 rounded"></div>
+
+  <div id="content" class="hidden space-y-4">
+
+    <!-- Paper meta -->
+    <div class="bg-white rounded-xl shadow p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-gray-800">📄 试卷基本信息</h2>
+        <div class="flex gap-2">
+          <button id="btn-save-paper" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-1.5 rounded text-sm">保存基本信息</button>
+          <button id="btn-toggle-active" class="bg-gray-100 hover:bg-gray-200 px-4 py-1.5 rounded text-sm">—</button>
+        </div>
+      </div>
+      <form id="paper-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">标题 *</label>
+          <input name="title" class="w-full border border-gray-300 rounded px-3 py-2" required>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">级别 / Level Code</label>
+          <input name="level" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="ielts_60_75 / general_a2 …">
+        </div>
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">考试类型</label>
+          <select name="exam_type" class="w-full border border-gray-300 rounded px-3 py-2">
+            <option value="general">通用英语</option>
+            <option value="ielts">IELTS</option>
+            <option value="toefl">TOEFL</option>
+            <option value="toefl_junior">TOEFL Junior</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">描述</label>
+          <input name="description" class="w-full border border-gray-300 rounded px-3 py-2">
+        </div>
+      </form>
+    </div>
+
+    <!-- Sections -->
+    <div class="bg-white rounded-xl shadow p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-gray-800">📑 试卷分节</h2>
+        <div class="flex gap-2">
+          <button onclick="createSection('listening')" class="bg-teal-50 hover:bg-teal-100 text-teal-700 px-3 py-1.5 rounded text-sm">+ 听力</button>
+          <button onclick="createSection('reading')" class="bg-teal-50 hover:bg-teal-100 text-teal-700 px-3 py-1.5 rounded text-sm">+ 阅读</button>
+          <button onclick="createSection('writing')" class="bg-teal-50 hover:bg-teal-100 text-teal-700 px-3 py-1.5 rounded text-sm">+ 写作</button>
+        </div>
+      </div>
+      <div id="sections-list" class="space-y-3"></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/admin.js"></script>
+<script src="../assets/edit.js"></script>
+<script>initEditPage();</script>
+</body>
+</html>
