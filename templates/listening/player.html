@@ -583,15 +583,81 @@ body {
   const audio = document.getElementById('audio');
   const exerciseId = "{{ exercise_id }}";
 
+  // ── Task Mode ──
+  const urlParams = new URLSearchParams(window.location.search);
+  const taskId = urlParams.get('task_id');
+  const taskToken = urlParams.get('token') || '';
+  let taskProgress = {};  // segment_index -> result
+
+  // ── Deterministic seed hash ──
+  function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + ch;
+      hash |= 0;
+    }
+    return hash;
+  }
+
+  function seededRandom(seed) {
+    let s = seed;
+    return function() {
+      s = (s * 1664525 + 1013904223) & 0x7fffffff;
+      return s / 0x7fffffff;
+    };
+  }
+
   // ── Load Data ──
-  fetch(`/api/listening/${exerciseId}`)
-    .then(r => r.json())
-    .then(d => { data = d; init(); })
-    .catch(e => alert('加载数据失败: ' + e.message));
+  if (taskId) {
+    // Task mode: load via task API (server uses current_user for auth if logged in)
+    const tokenParam = taskToken ? `?token=${encodeURIComponent(taskToken)}` : '';
+    fetch(`/api/student/listening/task/${taskId}${tokenParam}`)
+      .then(r => r.json())
+      .then(d => {
+        if (!d.ok) { alert('加载失败: ' + (d.error || '未知错误')); return; }
+        data = d.exercise;
+        taskProgress = d.progress || {};
+        // Pre-fill completedSegs from progress
+        Object.entries(taskProgress).forEach(([idx, r]) => {
+          if (r.is_completed) completedSegs.add(`0-${idx}`);
+        });
+        init();
+      })
+      .catch(e => alert('加载数据失败: ' + e.message));
+  } else {
+    // Free practice mode
+    fetch(`/api/listening/${exerciseId}`)
+      .then(r => r.json())
+      .then(d => { data = d; init(); })
+      .catch(e => alert('加载数据失败: ' + e.message));
+  }
 
   function init() {
     document.getElementById('exerciseTitle').textContent = data.title;
     audio.src = `/static/listening/${data.audio}`;
+
+    // In task mode, show progress subtitle
+    if (taskId) {
+      const completedCount = Object.values(taskProgress).filter(r => r.is_completed).length;
+      let totalSegs = 0;
+      data.parts.forEach(p => totalSegs += (p.segments || []).length);
+      const sub = document.getElementById('exerciseSubtitle');
+      if (sub) sub.textContent = `已完成 ${completedCount}/${totalSegs} 句`;
+
+      // Also mark completed segments across all parts
+      let globalOffset = 0;
+      data.parts.forEach((part, pIdx) => {
+        (part.segments || []).forEach((seg, sIdx) => {
+          const gIdx = globalOffset + sIdx;
+          if (taskProgress[gIdx] && taskProgress[gIdx].is_completed) {
+            completedSegs.add(`${pIdx}-${sIdx}`);
+          }
+        });
+        globalOffset += (part.segments || []).length;
+      });
+    }
+
     buildPartTabs();
     buildSentenceList();
     selectSegment(0);
@@ -696,17 +762,53 @@ body {
   }
 
   // ── Dictation Mode ──
+  function getHideIndices(seg, segGlobalIdx) {
+    const words = seg.text.split(/\s+/);
+    const hideCount = Math.max(1, Math.round(words.length * 0.5));
+
+    // In task mode, check if we already have fixed indices from a previous attempt
+    if (taskId && taskProgress[segGlobalIdx] && taskProgress[segGlobalIdx].hidden_word_indices) {
+      return new Set(taskProgress[segGlobalIdx].hidden_word_indices);
+    }
+
+    if (taskId) {
+      // Deterministic: seed from task_id + segment_index + first 20 chars of text
+      const seedStr = `${taskId}-${segGlobalIdx}-${seg.text.substring(0, 20)}`;
+      const rng = seededRandom(hashCode(seedStr));
+      const indices = [];
+      for (let i = 0; i < words.length; i++) indices.push(i);
+      // Fisher-Yates shuffle with seeded random
+      for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
+      return new Set(indices.slice(0, hideCount));
+    } else {
+      // Free mode: random
+      const hideIndices = new Set();
+      while (hideIndices.size < hideCount) {
+        hideIndices.add(Math.floor(Math.random() * words.length));
+      }
+      return hideIndices;
+    }
+  }
+
+  function getGlobalSegmentIndex() {
+    // Calculate global segment index across all parts
+    let idx = 0;
+    for (let p = 0; p < currentPartIdx; p++) {
+      idx += (data.parts[p]?.segments || []).length;
+    }
+    return idx + currentSegIdx;
+  }
+
   function renderDictation(seg) {
     const area = document.getElementById('dictationArea');
     area.innerHTML = '';
 
     const words = seg.text.split(/\s+/);
-    // Randomly hide ~40-60% of words for dictation
-    const hideIndices = new Set();
-    const hideCount = Math.max(1, Math.round(words.length * 0.5));
-    while (hideIndices.size < hideCount) {
-      hideIndices.add(Math.floor(Math.random() * words.length));
-    }
+    const segGlobalIdx = getGlobalSegmentIndex();
+    const hideIndices = getHideIndices(seg, segGlobalIdx);
 
     words.forEach((word, i) => {
       if (hideIndices.has(i)) {
@@ -766,10 +868,12 @@ body {
     const inputs = document.querySelectorAll('.dictation-area input');
     let correct = 0;
     let total = inputs.length;
+    const answers = [];
 
     inputs.forEach(input => {
       const answer = input.dataset.answer.toLowerCase();
       const guess = input.value.trim().toLowerCase();
+      answers.push(guess);
       if (guess === answer) {
         input.className = 'correct';
         correct++;
@@ -785,9 +889,48 @@ body {
     document.getElementById('scoreDetail').textContent = `${correct}/${total} 词正确`;
     document.getElementById('scoreBar').style.display = 'flex';
 
-    if (pct === 100) {
-      completedSegs.add(`${currentPartIdx}-${currentSegIdx}`);
-      buildSentenceList();
+    completedSegs.add(`${currentPartIdx}-${currentSegIdx}`);
+    buildSentenceList();
+
+    // In task mode, submit segment result to server
+    if (taskId) {
+      const seg = currentSegments()[currentSegIdx];
+      const segGlobalIdx = getGlobalSegmentIndex();
+      const hideIndices = Array.from(getHideIndices(seg, segGlobalIdx));
+
+      fetch(`/api/student/listening/task/${taskId}/segment/${segGlobalIdx}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: taskToken,
+          segment_text: seg.text,
+          hidden_word_indices: hideIndices,
+          answers: answers,
+          correct_words: correct,
+          total_words: total,
+        })
+      })
+      .then(r => r.json())
+      .then(d => {
+        if (d.ok) {
+          // Update local progress cache
+          taskProgress[segGlobalIdx] = {
+            segment_index: segGlobalIdx,
+            correct_words: correct,
+            total_words: total,
+            accuracy: pct,
+            is_completed: true,
+            hidden_word_indices: hideIndices,
+            answers_json: answers,
+          };
+          // Show task-level stats
+          if (d.task) {
+            const sub = document.getElementById('exerciseSubtitle');
+            if (sub) sub.textContent = `完成率: ${Math.round(d.task.completion_rate || 0)}% · 准确率: ${Math.round(d.task.accuracy || 0)}%`;
+          }
+        }
+      })
+      .catch(e => console.error('保存进度失败:', e));
     }
   }
 

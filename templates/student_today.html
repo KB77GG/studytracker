@@ -94,6 +94,34 @@
 <p class="muted">今天暂无计划，请联系老师确认安排。</p>
 {% endif %}
 
+{% if listening_tasks %}
+<section class="card" style="margin-top: 24px;">
+  <h3 style="margin-bottom: 12px;">精听练习任务</h3>
+  {% for lt in listening_tasks %}
+  <article class="plan-item" style="margin-bottom: 12px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <div>
+        <strong>{{ lt.detail or lt.listening_exercise_id }}</strong>
+        <div class="muted small" style="margin-top: 4px;">
+          {% if lt.status == 'done' %}
+            准确率: {{ '%.1f' | format(lt.accuracy or 0) }}% · 完成率: {{ '%.0f' | format(lt.completion_rate or 0) }}%
+          {% elif lt.completion_rate and lt.completion_rate > 0 %}
+            进行中 · 完成率: {{ '%.0f' | format(lt.completion_rate) }}%
+          {% else %}
+            未开始
+          {% endif %}
+        </div>
+      </div>
+      <a href="/listening/{{ lt.listening_exercise_id }}?task_id={{ lt.id }}&token={{ lt.listening_access_token }}"
+         style="padding: 8px 20px; background: {% if lt.status == 'done' %}#22c55e{% else %}#3b82f6{% endif %}; color: #fff; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+        {% if lt.status == 'done' %}已完成{% elif lt.completion_rate and lt.completion_rate > 0 %}继续精听{% else %}开始精听{% endif %}
+      </a>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% endif %}
+
 {% if recent_plans %}
 <section class="card recent-plans">
   <h3>近期计划</h3>

@@ -40,6 +40,9 @@ class Config:
     # 证据文件保存目录
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 
+    # 上传文件大小限制（100MB，精听音频可能较大）
+    MAX_CONTENT_LENGTH = 100 * 1024 * 1024
+
     # WeChat credentials (from environment)
     WECHAT_APPID = os.environ.get("WECHAT_APPID") or os.environ.get("WECHAT_APP_ID") or "wx75cdd8fc1ca68c69"
     WECHAT_SECRET = os.environ.get("WECHAT_SECRET") or os.environ.get("WECHAT_APP_SECRET") or "d50cb0a992515238c9807950fed29bf1"

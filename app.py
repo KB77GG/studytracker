@@ -56,6 +56,7 @@ from models import (
     Task,
     CoursePlan,
     StageReport,
+    ListeningSegmentResult,
 )
 
 def time_ago(dt):
@@ -700,12 +701,27 @@ def student_today():
         .all()
     )
 
+    # 精听任务 (legacy Task with listening_exercise_id)
+    listening_tasks = Task.query.filter(
+        Task.student_name == profile.full_name,
+        Task.date == today.isoformat(),
+        Task.listening_exercise_id.isnot(None),
+    ).all()
+    tokens_updated = False
+    for task in listening_tasks:
+        if not task.listening_access_token:
+            task.listening_access_token = secrets.token_urlsafe(16)
+            tokens_updated = True
+    if tokens_updated:
+        db.session.commit()
+
     return render_template(
         "student_today.html",
         profile=profile,
         today=today,
         plan=plan,
         recent_plans=recent_plans,
+        listening_tasks=listening_tasks,
     )
 
 
@@ -1411,11 +1427,25 @@ def tasks_page():
                 if not material_data or material_data.type not in {"speaking_part1", "speaking_part2", "speaking_part2_3"}:
                     question_ids = None
         
-        # Validate: need either category or material_id
+        # 精听练习
+        listening_exercise_id = request.form.get("listening_exercise_id", "").strip()
+        listening_access_token = None
+        if listening_exercise_id:
+            # 自动填充 category 和 detail
+            category = "雅思-听力-精听"
+            listening_access_token = secrets.token_urlsafe(16)
+            listening_json = Path(app.static_folder) / "listening" / f"{secure_filename(listening_exercise_id)}.json"
+            if listening_json.exists():
+                meta = json.loads(listening_json.read_text(encoding="utf-8"))
+                detail = meta.get("title", listening_exercise_id)
+            elif not detail:
+                detail = listening_exercise_id
+
+        # Validate: need either category or material_id or listening_exercise_id
         if not student:
             flash("请填写学生姓名")
-        elif not category and not material_id:
-            flash("请选择任务类别或材料")
+        elif not category and not material_id and not listening_exercise_id:
+            flash("请选择任务类别、材料或精听练习")
         elif not detail:
             flash("请填写任务描述")
         else:
@@ -1448,6 +1478,8 @@ def tasks_page():
                 speaking_phrase_start=int(request.form.get("speaking_phrase_start") or 1),
                 speaking_phrase_end=int(request.form.get("speaking_phrase_end")) if request.form.get("speaking_phrase_end") else None,
                 grading_mode=grading_mode,
+                listening_exercise_id=listening_exercise_id or None,
+                listening_access_token=listening_access_token,
             )
             db.session.add(t)
             db.session.commit()
@@ -1691,6 +1723,21 @@ def tasks_page():
     # 按提交时间排序
     pending_reviews.sort(key=lambda x: x['submitted_at'] or datetime.min, reverse=True)
 
+    # 精听练习列表
+    listening_exercises = []
+    listening_dir = Path(app.static_folder) / "listening"
+    if listening_dir.exists():
+        for f in sorted(listening_dir.glob("*.json")):
+            try:
+                meta = json.loads(f.read_text(encoding="utf-8"))
+                listening_exercises.append({
+                    "id": f.stem,
+                    "title": meta.get("title", f.stem),
+                    "segment_count": sum(len(p.get("segments", [])) for p in meta.get("parts", [])),
+                })
+            except Exception:
+                pass
+
     return render_template(
         "tasks.html",
         items=enriched_items,
@@ -1703,6 +1750,7 @@ def tasks_page():
         all_materials=all_materials,
         pending_reviews=pending_reviews,
         dictation_range_hints=dictation_range_hints,
+        listening_exercises=listening_exercises,
     )
 
 # ---- Grading Interface ----
@@ -4044,6 +4092,7 @@ def api_listening_data(exercise_id):
 
 @app.route("/listening/upload")
 @login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def listening_upload():
     """精听练习上传页面（需登录）。"""
     return render_template("listening/upload.html")
@@ -4055,6 +4104,7 @@ _listening_tasks: dict[str, dict] = {}
 
 @app.route("/api/listening/upload", methods=["POST"])
 @login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def api_listening_upload():
     """接收音频+文本，启动后台对齐任务。"""
     title = request.form.get("title", "").strip()
@@ -4074,10 +4124,11 @@ def api_listening_upload():
     if not exercise_id:
         exercise_id = f"exercise_{uuid.uuid4().hex[:8]}"
 
-    # 保存音频文件
+    # 保存音频文件（保留原始扩展名）
     listening_dir = Path(app.static_folder) / "listening"
     listening_dir.mkdir(parents=True, exist_ok=True)
-    audio_dest = listening_dir / f"{exercise_id}.mp3"
+    audio_ext = ext or "mp3"
+    audio_dest = listening_dir / f"{exercise_id}.{audio_ext}"
     audio_file.save(str(audio_dest))
 
     # 保存原文到临时文件
@@ -4098,7 +4149,7 @@ def api_listening_upload():
     import threading
     thread = threading.Thread(
         target=_process_listening_task,
-        args=(task_id, exercise_id, title, str(audio_dest), transcript, str(listening_dir)),
+        args=(task_id, exercise_id, title, str(audio_dest), transcript, str(listening_dir), audio_ext),
         daemon=True,
     )
     thread.start()
@@ -4106,7 +4157,7 @@ def api_listening_upload():
     return jsonify({"task_id": task_id})
 
 
-def _process_listening_task(task_id, exercise_id, title, audio_path, transcript, output_dir):
+def _process_listening_task(task_id, exercise_id, title, audio_path, transcript, output_dir, audio_ext="mp3"):
     """后台线程：用 Whisper 转录并与原文对齐。"""
     import ssl
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -4168,7 +4219,7 @@ def _process_listening_task(task_id, exercise_id, title, audio_path, transcript,
         data = {
             "id": exercise_id,
             "title": title,
-            "audio": f"{exercise_id}.mp3",
+            "audio": f"{exercise_id}.{audio_ext}",
             "parts": [{"name": "Full", "segments": segments}],
         }
         json_path = Path(output_dir) / f"{exercise_id}.json"
@@ -4263,12 +4314,164 @@ def _merge_short(segments, min_dur=1.5):
 
 @app.route("/api/listening/upload/status/<task_id>")
 @login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def api_listening_upload_status(task_id):
     """查询处理任务状态。"""
     task = _listening_tasks.get(task_id)
     if not task:
         return jsonify({"error": "任务不存在"}), 404
     return jsonify(task)
+
+
+def _resolve_listening_access_token():
+    """从 query 或 JSON body 中获取精听任务访问令牌。"""
+    return (
+        request.args.get("token")
+        or (request.get_json(silent=True) or {}).get("token")
+        or ""
+    ).strip()
+
+
+@app.route("/api/student/listening/task/<int:task_id>")
+def api_student_listening_task(task_id):
+    """返回任务信息 + 精听数据 + 已有做题进度。"""
+    access_token = _resolve_listening_access_token()
+    if not access_token:
+        return jsonify({"ok": False, "error": "missing_token"}), 400
+
+    task = Task.query.get(task_id)
+    if not task or not task.listening_exercise_id:
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+    if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, access_token):
+        return jsonify({"ok": False, "error": "invalid_token"}), 403
+
+    # 加载精听 JSON
+    safe_id = secure_filename(task.listening_exercise_id)
+    json_path = Path(app.static_folder) / "listening" / f"{safe_id}.json"
+    if not json_path.exists():
+        return jsonify({"ok": False, "error": "exercise_not_found"}), 404
+    exercise_data = json.loads(json_path.read_text(encoding="utf-8"))
+
+    # 已有进度
+    results = ListeningSegmentResult.query.filter_by(task_id=task_id).all()
+    progress = {}
+    for r in results:
+        progress[r.segment_index] = {
+            "segment_index": r.segment_index,
+            "correct_words": r.correct_words,
+            "total_words": r.total_words,
+            "accuracy": r.accuracy,
+            "is_completed": r.is_completed,
+            "attempt_count": r.attempt_count,
+            "hidden_word_indices": json.loads(r.hidden_word_indices) if r.hidden_word_indices else [],
+            "answers_json": json.loads(r.answers_json) if r.answers_json else [],
+        }
+
+    return jsonify({
+        "ok": True,
+        "task": {
+            "id": task.id,
+            "student_name": task.student_name,
+            "status": task.status,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+        },
+        "exercise": exercise_data,
+        "progress": progress,
+    })
+
+
+@app.route("/api/student/listening/task/<int:task_id>/segment/<int:segment_index>", methods=["POST"])
+def api_student_listening_submit_segment(task_id, segment_index):
+    """提交单句听写结果，自动汇总到 Task。"""
+    data = request.get_json() or {}
+    access_token = _resolve_listening_access_token()
+    if not access_token:
+        return jsonify({"ok": False, "error": "missing_token"}), 400
+
+    task = Task.query.get(task_id)
+    if not task or not task.listening_exercise_id:
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+    if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, access_token):
+        return jsonify({"ok": False, "error": "invalid_token"}), 403
+
+    correct_words = int(data.get("correct_words", 0))
+    total_words = int(data.get("total_words", 0))
+    accuracy = round(correct_words / total_words * 100, 1) if total_words > 0 else 0.0
+    hidden_word_indices = data.get("hidden_word_indices", [])
+    answers_json = data.get("answers", [])
+
+    # upsert ListeningSegmentResult
+    result = ListeningSegmentResult.query.filter_by(
+        task_id=task_id, segment_index=segment_index
+    ).first()
+    if result:
+        result.correct_words = correct_words
+        result.total_words = total_words
+        result.accuracy = accuracy
+        result.is_completed = True
+        result.attempt_count = result.attempt_count + 1
+        result.hidden_word_indices = json.dumps(hidden_word_indices)
+        result.answers_json = json.dumps(answers_json)
+        result.updated_at = datetime.utcnow()
+    else:
+        result = ListeningSegmentResult(
+            task_id=task_id,
+            student_name=task.student_name,
+            segment_index=segment_index,
+            segment_text=data.get("segment_text", ""),
+            hidden_word_indices=json.dumps(hidden_word_indices),
+            answers_json=json.dumps(answers_json),
+            correct_words=correct_words,
+            total_words=total_words,
+            accuracy=accuracy,
+            is_completed=True,
+            attempt_count=1,
+        )
+        db.session.add(result)
+
+    # 汇总到 Task：统计总 segment 数和完成数
+    safe_id = secure_filename(task.listening_exercise_id)
+    json_path = Path(app.static_folder) / "listening" / f"{safe_id}.json"
+    total_segments = 0
+    if json_path.exists():
+        ex_data = json.loads(json_path.read_text(encoding="utf-8"))
+        for part in ex_data.get("parts", []):
+            total_segments += len(part.get("segments", []))
+
+    all_results = ListeningSegmentResult.query.filter_by(task_id=task_id).all()
+    # 加上当前这条（如果是新建的还没在 all_results 里）
+    completed_count = sum(1 for r in all_results if r.is_completed)
+    if not any(r.segment_index == segment_index for r in all_results):
+        completed_count += 1  # 新记录
+
+    total_correct = sum(r.correct_words for r in all_results if r.segment_index != segment_index) + correct_words
+    total_total = sum(r.total_words for r in all_results if r.segment_index != segment_index) + total_words
+
+    task.completion_rate = round(completed_count / total_segments * 100, 1) if total_segments > 0 else 0.0
+    task.accuracy = round(total_correct / total_total * 100, 1) if total_total > 0 else 0.0
+
+    if completed_count >= total_segments and total_segments > 0:
+        task.status = "done"
+    elif completed_count > 0:
+        task.status = "progress"
+
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "segment": {
+            "segment_index": segment_index,
+            "accuracy": accuracy,
+            "correct_words": correct_words,
+            "total_words": total_words,
+        },
+        "task": {
+            "status": task.status,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+        },
+    })
 
 
 if __name__ == "__main__":

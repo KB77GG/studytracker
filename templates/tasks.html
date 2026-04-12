@@ -134,7 +134,24 @@
             <input type="radio" name="task_source" value="material" onchange="toggleTaskSource('material')">
             <span>从材料库选择</span>
           </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="radio" name="task_source" value="listening" onchange="toggleTaskSource('listening')">
+            <span>精听练习</span>
+          </label>
         </div>
+      </div>
+    </div>
+
+    <!-- 精听练习选择区域 (默认隐藏) -->
+    <div class="task-form-row" id="listeningSelectRow" style="display: none;">
+      <div class="field field--wide">
+        <label>选择精听练习</label>
+        <select class="form-select" id="listeningExerciseSelect" name="listening_exercise_id">
+          <option value="">-- 选择精听练习 --</option>
+          {% for ex in listening_exercises %}
+          <option value="{{ ex.id }}" data-title="{{ ex.title }}">{{ ex.title }} ({{ ex.segment_count }}句)</option>
+          {% endfor %}
+        </select>
       </div>
     </div>
 
@@ -818,23 +835,30 @@
     function toggleTaskSource(source) {
       const materialRow = document.getElementById('materialSelectRow');
       const categoryRow = document.getElementById('categoryRow');
+      const listeningRow = document.getElementById('listeningSelectRow');
       const categorySelect = document.getElementById('taskCategory');
       const materialSelect = document.getElementById('materialIdSelect');
+      const listeningSelect = document.getElementById('listeningExerciseSelect');
+
+      materialRow.style.display = 'none';
+      categoryRow.style.display = 'none';
+      listeningRow.style.display = 'none';
 
       if (source === 'material') {
-        // Show material selection, hide category
         materialRow.style.display = 'flex';
-        categoryRow.style.display = 'none';
         categorySelect.removeAttribute('required');
-        // Clear category selection
         categorySelect.value = '';
+        listeningSelect.value = '';
+      } else if (source === 'listening') {
+        listeningRow.style.display = 'flex';
+        categorySelect.removeAttribute('required');
+        categorySelect.value = '';
+        materialSelect.value = '';
       } else {
-        // Show category, hide material selection
-        materialRow.style.display = 'none';
         categoryRow.style.display = 'flex';
         categorySelect.setAttribute('required', 'required');
-        // Clear material selection
         materialSelect.value = '';
+        listeningSelect.value = '';
         document.getElementById('taskNote').value = '';
       }
     }

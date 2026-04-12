@@ -494,11 +494,40 @@ class Task(db.Model):
     feedback_audio = db.Column(db.String(200))
     feedback_image = db.Column(db.String(200))
 
+    # Listening Exercise
+    listening_exercise_id = db.Column(db.String(120), index=True)
+    listening_access_token = db.Column(db.String(64), index=True)  # 精听任务访问令牌
+
     creator = db.relationship("User", backref=db.backref("legacy_tasks", lazy="dynamic"))
     material = db.relationship("MaterialBank", backref=db.backref("tasks", lazy="dynamic"))
 
     def __repr__(self) -> str:
         return f"<Task {self.student_name} {self.category} {self.status}>"
+
+
+class ListeningSegmentResult(db.Model):
+    """每句精听听写的提交结果。"""
+
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    student_name = db.Column(db.String(64), nullable=False, index=True)
+    segment_index = db.Column(db.Integer, nullable=False)
+    segment_text = db.Column(db.Text)
+    hidden_word_indices = db.Column(db.Text)   # JSON list
+    answers_json = db.Column(db.Text)          # JSON list
+    correct_words = db.Column(db.Integer, default=0, nullable=False)
+    total_words = db.Column(db.Integer, default=0, nullable=False)
+    accuracy = db.Column(db.Float, default=0.0, nullable=False)
+    is_completed = db.Column(db.Boolean, default=False, nullable=False)
+    attempt_count = db.Column(db.Integer, default=0, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    task = db.relationship("Task", backref=db.backref("listening_results", lazy="dynamic"))
+
+    __table_args__ = (
+        db.UniqueConstraint("task_id", "segment_index", name="uq_task_segment"),
+    )
 
 
 # ---- Class Feedback (Scheduler) ----
