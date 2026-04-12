@@ -52,6 +52,10 @@
         {% if current_user.role in ('admin', 'teacher') %}
         <a class="nav-link" href="/entrance/admin/invitations.html">入学测试</a>
         {% endif %}
+        {% if current_user.role in ('admin', 'teacher', 'assistant') %}
+        <a class="nav-link {{ 'is-active' if 'listening' in endpoint else '' }}"
+          href="{{ url_for('listening_index') }}">精听练习</a>
+        {% endif %}
         {% if current_user.role == 'admin' %}
         <a class="nav-link {{ 'is-active' if endpoint == 'bulk_page' else '' }}" href="{{ url_for('bulk_page') }}">Bulk
           Add</a>

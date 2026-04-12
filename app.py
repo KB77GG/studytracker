@@ -3982,5 +3982,294 @@ def export_stage_report_pdf(report_id):
     return response
 
 
+# ── Listening (精听练习) ──────────────────────────────────
+
+@app.route("/listening")
+def listening_index():
+    """列出所有可用的精听练习（学生通过姓名验证访问）。"""
+    listening_dir = Path(app.static_folder) / "listening"
+    exercises = []
+    if listening_dir.exists():
+        for f in sorted(listening_dir.glob("*.json")):
+            try:
+                meta = json.loads(f.read_text(encoding="utf-8"))
+                exercises.append({
+                    "id": f.stem,
+                    "title": meta.get("title", f.stem),
+                    "audio": meta.get("audio", ""),
+                    "segment_count": sum(
+                        len(p.get("segments", []))
+                        for p in meta.get("parts", [])
+                    ),
+                })
+            except Exception:
+                pass
+    # 已登录员工可以看到上传按钮
+    show_upload = (
+        current_user.is_authenticated
+        and current_user.role in (User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+    )
+    return render_template("listening/index.html", exercises=exercises, show_upload=show_upload)
+
+
+@app.route("/listening/<exercise_id>")
+def listening_player(exercise_id):
+    """精听播放器页面。"""
+    return render_template("listening/player.html", exercise_id=exercise_id)
+
+
+@app.route("/api/listening/verify", methods=["POST"])
+def api_listening_verify():
+    """验证学生姓名是否在系统中。"""
+    data = request.get_json() or {}
+    name = (data.get("name") or "").strip()
+    if not name:
+        return jsonify({"ok": False, "error": "missing_name"}), 400
+    profile = StudentProfile.query.filter_by(full_name=name).first()
+    if not profile:
+        return jsonify({"ok": False, "error": "student_not_found"}), 404
+    return jsonify({"ok": True, "name": profile.full_name})
+
+
+@app.route("/api/listening/<exercise_id>")
+def api_listening_data(exercise_id):
+    """返回精听练习的 JSON 数据。"""
+    safe_id = secure_filename(exercise_id)
+    json_path = Path(app.static_folder) / "listening" / f"{safe_id}.json"
+    if not json_path.exists():
+        return jsonify({"error": "练习不存在"}), 404
+    data = json.loads(json_path.read_text(encoding="utf-8"))
+    return jsonify(data)
+
+
+@app.route("/listening/upload")
+@login_required
+def listening_upload():
+    """精听练习上传页面（需登录）。"""
+    return render_template("listening/upload.html")
+
+
+# 存储异步处理任务状态
+_listening_tasks: dict[str, dict] = {}
+
+
+@app.route("/api/listening/upload", methods=["POST"])
+@login_required
+def api_listening_upload():
+    """接收音频+文本，启动后台对齐任务。"""
+    title = request.form.get("title", "").strip()
+    transcript = request.form.get("transcript", "").strip()
+    audio_file = request.files.get("audio")
+
+    if not title or not transcript or not audio_file:
+        return jsonify({"error": "请填写标题、上传音频并输入原文"}), 400
+
+    # 检查文件类型
+    ext = audio_file.filename.rsplit(".", 1)[-1].lower() if "." in audio_file.filename else ""
+    if ext not in ("mp3", "wav", "m4a"):
+        return jsonify({"error": "仅支持 MP3、WAV、M4A 格式"}), 400
+
+    # 生成 exercise_id
+    exercise_id = re.sub(r"[^\w]", "_", title).lower().strip("_")
+    if not exercise_id:
+        exercise_id = f"exercise_{uuid.uuid4().hex[:8]}"
+
+    # 保存音频文件
+    listening_dir = Path(app.static_folder) / "listening"
+    listening_dir.mkdir(parents=True, exist_ok=True)
+    audio_dest = listening_dir / f"{exercise_id}.mp3"
+    audio_file.save(str(audio_dest))
+
+    # 保存原文到临时文件
+    transcript_path = listening_dir / f"{exercise_id}.txt"
+    transcript_path.write_text(transcript, encoding="utf-8")
+
+    # 创建任务
+    task_id = uuid.uuid4().hex[:12]
+    _listening_tasks[task_id] = {
+        "status": "processing",
+        "message": "正在处理音频，请稍候...",
+        "progress": 20,
+        "exercise_id": exercise_id,
+        "title": title,
+    }
+
+    # 启动后台线程处理
+    import threading
+    thread = threading.Thread(
+        target=_process_listening_task,
+        args=(task_id, exercise_id, title, str(audio_dest), transcript, str(listening_dir)),
+        daemon=True,
+    )
+    thread.start()
+
+    return jsonify({"task_id": task_id})
+
+
+def _process_listening_task(task_id, exercise_id, title, audio_path, transcript, output_dir):
+    """后台线程：用 Whisper 转录并与原文对齐。"""
+    import ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
+
+    try:
+        _listening_tasks[task_id]["message"] = "正在加载语音识别模型..."
+        _listening_tasks[task_id]["progress"] = 30
+
+        import whisper
+        model = whisper.load_model("base")
+
+        _listening_tasks[task_id]["message"] = "正在识别音频..."
+        _listening_tasks[task_id]["progress"] = 50
+
+        result = model.transcribe(audio_path, word_timestamps=True, language="en", verbose=False)
+
+        _listening_tasks[task_id]["message"] = "正在对齐文本..."
+        _listening_tasks[task_id]["progress"] = 80
+
+        # 解析用户提供的原文
+        user_sentences = [s.strip() for s in transcript.strip().splitlines() if s.strip()]
+
+        # 如果用户没有分行，按标点自动断句
+        if len(user_sentences) == 1:
+            import re as _re
+            text = user_sentences[0]
+            user_sentences = [s.strip() for s in _re.split(r'(?<=[.!?])\s+', text) if s.strip()]
+
+        # 获取 Whisper 的段级时间戳
+        whisper_segments = []
+        for seg in result.get("segments", []):
+            text = seg["text"].strip()
+            if text:
+                whisper_segments.append({
+                    "start": round(seg["start"], 2),
+                    "end": round(seg["end"], 2),
+                    "text": text,
+                })
+
+        # 对齐策略：用户提供的句子数 vs Whisper 的段数
+        if len(user_sentences) > 1 and len(whisper_segments) > 0:
+            # 用户已分句，尝试将 Whisper 时间戳匹配到用户的句子
+            segments = _align_user_text_with_whisper(user_sentences, whisper_segments)
+        else:
+            # 直接使用 Whisper 的分段结果
+            segments = []
+            for i, seg in enumerate(whisper_segments):
+                segments.append({
+                    "id": i + 1,
+                    "start": seg["start"],
+                    "end": seg["end"],
+                    "text": seg["text"],
+                })
+
+        # 合并过短的片段
+        segments = _merge_short(segments)
+
+        # 生成 JSON
+        data = {
+            "id": exercise_id,
+            "title": title,
+            "audio": f"{exercise_id}.mp3",
+            "parts": [{"name": "Full", "segments": segments}],
+        }
+        json_path = Path(output_dir) / f"{exercise_id}.json"
+        json_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # 清理临时文本文件
+        txt_path = Path(output_dir) / f"{exercise_id}.txt"
+        if txt_path.exists():
+            txt_path.unlink()
+
+        _listening_tasks[task_id].update({
+            "status": "done",
+            "message": "处理完成",
+            "progress": 100,
+            "segment_count": len(segments),
+        })
+
+    except Exception as e:
+        _listening_tasks[task_id].update({
+            "status": "error",
+            "error": str(e),
+        })
+
+
+def _align_user_text_with_whisper(user_sentences, whisper_segments):
+    """将用户提供的句子文本与 Whisper 的时间戳对齐。"""
+    def normalize(t):
+        return re.sub(r"[^\w\s]", "", t.lower()).split()
+
+    segments = []
+    w_idx = 0
+
+    for u_idx, user_text in enumerate(user_sentences):
+        user_words = normalize(user_text)
+        if not user_words:
+            continue
+
+        # 找到与当前用户句子最匹配的 whisper 段起始位置
+        best_start = w_idx
+        best_score = -1
+        for offset in range(min(5, len(whisper_segments) - w_idx)):
+            check = w_idx + offset
+            if check >= len(whisper_segments):
+                break
+            w_words = normalize(whisper_segments[check]["text"])
+            # 计算前几个词的匹配度
+            score = sum(1 for a, b in zip(user_words[:4], w_words[:4]) if a == b)
+            if score > best_score:
+                best_score = score
+                best_start = check
+
+        # 确定这个用户句子覆盖多少个 whisper 段
+        start_time = whisper_segments[best_start]["start"]
+        end_idx = best_start
+
+        # 累积 whisper 段的词数直到接近用户句子的词数
+        accumulated_words = 0
+        target_words = len(user_words)
+        while end_idx < len(whisper_segments) and accumulated_words < target_words:
+            w_words = normalize(whisper_segments[end_idx]["text"])
+            accumulated_words += len(w_words)
+            end_idx += 1
+
+        end_time = whisper_segments[min(end_idx, len(whisper_segments)) - 1]["end"]
+        w_idx = end_idx
+
+        segments.append({
+            "id": len(segments) + 1,
+            "start": round(start_time, 2),
+            "end": round(end_time, 2),
+            "text": user_text,
+        })
+
+    return segments
+
+
+def _merge_short(segments, min_dur=1.5):
+    """合并过短的片段。"""
+    if not segments:
+        return segments
+    merged = [segments[0]]
+    for seg in segments[1:]:
+        if seg["end"] - seg["start"] < min_dur and merged:
+            merged[-1]["end"] = seg["end"]
+            merged[-1]["text"] += " " + seg["text"]
+        else:
+            merged.append(seg)
+    for i, s in enumerate(merged):
+        s["id"] = i + 1
+    return merged
+
+
+@app.route("/api/listening/upload/status/<task_id>")
+@login_required
+def api_listening_upload_status(task_id):
+    """查询处理任务状态。"""
+    task = _listening_tasks.get(task_id)
+    if not task:
+        return jsonify({"error": "任务不存在"}), 404
+    return jsonify(task)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

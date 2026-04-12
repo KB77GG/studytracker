@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>上传精听练习</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f5f7fa;
+  color: #1e293b;
+  min-height: 100vh;
+}
+.container { max-width: 720px; margin: 0 auto; padding: 40px 24px; }
+h1 { font-size: 24px; margin-bottom: 8px; }
+.subtitle { color: #64748b; margin-bottom: 32px; font-size: 14px; }
+.back-link { display: inline-block; margin-bottom: 24px; color: #3b82f6; text-decoration: none; font-size: 14px; }
+
+.form-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+}
+
+.field { margin-bottom: 24px; }
+.field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.field .hint {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.field input[type="text"],
+.field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+.field input[type="text"]:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+.field textarea {
+  min-height: 200px;
+  font-family: monospace;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+/* File upload zone */
+.upload-zone {
+  border: 2px dashed #e2e8f0;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+.upload-zone.has-file {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+.upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.upload-zone .icon { font-size: 32px; margin-bottom: 8px; }
+.upload-zone .label { font-size: 14px; color: #64748b; }
+.upload-zone .filename { font-size: 14px; color: #22c55e; font-weight: 600; margin-top: 4px; }
+
+.btn-submit {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-submit:hover { background: #2563eb; }
+.btn-submit:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Progress */
+.progress-section {
+  display: none;
+  margin-top: 24px;
+}
+.progress-section.visible { display: block; }
+
+.progress-bar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.progress-bar .fill {
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 4px;
+  transition: width 0.3s;
+  width: 0%;
+}
+
+.progress-status {
+  font-size: 14px;
+  color: #64748b;
+  text-align: center;
+}
+
+.result-section {
+  display: none;
+  margin-top: 24px;
+  padding: 20px;
+  background: #f0fdf4;
+  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+}
+.result-section.visible { display: block; }
+.result-section h3 { color: #16a34a; margin-bottom: 8px; }
+.result-section a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.error-section {
+  display: none;
+  margin-top: 24px;
+  padding: 20px;
+  background: #fef2f2;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 14px;
+}
+.error-section.visible { display: block; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="{{ url_for('listening_index') }}">&larr; 返回练习列表</a>
+  <h1>上传精听练习</h1>
+  <p class="subtitle">上传音频文件和对应的文本，系统将自动生成句级时间戳</p>
+
+  <div class="form-card">
+    <form id="uploadForm">
+      <div class="field">
+        <label>练习标题</label>
+        <input type="text" name="title" id="inputTitle" placeholder="例如: Cambridge IELTS 12 Test 5 Section 1" required>
+      </div>
+
+      <div class="field">
+        <label>音频文件</label>
+        <div class="hint">支持 MP3、WAV、M4A 格式</div>
+        <div class="upload-zone" id="audioZone">
+          <input type="file" name="audio" id="inputAudio" accept=".mp3,.wav,.m4a">
+          <div class="icon">&#127925;</div>
+          <div class="label">点击或拖拽上传音频文件</div>
+          <div class="filename" id="audioFilename"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>听力原文</label>
+        <div class="hint">每行一句话。如果不分行，系统会按标点自动断句。</div>
+        <textarea name="transcript" id="inputTranscript" placeholder="Hi. Can I help you?
+I'd like to find out if you have any excursions suitable for families.
+Sure. How about taking your family for a cruise?
+..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnSubmit">开始处理</button>
+    </form>
+
+    <div class="progress-section" id="progressSection">
+      <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+      <div class="progress-status" id="progressStatus">正在上传...</div>
+    </div>
+
+    <div class="result-section" id="resultSection">
+      <h3>处理完成</h3>
+      <p id="resultInfo"></p>
+      <p style="margin-top:12px"><a id="resultLink" href="#">前往练习 &rarr;</a></p>
+    </div>
+
+    <div class="error-section" id="errorSection"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const form = document.getElementById('uploadForm');
+  const btnSubmit = document.getElementById('btnSubmit');
+  const audioInput = document.getElementById('inputAudio');
+  const audioZone = document.getElementById('audioZone');
+  const audioFilename = document.getElementById('audioFilename');
+
+  // File upload display
+  audioInput.addEventListener('change', function() {
+    if (this.files.length > 0) {
+      audioFilename.textContent = this.files[0].name;
+      audioZone.classList.add('has-file');
+    } else {
+      audioFilename.textContent = '';
+      audioZone.classList.remove('has-file');
+    }
+  });
+
+  // Drag & drop
+  ['dragover', 'dragenter'].forEach(evt => {
+    audioZone.addEventListener(evt, e => { e.preventDefault(); audioZone.classList.add('dragover'); });
+  });
+  ['dragleave', 'drop'].forEach(evt => {
+    audioZone.addEventListener(evt, e => { e.preventDefault(); audioZone.classList.remove('dragover'); });
+  });
+  audioZone.addEventListener('drop', e => {
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      audioInput.files = files;
+      audioFilename.textContent = files[0].name;
+      audioZone.classList.add('has-file');
+    }
+  });
+
+  // Submit
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById('inputTitle').value.trim();
+    const transcript = document.getElementById('inputTranscript').value.trim();
+    const audioFile = audioInput.files[0];
+
+    if (!title || !audioFile || !transcript) {
+      showError('请填写标题、上传音频文件并输入原文。');
+      return;
+    }
+
+    btnSubmit.disabled = true;
+    showProgress('正在上传文件...', 10);
+    hideError();
+    hideResult();
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('audio', audioFile);
+    formData.append('transcript', transcript);
+
+    try {
+      const resp = await fetch('/api/listening/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || '上传失败');
+      }
+
+      showProgress('正在识别并对齐音频（可能需要1-3分钟）...', 30);
+
+      // Poll for status
+      const { task_id } = await resp.json();
+      pollStatus(task_id);
+
+    } catch (err) {
+      showError(err.message);
+      btnSubmit.disabled = false;
+    }
+  });
+
+  async function pollStatus(taskId) {
+    try {
+      const resp = await fetch(`/api/listening/upload/status/${taskId}`);
+      const data = await resp.json();
+
+      if (data.status === 'done') {
+        showProgress('完成！', 100);
+        showResult(data);
+        btnSubmit.disabled = false;
+      } else if (data.status === 'error') {
+        showError(data.error || '处理失败');
+        btnSubmit.disabled = false;
+      } else {
+        // Still processing
+        showProgress(data.message || '处理中...', data.progress || 50);
+        setTimeout(() => pollStatus(taskId), 2000);
+      }
+    } catch {
+      setTimeout(() => pollStatus(taskId), 3000);
+    }
+  }
+
+  function showProgress(msg, pct) {
+    document.getElementById('progressSection').classList.add('visible');
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressStatus').textContent = msg;
+  }
+
+  function showResult(data) {
+    const sec = document.getElementById('resultSection');
+    sec.classList.add('visible');
+    document.getElementById('resultInfo').textContent =
+      `"${data.title}" — 共 ${data.segment_count} 个句子`;
+    document.getElementById('resultLink').href = `/listening/${data.exercise_id}`;
+  }
+
+  function hideResult() {
+    document.getElementById('resultSection').classList.remove('visible');
+  }
+
+  function showError(msg) {
+    const sec = document.getElementById('errorSection');
+    sec.textContent = msg;
+    sec.classList.add('visible');
+  }
+
+  function hideError() {
+    document.getElementById('errorSection').classList.remove('visible');
+  }
+})();
+</script>
+</body>
+</html>

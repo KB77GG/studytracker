@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>精听练习</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f5f7fa;
+  color: #1e293b;
+  min-height: 100vh;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+/* Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.page-header h1 { font-size: 28px; }
+.subtitle { color: #64748b; margin-bottom: 32px; font-size: 14px; }
+
+/* Student info bar */
+.student-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: #dbeafe;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+.student-bar .name { font-weight: 600; color: #1d4ed8; }
+.student-bar button {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 13px;
+}
+.student-bar button:hover { color: #ef4444; }
+
+/* Upload button (for logged-in employees) */
+.upload-btn {
+  padding: 10px 20px;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.upload-btn:hover { background: #2563eb; }
+
+/* Exercise list */
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.exercise-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  display: block;
+}
+.exercise-card:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59,130,246,0.1);
+  transform: translateY(-2px);
+}
+.exercise-card h3 { font-size: 16px; margin-bottom: 8px; }
+.exercise-meta { font-size: 13px; color: #64748b; }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 0;
+  color: #94a3b8;
+}
+.empty-state h3 { margin-bottom: 12px; color: #64748b; }
+
+/* Login gate */
+.login-gate {
+  max-width: 400px;
+  margin: 80px auto;
+  text-align: center;
+}
+.login-gate h1 { font-size: 28px; margin-bottom: 8px; }
+.login-gate .desc { color: #64748b; margin-bottom: 32px; font-size: 14px; }
+.login-gate .form-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+}
+.login-gate label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.login-gate input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.login-gate input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+.login-gate .btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.login-gate .btn:hover { background: #2563eb; }
+.login-gate .error {
+  color: #ef4444;
+  font-size: 14px;
+  margin-top: 12px;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+{% if show_upload %}
+{# 已登录的员工：跳过验证，直接显示内容 #}
+<div class="container" id="mainContent">
+  {% if show_upload %}
+  <div class="student-bar" style="background:#d1fae5;">
+    <span>员工模式 — <span class="name" style="color:#16a34a;">{{ current_user.display_name or current_user.username }}</span></span>
+    <a href="{{ url_for('logout') }}" style="color:#64748b;font-size:13px;">退出登录</a>
+  </div>
+  {% else %}
+  <div class="student-bar">
+    <span>欢迎，<span class="name" id="displayName"></span></span>
+    <button onclick="logout()">切换账号</button>
+  </div>
+  {% endif %}
+
+  <div class="page-header">
+    <h1>精听练习</h1>
+    {% if show_upload %}
+    <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
+    {% endif %}
+  </div>
+  <p class="subtitle">选择一个练习开始精听训练</p>
+
+  {% if exercises %}
+  <div class="exercise-grid">
+    {% for ex in exercises %}
+    <a class="exercise-card" href="{{ url_for('listening_player', exercise_id=ex.id) }}">
+      <h3>{{ ex.title }}</h3>
+      <div class="exercise-meta">{{ ex.segment_count }} 个句子</div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>暂无练习</h3>
+    <p>请联系老师添加精听练习内容</p>
+  </div>
+  {% endif %}
+</div>
+
+{% else %}
+{# 未登录：学生姓名验证 #}
+
+<!-- Student name verification gate -->
+<div class="login-gate" id="loginGate">
+  <h1>精听练习</h1>
+  <p class="desc">请输入你的姓名开始练习</p>
+  <div class="form-card">
+    <label for="studentName">学生姓名</label>
+    <input type="text" id="studentName" placeholder="请输入姓名" autofocus>
+    <button class="btn" id="btnVerify" onclick="verifyStudent()">进入练习</button>
+    <div class="error" id="errorMsg"></div>
+  </div>
+  <a href="{{ url_for('login') }}?next={{ url_for('listening_index') }}" style="display:inline-block;margin-top:24px;color:#94a3b8;font-size:12px;text-decoration:none;">员工登录</a>
+</div>
+
+<!-- Main content (hidden until student verified) -->
+<div class="container" id="mainContent" style="display:none">
+  <div class="student-bar">
+    <span>欢迎，<span class="name" id="displayName"></span></span>
+    <button onclick="logout()">切换账号</button>
+  </div>
+
+  <div class="page-header">
+    <h1>精听练习</h1>
+  </div>
+  <p class="subtitle">选择一个练习开始精听训练</p>
+
+  {% if exercises %}
+  <div class="exercise-grid">
+    {% for ex in exercises %}
+    <a class="exercise-card" href="{{ url_for('listening_player', exercise_id=ex.id) }}">
+      <h3>{{ ex.title }}</h3>
+      <div class="exercise-meta">{{ ex.segment_count }} 个句子</div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>暂无练习</h3>
+    <p>请联系老师添加精听练习内容</p>
+  </div>
+  {% endif %}
+</div>
+
+{% endif %}
+
+<script>
+// Only run student verification JS if not in staff mode
+if (document.getElementById('loginGate')) {
+  function verifyStudent() {
+    const name = document.getElementById('studentName').value.trim();
+    if (!name) return;
+
+    document.getElementById('btnVerify').textContent = '验证中...';
+    document.getElementById('btnVerify').disabled = true;
+
+    fetch('/api/listening/verify', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name: name})
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        sessionStorage.setItem('listening_student', name);
+        showMain(name);
+      } else {
+        const err = document.getElementById('errorMsg');
+        err.textContent = data.error === 'student_not_found'
+          ? '未找到该学生，请确认姓名是否正确'
+          : (data.message || '验证失败');
+        err.style.display = 'block';
+      }
+    })
+    .catch(() => {
+      document.getElementById('errorMsg').textContent = '网络错误，请重试';
+      document.getElementById('errorMsg').style.display = 'block';
+    })
+    .finally(() => {
+      document.getElementById('btnVerify').textContent = '进入练习';
+      document.getElementById('btnVerify').disabled = false;
+    });
+  }
+
+  function showMain(name) {
+    document.getElementById('loginGate').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('displayName').textContent = name;
+  }
+
+  function logout() {
+    sessionStorage.removeItem('listening_student');
+    document.getElementById('loginGate').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('studentName').value = '';
+    document.getElementById('errorMsg').style.display = 'none';
+  }
+
+  // Auto-login if previously verified in this session
+  document.addEventListener('DOMContentLoaded', function() {
+    const saved = sessionStorage.getItem('listening_student');
+    if (saved) showMain(saved);
+  });
+
+  // Enter key to submit
+  document.getElementById('studentName').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') verifyStudent();
+  });
+}
+</script>
+</body>
+</html>
