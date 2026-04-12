@@ -4110,6 +4110,10 @@ def api_listening_upload():
     title = request.form.get("title", "").strip()
     transcript = request.form.get("transcript", "").strip()
     audio_file = request.files.get("audio")
+    try:
+        skip_seconds = float(request.form.get("skip_seconds", 0) or 0)
+    except (ValueError, TypeError):
+        skip_seconds = 0
 
     if not title or not transcript or not audio_file:
         return jsonify({"error": "请填写标题、上传音频并输入原文"}), 400
@@ -4149,7 +4153,7 @@ def api_listening_upload():
     import threading
     thread = threading.Thread(
         target=_process_listening_task,
-        args=(task_id, exercise_id, title, str(audio_dest), transcript, str(listening_dir), audio_ext),
+        args=(task_id, exercise_id, title, str(audio_dest), transcript, str(listening_dir), audio_ext, skip_seconds),
         daemon=True,
     )
     thread.start()
@@ -4157,7 +4161,7 @@ def api_listening_upload():
     return jsonify({"task_id": task_id})
 
 
-def _process_listening_task(task_id, exercise_id, title, audio_path, transcript, output_dir, audio_ext="mp3"):
+def _process_listening_task(task_id, exercise_id, title, audio_path, transcript, output_dir, audio_ext="mp3", skip_seconds=0):
     """后台线程：用 Whisper 转录并与原文对齐。"""
     import ssl
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -4200,13 +4204,15 @@ def _process_listening_task(task_id, exercise_id, title, audio_path, transcript,
         # 对齐策略：用户提供的句子数 vs Whisper 的段数
         if len(user_sentences) > 1 and len(whisper_segments) > 0:
             # 用户已分句，尝试将 Whisper 时间戳匹配到用户的句子
-            segments = _align_user_text_with_whisper(user_sentences, whisper_segments)
+            segments = _align_user_text_with_whisper(user_sentences, whisper_segments, skip_seconds)
         else:
-            # 直接使用 Whisper 的分段结果
+            # 直接使用 Whisper 的分段结果，跳过指定秒数之前的段
             segments = []
             for i, seg in enumerate(whisper_segments):
+                if skip_seconds > 0 and seg["end"] <= skip_seconds:
+                    continue
                 segments.append({
-                    "id": i + 1,
+                    "id": len(segments) + 1,
                     "start": seg["start"],
                     "end": seg["end"],
                     "text": seg["text"],
@@ -4244,10 +4250,14 @@ def _process_listening_task(task_id, exercise_id, title, audio_path, transcript,
         })
 
 
-def _align_user_text_with_whisper(user_sentences, whisper_segments):
+def _align_user_text_with_whisper(user_sentences, whisper_segments, skip_seconds=0):
     """将用户提供的句子文本与 Whisper 的时间戳对齐。"""
     def normalize(t):
         return re.sub(r"[^\w\s]", "", t.lower()).split()
+
+    # 如果指定了跳过秒数，过滤掉开头的 Whisper 段
+    if skip_seconds > 0:
+        whisper_segments = [s for s in whisper_segments if s["end"] > skip_seconds]
 
     segments = []
     w_idx = 0
@@ -4257,10 +4267,13 @@ def _align_user_text_with_whisper(user_sentences, whisper_segments):
         if not user_words:
             continue
 
-        # 找到与当前用户句子最匹配的 whisper 段起始位置
+        # 第一句搜索全部剩余 whisper 段（正文可能在音频中间才开始）
+        # 后续句子只往前搜 5 段（前一句已经定位好了）
+        search_range = len(whisper_segments) - w_idx if u_idx == 0 else min(5, len(whisper_segments) - w_idx)
+
         best_start = w_idx
         best_score = -1
-        for offset in range(min(5, len(whisper_segments) - w_idx)):
+        for offset in range(search_range):
             check = w_idx + offset
             if check >= len(whisper_segments):
                 break

@@ -187,8 +187,14 @@ h1 { font-size: 24px; margin-bottom: 8px; }
       </div>
 
       <div class="field">
+        <label>跳过开头（秒）</label>
+        <div class="hint">可选。雅思音频开头通常有考试说明，不属于正文。填入正文开始的大致秒数，系统会自动跳过前面的内容。留空或填 0 表示不跳过。</div>
+        <input type="text" name="skip_seconds" id="inputSkipSeconds" placeholder="例如: 60" style="width:120px">
+      </div>
+
+      <div class="field">
         <label>听力原文</label>
-        <div class="hint">每行一句话。如果不分行，系统会按标点自动断句。</div>
+        <div class="hint">每行一句话。如果不分行，系统会按标点自动断句。只需输入正文部分，不要包含考试说明。</div>
         <textarea name="transcript" id="inputTranscript" placeholder="Hi. Can I help you?
 I'd like to find out if you have any excursions suitable for families.
 Sure. How about taking your family for a cruise?
@@ -266,10 +272,13 @@ Sure. How about taking your family for a cruise?
     hideError();
     hideResult();
 
+    const skipSeconds = document.getElementById('inputSkipSeconds').value.trim() || '0';
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('audio', audioFile);
     formData.append('transcript', transcript);
+    formData.append('skip_seconds', skipSeconds);
 
     try {
       const resp = await fetch('/api/listening/upload', {
