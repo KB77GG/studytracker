@@ -451,6 +451,57 @@ body {
   font-size: 11px;
 }
 
+/* Difficulty slider */
+.difficulty-section {
+  padding: 12px 24px;
+  background: var(--panel-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.difficulty-slider-wrap {
+  flex: 1;
+  max-width: 320px;
+}
+
+.difficulty-slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+  margin-bottom: 4px;
+}
+
+.difficulty-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.difficulty-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.difficulty-labels span.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .sidebar { width: 100%; height: auto; max-height: 200px; }
@@ -503,6 +554,20 @@ body {
         <button class="mode-tab" data-mode="paragraph">段落精听</button>
         <button class="mode-tab" data-mode="full">全文精听</button>
         <button class="mode-tab" data-mode="dictation">听写模式</button>
+      </div>
+    </div>
+
+    <!-- Difficulty slider (dictation only) -->
+    <div class="difficulty-section" id="difficultySection" style="display:none">
+      <span class="mode-label">听写难度：</span>
+      <div class="difficulty-slider-wrap">
+        <input type="range" id="difficultySlider" min="0" max="3" step="1" value="1" class="difficulty-slider">
+        <div class="difficulty-labels">
+          <span data-v="0">简单<br>30%</span>
+          <span data-v="1" class="active">标准<br>50%</span>
+          <span data-v="2">挑战<br>80%</span>
+          <span data-v="3">地狱<br>100%</span>
+        </div>
       </div>
     </div>
 
@@ -579,6 +644,8 @@ body {
   let showTranslation = false;
   let completedSegs = new Set();
   let sentenceLoopActive = false;
+  const difficultyLevels = [0.3, 0.5, 0.8, 1.0];  // 简单/标准/挑战/地狱
+  let difficultyIdx = 1;  // 默认标准
 
   const audio = document.getElementById('audio');
   const exerciseId = "{{ exercise_id }}";
@@ -764,7 +831,8 @@ body {
   // ── Dictation Mode ──
   function getHideIndices(seg, segGlobalIdx) {
     const words = seg.text.split(/\s+/);
-    const hideCount = Math.max(1, Math.round(words.length * 0.5));
+    const hideRatio = difficultyLevels[difficultyIdx] || 0.5;
+    const hideCount = Math.max(1, Math.round(words.length * hideRatio));
 
     // In task mode, check if we already have fixed indices from a previous attempt
     if (taskId && taskProgress[segGlobalIdx] && taskProgress[segGlobalIdx].hidden_word_indices) {
@@ -1011,12 +1079,25 @@ body {
   document.getElementById('btnNextAfterScore').onclick = () => selectSegment(currentSegIdx + 1);
 
   // Mode tabs
+  const diffSection = document.getElementById('difficultySection');
   document.querySelectorAll('.mode-tab').forEach(tab => {
     tab.onclick = function() {
       mode = this.dataset.mode;
       document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t === this));
+      // 只在听写模式下显示难度滑块
+      diffSection.style.display = mode === 'dictation' ? 'flex' : 'none';
       renderContent();
     };
+  });
+
+  // Difficulty slider
+  const diffSlider = document.getElementById('difficultySlider');
+  const diffLabels = document.querySelectorAll('.difficulty-labels span');
+  diffSlider.addEventListener('input', function() {
+    difficultyIdx = parseInt(this.value);
+    diffLabels.forEach(el => el.classList.toggle('active', parseInt(el.dataset.v) === difficultyIdx));
+    // 非任务模式下立即重新渲染（任务模式下隐藏词已固定，不随难度变）
+    if (!taskId) renderContent();
   });
 
   // Progress bar click
