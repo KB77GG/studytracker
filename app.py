@@ -272,6 +272,21 @@ def uploaded_file(filename):
     from flask import send_from_directory
     return send_from_directory(UPLOAD_ROOT, filename)
 
+
+ENTRANCE_WEB_ROOT = Path(app.root_path) / "entrance_web"
+
+
+@app.route("/entrance/")
+def entrance_web_index():
+    """Serve the standalone entrance test frontend in local/dev environments."""
+    return send_from_directory(ENTRANCE_WEB_ROOT, "index.html")
+
+
+@app.route("/entrance/<path:filename>")
+def entrance_web_file(filename):
+    """Expose entrance_web static files without requiring an external web server."""
+    return send_from_directory(ENTRANCE_WEB_ROOT, filename)
+
 # 登录路由
 @app.route("/login", methods=["GET", "POST"])
 def login():
