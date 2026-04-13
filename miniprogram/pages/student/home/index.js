@@ -329,11 +329,19 @@ Page({
 
     goToTaskDetail(e) {
         const taskId = e.currentTarget.dataset.id
-        // 精听任务 → 在小程序内打开网页
+        // 精听任务 → 复制链接并提示去浏览器打开
         const task = this.data.tasks.find(t => t.id === taskId)
         if (task && task.listeningUrl) {
-            wx.navigateTo({
-                url: `/pages/student/webview/index?url=${encodeURIComponent(task.listeningUrl)}`,
+            wx.setClipboardData({
+                data: task.listeningUrl,
+                success() {
+                    wx.showModal({
+                        title: '精听练习',
+                        content: '链接已复制到剪贴板，请打开手机浏览器粘贴访问。',
+                        showCancel: false,
+                        confirmText: '我知道了'
+                    })
+                }
             })
             return
         }
