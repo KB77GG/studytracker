@@ -249,6 +249,8 @@ Page({
                         dictationBookId: t.dictation_book_id,
                         // Speaking Fields
                         speakingBookId: t.speaking_book_id,
+                        // Listening Fields
+                        listeningUrl: t.listening_url || null,
 
                         // Timer state - show actual time spent from backend
                         timerStatus: 'idle',
@@ -327,6 +329,14 @@ Page({
 
     goToTaskDetail(e) {
         const taskId = e.currentTarget.dataset.id
+        // 精听任务 → 在小程序内打开网页
+        const task = this.data.tasks.find(t => t.id === taskId)
+        if (task && task.listeningUrl) {
+            wx.navigateTo({
+                url: `/pages/student/webview/index?url=${encodeURIComponent(task.listeningUrl)}`,
+            })
+            return
+        }
         wx.navigateTo({
             url: `/pages/student/task/index?id=${taskId}`,
         })

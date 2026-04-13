@@ -2,6 +2,7 @@ import os
 import re
 import json
 import hashlib
+import secrets
 from datetime import datetime, date, timedelta
 from urllib.parse import quote
 import requests
@@ -872,7 +873,16 @@ def get_student_today_tasks():
     
     if not tasks:
         return jsonify({"ok": True, "tasks": [], "message": "今日无任务"})
-        
+
+    # 给缺少 token 的精听任务补上
+    tokens_updated = False
+    for task in tasks:
+        if task.listening_exercise_id and not task.listening_access_token:
+            task.listening_access_token = secrets.token_urlsafe(16)
+            tokens_updated = True
+    if tokens_updated:
+        db.session.commit()
+
     tasks_data = []
     for task in tasks:
         # 判断状态
@@ -905,6 +915,12 @@ def get_student_today_tasks():
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "teacher_note": task.note, # 暂时复用note，前端需区分展示场景
+            # 精听练习字段
+            "listening_exercise_id": task.listening_exercise_id,
+            "listening_url": (
+                f"https://studytracker.xin/listening/{task.listening_exercise_id}"
+                f"?task_id={task.id}&token={task.listening_access_token}"
+            ) if task.listening_exercise_id and task.listening_access_token else None,
         })
         
     return jsonify({
