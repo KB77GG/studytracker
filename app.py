@@ -4098,8 +4098,20 @@ def listening_upload():
     return render_template("listening/upload.html")
 
 
-# 存储异步处理任务状态
-_listening_tasks: dict[str, dict] = {}
+# 存储异步处理任务状态（文件持久化，避免多 worker 进程内字典不共享）
+def _task_status_path(task_id):
+    d = Path(app.static_folder) / "listening" / ".tasks"
+    d.mkdir(parents=True, exist_ok=True)
+    return d / f"{task_id}.json"
+
+def _set_task_status(task_id, data):
+    _task_status_path(task_id).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+def _get_task_status(task_id):
+    p = _task_status_path(task_id)
+    if p.exists():
+        return json.loads(p.read_text(encoding="utf-8"))
+    return None
 
 
 @app.route("/api/listening/upload", methods=["POST"])
@@ -4141,13 +4153,13 @@ def api_listening_upload():
 
     # 创建任务
     task_id = uuid.uuid4().hex[:12]
-    _listening_tasks[task_id] = {
+    _set_task_status(task_id, {
         "status": "processing",
         "message": "正在处理音频，请稍候...",
         "progress": 20,
         "exercise_id": exercise_id,
         "title": title,
-    }
+    })
 
     # 启动后台线程处理
     import threading
@@ -4167,19 +4179,25 @@ def _process_listening_task(task_id, exercise_id, title, audio_path, transcript,
     ssl._create_default_https_context = ssl._create_unverified_context
 
     try:
-        _listening_tasks[task_id]["message"] = "正在加载语音识别模型..."
-        _listening_tasks[task_id]["progress"] = 30
+        _set_task_status(task_id, {
+            "status": "processing", "message": "正在加载语音识别模型...",
+            "progress": 30, "exercise_id": exercise_id, "title": title,
+        })
 
         import whisper
         model = whisper.load_model("base")
 
-        _listening_tasks[task_id]["message"] = "正在识别音频..."
-        _listening_tasks[task_id]["progress"] = 50
+        _set_task_status(task_id, {
+            "status": "processing", "message": "正在识别音频...",
+            "progress": 50, "exercise_id": exercise_id, "title": title,
+        })
 
         result = model.transcribe(audio_path, word_timestamps=True, language="en", verbose=False)
 
-        _listening_tasks[task_id]["message"] = "正在对齐文本..."
-        _listening_tasks[task_id]["progress"] = 80
+        _set_task_status(task_id, {
+            "status": "processing", "message": "正在对齐文本...",
+            "progress": 80, "exercise_id": exercise_id, "title": title,
+        })
 
         # 解析用户提供的原文
         user_sentences = [s.strip() for s in transcript.strip().splitlines() if s.strip()]
@@ -4236,16 +4254,20 @@ def _process_listening_task(task_id, exercise_id, title, audio_path, transcript,
         if txt_path.exists():
             txt_path.unlink()
 
-        _listening_tasks[task_id].update({
+        _set_task_status(task_id, {
             "status": "done",
             "message": "处理完成",
             "progress": 100,
+            "exercise_id": exercise_id,
+            "title": title,
             "segment_count": len(segments),
         })
 
     except Exception as e:
-        _listening_tasks[task_id].update({
+        _set_task_status(task_id, {
             "status": "error",
+            "exercise_id": exercise_id,
+            "title": title,
             "error": str(e),
         })
 
@@ -4330,7 +4352,7 @@ def _merge_short(segments, min_dur=1.5):
 @role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def api_listening_upload_status(task_id):
     """查询处理任务状态。"""
-    task = _listening_tasks.get(task_id)
+    task = _get_task_status(task_id)
     if not task:
         return jsonify({"error": "任务不存在"}), 404
     return jsonify(task)

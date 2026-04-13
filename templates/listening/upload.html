@@ -303,9 +303,21 @@ Sure. How about taking your family for a cruise?
     }
   });
 
+  let pollFailCount = 0;
   async function pollStatus(taskId) {
     try {
       const resp = await fetch(`/api/listening/upload/status/${taskId}`);
+      if (!resp.ok) {
+        pollFailCount++;
+        if (pollFailCount >= 5) {
+          showError('任务状态查询失败，请刷新页面重试。');
+          btnSubmit.disabled = false;
+          return;
+        }
+        setTimeout(() => pollStatus(taskId), 3000);
+        return;
+      }
+      pollFailCount = 0;
       const data = await resp.json();
 
       if (data.status === 'done') {
@@ -321,6 +333,12 @@ Sure. How about taking your family for a cruise?
         setTimeout(() => pollStatus(taskId), 2000);
       }
     } catch {
+      pollFailCount++;
+      if (pollFailCount >= 5) {
+        showError('网络连接失败，请检查网络后刷新页面重试。');
+        btnSubmit.disabled = false;
+        return;
+      }
       setTimeout(() => pollStatus(taskId), 3000);
     }
   }
