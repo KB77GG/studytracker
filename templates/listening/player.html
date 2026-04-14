@@ -668,7 +668,8 @@ body {
   let repeatCount = 1;
   let repeatGapSeconds = 2;
   let autoRepeatActive = false;
-  let autoRepeatRemaining = 0;
+  let autoRepeatTargetCount = 1;
+  let autoRepeatCompletedCount = 0;
   let autoRepeatTimer = null;
   let segmentEndHandled = false;
 
@@ -792,7 +793,10 @@ body {
   function stopAutoRepeat(resetRemaining = true) {
     autoRepeatActive = false;
     clearAutoRepeatTimer();
-    if (resetRemaining) autoRepeatRemaining = 0;
+    if (resetRemaining) {
+      autoRepeatTargetCount = repeatCount;
+      autoRepeatCompletedCount = 0;
+    }
     segmentEndHandled = false;
   }
 
@@ -810,8 +814,15 @@ body {
     if (!seg) return;
     stopAutoRepeat(false);
     autoRepeatActive = true;
-    autoRepeatRemaining = repeatCount;
+    autoRepeatTargetCount = repeatCount;
+    autoRepeatCompletedCount = 0;
     playCurrentSegmentPass();
+  }
+
+  function normalizeDictationWord(word) {
+    return (word || '')
+      .toLowerCase()
+      .replace(/[^\w]/g, '');
   }
 
   // ── Sentence List ──
@@ -948,10 +959,11 @@ body {
         slot.className = 'word-slot';
         const input = document.createElement('input');
         input.type = 'text';
-        input.dataset.answer = word.replace(/[.,!?;:'"]/g, '');
+        const displayAnswer = word.replace(/^[.,!?;:"'“”‘’()]+|[.,!?;:"'“”‘’()]+$/g, '');
+        input.dataset.answer = normalizeDictationWord(displayAnswer);
+        input.dataset.displayAnswer = displayAnswer;
         input.dataset.index = i;
-        const cleanWord = word.replace(/[.,!?;:'"]/g, '');
-        input.style.width = Math.max(50, cleanWord.length * 12) + 'px';
+        input.style.width = Math.max(50, displayAnswer.length * 12) + 'px';
         input.addEventListener('keydown', onDictationKey);
         slot.appendChild(input);
         area.appendChild(slot);
@@ -1003,15 +1015,16 @@ body {
     const answers = [];
 
     inputs.forEach(input => {
-      const answer = input.dataset.answer.toLowerCase();
-      const guess = input.value.trim().toLowerCase();
-      answers.push(guess);
+      const answer = input.dataset.answer;
+      const guessRaw = input.value.trim();
+      const guess = normalizeDictationWord(guessRaw);
+      answers.push(guessRaw);
       if (guess === answer) {
         input.className = 'correct';
         correct++;
       } else {
         input.className = 'incorrect';
-        input.value = input.dataset.answer;
+        input.value = input.dataset.displayAnswer || input.dataset.answer;
       }
       input.disabled = true;
     });
@@ -1084,8 +1097,8 @@ body {
         } else if (autoRepeatActive) {
           audio.pause();
           updatePlayBtn(false);
-          autoRepeatRemaining -= 1;
-          if (autoRepeatRemaining > 0) {
+          autoRepeatCompletedCount += 1;
+          if (autoRepeatCompletedCount < autoRepeatTargetCount) {
             clearAutoRepeatTimer();
             autoRepeatTimer = setTimeout(() => {
               if (!autoRepeatActive) return;
@@ -1158,6 +1171,14 @@ body {
   };
   document.getElementById('repeatCountSelect').onchange = function() {
     repeatCount = parseInt(this.value, 10) || 1;
+    if (autoRepeatActive) {
+      autoRepeatTargetCount = repeatCount;
+      if (autoRepeatCompletedCount >= autoRepeatTargetCount) {
+        stopAutoRepeat();
+        audio.pause();
+        updatePlayBtn(false);
+      }
+    }
   };
   document.getElementById('repeatGapSelect').onchange = function() {
     repeatGapSeconds = parseInt(this.value, 10) || 2;
