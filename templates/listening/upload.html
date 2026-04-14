@@ -201,6 +201,15 @@ Sure. How about taking your family for a cruise?
 ..."></textarea>
       </div>
 
+      <div class="field">
+        <label>逐句译文</label>
+        <div class="hint">可选。建议每行对应一句原文。若原文未分行，译文也可按中文句号、问号、叹号自动断句。</div>
+        <textarea name="translation" id="inputTranslation" placeholder="你好，需要我帮忙吗？
+我想了解一下你们有没有适合家庭参加的短途旅行。
+当然有。带家人去坐游船怎么样？
+..."></textarea>
+      </div>
+
       <button type="submit" class="btn-submit" id="btnSubmit">开始处理</button>
     </form>
 
@@ -260,6 +269,7 @@ Sure. How about taking your family for a cruise?
 
     const title = document.getElementById('inputTitle').value.trim();
     const transcript = document.getElementById('inputTranscript').value.trim();
+    const translation = document.getElementById('inputTranslation').value.trim();
     const audioFile = audioInput.files[0];
 
     if (!title || !audioFile || !transcript) {
@@ -278,6 +288,7 @@ Sure. How about taking your family for a cruise?
     formData.append('title', title);
     formData.append('audio', audioFile);
     formData.append('transcript', transcript);
+    formData.append('translation', translation);
     formData.append('skip_seconds', skipSeconds);
 
     try {

@@ -304,6 +304,12 @@ body {
   cursor: pointer;
 }
 
+.ctrl-inline-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-right: 2px;
+}
+
 .toggle-group { display: flex; gap: 4px; }
 
 .toggle-btn {
@@ -594,6 +600,19 @@ body {
           <option value="2">2.0x</option>
         </select>
       </div>
+      <div class="ctrl-group">
+        <span class="ctrl-inline-label">自动播放</span>
+        <select class="speed-select" id="repeatCountSelect" title="播放次数">
+          <option value="1" selected>1次</option>
+          <option value="3">3次</option>
+          <option value="5">5次</option>
+        </select>
+        <select class="speed-select" id="repeatGapSelect" title="间隔时间">
+          <option value="2" selected>间隔2s</option>
+          <option value="5">间隔5s</option>
+          <option value="10">间隔10s</option>
+        </select>
+      </div>
       <div class="toggle-group">
         <button class="toggle-btn" id="btnShowText" title="显示原文 ( - )">显示原文</button>
         <button class="toggle-btn" id="btnShowTrans" title="显示译文 ( = )">显示译文</button>
@@ -646,6 +665,11 @@ body {
   let sentenceLoopActive = false;
   const difficultyLevels = [0.3, 0.5, 0.8, 1.0];  // 简单/标准/挑战/地狱
   let difficultyIdx = 1;  // 默认标准
+  let repeatCount = 1;
+  let repeatGapSeconds = 2;
+  let autoRepeatActive = false;
+  let autoRepeatRemaining = 0;
+  let autoRepeatTimer = null;
 
   const audio = document.getElementById('audio');
   const exerciseId = "{{ exercise_id }}";
@@ -753,6 +777,40 @@ body {
     });
   }
 
+  function isSegmentPracticeMode() {
+    return mode === 'sentence' || mode === 'dictation';
+  }
+
+  function clearAutoRepeatTimer() {
+    if (autoRepeatTimer) {
+      clearTimeout(autoRepeatTimer);
+      autoRepeatTimer = null;
+    }
+  }
+
+  function stopAutoRepeat(resetRemaining = true) {
+    autoRepeatActive = false;
+    clearAutoRepeatTimer();
+    if (resetRemaining) autoRepeatRemaining = 0;
+  }
+
+  function playCurrentSegmentPass() {
+    const seg = currentSegments()[currentSegIdx];
+    if (!seg) return;
+    audio.currentTime = seg.start;
+    audio.play();
+    updatePlayBtn(true);
+  }
+
+  function startAutoRepeatSequence() {
+    const seg = currentSegments()[currentSegIdx];
+    if (!seg) return;
+    stopAutoRepeat(false);
+    autoRepeatActive = true;
+    autoRepeatRemaining = repeatCount;
+    playCurrentSegmentPass();
+  }
+
   // ── Sentence List ──
   function buildSentenceList() {
     const container = document.getElementById('sentenceList');
@@ -781,6 +839,8 @@ body {
   function selectSegment(idx) {
     const segs = currentSegments();
     if (idx < 0 || idx >= segs.length) return;
+    stopAutoRepeat();
+    audio.pause();
     currentSegIdx = idx;
     const seg = segs[idx];
 
@@ -1010,11 +1070,24 @@ body {
     document.getElementById('progressFill').style.width = (t / d * 100) + '%';
 
     // In sentence mode, loop/stop at sentence end
-    if (mode === 'sentence' || mode === 'dictation') {
+    if (isSegmentPracticeMode()) {
       const seg = currentSegments()[currentSegIdx];
       if (seg && t >= seg.end) {
         if (sentenceLoopActive) {
           audio.currentTime = seg.start;
+        } else if (autoRepeatActive) {
+          audio.pause();
+          updatePlayBtn(false);
+          autoRepeatRemaining -= 1;
+          if (autoRepeatRemaining > 0) {
+            clearAutoRepeatTimer();
+            autoRepeatTimer = setTimeout(() => {
+              if (!autoRepeatActive) return;
+              playCurrentSegmentPass();
+            }, repeatGapSeconds * 1000);
+          } else {
+            stopAutoRepeat();
+          }
         } else {
           audio.pause();
           updatePlayBtn(false);
@@ -1026,14 +1099,14 @@ body {
   // ── Controls ──
   function togglePlay() {
     if (audio.paused) {
-      // If at end of sentence, restart
-      const seg = currentSegments()[currentSegIdx];
-      if (seg && (mode === 'sentence' || mode === 'dictation') && audio.currentTime >= seg.end) {
-        audio.currentTime = seg.start;
+      if (isSegmentPracticeMode()) {
+        startAutoRepeatSequence();
+      } else {
+        audio.play();
+        updatePlayBtn(true);
       }
-      audio.play();
-      updatePlayBtn(true);
     } else {
+      stopAutoRepeat();
       audio.pause();
       updatePlayBtn(false);
     }
@@ -1053,14 +1126,35 @@ body {
   document.getElementById('btnPrev').onclick = () => selectSegment(currentSegIdx - 1);
   document.getElementById('btnNext').onclick = () => selectSegment(currentSegIdx + 1);
   document.getElementById('btnRepeat').onclick = () => {
+    if (isSegmentPracticeMode()) {
+      startAutoRepeatSequence();
+      return;
+    }
     const seg = currentSegments()[currentSegIdx];
-    if (seg) { audio.currentTime = seg.start; audio.play(); updatePlayBtn(true); }
+    if (seg) {
+      stopAutoRepeat();
+      audio.currentTime = seg.start;
+      audio.play();
+      updatePlayBtn(true);
+    }
   };
-  document.getElementById('btnBack5').onclick = () => { audio.currentTime = Math.max(0, audio.currentTime - 5); };
-  document.getElementById('btnFwd5').onclick = () => { audio.currentTime += 5; };
+  document.getElementById('btnBack5').onclick = () => {
+    stopAutoRepeat();
+    audio.currentTime = Math.max(0, audio.currentTime - 5);
+  };
+  document.getElementById('btnFwd5').onclick = () => {
+    stopAutoRepeat();
+    audio.currentTime += 5;
+  };
 
   document.getElementById('speedSelect').onchange = function() {
     audio.playbackRate = parseFloat(this.value);
+  };
+  document.getElementById('repeatCountSelect').onchange = function() {
+    repeatCount = parseInt(this.value, 10) || 1;
+  };
+  document.getElementById('repeatGapSelect').onchange = function() {
+    repeatGapSeconds = parseInt(this.value, 10) || 2;
   };
 
   document.getElementById('btnShowText').onclick = function() {
@@ -1082,6 +1176,8 @@ body {
   const diffSection = document.getElementById('difficultySection');
   document.querySelectorAll('.mode-tab').forEach(tab => {
     tab.onclick = function() {
+      stopAutoRepeat();
+      audio.pause();
       mode = this.dataset.mode;
       document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t === this));
       // 只在听写模式下显示难度滑块
@@ -1102,6 +1198,7 @@ body {
 
   // Progress bar click
   document.getElementById('progressTrack').onclick = function(e) {
+    stopAutoRepeat();
     const rect = this.getBoundingClientRect();
     const pct = (e.clientX - rect.left) / rect.width;
     audio.currentTime = pct * audio.duration;

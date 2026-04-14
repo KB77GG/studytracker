@@ -4136,6 +4136,7 @@ def api_listening_upload():
     """接收音频+文本，启动后台对齐任务。"""
     title = request.form.get("title", "").strip()
     transcript = request.form.get("transcript", "").strip()
+    translation = request.form.get("translation", "").strip()
     audio_file = request.files.get("audio")
     try:
         skip_seconds = float(request.form.get("skip_seconds", 0) or 0)
@@ -4180,7 +4181,7 @@ def api_listening_upload():
     import threading
     thread = threading.Thread(
         target=_process_listening_task,
-        args=(task_id, exercise_id, title, str(audio_dest), transcript, str(listening_dir), audio_ext, skip_seconds),
+        args=(task_id, exercise_id, title, str(audio_dest), transcript, translation, str(listening_dir), audio_ext, skip_seconds),
         daemon=True,
     )
     thread.start()
@@ -4188,7 +4189,7 @@ def api_listening_upload():
     return jsonify({"task_id": task_id})
 
 
-def _process_listening_task(task_id, exercise_id, title, audio_path, transcript, output_dir, audio_ext="mp3", skip_seconds=0):
+def _process_listening_task(task_id, exercise_id, title, audio_path, transcript, translation, output_dir, audio_ext="mp3", skip_seconds=0):
     """后台线程：用 Whisper 转录并与原文对齐。"""
     import ssl
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -4223,6 +4224,8 @@ def _process_listening_task(task_id, exercise_id, title, audio_path, transcript,
             text = user_sentences[0]
             user_sentences = [s.strip() for s in _re.split(r'(?<=[.!?])\s+', text) if s.strip()]
 
+        translation_sentences = _split_translation_text(translation, len(user_sentences))
+
         # 获取 Whisper 的段级时间戳
         whisper_segments = []
         for seg in result.get("segments", []):
@@ -4253,6 +4256,11 @@ def _process_listening_task(task_id, exercise_id, title, audio_path, transcript,
 
         # 合并过短的片段
         segments = _merge_short(segments)
+
+        if translation_sentences:
+            for i, seg in enumerate(segments):
+                if i < len(translation_sentences):
+                    seg["translation"] = translation_sentences[i]
 
         # 生成 JSON
         data = {
@@ -4344,6 +4352,25 @@ def _align_user_text_with_whisper(user_sentences, whisper_segments, skip_seconds
         })
 
     return segments
+
+
+def _split_translation_text(translation_text, expected_count=0):
+    """解析译文；优先按行，其次按中文句末标点自动断句。"""
+    if not translation_text:
+        return []
+
+    lines = [s.strip() for s in translation_text.strip().splitlines() if s.strip()]
+    if len(lines) > 1:
+        return lines
+
+    if len(lines) == 1 and expected_count != 1:
+        import re as _re
+        text = lines[0]
+        auto = [s.strip() for s in _re.split(r'(?<=[。！？!?])\s*', text) if s.strip()]
+        if auto:
+            return auto
+
+    return lines
 
 
 def _merge_short(segments, min_dur=1.5):
