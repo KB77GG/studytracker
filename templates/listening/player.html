@@ -670,6 +670,7 @@ body {
   let autoRepeatActive = false;
   let autoRepeatRemaining = 0;
   let autoRepeatTimer = null;
+  let segmentEndHandled = false;
 
   const audio = document.getElementById('audio');
   const exerciseId = "{{ exercise_id }}";
@@ -792,11 +793,13 @@ body {
     autoRepeatActive = false;
     clearAutoRepeatTimer();
     if (resetRemaining) autoRepeatRemaining = 0;
+    segmentEndHandled = false;
   }
 
   function playCurrentSegmentPass() {
     const seg = currentSegments()[currentSegIdx];
     if (!seg) return;
+    segmentEndHandled = false;
     audio.currentTime = seg.start;
     audio.play();
     updatePlayBtn(true);
@@ -856,6 +859,7 @@ body {
       `第${idx + 1}句 / 共${segs.length}句`;
 
     // Seek audio
+    segmentEndHandled = false;
     audio.currentTime = seg.start;
 
     // Render content based on mode
@@ -1072,8 +1076,10 @@ body {
     // In sentence mode, loop/stop at sentence end
     if (isSegmentPracticeMode()) {
       const seg = currentSegments()[currentSegIdx];
-      if (seg && t >= seg.end) {
+      if (seg && t >= seg.end && !segmentEndHandled) {
+        segmentEndHandled = true;
         if (sentenceLoopActive) {
+          segmentEndHandled = false;
           audio.currentTime = seg.start;
         } else if (autoRepeatActive) {
           audio.pause();
