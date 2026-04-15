@@ -89,6 +89,17 @@ def direct_parse(path: Path) -> dict | None:
             "section": int(match.group(2)),
         }
 
+    match = re.match(r"^Test\s+([0-9]+|[IVX]+)\s+Part\s*([0-9]+)\s*$", stem, re.I)
+    if match:
+        raw_test = match.group(1)
+        test = int(raw_test) if raw_test.isdigit() else ROMAN[raw_test.lower()]
+        return {
+            "cam": cam_from_path(path),
+            "text_test": test,
+            "display_test": test,
+            "section": int(match.group(2)),
+        }
+
     match = re.match(
         r"^\d+\s+Test\s+(One|Two|Three|Four)-Section\s+(One|Two|Three|Four)$",
         stem,
