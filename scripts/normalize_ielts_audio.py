@@ -44,11 +44,15 @@ WORD_NUMS = {
 def cam_from_path(path: Path) -> int | None:
     text = str(path)
     match = re.search(r"剑桥?\s*(\d+)|剑\s*(\d+)|IELTS\s*(\d+)", text, re.I)
-    if not match:
-        return None
-    for group in match.groups():
-        if group:
-            return int(group)
+    if match:
+        for group in match.groups():
+            if group:
+                return int(group)
+
+    match = re.search(r"(?:^|[\\/])(?:[A-Za-z])?(\d+)\s*音频", text, re.I)
+    if match:
+        return int(match.group(1))
+
     return None
 
 
@@ -56,10 +60,13 @@ def direct_parse(path: Path) -> dict | None:
     stem = path.stem.strip()
     patterns = [
         re.compile(r"^C(?P<cam>\d+)T(?P<test>\d+)S(?P<section>\d+)$", re.I),
+        re.compile(r"^C(?P<cam>\d+)-T(?P<test>\d+)-P(?P<section>\d+)$", re.I),
+        re.compile(r"^T(?P<test>\d+)S(?P<section>\d+)$", re.I),
         re.compile(r"^Test(?P<test>\d+)-s(?P<section>\d+)$", re.I),
         re.compile(r"^Test(?P<test>\d+)_section(?P<section>\d+)$", re.I),
         re.compile(r"^IELTS\s*(?P<cam>\d+)\s*Test\s*(?P<test>\d+)_S(?P<section>\d+)$", re.I),
         re.compile(r"^IELTS(?P<cam>\d+)_Test(?P<test>\d+)_Section(?P<section>\d+)$", re.I),
+        re.compile(r"^IELTS(?P<cam>\d+)_Test(?P<test>\d+)\.Section(?P<section>\d+)$", re.I),
         re.compile(r"^IELTS\s*(?P<cam>\d+)\s*Test\s*(?P<test>\d+)_(?P<section>\d+)$", re.I),
         re.compile(r"^IELTS(?P<cam>\d+)_test(?P<test>\d+)_audio(?P<section>\d+)$", re.I),
     ]
@@ -90,6 +97,17 @@ def direct_parse(path: Path) -> dict | None:
         }
 
     match = re.match(r"^Test\s+([0-9]+|[IVX]+)\s+Part\s*([0-9]+)\s*$", stem, re.I)
+    if match:
+        raw_test = match.group(1)
+        test = int(raw_test) if raw_test.isdigit() else ROMAN[raw_test.lower()]
+        return {
+            "cam": cam_from_path(path),
+            "text_test": test,
+            "display_test": test,
+            "section": int(match.group(2)),
+        }
+
+    match = re.match(r"^Test([0-9]+|[IVX]+)\s+Part([0-9]+)\s*$", stem, re.I)
     if match:
         raw_test = match.group(1)
         test = int(raw_test) if raw_test.isdigit() else ROMAN[raw_test.lower()]
