@@ -249,6 +249,8 @@ Page({
                         dictationBookId: t.dictation_book_id,
                         // Speaking Fields
                         speakingBookId: t.speaking_book_id,
+                        materialType: t.material_type || null,
+                        materialId: t.material_id || null,
                         // Listening Fields
                         listeningUrl: t.listening_url || null,
 
@@ -345,6 +347,12 @@ Page({
             })
             return
         }
+        if (task && task.materialType === 'reading_vocab_choice') {
+            wx.navigateTo({
+                url: `/pages/student/material-choice/practice/index?taskId=${taskId}`,
+            })
+            return
+        }
         wx.navigateTo({
             url: `/pages/student/task/index?id=${taskId}`,
         })
@@ -404,6 +412,13 @@ Page({
         if (task && task.speakingBookId) {
             wx.navigateTo({
                 url: `/pages/student/speaking/practice/index?taskId=${taskId}&id=${task.speakingBookId}`
+            })
+            return
+        }
+
+        if (task && task.materialType === 'reading_vocab_choice') {
+            wx.navigateTo({
+                url: `/pages/student/material-choice/practice/index?taskId=${taskId}`
             })
             return
         }

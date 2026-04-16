@@ -1,0 +1,50 @@
+<view class="container" wx:if="{{!loading}}">
+  <view class="header-card">
+    <text class="title">{{task.task_name || '阅读词汇练习'}}</text>
+    <text class="subtitle">{{task.material_title || ''}}</text>
+    <text class="desc" wx:if="{{task.description}}">{{task.description}}</text>
+    <view class="progress-row">
+      <text>第 {{currentIndex + 1}} / {{questions.length}} 题</text>
+      <text>已答 {{answeredCount}} 题</text>
+    </view>
+  </view>
+
+  <view class="question-card" wx:if="{{currentQuestion}}">
+    <text class="question-no">Q{{currentIndex + 1}}</text>
+    <text class="question-word">{{currentQuestion.content}}</text>
+    <view class="options">
+      <view
+        class="option-item {{selectedAnswer === item.key ? 'selected' : ''}}"
+        wx:for="{{currentQuestion.options}}"
+        wx:key="key"
+        bindtap="selectOption"
+        data-key="{{item.key}}"
+      >
+        <text class="option-key">{{item.key}}</text>
+        <text class="option-text">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="nav-row">
+    <button class="nav-btn secondary" bindtap="prevQuestion" disabled="{{currentIndex === 0}}">上一题</button>
+    <button class="nav-btn secondary" bindtap="nextQuestion" disabled="{{currentIndex === questions.length - 1}}">下一题</button>
+  </view>
+
+  <view class="submit-card">
+    <textarea
+      class="note-input"
+      placeholder="可选：记录学生备注"
+      maxlength="200"
+      value="{{note}}"
+      bindinput="onNoteInput"
+    />
+    <button class="submit-btn" bindtap="submitPractice" loading="{{submitting}}" disabled="{{submitting}}">
+      {{submitting ? '提交中...' : '提交并评分'}}
+    </button>
+  </view>
+</view>
+
+<view class="loading-wrap" wx:else>
+  <text>加载中...</text>
+</view>

@@ -14,7 +14,8 @@ from models import (
     db, User, StudentProfile, StudyPlan, PlanItem,
     PlanEvidence, ParentStudentLink, TaskCatalog, Task,
     PlanItemSession, ClassFeedback, ScheduleSnapshot,
-    MaterialBank, Question, SpeakingSession, SpeakingMessage,
+    MaterialBank, Question, QuestionOption, SpeakingSession, SpeakingMessage,
+    StudentAnswer,
     DictationBook
 )
 from .auth_utils import require_api_user
@@ -27,6 +28,7 @@ from .aliyun_oral_warrant import create_oral_warrant
 from .aliyun_oral_task import run_oral_task
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
+READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
 
 
 def _safe_float(value, default=0.0):
@@ -126,6 +128,48 @@ def _split_part23_sections(content: str) -> tuple[str, str]:
     part2 = "\n".join(lines[:part3_index]).strip()
     part3 = "\n".join(lines[part3_index + 1:]).strip()
     return part2, part3
+
+
+def _selected_question_ids(task):
+    if not task.question_ids:
+        return None
+    try:
+        loaded = json.loads(task.question_ids)
+        if isinstance(loaded, list):
+            return {int(x) for x in loaded if str(x).isdigit()}
+    except Exception:
+        return None
+    return None
+
+
+def _iter_task_material_questions(task):
+    if not task.material:
+        return []
+
+    selected_ids = _selected_question_ids(task)
+    q_start = task.dictation_word_start or 1
+    q_end = task.dictation_word_end
+    ranged_types = {"grammar", READING_VOCAB_CHOICE_TYPE}
+    is_ranged = task.material.type in ranged_types and (q_start > 1 or q_end is not None)
+
+    questions = []
+    for q in task.material.questions.order_by(Question.sequence).all():
+        if selected_ids is not None and q.id not in selected_ids:
+            continue
+        if is_ranged and q.sequence is not None:
+            if q.sequence < q_start:
+                continue
+            if q_end is not None and q.sequence > q_end:
+                continue
+        questions.append(q)
+    return questions
+
+
+def _question_options(q):
+    return [
+        {"key": opt.option_key, "text": opt.option_text}
+        for opt in q.options.order_by(QuestionOption.option_key).all()
+    ]
 
 
 def _merge_aliyun_oral_result(result: dict, oral: dict) -> dict:
@@ -911,6 +955,8 @@ def get_student_today_tasks():
             "speaking_book_id": task.speaking_book_id,
             "speaking_phrase_start": task.speaking_phrase_start,
             "speaking_phrase_end": task.speaking_phrase_end,
+            "material_id": task.material.id if task.material else None,
+            "material_type": task.material.type if task.material else None,
             # 反馈字段
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
@@ -957,30 +1003,9 @@ def get_task_detail(task_id):
         # 获取关联的材料信息
         material_data = None
         if task.material:
-            selected_ids = None
-            if task.question_ids:
-                try:
-                    loaded = json.loads(task.question_ids)
-                    if isinstance(loaded, list):
-                        selected_ids = {int(x) for x in loaded if str(x).isdigit()}
-                except Exception:
-                    selected_ids = None
-
-            # For grammar materials, use dictation_word_start/end as question range
-            q_start = task.dictation_word_start or 1
-            q_end = task.dictation_word_end
-            is_ranged = task.material.type == "grammar" and (q_start > 1 or q_end is not None)
-
             questions = []
-            for q in task.material.questions:
-                if selected_ids is not None and q.id not in selected_ids:
-                    continue
-                if is_ranged and q.sequence is not None:
-                    if q.sequence < q_start:
-                        continue
-                    if q_end is not None and q.sequence > q_end:
-                        continue
-                options = [{"key": opt.option_key, "text": opt.option_text} for opt in q.options]
+            for q in _iter_task_material_questions(task):
+                options = _question_options(q)
                 questions.append({
                     "id": q.id,
                     "sequence": q.sequence,
@@ -1039,6 +1064,147 @@ def get_task_detail(task_id):
         import traceback
         current_app.logger.error(traceback.format_exc())
         return jsonify({"ok": False, "message": str(e), "error": str(e)}), 500
+
+
+@mp_bp.route("/student/tasks/<int:task_id>/reading-vocab-practice", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def get_reading_vocab_practice(task_id):
+    """Return reading vocab choice questions without exposing answers."""
+    user = request.current_api_user
+    task = Task.query.get(task_id)
+    if not task:
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+    if task.student_name != user.student_profile.full_name:
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    if not task.material or task.material.type != READING_VOCAB_CHOICE_TYPE:
+        return jsonify({"ok": False, "error": "invalid_material_type"}), 400
+
+    questions = []
+    for q in _iter_task_material_questions(task):
+        questions.append({
+            "id": q.id,
+            "sequence": q.sequence,
+            "content": q.content,
+            "options": _question_options(q),
+        })
+
+    previous_answers = {
+        a.question_id: a.text_answer
+        for a in StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).all()
+    }
+
+    return jsonify({
+        "ok": True,
+        "task": {
+            "id": task.id,
+            "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
+            "material_title": task.material.title,
+            "description": task.material.description or "",
+            "planned_minutes": task.planned_minutes,
+            "status": task.status or "pending",
+            "accuracy": task.accuracy,
+        },
+        "questions": questions,
+        "previous_answers": previous_answers,
+    })
+
+
+@mp_bp.route("/student/tasks/<int:task_id>/reading-vocab-practice/submit", methods=["POST"])
+@require_api_user(User.ROLE_STUDENT)
+def submit_reading_vocab_practice(task_id):
+    """Grade and submit a reading vocab choice practice task."""
+    user = request.current_api_user
+    task = Task.query.get(task_id)
+    if not task:
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+    if task.student_name != user.student_profile.full_name:
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    if not task.material or task.material.type != READING_VOCAB_CHOICE_TYPE:
+        return jsonify({"ok": False, "error": "invalid_material_type"}), 400
+
+    data = request.get_json() or {}
+    answers = data.get("answers") or []
+    duration = int(data.get("duration_seconds") or 0)
+    note = (data.get("note") or "").strip()
+    answer_map = {}
+    for item in answers:
+        qid = item.get("question_id")
+        answer_key = str(item.get("answer_key") or "").strip().upper()
+        if str(qid).isdigit() and answer_key in {"A", "B", "C", "D"}:
+            answer_map[int(qid)] = answer_key
+
+    questions = _iter_task_material_questions(task)
+    if not questions:
+        return jsonify({"ok": False, "error": "no_questions"}), 400
+
+    StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).delete()
+
+    correct_count = 0
+    answered_count = 0
+    wrong_items = []
+    for q in questions:
+        selected_key = answer_map.get(q.id, "")
+        correct_key = str(q.reference_answer or "").strip().upper()
+        options = {opt["key"]: opt["text"] for opt in _question_options(q)}
+        is_correct = bool(selected_key) and selected_key == correct_key
+        if selected_key:
+            answered_count += 1
+        if is_correct:
+            correct_count += 1
+        else:
+            wrong_items.append({
+                "word": q.content,
+                "selected_key": selected_key or "未作答",
+                "selected_text": options.get(selected_key, "未作答"),
+                "correct_key": correct_key,
+                "correct_text": options.get(correct_key, q.hint or ""),
+            })
+
+        db.session.add(StudentAnswer(
+            task_id=task.id,
+            question_id=q.id,
+            student_id=user.id,
+            answer_type="choice",
+            text_answer=selected_key,
+            submitted_at=datetime.now(),
+            reviewed=True,
+            is_correct=is_correct,
+        ))
+
+    total = len(questions)
+    accuracy = round((correct_count / total) * 100, 1) if total else 0.0
+    completion_rate = round((answered_count / total) * 100, 1) if total else 0.0
+
+    wrong_summary = ""
+    if wrong_items:
+        wrong_summary = "；".join(
+            f"{item['word']}（你选{item['selected_key']}:{item['selected_text']}，正确{item['correct_key']}:{item['correct_text']}）"
+            for item in wrong_items
+        )
+
+    final_note = note
+    if wrong_summary:
+        suffix = f"[阅读词汇错题] {wrong_summary}"
+        final_note = f"{note}\n{suffix}" if note else suffix
+
+    task.student_submitted = True
+    task.submitted_at = datetime.now()
+    task.student_note = final_note
+    if duration > 0:
+        task.actual_seconds = duration
+    task.accuracy = accuracy
+    task.completion_rate = completion_rate
+    task.status = "done"
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "correct_count": correct_count,
+        "total_count": total,
+        "accuracy": accuracy,
+        "completion_rate": completion_rate,
+        "wrong_items": wrong_items,
+    })
 
 @mp_bp.route("/student/tasks/<int:task_id>/submit", methods=["POST"])
 @require_api_user(User.ROLE_STUDENT)

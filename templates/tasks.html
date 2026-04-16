@@ -927,10 +927,10 @@
           detailInput.value = title;
         }
 
-        // Show range inputs for Dictation Books and Grammar materials
+        // Show range inputs for Dictation Books and objective materials
         var isDict = select.value.startsWith("dictation-");
-        var isGrammar = (type === "grammar");
-        if (isDict || isGrammar) {
+        var isObjective = (type === "grammar" || type === "reading_vocab_choice");
+        if (isDict || isObjective) {
           rangeGroup.style.display = "block";
 
           // Update unit label

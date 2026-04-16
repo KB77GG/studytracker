@@ -1,0 +1,153 @@
+.container {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.header-card,
+.question-card,
+.submit-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 8rpx 24rpx rgba(20, 41, 82, 0.06);
+  margin-bottom: 24rpx;
+}
+
+.title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.subtitle {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #53627c;
+}
+
+.desc {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.progress-row {
+  margin-top: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #4b5563;
+}
+
+.question-no {
+  display: inline-block;
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+  background: #eef2ff;
+  color: #3853d8;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.question-word {
+  display: block;
+  margin-top: 24rpx;
+  font-size: 42rpx;
+  line-height: 1.3;
+  font-weight: 700;
+  color: #111827;
+}
+
+.options {
+  margin-top: 24rpx;
+}
+
+.option-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 18rpx;
+  padding: 22rpx 20rpx;
+  border: 2rpx solid #dbe3f0;
+  border-radius: 18rpx;
+  background: #fff;
+  margin-bottom: 16rpx;
+}
+
+.option-item.selected {
+  border-color: #2f7cf6;
+  background: #eef5ff;
+}
+
+.option-key {
+  min-width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  border-radius: 50%;
+  background: #edf2f7;
+  color: #334155;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.option-item.selected .option-key {
+  background: #2f7cf6;
+  color: #fff;
+}
+
+.option-text {
+  flex: 1;
+  font-size: 28rpx;
+  line-height: 1.5;
+  color: #1f2937;
+}
+
+.nav-row {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.nav-btn,
+.submit-btn {
+  flex: 1;
+  border-radius: 18rpx;
+  font-size: 28rpx;
+}
+
+.nav-btn.secondary {
+  background: #ffffff;
+  color: #334155;
+  border: 2rpx solid #dbe3f0;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #2676f2, #1f5ed6);
+  color: #fff;
+}
+
+.note-input {
+  width: 100%;
+  min-height: 120rpx;
+  background: #f8fafc;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  font-size: 26rpx;
+  color: #111827;
+  margin-bottom: 18rpx;
+}
+
+.loading-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 28rpx;
+}

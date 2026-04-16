@@ -34,6 +34,8 @@
                                             material.type=='speaking_part2_3' else '' }}>口语题库Part2+3</option>
                                         <option value="translation" {{ 'selected' if material and
                                             material.type=='translation' else '' }}>翻译练习</option>
+                                        <option value="reading_vocab_choice" {{ 'selected' if material and
+                                            material.type=='reading_vocab_choice' else '' }}>阅读词汇选择题</option>
                                         <option value="dictation" {{ 'selected' if material and
                                             material.type=='dictation' else '' }}>听写词库</option>
                                     </select>
@@ -224,6 +226,29 @@
                             </div>
                         </div>
 
+                        <!-- 阅读词汇选择题 -->
+                        <div id="readingVocabChoiceInput" style="display:none;">
+                            <div class="card mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    <h5 class="mb-0">📘 阅读词汇选择题上传</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold">Excel 文件 <span class="text-danger">*</span></label>
+                                        <input type="file" class="form-control-file" id="readingVocabChoiceFile" accept=".xlsx">
+                                        <small class="text-muted">支持列：英文、正确中文、选项A、选项B、选项C、选项D、答案</small>
+                                    </div>
+                                    <button type="button" class="btn btn-warning btn-sm" onclick="parseReadingVocabChoice()" id="readingVocabChoiceBtn">
+                                        <i class="fas fa-file-import"></i> 解析 Excel
+                                    </button>
+                                    <span id="readingVocabChoiceStatus" class="ml-2 small"></span>
+                                    <div class="alert alert-light mt-3 mb-0">
+                                        <i class="fas fa-info-circle"></i> 适用于“看英文，选择对应中文”的托福阅读词汇练习。解析完成后，下方会显示题目预览，保存后即可用于布置任务。
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- 听写词库专用输入区 -->
                         <div id="dictationInput" style="display:none;">
                             <!-- 模式选择 -->
@@ -312,17 +337,13 @@
     let questions = [];
 
     {% if questions_json %}
-    // Edit mode: load existing questions
     questions = {{ questions_json | safe }};
-    } catch (e) {
-        // Render questions immediately after page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            renderQuestions();
-        });
-    } catch (e) {
-        console.error('Failed to parse questions:', e);
-    }
     {% endif %}
+
+    document.addEventListener('DOMContentLoaded', function () {
+        handleTypeChange();
+        renderQuestions();
+    });
 
     // Handle material type change
     function handleTypeChange() {
@@ -336,6 +357,7 @@
         document.getElementById('speakingPart2Input').style.display = 'none';
         document.getElementById('speakingPart23Input').style.display = 'none';
         document.getElementById('translationInput').style.display = 'none';
+        document.getElementById('readingVocabChoiceInput').style.display = 'none';
         document.getElementById('dictationInput').style.display = 'none';
 
         // Show the selected type's input area
@@ -353,6 +375,8 @@
             document.getElementById('speakingPart23Input').style.display = 'block';
         } else if (type === 'translation') {
             document.getElementById('translationInput').style.display = 'block';
+        } else if (type === 'reading_vocab_choice') {
+            document.getElementById('readingVocabChoiceInput').style.display = 'block';
         } else if (type === 'dictation') {
             document.getElementById('dictationInput').style.display = 'block';
         }
@@ -479,6 +503,44 @@
         }
     }
 
+    async function parseReadingVocabChoice() {
+        const fileInput = document.getElementById('readingVocabChoiceFile');
+        const btn = document.getElementById('readingVocabChoiceBtn');
+        const status = document.getElementById('readingVocabChoiceStatus');
+
+        if (!fileInput.files.length) {
+            alert('请先选择 Excel 文件');
+            return;
+        }
+
+        btn.disabled = true;
+        status.innerHTML = '<span class="text-info">正在解析中...</span>';
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        try {
+            const response = await fetch('/api/materials/parse-reading-vocab-choice', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+            const data = await response.json();
+
+            if (data.ok && Array.isArray(data.questions)) {
+                questions = data.questions;
+                renderQuestions();
+                status.innerHTML = `<span class="text-success">✓ 成功解析 ${data.questions.length} 题</span>`;
+            } else {
+                status.innerHTML = `<span class="text-danger">失败：${data.message || data.error || '未知错误'}</span>`;
+            }
+        } catch (err) {
+            status.innerHTML = `<span class="text-danger">解析失败：${err.message}</span>`;
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
     // 渲染题目列表
     function renderQuestions() {
         const container = document.getElementById('questionsList');
@@ -551,6 +613,13 @@
             // Grammar: use existing questions array
             if (questions.length === 0) {
                 alert('请至少添加一道题目');
+                return;
+            }
+            payload.questions = questions;
+
+        } else if (type === 'reading_vocab_choice') {
+            if (questions.length === 0) {
+                alert('请先解析阅读词汇选择题 Excel');
                 return;
             }
             payload.questions = questions;

@@ -4,9 +4,11 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from models import db, MaterialBank, Question, QuestionOption, StudentAnswer, Task
 from datetime import datetime
+from openpyxl import load_workbook
 import re
 
 material_bp = Blueprint('material', __name__, url_prefix='/api/materials')
+READING_VOCAB_CHOICE_TYPE = 'reading_vocab_choice'
 
 
 def require_teacher():
@@ -16,6 +18,119 @@ def require_teacher():
     if current_user.role not in ['teacher', 'admin', 'assistant']:
         return jsonify({"ok": False, "error": "forbidden"}), 403
     return None
+
+
+def _build_choice_questions(material_id, questions_data):
+    for q_data in questions_data:
+        question = Question(
+            material_id=material_id,
+            sequence=q_data.get('sequence'),
+            question_type=q_data.get('question_type', 'choice'),
+            content=q_data.get('content'),
+            reference_answer=q_data.get('reference_answer'),
+            hint=q_data.get('hint'),
+            explanation=q_data.get('explanation', ''),
+            points=q_data.get('points', 1)
+        )
+        db.session.add(question)
+        db.session.flush()
+
+        if q_data.get('options'):
+            for opt in q_data['options']:
+                option = QuestionOption(
+                    question_id=question.id,
+                    option_key=opt['key'],
+                    option_text=opt['text']
+                )
+                db.session.add(option)
+
+
+def _normalize_header(value):
+    text = str(value or '').strip().lower()
+    return text.replace(' ', '').replace('_', '')
+
+
+def _parse_reading_vocab_choice_workbook(file_storage):
+    try:
+        wb = load_workbook(file_storage, data_only=True)
+    except Exception as exc:
+        raise ValueError(f"无法读取 Excel 文件: {exc}") from exc
+
+    ws = wb.active
+    rows = list(ws.iter_rows(values_only=True))
+    if not rows:
+        raise ValueError("Excel 为空")
+
+    headers = [_normalize_header(v) for v in rows[0]]
+    header_map = {name: idx for idx, name in enumerate(headers) if name}
+
+    english_idx = None
+    answer_idx = None
+    correct_chinese_idx = None
+    option_indices = {}
+
+    for key, idx in header_map.items():
+        if key in {'英文', 'english', 'word', '单词'}:
+            english_idx = idx
+        elif key in {'正确中文', 'correctchinese', 'correctmeaning', '正确释义'}:
+            correct_chinese_idx = idx
+        elif key in {'答案', 'answer'}:
+            answer_idx = idx
+        elif key in {'选项a', 'a', 'optiona'}:
+            option_indices['A'] = idx
+        elif key in {'选项b', 'b', 'optionb'}:
+            option_indices['B'] = idx
+        elif key in {'选项c', 'c', 'optionc'}:
+            option_indices['C'] = idx
+        elif key in {'选项d', 'd', 'optiond'}:
+            option_indices['D'] = idx
+
+    if english_idx is None:
+        raise ValueError("缺少“英文”列")
+    if answer_idx is None:
+        raise ValueError("缺少“答案”列")
+    if len(option_indices) != 4:
+        raise ValueError("必须包含 4 个选项列：选项A/选项B/选项C/选项D")
+
+    questions = []
+    for row_no, row in enumerate(rows[1:], start=2):
+        english = str(row[english_idx] or '').strip()
+        if not english:
+            continue
+
+        options = []
+        for key in ['A', 'B', 'C', 'D']:
+            idx = option_indices[key]
+            text = str(row[idx] or '').strip()
+            if not text:
+                raise ValueError(f"第 {row_no} 行缺少选项 {key}")
+            options.append({'key': key, 'text': text})
+
+        answer = str(row[answer_idx] or '').strip().upper()
+        if answer not in {'A', 'B', 'C', 'D'}:
+            raise ValueError(f"第 {row_no} 行答案必须是 A/B/C/D")
+
+        correct_chinese = ''
+        if correct_chinese_idx is not None:
+            correct_chinese = str(row[correct_chinese_idx] or '').strip()
+        if not correct_chinese:
+            correct_chinese = next((opt['text'] for opt in options if opt['key'] == answer), '')
+
+        questions.append({
+            'sequence': len(questions) + 1,
+            'question_type': 'choice',
+            'content': english,
+            'reference_answer': answer,
+            'hint': correct_chinese,
+            'explanation': '',
+            'points': 1,
+            'options': options,
+        })
+
+    if not questions:
+        raise ValueError("未识别到有效题目")
+
+    return questions
 
 
 # ============================================================================
@@ -121,32 +236,10 @@ def create_material():
     db.session.flush()  # Get material.id
     
     # Handle different material types
-    if material_type == 'grammar':
+    if material_type in {'grammar', READING_VOCAB_CHOICE_TYPE}:
         # Grammar: traditional questions with options
         questions_data = data.get('questions', [])
-        for q_data in questions_data:
-            question = Question(
-                material_id=material.id,
-                sequence=q_data.get('sequence'),
-                question_type=q_data.get('question_type', 'choice'),
-                content=q_data.get('content'),
-                reference_answer=q_data.get('reference_answer'),
-                hint=q_data.get('hint'),
-                explanation=q_data.get('explanation', ''),
-                points=q_data.get('points', 1)
-            )
-            db.session.add(question)
-            db.session.flush()
-            
-            # Create options for choice questions
-            if q_data.get('options'):
-                for opt in q_data['options']:
-                    option = QuestionOption(
-                        question_id=question.id,
-                        option_key=opt['key'],
-                        option_text=opt['text']
-                    )
-                    db.session.add(option)
+        _build_choice_questions(material.id, questions_data)
     
     elif material_type == 'writing_logic':
         # Writing logic chain: single question with essay data
@@ -258,28 +351,7 @@ def update_material(material_id):
         
         # Create new questions
         questions_data = data.get('questions', [])
-        for q_data in questions_data:
-            question = Question(
-                material_id=material.id,
-                sequence=q_data.get('sequence'),
-                question_type=q_data.get('question_type', 'choice'),
-                content=q_data.get('content'),
-                reference_answer=q_data.get('reference_answer'),
-                hint=q_data.get('hint'),
-                points=q_data.get('points', 1)
-            )
-            db.session.add(question)
-            db.session.flush()
-            
-            # Create options for choice questions
-            if q_data.get('options'):
-                for opt in q_data['options']:
-                    option = QuestionOption(
-                        question_id=question.id,
-                        option_key=opt['key'],
-                        option_text=opt['text']
-                    )
-                    db.session.add(option)
+        _build_choice_questions(material.id, questions_data)
     elif material.type == 'speaking_part1' and data.get('part1_questions'):
         Question.query.filter_by(material_id=material_id).delete()
         questions_list = _parse_speaking_part1(data.get('part1_questions', ''))
@@ -337,6 +409,31 @@ def delete_material(material_id):
     db.session.commit()
     
     return jsonify({"ok": True})
+
+
+@material_bp.route('/parse-reading-vocab-choice', methods=['POST'])
+@login_required
+def parse_reading_vocab_choice():
+    """Parse an Excel workbook of English-to-Chinese vocab choice questions."""
+    auth_check = require_teacher()
+    if auth_check:
+        return auth_check
+
+    if "file" not in request.files:
+        return jsonify({"ok": False, "error": "missing_file"}), 400
+
+    file = request.files["file"]
+    if not file.filename:
+        return jsonify({"ok": False, "error": "empty_filename"}), 400
+
+    if not file.filename.lower().endswith('.xlsx'):
+        return jsonify({"ok": False, "error": "invalid_extension", "message": "仅支持 .xlsx 文件"}), 400
+
+    try:
+        questions = _parse_reading_vocab_choice_workbook(file)
+        return jsonify({"ok": True, "questions": questions})
+    except ValueError as exc:
+        return jsonify({"ok": False, "error": "parse_failed", "message": str(exc)}), 400
 
 
 # ============================================================================

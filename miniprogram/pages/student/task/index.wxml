@@ -42,7 +42,7 @@
     <view class="section-title">📚 学习材料</view>
     
     <!-- 1. 语法练习 / 翻译练习 -->
-    <view wx:if="{{task.material.type === 'grammar' || task.material.type === 'translation'}}">
+    <view wx:if="{{task.material.type === 'grammar' || task.material.type === 'translation' || task.material.type === 'reading_vocab_choice'}}">
       <view class="question-item" wx:for="{{task.material.questions}}" wx:key="id">
         <text class="question-content">{{index + 1}}. {{item.content}}</text>
         <view class="options" wx:if="{{item.options && item.options.length > 0}}">
