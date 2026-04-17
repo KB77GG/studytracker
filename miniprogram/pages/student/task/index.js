@@ -125,6 +125,14 @@ Page({
         try {
             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
             if (res.ok && res.task) {
+                if (res.task.listening_exercise_id && res.task.listening_token) {
+                    const token = encodeURIComponent(res.task.listening_token)
+                    wx.redirectTo({
+                        url: `/pages/student/listening/practice/index?taskId=${this.data.taskId}&token=${token}`
+                    })
+                    return
+                }
+
                 // 检查是否是口语任务（通过 module 或 material.type）
                 const isSpeaking =
                     (res.task.module && (res.task.module.includes('口语') || res.task.module.includes('Speaking'))) ||

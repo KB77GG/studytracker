@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% block page_subtitle %}Listening Task Detail{% endblock %}
+{% block page_title %}精听任务明细{% endblock %}
+{% block header_actions %}
+<a class="btn" href="{{ url_for('tasks_page') }}">返回任务列表</a>
+{% endblock %}
+{% block content %}{% endblock %}
+{% block content_dashboard %}
+<section class="card-section">
+  <div class="listening-hero">
+    <div>
+      <div class="eyebrow">任务信息</div>
+      <h2>{{ task.student_name }} · {{ task.detail or exercise.title }}</h2>
+      <div class="meta-line">材料：{{ exercise.title }} · 任务日期：{{ task.date }} · 状态：{{ task.status }}</div>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('listening_player', exercise_id=exercise_id) }}?task_id={{ task.id }}&token={{ task.listening_access_token }}" target="_blank">打开练习页</a>
+    </div>
+  </div>
+
+  <div class="stat-grid listening-stats">
+    <article class="stat-card">
+      <p class="stat-label">完成句数</p>
+      <div class="stat-value">{{ summary.completed_count }}/{{ summary.total_segments }}</div>
+      <div class="stat-meta">完成率 {{ '%.1f'|format(summary.completion_rate) }}%</div>
+    </article>
+    <article class="stat-card">
+      <p class="stat-label">词级正确率</p>
+      <div class="stat-value">{{ '%.1f'|format(summary.accuracy) }}%</div>
+      <div class="stat-meta">{{ summary.total_correct }}/{{ summary.total_words }} 词正确</div>
+    </article>
+    <article class="stat-card">
+      <p class="stat-label">计划时长</p>
+      <div class="stat-value">{{ task.planned_minutes or 0 }} min</div>
+      <div class="stat-meta">实际 {{ ((task.actual_seconds or 0) / 60)|round(1) }} min</div>
+    </article>
+    <article class="stat-card">
+      <p class="stat-label">学生备注</p>
+      <div class="stat-value small-text">{{ task.student_note or '—' }}</div>
+      <div class="stat-meta">教师端查看</div>
+    </article>
+  </div>
+</section>
+
+<section class="card-section">
+  <div class="card-header">
+    <h3>句级结果</h3>
+    <div class="pill">{{ segment_rows|length }} 句</div>
+  </div>
+
+  <div class="segment-list">
+    {% for row in segment_rows %}
+    {% set result = row.result %}
+    <article class="segment-card {{ 'done' if result and result.is_completed else 'pending' }}">
+      <header class="segment-card__head">
+        <div>
+          <div class="segment-title">{{ row.part_name }} · 第{{ row.sentence_index + 1 }}句</div>
+          <div class="segment-meta">全局句序 {{ row.global_index + 1 }} · {{ '%.1f'|format(row.duration) }}s</div>
+        </div>
+        <div class="segment-pill {{ 'done' if result and result.is_completed else 'pending' }}">
+          {% if result and result.is_completed %}
+          {{ '%.1f'|format(result.accuracy) }}%
+          {% else %}
+          未完成
+          {% endif %}
+        </div>
+      </header>
+
+      <div class="segment-body">
+        <div class="segment-block">
+          <div class="block-label">原文</div>
+          <div class="block-text">{{ row.text }}</div>
+        </div>
+        {% if row.translation %}
+        <div class="segment-block">
+          <div class="block-label">译文</div>
+          <div class="block-text secondary">{{ row.translation }}</div>
+        </div>
+        {% endif %}
+
+        <div class="segment-grid">
+          <div class="segment-block">
+            <div class="block-label">结果</div>
+            {% if result and result.is_completed %}
+            <div class="mini-meta">尝试 {{ result.attempt_count }} 次 · 正确 {{ result.correct_words }}/{{ result.total_words }}</div>
+            {% else %}
+            <div class="mini-meta">学生还没有提交这一句</div>
+            {% endif %}
+          </div>
+          <div class="segment-block">
+            <div class="block-label">挖空位置</div>
+            <div class="mini-meta">
+              {% if row.hidden_indices_display %}
+                第 {% for pos in row.hidden_indices_display %}{{ pos }}{% if not loop.last %}、{% endif %}{% endfor %} 位单词
+              {% else %}
+                —
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="segment-block">
+          <div class="block-label">答案对照</div>
+          {% if row.answer_pairs %}
+          <div class="answer-list">
+            {% for pair in row.answer_pairs %}
+            <div class="answer-item {{ 'correct' if pair.is_correct else 'wrong' }}">
+              <span class="answer-index">#{{ pair.index }}</span>
+              <span class="answer-expected">{{ pair.answer }}</span>
+              <span class="answer-arrow">→</span>
+              <span class="answer-actual">{{ pair.student_answer or '（空）' }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="mini-meta">本句暂无答案记录</div>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  .listening-hero {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .meta-line {
+    color: #6b7280;
+    margin-top: 8px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+  }
+  .listening-stats .small-text {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  .segment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .segment-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background: #fff;
+    padding: 18px;
+  }
+  .segment-card.done {
+    border-color: #b7ead8;
+    background: linear-gradient(180deg, #ffffff 0%, #f6fffb 100%);
+  }
+  .segment-card__head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .segment-title {
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .segment-meta,
+  .mini-meta {
+    color: #64748b;
+    font-size: 14px;
+  }
+  .segment-pill {
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .segment-pill.done {
+    background: #dcfce7;
+    color: #166534;
+  }
+  .segment-pill.pending {
+    background: #f1f5f9;
+    color: #475569;
+  }
+  .segment-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .segment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .segment-block {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+  .block-label {
+    font-size: 12px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 6px;
+  }
+  .block-text {
+    color: #0f172a;
+    line-height: 1.7;
+  }
+  .block-text.secondary {
+    color: #334155;
+  }
+  .answer-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .answer-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 14px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+  }
+  .answer-item.correct {
+    border-color: #bbf7d0;
+    background: #f0fdf4;
+  }
+  .answer-item.wrong {
+    border-color: #fecaca;
+    background: #fef2f2;
+  }
+  .answer-index {
+    color: #475569;
+    font-weight: 600;
+  }
+  .answer-expected {
+    color: #0f172a;
+    font-weight: 600;
+  }
+  .answer-arrow {
+    color: #94a3b8;
+  }
+  .answer-actual {
+    color: #334155;
+  }
+  @media (max-width: 900px) {
+    .listening-hero,
+    .segment-card__head,
+    .segment-grid {
+      display: block;
+    }
+    .hero-actions {
+      margin-top: 14px;
+    }
+    .segment-pill {
+      display: inline-block;
+      margin-top: 10px;
+    }
+  }
+</style>
+{% endblock %}

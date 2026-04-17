@@ -85,6 +85,88 @@ def time_ago(dt):
         return dt.strftime("%Y-%m-%d")
 
 
+def _role_can_manage_listening(user) -> bool:
+    return bool(
+        user.is_authenticated
+        and user.role in (User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+    )
+
+
+def _listening_root() -> Path:
+    return Path(app.static_folder) / "listening"
+
+
+def _load_listening_meta(exercise_id: str):
+    safe_id = secure_filename(exercise_id)
+    json_path = _listening_root() / f"{safe_id}.json"
+    if not json_path.exists():
+        return None, None, safe_id
+    payload = json.loads(json_path.read_text(encoding="utf-8"))
+    return payload, json_path, safe_id
+
+
+def _flatten_listening_segments(payload: dict) -> list[dict]:
+    rows = []
+    global_index = 0
+    for part_idx, part in enumerate(payload.get("parts", [])):
+        part_name = part.get("name") or f"Part {part_idx + 1}"
+        for seg_idx, seg in enumerate(part.get("segments", [])):
+            rows.append(
+                {
+                    "global_index": global_index,
+                    "part_index": part_idx,
+                    "part_name": part_name,
+                    "sentence_index": seg_idx,
+                    "segment_id": seg.get("id"),
+                    "start": float(seg.get("start") or 0),
+                    "end": float(seg.get("end") or 0),
+                    "duration": round(float(seg.get("end") or 0) - float(seg.get("start") or 0), 1),
+                    "text": seg.get("text") or "",
+                    "translation": seg.get("translation") or "",
+                }
+            )
+            global_index += 1
+    return rows
+
+
+def _listening_exercise_usage_map():
+    tasks = Task.query.filter(Task.listening_exercise_id.isnot(None)).all()
+    usage_map = {}
+    for task in tasks:
+        exercise_id = (task.listening_exercise_id or "").strip()
+        if not exercise_id:
+            continue
+        entry = usage_map.setdefault(
+            exercise_id,
+            {
+                "task_count": 0,
+                "done_count": 0,
+                "progress_count": 0,
+                "students": set(),
+                "accuracy_sum": 0.0,
+                "accuracy_count": 0,
+                "last_assigned": None,
+            },
+        )
+        entry["task_count"] += 1
+        entry["students"].add(task.student_name or "")
+        if task.status == "done":
+            entry["done_count"] += 1
+        elif task.status == "progress":
+            entry["progress_count"] += 1
+        if task.accuracy is not None:
+            entry["accuracy_sum"] += float(task.accuracy)
+            entry["accuracy_count"] += 1
+        if task.date:
+            try:
+                task_date = datetime.fromisoformat(task.date)
+            except ValueError:
+                task_date = None
+            if task_date and (entry["last_assigned"] is None or task_date > entry["last_assigned"]):
+                entry["last_assigned"] = task_date
+    return usage_map
+
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -1578,6 +1660,7 @@ def tasks_page():
             "detail": t.detail,
             "status": t.status,
             "note": t.note,
+            "listening_exercise_id": t.listening_exercise_id,
             "planned_minutes": planned,
             "actual_minutes": actual_minutes,
             "progress": progress,
@@ -1956,6 +2039,84 @@ def review_task_page(tid):
         except:
             pass
     return render_template("review_task.html", task=task, evidence_photos=evidence_photos)
+
+
+@app.route("/tasks/<int:tid>/listening")
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def task_listening_detail_page(tid):
+    task = Task.query.get_or_404(tid)
+    if not task.listening_exercise_id:
+        flash("该任务不是精听任务", "error")
+        return redirect(url_for("tasks_page"))
+
+    payload, json_path, safe_id = _load_listening_meta(task.listening_exercise_id)
+    if payload is None or not json_path:
+        flash("精听材料不存在或已损坏", "error")
+        return redirect(url_for("tasks_page"))
+
+    result_rows = {
+        row.segment_index: row
+        for row in ListeningSegmentResult.query.filter_by(task_id=task.id).order_by(ListeningSegmentResult.segment_index.asc()).all()
+    }
+
+    segment_rows = []
+    total_correct = 0
+    total_words = 0
+    completed_count = 0
+    for segment in _flatten_listening_segments(payload):
+        result = result_rows.get(segment["global_index"])
+        hidden_indices = json.loads(result.hidden_word_indices) if result and result.hidden_word_indices else []
+        answers = json.loads(result.answers_json) if result and result.answers_json else []
+        pairs = []
+        words = [w for w in segment["text"].split() if w]
+        for pos, word_index in enumerate(hidden_indices):
+            raw_word = words[word_index] if 0 <= word_index < len(words) else ""
+            display_answer = re.sub(r"^[\W_]+|[\W_]+$", "", raw_word)
+            student_answer = answers[pos] if pos < len(answers) else ""
+            pairs.append({
+                "index": word_index + 1,
+                "answer": display_answer or raw_word,
+                "student_answer": student_answer,
+                "is_correct": (
+                    re.sub(r"[^\w]", "", (student_answer or "").lower())
+                    == re.sub(r"[^\w]", "", (display_answer or raw_word or "").lower())
+                ),
+            })
+
+        if result and result.is_completed:
+            completed_count += 1
+            total_correct += int(result.correct_words or 0)
+            total_words += int(result.total_words or 0)
+
+        segment_rows.append({
+            **segment,
+            "result": result,
+            "hidden_indices": hidden_indices,
+            "hidden_indices_display": [idx + 1 for idx in hidden_indices],
+            "answers": answers,
+            "answer_pairs": pairs,
+        })
+
+    total_segments = len(segment_rows)
+    summary_accuracy = round(total_correct * 100.0 / total_words, 1) if total_words else float(task.accuracy or 0.0)
+    summary_completion = round(completed_count * 100.0 / total_segments, 1) if total_segments else float(task.completion_rate or 0.0)
+
+    return render_template(
+        "tasks_listening_detail.html",
+        task=task,
+        exercise=payload,
+        exercise_id=safe_id,
+        segment_rows=segment_rows,
+        summary={
+            "completed_count": completed_count,
+            "total_segments": total_segments,
+            "accuracy": summary_accuracy,
+            "completion_rate": summary_completion,
+            "total_correct": total_correct,
+            "total_words": total_words,
+        },
+    )
 
 
 @app.post("/api/tasks/<int:tid>/review")
@@ -4050,12 +4211,15 @@ def export_stage_report_pdf(report_id):
 @app.route("/listening")
 def listening_index():
     """列出所有可用的精听练习（学生通过姓名验证访问）。"""
-    listening_dir = Path(app.static_folder) / "listening"
+    listening_dir = _listening_root()
     exercises = []
+    usage_map = _listening_exercise_usage_map()
     if listening_dir.exists():
         for f in sorted(listening_dir.glob("*.json")):
             try:
                 meta = json.loads(f.read_text(encoding="utf-8"))
+                usage = usage_map.get(f.stem, {})
+                accuracy_count = int(usage.get("accuracy_count") or 0)
                 exercises.append({
                     "id": f.stem,
                     "title": meta.get("title", f.stem),
@@ -4064,14 +4228,21 @@ def listening_index():
                         len(p.get("segments", []))
                         for p in meta.get("parts", [])
                     ),
+                    "task_count": int(usage.get("task_count") or 0),
+                    "done_count": int(usage.get("done_count") or 0),
+                    "progress_count": int(usage.get("progress_count") or 0),
+                    "student_count": len(usage.get("students") or []),
+                    "avg_accuracy": round(float(usage.get("accuracy_sum") or 0.0) / accuracy_count, 1)
+                    if accuracy_count
+                    else None,
+                    "last_assigned": usage.get("last_assigned").strftime("%Y-%m-%d")
+                    if usage.get("last_assigned")
+                    else None,
                 })
             except Exception:
                 pass
     # 已登录员工可以看到上传按钮
-    show_upload = (
-        current_user.is_authenticated
-        and current_user.role in (User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
-    )
+    show_upload = _role_can_manage_listening(current_user)
     return render_template("listening/index.html", exercises=exercises, show_upload=show_upload)
 
 
@@ -4079,6 +4250,41 @@ def listening_index():
 def listening_player(exercise_id):
     """精听播放器页面。"""
     return render_template("listening/player.html", exercise_id=exercise_id)
+
+
+@app.post("/api/listening/<exercise_id>/delete")
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def api_delete_listening_exercise(exercise_id):
+    payload, json_path, safe_id = _load_listening_meta(exercise_id)
+    if payload is None or not json_path:
+        return jsonify({"ok": False, "error": "exercise_not_found"}), 404
+
+    linked_count = Task.query.filter_by(listening_exercise_id=safe_id).count()
+    if linked_count > 0:
+        return jsonify({
+            "ok": False,
+            "error": "exercise_in_use",
+            "message": f"已有 {linked_count} 个任务引用该精听练习，无法删除。"
+        }), 400
+
+    to_delete = [json_path]
+    transcript_path = _listening_root() / f"{safe_id}.txt"
+    if transcript_path.exists():
+        to_delete.append(transcript_path)
+    audio_name = payload.get("audio")
+    if audio_name:
+        audio_path = _listening_root() / secure_filename(audio_name)
+        if audio_path.exists():
+            to_delete.append(audio_path)
+
+    for file_path in to_delete:
+        try:
+            file_path.unlink(missing_ok=True)
+        except Exception as exc:
+            current_app.logger.warning("Failed deleting listening asset %s: %s", file_path, exc)
+
+    return jsonify({"ok": True, "deleted_id": safe_id})
 
 
 @app.route("/api/listening/verify", methods=["POST"])

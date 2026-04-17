@@ -80,6 +80,57 @@ body {
 }
 .exercise-card h3 { font-size: 16px; margin-bottom: 8px; }
 .exercise-meta { font-size: 13px; color: #64748b; }
+.exercise-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.exercise-stat {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.exercise-stat .k {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}
+.exercise-stat .v {
+  display: block;
+  margin-top: 4px;
+  font-size: 15px;
+  color: #0f172a;
+  font-weight: 600;
+}
+.exercise-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.exercise-actions .action-btn {
+  flex: 1;
+  text-align: center;
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+.action-open {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+.action-manage {
+  background: #dcfce7;
+  color: #166534;
+}
+.action-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
 
 .empty-state {
   text-align: center;
@@ -171,10 +222,35 @@ body {
   {% if exercises %}
   <div class="exercise-grid">
     {% for ex in exercises %}
-    <a class="exercise-card" href="{{ url_for('listening_player', exercise_id=ex.id) }}">
+    <div class="exercise-card">
       <h3>{{ ex.title }}</h3>
       <div class="exercise-meta">{{ ex.segment_count }} 个句子</div>
-    </a>
+      <div class="exercise-stats">
+        <div class="exercise-stat">
+          <span class="k">布置任务</span>
+          <span class="v">{{ ex.task_count }}</span>
+        </div>
+        <div class="exercise-stat">
+          <span class="k">完成任务</span>
+          <span class="v">{{ ex.done_count }}</span>
+        </div>
+        <div class="exercise-stat">
+          <span class="k">平均正确率</span>
+          <span class="v">{{ ('%.1f%%'|format(ex.avg_accuracy)) if ex.avg_accuracy is not none else '—' }}</span>
+        </div>
+        <div class="exercise-stat">
+          <span class="k">最近布置</span>
+          <span class="v">{{ ex.last_assigned or '—' }}</span>
+        </div>
+      </div>
+      <div class="exercise-actions">
+        <a class="action-btn action-open" href="{{ url_for('listening_player', exercise_id=ex.id) }}">打开练习</a>
+        <a class="action-btn action-manage" href="{{ url_for('tasks_page') }}#taskForm">去任务页</a>
+        <button class="action-btn action-danger js-delete-exercise" data-id="{{ ex.id }}" {% if ex.task_count > 0 %}disabled title="已有任务引用，不能删除"{% endif %}>
+          删除
+        </button>
+      </div>
+    </div>
     {% endfor %}
   </div>
   {% else %}
@@ -295,6 +371,33 @@ if (document.getElementById('loginGate')) {
     if (e.key === 'Enter') verifyStudent();
   });
 }
+
+document.querySelectorAll('.js-delete-exercise').forEach(btn => {
+  btn.addEventListener('click', async function(e) {
+    e.preventDefault();
+    const exerciseId = this.dataset.id;
+    if (!exerciseId) return;
+    if (this.disabled) {
+      alert('该练习已经被任务引用，不能删除。');
+      return;
+    }
+    if (!confirm(`确认删除精听练习 ${exerciseId}？删除后音频和文本将一起移除。`)) return;
+    this.disabled = true;
+    try {
+      const res = await fetch(`/api/listening/${encodeURIComponent(exerciseId)}/delete`, { method: 'POST' });
+      const data = await res.json();
+      if (!data.ok) {
+        alert(data.message || data.error || '删除失败');
+        this.disabled = false;
+        return;
+      }
+      location.reload();
+    } catch (err) {
+      this.disabled = false;
+      alert('删除失败，请稍后重试');
+    }
+  });
+});
 </script>
 </body>
 </html>
