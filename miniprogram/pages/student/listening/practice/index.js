@@ -206,12 +206,15 @@ Page({
     flattenSegments(exercise) {
         const parts = exercise.parts || []
         const segments = []
-        let globalIndex = 0
+        let fallbackIndex = 0
         parts.forEach((part, partIndex) => {
             const items = part.segments || []
             items.forEach((segment, sentenceIndex) => {
+                const sourceIndex = Number.isInteger(segment.source_index)
+                    ? Number(segment.source_index)
+                    : fallbackIndex
                 segments.push({
-                    globalIndex,
+                    globalIndex: sourceIndex,
                     partIndex,
                     partName: part.name || `Part ${partIndex + 1}`,
                     partShort: `P${partIndex + 1}`,
@@ -221,7 +224,7 @@ Page({
                     text: segment.text || '',
                     translation: segment.translation || ''
                 })
-                globalIndex += 1
+                fallbackIndex += 1
             })
         })
         return segments

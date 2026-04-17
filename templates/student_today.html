@@ -103,6 +103,9 @@
       <div>
         <strong>{{ lt.detail or lt.listening_exercise_id }}</strong>
         <div class="muted small" style="margin-top: 4px;">
+          已分配 {{ lt.listening_segment_count or 0 }} 句
+        </div>
+        <div class="muted small" style="margin-top: 4px;">
           {% if lt.status == 'done' %}
             准确率: {{ '%.1f' | format(lt.accuracy or 0) }}% · 完成率: {{ '%.0f' | format(lt.completion_rate or 0) }}%
           {% elif lt.completion_rate and lt.completion_rate > 0 %}
@@ -121,6 +124,22 @@
   {% endfor %}
 </section>
 {% endif %}
+
+<section class="card" style="margin-top: 24px;">
+  <h3 style="margin-bottom: 12px;">自由精听练习</h3>
+  <article class="plan-item" style="padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+      <div>
+        <strong>网页端自主精听</strong>
+        <div class="muted small" style="margin-top: 4px;">可自行进入精听材料列表训练，浏览器会自动保存自由练习进度。</div>
+      </div>
+      <a href="/listening"
+         style="padding: 8px 20px; background: #0f766e; color: #fff; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+        去自由练习
+      </a>
+    </div>
+  </article>
+</section>
 
 {% if recent_plans %}
 <section class="card recent-plans">

@@ -111,9 +111,11 @@ def _flatten_listening_segments(payload: dict) -> list[dict]:
     for part_idx, part in enumerate(payload.get("parts", [])):
         part_name = part.get("name") or f"Part {part_idx + 1}"
         for seg_idx, seg in enumerate(part.get("segments", [])):
+            source_index = seg.get("source_index")
+            segment_index = source_index if isinstance(source_index, int) else global_index
             rows.append(
                 {
-                    "global_index": global_index,
+                    "global_index": segment_index,
                     "part_index": part_idx,
                     "part_name": part_name,
                     "sentence_index": seg_idx,
@@ -165,6 +167,59 @@ def _listening_exercise_usage_map():
             if task_date and (entry["last_assigned"] is None or task_date > entry["last_assigned"]):
                 entry["last_assigned"] = task_date
     return usage_map
+
+
+def _selected_listening_segment_indices(task):
+    raw = (task.question_ids or "").strip()
+    if not raw:
+        return None
+    try:
+        values = json.loads(raw)
+    except Exception:
+        return None
+    if not isinstance(values, list):
+        return None
+    selected = []
+    for value in values:
+        try:
+            selected.append(int(value))
+        except (TypeError, ValueError):
+            continue
+    return sorted(set(selected)) if selected else None
+
+
+def _build_listening_task_payload(task, exercise_data: dict):
+    selected = _selected_listening_segment_indices(task)
+    selected_set = set(selected or [])
+    filtered_parts = []
+    retained_indices = []
+    global_index = 0
+
+    for part in exercise_data.get("parts", []):
+        next_part = dict(part)
+        next_segments = []
+        for segment in part.get("segments", []):
+            keep = not selected_set or global_index in selected_set
+            if keep:
+                next_segment = dict(segment)
+                next_segment["source_index"] = global_index
+                next_segments.append(next_segment)
+                retained_indices.append(global_index)
+            global_index += 1
+        if next_segments:
+            next_part["segments"] = next_segments
+            filtered_parts.append(next_part)
+
+    payload = dict(exercise_data)
+    payload["parts"] = filtered_parts
+    payload["selected_segment_indices"] = retained_indices if selected else []
+    payload["selected_segment_count"] = len(retained_indices)
+    return payload
+
+
+def _listening_segment_count_for_task(task, exercise_data: dict) -> int:
+    payload = _build_listening_task_payload(task, exercise_data)
+    return sum(len(part.get("segments", [])) for part in payload.get("parts", []))
 
 
 
@@ -809,6 +864,8 @@ def student_today():
         if not task.listening_access_token:
             task.listening_access_token = secrets.token_urlsafe(16)
             tokens_updated = True
+        payload, _, _ = _load_listening_meta(task.listening_exercise_id or "")
+        task.listening_segment_count = _listening_segment_count_for_task(task, payload) if payload else 0
     if tokens_updated:
         db.session.commit()
 
@@ -1529,7 +1586,6 @@ def tasks_page():
         listening_access_token = None
         if listening_exercise_id:
             # 自动填充 category 和 detail
-            category = "雅思-听力-精听"
             listening_access_token = secrets.token_urlsafe(16)
             listening_json = Path(app.static_folder) / "listening" / f"{secure_filename(listening_exercise_id)}.json"
             if listening_json.exists():
@@ -1537,6 +1593,13 @@ def tasks_page():
                 detail = meta.get("title", listening_exercise_id)
             elif not detail:
                 detail = listening_exercise_id
+            title_upper = detail.upper()
+            if "托福" in detail or "TOEFL" in title_upper:
+                category = "托福-听力-精听"
+            elif "雅思" in detail or "IELTS" in title_upper:
+                category = "雅思-听力-精听"
+            else:
+                category = category or "精听练习"
 
         # Validate: need either category or material_id or listening_exercise_id
         if not student:
@@ -1823,16 +1886,31 @@ def tasks_page():
 
     # 精听练习列表
     listening_exercises = []
+    listening_exercise_segments = {}
     listening_dir = Path(app.static_folder) / "listening"
     if listening_dir.exists():
         for f in sorted(listening_dir.glob("*.json")):
             try:
                 meta = json.loads(f.read_text(encoding="utf-8"))
+                segment_items = []
+                global_idx = 0
+                for part_idx, part in enumerate(meta.get("parts", [])):
+                    part_name = part.get("name") or f"Part {part_idx + 1}"
+                    for seg_idx, seg in enumerate(part.get("segments", [])):
+                        text = (seg.get("text") or "").strip()
+                        preview = text[:90] + ("..." if len(text) > 90 else "")
+                        segment_items.append({
+                            "id": global_idx,
+                            "sequence": global_idx + 1,
+                            "content": f"{part_name} · 第{seg_idx + 1}句 · {preview}",
+                        })
+                        global_idx += 1
                 listening_exercises.append({
                     "id": f.stem,
                     "title": meta.get("title", f.stem),
                     "segment_count": sum(len(p.get("segments", [])) for p in meta.get("parts", [])),
                 })
+                listening_exercise_segments[f.stem] = segment_items
             except Exception:
                 pass
 
@@ -1849,6 +1927,7 @@ def tasks_page():
         pending_reviews=pending_reviews,
         dictation_range_hints=dictation_range_hints,
         listening_exercises=listening_exercises,
+        listening_exercise_segments=listening_exercise_segments,
     )
 
 # ---- Grading Interface ----
@@ -2054,6 +2133,7 @@ def task_listening_detail_page(tid):
     if payload is None or not json_path:
         flash("精听材料不存在或已损坏", "error")
         return redirect(url_for("tasks_page"))
+    task_payload = _build_listening_task_payload(task, payload)
 
     result_rows = {
         row.segment_index: row
@@ -2064,7 +2144,7 @@ def task_listening_detail_page(tid):
     total_correct = 0
     total_words = 0
     completed_count = 0
-    for segment in _flatten_listening_segments(payload):
+    for segment in _flatten_listening_segments(task_payload):
         result = result_rows.get(segment["global_index"])
         hidden_indices = json.loads(result.hidden_word_indices) if result and result.hidden_word_indices else []
         answers = json.loads(result.answers_json) if result and result.answers_json else []
@@ -2105,7 +2185,7 @@ def task_listening_detail_page(tid):
     return render_template(
         "tasks_listening_detail.html",
         task=task,
-        exercise=payload,
+        exercise=task_payload,
         exercise_id=safe_id,
         segment_rows=segment_rows,
         summary={
@@ -4634,11 +4714,15 @@ def api_student_listening_task(task_id):
     if not json_path.exists():
         return jsonify({"ok": False, "error": "exercise_not_found"}), 404
     exercise_data = json.loads(json_path.read_text(encoding="utf-8"))
+    task_exercise_data = _build_listening_task_payload(task, exercise_data)
+    selected_indices = set(task_exercise_data.get("selected_segment_indices") or [])
 
     # 已有进度
     results = ListeningSegmentResult.query.filter_by(task_id=task_id).all()
     progress = {}
     for r in results:
+        if selected_indices and r.segment_index not in selected_indices:
+            continue
         progress[r.segment_index] = {
             "segment_index": r.segment_index,
             "correct_words": r.correct_words,
@@ -4658,8 +4742,9 @@ def api_student_listening_task(task_id):
             "status": task.status,
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
+            "selected_segment_count": task_exercise_data.get("selected_segment_count"),
         },
-        "exercise": exercise_data,
+        "exercise": task_exercise_data,
         "progress": progress,
     })
 
@@ -4677,6 +4762,9 @@ def api_student_listening_submit_segment(task_id, segment_index):
         return jsonify({"ok": False, "error": "task_not_found"}), 404
     if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, access_token):
         return jsonify({"ok": False, "error": "invalid_token"}), 403
+    selected_indices = _selected_listening_segment_indices(task)
+    if selected_indices and segment_index not in set(selected_indices):
+        return jsonify({"ok": False, "error": "segment_not_assigned"}), 400
 
     correct_words = int(data.get("correct_words", 0))
     total_words = int(data.get("total_words", 0))
@@ -4720,17 +4808,21 @@ def api_student_listening_submit_segment(task_id, segment_index):
     total_segments = 0
     if json_path.exists():
         ex_data = json.loads(json_path.read_text(encoding="utf-8"))
-        for part in ex_data.get("parts", []):
-            total_segments += len(part.get("segments", []))
+        total_segments = _listening_segment_count_for_task(task, ex_data)
 
     all_results = ListeningSegmentResult.query.filter_by(task_id=task_id).all()
+    selected_set = set(selected_indices or [])
     # 加上当前这条（如果是新建的还没在 all_results 里）
-    completed_count = sum(1 for r in all_results if r.is_completed)
-    if not any(r.segment_index == segment_index for r in all_results):
+    relevant_results = [
+        r for r in all_results
+        if not selected_set or r.segment_index in selected_set
+    ]
+    completed_count = sum(1 for r in relevant_results if r.is_completed)
+    if not any(r.segment_index == segment_index for r in relevant_results):
         completed_count += 1  # 新记录
 
-    total_correct = sum(r.correct_words for r in all_results if r.segment_index != segment_index) + correct_words
-    total_total = sum(r.total_words for r in all_results if r.segment_index != segment_index) + total_words
+    total_correct = sum(r.correct_words for r in relevant_results if r.segment_index != segment_index) + correct_words
+    total_total = sum(r.total_words for r in relevant_results if r.segment_index != segment_index) + total_words
 
     task.completion_rate = round(completed_count / total_segments * 100, 1) if total_segments > 0 else 0.0
     task.accuracy = round(total_correct / total_total * 100, 1) if total_total > 0 else 0.0

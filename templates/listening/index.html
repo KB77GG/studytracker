@@ -80,6 +80,14 @@ body {
 }
 .exercise-card h3 { font-size: 16px; margin-bottom: 8px; }
 .exercise-meta { font-size: 13px; color: #64748b; }
+.exercise-progress {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #2563eb;
+}
+.exercise-progress.muted {
+  color: #64748b;
+}
 .exercise-stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -217,7 +225,7 @@ body {
     <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
     {% endif %}
   </div>
-  <p class="subtitle">选择一个练习开始精听训练</p>
+  <p class="subtitle">选择一个练习开始精听训练。学生自由练习会在当前浏览器自动保存进度。</p>
 
   {% if exercises %}
   <div class="exercise-grid">
@@ -287,14 +295,15 @@ body {
   <div class="page-header">
     <h1>精听练习</h1>
   </div>
-  <p class="subtitle">选择一个练习开始精听训练</p>
+  <p class="subtitle">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
 
   {% if exercises %}
   <div class="exercise-grid">
     {% for ex in exercises %}
-    <a class="exercise-card" href="{{ url_for('listening_player', exercise_id=ex.id) }}">
+    <a class="exercise-card js-student-exercise-card" href="{{ url_for('listening_player', exercise_id=ex.id) }}" data-exercise-id="{{ ex.id }}" data-segment-count="{{ ex.segment_count }}">
       <h3>{{ ex.title }}</h3>
       <div class="exercise-meta">{{ ex.segment_count }} 个句子</div>
+      <div class="exercise-progress muted">尚未开始</div>
     </a>
     {% endfor %}
   </div>
@@ -327,6 +336,7 @@ if (document.getElementById('loginGate')) {
     .then(data => {
       if (data.ok) {
         sessionStorage.setItem('listening_student', name);
+        localStorage.setItem('listening_student', name);
         showMain(name);
       } else {
         const err = document.getElementById('errorMsg');
@@ -350,10 +360,12 @@ if (document.getElementById('loginGate')) {
     document.getElementById('loginGate').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('displayName').textContent = name;
+    refreshExerciseProgress(name);
   }
 
   function logout() {
     sessionStorage.removeItem('listening_student');
+    localStorage.removeItem('listening_student');
     document.getElementById('loginGate').style.display = 'block';
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('studentName').value = '';
@@ -362,13 +374,52 @@ if (document.getElementById('loginGate')) {
 
   // Auto-login if previously verified in this session
   document.addEventListener('DOMContentLoaded', function() {
-    const saved = sessionStorage.getItem('listening_student');
+    const saved = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student');
+    if (saved) sessionStorage.setItem('listening_student', saved);
     if (saved) showMain(saved);
+  });
+
+  window.addEventListener('pageshow', function() {
+    const saved = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student');
+    if (saved && document.getElementById('mainContent').style.display !== 'none') {
+      refreshExerciseProgress(saved);
+    }
   });
 
   // Enter key to submit
   document.getElementById('studentName').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') verifyStudent();
+  });
+}
+
+function refreshExerciseProgress(studentName) {
+  if (!studentName) return;
+  document.querySelectorAll('.js-student-exercise-card').forEach(card => {
+    const exerciseId = card.dataset.exerciseId;
+    const segmentCount = Number(card.dataset.segmentCount || 0);
+    const progressEl = card.querySelector('.exercise-progress');
+    if (!exerciseId || !progressEl) return;
+
+    let progress = {};
+    try {
+      progress = JSON.parse(localStorage.getItem(`listening_free_progress_${exerciseId}_${studentName}`) || '{}') || {};
+    } catch (err) {
+      progress = {};
+    }
+
+    const rows = Object.values(progress);
+    const completedCount = rows.filter(item => item && item.is_completed).length;
+    const totalWords = rows.reduce((sum, item) => sum + (Number(item.total_words) || 0), 0);
+    const correctWords = rows.reduce((sum, item) => sum + (Number(item.correct_words) || 0), 0);
+    const accuracy = totalWords > 0 ? Math.round(correctWords * 100 / totalWords) : 0;
+
+    if (completedCount > 0) {
+      progressEl.textContent = `本地进度 ${completedCount}/${segmentCount} 句 · 正确率 ${accuracy}%`;
+      progressEl.classList.remove('muted');
+    } else {
+      progressEl.textContent = '尚未开始';
+      progressEl.classList.add('muted');
+    }
   });
 }
 

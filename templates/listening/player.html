@@ -537,6 +537,7 @@ body {
     <div class="topbar">
       <div class="topbar-title" id="currentSentenceLabel">第1句</div>
       <div class="topbar-actions">
+        <button class="ctrl-btn" id="btnResetFreeProgress" type="button" style="display:none">重置本地进度</button>
         <a class="back-link" href="{{ url_for('listening_index') }}">返回列表</a>
       </div>
     </div>
@@ -662,6 +663,7 @@ body {
   let showOriginal = false;
   let showTranslation = false;
   let completedSegs = new Set();
+  let freeProgress = {};
   let sentenceLoopActive = false;
   const difficultyLevels = [0.3, 0.5, 0.8, 1.0];  // 简单/标准/挑战/地狱
   let difficultyIdx = 1;  // 默认标准
@@ -672,6 +674,7 @@ body {
   let autoRepeatCompletedCount = 0;
   let autoRepeatTimer = null;
   let segmentEndHandled = false;
+  let retryingSegmentIndex = null;
 
   const audio = document.getElementById('audio');
   const exerciseId = "{{ exercise_id }}";
@@ -681,6 +684,107 @@ body {
   const taskId = urlParams.get('task_id');
   const taskToken = urlParams.get('token') || '';
   let taskProgress = {};  // segment_index -> result
+  const freeStudentName = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student') || 'guest';
+
+  function getFreeProgressStorageKey() {
+    return `listening_free_progress_${exerciseId}_${freeStudentName}`;
+  }
+
+  function loadFreeProgress() {
+    try {
+      freeProgress = JSON.parse(localStorage.getItem(getFreeProgressStorageKey()) || '{}') || {};
+    } catch (err) {
+      freeProgress = {};
+    }
+  }
+
+  function saveFreeProgress() {
+    try {
+      localStorage.setItem(getFreeProgressStorageKey(), JSON.stringify(freeProgress));
+    } catch (err) {
+      console.warn('free progress save failed', err);
+    }
+  }
+
+  function clearFreeProgress() {
+    freeProgress = {};
+    try {
+      localStorage.removeItem(getFreeProgressStorageKey());
+    } catch (err) {
+      console.warn('free progress clear failed', err);
+    }
+  }
+
+  function getSegmentSourceIndex(seg, fallbackIdx) {
+    return typeof seg?.source_index === 'number' ? seg.source_index : fallbackIdx;
+  }
+
+  function applyCompletedMarkers(progressMap) {
+    completedSegs.clear();
+    let globalOffset = 0;
+    data.parts.forEach((part, pIdx) => {
+      (part.segments || []).forEach((seg, sIdx) => {
+        const realIdx = getSegmentSourceIndex(seg, globalOffset + sIdx);
+        if (progressMap[realIdx] && progressMap[realIdx].is_completed) {
+          completedSegs.add(`${pIdx}-${sIdx}`);
+        }
+      });
+      globalOffset += (part.segments || []).length;
+    });
+  }
+
+  function updatePracticeSubtitle(progressMap, totalSegs) {
+    const sub = document.getElementById('exerciseSubtitle');
+    if (!sub) return;
+    const rows = Object.values(progressMap || {});
+    const completedCount = rows.filter(r => r.is_completed).length;
+    const correctWords = rows.reduce((sum, r) => sum + (Number(r.correct_words) || 0), 0);
+    const totalWords = rows.reduce((sum, r) => sum + (Number(r.total_words) || 0), 0);
+    const accuracy = totalWords > 0 ? Math.round(correctWords * 100 / totalWords) : 0;
+    if (completedCount > 0) {
+      sub.textContent = `已完成 ${completedCount}/${totalSegs} 句 · 正确率 ${accuracy}%`;
+    } else if (taskId) {
+      sub.textContent = `已完成 0/${totalSegs} 句`;
+    } else {
+      sub.textContent = '自由练习 · 本地自动保存进度';
+    }
+  }
+
+  function totalSegmentCount() {
+    return data.parts.reduce((sum, part) => sum + (part.segments || []).length, 0);
+  }
+
+  function getCurrentSegmentProgress(segGlobalIdx) {
+    if (taskId) return taskProgress[segGlobalIdx] || null;
+    return freeProgress[segGlobalIdx] || null;
+  }
+
+  function showSavedDictationResult(progress) {
+    if (!progress) return;
+    const inputs = document.querySelectorAll('.dictation-area input');
+    const answers = Array.isArray(progress.answers_json) ? progress.answers_json : [];
+    inputs.forEach((input, idx) => {
+      const guessRaw = answers[idx] || '';
+      const guess = normalizeDictationWord(guessRaw);
+      const isCorrect = guess === input.dataset.answer;
+      input.className = isCorrect ? 'correct' : 'incorrect';
+      input.value = isCorrect ? guessRaw : (input.dataset.displayAnswer || input.dataset.answer);
+      input.disabled = true;
+    });
+    document.getElementById('scoreValue').textContent = Math.round(progress.accuracy || 0);
+    document.getElementById('scoreDetail').textContent = `${progress.correct_words || 0}/${progress.total_words || 0} 词正确`;
+    document.getElementById('scoreBar').style.display = 'flex';
+  }
+
+  function resetCurrentSentenceState() {
+    document.getElementById('scoreBar').style.display = 'none';
+  }
+
+  const practiceStartedAt = Date.now();
+
+  function computeDurationSeconds() {
+    return Math.max(0, Math.round((Date.now() - practiceStartedAt) / 1000));
+  }
 
   // ── Deterministic seed hash ──
   function hashCode(str) {
@@ -711,10 +815,6 @@ body {
         if (!d.ok) { alert('加载失败: ' + (d.error || '未知错误')); return; }
         data = d.exercise;
         taskProgress = d.progress || {};
-        // Pre-fill completedSegs from progress
-        Object.entries(taskProgress).forEach(([idx, r]) => {
-          if (r.is_completed) completedSegs.add(`0-${idx}`);
-        });
         init();
       })
       .catch(e => alert('加载数据失败: ' + e.message));
@@ -722,33 +822,27 @@ body {
     // Free practice mode
     fetch(`/api/listening/${exerciseId}`)
       .then(r => r.json())
-      .then(d => { data = d; init(); })
+      .then(d => { data = d; loadFreeProgress(); init(); })
       .catch(e => alert('加载数据失败: ' + e.message));
   }
 
   function init() {
     document.getElementById('exerciseTitle').textContent = data.title;
     audio.src = `/static/listening/${data.audio}`;
+    const freeResetBtn = document.getElementById('btnResetFreeProgress');
+    if (freeResetBtn) {
+      freeResetBtn.style.display = taskId ? 'none' : 'inline-flex';
+    }
 
     // In task mode, show progress subtitle
     if (taskId) {
-      const completedCount = Object.values(taskProgress).filter(r => r.is_completed).length;
-      let totalSegs = 0;
-      data.parts.forEach(p => totalSegs += (p.segments || []).length);
-      const sub = document.getElementById('exerciseSubtitle');
-      if (sub) sub.textContent = `已完成 ${completedCount}/${totalSegs} 句`;
-
-      // Also mark completed segments across all parts
-      let globalOffset = 0;
-      data.parts.forEach((part, pIdx) => {
-        (part.segments || []).forEach((seg, sIdx) => {
-          const gIdx = globalOffset + sIdx;
-          if (taskProgress[gIdx] && taskProgress[gIdx].is_completed) {
-            completedSegs.add(`${pIdx}-${sIdx}`);
-          }
-        });
-        globalOffset += (part.segments || []).length;
-      });
+      const totalSegs = totalSegmentCount();
+      applyCompletedMarkers(taskProgress);
+      updatePracticeSubtitle(taskProgress, totalSegs);
+    } else {
+      const totalSegs = totalSegmentCount();
+      applyCompletedMarkers(freeProgress);
+      updatePracticeSubtitle(freeProgress, totalSegs);
     }
 
     buildPartTabs();
@@ -856,6 +950,7 @@ body {
     stopAutoRepeat();
     audio.pause();
     currentSegIdx = idx;
+    retryingSegmentIndex = null;
     const seg = segs[idx];
 
     // Update sidebar
@@ -896,6 +991,7 @@ body {
     if (mode === 'dictation') {
       renderDictation(seg);
     } else {
+      resetCurrentSentenceState();
       // In non-dictation modes, show text if toggled
       area.innerHTML = `<div style="font-size:20px;line-height:2;color:var(--text-muted);padding:24px 0;">
         ${showOriginal ? seg.text : '<span style="opacity:0.4;">按 "显示原文" 查看文本，或切换到听写模式</span>'}
@@ -912,6 +1008,9 @@ body {
     // In task mode, check if we already have fixed indices from a previous attempt
     if (taskId && taskProgress[segGlobalIdx] && taskProgress[segGlobalIdx].hidden_word_indices) {
       return new Set(taskProgress[segGlobalIdx].hidden_word_indices);
+    }
+    if (!taskId && freeProgress[segGlobalIdx] && freeProgress[segGlobalIdx].hidden_word_indices) {
+      return new Set(freeProgress[segGlobalIdx].hidden_word_indices);
     }
 
     if (taskId) {
@@ -937,7 +1036,8 @@ body {
   }
 
   function getGlobalSegmentIndex() {
-    // Calculate global segment index across all parts
+    const seg = currentSegments()[currentSegIdx];
+    if (seg && typeof seg.source_index === 'number') return seg.source_index;
     let idx = 0;
     for (let p = 0; p < currentPartIdx; p++) {
       idx += (data.parts[p]?.segments || []).length;
@@ -948,6 +1048,7 @@ body {
   function renderDictation(seg) {
     const area = document.getElementById('dictationArea');
     area.innerHTML = '';
+    resetCurrentSentenceState();
 
     const words = seg.text.split(/\s+/);
     const segGlobalIdx = getGlobalSegmentIndex();
@@ -991,6 +1092,11 @@ body {
       const first = area.querySelector('input');
       if (first) first.focus();
     }, 100);
+
+    const savedProgress = getCurrentSegmentProgress(segGlobalIdx);
+    if (savedProgress && savedProgress.is_completed && retryingSegmentIndex !== segGlobalIdx) {
+      showSavedDictationResult(savedProgress);
+    }
   }
 
   function onDictationKey(e) {
@@ -1030,6 +1136,7 @@ body {
     });
 
     const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+    retryingSegmentIndex = null;
     document.getElementById('scoreValue').textContent = pct;
     document.getElementById('scoreDetail').textContent = `${correct}/${total} 词正确`;
     document.getElementById('scoreBar').style.display = 'flex';
@@ -1053,6 +1160,7 @@ body {
           answers: answers,
           correct_words: correct,
           total_words: total,
+          duration_seconds: computeDurationSeconds(),
         })
       })
       .then(r => r.json())
@@ -1068,14 +1176,29 @@ body {
             hidden_word_indices: hideIndices,
             answers_json: answers,
           };
-          // Show task-level stats
-          if (d.task) {
-            const sub = document.getElementById('exerciseSubtitle');
-            if (sub) sub.textContent = `完成率: ${Math.round(d.task.completion_rate || 0)}% · 准确率: ${Math.round(d.task.accuracy || 0)}%`;
-          }
+          applyCompletedMarkers(taskProgress);
+          buildSentenceList();
+          updatePracticeSubtitle(taskProgress, totalSegmentCount());
         }
       })
       .catch(e => console.error('保存进度失败:', e));
+    } else {
+      const seg = currentSegments()[currentSegIdx];
+      const segGlobalIdx = getGlobalSegmentIndex();
+      const hideIndices = Array.from(getHideIndices(seg, segGlobalIdx));
+      freeProgress[segGlobalIdx] = {
+        segment_index: segGlobalIdx,
+        correct_words: correct,
+        total_words: total,
+        accuracy: pct,
+        is_completed: true,
+        hidden_word_indices: hideIndices,
+        answers_json: answers,
+      };
+      saveFreeProgress();
+      applyCompletedMarkers(freeProgress);
+      buildSentenceList();
+      updatePracticeSubtitle(freeProgress, totalSegmentCount());
     }
   }
 
@@ -1196,8 +1319,30 @@ body {
     renderContent();
   };
 
-  document.getElementById('btnRetry').onclick = () => renderContent();
+  document.getElementById('btnRetry').onclick = () => {
+    resetCurrentSentenceState();
+    const segGlobalIdx = getGlobalSegmentIndex();
+    if (!taskId) {
+      delete freeProgress[segGlobalIdx];
+      saveFreeProgress();
+      applyCompletedMarkers(freeProgress);
+      buildSentenceList();
+      updatePracticeSubtitle(freeProgress, totalSegmentCount());
+    } else {
+      retryingSegmentIndex = segGlobalIdx;
+    }
+    renderContent();
+  };
   document.getElementById('btnNextAfterScore').onclick = () => selectSegment(currentSegIdx + 1);
+  document.getElementById('btnResetFreeProgress').onclick = () => {
+    if (taskId) return;
+    if (!confirm('确认清空本篇自由练习进度？已保存的本地结果会被移除。')) return;
+    clearFreeProgress();
+    applyCompletedMarkers(freeProgress);
+    buildSentenceList();
+    updatePracticeSubtitle(freeProgress, totalSegmentCount());
+    renderContent();
+  };
 
   // Mode tabs
   const diffSection = document.getElementById('difficultySection');

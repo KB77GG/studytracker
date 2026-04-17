@@ -146,7 +146,7 @@
     <div class="task-form-row" id="listeningSelectRow" style="display: none;">
       <div class="field field--wide">
         <label>选择精听练习</label>
-        <select class="form-select" id="listeningExerciseSelect" name="listening_exercise_id">
+        <select class="form-select" id="listeningExerciseSelect" name="listening_exercise_id" onchange="handleListeningExerciseChange()">
           <option value="">-- 选择精听练习 --</option>
           {% for ex in listening_exercises %}
           <option value="{{ ex.id }}" data-title="{{ ex.title }}">{{ ex.title }} ({{ ex.segment_count }}句)</option>
@@ -193,7 +193,7 @@
     </div>
     <div class="task-form-row" id="questionSelectRow" style="display: none;">
       <div class="field field--wide">
-        <label>选择题目（口语题库）</label>
+        <label id="questionSelectLabel">选择题目 / 句子</label>
         <div style="display:flex; gap: 8px; margin-bottom: 8px;">
           <button type="button" class="btn btn-sm btn-outline-secondary" onclick="selectAllQuestions(true)">全选</button>
           <button type="button" class="btn btn-sm btn-outline-secondary" onclick="selectAllQuestions(false)">取消全选</button>
@@ -201,7 +201,7 @@
         <div id="questionListContainer" style="max-height: 240px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
           <div class="text-muted">请选择材料后加载题目</div>
         </div>
-        <small class="form-text text-muted">不勾选则默认布置全部题目</small>
+        <small id="questionSelectHint" class="form-text text-muted">不勾选则默认布置全部内容</small>
         <input id="questionIds" type="hidden" name="question_ids" value="">
       </div>
     </div>
@@ -834,12 +834,16 @@
 
   <script>
     const dictationRangeHints = {{ dictation_range_hints | tojson }};
+    const listeningExerciseSegments = {{ listening_exercise_segments | tojson }};
 
     // Material Bank Selection Functions
     function toggleTaskSource(source) {
       const materialRow = document.getElementById('materialSelectRow');
       const categoryRow = document.getElementById('categoryRow');
       const listeningRow = document.getElementById('listeningSelectRow');
+      const questionRow = document.getElementById('questionSelectRow');
+      const questionIds = document.getElementById('questionIds');
+      const questionContainer = document.getElementById('questionListContainer');
       const categorySelect = document.getElementById('taskCategory');
       const materialSelect = document.getElementById('materialIdSelect');
       const listeningSelect = document.getElementById('listeningExerciseSelect');
@@ -847,24 +851,39 @@
       materialRow.style.display = 'none';
       categoryRow.style.display = 'none';
       listeningRow.style.display = 'none';
+      if (questionRow) questionRow.style.display = 'none';
+      if (questionIds) questionIds.value = '';
+      if (questionContainer) questionContainer.innerHTML = '<div class="text-muted">请选择材料后加载题目</div>';
 
       if (source === 'material') {
         materialRow.style.display = 'flex';
         categorySelect.removeAttribute('required');
         categorySelect.value = '';
         listeningSelect.value = '';
+        setQuestionSelectionMeta('题目（口语题库）', '不勾选则默认布置全部题目');
+        if (materialSelect.value) toggleDetailInput();
       } else if (source === 'listening') {
         listeningRow.style.display = 'flex';
         categorySelect.removeAttribute('required');
         categorySelect.value = '';
         materialSelect.value = '';
+        setQuestionSelectionMeta('选择句子（精听任务）', '可勾选指定句子；不勾选则默认布置整篇');
+        handleListeningExerciseChange();
       } else {
         categoryRow.style.display = 'flex';
         categorySelect.setAttribute('required', 'required');
         materialSelect.value = '';
         listeningSelect.value = '';
         document.getElementById('taskNote').value = '';
+        document.getElementById('taskDetail').value = '';
       }
+    }
+
+    function setQuestionSelectionMeta(label, hint) {
+      const labelEl = document.getElementById('questionSelectLabel');
+      const hintEl = document.getElementById('questionSelectHint');
+      if (labelEl) labelEl.textContent = label;
+      if (hintEl) hintEl.textContent = hint;
     }
 
     function renderQuestionCheckboxes(questions) {
@@ -955,6 +974,7 @@
 
         const speakingTypes = ['speaking_part1', 'speaking_part2', 'speaking_part2_3'];
         if (type && speakingTypes.includes(type)) {
+          setQuestionSelectionMeta('题目（口语题库）', '不勾选则默认布置全部题目');
           if (questionRow) questionRow.style.display = "flex";
           const container = document.getElementById("questionListContainer");
           if (container) container.innerHTML = '<div class="text-muted">加载题目中...</div>';
@@ -975,6 +995,31 @@
         rangeGroup.style.display = "none";
         updateDictationRangeSuggestion(true);
       }
+    }
+
+    function handleListeningExerciseChange() {
+      const listeningSelect = document.getElementById('listeningExerciseSelect');
+      const questionRow = document.getElementById('questionSelectRow');
+      const container = document.getElementById('questionListContainer');
+      const questionIds = document.getElementById('questionIds');
+      const detailInput = document.getElementById('taskDetail');
+      if (!listeningSelect || !questionRow || !container || !questionIds || !detailInput) return;
+
+      questionIds.value = '';
+      if (!listeningSelect.value) {
+        questionRow.style.display = 'none';
+        container.innerHTML = '<div class="text-muted">请选择精听练习后加载句子</div>';
+        detailInput.value = '';
+        return;
+      }
+
+      const option = listeningSelect.options[listeningSelect.selectedIndex];
+      detailInput.value = option?.getAttribute('data-title') || option?.textContent?.trim() || '';
+      setQuestionSelectionMeta('选择句子（精听任务）', '可勾选指定句子；不勾选则默认布置整篇');
+      questionRow.style.display = 'flex';
+
+      const segments = listeningExerciseSegments[listeningSelect.value] || [];
+      renderQuestionCheckboxes(segments);
     }
 
     function updateDictationRangeSuggestion(forceClear = false) {
