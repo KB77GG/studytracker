@@ -35,6 +35,11 @@
       <div class="stat-meta">实际 {{ ((task.actual_seconds or 0) / 60)|round(1) }} min</div>
     </article>
     <article class="stat-card">
+      <p class="stat-label">跟读通过</p>
+      <div class="stat-value">{{ repeat_summary.passed_count }}/{{ summary.total_segments }}</div>
+      <div class="stat-meta">尝试 {{ repeat_summary.attempted_count }} 句 · 均分 {{ '%.1f'|format(repeat_summary.avg_score) }}</div>
+    </article>
+    <article class="stat-card">
       <p class="stat-label">学生备注</p>
       <div class="stat-value small-text">{{ task.student_note or '—' }}</div>
       <div class="stat-meta">教师端查看</div>
@@ -97,6 +102,36 @@
               {% endif %}
             </div>
           </div>
+        </div>
+
+        <div class="segment-block">
+          <div class="block-label">跟读评测</div>
+          {% if row.repeat_result %}
+          <div class="repeat-metrics">
+            <span class="repeat-chip {{ 'passed' if row.repeat_result.is_passed else 'retry' }}">
+              {{ '通过' if row.repeat_result.is_passed else '待加强' }}
+            </span>
+            <span class="mini-meta">综合 {{ '%.1f'|format(row.repeat_result.overall_score) }}</span>
+            <span class="mini-meta">发音 {{ '%.1f'|format(row.repeat_result.pron_accuracy) }}</span>
+            <span class="mini-meta">流利 {{ '%.1f'|format(row.repeat_result.pron_fluency) }}</span>
+            <span class="mini-meta">完整 {{ '%.1f'|format(row.repeat_result.pron_completion) }}</span>
+            <span class="mini-meta">尝试 {{ row.repeat_result.attempt_count }} 次</span>
+            {% if row.repeat_result.audio_url %}
+            <a class="audio-link" href="{{ row.repeat_result.audio_url }}" target="_blank">试听录音</a>
+            {% endif %}
+          </div>
+          {% if row.repeat_issues %}
+          <div class="issue-list">
+            {% for issue in row.repeat_issues %}
+            <span class="issue-chip">{{ issue.word }} · {{ '%.1f'|format(issue.accuracy) }}</span>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="mini-meta">本句未发现明显低分单词</div>
+          {% endif %}
+          {% else %}
+          <div class="mini-meta">学生还没有提交跟读录音</div>
+          {% endif %}
         </div>
 
         <div class="segment-block">
@@ -219,6 +254,46 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+  }
+  .repeat-metrics,
+  .issue-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .issue-list {
+    margin-top: 10px;
+  }
+  .repeat-chip,
+  .issue-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #eef2ff;
+    color: #3730a3;
+  }
+  .repeat-chip.passed {
+    background: #dcfce7;
+    color: #166534;
+  }
+  .repeat-chip.retry {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .issue-chip {
+    background: #fff7ed;
+    color: #9a3412;
+    font-weight: 500;
+  }
+  .audio-link {
+    color: #0f766e;
+    font-weight: 600;
+    text-decoration: none;
   }
   .answer-item {
     display: inline-flex;

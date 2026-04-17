@@ -24,11 +24,19 @@ Page({
         exercise: {},
         segments: [],
         progressMap: {},
+        repeatProgressMap: {},
         summary: {
             completedCount: 0,
             totalCount: 0,
             accuracy: 0,
             completionRate: 0
+        },
+        repeatSummary: {
+            attemptedCount: 0,
+            passedCount: 0,
+            avgScore: 0,
+            completionRate: 0,
+            passRate: 0
         },
         allCompleted: false,
         currentIndex: 0,
@@ -37,7 +45,12 @@ Page({
         renderTokens: [],
         blankAnswers: [],
         currentResult: null,
+        currentRepeatResult: null,
         dictationLocked: false,
+        repeatRecording: false,
+        repeatFilePath: '',
+        repeatPlayingRecord: false,
+        repeatUploading: false,
         mode: 'dictation',
         showOriginal: false,
         showTranslation: false,
@@ -49,7 +62,12 @@ Page({
         audioPlaying: false,
         currentTimeText: '00:00',
         segmentDurationText: '00:00',
-        startedAt: 0
+        startedAt: 0,
+        passThresholds: {
+            accuracy: 75,
+            fluency: 70,
+            completion: 90
+        }
     },
 
     onLoad(options) {
@@ -62,15 +80,18 @@ Page({
             startedAt: Date.now()
         })
         this.initAudio()
+        this.initRepeatRecorder()
         this.fetchPractice()
     },
 
     onHide() {
         this.pauseAudio()
+        this.stopRepeatPlayback()
     },
 
     onUnload() {
         this.destroyAudio()
+        this.destroyRepeatRecorder()
     },
 
     getRootUrl() {
@@ -121,6 +142,37 @@ Page({
         })
     },
 
+    initRepeatRecorder() {
+        this.recorderManager = wx.getRecorderManager()
+        this.recorderManager.onStop((res) => {
+            this.setData({
+                repeatRecording: false,
+                repeatFilePath: res.tempFilePath || ''
+            })
+        })
+        this.recorderManager.onError((err) => {
+            console.error('repeat recorder error', err)
+            this.setData({ repeatRecording: false })
+            wx.showToast({ title: '录音失败', icon: 'none' })
+        })
+
+        this.recordAudioCtx = wx.createInnerAudioContext()
+        this.recordAudioCtx.onPlay(() => {
+            this.setData({ repeatPlayingRecord: true })
+        })
+        this.recordAudioCtx.onStop(() => {
+            this.setData({ repeatPlayingRecord: false })
+        })
+        this.recordAudioCtx.onEnded(() => {
+            this.setData({ repeatPlayingRecord: false })
+        })
+        this.recordAudioCtx.onError((err) => {
+            console.error('repeat record playback error', err)
+            this.setData({ repeatPlayingRecord: false })
+            wx.showToast({ title: '录音播放失败', icon: 'none' })
+        })
+    },
+
     destroyAudio() {
         if (!this.audioCtx) return
         try {
@@ -132,12 +184,33 @@ Page({
         this.audioCtx = null
     },
 
+    destroyRepeatRecorder() {
+        if (this.recordAudioCtx) {
+            try {
+                this.recordAudioCtx.stop()
+                this.recordAudioCtx.destroy()
+            } catch (err) {
+                console.warn('destroy record audio failed', err)
+            }
+            this.recordAudioCtx = null
+        }
+    },
+
     pauseAudio() {
         if (!this.audioCtx) return
         try {
             this.audioCtx.pause()
         } catch (err) {
             console.warn('pause audio failed', err)
+        }
+    },
+
+    stopRepeatPlayback() {
+        if (!this.recordAudioCtx) return
+        try {
+            this.recordAudioCtx.stop()
+        } catch (err) {
+            console.warn('stop repeat playback failed', err)
         }
     },
 
@@ -158,24 +231,34 @@ Page({
 
             const exercise = res.exercise || {}
             const rawProgress = res.progress || {}
+            const rawRepeatProgress = res.repeat_progress || {}
             const progressMap = {}
+            const repeatProgressMap = {}
             Object.keys(rawProgress).forEach(key => {
                 progressMap[String(key)] = rawProgress[key]
+            })
+            Object.keys(rawRepeatProgress).forEach(key => {
+                repeatProgressMap[String(key)] = rawRepeatProgress[key]
             })
 
             const segments = this.decorateSegments(
                 this.flattenSegments(exercise),
-                progressMap
+                progressMap,
+                repeatProgressMap
             )
             const summary = this.buildSummary(segments, progressMap, res.task || {})
+            const repeatSummary = this.buildRepeatSummary(segments, repeatProgressMap, res.repeat_summary || {})
             const initialIndex = this.findInitialIndex(segments, progressMap)
 
             this.setData({
                 task: res.task || {},
                 exercise,
                 progressMap,
+                repeatProgressMap,
                 segments,
                 summary,
+                repeatSummary,
+                passThresholds: res.pass_thresholds || this.data.passThresholds,
                 allCompleted: summary.totalCount > 0 && summary.completedCount >= summary.totalCount,
                 loading: false
             })
@@ -230,13 +313,17 @@ Page({
         return segments
     },
 
-    decorateSegments(segments, progressMap) {
+    decorateSegments(segments, progressMap, repeatProgressMap = {}) {
         return segments.map(segment => {
             const progress = progressMap[String(segment.globalIndex)]
+            const repeatProgress = repeatProgressMap[String(segment.globalIndex)]
             return {
                 ...segment,
                 isCompleted: !!(progress && progress.is_completed),
-                accuracy: progress ? Number(progress.accuracy || 0) : null
+                accuracy: progress ? Number(progress.accuracy || 0) : null,
+                repeatAttempted: !!repeatProgress,
+                repeatPassed: !!(repeatProgress && repeatProgress.is_passed),
+                repeatScore: repeatProgress ? Number(repeatProgress.overall_score || 0) : null
             }
         })
     },
@@ -272,6 +359,44 @@ Page({
         }
     },
 
+    buildRepeatSummary(segments, repeatProgressMap, serverSummary = {}) {
+        const totalCount = segments.length
+        const attemptedCount = segments.filter(segment => {
+            const progress = repeatProgressMap[String(segment.globalIndex)]
+            return !!progress
+        }).length
+        const passedCount = segments.filter(segment => {
+            const progress = repeatProgressMap[String(segment.globalIndex)]
+            return !!(progress && progress.is_passed)
+        }).length
+
+        let avgScore = Number(serverSummary.avg_score || 0)
+        if (!avgScore && attemptedCount > 0) {
+            const totalScore = Object.values(repeatProgressMap).reduce((sum, progress) => {
+                return sum + Number(progress.overall_score || 0)
+            }, 0)
+            avgScore = Number((totalScore / attemptedCount).toFixed(1))
+        }
+
+        let completionRate = Number(serverSummary.completion_rate || 0)
+        if (!completionRate && totalCount > 0) {
+            completionRate = Number(((attemptedCount / totalCount) * 100).toFixed(1))
+        }
+
+        let passRate = Number(serverSummary.pass_rate || 0)
+        if (!passRate && attemptedCount > 0) {
+            passRate = Number(((passedCount / attemptedCount) * 100).toFixed(1))
+        }
+
+        return {
+            attemptedCount,
+            passedCount,
+            avgScore,
+            completionRate,
+            passRate
+        }
+    },
+
     findInitialIndex(segments, progressMap) {
         const firstPending = segments.findIndex(segment => {
             const progress = progressMap[String(segment.globalIndex)]
@@ -288,6 +413,7 @@ Page({
 
         const currentSegment = segments[index]
         const progress = this.data.progressMap[String(currentSegment.globalIndex)]
+        const repeatProgress = this.data.repeatProgressMap[String(currentSegment.globalIndex)]
         const hiddenIndices = this.getHideIndices(currentSegment)
         const presetAnswers = progress && Array.isArray(progress.answers_json) ? progress.answers_json : []
         const built = this.buildRenderTokens(currentSegment, hiddenIndices, presetAnswers)
@@ -305,7 +431,11 @@ Page({
                 correctWords: Number(progress.correct_words || 0),
                 totalWords: Number(progress.total_words || 0)
             } : null,
+            currentRepeatResult: repeatProgress ? this.buildRepeatResult(repeatProgress) : null,
             dictationLocked: !!progress,
+            repeatFilePath: '',
+            repeatRecording: false,
+            repeatPlayingRecord: false,
             currentTimeText: '00:00',
             segmentDurationText: this.formatTime(Math.max(0, currentSegment.end - currentSegment.start))
         })
@@ -332,6 +462,39 @@ Page({
 
     toggleTranslation() {
         this.setData({ showTranslation: !this.data.showTranslation })
+    },
+
+    buildRepeatResult(progress) {
+        if (!progress) return null
+        const words = Array.isArray(progress.words) ? progress.words : []
+        return {
+            overallScore: Number(progress.overall_score || 0),
+            pronAccuracy: Number(progress.pron_accuracy || 0),
+            pronFluency: Number(progress.pron_fluency || 0),
+            pronCompletion: Number(progress.pron_completion || 0),
+            suggestedScore: Number(progress.suggested_score_100 || 0),
+            isPassed: !!progress.is_passed,
+            attemptCount: Number(progress.attempt_count || 0),
+            audioUrl: progress.audio_url || '',
+            issues: this.extractRepeatIssues(words)
+        }
+    },
+
+    extractRepeatIssues(words = []) {
+        if (!Array.isArray(words)) return []
+        return words.map(item => {
+            if (!item || typeof item !== 'object') return null
+            const word = item.Word || item.word || item.Text || item.text || ''
+            const accuracy = item.PronAccuracy ?? item.pronAccuracy ?? item.Accuracy ?? item.accuracy
+            const accuracyVal = Number(accuracy)
+            if (!word || Number.isNaN(accuracyVal) || accuracyVal >= this.data.passThresholds.accuracy) {
+                return null
+            }
+            return {
+                word,
+                accuracy: Number(accuracyVal.toFixed(1))
+            }
+        }).filter(Boolean).sort((a, b) => a.accuracy - b.accuracy).slice(0, 5)
     },
 
     onSpeedChange(e) {
@@ -562,6 +725,122 @@ Page({
             currentResult: null,
             dictationLocked: false
         })
+    },
+
+    startRepeatRecording() {
+        if (this.data.repeatUploading) return
+        this.pauseAudio()
+        this.stopRepeatPlayback()
+        this.setData({
+            repeatRecording: true,
+            repeatFilePath: ''
+        })
+        this.recorderManager.start({
+            format: 'mp3',
+            sampleRate: 16000,
+            numberOfChannels: 1
+        })
+    },
+
+    stopRepeatRecording() {
+        if (!this.data.repeatRecording) return
+        this.recorderManager.stop()
+    },
+
+    playRepeatRecording() {
+        if (!this.data.repeatFilePath || !this.recordAudioCtx) return
+        this.recordAudioCtx.src = this.data.repeatFilePath
+        this.recordAudioCtx.play()
+    },
+
+    resetRepeatRecording() {
+        this.stopRepeatPlayback()
+        this.setData({
+            repeatFilePath: '',
+            repeatRecording: false
+        })
+    },
+
+    uploadRepeatAudio(filePath) {
+        const token = app.globalData.token || wx.getStorageSync('token') || ''
+        const baseUrl = app.globalData.baseUrl || ''
+        return new Promise((resolve, reject) => {
+            wx.uploadFile({
+                url: `${baseUrl}/miniprogram/upload`,
+                filePath,
+                name: 'file',
+                header: token ? { Authorization: `Bearer ${token}` } : {},
+                success: (res) => {
+                    try {
+                        const data = JSON.parse(res.data || '{}')
+                        if (res.statusCode >= 200 && res.statusCode < 300 && data.ok) {
+                            resolve(data)
+                            return
+                        }
+                        reject(new Error(data.error || 'upload_failed'))
+                    } catch (err) {
+                        reject(err)
+                    }
+                },
+                fail: reject
+            })
+        })
+    },
+
+    async submitRepeatSegment() {
+        if (!this.data.currentSegment) return
+        if (!this.data.repeatFilePath) {
+            wx.showToast({ title: '请先录音', icon: 'none' })
+            return
+        }
+        this.setData({ repeatUploading: true })
+        wx.showLoading({ title: '评测中...' })
+        try {
+            const uploadRes = await this.uploadRepeatAudio(this.data.repeatFilePath)
+            const res = await request(
+                `/student/listening/task/${this.data.taskId}/segment/${this.data.currentSegment.globalIndex}/repeat?token=${encodeURIComponent(this.data.token)}`,
+                {
+                    method: 'POST',
+                    data: {
+                        audio_url: uploadRes.url,
+                        segment_text: this.data.currentSegment.text,
+                        duration_seconds: this.computeDurationSeconds()
+                    }
+                }
+            )
+
+            if (!res.ok) {
+                wx.showToast({ title: '评测失败', icon: 'none' })
+                return
+            }
+
+            const repeatProgressMap = {
+                ...this.data.repeatProgressMap,
+                [String(this.data.currentSegment.globalIndex)]: res.segment
+            }
+            const segments = this.decorateSegments(this.data.segments, this.data.progressMap, repeatProgressMap)
+            const repeatSummary = this.buildRepeatSummary(segments, repeatProgressMap, res.summary || {})
+            const currentRepeatResult = this.buildRepeatResult(res.segment)
+
+            this.setData({
+                repeatProgressMap,
+                segments,
+                repeatSummary,
+                currentRepeatResult,
+                passThresholds: res.pass_thresholds || this.data.passThresholds
+            })
+
+            wx.showToast({
+                title: currentRepeatResult && currentRepeatResult.isPassed ? '跟读通过' : '结果已保存',
+                icon: 'success'
+            })
+        } catch (err) {
+            console.error(err)
+            wx.showToast({ title: '网络错误', icon: 'none' })
+        } finally {
+            wx.hideLoading()
+            this.setData({ repeatUploading: false })
+        }
     },
 
     buildRenderTokens(segment, hiddenIndices, presetAnswers = []) {

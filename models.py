@@ -530,6 +530,35 @@ class ListeningSegmentResult(db.Model):
     )
 
 
+class ListeningRepeatResult(db.Model):
+    """每句精听跟读评测结果。"""
+
+    __tablename__ = "listening_repeat_result"
+
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    student_name = db.Column(db.String(64), nullable=False, index=True)
+    segment_index = db.Column(db.Integer, nullable=False)
+    segment_text = db.Column(db.Text)
+    audio_url = db.Column(db.String(500))
+    overall_score = db.Column(db.Float, default=0.0, nullable=False)
+    pron_accuracy = db.Column(db.Float, default=0.0, nullable=False)
+    pron_fluency = db.Column(db.Float, default=0.0, nullable=False)
+    pron_completion = db.Column(db.Float, default=0.0, nullable=False)
+    suggested_score_100 = db.Column(db.Float, default=0.0, nullable=False)
+    words_json = db.Column(db.Text)
+    is_passed = db.Column(db.Boolean, default=False, nullable=False)
+    attempt_count = db.Column(db.Integer, default=0, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    task = db.relationship("Task", backref=db.backref("listening_repeat_results", lazy="dynamic"))
+
+    __table_args__ = (
+        db.UniqueConstraint("task_id", "segment_index", name="uq_task_repeat_segment"),
+    )
+
+
 # ---- Class Feedback (Scheduler) ----
 
 class ClassFeedback(db.Model, TimestampMixin):

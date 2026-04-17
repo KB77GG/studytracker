@@ -28,6 +28,20 @@
           <text class="summary-key">正确率</text>
         </view>
       </view>
+      <view class="summary-grid repeat-summary-grid">
+        <view class="summary-item">
+          <text class="summary-value">{{repeatSummary.attemptedCount}}/{{summary.totalCount}}</text>
+          <text class="summary-key">跟读已测</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-value">{{repeatSummary.passedCount}}</text>
+          <text class="summary-key">跟读通过</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-value">{{repeatSummary.avgScore}}</text>
+          <text class="summary-key">跟读均分</text>
+        </view>
+      </view>
     </view>
 
     <scroll-view scroll-x class="segment-strip" enable-flex>
@@ -66,6 +80,7 @@
       <view class="mode-switch">
         <view class="mode-pill {{mode === 'listen' ? 'active' : ''}}" data-mode="listen" bindtap="switchMode">句子精听</view>
         <view class="mode-pill {{mode === 'dictation' ? 'active' : ''}}" data-mode="dictation" bindtap="switchMode">听写模式</view>
+        <view class="mode-pill {{mode === 'repeat' ? 'active' : ''}}" data-mode="repeat" bindtap="switchMode">跟读检查</view>
       </view>
 
       <view class="toggle-row">
@@ -132,6 +147,63 @@
           <button class="control-btn primary" wx:if="{{!dictationLocked}}" bindtap="submitCurrentSegment">提交本句</button>
           <button class="control-btn ghost" wx:else bindtap="redoCurrentSegment">重做本句</button>
           <button class="control-btn ghost" bindtap="nextSegment">{{currentIndex + 1 >= segments.length ? '返回末句' : '下一句'}}</button>
+        </view>
+      </view>
+
+      <view wx:if="{{mode === 'repeat'}}">
+        <view class="listen-card repeat-guide-card">
+          <text class="original-text">{{currentSegment.text}}</text>
+          <text class="translation-text" wx:if="{{showTranslation && currentSegment.translation}}">{{currentSegment.translation}}</text>
+          <text class="repeat-hint">先播放原句，再录下你的跟读。系统会检查发音、停顿流畅度和完整度。</text>
+          <text class="repeat-threshold">通过线：发音≥{{passThresholds.accuracy}}，流利≥{{passThresholds.fluency}}，完整≥{{passThresholds.completion}}</text>
+        </view>
+
+        <view class="control-row">
+          <button class="control-btn primary" wx:if="{{!repeatRecording}}" bindtap="startRepeatRecording">
+            {{repeatFilePath ? '重新录音' : '开始录音'}}
+          </button>
+          <button class="control-btn primary" wx:else bindtap="stopRepeatRecording">停止录音</button>
+          <button class="control-btn ghost" bindtap="playRepeatRecording" disabled="{{!repeatFilePath || repeatRecording}}">播放录音</button>
+          <button class="control-btn ghost" bindtap="resetRepeatRecording" disabled="{{!repeatFilePath || repeatRecording}}">清空录音</button>
+        </view>
+
+        <view class="repeat-file-card" wx:if="{{repeatFilePath}}">
+          <text class="repeat-file-text">录音已就绪，可以提交评测。</text>
+        </view>
+
+        <view class="control-row">
+          <button class="control-btn primary" bindtap="submitRepeatSegment" loading="{{repeatUploading}}" disabled="{{repeatRecording || !repeatFilePath}}">
+            提交跟读
+          </button>
+          <button class="control-btn ghost" bindtap="nextSegment">下一句</button>
+        </view>
+
+        <view class="result-card" wx:if="{{currentRepeatResult}}">
+          <view class="result-main">{{currentRepeatResult.isPassed ? '本句跟读通过' : '本句还需加强'}}</view>
+          <view class="repeat-score-grid">
+            <view class="repeat-score-item">
+              <text class="repeat-score-value">{{currentRepeatResult.overallScore}}</text>
+              <text class="repeat-score-key">综合</text>
+            </view>
+            <view class="repeat-score-item">
+              <text class="repeat-score-value">{{currentRepeatResult.pronAccuracy}}</text>
+              <text class="repeat-score-key">发音</text>
+            </view>
+            <view class="repeat-score-item">
+              <text class="repeat-score-value">{{currentRepeatResult.pronFluency}}</text>
+              <text class="repeat-score-key">流利</text>
+            </view>
+            <view class="repeat-score-item">
+              <text class="repeat-score-value">{{currentRepeatResult.pronCompletion}}</text>
+              <text class="repeat-score-key">完整</text>
+            </view>
+          </view>
+          <view class="repeat-issue-row" wx:if="{{currentRepeatResult.issues.length}}">
+            <text class="repeat-issue-title">低分单词：</text>
+            <view class="repeat-issue-list">
+              <text class="repeat-issue-chip" wx:for="{{currentRepeatResult.issues}}" wx:key="word">{{item.word}} {{item.accuracy}}</text>
+            </view>
+          </view>
         </view>
       </view>
     </view>

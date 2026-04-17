@@ -35,6 +35,7 @@ from config import Config
 from pypinyin import lazy_pinyin
 from api import init_app as init_api
 from api.wechat import send_subscribe_message
+from api.tencent_soe import evaluate_pronunciation
 from models import (
     AuditLogEntry,
     PlanEvidence,
@@ -57,6 +58,7 @@ from models import (
     CoursePlan,
     StageReport,
     ListeningSegmentResult,
+    ListeningRepeatResult,
 )
 
 def time_ago(dt):
@@ -230,6 +232,107 @@ def _listening_segment_count_for_task(task, exercise_data: dict) -> int:
     return sum(len(part.get("segments", [])) for part in payload.get("parts", []))
 
 
+LISTENING_REPEAT_PASS_ACCURACY = 75.0
+LISTENING_REPEAT_PASS_FLUENCY = 70.0
+LISTENING_REPEAT_PASS_COMPLETION = 90.0
+
+
+def _listening_repeat_overall_score(pron_accuracy: float, pron_fluency: float) -> float:
+    return round((pron_accuracy * 0.6) + (pron_fluency * 0.4), 1)
+
+
+def _listening_repeat_is_passed(pron_accuracy: float, pron_fluency: float, pron_completion: float) -> bool:
+    return (
+        pron_accuracy >= LISTENING_REPEAT_PASS_ACCURACY
+        and pron_fluency >= LISTENING_REPEAT_PASS_FLUENCY
+        and pron_completion >= LISTENING_REPEAT_PASS_COMPLETION
+    )
+
+
+def _listening_repeat_public_url(audio_url: str) -> str:
+    audio_url = (audio_url or "").strip()
+    if not audio_url:
+        return ""
+    if audio_url.startswith("http://") or audio_url.startswith("https://"):
+        return audio_url
+    base_url = request.host_url.rstrip("/")
+    return f"{base_url}{audio_url if audio_url.startswith('/') else '/' + audio_url}"
+
+
+def _serialize_listening_repeat_result(row: "ListeningRepeatResult") -> dict:
+    words = []
+    if row.words_json:
+        try:
+            words = json.loads(row.words_json)
+        except Exception:
+            words = []
+    return {
+        "segment_index": row.segment_index,
+        "audio_url": row.audio_url,
+        "overall_score": round(float(row.overall_score or 0.0), 1),
+        "pron_accuracy": round(float(row.pron_accuracy or 0.0), 1),
+        "pron_fluency": round(float(row.pron_fluency or 0.0), 1),
+        "pron_completion": round(float(row.pron_completion or 0.0), 1),
+        "suggested_score_100": round(float(row.suggested_score_100 or 0.0), 1),
+        "is_passed": bool(row.is_passed),
+        "attempt_count": int(row.attempt_count or 0),
+        "words": words if isinstance(words, list) else [],
+    }
+
+
+def _listening_repeat_summary(rows: list["ListeningRepeatResult"], total_segments: int = 0) -> dict:
+    attempted_count = len(rows)
+    passed_count = sum(1 for row in rows if row.is_passed)
+    avg_score = round(
+        sum(float(row.overall_score or 0.0) for row in rows) / attempted_count,
+        1,
+    ) if attempted_count else 0.0
+    completion_rate = round((attempted_count / total_segments) * 100, 1) if total_segments else 0.0
+    pass_rate = round((passed_count / attempted_count) * 100, 1) if attempted_count else 0.0
+    return {
+        "attempted_count": attempted_count,
+        "passed_count": passed_count,
+        "avg_score": avg_score,
+        "completion_rate": completion_rate,
+        "pass_rate": pass_rate,
+    }
+
+
+def _listening_repeat_word_issues(words: list) -> list[dict]:
+    issues = []
+    if not isinstance(words, list):
+        return issues
+    for raw in words:
+        if not isinstance(raw, dict):
+            continue
+        label = (
+            raw.get("Word")
+            or raw.get("Text")
+            or raw.get("word")
+            or raw.get("text")
+            or ""
+        )
+        accuracy = raw.get("PronAccuracy")
+        if accuracy is None:
+            accuracy = raw.get("pronAccuracy")
+        if accuracy is None:
+            accuracy = raw.get("Accuracy")
+        if accuracy is None:
+            accuracy = raw.get("accuracy")
+        try:
+            accuracy_val = round(float(accuracy), 1)
+        except (TypeError, ValueError):
+            continue
+        if accuracy_val >= LISTENING_REPEAT_PASS_ACCURACY:
+            continue
+        issues.append({
+            "word": str(label).strip() or "未知词",
+            "accuracy": accuracy_val,
+        })
+    issues.sort(key=lambda item: item["accuracy"])
+    return issues[:5]
+
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -384,6 +487,12 @@ def ensure_legacy_schema() -> None:
     except Exception as exc:  # pragma: no cover
         current_app.logger.warning(
             "Failed to ensure stage_report table exists: %s", exc
+        )
+    try:
+        ListeningRepeatResult.__table__.create(bind=db.engine, checkfirst=True)
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.warning(
+            "Failed to ensure listening_repeat_result table exists: %s", exc
         )
 
 
@@ -2147,6 +2256,10 @@ def task_listening_detail_page(tid):
         row.segment_index: row
         for row in ListeningSegmentResult.query.filter_by(task_id=task.id).order_by(ListeningSegmentResult.segment_index.asc()).all()
     }
+    repeat_rows = {
+        row.segment_index: row
+        for row in ListeningRepeatResult.query.filter_by(task_id=task.id).order_by(ListeningRepeatResult.segment_index.asc()).all()
+    }
 
     segment_rows = []
     total_correct = 0
@@ -2154,6 +2267,8 @@ def task_listening_detail_page(tid):
     completed_count = 0
     for segment in _flatten_listening_segments(task_payload):
         result = result_rows.get(segment["global_index"])
+        repeat_result = repeat_rows.get(segment["global_index"])
+        repeat_payload = _serialize_listening_repeat_result(repeat_result) if repeat_result else None
         hidden_indices = json.loads(result.hidden_word_indices) if result and result.hidden_word_indices else []
         answers = json.loads(result.answers_json) if result and result.answers_json else []
         pairs = []
@@ -2180,6 +2295,8 @@ def task_listening_detail_page(tid):
         segment_rows.append({
             **segment,
             "result": result,
+            "repeat_result": repeat_payload,
+            "repeat_issues": _listening_repeat_word_issues(repeat_payload.get("words") or []) if repeat_payload else [],
             "hidden_indices": hidden_indices,
             "hidden_indices_display": [idx + 1 for idx in hidden_indices],
             "answers": answers,
@@ -2189,6 +2306,7 @@ def task_listening_detail_page(tid):
     total_segments = len(segment_rows)
     summary_accuracy = round(total_correct * 100.0 / total_words, 1) if total_words else float(task.accuracy or 0.0)
     summary_completion = round(completed_count * 100.0 / total_segments, 1) if total_segments else float(task.completion_rate or 0.0)
+    repeat_summary = _listening_repeat_summary(list(repeat_rows.values()), total_segments)
 
     return render_template(
         "tasks_listening_detail.html",
@@ -2204,6 +2322,7 @@ def task_listening_detail_page(tid):
             "total_correct": total_correct,
             "total_words": total_words,
         },
+        repeat_summary=repeat_summary,
     )
 
 
@@ -4745,6 +4864,20 @@ def api_student_listening_task(task_id):
             "answers_json": json.loads(r.answers_json) if r.answers_json else [],
         }
 
+    repeat_results = ListeningRepeatResult.query.filter_by(task_id=task_id).all()
+    repeat_progress = {}
+    for row in repeat_results:
+        if selected_indices and row.segment_index not in selected_indices:
+            continue
+        repeat_progress[row.segment_index] = _serialize_listening_repeat_result(row)
+
+    repeat_summary = _listening_repeat_summary(
+        [row for row in repeat_results if not selected_indices or row.segment_index in selected_indices],
+        task_exercise_data.get("selected_segment_count") or sum(
+            len(part.get("segments", [])) for part in task_exercise_data.get("parts", [])
+        ),
+    )
+
     return jsonify({
         "ok": True,
         "task": {
@@ -4757,6 +4890,8 @@ def api_student_listening_task(task_id):
         },
         "exercise": task_exercise_data,
         "progress": progress,
+        "repeat_progress": repeat_progress,
+        "repeat_summary": repeat_summary,
     })
 
 
@@ -4863,6 +4998,110 @@ def api_student_listening_submit_segment(task_id, segment_index):
             "status": task.status,
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
+        },
+    })
+
+
+@app.route("/api/student/listening/task/<int:task_id>/segment/<int:segment_index>/repeat", methods=["POST"])
+def api_student_listening_repeat_segment(task_id, segment_index):
+    """提交单句跟读录音并返回腾讯 SOE 评测结果。"""
+    data = request.get_json() or {}
+    access_token = _resolve_listening_access_token()
+    if not access_token:
+        return jsonify({"ok": False, "error": "missing_token"}), 400
+
+    task = Task.query.get(task_id)
+    if not task or not task.listening_exercise_id:
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+    if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, access_token):
+        return jsonify({"ok": False, "error": "invalid_token"}), 403
+
+    selected_indices = _selected_listening_segment_indices(task)
+    selected_set = set(selected_indices or [])
+    if selected_set and segment_index not in selected_set:
+        return jsonify({"ok": False, "error": "segment_not_assigned"}), 400
+
+    audio_url = (data.get("audio_url") or "").strip()
+    segment_text = (data.get("segment_text") or "").strip()
+    if not audio_url:
+        return jsonify({"ok": False, "error": "missing_audio_url"}), 400
+    if not segment_text:
+        return jsonify({"ok": False, "error": "missing_segment_text"}), 400
+
+    ok, payload = evaluate_pronunciation(
+        _listening_repeat_public_url(audio_url),
+        segment_text,
+    )
+    if not ok:
+        return jsonify({"ok": False, "error": "repeat_eval_failed", "details": payload}), 502
+
+    pron_accuracy = round(float(payload.get("pron_accuracy") or 0.0), 1)
+    pron_fluency = round(float(payload.get("pron_fluency") or 0.0), 1)
+    pron_completion = round(float(payload.get("pron_completion") or 0.0), 1)
+    suggested_score_100 = round(float(payload.get("suggested_score_100") or 0.0), 1)
+    overall_score = _listening_repeat_overall_score(pron_accuracy, pron_fluency)
+    is_passed = _listening_repeat_is_passed(pron_accuracy, pron_fluency, pron_completion)
+    words = payload.get("words") if isinstance(payload.get("words"), list) else []
+
+    result = ListeningRepeatResult.query.filter_by(
+        task_id=task_id,
+        segment_index=segment_index,
+    ).first()
+    if result:
+        result.segment_text = segment_text
+        result.audio_url = audio_url
+        result.overall_score = overall_score
+        result.pron_accuracy = pron_accuracy
+        result.pron_fluency = pron_fluency
+        result.pron_completion = pron_completion
+        result.suggested_score_100 = suggested_score_100
+        result.words_json = json.dumps(words, ensure_ascii=False)
+        result.is_passed = is_passed
+        result.attempt_count = int(result.attempt_count or 0) + 1
+        result.updated_at = datetime.utcnow()
+    else:
+        result = ListeningRepeatResult(
+            task_id=task_id,
+            student_name=task.student_name,
+            segment_index=segment_index,
+            segment_text=segment_text,
+            audio_url=audio_url,
+            overall_score=overall_score,
+            pron_accuracy=pron_accuracy,
+            pron_fluency=pron_fluency,
+            pron_completion=pron_completion,
+            suggested_score_100=suggested_score_100,
+            words_json=json.dumps(words, ensure_ascii=False),
+            is_passed=is_passed,
+            attempt_count=1,
+        )
+        db.session.add(result)
+
+    duration_seconds = data.get("duration_seconds")
+    if duration_seconds is not None:
+        try:
+            duration_val = max(0, int(duration_seconds))
+            task.actual_seconds = max(int(task.actual_seconds or 0), duration_val)
+        except (TypeError, ValueError):
+            pass
+
+    payload_data, _, _ = _load_listening_meta(task.listening_exercise_id or "")
+    total_segments = _listening_segment_count_for_task(task, payload_data) if payload_data else 0
+    db.session.commit()
+
+    repeat_results = ListeningRepeatResult.query.filter_by(task_id=task_id).all()
+    summary = _listening_repeat_summary(
+        [row for row in repeat_results if not selected_set or row.segment_index in selected_set],
+        total_segments,
+    )
+    return jsonify({
+        "ok": True,
+        "segment": _serialize_listening_repeat_result(result),
+        "summary": summary,
+        "pass_thresholds": {
+            "accuracy": LISTENING_REPEAT_PASS_ACCURACY,
+            "fluency": LISTENING_REPEAT_PASS_FLUENCY,
+            "completion": LISTENING_REPEAT_PASS_COMPLETION,
         },
     })
 
