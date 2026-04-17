@@ -252,6 +252,7 @@ Page({
                         materialType: t.material_type || null,
                         materialId: t.material_id || null,
                         // Listening Fields
+                        listeningToken: t.listening_token || '',
                         listeningUrl: t.listening_url || null,
 
                         // Timer state - show actual time spent from backend
@@ -331,19 +332,11 @@ Page({
 
     goToTaskDetail(e) {
         const taskId = e.currentTarget.dataset.id
-        // 精听任务 → 复制链接并提示去浏览器打开
         const task = this.data.tasks.find(t => t.id === taskId)
         if (task && task.listeningUrl) {
-            wx.setClipboardData({
-                data: task.listeningUrl,
-                success() {
-                    wx.showModal({
-                        title: '精听练习',
-                        content: '链接已复制到剪贴板，请打开手机浏览器粘贴访问。',
-                        showCancel: false,
-                        confirmText: '我知道了'
-                    })
-                }
+            const token = encodeURIComponent(task.listeningToken || '')
+            wx.navigateTo({
+                url: `/pages/student/listening/practice/index?taskId=${taskId}&token=${token}`
             })
             return
         }
@@ -401,6 +394,14 @@ Page({
 
         // Dictation Routing
         const task = this.data.tasks.find(t => t.id === taskId)
+        if (task && task.listeningUrl) {
+            const token = encodeURIComponent(task.listeningToken || '')
+            wx.navigateTo({
+                url: `/pages/student/listening/practice/index?taskId=${taskId}&token=${token}`
+            })
+            return
+        }
+
         if (task && task.dictationBookId) {
             wx.navigateTo({
                 url: `/pages/student/dictation/practice/index?taskId=${taskId}&id=${task.dictationBookId}`

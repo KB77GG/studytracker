@@ -963,6 +963,7 @@ def get_student_today_tasks():
             "teacher_note": task.note, # 暂时复用note，前端需区分展示场景
             # 精听练习字段
             "listening_exercise_id": task.listening_exercise_id,
+            "listening_token": task.listening_access_token,
             "listening_url": (
                 f"https://studytracker.xin/listening/{task.listening_exercise_id}"
                 f"?task_id={task.id}&token={task.listening_access_token}"
@@ -1056,6 +1057,13 @@ def get_task_detail(task_id):
                 "speaking_book_id": task.speaking_book_id,
                 "speaking_phrase_start": task.speaking_phrase_start,
                 "speaking_phrase_end": task.speaking_phrase_end,
+                # Listening Info
+                "listening_exercise_id": task.listening_exercise_id,
+                "listening_token": task.listening_access_token,
+                "listening_url": (
+                    f"https://studytracker.xin/listening/{task.listening_exercise_id}"
+                    f"?task_id={task.id}&token={task.listening_access_token}"
+                ) if task.listening_exercise_id and task.listening_access_token else None,
                 # 材料信息
                 "material": material_data
             }

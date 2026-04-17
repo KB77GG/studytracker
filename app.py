@@ -4477,6 +4477,7 @@ def api_student_listening_submit_segment(task_id, segment_index):
     accuracy = round(correct_words / total_words * 100, 1) if total_words > 0 else 0.0
     hidden_word_indices = data.get("hidden_word_indices", [])
     answers_json = data.get("answers", [])
+    duration_seconds = data.get("duration_seconds")
 
     # upsert ListeningSegmentResult
     result = ListeningSegmentResult.query.filter_by(
@@ -4527,6 +4528,12 @@ def api_student_listening_submit_segment(task_id, segment_index):
 
     task.completion_rate = round(completed_count / total_segments * 100, 1) if total_segments > 0 else 0.0
     task.accuracy = round(total_correct / total_total * 100, 1) if total_total > 0 else 0.0
+    if duration_seconds is not None:
+        try:
+            duration_val = max(0, int(duration_seconds))
+            task.actual_seconds = max(int(task.actual_seconds or 0), duration_val)
+        except (TypeError, ValueError):
+            pass
 
     if completed_count >= total_segments and total_segments > 0:
         task.status = "done"
