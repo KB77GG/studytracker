@@ -1122,7 +1122,7 @@ body {
     scoreBar.style.display = 'none';
 
     origEl.textContent = modeRange?.text || practiceText;
-    origEl.className = 'original-text' + (mode === 'dictation' && showOriginal ? ' visible' : '');
+    origEl.className = 'original-text' + (showOriginal ? ' visible' : '');
     transEl.textContent = modeRange?.translation || '';
     transEl.className = 'translation-text' + (showTranslation ? ' visible' : '');
 
@@ -1130,14 +1130,18 @@ body {
       renderDictation(seg);
     } else {
       resetCurrentSentenceState();
-      const displayText = modeRange?.text || practiceText;
       area.innerHTML = '';
       const block = document.createElement('div');
       block.style.fontSize = '20px';
       block.style.lineHeight = '2';
-      block.style.color = 'var(--text)';
+      block.style.color = 'var(--text-muted)';
       block.style.padding = '24px 0';
-      block.textContent = displayText || '当前片段没有可显示的文本';
+      if (showOriginal) {
+        block.style.color = 'var(--text)';
+        block.textContent = modeRange?.text || practiceText || '当前片段没有可显示的文本';
+      } else {
+        block.innerHTML = '<span style="opacity:0.45;">当前为精听模式。先听，再按“显示原文”核对。</span>';
+      }
       area.appendChild(block);
     }
   }
@@ -1501,7 +1505,7 @@ body {
 
   function updateModeControls() {
     diffSection.style.display = mode === 'dictation' ? 'flex' : 'none';
-    document.getElementById('btnShowText').style.display = mode === 'dictation' ? 'inline-flex' : 'none';
+    document.getElementById('btnShowText').style.display = 'inline-flex';
     const repeatBtn = document.getElementById('btnRepeat');
     if (mode === 'paragraph') repeatBtn.textContent = '↻ 当前段';
     else if (mode === 'full') repeatBtn.textContent = '↻ 全文';
