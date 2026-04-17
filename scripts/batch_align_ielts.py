@@ -27,9 +27,22 @@ def normalize_text(text: str) -> str:
     return " ".join(text.split())
 
 
+def strip_speaker_label(text: str) -> str:
+    return re.sub(
+        r"^(?:[A-Z][A-Z\s.'&/-]{0,40}|[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3})\s*:\s*",
+        "",
+        (text or "").strip(),
+    )
+
+
 def split_sentences(path: Path) -> list[str]:
     lines = path.read_text(encoding="utf-8").strip().splitlines()
-    return [line.strip() for line in lines if line.strip()]
+    sentences = []
+    for line in lines:
+        cleaned = strip_speaker_label(line)
+        if cleaned:
+            sentences.append(cleaned)
+    return sentences
 
 
 def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict]:

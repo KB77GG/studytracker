@@ -131,6 +131,14 @@ def _flatten_listening_segments(payload: dict) -> list[dict]:
     return rows
 
 
+def _strip_listening_speaker_label(text: str) -> str:
+    return re.sub(
+        r"^(?:[A-Z][A-Z\s.'&/-]{0,40}|[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3})\s*:\s*",
+        "",
+        (text or "").strip(),
+    )
+
+
 def _listening_exercise_usage_map():
     tasks = Task.query.filter(Task.listening_exercise_id.isnot(None)).all()
     usage_map = {}
@@ -4502,13 +4510,15 @@ def _process_listening_task(task_id, exercise_id, title, audio_path, transcript,
         })
 
         # 解析用户提供的原文
-        user_sentences = [s.strip() for s in transcript.strip().splitlines() if s.strip()]
+        user_sentences = [_strip_listening_speaker_label(s) for s in transcript.strip().splitlines() if s.strip()]
+        user_sentences = [s for s in user_sentences if s]
 
         # 如果用户没有分行，按标点自动断句
         if len(user_sentences) == 1:
             import re as _re
             text = user_sentences[0]
-            user_sentences = [s.strip() for s in _re.split(r'(?<=[.!?])\s+', text) if s.strip()]
+            user_sentences = [_strip_listening_speaker_label(s) for s in _re.split(r'(?<=[.!?])\s+', text) if s.strip()]
+            user_sentences = [s for s in user_sentences if s]
 
         translation_sentences = _split_translation_text(translation, len(user_sentences))
 
@@ -4537,7 +4547,7 @@ def _process_listening_task(task_id, exercise_id, title, audio_path, transcript,
                     "id": len(segments) + 1,
                     "start": seg["start"],
                     "end": seg["end"],
-                    "text": seg["text"],
+                    "text": _strip_listening_speaker_label(seg["text"]),
                 })
 
         # 合并过短的片段
@@ -4594,6 +4604,7 @@ def _align_user_text_with_whisper(user_sentences, whisper_segments, skip_seconds
     w_idx = 0
 
     for u_idx, user_text in enumerate(user_sentences):
+        user_text = _strip_listening_speaker_label(user_text)
         user_words = normalize(user_text)
         if not user_words:
             continue

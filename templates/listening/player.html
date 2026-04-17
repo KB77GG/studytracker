@@ -675,6 +675,7 @@ body {
   let autoRepeatTimer = null;
   let segmentEndHandled = false;
   let retryingSegmentIndex = null;
+  const paragraphCache = new Map();
 
   const audio = document.getElementById('audio');
   const exerciseId = "{{ exercise_id }}";
@@ -719,6 +720,138 @@ body {
     return typeof seg?.source_index === 'number' ? seg.source_index : fallbackIdx;
   }
 
+  function stripSpeakerLabel(text) {
+    return (text || '')
+      .trim()
+      .replace(/^(?:[A-Z][A-Z\s.'&/-]{0,40}|[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3})\s*:\s*/, '');
+  }
+
+  function getPracticeText(seg) {
+    return stripSpeakerLabel(seg?.text || '').trim();
+  }
+
+  function splitPracticeWords(text) {
+    return (text || '').split(/\s+/).filter(Boolean);
+  }
+
+  function getRangeText(segments) {
+    return (segments || [])
+      .map(getPracticeText)
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  function getRangeTranslation(segments) {
+    return (segments || [])
+      .map(seg => (seg?.translation || '').trim())
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  function getPartBounds(partIdx = currentPartIdx) {
+    const segments = data.parts[partIdx]?.segments || [];
+    if (!segments.length) return null;
+    return {
+      start: segments[0].start,
+      end: segments[segments.length - 1].end,
+      segments,
+    };
+  }
+
+  function getParagraphGroups(partIdx = currentPartIdx) {
+    if (paragraphCache.has(partIdx)) return paragraphCache.get(partIdx);
+    const segments = data.parts[partIdx]?.segments || [];
+    const groups = [];
+    if (!segments.length) {
+      paragraphCache.set(partIdx, groups);
+      return groups;
+    }
+
+    // Derive paragraph-sized chunks from pauses and chunk length when source data is flat.
+    let current = {
+      startIdx: 0,
+      endIdx: 0,
+      start: segments[0].start,
+      end: segments[0].end,
+      segments: [segments[0]],
+    };
+
+    for (let i = 1; i < segments.length; i++) {
+      const seg = segments[i];
+      const prev = segments[i - 1];
+      const gap = Math.max(0, seg.start - prev.end);
+      const chunkSentenceCount = current.segments.length;
+      const chunkDuration = current.end - current.start;
+      const shouldBreak = gap >= 1.2 || chunkSentenceCount >= 4 || chunkDuration >= 18;
+
+      if (shouldBreak) {
+        groups.push(current);
+        current = {
+          startIdx: i,
+          endIdx: i,
+          start: seg.start,
+          end: seg.end,
+          segments: [seg],
+        };
+        continue;
+      }
+
+      current.endIdx = i;
+      current.end = seg.end;
+      current.segments.push(seg);
+    }
+
+    groups.push(current);
+    paragraphCache.set(partIdx, groups);
+    return groups;
+  }
+
+  function getCurrentParagraphGroup() {
+    const groups = getParagraphGroups();
+    return groups.find(group => currentSegIdx >= group.startIdx && currentSegIdx <= group.endIdx) || groups[0] || null;
+  }
+
+  function getCurrentModeRange() {
+    const seg = currentSegments()[currentSegIdx];
+    if (!seg) return null;
+
+    if (mode === 'sentence' || mode === 'dictation') {
+      return {
+        start: seg.start,
+        end: seg.end,
+        text: getPracticeText(seg),
+        translation: (seg.translation || '').trim(),
+      };
+    }
+
+    if (mode === 'paragraph') {
+      const paragraph = getCurrentParagraphGroup();
+      if (!paragraph) return null;
+      return {
+        start: paragraph.start,
+        end: paragraph.end,
+        text: getRangeText(paragraph.segments),
+        translation: getRangeTranslation(paragraph.segments),
+      };
+    }
+
+    const partBounds = getPartBounds();
+    if (!partBounds) return null;
+    return {
+      start: partBounds.start,
+      end: partBounds.end,
+      text: getRangeText(partBounds.segments),
+      translation: getRangeTranslation(partBounds.segments),
+    };
+  }
+
+  function getEffectiveProgress(progressMap, segGlobalIdx, practiceText) {
+    const progress = progressMap[segGlobalIdx];
+    if (!progress) return null;
+    if (progress.segment_text && progress.segment_text !== practiceText) return null;
+    return progress;
+  }
+
   function applyCompletedMarkers(progressMap) {
     completedSegs.clear();
     let globalOffset = 0;
@@ -755,8 +888,10 @@ body {
   }
 
   function getCurrentSegmentProgress(segGlobalIdx) {
-    if (taskId) return taskProgress[segGlobalIdx] || null;
-    return freeProgress[segGlobalIdx] || null;
+    const seg = currentSegments()[currentSegIdx];
+    const practiceText = getPracticeText(seg);
+    if (taskId) return getEffectiveProgress(taskProgress, segGlobalIdx, practiceText);
+    return getEffectiveProgress(freeProgress, segGlobalIdx, practiceText);
   }
 
   function showSavedDictationResult(progress) {
@@ -845,6 +980,7 @@ body {
       updatePracticeSubtitle(freeProgress, totalSegs);
     }
 
+    updateModeControls();
     buildPartTabs();
     buildSentenceList();
     selectSegment(0);
@@ -976,6 +1112,8 @@ body {
   function renderContent() {
     const seg = currentSegments()[currentSegIdx];
     if (!seg) return;
+    const modeRange = getCurrentModeRange();
+    const practiceText = getPracticeText(seg);
 
     const area = document.getElementById('dictationArea');
     const origEl = document.getElementById('originalText');
@@ -983,39 +1121,48 @@ body {
     const scoreBar = document.getElementById('scoreBar');
     scoreBar.style.display = 'none';
 
-    origEl.textContent = seg.text;
-    origEl.className = 'original-text' + (showOriginal ? ' visible' : '');
-    transEl.textContent = seg.translation || '';
+    origEl.textContent = modeRange?.text || practiceText;
+    origEl.className = 'original-text' + (mode === 'dictation' && showOriginal ? ' visible' : '');
+    transEl.textContent = modeRange?.translation || '';
     transEl.className = 'translation-text' + (showTranslation ? ' visible' : '');
 
     if (mode === 'dictation') {
       renderDictation(seg);
     } else {
       resetCurrentSentenceState();
-      // In non-dictation modes, show text if toggled
-      area.innerHTML = `<div style="font-size:20px;line-height:2;color:var(--text-muted);padding:24px 0;">
-        ${showOriginal ? seg.text : '<span style="opacity:0.4;">按 "显示原文" 查看文本，或切换到听写模式</span>'}
-      </div>`;
+      const displayText = modeRange?.text || practiceText;
+      area.innerHTML = '';
+      const block = document.createElement('div');
+      block.style.fontSize = '20px';
+      block.style.lineHeight = '2';
+      block.style.color = 'var(--text)';
+      block.style.padding = '24px 0';
+      block.textContent = displayText || '当前片段没有可显示的文本';
+      area.appendChild(block);
     }
   }
 
   // ── Dictation Mode ──
   function getHideIndices(seg, segGlobalIdx) {
-    const words = seg.text.split(/\s+/);
+    const practiceText = getPracticeText(seg);
+    const words = splitPracticeWords(practiceText);
+    if (!words.length) return new Set();
     const hideRatio = difficultyLevels[difficultyIdx] || 0.5;
     const hideCount = Math.max(1, Math.round(words.length * hideRatio));
 
     // In task mode, check if we already have fixed indices from a previous attempt
-    if (taskId && taskProgress[segGlobalIdx] && taskProgress[segGlobalIdx].hidden_word_indices) {
-      return new Set(taskProgress[segGlobalIdx].hidden_word_indices);
+    const taskSavedProgress = getEffectiveProgress(taskProgress, segGlobalIdx, practiceText);
+    if (taskId && taskSavedProgress && taskSavedProgress.hidden_word_indices) {
+      return new Set(taskSavedProgress.hidden_word_indices);
     }
-    if (!taskId && freeProgress[segGlobalIdx] && freeProgress[segGlobalIdx].hidden_word_indices) {
-      return new Set(freeProgress[segGlobalIdx].hidden_word_indices);
+    const freeSavedProgress = getEffectiveProgress(freeProgress, segGlobalIdx, practiceText);
+    if (!taskId && freeSavedProgress && freeSavedProgress.hidden_word_indices) {
+      return new Set(freeSavedProgress.hidden_word_indices);
     }
 
     if (taskId) {
       // Deterministic: seed from task_id + segment_index + first 20 chars of text
-      const seedStr = `${taskId}-${segGlobalIdx}-${seg.text.substring(0, 20)}`;
+      const seedStr = `${taskId}-${segGlobalIdx}-${practiceText.substring(0, 20)}`;
       const rng = seededRandom(hashCode(seedStr));
       const indices = [];
       for (let i = 0; i < words.length; i++) indices.push(i);
@@ -1050,7 +1197,8 @@ body {
     area.innerHTML = '';
     resetCurrentSentenceState();
 
-    const words = seg.text.split(/\s+/);
+    const practiceText = getPracticeText(seg);
+    const words = splitPracticeWords(practiceText);
     const segGlobalIdx = getGlobalSegmentIndex();
     const hideIndices = getHideIndices(seg, segGlobalIdx);
 
@@ -1147,6 +1295,7 @@ body {
     // In task mode, submit segment result to server
     if (taskId) {
       const seg = currentSegments()[currentSegIdx];
+      const practiceText = getPracticeText(seg);
       const segGlobalIdx = getGlobalSegmentIndex();
       const hideIndices = Array.from(getHideIndices(seg, segGlobalIdx));
 
@@ -1155,7 +1304,7 @@ body {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token: taskToken,
-          segment_text: seg.text,
+          segment_text: practiceText,
           hidden_word_indices: hideIndices,
           answers: answers,
           correct_words: correct,
@@ -1169,6 +1318,7 @@ body {
           // Update local progress cache
           taskProgress[segGlobalIdx] = {
             segment_index: segGlobalIdx,
+            segment_text: practiceText,
             correct_words: correct,
             total_words: total,
             accuracy: pct,
@@ -1184,10 +1334,12 @@ body {
       .catch(e => console.error('保存进度失败:', e));
     } else {
       const seg = currentSegments()[currentSegIdx];
+      const practiceText = getPracticeText(seg);
       const segGlobalIdx = getGlobalSegmentIndex();
       const hideIndices = Array.from(getHideIndices(seg, segGlobalIdx));
       freeProgress[segGlobalIdx] = {
         segment_index: segGlobalIdx,
+        segment_text: practiceText,
         correct_words: correct,
         total_words: total,
         accuracy: pct,
@@ -1209,14 +1361,12 @@ body {
     document.getElementById('currentTime').textContent = fmtTime(t);
     document.getElementById('progressFill').style.width = (t / d * 100) + '%';
 
-    // In sentence mode, loop/stop at sentence end
-    if (isSegmentPracticeMode()) {
-      const seg = currentSegments()[currentSegIdx];
-      if (seg && t >= seg.end && !segmentEndHandled) {
+    const modeRange = getCurrentModeRange();
+    if (modeRange && t >= modeRange.end && !segmentEndHandled) {
         segmentEndHandled = true;
-        if (sentenceLoopActive) {
+        if (sentenceLoopActive && isSegmentPracticeMode()) {
           segmentEndHandled = false;
-          audio.currentTime = seg.start;
+          audio.currentTime = modeRange.start;
         } else if (autoRepeatActive) {
           audio.pause();
           updatePlayBtn(false);
@@ -1234,7 +1384,6 @@ body {
           audio.pause();
           updatePlayBtn(false);
         }
-      }
     }
   }
 
@@ -1244,6 +1393,11 @@ body {
       if (isSegmentPracticeMode()) {
         startAutoRepeatSequence();
       } else {
+        const modeRange = getCurrentModeRange();
+        if (modeRange) {
+          segmentEndHandled = false;
+          audio.currentTime = modeRange.start;
+        }
         audio.play();
         updatePlayBtn(true);
       }
@@ -1272,10 +1426,11 @@ body {
       startAutoRepeatSequence();
       return;
     }
-    const seg = currentSegments()[currentSegIdx];
-    if (seg) {
+    const modeRange = getCurrentModeRange();
+    if (modeRange) {
       stopAutoRepeat();
-      audio.currentTime = seg.start;
+      segmentEndHandled = false;
+      audio.currentTime = modeRange.start;
       audio.play();
       updatePlayBtn(true);
     }
@@ -1344,6 +1499,15 @@ body {
     renderContent();
   };
 
+  function updateModeControls() {
+    diffSection.style.display = mode === 'dictation' ? 'flex' : 'none';
+    document.getElementById('btnShowText').style.display = mode === 'dictation' ? 'inline-flex' : 'none';
+    const repeatBtn = document.getElementById('btnRepeat');
+    if (mode === 'paragraph') repeatBtn.textContent = '↻ 当前段';
+    else if (mode === 'full') repeatBtn.textContent = '↻ 全文';
+    else repeatBtn.textContent = '↻ 当前句';
+  }
+
   // Mode tabs
   const diffSection = document.getElementById('difficultySection');
   document.querySelectorAll('.mode-tab').forEach(tab => {
@@ -1352,8 +1516,7 @@ body {
       audio.pause();
       mode = this.dataset.mode;
       document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t === this));
-      // 只在听写模式下显示难度滑块
-      diffSection.style.display = mode === 'dictation' ? 'flex' : 'none';
+      updateModeControls();
       renderContent();
     };
   });
