@@ -22,7 +22,7 @@ Page({
         hasSubscribed: false,
         subscribeState: 'unknown',
         subscribeButtonText: '开启任务提醒',
-        subscribeTip: '点击后勾选“总是保持以上选择”会更稳定',
+        subscribeTip: '多次允许后，微信会出现“总是保持以上选择”，勾选即可长期免打扰',
         notebookCount: 0,
         isGuest: false
     },
@@ -192,7 +192,7 @@ Page({
             hasSubscribed: false,
             subscribeState: state,
             subscribeButtonText: '开启任务提醒',
-            subscribeTip: '点击后勾选“总是保持以上选择”会更稳定'
+            subscribeTip: '多次允许后，微信会出现“总是保持以上选择”，勾选即可长期免打扰'
         }
     },
 
@@ -232,7 +232,7 @@ Page({
                 if (accepted) {
                     wx.showToast({ title: '提醒已记录', icon: 'success' })
                 } else {
-                    wx.showToast({ title: '建议勾选“总是保持以上选择”', icon: 'none', duration: 3000 })
+                    wx.showToast({ title: '本次未订阅，再次点击可重试', icon: 'none', duration: 3000 })
                 }
                 this.refreshSubscribeStatus()
             })

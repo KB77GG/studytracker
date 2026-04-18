@@ -8,7 +8,7 @@ Page({
         userInfo: null,
         feedbackSubscribed: false,
         feedbackSubscribeText: '订阅课堂反馈',
-        feedbackSubscribeHint: '点击后勾选“总是保持以上选择”更稳定',
+        feedbackSubscribeHint: '多次允许后，微信会出现“总是保持以上选择”，勾选即可长期免打扰',
         feedbackSubscribeState: 'unknown'
     },
 
@@ -70,7 +70,7 @@ Page({
             feedbackSubscribed: false,
             feedbackSubscribeState: state,
             feedbackSubscribeText: '订阅课堂反馈',
-            feedbackSubscribeHint: '点击后勾选“总是保持以上选择”更稳定'
+            feedbackSubscribeHint: '多次允许后，微信会出现“总是保持以上选择”，勾选即可长期免打扰'
         })
     },
 
@@ -108,7 +108,7 @@ Page({
                 if (res[FEEDBACK_TEMPLATE_ID] === 'accept') {
                     wx.showToast({ title: '提醒已记录', icon: 'success' })
                 } else {
-                    wx.showToast({ title: '建议勾选“总是保持以上选择”', icon: 'none', duration: 3000 })
+                    wx.showToast({ title: '本次未订阅，再次点击可重试', icon: 'none', duration: 3000 })
                 }
                 this.refreshSubscribeStatus()
             })
