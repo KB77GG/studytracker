@@ -48,7 +48,7 @@ class Config:
     WECHAT_SECRET = os.environ.get("WECHAT_SECRET") or os.environ.get("WECHAT_APP_SECRET") or "d50cb0a992515238c9807950fed29bf1"
     WECHAT_TASK_TEMPLATE_ID = os.environ.get(
         "WECHAT_TASK_TEMPLATE_ID",
-        "GElWxP8srvY_TwH-h69q4XcmgLyNZBsvjp6rSt8dhUU",
+        "AehPa5pMUTnQqXgq-q-wxe89cbwviDdZzJCrBNkhuOA",
     )
     WECHAT_COURSE_TEMPLATE_ID = os.environ.get(
         "WECHAT_COURSE_TEMPLATE_ID",
