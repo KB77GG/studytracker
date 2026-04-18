@@ -30,6 +30,13 @@
   align-items: center;
 }
 
+.subscribe-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
 .title {
   font-size: 20px;
   font-weight: 700;
@@ -51,6 +58,13 @@
   background: #edf2f7;
   color: #94a3b8;
   border-color: #e2e8f0;
+}
+
+.sub-tip {
+  max-width: 180px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #64748b;
 }
 
 .range-switch {
@@ -479,6 +493,12 @@
   gap: 8px;
 }
 
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .feedback-tag {
   font-size: 11px;
   color: #64748b;
@@ -501,4 +521,12 @@
 
 .feedback-btn.done {
   background: #1d4ed8;
+}
+
+.homework-btn {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-radius: 12px;
+  padding: 0 10px;
+  border: 1px solid #bfdbfe;
 }

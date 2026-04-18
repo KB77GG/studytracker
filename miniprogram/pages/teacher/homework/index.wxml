@@ -1,0 +1,80 @@
+<view class="container">
+  <view class="header">
+    <text class="title">布置作业</text>
+    <text class="subtitle">保存后会尝试把任务提醒推送给学生</text>
+  </view>
+
+  <view class="card">
+    <view class="info-row">
+      <text class="label">学生</text>
+      <text class="value">{{schedule.student_name || '—'}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">课程</text>
+      <text class="value">{{schedule.course_name || '—'}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">上课时间</text>
+      <text class="value">{{schedule.start_time || '—'}}{{schedule.end_time ? (' - ' + schedule.end_time) : ''}}</text>
+    </view>
+  </view>
+
+  <view class="form">
+    <text class="form-label">任务日期</text>
+    <picker mode="date" value="{{form.date}}" bindchange="handleDateChange">
+      <view class="picker-field">{{form.date}}</view>
+    </picker>
+  </view>
+
+  <view class="form">
+    <text class="form-label">任务分类</text>
+    <input
+      class="input"
+      placeholder="如：雅思听力、课后作业"
+      maxlength="32"
+      value="{{form.category}}"
+      data-field="category"
+      bindinput="handleInput"
+    />
+  </view>
+
+  <view class="form">
+    <text class="form-label">作业内容</text>
+    <textarea
+      class="textarea"
+      placeholder="填写学生需要完成的具体任务"
+      maxlength="200"
+      value="{{form.detail}}"
+      data-field="detail"
+      bindinput="handleInput"
+    ></textarea>
+    <view class="counter">{{form.detail.length}}/200</view>
+  </view>
+
+  <view class="form">
+    <text class="form-label">预计时长（分钟）</text>
+    <input
+      class="input"
+      type="number"
+      placeholder="30"
+      value="{{form.plannedMinutes}}"
+      data-field="plannedMinutes"
+      bindinput="handleInput"
+    />
+  </view>
+
+  <view class="form">
+    <text class="form-label">备注说明</text>
+    <textarea
+      class="textarea short-textarea"
+      placeholder="可填写提交要求、参考材料、截止说明"
+      maxlength="200"
+      value="{{form.note}}"
+      data-field="note"
+      bindinput="handleInput"
+    ></textarea>
+    <view class="counter">{{form.note.length}}/200</view>
+  </view>
+
+  <button class="submit-btn" loading="{{saving}}" disabled="{{saving}}" bindtap="submitHomework">保存并提醒学生</button>
+</view>

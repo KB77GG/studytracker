@@ -9,9 +9,10 @@
     </view>
     <view class="header-row secondary">
       <view class="left-group">
-        <button class="sub-btn" size="mini" disabled="{{hasSubscribed}}" bindtap="requestSubscribe">
-          {{hasSubscribed ? '已订阅提醒' : '订阅提醒'}}
-        </button>
+        <view class="subscribe-box">
+          <button class="sub-btn" size="mini" bindtap="requestSubscribe">{{subscribeButtonText}}</button>
+          <text class="sub-tip">{{subscribeTip}}</text>
+        </view>
       </view>
       <view class="right-group">
         <view class="range-switch segmented">
@@ -73,24 +74,44 @@
                 </view>
                 <view class="detail-footer">
                   <text class="feedback-tag {{item.feedback ? 'done' : ''}}">{{item.feedback ? '已反馈' : '待反馈'}}</text>
-                  <button
-                    class="feedback-btn {{item.feedback ? 'done' : ''}}"
-                    size="mini"
-                    data-schedule-uid="{{item.schedule_uid}}"
-                    data-schedule-id="{{item.schedule_id}}"
-                    data-student-id="{{item.student_id}}"
-                    data-student-name="{{item.student_name}}"
-                    data-course-name="{{item.course_name}}"
-                    data-start-time="{{item.start_time}}"
-                    data-end-time="{{item.end_time}}"
-                    data-teacher-name="{{item.teacher_name}}"
-                    data-schedule-date="{{item.schedule_date}}"
-                    data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
-                    data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
-                    bindtap="openFeedback"
-                  >
-                    {{item.feedback ? '修改反馈' : '上课反馈'}}
-                  </button>
+                  <view class="action-buttons">
+                    <button
+                      class="homework-btn"
+                      size="mini"
+                      data-schedule-uid="{{item.schedule_uid}}"
+                      data-schedule-id="{{item.schedule_id}}"
+                      data-student-id="{{item.student_id}}"
+                      data-student-name="{{item.student_name}}"
+                      data-teacher-id="{{item.teacher_id}}"
+                      data-course-name="{{item.course_name}}"
+                      data-start-time="{{item.start_time}}"
+                      data-end-time="{{item.end_time}}"
+                      data-teacher-name="{{item.teacher_name}}"
+                      data-schedule-date="{{item.schedule_date}}"
+                      bindtap="openHomework"
+                    >
+                      布置作业
+                    </button>
+                    <button
+                      class="feedback-btn {{item.feedback ? 'done' : ''}}"
+                      size="mini"
+                      data-schedule-uid="{{item.schedule_uid}}"
+                      data-schedule-id="{{item.schedule_id}}"
+                      data-student-id="{{item.student_id}}"
+                      data-student-name="{{item.student_name}}"
+                      data-teacher-id="{{item.teacher_id}}"
+                      data-course-name="{{item.course_name}}"
+                      data-start-time="{{item.start_time}}"
+                      data-end-time="{{item.end_time}}"
+                      data-teacher-name="{{item.teacher_name}}"
+                      data-schedule-date="{{item.schedule_date}}"
+                      data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
+                      data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
+                      bindtap="openFeedback"
+                    >
+                      {{item.feedback ? '修改反馈' : '上课反馈'}}
+                    </button>
+                  </view>
                 </view>
               </view>
             </block>
@@ -127,24 +148,44 @@
               </view>
               <view class="card-footer">
                 <text class="feedback-tag {{item.feedback ? 'done' : ''}}">{{item.feedback ? '已反馈' : '待反馈'}}</text>
-                <button
-                  class="feedback-btn {{item.feedback ? 'done' : ''}}"
-                  size="mini"
-                  data-schedule-uid="{{item.schedule_uid}}"
-                  data-schedule-id="{{item.schedule_id}}"
-                  data-student-id="{{item.student_id}}"
-                  data-student-name="{{item.student_name}}"
-                  data-course-name="{{item.course_name}}"
-                  data-start-time="{{item.start_time}}"
-                  data-end-time="{{item.end_time}}"
-                  data-teacher-name="{{item.teacher_name}}"
-                  data-schedule-date="{{item.schedule_date}}"
-                  data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
-                  data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
-                  bindtap="openFeedback"
-                >
-                  {{item.feedback ? '修改反馈' : '上课反馈'}}
-                </button>
+                <view class="action-buttons">
+                  <button
+                    class="homework-btn"
+                    size="mini"
+                    data-schedule-uid="{{item.schedule_uid}}"
+                    data-schedule-id="{{item.schedule_id}}"
+                    data-student-id="{{item.student_id}}"
+                    data-student-name="{{item.student_name}}"
+                    data-teacher-id="{{item.teacher_id}}"
+                    data-course-name="{{item.course_name}}"
+                    data-start-time="{{item.start_time}}"
+                    data-end-time="{{item.end_time}}"
+                    data-teacher-name="{{item.teacher_name}}"
+                    data-schedule-date="{{item.schedule_date}}"
+                    bindtap="openHomework"
+                  >
+                    布置作业
+                  </button>
+                  <button
+                    class="feedback-btn {{item.feedback ? 'done' : ''}}"
+                    size="mini"
+                    data-schedule-uid="{{item.schedule_uid}}"
+                    data-schedule-id="{{item.schedule_id}}"
+                    data-student-id="{{item.student_id}}"
+                    data-student-name="{{item.student_name}}"
+                    data-teacher-id="{{item.teacher_id}}"
+                    data-course-name="{{item.course_name}}"
+                    data-start-time="{{item.start_time}}"
+                    data-end-time="{{item.end_time}}"
+                    data-teacher-name="{{item.teacher_name}}"
+                    data-schedule-date="{{item.schedule_date}}"
+                    data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
+                    data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
+                    bindtap="openFeedback"
+                  >
+                    {{item.feedback ? '修改反馈' : '上课反馈'}}
+                  </button>
+                </view>
               </view>
             </view>
           </view>

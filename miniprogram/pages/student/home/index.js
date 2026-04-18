@@ -1,5 +1,6 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
+const { getSubscribeSummary, requestTemplateSubscribe } = require('../../../utils/subscribe.js')
 const TASK_TEMPLATE_ID = 'GElWxP8srvY_TwH-h69q4XcmgLyNZBsvjp6rSt8dhUU'
 const COURSE_TEMPLATE_ID = 'AehPa5pMUTnQqXgq-q-wxTAMZyVU-qdkxaO9rbpo-QI'
 
@@ -19,6 +20,9 @@ Page({
         activeTimerId: null,
         timerInterval: null,
         hasSubscribed: false,
+        subscribeState: 'unknown',
+        subscribeButtonText: '开启任务提醒',
+        subscribeTip: '点击后勾选“总是保持以上选择”会更稳定',
         notebookCount: 0,
         isGuest: false
     },
@@ -54,10 +58,7 @@ Page({
 
         // Restore timer if there's an active one in storage
         this.restoreTimerIfNeeded()
-
-        // 每次进入首页都尝试请求订阅（一次性订阅需反复获取配额）
-        this.autoRequestSubscribe()
-        this.loadNotebookCount()
+        this.refreshSubscribeStatus()
     },
 
     // Restore timer state from storage
@@ -131,38 +132,114 @@ Page({
         }
     },
 
-    // 用户主动点击按钮订阅（带 toast 反馈）
-    requestSubscribe() {
-        const tmplIds = [TASK_TEMPLATE_ID, COURSE_TEMPLATE_ID]
-        wx.requestSubscribeMessage({
-            tmplIds,
-            success: (res) => {
-                const accepted = tmplIds.some(id => res[id] === 'accept')
-                if (accepted) {
-                    this.setData({ hasSubscribed: true })
-                    wx.showToast({ title: '提醒已开启', icon: 'success' })
-                } else {
-                    wx.showToast({ title: '请勾选"总是保持以上选择"以长期接收提醒', icon: 'none', duration: 3000 })
-                }
-            },
-            fail: (err) => {
-                console.warn('subscribe fail', err)
+    async refreshSubscribeStatus() {
+        if (getApp().globalData.guestMode) {
+            this.setData({
+                hasSubscribed: false,
+                subscribeState: 'guest',
+                subscribeButtonText: '登录后开启提醒',
+                subscribeTip: '登录后可接收作业和课程提醒'
+            })
+            return
+        }
+        const summary = await getSubscribeSummary([TASK_TEMPLATE_ID, COURSE_TEMPLATE_ID])
+        this.setData(this.buildSubscribeView(summary))
+    },
+
+    buildSubscribeView(summary) {
+        const state = summary && summary.state ? summary.state : 'unknown'
+        if (state === 'accept') {
+            return {
+                hasSubscribed: true,
+                subscribeState: state,
+                subscribeButtonText: '提醒已开启',
+                subscribeTip: '如需修改提醒偏好，请前往微信设置页'
+            }
+        }
+        if (state === 'partial') {
+            return {
+                hasSubscribed: true,
+                subscribeState: state,
+                subscribeButtonText: '补全提醒',
+                subscribeTip: '部分提醒已开启，建议再次确认任务和课程提醒'
+            }
+        }
+        if (state === 'reject') {
+            return {
+                hasSubscribed: false,
+                subscribeState: state,
+                subscribeButtonText: '去设置开启',
+                subscribeTip: '你已关闭提醒，请在设置里重新开启'
+            }
+        }
+        if (state === 'ban') {
+            return {
+                hasSubscribed: false,
+                subscribeState: state,
+                subscribeButtonText: '查看提醒状态',
+                subscribeTip: '当前模板不可用，请联系老师检查配置'
+            }
+        }
+        if (state === 'off') {
+            return {
+                hasSubscribed: false,
+                subscribeState: state,
+                subscribeButtonText: '去设置开启',
+                subscribeTip: '微信总提醒开关已关闭，请先开启'
+            }
+        }
+        return {
+            hasSubscribed: false,
+            subscribeState: state,
+            subscribeButtonText: '开启任务提醒',
+            subscribeTip: '点击后勾选“总是保持以上选择”会更稳定'
+        }
+    },
+
+    openSubscribeSettings() {
+        wx.openSetting({
+            success: () => {
+                this.refreshSubscribeStatus()
             }
         })
     },
 
-    // 每次进入页面自动静默请求订阅（积累配额）
-    autoRequestSubscribe() {
-        if (getApp().globalData.guestMode) return
+    requestSubscribe() {
+        if (getApp().globalData.guestMode) {
+            this.goLogin()
+            return
+        }
+        if (['reject', 'off'].includes(this.data.subscribeState)) {
+            wx.showModal({
+                title: '开启提醒',
+                content: '当前提醒已关闭，请在设置页重新开启任务提醒。',
+                success: (res) => {
+                    if (res.confirm) {
+                        this.openSubscribeSettings()
+                    }
+                }
+            })
+            return
+        }
+        if (this.data.subscribeState === 'ban') {
+            wx.showToast({ title: '提醒模板不可用', icon: 'none' })
+            return
+        }
         const tmplIds = [TASK_TEMPLATE_ID, COURSE_TEMPLATE_ID]
-        wx.requestSubscribeMessage({
-            tmplIds,
-            success: (res) => {
-                const accepted = tmplIds.some(id => res[id] === 'accept')
-                this.setData({ hasSubscribed: accepted })
-            },
-            fail: () => {} // 静默失败，不打扰用户
-        })
+        requestTemplateSubscribe(tmplIds)
+            .then((res) => {
+                const accepted = tmplIds.some((id) => res[id] === 'accept')
+                if (accepted) {
+                    wx.showToast({ title: '提醒已记录', icon: 'success' })
+                } else {
+                    wx.showToast({ title: '建议勾选“总是保持以上选择”', icon: 'none', duration: 3000 })
+                }
+                this.refreshSubscribeStatus()
+            })
+            .catch((err) => {
+                console.warn('subscribe fail', err)
+                wx.showToast({ title: '请通过按钮手动开启提醒', icon: 'none' })
+            })
     },
 
     goNotebook() {

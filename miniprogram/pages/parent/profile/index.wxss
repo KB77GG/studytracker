@@ -63,6 +63,19 @@
   color: #333;
 }
 
+.action-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  padding-right: 20rpx;
+}
+
+.action-hint {
+  font-size: 22rpx;
+  line-height: 1.5;
+  color: #8b95a1;
+}
+
 .action-item:last-child {
   border-bottom: none;
 }

@@ -42,10 +42,12 @@ def _get_access_token():
     current_app.logger.error("Failed to fetch access_token: %s", data)
     return None
 
-def send_subscribe_message(openid: str, template_id: str, data: dict, page: str = "pages/student/home/index") -> bool:
+def send_subscribe_message_result(
+    openid: str, template_id: str, data: dict, page: str = "pages/student/home/index"
+) -> dict:
     token = _get_access_token()
     if not token:
-        return False
+        return {"ok": False, "error": "missing_access_token"}
     payload = {
         "touser": openid,
         "template_id": template_id,
@@ -59,9 +61,18 @@ def send_subscribe_message(openid: str, template_id: str, data: dict, page: str 
     )
     res = resp.json()
     if res.get("errcode") == 0:
-        return True
+        return {"ok": True}
     current_app.logger.error("Send subscribe fail: %s", res)
-    return False
+    return {
+        "ok": False,
+        "error": "send_failed",
+        "errcode": res.get("errcode"),
+        "errmsg": res.get("errmsg"),
+    }
+
+
+def send_subscribe_message(openid: str, template_id: str, data: dict, page: str = "pages/student/home/index") -> bool:
+    return send_subscribe_message_result(openid, template_id, data, page=page).get("ok", False)
 
 def get_wechat_session(code):
     """Exchange code for session_key and openid."""

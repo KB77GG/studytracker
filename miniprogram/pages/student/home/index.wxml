@@ -11,12 +11,15 @@
         <text class="hello">{{greeting}}，{{userInfo.nickName}}</text>
         <text class="sub-text">准备好开始今天的学习了吗？</text>
       </view>
-      <picker mode="date" value="{{currentDate}}" bindchange="handleDateChange">
-        <view class="date-badge">
-          {{dateStr}} <text class="picker-arrow">▼</text>
-        </view>
-      </picker>
-      <button class="sub-btn" size="mini" bindtap="requestSubscribe" wx:if="{{!hasSubscribed}}">开启任务提醒</button>
+      <view class="header-actions">
+        <picker mode="date" value="{{currentDate}}" bindchange="handleDateChange">
+          <view class="date-badge">
+            {{dateStr}} <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+        <button class="sub-btn" size="mini" bindtap="requestSubscribe">{{subscribeButtonText}}</button>
+        <text class="sub-tip">{{subscribeTip}}</text>
+      </view>
     </view>
 
     <!-- 进度卡片 -->

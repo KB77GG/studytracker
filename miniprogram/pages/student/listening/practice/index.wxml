@@ -1,122 +1,143 @@
 <view class="page">
   <view class="loading-state" wx:if="{{loading}}">
-    <text class="loading-text">正在加载精听内容...</text>
+    <view class="loading-ring"></view>
+    <text class="loading-text">正在加载精听内容…</text>
   </view>
 
-  <view wx:else>
+  <block wx:else>
+    <!-- ── 任务概览卡片 ── -->
     <view class="summary-card">
       <view class="summary-top">
-        <view>
-          <view class="summary-label">精听任务</view>
-          <view class="summary-title">{{exercise.title || task.task_name || '精听练习'}}</view>
+        <view class="summary-info">
+          <text class="summary-label">精听任务</text>
+          <text class="summary-title">{{exercise.title || task.task_name || '精听练习'}}</text>
         </view>
-        <view class="summary-badge {{allCompleted ? 'done' : 'progress'}}">
+        <view class="status-badge {{allCompleted ? 'done' : 'progress'}}">
           {{allCompleted ? '已完成' : '进行中'}}
         </view>
       </view>
-      <view class="summary-grid">
-        <view class="summary-item">
-          <text class="summary-value">{{summary.completedCount}}/{{summary.totalCount}}</text>
-          <text class="summary-key">完成句数</text>
-        </view>
-        <view class="summary-item">
-          <text class="summary-value">{{summary.completionRate}}%</text>
-          <text class="summary-key">完成率</text>
-        </view>
-        <view class="summary-item">
-          <text class="summary-value">{{summary.accuracy}}%</text>
-          <text class="summary-key">正确率</text>
-        </view>
+
+      <view class="progress-track">
+        <view class="progress-fill" style="width: {{summary.completionRate}}%;"></view>
+        <text class="progress-label">{{summary.completionRate}}%</text>
       </view>
-      <view class="summary-grid repeat-summary-grid">
-        <view class="summary-item">
-          <text class="summary-value">{{repeatSummary.attemptedCount}}/{{summary.totalCount}}</text>
-          <text class="summary-key">跟读已测</text>
+
+      <view class="stats-row">
+        <view class="stat-cell">
+          <text class="stat-val">{{summary.completedCount}}<text class="stat-total">/{{summary.totalCount}}</text></text>
+          <text class="stat-key">听写完成</text>
         </view>
-        <view class="summary-item">
-          <text class="summary-value">{{repeatSummary.passedCount}}</text>
-          <text class="summary-key">跟读通过</text>
+        <view class="stat-divider"></view>
+        <view class="stat-cell">
+          <text class="stat-val">{{summary.accuracy}}<text class="stat-unit">%</text></text>
+          <text class="stat-key">正确率</text>
         </view>
-        <view class="summary-item">
-          <text class="summary-value">{{repeatSummary.avgScore}}</text>
-          <text class="summary-key">跟读均分</text>
+        <view class="stat-divider"></view>
+        <view class="stat-cell">
+          <text class="stat-val">{{repeatSummary.passedCount}}<text class="stat-total">/{{summary.totalCount}}</text></text>
+          <text class="stat-key">跟读通过</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-cell">
+          <text class="stat-val">{{repeatSummary.avgScore || '—'}}</text>
+          <text class="stat-key">跟读均分</text>
         </view>
       </view>
     </view>
 
+    <!-- ── 句子选择条 ── -->
     <scroll-view scroll-x class="segment-strip" enable-flex>
       <view
-        class="segment-chip {{index === currentIndex ? 'active' : ''}} {{item.isCompleted ? 'done' : ''}}"
+        class="seg-chip {{index === currentIndex ? 'seg-active' : ''}} {{item.isCompleted ? 'seg-done' : ''}}"
         wx:for="{{segments}}"
         wx:key="globalIndex"
         data-index="{{index}}"
         bindtap="onSelectSegment"
       >
-        <text class="chip-main">{{index + 1}}</text>
-        <text class="chip-sub">{{item.isCompleted ? '✓' : item.partShort}}</text>
+        <text class="seg-num">{{index + 1}}</text>
+        <text class="seg-sub">{{item.isCompleted ? '✓' : item.partShort}}</text>
       </view>
     </scroll-view>
 
+    <!-- ── 播放器主卡片 ── -->
     <view class="player-card" wx:if="{{currentSegment}}">
-      <view class="player-head">
-        <view>
-          <view class="sentence-title">{{currentSegment.partName}} · 第{{currentIndex + 1}}句</view>
-          <view class="sentence-sub">{{currentTimeText}} / {{segmentDurationText}}</view>
+
+      <!-- 句子信息 + 速度 -->
+      <view class="player-top">
+        <view class="sentence-meta">
+          <view class="part-tag">{{currentSegment.partName}}</view>
+          <text class="sentence-pos">第 {{currentIndex + 1}} / {{segments.length}} 句</text>
         </view>
         <picker range="{{speedOptions}}" range-key="label" value="{{speedIndex}}" bindchange="onSpeedChange">
           <view class="speed-pill">{{speedOptions[speedIndex].label}}</view>
         </picker>
       </view>
 
-      <view class="control-row">
-        <button class="control-btn ghost" bindtap="prevSegment">上一句</button>
-        <button class="control-btn primary" bindtap="togglePlay">
-          {{audioPlaying ? '暂停' : '播放'}}
+      <!-- 模式切换 -->
+      <view class="mode-tabs">
+        <view class="mode-tab {{mode === 'listen' ? 'mode-active' : ''}}" data-mode="listen" bindtap="switchMode">
+          <text class="mode-icon">👂</text>
+          <text class="mode-label">句子精听</text>
+        </view>
+        <view class="mode-tab {{mode === 'dictation' ? 'mode-active' : ''}}" data-mode="dictation" bindtap="switchMode">
+          <text class="mode-icon">✏️</text>
+          <text class="mode-label">听写模式</text>
+        </view>
+        <view class="mode-tab {{mode === 'repeat' ? 'mode-active' : ''}}" data-mode="repeat" bindtap="switchMode">
+          <text class="mode-icon">🎤</text>
+          <text class="mode-label">跟读检查</text>
+        </view>
+      </view>
+
+      <!-- 音频控制 -->
+      <view class="audio-controls">
+        <button class="ctrl-ghost" bindtap="prevSegment">上一句</button>
+        <button class="ctrl-play" bindtap="togglePlay">
+          <text class="play-icon">{{audioPlaying ? '⏸' : '▶'}}</text>
         </button>
-        <button class="control-btn ghost" bindtap="repeatSegment">重播</button>
-        <button class="control-btn ghost" bindtap="nextSegment">下一句</button>
+        <button class="ctrl-ghost" bindtap="repeatSegment">重播</button>
+        <button class="ctrl-ghost" bindtap="nextSegment">下一句</button>
       </view>
 
-      <view class="mode-switch">
-        <view class="mode-pill {{mode === 'listen' ? 'active' : ''}}" data-mode="listen" bindtap="switchMode">句子精听</view>
-        <view class="mode-pill {{mode === 'dictation' ? 'active' : ''}}" data-mode="dictation" bindtap="switchMode">听写模式</view>
-        <view class="mode-pill {{mode === 'repeat' ? 'active' : ''}}" data-mode="repeat" bindtap="switchMode">跟读检查</view>
+      <view class="time-bar">
+        <text class="time-text">{{currentTimeText}} / {{segmentDurationText}}</text>
       </view>
 
-      <view class="toggle-row">
-        <view class="toggle-btn {{showOriginal ? 'active' : ''}}" bindtap="toggleOriginal">
-          {{showOriginal ? '隐藏原文' : '显示原文'}}
+      <!-- ─ 句子精听 ─ -->
+      <view class="mode-content" wx:if="{{mode === 'listen'}}">
+        <view class="text-card">
+          <view class="toggle-row">
+            <view class="toggle-btn {{showOriginal ? 'tog-active' : ''}}" bindtap="toggleOriginal">
+              {{showOriginal ? '隐藏原文' : '显示原文'}}
+            </view>
+            <view class="toggle-btn {{showTranslation ? 'tog-active' : ''}}" bindtap="toggleTranslation">
+              {{showTranslation ? '隐藏译文' : '显示译文'}}
+            </view>
+          </view>
+          <text class="hint-text" wx:if="{{!showOriginal && !showTranslation}}">先仔细听，准备好了再查看原文。</text>
+          <text class="original-text" wx:if="{{showOriginal}}">{{currentSegment.text}}</text>
+          <text class="translation-text" wx:if="{{showTranslation && currentSegment.translation}}">{{currentSegment.translation}}</text>
         </view>
-        <view class="toggle-btn {{showTranslation ? 'active' : ''}}" bindtap="toggleTranslation">
-          {{showTranslation ? '隐藏译文' : '显示译文'}}
-        </view>
       </view>
 
-      <view class="listen-card" wx:if="{{mode === 'listen'}}">
-        <text class="placeholder" wx:if="{{!showOriginal}}">先听一遍，再决定是否查看原文。</text>
-        <text class="original-text" wx:if="{{showOriginal}}">{{currentSegment.text}}</text>
-        <text class="translation-text" wx:if="{{showTranslation && currentSegment.translation}}">{{currentSegment.translation}}</text>
-      </view>
-
-      <view wx:if="{{mode === 'dictation'}}">
+      <!-- ─ 听写模式 ─ -->
+      <view class="mode-content" wx:if="{{mode === 'dictation'}}">
         <view class="difficulty-row">
-          <text class="difficulty-label">难度</text>
-          <view class="difficulty-pills">
+          <text class="section-label">难度</text>
+          <view class="pill-group">
             <view
-              class="difficulty-pill {{difficultyIndex === index ? 'active' : ''}}"
+              class="option-pill {{difficultyIndex === index ? 'pill-active' : ''}}"
               wx:for="{{difficultyOptions}}"
               wx:key="label"
               data-index="{{index}}"
               bindtap="changeDifficulty"
-            >
-              {{item.label}}
-            </view>
+            >{{item.label}}</view>
           </view>
         </view>
 
         <view class="dictation-box">
           <block wx:for="{{renderTokens}}" wx:key="tokenKey">
-            <text wx:if="{{item.kind === 'text'}}" class="plain-token">{{item.text}}</text>
+            <text wx:if="{{item.kind === 'text'}}" class="plain-word">{{item.text}}</text>
             <view wx:else class="blank-wrap {{item.status}}">
               <input
                 class="blank-input {{item.status}}"
@@ -126,7 +147,7 @@
                 value="{{blankAnswers[item.blankIndex] || item.value || ''}}"
                 data-blank-index="{{item.blankIndex}}"
                 bindinput="onBlankInput"
-                placeholder="..."
+                placeholder="…"
                 style="width: {{item.width}}px;"
               />
               <text wx:if="{{item.suffix}}" class="blank-suffix">{{item.suffix}}</text>
@@ -134,78 +155,114 @@
           </block>
         </view>
 
-        <view class="listen-card" wx:if="{{showTranslation && currentSegment.translation}}">
-          <text class="translation-text">{{currentSegment.translation}}</text>
+        <text class="translation-text side-translation" wx:if="{{showTranslation && currentSegment.translation}}">{{currentSegment.translation}}</text>
+
+        <view class="result-banner" wx:if="{{currentResult}}">
+          <view class="result-row">
+            <text class="result-score">{{currentResult.accuracy}}<text class="result-unit">%</text></text>
+            <view class="result-detail">
+              <text class="result-main">正确 {{currentResult.correctWords}} / {{currentResult.totalWords}} 词</text>
+              <text class="result-sub">{{currentResult.accuracy >= 80 ? '很棒！继续保持' : currentResult.accuracy >= 60 ? '不错，再接再厉' : '多听几遍再试试'}}</text>
+            </view>
+          </view>
         </view>
 
-        <view class="result-card" wx:if="{{currentResult}}">
-          <view class="result-main">本句正确 {{currentResult.correctWords}} / {{currentResult.totalWords}}</view>
-          <view class="result-sub">正确率 {{currentResult.accuracy}}%</view>
-        </view>
-
-        <view class="control-row">
-          <button class="control-btn primary" wx:if="{{!dictationLocked}}" bindtap="submitCurrentSegment">提交本句</button>
-          <button class="control-btn ghost" wx:else bindtap="redoCurrentSegment">重做本句</button>
-          <button class="control-btn ghost" bindtap="nextSegment">{{currentIndex + 1 >= segments.length ? '返回末句' : '下一句'}}</button>
+        <view class="action-row">
+          <view class="toggle-btn {{showTranslation ? 'tog-active' : ''}}" bindtap="toggleTranslation">
+            {{showTranslation ? '隐藏译文' : '显示译文'}}
+          </view>
+          <button class="action-btn btn-primary" wx:if="{{!dictationLocked}}" bindtap="submitCurrentSegment">提交本句</button>
+          <button class="action-btn btn-ghost" wx:else bindtap="redoCurrentSegment">重做本句</button>
+          <button class="action-btn btn-ghost" bindtap="nextSegment">
+            {{currentIndex + 1 >= segments.length ? '返回末句' : '下一句'}}
+          </button>
         </view>
       </view>
 
-      <view wx:if="{{mode === 'repeat'}}">
-        <view class="listen-card repeat-guide-card">
+      <!-- ─ 跟读检查 ─ -->
+      <view class="mode-content" wx:if="{{mode === 'repeat'}}">
+        <view class="repeat-text-card">
           <text class="original-text">{{currentSegment.text}}</text>
           <text class="translation-text" wx:if="{{showTranslation && currentSegment.translation}}">{{currentSegment.translation}}</text>
-          <text class="repeat-hint">先播放原句，再录下你的跟读。系统会检查发音、停顿流畅度和完整度。</text>
-          <text class="repeat-threshold">通过线：发音≥{{passThresholds.accuracy}}，流利≥{{passThresholds.fluency}}，完整≥{{passThresholds.completion}}</text>
+          <view class="threshold-row">
+            <text class="threshold-chip">发音 ≥ {{passThresholds.accuracy}}</text>
+            <text class="threshold-chip">流利 ≥ {{passThresholds.fluency}}</text>
+            <text class="threshold-chip">完整 ≥ {{passThresholds.completion}}</text>
+          </view>
+          <text class="repeat-hint">先播放原句，再录下你的跟读。</text>
         </view>
 
-        <view class="control-row">
-          <button class="control-btn primary" wx:if="{{!repeatRecording}}" bindtap="startRepeatRecording">
-            {{repeatFilePath ? '重新录音' : '开始录音'}}
+        <!-- 录音按钮 -->
+        <view class="record-zone">
+          <button
+            class="record-btn {{repeatRecording ? 'recording' : ''}} {{repeatFilePath && !repeatRecording ? 'recorded' : ''}}"
+            bindtap="{{repeatRecording ? 'stopRepeatRecording' : 'startRepeatRecording'}}"
+          >
+            <text class="record-icon">{{repeatRecording ? '⏹' : repeatFilePath ? '↺' : '●'}}</text>
+            <text class="record-label">{{repeatRecording ? '停止录音' : repeatFilePath ? '重新录音' : '开始录音'}}</text>
           </button>
-          <button class="control-btn primary" wx:else bindtap="stopRepeatRecording">停止录音</button>
-          <button class="control-btn ghost" bindtap="playRepeatRecording" disabled="{{!repeatFilePath || repeatRecording}}">播放录音</button>
-          <button class="control-btn ghost" bindtap="resetRepeatRecording" disabled="{{!repeatFilePath || repeatRecording}}">清空录音</button>
+
+          <view class="record-actions" wx:if="{{repeatFilePath && !repeatRecording}}">
+            <button class="ctrl-ghost" bindtap="playRepeatRecording" disabled="{{repeatRecording}}">播放录音</button>
+            <button class="ctrl-ghost" bindtap="resetRepeatRecording" disabled="{{repeatRecording}}">清空</button>
+          </view>
         </view>
 
-        <view class="repeat-file-card" wx:if="{{repeatFilePath}}">
-          <text class="repeat-file-text">录音已就绪，可以提交评测。</text>
+        <view class="ready-hint" wx:if="{{repeatFilePath && !repeatRecording}}">
+          <view class="ready-dot"></view>
+          <text class="ready-text">录音已就绪，可以提交评测。</text>
         </view>
 
-        <view class="control-row">
-          <button class="control-btn primary" bindtap="submitRepeatSegment" loading="{{repeatUploading}}" disabled="{{repeatRecording || !repeatFilePath}}">
-            提交跟读
-          </button>
-          <button class="control-btn ghost" bindtap="nextSegment">下一句</button>
+        <view class="action-row">
+          <view class="toggle-btn {{showTranslation ? 'tog-active' : ''}}" bindtap="toggleTranslation">
+            {{showTranslation ? '隐藏译文' : '显示译文'}}
+          </view>
+          <button
+            class="action-btn btn-primary"
+            bindtap="submitRepeatSegment"
+            loading="{{repeatUploading}}"
+            disabled="{{repeatRecording || !repeatFilePath}}"
+          >提交跟读</button>
+          <button class="action-btn btn-ghost" bindtap="nextSegment">下一句</button>
         </view>
 
-        <view class="result-card" wx:if="{{currentRepeatResult}}">
-          <view class="result-main">{{currentRepeatResult.isPassed ? '本句跟读通过' : '本句还需加强'}}</view>
-          <view class="repeat-score-grid">
-            <view class="repeat-score-item">
-              <text class="repeat-score-value">{{currentRepeatResult.overallScore}}</text>
-              <text class="repeat-score-key">综合</text>
+        <!-- 跟读结果 -->
+        <view class="repeat-result" wx:if="{{currentRepeatResult}}">
+          <view class="repeat-verdict {{currentRepeatResult.isPassed ? 'pass' : 'fail'}}">
+            <text class="verdict-icon">{{currentRepeatResult.isPassed ? '✓' : '✗'}}</text>
+            <text class="verdict-text">{{currentRepeatResult.isPassed ? '跟读通过' : '还需加强'}}</text>
+          </view>
+          <view class="score-grid">
+            <view class="score-cell">
+              <text class="score-big">{{currentRepeatResult.overallScore}}</text>
+              <text class="score-key">综合</text>
             </view>
-            <view class="repeat-score-item">
-              <text class="repeat-score-value">{{currentRepeatResult.pronAccuracy}}</text>
-              <text class="repeat-score-key">发音</text>
+            <view class="score-cell">
+              <text class="score-big">{{currentRepeatResult.pronAccuracy}}</text>
+              <text class="score-key">发音</text>
             </view>
-            <view class="repeat-score-item">
-              <text class="repeat-score-value">{{currentRepeatResult.pronFluency}}</text>
-              <text class="repeat-score-key">流利</text>
+            <view class="score-cell">
+              <text class="score-big">{{currentRepeatResult.pronFluency}}</text>
+              <text class="score-key">流利</text>
             </view>
-            <view class="repeat-score-item">
-              <text class="repeat-score-value">{{currentRepeatResult.pronCompletion}}</text>
-              <text class="repeat-score-key">完整</text>
+            <view class="score-cell">
+              <text class="score-big">{{currentRepeatResult.pronCompletion}}</text>
+              <text class="score-key">完整</text>
             </view>
           </view>
-          <view class="repeat-issue-row" wx:if="{{currentRepeatResult.issues.length}}">
-            <text class="repeat-issue-title">低分单词：</text>
-            <view class="repeat-issue-list">
-              <text class="repeat-issue-chip" wx:for="{{currentRepeatResult.issues}}" wx:key="word">{{item.word}} {{item.accuracy}}</text>
+          <view class="issue-section" wx:if="{{currentRepeatResult.issues.length}}">
+            <text class="issue-label">低分单词</text>
+            <view class="issue-chips">
+              <text
+                class="issue-chip"
+                wx:for="{{currentRepeatResult.issues}}"
+                wx:key="word"
+              >{{item.word}} · {{item.accuracy}}</text>
             </view>
           </view>
         </view>
       </view>
+
     </view>
-  </view>
+  </block>
 </view>

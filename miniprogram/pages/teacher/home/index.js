@@ -1,5 +1,6 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
+const { getSubscribeSummary, requestTemplateSubscribe } = require('../../../utils/subscribe.js')
 const COURSE_TEMPLATE_ID = 'AehPa5pMUTnQqXgq-q-wxTAMZyVU-qdkxaO9rbpo-QI'
 const DEFAULT_START_HOUR = 8
 const DEFAULT_END_HOUR = 22
@@ -11,6 +12,9 @@ Page({
         viewDays: 7,
         schedules: [],
         hasSubscribed: false,
+        subscribeState: 'unknown',
+        subscribeButtonText: '开启提醒',
+        subscribeTip: '点击后勾选“总是保持以上选择”更稳定',
         bindRequired: false,
         schedulerTeacherId: '',
         bindLoading: false,
@@ -30,8 +34,7 @@ Page({
 
     onShow() {
         this.fetchSchedules()
-        // 每次进入首页都尝试请求订阅（一次性订阅需反复获取配额）
-        this.autoRequestSubscribe()
+        this.refreshSubscribeStatus()
         if (typeof this.getTabBar === 'function' && this.getTabBar()) {
             this.getTabBar().setData({ selected: 0 })
         }
@@ -371,37 +374,92 @@ Page({
         }
     },
 
-    // 用户主动点击按钮订阅
-    requestSubscribe() {
-        const tmplIds = [COURSE_TEMPLATE_ID]
-        wx.requestSubscribeMessage({
-            tmplIds,
-            success: (res) => {
-                const accepted = tmplIds.some(id => res[id] === 'accept')
-                if (accepted) {
-                    this.setData({ hasSubscribed: true })
-                    wx.showToast({ title: '提醒已开启', icon: 'success' })
-                } else {
-                    wx.showToast({ title: '请勾选"总是保持以上选择"以长期接收提醒', icon: 'none', duration: 3000 })
-                }
-            },
-            fail: (err) => {
-                console.warn('subscribe fail', err)
+    async refreshSubscribeStatus() {
+        const summary = await getSubscribeSummary([COURSE_TEMPLATE_ID])
+        this.setData(this.buildSubscribeView(summary))
+    },
+
+    buildSubscribeView(summary) {
+        const state = summary && summary.state ? summary.state : 'unknown'
+        if (state === 'accept') {
+            return {
+                hasSubscribed: true,
+                subscribeState: state,
+                subscribeButtonText: '提醒已开启',
+                subscribeTip: '如需修改提醒偏好，请前往微信设置页'
+            }
+        }
+        if (state === 'reject') {
+            return {
+                hasSubscribed: false,
+                subscribeState: state,
+                subscribeButtonText: '去设置开启',
+                subscribeTip: '你已关闭课程提醒，请在设置里重新开启'
+            }
+        }
+        if (state === 'ban') {
+            return {
+                hasSubscribed: false,
+                subscribeState: state,
+                subscribeButtonText: '查看提醒状态',
+                subscribeTip: '当前模板不可用，请联系管理员检查'
+            }
+        }
+        if (state === 'off') {
+            return {
+                hasSubscribed: false,
+                subscribeState: state,
+                subscribeButtonText: '去设置开启',
+                subscribeTip: '微信总提醒开关已关闭，请先开启'
+            }
+        }
+        return {
+            hasSubscribed: false,
+            subscribeState: state,
+            subscribeButtonText: '开启提醒',
+            subscribeTip: '点击后勾选“总是保持以上选择”更稳定'
+        }
+    },
+
+    openSubscribeSettings() {
+        wx.openSetting({
+            success: () => {
+                this.refreshSubscribeStatus()
             }
         })
     },
 
-    // 每次进入页面自动请求订阅（积累配额）
-    autoRequestSubscribe() {
+    requestSubscribe() {
+        if (['reject', 'off'].includes(this.data.subscribeState)) {
+            wx.showModal({
+                title: '开启提醒',
+                content: '当前课程提醒已关闭，请在设置页重新开启。',
+                success: (res) => {
+                    if (res.confirm) {
+                        this.openSubscribeSettings()
+                    }
+                }
+            })
+            return
+        }
+        if (this.data.subscribeState === 'ban') {
+            wx.showToast({ title: '提醒模板不可用', icon: 'none' })
+            return
+        }
         const tmplIds = [COURSE_TEMPLATE_ID]
-        wx.requestSubscribeMessage({
-            tmplIds,
-            success: (res) => {
-                const accepted = tmplIds.some(id => res[id] === 'accept')
-                this.setData({ hasSubscribed: accepted })
-            },
-            fail: () => {}
-        })
+        requestTemplateSubscribe(tmplIds)
+            .then((res) => {
+                if (res[COURSE_TEMPLATE_ID] === 'accept') {
+                    wx.showToast({ title: '提醒已记录', icon: 'success' })
+                } else {
+                    wx.showToast({ title: '建议勾选“总是保持以上选择”', icon: 'none', duration: 3000 })
+                }
+                this.refreshSubscribeStatus()
+            })
+            .catch((err) => {
+                console.warn('subscribe fail', err)
+                wx.showToast({ title: '请点击按钮手动开启提醒', icon: 'none' })
+            })
     },
 
     openFeedback(e) {
@@ -425,6 +483,29 @@ Page({
             .join('&')
         wx.navigateTo({
             url: `/pages/teacher/feedback/index?${query}`
+        })
+    },
+
+    openHomework(e) {
+        const data = e.currentTarget.dataset || {}
+        const params = {
+            schedule_uid: data.scheduleUid,
+            schedule_id: data.scheduleId,
+            student_id: data.studentId,
+            student_name: data.studentName,
+            teacher_id: data.teacherId,
+            teacher_name: data.teacherName,
+            course_name: data.courseName,
+            start_time: data.startTime,
+            end_time: data.endTime,
+            schedule_date: data.scheduleDate
+        }
+        const query = Object.keys(params)
+            .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')
+            .map(key => `${key}=${encodeURIComponent(params[key])}`)
+            .join('&')
+        wx.navigateTo({
+            url: `/pages/teacher/homework/index?${query}`
         })
     }
 })

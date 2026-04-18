@@ -44,8 +44,10 @@ python3 add_class_feedback_image.py
 打开 `api/wechat.py`，找到 `WECHAT_APP_SECRET`，填入您的小程序 AppSecret。
 或者，您可以在 `config.py` 中添加 `WECHAT_APP_SECRET = '您的密钥'`。
 
-课堂反馈订阅消息需要配置环境变量：
+订阅消息模板需要配置环境变量：
 ```
+WECHAT_TASK_TEMPLATE_ID=学生作业提醒模板ID
+WECHAT_COURSE_TEMPLATE_ID=课程提醒模板ID
 WECHAT_FEEDBACK_TEMPLATE_ID=你的反馈模板ID
 ```
 

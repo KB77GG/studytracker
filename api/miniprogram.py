@@ -19,7 +19,7 @@ from models import (
     DictationBook
 )
 from .auth_utils import require_api_user
-from .wechat import send_subscribe_message
+from .wechat import send_subscribe_message, send_subscribe_message_result
 from .ielts_eval import run_ielts_eval, run_quick_reply
 from .aliyun_asr import transcribe_audio_url
 from .aliyun_tts import synthesize_text
@@ -2099,6 +2099,34 @@ def _collect_teacher_openid(scheduler_teacher_id):
     return None
 
 
+def _course_template_id():
+    return current_app.config.get("WECHAT_COURSE_TEMPLATE_ID")
+
+
+def _task_template_id():
+    return current_app.config.get("WECHAT_TASK_TEMPLATE_ID")
+
+
+def _normalize_subscribe_push_error(result):
+    if not result:
+        return "unknown_error"
+    if result.get("ok"):
+        return None
+
+    errcode = result.get("errcode")
+    if errcode == 43101:
+        return "user_refused"
+    if errcode == 40037:
+        return "invalid_template_id"
+    if errcode == 41030:
+        return "invalid_page"
+    if errcode == 47003:
+        return "template_param_error"
+    if result.get("error") == "missing_access_token":
+        return "missing_access_token"
+    return "send_failed"
+
+
 @mp_bp.route("/send_tomorrow_class_reminders", methods=["POST"])
 @require_api_user(User.ROLE_ADMIN, User.ROLE_TEACHER)
 def send_tomorrow_class_reminders():
@@ -2110,7 +2138,7 @@ def send_tomorrow_class_reminders():
 
 
 def send_tomorrow_class_reminders_internal():
-    template_id = current_app.config.get("WECHAT_TASK_TEMPLATE_ID")
+    template_id = _course_template_id()
     if not template_id:
         return {"ok": False, "error": "missing_template_id"}
 
@@ -2163,7 +2191,7 @@ def send_tomorrow_class_reminders_internal():
 
 def check_schedule_changes_internal(days=7):
     """检查课表变化并推送新增/取消提醒。"""
-    template_id = current_app.config.get("WECHAT_TASK_TEMPLATE_ID")
+    template_id = _course_template_id()
     if not template_id:
         return {"ok": False, "error": "missing_template_id"}
 
@@ -2395,6 +2423,113 @@ def submit_class_feedback():
         "push_sent": push_sent,
         "push_error": push_error,
         "created": is_new,
+    })
+
+
+@mp_bp.route("/teacher/homework", methods=["POST"])
+@require_api_user(User.ROLE_TEACHER)
+def create_teacher_homework():
+    """老师在小程序内为单个学生布置作业并触发任务提醒。"""
+    data = request.get_json() or {}
+    user = request.current_api_user
+
+    detail = (data.get("detail") or "").strip()
+    if not detail:
+        return jsonify({"ok": False, "error": "missing_detail"}), 400
+
+    task_date = (data.get("date") or date.today().isoformat()).strip()
+    try:
+        datetime.strptime(task_date, "%Y-%m-%d")
+    except ValueError:
+        return jsonify({"ok": False, "error": "invalid_date"}), 400
+
+    raw_teacher_id = data.get("teacher_id")
+    try:
+        schedule_teacher_id = int(raw_teacher_id) if raw_teacher_id not in (None, "") else None
+    except (TypeError, ValueError):
+        schedule_teacher_id = None
+    if user.scheduler_teacher_id and schedule_teacher_id and schedule_teacher_id != user.scheduler_teacher_id:
+        return jsonify({"ok": False, "error": "forbidden_schedule"}), 403
+
+    raw_student_id = data.get("student_id")
+    try:
+        scheduler_student_id = int(raw_student_id) if raw_student_id not in (None, "") else None
+    except (TypeError, ValueError):
+        scheduler_student_id = None
+
+    student_name = (data.get("student_name") or "").strip()
+    profile = None
+    if scheduler_student_id:
+        profile = StudentProfile.query.filter_by(
+            scheduler_student_id=scheduler_student_id,
+            is_deleted=False,
+        ).first()
+    if not profile and student_name:
+        profile = StudentProfile.query.filter_by(full_name=student_name, is_deleted=False).first()
+    if not profile:
+        return jsonify({"ok": False, "error": "student_not_found"}), 404
+
+    category = (data.get("category") or data.get("course_name") or "课后作业").strip()[:32]
+    note = (data.get("note") or "").strip()
+    try:
+        planned_minutes = int(data.get("planned_minutes") or 0)
+    except (TypeError, ValueError):
+        planned_minutes = 0
+    planned_minutes = max(0, min(planned_minutes, 600))
+
+    task = Task(
+        date=task_date,
+        student_name=profile.full_name,
+        category=category,
+        detail=detail[:200],
+        status="pending",
+        note=note[:200] if note else None,
+        created_by=user.id,
+        planned_minutes=planned_minutes,
+    )
+    db.session.add(task)
+    db.session.commit()
+
+    push_sent = 0
+    push_error = None
+    template_id = _task_template_id()
+    target_openid = profile.user.wechat_openid if profile.user and profile.user.wechat_openid else None
+
+    if not template_id:
+        push_error = "missing_template_id"
+    elif not target_openid:
+        push_error = "no_student_openid"
+    else:
+        payload = {
+            "thing1": {"value": detail[:20]},
+            "time2": {"value": f"{task_date} 08:00"},
+            "time3": {"value": f"{task_date} 23:59"},
+            "thing4": {"value": (category or "学习任务")[:20]},
+        }
+        push_result = send_subscribe_message_result(
+            target_openid,
+            template_id,
+            payload,
+            page="pages/student/home/index",
+        )
+        if push_result.get("ok"):
+            push_sent = 1
+        else:
+            push_error = _normalize_subscribe_push_error(push_result)
+
+    return jsonify({
+        "ok": True,
+        "task": {
+            "id": task.id,
+            "date": task.date,
+            "student_name": task.student_name,
+            "category": task.category,
+            "detail": task.detail,
+            "planned_minutes": task.planned_minutes,
+            "note": task.note,
+        },
+        "push_sent": push_sent,
+        "push_error": push_error,
     })
 
 

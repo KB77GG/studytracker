@@ -210,7 +210,10 @@ body {
   {% if show_upload %}
   <div class="student-bar" style="background:#d1fae5;">
     <span>员工模式 — <span class="name" style="color:#16a34a;">{{ current_user.display_name or current_user.username }}</span></span>
-    <a href="{{ url_for('logout') }}" style="color:#64748b;font-size:13px;">退出登录</a>
+    <span style="display:flex;gap:16px;align-items:center;">
+      <a href="{{ url_for('index') }}" style="color:#0f766e;font-size:13px;font-weight:600;">← 回到主页</a>
+      <a href="{{ url_for('logout') }}" style="color:#64748b;font-size:13px;">退出登录</a>
+    </span>
   </div>
   {% else %}
   <div class="student-bar">

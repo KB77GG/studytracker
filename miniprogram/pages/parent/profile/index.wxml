@@ -11,7 +11,10 @@
 
   <view class="action-list">
     <view class="action-item" bindtap="requestFeedbackSubscribe">
-      <text>{{feedbackSubscribed ? '已订阅课堂反馈' : '订阅课堂反馈'}}</text>
+      <view class="action-copy">
+        <text>{{feedbackSubscribeText}}</text>
+        <text class="action-hint">{{feedbackSubscribeHint}}</text>
+      </view>
       <text class="arrow">></text>
     </view>
     <view class="action-item" bindtap="handleUnbind">
