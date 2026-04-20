@@ -523,7 +523,7 @@ class ListeningSegmentResult(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
-    task = db.relationship("Task", backref=db.backref("listening_results", lazy="dynamic"))
+    task = db.relationship("Task", backref=db.backref("listening_results", lazy="dynamic", cascade="all, delete"))
 
     __table_args__ = (
         db.UniqueConstraint("task_id", "segment_index", name="uq_task_segment"),
@@ -552,7 +552,7 @@ class ListeningRepeatResult(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
-    task = db.relationship("Task", backref=db.backref("listening_repeat_results", lazy="dynamic"))
+    task = db.relationship("Task", backref=db.backref("listening_repeat_results", lazy="dynamic", cascade="all, delete"))
 
     __table_args__ = (
         db.UniqueConstraint("task_id", "segment_index", name="uq_task_repeat_segment"),
@@ -697,7 +697,7 @@ class StudentAnswer(db.Model, TimestampMixin):
     reviewed_at = db.Column(db.DateTime)
     
     # Relationships
-    task = db.relationship("Task", backref=db.backref("student_answers", lazy="dynamic"))
+    task = db.relationship("Task", backref=db.backref("student_answers", lazy="dynamic", cascade="all, delete"))
     student = db.relationship("User", foreign_keys=[student_id], backref=db.backref("my_answers", lazy="dynamic"))
     reviewer = db.relationship("User", foreign_keys=[reviewed_by], backref=db.backref("reviewed_answers", lazy="dynamic"))
     
