@@ -44,6 +44,12 @@ const request = (url, options = {}) => {
                 }
             },
             fail: (err) => {
+                console.warn('request fail', {
+                    url: `${baseUrl}${url}`,
+                    method: options.method || 'GET',
+                    timeout: options.timeout || 60000,
+                    err
+                })
                 reject(err)
             }
         })

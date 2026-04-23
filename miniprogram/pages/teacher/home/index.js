@@ -70,6 +70,7 @@ Page({
                 }
             }
         } catch (e) {
+            console.warn('teacher home fetchSchedules failed', e)
             wx.showToast({ title: '网络错误', icon: 'none' })
         } finally {
             this.setData({ loading: false })
@@ -368,6 +369,7 @@ Page({
                 wx.showToast({ title: msg, icon: 'none' })
             }
         } catch (e) {
+            console.warn('teacher home bindTeacherId failed', e)
             wx.showToast({ title: '网络错误', icon: 'none' })
         } finally {
             this.setData({ bindLoading: false })
