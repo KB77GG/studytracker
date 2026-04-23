@@ -1,17 +1,61 @@
+# Python
 __pycache__/
+*.pyc
 .venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local databases
 app_backup*.db
 app.db
-uploads/
-*.pyc
-output/
-data/*_eval_results.jsonl
+studytracker.db
+
+# Environment files
 .env
 .env.*
+
+# Generated output
+output/
+tmp/
+logs/
+data/*_eval_results.jsonl
+data/ielts_audio_normalized/
+data/ielts_transcripts/
+data/ielts_audio_manifest.json
+data/ielts_batch_align_report.json
+
+# Generated docs/artifacts
+docs/speaking_phrases/
+docs/ta_afterclass_support_introduction.docx
+docs/睿然国际教育_托福核心词汇手册.docx
+docs/睿然国际教育_新生入学指南.docx
+docs/睿然国际教育_课后教辅体系介绍.docx
+docs/睿然国际教育_雅思写作高分模板.docx
+docs/睿然国际教育_雅思核心词汇手册.docx
+
+# Upload/runtime artifacts
+uploads/
 miniprogram/vendor/
 static/listening/*.mp3
 static/listening/*.wav
 static/listening/*.m4a
 static/listening/.tasks/
-tmp/
+
+# Local tool state
+.claude/
+
+# macOS / Finder
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100/
+.Trashes/
+
+# Editor temp files
+*.swp
+*.swo
+*~
