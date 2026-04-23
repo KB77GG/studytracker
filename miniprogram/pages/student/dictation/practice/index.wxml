@@ -14,23 +14,43 @@
 
     <!-- Familiarization Card -->
     <view class="word-card fam-card">
-      <!-- Play Button -->
-      <view class="play-btn" bindtap="playFamWord" hover-class="btn-hover">
-        <view class="play-icon"></view>
-      </view>
-      <view class="play-hint">听发音，想拼写</view>
+      <!-- Audio -> English -->
+      <block wx:if="{{currentMode === 'audio_to_en'}}">
+        <view class="play-btn" bindtap="playFamWord" hover-class="btn-hover">
+          <view class="play-icon"></view>
+        </view>
+        <view class="play-hint">听发音，先尝试回忆拼写</view>
+        <view class="fam-prompt-label">释义提示</view>
+        <view class="fam-translation">{{words[famIndex].translation || '暂无释义'}}</view>
+      </block>
 
-      <!-- Translation (always shown) -->
-      <view class="fam-translation">{{words[famIndex].translation || '暂无释义'}}</view>
+      <!-- Chinese -> English -->
+      <block wx:elif="{{currentMode === 'zh_to_en'}}">
+        <view class="fam-prompt-label">中文提示</view>
+        <view class="fam-translation">{{words[famIndex].translation || '暂无释义'}}</view>
+        <view class="fam-mode-hint">先在心里回忆英文表达，再点击显示答案</view>
+      </block>
 
-      <!-- Revealed spelling + phonetic -->
-      <view class="fam-reveal-area" wx:if="{{famRevealed}}">
-        <text class="fam-word">{{words[famIndex].word}}</text>
+      <!-- English -> Chinese -->
+      <block wx:else>
+        <view class="fam-prompt-label">英文提示</view>
+        <view class="fam-word fam-prompt-word">{{words[famIndex].word}}</view>
         <text class="fam-phonetic" wx:if="{{words[famIndex].phonetic}}">[{{words[famIndex].phonetic}}]</text>
+        <view class="fam-mode-hint">先在心里回忆中文释义，再点击显示答案</view>
+      </block>
+
+      <!-- Revealed answer -->
+      <view class="fam-reveal-area" wx:if="{{famRevealed}}">
+        <text class="fam-answer-label">参考答案</text>
+        <text class="fam-word" wx:if="{{currentMode !== 'en_to_zh'}}">{{words[famIndex].word}}</text>
+        <text class="fam-translation fam-answer-translation" wx:else>{{words[famIndex].translation || '暂无释义'}}</text>
+        <text class="fam-phonetic" wx:if="{{currentMode !== 'en_to_zh' && words[famIndex].phonetic}}">[{{words[famIndex].phonetic}}]</text>
       </view>
 
       <!-- Reveal button -->
-      <button wx:if="{{!famRevealed}}" class="fam-reveal-btn" bindtap="revealFamWord">显示拼写</button>
+      <button wx:if="{{!famRevealed}}" class="fam-reveal-btn" bindtap="revealFamWord">
+        {{currentMode === 'en_to_zh' ? '显示释义' : '显示英文'}}
+      </button>
     </view>
 
     <!-- Navigation: Prev / Next -->
@@ -41,7 +61,9 @@
 
     <!-- Start Test button -->
     <view class="action-bar">
-      <button class="submit-btn" bindtap="startTest">跳过熟悉，开始听写</button>
+      <button class="submit-btn" bindtap="startTest">
+        {{currentMode === 'audio_to_en' ? '跳过熟悉，开始听写' : '跳过熟悉，开始默写'}}
+      </button>
     </view>
   </block>
 

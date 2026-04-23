@@ -326,11 +326,6 @@ Page({
                         this.setData({ phase: 'test' });
                         this.loadWord(resumeIndex);
                         this.startTicker();
-                    } else if (!isAudioMode(dictationMode)) {
-                        // Prompt-based modes: skip familiarization, go straight to test
-                        this.setData({ phase: 'test' });
-                        this.loadWord(0);
-                        this.startTicker();
                     } else {
                         this.enterFamiliarization();
                     }
@@ -928,16 +923,21 @@ Page({
 
     // ========== Familiarization Phase ==========
     enterFamiliarization() {
+        const firstWord = this.data.words[0] || {};
+        const firstMode = resolveDictationMode(firstWord.dictationMode, this.data.dictationMode);
         this.setData({
             phase: 'familiarize',
             famIndex: 0,
             famRevealed: false,
             famTimerSeconds: 1200,
             famTimerDisplay: '20:00',
-            currentWord: this.data.words[0] || {}
+            currentWord: firstWord,
+            currentMode: firstMode
         });
         this.startFamTimer();
-        setTimeout(() => this.playCurrentWord(), 500);
+        if (isAudioMode(firstMode)) {
+            setTimeout(() => this.playCurrentWord(), 500);
+        }
     },
 
     startFamTimer() {
@@ -946,7 +946,7 @@ Page({
             let seconds = this.data.famTimerSeconds - 1;
             if (seconds <= 0) {
                 this.stopFamTimer();
-                wx.showToast({ title: '熟悉时间到，开始听写', icon: 'none', duration: 2000 });
+                wx.showToast({ title: '熟悉时间到，开始练习', icon: 'none', duration: 2000 });
                 setTimeout(() => this.startTest(), 1500);
                 return;
             }
@@ -969,7 +969,10 @@ Page({
     playFamWord() {
         const word = this.data.words[this.data.famIndex];
         if (!word) return;
-        this.setData({ currentWord: word });
+        this.setData({
+            currentWord: word,
+            currentMode: resolveDictationMode(word.dictationMode, this.data.dictationMode)
+        });
         this.playCurrentWord();
     },
 
@@ -979,23 +982,40 @@ Page({
 
     nextFamWord() {
         const nextIdx = this.data.famIndex + 1;
+        let targetIndex = nextIdx;
         if (nextIdx >= this.data.totalWords) {
-            this.setData({ famIndex: 0, famRevealed: false, currentWord: this.data.words[0] || {} });
-        } else {
-            this.setData({ famIndex: nextIdx, famRevealed: false, currentWord: this.data.words[nextIdx] || {} });
+            targetIndex = 0;
         }
-        setTimeout(() => this.playCurrentWord(), 300);
+        const targetWord = this.data.words[targetIndex] || {};
+        const targetMode = resolveDictationMode(targetWord.dictationMode, this.data.dictationMode);
+        this.setData({
+            famIndex: targetIndex,
+            famRevealed: false,
+            currentWord: targetWord,
+            currentMode: targetMode
+        });
+        if (isAudioMode(targetMode)) {
+            setTimeout(() => this.playCurrentWord(), 300);
+        }
     },
 
     prevFamWord() {
         const prevIdx = this.data.famIndex - 1;
+        let targetIndex = prevIdx;
         if (prevIdx < 0) {
-            const last = this.data.totalWords - 1;
-            this.setData({ famIndex: last, famRevealed: false, currentWord: this.data.words[last] || {} });
-        } else {
-            this.setData({ famIndex: prevIdx, famRevealed: false, currentWord: this.data.words[prevIdx] || {} });
+            targetIndex = this.data.totalWords - 1;
         }
-        setTimeout(() => this.playCurrentWord(), 300);
+        const targetWord = this.data.words[targetIndex] || {};
+        const targetMode = resolveDictationMode(targetWord.dictationMode, this.data.dictationMode);
+        this.setData({
+            famIndex: targetIndex,
+            famRevealed: false,
+            currentWord: targetWord,
+            currentMode: targetMode
+        });
+        if (isAudioMode(targetMode)) {
+            setTimeout(() => this.playCurrentWord(), 300);
+        }
     },
 
     startTest() {
