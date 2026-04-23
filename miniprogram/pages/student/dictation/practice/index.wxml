@@ -58,14 +58,22 @@
 
     <!-- Word Card -->
     <view class="word-card">
-      <!-- Translation Mode: Show Chinese prompt -->
-      <block wx:if="{{isTranslation}}">
+      <!-- Chinese -> English -->
+      <block wx:if="{{currentMode === 'zh_to_en'}}">
         <view class="translation-prompt">
           <text class="translation-chinese">{{currentWord.translation || ''}}</text>
           <text class="translation-hint">请写出对应的英文表达</text>
         </view>
       </block>
-      <!-- Dictation Mode: Play Button -->
+      <!-- English -> Chinese -->
+      <block wx:elif="{{currentMode === 'en_to_zh'}}">
+        <view class="translation-prompt">
+          <text class="translation-chinese">{{currentWord.word || ''}}</text>
+          <text class="translation-hint" wx:if="{{currentWord.phonetic}}">[{{currentWord.phonetic}}]</text>
+          <text class="translation-hint">请写出对应的中文释义</text>
+        </view>
+      </block>
+      <!-- Audio dictation -->
       <block wx:else>
         <view class="play-btn" bindtap="playCurrentWord" hover-class="btn-hover">
           <view class="play-icon"></view>
@@ -83,13 +91,13 @@
       <!-- Input Area (Only show when not revealing answer) -->
       <view class="input-area" wx:if="{{!showResult}}">
         <input class="word-input {{inputError ? 'incorrect' : ''}}"
-               placeholder="{{isTranslation ? '输入英文表达' : '听音输入单词'}}"
+               placeholder="{{currentMode === 'en_to_zh' ? '输入中文释义' : (currentMode === 'zh_to_en' ? '输入英文表达' : '听音输入单词')}}"
                focus="{{inputFocus}}"
                value="{{inputValue}}"
                bindinput="onInput"
                confirm-type="done"
                bindconfirm="checkAnswer"/>
-        <view class="hint-card" wx:if="{{showHint && !isTranslation}}">
+        <view class="hint-card" wx:if="{{showHint && currentMode === 'audio_to_en'}}">
           <text class="hint-label">提示</text>
           <text class="hint-text">{{currentWord.translation || '暂无释义'}}</text>
         </view>
@@ -103,8 +111,8 @@
         </view>
         <text class="translation">{{currentWord.translation || '暂无释义'}}</text>
         <view class="compare-block">
-          <view class="answer-row wrong">你的拼写：{{userAnswer || '（空）'}}</view>
-          <view class="answer-row correct">正确拼写：{{currentWord.word}}</view>
+          <view class="answer-row wrong">你的答案：{{userAnswer || '（空）'}}</view>
+          <view class="answer-row correct">参考答案：{{currentMode === 'en_to_zh' ? (currentWord.translation || '暂无释义') : currentWord.word}}</view>
         </view>
 
         <!-- User Answer Display -->

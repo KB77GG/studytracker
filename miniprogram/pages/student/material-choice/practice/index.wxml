@@ -1,11 +1,19 @@
 <view class="container" wx:if="{{!loading}}">
   <view class="header-card">
-    <text class="title">{{task.task_name || '阅读词汇练习'}}</text>
+    <view class="title-row">
+      <text class="title">{{task.task_name || '阅读词汇练习'}}</text>
+      <view class="mode-pill {{mode}}" wx:if="{{mode !== 'practice'}}">
+        <text wx:if="{{mode === 'review'}}">回看模式</text>
+        <text wx:elif="{{mode === 'redo_wrong'}}">重做待复习</text>
+        <text wx:elif="{{mode === 'redo_all'}}">全部重做</text>
+      </view>
+    </view>
     <text class="subtitle">{{task.material_title || ''}}</text>
     <text class="desc" wx:if="{{task.description}}">{{task.description}}</text>
     <view class="progress-row">
       <text>第 {{currentIndex + 1}} / {{questions.length}} 题</text>
-      <text>已答 {{answeredCount}} 题</text>
+      <text wx:if="{{mode === 'review'}}">正确 {{correctCount}} · 待复习 {{wrongCount}}</text>
+      <text wx:else>已答 {{answeredCount}} 题</text>
     </view>
   </view>
 
@@ -14,7 +22,7 @@
     <text class="question-word">{{currentQuestion.content}}</text>
     <view class="options">
       <view
-        class="option-item {{selectedAnswer === item.key ? 'selected' : ''}}"
+        class="option-item {{selectedAnswer === item.key ? 'selected' : ''}} {{item.isCorrect ? 'correct' : ''}} {{item.isUserWrong ? 'wrong' : ''}}"
         wx:for="{{currentQuestion.options}}"
         wx:key="key"
         bindtap="selectOption"
@@ -22,7 +30,26 @@
       >
         <text class="option-key">{{item.key}}</text>
         <text class="option-text">{{item.text}}</text>
+        <text class="option-badge correct-badge" wx:if="{{item.isCorrect}}">✓ 正确</text>
+        <text class="option-badge wrong-badge" wx:if="{{item.isUserWrong}}">你的选择</text>
       </view>
+    </view>
+    <label class="uncertain-toggle" wx:if="{{mode !== 'review'}}">
+      <checkbox-group bindchange="toggleUncertain">
+        <checkbox value="1" checked="{{currentUncertain}}" color="#f59e0b" />
+      </checkbox-group>
+      <text class="uncertain-text">这题我不清楚，加入错题本复习</text>
+    </label>
+    <view class="result-box {{currentFeedback.isCorrect ? 'correct' : 'wrong'}}" wx:if="{{currentFeedback}}">
+      <text class="result-title">{{currentFeedback.isCorrect ? '回答正确' : '回答错误'}}</text>
+      <text class="result-line" wx:if="{{!currentFeedback.isCorrect}}">正确答案：{{currentFeedback.correctKey}}. {{currentFeedback.correctText}}</text>
+      <text class="result-line" wx:if="{{currentFeedback.hint}}">释义：{{currentFeedback.hint}}</text>
+      <text class="result-line uncertain-line" wx:if="{{currentFeedback.isUncertain}}">已标记为“不清楚”，提交后会保留到错题本</text>
+    </view>
+    <view class="hint-box" wx:if="{{mode === 'review' && currentQuestion.hint}}">
+      <text class="hint-label">释义</text>
+      <text class="hint-text">{{currentQuestion.hint}}</text>
+      <text class="hint-mark" wx:if="{{reviewFlags[currentQuestion.id] && reviewFlags[currentQuestion.id].isUncertain}}">这题曾被标记为“不清楚”</text>
     </view>
   </view>
 
@@ -31,7 +58,24 @@
     <button class="nav-btn secondary" bindtap="nextQuestion" disabled="{{currentIndex === questions.length - 1}}">下一题</button>
   </view>
 
-  <view class="submit-card">
+  <!-- Review action bar -->
+  <view class="submit-card" wx:if="{{mode === 'review'}}">
+    <view class="review-summary">
+      <text class="review-accuracy">正确率 {{task.accuracy || 0}}%</text>
+      <text class="review-detail" wx:if="{{wrongCount > 0}}">还有 {{wrongCount}} 题待复习，建议重练</text>
+      <text class="review-detail good" wx:else>全部答对，漂亮！</text>
+    </view>
+    <view class="action-row">
+      <button class="nav-btn secondary" bindtap="redoAll">全部重做</button>
+      <button class="submit-btn" bindtap="redoWrong" disabled="{{wrongCount === 0}}">
+        {{wrongCount > 0 ? '只重做待复习题' : '无待复习题'}}
+      </button>
+    </view>
+    <button class="nav-btn ghost" bindtap="goBack">返回任务列表</button>
+  </view>
+
+  <!-- Submit card (practice/redo modes) -->
+  <view class="submit-card" wx:else>
     <textarea
       class="note-input"
       placeholder="可选：记录学生备注"
@@ -40,7 +84,7 @@
       bindinput="onNoteInput"
     />
     <button class="submit-btn" bindtap="submitPractice" loading="{{submitting}}" disabled="{{submitting}}">
-      {{submitting ? '提交中...' : '提交并评分'}}
+      {{submitting ? '提交中...' : (mode === 'redo_wrong' ? '提交待复习重练' : (mode === 'redo_all' ? '提交全部重做' : '提交并评分'))}}
     </button>
   </view>
 </view>

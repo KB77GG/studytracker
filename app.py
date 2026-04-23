@@ -363,6 +363,18 @@ def allowed_evidence(filename: str) -> bool:
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EVIDENCE_EXTENSIONS
 
 
+VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh"}
+
+
+def resolve_task_dictation_mode(task, book_type: str | None = None) -> str:
+    mode = (getattr(task, "dictation_mode", "") or "").strip().lower()
+    if mode in VALID_DICTATION_MODES:
+        return mode
+    if (book_type or "").strip().lower() == "translation":
+        return "zh_to_en"
+    return "audio_to_en"
+
+
 def ensure_legacy_schema() -> None:
     """Ensure legacy Task table has columns expected by the assistant view."""
 
@@ -386,6 +398,34 @@ def ensure_legacy_schema() -> None:
             except Exception as exc:  # pragma: no cover - best-effort safeguard
                 current_app.logger.warning(
                     "Failed to add question_ids to task table: %s", exc
+                )
+        if "dictation_mode" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(
+                            "ALTER TABLE task ADD COLUMN dictation_mode "
+                            "VARCHAR(20) DEFAULT 'audio_to_en'"
+                        )
+                    )
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                current_app.logger.warning(
+                    "Failed to add dictation_mode to task table: %s", exc
+                )
+    if "student_answer" in tables:
+        columns = {col["name"] for col in inspector.get_columns("student_answer")}
+        if "is_uncertain" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(
+                            "ALTER TABLE student_answer "
+                            "ADD COLUMN is_uncertain BOOLEAN NOT NULL DEFAULT 0"
+                        )
+                    )
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                current_app.logger.warning(
+                    "Failed to add is_uncertain to student_answer table: %s", exc
                 )
 
     if "plan_item" in tables:
@@ -1728,10 +1768,18 @@ def tasks_page():
         else:
             # Set grading mode based on material selection
             grading_mode = "image"
+            dictation_mode_raw = (request.form.get("dictation_mode") or "").strip().lower()
+            dictation_mode = None
             if material_id:
                 grading_mode = "material"
                 if not category:
                     category = "材料练习"
+                if material_id.startswith("dictation-"):
+                    dictation_mode = (
+                        dictation_mode_raw
+                        if dictation_mode_raw in VALID_DICTATION_MODES
+                        else resolve_task_dictation_mode(None, getattr(dictation_book_data, "book_type", None))
+                    )
             
             dictation_word_start = request.form.get("dictation_word_start")
             dictation_word_end = request.form.get("dictation_word_end")
@@ -1749,6 +1797,7 @@ def tasks_page():
                 material_id=int(material_id) if material_id and not material_id.startswith(("dictation-", "speaking-")) else None,
                 question_ids=question_ids,
                 dictation_book_id=int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None,
+                dictation_mode=dictation_mode,
                 dictation_word_start=int(dictation_word_start) if dictation_word_start else 1,
                 dictation_word_end=int(dictation_word_end) if dictation_word_end else None,
                 speaking_book_id=int(material_id.split("-")[1]) if material_id and material_id.startswith("speaking-") else None,
@@ -1827,7 +1876,6 @@ def tasks_page():
         evidence_photos = []
         if t.evidence_photos:
             try:
-                import json
                 evidence_photos = json.loads(t.evidence_photos)
             except:
                 pass
@@ -1918,7 +1966,8 @@ def tasks_page():
             "id": f"dictation-{book.id}",  # Special ID format to distinguish
             "title": book.title,
             "type": "听写词库",
-            "question_count": f"{book.word_count}词"
+            "question_count": f"{book.word_count}词",
+            "book_type": book.book_type or "dictation"
         })
 
     # Add Speaking Books to material dropdown
@@ -2230,7 +2279,6 @@ def review_task_page(tid):
     evidence_photos = []
     if task.evidence_photos:
         try:
-            import json
             evidence_photos = json.loads(task.evidence_photos)
         except:
             pass

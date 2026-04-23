@@ -156,3 +156,115 @@ button.danger {
   color: #606266;
   border-radius: 12rpx;
 }
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  gap: 8rpx;
+  background: #fff;
+  padding: 8rpx;
+  border-radius: 14rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  padding: 18rpx 0;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  color: #606266;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+  color: #fff;
+  font-weight: 600;
+}
+
+.tab-count {
+  font-size: 22rpx;
+  padding: 2rpx 12rpx;
+  border-radius: 999rpx;
+  background: rgba(0, 0, 0, 0.06);
+  color: inherit;
+}
+
+.tab.active .tab-count {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.empty-sub {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #a1a4b0;
+}
+
+/* ── Reading-vocab card ── */
+.reading-card {
+  position: relative;
+}
+
+.reading-correct-tag {
+  margin-left: auto;
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.reading-uncertain-tag {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.reading-row {
+  margin-top: 10rpx;
+  display: flex;
+  align-items: flex-start;
+  gap: 8rpx;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.reading-label {
+  color: #909399;
+  flex-shrink: 0;
+}
+
+.reading-task-title {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.reading-your {
+  color: #b91c1c;
+  text-decoration: line-through;
+  flex: 1;
+}
+
+.reading-your-uncertain {
+  color: #92400e;
+  text-decoration: none;
+}
+
+.reading-correct {
+  color: #047857;
+  font-weight: 600;
+  flex: 1;
+}
+
+.reading-hint {
+  color: #4b5563;
+  flex: 1;
+}
