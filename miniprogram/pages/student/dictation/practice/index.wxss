@@ -407,6 +407,25 @@
   line-height: 1.6;
 }
 
+.fam-prompt-label,
+.fam-answer-label {
+  display: block;
+  text-align: center;
+  font-size: 22rpx;
+  color: #909399;
+  font-weight: 600;
+  letter-spacing: 1rpx;
+}
+
+.fam-mode-hint {
+  margin-top: -12rpx;
+  margin-bottom: 28rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #9a6a16;
+  line-height: 1.5;
+}
+
 .fam-reveal-area {
   text-align: center;
   animation: fadeIn 0.3s ease;
@@ -420,6 +439,18 @@
   display: block;
   margin-bottom: 10rpx;
   letter-spacing: 2rpx;
+}
+
+.fam-prompt-word {
+  margin-top: 20rpx;
+  margin-bottom: 14rpx;
+}
+
+.fam-answer-translation {
+  margin-top: 14rpx;
+  margin-bottom: 10rpx;
+  color: #2c3e50;
+  font-weight: 700;
 }
 
 .fam-phonetic {

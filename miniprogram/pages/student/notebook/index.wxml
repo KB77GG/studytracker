@@ -1,41 +1,111 @@
 <view class="page">
   <view class="page-header">
     <view class="title">错词本</view>
-    <view class="count">共 {{list.length}} 词</view>
+    <view class="count" wx:if="{{activeTab === 'dictation'}}">共 {{list.length}} 词</view>
+    <view class="count" wx:else>共 {{readingList.length}} 词</view>
   </view>
 
-  <!-- 上次错词快捷入口 -->
-  <view wx:if="{{lastWrongCount > 0}}" class="last-wrong-banner" bindtap="retryLastWrong">
-    <view class="banner-left">
-      <view class="banner-icon">🔄</view>
-      <view class="banner-text">
-        <text class="banner-title">上次练习错词</text>
-        <text class="banner-desc">{{lastWrongCount}} 个单词待巩固</text>
-      </view>
+  <!-- Tab switcher -->
+  <view class="tabs">
+    <view
+      class="tab {{activeTab === 'dictation' ? 'active' : ''}}"
+      data-tab="dictation"
+      bindtap="switchTab"
+    >
+      <text>听写错词</text>
+      <text class="tab-count" wx:if="{{list.length}}">{{list.length}}</text>
     </view>
-    <view class="banner-btn">立即重练</view>
-  </view>
-
-  <view wx:if="{{!list.length && !isLoading}}" class="empty">
-    <text>还没有错词记录</text>
-  </view>
-
-  <scroll-view wx:else scroll-y class="list">
-    <view class="card" wx:for="{{list}}" wx:key="word">
-      <view class="card-header">
-        <view class="word">{{item.word}}</view>
-        <view class="phonetic">[{{item.phonetic || '-'}}]</view>
-      </view>
-      <view class="trans">{{item.translation || '暂无释义'}}</view>
-      <view class="card-actions">
-        <button size="mini" class="ghost" data-word="{{item.word}}" bindtap="playWord">播放</button>
-        <button size="mini" class="danger" data-word="{{item.word}}" bindtap="deleteItem">删除</button>
-      </view>
+    <view
+      class="tab {{activeTab === 'reading' ? 'active' : ''}}"
+      data-tab="reading"
+      bindtap="switchTab"
+    >
+      <text>阅读错词</text>
+      <text class="tab-count" wx:if="{{readingList.length}}">{{readingList.length}}</text>
     </view>
-  </scroll-view>
-
-  <view class="footer">
-    <button wx:if="{{list.length >= 2}}" class="retry-all-btn" bindtap="retryAllNotebook">重练全部错词</button>
-    <button class="clear-btn" bindtap="clearAll">清空错词本</button>
   </view>
+
+  <!-- ═════ Dictation tab ═════ -->
+  <block wx:if="{{activeTab === 'dictation'}}">
+    <!-- 上次错词快捷入口 -->
+    <view wx:if="{{lastWrongCount > 0}}" class="last-wrong-banner" bindtap="retryLastWrong">
+      <view class="banner-left">
+        <view class="banner-icon">🔄</view>
+        <view class="banner-text">
+          <text class="banner-title">上次练习错词</text>
+          <text class="banner-desc">{{lastWrongCount}} 个单词待巩固</text>
+        </view>
+      </view>
+      <view class="banner-btn">立即重练</view>
+    </view>
+
+    <view wx:if="{{!list.length && !isLoading}}" class="empty">
+      <text>还没有错词记录</text>
+    </view>
+
+    <scroll-view wx:else scroll-y class="list">
+      <view class="card" wx:for="{{list}}" wx:key="entryKey">
+        <view class="card-header">
+          <view class="word">{{item.word}}</view>
+          <view class="phonetic">[{{item.phonetic || '-'}}]</view>
+        </view>
+        <view class="trans">{{item.translation || '暂无释义'}}</view>
+        <view class="card-actions">
+          <button size="mini" class="ghost" data-word="{{item.word}}" bindtap="playWord">播放</button>
+          <button size="mini" class="danger" data-entrykey="{{item.entryKey}}" bindtap="deleteItem">删除</button>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="footer">
+      <button wx:if="{{list.length >= 2}}" class="retry-all-btn" bindtap="retryAllNotebook">重练全部错词</button>
+      <button wx:if="{{list.length > 0}}" class="clear-btn" bindtap="clearAll">清空错词本</button>
+    </view>
+  </block>
+
+  <!-- ═════ Reading-vocab tab ═════ -->
+  <block wx:else>
+    <view wx:if="{{!readingList.length && !readingLoading}}" class="empty">
+      <text>还没有阅读词汇错题</text>
+      <text class="empty-sub">云端错题会自动同步到这里，离线时显示上次缓存</text>
+    </view>
+
+    <scroll-view wx:else scroll-y class="list">
+      <view
+        class="card reading-card"
+        wx:for="{{readingList}}"
+        wx:key="entryKey"
+        data-taskid="{{item.taskId}}"
+        bindtap="retryReadingItem"
+      >
+        <view class="card-header">
+          <view class="word">{{item.word}}</view>
+          <view class="reading-correct-tag {{item.isUncertain ? 'reading-uncertain-tag' : ''}}">
+            {{item.isUncertain ? '标记不清楚' : ('正确 ' + item.correctKey)}}
+          </view>
+        </view>
+        <view wx:if="{{item.taskTitle}}" class="reading-task-title">{{item.taskTitle}}</view>
+        <view class="reading-row">
+          <text class="reading-label">你选：</text>
+          <text class="reading-your {{item.isUncertain ? 'reading-your-uncertain' : ''}}">{{item.yourKey ? item.yourKey + '．' : ''}}{{item.yourText || '未作答'}}</text>
+        </view>
+        <view class="reading-row">
+          <text class="reading-label">正确：</text>
+          <text class="reading-correct">{{item.correctKey ? item.correctKey + '．' : ''}}{{item.correctText || '-'}}</text>
+        </view>
+        <view wx:if="{{item.hint}}" class="reading-row">
+          <text class="reading-label">释义：</text>
+          <text class="reading-hint">{{item.hint}}</text>
+        </view>
+        <view class="card-actions">
+          <button size="mini" class="ghost" catchtap="retryReadingItem" data-taskid="{{item.taskId}}">去重练</button>
+          <button size="mini" class="danger" catchtap="deleteReadingItem" data-entrykey="{{item.entryKey}}">删除</button>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="footer">
+      <button wx:if="{{readingList.length > 0}}" class="clear-btn" bindtap="clearReadingAll">清空本地缓存</button>
+    </view>
+  </block>
 </view>

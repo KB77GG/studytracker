@@ -133,6 +133,24 @@ Page({
                     return
                 }
 
+                // Choice-type materials (grammar 单选 / 阅读词义) reuse the
+                // material-choice practice page (radio inputs + immediate
+                // feedback). Without this redirect, students who land on this
+                // page from an old link can only see the questions as static
+                // text with no way to answer.
+                const choiceType =
+                    res.task.material && (
+                        res.task.material.type === 'grammar' ||
+                        res.task.material.type === 'reading_vocab_choice' ||
+                        res.task.material.type === 'translation'
+                    )
+                if (choiceType) {
+                    wx.redirectTo({
+                        url: `/pages/student/material-choice/practice/index?taskId=${this.data.taskId}`
+                    })
+                    return
+                }
+
                 // 检查是否是口语任务（通过 module 或 material.type）
                 const isSpeaking =
                     (res.task.module && (res.task.module.includes('口语') || res.task.module.includes('Speaking'))) ||

@@ -1,5 +1,80 @@
 const app = getApp()
 
+const MODE_AUDIO_TO_EN = 'audio_to_en'
+const MODE_ZH_TO_EN = 'zh_to_en'
+const MODE_EN_TO_ZH = 'en_to_zh'
+
+function resolveDictationMode(dictationMode, bookType) {
+    const mode = String(dictationMode || '').trim().toLowerCase()
+    if ([MODE_AUDIO_TO_EN, MODE_ZH_TO_EN, MODE_EN_TO_ZH].includes(mode)) {
+        return mode
+    }
+    return String(bookType || '').trim().toLowerCase() === 'translation'
+        ? MODE_ZH_TO_EN
+        : MODE_AUDIO_TO_EN
+}
+
+function isAudioMode(mode) {
+    return mode === MODE_AUDIO_TO_EN
+}
+
+function normalizeEnglishAnswer(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[’‘]/g, "'")
+        .replace(/\.{3,}|…+/g, ' ')
+        .replace(/[，,。.!！？?；;：:]/g, ' ')
+        .replace(/[()（）]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+}
+
+function englishVariants(value) {
+    const normalized = normalizeEnglishAnswer(value)
+        .replace(/^(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*/i, '')
+        .replace(/[()（）]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+    if (!normalized) return []
+    const variants = new Set([normalized])
+    normalized.split(/\s*(?:[\/≈；;]|,(?=\s*[a-z]))\s*/).forEach(part => {
+        const item = normalizeEnglishAnswer(part)
+        if (item) variants.add(item)
+    })
+    return Array.from(variants)
+}
+
+function normalizeChineseAnswer(value) {
+    return String(value || '')
+        .trim()
+        .replace(/^(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*/ig, '')
+        .replace(/[()（）【】\[\]「」『』"'`]/g, '')
+        .replace(/\s+/g, '')
+        .replace(/[，,。.!！？?：:]/g, '')
+        .toLowerCase()
+}
+
+function chineseVariants(value) {
+    const source = String(value || '')
+        .replace(/\r?\n/g, '；')
+        .replace(/^(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*/ig, '')
+    const variants = new Set()
+    source.split(/\s*(?:[；;、/]|,(?=[\u4e00-\u9fff]))\s*/).forEach(part => {
+        const item = normalizeChineseAnswer(part)
+        if (item) variants.add(item)
+    })
+    const full = normalizeChineseAnswer(source)
+    if (full) variants.add(full)
+    return Array.from(variants)
+}
+
+function notebookEntryKey(item) {
+    const word = String(item.word || '').toLowerCase().trim()
+    if (!word) return ''
+    return `${word}::${item.dictationMode || MODE_AUDIO_TO_EN}`
+}
+
 Page({
     data: {
         bookId: null,
@@ -39,7 +114,9 @@ Page({
         isCorrect: false,
         inputFocus: true,
         showHint: false,
-        attemptCount: 0
+        attemptCount: 0,
+        dictationMode: MODE_AUDIO_TO_EN,
+        currentMode: MODE_AUDIO_TO_EN
     },
 
     onLoad: function (options) {
@@ -129,14 +206,15 @@ Page({
             success: (res) => {
                 if (res.data.ok) {
                     const task = res.data.task;
+                    const dictationMode = resolveDictationMode(task.dictation_mode, task.dictation_book_type);
 
                     // Read from root task object
-                    const isTranslation = task.dictation_book_type === 'translation';
                     this.setData({
                         bookTitle: task.task_name,
                         rangeStart: task.dictation_word_start,
                         rangeEnd: task.dictation_word_end,
-                        isTranslation: isTranslation
+                        dictationMode: dictationMode,
+                        currentMode: dictationMode
                     });
                     this.setData({ progressKey: this.buildProgressKey(taskId, task.dictation_book_id, task.dictation_word_start, task.dictation_word_end) });
 
@@ -221,9 +299,14 @@ Page({
                         return;
                     }
 
-                    // Detect translation mode from book info
                     const bookType = res.data.book.book_type || 'dictation';
-                    const isTranslation = this.data.isTranslation || bookType === 'translation';
+                    const dictationMode = this.data.taskId
+                        ? resolveDictationMode(this.data.dictationMode, bookType)
+                        : resolveDictationMode('', bookType);
+                    words = words.map(word => ({
+                        ...word,
+                        dictationMode
+                    }))
 
                     this.setData({
                         // Only update title if not set by task
@@ -233,7 +316,8 @@ Page({
                         currentIndex: 0,
                         practiceStart: Date.now(),
                         accumulatedSeconds: 0,
-                        isTranslation: isTranslation
+                        dictationMode,
+                        currentMode: dictationMode
                     });
 
                     const resumeIndex = this.loadProgress(words.length);
@@ -241,11 +325,6 @@ Page({
                         // Resuming mid-test: skip familiarization
                         this.setData({ phase: 'test' });
                         this.loadWord(resumeIndex);
-                        this.startTicker();
-                    } else if (this.data.isTranslation) {
-                        // Translation mode: skip familiarization, go straight to test
-                        this.setData({ phase: 'test' });
-                        this.loadWord(0);
                         this.startTicker();
                     } else {
                         this.enterFamiliarization();
@@ -263,9 +342,11 @@ Page({
 
     loadWord: function (index) {
         const word = this.data.words[index];
+        const currentMode = resolveDictationMode(word && word.dictationMode, this.data.dictationMode);
         this.setData({
             currentWord: word,
             currentIndex: index,
+            currentMode: currentMode,
             inputValue: '',
             showResult: false,
             isCorrect: false,
@@ -277,12 +358,15 @@ Page({
         });
         this.saveProgress(index);
 
-        setTimeout(() => {
-            this.playCurrentWord();
-        }, 500);
+        if (isAudioMode(currentMode)) {
+            setTimeout(() => {
+                this.playCurrentWord();
+            }, 500);
+        }
     },
 
     playCurrentWord: function () {
+        if (!isAudioMode(this.data.currentMode)) return;
         const word = this.data.currentWord.word;
         if (!word) return;
 
@@ -359,24 +443,25 @@ Page({
     checkAnswer: function () {
         if (this.data.showResult) return;
 
-        const input = this.data.inputValue.trim().toLowerCase();
-        let target = this.data.currentWord.word.toLowerCase();
-        let isCorrect = input === target;
-
-        // Translation mode: more flexible matching
-        if (!isCorrect && this.data.isTranslation) {
-            // Strip POS tags like "n. ", "adj. ", "v. ", "vt. ", "vi. ", "adv. "
-            const stripped = target.replace(/^(n\.|v\.|vt\.|vi\.|adj\.|adv\.|n\.&\w*\.?)\s*/i, '').trim();
-            // Accept any variant separated by / or ≈
-            const variants = stripped.split(/\s*[/≈]\s*/).map(v => v.trim().toLowerCase()).filter(v => v);
-            isCorrect = variants.some(v => input === v || v === input);
-            // Also check if input matches the stripped version itself
-            if (!isCorrect && input === stripped) isCorrect = true;
+        const inputRaw = this.data.inputValue.trim();
+        const mode = this.data.currentMode || MODE_AUDIO_TO_EN;
+        let isCorrect = false;
+        if (mode === MODE_AUDIO_TO_EN) {
+            isCorrect = normalizeEnglishAnswer(inputRaw) === normalizeEnglishAnswer(this.data.currentWord.word);
+        } else if (mode === MODE_ZH_TO_EN) {
+            const input = normalizeEnglishAnswer(inputRaw);
+            isCorrect = englishVariants(this.data.currentWord.word).some(variant => input === variant);
+        } else {
+            const input = normalizeChineseAnswer(inputRaw);
+            isCorrect = chineseVariants(this.data.currentWord.translation).some(variant => (
+                input === variant
+                || (input.length >= 2 && (variant.includes(input) || input.includes(variant)))
+            ));
         }
         const attempts = this.data.attemptCount || 0;
 
-        if (!input) {
-            wx.showToast({ title: '请输入单词', icon: 'none' });
+        if (!inputRaw) {
+            wx.showToast({ title: '请输入答案', icon: 'none' });
             return;
         }
 
@@ -387,7 +472,7 @@ Page({
             this.setData({
                 showResult: true,
                 isCorrect: true,
-                userAnswer: input,
+                userAnswer: inputRaw,
                 inputError: false,
                 attemptCount: attempts + 1
             });
@@ -398,17 +483,18 @@ Page({
         if (attempts === 0) {
             const wrongList = this.data.wrongWords;
             const wrongDetail = this.data.wrongWordsDetail;
-            wrongList.push(`${this.data.currentWord.word} (写成了: ${input})`);
+            wrongList.push(`${this.data.currentWord.word} (写成了: ${inputRaw})`);
             wrongDetail.push({
                 word: this.data.currentWord.word,
                 translation: this.data.currentWord.translation,
                 phonetic: this.data.currentWord.phonetic,
-                wrong: input
+                wrong: inputRaw,
+                dictationMode: mode
             });
             this.setData({
                 wrongWords: wrongList,
                 wrongWordsDetail: wrongDetail,
-                showHint: true,
+                showHint: mode === MODE_AUDIO_TO_EN,
                 inputValue: '',
                 inputError: true,
                 attemptCount: attempts + 1,
@@ -421,7 +507,7 @@ Page({
         this.setData({
             showResult: true,
             isCorrect: false,
-            userAnswer: input,
+            userAnswer: inputRaw,
             inputError: true,
             attemptCount: attempts + 1
         });
@@ -668,7 +754,8 @@ Page({
             id: idx + 1,
             word: w.word,
             translation: w.translation,
-            phonetic: w.phonetic
+            phonetic: w.phonetic,
+            dictationMode: resolveDictationMode(w.dictationMode)
         }));
         this.setData({
             phase: 'test',
@@ -688,7 +775,9 @@ Page({
             finished: false,
             showHint: false,
             attemptCount: 0,
-            inputError: false
+            inputError: false,
+            dictationMode: wrongOnly[0] ? wrongOnly[0].dictationMode : MODE_AUDIO_TO_EN,
+            currentMode: wrongOnly[0] ? wrongOnly[0].dictationMode : MODE_AUDIO_TO_EN
         });
         this.loadWord(0);
         this.startTicker();
@@ -716,7 +805,8 @@ Page({
             id: idx + 1,
             word: w.word,
             translation: w.translation,
-            phonetic: w.phonetic
+            phonetic: w.phonetic,
+            dictationMode: resolveDictationMode(w.dictationMode)
         }));
         this.setData({
             words: wrongOnly,
@@ -733,7 +823,9 @@ Page({
             finished: false,
             showHint: false,
             attemptCount: 0,
-            inputError: false
+            inputError: false,
+            dictationMode: wrongOnly[0] ? wrongOnly[0].dictationMode : MODE_AUDIO_TO_EN,
+            currentMode: wrongOnly[0] ? wrongOnly[0].dictationMode : MODE_AUDIO_TO_EN
         });
         this.loadWord(0);
         this.startTicker();
@@ -773,11 +865,11 @@ Page({
             const allWords = this.data.words || [];
             // 本次仍然答错的单词
             const stillWrongSet = new Set(
-                (this.data.wrongWordsDetail || []).map(w => (w.word || '').toLowerCase())
+                (this.data.wrongWordsDetail || []).map(w => notebookEntryKey(w))
             );
             // 答对的单词 = 全部 - 仍然答错的
             const correctWords = allWords
-                .map(w => (w.word || '').toLowerCase())
+                .map(w => notebookEntryKey(w))
                 .filter(w => w && !stillWrongSet.has(w));
 
             if (!correctWords.length) return;
@@ -786,7 +878,7 @@ Page({
             const notebook = wx.getStorageSync('dictation_notebook') || [];
             if (!Array.isArray(notebook)) return;
             const updated = notebook.filter(
-                item => !correctSet.has((item.word || '').toLowerCase())
+                item => !correctSet.has(notebookEntryKey(item))
             );
             wx.setStorageSync('dictation_notebook', updated);
 
@@ -794,7 +886,7 @@ Page({
             const lastWrong = wx.getStorageSync('dictation_last_wrong') || [];
             if (Array.isArray(lastWrong) && lastWrong.length) {
                 const updatedLast = lastWrong.filter(
-                    item => !correctSet.has((item.word || '').toLowerCase())
+                    item => !correctSet.has(notebookEntryKey(item))
                 );
                 wx.setStorageSync('dictation_last_wrong', updatedLast);
             }
@@ -808,15 +900,16 @@ Page({
             const list = wx.getStorageSync('dictation_notebook') || [];
             const map = new Map();
             if (Array.isArray(list)) {
-                list.forEach(item => map.set((item.word || '').toLowerCase(), item));
+                list.forEach(item => map.set(notebookEntryKey(item), item));
             }
             (words || []).forEach(w => {
-                const key = (w.word || '').toLowerCase();
+                const key = notebookEntryKey(w);
                 if (!key) return;
                 map.set(key, {
                     word: w.word,
                     translation: w.translation,
                     phonetic: w.phonetic,
+                    dictationMode: resolveDictationMode(w.dictationMode || this.data.currentMode),
                     updatedAt: Date.now()
                 });
             });
@@ -830,16 +923,21 @@ Page({
 
     // ========== Familiarization Phase ==========
     enterFamiliarization() {
+        const firstWord = this.data.words[0] || {};
+        const firstMode = resolveDictationMode(firstWord.dictationMode, this.data.dictationMode);
         this.setData({
             phase: 'familiarize',
             famIndex: 0,
             famRevealed: false,
             famTimerSeconds: 1200,
             famTimerDisplay: '20:00',
-            currentWord: this.data.words[0] || {}
+            currentWord: firstWord,
+            currentMode: firstMode
         });
         this.startFamTimer();
-        setTimeout(() => this.playCurrentWord(), 500);
+        if (isAudioMode(firstMode)) {
+            setTimeout(() => this.playCurrentWord(), 500);
+        }
     },
 
     startFamTimer() {
@@ -848,7 +946,7 @@ Page({
             let seconds = this.data.famTimerSeconds - 1;
             if (seconds <= 0) {
                 this.stopFamTimer();
-                wx.showToast({ title: '熟悉时间到，开始听写', icon: 'none', duration: 2000 });
+                wx.showToast({ title: '熟悉时间到，开始练习', icon: 'none', duration: 2000 });
                 setTimeout(() => this.startTest(), 1500);
                 return;
             }
@@ -871,7 +969,10 @@ Page({
     playFamWord() {
         const word = this.data.words[this.data.famIndex];
         if (!word) return;
-        this.setData({ currentWord: word });
+        this.setData({
+            currentWord: word,
+            currentMode: resolveDictationMode(word.dictationMode, this.data.dictationMode)
+        });
         this.playCurrentWord();
     },
 
@@ -881,23 +982,40 @@ Page({
 
     nextFamWord() {
         const nextIdx = this.data.famIndex + 1;
+        let targetIndex = nextIdx;
         if (nextIdx >= this.data.totalWords) {
-            this.setData({ famIndex: 0, famRevealed: false, currentWord: this.data.words[0] || {} });
-        } else {
-            this.setData({ famIndex: nextIdx, famRevealed: false, currentWord: this.data.words[nextIdx] || {} });
+            targetIndex = 0;
         }
-        setTimeout(() => this.playCurrentWord(), 300);
+        const targetWord = this.data.words[targetIndex] || {};
+        const targetMode = resolveDictationMode(targetWord.dictationMode, this.data.dictationMode);
+        this.setData({
+            famIndex: targetIndex,
+            famRevealed: false,
+            currentWord: targetWord,
+            currentMode: targetMode
+        });
+        if (isAudioMode(targetMode)) {
+            setTimeout(() => this.playCurrentWord(), 300);
+        }
     },
 
     prevFamWord() {
         const prevIdx = this.data.famIndex - 1;
+        let targetIndex = prevIdx;
         if (prevIdx < 0) {
-            const last = this.data.totalWords - 1;
-            this.setData({ famIndex: last, famRevealed: false, currentWord: this.data.words[last] || {} });
-        } else {
-            this.setData({ famIndex: prevIdx, famRevealed: false, currentWord: this.data.words[prevIdx] || {} });
+            targetIndex = this.data.totalWords - 1;
         }
-        setTimeout(() => this.playCurrentWord(), 300);
+        const targetWord = this.data.words[targetIndex] || {};
+        const targetMode = resolveDictationMode(targetWord.dictationMode, this.data.dictationMode);
+        this.setData({
+            famIndex: targetIndex,
+            famRevealed: false,
+            currentWord: targetWord,
+            currentMode: targetMode
+        });
+        if (isAudioMode(targetMode)) {
+            setTimeout(() => this.playCurrentWord(), 300);
+        }
     },
 
     startTest() {

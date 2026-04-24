@@ -73,6 +73,103 @@ def role_required(*roles):
     return decorator
 
 
+PHRASE_LINE_OVERRIDES = {
+    "as/so long as": "as long as/so long as",
+    "from one's standpoint/point of view": "from one's standpoint/from one's point of view",
+    "keep abreast/up with": "keep abreast with/keep up with",
+}
+
+
+def _normalize_pdf_line(line):
+    return re.sub(r"\s+", " ", str(line or "")).strip()
+
+
+def _normalize_english_phrase(raw):
+    text = _normalize_pdf_line(raw)
+    text = text.replace("’", "'").replace("‘", "'")
+    text = re.sub(r"\.{3,}", "…", text)
+    text = re.sub(r"\s*([,;:])\s*", r"\1 ", text)
+    text = re.sub(r"\s+", " ", text).strip(" -")
+    return PHRASE_LINE_OVERRIDES.get(text, text)
+
+
+def _normalize_chinese_translation(raw):
+    text = _normalize_pdf_line(raw)
+    text = text.replace("； ", "；").replace("; ", ";")
+    return text
+
+
+def _contains_chinese(text):
+    return bool(re.search(r"[\u4e00-\u9fff]", str(text or "")))
+
+
+def _is_translation_only_line(line):
+    text = _normalize_pdf_line(line)
+    return _contains_chinese(text) and not re.search(r"[A-Za-z]", text)
+
+
+def _split_mixed_phrase_line(line):
+    text = _normalize_pdf_line(line)
+    match = re.search(r"[\u4e00-\u9fff]", text)
+    if not match:
+        return None
+    english = _normalize_english_phrase(text[:match.start()])
+    chinese = _normalize_chinese_translation(text[match.start():])
+    if not english or not chinese:
+        return None
+    return english, chinese
+
+
+def _append_vocab_entry(entries, seen, english, chinese, topic):
+    english_text = _normalize_english_phrase(english)
+    chinese_text = _normalize_chinese_translation(chinese)
+    topic_text = _normalize_pdf_line(topic or "General") or "General"
+    if not english_text or not chinese_text:
+        return
+    entry_key = (english_text.lower(), chinese_text, topic_text)
+    if entry_key in seen:
+        return
+    seen.add(entry_key)
+    entries.append({
+        "english": english_text,
+        "chinese": chinese_text,
+        "topic": topic_text,
+    })
+
+
+def _extract_pdf_text(pdf_path):
+    all_text = []
+    try:
+        from pypdf import PdfReader
+
+        reader = PdfReader(str(pdf_path))
+        for page in reader.pages:
+            text = page.extract_text()
+            if text:
+                all_text.append(text)
+    except ImportError:
+        try:
+            import pdfplumber
+
+            with pdfplumber.open(pdf_path) as pdf:
+                for page in pdf.pages:
+                    text = page.extract_text()
+                    if text:
+                        all_text.append(text)
+        except ImportError:
+            result = subprocess.run(
+                ["pdftotext", str(pdf_path), "-"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if result.returncode != 0:
+                raise RuntimeError(f"failed to extract pdf text: {result.stderr.strip()}")
+            if result.stdout:
+                all_text.append(result.stdout)
+    return "\n".join(all_text)
+
+
 # ============================================================================
 # Book Management APIs
 # ============================================================================
@@ -578,21 +675,13 @@ def upload_vocab_pdf():
     if not file.filename or not file.filename.lower().endswith('.pdf'):
         return jsonify({"ok": False, "error": "must_be_pdf"}), 400
 
-    import pdfplumber
-
     # Save to temp file
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
     file.save(tmp.name)
     tmp.close()
 
     try:
-        with pdfplumber.open(tmp.name) as pdf:
-            all_text = []
-            for page in pdf.pages:
-                text = page.extract_text()
-                if text:
-                    all_text.append(text)
-            full_text = '\n'.join(all_text)
+        full_text = _extract_pdf_text(tmp.name)
     finally:
         os.unlink(tmp.name)
 
@@ -647,49 +736,75 @@ def upload_vocab_pdf():
 def _parse_vocab_pdf(full_text):
     """Parse Chinese-English vocabulary pairs from PDF text.
 
-    Expected format: one entry per line, Chinese text followed by English text.
-    Topics are English-only header lines (e.g. 'Education', 'Technology').
+    Supports both:
+    1. Chinese-English vocab lists where one line contains both languages.
+    2. Phrase lists where several English lines are followed by one or more Chinese gloss lines.
     """
     entries = []
+    seen = set()
     current_topic = "General"
-    lines = full_text.split('\n')
+    pending_phrases = []
+    lines = [_normalize_pdf_line(line) for line in full_text.splitlines()]
 
-    # POS tags that often separate Chinese from English
-    pos_tags = r'(?:n\.|v\.|vt\.|vi\.|adj\.|adv\.|n\.&|v\.&|vt\.&)'
-
-    for line in lines:
-        line = line.strip()
+    index = 0
+    while index < len(lines):
+        line = lines[index]
         if not line:
+            index += 1
+            continue
+
+        if line.startswith("[例]") or line.startswith("【例】"):
+            index += 1
             continue
 
         # Skip title/header lines
-        if '托福' in line or '1000' in line or '分话题' in line:
+        if "托福" in line or "1000" in line or "分话题" in line:
+            index += 1
+            continue
+
+        if re.fullmatch(r"List\s*\d+", line, re.IGNORECASE):
+            current_topic = line.replace(" ", "")
+            index += 1
             continue
 
         # Topic header (single English words like "Education", "Technology")
-        if re.match(r'^[A-Z][a-z]+(?:\s+(?:and|&)\s+[A-Z][a-z]+)*$', line):
+        if re.match(r"^[A-Z][a-z]+(?:\s+(?:and|&)\s+[A-Z][a-z]+)*$", line):
             current_topic = line
+            index += 1
             continue
 
-        # Method 1: Split at POS tag
-        m = re.match(r'^(.+?)\s+(' + pos_tags + r'\s*.+)$', line)
-        if m and re.search(r'[\u4e00-\u9fff]', m.group(1)):
-            entries.append({
-                'chinese': m.group(1).strip(),
-                'english': m.group(2).strip(),
-                'topic': current_topic
-            })
+        mixed = _split_mixed_phrase_line(line)
+        if mixed:
+            english, chinese = mixed
+            _append_vocab_entry(entries, seen, english, chinese, current_topic)
+            index += 1
             continue
 
-        # Method 2: Chinese text followed by English text (no POS tag)
-        m = re.match(
-            r'^(.*[\u4e00-\u9fff\uff09\u201d）】」]+)\s+'
-            r'((?:[a-zA-Z]|the |a |be |to ).+)$', line)
-        if m and len(m.group(1).strip()) >= 1 and len(m.group(2).strip()) >= 2:
-            entries.append({
-                'chinese': m.group(1).strip(),
-                'english': m.group(2).strip(),
-                'topic': current_topic
-            })
+        if _is_translation_only_line(line):
+            if pending_phrases:
+                translation_parts = [line]
+                index += 1
+                while index < len(lines):
+                    next_line = lines[index]
+                    if not next_line:
+                        index += 1
+                        continue
+                    if _is_translation_only_line(next_line):
+                        translation_parts.append(next_line)
+                        index += 1
+                        continue
+                    break
+                translation = "；".join(_normalize_chinese_translation(part) for part in translation_parts if part)
+                for phrase in pending_phrases:
+                    _append_vocab_entry(entries, seen, phrase, translation, current_topic)
+                pending_phrases = []
+                continue
+            index += 1
+            continue
+
+        if re.search(r"[A-Za-z]", line):
+            pending_phrases.append(_normalize_english_phrase(line))
+
+        index += 1
 
     return entries

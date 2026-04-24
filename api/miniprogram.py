@@ -8,7 +8,7 @@ from urllib.parse import quote
 import requests
 from flask import Blueprint, jsonify, request, current_app, url_for
 from werkzeug.utils import secure_filename
-from sqlalchemy import func, and_
+from sqlalchemy import func, and_, or_
 
 from models import (
     db, User, StudentProfile, StudyPlan, PlanItem,
@@ -29,6 +29,15 @@ from .aliyun_oral_task import run_oral_task
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
+# Material types that route to the material-choice practice page. They all
+# use Question rows; the page distinguishes per question:
+#   - questions WITH options (ABCD)  → radio + immediate feedback (auto-graded)
+#   - questions WITHOUT options      → textarea (saved verbatim, teacher reviews)
+# So a single "grammar" material can mix 单选 (Q1-20) and 句子改写 (Q21-25),
+# and "translation" (single writing question) reuses the textarea path with
+# no reference shown to the student.
+CHOICE_PRACTICE_TYPES = {READING_VOCAB_CHOICE_TYPE, "grammar", "translation"}
+VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh"}
 
 
 def _safe_float(value, default=0.0):
@@ -170,6 +179,23 @@ def _question_options(q):
         {"key": opt.option_key, "text": opt.option_text}
         for opt in q.options.order_by(QuestionOption.option_key).all()
     ]
+
+
+def _task_display_title(task):
+    if task.material and task.material.title:
+        return task.material.title
+    if task.detail:
+        return f"{task.category} - {task.detail}"
+    return task.category or f"任务 {task.id}"
+
+
+def _resolve_task_dictation_mode(task, book_type=None):
+    mode = (getattr(task, "dictation_mode", "") or "").strip().lower()
+    if mode in VALID_DICTATION_MODES:
+        return mode
+    if (book_type or "").strip().lower() == "translation":
+        return "zh_to_en"
+    return "audio_to_en"
 
 
 def _merge_aliyun_oral_result(result: dict, oral: dict) -> dict:
@@ -929,6 +955,8 @@ def get_student_today_tasks():
 
     tasks_data = []
     for task in tasks:
+        dictation_book = DictationBook.query.get(task.dictation_book_id) if task.dictation_book_id else None
+        dictation_book_type = dictation_book.book_type if dictation_book else "dictation"
         # 判断状态
         status = "pending"
         if task.status == "done":
@@ -949,7 +977,8 @@ def get_student_today_tasks():
             "is_locked": False,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
             "dictation_book_id": task.dictation_book_id,
-            "dictation_book_type": (lambda b: b.book_type if b else "dictation")(DictationBook.query.get(task.dictation_book_id) if task.dictation_book_id else None),
+            "dictation_book_type": dictation_book_type,
+            "dictation_mode": _resolve_task_dictation_mode(task, dictation_book_type),
             "dictation_word_start": task.dictation_word_start,
             "dictation_word_end": task.dictation_word_end,
             "speaking_book_id": task.speaking_book_id,
@@ -1002,6 +1031,8 @@ def get_task_detail(task_id):
             status = "in_progress"
 
         # 获取关联的材料信息
+        dictation_book = DictationBook.query.get(task.dictation_book_id) if task.dictation_book_id else None
+        dictation_book_type = dictation_book.book_type if dictation_book else "dictation"
         material_data = None
         if task.material:
             questions = []
@@ -1051,6 +1082,8 @@ def get_task_detail(task_id):
                 "feedback_audio": task.feedback_audio,
                 # Dictation Info
                 "dictation_book_id": task.dictation_book_id,
+                "dictation_book_type": dictation_book_type,
+                "dictation_mode": _resolve_task_dictation_mode(task, dictation_book_type),
                 "dictation_word_start": task.dictation_word_start,
                 "dictation_word_end": task.dictation_word_end,
                 # Speaking Info
@@ -1074,46 +1107,171 @@ def get_task_detail(task_id):
         return jsonify({"ok": False, "message": str(e), "error": str(e)}), 500
 
 
+@mp_bp.route("/student/reading-vocab-wrongs", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def list_reading_vocab_wrongs():
+    """List the student's current reading-vocab items that still need review."""
+    user = request.current_api_user
+    student = user.student_profile
+    if not student:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    rows = (
+        db.session.query(StudentAnswer, Task, Question, MaterialBank)
+        .join(Task, StudentAnswer.task_id == Task.id)
+        .join(MaterialBank, Task.material_id == MaterialBank.id)
+        .join(Question, StudentAnswer.question_id == Question.id)
+        .filter(
+            StudentAnswer.student_id == user.id,
+            or_(
+                StudentAnswer.is_correct.is_(False),
+                StudentAnswer.is_uncertain.is_(True),
+            ),
+            MaterialBank.type == READING_VOCAB_CHOICE_TYPE,
+            Task.student_name == student.full_name,
+        )
+        .order_by(StudentAnswer.submitted_at.desc(), StudentAnswer.id.desc())
+        .all()
+    )
+
+    question_ids = [q.id for _, _, q, _ in rows]
+    options_by_question = {}
+    if question_ids:
+        option_rows = (
+            db.session.query(
+                QuestionOption.question_id,
+                QuestionOption.option_key,
+                QuestionOption.option_text,
+            )
+            .filter(QuestionOption.question_id.in_(question_ids))
+            .order_by(QuestionOption.question_id, QuestionOption.option_key)
+            .all()
+        )
+        for question_id, option_key, option_text in option_rows:
+            options_by_question.setdefault(question_id, {})[option_key] = option_text
+
+    items = []
+    for answer, task, question, material in rows:
+        options = options_by_question.get(question.id, {})
+        your_key = str(answer.text_answer or "").strip().upper()
+        correct_key = str(question.reference_answer or "").strip().upper()
+        items.append({
+            "task_id": task.id,
+            "task_title": material.title or _task_display_title(task),
+            "question_id": question.id,
+            "word": question.content,
+            "your_key": your_key,
+            "your_text": options.get(your_key, "未作答" if not your_key else ""),
+            "correct_key": correct_key,
+            "correct_text": options.get(correct_key, question.hint or ""),
+            "hint": question.hint or "",
+            "is_uncertain": bool(answer.is_uncertain),
+            "submitted_at": answer.submitted_at.isoformat() if answer.submitted_at else None,
+        })
+
+    return jsonify({
+        "ok": True,
+        "items": items,
+    })
+
+
 @mp_bp.route("/student/tasks/<int:task_id>/reading-vocab-practice", methods=["GET"])
 @require_api_user(User.ROLE_STUDENT)
 def get_reading_vocab_practice(task_id):
-    """Return reading vocab choice questions without exposing answers."""
+    """Return reading vocab choice questions.
+
+    Query params:
+      - mode: '' (default practice), 'review' (show correct answers + user picks),
+              'redo_wrong' (only previously-wrong questions),
+              'redo_all'   (all questions, prior selections cleared).
+    """
     user = request.current_api_user
     task = Task.query.get(task_id)
     if not task:
         return jsonify({"ok": False, "error": "task_not_found"}), 404
     if task.student_name != user.student_profile.full_name:
         return jsonify({"ok": False, "error": "forbidden"}), 403
-    if not task.material or task.material.type != READING_VOCAB_CHOICE_TYPE:
+    if not task.material or task.material.type not in CHOICE_PRACTICE_TYPES:
         return jsonify({"ok": False, "error": "invalid_material_type"}), 400
 
+    mode = (request.args.get("mode") or "").strip().lower()
+    is_done = bool(task.student_submitted) or (task.status == "done")
+
+    answer_records = {
+        a.question_id: a
+        for a in StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).all()
+    }
+
+    all_questions = list(_iter_task_material_questions(task))
+
+    # Filter for redo_wrong
+    if mode == "redo_wrong":
+        if not is_done:
+            return jsonify({"ok": False, "error": "task_not_completed"}), 400
+        wrong_ids = {
+            qid for qid, a in answer_records.items()
+            if (not a.is_correct) or bool(a.is_uncertain)
+        }
+        filtered = [q for q in all_questions if q.id in wrong_ids]
+        if not filtered:
+            return jsonify({"ok": False, "error": "no_wrong_questions"}), 400
+        questions_iter = filtered
+    else:
+        questions_iter = all_questions
+
     questions = []
-    for q in _iter_task_material_questions(task):
-        questions.append({
+    for q in questions_iter:
+        opts = _question_options(q)
+        is_writing = len(opts) == 0  # 无 options = 改写/翻译类输入题
+        correct_key = "" if is_writing else str(q.reference_answer or "").strip().upper()
+        options_map = {opt["key"]: opt["text"] for opt in opts}
+        item = {
             "id": q.id,
             "sequence": q.sequence,
             "content": q.content,
-            "options": _question_options(q),
-        })
+            "options": opts,
+            "is_writing": is_writing,
+            "correct_key": correct_key,
+            "correct_text": options_map.get(correct_key, q.hint or ""),
+            "hint": q.hint or "",
+        }
+        questions.append(item)
 
-    previous_answers = {
-        a.question_id: a.text_answer
-        for a in StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).all()
+    # Backward-compat flat map: qid -> answer key string.
+    # Cleared in redo modes so the student starts fresh.
+    if mode in ("redo_wrong", "redo_all"):
+        previous_answers = {}
+    else:
+        previous_answers = {qid: (a.text_answer or "") for qid, a in answer_records.items()}
+
+    # Per-question correctness for review UI
+    answer_records_out = {
+        qid: {
+            "answer_key": a.text_answer or "",
+            "is_correct": bool(a.is_correct),
+            "is_uncertain": bool(a.is_uncertain),
+        }
+        for qid, a in answer_records.items()
     }
+
+    effective_mode = mode or ("review" if is_done else "practice")
 
     return jsonify({
         "ok": True,
         "task": {
             "id": task.id,
-            "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
+            "task_name": _task_display_title(task),
             "material_title": task.material.title,
             "description": task.material.description or "",
             "planned_minutes": task.planned_minutes,
             "status": task.status or "pending",
             "accuracy": task.accuracy,
         },
+        "is_done": is_done,
+        "mode": effective_mode,
         "questions": questions,
         "previous_answers": previous_answers,
+        "answer_records": answer_records_out,
     })
 
 
@@ -1127,13 +1285,20 @@ def submit_reading_vocab_practice(task_id):
         return jsonify({"ok": False, "error": "task_not_found"}), 404
     if task.student_name != user.student_profile.full_name:
         return jsonify({"ok": False, "error": "forbidden"}), 403
-    if not task.material or task.material.type != READING_VOCAB_CHOICE_TYPE:
+    if not task.material or task.material.type not in CHOICE_PRACTICE_TYPES:
         return jsonify({"ok": False, "error": "invalid_material_type"}), 400
 
     data = request.get_json() or {}
     answers = data.get("answers") or []
     duration = int(data.get("duration_seconds") or 0)
     note = (data.get("note") or "").strip()
+    # mode: '' / 'redo_all' grade entire question set; 'redo_wrong' merges with prior answers
+    submit_mode = (data.get("mode") or "").strip().lower()
+    uncertain_question_ids = {
+        int(qid)
+        for qid in (data.get("uncertain_question_ids") or [])
+        if str(qid).isdigit()
+    }
     answer_map = {}
     for item in answers:
         qid = item.get("question_id")
@@ -1141,31 +1306,123 @@ def submit_reading_vocab_practice(task_id):
         if str(qid).isdigit() and answer_key in {"A", "B", "C", "D"}:
             answer_map[int(qid)] = answer_key
 
+    # text_answers: list of {question_id, text_answer} for writing questions
+    # (e.g. 句子改写). These are stored verbatim and NOT auto-graded;
+    # teacher reviews them later in the backend.
+    text_answer_map = {}
+    for item in (data.get("text_answers") or []):
+        qid = item.get("question_id")
+        text_val = (item.get("text_answer") or "").strip()
+        if str(qid).isdigit() and text_val:
+            text_answer_map[int(qid)] = text_val
+
     questions = _iter_task_material_questions(task)
     if not questions:
         return jsonify({"ok": False, "error": "no_questions"}), 400
 
-    StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).delete()
+    # In redo_wrong, keep previously-correct answers untouched and only update the questions
+    # the student is re-attempting (i.e. the ones present in answer_map / text_answer_map).
+    resubmit_qids = set(answer_map.keys()) | set(text_answer_map.keys())
+    if submit_mode == "redo_wrong":
+        # Delete only records for questions being re-submitted
+        if resubmit_qids:
+            StudentAnswer.query.filter(
+                StudentAnswer.task_id == task.id,
+                StudentAnswer.student_id == user.id,
+                StudentAnswer.question_id.in_(list(resubmit_qids)),
+            ).delete(synchronize_session=False)
+        # Pull existing records for all other questions to compute totals
+        existing = {
+            a.question_id: a
+            for a in StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).all()
+        }
+    else:
+        StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).delete()
+        existing = {}
 
+    # Accuracy is computed only over choice questions (writing questions
+    # have no auto-grading — teacher reviews them later).
+    choice_total = 0
     correct_count = 0
-    answered_count = 0
+    answered_count = 0  # all questions: choice answered + writing answered
+    writing_total = 0
+    writing_answered = 0
     wrong_items = []
     for q in questions:
+        opts = _question_options(q)
+        is_writing = len(opts) == 0
+        if is_writing:
+            writing_total += 1
+        else:
+            choice_total += 1
+
+        # If question is not in this submission and we have an existing answer (redo_wrong path), reuse it
+        if q.id not in resubmit_qids and q.id in existing:
+            prior = existing[q.id]
+            if prior.text_answer:
+                answered_count += 1
+                if is_writing:
+                    writing_answered += 1
+            if not is_writing:
+                if prior.is_correct:
+                    correct_count += 1
+                if (not prior.is_correct) or bool(prior.is_uncertain):
+                    correct_key = str(q.reference_answer or "").strip().upper()
+                    options = {opt["key"]: opt["text"] for opt in opts}
+                    wrong_items.append({
+                        "task_id": task.id,
+                        "task_title": _task_display_title(task),
+                        "question_id": q.id,
+                        "word": q.content,
+                        "selected_key": prior.text_answer or "未作答",
+                        "selected_text": options.get(prior.text_answer or "", "未作答"),
+                        "correct_key": correct_key,
+                        "correct_text": options.get(correct_key, q.hint or ""),
+                        "hint": q.hint or "",
+                        "is_uncertain": bool(prior.is_uncertain),
+                    })
+            continue
+
+        if is_writing:
+            # Writing question: save text verbatim, no grading.
+            text_val = text_answer_map.get(q.id, "")
+            if text_val:
+                answered_count += 1
+                writing_answered += 1
+            db.session.add(StudentAnswer(
+                task_id=task.id,
+                question_id=q.id,
+                student_id=user.id,
+                answer_type="text",
+                text_answer=text_val,
+                submitted_at=datetime.now(),
+                reviewed=False,  # awaiting teacher review
+                is_correct=None,
+                is_uncertain=False,
+            ))
+            continue
+
         selected_key = answer_map.get(q.id, "")
         correct_key = str(q.reference_answer or "").strip().upper()
-        options = {opt["key"]: opt["text"] for opt in _question_options(q)}
+        options = {opt["key"]: opt["text"] for opt in opts}
         is_correct = bool(selected_key) and selected_key == correct_key
+        is_uncertain = q.id in uncertain_question_ids
         if selected_key:
             answered_count += 1
         if is_correct:
             correct_count += 1
-        else:
+        if (not is_correct) or is_uncertain:
             wrong_items.append({
+                "task_id": task.id,
+                "task_title": _task_display_title(task),
+                "question_id": q.id,
                 "word": q.content,
                 "selected_key": selected_key or "未作答",
                 "selected_text": options.get(selected_key, "未作答"),
                 "correct_key": correct_key,
                 "correct_text": options.get(correct_key, q.hint or ""),
+                "hint": q.hint or "",
+                "is_uncertain": is_uncertain,
             })
 
         db.session.add(StudentAnswer(
@@ -1177,29 +1434,41 @@ def submit_reading_vocab_practice(task_id):
             submitted_at=datetime.now(),
             reviewed=True,
             is_correct=is_correct,
+            is_uncertain=is_uncertain,
         ))
 
     total = len(questions)
-    accuracy = round((correct_count / total) * 100, 1) if total else 0.0
+    # Accuracy reflects only auto-graded (choice) questions; writing questions
+    # are reviewed manually by the teacher and don't influence this metric.
+    accuracy = round((correct_count / choice_total) * 100, 1) if choice_total else 0.0
     completion_rate = round((answered_count / total) * 100, 1) if total else 0.0
 
     wrong_summary = ""
     if wrong_items:
         wrong_summary = "；".join(
-            f"{item['word']}（你选{item['selected_key']}:{item['selected_text']}，正确{item['correct_key']}:{item['correct_text']}）"
+            (
+                f"{item['word']}（已标记不清楚，你选{item['selected_key']}:{item['selected_text']}，"
+                f"正确{item['correct_key']}:{item['correct_text']}）"
+                if item.get("is_uncertain")
+                else f"{item['word']}（你选{item['selected_key']}:{item['selected_text']}，正确{item['correct_key']}:{item['correct_text']}）"
+            )
             for item in wrong_items
         )
 
     final_note = note
     if wrong_summary:
-        suffix = f"[阅读词汇错题] {wrong_summary}"
+        suffix = f"[阅读词汇待复习] {wrong_summary}"
         final_note = f"{note}\n{suffix}" if note else suffix
 
     task.student_submitted = True
     task.submitted_at = datetime.now()
     task.student_note = final_note
     if duration > 0:
-        task.actual_seconds = duration
+        # In redo modes, accumulate practice time rather than overwrite
+        if submit_mode in ("redo_wrong", "redo_all") and task.actual_seconds:
+            task.actual_seconds = int(task.actual_seconds or 0) + duration
+        else:
+            task.actual_seconds = duration
     task.accuracy = accuracy
     task.completion_rate = completion_rate
     task.status = "done"
@@ -1209,6 +1478,9 @@ def submit_reading_vocab_practice(task_id):
         "ok": True,
         "correct_count": correct_count,
         "total_count": total,
+        "choice_total": choice_total,
+        "writing_total": writing_total,
+        "writing_answered": writing_answered,
         "accuracy": accuracy,
         "completion_rate": completion_rate,
         "wrong_items": wrong_items,

@@ -163,6 +163,7 @@
           <option value="">-- 选择材料 --</option>
           {% for m in all_materials %}
           <option value="{{ m.id }}" data-title="{{ m.title }}" data-type="{{ m.type }}"
+            data-book-type="{{ m.book_type or '' }}"
             data-count="{{ m.question_count }}">{{ m.title }} ({{ m.question_count }})</option>
           {% endfor %}
         </select>
@@ -189,6 +190,17 @@
           </div>
           <div id="dictation-range-hint" class="form-text text-muted" style="margin-top: 6px;"></div>
         </div>
+      </div>
+    </div>
+    <div class="task-form-row" id="dictationModeRow" style="display: none;">
+      <div class="field field--wide">
+        <label for="dictationModeSelect">练习模式</label>
+        <select id="dictationModeSelect" name="dictation_mode" class="form-select">
+          <option value="audio_to_en">听发音写英文</option>
+          <option value="zh_to_en">看中文写英文</option>
+          <option value="en_to_zh">看英文写中文</option>
+        </select>
+        <small id="dictationModeHint" class="form-text text-muted">同一本词书可按任务切换练习方式。</small>
       </div>
     </div>
     <div class="task-form-row" id="questionSelectRow" style="display: none;">
@@ -935,6 +947,9 @@
       var option = select.options[select.selectedIndex];
       var detailInput = document.getElementById("taskDetail"); // Correct ID
       var rangeGroup = document.getElementById("dictation-range-group");
+      var dictationModeRow = document.getElementById("dictationModeRow");
+      var dictationModeSelect = document.getElementById("dictationModeSelect");
+      var dictationModeHint = document.getElementById("dictationModeHint");
       var questionRow = document.getElementById("questionSelectRow");
       var questionIds = document.getElementById("questionIds");
 
@@ -972,6 +987,29 @@
           updateDictationRangeSuggestion(true);
         }
 
+        if (dictationModeRow && dictationModeSelect) {
+          if (isDict) {
+            const bookType = option.getAttribute("data-book-type") || "dictation";
+            dictationModeRow.style.display = "flex";
+            if (!dictationModeSelect.value || dictationModeSelect.dataset.autofill === "1") {
+              dictationModeSelect.value = bookType === "translation" ? "zh_to_en" : "audio_to_en";
+              dictationModeSelect.dataset.autofill = "1";
+            }
+            if (dictationModeHint) {
+              dictationModeHint.textContent = bookType === "translation"
+                ? "该词书原始类型是“看中文写英文”，但任务里仍可切换成另外两种模式。"
+                : "该词书默认适合听发音写英文，也可在任务里切换成中英互译模式。";
+            }
+          } else {
+            dictationModeRow.style.display = "none";
+            dictationModeSelect.value = "audio_to_en";
+            dictationModeSelect.dataset.autofill = "1";
+            if (dictationModeHint) {
+              dictationModeHint.textContent = "同一本词书可按任务切换练习方式。";
+            }
+          }
+        }
+
         const speakingTypes = ['speaking_part1', 'speaking_part2', 'speaking_part2_3'];
         if (type && speakingTypes.includes(type)) {
           setQuestionSelectionMeta('题目（口语题库）', '不勾选则默认布置全部题目');
@@ -993,6 +1031,11 @@
       } else {
         detailInput.value = "";
         rangeGroup.style.display = "none";
+        if (dictationModeRow) dictationModeRow.style.display = "none";
+        if (dictationModeSelect) {
+          dictationModeSelect.value = "audio_to_en";
+          dictationModeSelect.dataset.autofill = "1";
+        }
         updateDictationRangeSuggestion(true);
       }
     }
@@ -1076,6 +1119,22 @@
     const detailHidden = document.getElementById('taskDetail');
     if (taskForm && categorySelect && detailHidden) {
       const syncDetail = () => {
+        const materialSelect = document.getElementById("material_id");
+        const listeningSelect = document.getElementById("listeningExerciseSelect");
+        const materialOption = materialSelect && materialSelect.value
+          ? materialSelect.options[materialSelect.selectedIndex]
+          : null;
+        const listeningOption = listeningSelect && listeningSelect.value
+          ? listeningSelect.options[listeningSelect.selectedIndex]
+          : null;
+        if (materialOption) {
+          detailHidden.value = materialOption.getAttribute("data-title") || materialOption.textContent.trim();
+          return;
+        }
+        if (listeningOption) {
+          detailHidden.value = listeningOption.getAttribute("data-title") || listeningOption.textContent.trim();
+          return;
+        }
         const option = categorySelect.options[categorySelect.selectedIndex];
         detailHidden.value = option ? option.textContent.trim() : '';
       };
@@ -1096,6 +1155,13 @@
     if (dictationStartInput) {
       dictationStartInput.addEventListener("input", () => {
         dictationStartInput.dataset.autofill = "0";
+      });
+    }
+
+    const dictationModeSelect = document.getElementById("dictationModeSelect");
+    if (dictationModeSelect) {
+      dictationModeSelect.addEventListener("change", () => {
+        dictationModeSelect.dataset.autofill = "0";
       });
     }
 
