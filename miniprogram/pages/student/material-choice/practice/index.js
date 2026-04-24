@@ -32,8 +32,10 @@ Page({
         questions: [],
         currentIndex: 0,
         currentQuestion: null,
-        selectedAnswers: {},       // qid -> answer key (local picks this session)
+        selectedAnswers: {},       // qid -> answer key (choice questions, local picks this session)
         selectedAnswer: '',
+        textAnswers: {},           // qid -> typed text (writing questions)
+        currentTextAnswer: '',     // current writing question's text (mirrors textAnswers[currentQid])
         answerRecords: {},         // qid -> { answer_key, is_correct } (prior submission)
         answeredCount: 0,
         note: '',
@@ -76,9 +78,23 @@ Page({
             }
 
             const effectiveMode = res.mode || (res.is_done ? 'review' : 'practice')
-            const selectedAnswers = res.previous_answers || {}
+            const previousAnswers = res.previous_answers || {}
             const answerRecords = res.answer_records || {}
             const questions = res.questions || []
+
+            // Split previousAnswers into choice (ABCD key) vs writing (free text)
+            // based on each question's is_writing flag.
+            const selectedAnswers = {}
+            const textAnswers = {}
+            questions.forEach(q => {
+                const prior = previousAnswers[q.id]
+                if (!prior) return
+                if (q.is_writing) {
+                    textAnswers[q.id] = prior
+                } else {
+                    selectedAnswers[q.id] = prior
+                }
+            })
 
             // Build reviewFlags for quick lookup in WXML
             const reviewFlags = {}
@@ -89,9 +105,11 @@ Page({
                 const rec = answerRecords[q.id]
                 const userKey = rec ? rec.answer_key : ''
                 const correctKey = q.correct_key || ''
-                const isCorrect = !!(rec && rec.is_correct)
-                const isUncertain = !!(rec && rec.is_uncertain)
-                if (rec) {
+                // Writing questions are reviewed manually — they don't count
+                // toward correct/wrong stats and never appear "wrong" here.
+                const isCorrect = !q.is_writing && !!(rec && rec.is_correct)
+                const isUncertain = !q.is_writing && !!(rec && rec.is_uncertain)
+                if (rec && !q.is_writing) {
                     if (isCorrect) correctCount++
                     if (!isCorrect || isUncertain) wrongCount++
                 }
@@ -99,10 +117,13 @@ Page({
                 uncertainFlags[q.id] = isUncertain
             })
 
+            const choiceAnsweredCount = Object.keys(selectedAnswers).filter(k => selectedAnswers[k]).length
+            const writingAnsweredCount = Object.keys(textAnswers).filter(k => (textAnswers[k] || '').trim()).length
             this.setData({
                 task: res.task || {},
                 questions,
                 selectedAnswers,
+                textAnswers,
                 answerRecords,
                 reviewFlags,
                 mode: effectiveMode,
@@ -113,7 +134,7 @@ Page({
                 currentUncertain: false,
                 sessionResults: {},
                 currentFeedback: null,
-                answeredCount: Object.keys(selectedAnswers).filter(k => selectedAnswers[k]).length,
+                answeredCount: choiceAnsweredCount + writingAnsweredCount,
                 loading: false
             })
             this.loadQuestion(0)
@@ -151,12 +172,17 @@ Page({
             }))
         }
 
+        const currentTextAnswer = baseQuestion && baseQuestion.is_writing
+            ? (this.data.textAnswers[baseQuestion.id] || '')
+            : ''
+
         this.setData({
             currentIndex: index,
             currentQuestion,
             selectedAnswer,
+            currentTextAnswer,
             currentUncertain: !!this.data.uncertainFlags[currentQuestion ? currentQuestion.id : ''],
-            currentFeedback: currentQuestion
+            currentFeedback: currentQuestion && !currentQuestion.is_writing
                 ? (this.data.mode === 'review'
                     ? null
                     : (() => {
@@ -176,6 +202,7 @@ Page({
         const key = e.currentTarget.dataset.key
         const currentQuestion = this.data.currentQuestion
         if (!currentQuestion) return
+        if (currentQuestion.is_writing) return  // writing questions use textarea
         if (this.data.sessionResults[currentQuestion.id]) return
 
         const selectedAnswers = {
@@ -197,12 +224,32 @@ Page({
                 isCorrect: !!(key && correctKey && key === correctKey)
             }
         }
+        const writingCount = Object.values(this.data.textAnswers).filter(v => (v || '').trim()).length
         this.setData({
             selectedAnswers,
             selectedAnswer: key,
             sessionResults,
-            answeredCount: Object.values(selectedAnswers).filter(Boolean).length
+            answeredCount: Object.values(selectedAnswers).filter(Boolean).length + writingCount
         }, () => this.loadQuestion(this.data.currentIndex))
+    },
+
+    onTextAnswerInput(e) {
+        if (this.data.mode === 'review') return
+        const currentQuestion = this.data.currentQuestion
+        if (!currentQuestion || !currentQuestion.is_writing) return
+        const value = e.detail.value || ''
+        const textAnswers = {
+            ...this.data.textAnswers,
+            [currentQuestion.id]: value
+        }
+        // Re-count: choice answers + non-empty writing answers
+        const choiceCount = Object.values(this.data.selectedAnswers).filter(Boolean).length
+        const writingCount = Object.values(textAnswers).filter(v => (v || '').trim()).length
+        this.setData({
+            textAnswers,
+            currentTextAnswer: value,
+            answeredCount: choiceCount + writingCount
+        })
     },
 
     toggleUncertain(e) {
@@ -259,6 +306,8 @@ Page({
             mode,
             selectedAnswers: {},
             selectedAnswer: '',
+            textAnswers: {},
+            currentTextAnswer: '',
             answeredCount: 0,
             currentIndex: 0,
             startedAt: Date.now(),
@@ -280,9 +329,18 @@ Page({
         if (this.data.submitting) return
         if (this.data.mode === 'review') return  // no submit in review
 
-        const total = this.data.questions.length
-        const answered = Object.values(this.data.selectedAnswers).filter(Boolean).length
-        const unanswered = total - answered
+        // Count separately: choice questions (need answer_key) vs writing
+        // questions (need text). Both contribute to "unanswered" check.
+        let choiceUnanswered = 0
+        let writingUnanswered = 0
+        this.data.questions.forEach(q => {
+            if (q.is_writing) {
+                if (!(this.data.textAnswers[q.id] || '').trim()) writingUnanswered++
+            } else {
+                if (!this.data.selectedAnswers[q.id]) choiceUnanswered++
+            }
+        })
+        const unanswered = choiceUnanswered + writingUnanswered
         if (unanswered > 0) {
             const modal = await wx.showModal({
                 title: '还有未作答题目',
@@ -293,10 +351,23 @@ Page({
             if (!modal.confirm) return
         }
 
-        const answers = this.data.questions.map(q => ({
-            question_id: q.id,
-            answer_key: this.data.selectedAnswers[q.id] || ''
-        }))
+        // Build separate payloads — backend distinguishes by `is_writing`
+        // (no options) and routes to the right grading branch.
+        const answers = []
+        const textAnswers = []
+        this.data.questions.forEach(q => {
+            if (q.is_writing) {
+                const text = (this.data.textAnswers[q.id] || '').trim()
+                if (text) {
+                    textAnswers.push({ question_id: q.id, text_answer: text })
+                }
+            } else {
+                answers.push({
+                    question_id: q.id,
+                    answer_key: this.data.selectedAnswers[q.id] || ''
+                })
+            }
+        })
         const uncertainQuestionIds = Object.keys(this.data.uncertainFlags)
             .filter(qid => this.data.uncertainFlags[qid])
             .map(qid => Number(qid))
@@ -314,6 +385,7 @@ Page({
                     method: 'POST',
                     data: {
                         answers,
+                        text_answers: textAnswers,
                         uncertain_question_ids: uncertainQuestionIds,
                         duration_seconds: durationSeconds,
                         note: this.data.note,
@@ -332,11 +404,20 @@ Page({
 
             const wrongCount = (res.wrong_items || []).filter(item => !item.is_uncertain).length
             const uncertainCount = (res.wrong_items || []).filter(item => item.is_uncertain).length
+            const writingTotal = res.writing_total || 0
+            const writingAnswered = res.writing_answered || 0
+            const choiceTotal = res.choice_total || res.total_count || 0
+            const writingNote = writingTotal > 0
+                ? `\n改写题已提交 ${writingAnswered}/${writingTotal}（待老师批改）`
+                : ''
+            const accuracyLine = choiceTotal > 0
+                ? `单选正确 ${res.correct_count}/${choiceTotal}，正确率 ${res.accuracy}%`
+                : '本次练习无单选题'
             await wx.showModal({
                 title: '练习完成',
-                content: `正确 ${res.correct_count}/${res.total_count}，正确率 ${res.accuracy}%${wrongCount > 0 ? `\n错 ${wrongCount} 题` : ''}${uncertainCount > 0 ? `\n标记不清楚 ${uncertainCount} 题` : ''}${(wrongCount + uncertainCount) > 0 ? '\n可以点"查看错题"复盘' : ''}`,
+                content: `${accuracyLine}${writingNote}${wrongCount > 0 ? `\n错 ${wrongCount} 题` : ''}${uncertainCount > 0 ? `\n标记不清楚 ${uncertainCount} 题` : ''}${(wrongCount + uncertainCount) > 0 ? '\n可以点"查看错题"复盘' : ''}`,
                 showCancel: false,
-                confirmText: '查看错题回看'
+                confirmText: choiceTotal > 0 ? '查看错题回看' : '完成'
             })
 
             // Transition into review mode in-place instead of navigating away

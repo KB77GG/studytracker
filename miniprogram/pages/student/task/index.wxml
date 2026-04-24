@@ -41,17 +41,12 @@
   <view class="material-card" wx:if="{{task.material}}">
     <view class="section-title">📚 学习材料</view>
     
-    <!-- 1. 语法练习 / 翻译练习 -->
-    <view wx:if="{{task.material.type === 'grammar' || task.material.type === 'translation' || task.material.type === 'reading_vocab_choice'}}">
-      <view class="question-item" wx:for="{{task.material.questions}}" wx:key="id">
-        <text class="question-content">{{index + 1}}. {{item.content}}</text>
-        <view class="options" wx:if="{{item.options && item.options.length > 0}}">
-          <view class="option-item" wx:for="{{item.options}}" wx:for-item="opt" wx:key="key">
-            <text>{{opt.key}}. {{opt.text}}</text>
-          </view>
-        </view>
-      </view>
-    </view>
+    <!--
+      grammar / reading_vocab_choice / translation 已在 fetchTaskDetail 里
+      redirect 到 material-choice/practice 页，那里有 radio + textarea 混合 UI。
+      此处保留空 view 占位，避免极少数老旧客户端落到此页时显示 nothing。
+    -->
+    <view wx:if="{{false}}"></view>
 
     <!-- 2. 写作逻辑链 -->
     <view wx:if="{{task.material.type === 'writing_logic'}}">

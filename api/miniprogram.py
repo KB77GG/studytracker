@@ -29,6 +29,14 @@ from .aliyun_oral_task import run_oral_task
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
+# Material types that route to the material-choice practice page. They all
+# use Question rows; the page distinguishes per question:
+#   - questions WITH options (ABCD)  → radio + immediate feedback (auto-graded)
+#   - questions WITHOUT options      → textarea (saved verbatim, teacher reviews)
+# So a single "grammar" material can mix 单选 (Q1-20) and 句子改写 (Q21-25),
+# and "translation" (single writing question) reuses the textarea path with
+# no reference shown to the student.
+CHOICE_PRACTICE_TYPES = {READING_VOCAB_CHOICE_TYPE, "grammar", "translation"}
 VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh"}
 
 
@@ -1183,7 +1191,7 @@ def get_reading_vocab_practice(task_id):
         return jsonify({"ok": False, "error": "task_not_found"}), 404
     if task.student_name != user.student_profile.full_name:
         return jsonify({"ok": False, "error": "forbidden"}), 403
-    if not task.material or task.material.type != READING_VOCAB_CHOICE_TYPE:
+    if not task.material or task.material.type not in CHOICE_PRACTICE_TYPES:
         return jsonify({"ok": False, "error": "invalid_material_type"}), 400
 
     mode = (request.args.get("mode") or "").strip().lower()
@@ -1213,15 +1221,18 @@ def get_reading_vocab_practice(task_id):
 
     questions = []
     for q in questions_iter:
-        correct_key = str(q.reference_answer or "").strip().upper()
-        options = {opt["key"]: opt["text"] for opt in _question_options(q)}
+        opts = _question_options(q)
+        is_writing = len(opts) == 0  # 无 options = 改写/翻译类输入题
+        correct_key = "" if is_writing else str(q.reference_answer or "").strip().upper()
+        options_map = {opt["key"]: opt["text"] for opt in opts}
         item = {
             "id": q.id,
             "sequence": q.sequence,
             "content": q.content,
-            "options": _question_options(q),
+            "options": opts,
+            "is_writing": is_writing,
             "correct_key": correct_key,
-            "correct_text": options.get(correct_key, q.hint or ""),
+            "correct_text": options_map.get(correct_key, q.hint or ""),
             "hint": q.hint or "",
         }
         questions.append(item)
@@ -1274,7 +1285,7 @@ def submit_reading_vocab_practice(task_id):
         return jsonify({"ok": False, "error": "task_not_found"}), 404
     if task.student_name != user.student_profile.full_name:
         return jsonify({"ok": False, "error": "forbidden"}), 403
-    if not task.material or task.material.type != READING_VOCAB_CHOICE_TYPE:
+    if not task.material or task.material.type not in CHOICE_PRACTICE_TYPES:
         return jsonify({"ok": False, "error": "invalid_material_type"}), 400
 
     data = request.get_json() or {}
@@ -1295,19 +1306,30 @@ def submit_reading_vocab_practice(task_id):
         if str(qid).isdigit() and answer_key in {"A", "B", "C", "D"}:
             answer_map[int(qid)] = answer_key
 
+    # text_answers: list of {question_id, text_answer} for writing questions
+    # (e.g. 句子改写). These are stored verbatim and NOT auto-graded;
+    # teacher reviews them later in the backend.
+    text_answer_map = {}
+    for item in (data.get("text_answers") or []):
+        qid = item.get("question_id")
+        text_val = (item.get("text_answer") or "").strip()
+        if str(qid).isdigit() and text_val:
+            text_answer_map[int(qid)] = text_val
+
     questions = _iter_task_material_questions(task)
     if not questions:
         return jsonify({"ok": False, "error": "no_questions"}), 400
 
     # In redo_wrong, keep previously-correct answers untouched and only update the questions
-    # the student is re-attempting (i.e. the ones present in answer_map).
+    # the student is re-attempting (i.e. the ones present in answer_map / text_answer_map).
+    resubmit_qids = set(answer_map.keys()) | set(text_answer_map.keys())
     if submit_mode == "redo_wrong":
         # Delete only records for questions being re-submitted
-        if answer_map:
+        if resubmit_qids:
             StudentAnswer.query.filter(
                 StudentAnswer.task_id == task.id,
                 StudentAnswer.student_id == user.id,
-                StudentAnswer.question_id.in_(list(answer_map.keys())),
+                StudentAnswer.question_id.in_(list(resubmit_qids)),
             ).delete(synchronize_session=False)
         # Pull existing records for all other questions to compute totals
         existing = {
@@ -1318,37 +1340,71 @@ def submit_reading_vocab_practice(task_id):
         StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).delete()
         existing = {}
 
+    # Accuracy is computed only over choice questions (writing questions
+    # have no auto-grading — teacher reviews them later).
+    choice_total = 0
     correct_count = 0
-    answered_count = 0
+    answered_count = 0  # all questions: choice answered + writing answered
+    writing_total = 0
+    writing_answered = 0
     wrong_items = []
     for q in questions:
+        opts = _question_options(q)
+        is_writing = len(opts) == 0
+        if is_writing:
+            writing_total += 1
+        else:
+            choice_total += 1
+
         # If question is not in this submission and we have an existing answer (redo_wrong path), reuse it
-        if q.id not in answer_map and q.id in existing:
+        if q.id not in resubmit_qids and q.id in existing:
             prior = existing[q.id]
             if prior.text_answer:
                 answered_count += 1
-            if prior.is_correct:
-                correct_count += 1
-            if (not prior.is_correct) or bool(prior.is_uncertain):
-                correct_key = str(q.reference_answer or "").strip().upper()
-                options = {opt["key"]: opt["text"] for opt in _question_options(q)}
-                wrong_items.append({
-                    "task_id": task.id,
-                    "task_title": _task_display_title(task),
-                    "question_id": q.id,
-                    "word": q.content,
-                    "selected_key": prior.text_answer or "未作答",
-                    "selected_text": options.get(prior.text_answer or "", "未作答"),
-                    "correct_key": correct_key,
-                    "correct_text": options.get(correct_key, q.hint or ""),
-                    "hint": q.hint or "",
-                    "is_uncertain": bool(prior.is_uncertain),
-                })
+                if is_writing:
+                    writing_answered += 1
+            if not is_writing:
+                if prior.is_correct:
+                    correct_count += 1
+                if (not prior.is_correct) or bool(prior.is_uncertain):
+                    correct_key = str(q.reference_answer or "").strip().upper()
+                    options = {opt["key"]: opt["text"] for opt in opts}
+                    wrong_items.append({
+                        "task_id": task.id,
+                        "task_title": _task_display_title(task),
+                        "question_id": q.id,
+                        "word": q.content,
+                        "selected_key": prior.text_answer or "未作答",
+                        "selected_text": options.get(prior.text_answer or "", "未作答"),
+                        "correct_key": correct_key,
+                        "correct_text": options.get(correct_key, q.hint or ""),
+                        "hint": q.hint or "",
+                        "is_uncertain": bool(prior.is_uncertain),
+                    })
+            continue
+
+        if is_writing:
+            # Writing question: save text verbatim, no grading.
+            text_val = text_answer_map.get(q.id, "")
+            if text_val:
+                answered_count += 1
+                writing_answered += 1
+            db.session.add(StudentAnswer(
+                task_id=task.id,
+                question_id=q.id,
+                student_id=user.id,
+                answer_type="text",
+                text_answer=text_val,
+                submitted_at=datetime.now(),
+                reviewed=False,  # awaiting teacher review
+                is_correct=None,
+                is_uncertain=False,
+            ))
             continue
 
         selected_key = answer_map.get(q.id, "")
         correct_key = str(q.reference_answer or "").strip().upper()
-        options = {opt["key"]: opt["text"] for opt in _question_options(q)}
+        options = {opt["key"]: opt["text"] for opt in opts}
         is_correct = bool(selected_key) and selected_key == correct_key
         is_uncertain = q.id in uncertain_question_ids
         if selected_key:
@@ -1382,7 +1438,9 @@ def submit_reading_vocab_practice(task_id):
         ))
 
     total = len(questions)
-    accuracy = round((correct_count / total) * 100, 1) if total else 0.0
+    # Accuracy reflects only auto-graded (choice) questions; writing questions
+    # are reviewed manually by the teacher and don't influence this metric.
+    accuracy = round((correct_count / choice_total) * 100, 1) if choice_total else 0.0
     completion_rate = round((answered_count / total) * 100, 1) if total else 0.0
 
     wrong_summary = ""
@@ -1420,6 +1478,9 @@ def submit_reading_vocab_practice(task_id):
         "ok": True,
         "correct_count": correct_count,
         "total_count": total,
+        "choice_total": choice_total,
+        "writing_total": writing_total,
+        "writing_answered": writing_answered,
         "accuracy": accuracy,
         "completion_rate": completion_rate,
         "wrong_items": wrong_items,

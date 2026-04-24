@@ -417,7 +417,7 @@ Page({
             })
             return
         }
-        if (task && task.materialType === 'reading_vocab_choice') {
+        if (task && (task.materialType === 'reading_vocab_choice' || task.materialType === 'grammar' || task.materialType === 'translation')) {
             wx.navigateTo({
                 url: `/pages/student/material-choice/practice/index?taskId=${taskId}`,
             })
@@ -494,7 +494,7 @@ Page({
             return
         }
 
-        if (task && task.materialType === 'reading_vocab_choice') {
+        if (task && (task.materialType === 'reading_vocab_choice' || task.materialType === 'grammar' || task.materialType === 'translation')) {
             wx.navigateTo({
                 url: `/pages/student/material-choice/practice/index?taskId=${taskId}`
             })

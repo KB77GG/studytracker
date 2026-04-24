@@ -340,3 +340,33 @@
   font-size: 26rpx;
   margin-top: 4rpx;
 }
+
+/* 改写/翻译输入题样式 */
+.writing-area {
+  margin-top: 20rpx;
+}
+
+.writing-input {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 20rpx;
+  background: #f8fafc;
+  border: 2rpx solid #cbd5f5;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  color: #1f2937;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.writing-input[disabled] {
+  background: #eef2f7;
+  color: #4b5563;
+}
+
+.writing-hint {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #6b7280;
+}
