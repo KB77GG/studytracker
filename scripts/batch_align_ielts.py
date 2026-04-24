@@ -82,22 +82,54 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
         if not sent_words:
             continue
 
-        best_start_idx = word_idx
-        best_score = -1
-        search_range = min(20, len(words) - word_idx)
+        # 第一句：全局搜（音频常有 IELTS 标准片头 ~25-40s 不在文本里），
+        # 后续句子：本地小窗口搜，避免相似句干扰。
+        if idx == 0:
+            search_range = max(0, len(words) - word_idx)
+            anchor_len = min(6, len(sent_words))
+        else:
+            search_range = min(20, len(words) - word_idx)
+            anchor_len = min(5, len(sent_words))
+
+        scored = []  # [(check_idx, score)]
         for offset in range(search_range):
             check_idx = word_idx + offset
             score = 0
-            for j, sent_word in enumerate(sent_words[:5]):
+            for j, sent_word in enumerate(sent_words[:anchor_len]):
                 if check_idx + j < len(words) and normalize_text(words[check_idx + j]["word"]) == sent_word:
                     score += 1
-            if score > best_score:
-                best_score = score
-                best_start_idx = check_idx
+            scored.append((check_idx, score))
 
-        start_time = words[best_start_idx]["start"] if best_start_idx < len(words) else 0
-        end_idx = min(best_start_idx + len(sent_words), len(words)) - 1
-        end_time = words[end_idx]["end"] if end_idx < len(words) else start_time + 5
+        if not scored:
+            best_start_idx = word_idx
+            best_score = -1
+        else:
+            max_score = max(s for _, s in scored)
+            if idx == 0:
+                # IELTS Section 1 常有 "example" 节选先放 ~第一句到第三句，再播完整录音。
+                # 取得分最高（或差 1 分）的所有候选，选最后一个 → 跳过 example，命中真正录音。
+                high = [ci for ci, s in scored if s >= max_score - 1 and s >= 2]
+                best_start_idx = high[-1] if high else scored[0][0]
+                best_score = max_score
+            else:
+                # 后续句子：取首个最佳匹配，避免漂到后面相似句
+                best_start_idx = next(ci for ci, s in scored if s == max_score)
+                best_score = max_score
+
+        # 第一句：要求至少匹配 2 个 anchor 词；否则放弃强行对齐，保守留 t=0 fallback
+        if idx == 0 and best_score < 2:
+            print(f"  [warn] first-sentence anchor weak (score={best_score}); using t=0 fallback")
+
+        # 词数耗尽：用上一句结尾续写，避免落到 t=0
+        if best_start_idx >= len(words):
+            prev_end = segments[-1]["end"] if segments else (words[-1]["end"] if words else 0)
+            start_time = prev_end
+            end_time = prev_end + 2.0
+            end_idx = len(words)  # keep word_idx pinned to end
+        else:
+            start_time = words[best_start_idx]["start"]
+            end_idx = min(best_start_idx + len(sent_words), len(words)) - 1
+            end_time = words[end_idx]["end"] if end_idx < len(words) else start_time + 5
         segments.append(
             {
                 "id": idx + 1,
