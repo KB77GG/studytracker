@@ -35,13 +35,67 @@ def strip_speaker_label(text: str) -> str:
     )
 
 
+# Common English abbreviations whose trailing period is NOT a sentence boundary.
+# Used by smart_split_into_sentences to avoid mis-splitting "Mr. Smith".
+_ABBREVS = (
+    "Mr.", "Mrs.", "Ms.", "Mx.", "Dr.", "St.", "Mt.", "Jr.", "Sr.",
+    "vs.", "etc.", "e.g.", "i.e.", "No.", "approx.", "Prof.", "Capt.",
+    "Sgt.", "Lt.", "Gen.", "Rev.", "Hon.", "Inc.", "Ltd.", "Co.",
+    "p.m.", "a.m.", "P.M.", "A.M.",
+)
+_ABBREV_PLACEHOLDER = "\u2407"  # symbol for delete (rare in source text)
+
+
+def smart_split_into_sentences(line: str) -> list[str]:
+    """Split one paragraph-style line into individual sentences.
+
+    Why: some source transcripts (mainly Cam 20 S2/S4 + a few stragglers) have
+    the entire paragraph as a single line. Whisper's word-level alignment then
+    has nothing to anchor against, and the listening player shows one giant
+    block of text with a single timestamp.
+
+    Strategy: split on .!? followed by whitespace, while protecting common
+    abbreviations (Mr. / Dr. / etc.) so we don't split mid-name. Also handles
+    paragraph separators like "—————" by leaving them in place — the caller
+    drops them when normalize_text() yields nothing.
+    """
+    line = line.strip()
+    if not line:
+        return []
+    # Short lines almost certainly already represent a single sentence.
+    if len(line) < 180:
+        return [line]
+    # Protect abbreviations whose period would otherwise be split on.
+    protected = line
+    for ab in _ABBREVS:
+        protected = protected.replace(ab, ab.replace(".", _ABBREV_PLACEHOLDER))
+    # Split on .!? followed by whitespace. Don't require a capital follow-up
+    # (some IELTS transcripts use lowercase after sentence-end due to OCR/
+    # quote handling), but the period itself must be preceded by alphanum so
+    # ellipses ("..." / "…") don't split into noise.
+    parts = re.split(r"(?<=[a-zA-Z0-9][.!?])\s+", protected)
+    # Restore protected periods, drop empties.
+    out = []
+    for p in parts:
+        s = p.replace(_ABBREV_PLACEHOLDER, ".").strip()
+        if s:
+            out.append(s)
+    # If splitting yielded nothing useful (e.g. paragraph has zero .!? at all),
+    # return the original line so we still align *something* rather than drop it.
+    return out or [line]
+
+
 def split_sentences(path: Path) -> list[str]:
     lines = path.read_text(encoding="utf-8").strip().splitlines()
-    sentences = []
+    sentences: list[str] = []
     for line in lines:
         cleaned = strip_speaker_label(line)
-        if cleaned:
-            sentences.append(cleaned)
+        if not cleaned:
+            continue
+        # Each line may be one sentence OR a whole paragraph; smart-split
+        # handles both cases. Keeps short single-sentence lines untouched.
+        for sent in smart_split_into_sentences(cleaned):
+            sentences.append(sent)
     return sentences
 
 
@@ -85,17 +139,31 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
         # 第一句：全局搜（音频常有 IELTS 标准片头 ~25-40s 不在文本里），
         # 后续句子：本地小窗口搜，避免相似句干扰。
         if idx == 0:
-            search_range = max(0, len(words) - word_idx)
-            anchor_len = min(6, len(sent_words))
+            # 限制在音频前 50% 的词内搜索：IELTS Section 1 主对话一定在前半段开始；
+            # 否则 "Hello" 之类常见词容易被尾部重复出现的同形词锚住（曾出现首句
+            # 跳到 428s/493s 的 bug）。
+            search_range = max(0, min(len(words), len(words) // 2 + 1) - word_idx)
+            # Build the anchor phrase. If sentence 0 is very short (e.g. just
+            # "Hello?" → 1 word), a 1-word anchor cannot discriminate the IELTS
+            # intro from the actual conversation start. Borrow words from the
+            # next sentences until we have ~5-6 words to match against.
+            anchor_words = list(sent_words)
+            borrow_idx = 1
+            while len(anchor_words) < 5 and borrow_idx < len(sentences):
+                next_words = normalize_text(sentences[borrow_idx]).split()
+                anchor_words.extend(next_words)
+                borrow_idx += 1
+            anchor_len = min(6, len(anchor_words))
         else:
             search_range = min(20, len(words) - word_idx)
+            anchor_words = sent_words
             anchor_len = min(5, len(sent_words))
 
         scored = []  # [(check_idx, score)]
         for offset in range(search_range):
             check_idx = word_idx + offset
             score = 0
-            for j, sent_word in enumerate(sent_words[:anchor_len]):
+            for j, sent_word in enumerate(anchor_words[:anchor_len]):
                 if check_idx + j < len(words) and normalize_text(words[check_idx + j]["word"]) == sent_word:
                     score += 1
             scored.append((check_idx, score))
@@ -108,7 +176,16 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
             if idx == 0:
                 # IELTS Section 1 常有 "example" 节选先放 ~第一句到第三句，再播完整录音。
                 # 取得分最高（或差 1 分）的所有候选，选最后一个 → 跳过 example，命中真正录音。
-                high = [ci for ci, s in scored if s >= max_score - 1 and s >= 2]
+                # Threshold scales with anchor_len so 1-word first sentences (now
+                # using a borrowed multi-word anchor) still pass.
+                threshold = max(2, anchor_len // 2)
+                high = [ci for ci, s in scored if s >= max_score - 1 and s >= threshold]
+                if not high and max_score >= 2:
+                    high = [ci for ci, s in scored if s == max_score]
+                if not high and max_score >= 1:
+                    # Last resort: pick the latest single-word match (skips
+                    # any earlier intro-narrator occurrence).
+                    high = [ci for ci, s in scored if s == max_score]
                 best_start_idx = high[-1] if high else scored[0][0]
                 best_score = max_score
             else:
@@ -173,6 +250,7 @@ def main() -> None:
     parser.add_argument("--manifest", default="data/ielts_audio_manifest.json")
     parser.add_argument("--model", default="base")
     parser.add_argument("--books", help="comma separated book numbers, e.g. 4,5,6")
+    parser.add_argument("--only", help="comma separated exercise ids, e.g. ielts10_test4_s1,ielts11_test1_s1")
     parser.add_argument("--limit", type=int, help="max entries to process")
     parser.add_argument("--resume", action="store_true", help="skip outputs that already exist")
     args = parser.parse_args()
@@ -183,6 +261,14 @@ def main() -> None:
     if args.books:
         book_filter = {int(x.strip()) for x in args.books.split(",") if x.strip()}
         entries = [e for e in entries if e["cam"] in book_filter]
+    if args.only:
+        only_ids = {x.strip() for x in args.only.split(",") if x.strip()}
+        entries = [
+            e for e in entries
+            if f"ielts{e['cam']}_test{e['display_test']}_s{e['section']}" in only_ids
+        ]
+        if not entries:
+            raise SystemExit(f"--only matched 0 entries; check ids: {only_ids}")
     if args.limit:
         entries = entries[: args.limit]
 
