@@ -120,12 +120,31 @@ def align_with_whisper(audio_path: str, sentences: list[str]) -> list[dict]:
         if sent_idx == 0 and best_score < 2:
             print(f"  [warn] first-sentence anchor weak (score={best_score}); 可能仍落在片头", file=sys.stderr)
 
-        # 词数耗尽：用上一句结尾续写，避免落到 t=0
+        # If the transcript continues after Whisper has no more timed words,
+        # the audio source is probably truncated or silent at the end. Do not
+        # invent 2-second timestamps for text that has no audio.
         if best_start_idx >= len(words):
             prev_end = segments[-1]["end"] if segments else (words[-1]["end"] if words else 0)
-            start_time = prev_end
-            end_time = prev_end + 2.0
-            end_idx = len(words)
+            print(
+                f"  [warn] stopping at sentence {sent_idx + 1}: no timed words remain "
+                f"after {prev_end:.2f}s",
+                file=sys.stderr,
+            )
+            break
+
+        remaining_words = len(words) - best_start_idx
+        if remaining_words < len(sent_words):
+            coverage = remaining_words / max(1, len(sent_words))
+            if coverage < 0.75:
+                print(
+                    f"  [warn] stopping at sentence {sent_idx + 1}: only "
+                    f"{remaining_words}/{len(sent_words)} words have audio timestamps",
+                    file=sys.stderr,
+                )
+                break
+            start_time = words[best_start_idx]["start"]
+            end_idx = len(words) - 1
+            end_time = words[end_idx]["end"]
         else:
             start_time = words[best_start_idx]["start"]
             end_idx = min(best_start_idx + len(sent_words), len(words)) - 1
