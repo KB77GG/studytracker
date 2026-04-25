@@ -95,11 +95,33 @@ def split_sentences(path: Path) -> list[str]:
         # Each line may be one sentence OR a whole paragraph; smart-split
         # handles both cases. Keeps short single-sentence lines untouched.
         for sent in smart_split_into_sentences(cleaned):
+            # Skip punctuation/separator-only fragments like ",", "/", "———",
+            # ". .", which would inflate sentence count and confuse audits.
+            if not normalize_text(sent):
+                continue
             sentences.append(sent)
     return sentences
 
 
+def get_audio_duration(audio_path: Path) -> float:
+    """Return audio duration in seconds via ffprobe; 0.0 on failure."""
+    try:
+        out = subprocess.run(
+            [
+                "ffprobe", "-v", "error",
+                "-show_entries", "format=duration",
+                "-of", "default=noprint_wrappers=1:nokey=1",
+                str(audio_path),
+            ],
+            capture_output=True, text=True, timeout=15,
+        )
+        return float(out.stdout.strip())
+    except Exception:
+        return 0.0
+
+
 def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict]:
+    audio_duration = get_audio_duration(audio_path)
     result = model.transcribe(
         str(audio_path),
         word_timestamps=True,
@@ -131,7 +153,12 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
             )
         return segments
 
-    for idx, sentence in enumerate(sentences):
+    # Pre-compute effective sentences (skip empty after normalize) so we can
+    # spread the tail evenly across remaining audio time when Whisper drops
+    # the last words of a recording.
+    effective = [(i, s) for i, s in enumerate(sentences) if normalize_text(s).split()]
+
+    for eff_pos, (idx, sentence) in enumerate(effective):
         sent_words = normalize_text(sentence).split()
         if not sent_words:
             continue
@@ -155,7 +182,11 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
                 borrow_idx += 1
             anchor_len = min(6, len(anchor_words))
         else:
-            search_range = min(20, len(words) - word_idx)
+            # 大窗口（200 词）：IELTS 在 conversation 之间会插入
+            # "Now look at questions 5 to 10" 之类的 announcement（30-50 词）
+            # 加上 30s 静默期间没有词，下一句的 anchor 词会在窗口外。
+            # 旧值 20 导致后半段所有句子全部丢失或错位。
+            search_range = min(200, len(words) - word_idx)
             anchor_words = sent_words
             anchor_len = min(5, len(sent_words))
 
@@ -189,34 +220,58 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
                 best_start_idx = high[-1] if high else scored[0][0]
                 best_score = max_score
             else:
-                # 后续句子：取首个最佳匹配，避免漂到后面相似句
-                best_start_idx = next(ci for ci, s in scored if s == max_score)
+                # 后续句子：取首个最佳匹配，避免漂到后面相似句。
+                # 大窗口下要求至少匹配一定阈值的 anchor 词，否则视为
+                # "当前句子在 announcement 期内/Whisper 漏词"，保守续写
+                # 在上一句结尾后约 1s（不漂到无关位置）。
+                min_required = max(1, anchor_len // 2)
+                if max_score >= min_required:
+                    best_start_idx = next(ci for ci, s in scored if s == max_score)
+                else:
+                    best_start_idx = word_idx
                 best_score = max_score
 
         # 第一句：要求至少匹配 2 个 anchor 词；否则放弃强行对齐，保守留 t=0 fallback
         if idx == 0 and best_score < 2:
             print(f"  [warn] first-sentence anchor weak (score={best_score}); using t=0 fallback")
 
-        # If the transcript continues after Whisper has no more timed words,
-        # the audio source is probably truncated or silent at the end. Do not
-        # invent 2-second timestamps for text that has no audio.
+        # 词数耗尽：Whisper 漏转录尾部内容（base 模型在静默/低能量段易丢词）。
+        # 旧版 break，导致丢掉后面所有句子。改为：把剩下的句子均匀分布在
+        # [上一句结尾, 音频实际结尾]，学生点击后能听到对应区间内的真实音频。
         if best_start_idx >= len(words):
             prev_end = segments[-1]["end"] if segments else (words[-1]["end"] if words else 0)
-            print(
-                f"  [warn] stopping at sentence {idx + 1}: no timed words remain "
-                f"after {prev_end:.2f}s"
+            remaining = len(effective) - eff_pos  # 包含当前句
+            # 留 0.5s 缓冲不撞到音频末尾
+            tail_end = max(prev_end + remaining * 1.5, audio_duration - 0.3) if audio_duration else prev_end + remaining * 2.0
+            slot = max(1.0, (tail_end - prev_end) / max(1, remaining))
+            start_time = prev_end + slot * 0  # 第一句紧接 prev_end
+            end_time = start_time + slot
+            segments.append(
+                {
+                    "id": idx + 1,
+                    "start": round(start_time, 2),
+                    "end": round(end_time, 2),
+                    "text": sentence,
+                }
             )
-            break
+            # 余下的句子继续按 slot 推进
+            cursor = end_time
+            for tail_idx in range(eff_pos + 1, len(effective)):
+                t_idx, t_sent = effective[tail_idx]
+                segments.append(
+                    {
+                        "id": t_idx + 1,
+                        "start": round(cursor, 2),
+                        "end": round(min(cursor + slot, tail_end), 2),
+                        "text": t_sent,
+                    }
+                )
+                cursor += slot
+            return segments
 
         remaining_words = len(words) - best_start_idx
         if remaining_words < len(sent_words):
-            coverage = remaining_words / max(1, len(sent_words))
-            if coverage < 0.75:
-                print(
-                    f"  [warn] stopping at sentence {idx + 1}: only "
-                    f"{remaining_words}/{len(sent_words)} words have audio timestamps"
-                )
-                break
+            # 剩余 audio 词不够该句长度：用所有剩余词覆盖
             start_time = words[best_start_idx]["start"]
             end_idx = len(words) - 1
             end_time = words[end_idx]["end"]
@@ -265,7 +320,10 @@ def ensure_mp3(src: Path, dest: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Batch align IELTS listening materials")
     parser.add_argument("--manifest", default="data/ielts_audio_manifest.json")
-    parser.add_argument("--model", default="base")
+    parser.add_argument("--model", default="small",
+                        help="whisper model size; 'small' is the minimum that "
+                             "reliably transcribes IELTS audio to the end. "
+                             "'base' drops the last ~30s of many files.")
     parser.add_argument("--books", help="comma separated book numbers, e.g. 4,5,6")
     parser.add_argument("--only", help="comma separated exercise ids, e.g. ielts10_test4_s1,ielts11_test1_s1")
     parser.add_argument("--limit", type=int, help="max entries to process")
