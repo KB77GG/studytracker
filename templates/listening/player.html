@@ -6,30 +6,43 @@
 <title>精听练习</title>
 <style>
 :root {
-  --bg: #f5f7fa;
-  --sidebar-bg: #1e293b;
-  --sidebar-text: #cbd5e1;
-  --sidebar-active: #3b82f6;
-  --panel-bg: #fff;
-  --text: #1e293b;
-  --text-muted: #64748b;
-  --border: #e2e8f0;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --radius: 8px;
+  --bg: #f3eee6;
+  --sidebar-bg: #171a1e;
+  --sidebar-panel: #20242a;
+  --sidebar-text: #c8c1b7;
+  --sidebar-muted: #8d867d;
+  --panel-bg: #fbf8f1;
+  --reader-bg: #fffdf8;
+  --surface: #fffaf2;
+  --surface-muted: #f6f0e7;
+  --text: #25211c;
+  --text-muted: #746b60;
+  --border: #e3d9cb;
+  --border-strong: #cfc2b1;
+  --accent: #2f8e87;
+  --accent-hover: #267873;
+  --accent-soft: #e1f3ef;
+  --audio-accent: #5b6ee1;
+  --audio-soft: #e7e9fb;
+  --success: #2f8a5f;
+  --warning: #b87317;
+  --danger: #c34a3e;
+  --shadow-soft: 0 18px 50px rgba(62, 50, 34, 0.08);
+  --shadow-control: 0 1px 2px rgba(35, 29, 22, 0.08);
+  --radius: 10px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: var(--bg);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(47, 142, 135, 0.12), transparent 32rem),
+    linear-gradient(135deg, #f7f1e8 0%, var(--bg) 55%, #eee8de 100%);
   color: var(--text);
   height: 100vh;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Layout */
@@ -37,80 +50,88 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 240px;
+  width: 268px;
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,0.08);
 }
 
 .sidebar-header {
-  padding: 16px;
+  padding: 20px 18px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .sidebar-header h2 {
-  font-size: 14px;
+  font-size: 15px;
   color: #fff;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   line-height: 1.4;
+  font-weight: 650;
 }
 
 .sidebar-header .subtitle {
   font-size: 12px;
-  color: var(--text-muted);
+  color: var(--sidebar-muted);
+  line-height: 1.55;
 }
 
 .part-tabs {
   display: flex;
-  padding: 8px 16px;
-  gap: 8px;
+  padding: 12px 14px 8px;
+  gap: 6px;
 }
 
 .part-tab {
-  padding: 6px 16px;
-  border-radius: 6px;
+  padding: 7px 13px;
+  border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  border: none;
-  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
   color: var(--sidebar-text);
   transition: all 0.2s;
 }
 
 .part-tab.active {
-  background: var(--accent);
-  color: #fff;
+  background: #f7efe2;
+  border-color: #f7efe2;
+  color: #171a1e;
 }
 
 .sentence-list {
   flex: 1;
   overflow-y: auto;
-  padding: 8px;
+  padding: 8px 10px 16px;
 }
 
 .sentence-list::-webkit-scrollbar { width: 4px; }
-.sentence-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+.sentence-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.22); border-radius: 2px; }
 
 .sentence-item {
   display: flex;
   align-items: center;
-  padding: 10px 12px;
-  border-radius: 6px;
+  padding: 11px 12px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 13px;
   transition: all 0.15s;
   gap: 8px;
+  border: 1px solid transparent;
+  margin-bottom: 4px;
 }
 
-.sentence-item:hover { background: rgba(255,255,255,0.08); }
+.sentence-item:hover { background: rgba(255,255,255,0.07); }
 
 .sentence-item.active {
-  background: var(--accent);
+  background: linear-gradient(135deg, rgba(47,142,135,0.2), rgba(91,110,225,0.18));
+  border-color: rgba(255,255,255,0.12);
   color: #fff;
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .sentence-item.completed .sent-status {
@@ -118,8 +139,15 @@ body {
 }
 
 .sent-label { flex: 1; }
-.sent-dur { font-size: 11px; opacity: 0.7; }
-.sent-status { width: 16px; font-size: 14px; }
+.sent-dur {
+  font-size: 11px;
+  opacity: 0.78;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+}
+.sent-status { width: 16px; font-size: 13px; color: var(--sidebar-muted); }
 
 /* Main Panel */
 .main {
@@ -134,14 +162,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
-  background: var(--panel-bg);
+  padding: 14px 28px;
+  background: rgba(251, 248, 241, 0.92);
+  backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
 }
 
 .topbar-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 650;
+  color: #342d25;
 }
 
 .topbar-actions {
@@ -154,11 +184,16 @@ body {
   color: var(--text-muted);
   text-decoration: none;
   font-size: 14px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  transition: background 0.15s ease, color 0.15s ease;
 }
+
+.back-link:hover { background: var(--surface-muted); color: var(--text); }
 
 /* Progress Bar */
 .progress-bar-container {
-  padding: 12px 24px;
+  padding: 14px 28px;
   background: var(--panel-bg);
   border-bottom: 1px solid var(--border);
 }
@@ -169,21 +204,31 @@ body {
   gap: 12px;
 }
 
-.time-display { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; min-width: 45px; }
+.time-display {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 45px;
+  font-weight: 600;
+}
 
 .progress-track {
   flex: 1;
-  height: 6px;
-  background: var(--border);
-  border-radius: 3px;
+  height: 12px;
+  background:
+    repeating-linear-gradient(90deg, rgba(91,110,225,0.12) 0 2px, transparent 2px 8px),
+    var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
   cursor: pointer;
   position: relative;
+  overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: var(--accent);
-  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--audio-accent));
+  border-radius: 999px;
   transition: width 0.1s;
   position: relative;
 }
@@ -192,13 +237,13 @@ body {
   content: '';
   position: absolute;
   right: -6px;
-  top: -5px;
+  top: -4px;
   width: 16px;
   height: 16px;
-  background: var(--accent);
+  background: var(--audio-accent);
   border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  border: 2px solid var(--reader-bg);
+  box-shadow: 0 3px 10px rgba(91,110,225,0.28);
   opacity: 0;
   transition: opacity 0.2s;
 }
@@ -216,7 +261,7 @@ body {
 
 /* Mode Tabs */
 .mode-section {
-  padding: 16px 24px;
+  padding: 14px 28px;
   background: var(--panel-bg);
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -225,32 +270,41 @@ body {
   flex-wrap: wrap;
 }
 
-.mode-label { font-size: 13px; color: var(--text-muted); }
+.mode-label { font-size: 13px; color: var(--text-muted); font-weight: 600; }
 
-.mode-tabs { display: flex; gap: 4px; }
+.mode-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  border-radius: 999px;
+}
 
 .mode-tab {
-  padding: 6px 16px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  padding: 7px 15px;
+  border: 1px solid transparent;
+  border-radius: 999px;
   font-size: 13px;
   cursor: pointer;
-  background: #fff;
+  background: transparent;
   color: var(--text);
   transition: all 0.2s;
+  font-weight: 600;
 }
 
 .mode-tab.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
+  background: var(--reader-bg);
+  color: var(--accent-hover);
+  border-color: rgba(47,142,135,0.18);
+  box-shadow: var(--shadow-control);
 }
 
-.mode-tab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+.mode-tab:hover:not(.active) { color: var(--accent); }
 
 /* Controls */
 .controls {
-  padding: 16px 24px;
+  padding: 14px 28px;
   background: var(--panel-bg);
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -258,12 +312,14 @@ body {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 8px;
+  position: relative;
+  z-index: 2;
 }
 
 .ctrl-group {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .ctrl-btn {
@@ -271,37 +327,46 @@ body {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 8px 14px;
+  padding: 8px 13px;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  background: #fff;
+  border-radius: 9px;
+  background: var(--reader-bg);
   color: var(--text);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
+  box-shadow: var(--shadow-control);
+  font-weight: 600;
 }
 
-.ctrl-btn:hover { border-color: var(--accent); color: var(--accent); }
+.ctrl-btn:hover {
+  border-color: rgba(47,142,135,0.42);
+  color: var(--accent-hover);
+  background: #fff;
+}
 
 .ctrl-btn.primary {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--audio-accent));
   color: #fff;
-  border-color: var(--accent);
-  min-width: 44px;
+  border-color: transparent;
+  min-width: 48px;
+  min-height: 38px;
 }
 
-.ctrl-btn.primary:hover { background: var(--accent-hover); }
+.ctrl-btn.primary:hover { color: #fff; filter: brightness(0.96); }
 
 .ctrl-btn svg { width: 16px; height: 16px; }
 
 .speed-select {
   padding: 8px 12px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 9px;
   font-size: 13px;
-  background: #fff;
+  background: var(--reader-bg);
   cursor: pointer;
+  color: var(--text);
+  font-weight: 600;
 }
 
 .ctrl-inline-label {
@@ -313,18 +378,20 @@ body {
 .toggle-group { display: flex; gap: 4px; }
 
 .toggle-btn {
-  padding: 8px 14px;
+  padding: 8px 13px;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  background: #fff;
+  border-radius: 9px;
+  background: var(--reader-bg);
   font-size: 13px;
   cursor: pointer;
   color: var(--text-muted);
   transition: all 0.15s;
+  box-shadow: var(--shadow-control);
+  font-weight: 600;
 }
 
 .toggle-btn.on {
-  background: #dbeafe;
+  background: var(--accent-soft);
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -333,14 +400,25 @@ body {
 .content-area {
   flex: 1;
   overflow-y: auto;
-  padding: 32px 24px;
+  padding: 48px 28px 56px;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  background:
+    linear-gradient(90deg, rgba(227,217,203,0.32) 1px, transparent 1px) 0 0 / 42px 42px,
+    var(--bg);
 }
 
 .dictation-box {
-  max-width: 800px;
+  max-width: 860px;
   width: 100%;
+  min-height: 248px;
+  background: var(--reader-bg);
+  border: 1px solid rgba(207,194,177,0.78);
+  border-radius: 16px;
+  padding: 40px 40px 32px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow-soft);
 }
 
 /* Sentence display */
@@ -353,20 +431,29 @@ body {
 
 /* Dictation input area */
 .dictation-area {
-  font-size: 20px;
-  line-height: 2.2;
-  word-spacing: 4px;
+  font-family: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+  font-size: 21px;
+  line-height: 2.05;
+  word-spacing: 5px;
+  color: #2c261f;
+  min-height: 148px;
+  padding: 10px 6px 28px;
+  overflow-wrap: anywhere;
 }
 
 .dictation-area .word-slot {
-  display: inline-block;
-  min-width: 60px;
-  border-bottom: 2px solid var(--border);
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 64px;
+  min-height: 38px;
+  border-bottom: 2px solid var(--border-strong);
   text-align: center;
-  margin: 0 2px;
-  padding: 0 4px;
+  margin: 0 3px 8px;
+  padding: 0 5px 3px;
   transition: border-color 0.2s;
-  vertical-align: bottom;
+  vertical-align: baseline;
+  background: linear-gradient(180deg, transparent 62%, rgba(91,110,225,0.08) 0);
 }
 
 .dictation-area .word-slot:focus-within {
@@ -375,18 +462,21 @@ body {
 
 .dictation-area .word-visible {
   display: inline;
-  margin: 0 1px;
+  margin: 0 2px;
 }
 
 .dictation-area input {
   border: none;
   outline: none;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", sans-serif;
   font-size: 18px;
   text-align: center;
   width: 100%;
+  height: 30px;
+  line-height: 30px;
   background: transparent;
-  color: var(--accent);
-  font-weight: 500;
+  color: var(--audio-accent);
+  font-weight: 650;
 }
 
 .dictation-area input.correct {
@@ -399,17 +489,28 @@ body {
 
 /* 原文 / 译文显示 */
 .original-text {
-  font-size: 18px;
-  line-height: 1.8;
+  font-family: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+  font-size: 19px;
+  line-height: 1.95;
   color: var(--text);
+  margin-top: 22px;
   margin-bottom: 12px;
+  padding: 18px 20px;
+  background: #fbf3df;
+  border-left: 3px solid #d9a44a;
+  border-radius: 10px;
   display: none;
 }
 
 .translation-text {
   font-size: 15px;
   color: var(--text-muted);
-  line-height: 1.6;
+  line-height: 1.75;
+  margin-top: 12px;
+  padding: 14px 18px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 10px;
   display: none;
 }
 
@@ -418,9 +519,10 @@ body {
 /* Score bar */
 .score-bar {
   margin-top: 24px;
-  padding: 16px;
-  background: #f8fafc;
-  border-radius: 8px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, var(--accent-soft), var(--audio-soft));
+  border: 1px solid rgba(47,142,135,0.18);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -437,11 +539,11 @@ body {
 
 /* Error summary box */
 .error-summary-box {
-  margin-top: 16px;
-  padding: 14px 16px;
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  border-radius: 8px;
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: #fff8e9;
+  border: 1px solid #ead4a8;
+  border-radius: 12px;
 }
 
 .error-summary-box .esb-header {
@@ -454,7 +556,7 @@ body {
 .error-summary-box .esb-title {
   font-size: 14px;
   font-weight: 600;
-  color: #92400e;
+  color: #7b5519;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -472,14 +574,14 @@ body {
 .error-summary-box textarea {
   width: 100%;
   min-height: 72px;
-  padding: 10px 12px;
-  border: 1px solid #fde68a;
-  border-radius: 6px;
+  padding: 11px 12px;
+  border: 1px solid #e8d1a0;
+  border-radius: 9px;
   font-family: inherit;
   font-size: 14px;
   line-height: 1.6;
   resize: vertical;
-  background: #fff;
+  background: #fffdf8;
   color: var(--text);
   outline: none;
   transition: border-color 0.15s;
@@ -495,8 +597,8 @@ body {
 
 /* Keyboard shortcuts help */
 .shortcuts-help {
-  padding: 8px 24px;
-  background: #f8fafc;
+  padding: 10px 28px;
+  background: #eee7dc;
   border-top: 1px solid var(--border);
   font-size: 12px;
   color: var(--text-muted);
@@ -507,17 +609,18 @@ body {
 
 .shortcuts-help kbd {
   display: inline-block;
-  padding: 1px 6px;
-  background: #fff;
+  padding: 2px 6px;
+  background: var(--reader-bg);
   border: 1px solid var(--border);
-  border-radius: 3px;
+  border-radius: 5px;
   font-family: inherit;
   font-size: 11px;
+  color: var(--text);
 }
 
 /* Difficulty slider */
 .difficulty-section {
-  padding: 12px 24px;
+  padding: 12px 28px;
   background: var(--panel-bg);
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -532,11 +635,12 @@ body {
 
 .difficulty-slider {
   width: 100%;
-  height: 6px;
+  height: 8px;
   -webkit-appearance: none;
   appearance: none;
-  background: var(--border);
-  border-radius: 3px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
   outline: none;
   margin-bottom: 4px;
 }
@@ -546,10 +650,10 @@ body {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--audio-accent);
   cursor: pointer;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  border: 2px solid var(--reader-bg);
+  box-shadow: 0 3px 10px rgba(91,110,225,0.22);
 }
 
 .difficulty-labels {
@@ -573,6 +677,11 @@ body {
   .sentence-list { display: flex; overflow-x: auto; overflow-y: hidden; padding: 8px; gap: 4px; }
   .sentence-item { white-space: nowrap; padding: 8px 12px; }
   .controls { justify-content: center; }
+  .topbar, .progress-bar-container, .mode-section, .controls, .shortcuts-help { padding-left: 16px; padding-right: 16px; }
+  .content-area { padding: 36px 14px 44px; }
+  .dictation-box { min-height: 214px; padding: 34px 18px 28px; border-radius: 12px; margin-bottom: 28px; }
+  .dictation-area { font-size: 19px; line-height: 1.95; min-height: 142px; padding: 8px 2px 28px; }
+  .dictation-area .word-slot { min-width: 54px; min-height: 34px; margin-bottom: 7px; }
 }
 </style>
 </head>
@@ -676,7 +785,7 @@ body {
         </div>
         <div class="error-summary-box" id="errorSummaryBox">
           <div class="esb-header">
-            <div class="esb-title">📝 本句错因总结</div>
+            <div class="esb-title">本句错因总结</div>
             <span class="esb-status" id="errorSummaryStatus"></span>
           </div>
           <textarea id="errorSummaryInput" placeholder="例：连读没听出来 / 单词不认识 / 数字混淆 / 同义替换没反应过来 ..."></textarea>
