@@ -383,6 +383,39 @@ def ensure_legacy_schema() -> None:
 
     if "task" in tables:
         columns = {col["name"] for col in inspector.get_columns("task")}
+        legacy_task_columns = {
+            "completion_rate": "FLOAT",
+            "question_ids": "TEXT",
+            "dictation_mode": "VARCHAR(20) DEFAULT 'audio_to_en'",
+            "dictation_word_start": "INTEGER DEFAULT 1",
+            "dictation_word_end": "INTEGER",
+            "speaking_book_id": "INTEGER",
+            "speaking_phrase_start": "INTEGER DEFAULT 1",
+            "speaking_phrase_end": "INTEGER",
+            "grading_mode": "VARCHAR(50) DEFAULT 'image'",
+            "student_submitted": "BOOLEAN DEFAULT 0",
+            "submitted_at": "DATETIME",
+            "evidence_photos": "TEXT",
+            "student_note": "TEXT",
+            "feedback_text": "TEXT",
+            "feedback_audio": "VARCHAR(200)",
+            "feedback_image": "VARCHAR(200)",
+            "listening_exercise_id": "VARCHAR(120)",
+            "listening_access_token": "VARCHAR(64)",
+        }
+        for column_name, column_type in legacy_task_columns.items():
+            if column_name in columns:
+                continue
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(f"ALTER TABLE task ADD COLUMN {column_name} {column_type}")
+                    )
+                columns.add(column_name)
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                current_app.logger.warning(
+                    "Failed to add %s to task table: %s", column_name, exc
+                )
         if "completion_rate" not in columns:
             try:
                 with db.engine.begin() as conn:
@@ -2596,9 +2629,6 @@ def bulk_page():
                            today=date.today().isoformat(),
                            preview=preview,
                            msg=msg)
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
 # ---- 学生任务汇总报告 ----
 
