@@ -182,11 +182,18 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
                 borrow_idx += 1
             anchor_len = min(6, len(anchor_words))
         else:
-            # 大窗口（200 词）：IELTS 在 conversation 之间会插入
-            # "Now look at questions 5 to 10" 之类的 announcement（30-50 词）
-            # 加上 30s 静默期间没有词，下一句的 anchor 词会在窗口外。
-            # 旧值 20 导致后半段所有句子全部丢失或错位。
-            search_range = min(200, len(words) - word_idx)
+            # 窗口大小按 anchor 长度缩放：
+            # - 长 anchor (>=5 词)：200 词窗口能跨过 IELTS 题间 announcement
+            # - 中 anchor (3-4 词)：80 词，避免公共词 ("right"/"OK") 随机匹配
+            # - 短 anchor (1-2 词)：30 词，几乎没法可靠 anchor，限制漂移范围
+            anchor_len_real = len(sent_words)
+            if anchor_len_real >= 5:
+                max_window = 200
+            elif anchor_len_real >= 3:
+                max_window = 80
+            else:
+                max_window = 30
+            search_range = min(max_window, len(words) - word_idx)
             anchor_words = sent_words
             anchor_len = min(5, len(sent_words))
 
@@ -224,7 +231,12 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
                 # 大窗口下要求至少匹配一定阈值的 anchor 词，否则视为
                 # "当前句子在 announcement 期内/Whisper 漏词"，保守续写
                 # 在上一句结尾后约 1s（不漂到无关位置）。
-                min_required = max(1, anchor_len // 2)
+                # 关键：阈值必须 >=2（除非 anchor 只有 1 词），单词匹配
+                # 太容易在公共词上 false-positive 导致逐句累积漂移。
+                if anchor_len <= 1:
+                    min_required = 1
+                else:
+                    min_required = max(2, (anchor_len + 1) // 2)
                 if max_score >= min_required:
                     best_start_idx = next(ci for ci, s in scored if s == max_score)
                 else:
@@ -235,34 +247,42 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
         if idx == 0 and best_score < 2:
             print(f"  [warn] first-sentence anchor weak (score={best_score}); using t=0 fallback")
 
-        # 词数耗尽：Whisper 漏转录尾部内容（base 模型在静默/低能量段易丢词）。
-        # 旧版 break，导致丢掉后面所有句子。改为：把剩下的句子均匀分布在
-        # [上一句结尾, 音频实际结尾]，学生点击后能听到对应区间内的真实音频。
+        # 词数耗尽：Whisper 漏转录尾部内容（在 IELTS 题间静默/低能量段易丢词）。
+        # 改为：把剩下的句子均匀分布在 [扩展后的起点, 音频实际结尾]，
+        # 学生点击后能听到对应区间内的真实音频。
         if best_start_idx >= len(words):
             prev_end = segments[-1]["end"] if segments else (words[-1]["end"] if words else 0)
-            remaining = len(effective) - eff_pos  # 包含当前句
-            # 留 0.5s 缓冲不撞到音频末尾
-            tail_end = max(prev_end + remaining * 1.5, audio_duration - 0.3) if audio_duration else prev_end + remaining * 2.0
-            slot = max(1.0, (tail_end - prev_end) / max(1, remaining))
-            start_time = prev_end + slot * 0  # 第一句紧接 prev_end
-            end_time = start_time + slot
-            segments.append(
-                {
-                    "id": idx + 1,
-                    "start": round(start_time, 2),
-                    "end": round(end_time, 2),
-                    "text": sentence,
-                }
-            )
-            # 余下的句子继续按 slot 推进
-            cursor = end_time
-            for tail_idx in range(eff_pos + 1, len(effective)):
+            remaining = len(effective) - eff_pos
+            min_slot = 2.0  # 每句至少 2s 播放窗口，否则学生听不清
+
+            if audio_duration:
+                hard_end = audio_duration - 0.05
+                # 始终给尾部预留至少 N*min_slot 或 10s（取较大者）。
+                # 上一句的 anchor 即使已经接近音频末尾也允许往回 rewind，
+                # 否则会出现 10 个 fallback 句全部 start=同一时刻、互相覆盖
+                # 同 0.5s 音频的问题。少量与已对齐句子的 overlap 是可以接受的
+                # （音频在那段时间确实有对话，学生听到正确内容）。
+                if prev_end > hard_end:
+                    prev_end = hard_end
+                needed = max(remaining * min_slot, 10.0)
+                prev_end = max(0.0, min(prev_end, hard_end - needed))
+                slot = (hard_end - prev_end) / max(1, remaining)
+                slot = max(min_slot, slot)
+                last_valid_start = hard_end - 0.5
+            else:
+                slot = min_slot
+                last_valid_start = prev_end + remaining * slot
+
+            cursor = prev_end
+            for tail_idx in range(eff_pos, len(effective)):
                 t_idx, t_sent = effective[tail_idx]
+                seg_start = min(cursor, last_valid_start)
+                seg_end = seg_start + slot
                 segments.append(
                     {
                         "id": t_idx + 1,
-                        "start": round(cursor, 2),
-                        "end": round(min(cursor + slot, tail_end), 2),
+                        "start": round(seg_start, 2),
+                        "end": round(seg_end, 2),
                         "text": t_sent,
                     }
                 )
@@ -279,6 +299,14 @@ def align_with_model(model, audio_path: Path, sentences: list[str]) -> list[dict
             start_time = words[best_start_idx]["start"]
             end_idx = min(best_start_idx + len(sent_words), len(words)) - 1
             end_time = words[end_idx]["end"] if end_idx < len(words) else start_time + 5
+        # Whisper 偶尔给最后几个词 timestamp 超过音频实际长度（hallucinated tail）。
+        # 必须 clamp，否则 fallback 分支会从过界的 prev_end 继续往后排，
+        # 导致后续所有 segment 落在音频范围之外，播放器找不到位置就停。
+        if audio_duration:
+            cap = audio_duration - 0.05
+            if start_time > cap: start_time = cap
+            if end_time > cap: end_time = cap
+            if end_time < start_time: end_time = start_time
         segments.append(
             {
                 "id": idx + 1,
