@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ test.title }} - 听力整套练习</title>
+<style>
+:root {
+  /* 与全局 brand token 对齐：sage 主色保持一致，其余保留 paper 主题特色 */
+  --sage: #2F8E87;
+  --sage-deep: #277C78;
+  --sage-soft: #E5F4F2;
+  --ink: #1d1615;
+  --paper: #fffdf8;
+  --canvas: #f4f3ed;
+  --line: #dedbd0;
+  --muted: #64748b;
+  --warm: #f2eadc;
+  --error: #dc2626;
+  --success: #16a34a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(35,140,135,.10), transparent 28%),
+    linear-gradient(180deg, #fbfaf6 0%, var(--canvas) 100%);
+  color: var(--ink);
+  padding-bottom: 76px;
+}
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(255,253,248,.96);
+  border-bottom: 1px solid rgba(18,100,95,.16);
+  box-shadow: 0 10px 28px rgba(29,22,21,.07);
+  backdrop-filter: blur(14px);
+}
+.topbar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 480px);
+  gap: 18px;
+  align-items: center;
+}
+.brand-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.brand-mark {
+  width: 58px;
+  height: 48px;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 8px 18px rgba(18,100,95,.18));
+}
+.brand-mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.crumb {
+  color: var(--sage);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
+.meta { margin-top: 6px; color: var(--muted); font-size: 13px; }
+audio { width: 100%; display: block; }
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+}
+.tab {
+  border: none;
+  background: transparent;
+  padding: 12px 14px;
+  color: var(--muted);
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+.tab.active { color: var(--sage-deep); border-bottom-color: var(--sage); }
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 16px;
+  align-items: start;
+}
+body.result-mode .layout {
+  grid-template-columns: 340px minmax(0, 1fr) 260px;
+}
+.panel { display: none; }
+.panel.active { display: block; }
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 10px 26px rgba(29,22,21,.045);
+}
+.section-head {
+  padding: 18px;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.section-head::after,
+.group::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.section-head::after {
+  right: 18px;
+  top: 18px;
+  width: 58px;
+  height: 44px;
+  border-radius: 44% 56% 50% 50% / 56% 42% 58% 44%;
+  background: linear-gradient(135deg, rgba(35,140,135,.18), rgba(35,140,135,.04));
+  transform: rotate(-8deg);
+}
+.section-head h2 { margin: 0 0 8px; font-size: 20px; }
+.type-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.type-badge {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--sage-soft);
+  color: var(--sage-deep);
+  font-size: 12px;
+  font-weight: 800;
+}
+.group {
+  padding: 28px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.group::before {
+  right: -48px;
+  top: -36px;
+  width: 170px;
+  height: 126px;
+  border-radius: 48% 52% 44% 56% / 56% 44% 56% 44%;
+  background:
+    radial-gradient(circle at 28% 45%, rgba(255,255,255,.88) 0 3px, transparent 4px),
+    linear-gradient(135deg, rgba(35,140,135,.10), rgba(35,140,135,.02));
+  transform: rotate(-10deg);
+}
+.group h3 { margin: 0 0 18px; font-size: 22px; text-align: center; }
+.desc {
+  white-space: pre-line;
+  color: #202020;
+  line-height: 1.65;
+  margin-bottom: 22px;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 650;
+}
+.question-title {
+  margin: 10px 0;
+  font-weight: 900;
+}
+.collect {
+  line-height: 2.1;
+  color: #202020;
+  font-size: 17px;
+}
+.collect b { color: #0f172a; }
+.collect .example {
+  color: var(--muted);
+  text-decoration: underline;
+}
+.question-image {
+  display: block;
+  max-width: 100%;
+  margin: 12px 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+.question {
+  padding: 13px 0;
+  border-top: 1px solid rgba(222,219,208,.8);
+}
+.q-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+.q-title { font-weight: 850; line-height: 1.5; }
+.answer-input {
+  min-width: 118px;
+  height: 38px;
+  border: 1px solid #b8b5aa;
+  border-radius: 4px;
+  padding: 0 10px;
+  font-size: 14px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: inset 0 1px 0 rgba(0,0,0,.04);
+}
+.answer-input:focus {
+  outline: 2px solid rgba(35,140,135,.20);
+  border-color: var(--sage);
+}
+.inline-answer {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 4px;
+  vertical-align: middle;
+}
+.choice {
+  display: block;
+  margin: 8px 0;
+  color: #334155;
+  line-height: 1.45;
+}
+.choice input { margin-right: 8px; }
+.seek-btn,
+.ghost-btn {
+  border: 1px solid rgba(35,140,135,.24);
+  background: var(--sage-soft);
+  color: var(--sage-deep);
+  border-radius: 999px;
+  padding: 6px 9px;
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.side {
+  position: sticky;
+  top: 108px;
+  padding: 16px;
+}
+.side h3 { margin: 0 0 10px; font-size: 16px; }
+.stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(222,219,208,.8);
+  color: var(--muted);
+  font-size: 14px;
+}
+.stat strong { color: var(--ink); }
+.submit-btn {
+  width: 100%;
+  height: 44px;
+  margin-top: 14px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--sage) 0%, var(--sage-deep) 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(18,100,95,.22);
+}
+.result-box {
+  margin-top: 14px;
+  padding: 13px;
+  border-radius: 14px;
+  background: #f8f5ee;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.answer-note {
+  display: none;
+  margin-top: 8px;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.show-answers .answer-note { display: block; }
+.answer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 7px 9px;
+  border: 1px solid rgba(35,140,135,.22);
+  border-radius: 999px;
+  background: #f6fbfa;
+}
+.answer-pill strong {
+  color: var(--success);
+}
+.answer-action {
+  border: none;
+  background: transparent;
+  color: #3b82f6;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.answer-action:hover { color: var(--sage-deep); }
+.note-box {
+  display: none;
+  margin-top: 8px;
+}
+.note-box textarea {
+  width: 100%;
+  min-height: 72px;
+  resize: vertical;
+  border: 1px solid rgba(35,140,135,.24);
+  border-radius: 12px;
+  padding: 10px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+.note-box.is-open { display: block; }
+.is-correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.is-wrong { border-color: var(--error) !important; background: #fff1f2 !important; }
+.analysis {
+  display: none;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f8f5ee;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+.show-answers .analysis { display: block; }
+.back-link {
+  color: var(--sage-deep);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+.transcript-panel {
+  display: none;
+  position: sticky;
+  top: 108px;
+  max-height: calc(100vh - 146px);
+  overflow: auto;
+  padding: 16px;
+}
+body.result-mode .transcript-panel { display: block; }
+.transcript-panel h3 {
+  margin: 0 0 12px;
+  color: var(--sage-deep);
+  font-size: 16px;
+}
+.transcript-row {
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(222,219,208,.75);
+}
+.transcript-en {
+  margin: 0 0 5px;
+  color: var(--ink);
+  font-weight: 750;
+  line-height: 1.45;
+}
+.transcript-cn {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  background: rgba(255,253,248,.96);
+  border-top: 1px solid rgba(18,100,95,.16);
+  box-shadow: 0 -12px 28px rgba(29,22,21,.08);
+  backdrop-filter: blur(14px);
+}
+.bottom-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.bottom-brand {
+  color: var(--muted);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.question-nav {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.q-chip {
+  min-width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 10px;
+  font-weight: 850;
+  cursor: pointer;
+}
+.q-chip.is-active {
+  border-color: var(--sage);
+  background: var(--sage-soft);
+  color: var(--sage-deep);
+}
+.q-chip.is-filled {
+  border-color: rgba(35,140,135,.35);
+  box-shadow: inset 0 -3px 0 rgba(35,140,135,.22);
+}
+.q-chip.is-right { background: #ecfdf3; border-color: var(--success); color: var(--success); }
+.q-chip.is-wrong { background: #fff1f2; border-color: var(--error); color: var(--error); }
+@media (max-width: 900px) {
+  .topbar-inner { grid-template-columns: 1fr; }
+  .layout,
+  body.result-mode .layout { grid-template-columns: 1fr; }
+  .side,
+  .transcript-panel { position: static; max-height: none; }
+}
+@media (max-width: 640px) {
+  .page { padding: 14px; }
+  .topbar-inner { padding: 12px 14px; }
+  h1 { font-size: 19px; }
+  .brand-mark { width: 50px; height: 42px; }
+  .group { padding: 18px; }
+  .bottom-inner { padding: 9px 12px; }
+  .bottom-brand { display: none; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-line">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 96 76" role="img">
+          <defs>
+            <linearGradient id="sageMarkGradient" x1="10" y1="12" x2="86" y2="68">
+              <stop offset="0" stop-color="#40A6A0"/>
+              <stop offset="1" stop-color="#277C78"/>
+            </linearGradient>
+          </defs>
+          <path d="M52 4C70 8 87 29 91 48c4 20-12 25-35 25S7 69 6 52C5 36 34 0 52 4Z" fill="url(#sageMarkGradient)"/>
+          <path d="M24 52c3-21 27-37 49-31 14 4 14 19 2 27-9 6-16 7-23 1" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+          <path d="M34 57c4-17 20-31 41-31" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+          <path d="M68 33c-10 8-13 18 2 25" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+          <path d="M21 29l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z" fill="#fff"/>
+        </svg>
+      </div>
+      <div>
+        <div class="crumb">Sage Path · Listening</div>
+        <h1>{{ test.title }}</h1>
+        <div class="meta">
+          4 个 Section · 40 题 · 数据源 {{ test.source }}
+          · <a class="back-link" href="{{ url_for('listening_index') }}">返回精听列表</a>
+        </div>
+      </div>
+    </div>
+    <audio id="audio" controls preload="metadata"></audio>
+  </div>
+</header>
+
+<main class="page">
+  <nav class="tabs" id="sectionTabs" aria-label="Section"></nav>
+  <div class="layout">
+    <aside class="card transcript-panel" id="transcriptPanel"></aside>
+    <div id="sectionsRoot"></div>
+    <aside class="card side">
+      <h3>整套判分</h3>
+      <div class="stat"><span>Section</span><strong id="activeSectionLabel">-</strong></div>
+      <div class="stat"><span>题目数</span><strong id="questionCount">40</strong></div>
+      <div class="stat"><span>已填写</span><strong id="answeredCount">0</strong></div>
+      <button class="submit-btn" id="submitBtn">提交并判分</button>
+      <div class="result-box" id="resultBox">填写后可按 IELTS 听力 40 题查看得分。</div>
+    </aside>
+  </div>
+</main>
+
+<footer class="bottom-nav">
+  <div class="bottom-inner">
+    <div class="bottom-brand">睿然国际教育</div>
+    <div class="question-nav" id="questionNav"></div>
+  </div>
+</footer>
+
+<script>
+const test = {{ test|tojson }};
+const audio = document.getElementById('audio');
+const audioBase = "{{ url_for('static', filename='listening/') }}";
+const storageKey = `listening_test_answers_${test.id}_${localStorage.getItem('listening_student') || 'guest'}`;
+const noteStorageKey = `listening_test_error_notes_${test.id}_${localStorage.getItem('listening_student') || 'guest'}`;
+let activeSectionIndex = 0;
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function richText(value) {
+  return escapeHtml(value)
+    .replace(/&lt;b&gt;/g, '<b>')
+    .replace(/&lt;\/b&gt;/g, '</b>')
+    .replace(/&lt;iu&gt;/g, '<span class="example">')
+    .replace(/&lt;\/iu&gt;/g, '</span>')
+    .replace(/&amp;nbsp;/g, '&nbsp;')
+    .replace(/\n/g, '<br>');
+}
+
+function usableImage(url) {
+  return /^https?:\/\//.test(url || '') && !/aliyuncs\.com\/?$/.test(url || '');
+}
+
+function imageSrc(group) {
+  if (group.img_local) return "{{ url_for('static', filename='') }}" + group.img_local;
+  return usableImage(group.img_url) ? group.img_url : '';
+}
+
+function normalizeText(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/[.,!?;:，。！？；：]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+function splitAlternatives(answer) {
+  return String(answer || '')
+    .split(/\s*\/\s*/)
+    .map(normalizeText)
+    .filter(Boolean);
+}
+
+function splitLetters(answer) {
+  return String(answer || '')
+    .split(/\s*[,/]\s*/)
+    .map(v => v.trim().toUpperCase())
+    .filter(Boolean);
+}
+
+function formatClock(seconds) {
+  const total = Math.max(0, Math.floor(Number(seconds || 0)));
+  const minutes = Math.floor(total / 60);
+  const rest = String(total % 60).padStart(2, '0');
+  return `${minutes}:${rest}`;
+}
+
+function seekTo(sectionIndex, seconds) {
+  switchSection(sectionIndex, false);
+  const target = Number(seconds || 0);
+  const applySeek = () => {
+    audio.currentTime = target;
+    audio.play().catch(() => {});
+  };
+  if (audio.readyState >= 1) {
+    applySeek();
+  } else {
+    audio.addEventListener('loadedmetadata', applySeek, { once: true });
+  }
+}
+
+function allQuestions() {
+  return test.sections.flatMap((section, sectionIndex) =>
+    (section.groups || []).flatMap(group =>
+      (group.questions || []).map(question => ({ ...question, sectionIndex }))
+    )
+  );
+}
+
+function inputName(question) {
+  return `q_${question.id || question.number}`;
+}
+
+function noteId(question) {
+  return `note_${question.id || question.number}`;
+}
+
+function getNotes() {
+  try { return JSON.parse(localStorage.getItem(noteStorageKey) || '{}') || {}; } catch (err) { return {}; }
+}
+
+function saveNote(questionId, value) {
+  const notes = getNotes();
+  notes[questionId] = value;
+  localStorage.setItem(noteStorageKey, JSON.stringify(notes));
+}
+
+function toggleNote(questionId) {
+  const box = document.getElementById(`note_box_${questionId}`);
+  if (!box) return;
+  box.classList.toggle('is-open');
+  const textarea = box.querySelector('textarea');
+  if (textarea && box.classList.contains('is-open')) textarea.focus();
+}
+
+function answerTools(question, sectionIndex) {
+  const id = escapeHtml(question.id || question.number);
+  const saved = escapeHtml(getNotes()[question.id || question.number] || '');
+  const seek = question.start
+    ? `<button class="answer-action" type="button" onclick="seekTo(${sectionIndex}, ${Number(question.start)})">定位 ${formatClock(question.start)}</button>`
+    : '';
+  return `
+    <div class="answer-note">
+      <span class="answer-pill">
+        Q${escapeHtml(question.number)} 答案：<strong>${escapeHtml(question.answer || '')}</strong>
+        ${seek}
+        <button class="answer-action" type="button" onclick="toggleNote('${id}')">错因笔记</button>
+      </span>
+      <div class="note-box" id="note_box_${id}">
+        <textarea placeholder="记录本题错因：没听出连读 / 单词不认识 / 地图方向混淆..." oninput="saveNote('${id}', this.value)">${saved}</textarea>
+      </div>
+    </div>
+  `;
+}
+
+function controlForQuestion(question, sectionIndex, inline = false) {
+  const answer = escapeHtml(question.answer || '');
+  const qn = escapeHtml(question.number);
+  const baseAttrs = `data-q="${qn}" data-answer="${answer}" data-section="${sectionIndex}" data-id="${escapeHtml(question.id || question.number)}"`;
+
+  if (question.options && question.options.length) {
+    return `
+      <div class="answer-unit" data-kind="radio" ${baseAttrs}>
+        ${question.options.map(option => `
+          <label class="choice">
+            <input type="radio" name="${inputName(question)}" value="${escapeHtml(option.title)}">
+            ${escapeHtml(option.title)}. ${escapeHtml(option.content)}
+          </label>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  return `
+    <span class="${inline ? 'inline-answer' : ''}">
+      <input class="answer-input answer-unit" data-kind="text" ${baseAttrs} placeholder="Q${qn}">
+    </span>
+  `;
+}
+
+function renderCollect(group, sectionIndex) {
+  const byId = new Map((group.questions || []).map(q => [String(q.id), q]));
+  const raw = String(group.collect || '');
+  let html = '';
+  let last = 0;
+  raw.replace(/\$([^$\s]+)\$/g, (match, id, offset) => {
+    html += richText(raw.slice(last, offset));
+    const question = byId.get(String(id));
+    html += question ? controlForQuestion(question, sectionIndex, true) : '____';
+    last = offset + match.length;
+    return match;
+  });
+  html += richText(raw.slice(last));
+  return html;
+}
+
+function renderQuestion(question, sectionIndex) {
+  const seek = question.start
+    ? `<button class="seek-btn" type="button" onclick="seekTo(${sectionIndex}, ${Number(question.start)})">定位音频</button>`
+    : '';
+  return `
+    <div class="question">
+      <div class="q-head">
+        <div class="q-title">Q${escapeHtml(question.number)}. ${richText(question.title || '')}</div>
+        ${seek}
+      </div>
+      ${controlForQuestion(question, sectionIndex)}
+      ${answerTools(question, sectionIndex)}
+      ${question.analysis ? `<div class="analysis">${escapeHtml(question.analysis)}</div>` : ''}
+    </div>
+  `;
+}
+
+function renderGroup(group, sectionIndex) {
+  const hasCollect = Boolean(group.collect);
+  const img = imageSrc(group);
+  return `
+    <article class="card group">
+      ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ''}
+      ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ''}
+      ${group.question_title ? `<div class="question-title">${escapeHtml(group.question_title)}</div>` : ''}
+      ${img ? `<img class="question-image" src="${escapeHtml(img)}" alt="Question image">` : ''}
+      ${hasCollect ? `<div class="collect">${renderCollect(group, sectionIndex)}</div>` : ''}
+      ${!hasCollect ? (group.questions || []).map(q => renderQuestion(q, sectionIndex)).join('') : ''}
+      ${hasCollect ? (group.questions || []).map(q => `
+        ${answerTools(q, sectionIndex)}
+        ${q.analysis ? `<div class="analysis">Q${escapeHtml(q.number)}：${escapeHtml(q.analysis)}</div>` : ''}
+      `).join('') : ''}
+    </article>
+  `;
+}
+
+function renderSection(section, sectionIndex) {
+  return `
+    <section class="panel ${sectionIndex === 0 ? 'active' : ''}" data-section-index="${sectionIndex}">
+      <div class="card section-head">
+        <h2>${escapeHtml(section.title)} · ${escapeHtml(section.question_name)}</h2>
+        <div class="type-badges">
+          ${(section.question_type || []).map(type => `<span class="type-badge">${escapeHtml(type)}</span>`).join('')}
+        </div>
+      </div>
+      ${(section.groups || []).map(group => renderGroup(group, sectionIndex)).join('')}
+    </section>
+  `;
+}
+
+function switchSection(index, scroll = true) {
+  activeSectionIndex = index;
+  document.querySelectorAll('.tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
+  document.querySelectorAll('.panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
+  const section = test.sections[index];
+  if (section && !audio.src.endsWith(section.audio)) {
+    audio.src = audioBase + section.audio;
+  }
+  document.getElementById('activeSectionLabel').textContent = section ? `Section ${section.section}` : '-';
+  renderTranscript(section);
+  syncQuestionNav();
+  if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function unitValue(unit) {
+  if (unit.dataset.kind === 'radio') {
+    const checked = unit.querySelector('input:checked');
+    return checked ? checked.value : '';
+  }
+  return unit.value || '';
+}
+
+function markUnit(unit) {
+  const answer = unit.dataset.answer || '';
+  const value = unitValue(unit);
+  let correct = false;
+
+  if (/^[A-Z](\s*[,/]\s*[A-Z])*$/.test(answer.trim())) {
+    correct = splitLetters(answer).includes(String(value).trim().toUpperCase());
+  } else {
+    correct = splitAlternatives(answer).includes(normalizeText(value));
+  }
+
+  unit.classList.toggle('is-correct', correct);
+  unit.classList.toggle('is-wrong', !correct);
+  return { id: unit.dataset.id, q: unit.dataset.q, answer, value, correct };
+}
+
+function answerSnapshot() {
+  const rows = {};
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    rows[unit.dataset.id] = unitValue(unit);
+  });
+  return rows;
+}
+
+function saveAnswers() {
+  localStorage.setItem(storageKey, JSON.stringify(answerSnapshot()));
+  refreshAnsweredCount();
+  syncQuestionNav();
+}
+
+function restoreAnswers() {
+  let rows = {};
+  try { rows = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (err) { rows = {}; }
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    const value = rows[unit.dataset.id];
+    if (!value) return;
+    if (unit.dataset.kind === 'radio') {
+      const input = unit.querySelector(`input[value="${CSS.escape(value)}"]`);
+      if (input) input.checked = true;
+    } else {
+      unit.value = value;
+    }
+  });
+  refreshAnsweredCount();
+  syncQuestionNav();
+}
+
+function refreshAnsweredCount() {
+  const units = Array.from(document.querySelectorAll('.answer-unit'));
+  const answered = units.filter(unit => unitValue(unit).trim()).length;
+  document.getElementById('answeredCount').textContent = answered;
+}
+
+function renderTranscript(section) {
+  if (!section) return;
+  document.getElementById('transcriptPanel').innerHTML = `
+    <h3>Section ${escapeHtml(section.section)} 原文复盘</h3>
+    ${(section.transcript || []).map(row => `
+      <div class="transcript-row">
+        <p class="transcript-en">${escapeHtml(row.en || '')}</p>
+        ${row.cn ? `<p class="transcript-cn">${escapeHtml(row.cn)}</p>` : ''}
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderQuestionNav() {
+  document.getElementById('questionNav').innerHTML = allQuestions().map(question => `
+    <button class="q-chip" type="button" data-id="${escapeHtml(question.id || question.number)}" data-section="${question.sectionIndex}">
+      ${escapeHtml(question.number)}
+    </button>
+  `).join('');
+  document.querySelectorAll('.q-chip').forEach(button => {
+    button.addEventListener('click', () => {
+      const sectionIndex = Number(button.dataset.section || 0);
+      switchSection(sectionIndex);
+      const target = document.querySelector(`.answer-unit[data-id="${CSS.escape(button.dataset.id)}"]`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (target.matches('input')) target.focus({ preventScroll: true });
+      }
+    });
+  });
+}
+
+function syncQuestionNav(results = null) {
+  document.querySelectorAll('.q-chip').forEach(button => {
+    const target = document.querySelector(`.answer-unit[data-id="${CSS.escape(button.dataset.id)}"]`);
+    const filled = target && unitValue(target).trim();
+    button.classList.toggle('is-filled', Boolean(filled));
+    button.classList.toggle('is-active', Number(button.dataset.section) === activeSectionIndex);
+    if (results) {
+      const result = results.find(row => String(row.id) === String(button.dataset.id));
+      button.classList.toggle('is-right', Boolean(result && result.correct));
+      button.classList.toggle('is-wrong', Boolean(result && !result.correct));
+    }
+  });
+}
+
+function render() {
+  document.getElementById('sectionTabs').innerHTML = test.sections.map((section, index) => `
+    <button class="tab ${index === 0 ? 'active' : ''}" type="button" data-index="${index}">
+      Section ${escapeHtml(section.section)} · ${escapeHtml(section.question_name)}
+    </button>
+  `).join('');
+  document.getElementById('sectionsRoot').innerHTML = test.sections.map(renderSection).join('');
+  document.getElementById('questionCount').textContent = document.querySelectorAll('.answer-unit').length;
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => switchSection(Number(tab.dataset.index)));
+  });
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    unit.addEventListener('change', saveAnswers);
+    unit.addEventListener('input', saveAnswers);
+  });
+  renderQuestionNav();
+  restoreAnswers();
+  switchSection(0, false);
+}
+
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const units = Array.from(document.querySelectorAll('.answer-unit'));
+  const results = units.map(markUnit);
+  const correct = results.filter(row => row.correct).length;
+  const wrong = results.filter(row => !row.correct);
+  document.body.classList.add('show-answers');
+  document.body.classList.add('result-mode');
+  syncQuestionNav(results);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('submitBtn').textContent = '已提交，查看复盘';
+  document.getElementById('resultBox').innerHTML = `
+    <strong>${correct}/${results.length}</strong> · 正确率 ${results.length ? Math.round(correct / results.length * 100) : 0}%
+    ${wrong.length ? `<br>待核对：${wrong.slice(0, 16).map(row => `Q${escapeHtml(row.q)}`).join('、')}${wrong.length > 16 ? '…' : ''}` : '<br>全部正确'}
+  `;
+  saveAnswers();
+});
+
+render();
+</script>
+</body>
+</html>

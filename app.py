@@ -98,6 +98,14 @@ def _listening_root() -> Path:
     return Path(app.static_folder) / "listening"
 
 
+def _listening_jijing_root() -> Path:
+    return Path(app.static_folder) / "listening_jijing"
+
+
+def _listening_test_root() -> Path:
+    return Path(app.static_folder) / "listening_tests"
+
+
 def _load_listening_meta(exercise_id: str):
     safe_id = secure_filename(exercise_id)
     json_path = _listening_root() / f"{safe_id}.json"
@@ -4529,6 +4537,49 @@ def listening_index():
     # 已登录员工可以看到上传按钮
     show_upload = _role_can_manage_listening(current_user)
     return render_template("listening/index.html", exercises=exercises, show_upload=show_upload)
+
+
+@app.route("/listening/jijing")
+def listening_jijing_index():
+    """听力机经列表。"""
+    catalog_path = _listening_jijing_root() / "catalog.json"
+    if not catalog_path.exists():
+        return render_template("listening/jijing_index.html", catalog=None, books=[])
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    return render_template("listening/jijing_index.html", catalog=catalog, books=catalog.get("books") or [])
+
+
+@app.route("/listening/jijing/<part_id>")
+def listening_jijing_part(part_id):
+    """听力机经 Part 做题页。"""
+    safe_id = secure_filename(part_id)
+    part_path = _listening_jijing_root() / "parts" / f"{safe_id}.json"
+    if not part_path.exists():
+        return "机经练习不存在", 404
+    part = json.loads(part_path.read_text(encoding="utf-8"))
+    return render_template("listening/jijing_part.html", part=part)
+
+
+@app.route("/listening/test/<test_id>")
+def listening_test_practice(test_id):
+    """完整听力 Test 做题页。"""
+    safe_id = secure_filename(test_id)
+    test_path = _listening_test_root() / f"{safe_id}.json"
+    if not test_path.exists():
+        return "听力 Test 不存在", 404
+    test = json.loads(test_path.read_text(encoding="utf-8"))
+    return render_template("listening/test_practice.html", test=test)
+
+
+@app.route("/api/listening/test/<test_id>")
+def api_listening_test_practice(test_id):
+    """返回完整听力 Test 题目 JSON。"""
+    safe_id = secure_filename(test_id)
+    test_path = _listening_test_root() / f"{safe_id}.json"
+    if not test_path.exists():
+        return jsonify({"error": "听力 Test 不存在"}), 404
+    data = json.loads(test_path.read_text(encoding="utf-8"))
+    return jsonify(data)
 
 
 @app.route("/listening/<exercise_id>")

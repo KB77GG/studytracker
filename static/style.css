@@ -1,17 +1,74 @@
 /* ===== Brand palette (Sage Path) ===== */
 :root{
-  --brand: #2F8E87;        /* logo 主色 */
-  --brand-dark:#277C78;    /* hover */
-  --brand-light:#40A6A0;   /* 次级/边框 */
-  --bg:#f5f6fa;            /* 页面背景 */
-  --text:#222;             /* 正文文字 */
-  --muted:#666;            /* 次要文字 */
-  --card:#fff;             /* 卡片背景 */
-  --line:#E8EBF0;          /* 分割线 */
-  --shadow:0 2px 8px rgba(0,0,0,.06);
+  /* Brand */
+  --brand: #2F8E87;
+  --brand-dark:#277C78;
+  --brand-light:#40A6A0;
+  --brand-soft:#E5F4F2;       /* 浅底（active nav / pill） */
+  --brand-tint:#F2FBF9;       /* 更浅的提示底 */
+
+  /* Surfaces */
+  --bg:#f5f7fb;
+  --card:#fff;
+  --line:#E8EBF0;
+  --line-strong:#dbe0e8;
+
+  /* Text */
+  --text:#1f2937;
+  --text-strong:#0f172a;
+  --muted:#64748b;            /* 提升对比度，AA 通过 */
+  --muted-soft:#94a3b8;       /* 仅用于装饰性 placeholder */
+
+  /* Status */
+  --info:#1d4ed8;
+  --success:#16a34a;
+  --warning:#b45309;
+  --danger:#dc2626;
+
+  /* Radius scale */
+  --r-sm:8px;
+  --r:12px;
+  --r-lg:16px;
+  --r-xl:20px;
+  --r-pill:999px;
+
+  /* Shadow scale */
+  --shadow-sm:0 1px 2px rgba(15,23,42,.06);
+  --shadow:0 2px 8px rgba(15,23,42,.06);
+  --shadow-md:0 8px 20px rgba(15,23,42,.08);
+  --shadow-lg:0 18px 38px rgba(15,23,42,.12);
+
+  /* Type scale */
+  --fs-xs:12px;
+  --fs-sm:13px;
+  --fs-base:14px;
+  --fs-md:16px;
+  --fs-lg:20px;
+  --fs-xl:24px;
+  --fs-2xl:32px;
+
+  /* Focus ring */
+  --focus-ring:0 0 0 3px rgba(47,142,135,.28);
 }
 
 *{ box-sizing: border-box; }
+
+/* Global focus-visible — 替代浏览器默认外框，键盘可见、鼠标静默 */
+:focus{ outline: none; }
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible,
+.nav-link:focus-visible,
+.exercise-card:focus-visible,
+.action-btn:focus-visible,
+.tab:focus-visible{
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "PingFang SC", "Hiragino Sans GB";
@@ -84,7 +141,7 @@ body {
   background: #f1f5f9;
 }
 .nav-link.is-active{
-  background: #e5f6f4;
+  background: var(--brand-soft);
   color: var(--brand-dark);
   font-weight: 600;
 }
@@ -937,4 +994,59 @@ form[method="post"] input[name="detail"] {
 .student-pill .minutes{
   font-weight: 700;
   color: var(--brand-dark);
+}
+
+/* listening section spacing on student_today */
+.listening-section{ margin-top: 24px; }
+.listening-section h3{ margin: 0 0 12px; }
+
+/* ===== Shared task card (student_today listening / free practice) ===== */
+.task-card{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
+}
+.task-card__body{ min-width: 0; }
+.task-card__title{ font-weight: 700; color: var(--text-strong); }
+.task-card__meta{
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+.task-card__cta{
+  flex: 0 0 auto;
+  padding: 9px 18px;
+  background: var(--brand);
+  color: #fff;
+  border-radius: var(--r-sm);
+  text-decoration: none;
+  font-size: var(--fs-base);
+  font-weight: 600;
+  transition: background .15s ease, transform .02s ease;
+}
+.task-card__cta:hover{ background: var(--brand-dark); }
+.task-card__cta:active{ transform: translateY(1px); }
+.task-card__cta--success{ background: var(--success); }
+.task-card__cta--success:hover{ background: #15803d; }
+.task-card__cta--ghost{
+  background: transparent;
+  color: var(--brand-dark);
+  border: 1px solid var(--brand-light);
+}
+.task-card__cta--ghost:hover{
+  background: var(--brand-soft);
+}
+@media (max-width: 640px){
+  .task-card{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .task-card__cta{ text-align: center; }
 }

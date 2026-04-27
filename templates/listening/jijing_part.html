@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ part.in_book }} {{ part.test_name }} {{ part.part_title }} - 听力机经</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f6f7fb;
+  color: #172033;
+}
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.player-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #fff;
+  border-bottom: 1px solid #e5eaf2;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+}
+.player-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: grid;
+  grid-template-columns: 1fr minmax(320px, 520px);
+  gap: 18px;
+  align-items: center;
+}
+.crumb {
+  color: #f05a28;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+h1 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+.meta {
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 13px;
+}
+audio {
+  width: 100%;
+  display: block;
+}
+.page {
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5eaf2;
+}
+.tab {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+.tab.active {
+  color: #f05a28;
+  border-bottom-color: #f05a28;
+}
+.panel {
+  display: none;
+}
+.panel.active {
+  display: block;
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 16px;
+}
+.card {
+  background: #fff;
+  border: 1px solid #e5eaf2;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+.group {
+  margin-bottom: 14px;
+  padding: 18px;
+}
+.group h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+.desc {
+  color: #475569;
+  white-space: pre-line;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.question-title {
+  font-weight: 800;
+  margin: 10px 0;
+}
+.collect {
+  line-height: 2.05;
+  white-space: pre-line;
+  color: #1f2937;
+}
+.option-bank {
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid #e5eaf2;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+.option-bank-title {
+  margin-bottom: 8px;
+  font-weight: 800;
+}
+.option-line {
+  margin: 5px 0;
+  color: #334155;
+}
+.question {
+  padding: 12px 0;
+  border-top: 1px solid #f1f5f9;
+}
+.q-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.q-title {
+  font-weight: 800;
+}
+.seek-btn {
+  flex: 0 0 auto;
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
+  color: #c2410c;
+  border-radius: 8px;
+  padding: 6px 9px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.answer-input,
+.answer-select {
+  min-width: 120px;
+  height: 34px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  padding: 0 10px;
+  font-size: 14px;
+  background: #fff;
+}
+.inline-answer {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 4px;
+  vertical-align: middle;
+}
+.choice {
+  display: block;
+  margin: 7px 0;
+  color: #334155;
+}
+.choice input {
+  margin-right: 8px;
+}
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 12px;
+}
+table.practice-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 520px;
+  background: #fff;
+}
+.practice-table td,
+.practice-table th {
+  border: 1px solid #dbe3ef;
+  padding: 10px;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.practice-table tr:first-child td {
+  background: #f8fafc;
+  font-weight: 800;
+}
+.question-image {
+  display: block;
+  max-width: 100%;
+  margin: 12px 0;
+  border: 1px solid #e5eaf2;
+  border-radius: 8px;
+}
+.side {
+  position: sticky;
+  top: 96px;
+  align-self: start;
+  padding: 16px;
+}
+.side h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+}
+.stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid #f1f5f9;
+  color: #475569;
+  font-size: 14px;
+}
+.submit-btn {
+  width: 100%;
+  height: 42px;
+  margin-top: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #f05a28;
+  color: #fff;
+  font-weight: 900;
+  cursor: pointer;
+  font-size: 15px;
+}
+.result-box {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.is-correct {
+  border-color: #22c55e !important;
+  background: #f0fdf4 !important;
+}
+.is-wrong {
+  border-color: #ef4444 !important;
+  background: #fff1f2 !important;
+}
+.answer-note {
+  display: none;
+  margin-top: 8px;
+  color: #166534;
+  font-size: 13px;
+}
+.show-answers .answer-note {
+  display: block;
+}
+.transcript-row {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  background: #fff;
+}
+.transcript-time {
+  color: #64748b;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.transcript-text {
+  line-height: 1.6;
+}
+.transcript-cn {
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 13px;
+}
+.dictation-row {
+  padding: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.dictation-tools {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.small-btn {
+  border: 1px solid #dbe3ef;
+  background: #fff;
+  border-radius: 7px;
+  padding: 6px 9px;
+  color: #334155;
+  cursor: pointer;
+  font-weight: 700;
+}
+.dictation-row textarea {
+  width: 100%;
+  min-height: 68px;
+  resize: vertical;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+}
+.dictation-answer {
+  display: none;
+  margin-top: 8px;
+  line-height: 1.6;
+  color: #334155;
+}
+.dictation-row.revealed .dictation-answer {
+  display: block;
+}
+.analysis-item {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.analysis-item h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.analysis-answer {
+  color: #166534;
+  font-weight: 800;
+}
+.analysis-text {
+  color: #475569;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+@media (max-width: 900px) {
+  .player-inner { grid-template-columns: 1fr; }
+  .layout { grid-template-columns: 1fr; }
+  .side { position: static; }
+}
+@media (max-width: 640px) {
+  .page { padding: 14px; }
+  .player-inner { padding: 12px 14px; }
+  .tabs { overflow-x: auto; }
+  .tab { white-space: nowrap; }
+  .transcript-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="player-bar">
+    <div class="player-inner">
+      <div>
+        <div class="crumb">听力 / 机经 {{ part.in_book }} / {{ part.test_name }}</div>
+        <h1>{{ part.part_title }} · {{ part.question_name }}</h1>
+        <div class="meta">{{ part.question_type }} · Paper {{ part.paper_id }}</div>
+      </div>
+      <audio id="audio" controls preload="metadata"></audio>
+    </div>
+  </header>
+
+  <main class="page">
+    <nav class="tabs" aria-label="练习视图">
+      <button class="tab active" data-tab="practice">题目练习</button>
+      <button class="tab" data-tab="dictation">精听</button>
+      <button class="tab" data-tab="analysis">解析</button>
+      <button class="tab" data-tab="transcript">原文</button>
+      <a class="tab" href="{{ url_for('listening_jijing_index') }}" style="text-decoration:none;">返回列表</a>
+    </nav>
+
+    <section class="panel active" id="practicePanel">
+      <div class="layout">
+        <div id="questionRoot"></div>
+        <aside class="card side">
+          <h3>本 Part</h3>
+          <div class="stat"><span>题号</span><strong>{{ part.question_name }}</strong></div>
+          <div class="stat"><span>题组</span><strong id="groupCount">-</strong></div>
+          <div class="stat"><span>计分项</span><strong id="markCount">-</strong></div>
+          <button class="submit-btn" id="submitBtn">提交并判分</button>
+          <div class="result-box" id="resultBox">完成后可查看正确率和答案。</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel" id="dictationPanel">
+      <div class="card" id="dictationRoot"></div>
+    </section>
+
+    <section class="panel" id="analysisPanel">
+      <div class="card" id="analysisRoot"></div>
+    </section>
+
+    <section class="panel" id="transcriptPanel">
+      <div class="card" id="transcriptRoot"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const part = {{ part|tojson }};
+const staticBase = "{{ url_for('static', filename='listening_jijing/') }}";
+const audio = document.getElementById('audio');
+audio.src = staticBase + part.audio.local_path;
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function msToSeconds(value) {
+  const n = Number(value || 0);
+  return n > 1000 ? n / 1000 : n;
+}
+
+function formatTime(ms) {
+  const seconds = Math.floor(msToSeconds(ms));
+  const m = Math.floor(seconds / 60);
+  const s = String(seconds % 60).padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+function seekTo(ms) {
+  audio.currentTime = msToSeconds(ms);
+  audio.play();
+}
+
+function normalizeText(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[：]/g, ':')
+    .replace(/\s+/g, ' ');
+}
+
+function splitAlternatives(answer) {
+  return String(answer || '')
+    .split(/\s*\/\s*/)
+    .map(normalizeText)
+    .filter(Boolean);
+}
+
+function splitLetters(answer) {
+  return String(answer || '')
+    .split(/\s*,\s*/)
+    .map(v => v.trim().toUpperCase())
+    .filter(Boolean);
+}
+
+function optionBank(group) {
+  const options = group.collect_options?.list || [];
+  if (!options.length) return '';
+  const title = group.collect_options.title || group.title || '';
+  return `
+    <div class="option-bank">
+      ${title ? `<div class="option-bank-title">${escapeHtml(title)}</div>` : ''}
+      ${options.map(o => `<div class="option-line">${escapeHtml(o.title)}. ${escapeHtml(o.content)}</div>`).join('')}
+    </div>
+  `;
+}
+
+function controlForItem(item, group, inline = false) {
+  const answer = escapeHtml(item.answer || '');
+  const qid = `q_${item.id}`;
+  const options = item.options?.length ? item.options : (group.collect_options?.list || []);
+  const wrapperClass = inline ? 'inline-answer' : '';
+
+  if (options.length && group.type !== 2) {
+    return `
+      <span class="${wrapperClass}">
+        <select class="answer-select answer-unit" data-kind="select" data-answer="${answer}" data-q="${escapeHtml(item.number)}">
+          <option value=""></option>
+          ${options.map(o => `<option value="${escapeHtml(o.title)}">${escapeHtml(o.title)}. ${escapeHtml(o.content)}</option>`).join('')}
+        </select>
+      </span>
+    `;
+  }
+
+  if (item.options?.length) {
+    const isMulti = String(item.answer || '').includes(',') || group.type === 9;
+    return `
+      <div class="answer-unit" data-kind="${isMulti ? 'checkboxes' : 'radio'}" data-answer="${answer}" data-q="${escapeHtml(item.number)}">
+        ${item.options.map(o => `
+          <label class="choice">
+            <input type="${isMulti ? 'checkbox' : 'radio'}" name="${qid}" value="${escapeHtml(o.title)}">
+            ${escapeHtml(o.title)}. ${escapeHtml(o.content)}
+          </label>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  return `
+    <span class="${wrapperClass}">
+      <input class="answer-input answer-unit" data-kind="text" data-answer="${answer}" data-q="${escapeHtml(item.number)}" placeholder="Q${escapeHtml(item.number)}">
+    </span>
+  `;
+}
+
+function renderWithPlaceholders(text, group) {
+  const itemsById = new Map((group.items || []).map(item => [String(item.id), item]));
+  const raw = String(text || '');
+  let html = '';
+  let last = 0;
+  raw.replace(/\$([^$\s]+)\$/g, (match, id, offset) => {
+    html += escapeHtml(raw.slice(last, offset));
+    const item = itemsById.get(String(id));
+    html += item ? controlForItem(item, group, true) : '____';
+    last = offset + match.length;
+    return match;
+  });
+  html += escapeHtml(raw.slice(last));
+  return html.replace(/\n/g, '<br>');
+}
+
+function renderTable(group) {
+  const table = group.table;
+  if (!table || !Array.isArray(table.content)) return '';
+  return `
+    <div class="table-wrap">
+      <table class="practice-table">
+        <tbody>
+          ${table.content.map(row => `
+            <tr>${row.map(cell => `<td>${renderWithPlaceholders(cell, group)}</td>`).join('')}</tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function isCombinedMulti(group) {
+  if (group.type !== 2) return false;
+  const options = group.collect_options?.list || [];
+  if (!options.length || !group.items?.length) return false;
+  const first = group.items[0].answer || '';
+  return first.includes(',') && group.items.every(item => item.answer === first);
+}
+
+function renderCombinedMulti(group) {
+  const answer = escapeHtml(group.items[0].answer || '');
+  const marks = group.items.length;
+  return `
+    <div class="answer-unit" data-kind="checkbox-set" data-answer="${answer}" data-marks="${marks}" data-q="${escapeHtml(group.desc)}">
+      ${(group.collect_options?.list || []).map(o => `
+        <label class="choice">
+          <input type="checkbox" value="${escapeHtml(o.title)}">
+          ${escapeHtml(o.title)}. ${escapeHtml(o.content)}
+        </label>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderQuestionItem(item, group) {
+  const title = item.title ? escapeHtml(item.title) : '____';
+  const time = item.start_time ? `<button class="seek-btn" type="button" onclick="seekTo(${Number(item.start_time)})">定位音频</button>` : '';
+  return `
+    <div class="question">
+      <div class="q-head">
+        <div class="q-title">Q${escapeHtml(item.number)}. ${title}</div>
+        ${time}
+      </div>
+      ${controlForItem(item, group)}
+      <div class="answer-note">答案：${escapeHtml(item.answer || '')}</div>
+    </div>
+  `;
+}
+
+function usableImage(url) {
+  return /^https?:\/\//.test(url || '') && !/aliyuncs\.com\/?$/.test(url || '');
+}
+
+function renderGroup(group) {
+  const hasStructuredBlank = group.collect || group.table;
+  const combinedMulti = isCombinedMulti(group);
+  return `
+    <article class="card group">
+      <h2>${escapeHtml(group.type_name)}</h2>
+      ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ''}
+      ${group.question_title ? `<div class="question-title">${escapeHtml(group.question_title)}</div>` : ''}
+      ${group.title && group.title !== group.question_title ? `<div class="question-title">${escapeHtml(group.title)}</div>` : ''}
+      ${usableImage(group.img_url) ? `<img class="question-image" src="${escapeHtml(group.img_url)}" alt="">` : ''}
+      ${group.collect && !combinedMulti ? `<div class="collect">${renderWithPlaceholders(group.collect, group)}</div>` : ''}
+      ${combinedMulti ? '' : optionBank(group)}
+      ${renderTable(group)}
+      ${combinedMulti ? renderCombinedMulti(group) : ''}
+      ${!hasStructuredBlank && !combinedMulti ? (group.items || []).map(item => renderQuestionItem(item, group)).join('') : ''}
+      ${hasStructuredBlank ? (group.items || []).map(item => `<div class="answer-note">Q${escapeHtml(item.number)} 答案：${escapeHtml(item.answer || '')}</div>`).join('') : ''}
+    </article>
+  `;
+}
+
+function unitValue(unit) {
+  const kind = unit.dataset.kind;
+  if (kind === 'radio') {
+    const checked = unit.querySelector('input:checked');
+    return checked ? checked.value : '';
+  }
+  if (kind === 'checkboxes' || kind === 'checkbox-set') {
+    return Array.from(unit.querySelectorAll('input:checked')).map(input => input.value).join(',');
+  }
+  return unit.value || '';
+}
+
+function markUnit(unit) {
+  const kind = unit.dataset.kind;
+  const answer = unit.dataset.answer || '';
+  const value = unitValue(unit);
+  const marks = Number(unit.dataset.marks || 1);
+  let correct = false;
+
+  if (kind === 'checkboxes' || kind === 'checkbox-set') {
+    const a = splitLetters(answer).sort().join(',');
+    const v = splitLetters(value).sort().join(',');
+    correct = Boolean(a) && a === v;
+  } else if (/^[A-Z](\s*,\s*[A-Z])+$/.test(answer)) {
+    correct = splitLetters(answer).includes(String(value).trim().toUpperCase());
+  } else {
+    const alternatives = splitAlternatives(answer);
+    correct = alternatives.includes(normalizeText(value));
+  }
+
+  unit.classList.toggle('is-correct', correct);
+  unit.classList.toggle('is-wrong', !correct);
+  return { correct, marks, value, answer, q: unit.dataset.q || '' };
+}
+
+function renderPractice() {
+  document.getElementById('questionRoot').innerHTML = part.groups.map(renderGroup).join('');
+  document.getElementById('groupCount').textContent = part.groups.length;
+  document.getElementById('markCount').textContent = Array.from(document.querySelectorAll('.answer-unit'))
+    .reduce((sum, unit) => sum + Number(unit.dataset.marks || 1), 0);
+}
+
+function renderTranscript() {
+  document.getElementById('transcriptRoot').innerHTML = (part.content || []).map(row => `
+    <div class="transcript-row">
+      <button class="small-btn transcript-time" type="button" onclick="seekTo(${Number(row.start_time || 0)})">${formatTime(row.start_time)}</button>
+      <div class="transcript-text">
+        <div>${escapeHtml(row.en_text || '')}</div>
+        ${row.cn_text ? `<div class="transcript-cn">${escapeHtml(row.cn_text)}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderDictation() {
+  document.getElementById('dictationRoot').innerHTML = (part.content || []).map((row, index) => `
+    <div class="dictation-row">
+      <div class="dictation-tools">
+        <button class="small-btn" type="button" onclick="seekTo(${Number(row.start_time || 0)})">播放 ${formatTime(row.start_time)}</button>
+        <button class="small-btn" type="button" onclick="this.closest('.dictation-row').classList.toggle('revealed')">核对原文</button>
+      </div>
+      <textarea placeholder="S${index + 1}"></textarea>
+      <div class="dictation-answer">
+        <strong>${escapeHtml(row.en_text || '')}</strong>
+        ${row.cn_text ? `<div class="transcript-cn">${escapeHtml(row.cn_text)}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderAnalysis() {
+  const items = part.groups.flatMap(group => (group.items || []).map(item => ({ ...item, group })));
+  document.getElementById('analysisRoot').innerHTML = items.map(item => `
+    <div class="analysis-item">
+      <h3>Q${escapeHtml(item.number)} ${escapeHtml(item.title || '')}</h3>
+      <div class="analysis-answer">答案：${escapeHtml(item.answer || '')}</div>
+      ${item.start_time ? `<p><button class="seek-btn" type="button" onclick="seekTo(${Number(item.start_time)})">定位音频</button></p>` : ''}
+      ${item.analysis ? `<div class="analysis-text">${escapeHtml(item.analysis)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+document.querySelectorAll('.tab[data-tab]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab[data-tab]').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(`${tab.dataset.tab}Panel`).classList.add('active');
+  });
+});
+
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const units = Array.from(document.querySelectorAll('.answer-unit'));
+  const results = units.map(markUnit);
+  const total = results.reduce((sum, row) => sum + row.marks, 0);
+  const correct = results.reduce((sum, row) => sum + (row.correct ? row.marks : 0), 0);
+  const wrong = results.filter(row => !row.correct);
+  document.body.classList.add('show-answers');
+  document.getElementById('resultBox').innerHTML = `
+    <strong>${correct}/${total}</strong> · 正确率 ${total ? Math.round(correct / total * 100) : 0}%
+    ${wrong.length ? `<br>待核对：${wrong.slice(0, 12).map(row => escapeHtml(row.q)).join('、')}${wrong.length > 12 ? '…' : ''}` : '<br>全部正确'}
+  `;
+});
+
+renderPractice();
+renderTranscript();
+renderDictation();
+renderAnalysis();
+</script>
+</body>
+</html>

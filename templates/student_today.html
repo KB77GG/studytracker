@@ -95,49 +95,40 @@
 {% endif %}
 
 {% if listening_tasks %}
-<section class="card" style="margin-top: 24px;">
-  <h3 style="margin-bottom: 12px;">精听练习任务</h3>
+<section class="card listening-section">
+  <h3>精听练习任务</h3>
   {% for lt in listening_tasks %}
-  <article class="plan-item" style="margin-bottom: 12px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-      <div>
-        <strong>{{ lt.detail or lt.listening_exercise_id }}</strong>
-        <div class="muted small" style="margin-top: 4px;">
-          已分配 {{ lt.listening_segment_count or 0 }} 句
-        </div>
-        <div class="muted small" style="margin-top: 4px;">
-          {% if lt.status == 'done' %}
-            准确率: {{ '%.1f' | format(lt.accuracy or 0) }}% · 完成率: {{ '%.0f' | format(lt.completion_rate or 0) }}%
-          {% elif lt.completion_rate and lt.completion_rate > 0 %}
-            进行中 · 完成率: {{ '%.0f' | format(lt.completion_rate) }}%
-          {% else %}
-            未开始
-          {% endif %}
-        </div>
+  <article class="task-card">
+    <div class="task-card__body">
+      <div class="task-card__title">{{ lt.detail or lt.listening_exercise_id }}</div>
+      <div class="task-card__meta">已分配 {{ lt.listening_segment_count or 0 }} 句</div>
+      <div class="task-card__meta">
+        {% if lt.status == 'done' %}
+          准确率 {{ '%.1f'|format(lt.accuracy or 0) }}% · 完成率 {{ '%.0f'|format(lt.completion_rate or 0) }}%
+        {% elif lt.completion_rate and lt.completion_rate > 0 %}
+          进行中 · 完成率 {{ '%.0f'|format(lt.completion_rate) }}%
+        {% else %}
+          未开始
+        {% endif %}
       </div>
-      <a href="/listening/{{ lt.listening_exercise_id }}?task_id={{ lt.id }}&token={{ lt.listening_access_token }}"
-         style="padding: 8px 20px; background: {% if lt.status == 'done' %}#22c55e{% else %}#3b82f6{% endif %}; color: #fff; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
-        {% if lt.status == 'done' %}已完成{% elif lt.completion_rate and lt.completion_rate > 0 %}继续精听{% else %}开始精听{% endif %}
-      </a>
     </div>
+    <a class="task-card__cta {{ 'task-card__cta--success' if lt.status == 'done' }}"
+       href="/listening/{{ lt.listening_exercise_id }}?task_id={{ lt.id }}&token={{ lt.listening_access_token }}">
+      {% if lt.status == 'done' %}已完成{% elif lt.completion_rate and lt.completion_rate > 0 %}继续精听{% else %}开始精听{% endif %}
+    </a>
   </article>
   {% endfor %}
 </section>
 {% endif %}
 
-<section class="card" style="margin-top: 24px;">
-  <h3 style="margin-bottom: 12px;">自由精听练习</h3>
-  <article class="plan-item" style="padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
-      <div>
-        <strong>网页端自主精听</strong>
-        <div class="muted small" style="margin-top: 4px;">可自行进入精听材料列表训练，浏览器会自动保存自由练习进度。</div>
-      </div>
-      <a href="/listening"
-         style="padding: 8px 20px; background: #0f766e; color: #fff; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
-        去自由练习
-      </a>
+<section class="card listening-section">
+  <h3>自由精听练习</h3>
+  <article class="task-card">
+    <div class="task-card__body">
+      <div class="task-card__title">网页端自主精听</div>
+      <div class="task-card__meta">可自行进入精听材料列表训练，浏览器会自动保存自由练习进度。</div>
     </div>
+    <a class="task-card__cta task-card__cta--ghost" href="/listening">去自由练习</a>
   </article>
 </section>
 

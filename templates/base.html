@@ -20,49 +20,55 @@
       <div class="sidebar__brand">
         <span class="brand-icon">S</span>
         <div>
-          <div class="brand-title">StudyTrack</div>
-          <div class="brand-sub">教师工作台</div>
+          <div class="brand-title">Sage Path</div>
+          <div class="brand-sub">
+            {% if current_user.role == 'student' %}学生空间
+            {% elif current_user.role == 'admin' %}管理后台
+            {% elif current_user.role == 'assistant' %}助教工作台
+            {% else %}教师工作台{% endif %}
+          </div>
         </div>
       </div>
       <div class="sidebar__nav">
-        <p class="nav-label">Main</p>
+        <p class="nav-label">主导航</p>
         {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
         <a class="nav-link {{ 'is-active' if 'materials' in endpoint else '' }}"
-          href="{{ url_for('materials_list') }}">Material Bank</a>
+          href="{{ url_for('materials_list') }}">材料库</a>
         <a class="nav-link {{ 'is-active' if endpoint == 'tasks_page' else '' }}"
-          href="{{ url_for('tasks_page') }}">Task Management</a>
+          href="{{ url_for('tasks_page') }}">任务管理</a>
         <a class="nav-link {{ 'is-active' if 'grading' in endpoint else '' }}"
-          href="{{ url_for('grading_list') }}">Grading Center</a>
+          href="{{ url_for('grading_list') }}">批改中心</a>
         <a class="nav-link {{ 'is-active' if 'course_plan' in endpoint else '' }}"
-          href="{{ url_for('course_plan_list') }}">Course Plans</a>
+          href="{{ url_for('course_plan_list') }}">课程计划</a>
         {% endif %}
         {% if current_user.role == 'student' %}
         <a class="nav-link {{ 'is-active' if endpoint == 'student_today' else '' }}"
-          href="{{ url_for('student_today') }}">My Plan</a>
+          href="{{ url_for('student_today') }}">今日计划</a>
         {% endif %}
-        <p class="nav-label">Analysis</p>
-        {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
-        <a class="nav-link {{ 'is-active' if endpoint == 'report_page' else '' }}"
-          href="{{ url_for('report_page') }}">Reports</a>
-        {% endif %}
-        {% if current_user.role == 'admin' or current_user.username == '陈悦' or current_user.display_name == '陈悦' %}
-        <a class="nav-link {{ 'is-active' if 'stage_report' in endpoint else '' }}"
-          href="{{ url_for('stage_report_list') }}">Stage Reports</a>
+        {% if current_user.role in ('admin', 'teacher', 'assistant') %}
+        <a class="nav-link {{ 'is-active' if endpoint in ('listening_index', 'listening_jijing_index', 'listening_player', 'listening_upload') else '' }}"
+          href="{{ url_for('listening_index') }}">精听练习</a>
         {% endif %}
         {% if current_user.role in ('admin', 'teacher') %}
         <a class="nav-link" href="/entrance/admin/invitations.html">入学测试</a>
         {% endif %}
-        {% if current_user.role in ('admin', 'teacher', 'assistant') %}
-        <a class="nav-link {{ 'is-active' if 'listening' in endpoint else '' }}"
-          href="{{ url_for('listening_index') }}">精听练习</a>
+        <p class="nav-label">数据分析</p>
+        {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
+        <a class="nav-link {{ 'is-active' if endpoint == 'report_page' else '' }}"
+          href="{{ url_for('report_page') }}">学习报表</a>
+        {% endif %}
+        {% if current_user.role == 'admin' or current_user.username == '陈悦' or current_user.display_name == '陈悦' %}
+        <a class="nav-link {{ 'is-active' if 'stage_report' in endpoint else '' }}"
+          href="{{ url_for('stage_report_list') }}">阶段报告</a>
         {% endif %}
         {% if current_user.role == 'admin' %}
-        <a class="nav-link {{ 'is-active' if endpoint == 'bulk_page' else '' }}" href="{{ url_for('bulk_page') }}">Bulk
-          Add</a>
+        <p class="nav-label">系统</p>
+        <a class="nav-link {{ 'is-active' if endpoint == 'bulk_page' else '' }}"
+          href="{{ url_for('bulk_page') }}">批量添加</a>
         <a class="nav-link {{ 'is-active' if endpoint == 'users_page' else '' }}"
-          href="{{ url_for('users_page') }}">Users</a>
+          href="{{ url_for('users_page') }}">用户管理</a>
         {% endif %}
-        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        <a class="nav-link" href="{{ url_for('logout') }}">退出登录</a>
       </div>
       <div class="sidebar__user">
         <div class="avatar">{{ current_user.display_name[:1] if current_user.display_name else

@@ -1,8 +1,48 @@
 {% extends "base.html" %}
 {% block content_public %}
+
+<!-- 装饰背景层 -->
+<div class="login-bg" aria-hidden="true">
+  <svg class="login-bg__blob login-bg__blob--tl" viewBox="0 0 600 600" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="loginBlob1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#2F8E87" stop-opacity=".55"/>
+        <stop offset="1" stop-color="#40A6A0" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path fill="url(#loginBlob1)" d="M421 96c66 35 119 90 134 153s-9 134-58 178-126 50-198 50-148-3-200-43S22 326 24 256s40-138 99-180S355 61 421 96Z"/>
+  </svg>
+  <svg class="login-bg__blob login-bg__blob--br" viewBox="0 0 600 600" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="loginBlob2" x1="1" y1="1" x2="0" y2="0">
+        <stop offset="0" stop-color="#277C78" stop-opacity=".5"/>
+        <stop offset="1" stop-color="#2F8E87" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path fill="url(#loginBlob2)" d="M507 198c40 70 50 159 8 218s-127 88-205 86-148-32-202-86S22 285 41 213 142 79 215 51s175-30 240 7 92 70 52 140Z"/>
+  </svg>
+  <!-- 抽象生长曲线 -->
+  <svg class="login-bg__path" viewBox="0 0 800 600" preserveAspectRatio="none">
+    <path d="M-50 480 Q 180 380 320 420 T 620 320 T 880 220" fill="none" stroke="#2F8E87" stroke-width="1.5" stroke-opacity=".22" stroke-dasharray="4 8"/>
+    <path d="M-50 540 Q 200 480 360 500 T 660 420 T 880 360" fill="none" stroke="#2F8E87" stroke-width="1.5" stroke-opacity=".14"/>
+  </svg>
+</div>
+
 <div class="login-container">
   <div class="login-card">
     <div class="login-hero">
+      <!-- 装饰：sage 叶片 -->
+      <svg class="hero-leaf" viewBox="0 0 120 120" aria-hidden="true">
+        <defs>
+          <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#40A6A0"/>
+            <stop offset="1" stop-color="#277C78"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#leafGrad)" d="M96 14C70 8 38 18 22 44 8 67 12 96 32 110c20 13 50 4 67-19 16-22 21-71-3-77Z" opacity=".18"/>
+        <path d="M30 96c14-32 40-58 70-72" stroke="#277C78" stroke-width="2" fill="none" stroke-linecap="round" opacity=".55"/>
+      </svg>
+
       <div class="logo-row">
         <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Sage Path Logo" class="login-logo">
         <div class="brand-text">
@@ -10,21 +50,31 @@
           <div class="brand-sub">睿然学习助手</div>
         </div>
       </div>
-      <div class="hero-illus">
-        <img src="{{ url_for('static', filename='login_illustration.svg') }}" alt="Learn and Grow" loading="lazy">
-      </div>
-      <h2>让每一次进步都看得见</h2>
-      <ul>
-        <li>任务打卡与进度可视</li>
-        <li>批改反馈一目了然</li>
-        <li>家长联动，安心陪伴</li>
+      <h2 class="hero-headline">让每一次<span class="hero-headline__accent">进步</span>都看得见</h2>
+      <p class="hero-tagline">把任务、打卡、批改、家长反馈，全部串成一条清晰的成长路径。</p>
+      <ul class="hero-features">
+        <li><span class="hero-features__bullet" aria-hidden="true">✓</span>任务打卡与进度可视</li>
+        <li><span class="hero-features__bullet" aria-hidden="true">✓</span>批改反馈一目了然</li>
+        <li><span class="hero-features__bullet" aria-hidden="true">✓</span>家长联动，安心陪伴</li>
       </ul>
+
+      <!-- 底部小数据装饰 -->
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat__v">即时</span>
+          <span class="hero-stat__k">批改反馈</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat__v">可视化</span>
+          <span class="hero-stat__k">学习轨迹</span>
+        </div>
+      </div>
     </div>
 
     <div class="login-panel">
       <div class="login-header">
         <h3>欢迎回来</h3>
-        <p class="subtitle">请登录您的账号</p>
+        <p class="subtitle">请登录您的账号继续学习之旅</p>
       </div>
 
       <form method="post" class="login-form">
@@ -38,7 +88,12 @@
           <input type="password" id="password" name="password" placeholder="请输入密码" required>
         </div>
 
-        <button type="submit" class="btn-login">登录</button>
+        <button type="submit" class="btn-login">
+          <span>登录</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true" class="btn-login__arrow">
+            <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
 
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -48,19 +103,70 @@
         {% endif %}
         {% endwith %}
       </form>
+
+      <p class="login-footer">© Sage Path · 睿然国际教育</p>
     </div>
   </div>
 </div>
 
 <style>
-  /* 覆盖 base.html 可能的默认样式，确保登录页全屏居中 */
+  /* 登录页：使用全局 sage token，不再自带色值 */
   body {
-    background: radial-gradient(circle at 20% 20%, rgba(54, 165, 157, 0.12), transparent 30%),
-                radial-gradient(circle at 80% 10%, rgba(32, 117, 111, 0.14), transparent 28%),
-                #f5f7fa;
+    background:
+      radial-gradient(ellipse at 20% 18%, rgba(47, 142, 135, .14), transparent 38%),
+      radial-gradient(ellipse at 82% 10%, rgba(39, 124, 120, .16), transparent 36%),
+      radial-gradient(ellipse at 88% 88%, rgba(47, 142, 135, .12), transparent 38%),
+      var(--bg);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* 网格点点纹理 */
+  body::before{
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(rgba(47,142,135,.10) 1px, transparent 1.4px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  }
+
+  /* 装饰 SVG 容器 */
+  .login-bg{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .login-bg__blob{
+    position: absolute;
+    width: 720px;
+    height: 720px;
+    filter: blur(8px);
+    opacity: .9;
+  }
+  .login-bg__blob--tl{
+    top: -260px;
+    left: -240px;
+    transform: rotate(-12deg);
+  }
+  .login-bg__blob--br{
+    bottom: -300px;
+    right: -260px;
+    transform: rotate(18deg);
+  }
+  .login-bg__path{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .topbar { display: none; }
@@ -84,171 +190,285 @@
     justify-content: center;
     padding: 20px;
     background: transparent;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
+    position: relative;
+    z-index: 2;
   }
 
   .login-card {
-    background: #ffffff;
-    width: min(960px, 94vw);
-    padding: 32px;
-    border-radius: 20px;
-    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.12);
+    background: rgba(255,255,255,.78);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    width: min(1000px, 94vw);
+    padding: 28px;
+    border-radius: var(--r-xl);
+    box-shadow:
+      0 30px 60px rgba(15, 23, 42, .12),
+      0 0 0 1px rgba(255,255,255,.6) inset;
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1.05fr 0.95fr;
     gap: 24px;
-    animation: slideUp 0.5s ease-out;
+    animation: slideUp .55s ease-out;
   }
 
   @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .login-hero {
     position: relative;
-    background: linear-gradient(135deg, rgba(54, 165, 157, 0.1), rgba(32, 117, 111, 0.06));
-    border-radius: 16px;
-    padding: 20px 20px 120px;
-    border: 1px solid rgba(32, 117, 111, 0.08);
-    background-image: url("{{ url_for('static', filename='login_illustration.svg') }}");
-    background-repeat: no-repeat;
-    background-position: center 85%;
-    background-size: 92% auto;
+    background:
+      linear-gradient(160deg, rgba(47, 142, 135, .14) 0%, rgba(39, 124, 120, .04) 55%, rgba(255,255,255,0) 100%),
+      url("{{ url_for('static', filename='login_illustration.svg') }}");
+    background-repeat: no-repeat, no-repeat;
+    background-position: 0 0, center 92%;
+    background-size: 100% 100%, 88% auto;
+    border-radius: var(--r-lg);
+    padding: 32px 28px 130px;
+    border: 1px solid rgba(39, 124, 120, .10);
+    overflow: hidden;
+    isolation: isolate;
   }
+  .hero-leaf{
+    position: absolute;
+    top: -22px;
+    right: -22px;
+    width: 180px;
+    height: 180px;
+    z-index: 0;
+    pointer-events: none;
+    transform: rotate(8deg);
+  }
+  .login-hero > * { position: relative; z-index: 1; }
+
   .logo-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
   }
   .login-logo {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
-    border-radius: 12px;
+    border-radius: var(--r);
+    box-shadow: 0 6px 14px rgba(39, 124, 120, .18);
   }
   .brand-title {
-    font-weight: 700;
-    color: #1f2d3d;
+    font-weight: 800;
+    color: var(--text-strong);
+    font-size: var(--fs-md);
+    letter-spacing: .01em;
   }
   .brand-sub {
-    color: #6b7280;
-    font-size: 13px;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    margin-top: 2px;
   }
-  .login-hero h2 {
-    margin: 4px 0 10px;
-    color: #20756F;
-    font-size: 20px;
-    font-weight: 700;
-  }
-  .login-hero ul {
-    padding-left: 18px;
-    margin: 0;
-    color: #4b5563;
-    line-height: 1.6;
-    font-size: 14px;
-  }
-  .hero-illus {
-    width: 100%;
+
+  .hero-headline{
     margin: 6px 0 10px;
-    text-align: center;
+    color: var(--text-strong);
+    font-size: 28px;
+    line-height: 1.25;
+    font-weight: 800;
+    letter-spacing: -.01em;
   }
-  .hero-illus img {
-    width: 100%;
-    max-width: 340px;
-    filter: saturate(0.9);
-    display: none; /* 背景图已经覆盖，这里隐藏 img 防止重复 */
+  .hero-headline__accent{
+    background: linear-gradient(135deg, #2F8E87 0%, #40A6A0 50%, #88C7C2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-tagline{
+    margin: 0 0 18px;
+    color: var(--text);
+    font-size: var(--fs-base);
+    line-height: 1.65;
+    max-width: 32em;
+  }
+  .hero-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .hero-features li{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    font-size: var(--fs-base);
+    font-weight: 500;
+  }
+  .hero-features__bullet{
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2F8E87, #277C78);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 4px 8px rgba(39,124,120,.25);
+  }
+
+  .hero-stats{
+    display: flex;
+    gap: 14px;
+    margin-top: 26px;
+    flex-wrap: wrap;
+  }
+  .hero-stat{
+    flex: 1 1 0;
+    min-width: 110px;
+    padding: 12px 14px;
+    border-radius: var(--r);
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(47,142,135,.18);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .hero-stat__v{
+    display: block;
+    font-size: var(--fs-md);
+    font-weight: 800;
+    color: var(--brand-dark);
+    letter-spacing: .01em;
+  }
+  .hero-stat__k{
+    display: block;
+    margin-top: 2px;
+    font-size: var(--fs-xs);
+    color: var(--muted);
+    letter-spacing: .04em;
   }
 
   .login-panel {
-    padding: 8px;
+    padding: 24px 16px 8px;
+    display: flex;
+    flex-direction: column;
   }
   .login-header h3 {
     margin: 0 0 6px;
-    color: #1f2d3d;
-    font-size: 22px;
-    font-weight: 700;
+    color: var(--text-strong);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -.01em;
   }
   .subtitle {
-    margin: 0 0 24px;
-    color: #8492a6;
-    font-size: 14px;
+    margin: 0 0 28px;
+    color: var(--muted);
+    font-size: var(--fs-base);
   }
   .login-form {
     text-align: left;
+    display: block;            /* 覆盖全局 form[method=post] flex 规则 */
+    flex-wrap: nowrap;
   }
-  .form-group {
-    margin-bottom: 16px;
-  }
+  .form-group { margin-bottom: 16px; }
+  .login-form .form-group{ width: 100%; }
   .form-group label {
     display: block;
     margin-bottom: 6px;
-    font-size: 13px;
+    font-size: var(--fs-sm);
     font-weight: 600;
-    color: #3c4858;
+    color: var(--text);
   }
   .form-group input {
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid #e0e6ed;
-    border-radius: 12px;
-    font-size: 14px;
-    transition: all 0.2s;
-    background: #f8f9fb;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r);
+    font-size: var(--fs-base);
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    background: var(--bg);
   }
   .form-group input:focus {
-    border-color: #20756F;
+    border-color: var(--brand);
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(32, 117, 111, 0.12);
+    box-shadow: var(--focus-ring);
     outline: none;
   }
   .btn-login {
     width: 100%;
-    padding: 12px;
-    background: linear-gradient(135deg, #36A59D 0%, #20756F 100%);
+    padding: 14px 18px;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: #fff;
     border: none;
-    border-radius: 12px;
-    font-size: 15px;
+    border-radius: var(--r);
+    font-size: var(--fs-md);
     font-weight: 700;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    transition: filter .15s ease, transform .1s ease, box-shadow .2s ease;
     margin-top: 6px;
-    box-shadow: 0 10px 18px rgba(32, 117, 111, 0.18);
+    box-shadow: 0 12px 24px rgba(39, 124, 120, .26);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
   }
-  .btn-login:hover {
-    background: linear-gradient(135deg, #3ebcb3 0%, #1f6c65 100%);
+  .btn-login::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 35%, rgba(255,255,255,.28) 50%, transparent 65%);
+    transform: translateX(-100%);
+    transition: transform .6s ease;
   }
-  .btn-login:active {
-    transform: scale(0.98);
+  .btn-login:hover { filter: brightness(1.06); box-shadow: 0 14px 28px rgba(39, 124, 120, .32); }
+  .btn-login:hover::before{ transform: translateX(100%); }
+  .btn-login:active { transform: scale(.98); }
+  .btn-login__arrow{
+    width: 18px;
+    height: 18px;
+    transition: transform .2s ease;
   }
+  .btn-login:hover .btn-login__arrow{ transform: translateX(3px); }
+
   .login-flash {
     margin-top: 16px;
-    padding: 10px;
+    padding: 10px 12px;
     background: #fff1f0;
     border: 1px solid #ffa39e;
     color: #cf1322;
-    border-radius: 8px;
-    font-size: 13px;
+    border-radius: var(--r-sm);
+    font-size: var(--fs-sm);
     text-align: center;
   }
+  .login-footer{
+    margin: auto 0 0;
+    padding-top: 28px;
+    color: var(--muted-soft);
+    font-size: var(--fs-xs);
+    text-align: center;
+    letter-spacing: .04em;
+  }
 
-  @media (max-width: 840px) {
+  @media (max-width: 900px) {
     .login-card {
       grid-template-columns: 1fr;
-      padding: 24px;
+      padding: 20px;
     }
-    .login-hero { display: none; }
+    .login-hero {
+      padding: 24px 22px 90px;
+      background-size: 100% 100%, 70% auto;
+    }
+    .hero-headline{ font-size: 24px; }
+    .login-panel{ padding: 12px 8px 4px; }
+    .login-header h3{ font-size: 22px; }
+  }
+  @media (max-width: 520px){
+    .login-bg__blob{ width: 480px; height: 480px; }
+    .hero-stats{ display: none; }
+    .hero-leaf{ width: 130px; height: 130px; }
   }
 </style>
 {% endblock %}

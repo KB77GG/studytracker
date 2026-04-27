@@ -3,61 +3,77 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>精听练习</title>
+<title>精听练习 · Sage Path</title>
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f5f7fa;
-  color: #1e293b;
-  min-height: 100vh;
-}
-.container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+/* listening/index 局部样式 — 颜色全部走全局 token，不再硬编码 */
+.listening-page { max-width: 960px; margin: 0 auto; padding: 40px 24px; background: transparent; box-shadow: none; border-radius: 0; }
 
-/* Header */
 .page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   margin-bottom: 8px;
 }
-.page-header h1 { font-size: 28px; }
-.subtitle { color: #64748b; margin-bottom: 32px; font-size: 14px; }
+.page-header .eyebrow{
+  margin: 0 0 6px;
+  color: var(--brand);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.page-header h1 { margin: 0; font-size: var(--fs-xl); color: var(--text-strong); }
+.subtitle { color: var(--muted); margin: 8px 0 28px; font-size: var(--fs-base); }
 
-/* Student info bar */
 .student-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
-  background: #dbeafe;
-  border-radius: 8px;
+  padding: 12px 18px;
+  background: var(--brand-soft);
+  border: 1px solid rgba(47,142,135,.18);
+  border-radius: var(--r-sm);
   margin-bottom: 24px;
-  font-size: 14px;
+  font-size: var(--fs-base);
 }
-.student-bar .name { font-weight: 600; color: #1d4ed8; }
+.student-bar .name { font-weight: 700; color: var(--brand-dark); }
 .student-bar button {
   background: none;
   border: none;
-  color: #64748b;
+  color: var(--muted);
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--fs-sm);
+  padding: 4px 6px;
+  border-radius: 4px;
 }
-.student-bar button:hover { color: #ef4444; }
+.student-bar button:hover { color: var(--danger); }
+.student-bar a{ color: var(--brand-dark); font-weight: 600; text-decoration: none; }
+.student-bar a:hover{ text-decoration: underline; }
 
-/* Upload button (for logged-in employees) */
+/* 顶部操作按钮 */
 .upload-btn {
-  padding: 10px 20px;
-  background: #3b82f6;
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 16px;
+  background: var(--brand);
   color: #fff;
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   text-decoration: none;
-  font-size: 14px;
+  font-size: var(--fs-base);
   font-weight: 600;
+  transition: background .15s ease;
 }
-.upload-btn:hover { background: #2563eb; }
+.upload-btn:hover { background: var(--brand-dark); }
+.upload-btn--secondary{
+  background: #fff;
+  color: var(--brand-dark);
+  border: 1px solid var(--brand-light);
+}
+.upload-btn--secondary:hover{ background: var(--brand-soft); }
 
-/* Exercise list */
 .exercise-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -65,28 +81,30 @@ body {
 }
 .exercise-card {
   background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid #e2e8f0;
+  border-radius: var(--r);
+  padding: 22px;
+  border: 1px solid var(--line);
   text-decoration: none;
   color: inherit;
-  transition: all 0.2s;
+  transition: border-color .15s ease, box-shadow .2s ease, transform .2s ease;
   display: block;
 }
 .exercise-card:hover {
-  border-color: #3b82f6;
-  box-shadow: 0 4px 12px rgba(59,130,246,0.1);
+  border-color: var(--brand-light);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
-.exercise-card h3 { font-size: 16px; margin-bottom: 8px; }
-.exercise-meta { font-size: 13px; color: #64748b; }
+.exercise-card h3 { font-size: var(--fs-md); margin: 0 0 6px; color: var(--text-strong); }
+.exercise-meta { font-size: var(--fs-sm); color: var(--muted); }
 .exercise-progress {
   margin-top: 10px;
-  font-size: 13px;
-  color: #2563eb;
+  font-size: var(--fs-sm);
+  color: var(--brand-dark);
+  font-weight: 600;
 }
 .exercise-progress.muted {
-  color: #64748b;
+  color: var(--muted);
+  font-weight: 500;
 }
 .exercise-stats {
   display: grid;
@@ -95,110 +113,114 @@ body {
   margin-top: 14px;
 }
 .exercise-stat {
-  background: #f8fafc;
-  border-radius: 10px;
+  background: var(--brand-tint);
+  border-radius: var(--r-sm);
   padding: 10px 12px;
 }
 .exercise-stat .k {
   display: block;
-  font-size: 12px;
-  color: #64748b;
+  font-size: var(--fs-xs);
+  color: var(--muted);
 }
 .exercise-stat .v {
   display: block;
   margin-top: 4px;
-  font-size: 15px;
-  color: #0f172a;
-  font-weight: 600;
+  font-size: var(--fs-md);
+  color: var(--text-strong);
+  font-weight: 700;
 }
 .exercise-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: 16px;
 }
 .exercise-actions .action-btn {
   flex: 1;
   text-align: center;
-  border-radius: 10px;
-  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  padding: 9px 10px;
   text-decoration: none;
-  font-size: 14px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   cursor: pointer;
-  border: none;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background .15s ease;
 }
-.action-open {
-  background: #e0f2fe;
-  color: #0369a1;
-}
-.action-manage {
-  background: #dcfce7;
-  color: #166534;
-}
-.action-danger {
-  background: #fee2e2;
-  color: #b91c1c;
-}
+.action-open { background: var(--brand); color: #fff; }
+.action-open:hover{ background: var(--brand-dark); }
+.action-manage { background: var(--brand-tint); color: var(--brand-dark); border-color: var(--brand-light); }
+.action-manage:hover{ background: var(--brand-soft); }
+.action-danger { background: #fff5f5; color: var(--danger); border-color: #fecaca; }
+.action-danger:hover:not(:disabled){ background: #fee2e2; }
+.action-danger:disabled{ opacity: .5; cursor: not-allowed; }
 
 .empty-state {
   text-align: center;
   padding: 60px 0;
-  color: #94a3b8;
+  color: var(--muted);
 }
-.empty-state h3 { margin-bottom: 12px; color: #64748b; }
+.empty-state h3 { margin-bottom: 12px; color: var(--text-strong); }
 
 /* Login gate */
 .login-gate {
-  max-width: 400px;
+  max-width: 420px;
   margin: 80px auto;
   text-align: center;
 }
-.login-gate h1 { font-size: 28px; margin-bottom: 8px; }
-.login-gate .desc { color: #64748b; margin-bottom: 32px; font-size: 14px; }
+.login-gate h1 { font-size: var(--fs-xl); margin: 0 0 8px; color: var(--text-strong); }
+.login-gate .desc { color: var(--muted); margin: 0 0 24px; font-size: var(--fs-base); }
 .login-gate .form-card {
   background: #fff;
-  border-radius: 12px;
-  padding: 32px;
-  border: 1px solid #e2e8f0;
+  border-radius: var(--r);
+  padding: 28px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
   text-align: left;
 }
 .login-gate label {
   display: block;
-  font-size: 14px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   margin-bottom: 8px;
+  color: var(--text);
 }
 .login-gate input {
   width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 16px;
-  margin-bottom: 16px;
-  transition: border-color 0.2s;
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
+  margin-bottom: 14px;
+  transition: border-color .15s ease, box-shadow .15s ease;
 }
 .login-gate input:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
 }
 .login-gate .btn {
   display: block;
   width: 100%;
-  padding: 14px;
-  background: #3b82f6;
+  padding: 13px;
+  background: var(--brand);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
+  font-weight: 700;
   cursor: pointer;
+  transition: background .15s ease;
 }
-.login-gate .btn:hover { background: #2563eb; }
+.login-gate .btn:hover { background: var(--brand-dark); }
 .login-gate .error {
-  color: #ef4444;
-  font-size: 14px;
+  color: var(--danger);
+  font-size: var(--fs-sm);
   margin-top: 12px;
   display: none;
+  background: #fff1f0;
+  padding: 8px 10px;
+  border-radius: 6px;
 }
 </style>
 </head>
@@ -206,7 +228,7 @@ body {
 
 {% if show_upload %}
 {# 已登录的员工：跳过验证，直接显示内容 #}
-<div class="container" id="mainContent">
+<div class="listening-page" id="mainContent">
   {% if show_upload %}
   <div class="student-bar" style="background:#d1fae5;">
     <span>员工模式 — <span class="name" style="color:#16a34a;">{{ current_user.display_name or current_user.username }}</span></span>
@@ -223,10 +245,16 @@ body {
   {% endif %}
 
   <div class="page-header">
-    <h1>精听练习</h1>
+    <div>
+      <p class="eyebrow">Sage Path · Listening</p>
+      <h1>精听练习</h1>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a class="upload-btn upload-btn--secondary" href="{{ url_for('listening_jijing_index') }}">听力机经</a>
     {% if show_upload %}
-    <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
+      <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
     {% endif %}
+    </div>
   </div>
   <p class="subtitle">选择一个练习开始精听训练。学生自由练习会在当前浏览器自动保存进度。</p>
 
@@ -289,14 +317,18 @@ body {
 </div>
 
 <!-- Main content (hidden until student verified) -->
-<div class="container" id="mainContent" style="display:none">
+<div class="listening-page" id="mainContent" style="display:none">
   <div class="student-bar">
     <span>欢迎，<span class="name" id="displayName"></span></span>
     <button onclick="logout()">切换账号</button>
   </div>
 
   <div class="page-header">
-    <h1>精听练习</h1>
+    <div>
+      <p class="eyebrow">Sage Path · Listening</p>
+      <h1>精听练习</h1>
+    </div>
+    <a class="upload-btn upload-btn--secondary" href="{{ url_for('listening_jijing_index') }}">听力机经</a>
   </div>
   <p class="subtitle">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
 
