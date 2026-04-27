@@ -5,12 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ part.in_book }} {{ part.test_name }} {{ part.part_title }} - 听力机经</title>
 <style>
+:root {
+  --brand: #2F8E87;
+  --brand-dark: #277C78;
+  --brand-light: #40A6A0;
+  --brand-soft: #E5F4F2;
+  --brand-tint: #F2FBF9;
+  --bg: #f5f7fb;
+  --card: #fff;
+  --line: #E8EBF0;
+  --line-strong: #dbe0e8;
+  --text: #1f2937;
+  --text-strong: #0f172a;
+  --muted: #64748b;
+  --success: #16a34a;
+  --success-soft: #f0fdf4;
+  --danger: #dc2626;
+  --danger-soft: #fff1f2;
+  --r-sm: 8px;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
+  --shadow-md: 0 8px 20px rgba(15,23,42,.08);
+}
 * { box-sizing: border-box; }
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f6f7fb;
-  color: #172033;
+  background: var(--bg);
+  color: var(--text);
 }
 .shell {
   min-height: 100vh;
@@ -21,9 +42,9 @@ body {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: #fff;
-  border-bottom: 1px solid #e5eaf2;
-  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
 }
 .player-inner {
   max-width: 1180px;
@@ -35,9 +56,11 @@ body {
   align-items: center;
 }
 .crumb {
-  color: #f05a28;
+  color: var(--brand);
   font-size: 13px;
   font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
   margin-bottom: 4px;
 }
 h1 {
@@ -47,7 +70,7 @@ h1 {
 }
 .meta {
   margin-top: 5px;
-  color: #64748b;
+  color: var(--muted);
   font-size: 13px;
 }
 audio {
@@ -64,12 +87,12 @@ audio {
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
-  border-bottom: 1px solid #e5eaf2;
+  border-bottom: 1px solid var(--line);
 }
 .tab {
   border: none;
   background: transparent;
-  color: #64748b;
+  color: var(--muted);
   padding: 12px 14px;
   font-size: 15px;
   font-weight: 800;
@@ -77,8 +100,11 @@ audio {
   border-bottom: 3px solid transparent;
 }
 .tab.active {
-  color: #f05a28;
-  border-bottom-color: #f05a28;
+  color: var(--brand-dark);
+  border-bottom-color: var(--brand);
+}
+.tab:hover {
+  color: var(--brand-dark);
 }
 .panel {
   display: none;
@@ -92,10 +118,10 @@ audio {
   gap: 16px;
 }
 .card {
-  background: #fff;
-  border: 1px solid #e5eaf2;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-sm);
 }
 .group {
   margin-bottom: 14px;
@@ -106,7 +132,7 @@ audio {
   font-size: 18px;
 }
 .desc {
-  color: #111827;
+  color: var(--text-strong);
   white-space: pre-line;
   line-height: 1.6;
   margin-bottom: 18px;
@@ -119,14 +145,14 @@ audio {
 .collect {
   line-height: 2.05;
   white-space: pre-line;
-  color: #1f2937;
+  color: var(--text);
 }
 .option-bank {
   margin: 12px 0;
   padding: 12px;
-  border: 1px solid #e5eaf2;
-  border-radius: 8px;
-  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--brand-tint);
 }
 .option-bank-title {
   margin-bottom: 8px;
@@ -134,11 +160,11 @@ audio {
 }
 .option-line {
   margin: 5px 0;
-  color: #334155;
+  color: var(--text);
 }
 .question {
   padding: 18px 0;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--line);
 }
 .question:first-of-type {
   border-top: none;
@@ -157,28 +183,40 @@ audio {
 }
 .q-number {
   font-weight: 800;
-  color: #111827;
+  color: var(--text-strong);
 }
 .seek-btn {
   flex: 0 0 auto;
-  border: 1px solid #fed7aa;
-  background: #fff7ed;
-  color: #c2410c;
-  border-radius: 8px;
+  border: 1px solid rgba(47,142,135,.28);
+  background: var(--brand-tint);
+  color: var(--brand-dark);
+  border-radius: var(--r-sm);
   padding: 6px 9px;
   font-size: 12px;
   font-weight: 800;
   cursor: pointer;
 }
+.seek-btn:hover {
+  background: var(--brand-soft);
+}
+.seek-btn:focus-visible,
+.submit-btn:focus-visible,
+.small-btn:focus-visible,
+.answer-input:focus-visible,
+.answer-select:focus-visible,
+.tab:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
 .answer-input,
 .answer-select {
   min-width: 120px;
   height: 34px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--line-strong);
   border-radius: 7px;
   padding: 0 10px;
   font-size: 14px;
-  background: #fff;
+  background: var(--card);
 }
 .options-list {
   display: grid;
@@ -197,7 +235,7 @@ audio {
   align-items: flex-start;
   gap: 10px;
   margin: 0;
-  color: #111827;
+  color: var(--text-strong);
   font-size: 16px;
   line-height: 1.5;
   cursor: pointer;
@@ -207,7 +245,7 @@ audio {
   height: 16px;
   margin: 4px 0 0;
   flex: 0 0 auto;
-  accent-color: #f05a28;
+  accent-color: var(--brand);
 }
 .choice-text {
   min-width: 0;
@@ -220,25 +258,25 @@ table.practice-table {
   border-collapse: collapse;
   width: 100%;
   min-width: 520px;
-  background: #fff;
+  background: var(--card);
 }
 .practice-table td,
 .practice-table th {
-  border: 1px solid #dbe3ef;
+  border: 1px solid var(--line-strong);
   padding: 10px;
   vertical-align: top;
   line-height: 1.5;
 }
 .practice-table tr:first-child td {
-  background: #f8fafc;
+  background: var(--brand-tint);
   font-weight: 800;
 }
 .question-image {
   display: block;
   max-width: 100%;
   margin: 12px 0;
-  border: 1px solid #e5eaf2;
-  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
 }
 .side {
   position: sticky;
@@ -254,8 +292,8 @@ table.practice-table {
   display: flex;
   justify-content: space-between;
   padding: 9px 0;
-  border-bottom: 1px solid #f1f5f9;
-  color: #475569;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
   font-size: 14px;
 }
 .submit-btn {
@@ -263,39 +301,42 @@ table.practice-table {
   height: 42px;
   margin-top: 14px;
   border: none;
-  border-radius: 8px;
-  background: #f05a28;
+  border-radius: var(--r-sm);
+  background: var(--brand);
   color: #fff;
   font-weight: 900;
   cursor: pointer;
   font-size: 15px;
 }
+.submit-btn:hover {
+  background: var(--brand-dark);
+}
 .result-box {
   margin-top: 14px;
   padding: 12px;
-  border-radius: 8px;
-  background: #f8fafc;
-  color: #334155;
+  border-radius: var(--r-sm);
+  background: var(--brand-tint);
+  color: var(--text);
   font-size: 14px;
   line-height: 1.6;
 }
 .is-correct {
-  border-color: #22c55e !important;
-  background: #f0fdf4 !important;
+  border-color: var(--success) !important;
+  background: var(--success-soft) !important;
 }
 .is-wrong {
-  border-color: #ef4444 !important;
-  background: #fff1f2 !important;
+  border-color: var(--danger) !important;
+  background: var(--danger-soft) !important;
 }
 .options-list.is-correct,
 .options-list.is-wrong {
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   padding: 8px 10px;
 }
 .answer-note {
   display: none;
   margin-top: 8px;
-  color: #166534;
+  color: var(--success);
   font-size: 13px;
 }
 .show-answers .answer-note {
@@ -306,11 +347,11 @@ table.practice-table {
   grid-template-columns: 84px minmax(0, 1fr);
   gap: 12px;
   padding: 12px 14px;
-  border-bottom: 1px solid #f1f5f9;
-  background: #fff;
+  border-bottom: 1px solid var(--line);
+  background: var(--card);
 }
 .transcript-time {
-  color: #64748b;
+  color: var(--muted);
   font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
@@ -319,12 +360,12 @@ table.practice-table {
 }
 .transcript-cn {
   margin-top: 5px;
-  color: #64748b;
+  color: var(--muted);
   font-size: 13px;
 }
 .dictation-row {
   padding: 14px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--line);
 }
 .dictation-tools {
   display: flex;
@@ -332,11 +373,11 @@ table.practice-table {
   margin-bottom: 8px;
 }
 .small-btn {
-  border: 1px solid #dbe3ef;
-  background: #fff;
+  border: 1px solid var(--line-strong);
+  background: var(--card);
   border-radius: 7px;
   padding: 6px 9px;
-  color: #334155;
+  color: var(--text);
   cursor: pointer;
   font-weight: 700;
 }
@@ -360,18 +401,18 @@ table.practice-table {
 }
 .analysis-item {
   padding: 16px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--line);
 }
 .analysis-item h3 {
   margin: 0 0 8px;
   font-size: 16px;
 }
 .analysis-answer {
-  color: #166534;
+  color: var(--success);
   font-weight: 800;
 }
 .analysis-text {
-  color: #475569;
+  color: var(--muted);
   line-height: 1.7;
   white-space: pre-line;
 }
@@ -394,7 +435,7 @@ table.practice-table {
   <header class="player-bar">
     <div class="player-inner">
       <div>
-        <div class="crumb">听力 / 机经 {{ part.in_book }} / {{ part.test_name }}</div>
+        <div class="crumb">Sage Path · Listening</div>
         <h1>{{ part.part_title }} · {{ part.question_name }}</h1>
         <div class="meta">{{ part.question_type }} · Paper {{ part.paper_id }}</div>
       </div>
