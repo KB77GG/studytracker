@@ -99,17 +99,18 @@ audio {
 }
 .group {
   margin-bottom: 14px;
-  padding: 18px;
+  padding: 22px 26px;
 }
 .group h2 {
-  margin: 0 0 10px;
+  margin: 0 0 18px;
   font-size: 18px;
 }
 .desc {
-  color: #475569;
+  color: #111827;
   white-space: pre-line;
   line-height: 1.6;
-  margin-bottom: 12px;
+  margin-bottom: 18px;
+  font-size: 17px;
 }
 .question-title {
   font-weight: 800;
@@ -136,18 +137,27 @@ audio {
   color: #334155;
 }
 .question {
-  padding: 12px 0;
+  padding: 18px 0;
   border-top: 1px solid #f1f5f9;
+}
+.question:first-of-type {
+  border-top: none;
 }
 .q-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .q-title {
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.q-number {
   font-weight: 800;
+  color: #111827;
 }
 .seek-btn {
   flex: 0 0 auto;
@@ -170,6 +180,12 @@ audio {
   font-size: 14px;
   background: #fff;
 }
+.options-list {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  max-width: 820px;
+}
 .inline-answer {
   display: inline-flex;
   align-items: center;
@@ -177,12 +193,24 @@ audio {
   vertical-align: middle;
 }
 .choice {
-  display: block;
-  margin: 7px 0;
-  color: #334155;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  color: #111827;
+  font-size: 16px;
+  line-height: 1.5;
+  cursor: pointer;
 }
 .choice input {
-  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  margin: 4px 0 0;
+  flex: 0 0 auto;
+  accent-color: #f05a28;
+}
+.choice-text {
+  min-width: 0;
 }
 .table-wrap {
   overflow-x: auto;
@@ -258,6 +286,11 @@ table.practice-table {
 .is-wrong {
   border-color: #ef4444 !important;
   background: #fff1f2 !important;
+}
+.options-list.is-correct,
+.options-list.is-wrong {
+  border-radius: 8px;
+  padding: 8px 10px;
 }
 .answer-note {
   display: none;
@@ -478,6 +511,20 @@ function controlForItem(item, group, inline = false) {
   const options = item.options?.length ? item.options : (group.collect_options?.list || []);
   const wrapperClass = inline ? 'inline-answer' : '';
 
+  if (item.options?.length) {
+    const isMulti = String(item.answer || '').includes(',') || group.type === 9;
+    return `
+      <div class="answer-unit options-list" data-kind="${isMulti ? 'checkboxes' : 'radio'}" data-answer="${answer}" data-q="${escapeHtml(item.number)}">
+        ${item.options.map(o => `
+          <label class="choice">
+            <input type="${isMulti ? 'checkbox' : 'radio'}" name="${qid}" value="${escapeHtml(o.title)}">
+            <span class="choice-text">${escapeHtml(o.title)}. ${escapeHtml(o.content)}</span>
+          </label>
+        `).join('')}
+      </div>
+    `;
+  }
+
   if (options.length && group.type !== 2) {
     return `
       <span class="${wrapperClass}">
@@ -486,20 +533,6 @@ function controlForItem(item, group, inline = false) {
           ${options.map(o => `<option value="${escapeHtml(o.title)}">${escapeHtml(o.title)}. ${escapeHtml(o.content)}</option>`).join('')}
         </select>
       </span>
-    `;
-  }
-
-  if (item.options?.length) {
-    const isMulti = String(item.answer || '').includes(',') || group.type === 9;
-    return `
-      <div class="answer-unit" data-kind="${isMulti ? 'checkboxes' : 'radio'}" data-answer="${answer}" data-q="${escapeHtml(item.number)}">
-        ${item.options.map(o => `
-          <label class="choice">
-            <input type="${isMulti ? 'checkbox' : 'radio'}" name="${qid}" value="${escapeHtml(o.title)}">
-            ${escapeHtml(o.title)}. ${escapeHtml(o.content)}
-          </label>
-        `).join('')}
-      </div>
     `;
   }
 
@@ -571,7 +604,7 @@ function renderQuestionItem(item, group) {
   return `
     <div class="question">
       <div class="q-head">
-        <div class="q-title">Q${escapeHtml(item.number)}. ${title}</div>
+        <div class="q-title"><span class="q-number">${escapeHtml(item.number)}.</span> ${title}</div>
         ${time}
       </div>
       ${controlForItem(item, group)}
