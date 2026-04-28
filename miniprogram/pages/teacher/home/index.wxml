@@ -59,23 +59,40 @@
             <view class="course-title">{{item.course_name}}</view>
             <view class="course-meta">学生 {{item.student_name || '—'}} ｜ 老师 {{item.teacher_name || '—'}}</view>
           </view>
-          <button
-            class="course-action"
-            size="mini"
-            data-schedule-uid="{{item.schedule_uid}}"
-            data-schedule-id="{{item.schedule_id}}"
-            data-student-id="{{item.student_id}}"
-            data-student-name="{{item.student_name}}"
-            data-teacher-id="{{item.teacher_id}}"
-            data-course-name="{{item.course_name}}"
-            data-start-time="{{item.start_time}}"
-            data-end-time="{{item.end_time}}"
-            data-teacher-name="{{item.teacher_name}}"
-            data-schedule-date="{{item.schedule_date}}"
-            data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
-            data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
-            bindtap="openFeedback"
-          >课堂记录</button>
+          <view class="course-actions">
+            <button
+              class="course-action ghost"
+              size="mini"
+              data-schedule-uid="{{item.schedule_uid}}"
+              data-schedule-id="{{item.schedule_id}}"
+              data-student-id="{{item.student_id}}"
+              data-student-name="{{item.student_name}}"
+              data-teacher-id="{{item.teacher_id}}"
+              data-course-name="{{item.course_name}}"
+              data-start-time="{{item.start_time}}"
+              data-end-time="{{item.end_time}}"
+              data-teacher-name="{{item.teacher_name}}"
+              data-schedule-date="{{item.schedule_date}}"
+              bindtap="openHomework"
+            >布置作业</button>
+            <button
+              class="course-action"
+              size="mini"
+              data-schedule-uid="{{item.schedule_uid}}"
+              data-schedule-id="{{item.schedule_id}}"
+              data-student-id="{{item.student_id}}"
+              data-student-name="{{item.student_name}}"
+              data-teacher-id="{{item.teacher_id}}"
+              data-course-name="{{item.course_name}}"
+              data-start-time="{{item.start_time}}"
+              data-end-time="{{item.end_time}}"
+              data-teacher-name="{{item.teacher_name}}"
+              data-schedule-date="{{item.schedule_date}}"
+              data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
+              data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
+              bindtap="openFeedback"
+            >课堂记录</button>
+          </view>
         </view>
       </view>
 
@@ -127,23 +144,40 @@
             <view class="course-title">{{item.course_name}}</view>
             <view class="course-meta">学生 {{item.student_name || '—'}} ｜ 老师 {{item.teacher_name || '—'}}</view>
           </view>
-          <button
-            class="course-action ghost"
-            size="mini"
-            data-schedule-uid="{{item.schedule_uid}}"
-            data-schedule-id="{{item.schedule_id}}"
-            data-student-id="{{item.student_id}}"
-            data-student-name="{{item.student_name}}"
-            data-teacher-id="{{item.teacher_id}}"
-            data-course-name="{{item.course_name}}"
-            data-start-time="{{item.start_time}}"
-            data-end-time="{{item.end_time}}"
-            data-teacher-name="{{item.teacher_name}}"
-            data-schedule-date="{{item.schedule_date}}"
-            data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
-            data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
-            bindtap="openFeedback"
-          >{{item.feedback ? '修改记录' : '课堂记录'}}</button>
+          <view class="course-actions">
+            <button
+              class="course-action ghost"
+              size="mini"
+              data-schedule-uid="{{item.schedule_uid}}"
+              data-schedule-id="{{item.schedule_id}}"
+              data-student-id="{{item.student_id}}"
+              data-student-name="{{item.student_name}}"
+              data-teacher-id="{{item.teacher_id}}"
+              data-course-name="{{item.course_name}}"
+              data-start-time="{{item.start_time}}"
+              data-end-time="{{item.end_time}}"
+              data-teacher-name="{{item.teacher_name}}"
+              data-schedule-date="{{item.schedule_date}}"
+              bindtap="openHomework"
+            >布置作业</button>
+            <button
+              class="course-action ghost"
+              size="mini"
+              data-schedule-uid="{{item.schedule_uid}}"
+              data-schedule-id="{{item.schedule_id}}"
+              data-student-id="{{item.student_id}}"
+              data-student-name="{{item.student_name}}"
+              data-teacher-id="{{item.teacher_id}}"
+              data-course-name="{{item.course_name}}"
+              data-start-time="{{item.start_time}}"
+              data-end-time="{{item.end_time}}"
+              data-teacher-name="{{item.teacher_name}}"
+              data-schedule-date="{{item.schedule_date}}"
+              data-feedback-text="{{item.feedback ? item.feedback.text : ''}}"
+              data-feedback-image="{{item.feedback ? item.feedback.image : ''}}"
+              bindtap="openFeedback"
+            >{{item.feedback ? '修改记录' : '课堂记录'}}</button>
+          </view>
         </view>
       </view>
 
@@ -156,10 +190,10 @@
           <text>课堂记录</text>
           <text class="quick-sub">可用</text>
         </view>
-        <view class="quick-card muted" data-name="布置作业" bindtap="showUnavailable">
+        <view class="quick-card" bindtap="openFirstHomework">
           <text class="quick-icon">作</text>
           <text>布置作业</text>
-          <text class="quick-sub">保留入口</text>
+          <text class="quick-sub">可用</text>
         </view>
         <view class="quick-card muted" data-name="发送通知" bindtap="showUnavailable">
           <text class="quick-icon">通</text>

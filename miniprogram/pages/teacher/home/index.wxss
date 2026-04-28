@@ -264,6 +264,13 @@ page {
   font-weight: 850;
 }
 
+.course-actions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
 .course-action.ghost {
   color: #087f77;
   background: #f5fbfa;
@@ -573,6 +580,10 @@ page {
   .schedule-card {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .course-actions {
+    flex-direction: row;
   }
 
   .course-action {

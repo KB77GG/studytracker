@@ -481,6 +481,16 @@ Page({
         this.navigateFeedbackWithSchedule(target)
     },
 
+    openFirstHomework() {
+        const target = (this.data.selectedItems && this.data.selectedItems[0])
+            || (this.data.todayItems && this.data.todayItems[0])
+        if (!target) {
+            wx.showToast({ title: '请先选择有课程的日期', icon: 'none' })
+            return
+        }
+        this.navigateHomeworkWithSchedule(target)
+    },
+
     async bindSchedulerTeacher() {
         const rawId = (this.data.schedulerTeacherId || '').trim()
         const parsedId = Number(rawId)
@@ -636,17 +646,21 @@ Page({
 
     openHomework(e) {
         const data = e.currentTarget.dataset || {}
+        this.navigateHomeworkWithSchedule(data)
+    },
+
+    navigateHomeworkWithSchedule(data = {}) {
         const params = {
-            schedule_uid: data.scheduleUid,
-            schedule_id: data.scheduleId,
-            student_id: data.studentId,
-            student_name: data.studentName,
-            teacher_id: data.teacherId,
-            teacher_name: data.teacherName,
-            course_name: data.courseName,
-            start_time: data.startTime,
-            end_time: data.endTime,
-            schedule_date: data.scheduleDate
+            schedule_uid: data.scheduleUid || data.schedule_uid,
+            schedule_id: data.scheduleId || data.schedule_id,
+            student_id: data.studentId || data.student_id,
+            student_name: data.studentName || data.student_name,
+            teacher_id: data.teacherId || data.teacher_id,
+            teacher_name: data.teacherName || data.teacher_name,
+            course_name: data.courseName || data.course_name,
+            start_time: data.startTime || data.start_time,
+            end_time: data.endTime || data.end_time,
+            schedule_date: data.scheduleDate || data.schedule_date
         }
         const query = Object.keys(params)
             .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')
