@@ -16,7 +16,8 @@
   {% if current_user.is_authenticated %}
   {% set endpoint = request.endpoint or '' %}
   <div class="app-shell">
-    <aside class="sidebar">
+    <button type="button" class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true" tabindex="-1"></button>
+    <aside class="sidebar" id="sidebar">
       <div class="sidebar__brand">
         <span class="brand-icon">S</span>
         <div>
@@ -81,7 +82,10 @@
     </aside>
     <div class="main-panel">
       <header class="main-header">
-        <div>
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="打开导航" aria-controls="sidebar" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="main-header__title">
           <p class="eyebrow">{% block page_subtitle %}Dashboard Overview{% endblock %}</p>
           <h1>{% block page_title %}学习计划与打卡系统{% endblock %}</h1>
         </div>
@@ -139,6 +143,35 @@
         setTimeout(function () { el.style.opacity = '0'; }, 2500);
         setTimeout(function () { el.remove(); }, 3500);
       });
+
+      // Mobile sidebar drawer
+      const toggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (toggle && sidebar && overlay) {
+        const openDrawer = function () {
+          sidebar.classList.add('is-open');
+          overlay.classList.add('is-open');
+          toggle.setAttribute('aria-expanded', 'true');
+          document.body.style.overflow = 'hidden';
+        };
+        const closeDrawer = function () {
+          sidebar.classList.remove('is-open');
+          overlay.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        };
+        toggle.addEventListener('click', function () {
+          if (sidebar.classList.contains('is-open')) closeDrawer(); else openDrawer();
+        });
+        overlay.addEventListener('click', closeDrawer);
+        sidebar.querySelectorAll('.nav-link').forEach(function (a) {
+          a.addEventListener('click', function () { if (window.innerWidth <= 768) closeDrawer(); });
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && sidebar.classList.contains('is-open')) closeDrawer();
+        });
+      }
     });
   </script>
 </body>
