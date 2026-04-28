@@ -1,112 +1,116 @@
 <view class="container {{showLoginForm ? 'confirm-mode' : ''}}">
-  <!-- 背景装饰 -->
   <view class="bg-circle-1"></view>
   <view class="bg-circle-2"></view>
+  <view class="dot-grid">
+    <view wx:for="{{dotList}}" wx:key="*this" class="dot"></view>
+  </view>
 
-  <!-- 顶部品牌区 -->
   <view class="hero {{showLoginForm ? 'hero-confirm' : ''}}">
     <text class="app-name">StudyTracker</text>
-    <text class="sub-name">by Sage path edu.</text>
+    <text class="sub-name">Sage Path 睿然国际教育学习管理系统</text>
     <text class="slogan">让每一次进步都看得见</text>
   </view>
 
-  <!-- 主卡片区域 -->
   <view class="main-card">
-
-    <!-- 0. 欢迎引导页 -->
     <view class="welcome-intro" wx:if="{{!hasToken && !showLoginForm}}">
       <view class="intro-content">
-        <text class="intro-title">📚 智能学习管理</text>
+        <view class="intro-title-row">
+          <view class="intro-mark">学</view>
+          <text class="intro-title">智能学习管理</text>
+        </view>
+
         <view class="feature-list">
-          <view class="feature-item">
-            <text class="feature-emoji">✅</text>
+          <view class="feature-item accent-teal">
+            <view class="feature-icon">任</view>
             <view class="feature-texts">
-              <text class="feature-title">任务打卡</text>
-              <text class="feature-desc">每日学习进度一目了然</text>
+              <text class="feature-title">学习任务</text>
+              <text class="feature-desc">查看每日练习、作业与打卡进度</text>
             </view>
+            <text class="feature-arrow">›</text>
           </view>
-          <view class="feature-item">
-            <text class="feature-emoji">📊</text>
+          <view class="feature-item accent-blue">
+            <view class="feature-icon">课</view>
             <view class="feature-texts">
-              <text class="feature-title">数据统计</text>
-              <text class="feature-desc">可视化学习成果</text>
+              <text class="feature-title">课程课表</text>
+              <text class="feature-desc">查看课程时间、地点与上课提醒</text>
             </view>
+            <text class="feature-arrow">›</text>
           </view>
-          <view class="feature-item">
-            <text class="feature-emoji">🎯</text>
+          <view class="feature-item accent-amber">
+            <view class="feature-icon">反</view>
             <view class="feature-texts">
-              <text class="feature-title">智能材料</text>
-              <text class="feature-desc">口语朗读、写作训练</text>
+              <text class="feature-title">学习反馈</text>
+              <text class="feature-desc">查看老师反馈、练习结果与改进建议</text>
             </view>
+            <text class="feature-arrow">›</text>
           </view>
-          <view class="feature-item">
-            <text class="feature-emoji">👨‍👩‍👧</text>
+          <view class="feature-item accent-violet">
+            <view class="feature-icon">数</view>
             <view class="feature-texts">
-              <text class="feature-title">家长监督</text>
-              <text class="feature-desc">随时了解学习情况</text>
+              <text class="feature-title">学习数据</text>
+              <text class="feature-desc">了解完成率、正确率和阶段表现</text>
             </view>
+            <text class="feature-arrow">›</text>
           </view>
         </view>
 
         <view class="privacy-section">
           <checkbox-group bindchange="handleLandingPrivacyChange">
             <label class="privacy-label">
-              <checkbox value="agree" checked="{{landingAgreed}}" color="#07c160" style="transform:scale(0.7)"/>
+              <checkbox value="agree" checked="{{landingAgreed}}" color="#087f77" style="transform:scale(0.82)" />
               <text class="privacy-text">我已阅读并同意 <text class="link" catchtap="openPrivacyContract">《用户协议》</text> 和 <text class="link" catchtap="openPrivacyContract">《隐私政策》</text></text>
             </label>
           </checkbox-group>
         </view>
 
         <button class="btn-start {{!landingAgreed ? 'btn-disabled' : ''}}" bindtap="startUse">开始使用</button>
-        <button class="btn-ghost" bindtap="showPreview">先随便看看</button>
+        <button class="btn-ghost" bindtap="showPreview">先浏览功能</button>
+
+        <view class="login-note">
+          <view class="shield-mark">✓</view>
+          <text>登录后将根据账号自动进入学生端或教师端</text>
+        </view>
       </view>
     </view>
 
-    <!-- 1. 登录引导 -->
     <view class="login-section" wx:if="{{!hasToken && showLoginForm}}">
-    <view class="welcome-text">
-      <text class="status-text">继续进入</text>
-    </view>
-      
-      <!-- 隐私协议勾选 -->
-      <view class="privacy-section">
+      <text class="section-title">继续进入 StudyTracker</text>
+      <text class="section-subtitle">使用微信登录后，系统会自动识别学生、家长或教师身份。</text>
+
+      <view class="privacy-section confirm-privacy">
         <checkbox-group bindchange="handlePrivacyChange">
           <label class="privacy-label">
-            <checkbox value="agree" checked="{{privacyAgreed}}" color="#07c160" style="transform:scale(0.7)"/>
+            <checkbox value="agree" checked="{{privacyAgreed}}" color="#087f77" style="transform:scale(0.82)" />
             <text class="privacy-text">我已阅读并同意 <text class="link" catchtap="openPrivacyContract">《用户协议》</text> 和 <text class="link" catchtap="openPrivacyContract">《隐私政策》</text></text>
           </label>
         </checkbox-group>
       </view>
 
-      <button class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" bindtap="handleLogin">
-        微信一键登录
-      </button>
-      <button class="btn-back" bindtap="backToWelcome">取消登录</button>
+      <button class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" bindtap="handleLogin">微信一键登录</button>
+      <button class="btn-back" bindtap="backToWelcome">返回</button>
     </view>
 
-    <!-- 2. 角色选择 -->
     <view class="role-section" wx:if="{{hasToken && isGuest}}">
       <text class="section-title">请选择您的身份</text>
       <view class="role-grid">
         <view class="role-item student" bindtap="selectRole" data-role="student">
-          <view class="role-icon-bg">🎓</view>
+          <view class="role-icon-bg">学</view>
           <text class="role-label">我是学生</text>
           <text class="role-desc">查看任务 · 提交打卡</text>
         </view>
         <view class="role-item parent" bindtap="selectRole" data-role="parent">
-          <view class="role-icon-bg">👨‍👩‍👧</view>
+          <view class="role-icon-bg">家</view>
           <text class="role-label">我是家长</text>
           <text class="role-desc">关注成长 · 查看报告</text>
         </view>
         <view class="role-item teacher" bindtap="selectRole" data-role="teacher">
-          <view class="role-icon-bg">👨‍🏫</view>
+          <view class="role-icon-bg">师</view>
           <text class="role-label">我是老师</text>
-          <text class="role-desc">查看课表 · 订阅提醒</text>
+          <text class="role-desc">查看课表 · 课堂记录</text>
         </view>
       </view>
     </view>
 
-    <!-- 2.5 绑定已有账号 -->
     <view class="bind-existing-section" wx:if="{{showExistingBindForm}}">
       <text class="section-title">绑定已有账号</text>
       <text class="section-subtitle">请输入后台创建的老师账号与密码</text>
@@ -127,16 +131,15 @@
       </view>
     </view>
 
-    <!-- 3. 绑定表单 -->
     <view class="bind-section" wx:if="{{showBindForm}}">
       <text class="section-title">完善信息</text>
       <text class="section-subtitle">绑定{{targetRole === 'student' ? '学生' : '家长'}}身份以开始使用</text>
-      
+
       <view class="input-group">
         <text class="input-label">姓名</text>
         <input class="input-field" placeholder="请输入真实姓名" model:value="{{bindName}}" />
       </view>
-      
+
       <view class="input-group" wx:if="{{targetRole === 'parent'}}">
         <text class="input-label">孩子姓名</text>
         <input class="input-field" placeholder="请输入孩子的姓名" model:value="{{bindStudentName}}" />
@@ -152,6 +155,5 @@
         <button class="btn-confirm" bindtap="confirmBind">确认绑定</button>
       </view>
     </view>
-
   </view>
 </view>

@@ -24,7 +24,10 @@ Page({
         subscribeButtonText: '开启任务提醒',
         subscribeTip: '多次允许后，微信会出现“总是保持以上选择”，勾选即可长期免打扰',
         notebookCount: 0,
-        isGuest: false
+        reviewTaskCount: 0,
+        isGuest: false,
+        weekdayText: '',
+        quickDates: []
     },
 
     onLoad() {
@@ -38,7 +41,9 @@ Page({
         this.setData({
             dateStr: `${year}/${month}/${day}`,
             currentDate: dateString,
-            userInfo: app.globalData.userInfo || { nickName: '同学' }
+            userInfo: app.globalData.userInfo || { nickName: '同学' },
+            weekdayText: this.getWeekdayText(now),
+            quickDates: this.buildQuickDates(dateString)
         })
     },
 
@@ -274,11 +279,63 @@ Page({
     handleDateChange(e) {
         const date = e.detail.value // YYYY-MM-DD
         const [year, month, day] = date.split('-')
+        const dateObj = new Date(`${date}T00:00:00`)
         this.setData({
             currentDate: date,
-            dateStr: `${year}/${month}/${day}`
+            dateStr: `${year}/${month}/${day}`,
+            weekdayText: this.getWeekdayText(dateObj),
+            quickDates: this.buildQuickDates(date)
         })
         this.fetchTasks()
+    },
+
+    selectQuickDate(e) {
+        const date = e.currentTarget.dataset.date
+        if (!date || date === this.data.currentDate) return
+        const [year, month, day] = date.split('-')
+        const dateObj = new Date(`${date}T00:00:00`)
+        this.setData({
+            currentDate: date,
+            dateStr: `${year}/${month}/${day}`,
+            weekdayText: this.getWeekdayText(dateObj),
+            quickDates: this.buildQuickDates(date)
+        })
+        this.fetchTasks()
+    },
+
+    getWeekdayText(dateObj) {
+        const days = ['日', '一', '二', '三', '四', '五', '六']
+        return days[dateObj.getDay()]
+    },
+
+    formatDateObj(dateObj) {
+        const year = dateObj.getFullYear()
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+        const day = String(dateObj.getDate()).padStart(2, '0')
+        return `${year}-${month}-${day}`
+    },
+
+    buildQuickDates(selectedDate) {
+        const selected = new Date(`${selectedDate}T00:00:00`)
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        const labels = {
+            '-2': '前天',
+            '-1': '昨天',
+            '0': '今天',
+            '1': '明天',
+            '2': '后天'
+        }
+        return [-2, -1, 0, 1].map(offset => {
+            const d = new Date(selected)
+            d.setDate(selected.getDate() + offset)
+            const diffFromToday = Math.round((d.getTime() - today.getTime()) / 86400000)
+            return {
+                date: this.formatDateObj(d),
+                label: `${d.getMonth() + 1}/${d.getDate()}`,
+                sub: labels[String(diffFromToday)] || `周${this.getWeekdayText(d)}`
+            }
+        })
     },
 
     goLogin() {
@@ -346,15 +403,18 @@ Page({
                 const total = tasks.length
                 const completed = tasks.filter(t => t.isDone).length
                 const percent = total > 0 ? Math.round((completed / total) * 100) : 0
+                const reviewTaskCount = tasks.filter(t => t.status === 'rejected').length
 
                 this.setData({
                     tasks,
-                    progress: { total, completed, percent }
+                    progress: { total, completed, percent },
+                    reviewTaskCount
                 })
             } else {
                 this.setData({
                     tasks: [],
-                    progress: { total: 0, completed: 0, percent: 0 }
+                    progress: { total: 0, completed: 0, percent: 0 },
+                    reviewTaskCount: 0
                 })
             }
         } catch (err) {

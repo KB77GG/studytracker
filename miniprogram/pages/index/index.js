@@ -18,7 +18,8 @@ Page({
         existingPassword: '',
         existingLoading: false,
         privacyAgreed: false,
-        showPreview: false
+        showPreview: false,
+        dotList: Array.from({ length: 20 }, (_, index) => index)
     },
 
     showLogin() {

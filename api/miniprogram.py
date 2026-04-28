@@ -2808,7 +2808,10 @@ def create_teacher_homework():
 @mp_bp.route("/teacher/schedules", methods=["GET"])
 @require_api_user(User.ROLE_TEACHER)
 def teacher_schedules():
-    """老师查看课表（默认未来7天 + 过去2天，可传 days/past_days），要求已绑定 scheduler_teacher_id。"""
+    """老师查看课表。
+
+    默认未来7天 + 过去2天；也可传 month=YYYY-MM 获取整月课表。
+    """
     days = request.args.get("days", 7)
     try:
         days = int(days)
@@ -2823,6 +2826,24 @@ def teacher_schedules():
         past_days = 2
     past_days = max(0, min(past_days, 14))  # 限制 0-14 天
 
+    month_arg = (request.args.get("month") or "").strip()
+    month_start = None
+    month_end = None
+    if month_arg:
+        try:
+            year_str, month_str = month_arg.split("-", 1)
+            year = int(year_str)
+            month = int(month_str)
+            if month < 1 or month > 12:
+                raise ValueError("month out of range")
+            month_start = date(year, month, 1)
+            if month == 12:
+                month_end = date(year + 1, 1, 1) - timedelta(days=1)
+            else:
+                month_end = date(year, month + 1, 1) - timedelta(days=1)
+        except Exception:
+            return jsonify({"ok": False, "error": "invalid_month"}), 400
+
     user = request.current_api_user
     if not user.scheduler_teacher_id:
         current_app.logger.warning(
@@ -2831,8 +2852,12 @@ def teacher_schedules():
         )
         return jsonify({"ok": False, "error": "missing_scheduler_teacher_id"}), 400
 
-    start_date = date.today() - timedelta(days=past_days)
-    end_date = date.today() + timedelta(days=days)
+    if month_start and month_end:
+        start_date = month_start
+        end_date = month_end
+    else:
+        start_date = date.today() - timedelta(days=past_days)
+        end_date = date.today() + timedelta(days=days)
     data, err = _fetch_range_schedules_by_dates(start_date, end_date, teacher_id=user.scheduler_teacher_id)
     if err:
         return jsonify({"ok": False, "error": err}), 400
@@ -2901,6 +2926,7 @@ def teacher_schedules():
         "ok": True,
         "days": days,
         "past_days": past_days,
+        "month": month_arg or None,
         "count": len(normalized),
         "schedules": normalized
     })

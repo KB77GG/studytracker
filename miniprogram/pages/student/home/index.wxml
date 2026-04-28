@@ -1,53 +1,79 @@
 <view class="container">
-  <!-- 访客模式提示条 -->
+  <view class="page-bg"></view>
+
   <view class="guest-banner" wx:if="{{isGuest}}">
     <text class="guest-text">访客模式浏览中 · 登录解锁全部功能</text>
     <view class="guest-login-btn" bindtap="goLogin">登录</view>
   </view>
-  <scroll-view scroll-y class="page-scroll">
-    <!-- 顶部欢迎区 -->
+
+  <scroll-view scroll-y class="page-scroll" enhanced="true" show-scrollbar="false">
     <view class="header-section">
       <view class="greeting">
+        <text class="date">{{dateStr}} 星期{{weekdayText}}</text>
         <text class="hello">{{greeting}}，{{userInfo.nickName}}</text>
-        <text class="sub-text">准备好开始今天的学习了吗？</text>
       </view>
       <view class="header-actions">
-        <picker mode="date" value="{{currentDate}}" bindchange="handleDateChange">
-          <view class="date-badge">
-            {{dateStr}} <text class="picker-arrow">▼</text>
-          </view>
-        </picker>
         <button class="sub-btn" size="mini" bindtap="requestSubscribe">{{subscribeButtonText}}</button>
-        <text class="sub-tip">{{subscribeTip}}</text>
       </view>
     </view>
 
-    <!-- 进度卡片 -->
     <view class="progress-card">
-      <view class="progress-info">
-        <text class="progress-label">今日完成度</text>
-        <text class="progress-value">{{progress.completed}}/{{progress.total}}</text>
+      <view class="progress-top">
+        <view>
+          <text class="progress-label">今日完成度</text>
+          <text class="progress-value">{{progress.completed}} / {{progress.total}} 项任务</text>
+        </view>
+        <view class="streak-box">
+          <text class="streak-num">{{progress.percent || 0}}</text>
+          <text class="streak-label">%</text>
+        </view>
       </view>
       <view class="progress-bar-bg">
         <view class="progress-bar-fill" style="width: {{progress.percent}}%"></view>
       </view>
-      <text class="progress-tips" wx:if="{{progress.percent === 100}}">太棒了！今日任务全部完成 🎉</text>
-      <text class="progress-tips" wx:elif="{{progress.percent > 0}}">继续加油，保持节奏！💪</text>
-      <text class="progress-tips" wx:else>千里之行，始于足下 🚀</text>
+      <text class="progress-tips" wx:if="{{progress.percent === 100}}">今日任务已完成，记得回顾错词和老师反馈。</text>
+      <text class="progress-tips" wx:elif="{{progress.percent > 0}}">保持这个节奏，完成剩余任务即可收尾。</text>
+      <text class="progress-tips" wx:else>先从一个任务开始，进入学习状态。</text>
     </view>
 
-    <!-- Notebook entry -->
-    <view class="notebook-entry" bindtap="goNotebook">
+    <view class="review-entry" bindtap="goNotebook">
       <view>
-        <view class="note-title">错词本</view>
-        <view class="note-desc">查看并复习错词</view>
+        <view class="review-title">复习中心</view>
+        <view class="review-desc">错题错词，集中攻克</view>
       </view>
-      <view class="note-count" wx:if="{{notebookCount > 0}}">已收录 {{notebookCount}} 词</view>
+      <view class="review-stats">
+        <view>
+          <text class="review-num">{{notebookCount}}</text>
+          <text class="review-label">错词</text>
+        </view>
+        <view>
+          <text class="review-num">{{reviewTaskCount}}</text>
+          <text class="review-label">待复盘</text>
+        </view>
+        <text class="review-arrow">›</text>
+      </view>
     </view>
-    
-    <!-- 任务列表 -->
-    <view class="section-title">我的任务</view>
-    
+
+    <view class="section-title-row">
+      <text class="section-title">我的任务</text>
+      <picker mode="date" value="{{currentDate}}" bindchange="handleDateChange">
+        <view class="section-link">切换日期</view>
+      </picker>
+    </view>
+
+    <scroll-view scroll-x class="date-strip" enhanced="true" show-scrollbar="false">
+      <view
+        class="date-chip {{item.date === currentDate ? 'active' : ''}}"
+        wx:for="{{quickDates}}"
+        wx:key="date"
+        data-date="{{item.date}}"
+        bindtap="selectQuickDate"
+      >
+        <text class="date-main">{{item.label}}</text>
+        <text class="date-sub">{{item.sub}}</text>
+      </view>
+    </scroll-view>
+
     <view class="task-list" wx:if="{{tasks.length > 0}}">
       <view class="task-card {{item.isDone ? 'done' : ''}}" wx:for="{{tasks}}" wx:key="id">
         <view class="card-main" bindtap="goToTaskDetail" data-id="{{item.id}}">
@@ -55,21 +81,17 @@
             <view class="task-icon {{item.iconClass}}">{{item.iconText}}</view>
             <view class="task-content">
               <text class="task-name">{{item.task_name}}</text>
-              <text class="task-time">预计 {{item.planned_minutes}}分钟</text>
+              <text class="task-time">预计 {{item.planned_minutes}} 分钟</text>
             </view>
           </view>
           <view class="card-right">
             <view class="status-badge {{item.status}}">{{item.statusText}}</view>
           </view>
         </view>
-        
-        <!-- Timer Section -->
+
         <view class="timer-section" wx:if="{{!item.isDone}}">
           <view class="timer-display {{item.timerStatus}}">
-            <text class="timer-label">⏱️</text>
-            <text class="timer-text {{item.isOvertime ? 'overtime' : ''}}">
-              {{item.displayTime}} / {{item.plannedTime}}
-            </text>
+            <text class="timer-text {{item.isOvertime ? 'overtime' : ''}}">{{item.displayTime}} / {{item.plannedTime}}</text>
           </view>
           <view class="timer-controls">
             <view wx:if="{{item.timerStatus === 'idle'}}" class="timer-btn start" catchtap="startTimer" data-id="{{item.id}}">开始</view>
@@ -81,11 +103,9 @@
       </view>
     </view>
 
-    <!-- 空状态 -->
     <view class="empty-state" wx:else>
-      <image class="empty-img" src="/images/empty-box.png" mode="aspectFit" wx:if="{{false}}"></image> <!-- 暂时隐藏图片 -->
-      <text class="empty-text">今天没有任务哦</text>
-      <text class="empty-sub">好好休息，明天继续加油！</text>
+      <text class="empty-text">今天没有任务</text>
+      <text class="empty-sub">好好休息，明天继续保持。</text>
     </view>
   </scroll-view>
 </view>

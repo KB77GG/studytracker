@@ -22,9 +22,20 @@ Page({
         weekDays: [],
         monthDays: [],
         monthLabel: '',
+        calendarMonth: '',
         weekHeaders: ['一', '二', '三', '四', '五', '六', '日'],
+        todayDate: '',
         selectedDate: '',
         selectedItems: [],
+        todayItems: [],
+        scrollIntoView: '',
+        dashboardStats: {
+            todayCourses: 0,
+            pendingHomework: 0,
+            pendingFeedback: 0,
+            studentCount: 0
+        },
+        touchStartX: 0,
         timeSlots: [],
         gridStartHour: DEFAULT_START_HOUR,
         gridEndHour: DEFAULT_END_HOUR,
@@ -33,6 +44,13 @@ Page({
     },
 
     onShow() {
+        if (!this.data.calendarMonth) {
+            const now = new Date()
+            this.setData({
+                calendarMonth: this.formatMonth(now),
+                todayDate: this.formatDate(now)
+            })
+        }
         this.fetchSchedules()
         this.refreshSubscribeStatus()
         if (typeof this.getTabBar === 'function' && this.getTabBar()) {
@@ -45,20 +63,38 @@ Page({
         try {
             const res = await request('/miniprogram/teacher/schedules', {
                 method: 'GET',
-                data: { days: this.data.viewDays }
+                data: {
+                    days: this.data.viewDays,
+                    month: this.data.calendarMonth
+                }
             })
             if (res && res.ok !== false) {
                 const list = res.schedules || []
+                let dashboardList = list
+                const currentMonth = this.formatMonth(new Date())
+                if (this.data.calendarMonth && this.data.calendarMonth !== currentMonth) {
+                    const todayRes = await request('/miniprogram/teacher/schedules', {
+                        method: 'GET',
+                        data: { month: currentMonth }
+                    })
+                    if (todayRes && todayRes.ok !== false) {
+                        dashboardList = todayRes.schedules || []
+                    }
+                }
                 const grouped = this.groupByDate(list)
                 const weekData = this.buildWeekView(list)
                 const monthData = this.buildMonthView(list)
+                const dashboard = this.buildDashboard(dashboardList)
                 this.setData({
                     schedules: grouped,
                     weekDays: weekData.days,
                     monthDays: monthData.days,
                     monthLabel: monthData.label,
+                    calendarMonth: monthData.month,
                     selectedDate: monthData.selectedDate || weekData.selectedDate,
                     selectedItems: monthData.selectedItems || weekData.selectedItems,
+                    todayItems: dashboard.todayItems,
+                    dashboardStats: dashboard.stats,
                     bindRequired: false
                 })
             } else {
@@ -160,7 +196,8 @@ Page({
     },
 
     buildMonthView(list) {
-        const base = this.data.selectedDate ? new Date(this.data.selectedDate) : new Date()
+        const monthValue = this.data.calendarMonth || this.formatMonth(new Date())
+        const base = new Date(`${monthValue}-01T00:00:00`)
         const year = base.getFullYear()
         const month = base.getMonth()
         const monthLabel = `${year}年${month + 1}月`
@@ -213,15 +250,58 @@ Page({
 
         const today = this.formatDate(new Date())
         let selectedDate = this.data.selectedDate
-        if (!selectedDate || !dayMap[selectedDate]) {
-            selectedDate = dayMap[today] ? today : (dayMap[days[0]?.date] ? days[0].date : today)
+        const selectedInMonth = selectedDate && selectedDate.slice(0, 7) === monthValue
+        if (!selectedInMonth) {
+            selectedDate = today.slice(0, 7) === monthValue ? today : `${monthValue}-01`
         }
 
         return {
             days,
             label: monthLabel,
+            month: monthValue,
             selectedDate,
             selectedItems: dayMap[selectedDate] || []
+        }
+    },
+
+    buildDashboard(list) {
+        const today = this.formatDate(new Date())
+        const todayItems = []
+        const students = {}
+        let pendingFeedback = 0
+
+        list.forEach(item => {
+            const date = item.schedule_date || (item.start_time || '').split(' ')[0] || ''
+            const color = this.pickSubjectColor(item.course_name || '')
+            const decorated = {
+                ...item,
+                timeRange: this.formatTimeRange(item.start_time, item.end_time),
+                accentColor: color.border,
+                accentBg: color.bg
+            }
+            if (item.student_id || item.student_name) {
+                students[item.student_id || item.student_name] = true
+            }
+            if (date === today) {
+                todayItems.push(decorated)
+                if (!item.feedback) pendingFeedback += 1
+            }
+        })
+
+        todayItems.sort((a, b) => {
+            const aTime = this.parseTimeRange(a, 0, 24)
+            const bTime = this.parseTimeRange(b, 0, 24)
+            return (aTime.startMinutes || 0) - (bTime.startMinutes || 0)
+        })
+
+        return {
+            todayItems,
+            stats: {
+                todayCourses: todayItems.length,
+                pendingHomework: todayItems.length,
+                pendingFeedback,
+                studentCount: Object.keys(students).length
+            }
         }
     },
 
@@ -230,6 +310,12 @@ Page({
         const m = String(dateObj.getMonth() + 1).padStart(2, '0')
         const d = String(dateObj.getDate()).padStart(2, '0')
         return `${y}-${m}-${d}`
+    },
+
+    formatMonth(dateObj) {
+        const y = dateObj.getFullYear()
+        const m = String(dateObj.getMonth() + 1).padStart(2, '0')
+        return `${y}-${m}`
     },
 
     formatWeekday(dateObj) {
@@ -335,8 +421,64 @@ Page({
         })
     },
 
+    changeMonth(offset) {
+        const current = this.data.calendarMonth || this.formatMonth(new Date())
+        const base = new Date(`${current}-01T00:00:00`)
+        base.setMonth(base.getMonth() + offset)
+        const calendarMonth = this.formatMonth(base)
+        this.setData({
+            calendarMonth,
+            selectedDate: `${calendarMonth}-01`,
+            selectedItems: []
+        }, () => this.fetchSchedules())
+    },
+
+    prevMonth() {
+        this.changeMonth(-1)
+    },
+
+    nextMonth() {
+        this.changeMonth(1)
+    },
+
+    onCalendarTouchStart(e) {
+        const touch = e.touches && e.touches[0]
+        if (!touch) return
+        this.setData({ touchStartX: touch.clientX })
+    },
+
+    onCalendarTouchEnd(e) {
+        const touch = e.changedTouches && e.changedTouches[0]
+        if (!touch) return
+        const delta = touch.clientX - this.data.touchStartX
+        if (Math.abs(delta) < 50) return
+        if (delta < 0) this.nextMonth()
+        else this.prevMonth()
+    },
+
     goStats() {
         wx.redirectTo({ url: '/pages/teacher/stats/index' })
+    },
+
+    goCalendar() {
+        this.setData({ scrollIntoView: '' }, () => {
+            this.setData({ scrollIntoView: 'calendar-section' })
+        })
+    },
+
+    showUnavailable(e) {
+        const name = e.currentTarget.dataset.name || '该功能'
+        wx.showToast({ title: `${name}暂未开放`, icon: 'none' })
+    },
+
+    openClassRecord() {
+        const target = (this.data.selectedItems && this.data.selectedItems[0])
+            || (this.data.todayItems && this.data.todayItems[0])
+        if (!target) {
+            wx.showToast({ title: '请先选择有课程的日期', icon: 'none' })
+            return
+        }
+        this.navigateFeedbackWithSchedule(target)
     },
 
     async bindSchedulerTeacher() {
@@ -466,18 +608,22 @@ Page({
 
     openFeedback(e) {
         const data = e.currentTarget.dataset || {}
+        this.navigateFeedbackWithSchedule(data)
+    },
+
+    navigateFeedbackWithSchedule(data = {}) {
         const params = {
-            schedule_uid: data.scheduleUid,
-            schedule_id: data.scheduleId,
-            student_id: data.studentId,
-            student_name: data.studentName,
-            course_name: data.courseName,
-            start_time: data.startTime,
-            end_time: data.endTime,
-            teacher_name: data.teacherName,
-            schedule_date: data.scheduleDate,
-            feedback_text: data.feedbackText,
-            feedback_image: data.feedbackImage
+            schedule_uid: data.scheduleUid || data.schedule_uid,
+            schedule_id: data.scheduleId || data.schedule_id,
+            student_id: data.studentId || data.student_id,
+            student_name: data.studentName || data.student_name,
+            course_name: data.courseName || data.course_name,
+            start_time: data.startTime || data.start_time,
+            end_time: data.endTime || data.end_time,
+            teacher_name: data.teacherName || data.teacher_name,
+            schedule_date: data.scheduleDate || data.schedule_date,
+            feedback_text: data.feedbackText || (data.feedback && data.feedback.text),
+            feedback_image: data.feedbackImage || (data.feedback && data.feedback.image)
         }
         const query = Object.keys(params)
             .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')

@@ -76,15 +76,12 @@
       <!-- 模式切换 -->
       <view class="mode-tabs">
         <view class="mode-tab {{mode === 'listen' ? 'mode-active' : ''}}" data-mode="listen" bindtap="switchMode">
-          <text class="mode-icon">👂</text>
           <text class="mode-label">句子精听</text>
         </view>
         <view class="mode-tab {{mode === 'dictation' ? 'mode-active' : ''}}" data-mode="dictation" bindtap="switchMode">
-          <text class="mode-icon">✏️</text>
           <text class="mode-label">听写模式</text>
         </view>
         <view class="mode-tab {{mode === 'repeat' ? 'mode-active' : ''}}" data-mode="repeat" bindtap="switchMode">
-          <text class="mode-icon">🎤</text>
           <text class="mode-label">跟读检查</text>
         </view>
       </view>
