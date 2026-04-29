@@ -106,6 +106,40 @@ def _listening_test_root() -> Path:
     return Path(app.static_folder) / "listening_tests"
 
 
+def _listening_test_catalog() -> list[dict]:
+    tests_by_book = defaultdict(list)
+    for path in sorted(_listening_test_root().glob("ielts*_test*.json")):
+        match = re.match(r"^ielts(?P<book>\d+)_test(?P<test>\d+)\.json$", path.name)
+        if not match:
+            continue
+        book_no = int(match.group("book"))
+        test_no = int(match.group("test"))
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        question_count = sum(
+            len(group.get("questions") or [])
+            for section in payload.get("sections") or []
+            for group in section.get("groups") or []
+        )
+        tests_by_book[book_no].append({
+            "id": path.stem,
+            "book": book_no,
+            "test": test_no,
+            "title": payload.get("title") or f"Cambridge IELTS {book_no} Test {test_no} Listening",
+            "section_count": len(payload.get("sections") or []),
+            "question_count": question_count,
+        })
+    books = []
+    for book_no in sorted(tests_by_book):
+        books.append({
+            "book": book_no,
+            "tests": sorted(tests_by_book[book_no], key=lambda row: row["test"]),
+        })
+    return books
+
+
 def _load_listening_meta(exercise_id: str):
     safe_id = secure_filename(exercise_id)
     json_path = _listening_root() / f"{safe_id}.json"
@@ -265,6 +299,46 @@ def _listening_repeat_public_url(audio_url: str) -> str:
         return audio_url
     base_url = request.host_url.rstrip("/")
     return f"{base_url}{audio_url if audio_url.startswith('/') else '/' + audio_url}"
+
+
+def _listening_repeat_error_message(payload: dict) -> str:
+    if not isinstance(payload, dict):
+        return "跟读评测失败，请稍后重试"
+    error = payload.get("error")
+    code = payload.get("code")
+    if error == "tencent_soe_disabled":
+        return "跟读评测服务未启用，请联系老师"
+    if error == "missing_tencent_soe_secret":
+        return "跟读评测密钥未配置，请联系老师"
+    if error == "missing_tencent_soe_app_id":
+        return "跟读评测 AppID 未配置，请联系老师"
+    if code == "AuthFailure.AccountUnavailable":
+        return "腾讯口语评测服务未开通或账号欠费，请联系老师"
+    if code in {4002, "4002"}:
+        return "腾讯口语评测鉴权失败，请检查 AppID、SecretId 和 SecretKey"
+    if code in {4003, "4003"}:
+        return "腾讯口语评测 AppID 未开通新版服务，请在控制台开通"
+    if code in {4004, "4004"}:
+        return "腾讯口语评测资源包已耗尽，请续费或开通后付费"
+    if code in {4005, "4005"}:
+        return "腾讯云账号欠费，口语评测已暂停"
+    if code in {4007, "4007"}:
+        return "录音解码失败，请重新录音后提交"
+    if code in {4102, "4102", 4103, "4103", 4104, "4104", 4110, "4110", 4114, "4114"}:
+        return "跟读文本不符合评测要求，请联系老师检查原文"
+    if code in {4105, "4105", 4108, "4108"}:
+        return "录音里没有识别到有效人声，请重新录音"
+    if error == "tencent_audio_download_failed":
+        return "录音文件读取失败，请重新录音"
+    if error == "tencent_audio_empty":
+        return "录音文件为空，请重新录音"
+    if error == "tencent_audio_too_large":
+        return "录音文件过大，请缩短录音后重试"
+    if error == "tencent_soe_timeout":
+        return "跟读评测超时，请稍后重试"
+    if error == "tencent_soe_api_error" and payload.get("message"):
+        return f"跟读评测失败：{payload.get('message')}"
+    return "跟读评测失败，请稍后重试"
 
 
 def _serialize_listening_repeat_result(row: "ListeningRepeatResult") -> dict:
@@ -4560,6 +4634,14 @@ def listening_jijing_part(part_id):
     return render_template("listening/jijing_part.html", part=part)
 
 
+@app.route("/listening/tests")
+def listening_test_index():
+    """剑桥雅思听力整套练习列表。"""
+    books = _listening_test_catalog()
+    test_count = sum(len(book["tests"]) for book in books)
+    return render_template("listening/test_index.html", books=books, test_count=test_count)
+
+
 @app.route("/listening/test/<test_id>")
 def listening_test_practice(test_id):
     """完整听力 Test 做题页。"""
@@ -4585,7 +4667,10 @@ def api_listening_test_practice(test_id):
 @app.route("/listening/<exercise_id>")
 def listening_player(exercise_id):
     """精听播放器页面。"""
-    return render_template("listening/player.html", exercise_id=exercise_id)
+    payload, _json_path, safe_id = _load_listening_meta(exercise_id)
+    if payload is None:
+        return "精听练习不存在", 404
+    return render_template("listening/player.html", exercise_id=safe_id)
 
 
 @app.post("/api/listening/<exercise_id>/delete")
@@ -5162,7 +5247,20 @@ def api_student_listening_repeat_segment(task_id, segment_index):
         segment_text,
     )
     if not ok:
-        return jsonify({"ok": False, "error": "repeat_eval_failed", "details": payload}), 502
+        current_app.logger.warning(
+            "Listening repeat evaluation failed task=%s segment=%s error=%s code=%s message=%s",
+            task_id,
+            segment_index,
+            payload.get("error") if isinstance(payload, dict) else None,
+            payload.get("code") if isinstance(payload, dict) else None,
+            payload.get("message") if isinstance(payload, dict) else None,
+        )
+        return jsonify({
+            "ok": False,
+            "error": "repeat_eval_failed",
+            "message": _listening_repeat_error_message(payload),
+            "details": payload,
+        }), 502
 
     pron_accuracy = round(float(payload.get("pron_accuracy") or 0.0), 1)
     pron_fluency = round(float(payload.get("pron_fluency") or 0.0), 1)

@@ -250,6 +250,7 @@
       <h1>精听练习</h1>
     </div>
     <div style="display:flex;gap:10px;align-items:center;">
+      <a class="upload-btn upload-btn--secondary" href="{{ url_for('listening_test_index') }}">剑雅整套</a>
       <a class="upload-btn upload-btn--secondary" href="{{ url_for('listening_jijing_index') }}">听力机经</a>
     {% if show_upload %}
       <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
@@ -328,7 +329,10 @@
       <p class="eyebrow">Sage Path · Listening</p>
       <h1>精听练习</h1>
     </div>
-    <a class="upload-btn upload-btn--secondary" href="{{ url_for('listening_jijing_index') }}">听力机经</a>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a class="upload-btn upload-btn--secondary" href="{{ url_for('listening_test_index') }}">剑雅整套</a>
+      <a class="upload-btn upload-btn--secondary" href="{{ url_for('listening_jijing_index') }}">听力机经</a>
+    </div>
   </div>
   <p class="subtitle">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>听力机经 · Sage Path</title>
+<title>剑桥雅思听力整套练习 · Sage Path</title>
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 <style>
 .page {
@@ -41,7 +41,7 @@
   align-items: center;
   gap: 10px;
 }
-.nav-actions .nav-link {
+.nav-link {
   display: inline-flex;
   align-items: center;
   height: 38px;
@@ -54,7 +54,7 @@
   font-size: var(--fs-base);
   font-weight: 600;
 }
-.nav-actions .nav-link:hover{ border-color: var(--brand-light); color: var(--brand-dark); }
+.nav-link:hover { border-color: var(--brand-light); color: var(--brand-dark); }
 .tabs {
   display: flex;
   gap: 8px;
@@ -94,9 +94,6 @@
   background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
   color: #fff;
 }
-.book-header.dark {
-  background: linear-gradient(135deg, #1f3a38 0%, #122b29 100%);
-}
 .book-label {
   font-size: var(--fs-md);
   font-weight: 700;
@@ -114,40 +111,32 @@
   gap: 8px;
   padding: 10px;
 }
-.test-card {
-  min-height: 184px;
+.test-link {
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
   border: 1px solid var(--line);
   border-radius: var(--r-sm);
-  overflow: hidden;
-  background: #fff;
-}
-.test-title {
-  padding: 9px 12px;
   background: var(--brand-tint);
-  color: var(--brand-dark);
-  font-weight: 700;
-  font-size: var(--fs-base);
-  border-bottom: 1px solid var(--line);
-}
-.part-link {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 11px 12px;
   color: var(--text);
   text-decoration: none;
-  font-size: var(--fs-base);
-  border-bottom: 1px solid var(--line);
 }
-.part-link:last-child{ border-bottom: none; }
-.part-link:hover {
+.test-link:hover {
+  border-color: var(--brand-light);
   background: var(--brand-soft);
   color: var(--brand-dark);
 }
-.part-meta {
+.test-name {
+  font-size: 18px;
+  font-weight: 800;
+}
+.test-meta {
   color: var(--muted);
-  font-size: var(--fs-xs);
-  white-space: nowrap;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
 }
 .empty {
   padding: 64px 20px;
@@ -171,14 +160,12 @@
 <main class="page">
   <div class="page-head">
     <div>
-      <p class="eyebrow">听力 / 机经</p>
-      <h1>听力机经练习</h1>
-      {% if catalog %}
-      <div class="summary">{{ catalog.book_count }} 套机经卡片 · {{ catalog.part_count }} 个 Part · 本地音频已接入 · 按原站机经编号排序，编号可能不连续</div>
-      {% endif %}
+      <p class="eyebrow">听力 / 剑桥雅思</p>
+      <h1>剑桥雅思听力整套练习</h1>
+      <div class="summary">{{ test_count }} 套 Test · 每套 4 个 Section · 支持题目练习、精听、解析、原文</div>
     </div>
     <div class="nav-actions">
-      <a class="nav-link" href="{{ url_for('listening_index') }}">剑雅精听</a>
+      <a class="nav-link" href="{{ url_for('listening_index') }}">返回精听</a>
       {% if current_user.is_authenticated %}
       <a class="nav-link" href="{{ url_for('index') }}">返回首页</a>
       {% endif %}
@@ -187,31 +174,26 @@
 
   <nav class="tabs" aria-label="听力分类">
     <a class="tab" href="{{ url_for('listening_index') }}">精听</a>
-    <a class="tab" href="{{ url_for('listening_test_index') }}">剑雅整套</a>
-    <a class="tab active" href="{{ url_for('listening_jijing_index') }}">机经</a>
+    <a class="tab active" href="{{ url_for('listening_test_index') }}">剑雅整套</a>
+    <a class="tab" href="{{ url_for('listening_jijing_index') }}">机经</a>
   </nav>
 
   {% if not books %}
-  <section class="empty">还没有生成机经数据。请先运行 build 脚本。</section>
+  <section class="empty">还没有生成剑雅整套练习数据。请先运行 build 脚本。</section>
   {% else %}
   <section class="grid">
     {% for book in books %}
     <article class="book-card">
-      <header class="book-header {{ 'dark' if loop.index > 2 else '' }}">
-        <span class="book-label">机经</span>
-        <span class="book-number">{{ book.in_book }}</span>
+      <header class="book-header">
+        <span class="book-label">Cambridge IELTS</span>
+        <span class="book-number">{{ book.book }}</span>
       </header>
       <div class="tests">
         {% for test in book.tests %}
-        <section class="test-card">
-          <div class="test-title">{{ test.test_name }}</div>
-          {% for part in test.parts %}
-          <a class="part-link" href="{{ url_for('listening_jijing_part', part_id=part.id) }}">
-            <span>{{ part.part_title }}</span>
-            <span class="part-meta">{{ part.question_name }}</span>
-          </a>
-          {% endfor %}
-        </section>
+        <a class="test-link" href="{{ url_for('listening_test_practice', test_id=test.id) }}">
+          <span class="test-name">Test {{ test.test }}</span>
+          <span class="test-meta">{{ test.section_count }} Section<br>{{ test.question_count }} 题</span>
+        </a>
         {% endfor %}
       </div>
     </article>

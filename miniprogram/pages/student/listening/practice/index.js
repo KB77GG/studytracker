@@ -810,7 +810,11 @@ Page({
             )
 
             if (!res.ok) {
-                wx.showToast({ title: '评测失败', icon: 'none' })
+                wx.showModal({
+                    title: '评测失败',
+                    content: res.message || this.repeatErrorMessage(res),
+                    showCancel: false
+                })
                 return
             }
 
@@ -841,6 +845,58 @@ Page({
             wx.hideLoading()
             this.setData({ repeatUploading: false })
         }
+    },
+
+    repeatErrorMessage(res = {}) {
+        const details = res.details || {}
+        const code = details.code || res.code || ''
+        const error = details.error || res.error || ''
+        if (code === 'AuthFailure.AccountUnavailable') {
+            return '腾讯口语评测服务未开通或账号欠费，请联系老师处理。'
+        }
+        if (error === 'tencent_soe_disabled') {
+            return '跟读评测服务未启用，请联系老师处理。'
+        }
+        if (error === 'missing_tencent_soe_secret') {
+            return '跟读评测密钥未配置，请联系老师处理。'
+        }
+        if (error === 'missing_tencent_soe_app_id') {
+            return '跟读评测 AppID 未配置，请联系老师处理。'
+        }
+        if (code === 4002 || code === '4002') {
+            return '腾讯口语评测鉴权失败，请联系老师检查 AppID 和密钥。'
+        }
+        if (code === 4003 || code === '4003') {
+            return '腾讯口语评测 AppID 未开通新版服务，请联系老师处理。'
+        }
+        if (code === 4004 || code === '4004') {
+            return '腾讯口语评测资源包已耗尽，请联系老师处理。'
+        }
+        if (code === 4005 || code === '4005') {
+            return '腾讯云账号欠费，口语评测已暂停。'
+        }
+        if (code === 4007 || code === '4007') {
+            return '录音解码失败，请重新录音后提交。'
+        }
+        if ([4102, '4102', 4103, '4103', 4104, '4104', 4110, '4110', 4114, '4114'].includes(code)) {
+            return '跟读文本不符合评测要求，请联系老师检查原文。'
+        }
+        if ([4105, '4105', 4108, '4108'].includes(code)) {
+            return '录音里没有识别到有效人声，请重新录音。'
+        }
+        if (error === 'tencent_audio_download_failed') {
+            return '录音文件读取失败，请重新录音后提交。'
+        }
+        if (error === 'tencent_audio_empty') {
+            return '录音文件为空，请重新录音。'
+        }
+        if (error === 'tencent_audio_too_large') {
+            return '录音文件过大，请缩短录音后重试。'
+        }
+        if (error === 'tencent_soe_timeout') {
+            return '跟读评测超时，请稍后重试。'
+        }
+        return '跟读评测暂时失败，请稍后重试。'
     },
 
     buildRenderTokens(segment, hiddenIndices, presetAnswers = []) {

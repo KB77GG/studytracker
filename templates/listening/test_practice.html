@@ -59,10 +59,11 @@ body {
   flex: 0 0 auto;
   filter: drop-shadow(0 8px 18px rgba(18,100,95,.18));
 }
-.brand-mark svg {
+.brand-mark img {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 .crumb {
   color: var(--sage);
@@ -110,6 +111,8 @@ body.result-mode .layout {
 }
 .panel { display: none; }
 .panel.active { display: block; }
+.view-panel { display: none; }
+.view-panel.active { display: block; }
 .card {
   background: var(--paper);
   border: 1px solid var(--line);
@@ -197,6 +200,44 @@ body.result-mode .layout {
   border-radius: 14px;
   background: #fff;
 }
+.table-wrap {
+  overflow-x: auto;
+  margin: 14px 0 18px;
+}
+.practice-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  background: #fff;
+}
+.practice-table td,
+.practice-table th {
+  border: 1px solid var(--line);
+  padding: 12px;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.practice-table tr:first-child td,
+.practice-table th {
+  background: #f8f5ee;
+  font-weight: 850;
+}
+.option-bank {
+  margin: 12px 0 18px;
+  padding: 14px;
+  border: 1px solid rgba(35,140,135,.18);
+  border-radius: 12px;
+  background: #f6fbfa;
+}
+.option-bank-title {
+  margin-bottom: 8px;
+  color: var(--sage-deep);
+  font-weight: 900;
+}
+.option-line {
+  padding: 4px 0;
+  color: #334155;
+}
 .question {
   padding: 13px 0;
   border-top: 1px solid rgba(222,219,208,.8);
@@ -236,6 +277,15 @@ body.result-mode .layout {
   line-height: 1.45;
 }
 .choice input { margin-right: 8px; }
+.answer-select {
+  min-width: 230px;
+  min-height: 38px;
+  border: 1px solid #b8b5aa;
+  border-radius: 4px;
+  padding: 0 8px;
+  background: #fff;
+  color: var(--ink);
+}
 .seek-btn,
 .ghost-btn {
   border: 1px solid rgba(35,140,135,.24);
@@ -346,11 +396,70 @@ body.result-mode .layout {
   white-space: pre-line;
 }
 .show-answers .analysis { display: block; }
+.wide-card {
+  padding: 18px;
+}
+.dictation-row,
+.analysis-item,
+.full-transcript-row {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(222,219,208,.8);
+}
+.dictation-tools {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.small-btn {
+  border: 1px solid rgba(35,140,135,.24);
+  background: #fff;
+  color: var(--sage-deep);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.dictation-row textarea {
+  width: 100%;
+  min-height: 82px;
+  border: 1px solid #c9c5ba;
+  border-radius: 10px;
+  padding: 10px;
+  font: inherit;
+}
+.dictation-answer {
+  display: none;
+  margin-top: 8px;
+  line-height: 1.65;
+}
+.dictation-row.revealed .dictation-answer { display: block; }
+.analysis-answer {
+  color: var(--success);
+  font-weight: 850;
+  margin: 8px 0;
+}
+.analysis-text {
+  white-space: pre-line;
+  color: #475569;
+  line-height: 1.7;
+}
 .back-link {
   color: var(--sage-deep);
   text-decoration: none;
   font-size: 13px;
   font-weight: 700;
+}
+.template-source-warning {
+  display: none;
+  margin: 16px auto 0;
+  max-width: 1280px;
+  padding: 14px 18px;
+  border: 1px solid #f59e0b;
+  border-radius: 12px;
+  background: #fffbeb;
+  color: #92400e;
+  font-weight: 800;
+  line-height: 1.5;
 }
 .transcript-panel {
   display: none;
@@ -456,25 +565,13 @@ body.result-mode .transcript-panel { display: block; }
   <div class="topbar-inner">
     <div class="brand-line">
       <div class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 96 76" role="img">
-          <defs>
-            <linearGradient id="sageMarkGradient" x1="10" y1="12" x2="86" y2="68">
-              <stop offset="0" stop-color="#40A6A0"/>
-              <stop offset="1" stop-color="#277C78"/>
-            </linearGradient>
-          </defs>
-          <path d="M52 4C70 8 87 29 91 48c4 20-12 25-35 25S7 69 6 52C5 36 34 0 52 4Z" fill="url(#sageMarkGradient)"/>
-          <path d="M24 52c3-21 27-37 49-31 14 4 14 19 2 27-9 6-16 7-23 1" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
-          <path d="M34 57c4-17 20-31 41-31" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
-          <path d="M68 33c-10 8-13 18 2 25" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
-          <path d="M21 29l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z" fill="#fff"/>
-        </svg>
+        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
       </div>
       <div>
         <div class="crumb">Sage Path · Listening</div>
         <h1>{{ test.title }}</h1>
         <div class="meta">
-          4 个 Section · 40 题 · 数据源 {{ test.source }}
+          4 个 Section · 40 题
           · <a class="back-link" href="{{ url_for('listening_index') }}">返回精听列表</a>
         </div>
       </div>
@@ -483,20 +580,35 @@ body.result-mode .transcript-panel { display: block; }
   </div>
 </header>
 
+<div class="template-source-warning" id="templateSourceWarning">
+  当前打开的是 HTML 模板源文件，题目数据不会注入。请通过 Flask 路由访问：/listening/test/ielts20_test1。
+</div>
+
 <main class="page">
+  <nav class="tabs" id="viewTabs" aria-label="练习视图">
+    <button class="tab active" type="button" data-view="practice">题目练习</button>
+    <button class="tab" type="button" data-view="dictation">精听</button>
+    <button class="tab" type="button" data-view="analysis">解析</button>
+    <button class="tab" type="button" data-view="transcript">原文</button>
+  </nav>
   <nav class="tabs" id="sectionTabs" aria-label="Section"></nav>
-  <div class="layout">
-    <aside class="card transcript-panel" id="transcriptPanel"></aside>
-    <div id="sectionsRoot"></div>
-    <aside class="card side">
-      <h3>整套判分</h3>
-      <div class="stat"><span>Section</span><strong id="activeSectionLabel">-</strong></div>
-      <div class="stat"><span>题目数</span><strong id="questionCount">40</strong></div>
-      <div class="stat"><span>已填写</span><strong id="answeredCount">0</strong></div>
-      <button class="submit-btn" id="submitBtn">提交并判分</button>
-      <div class="result-box" id="resultBox">填写后可按 IELTS 听力 40 题查看得分。</div>
-    </aside>
+  <div class="view-panel active" id="practiceView">
+    <div class="layout">
+      <aside class="card transcript-panel" id="transcriptPanel"></aside>
+      <div id="sectionsRoot"></div>
+      <aside class="card side">
+        <h3>整套判分</h3>
+        <div class="stat"><span>Section</span><strong id="activeSectionLabel">-</strong></div>
+        <div class="stat"><span>题目数</span><strong id="questionCount">40</strong></div>
+        <div class="stat"><span>已填写</span><strong id="answeredCount">0</strong></div>
+        <button class="submit-btn" id="submitBtn">提交并判分</button>
+        <div class="result-box" id="resultBox">填写后可按 IELTS 听力 40 题查看得分。</div>
+      </aside>
+    </div>
   </div>
+  <section class="view-panel card wide-card" id="dictationView"></section>
+  <section class="view-panel card wide-card" id="analysisView"></section>
+  <section class="view-panel card wide-card" id="transcriptView"></section>
 </main>
 
 <footer class="bottom-nav">
@@ -507,12 +619,20 @@ body.result-mode .transcript-panel { display: block; }
 </footer>
 
 <script>
+if (window.location.protocol === 'file:') {
+  const warning = document.getElementById('templateSourceWarning');
+  if (warning) warning.style.display = 'block';
+}
+</script>
+
+<script>
 const test = {{ test|tojson }};
 const audio = document.getElementById('audio');
 const audioBase = "{{ url_for('static', filename='listening/') }}";
 const storageKey = `listening_test_answers_${test.id}_${localStorage.getItem('listening_student') || 'guest'}`;
 const noteStorageKey = `listening_test_error_notes_${test.id}_${localStorage.getItem('listening_student') || 'guest'}`;
 let activeSectionIndex = 0;
+let activeView = 'practice';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -641,21 +761,88 @@ function answerTools(question, sectionIndex) {
   `;
 }
 
-function controlForQuestion(question, sectionIndex, inline = false) {
+function optionBank(group) {
+  const options = group.collect_option?.list || [];
+  if (!options.length) return '';
+  const title = group.collect_option.title || group.title || '';
+  return `
+    <div class="option-bank">
+      ${title ? `<div class="option-bank-title">${escapeHtml(title)}</div>` : ''}
+      ${options.map(option => `<div class="option-line">${escapeHtml(option.title)}. ${escapeHtml(option.content)}</div>`).join('')}
+    </div>
+  `;
+}
+
+function renderTable(group, sectionIndex) {
+  const table = group.table;
+  if (!table || !Array.isArray(table.content)) return '';
+  return `
+    <div class="table-wrap">
+      <table class="practice-table">
+        <tbody>
+          ${table.content.map(row => `
+            <tr>${row.map(cell => `<td>${renderCollectText(cell, group, sectionIndex)}</td>`).join('')}</tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function isCombinedMulti(group) {
+  if (group.type !== 2) return false;
+  const options = group.collect_option?.list || [];
+  const questions = group.questions || [];
+  if (!options.length || !questions.length) return false;
+  const first = questions[0].answer || '';
+  return first.includes(',') && questions.every(question => question.answer === first);
+}
+
+function renderCombinedMulti(group) {
+  const questions = group.questions || [];
+  const answer = escapeHtml(questions[0]?.answer || '');
+  const ids = questions.map(question => question.id || question.number).join(',');
+  const numbers = questions.map(question => question.number).join(',');
+  return `
+    <div class="answer-unit" data-kind="checkbox-set" data-answer="${answer}" data-marks="${questions.length}" data-id="${escapeHtml(ids)}" data-q="${escapeHtml(numbers)}">
+      ${(group.collect_option?.list || []).map(option => `
+        <label class="choice">
+          <input type="checkbox" value="${escapeHtml(option.title)}">
+          ${escapeHtml(option.title)}. ${escapeHtml(option.content)}
+        </label>
+      `).join('')}
+    </div>
+  `;
+}
+
+function controlForQuestion(question, sectionIndex, group = {}, inline = false) {
   const answer = escapeHtml(question.answer || '');
   const qn = escapeHtml(question.number);
   const baseAttrs = `data-q="${qn}" data-answer="${answer}" data-section="${sectionIndex}" data-id="${escapeHtml(question.id || question.number)}"`;
 
   if (question.options && question.options.length) {
+    const isMulti = String(question.answer || '').includes(',') || group.type === 9;
     return `
-      <div class="answer-unit" data-kind="radio" ${baseAttrs}>
+      <div class="answer-unit" data-kind="${isMulti ? 'checkboxes' : 'radio'}" ${baseAttrs}>
         ${question.options.map(option => `
           <label class="choice">
-            <input type="radio" name="${inputName(question)}" value="${escapeHtml(option.title)}">
+            <input type="${isMulti ? 'checkbox' : 'radio'}" name="${inputName(question)}" value="${escapeHtml(option.title)}">
             ${escapeHtml(option.title)}. ${escapeHtml(option.content)}
           </label>
         `).join('')}
       </div>
+    `;
+  }
+
+  const bankOptions = group.collect_option?.list || [];
+  if (bankOptions.length && group.type !== 2) {
+    return `
+      <span class="${inline ? 'inline-answer' : ''}">
+        <select class="answer-select answer-unit" data-kind="select" ${baseAttrs}>
+          <option value=""></option>
+          ${bankOptions.map(option => `<option value="${escapeHtml(option.title)}">${escapeHtml(option.title)}. ${escapeHtml(option.content)}</option>`).join('')}
+        </select>
+      </span>
     `;
   }
 
@@ -666,15 +853,15 @@ function controlForQuestion(question, sectionIndex, inline = false) {
   `;
 }
 
-function renderCollect(group, sectionIndex) {
+function renderCollectText(text, group, sectionIndex) {
   const byId = new Map((group.questions || []).map(q => [String(q.id), q]));
-  const raw = String(group.collect || '');
+  const raw = String(text || '');
   let html = '';
   let last = 0;
   raw.replace(/\$([^$\s]+)\$/g, (match, id, offset) => {
     html += richText(raw.slice(last, offset));
     const question = byId.get(String(id));
-    html += question ? controlForQuestion(question, sectionIndex, true) : '____';
+    html += question ? controlForQuestion(question, sectionIndex, group, true) : '____';
     last = offset + match.length;
     return match;
   });
@@ -682,7 +869,7 @@ function renderCollect(group, sectionIndex) {
   return html;
 }
 
-function renderQuestion(question, sectionIndex) {
+function renderQuestion(question, sectionIndex, group) {
   const seek = question.start
     ? `<button class="seek-btn" type="button" onclick="seekTo(${sectionIndex}, ${Number(question.start)})">定位音频</button>`
     : '';
@@ -692,7 +879,7 @@ function renderQuestion(question, sectionIndex) {
         <div class="q-title">Q${escapeHtml(question.number)}. ${richText(question.title || '')}</div>
         ${seek}
       </div>
-      ${controlForQuestion(question, sectionIndex)}
+      ${controlForQuestion(question, sectionIndex, group)}
       ${answerTools(question, sectionIndex)}
       ${question.analysis ? `<div class="analysis">${escapeHtml(question.analysis)}</div>` : ''}
     </div>
@@ -701,6 +888,8 @@ function renderQuestion(question, sectionIndex) {
 
 function renderGroup(group, sectionIndex) {
   const hasCollect = Boolean(group.collect);
+  const hasTable = Boolean(group.table);
+  const combinedMulti = isCombinedMulti(group);
   const img = imageSrc(group);
   return `
     <article class="card group">
@@ -708,9 +897,12 @@ function renderGroup(group, sectionIndex) {
       ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ''}
       ${group.question_title ? `<div class="question-title">${escapeHtml(group.question_title)}</div>` : ''}
       ${img ? `<img class="question-image" src="${escapeHtml(img)}" alt="Question image">` : ''}
-      ${hasCollect ? `<div class="collect">${renderCollect(group, sectionIndex)}</div>` : ''}
-      ${!hasCollect ? (group.questions || []).map(q => renderQuestion(q, sectionIndex)).join('') : ''}
-      ${hasCollect ? (group.questions || []).map(q => `
+      ${hasCollect && !combinedMulti ? `<div class="collect">${renderCollectText(group.collect, group, sectionIndex)}</div>` : ''}
+      ${combinedMulti ? '' : optionBank(group)}
+      ${renderTable(group, sectionIndex)}
+      ${combinedMulti ? renderCombinedMulti(group) : ''}
+      ${!hasCollect && !hasTable && !combinedMulti ? (group.questions || []).map(q => renderQuestion(q, sectionIndex, group)).join('') : ''}
+      ${(hasCollect || hasTable || combinedMulti) ? (group.questions || []).map(q => `
         ${answerTools(q, sectionIndex)}
         ${q.analysis ? `<div class="analysis">Q${escapeHtml(q.number)}：${escapeHtml(q.analysis)}</div>` : ''}
       `).join('') : ''}
@@ -734,7 +926,7 @@ function renderSection(section, sectionIndex) {
 
 function switchSection(index, scroll = true) {
   activeSectionIndex = index;
-  document.querySelectorAll('.tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
+  document.querySelectorAll('#sectionTabs .tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
   document.querySelectorAll('.panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
   const section = test.sections[index];
   if (section && !audio.src.endsWith(section.audio)) {
@@ -742,6 +934,7 @@ function switchSection(index, scroll = true) {
   }
   document.getElementById('activeSectionLabel').textContent = section ? `Section ${section.section}` : '-';
   renderTranscript(section);
+  renderActiveView();
   syncQuestionNav();
   if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -751,23 +944,37 @@ function unitValue(unit) {
     const checked = unit.querySelector('input:checked');
     return checked ? checked.value : '';
   }
+  if (unit.dataset.kind === 'checkboxes' || unit.dataset.kind === 'checkbox-set') {
+    return Array.from(unit.querySelectorAll('input:checked')).map(input => input.value).join(',');
+  }
   return unit.value || '';
 }
 
 function markUnit(unit) {
   const answer = unit.dataset.answer || '';
   const value = unitValue(unit);
+  const marks = Number(unit.dataset.marks || 1);
   let correct = false;
+  let awarded = 0;
 
-  if (/^[A-Z](\s*[,/]\s*[A-Z])*$/.test(answer.trim())) {
+  if (unit.dataset.kind === 'checkboxes' || unit.dataset.kind === 'checkbox-set') {
+    const answers = splitLetters(answer);
+    const values = splitLetters(value);
+    const extra = values.filter(v => !answers.includes(v)).length;
+    const matched = values.filter(v => answers.includes(v)).length;
+    awarded = extra ? 0 : Math.min(marks, matched);
+    correct = Boolean(answers.length) && awarded === marks;
+  } else if (/^[A-Z](\s*[,/]\s*[A-Z])*$/.test(answer.trim())) {
     correct = splitLetters(answer).includes(String(value).trim().toUpperCase());
+    awarded = correct ? marks : 0;
   } else {
     correct = splitAlternatives(answer).includes(normalizeText(value));
+    awarded = correct ? marks : 0;
   }
 
   unit.classList.toggle('is-correct', correct);
   unit.classList.toggle('is-wrong', !correct);
-  return { id: unit.dataset.id, q: unit.dataset.q, answer, value, correct };
+  return { id: unit.dataset.id, q: unit.dataset.q, answer, value, correct, marks, awarded };
 }
 
 function answerSnapshot() {
@@ -793,6 +1000,11 @@ function restoreAnswers() {
     if (unit.dataset.kind === 'radio') {
       const input = unit.querySelector(`input[value="${CSS.escape(value)}"]`);
       if (input) input.checked = true;
+    } else if (unit.dataset.kind === 'checkboxes' || unit.dataset.kind === 'checkbox-set') {
+      splitLetters(value).forEach(letter => {
+        const input = unit.querySelector(`input[value="${CSS.escape(letter)}"]`);
+        if (input) input.checked = true;
+      });
     } else {
       unit.value = value;
     }
@@ -803,8 +1015,17 @@ function restoreAnswers() {
 
 function refreshAnsweredCount() {
   const units = Array.from(document.querySelectorAll('.answer-unit'));
-  const answered = units.filter(unit => unitValue(unit).trim()).length;
+  const answered = units.reduce((sum, unit) => {
+    const marks = Number(unit.dataset.marks || 1);
+    return sum + (unitValue(unit).trim() ? marks : 0);
+  }, 0);
   document.getElementById('answeredCount').textContent = answered;
+}
+
+function findUnitByQuestionId(id) {
+  return Array.from(document.querySelectorAll('.answer-unit')).find(unit =>
+    String(unit.dataset.id || '').split(',').includes(String(id))
+  );
 }
 
 function renderTranscript(section) {
@@ -820,6 +1041,61 @@ function renderTranscript(section) {
   `;
 }
 
+function renderDictationView(section) {
+  document.getElementById('dictationView').innerHTML = `
+    <h2>Section ${escapeHtml(section.section)} 精听</h2>
+    ${(section.transcript || []).map((row, index) => `
+      <div class="dictation-row">
+        <div class="dictation-tools">
+          <button class="small-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">播放 ${formatClock(row.start)}</button>
+          <button class="small-btn" type="button" onclick="this.closest('.dictation-row').classList.toggle('revealed')">核对原文</button>
+        </div>
+        <textarea placeholder="S${index + 1}"></textarea>
+        <div class="dictation-answer">
+          <strong>${escapeHtml(row.en || '')}</strong>
+          ${row.cn ? `<div class="transcript-cn">${escapeHtml(row.cn)}</div>` : ''}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderAnalysisView(section) {
+  const items = (section.groups || []).flatMap(group => (group.questions || []).map(question => ({ ...question, group })));
+  document.getElementById('analysisView').innerHTML = `
+    <h2>Section ${escapeHtml(section.section)} 解析</h2>
+    ${items.map(question => `
+      <div class="analysis-item">
+        <h3>Q${escapeHtml(question.number)} ${escapeHtml(question.title || '')}</h3>
+        <div class="analysis-answer">答案：${escapeHtml(question.answer || '')}</div>
+        ${question.start ? `<p><button class="seek-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${Number(question.start)})">定位音频 ${formatClock(question.start)}</button></p>` : ''}
+        ${question.analysis ? `<div class="analysis-text">${escapeHtml(question.analysis)}</div>` : ''}
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderTranscriptView(section) {
+  document.getElementById('transcriptView').innerHTML = `
+    <h2>Section ${escapeHtml(section.section)} 原文</h2>
+    ${(section.transcript || []).map(row => `
+      <div class="full-transcript-row">
+        <button class="small-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">${formatClock(row.start)}</button>
+        <p class="transcript-en">${escapeHtml(row.en || '')}</p>
+        ${row.cn ? `<p class="transcript-cn">${escapeHtml(row.cn)}</p>` : ''}
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderActiveView() {
+  const section = test.sections[activeSectionIndex];
+  if (!section) return;
+  if (activeView === 'dictation') renderDictationView(section);
+  if (activeView === 'analysis') renderAnalysisView(section);
+  if (activeView === 'transcript') renderTranscriptView(section);
+}
+
 function renderQuestionNav() {
   document.getElementById('questionNav').innerHTML = allQuestions().map(question => `
     <button class="q-chip" type="button" data-id="${escapeHtml(question.id || question.number)}" data-section="${question.sectionIndex}">
@@ -830,7 +1106,7 @@ function renderQuestionNav() {
     button.addEventListener('click', () => {
       const sectionIndex = Number(button.dataset.section || 0);
       switchSection(sectionIndex);
-      const target = document.querySelector(`.answer-unit[data-id="${CSS.escape(button.dataset.id)}"]`);
+      const target = findUnitByQuestionId(button.dataset.id);
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
         if (target.matches('input')) target.focus({ preventScroll: true });
@@ -841,12 +1117,12 @@ function renderQuestionNav() {
 
 function syncQuestionNav(results = null) {
   document.querySelectorAll('.q-chip').forEach(button => {
-    const target = document.querySelector(`.answer-unit[data-id="${CSS.escape(button.dataset.id)}"]`);
+    const target = findUnitByQuestionId(button.dataset.id);
     const filled = target && unitValue(target).trim();
     button.classList.toggle('is-filled', Boolean(filled));
     button.classList.toggle('is-active', Number(button.dataset.section) === activeSectionIndex);
     if (results) {
-      const result = results.find(row => String(row.id) === String(button.dataset.id));
+      const result = results.find(row => String(row.id || '').split(',').includes(String(button.dataset.id)));
       button.classList.toggle('is-right', Boolean(result && result.correct));
       button.classList.toggle('is-wrong', Boolean(result && !result.correct));
     }
@@ -860,9 +1136,20 @@ function render() {
     </button>
   `).join('');
   document.getElementById('sectionsRoot').innerHTML = test.sections.map(renderSection).join('');
-  document.getElementById('questionCount').textContent = document.querySelectorAll('.answer-unit').length;
+  document.getElementById('questionCount').textContent = Array.from(document.querySelectorAll('.answer-unit'))
+    .reduce((sum, unit) => sum + Number(unit.dataset.marks || 1), 0);
   document.querySelectorAll('.tab').forEach(tab => {
+    if (!tab.dataset.index) return;
     tab.addEventListener('click', () => switchSection(Number(tab.dataset.index)));
+  });
+  document.querySelectorAll('#viewTabs .tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      activeView = tab.dataset.view;
+      document.querySelectorAll('#viewTabs .tab').forEach(item => item.classList.toggle('active', item === tab));
+      document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+      document.getElementById(`${activeView}View`).classList.add('active');
+      renderActiveView();
+    });
   });
   document.querySelectorAll('.answer-unit').forEach(unit => {
     unit.addEventListener('change', saveAnswers);
@@ -876,7 +1163,8 @@ function render() {
 document.getElementById('submitBtn').addEventListener('click', () => {
   const units = Array.from(document.querySelectorAll('.answer-unit'));
   const results = units.map(markUnit);
-  const correct = results.filter(row => row.correct).length;
+  const total = results.reduce((sum, row) => sum + row.marks, 0);
+  const correct = results.reduce((sum, row) => sum + row.awarded, 0);
   const wrong = results.filter(row => !row.correct);
   document.body.classList.add('show-answers');
   document.body.classList.add('result-mode');
@@ -884,7 +1172,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   document.getElementById('submitBtn').textContent = '已提交，查看复盘';
   document.getElementById('resultBox').innerHTML = `
-    <strong>${correct}/${results.length}</strong> · 正确率 ${results.length ? Math.round(correct / results.length * 100) : 0}%
+    <strong>${correct}/${total}</strong> · 正确率 ${total ? Math.round(correct / total * 100) : 0}%
     ${wrong.length ? `<br>待核对：${wrong.slice(0, 16).map(row => `Q${escapeHtml(row.q)}`).join('、')}${wrong.length > 16 ? '…' : ''}` : '<br>全部正确'}
   `;
   saveAnswers();
