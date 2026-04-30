@@ -491,6 +491,21 @@ body.result-mode .transcript-panel { display: block; }
   font-size: 13px;
   line-height: 1.5;
 }
+.transcript-row.is-current,
+.full-transcript-row.is-current,
+.dictation-row.is-current {
+  border-radius: 12px;
+  background: #eef8f6;
+  box-shadow: inset 4px 0 0 var(--sage);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.ghost-blank {
+  min-width: 64px;
+  color: var(--muted);
+  border-bottom: 1px solid #b8b5aa;
+  justify-content: center;
+}
 .bottom-nav {
   position: fixed;
   left: 0;
@@ -701,12 +716,69 @@ function seekTo(sectionIndex, seconds) {
   const applySeek = () => {
     audio.currentTime = target;
     audio.play().catch(() => {});
+    syncTranscriptAt(sectionIndex, target);
   };
   if (audio.readyState >= 1) {
     applySeek();
   } else {
     audio.addEventListener('loadedmetadata', applySeek, { once: true });
+    syncTranscriptAt(sectionIndex, target);
   }
+}
+
+function transcriptIndexAt(section, seconds) {
+  const rows = section?.transcript || [];
+  if (!rows.length) return -1;
+  const target = Number(seconds || 0);
+  const containing = rows.findIndex(row =>
+    Number(row.start || 0) <= target && target <= Number(row.end || row.start || 0)
+  );
+  if (containing >= 0) return containing;
+  let previousIndex = -1;
+  rows.forEach((row, index) => {
+    if (Number(row.start || 0) <= target) previousIndex = index;
+  });
+  if (previousIndex >= 0) return previousIndex;
+  let bestIndex = 0;
+  let bestDistance = Number.POSITIVE_INFINITY;
+  rows.forEach((row, index) => {
+    const start = Number(row.start || 0);
+    const distance = Math.abs(start - target);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = index;
+    }
+  });
+  return bestIndex;
+}
+
+function scrollInside(container, target) {
+  if (!container || !target) return;
+  const top = target.offsetTop - (container.clientHeight / 2) + (target.clientHeight / 2);
+  container.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+}
+
+function syncTranscriptAt(sectionIndex, seconds) {
+  const section = test.sections[sectionIndex];
+  const rowIndex = transcriptIndexAt(section, seconds);
+  if (rowIndex < 0) return;
+  requestAnimationFrame(() => {
+    document
+      .querySelectorAll('.transcript-row.is-current, .full-transcript-row.is-current, .dictation-row.is-current')
+      .forEach(row => row.classList.remove('is-current'));
+
+    const selector = `[data-transcript-section="${sectionIndex}"][data-transcript-index="${rowIndex}"]`;
+    document.querySelectorAll(selector).forEach(row => row.classList.add('is-current'));
+
+    const sidePanel = document.getElementById('transcriptPanel');
+    const sideRow = sidePanel?.querySelector(selector);
+    if (sideRow) scrollInside(sidePanel, sideRow);
+
+    if (activeView === 'transcript' || activeView === 'dictation') {
+      const activeRow = document.querySelector(`#${activeView}View ${selector}`);
+      if (activeRow) activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
 }
 
 function allQuestions() {
@@ -775,7 +847,7 @@ function optionBank(group) {
   `;
 }
 
-function renderTable(group, sectionIndex) {
+function renderTable(group, sectionIndex, context) {
   const table = group.table;
   if (!table || !Array.isArray(table.content)) return '';
   return `
@@ -783,7 +855,7 @@ function renderTable(group, sectionIndex) {
       <table class="practice-table">
         <tbody>
           ${table.content.map(row => `
-            <tr>${row.map(cell => `<td>${renderCollectText(cell, group, sectionIndex)}</td>`).join('')}</tr>
+            <tr>${row.map(cell => `<td>${renderCollectText(cell, group, sectionIndex, context)}</td>`).join('')}</tr>
           `).join('')}
         </tbody>
       </table>
@@ -855,7 +927,7 @@ function controlForQuestion(question, sectionIndex, group = {}, inline = false) 
   `;
 }
 
-function renderCollectText(text, group, sectionIndex) {
+function renderCollectText(text, group, sectionIndex, context = { seenIds: new Set() }) {
   const byId = new Map((group.questions || []).map(q => [String(q.id), q]));
   const raw = String(text || '');
   let html = '';
@@ -863,7 +935,14 @@ function renderCollectText(text, group, sectionIndex) {
   raw.replace(/\$([^$\s]+)\$/g, (match, id, offset) => {
     html += richText(raw.slice(last, offset));
     const question = byId.get(String(id));
-    html += question ? controlForQuestion(question, sectionIndex, group, true) : '____';
+    if (question && !context.seenIds.has(String(id))) {
+      context.seenIds.add(String(id));
+      html += controlForQuestion(question, sectionIndex, group, true);
+    } else if (question) {
+      html += '<span class="inline-answer ghost-blank">____</span>';
+    } else {
+      html += '____';
+    }
     last = offset + match.length;
     return match;
   });
@@ -893,15 +972,16 @@ function renderGroup(group, sectionIndex) {
   const hasTable = Boolean(group.table);
   const combinedMulti = isCombinedMulti(group);
   const img = imageSrc(group);
+  const renderContext = { seenIds: new Set() };
   return `
     <article class="card group">
       ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ''}
       ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ''}
       ${group.question_title ? `<div class="question-title">${escapeHtml(group.question_title)}</div>` : ''}
       ${img ? `<img class="question-image" src="${escapeHtml(img)}" alt="Question image">` : ''}
-      ${hasCollect && !combinedMulti ? `<div class="collect">${renderCollectText(group.collect, group, sectionIndex)}</div>` : ''}
+      ${hasCollect && !combinedMulti ? `<div class="collect">${renderCollectText(group.collect, group, sectionIndex, renderContext)}</div>` : ''}
       ${combinedMulti ? '' : optionBank(group)}
-      ${renderTable(group, sectionIndex)}
+      ${renderTable(group, sectionIndex, renderContext)}
       ${combinedMulti ? renderCombinedMulti(group) : ''}
       ${!hasCollect && !hasTable && !combinedMulti ? (group.questions || []).map(q => renderQuestion(q, sectionIndex, group)).join('') : ''}
       ${(hasCollect || hasTable || combinedMulti) ? (group.questions || []).map(q => `
@@ -1034,8 +1114,8 @@ function renderTranscript(section) {
   if (!section) return;
   document.getElementById('transcriptPanel').innerHTML = `
     <h3>Section ${escapeHtml(section.section)} 原文复盘</h3>
-    ${(section.transcript || []).map(row => `
-      <div class="transcript-row">
+    ${(section.transcript || []).map((row, index) => `
+      <div class="transcript-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}">
         <p class="transcript-en">${escapeHtml(row.en || '')}</p>
         ${row.cn ? `<p class="transcript-cn">${escapeHtml(row.cn)}</p>` : ''}
       </div>
@@ -1047,7 +1127,7 @@ function renderDictationView(section) {
   document.getElementById('dictationView').innerHTML = `
     <h2>Section ${escapeHtml(section.section)} 精听</h2>
     ${(section.transcript || []).map((row, index) => `
-      <div class="dictation-row">
+      <div class="dictation-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}">
         <div class="dictation-tools">
           <button class="small-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">播放 ${formatClock(row.start)}</button>
           <button class="small-btn" type="button" onclick="this.closest('.dictation-row').classList.toggle('revealed')">核对原文</button>
@@ -1080,8 +1160,8 @@ function renderAnalysisView(section) {
 function renderTranscriptView(section) {
   document.getElementById('transcriptView').innerHTML = `
     <h2>Section ${escapeHtml(section.section)} 原文</h2>
-    ${(section.transcript || []).map(row => `
-      <div class="full-transcript-row">
+    ${(section.transcript || []).map((row, index) => `
+      <div class="full-transcript-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}">
         <button class="small-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">${formatClock(row.start)}</button>
         <p class="transcript-en">${escapeHtml(row.en || '')}</p>
         ${row.cn ? `<p class="transcript-cn">${escapeHtml(row.cn)}</p>` : ''}
