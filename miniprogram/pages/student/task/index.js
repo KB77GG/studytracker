@@ -126,6 +126,12 @@ Page({
             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
             if (res.ok && res.task) {
                 if (res.task.listening_exercise_id && res.task.listening_token) {
+                    if (res.task.listening_resource_type === 'cambridge_test' && res.task.listening_url) {
+                        wx.redirectTo({
+                            url: `/pages/student/webview/index?url=${encodeURIComponent(res.task.listening_url)}`
+                        })
+                        return
+                    }
                     const token = encodeURIComponent(res.task.listening_token)
                     wx.redirectTo({
                         url: `/pages/student/listening/practice/index?taskId=${this.data.taskId}&token=${token}`

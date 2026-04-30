@@ -496,6 +496,7 @@ class Task(db.Model):
     feedback_image = db.Column(db.String(200))
 
     # Listening Exercise
+    listening_resource_type = db.Column(db.String(32), default="intensive", index=True)
     listening_exercise_id = db.Column(db.String(120), index=True)
     listening_access_token = db.Column(db.String(64), index=True)  # 精听任务访问令牌
 

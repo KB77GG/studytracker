@@ -177,19 +177,15 @@
       <div class="summary">{{ catalog.book_count }} 套机经卡片 · {{ catalog.part_count }} 个 Part · 本地音频已接入 · 按原站机经编号排序，编号可能不连续</div>
       {% endif %}
     </div>
+    {% if current_user.is_authenticated %}
     <div class="nav-actions">
-      <a class="nav-link" href="{{ url_for('listening_index') }}">剑雅精听</a>
-      {% if current_user.is_authenticated %}
       <a class="nav-link" href="{{ url_for('index') }}">返回首页</a>
-      {% endif %}
     </div>
+    {% endif %}
   </div>
 
-  <nav class="tabs" aria-label="听力分类">
-    <a class="tab" href="{{ url_for('listening_index') }}">精听</a>
-    <a class="tab" href="{{ url_for('listening_test_index') }}">剑雅整套</a>
-    <a class="tab active" href="{{ url_for('listening_jijing_index') }}">机经</a>
-  </nav>
+  {% set listening_active = 'jijing' %}
+  {% include "listening/_mode_nav.html" %}
 
   {% if not books %}
   <section class="empty">还没有生成机经数据。请先运行 build 脚本。</section>

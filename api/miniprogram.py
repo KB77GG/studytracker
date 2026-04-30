@@ -38,6 +38,31 @@ READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
 # no reference shown to the student.
 CHOICE_PRACTICE_TYPES = {READING_VOCAB_CHOICE_TYPE, "grammar", "translation"}
 VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh"}
+LISTENING_RESOURCE_INTENSIVE = "intensive"
+LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
+
+
+def _task_listening_resource_type(task) -> str:
+    value = (getattr(task, "listening_resource_type", "") or "").strip()
+    if value in {LISTENING_RESOURCE_INTENSIVE, LISTENING_RESOURCE_CAMBRIDGE_TEST}:
+        return value
+    return LISTENING_RESOURCE_INTENSIVE
+
+
+def _task_listening_url(task) -> str | None:
+    exercise_id = (getattr(task, "listening_exercise_id", "") or "").strip()
+    token = (getattr(task, "listening_access_token", "") or "").strip()
+    if not exercise_id or not token:
+        return None
+    if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+        return (
+            f"https://studytracker.xin/listening/test/{exercise_id}"
+            f"?task_id={task.id}&token={token}"
+        )
+    return (
+        f"https://studytracker.xin/listening/{exercise_id}"
+        f"?task_id={task.id}&token={token}"
+    )
 
 
 def _safe_float(value, default=0.0):
@@ -991,12 +1016,10 @@ def get_student_today_tasks():
             "completion_rate": task.completion_rate,
             "teacher_note": task.note, # 暂时复用note，前端需区分展示场景
             # 精听练习字段
+            "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
             "listening_exercise_id": task.listening_exercise_id,
             "listening_token": task.listening_access_token,
-            "listening_url": (
-                f"https://studytracker.xin/listening/{task.listening_exercise_id}"
-                f"?task_id={task.id}&token={task.listening_access_token}"
-            ) if task.listening_exercise_id and task.listening_access_token else None,
+            "listening_url": _task_listening_url(task),
         })
         
     return jsonify({
@@ -1021,6 +1044,9 @@ def get_task_detail(task_id):
         # 简单权限验证
         if task.student_name != user.student_profile.full_name:
              return jsonify({"ok": False, "error": "forbidden"}), 403
+        if task.listening_exercise_id and not task.listening_access_token:
+            task.listening_access_token = secrets.token_urlsafe(16)
+            db.session.commit()
 
         status = "pending"
         if task.status == "done":
@@ -1091,12 +1117,10 @@ def get_task_detail(task_id):
                 "speaking_phrase_start": task.speaking_phrase_start,
                 "speaking_phrase_end": task.speaking_phrase_end,
                 # Listening Info
+                "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
                 "listening_exercise_id": task.listening_exercise_id,
                 "listening_token": task.listening_access_token,
-                "listening_url": (
-                    f"https://studytracker.xin/listening/{task.listening_exercise_id}"
-                    f"?task_id={task.id}&token={task.listening_access_token}"
-                ) if task.listening_exercise_id and task.listening_access_token else None,
+                "listening_url": _task_listening_url(task),
                 # 材料信息
                 "material": material_data
             }

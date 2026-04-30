@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from collections import defaultdict
 from datetime import date, datetime, timedelta
+from urllib.parse import quote
 
 from flask import (
     Flask,
@@ -106,6 +107,40 @@ def _listening_test_root() -> Path:
     return Path(app.static_folder) / "listening_tests"
 
 
+LISTENING_RESOURCE_INTENSIVE = "intensive"
+LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
+LISTENING_RESOURCE_TYPES = {LISTENING_RESOURCE_INTENSIVE, LISTENING_RESOURCE_CAMBRIDGE_TEST}
+
+
+def _task_listening_resource_type(task) -> str:
+    value = (getattr(task, "listening_resource_type", "") or "").strip()
+    return value if value in LISTENING_RESOURCE_TYPES else LISTENING_RESOURCE_INTENSIVE
+
+
+def _task_listening_url(task, absolute: bool = True) -> str | None:
+    exercise_id = (getattr(task, "listening_exercise_id", "") or "").strip()
+    token = (getattr(task, "listening_access_token", "") or "").strip()
+    if not exercise_id or not token:
+        return None
+    safe_exercise_id = quote(exercise_id, safe="")
+    safe_token = quote(token, safe="")
+    if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+        path = f"/listening/test/{safe_exercise_id}?task_id={task.id}&token={safe_token}"
+    else:
+        path = f"/listening/{safe_exercise_id}?task_id={task.id}&token={safe_token}"
+    if absolute:
+        return f"https://studytracker.xin{path}"
+    return path
+
+
+def _listening_test_question_count(payload: dict) -> int:
+    return sum(
+        len(group.get("questions") or [])
+        for section in payload.get("sections") or []
+        for group in section.get("groups") or []
+    )
+
+
 def _listening_test_catalog() -> list[dict]:
     tests_by_book = defaultdict(list)
     for path in sorted(_listening_test_root().glob("ielts*_test*.json")):
@@ -118,11 +153,7 @@ def _listening_test_catalog() -> list[dict]:
             payload = json.loads(path.read_text(encoding="utf-8"))
         except Exception:
             continue
-        question_count = sum(
-            len(group.get("questions") or [])
-            for section in payload.get("sections") or []
-            for group in section.get("groups") or []
-        )
+        question_count = _listening_test_question_count(payload)
         tests_by_book[book_no].append({
             "id": path.stem,
             "book": book_no,
@@ -187,6 +218,8 @@ def _listening_exercise_usage_map():
     tasks = Task.query.filter(Task.listening_exercise_id.isnot(None)).all()
     usage_map = {}
     for task in tasks:
+        if _task_listening_resource_type(task) != LISTENING_RESOURCE_INTENSIVE:
+            continue
         exercise_id = (task.listening_exercise_id or "").strip()
         if not exercise_id:
             continue
@@ -482,6 +515,7 @@ def ensure_legacy_schema() -> None:
             "feedback_text": "TEXT",
             "feedback_audio": "VARCHAR(200)",
             "feedback_image": "VARCHAR(200)",
+            "listening_resource_type": "VARCHAR(32) DEFAULT 'intensive'",
             "listening_exercise_id": "VARCHAR(120)",
             "listening_access_token": "VARCHAR(64)",
         }
@@ -1136,8 +1170,15 @@ def student_today():
         if not task.listening_access_token:
             task.listening_access_token = secrets.token_urlsafe(16)
             tokens_updated = True
-        payload, _, _ = _load_listening_meta(task.listening_exercise_id or "")
-        task.listening_segment_count = _listening_segment_count_for_task(task, payload) if payload else 0
+        task.listening_resource_type = _task_listening_resource_type(task)
+        task.listening_url = _task_listening_url(task, absolute=False)
+        if task.listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+            test_path = _listening_test_root() / f"{secure_filename(task.listening_exercise_id or '')}.json"
+            payload = json.loads(test_path.read_text(encoding="utf-8")) if test_path.exists() else {}
+            task.listening_segment_count = _listening_test_question_count(payload) if payload else 0
+        else:
+            payload, _, _ = _load_listening_meta(task.listening_exercise_id or "")
+            task.listening_segment_count = _listening_segment_count_for_task(task, payload) if payload else 0
     if tokens_updated:
         db.session.commit()
 
@@ -1855,29 +1896,49 @@ def tasks_page():
         
         # 精听练习
         listening_exercise_id = request.form.get("listening_exercise_id", "").strip()
+        listening_resource_type = (request.form.get("listening_resource_type") or LISTENING_RESOURCE_INTENSIVE).strip()
+        if listening_resource_type not in LISTENING_RESOURCE_TYPES:
+            listening_resource_type = LISTENING_RESOURCE_INTENSIVE
         listening_access_token = None
+        listening_error = None
         if listening_exercise_id:
             # 自动填充 category 和 detail
             listening_access_token = secrets.token_urlsafe(16)
-            listening_json = Path(app.static_folder) / "listening" / f"{secure_filename(listening_exercise_id)}.json"
-            if listening_json.exists():
-                meta = json.loads(listening_json.read_text(encoding="utf-8"))
-                detail = meta.get("title", listening_exercise_id)
-            elif not detail:
-                detail = listening_exercise_id
-            title_upper = detail.upper()
-            if "托福" in detail or "TOEFL" in title_upper:
-                category = "托福-听力-精听"
-            elif "雅思" in detail or "IELTS" in title_upper:
-                category = "雅思-听力-精听"
+            safe_listening_id = secure_filename(listening_exercise_id)
+            if listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+                test_json = _listening_test_root() / f"{safe_listening_id}.json"
+                if test_json.exists():
+                    meta = json.loads(test_json.read_text(encoding="utf-8"))
+                    detail = meta.get("title") or safe_listening_id
+                    category = "雅思-听力-整套"
+                    question_ids = None
+                    listening_exercise_id = safe_listening_id
+                else:
+                    listening_error = "选择的剑雅整套练习不存在"
             else:
-                category = category or "精听练习"
+                listening_resource_type = LISTENING_RESOURCE_INTENSIVE
+                listening_json = _listening_root() / f"{safe_listening_id}.json"
+                if listening_json.exists():
+                    meta = json.loads(listening_json.read_text(encoding="utf-8"))
+                    detail = meta.get("title", safe_listening_id)
+                    listening_exercise_id = safe_listening_id
+                elif not detail:
+                    detail = safe_listening_id
+                title_upper = detail.upper()
+                if "托福" in detail or "TOEFL" in title_upper:
+                    category = "托福-听力-精听"
+                elif "雅思" in detail or "IELTS" in title_upper:
+                    category = "雅思-听力-精听"
+                else:
+                    category = category or "精听练习"
 
         # Validate: need either category or material_id or listening_exercise_id
         if not student:
             flash("请填写学生姓名")
+        elif listening_error:
+            flash(listening_error)
         elif not category and not material_id and not listening_exercise_id:
-            flash("请选择任务类别、材料或精听练习")
+            flash("请选择任务类别、材料或听力练习")
         elif not detail:
             flash("请填写任务描述")
         else:
@@ -1919,6 +1980,7 @@ def tasks_page():
                 speaking_phrase_start=int(request.form.get("speaking_phrase_start") or 1),
                 speaking_phrase_end=int(request.form.get("speaking_phrase_end")) if request.form.get("speaking_phrase_end") else None,
                 grading_mode=grading_mode,
+                listening_resource_type=listening_resource_type if listening_exercise_id else None,
                 listening_exercise_id=listening_exercise_id or None,
                 listening_access_token=listening_access_token,
             )
@@ -2003,7 +2065,9 @@ def tasks_page():
             "detail": t.detail,
             "status": t.status,
             "note": t.note,
+            "listening_resource_type": _task_listening_resource_type(t) if t.listening_exercise_id else None,
             "listening_exercise_id": t.listening_exercise_id,
+            "listening_url": _task_listening_url(t, absolute=False) if t.listening_exercise_id else None,
             "planned_minutes": planned,
             "actual_minutes": actual_minutes,
             "progress": progress,
@@ -2189,9 +2253,25 @@ def tasks_page():
                 listening_exercises.append({
                     "id": f.stem,
                     "title": meta.get("title", f.stem),
+                    "resource_type": LISTENING_RESOURCE_INTENSIVE,
                     "segment_count": sum(len(p.get("segments", [])) for p in meta.get("parts", [])),
                 })
                 listening_exercise_segments[f.stem] = segment_items
+            except Exception:
+                pass
+    listening_tests_dir = _listening_test_root()
+    if listening_tests_dir.exists():
+        for f in sorted(listening_tests_dir.glob("ielts*_test*.json")):
+            try:
+                meta = json.loads(f.read_text(encoding="utf-8"))
+                listening_exercises.append({
+                    "id": f.stem,
+                    "title": meta.get("title", f.stem),
+                    "resource_type": LISTENING_RESOURCE_CAMBRIDGE_TEST,
+                    "segment_count": 0,
+                    "question_count": _listening_test_question_count(meta),
+                    "section_count": len(meta.get("sections") or []),
+                })
             except Exception:
                 pass
 
@@ -2408,6 +2488,11 @@ def task_listening_detail_page(tid):
     if not task.listening_exercise_id:
         flash("该任务不是精听任务", "error")
         return redirect(url_for("tasks_page"))
+    if not task.listening_access_token:
+        task.listening_access_token = secrets.token_urlsafe(16)
+        db.session.commit()
+    if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+        return redirect(_task_listening_url(task, absolute=False) or url_for("listening_test_index"))
 
     payload, json_path, safe_id = _load_listening_meta(task.listening_exercise_id)
     if payload is None or not json_path:

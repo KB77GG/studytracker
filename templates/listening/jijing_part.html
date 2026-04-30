@@ -444,12 +444,14 @@ table.practice-table {
   </header>
 
   <main class="page">
+    {% set listening_active = 'jijing' %}
+    {% include "listening/_mode_nav.html" %}
     <nav class="tabs" aria-label="练习视图">
       <button class="tab active" data-tab="practice">题目练习</button>
       <button class="tab" data-tab="dictation">精听</button>
       <button class="tab" data-tab="analysis">解析</button>
       <button class="tab" data-tab="transcript">原文</button>
-      <a class="tab" href="{{ url_for('listening_jijing_index') }}" style="text-decoration:none;">返回列表</a>
+      <a class="tab" href="{{ url_for('listening_jijing_index') }}" style="text-decoration:none;">返回机经列表</a>
     </nav>
 
     <section class="panel active" id="practicePanel">

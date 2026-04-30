@@ -47,7 +47,7 @@
           href="{{ url_for('student_today') }}">今日计划</a>
         {% endif %}
         {% if current_user.role in ('admin', 'teacher', 'assistant') %}
-        <a class="nav-link {{ 'is-active' if endpoint in ('listening_index', 'listening_jijing_index', 'listening_player', 'listening_upload') else '' }}"
+        <a class="nav-link {{ 'is-active' if endpoint in ('listening_index', 'listening_jijing_index', 'listening_jijing_part', 'listening_test_index', 'listening_test_practice', 'listening_player', 'listening_upload') else '' }}"
           href="{{ url_for('listening_index') }}">精听练习</a>
         {% endif %}
         {% if current_user.role in ('admin', 'teacher') %}

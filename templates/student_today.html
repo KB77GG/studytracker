@@ -96,12 +96,18 @@
 
 {% if listening_tasks %}
 <section class="card listening-section">
-  <h3>精听练习任务</h3>
+  <h3>听力练习任务</h3>
   {% for lt in listening_tasks %}
   <article class="task-card">
     <div class="task-card__body">
       <div class="task-card__title">{{ lt.detail or lt.listening_exercise_id }}</div>
-      <div class="task-card__meta">已分配 {{ lt.listening_segment_count or 0 }} 句</div>
+      <div class="task-card__meta">
+        {% if lt.listening_resource_type == 'cambridge_test' %}
+          整套 Test · {{ lt.listening_segment_count or 40 }} 题
+        {% else %}
+          已分配 {{ lt.listening_segment_count or 0 }} 句
+        {% endif %}
+      </div>
       <div class="task-card__meta">
         {% if lt.status == 'done' %}
           准确率 {{ '%.1f'|format(lt.accuracy or 0) }}% · 完成率 {{ '%.0f'|format(lt.completion_rate or 0) }}%
@@ -113,8 +119,8 @@
       </div>
     </div>
     <a class="task-card__cta {{ 'task-card__cta--success' if lt.status == 'done' }}"
-       href="/listening/{{ lt.listening_exercise_id }}?task_id={{ lt.id }}&token={{ lt.listening_access_token }}">
-      {% if lt.status == 'done' %}已完成{% elif lt.completion_rate and lt.completion_rate > 0 %}继续精听{% else %}开始精听{% endif %}
+       href="{{ lt.listening_url or ('/listening/' ~ lt.listening_exercise_id ~ '?task_id=' ~ lt.id ~ '&token=' ~ lt.listening_access_token) }}">
+      {% if lt.status == 'done' %}已完成{% elif lt.listening_resource_type == 'cambridge_test' %}打开整套{% elif lt.completion_rate and lt.completion_rate > 0 %}继续精听{% else %}开始精听{% endif %}
     </a>
   </article>
   {% endfor %}

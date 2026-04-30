@@ -13,7 +13,7 @@
   <scroll-view wx:else scroll-y class="page-scroll" enhanced="true" show-scrollbar="false" scroll-into-view="{{scrollIntoView}}" scroll-with-animation="true">
     <view class="teacher-header">
       <view>
-        <text class="teacher-title">上午好，周老师</text>
+        <text class="teacher-title">{{teacherGreeting || '你好'}}，周老师</text>
         <text class="teacher-date">今天是 {{todayDate || '今日'}} · 教师工作台</text>
       </view>
       <view class="header-actions">

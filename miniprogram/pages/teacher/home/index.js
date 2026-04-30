@@ -15,6 +15,7 @@ Page({
         subscribeState: 'unknown',
         subscribeButtonText: '开启提醒',
         subscribeTip: '多次允许后，微信会出现“总是保持以上选择”，勾选即可长期免打扰',
+        teacherGreeting: '',
         bindRequired: false,
         schedulerTeacherId: '',
         bindLoading: false,
@@ -44,6 +45,7 @@ Page({
     },
 
     onShow() {
+        this.updateGreeting()
         if (!this.data.calendarMonth) {
             const now = new Date()
             this.setData({
@@ -56,6 +58,17 @@ Page({
         if (typeof this.getTabBar === 'function' && this.getTabBar()) {
             this.getTabBar().setData({ selected: 0 })
         }
+    },
+
+    updateGreeting() {
+        const hour = new Date().getHours()
+        let teacherGreeting = '你好'
+        if (hour < 6) teacherGreeting = '夜深了'
+        else if (hour < 12) teacherGreeting = '上午好'
+        else if (hour < 14) teacherGreeting = '中午好'
+        else if (hour < 18) teacherGreeting = '下午好'
+        else teacherGreeting = '晚上好'
+        this.setData({ teacherGreeting })
     },
 
     async fetchSchedules() {

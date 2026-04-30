@@ -572,7 +572,7 @@ body.result-mode .transcript-panel { display: block; }
         <h1>{{ test.title }}</h1>
         <div class="meta">
           4 个 Section · 40 题
-          · <a class="back-link" href="{{ url_for('listening_index') }}">返回精听列表</a>
+          · <a class="back-link" href="{{ url_for('listening_test_index') }}">返回剑雅整套</a>
         </div>
       </div>
     </div>
@@ -585,6 +585,8 @@ body.result-mode .transcript-panel { display: block; }
 </div>
 
 <main class="page">
+  {% set listening_active = 'tests' %}
+  {% include "listening/_mode_nav.html" %}
   <nav class="tabs" id="viewTabs" aria-label="练习视图">
     <button class="tab active" type="button" data-view="practice">题目练习</button>
     <button class="tab" type="button" data-view="dictation">精听</button>

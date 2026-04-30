@@ -386,6 +386,7 @@ Page({
                         materialType: t.material_type || null,
                         materialId: t.material_id || null,
                         // Listening Fields
+                        listeningResourceType: t.listening_resource_type || 'intensive',
                         listeningToken: t.listening_token || '',
                         listeningUrl: t.listening_url || null,
 
@@ -470,13 +471,7 @@ Page({
     goToTaskDetail(e) {
         const taskId = e.currentTarget.dataset.id
         const task = this.data.tasks.find(t => t.id === taskId)
-        if (task && task.listeningUrl) {
-            const token = encodeURIComponent(task.listeningToken || '')
-            wx.navigateTo({
-                url: `/pages/student/listening/practice/index?taskId=${taskId}&token=${token}`
-            })
-            return
-        }
+        if (this.openListeningTask(taskId, task)) return
         if (task && (task.materialType === 'reading_vocab_choice' || task.materialType === 'grammar' || task.materialType === 'translation')) {
             wx.navigateTo({
                 url: `/pages/student/material-choice/practice/index?taskId=${taskId}`,
@@ -486,6 +481,21 @@ Page({
         wx.navigateTo({
             url: `/pages/student/task/index?id=${taskId}`,
         })
+    },
+
+    openListeningTask(taskId, task) {
+        if (!task || !task.listeningUrl) return false
+        if (task.listeningResourceType === 'cambridge_test') {
+            wx.navigateTo({
+                url: `/pages/student/webview/index?url=${encodeURIComponent(task.listeningUrl)}`
+            })
+            return true
+        }
+        const token = encodeURIComponent(task.listeningToken || '')
+        wx.navigateTo({
+            url: `/pages/student/listening/practice/index?taskId=${taskId}&token=${token}`
+        })
+        return true
     },
 
     // Timer helper: format seconds to MM:SS
@@ -531,13 +541,7 @@ Page({
 
         // Dictation Routing
         const task = this.data.tasks.find(t => t.id === taskId)
-        if (task && task.listeningUrl) {
-            const token = encodeURIComponent(task.listeningToken || '')
-            wx.navigateTo({
-                url: `/pages/student/listening/practice/index?taskId=${taskId}&token=${token}`
-            })
-            return
-        }
+        if (this.openListeningTask(taskId, task)) return
 
         if (task && task.dictationBookId) {
             wx.navigateTo({
