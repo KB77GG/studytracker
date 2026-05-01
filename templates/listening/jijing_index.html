@@ -166,20 +166,21 @@
   .tests { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
+{% include "listening/_library_styles.html" %}
 </head>
 <body>
-<main class="page">
-  <div class="page-head">
+<main class="listening-library">
+  <div class="listening-library__header">
     <div>
-      <p class="eyebrow">听力 / 机经</p>
-      <h1>听力机经练习</h1>
+      <p class="listening-library__eyebrow">听力 / 机经</p>
+      <h1 class="listening-library__title">听力机经练习</h1>
       {% if catalog %}
-      <div class="summary">{{ catalog.book_count }} 套机经卡片 · {{ catalog.part_count }} 个 Part · 本地音频已接入 · 按原站机经编号排序，编号可能不连续</div>
+      <p class="listening-library__summary">{{ catalog.book_count }} 套机经卡片 · {{ catalog.part_count }} 个 Part · 本地音频已接入 · 按原站机经编号排序，编号可能不连续</p>
       {% endif %}
     </div>
     {% if current_user.is_authenticated %}
-    <div class="nav-actions">
-      <a class="nav-link" href="{{ url_for('index') }}">返回首页</a>
+    <div class="listening-library__actions">
+      <a class="listening-library__button" href="{{ url_for('index') }}">返回首页</a>
     </div>
     {% endif %}
   </div>
@@ -188,23 +189,23 @@
   {% include "listening/_mode_nav.html" %}
 
   {% if not books %}
-  <section class="empty">还没有生成机经数据。请先运行 build 脚本。</section>
+  <section class="listening-library__empty">还没有生成机经数据。请先运行 build 脚本。</section>
   {% else %}
-  <section class="grid">
+  <section class="listening-book-grid">
     {% for book in books %}
-    <article class="book-card">
-      <header class="book-header {{ 'dark' if loop.index > 2 else '' }}">
-        <span class="book-label">机经</span>
-        <span class="book-number">{{ book.in_book }}</span>
+    <article class="listening-book-card">
+      <header class="listening-book-card__header">
+        <span class="listening-book-card__label">机经</span>
+        <span class="listening-book-card__number">{{ book.in_book }}</span>
       </header>
-      <div class="tests">
+      <div class="listening-test-grid">
         {% for test in book.tests %}
-        <section class="test-card">
-          <div class="test-title">{{ test.test_name }}</div>
+        <section class="listening-jijing-test">
+          <div class="listening-jijing-test__title">{{ test.test_name }}</div>
           {% for part in test.parts %}
-          <a class="part-link" href="{{ url_for('listening_jijing_part', part_id=part.id) }}">
+          <a class="listening-jijing-test__part" href="{{ url_for('listening_jijing_part', part_id=part.id) }}">
             <span>{{ part.part_title }}</span>
-            <span class="part-meta">{{ part.question_name }}</span>
+            <span class="listening-jijing-test__meta">{{ part.question_name }}</span>
           </a>
           {% endfor %}
         </section>

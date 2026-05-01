@@ -155,18 +155,19 @@
   .tests { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
+{% include "listening/_library_styles.html" %}
 </head>
 <body>
-<main class="page">
-  <div class="page-head">
+<main class="listening-library">
+  <div class="listening-library__header">
     <div>
-      <p class="eyebrow">听力 / 剑桥雅思</p>
-      <h1>剑桥雅思听力整套练习</h1>
-      <div class="summary">{{ test_count }} 套 Test · 每套 4 个 Section · 支持题目练习、精听、解析、原文</div>
+      <p class="listening-library__eyebrow">听力 / 剑桥雅思</p>
+      <h1 class="listening-library__title">剑桥雅思听力整套练习</h1>
+      <p class="listening-library__summary">{{ test_count }} 套 Test · 每套 4 个 Section · 支持题目练习、精听、解析、原文</p>
     </div>
     {% if current_user.is_authenticated %}
-    <div class="nav-actions">
-      <a class="nav-link" href="{{ url_for('index') }}">返回首页</a>
+    <div class="listening-library__actions">
+      <a class="listening-library__button" href="{{ url_for('index') }}">返回首页</a>
     </div>
     {% endif %}
   </div>
@@ -175,20 +176,20 @@
   {% include "listening/_mode_nav.html" %}
 
   {% if not books %}
-  <section class="empty">还没有生成剑雅整套练习数据。请先运行 build 脚本。</section>
+  <section class="listening-library__empty">还没有生成剑雅整套练习数据。请先运行 build 脚本。</section>
   {% else %}
-  <section class="grid">
+  <section class="listening-book-grid">
     {% for book in books %}
-    <article class="book-card">
-      <header class="book-header">
-        <span class="book-label">Cambridge IELTS</span>
-        <span class="book-number">{{ book.book }}</span>
+    <article class="listening-book-card">
+      <header class="listening-book-card__header">
+        <span class="listening-book-card__label">Cambridge IELTS</span>
+        <span class="listening-book-card__number">{{ book.book }}</span>
       </header>
-      <div class="tests">
+      <div class="listening-test-grid">
         {% for test in book.tests %}
-        <a class="test-link" href="{{ url_for('listening_test_practice', test_id=test.id) }}">
-          <span class="test-name">Test {{ test.test }}</span>
-          <span class="test-meta">{{ test.section_count }} Section<br>{{ test.question_count }} 题</span>
+        <a class="listening-test-link" href="{{ url_for('listening_test_practice', test_id=test.id) }}">
+          <span class="listening-test-link__name">Test {{ test.test }}</span>
+          <span class="listening-test-link__meta">{{ test.section_count }} Section<br>{{ test.question_count }} 题</span>
         </a>
         {% endfor %}
       </div>

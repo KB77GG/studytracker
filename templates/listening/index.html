@@ -285,13 +285,14 @@
 }
 .login-gate .staff-link:hover { color: var(--muted); text-decoration: underline; }
 </style>
+{% include "listening/_library_styles.html" %}
 </head>
 <body>
 
 {% if show_upload %}
 {# 已登录的员工：跳过验证，直接显示内容 #}
-<div class="listening-page" id="mainContent">
-  <div class="identity-bar identity-bar--staff">
+<div class="listening-page listening-library" id="mainContent">
+  <div class="identity-bar identity-bar--staff listening-library__identity">
     <span>员工模式 · <span class="name">{{ current_user.display_name or current_user.username }}</span></span>
     <span class="actions">
       <a href="{{ url_for('index') }}">← 回到主页</a>
@@ -299,13 +300,19 @@
     </span>
   </div>
 
+  <div class="listening-library__header">
+    <div>
+      <p class="listening-library__eyebrow">听力 / 精听</p>
+      <h1 class="listening-library__title">精听练习</h1>
+      <p class="listening-library__summary">选择一个练习开始精听训练。学生自由练习会在当前浏览器自动保存进度。</p>
+    </div>
+    <div class="listening-library__actions">
+      <a class="listening-library__button listening-library__button--primary" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
+    </div>
+  </div>
+
   {% set listening_active = 'intensive' %}
   {% include "listening/_mode_nav.html" %}
-
-  <div class="page-intro">
-    <p class="subtitle">选择一个练习开始精听训练。学生自由练习会在当前浏览器自动保存进度。</p>
-    <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
-  </div>
 
   {% if exercises %}
   <div class="exercise-grid">
@@ -341,7 +348,7 @@
   <div class="empty-state">
     <h3>还没有精听练习</h3>
     <p>上传一个音频和原文，几分钟就能让学生开始练习。</p>
-    <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
+    <a class="listening-library__button listening-library__button--primary" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
   </div>
   {% endif %}
 </div>
@@ -365,20 +372,24 @@
 </div>
 
 <!-- Main content (hidden until student verified) -->
-<div class="listening-page" id="mainContent" style="display:none">
-  <div class="identity-bar">
+<div class="listening-page listening-library" id="mainContent" style="display:none">
+  <div class="identity-bar listening-library__identity">
     <span>欢迎，<span class="name" id="displayName"></span></span>
     <span class="actions">
       <button onclick="logout()">切换账号</button>
     </span>
   </div>
 
+  <div class="listening-library__header">
+    <div>
+      <p class="listening-library__eyebrow">听力 / 精听</p>
+      <h1 class="listening-library__title">精听练习</h1>
+      <p class="listening-library__summary">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
+    </div>
+  </div>
+
   {% set listening_active = 'intensive' %}
   {% include "listening/_mode_nav.html" %}
-
-  <div class="page-intro">
-    <p class="subtitle">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
-  </div>
 
   {% if exercises %}
   <div class="exercise-grid">
