@@ -5312,6 +5312,72 @@ def export_stage_report_pdf(report_id):
 
 # ── Listening (精听练习) ──────────────────────────────────
 
+_INTENSIVE_CAMBRIDGE_RE = re.compile(r"^ielts(?P<book>\d+)_test(?P<test>\d+)_s(?P<section>\d+)$", re.IGNORECASE)
+
+
+def _listening_intensive_catalog(exercises):
+    """Group imported intensive listening sections by Cambridge book/test."""
+    grouped: dict[int, dict[int, list[dict]]] = defaultdict(lambda: defaultdict(list))
+    others = []
+    for exercise in exercises:
+        match = _INTENSIVE_CAMBRIDGE_RE.match(str(exercise.get("id") or ""))
+        if not match:
+            others.append(exercise)
+            continue
+        section = dict(exercise)
+        section["book"] = int(match.group("book"))
+        section["test"] = int(match.group("test"))
+        section["section"] = int(match.group("section"))
+        section["test_key"] = f"ielts{section['book']}_test{section['test']}"
+        grouped[section["book"]][section["test"]].append(section)
+
+    books = []
+    for book_no in sorted(grouped):
+        tests = []
+        for test_no in sorted(grouped[book_no]):
+            sections = sorted(grouped[book_no][test_no], key=lambda item: item["section"])
+            accuracy_values = [
+                float(item["avg_accuracy"])
+                for item in sections
+                if item.get("avg_accuracy") is not None
+            ]
+            last_assigned_values = [
+                item.get("last_assigned")
+                for item in sections
+                if item.get("last_assigned")
+            ]
+            tests.append({
+                "book": book_no,
+                "test": test_no,
+                "key": f"ielts{book_no}_test{test_no}",
+                "title": f"Cambridge IELTS {book_no} Test {test_no}",
+                "sections": sections,
+                "section_count": len(sections),
+                "segment_count": sum(int(item.get("segment_count") or 0) for item in sections),
+                "task_count": sum(int(item.get("task_count") or 0) for item in sections),
+                "done_count": sum(int(item.get("done_count") or 0) for item in sections),
+                "avg_accuracy": round(sum(accuracy_values) / len(accuracy_values), 1)
+                if accuracy_values
+                else None,
+                "last_assigned": max(last_assigned_values) if last_assigned_values else None,
+            })
+        books.append({
+            "book": book_no,
+            "tests": tests,
+            "test_count": len(tests),
+            "section_count": sum(test["section_count"] for test in tests),
+        })
+
+    return {
+        "books": books,
+        "others": others,
+        "book_count": len(books),
+        "test_count": sum(book["test_count"] for book in books),
+        "section_count": sum(book["section_count"] for book in books),
+        "exercise_count": len(exercises),
+    }
+
+
 @app.route("/listening")
 def listening_index():
     """列出所有可用的精听练习（学生通过姓名验证访问）。"""
@@ -5347,7 +5413,13 @@ def listening_index():
                 pass
     # 已登录员工可以看到上传按钮
     show_upload = _role_can_manage_listening(current_user)
-    return render_template("listening/index.html", exercises=exercises, show_upload=show_upload)
+    catalog = _listening_intensive_catalog(exercises)
+    return render_template(
+        "listening/index.html",
+        exercises=exercises,
+        intensive_catalog=catalog,
+        show_upload=show_upload,
+    )
 
 
 @app.route("/listening/jijing")

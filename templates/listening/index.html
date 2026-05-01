@@ -289,6 +289,149 @@
 </head>
 <body>
 
+{% macro render_intensive_catalog(catalog, staff=False) %}
+{% set suffix = 'staff' if staff else 'student' %}
+<div class="listening-catalog-layout js-listening-catalog">
+  <aside class="listening-catalog-sidebar" aria-label="精听目录筛选">
+    <label class="listening-catalog-sidebar__label" for="listeningSearch-{{ suffix }}">搜索精听</label>
+    <input class="listening-catalog-sidebar__search js-listening-search"
+           id="listeningSearch-{{ suffix }}"
+           type="search"
+           placeholder="Book / Test / Section">
+    <div class="listening-catalog-sidebar__meta">
+      {{ catalog.book_count }} 本 · {{ catalog.test_count }} 套 Test · {{ catalog.section_count }} 个 Section
+    </div>
+    <nav class="listening-catalog-sidebar__links" aria-label="Cambridge IELTS 书籍索引">
+      {% for book in catalog.books %}
+      <a class="listening-catalog-sidebar__link" href="#listening-book-{{ book.book }}-{{ suffix }}">
+        <span>IELTS {{ book.book }}</span>
+        <span>{{ book.section_count }}</span>
+      </a>
+      {% endfor %}
+      {% if catalog.others %}
+      <a class="listening-catalog-sidebar__link" href="#listening-other-{{ suffix }}">
+        <span>其他</span>
+        <span>{{ catalog.others|length }}</span>
+      </a>
+      {% endif %}
+    </nav>
+  </aside>
+
+  <section class="listening-intensive-main">
+    <div class="listening-catalog-no-results">没有找到匹配的精听资源。</div>
+    {% for book in catalog.books %}
+    <article class="listening-intensive-book js-listening-book-group"
+             id="listening-book-{{ book.book }}-{{ suffix }}"
+             data-search="ielts {{ book.book }} cambridge {{ book.book }} 剑{{ book.book }}">
+      <header class="listening-intensive-book__header">
+        <div class="listening-intensive-book__title">
+          <span class="listening-intensive-book__label">Cambridge IELTS</span>
+          <span class="listening-intensive-book__number">{{ book.book }}</span>
+        </div>
+        <span class="listening-intensive-book__meta">{{ book.test_count }} Test · {{ book.section_count }} Section</span>
+      </header>
+      <div class="listening-intensive-test-grid">
+        {% for test in book.tests %}
+        <section class="listening-intensive-test js-listening-test-group"
+                 data-search="{{ test.title }} ielts{{ test.book }} test{{ test.test }} 剑{{ test.book }} test {{ test.test }}">
+          <div class="listening-intensive-test__head">
+            <div>
+              <h2 class="listening-intensive-test__title">Test {{ test.test }}</h2>
+              <div class="listening-intensive-test__meta">{{ test.section_count }} Section · {{ test.segment_count }} 个句子{% if test.last_assigned %} · 最近布置 {{ test.last_assigned }}{% endif %}</div>
+            </div>
+            {% if staff %}
+            <div class="listening-intensive-section__score">
+              {{ test.done_count }} / {{ test.task_count }} 完成
+            </div>
+            {% endif %}
+          </div>
+          <div class="listening-intensive-sections">
+            {% for section in test.sections %}
+            <div class="listening-intensive-section js-listening-section{% if not staff %} js-student-exercise-card{% endif %}"
+                 data-search="{{ section.title }} {{ section.id }} ielts{{ section.book }} test{{ section.test }} section{{ section.section }} s{{ section.section }}"
+                 {% if not staff %}
+                 data-exercise-id="{{ section.id }}"
+                 data-segment-count="{{ section.segment_count }}"
+                 data-href="{{ url_for('listening_player', exercise_id=section.id) }}"
+                 {% endif %}>
+              <div class="listening-intensive-section__top">
+                <div>
+                  <a class="listening-intensive-section__link" href="{{ url_for('listening_player', exercise_id=section.id) }}">Section {{ section.section }}</a>
+                  <div class="listening-intensive-section__meta">{{ section.segment_count }} 个句子{% if section.last_assigned %} · {{ section.last_assigned }}{% endif %}</div>
+                </div>
+                {% if staff %}
+                <span class="listening-intensive-section__score">{{ ('%.1f%%'|format(section.avg_accuracy)) if section.avg_accuracy is not none else '—' }}</span>
+                {% endif %}
+              </div>
+              {% if staff %}
+              <div class="listening-intensive-section__actions">
+                <a class="action-btn action-assign" href="{{ url_for('tasks_page') }}?preset_exercise={{ section.id }}#taskForm">布置任务</a>
+                <button class="action-btn action-danger js-delete-exercise" data-id="{{ section.id }}" {% if section.task_count > 0 %}disabled title="已有任务引用，不能删除"{% endif %}>删除</button>
+              </div>
+              {% else %}
+              <div class="progress-row">
+                <div class="progress-track"><div class="progress-fill"></div></div>
+                <div class="progress-label muted">尚未开始</div>
+              </div>
+              <a class="student-cta" href="{{ url_for('listening_player', exercise_id=section.id) }}">开始练习</a>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+        {% endfor %}
+      </div>
+    </article>
+    {% endfor %}
+
+    {% if catalog.others %}
+    <section class="listening-intensive-other js-listening-book-group" id="listening-other-{{ suffix }}" data-search="other custom 其他">
+      <h2 class="listening-intensive-other__title">其他精听</h2>
+      <div class="exercise-grid">
+        {% for ex in catalog.others %}
+        <div class="exercise-card{% if not staff %} js-student-exercise-card{% endif %} js-listening-section"
+             data-search="{{ ex.title }} {{ ex.id }}"
+             {% if not staff %}
+             data-exercise-id="{{ ex.id }}"
+             data-segment-count="{{ ex.segment_count }}"
+             data-href="{{ url_for('listening_player', exercise_id=ex.id) }}"
+             {% endif %}>
+          <div class="exercise-card__head">
+            <h3>{{ ex.title }}</h3>
+            <div class="exercise-card__meta">{{ ex.segment_count }} 个句子{% if ex.last_assigned %} · 最近布置 {{ ex.last_assigned }}{% endif %}</div>
+          </div>
+          {% if staff %}
+          <div class="exercise-stats">
+            <div class="exercise-stat">
+              <span class="k">完成 / 布置</span>
+              <span class="v">{{ ex.done_count }} / {{ ex.task_count }}</span>
+            </div>
+            <div class="exercise-stat">
+              <span class="k">平均正确率</span>
+              <span class="v">{{ ('%.1f%%'|format(ex.avg_accuracy)) if ex.avg_accuracy is not none else '—' }}</span>
+            </div>
+          </div>
+          <div class="exercise-actions">
+            <a class="action-btn action-open" href="{{ url_for('listening_player', exercise_id=ex.id) }}">打开练习</a>
+            <a class="action-btn action-assign" href="{{ url_for('tasks_page') }}?preset_exercise={{ ex.id }}#taskForm">布置任务</a>
+            <button class="action-btn action-danger js-delete-exercise" data-id="{{ ex.id }}" {% if ex.task_count > 0 %}disabled title="已有任务引用，不能删除"{% endif %}>删除</button>
+          </div>
+          {% else %}
+          <div class="progress-row">
+            <div class="progress-track"><div class="progress-fill"></div></div>
+            <div class="progress-label muted">尚未开始</div>
+          </div>
+          <a class="student-cta" href="{{ url_for('listening_player', exercise_id=ex.id) }}">开始练习</a>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+  </section>
+</div>
+{% endmacro %}
+
 {% if show_upload %}
 {# 已登录的员工：跳过验证，直接显示内容 #}
 <div class="listening-page listening-library" id="mainContent">
@@ -315,35 +458,7 @@
   {% include "listening/_mode_nav.html" %}
 
   {% if exercises %}
-  <div class="exercise-grid">
-    {% for ex in exercises %}
-    <div class="exercise-card">
-      <div class="exercise-card__head">
-        <h3>{{ ex.title }}</h3>
-        <div class="exercise-card__meta">
-          {{ ex.segment_count }} 个句子{% if ex.last_assigned %} · 最近布置 {{ ex.last_assigned }}{% endif %}
-        </div>
-      </div>
-      <div class="exercise-stats">
-        <div class="exercise-stat">
-          <span class="k">完成 / 布置</span>
-          <span class="v">{{ ex.done_count }} / {{ ex.task_count }}</span>
-        </div>
-        <div class="exercise-stat">
-          <span class="k">平均正确率</span>
-          <span class="v">{{ ('%.1f%%'|format(ex.avg_accuracy)) if ex.avg_accuracy is not none else '—' }}</span>
-        </div>
-      </div>
-      <div class="exercise-actions">
-        <a class="action-btn action-open" href="{{ url_for('listening_player', exercise_id=ex.id) }}">打开练习</a>
-        <a class="action-btn action-assign" href="{{ url_for('tasks_page') }}?preset_exercise={{ ex.id }}#taskForm">布置任务</a>
-        <button class="action-btn action-danger js-delete-exercise" data-id="{{ ex.id }}" {% if ex.task_count > 0 %}disabled title="已有任务引用，不能删除"{% endif %}>
-          删除
-        </button>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
+  {{ render_intensive_catalog(intensive_catalog, staff=True) }}
   {% else %}
   <div class="empty-state">
     <h3>还没有精听练习</h3>
@@ -392,24 +507,7 @@
   {% include "listening/_mode_nav.html" %}
 
   {% if exercises %}
-  <div class="exercise-grid">
-    {% for ex in exercises %}
-    <div class="exercise-card js-student-exercise-card"
-         data-exercise-id="{{ ex.id }}"
-         data-segment-count="{{ ex.segment_count }}"
-         data-href="{{ url_for('listening_player', exercise_id=ex.id) }}">
-      <div class="exercise-card__head">
-        <h3>{{ ex.title }}</h3>
-        <div class="exercise-card__meta">{{ ex.segment_count }} 个句子</div>
-      </div>
-      <div class="progress-row">
-        <div class="progress-track"><div class="progress-fill"></div></div>
-        <div class="progress-label muted">尚未开始</div>
-      </div>
-      <a class="student-cta" href="{{ url_for('listening_player', exercise_id=ex.id) }}">开始练习</a>
-    </div>
-    {% endfor %}
-  </div>
+  {{ render_intensive_catalog(intensive_catalog, staff=False) }}
   {% else %}
   <div class="empty-state">
     <h3>暂无练习</h3>
@@ -494,6 +592,61 @@ if (document.getElementById('loginGate')) {
     if (e.key === 'Enter') verifyStudent();
   });
 }
+
+function initListeningCatalogSearch() {
+  document.querySelectorAll('.js-listening-catalog').forEach(catalog => {
+    const input = catalog.querySelector('.js-listening-search');
+    if (!input || input.dataset.bound === '1') return;
+    input.dataset.bound = '1';
+    const apply = () => {
+      const query = input.value.trim().toLowerCase();
+      let visibleBooks = 0;
+
+      catalog.querySelectorAll('.js-listening-book-group').forEach(book => {
+        const bookSearch = (book.dataset.search || '').toLowerCase();
+        const bookMatches = query && bookSearch.includes(query);
+        let visibleTests = 0;
+
+        const tests = book.querySelectorAll('.js-listening-test-group');
+        if (tests.length) {
+          tests.forEach(test => {
+            const testSearch = (test.dataset.search || '').toLowerCase();
+            const testMatches = bookMatches || (query && testSearch.includes(query));
+            let visibleSections = 0;
+
+            test.querySelectorAll('.js-listening-section').forEach(section => {
+              const sectionSearch = (section.dataset.search || '').toLowerCase();
+              const show = !query || testMatches || sectionSearch.includes(query);
+              section.hidden = !show;
+              if (show) visibleSections += 1;
+            });
+
+            test.hidden = visibleSections === 0;
+            if (!test.hidden) visibleTests += 1;
+          });
+          book.hidden = visibleTests === 0;
+        } else {
+          let visibleItems = 0;
+          book.querySelectorAll('.js-listening-section').forEach(item => {
+            const itemSearch = (item.dataset.search || '').toLowerCase();
+            const show = !query || bookMatches || itemSearch.includes(query);
+            item.hidden = !show;
+            if (show) visibleItems += 1;
+          });
+          book.hidden = visibleItems === 0;
+        }
+
+        if (!book.hidden) visibleBooks += 1;
+      });
+
+      catalog.classList.toggle('is-empty', visibleBooks === 0);
+    };
+    input.addEventListener('input', apply);
+    apply();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initListeningCatalogSearch);
 
 function refreshExerciseProgress(studentName) {
   if (!studentName) return;
