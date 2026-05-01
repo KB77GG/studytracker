@@ -561,6 +561,33 @@ class ListeningRepeatResult(db.Model):
     )
 
 
+class ListeningTestSubmission(db.Model):
+    """剑桥雅思听力整套 Test 的自动判分结果。"""
+
+    __tablename__ = "listening_test_submission"
+
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, unique=True, index=True)
+    student_name = db.Column(db.String(64), nullable=False, index=True)
+    test_id = db.Column(db.String(120), nullable=False, index=True)
+    test_title = db.Column(db.String(200))
+    correct_count = db.Column(db.Integer, default=0, nullable=False)
+    total_count = db.Column(db.Integer, default=0, nullable=False)
+    accuracy = db.Column(db.Float, default=0.0, nullable=False)
+    ielts_score = db.Column(db.Float)
+    completion_rate = db.Column(db.Float, default=100.0, nullable=False)
+    duration_seconds = db.Column(db.Integer, default=0, nullable=False)
+    answers_json = db.Column(db.Text)
+    results_json = db.Column(db.Text)
+    wrong_numbers_json = db.Column(db.Text)
+    attempt_count = db.Column(db.Integer, default=1, nullable=False)
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    task = db.relationship("Task", backref=db.backref("listening_test_submission", uselist=False, cascade="all, delete"))
+
+
 # ---- Class Feedback (Scheduler) ----
 
 class ClassFeedback(db.Model, TimestampMixin):

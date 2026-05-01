@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block content %}
+{% macro parent_report_body() %}
 <div class="report-header">
   <div>
     <h2>{{ student.full_name }} 学习周报</h2>
@@ -141,6 +141,61 @@
     {% endfor %}
   {% else %}
     <p class="muted">本周暂无打卡记录。</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h3>听力/自动评分任务</h3>
+  {% if legacy_daily_tasks %}
+    {% for day, tasks in legacy_daily_tasks.items() %}
+      <article class="daily-card">
+        <header><strong>{{ day }}</strong></header>
+        <table>
+          <thead>
+            <tr>
+              <th>任务</th>
+              <th>状态</th>
+              <th>计划</th>
+              <th>实际</th>
+              <th>正确率</th>
+              <th>整套分数</th>
+              <th>查看</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in tasks %}
+              <tr>
+                <td>
+                  {{ task.category }} · {{ task.detail }}
+                  {% if task.student_note %}<div class="muted small">{{ task.student_note }}</div>{% endif %}
+                </td>
+                <td>{{ task.status_label }}</td>
+                <td>{{ task.planned_minutes }} 分</td>
+                <td>{{ task.actual_minutes }} 分</td>
+                <td>{% if task.accuracy is not none %}{{ task.accuracy }}%{% else %}<span class="muted">—</span>{% endif %}</td>
+                <td>
+                  {% if task.listening_test %}
+                    {{ task.listening_test.correct_count }}/{{ task.listening_test.total_count }}
+                    <div class="muted small">IELTS {{ task.listening_test.ielts_score }}</div>
+                  {% else %}
+                    <span class="muted">—</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if task.listening_url %}
+                    <a href="{{ task.listening_url }}" target="_blank">打开</a>
+                  {% else %}
+                    <span class="muted">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </article>
+    {% endfor %}
+  {% else %}
+    <p class="muted">本周暂无听力或自动评分任务。</p>
   {% endif %}
 </section>
 
@@ -356,4 +411,8 @@ if(copyBtn){
 }
 </script>
 {% endif %}
-{% endblock %}
+{% endmacro %}
+
+{% block content %}{% endblock %}
+{% block content_dashboard %}{{ parent_report_body() }}{% endblock %}
+{% block content_public %}{{ parent_report_body() }}{% endblock %}

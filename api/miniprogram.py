@@ -16,7 +16,7 @@ from models import (
     PlanItemSession, ClassFeedback, ScheduleSnapshot,
     MaterialBank, Question, QuestionOption, SpeakingSession, SpeakingMessage,
     StudentAnswer,
-    DictationBook
+    DictationBook, ListeningTestSubmission
 )
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message, send_subscribe_message_result
@@ -63,6 +63,27 @@ def _task_listening_url(task) -> str | None:
         f"https://studytracker.xin/listening/{exercise_id}"
         f"?task_id={task.id}&token={token}"
     )
+
+
+def _serialize_listening_test_submission(row) -> dict | None:
+    if not row:
+        return None
+    try:
+        wrong_numbers = json.loads(row.wrong_numbers_json or "[]")
+    except Exception:
+        wrong_numbers = []
+    return {
+        "test_id": row.test_id,
+        "test_title": row.test_title,
+        "correct_count": row.correct_count,
+        "total_count": row.total_count,
+        "accuracy": row.accuracy,
+        "ielts_score": row.ielts_score,
+        "completion_rate": row.completion_rate,
+        "attempt_count": row.attempt_count,
+        "submitted_at": row.submitted_at.isoformat() if row.submitted_at else None,
+        "wrong_numbers": wrong_numbers,
+    }
 
 
 def _safe_float(value, default=0.0):
@@ -982,6 +1003,11 @@ def get_student_today_tasks():
     for task in tasks:
         dictation_book = DictationBook.query.get(task.dictation_book_id) if task.dictation_book_id else None
         dictation_book_type = dictation_book.book_type if dictation_book else "dictation"
+        listening_test_submission = (
+            ListeningTestSubmission.query.filter_by(task_id=task.id).first()
+            if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            else None
+        )
         # 判断状态
         status = "pending"
         if task.status == "done":
@@ -1020,6 +1046,7 @@ def get_student_today_tasks():
             "listening_exercise_id": task.listening_exercise_id,
             "listening_token": task.listening_access_token,
             "listening_url": _task_listening_url(task),
+            "listening_test_result": _serialize_listening_test_submission(listening_test_submission),
         })
         
     return jsonify({
@@ -1059,6 +1086,11 @@ def get_task_detail(task_id):
         # 获取关联的材料信息
         dictation_book = DictationBook.query.get(task.dictation_book_id) if task.dictation_book_id else None
         dictation_book_type = dictation_book.book_type if dictation_book else "dictation"
+        listening_test_submission = (
+            ListeningTestSubmission.query.filter_by(task_id=task.id).first()
+            if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            else None
+        )
         material_data = None
         if task.material:
             questions = []
@@ -1121,6 +1153,7 @@ def get_task_detail(task_id):
                 "listening_exercise_id": task.listening_exercise_id,
                 "listening_token": task.listening_access_token,
                 "listening_url": _task_listening_url(task),
+                "listening_test_result": _serialize_listening_test_submission(listening_test_submission),
                 # 材料信息
                 "material": material_data
             }
@@ -1933,6 +1966,11 @@ def get_parent_stats():
     
     recent_feed = []
     for t in recent_tasks:
+        listening_test_submission = (
+            ListeningTestSubmission.query.filter_by(task_id=t.id).first()
+            if _task_listening_resource_type(t) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            else None
+        )
         recent_feed.append({
             "id": t.id,
             "date": t.date,
@@ -1940,7 +1978,8 @@ def get_parent_stats():
             "detail": t.detail,
             "accuracy": t.accuracy,
             "completion_rate": t.completion_rate,
-            "teacher_note": t.note
+            "teacher_note": t.note,
+            "listening_test_result": _serialize_listening_test_submission(listening_test_submission),
         })
 
     # 3. 本周趋势 (过去7天)

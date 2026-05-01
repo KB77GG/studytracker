@@ -60,6 +60,7 @@ from models import (
     StageReport,
     ListeningSegmentResult,
     ListeningRepeatResult,
+    ListeningTestSubmission,
 )
 
 def time_ago(dt):
@@ -138,6 +139,279 @@ def _listening_test_question_count(payload: dict) -> int:
         len(group.get("questions") or [])
         for section in payload.get("sections") or []
         for group in section.get("groups") or []
+    )
+
+
+def _load_listening_test_payload(test_id: str) -> tuple[dict | None, Path | None, str]:
+    safe_id = secure_filename(test_id)
+    test_path = _listening_test_root() / f"{safe_id}.json"
+    if not test_path.exists():
+        return None, None, safe_id
+    try:
+        return json.loads(test_path.read_text(encoding="utf-8")), test_path, safe_id
+    except Exception:
+        return None, test_path, safe_id
+
+
+def _normalize_listening_test_answer(value) -> str:
+    return (
+        str(value or "")
+        .strip()
+        .lower()
+        .replace("‘", "'")
+        .replace("’", "'")
+        .replace("“", '"')
+        .replace("”", '"')
+    )
+
+
+def _clean_listening_test_answer(value) -> str:
+    text_value = _normalize_listening_test_answer(value)
+    text_value = re.sub(r"[.,!?;:，。！？；：]", "", text_value)
+    text_value = re.sub(r"\s+", " ", text_value)
+    return text_value.strip()
+
+
+def _split_listening_test_alternatives(answer) -> list[str]:
+    return [
+        _clean_listening_test_answer(part)
+        for part in re.split(r"\s*/\s*", str(answer or ""))
+        if _clean_listening_test_answer(part)
+    ]
+
+
+def _split_listening_test_letters(answer) -> list[str]:
+    letters = [
+        part.strip().upper()
+        for part in re.split(r"\s*[,/]\s*", str(answer or ""))
+        if part.strip()
+    ]
+    return list(dict.fromkeys(letters))
+
+
+def _listening_test_answer_is_letters(answer: str) -> bool:
+    letters = _split_listening_test_letters(answer)
+    return bool(letters) and all(re.fullmatch(r"[A-Z]", letter) for letter in letters)
+
+
+def _listening_test_is_combined_multi(group: dict) -> bool:
+    if group.get("type") != 2:
+        return False
+    options = (group.get("collect_option") or {}).get("list") or []
+    questions = group.get("questions") or []
+    if not options or not questions:
+        return False
+    first_answer = questions[0].get("answer") or ""
+    return "," in first_answer and all((q.get("answer") or "") == first_answer for q in questions)
+
+
+def _iter_listening_test_grade_units(payload: dict) -> list[dict]:
+    units = []
+    for section_index, section in enumerate(payload.get("sections") or []):
+        for group in section.get("groups") or []:
+            questions = group.get("questions") or []
+            if _listening_test_is_combined_multi(group):
+                units.append(
+                    {
+                        "ids": [str(q.get("id") or q.get("number")) for q in questions],
+                        "numbers": [q.get("number") for q in questions],
+                        "answer": questions[0].get("answer") or "",
+                        "marks": len(questions),
+                        "kind": "checkbox-set",
+                        "section": section_index,
+                    }
+                )
+                continue
+            for question in questions:
+                units.append(
+                    {
+                        "ids": [str(question.get("id") or question.get("number"))],
+                        "numbers": [question.get("number")],
+                        "answer": question.get("answer") or "",
+                        "marks": 1,
+                        "kind": "question",
+                        "section": section_index,
+                    }
+                )
+    return units
+
+
+def _grade_listening_test_answers(payload: dict, answers: dict) -> dict:
+    if not isinstance(answers, dict):
+        answers = {}
+    results = []
+    total = 0
+    correct = 0
+    wrong_numbers = []
+
+    for unit in _iter_listening_test_grade_units(payload):
+        key = ",".join(unit["ids"])
+        value = answers.get(key)
+        if value is None and unit["ids"]:
+            value = answers.get(unit["ids"][0], "")
+        answer = unit["answer"]
+        marks = int(unit["marks"] or 1)
+        total += marks
+        awarded = 0
+        is_correct = False
+
+        if unit["kind"] == "checkbox-set":
+            expected = _split_listening_test_letters(answer)
+            submitted = _split_listening_test_letters(value)
+            extra = len([letter for letter in submitted if letter not in expected])
+            matched = len([letter for letter in submitted if letter in expected])
+            awarded = 0 if extra else min(marks, matched)
+            is_correct = bool(expected) and awarded == marks
+        elif _listening_test_answer_is_letters(answer):
+            is_correct = str(value or "").strip().upper() in _split_listening_test_letters(answer)
+            awarded = marks if is_correct else 0
+        else:
+            is_correct = _clean_listening_test_answer(value) in _split_listening_test_alternatives(answer)
+            awarded = marks if is_correct else 0
+
+        correct += awarded
+        if not is_correct:
+            wrong_numbers.extend(unit["numbers"])
+
+        results.append(
+            {
+                "ids": unit["ids"],
+                "numbers": unit["numbers"],
+                "q": ",".join(str(n) for n in unit["numbers"] if n is not None),
+                "answer": answer,
+                "value": value or "",
+                "marks": marks,
+                "awarded": awarded,
+                "correct": is_correct,
+                "section": unit["section"],
+            }
+        )
+
+    accuracy = round(correct * 100.0 / total, 1) if total else 0.0
+    return {
+        "correct": correct,
+        "total": total,
+        "accuracy": accuracy,
+        "ielts_score": _ielts_listening_band(correct),
+        "wrong_numbers": wrong_numbers,
+        "results": results,
+    }
+
+
+def _ielts_listening_band(raw_score: int) -> float:
+    raw = int(raw_score or 0)
+    if raw >= 39:
+        return 9.0
+    if raw >= 37:
+        return 8.5
+    if raw >= 35:
+        return 8.0
+    if raw >= 32:
+        return 7.5
+    if raw >= 30:
+        return 7.0
+    if raw >= 26:
+        return 6.5
+    if raw >= 23:
+        return 6.0
+    if raw >= 18:
+        return 5.5
+    if raw >= 16:
+        return 5.0
+    if raw >= 13:
+        return 4.5
+    if raw >= 11:
+        return 4.0
+    if raw >= 8:
+        return 3.5
+    if raw >= 6:
+        return 3.0
+    if raw >= 4:
+        return 2.5
+    if raw >= 2:
+        return 2.0
+    if raw >= 1:
+        return 1.0
+    return 0.0
+
+
+def _serialize_listening_test_submission(row: ListeningTestSubmission | None) -> dict | None:
+    if not row:
+        return None
+    try:
+        answers = json.loads(row.answers_json or "{}")
+    except Exception:
+        answers = {}
+    try:
+        results = json.loads(row.results_json or "[]")
+    except Exception:
+        results = []
+    try:
+        wrong_numbers = json.loads(row.wrong_numbers_json or "[]")
+    except Exception:
+        wrong_numbers = []
+    return {
+        "task_id": row.task_id,
+        "student_name": row.student_name,
+        "test_id": row.test_id,
+        "test_title": row.test_title,
+        "correct_count": row.correct_count,
+        "total_count": row.total_count,
+        "accuracy": row.accuracy,
+        "ielts_score": row.ielts_score,
+        "completion_rate": row.completion_rate,
+        "duration_seconds": row.duration_seconds,
+        "attempt_count": row.attempt_count,
+        "submitted_at": row.submitted_at.isoformat() if row.submitted_at else None,
+        "answers": answers,
+        "results": results,
+        "wrong_numbers": wrong_numbers,
+    }
+
+
+def _sync_listening_test_score_record(task: Task, payload: dict, grade: dict) -> None:
+    student = StudentProfile.query.filter_by(
+        full_name=task.student_name, is_deleted=False
+    ).first()
+    recorder_id = task.created_by
+    if not recorder_id and getattr(current_user, "is_authenticated", False):
+        recorder_id = current_user.id
+    if not student or not recorder_id:
+        return
+    try:
+        taken_on = datetime.strptime(task.date or "", "%Y-%m-%d").date()
+    except ValueError:
+        taken_on = date.today()
+    assessment_name = f"{payload.get('title') or task.detail or task.listening_exercise_id}（任务 #{task.id}）"
+    record = ScoreRecord.query.filter(
+        ScoreRecord.student_id == student.id,
+        ScoreRecord.exam_system == "雅思",
+        ScoreRecord.assessment_name == assessment_name,
+        ScoreRecord.is_deleted.is_(False),
+    ).first()
+    if not record:
+        record = ScoreRecord(
+            student_id=student.id,
+            exam_system="雅思",
+            assessment_name=assessment_name,
+            taken_on=taken_on,
+            recorded_by=recorder_id,
+        )
+        db.session.add(record)
+    record.taken_on = taken_on
+    record.total_score = grade["ielts_score"]
+    record.component_scores = {
+        "listening": grade["ielts_score"],
+        "raw_score": grade["correct"],
+        "total_questions": grade["total"],
+        "accuracy": grade["accuracy"],
+    }
+    wrong_numbers = grade.get("wrong_numbers") or []
+    record.notes = (
+        f"剑雅听力整套自动判分：{grade['correct']}/{grade['total']}，"
+        f"正确率 {grade['accuracy']}%，错题 "
+        f"{'、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else '无'}"
+        f"{'…' if len(wrong_numbers) > 20 else ''}"
     )
 
 
@@ -682,6 +956,12 @@ def ensure_legacy_schema() -> None:
     except Exception as exc:  # pragma: no cover
         current_app.logger.warning(
             "Failed to ensure listening_repeat_result table exists: %s", exc
+        )
+    try:
+        ListeningTestSubmission.__table__.create(bind=db.engine, checkfirst=True)
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.warning(
+            "Failed to ensure listening_test_submission table exists: %s", exc
         )
 
 
@@ -1413,6 +1693,15 @@ def _build_parent_report(student: StudentProfile, start_date: date, end_date: da
             .order_by(StudyPlan.plan_date.asc(), PlanItem.order_index.asc())
             .all()
         )
+        legacy_tasks = (
+            Task.query.filter(
+                Task.student_name == student.full_name,
+                Task.date >= range_start.isoformat(),
+                Task.date <= range_end.isoformat(),
+            )
+            .order_by(Task.date.asc(), Task.id.asc())
+            .all()
+        )
 
         filtered_items = [
             item
@@ -1424,11 +1713,16 @@ def _build_parent_report(student: StudentProfile, start_date: date, end_date: da
                 PlanItem.REVIEW_REJECTED,
             )
         ]
-        total_items = len(items)
-        reviewed_items = len(filtered_items)
+        completed_legacy = [task for task in legacy_tasks if (task.status or "").lower() == "done"]
+        total_items = len(items) + len(legacy_tasks)
+        reviewed_items = len(filtered_items) + len(completed_legacy)
 
-        planned_total = sum(item.planned_minutes for item in items)
-        actual_total = sum((item.actual_seconds or 0) for item in items)
+        planned_total = sum(item.planned_minutes for item in items) + sum(
+            int(task.planned_minutes or 0) for task in legacy_tasks
+        )
+        actual_total = sum((item.actual_seconds or 0) for item in items) + sum(
+            int(task.actual_seconds or 0) for task in legacy_tasks
+        )
         manual_total = sum((item.manual_minutes or 0) * 60 for item in items)
 
         module_breakdown = defaultdict(lambda: {"planned": 0, "actual": 0})
@@ -1439,6 +1733,42 @@ def _build_parent_report(student: StudentProfile, start_date: date, end_date: da
                 (item.actual_seconds or 0) / 60
             )
             daily[item.plan.plan_date].append(item)
+        legacy_daily = defaultdict(list)
+        for task in legacy_tasks:
+            module = (task.category or "").strip() or "旧版任务"
+            module_breakdown[module]["planned"] += int(task.planned_minutes or 0)
+            module_breakdown[module]["actual"] += int((task.actual_seconds or 0) / 60)
+            try:
+                task_day = datetime.strptime(task.date or "", "%Y-%m-%d").date()
+            except ValueError:
+                task_day = range_start
+            status = (task.status or "pending").lower()
+            if status == "done":
+                status_label = "已完成"
+            elif status == "submitted" or task.student_submitted:
+                status_label = "已提交"
+            elif status == "progress" or int(task.actual_seconds or 0) > 0:
+                status_label = "进行中"
+            else:
+                status_label = "未开始"
+            submission = task.listening_test_submission
+            legacy_daily[task_day].append(
+                {
+                    "id": task.id,
+                    "date": task.date,
+                    "category": task.category or "未分类",
+                    "detail": task.detail or "",
+                    "status": status,
+                    "status_label": status_label,
+                    "planned_minutes": int(task.planned_minutes or 0),
+                    "actual_minutes": round(int(task.actual_seconds or 0) / 60.0, 1),
+                    "accuracy": round(float(task.accuracy), 1) if task.accuracy is not None else None,
+                    "completion_rate": round(float(task.completion_rate), 1) if task.completion_rate is not None else None,
+                    "student_note": task.student_note or "",
+                    "listening_url": _task_listening_url(task, absolute=False) if task.listening_exercise_id else None,
+                    "listening_test": _serialize_listening_test_submission(submission),
+                }
+            )
 
         completion_rate = (
             round(reviewed_items * 100.0 / total_items, 1) if total_items else 0.0
@@ -1447,6 +1777,8 @@ def _build_parent_report(student: StudentProfile, start_date: date, end_date: da
         return {
             "items": items,
             "daily": daily,
+            "legacy_daily": legacy_daily,
+            "legacy_tasks": legacy_tasks,
             "planned_total": planned_total,
             "actual_total": actual_total,
             "manual_total": manual_total,
@@ -1536,6 +1868,8 @@ def _build_parent_report(student: StudentProfile, start_date: date, end_date: da
         "end_date": end_date,
         "items": cur["items"],
         "daily_items": dict(sorted(cur["daily"].items())),
+        "legacy_daily_tasks": dict(sorted(cur["legacy_daily"].items())),
+        "legacy_tasks": cur["legacy_tasks"],
         "planned_minutes_total": cur["planned_total"],
         "actual_minutes_total": round(cur["actual_total"] / 60),
         "manual_minutes_total": round(cur["manual_total"] / 60),
@@ -2073,6 +2407,9 @@ def tasks_page():
             "progress": progress,
             "completion_rate": manual_progress,
             "accuracy": accuracy_value,
+            "listening_test": _serialize_listening_test_submission(t.listening_test_submission)
+            if _task_listening_resource_type(t) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            else None,
             "student_submitted": t.student_submitted,
             "evidence_photos": evidence_photos,
             "student_note": t.student_note,
@@ -3585,6 +3922,12 @@ def report_student_view():
     payload = _build_report_payload(tasks, filters)
 
     student_summary = payload["summary"][0] if payload["summary"] else None
+    submission_map = {
+        row.task_id: row
+        for row in ListeningTestSubmission.query.filter(
+            ListeningTestSubmission.task_id.in_([task.id for task in tasks] or [0])
+        ).all()
+    }
     records = [
         {
             "id": task.id,
@@ -3598,6 +3941,9 @@ def report_student_view():
             if task.completion_rate is not None
             else None,
             "accuracy": float(task.accuracy or 0.0),
+            "listening_test": _serialize_listening_test_submission(
+                submission_map.get(task.id)
+            ),
             "note": task.note or "",
         }
         for task in tasks
@@ -4730,23 +5076,153 @@ def listening_test_index():
 @app.route("/listening/test/<test_id>")
 def listening_test_practice(test_id):
     """完整听力 Test 做题页。"""
-    safe_id = secure_filename(test_id)
-    test_path = _listening_test_root() / f"{safe_id}.json"
-    if not test_path.exists():
+    test, _test_path, _safe_id = _load_listening_test_payload(test_id)
+    if not test:
         return "听力 Test 不存在", 404
-    test = json.loads(test_path.read_text(encoding="utf-8"))
     return render_template("listening/test_practice.html", test=test)
 
 
 @app.route("/api/listening/test/<test_id>")
 def api_listening_test_practice(test_id):
     """返回完整听力 Test 题目 JSON。"""
-    safe_id = secure_filename(test_id)
-    test_path = _listening_test_root() / f"{safe_id}.json"
-    if not test_path.exists():
+    data, _test_path, _safe_id = _load_listening_test_payload(test_id)
+    if not data:
         return jsonify({"error": "听力 Test 不存在"}), 404
-    data = json.loads(test_path.read_text(encoding="utf-8"))
     return jsonify(data)
+
+
+@app.get("/api/listening/test/<test_id>/submission")
+def api_listening_test_submission(test_id):
+    """返回指定任务的整套 Test 已提交结果。"""
+    data, _test_path, safe_id = _load_listening_test_payload(test_id)
+    if not data:
+        return jsonify({"ok": False, "error": "test_not_found"}), 404
+    task_id = request.args.get("task_id", type=int)
+    token = (request.args.get("token") or "").strip()
+    if not task_id or not token:
+        return jsonify({"ok": True, "submission": None})
+    task = Task.query.get(task_id)
+    if (
+        not task
+        or _task_listening_resource_type(task) != LISTENING_RESOURCE_CAMBRIDGE_TEST
+        or secure_filename(task.listening_exercise_id or "") != safe_id
+    ):
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+    if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, token):
+        return jsonify({"ok": False, "error": "invalid_token"}), 403
+    return jsonify({
+        "ok": True,
+        "task": {
+            "id": task.id,
+            "status": task.status,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        },
+        "submission": _serialize_listening_test_submission(task.listening_test_submission),
+    })
+
+
+@app.post("/api/listening/test/<test_id>/submit")
+def api_listening_test_submit(test_id):
+    """提交剑雅整套 Test 答案并回写任务/报告。"""
+    payload, _test_path, safe_id = _load_listening_test_payload(test_id)
+    if not payload:
+        return jsonify({"ok": False, "error": "test_not_found"}), 404
+
+    data = request.get_json(silent=True) or {}
+    answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
+    grade = _grade_listening_test_answers(payload, answers)
+
+    task = None
+    task_id = data.get("task_id") or request.args.get("task_id")
+    token = (data.get("token") or request.args.get("token") or "").strip()
+    if task_id:
+        try:
+            task_id = int(task_id)
+        except (TypeError, ValueError):
+            return jsonify({"ok": False, "error": "invalid_task_id"}), 400
+        if not token:
+            return jsonify({"ok": False, "error": "missing_token"}), 400
+        task = Task.query.get(task_id)
+        if (
+            not task
+            or _task_listening_resource_type(task) != LISTENING_RESOURCE_CAMBRIDGE_TEST
+            or secure_filename(task.listening_exercise_id or "") != safe_id
+        ):
+            return jsonify({"ok": False, "error": "task_not_found"}), 404
+        if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, token):
+            return jsonify({"ok": False, "error": "invalid_token"}), 403
+
+    if not task:
+        return jsonify({"ok": True, "synced": False, "result": grade})
+
+    now = datetime.utcnow()
+    duration_seconds = 0
+    try:
+        duration_seconds = max(0, int(data.get("duration_seconds") or 0))
+    except (TypeError, ValueError):
+        duration_seconds = 0
+
+    submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
+    if submission:
+        submission.attempt_count = int(submission.attempt_count or 0) + 1
+        submission.updated_at = now
+    else:
+        submission = ListeningTestSubmission(
+            task_id=task.id,
+            student_name=task.student_name,
+            test_id=safe_id,
+            attempt_count=1,
+            created_at=now,
+        )
+        db.session.add(submission)
+
+    submission.student_name = task.student_name
+    submission.test_id = safe_id
+    submission.test_title = payload.get("title") or task.detail or safe_id
+    submission.correct_count = grade["correct"]
+    submission.total_count = grade["total"]
+    submission.accuracy = grade["accuracy"]
+    submission.ielts_score = grade["ielts_score"]
+    submission.completion_rate = 100.0
+    submission.duration_seconds = max(int(submission.duration_seconds or 0), duration_seconds)
+    submission.answers_json = json.dumps(answers, ensure_ascii=False)
+    submission.results_json = json.dumps(grade["results"], ensure_ascii=False)
+    submission.wrong_numbers_json = json.dumps(grade["wrong_numbers"], ensure_ascii=False)
+    submission.submitted_at = now
+
+    task.student_submitted = True
+    task.submitted_at = now
+    task.status = "done"
+    task.accuracy = grade["accuracy"]
+    task.completion_rate = 100.0
+    if duration_seconds:
+        task.actual_seconds = max(int(task.actual_seconds or 0), duration_seconds)
+    wrong_numbers = grade.get("wrong_numbers") or []
+    task.student_note = (
+        f"剑雅整套听力自动判分：{grade['correct']}/{grade['total']}，"
+        f"IELTS Listening {grade['ielts_score']}，正确率 {grade['accuracy']}%。"
+        f"{' 错题：' + '、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else ''}"
+        f"{'…' if len(wrong_numbers) > 20 else ''}"
+    )
+
+    _sync_listening_test_score_record(task, payload, grade)
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "synced": True,
+        "result": grade,
+        "task": {
+            "id": task.id,
+            "status": task.status,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        },
+        "submission": _serialize_listening_test_submission(submission),
+    })
 
 
 @app.route("/listening/<exercise_id>")

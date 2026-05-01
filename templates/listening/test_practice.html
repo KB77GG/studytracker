@@ -648,6 +648,10 @@ const audio = document.getElementById('audio');
 const audioBase = "{{ url_for('static', filename='listening/') }}";
 const storageKey = `listening_test_answers_${test.id}_${localStorage.getItem('listening_student') || 'guest'}`;
 const noteStorageKey = `listening_test_error_notes_${test.id}_${localStorage.getItem('listening_student') || 'guest'}`;
+const pageParams = new URLSearchParams(window.location.search);
+const listeningTaskId = pageParams.get('task_id') || '';
+const listeningTaskToken = pageParams.get('token') || '';
+const practiceStartedAt = Date.now();
 let activeSectionIndex = 0;
 let activeView = 'practice';
 
@@ -697,10 +701,11 @@ function splitAlternatives(answer) {
 }
 
 function splitLetters(answer) {
-  return String(answer || '')
+  const letters = String(answer || '')
     .split(/\s*[,/]\s*/)
     .map(v => v.trim().toUpperCase())
     .filter(Boolean);
+  return Array.from(new Set(letters));
 }
 
 function formatClock(seconds) {
@@ -1073,9 +1078,14 @@ function saveAnswers() {
   syncQuestionNav();
 }
 
-function restoreAnswers() {
-  let rows = {};
-  try { rows = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (err) { rows = {}; }
+function applyAnswerRows(rows) {
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    if (unit.dataset.kind === 'radio' || unit.dataset.kind === 'checkboxes' || unit.dataset.kind === 'checkbox-set') {
+      unit.querySelectorAll('input').forEach(input => { input.checked = false; });
+    } else {
+      unit.value = '';
+    }
+  });
   document.querySelectorAll('.answer-unit').forEach(unit => {
     const value = rows[unit.dataset.id];
     if (!value) return;
@@ -1093,6 +1103,74 @@ function restoreAnswers() {
   });
   refreshAnsweredCount();
   syncQuestionNav();
+}
+
+function restoreAnswers() {
+  let rows = {};
+  try { rows = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (err) { rows = {}; }
+  applyAnswerRows(rows);
+}
+
+function resultHtml(correct, total, wrongLabels, syncedText = '') {
+  const rate = total ? Math.round(correct / total * 100) : 0;
+  return `
+    <strong>${correct}/${total}</strong> · 正确率 ${rate}%
+    ${wrongLabels.length ? `<br>待核对：${wrongLabels.slice(0, 16).map(label => `Q${escapeHtml(label)}`).join('、')}${wrongLabels.length > 16 ? '…' : ''}` : '<br>全部正确'}
+    ${syncedText ? `<br>${syncedText}` : ''}
+  `;
+}
+
+async function syncListeningTestSubmission(baseHtml) {
+  if (!listeningTaskId || !listeningTaskToken) return;
+  const resultBox = document.getElementById('resultBox');
+  resultBox.innerHTML = `${baseHtml}<br><span class="muted">正在同步后台成绩...</span>`;
+  try {
+    const response = await fetch(`/api/listening/test/${encodeURIComponent(test.id)}/submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        task_id: Number(listeningTaskId),
+        token: listeningTaskToken,
+        answers: answerSnapshot(),
+        duration_seconds: Math.max(0, Math.round((Date.now() - practiceStartedAt) / 1000))
+      })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || 'sync_failed');
+    }
+    const summary = data.submission || data.result || {};
+    const syncedText = `已同步后台：原始分 ${summary.correct_count ?? data.result?.correct}/${summary.total_count ?? data.result?.total}，IELTS Listening ${summary.ielts_score ?? data.result?.ielts_score}`;
+    resultBox.innerHTML = `${baseHtml}<br>${syncedText}`;
+  } catch (err) {
+    resultBox.innerHTML = `${baseHtml}<br><span style="color: var(--error);">后台同步失败，请稍后再提交。</span>`;
+  }
+}
+
+async function loadExistingSubmission() {
+  if (!listeningTaskId || !listeningTaskToken) return;
+  try {
+    const response = await fetch(`/api/listening/test/${encodeURIComponent(test.id)}/submission?task_id=${encodeURIComponent(listeningTaskId)}&token=${encodeURIComponent(listeningTaskToken)}`);
+    const data = await response.json();
+    if (!response.ok || !data.ok || !data.submission) return;
+    const submission = data.submission;
+    applyAnswerRows(submission.answers || {});
+    localStorage.setItem(storageKey, JSON.stringify(answerSnapshot()));
+    const results = Array.from(document.querySelectorAll('.answer-unit')).map(markUnit);
+    document.body.classList.add('show-answers');
+    document.body.classList.add('result-mode');
+    syncQuestionNav(results);
+    const wrongLabels = submission.wrong_numbers || results.filter(row => !row.correct).map(row => row.q);
+    document.getElementById('submitBtn').textContent = '已提交，查看复盘';
+    document.getElementById('resultBox').innerHTML = resultHtml(
+      submission.correct_count,
+      submission.total_count,
+      wrongLabels,
+      `已同步后台：IELTS Listening ${submission.ielts_score}`
+    );
+  } catch (err) {
+    // 已提交结果加载失败时，不影响学生继续做题或重新提交。
+  }
 }
 
 function refreshAnsweredCount() {
@@ -1240,6 +1318,7 @@ function render() {
   renderQuestionNav();
   restoreAnswers();
   switchSection(0, false);
+  loadExistingSubmission();
 }
 
 document.getElementById('submitBtn').addEventListener('click', () => {
@@ -1253,11 +1332,10 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   syncQuestionNav(results);
   window.scrollTo({ top: 0, behavior: 'smooth' });
   document.getElementById('submitBtn').textContent = '已提交，查看复盘';
-  document.getElementById('resultBox').innerHTML = `
-    <strong>${correct}/${total}</strong> · 正确率 ${total ? Math.round(correct / total * 100) : 0}%
-    ${wrong.length ? `<br>待核对：${wrong.slice(0, 16).map(row => `Q${escapeHtml(row.q)}`).join('、')}${wrong.length > 16 ? '…' : ''}` : '<br>全部正确'}
-  `;
+  const baseHtml = resultHtml(correct, total, wrong.map(row => row.q));
+  document.getElementById('resultBox').innerHTML = baseHtml;
   saveAnswers();
+  syncListeningTestSubmission(baseHtml);
 });
 
 render();

@@ -428,6 +428,11 @@
                     max="100" step="0.1" aria-label="正确率">
                   <span class="accuracy-suffix">%</span>
                 </div>
+                {% if t.listening_test %}
+                <div class="progress-hint">
+                  原始分 {{ t.listening_test.correct_count }}/{{ t.listening_test.total_count }} · IELTS {{ t.listening_test.ielts_score }}
+                </div>
+                {% endif %}
               </td>
               <td class="task-note">{{ t.note }}</td>
               <td>

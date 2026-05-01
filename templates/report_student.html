@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block content %}
+{% block content %}{% endblock %}
+{% block content_dashboard %}
 <h2>学生任务洞察报告</h2>
 
 <div class="report-card card">
@@ -118,6 +119,7 @@
           <th>实际 (分)</th>
           <th>完成率</th>
           <th>正确率</th>
+          <th>测评结果</th>
           <th>备注</th>
         </tr>
       </thead>
@@ -142,6 +144,14 @@
             {% endif %}
           </td>
           <td>{{ '%.1f'|format(row.accuracy) }}%</td>
+          <td>
+            {% if row.listening_test %}
+              {{ row.listening_test.correct_count }}/{{ row.listening_test.total_count }}
+              <div class="muted small">IELTS {{ row.listening_test.ielts_score }}</div>
+            {% else %}
+              —
+            {% endif %}
+          </td>
           <td>{{ row.note }}</td>
         </tr>
         {% endfor %}
@@ -282,6 +292,11 @@
   border:1px solid #ffe2b8;
   border-radius:10px;
   color:#8a5a00;
+}
+.muted.small{
+  color:var(--muted,#6b7785);
+  font-size:12px;
+  margin-top:3px;
 }
 @media (max-width: 960px){
   .chart-card--wide{
