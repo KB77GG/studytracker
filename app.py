@@ -13,6 +13,7 @@ from flask import (
     Flask,
     current_app,
     flash,
+    has_request_context,
     jsonify,
     make_response,
     redirect,
@@ -30,7 +31,7 @@ from flask_login import (
 )
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm import joinedload
-from sqlalchemy import false, inspect, text
+from sqlalchemy import false, func, inspect, text
 
 from config import Config
 from pypinyin import lazy_pinyin
@@ -113,6 +114,14 @@ LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
 LISTENING_RESOURCE_TYPES = {LISTENING_RESOURCE_INTENSIVE, LISTENING_RESOURCE_CAMBRIDGE_TEST}
 
 
+PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST = "cambridge_listening_test"
+PLAN_RESOURCE_INTENSIVE_LISTENING = "intensive_listening"
+PLAN_RESOURCE_DICTATION = "dictation"
+PLAN_RESOURCE_SPEAKING = "speaking"
+PLAN_RESOURCE_MATERIAL = "material"
+PLAN_RESOURCE_FREEFORM = "freeform"
+
+
 def _task_listening_resource_type(task) -> str:
     value = (getattr(task, "listening_resource_type", "") or "").strip()
     return value if value in LISTENING_RESOURCE_TYPES else LISTENING_RESOURCE_INTENSIVE
@@ -151,6 +160,196 @@ def _load_listening_test_payload(test_id: str) -> tuple[dict | None, Path | None
         return json.loads(test_path.read_text(encoding="utf-8")), test_path, safe_id
     except Exception:
         return None, test_path, safe_id
+
+
+def _normalize_task_category(value: str | None):
+    if not value:
+        return ("未分类", "未分模块", "未命名任务")
+    normalized = value.replace("—", "-").replace("－", "-")
+    parts = [p.strip() for p in normalized.split("-") if p.strip()]
+    if len(parts) == 1:
+        return (parts[0], "未分模块", parts[0])
+    if len(parts) == 2:
+        return (parts[0], parts[1], parts[1])
+    exam, module, *rest = parts
+    return (exam, module, "-".join(rest) if rest else module)
+
+
+def _safe_plan_date(value: str | None) -> date:
+    try:
+        return datetime.strptime(value or "", "%Y-%m-%d").date()
+    except (TypeError, ValueError):
+        return date.today()
+
+
+def _ensure_student_profile_for_task(student_name: str) -> StudentProfile:
+    clean_name = (student_name or "").strip() or "未填写学生"
+    profile = StudentProfile.query.filter_by(full_name=clean_name, is_deleted=False).first()
+    if profile:
+        return profile
+    profile = StudentProfile(full_name=clean_name, guardian_view_token=secrets.token_urlsafe(16))
+    db.session.add(profile)
+    db.session.flush()
+    return profile
+
+
+def _ensure_study_plan_for_task(student_name: str, date_value: str | None, creator_id: int) -> StudyPlan:
+    profile = _ensure_student_profile_for_task(student_name)
+    plan_date = _safe_plan_date(date_value)
+    plan = StudyPlan.query.filter_by(
+        student_id=profile.id,
+        plan_date=plan_date,
+        is_deleted=False,
+    ).first()
+    if plan:
+        return plan
+    plan = StudyPlan(
+        student_id=profile.id,
+        plan_date=plan_date,
+        status=StudyPlan.STATUS_PUBLISHED,
+        created_by=creator_id,
+        published_by=creator_id,
+        published_at=datetime.utcnow(),
+    )
+    db.session.add(plan)
+    db.session.flush()
+    return plan
+
+
+def _task_resource_binding(
+    *,
+    listening_exercise_id=None,
+    listening_resource_type=None,
+    dictation_book_id=None,
+    dictation_mode=None,
+    dictation_word_start=None,
+    dictation_word_end=None,
+    speaking_book_id=None,
+    speaking_phrase_start=None,
+    speaking_phrase_end=None,
+    material_id=None,
+    question_ids=None,
+    grading_mode=None,
+) -> tuple[str, str | None, dict]:
+    metadata = {}
+    if listening_exercise_id:
+        if listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+            return PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST, str(listening_exercise_id), metadata
+        return PLAN_RESOURCE_INTENSIVE_LISTENING, str(listening_exercise_id), metadata
+    if dictation_book_id:
+        metadata = {
+            "dictation_mode": dictation_mode or "audio_to_en",
+            "dictation_word_start": dictation_word_start or 1,
+            "dictation_word_end": dictation_word_end,
+        }
+        return PLAN_RESOURCE_DICTATION, f"dictation_book:{dictation_book_id}", metadata
+    if speaking_book_id:
+        metadata = {
+            "speaking_phrase_start": speaking_phrase_start or 1,
+            "speaking_phrase_end": speaking_phrase_end,
+        }
+        return PLAN_RESOURCE_SPEAKING, f"speaking_book:{speaking_book_id}", metadata
+    if material_id:
+        metadata = {
+            "question_ids": question_ids,
+            "grading_mode": grading_mode or "material",
+        }
+        return PLAN_RESOURCE_MATERIAL, f"material:{material_id}", metadata
+    if grading_mode:
+        metadata["grading_mode"] = grading_mode
+    return PLAN_RESOURCE_FREEFORM, None, metadata
+
+
+def _plan_status_from_task_status(status: str | None):
+    value = (status or "pending").lower()
+    if value == "done":
+        return PlanItem.STUDENT_SUBMITTED, PlanItem.REVIEW_APPROVED
+    if value in {"progress", "in_progress"}:
+        return PlanItem.STUDENT_IN_PROGRESS, PlanItem.REVIEW_PENDING
+    if value == "submitted":
+        return PlanItem.STUDENT_SUBMITTED, PlanItem.REVIEW_PENDING
+    return PlanItem.STUDENT_PENDING, PlanItem.REVIEW_PENDING
+
+
+def _create_plan_item_shadow_for_task(
+    *,
+    student_name: str,
+    date_value: str,
+    category: str,
+    detail: str,
+    note: str,
+    status: str,
+    planned_minutes: int,
+    actual_seconds: int = 0,
+    creator_id: int,
+    resource_type: str | None = None,
+    resource_id: str | None = None,
+    access_token: str | None = None,
+    resource_metadata: dict | None = None,
+) -> PlanItem:
+    plan = _ensure_study_plan_for_task(student_name, date_value, creator_id)
+    exam_system, module, task_name = _normalize_task_category(category)
+    student_status, review_status = _plan_status_from_task_status(status)
+    next_order = (
+        db.session.query(func.max(PlanItem.order_index))
+        .filter(PlanItem.plan_id == plan.id, PlanItem.is_deleted.is_(False))
+        .scalar()
+    )
+    plan_item = PlanItem(
+        plan=plan,
+        exam_system=exam_system,
+        module=module,
+        task_name=task_name,
+        custom_title=detail,
+        instructions=note,
+        order_index=int(next_order or 0) + 1,
+        planned_minutes=planned_minutes,
+        actual_seconds=max(0, int(actual_seconds or 0)),
+        student_status=student_status,
+        review_status=review_status,
+        review_by=creator_id if review_status == PlanItem.REVIEW_APPROVED else None,
+        review_at=datetime.utcnow() if review_status == PlanItem.REVIEW_APPROVED else None,
+        review_comment=note if review_status == PlanItem.REVIEW_APPROVED else None,
+        resource_type=resource_type or PLAN_RESOURCE_FREEFORM,
+        resource_id=resource_id,
+        access_token=access_token,
+        resource_metadata=json.dumps(resource_metadata or {}, ensure_ascii=False),
+    )
+    db.session.add(plan_item)
+    db.session.flush()
+    return plan_item
+
+
+def _sync_plan_item_from_task(task: Task) -> None:
+    item = task.plan_item
+    if not item:
+        return
+    creator_id = task.created_by
+    if not creator_id and has_request_context() and getattr(current_user, "is_authenticated", False):
+        creator_id = current_user.id
+    if not creator_id:
+        creator_id = item.plan.created_by if item.plan else None
+    if task.student_name and (not item.plan or item.plan.student.full_name != task.student_name):
+        if creator_id:
+            item.plan = _ensure_study_plan_for_task(task.student_name, task.date, creator_id)
+    elif task.date and item.plan and item.plan.plan_date != _safe_plan_date(task.date):
+        if creator_id:
+            item.plan = _ensure_study_plan_for_task(task.student_name, task.date, creator_id)
+    exam_system, module, task_name = _normalize_task_category(task.category)
+    student_status, review_status = _plan_status_from_task_status(task.status)
+    item.exam_system = exam_system
+    item.module = module
+    item.task_name = task_name
+    item.custom_title = task.detail
+    item.instructions = task.note
+    item.planned_minutes = int(task.planned_minutes or 0)
+    item.actual_seconds = max(int(item.actual_seconds or 0), int(task.actual_seconds or 0))
+    item.student_status = student_status
+    item.review_status = review_status
+    if task.submitted_at:
+        item.submitted_at = task.submitted_at
+    if task.student_note:
+        item.student_comment = task.student_note[:255]
 
 
 def _normalize_listening_test_answer(value) -> str:
@@ -789,6 +988,7 @@ def ensure_legacy_schema() -> None:
             "feedback_text": "TEXT",
             "feedback_audio": "VARCHAR(200)",
             "feedback_image": "VARCHAR(200)",
+            "plan_item_id": "INTEGER",
             "listening_resource_type": "VARCHAR(32) DEFAULT 'intensive'",
             "listening_exercise_id": "VARCHAR(120)",
             "listening_access_token": "VARCHAR(64)",
@@ -835,6 +1035,17 @@ def ensure_legacy_schema() -> None:
                 current_app.logger.warning(
                     "Failed to add dictation_mode to task table: %s", exc
                 )
+        try:
+            existing_indexes = {idx["name"] for idx in inspector.get_indexes("task")}
+            if "ix_task_plan_item_id" not in existing_indexes and "plan_item_id" in columns:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text("CREATE INDEX IF NOT EXISTS ix_task_plan_item_id ON task (plan_item_id)")
+                    )
+        except Exception as exc:  # pragma: no cover
+            current_app.logger.warning(
+                "Failed to ensure index on task.plan_item_id: %s", exc
+            )
     if "student_answer" in tables:
         columns = {col["name"] for col in inspector.get_columns("student_answer")}
         if "is_uncertain" not in columns:
@@ -853,6 +1064,45 @@ def ensure_legacy_schema() -> None:
 
     if "plan_item" in tables:
         columns = {col["name"] for col in inspector.get_columns("plan_item")}
+        plan_item_resource_columns = {
+            "resource_type": "VARCHAR(32)",
+            "resource_id": "VARCHAR(120)",
+            "access_token": "VARCHAR(64)",
+            "resource_metadata": "TEXT",
+        }
+        for column_name, column_type in plan_item_resource_columns.items():
+            if column_name in columns:
+                continue
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(f"ALTER TABLE plan_item ADD COLUMN {column_name} {column_type}")
+                    )
+                columns.add(column_name)
+            except Exception as exc:  # pragma: no cover
+                current_app.logger.warning(
+                    "Failed to add %s to plan_item table: %s", column_name, exc
+                )
+        try:
+            existing_indexes = {idx["name"] for idx in inspector.get_indexes("plan_item")}
+            resource_indexes = {
+                "ix_plan_item_resource_type": "resource_type",
+                "ix_plan_item_resource_id": "resource_id",
+                "ix_plan_item_access_token": "access_token",
+            }
+            for index_name, column_name in resource_indexes.items():
+                if index_name not in existing_indexes and column_name in columns:
+                    with db.engine.begin() as conn:
+                        conn.execute(
+                            text(
+                                f"CREATE INDEX IF NOT EXISTS {index_name} "
+                                f"ON plan_item ({column_name})"
+                            )
+                        )
+        except Exception as exc:  # pragma: no cover
+            current_app.logger.warning(
+                "Failed to ensure plan_item resource indexes: %s", exc
+            )
         if "student_reset_count" not in columns:
             try:
                 with db.engine.begin() as conn:
@@ -2293,6 +2543,42 @@ def tasks_page():
             
             dictation_word_start = request.form.get("dictation_word_start")
             dictation_word_end = request.form.get("dictation_word_end")
+            planned_minutes = int(request.form.get("planned_minutes", 0) or 0)
+            material_task_id = int(material_id) if material_id and not material_id.startswith(("dictation-", "speaking-")) else None
+            dictation_task_book_id = int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None
+            speaking_task_book_id = int(material_id.split("-")[1]) if material_id and material_id.startswith("speaking-") else None
+            dictation_task_start = int(dictation_word_start) if dictation_word_start else 1
+            dictation_task_end = int(dictation_word_end) if dictation_word_end else None
+            speaking_task_start = int(request.form.get("speaking_phrase_start") or 1)
+            speaking_task_end = int(request.form.get("speaking_phrase_end")) if request.form.get("speaking_phrase_end") else None
+            resource_type, resource_id, resource_metadata = _task_resource_binding(
+                listening_exercise_id=listening_exercise_id or None,
+                listening_resource_type=listening_resource_type if listening_exercise_id else None,
+                dictation_book_id=dictation_task_book_id,
+                dictation_mode=dictation_mode,
+                dictation_word_start=dictation_task_start,
+                dictation_word_end=dictation_task_end,
+                speaking_book_id=speaking_task_book_id,
+                speaking_phrase_start=speaking_task_start,
+                speaking_phrase_end=speaking_task_end,
+                material_id=material_task_id,
+                question_ids=question_ids,
+                grading_mode=grading_mode,
+            )
+            plan_item = _create_plan_item_shadow_for_task(
+                student_name=student,
+                date_value=d,
+                category=category,
+                detail=detail,
+                note=note,
+                status=status,
+                planned_minutes=planned_minutes,
+                creator_id=current_user.id,
+                resource_type=resource_type,
+                resource_id=resource_id,
+                access_token=listening_access_token,
+                resource_metadata=resource_metadata,
+            )
 
             t = Task(
                 date=d,
@@ -2302,17 +2588,18 @@ def tasks_page():
                 status=status,
                 note=note,
                 created_by=current_user.id,
-                planned_minutes=int(request.form.get("planned_minutes", 0) or 0),
+                plan_item_id=plan_item.id,
+                planned_minutes=planned_minutes,
                 accuracy=min(100.0, max(0.0, float(request.form.get("accuracy", 0) or 0))),
-                material_id=int(material_id) if material_id and not material_id.startswith(("dictation-", "speaking-")) else None,
+                material_id=material_task_id,
                 question_ids=question_ids,
-                dictation_book_id=int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None,
+                dictation_book_id=dictation_task_book_id,
                 dictation_mode=dictation_mode,
-                dictation_word_start=int(dictation_word_start) if dictation_word_start else 1,
-                dictation_word_end=int(dictation_word_end) if dictation_word_end else None,
-                speaking_book_id=int(material_id.split("-")[1]) if material_id and material_id.startswith("speaking-") else None,
-                speaking_phrase_start=int(request.form.get("speaking_phrase_start") or 1),
-                speaking_phrase_end=int(request.form.get("speaking_phrase_end")) if request.form.get("speaking_phrase_end") else None,
+                dictation_word_start=dictation_task_start,
+                dictation_word_end=dictation_task_end,
+                speaking_book_id=speaking_task_book_id,
+                speaking_phrase_start=speaking_task_start,
+                speaking_phrase_end=speaking_task_end,
                 grading_mode=grading_mode,
                 listening_resource_type=listening_resource_type if listening_exercise_id else None,
                 listening_exercise_id=listening_exercise_id or None,
@@ -2459,6 +2746,20 @@ def tasks_page():
 
     # 获取所有学生用于下拉框
     all_students = [s.full_name for s in StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.full_name).all()]
+    student_picker_options = []
+    for name in all_students:
+        pinyin_parts = lazy_pinyin(name)
+        student_picker_options.append({
+            "name": name,
+            "search": " ".join(
+                part for part in [
+                    name,
+                    "".join(pinyin_parts),
+                    " ".join(pinyin_parts),
+                ]
+                if part
+            ),
+        })
     
     # 获取所有材料用于材料库选择
     from models import MaterialBank, Question
@@ -2620,6 +2921,7 @@ def tasks_page():
         top_students=top_students,
         recent_tasks=recent_tasks,
         all_students=all_students,
+        student_picker_options=student_picker_options,
         period=period,
         all_materials=all_materials,
         pending_reviews=pending_reviews,
@@ -2691,6 +2993,7 @@ def grading_submit(task_id):
         
     # Mark as done
     task.status = "done"
+    _sync_plan_item_from_task(task)
     
     db.session.commit()
     
@@ -2706,6 +3009,8 @@ def api_task_delete(tid):
     # 权限：创建者、管理员或助教可删
     if t.created_by != current_user.id and current_user.role not in ["admin", "assistant"]:
         return jsonify({"ok": False, "error": "no_permission"}), 403
+    if t.plan_item:
+        t.plan_item.is_deleted = True
     db.session.delete(t)
     db.session.commit()
     return jsonify({"ok": True})
@@ -2780,6 +3085,7 @@ def api_task_edit(tid):
                 return jsonify({"ok": False, "error": "invalid_completion"}), 400
             t.completion_rate = min(100.0, max(0.0, comp))
 
+    _sync_plan_item_from_task(t)
     db.session.commit()
     return jsonify({
         "ok": True,
@@ -5206,6 +5512,7 @@ def api_listening_test_submit(test_id):
         f"{' 错题：' + '、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else ''}"
         f"{'…' if len(wrong_numbers) > 20 else ''}"
     )
+    _sync_plan_item_from_task(task)
 
     _sync_listening_test_score_record(task, payload, grade)
     db.session.commit()

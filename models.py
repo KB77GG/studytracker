@@ -289,6 +289,13 @@ class PlanItem(db.Model, TimestampMixin, SoftDeleteMixin):
     STUDENT_IN_PROGRESS = "in_progress"
     STUDENT_SUBMITTED = "submitted"
 
+    RESOURCE_CAMBRIDGE_LISTENING_TEST = "cambridge_listening_test"
+    RESOURCE_INTENSIVE_LISTENING = "intensive_listening"
+    RESOURCE_DICTATION = "dictation"
+    RESOURCE_SPEAKING = "speaking"
+    RESOURCE_MATERIAL = "material"
+    RESOURCE_FREEFORM = "freeform"
+
     id = db.Column(db.Integer, primary_key=True)
     plan_id = db.Column(db.Integer, db.ForeignKey("study_plan.id"), nullable=False, index=True)
     template_item_id = db.Column(db.Integer, db.ForeignKey("plan_template_item.id"))
@@ -300,6 +307,11 @@ class PlanItem(db.Model, TimestampMixin, SoftDeleteMixin):
     custom_title = db.Column(db.String(128))
     instructions = db.Column(db.Text)
     order_index = db.Column(db.Integer, default=0, nullable=False)
+
+    resource_type = db.Column(db.String(32), index=True)
+    resource_id = db.Column(db.String(120), index=True)
+    access_token = db.Column(db.String(64), index=True)
+    resource_metadata = db.Column(db.Text)
 
     planned_minutes = db.Column(db.Integer, default=0, nullable=False)
     planned_start = db.Column(db.Time)
@@ -496,12 +508,14 @@ class Task(db.Model):
     feedback_image = db.Column(db.String(200))
 
     # Listening Exercise
+    plan_item_id = db.Column(db.Integer, db.ForeignKey("plan_item.id"), index=True)
     listening_resource_type = db.Column(db.String(32), default="intensive", index=True)
     listening_exercise_id = db.Column(db.String(120), index=True)
     listening_access_token = db.Column(db.String(64), index=True)  # 精听任务访问令牌
 
     creator = db.relationship("User", backref=db.backref("legacy_tasks", lazy="dynamic"))
     material = db.relationship("MaterialBank", backref=db.backref("tasks", lazy="dynamic"))
+    plan_item = db.relationship("PlanItem", backref=db.backref("legacy_tasks", lazy="dynamic"))
 
     def __repr__(self) -> str:
         return f"<Task {self.student_name} {self.category} {self.status}>"

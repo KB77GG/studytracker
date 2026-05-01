@@ -105,21 +105,27 @@
 <section class="card-section">
   <h2>任务记录与计时</h2>
 
-  <form id="taskForm" method="post" action="{{ url_for('tasks_page') }}">
+  <form id="taskForm" class="task-form" method="post" action="{{ url_for('tasks_page') }}">
     <div class="task-form-row">
       <div class="field">
         <label for="taskDate">日期</label>
         <input id="taskDate" type="date" name="date" value="{{ today }}" required>
       </div>
-      <div class="field">
+      <div class="field field--student">
         <label for="taskStudent">学生</label>
-        <input id="taskStudent" name="student_name" list="studentOptions" placeholder="输入或选择学生姓名" required
-          autocomplete="off">
-        <datalist id="studentOptions">
-          {% for name in all_students %}
-          <option value="{{ name }}">
-            {% endfor %}
-        </datalist>
+        <div class="student-picker">
+          <input id="taskStudent" name="student_name" placeholder="搜索或输入学生姓名" required autocomplete="off"
+            aria-autocomplete="list" aria-controls="studentSuggestions" aria-expanded="false">
+          <div id="studentSuggestions" class="student-suggestions" role="listbox" hidden></div>
+        </div>
+        {% if top_students %}
+        <div class="student-quick-picks" aria-label="常用学生">
+          {% for stu in top_students[:6] %}
+          <button type="button" class="student-chip" data-student-name="{{ stu.name }}">{{ stu.name }}</button>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <small class="field-hint">可直接输入新学生姓名，也可输入拼音/姓名关键字筛选。</small>
       </div>
 
       <!-- 任务来源切换 -->
@@ -283,12 +289,6 @@
     </div>
     <input id="taskDetail" type="hidden" name="detail" value="">
   </form>
-
-  <datalist id="studentOptions">
-    {% for name in student_names %}
-    <option value="{{ name }}">
-      {% endfor %}
-  </datalist>
 
   <details class="filter-panel" open>
     <summary>筛选任务</summary>
@@ -566,6 +566,12 @@
       min-width: 240px;
     }
 
+    .task-form .field--student {
+      flex: 1 1 260px;
+      min-width: 240px;
+      position: relative;
+    }
+
     .task-form .field--grow {
       flex: 1 1 200px;
     }
@@ -590,6 +596,79 @@
 
     .task-form .btn-primary:hover {
       background: var(--brand-dark, #277C78);
+    }
+
+    .student-picker {
+      position: relative;
+    }
+
+    .student-suggestions {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      z-index: 30;
+      max-height: 260px;
+      overflow-y: auto;
+      border: 1px solid var(--line, #e4e7ed);
+      border-radius: 10px;
+      background: var(--card, #fff);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, .14);
+      padding: 6px;
+    }
+
+    .student-suggestion {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border: none;
+      background: transparent;
+      color: var(--text, #1f2937);
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .student-suggestion:hover,
+    .student-suggestion.is-active {
+      background: rgba(47, 142, 135, .1);
+      color: var(--brand-dark, #277C78);
+    }
+
+    .student-suggestion small {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .student-quick-picks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .student-chip {
+      border: 1px solid rgba(47, 142, 135, .25);
+      background: rgba(47, 142, 135, .08);
+      color: var(--brand-dark, #277C78);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .student-chip:hover {
+      background: rgba(47, 142, 135, .16);
+    }
+
+    .field-hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
     }
 
     .filter-panel {
@@ -864,6 +943,100 @@
   <script>
     const dictationRangeHints = {{ dictation_range_hints | tojson }};
     const listeningExerciseSegments = {{ listening_exercise_segments | tojson }};
+    const knownStudentOptions = {{ student_picker_options | tojson }};
+
+    function setupStudentPicker() {
+      const input = document.getElementById('taskStudent');
+      const suggestions = document.getElementById('studentSuggestions');
+      if (!input || !suggestions) return;
+
+      let activeIndex = -1;
+      let currentMatches = [];
+
+      const normalize = (value) => String(value || '').trim().toLowerCase();
+      const hideSuggestions = () => {
+        suggestions.hidden = true;
+        input.setAttribute('aria-expanded', 'false');
+        activeIndex = -1;
+      };
+      const chooseStudent = (name) => {
+        input.value = name;
+        hideSuggestions();
+        updateDictationRangeSuggestion();
+      };
+      const renderSuggestions = () => {
+        const query = normalize(input.value);
+        currentMatches = knownStudentOptions
+          .filter(item => !query || normalize(item.search || item.name).includes(query))
+          .slice(0, 12);
+
+        suggestions.innerHTML = '';
+        if (!currentMatches.length) {
+          const empty = document.createElement('div');
+          empty.className = 'student-suggestion';
+          empty.textContent = query ? `使用新学生：${input.value.trim()}` : '暂无学生档案';
+          suggestions.appendChild(empty);
+          suggestions.hidden = false;
+          input.setAttribute('aria-expanded', 'true');
+          return;
+        }
+
+        currentMatches.forEach((item, index) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = `student-suggestion${index === activeIndex ? ' is-active' : ''}`;
+          button.setAttribute('role', 'option');
+          const label = document.createElement('span');
+          label.textContent = item.name;
+          const hint = document.createElement('small');
+          hint.textContent = '选择';
+          button.append(label, hint);
+          button.addEventListener('mousedown', event => {
+            event.preventDefault();
+            chooseStudent(item.name);
+          });
+          suggestions.appendChild(button);
+        });
+
+        suggestions.hidden = false;
+        input.setAttribute('aria-expanded', 'true');
+      };
+
+      input.addEventListener('input', () => {
+        activeIndex = -1;
+        renderSuggestions();
+        updateDictationRangeSuggestion();
+      });
+      input.addEventListener('focus', renderSuggestions);
+      input.addEventListener('blur', () => {
+        setTimeout(hideSuggestions, 120);
+      });
+      input.addEventListener('keydown', event => {
+        if (suggestions.hidden || !currentMatches.length) return;
+        if (event.key === 'ArrowDown') {
+          event.preventDefault();
+          activeIndex = Math.min(currentMatches.length - 1, activeIndex + 1);
+          renderSuggestions();
+        } else if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          activeIndex = Math.max(0, activeIndex - 1);
+          renderSuggestions();
+        } else if (event.key === 'Enter' && activeIndex >= 0) {
+          event.preventDefault();
+          chooseStudent(currentMatches[activeIndex].name);
+        } else if (event.key === 'Escape') {
+          hideSuggestions();
+        }
+      });
+
+      document.querySelectorAll('.student-chip[data-student-name]').forEach(button => {
+        button.addEventListener('click', () => {
+          chooseStudent(button.dataset.studentName || '');
+          input.focus();
+        });
+      });
+    }
+    setupStudentPicker();
 
     // Material Bank Selection Functions
     function toggleTaskSource(source) {

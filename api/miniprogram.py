@@ -86,6 +86,37 @@ def _serialize_listening_test_submission(row) -> dict | None:
     }
 
 
+def _sync_plan_item_from_legacy_task(task, *, note=None, evidence_files=None, duration=0):
+    item = getattr(task, "plan_item", None)
+    if not item:
+        return None
+    item.student_status = PlanItem.STUDENT_SUBMITTED
+    item.submitted_at = task.submitted_at or datetime.now()
+    if note:
+        item.student_comment = str(note)[:255]
+    if duration and duration > 0:
+        item.actual_seconds = max(int(item.actual_seconds or 0), int(duration))
+    elif task.actual_seconds:
+        item.actual_seconds = max(int(item.actual_seconds or 0), int(task.actual_seconds or 0))
+    for file_url in evidence_files or []:
+        file_type = "image"
+        lower_url = str(file_url).lower()
+        if lower_url.endswith((".mp3", ".wav", ".m4a")):
+            file_type = "audio"
+        elif lower_url.endswith((".pdf", ".doc", ".docx")):
+            file_type = "doc"
+        db.session.add(
+            PlanEvidence(
+                plan_item_id=item.id,
+                uploader_id=getattr(request.current_api_user, "id", None),
+                file_type=file_type,
+                storage_path=file_url,
+                original_filename=os.path.basename(file_url),
+            )
+        )
+    return item
+
+
 def _safe_float(value, default=0.0):
     try:
         return round(float(value), 1)
@@ -1584,7 +1615,13 @@ def submit_task(task_id):
             task.status = "done"  # 自动评分任务(听写/跟读)直接完成
         else:
             task.status = "submitted"  # 需人工批改
-            
+
+        _sync_plan_item_from_legacy_task(
+            task,
+            note=final_note,
+            evidence_files=evidence_files,
+            duration=duration,
+        )
         db.session.commit()
         return jsonify({"ok": True})
 
@@ -1636,8 +1673,27 @@ def start_timer(task_id):
         # Verify ownership
         if task.student_name != user.student_profile.full_name:
             return jsonify({"ok": False, "error": "forbidden"}), 403
-        
-        # For old Task format, we don't create session, just return success
+
+        if task.plan_item:
+            now = datetime.utcnow()
+            session = PlanItemSession(
+                plan_item=task.plan_item,
+                started_at=now,
+                created_by=user.id,
+                source="timer",
+            )
+            db.session.add(session)
+            if task.plan_item.student_status == PlanItem.STUDENT_PENDING:
+                task.plan_item.student_status = PlanItem.STUDENT_IN_PROGRESS
+            task.status = "progress"
+            db.session.commit()
+            return jsonify({
+                "ok": True,
+                "session_id": session.id,
+                "started_at": now.isoformat(),
+            })
+
+        # For old orphan Task format, we don't create session, just return success
         task.status = "in_progress"
         db.session.commit()
         # The miniprogram will handle timer locally
@@ -1689,7 +1745,7 @@ def stop_timer(task_id, session_id):
     # Check if this is a legacy Task (session_id == task_id)
     if session_id == task_id:
         task = Task.query.get(task_id)
-        if task and task.student_name == user.student_profile.full_name:
+        if task and not task.plan_item and task.student_name == user.student_profile.full_name:
             # For old Task format, just return success
             # Timer duration is handled by miniprogram locally
             return jsonify({
@@ -1714,6 +1770,11 @@ def stop_timer(task_id, session_id):
             item.actual_seconds += duration
         else:
             item.actual_seconds = duration
+        linked_task = Task.query.filter_by(plan_item_id=item.id).first()
+        if linked_task:
+            linked_task.actual_seconds = max(int(linked_task.actual_seconds or 0), int(item.actual_seconds or 0))
+            if linked_task.status in (None, "", "pending", "in_progress"):
+                linked_task.status = "progress"
             
         db.session.commit()
         
