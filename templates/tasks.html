@@ -2033,6 +2033,35 @@
         }
       });
     });
+
+    // 从 /listening 跳转过来时支持 ?preset_exercise=<id> 自动预选
+    (function applyPresetExercise() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const preset = params.get('preset_exercise');
+        if (!preset) return;
+        const listeningRadio = document.querySelector('input[name="task_source"][value="listening"]');
+        const listeningSelect = document.getElementById('listeningExerciseSelect');
+        if (!listeningRadio || !listeningSelect) return;
+        const option = Array.from(listeningSelect.options).find(o => o.value === preset);
+        if (!option) return;
+        listeningRadio.checked = true;
+        toggleTaskSource('listening');
+        listeningSelect.value = preset;
+        const resourceType = option.dataset.resourceType || 'intensive';
+        const resourceTypeInput = document.getElementById('listeningResourceType');
+        if (resourceTypeInput) resourceTypeInput.value = resourceType;
+        if (typeof handleListeningExerciseChange === 'function') {
+          handleListeningExerciseChange();
+        }
+        const formAnchor = document.getElementById('taskForm');
+        if (formAnchor && formAnchor.scrollIntoView) {
+          formAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } catch (err) {
+        console.warn('applyPresetExercise failed', err);
+      }
+    })();
   </script>
 </section>
 {% endblock %}

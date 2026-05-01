@@ -2,38 +2,42 @@
 .listening-mode-nav {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 14px 0 18px;
-  padding: 8px;
-  border: 1px solid var(--line, #dedbd0);
-  border-radius: 12px;
+  gap: 6px;
+  margin: 0 0 6px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
   background: rgba(255, 255, 255, .72);
-  box-shadow: 0 8px 24px rgba(29, 22, 21, .04);
+  box-shadow: var(--shadow-sm);
   overflow-x: auto;
 }
 .listening-mode-nav__link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
-  padding: 8px 16px;
-  border-radius: 10px;
-  color: var(--muted, #64748b);
-  font-weight: 800;
+  min-height: 36px;
+  padding: 6px 16px;
+  border-radius: var(--r-sm);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: var(--fs-base);
   text-decoration: none;
   white-space: nowrap;
+  transition: color .15s ease, background .15s ease;
 }
 .listening-mode-nav__link:hover {
-  color: var(--sage-deep, var(--brand-dark, #277C78));
-  background: var(--sage-soft, var(--brand-soft, #E5F4F2));
+  color: var(--brand-dark);
+  background: var(--brand-tint);
 }
 .listening-mode-nav__link.is-active {
   color: #fff;
-  background: var(--sage, var(--brand, #2F8E87));
+  background: var(--brand);
+  font-weight: 800;
+  box-shadow: 0 1px 2px rgba(15,23,42,.08);
 }
 @media (max-width: 680px) {
-  .listening-mode-nav { margin: 12px 0 16px; }
-  .listening-mode-nav__link { flex: 0 0 auto; padding: 8px 13px; }
+  .listening-mode-nav { margin-bottom: 4px; }
+  .listening-mode-nav__link { flex: 0 0 auto; padding: 6px 13px; }
 }
 </style>
 <nav class="listening-mode-nav" aria-label="听力练习分类">

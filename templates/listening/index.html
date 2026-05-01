@@ -7,52 +7,45 @@
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 <style>
 /* listening/index 局部样式 — 颜色全部走全局 token，不再硬编码 */
-.listening-page { max-width: 960px; margin: 0 auto; padding: 40px 24px; background: transparent; box-shadow: none; border-radius: 0; }
+.listening-page { max-width: 960px; margin: 0 auto; padding: 32px 24px 48px; background: transparent; box-shadow: none; border-radius: 0; }
 
-.page-header {
+/* 顶部学生/员工身份小条 —— 浮在右上角 */
+.identity-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 8px;
-}
-.page-header .eyebrow{
-  margin: 0 0 6px;
-  color: var(--brand);
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.page-header h1 { margin: 0; font-size: var(--fs-xl); color: var(--text-strong); }
-.subtitle { color: var(--muted); margin: 8px 0 28px; font-size: var(--fs-base); }
-
-.student-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 18px;
+  gap: 12px;
+  padding: 8px 14px;
   background: var(--brand-soft);
-  border: 1px solid rgba(47,142,135,.18);
-  border-radius: var(--r-sm);
-  margin-bottom: 24px;
-  font-size: var(--fs-base);
+  border: 1px solid var(--brand-light);
+  border-radius: var(--r-pill);
+  margin-bottom: 18px;
+  font-size: var(--fs-sm);
+  color: var(--brand-dark);
 }
-.student-bar .name { font-weight: 700; color: var(--brand-dark); }
-.student-bar button {
+.identity-bar.identity-bar--staff {
+  background: var(--success-soft);
+  border-color: rgba(22,163,74,.28);
+  color: var(--success);
+}
+.identity-bar .name { font-weight: 700; }
+.identity-bar .actions { display: flex; gap: 14px; align-items: center; }
+.identity-bar .actions a,
+.identity-bar .actions button {
   background: none;
   border: none;
-  color: var(--muted);
-  cursor: pointer;
+  padding: 0;
   font-size: var(--fs-sm);
-  padding: 4px 6px;
-  border-radius: 4px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+  opacity: .82;
 }
-.student-bar button:hover { color: var(--danger); }
-.student-bar a{ color: var(--brand-dark); font-weight: 600; text-decoration: none; }
-.student-bar a:hover{ text-decoration: underline; }
+.identity-bar .actions a:hover,
+.identity-bar .actions button:hover { opacity: 1; text-decoration: underline; }
 
-/* 顶部操作按钮 */
+/* 操作按钮 */
 .upload-btn {
   display: inline-flex;
   align-items: center;
@@ -67,13 +60,18 @@
   transition: background .15s ease;
 }
 .upload-btn:hover { background: var(--brand-dark); }
-.upload-btn--secondary{
-  background: #fff;
-  color: var(--brand-dark);
-  border: 1px solid var(--brand-light);
-}
-.upload-btn--secondary:hover{ background: var(--brand-soft); }
 
+/* 页面标题区 —— mode-nav 提到最顶 */
+.page-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 4px 0 24px;
+}
+.page-intro .subtitle { color: var(--muted); margin: 0; font-size: var(--fs-base); max-width: 560px; }
+
+/* 卡片网格 */
 .exercise-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -82,35 +80,52 @@
 .exercise-card {
   background: #fff;
   border-radius: var(--r);
-  padding: 22px;
+  padding: 20px;
   border: 1px solid var(--line);
   text-decoration: none;
   color: inherit;
   transition: border-color .15s ease, box-shadow .2s ease, transform .2s ease;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 .exercise-card:hover {
   border-color: var(--brand-light);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
-.exercise-card h3 { font-size: var(--fs-md); margin: 0 0 6px; color: var(--text-strong); }
-.exercise-meta { font-size: var(--fs-sm); color: var(--muted); }
-.exercise-progress {
-  margin-top: 10px;
+.exercise-card.exercise-card--link { cursor: pointer; }
+.exercise-card__head { display: flex; flex-direction: column; gap: 4px; }
+.exercise-card__head h3 { font-size: var(--fs-md); margin: 0; color: var(--text-strong); line-height: 1.35; }
+.exercise-card__meta { font-size: var(--fs-sm); color: var(--muted); }
+
+/* 学生进度条 */
+.progress-row { display: flex; flex-direction: column; gap: 6px; }
+.progress-track {
+  height: 6px;
+  background: var(--brand-tint);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--brand);
+  border-radius: var(--r-pill);
+  width: 0%;
+  transition: width .3s ease;
+}
+.progress-label {
   font-size: var(--fs-sm);
   color: var(--brand-dark);
   font-weight: 600;
 }
-.exercise-progress.muted {
-  color: var(--muted);
-  font-weight: 500;
-}
+.progress-label.muted { color: var(--muted); font-weight: 500; }
+
+/* 员工 stats —— 砍到 2 个 */
 .exercise-stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 14px;
+  gap: 8px;
 }
 .exercise-stat {
   background: var(--brand-tint);
@@ -129,10 +144,12 @@
   color: var(--text-strong);
   font-weight: 700;
 }
+
+/* 操作行 */
 .exercise-actions {
   display: flex;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: auto;
 }
 .exercise-actions .action-btn {
   flex: 1;
@@ -145,28 +162,58 @@
   cursor: pointer;
   border: 1px solid transparent;
   background: transparent;
-  transition: background .15s ease;
+  transition: background .15s ease, color .15s ease;
 }
 .action-open { background: var(--brand); color: #fff; }
-.action-open:hover{ background: var(--brand-dark); }
-.action-manage { background: var(--brand-tint); color: var(--brand-dark); border-color: var(--brand-light); }
-.action-manage:hover{ background: var(--brand-soft); }
-.action-danger { background: #fff5f5; color: var(--danger); border-color: #fecaca; }
-.action-danger:hover:not(:disabled){ background: #fee2e2; }
-.action-danger:disabled{ opacity: .5; cursor: not-allowed; }
+.action-open:hover { background: var(--brand-dark); }
+.action-assign { background: var(--brand-tint); color: var(--brand-dark); border-color: var(--brand-light); }
+.action-assign:hover { background: var(--brand-soft); }
+.action-danger { background: var(--danger-soft); color: var(--danger); border-color: var(--danger-line); flex: 0 0 auto; padding: 9px 12px; }
+.action-danger:hover:not(:disabled) { background: var(--danger-tint); }
+.action-danger:disabled { opacity: .5; cursor: not-allowed; }
 
+/* 学生 CTA */
+.student-cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  border-radius: var(--r-sm);
+  background: var(--brand);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .15s ease;
+}
+.student-cta:hover { background: var(--brand-dark); }
+
+/* 空状态 */
 .empty-state {
   text-align: center;
-  padding: 60px 0;
+  padding: 60px 20px;
+  background: #fff;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r);
   color: var(--muted);
 }
-.empty-state h3 { margin-bottom: 12px; color: var(--text-strong); }
+.empty-state h3 { margin: 0 0 8px; color: var(--text-strong); font-size: var(--fs-lg); }
+.empty-state p { margin: 0 0 20px; font-size: var(--fs-base); }
 
-/* Login gate */
+/* 学生姓名验证 gate */
 .login-gate {
   max-width: 420px;
-  margin: 80px auto;
+  margin: 60px auto;
   text-align: center;
+}
+.login-gate .eyebrow {
+  margin: 0 0 8px;
+  color: var(--brand);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 .login-gate h1 { font-size: var(--fs-xl); margin: 0 0 8px; color: var(--text-strong); }
 .login-gate .desc { color: var(--muted); margin: 0 0 24px; font-size: var(--fs-base); }
@@ -213,15 +260,30 @@
   transition: background .15s ease;
 }
 .login-gate .btn:hover { background: var(--brand-dark); }
+.login-gate .form-help {
+  display: block;
+  margin-top: 12px;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  text-align: center;
+}
 .login-gate .error {
   color: var(--danger);
   font-size: var(--fs-sm);
   margin-top: 12px;
   display: none;
-  background: #fff1f0;
+  background: var(--danger-soft);
   padding: 8px 10px;
-  border-radius: 6px;
+  border-radius: var(--r-sm);
 }
+.login-gate .staff-link {
+  display: inline-block;
+  margin-top: 24px;
+  color: var(--muted-soft);
+  font-size: var(--fs-xs);
+  text-decoration: none;
+}
+.login-gate .staff-link:hover { color: var(--muted); text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -229,63 +291,45 @@
 {% if show_upload %}
 {# 已登录的员工：跳过验证，直接显示内容 #}
 <div class="listening-page" id="mainContent">
-  {% if show_upload %}
-  <div class="student-bar" style="background:#d1fae5;">
-    <span>员工模式 — <span class="name" style="color:#16a34a;">{{ current_user.display_name or current_user.username }}</span></span>
-    <span style="display:flex;gap:16px;align-items:center;">
-      <a href="{{ url_for('index') }}" style="color:#0f766e;font-size:13px;font-weight:600;">← 回到主页</a>
-      <a href="{{ url_for('logout') }}" style="color:#64748b;font-size:13px;">退出登录</a>
+  <div class="identity-bar identity-bar--staff">
+    <span>员工模式 · <span class="name">{{ current_user.display_name or current_user.username }}</span></span>
+    <span class="actions">
+      <a href="{{ url_for('index') }}">← 回到主页</a>
+      <a href="{{ url_for('logout') }}">退出登录</a>
     </span>
   </div>
-  {% else %}
-  <div class="student-bar">
-    <span>欢迎，<span class="name" id="displayName"></span></span>
-    <button onclick="logout()">切换账号</button>
-  </div>
-  {% endif %}
 
-  <div class="page-header">
-    <div>
-      <p class="eyebrow">Sage Path · Listening</p>
-      <h1>精听练习</h1>
-    </div>
-    <div style="display:flex;gap:10px;align-items:center;">
-    {% if show_upload %}
-      <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
-    {% endif %}
-    </div>
-  </div>
   {% set listening_active = 'intensive' %}
   {% include "listening/_mode_nav.html" %}
-  <p class="subtitle">选择一个练习开始精听训练。学生自由练习会在当前浏览器自动保存进度。</p>
+
+  <div class="page-intro">
+    <p class="subtitle">选择一个练习开始精听训练。学生自由练习会在当前浏览器自动保存进度。</p>
+    <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
+  </div>
 
   {% if exercises %}
   <div class="exercise-grid">
     {% for ex in exercises %}
     <div class="exercise-card">
-      <h3>{{ ex.title }}</h3>
-      <div class="exercise-meta">{{ ex.segment_count }} 个句子</div>
+      <div class="exercise-card__head">
+        <h3>{{ ex.title }}</h3>
+        <div class="exercise-card__meta">
+          {{ ex.segment_count }} 个句子{% if ex.last_assigned %} · 最近布置 {{ ex.last_assigned }}{% endif %}
+        </div>
+      </div>
       <div class="exercise-stats">
         <div class="exercise-stat">
-          <span class="k">布置任务</span>
-          <span class="v">{{ ex.task_count }}</span>
-        </div>
-        <div class="exercise-stat">
-          <span class="k">完成任务</span>
-          <span class="v">{{ ex.done_count }}</span>
+          <span class="k">完成 / 布置</span>
+          <span class="v">{{ ex.done_count }} / {{ ex.task_count }}</span>
         </div>
         <div class="exercise-stat">
           <span class="k">平均正确率</span>
           <span class="v">{{ ('%.1f%%'|format(ex.avg_accuracy)) if ex.avg_accuracy is not none else '—' }}</span>
         </div>
-        <div class="exercise-stat">
-          <span class="k">最近布置</span>
-          <span class="v">{{ ex.last_assigned or '—' }}</span>
-        </div>
       </div>
       <div class="exercise-actions">
         <a class="action-btn action-open" href="{{ url_for('listening_player', exercise_id=ex.id) }}">打开练习</a>
-        <a class="action-btn action-manage" href="{{ url_for('tasks_page') }}#taskForm">去任务页</a>
+        <a class="action-btn action-assign" href="{{ url_for('tasks_page') }}?preset_exercise={{ ex.id }}#taskForm">布置任务</a>
         <button class="action-btn action-danger js-delete-exercise" data-id="{{ ex.id }}" {% if ex.task_count > 0 %}disabled title="已有任务引用，不能删除"{% endif %}>
           删除
         </button>
@@ -295,8 +339,9 @@
   </div>
   {% else %}
   <div class="empty-state">
-    <h3>暂无练习</h3>
-    <p>请联系老师添加精听练习内容</p>
+    <h3>还没有精听练习</h3>
+    <p>上传一个音频和原文，几分钟就能让学生开始练习。</p>
+    <a class="upload-btn" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
   </div>
   {% endif %}
 </div>
@@ -306,48 +351,58 @@
 
 <!-- Student name verification gate -->
 <div class="login-gate" id="loginGate">
+  <p class="eyebrow">Sage Path · Listening</p>
   <h1>精听练习</h1>
-  <p class="desc">请输入你的姓名开始练习</p>
+  <p class="desc">输入你的姓名进入练习，进度会自动保存在当前浏览器。</p>
   <div class="form-card">
     <label for="studentName">学生姓名</label>
     <input type="text" id="studentName" placeholder="请输入姓名" autofocus>
     <button class="btn" id="btnVerify" onclick="verifyStudent()">进入练习</button>
     <div class="error" id="errorMsg"></div>
+    <span class="form-help">没找到自己？请联系老师确认姓名。</span>
   </div>
-  <a href="{{ url_for('login') }}?next={{ url_for('listening_index') }}" style="display:inline-block;margin-top:24px;color:#94a3b8;font-size:12px;text-decoration:none;">员工登录</a>
+  <a class="staff-link" href="{{ url_for('login') }}?next={{ url_for('listening_index') }}">员工登录</a>
 </div>
 
 <!-- Main content (hidden until student verified) -->
 <div class="listening-page" id="mainContent" style="display:none">
-  <div class="student-bar">
+  <div class="identity-bar">
     <span>欢迎，<span class="name" id="displayName"></span></span>
-    <button onclick="logout()">切换账号</button>
+    <span class="actions">
+      <button onclick="logout()">切换账号</button>
+    </span>
   </div>
 
-  <div class="page-header">
-    <div>
-      <p class="eyebrow">Sage Path · Listening</p>
-      <h1>精听练习</h1>
-    </div>
-  </div>
   {% set listening_active = 'intensive' %}
   {% include "listening/_mode_nav.html" %}
-  <p class="subtitle">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
+
+  <div class="page-intro">
+    <p class="subtitle">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
+  </div>
 
   {% if exercises %}
   <div class="exercise-grid">
     {% for ex in exercises %}
-    <a class="exercise-card js-student-exercise-card" href="{{ url_for('listening_player', exercise_id=ex.id) }}" data-exercise-id="{{ ex.id }}" data-segment-count="{{ ex.segment_count }}">
-      <h3>{{ ex.title }}</h3>
-      <div class="exercise-meta">{{ ex.segment_count }} 个句子</div>
-      <div class="exercise-progress muted">尚未开始</div>
-    </a>
+    <div class="exercise-card js-student-exercise-card"
+         data-exercise-id="{{ ex.id }}"
+         data-segment-count="{{ ex.segment_count }}"
+         data-href="{{ url_for('listening_player', exercise_id=ex.id) }}">
+      <div class="exercise-card__head">
+        <h3>{{ ex.title }}</h3>
+        <div class="exercise-card__meta">{{ ex.segment_count }} 个句子</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <div class="progress-label muted">尚未开始</div>
+      </div>
+      <a class="student-cta" href="{{ url_for('listening_player', exercise_id=ex.id) }}">开始练习</a>
+    </div>
     {% endfor %}
   </div>
   {% else %}
   <div class="empty-state">
     <h3>暂无练习</h3>
-    <p>请联系老师添加精听练习内容</p>
+    <p>请联系老师添加精听练习内容。</p>
   </div>
   {% endif %}
 </div>
@@ -378,7 +433,7 @@ if (document.getElementById('loginGate')) {
       } else {
         const err = document.getElementById('errorMsg');
         err.textContent = data.error === 'student_not_found'
-          ? '未找到该学生，请确认姓名是否正确'
+          ? '未找到该学生，请确认姓名是否正确，或联系老师。'
           : (data.message || '验证失败');
         err.style.display = 'block';
       }
@@ -434,8 +489,9 @@ function refreshExerciseProgress(studentName) {
   document.querySelectorAll('.js-student-exercise-card').forEach(card => {
     const exerciseId = card.dataset.exerciseId;
     const segmentCount = Number(card.dataset.segmentCount || 0);
-    const progressEl = card.querySelector('.exercise-progress');
-    if (!exerciseId || !progressEl) return;
+    const labelEl = card.querySelector('.progress-label');
+    const fillEl = card.querySelector('.progress-fill');
+    if (!exerciseId || !labelEl || !fillEl) return;
 
     let progress = {};
     try {
@@ -449,16 +505,28 @@ function refreshExerciseProgress(studentName) {
     const totalWords = rows.reduce((sum, item) => sum + (Number(item.total_words) || 0), 0);
     const correctWords = rows.reduce((sum, item) => sum + (Number(item.correct_words) || 0), 0);
     const accuracy = totalWords > 0 ? Math.round(correctWords * 100 / totalWords) : 0;
+    const pct = segmentCount > 0 ? Math.round(completedCount * 100 / segmentCount) : 0;
 
     if (completedCount > 0) {
-      progressEl.textContent = `本地进度 ${completedCount}/${segmentCount} 句 · 正确率 ${accuracy}%`;
-      progressEl.classList.remove('muted');
+      labelEl.textContent = `${completedCount}/${segmentCount} 句 · 正确率 ${accuracy}%`;
+      labelEl.classList.remove('muted');
+      fillEl.style.width = pct + '%';
     } else {
-      progressEl.textContent = '尚未开始';
-      progressEl.classList.add('muted');
+      labelEl.textContent = '尚未开始';
+      labelEl.classList.add('muted');
+      fillEl.style.width = '0%';
     }
   });
 }
+
+// 学生卡片：除了 CTA，整卡也可点（保持原行为）
+document.querySelectorAll('.js-student-exercise-card').forEach(card => {
+  card.addEventListener('click', function(e) {
+    if (e.target.closest('a, button')) return;
+    const href = card.dataset.href;
+    if (href) window.location.href = href;
+  });
+});
 
 document.querySelectorAll('.js-delete-exercise').forEach(btn => {
   btn.addEventListener('click', async function(e) {
