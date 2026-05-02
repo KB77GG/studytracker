@@ -33,42 +33,6 @@
   font-size: var(--fs-base);
   line-height: 1.7;
 }
-.practice-hero__actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-.practice-button {
-  min-height: 42px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 16px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r-sm);
-  background: #fff;
-  color: var(--text);
-  font-size: var(--fs-base);
-  font-weight: 800;
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-}
-.practice-button:hover {
-  border-color: var(--brand-light);
-  color: var(--brand-dark);
-  text-decoration: none;
-}
-.practice-button--primary {
-  border-color: var(--brand);
-  background: var(--brand);
-  color: #fff;
-}
-.practice-button--primary:hover {
-  border-color: var(--brand-dark);
-  background: var(--brand-dark);
-  color: #fff;
-}
 .practice-subjects {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -173,9 +137,6 @@ a.practice-resource:hover {
     align-items: flex-start;
     flex-direction: column;
   }
-  .practice-hero__actions {
-    justify-content: flex-start;
-  }
   .practice-resource {
     grid-template-columns: 1fr;
   }
@@ -188,10 +149,6 @@ a.practice-resource:hover {
       <p class="practice-hero__eyebrow">IELTS Practice</p>
       <h2>听力和阅读统一入口</h2>
       <p>按科目选择刷题资源。</p>
-    </div>
-    <div class="practice-hero__actions">
-      <a class="practice-button" href="{{ url_for('listening_index') }}">精听</a>
-      <a class="practice-button practice-button--primary" href="{{ url_for('listening_test_index') }}">剑雅听力</a>
     </div>
   </section>
 
