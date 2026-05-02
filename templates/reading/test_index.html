@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>剑桥雅思阅读整套练习 · Sage Path</title>
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+{% include "listening/_library_styles.html" %}
+</head>
+<body>
+<main class="listening-library">
+  <div class="listening-library__header">
+    <div>
+      <p class="listening-library__eyebrow">阅读 / 剑桥雅思</p>
+      <h1 class="listening-library__title">剑桥雅思阅读整套练习</h1>
+      <p class="listening-library__summary">{{ test_count }} 套 Test · 每套 3 篇 Passage · 支持限时刷题、提交判分、答案解析</p>
+    </div>
+    <div class="listening-library__actions">
+      <a class="listening-library__button" href="{{ url_for('practice_library') }}">刷题 / 模考</a>
+      <a class="listening-library__button" href="{{ url_for('listening_test_index') }}">切到听力</a>
+    </div>
+  </div>
+
+  {% if not books %}
+  <section class="listening-library__empty">还没有生成剑雅阅读练习数据。请先运行 build 脚本。</section>
+  {% else %}
+  <section class="listening-book-grid">
+    {% for book in books %}
+    <article class="listening-book-card">
+      <header class="listening-book-card__header">
+        <span class="listening-book-card__label">Cambridge IELTS</span>
+        <span class="listening-book-card__number">{{ book.book }}</span>
+      </header>
+      <div class="listening-test-grid">
+        {% for test in book.tests %}
+        <a class="listening-test-link" href="{{ url_for('reading_test_practice', test_id=test.id) }}">
+          <span class="listening-test-link__name">Test {{ test.test }}</span>
+          <span class="listening-test-link__meta">{{ test.passage_count }} Passage<br>{{ test.question_count }} 题</span>
+        </a>
+        {% endfor %}
+      </div>
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+</main>
+</body>
+</html>

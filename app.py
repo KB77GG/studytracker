@@ -62,6 +62,7 @@ from models import (
     ListeningSegmentResult,
     ListeningRepeatResult,
     ListeningTestSubmission,
+    ReadingTestSubmission,
 )
 
 def time_ago(dt):
@@ -109,6 +110,14 @@ def _listening_test_root() -> Path:
     return Path(app.static_folder) / "listening_tests"
 
 
+def _reading_test_root() -> Path:
+    return Path(app.static_folder) / "reading_tests"
+
+
+def _reading_data_root() -> Path:
+    return Path("data") / "idictation_reading"
+
+
 LISTENING_RESOURCE_INTENSIVE = "intensive"
 LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
 LISTENING_RESOURCE_TYPES = {LISTENING_RESOURCE_INTENSIVE, LISTENING_RESOURCE_CAMBRIDGE_TEST}
@@ -138,6 +147,15 @@ def _task_listening_url(task, absolute: bool = True) -> str | None:
         path = f"/listening/test/{safe_exercise_id}?task_id={task.id}&token={safe_token}"
     else:
         path = f"/listening/{safe_exercise_id}?task_id={task.id}&token={safe_token}"
+    if absolute:
+        return f"https://studytracker.xin{path}"
+    return path
+
+
+def _reading_test_url(test_id: str | None, absolute: bool = True) -> str | None:
+    if not test_id:
+        return None
+    path = f"/reading/test/{quote(str(test_id), safe='')}"
     if absolute:
         return f"https://studytracker.xin{path}"
     return path
@@ -534,7 +552,137 @@ def _ielts_listening_band(raw_score: int) -> float:
     return 0.0
 
 
+def _ielts_reading_band(raw_score: int) -> float:
+    raw = int(raw_score or 0)
+    if raw >= 39:
+        return 9.0
+    if raw >= 37:
+        return 8.5
+    if raw >= 35:
+        return 8.0
+    if raw >= 33:
+        return 7.5
+    if raw >= 30:
+        return 7.0
+    if raw >= 27:
+        return 6.5
+    if raw >= 23:
+        return 6.0
+    if raw >= 19:
+        return 5.5
+    if raw >= 15:
+        return 5.0
+    if raw >= 13:
+        return 4.5
+    if raw >= 10:
+        return 4.0
+    if raw >= 8:
+        return 3.5
+    if raw >= 6:
+        return 3.0
+    if raw >= 4:
+        return 2.5
+    if raw >= 2:
+        return 2.0
+    if raw >= 1:
+        return 1.0
+    return 0.0
+
+
+def _reading_test_answer_is_letters(answer: str) -> bool:
+    letters = _split_listening_test_letters(answer)
+    return bool(letters) and all(re.fullmatch(r"[A-Z]+", letter) for letter in letters)
+
+
+def _grade_reading_test_answers(payload: dict, answers: dict) -> dict:
+    if not isinstance(answers, dict):
+        answers = {}
+    results = []
+    total = 0
+    correct = 0
+    wrong_numbers = []
+
+    for passage_index, passage in enumerate(payload.get("passages") or []):
+        for group in passage.get("groups") or []:
+            for question in group.get("questions") or []:
+                qid = str(question.get("id") or question.get("number"))
+                number = question.get("number")
+                answer = question.get("answer") or ""
+                value = answers.get(qid, "")
+                total += 1
+
+                if "," in str(answer or ""):
+                    expected = _split_listening_test_letters(answer)
+                    submitted = _split_listening_test_letters(value)
+                    is_correct = bool(expected) and set(submitted) == set(expected)
+                elif _reading_test_answer_is_letters(answer):
+                    is_correct = str(value or "").strip().upper() in _split_listening_test_letters(answer)
+                else:
+                    is_correct = _clean_listening_test_answer(value) in _split_listening_test_alternatives(answer)
+
+                if is_correct:
+                    correct += 1
+                else:
+                    wrong_numbers.append(number)
+
+                results.append({
+                    "ids": [qid],
+                    "numbers": [number],
+                    "q": str(number or ""),
+                    "answer": answer,
+                    "value": value or "",
+                    "marks": 1,
+                    "awarded": 1 if is_correct else 0,
+                    "correct": is_correct,
+                    "passage": passage_index,
+                })
+
+    accuracy = round(correct * 100.0 / total, 1) if total else 0.0
+    return {
+        "correct": correct,
+        "total": total,
+        "accuracy": accuracy,
+        "ielts_score": _ielts_reading_band(correct),
+        "wrong_numbers": wrong_numbers,
+        "results": results,
+    }
+
+
 def _serialize_listening_test_submission(row: ListeningTestSubmission | None) -> dict | None:
+    if not row:
+        return None
+    try:
+        answers = json.loads(row.answers_json or "{}")
+    except Exception:
+        answers = {}
+    try:
+        results = json.loads(row.results_json or "[]")
+    except Exception:
+        results = []
+    try:
+        wrong_numbers = json.loads(row.wrong_numbers_json or "[]")
+    except Exception:
+        wrong_numbers = []
+    return {
+        "task_id": row.task_id,
+        "student_name": row.student_name,
+        "test_id": row.test_id,
+        "test_title": row.test_title,
+        "correct_count": row.correct_count,
+        "total_count": row.total_count,
+        "accuracy": row.accuracy,
+        "ielts_score": row.ielts_score,
+        "completion_rate": row.completion_rate,
+        "duration_seconds": row.duration_seconds,
+        "attempt_count": row.attempt_count,
+        "submitted_at": row.submitted_at.isoformat() if row.submitted_at else None,
+        "answers": answers,
+        "results": results,
+        "wrong_numbers": wrong_numbers,
+    }
+
+
+def _serialize_reading_test_submission(row: ReadingTestSubmission | None) -> dict | None:
     if not row:
         return None
     try:
@@ -614,6 +762,97 @@ def _sync_listening_test_score_record(task: Task, payload: dict, grade: dict) ->
     )
 
 
+def _sync_reading_test_score_record(task: Task, payload: dict, grade: dict) -> None:
+    student = StudentProfile.query.filter_by(
+        full_name=task.student_name, is_deleted=False
+    ).first()
+    recorder_id = task.created_by
+    if not recorder_id and getattr(current_user, "is_authenticated", False):
+        recorder_id = current_user.id
+    if not student or not recorder_id:
+        return
+    try:
+        taken_on = datetime.strptime(task.date or "", "%Y-%m-%d").date()
+    except ValueError:
+        taken_on = date.today()
+    assessment_name = f"{payload.get('title') or task.detail}（任务 #{task.id}）"
+    record = ScoreRecord.query.filter(
+        ScoreRecord.student_id == student.id,
+        ScoreRecord.exam_system == "雅思",
+        ScoreRecord.assessment_name == assessment_name,
+        ScoreRecord.is_deleted.is_(False),
+    ).first()
+    if not record:
+        record = ScoreRecord(
+            student_id=student.id,
+            exam_system="雅思",
+            assessment_name=assessment_name,
+            taken_on=taken_on,
+            recorded_by=recorder_id,
+        )
+        db.session.add(record)
+    record.taken_on = taken_on
+    record.total_score = grade["ielts_score"]
+    record.component_scores = {
+        "reading": grade["ielts_score"],
+        "raw_score": grade["correct"],
+        "total_questions": grade["total"],
+        "accuracy": grade["accuracy"],
+    }
+    wrong_numbers = grade.get("wrong_numbers") or []
+    record.notes = (
+        f"剑雅阅读整套自动判分：{grade['correct']}/{grade['total']}，"
+        f"正确率 {grade['accuracy']}%，错题 "
+        f"{'、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else '无'}"
+        f"{'…' if len(wrong_numbers) > 20 else ''}"
+    )
+
+
+def _current_student_profile() -> StudentProfile | None:
+    if not getattr(current_user, "is_authenticated", False):
+        return None
+    profile = StudentProfile.query.filter_by(
+        user_id=current_user.id,
+        is_deleted=False,
+    ).first()
+    if profile:
+        return profile
+    name = (current_user.display_name or current_user.username or "").strip()
+    if not name:
+        return None
+    return StudentProfile.query.filter_by(full_name=name, is_deleted=False).first()
+
+
+def _upsert_reading_self_task(payload: dict, duration_seconds: int) -> Task | None:
+    profile = _current_student_profile()
+    if not profile:
+        return None
+    today = date.today().isoformat()
+    detail = payload.get("title") or payload.get("id") or "剑雅阅读整套"
+    task = Task.query.filter_by(
+        student_name=profile.full_name,
+        date=today,
+        category="雅思-阅读-整套",
+        detail=detail,
+        created_by=current_user.id,
+    ).order_by(Task.id.desc()).first()
+    if not task:
+        task = Task(
+            student_name=profile.full_name,
+            date=today,
+            category="雅思-阅读-整套",
+            detail=detail,
+            status="progress",
+            note="网页端自主阅读整套练习",
+            created_by=current_user.id,
+            planned_minutes=60,
+        )
+        db.session.add(task)
+        db.session.flush()
+    task.actual_seconds = max(int(task.actual_seconds or 0), int(duration_seconds or 0))
+    return task
+
+
 def _listening_test_catalog() -> list[dict]:
     tests_by_book = defaultdict(list)
     for path in sorted(_listening_test_root().glob("ielts*_test*.json")):
@@ -642,6 +881,57 @@ def _listening_test_catalog() -> list[dict]:
             "tests": sorted(tests_by_book[book_no], key=lambda row: row["test"]),
         })
     return books
+
+
+def _reading_test_question_count(payload: dict) -> int:
+    return sum(
+        len(group.get("questions") or [])
+        for passage in payload.get("passages") or []
+        for group in passage.get("groups") or []
+    )
+
+
+def _load_reading_test_payload(test_id: str) -> tuple[dict | None, Path | None, str]:
+    safe_id = secure_filename(test_id)
+    test_path = _reading_test_root() / f"{safe_id}.json"
+    if not test_path.exists():
+        return None, None, safe_id
+    try:
+        return json.loads(test_path.read_text(encoding="utf-8")), test_path, safe_id
+    except Exception:
+        return None, test_path, safe_id
+
+
+def _reading_test_catalog() -> list[dict]:
+    catalog_path = _reading_test_root() / "catalog.json"
+    if catalog_path.exists():
+        try:
+            catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+            return catalog.get("books") or []
+        except Exception:
+            pass
+    tests_by_book = defaultdict(list)
+    for path in sorted(_reading_test_root().glob("ielts*_test*_reading.json")):
+        match = re.match(r"^ielts(?P<book>\d+)_test(?P<test>\d+)_reading\.json$", path.name)
+        if not match:
+            continue
+        book_no = int(match.group("book"))
+        test_no = int(match.group("test"))
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        tests_by_book[book_no].append({
+            "id": path.stem,
+            "book": book_no,
+            "test": test_no,
+            "passage_count": len(payload.get("passages") or []),
+            "question_count": _reading_test_question_count(payload),
+        })
+    return [
+        {"book": book_no, "tests": sorted(tests, key=lambda row: row["test"])}
+        for book_no, tests in sorted(tests_by_book.items())
+    ]
 
 
 def _load_listening_meta(exercise_id: str):
@@ -1212,6 +1502,12 @@ def ensure_legacy_schema() -> None:
     except Exception as exc:  # pragma: no cover
         current_app.logger.warning(
             "Failed to ensure listening_test_submission table exists: %s", exc
+        )
+    try:
+        ReadingTestSubmission.__table__.create(bind=db.engine, checkfirst=True)
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.warning(
+            "Failed to ensure reading_test_submission table exists: %s", exc
         )
 
 
@@ -2002,6 +2298,7 @@ def _build_parent_report(student: StudentProfile, start_date: date, end_date: da
             else:
                 status_label = "未开始"
             submission = task.listening_test_submission
+            reading_submission = task.reading_test_submission
             legacy_daily[task_day].append(
                 {
                     "id": task.id,
@@ -2017,6 +2314,10 @@ def _build_parent_report(student: StudentProfile, start_date: date, end_date: da
                     "student_note": task.student_note or "",
                     "listening_url": _task_listening_url(task, absolute=False) if task.listening_exercise_id else None,
                     "listening_test": _serialize_listening_test_submission(submission),
+                    "reading_url": _reading_test_url(reading_submission.test_id, absolute=False)
+                    if reading_submission
+                    else None,
+                    "reading_test": _serialize_reading_test_submission(reading_submission),
                 }
             )
 
@@ -2696,6 +2997,10 @@ def tasks_page():
             "accuracy": accuracy_value,
             "listening_test": _serialize_listening_test_submission(t.listening_test_submission)
             if _task_listening_resource_type(t) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            else None,
+            "reading_test": _serialize_reading_test_submission(t.reading_test_submission),
+            "reading_url": _reading_test_url(t.reading_test_submission.test_id, absolute=False)
+            if t.reading_test_submission
             else None,
             "student_submitted": t.student_submitted,
             "evidence_photos": evidence_photos,
@@ -4234,6 +4539,12 @@ def report_student_view():
             ListeningTestSubmission.task_id.in_([task.id for task in tasks] or [0])
         ).all()
     }
+    reading_submission_map = {
+        row.task_id: row
+        for row in ReadingTestSubmission.query.filter(
+            ReadingTestSubmission.task_id.in_([task.id for task in tasks] or [0])
+        ).all()
+    }
     records = [
         {
             "id": task.id,
@@ -4249,6 +4560,9 @@ def report_student_view():
             "accuracy": float(task.accuracy or 0.0),
             "listening_test": _serialize_listening_test_submission(
                 submission_map.get(task.id)
+            ),
+            "reading_test": _serialize_reading_test_submission(
+                reading_submission_map.get(task.id)
             ),
             "note": task.note or "",
         }
@@ -4284,6 +4598,18 @@ def api_report_student(name):
     filters["students"] = [name]
     tasks = _query_report_tasks(filters)
     payload = _build_report_payload(tasks, filters)
+    submission_map = {
+        row.task_id: row
+        for row in ListeningTestSubmission.query.filter(
+            ListeningTestSubmission.task_id.in_([task.id for task in tasks] or [0])
+        ).all()
+    }
+    reading_submission_map = {
+        row.task_id: row
+        for row in ReadingTestSubmission.query.filter(
+            ReadingTestSubmission.task_id.in_([task.id for task in tasks] or [0])
+        ).all()
+    }
     records = [
         {
             "id": task.id,
@@ -4297,6 +4623,12 @@ def api_report_student(name):
             if task.completion_rate is not None
             else None,
             "accuracy": float(task.accuracy or 0.0),
+            "listening_test": _serialize_listening_test_submission(
+                submission_map.get(task.id)
+            ),
+            "reading_test": _serialize_reading_test_submission(
+                reading_submission_map.get(task.id)
+            ),
             "note": task.note,
         }
         for task in tasks
@@ -5378,6 +5710,110 @@ def _listening_intensive_catalog(exercises):
     }
 
 
+def _practice_library_summary() -> dict:
+    """Build high-level counts for the unified practice entry."""
+    listening_books = _listening_test_catalog()
+    reading_books = _reading_test_catalog()
+    listening_test_count = sum(len(book.get("tests") or []) for book in listening_books)
+    listening_question_count = sum(
+        int(test.get("question_count") or 0)
+        for book in listening_books
+        for test in book.get("tests") or []
+    )
+
+    intensive_count = 0
+    if _listening_root().exists():
+        intensive_count = sum(1 for _path in _listening_root().glob("*.json"))
+
+    jijing_book_count = 0
+    jijing_test_count = 0
+    jijing_part_count = 0
+    jijing_catalog_path = _listening_jijing_root() / "catalog.json"
+    if jijing_catalog_path.exists():
+        try:
+            jijing_catalog = json.loads(jijing_catalog_path.read_text(encoding="utf-8"))
+            jijing_books = jijing_catalog.get("books") or []
+            jijing_book_count = len(jijing_books)
+            for book in jijing_books:
+                tests = book.get("tests") or []
+                jijing_test_count += len(tests)
+                for test in tests:
+                    jijing_part_count += len(test.get("parts") or [])
+        except Exception:
+            pass
+
+    reading_material_count = 0
+    try:
+        from models import MaterialBank
+        reading_material_count = MaterialBank.query.filter_by(
+            type="ielts_reading_practice",
+            is_deleted=False,
+        ).count()
+    except Exception:
+        reading_material_count = 0
+
+    reading_normalized_count = 0
+    normalized_path = _reading_data_root() / "normalized.json"
+    if normalized_path.exists():
+        try:
+            normalized = json.loads(normalized_path.read_text(encoding="utf-8"))
+            if isinstance(normalized, list):
+                reading_normalized_count = len(normalized)
+        except Exception:
+            pass
+
+    reading_raw_count = 0
+    raw_path = _reading_data_root() / "raw.json"
+    if raw_path.exists():
+        try:
+            raw = json.loads(raw_path.read_text(encoding="utf-8"))
+            entries = raw.get("entries")
+            if isinstance(entries, list):
+                reading_raw_count = len(entries)
+            else:
+                parts = ((raw.get("parts") or {}).get("academic") or {})
+                reading_raw_count = len(parts) if isinstance(parts, dict) else 0
+        except Exception:
+            pass
+
+    return {
+        "listening": {
+            "cambridge_books": len(listening_books),
+            "cambridge_tests": listening_test_count,
+            "cambridge_questions": listening_question_count,
+            "intensive_sections": intensive_count,
+            "jijing_books": jijing_book_count,
+            "jijing_tests": jijing_test_count,
+            "jijing_parts": jijing_part_count,
+        },
+        "reading": {
+            "cambridge_books": len(reading_books),
+            "cambridge_tests": sum(len(book.get("tests") or []) for book in reading_books),
+            "cambridge_questions": sum(
+                int(test.get("question_count") or 0)
+                for book in reading_books
+                for test in book.get("tests") or []
+            ),
+            "material_count": reading_material_count,
+            "normalized_count": reading_normalized_count,
+            "raw_count": reading_raw_count,
+            "script_path": "scripts/export_idictation_reading_console.js",
+        },
+    }
+
+
+@app.route("/practice")
+def practice_library():
+    """Unified entrance for practice and mock tests."""
+    return render_template("practice/index.html", summary=_practice_library_summary())
+
+
+@app.route("/exams")
+def exams_library():
+    """Backward-friendly alias for the unified practice entrance."""
+    return redirect(url_for("practice_library"))
+
+
 @app.route("/listening")
 def listening_index():
     """列出所有可用的精听练习（学生通过姓名验证访问）。"""
@@ -5467,6 +5903,168 @@ def api_listening_test_practice(test_id):
     if not data:
         return jsonify({"error": "听力 Test 不存在"}), 404
     return jsonify(data)
+
+
+@app.route("/reading/tests")
+def reading_test_index():
+    """剑桥雅思阅读整套练习列表。"""
+    books = _reading_test_catalog()
+    test_count = sum(len(book.get("tests") or []) for book in books)
+    return render_template("reading/test_index.html", books=books, test_count=test_count)
+
+
+@app.route("/reading/test/<test_id>")
+def reading_test_practice(test_id):
+    """完整阅读 Test 做题页。"""
+    test, _test_path, _safe_id = _load_reading_test_payload(test_id)
+    if not test:
+        return "阅读 Test 不存在", 404
+    return render_template("reading/test_practice.html", test=test)
+
+
+@app.route("/api/reading/test/<test_id>")
+def api_reading_test_practice(test_id):
+    """返回完整阅读 Test 题目 JSON。"""
+    data, _test_path, _safe_id = _load_reading_test_payload(test_id)
+    if not data:
+        return jsonify({"error": "阅读 Test 不存在"}), 404
+    return jsonify(data)
+
+
+@app.get("/api/reading/test/<test_id>/submission")
+def api_reading_test_submission(test_id):
+    """返回当前登录学生今天对该阅读 Test 的提交结果。"""
+    data, _test_path, safe_id = _load_reading_test_payload(test_id)
+    if not data:
+        return jsonify({"ok": False, "error": "test_not_found"}), 404
+    profile = _current_student_profile()
+    if not profile:
+        return jsonify({"ok": True, "submission": None})
+    task = Task.query.filter_by(
+        student_name=profile.full_name,
+        category="雅思-阅读-整套",
+        detail=data.get("title") or safe_id,
+        date=date.today().isoformat(),
+        created_by=current_user.id,
+    ).order_by(Task.id.desc()).first()
+    if not task:
+        return jsonify({"ok": True, "submission": None})
+    return jsonify({
+        "ok": True,
+        "task": {
+            "id": task.id,
+            "status": task.status,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        },
+        "submission": _serialize_reading_test_submission(task.reading_test_submission),
+    })
+
+
+@app.post("/api/reading/test/<test_id>/submit")
+def api_reading_test_submit(test_id):
+    """提交剑雅阅读整套 Test 答案并回写任务/报告。"""
+    payload, _test_path, safe_id = _load_reading_test_payload(test_id)
+    if not payload:
+        return jsonify({"ok": False, "error": "test_not_found"}), 404
+
+    data = request.get_json(silent=True) or {}
+    answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
+    grade = _grade_reading_test_answers(payload, answers)
+
+    duration_seconds = 0
+    try:
+        duration_seconds = max(0, int(data.get("duration_seconds") or 0))
+    except (TypeError, ValueError):
+        duration_seconds = 0
+
+    task = None
+    task_id = data.get("task_id") or request.args.get("task_id")
+    if task_id:
+        try:
+            task_id = int(task_id)
+        except (TypeError, ValueError):
+            return jsonify({"ok": False, "error": "invalid_task_id"}), 400
+        task = Task.query.get(task_id)
+        if not task:
+            return jsonify({"ok": False, "error": "task_not_found"}), 404
+        profile = _current_student_profile()
+        allowed = (
+            getattr(current_user, "is_authenticated", False)
+            and (
+                current_user.role in (User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+                or (profile and task.student_name == profile.full_name)
+            )
+        )
+        if not allowed:
+            return jsonify({"ok": False, "error": "forbidden"}), 403
+    else:
+        task = _upsert_reading_self_task(payload, duration_seconds)
+
+    if not task:
+        return jsonify({"ok": True, "synced": False, "result": grade})
+
+    now = datetime.utcnow()
+    submission = ReadingTestSubmission.query.filter_by(task_id=task.id).first()
+    if submission:
+        submission.attempt_count = int(submission.attempt_count or 0) + 1
+        submission.updated_at = now
+    else:
+        submission = ReadingTestSubmission(
+            task_id=task.id,
+            student_name=task.student_name,
+            test_id=safe_id,
+            attempt_count=1,
+            created_at=now,
+        )
+        db.session.add(submission)
+
+    submission.student_name = task.student_name
+    submission.test_id = safe_id
+    submission.test_title = payload.get("title") or task.detail or safe_id
+    submission.correct_count = grade["correct"]
+    submission.total_count = grade["total"]
+    submission.accuracy = grade["accuracy"]
+    submission.ielts_score = grade["ielts_score"]
+    submission.completion_rate = 100.0
+    submission.duration_seconds = max(int(submission.duration_seconds or 0), duration_seconds)
+    submission.answers_json = json.dumps(answers, ensure_ascii=False)
+    submission.results_json = json.dumps(grade["results"], ensure_ascii=False)
+    submission.wrong_numbers_json = json.dumps(grade["wrong_numbers"], ensure_ascii=False)
+    submission.submitted_at = now
+
+    task.student_submitted = True
+    task.submitted_at = now
+    task.status = "done"
+    task.accuracy = grade["accuracy"]
+    task.completion_rate = 100.0
+    if duration_seconds:
+        task.actual_seconds = max(int(task.actual_seconds or 0), duration_seconds)
+    wrong_numbers = grade.get("wrong_numbers") or []
+    task.student_note = (
+        f"剑雅整套阅读自动判分：{grade['correct']}/{grade['total']}，"
+        f"IELTS Reading {grade['ielts_score']}，正确率 {grade['accuracy']}%。"
+        f"{' 错题：' + '、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else ''}"
+        f"{'…' if len(wrong_numbers) > 20 else ''}"
+    )
+    _sync_plan_item_from_task(task)
+    _sync_reading_test_score_record(task, payload, grade)
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "synced": True,
+        "result": grade,
+        "task": {
+            "id": task.id,
+            "status": task.status,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        },
+        "submission": _serialize_reading_test_submission(submission),
+    })
 
 
 @app.get("/api/listening/test/<test_id>/submission")

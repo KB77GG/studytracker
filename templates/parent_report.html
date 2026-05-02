@@ -145,7 +145,7 @@
 </section>
 
 <section class="card">
-  <h3>听力/自动评分任务</h3>
+  <h3>听力/阅读自动评分任务</h3>
   {% if legacy_daily_tasks %}
     {% for day, tasks in legacy_daily_tasks.items() %}
       <article class="daily-card">
@@ -175,8 +175,13 @@
                 <td>{% if task.accuracy is not none %}{{ task.accuracy }}%{% else %}<span class="muted">—</span>{% endif %}</td>
                 <td>
                   {% if task.listening_test %}
+                    <div class="muted small">听力整套</div>
                     {{ task.listening_test.correct_count }}/{{ task.listening_test.total_count }}
                     <div class="muted small">IELTS {{ task.listening_test.ielts_score }}</div>
+                  {% elif task.reading_test %}
+                    <div class="muted small">阅读整套</div>
+                    {{ task.reading_test.correct_count }}/{{ task.reading_test.total_count }}
+                    <div class="muted small">IELTS {{ task.reading_test.ielts_score }}</div>
                   {% else %}
                     <span class="muted">—</span>
                   {% endif %}
@@ -184,6 +189,8 @@
                 <td>
                   {% if task.listening_url %}
                     <a href="{{ task.listening_url }}" target="_blank">打开</a>
+                  {% elif task.reading_url %}
+                    <a href="{{ task.reading_url }}" target="_blank">打开</a>
                   {% else %}
                     <span class="muted">—</span>
                   {% endif %}
@@ -195,7 +202,7 @@
       </article>
     {% endfor %}
   {% else %}
-    <p class="muted">本周暂无听力或自动评分任务。</p>
+    <p class="muted">本周暂无听力、阅读或自动评分任务。</p>
   {% endif %}
 </section>
 

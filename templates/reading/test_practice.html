@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ test.title }} - 阅读整套练习</title>
+<style>
+:root {
+  --sage: #2F8E87;
+  --sage-deep: #277C78;
+  --sage-soft: #E5F4F2;
+  --ink: #1d1615;
+  --paper: #fffdf8;
+  --canvas: #f4f3ed;
+  --line: #dedbd0;
+  --muted: #64748b;
+  --warm: #f2eadc;
+  --error: #dc2626;
+  --success: #16a34a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "PingFang SC", sans-serif;
+  background: linear-gradient(180deg, #fbfaf6 0%, var(--canvas) 100%);
+  color: var(--ink);
+  padding-bottom: 74px;
+}
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(255,253,248,.96);
+  border-bottom: 1px solid rgba(18,100,95,.16);
+  box-shadow: 0 10px 28px rgba(29,22,21,.07);
+  backdrop-filter: blur(14px);
+}
+.topbar-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+}
+.crumb {
+  color: var(--sage);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
+.meta { margin-top: 6px; color: var(--muted); font-size: 13px; }
+.timer {
+  min-width: 132px;
+  padding: 10px 14px;
+  border: 1px solid rgba(47,142,135,.18);
+  border-radius: 12px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(15,23,42,.06);
+}
+.timer-label { color: var(--muted); font-size: 12px; font-weight: 800; }
+.timer-value { margin-top: 2px; color: var(--sage-deep); font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.page { max-width: 1320px; margin: 0 auto; padding: 20px; }
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+}
+.tab {
+  border: none;
+  background: transparent;
+  padding: 12px 14px;
+  color: var(--muted);
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+.tab.active { color: var(--sage-deep); border-bottom-color: var(--sage); }
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(420px, 1.05fr);
+  gap: 16px;
+  align-items: start;
+}
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 10px 26px rgba(29,22,21,.045);
+}
+.passage-card,
+.question-card {
+  padding: 24px;
+}
+.passage-card {
+  position: sticky;
+  top: 92px;
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+}
+.passage-title {
+  margin: 0 0 12px;
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.25;
+}
+.passage-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--sage-soft);
+  color: var(--sage-deep);
+  font-size: 12px;
+  font-weight: 900;
+}
+.paragraph {
+  margin: 0 0 18px;
+  color: #202020;
+  font-size: 17px;
+  line-height: 1.78;
+}
+.paragraph-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: var(--warm);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 900;
+}
+.group {
+  padding: 22px;
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+}
+.group h3 { margin: 0 0 12px; font-size: 20px; text-align: center; }
+.desc {
+  white-space: pre-line;
+  margin-bottom: 18px;
+  color: #202020;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 650;
+  line-height: 1.65;
+}
+.collect {
+  color: #202020;
+  font-size: 16px;
+  line-height: 2.05;
+}
+.table-wrap { overflow-x: auto; margin: 12px 0 18px; }
+.practice-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  background: #fff;
+}
+.practice-table td,
+.practice-table th {
+  border: 1px solid var(--line);
+  padding: 12px;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.practice-table tr:first-child td,
+.practice-table th {
+  background: #f8f5ee;
+  font-weight: 850;
+}
+.question-image {
+  display: block;
+  max-width: 100%;
+  margin: 12px 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+.option-bank {
+  margin: 12px 0 18px;
+  padding: 14px;
+  border: 1px solid rgba(47,142,135,.18);
+  border-radius: 12px;
+  background: #f6fbfa;
+}
+.option-bank-title { margin-bottom: 8px; color: var(--sage-deep); font-weight: 900; }
+.option-line { padding: 4px 0; color: #334155; }
+.question-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, auto);
+  gap: 14px;
+  align-items: start;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf0f2;
+}
+.question-row:last-child { border-bottom: 0; }
+.question-text { line-height: 1.55; }
+.question-no { color: var(--sage-deep); font-weight: 900; }
+.answer-control {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  padding: 10px 12px;
+  color: var(--ink);
+  font: inherit;
+}
+input.answer-control { min-width: 136px; }
+select.answer-control { min-width: 154px; }
+.inline-answer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 4px;
+}
+.blank-number { color: var(--sage-deep); font-weight: 900; }
+.choice-stack { display: grid; gap: 8px; min-width: 170px; }
+.choice-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+.choice-option input { margin-top: 3px; }
+.result-pill {
+  display: none;
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 900;
+}
+.is-correct .result-pill { display: inline; color: var(--success); }
+.is-wrong .result-pill { display: inline; color: var(--error); }
+.is-correct .answer-control,
+.is-correct .choice-option:has(input:checked) { border-color: rgba(22,163,74,.45); background: #f0fdf4; }
+.is-wrong .answer-control,
+.is-wrong .choice-option:has(input:checked) { border-color: rgba(220,38,38,.45); background: #fff5f5; }
+.analysis {
+  display: none;
+  margin-top: 10px;
+  padding: 12px;
+  border-left: 3px solid var(--sage);
+  background: #f8fbfa;
+  color: #334155;
+  line-height: 1.65;
+}
+body.result-mode .analysis { display: block; }
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  background: rgba(255,253,248,.96);
+  border-top: 1px solid rgba(18,100,95,.16);
+  box-shadow: 0 -10px 28px rgba(29,22,21,.07);
+  backdrop-filter: blur(14px);
+}
+.bottom-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.score-summary { color: var(--muted); font-size: 14px; }
+.score-summary strong { color: var(--ink); font-size: 18px; }
+.sync-status {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+.sync-status.ok { color: var(--success); }
+.sync-status.warn { color: #b45309; }
+.sync-status.error { color: var(--error); }
+.actions { display: flex; gap: 10px; }
+.btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+.btn-primary { border-color: var(--sage); background: var(--sage); color: #fff; }
+.btn:hover { border-color: var(--sage); }
+@media (max-width: 980px) {
+  .topbar-inner { grid-template-columns: 1fr; }
+  .layout { grid-template-columns: 1fr; }
+  .passage-card { position: static; max-height: none; }
+}
+@media (max-width: 680px) {
+  .page { padding: 14px; }
+  .passage-card, .question-card, .group { padding: 16px; border-radius: 14px; }
+  .question-row { grid-template-columns: 1fr; }
+  .bottom-inner { align-items: stretch; flex-direction: column; }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <div class="crumb">阅读 / 剑桥雅思 / 整套练习</div>
+      <h1>{{ test.title }}</h1>
+      <div class="meta">3 篇 Passage · 40 题 · 建议 60 分钟完成</div>
+    </div>
+    <div class="timer" aria-live="polite">
+      <div class="timer-label">用时</div>
+      <div class="timer-value" id="timerValue">00:00</div>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <nav class="tabs" aria-label="阅读 Passage">
+    {% for passage in test.passages %}
+    <button class="tab {% if loop.first %}active{% endif %}" type="button" data-passage-tab="{{ passage.id }}">
+      Passage {{ passage.passage }} · {{ passage.question_name }}
+    </button>
+    {% endfor %}
+  </nav>
+
+  <section class="layout">
+    <article class="card passage-card" id="passagePanel"></article>
+    <section class="card question-card" id="questionPanel"></section>
+  </section>
+</main>
+
+<footer class="bottom-bar">
+  <div class="bottom-inner">
+    <div>
+      <div class="score-summary" id="scoreSummary">已答 <strong>0</strong> / 40</div>
+      <div class="sync-status" id="syncStatus">登录学生提交后会同步到练习记录和报告</div>
+    </div>
+    <div class="actions">
+      <button class="btn" type="button" id="resetBtn">重做</button>
+      <button class="btn btn-primary" type="button" id="submitBtn">提交判分</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+const testData = {{ test | tojson }};
+const answers = {};
+let currentPassageId = testData.passages[0]?.id || "";
+let resultMode = false;
+let startedAt = Date.now();
+let serverResult = null;
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[char]);
+}
+
+function normalizeAnswer(value) {
+  return String(value || "")
+    .trim()
+    .replace(/[：]/g, ":")
+    .replace(/\s+/g, " ")
+    .replace(/[.,;!?。；！？]$/g, "")
+    .toLowerCase();
+}
+
+function splitAnswer(answer) {
+  const raw = String(answer || "");
+  return raw.split(/\s*\/\s*|\s+or\s+/i).map(normalizeAnswer).filter(Boolean);
+}
+
+function splitLetters(value) {
+  return String(value || "")
+    .toUpperCase()
+    .split(/[,\s]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function isLetterAnswer(value) {
+  const compact = String(value || "").toUpperCase().replace(/[,\s]/g, "");
+  return Boolean(compact) && /^[A-Z]+$/.test(compact);
+}
+
+function questionById(id) {
+  for (const passage of testData.passages) {
+    for (const group of passage.groups || []) {
+      for (const question of group.questions || []) {
+        if (String(question.id) === String(id)) return question;
+      }
+    }
+  }
+  return null;
+}
+
+function allQuestions() {
+  return testData.passages.flatMap((passage) =>
+    (passage.groups || []).flatMap((group) => group.questions || [])
+  );
+}
+
+function questionControl(question, group) {
+  const value = answers[question.id] || "";
+  if (question.options && question.options.length) {
+    return `<div class="choice-stack" data-qid="${question.id}">
+      ${question.options.map((option) => `
+        <label class="choice-option">
+          <input type="radio" name="q_${question.id}" value="${escapeHtml(option.key)}" ${value === option.key ? "checked" : ""}>
+          <span><strong>${escapeHtml(option.key)}</strong> ${escapeHtml(option.text)}</span>
+        </label>
+      `).join("")}
+    </div>`;
+  }
+  const groupOptions = group.collect_option?.list || [];
+  if (groupOptions.length) {
+    return `<select class="answer-control" data-qid="${question.id}">
+      <option value="">选择</option>
+      ${groupOptions.map((option) => `<option value="${escapeHtml(option.key)}" ${value === option.key ? "selected" : ""}>${escapeHtml(option.key)}</option>`).join("")}
+    </select>`;
+  }
+  return `<input class="answer-control" data-qid="${question.id}" value="${escapeHtml(value)}" autocomplete="off" inputmode="text">`;
+}
+
+function inlineControl(question, group) {
+  return `<span class="inline-answer" data-inline-qid="${question.id}">
+    <span class="blank-number">${escapeHtml(question.number)}</span>
+    ${questionControl(question, group)}
+    <span class="result-pill"></span>
+  </span>`;
+}
+
+function replacePlaceholders(text, group) {
+  const questions = new Map((group.questions || []).map((question) => [String(question.id), question]));
+  return escapeHtml(text || "").replace(/\$(\d+)\$/g, (_match, qid) => {
+    const question = questions.get(String(qid));
+    return question ? inlineControl(question, group) : `<strong>${qid}</strong>`;
+  }).replace(/\n/g, "<br>");
+}
+
+function renderTable(table, group) {
+  const rows = Array.isArray(table?.content) ? table.content : [];
+  if (!rows.length) return "";
+  return `<div class="table-wrap"><table class="practice-table"><tbody>
+    ${rows.map((row) => `<tr>${(Array.isArray(row) ? row : [row]).map((cell) => `<td>${replacePlaceholders(cell, group)}</td>`).join("")}</tr>`).join("")}
+  </tbody></table></div>`;
+}
+
+function renderQuestionRow(question, group) {
+  return `<div class="question-row" data-row-qid="${question.id}">
+    <div>
+      <div class="question-text"><span class="question-no">Q${escapeHtml(question.number)}</span> ${escapeHtml(question.title || "")}</div>
+      <span class="result-pill"></span>
+      <div class="analysis" data-analysis-qid="${question.id}"></div>
+    </div>
+    <div>${questionControl(question, group)}</div>
+  </div>`;
+}
+
+function renderOptionBank(group) {
+  const options = group.collect_option?.list || [];
+  if (!options.length) return "";
+  return `<div class="option-bank">
+    <div class="option-bank-title">${escapeHtml(group.collect_option?.title || "Options")}</div>
+    ${options.map((option) => `<div class="option-line"><strong>${escapeHtml(option.key)}</strong> ${escapeHtml(option.text)}</div>`).join("")}
+  </div>`;
+}
+
+function renderGroup(group) {
+  const hasStructured = Boolean(group.collect) || Boolean(group.table?.content);
+  return `<section class="group">
+    ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ""}
+    ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ""}
+    ${group.img_local || group.img_url ? `<img class="question-image" src="${escapeHtml(group.img_local ? `/static/${group.img_local}` : group.img_url)}" alt="题目图片">` : ""}
+    ${renderOptionBank(group)}
+    ${group.collect ? `<div class="collect">${replacePlaceholders(group.collect, group)}</div>` : ""}
+    ${group.table ? renderTable(group.table, group) : ""}
+    ${hasStructured ? "" : (group.questions || []).map((question) => renderQuestionRow(question, group)).join("")}
+    ${hasStructured ? (group.questions || []).map((question) => `<div class="analysis" data-analysis-qid="${question.id}"></div>`).join("") : ""}
+  </section>`;
+}
+
+function renderPassage(passage) {
+  document.getElementById("passagePanel").innerHTML = `
+    <h2 class="passage-title">${escapeHtml(passage.content?.title || passage.title)}</h2>
+    <div class="passage-meta">
+      <span class="badge">${escapeHtml(passage.question_name)}</span>
+      ${(passage.question_type || []).map((type) => `<span class="badge">${escapeHtml(type)}</span>`).join("")}
+    </div>
+    ${(passage.content?.paragraphs || []).map((para) => `
+      <p class="paragraph">${para.label ? `<span class="paragraph-label">${escapeHtml(para.label)}</span>` : ""}${escapeHtml(para.text)}</p>
+    `).join("")}
+  `;
+  document.getElementById("questionPanel").innerHTML = (passage.groups || []).map(renderGroup).join("");
+  bindInputs();
+  if (resultMode) paintResults();
+}
+
+function bindInputs() {
+  document.querySelectorAll("[data-qid]").forEach((control) => {
+    control.addEventListener("input", handleAnswerChange);
+    control.addEventListener("change", handleAnswerChange);
+  });
+  document.querySelectorAll(".choice-stack input").forEach((control) => {
+    control.addEventListener("change", handleAnswerChange);
+  });
+}
+
+function handleAnswerChange(event) {
+  const target = event.target;
+  if (target.matches(".choice-stack input")) {
+    const stack = target.closest(".choice-stack");
+    answers[stack.dataset.qid] = target.value;
+  } else if (target.dataset.qid) {
+    answers[target.dataset.qid] = target.value;
+  }
+  if (resultMode && serverResult) {
+    serverResult = null;
+    setSyncStatus("答案已修改，需重新提交后才会更新记录和报告", "warn");
+    paintResults();
+  }
+  updateSummary();
+}
+
+function resultForQuestion(question) {
+  if (!serverResult?.results) return null;
+  return serverResult.results.find((result) =>
+    (result.ids || []).map(String).includes(String(question.id))
+  ) || null;
+}
+
+function answerForQuestion(question) {
+  return resultForQuestion(question)?.answer || question.answer || "";
+}
+
+function isCorrect(question) {
+  const serverRow = resultForQuestion(question);
+  if (serverRow) return Boolean(serverRow.correct);
+  const userValue = answers[question.id] || "";
+  const answer = question.answer || "";
+  if (String(answer).includes(",") && isLetterAnswer(answer)) {
+    const expectedLetters = splitLetters(answer);
+    const submittedLetters = splitLetters(userValue);
+    return Boolean(expectedLetters.length) && expectedLetters.length === submittedLetters.length &&
+      expectedLetters.every((letter) => submittedLetters.includes(letter));
+  }
+  if (isLetterAnswer(answer)) {
+    return splitLetters(answer).includes(String(userValue || "").trim().toUpperCase());
+  }
+  const expected = splitAnswer(answer);
+  if (!expected.length) return false;
+  const normalizedUser = normalizeAnswer(userValue);
+  return expected.includes(normalizedUser);
+}
+
+function paintResults() {
+  allQuestions().forEach((question) => {
+    const correct = isCorrect(question);
+    document.querySelectorAll(`[data-row-qid="${question.id}"], [data-inline-qid="${question.id}"]`).forEach((row) => {
+      row.classList.toggle("is-correct", correct);
+      row.classList.toggle("is-wrong", !correct);
+      const pill = row.querySelector(".result-pill");
+      if (pill) pill.textContent = correct ? "正确" : `答案：${answerForQuestion(question)}`;
+    });
+    document.querySelectorAll(`[data-analysis-qid="${question.id}"]`).forEach((node) => {
+      node.innerHTML = `<strong>Q${escapeHtml(question.number)} 答案：${escapeHtml(answerForQuestion(question))}</strong>${question.analysis ? `<br>${escapeHtml(question.analysis).replace(/\n/g, "<br>")}` : ""}`;
+    });
+  });
+}
+
+function updateSummary() {
+  const total = allQuestions().length;
+  const answered = allQuestions().filter((question) => String(answers[question.id] || "").trim()).length;
+  if (!resultMode) {
+    document.getElementById("scoreSummary").innerHTML = `已答 <strong>${answered}</strong> / ${total}`;
+    return;
+  }
+  const correct = serverResult?.correct ?? allQuestions().filter(isCorrect).length;
+  const accuracy = total ? Math.round(correct / total * 100) : 0;
+  const band = serverResult?.ielts_score;
+  document.getElementById("scoreSummary").innerHTML = `得分 <strong>${correct}</strong> / ${total} · 正确率 ${accuracy}%${band !== undefined ? ` · IELTS ${band}` : ""}`;
+}
+
+function setSyncStatus(message, tone = "") {
+  const node = document.getElementById("syncStatus");
+  node.textContent = message;
+  node.className = `sync-status ${tone}`.trim();
+}
+
+async function submitAnswers() {
+  const submitBtn = document.getElementById("submitBtn");
+  submitBtn.disabled = true;
+  setSyncStatus("正在提交并同步记录...", "");
+  resultMode = true;
+  document.body.classList.add("result-mode");
+  try {
+    const response = await fetch(`/api/reading/test/${encodeURIComponent(testData.id)}/submit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        answers,
+        duration_seconds: Math.floor((Date.now() - startedAt) / 1000)
+      })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || "submit_failed");
+    }
+    serverResult = data.result || null;
+    paintResults();
+    updateSummary();
+    if (data.synced) {
+      setSyncStatus(`已同步到练习记录和报告${data.task?.id ? ` · 任务 #${data.task.id}` : ""}`, "ok");
+    } else {
+      setSyncStatus("未登录或未匹配学生账号，仅完成本地判分", "warn");
+    }
+  } catch (error) {
+    serverResult = null;
+    paintResults();
+    updateSummary();
+    setSyncStatus(`提交同步失败：${error.message || error}`, "error");
+  } finally {
+    submitBtn.disabled = false;
+  }
+}
+
+function resetAnswers() {
+  Object.keys(answers).forEach((key) => delete answers[key]);
+  serverResult = null;
+  resultMode = false;
+  document.body.classList.remove("result-mode");
+  renderPassage(testData.passages.find((passage) => passage.id === currentPassageId) || testData.passages[0]);
+  updateSummary();
+  setSyncStatus("登录学生提交后会同步到练习记录和报告");
+}
+
+async function loadExistingSubmission() {
+  try {
+    const response = await fetch(`/api/reading/test/${encodeURIComponent(testData.id)}/submission`, {
+      credentials: "same-origin"
+    });
+    const data = await response.json();
+    const submission = data?.submission;
+    if (!response.ok || !data.ok || !submission?.answers) return;
+    Object.assign(answers, submission.answers);
+    serverResult = {
+      correct: submission.correct_count,
+      total: submission.total_count,
+      accuracy: submission.accuracy,
+      ielts_score: submission.ielts_score,
+      results: submission.results || []
+    };
+    resultMode = true;
+    document.body.classList.add("result-mode");
+    renderPassage(testData.passages.find((passage) => passage.id === currentPassageId) || testData.passages[0]);
+    paintResults();
+    updateSummary();
+    setSyncStatus("已加载今天的上次提交记录", "ok");
+  } catch (_error) {
+    // 历史记录加载失败不影响当前练习。
+  }
+}
+
+document.querySelectorAll("[data-passage-tab]").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    currentPassageId = tab.dataset.passageTab;
+    document.querySelectorAll("[data-passage-tab]").forEach((item) => item.classList.toggle("active", item === tab));
+    renderPassage(testData.passages.find((passage) => passage.id === currentPassageId));
+  });
+});
+
+document.getElementById("submitBtn").addEventListener("click", submitAnswers);
+document.getElementById("resetBtn").addEventListener("click", resetAnswers);
+
+setInterval(() => {
+  const seconds = Math.floor((Date.now() - startedAt) / 1000);
+  const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const ss = String(seconds % 60).padStart(2, "0");
+  document.getElementById("timerValue").textContent = `${mm}:${ss}`;
+}, 1000);
+
+renderPassage(testData.passages[0]);
+updateSummary();
+loadExistingSubmission();
+</script>
+</body>
+</html>

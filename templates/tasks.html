@@ -252,6 +252,7 @@
             <option value="雅思-听力-精听">听力精听</option>
             <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
             <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
+            <option value="雅思-阅读-整套">阅读整套练习</option>
             <option value="雅思-阅读-精读">阅读精读</option>
             <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
             <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
@@ -311,6 +312,7 @@
             <option value="雅思-听力-精听">听力精听</option>
             <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
             <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
+            <option value="雅思-阅读-整套">阅读整套练习</option>
             <option value="雅思-阅读-精读">阅读精读</option>
             <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
             <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
@@ -432,6 +434,10 @@
                 <div class="progress-hint">
                   原始分 {{ t.listening_test.correct_count }}/{{ t.listening_test.total_count }} · IELTS {{ t.listening_test.ielts_score }}
                 </div>
+                {% elif t.reading_test %}
+                <div class="progress-hint">
+                  阅读原始分 {{ t.reading_test.correct_count }}/{{ t.reading_test.total_count }} · IELTS {{ t.reading_test.ielts_score }}
+                </div>
                 {% endif %}
               </td>
               <td class="task-note">{{ t.note }}</td>
@@ -450,6 +456,10 @@
                   {% if t.listening_exercise_id %}
                   <a href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank"
                     style="display:inline-block; text-decoration:none; background:#0f766e; color:#fff; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:inherit; font-family:inherit; line-height:normal;">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else '精听明细' }}</a>
+                  {% endif %}
+                  {% if t.reading_test and t.reading_url %}
+                  <a href="{{ t.reading_url }}" target="_blank"
+                    style="display:inline-block; text-decoration:none; background:#0f766e; color:#fff; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:inherit; font-family:inherit; line-height:normal;">打开阅读</a>
                   {% endif %}
                   {% if t.student_submitted and not t.dictation_book_id and not t.speaking_book_id %}
                   <a href="/tasks/{{ t.id }}/review" target="_blank"
@@ -1161,7 +1171,7 @@
 
         // Show range inputs for Dictation Books and objective materials
         var isDict = select.value.startsWith("dictation-");
-        var isObjective = (type === "grammar" || type === "reading_vocab_choice");
+        var isObjective = (type === "grammar" || type === "reading_vocab_choice" || type === "ielts_reading_practice");
         if (isDict || isObjective) {
           rangeGroup.style.display = "block";
 

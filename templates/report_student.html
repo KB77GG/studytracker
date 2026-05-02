@@ -146,8 +146,13 @@
           <td>{{ '%.1f'|format(row.accuracy) }}%</td>
           <td>
             {% if row.listening_test %}
+              <div class="muted small">听力整套</div>
               {{ row.listening_test.correct_count }}/{{ row.listening_test.total_count }}
               <div class="muted small">IELTS {{ row.listening_test.ielts_score }}</div>
+            {% elif row.reading_test %}
+              <div class="muted small">阅读整套</div>
+              {{ row.reading_test.correct_count }}/{{ row.reading_test.total_count }}
+              <div class="muted small">IELTS {{ row.reading_test.ielts_score }}</div>
             {% else %}
               —
             {% endif %}

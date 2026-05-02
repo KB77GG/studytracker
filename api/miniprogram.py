@@ -29,6 +29,7 @@ from .aliyun_oral_task import run_oral_task
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
+IELTS_READING_PRACTICE_TYPE = "ielts_reading_practice"
 # Material types that route to the material-choice practice page. They all
 # use Question rows; the page distinguishes per question:
 #   - questions WITH options (ABCD)  → radio + immediate feedback (auto-graded)
@@ -36,7 +37,7 @@ READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
 # So a single "grammar" material can mix 单选 (Q1-20) and 句子改写 (Q21-25),
 # and "translation" (single writing question) reuses the textarea path with
 # no reference shown to the student.
-CHOICE_PRACTICE_TYPES = {READING_VOCAB_CHOICE_TYPE, "grammar", "translation"}
+CHOICE_PRACTICE_TYPES = {READING_VOCAB_CHOICE_TYPE, IELTS_READING_PRACTICE_TYPE, "grammar", "translation"}
 VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh"}
 LISTENING_RESOURCE_INTENSIVE = "intensive"
 LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
@@ -235,7 +236,7 @@ def _iter_task_material_questions(task):
     selected_ids = _selected_question_ids(task)
     q_start = task.dictation_word_start or 1
     q_end = task.dictation_word_end
-    ranged_types = {"grammar", READING_VOCAB_CHOICE_TYPE}
+    ranged_types = {"grammar", READING_VOCAB_CHOICE_TYPE, IELTS_READING_PRACTICE_TYPE}
     is_ranged = task.material.type in ranged_types and (q_start > 1 or q_end is not None)
 
     questions = []
@@ -256,6 +257,23 @@ def _question_options(q):
         {"key": opt.option_key, "text": opt.option_text}
         for opt in q.options.order_by(QuestionOption.option_key).all()
     ]
+
+
+def _normalize_objective_answer(value: str) -> str:
+    text = str(value or "").strip().lower()
+    text = re.sub(r"[‘’`]", "'", text)
+    text = re.sub(r"[“”]", '"', text)
+    text = re.sub(r"\s+", " ", text)
+    text = re.sub(r"^[\W_]+|[\W_]+$", "", text)
+    return text
+
+
+def _objective_answer_alternatives(answer: str) -> set[str]:
+    raw = str(answer or "").strip()
+    if not raw:
+        return set()
+    parts = re.split(r"\s*(?:/|\||\bor\b)\s*", raw, flags=re.IGNORECASE)
+    return {_normalize_objective_answer(part) for part in parts if _normalize_objective_answer(part)}
 
 
 def _task_display_title(task):
@@ -1310,7 +1328,8 @@ def get_reading_vocab_practice(task_id):
     questions = []
     for q in questions_iter:
         opts = _question_options(q)
-        is_writing = len(opts) == 0  # 无 options = 改写/翻译类输入题
+        is_auto_text = len(opts) == 0 and task.material.type == IELTS_READING_PRACTICE_TYPE
+        is_writing = len(opts) == 0 and not is_auto_text  # 无 options = 改写/翻译类输入题
         correct_key = "" if is_writing else str(q.reference_answer or "").strip().upper()
         options_map = {opt["key"]: opt["text"] for opt in opts}
         item = {
@@ -1319,8 +1338,9 @@ def get_reading_vocab_practice(task_id):
             "content": q.content,
             "options": opts,
             "is_writing": is_writing,
+            "is_auto_text": is_auto_text,
             "correct_key": correct_key,
-            "correct_text": options_map.get(correct_key, q.hint or ""),
+            "correct_text": options_map.get(correct_key, q.reference_answer or q.hint or ""),
             "hint": q.hint or "",
         }
         questions.append(item)
@@ -1428,9 +1448,9 @@ def submit_reading_vocab_practice(task_id):
         StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).delete()
         existing = {}
 
-    # Accuracy is computed only over choice questions (writing questions
-    # have no auto-grading — teacher reviews them later).
-    choice_total = 0
+    # Accuracy is computed over objective questions: radio choices and
+    # IELTS reading text blanks. Writing questions remain teacher-reviewed.
+    objective_total = 0
     correct_count = 0
     answered_count = 0  # all questions: choice answered + writing answered
     writing_total = 0
@@ -1438,11 +1458,12 @@ def submit_reading_vocab_practice(task_id):
     wrong_items = []
     for q in questions:
         opts = _question_options(q)
-        is_writing = len(opts) == 0
+        is_auto_text = len(opts) == 0 and task.material.type == IELTS_READING_PRACTICE_TYPE
+        is_writing = len(opts) == 0 and not is_auto_text
         if is_writing:
             writing_total += 1
         else:
-            choice_total += 1
+            objective_total += 1
 
         # If question is not in this submission and we have an existing answer (redo_wrong path), reuse it
         if q.id not in resubmit_qids and q.id in existing:
@@ -1457,6 +1478,7 @@ def submit_reading_vocab_practice(task_id):
                 if (not prior.is_correct) or bool(prior.is_uncertain):
                     correct_key = str(q.reference_answer or "").strip().upper()
                     options = {opt["key"]: opt["text"] for opt in opts}
+                    correct_text = options.get(correct_key, q.reference_answer or q.hint or "")
                     wrong_items.append({
                         "task_id": task.id,
                         "task_title": _task_display_title(task),
@@ -1465,7 +1487,7 @@ def submit_reading_vocab_practice(task_id):
                         "selected_key": prior.text_answer or "未作答",
                         "selected_text": options.get(prior.text_answer or "", "未作答"),
                         "correct_key": correct_key,
-                        "correct_text": options.get(correct_key, q.hint or ""),
+                        "correct_text": correct_text,
                         "hint": q.hint or "",
                         "is_uncertain": bool(prior.is_uncertain),
                     })
@@ -1487,6 +1509,42 @@ def submit_reading_vocab_practice(task_id):
                 reviewed=False,  # awaiting teacher review
                 is_correct=None,
                 is_uncertain=False,
+            ))
+            continue
+
+        if is_auto_text:
+            text_val = text_answer_map.get(q.id, "")
+            expected = _objective_answer_alternatives(q.reference_answer or "")
+            normalized = _normalize_objective_answer(text_val)
+            is_correct = bool(normalized) and normalized in expected
+            is_uncertain = q.id in uncertain_question_ids
+            if text_val:
+                answered_count += 1
+            if is_correct:
+                correct_count += 1
+            if (not is_correct) or is_uncertain:
+                wrong_items.append({
+                    "task_id": task.id,
+                    "task_title": _task_display_title(task),
+                    "question_id": q.id,
+                    "word": q.content,
+                    "selected_key": text_val or "未作答",
+                    "selected_text": text_val or "未作答",
+                    "correct_key": q.reference_answer or "",
+                    "correct_text": q.reference_answer or "",
+                    "hint": q.hint or "",
+                    "is_uncertain": is_uncertain,
+                })
+            db.session.add(StudentAnswer(
+                task_id=task.id,
+                question_id=q.id,
+                student_id=user.id,
+                answer_type="text",
+                text_answer=text_val,
+                submitted_at=datetime.now(),
+                reviewed=True,
+                is_correct=is_correct,
+                is_uncertain=is_uncertain,
             ))
             continue
 
@@ -1526,9 +1584,9 @@ def submit_reading_vocab_practice(task_id):
         ))
 
     total = len(questions)
-    # Accuracy reflects only auto-graded (choice) questions; writing questions
-    # are reviewed manually by the teacher and don't influence this metric.
-    accuracy = round((correct_count / choice_total) * 100, 1) if choice_total else 0.0
+    # Accuracy reflects only auto-graded questions; writing questions are
+    # reviewed manually by the teacher and don't influence this metric.
+    accuracy = round((correct_count / objective_total) * 100, 1) if objective_total else 0.0
     completion_rate = round((answered_count / total) * 100, 1) if total else 0.0
 
     wrong_summary = ""
@@ -1566,7 +1624,8 @@ def submit_reading_vocab_practice(task_id):
         "ok": True,
         "correct_count": correct_count,
         "total_count": total,
-        "choice_total": choice_total,
+        "choice_total": objective_total,
+        "objective_total": objective_total,
         "writing_total": writing_total,
         "writing_answered": writing_answered,
         "accuracy": accuracy,
@@ -2384,23 +2443,40 @@ def _fetch_range_schedules(days=7, teacher_id=None):
     return _fetch_range_schedules_by_dates(start, end, teacher_id=teacher_id)
 
 
+def _coerce_schedule_list(payload):
+    if isinstance(payload, dict):
+        return payload.get("schedules") or payload.get("data") or []
+    return payload or []
+
+
+def _first_schedule_value(item: dict, *keys):
+    for key in keys:
+        value = item.get(key)
+        if value not in (None, ""):
+            return value
+    return None
+
+
 def _extract_schedule_fields(item: dict):
     """兼容字段提取"""
-    schedule_id = item.get("schedule_id") or item.get("id")
-    student_id = item.get("student_id") or item.get("scheduler_student_id")
-    teacher_id = item.get("teacher_id")
-    course_name = item.get("course_name") or item.get("name") or "课程"
-    start_time = item.get("start_time") or item.get("start_at") or item.get("datetime")
-    end_time = item.get("end_time") or item.get("end_at") or item.get("end_datetime")
-    teacher_name = item.get("teacher_name") or item.get("teacher") or "老师待定"
+    schedule_id = _first_schedule_value(item, "schedule_id", "id", "scheduleId")
+    student_id = _first_schedule_value(item, "student_id", "scheduler_student_id", "studentId", "studentID")
+    teacher_id = _first_schedule_value(item, "teacher_id", "scheduler_teacher_id", "teacherId", "teacherID")
+    course_name = _first_schedule_value(item, "course_name", "courseName", "name") or "课程"
+    start_time = _first_schedule_value(item, "start_time", "start_at", "startTime", "startAt", "datetime")
+    end_time = _first_schedule_value(item, "end_time", "end_at", "endTime", "endAt", "end_datetime")
+    teacher_name = _first_schedule_value(item, "teacher_name", "teacherName", "teacher") or "老师待定"
     student_name = (
-        item.get("student_name")
-        or item.get("student")
-        or item.get("studentName")
-        or item.get("student_full_name")
-        or item.get("studentFullName")
+        _first_schedule_value(
+            item,
+            "student_name",
+            "student",
+            "studentName",
+            "student_full_name",
+            "studentFullName",
+        )
     )
-    schedule_date = item.get("schedule_date") or item.get("date")
+    schedule_date = _first_schedule_value(item, "schedule_date", "scheduleDate", "date")
 
     # 拼成完整时间，避免仅有时分导致订阅模板校验失败
     if schedule_date and start_time and len(str(start_time)) <= 5:
@@ -2489,7 +2565,11 @@ def _collect_student_openids(student_id, student_name):
 def _collect_teacher_openid(scheduler_teacher_id):
     if not scheduler_teacher_id:
         return None
-    teacher = User.query.filter_by(scheduler_teacher_id=scheduler_teacher_id, role=User.ROLE_TEACHER).first()
+    teacher = User.query.filter(
+        User.scheduler_teacher_id == scheduler_teacher_id,
+        User.is_active.is_(True),
+        User.role.in_([User.ROLE_TEACHER, User.ROLE_ADMIN, User.ROLE_ASSISTANT]),
+    ).first()
     if teacher and teacher.wechat_openid:
         return teacher.wechat_openid
     return None
@@ -2539,17 +2619,14 @@ def send_tomorrow_class_reminders_internal():
         return {"ok": False, "error": "missing_template_id"}
 
     schedules, err = _fetch_tomorrow_schedules()
-    if err:
-        return {"ok": False, "error": err}
-    if not schedules:
-        return {"ok": True, "sent": 0, "total": 0}
-
-    if isinstance(schedules, dict):
-        schedules_list = schedules.get("schedules") or schedules.get("data") or []
-    else:
-        schedules_list = schedules
+    student_error = err
+    schedules_list = [] if err else _coerce_schedule_list(schedules)
 
     sent = 0
+    student_sent = 0
+    teacher_sent = 0
+    teacher_total = 0
+    teacher_errors = []
     dedupe = set()
     for item in schedules_list:
         schedule_id, student_id, teacher_id, course_name, start_time, end_time, teacher_name, student_name = _extract_schedule_fields(item)
@@ -2569,20 +2646,75 @@ def send_tomorrow_class_reminders_internal():
             for oid in openids:
                 if send_subscribe_message(oid, template_id, data, page="pages/student/home/index"):
                     sent += 1
+                    student_sent += 1
 
-        # 老师
-        teacher_openid = _collect_teacher_openid(teacher_id)
-        if teacher_openid:
-            data_t = {
-                "thing27": {"value": (course_name or "课程")[:20]},
-                "time6": {"value": str(start_time)[:32]},
-                "time38": {"value": str(end_time or start_time)[:32]},
-                "thing15": {"value": (teacher_name or "")[:20]},
-            }
-            if send_subscribe_message(teacher_openid, template_id, data_t, page="pages/teacher/home/index"):
-                sent += 1
+    tomorrow = date.today() + timedelta(days=1)
+    teachers = User.query.filter(
+        User.scheduler_teacher_id.isnot(None),
+        User.is_active.is_(True),
+        User.role.in_([User.ROLE_TEACHER, User.ROLE_ADMIN, User.ROLE_ASSISTANT]),
+    ).all()
+    for teacher in teachers:
+        teacher_openid = teacher.wechat_openid
+        teacher_data, teacher_err = _fetch_range_schedules_by_dates(
+            tomorrow,
+            tomorrow,
+            teacher_id=teacher.scheduler_teacher_id,
+        )
+        if teacher_err:
+            teacher_errors.append({"teacher_id": teacher.id, "error": teacher_err})
+            continue
+        teacher_schedules = _coerce_schedule_list(teacher_data)
+        teacher_total += len(teacher_schedules)
+        if not teacher_openid:
+            if teacher_schedules:
+                teacher_errors.append({"teacher_id": teacher.id, "error": "missing_teacher_openid"})
+            continue
+        teacher_dedupe = set()
+        for item in teacher_schedules:
+            schedule_id, _student_id, _teacher_id, course_name, start_time, end_time, teacher_name, _student_name = _extract_schedule_fields(item)
+            dedupe_key = _build_schedule_uid(
+                schedule_id,
+                teacher.scheduler_teacher_id,
+                _student_id,
+                course_name,
+                start_time,
+            )
+            if dedupe_key in teacher_dedupe:
+                continue
+            teacher_dedupe.add(dedupe_key)
+            if teacher_openid:
+                data_t = {
+                    "thing27": {"value": (course_name or "课程")[:20]},
+                    "time6": {"value": str(start_time)[:32]},
+                    "time38": {"value": str(end_time or start_time)[:32]},
+                    "thing15": {"value": (teacher_name or teacher.display_name or teacher.username or "")[:20]},
+                }
+                result = send_subscribe_message_result(
+                    teacher_openid,
+                    template_id,
+                    data_t,
+                    page="pages/teacher/home/index",
+                )
+                if result.get("ok"):
+                    sent += 1
+                    teacher_sent += 1
+                else:
+                    teacher_errors.append({
+                        "teacher_id": teacher.id,
+                        "error": _normalize_subscribe_push_error(result),
+                    })
 
-    return {"ok": True, "sent": sent, "total": len(schedules_list)}
+    return {
+        "ok": True,
+        "sent": sent,
+        "student_sent": student_sent,
+        "teacher_sent": teacher_sent,
+        "total": len(schedules_list),
+        "teacher_total": teacher_total,
+        "student_error": student_error,
+        "teacher_errors": teacher_errors[:20],
+    }
 
 
 def check_schedule_changes_internal(days=7):
@@ -2592,8 +2724,9 @@ def check_schedule_changes_internal(days=7):
         return {"ok": False, "error": "missing_template_id"}
 
     teachers = User.query.filter(
-        User.role == User.ROLE_TEACHER,
-        User.scheduler_teacher_id.isnot(None)
+        User.scheduler_teacher_id.isnot(None),
+        User.is_active.is_(True),
+        User.role.in_([User.ROLE_TEACHER, User.ROLE_ADMIN, User.ROLE_ASSISTANT]),
     ).all()
 
     start_date = date.today()
@@ -2606,8 +2739,7 @@ def check_schedule_changes_internal(days=7):
         data, err = _fetch_range_schedules_by_dates(start_date, end_date, teacher_id=teacher.scheduler_teacher_id)
         if err:
             continue
-        schedules = data.get("schedules") if isinstance(data, dict) else data
-        schedules = schedules or []
+        schedules = _coerce_schedule_list(data)
 
         current_uids = set()
         for item in schedules:

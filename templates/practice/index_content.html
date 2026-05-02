@@ -1,0 +1,256 @@
+<style>
+.practice-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px 0 48px;
+}
+.practice-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+.practice-hero__eyebrow {
+  margin: 0 0 8px;
+  color: var(--brand);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.practice-hero h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: var(--fs-2xl);
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+.practice-hero p {
+  max-width: 760px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: var(--fs-base);
+  line-height: 1.7;
+}
+.practice-hero__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.practice-button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: #fff;
+  color: var(--text);
+  font-size: var(--fs-base);
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+}
+.practice-button:hover {
+  border-color: var(--brand-light);
+  color: var(--brand-dark);
+  text-decoration: none;
+}
+.practice-button--primary {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+.practice-button--primary:hover {
+  border-color: var(--brand-dark);
+  background: var(--brand-dark);
+  color: #fff;
+}
+.practice-subjects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.practice-subject {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.practice-subject__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 74px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.practice-subject__name {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: var(--fs-xl);
+  line-height: 1.25;
+}
+.practice-subject__tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: var(--r-pill);
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.practice-resource-list {
+  display: grid;
+  gap: 0;
+}
+.practice-resource {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+}
+.practice-resource:last-child {
+  border-bottom: 0;
+}
+a.practice-resource:hover {
+  background: var(--brand-tint);
+  color: inherit;
+  text-decoration: none;
+}
+.practice-resource__label {
+  margin: 0 0 6px;
+  color: var(--text-strong);
+  font-size: var(--fs-md);
+  font-weight: 900;
+}
+.practice-resource__meta {
+  color: var(--muted);
+  font-size: var(--fs-base);
+  line-height: 1.55;
+}
+.practice-resource__cta {
+  color: var(--brand-dark);
+  font-weight: 900;
+  white-space: nowrap;
+}
+.practice-resource--muted {
+  background: #fff;
+}
+.practice-code {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 7px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--brand-tint);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--fs-xs);
+}
+@media (max-width: 900px) {
+  .practice-subjects {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 680px) {
+  .practice-page {
+    padding: 0 0 36px;
+  }
+  .practice-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .practice-hero__actions {
+    justify-content: flex-start;
+  }
+  .practice-resource {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<main class="practice-page">
+  <section class="practice-hero">
+    <div>
+      <p class="practice-hero__eyebrow">IELTS Practice</p>
+      <h2>听力和阅读统一入口</h2>
+      <p>这里作为后续学生刷题和模考的主入口。听力已接入剑雅整套、机经和精听；阅读先接入爱听写导出链路，导入数据后会在这里变成可刷题列表。</p>
+    </div>
+    <div class="practice-hero__actions">
+      <a class="practice-button" href="{{ url_for('listening_index') }}">精听</a>
+      <a class="practice-button practice-button--primary" href="{{ url_for('listening_test_index') }}">剑雅听力</a>
+    </div>
+  </section>
+
+  <section class="practice-subjects" aria-label="刷题科目">
+    <article class="practice-subject">
+      <header class="practice-subject__head">
+        <h3 class="practice-subject__name">听力</h3>
+        <span class="practice-subject__tag">已接入</span>
+      </header>
+      <div class="practice-resource-list">
+        <a class="practice-resource" href="{{ url_for('listening_test_index') }}">
+          <div>
+            <p class="practice-resource__label">剑桥雅思整套练习</p>
+            <div class="practice-resource__meta">{{ summary.listening.cambridge_books }} 本书 · {{ summary.listening.cambridge_tests }} 套 Test · {{ summary.listening.cambridge_questions }} 题</div>
+          </div>
+          <span class="practice-resource__cta">进入</span>
+        </a>
+        <a class="practice-resource" href="{{ url_for('listening_jijing_index') }}">
+          <div>
+            <p class="practice-resource__label">听力机经</p>
+            <div class="practice-resource__meta">{{ summary.listening.jijing_books }} 组 · {{ summary.listening.jijing_tests }} 套 · {{ summary.listening.jijing_parts }} 个 Part</div>
+          </div>
+          <span class="practice-resource__cta">进入</span>
+        </a>
+        <a class="practice-resource" href="{{ url_for('listening_index') }}">
+          <div>
+            <p class="practice-resource__label">精听练习</p>
+            <div class="practice-resource__meta">{{ summary.listening.intensive_sections }} 个切句材料，支持逐句听写、跟读和任务同步。</div>
+          </div>
+          <span class="practice-resource__cta">进入</span>
+        </a>
+      </div>
+    </article>
+
+    <article class="practice-subject">
+      <header class="practice-subject__head">
+        <h3 class="practice-subject__name">阅读</h3>
+        <span class="practice-subject__tag">导入中</span>
+      </header>
+      <div class="practice-resource-list">
+        <a class="practice-resource" href="{{ url_for('reading_test_index') }}">
+          <div>
+            <p class="practice-resource__label">剑桥雅思阅读</p>
+            <div class="practice-resource__meta">
+              {{ summary.reading.cambridge_books }} 本书 · {{ summary.reading.cambridge_tests }} 套 Test · {{ summary.reading.cambridge_questions }} 题
+              <br>
+              <span class="practice-code">raw {{ summary.reading.raw_count }} 篇 · normalized {{ summary.reading.normalized_count }} 篇</span>
+            </div>
+          </div>
+          <span class="practice-resource__cta">进入</span>
+        </a>
+        <div class="practice-resource practice-resource--muted">
+          <div>
+            <p class="practice-resource__label">阅读机经</p>
+            <div class="practice-resource__meta">导出链路已预留，后续可和听力机经一样生成刷题页。</div>
+          </div>
+          <span class="practice-resource__cta">待导入</span>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
