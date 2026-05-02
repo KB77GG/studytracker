@@ -52,6 +52,8 @@ body {
   text-transform: uppercase;
   margin-bottom: 4px;
 }
+.crumb a { color: inherit; text-decoration: none; }
+.crumb a:hover { text-decoration: underline; }
 h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
 .meta { margin-top: 6px; color: var(--muted); font-size: 13px; }
 .timer {
@@ -335,7 +337,7 @@ body.result-mode .analysis { display: block; }
 <header class="topbar">
   <div class="topbar-inner">
     <div>
-      <div class="crumb" id="practiceCrumb">阅读 / 剑桥雅思 / 整套练习</div>
+      <div class="crumb"><a href="{{ url_for('practice_library') }}">阅读</a> / <a href="{{ url_for('reading_test_index') }}">剑桥雅思</a> / <span id="practiceCrumbTail">整套练习</span></div>
       <h1 id="practiceTitle">{{ test.title }}</h1>
       <div class="meta" id="practiceMeta">3 篇 Passage · 40 题 · 建议 60 分钟完成</div>
     </div>
@@ -626,7 +628,7 @@ function setSyncStatus(message, tone = "") {
 function updatePracticeHeader() {
   const total = allQuestions().length;
   if (assignedPassageNumber) {
-    document.getElementById("practiceCrumb").textContent = "阅读 / 剑桥雅思 / Passage 练习";
+    document.getElementById("practiceCrumbTail").textContent = "Passage 练习";
     document.getElementById("practiceTitle").textContent = `${rawTestData.title} Passage ${assignedPassageNumber}`;
     document.getElementById("practiceMeta").textContent = `1 篇 Passage · ${total} 题 · 建议 20 分钟完成`;
     setSyncStatus("完成后会同步到这条小程序任务和报告");

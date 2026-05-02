@@ -73,6 +73,8 @@ body {
   text-transform: uppercase;
   margin-bottom: 4px;
 }
+.crumb a { color: inherit; text-decoration: none; }
+.crumb a:hover { text-decoration: underline; }
 h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
 .meta { margin-top: 6px; color: var(--muted); font-size: 13px; }
 audio { width: 100%; display: block; }
@@ -583,7 +585,7 @@ body.result-mode .transcript-panel { display: block; }
         <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
       </div>
       <div>
-        <div class="crumb" id="practiceCrumb">Sage Path · Listening</div>
+        <div class="crumb"><a href="{{ url_for('practice_library') }}">听力</a> / <a href="{{ url_for('listening_test_index') }}">剑桥雅思</a> / <span id="practiceCrumbTail">整套练习</span></div>
         <h1 id="practiceTitle">{{ test.title }}</h1>
         <div class="meta" id="practiceMeta">
           4 个 Section · 40 题
@@ -1305,7 +1307,7 @@ function syncQuestionNav(results = null) {
 
 function render() {
   if (assignedSectionNumber) {
-    document.getElementById('practiceCrumb').textContent = 'Sage Path · Listening Part';
+    document.getElementById('practiceCrumbTail').textContent = 'Part 练习';
     document.getElementById('practiceTitle').textContent = `${rawTest.title} Part ${assignedSectionNumber}`;
     document.getElementById('scorePanelTitle').textContent = 'Part 判分';
     document.getElementById('resultBox').textContent = '填写后可查看本 Part 正确率，并同步到任务和报告。';
