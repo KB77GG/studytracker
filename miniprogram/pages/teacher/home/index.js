@@ -552,8 +552,8 @@ Page({
             return {
                 hasSubscribed: true,
                 subscribeState: state,
-                subscribeButtonText: '提醒已开启',
-                subscribeTip: '如需修改提醒偏好，请前往微信设置页'
+                subscribeButtonText: '补充提醒次数',
+                subscribeTip: '微信课程提醒可能按次数消耗；明天有多节课时，课前一天可再次点击补充授权'
             }
         }
         if (state === 'reject') {
