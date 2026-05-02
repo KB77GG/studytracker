@@ -187,7 +187,7 @@ a.practice-resource:hover {
     <div>
       <p class="practice-hero__eyebrow">IELTS Practice</p>
       <h2>听力和阅读统一入口</h2>
-      <p>这里作为后续学生刷题和模考的主入口。听力已接入剑雅整套、机经和精听；阅读先接入爱听写导出链路，导入数据后会在这里变成可刷题列表。</p>
+      <p>按科目选择刷题资源。</p>
     </div>
     <div class="practice-hero__actions">
       <a class="practice-button" href="{{ url_for('listening_index') }}">精听</a>
@@ -237,8 +237,6 @@ a.practice-resource:hover {
             <p class="practice-resource__label">剑桥雅思阅读</p>
             <div class="practice-resource__meta">
               {{ summary.reading.cambridge_books }} 本书 · {{ summary.reading.cambridge_tests }} 套 Test · {{ summary.reading.cambridge_questions }} 题
-              <br>
-              <span class="practice-code">raw {{ summary.reading.raw_count }} 篇 · normalized {{ summary.reading.normalized_count }} 篇</span>
             </div>
           </div>
           <span class="practice-resource__cta">进入</span>
@@ -246,7 +244,7 @@ a.practice-resource:hover {
         <div class="practice-resource practice-resource--muted">
           <div>
             <p class="practice-resource__label">阅读机经</p>
-            <div class="practice-resource__meta">导出链路已预留，后续可和听力机经一样生成刷题页。</div>
+            <div class="practice-resource__meta">暂未上线</div>
           </div>
           <span class="practice-resource__cta">待导入</span>
         </div>
