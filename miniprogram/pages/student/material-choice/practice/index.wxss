@@ -33,7 +33,10 @@
   display: block;
   margin-top: 12rpx;
   font-size: 24rpx;
+  line-height: 1.55;
   color: #6b7280;
+  max-height: 520rpx;
+  white-space: pre-wrap;
 }
 
 .progress-row {

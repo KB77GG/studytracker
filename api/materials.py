@@ -9,6 +9,7 @@ import re
 
 material_bp = Blueprint('material', __name__, url_prefix='/api/materials')
 READING_VOCAB_CHOICE_TYPE = 'reading_vocab_choice'
+IELTS_READING_PRACTICE_TYPE = 'ielts_reading_practice'
 
 
 def require_teacher():
@@ -236,8 +237,8 @@ def create_material():
     db.session.flush()  # Get material.id
     
     # Handle different material types
-    if material_type in {'grammar', READING_VOCAB_CHOICE_TYPE}:
-        # Grammar: traditional questions with options
+    if material_type in {'grammar', READING_VOCAB_CHOICE_TYPE, IELTS_READING_PRACTICE_TYPE}:
+        # Objective materials: choices and optional auto-graded text blanks.
         questions_data = data.get('questions', [])
         _build_choice_questions(material.id, questions_data)
     

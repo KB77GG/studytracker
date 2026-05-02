@@ -36,6 +36,8 @@
                                             material.type=='translation' else '' }}>翻译练习</option>
                                         <option value="reading_vocab_choice" {{ 'selected' if material and
                                             material.type=='reading_vocab_choice' else '' }}>阅读词汇选择题</option>
+                                        <option value="ielts_reading_practice" {{ 'selected' if material and
+                                            material.type=='ielts_reading_practice' else '' }}>雅思阅读真题</option>
                                         <option value="dictation" {{ 'selected' if material and
                                             material.type=='dictation' else '' }}>听写词库</option>
                                     </select>
@@ -375,7 +377,7 @@
             document.getElementById('speakingPart23Input').style.display = 'block';
         } else if (type === 'translation') {
             document.getElementById('translationInput').style.display = 'block';
-        } else if (type === 'reading_vocab_choice') {
+        } else if (type === 'reading_vocab_choice' || type === 'ielts_reading_practice') {
             document.getElementById('readingVocabChoiceInput').style.display = 'block';
         } else if (type === 'dictation') {
             document.getElementById('dictationInput').style.display = 'block';
@@ -617,9 +619,9 @@
             }
             payload.questions = questions;
 
-        } else if (type === 'reading_vocab_choice') {
+        } else if (type === 'reading_vocab_choice' || type === 'ielts_reading_practice') {
             if (questions.length === 0) {
-                alert('请先解析阅读词汇选择题 Excel');
+                alert('请先准备题目');
                 return;
             }
             payload.questions = questions;

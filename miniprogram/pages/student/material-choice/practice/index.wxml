@@ -9,7 +9,9 @@
       </view>
     </view>
     <text class="subtitle">{{task.material_title || ''}}</text>
-    <text class="desc" wx:if="{{task.description}}">{{task.description}}</text>
+    <scroll-view class="desc" wx:if="{{task.description}}" scroll-y="true">
+      <text>{{task.description}}</text>
+    </scroll-view>
     <view class="progress-row">
       <text>第 {{currentIndex + 1}} / {{questions.length}} 题</text>
       <text wx:if="{{mode === 'review'}}">正确 {{correctCount}} · 待复习 {{wrongCount}}</text>
@@ -37,19 +39,20 @@
       </view>
     </view>
 
-    <!-- 改写/翻译题（无 options，文本输入；提交后老师人工批改） -->
-    <view class="writing-area" wx:if="{{currentQuestion.is_writing}}">
+    <!-- 文本题：改写/翻译人工批改；阅读填空自动判分 -->
+    <view class="writing-area" wx:if="{{currentQuestion.is_writing || currentQuestion.is_auto_text}}">
       <textarea
         class="writing-input"
-        placeholder="在此输入你改写后的句子..."
+        placeholder="{{currentQuestion.is_auto_text ? '在此输入答案...' : '在此输入你改写后的句子...'}}"
         value="{{currentTextAnswer}}"
         bindinput="onTextAnswerInput"
         maxlength="500"
         auto-height
         disabled="{{mode === 'review'}}"
       />
-      <text class="writing-hint" wx:if="{{mode !== 'review'}}">提交后老师将人工批改，无即时对错反馈</text>
-      <text class="writing-hint" wx:if="{{mode === 'review'}}">已提交，等待老师批改</text>
+      <text class="writing-hint" wx:if="{{mode !== 'review' && currentQuestion.is_auto_text}}">提交后自动判分</text>
+      <text class="writing-hint" wx:if="{{mode !== 'review' && currentQuestion.is_writing}}">提交后老师将人工批改，无即时对错反馈</text>
+      <text class="writing-hint" wx:if="{{mode === 'review' && currentQuestion.is_writing}}">已提交，等待老师批改</text>
     </view>
 
     <label class="uncertain-toggle" wx:if="{{mode !== 'review' && !currentQuestion.is_writing}}">
@@ -64,9 +67,10 @@
       <text class="result-line" wx:if="{{currentFeedback.hint}}">释义：{{currentFeedback.hint}}</text>
       <text class="result-line uncertain-line" wx:if="{{currentFeedback.isUncertain}}">已标记为"不清楚"，提交后会保留到错题本</text>
     </view>
-    <view class="hint-box" wx:if="{{mode === 'review' && currentQuestion.hint && !currentQuestion.is_writing}}">
+    <view class="hint-box" wx:if="{{mode === 'review' && !currentQuestion.is_writing && (currentQuestion.hint || currentQuestion.correct_text)}}">
       <text class="hint-label">释义</text>
       <text class="hint-text">{{currentQuestion.hint}}</text>
+      <text class="hint-text" wx:if="{{currentQuestion.is_auto_text && currentQuestion.correct_text}}">正确答案：{{currentQuestion.correct_text}}</text>
       <text class="hint-mark" wx:if="{{reviewFlags[currentQuestion.id] && reviewFlags[currentQuestion.id].isUncertain}}">这题曾被标记为"不清楚"</text>
     </view>
   </view>

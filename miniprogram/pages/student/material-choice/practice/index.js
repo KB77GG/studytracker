@@ -34,8 +34,8 @@ Page({
         currentQuestion: null,
         selectedAnswers: {},       // qid -> answer key (choice questions, local picks this session)
         selectedAnswer: '',
-        textAnswers: {},           // qid -> typed text (writing questions)
-        currentTextAnswer: '',     // current writing question's text (mirrors textAnswers[currentQid])
+        textAnswers: {},           // qid -> typed text (writing or auto-graded text questions)
+        currentTextAnswer: '',     // current text question's text (mirrors textAnswers[currentQid])
         answerRecords: {},         // qid -> { answer_key, is_correct } (prior submission)
         answeredCount: 0,
         note: '',
@@ -82,14 +82,14 @@ Page({
             const answerRecords = res.answer_records || {}
             const questions = res.questions || []
 
-            // Split previousAnswers into choice (ABCD key) vs writing (free text)
-            // based on each question's is_writing flag.
+            // Split previousAnswers into choice (ABCD key) vs typed text
+            // based on each question's input mode.
             const selectedAnswers = {}
             const textAnswers = {}
             questions.forEach(q => {
                 const prior = previousAnswers[q.id]
                 if (!prior) return
-                if (q.is_writing) {
+                if (q.is_writing || q.is_auto_text) {
                     textAnswers[q.id] = prior
                 } else {
                     selectedAnswers[q.id] = prior
@@ -105,11 +105,12 @@ Page({
                 const rec = answerRecords[q.id]
                 const userKey = rec ? rec.answer_key : ''
                 const correctKey = q.correct_key || ''
-                // Writing questions are reviewed manually — they don't count
-                // toward correct/wrong stats and never appear "wrong" here.
-                const isCorrect = !q.is_writing && !!(rec && rec.is_correct)
-                const isUncertain = !q.is_writing && !!(rec && rec.is_uncertain)
-                if (rec && !q.is_writing) {
+                // Manual writing questions are teacher-reviewed. Choice and
+                // auto-text reading questions are objective and count here.
+                const isObjective = !q.is_writing
+                const isCorrect = isObjective && !!(rec && rec.is_correct)
+                const isUncertain = isObjective && !!(rec && rec.is_uncertain)
+                if (rec && isObjective) {
                     if (isCorrect) correctCount++
                     if (!isCorrect || isUncertain) wrongCount++
                 }
@@ -172,7 +173,7 @@ Page({
             }))
         }
 
-        const currentTextAnswer = baseQuestion && baseQuestion.is_writing
+        const currentTextAnswer = baseQuestion && (baseQuestion.is_writing || baseQuestion.is_auto_text)
             ? (this.data.textAnswers[baseQuestion.id] || '')
             : ''
 
@@ -202,7 +203,7 @@ Page({
         const key = e.currentTarget.dataset.key
         const currentQuestion = this.data.currentQuestion
         if (!currentQuestion) return
-        if (currentQuestion.is_writing) return  // writing questions use textarea
+        if (currentQuestion.is_writing || currentQuestion.is_auto_text) return  // text questions use textarea
         if (this.data.sessionResults[currentQuestion.id]) return
 
         const selectedAnswers = {
@@ -236,7 +237,7 @@ Page({
     onTextAnswerInput(e) {
         if (this.data.mode === 'review') return
         const currentQuestion = this.data.currentQuestion
-        if (!currentQuestion || !currentQuestion.is_writing) return
+        if (!currentQuestion || (!currentQuestion.is_writing && !currentQuestion.is_auto_text)) return
         const value = e.detail.value || ''
         const textAnswers = {
             ...this.data.textAnswers,
@@ -329,18 +330,18 @@ Page({
         if (this.data.submitting) return
         if (this.data.mode === 'review') return  // no submit in review
 
-        // Count separately: choice questions (need answer_key) vs writing
+        // Count separately: choice questions (need answer_key) vs text
         // questions (need text). Both contribute to "unanswered" check.
         let choiceUnanswered = 0
-        let writingUnanswered = 0
+        let textUnanswered = 0
         this.data.questions.forEach(q => {
-            if (q.is_writing) {
-                if (!(this.data.textAnswers[q.id] || '').trim()) writingUnanswered++
+            if (q.is_writing || q.is_auto_text) {
+                if (!(this.data.textAnswers[q.id] || '').trim()) textUnanswered++
             } else {
                 if (!this.data.selectedAnswers[q.id]) choiceUnanswered++
             }
         })
-        const unanswered = choiceUnanswered + writingUnanswered
+        const unanswered = choiceUnanswered + textUnanswered
         if (unanswered > 0) {
             const modal = await wx.showModal({
                 title: '还有未作答题目',
@@ -351,12 +352,12 @@ Page({
             if (!modal.confirm) return
         }
 
-        // Build separate payloads — backend distinguishes by `is_writing`
-        // (no options) and routes to the right grading branch.
+        // Build separate payloads. Backend distinguishes manual writing
+        // from auto-graded IELTS reading blanks by question metadata.
         const answers = []
         const textAnswers = []
         this.data.questions.forEach(q => {
-            if (q.is_writing) {
+            if (q.is_writing || q.is_auto_text) {
                 const text = (this.data.textAnswers[q.id] || '').trim()
                 if (text) {
                     textAnswers.push({ question_id: q.id, text_answer: text })
@@ -411,7 +412,7 @@ Page({
                 ? `\n改写题已提交 ${writingAnswered}/${writingTotal}（待老师批改）`
                 : ''
             const accuracyLine = choiceTotal > 0
-                ? `单选正确 ${res.correct_count}/${choiceTotal}，正确率 ${res.accuracy}%`
+                ? `客观题正确 ${res.correct_count}/${choiceTotal}，正确率 ${res.accuracy}%`
                 : '本次练习无单选题'
             await wx.showModal({
                 title: '练习完成',
