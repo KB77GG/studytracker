@@ -121,6 +121,7 @@ def _reading_data_root() -> Path:
 LISTENING_RESOURCE_INTENSIVE = "intensive"
 LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
 LISTENING_RESOURCE_TYPES = {LISTENING_RESOURCE_INTENSIVE, LISTENING_RESOURCE_CAMBRIDGE_TEST}
+READING_RESOURCE_CAMBRIDGE_TEST = "cambridge_reading_test"
 
 
 PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST = "cambridge_listening_test"
@@ -156,6 +157,23 @@ def _reading_test_url(test_id: str | None, absolute: bool = True) -> str | None:
     if not test_id:
         return None
     path = f"/reading/test/{quote(str(test_id), safe='')}"
+    if absolute:
+        return f"https://studytracker.xin{path}"
+    return path
+
+
+def _task_reading_url(task, absolute: bool = True) -> str | None:
+    test_id = (getattr(task, "reading_test_id", "") or "").strip()
+    token = (getattr(task, "reading_access_token", "") or "").strip()
+    if not test_id or not token:
+        return None
+    path = (
+        f"/reading/test/{quote(test_id, safe='')}"
+        f"?task_id={task.id}&token={quote(token, safe='')}"
+    )
+    passage_number = getattr(task, "reading_passage_number", None)
+    if passage_number:
+        path = f"{path}&passage={int(passage_number)}"
     if absolute:
         return f"https://studytracker.xin{path}"
     return path
@@ -453,15 +471,20 @@ def _iter_listening_test_grade_units(payload: dict) -> list[dict]:
     return units
 
 
-def _grade_listening_test_answers(payload: dict, answers: dict) -> dict:
+def _grade_listening_test_answers(payload: dict, answers: dict, section_number: int | None = None) -> dict:
     if not isinstance(answers, dict):
         answers = {}
     results = []
     total = 0
     correct = 0
     wrong_numbers = []
+    section_index = None
+    if section_number:
+        section_index = max(0, int(section_number) - 1)
 
     for unit in _iter_listening_test_grade_units(payload):
+        if section_index is not None and int(unit.get("section") or 0) != section_index:
+            continue
         key = ",".join(unit["ids"])
         value = answers.get(key)
         if value is None and unit["ids"]:
@@ -509,7 +532,7 @@ def _grade_listening_test_answers(payload: dict, answers: dict) -> dict:
         "correct": correct,
         "total": total,
         "accuracy": accuracy,
-        "ielts_score": _ielts_listening_band(correct),
+        "ielts_score": _ielts_listening_band(correct) if total >= 40 else None,
         "wrong_numbers": wrong_numbers,
         "results": results,
     }
@@ -594,15 +617,20 @@ def _reading_test_answer_is_letters(answer: str) -> bool:
     return bool(letters) and all(re.fullmatch(r"[A-Z]+", letter) for letter in letters)
 
 
-def _grade_reading_test_answers(payload: dict, answers: dict) -> dict:
+def _grade_reading_test_answers(payload: dict, answers: dict, passage_number: int | None = None) -> dict:
     if not isinstance(answers, dict):
         answers = {}
     results = []
     total = 0
     correct = 0
     wrong_numbers = []
+    passage_index_filter = None
+    if passage_number:
+        passage_index_filter = max(0, int(passage_number) - 1)
 
     for passage_index, passage in enumerate(payload.get("passages") or []):
+        if passage_index_filter is not None and passage_index != passage_index_filter:
+            continue
         for group in passage.get("groups") or []:
             for question in group.get("questions") or []:
                 qid = str(question.get("id") or question.get("number"))
@@ -642,7 +670,7 @@ def _grade_reading_test_answers(payload: dict, answers: dict) -> dict:
         "correct": correct,
         "total": total,
         "accuracy": accuracy,
-        "ielts_score": _ielts_reading_band(correct),
+        "ielts_score": _ielts_reading_band(correct) if total >= 40 else None,
         "wrong_numbers": wrong_numbers,
         "results": results,
     }
@@ -745,17 +773,20 @@ def _sync_listening_test_score_record(task: Task, payload: dict, grade: dict) ->
             recorded_by=recorder_id,
         )
         db.session.add(record)
+    band = grade.get("ielts_score")
     record.taken_on = taken_on
-    record.total_score = grade["ielts_score"]
+    record.total_score = band
     record.component_scores = {
-        "listening": grade["ielts_score"],
+        "listening": band,
         "raw_score": grade["correct"],
         "total_questions": grade["total"],
         "accuracy": grade["accuracy"],
     }
     wrong_numbers = grade.get("wrong_numbers") or []
+    band_text = f"IELTS Listening {band}，" if band is not None else ""
     record.notes = (
-        f"剑雅听力整套自动判分：{grade['correct']}/{grade['total']}，"
+        f"剑雅听力自动判分：{grade['correct']}/{grade['total']}，"
+        f"{band_text}"
         f"正确率 {grade['accuracy']}%，错题 "
         f"{'、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else '无'}"
         f"{'…' if len(wrong_numbers) > 20 else ''}"
@@ -791,17 +822,20 @@ def _sync_reading_test_score_record(task: Task, payload: dict, grade: dict) -> N
             recorded_by=recorder_id,
         )
         db.session.add(record)
+    band = grade.get("ielts_score")
     record.taken_on = taken_on
-    record.total_score = grade["ielts_score"]
+    record.total_score = band
     record.component_scores = {
-        "reading": grade["ielts_score"],
+        "reading": band,
         "raw_score": grade["correct"],
         "total_questions": grade["total"],
         "accuracy": grade["accuracy"],
     }
     wrong_numbers = grade.get("wrong_numbers") or []
+    band_text = f"IELTS Reading {band}，" if band is not None else ""
     record.notes = (
-        f"剑雅阅读整套自动判分：{grade['correct']}/{grade['total']}，"
+        f"剑雅阅读自动判分：{grade['correct']}/{grade['total']}，"
+        f"{band_text}"
         f"正确率 {grade['accuracy']}%，错题 "
         f"{'、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else '无'}"
         f"{'…' if len(wrong_numbers) > 20 else ''}"
@@ -1282,6 +1316,9 @@ def ensure_legacy_schema() -> None:
             "listening_resource_type": "VARCHAR(32) DEFAULT 'intensive'",
             "listening_exercise_id": "VARCHAR(120)",
             "listening_access_token": "VARCHAR(64)",
+            "reading_test_id": "VARCHAR(120)",
+            "reading_passage_number": "INTEGER",
+            "reading_access_token": "VARCHAR(64)",
         }
         for column_name, column_type in legacy_task_columns.items():
             if column_name in columns:
@@ -1293,6 +1330,9 @@ def ensure_legacy_schema() -> None:
                     )
                 columns.add(column_name)
             except Exception as exc:  # pragma: no cover - best-effort safeguard
+                if "duplicate column" in str(exc).lower():
+                    columns.add(column_name)
+                    continue
                 current_app.logger.warning(
                     "Failed to add %s to task table: %s", column_name, exc
                 )
@@ -2990,6 +3030,8 @@ def tasks_page():
             "listening_resource_type": _task_listening_resource_type(t) if t.listening_exercise_id else None,
             "listening_exercise_id": t.listening_exercise_id,
             "listening_url": _task_listening_url(t, absolute=False) if t.listening_exercise_id else None,
+            "reading_test_id": t.reading_test_id,
+            "reading_passage_number": t.reading_passage_number,
             "planned_minutes": planned,
             "actual_minutes": actual_minutes,
             "progress": progress,
@@ -2999,9 +3041,13 @@ def tasks_page():
             if _task_listening_resource_type(t) == LISTENING_RESOURCE_CAMBRIDGE_TEST
             else None,
             "reading_test": _serialize_reading_test_submission(t.reading_test_submission),
-            "reading_url": _reading_test_url(t.reading_test_submission.test_id, absolute=False)
-            if t.reading_test_submission
-            else None,
+            "reading_url": _task_reading_url(t, absolute=False)
+            if t.reading_test_id
+            else (
+                _reading_test_url(t.reading_test_submission.test_id, absolute=False)
+                if t.reading_test_submission
+                else None
+            ),
             "student_submitted": t.student_submitted,
             "evidence_photos": evidence_photos,
             "student_note": t.student_note,
@@ -5937,6 +5983,25 @@ def api_reading_test_submission(test_id):
     data, _test_path, safe_id = _load_reading_test_payload(test_id)
     if not data:
         return jsonify({"ok": False, "error": "test_not_found"}), 404
+    task_id = request.args.get("task_id", type=int)
+    token = (request.args.get("token") or "").strip()
+    if task_id and token:
+        task = Task.query.get(task_id)
+        if not task or secure_filename(task.reading_test_id or "") != safe_id:
+            return jsonify({"ok": False, "error": "task_not_found"}), 404
+        if not task.reading_access_token or not secrets.compare_digest(task.reading_access_token, token):
+            return jsonify({"ok": False, "error": "invalid_token"}), 403
+        return jsonify({
+            "ok": True,
+            "task": {
+                "id": task.id,
+                "status": task.status,
+                "accuracy": task.accuracy,
+                "completion_rate": task.completion_rate,
+                "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+            },
+            "submission": _serialize_reading_test_submission(task.reading_test_submission),
+        })
     profile = _current_student_profile()
     if not profile:
         return jsonify({"ok": True, "submission": None})
@@ -5971,16 +6036,20 @@ def api_reading_test_submit(test_id):
 
     data = request.get_json(silent=True) or {}
     answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
-    grade = _grade_reading_test_answers(payload, answers)
-
     duration_seconds = 0
     try:
         duration_seconds = max(0, int(data.get("duration_seconds") or 0))
     except (TypeError, ValueError):
         duration_seconds = 0
+    requested_passage_number = data.get("passage_number") or request.args.get("passage")
+    try:
+        passage_number = int(requested_passage_number) if requested_passage_number not in (None, "") else None
+    except (TypeError, ValueError):
+        passage_number = None
 
     task = None
     task_id = data.get("task_id") or request.args.get("task_id")
+    token = (data.get("token") or request.args.get("token") or "").strip()
     if task_id:
         try:
             task_id = int(task_id)
@@ -5989,18 +6058,30 @@ def api_reading_test_submit(test_id):
         task = Task.query.get(task_id)
         if not task:
             return jsonify({"ok": False, "error": "task_not_found"}), 404
-        profile = _current_student_profile()
-        allowed = (
-            getattr(current_user, "is_authenticated", False)
-            and (
-                current_user.role in (User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
-                or (profile and task.student_name == profile.full_name)
+        if token:
+            if secure_filename(task.reading_test_id or "") != safe_id:
+                return jsonify({"ok": False, "error": "task_not_found"}), 404
+            if not task.reading_access_token or not secrets.compare_digest(task.reading_access_token, token):
+                return jsonify({"ok": False, "error": "invalid_token"}), 403
+        else:
+            profile = _current_student_profile()
+            allowed = (
+                getattr(current_user, "is_authenticated", False)
+                and (
+                    current_user.role in (User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+                    or (profile and task.student_name == profile.full_name)
+                )
             )
-        )
-        if not allowed:
-            return jsonify({"ok": False, "error": "forbidden"}), 403
+            if not allowed:
+                return jsonify({"ok": False, "error": "forbidden"}), 403
+            if task.reading_test_id and secure_filename(task.reading_test_id or "") != safe_id:
+                return jsonify({"ok": False, "error": "task_not_found"}), 404
+        if task.reading_passage_number:
+            passage_number = int(task.reading_passage_number)
     else:
         task = _upsert_reading_self_task(payload, duration_seconds)
+
+    grade = _grade_reading_test_answers(payload, answers, passage_number=passage_number)
 
     if not task:
         return jsonify({"ok": True, "synced": False, "result": grade})
@@ -6022,7 +6103,10 @@ def api_reading_test_submit(test_id):
 
     submission.student_name = task.student_name
     submission.test_id = safe_id
-    submission.test_title = payload.get("title") or task.detail or safe_id
+    title = payload.get("title") or task.detail or safe_id
+    if passage_number:
+        title = f"{title} Passage {passage_number}"
+    submission.test_title = title
     submission.correct_count = grade["correct"]
     submission.total_count = grade["total"]
     submission.accuracy = grade["accuracy"]
@@ -6042,9 +6126,10 @@ def api_reading_test_submit(test_id):
     if duration_seconds:
         task.actual_seconds = max(int(task.actual_seconds or 0), duration_seconds)
     wrong_numbers = grade.get("wrong_numbers") or []
+    band_text = f"IELTS Reading {grade['ielts_score']}，" if grade.get("ielts_score") is not None else ""
     task.student_note = (
-        f"剑雅整套阅读自动判分：{grade['correct']}/{grade['total']}，"
-        f"IELTS Reading {grade['ielts_score']}，正确率 {grade['accuracy']}%。"
+        f"剑雅阅读自动判分：{grade['correct']}/{grade['total']}，"
+        f"{band_text}正确率 {grade['accuracy']}%。"
         f"{' 错题：' + '、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else ''}"
         f"{'…' if len(wrong_numbers) > 20 else ''}"
     )
@@ -6108,7 +6193,11 @@ def api_listening_test_submit(test_id):
 
     data = request.get_json(silent=True) or {}
     answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
-    grade = _grade_listening_test_answers(payload, answers)
+    requested_section_number = data.get("section_number") or request.args.get("section")
+    try:
+        section_number = int(requested_section_number) if requested_section_number not in (None, "") else None
+    except (TypeError, ValueError):
+        section_number = None
 
     task = None
     task_id = data.get("task_id") or request.args.get("task_id")
@@ -6129,6 +6218,18 @@ def api_listening_test_submit(test_id):
             return jsonify({"ok": False, "error": "task_not_found"}), 404
         if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, token):
             return jsonify({"ok": False, "error": "invalid_token"}), 403
+        try:
+            metadata = json.loads(task.question_ids or "{}") if task.question_ids else {}
+        except Exception:
+            metadata = {}
+        bound_section = metadata.get("listening_section_number")
+        if bound_section:
+            try:
+                section_number = int(bound_section)
+            except (TypeError, ValueError):
+                pass
+
+    grade = _grade_listening_test_answers(payload, answers, section_number=section_number)
 
     if not task:
         return jsonify({"ok": True, "synced": False, "result": grade})
@@ -6156,7 +6257,10 @@ def api_listening_test_submit(test_id):
 
     submission.student_name = task.student_name
     submission.test_id = safe_id
-    submission.test_title = payload.get("title") or task.detail or safe_id
+    title = payload.get("title") or task.detail or safe_id
+    if section_number:
+        title = f"{title} Section {section_number}"
+    submission.test_title = title
     submission.correct_count = grade["correct"]
     submission.total_count = grade["total"]
     submission.accuracy = grade["accuracy"]
@@ -6176,9 +6280,10 @@ def api_listening_test_submit(test_id):
     if duration_seconds:
         task.actual_seconds = max(int(task.actual_seconds or 0), duration_seconds)
     wrong_numbers = grade.get("wrong_numbers") or []
+    band_text = f"IELTS Listening {grade['ielts_score']}，" if grade.get("ielts_score") is not None else ""
     task.student_note = (
-        f"剑雅整套听力自动判分：{grade['correct']}/{grade['total']}，"
-        f"IELTS Listening {grade['ielts_score']}，正确率 {grade['accuracy']}%。"
+        f"剑雅听力自动判分：{grade['correct']}/{grade['total']}，"
+        f"{band_text}正确率 {grade['accuracy']}%。"
         f"{' 错题：' + '、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else ''}"
         f"{'…' if len(wrong_numbers) > 20 else ''}"
     )

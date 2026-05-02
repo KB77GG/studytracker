@@ -4,6 +4,7 @@ import json
 import hashlib
 import secrets
 from datetime import datetime, date, timedelta
+from pathlib import Path
 from urllib.parse import quote
 import requests
 from flask import Blueprint, jsonify, request, current_app, url_for
@@ -16,7 +17,7 @@ from models import (
     PlanItemSession, ClassFeedback, ScheduleSnapshot,
     MaterialBank, Question, QuestionOption, SpeakingSession, SpeakingMessage,
     StudentAnswer,
-    DictationBook, ListeningTestSubmission
+    DictationBook, ListeningTestSubmission, ReadingTestSubmission
 )
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message, send_subscribe_message_result
@@ -41,6 +42,7 @@ CHOICE_PRACTICE_TYPES = {READING_VOCAB_CHOICE_TYPE, IELTS_READING_PRACTICE_TYPE,
 VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh"}
 LISTENING_RESOURCE_INTENSIVE = "intensive"
 LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
+READING_RESOURCE_CAMBRIDGE_TEST = "cambridge_reading_test"
 
 
 def _task_listening_resource_type(task) -> str:
@@ -66,7 +68,66 @@ def _task_listening_url(task) -> str | None:
     )
 
 
+def _task_reading_url(task) -> str | None:
+    test_id = (getattr(task, "reading_test_id", "") or "").strip()
+    token = (getattr(task, "reading_access_token", "") or "").strip()
+    if not test_id or not token:
+        return None
+    path = (
+        f"https://studytracker.xin/reading/test/{quote(test_id, safe='')}"
+        f"?task_id={task.id}&token={quote(token, safe='')}"
+    )
+    if getattr(task, "reading_passage_number", None):
+        path = f"{path}&passage={int(task.reading_passage_number)}"
+    return path
+
+
+def _static_root(name: str) -> Path:
+    return Path(current_app.static_folder) / name
+
+
+def _load_static_json(root_name: str, filename: str) -> dict | None:
+    path = _static_root(root_name) / filename
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _load_cambridge_listening_test(test_id: str) -> tuple[dict | None, str]:
+    safe_id = secure_filename(test_id or "")
+    return _load_static_json("listening_tests", f"{safe_id}.json"), safe_id
+
+
+def _load_cambridge_reading_test(test_id: str) -> tuple[dict | None, str]:
+    safe_id = secure_filename(test_id or "")
+    return _load_static_json("reading_tests", f"{safe_id}.json"), safe_id
+
+
 def _serialize_listening_test_submission(row) -> dict | None:
+    if not row:
+        return None
+    try:
+        wrong_numbers = json.loads(row.wrong_numbers_json or "[]")
+    except Exception:
+        wrong_numbers = []
+    return {
+        "test_id": row.test_id,
+        "test_title": row.test_title,
+        "correct_count": row.correct_count,
+        "total_count": row.total_count,
+        "accuracy": row.accuracy,
+        "ielts_score": row.ielts_score,
+        "completion_rate": row.completion_rate,
+        "attempt_count": row.attempt_count,
+        "submitted_at": row.submitted_at.isoformat() if row.submitted_at else None,
+        "wrong_numbers": wrong_numbers,
+    }
+
+
+def _serialize_reading_test_submission(row) -> dict | None:
     if not row:
         return None
     try:
@@ -1045,6 +1106,9 @@ def get_student_today_tasks():
         if task.listening_exercise_id and not task.listening_access_token:
             task.listening_access_token = secrets.token_urlsafe(16)
             tokens_updated = True
+        if task.reading_test_id and not task.reading_access_token:
+            task.reading_access_token = secrets.token_urlsafe(16)
+            tokens_updated = True
     if tokens_updated:
         db.session.commit()
 
@@ -1055,6 +1119,11 @@ def get_student_today_tasks():
         listening_test_submission = (
             ListeningTestSubmission.query.filter_by(task_id=task.id).first()
             if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            else None
+        )
+        reading_test_submission = (
+            ReadingTestSubmission.query.filter_by(task_id=task.id).first()
+            if task.reading_test_id
             else None
         )
         # 判断状态
@@ -1073,6 +1142,7 @@ def get_student_today_tasks():
             "exam_system": "",
             "instructions": task.note or "", # 这里note作为任务说明
             "planned_minutes": task.planned_minutes,
+            "actual_seconds": task.actual_seconds,
             "status": status,
             "is_locked": False,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -1096,6 +1166,11 @@ def get_student_today_tasks():
             "listening_token": task.listening_access_token,
             "listening_url": _task_listening_url(task),
             "listening_test_result": _serialize_listening_test_submission(listening_test_submission),
+            "reading_test_id": task.reading_test_id,
+            "reading_passage_number": task.reading_passage_number,
+            "reading_token": task.reading_access_token,
+            "reading_url": _task_reading_url(task),
+            "reading_test_result": _serialize_reading_test_submission(reading_test_submission),
         })
         
     return jsonify({
@@ -1123,6 +1198,9 @@ def get_task_detail(task_id):
         if task.listening_exercise_id and not task.listening_access_token:
             task.listening_access_token = secrets.token_urlsafe(16)
             db.session.commit()
+        if task.reading_test_id and not task.reading_access_token:
+            task.reading_access_token = secrets.token_urlsafe(16)
+            db.session.commit()
 
         status = "pending"
         if task.status == "done":
@@ -1138,6 +1216,11 @@ def get_task_detail(task_id):
         listening_test_submission = (
             ListeningTestSubmission.query.filter_by(task_id=task.id).first()
             if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            else None
+        )
+        reading_test_submission = (
+            ReadingTestSubmission.query.filter_by(task_id=task.id).first()
+            if task.reading_test_id
             else None
         )
         material_data = None
@@ -1203,6 +1286,11 @@ def get_task_detail(task_id):
                 "listening_token": task.listening_access_token,
                 "listening_url": _task_listening_url(task),
                 "listening_test_result": _serialize_listening_test_submission(listening_test_submission),
+                "reading_test_id": task.reading_test_id,
+                "reading_passage_number": task.reading_passage_number,
+                "reading_token": task.reading_access_token,
+                "reading_url": _task_reading_url(task),
+                "reading_test_result": _serialize_reading_test_submission(reading_test_submission),
                 # 材料信息
                 "material": material_data
             }
@@ -2954,6 +3042,110 @@ def submit_class_feedback():
     })
 
 
+def _practice_listening_catalog() -> list[dict]:
+    books: dict[int, list[dict]] = {}
+    for path in sorted(_static_root("listening_tests").glob("ielts*_test*.json")):
+        match = re.match(r"^ielts(?P<book>\d+)_test(?P<test>\d+)\.json$", path.name)
+        if not match:
+            continue
+        book_no = int(match.group("book"))
+        test_no = int(match.group("test"))
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        sections = []
+        question_count = 0
+        for section in payload.get("sections") or []:
+            groups = section.get("groups") or []
+            count = sum(len(group.get("questions") or []) for group in groups)
+            question_count += count
+            section_no = int(section.get("section") or len(sections) + 1)
+            sections.append({
+                "number": section_no,
+                "title": f"Part {section_no}",
+                "question_name": section.get("question_name") or f"Q{(section_no - 1) * 10 + 1}-{section_no * 10}",
+                "question_count": count,
+            })
+        books.setdefault(book_no, []).append({
+            "id": path.stem,
+            "book": book_no,
+            "test": test_no,
+            "title": payload.get("title") or f"Cambridge IELTS {book_no} Test {test_no} Listening",
+            "section_count": len(sections),
+            "question_count": question_count,
+            "sections": sections,
+        })
+    return [
+        {"book": book_no, "tests": sorted(tests, key=lambda item: item["test"])}
+        for book_no, tests in sorted(books.items())
+    ]
+
+
+def _practice_reading_catalog() -> list[dict]:
+    catalog = _load_static_json("reading_tests", "catalog.json")
+    if catalog and isinstance(catalog.get("books"), list):
+        books = catalog.get("books") or []
+    else:
+        books = []
+        by_book: dict[int, list[dict]] = {}
+        for path in sorted(_static_root("reading_tests").glob("ielts*_test*_reading.json")):
+            match = re.match(r"^ielts(?P<book>\d+)_test(?P<test>\d+)_reading\.json$", path.name)
+            if not match:
+                continue
+            book_no = int(match.group("book"))
+            test_no = int(match.group("test"))
+            payload = _load_static_json("reading_tests", path.name) or {}
+            by_book.setdefault(book_no, []).append({
+                "id": path.stem,
+                "book": book_no,
+                "test": test_no,
+                "passage_count": len(payload.get("passages") or []),
+                "question_count": sum(
+                    len(group.get("questions") or [])
+                    for passage in payload.get("passages") or []
+                    for group in passage.get("groups") or []
+                ),
+            })
+        books = [
+            {"book": book_no, "tests": sorted(tests, key=lambda item: item["test"])}
+            for book_no, tests in sorted(by_book.items())
+        ]
+
+    enriched_books = []
+    for book in books:
+        tests = []
+        for test in book.get("tests") or []:
+            payload = _load_static_json("reading_tests", f"{secure_filename(test.get('id') or '')}.json") or {}
+            passages = []
+            for passage in payload.get("passages") or []:
+                passage_no = int(passage.get("passage") or len(passages) + 1)
+                question_count = sum(len(group.get("questions") or []) for group in passage.get("groups") or [])
+                passages.append({
+                    "number": passage_no,
+                    "title": f"Passage {passage_no}",
+                    "question_name": passage.get("question_name") or "",
+                    "question_count": question_count,
+                })
+            row = dict(test)
+            row["title"] = payload.get("title") or f"Cambridge IELTS {test.get('book')} Test {test.get('test')} Reading"
+            row["passages"] = passages
+            tests.append(row)
+        enriched_books.append({"book": book.get("book"), "tests": tests})
+    return enriched_books
+
+
+@mp_bp.route("/practice/catalog", methods=["GET"])
+@require_api_user(User.ROLE_TEACHER)
+def get_practice_catalog():
+    """给小程序布置作业页提供剑雅练习目录。"""
+    return jsonify({
+        "ok": True,
+        "cambridge_listening": _practice_listening_catalog(),
+        "cambridge_reading": _practice_reading_catalog(),
+    })
+
+
 @mp_bp.route("/teacher/homework", methods=["POST"])
 @require_api_user(User.ROLE_TEACHER)
 def create_teacher_homework():
@@ -2961,9 +3153,10 @@ def create_teacher_homework():
     data = request.get_json() or {}
     user = request.current_api_user
 
+    source_type = (data.get("source_type") or "custom").strip()
+    if source_type not in {"custom", "cambridge_listening", "cambridge_reading"}:
+        return jsonify({"ok": False, "error": "invalid_source_type"}), 400
     detail = (data.get("detail") or "").strip()
-    if not detail:
-        return jsonify({"ok": False, "error": "missing_detail"}), 400
 
     task_date = (data.get("date") or date.today().isoformat()).strip()
     try:
@@ -3005,6 +3198,72 @@ def create_teacher_homework():
         planned_minutes = 0
     planned_minutes = max(0, min(planned_minutes, 600))
 
+    listening_resource_type = None
+    listening_exercise_id = None
+    listening_access_token = None
+    reading_test_id = None
+    reading_passage_number = None
+    reading_access_token = None
+    task_metadata = {}
+
+    if source_type == "cambridge_listening":
+        payload, safe_id = _load_cambridge_listening_test(data.get("practice_test_id") or "")
+        if not payload:
+            return jsonify({"ok": False, "error": "practice_not_found"}), 404
+        scope = (data.get("practice_scope") or "test").strip()
+        raw_section = data.get("practice_section_number")
+        try:
+            section_number = int(raw_section) if raw_section not in (None, "") else None
+        except (TypeError, ValueError):
+            section_number = None
+        sections = payload.get("sections") or []
+        if scope == "section":
+            if not section_number or section_number < 1 or section_number > len(sections):
+                return jsonify({"ok": False, "error": "invalid_practice_scope"}), 400
+            task_metadata["listening_section_number"] = section_number
+        else:
+            scope = "test"
+            section_number = None
+        listening_resource_type = LISTENING_RESOURCE_CAMBRIDGE_TEST
+        listening_exercise_id = safe_id
+        listening_access_token = secrets.token_urlsafe(16)
+        default_detail = payload.get("title") or safe_id
+        if section_number:
+            default_detail = f"{default_detail} Part {section_number}"
+        detail = detail or default_detail
+        category = (data.get("category") or "雅思-听力").strip()[:32]
+        if not planned_minutes:
+            planned_minutes = 30 if section_number else 40
+    elif source_type == "cambridge_reading":
+        payload, safe_id = _load_cambridge_reading_test(data.get("practice_test_id") or "")
+        if not payload:
+            return jsonify({"ok": False, "error": "practice_not_found"}), 404
+        scope = (data.get("practice_scope") or "test").strip()
+        raw_passage = data.get("practice_passage_number")
+        try:
+            passage_number = int(raw_passage) if raw_passage not in (None, "") else None
+        except (TypeError, ValueError):
+            passage_number = None
+        passages = payload.get("passages") or []
+        if scope == "passage":
+            if not passage_number or passage_number < 1 or passage_number > len(passages):
+                return jsonify({"ok": False, "error": "invalid_practice_scope"}), 400
+            reading_passage_number = passage_number
+        else:
+            scope = "test"
+            reading_passage_number = None
+        reading_test_id = safe_id
+        reading_access_token = secrets.token_urlsafe(16)
+        default_detail = payload.get("title") or safe_id
+        if reading_passage_number:
+            default_detail = f"{default_detail} Passage {reading_passage_number}"
+        detail = detail or default_detail
+        category = (data.get("category") or "雅思-阅读").strip()[:32]
+        if not planned_minutes:
+            planned_minutes = 20 if reading_passage_number else 60
+    elif not detail:
+        return jsonify({"ok": False, "error": "missing_detail"}), 400
+
     task = Task(
         date=task_date,
         student_name=profile.full_name,
@@ -3014,6 +3273,13 @@ def create_teacher_homework():
         note=note[:200] if note else None,
         created_by=user.id,
         planned_minutes=planned_minutes,
+        listening_resource_type=listening_resource_type,
+        listening_exercise_id=listening_exercise_id,
+        listening_access_token=listening_access_token,
+        reading_test_id=reading_test_id,
+        reading_passage_number=reading_passage_number,
+        reading_access_token=reading_access_token,
+        question_ids=json.dumps(task_metadata, ensure_ascii=False) if task_metadata else None,
     )
     db.session.add(task)
     db.session.commit()
@@ -3055,6 +3321,12 @@ def create_teacher_homework():
             "detail": task.detail,
             "planned_minutes": task.planned_minutes,
             "note": task.note,
+            "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
+            "listening_exercise_id": task.listening_exercise_id,
+            "listening_url": _task_listening_url(task),
+            "reading_test_id": task.reading_test_id,
+            "reading_passage_number": task.reading_passage_number,
+            "reading_url": _task_reading_url(task),
         },
         "push_sent": push_sent,
         "push_error": push_error,

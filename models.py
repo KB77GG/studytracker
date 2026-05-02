@@ -512,6 +512,9 @@ class Task(db.Model):
     listening_resource_type = db.Column(db.String(32), default="intensive", index=True)
     listening_exercise_id = db.Column(db.String(120), index=True)
     listening_access_token = db.Column(db.String(64), index=True)  # 精听任务访问令牌
+    reading_test_id = db.Column(db.String(120), index=True)
+    reading_passage_number = db.Column(db.Integer)
+    reading_access_token = db.Column(db.String(64), index=True)
 
     creator = db.relationship("User", backref=db.backref("legacy_tasks", lazy="dynamic"))
     material = db.relationship("MaterialBank", backref=db.backref("tasks", lazy="dynamic"))

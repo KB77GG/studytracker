@@ -138,6 +138,12 @@ Page({
                     })
                     return
                 }
+                if (res.task.reading_test_id && res.task.reading_url) {
+                    wx.redirectTo({
+                        url: `/pages/student/webview/index?url=${encodeURIComponent(res.task.reading_url)}`
+                    })
+                    return
+                }
 
                 // Choice-type materials (grammar 单选 / 阅读词义) reuse the
                 // material-choice practice page (radio inputs + immediate
@@ -148,6 +154,7 @@ Page({
                     res.task.material && (
                         res.task.material.type === 'grammar' ||
                         res.task.material.type === 'reading_vocab_choice' ||
+                        res.task.material.type === 'ielts_reading_practice' ||
                         res.task.material.type === 'translation'
                     )
                 if (choiceType) {

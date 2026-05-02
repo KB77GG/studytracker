@@ -26,6 +26,48 @@
     </picker>
   </view>
 
+  <view class="form source-card">
+    <text class="form-label">作业来源</text>
+    <picker range="{{sourceLabels}}" value="{{sourceIndex}}" bindchange="handleSourceChange">
+      <view class="picker-field">{{sourceLabels[sourceIndex]}}</view>
+    </picker>
+
+    <view wx:if="{{isListeningSource}}" class="practice-picker-stack">
+      <view class="practice-picker-row">
+        <picker range="{{listeningBookLabels}}" value="{{listeningBookIndex}}" bindchange="handleListeningBookChange">
+          <view class="picker-field compact">{{listeningBookLabels[listeningBookIndex] || '选择书册'}}</view>
+        </picker>
+        <picker range="{{listeningTestLabels}}" value="{{listeningTestIndex}}" bindchange="handleListeningTestChange">
+          <view class="picker-field compact">{{listeningTestLabels[listeningTestIndex] || '选择 Test'}}</view>
+        </picker>
+      </view>
+      <picker range="{{listeningScopeLabels}}" value="{{listeningScopeIndex}}" bindchange="handleListeningScopeChange">
+        <view class="picker-field">{{listeningScopeLabels[listeningScopeIndex] || '选择范围'}}</view>
+      </picker>
+    </view>
+
+    <view wx:if="{{isReadingSource}}" class="practice-picker-stack">
+      <view class="practice-picker-row">
+        <picker range="{{readingBookLabels}}" value="{{readingBookIndex}}" bindchange="handleReadingBookChange">
+          <view class="picker-field compact">{{readingBookLabels[readingBookIndex] || '选择书册'}}</view>
+        </picker>
+        <picker range="{{readingTestLabels}}" value="{{readingTestIndex}}" bindchange="handleReadingTestChange">
+          <view class="picker-field compact">{{readingTestLabels[readingTestIndex] || '选择 Test'}}</view>
+        </picker>
+      </view>
+      <picker range="{{readingScopeLabels}}" value="{{readingScopeIndex}}" bindchange="handleReadingScopeChange">
+        <view class="picker-field">{{readingScopeLabels[readingScopeIndex] || '选择范围'}}</view>
+      </picker>
+    </view>
+
+    <view class="practice-summary" wx:if="{{selectedPracticeSummary}}">
+      <text>{{selectedPracticeSummary}}</text>
+    </view>
+    <view class="practice-summary muted" wx:if="{{catalogLoading}}">
+      <text>正在加载练习目录...</text>
+    </view>
+  </view>
+
   <view class="form">
     <text class="form-label">任务分类</text>
     <input

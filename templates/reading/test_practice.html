@@ -335,9 +335,9 @@ body.result-mode .analysis { display: block; }
 <header class="topbar">
   <div class="topbar-inner">
     <div>
-      <div class="crumb">阅读 / 剑桥雅思 / 整套练习</div>
-      <h1>{{ test.title }}</h1>
-      <div class="meta">3 篇 Passage · 40 题 · 建议 60 分钟完成</div>
+      <div class="crumb" id="practiceCrumb">阅读 / 剑桥雅思 / 整套练习</div>
+      <h1 id="practiceTitle">{{ test.title }}</h1>
+      <div class="meta" id="practiceMeta">3 篇 Passage · 40 题 · 建议 60 分钟完成</div>
     </div>
     <div class="timer" aria-live="polite">
       <div class="timer-label">用时</div>
@@ -347,13 +347,7 @@ body.result-mode .analysis { display: block; }
 </header>
 
 <main class="page">
-  <nav class="tabs" aria-label="阅读 Passage">
-    {% for passage in test.passages %}
-    <button class="tab {% if loop.first %}active{% endif %}" type="button" data-passage-tab="{{ passage.id }}">
-      Passage {{ passage.passage }} · {{ passage.question_name }}
-    </button>
-    {% endfor %}
-  </nav>
+  <nav class="tabs" id="passageTabs" aria-label="阅读 Passage"></nav>
 
   <section class="layout">
     <article class="card passage-card" id="passagePanel"></article>
@@ -375,7 +369,17 @@ body.result-mode .analysis { display: block; }
 </footer>
 
 <script>
-const testData = {{ test | tojson }};
+const pageParams = new URLSearchParams(window.location.search);
+const rawTestData = {{ test | tojson }};
+const readingTaskId = pageParams.get("task_id") || "";
+const readingTaskToken = pageParams.get("token") || "";
+const assignedPassageNumber = Number(pageParams.get("passage") || 0);
+const testData = assignedPassageNumber
+  ? {
+      ...rawTestData,
+      passages: (rawTestData.passages || []).filter((passage) => Number(passage.passage) === assignedPassageNumber)
+    }
+  : rawTestData;
 const answers = {};
 let currentPassageId = testData.passages[0]?.id || "";
 let resultMode = false;
@@ -610,13 +614,40 @@ function updateSummary() {
   const correct = serverResult?.correct ?? allQuestions().filter(isCorrect).length;
   const accuracy = total ? Math.round(correct / total * 100) : 0;
   const band = serverResult?.ielts_score;
-  document.getElementById("scoreSummary").innerHTML = `得分 <strong>${correct}</strong> / ${total} · 正确率 ${accuracy}%${band !== undefined ? ` · IELTS ${band}` : ""}`;
+  document.getElementById("scoreSummary").innerHTML = `得分 <strong>${correct}</strong> / ${total} · 正确率 ${accuracy}%${band !== undefined && band !== null ? ` · IELTS ${band}` : ""}`;
 }
 
 function setSyncStatus(message, tone = "") {
   const node = document.getElementById("syncStatus");
   node.textContent = message;
   node.className = `sync-status ${tone}`.trim();
+}
+
+function updatePracticeHeader() {
+  const total = allQuestions().length;
+  if (assignedPassageNumber) {
+    document.getElementById("practiceCrumb").textContent = "阅读 / 剑桥雅思 / Passage 练习";
+    document.getElementById("practiceTitle").textContent = `${rawTestData.title} Passage ${assignedPassageNumber}`;
+    document.getElementById("practiceMeta").textContent = `1 篇 Passage · ${total} 题 · 建议 20 分钟完成`;
+    setSyncStatus("完成后会同步到这条小程序任务和报告");
+    return;
+  }
+  document.getElementById("practiceMeta").textContent = `${testData.passages.length} 篇 Passage · ${total} 题 · 建议 60 分钟完成`;
+}
+
+function renderPassageTabs() {
+  document.getElementById("passageTabs").innerHTML = (testData.passages || []).map((passage, index) => `
+    <button class="tab ${index === 0 ? "active" : ""}" type="button" data-passage-tab="${escapeHtml(passage.id)}">
+      Passage ${escapeHtml(passage.passage)} · ${escapeHtml(passage.question_name || "")}
+    </button>
+  `).join("");
+  document.querySelectorAll("[data-passage-tab]").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      currentPassageId = tab.dataset.passageTab;
+      document.querySelectorAll("[data-passage-tab]").forEach((item) => item.classList.toggle("active", item === tab));
+      renderPassage(testData.passages.find((passage) => passage.id === currentPassageId));
+    });
+  });
 }
 
 async function submitAnswers() {
@@ -632,7 +663,10 @@ async function submitAnswers() {
       credentials: "same-origin",
       body: JSON.stringify({
         answers,
-        duration_seconds: Math.floor((Date.now() - startedAt) / 1000)
+        duration_seconds: Math.floor((Date.now() - startedAt) / 1000),
+        task_id: readingTaskId ? Number(readingTaskId) : undefined,
+        token: readingTaskToken || undefined,
+        passage_number: assignedPassageNumber || undefined
       })
     });
     const data = await response.json();
@@ -669,7 +703,13 @@ function resetAnswers() {
 
 async function loadExistingSubmission() {
   try {
-    const response = await fetch(`/api/reading/test/${encodeURIComponent(testData.id)}/submission`, {
+    const params = new URLSearchParams();
+    if (readingTaskId && readingTaskToken) {
+      params.set("task_id", readingTaskId);
+      params.set("token", readingTaskToken);
+    }
+    const query = params.toString();
+    const response = await fetch(`/api/reading/test/${encodeURIComponent(testData.id)}/submission${query ? `?${query}` : ""}`, {
       credentials: "same-origin"
     });
     const data = await response.json();
@@ -694,14 +734,6 @@ async function loadExistingSubmission() {
   }
 }
 
-document.querySelectorAll("[data-passage-tab]").forEach((tab) => {
-  tab.addEventListener("click", () => {
-    currentPassageId = tab.dataset.passageTab;
-    document.querySelectorAll("[data-passage-tab]").forEach((item) => item.classList.toggle("active", item === tab));
-    renderPassage(testData.passages.find((passage) => passage.id === currentPassageId));
-  });
-});
-
 document.getElementById("submitBtn").addEventListener("click", submitAnswers);
 document.getElementById("resetBtn").addEventListener("click", resetAnswers);
 
@@ -712,6 +744,8 @@ setInterval(() => {
   document.getElementById("timerValue").textContent = `${mm}:${ss}`;
 }, 1000);
 
+renderPassageTabs();
+updatePracticeHeader();
 renderPassage(testData.passages[0]);
 updateSummary();
 loadExistingSubmission();

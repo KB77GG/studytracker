@@ -583,9 +583,9 @@ body.result-mode .transcript-panel { display: block; }
         <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
       </div>
       <div>
-        <div class="crumb">Sage Path · Listening</div>
-        <h1>{{ test.title }}</h1>
-        <div class="meta">
+        <div class="crumb" id="practiceCrumb">Sage Path · Listening</div>
+        <h1 id="practiceTitle">{{ test.title }}</h1>
+        <div class="meta" id="practiceMeta">
           4 个 Section · 40 题
           · <a class="back-link" href="{{ url_for('listening_test_index') }}">返回剑雅整套</a>
         </div>
@@ -614,7 +614,7 @@ body.result-mode .transcript-panel { display: block; }
       <aside class="card transcript-panel" id="transcriptPanel"></aside>
       <div id="sectionsRoot"></div>
       <aside class="card side">
-        <h3>整套判分</h3>
+        <h3 id="scorePanelTitle">整套判分</h3>
         <div class="stat"><span>Section</span><strong id="activeSectionLabel">-</strong></div>
         <div class="stat"><span>题目数</span><strong id="questionCount">40</strong></div>
         <div class="stat"><span>已填写</span><strong id="answeredCount">0</strong></div>
@@ -643,14 +643,23 @@ if (window.location.protocol === 'file:') {
 </script>
 
 <script>
-const test = {{ test|tojson }};
-const audio = document.getElementById('audio');
-const audioBase = "{{ url_for('static', filename='listening/') }}";
-const storageKey = `listening_test_answers_${test.id}_${localStorage.getItem('listening_student') || 'guest'}`;
-const noteStorageKey = `listening_test_error_notes_${test.id}_${localStorage.getItem('listening_student') || 'guest'}`;
 const pageParams = new URLSearchParams(window.location.search);
 const listeningTaskId = pageParams.get('task_id') || '';
 const listeningTaskToken = pageParams.get('token') || '';
+const assignedSectionNumber = Number(pageParams.get('section') || 0);
+const rawTest = {{ test|tojson }};
+const test = assignedSectionNumber
+  ? {
+      ...rawTest,
+      title: `${rawTest.title} Section ${assignedSectionNumber}`,
+      sections: (rawTest.sections || []).filter(section => Number(section.section) === assignedSectionNumber)
+    }
+  : rawTest;
+const audio = document.getElementById('audio');
+const audioBase = "{{ url_for('static', filename='listening/') }}";
+const storageScope = assignedSectionNumber ? `section_${assignedSectionNumber}` : 'full';
+const storageKey = `listening_test_answers_${test.id}_${storageScope}_${localStorage.getItem('listening_student') || 'guest'}`;
+const noteStorageKey = `listening_test_error_notes_${test.id}_${storageScope}_${localStorage.getItem('listening_student') || 'guest'}`;
 const practiceStartedAt = Date.now();
 let activeSectionIndex = 0;
 let activeView = 'practice';
@@ -1132,7 +1141,8 @@ async function syncListeningTestSubmission(baseHtml) {
         task_id: Number(listeningTaskId),
         token: listeningTaskToken,
         answers: answerSnapshot(),
-        duration_seconds: Math.max(0, Math.round((Date.now() - practiceStartedAt) / 1000))
+        duration_seconds: Math.max(0, Math.round((Date.now() - practiceStartedAt) / 1000)),
+        section_number: assignedSectionNumber || undefined
       })
     });
     const data = await response.json();
@@ -1140,7 +1150,9 @@ async function syncListeningTestSubmission(baseHtml) {
       throw new Error(data.error || 'sync_failed');
     }
     const summary = data.submission || data.result || {};
-    const syncedText = `已同步后台：原始分 ${summary.correct_count ?? data.result?.correct}/${summary.total_count ?? data.result?.total}，IELTS Listening ${summary.ielts_score ?? data.result?.ielts_score}`;
+    const band = summary.ielts_score ?? data.result?.ielts_score;
+    const bandText = band !== undefined && band !== null ? `，IELTS Listening ${band}` : '';
+    const syncedText = `已同步后台：原始分 ${summary.correct_count ?? data.result?.correct}/${summary.total_count ?? data.result?.total}${bandText}`;
     resultBox.innerHTML = `${baseHtml}<br>${syncedText}`;
   } catch (err) {
     resultBox.innerHTML = `${baseHtml}<br><span style="color: var(--error);">后台同步失败，请稍后再提交。</span>`;
@@ -1166,7 +1178,9 @@ async function loadExistingSubmission() {
       submission.correct_count,
       submission.total_count,
       wrongLabels,
-      `已同步后台：IELTS Listening ${submission.ielts_score}`
+      submission.ielts_score !== null && submission.ielts_score !== undefined
+        ? `已同步后台：IELTS Listening ${submission.ielts_score}`
+        : '已同步后台'
     );
   } catch (err) {
     // 已提交结果加载失败时，不影响学生继续做题或重新提交。
@@ -1290,6 +1304,12 @@ function syncQuestionNav(results = null) {
 }
 
 function render() {
+  if (assignedSectionNumber) {
+    document.getElementById('practiceCrumb').textContent = 'Sage Path · Listening Part';
+    document.getElementById('practiceTitle').textContent = `${rawTest.title} Part ${assignedSectionNumber}`;
+    document.getElementById('scorePanelTitle').textContent = 'Part 判分';
+    document.getElementById('resultBox').textContent = '填写后可查看本 Part 正确率，并同步到任务和报告。';
+  }
   document.getElementById('sectionTabs').innerHTML = test.sections.map((section, index) => `
     <button class="tab ${index === 0 ? 'active' : ''}" type="button" data-index="${index}">
       Section ${escapeHtml(section.section)} · ${escapeHtml(section.question_name)}
@@ -1298,6 +1318,9 @@ function render() {
   document.getElementById('sectionsRoot').innerHTML = test.sections.map(renderSection).join('');
   document.getElementById('questionCount').textContent = Array.from(document.querySelectorAll('.answer-unit'))
     .reduce((sum, unit) => sum + Number(unit.dataset.marks || 1), 0);
+  if (assignedSectionNumber) {
+    document.getElementById('practiceMeta').innerHTML = `1 个 Section · ${document.getElementById('questionCount').textContent} 题 · <a class="back-link" href="{{ url_for('listening_test_index') }}">返回剑雅整套</a>`;
+  }
   document.querySelectorAll('.tab').forEach(tab => {
     if (!tab.dataset.index) return;
     tab.addEventListener('click', () => switchSection(Number(tab.dataset.index)));

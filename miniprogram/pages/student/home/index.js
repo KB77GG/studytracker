@@ -389,6 +389,10 @@ Page({
                         listeningResourceType: t.listening_resource_type || 'intensive',
                         listeningToken: t.listening_token || '',
                         listeningUrl: t.listening_url || null,
+                        readingTestId: t.reading_test_id || '',
+                        readingPassageNumber: t.reading_passage_number || null,
+                        readingToken: t.reading_token || '',
+                        readingUrl: t.reading_url || null,
 
                         // Timer state - show actual time spent from backend
                         timerStatus: 'idle',
@@ -472,7 +476,8 @@ Page({
         const taskId = e.currentTarget.dataset.id
         const task = this.data.tasks.find(t => t.id === taskId)
         if (this.openListeningTask(taskId, task)) return
-        if (task && (task.materialType === 'reading_vocab_choice' || task.materialType === 'grammar' || task.materialType === 'translation')) {
+        if (this.openReadingTask(task)) return
+        if (task && (task.materialType === 'reading_vocab_choice' || task.materialType === 'ielts_reading_practice' || task.materialType === 'grammar' || task.materialType === 'translation')) {
             wx.navigateTo({
                 url: `/pages/student/material-choice/practice/index?taskId=${taskId}`,
             })
@@ -494,6 +499,14 @@ Page({
         const token = encodeURIComponent(task.listeningToken || '')
         wx.navigateTo({
             url: `/pages/student/listening/practice/index?taskId=${taskId}&token=${token}`
+        })
+        return true
+    },
+
+    openReadingTask(task) {
+        if (!task || !task.readingUrl) return false
+        wx.navigateTo({
+            url: `/pages/student/webview/index?url=${encodeURIComponent(task.readingUrl)}`
         })
         return true
     },
@@ -542,6 +555,7 @@ Page({
         // Dictation Routing
         const task = this.data.tasks.find(t => t.id === taskId)
         if (this.openListeningTask(taskId, task)) return
+        if (this.openReadingTask(task)) return
 
         if (task && task.dictationBookId) {
             wx.navigateTo({
@@ -558,7 +572,7 @@ Page({
             return
         }
 
-        if (task && (task.materialType === 'reading_vocab_choice' || task.materialType === 'grammar' || task.materialType === 'translation')) {
+        if (task && (task.materialType === 'reading_vocab_choice' || task.materialType === 'ielts_reading_practice' || task.materialType === 'grammar' || task.materialType === 'translation')) {
             wx.navigateTo({
                 url: `/pages/student/material-choice/practice/index?taskId=${taskId}`
             })

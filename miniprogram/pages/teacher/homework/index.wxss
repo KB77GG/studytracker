@@ -78,6 +78,42 @@
   border: 1px solid #e2e8f0;
 }
 
+.source-card {
+  border-color: rgba(15, 118, 110, 0.18);
+}
+
+.practice-picker-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.practice-picker-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.picker-field.compact {
+  text-align: center;
+}
+
+.practice-summary {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  color: #0f766e;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.practice-summary.muted {
+  background: #f8fafc;
+  color: #64748b;
+}
+
 .textarea {
   min-height: 120px;
 }
