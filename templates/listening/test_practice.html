@@ -480,9 +480,15 @@ body.result-mode .transcript-panel { display: block; }
   font-size: 16px;
 }
 .transcript-row {
-  padding: 11px 0;
+  padding: 11px 8px;
   border-bottom: 1px solid rgba(222,219,208,.75);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background .15s;
 }
+.transcript-row:hover,
+.full-transcript-row:hover { background: rgba(35,140,135,.06); }
+.full-transcript-row { cursor: pointer; }
 .transcript-en {
   margin: 0 0 5px;
   color: var(--ink);
@@ -1211,7 +1217,7 @@ function renderTranscript(section) {
   document.getElementById('transcriptPanel').innerHTML = `
     <h3>Section ${escapeHtml(section.section)} 原文复盘</h3>
     ${(section.transcript || []).map((row, index) => `
-      <div class="transcript-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}">
+      <div class="transcript-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})" role="button" tabindex="0">
         <p class="transcript-en">${escapeHtml(row.en || '')}</p>
         ${row.cn ? `<p class="transcript-cn">${escapeHtml(row.cn)}</p>` : ''}
       </div>
@@ -1257,8 +1263,8 @@ function renderTranscriptView(section) {
   document.getElementById('transcriptView').innerHTML = `
     <h2>Section ${escapeHtml(section.section)} 原文</h2>
     ${(section.transcript || []).map((row, index) => `
-      <div class="full-transcript-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}">
-        <button class="small-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">${formatClock(row.start)}</button>
+      <div class="full-transcript-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})" role="button" tabindex="0">
+        <button class="small-btn" type="button" onclick="event.stopPropagation(); seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">${formatClock(row.start)}</button>
         <p class="transcript-en">${escapeHtml(row.en || '')}</p>
         ${row.cn ? `<p class="transcript-cn">${escapeHtml(row.cn)}</p>` : ''}
       </div>

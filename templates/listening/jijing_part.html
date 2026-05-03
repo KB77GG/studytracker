@@ -355,7 +355,10 @@ table.practice-table {
   padding: 12px 14px;
   border-bottom: 1px solid var(--line);
   background: var(--card);
+  cursor: pointer;
+  transition: background .15s;
 }
+.transcript-row:hover { background: rgba(35,140,135,.06); }
 .transcript-time {
   color: var(--muted);
   font-size: 12px;
@@ -730,8 +733,8 @@ function renderPractice() {
 
 function renderTranscript() {
   document.getElementById('transcriptRoot').innerHTML = (part.content || []).map(row => `
-    <div class="transcript-row">
-      <button class="small-btn transcript-time" type="button" onclick="seekTo(${Number(row.start_time || 0)})">${formatTime(row.start_time)}</button>
+    <div class="transcript-row" onclick="seekTo(${Number(row.start_time || 0)})" role="button" tabindex="0">
+      <button class="small-btn transcript-time" type="button" onclick="event.stopPropagation(); seekTo(${Number(row.start_time || 0)})">${formatTime(row.start_time)}</button>
       <div class="transcript-text">
         <div>${escapeHtml(row.en_text || '')}</div>
         ${row.cn_text ? `<div class="transcript-cn">${escapeHtml(row.cn_text)}</div>` : ''}
