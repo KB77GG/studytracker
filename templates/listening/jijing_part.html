@@ -147,6 +147,14 @@ audio {
   white-space: pre-line;
   color: var(--text);
 }
+.bc {
+  display: block;
+  text-align: center;
+  font-weight: 800;
+  font-style: normal;
+  letter-spacing: .04em;
+  margin: 6px 0;
+}
 .option-bank {
   margin: 12px 0;
   padding: 12px;
@@ -506,6 +514,20 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
+function richText(value) {
+  return escapeHtml(value)
+    .replace(/&lt;b&gt;/g, '<b>')
+    .replace(/&lt;\/b&gt;/g, '</b>')
+    .replace(/&lt;i&gt;/g, '<i>')
+    .replace(/&lt;\/i&gt;/g, '</i>')
+    .replace(/&lt;bc&gt;/g, '<strong class="bc">')
+    .replace(/&lt;\/bc&gt;/g, '</strong>')
+    .replace(/&lt;iu&gt;/g, '<span class="example">')
+    .replace(/&lt;\/iu&gt;/g, '</span>')
+    .replace(/&amp;nbsp;/g, '&nbsp;')
+    .replace(/\n/g, '<br>');
+}
+
 function msToSeconds(value) {
   const n = Number(value || 0);
   return n > 1000 ? n / 1000 : n;
@@ -675,9 +697,9 @@ function renderGroup(group) {
   return `
     <article class="card group">
       <h2>${escapeHtml(group.type_name)}</h2>
-      ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ''}
-      ${group.question_title ? `<div class="question-title">${escapeHtml(group.question_title)}</div>` : ''}
-      ${group.title && group.title !== group.question_title ? `<div class="question-title">${escapeHtml(group.title)}</div>` : ''}
+      ${group.desc ? `<div class="desc">${richText(group.desc)}</div>` : ''}
+      ${group.question_title ? `<div class="question-title">${richText(group.question_title)}</div>` : ''}
+      ${group.title && group.title !== group.question_title ? `<div class="question-title">${richText(group.title)}</div>` : ''}
       ${usableImage(group.img_url) ? `<img class="question-image" src="${escapeHtml(group.img_url)}" alt="">` : ''}
       ${group.collect && !combinedMulti ? `<div class="collect">${renderWithPlaceholders(group.collect, group)}</div>` : ''}
       ${combinedMulti ? '' : optionBank(group)}

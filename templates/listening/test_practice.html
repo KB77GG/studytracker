@@ -194,6 +194,14 @@ body.result-mode .layout {
   color: var(--muted);
   text-decoration: underline;
 }
+.bc {
+  display: block;
+  text-align: center;
+  font-weight: 800;
+  font-style: normal;
+  letter-spacing: .04em;
+  margin: 6px 0;
+}
 .question-image {
   display: block;
   max-width: 100%;
@@ -687,6 +695,10 @@ function richText(value) {
   return escapeHtml(value)
     .replace(/&lt;b&gt;/g, '<b>')
     .replace(/&lt;\/b&gt;/g, '</b>')
+    .replace(/&lt;i&gt;/g, '<i>')
+    .replace(/&lt;\/i&gt;/g, '</i>')
+    .replace(/&lt;bc&gt;/g, '<strong class="bc">')
+    .replace(/&lt;\/bc&gt;/g, '</strong>')
     .replace(/&lt;iu&gt;/g, '<span class="example">')
     .replace(/&lt;\/iu&gt;/g, '</span>')
     .replace(/&amp;nbsp;/g, '&nbsp;')
@@ -1000,8 +1012,8 @@ function renderGroup(group, sectionIndex) {
   return `
     <article class="card group">
       ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ''}
-      ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ''}
-      ${group.question_title ? `<div class="question-title">${escapeHtml(group.question_title)}</div>` : ''}
+      ${group.desc ? `<div class="desc">${richText(group.desc)}</div>` : ''}
+      ${group.question_title ? `<div class="question-title">${richText(group.question_title)}</div>` : ''}
       ${img ? `<img class="question-image" src="${escapeHtml(img)}" alt="Question image">` : ''}
       ${hasCollect && !combinedMulti ? `<div class="collect">${renderCollectText(group.collect, group, sectionIndex, renderContext)}</div>` : ''}
       ${combinedMulti ? '' : optionBank(group)}
