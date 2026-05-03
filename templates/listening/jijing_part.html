@@ -50,10 +50,9 @@ body {
   max-width: 1180px;
   margin: 0 auto;
   padding: 14px 20px;
-  display: grid;
-  grid-template-columns: 1fr minmax(320px, 520px);
-  gap: 18px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .crumb {
   color: var(--brand);
@@ -434,7 +433,6 @@ table.practice-table {
   white-space: pre-line;
 }
 @media (max-width: 900px) {
-  .player-inner { grid-template-columns: 1fr; }
   .layout { grid-template-columns: 1fr; }
   .side { position: static; }
 }
