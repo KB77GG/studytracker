@@ -228,6 +228,13 @@
           <button type="button" class="btn btn-sm btn-outline-secondary" onclick="selectAllQuestions(true)">全选</button>
           <button type="button" class="btn btn-sm btn-outline-secondary" onclick="selectAllQuestions(false)">取消全选</button>
         </div>
+        <div id="sentenceRangeControls" style="display:none; align-items:center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+          <input id="sentenceRangeInput" type="text" placeholder="输入句子序号，如 1-35、1,3,8-12"
+            autocomplete="off" style="min-width: 260px; flex: 1;">
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="applySentenceRangeInput()">应用序号</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="clearSentenceRangeInput()">清空输入</button>
+          <small id="sentenceRangeStatus" class="form-text text-muted" style="width: 100%;"></small>
+        </div>
         <div id="questionListContainer" style="max-height: 240px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
           <div class="text-muted">请选择材料后加载题目</div>
         </div>
@@ -1067,6 +1074,7 @@
       if (questionRow) questionRow.style.display = 'none';
       if (questionIds) questionIds.value = '';
       if (questionContainer) questionContainer.innerHTML = '<div class="text-muted">请选择材料后加载题目</div>';
+      setSentenceRangeControlsVisible(false, true);
 
       if (source === 'material') {
         materialRow.style.display = 'flex';
@@ -1107,6 +1115,7 @@
       const questionIds = document.getElementById("questionIds");
       if (!container || !questionIds) return;
       questionIds.value = "";
+      setSentenceRangeControlsVisible(false, true);
 
       if (!questions || questions.length === 0) {
         container.innerHTML = '<div class="text-muted">暂无题目</div>';
@@ -1118,15 +1127,144 @@
         const content = q.content || '';
         return `
           <label style="display:block; margin-bottom:6px;">
-            <input class="question-checkbox" type="checkbox" value="${q.id}" />
+            <input class="question-checkbox" type="checkbox" value="${q.id}" data-sequence="${q.sequence || ''}" />
             <span style="margin-left:6px;">${seq}${content}</span>
           </label>
         `;
       }).join('');
 
       container.querySelectorAll('.question-checkbox').forEach(cb => {
-        cb.addEventListener('change', syncQuestionIds);
+        cb.addEventListener('change', () => {
+          clearSentenceRangeInput(false);
+          syncQuestionIds();
+        });
       });
+    }
+
+    function setSentenceRangeControlsVisible(visible, reset = false) {
+      const controls = document.getElementById('sentenceRangeControls');
+      const input = document.getElementById('sentenceRangeInput');
+      const status = document.getElementById('sentenceRangeStatus');
+      if (controls) controls.style.display = visible ? 'flex' : 'none';
+      if (reset) {
+        if (input) input.value = '';
+        if (status) {
+          status.textContent = '';
+          status.style.color = '';
+        }
+      }
+    }
+
+    function clearSentenceRangeInput(focus = true) {
+      const input = document.getElementById('sentenceRangeInput');
+      const status = document.getElementById('sentenceRangeStatus');
+      if (input) {
+        input.value = '';
+        if (focus) input.focus();
+      }
+      if (status) {
+        status.textContent = '';
+        status.style.color = '';
+      }
+    }
+
+    function parseSentenceRangeInput(rawValue, maxSequence) {
+      const raw = String(rawValue || '').trim();
+      if (!raw) return { sequences: [], error: '' };
+      if (!maxSequence) return { sequences: [], error: '当前材料没有可选择的句子' };
+
+      const normalized = raw
+        .replace(/句子|第|句/g, '')
+        .replace(/[，、；;]/g, ',')
+        .replace(/\s*[-－–—~～]\s*/g, '-')
+        .replace(/\s*(?:到|至)\s*/g, '-')
+        .replace(/\s+/g, ',');
+      const tokens = normalized.split(',').map(item => item.trim()).filter(Boolean);
+      if (!tokens.length) return { sequences: [], error: '请输入句子序号，例如 1-35' };
+
+      const selected = new Set();
+      for (const token of tokens) {
+        const rangeMatch = token.match(/^(\d+)-(\d+)$/);
+        const singleMatch = token.match(/^\d+$/);
+        if (rangeMatch) {
+          const start = Number(rangeMatch[1]);
+          const end = Number(rangeMatch[2]);
+          if (start < 1 || end < 1 || start > maxSequence || end > maxSequence) {
+            return { sequences: [], error: `序号需在 1-${maxSequence} 之间` };
+          }
+          if (start > end) {
+            return { sequences: [], error: `范围起点不能大于终点：${token}` };
+          }
+          for (let i = start; i <= end; i += 1) selected.add(i);
+        } else if (singleMatch) {
+          const value = Number(token);
+          if (value < 1 || value > maxSequence) {
+            return { sequences: [], error: `序号需在 1-${maxSequence} 之间` };
+          }
+          selected.add(value);
+        } else {
+          return { sequences: [], error: `无法识别序号：${token}` };
+        }
+      }
+      return { sequences: Array.from(selected).sort((a, b) => a - b), error: '' };
+    }
+
+    function compressSentenceSequences(sequences) {
+      if (!sequences.length) return '';
+      const ranges = [];
+      let start = sequences[0];
+      let prev = sequences[0];
+      for (let i = 1; i < sequences.length; i += 1) {
+        const current = sequences[i];
+        if (current === prev + 1) {
+          prev = current;
+          continue;
+        }
+        ranges.push(start === prev ? `${start}` : `${start}-${prev}`);
+        start = current;
+        prev = current;
+      }
+      ranges.push(start === prev ? `${start}` : `${start}-${prev}`);
+      return ranges.join(', ');
+    }
+
+    function applySentenceRangeInput() {
+      const input = document.getElementById('sentenceRangeInput');
+      const status = document.getElementById('sentenceRangeStatus');
+      const container = document.getElementById('questionListContainer');
+      if (!input || !container) return true;
+      const boxes = Array.from(container.querySelectorAll('.question-checkbox'));
+      const maxSequence = boxes.reduce((max, cb) => Math.max(max, Number(cb.dataset.sequence || 0)), 0);
+      const parsed = parseSentenceRangeInput(input.value, maxSequence);
+
+      if (parsed.error) {
+        if (status) {
+          status.textContent = parsed.error;
+          status.style.color = '#dc2626';
+        }
+        input.focus();
+        return false;
+      }
+
+      if (!parsed.sequences.length) {
+        syncQuestionIds();
+        if (status) {
+          status.textContent = '';
+          status.style.color = '';
+        }
+        return true;
+      }
+
+      const selected = new Set(parsed.sequences.map(String));
+      boxes.forEach(cb => {
+        cb.checked = selected.has(String(cb.dataset.sequence || ''));
+      });
+      syncQuestionIds();
+      if (status) {
+        status.textContent = `已选择 ${parsed.sequences.length} 句：${compressSentenceSequences(parsed.sequences)}`;
+        status.style.color = '#277C78';
+      }
+      return true;
     }
 
     function syncQuestionIds() {
@@ -1140,6 +1278,7 @@
     function selectAllQuestions(checked) {
       const container = document.getElementById("questionListContainer");
       if (!container) return;
+      clearSentenceRangeInput(false);
       container.querySelectorAll('.question-checkbox').forEach(cb => {
         cb.checked = checked;
       });
@@ -1159,6 +1298,7 @@
 
       if (questionRow) questionRow.style.display = "none";
       if (questionIds) questionIds.value = "";
+      setSentenceRangeControlsVisible(false, true);
 
       if (select.value) {
         var title = option.getAttribute("data-title");
@@ -1254,6 +1394,7 @@
       if (!listeningSelect || !questionRow || !container || !questionIds || !detailInput) return;
 
       questionIds.value = '';
+      setSentenceRangeControlsVisible(false, true);
       if (!listeningSelect.value) {
         questionRow.style.display = 'none';
         container.innerHTML = '<div class="text-muted">请选择听力练习</div>';
@@ -1278,6 +1419,7 @@
 
       const segments = listeningExerciseSegments[listeningSelect.value] || [];
       renderQuestionCheckboxes(segments);
+      setSentenceRangeControlsVisible(true, true);
     }
 
     function updateDictationRangeSuggestion(forceClear = false) {
@@ -1355,7 +1497,29 @@
       };
       syncDetail();
       categorySelect.addEventListener('change', syncDetail);
-      taskForm.addEventListener('submit', syncDetail);
+      taskForm.addEventListener('submit', event => {
+        const activeSource = document.querySelector('input[name="task_source"]:checked')?.value;
+        const resourceType = document.getElementById('listeningResourceType')?.value || 'intensive';
+        const rangeInput = document.getElementById('sentenceRangeInput');
+        if (activeSource === 'listening' && resourceType === 'intensive' && rangeInput && rangeInput.value.trim()) {
+          const ok = applySentenceRangeInput();
+          if (!ok) {
+            event.preventDefault();
+            return;
+          }
+        }
+        syncDetail();
+      });
+    }
+
+    const sentenceRangeInput = document.getElementById('sentenceRangeInput');
+    if (sentenceRangeInput) {
+      sentenceRangeInput.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          applySentenceRangeInput();
+        }
+      });
     }
 
     const formatPercent = (value) => Number.isFinite(value) ? value.toFixed(1) : '0.0';
