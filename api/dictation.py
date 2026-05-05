@@ -496,6 +496,22 @@ def _kokoro_tts(text: str) -> bytes | None:
         current_app.logger.warning("Kokoro TTS error for %s: %s", text, exc)
         return None
 
+
+def _dictation_tts_text(text: str) -> str:
+    """Repeat dictation prompts so plural and tense suffixes are easier to hear."""
+    cleaned = re.sub(r"\s+", " ", (text or "").strip())
+    if not cleaned:
+        return ""
+    try:
+        repeat_count = int(current_app.config.get("DICTATION_TTS_REPEAT_COUNT") or 2)
+    except (TypeError, ValueError):
+        repeat_count = 2
+    repeat_count = min(3, max(1, repeat_count))
+    if repeat_count <= 1:
+        return cleaned
+    return ". ".join([cleaned] * repeat_count) + "."
+
+
 def _dashscope_tts(text: str) -> bytes | None:
     """Primary TTS using Aliyun DashScope (neural model, handles plurals/tenses)."""
     api_key = current_app.config.get("ALIYUN_API_KEY")
@@ -621,6 +637,7 @@ def proxy_tts():
     word = (request.args.get("word") or "").strip()
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
+    tts_text = _dictation_tts_text(word)
 
     voice = (current_app.config.get("KOKORO_TTS_VOICE") or "af_heart").strip()
     lang = (current_app.config.get("KOKORO_TTS_LANG") or "en-us").strip()
@@ -629,12 +646,12 @@ def proxy_tts():
     # Use a provider-prefixed cache so old Youdao/DashScope files are ignored
     # once Kokoro is enabled.
     raw_safe = re.sub(r"[^a-zA-Z0-9_-]+", "_", word.lower()) or "tts"
-    text_hash = hashlib.md5(word.lower().encode()).hexdigest()
+    text_hash = hashlib.md5(tts_text.lower().encode()).hexdigest()
     safe_name = raw_safe if len(raw_safe) <= 64 else text_hash
     tts_dir = Path(current_app.config.get("UPLOAD_FOLDER", Path(current_app.root_path) / "uploads")) / "tts_cache"
     tts_dir.mkdir(parents=True, exist_ok=True)
-    kokoro_cache = tts_dir / f"kokoro_{voice}_{lang}_{speed}_{safe_name}_{text_hash[:8]}.mp3"
-    fallback_cache = tts_dir / f"fallback_{safe_name}_{text_hash[:8]}.mp3"
+    kokoro_cache = tts_dir / f"kokoro_{voice}_{lang}_{speed}_dict_{safe_name}_{text_hash[:8]}.mp3"
+    fallback_cache = tts_dir / f"fallback_dict_{safe_name}_{text_hash[:8]}.mp3"
 
     if kokoro_cache.exists():
         try:
@@ -642,7 +659,7 @@ def proxy_tts():
         except Exception:
             kokoro_cache.unlink(missing_ok=True)
 
-    kokoro_audio = _kokoro_tts(word)
+    kokoro_audio = _kokoro_tts(tts_text)
     if kokoro_audio:
         kokoro_cache.write_bytes(kokoro_audio)
         return send_file(kokoro_cache, mimetype="audio/mpeg")
@@ -653,12 +670,12 @@ def proxy_tts():
         except Exception:
             fallback_cache.unlink(missing_ok=True)
 
-    ds_audio = _dashscope_tts(word)
+    ds_audio = _dashscope_tts(tts_text)
     if ds_audio:
         fallback_cache.write_bytes(ds_audio)
         return send_file(fallback_cache, mimetype="audio/mpeg")
 
-    youdao_audio = _youdao_tts(word)
+    youdao_audio = _youdao_tts(tts_text)
     if youdao_audio:
         fallback_cache.write_bytes(youdao_audio)
         return send_file(fallback_cache, mimetype="audio/mpeg")

@@ -96,6 +96,7 @@ class Config:
     KOKORO_TTS_VOICE = os.environ.get("KOKORO_TTS_VOICE", "af_heart")
     KOKORO_TTS_LANG = os.environ.get("KOKORO_TTS_LANG", "en-us")
     KOKORO_TTS_SPEED = os.environ.get("KOKORO_TTS_SPEED", "0.88")
+    DICTATION_TTS_REPEAT_COUNT = os.environ.get("DICTATION_TTS_REPEAT_COUNT", "2")
     ALIYUN_AICONTENT_AK_ID = os.environ.get("ALIYUN_AICONTENT_AK_ID")
     ALIYUN_AICONTENT_AK_SECRET = os.environ.get("ALIYUN_AICONTENT_AK_SECRET")
     ALIYUN_ORAL_APP_KEY = os.environ.get("ALIYUN_ORAL_APP_KEY")
