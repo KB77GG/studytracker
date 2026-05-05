@@ -1,0 +1,194 @@
+<template name="answerControl">
+  <input
+    wx:if="{{question.control === 'text'}}"
+    class="{{inline ? 'inline-input' : 'answer-input'}}"
+    type="text"
+    adjust-position="false"
+    value="{{answers[question.key] || ''}}"
+    placeholder="{{inline ? '答案' : '请输入答案'}}"
+    data-key="{{question.key}}"
+    bindinput="onTextInput"
+  />
+
+  <picker
+    wx:elif="{{question.control === 'select'}}"
+    range="{{question.options}}"
+    range-key="label"
+    data-key="{{question.key}}"
+    bindchange="onPickerChange"
+  >
+    <view class="{{inline ? 'inline-picker' : 'answer-picker'}}">
+      {{question.selectedLabel || '请选择'}}
+    </view>
+  </picker>
+
+  <radio-group
+    wx:elif="{{question.control === 'radio'}}"
+    class="choice-list"
+    data-key="{{question.key}}"
+    bindchange="onRadioChange"
+  >
+    <label class="choice-row" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
+      <radio value="{{option.value}}" checked="{{option.checked}}" color="#0f9f8f" />
+      <text class="choice-text">{{option.label}}</text>
+    </label>
+  </radio-group>
+
+  <checkbox-group
+    wx:elif="{{question.control === 'checkbox'}}"
+    class="choice-list"
+    data-key="{{question.key}}"
+    bindchange="onCheckboxChange"
+  >
+    <label class="choice-row" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
+      <checkbox value="{{option.value}}" checked="{{option.checked}}" color="#0f9f8f" />
+      <text class="choice-text">{{option.label}}</text>
+    </label>
+  </checkbox-group>
+</template>
+
+<template name="richChunks">
+  <block wx:for="{{chunks}}" wx:for-item="chunk" wx:key="chunkKey">
+    <rich-text wx:if="{{chunk.kind === 'text'}}" class="chunk-text" nodes="{{chunk.html}}"></rich-text>
+    <block wx:else>
+      <template is="answerControl" data="{{question: chunk.question, answers: answers, inline: true}}" />
+    </block>
+  </block>
+</template>
+
+<view class="page">
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-ring"></view>
+    <text class="loading-text">正在加载剑雅听力…</text>
+  </view>
+
+  <block wx:else>
+    <view class="summary-card">
+      <view class="summary-top">
+        <view class="summary-info">
+          <text class="summary-label">剑雅听力任务</text>
+          <text class="summary-title">{{task.title || test.title || 'Cambridge IELTS Listening'}}</text>
+        </view>
+        <view class="status-badge {{submitted ? 'done' : 'progress'}}">{{submitted ? '已提交' : '进行中'}}</view>
+      </view>
+
+      <view class="progress-track">
+        <view class="progress-fill" style="width: {{progress.percent}}%;"></view>
+      </view>
+
+      <view class="stats-row">
+        <view class="stat-cell">
+          <text class="stat-val">{{progress.answeredCount}}<text class="stat-total">/{{progress.totalCount}}</text></text>
+          <text class="stat-key">已答题</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-cell">
+          <text class="stat-val">{{progress.percent}}<text class="stat-unit">%</text></text>
+          <text class="stat-key">完成度</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-cell">
+          <text class="stat-val">{{sectionNumber ? 'S' + sectionNumber : '整套'}}</text>
+          <text class="stat-key">范围</text>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view wx:if="{{!sectionLocked}}" scroll-x class="section-strip" enable-flex>
+      <view
+        class="section-chip {{index === activeSectionIndex ? 'active' : ''}}"
+        wx:for="{{sectionTabs}}"
+        wx:key="sectionIndex"
+        data-index="{{index}}"
+        bindtap="onSectionTap"
+      >
+        <text>{{item.title}}</text>
+      </view>
+    </scroll-view>
+
+    <view class="audio-card" wx:if="{{activeSection}}">
+      <view class="audio-head">
+        <view>
+          <text class="section-label">Section {{activeSection.section_number}}</text>
+          <text class="section-title">{{activeSection.title}}</text>
+        </view>
+        <picker range="{{speedOptions}}" range-key="label" value="{{speedIndex}}" bindchange="onSpeedChange">
+          <view class="speed-pill">{{speedOptions[speedIndex].label}}</view>
+        </picker>
+      </view>
+
+      <view class="audio-controls">
+        <view class="audio-button secondary" data-offset="-15" bindtap="seekAudio">-15s</view>
+        <view class="audio-button primary" bindtap="togglePlay">{{audioPlaying ? '暂停' : '播放'}}</view>
+        <view class="audio-button secondary" data-offset="15" bindtap="seekAudio">+15s</view>
+      </view>
+      <view class="time-row">
+        <text>{{currentTimeText}}</text>
+        <text>{{durationText}}</text>
+      </view>
+    </view>
+
+    <view class="result-card" wx:if="{{submitted && resultDisplay}}">
+      <view class="result-score">
+        <text class="result-main">{{resultDisplay.correct}}/{{resultDisplay.total}}</text>
+        <text class="result-sub">正确率 {{resultDisplay.accuracy}}%</text>
+      </view>
+      <text class="result-band" wx:if="{{resultDisplay.ieltsScore}}">IELTS Listening {{resultDisplay.ieltsScore}}</text>
+      <text class="wrong-list" wx:if="{{resultDisplay.hasWrong}}">错题：{{resultDisplay.wrongText}}</text>
+      <view class="back-btn" bindtap="goBack">返回任务页</view>
+    </view>
+
+    <view class="group-card" wx:for="{{activeGroups}}" wx:for-item="group" wx:key="groupId">
+      <rich-text wx:if="{{group.titleHtml}}" class="group-title" nodes="{{group.titleHtml}}"></rich-text>
+      <rich-text wx:if="{{group.descHtml}}" class="group-desc" nodes="{{group.descHtml}}"></rich-text>
+      <rich-text wx:if="{{group.questionTitleHtml}}" class="question-title" nodes="{{group.questionTitleHtml}}"></rich-text>
+      <image wx:if="{{group.imageUrl}}" class="question-image" src="{{group.imageUrl}}" mode="widthFix"></image>
+
+      <view class="collect-box" wx:if="{{group.collectChunks.length}}">
+        <template is="richChunks" data="{{chunks: group.collectChunks, answers: answers}}" />
+      </view>
+
+      <view class="option-bank" wx:if="{{group.showOptionBank}}">
+        <view class="option-line" wx:for="{{group.optionBank}}" wx:key="value">{{item.label}}</view>
+      </view>
+
+      <scroll-view scroll-x class="table-scroll" wx:if="{{group.tableRows.length}}">
+        <view class="practice-table">
+          <view class="table-row" wx:for="{{group.tableRows}}" wx:for-item="row" wx:key="rowKey">
+            <view class="table-cell" wx:for="{{row.cells}}" wx:for-item="cell" wx:key="cellKey">
+              <template is="richChunks" data="{{chunks: cell.chunks, answers: answers}}" />
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="question-block combined" wx:if="{{group.combined}}">
+        <view class="q-head">
+          <text class="q-number">Q{{group.combined.numbersLabel}}</text>
+          <text class="q-title">多选题</text>
+        </view>
+        <template is="answerControl" data="{{question: group.combined, answers: answers, inline: false}}" />
+      </view>
+
+      <view class="question-block" wx:for="{{group.questions}}" wx:for-item="question" wx:key="key">
+        <view class="q-head">
+          <text class="q-number">Q{{question.number}}</text>
+          <view class="q-title">
+            <template is="richChunks" data="{{chunks: question.titleChunks, answers: answers}}" />
+          </view>
+          <view wx:if="{{question.start}}" class="seek-pill" data-start="{{question.start}}" bindtap="seekToQuestion">定位</view>
+        </view>
+        <block wx:if="{{question.showControl}}">
+          <template is="answerControl" data="{{question: question, answers: answers, inline: false}}" />
+        </block>
+      </view>
+    </view>
+
+    <view class="submit-bar">
+      <view class="submit-info">{{progress.answeredCount}} / {{progress.totalCount}}</view>
+      <view class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitAnswers">
+        {{submitting ? '提交中…' : '提交答卷'}}
+      </view>
+    </view>
+  </block>
+</view>

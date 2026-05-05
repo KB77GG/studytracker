@@ -458,13 +458,15 @@ def _iter_listening_test_grade_units(payload: dict) -> list[dict]:
                 )
                 continue
             for question in questions:
+                answer = question.get("answer") or ""
+                is_exact_multi = bool(question.get("options")) and "," in str(answer)
                 units.append(
                     {
                         "ids": [str(question.get("id") or question.get("number"))],
                         "numbers": [question.get("number")],
-                        "answer": question.get("answer") or "",
+                        "answer": answer,
                         "marks": 1,
-                        "kind": "question",
+                        "kind": "checkbox-exact" if is_exact_multi else "question",
                         "section": section_index,
                     }
                 )
@@ -502,8 +504,18 @@ def _grade_listening_test_answers(payload: dict, answers: dict, section_number: 
             matched = len([letter for letter in submitted if letter in expected])
             awarded = 0 if extra else min(marks, matched)
             is_correct = bool(expected) and awarded == marks
+        elif unit["kind"] == "checkbox-exact":
+            expected = _split_listening_test_letters(answer)
+            submitted = _split_listening_test_letters(value)
+            is_correct = bool(expected) and len(submitted) == len(expected) and set(submitted) == set(expected)
+            awarded = marks if is_correct else 0
         elif _listening_test_answer_is_letters(answer):
-            is_correct = str(value or "").strip().upper() in _split_listening_test_letters(answer)
+            expected = _split_listening_test_letters(answer)
+            submitted = _split_listening_test_letters(value)
+            if len(submitted) > 1:
+                is_correct = len(submitted) == len(expected) and set(submitted) == set(expected)
+            else:
+                is_correct = str(value or "").strip().upper() in expected
             awarded = marks if is_correct else 0
         else:
             is_correct = _clean_listening_test_answer(value) in _split_listening_test_alternatives(answer)
@@ -2834,9 +2846,21 @@ def tasks_page():
                 test_json = _listening_test_root() / f"{safe_listening_id}.json"
                 if test_json.exists():
                     meta = json.loads(test_json.read_text(encoding="utf-8"))
-                    detail = meta.get("title") or safe_listening_id
+                    raw_section = request.form.get("listening_section_number")
+                    try:
+                        listening_section_number = int(raw_section) if raw_section not in (None, "") else None
+                    except (TypeError, ValueError):
+                        listening_section_number = None
+                    if listening_section_number not in {1, 2, 3, 4}:
+                        listening_section_number = None
+                    title = meta.get("title") or safe_listening_id
+                    detail = f"{title} Section {listening_section_number}" if listening_section_number else title
                     category = "雅思-听力-整套"
-                    question_ids = None
+                    question_ids = (
+                        json.dumps({"listening_section_number": listening_section_number}, ensure_ascii=False)
+                        if listening_section_number
+                        else None
+                    )
                     listening_exercise_id = safe_listening_id
                 else:
                     listening_error = "选择的剑雅整套练习不存在"

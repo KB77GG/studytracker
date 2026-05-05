@@ -173,6 +173,35 @@
       </div>
     </div>
 
+    <div class="task-form-row" id="listeningSectionRow" style="display: none;">
+      <div class="field field--wide">
+        <label>剑雅布置范围</label>
+        <div style="display:flex; flex-wrap:wrap; gap:12px 18px; align-items:center;">
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="radio" name="listening_section_number" value="" checked>
+            <span>整套</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="radio" name="listening_section_number" value="1">
+            <span>Section 1</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="radio" name="listening_section_number" value="2">
+            <span>Section 2</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="radio" name="listening_section_number" value="3">
+            <span>Section 3</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="radio" name="listening_section_number" value="4">
+            <span>Section 4</span>
+          </label>
+        </div>
+        <small class="text-muted">可布置整套 40 题，也可只布置一个 Section 10 题。</small>
+      </div>
+    </div>
+
     <!-- 材料选择区域 (默认隐藏) -->
     <div class="task-form-row" id="materialSelectRow" style="display: none;">
       <div class="field field--wide">
@@ -1060,6 +1089,7 @@
       const materialRow = document.getElementById('materialSelectRow');
       const categoryRow = document.getElementById('categoryRow');
       const listeningRow = document.getElementById('listeningSelectRow');
+      const listeningSectionRow = document.getElementById('listeningSectionRow');
       const questionRow = document.getElementById('questionSelectRow');
       const questionIds = document.getElementById('questionIds');
       const questionContainer = document.getElementById('questionListContainer');
@@ -1071,8 +1101,10 @@
       materialRow.style.display = 'none';
       categoryRow.style.display = 'none';
       listeningRow.style.display = 'none';
+      if (listeningSectionRow) listeningSectionRow.style.display = 'none';
       if (questionRow) questionRow.style.display = 'none';
       if (questionIds) questionIds.value = '';
+      resetListeningSectionSelection();
       if (questionContainer) questionContainer.innerHTML = '<div class="text-muted">请选择材料后加载题目</div>';
       setSentenceRangeControlsVisible(false, true);
 
@@ -1108,6 +1140,13 @@
       const hintEl = document.getElementById('questionSelectHint');
       if (labelEl) labelEl.textContent = label;
       if (hintEl) hintEl.textContent = hint;
+    }
+
+    function resetListeningSectionSelection() {
+      const radios = document.querySelectorAll('input[name="listening_section_number"]');
+      radios.forEach(radio => {
+        radio.checked = radio.value === '';
+      });
     }
 
     function renderQuestionCheckboxes(questions) {
@@ -1391,10 +1430,13 @@
       const questionIds = document.getElementById('questionIds');
       const detailInput = document.getElementById('taskDetail');
       const resourceTypeInput = document.getElementById('listeningResourceType');
+      const sectionRow = document.getElementById('listeningSectionRow');
       if (!listeningSelect || !questionRow || !container || !questionIds || !detailInput) return;
 
       questionIds.value = '';
       setSentenceRangeControlsVisible(false, true);
+      if (sectionRow) sectionRow.style.display = 'none';
+      resetListeningSectionSelection();
       if (!listeningSelect.value) {
         questionRow.style.display = 'none';
         container.innerHTML = '<div class="text-muted">请选择听力练习</div>';
@@ -1408,9 +1450,10 @@
       if (resourceTypeInput) resourceTypeInput.value = resourceType;
       detailInput.value = option?.getAttribute('data-title') || option?.textContent?.trim() || '';
       if (resourceType === 'cambridge_test') {
-        setQuestionSelectionMeta('剑雅整套 Test', '整套 Test 暂不拆题布置，学生会打开网页完成整套练习');
+        setQuestionSelectionMeta('剑雅整套 Test', '可选择整套或单个 Section，学生会在小程序原生页面完成练习');
+        if (sectionRow) sectionRow.style.display = 'flex';
         questionRow.style.display = 'none';
-        container.innerHTML = '<div class="text-muted">整套 Test 会作为完整网页任务打开。</div>';
+        container.innerHTML = '<div class="text-muted">剑雅 Test 会在小程序原生页面打开。</div>';
         questionIds.value = '';
         return;
       }

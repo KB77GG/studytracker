@@ -52,16 +52,25 @@ def _task_listening_resource_type(task) -> str:
     return LISTENING_RESOURCE_INTENSIVE
 
 
+def _task_listening_section_number(task) -> int | None:
+    try:
+        metadata = json.loads(getattr(task, "question_ids", "") or "{}")
+    except Exception:
+        metadata = {}
+    try:
+        section_number = int(metadata.get("listening_section_number") or 0)
+    except (TypeError, ValueError):
+        return None
+    return section_number if section_number in {1, 2, 3, 4} else None
+
+
 def _task_listening_url(task) -> str | None:
     exercise_id = (getattr(task, "listening_exercise_id", "") or "").strip()
     token = (getattr(task, "listening_access_token", "") or "").strip()
     if not exercise_id or not token:
         return None
     if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST:
-        return (
-            f"https://studytracker.xin/listening/test/{exercise_id}"
-            f"?task_id={task.id}&token={token}"
-        )
+        return None
     return (
         f"https://studytracker.xin/listening/{exercise_id}"
         f"?task_id={task.id}&token={token}"
@@ -99,6 +108,127 @@ def _load_static_json(root_name: str, filename: str) -> dict | None:
 def _load_cambridge_listening_test(test_id: str) -> tuple[dict | None, str]:
     safe_id = secure_filename(test_id or "")
     return _load_static_json("listening_tests", f"{safe_id}.json"), safe_id
+
+
+def _listening_group_is_combined_multi(group: dict) -> bool:
+    if group.get("type") != 2:
+        return False
+    options = (group.get("collect_option") or {}).get("list") or []
+    questions = group.get("questions") or []
+    if not options or not questions:
+        return False
+    first_answer = questions[0].get("answer") or ""
+    return "," in first_answer and all((question.get("answer") or "") == first_answer for question in questions)
+
+
+def _question_has_multi_answer(question: dict, group: dict | None = None) -> bool:
+    answer = str(question.get("answer") or "")
+    return "," in answer or (group or {}).get("type") == 9
+
+
+def _letter_options_from_group(group: dict) -> list[dict]:
+    desc = f"{group.get('desc') or ''}\n{group.get('question_title') or ''}"
+    match = re.search(r"\b([A-Z])\s*[-–]\s*([A-Z])\b", desc)
+    start, end = ("A", "I") if not match else (match.group(1), match.group(2))
+    start_ord = ord(start)
+    end_ord = min(ord(end), ord("Z"))
+    if end_ord < start_ord:
+        return []
+    return [{"title": chr(code), "content": ""} for code in range(start_ord, end_ord + 1)]
+
+
+def _serialize_cambridge_question(question: dict, group: dict | None = None) -> dict:
+    options = []
+    for option in question.get("options") or []:
+        options.append({
+            "title": option.get("title"),
+            "content": option.get("content"),
+        })
+    if not options and (group or {}).get("type") == 7:
+        options = _letter_options_from_group(group or {})
+    return {
+        "id": question.get("id") or question.get("number"),
+        "number": question.get("number"),
+        "title": question.get("title") or "",
+        "options": options,
+        "start": question.get("start"),
+        "end": question.get("end"),
+        "is_multi_answer": _question_has_multi_answer(question, group),
+    }
+
+
+def _usable_cambridge_image(group: dict) -> str:
+    img_local = (group.get("img_local") or "").strip()
+    if img_local:
+        return f"https://studytracker.xin/static/{img_local.lstrip('/')}"
+    img_url = (group.get("img_url") or "").strip()
+    if re.match(r"^https?://", img_url) and not re.search(r"aliyuncs\.com/?$", img_url):
+        return img_url
+    return ""
+
+
+def _serialize_cambridge_group(group: dict) -> dict:
+    questions = [_serialize_cambridge_question(question, group) for question in group.get("questions") or []]
+    collect_option = group.get("collect_option") or {}
+    collect_options = []
+    for option in collect_option.get("list") or []:
+        collect_options.append({
+            "title": option.get("title"),
+            "content": option.get("content"),
+        })
+    combined_multi = _listening_group_is_combined_multi(group)
+    return {
+        "group_id": group.get("group_id"),
+        "type": group.get("type"),
+        "title": group.get("title") or "",
+        "question_title": group.get("question_title") or "",
+        "desc": group.get("desc") or "",
+        "collect": group.get("collect") or "",
+        "table": group.get("table") or None,
+        "image_url": _usable_cambridge_image(group),
+        "collect_option": {
+            "title": collect_option.get("title") or "",
+            "list": collect_options,
+        },
+        "combined_multi": combined_multi,
+        "combined_key": ",".join(str(question.get("id") or question.get("number")) for question in group.get("questions") or [])
+        if combined_multi
+        else "",
+        "combined_numbers": [question.get("number") for question in group.get("questions") or []] if combined_multi else [],
+        "questions": questions,
+    }
+
+
+def _serialize_cambridge_test(payload: dict, section_number: int | None = None) -> dict:
+    requested_index = int(section_number) - 1 if section_number else None
+    sections = []
+    for section_index, section in enumerate(payload.get("sections") or []):
+        current_number = int(section.get("section") or section_index + 1)
+        if requested_index is not None and section_index != requested_index:
+            continue
+        groups = [_serialize_cambridge_group(group) for group in section.get("groups") or []]
+        flat_questions = []
+        for group in groups:
+            flat_questions.extend(group.get("questions") or [])
+        sections.append({
+            "id": section.get("id"),
+            "section_index": section_index,
+            "section_number": current_number,
+            "title": section.get("title") or f"Section {current_number}",
+            "audio": section.get("audio") or "",
+            "question_name": section.get("question_name") or "",
+            "question_type": section.get("question_type") or [],
+            "groups": groups,
+            "flat_questions": flat_questions,
+            "question_count": len(flat_questions),
+        })
+    return {
+        "id": payload.get("id"),
+        "title": payload.get("title") or "",
+        "source": payload.get("source") or "",
+        "sections": sections,
+        "question_count": sum(section.get("question_count") or 0 for section in sections),
+    }
 
 
 def _load_cambridge_reading_test(test_id: str) -> tuple[dict | None, str]:
@@ -1163,6 +1293,7 @@ def get_student_today_tasks():
             # 精听练习字段
             "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
             "listening_exercise_id": task.listening_exercise_id,
+            "listening_section_number": _task_listening_section_number(task),
             "listening_token": task.listening_access_token,
             "listening_url": _task_listening_url(task),
             "listening_test_result": _serialize_listening_test_submission(listening_test_submission),
@@ -1283,6 +1414,7 @@ def get_task_detail(task_id):
                 # Listening Info
                 "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
                 "listening_exercise_id": task.listening_exercise_id,
+                "listening_section_number": _task_listening_section_number(task),
                 "listening_token": task.listening_access_token,
                 "listening_url": _task_listening_url(task),
                 "listening_test_result": _serialize_listening_test_submission(listening_test_submission),
@@ -1299,6 +1431,56 @@ def get_task_detail(task_id):
         import traceback
         current_app.logger.error(traceback.format_exc())
         return jsonify({"ok": False, "message": str(e), "error": str(e)}), 500
+
+
+@mp_bp.route("/student/listening/cambridge/<int:task_id>", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def get_student_cambridge_listening_task(task_id):
+    """获取剑雅整套/Section 原生小程序答题数据。"""
+    user = request.current_api_user
+    profile = user.student_profile
+    if not profile:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    token = (request.args.get("token") or "").strip()
+    if not token:
+        return jsonify({"ok": False, "error": "missing_token"}), 400
+
+    task = Task.query.get(task_id)
+    if (
+        not task
+        or task.student_name != profile.full_name
+        or _task_listening_resource_type(task) != LISTENING_RESOURCE_CAMBRIDGE_TEST
+        or not task.listening_exercise_id
+    ):
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+    if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, token):
+        return jsonify({"ok": False, "error": "invalid_token"}), 403
+
+    payload, safe_id = _load_cambridge_listening_test(task.listening_exercise_id)
+    if not payload:
+        return jsonify({"ok": False, "error": "test_not_found"}), 404
+
+    section_number = _task_listening_section_number(task)
+    submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
+    return jsonify({
+        "ok": True,
+        "section_number": section_number,
+        "audio_base_url": "https://studytracker.xin/static/listening/",
+        "test": _serialize_cambridge_test(payload, section_number),
+        "task": {
+            "id": task.id,
+            "status": task.status,
+            "student_name": task.student_name,
+            "title": task.detail or payload.get("title") or safe_id,
+            "listening_exercise_id": safe_id,
+            "listening_section_number": section_number,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        },
+        "submission": _serialize_listening_test_submission(submission),
+    })
 
 
 @mp_bp.route("/student/reading-vocab-wrongs", methods=["GET"])
@@ -3229,7 +3411,7 @@ def create_teacher_homework():
         listening_access_token = secrets.token_urlsafe(16)
         default_detail = payload.get("title") or safe_id
         if section_number:
-            default_detail = f"{default_detail} Part {section_number}"
+            default_detail = f"{default_detail} Section {section_number}"
         detail = detail or default_detail
         category = (data.get("category") or "雅思-听力").strip()[:32]
         if not planned_minutes:
@@ -3323,6 +3505,7 @@ def create_teacher_homework():
             "note": task.note,
             "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
             "listening_exercise_id": task.listening_exercise_id,
+            "listening_section_number": _task_listening_section_number(task),
             "listening_url": _task_listening_url(task),
             "reading_test_id": task.reading_test_id,
             "reading_passage_number": task.reading_passage_number,

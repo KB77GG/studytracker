@@ -387,6 +387,8 @@ Page({
                         materialId: t.material_id || null,
                         // Listening Fields
                         listeningResourceType: t.listening_resource_type || 'intensive',
+                        listeningExerciseId: t.listening_exercise_id || '',
+                        listeningSectionNumber: t.listening_section_number || null,
                         listeningToken: t.listening_token || '',
                         listeningUrl: t.listening_url || null,
                         readingTestId: t.reading_test_id || '',
@@ -489,13 +491,17 @@ Page({
     },
 
     openListeningTask(taskId, task) {
-        if (!task || !task.listeningUrl) return false
+        if (!task) return false
         if (task.listeningResourceType === 'cambridge_test') {
+            if (!task.listeningExerciseId) return false
+            const token = encodeURIComponent(task.listeningToken || '')
+            const section = task.listeningSectionNumber ? `&section=${task.listeningSectionNumber}` : ''
             wx.navigateTo({
-                url: `/pages/student/webview/index?url=${encodeURIComponent(task.listeningUrl)}`
+                url: `/pages/student/listening/cambridge/index?taskId=${taskId}&token=${token}${section}`
             })
             return true
         }
+        if (!task || !task.listeningUrl) return false
         const token = encodeURIComponent(task.listeningToken || '')
         wx.navigateTo({
             url: `/pages/student/listening/practice/index?taskId=${taskId}&token=${token}`
