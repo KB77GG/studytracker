@@ -88,12 +88,18 @@
 
       <!-- 音频控制 -->
       <view class="audio-controls">
-        <button class="ctrl-ghost" bindtap="prevSegment">上一句</button>
-        <button class="ctrl-play" bindtap="togglePlay">
+        <view class="audio-button audio-button-secondary" bindtap="prevSegment" hover-class="audio-button-hover">
+          <text class="audio-button-label">上一句</text>
+        </view>
+        <view class="audio-button audio-button-primary" bindtap="togglePlay" hover-class="audio-button-hover">
           <text class="play-icon">{{audioPlaying ? '⏸' : '▶'}}</text>
-        </button>
-        <button class="ctrl-ghost" bindtap="repeatSegment">重播</button>
-        <button class="ctrl-ghost" bindtap="nextSegment">下一句</button>
+        </view>
+        <view class="audio-button audio-button-secondary" bindtap="repeatSegment" hover-class="audio-button-hover">
+          <text class="audio-button-label">重播</text>
+        </view>
+        <view class="audio-button audio-button-secondary" bindtap="nextSegment" hover-class="audio-button-hover">
+          <text class="audio-button-label">下一句</text>
+        </view>
       </view>
 
       <view class="time-bar">
