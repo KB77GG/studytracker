@@ -81,6 +81,21 @@ class Config:
     ALIYUN_TTS_MODEL = os.environ.get("ALIYUN_TTS_MODEL", "qwen3-tts-flash")
     ALIYUN_TTS_VOICE = os.environ.get("ALIYUN_TTS_VOICE", "Cherry")
     ALIYUN_TTS_LANGUAGE = os.environ.get("ALIYUN_TTS_LANGUAGE", "English")
+
+    # Local Kokoro ONNX TTS for dictation word playback
+    KOKORO_TTS_ENABLED = os.environ.get("KOKORO_TTS_ENABLED", "1")
+    KOKORO_TTS_DIR = os.environ.get("KOKORO_TTS_DIR", os.path.join(BASE_DIR, "data", "kokoro"))
+    KOKORO_TTS_MODEL_URL = os.environ.get(
+        "KOKORO_TTS_MODEL_URL",
+        "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.int8.onnx",
+    )
+    KOKORO_TTS_VOICES_URL = os.environ.get(
+        "KOKORO_TTS_VOICES_URL",
+        "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin",
+    )
+    KOKORO_TTS_VOICE = os.environ.get("KOKORO_TTS_VOICE", "af_heart")
+    KOKORO_TTS_LANG = os.environ.get("KOKORO_TTS_LANG", "en-us")
+    KOKORO_TTS_SPEED = os.environ.get("KOKORO_TTS_SPEED", "0.88")
     ALIYUN_AICONTENT_AK_ID = os.environ.get("ALIYUN_AICONTENT_AK_ID")
     ALIYUN_AICONTENT_AK_SECRET = os.environ.get("ALIYUN_AICONTENT_AK_SECRET")
     ALIYUN_ORAL_APP_KEY = os.environ.get("ALIYUN_ORAL_APP_KEY")

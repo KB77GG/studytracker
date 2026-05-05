@@ -5,8 +5,13 @@ Handles word book management, Excel upload, TTS generation, and practice records
 
 import os
 import re
+import hashlib
+import io
+import shutil
 import subprocess
 import tempfile
+import threading
+import wave
 from pathlib import Path
 from datetime import datetime
 from functools import wraps
@@ -371,9 +376,125 @@ def get_word_audio(word_id):
 
 # ============================================================================
 # TTS proxy & cache for mini-program playback
-# Hybrid strategy: Youdao first (natural dictionary recordings for base forms)
-# → quality check via MPEG header → DashScope for inflected/unknown forms
+# Kokoro ONNX first → DashScope fallback → Youdao last-resort fallback.
 # ============================================================================
+
+_KOKORO_LOCK = threading.Lock()
+_KOKORO_ENGINE = None
+
+
+def _flag_enabled(value, default=True) -> bool:
+    if value is None:
+        return default
+    return str(value).strip().lower() not in {"0", "false", "no", "off"}
+
+
+def _kokoro_paths() -> tuple[Path, Path]:
+    base_dir = Path(
+        current_app.config.get(
+            "KOKORO_TTS_DIR",
+            Path(current_app.root_path) / "data" / "kokoro",
+        )
+    )
+    return base_dir / "kokoro-v1.0.onnx", base_dir / "voices-v1.0.bin"
+
+
+def _download_file(url: str, target: Path) -> bool:
+    if not url:
+        return False
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = target.with_suffix(target.suffix + ".tmp")
+    try:
+        with requests.get(url, stream=True, timeout=60) as resp:
+            resp.raise_for_status()
+            with tmp_path.open("wb") as f:
+                for chunk in resp.iter_content(chunk_size=1024 * 1024):
+                    if chunk:
+                        f.write(chunk)
+        tmp_path.replace(target)
+        return True
+    except Exception as exc:
+        current_app.logger.warning("Kokoro model download failed %s: %s", url, exc)
+        try:
+            tmp_path.unlink(missing_ok=True)
+        except Exception:
+            pass
+        return False
+
+
+def _ensure_kokoro_files() -> bool:
+    model_path, voices_path = _kokoro_paths()
+    ok = True
+    if not model_path.exists():
+        ok = _download_file(current_app.config.get("KOKORO_TTS_MODEL_URL", ""), model_path) and ok
+    if not voices_path.exists():
+        ok = _download_file(current_app.config.get("KOKORO_TTS_VOICES_URL", ""), voices_path) and ok
+    return ok and model_path.exists() and voices_path.exists()
+
+
+def _kokoro_engine():
+    global _KOKORO_ENGINE
+    if _KOKORO_ENGINE is not None:
+        return _KOKORO_ENGINE
+    with _KOKORO_LOCK:
+        if _KOKORO_ENGINE is not None:
+            return _KOKORO_ENGINE
+        if not _ensure_kokoro_files():
+            return None
+        try:
+            from kokoro_onnx import Kokoro
+            model_path, voices_path = _kokoro_paths()
+            _KOKORO_ENGINE = Kokoro(str(model_path), str(voices_path))
+            return _KOKORO_ENGINE
+        except Exception as exc:
+            current_app.logger.warning("Kokoro init failed: %s", exc)
+            return None
+
+
+def _pcm_to_wav_bytes(samples, sample_rate: int) -> bytes:
+    import numpy as np
+
+    audio = np.asarray(samples, dtype=np.float32)
+    if audio.ndim > 1:
+        audio = audio.reshape(-1)
+    audio = np.clip(audio, -1.0, 1.0)
+    pcm = (audio * 32767).astype(np.int16)
+    out = io.BytesIO()
+    with wave.open(out, "wb") as wav:
+        wav.setnchannels(1)
+        wav.setsampwidth(2)
+        wav.setframerate(int(sample_rate or 24000))
+        wav.writeframes(pcm.tobytes())
+    return out.getvalue()
+
+
+def _kokoro_tts(text: str) -> bytes | None:
+    """Local Kokoro ONNX TTS. Returns MP3 bytes when available."""
+    if not _flag_enabled(current_app.config.get("KOKORO_TTS_ENABLED"), default=True):
+        return None
+    engine = _kokoro_engine()
+    if engine is None:
+        return None
+
+    voice = (current_app.config.get("KOKORO_TTS_VOICE") or "af_heart").strip()
+    lang = (current_app.config.get("KOKORO_TTS_LANG") or "en-us").strip()
+    try:
+        speed = float(current_app.config.get("KOKORO_TTS_SPEED") or 0.88)
+    except (TypeError, ValueError):
+        speed = 0.88
+    speed = min(1.4, max(0.6, speed))
+
+    try:
+        with _KOKORO_LOCK:
+            samples, sample_rate = engine.create(text, voice=voice, speed=speed, lang=lang)
+        wav_bytes = _pcm_to_wav_bytes(samples, sample_rate)
+        mp3_bytes = _wav_to_mp3(wav_bytes)
+        if not mp3_bytes:
+            current_app.logger.warning("Kokoro TTS MP3 conversion failed for %s", text)
+        return mp3_bytes
+    except Exception as exc:
+        current_app.logger.warning("Kokoro TTS error for %s: %s", text, exc)
+        return None
 
 def _dashscope_tts(text: str) -> bytes | None:
     """Primary TTS using Aliyun DashScope (neural model, handles plurals/tenses)."""
@@ -429,12 +550,14 @@ def _dashscope_tts(text: str) -> bytes | None:
 
 def _wav_to_mp3(raw_audio: bytes) -> bytes | None:
     """Convert WAV/PCM audio bytes to MP3 using ffmpeg. Returns None on failure."""
+    tmp_in_path = None
+    tmp_out_path = None
     try:
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_in:
             tmp_in.write(raw_audio)
             tmp_in_path = tmp_in.name
         tmp_out_path = tmp_in_path.replace(".wav", ".mp3")
-        ffmpeg_bin = "/usr/bin/ffmpeg"
+        ffmpeg_bin = shutil.which("ffmpeg") or "/usr/bin/ffmpeg"
         result = subprocess.run(
             [ffmpeg_bin, "-y", "-i", tmp_in_path, "-codec:a", "libmp3lame",
              "-b:a", "64k", "-ar", "48000", "-ac", "1", tmp_out_path],
@@ -447,10 +570,11 @@ def _wav_to_mp3(raw_audio: bytes) -> bytes | None:
         return None
     finally:
         for p in (tmp_in_path, tmp_out_path):
-            try:
-                os.unlink(p)
-            except OSError:
-                pass
+            if p:
+                try:
+                    os.unlink(p)
+                except OSError:
+                    pass
     return None
 
 
@@ -489,46 +613,55 @@ def _is_high_quality_mp3(data: bytes) -> bool:
 def proxy_tts():
     """Proxy TTS audio with file cache.
 
-    Strategy (hybrid):
-    1. Try Youdao first — dictionary recordings sound the most natural.
-    2. Check the MPEG version; v1 = real recording → use it.
-    3. If v2 (synthesized, likely wrong for inflected forms) → use DashScope.
-    4. If DashScope also fails, fall back to whatever Youdao returned.
+    Strategy:
+    1. Kokoro ONNX first for consistent local English pronunciation.
+    2. DashScope fallback if Kokoro is unavailable.
+    3. Youdao only as a last-resort fallback.
     """
     word = (request.args.get("word") or "").strip()
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
 
-    # Use MD5 hash for long texts (sentences) to avoid filename issues
-    import hashlib
+    voice = (current_app.config.get("KOKORO_TTS_VOICE") or "af_heart").strip()
+    lang = (current_app.config.get("KOKORO_TTS_LANG") or "en-us").strip()
+    speed = str(current_app.config.get("KOKORO_TTS_SPEED") or "0.88").strip()
+
+    # Use a provider-prefixed cache so old Youdao/DashScope files are ignored
+    # once Kokoro is enabled.
     raw_safe = re.sub(r"[^a-zA-Z0-9_-]+", "_", word.lower()) or "tts"
-    safe_name = raw_safe if len(raw_safe) <= 80 else hashlib.md5(word.lower().encode()).hexdigest()
+    text_hash = hashlib.md5(word.lower().encode()).hexdigest()
+    safe_name = raw_safe if len(raw_safe) <= 64 else text_hash
     tts_dir = Path(current_app.config.get("UPLOAD_FOLDER", Path(current_app.root_path) / "uploads")) / "tts_cache"
     tts_dir.mkdir(parents=True, exist_ok=True)
-    cache_path = tts_dir / f"{safe_name}.mp3"
+    kokoro_cache = tts_dir / f"kokoro_{voice}_{lang}_{speed}_{safe_name}_{text_hash[:8]}.mp3"
+    fallback_cache = tts_dir / f"fallback_{safe_name}_{text_hash[:8]}.mp3"
 
-    if cache_path.exists():
+    if kokoro_cache.exists():
         try:
-            return send_file(cache_path, mimetype="audio/mpeg")
+            return send_file(kokoro_cache, mimetype="audio/mpeg")
         except Exception:
-            cache_path.unlink(missing_ok=True)
+            kokoro_cache.unlink(missing_ok=True)
 
-    # 1. Try Youdao (best for base-form words)
-    youdao_audio = _youdao_tts(word)
-    if youdao_audio and _is_high_quality_mp3(youdao_audio):
-        cache_path.write_bytes(youdao_audio)
-        return send_file(cache_path, mimetype="audio/mpeg")
+    kokoro_audio = _kokoro_tts(word)
+    if kokoro_audio:
+        kokoro_cache.write_bytes(kokoro_audio)
+        return send_file(kokoro_cache, mimetype="audio/mpeg")
 
-    # 2. Youdao returned low-quality synthesis → use DashScope neural TTS
+    if fallback_cache.exists():
+        try:
+            return send_file(fallback_cache, mimetype="audio/mpeg")
+        except Exception:
+            fallback_cache.unlink(missing_ok=True)
+
     ds_audio = _dashscope_tts(word)
     if ds_audio:
-        cache_path.write_bytes(ds_audio)
-        return send_file(cache_path, mimetype="audio/mpeg")
+        fallback_cache.write_bytes(ds_audio)
+        return send_file(fallback_cache, mimetype="audio/mpeg")
 
-    # 3. DashScope failed too → use whatever Youdao gave us
+    youdao_audio = _youdao_tts(word)
     if youdao_audio:
-        cache_path.write_bytes(youdao_audio)
-        return send_file(cache_path, mimetype="audio/mpeg")
+        fallback_cache.write_bytes(youdao_audio)
+        return send_file(fallback_cache, mimetype="audio/mpeg")
 
     return jsonify({"ok": False, "error": "tts_fetch_failed"}), 502
 
