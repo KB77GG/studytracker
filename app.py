@@ -6246,6 +6246,8 @@ def api_listening_test_submit(test_id):
             metadata = json.loads(task.question_ids or "{}") if task.question_ids else {}
         except Exception:
             metadata = {}
+        if not isinstance(metadata, dict):
+            metadata = {}
         bound_section = metadata.get("listening_section_number")
         if bound_section:
             try:
