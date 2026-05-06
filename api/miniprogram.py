@@ -57,6 +57,8 @@ def _task_listening_section_number(task) -> int | None:
         metadata = json.loads(getattr(task, "question_ids", "") or "{}")
     except Exception:
         metadata = {}
+    if not isinstance(metadata, dict):
+        return None
     try:
         section_number = int(metadata.get("listening_section_number") or 0)
     except (TypeError, ValueError):
