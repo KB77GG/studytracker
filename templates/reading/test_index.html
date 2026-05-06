@@ -17,9 +17,11 @@
     </div>
     <div class="listening-library__actions">
       <a class="listening-library__button" href="{{ url_for('practice_library') }}">刷题 / 模考</a>
-      <a class="listening-library__button" href="{{ url_for('listening_test_index') }}">切到听力</a>
     </div>
   </div>
+
+  {% set listening_active = 'reading' %}
+  {% include "listening/_mode_nav.html" %}
 
   {% if not books %}
   <section class="listening-library__empty">还没有生成剑雅阅读练习数据。请先运行 build 脚本。</section>

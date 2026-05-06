@@ -20,6 +20,7 @@ from flask import (
     render_template,
     request,
     send_from_directory,
+    session,
     url_for,
 )
 from flask_login import (
@@ -31,7 +32,7 @@ from flask_login import (
 )
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm import joinedload
-from sqlalchemy import false, func, inspect, text
+from sqlalchemy import false, func, inspect, or_, text
 
 from config import Config
 from pypinyin import lazy_pinyin
@@ -5885,8 +5886,13 @@ def exams_library():
 
 
 @app.route("/listening")
+@app.route("/practices")
 def listening_index():
-    """列出所有可用的精听练习（学生通过姓名验证访问）。"""
+    """列出所有可用的精听练习（学生通过姓名验证访问）。
+
+    `/practices` 是主入口（url_for 默认生成）；`/listening` 保留为兼容别名，
+    避免分享给学生的旧链接断掉。
+    """
     listening_dir = _listening_root()
     exercises = []
     usage_map = _listening_exercise_usage_map()
@@ -6379,7 +6385,7 @@ def api_delete_listening_exercise(exercise_id):
 
 @app.route("/api/listening/verify", methods=["POST"])
 def api_listening_verify():
-    """验证学生姓名是否在系统中。"""
+    """验证学生姓名是否在系统中，并写入轻量 session 用于练习页任务推送。"""
     data = request.get_json() or {}
     name = (data.get("name") or "").strip()
     if not name:
@@ -6387,7 +6393,113 @@ def api_listening_verify():
     profile = StudentProfile.query.filter_by(full_name=name).first()
     if not profile:
         return jsonify({"ok": False, "error": "student_not_found"}), 404
-    return jsonify({"ok": True, "name": profile.full_name})
+    session["practice_student_name"] = profile.full_name
+    today_iso = date.today().isoformat()
+    task_count = Task.query.filter(
+        Task.student_name == profile.full_name,
+        Task.date == today_iso,
+        or_(
+            Task.listening_exercise_id.isnot(None),
+            Task.reading_test_id.isnot(None),
+        ),
+    ).count()
+    return jsonify({
+        "ok": True,
+        "name": profile.full_name,
+        "task_count": task_count,
+    })
+
+
+def _practice_task_status_label(task) -> tuple[str, str]:
+    raw = (task.status or "pending").lower()
+    if raw in ("done", "completed", "finished") or task.submitted_at:
+        return "done", "已完成"
+    if raw in ("progress", "in_progress", "started"):
+        return "in_progress", "进行中"
+    return "pending", "未开始"
+
+
+def _practice_task_payload(task) -> dict | None:
+    if task.listening_exercise_id:
+        if not task.listening_access_token:
+            task.listening_access_token = secrets.token_urlsafe(16)
+        url = _task_listening_url(task, absolute=False)
+        if not url:
+            return None
+        resource_type = _task_listening_resource_type(task)
+        category = "听力整套" if resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST else "精听"
+        title = task.detail or task.listening_exercise_id
+    elif task.reading_test_id:
+        if not task.reading_access_token:
+            task.reading_access_token = secrets.token_urlsafe(16)
+        url = _task_reading_url(task, absolute=False)
+        if not url:
+            return None
+        category = "阅读"
+        title = task.detail or task.reading_test_id
+        if task.reading_passage_number:
+            title = f"{title} · Passage {int(task.reading_passage_number)}"
+    else:
+        return None
+
+    status_key, status_label = _practice_task_status_label(task)
+    accuracy = float(task.accuracy or 0.0)
+    completion = float(task.completion_rate or 0.0) if task.completion_rate is not None else None
+    return {
+        "id": task.id,
+        "category": category,
+        "title": title,
+        "url": url,
+        "status": status_key,
+        "status_label": status_label,
+        "accuracy": round(accuracy, 1) if status_key == "done" else None,
+        "completion_rate": round(completion, 1) if completion is not None else None,
+        "note": task.note or "",
+    }
+
+
+@app.route("/api/student/practices/today")
+def api_student_practices_today():
+    """返回当前会话学生今天的练习任务（仅读自 session 写入的姓名）。"""
+    name = (session.get("practice_student_name") or "").strip()
+    if not name:
+        return jsonify({"ok": False, "error": "not_verified"}), 401
+    profile = StudentProfile.query.filter_by(full_name=name).first()
+    if not profile:
+        session.pop("practice_student_name", None)
+        return jsonify({"ok": False, "error": "student_not_found"}), 404
+    today_iso = date.today().isoformat()
+    tasks = (
+        Task.query.filter(
+            Task.student_name == profile.full_name,
+            Task.date == today_iso,
+            or_(
+                Task.listening_exercise_id.isnot(None),
+                Task.reading_test_id.isnot(None),
+            ),
+        )
+        .order_by(Task.id.asc())
+        .all()
+    )
+    payloads: list[dict] = []
+    tokens_changed = False
+    for task in tasks:
+        had_listening_token = task.listening_access_token
+        had_reading_token = task.reading_access_token
+        payload = _practice_task_payload(task)
+        if payload is None:
+            continue
+        if task.listening_access_token != had_listening_token or task.reading_access_token != had_reading_token:
+            tokens_changed = True
+        payloads.append(payload)
+    if tokens_changed:
+        db.session.commit()
+    return jsonify({
+        "ok": True,
+        "name": profile.full_name,
+        "date": today_iso,
+        "tasks": payloads,
+    })
 
 
 @app.route("/api/listening/<exercise_id>")

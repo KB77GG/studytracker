@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>精听练习 · Sage Path</title>
+<title>睿然练习系统 · Sage Path</title>
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 <style>
 /* listening/index 局部样式 — 颜色全部走全局 token，不再硬编码 */
@@ -284,6 +284,70 @@
   text-decoration: none;
 }
 .login-gate .staff-link:hover { color: var(--muted); text-decoration: underline; }
+
+/* 今日任务 */
+.today-tasks {
+  margin: 0 0 18px;
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--brand);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+}
+.today-tasks__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.today-tasks__title { margin: 0; font-size: var(--fs-lg); color: var(--text-strong); }
+.today-tasks__meta { font-size: var(--fs-sm); color: var(--muted); }
+.today-tasks__list { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.today-task {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--brand-soft);
+  text-decoration: none;
+  color: var(--text-strong);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.today-task:hover { border-color: var(--brand); transform: translateY(-1px); }
+.today-task__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.today-task__category {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+.today-task__status {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.today-task__status--pending { background: var(--line); color: var(--muted); }
+.today-task__status--in_progress { background: #fff3cd; color: #8a6d00; }
+.today-task__status--done { background: #d8f5e3; color: #186b3a; }
+.today-task__title { font-size: var(--fs-base); font-weight: 700; line-height: 1.35; }
+.today-task__hint { font-size: var(--fs-sm); color: var(--muted); }
+.today-tasks__empty {
+  padding: 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-sm);
+  background: #fafbfd;
+}
 </style>
 {% include "listening/_library_styles.html" %}
 </head>
@@ -473,8 +537,8 @@
 
 <!-- Student name verification gate -->
 <div class="login-gate" id="loginGate">
-  <p class="eyebrow">Sage Path · Listening</p>
-  <h1>精听练习</h1>
+  <p class="eyebrow">Sage Path · Practices</p>
+  <h1>睿然练习系统</h1>
   <p class="desc">输入你的姓名进入练习，进度会自动保存在当前浏览器。</p>
   <div class="form-card">
     <label for="studentName">学生姓名</label>
@@ -502,6 +566,14 @@
       <p class="listening-library__summary">选择一个练习开始精听训练。自由练习进度会保存在当前浏览器。</p>
     </div>
   </div>
+
+  <section class="today-tasks" id="todayTasks" style="display:none">
+    <div class="today-tasks__header">
+      <h2 class="today-tasks__title">今日任务</h2>
+      <span class="today-tasks__meta" id="todayTasksMeta"></span>
+    </div>
+    <div class="today-tasks__list" id="todayTasksList"></div>
+  </section>
 
   {% set listening_active = 'intensive' %}
   {% include "listening/_mode_nav.html" %}
@@ -562,6 +634,60 @@ if (document.getElementById('loginGate')) {
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('displayName').textContent = name;
     refreshExerciseProgress(name);
+    loadTodayTasks();
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    })[c]);
+  }
+
+  function loadTodayTasks() {
+    const wrap = document.getElementById('todayTasks');
+    const list = document.getElementById('todayTasksList');
+    const meta = document.getElementById('todayTasksMeta');
+    if (!wrap || !list) return;
+    fetch('/api/student/practices/today', { credentials: 'same-origin' })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data || !data.ok) {
+          wrap.style.display = 'none';
+          return;
+        }
+        const tasks = Array.isArray(data.tasks) ? data.tasks : [];
+        if (tasks.length === 0) {
+          wrap.style.display = 'block';
+          meta.textContent = '今天暂无任务';
+          list.innerHTML = '<div class="today-tasks__empty">老师还没有给你布置任务，可以先在下方自由练习。</div>';
+          return;
+        }
+        const doneCount = tasks.filter(t => t.status === 'done').length;
+        meta.textContent = `${doneCount} / ${tasks.length} 已完成`;
+        list.innerHTML = tasks.map(t => {
+          let hint = '';
+          if (t.status === 'done') {
+            const acc = (t.accuracy != null) ? `正确率 ${t.accuracy}%` : '已提交';
+            hint = acc;
+          } else if (t.status === 'in_progress') {
+            hint = (t.completion_rate != null) ? `进度 ${t.completion_rate}%` : '继续做题';
+          } else {
+            hint = '点击进入练习';
+          }
+          return `
+            <a class="today-task" href="${escapeHtml(t.url)}">
+              <div class="today-task__row">
+                <span class="today-task__category">${escapeHtml(t.category)}</span>
+                <span class="today-task__status today-task__status--${escapeHtml(t.status)}">${escapeHtml(t.status_label)}</span>
+              </div>
+              <div class="today-task__title">${escapeHtml(t.title)}</div>
+              <div class="today-task__hint">${escapeHtml(hint)}</div>
+            </a>
+          `;
+        }).join('');
+        wrap.style.display = 'block';
+      })
+      .catch(() => { wrap.style.display = 'none'; });
   }
 
   function logout() {
