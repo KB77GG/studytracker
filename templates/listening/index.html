@@ -608,9 +608,9 @@ if (document.getElementById('loginGate')) {
     .then(r => r.json())
     .then(data => {
       if (data.ok) {
-        sessionStorage.setItem('listening_student', name);
-        localStorage.setItem('listening_student', name);
-        showMain(name);
+        const verifiedName = data.name || name;
+        rememberStudent(verifiedName);
+        showMain(verifiedName);
       } else {
         const err = document.getElementById('errorMsg');
         err.textContent = data.error === 'student_not_found'
@@ -626,6 +626,34 @@ if (document.getElementById('loginGate')) {
     .finally(() => {
       document.getElementById('btnVerify').textContent = '进入练习';
       document.getElementById('btnVerify').disabled = false;
+    });
+  }
+
+  function rememberStudent(name) {
+    sessionStorage.setItem('listening_student', name);
+    localStorage.setItem('listening_student', name);
+  }
+
+  function verifySavedStudent(name) {
+    const savedName = String(name || '').trim();
+    if (!savedName) return;
+    fetch('/api/listening/verify', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name: savedName})
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (!data.ok) {
+        logout();
+        return;
+      }
+      const verifiedName = data.name || savedName;
+      rememberStudent(verifiedName);
+      showMain(verifiedName);
+    })
+    .catch(() => {
+      showMain(savedName);
     });
   }
 
@@ -697,19 +725,22 @@ if (document.getElementById('loginGate')) {
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('studentName').value = '';
     document.getElementById('errorMsg').style.display = 'none';
+    document.getElementById('todayTasks').style.display = 'none';
+    document.getElementById('todayTasksList').innerHTML = '';
+    document.getElementById('todayTasksMeta').textContent = '';
   }
 
   // Auto-login if previously verified in this session
   document.addEventListener('DOMContentLoaded', function() {
     const saved = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student');
-    if (saved) sessionStorage.setItem('listening_student', saved);
-    if (saved) showMain(saved);
+    if (saved) verifySavedStudent(saved);
   });
 
   window.addEventListener('pageshow', function() {
     const saved = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student');
     if (saved && document.getElementById('mainContent').style.display !== 'none') {
       refreshExerciseProgress(saved);
+      loadTodayTasks();
     }
   });
 
