@@ -19,6 +19,16 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW_PATH = ROOT / "data" / "idictation_reading" / "raw.json"
 OUTPUT_DIR = ROOT / "static" / "reading_tests"
 IMAGE_DIR = OUTPUT_DIR / "images"
+STATIC_IMAGE_PREFIX = OUTPUT_DIR.name
+
+SOURCE_META = {
+    "academic": {
+        "source": "idictation_reading",
+    },
+    "jijing": {
+        "source": "idictation_reading_jijing",
+    },
+}
 
 
 def clean_text(value: Any) -> str:
@@ -125,7 +135,7 @@ def localize_image(url: str, passage_id: str) -> str:
         context = ssl._create_unverified_context()
         with urllib.request.urlopen(url, timeout=30, context=context) as resp:
             out_path.write_bytes(resp.read())
-    return f"reading_tests/images/{filename}"
+    return f"{STATIC_IMAGE_PREFIX}/images/{filename}"
 
 
 def unwrap_part(raw_parts: dict[str, Any], source: str, part_id: int) -> dict[str, Any]:
@@ -220,14 +230,31 @@ def build_group(group: dict[str, Any], passage_id: str) -> dict[str, Any]:
     }
 
 
-def test_id_for(book: int, test_no: int) -> str:
+def test_id_for(book: int, test_no: int, source: str) -> str:
+    if source == "jijing":
+        return f"reading_jijing_{book}_test_{test_no}"
     return f"ielts{book}_test{test_no}_reading"
+
+
+def passage_id_for(book: int, test_no: int, passage_no: int, source: str) -> str:
+    if source == "jijing":
+        return f"reading_jijing_{book}_test_{test_no}_p{passage_no}"
+    return f"ielts{book}_test{test_no}_p{passage_no}"
+
+
+def test_title_for(book: int, test_no: int, source: str) -> str:
+    if source == "jijing":
+        return f"阅读机经 {book} Test {test_no}"
+    return f"Cambridge IELTS {book} Test {test_no} Reading"
 
 
 def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
     raw_parts = raw.get("parts") or {}
+    meta = SOURCE_META.get(source, SOURCE_META["academic"])
     tests: dict[str, dict[str, Any]] = {}
     for entry in raw.get("entries") or []:
+        if entry.get("source") and entry.get("source") != source:
+            continue
         part_id = int(entry.get("part_id") or 0)
         part = unwrap_part(raw_parts, source, part_id)
         if not part:
@@ -237,20 +264,20 @@ def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
         passage_no = first_int(part.get("title"), entry.get("passage"))
         if not book or not test_no or not passage_no:
             continue
-        tid = test_id_for(book, test_no)
+        tid = test_id_for(book, test_no, source)
         tests.setdefault(
             tid,
             {
                 "id": tid,
                 "book": book,
                 "test": test_no,
-                "title": f"Cambridge IELTS {book} Test {test_no} Reading",
-                "source": "idictation_reading",
+                "title": test_title_for(book, test_no, source),
+                "source": meta["source"],
                 "generated_at": datetime.now(timezone.utc).isoformat(),
                 "passages": [],
             },
         )
-        passage_id = f"ielts{book}_test{test_no}_p{passage_no}"
+        passage_id = passage_id_for(book, test_no, passage_no, source)
         tests[tid]["passages"].append(
             {
                 "id": passage_id,
@@ -272,6 +299,7 @@ def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
 
 
 def main() -> None:
+    global IMAGE_DIR, STATIC_IMAGE_PREFIX
     parser = argparse.ArgumentParser()
     parser.add_argument("--raw", type=Path, default=RAW_PATH)
     parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
@@ -280,6 +308,8 @@ def main() -> None:
 
     raw = json.loads(args.raw.read_text(encoding="utf-8"))
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    IMAGE_DIR = args.output_dir / "images"
+    STATIC_IMAGE_PREFIX = args.output_dir.name
     tests = build_tests(raw, args.source)
     catalog: dict[int, list[dict[str, Any]]] = {}
     for tid, payload in sorted(tests.items(), key=lambda item: (item[1]["book"], item[1]["test"])):

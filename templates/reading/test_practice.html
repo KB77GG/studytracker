@@ -337,7 +337,12 @@ body.result-mode .analysis { display: block; }
 <header class="topbar">
   <div class="topbar-inner">
     <div>
-      <div class="crumb"><a href="{{ url_for('practice_library') }}">阅读</a> / <a href="{{ url_for('reading_test_index') }}">剑桥雅思</a> / <span id="practiceCrumbTail">整套练习</span></div>
+      {% set is_reading_jijing = test.source == 'idictation_reading_jijing' %}
+      <div class="crumb">
+        <a href="{{ url_for('practice_library') }}">阅读</a> /
+        <a href="{{ url_for('reading_jijing_index') if is_reading_jijing else url_for('reading_test_index') }}">{{ '阅读机经' if is_reading_jijing else '剑桥雅思' }}</a> /
+        <span id="practiceCrumbTail">整套练习</span>
+      </div>
       <h1 id="practiceTitle">{{ test.title }}</h1>
       <div class="meta" id="practiceMeta">3 篇 Passage · 40 题 · 建议 60 分钟完成</div>
     </div>

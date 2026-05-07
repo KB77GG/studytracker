@@ -198,13 +198,15 @@ a.practice-resource:hover {
           </div>
           <span class="practice-resource__cta">进入</span>
         </a>
-        <div class="practice-resource practice-resource--muted">
+        <a class="practice-resource" href="{{ url_for('reading_jijing_index') }}">
           <div>
             <p class="practice-resource__label">阅读机经</p>
-            <div class="practice-resource__meta">暂未上线</div>
+            <div class="practice-resource__meta">
+              {{ summary.reading.jijing_books }} 组 · {{ summary.reading.jijing_tests }} 套 Test · {{ summary.reading.jijing_questions }} 题
+            </div>
           </div>
-          <span class="practice-resource__cta">待导入</span>
-        </div>
+          <span class="practice-resource__cta">进入</span>
+        </a>
       </div>
     </article>
   </section>

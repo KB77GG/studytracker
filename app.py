@@ -115,6 +115,10 @@ def _reading_test_root() -> Path:
     return Path(app.static_folder) / "reading_tests"
 
 
+def _reading_jijing_root() -> Path:
+    return Path(app.static_folder) / "reading_jijing"
+
+
 def _reading_data_root() -> Path:
     return Path("data") / "idictation_reading"
 
@@ -940,13 +944,15 @@ def _reading_test_question_count(payload: dict) -> int:
 
 def _load_reading_test_payload(test_id: str) -> tuple[dict | None, Path | None, str]:
     safe_id = secure_filename(test_id)
-    test_path = _reading_test_root() / f"{safe_id}.json"
-    if not test_path.exists():
-        return None, None, safe_id
-    try:
-        return json.loads(test_path.read_text(encoding="utf-8")), test_path, safe_id
-    except Exception:
-        return None, test_path, safe_id
+    for root in (_reading_test_root(), _reading_jijing_root()):
+        test_path = root / f"{safe_id}.json"
+        if not test_path.exists():
+            continue
+        try:
+            return json.loads(test_path.read_text(encoding="utf-8")), test_path, safe_id
+        except Exception:
+            return None, test_path, safe_id
+    return None, None, safe_id
 
 
 def _reading_test_catalog() -> list[dict]:
@@ -960,6 +966,38 @@ def _reading_test_catalog() -> list[dict]:
     tests_by_book = defaultdict(list)
     for path in sorted(_reading_test_root().glob("ielts*_test*_reading.json")):
         match = re.match(r"^ielts(?P<book>\d+)_test(?P<test>\d+)_reading\.json$", path.name)
+        if not match:
+            continue
+        book_no = int(match.group("book"))
+        test_no = int(match.group("test"))
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        tests_by_book[book_no].append({
+            "id": path.stem,
+            "book": book_no,
+            "test": test_no,
+            "passage_count": len(payload.get("passages") or []),
+            "question_count": _reading_test_question_count(payload),
+        })
+    return [
+        {"book": book_no, "tests": sorted(tests, key=lambda row: row["test"])}
+        for book_no, tests in sorted(tests_by_book.items())
+    ]
+
+
+def _reading_jijing_catalog() -> list[dict]:
+    catalog_path = _reading_jijing_root() / "catalog.json"
+    if catalog_path.exists():
+        try:
+            catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+            return catalog.get("books") or []
+        except Exception:
+            pass
+    tests_by_book = defaultdict(list)
+    for path in sorted(_reading_jijing_root().glob("reading_jijing_*_test_*.json")):
+        match = re.match(r"^reading_jijing_(?P<book>\d+)_test_(?P<test>\d+)\.json$", path.name)
         if not match:
             continue
         book_no = int(match.group("book"))
@@ -5825,6 +5863,7 @@ def _practice_library_summary() -> dict:
     """Build high-level counts for the unified practice entry."""
     listening_books = _listening_test_catalog()
     reading_books = _reading_test_catalog()
+    reading_jijing_books = _reading_jijing_catalog()
     listening_test_count = sum(len(book.get("tests") or []) for book in listening_books)
     listening_question_count = sum(
         int(test.get("question_count") or 0)
@@ -5903,6 +5942,13 @@ def _practice_library_summary() -> dict:
             "cambridge_questions": sum(
                 int(test.get("question_count") or 0)
                 for book in reading_books
+                for test in book.get("tests") or []
+            ),
+            "jijing_books": len(reading_jijing_books),
+            "jijing_tests": sum(len(book.get("tests") or []) for book in reading_jijing_books),
+            "jijing_questions": sum(
+                int(test.get("question_count") or 0)
+                for book in reading_jijing_books
                 for test in book.get("tests") or []
             ),
             "material_count": reading_material_count,
@@ -6029,12 +6075,39 @@ def reading_test_index():
     return render_template("reading/test_index.html", books=books, test_count=test_count)
 
 
+@app.route("/reading/jijing")
+def reading_jijing_index():
+    """阅读机经练习列表。"""
+    books = _reading_jijing_catalog()
+    test_count = sum(len(book.get("tests") or []) for book in books)
+    question_count = sum(
+        int(test.get("question_count") or 0)
+        for book in books
+        for test in book.get("tests") or []
+    )
+    return render_template(
+        "reading/jijing_index.html",
+        books=books,
+        test_count=test_count,
+        question_count=question_count,
+    )
+
+
 @app.route("/reading/test/<test_id>")
 def reading_test_practice(test_id):
     """完整阅读 Test 做题页。"""
     test, _test_path, _safe_id = _load_reading_test_payload(test_id)
     if not test:
         return "阅读 Test 不存在", 404
+    return render_template("reading/test_practice.html", test=test)
+
+
+@app.route("/reading/jijing/<test_id>")
+def reading_jijing_practice(test_id):
+    """阅读机经整套做题页。"""
+    test, _test_path, _safe_id = _load_reading_test_payload(test_id)
+    if not test or test.get("source") != "idictation_reading_jijing":
+        return "阅读机经不存在", 404
     return render_template("reading/test_practice.html", test=test)
 
 
