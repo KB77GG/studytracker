@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block content_public %}
+
+<div class="classroom-gate">
+  <div class="classroom-gate__card">
+    <div class="classroom-gate__brand">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Sage Path" class="classroom-gate__logo">
+      <div>
+        <div class="classroom-gate__title">课堂模式</div>
+        <div class="classroom-gate__sub">教师上课使用 · 输入口令进入刷题库</div>
+      </div>
+    </div>
+
+    <form method="post" class="classroom-gate__form">
+      <input type="hidden" name="next" value="{{ next_url }}">
+      <label for="passcode">口令</label>
+      <input
+        type="password"
+        id="passcode"
+        name="passcode"
+        inputmode="numeric"
+        autocomplete="off"
+        autofocus
+        placeholder="请输入老师口令"
+        required>
+      <button type="submit">进入刷题库</button>
+      {% if error %}
+      <div class="classroom-gate__error">{{ error }}</div>
+      {% endif %}
+    </form>
+
+    <div class="classroom-gate__footer">
+      <a href="{{ url_for('login') }}">← 返回登录</a>
+      <span>验证通过后本设备将记住状态</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .topbar { display: none; }
+  .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  body {
+    background:
+      radial-gradient(ellipse at 20% 18%, rgba(47, 142, 135, .14), transparent 38%),
+      radial-gradient(ellipse at 82% 88%, rgba(39, 124, 120, .14), transparent 36%),
+      var(--bg);
+    min-height: 100vh;
+  }
+  .classroom-gate {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .classroom-gate__card {
+    width: min(420px, 94vw);
+    padding: 32px 28px;
+    background: rgba(255, 255, 255, .92);
+    border-radius: var(--r-xl);
+    box-shadow: 0 30px 60px rgba(15, 23, 42, .12);
+    border: 1px solid rgba(39, 124, 120, .12);
+  }
+  .classroom-gate__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .classroom-gate__logo {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r);
+    object-fit: contain;
+    box-shadow: 0 6px 14px rgba(39, 124, 120, .18);
+  }
+  .classroom-gate__title {
+    color: var(--text-strong);
+    font-weight: 800;
+    font-size: var(--fs-lg);
+  }
+  .classroom-gate__sub {
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    margin-top: 2px;
+  }
+  .classroom-gate__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .classroom-gate__form label {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--text);
+  }
+  .classroom-gate__form input {
+    padding: 12px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r);
+    font-size: var(--fs-base);
+    background: var(--bg);
+    letter-spacing: .25em;
+    text-align: center;
+  }
+  .classroom-gate__form input:focus {
+    border-color: var(--brand);
+    background: #fff;
+    box-shadow: var(--focus-ring);
+    outline: none;
+  }
+  .classroom-gate__form button {
+    margin-top: 6px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: var(--r);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: #fff;
+    font-size: var(--fs-md);
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(39, 124, 120, .26);
+  }
+  .classroom-gate__form button:hover { filter: brightness(1.06); }
+  .classroom-gate__error {
+    margin-top: 4px;
+    padding: 8px 10px;
+    background: #fff1f0;
+    border: 1px solid #ffa39e;
+    color: #cf1322;
+    border-radius: var(--r-sm);
+    font-size: var(--fs-sm);
+    text-align: center;
+  }
+  .classroom-gate__footer {
+    margin-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--muted-soft);
+    font-size: var(--fs-xs);
+  }
+  .classroom-gate__footer a {
+    color: var(--brand-dark);
+    text-decoration: none;
+    font-weight: 600;
+  }
+</style>
+{% endblock %}

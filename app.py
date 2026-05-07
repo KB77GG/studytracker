@@ -1631,6 +1631,46 @@ def logout():
     return redirect(url_for("login"))
 
 
+# ---- 课堂模式门禁 ----
+CLASSROOM_COOKIE_NAME = "classroom_unlocked"
+CLASSROOM_COOKIE_MAX_AGE = 60 * 60 * 24 * 180  # 半年
+
+
+def _classroom_unlocked() -> bool:
+    if request.cookies.get(CLASSROOM_COOKIE_NAME) == "1":
+        return True
+    return bool(session.get("classroom_unlocked"))
+
+
+@app.route("/classroom", methods=["GET", "POST"])
+def classroom_gate():
+    """课堂模式：老师输入口令后进入刷题库播放音频/讲例题。"""
+    expected = (app.config.get("CLASSROOM_PASSCODE") or "").strip()
+    next_url = request.values.get("next") or url_for("practice_library")
+    if not next_url.startswith("/"):
+        next_url = url_for("practice_library")
+
+    if _classroom_unlocked():
+        return redirect(next_url)
+
+    error = None
+    if request.method == "POST":
+        code = (request.form.get("passcode") or "").strip()
+        if expected and code == expected:
+            session["classroom_unlocked"] = True
+            resp = redirect(next_url)
+            resp.set_cookie(
+                CLASSROOM_COOKIE_NAME,
+                "1",
+                max_age=CLASSROOM_COOKIE_MAX_AGE,
+                httponly=True,
+                samesite="Lax",
+            )
+            return resp
+        error = "口令不正确"
+    return render_template("classroom_gate.html", error=error, next_url=next_url)
+
+
 # ---- Admin 权限校验装饰器 ----
 from functools import wraps
 def admin_required(view_fn):

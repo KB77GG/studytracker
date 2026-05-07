@@ -104,6 +104,16 @@
         {% endwith %}
       </form>
 
+      <div class="login-divider" aria-hidden="true"><span>或</span></div>
+      <a class="login-classroom" href="{{ url_for('classroom_gate') }}">
+        <span class="login-classroom__icon" aria-hidden="true">📺</span>
+        <span class="login-classroom__text">
+          <span class="login-classroom__title">课堂使用 · 直接进入刷题库</span>
+          <span class="login-classroom__sub">教师上课播放音频 / 讲例题（需口令）</span>
+        </span>
+        <span class="login-classroom__arrow" aria-hidden="true">→</span>
+      </a>
+
       <p class="login-footer">© Sage Path · 睿然国际教育</p>
     </div>
   </div>
@@ -450,6 +460,76 @@
     font-size: var(--fs-xs);
     text-align: center;
     letter-spacing: .04em;
+  }
+
+  .login-divider{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 22px 0 14px;
+    color: var(--muted-soft);
+    font-size: var(--fs-xs);
+    letter-spacing: .12em;
+  }
+  .login-divider::before,
+  .login-divider::after{
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .login-classroom{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px dashed rgba(47, 142, 135, .35);
+    border-radius: var(--r);
+    background: rgba(47, 142, 135, .06);
+    text-decoration: none;
+    color: var(--text);
+    transition: background .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  .login-classroom:hover{
+    background: rgba(47, 142, 135, .12);
+    border-color: var(--brand);
+    text-decoration: none;
+    color: var(--text);
+  }
+  .login-classroom:active{ transform: scale(.99); }
+  .login-classroom__icon{
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--r-sm);
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 10px rgba(39, 124, 120, .14);
+  }
+  .login-classroom__text{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .login-classroom__title{
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+  .login-classroom__sub{
+    font-size: var(--fs-xs);
+    color: var(--muted);
+  }
+  .login-classroom__arrow{
+    flex: 0 0 auto;
+    color: var(--brand-dark);
+    font-weight: 800;
   }
 
   @media (max-width: 900px) {
