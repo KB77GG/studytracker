@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block page_title %}新建模考{% endblock %}
+{% block page_subtitle %}Mock Exam · Create{% endblock %}
+
+{% block content_dashboard %}
+<div class="container" style="max-width: 760px;">
+  <div class="header-row">
+    <h1>新建模考</h1>
+    <a href="{{ url_for('admin_mock_exams_index') }}" class="btn btn-outline">返回列表</a>
+  </div>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-warning">
+        {% for msg in messages %}<div>{{ msg }}</div>{% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="card">
+    <form method="post" class="form" style="display: grid; gap: 16px; padding: 20px;">
+      <div class="form-group">
+        <label>模考名称</label>
+        <input type="text" name="name" class="form-control" placeholder="例：5月模考一" required>
+      </div>
+
+      <div class="form-group">
+        <label>听力题目（剑桥整套）</label>
+        <select name="listening_test_id" class="form-control" required>
+          <option value="">-- 请选择 --</option>
+          {% for opt in listening_options %}
+          <option value="{{ opt.id }}">{{ opt.label }}{% if opt.question_count %} · {{ opt.question_count }}题{% endif %}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>阅读题目（剑桥/机经）</label>
+        <select name="reading_test_id" class="form-control" required>
+          <option value="">-- 请选择 --</option>
+          {% for opt in reading_options %}
+          <option value="{{ opt.id }}">{{ opt.label }}{% if opt.question_count %} · {{ opt.question_count }}题{% endif %}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label>听力时长（分钟）</label>
+          <input type="number" name="listening_minutes" class="form-control" value="30" min="1" max="180">
+        </div>
+        <div class="form-group">
+          <label>阅读时长（分钟）</label>
+          <input type="number" name="reading_minutes" class="form-control" value="60" min="1" max="180">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Pincode（学生进入用，留空将随机生成）</label>
+        <input type="text" name="pincode" class="form-control" value="{{ suggested_pincode }}" maxlength="16" style="font-family: monospace; letter-spacing: 0.2em;">
+        <small style="color: #888;">5 位字母数字，例如 <code>{{ suggested_pincode }}</code></small>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button type="submit" class="btn btn-primary">创建模考</button>
+        <a href="{{ url_for('admin_mock_exams_index') }}" class="btn btn-outline">取消</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

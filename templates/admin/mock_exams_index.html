@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block page_title %}模考管理{% endblock %}
+{% block page_subtitle %}Mock Exam Console{% endblock %}
+
+{% block content_dashboard %}
+<div class="container">
+  <div class="header-row">
+    <h1>模考管理</h1>
+    <a href="{{ url_for('admin_mock_exams_create') }}" class="btn btn-primary">
+      <span class="icon">+</span> 新建模考
+    </a>
+  </div>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-info">
+        {% for msg in messages %}<div>{{ msg }}</div>{% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>听力</th>
+          <th>阅读</th>
+          <th>时长 (L/R)</th>
+          <th>Pincode</th>
+          <th>状态</th>
+          <th>分发链接</th>
+          <th>创建时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for exam in exams %}
+        <tr>
+          <td>{{ exam.id }}</td>
+          <td>{{ exam.name }}</td>
+          <td><code>{{ exam.listening_test_id }}</code></td>
+          <td><code>{{ exam.reading_test_id }}</code></td>
+          <td>{{ exam.listening_minutes }}min / {{ exam.reading_minutes }}min</td>
+          <td><strong style="font-family: monospace;">{{ exam.pincode }}</strong></td>
+          <td>
+            {% if exam.is_active %}
+              <span class="badge badge-success">启用</span>
+            {% else %}
+              <span class="badge badge-secondary">停用</span>
+            {% endif %}
+          </td>
+          <td><a href="{{ exam.entry_url }}" target="_blank">{{ exam.entry_url }}</a></td>
+          <td>{{ exam.created_at }}</td>
+          <td>
+            <button type="button" class="btn btn-sm btn-outline" onclick="regenPincode({{ exam.id }})">换 pincode</button>
+            <button type="button" class="btn btn-sm btn-outline" onclick="toggleActive({{ exam.id }})">{{ '停用' if exam.is_active else '启用' }}</button>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="10" style="text-align:center; color:#888;">暂无模考，点击右上「新建模考」。</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+async function regenPincode(examId) {
+  if (!confirm('换发 pincode 后，旧 pincode 失效。继续？')) return;
+  const resp = await fetch(`/admin/mock-exams/${examId}/regenerate-pincode`, { method: 'POST' });
+  const data = await resp.json();
+  if (data.ok) {
+    alert(`新 pincode：${data.pincode}`);
+    location.reload();
+  } else {
+    alert('换发失败：' + (data.error || '未知错误'));
+  }
+}
+async function toggleActive(examId) {
+  const resp = await fetch(`/admin/mock-exams/${examId}/toggle-active`, { method: 'POST' });
+  const data = await resp.json();
+  if (data.ok) {
+    location.reload();
+  } else {
+    alert('切换失败：' + (data.error || '未知错误'));
+  }
+}
+</script>
+{% endblock %}

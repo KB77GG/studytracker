@@ -64,6 +64,8 @@ from models import (
     ListeningRepeatResult,
     ListeningTestSubmission,
     ReadingTestSubmission,
+    MockExam,
+    MockExamSession,
 )
 
 def time_ago(dt):
@@ -6450,6 +6452,492 @@ def api_listening_test_submit(test_id):
         },
         "submission": _serialize_listening_test_submission(submission),
     })
+
+
+# ---- Mock Exam (爱听写式模考) ----
+
+
+def _mock_exam_listening_options() -> list[dict]:
+    """合并剑桥听力 + 听力机经（如有完整 4-section 结构）作为下拉选项。"""
+    options: list[dict] = []
+    for book in _listening_test_catalog():
+        for test in book.get("tests") or []:
+            options.append({
+                "id": test["id"],
+                "label": f"剑桥{book['book']} Test{test['test']} · {test.get('title') or test['id']}",
+                "section_count": test.get("section_count"),
+                "question_count": test.get("question_count"),
+            })
+    return options
+
+
+def _mock_exam_reading_options() -> list[dict]:
+    options: list[dict] = []
+    for book in _reading_test_catalog():
+        for test in book.get("tests") or []:
+            options.append({
+                "id": test["id"],
+                "label": f"剑桥{book['book']} Test{test['test']} · 阅读 {test.get('title') or test['id']}",
+                "passage_count": test.get("passage_count"),
+                "question_count": test.get("question_count"),
+            })
+    for book in _reading_jijing_catalog():
+        for test in book.get("tests") or []:
+            options.append({
+                "id": test["id"],
+                "label": f"阅读机经 · {book.get('title') or book.get('book')} · {test.get('title') or test['id']}",
+                "passage_count": test.get("passage_count"),
+                "question_count": test.get("question_count"),
+            })
+    return options
+
+
+def _generate_mock_exam_pincode() -> str:
+    raw = secrets.token_urlsafe(6).upper()
+    cleaned = re.sub(r"[^A-Z0-9]", "", raw)
+    return (cleaned + "PIN")[:5]
+
+
+def _serialize_mock_exam(exam: MockExam) -> dict:
+    return {
+        "id": exam.id,
+        "name": exam.name,
+        "listening_test_id": exam.listening_test_id,
+        "reading_test_id": exam.reading_test_id,
+        "listening_minutes": exam.listening_minutes,
+        "reading_minutes": exam.reading_minutes,
+        "pincode": exam.pincode,
+        "is_active": bool(exam.is_active),
+        "created_at": exam.created_at.strftime("%Y-%m-%d %H:%M") if exam.created_at else "",
+        "entry_url": url_for("mock_exam_login", exam_id=exam.id, _external=False),
+    }
+
+
+def _serialize_mock_exam_session(sess: MockExamSession) -> dict:
+    return {
+        "id": sess.id,
+        "exam_id": sess.exam_id,
+        "student_name": sess.student_name,
+        "status": sess.status,
+        "current_section": sess.current_section,
+        "started_at": sess.started_at.isoformat() if sess.started_at else None,
+        "finished_at": sess.finished_at.isoformat() if sess.finished_at else None,
+        "listening": {
+            "submitted_at": sess.listening_submitted_at.isoformat() if sess.listening_submitted_at else None,
+            "deadline_at": sess.listening_deadline_at.isoformat() if sess.listening_deadline_at else None,
+            "correct": sess.listening_correct,
+            "total": sess.listening_total,
+            "accuracy": sess.listening_accuracy,
+            "ielts_score": sess.listening_ielts_score,
+            "auto_submitted": bool(sess.listening_auto_submitted),
+        },
+        "reading": {
+            "submitted_at": sess.reading_submitted_at.isoformat() if sess.reading_submitted_at else None,
+            "deadline_at": sess.reading_deadline_at.isoformat() if sess.reading_deadline_at else None,
+            "correct": sess.reading_correct,
+            "total": sess.reading_total,
+            "accuracy": sess.reading_accuracy,
+            "ielts_score": sess.reading_ielts_score,
+            "auto_submitted": bool(sess.reading_auto_submitted),
+        },
+    }
+
+
+def _get_mock_exam_session_or_404(exam_id: int, token: str) -> tuple[MockExam | None, MockExamSession | None, tuple | None]:
+    exam = MockExam.query.get(exam_id)
+    if not exam:
+        return None, None, ("exam_not_found", 404)
+    sess = MockExamSession.query.filter_by(access_token=token, exam_id=exam.id).first()
+    if not sess:
+        return exam, None, ("session_not_found", 404)
+    return exam, sess, None
+
+
+# ---- Admin: 教师配卷 ----
+
+@app.route("/admin/mock-exams")
+@login_required
+def admin_mock_exams_index():
+    if not _role_can_manage_listening(current_user):
+        flash("无权限管理模考。")
+        return redirect(url_for("index"))
+    exams = MockExam.query.order_by(MockExam.created_at.desc()).all()
+    return render_template(
+        "admin/mock_exams_index.html",
+        exams=[_serialize_mock_exam(e) for e in exams],
+    )
+
+
+@app.route("/admin/mock-exams/create", methods=["GET", "POST"])
+@login_required
+def admin_mock_exams_create():
+    if not _role_can_manage_listening(current_user):
+        flash("无权限管理模考。")
+        return redirect(url_for("index"))
+
+    if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        listening_test_id = (request.form.get("listening_test_id") or "").strip()
+        reading_test_id = (request.form.get("reading_test_id") or "").strip()
+        pincode = (request.form.get("pincode") or "").strip().upper() or _generate_mock_exam_pincode()
+        try:
+            listening_minutes = max(1, int(request.form.get("listening_minutes") or 30))
+        except (TypeError, ValueError):
+            listening_minutes = 30
+        try:
+            reading_minutes = max(1, int(request.form.get("reading_minutes") or 60))
+        except (TypeError, ValueError):
+            reading_minutes = 60
+
+        if not name or not listening_test_id or not reading_test_id:
+            flash("请填写名称、听力题目、阅读题目。")
+        elif _load_listening_test_payload(listening_test_id)[0] is None:
+            flash(f"听力题目 {listening_test_id} 不存在。")
+        elif _load_reading_test_payload(reading_test_id)[0] is None:
+            flash(f"阅读题目 {reading_test_id} 不存在。")
+        else:
+            exam = MockExam(
+                name=name,
+                listening_test_id=listening_test_id,
+                reading_test_id=reading_test_id,
+                listening_minutes=listening_minutes,
+                reading_minutes=reading_minutes,
+                pincode=pincode,
+                is_active=True,
+                created_by=current_user.id,
+            )
+            db.session.add(exam)
+            db.session.commit()
+            flash(f"模考「{exam.name}」已创建，pincode：{exam.pincode}")
+            return redirect(url_for("admin_mock_exams_index"))
+
+    return render_template(
+        "admin/mock_exams_form.html",
+        exam=None,
+        listening_options=_mock_exam_listening_options(),
+        reading_options=_mock_exam_reading_options(),
+        suggested_pincode=_generate_mock_exam_pincode(),
+    )
+
+
+@app.post("/admin/mock-exams/<int:exam_id>/regenerate-pincode")
+@login_required
+def admin_mock_exams_regenerate_pincode(exam_id):
+    if not _role_can_manage_listening(current_user):
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    exam = MockExam.query.get_or_404(exam_id)
+    exam.pincode = _generate_mock_exam_pincode()
+    db.session.commit()
+    return jsonify({"ok": True, "pincode": exam.pincode})
+
+
+@app.post("/admin/mock-exams/<int:exam_id>/toggle-active")
+@login_required
+def admin_mock_exams_toggle_active(exam_id):
+    if not _role_can_manage_listening(current_user):
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    exam = MockExam.query.get_or_404(exam_id)
+    exam.is_active = not exam.is_active
+    db.session.commit()
+    return jsonify({"ok": True, "is_active": bool(exam.is_active)})
+
+
+# ---- Student: 模考流程 ----
+
+@app.route("/exam/<int:exam_id>")
+def mock_exam_login(exam_id):
+    """模考登录页：姓名 + pincode。"""
+    exam = MockExam.query.get_or_404(exam_id)
+    return render_template("exam/login.html", exam=exam)
+
+
+@app.post("/api/exam/<int:exam_id>/start")
+def api_mock_exam_start(exam_id):
+    exam = MockExam.query.get_or_404(exam_id)
+    if not exam.is_active:
+        return jsonify({"ok": False, "error": "exam_inactive"}), 403
+
+    data = request.get_json(silent=True) or request.form
+    name = (data.get("name") or "").strip()
+    pincode = (data.get("pincode") or "").strip().upper()
+    if not name or not pincode:
+        return jsonify({"ok": False, "error": "missing_fields"}), 400
+
+    profile = StudentProfile.query.filter_by(full_name=name).first()
+    if not profile:
+        return jsonify({"ok": False, "error": "student_not_found"}), 404
+
+    if not secrets.compare_digest(pincode, exam.pincode.upper()):
+        return jsonify({"ok": False, "error": "invalid_pincode"}), 403
+
+    sess = MockExamSession.query.filter_by(exam_id=exam.id, student_name=profile.full_name).first()
+    if not sess:
+        sess = MockExamSession(
+            exam_id=exam.id,
+            student_name=profile.full_name,
+            access_token=secrets.token_urlsafe(24),
+            current_section=MockExamSession.SECTION_INTRO,
+            started_at=datetime.utcnow(),
+        )
+        db.session.add(sess)
+        db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "session_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+    })
+
+
+@app.route("/exam/<int:exam_id>/session/<token>")
+def mock_exam_process(exam_id, token):
+    """章节列表页（Pre-test / Listening / Reading）。"""
+    exam, sess, err = _get_mock_exam_session_or_404(exam_id, token)
+    if err:
+        return f"模考会话不存在：{err[0]}", err[1]
+    if sess.status == MockExamSession.STATUS_SUBMITTED:
+        return redirect(url_for("mock_exam_result", exam_id=exam.id, token=token))
+    return render_template(
+        "exam/process.html",
+        exam=exam,
+        session=sess,
+        session_payload=_serialize_mock_exam_session(sess),
+        listening_url=url_for("mock_exam_listening", exam_id=exam.id, token=token),
+        reading_url=url_for("mock_exam_reading", exam_id=exam.id, token=token),
+        result_url=url_for("mock_exam_result", exam_id=exam.id, token=token),
+    )
+
+
+def _exam_section_context(exam, sess, section):
+    """构造模板用的 exam_context（顶栏、计时、提交目标）。"""
+    if section == MockExamSession.SECTION_LISTENING:
+        deadline = sess.listening_deadline_at
+        submit_path = url_for("api_mock_exam_submit_listening", exam_id=exam.id, token=sess.access_token)
+        section_label = "Listening"
+        minutes = exam.listening_minutes
+    else:
+        deadline = sess.reading_deadline_at
+        submit_path = url_for("api_mock_exam_submit_reading", exam_id=exam.id, token=sess.access_token)
+        section_label = "Reading"
+        minutes = exam.reading_minutes
+    return {
+        "exam_id": exam.id,
+        "exam_name": exam.name,
+        "session_token": sess.access_token,
+        "student_name": sess.student_name,
+        "section": section,
+        "section_label": section_label,
+        "minutes": minutes,
+        "deadline_at": deadline.isoformat() + "Z" if deadline else None,
+        "submit_url": submit_path,
+        "next_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+        "exit_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+    }
+
+
+@app.route("/exam/<int:exam_id>/session/<token>/listening")
+def mock_exam_listening(exam_id, token):
+    exam, sess, err = _get_mock_exam_session_or_404(exam_id, token)
+    if err:
+        return f"模考会话不存在：{err[0]}", err[1]
+    if sess.listening_submitted_at or sess.current_section in (
+        MockExamSession.SECTION_READING,
+        MockExamSession.SECTION_FINISHED,
+    ):
+        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+
+    test, _path, _safe = _load_listening_test_payload(exam.listening_test_id)
+    if not test:
+        return f"听力题目 {exam.listening_test_id} 不存在", 404
+
+    now = datetime.utcnow()
+    if not sess.listening_started_at:
+        sess.listening_started_at = now
+        sess.listening_deadline_at = now + timedelta(minutes=exam.listening_minutes)
+        sess.current_section = MockExamSession.SECTION_LISTENING
+        db.session.commit()
+
+    return render_template(
+        "listening/test_practice.html",
+        test=test,
+        exam_context=_exam_section_context(exam, sess, MockExamSession.SECTION_LISTENING),
+    )
+
+
+@app.route("/exam/<int:exam_id>/session/<token>/reading")
+def mock_exam_reading(exam_id, token):
+    exam, sess, err = _get_mock_exam_session_or_404(exam_id, token)
+    if err:
+        return f"模考会话不存在：{err[0]}", err[1]
+    if not sess.listening_submitted_at:
+        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+    if sess.reading_submitted_at or sess.current_section == MockExamSession.SECTION_FINISHED:
+        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+
+    test, _path, _safe = _load_reading_test_payload(exam.reading_test_id)
+    if not test:
+        return f"阅读题目 {exam.reading_test_id} 不存在", 404
+
+    now = datetime.utcnow()
+    if not sess.reading_started_at:
+        sess.reading_started_at = now
+        sess.reading_deadline_at = now + timedelta(minutes=exam.reading_minutes)
+        sess.current_section = MockExamSession.SECTION_READING
+        db.session.commit()
+
+    return render_template(
+        "reading/test_practice.html",
+        test=test,
+        exam_context=_exam_section_context(exam, sess, MockExamSession.SECTION_READING),
+    )
+
+
+def _persist_mock_exam_section_grade(
+    sess: MockExamSession,
+    section: str,
+    grade: dict,
+    answers: dict,
+    duration_seconds: int,
+    auto_submitted: bool,
+):
+    now = datetime.utcnow()
+    if section == MockExamSession.SECTION_LISTENING:
+        sess.listening_submitted_at = now
+        sess.listening_correct = grade.get("correct")
+        sess.listening_total = grade.get("total")
+        sess.listening_accuracy = grade.get("accuracy")
+        sess.listening_ielts_score = grade.get("ielts_score")
+        sess.listening_duration_seconds = max(int(sess.listening_duration_seconds or 0), int(duration_seconds or 0))
+        sess.listening_answers_json = json.dumps(answers, ensure_ascii=False)
+        sess.listening_results_json = json.dumps(grade.get("results") or [], ensure_ascii=False)
+        sess.listening_wrong_numbers_json = json.dumps(grade.get("wrong_numbers") or [], ensure_ascii=False)
+        sess.listening_auto_submitted = bool(auto_submitted)
+        sess.current_section = MockExamSession.SECTION_READING
+    else:
+        sess.reading_submitted_at = now
+        sess.reading_correct = grade.get("correct")
+        sess.reading_total = grade.get("total")
+        sess.reading_accuracy = grade.get("accuracy")
+        sess.reading_ielts_score = grade.get("ielts_score")
+        sess.reading_duration_seconds = max(int(sess.reading_duration_seconds or 0), int(duration_seconds or 0))
+        sess.reading_answers_json = json.dumps(answers, ensure_ascii=False)
+        sess.reading_results_json = json.dumps(grade.get("results") or [], ensure_ascii=False)
+        sess.reading_wrong_numbers_json = json.dumps(grade.get("wrong_numbers") or [], ensure_ascii=False)
+        sess.reading_auto_submitted = bool(auto_submitted)
+        sess.current_section = MockExamSession.SECTION_FINISHED
+        sess.status = MockExamSession.STATUS_SUBMITTED
+        sess.finished_at = now
+
+
+@app.post("/api/exam/<int:exam_id>/session/<token>/submit-listening")
+def api_mock_exam_submit_listening(exam_id, token):
+    exam, sess, err = _get_mock_exam_session_or_404(exam_id, token)
+    if err:
+        return jsonify({"ok": False, "error": err[0]}), err[1]
+    if sess.listening_submitted_at:
+        return jsonify({"ok": True, "already_submitted": True})
+
+    payload, _path, _safe = _load_listening_test_payload(exam.listening_test_id)
+    if not payload:
+        return jsonify({"ok": False, "error": "test_not_found"}), 404
+
+    data = request.get_json(silent=True) or {}
+    answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
+    try:
+        duration_seconds = max(0, int(data.get("duration_seconds") or 0))
+    except (TypeError, ValueError):
+        duration_seconds = 0
+
+    auto_submitted = False
+    if sess.listening_deadline_at and datetime.utcnow() > sess.listening_deadline_at + timedelta(seconds=5):
+        auto_submitted = True
+
+    grade = _grade_listening_test_answers(payload, answers)
+    _persist_mock_exam_section_grade(
+        sess,
+        MockExamSession.SECTION_LISTENING,
+        grade,
+        answers,
+        duration_seconds,
+        auto_submitted,
+    )
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "result": grade,
+        "next_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+        "auto_submitted": auto_submitted,
+    })
+
+
+@app.post("/api/exam/<int:exam_id>/session/<token>/submit-reading")
+def api_mock_exam_submit_reading(exam_id, token):
+    exam, sess, err = _get_mock_exam_session_or_404(exam_id, token)
+    if err:
+        return jsonify({"ok": False, "error": err[0]}), err[1]
+    if sess.reading_submitted_at:
+        return jsonify({"ok": True, "already_submitted": True})
+
+    payload, _path, _safe = _load_reading_test_payload(exam.reading_test_id)
+    if not payload:
+        return jsonify({"ok": False, "error": "test_not_found"}), 404
+
+    data = request.get_json(silent=True) or {}
+    answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
+    try:
+        duration_seconds = max(0, int(data.get("duration_seconds") or 0))
+    except (TypeError, ValueError):
+        duration_seconds = 0
+
+    auto_submitted = False
+    if sess.reading_deadline_at and datetime.utcnow() > sess.reading_deadline_at + timedelta(seconds=5):
+        auto_submitted = True
+
+    grade = _grade_reading_test_answers(payload, answers)
+    _persist_mock_exam_section_grade(
+        sess,
+        MockExamSession.SECTION_READING,
+        grade,
+        answers,
+        duration_seconds,
+        auto_submitted,
+    )
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "result": grade,
+        "next_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+        "auto_submitted": auto_submitted,
+    })
+
+
+@app.route("/exam/<int:exam_id>/session/<token>/result")
+def mock_exam_result(exam_id, token):
+    exam, sess, err = _get_mock_exam_session_or_404(exam_id, token)
+    if err:
+        return f"模考会话不存在：{err[0]}", err[1]
+
+    listening_band = sess.listening_ielts_score
+    reading_band = sess.reading_ielts_score
+    overall_band = None
+    if listening_band is not None and reading_band is not None:
+        overall_band = round((float(listening_band) + float(reading_band)) / 2 * 2) / 2
+
+    def _wrong(json_blob):
+        try:
+            return json.loads(json_blob or "[]") or []
+        except Exception:
+            return []
+
+    return render_template(
+        "exam/result.html",
+        exam=exam,
+        session=sess,
+        listening_wrong=_wrong(sess.listening_wrong_numbers_json),
+        reading_wrong=_wrong(sess.reading_wrong_numbers_json),
+        overall_band=overall_band,
+    )
 
 
 @app.route("/listening/<exercise_id>")

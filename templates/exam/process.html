@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ exam.name }} · 模考</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
+</head>
+<body class="exam-app-bg">
+  <header class="exam-topbar">
+    <div class="exam-topbar__brand">
+      <span class="exam-topbar__logo">📝</span>
+      <span class="exam-topbar__name">{{ exam.name }}</span>
+    </div>
+    <div class="exam-topbar__meta">
+      <span>考号：<strong>{{ session.student_name }}</strong></span>
+      <span class="exam-topbar__saved" id="savedIndicator">Saved</span>
+    </div>
+  </header>
+
+  <main class="exam-process">
+    {# Pre-test #}
+    <section class="exam-card" id="cardPretest">
+      <header class="exam-card__head">
+        <h2>Pre-test</h2>
+        <span class="exam-card__status" id="pretestStatus">Not completed</span>
+      </header>
+      <div class="exam-card__body">
+        <div class="exam-pretest-banner">
+          <p class="exam-pretest-banner__title">真实雅思机考中，这是介绍系统怎么使用的视频</p>
+          <p class="exam-pretest-banner__warn">真实的雅思机考中，需要等待视频完整播放完成后，才能够点击下方的【I confirm】按钮！</p>
+          <p class="exam-pretest-banner__tip">为了节省同学的备考时间，可以选择直接点击【I confirm】按钮！</p>
+        </div>
+        <p class="exam-card__hint">Please confirm after you fully understand the content of this video</p>
+        <button type="button" class="exam-btn-dark" id="btnConfirmPretest">I confirm</button>
+      </div>
+    </section>
+
+    {# Listening #}
+    <section class="exam-card" id="cardListening">
+      <header class="exam-card__head">
+        <h2>Listening</h2>
+        <span class="exam-card__status" id="listeningStatus">Not completed</span>
+      </header>
+      <div class="exam-card__body">
+        <p class="exam-card__timing">Timing: {{ exam.listening_minutes }} minutes</p>
+
+        <details class="exam-collapse">
+          <summary>Test information <span class="exam-collapse__state" id="listeningInfoState">Not confirmed</span></summary>
+          <div class="exam-collapse__body">
+            <div class="exam-pretest-banner" style="text-align:center;">
+              <p style="font-size:32px; font-weight:800; margin: 16px 0;">The Listening test is in 4 parts.</p>
+            </div>
+            <p class="exam-card__hint">Ready? Please confirm that you have understood the instructions above.</p>
+            <button type="button" class="exam-btn-dark" id="btnConfirmListening">I confirm</button>
+          </div>
+        </details>
+
+        <a href="{{ listening_url }}" class="exam-btn-dark exam-btn-arrow" id="btnStartListening" data-disabled="true" aria-disabled="true">→ Start IELTS Online Listening</a>
+        <p class="exam-card__done-summary" id="listeningSummary" hidden></p>
+      </div>
+    </section>
+
+    {# Reading #}
+    <section class="exam-card" id="cardReading">
+      <header class="exam-card__head">
+        <h2>Reading</h2>
+        <span class="exam-card__status" id="readingStatus">Not completed</span>
+      </header>
+      <div class="exam-card__body">
+        <p class="exam-card__timing">Timing: {{ exam.reading_minutes }} minutes</p>
+        <a href="{{ reading_url }}" class="exam-btn-dark exam-btn-arrow" id="btnStartReading" data-disabled="true" aria-disabled="true">→ Start IELTS Online Reading</a>
+        <p class="exam-card__done-summary" id="readingSummary" hidden></p>
+      </div>
+    </section>
+
+    {# Writing 占位 #}
+    <section class="exam-card exam-card--locked">
+      <header class="exam-card__head">
+        <h2>Writing</h2>
+        <span class="exam-card__status">即将开放</span>
+      </header>
+      <div class="exam-card__body">
+        <p class="exam-card__timing">Timing: 60 minutes（写作机经收集中，暂未上线）</p>
+      </div>
+    </section>
+
+    <div class="exam-process__footer">
+      <a href="{{ result_url }}" class="exam-btn-outline" id="btnViewResult" hidden>查看综合成绩</a>
+    </div>
+  </main>
+
+  <footer class="exam-bottombar">
+    <span class="exam-bottombar__brand">睿然国际教育</span>
+    <a class="exam-bottombar__exit" href="{{ url_for('practice_library') }}">Exit</a>
+  </footer>
+
+<script>
+const SESSION = {{ session_payload|tojson }};
+const LISTENING_URL = {{ listening_url|tojson }};
+const READING_URL = {{ reading_url|tojson }};
+const RESULT_URL = {{ result_url|tojson }};
+
+function fmtScore(section) {
+  if (section.correct == null || section.total == null) return '';
+  const band = section.ielts_score != null ? `，IELTS ${section.ielts_score}` : '';
+  const auto = section.auto_submitted ? '（到时自动提交）' : '';
+  return `已完成：${section.correct}/${section.total}${band}${auto}`;
+}
+
+function applyState() {
+  const pretestConfirmed = sessionStorage.getItem(`exam_${SESSION.id}_pretest`) === '1';
+  const listeningInfoConfirmed = sessionStorage.getItem(`exam_${SESSION.id}_listening_info`) === '1';
+
+  // Pre-test
+  if (pretestConfirmed) {
+    document.getElementById('pretestStatus').textContent = 'Confirmed';
+    document.getElementById('pretestStatus').classList.add('is-ok');
+    document.getElementById('btnConfirmPretest').textContent = 'Confirmed';
+    document.getElementById('btnConfirmPretest').disabled = true;
+  }
+
+  // Listening info
+  if (listeningInfoConfirmed) {
+    document.getElementById('listeningInfoState').textContent = 'Confirmed';
+    document.getElementById('listeningInfoState').classList.add('is-ok');
+    document.getElementById('btnConfirmListening').textContent = 'Confirmed';
+    document.getElementById('btnConfirmListening').disabled = true;
+  }
+
+  // Listening section
+  const startListening = document.getElementById('btnStartListening');
+  if (SESSION.listening.submitted_at) {
+    document.getElementById('listeningStatus').textContent = 'Completed';
+    document.getElementById('listeningStatus').classList.add('is-ok');
+    startListening.setAttribute('data-disabled', 'true');
+    startListening.style.pointerEvents = 'none';
+    startListening.style.opacity = '0.5';
+    startListening.textContent = '已完成';
+    const summary = document.getElementById('listeningSummary');
+    summary.textContent = fmtScore(SESSION.listening);
+    summary.hidden = false;
+  } else if (pretestConfirmed && listeningInfoConfirmed) {
+    startListening.removeAttribute('data-disabled');
+    startListening.style.pointerEvents = '';
+    startListening.style.opacity = '';
+  }
+
+  // Reading section — gated by listening submitted
+  const startReading = document.getElementById('btnStartReading');
+  if (SESSION.reading.submitted_at) {
+    document.getElementById('readingStatus').textContent = 'Completed';
+    document.getElementById('readingStatus').classList.add('is-ok');
+    startReading.setAttribute('data-disabled', 'true');
+    startReading.style.pointerEvents = 'none';
+    startReading.style.opacity = '0.5';
+    startReading.textContent = '已完成';
+    const summary = document.getElementById('readingSummary');
+    summary.textContent = fmtScore(SESSION.reading);
+    summary.hidden = false;
+  } else if (SESSION.listening.submitted_at) {
+    startReading.removeAttribute('data-disabled');
+    startReading.style.pointerEvents = '';
+    startReading.style.opacity = '';
+  }
+
+  // Result link
+  if (SESSION.listening.submitted_at && SESSION.reading.submitted_at) {
+    document.getElementById('btnViewResult').hidden = false;
+  }
+
+  // Auto-redirect to current section if mid-stream
+  if (SESSION.current_section === 'listening' && pretestConfirmed && listeningInfoConfirmed && !SESSION.listening.submitted_at) {
+    // 学生回到这页时，如果已经在做听力，可以一键回去（不要自动跳，避免误操作）
+  }
+}
+
+document.getElementById('btnConfirmPretest').addEventListener('click', () => {
+  sessionStorage.setItem(`exam_${SESSION.id}_pretest`, '1');
+  applyState();
+});
+document.getElementById('btnConfirmListening').addEventListener('click', () => {
+  sessionStorage.setItem(`exam_${SESSION.id}_listening_info`, '1');
+  applyState();
+});
+
+document.querySelectorAll('[data-disabled="true"]').forEach((el) => {
+  el.addEventListener('click', (e) => {
+    if (el.getAttribute('data-disabled') === 'true') {
+      e.preventDefault();
+    }
+  });
+});
+
+applyState();
+</script>
+</body>
+</html>

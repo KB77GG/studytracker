@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ exam.name }} · 模考登录</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
+</head>
+<body class="exam-bg">
+  <div class="exam-window">
+    <header class="exam-window__head">
+      <div class="exam-window__avatars">
+        <span class="avatar"></span>
+        <span class="avatar"></span>
+      </div>
+      <div class="exam-window__tab is-active">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v18h-6"/><path d="M10 17l5-5-5-5"/><path d="M3 12h12"/></svg>
+        <span>login</span>
+      </div>
+      <div class="exam-window__tab">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>introduce</span>
+      </div>
+      <div class="exam-window__close">×</div>
+    </header>
+
+    <main class="exam-window__body">
+      <h2 id="formStepTitle">Login</h2>
+      <p class="exam-window__intro">
+        请使用与系统中登记的姓名一致的中文全名登录，输入老师下发的 pincode 后开始模考。
+      </p>
+
+      <form id="examLoginForm" class="exam-form">
+        <div class="exam-form-row" id="rowName">
+          <label>account</label>
+          <input type="text" id="examName" name="name" autocomplete="off" required>
+          <span class="exam-form-hint">请输入账号：你的姓名</span>
+        </div>
+
+        <div class="exam-form-row" id="rowPin" style="display: none;">
+          <label>pincode</label>
+          <input type="text" id="examPin" name="pincode" maxlength="16" autocomplete="off" style="text-transform: uppercase; font-family: monospace; letter-spacing: 0.2em;">
+          <span class="exam-form-hint">请输入编码：<code>{{ '*' * exam.pincode|length }}</code></span>
+        </div>
+
+        <p class="exam-form-note">*真实模考中，监考老师会下发 A4 纸质账号密码和编码，需考生自行填写。</p>
+
+        <div class="exam-form-actions">
+          <button type="button" class="exam-btn-primary" id="btnLogin">Login</button>
+        </div>
+        <div id="loginError" class="exam-form-error" role="alert" aria-live="polite"></div>
+      </form>
+    </main>
+
+    <footer class="exam-window__foot">
+      <span class="exam-window__foot-mask">{{ '×' * 40 }}</span>
+      <button type="button" class="exam-btn-next" id="btnNext" disabled>Next</button>
+    </footer>
+  </div>
+
+<script>
+const examId = {{ exam.id|tojson }};
+const startUrl = `/api/exam/${examId}/start`;
+const formTitle = document.getElementById('formStepTitle');
+const rowName = document.getElementById('rowName');
+const rowPin = document.getElementById('rowPin');
+const btnLogin = document.getElementById('btnLogin');
+const btnNext = document.getElementById('btnNext');
+const errorBox = document.getElementById('loginError');
+
+let stage = 'name';
+
+btnLogin.addEventListener('click', async () => {
+  errorBox.textContent = '';
+  if (stage === 'name') {
+    const name = document.getElementById('examName').value.trim();
+    if (!name) {
+      errorBox.textContent = '请输入姓名';
+      return;
+    }
+    rowPin.style.display = '';
+    formTitle.textContent = 'Pincode';
+    btnLogin.textContent = 'Continue';
+    stage = 'pin';
+    document.getElementById('examPin').focus();
+    return;
+  }
+
+  const name = document.getElementById('examName').value.trim();
+  const pincode = document.getElementById('examPin').value.trim().toUpperCase();
+  if (!pincode) {
+    errorBox.textContent = '请输入 pincode';
+    return;
+  }
+  btnLogin.disabled = true;
+  try {
+    const resp = await fetch(startUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, pincode })
+    });
+    const data = await resp.json();
+    if (!resp.ok || !data.ok) {
+      const errMap = {
+        student_not_found: '未找到该学生姓名，请联系老师。',
+        invalid_pincode: 'Pincode 错误。',
+        exam_inactive: '该模考已停用。',
+        missing_fields: '请完整填写姓名与 pincode。',
+      };
+      errorBox.textContent = errMap[data.error] || '登录失败';
+      btnLogin.disabled = false;
+      return;
+    }
+    window.location.href = data.session_url;
+  } catch (e) {
+    errorBox.textContent = '网络错误：' + (e.message || e);
+    btnLogin.disabled = false;
+  }
+});
+
+document.getElementById('examPin').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); btnLogin.click(); }
+});
+document.getElementById('examName').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); btnLogin.click(); }
+});
+</script>
+</body>
+</html>

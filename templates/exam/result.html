@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ exam.name }} · 模考成绩</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
+</head>
+<body class="exam-app-bg">
+  <header class="exam-topbar">
+    <div class="exam-topbar__brand">
+      <span class="exam-topbar__logo">📝</span>
+      <span class="exam-topbar__name">{{ exam.name }} · 成绩</span>
+    </div>
+    <div class="exam-topbar__meta">
+      <span>考号：<strong>{{ session.student_name }}</strong></span>
+    </div>
+  </header>
+
+  <main class="exam-process">
+    <section class="exam-card">
+      <header class="exam-card__head">
+        <h2>综合成绩</h2>
+        <span class="exam-card__status is-ok">Submitted</span>
+      </header>
+      <div class="exam-card__body">
+        <p class="exam-result-band">
+          {% if overall_band is not none %}
+            综合 IELTS Band：<strong>{{ overall_band }}</strong>
+          {% else %}
+            综合分待两个 section 都完成后计算。
+          {% endif %}
+        </p>
+      </div>
+    </section>
+
+    <section class="exam-card">
+      <header class="exam-card__head">
+        <h2>Listening</h2>
+        <span class="exam-card__status is-ok">Submitted</span>
+      </header>
+      <div class="exam-card__body">
+        {% if session.listening_total %}
+          <p>原始分：<strong>{{ session.listening_correct }}/{{ session.listening_total }}</strong>，正确率 {{ '%.1f'|format(session.listening_accuracy or 0) }}%</p>
+          <p>IELTS Listening：<strong>{{ session.listening_ielts_score if session.listening_ielts_score is not none else '—' }}</strong></p>
+          <p>用时：{{ session.listening_duration_seconds // 60 }} 分 {{ session.listening_duration_seconds % 60 }} 秒{% if session.listening_auto_submitted %}（到时自动提交）{% endif %}</p>
+          {% if listening_wrong %}
+            <p>错题：{% for n in listening_wrong[:30] %}<code>Q{{ n }}</code>{% if not loop.last %}、{% endif %}{% endfor %}{% if listening_wrong|length > 30 %}…{% endif %}</p>
+          {% endif %}
+        {% else %}
+          <p>尚未提交。</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="exam-card">
+      <header class="exam-card__head">
+        <h2>Reading</h2>
+        <span class="exam-card__status is-ok">Submitted</span>
+      </header>
+      <div class="exam-card__body">
+        {% if session.reading_total %}
+          <p>原始分：<strong>{{ session.reading_correct }}/{{ session.reading_total }}</strong>，正确率 {{ '%.1f'|format(session.reading_accuracy or 0) }}%</p>
+          <p>IELTS Reading：<strong>{{ session.reading_ielts_score if session.reading_ielts_score is not none else '—' }}</strong></p>
+          <p>用时：{{ session.reading_duration_seconds // 60 }} 分 {{ session.reading_duration_seconds % 60 }} 秒{% if session.reading_auto_submitted %}（到时自动提交）{% endif %}</p>
+          {% if reading_wrong %}
+            <p>错题：{% for n in reading_wrong[:30] %}<code>Q{{ n }}</code>{% if not loop.last %}、{% endif %}{% endfor %}{% if reading_wrong|length > 30 %}…{% endif %}</p>
+          {% endif %}
+        {% else %}
+          <p>尚未提交。</p>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+
+  <footer class="exam-bottombar">
+    <span class="exam-bottombar__brand">睿然国际教育</span>
+    <a class="exam-bottombar__exit" href="{{ url_for('practice_library') }}">Exit</a>
+  </footer>
+</body>
+</html>
