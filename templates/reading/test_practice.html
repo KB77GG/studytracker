@@ -332,8 +332,43 @@ body.result-mode .analysis { display: block; }
   .btn { width: 100%; }
 }
 </style>
+{% if exam_context %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
+<style>
+body.exam-mode .topbar { box-shadow: none; border-bottom: 1px solid #e3e8ed; }
+body.exam-mode .topbar .crumb,
+body.exam-mode .topbar h1,
+body.exam-mode .topbar .meta { display: none; }
+body.exam-mode #templateSourceWarning,
+body.exam-mode .mode-nav { display: none; }
+body.exam-mode #submitBtn,
+body.exam-mode #resetBtn { display: none; }
+.exam-finish-btn {
+  position: fixed; right: 24px; bottom: 18px; z-index: 50;
+  background: var(--exam-orange, #f37021); color: #fff; border: none;
+  padding: 10px 22px; border-radius: 4px; font-weight: 800; cursor: pointer;
+  font-size: 14px; box-shadow: 0 6px 16px rgba(243,112,33,.35);
+}
+.exam-finish-btn:hover { background: #d9591a; }
+.exam-finish-btn:disabled { background: #6b7280; cursor: not-allowed; }
+</style>
+{% endif %}
 </head>
-<body>
+<body{% if exam_context %} class="exam-mode"{% endif %}>
+{% if exam_context %}
+<header class="exam-mode-shell">
+  <div class="exam-mode-shell__left">
+    <span class="exam-mode-shell__brand">📝</span>
+    <span class="exam-mode-shell__title">{{ exam_context.exam_name }}</span>
+    <span class="exam-mode-shell__sub">{{ exam_context.section_label }} · 考号：{{ exam_context.student_name }}</span>
+  </div>
+  <div class="exam-mode-shell__right">
+    <span class="exam-mode-shell__saved" id="examSavedIndicator">Saved</span>
+    <span class="exam-mode-shell__timer" id="examCountdown">--:--</span>
+    <a class="exam-mode-shell__exit" href="{{ exam_context.exit_url }}">Exit</a>
+  </div>
+</header>
+{% endif %}
 <header class="topbar">
   <div class="topbar-inner">
     <div>
@@ -757,5 +792,69 @@ renderPassage(testData.passages[0]);
 updateSummary();
 loadExistingSubmission();
 </script>
+
+{% if exam_context %}
+<button type="button" class="exam-finish-btn" id="examFinishBtn">Finish section</button>
+<script>
+window.EXAM_CONTEXT = {{ exam_context|tojson }};
+(function() {
+  const ctx = window.EXAM_CONTEXT;
+  const deadlineMs = ctx.deadline_at ? Date.parse(ctx.deadline_at) : 0;
+  const countdown = document.getElementById('examCountdown');
+  let submitted = false;
+
+  function fmt(ms) {
+    const total = Math.max(0, Math.floor(ms / 1000));
+    const m = Math.floor(total / 60);
+    const s = total % 60;
+    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
+
+  function tick() {
+    if (!deadlineMs) { countdown.textContent = '--:--'; return; }
+    const remaining = deadlineMs - Date.now();
+    countdown.textContent = fmt(remaining);
+    if (remaining < 60_000) countdown.classList.add('is-warning');
+    if (remaining <= 0 && !submitted) {
+      submitted = true;
+      forceSubmit();
+    }
+  }
+
+  async function forceSubmit() {
+    const finishBtn = document.getElementById('examFinishBtn');
+    if (finishBtn) { finishBtn.disabled = true; finishBtn.textContent = '提交中...'; }
+    const startedAtLocal = (typeof startedAt !== 'undefined') ? startedAt : Date.now();
+    try {
+      const resp = await fetch(ctx.submit_url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          answers,
+          duration_seconds: Math.floor((Date.now() - startedAtLocal) / 1000)
+        })
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.ok) throw new Error(data.error || 'submit_failed');
+      window.location.href = data.next_url || ctx.next_url;
+    } catch (err) {
+      if (finishBtn) { finishBtn.disabled = false; finishBtn.textContent = 'Finish section'; }
+      alert('提交失败：' + (err.message || err) + '\n请检查网络后重试。');
+    }
+  }
+
+  document.getElementById('examFinishBtn').addEventListener('click', () => {
+    if (submitted) return;
+    if (!confirm('确定提交本部分？提交后无法修改。')) return;
+    submitted = true;
+    forceSubmit();
+  });
+
+  setInterval(tick, 1000);
+  tick();
+})();
+</script>
+{% endif %}
 </body>
 </html>
