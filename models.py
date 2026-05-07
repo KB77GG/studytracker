@@ -1171,3 +1171,90 @@ class EntranceTestAnswer(db.Model, TimestampMixin):
 
     def __repr__(self):
         return f"<EntranceTestAnswer attempt={self.attempt_id} q={self.question_id}>"
+
+
+# ---- Mock Exam (爱听写式模考) ----
+
+
+class MockExam(db.Model):
+    """教师配卷：一份模考 = 听力 test + 阅读 test + pincode。"""
+
+    __tablename__ = "mock_exam"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    listening_test_id = db.Column(db.String(120), nullable=False)
+    reading_test_id = db.Column(db.String(120), nullable=False)
+    listening_minutes = db.Column(db.Integer, default=30, nullable=False)
+    reading_minutes = db.Column(db.Integer, default=60, nullable=False)
+    pincode = db.Column(db.String(16), nullable=False, index=True)
+    is_active = db.Column(db.Boolean, default=True, nullable=False, index=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+    )
+
+    creator = db.relationship("User", backref=db.backref("mock_exams", lazy="dynamic"))
+
+    def __repr__(self) -> str:
+        return f"<MockExam {self.id} {self.name}>"
+
+
+class MockExamSession(db.Model):
+    """学生进入一次模考的运行态：当前 section、deadline、各 section 答题与判分结果。"""
+
+    __tablename__ = "mock_exam_session"
+
+    SECTION_INTRO = "intro"
+    SECTION_LISTENING = "listening"
+    SECTION_READING = "reading"
+    SECTION_FINISHED = "finished"
+
+    STATUS_IN_PROGRESS = "in_progress"
+    STATUS_SUBMITTED = "submitted"
+
+    id = db.Column(db.Integer, primary_key=True)
+    exam_id = db.Column(db.Integer, db.ForeignKey("mock_exam.id"), nullable=False, index=True)
+    student_name = db.Column(db.String(64), nullable=False, index=True)
+    access_token = db.Column(db.String(64), unique=True, nullable=False, index=True)
+    status = db.Column(db.String(20), default=STATUS_IN_PROGRESS, nullable=False, index=True)
+    current_section = db.Column(db.String(20), default=SECTION_INTRO, nullable=False)
+
+    started_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    finished_at = db.Column(db.DateTime)
+
+    listening_started_at = db.Column(db.DateTime)
+    listening_deadline_at = db.Column(db.DateTime)
+    listening_submitted_at = db.Column(db.DateTime)
+    listening_correct = db.Column(db.Integer)
+    listening_total = db.Column(db.Integer)
+    listening_accuracy = db.Column(db.Float)
+    listening_ielts_score = db.Column(db.Float)
+    listening_duration_seconds = db.Column(db.Integer, default=0)
+    listening_answers_json = db.Column(db.Text)
+    listening_results_json = db.Column(db.Text)
+    listening_wrong_numbers_json = db.Column(db.Text)
+    listening_auto_submitted = db.Column(db.Boolean, default=False, nullable=False)
+
+    reading_started_at = db.Column(db.DateTime)
+    reading_deadline_at = db.Column(db.DateTime)
+    reading_submitted_at = db.Column(db.DateTime)
+    reading_correct = db.Column(db.Integer)
+    reading_total = db.Column(db.Integer)
+    reading_accuracy = db.Column(db.Float)
+    reading_ielts_score = db.Column(db.Float)
+    reading_duration_seconds = db.Column(db.Integer, default=0)
+    reading_answers_json = db.Column(db.Text)
+    reading_results_json = db.Column(db.Text)
+    reading_wrong_numbers_json = db.Column(db.Text)
+    reading_auto_submitted = db.Column(db.Boolean, default=False, nullable=False)
+
+    exam = db.relationship("MockExam", backref=db.backref("sessions", lazy="dynamic"))
+
+    __table_args__ = (
+        db.UniqueConstraint("exam_id", "student_name", name="uq_mock_exam_student"),
+    )
+
+    def __repr__(self) -> str:
+        return f"<MockExamSession exam={self.exam_id} student={self.student_name} section={self.current_section}>"
