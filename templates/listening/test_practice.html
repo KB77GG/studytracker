@@ -715,6 +715,7 @@ const noteStorageKey = `listening_test_error_notes_${test.id}_${storageScope}_${
 const practiceStartedAt = Date.now();
 let activeSectionIndex = 0;
 let activeView = 'practice';
+let currentTranscriptKey = '';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -832,6 +833,9 @@ function syncTranscriptAt(sectionIndex, seconds) {
   const section = test.sections[sectionIndex];
   const rowIndex = transcriptIndexAt(section, seconds);
   if (rowIndex < 0) return;
+  const transcriptKey = `${sectionIndex}:${rowIndex}`;
+  if (transcriptKey === currentTranscriptKey) return;
+  currentTranscriptKey = transcriptKey;
   requestAnimationFrame(() => {
     document
       .querySelectorAll('.transcript-row.is-current, .full-transcript-row.is-current, .dictation-row.is-current')
@@ -849,6 +853,10 @@ function syncTranscriptAt(sectionIndex, seconds) {
       if (activeRow) activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   });
+}
+
+function syncTranscriptFromAudio() {
+  syncTranscriptAt(activeSectionIndex, audio.currentTime);
 }
 
 function allQuestions() {
@@ -1078,6 +1086,7 @@ function renderSection(section, sectionIndex) {
 
 function switchSection(index, scroll = true) {
   activeSectionIndex = index;
+  currentTranscriptKey = '';
   document.querySelectorAll('#sectionTabs .tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
   document.querySelectorAll('.panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
   const section = test.sections[index];
@@ -1088,6 +1097,7 @@ function switchSection(index, scroll = true) {
   renderTranscript(section);
   renderActiveView();
   syncQuestionNav();
+  syncTranscriptFromAudio();
   if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1388,6 +1398,8 @@ function render() {
       document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
       document.getElementById(`${activeView}View`).classList.add('active');
       renderActiveView();
+      currentTranscriptKey = '';
+      syncTranscriptFromAudio();
     });
   });
   document.querySelectorAll('.answer-unit').forEach(unit => {
@@ -1416,6 +1428,10 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   saveAnswers();
   syncListeningTestSubmission(baseHtml);
 });
+
+audio.addEventListener('timeupdate', syncTranscriptFromAudio);
+audio.addEventListener('seeked', syncTranscriptFromAudio);
+audio.addEventListener('loadedmetadata', syncTranscriptFromAudio);
 
 render();
 </script>
