@@ -3,6 +3,10 @@ const app = getApp()
 const MODE_AUDIO_TO_EN = 'audio_to_en'
 const MODE_ZH_TO_EN = 'zh_to_en'
 const MODE_EN_TO_ZH = 'en_to_zh'
+const AUDIO_SLOW_FALLBACK_MS = 3500
+const AUDIO_FAMILIARIZE_FALLBACK_MS = 1200
+const AUDIO_PREFETCH_AHEAD = 4
+const AUDIO_PREWARM_LIMIT = 60
 
 function resolveDictationMode(dictationMode, bookType) {
     const mode = String(dictationMode || '').trim().toLowerCase()
@@ -73,6 +77,14 @@ function notebookEntryKey(item) {
     const word = String(item.word || '').toLowerCase().trim()
     if (!word) return ''
     return `${word}::${item.dictationMode || MODE_AUDIO_TO_EN}`
+}
+
+function audioCacheKey(word) {
+    return String(word || '').trim().toLowerCase()
+}
+
+function directYoudaoAudioUrl(word) {
+    return `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`
 }
 
 Page({
@@ -152,9 +164,13 @@ Page({
         this.audioCtx = wx.createInnerAudioContext();
         this.audioCtx.obeyMuteSwitch = false;
         this.audioCtx.autoplay = false;
+        this.audioFileCache = {};
         this.playTokenCounter = 0;
         this.pendingPlayToken = null;
         this.currentDownloadTask = null;
+        this.audioFallbackTimer = null;
+        this.currentAudioCacheKey = null;
+        this.activeAudioPath = null;
         this.audioCtx.onCanplay(() => {
             if (this.pendingPlayToken && this.pendingPlayToken === this.playTokenCounter) {
                 this.pendingPlayToken = null;
@@ -179,8 +195,9 @@ Page({
             if (!this.fallbackTried && this.data.currentWord.word) {
                 this.fallbackTried = true;
                 const trimmed = this.data.currentWord.word.trim();
-                const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(trimmed)}&type=2`;
-                this.downloadAndPlay(direct, trimmed, this.playTokenCounter, true);
+                this.downloadAndPlay(directYoudaoAudioUrl(trimmed), trimmed, this.playTokenCounter, true, {
+                    cacheKey: this.currentAudioCacheKey
+                });
                 return;
             }
             this.setData({ isLoadingAudio: false });
@@ -320,6 +337,11 @@ Page({
                         currentMode: dictationMode
                     });
 
+                    if (isAudioMode(dictationMode)) {
+                        this.requestServerTtsPrewarm(words);
+                        this.prefetchAudioWindow(0);
+                    }
+
                     const resumeIndex = this.loadProgress(words.length);
                     if (resumeIndex > 0) {
                         // Resuming mid-test: skip familiarization
@@ -362,6 +384,7 @@ Page({
             setTimeout(() => {
                 this.playCurrentWord();
             }, 500);
+            this.prefetchAudioWindow(index + 1);
         }
     },
 
@@ -374,7 +397,9 @@ Page({
         this.fallbackTried = false;
         this.playTokenCounter = (this.playTokenCounter || 0) + 1;
         const token = this.playTokenCounter;
+        const cacheKey = audioCacheKey(trimmed);
         this.pendingPlayToken = token;
+        this.currentAudioCacheKey = cacheKey;
         this.setData({ isLoadingAudio: true, playToken: token });
 
         this.abortAudioDownload();
@@ -384,11 +409,26 @@ Page({
             } catch (e) {}
         }
 
+        const cached = this.audioFileCache && this.audioFileCache[cacheKey];
+        if (cached && cached.status === 'ready' && cached.tempFilePath) {
+            this.playPreparedAudio(cached.tempFilePath, token);
+            this.prefetchAudioWindow(this.nextAudioPrefetchIndex());
+            return;
+        }
+
         const proxyUrl = `${app.globalData.baseUrl}/dictation/tts?word=${encodeURIComponent(trimmed)}`;
-        this.downloadAndPlay(proxyUrl, trimmed, token, false);
+        this.downloadAndPlay(proxyUrl, trimmed, token, false, {
+            cacheKey,
+            allowSlowFallback: true,
+            fallbackDelayMs: this.data.phase === 'familiarize'
+                ? AUDIO_FAMILIARIZE_FALLBACK_MS
+                : AUDIO_SLOW_FALLBACK_MS
+        });
+        this.prefetchAudioWindow(this.nextAudioPrefetchIndex());
     },
 
     abortAudioDownload() {
+        this.clearAudioFallbackTimer();
         if (this.currentDownloadTask && this.currentDownloadTask.abort) {
             try {
                 this.currentDownloadTask.abort();
@@ -397,34 +437,205 @@ Page({
         this.currentDownloadTask = null;
     },
 
-    downloadAndPlay(url, word, token, isFallback) {
+    clearAudioFallbackTimer() {
+        if (this.audioFallbackTimer) {
+            clearTimeout(this.audioFallbackTimer);
+            this.audioFallbackTimer = null;
+        }
+    },
+
+    startSlowFallbackTimer(word, token, cacheKey, delayMs = AUDIO_SLOW_FALLBACK_MS) {
+        this.clearAudioFallbackTimer();
+        this.audioFallbackTimer = setTimeout(() => {
+            this.audioFallbackTimer = null;
+            if (token !== this.playTokenCounter || this.fallbackTried) return;
+            this.fallbackTried = true;
+            this.downloadAndPlay(directYoudaoAudioUrl(word), word, token, true, { cacheKey });
+        }, delayMs);
+    },
+
+    playPreparedAudio(tempFilePath, token) {
+        if (!tempFilePath || !this.audioCtx || token !== this.playTokenCounter) {
+            return;
+        }
+
+        if (this.activeAudioPath === tempFilePath) {
+            this.pendingPlayToken = null;
+            try {
+                this.audioCtx.pause();
+            } catch (e) {}
+            try {
+                this.audioCtx.seek(0);
+            } catch (e) {}
+            setTimeout(() => {
+                if (
+                    !this.audioCtx
+                    || token !== this.playTokenCounter
+                    || this.activeAudioPath !== tempFilePath
+                ) {
+                    return;
+                }
+                try {
+                    this.audioCtx.play();
+                } catch (e) {
+                    this.pendingPlayToken = token;
+                    this.activeAudioPath = null;
+                    this.audioCtx.src = tempFilePath;
+                }
+            }, 120);
+            return;
+        }
+
+        this.pendingPlayToken = token;
+        this.activeAudioPath = tempFilePath;
+        this.audioCtx.src = tempFilePath;
+    },
+
+    downloadAndPlay(url, word, token, isFallback, options = {}) {
         this.abortAudioDownload();
-        this.currentDownloadTask = wx.downloadFile({
+        let downloadTask = null;
+        downloadTask = wx.downloadFile({
             url: url,
             success: (res) => {
-                this.currentDownloadTask = null;
+                if (this.currentDownloadTask === downloadTask) {
+                    this.currentDownloadTask = null;
+                }
                 if (token !== this.playTokenCounter) return;
+                this.clearAudioFallbackTimer();
                 if (res.statusCode === 200 && res.tempFilePath) {
-                    this.pendingPlayToken = token;
-                    this.audioCtx.src = res.tempFilePath;
+                    if (options.cacheKey) {
+                        this.audioFileCache[options.cacheKey] = {
+                            status: 'ready',
+                            tempFilePath: res.tempFilePath
+                        };
+                    }
+                    this.playPreparedAudio(res.tempFilePath, token);
+                } else if (!isFallback && !this.fallbackTried) {
+                    this.fallbackTried = true;
+                    this.downloadAndPlay(directYoudaoAudioUrl(word), word, token, true, options);
                 } else if (!isFallback) {
-                    const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
-                    this.downloadAndPlay(direct, word, token, true);
+                    return;
                 } else {
                     this.setData({ isLoadingAudio: false });
                     wx.showToast({ title: '音频获取失败', icon: 'none' });
                 }
             },
             fail: () => {
-                this.currentDownloadTask = null;
+                if (this.currentDownloadTask === downloadTask) {
+                    this.currentDownloadTask = null;
+                }
                 if (token !== this.playTokenCounter) return;
-                if (!isFallback) {
-                    const direct = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
-                    this.downloadAndPlay(direct, word, token, true);
+                this.clearAudioFallbackTimer();
+                if (!isFallback && !this.fallbackTried) {
+                    this.fallbackTried = true;
+                    this.downloadAndPlay(directYoudaoAudioUrl(word), word, token, true, options);
+                } else if (!isFallback) {
+                    return;
                 } else {
                     this.setData({ isLoadingAudio: false });
                     wx.showToast({ title: '音频获取失败', icon: 'none' });
                 }
+            }
+        });
+        this.currentDownloadTask = downloadTask;
+        if (options.allowSlowFallback && !isFallback) {
+            this.startSlowFallbackTimer(
+                word,
+                token,
+                options.cacheKey,
+                options.fallbackDelayMs || AUDIO_SLOW_FALLBACK_MS
+            );
+        }
+    },
+
+    prefetchAudioWindow(startIndex) {
+        const words = this.data.words || [];
+        if (!words.length) return;
+        for (let offset = 0; offset < AUDIO_PREFETCH_AHEAD; offset++) {
+            const item = words[startIndex + offset];
+            if (!item) break;
+            const mode = resolveDictationMode(item.dictationMode, this.data.dictationMode);
+            if (isAudioMode(mode)) {
+                this.prefetchAudioForWord(item.word);
+            }
+        }
+    },
+
+    nextAudioPrefetchIndex() {
+        if (this.data.phase === 'familiarize') {
+            return (this.data.famIndex || 0) + 1;
+        }
+        return (this.data.currentIndex || 0) + 1;
+    },
+
+    prefetchAudioForWord(word) {
+        const trimmed = String(word || '').trim();
+        if (!trimmed) return;
+        const cacheKey = audioCacheKey(trimmed);
+        const existing = this.audioFileCache && this.audioFileCache[cacheKey];
+        if (existing && (existing.status === 'ready' || existing.status === 'loading')) {
+            return;
+        }
+        const cacheRecord = { status: 'loading' };
+        this.audioFileCache[cacheKey] = cacheRecord;
+        const url = `${app.globalData.baseUrl}/dictation/tts?word=${encodeURIComponent(trimmed)}`;
+        const task = wx.downloadFile({
+            url,
+            success: (res) => {
+                if (res.statusCode === 200 && res.tempFilePath) {
+                    this.audioFileCache[cacheKey] = {
+                        status: 'ready',
+                        tempFilePath: res.tempFilePath
+                    };
+                } else {
+                    delete this.audioFileCache[cacheKey];
+                }
+            },
+            fail: () => {
+                delete this.audioFileCache[cacheKey];
+            }
+        });
+        cacheRecord.task = task;
+    },
+
+    abortAudioPrefetches() {
+        const cache = this.audioFileCache || {};
+        Object.keys(cache).forEach(key => {
+            const item = cache[key];
+            if (item && item.status === 'loading' && item.task && item.task.abort) {
+                try {
+                    item.task.abort();
+                } catch (e) {}
+                delete cache[key];
+            }
+        });
+    },
+
+    requestServerTtsPrewarm(words) {
+        const targets = [];
+        const seen = {};
+        (words || []).forEach(item => {
+            const mode = resolveDictationMode(item && item.dictationMode, this.data.dictationMode);
+            const word = String(item && item.word || '').trim();
+            const key = audioCacheKey(word);
+            if (!word || !isAudioMode(mode) || seen[key]) return;
+            seen[key] = true;
+            targets.push(word);
+        });
+        if (!targets.length) return;
+        wx.request({
+            url: `${app.globalData.baseUrl}/dictation/tts/prewarm`,
+            method: 'POST',
+            header: {
+                'Cookie': wx.getStorageSync('cookie'),
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${wx.getStorageSync('token')}`
+            },
+            data: {
+                words: targets.slice(0, AUDIO_PREWARM_LIMIT)
+            },
+            fail: (err) => {
+                console.warn('dictation tts prewarm failed', err);
             }
         });
     },
@@ -710,6 +921,7 @@ Page({
         this.stopTicker();
         this.stopFamTimer();
         this.abortAudioDownload();
+        this.abortAudioPrefetches();
         if (this.audioCtx) {
             this.audioCtx.destroy();
             this.audioCtx = null;
@@ -936,6 +1148,7 @@ Page({
         });
         this.startFamTimer();
         if (isAudioMode(firstMode)) {
+            this.prefetchAudioWindow(0);
             setTimeout(() => this.playCurrentWord(), 500);
         }
     },
@@ -995,6 +1208,7 @@ Page({
             currentMode: targetMode
         });
         if (isAudioMode(targetMode)) {
+            this.prefetchAudioWindow(targetIndex);
             setTimeout(() => this.playCurrentWord(), 300);
         }
     },
@@ -1014,6 +1228,7 @@ Page({
             currentMode: targetMode
         });
         if (isAudioMode(targetMode)) {
+            this.prefetchAudioWindow(targetIndex);
             setTimeout(() => this.playCurrentWord(), 300);
         }
     },

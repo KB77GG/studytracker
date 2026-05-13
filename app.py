@@ -39,6 +39,7 @@ from pypinyin import lazy_pinyin
 from api import init_app as init_api
 from api.wechat import send_subscribe_message
 from api.tencent_soe import evaluate_pronunciation
+from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
 from models import (
     AuditLogEntry,
     PlanEvidence,
@@ -3053,6 +3054,15 @@ def tasks_page():
             )
             db.session.add(t)
             db.session.commit()
+            # Warm dictation TTS cache for this book so the student's first play is fast.
+            if dictation_task_book_id:
+                try:
+                    _schedule_dictation_prewarm(dictation_task_book_id)
+                except Exception as exc:
+                    current_app.logger.warning(
+                        "Schedule dictation TTS prewarm failed for book %s: %s",
+                        dictation_task_book_id, exc,
+                    )
             # Try sending subscription notification if openid exists
             student_profile = StudentProfile.query.filter_by(full_name=student, is_deleted=False).first()
             if student_profile and student_profile.user and student_profile.user.wechat_openid:

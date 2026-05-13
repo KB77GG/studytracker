@@ -291,7 +291,10 @@ def upload_book():
         
         book.word_count = words_added
         db.session.commit()
-        
+
+        # Warm Kokoro TTS cache in the background so students don't hit cold synthesis.
+        schedule_prewarm_for_book(book.id)
+
         return jsonify({
             "ok": True,
             "book": {
@@ -381,12 +384,21 @@ def get_word_audio(word_id):
 
 _KOKORO_LOCK = threading.Lock()
 _KOKORO_ENGINE = None
+_TTS_WARMUP_LOCK = threading.Lock()
+_TTS_WARMUP_KEYS = set()
 
 
 def _flag_enabled(value, default=True) -> bool:
     if value is None:
         return default
     return str(value).strip().lower() not in {"0", "false", "no", "off"}
+
+
+def _config_float(name: str, default: float) -> float:
+    try:
+        return float(current_app.config.get(name) or default)
+    except (TypeError, ValueError):
+        return default
 
 
 def _kokoro_paths() -> tuple[Path, Path]:
@@ -424,6 +436,8 @@ def _download_file(url: str, target: Path) -> bool:
 
 def _ensure_kokoro_files() -> bool:
     model_path, voices_path = _kokoro_paths()
+    if not _flag_enabled(current_app.config.get("KOKORO_TTS_AUTO_DOWNLOAD"), default=False):
+        return model_path.exists() and voices_path.exists()
     ok = True
     if not model_path.exists():
         ok = _download_file(current_app.config.get("KOKORO_TTS_MODEL_URL", ""), model_path) and ok
@@ -544,8 +558,9 @@ def _dashscope_tts(text: str) -> bytes | None:
             "format": "mp3"
         }
     }
+    timeout = _config_float("DICTATION_TTS_PROVIDER_TIMEOUT", 8)
     try:
-        resp = requests.post(url, headers=headers, json=payload, timeout=15)
+        resp = requests.post(url, headers=headers, json=payload, timeout=timeout)
         if resp.status_code != 200:
             current_app.logger.warning("DashScope TTS failed %s: %s", text, resp.status_code)
             return None
@@ -553,7 +568,7 @@ def _dashscope_tts(text: str) -> bytes | None:
         audio_url = data.get("output", {}).get("audio", {}).get("url")
         if not audio_url:
             return None
-        audio_resp = requests.get(audio_url, timeout=15)
+        audio_resp = requests.get(audio_url, timeout=timeout)
         if audio_resp.status_code == 200 and audio_resp.content:
             raw = audio_resp.content
             # Convert WAV → MP3 via ffmpeg for smaller file size
@@ -598,7 +613,7 @@ def _youdao_tts(text: str) -> bytes | None:
     """Youdao dictvoice — high-quality for base forms, weak for inflected."""
     url = f"https://dict.youdao.com/dictvoice?audio={requests.utils.quote(text)}&type=2"
     try:
-        resp = requests.get(url, timeout=10)
+        resp = requests.get(url, timeout=5)
         if resp.status_code == 200 and resp.content:
             return resp.content
         current_app.logger.warning("Youdao TTS fetch failed %s: %s", text, resp.status_code)
@@ -625,6 +640,106 @@ def _is_high_quality_mp3(data: bytes) -> bool:
     return False
 
 
+def _dictation_tts_cache_paths(word: str, tts_text: str | None = None) -> tuple[Path, Path]:
+    tts_text = tts_text if tts_text is not None else _dictation_tts_text(word)
+    voice = (current_app.config.get("KOKORO_TTS_VOICE") or "af_heart").strip()
+    lang = (current_app.config.get("KOKORO_TTS_LANG") or "en-us").strip()
+    speed = str(current_app.config.get("KOKORO_TTS_SPEED") or "0.88").strip()
+
+    raw_safe = re.sub(r"[^a-zA-Z0-9_-]+", "_", word.lower()) or "tts"
+    text_hash = hashlib.md5(tts_text.lower().encode()).hexdigest()
+    safe_name = raw_safe if len(raw_safe) <= 64 else text_hash
+    tts_dir = Path(current_app.config.get("UPLOAD_FOLDER", Path(current_app.root_path) / "uploads")) / "tts_cache"
+    tts_dir.mkdir(parents=True, exist_ok=True)
+    kokoro_cache = tts_dir / f"kokoro_{voice}_{lang}_{speed}_dict_{safe_name}_{text_hash[:8]}.mp3"
+    fallback_cache = tts_dir / f"fallback_dict_{safe_name}_{text_hash[:8]}.mp3"
+    return kokoro_cache, fallback_cache
+
+
+def _send_tts_file(path: Path):
+    response = send_file(path, mimetype="audio/mpeg", max_age=7 * 24 * 60 * 60)
+    response.headers["Cache-Control"] = "public, max-age=604800"
+    return response
+
+
+def _generate_tts_to_cache(tts_text: str, kokoro_cache: Path, fallback_cache: Path) -> Path | None:
+    kokoro_audio = _kokoro_tts(tts_text)
+    if kokoro_audio:
+        kokoro_cache.write_bytes(kokoro_audio)
+        return kokoro_cache
+
+    ds_audio = _dashscope_tts(tts_text)
+    if ds_audio:
+        fallback_cache.write_bytes(ds_audio)
+        return fallback_cache
+
+    youdao_audio = _youdao_tts(tts_text)
+    if youdao_audio:
+        fallback_cache.write_bytes(youdao_audio)
+        return fallback_cache
+
+    return None
+
+
+def _prewarm_tts_cache(words: list[str]) -> None:
+    for word in words:
+        word = (word or "").strip()
+        if not word:
+            continue
+        tts_text = _dictation_tts_text(word)
+        kokoro_cache, fallback_cache = _dictation_tts_cache_paths(word, tts_text)
+        warmup_key = str(kokoro_cache)
+        with _TTS_WARMUP_LOCK:
+            if warmup_key in _TTS_WARMUP_KEYS:
+                continue
+            _TTS_WARMUP_KEYS.add(warmup_key)
+        try:
+            if not kokoro_cache.exists() and not fallback_cache.exists():
+                _generate_tts_to_cache(tts_text, kokoro_cache, fallback_cache)
+        except Exception as exc:
+            current_app.logger.warning("Dictation TTS warmup failed for %s: %s", word, exc)
+        finally:
+            with _TTS_WARMUP_LOCK:
+                _TTS_WARMUP_KEYS.discard(warmup_key)
+
+
+def schedule_prewarm_for_book(book_id: int) -> None:
+    """Spawn a background thread that warms Kokoro TTS cache for every word in a book.
+
+    Called after book upload and task creation so students never hit cold Kokoro
+    synthesis on the play path. Idempotent — _prewarm_tts_cache dedups via
+    _TTS_WARMUP_KEYS, so concurrent invocations are safe.
+    """
+    try:
+        book = DictationBook.query.get(book_id)
+    except Exception:
+        book = None
+    if book is None:
+        return
+    if (book.book_type or "dictation").lower() == "translation":
+        return
+
+    app_obj = current_app._get_current_object()
+
+    def runner():
+        with app_obj.app_context():
+            try:
+                rows = (
+                    db.session.query(DictationWord.word)
+                    .filter(DictationWord.book_id == book_id)
+                    .all()
+                )
+                clean = [r[0].strip() for r in rows if r[0] and r[0].strip()]
+                if clean:
+                    _prewarm_tts_cache(clean)
+            except Exception as exc:
+                current_app.logger.warning(
+                    "Background TTS prewarm failed for book %s: %s", book_id, exc
+                )
+
+    threading.Thread(target=runner, daemon=True).start()
+
+
 @dictation_bp.route("/tts", methods=["GET"])
 def proxy_tts():
     """Proxy TTS audio with file cache.
@@ -638,49 +753,60 @@ def proxy_tts():
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
     tts_text = _dictation_tts_text(word)
-
-    voice = (current_app.config.get("KOKORO_TTS_VOICE") or "af_heart").strip()
-    lang = (current_app.config.get("KOKORO_TTS_LANG") or "en-us").strip()
-    speed = str(current_app.config.get("KOKORO_TTS_SPEED") or "0.88").strip()
-
-    # Use a provider-prefixed cache so old Youdao/DashScope files are ignored
-    # once Kokoro is enabled.
-    raw_safe = re.sub(r"[^a-zA-Z0-9_-]+", "_", word.lower()) or "tts"
-    text_hash = hashlib.md5(tts_text.lower().encode()).hexdigest()
-    safe_name = raw_safe if len(raw_safe) <= 64 else text_hash
-    tts_dir = Path(current_app.config.get("UPLOAD_FOLDER", Path(current_app.root_path) / "uploads")) / "tts_cache"
-    tts_dir.mkdir(parents=True, exist_ok=True)
-    kokoro_cache = tts_dir / f"kokoro_{voice}_{lang}_{speed}_dict_{safe_name}_{text_hash[:8]}.mp3"
-    fallback_cache = tts_dir / f"fallback_dict_{safe_name}_{text_hash[:8]}.mp3"
+    kokoro_cache, fallback_cache = _dictation_tts_cache_paths(word, tts_text)
 
     if kokoro_cache.exists():
         try:
-            return send_file(kokoro_cache, mimetype="audio/mpeg")
+            return _send_tts_file(kokoro_cache)
         except Exception:
             kokoro_cache.unlink(missing_ok=True)
 
-    kokoro_audio = _kokoro_tts(tts_text)
-    if kokoro_audio:
-        kokoro_cache.write_bytes(kokoro_audio)
-        return send_file(kokoro_cache, mimetype="audio/mpeg")
-
     if fallback_cache.exists():
         try:
-            return send_file(fallback_cache, mimetype="audio/mpeg")
+            return _send_tts_file(fallback_cache)
         except Exception:
             fallback_cache.unlink(missing_ok=True)
 
-    ds_audio = _dashscope_tts(tts_text)
-    if ds_audio:
-        fallback_cache.write_bytes(ds_audio)
-        return send_file(fallback_cache, mimetype="audio/mpeg")
-
-    youdao_audio = _youdao_tts(tts_text)
-    if youdao_audio:
-        fallback_cache.write_bytes(youdao_audio)
-        return send_file(fallback_cache, mimetype="audio/mpeg")
+    generated_cache = _generate_tts_to_cache(tts_text, kokoro_cache, fallback_cache)
+    if generated_cache:
+        return _send_tts_file(generated_cache)
 
     return jsonify({"ok": False, "error": "tts_fetch_failed"}), 502
+
+
+@dictation_bp.route("/tts/prewarm", methods=["POST"])
+@require_session_or_bearer
+def prewarm_tts():
+    """Start background TTS cache generation for upcoming dictation words."""
+    data = request.get_json(silent=True) or {}
+    words = data.get("words") or []
+    if not isinstance(words, list):
+        return jsonify({"ok": False, "error": "invalid_words"}), 400
+
+    clean_words = []
+    seen = set()
+    for raw in words:
+        word = str(raw or "").strip()
+        key = word.lower()
+        if not word or key in seen:
+            continue
+        seen.add(key)
+        clean_words.append(word)
+        if len(clean_words) >= 80:
+            break
+
+    if not clean_words:
+        return jsonify({"ok": True, "queued": 0})
+
+    app_obj = current_app._get_current_object()
+
+    def runner():
+        with app_obj.app_context():
+            _prewarm_tts_cache(clean_words)
+
+    thread = threading.Thread(target=runner, daemon=True)
+    thread.start()
+    return jsonify({"ok": True, "queued": len(clean_words)})
 
 
 # ============================================================================
