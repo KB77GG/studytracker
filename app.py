@@ -5757,20 +5757,12 @@ def export_stage_report_pdf(report_id):
         )
     mock_review_rows = _default_mock_review_rows(data.get("mock_review_rows"))
     next_stage_plan_text = (data.get("next_stage_plan_text") or "").strip()
+    focus_points_text = (data.get("focus_points_text") or "").strip()
+    suggestions_text = (data.get("suggestions_text") or "").strip()
     if not next_stage_plan_text:
         next_stage_plan_text = "\n".join(
-            [value for value in [data.get("focus_points_text"), data.get("suggestions_text")] if value]
+            [value for value in [focus_points_text, suggestions_text] if value]
         ).strip()
-
-    import base64
-
-    logo_path = os.path.join(app.static_folder, "sagepath_logo.jpg")
-    logo_base64 = ""
-    try:
-        with open(logo_path, "rb") as f:
-            logo_base64 = base64.b64encode(f.read()).decode("utf-8")
-    except Exception:
-        logo_base64 = ""
 
     visible_sections = data.get("visible_sections", {})
 
@@ -5783,16 +5775,13 @@ def export_stage_report_pdf(report_id):
         class_summary_rows=class_summary_rows,
         mock_review_rows=mock_review_rows,
         next_stage_plan_text=next_stage_plan_text,
+        focus_points_text=focus_points_text,
+        suggestions_text=suggestions_text,
         generated_at=datetime.now(),
-        logo_base64=logo_base64,
         secs=visible_sections,
     )
 
-    css = CSS(string="""
-        @page { size: A4; margin: 18mm; }
-        body { font-family: "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-    """)
-    pdf = HTML(string=html).write_pdf(stylesheets=[css])
+    pdf = HTML(string=html, base_url=app.static_folder).write_pdf()
 
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
