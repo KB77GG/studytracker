@@ -22,7 +22,6 @@ IMAGE_DIR = OUTPUT_DIR / "images"
 
 SECTION_RE = re.compile(r"^ielts(?P<book>\d+)_test(?P<test>\d+)_s(?P<section>\d+)$")
 
-
 def ms_to_seconds(value) -> float:
     try:
         return round(float(value or 0) / 1000, 3)
@@ -51,6 +50,15 @@ def analysis_text(value) -> str:
     if isinstance(value, str):
         return value
     if isinstance(value, list):
+        text_chunks = [
+            str(row.get("content"))
+            for row in value
+            if isinstance(row, dict)
+            and row.get("type") == "text"
+            and row.get("content")
+        ]
+        if text_chunks:
+            return "\n".join(text_chunks)
         chunks = []
         for row in value:
             if isinstance(row, dict) and row.get("content"):
@@ -61,6 +69,31 @@ def analysis_text(value) -> str:
     if isinstance(value, dict):
         return str(value.get("content") or value.get("analysis") or "")
     return ""
+
+
+def audio_location(value) -> dict:
+    if not isinstance(value, list):
+        return {}
+    for row in value:
+        if not isinstance(row, dict) or row.get("type") != "audio":
+            continue
+        location = row.get("location")
+        if isinstance(location, dict) and (location.get("start_time") or location.get("end_time")):
+            return location
+    return {}
+
+
+def is_usable_analysis(value: str) -> bool:
+    text = (value or "").strip()
+    if not text:
+        return False
+    blocked_markers = (
+        "\u5f88\u62b1\u6b49",
+        "\u65e0\u6cd5\u76f4\u63a5",
+        "\u65e0\u6cd5\u786e\u5b9a",
+        "\u4fe1\u606f\u6709\u9650",
+    )
+    return not any(marker in text for marker in blocked_markers)
 
 
 def is_usable_image(url: str) -> bool:
@@ -88,7 +121,39 @@ def unwrap_part(raw_parts: dict, part_id: int) -> dict:
     return row.get("values") or row.get("data") or row
 
 
-def build_question(item: dict) -> dict:
+def default_start_time(item: dict):
+    answer_sentence = item.get("answer_sentences") or {}
+    return answer_sentence.get("start_time") or item.get("start_time")
+
+
+def analyze_location_question_ids(items: list[dict]) -> set:
+    by_start = {}
+    for item in items:
+        start_time = default_start_time(item)
+        if not start_time:
+            continue
+        by_start.setdefault(start_time, []).append(item)
+
+    for cluster in by_start.values():
+        if len(cluster) < 2:
+            continue
+        locations = [audio_location(item.get("analyze")) for item in cluster]
+        starts = {
+            location.get("start_time")
+            for location in locations
+            if location.get("start_time")
+        }
+        if len(starts) < 2:
+            continue
+        return {
+            item.get("id")
+            for item in items
+            if audio_location(item.get("analyze")).get("start_time")
+        }
+    return set()
+
+
+def build_question(item: dict, use_analyze_location: bool = False) -> dict:
     options = []
     for option in item.get("option") or []:
         options.append(
@@ -99,10 +164,24 @@ def build_question(item: dict) -> dict:
         )
 
     answer = str(item.get("display_answer") or "").strip()
+    source_location = (
+        audio_location(item.get("analyze"))
+        if use_analyze_location
+        else {}
+    )
     answer_sentence = item.get("answer_sentences") or {}
-    start_time = answer_sentence.get("start_time") or item.get("start_time")
-    end_time = answer_sentence.get("end_time") or item.get("end_time")
-    analysis = item.get("ai_analyze") or analysis_text(item.get("analyze"))
+    start_time = source_location.get("start_time") or answer_sentence.get("start_time") or item.get("start_time")
+    end_time = source_location.get("end_time") or answer_sentence.get("end_time") or item.get("end_time")
+    output_answer_sentence = dict(answer_sentence)
+    if source_location:
+        for key in ("start_time", "end_time", "lyc_index"):
+            if key in source_location:
+                output_answer_sentence[key] = source_location.get(key)
+    source_analysis = analysis_text(item.get("analyze"))
+    if use_analyze_location and is_usable_analysis(source_analysis):
+        analysis = source_analysis
+    else:
+        analysis = item.get("ai_analyze") or source_analysis
     return {
         "id": item.get("id"),
         "number": item.get("number"),
@@ -113,12 +192,14 @@ def build_question(item: dict) -> dict:
         "start": ms_to_seconds(start_time),
         "end": ms_to_seconds(end_time),
         "analysis": analysis,
-        "answer_sentences": answer_sentence,
+        "answer_sentences": output_answer_sentence,
     }
 
 
 def build_group(group: dict, section_id: str) -> dict:
     img_url = group.get("img_url") or ""
+    items = group.get("list") or []
+    analyze_location_ids = analyze_location_question_ids(items)
     return {
         "group_id": group.get("group_id"),
         "type": group.get("type"),
@@ -130,7 +211,10 @@ def build_group(group: dict, section_id: str) -> dict:
         "img_url": img_url,
         "img_local": localize_image(img_url, section_id),
         "collect_option": group.get("collect_option") or {},
-        "questions": [build_question(item) for item in group.get("list") or []],
+        "questions": [
+            build_question(item, item.get("id") in analyze_location_ids)
+            for item in items
+        ],
     }
 
 

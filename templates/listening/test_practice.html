@@ -193,6 +193,11 @@ body.result-mode .layout {
   color: var(--muted);
   text-decoration: underline;
 }
+.collect-divider {
+  border: 0;
+  border-top: 1px solid rgba(222,219,208,.9);
+  margin: 14px 0;
+}
 .bc {
   display: block;
   text-align: center;
@@ -736,6 +741,7 @@ function richText(value) {
     .replace(/&lt;\/bc&gt;/g, '</strong>')
     .replace(/&lt;iu&gt;/g, '<span class="example">')
     .replace(/&lt;\/iu&gt;/g, '</span>')
+    .replace(/&lt;divider\s*\/?&gt;/gi, '<hr class="collect-divider">')
     .replace(/&amp;nbsp;/g, '&nbsp;')
     .replace(/\n/g, '<br>');
 }
