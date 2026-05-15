@@ -131,18 +131,22 @@
       <!-- 任务来源切换 -->
       <div class="field field--wide">
         <label>任务来源</label>
-        <div style="display: flex; gap: 12px;">
-          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+        <div class="source-options">
+          <label class="source-option">
             <input type="radio" name="task_source" value="custom" checked onchange="toggleTaskSource('custom')">
-            <span>自定义任务</span>
+            <span>普通任务</span>
           </label>
-          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+          <label class="source-option">
             <input type="radio" name="task_source" value="material" onchange="toggleTaskSource('material')">
-            <span>从材料库选择</span>
+            <span>材料库</span>
           </label>
-          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+          <label class="source-option">
             <input type="radio" name="task_source" value="listening" onchange="toggleTaskSource('listening')">
-            <span>听力练习</span>
+            <span>听力题库</span>
+          </label>
+          <label class="source-option">
+            <input type="radio" name="task_source" value="reading" onchange="toggleTaskSource('reading')">
+            <span>阅读题库</span>
           </label>
         </div>
       </div>
@@ -199,6 +203,38 @@
           </label>
         </div>
         <small class="text-muted">可布置整套 40 题，也可只布置一个 Section 10 题。</small>
+      </div>
+    </div>
+
+    <!-- 阅读练习选择区域 (默认隐藏) -->
+    <div class="task-form-row" id="readingSelectRow" style="display: none;">
+      <div class="field field--wide">
+        <label>选择阅读练习</label>
+        <select class="form-select" id="readingExerciseSelect" name="reading_test_id" onchange="handleReadingExerciseChange()">
+          <option value="">-- 选择阅读练习 --</option>
+          <optgroup label="剑雅阅读">
+          {% for ex in reading_exercises %}
+          {% if ex.source_label == '剑雅阅读' %}
+          <option value="{{ ex.id }}" data-title="{{ ex.title }}" data-passage-count="{{ ex.passage_count }}" data-question-count="{{ ex.question_count }}">{{ ex.title }} ({{ ex.passage_count }} Passage / {{ ex.question_count }}题)</option>
+          {% endif %}
+          {% endfor %}
+          </optgroup>
+          <optgroup label="阅读机经">
+          {% for ex in reading_exercises %}
+          {% if ex.source_label == '阅读机经' %}
+          <option value="{{ ex.id }}" data-title="{{ ex.title }}" data-passage-count="{{ ex.passage_count }}" data-question-count="{{ ex.question_count }}">{{ ex.title }} ({{ ex.passage_count }} Passage / {{ ex.question_count }}题)</option>
+          {% endif %}
+          {% endfor %}
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    <div class="task-form-row" id="readingPassageRow" style="display: none;">
+      <div class="field field--wide">
+        <label>阅读布置范围</label>
+        <div id="readingPassageChoices" class="range-choice-row"></div>
+        <small class="text-muted">可布置整套 40 题，也可只布置单篇 Passage。</small>
       </div>
     </div>
 
@@ -493,7 +529,7 @@
                   <a href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank"
                     style="display:inline-block; text-decoration:none; background:#0f766e; color:#fff; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:inherit; font-family:inherit; line-height:normal;">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else '精听明细' }}</a>
                   {% endif %}
-                  {% if t.reading_test and t.reading_url %}
+                  {% if t.reading_test_id and t.reading_url %}
                   <a href="{{ t.reading_url }}" target="_blank"
                     style="display:inline-block; text-decoration:none; background:#0f766e; color:#fff; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:inherit; font-family:inherit; line-height:normal;">打开阅读</a>
                   {% endif %}
@@ -610,6 +646,37 @@
     .task-form .field--wide {
       flex: 1 1 260px;
       min-width: 240px;
+    }
+
+    .source-options,
+    .range-choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .source-option,
+    .range-choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 34px;
+      padding: 6px 11px;
+      border: 1px solid var(--line, #e4e7ed);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text, #1f2937);
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .source-option:has(input:checked),
+    .range-choice:has(input:checked) {
+      border-color: rgba(47, 142, 135, .4);
+      background: rgba(47, 142, 135, .09);
+      color: var(--brand-dark, #277C78);
+      font-weight: 600;
     }
 
     .task-form .field--student {
@@ -989,6 +1056,7 @@
   <script>
     const dictationRangeHints = {{ dictation_range_hints | tojson }};
     const listeningExerciseSegments = {{ listening_exercise_segments | tojson }};
+    const readingExercisePassages = {{ reading_exercise_passages | tojson }};
     const knownStudentOptions = {{ student_picker_options | tojson }};
 
     function setupStudentPicker() {
@@ -1090,21 +1158,27 @@
       const categoryRow = document.getElementById('categoryRow');
       const listeningRow = document.getElementById('listeningSelectRow');
       const listeningSectionRow = document.getElementById('listeningSectionRow');
+      const readingRow = document.getElementById('readingSelectRow');
+      const readingPassageRow = document.getElementById('readingPassageRow');
       const questionRow = document.getElementById('questionSelectRow');
       const questionIds = document.getElementById('questionIds');
       const questionContainer = document.getElementById('questionListContainer');
       const categorySelect = document.getElementById('taskCategory');
       const materialSelect = document.getElementById('material_id');
       const listeningSelect = document.getElementById('listeningExerciseSelect');
+      const readingSelect = document.getElementById('readingExerciseSelect');
       const listeningResourceType = document.getElementById('listeningResourceType');
 
       materialRow.style.display = 'none';
       categoryRow.style.display = 'none';
       listeningRow.style.display = 'none';
       if (listeningSectionRow) listeningSectionRow.style.display = 'none';
+      if (readingRow) readingRow.style.display = 'none';
+      if (readingPassageRow) readingPassageRow.style.display = 'none';
       if (questionRow) questionRow.style.display = 'none';
       if (questionIds) questionIds.value = '';
       resetListeningSectionSelection();
+      resetReadingPassageSelection();
       if (questionContainer) questionContainer.innerHTML = '<div class="text-muted">请选择材料后加载题目</div>';
       setSentenceRangeControlsVisible(false, true);
 
@@ -1113,6 +1187,7 @@
         categorySelect.removeAttribute('required');
         categorySelect.value = '';
         listeningSelect.value = '';
+        if (readingSelect) readingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         setQuestionSelectionMeta('题目（口语题库）', '不勾选则默认布置全部题目');
         if (materialSelect.value) toggleDetailInput();
@@ -1121,14 +1196,25 @@
         categorySelect.removeAttribute('required');
         categorySelect.value = '';
         materialSelect.value = '';
+        if (readingSelect) readingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         setQuestionSelectionMeta('选择句子（精听任务）', '可勾选指定句子；不勾选则默认布置整篇');
         handleListeningExerciseChange();
+      } else if (source === 'reading') {
+        if (readingRow) readingRow.style.display = 'flex';
+        categorySelect.removeAttribute('required');
+        categorySelect.value = '';
+        materialSelect.value = '';
+        listeningSelect.value = '';
+        if (listeningResourceType) listeningResourceType.value = 'intensive';
+        document.getElementById('taskDetail').value = '';
+        handleReadingExerciseChange();
       } else {
         categoryRow.style.display = 'flex';
         categorySelect.setAttribute('required', 'required');
         materialSelect.value = '';
         listeningSelect.value = '';
+        if (readingSelect) readingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         document.getElementById('taskNote').value = '';
         document.getElementById('taskDetail').value = '';
@@ -1147,6 +1233,11 @@
       radios.forEach(radio => {
         radio.checked = radio.value === '';
       });
+    }
+
+    function resetReadingPassageSelection() {
+      const holder = document.getElementById('readingPassageChoices');
+      if (holder) holder.innerHTML = '';
     }
 
     function renderQuestionCheckboxes(questions) {
@@ -1465,6 +1556,54 @@
       setSentenceRangeControlsVisible(true, true);
     }
 
+    function renderReadingPassageChoices(passages) {
+      const holder = document.getElementById('readingPassageChoices');
+      if (!holder) return;
+      const options = [
+        { number: '', label: '整套 Test' },
+        ...(passages || [])
+      ];
+      holder.innerHTML = options.map((item, index) => `
+        <label class="range-choice">
+          <input type="radio" name="reading_passage_number" value="${item.number || ''}" ${index === 0 ? 'checked' : ''}>
+          <span>${item.label}</span>
+        </label>
+      `).join('');
+    }
+
+    function handleReadingExerciseChange() {
+      const readingSelect = document.getElementById('readingExerciseSelect');
+      const passageRow = document.getElementById('readingPassageRow');
+      const detailInput = document.getElementById('taskDetail');
+      const plannedInput = document.getElementById('taskPlanned');
+      if (!readingSelect || !passageRow || !detailInput) return;
+
+      resetReadingPassageSelection();
+      if (!readingSelect.value) {
+        passageRow.style.display = 'none';
+        detailInput.value = '';
+        return;
+      }
+
+      const option = readingSelect.options[readingSelect.selectedIndex];
+      detailInput.value = option?.getAttribute('data-title') || option?.textContent?.trim() || '';
+      const passages = readingExercisePassages[readingSelect.value] || [];
+      renderReadingPassageChoices(passages);
+      passageRow.style.display = 'flex';
+      if (plannedInput && !plannedInput.value) plannedInput.placeholder = '整套 60 / 单篇 20';
+
+      const holder = document.getElementById('readingPassageChoices');
+      if (holder && plannedInput) {
+        holder.querySelectorAll('input[name="reading_passage_number"]').forEach(radio => {
+          radio.addEventListener('change', () => {
+            if (!plannedInput.value) {
+              plannedInput.placeholder = radio.value ? '例如 20' : '例如 60';
+            }
+          });
+        });
+      }
+    }
+
     function updateDictationRangeSuggestion(forceClear = false) {
       const hintEl = document.getElementById("dictation-range-hint");
       const studentInput = document.getElementById("taskStudent");
@@ -1521,11 +1660,15 @@
       const syncDetail = () => {
         const materialSelect = document.getElementById("material_id");
         const listeningSelect = document.getElementById("listeningExerciseSelect");
+        const readingSelect = document.getElementById("readingExerciseSelect");
         const materialOption = materialSelect && materialSelect.value
           ? materialSelect.options[materialSelect.selectedIndex]
           : null;
         const listeningOption = listeningSelect && listeningSelect.value
           ? listeningSelect.options[listeningSelect.selectedIndex]
+          : null;
+        const readingOption = readingSelect && readingSelect.value
+          ? readingSelect.options[readingSelect.selectedIndex]
           : null;
         if (materialOption) {
           detailHidden.value = materialOption.getAttribute("data-title") || materialOption.textContent.trim();
@@ -1533,6 +1676,10 @@
         }
         if (listeningOption) {
           detailHidden.value = listeningOption.getAttribute("data-title") || listeningOption.textContent.trim();
+          return;
+        }
+        if (readingOption) {
+          detailHidden.value = readingOption.getAttribute("data-title") || readingOption.textContent.trim();
           return;
         }
         const option = categorySelect.options[categorySelect.selectedIndex];

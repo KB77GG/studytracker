@@ -133,6 +133,7 @@ READING_RESOURCE_CAMBRIDGE_TEST = "cambridge_reading_test"
 
 
 PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST = "cambridge_listening_test"
+PLAN_RESOURCE_CAMBRIDGE_READING_TEST = "cambridge_reading_test"
 PLAN_RESOURCE_INTENSIVE_LISTENING = "intensive_listening"
 PLAN_RESOURCE_DICTATION = "dictation"
 PLAN_RESOURCE_SPEAKING = "speaking"
@@ -264,6 +265,8 @@ def _task_resource_binding(
     *,
     listening_exercise_id=None,
     listening_resource_type=None,
+    reading_test_id=None,
+    reading_passage_number=None,
     dictation_book_id=None,
     dictation_mode=None,
     dictation_word_start=None,
@@ -280,6 +283,14 @@ def _task_resource_binding(
         if listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
             return PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST, str(listening_exercise_id), metadata
         return PLAN_RESOURCE_INTENSIVE_LISTENING, str(listening_exercise_id), metadata
+    if reading_test_id:
+        metadata = {
+            "reading_test_id": str(reading_test_id),
+            "reading_passage_number": reading_passage_number,
+            "question_ids": question_ids,
+            "grading_mode": grading_mode or "reading_test",
+        }
+        return PLAN_RESOURCE_CAMBRIDGE_READING_TEST, str(reading_test_id), metadata
     if dictation_book_id:
         metadata = {
             "dictation_mode": dictation_mode or "audio_to_en",
@@ -310,6 +321,13 @@ def _task_resource_binding_from_task(task: Task) -> tuple[str, str | None, dict]
             listening_exercise_id=task.listening_exercise_id,
             listening_resource_type=_task_listening_resource_type(task),
         )
+    if task.reading_test_id:
+        return _task_resource_binding(
+            reading_test_id=task.reading_test_id,
+            reading_passage_number=task.reading_passage_number,
+            question_ids=task.question_ids,
+            grading_mode=task.grading_mode or "reading_test",
+        )
     if task.dictation_book_id:
         return _task_resource_binding(
             dictation_book_id=task.dictation_book_id,
@@ -330,14 +348,6 @@ def _task_resource_binding_from_task(task: Task) -> tuple[str, str | None, dict]
             grading_mode=task.grading_mode,
         )
     metadata = {}
-    if task.reading_test_id:
-        metadata = {
-            "reading_test_id": task.reading_test_id,
-            "reading_passage_number": task.reading_passage_number,
-            "question_ids": task.question_ids,
-            "grading_mode": task.grading_mode or "reading_test",
-        }
-        return PLAN_RESOURCE_FREEFORM, f"reading_test:{task.reading_test_id}", metadata
     if task.grading_mode:
         metadata["grading_mode"] = task.grading_mode
     return PLAN_RESOURCE_FREEFORM, None, metadata
@@ -2943,8 +2953,12 @@ def tasks_page():
         status = request.form.get("status", "pending")
         note = request.form.get("note", "").strip()
         material_id = request.form.get("material_id")
+        task_source = (request.form.get("task_source") or "").strip()
         question_ids_raw = (request.form.get("question_ids") or "").strip()
         question_ids = question_ids_raw if question_ids_raw else None
+        if task_source in {"custom", "material", "listening", "reading"}:
+            if task_source != "material":
+                material_id = None
         
         # 如果选择了材料，自动填充描述
         material_data = None
@@ -2975,9 +2989,11 @@ def tasks_page():
                     detail = material_data.title
                 if not material_data or material_data.type not in {"speaking_part1", "speaking_part2", "speaking_part2_3"}:
                     question_ids = None
-        
+
         # 精听练习
         listening_exercise_id = request.form.get("listening_exercise_id", "").strip()
+        if task_source in {"custom", "material", "listening", "reading"} and task_source != "listening":
+            listening_exercise_id = ""
         listening_resource_type = (request.form.get("listening_resource_type") or LISTENING_RESOURCE_INTENSIVE).strip()
         if listening_resource_type not in LISTENING_RESOURCE_TYPES:
             listening_resource_type = LISTENING_RESOURCE_INTENSIVE
@@ -3026,13 +3042,51 @@ def tasks_page():
                 else:
                     category = category or "精听练习"
 
-        # Validate: need either category or material_id or listening_exercise_id
+        # 阅读整套 / Passage 练习
+        reading_test_id = request.form.get("reading_test_id", "").strip()
+        if task_source in {"custom", "material", "listening", "reading"} and task_source != "reading":
+            reading_test_id = ""
+        reading_passage_number = None
+        reading_access_token = None
+        reading_error = None
+        reading_default_minutes = 0
+        if reading_test_id:
+            reading_access_token = secrets.token_urlsafe(16)
+            payload, _reading_path, safe_reading_id = _load_reading_test_payload(reading_test_id)
+            if not payload:
+                reading_error = "选择的阅读练习不存在"
+            else:
+                raw_passage = request.form.get("reading_passage_number")
+                try:
+                    reading_passage_number = int(raw_passage) if raw_passage not in (None, "") else None
+                except (TypeError, ValueError):
+                    reading_passage_number = None
+                passages = payload.get("passages") or []
+                if reading_passage_number and not any(
+                    int(p.get("passage") or idx + 1) == reading_passage_number
+                    for idx, p in enumerate(passages)
+                ):
+                    reading_error = "选择的阅读 Passage 不存在"
+                else:
+                    title = payload.get("title") or safe_reading_id
+                    detail = (
+                        f"{title} Passage {reading_passage_number}"
+                        if reading_passage_number
+                        else title
+                    )
+                    category = "雅思-阅读-整套"
+                    reading_test_id = safe_reading_id
+                    reading_default_minutes = 20 if reading_passage_number else 60
+
+        # Validate: need either category or material_id or listening_exercise_id or reading_test_id
         if not student:
             flash("请填写学生姓名")
         elif listening_error:
             flash(listening_error)
-        elif not category and not material_id and not listening_exercise_id:
-            flash("请选择任务类别、材料或听力练习")
+        elif reading_error:
+            flash(reading_error)
+        elif not category and not material_id and not listening_exercise_id and not reading_test_id:
+            flash("请选择任务类别、材料、听力练习或阅读练习")
         elif not detail:
             flash("请填写任务描述")
         else:
@@ -3050,10 +3104,14 @@ def tasks_page():
                         if dictation_mode_raw in VALID_DICTATION_MODES
                         else resolve_task_dictation_mode(None, getattr(dictation_book_data, "book_type", None))
                     )
+            if reading_test_id:
+                grading_mode = "reading_test"
             
             dictation_word_start = request.form.get("dictation_word_start")
             dictation_word_end = request.form.get("dictation_word_end")
             planned_minutes = int(request.form.get("planned_minutes", 0) or 0)
+            if not planned_minutes and reading_default_minutes:
+                planned_minutes = reading_default_minutes
             material_task_id = int(material_id) if material_id and not material_id.startswith(("dictation-", "speaking-")) else None
             dictation_task_book_id = int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None
             speaking_task_book_id = int(material_id.split("-")[1]) if material_id and material_id.startswith("speaking-") else None
@@ -3064,6 +3122,8 @@ def tasks_page():
             resource_type, resource_id, resource_metadata = _task_resource_binding(
                 listening_exercise_id=listening_exercise_id or None,
                 listening_resource_type=listening_resource_type if listening_exercise_id else None,
+                reading_test_id=reading_test_id or None,
+                reading_passage_number=reading_passage_number,
                 dictation_book_id=dictation_task_book_id,
                 dictation_mode=dictation_mode,
                 dictation_word_start=dictation_task_start,
@@ -3086,7 +3146,7 @@ def tasks_page():
                 creator_id=current_user.id,
                 resource_type=resource_type,
                 resource_id=resource_id,
-                access_token=listening_access_token,
+                access_token=listening_access_token or reading_access_token,
                 resource_metadata=resource_metadata,
             )
 
@@ -3114,6 +3174,9 @@ def tasks_page():
                 listening_resource_type=listening_resource_type if listening_exercise_id else None,
                 listening_exercise_id=listening_exercise_id or None,
                 listening_access_token=listening_access_token,
+                reading_test_id=reading_test_id or None,
+                reading_passage_number=reading_passage_number,
+                reading_access_token=reading_access_token,
             )
             db.session.add(t)
             db.session.commit()
@@ -3442,6 +3505,44 @@ def tasks_page():
             except Exception:
                 pass
 
+    reading_exercises = []
+    reading_exercise_passages = {}
+
+    def add_reading_exercise_options(books, source_label):
+        for book in books:
+            for test in book.get("tests") or []:
+                test_id = test.get("id")
+                if not test_id:
+                    continue
+                safe_id = secure_filename(str(test_id))
+                passage_count = int(test.get("passage_count") or 3)
+                question_count = int(test.get("question_count") or 0)
+                passages = []
+                for passage_no in range(1, passage_count + 1):
+                    passages.append({
+                        "number": passage_no,
+                        "label": f"Passage {passage_no}",
+                    })
+                book_no = test.get("book") or book.get("book")
+                test_no = test.get("test")
+                if source_label == "阅读机经":
+                    title = f"阅读机经 {book_no} Test {test_no}"
+                else:
+                    title = f"Cambridge IELTS {book_no} Test {test_no} Reading"
+                reading_exercises.append({
+                    "id": safe_id,
+                    "title": title,
+                    "source_label": source_label,
+                    "book": book_no,
+                    "test": test_no,
+                    "passage_count": passage_count,
+                    "question_count": question_count,
+                })
+                reading_exercise_passages[safe_id] = passages
+
+    add_reading_exercise_options(_reading_test_catalog(), "剑雅阅读")
+    add_reading_exercise_options(_reading_jijing_catalog(), "阅读机经")
+
     return render_template(
         "tasks.html",
         items=enriched_items,
@@ -3457,6 +3558,8 @@ def tasks_page():
         dictation_range_hints=dictation_range_hints,
         listening_exercises=listening_exercises,
         listening_exercise_segments=listening_exercise_segments,
+        reading_exercises=reading_exercises,
+        reading_exercise_passages=reading_exercise_passages,
     )
 
 # ---- Grading Interface ----

@@ -510,9 +510,17 @@ Page({
     },
 
     openReadingTask(task) {
-        if (!task || !task.readingUrl) return false
+        if (!task || !task.readingTestId) {
+            if (!task || !task.readingUrl) return false
+            wx.navigateTo({
+                url: `/pages/student/webview/index?url=${encodeURIComponent(task.readingUrl)}`
+            })
+            return true
+        }
+        const token = encodeURIComponent(task.readingToken || '')
+        const passage = task.readingPassageNumber ? `&passage=${task.readingPassageNumber}` : ''
         wx.navigateTo({
-            url: `/pages/student/webview/index?url=${encodeURIComponent(task.readingUrl)}`
+            url: `/pages/student/reading/cambridge/index?taskId=${task.id}&token=${token}${passage}`
         })
         return true
     },

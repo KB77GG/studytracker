@@ -141,8 +141,10 @@ Page({
                     return
                 }
                 if (res.task.reading_test_id && res.task.reading_url) {
+                    const token = encodeURIComponent(res.task.reading_token || '')
+                    const passage = res.task.reading_passage_number ? `&passage=${res.task.reading_passage_number}` : ''
                     wx.redirectTo({
-                        url: `/pages/student/webview/index?url=${encodeURIComponent(res.task.reading_url)}`
+                        url: `/pages/student/reading/cambridge/index?taskId=${this.data.taskId}&token=${token}${passage}`
                     })
                     return
                 }

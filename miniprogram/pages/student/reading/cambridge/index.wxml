@@ -1,0 +1,176 @@
+<template name="answerControl">
+  <input
+    wx:if="{{question.control === 'text'}}"
+    class="{{inline ? 'inline-input' : 'answer-input'}}"
+    type="text"
+    adjust-position="false"
+    value="{{answers[question.key] || ''}}"
+    placeholder="{{inline ? '答案' : '请输入答案'}}"
+    data-key="{{question.key}}"
+    bindinput="onTextInput"
+  />
+
+  <picker
+    wx:elif="{{question.control === 'select'}}"
+    range="{{question.options}}"
+    range-key="label"
+    data-key="{{question.key}}"
+    bindchange="onPickerChange"
+  >
+    <view class="{{inline ? 'inline-picker' : 'answer-picker'}}">
+      {{question.selectedLabel || '请选择'}}
+    </view>
+  </picker>
+
+  <radio-group
+    wx:elif="{{question.control === 'radio'}}"
+    class="choice-list"
+    data-key="{{question.key}}"
+    bindchange="onRadioChange"
+  >
+    <label class="choice-row" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
+      <radio value="{{option.value}}" checked="{{option.checked}}" color="#0f9f8f" />
+      <text class="choice-text">{{option.label}}</text>
+    </label>
+  </radio-group>
+
+  <checkbox-group
+    wx:elif="{{question.control === 'checkbox'}}"
+    class="choice-list"
+    data-key="{{question.key}}"
+    bindchange="onCheckboxChange"
+  >
+    <label class="choice-row" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
+      <checkbox value="{{option.value}}" checked="{{option.checked}}" color="#0f9f8f" />
+      <text class="choice-text">{{option.label}}</text>
+    </label>
+  </checkbox-group>
+</template>
+
+<template name="richChunks">
+  <block wx:for="{{chunks}}" wx:for-item="chunk" wx:key="chunkKey">
+    <rich-text wx:if="{{chunk.kind === 'text'}}" class="chunk-text" nodes="{{chunk.html}}"></rich-text>
+    <block wx:else>
+      <template is="answerControl" data="{{question: chunk.question, answers: answers, inline: true}}" />
+    </block>
+  </block>
+</template>
+
+<view class="page">
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-ring"></view>
+    <text class="loading-text">正在加载阅读练习…</text>
+  </view>
+
+  <block wx:else>
+    <view class="summary-card">
+      <view class="summary-top">
+        <view class="summary-info">
+          <text class="summary-label">阅读刷题任务</text>
+          <text class="summary-title">{{task.title || test.title || 'Cambridge IELTS Reading'}}</text>
+        </view>
+        <view class="status-badge {{submitted ? 'done' : 'progress'}}">{{submitted ? '已提交' : '进行中'}}</view>
+      </view>
+
+      <view class="progress-track">
+        <view class="progress-fill" style="width: {{progress.percent}}%;"></view>
+      </view>
+
+      <view class="stats-row">
+        <view class="stat-cell">
+          <text class="stat-val">{{progress.answeredCount}}<text class="stat-total">/{{progress.totalCount}}</text></text>
+          <text class="stat-key">已答题</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-cell">
+          <text class="stat-val">{{progress.percent}}<text class="stat-unit">%</text></text>
+          <text class="stat-key">完成度</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-cell">
+          <text class="stat-val">{{passageNumber ? 'P' + passageNumber : '整套'}}</text>
+          <text class="stat-key">范围</text>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view wx:if="{{!passageLocked}}" scroll-x class="passage-strip" enable-flex>
+      <view
+        class="passage-chip {{index === activePassageIndex ? 'active' : ''}}"
+        wx:for="{{passageTabs}}"
+        wx:key="passageIndex"
+        data-index="{{index}}"
+        bindtap="onPassageTap"
+      >
+        <text>{{item.title}}</text>
+      </view>
+    </scroll-view>
+
+    <view class="result-card" wx:if="{{submitted && resultDisplay}}">
+      <view class="result-score">
+        <text class="result-main">{{resultDisplay.correct}}/{{resultDisplay.total}}</text>
+        <text class="result-sub">正确率 {{resultDisplay.accuracy}}%</text>
+      </view>
+      <text class="result-band" wx:if="{{resultDisplay.ieltsScore}}">IELTS Reading {{resultDisplay.ieltsScore}}</text>
+      <text class="wrong-list" wx:if="{{resultDisplay.hasWrong}}">错题：{{resultDisplay.wrongText}}</text>
+      <view class="back-btn" bindtap="goBack">返回任务页</view>
+    </view>
+
+    <view class="passage-card" wx:if="{{activePassage}}">
+      <text class="passage-label">Passage {{activePassage.passage_number}}</text>
+      <text class="passage-title">{{activePassage.content.title || activePassage.title}}</text>
+      <view class="passage-meta">
+        <text class="meta-pill" wx:if="{{activePassage.question_name}}">{{activePassage.question_name}}</text>
+        <text class="meta-pill" wx:for="{{activePassage.question_type}}" wx:key="*this">{{item}}</text>
+      </view>
+      <view class="paragraph" wx:for="{{activePassage.content.paragraphs}}" wx:key="label">
+        <text class="paragraph-label" wx:if="{{item.label}}">{{item.label}}</text>
+        <text class="paragraph-text">{{item.text}}</text>
+      </view>
+    </view>
+
+    <view class="group-card" wx:for="{{activeGroups}}" wx:for-item="group" wx:key="groupId">
+      <rich-text wx:if="{{group.titleHtml}}" class="group-title" nodes="{{group.titleHtml}}"></rich-text>
+      <rich-text wx:if="{{group.descHtml}}" class="group-desc" nodes="{{group.descHtml}}"></rich-text>
+      <rich-text wx:if="{{group.questionTitleHtml}}" class="question-title" nodes="{{group.questionTitleHtml}}"></rich-text>
+      <image wx:if="{{group.imageUrl}}" class="question-image" src="{{group.imageUrl}}" mode="widthFix"></image>
+
+      <view class="option-bank" wx:if="{{group.showOptionBank}}">
+        <view class="option-line" wx:for="{{group.optionBank}}" wx:key="value">{{item.label}}</view>
+      </view>
+
+      <view class="collect-box" wx:if="{{group.collectChunks.length}}">
+        <template is="richChunks" data="{{chunks: group.collectChunks, answers: answers}}" />
+      </view>
+
+      <scroll-view scroll-x class="table-scroll" wx:if="{{group.tableRows.length}}">
+        <view class="practice-table">
+          <view class="table-row" wx:for="{{group.tableRows}}" wx:for-item="row" wx:key="rowKey">
+            <view class="table-cell" wx:for="{{row.cells}}" wx:for-item="cell" wx:key="cellKey">
+              <template is="richChunks" data="{{chunks: cell.chunks, answers: answers}}" />
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="question-block" wx:for="{{group.questions}}" wx:for-item="question" wx:key="key">
+        <view class="q-head">
+          <text class="q-number">Q{{question.number}}</text>
+          <view class="q-title">
+            <template is="richChunks" data="{{chunks: question.titleChunks, answers: answers}}" />
+          </view>
+        </view>
+        <block wx:if="{{question.showControl}}">
+          <template is="answerControl" data="{{question: question, answers: answers, inline: false}}" />
+        </block>
+      </view>
+    </view>
+
+    <view class="submit-bar">
+      <view class="submit-info">{{progress.answeredCount}} / {{progress.totalCount}}</view>
+      <view class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitAnswers">
+        {{submitting ? '提交中…' : '提交答卷'}}
+      </view>
+    </view>
+  </block>
+</view>

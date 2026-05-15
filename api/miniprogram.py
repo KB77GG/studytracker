@@ -238,6 +238,109 @@ def _load_cambridge_reading_test(test_id: str) -> tuple[dict | None, str]:
     return _load_static_json("reading_tests", f"{safe_id}.json"), safe_id
 
 
+def _load_student_reading_test(test_id: str) -> tuple[dict | None, str]:
+    safe_id = secure_filename(test_id or "")
+    for root_name in ("reading_tests", "reading_jijing"):
+        payload = _load_static_json(root_name, f"{safe_id}.json")
+        if payload:
+            return payload, safe_id
+    return None, safe_id
+
+
+def _reading_question_is_multi_answer(question: dict) -> bool:
+    answer = str(question.get("answer") or "")
+    return "," in answer
+
+
+def _serialize_reading_question(question: dict) -> dict:
+    options = []
+    for option in question.get("options") or []:
+        key = option.get("key") or option.get("title")
+        text = option.get("text") or option.get("content") or ""
+        options.append({"key": key, "text": text})
+    return {
+        "id": question.get("id") or question.get("number"),
+        "number": question.get("number"),
+        "title": question.get("title") or "",
+        "input_mode": question.get("input_mode") or ("choice" if options else "text"),
+        "options": options,
+        "is_multi_answer": _reading_question_is_multi_answer(question),
+    }
+
+
+def _usable_reading_image(group: dict) -> str:
+    img_local = (group.get("img_local") or "").strip()
+    if img_local:
+        return f"https://studytracker.xin/static/{img_local.lstrip('/')}"
+    img_url = (group.get("img_url") or "").strip()
+    if re.match(r"^https?://", img_url):
+        return img_url
+    return ""
+
+
+def _serialize_reading_group(group: dict) -> dict:
+    collect_option = group.get("collect_option") or {}
+    collect_options = []
+    for option in collect_option.get("list") or []:
+        key = option.get("key") or option.get("title")
+        text = option.get("text") or option.get("content") or ""
+        collect_options.append({"key": key, "text": text})
+    return {
+        "group_id": group.get("group_id"),
+        "type": group.get("type"),
+        "title": group.get("title") or "",
+        "question_title": group.get("question_title") or "",
+        "desc": group.get("desc") or "",
+        "collect": group.get("collect") or "",
+        "table": group.get("table") or None,
+        "image_url": _usable_reading_image(group),
+        "collect_option": {
+            "title": collect_option.get("title") or "",
+            "list": collect_options,
+        },
+        "questions": [_serialize_reading_question(question) for question in group.get("questions") or []],
+    }
+
+
+def _serialize_reading_passage(passage: dict, passage_index: int) -> dict:
+    content = passage.get("content") if isinstance(passage.get("content"), dict) else {}
+    return {
+        "id": passage.get("id"),
+        "passage_index": passage_index,
+        "passage_number": int(passage.get("passage") or passage_index + 1),
+        "title": passage.get("title") or f"Passage {passage_index + 1}",
+        "question_name": passage.get("question_name") or "",
+        "question_type": passage.get("question_type") or [],
+        "content": {
+            "title": content.get("title") or passage.get("title") or "",
+            "summary": content.get("summary") or "",
+            "notes": content.get("notes") or "",
+            "paragraphs": content.get("paragraphs") or [],
+        },
+        "groups": [_serialize_reading_group(group) for group in passage.get("groups") or []],
+    }
+
+
+def _serialize_reading_test(payload: dict, passage_number: int | None = None) -> dict:
+    passages = []
+    for passage_index, passage in enumerate(payload.get("passages") or []):
+        current_number = int(passage.get("passage") or passage_index + 1)
+        if passage_number and current_number != int(passage_number):
+            continue
+        passages.append(_serialize_reading_passage(passage, passage_index))
+    return {
+        "id": payload.get("id"),
+        "title": payload.get("title") or "",
+        "source": payload.get("source") or "",
+        "passages": passages,
+        "question_count": sum(
+            len(group.get("questions") or [])
+            for passage in passages
+            for group in passage.get("groups") or []
+        ),
+    }
+
+
 def _serialize_listening_test_submission(row) -> dict | None:
     if not row:
         return None
@@ -1482,6 +1585,54 @@ def get_student_cambridge_listening_task(task_id):
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
         },
         "submission": _serialize_listening_test_submission(submission),
+    })
+
+
+@mp_bp.route("/student/reading/cambridge/<int:task_id>", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def get_student_cambridge_reading_task(task_id):
+    """获取阅读整套/Passage 原生小程序答题数据。"""
+    user = request.current_api_user
+    profile = user.student_profile
+    if not profile:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    token = (request.args.get("token") or "").strip()
+    if not token:
+        return jsonify({"ok": False, "error": "missing_token"}), 400
+
+    task = Task.query.get(task_id)
+    if (
+        not task
+        or task.student_name != profile.full_name
+        or not task.reading_test_id
+    ):
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+    if not task.reading_access_token or not secrets.compare_digest(task.reading_access_token, token):
+        return jsonify({"ok": False, "error": "invalid_token"}), 403
+
+    payload, safe_id = _load_student_reading_test(task.reading_test_id)
+    if not payload:
+        return jsonify({"ok": False, "error": "test_not_found"}), 404
+
+    passage_number = int(task.reading_passage_number) if task.reading_passage_number else None
+    submission = ReadingTestSubmission.query.filter_by(task_id=task.id).first()
+    return jsonify({
+        "ok": True,
+        "passage_number": passage_number,
+        "test": _serialize_reading_test(payload, passage_number),
+        "task": {
+            "id": task.id,
+            "status": task.status,
+            "student_name": task.student_name,
+            "title": task.detail or payload.get("title") or safe_id,
+            "reading_test_id": safe_id,
+            "reading_passage_number": passage_number,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        },
+        "submission": _serialize_reading_test_submission(submission),
     })
 
 
