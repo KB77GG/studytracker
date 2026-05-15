@@ -304,6 +304,45 @@ def _task_resource_binding(
     return PLAN_RESOURCE_FREEFORM, None, metadata
 
 
+def _task_resource_binding_from_task(task: Task) -> tuple[str, str | None, dict]:
+    if task.listening_exercise_id:
+        return _task_resource_binding(
+            listening_exercise_id=task.listening_exercise_id,
+            listening_resource_type=_task_listening_resource_type(task),
+        )
+    if task.dictation_book_id:
+        return _task_resource_binding(
+            dictation_book_id=task.dictation_book_id,
+            dictation_mode=task.dictation_mode,
+            dictation_word_start=task.dictation_word_start,
+            dictation_word_end=task.dictation_word_end,
+        )
+    if task.speaking_book_id:
+        return _task_resource_binding(
+            speaking_book_id=task.speaking_book_id,
+            speaking_phrase_start=task.speaking_phrase_start,
+            speaking_phrase_end=task.speaking_phrase_end,
+        )
+    if task.material_id:
+        return _task_resource_binding(
+            material_id=task.material_id,
+            question_ids=task.question_ids,
+            grading_mode=task.grading_mode,
+        )
+    metadata = {}
+    if task.reading_test_id:
+        metadata = {
+            "reading_test_id": task.reading_test_id,
+            "reading_passage_number": task.reading_passage_number,
+            "question_ids": task.question_ids,
+            "grading_mode": task.grading_mode or "reading_test",
+        }
+        return PLAN_RESOURCE_FREEFORM, f"reading_test:{task.reading_test_id}", metadata
+    if task.grading_mode:
+        metadata["grading_mode"] = task.grading_mode
+    return PLAN_RESOURCE_FREEFORM, None, metadata
+
+
 def _plan_status_from_task_status(status: str | None):
     value = (status or "pending").lower()
     if value == "done":
@@ -365,14 +404,32 @@ def _create_plan_item_shadow_for_task(
 
 
 def _sync_plan_item_from_task(task: Task) -> None:
-    item = task.plan_item
-    if not item:
-        return
     creator_id = task.created_by
     if not creator_id and has_request_context() and getattr(current_user, "is_authenticated", False):
         creator_id = current_user.id
-    if not creator_id:
+    item = task.plan_item
+    if not creator_id and item and item.plan:
         creator_id = item.plan.created_by if item.plan else None
+    if not item:
+        if not creator_id:
+            return
+        resource_type, resource_id, resource_metadata = _task_resource_binding_from_task(task)
+        item = _create_plan_item_shadow_for_task(
+            student_name=task.student_name,
+            date_value=task.date,
+            category=task.category,
+            detail=task.detail,
+            note=task.note,
+            status=task.status,
+            planned_minutes=int(task.planned_minutes or 0),
+            actual_seconds=int(task.actual_seconds or 0),
+            creator_id=creator_id,
+            resource_type=resource_type,
+            resource_id=resource_id,
+            access_token=task.listening_access_token or task.reading_access_token,
+            resource_metadata=resource_metadata,
+        )
+        task.plan_item = item
     if task.student_name and (not item.plan or item.plan.student.full_name != task.student_name):
         if creator_id:
             item.plan = _ensure_study_plan_for_task(task.student_name, task.date, creator_id)
@@ -390,6 +447,12 @@ def _sync_plan_item_from_task(task: Task) -> None:
     item.actual_seconds = max(int(item.actual_seconds or 0), int(task.actual_seconds or 0))
     item.student_status = student_status
     item.review_status = review_status
+    resource_type, resource_id, resource_metadata = _task_resource_binding_from_task(task)
+    item.resource_type = resource_type
+    item.resource_id = resource_id
+    if task.listening_access_token or task.reading_access_token:
+        item.access_token = task.listening_access_token or task.reading_access_token
+    item.resource_metadata = json.dumps(resource_metadata or {}, ensure_ascii=False)
     if task.submitted_at:
         item.submitted_at = task.submitted_at
     if task.student_note:
@@ -3492,7 +3555,7 @@ def api_task_edit(tid):
 
     data = request.get_json(silent=True) or {}
     # 允许的状态
-    allowed_status = {"pending", "progress", "done"}
+    allowed_status = {"pending", "progress", "submitted", "done"}
 
     # 按需更新（有传才更新）
     if "date" in data:
@@ -3749,6 +3812,7 @@ def api_review_task(tid):
         task.note = data["note"]
         
     task.status = "done"
+    _sync_plan_item_from_task(task)
     db.session.commit()
     
     return jsonify({"ok": True})
@@ -3806,6 +3870,7 @@ def api_session_stop(sid):
                 if not t.started_at:
                     t.started_at = sess.started_at
                 t.ended_at = sess.ended_at  # 最后一次结束时间
+                _sync_plan_item_from_task(t)
         db.session.commit()
     return jsonify({"ok": True, "session_id": sess.id, "seconds": sess.seconds or 0})
 # ---- 设置任务的预计用时（分钟）----
@@ -3819,6 +3884,7 @@ def api_task_plan(tid):
     try:
         pm = int(data.get("planned_minutes") or 0)
         t.planned_minutes = max(0, pm)
+        _sync_plan_item_from_task(t)
         db.session.commit()
         return jsonify({"ok": True, "planned_minutes": t.planned_minutes})
     except Exception:
@@ -3834,6 +3900,9 @@ def api_task_time_reset(tid):
     t.actual_seconds = 0
     t.started_at = None
     t.ended_at = None
+    if t.plan_item:
+        t.plan_item.actual_seconds = 0
+    _sync_plan_item_from_task(t)
     db.session.commit()
     return jsonify({"ok": True})
 
@@ -3883,6 +3952,16 @@ def bulk_page():
                 s, c, d, n = parse_line(ln)
                 if not (s and c and d):
                     continue
+                plan_item = _create_plan_item_shadow_for_task(
+                    student_name=s,
+                    date_value=date_str,
+                    category=c,
+                    detail=d,
+                    note=n,
+                    status=status,
+                    planned_minutes=0,
+                    creator_id=current_user.id,
+                )
                 t = Task(
                     date=date_str,
                     student_name=s,
@@ -3890,7 +3969,8 @@ def bulk_page():
                     detail=d,
                     status=status,
                     note=n,
-                    created_by=current_user.id
+                    created_by=current_user.id,
+                    plan_item_id=plan_item.id,
                 )
                 db.session.add(t)
                 created += 1
@@ -4311,17 +4391,54 @@ def _build_stage_report_payload(student: StudentProfile, start_date: date, end_d
         .order_by(StudyPlan.plan_date.asc(), PlanItem.order_index.asc())
         .all()
     )
-    legacy_tasks = []
-    if not items and student and student.full_name:
-        legacy_tasks = (
-            Task.query.filter(
-                Task.student_name == student.full_name,
-                Task.date >= start_date.isoformat(),
-                Task.date <= end_date.isoformat(),
+    item_ids = {item.id for item in items}
+    legacy_filters = [
+        Task.student_name == student.full_name,
+        Task.date >= start_date.isoformat(),
+        Task.date <= end_date.isoformat(),
+    ]
+    if item_ids:
+        legacy_filters.append(
+            or_(
+                Task.plan_item_id.is_(None),
+                ~Task.plan_item_id.in_(item_ids),
             )
-            .order_by(Task.date.asc(), Task.id.asc())
-            .all()
         )
+    legacy_tasks = (
+        Task.query.filter(*legacy_filters)
+        .order_by(Task.date.asc(), Task.id.asc())
+        .all()
+    )
+    represented_counts = defaultdict(int)
+    for item in items:
+        represented_counts[
+            (
+                item.plan.plan_date.isoformat() if item.plan and item.plan.plan_date else "",
+                item.exam_system or "",
+                item.module or "",
+                item.task_name or "",
+                item.custom_title or "",
+                item.instructions or "",
+            )
+        ] += 1
+    deduped_legacy_tasks = []
+    for task in legacy_tasks:
+        if task.plan_item_id in item_ids:
+            continue
+        exam_system, module, task_name = _normalize_task_category(task.category)
+        task_key = (
+            task.date or "",
+            exam_system or "",
+            module or "",
+            task_name or "",
+            task.detail or "",
+            task.note or "",
+        )
+        if represented_counts[task_key] > 0:
+            represented_counts[task_key] -= 1
+            continue
+        deduped_legacy_tasks.append(task)
+    legacy_tasks = deduped_legacy_tasks
 
     module_map = defaultdict(
         lambda: {
@@ -4339,74 +4456,73 @@ def _build_stage_report_payload(student: StudentProfile, start_date: date, end_d
         }
     )
 
-    if items:
-        for item in items:
-            module = (item.module or "").strip() or "未分类"
-            row = module_map[module]
-            row["total"] += 1
-            row["planned_minutes"] += int(item.planned_minutes or 0)
-            row["actual_minutes"] += int((item.actual_seconds or 0) / 60) + int(item.manual_minutes or 0)
+    for item in items:
+        module = (item.module or "").strip() or "未分类"
+        row = module_map[module]
+        row["total"] += 1
+        row["planned_minutes"] += int(item.planned_minutes or 0)
+        row["actual_minutes"] += int((item.actual_seconds or 0) / 60) + int(item.manual_minutes or 0)
 
-            review_status = item.review_status or PlanItem.REVIEW_PENDING
-            mastery_value = 0.35
-            if review_status == PlanItem.REVIEW_APPROVED:
-                row["approved"] += 1
-                mastery_value = 1.0
-            elif review_status == PlanItem.REVIEW_PARTIAL:
-                row["partial"] += 1
-                mastery_value = 0.65
-            elif review_status == PlanItem.REVIEW_REJECTED:
-                row["rejected"] += 1
-                mastery_value = 0.2
-            else:
-                row["pending"] += 1
+        review_status = item.review_status or PlanItem.REVIEW_PENDING
+        mastery_value = 0.35
+        if review_status == PlanItem.REVIEW_APPROVED:
+            row["approved"] += 1
+            mastery_value = 1.0
+        elif review_status == PlanItem.REVIEW_PARTIAL:
+            row["partial"] += 1
+            mastery_value = 0.65
+        elif review_status == PlanItem.REVIEW_REJECTED:
+            row["rejected"] += 1
+            mastery_value = 0.2
+        else:
+            row["pending"] += 1
 
-            row["mastery_sum"] += mastery_value
-            row["mastery_count"] += 1
+        row["mastery_sum"] += mastery_value
+        row["mastery_count"] += 1
 
-            content_name = (item.custom_title or item.task_name or "").strip()
-            if (
-                content_name
-                and content_name not in row["content_seen"]
-                and len(row["contents"]) < 8
-            ):
-                row["contents"].append(content_name)
-                row["content_seen"].add(content_name)
-    else:
-        for task in legacy_tasks:
-            raw_category = (task.category or "").strip() or "未分类"
-            parts = [part for part in raw_category.split("-") if part]
-            module = parts[1] if len(parts) >= 2 else parts[0]
-            row = module_map[module]
-            row["total"] += 1
-            row["planned_minutes"] += int(task.planned_minutes or 0)
-            row["actual_minutes"] += int((task.actual_seconds or 0) / 60)
+        content_name = (item.custom_title or item.task_name or "").strip()
+        if (
+            content_name
+            and content_name not in row["content_seen"]
+            and len(row["contents"]) < 8
+        ):
+            row["contents"].append(content_name)
+            row["content_seen"].add(content_name)
 
-            task_status = (task.status or "pending").lower()
-            status_value = 0.2
-            if task_status == "done":
-                row["approved"] += 1
-                status_value = 0.85
-            elif task_status == "progress" or task_status == "in_progress":
-                row["partial"] += 1
-                status_value = 0.55
-            else:
-                row["pending"] += 1
+    for task in legacy_tasks:
+        raw_category = (task.category or "").strip() or "未分类"
+        parts = [part for part in raw_category.split("-") if part]
+        module = parts[1] if len(parts) >= 2 else parts[0]
+        row = module_map[module]
+        row["total"] += 1
+        row["planned_minutes"] += int(task.planned_minutes or 0)
+        row["actual_minutes"] += int((task.actual_seconds or 0) / 60)
 
-            accuracy_value = float(task.accuracy or 0.0)
-            if accuracy_value > 0:
-                status_value = max(status_value, min(1.0, accuracy_value / 100.0))
-            row["mastery_sum"] += status_value
-            row["mastery_count"] += 1
+        task_status = (task.status or "pending").lower()
+        status_value = 0.2
+        if task_status == "done":
+            row["approved"] += 1
+            status_value = 0.85
+        elif task_status == "progress" or task_status == "in_progress":
+            row["partial"] += 1
+            status_value = 0.55
+        else:
+            row["pending"] += 1
 
-            content_name = (task.detail or raw_category).strip()
-            if (
-                content_name
-                and content_name not in row["content_seen"]
-                and len(row["contents"]) < 8
-            ):
-                row["contents"].append(content_name)
-                row["content_seen"].add(content_name)
+        accuracy_value = float(task.accuracy or 0.0)
+        if accuracy_value > 0:
+            status_value = max(status_value, min(1.0, accuracy_value / 100.0))
+        row["mastery_sum"] += status_value
+        row["mastery_count"] += 1
+
+        content_name = (task.detail or raw_category).strip()
+        if (
+            content_name
+            and content_name not in row["content_seen"]
+            and len(row["contents"]) < 8
+        ):
+            row["contents"].append(content_name)
+            row["content_seen"].add(content_name)
 
     subject_rows = []
     for module, row in module_map.items():
@@ -4444,19 +4560,15 @@ def _build_stage_report_payload(student: StudentProfile, start_date: date, end_d
 
     subject_rows.sort(key=lambda entry: entry["planned_minutes"], reverse=True)
 
-    if items:
-        total_items = len(items)
-        reviewed_items = sum(
-            1
-            for item in items
-            if item.review_status
-            in (PlanItem.REVIEW_APPROVED, PlanItem.REVIEW_PARTIAL, PlanItem.REVIEW_REJECTED)
-        )
-    else:
-        total_items = len(legacy_tasks)
-        reviewed_items = sum(
-            1 for task in legacy_tasks if (task.status or "").lower() in {"done", "progress", "in_progress"}
-        )
+    total_items = len(items) + len(legacy_tasks)
+    reviewed_items = sum(
+        1
+        for item in items
+        if item.review_status
+        in (PlanItem.REVIEW_APPROVED, PlanItem.REVIEW_PARTIAL, PlanItem.REVIEW_REJECTED)
+    ) + sum(
+        1 for task in legacy_tasks if (task.status or "").lower() in {"done", "progress", "in_progress"}
+    )
     planned_total = sum(row["planned_minutes"] for row in subject_rows)
     actual_total = sum(row["actual_minutes"] for row in subject_rows)
     stage_completion_rate = round(reviewed_items * 100.0 / total_items, 1) if total_items else 0.0

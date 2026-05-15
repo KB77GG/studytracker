@@ -174,20 +174,24 @@ def main():
                     created_plans += 1
                 plan_cache[plan_key] = plan
 
+            exam, module, task_name = normalize_category(task.category)
+
             # Avoid duplicating items if we already migrated this task
             existing_item = (
                 PlanItem.query.filter_by(
                     plan_id=plan.id,
-                    task_name=task.category or task.detail,
+                    exam_system=exam,
+                    module=module,
+                    task_name=task_name,
                     custom_title=task.detail,
                     is_deleted=False,
                 ).first()
             )
             if existing_item:
+                task.plan_item_id = existing_item.id
                 updated_items += 1
                 continue
 
-            exam, module, task_name = normalize_category(task.category)
             catalog = ensure_catalog(
                 exam=exam,
                 module=module,
@@ -230,6 +234,7 @@ def main():
                 review_comment=review_comment,
             )
             db.session.add(plan_item)
+            task.plan_item = plan_item
             created_items += 1
 
             if review_status in (PlanItem.REVIEW_APPROVED, PlanItem.REVIEW_PARTIAL, PlanItem.REVIEW_REJECTED):
