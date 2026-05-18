@@ -22,7 +22,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from sqlalchemy.orm import joinedload
-from models import db, User, DictationBook, DictationWord, DictationRecord, Task
+from models import db, User, DictationBook, DictationWord, DictationRecord, StudentWordMastery, Task
 
 
 def require_session_or_bearer(fn):
@@ -822,16 +822,17 @@ def submit_answer():
     student_answer = (data.get("answer") or "").strip().lower()
     book_id = data.get("book_id")
     task_id = data.get("task_id")
-    
+    mode = data.get("mode")
+
     if not word_id or not student_answer:
         return jsonify({"ok": False, "error": "missing_params"}), 400
-    
+
     word = DictationWord.query.get_or_404(word_id)
     correct_answer = word.word.lower().strip()
-    
+
     # Check correctness (exact match for now, can add fuzzy matching later)
     is_correct = student_answer == correct_answer
-    
+
     # Record the attempt
     record = DictationRecord(
         student_id=current_user.id,
@@ -842,6 +843,15 @@ def submit_answer():
         is_correct=is_correct
     )
     db.session.add(record)
+
+    StudentWordMastery.apply_answer(
+        student_id=current_user.id,
+        word_id=word.id,
+        book_id=book_id or word.book_id,
+        is_correct=is_correct,
+        mode=mode,
+    )
+
     db.session.commit()
     
     return jsonify({
@@ -930,6 +940,111 @@ def get_book_stats(book_id):
         "correct": len(correct),
         "accuracy": round(len(correct) / len(attempted) * 100, 1) if attempted else 0,
         "wrong_words": wrong_words
+    })
+
+
+@dictation_bp.route("/review/today", methods=["GET"])
+@login_required
+def get_review_today():
+    """Return words due for spaced-repetition review for the current student.
+
+    A word is "due" when it has a mastery row with next_review_at <= now and
+    review_level < graduated. Each word carries the practice mode it should be
+    drilled with (rises from en_to_zh to zh_to_en to audio_to_en as level climbs).
+    """
+    from datetime import datetime
+    now = datetime.utcnow()
+    limit = min(int(request.args.get("limit", 30) or 30), 100)
+
+    rows = (
+        StudentWordMastery.query
+        .filter(StudentWordMastery.student_id == current_user.id)
+        .filter(StudentWordMastery.review_level < StudentWordMastery.LEVEL_GRADUATED)
+        .filter(StudentWordMastery.next_review_at <= now)
+        .order_by(StudentWordMastery.next_review_at.asc())
+        .limit(limit)
+        .all()
+    )
+
+    items = []
+    for m in rows:
+        w = m.word
+        if w is None:
+            continue
+        items.append({
+            "word_id": w.id,
+            "book_id": w.book_id,
+            "word": w.word,
+            "phonetic": w.phonetic,
+            "translation": w.translation,
+            "mode": StudentWordMastery.mode_for_level(m.review_level),
+            "review_level": m.review_level,
+            "mistake_count": m.mistake_count,
+        })
+
+    return jsonify({"ok": True, "count": len(items), "items": items})
+
+
+@dictation_bp.route("/review/summary", methods=["GET"])
+@login_required
+def get_review_summary():
+    """Lightweight summary for the home-page card: how many words are due now."""
+    from datetime import datetime
+    now = datetime.utcnow()
+    due_count = (
+        StudentWordMastery.query
+        .filter(StudentWordMastery.student_id == current_user.id)
+        .filter(StudentWordMastery.review_level < StudentWordMastery.LEVEL_GRADUATED)
+        .filter(StudentWordMastery.next_review_at <= now)
+        .count()
+    )
+    return jsonify({"ok": True, "due_count": due_count})
+
+
+@dictation_bp.route("/stubborn-words", methods=["GET"])
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def get_stubborn_words():
+    """TA/teacher view: list students with their stubborn words (mistake_count >= threshold).
+
+    Grouped by student so a TA can quickly see who needs targeted attention.
+    """
+    threshold = max(int(request.args.get("threshold", 3) or 3), 1)
+
+    rows = (
+        StudentWordMastery.query
+        .filter(StudentWordMastery.mistake_count >= threshold)
+        .order_by(
+            StudentWordMastery.student_id.asc(),
+            StudentWordMastery.mistake_count.desc(),
+        )
+        .all()
+    )
+
+    grouped = {}
+    for m in rows:
+        student = m.student
+        word = m.word
+        if student is None or word is None:
+            continue
+        bucket = grouped.setdefault(student.id, {
+            "student_id": student.id,
+            "student_name": getattr(student, "name", None) or student.username,
+            "words": [],
+        })
+        bucket["words"].append({
+            "word_id": word.id,
+            "word": word.word,
+            "translation": word.translation,
+            "mistake_count": m.mistake_count,
+            "review_level": m.review_level,
+            "last_seen_at": m.last_seen_at.isoformat() if m.last_seen_at else None,
+        })
+
+    return jsonify({
+        "ok": True,
+        "threshold": threshold,
+        "students": list(grouped.values()),
     })
 
 

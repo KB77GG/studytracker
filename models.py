@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
@@ -915,6 +915,102 @@ class DictationRecord(db.Model, TimestampMixin):
     
     def __repr__(self):
         return f"<DictationRecord student={self.student_id} word={self.word_id} correct={self.is_correct}>"
+
+
+class StudentWordMastery(db.Model, TimestampMixin):
+    """Per-student, per-word mastery state for spaced-repetition review."""
+
+    __tablename__ = "student_word_mastery"
+    __table_args__ = (
+        db.UniqueConstraint("student_id", "word_id", name="uq_mastery_student_word"),
+    )
+
+    REVIEW_INTERVALS_DAYS = [1, 3, 7, 14]
+    LEVEL_GRADUATED = 5
+    STREAK_TO_PROMOTE = 2
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+
+    mistake_count = db.Column(db.Integer, default=0, nullable=False)
+    correct_streak = db.Column(db.Integer, default=0, nullable=False)
+    review_level = db.Column(db.Integer, default=0, nullable=False, index=True)
+    next_review_at = db.Column(db.DateTime, nullable=True, index=True)
+    last_seen_at = db.Column(db.DateTime, nullable=True)
+    last_mode = db.Column(db.String(20), nullable=True)
+
+    student = db.relationship("User", backref=db.backref("word_mastery", lazy="dynamic"))
+    word = db.relationship("DictationWord", backref=db.backref("mastery_records", lazy="dynamic"))
+    book = db.relationship("DictationBook", backref=db.backref("mastery_records", lazy="dynamic"))
+
+    def __repr__(self):
+        return f"<StudentWordMastery s={self.student_id} w={self.word_id} lvl={self.review_level}>"
+
+    @classmethod
+    def apply_answer(cls, *, student_id, word_id, book_id, is_correct, mode=None, now=None):
+        """Update or create the mastery row for a (student, word) after an answer.
+
+        Rules:
+        - Correct answer: only updates an existing row. correct_streak += 1; once it
+          reaches STREAK_TO_PROMOTE, the level advances and a new next_review_at is
+          set from REVIEW_INTERVALS_DAYS. Reaching LEVEL_GRADUATED clears the queue.
+        - Wrong answer: creates the row if absent, increments mistake_count, resets
+          streak, and forces review_level back to 1 with next_review_at = now + 1d.
+        """
+        now = now or datetime.utcnow()
+        mastery = cls.query.filter_by(student_id=student_id, word_id=word_id).first()
+
+        if is_correct:
+            if mastery is None:
+                return None
+            mastery.last_seen_at = now
+            mastery.last_mode = mode
+            mastery.correct_streak += 1
+            if (
+                mastery.correct_streak >= cls.STREAK_TO_PROMOTE
+                and mastery.review_level < cls.LEVEL_GRADUATED
+            ):
+                mastery.review_level += 1
+                mastery.correct_streak = 0
+                if mastery.review_level >= cls.LEVEL_GRADUATED:
+                    mastery.next_review_at = None
+                else:
+                    days = cls.REVIEW_INTERVALS_DAYS[mastery.review_level - 1]
+                    mastery.next_review_at = now + timedelta(days=days)
+            return mastery
+
+        if mastery is None:
+            mastery = cls(
+                student_id=student_id,
+                word_id=word_id,
+                book_id=book_id,
+                mistake_count=0,
+                correct_streak=0,
+                review_level=0,
+            )
+            db.session.add(mastery)
+        mastery.mistake_count += 1
+        mastery.correct_streak = 0
+        mastery.review_level = 1
+        mastery.next_review_at = now + timedelta(days=cls.REVIEW_INTERVALS_DAYS[0])
+        mastery.last_seen_at = now
+        mastery.last_mode = mode
+        return mastery
+
+    @classmethod
+    def mode_for_level(cls, level):
+        """Return the practice mode to use when reviewing a word at the given level.
+
+        Difficulty ratchets up with the level so that students move from passive
+        recognition (en→zh) to active production (zh→en) to listening (audio→en).
+        """
+        if level <= 1:
+            return "en_to_zh"
+        if level == 2:
+            return "zh_to_en"
+        return "audio_to_en"
 
 
 # ---- Speaking Practice (Listen & Repeat) ----

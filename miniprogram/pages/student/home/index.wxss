@@ -207,6 +207,62 @@ page {
   box-shadow: 0 18rpx 36rpx rgba(0, 105, 98, 0.22);
 }
 
+.review-today-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding: 28rpx 30rpx;
+  margin-bottom: 22rpx;
+  border-radius: 32rpx;
+  color: #fff;
+  background:
+    radial-gradient(circle at right top, rgba(255, 255, 255, 0.22), transparent 50%),
+    linear-gradient(135deg, #d77834, #f1a35a);
+  box-shadow: 0 18rpx 36rpx rgba(196, 110, 50, 0.28);
+}
+
+.review-today-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.review-today-title {
+  font-size: 32rpx;
+  font-weight: 900;
+  margin-bottom: 6rpx;
+}
+
+.review-today-desc {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 23rpx;
+}
+
+.review-today-right {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+.review-today-num {
+  font-size: 56rpx;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.review-today-unit {
+  font-size: 24rpx;
+  font-weight: 700;
+  margin-right: 10rpx;
+}
+
+.review-today-arrow {
+  font-size: 40rpx;
+  line-height: 1;
+  margin-left: 4rpx;
+}
+
 .review-title {
   font-size: 32rpx;
   font-weight: 900;

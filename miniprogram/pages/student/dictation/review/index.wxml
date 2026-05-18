@@ -1,0 +1,89 @@
+<view class="page">
+  <view class="loading" wx:if="{{loading}}">加载中…</view>
+
+  <view class="error" wx:elif="{{loadError}}">
+    <text>{{loadError}}</text>
+    <button class="btn" bindtap="fetchReviewQueue">重试</button>
+  </view>
+
+  <view class="empty" wx:elif="{{!loading && totalWords === 0}}">
+    <view class="empty-emoji">🎉</view>
+    <view class="empty-title">今日没有待复习的词</view>
+    <view class="empty-desc">继续保持，等下一个复习窗口到来。</view>
+    <button class="btn" bindtap="backToHome">返回首页</button>
+  </view>
+
+  <block wx:elif="{{!finished}}">
+    <view class="header">
+      <view class="progress-text">{{currentIndex + 1}} / {{totalWords}}</view>
+      <view class="level-tag" wx:if="{{levelLabel}}">{{levelLabel}}</view>
+    </view>
+
+    <view class="card">
+      <block wx:if="{{currentMode === 'en_to_zh'}}">
+        <view class="prompt-word">{{currentWord.word}}</view>
+        <view class="prompt-phonetic" wx:if="{{currentWord.phonetic}}">[{{currentWord.phonetic}}]</view>
+        <view class="mode-tag">看英文 → 写中文释义</view>
+      </block>
+
+      <block wx:elif="{{currentMode === 'zh_to_en'}}">
+        <view class="prompt-chinese">{{currentWord.translation}}</view>
+        <view class="mode-tag">看中文 → 写英文表达</view>
+      </block>
+
+      <block wx:else>
+        <view class="audio-area">
+          <view class="play-btn" bindtap="replayAudio">▶</view>
+          <view class="play-hint">点击播放发音</view>
+        </view>
+        <view class="mode-tag">听音 → 写英文单词</view>
+      </block>
+
+      <view class="input-row" wx:if="{{!showResult}}">
+        <input class="word-input"
+               placeholder="{{modeHint}}"
+               value="{{inputValue}}"
+               bindinput="onInput"
+               confirm-type="done"
+               bindconfirm="checkAnswer"/>
+      </view>
+
+      <view class="result" wx:else>
+        <view class="result-flag {{isCorrect ? 'ok' : 'bad'}}">
+          {{isCorrect ? '✓ 答对了' : '✗ 答错了'}}
+        </view>
+        <view class="answer-block">
+          <view class="answer-row"><text class="label">你的答案：</text>{{userAnswer || '（空）'}}</view>
+          <view class="answer-row"><text class="label">参考答案：</text>{{correctAnswer || '-'}}</view>
+          <view class="answer-row" wx:if="{{currentMode !== 'en_to_zh'}}">
+            <text class="label">中文释义：</text>{{currentWord.translation || '-'}}
+          </view>
+          <view class="answer-row" wx:if="{{currentMode === 'en_to_zh'}}">
+            <text class="label">英文单词：</text>{{currentWord.word || '-'}}
+            <text wx:if="{{currentWord.phonetic}}"> [{{currentWord.phonetic}}]</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="action-bar">
+      <button wx:if="{{!showResult}}" class="btn primary" bindtap="checkAnswer">提交</button>
+      <button wx:else class="btn primary" bindtap="nextWord">
+        {{currentIndex + 1 === totalWords ? '完成本轮' : '下一个'}}
+      </button>
+    </view>
+  </block>
+
+  <view class="summary" wx:elif="{{finished}}">
+    <view class="summary-title">本轮复习完成</view>
+    <view class="summary-row">共 {{totalWords}} 词</view>
+    <view class="summary-row">答对 {{correctCount}} / 答错 {{wrongCount}}</view>
+    <view class="summary-tip">
+      答对的词会按 1d / 3d / 7d / 14d 节奏自动安排下次复习；答错的词会立即回到第 1 关。
+    </view>
+    <view class="summary-actions">
+      <button class="btn primary" bindtap="restartReview">再来一组</button>
+      <button class="btn" bindtap="backToHome">返回首页</button>
+    </view>
+  </view>
+</view>

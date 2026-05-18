@@ -25,6 +25,7 @@ Page({
         subscribeTip: '多次允许后，微信会出现“总是保持以上选择”，勾选即可长期免打扰',
         notebookCount: 0,
         reviewTaskCount: 0,
+        reviewDueCount: 0,
         isGuest: false,
         weekdayText: '',
         quickDates: []
@@ -59,6 +60,7 @@ Page({
 
         this.fetchTasks()
         this.loadNotebookCount()
+        this.loadReviewDueCount()
         this.updateGreeting()
 
         // Restore timer if there's an active one in storage
@@ -251,6 +253,34 @@ Page({
         wx.navigateTo({
             url: '/pages/student/notebook/index'
         })
+    },
+
+    goReviewToday() {
+        if (!this.data.reviewDueCount) {
+            wx.showToast({ title: '今日没有待复习的词', icon: 'none' })
+            return
+        }
+        wx.navigateTo({
+            url: '/pages/student/dictation/review/index'
+        })
+    },
+
+    loadReviewDueCount() {
+        if (this.data.isGuest) {
+            this.setData({ reviewDueCount: 0 })
+            return
+        }
+        request('/api/dictation/review/summary')
+            .then((res) => {
+                if (res && res.ok) {
+                    this.setData({ reviewDueCount: res.due_count || 0 })
+                } else {
+                    this.setData({ reviewDueCount: 0 })
+                }
+            })
+            .catch(() => {
+                this.setData({ reviewDueCount: 0 })
+            })
     },
 
     loadNotebookCount() {

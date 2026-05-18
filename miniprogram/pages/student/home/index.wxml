@@ -36,6 +36,18 @@
       <text class="progress-tips" wx:else>先从一个任务开始，进入学习状态。</text>
     </view>
 
+    <view class="review-today-card" wx:if="{{reviewDueCount > 0}}" bindtap="goReviewToday">
+      <view class="review-today-left">
+        <view class="review-today-title">今日复习</view>
+        <view class="review-today-desc">基于艾宾浩斯曲线，复盘到期单词</view>
+      </view>
+      <view class="review-today-right">
+        <text class="review-today-num">{{reviewDueCount}}</text>
+        <text class="review-today-unit">词</text>
+        <text class="review-today-arrow">›</text>
+      </view>
+    </view>
+
     <view class="review-entry" bindtap="goNotebook">
       <view>
         <view class="review-title">复习中心</view>
