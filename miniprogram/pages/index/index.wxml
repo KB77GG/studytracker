@@ -4,6 +4,7 @@
   <view class="dot-grid">
     <view wx:for="{{dotList}}" wx:key="*this" class="dot"></view>
   </view>
+  <view class="bottom-flourish"></view>
 
   <view class="hero {{showLoginForm ? 'hero-confirm' : ''}}">
     <text class="app-name">StudyTracker</text>
@@ -14,14 +15,9 @@
   <view class="main-card">
     <view class="welcome-intro" wx:if="{{!hasToken && !showLoginForm}}">
       <view class="intro-content">
-        <view class="intro-title-row">
-          <view class="intro-mark">学</view>
-          <text class="intro-title">智能学习管理</text>
-        </view>
-
         <view class="feature-list">
           <view class="feature-item accent-teal">
-            <view class="feature-icon">任</view>
+            <view class="feature-icon icon-task"></view>
             <view class="feature-texts">
               <text class="feature-title">学习任务</text>
               <text class="feature-desc">查看每日练习、作业与打卡进度</text>
@@ -29,7 +25,7 @@
             <text class="feature-arrow">›</text>
           </view>
           <view class="feature-item accent-blue">
-            <view class="feature-icon">课</view>
+            <view class="feature-icon icon-schedule"></view>
             <view class="feature-texts">
               <text class="feature-title">课程课表</text>
               <text class="feature-desc">查看课程时间、地点与上课提醒</text>
@@ -37,7 +33,7 @@
             <text class="feature-arrow">›</text>
           </view>
           <view class="feature-item accent-amber">
-            <view class="feature-icon">反</view>
+            <view class="feature-icon icon-feedback"></view>
             <view class="feature-texts">
               <text class="feature-title">学习反馈</text>
               <text class="feature-desc">查看老师反馈、练习结果与改进建议</text>
@@ -45,7 +41,7 @@
             <text class="feature-arrow">›</text>
           </view>
           <view class="feature-item accent-violet">
-            <view class="feature-icon">数</view>
+            <view class="feature-icon icon-data"></view>
             <view class="feature-texts">
               <text class="feature-title">学习数据</text>
               <text class="feature-desc">了解完成率、正确率和阶段表现</text>
@@ -54,20 +50,22 @@
           </view>
         </view>
 
-        <view class="privacy-section">
-          <checkbox-group bindchange="handleLandingPrivacyChange">
-            <label class="privacy-label">
-              <checkbox value="agree" checked="{{landingAgreed}}" color="#087f77" style="transform:scale(0.82)" />
-              <text class="privacy-text">我已阅读并同意 <text class="link" catchtap="openPrivacyContract">《用户协议》</text> 和 <text class="link" catchtap="openPrivacyContract">《隐私政策》</text></text>
-            </label>
-          </checkbox-group>
+        <view class="cta-stack">
+          <view class="privacy-section">
+            <checkbox-group bindchange="handleLandingPrivacyChange">
+              <label class="privacy-label">
+                <checkbox value="agree" checked="{{landingAgreed}}" color="#087f77" style="transform:scale(0.82)" />
+                <text class="privacy-text">我已阅读并同意 <text class="link" catchtap="openPrivacyContract">《用户协议》</text> 和 <text class="link" catchtap="openPrivacyContract">《隐私政策》</text></text>
+              </label>
+            </checkbox-group>
+          </view>
+
+          <button class="btn-start {{!landingAgreed ? 'btn-disabled' : ''}}" bindtap="startUse">开始使用</button>
+          <button class="btn-ghost" bindtap="showPreview">先浏览功能</button>
         </view>
 
-        <button class="btn-start {{!landingAgreed ? 'btn-disabled' : ''}}" bindtap="startUse">开始使用</button>
-        <button class="btn-ghost" bindtap="showPreview">先浏览功能</button>
-
         <view class="login-note">
-          <view class="shield-mark">✓</view>
+          <view class="shield-mark"></view>
           <text>登录后将根据账号自动进入学生端或教师端</text>
         </view>
       </view>
