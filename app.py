@@ -5552,6 +5552,14 @@ def materials_view(material_id):
     return render_template("material_view.html", material=material)
 
 
+@app.route("/admin/word-examples")
+@login_required
+@role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def word_examples_page():
+    """Vocabulary enrichment review page."""
+    return render_template("word_examples.html")
+
+
 @app.route("/materials/<int:material_id>/edit")
 @login_required
 @role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)

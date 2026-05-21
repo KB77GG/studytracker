@@ -127,20 +127,40 @@
 
       <!-- Result Feedback (Show after check) -->
       <view class="result-feedback" wx:else>
-        <text class="correct-word">{{currentWord.word}}</text>
-        <view>
-          <text class="phonetic">[{{currentWord.phonetic || '-'}}]</text>
+        <view class="result-status {{isCorrect ? 'ok' : 'bad'}}">
+          {{isCorrect ? '✓ 回答正确' : '✗ 回答错误'}}
         </view>
-        <text class="translation">{{currentWord.translation || '暂无释义'}}</text>
+
+        <view class="vocab-card">
+          <view class="vocab-head">
+            <text class="correct-word">{{currentWord.word}}</text>
+            <text class="phonetic" wx:if="{{currentWord.phonetic}}">[{{currentWord.phonetic}}]</text>
+          </view>
+          <view class="core-meaning">
+            <text class="vocab-label">核心义：</text>{{currentWord.core_meaning_zh || currentWord.translation || '暂无释义'}}
+          </view>
+          <view class="usage-chip" wx:if="{{currentWord.usage_pattern}}">
+            搭配 / 句型：{{currentWord.usage_pattern}}
+          </view>
+          <view class="example-block" wx:if="{{currentWord.example_en}}">
+            <view class="example-label">例句</view>
+            <text class="example-en">{{currentWord.example_en}}</text>
+            <text class="example-zh" wx:if="{{currentWord.example_zh}}">{{currentWord.example_zh}}</text>
+          </view>
+          <view class="usage-note" wx:if="{{currentWord.usage_note}}">
+            <text class="vocab-label">用法提示：</text>{{currentWord.usage_note}}
+          </view>
+          <view class="example-report"
+                wx:if="{{currentWord.id && (currentWord.core_meaning_zh || currentWord.usage_pattern || currentWord.example_en || currentWord.example_zh || currentWord.usage_note)}}"
+                bindtap="reportExample"
+                data-id="{{currentWord.id}}">
+            这条内容有问题？
+          </view>
+        </view>
+
         <view class="compare-block">
           <view class="answer-row wrong">你的答案：{{userAnswer || '（空）'}}</view>
           <view class="answer-row correct">参考答案：{{currentMode === 'en_to_zh' ? (currentWord.translation || '暂无释义') : currentWord.word}}</view>
-        </view>
-
-        <!-- User Answer Display -->
-        <view style="margin-top: 20rpx; font-size: 28rpx; color: {{isCorrect ? '#67C23A' : '#F56C6C'}}">
-          <text wx:if="{{isCorrect}}">✓ 回答正确</text>
-          <text wx:else>✗ 你的答案: {{inputValue}}</text>
         </view>
       </view>
     </view>

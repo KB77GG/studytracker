@@ -81,6 +81,11 @@ class Config:
     ALIYUN_ASR_HOST = os.environ.get("ALIYUN_ASR_HOST", "")
     ALIYUN_ASR_POLL_INTERVAL = os.environ.get("ALIYUN_ASR_POLL_INTERVAL", "1.0")
     ALIYUN_ASR_MAX_WAIT = os.environ.get("ALIYUN_ASR_MAX_WAIT", "45")
+    ALIYUN_QWEN_MODEL = os.environ.get("ALIYUN_QWEN_MODEL", "qwen3-max-2026-01-23")
+    ALIYUN_QWEN_CHAT_URL = os.environ.get(
+        "ALIYUN_QWEN_CHAT_URL",
+        "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+    )
     ALIYUN_TTS_MODEL = os.environ.get("ALIYUN_TTS_MODEL", "qwen3-tts-flash")
     ALIYUN_TTS_VOICE = os.environ.get("ALIYUN_TTS_VOICE", "Cherry")
     ALIYUN_TTS_LANGUAGE = os.environ.get("ALIYUN_TTS_LANGUAGE", "English")

@@ -696,9 +696,16 @@ Page({
             const wrongDetail = this.data.wrongWordsDetail;
             wrongList.push(`${this.data.currentWord.word} (写成了: ${inputRaw})`);
             wrongDetail.push({
+                id: this.data.currentWord.id,
+                word_id: this.data.currentWord.word_id,
                 word: this.data.currentWord.word,
                 translation: this.data.currentWord.translation,
                 phonetic: this.data.currentWord.phonetic,
+                core_meaning_zh: this.data.currentWord.core_meaning_zh,
+                usage_pattern: this.data.currentWord.usage_pattern,
+                example_en: this.data.currentWord.example_en,
+                example_zh: this.data.currentWord.example_zh,
+                usage_note: this.data.currentWord.usage_note,
                 wrong: inputRaw,
                 dictationMode: mode
             });
@@ -721,6 +728,30 @@ Page({
             userAnswer: inputRaw,
             inputError: true,
             attemptCount: attempts + 1
+        });
+    },
+
+    reportExample: function (e) {
+        const wordId = e.currentTarget.dataset.id;
+        if (!wordId) return;
+        wx.request({
+            url: `${app.globalData.baseUrl}/dictation/example/report/${wordId}`,
+            method: 'POST',
+            header: {
+                'Cookie': wx.getStorageSync('cookie'),
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${wx.getStorageSync('token')}`
+            },
+            success: (res) => {
+                if (res.data && res.data.ok) {
+                    wx.showToast({ title: '已反馈，助教会复审', icon: 'none' });
+                } else {
+                    wx.showToast({ title: '反馈失败', icon: 'none' });
+                }
+            },
+            fail: () => {
+                wx.showToast({ title: '网络错误', icon: 'none' });
+            }
         });
     },
 
@@ -963,10 +994,15 @@ Page({
             return;
         }
         const wrongOnly = wrongDetail.map((w, idx) => ({
-            id: idx + 1,
+            id: w.id || w.word_id || null,
             word: w.word,
             translation: w.translation,
             phonetic: w.phonetic,
+            core_meaning_zh: w.core_meaning_zh,
+            usage_pattern: w.usage_pattern,
+            example_en: w.example_en,
+            example_zh: w.example_zh,
+            usage_note: w.usage_note,
             dictationMode: resolveDictationMode(w.dictationMode)
         }));
         this.setData({
@@ -1014,10 +1050,15 @@ Page({
             return;
         }
         const wrongOnly = wrongDetail.map((w, idx) => ({
-            id: idx + 1,
+            id: w.id || w.word_id || null,
             word: w.word,
             translation: w.translation,
             phonetic: w.phonetic,
+            core_meaning_zh: w.core_meaning_zh,
+            usage_pattern: w.usage_pattern,
+            example_en: w.example_en,
+            example_zh: w.example_zh,
+            usage_note: w.usage_note,
             dictationMode: resolveDictationMode(w.dictationMode)
         }));
         this.setData({
@@ -1118,9 +1159,15 @@ Page({
                 const key = notebookEntryKey(w);
                 if (!key) return;
                 map.set(key, {
+                    id: w.id || w.word_id || null,
                     word: w.word,
                     translation: w.translation,
                     phonetic: w.phonetic,
+                    core_meaning_zh: w.core_meaning_zh,
+                    usage_pattern: w.usage_pattern,
+                    example_en: w.example_en,
+                    example_zh: w.example_zh,
+                    usage_note: w.usage_note,
                     dictationMode: resolveDictationMode(w.dictationMode || this.data.currentMode),
                     updatedAt: Date.now()
                 });

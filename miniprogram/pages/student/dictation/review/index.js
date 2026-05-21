@@ -54,7 +54,7 @@ Page({
 
     fetchReviewQueue() {
         this.setData({ loading: true, loadError: '' })
-        request('/api/dictation/review/today?limit=50')
+        request('/dictation/review/today?limit=50')
             .then((res) => {
                 if (!res || !res.ok) {
                     this.setData({
@@ -146,7 +146,7 @@ Page({
 
         // Submit to server (which updates mastery row + records the attempt)
         const prevLevel = word.review_level
-        request('/api/dictation/submit', {
+        request('/dictation/submit', {
             method: 'POST',
             data: {
                 word_id: word.word_id,
@@ -200,6 +200,22 @@ Page({
 
     replayAudio() {
         this.playAudio()
+    },
+
+    reportExample(e) {
+        const wordId = e.currentTarget.dataset.id
+        if (!wordId) return
+        request(`/dictation/example/report/${wordId}`, { method: 'POST' })
+            .then((res) => {
+                if (res && res.ok) {
+                    wx.showToast({ title: '已反馈，助教会复审', icon: 'none' })
+                } else {
+                    wx.showToast({ title: '反馈失败', icon: 'none' })
+                }
+            })
+            .catch(() => {
+                wx.showToast({ title: '网络错误', icon: 'none' })
+            })
     },
 
     backToHome() {

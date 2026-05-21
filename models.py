@@ -889,6 +889,16 @@ class DictationWord(db.Model, TimestampMixin):
     translation = db.Column(db.Text)  # Chinese translation/meaning
     audio_us = db.Column(db.String(200))  # American English audio path
     audio_uk = db.Column(db.String(200))  # British English audio path
+    core_meaning_zh = db.Column(db.Text)  # Short, teaching-focused Chinese meaning
+    usage_pattern = db.Column(db.Text)  # Common collocation or sentence pattern
+    example_en = db.Column(db.Text)  # Example sentence
+    example_zh = db.Column(db.Text)  # Chinese translation of example sentence
+    usage_note = db.Column(db.Text)  # Short usage/collocation note
+    vocab_ai_status = db.Column(db.String(20), default="empty", nullable=False, index=True)
+    vocab_ai_model = db.Column(db.String(100))
+    vocab_ai_generated_at = db.Column(db.DateTime)
+    vocab_reviewed_at = db.Column(db.DateTime, index=True)
+    vocab_report_count = db.Column(db.Integer, default=0, nullable=False, index=True)
     
     def __repr__(self):
         return f"<DictationWord {self.word}>"

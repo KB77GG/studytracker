@@ -154,6 +154,7 @@
   background: #f3f5fa;
   border-radius: 20rpx;
   padding: 22rpx 26rpx;
+  margin-top: 20rpx;
 }
 
 .answer-row {
@@ -166,6 +167,92 @@
   color: #74798a;
   font-weight: 600;
   margin-right: 4rpx;
+}
+
+.vocab-card {
+  background: #fff;
+  border: 2rpx solid #edf0f5;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.vocab-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+  flex-wrap: wrap;
+  margin-bottom: 10rpx;
+}
+
+.vocab-word {
+  font-size: 46rpx;
+  font-weight: 800;
+  color: #102043;
+}
+
+.core-meaning {
+  font-size: 30rpx;
+  color: #1f2330;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.usage-chip {
+  display: inline-flex;
+  max-width: 100%;
+  margin-top: 14rpx;
+  padding: 8rpx 16rpx;
+  background: #eef2f7;
+  border-radius: 999rpx;
+  color: #374151;
+  font-size: 24rpx;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+.example-block {
+  margin-top: 18rpx;
+  padding: 18rpx 20rpx;
+  background: #f4f7fb;
+  border-left: 4rpx solid #1473e6;
+  border-radius: 12rpx;
+}
+
+.example-label {
+  font-size: 22rpx;
+  color: #667085;
+  font-weight: 700;
+  margin-bottom: 8rpx;
+}
+
+.example-en {
+  display: block;
+  font-size: 28rpx;
+  color: #111827;
+  line-height: 1.55;
+}
+
+.example-zh {
+  display: block;
+  margin-top: 6rpx;
+  padding-left: 18rpx;
+  font-size: 25rpx;
+  color: #667085;
+  line-height: 1.5;
+}
+
+.usage-note {
+  margin-top: 16rpx;
+  font-size: 25rpx;
+  color: #667085;
+  line-height: 1.5;
+}
+
+.example-report {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #1473e6;
 }
 
 .action-bar {

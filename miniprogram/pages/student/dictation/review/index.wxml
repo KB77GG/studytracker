@@ -52,6 +52,32 @@
         <view class="result-flag {{isCorrect ? 'ok' : 'bad'}}">
           {{isCorrect ? '✓ 答对了' : '✗ 答错了'}}
         </view>
+        <view class="vocab-card">
+          <view class="vocab-head">
+            <text class="vocab-word">{{currentWord.word || '-'}}</text>
+            <text class="prompt-phonetic" wx:if="{{currentWord.phonetic}}">[{{currentWord.phonetic}}]</text>
+          </view>
+          <view class="core-meaning">
+            <text class="label">核心义：</text>{{currentWord.core_meaning_zh || currentWord.translation || '-'}}
+          </view>
+          <view class="usage-chip" wx:if="{{currentWord.usage_pattern}}">
+            搭配 / 句型：{{currentWord.usage_pattern}}
+          </view>
+          <view class="example-block" wx:if="{{currentWord.example_en}}">
+            <view class="example-label">例句</view>
+            <text class="example-en">{{currentWord.example_en}}</text>
+            <text class="example-zh" wx:if="{{currentWord.example_zh}}">{{currentWord.example_zh}}</text>
+          </view>
+          <view class="usage-note" wx:if="{{currentWord.usage_note}}">
+            <text class="label">用法提示：</text>{{currentWord.usage_note}}
+          </view>
+          <view class="example-report"
+                wx:if="{{(currentWord.word_id || currentWord.id) && (currentWord.core_meaning_zh || currentWord.usage_pattern || currentWord.example_en || currentWord.example_zh || currentWord.usage_note)}}"
+                bindtap="reportExample"
+                data-id="{{currentWord.word_id || currentWord.id}}">
+            这条内容有问题？
+          </view>
+        </view>
         <view class="answer-block">
           <view class="answer-row"><text class="label">你的答案：</text>{{userAnswer || '（空）'}}</view>
           <view class="answer-row"><text class="label">参考答案：</text>{{correctAnswer || '-'}}</view>

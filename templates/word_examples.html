@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block page_title %}例句审核{% endblock %}
+{% block page_subtitle %}Vocabulary Enrichment Review{% endblock %}
+
+{% block content_dashboard %}
+<style>
+  .review-toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .review-toolbar .form-control {
+    max-width: 320px;
+  }
+
+  .word-cell {
+    min-width: 150px;
+  }
+
+  .word-main {
+    font-weight: 700;
+    color: #1f2937;
+  }
+
+  .word-sub {
+    color: #6b7280;
+    font-size: 0.85rem;
+  }
+
+  .enrichment-block {
+    line-height: 1.55;
+  }
+
+  .pattern-chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #eef2f7;
+    color: #374151;
+    font-size: 0.82rem;
+    margin: 3px 0;
+  }
+
+  .example-en {
+    color: #111827;
+  }
+
+  .example-zh,
+  .usage-note {
+    color: #6b7280;
+    font-size: 0.9rem;
+  }
+
+  .status-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #374151;
+    font-size: 0.78rem;
+  }
+
+  .table td {
+    vertical-align: top;
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs" id="statusTabs">
+        <li class="nav-item"><button class="nav-link active" data-status="pending" type="button">未审</button></li>
+        <li class="nav-item"><button class="nav-link" data-status="reported" type="button">学生反馈</button></li>
+        <li class="nav-item"><button class="nav-link" data-status="reviewed" type="button">已审</button></li>
+        <li class="nav-item"><button class="nav-link" data-status="failed" type="button">失败</button></li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <div class="review-toolbar">
+        <select id="bookFilter" class="form-control form-control-sm">
+          <option value="">全部词库</option>
+        </select>
+        <button class="btn btn-sm btn-outline-secondary" id="refreshBtn" type="button">刷新</button>
+        <span class="text-muted small" id="totalLabel">加载中...</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th class="word-cell">单词</th>
+              <th>词汇增强内容</th>
+              <th style="width: 140px;">状态</th>
+              <th style="width: 260px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="itemsBody">
+            <tr><td colspan="4" class="text-center text-muted py-4">加载中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <button class="btn btn-sm btn-outline-secondary" id="prevPage" type="button">上一页</button>
+        <span class="text-muted small" id="pageLabel">第 1 页</span>
+        <button class="btn btn-sm btn-outline-secondary" id="nextPage" type="button">下一页</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">编辑词汇增强内容</h5>
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editWordId">
+        <div class="form-group">
+          <label>核心义</label>
+          <input class="form-control" id="editCoreMeaning">
+        </div>
+        <div class="form-group">
+          <label>搭配 / 句型</label>
+          <input class="form-control" id="editUsagePattern">
+        </div>
+        <div class="form-group">
+          <label>英文例句</label>
+          <textarea class="form-control" id="editExampleEn" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>中文翻译</label>
+          <textarea class="form-control" id="editExampleZh" rows="2"></textarea>
+        </div>
+        <div class="form-group mb-0">
+          <label>用法提示</label>
+          <textarea class="form-control" id="editUsageNote" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="saveEditBtn">保存并通过</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const state = {
+    status: 'pending',
+    page: 1,
+    perPage: 50,
+    total: 0,
+    items: [],
+    booksLoaded: false
+  };
+
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function fmtDate(value) {
+    if (!value) return '-';
+    return value.replace('T', ' ').slice(0, 16);
+  }
+
+  function statusLabel(item) {
+    if ((item.vocab_report_count || 0) > 0) return `反馈 ${item.vocab_report_count} 次`;
+    if (item.vocab_ai_status === 'failed') return '生成失败';
+    if (item.vocab_ai_status === 'edited') return '已编辑';
+    if (item.vocab_reviewed_at) return '已审';
+    if (item.vocab_ai_status === 'generated') return '待审核';
+    return item.vocab_ai_status || 'empty';
+  }
+
+  function renderBooks(books) {
+    if (state.booksLoaded) return;
+    const select = document.getElementById('bookFilter');
+    (books || []).forEach(book => {
+      const opt = document.createElement('option');
+      opt.value = book.id;
+      opt.textContent = `${book.title} (${book.word_count || 0})`;
+      select.appendChild(opt);
+    });
+    state.booksLoaded = true;
+  }
+
+  function renderItems() {
+    const body = document.getElementById('itemsBody');
+    if (!state.items.length) {
+      body.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">没有符合条件的词条</td></tr>';
+      return;
+    }
+
+    body.innerHTML = state.items.map(item => `
+      <tr>
+        <td class="word-cell">
+          <div class="word-main">${escapeHtml(item.word)}</div>
+          <div class="word-sub">${escapeHtml(item.phonetic || '')}</div>
+          <div class="word-sub">${escapeHtml(item.book_title || '')} #${item.sequence || '-'}</div>
+          <div class="word-sub">${escapeHtml(item.translation || '')}</div>
+        </td>
+        <td>
+          <div class="enrichment-block">
+            <div><strong>核心义：</strong>${escapeHtml(item.core_meaning_zh || item.translation || '-')}</div>
+            ${item.usage_pattern ? `<div><span class="pattern-chip">${escapeHtml(item.usage_pattern)}</span></div>` : ''}
+            ${item.example_en ? `<div class="example-en mt-1">${escapeHtml(item.example_en)}</div>` : ''}
+            ${item.example_zh ? `<div class="example-zh">${escapeHtml(item.example_zh)}</div>` : ''}
+            ${item.usage_note ? `<div class="usage-note mt-1"><strong>用法提示：</strong>${escapeHtml(item.usage_note)}</div>` : ''}
+          </div>
+        </td>
+        <td>
+          <span class="status-pill">${escapeHtml(statusLabel(item))}</span>
+          <div class="word-sub mt-1">模型：${escapeHtml(item.vocab_ai_model || '-')}</div>
+          <div class="word-sub">生成：${escapeHtml(fmtDate(item.vocab_ai_generated_at))}</div>
+          <div class="word-sub">审核：${escapeHtml(fmtDate(item.vocab_reviewed_at))}</div>
+        </td>
+        <td>
+          <div class="btn-group btn-group-sm mb-1" role="group">
+            <button class="btn btn-outline-success" onclick="approveItem(${item.id})">通过</button>
+            <button class="btn btn-outline-primary" onclick="openEdit(${item.id})">编辑</button>
+            <button class="btn btn-outline-warning" onclick="regenerateItem(${item.id})">重生成</button>
+          </div>
+          <button class="btn btn-sm btn-outline-danger" onclick="clearItem(${item.id})">清空</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  async function loadItems() {
+    const body = document.getElementById('itemsBody');
+    body.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">加载中...</td></tr>';
+    const params = new URLSearchParams({
+      status: state.status,
+      page: state.page,
+      per_page: state.perPage
+    });
+    const bookId = document.getElementById('bookFilter').value;
+    if (bookId) params.set('book_id', bookId);
+    const resp = await fetch(`/api/dictation/examples?${params.toString()}`, { credentials: 'include' });
+    const data = await resp.json();
+    if (!data.ok) {
+      body.innerHTML = `<tr><td colspan="4" class="text-center text-danger py-4">加载失败：${escapeHtml(data.error || '未知错误')}</td></tr>`;
+      return;
+    }
+    state.items = data.items || [];
+    state.total = data.total || 0;
+    renderBooks(data.books || []);
+    renderItems();
+    document.getElementById('totalLabel').textContent = `共 ${state.total} 条`;
+    document.getElementById('pageLabel').textContent = `第 ${state.page} 页 / 共 ${Math.max(Math.ceil(state.total / state.perPage), 1)} 页`;
+  }
+
+  async function postAction(url, payload) {
+    const resp = await fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: payload ? JSON.stringify(payload) : '{}'
+    });
+    const data = await resp.json();
+    if (!data.ok) {
+      alert(data.error || '操作失败');
+      return false;
+    }
+    await loadItems();
+    return true;
+  }
+
+  function findItem(id) {
+    return state.items.find(item => item.id === id);
+  }
+
+  function approveItem(id) {
+    postAction(`/api/dictation/example/${id}/approve`);
+  }
+
+  function regenerateItem(id) {
+    if (!confirm('确定重新生成这条内容？')) return;
+    postAction(`/api/dictation/example/${id}/regenerate`);
+  }
+
+  function clearItem(id) {
+    if (!confirm('确定清空这条内容？')) return;
+    postAction(`/api/dictation/example/${id}/clear`);
+  }
+
+  function openEdit(id) {
+    const item = findItem(id);
+    if (!item) return;
+    document.getElementById('editWordId').value = item.id;
+    document.getElementById('editCoreMeaning').value = item.core_meaning_zh || '';
+    document.getElementById('editUsagePattern').value = item.usage_pattern || '';
+    document.getElementById('editExampleEn').value = item.example_en || '';
+    document.getElementById('editExampleZh').value = item.example_zh || '';
+    document.getElementById('editUsageNote').value = item.usage_note || '';
+    $('#editModal').modal('show');
+  }
+
+  document.getElementById('saveEditBtn').addEventListener('click', async () => {
+    const id = document.getElementById('editWordId').value;
+    const ok = await postAction(`/api/dictation/example/${id}/edit`, {
+      core_meaning_zh: document.getElementById('editCoreMeaning').value,
+      usage_pattern: document.getElementById('editUsagePattern').value,
+      example_en: document.getElementById('editExampleEn').value,
+      example_zh: document.getElementById('editExampleZh').value,
+      usage_note: document.getElementById('editUsageNote').value
+    });
+    if (ok) $('#editModal').modal('hide');
+  });
+
+  document.querySelectorAll('#statusTabs .nav-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#statusTabs .nav-link').forEach(node => node.classList.remove('active'));
+      btn.classList.add('active');
+      state.status = btn.dataset.status;
+      state.page = 1;
+      loadItems();
+    });
+  });
+
+  document.getElementById('bookFilter').addEventListener('change', () => {
+    state.page = 1;
+    loadItems();
+  });
+  document.getElementById('refreshBtn').addEventListener('click', loadItems);
+  document.getElementById('prevPage').addEventListener('click', () => {
+    if (state.page > 1) {
+      state.page -= 1;
+      loadItems();
+    }
+  });
+  document.getElementById('nextPage').addEventListener('click', () => {
+    if (state.page * state.perPage < state.total) {
+      state.page += 1;
+      loadItems();
+    }
+  });
+
+  loadItems();
+</script>
+{% endblock %}

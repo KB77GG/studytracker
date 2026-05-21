@@ -21,8 +21,10 @@ from flask import Blueprint, current_app, jsonify, request, send_file
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
+from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
 from models import db, User, DictationBook, DictationWord, DictationRecord, StudentWordMastery, Task
+from api.qwen import generate_word_enrichment
 
 
 def require_session_or_bearer(fn):
@@ -76,6 +78,45 @@ def role_required(*roles):
             return fn(*args, **kwargs)
         return wrapper
     return decorator
+
+
+def _word_enrichment_payload(word):
+    return {
+        "core_meaning_zh": word.core_meaning_zh,
+        "usage_pattern": word.usage_pattern,
+        "example_en": word.example_en,
+        "example_zh": word.example_zh,
+        "usage_note": word.usage_note,
+    }
+
+
+def _word_student_payload(word):
+    payload = {
+        "id": word.id,
+        "sequence": word.sequence,
+        "word": word.word,
+        "phonetic": word.phonetic,
+        "translation": word.translation,
+        "audio_us": word.audio_us,
+        "audio_uk": word.audio_uk,
+    }
+    payload.update(_word_enrichment_payload(word))
+    return payload
+
+
+def _apply_enrichment_result(word, result, status="generated"):
+    now = datetime.utcnow()
+    word.core_meaning_zh = result.get("core_meaning_zh") or None
+    word.usage_pattern = result.get("usage_pattern") or None
+    word.example_en = result.get("example_en") or None
+    word.example_zh = result.get("example_zh") or None
+    word.usage_note = result.get("usage_note") or None
+    word.vocab_ai_status = status
+    word.vocab_ai_model = result.get("model") or current_app.config.get("ALIYUN_QWEN_MODEL")
+    word.vocab_ai_generated_at = now
+    word.vocab_reviewed_at = None
+    if word.vocab_report_count is None:
+        word.vocab_report_count = 0
 
 
 PHRASE_LINE_OVERRIDES = {
@@ -328,18 +369,7 @@ def get_book(book_id):
             "book_type": book.book_type or "dictation",
             "created_at": book.created_at.isoformat() if book.created_at else None
         },
-        "words": [
-            {
-                "id": w.id,
-                "sequence": w.sequence,
-                "word": w.word,
-                "phonetic": w.phonetic,
-                "translation": w.translation,
-                "audio_us": w.audio_us,
-                "audio_uk": w.audio_uk
-            }
-            for w in words
-        ]
+        "words": [_word_student_payload(w) for w in words]
     })
 
 
@@ -854,13 +884,15 @@ def submit_answer():
 
     db.session.commit()
     
-    return jsonify({
+    response = {
         "ok": True,
         "is_correct": is_correct,
         "correct_answer": word.word,
         "phonetic": word.phonetic,
         "translation": word.translation
-    })
+    }
+    response.update(_word_enrichment_payload(word))
+    return jsonify(response)
 
 
 @dictation_bp.route("/history", methods=["GET"])
@@ -971,8 +1003,9 @@ def get_review_today():
         w = m.word
         if w is None:
             continue
-        items.append({
+        item = {
             "word_id": w.id,
+            "id": w.id,
             "book_id": w.book_id,
             "word": w.word,
             "phonetic": w.phonetic,
@@ -980,7 +1013,9 @@ def get_review_today():
             "mode": StudentWordMastery.mode_for_level(m.review_level),
             "review_level": m.review_level,
             "mistake_count": m.mistake_count,
-        })
+        }
+        item.update(_word_enrichment_payload(w))
+        items.append(item)
 
     return jsonify({"ok": True, "count": len(items), "items": items})
 
@@ -999,6 +1034,184 @@ def get_review_summary():
         .count()
     )
     return jsonify({"ok": True, "due_count": due_count})
+
+
+def _admin_word_payload(word):
+    book = word.book
+    return {
+        "id": word.id,
+        "book_id": word.book_id,
+        "book_title": book.title if book else "",
+        "sequence": word.sequence,
+        "word": word.word,
+        "phonetic": word.phonetic,
+        "translation": word.translation,
+        "core_meaning_zh": word.core_meaning_zh,
+        "usage_pattern": word.usage_pattern,
+        "example_en": word.example_en,
+        "example_zh": word.example_zh,
+        "usage_note": word.usage_note,
+        "vocab_ai_status": word.vocab_ai_status or "empty",
+        "vocab_ai_model": word.vocab_ai_model,
+        "vocab_ai_generated_at": word.vocab_ai_generated_at.isoformat() if word.vocab_ai_generated_at else None,
+        "vocab_reviewed_at": word.vocab_reviewed_at.isoformat() if word.vocab_reviewed_at else None,
+        "vocab_report_count": word.vocab_report_count or 0,
+    }
+
+
+def _has_enrichment_filter():
+    return or_(
+        DictationWord.core_meaning_zh.isnot(None),
+        DictationWord.usage_pattern.isnot(None),
+        DictationWord.example_en.isnot(None),
+        DictationWord.example_zh.isnot(None),
+        DictationWord.usage_note.isnot(None),
+    )
+
+
+@dictation_bp.route("/example/report/<int:word_id>", methods=["POST"])
+@require_session_or_bearer
+def report_word_enrichment(word_id):
+    """Allow a student to report an incorrect or awkward enrichment block."""
+    word = DictationWord.query.get_or_404(word_id)
+    word.vocab_report_count = (word.vocab_report_count or 0) + 1
+    word.vocab_reviewed_at = None
+    if word.vocab_ai_status == "reviewed":
+        word.vocab_ai_status = "generated"
+    db.session.commit()
+    return jsonify({"ok": True, "report_count": word.vocab_report_count})
+
+
+@dictation_bp.route("/examples", methods=["GET"])
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def list_word_enrichments():
+    """Teacher/TA review queue for vocabulary-enrichment content."""
+    status = (request.args.get("status") or "pending").strip().lower()
+    book_id = request.args.get("book_id", type=int)
+    page = max(request.args.get("page", default=1, type=int), 1)
+    per_page = min(max(request.args.get("per_page", default=50, type=int), 1), 100)
+
+    query = DictationWord.query.options(joinedload(DictationWord.book)).join(DictationBook)
+    query = query.filter(DictationBook.is_deleted == False)  # noqa: E712
+    if book_id:
+        query = query.filter(DictationWord.book_id == book_id)
+
+    if status == "reported":
+        query = query.filter((DictationWord.vocab_report_count != None) & (DictationWord.vocab_report_count > 0))  # noqa: E711
+    elif status == "reviewed":
+        query = query.filter(DictationWord.vocab_reviewed_at.isnot(None))
+        query = query.filter((DictationWord.vocab_report_count == None) | (DictationWord.vocab_report_count == 0))  # noqa: E711
+    elif status == "failed":
+        query = query.filter(DictationWord.vocab_ai_status == "failed")
+    else:
+        status = "pending"
+        query = query.filter(_has_enrichment_filter())
+        query = query.filter(DictationWord.vocab_reviewed_at.is_(None))
+        query = query.filter((DictationWord.vocab_report_count == None) | (DictationWord.vocab_report_count == 0))  # noqa: E711
+        query = query.filter(or_(DictationWord.vocab_ai_status == None, DictationWord.vocab_ai_status != "failed"))  # noqa: E711
+
+    total = query.count()
+    rows = (
+        query
+        .order_by(DictationWord.updated_at.desc(), DictationWord.id.desc())
+        .offset((page - 1) * per_page)
+        .limit(per_page)
+        .all()
+    )
+    books = (
+        DictationBook.query
+        .filter_by(is_deleted=False)
+        .order_by(DictationBook.title.asc())
+        .all()
+    )
+    return jsonify({
+        "ok": True,
+        "status": status,
+        "page": page,
+        "per_page": per_page,
+        "total": total,
+        "items": [_admin_word_payload(word) for word in rows],
+        "books": [
+            {
+                "id": book.id,
+                "title": book.title,
+                "word_count": book.word_count,
+                "book_type": book.book_type or "dictation",
+            }
+            for book in books
+        ],
+    })
+
+
+@dictation_bp.route("/example/<int:word_id>/approve", methods=["POST"])
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def approve_word_enrichment(word_id):
+    word = DictationWord.query.get_or_404(word_id)
+    word.vocab_ai_status = "reviewed"
+    word.vocab_reviewed_at = datetime.utcnow()
+    word.vocab_report_count = 0
+    db.session.commit()
+    return jsonify({"ok": True, "item": _admin_word_payload(word)})
+
+
+@dictation_bp.route("/example/<int:word_id>/edit", methods=["POST"])
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def edit_word_enrichment(word_id):
+    word = DictationWord.query.get_or_404(word_id)
+    data = request.get_json() or {}
+    for field in ("core_meaning_zh", "usage_pattern", "example_en", "example_zh", "usage_note"):
+        if field in data:
+            value = str(data.get(field) or "").strip()
+            setattr(word, field, value or None)
+    word.vocab_ai_status = "edited"
+    word.vocab_reviewed_at = datetime.utcnow()
+    word.vocab_report_count = 0
+    db.session.commit()
+    return jsonify({"ok": True, "item": _admin_word_payload(word)})
+
+
+@dictation_bp.route("/example/<int:word_id>/regenerate", methods=["POST"])
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def regenerate_word_enrichment(word_id):
+    word = DictationWord.query.get_or_404(word_id)
+    result = generate_word_enrichment(
+        word.word,
+        word.translation or "",
+        word_id=word.id,
+        phonetic=word.phonetic,
+    )
+    if not result:
+        word.vocab_ai_status = "failed"
+        db.session.commit()
+        return jsonify({"ok": False, "error": "qwen_generation_failed"}), 502
+
+    _apply_enrichment_result(word, result, status="generated")
+    word.vocab_report_count = 0
+    db.session.commit()
+    return jsonify({"ok": True, "item": _admin_word_payload(word)})
+
+
+@dictation_bp.route("/example/<int:word_id>/clear", methods=["POST"])
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def clear_word_enrichment(word_id):
+    word = DictationWord.query.get_or_404(word_id)
+    word.core_meaning_zh = None
+    word.usage_pattern = None
+    word.example_en = None
+    word.example_zh = None
+    word.usage_note = None
+    word.vocab_ai_status = "empty"
+    word.vocab_ai_model = None
+    word.vocab_ai_generated_at = None
+    word.vocab_reviewed_at = None
+    word.vocab_report_count = 0
+    db.session.commit()
+    return jsonify({"ok": True, "item": _admin_word_payload(word)})
 
 
 @dictation_bp.route("/stubborn-words", methods=["GET"])

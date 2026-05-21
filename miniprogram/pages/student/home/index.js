@@ -270,7 +270,7 @@ Page({
             this.setData({ reviewDueCount: 0 })
             return
         }
-        request('/api/dictation/review/summary')
+        request('/dictation/review/summary')
             .then((res) => {
                 if (res && res.ok) {
                     this.setData({ reviewDueCount: res.due_count || 0 })
