@@ -28,9 +28,23 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# 3. 服务器远程更新
+# 3. 上传 TOEFL 听力音频（uploads/ 是 gitignored，必须 scp 单独上传）
+#    幂等：scp 会直接覆盖，文件存在但变化时也会更新。
+if ls uploads/entrance/audio/toefl_tiered_*.mp3 >/dev/null 2>&1; then
+    echo "🎧 上传 TOEFL 分档卷听力音频..."
+    ssh root@$SERVER_IP "mkdir -p $REMOTE_DIR/uploads/entrance/audio"
+    scp uploads/entrance/audio/toefl_tiered_*.mp3 root@$SERVER_IP:$REMOTE_DIR/uploads/entrance/audio/
+    if [ $? -ne 0 ]; then
+        echo "❌ 音频上传失败"
+        exit 1
+    fi
+else
+    echo "⚠️  本地没有 toefl_tiered_*.mp3，跳过音频上传"
+fi
+
+# 4. 服务器远程更新
 echo "☁️  正在连接服务器更新代码..."
-ssh root@$SERVER_IP "apt-get update && apt-get install -y python3-pip python3-cffi python3-brotli libpango-1.0-0 libpangoft2-1.0-0 fonts-noto-cjk && cd $REMOTE_DIR && git pull && .venv/bin/pip install -r requirements.txt && .venv/bin/python3 create_plan_table.py && .venv/bin/python3 create_speaking_tables.py && .venv/bin/python3 add_feedback_column.py && .venv/bin/python3 add_explanation_column.py && .venv/bin/python3 add_dictation_book_id.py && .venv/bin/python3 add_dictation_range_columns.py && .venv/bin/python3 add_dictation_mode_column.py && .venv/bin/python3 add_student_answer_uncertain_column.py && .venv/bin/python3 add_word_mastery_table.py && .venv/bin/python3 scripts/migrate_planitem_resource.py && .venv/bin/python3 create_mock_exam_tables.py && systemctl restart studytracker"
+ssh root@$SERVER_IP "apt-get update && apt-get install -y python3-pip python3-cffi python3-brotli libpango-1.0-0 libpangoft2-1.0-0 fonts-noto-cjk && cd $REMOTE_DIR && git pull && .venv/bin/pip install -r requirements.txt && .venv/bin/python3 create_plan_table.py && .venv/bin/python3 create_speaking_tables.py && .venv/bin/python3 add_feedback_column.py && .venv/bin/python3 add_explanation_column.py && .venv/bin/python3 add_dictation_book_id.py && .venv/bin/python3 add_dictation_range_columns.py && .venv/bin/python3 add_dictation_mode_column.py && .venv/bin/python3 add_student_answer_uncertain_column.py && .venv/bin/python3 add_word_mastery_table.py && .venv/bin/python3 scripts/migrate_planitem_resource.py && .venv/bin/python3 create_mock_exam_tables.py && .venv/bin/python3 scripts/add_listening_to_toefl_tiered.py && systemctl restart studytracker"
 
 if [ $? -eq 0 ]; then
     echo "✅ 部署成功！"

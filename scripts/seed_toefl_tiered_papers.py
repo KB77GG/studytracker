@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Seed 8 tiered TOEFL entrance test papers (reading + writing) by extracting
-real exam passages from post-March 2026 test materials.
+"""Seed 8 tiered TOEFL entrance test papers (listening + reading + writing).
 
-Idempotent: skipped if (title, exam_type) already exists.
+Idempotent: skipped if (title, exam_type) already exists. For papers already
+seeded WITHOUT a listening section, see add_listening_to_toefl_tiered.py
+which augments them in place.
 
 Tiers (TOEFL total score, 0-120):
   - toefl_60_80      入门 60-80     (2 papers, A/B)
@@ -10,10 +11,21 @@ Tiers (TOEFL total score, 0-120):
   - toefl_95_105     高阶 95-105    (2 papers, A/B)
   - toefl_105_plus   冲刺 105+      (2 papers, A/B)
 
-Source: real TOEFL reading passages from 2026/3-4 exams (3.10/3.18/3.27/3.30/
-4.1/4.5/4.6/4.8). Each paper = 1 reading passage (~250-300 words) with 3-5
-multi-choice questions + 1 AI-authored Academic Discussion writing prompt.
-~20-25 minutes per paper.
+Sources:
+  - Reading: real TOEFL passages from 2026/3-4 exams (3.10/3.18/3.27/3.30/
+    4.1/4.5/4.6/4.8).
+  - Listening: Q1-8 "Choose the best response" from real-exam screenshots
+    (manifest under data/toefl_listening_q1_8/manifest.json). Audio is
+    trimmed to first 8 minutes — enough for the 8-question block plus
+    directions buffer. For 3 papers the listening date differs from the
+    reading date because that date's listening source was incomplete
+    (audio missing Q1-3, or PDF only has 套二, etc.):
+      入门 A: reading 4.6   → listening 2.23
+      中阶 A: reading 4.5   → listening 3.11
+      高阶 B: reading 3.10  → listening 3.20
+  - Writing: 1 AI-authored Academic Discussion prompt per paper.
+
+Total per paper: ~30 minutes (listening 6 + reading 14 + writing 10).
 
 Note: questions of types "sentence insertion (4-location)" and "sentence
 pick" from real exams are skipped since our entrance system supports only
@@ -34,6 +46,54 @@ from models import (
     EntranceTestSection,
     EntranceTestQuestion,
 )
+
+
+# ---------------------------------------------------------------------------
+# Listening manifest loader
+# ---------------------------------------------------------------------------
+
+LISTENING_MANIFEST_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "data", "toefl_listening_q1_8", "manifest.json"
+)
+LISTENING_AUDIO_URL_PREFIX = "/uploads/entrance/audio/toefl_tiered_"
+
+
+def _load_listening_manifest():
+    with open(LISTENING_MANIFEST_PATH, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _build_listening_section(listening_date, manifest):
+    """Build a listening section dict from manifest data for the given date."""
+    entry = manifest["dates"][listening_date]
+    answers = entry["answers"]
+    options = entry["options"]
+    questions = []
+    for i, (ans, opts) in enumerate(zip(answers, options), start=1):
+        questions.append({
+            "sequence": i,
+            "question_type": "single_choice",
+            "stem": "Choose the best response.",
+            "options_json": _opts([("A", opts[0]), ("B", opts[1]),
+                                    ("C", opts[2]), ("D", opts[3])]),
+            "correct_answer": ans,
+            "points": 1,
+            "reference_answer": None,
+        })
+    return {
+        "section_type": "listening",
+        "sequence": 1,
+        "title": f"Section 1 · Listening — Choose the Best Response ({listening_date})",
+        "instructions": (
+            "戴上耳机播放音频，音频会逐题播报情景对话或单句提问，请选择最合适的回应。\n"
+            "音频长度约 6-7 分钟，听完第 8 题即可停止。每题只有一个最佳答案。"
+        ),
+        "audio_url": f"{LISTENING_AUDIO_URL_PREFIX}{listening_date}.mp3",
+        "passage": None,
+        "duration_minutes": 6,
+        "questions": questions,
+    }
 
 
 def _opts(pairs):
@@ -653,17 +713,20 @@ W_METAPHILOSOPHY = (
 # ---------------------------------------------------------------------------
 
 def _make_paper(title, level, tier_label, description, passage_title,
-                passage, questions, writing_prompt, reading_minutes=14):
+                passage, questions, writing_prompt, listening_date,
+                manifest, reading_minutes=14):
+    listening_section = _build_listening_section(listening_date, manifest)
     return {
         "title": title,
         "exam_type": "toefl",
         "level": level,
         "description": description,
         "sections": [
+            listening_section,
             {
                 "section_type": "reading",
-                "sequence": 1,
-                "title": f"Section 1 · Reading — {passage_title}",
+                "sequence": 2,
+                "title": f"Section 2 · Reading — {passage_title}",
                 "instructions": (
                     "阅读下面的学术文章并回答选择题。每题只有一个最佳答案。\n"
                     f"建议时间：{reading_minutes} 分钟。"
@@ -675,8 +738,8 @@ def _make_paper(title, level, tier_label, description, passage_title,
             },
             {
                 "section_type": "writing",
-                "sequence": 2,
-                "title": "Section 2 · Writing (Academic Discussion)",
+                "sequence": 3,
+                "title": "Section 3 · Writing (Academic Discussion)",
                 "instructions": (
                     "阅读教授的提问和上下文，写出你的回应。建议字数 100 词以上；"
                     "时间紧张可只写立场 + 1-2 句理由。"
@@ -700,74 +763,89 @@ def _make_paper(title, level, tier_label, description, passage_title,
     }
 
 
+_MANIFEST = _load_listening_manifest()
+
+# Per-paper listening date. Re-uses same-date listening where possible; falls
+# back to other dates when the same-date listening source is incomplete:
+#   入门 A (reading 4.6)  → listening 2.23  (4.6 has no 听力.pdf, Q1 audio missing)
+#   中阶 A (reading 4.5)  → listening 3.11  (4.5 PDF is 套二 with q4-6 missing)
+#   高阶 B (reading 3.10) → listening 3.20  (3.10 audio starts at Q4)
 PAPERS = [
     # ---- 入门 60-80 ----
     _make_paper(
         "新版 TOEFL 入门诊断 A · Video Evidence",
         "toefl_60_80",
         "入门 (60-80)",
-        "适用于 TOEFL 预估 60-80 分学生（入门档 A 套）。基于 2026.4.6 真题阅读改编，主题为视频证据在法庭的应用，5 道选择题 + 1 道 Academic Discussion 写作题。约 25 分钟。",
+        "适用于 TOEFL 预估 60-80 分学生（入门档 A 套）。Section 1 听力：2026.2.23 真题 Q1-8 单句应答；Section 2 阅读：2026.4.6 真题改编，视频证据在法庭的应用，5 道选择题；Section 3 写作：1 道 Academic Discussion。约 30 分钟。",
         "Video Evidence in U.S. Courts",
         PASSAGE_4_6, QUESTIONS_4_6, W_VIDEO_EVIDENCE,
+        listening_date="2.23", manifest=_MANIFEST,
     ),
     _make_paper(
         "新版 TOEFL 入门诊断 B · Roman Empire Legacy",
         "toefl_60_80",
         "入门 (60-80)",
-        "适用于 TOEFL 预估 60-80 分学生（入门档 B 套）。基于 2026.3.30 真题阅读改编，主题为罗马帝国崩溃的政治影响，4 道选择题 + 1 道 Academic Discussion 写作题。约 22 分钟。",
+        "适用于 TOEFL 预估 60-80 分学生（入门档 B 套）。Section 1 听力：2026.3.30 真题 Q1-8 单句应答；Section 2 阅读：同场真题改编，罗马帝国崩溃的政治影响，4 道选择题；Section 3 写作：1 道 Academic Discussion。约 30 分钟。",
         "The Political Legacy of the Roman Empire",
         PASSAGE_3_30, QUESTIONS_3_30, W_ROMAN_LEGACY,
+        listening_date="3.30", manifest=_MANIFEST,
     ),
     # ---- 中阶 80-95 ----
     _make_paper(
         "新版 TOEFL 中阶诊断 A · Expert Systems",
         "toefl_80_95",
         "中阶 (80-95)",
-        "适用于 TOEFL 预估 80-95 分学生（中阶档 A 套）。基于 2026.4.5 真题阅读改编，主题为专家系统与 MYCIN 案例，4 道选择题 + 1 道 Academic Discussion 写作题。约 22 分钟。",
+        "适用于 TOEFL 预估 80-95 分学生（中阶档 A 套）。Section 1 听力：2026.3.11 真题 Q1-8 单句应答；Section 2 阅读：2026.4.5 真题改编，专家系统与 MYCIN 案例，4 道选择题；Section 3 写作：1 道 Academic Discussion。约 30 分钟。",
         "Expert Systems",
         PASSAGE_4_5, QUESTIONS_4_5, W_EXPERT_SYSTEMS,
+        listening_date="3.11", manifest=_MANIFEST,
     ),
     _make_paper(
         "新版 TOEFL 中阶诊断 B · Cybernetic Prosthetics",
         "toefl_80_95",
         "中阶 (80-95)",
-        "适用于 TOEFL 预估 80-95 分学生（中阶档 B 套）。基于 2026.4.8 真题阅读改编，主题为神经控制义肢，3 道选择题 + 1 道 Academic Discussion 写作题。约 20 分钟。",
+        "适用于 TOEFL 预估 80-95 分学生（中阶档 B 套）。Section 1 听力：2026.4.8 真题 Q1-8 单句应答；Section 2 阅读：同场真题改编，神经控制义肢，3 道选择题；Section 3 写作：1 道 Academic Discussion。约 30 分钟。",
         "Cybernetic Prosthetics",
         PASSAGE_4_8, QUESTIONS_4_8, W_CYBERNETIC,
+        listening_date="4.8", manifest=_MANIFEST,
     ),
     # ---- 高阶 95-105 ----
     _make_paper(
         "新版 TOEFL 高阶诊断 A · Ecological Systems Theory",
         "toefl_95_105",
         "高阶 (95-105)",
-        "适用于 TOEFL 预估 95-105 分学生（高阶档 A 套）。基于 2026.4.1 真题阅读改编，主题为 Bronfenbrenner 生态系统理论，3 道选择题 + 1 道 Academic Discussion 写作题。约 20 分钟。",
+        "适用于 TOEFL 预估 95-105 分学生（高阶档 A 套）。Section 1 听力：2026.4.1 真题 Q1-8 单句应答；Section 2 阅读：同场真题改编，Bronfenbrenner 生态系统理论，3 道选择题；Section 3 写作：1 道 Academic Discussion。约 30 分钟。",
         "Understanding Ecological Systems Theory",
         PASSAGE_4_1, QUESTIONS_4_1, W_ECOLOGICAL,
+        listening_date="4.1", manifest=_MANIFEST,
     ),
     _make_paper(
         "新版 TOEFL 高阶诊断 B · Space Debris",
         "toefl_95_105",
         "高阶 (95-105)",
-        "适用于 TOEFL 预估 95-105 分学生（高阶档 B 套）。基于 2026.3.10 真题阅读改编，主题为 Kessler Syndrome 与太空碎片，5 道选择题 + 1 道 Academic Discussion 写作题。约 25 分钟。",
+        "适用于 TOEFL 预估 95-105 分学生（高阶档 B 套）。Section 1 听力：2026.3.20 真题 Q1-8 单句应答；Section 2 阅读：2026.3.10 真题改编，Kessler Syndrome 与太空碎片，5 道选择题；Section 3 写作：1 道 Academic Discussion。约 30 分钟。",
         "Space Debris: A Growing Concern",
         PASSAGE_3_10, QUESTIONS_3_10, W_SPACE_DEBRIS,
+        listening_date="3.20", manifest=_MANIFEST,
     ),
     # ---- 冲刺 105+ ----
     _make_paper(
         "新版 TOEFL 冲刺诊断 A · Magnetic Confinement Fusion",
         "toefl_105_plus",
         "冲刺 (105+)",
-        "适用于 TOEFL 预估 105 分以上学生（冲刺档 A 套）。基于 2026.3.27 真题阅读改编，主题为磁约束核聚变与 ITER 项目，5 道选择题 + 1 道 Academic Discussion 写作题。约 25 分钟。",
+        "适用于 TOEFL 预估 105 分以上学生（冲刺档 A 套）。Section 1 听力：2026.3.27 真题 Q1-8 单句应答；Section 2 阅读：同场真题改编，磁约束核聚变与 ITER 项目，5 道选择题；Section 3 写作：1 道 Academic Discussion。约 30 分钟。",
         "Magnetic Confinement Fusion",
         PASSAGE_3_27, QUESTIONS_3_27, W_FUSION,
+        listening_date="3.27", manifest=_MANIFEST,
     ),
     _make_paper(
         "新版 TOEFL 冲刺诊断 B · Beyond Philosophy's Borders",
         "toefl_105_plus",
         "冲刺 (105+)",
-        "适用于 TOEFL 预估 105 分以上学生（冲刺档 B 套）。基于 2026.3.18 真题阅读改编，主题为元哲学与跨文化普遍性，4 道选择题 + 1 道 Academic Discussion 写作题。约 22 分钟。",
+        "适用于 TOEFL 预估 105 分以上学生（冲刺档 B 套）。Section 1 听力：2026.3.18 真题 Q1-8 单句应答；Section 2 阅读：同场真题改编，元哲学与跨文化普遍性，4 道选择题；Section 3 写作：1 道 Academic Discussion。约 30 分钟。",
         "Beyond Philosophy's Borders",
         PASSAGE_3_18, QUESTIONS_3_18, W_METAPHILOSOPHY,
+        listening_date="3.18", manifest=_MANIFEST,
     ),
 ]
 
