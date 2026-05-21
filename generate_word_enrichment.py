@@ -78,7 +78,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--book-id", type=int, help="Only generate words in this book")
     parser.add_argument("--limit", type=int, help="Maximum number of words to process")
-    parser.add_argument("--batch-size", type=int, default=50, help="Words per Qwen request")
+    parser.add_argument("--batch-size", type=int, default=10, help="Words per Qwen request")
     parser.add_argument("--dry-run", action="store_true", help="Generate and print examples without writing database")
     args = parser.parse_args()
 
@@ -96,7 +96,7 @@ def main():
             try:
                 results = generate_vocab_enrichment([_payload(word) for word in batch])
             except RuntimeError as exc:
-                print(f"Batch failed: {exc}")
+                print(f"Batch failed: {exc}", flush=True)
                 if not args.dry_run:
                     _mark_failed(batch, str(exc))
                     db.session.commit()
@@ -109,7 +109,7 @@ def main():
                 if not result:
                     if not args.dry_run:
                         _mark_failed([word], "missing_result")
-                    print(f"Missing result: {word.id} {word.word}")
+                    print(f"Missing result: {word.id} {word.word}", flush=True)
                     continue
                 if args.dry_run:
                     print(f"\n{word.word} | {word.translation or ''}")
@@ -123,15 +123,15 @@ def main():
                     _apply_result(word, result, now)
                 processed += 1
                 if processed % 20 == 0:
-                    print(f"Processed {processed}/{len(words)}")
+                    print(f"Processed {processed}/{len(words)}", flush=True)
 
             if not args.dry_run:
                 db.session.commit()
 
             if processed >= len(words) and processed % 20 != 0:
-                print(f"Processed {processed}/{len(words)}")
+                print(f"Processed {processed}/{len(words)}", flush=True)
 
-        print("Dry run completed." if args.dry_run else "Word enrichment completed.")
+        print("Dry run completed." if args.dry_run else "Word enrichment completed.", flush=True)
 
 
 if __name__ == "__main__":
