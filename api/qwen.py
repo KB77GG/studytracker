@@ -57,6 +57,9 @@ HIGH_RISK_USAGE_NOTE_PATTERNS = (
     re.compile(r"不可.{0,8}被动"),
     re.compile(r"不用于.{0,8}被动"),
     re.compile(r"不能说"),
+    re.compile(r"仅用于"),
+    re.compile(r"只用于"),
+    re.compile(r"只能"),
     re.compile(r"under\s+the\s+charge\s+of", re.IGNORECASE),
 )
 
