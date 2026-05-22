@@ -16,13 +16,23 @@ QWEN_CHAT_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completi
 
 SYSTEM_PROMPT = """你是 TOEFL/IELTS 词汇教学专家。请为英语学习者生成词汇增强信息。
 
+最高原则：准确性高于信息量。尤其是 usage_note，宁可留空，也不要写未经验证的用法限制。
+
 要求：
 1. core_meaning_zh 必须是简洁核心义，不照搬冗长释义。
-2. usage_pattern 写常见搭配或句型；无明显搭配时写自然常用语境。
+2. usage_pattern 写常见搭配或句型；无明显搭配时写自然常用语境。介词和句型必须地道。
 3. example_en 写 12-22 个英文词，自然地道，适合 TOEFL/IELTS 或通用学习语境。
-4. example_zh 是准确流畅的中文翻译。
-5. usage_note 只在多义词、易混词、搭配限制或考试常用法需要说明时填写；普通词可为空字符串。
-6. needs_review 对高风险词、短语、不确定内容返回 true，否则 false。
+4. example_en 必须体现该词最值得学生掌握的常见义项。常见多义动词优先 TOEFL/IELTS 高频义项，例如 address 优先“处理/应对问题”，不要优先“演讲/地址”。
+5. example_zh 是准确流畅的中文翻译。
+6. usage_note 只在学生容易错且你有充分把握时填写，例如介词搭配、固定句型、可数/不可数、近义词辨析、多义词高频义。
+7. usage_note 最多 50 个汉字；不要写泛泛提醒；不要编造“不能被动”“只能人作主语”“只能用于正式场合”等绝对规则，除非你能按 Oxford/Longman/Cambridge 级别确认。
+8. 如果 usage_note 的准确性没有 100% 把握，必须返回空字符串 ""。
+9. needs_review 对高风险词、短语、不确定内容返回 true，否则 false。
+
+常见动词特别注意：
+- spend: spend time/money on sth 或 spend time/money doing sth；不要说它不能用于被动语态。
+- charge: “负责”用 in charge of 或 in the charge of；不要写 under the charge of。
+- address: 学术语境优先 address an issue/problem/concern。
 
 只输出合法 JSON，不要输出 Markdown。JSON 格式：
 {
@@ -39,6 +49,14 @@ SYSTEM_PROMPT = """你是 TOEFL/IELTS 词汇教学专家。请为英语学习者
   ]
 }
 """
+
+HIGH_RISK_USAGE_NOTE_PATTERNS = (
+    re.compile(r"不能.{0,8}被动"),
+    re.compile(r"不可.{0,8}被动"),
+    re.compile(r"不用于.{0,8}被动"),
+    re.compile(r"不能说"),
+    re.compile(r"under\s+the\s+charge\s+of", re.IGNORECASE),
+)
 
 
 def _config_value(key: str, default: str | None = None) -> str | None:
@@ -131,13 +149,20 @@ def _normalize_result(raw: dict[str, Any], by_id: dict[int, dict[str, Any]], mod
     else:
         needs_review = bool(needs_review)
 
+    usage_note = str(raw.get("usage_note") or "").strip()
+    if any(pattern.search(usage_note) for pattern in HIGH_RISK_USAGE_NOTE_PATTERNS):
+        usage_note = ""
+        needs_review = True
+    if len(usage_note) > 80:
+        usage_note = usage_note[:80].rstrip()
+
     result = {
         "id": word_id,
         "core_meaning_zh": str(raw.get("core_meaning_zh") or "").strip(),
         "usage_pattern": str(raw.get("usage_pattern") or "").strip(),
         "example_en": str(raw.get("example_en") or "").strip(),
         "example_zh": str(raw.get("example_zh") or "").strip(),
-        "usage_note": str(raw.get("usage_note") or "").strip(),
+        "usage_note": usage_note,
         "needs_review": needs_review,
         "model": model,
     }

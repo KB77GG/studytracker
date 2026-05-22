@@ -4,6 +4,7 @@
 import argparse
 from datetime import datetime
 from pathlib import Path
+import re
 import sys
 
 from sqlalchemy import or_
@@ -19,6 +20,7 @@ from models import db, DictationBook, DictationWord  # noqa: E402
 
 SKIP_STATUSES = {"generated", "reviewed", "edited"}
 FAILED_LOG = ROOT / "failed_words.log"
+VERBISH_RE = re.compile(r"(^|[\s;；,，])(?:v|vt|vi)\.|动词|及物|不及物", re.IGNORECASE)
 
 
 def _chunks(items, size):
@@ -26,21 +28,46 @@ def _chunks(items, size):
         yield items[index:index + size]
 
 
-def _query_words(book_id=None, limit=None):
+def _is_verbish(word):
+    text = f"{word.translation or ''} {word.core_meaning_zh or ''}"
+    return bool(VERBISH_RE.search(text))
+
+
+def _parse_ids(raw_ids):
+    if not raw_ids:
+        return None
+    ids = []
+    for item in raw_ids.split(","):
+        item = item.strip()
+        if not item:
+            continue
+        ids.append(int(item))
+    return ids or None
+
+
+def _query_words(book_id=None, limit=None, refresh_generated=False, verbish_only=False, ids=None):
     query = DictationWord.query.join(DictationBook, DictationWord.book_id == DictationBook.id)
     query = query.filter(DictationBook.is_deleted == False)  # noqa: E712
     if book_id:
         query = query.filter(DictationWord.book_id == book_id)
-    query = query.filter(
-        or_(
-            DictationWord.vocab_ai_status == None,  # noqa: E711
-            ~DictationWord.vocab_ai_status.in_(SKIP_STATUSES),
+    if ids:
+        query = query.filter(DictationWord.id.in_(ids))
+    if refresh_generated:
+        query = query.filter(DictationWord.vocab_ai_status == "generated")
+    else:
+        query = query.filter(
+            or_(
+                DictationWord.vocab_ai_status == None,  # noqa: E711
+                ~DictationWord.vocab_ai_status.in_(SKIP_STATUSES),
+            )
         )
-    )
     query = query.order_by(DictationWord.book_id.asc(), DictationWord.sequence.asc())
+    words = query.all() if (verbish_only or ids) else query.limit(limit).all() if limit else query.all()
+    if verbish_only:
+        words = [word for word in words if _is_verbish(word)]
     if limit:
-        query = query.limit(limit)
-    return query.all()
+        words = words[:limit]
+    return words
 
 
 def _payload(word):
@@ -79,12 +106,29 @@ def main():
     parser.add_argument("--book-id", type=int, help="Only generate words in this book")
     parser.add_argument("--limit", type=int, help="Maximum number of words to process")
     parser.add_argument("--batch-size", type=int, default=10, help="Words per Qwen request")
+    parser.add_argument("--ids", help="Comma-separated word ids to process")
+    parser.add_argument(
+        "--refresh-generated",
+        action="store_true",
+        help="Overwrite existing AI-generated rows. Reviewed/edited rows are still skipped.",
+    )
+    parser.add_argument(
+        "--verbish-only",
+        action="store_true",
+        help="Only process entries whose translation/core meaning looks like a verb sense.",
+    )
     parser.add_argument("--dry-run", action="store_true", help="Generate and print examples without writing database")
     args = parser.parse_args()
 
     with app.app_context():
-        words = _query_words(book_id=args.book_id, limit=args.limit)
-        if args.dry_run:
+        words = _query_words(
+            book_id=args.book_id,
+            limit=args.limit,
+            refresh_generated=args.refresh_generated,
+            verbish_only=args.verbish_only,
+            ids=_parse_ids(args.ids),
+        )
+        if args.dry_run and args.limit is None and not args.ids:
             words = words[:5]
         if not words:
             print("No words need enrichment.")
