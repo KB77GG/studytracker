@@ -16,6 +16,7 @@ Page({
         subscribeButtonText: '开启提醒',
         subscribeTip: '多次允许后，微信会出现“总是保持以上选择”，勾选即可长期免打扰',
         teacherGreeting: '',
+        teacherName: '',
         bindRequired: false,
         schedulerTeacherId: '',
         bindLoading: false,
@@ -46,6 +47,7 @@ Page({
 
     onShow() {
         this.updateGreeting()
+        this.loadTeacherProfile()
         if (!this.data.calendarMonth) {
             const now = new Date()
             this.setData({
@@ -69,6 +71,54 @@ Page({
         else if (hour < 18) teacherGreeting = '下午好'
         else teacherGreeting = '晚上好'
         this.setData({ teacherGreeting })
+    },
+
+    resolveTeacherName(userInfo) {
+        if (!userInfo) return ''
+        const name = userInfo.display_name || userInfo.nickName || userInfo.username || userInfo.name || ''
+        return String(name).trim()
+    },
+
+    cacheUserInfo(userInfo) {
+        if (!userInfo) return null
+        const teacherName = this.resolveTeacherName(userInfo)
+        const normalized = {
+            ...userInfo,
+            nickName: userInfo.nickName || teacherName || '老师'
+        }
+        app.globalData.userInfo = normalized
+        wx.setStorageSync('userInfo', normalized)
+        if (normalized.role) {
+            app.globalData.role = normalized.role
+            wx.setStorageSync('role', normalized.role)
+        }
+        return normalized
+    },
+
+    async loadTeacherProfile() {
+        const cached = app.globalData.userInfo || wx.getStorageSync('userInfo')
+        const cachedName = this.resolveTeacherName(cached)
+        if (cachedName && cachedName !== this.data.teacherName) {
+            this.setData({ teacherName: cachedName })
+        }
+
+        try {
+            const res = await request('/v1/me')
+            if (res && res.ok && res.data) {
+                const userInfo = this.cacheUserInfo(res.data)
+                const teacherName = this.resolveTeacherName(userInfo) || '老师'
+                if (teacherName !== this.data.teacherName) {
+                    this.setData({ teacherName })
+                }
+            } else if (!this.data.teacherName) {
+                this.setData({ teacherName: '老师' })
+            }
+        } catch (e) {
+            console.warn('teacher home loadTeacherProfile failed', e)
+            if (!this.data.teacherName) {
+                this.setData({ teacherName: '老师' })
+            }
+        }
     },
 
     async fetchSchedules() {

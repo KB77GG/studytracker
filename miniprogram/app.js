@@ -42,9 +42,13 @@ App({
     checkLogin() {
         const token = wx.getStorageSync('token')
         const role = wx.getStorageSync('role')
+        const userInfo = wx.getStorageSync('userInfo')
         if (token) {
             this.globalData.token = token
             this.globalData.role = role
+            if (userInfo) {
+                this.globalData.userInfo = userInfo
+            }
             // 可以验证 token 有效性，或者直接尝试获取用户信息
         } else {
             // 无 token，需要在页面中引导登录

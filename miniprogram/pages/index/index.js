@@ -53,6 +53,34 @@ Page({
         wx.reLaunch({ url: '/pages/student/home/index' })
     },
 
+    cacheUserInfo(userInfo) {
+        if (!userInfo) return null
+        const displayName = userInfo.display_name || userInfo.nickName || userInfo.username || userInfo.name || ''
+        const normalized = {
+            ...userInfo,
+            nickName: userInfo.nickName || displayName || '同学'
+        }
+        wx.setStorageSync('userInfo', normalized)
+        app.globalData.userInfo = normalized
+        if (normalized.role) {
+            wx.setStorageSync('role', normalized.role)
+            app.globalData.role = normalized.role
+        }
+        return normalized
+    },
+
+    async loadCurrentUser() {
+        try {
+            const res = await request('/v1/me')
+            if (res && res.ok && res.data) {
+                return this.cacheUserInfo(res.data)
+            }
+        } catch (err) {
+            console.warn('load current user failed', err)
+        }
+        return null
+    },
+
     onLoad(options) {
         // 检查隐私授权状态
         if (typeof wx.getPrivacySetting === 'function') {
@@ -141,6 +169,7 @@ Page({
                             app.globalData.token = result.token
                             app.globalData.guestMode = false
                             wx.setStorageSync('token', result.token)
+                            this.cacheUserInfo(result.user)
                             this.setData({ hasToken: true })
 
                             // Save role to storage
@@ -155,8 +184,9 @@ Page({
                                 // 显示角色选择
                                 this.setData({ isGuest: true })
                             } else {
+                                const currentUser = await this.loadCurrentUser()
                                 // 已绑定，直接跳转
-                                this.handleRoleRedirect(result.user.role)
+                                this.handleRoleRedirect((currentUser && currentUser.role) || result.user.role)
                             }
                         } else {
                             wx.showToast({ title: '登录失败', icon: 'none' })
@@ -183,9 +213,8 @@ Page({
         try {
             const res = await request('/v1/me')
             if (res.ok) {
-                wx.setStorageSync('role', res.data.role)
-                app.globalData.role = res.data.role
-                this.handleRoleRedirect(res.data.role)
+                const userInfo = this.cacheUserInfo(res.data)
+                this.handleRoleRedirect(userInfo.role)
             }
         } catch (err) {
             // token 可能失效
@@ -289,6 +318,10 @@ Page({
                 wx.showToast({ title: '绑定成功', icon: 'success' })
                 wx.setStorageSync('role', this.data.targetRole)
                 app.globalData.role = this.data.targetRole
+                this.cacheUserInfo({
+                    role: this.data.targetRole,
+                    display_name: this.data.bindName
+                })
                 setTimeout(() => {
                     this.handleRoleRedirect(this.data.targetRole)
                 }, 1500)
@@ -323,8 +356,7 @@ Page({
                 app.globalData.token = res.token
                 wx.setStorageSync('token', res.token)
                 if (res.user && res.user.role) {
-                    wx.setStorageSync('role', res.user.role)
-                    app.globalData.role = res.user.role
+                    this.cacheUserInfo(res.user)
                 }
                 wx.showToast({ title: '绑定成功', icon: 'success' })
                 this.setData({
