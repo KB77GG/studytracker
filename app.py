@@ -570,6 +570,14 @@ def _grade_listening_test_answers(payload: dict, answers: dict, section_number: 
             continue
         key = ",".join(unit["ids"])
         value = answers.get(key)
+        if value is None and unit["kind"] == "checkbox-set":
+            separate_values = [
+                str(answers.get(item_id) or "").strip()
+                for item_id in unit["ids"]
+                if str(answers.get(item_id) or "").strip()
+            ]
+            if separate_values:
+                value = ",".join(separate_values)
         if value is None and unit["ids"]:
             value = answers.get(unit["ids"][0], "")
         answer = unit["answer"]

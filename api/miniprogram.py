@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import html
 import hashlib
 import secrets
 from datetime import datetime, date, timedelta
@@ -132,6 +133,61 @@ def _miniprogram_safe_question_title(title: str) -> str:
     return re.sub(r"【\s*】", "____", str(title or ""))
 
 
+def _miniprogram_safe_rich_text(value: str) -> str:
+    text = html.unescape(str(value or ""))
+    text = text.replace("\xa0", " ")
+    text = re.sub(r"<\s*divider\s*/?\s*>", "\n", text, flags=re.IGNORECASE)
+    text = re.sub(r"<\s*br\s*/?\s*>", "\n", text, flags=re.IGNORECASE)
+    text = re.sub(r"[ \t]{3,}", "  ", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
+
+
+def _miniprogram_question_number_map(group: dict) -> dict[str, int | str]:
+    number_by_key = {}
+    for question in group.get("questions") or []:
+        key = str(question.get("id") or question.get("number") or "").strip()
+        if key:
+            number_by_key[key] = question.get("number") or key
+    return number_by_key
+
+
+def _miniprogram_label_placeholders(value: str, group: dict) -> str:
+    number_by_key = _miniprogram_question_number_map(group)
+
+    def repl(match):
+        key = str(match.group(1)).strip()
+        number = number_by_key.get(key)
+        if not number:
+            return match.group(0)
+        before = value[max(0, match.start() - 4):match.start()]
+        if re.search(r"Q\s*$", before, flags=re.IGNORECASE):
+            return match.group(0)
+        return f"Q{number} ${key}$"
+
+    return re.sub(r"\$([^$\s]+)\$", repl, str(value or ""))
+
+
+def _miniprogram_safe_collect(value: str, group: dict) -> str:
+    return _miniprogram_label_placeholders(_miniprogram_safe_rich_text(value), group)
+
+
+def _miniprogram_safe_table(table, group: dict):
+    if not isinstance(table, dict):
+        return table
+    safe_table = dict(table)
+    rows = table.get("content")
+    if isinstance(rows, list):
+        safe_rows = []
+        for row in rows:
+            if isinstance(row, list):
+                safe_rows.append([_miniprogram_safe_collect(cell, group) for cell in row])
+            else:
+                safe_rows.append(_miniprogram_safe_collect(row, group))
+        safe_table["content"] = safe_rows
+    return safe_table
+
+
 def _letter_options_from_group(group: dict) -> list[dict]:
     desc = f"{group.get('desc') or ''}\n{group.get('question_title') or ''}"
     match = re.search(r"\b([A-Z])\s*[-–]\s*([A-Z])\b", desc)
@@ -148,7 +204,7 @@ def _serialize_cambridge_question(question: dict, group: dict | None = None) -> 
     for option in question.get("options") or []:
         options.append({
             "title": option.get("title"),
-            "content": option.get("content"),
+            "content": _miniprogram_safe_rich_text(option.get("content") or ""),
         })
     if not options and (group or {}).get("type") == 7:
         options = _letter_options_from_group(group or {})
@@ -180,23 +236,23 @@ def _serialize_cambridge_group(group: dict) -> dict:
     for option in collect_option.get("list") or []:
         collect_options.append({
             "title": option.get("title"),
-            "content": option.get("content"),
+            "content": _miniprogram_safe_rich_text(option.get("content") or ""),
         })
     combined_multi = _listening_group_is_combined_multi(group)
     return {
         "group_id": group.get("group_id"),
         "type": group.get("type"),
-        "title": group.get("title") or "",
-        "question_title": group.get("question_title") or "",
-        "desc": group.get("desc") or "",
-        "collect": group.get("collect") or "",
-        "table": group.get("table") or None,
+        "title": _miniprogram_safe_rich_text(group.get("title") or ""),
+        "question_title": _miniprogram_safe_rich_text(group.get("question_title") or ""),
+        "desc": _miniprogram_safe_rich_text(group.get("desc") or ""),
+        "collect": _miniprogram_safe_collect(group.get("collect") or "", group),
+        "table": _miniprogram_safe_table(group.get("table"), group) or None,
         "image_url": _usable_cambridge_image(group),
         "collect_option": {
-            "title": collect_option.get("title") or "",
+            "title": _miniprogram_safe_rich_text(collect_option.get("title") or ""),
             "list": collect_options,
         },
-        "combined_multi": combined_multi,
+        "combined_multi": False,
         "combined_key": ",".join(str(question.get("id") or question.get("number")) for question in group.get("questions") or [])
         if combined_multi
         else "",
