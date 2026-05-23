@@ -128,6 +128,10 @@ def _question_has_multi_answer(question: dict, group: dict | None = None) -> boo
     return "," in answer or (group or {}).get("type") == 9
 
 
+def _miniprogram_safe_question_title(title: str) -> str:
+    return re.sub(r"【\s*】", "____", str(title or ""))
+
+
 def _letter_options_from_group(group: dict) -> list[dict]:
     desc = f"{group.get('desc') or ''}\n{group.get('question_title') or ''}"
     match = re.search(r"\b([A-Z])\s*[-–]\s*([A-Z])\b", desc)
@@ -151,7 +155,7 @@ def _serialize_cambridge_question(question: dict, group: dict | None = None) -> 
     return {
         "id": question.get("id") or question.get("number"),
         "number": question.get("number"),
-        "title": question.get("title") or "",
+        "title": _miniprogram_safe_question_title(question.get("title") or ""),
         "options": options,
         "start": question.get("start"),
         "end": question.get("end"),
@@ -261,7 +265,7 @@ def _serialize_reading_question(question: dict) -> dict:
     return {
         "id": question.get("id") or question.get("number"),
         "number": question.get("number"),
-        "title": question.get("title") or "",
+        "title": _miniprogram_safe_question_title(question.get("title") or ""),
         "input_mode": question.get("input_mode") or ("choice" if options else "text"),
         "options": options,
         "is_multi_answer": _reading_question_is_multi_answer(question),
