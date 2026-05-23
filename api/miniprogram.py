@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import html
 import hashlib
 import secrets
 from datetime import datetime, date, timedelta
@@ -128,6 +129,65 @@ def _question_has_multi_answer(question: dict, group: dict | None = None) -> boo
     return "," in answer or (group or {}).get("type") == 9
 
 
+def _miniprogram_safe_question_title(title: str) -> str:
+    return re.sub(r"【\s*】", "____", str(title or ""))
+
+
+def _miniprogram_safe_rich_text(value: str) -> str:
+    text = html.unescape(str(value or ""))
+    text = text.replace("\xa0", " ")
+    text = re.sub(r"<\s*divider\s*/?\s*>", "\n", text, flags=re.IGNORECASE)
+    text = re.sub(r"<\s*br\s*/?\s*>", "\n", text, flags=re.IGNORECASE)
+    text = re.sub(r"[ \t]{3,}", "  ", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
+
+
+def _miniprogram_question_number_map(group: dict) -> dict[str, int | str]:
+    number_by_key = {}
+    for question in group.get("questions") or []:
+        key = str(question.get("id") or question.get("number") or "").strip()
+        if key:
+            number_by_key[key] = question.get("number") or key
+    return number_by_key
+
+
+def _miniprogram_label_placeholders(value: str, group: dict) -> str:
+    number_by_key = _miniprogram_question_number_map(group)
+
+    def repl(match):
+        key = str(match.group(1)).strip()
+        number = number_by_key.get(key)
+        if not number:
+            return match.group(0)
+        before = value[max(0, match.start() - 4):match.start()]
+        if re.search(r"Q\s*$", before, flags=re.IGNORECASE):
+            return match.group(0)
+        return f"Q{number} ${key}$"
+
+    return re.sub(r"\$([^$\s]+)\$", repl, str(value or ""))
+
+
+def _miniprogram_safe_collect(value: str, group: dict) -> str:
+    return _miniprogram_label_placeholders(_miniprogram_safe_rich_text(value), group)
+
+
+def _miniprogram_safe_table(table, group: dict):
+    if not isinstance(table, dict):
+        return table
+    safe_table = dict(table)
+    rows = table.get("content")
+    if isinstance(rows, list):
+        safe_rows = []
+        for row in rows:
+            if isinstance(row, list):
+                safe_rows.append([_miniprogram_safe_collect(cell, group) for cell in row])
+            else:
+                safe_rows.append(_miniprogram_safe_collect(row, group))
+        safe_table["content"] = safe_rows
+    return safe_table
+
+
 def _letter_options_from_group(group: dict) -> list[dict]:
     desc = f"{group.get('desc') or ''}\n{group.get('question_title') or ''}"
     match = re.search(r"\b([A-Z])\s*[-–]\s*([A-Z])\b", desc)
@@ -139,19 +199,19 @@ def _letter_options_from_group(group: dict) -> list[dict]:
     return [{"title": chr(code), "content": ""} for code in range(start_ord, end_ord + 1)]
 
 
-def _serialize_cambridge_question(question: dict, group: dict | None = None) -> dict:
+def _serialize_cambridge_question(question: dict, group: dict | None = None, legacy_safe: bool = False) -> dict:
     options = []
     for option in question.get("options") or []:
         options.append({
             "title": option.get("title"),
-            "content": option.get("content"),
+            "content": _miniprogram_safe_rich_text(option.get("content") or "") if legacy_safe else option.get("content"),
         })
     if not options and (group or {}).get("type") == 7:
         options = _letter_options_from_group(group or {})
     return {
         "id": question.get("id") or question.get("number"),
         "number": question.get("number"),
-        "title": question.get("title") or "",
+        "title": _miniprogram_safe_question_title(question.get("title") or "") if legacy_safe else question.get("title") or "",
         "options": options,
         "start": question.get("start"),
         "end": question.get("end"),
@@ -169,30 +229,33 @@ def _usable_cambridge_image(group: dict) -> str:
     return ""
 
 
-def _serialize_cambridge_group(group: dict) -> dict:
-    questions = [_serialize_cambridge_question(question, group) for question in group.get("questions") or []]
+def _serialize_cambridge_group(group: dict, legacy_safe: bool = False) -> dict:
+    questions = [
+        _serialize_cambridge_question(question, group, legacy_safe=legacy_safe)
+        for question in group.get("questions") or []
+    ]
     collect_option = group.get("collect_option") or {}
     collect_options = []
     for option in collect_option.get("list") or []:
         collect_options.append({
             "title": option.get("title"),
-            "content": option.get("content"),
+            "content": _miniprogram_safe_rich_text(option.get("content") or "") if legacy_safe else option.get("content"),
         })
     combined_multi = _listening_group_is_combined_multi(group)
     return {
         "group_id": group.get("group_id"),
         "type": group.get("type"),
-        "title": group.get("title") or "",
-        "question_title": group.get("question_title") or "",
-        "desc": group.get("desc") or "",
-        "collect": group.get("collect") or "",
-        "table": group.get("table") or None,
+        "title": _miniprogram_safe_rich_text(group.get("title") or "") if legacy_safe else group.get("title") or "",
+        "question_title": _miniprogram_safe_rich_text(group.get("question_title") or "") if legacy_safe else group.get("question_title") or "",
+        "desc": _miniprogram_safe_rich_text(group.get("desc") or "") if legacy_safe else group.get("desc") or "",
+        "collect": _miniprogram_safe_collect(group.get("collect") or "", group) if legacy_safe else group.get("collect") or "",
+        "table": _miniprogram_safe_table(group.get("table"), group) if legacy_safe else group.get("table") or None,
         "image_url": _usable_cambridge_image(group),
         "collect_option": {
-            "title": collect_option.get("title") or "",
+            "title": _miniprogram_safe_rich_text(collect_option.get("title") or "") if legacy_safe else collect_option.get("title") or "",
             "list": collect_options,
         },
-        "combined_multi": combined_multi,
+        "combined_multi": combined_multi if not legacy_safe else False,
         "combined_key": ",".join(str(question.get("id") or question.get("number")) for question in group.get("questions") or [])
         if combined_multi
         else "",
@@ -201,14 +264,17 @@ def _serialize_cambridge_group(group: dict) -> dict:
     }
 
 
-def _serialize_cambridge_test(payload: dict, section_number: int | None = None) -> dict:
+def _serialize_cambridge_test(payload: dict, section_number: int | None = None, legacy_safe: bool = False) -> dict:
     requested_index = int(section_number) - 1 if section_number else None
     sections = []
     for section_index, section in enumerate(payload.get("sections") or []):
         current_number = int(section.get("section") or section_index + 1)
         if requested_index is not None and section_index != requested_index:
             continue
-        groups = [_serialize_cambridge_group(group) for group in section.get("groups") or []]
+        groups = [
+            _serialize_cambridge_group(group, legacy_safe=legacy_safe)
+            for group in section.get("groups") or []
+        ]
         flat_questions = []
         for group in groups:
             flat_questions.extend(group.get("questions") or [])
@@ -252,7 +318,7 @@ def _reading_question_is_multi_answer(question: dict) -> bool:
     return "," in answer
 
 
-def _serialize_reading_question(question: dict) -> dict:
+def _serialize_reading_question(question: dict, legacy_safe: bool = False) -> dict:
     options = []
     for option in question.get("options") or []:
         key = option.get("key") or option.get("title")
@@ -261,7 +327,7 @@ def _serialize_reading_question(question: dict) -> dict:
     return {
         "id": question.get("id") or question.get("number"),
         "number": question.get("number"),
-        "title": question.get("title") or "",
+        "title": _miniprogram_safe_question_title(question.get("title") or "") if legacy_safe else question.get("title") or "",
         "input_mode": question.get("input_mode") or ("choice" if options else "text"),
         "options": options,
         "is_multi_answer": _reading_question_is_multi_answer(question),
@@ -278,7 +344,7 @@ def _usable_reading_image(group: dict) -> str:
     return ""
 
 
-def _serialize_reading_group(group: dict) -> dict:
+def _serialize_reading_group(group: dict, legacy_safe: bool = False) -> dict:
     collect_option = group.get("collect_option") or {}
     collect_options = []
     for option in collect_option.get("list") or []:
@@ -288,21 +354,24 @@ def _serialize_reading_group(group: dict) -> dict:
     return {
         "group_id": group.get("group_id"),
         "type": group.get("type"),
-        "title": group.get("title") or "",
-        "question_title": group.get("question_title") or "",
-        "desc": group.get("desc") or "",
-        "collect": group.get("collect") or "",
-        "table": group.get("table") or None,
+        "title": _miniprogram_safe_rich_text(group.get("title") or "") if legacy_safe else group.get("title") or "",
+        "question_title": _miniprogram_safe_rich_text(group.get("question_title") or "") if legacy_safe else group.get("question_title") or "",
+        "desc": _miniprogram_safe_rich_text(group.get("desc") or "") if legacy_safe else group.get("desc") or "",
+        "collect": _miniprogram_safe_collect(group.get("collect") or "", group) if legacy_safe else group.get("collect") or "",
+        "table": _miniprogram_safe_table(group.get("table"), group) if legacy_safe else group.get("table") or None,
         "image_url": _usable_reading_image(group),
         "collect_option": {
             "title": collect_option.get("title") or "",
             "list": collect_options,
         },
-        "questions": [_serialize_reading_question(question) for question in group.get("questions") or []],
+        "questions": [
+            _serialize_reading_question(question, legacy_safe=legacy_safe)
+            for question in group.get("questions") or []
+        ],
     }
 
 
-def _serialize_reading_passage(passage: dict, passage_index: int) -> dict:
+def _serialize_reading_passage(passage: dict, passage_index: int, legacy_safe: bool = False) -> dict:
     content = passage.get("content") if isinstance(passage.get("content"), dict) else {}
     return {
         "id": passage.get("id"),
@@ -317,17 +386,20 @@ def _serialize_reading_passage(passage: dict, passage_index: int) -> dict:
             "notes": content.get("notes") or "",
             "paragraphs": content.get("paragraphs") or [],
         },
-        "groups": [_serialize_reading_group(group) for group in passage.get("groups") or []],
+        "groups": [
+            _serialize_reading_group(group, legacy_safe=legacy_safe)
+            for group in passage.get("groups") or []
+        ],
     }
 
 
-def _serialize_reading_test(payload: dict, passage_number: int | None = None) -> dict:
+def _serialize_reading_test(payload: dict, passage_number: int | None = None, legacy_safe: bool = False) -> dict:
     passages = []
     for passage_index, passage in enumerate(payload.get("passages") or []):
         current_number = int(passage.get("passage") or passage_index + 1)
         if passage_number and current_number != int(passage_number):
             continue
-        passages.append(_serialize_reading_passage(passage, passage_index))
+        passages.append(_serialize_reading_passage(passage, passage_index, legacy_safe=legacy_safe))
     return {
         "id": payload.get("id"),
         "title": payload.get("title") or "",
@@ -1568,11 +1640,12 @@ def get_student_cambridge_listening_task(task_id):
 
     section_number = _task_listening_section_number(task)
     submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
+    legacy_safe = (request.args.get("render") or "").strip() != "rich_v2"
     return jsonify({
         "ok": True,
         "section_number": section_number,
         "audio_base_url": "https://studytracker.xin/static/listening/",
-        "test": _serialize_cambridge_test(payload, section_number),
+        "test": _serialize_cambridge_test(payload, section_number, legacy_safe=legacy_safe),
         "task": {
             "id": task.id,
             "status": task.status,
@@ -1620,7 +1693,7 @@ def get_student_cambridge_reading_task(task_id):
     return jsonify({
         "ok": True,
         "passage_number": passage_number,
-        "test": _serialize_reading_test(payload, passage_number),
+        "test": _serialize_reading_test(payload, passage_number, legacy_safe=True),
         "task": {
             "id": task.id,
             "status": task.status,

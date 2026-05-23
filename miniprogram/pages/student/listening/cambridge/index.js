@@ -77,7 +77,7 @@ Page({
                 return
             }
             const res = await request(
-                `/miniprogram/student/listening/cambridge/${this.data.taskId}?token=${encodeURIComponent(token)}`,
+                `/miniprogram/student/listening/cambridge/${this.data.taskId}?token=${encodeURIComponent(token)}&render=rich_v2`,
                 { timeout: 90000 }
             )
             if (!res.ok) {
