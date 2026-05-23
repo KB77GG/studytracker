@@ -51,6 +51,7 @@
   <block wx:for="{{chunks}}" wx:for-item="chunk" wx:key="chunkKey">
     <rich-text wx:if="{{chunk.kind === 'text'}}" class="chunk-text" nodes="{{chunk.html}}"></rich-text>
     <block wx:else>
+      <text wx:if="{{chunk.showNumber}}" class="inline-q-number">Q{{chunk.question.number}}</text>
       <template is="answerControl" data="{{question: chunk.question, answers: answers, inline: true}}" />
     </block>
   </block>

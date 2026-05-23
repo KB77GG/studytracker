@@ -246,10 +246,13 @@ Page({
             const renderQuestions = questions.filter(question => !renderedKeys[question.key] && !group.combined_multi)
             const combined = group.combined_multi ? {
                 key: group.combined_key,
+                number: (group.combined_numbers || [])[0] || '',
                 numbersLabel: (group.combined_numbers || []).join(', '),
+                control: 'checkbox',
                 options: this.normalizeOptions((group.collect_option || {}).list || []),
                 selectedLabel: '',
-                checkedMap: {}
+                checkedMap: {},
+                showControl: true
             } : null
 
             return {
@@ -301,8 +304,8 @@ Page({
 
     normalizeOptions(options) {
         return (options || []).map(option => {
-            const value = String(option.title || '').trim()
-            const content = String(option.content || '').trim()
+            const value = String(option.key || option.title || '').trim()
+            const content = String(option.text || option.content || '').trim()
             return {
                 value,
                 label: content ? `${value}. ${content}` : value,
@@ -318,16 +321,17 @@ Page({
         const parts = []
         let last = 0
         let found = false
-        raw.replace(/【\s*】/g, (match, offset) => {
+        raw.replace(/【\s*】|_{3,}/g, (match, offset) => {
             const before = raw.slice(last, offset)
             if (before) parts.push(this.textChunk(before, `${question.key}_${parts.length}`))
             if (canInline) {
+                question.showControl = false
                 parts.push({
                     kind: 'blank',
                     chunkKey: `${question.key}_blank_${parts.length}`,
-                    question
+                    question: this.inlineQuestionControl(question),
+                    showNumber: false
                 })
-                question.showControl = false
                 found = true
             } else {
                 parts.push(this.textChunk('____', `${question.key}_blank_text_${parts.length}`))
@@ -345,7 +349,7 @@ Page({
         const rows = table.content || []
         return rows.map((row, rowIndex) => ({
             rowKey: `${group.group_id || 'g'}_${rowIndex}`,
-            cells: (row || []).map((cell, cellIndex) => ({
+            cells: (Array.isArray(row) ? row : [row]).map((cell, cellIndex) => ({
                 cellKey: `${group.group_id || 'g'}_${rowIndex}_${cellIndex}`,
                 chunks: this.splitReferenceText(String(cell || ''), questionMap, renderedKeys)
             }))
@@ -369,7 +373,8 @@ Page({
                 chunks.push({
                     kind: 'blank',
                     chunkKey: `blank_${question.key}_${offset}`,
-                    question: inlineQuestion
+                    question: this.inlineQuestionControl(inlineQuestion),
+                    showNumber: true
                 })
             } else {
                 chunks.push(this.textChunk('____', `ghost_${id}_${offset}`))
@@ -382,6 +387,20 @@ Page({
         return chunks
     },
 
+    inlineQuestionControl(question) {
+        return {
+            key: question.key,
+            number: question.number,
+            title: question.title || '',
+            start: question.start,
+            end: question.end,
+            control: question.control,
+            options: question.options || [],
+            selectedLabel: question.selectedLabel || '',
+            showControl: false
+        }
+    },
+
     textChunk(text, key) {
         return {
             kind: 'text',
@@ -390,8 +409,25 @@ Page({
         }
     },
 
-    richText(value) {
+    decodeHtmlEntities(value) {
         return String(value || '')
+            .replace(/&nbsp;/gi, ' ')
+            .replace(/&#160;/gi, ' ')
+            .replace(/&amp;/gi, '&')
+            .replace(/&lt;/gi, '<')
+            .replace(/&gt;/gi, '>')
+            .replace(/&quot;/gi, '"')
+            .replace(/&#39;/gi, "'")
+    },
+
+    richText(value) {
+        return this.decodeHtmlEntities(value)
+            .replace(/\u00a0/g, ' ')
+            .replace(/<\s*divider\s*\/?\s*>/gi, '\n')
+            .replace(/<\s*br\s*\/?\s*>/gi, '\n')
+            .replace(/[ \t]{3,}/g, '  ')
+            .replace(/\n{3,}/g, '\n\n')
+            .trim()
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
