@@ -278,6 +278,23 @@ page {
   margin-top: 18rpx;
 }
 
+.result-actions {
+  margin-top: 18rpx;
+}
+
+.redo-btn {
+  height: 68rpx;
+  border-radius: 18rpx;
+  background: #0f9f8f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25rpx;
+  font-weight: 780;
+  box-shadow: 0 10rpx 24rpx rgba(15, 159, 143, 0.2);
+}
+
 .group-card {
   padding: 26rpx;
   margin-bottom: 20rpx;
@@ -457,6 +474,64 @@ page {
   color: #526070;
 }
 
+.answer-input.correct,
+.answer-picker.correct,
+.inline-input.correct,
+.inline-picker.correct {
+  border-color: rgba(22, 163, 74, 0.62);
+  background: #f0fdf4;
+}
+
+.answer-input.wrong,
+.answer-picker.wrong,
+.inline-input.wrong,
+.inline-picker.wrong {
+  border-color: rgba(220, 38, 38, 0.72);
+  background: #fff1f2;
+}
+
+.answer-tip {
+  margin-top: 12rpx;
+  padding: 12rpx 16rpx;
+  border-radius: 14rpx;
+  background: #f6f8f8;
+  color: #475467;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.answer-tip.correct {
+  color: #15803d;
+  background: #f0fdf4;
+}
+
+.answer-tip.wrong {
+  color: #b91c1c;
+  background: #fff1f2;
+}
+
+.inline-answer-tip {
+  display: inline-flex;
+  vertical-align: middle;
+  margin: 0 8rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 10rpx;
+  font-size: 22rpx;
+  line-height: 1.35;
+  color: #475467;
+  background: #f2f5f7;
+}
+
+.inline-answer-tip.correct {
+  color: #15803d;
+  background: #f0fdf4;
+}
+
+.inline-answer-tip.wrong {
+  color: #b91c1c;
+  background: #fff1f2;
+}
+
 .inline-q-number {
   display: inline-flex;
   align-items: center;
@@ -479,6 +554,20 @@ page {
   gap: 14rpx;
 }
 
+.choice-list.wrong {
+  padding: 10rpx;
+  border-radius: 18rpx;
+  border: 2rpx solid rgba(220, 38, 38, 0.72);
+  background: #fff8f8;
+}
+
+.choice-list.correct {
+  padding: 10rpx;
+  border-radius: 18rpx;
+  border: 2rpx solid rgba(22, 163, 74, 0.46);
+  background: #f7fef9;
+}
+
 .choice-row {
   display: flex;
   align-items: flex-start;
@@ -488,6 +577,16 @@ page {
   border-radius: 16rpx;
   background: #f8fafb;
   border: 2rpx solid #e3eaee;
+}
+
+.choice-row.correct {
+  border-color: rgba(22, 163, 74, 0.62);
+  background: #f0fdf4;
+}
+
+.choice-row.wrong {
+  border-color: rgba(220, 38, 38, 0.72);
+  background: #fff1f2;
 }
 
 .choice-text {

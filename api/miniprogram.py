@@ -413,14 +413,14 @@ def _serialize_reading_test(payload: dict, passage_number: int | None = None, le
     }
 
 
-def _serialize_listening_test_submission(row) -> dict | None:
+def _serialize_listening_test_submission(row, include_details: bool = False) -> dict | None:
     if not row:
         return None
     try:
         wrong_numbers = json.loads(row.wrong_numbers_json or "[]")
     except Exception:
         wrong_numbers = []
-    return {
+    payload = {
         "test_id": row.test_id,
         "test_title": row.test_title,
         "correct_count": row.correct_count,
@@ -432,16 +432,26 @@ def _serialize_listening_test_submission(row) -> dict | None:
         "submitted_at": row.submitted_at.isoformat() if row.submitted_at else None,
         "wrong_numbers": wrong_numbers,
     }
+    if include_details:
+        try:
+            payload["answers"] = json.loads(row.answers_json or "{}")
+        except Exception:
+            payload["answers"] = {}
+        try:
+            payload["results"] = json.loads(row.results_json or "[]")
+        except Exception:
+            payload["results"] = []
+    return payload
 
 
-def _serialize_reading_test_submission(row) -> dict | None:
+def _serialize_reading_test_submission(row, include_details: bool = False) -> dict | None:
     if not row:
         return None
     try:
         wrong_numbers = json.loads(row.wrong_numbers_json or "[]")
     except Exception:
         wrong_numbers = []
-    return {
+    payload = {
         "test_id": row.test_id,
         "test_title": row.test_title,
         "correct_count": row.correct_count,
@@ -453,6 +463,16 @@ def _serialize_reading_test_submission(row) -> dict | None:
         "submitted_at": row.submitted_at.isoformat() if row.submitted_at else None,
         "wrong_numbers": wrong_numbers,
     }
+    if include_details:
+        try:
+            payload["answers"] = json.loads(row.answers_json or "{}")
+        except Exception:
+            payload["answers"] = {}
+        try:
+            payload["results"] = json.loads(row.results_json or "[]")
+        except Exception:
+            payload["results"] = []
+    return payload
 
 
 def _sync_plan_item_from_legacy_task(task, *, note=None, evidence_files=None, duration=0):
@@ -1657,7 +1677,7 @@ def get_student_cambridge_listening_task(task_id):
             "completion_rate": task.completion_rate,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
         },
-        "submission": _serialize_listening_test_submission(submission),
+        "submission": _serialize_listening_test_submission(submission, include_details=True),
     })
 
 
@@ -1705,7 +1725,7 @@ def get_student_cambridge_reading_task(task_id):
             "completion_rate": task.completion_rate,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
         },
-        "submission": _serialize_reading_test_submission(submission),
+        "submission": _serialize_reading_test_submission(submission, include_details=True),
     })
 
 

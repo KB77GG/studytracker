@@ -27,7 +27,10 @@ Page({
         submitted: false,
         result: null,
         submission: null,
-        resultDisplay: null
+        resultDisplay: null,
+        resultMap: {},
+        wrongKeys: [],
+        retryingWrong: false
     },
 
     onLoad(options) {
@@ -78,7 +81,10 @@ Page({
                 activeIndex = found >= 0 ? found : 0
             }
             const answerUnits = this.buildAnswerUnits(passages)
-            const progress = this.buildProgress({}, answerUnits)
+            const submission = res.submission || null
+            const loadedAnswers = this.normalizeAnswerMap(submission && submission.answers)
+            const reviewState = this.buildReviewState(submission, null)
+            const progress = this.buildProgress(loadedAnswers, answerUnits)
 
             this.setData({
                 task: res.task || {},
@@ -92,13 +98,18 @@ Page({
                 passageNumber,
                 passageLocked: !!passageNumber || passages.length <= 1,
                 answerUnits,
+                answers: loadedAnswers,
                 progress,
-                submission: res.submission || null,
-                submitted: !!res.submission,
-                resultDisplay: this.buildResultDisplay(res.submission, null),
+                submission,
+                submitted: !!submission,
+                resultMap: reviewState.resultMap,
+                wrongKeys: reviewState.wrongKeys,
+                retryingWrong: false,
+                resultDisplay: this.buildResultDisplay(submission, null),
                 loading: false
+            }, () => {
+                this.selectPassage(activeIndex, false)
             })
-            this.selectPassage(activeIndex, false)
         } catch (err) {
             console.error('fetch cambridge reading failed', err)
             wx.showToast({ title: '网络错误', icon: 'none' })
@@ -121,7 +132,12 @@ Page({
         const passages = this.data.passages || []
         const passage = passages[index]
         if (!passage) return
-        const groups = this.applyAnswerState(this.buildGroups(passage), this.data.answers)
+        const groups = this.applyAnswerState(
+            this.buildGroups(passage),
+            this.data.answers,
+            this.data.resultMap,
+            this.data.submitted
+        )
         this.setData({
             activePassageIndex: index,
             activePassage: passage,
@@ -302,50 +318,109 @@ Page({
             .replace(/\n/g, '<br/>')
     },
 
-    applyAnswerState(groups, answers) {
+    applyAnswerState(groups, answers, resultMap = this.data.resultMap, submitted = this.data.submitted) {
         return (groups || []).map(group => {
             const nextGroup = { ...group }
             nextGroup.questions = (nextGroup.questions || []).map(question => (
-                this.decorateChoiceState(question, answers[question.key])
+                this.decorateChoiceState(question, answers[question.key], resultMap[question.key], submitted)
             ))
-            nextGroup.collectChunks = this.decorateChunks(nextGroup.collectChunks, answers)
+            nextGroup.collectChunks = this.decorateChunks(nextGroup.collectChunks, answers, resultMap, submitted)
             nextGroup.tableRows = (nextGroup.tableRows || []).map(row => ({
                 ...row,
                 cells: (row.cells || []).map(cell => ({
                     ...cell,
-                    chunks: this.decorateChunks(cell.chunks, answers)
+                    chunks: this.decorateChunks(cell.chunks, answers, resultMap, submitted)
                 }))
             }))
             return nextGroup
         })
     },
 
-    decorateChunks(chunks, answers) {
+    decorateChunks(chunks, answers, resultMap = this.data.resultMap, submitted = this.data.submitted) {
         return (chunks || []).map(chunk => {
             if (chunk.kind !== 'blank' || !chunk.question) return chunk
             return {
                 ...chunk,
-                question: this.decorateChoiceState(chunk.question, answers[chunk.question.key])
+                question: this.decorateChoiceState(
+                    chunk.question,
+                    answers[chunk.question.key],
+                    resultMap[chunk.question.key],
+                    submitted
+                )
             }
         })
     },
 
-    decorateChoiceState(question, value) {
+    decorateChoiceState(question, value, resultRow = null, submitted = this.data.submitted) {
         const values = this.splitAnswerValue(value)
+        const correctValues = resultRow ? this.splitAnswerValue(resultRow.answer) : []
         const options = (question.options || []).map(option => ({
             ...option,
-            checked: values.indexOf(option.value) >= 0
+            checked: values.indexOf(option.value) >= 0,
+            isCorrectOption: !!(submitted && resultRow && correctValues.indexOf(option.value) >= 0),
+            isUserWrong: !!(submitted && resultRow && !resultRow.correct && values.indexOf(option.value) >= 0)
         }))
         const selected = options.filter(option => option.checked).map(option => option.label)
+        const reviewClass = submitted && resultRow ? (resultRow.correct ? 'correct' : 'wrong') : ''
         return {
             ...question,
             options,
-            selectedLabel: selected.join('，')
+            selectedLabel: selected.join('，'),
+            reviewClass,
+            reviewAnswerText: submitted && resultRow ? this.formatAnswerText(resultRow.answer) : ''
         }
     },
 
     splitAnswerValue(value) {
         return String(value || '').split(',').map(item => item.trim()).filter(Boolean)
+    },
+
+    formatAnswerText(value) {
+        return String(value || '').trim()
+    },
+
+    normalizeAnswerMap(answers) {
+        const normalized = {}
+        Object.keys(answers || {}).forEach(key => {
+            const value = answers[key]
+            if (value !== undefined && value !== null && String(value).trim()) {
+                normalized[String(key)] = String(value).trim()
+            }
+        })
+        return normalized
+    },
+
+    buildReviewState(submission, result) {
+        const source = (submission && Array.isArray(submission.results) && submission.results.length)
+            ? submission
+            : (result || submission || {})
+        const rows = Array.isArray(source.results) ? source.results : []
+        const resultMap = {}
+        const wrongKeys = []
+        rows.forEach(row => {
+            const ids = (row.ids || []).map(id => String(id))
+            const key = ids.join(',')
+            if (!key) return
+            const normalized = {
+                ...row,
+                ids,
+                key,
+                answer: this.formatAnswerText(row.answer),
+                value: String(row.value || ''),
+                correct: !!row.correct
+            }
+            resultMap[key] = normalized
+            ids.forEach(id => {
+                resultMap[id] = normalized
+            })
+            if (!normalized.correct) {
+                wrongKeys.push(key)
+            }
+        })
+        return {
+            resultMap,
+            wrongKeys: Array.from(new Set(wrongKeys))
+        }
     },
 
     buildAnswerUnits(passages) {
@@ -392,7 +467,12 @@ Page({
             progress: this.buildProgress(answers)
         }
         if (refreshGroups) {
-            data.activeGroups = this.applyAnswerState(this.buildGroups(this.data.activePassage), answers)
+            data.activeGroups = this.applyAnswerState(
+                this.buildGroups(this.data.activePassage),
+                answers,
+                this.data.resultMap,
+                this.data.submitted
+            )
         }
         this.setData(data)
     },
@@ -476,12 +556,25 @@ Page({
                 })
                 return
             }
+            const submission = res.submission || null
+            const loadedAnswers = this.normalizeAnswerMap((submission && submission.answers) || this.data.answers)
+            const reviewState = this.buildReviewState(submission, res.result)
+            const activeGroups = this.data.activePassage
+                ? this.applyAnswerState(this.buildGroups(this.data.activePassage), loadedAnswers, reviewState.resultMap, true)
+                : this.data.activeGroups
             this.setData({
                 submitted: true,
                 result: res.result || null,
-                submission: res.submission || null,
-                resultDisplay: this.buildResultDisplay(res.submission, res.result)
+                submission,
+                answers: loadedAnswers,
+                progress: this.buildProgress(loadedAnswers),
+                resultMap: reviewState.resultMap,
+                wrongKeys: reviewState.wrongKeys,
+                retryingWrong: false,
+                activeGroups,
+                resultDisplay: this.buildResultDisplay(submission, res.result)
             })
+            wx.pageScrollTo({ scrollTop: 0, duration: 180 })
             wx.showToast({ title: '已提交', icon: 'success' })
         } catch (err) {
             console.error('submit cambridge reading failed', err)
@@ -507,6 +600,55 @@ Page({
 
     goBack() {
         wx.navigateBack()
+    },
+
+    redoWrong() {
+        const wrongKeys = this.data.wrongKeys || []
+        if (!wrongKeys.length) {
+            wx.showToast({ title: '没有错题', icon: 'none' })
+            return
+        }
+        const answers = { ...this.data.answers }
+        wrongKeys.forEach(key => {
+            delete answers[key]
+            const row = this.data.resultMap[key]
+            ;(row && row.ids ? row.ids : []).forEach(id => {
+                delete answers[String(id)]
+            })
+        })
+        const targetIndex = this.findPassageIndexForKey(wrongKeys[0])
+        this.setData({
+            answers,
+            progress: this.buildProgress(answers),
+            submitted: false,
+            result: null,
+            submission: null,
+            resultDisplay: null,
+            resultMap: {},
+            wrongKeys: [],
+            retryingWrong: true,
+            startedAt: Date.now()
+        }, () => {
+            this.selectPassage(targetIndex >= 0 ? targetIndex : this.data.activePassageIndex, false)
+            wx.pageScrollTo({ scrollTop: 0, duration: 180 })
+            wx.showToast({ title: '已进入错题重做', icon: 'none' })
+        })
+    },
+
+    findPassageIndexForKey(targetKey) {
+        const target = String(targetKey || '')
+        const passages = this.data.passages || []
+        for (let passageIndex = 0; passageIndex < passages.length; passageIndex += 1) {
+            for (const group of passages[passageIndex].groups || []) {
+                for (const question of group.questions || []) {
+                    const key = String(question.id || question.number)
+                    if (key === target || target.split(',').indexOf(key) >= 0) {
+                        return passageIndex
+                    }
+                }
+            }
+        }
+        return -1
     },
 
     buildResultDisplay(submission, result) {

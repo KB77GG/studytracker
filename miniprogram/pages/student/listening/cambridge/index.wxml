@@ -1,7 +1,7 @@
 <template name="answerControl">
   <input
     wx:if="{{question.control === 'text'}}"
-    class="{{inline ? 'inline-input' : 'answer-input'}}"
+    class="{{inline ? 'inline-input' : 'answer-input'}} {{question.reviewClass || ''}}"
     type="text"
     adjust-position="false"
     value="{{answers[question.key] || ''}}"
@@ -17,18 +17,18 @@
     data-key="{{question.key}}"
     bindchange="onPickerChange"
   >
-    <view class="{{inline ? 'inline-picker' : 'answer-picker'}}">
+    <view class="{{inline ? 'inline-picker' : 'answer-picker'}} {{question.reviewClass || ''}}">
       {{question.selectedLabel || '请选择'}}
     </view>
   </picker>
 
   <radio-group
     wx:elif="{{question.control === 'radio'}}"
-    class="choice-list"
+    class="choice-list {{question.reviewClass || ''}}"
     data-key="{{question.key}}"
     bindchange="onRadioChange"
   >
-    <label class="choice-row" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
+    <label class="choice-row {{option.isCorrectOption ? 'correct' : ''}} {{option.isUserWrong ? 'wrong' : ''}}" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
       <radio value="{{option.value}}" checked="{{option.checked}}" color="#0f9f8f" />
       <text class="choice-text">{{option.label}}</text>
     </label>
@@ -36,15 +36,18 @@
 
   <checkbox-group
     wx:elif="{{question.control === 'checkbox'}}"
-    class="choice-list"
+    class="choice-list {{question.reviewClass || ''}}"
     data-key="{{question.key}}"
     bindchange="onCheckboxChange"
   >
-    <label class="choice-row" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
+    <label class="choice-row {{option.isCorrectOption ? 'correct' : ''}} {{option.isUserWrong ? 'wrong' : ''}}" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
       <checkbox value="{{option.value}}" checked="{{option.checked}}" color="#0f9f8f" />
       <text class="choice-text">{{option.label}}</text>
     </label>
   </checkbox-group>
+
+  <text wx:if="{{inline && question.reviewAnswerText}}" class="inline-answer-tip {{question.reviewClass}}">答案：{{question.reviewAnswerText}}</text>
+  <view wx:if="{{!inline && question.reviewAnswerText}}" class="answer-tip {{question.reviewClass}}">正确答案：{{question.reviewAnswerText}}</view>
 </template>
 
 <template name="richChunks">
@@ -136,6 +139,9 @@
       </view>
       <text class="result-band" wx:if="{{resultDisplay.ieltsScore}}">IELTS Listening {{resultDisplay.ieltsScore}}</text>
       <text class="wrong-list" wx:if="{{resultDisplay.hasWrong}}">错题：{{resultDisplay.wrongText}}</text>
+      <view class="result-actions" wx:if="{{resultDisplay.hasWrong}}">
+        <view class="redo-btn" bindtap="redoWrong">重做错题</view>
+      </view>
       <view class="back-btn" bindtap="goBack">返回任务页</view>
     </view>
 
@@ -188,7 +194,7 @@
     <view class="submit-bar">
       <view class="submit-info">{{progress.answeredCount}} / {{progress.totalCount}}</view>
       <view class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitAnswers">
-        {{submitting ? '提交中…' : '提交答卷'}}
+        {{submitting ? '提交中…' : (submitted ? '重新提交答卷' : (retryingWrong ? '提交错题重做' : '提交答卷'))}}
       </view>
     </view>
   </block>
