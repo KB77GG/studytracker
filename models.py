@@ -894,6 +894,13 @@ class DictationWord(db.Model, TimestampMixin):
     example_en = db.Column(db.Text)  # Example sentence
     example_zh = db.Column(db.Text)  # Chinese translation of example sentence
     usage_note = db.Column(db.Text)  # Short usage/collocation note
+    usage_note_audited = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=False,
+        server_default="0",
+        index=True,
+    )  # True = reviewer audited; either filled or intentionally blank
     vocab_ai_status = db.Column(db.String(20), default="empty", nullable=False, index=True)
     vocab_ai_model = db.Column(db.String(100))
     vocab_ai_generated_at = db.Column(db.DateTime)
