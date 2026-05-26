@@ -1,0 +1,9 @@
+[Unit]
+Description=Studytracker TLS certificate expiry alert
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/apps/studytracker
+ExecStart=/usr/bin/python3 /root/apps/studytracker/scripts/cert_expiry_alert.py
