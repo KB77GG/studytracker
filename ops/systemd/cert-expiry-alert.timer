@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Studytracker TLS certificate expiry alert daily
+
+[Timer]
+OnCalendar=*-*-* 09:20:00
+RandomizedDelaySec=30m
+Persistent=true
+
+[Install]
+WantedBy=timers.target
