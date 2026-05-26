@@ -22,6 +22,9 @@ output/
 tmp/
 logs/
 failed_words.log
+*.bak.*
+*.db.bak.*
+tmp_*.pdf
 data/*_eval_results.jsonl
 data/ielts_audio_normalized/
 data/ielts_transcripts/
@@ -41,6 +44,9 @@ docs/睿然国际教育_雅思核心词汇手册.docx
 # Upload/runtime artifacts
 uploads/
 miniprogram/vendor/
+backups/
+.codex_backup/
+static/tts_cache/
 static/listening/*.mp3
 static/listening/*.wav
 static/listening/*.m4a
@@ -48,6 +54,8 @@ static/listening/.tasks/
 static/listening_jijing/audio
 data/idictation_listening_jijing/audio/
 data/idictation_reading/
+scripts/usage_note_batch*.json
+scripts/usage_pattern_batch*.json
 
 # Local tool state
 .claude/
