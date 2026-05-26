@@ -51,6 +51,14 @@ WECHAT_COURSE_TEMPLATE_ID=课程提醒模板ID
 WECHAT_FEEDBACK_TEMPLATE_ID=你的反馈模板ID
 ```
 
+排课系统对接需要配置环境变量：
+```
+SCHEDULER_BASE_URL=http://127.0.0.1:5000
+SCHEDULER_PUSH_TOKEN=与 training_scheduler /home/admin/training_scheduler/.env 中 PUSH_TOKEN 相同
+```
+
+当前线上 `studytracker.service` 已在 systemd unit 中配置上述 `SCHEDULER_*` 变量。`studytracker` 只调用 `training_scheduler` 的接口，不占用 5000 端口，也不负责启动、停止或清理 `training_scheduler` 的 gunicorn 进程；`training_scheduler` 的生命周期由它自己的 `gunicorn.service` 管理。
+
 ### 步骤 6：重启服务
 ```bash
 systemctl restart studytracker
