@@ -35,9 +35,12 @@
       </header>
       <div class="listening-test-grid">
         {% for test in book.tests %}
-        <a class="listening-test-link" href="{{ url_for('reading_test_practice', test_id=test.id) }}">
+        <a class="listening-test-link{% if test.practice_status %} listening-test-link--done{% endif %}" href="{{ url_for('reading_test_practice', test_id=test.id) }}">
           <span class="listening-test-link__name">Test {{ test.test }}</span>
           <span class="listening-test-link__meta">{{ test.passage_count }} Passage<br>{{ test.question_count }} 题</span>
+          {% if test.practice_status %}
+          <span class="listening-test-link__status">已刷 · {{ test.practice_status.accuracy }}%</span>
+          {% endif %}
         </a>
         {% endfor %}
       </div>

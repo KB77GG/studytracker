@@ -401,7 +401,7 @@ body.exam-mode #resetBtn { display: none; }
   <div class="bottom-inner">
     <div>
       <div class="score-summary" id="scoreSummary">已答 <strong>0</strong> / 40</div>
-      <div class="sync-status" id="syncStatus">登录学生提交后会同步到练习记录和报告</div>
+      <div class="sync-status" id="syncStatus">已绑定学生姓名后，提交会同步到练习记录和报告</div>
     </div>
     <div class="actions">
       <button class="btn" type="button" id="resetBtn">重做</button>
@@ -721,7 +721,7 @@ async function submitAnswers() {
     if (data.synced) {
       setSyncStatus(`已同步到练习记录和报告${data.task?.id ? ` · 任务 #${data.task.id}` : ""}`, "ok");
     } else {
-      setSyncStatus("未登录或未匹配学生账号，仅完成本地判分", "warn");
+      setSyncStatus("未绑定学生姓名，仅完成本地判分", "warn");
     }
   } catch (error) {
     serverResult = null;
@@ -740,7 +740,7 @@ function resetAnswers() {
   document.body.classList.remove("result-mode");
   renderPassage(testData.passages.find((passage) => passage.id === currentPassageId) || testData.passages[0]);
   updateSummary();
-  setSyncStatus("登录学生提交后会同步到练习记录和报告");
+  setSyncStatus("已绑定学生姓名后，提交会同步到练习记录和报告");
 }
 
 async function loadExistingSubmission() {

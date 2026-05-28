@@ -502,6 +502,7 @@ const part = {{ part|tojson }};
 const staticBase = "{{ url_for('static', filename='listening_jijing/') }}";
 const audio = document.getElementById('audio');
 audio.src = staticBase + part.audio.local_path;
+const practiceStartedAt = Date.now();
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -721,6 +722,33 @@ function unitValue(unit) {
   return unit.value || '';
 }
 
+function setUnitValue(unit, value) {
+  const kind = unit.dataset.kind;
+  const values = splitLetters(value);
+  if (kind === 'radio') {
+    unit.querySelectorAll('input').forEach(input => {
+      input.checked = input.value === value;
+    });
+    return;
+  }
+  if (kind === 'checkboxes' || kind === 'checkbox-set') {
+    unit.querySelectorAll('input').forEach(input => {
+      input.checked = values.includes(String(input.value || '').trim().toUpperCase());
+    });
+    return;
+  }
+  unit.value = value || '';
+}
+
+function answerSnapshot() {
+  const answers = {};
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    const key = unit.dataset.q || '';
+    if (key) answers[key] = unitValue(unit);
+  });
+  return answers;
+}
+
 function markUnit(unit) {
   const kind = unit.dataset.kind;
   const answer = unit.dataset.answer || '';
@@ -742,6 +770,64 @@ function markUnit(unit) {
   unit.classList.toggle('is-correct', correct);
   unit.classList.toggle('is-wrong', !correct);
   return { correct, marks, value, answer, q: unit.dataset.q || '' };
+}
+
+async function syncJijingSubmission(results, correct, total, baseHtml) {
+  const resultBox = document.getElementById('resultBox');
+  resultBox.innerHTML = `${baseHtml}<br><span class="muted">正在同步后台记录...</span>`;
+  try {
+    const response = await fetch(`/api/listening/jijing/${encodeURIComponent(part.id)}/submit`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        answers: answerSnapshot(),
+        results,
+        correct,
+        total,
+        duration_seconds: Math.max(0, Math.round((Date.now() - practiceStartedAt) / 1000))
+      })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || 'sync_failed');
+    }
+    if (data.synced) {
+      resultBox.innerHTML = `${baseHtml}<br>已同步后台：${correct}/${total}`;
+    } else {
+      resultBox.innerHTML = `${baseHtml}<br><span class="muted">未绑定学生姓名，仅完成本地判分。</span>`;
+    }
+  } catch (_error) {
+    resultBox.innerHTML = `${baseHtml}<br><span style="color: var(--error);">后台同步失败，请稍后再提交。</span>`;
+  }
+}
+
+async function loadExistingJijingSubmission() {
+  try {
+    const response = await fetch(`/api/listening/jijing/${encodeURIComponent(part.id)}/submission`, {
+      credentials: 'same-origin'
+    });
+    const data = await response.json();
+    const submission = data?.submission;
+    if (!response.ok || !data.ok || !submission?.answers) return;
+    document.querySelectorAll('.answer-unit').forEach(unit => {
+      const key = unit.dataset.q || '';
+      if (key && Object.prototype.hasOwnProperty.call(submission.answers, key)) {
+        setUnitValue(unit, submission.answers[key]);
+      }
+    });
+    const results = Array.from(document.querySelectorAll('.answer-unit')).map(markUnit);
+    const wrong = submission.wrong_numbers || results.filter(row => !row.correct).map(row => row.q);
+    document.body.classList.add('show-answers');
+    document.getElementById('submitBtn').textContent = '已提交，查看复盘';
+    document.getElementById('resultBox').innerHTML = `
+      <strong>${submission.correct_count}/${submission.total_count}</strong> · 正确率 ${Math.round(submission.accuracy || 0)}%
+      ${wrong.length ? `<br>待核对：${wrong.slice(0, 12).map(row => escapeHtml(row)).join('、')}${wrong.length > 12 ? '…' : ''}` : '<br>全部正确'}
+      <br>已加载后台记录
+    `;
+  } catch (_error) {
+    // 历史记录加载失败时不影响本次练习。
+  }
 }
 
 function renderPractice() {
@@ -807,16 +893,20 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   const correct = results.reduce((sum, row) => sum + (row.correct ? row.marks : 0), 0);
   const wrong = results.filter(row => !row.correct);
   document.body.classList.add('show-answers');
-  document.getElementById('resultBox').innerHTML = `
+  document.getElementById('submitBtn').textContent = '已提交，查看复盘';
+  const baseHtml = `
     <strong>${correct}/${total}</strong> · 正确率 ${total ? Math.round(correct / total * 100) : 0}%
     ${wrong.length ? `<br>待核对：${wrong.slice(0, 12).map(row => escapeHtml(row.q)).join('、')}${wrong.length > 12 ? '…' : ''}` : '<br>全部正确'}
   `;
+  document.getElementById('resultBox').innerHTML = baseHtml;
+  syncJijingSubmission(results, correct, total, baseHtml);
 });
 
 renderPractice();
 renderTranscript();
 renderDictation();
 renderAnalysis();
+loadExistingJijingSubmission();
 </script>
 </body>
 </html>

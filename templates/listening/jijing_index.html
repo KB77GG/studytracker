@@ -203,9 +203,12 @@
         <section class="listening-jijing-test">
           <div class="listening-jijing-test__title">{{ test.test_name }}</div>
           {% for part in test.parts %}
-          <a class="listening-jijing-test__part" href="{{ url_for('listening_jijing_part', part_id=part.id) }}">
+          <a class="listening-jijing-test__part{% if part.practice_status %} listening-jijing-test__part--done{% endif %}" href="{{ url_for('listening_jijing_part', part_id=part.id) }}">
             <span>{{ part.part_title }}</span>
-            <span class="listening-jijing-test__meta">{{ part.question_name }}</span>
+            <span class="listening-jijing-test__meta">
+              {{ part.question_name }}
+              {% if part.practice_status %}<br><strong>已刷 · {{ part.practice_status.accuracy }}%</strong>{% endif %}
+            </span>
           </a>
           {% endfor %}
         </section>

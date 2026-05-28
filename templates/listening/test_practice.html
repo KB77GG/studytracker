@@ -1202,20 +1202,23 @@ function resultHtml(correct, total, wrongLabels, syncedText = '') {
 }
 
 async function syncListeningTestSubmission(baseHtml) {
-  if (!listeningTaskId || !listeningTaskToken) return;
   const resultBox = document.getElementById('resultBox');
   resultBox.innerHTML = `${baseHtml}<br><span class="muted">正在同步后台成绩...</span>`;
   try {
+    const payload = {
+      answers: answerSnapshot(),
+      duration_seconds: Math.max(0, Math.round((Date.now() - practiceStartedAt) / 1000)),
+      section_number: assignedSectionNumber || undefined
+    };
+    if (listeningTaskId && listeningTaskToken) {
+      payload.task_id = Number(listeningTaskId);
+      payload.token = listeningTaskToken;
+    }
     const response = await fetch(`/api/listening/test/${encodeURIComponent(test.id)}/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        task_id: Number(listeningTaskId),
-        token: listeningTaskToken,
-        answers: answerSnapshot(),
-        duration_seconds: Math.max(0, Math.round((Date.now() - practiceStartedAt) / 1000)),
-        section_number: assignedSectionNumber || undefined
-      })
+      credentials: 'same-origin',
+      body: JSON.stringify(payload)
     });
     const data = await response.json();
     if (!response.ok || !data.ok) {
@@ -1224,17 +1227,31 @@ async function syncListeningTestSubmission(baseHtml) {
     const summary = data.submission || data.result || {};
     const band = summary.ielts_score ?? data.result?.ielts_score;
     const bandText = band !== undefined && band !== null ? `，IELTS Listening ${band}` : '';
-    const syncedText = `已同步后台：原始分 ${summary.correct_count ?? data.result?.correct}/${summary.total_count ?? data.result?.total}${bandText}`;
-    resultBox.innerHTML = `${baseHtml}<br>${syncedText}`;
+    if (data.synced) {
+      const syncedText = `已同步后台：原始分 ${summary.correct_count ?? data.result?.correct}/${summary.total_count ?? data.result?.total}${bandText}`;
+      resultBox.innerHTML = `${baseHtml}<br>${syncedText}`;
+    } else {
+      resultBox.innerHTML = `${baseHtml}<br><span class="muted">未绑定学生姓名，仅完成本地判分。</span>`;
+    }
   } catch (err) {
     resultBox.innerHTML = `${baseHtml}<br><span style="color: var(--error);">后台同步失败，请稍后再提交。</span>`;
   }
 }
 
 async function loadExistingSubmission() {
-  if (!listeningTaskId || !listeningTaskToken) return;
   try {
-    const response = await fetch(`/api/listening/test/${encodeURIComponent(test.id)}/submission?task_id=${encodeURIComponent(listeningTaskId)}&token=${encodeURIComponent(listeningTaskToken)}`);
+    const params = new URLSearchParams();
+    if (listeningTaskId && listeningTaskToken) {
+      params.set('task_id', listeningTaskId);
+      params.set('token', listeningTaskToken);
+    }
+    if (assignedSectionNumber) {
+      params.set('section', assignedSectionNumber);
+    }
+    const query = params.toString();
+    const response = await fetch(`/api/listening/test/${encodeURIComponent(test.id)}/submission${query ? `?${query}` : ''}`, {
+      credentials: 'same-origin'
+    });
     const data = await response.json();
     if (!response.ok || !data.ok || !data.submission) return;
     const submission = data.submission;

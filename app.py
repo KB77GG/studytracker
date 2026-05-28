@@ -128,13 +128,19 @@ def _reading_data_root() -> Path:
 
 LISTENING_RESOURCE_INTENSIVE = "intensive"
 LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
-LISTENING_RESOURCE_TYPES = {LISTENING_RESOURCE_INTENSIVE, LISTENING_RESOURCE_CAMBRIDGE_TEST}
+LISTENING_RESOURCE_JIJING = "jijing"
+LISTENING_RESOURCE_TYPES = {
+    LISTENING_RESOURCE_INTENSIVE,
+    LISTENING_RESOURCE_CAMBRIDGE_TEST,
+    LISTENING_RESOURCE_JIJING,
+}
 READING_RESOURCE_CAMBRIDGE_TEST = "cambridge_reading_test"
 
 
 PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST = "cambridge_listening_test"
 PLAN_RESOURCE_CAMBRIDGE_READING_TEST = "cambridge_reading_test"
 PLAN_RESOURCE_INTENSIVE_LISTENING = "intensive_listening"
+PLAN_RESOURCE_LISTENING_JIJING = "listening_jijing"
 PLAN_RESOURCE_DICTATION = "dictation"
 PLAN_RESOURCE_SPEAKING = "speaking"
 PLAN_RESOURCE_MATERIAL = "material"
@@ -153,8 +159,11 @@ def _task_listening_url(task, absolute: bool = True) -> str | None:
         return None
     safe_exercise_id = quote(exercise_id, safe="")
     safe_token = quote(token, safe="")
-    if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+    resource_type = _task_listening_resource_type(task)
+    if resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
         path = f"/listening/test/{safe_exercise_id}?task_id={task.id}&token={safe_token}"
+    elif resource_type == LISTENING_RESOURCE_JIJING:
+        path = f"/listening/jijing/{safe_exercise_id}?task_id={task.id}&token={safe_token}"
     else:
         path = f"/listening/{safe_exercise_id}?task_id={task.id}&token={safe_token}"
     if absolute:
@@ -282,6 +291,8 @@ def _task_resource_binding(
     if listening_exercise_id:
         if listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
             return PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST, str(listening_exercise_id), metadata
+        if listening_resource_type == LISTENING_RESOURCE_JIJING:
+            return PLAN_RESOURCE_LISTENING_JIJING, str(listening_exercise_id), metadata
         return PLAN_RESOURCE_INTENSIVE_LISTENING, str(listening_exercise_id), metadata
     if reading_test_id:
         metadata = {
@@ -958,19 +969,107 @@ def _current_student_profile() -> StudentProfile | None:
     return StudentProfile.query.filter_by(full_name=name, is_deleted=False).first()
 
 
-def _upsert_reading_self_task(payload: dict, duration_seconds: int) -> Task | None:
+def _current_practice_student_profile() -> StudentProfile | None:
+    """Return the student identity used by public practice pages.
+
+    Student web accounts still win when present. Public practice pages use the
+    lightweight name verification flow, stored in session, so free practice can
+    sync without requiring a password account.
+    """
     profile = _current_student_profile()
+    if profile:
+        return profile
+    name = (session.get("practice_student_name") or "").strip()
+    if not name:
+        return None
+    profile = StudentProfile.query.filter_by(full_name=name, is_deleted=False).first()
+    if not profile:
+        session.pop("practice_student_name", None)
+        return None
+    return profile
+
+
+def _practice_task_creator_id(profile: StudentProfile | None = None) -> int | None:
+    if getattr(current_user, "is_authenticated", False):
+        return current_user.id
+    if profile and getattr(profile, "user_id", None):
+        return profile.user_id
+    return None
+
+
+def _parse_task_resource_metadata(task: Task | None) -> dict:
+    if not task or not task.question_ids:
+        return {}
+    try:
+        value = json.loads(task.question_ids)
+    except Exception:
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _task_matches_section(task: Task, section_number: int | None) -> bool:
+    metadata = _parse_task_resource_metadata(task)
+    bound = metadata.get("listening_section_number")
+    if bound in (None, ""):
+        return section_number in (None, "")
+    try:
+        return int(bound) == int(section_number)
+    except (TypeError, ValueError):
+        return False
+
+
+def _latest_submitted_task(tasks: list[Task]) -> Task | None:
+    submitted = [task for task in tasks if task.submitted_at]
+    pool = submitted or tasks
+    if not pool:
+        return None
+    return sorted(
+        pool,
+        key=lambda task: (
+            task.submitted_at or datetime.min,
+            task.date or "",
+            int(task.id or 0),
+        ),
+        reverse=True,
+    )[0]
+
+
+def _upsert_reading_self_task(
+    payload: dict,
+    duration_seconds: int,
+    passage_number: int | None = None,
+    safe_id: str | None = None,
+) -> Task | None:
+    profile = _current_practice_student_profile()
     if not profile:
         return None
     today = date.today().isoformat()
-    detail = payload.get("title") or payload.get("id") or "剑雅阅读整套"
-    task = Task.query.filter_by(
-        student_name=profile.full_name,
-        date=today,
-        category="雅思-阅读-整套",
-        detail=detail,
-        created_by=current_user.id,
-    ).order_by(Task.id.desc()).first()
+    safe_id = safe_id or secure_filename(str(payload.get("id") or ""))
+    base_detail = payload.get("title") or safe_id or "剑雅阅读整套"
+    detail = f"{base_detail} Passage {passage_number}" if passage_number else base_detail
+    task = None
+    if safe_id:
+        task = (
+            Task.query.filter(
+                Task.student_name == profile.full_name,
+                Task.date == today,
+                Task.reading_test_id == safe_id,
+                Task.reading_passage_number == passage_number,
+            )
+            .order_by(Task.id.desc())
+            .first()
+        )
+    if not task:
+        task = (
+            Task.query.filter_by(
+                student_name=profile.full_name,
+                date=today,
+                category="雅思-阅读-整套",
+                detail=detail,
+            )
+            .order_by(Task.id.desc())
+            .first()
+        )
     if not task:
         task = Task(
             student_name=profile.full_name,
@@ -979,11 +1078,147 @@ def _upsert_reading_self_task(payload: dict, duration_seconds: int) -> Task | No
             detail=detail,
             status="progress",
             note="网页端自主阅读整套练习",
-            created_by=current_user.id,
-            planned_minutes=60,
+            created_by=_practice_task_creator_id(profile),
+            planned_minutes=20 if passage_number else 60,
+            reading_test_id=safe_id or None,
+            reading_passage_number=passage_number,
+            reading_access_token=secrets.token_urlsafe(16),
+            grading_mode="reading_test",
         )
         db.session.add(task)
         db.session.flush()
+    else:
+        task.category = task.category or "雅思-阅读-整套"
+        task.detail = task.detail or detail
+        task.reading_test_id = task.reading_test_id or safe_id or None
+        task.reading_passage_number = task.reading_passage_number or passage_number
+        task.reading_access_token = task.reading_access_token or secrets.token_urlsafe(16)
+        task.grading_mode = task.grading_mode or "reading_test"
+        if not task.created_by:
+            task.created_by = _practice_task_creator_id(profile)
+    task.actual_seconds = max(int(task.actual_seconds or 0), int(duration_seconds or 0))
+    return task
+
+
+def _upsert_listening_self_task(
+    payload: dict,
+    safe_id: str,
+    duration_seconds: int,
+    section_number: int | None = None,
+) -> Task | None:
+    profile = _current_practice_student_profile()
+    if not profile:
+        return None
+    today = date.today().isoformat()
+    base_detail = payload.get("title") or safe_id or "剑雅听力整套"
+    detail = f"{base_detail} Section {section_number}" if section_number else base_detail
+    candidates = (
+        Task.query.filter(
+            Task.student_name == profile.full_name,
+            Task.date == today,
+            Task.listening_exercise_id == safe_id,
+            Task.listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST,
+        )
+        .order_by(Task.id.desc())
+        .all()
+    )
+    task = next((row for row in candidates if _task_matches_section(row, section_number)), None)
+    if not task:
+        task = (
+            Task.query.filter_by(
+                student_name=profile.full_name,
+                date=today,
+                category="雅思-听力-整套",
+                detail=detail,
+            )
+            .order_by(Task.id.desc())
+            .first()
+        )
+    metadata = (
+        {"listening_section_number": section_number}
+        if section_number
+        else None
+    )
+    if not task:
+        task = Task(
+            student_name=profile.full_name,
+            date=today,
+            category="雅思-听力-整套",
+            detail=detail,
+            status="progress",
+            note="网页端自主听力整套练习",
+            created_by=_practice_task_creator_id(profile),
+            planned_minutes=10 if section_number else 30,
+            listening_resource_type=LISTENING_RESOURCE_CAMBRIDGE_TEST,
+            listening_exercise_id=safe_id,
+            listening_access_token=secrets.token_urlsafe(16),
+            question_ids=json.dumps(metadata, ensure_ascii=False) if metadata else None,
+        )
+        db.session.add(task)
+        db.session.flush()
+    else:
+        task.category = task.category or "雅思-听力-整套"
+        task.detail = task.detail or detail
+        task.listening_resource_type = LISTENING_RESOURCE_CAMBRIDGE_TEST
+        task.listening_exercise_id = task.listening_exercise_id or safe_id
+        task.listening_access_token = task.listening_access_token or secrets.token_urlsafe(16)
+        if metadata and not task.question_ids:
+            task.question_ids = json.dumps(metadata, ensure_ascii=False)
+        if not task.created_by:
+            task.created_by = _practice_task_creator_id(profile)
+    task.actual_seconds = max(int(task.actual_seconds or 0), int(duration_seconds or 0))
+    return task
+
+
+def _upsert_listening_jijing_self_task(
+    part: dict,
+    safe_id: str,
+    duration_seconds: int,
+) -> Task | None:
+    profile = _current_practice_student_profile()
+    if not profile:
+        return None
+    today = date.today().isoformat()
+    detail_parts = [
+        str(part.get("in_book") or "").strip(),
+        str(part.get("test_name") or "").strip(),
+        str(part.get("part_title") or "").strip(),
+    ]
+    detail = " ".join(item for item in detail_parts if item) or safe_id
+    task = (
+        Task.query.filter(
+            Task.student_name == profile.full_name,
+            Task.date == today,
+            Task.listening_resource_type == LISTENING_RESOURCE_JIJING,
+            Task.listening_exercise_id == safe_id,
+        )
+        .order_by(Task.id.desc())
+        .first()
+    )
+    if not task:
+        task = Task(
+            student_name=profile.full_name,
+            date=today,
+            category="雅思-听力-机经",
+            detail=detail,
+            status="progress",
+            note="网页端自主听力机经练习",
+            created_by=_practice_task_creator_id(profile),
+            planned_minutes=10,
+            listening_resource_type=LISTENING_RESOURCE_JIJING,
+            listening_exercise_id=safe_id,
+            listening_access_token=secrets.token_urlsafe(16),
+        )
+        db.session.add(task)
+        db.session.flush()
+    else:
+        task.category = task.category or "雅思-听力-机经"
+        task.detail = task.detail or detail
+        task.listening_resource_type = LISTENING_RESOURCE_JIJING
+        task.listening_exercise_id = task.listening_exercise_id or safe_id
+        task.listening_access_token = task.listening_access_token or secrets.token_urlsafe(16)
+        if not task.created_by:
+            task.created_by = _practice_task_creator_id(profile)
     task.actual_seconds = max(int(task.actual_seconds or 0), int(duration_seconds or 0))
     return task
 
@@ -6191,6 +6426,153 @@ def _practice_library_summary() -> dict:
     }
 
 
+def _practice_status_payload(task: Task) -> dict | None:
+    submitted_at = task.submitted_at
+    is_done = (task.status or "").lower() in {"done", "submitted", "completed", "finished"}
+    if not submitted_at and not is_done:
+        return None
+    accuracy = task.accuracy
+    if task.listening_test_submission:
+        accuracy = task.listening_test_submission.accuracy
+        submitted_at = task.listening_test_submission.submitted_at or submitted_at
+    if task.reading_test_submission:
+        accuracy = task.reading_test_submission.accuracy
+        submitted_at = task.reading_test_submission.submitted_at or submitted_at
+    return {
+        "label": "已刷",
+        "accuracy": round(float(accuracy or 0.0), 1),
+        "submitted_at": submitted_at.isoformat() if submitted_at else None,
+    }
+
+
+def _reading_practice_status_map(profile: StudentProfile | None) -> dict[str, dict]:
+    if not profile:
+        return {}
+    rows = (
+        Task.query.filter(
+            Task.student_name == profile.full_name,
+            Task.reading_test_id.isnot(None),
+        )
+        .options(joinedload(Task.reading_test_submission))
+        .order_by(Task.id.asc())
+        .all()
+    )
+    by_test: dict[str, Task] = {}
+    for task in rows:
+        test_id = (task.reading_test_id or "").strip()
+        if not test_id:
+            continue
+        status = _practice_status_payload(task)
+        if not status:
+            continue
+        current = by_test.get(test_id)
+        if not current:
+            by_test[test_id] = task
+            continue
+        current_time = current.submitted_at or datetime.min
+        task_time = task.submitted_at or datetime.min
+        if (task_time, int(task.id or 0)) >= (current_time, int(current.id or 0)):
+            by_test[test_id] = task
+    return {
+        test_id: status
+        for test_id, task in by_test.items()
+        if (status := _practice_status_payload(task))
+    }
+
+
+def _listening_practice_status_map(profile: StudentProfile | None) -> dict[str, dict]:
+    if not profile:
+        return {}
+    rows = (
+        Task.query.filter(
+            Task.student_name == profile.full_name,
+            Task.listening_exercise_id.isnot(None),
+            Task.listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST,
+        )
+        .options(joinedload(Task.listening_test_submission))
+        .order_by(Task.id.asc())
+        .all()
+    )
+    by_test: dict[str, Task] = {}
+    for task in rows:
+        test_id = (task.listening_exercise_id or "").strip()
+        if not test_id:
+            continue
+        status = _practice_status_payload(task)
+        if not status:
+            continue
+        current = by_test.get(test_id)
+        if not current:
+            by_test[test_id] = task
+            continue
+        current_time = current.submitted_at or datetime.min
+        task_time = task.submitted_at or datetime.min
+        if (task_time, int(task.id or 0)) >= (current_time, int(current.id or 0)):
+            by_test[test_id] = task
+    return {
+        test_id: status
+        for test_id, task in by_test.items()
+        if (status := _practice_status_payload(task))
+    }
+
+
+def _listening_jijing_status_map(profile: StudentProfile | None) -> dict[str, dict]:
+    if not profile:
+        return {}
+    rows = (
+        Task.query.filter(
+            Task.student_name == profile.full_name,
+            Task.listening_exercise_id.isnot(None),
+            Task.listening_resource_type == LISTENING_RESOURCE_JIJING,
+        )
+        .options(joinedload(Task.listening_test_submission))
+        .order_by(Task.id.asc())
+        .all()
+    )
+    by_part: dict[str, Task] = {}
+    for task in rows:
+        part_id = (task.listening_exercise_id or "").strip()
+        if not part_id:
+            continue
+        status = _practice_status_payload(task)
+        if not status:
+            continue
+        current = by_part.get(part_id)
+        if not current:
+            by_part[part_id] = task
+            continue
+        current_time = current.submitted_at or datetime.min
+        task_time = task.submitted_at or datetime.min
+        if (task_time, int(task.id or 0)) >= (current_time, int(current.id or 0)):
+            by_part[part_id] = task
+    return {
+        part_id: status
+        for part_id, task in by_part.items()
+        if (status := _practice_status_payload(task))
+    }
+
+
+def _apply_test_statuses(books: list[dict], statuses: dict[str, dict]) -> None:
+    if not statuses:
+        return
+    for book in books:
+        for test in book.get("tests") or []:
+            test_id = str(test.get("id") or "")
+            if test_id in statuses:
+                test["practice_status"] = statuses[test_id]
+
+
+def _apply_listening_jijing_statuses(books: list[dict], statuses: dict[str, dict]) -> None:
+    if not statuses:
+        return
+    for book in books:
+        for test in book.get("tests") or []:
+            for part in test.get("parts") or []:
+                part_id = str(part.get("id") or "")
+                if part_id in statuses:
+                    part["practice_status"] = statuses[part_id]
+
+
 @app.route("/practice")
 def practice_library():
     """Unified entrance for practice and mock tests."""
@@ -6259,7 +6641,12 @@ def listening_jijing_index():
     if not catalog_path.exists():
         return render_template("listening/jijing_index.html", catalog=None, books=[])
     catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
-    return render_template("listening/jijing_index.html", catalog=catalog, books=catalog.get("books") or [])
+    books = catalog.get("books") or []
+    _apply_listening_jijing_statuses(
+        books,
+        _listening_jijing_status_map(_current_practice_student_profile()),
+    )
+    return render_template("listening/jijing_index.html", catalog=catalog, books=books)
 
 
 @app.route("/listening/jijing/<part_id>")
@@ -6273,10 +6660,159 @@ def listening_jijing_part(part_id):
     return render_template("listening/jijing_part.html", part=part)
 
 
+@app.get("/api/listening/jijing/<part_id>/submission")
+def api_listening_jijing_submission(part_id):
+    safe_id = secure_filename(part_id)
+    profile = _current_practice_student_profile()
+    if not profile:
+        return jsonify({"ok": True, "submission": None})
+    tasks = (
+        Task.query.filter(
+            Task.student_name == profile.full_name,
+            Task.listening_resource_type == LISTENING_RESOURCE_JIJING,
+            Task.listening_exercise_id == safe_id,
+        )
+        .order_by(Task.id.desc())
+        .all()
+    )
+    task = _latest_submitted_task(tasks)
+    if not task:
+        return jsonify({"ok": True, "submission": None})
+    return jsonify({
+        "ok": True,
+        "task": {
+            "id": task.id,
+            "status": task.status,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        },
+        "submission": _serialize_listening_test_submission(task.listening_test_submission),
+    })
+
+
+@app.post("/api/listening/jijing/<part_id>/submit")
+def api_listening_jijing_submit(part_id):
+    safe_id = secure_filename(part_id)
+    part_path = _listening_jijing_root() / "parts" / f"{safe_id}.json"
+    if not part_path.exists():
+        return jsonify({"ok": False, "error": "part_not_found"}), 404
+    part = json.loads(part_path.read_text(encoding="utf-8"))
+    data = request.get_json(silent=True) or {}
+    answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
+    results = data.get("results") if isinstance(data.get("results"), list) else []
+    try:
+        total = max(0, int(data.get("total") or 0))
+    except (TypeError, ValueError):
+        total = 0
+    try:
+        correct = max(0, int(data.get("correct") or 0))
+    except (TypeError, ValueError):
+        correct = 0
+    accuracy = round(correct * 100.0 / total, 1) if total else 0.0
+    wrong_numbers = [
+        str(row.get("q") or "").strip()
+        for row in results
+        if isinstance(row, dict) and not row.get("correct") and str(row.get("q") or "").strip()
+    ]
+    try:
+        duration_seconds = max(0, int(data.get("duration_seconds") or 0))
+    except (TypeError, ValueError):
+        duration_seconds = 0
+
+    task = _upsert_listening_jijing_self_task(part, safe_id, duration_seconds)
+    if not task:
+        return jsonify({
+            "ok": True,
+            "synced": False,
+            "result": {
+                "correct": correct,
+                "total": total,
+                "accuracy": accuracy,
+                "wrong_numbers": wrong_numbers,
+                "results": results,
+            },
+        })
+
+    now = datetime.utcnow()
+    submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
+    if submission:
+        submission.attempt_count = int(submission.attempt_count or 0) + 1
+        submission.updated_at = now
+    else:
+        submission = ListeningTestSubmission(
+            task_id=task.id,
+            student_name=task.student_name,
+            test_id=safe_id,
+            attempt_count=1,
+            created_at=now,
+        )
+        db.session.add(submission)
+
+    title_parts = [
+        str(part.get("in_book") or "").strip(),
+        str(part.get("test_name") or "").strip(),
+        str(part.get("part_title") or "").strip(),
+    ]
+    title = " ".join(item for item in title_parts if item) or task.detail or safe_id
+    submission.student_name = task.student_name
+    submission.test_id = safe_id
+    submission.test_title = title
+    submission.correct_count = correct
+    submission.total_count = total
+    submission.accuracy = accuracy
+    submission.ielts_score = None
+    submission.completion_rate = 100.0
+    submission.duration_seconds = max(int(submission.duration_seconds or 0), duration_seconds)
+    submission.answers_json = json.dumps(answers, ensure_ascii=False)
+    submission.results_json = json.dumps(results, ensure_ascii=False)
+    submission.wrong_numbers_json = json.dumps(wrong_numbers, ensure_ascii=False)
+    submission.submitted_at = now
+
+    task.student_submitted = True
+    task.submitted_at = now
+    task.status = "done"
+    task.accuracy = accuracy
+    task.completion_rate = 100.0
+    if duration_seconds:
+        task.actual_seconds = max(int(task.actual_seconds or 0), duration_seconds)
+    task.student_note = (
+        f"听力机经自动判分：{correct}/{total}，正确率 {accuracy}%。"
+        f"{' 错题：' + '、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else ''}"
+        f"{'…' if len(wrong_numbers) > 20 else ''}"
+    )
+    _sync_plan_item_from_task(task)
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "synced": True,
+        "result": {
+            "correct": correct,
+            "total": total,
+            "accuracy": accuracy,
+            "wrong_numbers": wrong_numbers,
+            "results": results,
+        },
+        "task": {
+            "id": task.id,
+            "status": task.status,
+            "accuracy": task.accuracy,
+            "completion_rate": task.completion_rate,
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        },
+        "submission": _serialize_listening_test_submission(submission),
+    })
+
+
 @app.route("/listening/tests")
 def listening_test_index():
     """剑桥雅思听力整套练习列表。"""
     books = _listening_test_catalog()
+    _apply_test_statuses(
+        books,
+        _listening_practice_status_map(_current_practice_student_profile()),
+    )
     test_count = sum(len(book["tests"]) for book in books)
     return render_template("listening/test_index.html", books=books, test_count=test_count)
 
@@ -6303,6 +6839,10 @@ def api_listening_test_practice(test_id):
 def reading_test_index():
     """剑桥雅思阅读整套练习列表。"""
     books = _reading_test_catalog()
+    _apply_test_statuses(
+        books,
+        _reading_practice_status_map(_current_practice_student_profile()),
+    )
     test_count = sum(len(book.get("tests") or []) for book in books)
     return render_template("reading/test_index.html", books=books, test_count=test_count)
 
@@ -6311,6 +6851,10 @@ def reading_test_index():
 def reading_jijing_index():
     """阅读机经练习列表。"""
     books = _reading_jijing_catalog()
+    _apply_test_statuses(
+        books,
+        _reading_practice_status_map(_current_practice_student_profile()),
+    )
     test_count = sum(len(book.get("tests") or []) for book in books)
     question_count = sum(
         int(test.get("question_count") or 0)
@@ -6377,16 +6921,23 @@ def api_reading_test_submission(test_id):
             },
             "submission": _serialize_reading_test_submission(task.reading_test_submission),
         })
-    profile = _current_student_profile()
+    profile = _current_practice_student_profile()
     if not profile:
         return jsonify({"ok": True, "submission": None})
-    task = Task.query.filter_by(
-        student_name=profile.full_name,
-        category="雅思-阅读-整套",
-        detail=data.get("title") or safe_id,
-        date=date.today().isoformat(),
-        created_by=current_user.id,
-    ).order_by(Task.id.desc()).first()
+    requested_passage_number = request.args.get("passage")
+    try:
+        passage_number = int(requested_passage_number) if requested_passage_number not in (None, "") else None
+    except (TypeError, ValueError):
+        passage_number = None
+    query = Task.query.filter(
+        Task.student_name == profile.full_name,
+        Task.reading_test_id == safe_id,
+    )
+    if passage_number:
+        query = query.filter(Task.reading_passage_number == passage_number)
+    else:
+        query = query.filter(Task.reading_passage_number.is_(None))
+    task = _latest_submitted_task(query.order_by(Task.id.desc()).all())
     if not task:
         return jsonify({"ok": True, "submission": None})
     return jsonify({
@@ -6454,7 +7005,12 @@ def api_reading_test_submit(test_id):
         if task.reading_passage_number:
             passage_number = int(task.reading_passage_number)
     else:
-        task = _upsert_reading_self_task(payload, duration_seconds)
+        task = _upsert_reading_self_task(
+            payload,
+            duration_seconds,
+            passage_number=passage_number,
+            safe_id=safe_id,
+        )
 
     grade = _grade_reading_test_answers(payload, answers, passage_number=passage_number)
 
@@ -6536,7 +7092,38 @@ def api_listening_test_submission(test_id):
     task_id = request.args.get("task_id", type=int)
     token = (request.args.get("token") or "").strip()
     if not task_id or not token:
-        return jsonify({"ok": True, "submission": None})
+        requested_section_number = request.args.get("section")
+        try:
+            section_number = int(requested_section_number) if requested_section_number not in (None, "") else None
+        except (TypeError, ValueError):
+            section_number = None
+        profile = _current_practice_student_profile()
+        if not profile:
+            return jsonify({"ok": True, "submission": None})
+        candidates = (
+            Task.query.filter(
+                Task.student_name == profile.full_name,
+                Task.listening_exercise_id == safe_id,
+                Task.listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST,
+            )
+            .order_by(Task.id.desc())
+            .all()
+        )
+        candidates = [row for row in candidates if _task_matches_section(row, section_number)]
+        task = _latest_submitted_task(candidates)
+        if not task:
+            return jsonify({"ok": True, "submission": None})
+        return jsonify({
+            "ok": True,
+            "task": {
+                "id": task.id,
+                "status": task.status,
+                "accuracy": task.accuracy,
+                "completion_rate": task.completion_rate,
+                "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+            },
+            "submission": _serialize_listening_test_submission(task.listening_test_submission),
+        })
     task = Task.query.get(task_id)
     if (
         not task
@@ -6577,6 +7164,12 @@ def api_listening_test_submit(test_id):
     task = None
     task_id = data.get("task_id") or request.args.get("task_id")
     token = (data.get("token") or request.args.get("token") or "").strip()
+    duration_seconds = 0
+    try:
+        duration_seconds = max(0, int(data.get("duration_seconds") or 0))
+    except (TypeError, ValueError):
+        duration_seconds = 0
+
     if task_id:
         try:
             task_id = int(task_id)
@@ -6605,6 +7198,13 @@ def api_listening_test_submit(test_id):
                 section_number = int(bound_section)
             except (TypeError, ValueError):
                 pass
+    else:
+        task = _upsert_listening_self_task(
+            payload,
+            safe_id,
+            duration_seconds,
+            section_number=section_number,
+        )
 
     grade = _grade_listening_test_answers(payload, answers, section_number=section_number)
 
@@ -6612,11 +7212,6 @@ def api_listening_test_submit(test_id):
         return jsonify({"ok": True, "synced": False, "result": grade})
 
     now = datetime.utcnow()
-    duration_seconds = 0
-    try:
-        duration_seconds = max(0, int(data.get("duration_seconds") or 0))
-    except (TypeError, ValueError):
-        duration_seconds = 0
 
     submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
     if submission:
@@ -6893,7 +7488,7 @@ def api_mock_exam_start(exam_id):
     if not name or not pincode:
         return jsonify({"ok": False, "error": "missing_fields"}), 400
 
-    profile = StudentProfile.query.filter_by(full_name=name).first()
+    profile = StudentProfile.query.filter_by(full_name=name, is_deleted=False).first()
     if not profile:
         return jsonify({"ok": False, "error": "student_not_found"}), 404
 
@@ -7221,7 +7816,7 @@ def api_listening_verify():
     name = (data.get("name") or "").strip()
     if not name:
         return jsonify({"ok": False, "error": "missing_name"}), 400
-    profile = StudentProfile.query.filter_by(full_name=name).first()
+    profile = StudentProfile.query.filter_by(full_name=name, is_deleted=False).first()
     if not profile:
         return jsonify({"ok": False, "error": "student_not_found"}), 404
     session["practice_student_name"] = profile.full_name
@@ -7238,6 +7833,19 @@ def api_listening_verify():
         "ok": True,
         "name": profile.full_name,
         "task_count": task_count,
+    })
+
+
+@app.route("/api/practice/identity")
+def api_practice_identity():
+    """Return the lightweight identity currently attached to public practice."""
+    profile = _current_practice_student_profile()
+    if not profile:
+        return jsonify({"ok": True, "verified": False})
+    return jsonify({
+        "ok": True,
+        "verified": True,
+        "name": profile.full_name,
     })
 
 
@@ -7258,7 +7866,12 @@ def _practice_task_payload(task) -> dict | None:
         if not url:
             return None
         resource_type = _task_listening_resource_type(task)
-        category = "听力整套" if resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST else "精听"
+        if resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+            category = "听力整套"
+        elif resource_type == LISTENING_RESOURCE_JIJING:
+            category = "听力机经"
+        else:
+            category = "精听"
         title = task.detail or task.listening_exercise_id
     elif task.reading_test_id:
         if not task.reading_access_token:

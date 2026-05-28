@@ -33,6 +33,78 @@
   font-size: var(--fs-base);
   line-height: 1.7;
 }
+.practice-identity {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin: 0 0 20px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.practice-identity__label {
+  margin: 0 0 5px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+.practice-identity__name {
+  color: var(--text-strong);
+  font-size: var(--fs-lg);
+  font-weight: 900;
+}
+.practice-identity__hint {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+.practice-identity__form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.practice-identity__form input {
+  width: 180px;
+  min-height: 40px;
+  padding: 9px 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-base);
+}
+.practice-identity__form input:focus {
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+  outline: none;
+}
+.practice-identity__form button,
+.practice-identity__switch {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--brand);
+  border-radius: var(--r-sm);
+  background: var(--brand);
+  color: #fff;
+  font-size: var(--fs-base);
+  font-weight: 800;
+  cursor: pointer;
+}
+.practice-identity__switch {
+  border-color: var(--line-strong);
+  background: #fff;
+  color: var(--text);
+}
+.practice-identity__error {
+  grid-column: 1 / -1;
+  display: none;
+  padding-top: 2px;
+  color: var(--error);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
 .practice-subjects {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -137,6 +209,16 @@ a.practice-resource:hover {
     align-items: flex-start;
     flex-direction: column;
   }
+  .practice-identity {
+    grid-template-columns: 1fr;
+  }
+  .practice-identity__form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .practice-identity__form input {
+    width: 100%;
+  }
   .practice-resource {
     grid-template-columns: 1fr;
   }
@@ -152,6 +234,20 @@ a.practice-resource:hover {
     </div>
   </section>
 
+  <section class="practice-identity" aria-label="学生身份">
+    <div>
+      <p class="practice-identity__label">学生身份</p>
+      <div class="practice-identity__name" id="practiceIdentityName">未绑定</div>
+      <div class="practice-identity__hint" id="practiceIdentityHint">输入后台学生档案中的姓名后，刷题记录会同步到后台。</div>
+    </div>
+    <form class="practice-identity__form" id="practiceIdentityForm">
+      <input type="text" id="practiceStudentName" placeholder="学生姓名" autocomplete="name">
+      <button type="submit" id="practiceIdentitySubmit">确认</button>
+    </form>
+    <button class="practice-identity__switch" type="button" id="practiceIdentitySwitch" hidden>切换学生</button>
+    <div class="practice-identity__error" id="practiceIdentityError"></div>
+  </section>
+
   <section class="practice-subjects" aria-label="刷题科目">
     <article class="practice-subject">
       <header class="practice-subject__head">
@@ -159,21 +255,21 @@ a.practice-resource:hover {
         <span class="practice-subject__tag">已接入</span>
       </header>
       <div class="practice-resource-list">
-        <a class="practice-resource" href="{{ url_for('listening_test_index') }}">
+        <a class="practice-resource js-practice-resource" href="{{ url_for('listening_test_index') }}">
           <div>
             <p class="practice-resource__label">剑桥雅思整套练习</p>
             <div class="practice-resource__meta">{{ summary.listening.cambridge_books }} 本书 · {{ summary.listening.cambridge_tests }} 套 Test · {{ summary.listening.cambridge_questions }} 题</div>
           </div>
           <span class="practice-resource__cta">进入</span>
         </a>
-        <a class="practice-resource" href="{{ url_for('listening_jijing_index') }}">
+        <a class="practice-resource js-practice-resource" href="{{ url_for('listening_jijing_index') }}">
           <div>
             <p class="practice-resource__label">听力机经</p>
             <div class="practice-resource__meta">{{ summary.listening.jijing_books }} 组 · {{ summary.listening.jijing_tests }} 套 · {{ summary.listening.jijing_parts }} 个 Part</div>
           </div>
           <span class="practice-resource__cta">进入</span>
         </a>
-        <a class="practice-resource" href="{{ url_for('listening_index') }}">
+        <a class="practice-resource js-practice-resource" href="{{ url_for('listening_index') }}">
           <div>
             <p class="practice-resource__label">精听练习</p>
             <div class="practice-resource__meta">{{ summary.listening.intensive_sections }} 个切句材料，支持逐句听写、跟读和任务同步。</div>
@@ -189,7 +285,7 @@ a.practice-resource:hover {
         <span class="practice-subject__tag">导入中</span>
       </header>
       <div class="practice-resource-list">
-        <a class="practice-resource" href="{{ url_for('reading_test_index') }}">
+        <a class="practice-resource js-practice-resource" href="{{ url_for('reading_test_index') }}">
           <div>
             <p class="practice-resource__label">剑桥雅思阅读</p>
             <div class="practice-resource__meta">
@@ -198,7 +294,7 @@ a.practice-resource:hover {
           </div>
           <span class="practice-resource__cta">进入</span>
         </a>
-        <a class="practice-resource" href="{{ url_for('reading_jijing_index') }}">
+        <a class="practice-resource js-practice-resource" href="{{ url_for('reading_jijing_index') }}">
           <div>
             <p class="practice-resource__label">阅读机经</p>
             <div class="practice-resource__meta">
@@ -211,3 +307,110 @@ a.practice-resource:hover {
     </article>
   </section>
 </main>
+
+<script>
+(function () {
+  const nameEl = document.getElementById('practiceIdentityName');
+  const hintEl = document.getElementById('practiceIdentityHint');
+  const form = document.getElementById('practiceIdentityForm');
+  const input = document.getElementById('practiceStudentName');
+  const submit = document.getElementById('practiceIdentitySubmit');
+  const switchBtn = document.getElementById('practiceIdentitySwitch');
+  const errorEl = document.getElementById('practiceIdentityError');
+  let verified = false;
+
+  function setError(message) {
+    errorEl.textContent = message || '';
+    errorEl.style.display = message ? 'block' : 'none';
+  }
+
+  function setVerified(name) {
+    verified = true;
+    localStorage.setItem('listening_student', name);
+    sessionStorage.setItem('listening_student', name);
+    nameEl.textContent = name;
+    hintEl.textContent = '当前设备已绑定，提交后会进入后台练习记录。';
+    form.hidden = true;
+    switchBtn.hidden = false;
+    setError('');
+  }
+
+  function setUnverified(message) {
+    verified = false;
+    nameEl.textContent = '未绑定';
+    hintEl.textContent = '输入后台学生档案中的姓名后，刷题记录会同步到后台。';
+    form.hidden = false;
+    switchBtn.hidden = true;
+    if (message) setError(message);
+  }
+
+  async function verifyName(name, silent) {
+    const clean = String(name || '').trim();
+    if (!clean) {
+      if (!silent) setError('请先输入学生姓名。');
+      return false;
+    }
+    submit.disabled = true;
+    submit.textContent = '验证中';
+    try {
+      const response = await fetch('/api/listening/verify', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: clean })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        if (!silent) setUnverified(data.error === 'student_not_found' ? '未找到该学生，请确认姓名。' : '验证失败，请重试。');
+        return false;
+      }
+      setVerified(data.name || clean);
+      return true;
+    } catch (_error) {
+      if (!silent) setUnverified('网络错误，请重试。');
+      return false;
+    } finally {
+      submit.disabled = false;
+      submit.textContent = '确认';
+    }
+  }
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    verifyName(input.value, false);
+  });
+
+  switchBtn.addEventListener('click', function () {
+    localStorage.removeItem('listening_student');
+    sessionStorage.removeItem('listening_student');
+    input.value = '';
+    setUnverified('');
+    input.focus();
+  });
+
+  document.querySelectorAll('.js-practice-resource').forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      if (verified) return;
+      event.preventDefault();
+      setError('请先输入学生姓名，再进入刷题。');
+      input.focus();
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', async function () {
+    try {
+      const response = await fetch('/api/practice/identity', { credentials: 'same-origin' });
+      const data = await response.json();
+      if (response.ok && data.ok && data.verified) {
+        setVerified(data.name);
+        return;
+      }
+    } catch (_error) {}
+    const saved = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student');
+    if (saved) {
+      input.value = saved;
+      await verifyName(saved, true);
+    }
+  });
+})();
+</script>
