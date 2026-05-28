@@ -1,14 +1,19 @@
 import os
 import re
 import secrets
+import ssl
+import time
 import uuid
 import subprocess
 import json
 from pathlib import Path
 from collections import defaultdict
 from datetime import date, datetime, timedelta
-from urllib.parse import quote
+from urllib.error import HTTPError, URLError
+from urllib.parse import quote, urlencode
+from urllib.request import Request, urlopen
 
+import certifi
 from flask import (
     Flask,
     current_app,
@@ -135,6 +140,186 @@ LISTENING_RESOURCE_TYPES = {
     LISTENING_RESOURCE_JIJING,
 }
 READING_RESOURCE_CAMBRIDGE_TEST = "cambridge_reading_test"
+
+
+WORD_LOOKUP_RE = re.compile(r"^[a-z][a-z'-]{0,39}$")
+WORD_LOOKUP_EDGE_CHARS = " \t\r\n\"'“”‘’.,;:!?()[]{}<>…-"
+WORD_LOOKUP_RATE_LIMIT = 120
+WORD_LOOKUP_RATE_WINDOW_SECONDS = 60
+WORD_LOOKUP_GOOGLE_URL = "https://translate.googleapis.com/translate_a/single"
+WORD_LOOKUP_USER_AGENT = (
+    "Mozilla/5.0 (compatible; StudyTrackerWordLookup/1.0; +https://studytracker.xin)"
+)
+WORD_LOOKUP_SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+_WORD_LOOKUP_RATE_BUCKETS = defaultdict(list)
+_WORD_TRANSLATION_CACHE_READY = False
+
+
+def _normalize_lookup_word(value: str | None) -> str | None:
+    if not isinstance(value, str):
+        return None
+    word = (
+        value.strip()
+        .replace("’", "'")
+        .replace("‘", "'")
+        .replace("`", "'")
+        .strip(WORD_LOOKUP_EDGE_CHARS)
+        .lower()
+    )
+    if not word or len(word) > 40 or not WORD_LOOKUP_RE.fullmatch(word):
+        return None
+    return word
+
+
+def _ensure_word_translation_cache_table() -> None:
+    global _WORD_TRANSLATION_CACHE_READY
+    if _WORD_TRANSLATION_CACHE_READY:
+        return
+    with db.engine.begin() as conn:
+        conn.execute(
+            text(
+                """
+                CREATE TABLE IF NOT EXISTS word_translation_cache (
+                    word TEXT PRIMARY KEY,
+                    translation TEXT NOT NULL,
+                    source TEXT,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+                """
+            )
+        )
+    _WORD_TRANSLATION_CACHE_READY = True
+
+
+def _lookup_cached_word_translation(word: str) -> dict | None:
+    _ensure_word_translation_cache_table()
+    row = (
+        db.session.execute(
+            text(
+                """
+                SELECT word, translation, source
+                FROM word_translation_cache
+                WHERE word = :word
+                """
+            ),
+            {"word": word},
+        )
+        .mappings()
+        .first()
+    )
+    if not row:
+        return None
+    return {
+        "ok": True,
+        "found": True,
+        "word": row["word"],
+        "translation": row["translation"],
+        "source": "cache",
+        "cached_source": row["source"] or "",
+    }
+
+
+def _cache_word_translation(word: str, translation: str, source: str) -> None:
+    clean_translation = (translation or "").strip()
+    if not word or not clean_translation:
+        return
+    clean_translation = clean_translation[:200]
+    _ensure_word_translation_cache_table()
+    with db.engine.begin() as conn:
+        conn.execute(
+            text(
+                """
+                INSERT OR IGNORE INTO word_translation_cache (word, translation, source)
+                VALUES (:word, :translation, :source)
+                """
+            ),
+            {"word": word, "translation": clean_translation, "source": source},
+        )
+
+
+def _lookup_dictation_word_translation(word: str) -> dict | None:
+    row = (
+        db.session.execute(
+            text(
+                """
+                SELECT w.word, w.phonetic, w.translation, w.core_meaning_zh
+                FROM dictation_word w
+                JOIN dictation_book b ON w.book_id = b.id
+                WHERE LOWER(w.word) = :word
+                  AND COALESCE(b.is_active, 1) = 1
+                  AND COALESCE(b.is_deleted, 0) = 0
+                ORDER BY w.id ASC
+                LIMIT 1
+                """
+            ),
+            {"word": word},
+        )
+        .mappings()
+        .first()
+    )
+    if not row:
+        return None
+    translation = (row["core_meaning_zh"] or row["translation"] or "").strip()
+    if not translation:
+        return None
+    translation = translation[:200]
+    _cache_word_translation(word, translation, "dictation")
+    return {
+        "ok": True,
+        "found": True,
+        "word": word,
+        "translation": translation,
+        "source": "dictation",
+        "phonetic": row["phonetic"] or "",
+    }
+
+
+def _lookup_word_client_key() -> str:
+    forwarded_for = (request.headers.get("X-Forwarded-For") or "").split(",", 1)[0].strip()
+    return forwarded_for or request.remote_addr or "unknown"
+
+
+def _word_lookup_rate_limited() -> bool:
+    now = time.time()
+    cutoff = now - WORD_LOOKUP_RATE_WINDOW_SECONDS
+    client_key = _lookup_word_client_key()
+    bucket = _WORD_LOOKUP_RATE_BUCKETS[client_key]
+    bucket[:] = [timestamp for timestamp in bucket if timestamp >= cutoff]
+    if len(bucket) >= WORD_LOOKUP_RATE_LIMIT:
+        return True
+    bucket.append(now)
+    return False
+
+
+def _lookup_google_word_translation(word: str) -> dict | None:
+    query = urlencode(
+        {"client": "gtx", "sl": "en", "tl": "zh-CN", "dt": "t", "q": word}
+    )
+    req = Request(
+        f"{WORD_LOOKUP_GOOGLE_URL}?{query}",
+        headers={"User-Agent": WORD_LOOKUP_USER_AGENT},
+    )
+    try:
+        with urlopen(req, timeout=2.5, context=WORD_LOOKUP_SSL_CONTEXT) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+    except (HTTPError, URLError, TimeoutError, ValueError, json.JSONDecodeError):
+        return None
+
+    try:
+        translation = str(payload[0][0][0]).strip()
+    except (TypeError, IndexError, KeyError):
+        return {"ok": True, "found": False, "word": word, "source": "google"}
+    if not translation:
+        return {"ok": True, "found": False, "word": word, "source": "google"}
+    translation = translation[:200]
+    _cache_word_translation(word, translation, "google")
+    return {
+        "ok": True,
+        "found": True,
+        "word": word,
+        "translation": translation,
+        "source": "google",
+    }
 
 
 PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST = "cambridge_listening_test"
@@ -7847,6 +8032,31 @@ def api_practice_identity():
         "verified": True,
         "name": profile.full_name,
     })
+
+
+@app.route("/api/practice/word-lookup", methods=["POST"])
+def api_practice_word_lookup():
+    """Look up one selected English word for listening/reading review pages."""
+    payload = request.get_json(silent=True) or {}
+    word = _normalize_lookup_word(payload.get("word"))
+    if not word:
+        return jsonify({"ok": False, "error": "invalid_word"}), 400
+
+    cached = _lookup_cached_word_translation(word)
+    if cached:
+        return jsonify(cached)
+
+    local = _lookup_dictation_word_translation(word)
+    if local:
+        return jsonify(local)
+
+    if _word_lookup_rate_limited():
+        return jsonify({"ok": False, "error": "rate_limited"}), 429
+
+    upstream = _lookup_google_word_translation(word)
+    if upstream:
+        return jsonify(upstream)
+    return jsonify({"ok": False, "error": "upstream"}), 502
 
 
 def _practice_task_status_label(task) -> tuple[str, str]:
