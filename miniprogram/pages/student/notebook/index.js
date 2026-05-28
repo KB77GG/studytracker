@@ -30,28 +30,60 @@ function sortReadingNotebook(list) {
     return (Array.isArray(list) ? list.slice() : []).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
 }
 
+function formatDateTime(value) {
+    if (!value) return ''
+    const time = new Date(value).getTime()
+    if (!time) return ''
+    const date = new Date(time)
+    const month = `${date.getMonth() + 1}`.padStart(2, '0')
+    const day = `${date.getDate()}`.padStart(2, '0')
+    const hour = `${date.getHours()}`.padStart(2, '0')
+    const minute = `${date.getMinutes()}`.padStart(2, '0')
+    return `${month}-${day} ${hour}:${minute}`
+}
+
+function savedWordSourceLabel(kind) {
+    const labels = {
+        listening_test: '听力复盘',
+        reading_test: '阅读复盘',
+        listening_jijing: '听力机经',
+        reading_jijing: '阅读机经',
+        manual: '网页收藏'
+    }
+    return labels[kind] || '网页收藏'
+}
+
 Page({
     data: {
-        activeTab: 'dictation',          // 'dictation' | 'reading'
+        activeTab: 'dictation',          // 'dictation' | 'reading' | 'vocab'
         // Dictation tab
         list: [],
         isLoading: false,
         lastWrongCount: 0,
         // Reading-vocab tab
         readingList: [],
-        readingLoading: false
+        readingLoading: false,
+        // Saved web vocabulary tab
+        vocabList: [],
+        vocabLoading: false
     },
 
     onShow() {
         this.loadNotebook();
         this.loadLastWrongCount();
         this.loadReadingNotebook();
+        if (this.data.activeTab === 'vocab') {
+            this.loadVocab();
+        }
     },
 
     switchTab(e) {
         const tab = e.currentTarget.dataset.tab
         if (!tab || tab === this.data.activeTab) return
         this.setData({ activeTab: tab })
+        if (tab === 'vocab' && !this.data.vocabList.length) {
+            this.loadVocab()
+        }
     },
 
     loadNotebook() {
@@ -119,6 +151,33 @@ Page({
             this.setData({ readingList: sortReadingNotebook(readReadingNotebookCache()) });
         } finally {
             this.setData({ readingLoading: false });
+        }
+    },
+
+    async loadVocab() {
+        this.setData({ vocabLoading: true });
+        try {
+            const res = await request('/miniprogram/student/saved-words');
+            if (res.ok && Array.isArray(res.items)) {
+                const list = res.items.map(item => ({
+                    id: item.id,
+                    word: item.word || '',
+                    translation: item.translation || '暂无释义',
+                    sourceKind: item.source_kind || 'manual',
+                    sourceLabel: savedWordSourceLabel(item.source_kind || 'manual'),
+                    sourceRef: item.source_ref || '',
+                    updatedAt: item.updated_at ? new Date(item.updated_at).getTime() : 0,
+                    updatedText: formatDateTime(item.updated_at)
+                }));
+                this.setData({ vocabList: list });
+            } else {
+                this.setData({ vocabList: [] });
+            }
+        } catch (e) {
+            console.warn('loadVocab error', e);
+            this.setData({ vocabList: [] });
+        } finally {
+            this.setData({ vocabLoading: false });
         }
     },
 
@@ -230,5 +289,24 @@ Page({
                 }
             }
         });
+    },
+
+    async deleteVocab(e) {
+        const id = e.currentTarget.dataset.id;
+        if (!id) return;
+        const previous = this.data.vocabList || [];
+        this.setData({ vocabList: previous.filter(item => String(item.id) !== String(id)) });
+        try {
+            const res = await request(`/miniprogram/student/saved-words/${id}`, {
+                method: 'DELETE'
+            });
+            if (!res.ok) {
+                this.setData({ vocabList: previous });
+                wx.showToast({ title: '删除失败', icon: 'none' });
+            }
+        } catch (err) {
+            this.setData({ vocabList: previous });
+            wx.showToast({ title: '删除失败', icon: 'none' });
+        }
     }
 })

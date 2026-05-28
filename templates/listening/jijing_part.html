@@ -908,6 +908,10 @@ renderDictation();
 renderAnalysis();
 loadExistingJijingSubmission();
 </script>
+<script>
+window.__PRACTICE_SOURCE__ = {{ practice_source|default('listening_jijing')|tojson }};
+window.__PRACTICE_SOURCE_REF__ = {{ practice_source_ref|default('')|tojson }};
+</script>
 <script src="{{ url_for('static', filename='js/selection-translate.js') }}" defer></script>
 </body>
 </html>

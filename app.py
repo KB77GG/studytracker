@@ -55,6 +55,7 @@ from models import (
     PlanTemplateItem,
     ScoreRecord,
     StudentProfile,
+    StudentSavedWord,
     StudyPlan,
     TaskCatalog,
     TeacherStudentLink,
@@ -6891,7 +6892,12 @@ def listening_jijing_part(part_id):
     if not part_path.exists():
         return "机经练习不存在", 404
     part = json.loads(part_path.read_text(encoding="utf-8"))
-    return render_template("listening/jijing_part.html", part=part)
+    return render_template(
+        "listening/jijing_part.html",
+        part=part,
+        practice_source="listening_jijing",
+        practice_source_ref=safe_id,
+    )
 
 
 @app.get("/api/listening/jijing/<part_id>/submission")
@@ -7057,7 +7063,12 @@ def listening_test_practice(test_id):
     test, _test_path, _safe_id = _load_listening_test_payload(test_id)
     if not test:
         return "听力 Test 不存在", 404
-    return render_template("listening/test_practice.html", test=test)
+    return render_template(
+        "listening/test_practice.html",
+        test=test,
+        practice_source="listening_test",
+        practice_source_ref=_safe_id,
+    )
 
 
 @app.route("/api/listening/test/<test_id>")
@@ -7109,7 +7120,12 @@ def reading_test_practice(test_id):
     test, _test_path, _safe_id = _load_reading_test_payload(test_id)
     if not test:
         return "阅读 Test 不存在", 404
-    return render_template("reading/test_practice.html", test=test)
+    return render_template(
+        "reading/test_practice.html",
+        test=test,
+        practice_source="reading_test",
+        practice_source_ref=_safe_id,
+    )
 
 
 @app.route("/reading/jijing/<test_id>")
@@ -7118,7 +7134,12 @@ def reading_jijing_practice(test_id):
     test, _test_path, _safe_id = _load_reading_test_payload(test_id)
     if not test or test.get("source") != "idictation_reading_jijing":
         return "阅读机经不存在", 404
-    return render_template("reading/test_practice.html", test=test)
+    return render_template(
+        "reading/test_practice.html",
+        test=test,
+        practice_source="reading_jijing",
+        practice_source_ref=_safe_id,
+    )
 
 
 @app.route("/api/reading/test/<test_id>")
@@ -8083,6 +8104,18 @@ def api_practice_identity():
     })
 
 
+@app.route("/api/practice/me")
+def api_practice_me():
+    """Return whether the current web session belongs to a student account."""
+    return jsonify({
+        "ok": True,
+        "is_student": bool(
+            current_user.is_authenticated
+            and current_user.role == User.ROLE_STUDENT
+        ),
+    })
+
+
 @app.route("/api/practice/word-lookup", methods=["POST"])
 def api_practice_word_lookup():
     """Look up one selected English word for listening/reading review pages."""
@@ -8109,6 +8142,64 @@ def api_practice_word_lookup():
     if fallback:
         return jsonify(fallback)
     return jsonify({"ok": False, "error": "upstream"}), 502
+
+
+@app.route("/api/practice/save-word", methods=["POST"])
+@login_required
+@role_required(User.ROLE_STUDENT)
+def api_practice_save_word():
+    """Save one selected word into the student's cross-device vocabulary list."""
+    if current_user.role != User.ROLE_STUDENT:
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+
+    payload = request.get_json(silent=True) or {}
+    raw_word = (payload.get("word") or "").strip()
+    word_norm = _normalize_lookup_word(raw_word)
+    if not word_norm:
+        return jsonify({"ok": False, "error": "invalid_word"}), 400
+
+    translation = (payload.get("translation") or "").strip()[:500] or None
+    source_kind = (payload.get("source_kind") or "manual").strip()[:32] or "manual"
+    if source_kind not in {
+        "listening_test",
+        "reading_test",
+        "listening_jijing",
+        "reading_jijing",
+        "manual",
+    }:
+        source_kind = "manual"
+    source_ref = (payload.get("source_ref") or "").strip()[:80] or None
+    now = datetime.utcnow()
+
+    row = StudentSavedWord.query.filter_by(
+        student_id=current_user.id,
+        word_norm=word_norm,
+    ).first()
+    if row:
+        row.archived_at = None
+        row.word_display = raw_word[:80] or row.word_display or word_norm
+        row.translation = translation or row.translation
+        row.source_kind = source_kind or row.source_kind
+        row.source_ref = source_ref or row.source_ref
+        row.updated_at = now
+    else:
+        row = StudentSavedWord(
+            student_id=current_user.id,
+            word_norm=word_norm,
+            word_display=raw_word[:80] or word_norm,
+            translation=translation,
+            source_kind=source_kind,
+            source_ref=source_ref,
+            updated_at=now,
+        )
+        db.session.add(row)
+    db.session.commit()
+    return jsonify({
+        "ok": True,
+        "id": row.id,
+        "word": row.word_display,
+        "translation": row.translation or "",
+    })
 
 
 def _practice_task_status_label(task) -> tuple[str, str]:

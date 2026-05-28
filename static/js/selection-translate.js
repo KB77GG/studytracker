@@ -3,6 +3,8 @@
 
   const WORD_RE = /^[A-Za-z][A-Za-z'-]{0,39}$/;
   const LOOKUP_URL = '/api/practice/word-lookup';
+  const ME_URL = '/api/practice/me';
+  const SAVE_URL = '/api/practice/save-word';
   const IGNORE_SELECTOR = [
     'input',
     'textarea',
@@ -21,8 +23,10 @@
 
   let popover = null;
   let activeWord = '';
+  let activeLookupData = null;
   let activeController = null;
   let triggerTimer = 0;
+  let isPracticeStudent = false;
 
   function isReviewMode() {
     return document.body.classList.contains('result-mode') ||
@@ -86,6 +90,26 @@
       .sel-tx-error {
         color: #b91c1c;
       }
+      .sel-tx-save {
+        margin-top: 10px;
+        width: 100%;
+        min-height: 34px;
+        border: 1px solid #2F8E87;
+        border-radius: 8px;
+        background: #2F8E87;
+        color: #fff;
+        font: 700 13px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        cursor: pointer;
+      }
+      .sel-tx-save:disabled {
+        cursor: default;
+        opacity: 0.76;
+      }
+      .sel-tx-save.is-error {
+        border-color: #fecaca;
+        background: #fff1f2;
+        color: #b91c1c;
+      }
     `;
     document.head.appendChild(style);
   }
@@ -141,6 +165,7 @@
       activeController = null;
     }
     activeWord = '';
+    activeLookupData = null;
     if (popover) {
       popover.remove();
       popover = null;
@@ -185,6 +210,7 @@
       popover.addEventListener('mousedown', function(event) {
         event.stopPropagation();
       });
+      popover.addEventListener('click', handlePopoverClick);
       document.body.appendChild(popover);
     }
     popover.innerHTML = html;
@@ -207,9 +233,13 @@
     };
     const source = sourceLabels[data.source] || '查词服务';
     const phonetic = data.phonetic ? `<span class="sel-tx-phonetic">${escapeHtml(data.phonetic)}</span>` : '';
+    const saveButton = isPracticeStudent
+      ? '<button type="button" class="sel-tx-save" data-sel-tx-save>加入生词本</button>'
+      : '';
     return `
       <div class="sel-tx-word">${escapeHtml(data.word || activeWord)}${phonetic}</div>
       <div class="sel-tx-translation">${escapeHtml(data.translation)}</div>
+      ${saveButton}
       <div class="sel-tx-meta">来源：${escapeHtml(source)}</div>
     `;
   }
@@ -236,6 +266,7 @@
     const controller = new AbortController();
     activeController = controller;
     activeWord = word;
+    activeLookupData = null;
     showPopover(rect, loadingHtml(word));
 
     try {
@@ -249,6 +280,7 @@
       const data = await response.json().catch(function() { return {}; });
       if (!popover || activeWord !== word) return;
       if (response.ok && data.ok && data.found && data.translation) {
+        activeLookupData = data;
         showPopover(rect, resultHtml(data));
       } else if (response.ok && data.ok && data.found === false) {
         showPopover(rect, missHtml(word));
@@ -287,6 +319,68 @@
     triggerTimer = window.setTimeout(handleSelection, delay);
   }
 
+  function getPracticeSourceKind() {
+    return String(window.__PRACTICE_SOURCE__ || 'manual').slice(0, 32) || 'manual';
+  }
+
+  function getPracticeSourceRef() {
+    return String(window.__PRACTICE_SOURCE_REF__ || window.location.pathname || '').slice(0, 80);
+  }
+
+  function setSaveButton(button, text, disabled, isError) {
+    if (!button) return;
+    button.textContent = text;
+    button.disabled = Boolean(disabled);
+    button.classList.toggle('is-error', Boolean(isError));
+  }
+
+  async function saveActiveWord(button) {
+    if (!activeLookupData || !activeLookupData.translation) return;
+    setSaveButton(button, '保存中...', true, false);
+    try {
+      const response = await fetch(SAVE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          word: activeLookupData.word || activeWord,
+          translation: activeLookupData.translation,
+          source_kind: getPracticeSourceKind(),
+          source_ref: getPracticeSourceRef()
+        })
+      });
+      const data = await response.json().catch(function() { return {}; });
+      if (response.ok && data.ok) {
+        setSaveButton(button, '✓ 已加入', true, false);
+      } else {
+        setSaveButton(button, '保存失败，点我重试', false, true);
+      }
+    } catch (err) {
+      setSaveButton(button, '保存失败，点我重试', false, true);
+    }
+  }
+
+  function handlePopoverClick(event) {
+    const saveButton = event.target && event.target.closest
+      ? event.target.closest('[data-sel-tx-save]')
+      : null;
+    if (!saveButton) return;
+    event.preventDefault();
+    event.stopPropagation();
+    saveActiveWord(saveButton);
+  }
+
+  async function loadPracticeUser() {
+    try {
+      const response = await fetch(ME_URL, { credentials: 'same-origin' });
+      const data = await response.json();
+      isPracticeStudent = Boolean(response.ok && data && data.is_student);
+    } catch (err) {
+      isPracticeStudent = false;
+    }
+    window.__IS_STUDENT__ = isPracticeStudent;
+  }
+
   document.addEventListener('mouseup', function() {
     scheduleSelectionCheck(80);
   });
@@ -304,4 +398,5 @@
     if (popover && !popover.contains(event.target)) closePopover();
   });
   document.addEventListener('scroll', closePopover, true);
+  loadPracticeUser();
 })();

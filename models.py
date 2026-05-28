@@ -1030,6 +1030,31 @@ class StudentWordMastery(db.Model, TimestampMixin):
         return "audio_to_en"
 
 
+class StudentSavedWord(db.Model, TimestampMixin):
+    """Words students explicitly save from web practice review pages."""
+
+    __tablename__ = "student_saved_word"
+    __table_args__ = (
+        db.UniqueConstraint("student_id", "word_norm", name="uq_saved_word_student_word"),
+        db.Index("ix_student_saved_word_student_archived", "student_id", "archived_at"),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    word_norm = db.Column(db.String(64), nullable=False)
+    word_display = db.Column(db.String(80), nullable=False)
+    translation = db.Column(db.Text)
+    source_kind = db.Column(db.String(32))
+    source_ref = db.Column(db.String(80))
+    note = db.Column(db.Text)
+    archived_at = db.Column(db.DateTime, nullable=True)
+
+    student = db.relationship("User", backref=db.backref("saved_words", lazy="dynamic"))
+
+    def __repr__(self):
+        return f"<StudentSavedWord student={self.student_id} word={self.word_norm}>"
+
+
 # ---- Speaking Practice (Listen & Repeat) ----
 
 class SpeakingBook(db.Model, TimestampMixin, SoftDeleteMixin):

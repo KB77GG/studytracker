@@ -856,6 +856,10 @@ window.EXAM_CONTEXT = {{ exam_context|tojson }};
 })();
 </script>
 {% endif %}
+<script>
+window.__PRACTICE_SOURCE__ = {{ practice_source|default('reading_test')|tojson }};
+window.__PRACTICE_SOURCE_REF__ = {{ practice_source_ref|default('')|tojson }};
+</script>
 <script src="{{ url_for('static', filename='js/selection-translate.js') }}" defer></script>
 </body>
 </html>

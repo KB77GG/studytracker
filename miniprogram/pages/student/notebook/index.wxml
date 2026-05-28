@@ -2,7 +2,8 @@
   <view class="page-header">
     <view class="title">错词本</view>
     <view class="count" wx:if="{{activeTab === 'dictation'}}">共 {{list.length}} 词</view>
-    <view class="count" wx:else>共 {{readingList.length}} 词</view>
+    <view class="count" wx:elif="{{activeTab === 'reading'}}">共 {{readingList.length}} 词</view>
+    <view class="count" wx:else>共 {{vocabList.length}} 词</view>
   </view>
 
   <!-- Tab switcher -->
@@ -22,6 +23,14 @@
     >
       <text>阅读错词</text>
       <text class="tab-count" wx:if="{{readingList.length}}">{{readingList.length}}</text>
+    </view>
+    <view
+      class="tab {{activeTab === 'vocab' ? 'active' : ''}}"
+      data-tab="vocab"
+      bindtap="switchTab"
+    >
+      <text>生词</text>
+      <text class="tab-count" wx:if="{{vocabList.length}}">{{vocabList.length}}</text>
     </view>
   </view>
 
@@ -64,7 +73,7 @@
   </block>
 
   <!-- ═════ Reading-vocab tab ═════ -->
-  <block wx:else>
+  <block wx:elif="{{activeTab === 'reading'}}">
     <view wx:if="{{!readingList.length && !readingLoading}}" class="empty">
       <text>还没有阅读词汇错题</text>
       <text class="empty-sub">云端错题会自动同步到这里，离线时显示上次缓存</text>
@@ -107,5 +116,27 @@
     <view class="footer">
       <button wx:if="{{readingList.length > 0}}" class="clear-btn" bindtap="clearReadingAll">清空本地缓存</button>
     </view>
+  </block>
+
+  <!-- ═════ Saved vocabulary tab ═════ -->
+  <block wx:else>
+    <view wx:if="{{!vocabList.length && !vocabLoading}}" class="empty">
+      <text>还没有收藏生词</text>
+      <text class="empty-sub">网页复盘划词后点“加入生词本”，会同步到这里</text>
+    </view>
+
+    <scroll-view wx:else scroll-y class="list">
+      <view class="card vocab-card" wx:for="{{vocabList}}" wx:key="id">
+        <view class="card-header">
+          <view class="word">{{item.word}}</view>
+          <view class="reading-correct-tag">{{item.sourceLabel}}</view>
+        </view>
+        <view class="trans">{{item.translation || '暂无释义'}}</view>
+        <view class="reading-task-title" wx:if="{{item.updatedText}}">加入时间：{{item.updatedText}}</view>
+        <view class="card-actions">
+          <button size="mini" class="danger" catchtap="deleteVocab" data-id="{{item.id}}">删除</button>
+        </view>
+      </view>
+    </scroll-view>
   </block>
 </view>

@@ -17,7 +17,7 @@ from models import (
     PlanEvidence, ParentStudentLink, TaskCatalog, Task,
     PlanItemSession, ClassFeedback, ScheduleSnapshot,
     MaterialBank, Question, QuestionOption, SpeakingSession, SpeakingMessage,
-    StudentAnswer,
+    StudentAnswer, StudentSavedWord,
     DictationBook, ListeningTestSubmission, ReadingTestSubmission
 )
 from .auth_utils import require_api_user
@@ -1795,6 +1795,49 @@ def list_reading_vocab_wrongs():
         "ok": True,
         "items": items,
     })
+
+
+@mp_bp.route("/student/saved-words", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def list_saved_words():
+    """List words the student saved from web practice review pages."""
+    user = request.current_api_user
+    rows = (
+        StudentSavedWord.query.filter(
+            StudentSavedWord.student_id == user.id,
+            StudentSavedWord.archived_at.is_(None),
+        )
+        .order_by(StudentSavedWord.updated_at.desc(), StudentSavedWord.id.desc())
+        .limit(500)
+        .all()
+    )
+    return jsonify({
+        "ok": True,
+        "items": [
+            {
+                "id": row.id,
+                "word": row.word_display,
+                "translation": row.translation or "",
+                "source_kind": row.source_kind or "manual",
+                "source_ref": row.source_ref or "",
+                "updated_at": row.updated_at.isoformat() if row.updated_at else None,
+            }
+            for row in rows
+        ],
+    })
+
+
+@mp_bp.route("/student/saved-words/<int:item_id>", methods=["DELETE"])
+@require_api_user(User.ROLE_STUDENT)
+def delete_saved_word(item_id):
+    """Archive one saved word for the current student."""
+    user = request.current_api_user
+    row = StudentSavedWord.query.filter_by(id=item_id, student_id=user.id).first()
+    if not row:
+        return jsonify({"ok": False, "error": "not_found"}), 404
+    row.archived_at = datetime.utcnow()
+    db.session.commit()
+    return jsonify({"ok": True})
 
 
 @mp_bp.route("/student/tasks/<int:task_id>/reading-vocab-practice", methods=["GET"])
