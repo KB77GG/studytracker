@@ -147,6 +147,7 @@ WORD_LOOKUP_EDGE_CHARS = " \t\r\n\"'“”‘’.,;:!?()[]{}<>…-"
 WORD_LOOKUP_RATE_LIMIT = 120
 WORD_LOOKUP_RATE_WINDOW_SECONDS = 60
 WORD_LOOKUP_GOOGLE_URL = "https://translate.googleapis.com/translate_a/single"
+WORD_LOOKUP_YOUDAO_URL = "https://dict.youdao.com/suggest"
 WORD_LOOKUP_USER_AGENT = (
     "Mozilla/5.0 (compatible; StudyTrackerWordLookup/1.0; +https://studytracker.xin)"
 )
@@ -319,6 +320,54 @@ def _lookup_google_word_translation(word: str) -> dict | None:
         "word": word,
         "translation": translation,
         "source": "google",
+    }
+
+
+def _lookup_youdao_word_translation(word: str) -> dict | None:
+    query = urlencode(
+        {
+            "num": "5",
+            "ver": "3.0",
+            "doctype": "json",
+            "cache": "false",
+            "le": "en",
+            "q": word,
+        }
+    )
+    req = Request(
+        f"{WORD_LOOKUP_YOUDAO_URL}?{query}",
+        headers={"User-Agent": WORD_LOOKUP_USER_AGENT},
+    )
+    try:
+        with urlopen(req, timeout=2.5, context=WORD_LOOKUP_SSL_CONTEXT) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+    except (HTTPError, URLError, TimeoutError, ValueError, json.JSONDecodeError):
+        return None
+
+    entries = ((payload.get("data") or {}).get("entries") or [])
+    if not isinstance(entries, list):
+        return None
+    exact_entry = None
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        if (entry.get("entry") or "").strip().lower() == word:
+            exact_entry = entry
+            break
+    selected = exact_entry or next((entry for entry in entries if isinstance(entry, dict)), None)
+    if not selected:
+        return None
+    translation = str(selected.get("explain") or "").strip()
+    if not translation:
+        return None
+    translation = translation[:200]
+    _cache_word_translation(word, translation, "youdao")
+    return {
+        "ok": True,
+        "found": True,
+        "word": word,
+        "translation": translation,
+        "source": "youdao",
     }
 
 
@@ -8056,6 +8105,9 @@ def api_practice_word_lookup():
     upstream = _lookup_google_word_translation(word)
     if upstream:
         return jsonify(upstream)
+    fallback = _lookup_youdao_word_translation(word)
+    if fallback:
+        return jsonify(fallback)
     return jsonify({"ok": False, "error": "upstream"}), 502
 
 

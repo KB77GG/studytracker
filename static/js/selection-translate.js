@@ -202,7 +202,8 @@
     const sourceLabels = {
       cache: '本地缓存',
       dictation: '本地词库',
-      google: 'Google 免费翻译'
+      google: 'Google 免费翻译',
+      youdao: '有道词典'
     };
     const source = sourceLabels[data.source] || '查词服务';
     const phonetic = data.phonetic ? `<span class="sel-tx-phonetic">${escapeHtml(data.phonetic)}</span>` : '';
