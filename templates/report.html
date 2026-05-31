@@ -1,25 +1,23 @@
 {% extends "base.html" %}
+{% block title %}学习报表{% endblock %}
+{% block page_subtitle %}Data Analysis{% endblock %}
+{% block page_title %}学习报表{% endblock %}
+{% block header_actions %}
+<button type="button" id="exportBtn" class="btn report-export-button">导出 Excel</button>
+<button type="button" id="exportPdfBtn" class="btn report-export-button report-export-button--secondary">导出 PDF</button>
+{% endblock %}
 {% block content %}{% endblock %}
 {% block content_dashboard %}
-<style>
-  .main-header {
-    display: none;
-  }
-</style>
-
-<section class="report-hero">
-  <div class="hero-inner">
-    <div class="hero-heading">
-      <div class="hero-title">
-        <h1>学习任务汇总报告</h1>
+<section class="report-page">
+  <section class="report-filter-panel">
+    <div class="report-section-header">
+      <div>
+        <h2>学习任务汇总报告</h2>
         <p>快速洞察全体学生的学习投入与任务完成情况</p>
       </div>
-      <div class="hero-actions">
-        <button type="button" id="exportBtn" class="hero-export">导出 Excel</button>
-        <button type="button" id="exportPdfBtn" class="hero-export hero-export--outline">导出 PDF</button>
-      </div>
+      <span class="report-range-pill">{{ report_payload.filters.start }} — {{ report_payload.filters.end }}</span>
     </div>
-    <form id="reportFilterForm" class="hero-form" method="get" action="{{ url_for('report_page') }}">
+    <form id="reportFilterForm" class="report-filter-form" method="get" action="{{ url_for('report_page') }}">
       <input type="hidden" name="period" id="periodField" value="{{ report_payload.filters.period }}">
       <div class="filter-row">
         <div class="filter-group filter-group--range">
@@ -76,8 +74,7 @@
         </div>
       </div>
     </form>
-  </div>
-</section>
+  </section>
 
 {% if not report_payload.hasData %}
 <div class="alert">没有符合条件的数据，试试调整筛选条件。</div>
@@ -193,95 +190,96 @@
   </div>
 </div>
 {% endif %}
+</section>
 
 <style>
-  .report-card {
-    margin-bottom: 16px;
-    padding: 16px 20px;
+  .report-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    color: #172033;
   }
 
-  .report-hero {
-    position: relative;
-    margin-bottom: 24px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #0E8F87 0%, #22B5AD 55%, #4FD0C1 100%);
-    color: #fff;
-    overflow: visible;
-    box-shadow: 0 18px 40px rgba(14, 143, 135, 0.22);
+  .report-page,
+  .report-page * {
+    box-sizing: border-box;
   }
 
-  .hero-inner {
-    position: relative;
-    padding: 28px 32px 32px;
-    backdrop-filter: blur(4px);
-  }
-
-  .hero-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-
-  .hero-title h1 {
-    font-size: 26px;
+  .report-export-button {
+    border: 1px solid #c9d7d5;
+    background: #ffffff;
+    color: #20756f;
     font-weight: 700;
-    letter-spacing: 0.5px;
-    margin: 0 0 6px;
-    color: #f6fffd;
+    box-shadow: none;
   }
 
-  .hero-title p {
-    margin: 0;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.78);
+  .report-export-button:hover {
+    background: #e8f6f4;
+    color: #17645f;
   }
 
-  .hero-actions {
-    flex-shrink: 0;
+  .report-export-button--secondary {
+    background: #f7fafc;
+    color: #334155;
+  }
+
+  .report-filter-panel {
+    min-width: 0;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e4e9ef;
+    border-radius: 8px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  }
+
+  .report-section-header {
     display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .report-section-header h2 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.25;
+    color: #111827;
+  }
+
+  .report-section-header p {
+    margin: 6px 0 0;
+    color: #667085;
+    font-size: 14px;
+  }
+
+  .report-range-pill {
+    flex: 0 0 auto;
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
-  }
-
-  .hero-export {
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-    padding: 10px 18px;
+    min-height: 28px;
+    padding: 5px 10px;
     border-radius: 999px;
-    font-size: 13px;
-    transition: all .2s ease;
-    cursor: pointer;
-    backdrop-filter: blur(4px);
+    background: #e7f6f3;
+    color: #20756f;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
   }
 
-  .hero-export:hover {
-    background: #fff;
-    color: #0E8F87;
-  }
-
-  .hero-export--outline {
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  .hero-export--outline:hover {
-    background: #fff;
-    color: #0E8F87;
-  }
-
-  .hero-form {
-    background: rgba(255, 255, 255, 0.18);
-    border-radius: 16px;
-    padding: 18px 20px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  .report-filter-form {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid #edf1f5;
+    border-radius: 8px;
+    background: #f8fafc;
   }
 
   .filter-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 14px;
     align-items: flex-end;
   }
 
@@ -289,39 +287,59 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    min-width: 160px;
+    flex: 1 1 160px;
+    min-width: 0;
+  }
+
+  .filter-group--range {
+    flex: 1.35 1 260px;
+  }
+
+  .filter-group--students {
+    flex: 1.25 1 240px;
   }
 
   .filter-group label {
-    font-size: 13px;
-    color: var(--muted, #6b7785);
+    font-size: 12px;
+    font-weight: 700;
+    color: #667085;
   }
 
   .filter-group input,
   .filter-group select {
-    height: 36px;
-    padding: 6px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 7px 10px;
+    border: 1px solid #d9e2ea;
     border-radius: 8px;
     font-size: 14px;
-    background: rgba(255, 255, 255, 0.85);
-    color: #164A45;
+    background: #ffffff;
+    color: #172033;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .filter-group input:focus,
+  .filter-group select:focus {
+    border-color: #2f8e87;
+    box-shadow: 0 0 0 3px rgba(47, 142, 135, 0.12);
+    outline: none;
   }
 
   .filter-group input::placeholder {
-    color: rgba(22, 74, 69, 0.55);
+    color: #98a2b3;
   }
 
   .student-combo {
     position: relative;
-    min-width: 220px;
+    min-width: 0;
   }
 
   .student-combo__control {
     width: 100%;
-    height: 36px;
+    height: 38px;
     padding: 6px 12px;
-    border: 1px solid var(--line, #e4e7ed);
+    border: 1px solid #d9e2ea;
     border-radius: 8px;
     background: #fff;
     display: flex;
@@ -333,8 +351,9 @@
   }
 
   .student-combo__control:focus {
-    outline: 2px solid var(--brand, #2F8E87);
-    outline-offset: 2px;
+    border-color: #2f8e87;
+    box-shadow: 0 0 0 3px rgba(47, 142, 135, 0.12);
+    outline: none;
   }
 
   .student-combo__arrow {
@@ -355,8 +374,8 @@
     right: 0;
     padding: 10px;
     background: #fff;
-    border: 1px solid var(--line, #e4e7ed);
-    border-radius: 10px;
+    border: 1px solid #d9e2ea;
+    border-radius: 8px;
     box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
     z-index: 60;
   }
@@ -368,7 +387,7 @@
   .student-combo__search {
     width: 100%;
     height: 32px;
-    border: 1px solid var(--line, #e4e7ed);
+    border: 1px solid #d9e2ea;
     border-radius: 6px;
     padding: 4px 10px;
     font-size: 13px;
@@ -400,7 +419,7 @@
   }
 
   .student-option:hover {
-    background: #f5f8ff;
+    background: #eff7f6;
   }
 
   .student-option input {
@@ -425,8 +444,8 @@
 
   .student-combo__action {
     flex: 1;
-    border: 1px solid var(--line, #e4e7ed);
-    background: #f5f6f8;
+    border: 1px solid #d9e2ea;
+    background: #f8fafc;
     border-radius: 6px;
     padding: 4px 0;
     font-size: 12px;
@@ -446,8 +465,8 @@
   }
 
   .tag {
-    background: #f0f4ff;
-    color: #2f4f80;
+    background: #e8f6f4;
+    color: #20756f;
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 12px;
@@ -459,76 +478,89 @@
 
   .range-buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
   }
 
   .range-btn {
-    border: 1px solid var(--line, #e4e7ed);
-    background: #f7f9fc;
-    color: #3b3f45;
-    border-radius: 18px;
-    padding: 6px 14px;
+    min-height: 38px;
+    border: 1px solid #d9e2ea;
+    background: #ffffff;
+    color: #344054;
+    border-radius: 8px;
+    padding: 7px 12px;
     font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
     transition: all .15s ease;
   }
 
   .range-btn.active {
-    background: var(--brand, #2F8E87);
+    background: #2f8e87;
     color: #fff;
-    border-color: var(--brand, #2F8E87);
+    border-color: #2f8e87;
   }
 
   .filter-actions {
     display: flex;
     gap: 10px;
     align-items: center;
+    flex: 0 0 auto;
   }
 
   .btn-primary {
-    background: #fff;
-    color: #0E8F87;
-    padding: 8px 18px;
-    border-radius: 999px;
-    border: none;
+    min-height: 38px;
+    background: #20756f;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #20756f;
     font-weight: 600;
     cursor: pointer;
   }
 
   .btn-primary:hover {
-    background: #E8FFFA;
+    background: #17645f;
+    border-color: #17645f;
   }
 
   .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
     padding: 8px 16px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.22);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 8px;
+    background: #ffffff;
+    color: #475467;
+    border: 1px solid #d9e2ea;
     text-decoration: none;
     font-size: 13px;
+    font-weight: 700;
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.4);
+    background: #f2f4f7;
+    color: #344054;
   }
 
   .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     gap: 14px;
+    min-width: 0;
     margin-bottom: 18px;
   }
 
   .metric-card {
     background: #fff;
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 16px;
-    box-shadow: 0 10px 26px rgba(14, 143, 135, 0.08);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
     display: flex;
     flex-direction: column;
     gap: 6px;
-    border: 1px solid #E4F4F2;
+    min-width: 0;
+    border: 1px solid #e4e9ef;
   }
 
   .metric-label {
@@ -539,7 +571,9 @@
   .metric-value {
     font-size: 22px;
     font-weight: 600;
-    color: #0E6F6A;
+    line-height: 1.2;
+    color: #20756f;
+    word-break: break-word;
   }
 
   .metric-note {
@@ -549,25 +583,34 @@
 
   .charts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 16px;
+    min-width: 0;
     margin-bottom: 20px;
   }
 
   .chart-card {
-    background: var(--card, #fff);
-    border-radius: 12px;
+    grid-column: span 2;
+    min-width: 0;
+    background: #fff;
+    border-radius: 8px;
     padding: 16px;
-    box-shadow: var(--shadow, 0 1px 4px rgba(0, 0, 0, 0.08));
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+    border: 1px solid #e4e9ef;
   }
 
   .chart-card--wide {
-    grid-column: span 2;
+    grid-column: span 3;
   }
 
-  .chart-card {
-    background: #fff;
-    border: 1px solid #E4F4F2;
+  .chart-card canvas {
+    display: block;
+    width: 100% !important;
+    height: 260px !important;
+  }
+
+  .chart-card--wide canvas {
+    height: 300px !important;
   }
 
   .chart-title {
@@ -578,8 +621,13 @@
   }
 
   .summary-card {
+    min-width: 0;
     margin-top: 24px;
     padding: 16px;
+    background: #ffffff;
+    border: 1px solid #e4e9ef;
+    border-radius: 8px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
   }
 
   .summary-header {
@@ -595,26 +643,113 @@
   }
 
   .table-wrap {
-    overflow: auto;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 1px solid #edf1f5;
+    border-radius: 8px;
+  }
+
+  .report-table {
+    min-width: 980px;
   }
 
   .report-table th,
   .report-table td {
     text-align: center;
     white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .report-table th {
+    background: #f8fafc;
+    color: #667085;
+    font-size: 12px;
+    font-weight: 700;
   }
 
   .alert {
     padding: 14px 18px;
     background: #fff7e6;
     border: 1px solid #ffe2b8;
-    border-radius: 10px;
+    border-radius: 8px;
     color: #8a5a00;
   }
 
-  @media (max-width: 960px) {
+  .main-panel,
+  .panel-content {
+    min-width: 0;
+  }
+
+  @media (max-width: 1180px) {
+    .chart-card,
     .chart-card--wide {
-      grid-column: span 1;
+      grid-column: span 3;
+    }
+  }
+
+  @media (max-width: 780px) {
+    .main-header {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .main-header__title {
+      flex: 1 1 calc(100% - 64px);
+    }
+
+    .header-actions {
+      flex: 1 0 100%;
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .report-export-button {
+      min-height: 36px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .report-section-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .report-range-pill {
+      width: max-content;
+      max-width: 100%;
+    }
+
+    .report-filter-panel,
+    .report-filter-form {
+      padding: 14px;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .filter-actions {
+      flex-wrap: wrap;
+    }
+
+    .metrics-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .charts-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .chart-card,
+    .chart-card--wide {
+      grid-column: 1;
+    }
+
+    .chart-card canvas,
+    .chart-card--wide canvas {
+      height: 260px !important;
     }
   }
 </style>
@@ -918,6 +1053,7 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           interaction: { mode: 'index', intersect: false },
           scales: {
             x: {
@@ -947,6 +1083,7 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           interaction: { mode: 'index', intersect: false },
           scales: {
             x: { stacked: true, grid: { display: false } },
@@ -973,7 +1110,11 @@
             backgroundColor: shareColors,
           }]
         },
-        options: { plugins: { legend: { position: 'bottom' } } }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } }
+        }
       });
     }
 
@@ -991,6 +1132,7 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           indexAxis: 'y',
           scales: { x: { beginAtZero: true, max: 100 } },
           plugins: { legend: { display: false } }
@@ -1015,6 +1157,7 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           scales: {
             y: { beginAtZero: true, max: 100, grid: { color: '#EBF3F2' } },
             x: { grid: { display: false } }
