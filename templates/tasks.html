@@ -15,6 +15,7 @@
 {% block content %}{% endblock %}
 {% block content_dashboard %}
 {% set stats = stats or {"total":0,"completed":0,"total_minutes":0,"avg_accuracy":0} %}
+<section class="tasks-page">
 <section class="stat-grid">
   <article class="stat-card">
     <p class="stat-label">Total Tasks</p>
@@ -38,7 +39,7 @@
   </article>
 </section>
 
-<section class="card-section two-col">
+<section class="card-section two-col task-overview">
   <div>
     <div class="card-header">
       <h3>Recent Tasks</h3>
@@ -102,8 +103,14 @@
   </div>
 </section>
 
-<section class="card-section">
-  <h2>任务记录与计时</h2>
+<section class="card-section task-workspace">
+  <div class="task-section-header">
+    <div>
+      <h2>任务记录与计时</h2>
+      <p>布置任务、跟踪计时、批改提交和更新完成率。</p>
+    </div>
+    <span class="task-count-pill">{{ items|length }} 条记录</span>
+  </div>
 
   <form id="taskForm" class="task-form" method="post" action="{{ url_for('tasks_page') }}">
     <div class="task-form-row">
@@ -525,18 +532,15 @@
                 <button class="btn-start" type="button">开始计时</button>
                 <button class="btn-pause" type="button" style="display:none;">暂停</button>
                 <button class="btn-stop" type="button" style="display:none;">结束</button>
-                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
+                <div class="task-actions">
                   {% if t.listening_exercise_id %}
-                  <a href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank"
-                    style="display:inline-block; text-decoration:none; background:#0f766e; color:#fff; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:inherit; font-family:inherit; line-height:normal;">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else '精听明细' }}</a>
+                  <a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else '精听明细' }}</a>
                   {% endif %}
                   {% if t.reading_test_id and t.reading_url %}
-                  <a href="{{ t.reading_url }}" target="_blank"
-                    style="display:inline-block; text-decoration:none; background:#0f766e; color:#fff; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:inherit; font-family:inherit; line-height:normal;">打开阅读</a>
+                  <a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>
                   {% endif %}
                   {% if t.student_submitted and not t.dictation_book_id and not t.speaking_book_id %}
-                  <a href="/tasks/{{ t.id }}/review" target="_blank"
-                    style="display:inline-block; text-decoration:none; background:var(--brand); color:#fff; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:inherit; font-family:inherit; line-height:normal;">批改</a>
+                  <a class="task-action-link task-action-link--primary" href="/tasks/{{ t.id }}/review" target="_blank">批改</a>
                   {% endif %}
                   <button class="btn-edit" type="button" onclick="handleEditClick(event)">编辑</button>
                   <button class="btn-delete" type="button">删除</button>
@@ -552,40 +556,41 @@
   </div>
 
   <!-- 待审核提交 -->
-  <div class="card" style="margin-top: 24px; padding: 20px;">
-    <h3>待审核提交</h3>
+  <div class="task-review-panel">
+    <div class="task-section-header task-section-header--compact">
+      <div>
+        <h3>待审核提交</h3>
+        <p>学生提交后的批注、通过和退回入口。</p>
+      </div>
+      <span class="task-count-pill">{{ pending_reviews|length }} 条待处理</span>
+    </div>
     {% if pending_reviews %}
-    <div class="pending-list" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+    <div class="pending-list">
       {% for review in pending_reviews %}
-      <article class="pending-item" data-item-id="{{ review.id }}" data-review-type="{{ review.type }}" style="border: 1px solid #e4e7ed; border-radius: 8px; padding: 12px;">
-        <header style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+      <article class="pending-item" data-item-id="{{ review.id }}" data-review-type="{{ review.type }}">
+        <header>
           <strong>{{ review.student_name }}</strong>
-          <span class="muted" style="font-size: 0.9em;">{{ review.time_ago }}</span>
+          <span class="muted">{{ review.time_ago }}</span>
         </header>
         <div class="pending-body">
-          <div class="pending-task" style="margin-bottom: 8px;">{{ review.task_name }}</div>
+          <div class="pending-task">{{ review.task_name }}</div>
           {% if review.type == 'plan_item' and review.student_comment %}
-          <div style="margin-bottom: 8px; padding: 8px; background: #f0f7ff; border-radius: 6px; font-size: 0.9em; color: #555;">
+          <div class="pending-comment">
             学生备注：{{ review.student_comment }}
           </div>
           {% endif %}
           <div class="pending-actions">
             {% if review.type == 'plan_item' %}
-            <div class="review-actions" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-              <input type="text" class="review-comment" placeholder="批注/评语（可选）"
-                style="width: 100%; padding: 6px 10px; border: 1px solid #dcdfe6; border-radius: 6px; font-size: 0.9em; box-sizing: border-box;">
-              <div style="display: flex; gap: 8px;">
-                <button class="btn-review" data-status="approved"
-                  style="flex: 1; padding: 6px 12px; border: none; border-radius: 6px; background: #277C78; color: #fff; cursor: pointer; font-size: 0.9em;">通过</button>
-                <button class="btn-review" data-status="partial"
-                  style="flex: 1; padding: 6px 12px; border: none; border-radius: 6px; background: #e6a23c; color: #fff; cursor: pointer; font-size: 0.9em;">部分完成</button>
-                <button class="btn-review" data-status="rejected"
-                  style="flex: 1; padding: 6px 12px; border: none; border-radius: 6px; background: #f56c6c; color: #fff; cursor: pointer; font-size: 0.9em;">退回</button>
+            <div class="review-actions">
+              <input type="text" class="review-comment" placeholder="批注/评语（可选）">
+              <div class="review-button-row">
+                <button class="btn-review btn-review--approved" data-status="approved">通过</button>
+                <button class="btn-review btn-review--partial" data-status="partial">部分完成</button>
+                <button class="btn-review btn-review--rejected" data-status="rejected">退回</button>
               </div>
             </div>
             {% else %}
-            <a href="{{ url_for('tasks_page', student_name=review.student_name) }}" class="btn-small"
-              style="text-decoration: none; background: #4caf50; padding: 4px 12px; border-radius: 4px; color: white; font-size: 0.9em;">去审核</a>
+            <a href="{{ url_for('tasks_page', student_name=review.student_name) }}" class="task-action-link task-action-link--primary">去审核</a>
             {% endif %}
           </div>
         </div>
@@ -593,7 +598,7 @@
       {% endfor %}
     </div>
     {% else %}
-    <p class="muted" style="margin-top: 16px;">暂无待审核任务。</p>
+    <p class="muted task-empty-note">暂无待审核任务。</p>
     {% endif %}
   </div>
 
@@ -1007,11 +1012,746 @@
       min-width: 180px;
     }
 
-    .task-time.exceed {
-      color: #b00020;
-      font-weight: 600;
-    }
-  </style>
+	    .task-time.exceed {
+	      color: #b00020;
+	      font-weight: 600;
+	    }
+
+	    .segmented-control {
+	      display: inline-flex;
+	      gap: 4px;
+	      padding: 3px;
+	      background: #f9fafb;
+	      border: 1px solid #e5e7eb;
+	      border-radius: 8px;
+	    }
+
+	    .segmented-control__btn {
+	      min-height: 32px;
+	      padding: 6px 12px;
+	      border: 0;
+	      border-radius: 6px;
+	      background: transparent;
+	      color: #667085;
+	      font-size: 13px;
+	      font-weight: 700;
+	      cursor: pointer;
+	    }
+
+	    .segmented-control__btn.is-active {
+	      color: #145c57;
+	      background: #fff;
+	      box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
+	    }
+
+	    .tasks-page {
+	      --task-canvas: #f7f8fa;
+	      --task-surface: #fff;
+	      --task-surface-soft: #f9fafb;
+	      --task-border: #e5e7eb;
+	      --task-border-strong: #d0d5dd;
+	      --task-ink: #111827;
+	      --task-muted: #667085;
+	      --task-subtle: #98a2b3;
+	      --task-primary: #20756f;
+	      --task-primary-strong: #145c57;
+	      --task-primary-soft: #e6f5f2;
+	      --task-danger: #dc2626;
+	      --task-danger-soft: #fee2e2;
+	      --task-warning: #d97706;
+	      --task-warning-soft: #fff7ed;
+	      --task-info: #2563eb;
+	      --task-info-soft: #eaf2ff;
+	      display: flex;
+	      flex-direction: column;
+	      gap: 16px;
+	      color: var(--task-ink);
+	    }
+
+	    .tasks-page .stat-grid {
+	      display: grid;
+	      grid-template-columns: repeat(4, minmax(0, 1fr));
+	      gap: 12px;
+	      margin: 0;
+	    }
+
+	    .tasks-page .stat-card,
+	    .tasks-page .card-section,
+	    .tasks-page .task-review-panel,
+	    .tasks-page .student-group {
+	      background: var(--task-surface);
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+	    }
+
+	    .tasks-page .stat-card {
+	      padding: 16px;
+	    }
+
+	    .tasks-page .stat-label {
+	      margin: 0 0 8px;
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 800;
+	      text-transform: uppercase;
+	      letter-spacing: .04em;
+	    }
+
+	    .tasks-page .stat-value {
+	      color: var(--task-ink);
+	      font-size: 30px;
+	      font-weight: 800;
+	      line-height: 1;
+	    }
+
+	    .tasks-page .stat-meta {
+	      margin-top: 8px;
+	      color: var(--task-muted);
+	      font-size: 13px;
+	    }
+
+	    .tasks-page .card-section {
+	      margin: 0;
+	      overflow: hidden;
+	    }
+
+	    .tasks-page .task-overview {
+	      display: grid;
+	      grid-template-columns: minmax(0, 1.5fr) minmax(280px, .8fr);
+	      gap: 0;
+	      padding: 0;
+	    }
+
+	    .tasks-page .task-overview > div {
+	      min-width: 0;
+	      padding: 16px;
+	    }
+
+	    .tasks-page .task-overview > div + div {
+	      border-left: 1px solid var(--task-border);
+	    }
+
+	    .tasks-page .card-header,
+	    .task-section-header {
+	      display: flex;
+	      align-items: flex-start;
+	      justify-content: space-between;
+	      gap: 16px;
+	      margin: 0;
+	      padding: 16px;
+	      border-bottom: 1px solid var(--task-border);
+	      background: var(--task-surface);
+	    }
+
+	    .tasks-page .task-overview .card-header {
+	      padding: 0 0 12px;
+	      border-bottom: 0;
+	    }
+
+	    .tasks-page h2,
+	    .tasks-page h3 {
+	      margin: 0;
+	      color: var(--task-ink);
+	      font-size: 17px;
+	      font-weight: 800;
+	      line-height: 1.3;
+	    }
+
+	    .task-section-header p {
+	      margin: 4px 0 0;
+	      color: var(--task-muted);
+	      font-size: 13px;
+	    }
+
+	    .task-section-header--compact {
+	      padding: 0 0 14px;
+	      border-bottom: 0;
+	    }
+
+	    .task-count-pill,
+	    .tasks-page .pill,
+	    .student-count {
+	      display: inline-flex;
+	      align-items: center;
+	      min-height: 24px;
+	      padding: 3px 8px;
+	      border-radius: 999px;
+	      background: var(--task-primary-soft);
+	      color: var(--task-primary-strong);
+	      font-size: 12px;
+	      font-weight: 800;
+	      white-space: nowrap;
+	    }
+
+	    .tasks-page table {
+	      width: 100%;
+	      border-collapse: collapse;
+	      font-size: 13px;
+	    }
+
+	    .tasks-page table th {
+	      padding: 10px 12px;
+	      background: var(--task-surface-soft);
+	      border-bottom: 1px solid var(--task-border);
+	      color: var(--task-muted);
+	      font-size: 11px;
+	      font-weight: 800;
+	      text-transform: uppercase;
+	      white-space: nowrap;
+	    }
+
+	    .tasks-page table td {
+	      padding: 11px 12px;
+	      border-bottom: 1px solid var(--task-border);
+	      color: var(--task-ink);
+	      vertical-align: top;
+	    }
+
+	    .tasks-page table tbody tr:last-child td {
+	      border-bottom: 0;
+	    }
+
+	    .tasks-page table tbody tr:hover td {
+	      background: #fbfcfd;
+	    }
+
+	    .top-students {
+	      display: flex;
+	      flex-direction: column;
+	      gap: 8px;
+	      margin: 0;
+	      padding: 0;
+	      list-style: none;
+	    }
+
+	    .student-pill {
+	      display: flex;
+	      align-items: center;
+	      justify-content: space-between;
+	      gap: 12px;
+	      padding: 10px 0;
+	      border-bottom: 1px solid var(--task-border);
+	    }
+
+	    .student-pill:last-child {
+	      border-bottom: 0;
+	    }
+
+	    .student-pill .info {
+	      display: flex;
+	      align-items: center;
+	      gap: 10px;
+	      min-width: 0;
+	    }
+
+	    .student-pill .avatar {
+	      width: 32px;
+	      height: 32px;
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: center;
+	      flex: 0 0 auto;
+	      border-radius: 50%;
+	      background: var(--task-primary-soft);
+	      color: var(--task-primary-strong);
+	      font-weight: 800;
+	    }
+
+	    .student-pill .minutes {
+	      color: var(--task-primary-strong);
+	      font-size: 13px;
+	      font-weight: 800;
+	      white-space: nowrap;
+	    }
+
+	    .task-workspace {
+	      padding: 0;
+	    }
+
+	    .task-workspace > .task-form,
+	    .task-workspace > .filter-panel,
+	    .task-workspace > .task-accordion,
+	    .task-workspace > .task-review-panel {
+	      margin-left: 16px;
+	      margin-right: 16px;
+	    }
+
+	    .task-workspace > .task-form {
+	      margin-top: 16px;
+	    }
+
+	    .task-form {
+	      padding: 16px;
+	      border-color: var(--task-border);
+	      border-radius: 8px;
+	      background: var(--task-surface-soft);
+	      box-shadow: none;
+	      gap: 14px;
+	      align-items: stretch;
+	    }
+
+	    .task-form-row {
+	      gap: 12px;
+	      width: 100%;
+	    }
+
+	    .task-form .field label,
+	    .filter-content label,
+	    .modal .row label {
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 800;
+	    }
+
+	    .task-form .field input,
+	    .task-form .field select,
+	    .filter-content input,
+	    .filter-content select,
+	    .status-select,
+	    .review-comment,
+	    .modal input,
+	    .modal select {
+	      min-height: 36px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-ink);
+	      font-size: 13px;
+	    }
+
+	    .task-form .field input:focus,
+	    .task-form .field select:focus,
+	    .filter-content input:focus,
+	    .filter-content select:focus,
+	    .status-select:focus,
+	    .review-comment:focus,
+	    .modal input:focus,
+	    .modal select:focus {
+	      border-color: var(--task-border-strong);
+	      outline: none;
+	      box-shadow: 0 0 0 3px rgba(32, 117, 111, .12);
+	    }
+
+	    .source-option,
+	    .range-choice {
+	      border-color: var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-muted);
+	      font-weight: 700;
+	    }
+
+	    .source-option:has(input:checked),
+	    .range-choice:has(input:checked) {
+	      border-color: rgba(32, 117, 111, .35);
+	      background: var(--task-primary-soft);
+	      color: var(--task-primary-strong);
+	    }
+
+	    .task-form .btn-primary,
+	    .task-action-link--primary,
+	    .btn-review--approved,
+	    #editSave,
+	    #editComplete {
+	      border: 1px solid var(--task-primary);
+	      background: var(--task-primary);
+	      color: #fff;
+	    }
+
+	    .task-form .btn-primary {
+	      min-height: 36px;
+	      padding: 8px 16px;
+	      border-radius: 8px;
+	      font-weight: 800;
+	    }
+
+	    .student-chip {
+	      border-color: rgba(32, 117, 111, .25);
+	      background: var(--task-primary-soft);
+	      color: var(--task-primary-strong);
+	      font-weight: 750;
+	    }
+
+	    .filter-panel {
+	      border-color: var(--task-border);
+	      border-radius: 8px;
+	      background: var(--task-surface);
+	      box-shadow: none;
+	    }
+
+	    .filter-panel > summary {
+	      padding: 12px 14px;
+	      color: var(--task-ink);
+	      font-size: 14px;
+	      font-weight: 800;
+	    }
+
+	    .filter-panel[open] > summary {
+	      border-bottom-color: var(--task-border);
+	    }
+
+	    .filter-content {
+	      padding: 14px;
+	      background: var(--task-surface-soft);
+	    }
+
+	    .filter-content button,
+	    .task-action-link,
+	    .btn-start,
+	    .btn-pause,
+	    .btn-stop,
+	    .btn-edit,
+	    .btn-delete,
+	    .btn-review,
+	    #editCancel,
+	    #editSave,
+	    #editComplete {
+	      min-height: 32px;
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: center;
+	      gap: 6px;
+	      padding: 6px 10px;
+	      border-radius: 8px;
+	      border: 1px solid var(--task-border);
+	      background: #fff;
+	      color: var(--task-ink);
+	      font-size: 12px;
+	      font-weight: 800;
+	      line-height: 1;
+	      text-decoration: none;
+	      cursor: pointer;
+	    }
+
+	    .filter-content button:hover,
+	    .task-action-link:hover,
+	    .btn-start:hover,
+	    .btn-pause:hover,
+	    .btn-stop:hover,
+	    .btn-edit:hover,
+	    .btn-delete:hover,
+	    .btn-review:hover,
+	    #editCancel:hover,
+	    #editSave:hover,
+	    #editComplete:hover {
+	      text-decoration: none;
+	      filter: brightness(.98);
+	    }
+
+	    .btn-delete,
+	    .btn-review--rejected {
+	      border-color: var(--task-danger-soft);
+	      background: var(--task-danger-soft);
+	      color: #991b1b;
+	    }
+
+	    .btn-review--partial {
+	      border-color: var(--task-warning-soft);
+	      background: var(--task-warning-soft);
+	      color: #92400e;
+	    }
+
+	    .btn-start {
+	      border-color: var(--task-primary-soft);
+	      background: var(--task-primary-soft);
+	      color: var(--task-primary-strong);
+	    }
+
+	    .btn-pause,
+	    .btn-stop {
+	      border-color: var(--task-info-soft);
+	      background: var(--task-info-soft);
+	      color: #1d4ed8;
+	    }
+
+	    .task-accordion {
+	      gap: 12px;
+	      margin-top: 14px;
+	      margin-bottom: 16px;
+	    }
+
+	    .student-group {
+	      overflow: hidden;
+	    }
+
+	    .student-group summary {
+	      padding: 13px 16px;
+	      background: #fff;
+	      border-bottom-color: var(--task-border);
+	    }
+
+	    .student-name {
+	      color: var(--task-ink);
+	      font-size: 15px;
+	      font-weight: 850;
+	    }
+
+	    .student-summary {
+	      color: var(--task-muted);
+	    }
+
+	    .student-tasks {
+	      overflow-x: auto;
+	      padding: 0;
+	    }
+
+	    .task-subtable {
+	      min-width: 1180px;
+	      margin: 0;
+	    }
+
+	    .task-subtable thead th {
+	      background: var(--task-surface-soft);
+	    }
+
+	    .task-subtable tbody tr td.task-detail {
+	      max-width: 260px;
+	      padding-left: 12px;
+	    }
+
+	    .task-subtable tbody tr td.task-detail::before {
+	      content: none;
+	    }
+
+	    .task-category,
+	    .task-note,
+	    .task-detail {
+	      color: var(--task-ink);
+	    }
+
+	    .task-note,
+	    .task-detail {
+	      line-height: 1.45;
+	    }
+
+	    .badge {
+	      display: inline-flex;
+	      align-items: center;
+	      min-height: 24px;
+	      padding: 3px 8px;
+	      border-radius: 999px;
+	      font-size: 12px;
+	      font-weight: 800;
+	      white-space: nowrap;
+	    }
+
+	    .status-pending {
+	      background: #f3f4f6;
+	      color: #4b5563;
+	    }
+
+	    .status-progress {
+	      background: var(--task-info-soft);
+	      color: #1d4ed8;
+	    }
+
+	    .status-submitted {
+	      background: var(--task-warning-soft);
+	      color: #92400e;
+	    }
+
+	    .status-done {
+	      background: #dcfce7;
+	      color: #166534;
+	    }
+
+	    .percent-input input {
+	      width: 74px;
+	      height: 32px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-ink);
+	      font-size: 13px;
+	    }
+
+	    .progress-hint,
+	    .field-hint,
+	    .muted {
+	      color: var(--task-muted);
+	    }
+
+	    .timer {
+	      min-height: 32px;
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: center;
+	      margin: 8px 6px 0 0;
+	      padding: 6px 8px;
+	      border-radius: 8px;
+	      background: var(--task-surface-soft);
+	      color: var(--task-muted);
+	      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	      font-size: 12px;
+	      font-weight: 800;
+	    }
+
+	    .task-actions {
+	      display: flex;
+	      flex-wrap: wrap;
+	      gap: 6px;
+	      margin-top: 8px;
+	    }
+
+	    .task-evidence img {
+	      border-radius: 6px !important;
+	      border-color: var(--task-border) !important;
+	    }
+
+	    .task-review-panel {
+	      margin-top: 16px;
+	      margin-bottom: 16px;
+	      padding: 16px;
+	    }
+
+	    .pending-list,
+	    .review-actions {
+	      display: flex;
+	      flex-direction: column;
+	      gap: 10px;
+	    }
+
+	    .pending-list {
+	      margin-top: 12px;
+	    }
+
+	    .pending-item {
+	      padding: 12px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: var(--task-surface-soft);
+	    }
+
+	    .pending-item header {
+	      display: flex;
+	      justify-content: space-between;
+	      gap: 12px;
+	      margin-bottom: 8px;
+	    }
+
+	    .pending-task {
+	      margin-bottom: 8px;
+	      color: var(--task-ink);
+	      font-weight: 700;
+	    }
+
+	    .pending-comment {
+	      margin-bottom: 8px;
+	      padding: 8px 10px;
+	      border-radius: 8px;
+	      background: var(--task-info-soft);
+	      color: #1e3a8a;
+	      font-size: 13px;
+	    }
+
+	    .review-comment {
+	      width: 100%;
+	      padding: 6px 10px;
+	      box-sizing: border-box;
+	    }
+
+	    .review-button-row {
+	      display: flex;
+	      gap: 8px;
+	    }
+
+	    .review-button-row .btn-review {
+	      flex: 1 1 0;
+	    }
+
+	    .task-empty-note {
+	      margin-top: 12px;
+	    }
+
+	    .modal .backdrop {
+	      background: rgba(15, 23, 42, .42);
+	    }
+
+	    .modal .card {
+	      background: var(--task-surface);
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      box-shadow: 0 20px 60px rgba(15, 23, 42, .24);
+	      padding: 18px;
+	    }
+
+	    .modal .actions {
+	      gap: 8px;
+	    }
+
+	    @media (max-width: 1100px) {
+	      .tasks-page .stat-grid {
+	        grid-template-columns: repeat(2, minmax(0, 1fr));
+	      }
+
+	      .tasks-page .task-overview {
+	        grid-template-columns: 1fr;
+	      }
+
+	      .tasks-page .task-overview > div + div {
+	        border-left: 0;
+	        border-top: 1px solid var(--task-border);
+	      }
+	    }
+
+	    @media (max-width: 720px) {
+	      .main-header {
+	        flex-wrap: wrap;
+	        align-items: flex-start;
+	      }
+
+	      .main-header__title {
+	        flex: 1 1 0;
+	      }
+
+	      .main-header h1 {
+	        white-space: normal;
+	        word-break: keep-all;
+	      }
+
+	      .header-actions {
+	        order: 3;
+	        width: 100%;
+	        flex: 1 0 100%;
+	        flex-wrap: nowrap;
+	        overflow-x: auto;
+	        padding-bottom: 2px;
+	      }
+
+	      .header-actions .btn {
+	        flex: 0 0 auto;
+	        white-space: nowrap;
+	      }
+
+	      .tasks-page .stat-grid {
+	        grid-template-columns: 1fr;
+	      }
+
+	      .task-section-header,
+	      .tasks-page .card-header {
+	        flex-direction: column;
+	        align-items: stretch;
+	      }
+
+	      .task-workspace > .task-form,
+	      .task-workspace > .filter-panel,
+	      .task-workspace > .task-accordion,
+	      .task-workspace > .task-review-panel {
+	        margin-left: 12px;
+	        margin-right: 12px;
+	      }
+
+	      .filter-content input,
+	      .filter-content select {
+	        width: min(100%, 280px);
+	      }
+
+	      .review-button-row {
+	        flex-direction: column;
+	      }
+	    }
+	  </style>
 
   <div id="editModal" class="modal hidden" aria-modal="true" role="dialog">
     <div id="editBackdrop" class="backdrop"></div>
@@ -2601,5 +3341,6 @@
       }
     })();
   </script>
+</section>
 </section>
 {% endblock %}
