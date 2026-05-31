@@ -3,6 +3,7 @@ const app = getApp()
 const MODE_AUDIO_TO_EN = 'audio_to_en'
 const MODE_ZH_TO_EN = 'zh_to_en'
 const MODE_EN_TO_ZH = 'en_to_zh'
+const MODE_SPELLING_DRILL = 'spelling_drill'
 const AUDIO_SLOW_FALLBACK_MS = 3500
 const AUDIO_FAMILIARIZE_FALLBACK_MS = 1200
 const AUDIO_PREFETCH_AHEAD = 4
@@ -223,6 +224,14 @@ Page({
             success: (res) => {
                 if (res.data.ok) {
                     const task = res.data.task;
+                    const rawMode = String(task.dictation_mode || '').trim().toLowerCase();
+                    if (rawMode === MODE_SPELLING_DRILL) {
+                        wx.hideLoading();
+                        wx.redirectTo({
+                            url: `/pages/student/dictation/spell/index?taskId=${taskId}`
+                        });
+                        return;
+                    }
                     const dictationMode = resolveDictationMode(task.dictation_mode, task.dictation_book_type);
 
                     // Read from root task object

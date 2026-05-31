@@ -40,7 +40,7 @@ IELTS_READING_PRACTICE_TYPE = "ielts_reading_practice"
 # and "translation" (single writing question) reuses the textarea path with
 # no reference shown to the student.
 CHOICE_PRACTICE_TYPES = {READING_VOCAB_CHOICE_TYPE, IELTS_READING_PRACTICE_TYPE, "grammar", "translation"}
-VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh"}
+VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh", "spelling_drill"}
 LISTENING_RESOURCE_INTENSIVE = "intensive"
 LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
 READING_RESOURCE_CAMBRIDGE_TEST = "cambridge_reading_test"

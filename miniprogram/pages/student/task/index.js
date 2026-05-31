@@ -1,5 +1,6 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
+const MODE_SPELLING_DRILL = 'spelling_drill'
 
 const recorderManager = wx.getRecorderManager()
 const innerAudioContext = wx.createInnerAudioContext()
@@ -125,6 +126,13 @@ Page({
         try {
             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
             if (res.ok && res.task) {
+                const dictationMode = String(res.task.dictation_mode || '').trim().toLowerCase()
+                if (res.task.dictation_book_id && dictationMode === MODE_SPELLING_DRILL) {
+                    wx.redirectTo({
+                        url: `/pages/student/dictation/spell/index?taskId=${this.data.taskId}`
+                    })
+                    return
+                }
                 if (res.task.listening_exercise_id && res.task.listening_token) {
                     if (res.task.listening_resource_type === 'cambridge_test') {
                         const token = encodeURIComponent(res.task.listening_token)

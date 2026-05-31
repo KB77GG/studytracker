@@ -966,7 +966,17 @@ class StudentWordMastery(db.Model, TimestampMixin):
         return f"<StudentWordMastery s={self.student_id} w={self.word_id} lvl={self.review_level}>"
 
     @classmethod
-    def apply_answer(cls, *, student_id, word_id, book_id, is_correct, mode=None, now=None):
+    def apply_answer(
+        cls,
+        *,
+        student_id,
+        word_id,
+        book_id,
+        is_correct,
+        mode=None,
+        now=None,
+        create_if_missing=False,
+    ):
         """Update or create the mastery row for a (student, word) after an answer.
 
         Rules:
@@ -981,7 +991,21 @@ class StudentWordMastery(db.Model, TimestampMixin):
 
         if is_correct:
             if mastery is None:
-                return None
+                if not create_if_missing:
+                    return None
+                mastery = cls(
+                    student_id=student_id,
+                    word_id=word_id,
+                    book_id=book_id,
+                    mistake_count=0,
+                    correct_streak=1,
+                    review_level=1,
+                    next_review_at=now + timedelta(days=cls.REVIEW_INTERVALS_DAYS[0]),
+                    last_seen_at=now,
+                    last_mode=mode,
+                )
+                db.session.add(mastery)
+                return mastery
             mastery.last_seen_at = now
             mastery.last_mode = mode
             mastery.correct_streak += 1

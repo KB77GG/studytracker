@@ -14,7 +14,7 @@ import threading
 import wave
 from pathlib import Path
 from datetime import datetime
-from functools import wraps
+from functools import lru_cache, wraps
 import jwt
 import requests
 from flask import Blueprint, current_app, jsonify, request, send_file
@@ -61,6 +61,33 @@ dictation_bp = Blueprint("dictation", __name__, url_prefix="/api/dictation")
 # Allowed Excel extensions
 ALLOWED_EXTENSIONS = {'xlsx', 'xls'}
 
+_HYPHENATOR = None
+
+SYLLABLE_OVERRIDES = {
+    # Teaching-display overrides for common CET/SAT-style vocabulary where
+    # hyphenation libraries split differently from classroom syllable chunks.
+    "achieve": "a·chieve",
+    "agriculture": "ag·ri·cul·ture",
+    "astronaut": "astro·naut",
+    "content": "con·tent",
+    "elicit": "e·li·cit",
+    "fairly": "fair·ly",
+    "heritage": "he·ri·tage",
+    "independent": "in·de·pend·ent",
+    "instruction": "in·struc·tion",
+    "military": "mili·ta·ry",
+    "pregnant": "preg·nant",
+    "realistic": "re·al·is·tic",
+    "reputation": "re·pu·ta·tion",
+    "vision": "vi·sion",
+}
+
+
+def _current_api_user():
+    if current_user.is_authenticated:
+        return current_user
+    return getattr(request, "current_api_user", None)
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -90,11 +117,49 @@ def _word_enrichment_payload(word):
     }
 
 
+@lru_cache(maxsize=8192)
+def _syllabify_token(token):
+    clean = str(token or "").strip()
+    override = SYLLABLE_OVERRIDES.get(clean.lower())
+    if override:
+        return override
+    if len(clean) <= 3 or not re.search(r"[A-Za-z]", clean):
+        return clean
+
+    global _HYPHENATOR
+    if _HYPHENATOR is None:
+        try:
+            import pyphen
+            _HYPHENATOR = pyphen.Pyphen(lang="en_US")
+        except Exception:
+            _HYPHENATOR = False
+
+    if not _HYPHENATOR:
+        return clean
+
+    hyphenated = _HYPHENATOR.inserted(clean)
+    parts = [part for part in hyphenated.split("-") if part]
+    return "·".join(parts) if len(parts) > 1 else clean
+
+
+@lru_cache(maxsize=8192)
+def _syllabify(word):
+    text = str(word or "").strip()
+    if not text:
+        return ""
+
+    def replace(match):
+        return _syllabify_token(match.group(0))
+
+    return re.sub(r"[A-Za-z]+", replace, text)
+
+
 def _word_student_payload(word):
     payload = {
         "id": word.id,
         "sequence": word.sequence,
         "word": word.word,
+        "syllables": _syllabify(word.word),
         "phonetic": word.phonetic,
         "translation": word.translation,
         "audio_us": word.audio_us,
@@ -844,15 +909,20 @@ def prewarm_tts():
 # ============================================================================
 
 @dictation_bp.route("/submit", methods=["POST"])
-@login_required
+@require_session_or_bearer
 def submit_answer():
     """Submit a dictation answer and check if correct."""
+    user = _current_api_user()
+    if not user:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+
     data = request.get_json() or {}
     word_id = data.get("word_id")
     student_answer = (data.get("answer") or "").strip().lower()
     book_id = data.get("book_id")
     task_id = data.get("task_id")
     mode = data.get("mode")
+    enroll = bool(data.get("enroll"))
 
     if not word_id or not student_answer:
         return jsonify({"ok": False, "error": "missing_params"}), 400
@@ -865,7 +935,7 @@ def submit_answer():
 
     # Record the attempt
     record = DictationRecord(
-        student_id=current_user.id,
+        student_id=user.id,
         task_id=task_id,
         book_id=book_id or word.book_id,
         word_id=word_id,
@@ -874,12 +944,13 @@ def submit_answer():
     )
     db.session.add(record)
 
-    StudentWordMastery.apply_answer(
-        student_id=current_user.id,
+    mastery = StudentWordMastery.apply_answer(
+        student_id=user.id,
         word_id=word.id,
         book_id=book_id or word.book_id,
         is_correct=is_correct,
         mode=mode,
+        create_if_missing=enroll,
     )
 
     db.session.commit()
@@ -888,8 +959,11 @@ def submit_answer():
         "ok": True,
         "is_correct": is_correct,
         "correct_answer": word.word,
+        "syllables": _syllabify(word.word),
         "phonetic": word.phonetic,
-        "translation": word.translation
+        "translation": word.translation,
+        "next_review_at": mastery.next_review_at.isoformat() if mastery and mastery.next_review_at else None,
+        "review_level": mastery.review_level if mastery else None,
     }
     response.update(_word_enrichment_payload(word))
     return jsonify(response)
@@ -976,7 +1050,7 @@ def get_book_stats(book_id):
 
 
 @dictation_bp.route("/review/today", methods=["GET"])
-@login_required
+@require_session_or_bearer
 def get_review_today():
     """Return words due for spaced-repetition review for the current student.
 
@@ -985,12 +1059,15 @@ def get_review_today():
     drilled with (rises from en_to_zh to zh_to_en to audio_to_en as level climbs).
     """
     from datetime import datetime
+    user = _current_api_user()
+    if not user:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
     now = datetime.utcnow()
     limit = min(int(request.args.get("limit", 30) or 30), 100)
 
     rows = (
         StudentWordMastery.query
-        .filter(StudentWordMastery.student_id == current_user.id)
+        .filter(StudentWordMastery.student_id == user.id)
         .filter(StudentWordMastery.review_level < StudentWordMastery.LEVEL_GRADUATED)
         .filter(StudentWordMastery.next_review_at <= now)
         .order_by(StudentWordMastery.next_review_at.asc())
@@ -1008,6 +1085,7 @@ def get_review_today():
             "id": w.id,
             "book_id": w.book_id,
             "word": w.word,
+            "syllables": _syllabify(w.word),
             "phonetic": w.phonetic,
             "translation": w.translation,
             "mode": StudentWordMastery.mode_for_level(m.review_level),
@@ -1021,14 +1099,17 @@ def get_review_today():
 
 
 @dictation_bp.route("/review/summary", methods=["GET"])
-@login_required
+@require_session_or_bearer
 def get_review_summary():
     """Lightweight summary for the home-page card: how many words are due now."""
     from datetime import datetime
+    user = _current_api_user()
+    if not user:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
     now = datetime.utcnow()
     due_count = (
         StudentWordMastery.query
-        .filter(StudentWordMastery.student_id == current_user.id)
+        .filter(StudentWordMastery.student_id == user.id)
         .filter(StudentWordMastery.review_level < StudentWordMastery.LEVEL_GRADUATED)
         .filter(StudentWordMastery.next_review_at <= now)
         .count()

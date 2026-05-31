@@ -1880,7 +1880,7 @@ def allowed_evidence(filename: str) -> bool:
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EVIDENCE_EXTENSIONS
 
 
-VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh"}
+VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh", "spelling_drill"}
 
 
 def resolve_task_dictation_mode(task, book_type: str | None = None) -> str:

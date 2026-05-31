@@ -43,5 +43,12 @@ Page({
         wx.navigateTo({
             url: `/pages/student/dictation/practice/index?id=${id}&title=${encodeURIComponent(title)}`
         });
+    },
+
+    startSpell(e) {
+        const { id, title } = e.currentTarget.dataset;
+        wx.navigateTo({
+            url: `/pages/student/dictation/spell/index?id=${id}&title=${encodeURIComponent(title)}`
+        });
     }
 })

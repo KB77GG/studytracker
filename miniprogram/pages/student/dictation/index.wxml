@@ -16,7 +16,10 @@
           <text class="desc">{{item.description || '暂无描述'}}</text>
         </view>
       </view>
-      <view class="action-btn">练习</view>
+      <view class="book-actions">
+        <view class="action-btn secondary" catchtap="startSpell" data-id="{{item.id}}" data-title="{{item.title}}">拼写</view>
+        <view class="action-btn">练习</view>
+      </view>
     </view>
     
     <view wx:if="{{books.length === 0}}" class="empty-state">

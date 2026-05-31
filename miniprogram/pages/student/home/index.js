@@ -3,6 +3,7 @@ const { request } = require('../../../utils/request.js')
 const { getSubscribeSummary, requestTemplateSubscribe } = require('../../../utils/subscribe.js')
 const TASK_TEMPLATE_ID = 'GElWxP8srvY_TwH-h69q4XcmgLyNZBsvjp6rSt8dhUU'
 const COURSE_TEMPLATE_ID = 'AehPa5pMUTnQqXgq-q-wxTAMZyVU-qdkxaO9rbpo-QI'
+const MODE_SPELLING_DRILL = 'spelling_drill'
 
 Page({
     data: {
@@ -411,6 +412,7 @@ Page({
                         isDone: t.status === 'completed' || t.status === 'submitted',
                         // Dictation Fields
                         dictationBookId: t.dictation_book_id,
+                        dictationMode: t.dictation_mode || '',
                         // Speaking Fields
                         speakingBookId: t.speaking_book_id,
                         materialType: t.material_type || null,
@@ -509,6 +511,7 @@ Page({
         const task = this.data.tasks.find(t => t.id === taskId)
         if (this.openListeningTask(taskId, task)) return
         if (this.openReadingTask(task)) return
+        if (this.openSpellingTask(taskId, task)) return
         if (task && (task.materialType === 'reading_vocab_choice' || task.materialType === 'ielts_reading_practice' || task.materialType === 'grammar' || task.materialType === 'translation')) {
             wx.navigateTo({
                 url: `/pages/student/material-choice/practice/index?taskId=${taskId}`,
@@ -555,6 +558,15 @@ Page({
         return true
     },
 
+    openSpellingTask(taskId, task) {
+        if (!task || !task.dictationBookId) return false
+        if (String(task.dictationMode || '').trim().toLowerCase() !== MODE_SPELLING_DRILL) return false
+        wx.navigateTo({
+            url: `/pages/student/dictation/spell/index?taskId=${taskId}`
+        })
+        return true
+    },
+
     // Timer helper: format seconds to MM:SS
     formatTime(seconds) {
         const mins = Math.floor(seconds / 60)
@@ -584,6 +596,14 @@ Page({
     },
 
     // Start timer
+    startSpellTask(e) {
+        const taskId = e.currentTarget.dataset.id
+        if (!taskId) return
+        wx.navigateTo({
+            url: `/pages/student/dictation/spell/index?taskId=${taskId}`
+        })
+    },
+
     async startTimer(e) {
         console.log('Start button clicked', e) // Debug log
         const taskId = e.currentTarget.dataset.id
@@ -602,6 +622,7 @@ Page({
         if (this.openReadingTask(task)) return
 
         if (task && task.dictationBookId) {
+            if (this.openSpellingTask(taskId, task)) return
             wx.navigateTo({
                 url: `/pages/student/dictation/practice/index?taskId=${taskId}&id=${task.dictationBookId}`
             })

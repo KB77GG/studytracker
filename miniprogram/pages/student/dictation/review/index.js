@@ -202,6 +202,12 @@ Page({
         this.playAudio()
     },
 
+    startSpellReview() {
+        wx.navigateTo({
+            url: '/pages/student/dictation/spell/index?mode=review'
+        })
+    },
+
     reportExample(e) {
         const wordId = e.currentTarget.dataset.id
         if (!wordId) return

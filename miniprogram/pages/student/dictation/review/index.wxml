@@ -17,6 +17,7 @@
     <view class="header">
       <view class="progress-text">{{currentIndex + 1}} / {{totalWords}}</view>
       <view class="level-tag" wx:if="{{levelLabel}}">{{levelLabel}}</view>
+      <button class="spell-link" bindtap="startSpellReview">强化拼写</button>
     </view>
 
     <view class="card">

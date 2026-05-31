@@ -1,0 +1,97 @@
+<view class="spell-page">
+  <view style="height: env(safe-area-inset-top);"></view>
+
+  <view class="loading" wx:if="{{stage === 'loading'}}">加载中...</view>
+
+  <block wx:elif="{{stage === 'ready'}}">
+    <view class="ready-shell">
+      <view class="ready-title">本组单词辨识完成</view>
+      <view class="ready-face">😃</view>
+      <view class="ready-actions">
+        <button class="primary-pill" bindtap="startDrill">强化拼写 ↵</button>
+        <button class="ghost-pill" bindtap="goSummary">小结 Esc</button>
+      </view>
+      <label class="skip-row" wx:if="{{sourceMode === 'review'}}">
+        <switch checked="{{skipSpellInReview}}" bindchange="onSkipChange" color="#f45a12"></switch>
+        <text>复习时不再拼写</text>
+      </label>
+    </view>
+  </block>
+
+  <block wx:elif="{{stage === 'drill'}}">
+    <view class="top-bar">
+      <view class="count-text">{{completedCount}}/{{totalWords}}</view>
+      <view class="dots">
+        <view wx:for="{{progressDots}}" wx:key="index" class="dot {{item.done ? 'done' : ''}}"></view>
+      </view>
+      <view class="tools">
+        <text class="tool-star">☆</text>
+        <text class="tool-sliders">⌘</text>
+      </view>
+    </view>
+
+    <view class="drill-center" bindtap="focusInput">
+      <input class="hidden-input"
+             value="{{inputValue}}"
+             focus="{{inputFocus}}"
+             adjust-position="{{false}}"
+             cursor-spacing="160"
+             confirm-type="done"
+             bindinput="onInput"
+             bindconfirm="submitOrNext"/>
+
+      <view class="word-display">
+        <block wx:if="{{showResult && resultCorrect}}">
+          <text class="answer-word success">{{displayWord}}</text><text class="fake-cursor"></text>
+        </block>
+        <block wx:elif="{{showResult && !resultCorrect}}">
+          <view class="diff-row">
+            <text wx:for="{{diffTop}}" wx:key="index" class="diff-char {{item.status}}">{{item.char}}</text>
+          </view>
+          <view class="answer-word answer-small">{{displayWord}}</view>
+        </block>
+        <block wx:else>
+          <text class="typed-word">{{inputValue}}</text><text class="fake-cursor"></text>
+        </block>
+      </view>
+
+      <view class="translation">{{currentWord.translation || '暂无释义'}}</view>
+    </view>
+
+    <view class="bottom-bar">
+      <button class="round-control exit" bindtap="exitPage">× <text>Esc</text></button>
+      <button class="round-control hint" bindtap="playCurrentWord">
+        <text wx:if="{{isLoadingAudio}}">...</text>
+        <text wx:else>♬</text>
+      </button>
+      <button class="round-control confirm" bindtap="submitOrNext">
+        {{showResult ? '→' : '✓'}} <text>↵</text>
+      </button>
+    </view>
+
+    <view class="phonetic-pill" wx:if="{{showResult && resultCorrect && currentWord.phonetic}}">
+      {{currentWord.phonetic}}
+    </view>
+  </block>
+
+  <block wx:elif="{{stage === 'summary'}}">
+    <view class="summary-head">
+      <button class="back-btn" bindtap="exitPage">‹</button>
+      <view class="summary-title">小结</view>
+      <view class="eye">◉</view>
+    </view>
+    <view class="tip-strip">💡 快速回顾本组单词吧～</view>
+
+    <scroll-view class="summary-list" scroll-y="true">
+      <view class="summary-row" wx:for="{{summaryItems}}" wx:key="key">
+        <text class="summary-word">{{item.word}}</text>
+        <text class="review-time">{{item.reviewLabel}}</text>
+      </view>
+    </scroll-view>
+
+    <view class="summary-foot">
+      <view class="summary-count">已复习 {{completedCount}} 词，还剩 {{remainingCount}} 词</view>
+      <button class="primary-pill wide" bindtap="continueReview">继续复习 ↵</button>
+    </view>
+  </block>
+</view>

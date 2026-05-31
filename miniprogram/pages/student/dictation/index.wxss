@@ -92,6 +92,20 @@
   box-shadow: 0 6rpx 14rpx rgba(32, 117, 111, 0.18);
 }
 
+.book-actions {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex-shrink: 0;
+}
+
+.action-btn.secondary {
+  background: #fff;
+  color: #20756F;
+  border: 2rpx solid rgba(32, 117, 111, 0.26);
+  box-shadow: none;
+}
+
 .empty-state {
   text-align: center;
   color: #909399;

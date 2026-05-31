@@ -106,6 +106,7 @@
             <text class="timer-text {{item.isOvertime ? 'overtime' : ''}}">{{item.displayTime}} / {{item.plannedTime}}</text>
           </view>
           <view class="timer-controls">
+            <view wx:if="{{item.dictationBookId}}" class="timer-btn spell" catchtap="startSpellTask" data-id="{{item.id}}">拼写</view>
             <view wx:if="{{item.timerStatus === 'idle'}}" class="timer-btn start" catchtap="startTimer" data-id="{{item.id}}">开始</view>
             <view wx:if="{{item.timerStatus === 'running'}}" class="timer-btn pause" catchtap="pauseTimer" data-id="{{item.id}}">暂停</view>
             <view wx:if="{{item.timerStatus === 'paused'}}" class="timer-btn resume" catchtap="resumeTimer" data-id="{{item.id}}">继续</view>
