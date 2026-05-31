@@ -164,7 +164,21 @@
       <div class="field field--wide">
         <label>选择听力练习</label>
         <input type="hidden" id="listeningResourceType" name="listening_resource_type" value="intensive">
-        <select class="form-select" id="listeningExerciseSelect" name="listening_exercise_id" onchange="handleListeningExerciseChange()">
+        <div class="listening-picker" id="listeningPicker" hidden>
+          <div class="listening-picker__top">
+            <div class="listening-type-filter" role="group" aria-label="听力练习类型">
+              <button type="button" class="listening-type-filter__btn is-active" data-listening-filter="intensive">精听切句</button>
+              <button type="button" class="listening-type-filter__btn" data-listening-filter="cambridge_test">整套 Test</button>
+            </div>
+            <label class="listening-search-field" for="listeningPickerSearch">
+              <span>搜索</span>
+              <input id="listeningPickerSearch" type="search" placeholder="如 11 Test 2 Section 2">
+            </label>
+          </div>
+          <div class="listening-picker__selected" id="listeningPickerSelected">未选择听力练习</div>
+          <div class="listening-picker__results" id="listeningPickerResults" role="listbox" aria-label="听力练习列表"></div>
+        </div>
+        <select class="form-select listening-native-select" id="listeningExerciseSelect" name="listening_exercise_id" onchange="handleListeningExerciseChange()">
           <option value="">-- 选择听力练习 --</option>
           <optgroup label="精听切句练习">
           {% for ex in listening_exercises %}
@@ -1363,6 +1377,140 @@
 	      color: var(--task-primary-strong);
 	    }
 
+	    .listening-native-select.is-enhanced {
+	      position: absolute;
+	      width: 1px;
+	      height: 1px;
+	      opacity: 0;
+	      pointer-events: none;
+	    }
+
+	    .listening-picker {
+	      display: flex;
+	      flex-direction: column;
+	      gap: 10px;
+	      padding: 12px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	    }
+
+	    .listening-picker__top {
+	      display: grid;
+	      grid-template-columns: minmax(240px, auto) minmax(220px, 1fr);
+	      gap: 12px;
+	      align-items: end;
+	    }
+
+	    .listening-type-filter {
+	      display: flex;
+	      flex-wrap: wrap;
+	      gap: 8px;
+	    }
+
+	    .listening-type-filter__btn {
+	      min-height: 36px;
+	      padding: 7px 12px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-muted);
+	      font-size: 13px;
+	      font-weight: 800;
+	      cursor: pointer;
+	    }
+
+	    .listening-type-filter__btn.is-active {
+	      border-color: rgba(32, 117, 111, .35);
+	      background: var(--task-primary-soft);
+	      color: var(--task-primary-strong);
+	    }
+
+	    .listening-search-field {
+	      display: flex;
+	      min-width: 0;
+	      flex-direction: column;
+	      gap: 6px;
+	    }
+
+	    .listening-search-field span {
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 800;
+	    }
+
+	    .listening-search-field input {
+	      width: 100%;
+	    }
+
+	    .listening-picker__selected {
+	      min-height: 30px;
+	      padding: 7px 10px;
+	      border-radius: 8px;
+	      background: var(--task-primary-soft);
+	      color: var(--task-primary-strong);
+	      font-size: 13px;
+	      font-weight: 800;
+	    }
+
+	    .listening-picker__results {
+	      display: grid;
+	      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	      gap: 8px;
+	      max-height: 300px;
+	      overflow: auto;
+	      padding: 2px;
+	    }
+
+	    .listening-picker__empty,
+	    .listening-picker__more {
+	      padding: 10px;
+	      border: 1px dashed var(--task-border);
+	      border-radius: 8px;
+	      color: var(--task-muted);
+	      font-size: 13px;
+	    }
+
+	    .listening-picker__more {
+	      grid-column: 1 / -1;
+	      background: var(--task-surface-soft);
+	    }
+
+	    .listening-option {
+	      display: flex;
+	      min-width: 0;
+	      flex-direction: column;
+	      gap: 4px;
+	      padding: 10px 12px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-ink);
+	      text-align: left;
+	      cursor: pointer;
+	    }
+
+	    .listening-option:hover,
+	    .listening-option.is-selected {
+	      border-color: rgba(32, 117, 111, .35);
+	      background: var(--task-primary-soft);
+	    }
+
+	    .listening-option__title {
+	      overflow: hidden;
+	      color: var(--task-ink);
+	      font-size: 13px;
+	      font-weight: 800;
+	      text-overflow: ellipsis;
+	      white-space: nowrap;
+	    }
+
+	    .listening-option__meta {
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 700;
+	    }
+
 	    .task-form .btn-primary,
 	    .task-action-link--primary,
 	    .btn-review--approved,
@@ -1765,6 +1913,15 @@
 	        width: min(100%, 280px);
 	      }
 
+	      .listening-picker__top {
+	        grid-template-columns: minmax(0, 1fr);
+	      }
+
+	      .listening-picker__results {
+	        grid-template-columns: minmax(0, 1fr);
+	        max-height: 280px;
+	      }
+
 	      .review-button-row {
 	        flex-direction: column;
 	      }
@@ -1911,6 +2068,198 @@
     }
     setupStudentPicker();
 
+    function initListeningPicker() {
+      const picker = document.getElementById('listeningPicker');
+      const select = document.getElementById('listeningExerciseSelect');
+      const searchInput = document.getElementById('listeningPickerSearch');
+      const results = document.getElementById('listeningPickerResults');
+      const selectedLabel = document.getElementById('listeningPickerSelected');
+      const filterButtons = Array.from(document.querySelectorAll('[data-listening-filter]'));
+      if (!picker || !select || !searchInput || !results || !selectedLabel || !filterButtons.length) return;
+
+      const normalize = value => String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+      function parseListeningTitle(title) {
+        const match = String(title || '').match(/IELTS\s+(\d+)\s+Test\s+(\d+)(?:\s+Section\s+(\d+)|\s+Listening)?/i);
+        return {
+          book: match ? match[1] : '',
+          test: match ? match[2] : '',
+          section: match && match[3] ? match[3] : ''
+        };
+      }
+      function parseStructuredQuery(query) {
+        const tokens = normalize(query).split(' ').filter(Boolean);
+        const parsed = { book: '', test: '', section: '' };
+        const testIndex = tokens.indexOf('test');
+        const sectionIndex = tokens.indexOf('section');
+        const ieltsIndex = tokens.indexOf('ielts');
+        if (testIndex >= 0 && /^\d+$/.test(tokens[testIndex + 1] || '')) {
+          parsed.test = tokens[testIndex + 1];
+        }
+        if (sectionIndex >= 0 && /^\d+$/.test(tokens[sectionIndex + 1] || '')) {
+          parsed.section = tokens[sectionIndex + 1];
+        }
+        if (ieltsIndex >= 0 && /^\d+$/.test(tokens[ieltsIndex + 1] || '')) {
+          parsed.book = tokens[ieltsIndex + 1];
+        } else if (testIndex > 0) {
+          for (let i = testIndex - 1; i >= 0; i -= 1) {
+            if (/^\d+$/.test(tokens[i])) {
+              parsed.book = tokens[i];
+              break;
+            }
+          }
+        }
+        return parsed;
+      }
+      const items = Array.from(select.options)
+        .filter(option => option.value)
+        .map(option => {
+          const resourceType = option.dataset.resourceType || 'intensive';
+          const title = option.dataset.title || option.textContent.trim();
+          const label = option.textContent.trim();
+          const cleanLabel = label.replace(/\([^)]*\)\s*$/, '');
+          const metaMatch = label.match(/\(([^)]+)\)\s*$/);
+          const structuredTitle = parseListeningTitle(title);
+          return {
+            value: option.value,
+            resourceType,
+            title,
+            label,
+            book: structuredTitle.book,
+            test: structuredTitle.test,
+            section: structuredTitle.section,
+            meta: resourceType === 'cambridge_test'
+              ? `整套 Test${metaMatch ? ` · ${metaMatch[1]}` : ''}`
+              : `精听切句${metaMatch ? ` · ${metaMatch[1]}` : ''}`,
+            searchText: normalize(`${cleanLabel} ${title} ${resourceType.replace('_', ' ')}`)
+          };
+        });
+      const state = {
+        filter: 'intensive',
+        query: ''
+      };
+      const maxResults = 80;
+
+      function selectedOption() {
+        return select.value ? select.options[select.selectedIndex] : null;
+      }
+
+      function updateFilterButtons() {
+        filterButtons.forEach(button => {
+          const isActive = button.dataset.listeningFilter === state.filter;
+          button.classList.toggle('is-active', isActive);
+          button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+      }
+
+      function updateSelectedLabel() {
+        const option = selectedOption();
+        if (!option) {
+          selectedLabel.textContent = '未选择听力练习';
+          return;
+        }
+        const resourceType = option.dataset.resourceType || 'intensive';
+        const typeLabel = resourceType === 'cambridge_test' ? '整套 Test' : '精听切句';
+        selectedLabel.textContent = `${typeLabel}：${option.textContent.trim()}`;
+      }
+
+      function renderListeningResults() {
+        const query = normalize(state.query);
+        const queryTokens = query ? query.split(' ') : [];
+        const structuredQuery = parseStructuredQuery(query);
+        const matches = items.filter(item => {
+          if (item.resourceType !== state.filter) return false;
+          if (structuredQuery.book && item.book !== structuredQuery.book) return false;
+          if (structuredQuery.test && item.test !== structuredQuery.test) return false;
+          if (structuredQuery.section && item.section !== structuredQuery.section) return false;
+          return queryTokens.every(token => item.searchText.includes(token));
+        });
+
+        results.innerHTML = '';
+        if (!matches.length) {
+          const empty = document.createElement('div');
+          empty.className = 'listening-picker__empty';
+          empty.textContent = '没有匹配的听力练习';
+          results.appendChild(empty);
+          return;
+        }
+
+        matches.slice(0, maxResults).forEach(item => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'listening-option';
+          button.setAttribute('role', 'option');
+          button.setAttribute('aria-selected', item.value === select.value ? 'true' : 'false');
+          button.classList.toggle('is-selected', item.value === select.value);
+          button.dataset.value = item.value;
+
+          const title = document.createElement('span');
+          title.className = 'listening-option__title';
+          title.textContent = item.title;
+
+          const meta = document.createElement('span');
+          meta.className = 'listening-option__meta';
+          meta.textContent = item.meta;
+
+          button.append(title, meta);
+          button.addEventListener('click', () => {
+            select.value = item.value;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+            syncListeningPickerFromSelect();
+          });
+          results.appendChild(button);
+        });
+
+        if (matches.length > maxResults) {
+          const more = document.createElement('div');
+          more.className = 'listening-picker__more';
+          more.textContent = `还有 ${matches.length - maxResults} 个结果，请输入册号、Test 或 Section 继续缩小范围。`;
+          results.appendChild(more);
+        }
+      }
+
+      function syncListeningPickerFromSelect(options) {
+        const option = selectedOption();
+        if (option && !(options && options.preserveFilter)) {
+          state.filter = option.dataset.resourceType || 'intensive';
+        } else if (!option && !(options && options.preserveFilter)) {
+          state.filter = 'intensive';
+        }
+        updateFilterButtons();
+        updateSelectedLabel();
+        renderListeningResults();
+      }
+
+      window.syncListeningPickerFromSelect = syncListeningPickerFromSelect;
+      picker.hidden = false;
+      select.classList.add('is-enhanced');
+      select.setAttribute('aria-hidden', 'true');
+      select.tabIndex = -1;
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          state.filter = button.dataset.listeningFilter || 'intensive';
+          updateFilterButtons();
+          renderListeningResults();
+        });
+      });
+
+      searchInput.addEventListener('input', () => {
+        state.query = searchInput.value;
+        renderListeningResults();
+      });
+
+      searchInput.addEventListener('keydown', event => {
+        if (event.key !== 'Enter') return;
+        const first = results.querySelector('.listening-option');
+        if (!first) return;
+        event.preventDefault();
+        first.click();
+      });
+
+      syncListeningPickerFromSelect();
+    }
+    initListeningPicker();
+
     // Material Bank Selection Functions
     function toggleTaskSource(source) {
       const materialRow = document.getElementById('materialSelectRow');
@@ -1946,6 +2295,7 @@
         categorySelect.removeAttribute('required');
         categorySelect.value = '';
         listeningSelect.value = '';
+        window.syncListeningPickerFromSelect?.();
         if (readingSelect) readingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         setQuestionSelectionMeta('题目（口语题库）', '不勾选则默认布置全部题目');
@@ -1958,6 +2308,7 @@
         if (readingSelect) readingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         setQuestionSelectionMeta('选择句子（精听任务）', '可勾选指定句子；不勾选则默认布置整篇');
+        window.syncListeningPickerFromSelect?.({ preserveFilter: true });
         handleListeningExerciseChange();
       } else if (source === 'reading') {
         if (readingRow) readingRow.style.display = 'flex';
@@ -1965,6 +2316,7 @@
         categorySelect.value = '';
         materialSelect.value = '';
         listeningSelect.value = '';
+        window.syncListeningPickerFromSelect?.();
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         document.getElementById('taskDetail').value = '';
         handleReadingExerciseChange();
@@ -1973,6 +2325,7 @@
         categorySelect.setAttribute('required', 'required');
         materialSelect.value = '';
         listeningSelect.value = '';
+        window.syncListeningPickerFromSelect?.();
         if (readingSelect) readingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         document.getElementById('taskNote').value = '';
@@ -3347,6 +3700,7 @@
         const resourceType = option.dataset.resourceType || 'intensive';
         const resourceTypeInput = document.getElementById('listeningResourceType');
         if (resourceTypeInput) resourceTypeInput.value = resourceType;
+        window.syncListeningPickerFromSelect?.();
         if (typeof handleListeningExerciseChange === 'function') {
           handleListeningExerciseChange();
         }
