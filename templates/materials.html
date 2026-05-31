@@ -1,139 +1,143 @@
 {% extends "base.html" %}
 
 {% block title %}材料库管理{% endblock %}
+{% block page_subtitle %}Materials{% endblock %}
+{% block page_title %}材料库{% endblock %}
+{% block header_actions %}
+<button type="button" class="btn btn-primary material-create-button" onclick="window.location.href='/materials/create'">
+    <i class="fas fa-plus"></i>
+    创建新材料
+</button>
+{% endblock %}
 
 {% block content_dashboard %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-end">
-                    <!-- Tabs -->
-                    <ul class="nav nav-tabs card-header-tabs" id="materialTabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="materials-tab" data-toggle="tab" href="#materials"
-                                role="tab">
-                                📚 教辅材料
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="dictation-tab" data-toggle="tab" href="#dictation" role="tab">
-                                🎧 听写词库
-                            </a>
-                        </li>
-                    </ul>
-                    <button class="btn btn-sm btn-primary" onclick="window.location.href='/materials/create'">
-                        <i class="fas fa-plus"></i> 创建新材料
+<section class="materials-page">
+    <div class="library-panel">
+        <div class="library-tabs">
+            <ul class="nav material-segment" id="materialTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="materials-tab" data-toggle="tab" href="#materials" role="tab">
+                        教辅材料
+                        <span class="tab-count" id="materialCount">-</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="dictation-tab" data-toggle="tab" href="#dictation" role="tab">
+                        听写词库
+                        <span class="tab-count" id="dictationCount">-</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content" id="materialTabContent">
+            <div class="tab-pane fade show active" id="materials" role="tabpanel">
+                <div class="library-toolbar">
+                    <div class="toolbar-title">
+                        <h2>教辅材料</h2>
+                        <span id="materialResultText">正在加载</span>
+                    </div>
+                    <div class="toolbar-controls">
+                        <label class="control-shell control-shell--select" for="typeFilter">
+                            <span class="control-icon"><i class="fas fa-filter"></i></span>
+                            <select id="typeFilter" onchange="filterMaterials(true)">
+                                <option value="">全部类型</option>
+                                <option value="grammar">语法练习</option>
+                                <option value="translation">翻译练习</option>
+                                <option value="reading_vocab_choice">阅读词汇选择题</option>
+                                <option value="ielts_reading_practice">雅思阅读真题</option>
+                                <option value="speaking">口语朗读</option>
+                                <option value="writing">写作训练</option>
+                            </select>
+                        </label>
+                        <label class="control-shell control-shell--search" for="searchInput">
+                            <span class="control-icon"><i class="fas fa-search"></i></span>
+                            <input type="text" id="searchInput" placeholder="搜索标题" oninput="filterMaterials()">
+                        </label>
+                        <button type="button" class="icon-button" onclick="loadMaterials()" aria-label="刷新材料列表" title="刷新">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="materialsList" class="library-list">
+                    <div class="loading-state">
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">加载中...</span>
+                        </div>
+                        <span>加载材料中</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="dictation" role="tabpanel">
+                <div class="library-toolbar library-toolbar--split">
+                    <div class="toolbar-title">
+                        <h2>听写词库</h2>
+                        <span id="dictationResultText">尚未加载</span>
+                    </div>
+                    <button type="button" class="secondary-button" onclick="toggleVocabUpload()">
+                        <i class="far fa-file-pdf"></i>
+                        上传翻译词汇 PDF
                     </button>
                 </div>
-                <div class="card-body">
-                    <div class="tab-content" id="materialTabContent">
-                        <!-- 教辅材料 Tab -->
-                        <div class="tab-pane fade show active" id="materials" role="tabpanel">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="mb-0">材料列表</h5>
-                            </div>
-                            <!-- 筛选栏 -->
-                            <div class="row mb-3">
-                                <div class="col-md-3">
-                                    <select class="form-control" id="typeFilter" onchange="filterMaterials()">
-                                        <option value="">全部类型</option>
-                                        <option value="grammar">语法练习</option>
-                                        <option value="translation">翻译练习</option>
-                                        <option value="reading_vocab_choice">阅读词汇选择题</option>
-                                        <option value="ielts_reading_practice">雅思阅读真题</option>
-                                        <option value="speaking">口语朗读</option>
-                                        <option value="writing">写作训练</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="searchInput" placeholder="搜索材料标题..."
-                                        onkeyup="filterMaterials()">
-                                </div>
-                                <div class="col-md-3">
-                                    <button class="btn btn-outline-secondary btn-block" onclick="loadMaterials()">
-                                        <i class="fas fa-sync"></i> 刷新
-                                    </button>
-                                </div>
-                            </div>
 
-                            <!-- 材料列表 -->
-                            <div id="materialsList">
-                                <div class="text-center py-5">
-                                    <div class="spinner-border text-primary" role="status">
-                                        <span class="sr-only">加载中...</span>
-                                    </div>
-                                </div>
-                            </div>
+                <div id="vocabPdfUploadArea" class="upload-panel" hidden>
+                    <div class="upload-panel__header">
+                        <h3>上传翻译词汇 PDF</h3>
+                        <p>系统会按话题整理成可发布的词库。</p>
+                    </div>
+                    <div class="upload-panel__body">
+                        <input type="text" id="vocabPdfTitle" placeholder="词库标题（选填）">
+                        <input type="file" id="vocabPdfFile" accept=".pdf">
+                        <button type="button" class="primary-button" onclick="uploadVocabPdf()" id="vocabPdfBtn">
+                            上传并创建
+                        </button>
+                    </div>
+                    <div id="vocabPdfStatus" class="upload-status" aria-live="polite"></div>
+                </div>
+
+                <div id="dictationBooksList" class="library-list">
+                    <div class="loading-state">
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">加载中...</span>
                         </div>
-
-                        <!-- 听写词库 Tab -->
-                        <div class="tab-pane fade" id="dictation" role="tabpanel">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="mb-0">听写词库</h5>
-                                <div>
-                                    <button class="btn btn-sm btn-outline-info" onclick="document.getElementById('vocabPdfUploadArea').style.display = document.getElementById('vocabPdfUploadArea').style.display === 'none' ? 'block' : 'none'">
-                                        📄 上传翻译词汇PDF
-                                    </button>
-                                    <small class="text-muted ml-2">💡 或点击"创建新材料"选择"听写词库"类型</small>
-                                </div>
-                            </div>
-
-                            <!-- 翻译词汇PDF上传区域 -->
-                            <div id="vocabPdfUploadArea" style="display: none;" class="card bg-light mb-3">
-                                <div class="card-body">
-                                    <h6>上传翻译词汇PDF（看中文写英文）</h6>
-                                    <p class="text-muted small">支持托福/雅思写作词汇等中英对照PDF，系统自动按话题分类</p>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control form-control-sm mb-2" id="vocabPdfTitle" placeholder="词库标题（选填，默认用文件名）">
-                                        <input type="file" class="form-control-file" id="vocabPdfFile" accept=".pdf">
-                                    </div>
-                                    <button class="btn btn-info btn-sm mt-2" onclick="uploadVocabPdf()" id="vocabPdfBtn">上传并创建词库</button>
-                                    <span id="vocabPdfStatus" class="ml-2 small"></span>
-                                </div>
-                            </div>
-
-                            <!-- 词库列表 -->
-                            <div id="dictationBooksList">
-                                <div class="text-center py-5">
-                                    <div class="spinner-border text-success" role="status">
-                                        <span class="sr-only">加载中...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <span>切换后加载词库</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <!-- 词库详情 Modal -->
 <div class="modal fade" id="dictationBookModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+        <div class="modal-content library-modal">
             <div class="modal-header">
                 <h5 class="modal-title" id="bookDetailTitle">词库详情</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="mb-4">
-                    <p class="text-muted mb-1" id="bookDetailDesc"></p>
-                    <small class="text-muted">
-                        <i class="fas fa-layer-group"></i> 共 <span id="bookDetailCount">0</span> 个单词
-                        <span class="mx-2">|</span>
-                        <i class="far fa-clock"></i> 创建于 <span id="bookDetailDate"></span>
-                    </small>
+                <div class="book-summary">
+                    <p id="bookDetailDesc"></p>
+                    <span>
+                        <i class="fas fa-layer-group"></i>
+                        共 <strong id="bookDetailCount">0</strong> 个单词
+                    </span>
+                    <span>
+                        <i class="far fa-clock"></i>
+                        创建于 <strong id="bookDetailDate"></strong>
+                    </span>
                 </div>
 
-                <div class="table-responsive" style="max-height: 50vh; overflow-y: auto;">
-                    <table class="table table-hover table-sm">
-                        <thead class="thead-light">
+                <div class="library-table-wrap library-table-wrap--modal">
+                    <table class="library-table">
+                        <thead>
                             <tr>
-                                <th style="width: 60px;">#</th>
+                                <th style="width: 64px;">#</th>
                                 <th>单词</th>
                                 <th>音标</th>
                                 <th>释义</th>
@@ -146,7 +150,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="secondary-button" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
@@ -155,24 +159,83 @@
 <script>
     let allMaterials = [];
     let allBooks = [];
+    let materialSearchTimer = null;
+    let dictationLoaded = false;
+
+    const typeLabels = {
+        grammar: '语法',
+        translation: '翻译',
+        reading_vocab_choice: '阅读词汇',
+        ielts_reading_practice: '雅思阅读',
+        speaking: '口语',
+        writing: '写作'
+    };
+
+    const typeClasses = {
+        grammar: 'type-chip--grammar',
+        translation: 'type-chip--translation',
+        reading_vocab_choice: 'type-chip--vocab',
+        ielts_reading_practice: 'type-chip--reading',
+        speaking: 'type-chip--speaking',
+        writing: 'type-chip--writing'
+    };
+
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, function (char) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char];
+        });
+    }
+
+    function formatDate(value) {
+        if (!value) return '-';
+        return escapeHtml(String(value).split('T')[0]);
+    }
+
+    function setText(id, value) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    }
+
+    function renderLoading(containerId, label) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = `
+            <div class="loading-state">
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="sr-only">加载中...</span>
+                </div>
+                <span>${escapeHtml(label)}</span>
+            </div>
+        `;
+    }
 
     // 加载材料列表
     async function loadMaterials() {
         const typeFilter = document.getElementById('typeFilter').value;
-        const searchInput = document.getElementById('searchInput').value;
+        const searchInput = document.getElementById('searchInput').value.trim();
+        const params = new URLSearchParams();
+
+        if (typeFilter) params.set('type', typeFilter);
+        if (searchInput) params.set('search', searchInput);
+
+        renderLoading('materialsList', '加载材料中');
+        setText('materialResultText', '正在加载');
 
         try {
-            let url = '/api/materials?';
-            if (typeFilter) url += `type=${typeFilter}&`;
-            if (searchInput) url += `search=${encodeURIComponent(searchInput)}`;
-
-            const response = await fetch(url, {
+            const query = params.toString();
+            const response = await fetch(`/api/materials${query ? `?${query}` : ''}`, {
                 credentials: 'include'
             });
             const data = await response.json();
 
             if (data.ok) {
-                allMaterials = data.materials;
+                allMaterials = data.materials || [];
                 renderMaterials(allMaterials);
             } else {
                 showError('加载失败：' + (data.error || '未知错误'));
@@ -184,6 +247,9 @@
 
     // 加载听写词库列表
     async function loadDictationBooks() {
+        renderLoading('dictationBooksList', '加载词库中');
+        setText('dictationResultText', '正在加载');
+
         try {
             const response = await fetch('/api/dictation/books', {
                 credentials: 'include'
@@ -191,7 +257,8 @@
             const data = await response.json();
 
             if (data.ok) {
-                allBooks = data.books;
+                allBooks = data.books || [];
+                dictationLoaded = true;
                 renderDictationBooks(allBooks);
             } else {
                 showError('加载词库失败：' + (data.error || '未知错误'));
@@ -201,6 +268,10 @@
         }
     }
 
+    function toggleVocabUpload() {
+        const panel = document.getElementById('vocabPdfUploadArea');
+        panel.hidden = !panel.hidden;
+    }
 
     // 上传翻译词汇PDF
     async function uploadVocabPdf() {
@@ -215,7 +286,7 @@
         }
 
         btn.disabled = true;
-        status.innerHTML = '<span class="text-info">正在解析上传中...</span>';
+        status.innerHTML = '<span class="status-note status-note--info">正在解析上传中...</span>';
 
         const formData = new FormData();
         formData.append('file', fileInput.files[0]);
@@ -232,15 +303,15 @@
             const data = await response.json();
 
             if (data.ok) {
-                status.innerHTML = `<span class="text-success">成功创建词库「${data.title}」，共 ${data.word_count} 个词条</span>`;
+                status.innerHTML = `<span class="status-note status-note--success">已创建「${escapeHtml(data.title)}」，共 ${escapeHtml(data.word_count)} 个词条</span>`;
                 loadDictationBooks();
                 fileInput.value = '';
                 titleInput.value = '';
             } else {
-                status.innerHTML = `<span class="text-danger">失败: ${data.message || data.error}</span>`;
+                status.innerHTML = `<span class="status-note status-note--danger">失败：${escapeHtml(data.message || data.error)}</span>`;
             }
         } catch (e) {
-            status.innerHTML = `<span class="text-danger">上传失败: ${e.message}</span>`;
+            status.innerHTML = `<span class="status-note status-note--danger">上传失败：${escapeHtml(e.message)}</span>`;
         } finally {
             btn.disabled = false;
         }
@@ -249,50 +320,67 @@
     // 渲染听写词库列表
     function renderDictationBooks(books) {
         const container = document.getElementById('dictationBooksList');
+        setText('dictationCount', books.length);
+        setText('dictationResultText', `${books.length} 个词库`);
 
         if (books.length === 0) {
             container.innerHTML = `
-            <div class="text-center py-5 text-muted">
-                <i class="fas fa-headphones fa-3x mb-3"></i>
-                <p>暂无词库<br><small>点击"创建新材料"选择"听写词库"类型来创建</small></p>
-            </div>
-        `;
+                <div class="empty-state">
+                    <div class="empty-state__icon"><i class="fas fa-headphones"></i></div>
+                    <h3>暂无词库</h3>
+                    <p>创建或上传词库后会显示在这里。</p>
+                </div>
+            `;
             return;
         }
 
-        let html = '<div class="list-group">';
-        books.forEach(b => {
-            html += `
-            <div class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">
-                        <span class="badge ${b.book_type === 'translation' ? 'badge-info' : 'badge-success'} mr-2">${b.book_type === 'translation' ? '🔤 翻译' : '🎧 听写'}</span>
-                        ${b.title}
-                    </h5>
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="viewDictationBook(${b.id})">
-                            <i class="fas fa-eye"></i> 查看
+        const rows = books.map(function (b) {
+            const bookType = b.book_type === 'translation' ? '翻译' : '听写';
+            const bookTypeClass = b.book_type === 'translation' ? 'type-chip--translation' : 'type-chip--dictation';
+            const creator = b.creator ? `<span class="row-meta-dot"></span>${escapeHtml(b.creator)}` : '';
+            return `
+                <tr>
+                    <td>
+                        <div class="item-title">${escapeHtml(b.title)}</div>
+                        <div class="item-description">${escapeHtml(b.description || '暂无说明')}</div>
+                    </td>
+                    <td><span class="type-chip ${bookTypeClass}">${bookType}</span></td>
+                    <td><span class="metric-value">${escapeHtml(b.word_count || 0)}</span><span class="metric-unit">词</span></td>
+                    <td>
+                        <div class="date-cell">${formatDate(b.created_at)}</div>
+                        <div class="item-description">${creator}</div>
+                    </td>
+                    <td class="actions-cell">
+                        <button type="button" class="action-button" onclick="viewDictationBook(${Number(b.id)})" title="查看词库">
+                            <i class="fas fa-eye"></i><span>查看</span>
                         </button>
-                        <button class="btn btn-sm btn-outline-success" onclick="createDictationTask(${b.id})">
-                            <i class="fas fa-paper-plane"></i> 发布任务
+                        <button type="button" class="action-button action-button--primary" onclick="createDictationTask(${Number(b.id)})" title="发布任务">
+                            <i class="fas fa-paper-plane"></i><span>发布</span>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteDictationBook(${b.id})">
-                            <i class="fas fa-trash"></i> 删除
+                        <button type="button" class="action-button action-button--danger" onclick="deleteDictationBook(${Number(b.id)})" title="删除词库">
+                            <i class="fas fa-trash"></i><span>删除</span>
                         </button>
-                    </div>
-                </div>
-                <p class="mb-1 text-muted">${b.description || '暂无说明'}</p>
-                <small>
-                    <i class="fas fa-list-ol"></i> ${b.word_count} 词 | 
-                    <i class="fas fa-calendar"></i> ${b.created_at ? b.created_at.split('T')[0] : ''}
-                    ${b.creator ? ' | <i class="fas fa-user"></i> ' + b.creator : ''}
-                </small>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        container.innerHTML = `
+            <div class="library-table-wrap">
+                <table class="library-table">
+                    <thead>
+                        <tr>
+                            <th>词库</th>
+                            <th style="width: 112px;">类型</th>
+                            <th style="width: 104px;">词量</th>
+                            <th style="width: 168px;">创建</th>
+                            <th style="width: 240px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
             </div>
         `;
-        });
-        html += '</div>';
-
-        container.innerHTML = html;
     }
 
     // 查看词库
@@ -305,35 +393,32 @@
 
             if (data.ok) {
                 const book = data.book;
-                const words = data.words;
+                const words = data.words || [];
 
-                // Fill modal info
                 $('#bookDetailTitle').text(book.title);
                 $('#bookDetailDesc').text(book.description || '暂无描述');
                 $('#bookDetailCount').text(book.word_count);
-                $('#bookDetailDate').text(new Date(book.created_at).toLocaleDateString());
+                $('#bookDetailDate').text(book.created_at ? new Date(book.created_at).toLocaleDateString() : '-');
 
-                // Fill table
                 const tbody = $('#bookWordsList');
                 tbody.empty();
 
                 if (words.length === 0) {
-                    tbody.append('<tr><td colspan="4" class="text-center text-muted">暂无单词</td></tr>');
+                    tbody.append('<tr><td colspan="4" class="empty-cell">暂无单词</td></tr>');
                 } else {
-                    words.forEach((w, index) => {
+                    words.forEach(function (w, index) {
                         const tr = `
                             <tr>
                                 <td>${index + 1}</td>
-                                <td><strong>${w.word}</strong></td>
-                                <td class="text-muted font-italic">${w.phonetic || '-'}</td>
-                                <td>${w.translation || '-'}</td>
+                                <td><strong>${escapeHtml(w.word)}</strong></td>
+                                <td class="muted-cell">${escapeHtml(w.phonetic || '-')}</td>
+                                <td>${escapeHtml(w.translation || '-')}</td>
                             </tr>
                         `;
                         tbody.append(tr);
                     });
                 }
 
-                // Show modal
                 $('#dictationBookModal').modal('show');
             } else {
                 showError('获取详情失败：' + (data.error || '未知错误'));
@@ -373,77 +458,72 @@
     // 渲染材料列表
     function renderMaterials(materials) {
         const container = document.getElementById('materialsList');
+        setText('materialCount', materials.length);
+        setText('materialResultText', `${materials.length} 份材料`);
 
         if (materials.length === 0) {
             container.innerHTML = `
-            <div class="text-center py-5 text-muted">
-                <i class="fas fa-inbox fa-3x mb-3"></i>
-                <p>暂无材料</p>
-            </div>
-        `;
+                <div class="empty-state">
+                    <div class="empty-state__icon"><i class="fas fa-inbox"></i></div>
+                    <h3>暂无材料</h3>
+                    <p>新建材料后会显示在这里。</p>
+                </div>
+            `;
             return;
         }
 
-        const typeLabels = {
-            'grammar': '语法',
-            'translation': '翻译',
-            'reading_vocab_choice': '阅读词汇选择',
-            'ielts_reading_practice': '雅思阅读真题',
-            'speaking': '口语',
-            'writing': '写作'
-        };
+        const rows = materials.map(function (m) {
+            const label = typeLabels[m.type] || m.type || '未分类';
+            const typeClass = typeClasses[m.type] || 'type-chip--neutral';
+            return `
+                <tr>
+                    <td>
+                        <div class="item-title">${escapeHtml(m.title)}</div>
+                        <div class="item-description">${escapeHtml(m.description || '暂无说明')}</div>
+                    </td>
+                    <td><span class="type-chip ${typeClass}">${escapeHtml(label)}</span></td>
+                    <td><span class="metric-value">${escapeHtml(m.question_count || 0)}</span><span class="metric-unit">题</span></td>
+                    <td><div class="date-cell">${formatDate(m.created_at)}</div></td>
+                    <td class="actions-cell">
+                        <button type="button" class="action-button" onclick="viewMaterial(${Number(m.id)})" title="查看材料">
+                            <i class="fas fa-eye"></i><span>查看</span>
+                        </button>
+                        <button type="button" class="action-button action-button--primary" onclick="createTaskFromMaterial(${Number(m.id)})" title="发布任务">
+                            <i class="fas fa-paper-plane"></i><span>发布</span>
+                        </button>
+                        <button type="button" class="action-button" onclick="editMaterial(${Number(m.id)})" title="编辑材料">
+                            <i class="fas fa-pen"></i><span>编辑</span>
+                        </button>
+                        <button type="button" class="action-button action-button--danger" onclick="deleteMaterial(${Number(m.id)})" title="删除材料">
+                            <i class="fas fa-trash"></i><span>删除</span>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
 
-        const typeColors = {
-            'grammar': 'primary',
-            'translation': 'success',
-            'reading_vocab_choice': 'warning',
-            'ielts_reading_practice': 'info',
-            'speaking': 'warning',
-            'writing': 'info'
-        };
-
-        let html = '<div class="list-group">';
-        materials.forEach(m => {
-            html += `
-            <div class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">
-                        <span class="badge badge-${typeColors[m.type] || 'secondary'} mr-2">
-                            ${typeLabels[m.type] || m.type}
-                        </span>
-                        ${m.title}
-                    </h5>
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="viewMaterial(${m.id})">
-                            <i class="fas fa-eye"></i> 查看
-                        </button>
-                        <button class="btn btn-sm btn-outline-success" onclick="createTaskFromMaterial(${m.id})">
-                            <i class="fas fa-paper-plane"></i> 发布任务
-                        </button>
-                        <button class="btn btn-sm btn-outline-warning" onclick="editMaterial(${m.id})">
-                            <i class="fas fa-edit"></i> 编辑
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteMaterial(${m.id})">
-                            <i class="fas fa-trash"></i> 删除
-                        </button>
-                    </div>
-                </div>
-                <p class="mb-1 text-muted">${m.description || '暂无说明'}</p>
-                <small>
-                    <i class="fas fa-list-ol"></i> ${m.question_count} 题 | 
-                    <i class="fas fa-calendar"></i> ${m.created_at}
-                </small>
+        container.innerHTML = `
+            <div class="library-table-wrap">
+                <table class="library-table">
+                    <thead>
+                        <tr>
+                            <th>材料</th>
+                            <th style="width: 132px;">类型</th>
+                            <th style="width: 96px;">题量</th>
+                            <th style="width: 132px;">创建时间</th>
+                            <th style="width: 292px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
             </div>
         `;
-        });
-        html += '</div>';
-
-        container.innerHTML = html;
     }
 
     // 筛选材料
-    function filterMaterials() {
-        loadMaterials();
+    function filterMaterials(immediate) {
+        clearTimeout(materialSearchTimer);
+        materialSearchTimer = setTimeout(loadMaterials, immediate ? 0 : 240);
     }
 
     // 查看材料详情
@@ -492,30 +572,708 @@
     document.addEventListener('DOMContentLoaded', function () {
         loadMaterials();
 
-        // Load dictation books when tab is clicked
         document.getElementById('dictation-tab').addEventListener('click', function () {
-            loadDictationBooks();
+            if (!dictationLoaded) loadDictationBooks();
         });
     });
 </script>
 
 <style>
-    .list-group-item {
-        transition: all 0.2s;
+    .material-create-button {
+        min-height: 36px;
+        padding: 8px 14px;
+        border-radius: 8px;
+        background: #20756F;
+        border-color: #20756F;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, .08);
+        font-size: 14px;
     }
 
-    .list-group-item:hover {
-        background-color: #f8f9fa;
-        transform: translateX(5px);
+    .material-create-button:hover {
+        background: #145C57;
+        border-color: #145C57;
+        color: #fff;
     }
 
-    .nav-tabs .nav-link {
-        font-weight: 500;
+    .materials-page {
+        --library-canvas: #F7F8FA;
+        --library-surface: #FFFFFF;
+        --library-subtle: #F9FAFB;
+        --library-border: #E5E7EB;
+        --library-border-strong: #D0D5DD;
+        --library-ink: #111827;
+        --library-muted: #667085;
+        --library-subtle-ink: #98A2B3;
+        --library-primary: #20756F;
+        --library-primary-strong: #145C57;
+        --library-primary-soft: #E6F5F2;
     }
 
-    .nav-tabs .nav-link.active {
-        background-color: #fff;
-        border-bottom-color: #fff;
+    .library-panel {
+        background: var(--library-surface);
+        border: 1px solid var(--library-border);
+        border-radius: 10px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+        overflow: hidden;
+    }
+
+    .library-tabs {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--library-border);
+        background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFD 100%);
+    }
+
+    .material-segment {
+        display: inline-flex;
+        gap: 4px;
+        padding: 3px;
+        border: 1px solid var(--library-border);
+        border-radius: 8px;
+        background: var(--library-subtle);
+    }
+
+    .material-segment .nav-item {
+        margin: 0;
+    }
+
+    .material-segment .nav-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 32px;
+        padding: 6px 12px;
+        border: 0;
+        border-radius: 6px;
+        color: var(--library-muted);
+        font-size: 13px;
+        font-weight: 650;
+        line-height: 1;
+        background: transparent;
+    }
+
+    .material-segment .nav-link:hover {
+        color: var(--library-ink);
+        background: #FFFFFF;
+    }
+
+    .material-segment .nav-link.active {
+        color: var(--library-primary-strong);
+        background: #FFFFFF;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
+    }
+
+    .tab-count {
+        min-width: 22px;
+        height: 20px;
+        padding: 0 7px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #EEF2F6;
+        color: var(--library-muted);
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .material-segment .nav-link.active .tab-count {
+        background: var(--library-primary-soft);
+        color: var(--library-primary-strong);
+    }
+
+    .library-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 20px;
+    }
+
+    .library-toolbar--split {
+        border-bottom: 1px solid var(--library-border);
+    }
+
+    .toolbar-title {
+        min-width: 180px;
+    }
+
+    .toolbar-title h2 {
+        margin: 0;
+        color: var(--library-ink);
+        font-size: 18px;
+        font-weight: 750;
+        line-height: 1.3;
+        letter-spacing: 0;
+    }
+
+    .toolbar-title span {
+        display: block;
+        margin-top: 3px;
+        color: var(--library-muted);
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .toolbar-controls {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .control-shell {
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        padding: 0 10px;
+        border: 1px solid var(--library-border);
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: var(--library-muted);
+        box-shadow: 0 1px 1px rgba(15, 23, 42, .02);
+    }
+
+    .control-shell:focus-within {
+        border-color: var(--library-border-strong);
+        box-shadow: 0 0 0 3px rgba(32, 117, 111, .10);
+    }
+
+    .control-shell--select {
+        width: 178px;
+        flex: 0 0 auto;
+    }
+
+    .control-shell--search {
+        width: min(360px, 42vw);
+    }
+
+    .control-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        color: var(--library-subtle-ink);
+        font-size: 12px;
+    }
+
+    .control-shell input,
+    .control-shell select {
+        width: 100%;
+        height: 34px;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: var(--library-ink);
+        font-size: 13px;
+        box-shadow: none;
+    }
+
+    .control-shell input:focus,
+    .control-shell select:focus {
+        border: 0;
+        box-shadow: none;
+    }
+
+    .control-shell input::placeholder {
+        color: var(--library-subtle-ink);
+    }
+
+    .icon-button,
+    .secondary-button,
+    .primary-button,
+    .action-button {
+        border: 1px solid var(--library-border);
+        box-shadow: none;
+        font-weight: 650;
+    }
+
+    .icon-button {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: var(--library-muted);
+    }
+
+    .icon-button:hover,
+    .secondary-button:hover,
+    .action-button:hover {
+        background: #F3F6F8;
+        color: var(--library-ink);
+        border-color: var(--library-border-strong);
+    }
+
+    .secondary-button,
+    .primary-button {
+        min-height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+    }
+
+    .secondary-button {
+        background: #FFFFFF;
+        color: var(--library-ink);
+    }
+
+    .primary-button {
+        background: var(--library-primary);
+        border-color: var(--library-primary);
+        color: #FFFFFF;
+    }
+
+    .primary-button:hover {
+        background: var(--library-primary-strong);
+        border-color: var(--library-primary-strong);
+        color: #FFFFFF;
+    }
+
+    .primary-button:disabled {
+        opacity: .65;
+        cursor: not-allowed;
+    }
+
+    .library-list {
+        padding: 0 20px 20px;
+    }
+
+    .library-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid var(--library-border);
+        border-radius: 8px;
+        background: #FFFFFF;
+    }
+
+    .library-table-wrap--modal {
+        max-height: 50vh;
+        overflow: auto;
+    }
+
+    .library-table {
+        width: 100%;
+        min-width: 860px;
+        margin: 0;
+        border: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        box-shadow: none;
+    }
+
+    .library-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--library-border);
+        background: var(--library-subtle);
+        color: var(--library-muted);
+        font-size: 12px;
+        font-weight: 750;
+        line-height: 1.3;
+    }
+
+    .library-table tbody td {
+        padding: 13px 14px;
+        border-bottom: 1px solid var(--library-border);
+        color: var(--library-ink);
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .library-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .library-table tbody tr:hover {
+        background: #FBFDFD;
+    }
+
+    .item-title {
+        max-width: 540px;
+        color: var(--library-ink);
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.35;
+        word-break: break-word;
+    }
+
+    .item-description {
+        max-width: 560px;
+        margin-top: 4px;
+        color: var(--library-muted);
+        font-size: 12px;
+        line-height: 1.45;
+        word-break: break-word;
+    }
+
+    .row-meta-dot::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        margin: 0 7px 2px;
+        border-radius: 999px;
+        background: #CBD5E1;
+    }
+
+    .type-chip {
+        min-height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3px 9px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+
+    .type-chip--grammar,
+    .type-chip--reading {
+        background: #EAF2FF;
+        color: #1D4ED8;
+    }
+
+    .type-chip--translation,
+    .type-chip--dictation {
+        background: #E6F5F2;
+        color: #145C57;
+    }
+
+    .type-chip--vocab,
+    .type-chip--speaking {
+        background: #FFF7ED;
+        color: #B45309;
+    }
+
+    .type-chip--writing {
+        background: #F3E8FF;
+        color: #7E22CE;
+    }
+
+    .type-chip--neutral {
+        background: #F3F4F6;
+        color: #4B5563;
+    }
+
+    .metric-value {
+        color: var(--library-ink);
+        font-size: 15px;
+        font-weight: 750;
+    }
+
+    .metric-unit {
+        margin-left: 3px;
+        color: var(--library-muted);
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .date-cell {
+        color: #344054;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .actions-cell {
+        white-space: nowrap;
+    }
+
+    .action-button {
+        min-height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin: 0 4px 0 0;
+        padding: 6px 9px;
+        border-radius: 7px;
+        background: #FFFFFF;
+        color: #344054;
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    .action-button--primary {
+        background: var(--library-primary-soft);
+        border-color: #B8E2DD;
+        color: var(--library-primary-strong);
+    }
+
+    .action-button--primary:hover {
+        background: #D8EFEB;
+        border-color: #95D4CC;
+        color: var(--library-primary-strong);
+    }
+
+    .action-button--danger {
+        color: #B42318;
+    }
+
+    .action-button--danger:hover {
+        background: #FFF5F5;
+        border-color: #FECACA;
+        color: #B42318;
+    }
+
+    .loading-state,
+    .empty-state {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 260px;
+        border: 1px solid var(--library-border);
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: var(--library-muted);
+    }
+
+    .loading-state {
+        gap: 10px;
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+    .loading-state .spinner-border {
+        color: var(--library-primary);
+    }
+
+    .empty-state {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .empty-state__icon {
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: var(--library-primary-soft);
+        color: var(--library-primary-strong);
+        font-size: 16px;
+    }
+
+    .empty-state h3 {
+        margin: 4px 0 0;
+        color: var(--library-ink);
+        font-size: 15px;
+        font-weight: 750;
+    }
+
+    .empty-state p {
+        margin: 0;
+        color: var(--library-muted);
+        font-size: 13px;
+    }
+
+    .upload-panel {
+        margin: 0 20px 18px;
+        padding: 16px;
+        border: 1px solid var(--library-border);
+        border-radius: 8px;
+        background: var(--library-subtle);
+    }
+
+    .upload-panel[hidden] {
+        display: none;
+    }
+
+    .upload-panel__header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .upload-panel__header h3 {
+        margin: 0;
+        color: var(--library-ink);
+        font-size: 15px;
+        font-weight: 750;
+    }
+
+    .upload-panel__header p {
+        margin: 0;
+        color: var(--library-muted);
+        font-size: 12px;
+    }
+
+    .upload-panel__body {
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) minmax(220px, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .upload-panel input[type="text"],
+    .upload-panel input[type="file"] {
+        min-height: 36px;
+        border: 1px solid var(--library-border);
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: var(--library-ink);
+        font-size: 13px;
+    }
+
+    .upload-status {
+        min-height: 20px;
+        margin-top: 10px;
+        font-size: 12px;
+        font-weight: 650;
+    }
+
+    .status-note--info {
+        color: #1D4ED8;
+    }
+
+    .status-note--success {
+        color: #15803D;
+    }
+
+    .status-note--danger {
+        color: #B42318;
+    }
+
+    .library-modal {
+        border: 1px solid var(--library-border);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(15, 23, 42, .18);
+    }
+
+    .library-modal .modal-header,
+    .library-modal .modal-footer {
+        border-color: var(--library-border);
+        background: #FFFFFF;
+    }
+
+    .library-modal .modal-title {
+        color: var(--library-ink);
+        font-size: 17px;
+        font-weight: 750;
+    }
+
+    .book-summary {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 16px;
+        margin-bottom: 14px;
+        color: var(--library-muted);
+        font-size: 13px;
+    }
+
+    .book-summary p {
+        flex-basis: 100%;
+        margin: 0;
+        color: var(--library-ink);
+        font-weight: 600;
+    }
+
+    .book-summary strong {
+        color: var(--library-ink);
+    }
+
+    .muted-cell {
+        color: var(--library-muted);
+        font-style: italic;
+    }
+
+    .empty-cell {
+        padding: 36px 14px !important;
+        color: var(--library-muted) !important;
+        text-align: center;
+    }
+
+    @media (max-width: 920px) {
+        .library-toolbar,
+        .library-toolbar--split {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .toolbar-controls {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .control-shell--search {
+            width: min(100%, 420px);
+            flex: 1 1 220px;
+        }
+
+        .upload-panel__body {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .material-create-button {
+            width: 100%;
+        }
+
+        .library-tabs,
+        .library-toolbar {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .material-segment {
+            width: 100%;
+        }
+
+        .material-segment .nav-item {
+            flex: 1;
+        }
+
+        .material-segment .nav-link {
+            justify-content: center;
+            width: 100%;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        .library-list {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .control-shell--select,
+        .control-shell--search {
+            width: 100%;
+            flex: 1 1 100%;
+        }
+
+        .upload-panel {
+            margin-left: 14px;
+            margin-right: 14px;
+        }
     }
 </style>
 {% endblock %}

@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StudyTracker Admin UI v2 Preview</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="./admin_ui_v2.css">
+  <style>
+    body {
+      margin: 0;
+      color: var(--admin-v2-ink);
+      background: var(--admin-v2-canvas);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "PingFang SC", "Hiragino Sans GB", sans-serif;
+    }
+
+    .preview-shell {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .preview-sidebar {
+      padding: 24px 20px;
+      background: #fff;
+      border-right: 1px solid var(--admin-v2-border);
+    }
+
+    .preview-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .preview-brand__icon {
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      background: var(--admin-v2-primary);
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .preview-brand strong {
+      display: block;
+      color: var(--admin-v2-ink);
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .preview-brand span {
+      color: var(--admin-v2-ink-muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .preview-nav-label {
+      margin: 18px 0 6px;
+      color: var(--admin-v2-ink-muted);
+      font-size: 11px;
+      font-weight: 750;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .preview-nav a {
+      display: block;
+      padding: 10px 12px;
+      color: #344054;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .preview-nav a.is-active {
+      color: var(--admin-v2-primary-strong);
+      background: var(--admin-v2-primary-soft);
+    }
+
+    .preview-main {
+      min-width: 0;
+      padding: 32px 40px 40px;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .preview-kicker {
+      margin: 0 0 4px;
+      color: var(--admin-v2-ink-muted);
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .preview-header h1 {
+      margin: 0;
+      color: var(--admin-v2-ink);
+      font-size: 24px;
+      font-weight: 750;
+      line-height: 1.25;
+    }
+
+    .preview-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .admin-v2-table tbody tr:hover {
+      background: #fbfdfd;
+    }
+
+    .preview-note {
+      margin: 12px 20px 20px;
+      color: var(--admin-v2-ink-muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 860px) {
+      .preview-shell {
+        display: block;
+      }
+
+      .preview-sidebar {
+        display: none;
+      }
+
+      .preview-main {
+        padding: 20px 16px 28px;
+      }
+
+      .preview-header {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-shell">
+    <aside class="preview-sidebar">
+      <div class="preview-brand">
+        <span class="preview-brand__icon">S</span>
+        <div>
+          <strong>Sage Path</strong>
+          <span>管理后台</span>
+        </div>
+      </div>
+      <nav class="preview-nav">
+        <p class="preview-nav-label">主导航</p>
+        <a class="is-active" href="#materialsPreview">材料库</a>
+        <a href="#tasksPreview">任务管理</a>
+        <a href="#gradingPreview">批改中心</a>
+        <a href="#formPreview">表单样式</a>
+        <p class="preview-nav-label">数据分析</p>
+        <a href="#reportsPreview">学习报表</a>
+      </nav>
+    </aside>
+
+    <main class="preview-main admin-v2-page">
+      <header class="preview-header">
+        <div>
+          <p class="preview-kicker">Admin UI v2</p>
+          <h1>StudyTracker 后台界面预览</h1>
+        </div>
+        <button class="admin-v2-button admin-v2-button--primary" type="button">
+          <i class="fas fa-plus"></i>
+          创建新材料
+        </button>
+      </header>
+
+      <div class="preview-grid">
+        <section class="admin-v2-panel" id="materialsPreview">
+          <div class="admin-v2-tabs">
+            <a class="admin-v2-tab active" href="#materialsPreview">教辅材料 <span class="admin-v2-count">18</span></a>
+            <a class="admin-v2-tab" href="#materialsPreview">听写词库 <span class="admin-v2-count">6</span></a>
+          </div>
+
+          <div class="admin-v2-toolbar">
+            <div class="admin-v2-toolbar-title">
+              <h2>材料库</h2>
+              <p>长说明、真实类型、批量题量的列表密度验证</p>
+            </div>
+            <div class="admin-v2-controls">
+              <label class="admin-v2-control">
+                <i class="fas fa-filter"></i>
+                <select>
+                  <option>全部类型</option>
+                  <option>语法练习</option>
+                  <option>阅读词汇选择题</option>
+                  <option>口语朗读</option>
+                </select>
+              </label>
+              <label class="admin-v2-control admin-v2-control--search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索材料标题">
+              </label>
+              <button class="admin-v2-icon-button" type="button" aria-label="刷新">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div id="materialsTable"></div>
+          <p class="preview-note">说明文字限制为两行，避免语法讲义类长说明撑乱行高。完整内容应放到详情页或编辑页。</p>
+        </section>
+
+        <section class="admin-v2-panel" id="tasksPreview">
+          <div class="admin-v2-toolbar">
+            <div class="admin-v2-toolbar-title">
+              <h2>任务管理</h2>
+              <p>学生、任务类型、状态和截止日期应能快速扫描</p>
+            </div>
+            <div class="admin-v2-controls">
+              <label class="admin-v2-control admin-v2-control--search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索学生或任务">
+              </label>
+              <button class="admin-v2-button admin-v2-button--primary" type="button">
+                <i class="fas fa-paper-plane"></i>
+                发布任务
+              </button>
+            </div>
+          </div>
+          <div id="tasksTable"></div>
+        </section>
+
+        <section class="admin-v2-panel" id="reportsPreview">
+          <div class="admin-v2-toolbar">
+            <div class="admin-v2-toolbar-title">
+              <h2>统计摘要</h2>
+              <p>报表、批改中心和首页看板共用同一套数字卡片</p>
+            </div>
+            <div class="admin-v2-controls">
+              <button class="admin-v2-button" type="button">本周</button>
+              <button class="admin-v2-button admin-v2-button--primary" type="button">导出</button>
+            </div>
+          </div>
+          <div class="admin-v2-stat-grid">
+            <div class="admin-v2-stat">
+              <p class="admin-v2-stat__label">待批改</p>
+              <div class="admin-v2-stat__value">12</div>
+              <p class="admin-v2-stat__meta">较昨日 +3</p>
+            </div>
+            <div class="admin-v2-stat">
+              <p class="admin-v2-stat__label">已完成任务</p>
+              <div class="admin-v2-stat__value">86%</div>
+              <p class="admin-v2-stat__meta">本周学生提交率</p>
+            </div>
+            <div class="admin-v2-stat">
+              <p class="admin-v2-stat__label">平均正确率</p>
+              <div class="admin-v2-stat__value">74%</div>
+              <p class="admin-v2-stat__meta">阅读与语法综合</p>
+            </div>
+            <div class="admin-v2-stat">
+              <p class="admin-v2-stat__label">活跃学生</p>
+              <div class="admin-v2-stat__value">28</div>
+              <p class="admin-v2-stat__meta">过去 7 天有练习记录</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-v2-panel" id="gradingPreview">
+          <div class="admin-v2-toolbar">
+            <div class="admin-v2-toolbar-title">
+              <h2>批改详情</h2>
+              <p>详情页采用主内容 + 侧栏元信息，不再堆叠松散卡片</p>
+            </div>
+            <div class="admin-v2-controls">
+              <button class="admin-v2-button" type="button">返回</button>
+              <button class="admin-v2-button admin-v2-button--primary" type="button">保存反馈</button>
+            </div>
+          </div>
+          <div class="admin-v2-detail">
+            <div class="admin-v2-detail-main">
+              <h3>学生答案与反馈</h3>
+              <p>学生提交的长文本、口语转写或阅读错题解析放在主内容区。段落保持 13px-14px 的后台阅读密度，反馈控件与内容靠近。</p>
+              <p>教师可在这里直接批注、打分、补充下一步练习建议，避免在多个松散区域之间来回跳转。</p>
+            </div>
+            <aside class="admin-v2-detail-side">
+              <h3>任务信息</h3>
+              <ul class="admin-v2-meta-list">
+                <li><span>学生</span><strong>朱子昊</strong></li>
+                <li><span>类型</span><strong>语法练习</strong></li>
+                <li><span>状态</span><strong>待批改</strong></li>
+                <li><span>提交时间</span><strong>2026-05-31</strong></li>
+              </ul>
+            </aside>
+          </div>
+        </section>
+
+        <section class="admin-v2-panel" id="formPreview">
+          <div class="admin-v2-toolbar">
+            <div class="admin-v2-toolbar-title">
+              <h2>创建/编辑表单</h2>
+              <p>表单迁移时保留紧凑分区和统一控件高度</p>
+            </div>
+            <div class="admin-v2-controls">
+              <button class="admin-v2-button" type="button">取消</button>
+              <button class="admin-v2-button admin-v2-button--primary" type="button">保存</button>
+            </div>
+          </div>
+          <form class="admin-v2-form">
+            <section class="admin-v2-form-section">
+              <h3>基础信息</h3>
+              <div class="admin-v2-form-grid">
+                <div class="admin-v2-field">
+                  <label for="demoTitle">任务标题</label>
+                  <input id="demoTitle" type="text" value="非谓语动词专项训练">
+                  <span class="admin-v2-help">列表页会优先显示这个标题。</span>
+                </div>
+                <div class="admin-v2-field">
+                  <label for="demoType">任务类型</label>
+                  <select id="demoType">
+                    <option>材料库练习</option>
+                    <option>听写词库</option>
+                    <option>口语录音</option>
+                  </select>
+                </div>
+                <div class="admin-v2-field admin-v2-field--wide">
+                  <label for="demoNote">补充说明</label>
+                  <textarea id="demoNote">完成 1-30 题，错题需要写出对应语法点。</textarea>
+                  <span class="admin-v2-help">说明可以写长，但列表页只显示两行，详情页展示完整内容。</span>
+                </div>
+              </div>
+            </section>
+            <section class="admin-v2-form-section">
+              <h3>发布设置</h3>
+              <div class="admin-v2-form-grid">
+                <div class="admin-v2-field">
+                  <label for="demoStudent">学生</label>
+                  <select id="demoStudent">
+                    <option>朱子昊</option>
+                    <option>测试学生</option>
+                    <option>陈同学</option>
+                  </select>
+                </div>
+                <div class="admin-v2-field">
+                  <label for="demoDue">截止日期</label>
+                  <input id="demoDue" type="date" value="2026-06-02">
+                </div>
+              </div>
+            </section>
+            <div class="admin-v2-form-actions">
+              <button class="admin-v2-button" type="button">取消</button>
+              <button class="admin-v2-button admin-v2-button--primary" type="button">保存并发布</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="./admin_ui_v2.js"></script>
+  <script>
+    const materialRows = [
+      {
+        title: '托福阅读词汇选择题',
+        desc: '暂无说明',
+        type: '阅读词汇',
+        tone: 'warning',
+        count: 266,
+        date: '2026-04-16'
+      },
+      {
+        title: '非谓语动词 (Non-finite Verbs)',
+        desc: '核心语法详解：非谓语动词是让句子变得高级、紧凑的法宝。V-ing 表示主动或进行，V-ed 表示被动或完成，独立主格用于逻辑主语不一致的情况。',
+        type: '语法',
+        tone: 'info',
+        count: 30,
+        date: '2026-03-18'
+      },
+      {
+        title: 'speaking_part2_3 part.2 + 3 题库',
+        desc: '包含近期 Part 2 cue card 和 Part 3 延展问题，适合课堂快速布置跟读和录音任务。',
+        type: '口语 Part 2/3',
+        tone: 'warning',
+        count: 71,
+        date: '2026-02-25'
+      },
+      {
+        title: 'speaking_reading Problem & Solution 问题与解决',
+        desc: '短篇朗读材料，保留英文主题和中文主题，供学生进行影子跟读、录音提交和教师反馈。',
+        type: '口语朗读',
+        tone: 'warning',
+        count: 1,
+        date: '2025-12-06'
+      }
+    ];
+
+    const taskRows = [
+      {
+        title: '动词的时态和语态',
+        desc: '材料库练习，指定完成 1-50 题。',
+        student: '朱子昊',
+        status: '进行中',
+        tone: 'primary',
+        due: '2026-06-02'
+      },
+      {
+        title: 'IELTS Reading Passage 1',
+        desc: '阅读真题训练，完成后提交错题反馈。',
+        student: '测试学生',
+        status: '待批改',
+        tone: 'warning',
+        due: '2026-06-03'
+      },
+      {
+        title: '口语 Part 2 录音',
+        desc: '录音提交后由教师查看发音和流利度。',
+        student: '陈同学',
+        status: '已完成',
+        tone: 'success',
+        due: '2026-05-30'
+      }
+    ];
+
+    document.getElementById('materialsTable').innerHTML = AdminUIV2.table(
+      [
+        { label: '材料' },
+        { label: '类型', width: '140px' },
+        { label: '题量', width: '96px' },
+        { label: '创建时间', width: '132px' },
+        { label: '操作', width: '292px' }
+      ],
+      materialRows.map((item) => [
+        AdminUIV2.titleCell(item.title, item.desc),
+        AdminUIV2.badge(item.type, item.tone),
+        `<strong>${item.count}</strong><span class="admin-v2-count" style="margin-left: 6px;">题</span>`,
+        `<span>${item.date}</span>`,
+        `<div class="admin-v2-row-actions">
+          ${AdminUIV2.rowAction('查看', { icon: 'fas fa-eye' })}
+          ${AdminUIV2.rowAction('发布', { icon: 'fas fa-paper-plane', tone: 'primary' })}
+          ${AdminUIV2.rowAction('编辑', { icon: 'fas fa-pen' })}
+          ${AdminUIV2.rowAction('删除', { icon: 'fas fa-trash', tone: 'danger' })}
+        </div>`
+      ])
+    );
+
+    document.getElementById('tasksTable').innerHTML = AdminUIV2.table(
+      [
+        { label: '任务' },
+        { label: '学生', width: '128px' },
+        { label: '状态', width: '112px' },
+        { label: '截止', width: '132px' },
+        { label: '操作', width: '190px' }
+      ],
+      taskRows.map((item) => [
+        AdminUIV2.titleCell(item.title, item.desc),
+        `<strong>${AdminUIV2.escapeHtml(item.student)}</strong>`,
+        AdminUIV2.badge(item.status, item.tone),
+        `<span>${item.due}</span>`,
+        `<div class="admin-v2-row-actions">
+          ${AdminUIV2.rowAction('查看', { icon: 'fas fa-eye' })}
+          ${AdminUIV2.rowAction('批改', { icon: 'fas fa-check', tone: 'primary' })}
+        </div>`
+      ])
+    );
+  </script>
+</body>
+</html>

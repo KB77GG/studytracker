@@ -1,0 +1,984 @@
+{% extends "base.html" %}
+
+{% block title %}材料库管理{% endblock %}
+{% block page_subtitle %}Materials{% endblock %}
+{% block page_title %}材料库{% endblock %}
+{% block header_actions %}
+<button type="button" class="btn btn-primary mlib-create-btn" onclick="window.location.href='/materials/create'">
+  <i class="fas fa-plus"></i>
+  创建新材料
+</button>
+{% endblock %}
+
+{% block content_dashboard %}
+<section class="mlib-page">
+  <div class="mlib-panel">
+    <div class="mlib-tabs" role="tablist" aria-label="材料库分类">
+      <a class="mlib-tab active" id="materials-tab" data-toggle="tab" href="#materials" role="tab">
+        教辅材料 <span id="materialCount">-</span>
+      </a>
+      <a class="mlib-tab" id="dictation-tab" data-toggle="tab" href="#dictation" role="tab">
+        听写词库 <span id="dictationCount">-</span>
+      </a>
+    </div>
+
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="materials" role="tabpanel">
+        <div class="mlib-toolbar">
+          <div>
+            <h2>教辅材料</h2>
+            <p id="materialResultText">正在加载</p>
+          </div>
+          <div class="mlib-controls">
+            <label class="mlib-control" for="typeFilter">
+              <i class="fas fa-filter"></i>
+              <select id="typeFilter" onchange="filterMaterials(true)">
+                <option value="">全部类型</option>
+                <option value="grammar">语法练习</option>
+                <option value="translation">翻译练习</option>
+                <option value="reading_vocab_choice">阅读词汇选择题</option>
+                <option value="ielts_reading_practice">雅思阅读真题</option>
+                <option value="speaking">口语朗读</option>
+                <option value="writing">写作训练</option>
+              </select>
+            </label>
+            <label class="mlib-control mlib-control--search" for="searchInput">
+              <i class="fas fa-search"></i>
+              <input id="searchInput" type="text" placeholder="搜索材料标题" oninput="filterMaterials()">
+            </label>
+            <button class="mlib-icon-btn" type="button" onclick="loadMaterials()" title="刷新" aria-label="刷新材料">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="materialsList" class="mlib-list">
+          <div class="mlib-loading"><span class="spinner-border spinner-border-sm"></span>加载材料中</div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="dictation" role="tabpanel">
+        <div class="mlib-toolbar">
+          <div>
+            <h2>听写词库</h2>
+            <p id="dictationResultText">尚未加载</p>
+          </div>
+          <button type="button" class="mlib-secondary-btn" onclick="toggleVocabUpload()">
+            <i class="far fa-file-pdf"></i>
+            上传翻译词汇 PDF
+          </button>
+        </div>
+
+        <div id="vocabPdfUploadArea" class="mlib-upload" hidden>
+          <div class="mlib-upload__head">
+            <h3>上传翻译词汇 PDF</h3>
+            <p>适合看中文写英文的词库，上传后可直接发布任务。</p>
+          </div>
+          <div class="mlib-upload__grid">
+            <input type="text" id="vocabPdfTitle" placeholder="词库标题（选填）">
+            <input type="file" id="vocabPdfFile" accept=".pdf">
+            <button type="button" class="mlib-primary-btn" id="vocabPdfBtn" onclick="uploadVocabPdf()">上传并创建</button>
+          </div>
+          <div id="vocabPdfStatus" class="mlib-status" aria-live="polite"></div>
+        </div>
+
+        <div id="dictationBooksList" class="mlib-list">
+          <div class="mlib-loading">切换后加载词库</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal fade" id="dictationBookModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content mlib-modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bookDetailTitle">词库详情</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="关闭">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="mlib-book-meta">
+          <p id="bookDetailDesc"></p>
+          <span><i class="fas fa-layer-group"></i> 共 <strong id="bookDetailCount">0</strong> 个单词</span>
+          <span><i class="far fa-clock"></i> 创建于 <strong id="bookDetailDate"></strong></span>
+        </div>
+        <div class="mlib-table-wrap mlib-table-wrap--modal">
+          <table class="mlib-table">
+            <thead>
+              <tr>
+                <th style="width: 64px;">#</th>
+                <th>单词</th>
+                <th>音标</th>
+                <th>释义</th>
+              </tr>
+            </thead>
+            <tbody id="bookWordsList"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="mlib-secondary-btn" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let allMaterials = [];
+  let allBooks = [];
+  let materialSearchTimer = null;
+  let dictationLoaded = false;
+
+  const typeLabels = {
+    grammar: '语法',
+    translation: '翻译',
+    reading_vocab_choice: '阅读词汇',
+    ielts_reading_practice: '雅思阅读',
+    speaking: '口语',
+    speaking_part1: '口语 Part 1',
+    speaking_part2_3: '口语 Part 2/3',
+    speaking_reading: '口语朗读',
+    writing: '写作'
+  };
+
+  const typeTone = {
+    grammar: 'blue',
+    translation: 'green',
+    reading_vocab_choice: 'amber',
+    ielts_reading_practice: 'blue',
+    speaking: 'orange',
+    speaking_part1: 'orange',
+    speaking_part2_3: 'orange',
+    speaking_reading: 'orange',
+    writing: 'purple'
+  };
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, function (char) {
+      return {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char];
+    });
+  }
+
+  function safeDate(value) {
+    if (!value) return '-';
+    return escapeHtml(String(value).split('T')[0]);
+  }
+
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  function showLoading(containerId, text) {
+    document.getElementById(containerId).innerHTML = `
+      <div class="mlib-loading">
+        <span class="spinner-border spinner-border-sm"></span>${escapeHtml(text)}
+      </div>
+    `;
+  }
+
+  async function loadMaterials() {
+    const params = new URLSearchParams();
+    const type = document.getElementById('typeFilter').value;
+    const search = document.getElementById('searchInput').value.trim();
+    if (type) params.set('type', type);
+    if (search) params.set('search', search);
+
+    showLoading('materialsList', '加载材料中');
+    setText('materialResultText', '正在加载');
+
+    try {
+      const query = params.toString();
+      const response = await fetch(`/api/materials${query ? `?${query}` : ''}`, { credentials: 'include' });
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.error || '未知错误');
+      allMaterials = data.materials || [];
+      renderMaterials(allMaterials);
+    } catch (error) {
+      renderError('materialsList', `加载失败：${error.message}`);
+    }
+  }
+
+  async function loadDictationBooks() {
+    showLoading('dictationBooksList', '加载词库中');
+    setText('dictationResultText', '正在加载');
+
+    try {
+      const response = await fetch('/api/dictation/books', { credentials: 'include' });
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.error || '未知错误');
+      allBooks = data.books || [];
+      dictationLoaded = true;
+      renderDictationBooks(allBooks);
+    } catch (error) {
+      renderError('dictationBooksList', `加载词库失败：${error.message}`);
+    }
+  }
+
+  function renderMaterials(materials) {
+    setText('materialCount', materials.length);
+    setText('materialResultText', `${materials.length} 份材料`);
+
+    if (!materials.length) {
+      renderEmpty('materialsList', '暂无材料', '新建材料后会显示在这里。');
+      return;
+    }
+
+    const rows = materials.map(function (m) {
+      const label = typeLabels[m.type] || m.type || '未分类';
+      const tone = typeTone[m.type] || 'neutral';
+      return `
+        <tr>
+          <td>
+            <div class="mlib-title">${escapeHtml(m.title)}</div>
+            <div class="mlib-desc">${escapeHtml(m.description || '暂无说明')}</div>
+          </td>
+          <td><span class="mlib-badge mlib-badge--${tone}">${escapeHtml(label)}</span></td>
+          <td><strong>${escapeHtml(m.question_count || 0)}</strong><span class="mlib-unit">题</span></td>
+          <td><span class="mlib-date">${safeDate(m.created_at)}</span></td>
+          <td class="mlib-actions">
+            <button type="button" onclick="viewMaterial(${Number(m.id)})"><i class="fas fa-eye"></i>查看</button>
+            <button type="button" class="is-primary" onclick="createTaskFromMaterial(${Number(m.id)})"><i class="fas fa-paper-plane"></i>发布</button>
+            <button type="button" onclick="editMaterial(${Number(m.id)})"><i class="fas fa-pen"></i>编辑</button>
+            <button type="button" class="is-danger" onclick="deleteMaterial(${Number(m.id)})"><i class="fas fa-trash"></i>删除</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    document.getElementById('materialsList').innerHTML = `
+      <div class="mlib-table-wrap">
+        <table class="mlib-table">
+          <thead>
+            <tr>
+              <th>材料</th>
+              <th style="width: 140px;">类型</th>
+              <th style="width: 96px;">题量</th>
+              <th style="width: 132px;">创建时间</th>
+              <th style="width: 292px;">操作</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function renderDictationBooks(books) {
+    setText('dictationCount', books.length);
+    setText('dictationResultText', `${books.length} 个词库`);
+
+    if (!books.length) {
+      renderEmpty('dictationBooksList', '暂无词库', '创建或上传词库后会显示在这里。');
+      return;
+    }
+
+    const rows = books.map(function (book) {
+      const isTranslation = book.book_type === 'translation';
+      return `
+        <tr>
+          <td>
+            <div class="mlib-title">${escapeHtml(book.title)}</div>
+            <div class="mlib-desc">${escapeHtml(book.description || '暂无说明')}</div>
+          </td>
+          <td><span class="mlib-badge mlib-badge--${isTranslation ? 'green' : 'blue'}">${isTranslation ? '翻译' : '听写'}</span></td>
+          <td><strong>${escapeHtml(book.word_count || 0)}</strong><span class="mlib-unit">词</span></td>
+          <td>
+            <span class="mlib-date">${safeDate(book.created_at)}</span>
+            ${book.creator ? `<div class="mlib-creator">${escapeHtml(book.creator)}</div>` : ''}
+          </td>
+          <td class="mlib-actions">
+            <button type="button" onclick="viewDictationBook(${Number(book.id)})"><i class="fas fa-eye"></i>查看</button>
+            <button type="button" class="is-primary" onclick="createDictationTask(${Number(book.id)})"><i class="fas fa-paper-plane"></i>发布</button>
+            <button type="button" class="is-danger" onclick="deleteDictationBook(${Number(book.id)})"><i class="fas fa-trash"></i>删除</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    document.getElementById('dictationBooksList').innerHTML = `
+      <div class="mlib-table-wrap">
+        <table class="mlib-table">
+          <thead>
+            <tr>
+              <th>词库</th>
+              <th style="width: 112px;">类型</th>
+              <th style="width: 104px;">词量</th>
+              <th style="width: 160px;">创建</th>
+              <th style="width: 228px;">操作</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function renderEmpty(containerId, title, desc) {
+    document.getElementById(containerId).innerHTML = `
+      <div class="mlib-empty">
+        <div><i class="fas fa-inbox"></i></div>
+        <h3>${escapeHtml(title)}</h3>
+        <p>${escapeHtml(desc)}</p>
+      </div>
+    `;
+  }
+
+  function renderError(containerId, message) {
+    document.getElementById(containerId).innerHTML = `<div class="mlib-error">${escapeHtml(message)}</div>`;
+  }
+
+  function filterMaterials(immediate) {
+    clearTimeout(materialSearchTimer);
+    materialSearchTimer = setTimeout(loadMaterials, immediate ? 0 : 240);
+  }
+
+  function toggleVocabUpload() {
+    const panel = document.getElementById('vocabPdfUploadArea');
+    panel.hidden = !panel.hidden;
+  }
+
+  async function uploadVocabPdf() {
+    const fileInput = document.getElementById('vocabPdfFile');
+    const titleInput = document.getElementById('vocabPdfTitle');
+    const btn = document.getElementById('vocabPdfBtn');
+    const status = document.getElementById('vocabPdfStatus');
+
+    if (!fileInput.files.length) {
+      alert('请先选择PDF文件');
+      return;
+    }
+
+    btn.disabled = true;
+    status.textContent = '正在解析上传中...';
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    if (titleInput.value.trim()) formData.append('title', titleInput.value.trim());
+
+    try {
+      const response = await fetch('/api/dictation/books/upload-vocab-pdf', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      });
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.message || data.error || '未知错误');
+      status.textContent = `已创建「${data.title}」，共 ${data.word_count} 个词条`;
+      fileInput.value = '';
+      titleInput.value = '';
+      loadDictationBooks();
+    } catch (error) {
+      status.textContent = `上传失败：${error.message}`;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function viewDictationBook(id) {
+    try {
+      const response = await fetch(`/api/dictation/books/${id}`, { credentials: 'include' });
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.error || '未知错误');
+
+      const book = data.book || {};
+      const words = data.words || [];
+      $('#bookDetailTitle').text(book.title || '词库详情');
+      $('#bookDetailDesc').text(book.description || '暂无描述');
+      $('#bookDetailCount').text(book.word_count || words.length || 0);
+      $('#bookDetailDate').text(book.created_at ? new Date(book.created_at).toLocaleDateString() : '-');
+
+      const rows = words.length ? words.map(function (word, index) {
+        return `
+          <tr>
+            <td>${index + 1}</td>
+            <td><strong>${escapeHtml(word.word || '-')}</strong></td>
+            <td class="mlib-muted">${escapeHtml(word.phonetic || '-')}</td>
+            <td>${escapeHtml(word.translation || '-')}</td>
+          </tr>
+        `;
+      }).join('') : '<tr><td colspan="4" class="mlib-empty-cell">暂无单词</td></tr>';
+
+      document.getElementById('bookWordsList').innerHTML = rows;
+      $('#dictationBookModal').modal('show');
+    } catch (error) {
+      alert(`获取详情失败：${error.message}`);
+    }
+  }
+
+  function viewMaterial(id) {
+    window.location.href = `/materials/${id}`;
+  }
+
+  function editMaterial(id) {
+    window.location.href = `/materials/${id}/edit`;
+  }
+
+  function createTaskFromMaterial(id) {
+    window.location.href = `/tasks/create?material_id=${id}`;
+  }
+
+  function createDictationTask(id) {
+    window.location.href = `/tasks/create?dictation_book_id=${id}`;
+  }
+
+  async function deleteMaterial(id) {
+    if (!confirm('确定要删除这份材料吗？')) return;
+    try {
+      const response = await fetch(`/api/materials/${id}`, { method: 'DELETE', credentials: 'include' });
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.error || '未知错误');
+      loadMaterials();
+    } catch (error) {
+      alert(`删除失败：${error.message}`);
+    }
+  }
+
+  async function deleteDictationBook(id) {
+    if (!confirm('确定要删除这个词库吗？相关音频也会被删除。')) return;
+    try {
+      const response = await fetch(`/api/dictation/books/${id}`, { method: 'DELETE', credentials: 'include' });
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.error || '未知错误');
+      loadDictationBooks();
+    } catch (error) {
+      alert(`删除失败：${error.message}`);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    loadMaterials();
+    document.getElementById('dictation-tab').addEventListener('click', function () {
+      if (!dictationLoaded) loadDictationBooks();
+    });
+  });
+</script>
+
+<style>
+  .mlib-page {
+    --mlib-primary: #20756F;
+    --mlib-primary-strong: #145C57;
+    --mlib-primary-soft: #E6F5F2;
+    --mlib-ink: #111827;
+    --mlib-muted: #667085;
+    --mlib-subtle: #98A2B3;
+    --mlib-border: #E5E7EB;
+    --mlib-border-strong: #D0D5DD;
+    --mlib-bg: #F9FAFB;
+  }
+
+  .mlib-create-btn {
+    min-height: 36px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: #20756F;
+    border-color: #20756F;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .08);
+  }
+
+  .mlib-create-btn:hover {
+    background: #145C57;
+    border-color: #145C57;
+    color: #fff;
+  }
+
+  .mlib-panel {
+    background: #fff;
+    border: 1px solid var(--mlib-border);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+    overflow: hidden;
+  }
+
+  .mlib-tabs {
+    display: inline-flex;
+    gap: 4px;
+    margin: 14px 16px;
+    padding: 3px;
+    border: 1px solid var(--mlib-border);
+    border-radius: 8px;
+    background: var(--mlib-bg);
+  }
+
+  .mlib-tab {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: var(--mlib-muted);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .mlib-tab:hover {
+    color: var(--mlib-ink);
+    text-decoration: none;
+  }
+
+  .mlib-tab.active {
+    background: #fff;
+    color: var(--mlib-primary-strong);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
+  }
+
+  .mlib-tab span {
+    min-width: 22px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: #EEF2F6;
+    color: var(--mlib-muted);
+    font-size: 12px;
+  }
+
+  .mlib-tab.active span {
+    background: var(--mlib-primary-soft);
+    color: var(--mlib-primary-strong);
+  }
+
+  .mlib-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border-top: 1px solid var(--mlib-border);
+  }
+
+  .mlib-toolbar h2 {
+    margin: 0;
+    color: var(--mlib-ink);
+    font-size: 18px;
+    font-weight: 750;
+  }
+
+  .mlib-toolbar p {
+    margin: 3px 0 0;
+    color: var(--mlib-muted);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .mlib-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .mlib-control {
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0 10px;
+    border: 1px solid var(--mlib-border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--mlib-subtle);
+  }
+
+  .mlib-control:focus-within {
+    border-color: var(--mlib-border-strong);
+    box-shadow: 0 0 0 3px rgba(32, 117, 111, .1);
+  }
+
+  .mlib-control select,
+  .mlib-control input {
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--mlib-ink);
+    font-size: 13px;
+  }
+
+  .mlib-control--search {
+    width: min(360px, 42vw);
+  }
+
+  .mlib-icon-btn,
+  .mlib-secondary-btn,
+  .mlib-primary-btn,
+  .mlib-actions button {
+    border: 1px solid var(--mlib-border);
+    border-radius: 8px;
+    box-shadow: none;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .mlib-icon-btn {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #fff;
+    color: var(--mlib-muted);
+  }
+
+  .mlib-secondary-btn,
+  .mlib-primary-btn {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 7px 12px;
+  }
+
+  .mlib-secondary-btn {
+    background: #fff;
+    color: var(--mlib-ink);
+  }
+
+  .mlib-primary-btn {
+    background: var(--mlib-primary);
+    border-color: var(--mlib-primary);
+    color: #fff;
+  }
+
+  .mlib-list {
+    padding: 0 20px 20px;
+  }
+
+  .mlib-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--mlib-border);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .mlib-table-wrap--modal {
+    max-height: 50vh;
+    overflow: auto;
+  }
+
+  .mlib-table {
+    width: 100%;
+    min-width: 860px;
+    margin: 0;
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: none;
+  }
+
+  .mlib-table th {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--mlib-border);
+    background: var(--mlib-bg);
+    color: var(--mlib-muted);
+    font-size: 12px;
+    font-weight: 750;
+  }
+
+  .mlib-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--mlib-border);
+    color: var(--mlib-ink);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  .mlib-table tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .mlib-title {
+    max-width: 560px;
+    color: var(--mlib-ink);
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .mlib-desc {
+    max-width: 620px;
+    margin-top: 4px;
+    color: var(--mlib-muted);
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 12px;
+    line-height: 1.45;
+    word-break: break-word;
+  }
+
+  .mlib-badge {
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 750;
+    white-space: nowrap;
+  }
+
+  .mlib-badge--blue { background: #EAF2FF; color: #1D4ED8; }
+  .mlib-badge--green { background: #E6F5F2; color: #145C57; }
+  .mlib-badge--amber { background: #FFF7ED; color: #B45309; }
+  .mlib-badge--orange { background: #FFF4E6; color: #C2410C; }
+  .mlib-badge--purple { background: #F3E8FF; color: #7E22CE; }
+  .mlib-badge--neutral { background: #F3F4F6; color: #4B5563; }
+
+  .mlib-unit {
+    margin-left: 3px;
+    color: var(--mlib-muted);
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .mlib-date {
+    color: #344054;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .mlib-creator {
+    margin-top: 3px;
+    color: var(--mlib-muted);
+    font-size: 12px;
+  }
+
+  .mlib-actions {
+    white-space: nowrap;
+  }
+
+  .mlib-actions button {
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 4px 0 0;
+    padding: 6px 9px;
+    background: #fff;
+    color: #344054;
+    font-size: 12px;
+  }
+
+  .mlib-actions .is-primary {
+    background: var(--mlib-primary-soft);
+    border-color: #B8E2DD;
+    color: var(--mlib-primary-strong);
+  }
+
+  .mlib-actions .is-danger {
+    color: #B42318;
+  }
+
+  .mlib-loading,
+  .mlib-empty,
+  .mlib-error {
+    min-height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid var(--mlib-border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--mlib-muted);
+    font-size: 13px;
+    font-weight: 650;
+  }
+
+  .mlib-empty {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .mlib-empty div {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--mlib-primary-soft);
+    color: var(--mlib-primary-strong);
+  }
+
+  .mlib-empty h3 {
+    margin: 4px 0 0;
+    color: var(--mlib-ink);
+    font-size: 15px;
+    font-weight: 750;
+  }
+
+  .mlib-empty p {
+    margin: 0;
+    color: var(--mlib-muted);
+    font-size: 13px;
+  }
+
+  .mlib-error {
+    color: #B42318;
+    background: #FFF5F5;
+  }
+
+  .mlib-upload {
+    margin: 0 20px 18px;
+    padding: 16px;
+    border: 1px solid var(--mlib-border);
+    border-radius: 8px;
+    background: var(--mlib-bg);
+  }
+
+  .mlib-upload[hidden] {
+    display: none;
+  }
+
+  .mlib-upload__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .mlib-upload__head h3 {
+    margin: 0;
+    color: var(--mlib-ink);
+    font-size: 15px;
+    font-weight: 750;
+  }
+
+  .mlib-upload__head p {
+    margin: 0;
+    color: var(--mlib-muted);
+    font-size: 12px;
+  }
+
+  .mlib-upload__grid {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(220px, 1fr) auto;
+    gap: 10px;
+  }
+
+  .mlib-upload input {
+    min-height: 36px;
+    border: 1px solid var(--mlib-border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--mlib-ink);
+    font-size: 13px;
+  }
+
+  .mlib-status {
+    min-height: 20px;
+    margin-top: 10px;
+    color: var(--mlib-muted);
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .mlib-book-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-bottom: 14px;
+    color: var(--mlib-muted);
+    font-size: 13px;
+  }
+
+  .mlib-book-meta p {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--mlib-ink);
+    font-weight: 650;
+  }
+
+  .mlib-muted {
+    color: var(--mlib-muted);
+    font-style: italic;
+  }
+
+  .mlib-empty-cell {
+    padding: 36px 14px !important;
+    color: var(--mlib-muted) !important;
+    text-align: center;
+  }
+
+  @media (max-width: 920px) {
+    .mlib-toolbar {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .mlib-controls {
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .mlib-control--search {
+      width: min(100%, 420px);
+      flex: 1 1 220px;
+    }
+
+    .mlib-upload__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .mlib-create-btn {
+      width: 100%;
+    }
+
+    .mlib-tabs {
+      display: flex;
+      margin: 12px;
+    }
+
+    .mlib-tab {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .mlib-toolbar,
+    .mlib-list {
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+
+    .mlib-control,
+    .mlib-control--search {
+      width: 100%;
+      flex: 1 1 100%;
+    }
+
+    .mlib-upload {
+      margin-left: 14px;
+      margin-right: 14px;
+    }
+  }
+</style>
+{% endblock %}

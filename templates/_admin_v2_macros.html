@@ -1,0 +1,141 @@
+{#
+  Shared admin UI v2 macros.
+
+  These macros are not wired into existing pages yet. Import them from a page
+  after `static/admin_ui_v2.css` is linked from base.html:
+
+    {% import "_admin_v2_macros.html" as ui %}
+    {{ ui.badge("已完成", "success") }}
+
+  Keep macro output structural and compact. Page-specific JavaScript can still
+  render dynamic table rows when data comes from APIs.
+#}
+
+{% macro count(value) -%}
+  <span class="admin-v2-count">{{ value }}</span>
+{%- endmacro %}
+
+{% macro tab(label, href, value="-", active=false, id="") -%}
+  <a class="admin-v2-tab {{ 'active' if active else '' }}" href="{{ href }}" role="tab"{% if id %} id="{{ id }}"{% endif %}>
+    {{ label }} {{ count(value) }}
+  </a>
+{%- endmacro %}
+
+{% macro badge(label, tone="neutral") -%}
+  <span class="admin-v2-badge admin-v2-badge--{{ tone }}">{{ label }}</span>
+{%- endmacro %}
+
+{% macro button(label, href="", tone="secondary", icon="") -%}
+  {% set classes = "admin-v2-button" + (" admin-v2-button--primary" if tone == "primary" else "") %}
+  {% if href %}
+    <a class="{{ classes }}" href="{{ href }}">{% if icon %}<i class="{{ icon }}"></i>{% endif %}{{ label }}</a>
+  {% else %}
+    <button type="button" class="{{ classes }}">{% if icon %}<i class="{{ icon }}"></i>{% endif %}{{ label }}</button>
+  {% endif %}
+{%- endmacro %}
+
+{% macro toolbar(title, meta="") -%}
+  <div class="admin-v2-toolbar">
+    <div class="admin-v2-toolbar-title">
+      <h2>{{ title }}</h2>
+      {% if meta %}<p>{{ meta }}</p>{% endif %}
+    </div>
+    <div class="admin-v2-controls">
+      {{ caller() }}
+    </div>
+  </div>
+{%- endmacro %}
+
+{% macro search_control(id, placeholder="搜索") -%}
+  <label class="admin-v2-control admin-v2-control--search" for="{{ id }}">
+    <i class="fas fa-search"></i>
+    <input id="{{ id }}" type="text" placeholder="{{ placeholder }}">
+  </label>
+{%- endmacro %}
+
+{% macro select_control(id, options) -%}
+  <label class="admin-v2-control" for="{{ id }}">
+    <i class="fas fa-filter"></i>
+    <select id="{{ id }}">
+      {% for value, label in options %}
+        <option value="{{ value }}">{{ label }}</option>
+      {% endfor %}
+    </select>
+  </label>
+{%- endmacro %}
+
+{% macro empty(title, desc="", icon="fas fa-inbox") -%}
+  <div class="admin-v2-empty">
+    <div><i class="{{ icon }}"></i></div>
+    <h3>{{ title }}</h3>
+    {% if desc %}<p>{{ desc }}</p>{% endif %}
+  </div>
+{%- endmacro %}
+
+{% macro loading(label="加载中") -%}
+  <div class="admin-v2-loading">
+    <span class="spinner-border spinner-border-sm"></span>{{ label }}
+  </div>
+{%- endmacro %}
+
+{% macro error(label) -%}
+  <div class="admin-v2-error">{{ label }}</div>
+{%- endmacro %}
+
+{% macro stat(label, value, meta="") -%}
+  <div class="admin-v2-stat">
+    <p class="admin-v2-stat__label">{{ label }}</p>
+    <div class="admin-v2-stat__value">{{ value }}</div>
+    {% if meta %}<p class="admin-v2-stat__meta">{{ meta }}</p>{% endif %}
+  </div>
+{%- endmacro %}
+
+{% macro stat_grid(items) -%}
+  <div class="admin-v2-stat-grid">
+    {% for item in items %}
+      {{ stat(item.label, item.value, item.meta if item.meta is defined else "") }}
+    {% endfor %}
+  </div>
+{%- endmacro %}
+
+{% macro detail(main_title, side_title="信息") -%}
+  <div class="admin-v2-detail">
+    <div class="admin-v2-detail-main">
+      <h3>{{ main_title }}</h3>
+      {{ caller("main") }}
+    </div>
+    <aside class="admin-v2-detail-side">
+      <h3>{{ side_title }}</h3>
+      {{ caller("side") }}
+    </aside>
+  </div>
+{%- endmacro %}
+
+{% macro meta_list(items) -%}
+  <ul class="admin-v2-meta-list">
+    {% for label, value in items %}
+      <li><span>{{ label }}</span><strong>{{ value }}</strong></li>
+    {% endfor %}
+  </ul>
+{%- endmacro %}
+
+{% macro form_section(title) -%}
+  <section class="admin-v2-form-section">
+    <h3>{{ title }}</h3>
+    <div class="admin-v2-form-grid">
+      {{ caller() }}
+    </div>
+  </section>
+{%- endmacro %}
+
+{% macro field(label, id, type="text", value="", help="", wide=false) -%}
+  <div class="admin-v2-field {{ 'admin-v2-field--wide' if wide else '' }}">
+    <label for="{{ id }}">{{ label }}</label>
+    {% if type == "textarea" %}
+      <textarea id="{{ id }}">{{ value }}</textarea>
+    {% else %}
+      <input id="{{ id }}" type="{{ type }}" value="{{ value }}">
+    {% endif %}
+    {% if help %}<span class="admin-v2-help">{{ help }}</span>{% endif %}
+  </div>
+{%- endmacro %}
