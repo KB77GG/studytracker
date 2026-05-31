@@ -1,122 +1,719 @@
 {% extends "base.html" %}
+
+{% block title %}用户管理{% endblock %}
+{% block page_subtitle %}System{% endblock %}
+{% block page_title %}用户管理{% endblock %}
+{% block header_actions %}
+<a class="btn users-header-link" href="#studentProfiles">学生档案</a>
+<a class="btn users-header-link users-header-link--secondary" href="#systemUsers">系统账号</a>
+{% endblock %}
+
 {% block content %}{% endblock %}
+
+{% macro role_label(role) -%}
+  {%- if role == 'admin' -%}管理员
+  {%- elif role == 'teacher' -%}老师
+  {%- elif role == 'assistant' -%}助教
+  {%- elif role == 'course_planner' -%}排课专员
+  {%- elif role == 'student' -%}学生
+  {%- elif role == 'parent' -%}家长
+  {%- elif role == 'guest' -%}访客
+  {%- else -%}{{ role }}
+  {%- endif -%}
+{%- endmacro %}
+
 {% block content_dashboard %}
-<h2>用户管理</h2>
+{% set stats = namespace(bound_wechat=0, bound_account=0, unbound=0, active_users=0, inactive_users=0, staff_users=0) %}
+{% for s in students %}
+  {% if s.user_id and s.user and s.user.wechat_openid %}
+    {% set stats.bound_wechat = stats.bound_wechat + 1 %}
+  {% elif s.user_id %}
+    {% set stats.bound_account = stats.bound_account + 1 %}
+  {% else %}
+    {% set stats.unbound = stats.unbound + 1 %}
+  {% endif %}
+{% endfor %}
+{% for u in users %}
+  {% if u.is_active %}
+    {% set stats.active_users = stats.active_users + 1 %}
+  {% else %}
+    {% set stats.inactive_users = stats.inactive_users + 1 %}
+  {% endif %}
+  {% if u.role in ['admin', 'teacher', 'assistant', 'course_planner'] %}
+    {% set stats.staff_users = stats.staff_users + 1 %}
+  {% endif %}
+{% endfor %}
 
-<!-- 学生档案管理区域 -->
-<div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-  <h3>学生档案管理</h3>
-  <p style="color: #666; font-size: 14px;">学生创建后可通过微信小程序绑定使用，无需设置账号密码</p>
+<section class="users-page">
+  <section class="users-overview-grid">
+    <article class="users-stat-card">
+      <span class="users-stat-label">学生档案</span>
+      <strong>{{ students|length }}</strong>
+      <span>微信绑定 {{ stats.bound_wechat }} 人</span>
+    </article>
+    <article class="users-stat-card">
+      <span class="users-stat-label">待绑定学生</span>
+      <strong>{{ stats.unbound }}</strong>
+      <span>账号绑定 {{ stats.bound_account }} 人</span>
+    </article>
+    <article class="users-stat-card">
+      <span class="users-stat-label">系统账号</span>
+      <strong>{{ users|length }}</strong>
+      <span>员工账号 {{ stats.staff_users }} 个</span>
+    </article>
+    <article class="users-stat-card">
+      <span class="users-stat-label">账号状态</span>
+      <strong>{{ stats.active_users }}</strong>
+      <span>停用 {{ stats.inactive_users }} 个</span>
+    </article>
+  </section>
 
-  <form method="POST" style="margin: 20px 0;">
-    <input type="hidden" name="action" value="create_student">
-    <label>学生姓名：</label>
-    <input type="text" name="full_name" placeholder="请输入学生姓名" required>
-    <button type="submit" style="background: #667eea;">➕ 添加学生</button>
-  </form>
+  <section class="users-panel" id="studentProfiles">
+    <div class="users-section-header">
+      <div>
+        <h2>学生档案管理</h2>
+        <p>学生创建后可通过微信小程序绑定使用，无需设置账号密码。</p>
+      </div>
+      <span class="users-count-pill">{{ students|length }} 位学生</span>
+    </div>
 
-  <table class="user-table" style="margin-top: 20px;">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>姓名</th>
-        <th>绑定状态</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for s in students %}
-      <tr>
-        <td>{{ s.id }}</td>
-        <td>{{ s.full_name }}</td>
-        <td>
-          {% if s.user_id and s.user and s.user.wechat_openid %}
-          <span style="color: green;">✓ 已绑定微信</span>
-          {% elif s.user_id %}
-          <span style="color: orange;">⚠ 已绑定账号</span>
-          {% else %}
-          <span style="color: gray;">未绑定</span>
-          {% endif %}
-        </td>
-        <td>
-          <form method="POST" style="display: inline;" onsubmit="return confirm('确定删除学生档案 {{ s.full_name }} 吗？');">
-            <input type="hidden" name="action" value="delete_student">
-            <input type="hidden" name="student_id" value="{{ s.id }}">
-            <button type="submit" class="delete-btn" style="padding: 4px 8px;">删除</button>
-          </form>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+    <form method="POST" class="student-create-form">
+      <input type="hidden" name="action" value="create_student">
+      <label class="users-field users-field--grow">
+        <span>学生姓名</span>
+        <input type="text" name="full_name" placeholder="请输入学生姓名" required>
+      </label>
+      <button type="submit" class="users-primary-button">添加学生</button>
+    </form>
 
-<hr>
+    <div class="users-table-wrap users-table-wrap--students">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th class="users-id-col">ID</th>
+            <th>姓名</th>
+            <th>绑定状态</th>
+            <th class="users-action-col">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in students %}
+          <tr>
+            <td class="users-id-cell">{{ s.id }}</td>
+            <td>
+              <div class="users-person">
+                <span class="users-avatar">{{ s.full_name[:1] }}</span>
+                <div>
+                  <strong>{{ s.full_name }}</strong>
+                  <span>学生档案</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              {% if s.user_id and s.user and s.user.wechat_openid %}
+              <span class="bind-badge bind-badge--wechat">微信已绑定</span>
+              {% elif s.user_id %}
+              <span class="bind-badge bind-badge--account">账号已绑定</span>
+              {% else %}
+              <span class="bind-badge bind-badge--empty">未绑定</span>
+              {% endif %}
+            </td>
+            <td>
+              <form method="POST" class="student-delete-form" onsubmit="return confirm('确定删除学生档案 {{ s.full_name }} 吗？');">
+                <input type="hidden" name="action" value="delete_student">
+                <input type="hidden" name="student_id" value="{{ s.id }}">
+                <button type="submit" class="user-action-btn user-action-btn--danger">删除</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-<!-- 系统用户管理区域 -->
-<h3>系统用户管理</h3>
-<p style="color: #666; font-size: 14px;">管理教师、助教、管理员等系统用户账号</p>
+  <section class="users-panel" id="systemUsers">
+    <div class="users-section-header">
+      <div>
+        <h2>系统用户管理</h2>
+        <p>管理教师、助教、管理员等后台账号，并维护教师排课系统关联 ID。</p>
+      </div>
+      <span class="users-count-pill">{{ users|length }} 个账号</span>
+    </div>
 
-<form method="POST" class="user-form">
-  <input type="hidden" name="action" value="create">
-  <label>用户名：</label>
-  <input type="text" name="username" required>
-  <label>密码：</label>
-  <input type="password" name="password" required>
-  <label>角色：</label>
-  <select name="role">
-    <option value="teacher">老师</option>
-    <option value="assistant">助教</option>
-    <option value="course_planner">排课专员</option>
-    <option value="admin">管理员</option>
-  </select>
-  <button type="submit">创建用户</button>
-</form>
+    <form method="POST" class="system-create-form">
+      <input type="hidden" name="action" value="create">
+      <label class="users-field">
+        <span>用户名</span>
+        <input type="text" name="username" placeholder="输入用户名" required>
+      </label>
+      <label class="users-field">
+        <span>密码</span>
+        <input type="password" name="password" placeholder="至少 6 位" required>
+      </label>
+      <label class="users-field">
+        <span>角色</span>
+        <select name="role">
+          <option value="teacher">老师</option>
+          <option value="assistant">助教</option>
+          <option value="course_planner">排课专员</option>
+          <option value="admin">管理员</option>
+        </select>
+      </label>
+      <button type="submit" class="users-primary-button">创建用户</button>
+    </form>
 
-<table class="user-table" style="margin-top: 20px;">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>用户名</th>
-      <th>角色</th>
-      <th>排课教师ID</th>
-      <th>状态</th>
-      <th>操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for u in users %}
-    <tr data-user-id="{{ u.id }}">
-      <td>{{ u.id }}</td>
-      <td>{{ u.username }}</td>
-      <td>{{ u.role }}</td>
-      <td>
-        {% if u.role == 'teacher' %}
-        <input type="number" class="sched-input" data-uid="{{ u.id }}" value="{{ u.scheduler_teacher_id or '' }}" style="width: 120px;">
-        {% else %}
-        —
-        {% endif %}
-      </td>
-      <td class="status-cell">{{ "启用" if u.is_active else "停用" }}</td>
-      <td>
-        {% if u.id != current_user.id %}
-        <button type="button" class="toggle-btn" data-uid="{{ u.id }}">
-          {{ "停用" if u.is_active else "启用" }}
-        </button>
-        <button type="button" class="delete-btn" data-uid="{{ u.id }}">删除</button>
-        <button type="button" class="pwd-btn" data-uid="{{ u.id }}">修改密码</button>
-        {% else %}
-        <em>当前登录用户</em>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    <div class="users-table-wrap users-table-wrap--system">
+      <table class="users-table users-table--system">
+        <thead>
+          <tr>
+            <th class="users-id-col">ID</th>
+            <th>用户名</th>
+            <th>角色</th>
+            <th>排课教师 ID</th>
+            <th>状态</th>
+            <th class="users-action-col">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users %}
+          <tr data-user-id="{{ u.id }}">
+            <td class="users-id-cell">{{ u.id }}</td>
+            <td>
+              <div class="users-account" title="{{ u.username }}">
+                <strong>{{ u.display_name or u.username }}</strong>
+                {% if u.display_name and u.display_name != u.username %}
+                <span>{{ u.username }}</span>
+                {% endif %}
+              </div>
+            </td>
+            <td>
+              <span class="role-badge role-badge--{{ u.role|replace('_', '-') }}">{{ role_label(u.role) }}</span>
+            </td>
+            <td>
+              {% if u.role == 'teacher' %}
+              <input type="number" class="sched-input" data-uid="{{ u.id }}" value="{{ u.scheduler_teacher_id or '' }}" placeholder="未设置">
+              {% else %}
+              <span class="users-muted">未适用</span>
+              {% endif %}
+            </td>
+            <td class="status-cell">
+              <span class="user-status-badge {{ 'user-status-badge--active' if u.is_active else 'user-status-badge--inactive' }}">
+                {{ "启用" if u.is_active else "停用" }}
+              </span>
+            </td>
+            <td>
+              {% if u.id != current_user.id %}
+              <div class="users-actions">
+                <button type="button" class="user-action-btn toggle-btn" data-uid="{{ u.id }}">
+                  {{ "停用" if u.is_active else "启用" }}
+                </button>
+                <button type="button" class="user-action-btn user-action-btn--danger delete-btn" data-uid="{{ u.id }}">删除</button>
+                <button type="button" class="user-action-btn user-action-btn--ghost pwd-btn" data-uid="{{ u.id }}">改密</button>
+              </div>
+              {% else %}
+              <span class="current-user-note">当前登录用户</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>
+
+<style>
+  .users-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    color: #172033;
+  }
+
+  .users-page,
+  .users-page * {
+    box-sizing: border-box;
+  }
+
+  .users-header-link {
+    border: 1px solid #c9d7d5;
+    background: #ffffff;
+    color: #20756f;
+    font-weight: 700;
+    box-shadow: none;
+  }
+
+  .users-header-link:hover {
+    background: #e8f6f4;
+    color: #17645f;
+  }
+
+  .users-header-link--secondary {
+    background: #f7fafc;
+    color: #334155;
+  }
+
+  .users-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    min-width: 0;
+    margin-bottom: 18px;
+  }
+
+  .users-stat-card {
+    min-width: 0;
+    padding: 16px;
+    background: #ffffff;
+    border: 1px solid #e4e9ef;
+    border-radius: 8px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+  }
+
+  .users-stat-card strong {
+    display: block;
+    margin: 5px 0 3px;
+    color: #20756f;
+    font-size: 28px;
+    line-height: 1.1;
+  }
+
+  .users-stat-card span {
+    display: block;
+    color: #667085;
+    font-size: 13px;
+  }
+
+  .users-stat-label {
+    color: #667085;
+    font-size: 12px !important;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .users-panel {
+    min-width: 0;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e4e9ef;
+    border-radius: 8px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  }
+
+  .users-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .users-section-header h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 22px;
+    line-height: 1.25;
+  }
+
+  .users-section-header p {
+    margin: 6px 0 0;
+    color: #667085;
+    font-size: 14px;
+  }
+
+  .users-count-pill {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #e7f6f3;
+    color: #20756f;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .student-create-form,
+  .system-create-form {
+    display: grid !important;
+    gap: 12px;
+    align-items: end;
+    margin: 0 0 16px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #edf1f5;
+    border-radius: 8px;
+  }
+
+  .student-create-form {
+    grid-template-columns: minmax(220px, 420px) auto;
+    justify-content: start;
+  }
+
+  .system-create-form {
+    grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) minmax(160px, 220px) auto;
+  }
+
+  .users-field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+  }
+
+  .users-field span {
+    color: #667085;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .users-field input,
+  .users-field select,
+  .sched-input {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 7px 10px;
+    border: 1px solid #d9e2ea;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #172033;
+    font-size: 14px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .users-field input:focus,
+  .users-field select:focus,
+  .sched-input:focus {
+    border-color: #2f8e87;
+    box-shadow: 0 0 0 3px rgba(47, 142, 135, 0.12);
+    outline: none;
+  }
+
+  .users-field input::placeholder,
+  .sched-input::placeholder {
+    color: #98a2b3;
+  }
+
+  .users-primary-button {
+    min-height: 38px;
+    padding: 8px 16px;
+    border: 1px solid #20756f;
+    border-radius: 8px;
+    background: #20756f;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .users-primary-button:hover {
+    background: #17645f;
+    border-color: #17645f;
+  }
+
+  .users-table-wrap {
+    max-width: 100%;
+    overflow: auto;
+    border: 1px solid #edf1f5;
+    border-radius: 8px;
+    background: #ffffff;
+  }
+
+  .users-table-wrap--students {
+    max-height: 560px;
+  }
+
+  .users-table-wrap--system {
+    max-height: 680px;
+  }
+
+  .users-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .users-table--system {
+    min-width: 1040px;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #edf1f5;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 14px;
+  }
+
+  .users-table th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #f8fafc;
+    color: #667085;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .users-table tbody tr:hover {
+    background: #fbfdfd;
+  }
+
+  .users-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .users-id-col,
+  .users-id-cell {
+    width: 72px;
+    color: #667085;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .users-action-col {
+    width: 220px;
+  }
+
+  .users-person {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .users-avatar {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #e7f6f3;
+    color: #20756f;
+    font-weight: 700;
+  }
+
+  .users-person strong,
+  .users-account strong {
+    display: block;
+    color: #172033;
+    font-weight: 700;
+  }
+
+  .users-person span:not(.users-avatar),
+  .users-account span {
+    display: block;
+    color: #667085;
+    font-size: 12px;
+  }
+
+  .users-account {
+    max-width: 280px;
+    min-width: 0;
+  }
+
+  .users-account strong,
+  .users-account span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bind-badge,
+  .role-badge,
+  .user-status-badge,
+  .current-user-note {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .bind-badge--wechat,
+  .user-status-badge--active {
+    background: #e7f6f3;
+    color: #20756f;
+  }
+
+  .bind-badge--account {
+    background: #fff7ed;
+    color: #b45309;
+  }
+
+  .bind-badge--empty,
+  .user-status-badge--inactive,
+  .current-user-note {
+    background: #f2f4f7;
+    color: #667085;
+  }
+
+  .role-badge--admin {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .role-badge--teacher {
+    background: #e0f2fe;
+    color: #075985;
+  }
+
+  .role-badge--assistant,
+  .role-badge--course-planner {
+    background: #eef2ff;
+    color: #3730a3;
+  }
+
+  .role-badge--student {
+    background: #e7f6f3;
+    color: #20756f;
+  }
+
+  .role-badge--parent {
+    background: #fdf2f8;
+    color: #9d174d;
+  }
+
+  .role-badge--guest {
+    background: #f2f4f7;
+    color: #667085;
+  }
+
+  .users-muted {
+    color: #98a2b3;
+    font-size: 13px;
+  }
+
+  .sched-input {
+    max-width: 140px;
+  }
+
+  .student-delete-form {
+    display: inline-flex !important;
+    margin: 0;
+    gap: 0;
+  }
+
+  .users-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .user-action-btn {
+    min-height: 30px;
+    padding: 5px 10px;
+    border: 1px solid #d9e2ea;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #344054;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .user-action-btn:hover {
+    background: #f2f4f7;
+  }
+
+  .user-action-btn--danger {
+    border-color: #fecaca;
+    background: #fff5f5;
+    color: #b42318;
+  }
+
+  .user-action-btn--danger:hover {
+    background: #fee2e2;
+  }
+
+  .user-action-btn--ghost {
+    color: #20756f;
+  }
+
+  .main-panel,
+  .panel-content {
+    min-width: 0;
+  }
+
+  @media (max-width: 960px) {
+    .system-create-form {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .system-create-form .users-primary-button {
+      width: max-content;
+    }
+  }
+
+  @media (max-width: 780px) {
+    .main-header {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .main-header__title {
+      flex: 1 1 calc(100% - 64px);
+    }
+
+    .header-actions {
+      flex: 1 0 100%;
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .users-header-link {
+      min-height: 36px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .users-section-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .users-count-pill {
+      width: max-content;
+      max-width: 100%;
+    }
+
+    .users-panel {
+      padding: 14px;
+    }
+
+    .student-create-form,
+    .system-create-form {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 14px;
+    }
+
+    .student-create-form .users-primary-button,
+    .system-create-form .users-primary-button {
+      width: max-content;
+      max-width: 100%;
+    }
+  }
+</style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // 启用/停用
+    function renderUserStatus(cell, isActive) {
+      if (!cell) return;
+      cell.innerHTML = `<span class="user-status-badge ${isActive ? 'user-status-badge--active' : 'user-status-badge--inactive'}">${isActive ? '启用' : '停用'}</span>`;
+    }
+
     const buttons = document.querySelectorAll('.toggle-btn');
     buttons.forEach(btn => {
       btn.addEventListener('click', async () => {
@@ -128,12 +725,11 @@
           const isActive = data.user.is_active;
           btn.textContent = isActive ? '停用' : '启用';
           const row = btn.closest('tr');
-          row.querySelector('.status-cell').textContent = isActive ? '启用' : '停用';
+          renderUserStatus(row.querySelector('.status-cell'), isActive);
         } catch (e) { alert('网络错误，请稍后再试'); }
       });
     });
 
-    // 删除
     const delBtns = document.querySelectorAll('.delete-btn');
     delBtns.forEach(btn => {
       btn.addEventListener('click', async () => {
@@ -149,7 +745,6 @@
       });
     });
 
-    // 修改密码
     const pwdBtns = document.querySelectorAll('.pwd-btn');
     pwdBtns.forEach(btn => {
       btn.addEventListener('click', async () => {
@@ -171,7 +766,6 @@
       });
     });
 
-    // 设置排课教师ID
     const schedInputs = document.querySelectorAll('.sched-input');
     schedInputs.forEach(input => {
       input.addEventListener('change', async () => {
