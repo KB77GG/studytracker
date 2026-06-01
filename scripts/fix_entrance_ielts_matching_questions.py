@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Repair IELTS entrance listening matching questions imported without options.
+"""Repair IELTS entrance matching questions imported without options.
 
 Older seeded entrance papers flattened Cambridge listening groups and lost
-group-level option banks such as A/B/C matching choices. This script updates
-only existing listening questions that are currently missing options but can be
-rebuilt as single-choice questions from the source JSON.
+group-level option banks such as A/B/C matching choices. The same flattened
+shape is also used for reading matching groups. This script updates only
+existing questions that are currently missing options but can be rebuilt as
+single-choice questions from the source JSON.
 """
 
 import json
@@ -36,31 +37,33 @@ def repair():
             if not paper:
                 continue
 
-            expected = _build_paper_data(plan)["sections"][0]["questions"]
-            section = (
-                EntranceTestSection.query.filter_by(
-                    paper_id=paper.id, section_type="listening"
+            for expected_section in _build_paper_data(plan)["sections"]:
+                section = (
+                    EntranceTestSection.query.filter_by(
+                        paper_id=paper.id,
+                        section_type=expected_section["section_type"],
+                        sequence=expected_section["sequence"],
+                    )
+                    .order_by(EntranceTestSection.sequence)
+                    .first()
                 )
-                .order_by(EntranceTestSection.sequence)
-                .first()
-            )
-            if not section:
-                continue
-
-            current_by_sequence = {q.sequence: q for q in section.questions}
-            for expected_q in expected:
-                q = current_by_sequence.get(expected_q["sequence"])
-                if not q or not _question_needs_repair(q, expected_q):
+                if not section:
                     continue
 
-                # Validate generated options before mutating persisted data.
-                json.loads(expected_q["options_json"])
-                q.question_type = "single_choice"
-                q.stem = expected_q["stem"]
-                q.options_json = expected_q["options_json"]
-                q.correct_answer = expected_q["correct_answer"]
-                q.points = expected_q["points"]
-                updated += 1
+                current_by_sequence = {q.sequence: q for q in section.questions}
+                for expected_q in expected_section["questions"]:
+                    q = current_by_sequence.get(expected_q["sequence"])
+                    if not q or not _question_needs_repair(q, expected_q):
+                        continue
+
+                    # Validate generated options before mutating persisted data.
+                    json.loads(expected_q["options_json"])
+                    q.question_type = "single_choice"
+                    q.stem = expected_q["stem"]
+                    q.options_json = expected_q["options_json"]
+                    q.correct_answer = expected_q["correct_answer"]
+                    q.points = expected_q["points"]
+                    updated += 1
 
         if updated:
             db.session.commit()
@@ -70,7 +73,7 @@ def repair():
 
 def main():
     updated = repair()
-    print(f"Updated {updated} entrance listening question(s).")
+    print(f"Updated {updated} entrance matching question(s).")
 
 
 if __name__ == "__main__":

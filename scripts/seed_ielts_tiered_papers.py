@@ -61,6 +61,20 @@ def _normalise_options(options):
     return out
 
 
+def _letter_options_from_group(group):
+    text = f"{group.get('desc') or ''}\n{group.get('question_title') or ''}"
+    import re
+
+    match = re.search(r"\b([A-Z])\s*[-–]\s*([A-Z])\b", text)
+    if not match:
+        return []
+    start_ord = ord(match.group(1))
+    end_ord = min(ord(match.group(2)), ord("Z"))
+    if end_ord < start_ord:
+        return []
+    return [{"key": chr(code), "text": ""} for code in range(start_ord, end_ord + 1)]
+
+
 def _group_intro(group):
     parts = []
     question_title = (group.get("question_title") or "").strip()
@@ -72,19 +86,33 @@ def _group_intro(group):
     return "\n".join(parts)
 
 
+def _group_image_marker(group):
+    img_local = (group.get("img_local") or "").strip()
+    if img_local:
+        return f"[image:/static/{img_local.lstrip('/')}]"
+    img_url = (group.get("img_url") or "").strip()
+    if img_url.startswith(("http://", "https://")) and "aliyuncs.com" not in img_url.rstrip("/"):
+        return f"[image:{img_url}]"
+    return ""
+
+
 def _convert_question(raw_q, seq, group=None):
     title = (raw_q.get("title") or "").strip()
     answer = (raw_q.get("answer") or "").strip()
     options = _normalise_options(raw_q.get("options") or [])
-    uses_group_options = False
+    uses_group_context = False
     if not options and group:
         options = _normalise_options((group.get("collect_option") or {}).get("list") or [])
-        uses_group_options = bool(options)
+        uses_group_context = bool(options)
+    if not options and group:
+        options = _letter_options_from_group(group)
+        uses_group_context = bool(options)
     analysis = raw_q.get("analysis")
 
     if options:
-        intro = _group_intro(group or {}) if uses_group_options else ""
-        stem = "\n".join(part for part in (intro, title) if part)
+        intro = _group_intro(group or {}) if uses_group_context else ""
+        image_marker = _group_image_marker(group or {}) if uses_group_context else ""
+        stem = "\n".join(part for part in (intro, image_marker, title) if part)
         return {
             "sequence": seq,
             "question_type": "single_choice",

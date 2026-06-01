@@ -124,7 +124,7 @@
           body += options.map(opt => `
             <label class="flex items-start gap-2 py-1 cursor-pointer hover:bg-teal-50 rounded px-2">
               <input type="radio" name="q_${q.id}" value="${escapeHtml(optionKey(opt))}" class="mt-1">
-              <span><b>${escapeHtml(optionKey(opt))}.</b> ${escapeHtml(optionText(opt))}</span>
+              <span>${formatOptionLabel(opt)}</span>
             </label>
           `).join('');
         } else if (q.question_type === 'short_answer') {
@@ -201,7 +201,14 @@
   }
 
   function formatMultiline(s) {
-    return escapeHtml(s).replace(/\n/g, '<br>');
+    return String(s || '').split('\n').map(line => {
+      const match = line.match(/^\[image:(.+)\]$/);
+      if (match) {
+        const src = match[1].trim();
+        return `<img src="${escapeHtml(src)}" alt="" class="mt-2 mb-2 max-w-full rounded border border-gray-200">`;
+      }
+      return escapeHtml(line);
+    }).join('<br>');
   }
 
   function optionKey(opt) {
@@ -210,6 +217,12 @@
 
   function optionText(opt) {
     return String((opt && (opt.text || opt.content)) || '');
+  }
+
+  function formatOptionLabel(opt) {
+    const key = escapeHtml(optionKey(opt));
+    const text = escapeHtml(optionText(opt));
+    return text ? `<b>${key}.</b> ${text}` : `<b>${key}</b>`;
   }
 
   init();
