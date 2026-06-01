@@ -144,7 +144,7 @@ function renderQuestionCard(q, idx) {
         </div>
         <div class="md:col-span-4">
           <label class="block text-gray-600 mb-1">选项 (每行一项，格式：<code>A|选项文本</code>，单选题必填)</label>
-          <textarea id="q-opts-${qid}" rows="4" class="w-full border rounded px-2 py-1 font-mono">${options.map(o => `${o.key}|${o.text}`).join('\n')}</textarea>
+          <textarea id="q-opts-${qid}" rows="4" class="w-full border rounded px-2 py-1 font-mono">${options.map(o => `${optionKey(o)}|${optionText(o)}`).join('\n')}</textarea>
         </div>
         <div class="md:col-span-4">
           <label class="block text-gray-600 mb-1">参考答案 / 批改要点（作文题给老师参考）</label>

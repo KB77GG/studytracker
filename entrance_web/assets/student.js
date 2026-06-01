@@ -118,12 +118,13 @@
         const qDiv = document.createElement('div');
         qDiv.className = 'q-card border border-gray-200 rounded-lg p-4 mb-3';
         const qNum = `${si + 1}.${qi + 1}`;
-        let body = `<div class="font-semibold mb-2">${qNum}　${escapeHtml(q.stem)}</div>`;
-        if (q.question_type === 'single_choice' && q.options) {
-          body += q.options.map(opt => `
+        const options = Array.isArray(q.options) ? q.options : [];
+        let body = `<div class="font-semibold mb-2 leading-relaxed">${qNum}　${formatMultiline(q.stem)}</div>`;
+        if (q.question_type === 'single_choice' && options.length) {
+          body += options.map(opt => `
             <label class="flex items-start gap-2 py-1 cursor-pointer hover:bg-teal-50 rounded px-2">
-              <input type="radio" name="q_${q.id}" value="${opt.key}" class="mt-1">
-              <span><b>${opt.key}.</b> ${escapeHtml(opt.text)}</span>
+              <input type="radio" name="q_${q.id}" value="${escapeHtml(optionKey(opt))}" class="mt-1">
+              <span><b>${escapeHtml(optionKey(opt))}.</b> ${escapeHtml(optionText(opt))}</span>
             </label>
           `).join('');
         } else if (q.question_type === 'short_answer') {
@@ -197,6 +198,18 @@
     return String(s || '').replace(/[&<>"']/g, c => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
     }[c]));
+  }
+
+  function formatMultiline(s) {
+    return escapeHtml(s).replace(/\n/g, '<br>');
+  }
+
+  function optionKey(opt) {
+    return String((opt && (opt.key || opt.title)) || '');
+  }
+
+  function optionText(opt) {
+    return String((opt && (opt.text || opt.content)) || '');
   }
 
   init();

@@ -51,17 +51,44 @@ def _is_usable(raw_q):
     return True
 
 
-def _convert_question(raw_q, seq):
+def _normalise_options(options):
+    out = []
+    for option in options or []:
+        key = (option.get("key") or option.get("title") or "").strip()
+        text = (option.get("text") or option.get("content") or "").strip()
+        if key:
+            out.append({"key": key, "text": text})
+    return out
+
+
+def _group_intro(group):
+    parts = []
+    question_title = (group.get("question_title") or "").strip()
+    desc = (group.get("desc") or "").strip()
+    if question_title:
+        parts.append(question_title)
+    if desc:
+        parts.append(desc)
+    return "\n".join(parts)
+
+
+def _convert_question(raw_q, seq, group=None):
     title = (raw_q.get("title") or "").strip()
     answer = (raw_q.get("answer") or "").strip()
-    options = raw_q.get("options") or []
+    options = _normalise_options(raw_q.get("options") or [])
+    uses_group_options = False
+    if not options and group:
+        options = _normalise_options((group.get("collect_option") or {}).get("list") or [])
+        uses_group_options = bool(options)
     analysis = raw_q.get("analysis")
 
     if options:
+        intro = _group_intro(group or {}) if uses_group_options else ""
+        stem = "\n".join(part for part in (intro, title) if part)
         return {
             "sequence": seq,
             "question_type": "single_choice",
-            "stem": title,
+            "stem": stem,
             "options_json": json.dumps(options, ensure_ascii=False),
             "correct_answer": answer,
             "points": 1,
@@ -88,7 +115,7 @@ def _collect_questions(groups, max_q):
         for raw_q in g.get("questions", []):
             if not _is_usable(raw_q):
                 continue
-            out.append(_convert_question(raw_q, seq))
+            out.append(_convert_question(raw_q, seq, g))
             seq += 1
             if len(out) >= max_q:
                 return out

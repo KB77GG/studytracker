@@ -39,6 +39,14 @@ function esc(s) {
   }[c]));
 }
 
+function optionKey(opt) {
+  return String((opt && (opt.key || opt.title)) || '');
+}
+
+function optionText(opt) {
+  return String((opt && (opt.text || opt.content)) || '');
+}
+
 // ============================================================================
 // Invitations page
 // ============================================================================
@@ -220,7 +228,7 @@ function renderAttempt(res) {
       }
       card.innerHTML = `
         <div class="font-semibold mb-1">${idx + 1}. ${esc(q.stem)}</div>
-        ${q.options ? `<div class="text-xs text-gray-500 mb-1">${q.options.map(o => `${o.key}. ${esc(o.text)}`).join('　')}</div>` : ''}
+        ${q.options ? `<div class="text-xs text-gray-500 mb-1">${q.options.map(o => `${esc(optionKey(o))}. ${esc(optionText(o))}`).join('　')}</div>` : ''}
         <div>学生作答：<b>${esc(ans.answer_text || '（未作答）')}</b>　${status}</div>
         ${q.question_type !== 'essay' ? `<div class="text-xs text-gray-500">标准答案：${esc(q.correct_answer || '')}</div>` : ''}
         ${q.reference_answer ? `<div class="text-xs text-gray-500 mt-1">参考：${esc(q.reference_answer)}</div>` : ''}
