@@ -641,10 +641,105 @@ def _iter_task_material_questions(task):
 
 
 def _question_options(q):
-    return [
-        {"key": opt.option_key, "text": opt.option_text}
+    rows = [
+        {"key": str(opt.option_key or "").strip().upper(), "text": str(opt.option_text or "").strip()}
         for opt in q.options.order_by(QuestionOption.option_key).all()
     ]
+    rows = [row for row in rows if row["key"] and row["text"]]
+
+    # Some grammar imports arrive as one DB option:
+    #   key=A, text="exceeds B. exceeded C. has exceeded D. was exceeding"
+    # Normalize that into four real options so the mini program can tap B/C/D.
+    if rows:
+        combined_parts = []
+        for row in rows:
+            if _option_text_starts_with_key(row["text"], row["key"]):
+                combined_parts.append(row["text"])
+            else:
+                combined_parts.append(f"{row['key']}. {row['text']}")
+        parsed = _split_inline_options(" ".join(combined_parts))
+        parsed_keys = [opt["key"] for opt in parsed]
+        row_keys = [row["key"] for row in rows]
+        if len(parsed) > len(rows) or (parsed and parsed_keys == row_keys):
+            return parsed
+
+    if not rows:
+        question_type = str(getattr(q, "question_type", "") or "").strip().lower()
+        if question_type in {"", "choice", "single_choice", "multiple_choice", "grammar_choice"}:
+            _, inline_options = _extract_inline_options_from_content(getattr(q, "content", "") or "")
+            if inline_options:
+                return inline_options
+
+    return rows
+
+
+def _option_text_starts_with_key(text: str, key: str) -> bool:
+    return bool(re.match(rf"^\s*{re.escape(key)}\s*[\.\uFF0E、)]\s*", str(text or ""), flags=re.IGNORECASE))
+
+
+def _split_inline_options(value: str) -> list[dict]:
+    text = html.unescape(str(value or ""))
+    text = text.replace("\xa0", " ").replace("\u3000", " ")
+    text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        return []
+
+    marker = re.compile(r"(?<![A-Za-z])([A-Z])\s*[\.\uFF0E、)]\s*")
+    matches = list(marker.finditer(text))
+    if len(matches) < 2:
+        return []
+
+    options = []
+    seen = set()
+    for index, match in enumerate(matches):
+        key = match.group(1).upper()
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        option_text = text[start:end].strip(" \t\r\n;；")
+        if not option_text or key in seen:
+            continue
+        seen.add(key)
+        options.append({"key": key, "text": option_text})
+
+    return options if len(options) >= 2 else []
+
+
+def _extract_inline_options_from_content(content: str) -> tuple[str, list[dict]]:
+    text = str(content or "").strip()
+    match = re.search(r"(?<![A-Za-z])A\s*[\.\uFF0E、)]\s*", text)
+    if not match:
+        return text, []
+
+    options = _split_inline_options(text[match.start():])
+    if len(options) < 2:
+        return text, []
+
+    stem = text[:match.start()].strip()
+    return stem or text, options
+
+
+def _question_display_content(q, options: list[dict]) -> str:
+    content = str(getattr(q, "content", "") or "")
+    stem, inline_options = _extract_inline_options_from_content(content)
+    if inline_options and [opt["key"] for opt in inline_options] == [opt["key"] for opt in options]:
+        return stem
+    return content
+
+
+def _material_question_input_mode(q, material_type: str, options: list[dict]) -> str:
+    if options:
+        return "choice"
+
+    question_type = str(getattr(q, "question_type", "") or "").strip().lower()
+    if material_type == IELTS_READING_PRACTICE_TYPE or question_type in {
+        "reading_text",
+        "auto_text",
+        "short_answer",
+        "text_auto",
+    }:
+        return "auto_text"
+
+    return "writing"
 
 
 def _normalize_objective_answer(value: str) -> str:
@@ -1560,7 +1655,7 @@ def get_task_detail(task_id):
                     "id": q.id,
                     "sequence": q.sequence,
                     "type": q.question_type,
-                    "content": q.content,
+                    "content": _question_display_content(q, options),
                     "hint": q.hint,
                     "reference_answer": q.reference_answer,
                     "options": options
@@ -1887,19 +1982,21 @@ def get_reading_vocab_practice(task_id):
     questions = []
     for q in questions_iter:
         opts = _question_options(q)
-        is_auto_text = len(opts) == 0 and task.material.type == IELTS_READING_PRACTICE_TYPE
-        is_writing = len(opts) == 0 and not is_auto_text  # 无 options = 改写/翻译类输入题
-        correct_key = "" if is_writing else str(q.reference_answer or "").strip().upper()
+        input_mode = _material_question_input_mode(q, task.material.type, opts)
+        is_auto_text = input_mode == "auto_text"
+        is_writing = input_mode == "writing"  # 无 options = 改写/翻译类输入题
+        correct_key = "" if input_mode != "choice" else str(q.reference_answer or "").strip().upper()
         options_map = {opt["key"]: opt["text"] for opt in opts}
         item = {
             "id": q.id,
             "sequence": q.sequence,
-            "content": q.content,
+            "content": _question_display_content(q, opts),
             "options": opts,
+            "input_mode": input_mode,
             "is_writing": is_writing,
             "is_auto_text": is_auto_text,
             "correct_key": correct_key,
-            "correct_text": options_map.get(correct_key, q.reference_answer or q.hint or ""),
+            "correct_text": (q.reference_answer or "") if is_auto_text else options_map.get(correct_key, q.reference_answer or q.hint or ""),
             "hint": q.hint or "",
         }
         questions.append(item)
@@ -1970,7 +2067,7 @@ def submit_reading_vocab_practice(task_id):
     for item in answers:
         qid = item.get("question_id")
         answer_key = str(item.get("answer_key") or "").strip().upper()
-        if str(qid).isdigit() and answer_key in {"A", "B", "C", "D"}:
+        if str(qid).isdigit() and answer_key:
             answer_map[int(qid)] = answer_key
 
     # text_answers: list of {question_id, text_answer} for writing questions
@@ -2017,8 +2114,9 @@ def submit_reading_vocab_practice(task_id):
     wrong_items = []
     for q in questions:
         opts = _question_options(q)
-        is_auto_text = len(opts) == 0 and task.material.type == IELTS_READING_PRACTICE_TYPE
-        is_writing = len(opts) == 0 and not is_auto_text
+        input_mode = _material_question_input_mode(q, task.material.type, opts)
+        is_auto_text = input_mode == "auto_text"
+        is_writing = input_mode == "writing"
         if is_writing:
             writing_total += 1
         else:
@@ -2035,16 +2133,21 @@ def submit_reading_vocab_practice(task_id):
                 if prior.is_correct:
                     correct_count += 1
                 if (not prior.is_correct) or bool(prior.is_uncertain):
-                    correct_key = str(q.reference_answer or "").strip().upper()
                     options = {opt["key"]: opt["text"] for opt in opts}
+                    correct_key = str(q.reference_answer or "").strip().upper() if input_mode == "choice" else (q.reference_answer or "")
                     correct_text = options.get(correct_key, q.reference_answer or q.hint or "")
+                    selected_text = (
+                        (prior.text_answer or "未作答")
+                        if input_mode == "auto_text"
+                        else options.get(prior.text_answer or "", "未作答")
+                    )
                     wrong_items.append({
                         "task_id": task.id,
                         "task_title": _task_display_title(task),
                         "question_id": q.id,
-                        "word": q.content,
+                        "word": _question_display_content(q, opts),
                         "selected_key": prior.text_answer or "未作答",
-                        "selected_text": options.get(prior.text_answer or "", "未作答"),
+                        "selected_text": selected_text,
                         "correct_key": correct_key,
                         "correct_text": correct_text,
                         "hint": q.hint or "",
@@ -2086,7 +2189,7 @@ def submit_reading_vocab_practice(task_id):
                     "task_id": task.id,
                     "task_title": _task_display_title(task),
                     "question_id": q.id,
-                    "word": q.content,
+                    "word": _question_display_content(q, opts),
                     "selected_key": text_val or "未作答",
                     "selected_text": text_val or "未作答",
                     "correct_key": q.reference_answer or "",
@@ -2108,8 +2211,10 @@ def submit_reading_vocab_practice(task_id):
             continue
 
         selected_key = answer_map.get(q.id, "")
-        correct_key = str(q.reference_answer or "").strip().upper()
         options = {opt["key"]: opt["text"] for opt in opts}
+        if selected_key and selected_key not in options:
+            selected_key = ""
+        correct_key = str(q.reference_answer or "").strip().upper()
         is_correct = bool(selected_key) and selected_key == correct_key
         is_uncertain = q.id in uncertain_question_ids
         if selected_key:
@@ -2121,7 +2226,7 @@ def submit_reading_vocab_practice(task_id):
                 "task_id": task.id,
                 "task_title": _task_display_title(task),
                 "question_id": q.id,
-                "word": q.content,
+                "word": _question_display_content(q, opts),
                 "selected_key": selected_key or "未作答",
                 "selected_text": options.get(selected_key, "未作答"),
                 "correct_key": correct_key,
@@ -3617,6 +3722,109 @@ def get_practice_catalog():
     })
 
 
+def _serialize_teacher_homework_task(task: Task) -> dict:
+    listening_section_number = _task_listening_section_number(task)
+    source_type = "custom"
+    source_summary = task.detail or ""
+    if task.listening_exercise_id:
+        if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+            source_type = "cambridge_listening"
+            suffix = f"Section {listening_section_number}" if listening_section_number else "整套 Test"
+            source_summary = f"{task.detail or task.listening_exercise_id} · {suffix}"
+        else:
+            source_type = "listening"
+            source_summary = task.detail or task.listening_exercise_id
+    elif task.reading_test_id:
+        source_type = "cambridge_reading"
+        suffix = f"Passage {task.reading_passage_number}" if task.reading_passage_number else "整套 Test"
+        source_summary = f"{task.detail or task.reading_test_id} · {suffix}"
+
+    status_label = {
+        "pending": "待完成",
+        "progress": "进行中",
+        "submitted": "待批改",
+        "done": "已完成",
+    }.get(task.status or "", task.status or "待完成")
+
+    return {
+        "id": task.id,
+        "date": task.date,
+        "student_name": task.student_name,
+        "category": task.category,
+        "detail": task.detail,
+        "planned_minutes": task.planned_minutes,
+        "note": task.note,
+        "status": task.status,
+        "status_label": status_label,
+        "source_type": source_type,
+        "source_summary": source_summary,
+        "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
+        "listening_exercise_id": task.listening_exercise_id,
+        "listening_section_number": listening_section_number,
+        "listening_url": _task_listening_url(task),
+        "reading_test_id": task.reading_test_id,
+        "reading_passage_number": task.reading_passage_number,
+        "reading_url": _task_reading_url(task),
+    }
+
+
+@mp_bp.route("/teacher/homework", methods=["GET"])
+@require_api_user(User.ROLE_TEACHER)
+def list_teacher_homework():
+    """老师查看当前学生某一天已经布置的作业。"""
+    user = request.current_api_user
+
+    task_date = (request.args.get("date") or date.today().isoformat()).strip()
+    try:
+        datetime.strptime(task_date, "%Y-%m-%d")
+    except ValueError:
+        return jsonify({"ok": False, "error": "invalid_date"}), 400
+
+    raw_teacher_id = request.args.get("teacher_id")
+    try:
+        schedule_teacher_id = int(raw_teacher_id) if raw_teacher_id not in (None, "") else None
+    except (TypeError, ValueError):
+        schedule_teacher_id = None
+    if user.scheduler_teacher_id and schedule_teacher_id and schedule_teacher_id != user.scheduler_teacher_id:
+        return jsonify({"ok": False, "error": "forbidden_schedule"}), 403
+
+    raw_student_id = request.args.get("student_id")
+    try:
+        scheduler_student_id = int(raw_student_id) if raw_student_id not in (None, "") else None
+    except (TypeError, ValueError):
+        scheduler_student_id = None
+
+    student_name = (request.args.get("student_name") or "").strip()
+    profile = None
+    if scheduler_student_id:
+        profile = StudentProfile.query.filter_by(
+            scheduler_student_id=scheduler_student_id,
+            is_deleted=False,
+        ).first()
+    if not profile and student_name:
+        profile = StudentProfile.query.filter_by(full_name=student_name, is_deleted=False).first()
+    if not profile:
+        return jsonify({"ok": False, "error": "student_not_found"}), 404
+
+    tasks = (
+        Task.query.filter(
+            Task.student_name == profile.full_name,
+            Task.date == task_date,
+            Task.created_by == user.id,
+        )
+        .order_by(Task.id.desc())
+        .limit(100)
+        .all()
+    )
+
+    return jsonify({
+        "ok": True,
+        "date": task_date,
+        "student_name": profile.full_name,
+        "tasks": [_serialize_teacher_homework_task(task) for task in tasks],
+    })
+
+
 @mp_bp.route("/teacher/homework", methods=["POST"])
 @require_api_user(User.ROLE_TEACHER)
 def create_teacher_homework():
@@ -3784,22 +3992,7 @@ def create_teacher_homework():
 
     return jsonify({
         "ok": True,
-        "task": {
-            "id": task.id,
-            "date": task.date,
-            "student_name": task.student_name,
-            "category": task.category,
-            "detail": task.detail,
-            "planned_minutes": task.planned_minutes,
-            "note": task.note,
-            "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
-            "listening_exercise_id": task.listening_exercise_id,
-            "listening_section_number": _task_listening_section_number(task),
-            "listening_url": _task_listening_url(task),
-            "reading_test_id": task.reading_test_id,
-            "reading_passage_number": task.reading_passage_number,
-            "reading_url": _task_reading_url(task),
-        },
+        "task": _serialize_teacher_homework_task(task),
         "push_sent": push_sent,
         "push_error": push_error,
     })

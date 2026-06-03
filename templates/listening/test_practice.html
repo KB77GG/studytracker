@@ -178,15 +178,21 @@ body.result-mode .layout {
   font-size: 16px;
   font-style: italic;
   font-weight: 650;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .question-title {
   margin: 10px 0;
   font-weight: 900;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .collect {
   line-height: 2.1;
   color: #202020;
   font-size: 17px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .collect b { color: #0f172a; }
 .collect .example {
@@ -230,6 +236,8 @@ body.result-mode .layout {
   padding: 12px;
   vertical-align: top;
   line-height: 1.55;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .practice-table tr:first-child td,
 .practice-table th {
@@ -251,6 +259,8 @@ body.result-mode .layout {
 .option-line {
   padding: 4px 0;
   color: #334155;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .question {
   padding: 13px 0;
@@ -262,7 +272,12 @@ body.result-mode .layout {
   gap: 12px;
   margin-bottom: 9px;
 }
-.q-title { font-weight: 850; line-height: 1.5; }
+.q-title {
+  font-weight: 850;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 .answer-input {
   min-width: 118px;
   height: 38px;
@@ -289,6 +304,8 @@ body.result-mode .layout {
   margin: 8px 0;
   color: #334155;
   line-height: 1.45;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .choice input { margin-right: 8px; }
 .answer-select {
@@ -731,6 +748,12 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
+function optionDisplayText(key, text) {
+  const value = String(text || '').trim();
+  const prefix = new RegExp(`^\\s*${String(key || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*[.．、)]\\s*`, 'i');
+  return value.replace(prefix, '');
+}
+
 function richText(value) {
   return escapeHtml(value)
     .replace(/&lt;b&gt;/g, '<b>')
@@ -926,7 +949,7 @@ function optionBank(group) {
   return `
     <div class="option-bank">
       ${title ? `<div class="option-bank-title">${escapeHtml(title)}</div>` : ''}
-      ${options.map(option => `<div class="option-line">${escapeHtml(option.title)}. ${escapeHtml(option.content)}</div>`).join('')}
+      ${options.map(option => `<div class="option-line">${escapeHtml(option.title)}. ${escapeHtml(optionDisplayText(option.title, option.content))}</div>`).join('')}
     </div>
   `;
 }
@@ -966,7 +989,7 @@ function renderCombinedMulti(group) {
       ${(group.collect_option?.list || []).map(option => `
         <label class="choice">
           <input type="checkbox" value="${escapeHtml(option.title)}">
-          ${escapeHtml(option.title)}. ${escapeHtml(option.content)}
+          ${escapeHtml(option.title)}. ${escapeHtml(optionDisplayText(option.title, option.content))}
         </label>
       `).join('')}
     </div>
@@ -985,7 +1008,7 @@ function controlForQuestion(question, sectionIndex, group = {}, inline = false) 
         ${question.options.map(option => `
           <label class="choice">
             <input type="${isMulti ? 'checkbox' : 'radio'}" name="${inputName(question)}" value="${escapeHtml(option.title)}">
-            ${escapeHtml(option.title)}. ${escapeHtml(option.content)}
+            ${escapeHtml(option.title)}. ${escapeHtml(optionDisplayText(option.title, option.content))}
           </label>
         `).join('')}
       </div>
@@ -998,7 +1021,7 @@ function controlForQuestion(question, sectionIndex, group = {}, inline = false) 
       <span class="${inline ? 'inline-answer' : ''}">
         <select class="answer-select answer-unit" data-kind="select" ${baseAttrs}>
           <option value=""></option>
-          ${bankOptions.map(option => `<option value="${escapeHtml(option.title)}">${escapeHtml(option.title)}. ${escapeHtml(option.content)}</option>`).join('')}
+          ${bankOptions.map(option => `<option value="${escapeHtml(option.title)}">${escapeHtml(option.title)}. ${escapeHtml(optionDisplayText(option.title, option.content))}</option>`).join('')}
         </select>
       </span>
     `;

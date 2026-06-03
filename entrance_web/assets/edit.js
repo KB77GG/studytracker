@@ -115,6 +115,10 @@ function renderQuestionCard(q, idx) {
   let options = [];
   try { options = q.options ? (Array.isArray(q.options) ? q.options : JSON.parse(q.options)) : []; } catch (_) {}
   const qid = q.id;
+  const optionRows = options.map(o => {
+    const key = optionKey(o);
+    return `${key}|${stripOptionKeyPrefix(key, optionText(o))}`;
+  }).join('\n');
   return `
     <div class="q-card border border-gray-200 rounded p-3 bg-gray-50">
       <div class="flex items-center justify-between mb-2">
@@ -144,7 +148,7 @@ function renderQuestionCard(q, idx) {
         </div>
         <div class="md:col-span-4">
           <label class="block text-gray-600 mb-1">选项 (每行一项，格式：<code>A|选项文本</code>，单选题必填)</label>
-          <textarea id="q-opts-${qid}" rows="4" class="w-full border rounded px-2 py-1 font-mono">${options.map(o => `${optionKey(o)}|${optionText(o)}`).join('\n')}</textarea>
+          <textarea id="q-opts-${qid}" rows="4" class="w-full border rounded px-2 py-1 font-mono">${esc(optionRows)}</textarea>
         </div>
         <div class="md:col-span-4">
           <label class="block text-gray-600 mb-1">参考答案 / 批改要点（作文题给老师参考）</label>
@@ -261,8 +265,15 @@ function parseOptionsText(text) {
   const opts = [];
   for (const line of lines) {
     const idx = line.indexOf('|');
-    if (idx < 0) continue;
-    opts.push({ key: line.slice(0, idx).trim(), text: line.slice(idx + 1).trim() });
+    if (idx >= 0) {
+      const key = line.slice(0, idx).trim().toUpperCase();
+      opts.push({ key, text: stripOptionKeyPrefix(key, line.slice(idx + 1).trim()) });
+      continue;
+    }
+    const match = line.match(/^([A-Z])\s*[.．、)]\s*(.+)$/i);
+    if (match) {
+      opts.push({ key: match[1].toUpperCase(), text: match[2].trim() });
+    }
   }
   return opts;
 }

@@ -24,7 +24,7 @@
     <text class="question-word">{{currentQuestion.content}}</text>
 
     <!-- 单选题（有 options） -->
-    <view class="options" wx:if="{{!currentQuestion.is_writing}}">
+    <view class="options" wx:if="{{!currentQuestion.is_writing && !currentQuestion.is_auto_text}}">
       <view
         class="option-item {{selectedAnswer === item.key ? 'selected' : ''}} {{item.isCorrect ? 'correct' : ''}} {{item.isUserWrong ? 'wrong' : ''}}"
         wx:for="{{currentQuestion.options}}"

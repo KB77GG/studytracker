@@ -64,6 +64,9 @@
   line-height: 1.3;
   font-weight: 700;
   color: #111827;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .options {
@@ -85,12 +88,14 @@
 .option-item {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: 18rpx;
   padding: 22rpx 20rpx;
   border: 2rpx solid #dbe3f0;
   border-radius: 18rpx;
   background: #fff;
   margin-bottom: 16rpx;
+  min-width: 0;
 }
 
 .option-item.selected {
@@ -117,9 +122,13 @@
 
 .option-text {
   flex: 1;
+  min-width: 0;
   font-size: 28rpx;
   line-height: 1.5;
   color: #1f2937;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .nav-row {
@@ -258,6 +267,9 @@
   font-size: 26rpx;
   color: #1f2937;
   line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .hint-mark {
@@ -297,6 +309,9 @@
   font-size: 24rpx;
   line-height: 1.5;
   color: #475569;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .uncertain-line {

@@ -184,8 +184,20 @@
     page-break-inside: avoid;
     background: #ffffff;
   }
-  .question .stem { font-weight: 600; margin-bottom: 6px; color: #111827; }
-  .question .options { font-size: 9.5pt; color: #6b7280; margin: 0 0 6px 0; }
+  .question .stem {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #111827;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .question .options {
+    font-size: 9.5pt;
+    color: #6b7280;
+    margin: 0 0 6px 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
   .question .answer-row { font-size: 9.5pt; color: #4b5563; }
   .question .student-ans { color: #0f172a; font-weight: 600; }
   .correct { color: #059669; font-weight: 600; }

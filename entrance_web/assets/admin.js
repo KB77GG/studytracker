@@ -48,9 +48,19 @@ function optionText(opt) {
 }
 
 function optionLabel(opt) {
-  const key = esc(optionKey(opt));
-  const text = esc(optionText(opt));
+  const rawKey = optionKey(opt);
+  const key = esc(rawKey);
+  const text = esc(stripOptionKeyPrefix(rawKey, optionText(opt)));
   return text ? `${key}. ${text}` : key;
+}
+
+function stripOptionKeyPrefix(key, text) {
+  const escapedKey = String(key || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return String(text || '').trim().replace(new RegExp(`^\\s*${escapedKey}\\s*[.．、)]\\s*`, 'i'), '');
+}
+
+function formatMultiline(value) {
+  return esc(value).replace(/\n/g, '<br>');
 }
 
 // ============================================================================
@@ -233,8 +243,8 @@ function renderAttempt(res) {
         status = '<span class="text-yellow-600 font-bold">主观题</span>';
       }
       card.innerHTML = `
-        <div class="font-semibold mb-1">${idx + 1}. ${esc(q.stem)}</div>
-        ${q.options ? `<div class="text-xs text-gray-500 mb-1">${q.options.map(o => optionLabel(o)).join('　')}</div>` : ''}
+        <div class="font-semibold mb-1 break-words whitespace-pre-wrap">${idx + 1}. ${formatMultiline(q.stem)}</div>
+        ${q.options ? `<div class="text-xs text-gray-500 mb-1 break-words">${q.options.map(o => optionLabel(o)).join('　')}</div>` : ''}
         <div>学生作答：<b>${esc(ans.answer_text || '（未作答）')}</b>　${status}</div>
         ${q.question_type !== 'essay' ? `<div class="text-xs text-gray-500">标准答案：${esc(q.correct_answer || '')}</div>` : ''}
         ${q.reference_answer ? `<div class="text-xs text-gray-500 mt-1">参考：${esc(q.reference_answer)}</div>` : ''}

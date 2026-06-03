@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 from models import db, MaterialBank, Question, QuestionOption, StudentAnswer, Task
 from datetime import datetime
 from openpyxl import load_workbook
+import html
 import re
 
 material_bp = Blueprint('material', __name__, url_prefix='/api/materials')
@@ -21,8 +22,96 @@ def require_teacher():
     return None
 
 
+def _option_text_starts_with_key(text, key):
+    return bool(re.match(rf"^\s*{re.escape(str(key or '').upper())}\s*[\.\uFF0E、)]\s*", str(text or ""), flags=re.IGNORECASE))
+
+
+def _split_inline_options(value):
+    text = html.unescape(str(value or ""))
+    text = text.replace("\xa0", " ").replace("\u3000", " ")
+    text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        return []
+
+    marker = re.compile(r"(?<![A-Za-z])([A-Z])\s*[\.\uFF0E、)]\s*")
+    matches = list(marker.finditer(text))
+    if len(matches) < 2:
+        return []
+
+    options = []
+    seen = set()
+    for index, match in enumerate(matches):
+        key = match.group(1).upper()
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        option_text = text[start:end].strip(" \t\r\n;；")
+        if not option_text or key in seen:
+            continue
+        seen.add(key)
+        options.append({"key": key, "text": option_text})
+
+    return options if len(options) >= 2 else []
+
+
+def _extract_inline_options_from_content(content):
+    text = str(content or "").strip()
+    match = re.search(r"(?<![A-Za-z])A\s*[\.\uFF0E、)]\s*", text)
+    if not match:
+        return text, []
+
+    options = _split_inline_options(text[match.start():])
+    if len(options) < 2:
+        return text, []
+
+    stem = text[:match.start()].strip()
+    return stem or text, options
+
+
+def _normalize_question_options(raw_options):
+    rows = []
+    for opt in raw_options or []:
+        key = str(opt.get("key") or "").strip().upper()
+        text = str(opt.get("text") or "").strip()
+        if key and text:
+            rows.append({"key": key, "text": text})
+
+    if rows:
+        combined_parts = []
+        for row in rows:
+            if _option_text_starts_with_key(row["text"], row["key"]):
+                combined_parts.append(row["text"])
+            else:
+                combined_parts.append(f"{row['key']}. {row['text']}")
+        parsed = _split_inline_options(" ".join(combined_parts))
+        parsed_keys = [opt["key"] for opt in parsed]
+        row_keys = [row["key"] for row in rows]
+        if len(parsed) > len(rows) or (parsed and parsed_keys == row_keys):
+            return parsed
+
+    return rows
+
+
+def _normalize_question_payload(q_data):
+    normalized = dict(q_data or {})
+    options = _normalize_question_options(normalized.get("options") or [])
+    stem, inline_options = _extract_inline_options_from_content(normalized.get("content") or "")
+    question_type = str(normalized.get("question_type") or "choice").strip().lower()
+    allows_inline_options = bool(options) or question_type in {"choice", "single_choice", "multiple_choice", "grammar_choice"}
+    if inline_options and allows_inline_options:
+        inline_keys = [opt["key"] for opt in inline_options]
+        option_keys = [opt["key"] for opt in options]
+        if not options:
+            options = inline_options
+            normalized["content"] = stem
+        elif inline_keys == option_keys:
+            normalized["content"] = stem
+    normalized["options"] = options
+    return normalized
+
+
 def _build_choice_questions(material_id, questions_data):
     for q_data in questions_data:
+        q_data = _normalize_question_payload(q_data)
         question = Question(
             material_id=material_id,
             sequence=q_data.get('sequence'),
@@ -192,7 +281,7 @@ def get_material(material_id):
     questions_data = []
     for q in questions:
         options = QuestionOption.query.filter_by(question_id=q.id).order_by(QuestionOption.option_key).all()
-        questions_data.append({
+        questions_data.append(_normalize_question_payload({
             "id": q.id,
             "sequence": q.sequence,
             "question_type": q.question_type,
@@ -201,7 +290,7 @@ def get_material(material_id):
             "hint": q.hint,
             "points": q.points,
             "options": [{"key": opt.option_key, "text": opt.option_text} for opt in options]
-        })
+        }))
     
     return jsonify({
         "ok": True,
@@ -570,7 +659,7 @@ def parse_questions():
             
             # Start new question
             sequence = int(question_match.group(1))
-            content = question_match.group(2)
+            content, inline_options = _extract_inline_options_from_content(question_match.group(2))
             current_question = {
                 'sequence': sequence,
                 'content': content,
@@ -578,15 +667,19 @@ def parse_questions():
                 'reference_answer': '',
                 'points': 1
             }
-            current_options = []
+            current_options = inline_options
             continue
         
-        # Match options: "A. " or "A、"
-        option_match = re.match(r'^([A-D])[.、]\s*(.+)$', line)
+        # Match options: "A. ", "A、", "A．", or "A)"
+        option_match = re.match(r'^([A-D])[\.\uFF0E、)]\s*(.+)$', line)
         if option_match and current_question:
-            option_key = option_match.group(1)
-            option_text = option_match.group(2)
-            current_options.append({'key': option_key, 'text': option_text})
+            inline_options = _split_inline_options(line)
+            if len(inline_options) > 1:
+                current_options.extend(inline_options)
+            else:
+                option_key = option_match.group(1)
+                option_text = option_match.group(2)
+                current_options.append({'key': option_key, 'text': option_text})
             continue
         
         # Otherwise, append to current question content

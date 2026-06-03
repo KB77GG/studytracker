@@ -137,6 +137,8 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
   color: #202020;
   font-size: 17px;
   line-height: 1.78;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .paragraph-label {
   display: inline-flex;
@@ -167,11 +169,15 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
   font-style: italic;
   font-weight: 650;
   line-height: 1.65;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .collect {
   color: #202020;
   font-size: 16px;
   line-height: 2.05;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .table-wrap { overflow-x: auto; margin: 12px 0 18px; }
 .practice-table {
@@ -186,6 +192,8 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
   padding: 12px;
   vertical-align: top;
   line-height: 1.55;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .practice-table tr:first-child td,
 .practice-table th {
@@ -208,7 +216,12 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
   background: #f6fbfa;
 }
 .option-bank-title { margin-bottom: 8px; color: var(--sage-deep); font-weight: 900; }
-.option-line { padding: 4px 0; color: #334155; }
+.option-line {
+  padding: 4px 0;
+  color: #334155;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 .question-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(180px, auto);
@@ -218,7 +231,11 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
   border-bottom: 1px solid #edf0f2;
 }
 .question-row:last-child { border-bottom: 0; }
-.question-text { line-height: 1.55; }
+.question-text {
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 .question-no { color: var(--sage-deep); font-weight: 900; }
 .answer-control {
   min-height: 44px;
@@ -249,8 +266,14 @@ select.answer-control { min-width: 154px; }
   border-radius: 10px;
   background: #fff;
   cursor: pointer;
+  min-width: 0;
 }
 .choice-option input { margin-top: 3px; }
+.choice-option span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 .result-pill {
   display: none;
   margin-left: 8px;
@@ -434,6 +457,12 @@ function escapeHtml(value) {
   })[char]);
 }
 
+function optionDisplayText(key, text) {
+  const value = String(text || "").trim();
+  const prefix = new RegExp(`^\\s*${String(key || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*[.．、)]\\s*`, "i");
+  return value.replace(prefix, "");
+}
+
 function normalizeAnswer(value) {
   return String(value || "")
     .trim()
@@ -485,7 +514,7 @@ function questionControl(question, group) {
       ${question.options.map((option) => `
         <label class="choice-option">
           <input type="radio" name="q_${question.id}" value="${escapeHtml(option.key)}" ${value === option.key ? "checked" : ""}>
-          <span><strong>${escapeHtml(option.key)}</strong> ${escapeHtml(option.text)}</span>
+          <span><strong>${escapeHtml(option.key)}</strong> ${escapeHtml(optionDisplayText(option.key, option.text))}</span>
         </label>
       `).join("")}
     </div>`;
@@ -540,7 +569,7 @@ function renderOptionBank(group) {
   if (!options.length) return "";
   return `<div class="option-bank">
     <div class="option-bank-title">${escapeHtml(group.collect_option?.title || "Options")}</div>
-    ${options.map((option) => `<div class="option-line"><strong>${escapeHtml(option.key)}</strong> ${escapeHtml(option.text)}</div>`).join("")}
+    ${options.map((option) => `<div class="option-line"><strong>${escapeHtml(option.key)}</strong> ${escapeHtml(optionDisplayText(option.key, option.text))}</div>`).join("")}
   </div>`;
 }
 

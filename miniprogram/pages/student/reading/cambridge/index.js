@@ -215,12 +215,18 @@ Page({
         return (options || []).map(option => {
             const value = String(option.key || option.title || '').trim()
             const content = String(option.text || option.content || '').trim()
+            const displayContent = this.stripOptionKeyPrefix(value, content)
             return {
                 value,
-                label: content ? `${value}. ${content}` : value,
+                label: displayContent ? `${value}. ${displayContent}` : value,
                 checked: false
             }
         }).filter(option => option.value)
+    },
+
+    stripOptionKeyPrefix(key, text) {
+        const escaped = String(key || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        return String(text || '').trim().replace(new RegExp(`^\\s*${escaped}\\s*[.．、)]\\s*`, 'i'), '')
     },
 
     splitQuestionTitle(question) {

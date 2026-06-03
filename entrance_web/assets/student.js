@@ -88,10 +88,10 @@
       secDiv.className = 'bg-white rounded-2xl shadow p-6';
       secDiv.innerHTML = `
         <div class="flex items-center justify-between mb-3">
-          <h2 class="text-xl font-bold text-teal-700">${typeLabel[sec.section_type] || sec.section_type} · ${sec.title}</h2>
+          <h2 class="text-xl font-bold text-teal-700">${escapeHtml(typeLabel[sec.section_type] || sec.section_type)} · ${escapeHtml(sec.title)}</h2>
           <span class="text-xs text-gray-500">建议 ${sec.duration_minutes || '—'} 分钟</span>
         </div>
-        ${sec.instructions ? `<p class="text-sm text-gray-600 mb-3">${sec.instructions}</p>` : ''}
+        ${sec.instructions ? `<p class="text-sm text-gray-600 mb-3 question-stem">${formatMultiline(sec.instructions)}</p>` : ''}
       `;
 
       if (sec.section_type === 'listening' && sec.audio_url) {
@@ -109,7 +109,7 @@
 
       if (sec.section_type === 'reading' && sec.passage) {
         const p = document.createElement('div');
-        p.className = 'bg-gray-50 rounded p-4 mb-4 whitespace-pre-wrap text-sm leading-relaxed';
+        p.className = 'bg-gray-50 rounded p-4 mb-4 whitespace-pre-wrap text-sm leading-relaxed reading-passage';
         p.textContent = sec.passage;
         secDiv.appendChild(p);
       }
@@ -119,12 +119,12 @@
         qDiv.className = 'q-card border border-gray-200 rounded-lg p-4 mb-3';
         const qNum = `${si + 1}.${qi + 1}`;
         const options = Array.isArray(q.options) ? q.options : [];
-        let body = `<div class="font-semibold mb-2 leading-relaxed">${qNum}　${formatMultiline(q.stem)}</div>`;
+        let body = `<div class="font-semibold mb-2 leading-relaxed question-stem">${escapeHtml(qNum)}　${formatMultiline(q.stem)}</div>`;
         if (q.question_type === 'single_choice' && options.length) {
           body += options.map(opt => `
             <label class="flex items-start gap-2 py-1 cursor-pointer hover:bg-teal-50 rounded px-2">
               <input type="radio" name="q_${q.id}" value="${escapeHtml(optionKey(opt))}" class="mt-1">
-              <span>${formatOptionLabel(opt)}</span>
+              <span class="option-label">${formatOptionLabel(opt)}</span>
             </label>
           `).join('');
         } else if (q.question_type === 'short_answer') {
@@ -220,9 +220,15 @@
   }
 
   function formatOptionLabel(opt) {
-    const key = escapeHtml(optionKey(opt));
-    const text = escapeHtml(optionText(opt));
+    const rawKey = optionKey(opt);
+    const key = escapeHtml(rawKey);
+    const text = escapeHtml(stripOptionKeyPrefix(rawKey, optionText(opt)));
     return text ? `<b>${key}.</b> ${text}` : `<b>${key}</b>`;
+  }
+
+  function stripOptionKeyPrefix(key, text) {
+    const escapedKey = String(key || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return String(text || '').trim().replace(new RegExp(`^\\s*${escapedKey}\\s*[.．、)]\\s*`, 'i'), '');
   }
 
   init();

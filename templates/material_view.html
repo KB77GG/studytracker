@@ -46,10 +46,10 @@
                     {% endif %}
 
                     <!-- 题目列表 -->
-                    <h5 class="mt-4 mb-3">题目列表 ({{ material.questions.count() }}题)</h5>
+                    <h5 class="mt-4 mb-3">题目列表 ({{ display_questions|length }}题)</h5>
 
                     <div class="questions-container">
-                        {% for question in material.questions %}
+                        {% for question in display_questions %}
                         <div class="card mb-3">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
@@ -94,14 +94,14 @@
 
                                 {% else %}
                                 <!-- 默认显示 (语法/翻译/口语Part1/2) -->
-                                <p class="card-text lead" style="white-space: pre-wrap;">{{ question.content }}</p>
+                                <p class="card-text lead" style="white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;">{{ question.content }}</p>
 
-                                {% if question.options.count() > 0 %}
+                                {% if question.options|length > 0 %}
                                 <div class="options-list ml-3 mb-3">
                                     {% for option in question.options %}
-                                    <div class="option-item">
-                                        <span class="badge badge-secondary">{{ option.option_key }}</span>
-                                        {{ option.option_text }}
+                                    <div class="option-item" style="overflow-wrap: anywhere; word-break: break-word;">
+                                        <span class="badge badge-secondary">{{ option.key }}</span>
+                                        {{ option.text }}
                                     </div>
                                     {% endfor %}
                                 </div>

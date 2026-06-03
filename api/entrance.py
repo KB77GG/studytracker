@@ -10,8 +10,10 @@ Phase 2: business logic implementation.
 """
 
 import base64
+import html
 import json
 import os
+import re
 import secrets
 from datetime import datetime
 from urllib.parse import quote
@@ -54,24 +56,116 @@ def _admin_required():
     return None
 
 
+def _option_text_starts_with_key(text, key):
+    return bool(re.match(rf"^\s*{re.escape(str(key or '').upper())}\s*[\.\uFF0E、)]\s*", str(text or ""), flags=re.IGNORECASE))
+
+
+def _split_inline_options(value):
+    text = html.unescape(str(value or ""))
+    text = text.replace("\xa0", " ").replace("\u3000", " ")
+    text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        return []
+
+    marker = re.compile(r"(?<![A-Za-z])([A-Z])\s*[\.\uFF0E、)]\s*")
+    matches = list(marker.finditer(text))
+    if len(matches) < 2:
+        return []
+
+    options = []
+    seen = set()
+    for index, match in enumerate(matches):
+        key = match.group(1).upper()
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        option_text = text[start:end].strip(" \t\r\n;；")
+        if not option_text or key in seen:
+            continue
+        seen.add(key)
+        options.append({"key": key, "text": option_text})
+    return options if len(options) >= 2 else []
+
+
+def _extract_inline_options_from_stem(stem):
+    text = str(stem or "").strip()
+    match = re.search(r"(?<![A-Za-z])A\s*[\.\uFF0E、)]\s*", text)
+    if not match:
+        return text, []
+
+    options = _split_inline_options(text[match.start():])
+    if len(options) < 2:
+        return text, []
+
+    clean_stem = text[:match.start()].strip()
+    return clean_stem or text, options
+
+
+def _normalize_question_options(raw_options):
+    rows = []
+    for opt in raw_options or []:
+        key = str((opt or {}).get("key") or (opt or {}).get("title") or "").strip().upper()
+        text = str((opt or {}).get("text") or (opt or {}).get("content") or "").strip()
+        if key and text:
+            rows.append({"key": key, "text": text})
+
+    if rows:
+        combined_parts = []
+        for row in rows:
+            if _option_text_starts_with_key(row["text"], row["key"]):
+                combined_parts.append(row["text"])
+            else:
+                combined_parts.append(f"{row['key']}. {row['text']}")
+        parsed = _split_inline_options(" ".join(combined_parts))
+        parsed_keys = [opt["key"] for opt in parsed]
+        row_keys = [row["key"] for row in rows]
+        if len(parsed) > len(rows) or (parsed and parsed_keys == row_keys):
+            return parsed
+
+    return rows
+
+
+def _load_question_options(question):
+    if not question.options_json:
+        return []
+    try:
+        options = json.loads(question.options_json)
+    except Exception:
+        return []
+    return options if isinstance(options, list) else []
+
+
+def _normalize_stem_and_options(stem, raw_options):
+    options = _normalize_question_options(raw_options)
+    clean_stem, inline_options = _extract_inline_options_from_stem(stem)
+    if inline_options:
+        inline_keys = [opt["key"] for opt in inline_options]
+        option_keys = [opt["key"] for opt in options]
+        if not options:
+            return clean_stem, inline_options
+        if inline_keys == option_keys:
+            return clean_stem, options
+    return str(stem or "").strip(), options
+
+
+def _display_stem_and_options(question):
+    if question.question_type != "single_choice":
+        return str(question.stem or "").strip(), []
+    return _normalize_stem_and_options(question.stem, _load_question_options(question))
+
+
 def _serialize_paper_for_student(paper):
     """Return paper structure WITHOUT correct answers / reference answers."""
     sections = []
     for section in paper.sections:
         questions = []
         for q in section.questions:
-            options = []
-            if q.options_json:
-                try:
-                    options = json.loads(q.options_json)
-                except Exception:
-                    options = []
+            stem, options = _display_stem_and_options(q)
             questions.append(
                 {
                     "id": q.id,
                     "sequence": q.sequence,
                     "question_type": q.question_type,
-                    "stem": q.stem,
+                    "stem": stem,
                     "options": options,
                     "points": q.points,
                 }
@@ -461,19 +555,14 @@ def admin_get_attempt(attempt_id):
     for section in paper.sections:
         questions = []
         for q in section.questions:
-            options = []
-            if q.options_json:
-                try:
-                    options = json.loads(q.options_json)
-                except Exception:
-                    options = []
+            stem, options = _display_stem_and_options(q)
             ans = answers_by_qid.get(q.id)
             questions.append(
                 {
                     "id": q.id,
                     "sequence": q.sequence,
                     "question_type": q.question_type,
-                    "stem": q.stem,
+                    "stem": stem,
                     "options": options,
                     "correct_answer": q.correct_answer,
                     "reference_answer": q.reference_answer,
@@ -602,15 +691,10 @@ def admin_report_pdf(attempt_id):
     for section in sorted(paper.sections, key=lambda s: s.sequence):
         qs = []
         for q in sorted(section.questions, key=lambda x: x.sequence):
-            opts = []
-            if q.options_json:
-                try:
-                    opts = json.loads(q.options_json)
-                except Exception:
-                    opts = []
+            stem, opts = _display_stem_and_options(q)
             ans = answers_by_q.get(q.id)
             qs.append({
-                "stem": q.stem,
+                "stem": stem,
                 "options": opts,
                 "question_type": q.question_type,
                 "correct_answer": q.correct_answer,
@@ -866,11 +950,13 @@ def admin_delete_section(section_id):
 def _question_payload(data, question=None):
     q = question or EntranceTestQuestion()
     q.question_type = data.get("question_type", q.question_type or "single_choice")
-    q.stem = (data.get("stem") or "").strip()
+    stem = (data.get("stem") or "").strip()
     opts = data.get("options")
+    if opts is not None and q.question_type == "single_choice":
+        stem, opts = _normalize_stem_and_options(stem, opts)
+    q.stem = stem
     if opts is not None:
-        # opts: list of {key, text}
-        q.options_json = json.dumps(opts, ensure_ascii=False) if opts else None
+        q.options_json = json.dumps(opts, ensure_ascii=False) if q.question_type == "single_choice" and opts else None
     q.correct_answer = (data.get("correct_answer") or "").strip() or None
     q.reference_answer = (data.get("reference_answer") or "").strip() or None
     try:

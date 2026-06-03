@@ -347,6 +347,117 @@
         renderQuestions();
     });
 
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, function (char) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char];
+        });
+    }
+
+    function escapeRegExp(value) {
+        return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function formatMultiline(value) {
+        return escapeHtml(value).replace(/\n/g, '<br>');
+    }
+
+    function optionTextStartsWithKey(text, key) {
+        return new RegExp(`^\\s*${escapeRegExp(String(key || '').toUpperCase())}\\s*[.．、)]\\s*`, 'i').test(String(text || ''));
+    }
+
+    function stripOptionKeyPrefix(key, text) {
+        return String(text || '').trim().replace(new RegExp(`^\\s*${escapeRegExp(key)}\\s*[.．、)]\\s*`, 'i'), '');
+    }
+
+    function splitInlineOptions(value) {
+        const text = String(value || '').replace(/\u00a0|\u3000/g, ' ').replace(/\s+/g, ' ').trim();
+        if (!text) return [];
+        const marker = /([A-Z])\s*[.．、)]\s*/g;
+        const matches = [];
+        let match;
+        while ((match = marker.exec(text)) !== null) {
+            const prev = match.index > 0 ? text[match.index - 1] : '';
+            if (prev && /[A-Za-z]/.test(prev)) continue;
+            matches.push({ key: match[1].toUpperCase(), start: match.index, end: marker.lastIndex });
+        }
+        if (matches.length < 2) return [];
+        const options = [];
+        const seen = new Set();
+        matches.forEach(function (item, index) {
+            const end = index + 1 < matches.length ? matches[index + 1].start : text.length;
+            const optionText = text.slice(item.end, end).replace(/^[\s;；]+|[\s;；]+$/g, '');
+            if (!optionText || seen.has(item.key)) return;
+            seen.add(item.key);
+            options.push({ key: item.key, text: optionText });
+        });
+        return options.length >= 2 ? options : [];
+    }
+
+    function extractInlineOptionsFromContent(content) {
+        const text = String(content || '').trim();
+        const marker = /A\s*[.．、)]\s*/ig;
+        let match;
+        while ((match = marker.exec(text)) !== null) {
+            const prev = match.index > 0 ? text[match.index - 1] : '';
+            if (prev && /[A-Za-z]/.test(prev)) continue;
+            const inlineOptions = splitInlineOptions(text.slice(match.index));
+            if (inlineOptions.length >= 2) {
+                const stem = text.slice(0, match.index).trim();
+                return { content: stem || text, options: inlineOptions };
+            }
+        }
+        return { content: text, options: [] };
+    }
+
+    function normalizeQuestionOptions(rawOptions) {
+        const rows = (rawOptions || []).map(function (opt) {
+            return {
+                key: String((opt && opt.key) || '').trim().toUpperCase(),
+                text: String((opt && opt.text) || '').trim()
+            };
+        }).filter(function (opt) {
+            return opt.key && opt.text;
+        });
+        if (rows.length) {
+            const combined = rows.map(function (row) {
+                return optionTextStartsWithKey(row.text, row.key) ? row.text : `${row.key}. ${row.text}`;
+            }).join(' ');
+            const parsed = splitInlineOptions(combined);
+            const parsedKeys = parsed.map(function (opt) { return opt.key; }).join(',');
+            const rowKeys = rows.map(function (opt) { return opt.key; }).join(',');
+            if (parsed.length > rows.length || (parsed.length && parsedKeys === rowKeys)) {
+                return parsed;
+            }
+        }
+        return rows;
+    }
+
+    function normalizeQuestionPayload(question) {
+        const normalized = { ...(question || {}) };
+        let options = normalizeQuestionOptions(normalized.options || []);
+        const extracted = extractInlineOptionsFromContent(normalized.content || '');
+        const questionType = String(normalized.question_type || 'choice').trim().toLowerCase();
+        const allowsInlineOptions = options.length > 0 || ['choice', 'single_choice', 'multiple_choice', 'grammar_choice'].includes(questionType);
+        if (extracted.options.length && allowsInlineOptions) {
+            const inlineKeys = extracted.options.map(function (opt) { return opt.key; }).join(',');
+            const optionKeys = options.map(function (opt) { return opt.key; }).join(',');
+            if (!options.length) {
+                options = extracted.options;
+                normalized.content = extracted.content;
+            } else if (inlineKeys === optionKeys) {
+                normalized.content = extracted.content;
+            }
+        }
+        normalized.options = options;
+        return normalized;
+    }
+
     // Handle material type change
     function handleTypeChange() {
         const type = document.getElementById('type').value;
@@ -546,6 +657,7 @@
     // 渲染题目列表
     function renderQuestions() {
         const container = document.getElementById('questionsList');
+        questions = (questions || []).map(normalizeQuestionPayload);
         document.getElementById('questionCount').textContent = questions.length;
 
         if (questions.length === 0) {
@@ -564,17 +676,17 @@
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
-                    <p class="mb-2">${q.content}</p>
+                    <p class="mb-2" style="white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;">${formatMultiline(q.content)}</p>
                     ${q.options ? q.options.map(opt => `
-                        <div class="ml-3">
-                            <small class="badge badge-light">${opt.key}</small> ${opt.text}
+                        <div class="ml-3" style="overflow-wrap: anywhere; word-break: break-word;">
+                            <small class="badge badge-light">${escapeHtml(opt.key)}</small> ${formatMultiline(stripOptionKeyPrefix(opt.key, opt.text))}
                         </div>
                     `).join('') : ''}
                     <small class="text-success">
-                        <strong>参考答案：</strong>${q.reference_answer || '未设置'}
+                        <strong>参考答案：</strong>${escapeHtml(q.reference_answer || '未设置')}
                     </small>
-                    ${q.explanation ? `<br><small class="text-muted"><strong>解析：</strong>${q.explanation.substring(0, 100)}${q.explanation.length > 100 ? '...' : ''}</small>` : ''}
-                    ${q.hint ? `<br><small class="text-info"><strong>${q.hint}</strong></small>` : ''}
+                    ${q.explanation ? `<br><small class="text-muted"><strong>解析：</strong>${escapeHtml(q.explanation.substring(0, 100))}${q.explanation.length > 100 ? '...' : ''}</small>` : ''}
+                    ${q.hint ? `<br><small class="text-info"><strong>${escapeHtml(q.hint)}</strong></small>` : ''}
                 </div>
             </div>
         `;

@@ -136,15 +136,21 @@ audio {
   line-height: 1.6;
   margin-bottom: 18px;
   font-size: 17px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .question-title {
   font-weight: 800;
   margin: 10px 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .collect {
   line-height: 2.05;
   white-space: pre-line;
   color: var(--text);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .bc {
   display: block;
@@ -168,6 +174,8 @@ audio {
 .option-line {
   margin: 5px 0;
   color: var(--text);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .question {
   padding: 18px 0;
@@ -187,6 +195,8 @@ audio {
   font-size: 17px;
   font-weight: 650;
   line-height: 1.45;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .q-number {
   font-weight: 800;
@@ -256,6 +266,8 @@ audio {
 }
 .choice-text {
   min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .table-wrap {
   overflow-x: auto;
@@ -273,6 +285,8 @@ table.practice-table {
   padding: 10px;
   vertical-align: top;
   line-height: 1.5;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .practice-table tr:first-child td {
   background: var(--brand-tint);
@@ -513,6 +527,12 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
+function optionDisplayText(key, text) {
+  const value = String(text || '').trim();
+  const prefix = new RegExp(`^\\s*${String(key || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*[.．、)]\\s*`, 'i');
+  return value.replace(prefix, '');
+}
+
 function richText(value) {
   return escapeHtml(value)
     .replace(/&lt;b&gt;/g, '<b>')
@@ -573,7 +593,7 @@ function optionBank(group) {
   return `
     <div class="option-bank">
       ${title ? `<div class="option-bank-title">${escapeHtml(title)}</div>` : ''}
-      ${options.map(o => `<div class="option-line">${escapeHtml(o.title)}. ${escapeHtml(o.content)}</div>`).join('')}
+      ${options.map(o => `<div class="option-line">${escapeHtml(o.title)}. ${escapeHtml(optionDisplayText(o.title, o.content))}</div>`).join('')}
     </div>
   `;
 }
@@ -591,7 +611,7 @@ function controlForItem(item, group, inline = false) {
         ${item.options.map(o => `
           <label class="choice">
             <input type="${isMulti ? 'checkbox' : 'radio'}" name="${qid}" value="${escapeHtml(o.title)}">
-            <span class="choice-text">${escapeHtml(o.title)}. ${escapeHtml(o.content)}</span>
+            <span class="choice-text">${escapeHtml(o.title)}. ${escapeHtml(optionDisplayText(o.title, o.content))}</span>
           </label>
         `).join('')}
       </div>
@@ -603,7 +623,7 @@ function controlForItem(item, group, inline = false) {
       <span class="${wrapperClass}">
         <select class="answer-select answer-unit" data-kind="select" data-answer="${answer}" data-q="${escapeHtml(item.number)}">
           <option value=""></option>
-          ${options.map(o => `<option value="${escapeHtml(o.title)}">${escapeHtml(o.title)}. ${escapeHtml(o.content)}</option>`).join('')}
+          ${options.map(o => `<option value="${escapeHtml(o.title)}">${escapeHtml(o.title)}. ${escapeHtml(optionDisplayText(o.title, o.content))}</option>`).join('')}
         </select>
       </span>
     `;
@@ -664,7 +684,7 @@ function renderCombinedMulti(group) {
       ${(group.collect_options?.list || []).map(o => `
         <label class="choice">
           <input type="checkbox" value="${escapeHtml(o.title)}">
-          ${escapeHtml(o.title)}. ${escapeHtml(o.content)}
+          ${escapeHtml(o.title)}. ${escapeHtml(optionDisplayText(o.title, o.content))}
         </label>
       `).join('')}
     </div>

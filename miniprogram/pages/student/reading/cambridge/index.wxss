@@ -287,6 +287,8 @@ page {
   font-size: 29rpx;
   line-height: 1.74;
   color: #263242;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .group-card {
@@ -309,6 +311,8 @@ page {
   color: #526070;
   line-height: 1.6;
   margin-bottom: 18rpx;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .question-image {
@@ -326,10 +330,14 @@ page {
   font-size: 28rpx;
   line-height: 1.8;
   margin-bottom: 20rpx;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .chunk-text {
   display: inline;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .option-bank {
@@ -345,6 +353,8 @@ page {
   color: #475467;
   line-height: 1.55;
   margin-bottom: 8rpx;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .option-line:last-child {
@@ -376,6 +386,8 @@ page {
   line-height: 1.55;
   color: #263242;
   background: #fff;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .question-block {
@@ -412,6 +424,8 @@ page {
   font-size: 29rpx;
   color: #18243a;
   line-height: 1.7;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .answer-input,
@@ -434,6 +448,8 @@ page {
   display: flex;
   align-items: center;
   color: #526070;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .inline-input,
@@ -456,6 +472,9 @@ page {
 
 .inline-picker {
   color: #526070;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .answer-input.correct,
@@ -482,6 +501,8 @@ page {
   color: #475467;
   font-size: 24rpx;
   line-height: 1.45;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .answer-tip.correct {
@@ -563,6 +584,8 @@ page {
   font-size: 26rpx;
   color: #263242;
   line-height: 1.45;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .submit-bar {
