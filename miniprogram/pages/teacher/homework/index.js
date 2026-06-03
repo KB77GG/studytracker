@@ -59,6 +59,7 @@ Page({
         isCustomSource: true,
         isListeningSource: false,
         isReadingSource: false,
+        isCambridgeSource: false,
         catalogLoading: false,
         catalog: {
             cambridge_listening: [],
@@ -77,6 +78,10 @@ Page({
         readingTestLabels: [],
         readingScopeLabels: [],
         selectedPracticeSummary: '',
+        selectedPracticeList: [],
+        existingTasks: [],
+        existingLoading: false,
+        createdTasks: [],
         saving: false
     },
 
@@ -103,8 +108,10 @@ Page({
                 plannedMinutes: 30,
                 note: ''
             }
+        }, () => {
+            this.fetchPracticeCatalog()
+            this.fetchExistingHomework()
         })
-        this.fetchPracticeCatalog()
     },
 
     getTodayString() {
@@ -184,6 +191,7 @@ Page({
             isCustomSource: source.key === 'custom',
             isListeningSource: source.key === 'cambridge_listening',
             isReadingSource: source.key === 'cambridge_reading',
+            isCambridgeSource: source.key === 'cambridge_listening' || source.key === 'cambridge_reading',
             listeningBookIndex,
             listeningTestIndex,
             listeningScopeIndex,
@@ -239,6 +247,34 @@ Page({
         return null
     },
 
+    buildPracticeKey(item) {
+        const section = item.practice_section_number || ''
+        const passage = item.practice_passage_number || ''
+        return [
+            item.source_type || '',
+            item.practice_test_id || '',
+            item.practice_scope || '',
+            section,
+            passage
+        ].join(':')
+    },
+
+    normalizePracticeItem(selected) {
+        const item = {
+            key: this.buildPracticeKey(selected),
+            source_type: selected.source_type,
+            practice_test_id: selected.practice_test_id,
+            practice_scope: selected.practice_scope,
+            practice_section_number: selected.practice_section_number || null,
+            practice_passage_number: selected.practice_passage_number || null,
+            category: selected.category,
+            detail: selected.detail,
+            plannedMinutes: selected.plannedMinutes,
+            summary: selected.summary
+        }
+        return item
+    },
+
     buildSelectedPracticePayload() {
         const source = SOURCE_OPTIONS[this.data.sourceIndex] || SOURCE_OPTIONS[0]
         if (source.key === 'custom') {
@@ -291,6 +327,35 @@ Page({
         })
     },
 
+    addSelectedPracticeToQueue() {
+        const selected = this.buildSelectedPracticePayload()
+        if (!selected || selected.source_type === 'custom' || !selected.practice_test_id) {
+            wx.showToast({ title: '请选择练习篇目', icon: 'none' })
+            return
+        }
+        const item = this.normalizePracticeItem(selected)
+        const exists = (this.data.selectedPracticeList || []).some(row => row.key === item.key)
+        if (exists) {
+            wx.showToast({ title: '已在清单中', icon: 'none' })
+            return
+        }
+        this.setData({
+            selectedPracticeList: [...(this.data.selectedPracticeList || []), item]
+        })
+    },
+
+    removePracticeFromQueue(e) {
+        const key = e.currentTarget.dataset.key
+        if (!key) return
+        this.setData({
+            selectedPracticeList: (this.data.selectedPracticeList || []).filter(item => item.key !== key)
+        })
+    },
+
+    clearPracticeQueue() {
+        this.setData({ selectedPracticeList: [] })
+    },
+
     handleSourceChange(e) {
         this.setData({ sourceIndex: Number(e.detail.value) || 0 }, () => this.refreshPracticeOptions(true))
     },
@@ -334,7 +399,7 @@ Page({
     },
 
     handleDateChange(e) {
-        this.setData({ 'form.date': e.detail.value })
+        this.setData({ 'form.date': e.detail.value }, () => this.fetchExistingHomework())
     },
 
     handleInput(e) {
@@ -343,61 +408,169 @@ Page({
         this.setData({ [`form.${field}`]: e.detail.value })
     },
 
+    buildHomeworkQuery() {
+        const { schedule, form } = this.data
+        const params = {
+            student_id: schedule.student_id,
+            student_name: schedule.student_name,
+            teacher_id: schedule.teacher_id,
+            date: form.date
+        }
+        return Object.keys(params)
+            .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')
+            .map(key => `${key}=${encodeURIComponent(params[key])}`)
+            .join('&')
+    },
+
+    async fetchExistingHomework() {
+        const { schedule } = this.data
+        if (!schedule.student_id && !schedule.student_name) return
+        this.setData({ existingLoading: true })
+        try {
+            const query = this.buildHomeworkQuery()
+            const res = await request(`/miniprogram/teacher/homework?${query}`)
+            if (res && res.ok) {
+                this.setData({ existingTasks: res.tasks || [] })
+            }
+        } catch (err) {
+            console.warn('load existing homework failed', err)
+        } finally {
+            this.setData({ existingLoading: false })
+        }
+    },
+
+    formatHomeworkError(code) {
+        let msg = code || '保存失败'
+        if (msg === 'student_not_found') msg = '未找到学生档案'
+        if (msg === 'forbidden_schedule') msg = '当前课表不属于你'
+        if (msg === 'invalid_date') msg = '日期格式不正确'
+        if (msg === 'practice_not_found') msg = '未找到练习篇目'
+        if (msg === 'invalid_practice_scope') msg = '练习范围不正确'
+        if (msg === 'missing_detail') msg = '请填写作业内容'
+        return msg
+    },
+
+    buildSubmitItems() {
+        const { form } = this.data
+        const source = SOURCE_OPTIONS[this.data.sourceIndex] || SOURCE_OPTIONS[0]
+        const queued = this.data.selectedPracticeList || []
+        if (queued.length > 0) {
+            return queued.map(item => ({
+                ...item,
+                planned_minutes: Number(item.plannedMinutes) || 0
+            }))
+        }
+
+        if (source.key === 'custom') {
+            return [{
+                key: 'custom',
+                source_type: 'custom',
+                category: (form.category || '').trim(),
+                detail: (form.detail || '').trim(),
+                planned_minutes: Number(form.plannedMinutes) || 0
+            }]
+        }
+
+        const selected = this.buildSelectedPracticePayload()
+        if (!selected || !selected.practice_test_id) return []
+        return [{
+            ...selected,
+            key: this.buildPracticeKey(selected),
+            category: (form.category || selected.category || '').trim(),
+            detail: (form.detail || selected.detail || '').trim(),
+            planned_minutes: Number(form.plannedMinutes) || selected.plannedMinutes || 0
+        }]
+    },
+
     async submitHomework() {
         const { form, schedule } = this.data
-        const practicePayload = this.buildSelectedPracticePayload()
-        const detail = (form.detail || '').trim()
-        if (!detail) {
+        const submitItems = this.buildSubmitItems()
+        if (!submitItems.length) {
+            wx.showToast({ title: '请选择练习篇目', icon: 'none' })
+            return
+        }
+        const missingDetail = submitItems.some(item => !(item.detail || '').trim())
+        if (missingDetail) {
             wx.showToast({ title: '请填写作业内容', icon: 'none' })
             return
         }
-        if (practicePayload.source_type !== 'custom' && !practicePayload.practice_test_id) {
+        const missingPractice = submitItems.some(item => item.source_type !== 'custom' && !item.practice_test_id)
+        if (missingPractice) {
             wx.showToast({ title: '请选择练习篇目', icon: 'none' })
             return
         }
 
         this.setData({ saving: true })
-        wx.showLoading({ title: '保存中...' })
+        wx.showLoading({ title: submitItems.length > 1 ? `保存 1/${submitItems.length}` : '保存中...' })
         try {
-            const payload = {
-                ...schedule,
-                ...practicePayload,
-                date: form.date,
-                category: (form.category || '').trim(),
-                detail,
-                planned_minutes: Number(form.plannedMinutes) || 0,
-                note: (form.note || '').trim()
+            const successes = []
+            const failures = []
+            for (let index = 0; index < submitItems.length; index += 1) {
+                const item = submitItems[index]
+                if (submitItems.length > 1) {
+                    wx.showLoading({ title: `保存 ${index + 1}/${submitItems.length}` })
+                }
+                const payload = {
+                    ...schedule,
+                    ...item,
+                    date: form.date,
+                    category: (item.category || form.category || '').trim(),
+                    detail: (item.detail || '').trim(),
+                    planned_minutes: Number(item.planned_minutes) || 0,
+                    note: (form.note || '').trim()
+                }
+                const res = await request('/miniprogram/teacher/homework', {
+                    method: 'POST',
+                    data: payload
+                })
+                if (!res || !res.ok) {
+                    failures.push({
+                        item,
+                        message: this.formatHomeworkError(res && res.error)
+                    })
+                } else {
+                    successes.push({
+                        item,
+                        response: res
+                    })
+                }
             }
-            const res = await request('/miniprogram/teacher/homework', {
-                method: 'POST',
-                data: payload
+
+            const createdTasks = successes.map(row => row.response.task).filter(Boolean)
+            const failedPracticeItems = failures
+                .map(row => row.item)
+                .filter(item => item.source_type !== 'custom')
+            this.setData({
+                createdTasks,
+                selectedPracticeList: failedPracticeItems
             })
-            if (!res || !res.ok) {
-                let msg = (res && res.error) || '保存失败'
-                if (msg === 'student_not_found') msg = '未找到学生档案'
-                if (msg === 'forbidden_schedule') msg = '当前课表不属于你'
-                if (msg === 'invalid_date') msg = '日期格式不正确'
-                if (msg === 'practice_not_found') msg = '未找到练习篇目'
-                if (msg === 'invalid_practice_scope') msg = '练习范围不正确'
-                wx.showToast({ title: msg, icon: 'none' })
+            await this.fetchExistingHomework()
+
+            if (!successes.length) {
+                wx.showToast({ title: failures[0] ? failures[0].message : '保存失败', icon: 'none' })
                 return
             }
 
-            if (res.push_sent > 0) {
-                wx.showToast({ title: '作业已布置并提醒学生', icon: 'success' })
-                setTimeout(() => {
-                    wx.navigateBack()
-                }, 500)
+            const pushSent = successes.reduce((count, row) => count + (Number(row.response.push_sent) || 0), 0)
+            if (failures.length > 0) {
+                wx.showModal({
+                    title: '部分作业已保存',
+                    content: `已保存 ${successes.length} 项，失败 ${failures.length} 项。${failures[0].message}`,
+                    showCancel: false
+                })
                 return
             }
 
+            if (pushSent >= successes.length) {
+                wx.showToast({ title: successes.length > 1 ? `已布置 ${successes.length} 项` : '作业已布置', icon: 'success' })
+                return
+            }
+
+            const pushError = successes.find(row => row.response.push_error)
             wx.showModal({
                 title: '作业已保存',
-                content: pushErrorMessage(res.push_error),
-                showCancel: false,
-                success: () => {
-                    wx.navigateBack()
-                }
+                content: pushErrorMessage(pushError && pushError.response.push_error),
+                showCancel: false
             })
         } catch (err) {
             console.error(err)

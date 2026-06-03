@@ -63,8 +63,47 @@
     <view class="practice-summary" wx:if="{{selectedPracticeSummary}}">
       <text>{{selectedPracticeSummary}}</text>
     </view>
+    <view class="practice-actions" wx:if="{{isCambridgeSource}}">
+      <button class="queue-btn" size="mini" bindtap="addSelectedPracticeToQueue">加入清单</button>
+      <button wx:if="{{selectedPracticeList.length}}" class="queue-btn ghost" size="mini" bindtap="clearPracticeQueue">清空</button>
+    </view>
+    <view class="queue-panel" wx:if="{{selectedPracticeList.length}}">
+      <view class="section-title-row">
+        <text class="section-title">待布置清单</text>
+        <text class="section-count">{{selectedPracticeList.length}} 项</text>
+      </view>
+      <view class="queue-item" wx:for="{{selectedPracticeList}}" wx:key="key">
+        <view class="queue-main">
+          <text class="queue-title">{{item.detail}}</text>
+          <text class="queue-meta">{{item.summary}} ｜ {{item.plannedMinutes}} 分钟</text>
+        </view>
+        <button class="remove-btn" size="mini" data-key="{{item.key}}" bindtap="removePracticeFromQueue">移除</button>
+      </view>
+    </view>
     <view class="practice-summary muted" wx:if="{{catalogLoading}}">
       <text>正在加载练习目录...</text>
+    </view>
+  </view>
+
+  <view class="form assigned-card">
+    <view class="section-title-row">
+      <text class="section-title">已布置作业</text>
+      <text class="section-count">{{existingTasks.length}} 项</text>
+    </view>
+    <view class="practice-summary muted" wx:if="{{existingLoading}}">
+      <text>正在加载已布置作业...</text>
+    </view>
+    <view class="empty-hint" wx:elif="{{!existingTasks.length}}">
+      <text>当前日期暂无作业</text>
+    </view>
+    <view class="assigned-list" wx:else>
+      <view class="assigned-item" wx:for="{{existingTasks}}" wx:key="id">
+        <view class="assigned-main">
+          <text class="assigned-title">{{item.detail}}</text>
+          <text class="assigned-meta">{{item.category || '课后作业'}} ｜ {{item.planned_minutes || 0}} 分钟</text>
+        </view>
+        <text class="status-pill">{{item.status_label}}</text>
+      </view>
     </view>
   </view>
 

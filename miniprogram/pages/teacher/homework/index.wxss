@@ -114,6 +114,128 @@
   color: #64748b;
 }
 
+.practice-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.queue-btn,
+.remove-btn {
+  margin: 0;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 2.4;
+}
+
+.queue-btn {
+  flex: 1;
+  background: #0f766e;
+  color: #fff;
+}
+
+.queue-btn.ghost,
+.remove-btn {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.queue-panel {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.section-count {
+  font-size: 12px;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.queue-item,
+.assigned-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.queue-main,
+.assigned-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.queue-title,
+.assigned-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.4;
+}
+
+.queue-meta,
+.assigned-meta {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.remove-btn {
+  width: 58px;
+  flex-shrink: 0;
+}
+
+.assigned-card {
+  border-color: rgba(14, 165, 233, 0.18);
+}
+
+.assigned-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.empty-hint {
+  padding: 10px;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #94a3b8;
+  font-size: 12px;
+  text-align: center;
+}
+
+.status-pill {
+  flex-shrink: 0;
+  min-width: 48px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #0f766e;
+  font-size: 11px;
+  text-align: center;
+}
+
 .textarea {
   min-height: 120px;
 }
