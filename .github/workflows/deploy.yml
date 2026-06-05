@@ -23,3 +23,28 @@ jobs:
             set -e
             echo "Triggering restricted Studytracker deployment..."
             sudo /usr/local/sbin/deploy-studytracker
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install miniprogram upload dependencies
+        run: npm ci
+
+      - name: Upload WeChat Mini Program
+        env:
+          WECHAT_MP_APPID: ${{ secrets.WECHAT_MP_APPID }}
+          WECHAT_MP_PRIVATE_KEY: ${{ secrets.WECHAT_MP_PRIVATE_KEY }}
+          WECHAT_MP_PRIVATE_KEY_BASE64: ${{ secrets.WECHAT_MP_PRIVATE_KEY_BASE64 }}
+          WECHAT_MP_ROBOT: ${{ vars.WECHAT_MP_ROBOT }}
+        run: |
+          set -e
+          if [ -z "$WECHAT_MP_PRIVATE_KEY" ] && [ -z "$WECHAT_MP_PRIVATE_KEY_BASE64" ]; then
+            echo "WECHAT_MP_PRIVATE_KEY not configured; skip mini program upload."
+            exit 0
+          fi
+          VERSION="0.1.${GITHUB_RUN_NUMBER}"
+          DESC="$(git log -1 --pretty=%s) (${GITHUB_SHA::7})"
+          npm run mp:upload -- --version "$VERSION" --desc "$DESC"

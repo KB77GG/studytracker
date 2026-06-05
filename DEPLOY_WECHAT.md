@@ -64,12 +64,60 @@ SCHEDULER_PUSH_TOKEN=与 training_scheduler /home/admin/training_scheduler/.env 
 systemctl restart studytracker
 ```
 
-## 2. 小程序端开发
+## 2. 小程序自动上传
+
+本仓库已接入微信官方 `miniprogram-ci`。它会把 `miniprogram/` 上传到微信公众平台，生成一个新的开发版本/体验版；提交审核和发布正式版仍需要在微信公众平台手动操作。
+
+### 准备代码上传密钥
+
+1. 使用小程序管理员账号登录 [微信公众平台](https://mp.weixin.qq.com)。
+2. 进入 **开发管理 → 开发设置 → 小程序代码上传**。
+3. 下载代码上传密钥。
+4. 如果在本地或 GitHub Actions 上传，请在该页面配置对应 IP 白名单；如果上传机器 IP 不固定，需要按微信后台策略处理白名单限制。
+
+不要把密钥文件提交到仓库。`.gitignore` 已忽略常见上传密钥文件名。
+
+### 本地上传
+
+推荐把密钥文件放在仓库外，或放在已忽略的本地路径，然后执行：
+
+```bash
+export WECHAT_MP_PRIVATE_KEY_PATH=/absolute/path/to/private.wx75cdd8fc1ca68c69.key
+npm ci
+npm run mp:upload -- --version 0.1.1 --desc "teacher homework edit controls"
+```
+
+也可以直接用环境变量传密钥内容：
+
+```bash
+export WECHAT_MP_PRIVATE_KEY="$(cat /absolute/path/to/private.key)"
+npm run mp:upload -- --version 0.1.1 --desc "teacher homework edit controls"
+```
+
+现有 `./deploy.sh "提交备注"` 已集成小程序上传：当检测到 `WECHAT_MP_PRIVATE_KEY`、`WECHAT_MP_PRIVATE_KEY_BASE64` 或 `WECHAT_MP_PRIVATE_KEY_PATH` 时，会在服务器部署成功后自动上传小程序；未配置密钥时会跳过并提示。临时跳过可设置：
+
+```bash
+SKIP_MINIPROGRAM_UPLOAD=1 ./deploy.sh "只部署后端"
+```
+
+### GitHub Actions 自动上传
+
+推送到 `main` 后，`.github/workflows/deploy.yml` 会先部署服务器，再尝试上传小程序。需要在 GitHub 仓库设置里配置以下 Secret：
+
+- `WECHAT_MP_PRIVATE_KEY`：代码上传密钥内容；或
+- `WECHAT_MP_PRIVATE_KEY_BASE64`：密钥文件内容的 base64 编码。
+
+可选配置：
+
+- `WECHAT_MP_APPID`：默认读取 `miniprogram/project.config.json`，当前为 `wx75cdd8fc1ca68c69`。
+- Repository Variable `WECHAT_MP_ROBOT`：指定 CI 机器人编号，默认 `1`。
+
+## 3. 小程序端开发
 
 1. 打开 **微信开发者工具**。
 2. 选择 **导入项目**。
 3. 目录选择：`/Users/zhouxin/Desktop/studytracker/miniprogram`。
-4. AppID 使用：`wx43ac836a9f623a0d`。
+4. AppID 使用：`wx75cdd8fc1ca68c69`。
 5. 确保在详情设置中勾选 **"不校验合法域名..."**（开发阶段）。
 
 课堂反馈订阅模板 ID 需要同步到小程序端：

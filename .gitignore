@@ -43,7 +43,11 @@ docs/睿然国际教育_雅思核心词汇手册.docx
 
 # Upload/runtime artifacts
 uploads/
+node_modules/
 miniprogram/vendor/
+private.*.key
+*.upload.key
+wechat-miniprogram*.key
 backups/
 .codex_backup/
 static/tts_cache/

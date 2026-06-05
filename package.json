@@ -1,0 +1,14 @@
+{
+  "name": "studytracker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "StudyTracker backend and WeChat mini program deployment helpers",
+  "scripts": {
+    "mp:upload": "node scripts/upload_miniprogram.cjs upload",
+    "mp:preview": "node scripts/upload_miniprogram.cjs preview",
+    "mp:upload:dry-run": "node scripts/upload_miniprogram.cjs upload --dry-run"
+  },
+  "devDependencies": {
+    "miniprogram-ci": "2.1.31"
+  }
+}
