@@ -1189,8 +1189,40 @@ def _sync_reading_test_score_record(task: Task, payload: dict, grade: dict) -> N
     )
 
 
+PRACTICE_STAFF_ROLES = {User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT}
+
+
+def _current_user_is_practice_staff() -> bool:
+    return bool(
+        getattr(current_user, "is_authenticated", False)
+        and current_user.role in PRACTICE_STAFF_ROLES
+    )
+
+
+def _practice_staff_mode() -> bool:
+    return _current_user_is_practice_staff() or _classroom_unlocked()
+
+
+def _practice_staff_label() -> str:
+    if _current_user_is_practice_staff():
+        return (current_user.display_name or current_user.username or "老师").strip()
+    if _classroom_unlocked():
+        return "课堂模式"
+    return ""
+
+
+def _practice_staff_hint() -> str:
+    if _current_user_is_practice_staff():
+        return "老师模式：可直接进入题库；未选择学生时，提交只做本地判分，不同步到学生记录。"
+    if _classroom_unlocked():
+        return "课堂模式：可直接进入题库讲题；提交只做本地判分，不同步到学生记录。"
+    return ""
+
+
 def _current_student_profile() -> StudentProfile | None:
     if not getattr(current_user, "is_authenticated", False):
+        return None
+    if current_user.role != User.ROLE_STUDENT:
         return None
     profile = StudentProfile.query.filter_by(
         user_id=current_user.id,
@@ -1214,6 +1246,8 @@ def _current_practice_student_profile() -> StudentProfile | None:
     profile = _current_student_profile()
     if profile:
         return profile
+    if _practice_staff_mode():
+        return None
     name = (session.get("practice_student_name") or "").strip()
     if not name:
         return None
@@ -2229,6 +2263,8 @@ CLASSROOM_COOKIE_MAX_AGE = 60 * 60 * 24 * 180  # 半年
 
 
 def _classroom_unlocked() -> bool:
+    if not has_request_context():
+        return False
     if request.cookies.get(CLASSROOM_COOKIE_NAME) == "1":
         return True
     return bool(session.get("classroom_unlocked"))
@@ -6828,7 +6864,13 @@ def _apply_listening_jijing_statuses(books: list[dict], statuses: dict[str, dict
 @app.route("/practice")
 def practice_library():
     """Unified entrance for practice and mock tests."""
-    return render_template("practice/index.html", summary=_practice_library_summary())
+    return render_template(
+        "practice/index.html",
+        summary=_practice_library_summary(),
+        practice_staff_mode=_practice_staff_mode(),
+        practice_staff_label=_practice_staff_label(),
+        practice_staff_hint=_practice_staff_hint(),
+    )
 
 
 @app.route("/exams")
@@ -6875,14 +6917,18 @@ def listening_index():
                 })
             except Exception:
                 pass
-    # 已登录员工可以看到上传按钮
+    # 已登录员工可以管理材料；课堂口令模式只允许浏览和讲题，不暴露管理操作。
     show_upload = _role_can_manage_listening(current_user)
+    staff_mode = bool(show_upload or _classroom_unlocked())
     catalog = _listening_intensive_catalog(exercises)
     return render_template(
         "listening/index.html",
         exercises=exercises,
         intensive_catalog=catalog,
         show_upload=show_upload,
+        staff_mode=staff_mode,
+        practice_staff_label=_practice_staff_label(),
+        practice_staff_hint=_practice_staff_hint(),
     )
 
 
@@ -8111,6 +8157,15 @@ def api_listening_verify():
 @app.route("/api/practice/identity")
 def api_practice_identity():
     """Return the lightweight identity currently attached to public practice."""
+    if _practice_staff_mode():
+        return jsonify({
+            "ok": True,
+            "verified": False,
+            "bypass_identity": True,
+            "mode": "staff" if _current_user_is_practice_staff() else "classroom",
+            "name": _practice_staff_label(),
+            "hint": _practice_staff_hint(),
+        })
     profile = _current_practice_student_profile()
     if not profile:
         return jsonify({"ok": True, "verified": False})

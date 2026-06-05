@@ -353,7 +353,7 @@
 </head>
 <body>
 
-{% macro render_intensive_catalog(catalog, staff=False) %}
+{% macro render_intensive_catalog(catalog, staff=False, can_manage=False) %}
 {% set suffix = 'staff' if staff else 'student' %}
 <div class="listening-catalog-layout js-listening-catalog">
   <aside class="listening-catalog-sidebar" aria-label="精听目录筛选">
@@ -429,8 +429,12 @@
               </div>
               {% if staff %}
               <div class="listening-intensive-section__actions">
+                {% if can_manage %}
                 <a class="action-btn action-assign" href="{{ url_for('tasks_page') }}?preset_exercise={{ section.id }}#taskForm">布置任务</a>
                 <button class="action-btn action-danger js-delete-exercise" data-id="{{ section.id }}" {% if section.task_count > 0 %}disabled title="已有任务引用，不能删除"{% endif %}>删除</button>
+                {% else %}
+                <a class="action-btn action-open" href="{{ url_for('listening_player', exercise_id=section.id) }}">打开练习</a>
+                {% endif %}
               </div>
               {% else %}
               <div class="progress-row">
@@ -477,8 +481,10 @@
           </div>
           <div class="exercise-actions">
             <a class="action-btn action-open" href="{{ url_for('listening_player', exercise_id=ex.id) }}">打开练习</a>
+            {% if can_manage %}
             <a class="action-btn action-assign" href="{{ url_for('tasks_page') }}?preset_exercise={{ ex.id }}#taskForm">布置任务</a>
             <button class="action-btn action-danger js-delete-exercise" data-id="{{ ex.id }}" {% if ex.task_count > 0 %}disabled title="已有任务引用，不能删除"{% endif %}>删除</button>
+            {% endif %}
           </div>
           {% else %}
           <div class="progress-row">
@@ -496,14 +502,19 @@
 </div>
 {% endmacro %}
 
-{% if show_upload %}
-{# 已登录的员工：跳过验证，直接显示内容 #}
+{% if staff_mode|default(show_upload) %}
+{# 已登录员工或课堂口令模式：跳过学生姓名验证，直接显示内容 #}
 <div class="listening-page listening-library" id="mainContent">
   <div class="identity-bar identity-bar--staff listening-library__identity">
-    <span>员工模式 · <span class="name">{{ current_user.display_name or current_user.username }}</span></span>
+    <span>{{ '员工模式' if show_upload else '课堂模式' }} · <span class="name">{{ practice_staff_label or (current_user.display_name if current_user.is_authenticated else '课堂模式') or (current_user.username if current_user.is_authenticated else '课堂模式') }}</span></span>
     <span class="actions">
-      <a href="{{ url_for('index') }}">← 回到主页</a>
+      <a href="{{ url_for('practice_library') }}">刷题 / 模考</a>
+      {% if current_user.is_authenticated %}
+      <a href="{{ url_for('index') }}">后台首页</a>
       <a href="{{ url_for('logout') }}">退出登录</a>
+      {% else %}
+      <a href="{{ url_for('login') }}">员工登录</a>
+      {% endif %}
     </span>
   </div>
 
@@ -513,21 +524,27 @@
       <h1 class="listening-library__title">精听练习</h1>
       <p class="listening-library__summary">选择一个练习开始精听训练。学生自由练习会在当前浏览器自动保存进度。</p>
     </div>
+    {% if show_upload %}
     <div class="listening-library__actions">
       <a class="listening-library__button listening-library__button--primary" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
     </div>
+    {% endif %}
   </div>
 
   {% set listening_active = 'intensive' %}
   {% include "listening/_mode_nav.html" %}
 
   {% if exercises %}
-  {{ render_intensive_catalog(intensive_catalog, staff=True) }}
+  {{ render_intensive_catalog(intensive_catalog, staff=True, can_manage=show_upload) }}
   {% else %}
   <div class="empty-state">
     <h3>还没有精听练习</h3>
+    {% if show_upload %}
     <p>上传一个音频和原文，几分钟就能让学生开始练习。</p>
     <a class="listening-library__button listening-library__button--primary" href="{{ url_for('listening_upload') }}">+ 上传新练习</a>
+    {% else %}
+    <p>暂时没有可用于课堂讲题的精听练习。</p>
+    {% endif %}
   </div>
   {% endif %}
 </div>

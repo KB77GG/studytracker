@@ -1,3 +1,4 @@
+{% set is_practice_staff_mode = practice_staff_mode|default(false) %}
 <style>
 .practice-page {
   max-width: 1180px;
@@ -104,6 +105,16 @@
   color: var(--error);
   font-size: var(--fs-sm);
   font-weight: 700;
+}
+.practice-identity--staff {
+  border-color: rgba(47, 142, 135, .22);
+  background: var(--brand-tint);
+}
+.practice-identity--staff .practice-identity__label {
+  color: var(--brand-dark);
+}
+.practice-identity--staff .practice-identity__name {
+  color: var(--brand-dark);
 }
 .practice-subjects {
   display: grid;
@@ -234,13 +245,19 @@ a.practice-resource:hover {
     </div>
   </section>
 
-  <section class="practice-identity" aria-label="学生身份">
+  <section class="practice-identity{% if is_practice_staff_mode %} practice-identity--staff{% endif %}"
+           aria-label="{{ '访问模式' if is_practice_staff_mode else '学生身份' }}"
+           data-practice-staff-mode="{{ '1' if is_practice_staff_mode else '0' }}"
+           data-staff-name="{{ practice_staff_label|default('课堂模式') }}"
+           data-staff-hint="{{ practice_staff_hint|default('课堂模式：可直接进入题库讲题；提交只做本地判分，不同步到学生记录。') }}">
     <div>
-      <p class="practice-identity__label">学生身份</p>
-      <div class="practice-identity__name" id="practiceIdentityName">未绑定</div>
-      <div class="practice-identity__hint" id="practiceIdentityHint">输入后台学生档案中的姓名后，刷题记录会同步到后台。</div>
+      <p class="practice-identity__label">{{ '访问模式' if is_practice_staff_mode else '学生身份' }}</p>
+      <div class="practice-identity__name" id="practiceIdentityName">{{ practice_staff_label if is_practice_staff_mode else '未绑定' }}</div>
+      <div class="practice-identity__hint" id="practiceIdentityHint">
+        {{ practice_staff_hint if is_practice_staff_mode else '输入后台学生档案中的姓名后，刷题记录会同步到后台。' }}
+      </div>
     </div>
-    <form class="practice-identity__form" id="practiceIdentityForm">
+    <form class="practice-identity__form" id="practiceIdentityForm" {% if is_practice_staff_mode %}hidden{% endif %}>
       <input type="text" id="practiceStudentName" placeholder="学生姓名" autocomplete="name">
       <button type="submit" id="practiceIdentitySubmit">确认</button>
     </form>
@@ -317,7 +334,11 @@ a.practice-resource:hover {
   const submit = document.getElementById('practiceIdentitySubmit');
   const switchBtn = document.getElementById('practiceIdentitySwitch');
   const errorEl = document.getElementById('practiceIdentityError');
-  let verified = false;
+  const identitySection = document.querySelector('.practice-identity');
+  const staffMode = identitySection && identitySection.dataset.practiceStaffMode === '1';
+  const staffName = (identitySection && identitySection.dataset.staffName) || '课堂模式';
+  const staffHint = (identitySection && identitySection.dataset.staffHint) || '课堂模式：可直接进入题库讲题；提交只做本地判分，不同步到学生记录。';
+  let verified = Boolean(staffMode);
 
   function setError(message) {
     errorEl.textContent = message || '';
@@ -332,6 +353,15 @@ a.practice-resource:hover {
     hintEl.textContent = '当前设备已绑定，提交后会进入后台练习记录。';
     form.hidden = true;
     switchBtn.hidden = false;
+    setError('');
+  }
+
+  function setStaffMode(name, hint) {
+    verified = true;
+    nameEl.textContent = name || '课堂模式';
+    hintEl.textContent = hint || '课堂模式：可直接进入题库讲题；提交只做本地判分，不同步到学生记录。';
+    form.hidden = true;
+    switchBtn.hidden = true;
     setError('');
   }
 
@@ -398,9 +428,17 @@ a.practice-resource:hover {
   });
 
   document.addEventListener('DOMContentLoaded', async function () {
+    if (staffMode) {
+      setStaffMode(staffName, staffHint);
+      return;
+    }
     try {
       const response = await fetch('/api/practice/identity', { credentials: 'same-origin' });
       const data = await response.json();
+      if (response.ok && data.ok && data.bypass_identity) {
+        setStaffMode(data.name, data.hint);
+        return;
+      }
       if (response.ok && data.ok && data.verified) {
         setVerified(data.name);
         return;

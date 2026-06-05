@@ -3768,6 +3768,173 @@ def _serialize_teacher_homework_task(task: Task) -> dict:
     }
 
 
+def _teacher_homework_error(error: str, status: int = 400):
+    return jsonify({"ok": False, "error": error}), status
+
+
+def _parse_teacher_homework_date(value, default_value: str | None = None) -> tuple[str | None, str | None]:
+    task_date = (value or default_value or date.today().isoformat()).strip()
+    try:
+        datetime.strptime(task_date, "%Y-%m-%d")
+    except ValueError:
+        return None, "invalid_date"
+    return task_date, None
+
+
+def _parse_teacher_homework_planned_minutes(value) -> int:
+    try:
+        planned_minutes = int(value or 0)
+    except (TypeError, ValueError):
+        planned_minutes = 0
+    return max(0, min(planned_minutes, 600))
+
+
+def _cambridge_listening_access_token(task: Task | None, test_id: str, section_number: int | None) -> str:
+    if (
+        task
+        and task.listening_exercise_id == test_id
+        and _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+        and _task_listening_section_number(task) == section_number
+        and task.listening_access_token
+    ):
+        return task.listening_access_token
+    return secrets.token_urlsafe(16)
+
+
+def _cambridge_reading_access_token(task: Task | None, test_id: str, passage_number: int | None) -> str:
+    if (
+        task
+        and task.reading_test_id == test_id
+        and (task.reading_passage_number or None) == passage_number
+        and task.reading_access_token
+    ):
+        return task.reading_access_token
+    return secrets.token_urlsafe(16)
+
+
+def _build_teacher_homework_values(
+    data: dict,
+    *,
+    existing_task: Task | None = None,
+    default_date: str | None = None,
+    include_source: bool = True,
+) -> tuple[dict | None, str | None, int]:
+    task_date, date_error = _parse_teacher_homework_date(data.get("date"), default_date)
+    if date_error:
+        return None, date_error, 400
+
+    detail = (data.get("detail") or "").strip()
+    category = (data.get("category") or data.get("course_name") or "课后作业").strip()[:32]
+    note = (data.get("note") or "").strip()
+    planned_minutes = _parse_teacher_homework_planned_minutes(data.get("planned_minutes"))
+
+    values = {
+        "date": task_date,
+        "category": category,
+        "detail": detail[:200],
+        "note": note[:200] if note else None,
+        "planned_minutes": planned_minutes,
+    }
+
+    if not include_source:
+        if not values["detail"]:
+            return None, "missing_detail", 400
+        return values, None, 200
+
+    source_type = (data.get("source_type") or "custom").strip()
+    if source_type not in {"custom", "cambridge_listening", "cambridge_reading"}:
+        return None, "invalid_source_type", 400
+
+    listening_resource_type = None
+    listening_exercise_id = None
+    listening_access_token = None
+    reading_test_id = None
+    reading_passage_number = None
+    reading_access_token = None
+    task_metadata = {}
+
+    if source_type == "cambridge_listening":
+        payload, safe_id = _load_cambridge_listening_test(data.get("practice_test_id") or "")
+        if not payload:
+            return None, "practice_not_found", 404
+        scope = (data.get("practice_scope") or "test").strip()
+        raw_section = data.get("practice_section_number")
+        try:
+            section_number = int(raw_section) if raw_section not in (None, "") else None
+        except (TypeError, ValueError):
+            section_number = None
+        sections = payload.get("sections") or []
+        if scope == "section":
+            if not section_number or section_number < 1 or section_number > len(sections):
+                return None, "invalid_practice_scope", 400
+            task_metadata["listening_section_number"] = section_number
+        else:
+            scope = "test"
+            section_number = None
+        listening_resource_type = LISTENING_RESOURCE_CAMBRIDGE_TEST
+        listening_exercise_id = safe_id
+        listening_access_token = _cambridge_listening_access_token(existing_task, safe_id, section_number)
+        default_detail = payload.get("title") or safe_id
+        if section_number:
+            default_detail = f"{default_detail} Section {section_number}"
+        detail = detail or default_detail
+        category = (data.get("category") or "雅思-听力").strip()[:32]
+        if not planned_minutes:
+            planned_minutes = 30 if section_number else 40
+    elif source_type == "cambridge_reading":
+        payload, safe_id = _load_cambridge_reading_test(data.get("practice_test_id") or "")
+        if not payload:
+            return None, "practice_not_found", 404
+        scope = (data.get("practice_scope") or "test").strip()
+        raw_passage = data.get("practice_passage_number")
+        try:
+            passage_number = int(raw_passage) if raw_passage not in (None, "") else None
+        except (TypeError, ValueError):
+            passage_number = None
+        passages = payload.get("passages") or []
+        if scope == "passage":
+            if not passage_number or passage_number < 1 or passage_number > len(passages):
+                return None, "invalid_practice_scope", 400
+            reading_passage_number = passage_number
+        else:
+            scope = "test"
+            reading_passage_number = None
+        reading_test_id = safe_id
+        reading_access_token = _cambridge_reading_access_token(existing_task, safe_id, reading_passage_number)
+        default_detail = payload.get("title") or safe_id
+        if reading_passage_number:
+            default_detail = f"{default_detail} Passage {reading_passage_number}"
+        detail = detail or default_detail
+        category = (data.get("category") or "雅思-阅读").strip()[:32]
+        if not planned_minutes:
+            planned_minutes = 20 if reading_passage_number else 60
+    elif not detail:
+        return None, "missing_detail", 400
+
+    clear_practice_metadata = not existing_task or bool(
+        existing_task.listening_exercise_id or existing_task.reading_test_id
+    )
+    values.update({
+        "category": category,
+        "detail": detail[:200],
+        "planned_minutes": planned_minutes,
+        "listening_resource_type": listening_resource_type,
+        "listening_exercise_id": listening_exercise_id,
+        "listening_access_token": listening_access_token,
+        "reading_test_id": reading_test_id,
+        "reading_passage_number": reading_passage_number,
+        "reading_access_token": reading_access_token,
+        "question_ids": (
+            json.dumps(task_metadata, ensure_ascii=False)
+            if task_metadata
+            else None
+            if clear_practice_metadata
+            else existing_task.question_ids
+        ),
+    })
+    return values, None, 200
+
+
 @mp_bp.route("/teacher/homework", methods=["GET"])
 @require_api_user(User.ROLE_TEACHER)
 def list_teacher_homework():
@@ -3832,24 +3999,13 @@ def create_teacher_homework():
     data = request.get_json() or {}
     user = request.current_api_user
 
-    source_type = (data.get("source_type") or "custom").strip()
-    if source_type not in {"custom", "cambridge_listening", "cambridge_reading"}:
-        return jsonify({"ok": False, "error": "invalid_source_type"}), 400
-    detail = (data.get("detail") or "").strip()
-
-    task_date = (data.get("date") or date.today().isoformat()).strip()
-    try:
-        datetime.strptime(task_date, "%Y-%m-%d")
-    except ValueError:
-        return jsonify({"ok": False, "error": "invalid_date"}), 400
-
     raw_teacher_id = data.get("teacher_id")
     try:
         schedule_teacher_id = int(raw_teacher_id) if raw_teacher_id not in (None, "") else None
     except (TypeError, ValueError):
         schedule_teacher_id = None
     if user.scheduler_teacher_id and schedule_teacher_id and schedule_teacher_id != user.scheduler_teacher_id:
-        return jsonify({"ok": False, "error": "forbidden_schedule"}), 403
+        return _teacher_homework_error("forbidden_schedule", 403)
 
     raw_student_id = data.get("student_id")
     try:
@@ -3867,98 +4023,28 @@ def create_teacher_homework():
     if not profile and student_name:
         profile = StudentProfile.query.filter_by(full_name=student_name, is_deleted=False).first()
     if not profile:
-        return jsonify({"ok": False, "error": "student_not_found"}), 404
+        return _teacher_homework_error("student_not_found", 404)
 
-    category = (data.get("category") or data.get("course_name") or "课后作业").strip()[:32]
-    note = (data.get("note") or "").strip()
-    try:
-        planned_minutes = int(data.get("planned_minutes") or 0)
-    except (TypeError, ValueError):
-        planned_minutes = 0
-    planned_minutes = max(0, min(planned_minutes, 600))
-
-    listening_resource_type = None
-    listening_exercise_id = None
-    listening_access_token = None
-    reading_test_id = None
-    reading_passage_number = None
-    reading_access_token = None
-    task_metadata = {}
-
-    if source_type == "cambridge_listening":
-        payload, safe_id = _load_cambridge_listening_test(data.get("practice_test_id") or "")
-        if not payload:
-            return jsonify({"ok": False, "error": "practice_not_found"}), 404
-        scope = (data.get("practice_scope") or "test").strip()
-        raw_section = data.get("practice_section_number")
-        try:
-            section_number = int(raw_section) if raw_section not in (None, "") else None
-        except (TypeError, ValueError):
-            section_number = None
-        sections = payload.get("sections") or []
-        if scope == "section":
-            if not section_number or section_number < 1 or section_number > len(sections):
-                return jsonify({"ok": False, "error": "invalid_practice_scope"}), 400
-            task_metadata["listening_section_number"] = section_number
-        else:
-            scope = "test"
-            section_number = None
-        listening_resource_type = LISTENING_RESOURCE_CAMBRIDGE_TEST
-        listening_exercise_id = safe_id
-        listening_access_token = secrets.token_urlsafe(16)
-        default_detail = payload.get("title") or safe_id
-        if section_number:
-            default_detail = f"{default_detail} Section {section_number}"
-        detail = detail or default_detail
-        category = (data.get("category") or "雅思-听力").strip()[:32]
-        if not planned_minutes:
-            planned_minutes = 30 if section_number else 40
-    elif source_type == "cambridge_reading":
-        payload, safe_id = _load_cambridge_reading_test(data.get("practice_test_id") or "")
-        if not payload:
-            return jsonify({"ok": False, "error": "practice_not_found"}), 404
-        scope = (data.get("practice_scope") or "test").strip()
-        raw_passage = data.get("practice_passage_number")
-        try:
-            passage_number = int(raw_passage) if raw_passage not in (None, "") else None
-        except (TypeError, ValueError):
-            passage_number = None
-        passages = payload.get("passages") or []
-        if scope == "passage":
-            if not passage_number or passage_number < 1 or passage_number > len(passages):
-                return jsonify({"ok": False, "error": "invalid_practice_scope"}), 400
-            reading_passage_number = passage_number
-        else:
-            scope = "test"
-            reading_passage_number = None
-        reading_test_id = safe_id
-        reading_access_token = secrets.token_urlsafe(16)
-        default_detail = payload.get("title") or safe_id
-        if reading_passage_number:
-            default_detail = f"{default_detail} Passage {reading_passage_number}"
-        detail = detail or default_detail
-        category = (data.get("category") or "雅思-阅读").strip()[:32]
-        if not planned_minutes:
-            planned_minutes = 20 if reading_passage_number else 60
-    elif not detail:
-        return jsonify({"ok": False, "error": "missing_detail"}), 400
+    values, error, status = _build_teacher_homework_values(data)
+    if error:
+        return _teacher_homework_error(error, status)
 
     task = Task(
-        date=task_date,
+        date=values["date"],
         student_name=profile.full_name,
-        category=category,
-        detail=detail[:200],
+        category=values["category"],
+        detail=values["detail"],
         status="pending",
-        note=note[:200] if note else None,
+        note=values["note"],
         created_by=user.id,
-        planned_minutes=planned_minutes,
-        listening_resource_type=listening_resource_type,
-        listening_exercise_id=listening_exercise_id,
-        listening_access_token=listening_access_token,
-        reading_test_id=reading_test_id,
-        reading_passage_number=reading_passage_number,
-        reading_access_token=reading_access_token,
-        question_ids=json.dumps(task_metadata, ensure_ascii=False) if task_metadata else None,
+        planned_minutes=values["planned_minutes"],
+        listening_resource_type=values["listening_resource_type"],
+        listening_exercise_id=values["listening_exercise_id"],
+        listening_access_token=values["listening_access_token"],
+        reading_test_id=values["reading_test_id"],
+        reading_passage_number=values["reading_passage_number"],
+        reading_access_token=values["reading_access_token"],
+        question_ids=values["question_ids"],
     )
     db.session.add(task)
     db.session.commit()
@@ -3974,10 +4060,10 @@ def create_teacher_homework():
         push_error = "no_student_openid"
     else:
         payload = {
-            "thing1": {"value": detail[:20]},
-            "time2": {"value": f"{task_date} 08:00"},
-            "time3": {"value": f"{task_date} 23:59"},
-            "thing4": {"value": (category or "学习任务")[:20]},
+            "thing1": {"value": values["detail"][:20]},
+            "time2": {"value": f"{values['date']} 08:00"},
+            "time3": {"value": f"{values['date']} 23:59"},
+            "thing4": {"value": (values["category"] or "学习任务")[:20]},
         }
         push_result = send_subscribe_message_result(
             target_openid,
@@ -3996,6 +4082,51 @@ def create_teacher_homework():
         "push_sent": push_sent,
         "push_error": push_error,
     })
+
+
+@mp_bp.route("/teacher/homework/<int:task_id>", methods=["PATCH"])
+@require_api_user(User.ROLE_TEACHER)
+def update_teacher_homework(task_id):
+    """老师在小程序内修正自己刚布置的作业。"""
+    data = request.get_json() or {}
+    user = request.current_api_user
+    task = Task.query.get_or_404(task_id)
+    if task.created_by != user.id:
+        return _teacher_homework_error("forbidden_task", 403)
+
+    include_source = "source_type" in data
+    values, error, status = _build_teacher_homework_values(
+        data,
+        existing_task=task,
+        default_date=task.date,
+        include_source=include_source,
+    )
+    if error:
+        return _teacher_homework_error(error, status)
+
+    for field, value in values.items():
+        setattr(task, field, value)
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "task": _serialize_teacher_homework_task(task),
+    })
+
+
+@mp_bp.route("/teacher/homework/<int:task_id>", methods=["DELETE"])
+@require_api_user(User.ROLE_TEACHER)
+def delete_teacher_homework(task_id):
+    """老师在小程序内删除自己布置错的作业。"""
+    user = request.current_api_user
+    task = Task.query.get_or_404(task_id)
+    if task.created_by != user.id:
+        return _teacher_homework_error("forbidden_task", 403)
+    if task.plan_item:
+        task.plan_item.is_deleted = True
+    db.session.delete(task)
+    db.session.commit()
+    return jsonify({"ok": True})
 
 
 @mp_bp.route("/teacher/schedules", methods=["GET"])
