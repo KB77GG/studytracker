@@ -53,7 +53,7 @@ else
 fi
 
 # 4. 等待 GitHub Actions 完成服务器部署
-echo "☁️  代码已推送到 $BRANCH，服务器部署交给 GitHub Actions"
+echo "Code pushed to branch $BRANCH; server deployment is handled by GitHub Actions"
 if [ "$WATCH_ACTIONS" = "1" ]; then
     echo "⏭️  已设置 SKIP_GITHUB_ACTIONS_WATCH=1，不等待 Actions 结果"
     exit 0
