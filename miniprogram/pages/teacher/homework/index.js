@@ -82,6 +82,9 @@ Page({
         existingTasks: [],
         existingLoading: false,
         createdTasks: [],
+        editingTaskId: null,
+        editingTaskSummary: '',
+        deletingTaskId: null,
         saving: false
     },
 
@@ -122,23 +125,30 @@ Page({
         return `${year}-${month}-${day}`
     },
 
+    setDataAsync(payload) {
+        return new Promise(resolve => this.setData(payload, resolve))
+    },
+
     async fetchPracticeCatalog() {
         this.setData({ catalogLoading: true })
         try {
             const res = await request('/miniprogram/practice/catalog')
             if (res && res.ok) {
-                this.setData({
+                await this.setDataAsync({
                     catalog: {
                         cambridge_listening: res.cambridge_listening || [],
                         cambridge_reading: res.cambridge_reading || []
                     }
-                }, () => this.refreshPracticeOptions(false))
+                })
+                this.refreshPracticeOptions(false)
+                return true
             }
         } catch (err) {
             console.warn('load practice catalog failed', err)
         } finally {
             this.setData({ catalogLoading: false })
         }
+        return false
     },
 
     refreshPracticeOptions(applySelection = true) {
@@ -328,6 +338,10 @@ Page({
     },
 
     addSelectedPracticeToQueue() {
+        if (this.data.editingTaskId) {
+            wx.showToast({ title: '修改模式不支持清单', icon: 'none' })
+            return
+        }
         const selected = this.buildSelectedPracticePayload()
         if (!selected || selected.source_type === 'custom' || !selected.practice_test_id) {
             wx.showToast({ title: '请选择练习篇目', icon: 'none' })
@@ -439,11 +453,154 @@ Page({
         }
     },
 
+    findSourceIndex(sourceKey) {
+        const index = SOURCE_OPTIONS.findIndex(item => item.key === sourceKey)
+        return index >= 0 ? index : 0
+    },
+
+    findListeningSelection(task) {
+        const books = this.data.catalog.cambridge_listening || []
+        for (let bookIndex = 0; bookIndex < books.length; bookIndex += 1) {
+            const tests = books[bookIndex].tests || []
+            for (let testIndex = 0; testIndex < tests.length; testIndex += 1) {
+                const test = tests[testIndex]
+                if (test.id !== task.listening_exercise_id) continue
+                const scopes = [
+                    { scope: 'test' },
+                    ...((test.sections || []).map(section => ({
+                        scope: 'section',
+                        sectionNumber: section.number
+                    })))
+                ]
+                const sectionNumber = task.listening_section_number || null
+                const scopeIndex = scopes.findIndex(scope => {
+                    if (!sectionNumber) return scope.scope === 'test'
+                    return scope.scope === 'section' && Number(scope.sectionNumber) === Number(sectionNumber)
+                })
+                if (scopeIndex < 0) return null
+                return { bookIndex, testIndex, scopeIndex }
+            }
+        }
+        return null
+    },
+
+    findReadingSelection(task) {
+        const books = this.data.catalog.cambridge_reading || []
+        for (let bookIndex = 0; bookIndex < books.length; bookIndex += 1) {
+            const tests = books[bookIndex].tests || []
+            for (let testIndex = 0; testIndex < tests.length; testIndex += 1) {
+                const test = tests[testIndex]
+                if (test.id !== task.reading_test_id) continue
+                const scopes = [
+                    { scope: 'test' },
+                    ...((test.passages || []).map(passage => ({
+                        scope: 'passage',
+                        passageNumber: passage.number
+                    })))
+                ]
+                const passageNumber = task.reading_passage_number || null
+                const scopeIndex = scopes.findIndex(scope => {
+                    if (!passageNumber) return scope.scope === 'test'
+                    return scope.scope === 'passage' && Number(scope.passageNumber) === Number(passageNumber)
+                })
+                if (scopeIndex < 0) return null
+                return { bookIndex, testIndex, scopeIndex }
+            }
+        }
+        return null
+    },
+
+    buildEditSourceUpdate(task) {
+        const sourceKey = task.source_type || 'custom'
+        if (!['custom', 'cambridge_listening', 'cambridge_reading'].includes(sourceKey)) return null
+
+        const update = {
+            sourceIndex: this.findSourceIndex(sourceKey),
+            selectedPracticeList: []
+        }
+        if (sourceKey === 'cambridge_listening') {
+            const selection = this.findListeningSelection(task)
+            if (!selection) return null
+            update.listeningBookIndex = selection.bookIndex
+            update.listeningTestIndex = selection.testIndex
+            update.listeningScopeIndex = selection.scopeIndex
+        }
+        if (sourceKey === 'cambridge_reading') {
+            const selection = this.findReadingSelection(task)
+            if (!selection) return null
+            update.readingBookIndex = selection.bookIndex
+            update.readingTestIndex = selection.testIndex
+            update.readingScopeIndex = selection.scopeIndex
+        }
+        return update
+    },
+
+    async startEditExistingTask(e) {
+        const taskId = Number(e.currentTarget.dataset.id)
+        const task = (this.data.existingTasks || []).find(item => Number(item.id) === taskId)
+        if (!task) return
+        if (!task.can_edit) {
+            wx.showToast({ title: '该任务暂不支持修改', icon: 'none' })
+            return
+        }
+
+        const sourceKey = task.source_type || 'custom'
+        if (sourceKey === 'cambridge_listening' && !(this.data.catalog.cambridge_listening || []).length) {
+            wx.showLoading({ title: '加载目录...' })
+            await this.fetchPracticeCatalog()
+            wx.hideLoading()
+        }
+        if (sourceKey === 'cambridge_reading' && !(this.data.catalog.cambridge_reading || []).length) {
+            wx.showLoading({ title: '加载目录...' })
+            await this.fetchPracticeCatalog()
+            wx.hideLoading()
+        }
+
+        const sourceUpdate = this.buildEditSourceUpdate(task)
+        if (!sourceUpdate) {
+            wx.showToast({ title: '未找到原练习篇目', icon: 'none' })
+            return
+        }
+
+        this.setData({
+            ...sourceUpdate,
+            editingTaskId: task.id,
+            editingTaskSummary: task.source_summary || task.detail || '',
+            createdTasks: [],
+            form: {
+                date: task.date || this.data.form.date,
+                category: task.category || '',
+                detail: task.detail || '',
+                plannedMinutes: Number(task.planned_minutes) || 0,
+                note: task.note || ''
+            }
+        }, () => this.refreshPracticeOptions(false))
+    },
+
+    cancelEditExistingTask() {
+        const courseName = this.data.schedule.course_name || '课后作业'
+        this.setData({
+            editingTaskId: null,
+            editingTaskSummary: '',
+            selectedPracticeList: [],
+            sourceIndex: 0,
+            form: {
+                date: this.data.form.date || this.getTodayString(),
+                category: courseName.slice(0, 32),
+                detail: `${courseName}课后练习`,
+                plannedMinutes: 30,
+                note: ''
+            }
+        }, () => this.refreshPracticeOptions(false))
+    },
+
     formatHomeworkError(code) {
         let msg = code || '保存失败'
         if (msg === 'student_not_found') msg = '未找到学生档案'
         if (msg === 'forbidden_schedule') msg = '当前课表不属于你'
+        if (msg === 'forbidden_task') msg = '只能修改或删除自己布置的作业'
         if (msg === 'invalid_date') msg = '日期格式不正确'
+        if (msg === 'invalid_source_type') msg = '作业来源不正确'
         if (msg === 'practice_not_found') msg = '未找到练习篇目'
         if (msg === 'invalid_practice_scope') msg = '练习范围不正确'
         if (msg === 'missing_detail') msg = '请填写作业内容'
@@ -482,7 +639,122 @@ Page({
         }]
     },
 
+    buildEditSubmitItem() {
+        const { form } = this.data
+        const source = SOURCE_OPTIONS[this.data.sourceIndex] || SOURCE_OPTIONS[0]
+        if (source.key === 'custom') {
+            return {
+                source_type: 'custom',
+                category: (form.category || '').trim(),
+                detail: (form.detail || '').trim(),
+                planned_minutes: Number(form.plannedMinutes) || 0
+            }
+        }
+
+        const selected = this.buildSelectedPracticePayload()
+        if (!selected || !selected.practice_test_id) return null
+        return {
+            ...selected,
+            category: (form.category || selected.category || '').trim(),
+            detail: (form.detail || selected.detail || '').trim(),
+            planned_minutes: Number(form.plannedMinutes) || selected.plannedMinutes || 0
+        }
+    },
+
+    async updateExistingHomework() {
+        const { form, schedule, editingTaskId } = this.data
+        if (!editingTaskId) return
+
+        const item = this.buildEditSubmitItem()
+        if (!item) {
+            wx.showToast({ title: '请选择练习篇目', icon: 'none' })
+            return
+        }
+        if (!(item.detail || '').trim()) {
+            wx.showToast({ title: '请填写作业内容', icon: 'none' })
+            return
+        }
+
+        this.setData({ saving: true })
+        wx.showLoading({ title: '保存修改...' })
+        try {
+            const payload = {
+                ...schedule,
+                ...item,
+                date: form.date,
+                category: (item.category || form.category || '').trim(),
+                detail: (item.detail || '').trim(),
+                planned_minutes: Number(item.planned_minutes) || 0,
+                note: (form.note || '').trim()
+            }
+            const res = await request(`/miniprogram/teacher/homework/${editingTaskId}`, {
+                method: 'PATCH',
+                data: payload
+            })
+            if (!res || !res.ok) {
+                wx.showToast({ title: this.formatHomeworkError(res && res.error), icon: 'none' })
+                return
+            }
+            this.setData({
+                editingTaskId: null,
+                editingTaskSummary: '',
+                createdTasks: res.task ? [res.task] : [],
+                selectedPracticeList: []
+            })
+            await this.fetchExistingHomework()
+            wx.showToast({ title: '作业已修改', icon: 'success' })
+        } catch (err) {
+            console.error(err)
+            wx.showToast({ title: '网络错误', icon: 'none' })
+        } finally {
+            wx.hideLoading()
+            this.setData({ saving: false })
+        }
+    },
+
+    deleteExistingTask(e) {
+        const taskId = Number(e.currentTarget.dataset.id)
+        const task = (this.data.existingTasks || []).find(item => Number(item.id) === taskId)
+        if (!task) return
+        wx.showModal({
+            title: '删除作业',
+            content: `确认删除「${task.detail || '这项作业'}」？`,
+            confirmText: '删除',
+            confirmColor: '#dc2626',
+            success: async (modal) => {
+                if (!modal.confirm) return
+                this.setData({ deletingTaskId: taskId })
+                wx.showLoading({ title: '删除中...' })
+                try {
+                    const res = await request(`/miniprogram/teacher/homework/${taskId}`, {
+                        method: 'DELETE'
+                    })
+                    if (!res || !res.ok) {
+                        wx.showToast({ title: this.formatHomeworkError(res && res.error), icon: 'none' })
+                        return
+                    }
+                    if (Number(this.data.editingTaskId) === taskId) {
+                        this.cancelEditExistingTask()
+                    }
+                    await this.fetchExistingHomework()
+                    wx.showToast({ title: '作业已删除', icon: 'success' })
+                } catch (err) {
+                    console.error(err)
+                    wx.showToast({ title: '网络错误', icon: 'none' })
+                } finally {
+                    wx.hideLoading()
+                    this.setData({ deletingTaskId: null })
+                }
+            }
+        })
+    },
+
     async submitHomework() {
+        if (this.data.editingTaskId) {
+            await this.updateExistingHomework()
+            return
+        }
+
         const { form, schedule } = this.data
         const submitItems = this.buildSubmitItems()
         if (!submitItems.length) {

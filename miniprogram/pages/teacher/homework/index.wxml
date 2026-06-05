@@ -63,7 +63,7 @@
     <view class="practice-summary" wx:if="{{selectedPracticeSummary}}">
       <text>{{selectedPracticeSummary}}</text>
     </view>
-    <view class="practice-actions" wx:if="{{isCambridgeSource}}">
+    <view class="practice-actions" wx:if="{{isCambridgeSource && !editingTaskId}}">
       <button class="queue-btn" size="mini" bindtap="addSelectedPracticeToQueue">加入清单</button>
       <button wx:if="{{selectedPracticeList.length}}" class="queue-btn ghost" size="mini" bindtap="clearPracticeQueue">清空</button>
     </view>
@@ -102,9 +102,31 @@
           <text class="assigned-title">{{item.detail}}</text>
           <text class="assigned-meta">{{item.category || '课后作业'}} ｜ {{item.planned_minutes || 0}} 分钟</text>
         </view>
-        <text class="status-pill">{{item.status_label}}</text>
+        <view class="assigned-side">
+          <text class="status-pill">{{item.status_label}}</text>
+          <view class="assigned-actions">
+            <button wx:if="{{item.can_edit}}" class="mini-action" size="mini" data-id="{{item.id}}" bindtap="startEditExistingTask">修改</button>
+            <button
+              wx:if="{{item.can_delete}}"
+              class="mini-action danger"
+              size="mini"
+              loading="{{deletingTaskId == item.id}}"
+              disabled="{{saving || deletingTaskId == item.id}}"
+              data-id="{{item.id}}"
+              bindtap="deleteExistingTask"
+            >删除</button>
+          </view>
+        </view>
       </view>
     </view>
+  </view>
+
+  <view class="edit-banner" wx:if="{{editingTaskId}}">
+    <view class="edit-banner-main">
+      <text class="edit-banner-title">正在修改已布置作业</text>
+      <text class="edit-banner-desc">{{editingTaskSummary}}</text>
+    </view>
+    <button class="cancel-edit-btn" size="mini" bindtap="cancelEditExistingTask">取消</button>
   </view>
 
   <view class="form">
@@ -157,5 +179,5 @@
     <view class="counter">{{form.note.length}}/200</view>
   </view>
 
-  <button class="submit-btn" loading="{{saving}}" disabled="{{saving}}" bindtap="submitHomework">保存并提醒学生</button>
+  <button class="submit-btn" loading="{{saving}}" disabled="{{saving}}" bindtap="submitHomework">{{editingTaskId ? '保存修改' : '保存并提醒学生'}}</button>
 </view>

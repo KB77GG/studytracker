@@ -3765,6 +3765,8 @@ def _serialize_teacher_homework_task(task: Task) -> dict:
         "reading_test_id": task.reading_test_id,
         "reading_passage_number": task.reading_passage_number,
         "reading_url": _task_reading_url(task),
+        "can_edit": source_type in {"custom", "cambridge_listening", "cambridge_reading"},
+        "can_delete": True,
     }
 
 
