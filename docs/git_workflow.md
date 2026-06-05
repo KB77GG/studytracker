@@ -62,3 +62,10 @@ git worktree add ../studytracker-dictation feat/task-dictation-mode
 - 平时不要直接在 `main` 上开发
 - 小程序发布前，确认后端已部署且前端代码已上传
 - 服务器不要手改业务文件；确实要改，也要尽快回写到仓库
+
+## 部署
+
+- 日常部署使用 `./deploy.sh "提交说明"`
+- `deploy.sh` 只提交并推送代码，然后等待 GitHub Actions 部署服务器
+- 不要在本地脚本里同时 SSH 部署服务器，避免和 GitHub Actions 同时 `git pull`
+- 小程序端仍通过微信开发者工具手动上传

@@ -10,8 +10,15 @@ fi
 COMMIT_MSG="$1"
 SERVER_IP="47.110.45.193"
 REMOTE_DIR="/root/apps/studytracker"
+BRANCH="main"
+WATCH_ACTIONS="${SKIP_GITHUB_ACTIONS_WATCH:-0}"
 
 echo "🚀 开始部署..."
+CURRENT_BRANCH="$(git branch --show-current)"
+if [ "$CURRENT_BRANCH" != "$BRANCH" ]; then
+    echo "❌ 当前分支是 $CURRENT_BRANCH，请先切换到 $BRANCH 再部署"
+    exit 1
+fi
 
 # 2. 本地 Git 提交
 echo "📦 正在提交本地代码..."
@@ -21,16 +28,17 @@ if git diff --cached --quiet; then
 else
     git commit -m "$COMMIT_MSG"
 fi
-git push origin main
+HEAD_SHA="$(git rev-parse HEAD)"
+git push origin "$BRANCH"
 
 if [ $? -ne 0 ]; then
     echo "❌ 本地推送失败，请检查 Git 状态"
     exit 1
 fi
 
-# 3. 上传 TOEFL 听力音频（uploads/ 是 gitignored，必须 scp 单独上传）
-#    幂等：scp 会直接覆盖，文件存在但变化时也会更新。
-if ls uploads/entrance/audio/toefl_tiered_*.mp3 >/dev/null 2>&1; then
+# 3. 可选上传 TOEFL 听力音频（uploads/ 是 gitignored，必须 scp 单独上传）
+#    只在需要同步本地音频时启用：UPLOAD_TOEFL_AUDIO=1 ./deploy.sh "..."
+if [ "${UPLOAD_TOEFL_AUDIO:-0}" = "1" ] && ls uploads/entrance/audio/toefl_tiered_*.mp3 >/dev/null 2>&1; then
     echo "🎧 上传 TOEFL 分档卷听力音频..."
     ssh root@$SERVER_IP "mkdir -p $REMOTE_DIR/uploads/entrance/audio"
     scp uploads/entrance/audio/toefl_tiered_*.mp3 root@$SERVER_IP:$REMOTE_DIR/uploads/entrance/audio/
@@ -38,17 +46,50 @@ if ls uploads/entrance/audio/toefl_tiered_*.mp3 >/dev/null 2>&1; then
         echo "❌ 音频上传失败"
         exit 1
     fi
-else
+elif [ "${UPLOAD_TOEFL_AUDIO:-0}" = "1" ]; then
     echo "⚠️  本地没有 toefl_tiered_*.mp3，跳过音频上传"
+else
+    echo "⏭️  未设置 UPLOAD_TOEFL_AUDIO=1，跳过音频上传"
 fi
 
-# 4. 服务器远程更新
-echo "☁️  正在连接服务器更新代码..."
-ssh root@$SERVER_IP "apt-get update && apt-get install -y python3-pip python3-cffi python3-brotli libpango-1.0-0 libpangoft2-1.0-0 fonts-noto-cjk && cd $REMOTE_DIR && git pull && .venv/bin/pip install -r requirements.txt && .venv/bin/python3 create_plan_table.py && .venv/bin/python3 create_speaking_tables.py && .venv/bin/python3 add_feedback_column.py && .venv/bin/python3 add_explanation_column.py && .venv/bin/python3 add_dictation_book_id.py && .venv/bin/python3 add_dictation_range_columns.py && .venv/bin/python3 add_dictation_mode_column.py && .venv/bin/python3 add_student_answer_uncertain_column.py && .venv/bin/python3 add_word_mastery_table.py && .venv/bin/python3 add_student_saved_word_table.py && .venv/bin/python3 add_word_enrichment_columns.py && .venv/bin/python3 add_word_translation_cache.py && .venv/bin/python3 scripts/migrate_planitem_resource.py && .venv/bin/python3 create_mock_exam_tables.py && .venv/bin/python3 scripts/add_listening_to_toefl_tiered.py && .venv/bin/python3 scripts/fix_entrance_ielts_matching_questions.py && systemctl restart studytracker"
+# 4. 等待 GitHub Actions 完成服务器部署
+echo "☁️  代码已推送到 $BRANCH，服务器部署交给 GitHub Actions"
+if [ "$WATCH_ACTIONS" = "1" ]; then
+    echo "⏭️  已设置 SKIP_GITHUB_ACTIONS_WATCH=1，不等待 Actions 结果"
+    exit 0
+fi
 
+if ! command -v gh >/dev/null 2>&1; then
+    echo "⚠️  未安装 GitHub CLI，无法等待 Actions 结果。请到 GitHub 查看 Deploy to Alibaba Cloud。"
+    exit 0
+fi
+
+echo "⏳ 等待 GitHub Actions 部署开始..."
+RUN_ID=""
+for _ in {1..30}; do
+    RUN_ID="$(gh run list \
+        --branch "$BRANCH" \
+        --commit "$HEAD_SHA" \
+        --workflow "Deploy to Alibaba Cloud" \
+        --limit 1 \
+        --json databaseId \
+        --jq '.[0].databaseId // empty' 2>/dev/null)"
+    if [ -n "$RUN_ID" ]; then
+        break
+    fi
+    sleep 2
+done
+
+if [ -z "$RUN_ID" ]; then
+    echo "⚠️  暂未找到对应的 GitHub Actions run，请稍后在 GitHub 查看。"
+    exit 0
+fi
+
+echo "📡 正在等待 GitHub Actions run $RUN_ID ..."
+gh run watch "$RUN_ID" --exit-status
 if [ $? -eq 0 ]; then
-    echo "✅ 部署成功！"
+    echo "✅ GitHub Actions 部署成功！"
 else
-    echo "❌ 服务器更新失败"
+    echo "❌ GitHub Actions 部署失败，请查看 run $RUN_ID 日志"
     exit 1
 fi

@@ -2,30 +2,45 @@
 
 ## 1. 服务器端部署
 
-### 步骤 1：提交代码到仓库
-在本地（您的电脑）执行：
+### 推荐流程：本地推送，GitHub Actions 部署服务器
+
+在本地执行：
+
 ```bash
-git add .
-git commit -m "feat: add wechat mini program integration"
-git push origin main
+./deploy.sh "本次提交说明"
 ```
 
-### 步骤 2：更新服务器代码
-登录阿里云服务器，执行：
+`deploy.sh` 只负责提交和推送代码，然后等待 GitHub Actions 的 `Deploy to Alibaba Cloud` 工作流完成。服务器端的拉代码、安装依赖、迁移和重启由 GitHub Actions 通过 `/usr/local/sbin/deploy-studytracker` 执行，避免本地脚本和 Actions 同时 SSH 到服务器造成 `git pull` 冲突。
+
+如需只推送、不等待 Actions：
+
+```bash
+SKIP_GITHUB_ACTIONS_WATCH=1 ./deploy.sh "本次提交说明"
+```
+
+如需同步本地 gitignored 的 TOEFL 分档卷音频：
+
+```bash
+UPLOAD_TOEFL_AUDIO=1 ./deploy.sh "同步 TOEFL 音频"
+```
+
+### 手动服务器维护
+
+一般不需要手动登录服务器部署。确实需要排查时，服务器项目目录是：
+
 ```bash
 cd /root/apps/studytracker
-git pull
 ```
 
-### 步骤 3：安装新依赖
+### 服务器依赖
 服务器上需要安装 `requests` 和 `pyjwt`：
 ```bash
 # 确保在虚拟环境中或系统环境中安装（取决于您的运行方式）
 pip3 install requests pyjwt
 ```
 
-### 步骤 4：执行数据库迁移
-在服务器上运行迁移脚本，为数据库添加新字段：
+### 数据库迁移
+GitHub Actions 部署脚本会执行当前项目需要的迁移脚本。历史上手动执行过：
 ```bash
 python3 migrate_wechat.py
 ```
@@ -40,7 +55,7 @@ python3 create_class_feedback_table.py
 python3 add_class_feedback_image.py
 ```
 
-### 步骤 5：配置 AppSecret
+### 配置 AppSecret
 打开 `api/wechat.py`，找到 `WECHAT_APP_SECRET`，填入您的小程序 AppSecret。
 或者，您可以在 `config.py` 中添加 `WECHAT_APP_SECRET = '您的密钥'`。
 
@@ -59,7 +74,7 @@ SCHEDULER_PUSH_TOKEN=与 training_scheduler /home/admin/training_scheduler/.env 
 
 当前线上 `studytracker.service` 已在 systemd unit 中配置上述 `SCHEDULER_*` 变量。`studytracker` 只调用 `training_scheduler` 的接口，不占用 5000 端口，也不负责启动、停止或清理 `training_scheduler` 的 gunicorn 进程；`training_scheduler` 的生命周期由它自己的 `gunicorn.service` 管理。
 
-### 步骤 6：重启服务
+### 手动重启服务
 ```bash
 systemctl restart studytracker
 ```
@@ -69,8 +84,10 @@ systemctl restart studytracker
 1. 打开 **微信开发者工具**。
 2. 选择 **导入项目**。
 3. 目录选择：`/Users/zhouxin/Desktop/studytracker/miniprogram`。
-4. AppID 使用：`wx43ac836a9f623a0d`。
+4. AppID 使用：`wx75cdd8fc1ca68c69`。
 5. 确保在详情设置中勾选 **"不校验合法域名..."**（开发阶段）。
+
+小程序代码上传仍然手动在微信开发者工具完成；当前仓库不配置自动上传到微信公众平台。
 
 课堂反馈订阅模板 ID 需要同步到小程序端：
 `miniprogram/pages/parent/profile/index.js` 的 `FEEDBACK_TEMPLATE_ID`。
