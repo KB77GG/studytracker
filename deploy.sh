@@ -52,27 +52,3 @@ else
     echo "❌ 服务器更新失败"
     exit 1
 fi
-
-# 5. 上传微信小程序代码到公众平台（生成开发版本/体验版）
-if [ "${SKIP_MINIPROGRAM_UPLOAD:-0}" = "1" ]; then
-    echo "⏭️  已设置 SKIP_MINIPROGRAM_UPLOAD=1，跳过小程序上传"
-elif [ -n "$WECHAT_MP_PRIVATE_KEY" ] || [ -n "$WECHAT_MP_PRIVATE_KEY_BASE64" ] || [ -n "$WECHAT_MP_PRIVATE_KEY_PATH" ]; then
-    echo "📱 正在上传微信小程序..."
-    if [ ! -d "node_modules/miniprogram-ci" ]; then
-        echo "📦 正在安装小程序上传依赖..."
-        npm ci
-        if [ $? -ne 0 ]; then
-            echo "❌ npm 依赖安装失败"
-            exit 1
-        fi
-    fi
-    MP_VERSION="${WECHAT_MP_VERSION:-0.1.$(date +%y%m%d%H%M)}"
-    npm run mp:upload -- --version "$MP_VERSION" --desc "$COMMIT_MSG"
-    if [ $? -ne 0 ]; then
-        echo "❌ 小程序上传失败"
-        exit 1
-    fi
-    echo "✅ 小程序上传成功！"
-else
-    echo "⚠️  未配置 WECHAT_MP_PRIVATE_KEY / WECHAT_MP_PRIVATE_KEY_BASE64 / WECHAT_MP_PRIVATE_KEY_PATH，跳过小程序上传"
-fi
