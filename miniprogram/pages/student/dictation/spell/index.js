@@ -122,6 +122,8 @@ Page({
         this.audioFileCache = {}
         this.playTokenCounter = 0
         this.currentDownloadTask = null
+        this.drillStartedAt = null
+        this.taskResultSubmitted = false
 
         this.audioCtx = wx.createInnerAudioContext()
         this.audioCtx.obeyMuteSwitch = false
@@ -262,10 +264,13 @@ Page({
             progressDots: buildProgressDots(words.length, 0),
             bookTitle: this.data.bookTitle || fallbackTitle || '强化拼写'
         })
+        this.drillStartedAt = null
+        this.taskResultSubmitted = false
         this.prewarmAudio(words)
     },
 
     startDrill() {
+        this.drillStartedAt = Date.now()
         this.setData({ stage: 'drill' })
         this.showNextWord(this.data.queue.slice())
     },
@@ -421,6 +426,58 @@ Page({
         this.updateSummaryItems()
         this.setData({ stage: 'summary' })
         this.fetchReviewSummary()
+        this.submitTaskResultIfNeeded()
+    },
+
+    buildTaskResult() {
+        const words = this.data.words || []
+        const total = words.length
+        let correct = 0
+        const wrongWords = []
+
+        words.forEach((word, index) => {
+            const first = this.firstAttempts[index]
+            if (first && first.correct) {
+                correct += 1
+            } else {
+                wrongWords.push(word.word)
+            }
+        })
+
+        return {
+            accuracy: total > 0 ? ((correct / total) * 100).toFixed(1) : 0,
+            wrongWords,
+            durationSeconds: this.computeDurationSeconds()
+        }
+    },
+
+    computeDurationSeconds() {
+        if (!this.drillStartedAt) return 0
+        return Math.max(1, Math.floor((Date.now() - this.drillStartedAt) / 1000))
+    },
+
+    submitTaskResultIfNeeded() {
+        if (!this.data.taskId || this.taskResultSubmitted) return
+        this.taskResultSubmitted = true
+
+        const result = this.buildTaskResult()
+        request(`/miniprogram/student/tasks/${this.data.taskId}/submit`, {
+            method: 'POST',
+            data: {
+                accuracy: result.accuracy,
+                wrong_words: result.wrongWords.join(', '),
+                duration_seconds: result.durationSeconds
+            }
+        }).then((res) => {
+            if (!res || !res.ok) {
+                this.taskResultSubmitted = false
+                wx.showToast({ title: '任务提交失败', icon: 'none' })
+            }
+        }).catch((err) => {
+            this.taskResultSubmitted = false
+            console.warn('submit spell task result failed', err)
+            wx.showToast({ title: '任务提交失败', icon: 'none' })
+        })
     },
 
     fetchReviewSummary() {
