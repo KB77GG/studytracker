@@ -178,6 +178,7 @@ Page({
                     correctCount: counts.correctCount,
                     wrongCount: counts.wrongCount
                 })
+                if (mode === 'zh_to_en') this.playAudio()
                 if (promoted && serverCorrect) {
                     // Subtle hint that progress was made — backend will do the
                     // actual promotion math; we just acknowledge here.

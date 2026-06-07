@@ -397,8 +397,8 @@ Page({
         }
     },
 
-    playCurrentWord: function () {
-        if (!isAudioMode(this.data.currentMode)) return;
+    playCurrentWord: function (force) {
+        if (!force && !isAudioMode(this.data.currentMode)) return;
         const word = this.data.currentWord.word;
         if (!word) return;
 
@@ -627,7 +627,7 @@ Page({
             const mode = resolveDictationMode(item && item.dictationMode, this.data.dictationMode);
             const word = String(item && item.word || '').trim();
             const key = audioCacheKey(word);
-            if (!word || !isAudioMode(mode) || seen[key]) return;
+            if (!word || (mode !== MODE_AUDIO_TO_EN && mode !== MODE_ZH_TO_EN) || seen[key]) return;
             seen[key] = true;
             targets.push(word);
         });
@@ -697,6 +697,7 @@ Page({
                 attemptCount: attempts + 1
             });
             wx.showToast({ title: '正确!', icon: 'success', duration: 1000 });
+            if (mode === MODE_ZH_TO_EN) this.playCurrentWord(true);
             return;
         }
 
@@ -738,6 +739,7 @@ Page({
             inputError: true,
             attemptCount: attempts + 1
         });
+        if (mode === MODE_ZH_TO_EN) this.playCurrentWord(true);
     },
 
     reportExample: function (e) {
