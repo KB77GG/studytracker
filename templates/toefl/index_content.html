@@ -1,0 +1,67 @@
+<style>
+.toefl-library { max-width: 1120px; margin: 0 auto; padding: 8px 0 48px; }
+.toefl-library__back { display: inline-flex; margin-bottom: 18px; color: var(--brand-dark); font-weight: 800; text-decoration: none; }
+.toefl-library__hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 22px; }
+.toefl-library__eyebrow { margin: 0 0 8px; color: var(--brand); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+.toefl-library h2 { margin: 0; color: var(--text-strong); font-size: 30px; line-height: 1.2; }
+.toefl-library__lead { max-width: 720px; margin: 10px 0 0; color: var(--muted); line-height: 1.7; }
+.toefl-library__note { max-width: 290px; padding: 12px 14px; border: 1px solid rgba(47,142,135,.24); border-radius: 10px; background: var(--brand-tint); color: var(--brand-dark); font-size: 13px; line-height: 1.55; }
+.toefl-exam-list { display: grid; gap: 16px; }
+.toefl-exam-card { overflow: hidden; border: 1px solid var(--line); border-radius: var(--r); background: #fff; box-shadow: var(--shadow-sm); }
+.toefl-exam-card__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 19px 22px; border-bottom: 1px solid var(--line); }
+.toefl-exam-card__title { margin: 0; color: var(--text-strong); font-size: 20px; }
+.toefl-exam-card__meta { margin-top: 4px; color: var(--muted); font-size: 13px; }
+.toefl-exam-card__badge { padding: 6px 10px; border-radius: 999px; background: var(--brand-soft); color: var(--brand-dark); font-size: 12px; font-weight: 900; }
+.toefl-subject-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.toefl-subject-link { display: block; min-height: 150px; padding: 20px 22px; border-right: 1px solid var(--line); color: inherit; text-decoration: none; }
+.toefl-subject-link:last-child { border-right: 0; }
+.toefl-subject-link:hover { background: var(--brand-tint); color: inherit; text-decoration: none; }
+.toefl-subject-link h4 { margin: 0 0 8px; color: var(--text-strong); font-size: 18px; }
+.toefl-subject-link p { margin: 0; color: var(--muted); line-height: 1.55; }
+.toefl-subject-link__cta { display: inline-block; margin-top: 18px; color: var(--brand-dark); font-weight: 900; }
+.toefl-empty { padding: 36px; border: 1px dashed var(--line-strong); border-radius: var(--r); background: #fff; color: var(--muted); text-align: center; }
+@media (max-width: 800px) {
+  .toefl-library__hero { align-items: flex-start; flex-direction: column; }
+  .toefl-library__note { max-width: none; }
+  .toefl-subject-grid { grid-template-columns: 1fr; }
+  .toefl-subject-link { border-right: 0; border-bottom: 1px solid var(--line); }
+  .toefl-subject-link:last-child { border-bottom: 0; }
+}
+</style>
+
+<main class="toefl-library">
+  <a class="toefl-library__back" href="{{ url_for('practice_library') }}">返回刷题入口</a>
+  <section class="toefl-library__hero">
+    <div>
+      <p class="toefl-library__eyebrow">New TOEFL Practice</p>
+      <h2>按真题日期进入正式考试界面</h2>
+      <p class="toefl-library__lead">套卷是主入口，进入后按阅读、听力、写作、口语分别计时。界面与导航规则依据新版 TOEFL 官方指南和真题截图实现。</p>
+    </div>
+    <div class="toefl-library__note">已接入真题、ETS Practice 与 OG 样题。重复副本和待复核来源不会进入可作答目录。</div>
+  </section>
+
+  <section class="toefl-exam-list" aria-label="托福真题套卷">
+    {% for exam in exams %}
+    <article class="toefl-exam-card">
+      <header class="toefl-exam-card__head">
+        <div>
+          <h3 class="toefl-exam-card__title">{{ exam.title }}</h3>
+          <div class="toefl-exam-card__meta">{{ exam.subtitle }} · {{ exam.subjects|length }} 个已接入科目</div>
+        </div>
+        <span class="toefl-exam-card__badge">{% if exam.source_kind == 'real_exam' %}真题{% elif exam.source_kind == 'official_guide' %}OG{% else %}ETS Practice{% endif %}</span>
+      </header>
+      <div class="toefl-subject-grid">
+        {% for subject in exam.subjects %}
+        <a class="toefl-subject-link js-practice-resource" href="{{ url_for('toefl.exam', exam_id=exam.id, subject=subject.id) }}">
+          <h4>{{ subject.label }} · {{ subject.label_zh }}</h4>
+          <p>{{ subject.item_count }} 题 · {{ subject.question_count }} 个题面 · {{ subject.minutes }} 分钟{% if subject.omitted_question_count %} · {{ subject.omitted_question_count }} 个题面待校对{% endif %}</p>
+          <span class="toefl-subject-link__cta">进入考试</span>
+        </a>
+        {% endfor %}
+      </div>
+    </article>
+    {% else %}
+    <div class="toefl-empty">暂无已导入的托福套卷。</div>
+    {% endfor %}
+  </section>
+</main>

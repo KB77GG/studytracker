@@ -1,0 +1,911 @@
+{
+  "exam": {
+    "id": "reading_2026-03-06",
+    "subject": "reading",
+    "date": "2026-03-06",
+    "volume": "",
+    "source_pdf": "3.6新托福真题/3.6阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-03-06_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "The history of the South Pacific is marked by diverse cultures and significant events. Indigenous popul\ndeveloped com societies wi rich tradi and soc structures. T region's poli and\necon landscapes exper profound cha following colonization by Europeans. Studying this\nhistory allows for a greater understanding of cultural interactions and the ongoing effects of historical events on\ncontemporary South Pacific societies. Traditional navigation techniques using stars and ocean swells enabled\nremarkable voyaging achievements, while contemporary movements focus on cultural preservation, language\nrevitalization, and addressing climate change impacts on island nations."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "populations",
+          "complex",
+          "with",
+          "traditions",
+          "social",
+          "the",
+          "political",
+          "economic",
+          "experienced",
+          "changes"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Tigers are solitary animals known for their territorial behavior; males use scent markings and vocalizations to define\ntheir territories. Each ma tiger estab control ov a la territory span several squ miles\na patrols t area regu to lo for prey and maintain dominance. This behavior helps reduce conflicts\nover prey, but tigers are known to fiercely defend their territory from intruders when necessary. Often hunting at\nnight, tigers use stealth and their excellent night vision to their advantage."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "male",
+          "establishes",
+          "over",
+          "large",
+          "spanning",
+          "square",
+          "and",
+          "the",
+          "regularly",
+          "look"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a webpage.",
+      "prompt": "What benefits does a quarterly member have that a monthly member lacks?",
+      "passage": {
+        "text": "https://www.fitlifegym.com\n\nFitLife Gym Membership\n\nMonthly plans cost $30 with equipment access only.\n\nQuarterly ($80) adds group classes and swimming pool privileges.\n\nAnnual members ($300) receive personal training discounts plus guest passes.\n\nNew members get a one-week free trial but must commit to a minimum three-month membership afterward."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Equipment access and guest passes"
+        },
+        {
+          "key": "B",
+          "text": "Personal training discounts only"
+        },
+        {
+          "key": "C",
+          "text": "Group classes ar swimming privileges"
+        },
+        {
+          "key": "D",
+          "text": "Free trial and minimum commitment"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a webpage.",
+      "prompt": "a webpage. What is required of new members after the one-week free trial ends?",
+      "passage": {
+        "text": "https://www.fitlifegym.com\n\nFitLife Gym Membership\n\nMonthly plans cost $30 with equipment access only.\n\nQuarterly ($80) adds group classes and swimming pool privileges. Annual members ($300) receive personal training discounts plus guest passes. New members get a one-week free trial but must commit to a minimum three-month membership afterward."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Nothing"
+        },
+        {
+          "key": "B",
+          "text": "A one-month membership"
+        },
+        {
+          "key": "C",
+          "text": "A three-month membership"
+        },
+        {
+          "key": "D",
+          "text": "An annual membership"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read an e-mail.",
+      "prompt": "What did Ryan do yesterday?",
+      "passage": {
+        "text": "Hi Team,\nBlundin University hosted a career fair yesterday. I was able to\nspeak to several promising candidates for summer internships\nwith our company. See their attached resumes. I'd like everyone\nto give me their feedback no later than Friday.\nThanks,\nRyan"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "He took a class at a university."
+        },
+        {
+          "key": "B",
+          "text": "He attended a job fair."
+        },
+        {
+          "key": "C",
+          "text": "He was interviewed by a manager"
+        },
+        {
+          "key": "D",
+          "text": "He hired some summer interns."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read an e-mail.",
+      "prompt": "What does Ryan ask his team to do?",
+      "passage": {
+        "text": "Hi Team,\nBlundin University hosted a career fair yesterday. I was able to\nspeak to several promising candidates for summer internships\nwith our company. See their attached resumes. I'd like everyone\nto give me their feedback no later than Friday.\nThanks,\nRyan"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Share their opinions of some job candidates"
+        },
+        {
+          "key": "B",
+          "text": "a summer internship program"
+        },
+        {
+          "key": "C",
+          "text": "Update their résumés by Friday"
+        },
+        {
+          "key": "D",
+          "text": "Introduce themselves to new interns"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read an article.",
+      "prompt": "What is the main topic of the article? An art exhibit highlighting technology-driven creativity",
+      "passage": {
+        "text": "Al-Generated Art on Campus Visitors to the Petrunich Gallery can now view an exhibit of Al-generated paintings that blur the line between human creativity and machine learning. One standout work, Dream Algorithm, depicts a city floating in a sea of binary code, while another, Echoes of Light, uses layered brushstrokes created by artificial neural networks to mimic sunrise over glass towers. The exhibit, which was funded by an arts innovation grant, allows visitors to interact with a program that generates custom artwork in real time, allowing them to choose themes and color palettes. This feature has become the centerpiece of the show, enchanting everyone from art majors to computer science instructors. \"We're exploring the intersection of creativity and technology,\" said curator Dana Fields. \"It challenges what art means.\" \"I made a painting with code-it felt empowering,\" said senior art major Sofia Ramirez. \"It's a new frontier.\""
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A debate over mixing art and technology"
+        },
+        {
+          "key": "B",
+          "text": "How students are learning traditional painting"
+        },
+        {
+          "key": "C",
+          "text": "A plan to replace the art gallery with a data center"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read an article.",
+      "prompt": "Which of the following is true of the exhibit?",
+      "passage": {
+        "text": "Al-Generated Art on Campus Visitors to the Petrunich Gallery can now view an exhibit of Al-generated paintings that blur the line between human creativity and machine learning. One standout work, Dream Algorithm, depicts a city floating in a sea of binary code, while another, Echoes of Light, uses layered brushstrokes created by artificial neurall networks to mimic sunrise over glass towers. The exhibit, which was funded by an arts innovation grant, allows visitors to interact with a program that generates custom artwork in real time, allowing them to choose themes and color palettes. This feature has become the centerpiece of the show, enchanting everyone from art major to computer science instructors. We're exploring the intersection of creativity and technology,\" said curator Dana Fields. \"It challenges what art means.\" 'I made a painting with code-it felt empowering,\" said senior art major Sofia Ramirez. \"It's a new frontier.\""
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Its dates have been extended because of public enthusiasm."
+        },
+        {
+          "key": "B",
+          "text": "It prohibits visitor participation"
+        },
+        {
+          "key": "C",
+          "text": "It merges artistic expression with digital innovation"
+        },
+        {
+          "key": "D",
+          "text": "It features computer-aided musical performances"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read an article.",
+      "prompt": "What can be inferred about the impact of the exhibit's interactive portion?",
+      "passage": {
+        "text": "Al-Generated Art on Campus Visitors to the Petrunich Gallery can now view an exhibit of Al-generated paintings that blur the line between human creativity and machine learning. One standout work, Dream Algorithm, depicts a city floating in a sea of binary code, while another, Echoes of Light, uses layered brushstrokes created by artificial neural networks to mimic sunrise over glass towers. The exhibit, which was funded by an arts innovation grant, allows visitors to interact with a program that generates custom artwork in real time, allowing them to choose themes and color palettes. This feature has become the centerpiece of the show, enchanting everyone from art majors to computer science instructors. \"We're exploring the intersection of creativity and technology,\" said curator Dana Fields. \"It challenges what art means.\" \"I made a painting with code- it felt empowering,\" said senior art major Sofia Ramirez. \"It's a new frontier.\""
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It asks visitors to consider the ethical implications of using Al to create art."
+        },
+        {
+          "key": "B",
+          "text": "It has caused visitors to switch majors from art to computer science."
+        },
+        {
+          "key": "C",
+          "text": "It has led to calls to replace traditional art with Al art"
+        },
+        {
+          "key": "D",
+          "text": "It tries to help visitors feel comfortable using Al in their creative endeavors."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "* Hide Time ollowing notice. Peter has no experience with spreadsheets and cannot + attend class on Wednesdays. He should enroll in",
+      "passage": {
+        "text": "Downtown School of Data Skills\nAll classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation\nThie raurco ie for analete and recoshore uhn nood to chau"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A"
+        },
+        {
+          "key": "B",
+          "text": "Section B"
+        },
+        {
+          "key": "C",
+          "text": "Section C"
+        },
+        {
+          "key": "D",
+          "text": "Section D"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "What does Michelle need before enrolling in Section D? Experience creating new spreadsheet formulas A research position that requires creating formulas",
+      "passage": {
+        "text": "weging Septemver 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation\nThis course is for analysts and researchers who need to show\naudiences easy-to-read graphs and charts.\nSection G: (virtual) Wednesdays"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Training in how to present complex data"
+        },
+        {
+          "key": "B",
+          "text": "Previous experience using spreadsheets"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "Beth has worked with formulas for years and is ready to learn advanced data skills. She should enroll in",
+      "passage": {
+        "text": "beging septemuel Lo\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation\nThis course is for analysts and researchers who need to show\naudiences easy-to-read graphs and charts.\nSection G: (virtual) Wednesdays"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A, B, or C"
+        },
+        {
+          "key": "B",
+          "text": "Section D or E"
+        },
+        {
+          "key": "C",
+          "text": "Section F"
+        },
+        {
+          "key": "D",
+          "text": "Section G"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"groundbreaking\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Augmented Reality for Training\n\nAugmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances its effectiveness. However, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "educational"
+        },
+        {
+          "key": "B",
+          "text": "practical"
+        },
+        {
+          "key": "C",
+          "text": "revolutionary"
+        },
+        {
+          "key": "D",
+          "text": "interesting"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is the function of AR as described in the passage? AR artificially enhances human performance.",
+      "passage": {
+        "text": "Augmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances its effectiveness. However, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "AR produces realistic experiences in a learning environment."
+        },
+        {
+          "key": "B",
+          "text": "AR enables unskilled humans to interact with complex machines."
+        },
+        {
+          "key": "C",
+          "text": "AR produces a digital record of real-world content"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "AR reduces which of the following problems associated with traditional training environments?",
+      "passage": {
+        "text": "Augmented Reality for Training\n\nAugmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances\n\nHowever, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Their inability to simulate authentic experiences"
+        },
+        {
+          "key": "B",
+          "text": "Their physical dangers"
+        },
+        {
+          "key": "C",
+          "text": "Their inaccessibility to many learners"
+        },
+        {
+          "key": "D",
+          "text": "Their high financial costs"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author cite studies showing that AR improves retention rates?",
+      "passage": {
+        "text": "Augmented Reality for Training\n\nAugmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances its effectiveness. However, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To demonstrate its usefulness when practicing emergency protocols"
+        },
+        {
+          "key": "B",
+          "text": "To provide an example of its adaptability"
+        },
+        {
+          "key": "C",
+          "text": "To explain why fields outside medicine and aviation are slower to adopt it"
+        },
+        {
+          "key": "D",
+          "text": "To support the claim that it is useful to industries"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m1_q35",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "35",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is one problem the passage mentions related to the use of AR?",
+      "passage": {
+        "text": "Augmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances its effectiveness. However, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The costs associated with making it useful to particular clients"
+        },
+        {
+          "key": "B",
+          "text": "Disagreement among experts regarding its accuracy A lack of measurable benefits in its present stage of development"
+        },
+        {
+          "key": "C",
+          "text": "The absence of existing training programs into which it may be integrated G"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m2_q1",
+      "task_type": "complete_words",
+      "order": 18,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Tectonic plates are large pieces of Earth's outer shell that move slowly over the planet's surface, and their study is\nfundamental in understanding Earth's geological activity. These plates fit toge much li a jig puzzle a\nconstantly sh , causing earth --- , the form of moun , and volc eruptions.\nScien analyze these movements to better understand natural disasters and how Earth's surface changes over\ntime. Advances in this field have significantly improved our ability to monitor and prepare for natural disasters as well\nas to mitigate their impacts."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "together",
+          "like",
+          "jigsaw",
+          "and",
+          "shift",
+          "earthquakes",
+          "formation",
+          "mountains",
+          "volcanic",
+          "scientists"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m2_q11",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"ejecting\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Formation of Sedimentary Rocks\n\nSedimentary rocks form through deposition, compaction, and cementation of materials like mineral particles, organic matter, and chemical precipitates. These sediments accumulate in layers, often in bodies of water like rivers, lakes, and oceans. As layers are deposited, the weight of the overlying layers exerts pressure on the sediments below, reducing their volume and ejecting water, a process known as compaction. Cementation occurs when dissolved minerals leave groundwater and fill the spaces between compacted particles, binding them together. This dual process is called lithification, transforming loose sediments into solid rock.\n\nSedimentary rocks are classified into three primary categories: clastic, chemical, and organic. Clastic sedimentary rocks, such as sandstone and shale, are composed of fragments of pre-existing rocks. Chemical sedimentary rocks, including limestone and gypsum, form from dissolved minerals leaching out of water. Organic sedimentary rocks, like coal, develop from the accumulation and lithification of plant and animal matter.\n\nThe study of sedimentary rocks offers insights into Earth's history. These rocks often contain fossils, which are preserved remains of ancient organisms. Fossils can reveal much about past environments, climate conditions, and evolutionary processes. Additionally, the layering of sedimentary rocks can indicate significant geological events, such as volcanic eruptions or changes in sea level."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "combining with"
+        },
+        {
+          "key": "B",
+          "text": "heating"
+        },
+        {
+          "key": "C",
+          "text": "forcing out"
+        },
+        {
+          "key": "D",
+          "text": "O accumulating"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m2_q12",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is the primary process involved in the formation of solid sedimentary rock?",
+      "passage": {
+        "text": "Formation of Sedimentary Rocks\n\nSedimentary rocks form through deposition, compaction, and cementation of materials like mineral particles, organic matter, and chemical precipitates. These sediments accumulate in layers, often in bodies of water like rivers, lakes, and oceans. As layers are deposited, the weight of the overlying layers exerts pressure on the sediments below, reducing their volume and ejecting water, a process known as compaction. Cementation occurs when dissolved minerals leave groundwater and fill the spaces between compacted particles, binding them together. This dual process is called lithification, transforming loose sediments into solid rock.\n\nSedimentary rocks are classified into three primary categories: clastic, chemical, and organic. Clastic sedimentary rocks, such as sandstone and shale, are composed of fragments of pre-existing rocks. Chemical sedimentary rocks, including limestone and gypsum, form from dissolved minerals leaching out of water. Organic sedimentary rocks, like coal, develop from the accumulation and lithification of plant and animal matter. The study of sedimentary rocks offers insights into Earth's history. These rocks often contain fossils, which are preserved remains of ancient organisms. Fossils can reveal much about past environments, climate conditions, and evolutionary processes. Additionally, the layering of sedimentary rocks can indicate significant geological events, such as volcanic eruptions or changes in sea level."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Erosion"
+        },
+        {
+          "key": "B",
+          "text": "Lithification"
+        },
+        {
+          "key": "C",
+          "text": "Fragmentation"
+        },
+        {
+          "key": "D",
+          "text": "Evaporation"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m2_q13",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is the role of groundwater in sedimentary rock formation?",
+      "passage": {
+        "text": "Formation of Sedimentary Rocks\n\nSedimentary rocks form through deposition, compaction, and cementation of materials like mineral particles, organic matter, and chemical precipitates. These sediments accumulate in layers, often in bodies of water like rivers, lakes, and oceans. As layers are deposited, the weight of the overlying layers exerts pressure on the sediments below, reducing their volume and ejecting water, a process known as compaction. Cementation occurs when dissolved minerals leave groundwater and fill the spaces between compacted particles, binding them together. This dual process is called lithification, transforming loose sediments into solid rock.\n\nSedimentary rocks are classified into three primary categories: clastic, chemical, and organic. Clastic sedimentary rocks, such as sandstone and shale, are composed of fragments of pre-existing rocks. Chemical sedimentary rocks, including limestone and gypsum, form from dissolved minerals leaching out of water. Organic sedimentary rocks, like coal, develop from the accumulation and lithification of plant and animal matter.\n\nThe study of sedimentary rocks offers insights into Earth's history. These rocks often contain fossils, which are preserved remains of ancient organisms. Fossils can reveal much about past environments, climate conditions, and evolutionary processes. Additionally, the layering of sedimentary rocks can indicate significant geological events, such as volcanic eruptions or changes in sea level."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It provides the compaction needed for the sedimentation process."
+        },
+        {
+          "key": "B",
+          "text": "It eventually dissolves the particles in sedimentary rocks"
+        },
+        {
+          "key": "C",
+          "text": "It carries sediments to new locations."
+        },
+        {
+          "key": "D",
+          "text": "It deposits minerals that bind sediments together"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m2_q14",
+      "task_type": "read_academic",
+      "order": 22,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Sedimentary Rocks Pieces of other types of rock are most likely to be found in which of the following?",
+      "passage": {
+        "text": "Formation of Sedimentary Rocks\n\nSedimentary rocks form through deposition, compaction, and cementation of materials like mineral particles, organic matter, and chemical precipitates. These sediments accumulate in layers, often in bodies of water like rivers, lakes, and oceans. As layers are deposited, the weight of the overlying layers exerts pressure on the sediments below, reducing their volume and ejecting water, a process known as compaction. Cementation occurs when dissolved minerals leave groundwater and fill the spaces between compacted particles, binding them together. This dual process is called lithification, transforming loose sediments into solid rock.\n\nSedimentary rocks are classified into three primary categories: clastic, chemical, and organic. Clastic sedimentary rocks, such as sandstone and shale, are composed of fragments of pre-existing rocks. Chemical sedimentary rocks, including limestone and gypsum, form from dissolved minerals leaching out of water. Organic sedimentary rocks, like coal, develop from the accumulation and lithification of plant and animal matter.\n\nThe study of sedimentary rocks offers insights into Earth's. history. These rocks often contain fossils, which are preserved remains of ancient organisms. Fossils can reveal much about past environments, climate conditions, and evolutionary processes. Additionally, the layering of sedimentary rocks can indicate significant geological events, such as volcanic eruptions or changes in sea level."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Sandstone"
+        },
+        {
+          "key": "B",
+          "text": "Limestone"
+        },
+        {
+          "key": "C",
+          "text": "Coal"
+        },
+        {
+          "key": "D",
+          "text": "Fossils"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-06_m2_q15",
+      "task_type": "read_academic",
+      "order": 23,
+      "number": "15",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Ø Hide Time Sedimentary Rocks Why does the author mention fossils in sedimentary rocks?",
+      "passage": {
+        "text": "Formation of Sedimentary Rocks\n\nSedimentary rocks form through deposition, compaction, and cementation of materials like mineral particles, organic matter, and chemical precipitates. These sediments accumulate in layers, often in bodies of water like rivers, lakes, and oceans. As layers are deposited, the weight of the overlying layers exerts pressure on the sediments below, reducing their volume and ejecting water, a process known as compaction. Cementation occurs when dissolved minerals leave groundwater and fill the spaces between compacted particles, binding them together. This dual process is called lithification, transforming loose sediments into solid rock. Sedimentary rocks are classified into three primary categories: clastic, chemical, and organic. Clastic sedimentary rocks, such as sandstone and shale, are composed of fragments of pre-existing rocks. Chemical sedimentary rocks, including limestone and gypsum, form from dissolved minerals leaching out of water. Organic sedimentary rocks, like coal, develop from the accumulation and lithification of plant and animal matter. The study of sedimentary rocks offers insights into Earth's history. These rocks often contain fossils, which are preserved remains of ancient organisms. Fossils can reveal much about past environments, climate conditions, and evolutionary processes. Additionally, the layering of sedimentary rocks can indicate significant geological events, such as volcanic eruptions or changes in sea level."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To provide details on the preservation of ancient organisms"
+        },
+        {
+          "key": "B",
+          "text": "To introduce an explanation of the types of materials found in sedimentary rocks"
+        },
+        {
+          "key": "C",
+          "text": "To highlight the use of fossils in understanding Earth's history"
+        },
+        {
+          "key": "D",
+          "text": "To add to an explanation of how past climate conditions are studied"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.6新托福真题/3.6阅读.pdf"
+    }
+  ]
+}

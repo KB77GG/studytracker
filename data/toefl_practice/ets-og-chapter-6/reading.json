@@ -1,0 +1,866 @@
+{
+  "exam": {
+    "id": "reading_ets-og-chapter-6",
+    "subject": "reading",
+    "source_id": "ets-og-chapter-6",
+    "source_kind": "official_guide",
+    "duration_seconds": 1740,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 540
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_ets-og-chapter-6_m1_q1-10",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "The extinction of the golden toad, a brightly colored amphibian once found in the cloud forests of\nCosta Rica, serves as a poignant example of the fragility of tropical ecosystems. The golden toad’s\nlast confirmed sighting was in 1989. Scientists bel its dec is d to\nhab destruction, chan weather patt , and dis\ncaused b a ty of fungus th attacks the skin of amphibians. Conservationists study\nthe golden toad’s demise to understand how climate factors affect amphibian populations. This\ncase underscores the importance of preserving sensitive habitats and addressing global\nenvironmental challenges to protect biodiversity."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "believe",
+          "decline",
+          "due",
+          "habitat",
+          "changing",
+          "patterns",
+          "disease",
+          "by",
+          "type",
+          "that"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q11-20",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "The study of animal behavior, specifically that of insects, provides insight into the complex interactions\nwithin ecosystems. Insects exhl a br range o behaviors fr foraging\na mating t complex soc organization. F instance, be perform\nintr dances to communicate the location of food sources. Ants communicate using\nchemical signals called pheromones, which help coordinate complex tasks like defending the colony\nand locating resources. This cooperative behavior ensures the survival and efficiency of\ntheir communities."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "exhibit",
+          "broad",
+          "of",
+          "from",
+          "and",
+          "to",
+          "social",
+          "For",
+          "bees",
+          "intricate"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "",
+      "prompt": "What can be inferred about Maria Lopez’ spot in the class?",
+      "passage": {
+        "text": "Read an email.\n\nSubject: Cooking class\n\nMaria Lopez,\n\nThankyou foryour interest in the Foster Dining Hall cooking\nclass.\n\nThere is currently a waiting list for this popular event. To secure\nyour spot, respond to this email to confirm your registration.\n\nThere is a $10 fee for the use of equipment and ingredients,\npayable when you arrive.\n\nHair nets will be provided and must be worn at all times in the\ndining hall kitchen. We have aprons for you to borrow, or you\ncan bring your own.\n\nBest regards,\n\nMichael Brown"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "She is currently on the waiting list."
+        },
+        {
+          "key": "B",
+          "text": "She will lose her spot if she does not respond to this email."
+        },
+        {
+          "key": "C",
+          "text": "She will secure her spot after she pays a fee."
+        },
+        {
+          "key": "D",
+          "text": "She has indicated to Michael Brown that she cannot attend."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "",
+      "prompt": "What must Maria Lopez take to the class?",
+      "passage": {
+        "text": "Read an email.\n\nSubject: Cooking class\n\nMaria Lopez,\n\nThankyou foryour interest in the Foster Dining Hall cooking\nclass.\n\nThere is currently a waiting list for this popular event. To secure\nyour spot, respond to this email to confirm your registration.\n\nThere is a $10 fee for the use of equipment and ingredients,\npayable when you arrive.\n\nHair nets will be provided and must be worn at all times in the\ndining hall kitchen. We have aprons for you to borrow, or you\ncan bring your own.\n\nBest regards,\n\nMichael Brown"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A $10 payment"
+        },
+        {
+          "key": "B",
+          "text": "Some ingredients"
+        },
+        {
+          "key": "C",
+          "text": "A hair net"
+        },
+        {
+          "key": "D",
+          "text": "An apron"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "",
+      "prompt": "What is suggested about Emma’s semester?",
+      "passage": {
+        "text": "Read a social media post.\n\nEmma Lee\n\nI can’t believe I’m already halfway through my exchange\nsemester in Japan. Time really flies when you have a busy class\nschedule! Last weekend, after wrapping up midterms, I finally\nheaded out of Osaka. My destination? Kyoto.\n\nDay 1: Temples and Shrines: I started my day at the Fushimi\nInari Shrine, famous for its thousands of torii gates. It was a\nsteep climb, but the view was absolutely worth it. Later, I visited\nthe Kinkaku-ji, the Golden Pavilion, which was stunning, with its\ngold-leaf-covered exterior reflecting on the tranquil pond.\n\nDay 2: Exploring Gion Kobu, one of Kyoto's historic districts,\nwas fascinating. I walked through the narrow streets lined with\ntraditional wooden teahouses. The atmosphere was magical,\nand it seemed as if I was stepping back in time.\n\nI'll share more about Kyoto. Stay tuned for updates!\n\n#Travel #Kyoto #Japan #Adventure"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "She is studying in Kyoto as an exchange student."
+        },
+        {
+          "key": "B",
+          "text": "She has visited many cities across Japan in the first half of the semester."
+        },
+        {
+          "key": "C",
+          "text": "She was too busy with coursework to travel until last weekend."
+        },
+        {
+          "key": "D",
+          "text": "She has not spent a lot of time preparing for her midterms."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "",
+      "prompt": "What can be inferred about the Kinkaku-ji?",
+      "passage": {
+        "text": "Read a social media post.\n\nEmma Lee\n\nI can’t believe I’m already halfway through my exchange\nsemester in Japan. Time really flies when you have a busy class\nschedule! Last weekend, after wrapping up midterms, I finally\nheaded out of Osaka. My destination? Kyoto.\n\nDay 1: Temples and Shrines: I started my day at the Fushimi\nInari Shrine, famous for its thousands of torii gates. It was a\nsteep climb, but the view was absolutely worth it. Later, I visited\nthe Kinkaku-ji, the Golden Pavilion, which was stunning, with its\ngold-leaf-covered exterior reflecting on the tranquil pond.\n\nDay 2: Exploring Gion Kobu, one of Kyoto's historic districts,\nwas fascinating. I walked through the narrow streets lined with\ntraditional wooden teahouses. The atmosphere was magical,\nand it seemed as if I was stepping back in time.\n\nI'll share more about Kyoto. Stay tuned for updates!\n\n#Travel #Kyoto #Japan #Adventure"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It is located within the Fushimi Inari Shrine."
+        },
+        {
+          "key": "B",
+          "text": "Its roof is covered with leaves from nearby trees."
+        },
+        {
+          "key": "C",
+          "text": "It is located next to a small body of water."
+        },
+        {
+          "key": "D",
+          "text": "It is on top of a hill."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "",
+      "prompt": "Which statement best characterizes Emma’s experience in Gion Kobu?",
+      "passage": {
+        "text": "Read a social media post.\n\nEmma Lee\n\nI can’t believe I’m already halfway through my exchange\nsemester in Japan. Time really flies when you have a busy class\nschedule! Last weekend, after wrapping up midterms, I finally\nheaded out of Osaka. My destination? Kyoto.\n\nDay 1: Temples and Shrines: I started my day at the Fushimi\nInari Shrine, famous for its thousands of torii gates. It was a\nsteep climb, but the view was absolutely worth it. Later, I visited\nthe Kinkaku-ji, the Golden Pavilion, which was stunning, with its\ngold-leaf-covered exterior reflecting on the tranquil pond.\n\nDay 2: Exploring Gion Kobu, one of Kyoto's historic districts,\nwas fascinating. I walked through the narrow streets lined with\ntraditional wooden teahouses. The atmosphere was magical,\nand it seemed as if I was stepping back in time.\n\nI'll share more about Kyoto. Stay tuned for updates!\n\n#Travel #Kyoto #Japan #Adventure"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "She was excited to view the performances of street magicians."
+        },
+        {
+          "key": "B",
+          "text": "She felt like she was visiting a different historical period."
+        },
+        {
+          "key": "C",
+          "text": "She did not have time to see many of the things that she wanted to see there."
+        },
+        {
+          "key": "D",
+          "text": "She enjoyed drinking tea in the traditional teahouses."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "",
+      "prompt": "The word “feats” in the passage is closest in meaning to",
+      "passage": {
+        "text": "Ancient Aqueducts\nAqueducts are among the most impressive engineering feats of ancient civilizations. [A] Aqueducts\nare structures built to transport water from a distant source to cities and towns. [B] The Romans, in\nparticular, perfected the construction of aqueducts, using gravity to carry water over long distances.\n[C] Roman aqueducts were made of stone, brick, and concrete and included tunnels, bridges, and\npipes. [D] The aqueducts were essential to the growth and sustainability of Roman cities. They\nsupplied water for public baths, fountains, households, and agriculture. One famous example is the\nPont du Gard in France. Built in the first century A.D., it spans 50 kilometers and features a three-tiered\nbridge that remains standing today.\n\nAqueducts were not unique to the Roman Empire. Ancient Greece, Persia, and India also developed\nsystems for water transport. Persian aqueducts, known as qanats, were underground channels\ntapping groundwater sources. These systems were exceptionally durable and could last for centuries.\nHowever, constructing and maintaining aqueducts required significant resources and labor. Despite\nthese challenges, aqueducts were essential investments in ancient infrastructure and played a crucial\nrole in development."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "examples"
+        },
+        {
+          "key": "B",
+          "text": "achievements"
+        },
+        {
+          "key": "C",
+          "text": "skills"
+        },
+        {
+          "key": "D",
+          "text": "investments"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "",
+      "prompt": "Why does the author mention public baths, fountains, households, and agriculture?",
+      "passage": {
+        "text": "Ancient Aqueducts\nAqueducts are among the most impressive engineering feats of ancient civilizations. [A] Aqueducts\nare structures built to transport water from a distant source to cities and towns. [B] The Romans, in\nparticular, perfected the construction of aqueducts, using gravity to carry water over long distances.\n[C] Roman aqueducts were made of stone, brick, and concrete and included tunnels, bridges, and\npipes. [D] The aqueducts were essential to the growth and sustainability of Roman cities. They\nsupplied water for public baths, fountains, households, and agriculture. One famous example is the\nPont du Gard in France. Built in the first century A.D., it spans 50 kilometers and features a three-tiered\nbridge that remains standing today.\n\nAqueducts were not unique to the Roman Empire. Ancient Greece, Persia, and India also developed\nsystems for water transport. Persian aqueducts, known as qanats, were underground channels\ntapping groundwater sources. These systems were exceptionally durable and could last for centuries.\nHowever, constructing and maintaining aqueducts required significant resources and labor. Despite\nthese challenges, aqueducts were essential investments in ancient infrastructure and played a crucial\nrole in development."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To imply that the construction of Roman aqueducts required a lot of effort"
+        },
+        {
+          "key": "B",
+          "text": "To indicate that Roman cities needed more water than aqueducts could provide"
+        },
+        {
+          "key": "C",
+          "text": "To emphasize the rapid growth and impressive sustainability of Roman cities"
+        },
+        {
+          "key": "D",
+          "text": "To explain the usefulness of Roman aqueducts"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "",
+      "prompt": "What specific ancient structure is mentioned in the passage as still existing today?",
+      "passage": {
+        "text": "Ancient Aqueducts\nAqueducts are among the most impressive engineering feats of ancient civilizations. [A] Aqueducts\nare structures built to transport water from a distant source to cities and towns. [B] The Romans, in\nparticular, perfected the construction of aqueducts, using gravity to carry water over long distances.\n[C] Roman aqueducts were made of stone, brick, and concrete and included tunnels, bridges, and\npipes. [D] The aqueducts were essential to the growth and sustainability of Roman cities. They\nsupplied water for public baths, fountains, households, and agriculture. One famous example is the\nPont du Gard in France. Built in the first century A.D., it spans 50 kilometers and features a three-tiered\nbridge that remains standing today.\n\nAqueducts were not unique to the Roman Empire. Ancient Greece, Persia, and India also developed\nsystems for water transport. Persian aqueducts, known as qanats, were underground channels\ntapping groundwater sources. These systems were exceptionally durable and could last for centuries.\nHowever, constructing and maintaining aqueducts required significant resources and labor. Despite\nthese challenges, aqueducts were essential investments in ancient infrastructure and played a crucial\nrole in development."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A tunnel"
+        },
+        {
+          "key": "B",
+          "text": "A bridge"
+        },
+        {
+          "key": "C",
+          "text": "A fountain"
+        },
+        {
+          "key": "D",
+          "text": "A channel"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "",
+      "prompt": "What problem with ancient aqueducts is mentioned in the passage?",
+      "passage": {
+        "text": "Ancient Aqueducts\nAqueducts are among the most impressive engineering feats of ancient civilizations. [A] Aqueducts\nare structures built to transport water from a distant source to cities and towns. [B] The Romans, in\nparticular, perfected the construction of aqueducts, using gravity to carry water over long distances.\n[C] Roman aqueducts were made of stone, brick, and concrete and included tunnels, bridges, and\npipes. [D] The aqueducts were essential to the growth and sustainability of Roman cities. They\nsupplied water for public baths, fountains, households, and agriculture. One famous example is the\nPont du Gard in France. Built in the first century A.D., it spans 50 kilometers and features a three-tiered\nbridge that remains standing today.\n\nAqueducts were not unique to the Roman Empire. Ancient Greece, Persia, and India also developed\nsystems for water transport. Persian aqueducts, known as qanats, were underground channels\ntapping groundwater sources. These systems were exceptionally durable and could last for centuries.\nHowever, constructing and maintaining aqueducts required significant resources and labor. Despite\nthese challenges, aqueducts were essential investments in ancient infrastructure and played a crucial\nrole in development."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The environmental damage they caused by using groundwater"
+        },
+        {
+          "key": "B",
+          "text": "The limited amount of water they could provide"
+        },
+        {
+          "key": "C",
+          "text": "Their frequent lack of durability"
+        },
+        {
+          "key": "D",
+          "text": "The cost and effort of building and maintaining them"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "",
+      "prompt": "There are four locations in the passage (marked with [A], [B], [C], and [D]) that indicate\nwhere the following sentence could be added.\n\nThis meant that the source of the water had to be higher than the city to which it was brought.\n\nWhere would the sentence best fit?",
+      "passage": {
+        "text": "Ancient Aqueducts\nAqueducts are among the most impressive engineering feats of ancient civilizations. [A] Aqueducts\nare structures built to transport water from a distant source to cities and towns. [B] The Romans, in\nparticular, perfected the construction of aqueducts, using gravity to carry water over long distances.\n[C] Roman aqueducts were made of stone, brick, and concrete and included tunnels, bridges, and\npipes. [D] The aqueducts were essential to the growth and sustainability of Roman cities. They\nsupplied water for public baths, fountains, households, and agriculture. One famous example is the\nPont du Gard in France. Built in the first century A.D., it spans 50 kilometers and features a three-tiered\nbridge that remains standing today.\n\nAqueducts were not unique to the Roman Empire. Ancient Greece, Persia, and India also developed\nsystems for water transport. Persian aqueducts, known as qanats, were underground channels\ntapping groundwater sources. These systems were exceptionally durable and could last for centuries.\nHowever, constructing and maintaining aqueducts required significant resources and labor. Despite\nthese challenges, aqueducts were essential investments in ancient infrastructure and played a crucial\nrole in development."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Location A"
+        },
+        {
+          "key": "B",
+          "text": "Location B"
+        },
+        {
+          "key": "C",
+          "text": "Location C"
+        },
+        {
+          "key": "D",
+          "text": "Location D"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "",
+      "prompt": "According to the passage, what does NOT occur inside PV cells?",
+      "passage": {
+        "text": "Advancements in Renewable Energy Engineering\n[A] Photovoltaic (PV) cells that convert sunlight into electricity are one innovative solution to harness\nrenewable energy. [B] When sunlight hits the PV cell, it is absorbed by a semiconductor material,\nusually silicon. The energy from the light knocks electrons loose from atoms, creating a flow of\nelectric current. This current is then captured and can be used to power electrical devices. A common\nmisconception is that, at night, PV cells store energy like a battery. [C] In fact, they convert sunlight\ninto electricity in real time; to store energy, a separate energy storage system, like a battery, is required.\n[D] Researchers are also developing what are called moonlight solar panels, which can generate\nelectricity at night, during rain, and under overcast skies. They make renewable energy a more viable\noption in diverse environments.\n\nFloating wind farms are another interesting innovation. Mounted on buoyant platforms tethered to\nthe ocean floor, they can be deployed far from land, where wind speeds are often stronger and more\nconsistent than those on land. Underwater cables transmit electricity they generate back to shore.\nWhile challenges such as maintenance and initial costs persist, the long-term benefits are substantial."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Silicon or another material absorbs sunlight."
+        },
+        {
+          "key": "B",
+          "text": "Electrons become less tightly bound to atoms."
+        },
+        {
+          "key": "C",
+          "text": "A flow of electric current is captured."
+        },
+        {
+          "key": "D",
+          "text": "Electricity is stored in a battery."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "",
+      "prompt": "What does the author indicate about moonlight solar panels?",
+      "passage": {
+        "text": "Advancements in Renewable Energy Engineering\n[A] Photovoltaic (PV) cells that convert sunlight into electricity are one innovative solution to harness\nrenewable energy. [B] When sunlight hits the PV cell, it is absorbed by a semiconductor material,\nusually silicon. The energy from the light knocks electrons loose from atoms, creating a flow of\nelectric current. This current is then captured and can be used to power electrical devices. A common\nmisconception is that, at night, PV cells store energy like a battery. [C] In fact, they convert sunlight\ninto electricity in real time; to store energy, a separate energy storage system, like a battery, is required.\n[D] Researchers are also developing what are called moonlight solar panels, which can generate\nelectricity at night, during rain, and under overcast skies. They make renewable energy a more viable\noption in diverse environments.\n\nFloating wind farms are another interesting innovation. Mounted on buoyant platforms tethered to\nthe ocean floor, they can be deployed far from land, where wind speeds are often stronger and more\nconsistent than those on land. Underwater cables transmit electricity they generate back to shore.\nWhile challenges such as maintenance and initial costs persist, the long-term benefits are substantial."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They are more efficient and cost-effective than traditional PV cells."
+        },
+        {
+          "key": "B",
+          "text": "They can function in low-light conditions."
+        },
+        {
+          "key": "C",
+          "text": "They can be used to store energy over a long period of time."
+        },
+        {
+          "key": "D",
+          "text": "They do not convert energy in real time."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "",
+      "prompt": "The word “viable” in the passage is closest in meaning to",
+      "passage": {
+        "text": "Advancements in Renewable Energy Engineering\n[A] Photovoltaic (PV) cells that convert sunlight into electricity are one innovative solution to harness\nrenewable energy. [B] When sunlight hits the PV cell, it is absorbed by a semiconductor material,\nusually silicon. The energy from the light knocks electrons loose from atoms, creating a flow of\nelectric current. This current is then captured and can be used to power electrical devices. A common\nmisconception is that, at night, PV cells store energy like a battery. [C] In fact, they convert sunlight\ninto electricity in real time; to store energy, a separate energy storage system, like a battery, is required.\n[D] Researchers are also developing what are called moonlight solar panels, which can generate\nelectricity at night, during rain, and under overcast skies. They make renewable energy a more viable\noption in diverse environments.\n\nFloating wind farms are another interesting innovation. Mounted on buoyant platforms tethered to\nthe ocean floor, they can be deployed far from land, where wind speeds are often stronger and more\nconsistent than those on land. Underwater cables transmit electricity they generate back to shore.\nWhile challenges such as maintenance and initial costs persist, the long-term benefits are substantial."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "practical"
+        },
+        {
+          "key": "B",
+          "text": "predictable"
+        },
+        {
+          "key": "C",
+          "text": "valuable"
+        },
+        {
+          "key": "D",
+          "text": "adaptable"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "",
+      "prompt": "The passage suggests that, compared to traditional wind farms, what is an advantage of\nfloating wind farms?",
+      "passage": {
+        "text": "Advancements in Renewable Energy Engineering\n[A] Photovoltaic (PV) cells that convert sunlight into electricity are one innovative solution to harness\nrenewable energy. [B] When sunlight hits the PV cell, it is absorbed by a semiconductor material,\nusually silicon. The energy from the light knocks electrons loose from atoms, creating a flow of\nelectric current. This current is then captured and can be used to power electrical devices. A common\nmisconception is that, at night, PV cells store energy like a battery. [C] In fact, they convert sunlight\ninto electricity in real time; to store energy, a separate energy storage system, like a battery, is required.\n[D] Researchers are also developing what are called moonlight solar panels, which can generate\nelectricity at night, during rain, and under overcast skies. They make renewable energy a more viable\noption in diverse environments.\n\nFloating wind farms are another interesting innovation. Mounted on buoyant platforms tethered to\nthe ocean floor, they can be deployed far from land, where wind speeds are often stronger and more\nconsistent than those on land. Underwater cables transmit electricity they generate back to shore.\nWhile challenges such as maintenance and initial costs persist, the long-term benefits are substantial."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They harness wind energy in larger amounts and more consistently."
+        },
+        {
+          "key": "B",
+          "text": "They are easier to install and maintain."
+        },
+        {
+          "key": "C",
+          "text": "They use underwater cables, which are more cost-effective than cables installed on land."
+        },
+        {
+          "key": "D",
+          "text": "They last for a longer time."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m1_q35",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "35",
+      "number_end": null,
+      "directive": "",
+      "prompt": "There are four locations in the passage (marked with [A], [B], [C], and [D]) that indicate\nwhere the following sentence could be added.\n\nHow do they work?\n\nWhere would the sentence best fit?",
+      "passage": {
+        "text": "Advancements in Renewable Energy Engineering\n[A] Photovoltaic (PV) cells that convert sunlight into electricity are one innovative solution to harness\nrenewable energy. [B] When sunlight hits the PV cell, it is absorbed by a semiconductor material,\nusually silicon. The energy from the light knocks electrons loose from atoms, creating a flow of\nelectric current. This current is then captured and can be used to power electrical devices. A common\nmisconception is that, at night, PV cells store energy like a battery. [C] In fact, they convert sunlight\ninto electricity in real time; to store energy, a separate energy storage system, like a battery, is required.\n[D] Researchers are also developing what are called moonlight solar panels, which can generate\nelectricity at night, during rain, and under overcast skies. They make renewable energy a more viable\noption in diverse environments.\n\nFloating wind farms are another interesting innovation. Mounted on buoyant platforms tethered to\nthe ocean floor, they can be deployed far from land, where wind speeds are often stronger and more\nconsistent than those on land. Underwater cables transmit electricity they generate back to shore.\nWhile challenges such as maintenance and initial costs persist, the long-term benefits are substantial."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Location A"
+        },
+        {
+          "key": "B",
+          "text": "Location B"
+        },
+        {
+          "key": "C",
+          "text": "Location C"
+        },
+        {
+          "key": "D",
+          "text": "Location D\n\nSTOP."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m2_q1-10",
+      "task_type": "complete_words",
+      "order": 18,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Textile weaving is a traditional craft that involves interlacing threads to create fabric. Weavers use\nlooms to hold the threads in place while they work. Nat fibers li wool,\ncot , and si are comm used, tho synthetic\nmate are al popular. Techn such a plain weave, twill, and\nsatin weave produce different textures and patterns. Textile weaving has been practiced by cultures\nworldwide, each developing unique styles. Ikat weaving from Indonesia, for example, uses a resist-dye\nmethod to create vibrant colors and symbolic motifs that reflect cultural identity and regional traditions."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "Natural",
+          "like",
+          "cotton",
+          "silk",
+          "commonly",
+          "though",
+          "materials",
+          "also",
+          "Techniques",
+          "as"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m2_q11",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "11",
+      "number_end": null,
+      "directive": "",
+      "prompt": "Why does the author mention Élisée Reclus and Frédéric Le Play?",
+      "passage": {
+        "text": "Urbanization and Social Geography\nUrbanization is the transformation of rural areas into urban ones. [A] Social geography studies\nthese changes and helps us understand urbanization’s implications on human societies. Unlike\ngeography, which examines landscapes, climates, and natural hazards, social geography focuses\non the interaction between society and landscapes. The term “social geography” was first used by\nFrench geographer Élisée Reclus and by followers of the French sociologist Frédéric Le Play, possibly\nindependently of each other, at the end of the nineteenth century. [B]\n\nAs cities grow, they attract people from rural areas seeking employment and better living conditions.\nThis migration leads to higher population densities, affecting social relationships and community\nstructures. Dense populations can foster anonymity, as the sheer number of people in urban\nenvironments often reduces the likelihood of repeated interactions with the same individuals. [C]\n\nCities offer better access to healthcare, education, and public services than rural areas. [D] However,\nthis concentration can lead to disparities, with some urban residents benefiting more than others.\nSocial geography seeks solutions to ensure equitable resource distribution.\n\nCities are melting pots, bringing together people from various backgrounds. This diversity can enrich\nurban life but also presents challenges in integration and social cohesion. Social geographers analyze\ncultural dynamics and propose measures to enhance inclusivity."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To identify the origins of social geography as a field of study"
+        },
+        {
+          "key": "B",
+          "text": "To suggest that social geography has evolved significantly over the years"
+        },
+        {
+          "key": "C",
+          "text": "To contrast the differences between geography and social geography"
+        },
+        {
+          "key": "D",
+          "text": "To explain the existence of two independent schools of thought\nwithin the field of social geography"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m2_q12",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "12",
+      "number_end": null,
+      "directive": "",
+      "prompt": "According to the passage, increased population densities result in",
+      "passage": {
+        "text": "Urbanization and Social Geography\nUrbanization is the transformation of rural areas into urban ones. [A] Social geography studies\nthese changes and helps us understand urbanization’s implications on human societies. Unlike\ngeography, which examines landscapes, climates, and natural hazards, social geography focuses\non the interaction between society and landscapes. The term “social geography” was first used by\nFrench geographer Élisée Reclus and by followers of the French sociologist Frédéric Le Play, possibly\nindependently of each other, at the end of the nineteenth century. [B]\n\nAs cities grow, they attract people from rural areas seeking employment and better living conditions.\nThis migration leads to higher population densities, affecting social relationships and community\nstructures. Dense populations can foster anonymity, as the sheer number of people in urban\nenvironments often reduces the likelihood of repeated interactions with the same individuals. [C]\n\nCities offer better access to healthcare, education, and public services than rural areas. [D] However,\nthis concentration can lead to disparities, with some urban residents benefiting more than others.\nSocial geography seeks solutions to ensure equitable resource distribution.\n\nCities are melting pots, bringing together people from various backgrounds. This diversity can enrich\nurban life but also presents challenges in integration and social cohesion. Social geographers analyze\ncultural dynamics and propose measures to enhance inclusivity."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "sharp declines in living conditions"
+        },
+        {
+          "key": "B",
+          "text": "stronger bonds with people from a common cultural background"
+        },
+        {
+          "key": "C",
+          "text": "fewer opportunities to encounter the same individuals multiple times"
+        },
+        {
+          "key": "D",
+          "text": "a reduction in access to resources like healthcare"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m2_q13",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "13",
+      "number_end": null,
+      "directive": "",
+      "prompt": "The word “disparities” in the passage is closest in meaning to",
+      "passage": {
+        "text": "Urbanization and Social Geography\nUrbanization is the transformation of rural areas into urban ones. [A] Social geography studies\nthese changes and helps us understand urbanization’s implications on human societies. Unlike\ngeography, which examines landscapes, climates, and natural hazards, social geography focuses\non the interaction between society and landscapes. The term “social geography” was first used by\nFrench geographer Élisée Reclus and by followers of the French sociologist Frédéric Le Play, possibly\nindependently of each other, at the end of the nineteenth century. [B]\n\nAs cities grow, they attract people from rural areas seeking employment and better living conditions.\nThis migration leads to higher population densities, affecting social relationships and community\nstructures. Dense populations can foster anonymity, as the sheer number of people in urban\nenvironments often reduces the likelihood of repeated interactions with the same individuals. [C]\n\nCities offer better access to healthcare, education, and public services than rural areas. [D] However,\nthis concentration can lead to disparities, with some urban residents benefiting more than others.\nSocial geography seeks solutions to ensure equitable resource distribution.\n\nCities are melting pots, bringing together people from various backgrounds. This diversity can enrich\nurban life but also presents challenges in integration and social cohesion. Social geographers analyze\ncultural dynamics and propose measures to enhance inclusivity."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "inequalities"
+        },
+        {
+          "key": "B",
+          "text": "difficulties"
+        },
+        {
+          "key": "C",
+          "text": "debates"
+        },
+        {
+          "key": "D",
+          "text": "shortages"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m2_q14",
+      "task_type": "read_academic",
+      "order": 22,
+      "number": "14",
+      "number_end": null,
+      "directive": "",
+      "prompt": "What is NOT mentioned in the passage as a topic included in social geography?",
+      "passage": {
+        "text": "Urbanization and Social Geography\nUrbanization is the transformation of rural areas into urban ones. [A] Social geography studies\nthese changes and helps us understand urbanization’s implications on human societies. Unlike\ngeography, which examines landscapes, climates, and natural hazards, social geography focuses\non the interaction between society and landscapes. The term “social geography” was first used by\nFrench geographer Élisée Reclus and by followers of the French sociologist Frédéric Le Play, possibly\nindependently of each other, at the end of the nineteenth century. [B]\n\nAs cities grow, they attract people from rural areas seeking employment and better living conditions.\nThis migration leads to higher population densities, affecting social relationships and community\nstructures. Dense populations can foster anonymity, as the sheer number of people in urban\nenvironments often reduces the likelihood of repeated interactions with the same individuals. [C]\n\nCities offer better access to healthcare, education, and public services than rural areas. [D] However,\nthis concentration can lead to disparities, with some urban residents benefiting more than others.\nSocial geography seeks solutions to ensure equitable resource distribution.\n\nCities are melting pots, bringing together people from various backgrounds. This diversity can enrich\nurban life but also presents challenges in integration and social cohesion. Social geographers analyze\ncultural dynamics and propose measures to enhance inclusivity."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "How society changes as a result of urbanization"
+        },
+        {
+          "key": "B",
+          "text": "How population growth affects employment"
+        },
+        {
+          "key": "C",
+          "text": "How urban resources can be distributed in a fair way"
+        },
+        {
+          "key": "D",
+          "text": "How to ensure that people from various backgrounds coexist in harmony"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    },
+    {
+      "id": "reading_ets-og-chapter-6_m2_q15",
+      "task_type": "read_academic",
+      "order": 23,
+      "number": "15",
+      "number_end": null,
+      "directive": "",
+      "prompt": "There are four locations in the passage (marked with [A], [B], [C], and [D]) that indicate\nwhere the following sentence could be added.\n\nIt alters how people interact with the landscape and with each other.\n\nWhere would the sentence best fit?",
+      "passage": {
+        "text": "Urbanization and Social Geography\nUrbanization is the transformation of rural areas into urban ones. [A] Social geography studies\nthese changes and helps us understand urbanization’s implications on human societies. Unlike\ngeography, which examines landscapes, climates, and natural hazards, social geography focuses\non the interaction between society and landscapes. The term “social geography” was first used by\nFrench geographer Élisée Reclus and by followers of the French sociologist Frédéric Le Play, possibly\nindependently of each other, at the end of the nineteenth century. [B]\n\nAs cities grow, they attract people from rural areas seeking employment and better living conditions.\nThis migration leads to higher population densities, affecting social relationships and community\nstructures. Dense populations can foster anonymity, as the sheer number of people in urban\nenvironments often reduces the likelihood of repeated interactions with the same individuals. [C]\n\nCities offer better access to healthcare, education, and public services than rural areas. [D] However,\nthis concentration can lead to disparities, with some urban residents benefiting more than others.\nSocial geography seeks solutions to ensure equitable resource distribution.\n\nCities are melting pots, bringing together people from various backgrounds. This diversity can enrich\nurban life but also presents challenges in integration and social cohesion. Social geographers analyze\ncultural dynamics and propose measures to enhance inclusivity."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Location A"
+        },
+        {
+          "key": "B",
+          "text": "Location B"
+        },
+        {
+          "key": "C",
+          "text": "Location C"
+        },
+        {
+          "key": "D",
+          "text": "Location D\n\nSTOP."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc"
+    }
+  ]
+}

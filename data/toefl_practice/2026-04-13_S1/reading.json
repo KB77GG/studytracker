@@ -1,0 +1,485 @@
+{
+  "exam": {
+    "id": "reading_2026-04-13_S1",
+    "subject": "reading",
+    "date": "2026-04-13",
+    "volume": "S1",
+    "source_pdf": "4.13/4.13 套一 阅读.docx",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-04-13_S1_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "We know from drawings that have been preserved in caves for over 10,000 years that early humans performed\ndances as a group activity. We mi__._ think th prehistoric peo concentrated on on t basic wo that\nrequired f survival: hun , gathering fo__, and making weapons and garments. However, it is clear\nfrom the record that group dancing was important to them. They made masks and costumes; they used much energy\nin the process of dancing; they recorded more drawings of dancing than of any other group activity."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "might",
+          "that",
+          "people",
+          "only",
+          "the",
+          "work",
+          "was",
+          "for",
+          "hunting",
+          "food"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Grasshoppers are insects commonly found in dry places with grass and plants. Grasshoppers ha several wa\nthey pro_ themselves aga_ danger. Th have powe back le _, which al them t jump\naw from enemies, such as rodents and snakes. Some grasshoppers can jump twenty times the length of their\nbodies. By the time they are adults, grasshoppers can also fly. Adult grasshoppers fly very quickly and this helps them\navoid danger."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "have",
+          "ways",
+          "protect",
+          "against",
+          "they",
+          "powerful",
+          "legs",
+          "allow",
+          "to",
+          "away"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a course description.",
+      "prompt": "Who can register for the course?",
+      "passage": {
+        "text": "Reading |\nIntroduction to Glassblowing\nThis hands-on class introduces adults (18+) to the art of\nglassblowing. You'll learn safety, shaping, and design techniques\nwhile crafting your own unique work of glass art.\nNo experience needed-just curiosity and closed-toe shoes! Other\nsafety-related equipment will be provided by the instructor.\nlegister now-spaces are limited\nVisit www.alburcommunitycenter.com/glassblowing."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Anyone who is at least 18 years old"
+        },
+        {
+          "key": "B",
+          "text": "Anyone who has worked with glass before"
+        },
+        {
+          "key": "C",
+          "text": "Anyone who has read a book on glass art"
+        },
+        {
+          "key": "D",
+          "text": "Anyone who is registered for classes at a university"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a course description.",
+      "prompt": "irse description. It can be inferred that students should wear closed-toed shoes because",
+      "passage": {
+        "text": "Introduction to Glassblowing\nThis hands-on class introduces adults (18+) to the art of\nglassblowing. You'll learn safety, shaping, and design techniques\nwhile crafting your own unique work of glass art.\nNo experience needed-just curiosity and closed-toe shoes! Other\nsafety-related equipment will be provided by the instructor.\nRegister now-spaces are limited!\nVisit www.alburcommunitycenter.com/glassblowing."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "they are preferred by the instructor"
+        },
+        {
+          "key": "B",
+          "text": "they offer protection during the process"
+        },
+        {
+          "key": "C",
+          "text": "they are unique to the Albur community"
+        },
+        {
+          "key": "D",
+          "text": "they help reduce the risk of falling"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m1_q24",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "Why does Noam mention \"both parliamentary and policy debate formats\"?",
+      "passage": {
+        "text": "Debate Club Coordinator\nTo:\nFrom:\nNoam Mitchell\nSent:\nSubject:\nRequest to join Debate Club\nDear Club Coordinator,\nI'm writing to express my strong interest in joining the\nuniversity Debate Club this semester. I attended last week's\nintroductory session and found the discussion on\ninternational trade policies both stimulating and challenging.\nIt reinforced my desire to engage in structured debates that\nexplore diverse perspectives.\nI have prior experience competing in high school debate\ntournaments, where I focused on both parliamentary and\npolicy debate formats. Last semester I attended some\nsessions of the Debate Club's workshop on refining delivery\nskills. This semester, I'm balancing a demanding academic\nschedule, so it would be helpful if you explained the time\ncommitment for practices and tournaments. Please share\ndetails about the registration process, membership\nrequirements, and any upcoming practice schedules.\nBest regards,\nNoam Mitchell"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To inquire about which debate format the Debate Club prefers"
+        },
+        {
+          "key": "B",
+          "text": "To indicate the breadth of his debating background"
+        },
+        {
+          "key": "C",
+          "text": "To highlight what he learned at a recent Debate Club event"
+        },
+        {
+          "key": "D",
+          "text": "To suggest a topic for a future workshop"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m1_q28",
+      "task_type": "read_academic",
+      "order": 6,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention listening to music daily for 30 minutes?",
+      "passage": {
+        "text": "Music therapy is known for its powerful effects on mental health. By using musical interventions, therapists aim to improve people's emotional well-being and cognitive functioning.\n\nThe roots of music therapy trace back to ancient healing rituals, but its modern form appeared after World War II, when musicians played for veterans suffering from trauma. Research shows that music therapy can reduce anxiety and stress. Listening to calming music can lower heart rates and cortisol levels. This is why music therapy is often used in hospitals. A study found that patients who listened to 30 minutes of music daily experienced significant reductions in anxiety. Engaging with familiar music can also trigger pleasant memories and improve mood. Patients who participated in music therapy showed better memory recall and increased social interaction. A study demonstrated that Alzheimer's patients who listened to music from their youth had improved cognitive function.\n\nDespite its benefits, music therapy is not a one-size-fits-all solution. Its effectiveness varies depending on the individual and type of music used. Personal musical preferences, cultural background, and the context in which the music is played are crucial to the therapy's success."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To indicate how long a music therapy session should last"
+        },
+        {
+          "key": "B",
+          "text": "To support a claim about music therapy's effectiveness"
+        },
+        {
+          "key": "C",
+          "text": "To explain why a study was conducted in a hospital"
+        },
+        {
+          "key": "D",
+          "text": "To suggest that music therapy should be practiced at home"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m1_q29",
+      "task_type": "read_academic",
+      "order": 7,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Ø Hide Time of Music Therapy According to the passage, all of the following can affect the benefit of a music therapy session for a patient EXCEPT",
+      "passage": {
+        "text": "Music therapy is known for its powerful effects on mental health. By using musical interventions, therapists aim to improve people's emotional well-being and cognitive\n\nThe roots of music therapy trace back to ancient healing rituals, but its modern form appeared after World War II, when musicians played for veterans suffering from trauma. Research shows that music therapy can reduce anxiety and stress. Listening to calming music can lower heart rates and cortisol levels. This is why music therapy is often used in hospitals. A study found that patients who listened to 30 minutes of music daily experienced significant reductions in anxiety. Engaging with familiar music can also trigger pleasant memories and improve mood. Patients who participated in music therapy showed better memory recall and increased social interaction. A study demonstrated that Alzheimer's patients who listened to music from their youth had improved cognitive function. Despite its benefits, music therapy is not a one-size-fits-all solution. Its effectiveness varies depending on the individual and type of music used. Personal musical preferences, cultural background, and the context in which the music is played are crucial to the therapy's success."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "what kind of music the patient prefers"
+        },
+        {
+          "key": "B",
+          "text": "which culture the patient is from"
+        },
+        {
+          "key": "C",
+          "text": "in what environment the music is played"
+        },
+        {
+          "key": "D",
+          "text": "how knowledgeable the patient is about music"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m1_q32",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author discuss binary bits and qubits?",
+      "passage": {
+        "text": "Quantum computing promises to revolutionize technology by delivering unprecedented computational power. Traditional computers store data in binary bits, representing 0 or 1. Quantum computers use qubits, which can represent 0, 1, or both simultaneously (a state called superposition). This allows quantum computers to process vast amounts of data simultaneously, solving complex problems much faster than classical computers.\n\nQuantum computing has promising applications in cryptography-techniques for encoding and decoding messages. Current encryption (encoding) methods rely on complex algorithms that classical computers struggle to break. Quantum computers could potentially break these encryption algorithms with ease, requiring new, quantum-resistant techniques. Researchers are exploring such methods to secure data in a post-quantum world.\n\nOne challenge to fully realizing quantum computing is that qubits are highly sensitive to external disturbances. Maintaining coherence, the state needed by qubits to perform calculations, requires extremely low temperatures and isolation from environmental noise, such as magnetic or electric field fluctuations. Despite the challenges, progress is accelerating. Scientists are developing error-correcting codes and stable qubit designs to address these issues. Quantum computing holds promise for advancements in fields like medicine, finance, and artificial intelligence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To explain why quantum computers are more powerful than classical computers are"
+        },
+        {
+          "key": "B",
+          "text": "To discuss the two ways in which quantum computers store data"
+        },
+        {
+          "key": "C",
+          "text": "To emphasize the fast pace at which computing technology is advancing"
+        },
+        {
+          "key": "D",
+          "text": "To explain what causes the state of superposition"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m1_q34",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention \"external disturbances\"? To point out that qubits can only function in certain environmental conditions",
+      "passage": {
+        "text": "Quantum computing promises to revolutionize technology by delivering unprecedented computational power. Traditional computers store data in binary bits, representing 0 or 1. Quantum computers use qubits, which can represent 0, 1, or both simultaneously (a state called superposition). This allows quantum computers to process vast amounts of data simultaneously, solving complex problems much faster than classical computers.\n\nQuantum computing has promising applications in cryptography-techniques for encoding and decoding messages. Current encryption (encoding) methods rely on complex algorithms that classical computers struggle to break. Quantum computers could potentially break these encryption algorithms with ease, requiring new, quantum-resistant techniques. Researchers are exploring such methods to secure data in a post-quantum world.\n\nOne challenge to fully realizing quantum computing is that qubits are highly sensitive to external disturbances. Maintaining coherence, the state needed by qubits to perform calculations, requires extremely low temperatures and isolation from environmental noise, such as magnetic or electric field fluctuations. Despite the challenges, progress is accelerating. Scientists are developing error-correcting codes and stable qubit designs to address these issues. Quantum computing holds promise for advancements in fields like medicine, finance, and artificial intelligence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To introduce a similarity between quantum computing and traditional computing"
+        },
+        {
+          "key": "B",
+          "text": "To explain how quantum computing creates unwanted fluctuations in magnetic or electric fields"
+        },
+        {
+          "key": "C",
+          "text": "To suggest that quantum computing can be prohibitively"
+        },
+        {
+          "key": "D",
+          "text": "expensive"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m2_q1",
+      "task_type": "complete_words",
+      "order": 10,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Paleontology, the study of ancient life through fossils, provides valuable insights into Earth's biological history. Fossils, bones and she millions oyears a -• By stud\nspecies. Techniques such as radiometric dating help determine the age of fossils and the geological context in which , paleontologists c reconstruct the appearance, behavior, and ecological relationships of extinct\nthey were found. Research in paleontology contributes to our understanding of evolutionary processes, environmental changes, and the development of life on Earth."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "including",
+          "shells",
+          "evidence",
+          "organisms",
+          "lived",
+          "of",
+          "ago",
+          "studying",
+          "remains",
+          "can"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m2_q11",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Acclack to thems prage, what advantage do closed-10op They can be easily adjusted using remote controls They continuously monitor their own performance They are less complicated than other feedback systems They assist engineers in creating more stable designs What happens when a home heating system is not precisely calibrated as described in paragraph 2?",
+      "passage": {
+        "text": "Feedback Systems and Their Unintended Effects\n\nControl engineering is a branch of engineering focused on designing systems that regulate themselves to achieve desired behaviors, often through feedback mechanisms. systems monitor their output and adjust their input accordingly, forming closed-loop mechanisms that maintain stability and performance. While this self-regulating nature is a core strength, feedback loops can also introduce unexpected complications. Consider how feedback controls temperature in a home heating system: A thermostat compares the current temperature to a set point and modifies the heating output based on the difference. However, time delays in this loop can cause overcorrections, resulting in temperature fluctuations. If the feedback response is not precisely calibrated, the system may oscillate continuously, failing to stabilize. In more complex systems, such as automated flight control or robotic motion, feedback mechanisms can behave For example, small unpredictably under certain conditions. timing mismatches or overly sensitive sensors may cause a drone to overreact to minor disturbances, leading to erratic flight patterns. This phenomenon, known as chaotic behavior, reveals that feedback is not inherently stabilizing. Instead, it demands careful tuning and predictive modeling. As control engineering advances, understanding and mitigating this unpredictability will be essential for ensuring reliability and\n\nFeedback Systems and Their Unintended Effects behaviors, often through feedback mechanisms. These systems monitor their output and adjust their input accordingly, forming closed-loop mechanisms that maintain stability and performance. While this self-regulating nature Is a core strength, feedback loops can also introduce unexpected complications. Consider how feedback controls temperature in a home heating system: A thermostat compares the current temperature to a set point and modifies the heating output based on the difference. However, time delays in this loop can cause overcorrections, resulting in temperature fluctuations. If the feedback response is not precisely calibrated, the system may oscillate continuously, failing to stabilize. In more complex systems, such as automated flight control or robotic motion, feedback mechanisms can behave unpredictably under certain conditions. For example, small timing mismatches or overly sensitive sensors may cause a drone to overreact to minor disturbances, leading to erratic flight patterns. This phenomenon, known as chaotic behavior, reveals that feedback is not inherently stabilizing. Instead, it demands careful tuning and predictive modeling. As control engineering advances, understanding and mitigating this unpredictability will be essential for ensuring reliability and precision, especially in high-stakes fields like aerospace and robotics."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The temperature in the house goes up and down rather than remaining at a constant level."
+        },
+        {
+          "key": "B",
+          "text": "The temperature in the house remains well below the set point."
+        },
+        {
+          "key": "C",
+          "text": "The thermostat is unable to correctly determine the current temperature in the house."
+        },
+        {
+          "key": "D",
+          "text": "The home heating system is likely to break down under the stress of frequent oscillations."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-13_S1_m2_q13",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author discuss drones in paragraph 3? argue that the pes are so unstable that they pose a To suggest that controlling drones is easier than controlling robots To provide an example of chaotic behavior in a feedback system To explain how navigational sensors function during flight The word \"mitigating\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Feedback Systems and Their Unintended Effects behaviors, often through feedback mechanisms. These systems monitor their output and adjust their input accordingly, forming closed-loop mechanisms that maintain stability and performance. While this self-regulating nature is a core strength, feedback loops can also introduce unexpected complications. Consider how feedback controls temperature in a home heating system: A thermostat compares the current temperature to a set point and modifies the heating output based on the difference. However, time delays in this loop can cause overcorrections, resulting in temperature fluctuations. If the feedback response is not precisely calibrated, the system may oscillate continuously, failing to stabilize. In more complex systems, such as automated flight control or robotic motion, feedback mechanisms can behave unpredictably under certain conditions. For example, small timing mismatches or overly sensitive sensors may cause a drone to overreact to minor disturbances, leading to erratic flight patterns. This phenomenon, known as chaotic behavior, reveals that feedback is not inherently stabilizing. Instead, it demands careful tuning and predictive modeling. As control engineering advances, understanding and mitigating this unpredictability will be essential for ensuring reliability and precision, especially in high-stakes fields like aerospace and robotics.\n\nFeedback Systems and Their Unintended Effects behăviors, often through feedback mechanisms. These systems monitor their output and adjust their input accordingly, forming closed-loop mechanisms that maintain stability and performance. While this self-regulating nature is a core strength, feedback loops can also introduce unexpected complications. Consider how feedback controls temperature in a home heating system: A thermostat compares the current temperature to a set point and modifies the heating output based on the difference. However, time delays in this loop can cause overcorrections, resulting in temperature fluctuations. If the feedback response is not precisely calibrated, the system may oscillate continuously, failing to stabilize. In more complex systems, such as automated flight control or robotic motion, feedback mechanisms can behave unpredictably under certain conditions. timing mismatches or overly sensitive sensors may cause a drone to overreact to minor disturbances, leading to erratic flight patterns. This phenomenon, known as chaotic behavior, reveals that feedback is not inherently stabilizing. Instead, it demands careful tuning and predictive modeling. As control engineering advances, understanding and mitigating this unpredictability will be essential for ensuring reliability and precision, especially in high-stakes fields like aerospace and robotics."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "preventing"
+        },
+        {
+          "key": "B",
+          "text": "monitoring"
+        },
+        {
+          "key": "C",
+          "text": "decreasing"
+        },
+        {
+          "key": "D",
+          "text": "analyzing"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 阅读.docx"
+    }
+  ]
+}

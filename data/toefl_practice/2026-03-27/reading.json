@@ -1,0 +1,882 @@
+{
+  "exam": {
+    "id": "reading_2026-03-27",
+    "subject": "reading",
+    "date": "2026-03-27",
+    "volume": "",
+    "source_pdf": "3.27新托福真题/3.27阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-03-27_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Fossils provide invaluable evidence of evolutionary history, documenting species that lived millions of years ago.\nPaleontologists examine these remains to understand how organisms have changed over time. Natural selection\nexpl how advant traits incr in freq in a popul • Species ad to th\nenvironments, wh leadst incredible dive observed in the biological world today through the\nmechanism of natural selection. The ongoing study of evolution continues to reveal how life on Earth has developed\nand diversified."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "explains",
+          "advantageous",
+          "increase",
+          "frequency",
+          "population",
+          "adapt",
+          "their",
+          "which",
+          "to",
+          "diversity"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "The earliest ancestor of the modern bicycle is probably a machine used in England in the early 1800s called a\nhobbyhorse. It h two whe and a pl to s , but n_ pedals; rid would pu it al with\nth feet. La , an inventor added pedals directly to the front wheel, like a modern child's tricycle. This version,\nwith a huge front wheel, was faster, but it was unsafe. Riders were high off the ground, and the two wheels were close\ntogether, making both balance and stopping difficult."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "had",
+          "wheels",
+          "place",
+          "sit",
+          "no",
+          "riders",
+          "push",
+          "along",
+          "their",
+          "later"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What is the main purpose of the notice?",
+      "passage": {
+        "text": "Student Center Closure\nThe student center will be closed for renovations from April 5\no April 20. All scheduled events during this period are\ncanceled.\nWe apologize for any inconvenience this may cause.\nThe center will reopen on April 21 with new features and\nimprovements."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To provide directions to a facility"
+        },
+        {
+          "key": "B",
+          "text": "To announce the temporary closure of a facility"
+        },
+        {
+          "key": "C",
+          "text": "To explain improvements to a facility"
+        },
+        {
+          "key": "D",
+          "text": "To announce the relocation of a facility"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What happens to events that are scheduled during the renovations?",
+      "passage": {
+        "text": "Student Center Closure\nThe student center will be closed for renovations from April 5\nto April 20. All scheduled events during this period are\ncanceled.\nWe apologize for any inconvenience this may cause.\nThe center will reopen on April 21 with new features and\nimprovements."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They will be rescheduled for earlier dates"
+        },
+        {
+          "key": "B",
+          "text": "They will be rescheduled for later dates."
+        },
+        {
+          "key": "C",
+          "text": "They will no longer take place."
+        },
+        {
+          "key": "D",
+          "text": "They will be moved to a different location"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why would someone follow these instructions?",
+      "passage": {
+        "text": "Read some instructions related to starting a campus garden.\n\nBuild a Raised Garden Bed\n\nStep 1: Prepare wooden boards for the size of bed you choose.\n\nStep 2: Place the boards in a rectangle.\n\nStep 3: Drill holes in the boards where they meet.\n\nStep 4: Attach the boards with screws to form a frame."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To build some bedroom furniture"
+        },
+        {
+          "key": "B",
+          "text": "To make a wooden picture frame"
+        },
+        {
+          "key": "C",
+          "text": "To prepare a garden"
+        },
+        {
+          "key": "D",
+          "text": "To paint some boards"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "In which step are the wooden boards connected?",
+      "passage": {
+        "text": "Read some instructions related to starting a campus garden.\n\nBuild a Raised Garden Bed\n\nStep 1: Prepare wooden boards for the size of bed you choose. Step 2: Place the boards in a rectangle. Step 3: Drill holes in the boards where they meet. Step 4: Attach the boards with screws to form a frame."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Step lo"
+        },
+        {
+          "key": "B",
+          "text": "Step 2 Step 3"
+        },
+        {
+          "key": "C",
+          "text": "Step 4"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read a page from a website.",
+      "prompt": "What is Health Geek?",
+      "passage": {
+        "text": "How Well Did You Sleep?\n\nIn addition to using Health Geek to track your exercise, you can use it to nonitor your sleep. Wear the wristband at night. In the morning, upload data to the phone app and get a readout. Here's a sample.\n\nPercentage of Time in Each Sleep Stage 60- 50- 40- 30- 20- 10 0 Deep REM Light Sleep Sleep Sleep\n\nAt night, your body moves naturally from one sleep stage to another. Heart rate and movement are used to calculate your sleep pattern.\n\nLight Sleep: The muscles relax. Heart rate and breathing slow down. About half of sleeping time is usually spent in light sleep.\n\nDeep Sleep: The body is deeply relaxed. This stage is critical for physical recovery and growth.\n\nREM (Rapid Eye Movement) Sleep: Brain activity increases, and vivid dreams may occur. Even though the eyes are closed, they move quickly. This stage is essential for memory, learning, and creativity.\n\nAwake: It is normal for a person to wake up several times at night."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "An online fitness class"
+        },
+        {
+          "key": "B",
+          "text": "A blog for posting sleeping tips"
+        },
+        {
+          "key": "C",
+          "text": "A device that goes on the wrist"
+        },
+        {
+          "key": "D",
+          "text": "A health and wellness magazine"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read a page from a website.",
+      "prompt": "How is the amount of time in each sleep stage estimated?",
+      "passage": {
+        "text": "How Well Did You Sleep? In addition to using Health Geek to track your exercise, you can use it to nonitor your sleep. Wear the wristband at night. In the morning, uploa lata to the phone app and get a readout. Here's a sample Percentage of Time in Each Sleep Stage 60 50 40- 30- 20 10 0 Light REM Deep Sleep Sleep Sleep At night, your body moves naturally from one sleep stage to another. Heart rate and movement are used to calculate your sleep pattern. Light Sleep: The muscles relax. Heart rate and breathing slow down. About half of sleeping time is usually spent in light sleep. Deep Sleep: The body is deeply relaxed. This stage is critical for physical recovery and growth. REM (Rapid Eye Movement) Sleep: Brain activity increases, and vivid dreams may occur. Even though the eyes are closed, they move quickly. This stage is essential for memory, learning, and creativity. Awake: It is normal for a person to wake up several times at night."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "By observing eye and face motions"
+        },
+        {
+          "key": "B",
+          "text": "By measuring changes in body temperature"
+        },
+        {
+          "key": "C",
+          "text": "By following a person's breathing patterns"
+        },
+        {
+          "key": "D",
+          "text": "By monitoring heart rate and body movements"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read a page from a website.",
+      "prompt": "What percentage of time is usually spent in light sleep?",
+      "passage": {
+        "text": "How Well Did You Sleep?\n\nIn addition to using Health Geek to track your exercise, you can use it to monitor your sleep. Wear the wristband at night. In the morning, uploa ata to the phone app and get a readout. Here's a sample\n\nPercentage of Time in Each Sleep Stage 60• 50- 40- 30- 20- 10- Light REM Deep Awake Sleep Sleep Sleep\n\nAt night, your body moves naturally from one sleep stage to another. Heart rate and movement are used to calculate your sleep pattern. Light Sleep: The muscles relax. Heart rate and breathing slow down. About half of sleeping time is usually spent in light sleep. Deep Sleep: The body is deeply relaxed. This stage is critical for physical recovery and growth. REM (Rapid Eye Movement) Sleep: Brain activity increases, and vivid dreams may occur. Even though the eyes are closed, they move quickly. This stage is essential for memory, learning, and creativity. Awake: It is normal for a person to wake up several times at night."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "50 percent"
+        },
+        {
+          "key": "B",
+          "text": "25 percent"
+        },
+        {
+          "key": "C",
+          "text": "15 percent"
+        },
+        {
+          "key": "D",
+          "text": "10 percent"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What is the notice primarily about? Providing safety tips during a storm",
+      "passage": {
+        "text": "Attention Residents!\nDue to necessary maintenance on the main water line, there will be a\ntemporary interruption in water service for all residents in the Maplewood\ndormitory.\nDate: Monday, March 15 Time: 9:00 A.M. - 4:00 P.M.\nImportant Information:\n1.Preparation:\n• Fill containers with water for drinking and cooking before the interruption.\n• Store enough water for personal hygiene needs.\n2.During the Interruption:\n• Do not attempt to use faucets, showers, or any appliances that require\nwater.\n• Toilets may rat function properly; please plan accordingly.\n3.After Service Resumes:\n• Run cold water through all faucets for a few minutes to clear any sediment.\n• Check for any leaks and report them immediately to the maintenance\ndepartment.\nContact Information: For questions or concerns, please contact the\nMaplewood Maintenance Department at 555-4321.\nWe apologize for the inconvenience and appreciate your understanding as\nwe work to improve our community's water infrastructure."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Announcing a disruption to a service"
+        },
+        {
+          "key": "B",
+          "text": "Providing after-installation instructions for a new appliance"
+        },
+        {
+          "key": "C",
+          "text": "Promoting a community water park opening"
+        },
+        {
+          "key": "D",
+          "text": "4. ******W"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What should residents do beforehand?",
+      "passage": {
+        "text": "Attention Residents!\nDue to necessary maintenance on the main water line, there will be a\ntemporary interruption in water service for all residents in the Maplewood\ndormitory.\nDate: Monday, March 15 Time: 9:00 A.M.- 4:00 P.M.\nImportant Information:\n1.Preparation:\n• Fill containers with water for drinking and cooking before the interruption.\n• Store enough water for personal hygiene needs.\n2. During the Interruption:\n• Do not attempt to use faucets, showers, or any appliances that require\nwater.\n• Toilets may not function properly; please plan accordingly.\n3. After Service Resumes:\n• Run cold water through all faucets for a few minutes to clear any sediment.\n• Check for any leaks and report them immediately to the maintenance\ndepartment.\nContact Information: For questions or concerns, please contact the\nMaplewood Maintenance Department at 555-4321.\nWe apologize for the inconvenience and appreciate your understanding as\nwe work to improve our community's water infrastructure."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Plan for power outages"
+        },
+        {
+          "key": "B",
+          "text": "Disconnect all water appliances"
+        },
+        {
+          "key": "C",
+          "text": "Inspect faucets and showers for leaks"
+        },
+        {
+          "key": "D",
+          "text": "Ensure enough water is stored for one day"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What can be inferred about the event described in the announcement?",
+      "passage": {
+        "text": "Attention Residents!\nDue to necessary maintenance on the main water line, there will be a\ntemporary interruption in water service for all residents in the Maplewood\ndormitory.\nDate: Monday, March 15 Time: 9:00 A.M.- 4:00 P.M.\nImportant Information:\n1 .Preparation:\n• Fill containers with water for drinking and cooking before the interruption.\n• Store enough water for personal hygiene needs.\n2.During the Interruption:\n• Do not attempt to use faucets, showers, or any appliances that require\nwater.\n• Toilets may not function properly; please plan accordingly.\n3.After Service Resumes:\n• Run cold water through all faucets for a few minutes to clear any sediment.\n• Check for any leaks and report them immediately to the maintenance\ndepartment.\nContact Information: For questions or concerns, please contact the\nMaplewood Maintenance Department at 555-4321.\nWe apologize for the inconvenience and appreciate your understanding as\nwe work to improve our community's water infrastructure."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It can be postponed to a different day by calling the maintenance department."
+        },
+        {
+          "key": "B",
+          "text": "It is required for infrastructure upgrades."
+        },
+        {
+          "key": "C",
+          "text": "It will occur weekly"
+        },
+        {
+          "key": "D",
+          "text": "It is due to a natural disaster."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"revolutionize\" in the passage is closest in meaning to simplify",
+      "passage": {
+        "text": "Quantum computing promises to revolutionize technology by delivering unprecedented computational power. Traditional computers store data in binary bits, representing 0 or 1. Quantum computers use qubits, which can represent 0, 1, or both simultaneously (a state called superposition). This allows quantum computers to process vast amounts of data simultaneously, solving complex problems much faster than classical computers.\n\nQuantum computing has promising applications in cryptography-techniques for encoding and decoding messages. Current encryption (encoding) methods rely on complex algorithms that classical computers struggle to break. Quantum computers could potentially break these encryption algorithms with ease, requiring new, quantum- resistant techniques. Researchers are exploring such methods to secure data in a post-quantum world.\n\nOne challenge to fully realizing quantum computing is that qubits are highly sensitive to external disturbances. Maintaining coherence, the state needed by qubits to perform calculations, requires extremely low temperatures and isolation from environmental noise, such as magnetic or electric field fluctuations. Despite the challenges, progress is accelerating. Scientists are developing error-correcting codes and stable qubit designs to address these issues. Quantum computing holds promise for advancements in fields like medicine, finance, and artificial intelligence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "transform"
+        },
+        {
+          "key": "B",
+          "text": "study"
+        },
+        {
+          "key": "C",
+          "text": "use"
+        },
+        {
+          "key": "D",
+          "text": "4."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author discuss binary bits and qubits? To explain why quantum computers are more powerful than classical computers are",
+      "passage": {
+        "text": "Quantum computing promises to revolutionize technology by delivering unprecedented computational power. Traditional computers store data in binary bits, representing 0 or 1. Quantum computers use qubits, which can represent 0, 1, or both simultaneously (a state called superposition). This allows quantum computers to process vast amounts of data simultaneously, solving complex problems much faster than classical computers.\n\nQuantum computing has promising applications in cryptography-techniques for encoding and decoding messages. Current encryption (encoding) methods rely on complex algorithms that classical computers struggle to break. Quantum computers could potentially break these encryption algorithms with ease, requiring new, quantum- resistant techniques. Researchers are exploring such methods to secure data in a post-quantum world.\n\nOne challenge to fully realizing quantum computing is that qubits are highly sensitive to external disturbances. Maintaining coherence, the state needed by qubits to perform calculations, requires extremely low temperatures and isolation from environmental noise, such as magnetic or electric field fluctuations. Despite the challenges, progress is accelerating. Scientists are developing error-correcting codes and stable qubit designs to address these issues. Quantum computing holds promise for advancements in fields like medicine, finance, and artificial intelligence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To discuss the two ways in which quantum computers store data"
+        },
+        {
+          "key": "B",
+          "text": "To emphasize the fast pace at which computing technology is advancing"
+        },
+        {
+          "key": "C",
+          "text": "To explain what causes the state of superposition"
+        },
+        {
+          "key": "D",
+          "text": "→"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, new encryption techniques are needed in the post-quantum world because quantum computers are less secure",
+      "passage": {
+        "text": "Reading |\n\nQuantum computing promises to revolutionize technology by delivering unprecedented computational power. Traditional computers store data in binary bits, representing 0 or 1. Quantum computers use qubits, which can represent 0, 1, or both simultaneously (a state called superposition). This allows quantum computers to process vast amounts of data simultaneously, solving complex problems much faster than classical computers.\n\nQuantum computing has promising applications in cryptography-techniques for encoding and decoding messages. Current encryption (encoding) methods rely on complex algorithms that classical computers struggle to break. Quantum computers could potentially break these encryption algorithms with ease, requiring new, quantum- resistant techniques. Researchers are exploring such methods to secure data in a post-quantum world.\n\nOne challenge to fully realizing quantum computing is that qubits are highly sensitive to external disturbances. Maintaining coherence, the state needed by qubits to perform calculations, requires extremely low temperatures and isolation from environmental noise, such as magnetic or electric field fluctuations. Despite the challenges, progress is accelerating. Scientists are developing error-correcting codes and stable qubit designs to address these issues. Quantum computing holds promise for advancements in fields like medicine, finance, and artificial intelligence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "quantum computers store more valuable data than classical computers do"
+        },
+        {
+          "key": "B",
+          "text": "quantum computers can break existing encryption"
+        },
+        {
+          "key": "C",
+          "text": "quantum computers cannot process current encryption algorithms"
+        },
+        {
+          "key": "D",
+          "text": "Aal"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention \"external disturbances\"?",
+      "passage": {
+        "text": "Quantum computing promises to revolutionize technology by delivering unprecedented computational power. Traditional computers store data in binary bits, representing 0 or 1. Quantum computers use qubits, which can represent 0, 1, or both simultaneously (a state called superposition). This allows quantum computers to process vast amounts of data simultaneously, solving complex problems much faster than classical computers.\n\nQuantum computing has promising applications in cryptography-techniques for encoding and decoding messages. Current encryption (encoding) methods rely on complex algorithms that classical computers struggle to break. Quantum computers could potentially break these encryption algorithms with ease, requiring new, quantum- resistant techniques. Researchers are exploring such methods to secure data in a post-quantum world.\n\nOne challenge to fully realizing quantum computing is that qubits are highly sensitive fo external disturbances. Maintaining coherence, the state needed by qubits to perform calculations, requires extremely low temperatures and isolation from environmental noise, such as magnetic or electric field fluctuations. Despite the challenges, progress is accelerating. Scientists are developing error-correcting codes and stable qubit designs to address these issues. Quantum computing holds promise for advancements in fields like medicine, finance, and artificial intelligence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To point out that qubits can only function in certain environmental conditions"
+        },
+        {
+          "key": "B",
+          "text": "To introduce a similarity between quantum computing and traditional computing"
+        },
+        {
+          "key": "C",
+          "text": "To explain how quantum computing creates unwanted fluctuations in magnetic or electric fields"
+        },
+        {
+          "key": "D",
+          "text": "To suggest that quantum computing can be prohibitively expensive"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m2_q1",
+      "task_type": "complete_words",
+      "order": 17,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Cosmology is the study of how the universe began, changed over time, and might evolve in the future. Scientists\nstars, pla , and gala using observ and mod Lo to desc cosmic eve\nOne wid accepted id is the big bang, wh suggests the universe started from a single point and has been\nexpanding ever since. Ongoing research helps improve our understanding of space, time, and the forces shaping the\ncosmos, revealing new discoveries about the vast universe."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "examine",
+          "planets",
+          "galaxies",
+          "observations",
+          "models",
+          "describe",
+          "events",
+          "widely",
+          "idea",
+          "which"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m2_q11",
+      "task_type": "read_academic",
+      "order": 18,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, what significant achievement in fusion research occurred in 1957?",
+      "passage": {
+        "text": "Magnetic confinement fusion is a promising approach for generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halang the fusion process.\n\nSince those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume-a critical milestone called net energy gain.\n\nHowever, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstacles, successful demonstration of net energy gain could pave the way for fusion power plants by"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Researchers successfully fused deuterium and tritium atoms for the first time."
+        },
+        {
+          "key": "B",
+          "text": "Researchers demonstrated that magnetic fields could contain extremely hot plasma."
+        },
+        {
+          "key": "C",
+          "text": "Researchers estimated the temperature of the sun's core to be 150 million degrees Celsius."
+        },
+        {
+          "key": "D",
+          "text": "Researchers discovered the basic principle that explains the existence of heavy forms of hydrogen."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m2_q12",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention plasma touching reactor walls?",
+      "passage": {
+        "text": "generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halting the fusion process.\n\nSince those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume-a critical milestone called net energy gain.\n\nHowever, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstacles, successful demonstration of net energy gain could pave the way for fusion power plants by the 2040s."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To explain how the plasma is contained within the reactor"
+        },
+        {
+          "key": "B",
+          "text": "To point out how researchers cool plasma after heating it for experiments"
+        },
+        {
+          "key": "C",
+          "text": "To demonstrate the final step in achieving nuclear fusion"
+        },
+        {
+          "key": "D",
+          "text": "To clarify why magnetic confinement techniques are necessary"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m2_q13",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"sophisticated\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Magnetic confinement fusion is a promising approach for generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halting the fusion process.\n\nSince those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume-a critical milestone called net energy gain.\n\nHowever, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstacles, successful demonstration of net energy gain could pave the way for fusion power plants by"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "advanced"
+        },
+        {
+          "key": "B",
+          "text": "large"
+        },
+        {
+          "key": "C",
+          "text": "expensive"
+        },
+        {
+          "key": "D",
+          "text": "successful"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m2_q14",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, what is ITER's primary objective? To generate commercial electricity for distribution to power grids",
+      "passage": {
+        "text": "generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halting the fusion process.\n\nSince those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume-a critica milestone called net energy gain.\n\nHowever, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstacles, successful demonstration of net energy gain could pave the way for fusion power plants by the 2040s."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To demonstrate that magnetic confinement techniques are not environmentally sustainable"
+        },
+        {
+          "key": "B",
+          "text": "To prove that fusion reactions can produce more energy than they consume"
+        },
+        {
+          "key": "C",
+          "text": "To challenge decades of magnetic confinement research"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-27_m2_q15",
+      "task_type": "read_academic",
+      "order": 22,
+      "number": "15",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Which of the following is mentioned as one factor that urrently prevents magnetic fusion from generatin ommercial electricity",
+      "passage": {
+        "text": "generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halting the fusion process. Since those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume-a critical milestone called net energy gain. However, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstactes, successful demonstration of net energy gain could pave the way for fusion power plants by the 2040s."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Insufficient global supplies of reactor materials"
+        },
+        {
+          "key": "B",
+          "text": "Inability to achieve intense neutron radiation"
+        },
+        {
+          "key": "C",
+          "text": "High energy demands for plasma maintenance"
+        },
+        {
+          "key": "D",
+          "text": "Lack of magnetic fields that are powerful enough"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.27新托福真题/3.27阅读.pdf"
+    }
+  ]
+}

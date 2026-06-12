@@ -1,0 +1,883 @@
+{
+  "exam": {
+    "id": "reading_2026-04-05_S2",
+    "subject": "reading",
+    "date": "2026-04-05",
+    "volume": "S2",
+    "source_pdf": "4.5新托福真题/4.5套2阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-04-05_S2_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Grasshoppers are insects commonly found in dry places with grass and plants. Grasshoppers ha several wa\nthey pro themselves aga danger. Th have powe back le , which al themt jump\naw from enemies, such as rodents and snakes. Some grasshoppers can jump twenty times the length of their\nbodies. By the time they are adults, grasshoppers can also fly. Adult grasshoppers fly very quickly and this helps them\navoid danger."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "have",
+          "ways",
+          "protect",
+          "against",
+          "they",
+          "powerful",
+          "legs",
+          "allow",
+          "to",
+          "away"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Ocean currents are critical components of Earth's climate system, influencing weather patterns and marine\necosystems. Driven b wind, tempe changes, a differences i salinity, ocean currents distr\nheat acr the gl . The Gulf Stream, f _ instance, wa the North Atlantic Current, affe climate in\nEurope. Deep ocean currents, known as thermohaline circulation, play a role in regulating global temperatures and\ncarbon dioxide levels. Research in oceanography continues to reveal the complexities of these dynamic systems."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "by",
+          "temperature",
+          "and",
+          "in",
+          "distribute",
+          "across",
+          "globe",
+          "for",
+          "warms",
+          "affecting"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a poster.",
+      "prompt": "What is the main purpose of the poster? To advertise a competitive cycling event",
+      "passage": {
+        "text": "Join the Karleton Cycling Club!\nMeet fellow riders every Sunday at 8:00 A.M. in the City\nHall parking lot. Explore scenic routes, boost your fitness,\nand enjoy the camaraderie of group rides for approximately\n3 hours each Sunday.\nAll experience levels welcome. Helmets required.\nCall 555-0190 for details and registration.\nLet's ride together!"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To recruit members for a cycling club"
+        },
+        {
+          "key": "B",
+          "text": "To promote gear associated with cycling"
+        },
+        {
+          "key": "C",
+          "text": "To promote activities associated with Karleton City Hall"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a poster.",
+      "prompt": "What is NOT mentioned as an aspect of the Sunday activity?",
+      "passage": {
+        "text": "Join the Karleton Cycling Club!\nMeet fellow riders every Sunday at 8:00 A.M. in the City\nHall parking lot. Explore scenic routes, boost your fitness,\nand enjoy the camaraderie of group rides for approximately\n3 hours each Sunday.\nAll experience levels welcome. Helmets required.\nCall 555-0190 for details and registration.\nLet's ride together!"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Enjoying scenery"
+        },
+        {
+          "key": "B",
+          "text": "Improving fitness"
+        },
+        {
+          "key": "C",
+          "text": "Bonding with other people"
+        },
+        {
+          "key": "D",
+          "text": "Learning about the history of Karleton"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read a form.",
+      "prompt": "The main purpose of the form is to request",
+      "passage": {
+        "text": "UNIVERSITY IT HELP DESK\nSTUDENT REQUEST FORM\nExperiencing tech issues?\nComplete this form so our IT team can assist you promptly. In order to minimize\ndisruption to your academic work, we aim to resolve all requests within 24 hours.\n* The Help Desk provides troubleshooting guides, FAQs, and software downloads\non our website. For faster solutions and helpful tips, check out our website before\nfilling out and submitting this form.\nStudent ID: _\nName:\nEmail:\nDevice Type: Laptop • Tablet • Smartphone • Other\nOperating System: Windows MacO ios Android • Other\nDescribe Your Issue:\nWhat steps have you taken to resolve the issue?\nPriority Level: • Low • Medium • High\nSubmit online at www.universitytechsupport.edu/help or visit the IT Help Desk in\nthe student center. For urgent problems, call 555-555-IT4U.\nYour information will remain confidential and be used only to resolve your issue."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "a list of approved devices for the university network"
+        },
+        {
+          "key": "B",
+          "text": "technical support from the Help Desk"
+        },
+        {
+          "key": "C",
+          "text": "free access to new software"
+        },
+        {
+          "key": "D",
+          "text": "advice on selecting a new computer for purchase"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read a form.",
+      "prompt": "It can be inferred from the form that technical issues are prioritized mainly according to",
+      "passage": {
+        "text": "UNIVERSITY IT HELP DESK\nSTUDENT REQUEST FORM\nExperiencing tech issues?\nComplete this form so our IT team can assist you promptly. In order to minimize\ndisruption to your academic work, we aim to resolve all requests within 24 hours.\n* The Help Desk provides troubleshooting guides, FAQs, and software downloads\non our website. For faster solutions and helpful tips, check out our website before\nfilling out and submitting this form.\nStudent ID: -\nName:\nPhone:\nDevice Type: Laptop Tablet Smartphone • Other\nOperating System: Windows Macios Android Other\nDescribe Your Issue:\nWhat steps have you taken to resolve the issue? -\nPriority Level: C Low O Medium • High\nSubmit online at www.universitytechsupport.edu/help or visit the IT Help Desk in\nthe student center. For urgent problems, call 555-555- 4U.\nYour information will remain confidential and be used only to resolve your issue."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "the student's sense of the urgency of the issue"
+        },
+        {
+          "key": "B",
+          "text": "the seniority of the student seeking help"
+        },
+        {
+          "key": "C",
+          "text": "the availability of staff at the Help Desk"
+        },
+        {
+          "key": "D",
+          "text": "the time when the form is received"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read a form.",
+      "prompt": "What are students encouraged to do before submitting a request?",
+      "passage": {
+        "text": "UNIVERSITY IT HELP DESK\nSTUDENT REQUEST FORM\nExperiencing tech issues?\nComplete this form so our IT team can assist you promptly. In order to minimize\ndisruption to your academic work, we aim to resolve all requests within 24 hours.\n* The Help Desk provides troubleshooting guides, FAQs, and software downloads\non our website. For faster solutions and helpful tips, check out our website before\nfilling out and submitting this form.\nStudent ID:\nName:\n- Phone: _\nEmail:\nDevice Type: Laptop Tablet Smartphone Other\nOperating System: Windows Mac ios Android Other\nDescribe Your Issue:\nWhat steps have you taken to resolve the issue?_\nPriority Level: • Low • Medium • High\nSubmit online at www.universitytechsupport.edu/help or visit the IT Help Desk in\nthe student center. For urgent problems, call 555-555-IT4U.\nYour information will remain confidential and be used only to resolve your issue."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Restart their device"
+        },
+        {
+          "key": "B",
+          "text": "Call the IT Help Desk"
+        },
+        {
+          "key": "C",
+          "text": "Visit the student center"
+        },
+        {
+          "key": "D",
+          "text": "Consult the IT Help Desk website"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Hollywood's Golden Age Which aspect of the studio system encouraged filmmakers to innovate? The demand for more silent films",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling. Silent film stars had to adapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often blurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose diverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The freedom to create experimental films"
+        },
+        {
+          "key": "B",
+          "text": "n The inefficiency of film production n The boundaries imposed by restrictive contracts"
+        },
+        {
+          "key": "C",
+          "text": "n"
+        },
+        {
+          "key": "D",
+          "text": "se"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"compelling\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling. Silent film stars had to adapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often blurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose diverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "modern"
+        },
+        {
+          "key": "B",
+          "text": "astonishing"
+        },
+        {
+          "key": "C",
+          "text": "fascinating"
+        },
+        {
+          "key": "D",
+          "text": "complex"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention the introduction of sound in films?",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling. Silent film stars had to adapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often blurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose diverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To highlight a development that led to new, creative narrative techniques"
+        },
+        {
+          "key": "B",
+          "text": "To emphasize the former popularity of silent films"
+        },
+        {
+          "key": "C",
+          "text": "To discuss how sound renewed the careers of silent film stars"
+        },
+        {
+          "key": "D",
+          "text": "To identify the event that started the decline of the studio system"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What inference can be made about the 1948 Supreme Court ruling? It led to a temporary increase in studio profits. It allowed independent films to be seen and become",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling. Silent film stars had to\n\nadapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often\n\nblurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose\n\ndiverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "popular."
+        },
+        {
+          "key": "B",
+          "text": "It caused studios to develop more large-scale musical"
+        },
+        {
+          "key": "C",
+          "text": "productions."
+        },
+        {
+          "key": "D",
+          "text": "It had no effect on Hollywood's operations."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the passage imply about the Hollywood film industry today?",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling, Silent film stars had to adapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often blurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose diverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Modern studios have completely abandoned all practices from the Golden Age period."
+        },
+        {
+          "key": "B",
+          "text": "Contemporary films commonly use the storytelling techniques developed during the 1920s-1960s."
+        },
+        {
+          "key": "C",
+          "text": "Independent filmmakers have entirely replaced the studio system's influence on cinema."
+        },
+        {
+          "key": "D",
+          "text": "The assembly-line process of the studio system still impacts current Hollywood operations."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Which of the following best summarizes the main point of the passage?",
+      "passage": {
+        "text": "Stars form in the relatively dense, egg-shaped cores of molecular clouds made of dust and gases. Scientists mapping these dense cores must use radio waves to penetrate the dust and gases that prevent light from escaping molecular clouds; satellite images of these regions show nothing but large, black areas of space.\n\nRecent observations of the Perseus molecular cloud may have surprising implications for previously accepted conclusions about the Sun. A radio wave sweep of the Perseus cloud's dense cores revealed that the youngest stars existing in the cloud all occurred in pairs, or binary twins, orbiting a common point. Stars of older binary systems, of which there were fewer, appeared closer together than stars of younger binary systems.\n\nScientists used current knowledge about stellar growth, decay, and destruction to predict the paths along which binary stars traveled throughout the molecular cloud. Their estimates would align with current understandings only if all stars approximately the same size as the Sun had begun as members of a binary system that first moved closer to each other and later separated. This rule would also apply to the Sun, whose twin likely separated following approximately one million years of coexistence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Binary stars alternate between separating and getting closer over time."
+        },
+        {
+          "key": "B",
+          "text": "Star development takes place in the dense cores of molecular clouds."
+        },
+        {
+          "key": "C",
+          "text": "The Sun formed in the same way that the Perseus molecular cloud did."
+        },
+        {
+          "key": "D",
+          "text": "Stars the size of the Sun begin their development with a binary twin."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Ø Hide Time in Stars The word \"penetrate\" in the passage is closest in meaning to t push aside break apart",
+      "passage": {
+        "text": "Stars form in the relatively dense, egg-shaped cores of molecular clouds made of dust and gases. Scientists mapping these dense cores must use radio waves to penetrate the dust and gases that prevent light from escaping molecular clouds; satellite images of these regions show nothing but large, black areas of space.\n\nRecent observations of the Perseus molecular cloud may have surprising implications for previously accepted conclusions about the Sun. A radio wave sweep of the Perseus cloud's dense cores revealed that the youngest stars existing in the cloud all occurred in pairs, or binary twins, orbiting a common point. Stars of older binary systems, of which there were fewer, appeared closer together than stars of younger binary systems.\n\nScientists used current knowledge about stellar growth, decay, and destruction to predict the paths along which binary stars traveled throughout the molecular cloud. Their estimates would align with current understandings only if all stars approximately the same size as the Sun had begun as members of a binary system that first moved closer to each other and later separated. This rule would also apply to the Sun, whose twin likely separated following approximately one million years of coexistence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "pass through"
+        },
+        {
+          "key": "B",
+          "text": "travel around"
+        },
+        {
+          "key": "C",
+          "text": "."
+        },
+        {
+          "key": "D",
+          "text": "S"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Which of the following was most likely one of the \"previously accepted conclusions\" about the Sun?",
+      "passage": {
+        "text": "Stars form in the relatively dense, egg-shaped cores of molecular clouds made of dust and gases. Scientists mapping\n\nthese dense cores must use radio waves to penetrate the dust and gases that prevent light from escaping molecular clouds; satellite images of these regions show nothing but large, black areas of space.\n\nRecent observations of the Perseus molecular cloud may have\n\nsurprising implications for previously accepted conclusions about the Sun. A radio wave sweep of the Perseus cloud's dense cores revealed that the youngest stars existing in the cloud all occurred in pairs, or binary twins, orbiting a common point. Stars of older binary systems, of which there were fewer, appeared closer together than stars of younger binary systems.\n\nScientists used current knowledge about stellar growth, decay, and destruction to predict the paths along which binary stars traveled throughout the molecular cloud. Their estimates would align with current understandings only if all stars approximately the same size as the Sun had begun as members of a binary system that first moved closer to each other and later separated. This rule would also apply to the Sun, whose\n\ntwin likely separated following approximately one million years of coexistence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It did not have a binary twin"
+        },
+        {
+          "key": "B",
+          "text": "It is larger than most other stars"
+        },
+        {
+          "key": "C",
+          "text": "It did not form in a molecular cloud. It developed faster than most other stars did."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What do the \"estimates\" discussed in the passage refer to?",
+      "passage": {
+        "text": "Stars form in the relatively dense, egg-shaped cores of molecular clouds made of dust and gases. Scientists mapping these dense cores must use radio waves to penetrate the dust and gases that prevent light from escaping molecular clouds; satellite images of these regions show nothing but large, black areas of space.\n\nRecent observations of the Perseus molecular cloud may have surprising implications for previously accepted conclusions about the Sun. A radio wave sweep of the Perseus cloud's dense cores revealed that the youngest stars existing in the cloud all occurred in pairs, or binary twins, orbiting a common point. Stars of older binary systems, of which there were fewer, appeared closer together than stars of younger binary systems.\n\nScientists used current knowledge about stellar growth, decay, and destruction to predict the paths along which binary stars traveled throughout the molecular cloud. Their estimates would align with current understandings only if all stars approximately the same size as the Sun had begun as members of a binary system that first moved closer to each other and later separated. This rule would also apply to the Sun, whose twin likely separated following approximately one million years of coexistence."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The rate at which stars grow in the molecular cloud"
+        },
+        {
+          "key": "B",
+          "text": "The course that stars move along within the molecular cloud"
+        },
+        {
+          "key": "C",
+          "text": "The number of binary star systems found in the molecular cloud The number of stars that have formed within the molecular cloud"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m1_q35",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "35",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What can be inferred from the passage about the Sun?",
+      "passage": {
+        "text": "Stars form in the relatively dense, egg-shaped cores of molecular clouds made of dust and gases. Scientists mapping these dense cores must use radio waves to penetrate the dust and gases that prevent light from escaping molecular clouds; satellite images of these regions show nothing but large, black areas of space. Recent observations of the Perseus molecular cloud may have surprising implications for previously accepted conclusions about the Sun. A radio wave sweep of the Perseus cloud's dense cores revealed that the youngest stars existing in the cloud all occurred in pairs, or binary twins, orbiting a common point. Stars of older binary systems, of which there were fewer, appeared closer together than stars of younger binary systems. Scientists used current knowledge about stellar growth, decay, and destruction to predict the paths along which binary stars traveled throughout the molecular cloud. Their estimates would align with current understandings only if all stars approximately the same size as the Sun had begun as members of a binary system that first moved closer to each other and later separated. This rule would also apply to the Sun, whose twin likely separated following approximately one million years of coexistence.\n\nThe clock will indicate how much time you have to complete Module 2."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It is following a unique development pattern"
+        },
+        {
+          "key": "B",
+          "text": "It moved closer to a binary twin early in its development"
+        },
+        {
+          "key": "C",
+          "text": "It was too far from its twin to maintain the binary system"
+        },
+        {
+          "key": "D",
+          "text": "Its twin decayed before separating from the binary system"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m2_q1",
+      "task_type": "complete_words",
+      "order": 18,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Climate change has become one of the most pressing current issues of our time, sparking global conversations. When\ndiscussing climate, it is often confused with weather. Climate specif refers t_ long-term tre in\n_ humidity, wi_, and precip that def typical condi for a reg -not\ntempe\nthe daily forecast. While weather can shift dramatically from one day to the next, the climate of an area\ndescribes what is normal over decades."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "specifically",
+          "to",
+          "trends",
+          "temperature",
+          "wind",
+          "precipitation",
+          "define",
+          "conditions",
+          "region",
+          "just"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m2_q11",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"mimic\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Expert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering. An early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN's system needed constant updates, requiring extensive input from medical professionals. Despite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. Advancements in machine learning and natural language processing could address these issues. By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "replace"
+        },
+        {
+          "key": "B",
+          "text": "combine"
+        },
+        {
+          "key": "C",
+          "text": "imitate"
+        },
+        {
+          "key": "D",
+          "text": "challenge"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m2_q12",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "How did MYCIN diagnose bacterial infections?",
+      "passage": {
+        "text": "Expert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering.\n\nAn early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN's system needed constant updates, requiring extensive input from medical professionals.\n\nDespite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. Advancements in machine learning and natural language processing could address these issues. By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently.\n\nWPS Office"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It used a human specialist to evaluate patient data."
+        },
+        {
+          "key": "B",
+          "text": "It applied set rules to analyze patient data."
+        },
+        {
+          "key": "C",
+          "text": "It used data on infection rates to infer the probability of a particular type of bacteria."
+        },
+        {
+          "key": "D",
+          "text": "It relied on information provided directly by the patients."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m2_q13",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is a major limitation of current expert systems mentioned in the passage?",
+      "passage": {
+        "text": "Expert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering.\n\nAn early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN's system needed constant updates, requiring extensive input from medical professionals.\n\nDespite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. Advancements in machine learning and natural language processing could address these issues. By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They are unable to process large datasets."
+        },
+        {
+          "key": "B",
+          "text": "They often provide incorrect results"
+        },
+        {
+          "key": "C",
+          "text": "They need frequent updating."
+        },
+        {
+          "key": "D",
+          "text": "They use databases that are always changing."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-05_S2_m2_q14",
+      "task_type": "read_academic",
+      "order": 22,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What can be inferred about the future of expert systems?",
+      "passage": {
+        "text": "Expert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering.\n\nAn early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN's system needed constant updates, requiring extensive input from medical professionals.\n\nDespite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. Advancements in machine learning and natural language processing could address these issues. By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They will probably be limited to use in medical applications."
+        },
+        {
+          "key": "B",
+          "text": "They will one day be able to update themselves without human input."
+        },
+        {
+          "key": "C",
+          "text": "They will become less accurate as the amount of new data increases."
+        },
+        {
+          "key": "D",
+          "text": "They will soon be replaced by more relevant technologies"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.5新托福真题/4.5套2阅读.pdf"
+    }
+  ]
+}

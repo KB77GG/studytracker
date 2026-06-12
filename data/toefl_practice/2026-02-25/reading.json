@@ -1,0 +1,672 @@
+{
+  "exam": {
+    "id": "reading_2026-02-25",
+    "subject": "reading",
+    "date": "2026-02-25",
+    "volume": "",
+    "source_pdf": "2.25新托福真题/2.25  阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-02-25_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Rock formations offer valuable insights into Earth's history. Sedimentary layers, for example, reveal past\nenvironments. By analyzing their composition and arrangement, geologists can determine if an area was once\nunderwater or exposed. Over time, pressure trans sediments in solid ro , preserving evid of\nanc climates a geological eve • Fossils wit layers sh what orga once lived there.\nThrough such studies, scientists reconstruct Earth's past and gain a deeper understanding of the dynamic processes\nthat continue to shape the planet's surface."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "transform",
+          "into",
+          "rock",
+          "evidence",
+          "ancient",
+          "and",
+          "events",
+          "within",
+          "show",
+          "organisms"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Weather patterns are influenced by a variety of factors, including atmospheric pressure, temperature, and humidity. Meteorologists st and under\nthese fac to pre weather condi _ monitor weather systems in great detail. Accurate weather climate cha\nforecasting is crucial for agriculture, disaster preparedness, and daily planning. It should be noted, however, that meteorologists t\ndespite technological advancements, weather is inherently unpredictable due to the numerous atmospheric variables\nthat can change rapidly."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "study",
+          "factors",
+          "predict",
+          "conditions",
+          "understand",
+          "change",
+          "like",
+          "and",
+          "allow",
+          "to"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a receipt.",
+      "prompt": "How much did the customer spend overall?",
+      "passage": {
+        "text": "Thank you for your purchase at Dunlap's!\n\nReceipt No.: 11234 Date: Saturday, August 29\n\nItems Purchased: $299.00 Smartphone:\n\nteadphones $ 49.00 JSB thumb drive $ 10.00 $ 21.48 Tax:\n\n$379.48 Total Amount:"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "$299.00"
+        },
+        {
+          "key": "B",
+          "text": "$49.00"
+        },
+        {
+          "key": "C",
+          "text": "$379.48"
+        },
+        {
+          "key": "D",
+          "text": "$21.48"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q23",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read a social media post.",
+      "prompt": "What event is being promoted in the post?",
+      "passage": {
+        "text": "all\nCampus Innovation Hub\n& Tech Bootcamp Alert!\nJoin us on February 20 at the\nCampus Innovation Hub for an\nintense, hands-on dive into Al, secure\ndigital systems, and online safety.\n* Interact with experts, enjoy\nrefreshments, and explore the future\nof tech.\n•m Limited seats-register now!\nVisit www.innovationhub.college.edu.\n#TechBootcamp #Innovation #Al\n#OnlineSafety\n& Like\n• Comment"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A technology competition"
+        },
+        {
+          "key": "B",
+          "text": "A technology workshop"
+        },
+        {
+          "key": "C",
+          "text": "A technology webinar"
+        },
+        {
+          "key": "D",
+          "text": "A technology lecture series"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q24",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read a social media post.",
+      "prompt": "What is suggested about the event? It is free of charge. It includes follow-up sessions.",
+      "passage": {
+        "text": "Campus Innovation Hub\n& Tech Bootcamp Alert!\nJoin us on February 20 at the\nCampus Innovation Hub for an\nintense, hands-on dive into Al, secure\ndigital systems, and online safety.\nInteract with experts, enjoy\nrefreshments, and explore the future\nof tech.\n• Limited seats-register now!\nVisit www.innovationhub.college.edu.\n#TechBootcamp #Innovation #Al\n#OnlineSafety\n• Like\n• Comment"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It requires registration"
+        },
+        {
+          "key": "B",
+          "text": "It is for professionals only"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q25",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What is the notice primarily about?",
+      "passage": {
+        "text": "Attention Residents!\nDue to necessary maintenance on the main water line, there will be a\ntemporary interruption in water service for all residents in the Maplewood\ndormitory.\nDate: Monday, March 15 Time: 9:00 A.M.- 4:00 P.M.\nImportant Information:\n1.Preparation:\n• Fill containers with water for drinking and cooking before the interruption.\n• Store enough water for personal hygiene needs.\n2.During the Interruption:\n• Do not attempt to use faucets, showers, or any appliances that require\nwater.\n• Toilets may not function properly; please plan accordingly.\n3.After Service Resumes:\n• Run cold water through all faucets for a few minutes to clear any sediment.\n• Check for any leaks and report them immediately to the maintenance\ndepartment.\nContact Information: For questions or concerns, please contact the\nMaplewood Maintenance Department at 555-4321.\nWe apologize for the inconvenience and appreciate your understanding as\nwe work to improve our community's water infrastructure."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Providing safety tips during a storm"
+        },
+        {
+          "key": "B",
+          "text": "Announcing a disruption to a service"
+        },
+        {
+          "key": "C",
+          "text": "Providing after-installation instructions for a new appliance"
+        },
+        {
+          "key": "D",
+          "text": "Promoting a community water park opening"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q27",
+      "task_type": "read_academic",
+      "order": 7,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What can be inferred about the event described in the announcement? It can be postponed to a different day by calling the",
+      "passage": {
+        "text": "Attention Residents!\nDue to necessary maintenance on the main water line, there will be a\ntemporary interruption in water service for all residents in the Maplewood\ndormitory.\nDate: Monday, March 15 Time: 9:00 A.M.- 4:00 P.M.\nImportant Information:\n1.Preparation:\n• Fill containers with water for drinking and cooking before the interruption.\n• Store enough water for personal hygiene needs.\n2.During the Interruption:\n• Do not attempt to use faucets, showers, or any appliances that require\nwater.\n• Toilets may not function properly; please plan accordingly.\n3.After Service Resumes:\n• Run cold water through all faucets for a few minutes to clear any sediment.\n• Check for any leaks and report them immediately to the maintenance\ndepartment.\nContact Information: For questions or concerns, please contact the\nMaplewood Maintenance Department at 555-4321.\nWe apologize for the inconvenience and appreciate your understanding as\nwe work to improve our community's water infrastructure."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "maintenance department."
+        },
+        {
+          "key": "B",
+          "text": "It is required for infrastructure upgrades."
+        },
+        {
+          "key": "C",
+          "text": "It will occur weekly."
+        },
+        {
+          "key": "D",
+          "text": "It is due to a natural disaster."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q29",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read a receipt.",
+      "prompt": "How much tax was charged?",
+      "passage": {
+        "text": "Thank you for shopping at Trendie Boutique! Date: October 8\n\nLocation: 800 Grafton Street, Dublin Items Purchased: Silk Scarf €25.00 €85.00 Leather Handbag Sunglasses €50.00 Cotton T-shirt €20.00 Subtotal: €180.00 Gift Card: -€5.00 Value Added Tax (23%): €40.25 Total: €215.25 We hope you love your new items! Returns and exchanges are accepted only with receipts. Your feedback is important to us. Please visit our website to share your experience. Follow us on social media for the latest trends and exclusive offers."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "€ 5.00"
+        },
+        {
+          "key": "B",
+          "text": "€ 15"
+        },
+        {
+          "key": "C",
+          "text": "€ 23"
+        },
+        {
+          "key": "D",
+          "text": "€ 40.25"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q31",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the passage indicate about sequential algorithms?",
+      "passage": {
+        "text": "Parallel Algorithms: From Challenges to Opportunities\n\nParallel algorithms, a computing method common in modern computers, solve problems faster by dividing a task into smaller parts that run at the same time. Instead of checking every item in a huge database one by one as in a sequential algorithm, a parallel algorithm might split the job across multiple processor cores, each checking a portion of the data simultaneously.\n\nIn healthcare, parallel algorithms play a crucial role in analyzing large datasets quickly. When researchers simulate how a virus spreads through a population, they need to process millions of data points-like infection rates and demographics. Using parallel processing, these simulations can run in minutes instead of hours, helping public health officials make faster decisions during outbreaks. However, if too much data is sent to the processors at once without proper management, the system slows down.\n\nOne of the strengths of parallel algorithms is their versatility. Developers can tailor them to work efficiently on different types of hardware, such as graphics processing units (GPUs), which are especially good at handling many tasks at once. This is a big reason why deep learning-used in things like facial recognition -has advanced so quickly. Training a deep learning model would be nearly impossible without parallel computing"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They are less efficient than parallel algorithms are."
+        },
+        {
+          "key": "B",
+          "text": "They handle computational tasks in the same way that parallel algorithms do."
+        },
+        {
+          "key": "C",
+          "text": "They can solve problems that parallel algorithms cannot"
+        },
+        {
+          "key": "D",
+          "text": "They use more advanced hardware than parallel algorithms do."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q32",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author discuss the simulation of the spread of a virus?",
+      "passage": {
+        "text": "Parallel Algorithms: From Challenges to Opportunities\n\nParallel algorithms, a computing method common in modern computers, solve problems faster by dividing a task into smaller parts that run at the same time. Instead of checking every item in a huge database one by one as in a sequential algorithm, a parallel algorithm might split the job across multiple processor cores, each checking a portion of the data simultaneously.\n\nIn healthcare, parallel algorithms play a crucial role in analyzing large datasets quickly. When researchers simulate how a virus spreads through a population, they need to process millions of data points-like infection rates and demographics. Using parallel processing, these simulations can run in minutes instead of hours, helping public health officials make faster decisions during outbreaks. However, if too much data is sent to the processors at once without proper management, the system slows down. One of the strengths of parallel algorithms is their versatility. Developers can tailor them to work efficiently on different types of hardware, such as graphics processing units (GPUs), which are especially good at handling many tasks at once. This is a big reason why deep learning-used in things like facial recognition -has advanced so quickly. Training a deep learning model would be nearly impossible without parallel computing."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To illustrate the challenges that public health officials face during disease breakouts"
+        },
+        {
+          "key": "B",
+          "text": "To demonstrate the significance of parallel algorithms in healthcare"
+        },
+        {
+          "key": "C",
+          "text": "To highlight the data points that researchers focus on when a virus spreads through a population"
+        },
+        {
+          "key": "D",
+          "text": "To emphasize the risk of using small datasets for analysis during disease outbreaks"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q33",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "n Challenges to Opportunities",
+      "passage": {
+        "text": "Parallel Algorithms: From Challenges to Opportunities\n\nParallel algorithms, a computing method common in modern computers, solve problems faster by dividing a task into smaller parts that run at the same time. Instead of checking every item in a huge database one by one as in a sequential algorithm, a parallel algorithm might split the job across multiple processor cores, each checking a portion of the data simultaneously. In healthcare, parallel algorithms play a crucial role in analyzing large datasets quickly. When researchers simulate how a virus spreads through a population, they need to process millions of data points-like infection rates and demographics. Using parallel processing, these simulations can run in minutes instead of hours, helping public health officials make faster decisions during outbreaks. However, if too much data is sent to the processors at once without proper management, the\n\nOne of the strengths of parallel algorithms is their versatility. Developers can tailor them to work efficiently on different types of hardware, such as graphics processing units (GPUs), which are especially good at handling many tasks at once. This is a big reason why deep learning-used in things like facial recognition -has advanced so quickly. Training a deep learning model would be nearly impossible without parallel computing."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Identify the sentence in paragraph 2 that indicates that parallel algorithms have challenges. Select the sentence to make your choice. n"
+        },
+        {
+          "key": "B",
+          "text": "g f"
+        },
+        {
+          "key": "C",
+          "text": "to"
+        },
+        {
+          "key": "D",
+          "text": "es"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m1_q34",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"tailor\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Parallel Algorithms: From Challenges to Opportunities\n\nParallel algorithms, a computing method common in modern computers, solve problems faster by dividing a task into smaller parts that run at the same time. Instead of checking every item in a huge database one by one as in a sequential algorithm, a parallel algorithm might split the job across multiple processor cores, each checking a portion of the data simultaneously.\n\nIn healthcare, parallel algorithms play a crucial role in analyzing large datasets quickly. When researchers simulate how a virus spreads through a population, they need to process millions of data points-like infection rates and demographics. Using parallel processing, these simulations can run in minutes instead of hours, helping public health officials make faster decisions during outbreaks. However, if too much data is sent to the processors at once without proper management, the system slows down.\n\nOne of the strengths of parallel algorithms is their versatility. Developers can tailor them to work efficiently on different types of hardware, such as graphics processing units (GPUs). which are especially good at handling many tasks at once. This is a big reason why deep learning-used in things like facial recognition-has advanced so quickly. Training a deep learning model would be nearly impossible without parallel computing."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "direct"
+        },
+        {
+          "key": "B",
+          "text": "explore"
+        },
+        {
+          "key": "C",
+          "text": "adapt"
+        },
+        {
+          "key": "D",
+          "text": "prepare"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m2_q1",
+      "task_type": "complete_words",
+      "order": 13,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "The Renaissance was a period of cultural rebirth in Europe, spanning the fourteenth to seventeenth centuries. A\nvib period o cultural, arti , and intell revival, t Renaissance mar a ren interest\nclassical liter , art, a _science. The Renaissance had a profound historical impact, serving as a bridge\nbetween the Middle Ages and the modern era. It sparked a cultural awakening that emphasized humanism, individual\nachievement, and secular learning, which reshaped European thought and institutions."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "vibrant",
+          "of",
+          "artistic",
+          "intellectual",
+          "the",
+          "marked",
+          "renewed",
+          "in",
+          "literature",
+          "and"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m2_q12",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"precarity\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Some researchers studying the United States population posit that Generation Z (born roughly between 1997 and 2012) is not merely an extension of millennials (born roughly between 1981 and 1996) but a distinct cohort shaped by fundamentally different sociotechnological conditions. While millennials came of age during the rise of the Internet and social media, Gen Z has never known a world without smartphones, automated content filtering, and pervasive digital surveillance. This has led to claims that Gen Z exhibits higher digital literacy but lower trust in institutions and media than millennials do.\n\nHowever, this theory faces objections. For instance, the assumption that technological immersion leads to skepticism may overlook other factors, such as economic precarity or political polarization, which also influence trust. Moreover, while some studies suggest that Gen Z is more pragmatic and financially cautious than millennials are, this could be attributed not to generational identity but to life-stage effects -young adults often exhibit similar traits regardless of cohort.\n\nOther scholars believe that generational differences are overstated and that intragenerational diversity (e.g., socioeconomic class, race, or geography) is more significant than intergenerational contrasts. Thus, while the Gen Z vs. millennials dichotomy is useful as a cultural shorthand, its explanatory power may be limited."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "insecurity"
+        },
+        {
+          "key": "B",
+          "text": "status"
+        },
+        {
+          "key": "C",
+          "text": "difference"
+        },
+        {
+          "key": "D",
+          "text": "dependence"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m2_q13",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, what is one way Generation Z is believed to differ from the millennial generation?",
+      "passage": {
+        "text": "Some researchers studying the United States population posit that Generation Z (born roughly between 1997 and 2012) is not merely an extension of millennials (born roughly between 1981 and 1996) but a distinct cohort shaped by fundamentally different sociotechnological conditions. While millennials came of age during the rise of the Internet and social media, Gen Z has never known a world without smartphones, automated content filtering, and pervasive digital surveillance. This has led to claims that Gen Z exhibits higher digital literacy but lower trust in institutions and media than millennials do.\n\nHowever, this theory faces objections. For instance, the assumption that technological immersion leads to skepticism may overlook other factors, such as economic precarity or political polarization, which also influence trust. Moreover, while some studies suggest that Gen Z is more pragmatic and financially cautious than millennials are, this could be attributed not to generational identity but to life-stage effects -young adults often exhibit similar traits regardless of cohort.\n\nOther scholars believe that generational differences are overstated and that intragenerational diversity (e.g., socioeconomic class, race, or geography) is more significant than intergenerational contrasts. Thus, while the Gen Z vs. millennials dichotomv is useful as a cultural shorthand. its"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Gen Z is more comfortable using social media."
+        },
+        {
+          "key": "B",
+          "text": "Gen Z is less concerned about spending money."
+        },
+        {
+          "key": "C",
+          "text": "Gen Z is more used to being constantly observed."
+        },
+        {
+          "key": "D",
+          "text": "Gen Z has lower intragenerational diversity."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m2_q14",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the passage suggest about the potential impact of \"technological immersion\" on Gen Z?",
+      "passage": {
+        "text": "Some researchers studying the United States population posit that Generation Z (born roughly between 1997 and 2012) is not merely an extension of millennials (born roughly between 1981 and 1996) but a distinct cohort shaped by fundamentally different sociotechnological conditions. While millennials came of age during the rise of the Internet and social media, Gen Z has never known a world without smartphones, automated content filtering, and pervasive digital surveillance. This has led to claims that Gen Z exhibits higher digital literacy but lower trust in institutions and media than millennials do.\n\nHowever, this theory faces objections. For instance, the assumption that technological immersion leads to skepticism may overlook other factors, such as economic precarity or political polarization, which also influence trust. Moreover, while some studies suggest that Gen Z is more pragmatic and financially cautious than millennials are, this could be attributed not to generational identity but to life- stage effects-young adults often exhibit similar traits regardless of cohort.\n\nOther scholars believe that generational differences are overstated and that intragenerational diversity (e.g.. socioeconomic class, race, or geography) is more significant than intergenerational contrasts. Thus, while the Gen Z vs. millennials dichotomy is useful as a cultural shorthand, its explanatory power may be limited."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It is significant, but other factors are important as well"
+        },
+        {
+          "key": "B",
+          "text": "It will gradually diminish as Gen Z individuals grow older"
+        },
+        {
+          "key": "C",
+          "text": "It is less pronounced in Gen Z than in the millennial generation."
+        },
+        {
+          "key": "D",
+          "text": "It causes a lack of trust between Gen Z and earlier generations."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-25_m2_q15",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "15",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The passage suggests which of the following about generational differences?",
+      "passage": {
+        "text": "Some researchers studying the United States population posit that Generation Z (born roughly between 1997 and 2012) is not merely an extension of millennials (born roughly between 1981 and 1996) but a distinct cohort shaped by fundamentally different sociotechnological conditions. While millennials came of age during the rise of the Internet and social media, Gen Z has never known a world without smartphones, automated content filtering, and pervasive digital surveillance. This has led to claims that Gen Z exhibits higher digital literacy but lower trust in institutions and media than millennials do.\n\nHowever, this theory faces objections. For instance, the assumption that technological immersion leads to skepticism may overlook other factors, such as economic precarity or political polarization, which also influence trust. Moreover, while some studies suggest that Gen Z is more pragmatic and financially cautious than millennials are, this could be attributed not to generational identity but to life-stage effects -young adults often exhibit similar traits regardless of cohort.\n\nOther scholars believe that generational differences are overstated and that intragenerational diversity (e.g. socioeconomic class, race, or geography) is more significant than intergenerational contrasts. Thus, while the Gen Z vs."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The societal impact of technology on generational cohorts may be difficult to measure precisely."
+        },
+        {
+          "key": "B",
+          "text": "Differences between Gen Z and millennials may be exaggerated."
+        },
+        {
+          "key": "C",
+          "text": "Gen Z and millenials themselves do not accept the dichotomy between their generations."
+        },
+        {
+          "key": "D",
+          "text": "Research is needed to explain why the belief in generational differences is so persistent."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.25新托福真题/2.25  阅读.pdf"
+    }
+  ]
+}

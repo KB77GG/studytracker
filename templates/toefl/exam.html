@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ exam.subject_label }} | {{ exam.title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/toefl_exam.css') }}">
+</head>
+<body>
+  <header class="toefl-toolbar">
+    <div class="toefl-brand">
+      <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+      <div>
+        <strong>SAGE PATH</strong>
+        <span>TOEFL Practice</span>
+      </div>
+    </div>
+    <nav class="toefl-toolbar__actions" aria-label="考试工具">
+      <button class="exam-tool" id="volumeButton" type="button">Volume</button>
+      <button class="exam-tool" id="helpButton" type="button">Help</button>
+      <button class="exam-tool" id="reviewButton" type="button">Review</button>
+      <button class="exam-tool" id="backButton" type="button">Back</button>
+      <button class="exam-tool exam-tool--primary" id="nextButton" type="button">Next</button>
+    </nav>
+  </header>
+
+  <div class="toefl-statusbar">
+    <div><strong id="sectionLabel">{{ exam.subject_label }}</strong><span class="status-divider">|</span><span id="questionCounter">Question 1 of {{ exam.questions|length }}</span></div>
+    <div class="timer-cluster">
+      <strong id="timerDisplay">00:00:00</strong>
+      <button id="timerToggle" type="button">Hide Time</button>
+    </div>
+  </div>
+
+  <div class="audio-drawer" id="audioDrawer" hidden>
+    <div>
+      <strong id="audioModuleLabel">Listening audio</strong>
+      <span>模块音频可用于听力与口语正式考试流程模拟。</span>
+    </div>
+    <audio id="moduleAudio" controls preload="metadata"></audio>
+  </div>
+
+  <main class="toefl-stage" id="examStage" aria-live="polite"></main>
+
+  <div class="exam-modal" id="helpModal" hidden>
+    <div class="exam-modal__card">
+      <h2>Help</h2>
+      <p>选择或录制答案后使用 Next 继续。阅读和写作可使用 Back 与 Review；听力和口语提交当前题后不能返回。</p>
+      <button class="modal-button" data-close-modal="helpModal" type="button">Return to Question</button>
+    </div>
+  </div>
+
+  <div class="exam-modal" id="requiredModal" hidden>
+    <div class="exam-modal__card exam-modal__card--alert">
+      <p class="modal-kicker">Must Answer</p>
+      <h2>You must enter an answer before you can leave this question.</h2>
+      <button class="modal-button" data-close-modal="requiredModal" type="button">Return to Question</button>
+    </div>
+  </div>
+
+  <div class="exam-modal" id="reviewModal" hidden>
+    <div class="exam-modal__card exam-modal__card--wide">
+      <div class="modal-heading">
+        <div>
+          <p class="modal-kicker">Review</p>
+          <h2>Question Status</h2>
+        </div>
+        <button class="modal-close" data-close-modal="reviewModal" type="button">Close</button>
+      </div>
+      <div class="review-grid" id="reviewGrid"></div>
+    </div>
+  </div>
+
+  <div class="exam-modal" id="resultModal" hidden>
+    <div class="exam-modal__card">
+      <p class="modal-kicker">Section Complete</p>
+      <h2 id="resultTitle">Your responses were submitted.</h2>
+      <p id="resultSummary"></p>
+      <a class="modal-button modal-button--link" href="{{ url_for('toefl.index') }}">Back to Test Library</a>
+    </div>
+  </div>
+
+  <script>
+    window.TOEFL_EXAM = {{ exam|tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/toefl_exam.js') }}"></script>
+</body>
+</html>

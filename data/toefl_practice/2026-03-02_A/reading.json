@@ -1,0 +1,842 @@
+{
+  "exam": {
+    "id": "reading_2026-03-02_A",
+    "subject": "reading",
+    "date": "2026-03-02",
+    "volume": "A",
+    "source_pdf": "3.2托福A卷/3.2A阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-03-02_A_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Conservation ecology focuses on protecting and restoring natural habitats to preserve biodiversity. Ecologists st\necosystems t_ understand h different spe interact wi their envir • This rese informs\nstrat for mana natural reso and mitigating human impact. Efforts include habitat restoration,\nspecies protection, and sustainable practices. Understanding conservation principles is crucial for maintaining\necological balance and ensuring the survival of diverse species. Corridor creation connects fragmented habitats, while\ncaptive breeding programs help recover endangered species, and citizen science initiatives engage communities in\nmonitoring local ecosystems and wildlife populations."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "study",
+          "to",
+          "how",
+          "species",
+          "with",
+          "environment",
+          "reseach",
+          "strategies",
+          "managing",
+          "resources"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Tigers are solitary animals known for their territorial behavior; males use scent markings and vocalizations to define\ntheir territories. Each ma tiger estab control ov territory span several squ miles\nfor prey and maintain dominance. This behavior helps reduce conflicts\nover prey, but tigers are known to fiercely defend their territory from intruders when necessary. Often hunting at\nnight, tigers use stealth and their excellent night vision to their advantage."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "male",
+          "establishes",
+          "over",
+          "large",
+          "spanning",
+          "square",
+          "and",
+          "the",
+          "regularly",
+          "look"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "Ø Hide Time I a notice. When can families use the main playground while also having access to picnic areas?",
+      "passage": {
+        "text": "City Park Renovation Timeline\nPhase 1 (January-April): Main playground is closed to build\nnew equipment.\nPhase 2 (May-August): Installation of walking paths\n(the playground is open).\nPicnic areas remain closed throughout the renovation.\nMiller Park offers temporary playground access during\nPhase 1 only."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "During Phase 1 only"
+        },
+        {
+          "key": "B",
+          "text": "During Phase 2 only"
+        },
+        {
+          "key": "C",
+          "text": "Throughout the entire renovation"
+        },
+        {
+          "key": "D",
+          "text": "Never during the renovation period"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "Ø Hide Time I a notice. Where should parents take their children for playground access in February?",
+      "passage": {
+        "text": "City Park Renovation Timeline\nPhase 1 (January-April): Main playground is closed to build\nnew equipment.\nPhase 2 (May-August): Installation of walking paths\n(the playground is open).\nPicnic areas remain closed throughout the renovation.\nMiller Park offers temporary playground access during\nPhase 1 only."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The main playground at City Park"
+        },
+        {
+          "key": "B",
+          "text": "Miller Park's temporary playground"
+        },
+        {
+          "key": "C",
+          "text": "Nowhere"
+        },
+        {
+          "key": "D",
+          "text": "Picnic areas"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read an e-mail.",
+      "prompt": "What did Ryan do yesterday?",
+      "passage": {
+        "text": "Hi Team,\nBlundin University hosted a career fair yesterday. I was able to\nspeak to several promising candidates for summer internships\nwith our company. See their attached resumes. I'd like everyone\nto give me their feedback no later than Friday.\nThanks,\nRyan"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "He took a class at a university He attended a job fair."
+        },
+        {
+          "key": "B",
+          "text": "He was interviewed by a manager"
+        },
+        {
+          "key": "C",
+          "text": "He hired some summer interns"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read an e-mail.",
+      "prompt": "What does Ryan ask his team to do?",
+      "passage": {
+        "text": "Hi Team,\nBlundin University hosted a career fair yesterday. I was able to\nspeak to several promising candidates for summer internships\nwith our company. See their attached resumes. I'd like everyone\nto give me their feedback no later than Friday.\nThanks,\nRyan"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Share their opinions of some job candidates"
+        },
+        {
+          "key": "B",
+          "text": "a summer internship program"
+        },
+        {
+          "key": "C",
+          "text": "Update their résumés by Friday"
+        },
+        {
+          "key": "D",
+          "text": "Introduce themselves to new interns"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "Ø Hide Time ollowing notice. Peter has no experience with spreadsheets and cannot attend class on Wednesdays. He should enroll in",
+      "passage": {
+        "text": "Downtown School of Data Skills\nAll classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data\nSection F: (virtual) Mondays\nData Representation\nhis course is for analysts and researchers who need to shov\nudiences easy-to-read graphs and chart\nSection Gi (virtuall Wednesdavs"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A"
+        },
+        {
+          "key": "B",
+          "text": "Section B"
+        },
+        {
+          "key": "C",
+          "text": "Section C"
+        },
+        {
+          "key": "D",
+          "text": "Section D"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "What does Michelle need before enrolling in Section D?",
+      "passage": {
+        "text": "beginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation\nThis course is for analysts and researchers who need to show\naudiences easy-to-read graphs and charts.\nSection G: (virtual) Wednesdays"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Experience creating new spreadsheet formulas"
+        },
+        {
+          "key": "B",
+          "text": "A research position that requires creating formulas"
+        },
+        {
+          "key": "C",
+          "text": "Training in how to present complex data"
+        },
+        {
+          "key": "D",
+          "text": "Previous experience using spreadsheets"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "Beth has worked with formulas for years and is ready to learn advanced data skills. She should enroll in",
+      "passage": {
+        "text": "All classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data\nSection F: (virtual) Mondays\nData Representation\nThis course is for analysts and researchers who need to show\naudiences easy-to-read graphs and charts.\nSection G: (virtual) Wednesdays"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A, B, or C"
+        },
+        {
+          "key": "B",
+          "text": "Section D or E"
+        },
+        {
+          "key": "C",
+          "text": "Section F"
+        },
+        {
+          "key": "D",
+          "text": "Section G"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read a poster.",
+      "prompt": "What is NOT listed as a feature of the event? Films created in various countries",
+      "passage": {
+        "text": "Join the Annual Cultural Festival!\nDate: August 20 | Time: 10:00 A.M. - 6:00 P.M.\nLocation: Central Park in Glenn Valley\nCelebrate the diversity and richness of our community at the Annual\nCultural Festival. Enjoy a day filled with exciting activities and\nperformances suitable for all ages. Here are some of the highlights:\n• Live Music and Dance Performances:\nExperience traditional and contemporary music and dance from\nvarious cultures.\n• Food Stalls:\nTaste delicious dishes from around the world, including Spanish\ntapas, Italian pasta, Indian curry, and more.\n• Art Exhibits:\nView artworks from local and international artists showcasing\ndifferent styles and mediums.\n• Children's Activities:\nBring the kids for face painting, storytelling sessions, and\ninteractive games.\n• Cultural Workshops:\nParticipate in workshops on crafts, cooking, and languages led by\ncultural experts.\nAdmission is free for everyone.\nDon't miss out on this incredible event!"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Traditional and contemporary music"
+        },
+        {
+          "key": "B",
+          "text": "Foods from different parts of the world"
+        },
+        {
+          "key": "C",
+          "text": "Local and international artworks"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read a poster.",
+      "prompt": "What can be inferred about the event?",
+      "passage": {
+        "text": "Join the Annual Cultural Festival!\nDate: August 20 | Time: 10:00 A.м. - 6:00 P.M.\nLocation: Central Park in Glenn Valley\nCelebrate the diversity and richness of our community at the Annual\nCultural Festival. Enjoy a day filled with exciting activities and\nperformances suitable for all ages. Here are some of the highlights:\n• Live Music and Dance Performances:\nExperience traditional and contemporary music and dance from\nvarious cultures.\n• Food Stalls:\nTaste delicious dishes from around the world, including Spanish\ntapas, Italian pasta, Indian curry, and more.\n• Art Exhibits:\nView artworks from local and international artists showcasing\ndifferent styles and mediums.\n• Children's Activities:\nBring the kids for face painting, storytelling sessions, and\ninteractive games.\n• Cultural Workshops:\nParticipate in workshops on crafts, cooking, and languages led by\ncultural experts.\nAdmission is free for everyone.\nDon't miss out on this incredible event!"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It requires an admission fee"
+        },
+        {
+          "key": "B",
+          "text": "It celebrates cultural diversity"
+        },
+        {
+          "key": "C",
+          "text": "It will be conducted partly online"
+        },
+        {
+          "key": "D",
+          "text": "It requires advance registration"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read a poster.",
+      "prompt": "Which is NOT mentioned as an activity for children?",
+      "passage": {
+        "text": "Join the Annual Cultural Festival!\nDate: August 20 | Time: 10:00 A.M. - 6:00 P.M.\nLocation: Central Park in Glenn Valley\nCelebrate the diversity and richness of our community at the Annual\nCultural Festival. Enjoy a day filled with exciting activities and\nperformances suitable for all ages. Here are some of the highlights:\n• Live Music and Dance Performances:\nExperience traditional and contemporary music and dance from\nvarious cultures.\n• Food Stalls:\nTaste delicious dishes from around the world, including Spanish\ntapas, Italian pasta, Indian curry, and more.\n• Art Exhibits:\nView artworks from local and international artists showcasing\ndifferent styles and mediums.\n• Children's Activities:\nBring the kids for face painting, storytelling sessions, and\ninteractive games.\n• Cultural Workshops:\nParticipate in workshops on crafts, cooking, and languages led by\ncultural experts.\nAdmission is free for everyone.\nDon't miss out on this incredible event!"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Playing games"
+        },
+        {
+          "key": "B",
+          "text": "Making crafts"
+        },
+        {
+          "key": "C",
+          "text": "Putting paint on faces Listening to stories"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "One of the main themes of the passage is",
+      "passage": {
+        "text": "Cetaceans-a group of mammals that includes whales, dolphins, and porpoises-use echolocation to navigate and hunt in waters too deep for sunlight to penetrate. Many cetaceans emit clicks, producing sound waves that bounce off objects and return as echoes.\n\nEcholocation techniques vary among species, depending on their environments and needs. Dolphins, for instance, produce more frequent and higher-pitched clicks than do larger cetaceans like sperm whales. Although high frequency sounds do not travel as far as low frequencies do, high frequencies with very short wavelengths help dolphins locate small objects and pick out fine detail-the higher the frequencies, the better the detail. This enables dolphins to find and track small, agile fish that make up their diet. Sperm whales, on the other hand, dive deep to hunt prey such as giant squid and use lower-frequency clicks that travel farther in the deep ocean.\n\nNoise pollution can interfere with the echolocation signals used by cetaceans. Human-made sounds-such as those from sonar and ship engines-can make it difficult for whales and dolphins to locate prey, orient themselves, or communicate with others. The disruption can cause stress and disorientation, increasing the risk of collisions and strandings, and it can also induce changes in behavior or habitat."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "differences between cetaceans and other species"
+        },
+        {
+          "key": "B",
+          "text": "vulnerability of cetaceans to disruptive sounds"
+        },
+        {
+          "key": "C",
+          "text": "surprising properties of sound waves"
+        },
+        {
+          "key": "D",
+          "text": "biological adaptations behind echolocation"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "of the Deep The passage suggests that compared to dolphins, sperm whales hunt slower prey",
+      "passage": {
+        "text": "Cetaceans-a group of mammals that includes whales, dolphins, and porpoises-use echolocation to navigate and hunt in waters too deep for sunlight to penetrate. Many cetaceans emit clicks, producing sound waves that bounce off objects and return as echoes.\n\nEcholocation techniques vary among species, depending on their environments and needs. Dolphins, for instance, produce more frequent and higher-pitched clicks than do larger cetaceans like sperm whales. Although high frequency sounds do not travel as far as low frequencies do, high frequencies with very short wavelengths help dolphins locate small objects and pick out fine detail-the higher the frequencies, the better the detail. This enables dolphins to find and track small, agile fish that make up their diet. Sperm whales, on the other hand, dive deep to hunt prey such as giant squid and use lower-frequency clicks that travel farther in the deep ocean.\n\nNoise pollution can interfere with the echolocation signals used by cetaceans. Human-made sounds-such as those from sonar and ship engines-can make it difficult for whales and dolphins to locate prey, orient themselves, or communicate with others. The disruption can cause stress and disorientation, increasing the risk of collisions and strandings, and it can also induce changes in behavior or habitat."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "for shorter periods"
+        },
+        {
+          "key": "B",
+          "text": "e in shallower waters"
+        },
+        {
+          "key": "C",
+          "text": "less often h"
+        },
+        {
+          "key": "D",
+          "text": "e"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"track\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Cetaceans-a group of mammals that includes whales, dolphins, and porpoises-use echolocation to navigate and hunt in waters too deep for sunlight to penetrate. Many celaceans emit clicks, producing sound waves that bounce off objects and return as echoes.\n\nEcholocation techniques vary among species, depending on their environments and needs. Dolphins, for instance, produce more frequent and higher-pitched clicks than do larger cetaceans like sperm whales. Although high frequency sounds do not travel as far as low frequencies do, high frequencies with very short wavelengths help dolphins locate small objects and pick out fine detail-the higher the frequencies, the better the detail. This enables dolphins to find and track small, agile fish that make up their diet. Sperm whales, on the other hand, dive deep to hunt prey such as giant squid and use lower-frequency clicks that travel farther in the deep ocean.\n\nNoise pollution can interfere with the echolocation signals used by cetaceans. Human-made sounds-such as those from sonar and ship engines-can make it difficult for whales and dolphins to locate prey, orient themselves, or communicate with others. The disruption can cause stress and disorientation, increasing the risk of collisions and strandings, and it can also induce changes in behavior or habitat."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "follow"
+        },
+        {
+          "key": "B",
+          "text": "consume"
+        },
+        {
+          "key": "C",
+          "text": "see"
+        },
+        {
+          "key": "D",
+          "text": "attack"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The passage suggests that one reason a cetacean may become stranded is",
+      "passage": {
+        "text": "Cetaceans-a group of mammals that includes whales, dolphins, and porpoises-use echolocation to navigate and hunt in waters too deep for sunlight to penetrate. Many cetaceans emit clicks, producing sound waves that bounce off objects and return as echoes. Echolocation techniques vary among species, depending on their environments and needs. Dolphins, for instance, produce more frequent and higher-pitched clicks than do larger cetaceans like sperm whales. Although high frequency sounds do not travel as far as low frequencies do, high frequencies with very short wavelengths help dolphins locate small objects and pick out fine detail-the higher the frequencies, the better the detail. This enables dolphins to find and track small, agile fish that make up their diet. Sperm whales, on the other hand, dive deep to hunt prey such as giant squid and use lower-frequency clicks that travel farther in the deep ocean. Noise pollution can interfere with the echolocation signals used by cetaceans. Human-made sounds-such as those from sonar and ship engines-can make it difficult for whales and dolphins to locate prey, orient themselves, or communicate with others. The disruption can cause stress and disorientation, increasing the risk of collisions and strandings, and it can also induce changes in behavior or habitat."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "lack of light in deep waters"
+        },
+        {
+          "key": "B",
+          "text": "difficulty in locating prey"
+        },
+        {
+          "key": "C",
+          "text": "sounds from passing ships"
+        },
+        {
+          "key": "D",
+          "text": "inability to find a new habitat"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m2_q1",
+      "task_type": "complete_words",
+      "order": 17,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Logical reasoning is a cornerstone of academic methodology, providing a structured approach to analyzing arguments\nand evidence. Deductive reas starts wi general princ and der specific concl\nwhile indu thinking invo drawing br generalizations fr specific observ . Critical\nthinking skills enable scholars to identify logical fallacies, assess the credibility of sources, and construct coherent\narguments. The application of logic extends across disciplines, from mathematics to philosophy to the natural\nsciences. Developing proficiency in logical reasoning enhances the ability to solve complex problems and\ncommunicate effectively, fostering intellectual rigor and innovation."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "reasoning",
+          "with",
+          "principles",
+          "derives",
+          "conclusions",
+          "inductive",
+          "involves",
+          "broad",
+          "from",
+          "observations"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m2_q11",
+      "task_type": "read_academic",
+      "order": 18,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"seamlessly\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Cybernetic prosthetics have revolutionized medical technology, offering hope to individuals who have lost limbs. Unlike traditional prosthetics, which are often cumbersome and limited in function, cybernetic versions are designed to integrate seamlessly with the human nervous system. This integration allows for more natural movement and even sensation. A key development in this field has been the use of myoelectric sensors, which detect electrical signals generated by muscle movements.\n\nOne example is a cybernetic hand that can perform delicate tasks such as picking up small objects or typing. This is achieved through advanced algorithms that translate muscle signals into controlled movements. Researchers are also exploring haptic feedback, which would enable users to feel textures and temperatures through their prosthetic limbs. It involves integrating sensors and actuators that mimic the sensation of touch by stimulating the user's nerve endings or skin with electrical signals. This could significantly improve the quality of life for amputees.\n\nThe high cost of these prosthetics makes them inaccessible to many. Additionally, the technology requires regular maintenance and updates, which can be a barrier. Current battery life is another limitation, as it restricts the user's ability to wear the prosthetic for extended periods. Researchers are continually working to make these devices more affordable and user-friendly."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "generally"
+        },
+        {
+          "key": "B",
+          "text": "smoothly"
+        },
+        {
+          "key": "C",
+          "text": "repeatedly"
+        },
+        {
+          "key": "D",
+          "text": "slowly"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m2_q12",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What can be inferred about myoelectric sensors?",
+      "passage": {
+        "text": "Cybernetic prosthetics have revolutionized medical technology, offering hope to individuals who have lost limbs. Unlike traditional prosthetics, which are often cumbersome and limited in function, cybernetic versions are designed to integrate seamlessly with the human nervous system. This integration allows for more natural movement and even sensation. A key development in this field has been the use of myoelectric sensors, which detect electrical signals generated by muscle movements.\n\nOne example is a cybernetic hand that can perform delicate tasks such as picking up small objects or typing. This is achieved through advanced algorithms that translate muscle signals into controlled movements. Researchers are also exploring haptic feedback, which would enable users to feel textures and temperatures through their prosthetic limbs. It involves integrating sensors and actuators that mimic the sensation of touch by stimulating the user's nerve endings or skin with electrical signals. This could significantly improve the quality of life for amputees.\n\nThe high cost of these prosthetics makes them inaccessible to many. Additionally, the technology requires regular maintenance and updates, which can be a barrier. Current battery life is another limitation, as it restricts the user's ability to wear the prosthetic for extended periods. Researchers are continually working to make these devices more affordable and user-friendlv."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They function less effectively in traditional prosthetics."
+        },
+        {
+          "key": "B",
+          "text": "They rely less on electric signals than other types of sensors do."
+        },
+        {
+          "key": "C",
+          "text": "They allow for more natural movement in cybernetic prosthetics."
+        },
+        {
+          "key": "D",
+          "text": "They make cybernetic prosthetics somewhat cumbersome."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m2_q13",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the passage indicate about cybernetic hands?",
+      "passage": {
+        "text": "Cybernetic prosthetics have revolutionized medical technology, offering hope to individuals who have lost limbs. Unlike traditional prosthetics, which are often cumbersome and limited in function, cybernetic versions are designed to integrate seamlessly with the human nervous system. This integration allows for more natural movement and even sensation. A key development in this field has been the use of myoelectric sensors, which detect electrical signals generated by muscle movements. One example is a cybernetic hand that can perform delicate tasks such as picking up small objects or typing. This is achieved through advanced algorithms that translate muscle signals into controlled movements. Researchers are also exploring haptic feedback, which would enable users to feel textures and temperatures through their prosthetic limbs. It involves integrating sensors and actuators that mimic the sensation of touch by stimulating the user's nerve endings or skin with electrical signals. This could significantly improve the quality of life for amputees. The high cost of these prosthetics makes them inaccessible to many. Additionally, the technology requires regular maintenance and updates, which can be a barrier. Current battery life is another limitation, as it restricts the user's ability to wear the prosthetic for extended periods. Researchers are continually working to make these devices more affordable and user-friendly."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They are very similar in appearance to natural human limbs."
+        },
+        {
+          "key": "B",
+          "text": "They are currently limited in their range of motion"
+        },
+        {
+          "key": "C",
+          "text": "They rely on algorithms that turn muscle signals into movements."
+        },
+        {
+          "key": "D",
+          "text": "They can cause skin irritation if worn for extended periods"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_A_m2_q14",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, using haptic feedback in artificial limbs involves each of the following EXCEPT",
+      "passage": {
+        "text": "Cybernetic prosthetics have revolutionized medical technology, offering hope to individuals who have lost limbs. Unlike traditional prosthetics, which are often cumbersome and limited in function, cybernetic versions are designed to integrate seamlessly with the human nervous system. This integration allows for more natural movement and even sensation. A key development in this field has been the use of myoelectric sensors, which detect electrical signals generated by muscle movements.\n\nOne example is a cybernetic hand that can perform delicate tasks such as picking up small objects or typing. This is achieved through advanced algorithms that translate muscle signals into controlled movements. Researchers are also exploring haptic feedback, which would enable users to feel textures and temperatures through their prosthetic limbs. It involves integrating sensors and actuators that mimic the sensation of touch by stimulating the user's nerve endings or skin with electrical signals. This could significantly improve the quality of life for amputees.\n\nThe high cost of these prosthetics makes them inaccessible to many. Additionally, the technology requires regular maintenance and updates, which can be a barrier. Current battery life is another limitation, as it restricts the user's ability to wear the prosthetic for extended periods. Researchers are continually working to make these devices more affordable and user-friendly."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "detecting electrical signals from muscles"
+        },
+        {
+          "key": "B",
+          "text": "changing the temperatures of objects"
+        },
+        {
+          "key": "C",
+          "text": "stimulating skin and nerve endings"
+        },
+        {
+          "key": "D",
+          "text": "using multiple sensors and actuators"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福A卷/3.2A阅读.pdf"
+    }
+  ]
+}

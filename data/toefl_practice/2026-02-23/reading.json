@@ -1,0 +1,840 @@
+{
+  "exam": {
+    "id": "reading_2026-02-23",
+    "subject": "reading",
+    "date": "2026-02-23",
+    "volume": "",
+    "source_pdf": "2.23新托福真题/2.23 阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-02-23_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Museums often serve as cultural hubs, preserving and exhibiting artifacts that reflect human history and creativity.\nThey pro educational reso that he visitors under diverse cult , historical er , and\narti movements. Exhi are desi to te compelling stories and engage the audience. Museums\nalso play a crucial role in conservation, employing techniques to preserve delicate or ancient items. They foster a\ndeeper appreciation for heritage and inspire curious minds to explore the past and present through tangible\nconnections."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": null,
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Crop rotation is a farming technique that involves growing a series of different types offrops in the same area across a\nsequence of seasons. Different crops use different nutrients from the soil, so rotating them prevents the soil from\nbecoming depleted. Th method he to red pests a diseases; i also decr the ne for\nchem fertilizers, prom sustainable agric • Farmers use this practice to improve crop yields\nand maintain healthy soil."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "this",
+          "helps",
+          "reduce",
+          "and",
+          "it",
+          "decreases",
+          "need",
+          "chemical",
+          "promiting",
+          "agriculture"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a review.",
+      "prompt": "What is suggested about the protagonist's experience in the film?",
+      "passage": {
+        "text": "The Review of Whispering Woods\n\nThis week's University Cineclub offering, Whispering Woods by award-winning filmmaker Amara Patel, features Tomás Ruiz as Dr. Daniel Salazar, a botanist who endures an unexpected reunion while doing fieldwork in a remote forest.\n\nPraised by critics, this film offers a compelling exploration of fantasy that challenges viewers' perceptions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "He wins an award for scientific research"
+        },
+        {
+          "key": "B",
+          "text": "He stumbles upon a mystery affecting a forest's ecology"
+        },
+        {
+          "key": "C",
+          "text": "He struggles to find his way out of a forest"
+        },
+        {
+          "key": "D",
+          "text": "He encounters someone from his past"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a review.",
+      "prompt": "Who is Tomás Ruiz?",
+      "passage": {
+        "text": "The Review of Whispering Woods\n\nThis week's University Cineclub offering, Whispering Woods by award-winning filmmaker Amara Patel, features Tomás Ruiz as Dr. Daniel Salazar, a botanist who endures an unexpected reunion while doing fieldwork in a remote forest. Praised by critics, this film offers a compelling exploration of fantasy that challenges viewers' perceptions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A film director"
+        },
+        {
+          "key": "B",
+          "text": "A film actor"
+        },
+        {
+          "key": "C",
+          "text": "A character in a film"
+        },
+        {
+          "key": "D",
+          "text": "A film critic"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What can be inferred about the renovation?",
+      "passage": {
+        "text": "SCIENCE LIBRARY RENOVATION ANNOUNCEMENT\nThe Woods Science Library will be temporarily closed starting\nMonday, August 2, for renovation. The renovation is expected to take\napproximately six weeks.\nImportant Information:\n1. Book Returns:\n• Please return all borrowed books to the temporary drop-off location at\nthe community center, located at 123 Elm Street.\n2. Online Services:\n• Digital resources such as e-books and online databases will remain\navailable throughout the renovation period. Visit our website at\nwww.woodslib.edu for access.\n3. Programs and Events:\n• All scheduled programs and events will be relocated to the community\ncenter. Check our website for updated schedules and locations.\n4. Contact Information:\n• For inquiries, please contact the library staff at\ninfo@woodslib.edy or call 555-6781.\nWe apologize for any inconvenience and appreciate your understanding as\nwe work to expand our library facilities. We're sure patrons will enjoy using\nour new meeting rooms after September!\nWoods Science Library Management"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It will take more than six weeks"
+        },
+        {
+          "key": "B",
+          "text": "It is necessary for expansion."
+        },
+        {
+          "key": "C",
+          "text": "It will enhance the digital resources."
+        },
+        {
+          "key": "D",
+          "text": "It is funded by the community center."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "Where should patrons bring back their borrowed books during the renovation?",
+      "passage": {
+        "text": "SCIENCE LIBRARY RENOVATION ANNOUNCEMENT\nThe Woods Science Library will be temporarily closed starting\nMonday, August 2, for renovation. The renovation is expected to take\napproximately six weeks.\nImportant Information:\n1. Book Returns:\n• Please return all borrowed books to the temporary drop-off location at\nthe community center, located at 123 Elm Street.\n2. Online Services:\n• Digital resources such as e-books and online databases will remain\navailable throughout the renovation period. Visit our website at\nwww.woodslib.edu for access.\n3. Programs and Events:\n•All scheduled programs and events will be relocated to the community\ncenter. Check our website for updated schedules and locations.\n4. Contact Information:\n• For inquiries, please contact the library staff at\ninfo.@woodslib.edu or call 555-6781.\nWe apologize for any inconvenience and appreciate your understanding as\nwe work to expand our library facilities. We're sure patrons will enjoy using\nour new meeting rooms after September!\nWoods Science Library Management"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The community center"
+        },
+        {
+          "key": "B",
+          "text": "The special meeting rooms"
+        },
+        {
+          "key": "C",
+          "text": "The library staff desk"
+        },
+        {
+          "key": "D",
+          "text": "The regular drop-off location"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What will happen to the programs and events?",
+      "passage": {
+        "text": "SCIENCE LIBRARY RENOVATION ANNOUNCEMENT\nThe Woods Science Library will be temporarily closed starting\nMonday, August 2, for renovation. The renovation is expected to take\napproximately six weeks.\nImportant Information:\n1. Book Returns:\n• Please return all borrowed books to the temporary drop-off location at\nthe community center, located at 123 Elm Street.\n2. Online Services:\n• Digital resources such as e-books and online databases will remain\navailable throughout the renovation period. Visit our website at\nwww.woodslib.edu for access.\n3. Programs and Events:\n• All scheduled programs and events will be relocated to the community\ncenter. Check our website for updated schedules and locations.\n4. Contact Information:\n• For inquiries, please contact the library staff at\ninfo@woodslib.edu or call 555-6781.\nWe apologize for any inconvenience and appreciate your understanding as\nwe work to expand our library facilities. We're sure patrons will enjoy using\nour new meeting rooms after September!\nWoods Science Library Management"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They will be canceled."
+        },
+        {
+          "key": "B",
+          "text": "They will continue at another location."
+        },
+        {
+          "key": "C",
+          "text": "They will be rescheduled after reopening."
+        },
+        {
+          "key": "D",
+          "text": "They will be moved online."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, value theory is concerned with all of the following EXCEPT",
+      "passage": {
+        "text": "Value theory investigates the nature of values and the principles that determine what is worth pursuing, both individually and collectively. Central questions include: What makes something good? Are values objective features of the world or subjective preferences? A key distinction in value theory is between intrinsic value, which denotes value something has in itself, and instrumental value, which refers to the value of something as a means to an end. One influential theory within this domain is utilitarianism, which posits that the moral worth of actions is determined by their consequences, specifically the maximization of overall happiness or utility. This consequentialist framework has shaped ethical reasoning in fields ranging from public policy to economics. However, critics argue that utilitarianism's aggregation of happiness can negate individual rights and seemingly justify morally troubling trade-offs. For example, allocating limited healthcare resources to benefit the majority may disadvantage those with rare or costly conditions, raising concerns about fairness and equity. Contemporary value theorists often endorse value pluralism. the view that multiple, sometimes conflicting values-such as autonomy. justice, and compassion-are irreducibly important. This pluralistic approach emphasizes the complexity of ethical decision-making and the need to navigate competing goods instead of reducing them to a single metric."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "how to determine what is good"
+        },
+        {
+          "key": "B",
+          "text": "whether values are personal preferences"
+        },
+        {
+          "key": "C",
+          "text": "how to distinguish between values and principles"
+        },
+        {
+          "key": "D",
+          "text": "the difference between intrinsic and instrumental value"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the phrase \"This consequentialist framework\" refer to? The view that the consequences of an action determine its morality",
+      "passage": {
+        "text": "Value theory investigates the nature of values and the principles that determine what is worth pursuing, both individually and collectively. Central questions include: What makes something good? Are values objective features of the world or subjective preferences? A key distinction in value theory is between intrinsic value, which denotes value something has in itself, and instrumental value, which refers to the value of something as a means to an end.\n\nOne influential theory within this domain is utilitarianism. which posits that the moral worth of actions is determined by their consequences, specifically the maximization of overall happiness or utility. This consequentialist framework has shaped ethical reasoning in fields ranging from public policy to economics. However, critics argue that utilitarianism's aggregation of happiness can negate individual rights and seemingly justify morally troubling trade-offs. For example, allocating limited healthcare resources to benefit the majority may disadvantage those with rare or costly conditions, raising concerns about fairness and equity.\n\nContemporary value theorists often endorse value pluralism, the view that multiple, sometimes conflicting values-such as autonomy, justice, and compassion-are irreducibly important. This pluralistic approach emphasizes the complexity of ethical decision-making and the need to navigate competing goods instead of reducing them to a single metric."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Theories that foreground the happiness of the individual in"
+        },
+        {
+          "key": "B",
+          "text": "assigning value"
+        },
+        {
+          "key": "C",
+          "text": "The underlying view that theories of value have an impact on making life decisions"
+        },
+        {
+          "key": "D",
+          "text": "The debate about how best to balance competing outcomes of happiness and utility"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "le Theory The word \"allocating\" in the passage is closest in meaning",
+      "passage": {
+        "text": "Value theory investigates the nature of values and the principles that determine what is worth pursuing, both individually and collectively. Central questions include: What makes something good? Are values objective features of the world or subjective preferences? A key distinction in value theory is between intrinsic value, which denotes value something has in itself, and instrumental value, which refers to the value of something as a means to an end. One influential theory within this domain is utilitarianism, which posits that the moral worth of actions is determined by their consequences, specifically the maximization of overall happiness or utility. This consequentialist framework has shaped ethical reasoning in fields ranging from public policy to economics. However, critics argue that utilitarianism's aggregation of happiness can negate individual rights and seemingly justify morally troubling trade-offs. For example, allocating limited healthcare resources to benefit the majority may disadvantage those with rare or costly conditions, raising concerns about fairness and equity. Contemporary value theorists often endorse value pluralism, the view that multiple, sometimes conflicting values-such as autonomy, justice, and compassion-are irreducibly important. This pluralistic approach emphasizes the complexity of ethical decision-making and the need to navigate competing goods instead of reducing them to a"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "distributing"
+        },
+        {
+          "key": "B",
+          "text": "acquiring"
+        },
+        {
+          "key": "C",
+          "text": "increasing"
+        },
+        {
+          "key": "D",
+          "text": "tracking"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, what is one main criticism of utilitarianism?",
+      "passage": {
+        "text": "Value theory investigates the nature of values and the principles that determine what is worth pursuing, both individually and collectively. Central questions include: What makes something good? Are values objective features of the world or subjective preferences? A key distinction in value theory is between intrinsic value, which denotes value something has in itself, and instrumental value, which refers to the value of something as a means to an end.\n\nOne influential theory within this domain is utilitarianism. which posits that the moral worth of actions is determined by their consequences, specifically the maximization of overall happiness or utility. This consequentialist framework has shaped ethical reasoning in fields ranging from public policy to economics. However, critics argue that utilitarianism's aggregation of happiness can negate individual rights and seemingly justify morally troubling trade-offs. For example, allocating limited healthcare resources to benefit the majority may disadvantage those with rare or costly conditions, raising concerns about fairness and equity.\n\nContemporary value theorists often endorse value pluralism, the view that multiple, sometimes conflicting values-such as autonomy, justice, and compassion-are irreducibly important. This pluralistic approach emphasizes the complexity of ethical decision-making and the need to navigate competing goods instead of reducing them to a single metric."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Its implementation may benefit public policy, but it is less helpful for economic decisions."
+        },
+        {
+          "key": "B",
+          "text": "Its priority of making healthcare more accessible creates higher costs for most people."
+        },
+        {
+          "key": "C",
+          "text": "In its efforts to benefit large numbers of people, it may harm some individuals."
+        },
+        {
+          "key": "D",
+          "text": "There is little evidence that it leads to improved healthcare for the majority."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the passage suggest about value pluralism?",
+      "passage": {
+        "text": "Value theory investigates the nature of values and the principles that determine what is worth pursuing, both individually and collectively. Central questions include: What makes something good? Are values objective features of the world or subjective preferences? A key distinction in value theory is between intrinsic value, which denotes value something has in itself, and instrumental value, which refers to the value of something as a means to an end. One influential theory within this domain is utilitarianism, which posits that the moral worth of actions is determined by their consequences, specifically the maximization of overall happiness or utility. This consequentialist framework has shaped ethical reasoning in fields ranging from public policy to economics. However, critics argue that utilitarianism's aggregation of happiness can negate individual rights and seemingly justify morally troubling trade-offs. For example, allocating limited healthcare resources to benefit the majority may disadvantage those with rare or costly conditions, raising concerns about fairness and equity. Contemporary value theorists often endorse value pluralism. the view that multiple, sometimes conflicting values-such as autonomy, justice, and compassion-are irreducibly important. This pluralistic approach emphasizes the complexity of ethical decision-making and the need to navigate competing goods instead of reducing them to a single metric."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It was a popular system for making decisions until quite recently."
+        },
+        {
+          "key": "B",
+          "text": "It gives primary consideration to compassion while autonomy plays a secondary role."
+        },
+        {
+          "key": "C",
+          "text": "It states that ethical decisions require the input of multiple decision-makers."
+        },
+        {
+          "key": "D",
+          "text": "It argues that ethical decisions should not be based on just one criterion."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The passage suggests that one advantage of synthetic diamonds over natural diamonds is that producing synthetic diamonds requires less heat than mining natural diamonds does producing synthetic diamonds is less harmful to the environment than mining natural diamonds is synthetic diamonds are physically and chemically superior to natural diamonds synthetic diamonds are available in a greater variety than natural diamonds are The word replicating in the passage is closest in meaning",
+      "passage": {
+        "text": "Traditionally, diamonds were extracted from mines, a process fraught with environmental concerns. Synthetic diamonds offer a promising alternative. Creating synthetic diamonds involves replicating the conditions under which natural diamonds form. One popular method is High Pressure High Temperature (HPHT), where carbon is subjected to extreme heat and pressure. HPHT diamonds can be produced quickly and in large quantities, making them suitable for mass production. However, they may contain metallic inclusions from the catalysts used, which can affect clarity and color. Another method is Chemical Vapor Deposition (CVD), which grows diamonds layer by layer from carbon-rich gases in a vacuum chamber. CVD diamonds typically have fewer impurities and offer greater control over clarity and size. Although CVD diamonds can be produced on a large scale, CVD production is often more technically demanding and slower, which may influence cost. Both HPHT and CVD methods produce diamonds that are chemically and physically identical to natural diamonds. They share the same hardness, brilliance, and clarity, making them suitable for jewelry. Consumers are often skeptical of synthetic diamonds, as they associate rarity and historical significance only with natural diamonds. Nevertheless, the market for synthetic diamonds continues to grow, driven by their\n\nmarket for synthetic diamonds continues to grow, driven by their affordability, sustainability, and ethical appeal.\n\nTraditionally, diamonds were extracted from mines, a process fraught with environmental concerns. Synthetic diamonds offer a promising alternative. Creating synthetic diamonds involves replicating the conditions under which natural diamonds form. One popular method is High Pressure High Temperature (HPHT), where carbon is subjected to extreme heat and pressure. HPHT diamonds can be produced quickly and in large quantities, making them suitable for mass production. However, they may contain metallic inclusions from the catalysts used, which can affect clarity and color. Another method is Chemical Vapor Deposition (CVD), which grows diamonds layer by layer from carbon-rich gases in a vacuum chamber. CVD diamonds typically have fewer impurities and offer greater control over clarity and size. Although CVD diamonds can be produced on a large scale, CVD production is often more technically demanding and slower, which may influence cost. Both HPHT and CVD methods produce diamonds that are chemically and physically identical to natural diamonds. They share the same hardness, brilliance, and clarity, making them suitable for jewelry. Consumers are often skeptical of synthetic diamonds, as they associate rarity and historical significance only with natural diamonds. Nevertheless, the market for synthetic diamonds continues to grow, driven by their"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "analyzing"
+        },
+        {
+          "key": "B",
+          "text": "recreating"
+        },
+        {
+          "key": "C",
+          "text": "altering"
+        },
+        {
+          "key": "D",
+          "text": "enhancing"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q33",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, what is one advantage of HPHT diamonds over CVD diamonds?",
+      "passage": {
+        "text": "Traditionally, diamonds were extracted from mines, a process fraught with environmental concerns. Synthetic diamonds offer\n\na promising alternative.\n\nCreating synthetic diamonds involves replicating the conditions under which natural diamonds form. One popular method is High Pressure High Temperature (HPHT), where carbon is subjected to extreme heat and pressure. HPHT diamonds can be produced quickly and in large quantities, making them suitable for mass production. However, they may contain metallic inclusions from the catalysts used, which can affect clarity and color.\n\nAnother method is Chemical Vapor Deposition (CVD), which grows diamonds layer by layer from carbon-rich gases in a vacuum chamber. CVD diamonds typically have fewer impurities and offer greater control over clarity and size. Although CVD diamonds can be produced on a large scale, CVD production is often more technically demanding and slower, which may influence cost.\n\nBoth HPHT and CVD methods produce diamonds that are chemically and physically identical to natural diamonds. They share the same hardness, brilliance, and clarity, making them suitable for jewelry. Consumers are often skeptical of synthetic\n\ndiamonds, as they associate rarity and historical significance only with natural diamonds. Nevertheless, the market for synthetic diamonds continues to grow, driven by their"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They are of higher quality"
+        },
+        {
+          "key": "B",
+          "text": "They are easier to produce"
+        },
+        {
+          "key": "C",
+          "text": "They can more readily be used for jewelry"
+        },
+        {
+          "key": "D",
+          "text": "They have better clarity and color"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m1_q34",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the passage mention the \"rarity and historical significance\" of natural diamonds?",
+      "passage": {
+        "text": "Traditionally, diamonds were extracted from mines, a process fraught with environmental concerns. Synthetic diamonds offer a promising alternative. Creating synthetic diamonds involves replicating the conditions under which natural diamonds form. One popular method is High Pressure High Temperature (HPHT), where carbon is subjected to extreme heat and pressure. HPHT diamonds can be produced quickly and in large quantities, making them suitable for mass production. However, they may contain metallic inclusions from the catalysts used, which can affect clarity and color. Another method is Chemical Vapor Deposition (CVD), which grows diamonds layer by layer from carbon-rich gases in a vacuum chamber. CVD diamonds typically have fewer impurities and offer greater control over clarity and size. Although CVD diamonds can be produced on a large scale, CVD production is often more technically demanding and slower, which may influence cost. Both HPHT and CVD methods produce diamonds that are chemically and physically identical to natural diamonds. They share the same hardness, brilliance, and clarity, making them suitable for jewelry. Consumers are often skeptical of synthetic diamonds, as they associate rarity and historical significance only with natural diamonds. Nevertheless, the market for"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To emphasize that consumers should continue using natural diamonds for most purposes"
+        },
+        {
+          "key": "B",
+          "text": "To support the claim that the market for natural diamonds is growing"
+        },
+        {
+          "key": "C",
+          "text": "To explain why the acceptance of synthetic diamonds is somewhat limited"
+        },
+        {
+          "key": "D",
+          "text": "To highlight the affordability and sustainability of synthetic diamonds"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m2_q1",
+      "task_type": "complete_words",
+      "order": 16,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "The Ottoman Empire, which lasted from 1299 to 1922, was a formidable force that reshaped the political and cultural\nlandscapes of Europe, the Middle East, and North Africa. Renowned for its mili prowess a strategic\ncong t , the emp reached i zenith un the re of Suleyman the Magnificent, dur which\nar and archit flourished. The Ottomans also played a pivotal role in global commerce, controlling key\ntrade routes that linked the spice markets of Asia with the merchant hubs of Europe."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "military",
+          "and",
+          "conquests",
+          "empire",
+          "its",
+          "under",
+          "reign",
+          "during",
+          "arts",
+          "architecture"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m2_q11",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What can be inferred about coral bleaching in the first paragraph?",
+      "passage": {
+        "text": "Coral reefs are defined as an underwater ecosystem formed by colonies of tiny marine animals called coral polyps. They are among the most diverse ecosystems on Earth; however, they are facing severe threats from climate change, pollution, and overfishing. These threats have led to widespread coral bleaching, where corals lose their vibrant colors and turn white. Bleaching weakens corals, making them more susceptible to disease and ultimately leading to their death. Scientists and environmentalists are working on various restoration techniques to combat this decline. These efforts highlight the urgency of finding effective solutions to protect these vital ecosystems. One promising method is coral gardening, where fragments of healthy coral are grown in underwater nurseries and then transplanted onto damaged reefs. This technique has shown significant success in certain areas, helping to rebuild reef structures and promote biodiversity. Another innovative approach involves using electricity to stimulate coral growth. This method, known as Biorock™ technology, creates an electric field that encourages the deposition of minerals found in seawater, accelerating coral\n\nDespite these efforts, challenges remain. Restoration projects are often expensive and labor-intensive, and the long-term success of these techniques is still uncertain. Continuous research and adaptive management strategies are crucial for ensuring the resilience of coral reefs in the face of ongoing environmental changes."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It makes corals more colorful."
+        },
+        {
+          "key": "B",
+          "text": "It is caused by underwater nurseries."
+        },
+        {
+          "key": "C",
+          "text": "It is a sign that corals are unhealthy."
+        },
+        {
+          "key": "D",
+          "text": "It helps coral growth."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m2_q12",
+      "task_type": "read_academic",
+      "order": 18,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Which of the following is NOT mentioned as a threat to coral reefs in the passage?",
+      "passage": {
+        "text": "Coral reefs are defined as an underwater ecosystem formed by colonies of tiny marine animals called coral polyps. They are among the most diverse ecosystems on Earth; however, they are facing severe threats from climate change, pollution, and overfishing. These threats have led to widespread coral bleaching, where corals lose their vibrant colors and turn white. Bleaching weakens corals, making them more susceptible to disease and ultimately leading to their death.\n\nScientists and environmentalists are working on various restoration techniques to combat this decline. These efforts highlight the urgency of finding effective solutions to protect these vital ecosystems. One promising method is coral gardening, where fragments of healthy coral are grown in underwater nurseries and then transplanted onto damaged reefs. This technique has shown significant success in certain areas, helping to rebuild reef structures and promote biodiversity. Another innovative approach involves using electricity to stimulate coral growth. This method, known as Biorock™ technology, creates an electric field that encourages the deposition of minerals found in seawater, accelerating coral growth.\n\nDespite these efforts, challenges remain. Restoration projects are often expensive and labor-intensive, and the long-term success of these techniques is still uncertain. Continuous research and adaptive management strategies are crucial for ensuring the resilience of coral reefs in the face of ongoing"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Climate change"
+        },
+        {
+          "key": "B",
+          "text": "Pollution"
+        },
+        {
+          "key": "C",
+          "text": "O Overfishing"
+        },
+        {
+          "key": "D",
+          "text": "Tourism"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m2_q13",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention Biorock™ technology in the l second paragraph?",
+      "passage": {
+        "text": "Coral reefs are defined as an underwater ecosystem formed by colonies of tiny marine animals called coral polyps. They are among the most diverse ecosystems on Earth; however, they are facing severe threats from climate change, pollution, and overfishing. These threats have led to widespread coral bleaching, where corals lose their vibrant colors and turn white. Bleaching weakens corals, making them more susceptible to disease and ultimately leading to their death. Scientists and environmentalists are working on various restoration techniques to combat this decline. These efforts highlight the urgency of finding effective solutions to protect these vital ecosystems. One promising method is coral gardening, where fragments of healthy coral are grown in underwater nurseries and then transplanted onto damaged reefs. This technique has shown significant success in certain areas, helping to rebuild reef structures and promote biodiversity. Another innovative approach involves using electricity to stimulate coral growth. This method, known as Biorock™ technology, creates an electric field that encourages the deposition of minerals found in seawater, accelerating coral growth. Despite these efforts, challenges remain. Restoration projects are often expensive and labor-intensive, and the long-term success of these techniques is still uncertain. Continuous research and adaptive management strategies are crucial for ensuring the resilience of coral reefs in the face of ongoing"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To describe one cause behind coral bleaching"
+        },
+        {
+          "key": "B",
+          "text": "To introduce an innovative method for coral restoration"
+        },
+        {
+          "key": "C",
+          "text": "To explain how electricity affects coral health"
+        },
+        {
+          "key": "D",
+          "text": "To criticize traditional restoration methods"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m2_q14",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is one challenge associated with coral reef restoration mentioned in the last paragraph?",
+      "passage": {
+        "text": "Coral reefs are defined as an underwater ecosystem formed by colonies of tiny marine animals called coral polyps. They are among the most diverse ecosystems on Earth; however, they are facing severe threats from climate change, pollution, and overfishing. These threats have led to widespread coral bleaching, where corals lose their vibrant colors and turn white. Bleaching weakens corals, making them more susceptible to disease and ultimately leading to their death.\n\nScientists and environmentalists are working on various restoration techniques to combat this decline. These efforts highlight the urgency of finding effective solutions to protect these vital ecosystems. One promising method is coral gardening, where fragments of healthy coral are grown in underwater nurseries and then transplanted onto damaged reefs. This technique has shown significant success in certain areas, helping to rebuild reef structures and promote biodiversity. Another innovative approach involves using electricity to stimulate coral growth. This method, known as Biorock™ technology, creates an electric field that encourages the deposition of minerals found in seawater, accelerating coral growth.\n\nDespite these efforts, challenges remain. Restoration projects are often expensive and labor-intensive, and the long-term success of these techniques is still uncertain. Continuous research and adaptive management strategies are crucial for ensuring the resilience of coral reefs in the face of ongoing"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It requires a lot of water."
+        },
+        {
+          "key": "B",
+          "text": "It is costly and requires a lot of work"
+        },
+        {
+          "key": "C",
+          "text": "It damages healthy corals"
+        },
+        {
+          "key": "D",
+          "text": "It reduces biodiversity."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    },
+    {
+      "id": "reading_2026-02-23_m2_q15",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "15",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What can be inferred about the long-term success of coral restoration techniques?",
+      "passage": {
+        "text": "Coral reefs are defined as an underwater ecosystem formed by colonies of tiny marine animals called coral polyps. They are among the most diverse ecosystems on Earth; however, they are facing severe threats from climate change, pollution, and overfishing. These threats have led to widespread coral bleaching, where corals lose their vibrant colors and turn white. Bleaching weakens corals, making them more susceptible to disease and ultimately leading to their death. Scientists and environmentalists are working on various restoration techniques to combat this decline. These efforts highlight the urgency of finding effective solutions to protect these vital ecosystems. One promising method is coral gardening. where fragments of healthy coral are grown in underwater nurseries and then transplanted onto damaged reefs. This technique has shown significant success in certain areas, helping to rebuild reef structures and promote biodiversity. Another innovative approach involves using electricity to stimulate coral growth. This method, known as Biorock™ technology, creates an electric field that encourages the deposition of minerals found in seawater, accelerating coral growth. Despite these efforts, challenges remain. Restoration projects are often expensive and labor-intensive, and the long-term success of these techniques is still uncertain. Continuous research and adaptive management strategies are crucial for ensuring the resilience of coral reefs in the face of ongoing"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It is guaranteed with current methods."
+        },
+        {
+          "key": "B",
+          "text": "It depends on reducing tourism."
+        },
+        {
+          "key": "C",
+          "text": "It is unaffected by environmental changes"
+        },
+        {
+          "key": "D",
+          "text": "It is still not guaranteed"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "2.23新托福真题/2.23 阅读.pdf"
+    }
+  ]
+}

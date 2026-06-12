@@ -45,6 +45,8 @@ from api import init_app as init_api
 from api.wechat import send_subscribe_message
 from api.tencent_soe import evaluate_pronunciation
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
+from toefl_practice import catalog_summary as _toefl_catalog_summary
+from toefl_practice import toefl_bp
 from models import (
     AuditLogEntry,
     PlanEvidence,
@@ -1889,6 +1891,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 init_api(app)
+app.register_blueprint(toefl_bp)
 
 
 UPLOAD_ROOT = Path(app.config.get("UPLOAD_FOLDER", Path(app.root_path) / "uploads"))
@@ -6682,6 +6685,7 @@ def _practice_library_summary() -> dict:
             pass
 
     return {
+        "toefl": _toefl_catalog_summary(),
         "listening": {
             "cambridge_books": len(listening_books),
             "cambridge_tests": listening_test_count,

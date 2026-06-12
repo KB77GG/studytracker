@@ -1,0 +1,919 @@
+{
+  "exam": {
+    "id": "reading_2026-04-15_S1",
+    "subject": "reading",
+    "date": "2026-04-15",
+    "volume": "S1",
+    "source_pdf": "4.15/4.15 套一 阅读.docx",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-04-15_S1_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Photosynthesis is a vital process for life on Earth that also has potential to address modern energy challenges.\nThrough the conversion of sunlight into chemical energy, plants pro organic comp\nsustaining li the found chains. Artif photosynthesis c theoretically\nclean and renewable energy, reducing our dependence on fossil fuels. By mimicking photosynthesis,\nscientists can produce carbon-neutral fuels, which can aid in developing sustainable energy solutions."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "produce",
+          "and",
+          "compounds",
+          "life",
+          "forming",
+          "foundation",
+          "food",
+          "artificial",
+          "can",
+          "produce"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Child development milestones are key indicators of a child's growth. They encol_ various asp of\ndevelopment, incl language acqui, motor ski , motor ski , and soc interactions. O example i\ntaking a fi step, wh typically occurs around the age of twelve months. These milestones are useful in\nhelping parents and caretakers monitor a child's progress. It is important to remember, however, that these\nmilestones only provide a general guide, and each child develops at their own pace."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "encompass",
+          "aspects",
+          "including",
+          "acquisition",
+          "skills",
+          "social",
+          "one",
+          "is",
+          "first",
+          "which"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What is the main purpose of the notice?",
+      "passage": {
+        "text": "Meadowfield Farmers Market\nExperience the freshness of local produce at the\nMeadowfield Farmers Market.\nOpen every Saturday from 9:00 A.M. to 1:00 P.m., the\nmarket offers a variety of fruits, vegetables,\nhomemade goods, and crafts.\nSponsored by Berghold University's Agriculture\nDepartment, it's the perfect place to support local\nfarmers and artisans."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To invite vendors to a market"
+        },
+        {
+          "key": "B",
+          "text": "To provide directions to a market"
+        },
+        {
+          "key": "C",
+          "text": "To advertise a market"
+        },
+        {
+          "key": "D",
+          "text": "To request information about a market"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What will NOT be found at the market?",
+      "passage": {
+        "text": "Meadowfield Farmers Market\nExperience the freshness of local produce at the\nMeadowfield Farmers Market.\nOpen every Saturday from 9:00 A.M. to 1:00 P.M., the\nmarket offers a variety of fruits, vegetables,\nhomemade goods, and crafts.\nSponsored by Berghold University's Agriculture\nDepartment, it's the perfect place to support local\nfarmers and artisans."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Fruits"
+        },
+        {
+          "key": "B",
+          "text": "Vegetables"
+        },
+        {
+          "key": "C",
+          "text": "Handmade items"
+        },
+        {
+          "key": "D",
+          "text": "Seafood"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is the main purpose of the instructions?",
+      "passage": {
+        "text": "Dorm Printer Setup Instructions\n\nStep 1: Remove the printer from the packaging.\n\nStep 2: Connect the power cable to the printer\n\nand plug it into the wall socket.\n\nStep 3: Open the front of the printer by pressing\n\nthe labeled button.\n\nStep 4: Install the ink cartridges.\n\nStep 5: Turn on the printer and follow the\n\non-screen steps to complete the process."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To explain how to replace an ink cartridge"
+        },
+        {
+          "key": "B",
+          "text": "To explain how to prepare a new printer for use"
+        },
+        {
+          "key": "C",
+          "text": "To explain how to repair a printer"
+        },
+        {
+          "key": "D",
+          "text": "To explain how to connect a printer to a power source"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is the next step after turning on the printer?",
+      "passage": {
+        "text": "Dorm Printer Setup Instructions\n\nStep 1: Remove the printer from the packaging. Step 2: Connect the power cable to the printer and plug it into the wall socket. Step 3: Open the front of the printer by pressing the labeled button. Step 4: Install the ink cartridges. Step 5: Turn on the printer and follow the on-screen steps to complete the process."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Print a test page to ensure it is working properly"
+        },
+        {
+          "key": "B",
+          "text": "Add paper and begin using the printer"
+        },
+        {
+          "key": "C",
+          "text": "Follow more instructions on the printer screen"
+        },
+        {
+          "key": "D",
+          "text": "Install the ink cartridges as shown"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read a text-message chain.",
+      "prompt": "t-message chain. What can be concluded about Eli?",
+      "passage": {
+        "text": "Hey Eli. I'm having a problem with my mini fridge. I hear the motor\nhumming, but it's not cooling off. David from our history class tells me\nyou're good at fixing things like this.\nCould you come by and have a look?\nHey Elena. I'd be happy to take a look. Right now I'm in the library with\nmy math study group. We just got here.\nOh, I didn't mean right away. Any time is good.\nHow about tomorrow at 12:30?\nMy economics class starts at noon. Does 1:30 work?\nThat works fine. Chances are it's a broken condenser coil. I've got an\nextra one, so I'll bring it with me.\nThank you so much!"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "He works at an appliance repair shop."
+        },
+        {
+          "key": "B",
+          "text": "He has repaired refrigerators in the past."
+        },
+        {
+          "key": "C",
+          "text": "He is studying to be a mechanical engineer."
+        },
+        {
+          "key": "D",
+          "text": "He meets with his math study group every week."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read a text-message chain.",
+      "prompt": "At 4:48 P.M., what does Elena imply when she writes, \"My economics class starts at noon\"?",
+      "passage": {
+        "text": "Hey Eli. I'm having a problem with my mini fridge. I hear the motor\nhumming, but it's not cooling off. David from our history class tells me\nyou're good at fixing things like this.\nCould you come by and have a look?\nHey Elena. I'd be happy to take a look. Right now I'm in the library with\nmy math study group. We just got here.\nOh, I didn't mean right away. Any time is good\nHow about tomorrow at 12:30?\nMy economics class starts at noon. Does 1:30 work?\nThat works fine. Chances are it's a broken condenser coil. I've got an\nextra one, so i'll bring it with me.\nThank you so much!"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "She has to arrive early to her economics class."
+        },
+        {
+          "key": "B",
+          "text": "Eli can work on the problem while she is in class."
+        },
+        {
+          "key": "C",
+          "text": "She cannot meet Eli at the time he has suggested"
+        },
+        {
+          "key": "D",
+          "text": "Her economics professor has changed the class start time."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read a text-message chain.",
+      "prompt": "What does Eli suggest about Elena's refrigerator?",
+      "passage": {
+        "text": "Hey Eli. I'm having a problem with my mini fridge. I hear the motor\nhumming, but it's not cooling off. David from our history class tells me\nyou're good at fixing things like this\nCould you come by and have a look?\nHey Elena. I'd be happy to take a look. Right now I'm in the library with\nmy math study group. We just got here.\nOh, I didn't mean right away. Any time is good.\nHow about tomorrow at 12:30?\nMy economics class starts at noon. Does 1:30 work?\nThat works fine. Chances are it's a broken condenser coil. ve got an\nextra one, so i'll bring it with me.\nThank you so much!"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It needs a new part"
+        },
+        {
+          "key": "B",
+          "text": "It cannot be repaired"
+        },
+        {
+          "key": "C",
+          "text": "It is a low-quality model"
+        },
+        {
+          "key": "D",
+          "text": "It must be brought to a shop"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read an article.",
+      "prompt": "What is the main topic of the article? A community's resilience during a disruption",
+      "passage": {
+        "text": "Blackout Brings Creativity to Finals Week\n\nA sudden power outage during finals week left Smithfield students scrambling for solutions. Students took advantage of their smart-phone flashlights, and university staff provided camping lights for dorm lounges. \"It was stressful but kind of fun,\" said sophomore Grace Lee. The blackout lasted six hours, caused by a transformer failure near campus. Dining services offered free coffee, and professors extended deadlines to ease the pressure. \"We made the best of it,\" said senior Omar Davis, who studied with his bike light. Social media buzzed with photos of candlelit study sessions, turning the inconvenience into a moment of campus unity. Some students even organized impromptu acoustic concerts on the quad, proving that creativity thrives under constraints. \"It reminded us that community matters more than convenience,\" said Professor Laura Chen. By the early morning hours, power was restored, but the evening's events left a lasting impression."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A new energy-saving initiative"
+        },
+        {
+          "key": "B",
+          "text": "A musical event on campus"
+        },
+        {
+          "key": "C",
+          "text": "An announcement about a technology upgrade"
+        },
+        {
+          "key": "D",
+          "text": "+"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read an article.",
+      "prompt": "What is indicated about the outage?",
+      "passage": {
+        "text": "Blackout Brings Creativity to Finals Week A sudden power outage during finals week left Smithfield students scrambling for solutions. Students took advantage of their smart-phone flashlights, and university staff provided camping lights for dorm lounges. \"It was stressful but kind of fun,\" said sophomore Grace Lee. The blackout lasted six hours, caused by a transformer failure near campus. Dining services offered free coffee, and professors extended deadlines to ease the pressure. \"We made the best of it,\" said senior Omar Davis, who studied with his bike light. Social media buzzed with photos of candlelit study sessions, turning the inconvenience into a moment of campus unity. Some students even organized impromptu acoustic concerts on the quad, proving that creativity thrives under constraints. \"It reminded us that community matters more than convenience,\" said Professor Laura Chen. By the early morning hours, power was restored, but the evening's events left a lasting impression."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It led to the cancellation of final exams"
+        },
+        {
+          "key": "B",
+          "text": "It was planned for routine maintenance"
+        },
+        {
+          "key": "C",
+          "text": "It was caused by an equipment failure"
+        },
+        {
+          "key": "D",
+          "text": "It was limited to a single dormitory"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read an article.",
+      "prompt": "How might student behavior during the blackout be best described?",
+      "passage": {
+        "text": "Blackout Brings Creativity to Finals Week A sudden power outage during finals week left Smithfield students scrambling for solutions. Students took advantage of their smart-phone flashlights, and university staff provided camping lights for dorm lounges. \"It was stressful but kind of fun,\" said sophomore Grace Lee. The blackout lasted six hours, caused by a transformer failure near campus. Dining services offered free coffee, and professors extended deadlines to ease the pressure. \"We made the best of it,\" said senior Omar Davis, who studied with his bike light. Social media buzzed with photos of candlelit study sessions, turning the inconvenience into a moment of campus unity. Some students even organized impromptu acoustic concerts on the quad, proving that creativity thrives under constraints. \"It reminded us that community matters more than convenience,\" said Professor Laura Chen. By the early morning hours, power was restored, but the evening's events left a lasting impression."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They largely abandoned their studies"
+        },
+        {
+          "key": "B",
+          "text": "They found creative solutions and even enjoyed themselves."
+        },
+        {
+          "key": "C",
+          "text": "They posted angry comments on social media"
+        },
+        {
+          "key": "D",
+          "text": "They left campus in large numbers"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The main purpose of this passage is to",
+      "passage": {
+        "text": "Veganism, a dietary approach that excludes all animal-based foods, has experienced notable shifts in popularity in the United States. A study conducted in 2020 showed a dramatic increase in the number of Americans adopting a plant-based diet between 2004 and 2019. This growth was fueled by expanding awareness of animal welfare, environmental concerns linked to industrial agriculture, and increased emphasis on healthy eating. During the 2010s, companies began to market plant- based meat alternatives that became highly popular with both restaurants and home cooks. By the mid-2020s, however, momentum began to level off. Surveys in 2025 indicated that only about three to four percent of Americans identified as vegan. Several factors contributed to this plateau. Preparing vegan meals can be more involved than preparing meat-based meals. For example, a vegan cheese substitute can be made with nuts, but the process is time- consuming. And while home cooks can buy commercially manufactured vegan foods, those foods are highly processed, raising concerns about their healthfulness. Additionally, some social media influencers have begun to promote increased protein consumption, sparking increased consumer demand for meat. American food trends come and go, but while some consumers adopt extreme diets, Americans overall seem to be favoring more flexibility in their eating habits."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "describe the birth of veganism in the United States"
+        },
+        {
+          "key": "B",
+          "text": "list the benefits of a vegan diet"
+        },
+        {
+          "key": "C",
+          "text": "analyze some changes in Americans' attitudes toward veganism"
+        },
+        {
+          "key": "D",
+          "text": "identify trends in American consumer preferences"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The author notes all of the following as factors driving the popularity of veganism EXCEPT",
+      "passage": {
+        "text": "Veganism, a dietary approach that excludes all animal-based foods, has experienced notable shifts in popularity in the United States. A study conducted in 2020 showed a dramatic increase in the number of Americans adopting a plant-based diet between 2004 and 2019. This growth was fueled by expanding awareness of animal welfare, environmental concerns linked to industrial agriculture, and increased emphasis on healthy eating. During the 2010s, companies began to market plant- based meat alternatives that became highly popular with both restaurants and home cooks. By the mid-2020s, however, momentum began to level off. Surveys in 2025 indicated that only about three to four percent of Americans identified as vegan. Several factors contributed to this plateau. Preparing vegan meals can be more involved than preparing meat-based meals. For example, a vegan cheese substitute can be made with nuts, but the process is time- consuming. And while home cooks can buy commercially manufactured vegan foods, those foods are highly processed, raising concerns about their healthfulness. Additionally, some social media influencers have begun to promote increased protein consumption, sparking increased consumer demand for meat. American food trends come and go, but while some consumers adopt extreme diets, Americans overall seem to be favoring more flexibility in their eating habits."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "concern for animals"
+        },
+        {
+          "key": "B",
+          "text": "considerations about health"
+        },
+        {
+          "key": "C",
+          "text": "the high cost of consuming meat"
+        },
+        {
+          "key": "D",
+          "text": "a desire to protect the environment"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"involved\" in the passage is closest in meaning to unsatisfying",
+      "passage": {
+        "text": "Veganism, a dietary approach that excludes all animal-based foods, has experienced notable shifts in popularity in the United States. A study conducted in 2020 showed a dramatic increase in the number of Americans adopting a plant-based diet between 2004 and 2019. This growth was fueled by expanding awareness of animal welfare, environmental concerns linked to industrial agriculture, and increased emphasis on healthy eating. During the 2010s, companies began to market plant- based meat alternatives that became highly popular with both restaurants and home cooks. By the mid-2020s, however, momentum began to level off. Surveys in 2025 indicated that only about three to four percent of Americans identified as vegan. Several factors contributed to this plateau. Preparing vegan meals can be more involved than preparing meat-based meals. For example, a vegan cheese substitute can be made with nuts, but the process is time-consuming. And while home cooks can buy commercially manufactured vegan foods, those foods are highly processed, raising concerns about their healthfulness. Additionally, some social media influencers have begun to promote increased protein consumption, sparking increased consumer demand for meat. American food trends come and go, but while some consumers adopt extreme diets, Americans overall seem to be favoring more flexibility in their eating habits."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "expensive unpleasant"
+        },
+        {
+          "key": "B",
+          "text": "complicated"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The author mentions \"a vegan cheese substitute\" primarily in order to",
+      "passage": {
+        "text": "Veganism, a dietary approach that excludes all animal-based foods, has experienced notable shifts in popularity in the United States. A study conducted in 2020 showed a dramatic increase in the number of Americans adopting a plant-based diet between 2004 and 2019. This growth was fueled by expanding awareness of animal welfare, environmental concerns linked to industrial agriculture, and increased emphasis on healthy eating. During the 2010s, companies began to market plant- based meat alternatives that became highly popular with both restaurants and home cooks. By the mid-2020s, however, momentum began to level off. Surveys in 2025 indicated that only about three to four percent of Americans identified as vegan. Several factors contributed to this plateau. Preparing vegan meals can be more involved than preparing meat-based meals. For example, a vegan cheese substitute can be made with nuts, but the process is time- consuming. And while home cooks can buy commercially manufactured vegan foods, those foods are highly processed, raising concerns about their healthfulness. Additionally, some social media influencers have begun to promote increased protein consumption, sparking increased consumer demand for meat. American food trends come and go, but while some consumers adopt extreme diets, Americans overall seem to be favoring more flexibility in their eating habits."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "note a challenge inherent in preparing vegan meals"
+        },
+        {
+          "key": "B",
+          "text": "identify a popular item used in many vegan recipes contrast the healthfulness of vegan and animal-based foods"
+        },
+        {
+          "key": "C",
+          "text": "describe a cooking process popularized by vegans"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m1_q35",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "35",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Ø Hide Time the United States",
+      "passage": {
+        "text": "Veganism, a dietary approach that excludes all animal-based foods, has experienced notable shifts in popularity in the United States. A study conducted in 2020 showed a dramatic increase in the number of Americans adopting a plant-based diet between 2004 and 2019. This growth was fueled by expanding awareness of animal welfare, environmental concerns linked to industrial agriculture, and increased emphasis on healthy eating. During the 2010s, companies began to market plant- based meat alternatives that became highly popular with both restaurants and home cooks. By the mid-2020s, however, momentum began to level off. Surveys in 2025 indicated that only about three to four percent of Americans identified as vegan. Several factors contributed to this plateau. Preparing vegan meals can be more involved than preparing meat-based meals. For example, a vegan cheese substitute can be made with nuts, but the process is time- consuming. And while home cooks can buy commercially manufactured vegan foods, those foods are highly processed, raising concerns about their healthfulness. Additionally, some social media influencers have begun to promote increased protein consumption, sparking increased consumer demand for meat. American food trends come and go, but while some consumers adopt extreme diets, Americans overall seem to be favoring more flexibility in their eating habits.\n\nThe clock will indicate how much time you have to complete Module 2."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The passage suggests which of the following about commercial meat-alternative products? They became increasingly popular with home cooks during the mid-2020s."
+        },
+        {
+          "key": "B",
+          "text": "They are produced in a way that causes some people to doubt their healthfulness. They are not popular with Americans concerned about food allergies. They have greatly improved in flavor since their introduction."
+        },
+        {
+          "key": "C",
+          "text": "or"
+        },
+        {
+          "key": "D",
+          "text": "ave to complete Module 2."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m2_q1",
+      "task_type": "complete_words",
+      "order": 18,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "In the world of academia, art history is more than just studying paintings-it is about decoding the emotional language of visual storytelling. For example, chiaroscuro is a tech Renaissance.\nillumination. Artists like Caravaggio mastered this interplay, using it to pull viewers into the heart of his scenes, guiding shadow, the st\ntheir eyes and stirring their emotions with every flicker of light."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "technique",
+          "originated",
+          "the",
+          "exemplified",
+          "strong",
+          "between",
+          "and",
+          "style",
+          "drama",
+          "selective"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m2_q11",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, what significant achievement in fusion research occurred in 1957?",
+      "passage": {
+        "text": "Magnetic confinement fusion is a promising approach for generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halting the fusion process. Since those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume-a critical milestone called net\n\nHowever, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstacles, successful demonstration of net energy gain could pave the way for fusion power plants by"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Researchers successfully fused deuterium and tritium atoms for the first time."
+        },
+        {
+          "key": "B",
+          "text": "Researchers demonstrated that magnetic fields could contain extremely hot plasma."
+        },
+        {
+          "key": "C",
+          "text": "Researchers estimated the temperature of the sun's core to be 150 million degrees Celsius."
+        },
+        {
+          "key": "D",
+          "text": "Researchers discovered the basic principle that explains the existence of heavy forms of hydrogen."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m2_q12",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention plasma touching reactor walls?",
+      "passage": {
+        "text": "generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halting the fusion process. Since those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume -a critical milestone called net energy gain. However, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstacles, successful demonstration of net energy gain could pave the way for fusion power plants by the 2040s."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To explain how the plasma is contained within the reactor"
+        },
+        {
+          "key": "B",
+          "text": "To point out how researchers cool plasma after heating it for experiments"
+        },
+        {
+          "key": "C",
+          "text": "To demonstrate the final step in achieving nuclear fusion"
+        },
+        {
+          "key": "D",
+          "text": "To clarify why magnetic confinement techniques are necessary"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m2_q13",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"sophisticated\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halting the fusion process. Since those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume-a critical milestone called net\n\nHowever, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstacles, successful demonstration of net energy gain could pave the way for fusion power plants by the 2040s."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "advanced"
+        },
+        {
+          "key": "B",
+          "text": "large"
+        },
+        {
+          "key": "C",
+          "text": "expensive"
+        },
+        {
+          "key": "D",
+          "text": "successful"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m2_q14",
+      "task_type": "read_academic",
+      "order": 22,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, what is ITER's primary objective?",
+      "passage": {
+        "text": "generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halting the fusion process. Since those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume-a critical milestone called net energy gain. However, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstacles, successful demonstration of net energy gain could pave the way for fusion power plants by the 2040s."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To generate commercial electricity for distribution to power grids"
+        },
+        {
+          "key": "B",
+          "text": "To demonstrate that magnetic confinement techniques are not environmentally sustainable"
+        },
+        {
+          "key": "C",
+          "text": "To prove that fusion reactions can produce more energy than they consume"
+        },
+        {
+          "key": "D",
+          "text": "To challenge decades of magnetic confinement research"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    },
+    {
+      "id": "reading_2026-04-15_S1_m2_q15",
+      "task_type": "read_academic",
+      "order": 23,
+      "number": "15",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Which of the following is mentioned as one factor that currently prevents magnetic fusion from generating commercial electricity?",
+      "passage": {
+        "text": "generating clean electricity. This technology fuses deuterium and tritium, heavy forms of hydrogen, to release energy while producing minimal radioactive waste when compared to current technologies to produce nuclear power. The basic principle was first demonstrated in 1957: powerful magnetic fields contain extremely hot plasma at temperatures reaching 150 million degrees Celsius-ten times hotter than the sun's core. Without magnetic containment, the plasma would instantly cool upon touching reactor walls, halting the fusion process. Since those early breakthroughs, researchers have built increasingly sophisticated magnetic confinement reactors called tokamaks. The International Thermonuclear Experimental Reactor (ITER), currently under construction, represents the culmination of decades of magnetic confinement research. ITER aims to demonstrate sustained fusion reactions that produce more energy than they consume-a critical milestone called net energy gain. However, significant challenges remain before magnetic fusion can generate commercial electricity. Current experiments require enormous energy inputs to maintain plasma conditions, and the intense neutron radiation gradually damages reactor materials. Additionally, converting fusion energy into usable electricity requires developing efficient heat-to-power conversion systems. Despite these obstacles, successful demonstration of net energy gain could pave the way for fusion power plants by the 2040s."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Insufficient global supplies of reactor materials"
+        },
+        {
+          "key": "B",
+          "text": "Inability to achieve intense neutron radiation"
+        },
+        {
+          "key": "C",
+          "text": "High energy demands for plasma maintenance"
+        },
+        {
+          "key": "D",
+          "text": "Lack of magnetic fields that are powerful enough"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 阅读.docx"
+    }
+  ]
+}

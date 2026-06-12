@@ -1,0 +1,229 @@
+{
+  "exam": {
+    "id": "speaking_2026-01-27_B",
+    "subject": "speaking",
+    "date": "2026-01-27",
+    "volume": "B",
+    "source_pdf": "1.27新托福B卷",
+    "duration_seconds": 960,
+    "module_durations": {
+      "m1": 420,
+      "m2": 540
+    },
+    "audio_modules": [
+      {
+        "id": "m1",
+        "label": "Listen and Repeat",
+        "url": "/static/toefl/speaking/2026-01-27_B_Speaking.mp3"
+      },
+      {
+        "id": "m2",
+        "label": "Take an Interview",
+        "url": "/static/toefl/speaking/2026-01-27_B_Speaking.mp3"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": "speaking_2026-01-27_B_m1_q1",
+      "task_type": "listen_and_repeat",
+      "order": 1,
+      "number": "1",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Welcome to our campus tour.",
+      "passage": {
+        "text": "You're learning to assist visitors at a university open house."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m1_q2",
+      "task_type": "listen_and_repeat",
+      "order": 2,
+      "number": "2",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "The enrollment office is straight ahead.",
+      "passage": {
+        "text": "You're learning to assist visitors at a university open house."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m1_q3",
+      "task_type": "listen_and_repeat",
+      "order": 3,
+      "number": "3",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Next door, you will see the library.",
+      "passage": {
+        "text": "You're learning to assist visitors at a university open house."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m1_q4",
+      "task_type": "listen_and_repeat",
+      "order": 4,
+      "number": "4",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "The cafeteria has many meal options available.",
+      "passage": {
+        "text": "You're learning to assist visitors at a university open house."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m1_q5",
+      "task_type": "listen_and_repeat",
+      "order": 5,
+      "number": "5",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "The university lecture halls are located over here.",
+      "passage": {
+        "text": "You're learning to assist visitors at a university open house."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m1_q6",
+      "task_type": "listen_and_repeat",
+      "order": 6,
+      "number": "6",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "If you have any questions, please stop by the information desk.",
+      "passage": {
+        "text": "You're learning to assist visitors at a university open house."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m1_q7",
+      "task_type": "listen_and_repeat",
+      "order": 7,
+      "number": "7",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Lastly, please also remember to check the event schedule at the entrance.",
+      "passage": {
+        "text": "You're learning to assist visitors at a university open house."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m2_q1",
+      "task_type": "take_an_interview",
+      "order": 8,
+      "number": "1",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "Would you prefer to study by yourself or with the group?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m2_q2",
+      "task_type": "take_an_interview",
+      "order": 9,
+      "number": "2",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "What would make you choose one over the other?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m2_q3",
+      "task_type": "take_an_interview",
+      "order": 10,
+      "number": "3",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "What are your thoughts on this?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-01-27_B_m2_q4",
+      "task_type": "take_an_interview",
+      "order": 11,
+      "number": "4",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "Do you agree or disagree?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    }
+  ]
+}

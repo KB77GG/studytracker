@@ -106,6 +106,67 @@
   font-size: var(--fs-sm);
   font-weight: 700;
 }
+.practice-exam-switch {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 18px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: #fff;
+  width: fit-content;
+}
+.practice-exam-switch a {
+  min-width: 126px;
+  padding: 9px 16px;
+  border-radius: 7px;
+  color: var(--muted);
+  font-weight: 900;
+  text-align: center;
+  text-decoration: none;
+}
+.practice-exam-switch a:hover,
+.practice-exam-switch a:first-child {
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+}
+.practice-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 26px 0 12px;
+}
+.practice-section-heading h3 { margin: 0; color: var(--text-strong); font-size: var(--fs-xl); }
+.practice-section-heading p { margin: 4px 0 0; color: var(--muted); }
+.practice-toefl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 22px;
+  align-items: center;
+  padding: 24px;
+  border: 1px solid rgba(47, 142, 135, .28);
+  border-radius: var(--r);
+  background: var(--brand-tint);
+  box-shadow: var(--shadow-sm);
+}
+.practice-toefl__eyebrow { margin: 0 0 7px; color: var(--brand-dark); font-size: var(--fs-xs); font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.practice-toefl h4 { margin: 0; color: var(--text-strong); font-size: var(--fs-xl); }
+.practice-toefl p { margin: 9px 0 0; color: var(--muted); line-height: 1.65; }
+.practice-toefl__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 142px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--r-sm);
+  background: var(--brand);
+  color: #fff;
+  font-weight: 900;
+  text-decoration: none;
+}
+.practice-toefl__button:hover { background: var(--brand-dark); color: #fff; text-decoration: none; }
 .practice-identity--staff {
   border-color: rgba(47, 142, 135, .22);
   background: var(--brand-tint);
@@ -233,15 +294,18 @@ a.practice-resource:hover {
   .practice-resource {
     grid-template-columns: 1fr;
   }
+  .practice-toefl {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 
 <main class="practice-page">
   <section class="practice-hero">
     <div>
-      <p class="practice-hero__eyebrow">IELTS Practice</p>
-      <h2>听力和阅读统一入口</h2>
-      <p>按科目选择刷题资源。</p>
+      <p class="practice-hero__eyebrow">Practice Library</p>
+      <h2>雅思与托福统一刷题入口</h2>
+      <p>雅思按科目与教材进入；托福按真题日期进入正式考试模式。</p>
     </div>
   </section>
 
@@ -265,7 +329,19 @@ a.practice-resource:hover {
     <div class="practice-identity__error" id="practiceIdentityError"></div>
   </section>
 
-  <section class="practice-subjects" aria-label="刷题科目">
+  <nav class="practice-exam-switch" aria-label="考试类型">
+    <a href="#ieltsPractice">IELTS 雅思</a>
+    <a href="#toeflPractice">TOEFL 托福</a>
+  </nav>
+
+  <div class="practice-section-heading" id="ieltsPractice">
+    <div>
+      <h3>IELTS 雅思</h3>
+      <p>按科目选择教材、机经或专项练习。</p>
+    </div>
+  </div>
+
+  <section class="practice-subjects" aria-label="雅思刷题科目">
     <article class="practice-subject">
       <header class="practice-subject__head">
         <h3 class="practice-subject__name">听力</h3>
@@ -322,6 +398,21 @@ a.practice-resource:hover {
         </a>
       </div>
     </article>
+  </section>
+
+  <div class="practice-section-heading" id="toeflPractice">
+    <div>
+      <h3>TOEFL 托福</h3>
+      <p>按真题日期和卷别进入，题面模拟新版正式考试界面。</p>
+    </div>
+  </div>
+  <section class="practice-toefl" aria-label="托福真题套卷">
+    <div>
+      <p class="practice-toefl__eyebrow">Official-style Test Mode</p>
+      <h4>新托福真题套卷</h4>
+      <p>{{ summary.toefl.exam_count }} 套已接入 · {{ summary.toefl.subject_count }} 个科目 · {{ summary.toefl.question_count }} 个可作答题。支持模块计时、跨模块不可回退、阅读 Review、写作组句、口语录音与交卷判分。</p>
+    </div>
+    <a class="practice-toefl__button js-practice-resource" href="{{ url_for('toefl.index') }}">选择套卷</a>
   </section>
 </main>
 

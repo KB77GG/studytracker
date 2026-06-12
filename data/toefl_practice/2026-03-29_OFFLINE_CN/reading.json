@@ -1,0 +1,756 @@
+{
+  "exam": {
+    "id": "reading_2026-03-29_OFFLINE_CN",
+    "subject": "reading",
+    "date": "2026-03-29",
+    "volume": "OFFLINE_CN",
+    "source_pdf": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf | 3.29-国内线下-后续还会补充/3.29阅读-2 自带答案.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q21",
+      "task_type": "read_daily",
+      "order": 1,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What is the main purpose of this notice?",
+      "passage": {
+        "text": "Notice to Students and Staff\nEffective immediately, breakfast is no longer being served in the\ndining hall. However, coffee, tea, and pastries will continue to be\navailable at the Campus Café, including vegetarian, vegan, and\ngluten-free options.\nFor dietary needs questions, speak with café staff.\nTo provide feedback, contact Dining Services."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To solicit questions for the Campus Café staff"
+        },
+        {
+          "key": "B",
+          "text": "To solicit feedback for Dining Services"
+        },
+        {
+          "key": "C",
+          "text": "To inform about options for special diets"
+        },
+        {
+          "key": "D",
+          "text": "To inform about the end of a dining option"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q22",
+      "task_type": "read_daily",
+      "order": 2,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a notice.",
+      "prompt": "What can be inferred about the decision to stop serving breakfast in the dining hall?",
+      "passage": {
+        "text": "Notice to Students and Staff\nEffective immediately, breakfast is no longer being served in the\ndining hall. However, coffee, tea, and pastries will continue to be\navailable at the Campus Café, including vegetarian, vegan, and\ngluten-free options.\nFor dietary needs questions, speak with café staff.\nTo provide feedback, contact Dining Services."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It is related to renovation in the dining hall kitchen."
+        },
+        {
+          "key": "B",
+          "text": "It will be in effect until the end of the year."
+        },
+        {
+          "key": "C",
+          "text": "It was announced without advance warning."
+        },
+        {
+          "key": "D",
+          "text": "It was protested by students."
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q23",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read an announcement.",
+      "prompt": "Which of the following can be inferred about the Wilson Gym swimming pool? In past years, it has been closed for maintenance for a week in both winter and summer. The way in which chlorine was added to it likely caused an",
+      "passage": {
+        "text": "During the week of December 28-January 3, the swimming pool at Wilson Gym will be closed for maintenance.\n\nWhile the pool closes annually for a week of maintenance, this year's closure will bring a significant change: a transition from the current chlorinated sanitation system to a saltwater-based system. Saltwater systems generate chlorine naturally from dissolved salt, creating a more comfortable swimming experience. Many swimmers find the water less irritating to their skin, eyes, and hair because the chlorine levels stay more consistent. Saltwater systems also eliminate the strong chemical smell associated with manually added chlorine.\n\nThe closure is timed to occur during winter break when many students are away. However, those remaining on campus who wish to swim during that week will have access to the pool at\n\nthe YWCA on Biltmore St.\n\nTo use that pool, simply show your student ID at the front desk."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "unpleasant smell."
+        },
+        {
+          "key": "B",
+          "text": "It is newer and larger than the swimming pool at the YWCA"
+        },
+        {
+          "key": "C",
+          "text": "on Biltmore St."
+        },
+        {
+          "key": "D",
+          "text": "It is used for both recreational swimming and for competitive swimming events."
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q24",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read an announcement.",
+      "prompt": "The announcement mentions each of the following EXCEPT",
+      "passage": {
+        "text": "During the week of December 28-January 3, the swimming pool at Wilson Gym will be closed for maintenance.\n\nWhile the pool closes annually for a week of maintenance, this year's closure will bring a significant change: a transition from the current chlorinated sanitation system to a saltwater-based system. Saltwater systems generate chlorine naturally from dissolved salt, creating a more comfortable swimming experience. Many swimmers find the water less irritating to their skin, eyes, and hair because the chlorine levels stay more consistent. Saltwater systems also eliminate the strong chemical smell associated with manually added chlorine. The closure is timed to occur during winter break when many students are away. However, those remaining on campus who wish to swim during that week will have access to the pool at the YWCA on Biltmore St. To use that pool, simply show your student ID at the front desk."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "the cost benefits of a saltwater sanitation system"
+        },
+        {
+          "key": "B",
+          "text": "information about what it's like to swim in a saltwater pool"
+        },
+        {
+          "key": "C",
+          "text": "a reason for the timing of the closure of the Wilson Gym pool"
+        },
+        {
+          "key": "D",
+          "text": "an option for those who wish to swim during the pool closure"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q25",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read an announcement.",
+      "prompt": "The announcement mentions \"dissolved salt\" primarily to identify one cause of eye irritation among swimmers",
+      "passage": {
+        "text": "During the week of December 28-January 3, the swimming pool at Wilson Gym will be closed for maintenance.\n\nWhile the pool closes annually for a week of maintenance, this year's closure will bring a significant change: a transition from the current chlorinated sanitation system to a saltwater-based system. Saltwater systems generate chlorine naturally from dissolved salt, creating a more comfortable swimming experience. Many swimmers find the water less irritating to their skin, eyes, and hair because the chlorine levels stay more consistent. Saltwater systems also eliminate the strong chemical smell associated with manually added chlorine.\n\nThe closure is timed to occur during winter break when many students are away. However, those remaining on campus who wish to swim during that week will have access to the pool at the YWCA on Biltmore St.\n\nTo use that pool, simply show your student ID at the front desk."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "account for the strong chemical smell that some pools give off"
+        },
+        {
+          "key": "B",
+          "text": "acknowledge one drawback of the new pool sanitation"
+        },
+        {
+          "key": "C",
+          "text": "system"
+        },
+        {
+          "key": "D",
+          "text": "explain an aspect of how the new pool sanitation system will work"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q26",
+      "task_type": "read_academic",
+      "order": 6,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "All of the following are mentioned as part of the formation process of opals EXCEPT:",
+      "passage": {
+        "text": "Opal is a unique gemstone, known for its vibrant colors that shift as the stone moves. Unlike most gemstones, which form rigid, repeating crystalline structures, opals are amorphous, meaning they lack a fixed internal shape. This is due to the formation process, where silica-rich water seeps into cracks in rocks deep underground, leaving silica deposits when it evaporates. Tiny silica spheres create the internal structure of opals, and these spheres diffract light, separating it into colors, much like a prism does.\n\nThe color and brilliance of opals depends on the size and spacing of the silica spheres. Larger spheres produce reds and oranges, while smaller spheres result in blues and greens. Because of Australia's unique geological conditions, it is home to over 90 percent of the world's opals. Opals are also fragile. Their high water content and noncrystalline structure make them prone to cracking when exposed to sudden temperature changes. Modern jewelers use techniques such as laser cutting and humidity-controlled storage to better protect opals.\n\nAncient cultures believed opals had mystical properties and brought good luck. The Romans saw them as a symbol of hope and purity, while the Greeks thought they gave the gift of prophecy."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Water flows into cracks in rocks"
+        },
+        {
+          "key": "B",
+          "text": "The water dries up, leaving silica deposits behind"
+        },
+        {
+          "key": "C",
+          "text": "Small spheres of silica create the structure of the gemstones."
+        },
+        {
+          "key": "D",
+          "text": "The structure formed is rigid and non-varying"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q27",
+      "task_type": "read_academic",
+      "order": 7,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention \"a prism\"?",
+      "passage": {
+        "text": "Opal is a unique gemstone, known for its vibrant colors that shift as the stone moves. Unlike most gemstones, which form rigid, repeating crystalline structures, opals are amorphous, meaning they lack a fixed internal shape. This is due to the formation process, where silica-rich water seeps into cracks in rocks deep underground, leaving silica deposits when it evaporates. Tiny silica spheres create the internal structure of\n\nopals, and these spheres diffract light, separating it into colors, much like a prism does.\n\nThe color and brilliance of opals depends on the size and spacing of the silica spheres. Larger spheres produce reds and oranges, while smaller spheres result in blues and greens. Because of Australia's unique geological conditions, it is home to over 90 percent of the world's opals. Opals are also fragile.\n\nTheir high water content and noncrystalline structure make them prone to cracking when exposed to sudden temperature changes. Modern jewelers use techniques such as laser cutting and humidity-controlled storage to better protect opals.\n\nAncient cultures believed opals had mystical properties and brought good luck. The Romans saw them as a symbol of hope\n\nand purity, while the Greeks thought they gave the gift of prophecy."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To illustrate how an opal affects light"
+        },
+        {
+          "key": "B",
+          "text": "To explain how the internal structure of opals is created"
+        },
+        {
+          "key": "C",
+          "text": "To give an example of how scientists study opals"
+        },
+        {
+          "key": "D",
+          "text": "To argue that opals do not truly diffract light"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q28",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is one consequence of the internal structure of opals?",
+      "passage": {
+        "text": "Opal is a unique gemstone, known for its vibrant colors that shift as the stone moves. Unlike most gemstones, which form rigid, repeating crystalline structures, opals are amorphous, meaning they lack a fixed internal shape. This is due to the formation process, where silica-rich water seeps into cracks in rocks deep underground, leaving silica deposits when it evaporates. Tiny silica spheres create the internal structure of opals, and these spheres diffract light, separating it into colors, much like a prism does.\n\nThe color and brilliance of opals depends on the size and spacing of the silica spheres. Larger spheres produce reds and oranges, while smaller spheres result in blues and greens. Because of Australia's unique geological conditions, it is home to over 90 percent of the world's opals. Opals are also fragile. Their high water content and noncrystalline structure make them prone to cracking when exposed to sudden temperature changes. Modern jewelers use techniques such as laser cutting and humidity-controlled storage to better protect opals.\n\nAncient cultures believed opals had mystical properties and brought good luck. The Romans saw them as a symbol of hope and purity, while the Greeks thought they gave the gift of prophecy."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "90 percent of them are red or orange"
+        },
+        {
+          "key": "B",
+          "text": "Relatively little ancient opal jewelry has survived"
+        },
+        {
+          "key": "C",
+          "text": "They are easily damaged by water"
+        },
+        {
+          "key": "D",
+          "text": "Jewelers must use special care to prevent opals from cracking."
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q29",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the passage suggest about ancient cultures' view of opals?",
+      "passage": {
+        "text": "Opal is a unique gemstone, known for its vibrant colors that shift as the stone moves. Unlike most gemstones, which form rigid, repeating crystalline structures, opals are amorphous, meaning they lack a fixed internal shape. This is due to the formation process, where silica-rich water seeps into cracks in rocks deep underground, leaving silica deposits when it evaporates. Tiny silica spheres create the internal structure of opals, and these spheres diffract light, separating it into colors, much like a prism does.\n\nThe color and brilliance of opals depends on the size and spacing of the silica spheres. Larger spheres produce reds and oranges, while smaller spheres result in blues and greens. Because of Australia's unique geological conditions, it is home to over 90 percent of the world's opals. Opals are also fragile. Their high water content and noncrystalline structure make\n\nthem prone to cracking when exposed to sudden temperature changes. Modern jewelers use techniques such as laser cutting and humidity-controlled storage to better protect opals.\n\nAncient cultures believed opals had mystical properties and brought good luck. The Romans saw them as a symbol of hope and purity, while the Greeks thought they gave the gift of prophecy."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They understood how opals were formed"
+        },
+        {
+          "key": "B",
+          "text": "They found opals difficult to work with"
+        },
+        {
+          "key": "C",
+          "text": "They believed opals had special qualities that benefited their owners."
+        },
+        {
+          "key": "D",
+          "text": "They considered opals to be very durable"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q30",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"prophecy\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Opal is a unique gemstone, known for its vibrant colors that shift as the stone moves. Unlike most gemstones, which form rigid, repeating crystalline structures, opals are amorphous, meaning they lack a fixed internal shape. This is due to the formation process, where silica-rich water seeps into cracks in rocks deep underground, leaving silica deposits when it evaporates. Tiny silica spheres create the internal structure of opals, and these spheres diffract light, separating it into colors, much like a prism does.\n\nThe color and brilliance of opals depends on the size and spacing of the silica spheres. Larger spheres produce reds and oranges, while smaller spheres result in blues and greens. Because of Australia's unique geological conditions, it is home to over 90 percent of the world's opals. Opals are also fragile. Their high water content and noncrystalline structure make them prone to cracking when exposed to sudden temperature changes. Modern jewelers use techniques such as laser cutting and humidity-controlled storage to better protect opals.\n\nAncient cultures believed opals had mystical properties and brought good luck. The Romans saw them as a symbol of hope and purity, while the Greeks thought they gave the gift of prophecy."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "long life"
+        },
+        {
+          "key": "B",
+          "text": "the ability to predict the future"
+        },
+        {
+          "key": "C",
+          "text": "happiness"
+        },
+        {
+          "key": "D",
+          "text": "high status"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q31",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the comparison of optical and radio telescopes suggest?",
+      "passage": {
+        "text": "Radio Astronomy: A New Perspective\n\nRadio astronomy is the study of celestial objects using radio waves rather than visible light. Unlike optical telescopes, radio telescopes can detect signals from sources obscured by dust or too faint to be seen with traditional instruments. This branch of astronomy has led to transformative discoveries, including the detection of cosmic microwave background radiation-a faint glow left over from the Big Bang-which has enabled scientists to reconstruct the universe's early conditions.\n\nOne of the most famous radio astronomy discoveries was the identification of pulsars in 1967. These rapidly spinning neutron stars, the dense remnants of massive stars that have exploded, emit beams of radio waves at regular intervals. Observing pulsars helps scientists understand the end stages of stellar life and the behavior of matter under extreme conditions.\n\nHowever, radio astronomy faces growing challenges due to technological interference. Devices like mobile phones, wireless routers, and satellites emit radio frequencies that can overwhelm the faint cosmic signals astronomers seek to detect. This \"radio frequency pollution\" makes it increasingly difficult to isolate genuine astronomical data. To combat this, observatories are often located in remote areas and protected by radio quiet zones, but the global spread of wireless technology continues to pose a serious threat."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Traditional instruments are more susceptible to damage."
+        },
+        {
+          "key": "B",
+          "text": "Dust often interferes with the optical detection of objects in space."
+        },
+        {
+          "key": "C",
+          "text": "Radio telescopes are best for detecting massive stars"
+        },
+        {
+          "key": "D",
+          "text": "Optical telescopes were the first to detect cosmic microwave background radiation."
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q32",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"transformative\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Radio Astronomy: A New Perspective\n\nRadio astronomy is the study of celestial objects using radio waves rather than visible light. Unlike optical telescopes, radio telescopes can detect signals from sources obscured by dust or too faint to be seen with traditional instruments. This branch of astronomy has led to transformative discoveries, including the detection of cosmic microwave background radiation-a faint glow left over from the Big Bang-which has enabled scientists to reconstruct the universe's early conditions.\n\nOne of the most famous radio astronomy discoveries was the identification of pulsars in 1967. These rapidly spinning neutron stars, the dense remnants of massive stars that have exploded, emit beams of radio waves at regular intervals. Observing pulsars helps scientists understand the end stages of stellar life and the behavior of matter under extreme conditions.\n\nHowever, radio astronomy faces growing challenges due to technological interference. Devices like mobile phones, wireless routers, and satellites emit radio frequencies that can overwhelm the faint cosmic signals astronomers seek to detect. This \"radio frequency pollution\" makes it increasingly difficult to isolate genuine astronomical data. To combat this, observatories are often located in remote areas and protected by radio quiet zones, but the global spread of wireless technology continues to pose a serious threat."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "groundbreaking"
+        },
+        {
+          "key": "B",
+          "text": "exciting"
+        },
+        {
+          "key": "C",
+          "text": "concerning"
+        },
+        {
+          "key": "D",
+          "text": "startling"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q33",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, radio astronomy helps scientists study all of the following EXCEPT",
+      "passage": {
+        "text": "Radio Astronomy: A New Perspective\n\nRadio astronomy is the study of celestial objects using radio waves rather than visible light. Unlike optical telescopes, radio telescopes can detect signals from sources obscured by dust or too faint to be seen with traditional instruments. This branch of astronomy has led to transformative discoveries, including the detection of cosmic microwave background radiation-a faint glow left over from the Big Bang-which has enabled scientists to reconstruct the universe's early conditions.\n\nOne of the most famous radio astronomy discoveries was the identification of pulsars in 1967. These rapidly spinning neutron stars, the dense remnants of massive stars that have exploded, emit beams of radio waves at regular intervals. Observing pulsars helps scientists understand the end stages of stellar life and the behavior of matter under extreme conditions.\n\nHowever, radio astronomy faces growing challenges due to technological interference. Devices like mobile phones, wireless routers, and satellites emit radio frequencies that can overwhelm the faint cosmic signals astronomers seek to detect. This \"radio frequency pollution\" makes it increasingly difficult to isolate genuine astronomical data. To combat this, observatories are often located in remote areas and protected by radio quiet zones, but the global spread of wireless technology continues to pose a serious threat."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "the beginnings of the universe"
+        },
+        {
+          "key": "B",
+          "text": "how to prevent the explosions of large stars"
+        },
+        {
+          "key": "C",
+          "text": "the last stages of stars"
+        },
+        {
+          "key": "D",
+          "text": "the way matter behaves under extreme conditions"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q34",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention \"the global spread of wireless technology\"?",
+      "passage": {
+        "text": "Reading |\n\nRadio Astronomy: A New Perspective\n\nRadio astronomy is the study of celestial objects using radio waves rather than visible light. Unlike optical telescopes, radio telescopes can detect signals from sources obscured by dust or too faint to be seen with traditional instruments. This branch of astronomy has led to transformative discoveries, including the detection of cosmic microwave background radiation-a faint glow left over from the Big Bang-which has enabled scientists to reconstruct the universe's early conditions.\n\nOne of the most famous radio astronomy discoveries was the identification of pulsars in 1967. These rapidly spinning neutron stars, the dense remnants of massive stars that have exploded, emit beams of radio waves at regular intervals. Observing pulsars helps scientists understand the end stages of stellar life and the behavior of matter under extreme conditions.\n\nHowever, radio astronomy faces growing challenges due to technological interference. Devices like mobile phones, wireless routers, and satellites emit radio frequencies that can overwhelm the faint cosmic signals astronomers seek to detect. This \"radio frequency pollution\" makes it increasingly difficult to isolate genuine astronomical data. To combat this, observatories are often located in remote areas and protected by radio quiet zones, but the global spread of wireless technology continues to pose a serious threat."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To suggest that the issue of technological interference is not likely to end soon"
+        },
+        {
+          "key": "B",
+          "text": "To argue that technological interference is not as severe as was once thought"
+        },
+        {
+          "key": "C",
+          "text": "To support the argument that optical telescopes are more reliable than radio telescopes"
+        },
+        {
+          "key": "D",
+          "text": "To highlight the sophisticated tools astronomers use to detect cosmic signals"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m1_q35",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "35",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Hide Time",
+      "passage": {
+        "text": "Radio Astronomy: A New Perspective\n\nRadio astronomy is the study of celestial objects using radio waves rather than visible light. Unlike optical telescopes, radio telescopes can detect signals from sources obscured by dust or too faint to be seen with traditional instruments. This branch of astronomy has led to transformative discoveries, including the detection of cosmic microwave background radiation-a faint glow left over from the Big Bang-which has enabled scientists to reconstruct the universe's early conditions. One of the most famous radio astronomy discoveries was the identification of pulsars in 1967. These rapidly spinning neutron stars, the dense remnants of massive stars that have exploded, emit beams of radio waves at regular intervals. Observing pulsars helps scientists understand the end stages of stellar life and the behavior of matter under extreme conditions. However, radio astronomy faces growing challenges due to technological interference. Devices like mobile phones, wireless routers, and satellites emit radio frequencies that can overwhelm the faint cosmic signals astronomers seek to detect. This \"radio frequency pollution\" makes it increasingly difficult to isolate genuine astronomical data. To combat this, observatories are often located in remote areas and protected by radio quiet zones, but the global spread of wireless technology continues to pose a serious threat.\n\nThe clock will indicate how much time you have to complete Module 2."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "ly: A New Perspective"
+        },
+        {
+          "key": "B",
+          "text": "According to the passage, what is one way to address the issue of technological interference? of Revive the use of optical telescopes Limit wireless routers to certain frequencies Place observatories far away from urban areas Mandate specific quiet times when the use of wireless technology is prohibited of"
+        },
+        {
+          "key": "C",
+          "text": "SS"
+        },
+        {
+          "key": "D",
+          "text": "nave to complete Module 2."
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m2_q1",
+      "task_type": "complete_words",
+      "order": 16,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Medieval European history, lasting approximately from 500 C.E. to 1500 C.E., is marked by significant cultural,\npolitical, and economic changes. Feudalism domi _ the soc__ structure, wi__ lords gove_ lands\na vassals prov military ser • The Church exe substantial infl over da life and\ngovernance. Trade routes expanded, facilitating the exchange of goods and ideas. Art and architecture flourished,\nexemplified by Gothic cathedrals and illuminated manuscripts. Studying this era involves analyzing historical\ndocuments, artifacts, and architectural remains to understand the complexities of medieval society."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": null,
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29阅读-2 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m2_q11",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, metaphilosophy challenges which of the following basic assumptions of philosophical inquiry?",
+      "passage": {
+        "text": "Metaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations-or none at all-in another. This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions?\n\nSome insist that despite linguistic and cultural variation, certain philosophical concerns-like suffering, justice, or mortality-are shared across societies, suggesting a basis for universality. Yet even these themes may be interpreted through culturally specific lenses. Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless. It encourages philosophers to examine how their methods and assumptions travel-or fail to-across contexts.\n\nCritics worry this reflexivity may stall progress, but others see it as essential for avoiding intellectual overreach. By foregrounding these tensions, metaphilosophy aims not to dilute philosophv's aims, but to sharpen them through"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The world can be understood through logical analysis"
+        },
+        {
+          "key": "B",
+          "text": "Argumentation is a suitable tool for analyzing ideas"
+        },
+        {
+          "key": "C",
+          "text": "Human experience is a good source of philosophical insight."
+        },
+        {
+          "key": "D",
+          "text": "The conceptual tools that philosophy provides are universal."
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29阅读-2 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m2_q12",
+      "task_type": "read_academic",
+      "order": 18,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author note that concepts may carry different connotations across different cultures?",
+      "passage": {
+        "text": "philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations-or none at all-in another. This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions? Some insist that despite linguistic and cultural variation, certain philosophical concerns-like suffering, justice, or mortality-are shared across societies, suggesting a basis for universality. Yet even these themes may be interpreted through culturally specific lenses. Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless. It encourages philosophers to examine how their methods and assumptions travel-or fail\n\nCritics worry this reflexivity may stall progress, but others see it as essential for avoiding intellectual overreach. By foregrounding these tensions, metaphilosophy aims not to dilute philosophy's aims, but to sharpen them through greater self-awareness and methodological rigor."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To support the claim that philosophical frameworks apply globally"
+        },
+        {
+          "key": "B",
+          "text": "To illustrate the idea of crossing cultural and linguistic boundaries"
+        },
+        {
+          "key": "C",
+          "text": "To provide a justification for metaphilosophica investigations"
+        },
+        {
+          "key": "D",
+          "text": "To challenge the claim that language affects how ideas are expressed"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29阅读-2 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m2_q13",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the author, GM technology can do all of the following EXCEPT",
+      "passage": {
+        "text": "The use of genetically modified organisms (GMOs) in foods has raised a number of concerns, yet genetic modification (GM) technology can provide solutions to many persistent problems facing humanity.\n\nFor instance, by engineering crops to resist pests, tolerate drought, or grow in nutrient-poor soil, farmers can produce more food with fewer resources. This can be especially valuable in regions facing food insecurity or harsh environmental conditions. GM technology can also enhance nutritional content. Rice, for example, can be enriched with vitamin A to combat malnutrition. Furthermore, reduced reliance on chemical pesticides benefits both the environment and farm workers.\n\nYet some critics anticipate harm from GMOs. One major issue is ecological impact. Genetically modified plants may crossbreed with wild species, potentially disrupting ecosystems or reducing biodiversity. GM critics also worry about long-term health effects, even though current scientific consensus finds GM foods safe to eat. Additionally, GM technology has economic effects: Patented GM seeds can increase farmers' dependence on large biotech companies, raising questions about fairness and control within the food system. Public skepticism remains strong, fueled by limited transparency and the rapid pace of technological change. If GM foods are to serve the public good, thoughtful regulation, candid communication, and ongoing research will be"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "improve the fertility of soil"
+        },
+        {
+          "key": "B",
+          "text": "boost agricultural productivity"
+        },
+        {
+          "key": "C",
+          "text": "improve human nutrition"
+        },
+        {
+          "key": "D",
+          "text": "protect the health of agricultural workers"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m2_q14",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The passage suggests which of the following about \"Patented GM seeds\"?",
+      "passage": {
+        "text": "has raised ă number of concerns, yet genetic modification\n\n(GM) technology can provide solutions to many persistent problems facing humanity.\n\nFor instance, by engineering crops to resist pests, tolerate drought, or grow in nutrient-poor soil, farmers can produce more food with fewer resources. This can be especially valuable in regions facing food insecurity or harsh environmental conditions. GM technology can also enhance nutritional content. Rice, for example, can be enriched with vitamin A to combat malnutrition. Furthermore, reduced reliance on chemical pesticides benefits both the environment and farm workers.\n\nYet some critics anticipate harm from GMOs. One major issue is ecological impact. Genetically modified plants may crossbreed with wild species, potentially disrupting ecosystems or reducing biodiversity. GM critics also worry about long-term health effects, even though current scientific consensus finds GM foods safe to eat. Additionally, GM technology has economic effects: Patented GM seeds can increase farmers' dependence on large biotech companies, raising questions about fairness and control within the food system. Public skepticism remains strong, fueled by limited transparency and the rapid pace of technological change. If GM foods are to serve the public good, thoughtful regulation, candid communication, and ongoing research will be essential."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They can sometimes alter the nutrients in crops in ways that harm human health."
+        },
+        {
+          "key": "B",
+          "text": "Their use can benefit farmers when profits are shared by biotech companies."
+        },
+        {
+          "key": "C",
+          "text": "Their adoption could potentially subject farmers to unfair control by businesses."
+        },
+        {
+          "key": "D",
+          "text": "Their widespread use in agriculture could help to expand and protect biodiversity."
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    },
+    {
+      "id": "reading_2026-03-29_OFFLINE_CN_m2_q15",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "15",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "* Hide Time y Modified Foods",
+      "passage": {
+        "text": "The use of genetically modified organisms (GMOs) in foods has raised a number of concerns, yet genetic modification (GM) technology can provide solutions to many persistent problems facing humanity. For instance, by engineering crops to resist pests, tolerate drought, or grow in nutrient-poor soil, farmers can produce more food with fewer resources. This can be especially valuable in regions facing food insecurity or harsh environmental conditions. GM technology can also enhance nutritional content. Rice, for example, can be enriched with vitamin A to combat malnutrition. Furthermore, reduced reliance on chemical pesticides benefits both the environment and farm workers. Yet some critics anticipate harm from GMOs. One major issue is ecological impact. Genetically modified plants may crossbreed with wild species, potentially disrupting ecosystems or reducing biodiversity. GM critics also worry about long-term health effects, even though current scientific consensus finds GM foods safe to eat. Additionally, GM technology has economic effects: Patented GM seeds can increase farmers' dependence on large biotech companies, raising questions about fairness and control within the food system. Public skepticism remains strong, fueled by limited transparency and the rapid pace of technological change. If GM foods are to serve the public good, thoughtful regulation, candid communication, and ongoing research will be essential.\n\nd 22c 23b 24a 25d 26d 27a 28d 29c 30b 31b 32a 33b 34a 35c lassblowing deveryday 3like 4bottles decorative 6making 7 more Savailable 9is carried 11c 12b 13a 14c 15d"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The author mentions \"the rapid pace of technological change\" in order to"
+        },
+        {
+          "key": "B",
+          "text": "acknowledge the promise that GM technology holds for farmers suggest why research on the health effects of GM e technology has lagged it. question one argument used to advocate for expanded use of GM technology explain some of the resistance to implementation of GM technology IS"
+        },
+        {
+          "key": "C",
+          "text": "a -"
+        },
+        {
+          "key": "D",
+          "text": "31b 32a 33b 34a 35c 5decorative 6making 7 more Savailable 9is"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.29-国内线下-后续还会补充/3.29 阅读-1 自带答案.pdf"
+    }
+  ]
+}

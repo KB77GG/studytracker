@@ -1,0 +1,144 @@
+import unittest
+
+from toefl_practice import (
+    _manifest_is_published,
+    _question_is_displayable,
+    _question_is_gradable,
+    catalog_summary,
+    exam_catalog,
+    grade_exam_payload,
+    public_exam_payload,
+)
+
+
+class ToeflPracticeTest(unittest.TestCase):
+    def test_publish_gate_requires_clear_published_manifest(self):
+        self.assertFalse(_manifest_is_published({}))
+        self.assertFalse(_manifest_is_published({
+            "publish_status": "published",
+            "duplicate_status": "review_required",
+        }))
+        self.assertTrue(_manifest_is_published({
+            "publish_status": "published",
+            "duplicate_status": "clear",
+        }))
+
+    def test_catalog_contains_sample_exam(self):
+        catalog = exam_catalog()
+        self.assertTrue(catalog)
+        sample = next(item for item in catalog if item["id"] == "2026-01-21_A")
+        self.assertTrue({
+            "reading",
+            "listening",
+            "writing",
+        }.issubset({item["id"] for item in sample["subjects"]}))
+        self.assertGreater(catalog_summary()["question_count"], 0)
+
+    def test_catalog_contains_audited_official_samples(self):
+        catalog = {item["id"]: item for item in exam_catalog()}
+        self.assertIn("ets-practice-1", catalog)
+        self.assertIn("ets-og-chapter-6", catalog)
+        self.assertEqual(catalog["ets-practice-1"]["subjects"][0]["item_count"], 40)
+        self.assertEqual(catalog["ets-og-chapter-6"]["subjects"][0]["item_count"], 50)
+
+    def test_official_payload_exposes_module_timing_without_answers(self):
+        payload = public_exam_payload("ets-og-chapter-6", "reading")
+        self.assertEqual(payload["module_durations"], {"m1": 1200, "m2": 540})
+        self.assertEqual(payload["item_count"], 50)
+        self.assertTrue(all("answer" not in question for question in payload["questions"]))
+
+    def test_public_payload_does_not_expose_answers(self):
+        payload = public_exam_payload("2026-01-21_A", "reading")
+        self.assertIsNotNone(payload)
+        self.assertTrue(all("answer" not in question for question in payload["questions"]))
+        self.assertTrue(all(question.get("options") for question in payload["questions"] if question["response_type"] == "mc"))
+
+    def test_grading_accepts_known_correct_answer(self):
+        payload = public_exam_payload("2026-01-21_A", "listening")
+        first = payload["questions"][0]
+        result = grade_exam_payload(
+            "2026-01-21_A",
+            "listening",
+            {first["id"]: "B"},
+        )
+        first_result = next(item for item in result["results"] if item["id"] == first["id"])
+        self.assertEqual(first_result["status"], "correct")
+
+    def test_grading_accepts_ordered_writing_tokens(self):
+        result = grade_exam_payload(
+            "2026-01-21_A",
+            "writing",
+            {
+                "writing_2026-01-21_A_m1_q1": [
+                    "do",
+                    "you",
+                    "know",
+                    "if",
+                    "the",
+                    "due",
+                    "dates",
+                    "have",
+                    "been",
+                    "updated",
+                    "?",
+                ]
+            },
+        )
+        first_result = next(
+            item for item in result["results"]
+            if item["id"] == "writing_2026-01-21_A_m1_q1"
+        )
+        self.assertEqual(first_result["status"], "correct")
+
+    def test_order_questions_with_repairable_content_remain_visible(self):
+        payload = public_exam_payload("2026-01-21_A", "writing")
+        ids = {question["id"] for question in payload["questions"]}
+        self.assertTrue(ids)
+
+    def test_displayability_is_separate_from_gradability(self):
+        question = {
+            "response_type": "mc",
+            "options": [{"key": "A", "text": "One"}, {"key": "B", "text": "Two"}],
+            "answer": None,
+        }
+        self.assertTrue(_question_is_displayable(question))
+        self.assertFalse(_question_is_gradable(question))
+
+    def test_mc_answer_key_must_exist_in_visible_options(self):
+        question = {
+            "response_type": "mc",
+            "options": [{"key": "A", "text": "One"}, {"key": "B", "text": "Two"}],
+            "answer": {"keys": ["C"]},
+        }
+        self.assertTrue(_question_is_displayable(question))
+        self.assertFalse(_question_is_gradable(question))
+
+    def test_recording_questions_are_manual_review(self):
+        question = {
+            "response_type": "record",
+            "directive": "Record your response.",
+            "prompt": "Tell me about your hometown.",
+            "answer": None,
+        }
+        self.assertTrue(_question_is_displayable(question))
+        self.assertFalse(_question_is_gradable(question))
+
+    def test_invalid_exam_is_rejected(self):
+        self.assertIsNone(public_exam_payload("../secret", "reading"))
+        self.assertIsNone(public_exam_payload("2026-01-21_A", "unknown"))
+
+    def test_fill_questions_are_scored_per_blank(self):
+        payload = public_exam_payload("ets-practice-1", "reading")
+        first = payload["questions"][0]
+        result = grade_exam_payload(
+            "ets-practice-1",
+            "reading",
+            {first["id"]: ["might", "wrong", "people", "only", "basic", "However", "is", "from", "record", "dancing"]},
+        )
+        first_result = next(item for item in result["results"] if item["id"] == first["id"])
+        self.assertEqual(first_result["correct_items"], 9)
+        self.assertEqual(first_result["total_items"], 10)
+
+
+if __name__ == "__main__":
+    unittest.main()

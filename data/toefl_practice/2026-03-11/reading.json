@@ -1,0 +1,891 @@
+{
+  "exam": {
+    "id": "reading_2026-03-11",
+    "subject": "reading",
+    "date": "2026-03-11",
+    "volume": "",
+    "source_pdf": "3.11新托福真题/3.11阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-03-11_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Although there are many different types of clouds, they are all composed of the same basic substance. Ea_ cloud\ndrops o watero ice, wh are usu too sm seen wi the naked eye.\nThese particles cluster together and form an invisible gas known as water vapor. Some of this vapor attaches to\nmicroscopic bits of dust or ice floating in the atmosphere. When enough of these elements combine, they create a\nvisible cloud."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "each",
+          "consists",
+          "tiny",
+          "of",
+          "or",
+          "which",
+          "usually",
+          "small",
+          "be",
+          "with"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Camels live in the desert where the weather is hot and dry. Sometimes i| , camels ha\nfinding a food o water. S when cam do find food, they are able to eat and drink a lot.\nCamels turn extra food into fat and store this fat in a special hump on their back. Then they change this fat into\nenergy to help them cross the desert."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "in",
+          "desert",
+          "have",
+          "travel",
+          "long",
+          "without",
+          "any",
+          "or",
+          "so",
+          "camels"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a receipt.",
+      "prompt": "Ø Hide Time I a receipt. What did the customer buy?",
+      "passage": {
+        "text": "Thank you for shopping at The Campus Spot!\n\nReceipt No.: 45678 Date: September 20\n\nItems Purchased: $15.00 1 T-shirt:\n\n2 Lab Notebook: $40.00 $55.00 Total amount:"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "ne lab notebook"
+        },
+        {
+          "key": "B",
+          "text": "Three T-shirts"
+        },
+        {
+          "key": "C",
+          "text": "ne T-shirt and two lab notebooks"
+        },
+        {
+          "key": "D",
+          "text": "Two T-shirts and one lab notebook"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a receipt.",
+      "prompt": "How much did the lab notebooks cost in total?",
+      "passage": {
+        "text": "Thank you for shopping at The Campus Spot!\n\nReceipt No.: 45678 Date: September 20 Items Purchased: $15.00 1 T-shirt: 2 Lab Notebook: $40.00 $55.00 Total amount:"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "$15.00"
+        },
+        {
+          "key": "B",
+          "text": "$20.00"
+        },
+        {
+          "key": "C",
+          "text": "$40.00"
+        },
+        {
+          "key": "D",
+          "text": "$55.00"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read a sign",
+      "prompt": "Which activity is not permitted at the library?",
+      "passage": {
+        "text": "Library Hours:\n\nMon-Fri: 8 A.M.-7 P.M.\n\nSat: 9 A.M.-5 P.M.\n\nSun: Closed\n\nGuidelines:\n\n• Reserve study rooms online. • Printing limit: 20 pages/day\n\n• Bottled water allowed in designated zones.\n\n• Silence phones.\n\n• Use computers for research only.\n\nLockers are available near the front desk for stowing personal belongings."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Making online purchases using a library computer"
+        },
+        {
+          "key": "B",
+          "text": "Studying for exams"
+        },
+        {
+          "key": "C",
+          "text": "Bringing personal belongings"
+        },
+        {
+          "key": "D",
+          "text": "Drinking water in designated zones"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read a sign",
+      "prompt": "What can be inferred about the library?",
+      "passage": {
+        "text": "Library Hours: Mon-Fri: 8 A.M.-7 P.M. Sat: 9 A.M.-5 P.M. Sun: Closed\n\nGuidelines: • Reserve study rooms online. • Printing limit: 20 pages/day • Bottled water allowed in designated zones. • Silence phones • Use computers for research only.\n\nLockers are available near the front desk for stowing personal belongings."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It has a designated room for cell phone use It has printers available for the public."
+        },
+        {
+          "key": "B",
+          "text": "It hosts special events on Saturdays"
+        },
+        {
+          "key": "C",
+          "text": "It allows food and drinks"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read an article in a student magazine.",
+      "prompt": "According to the article, what philosophical perspective does kintsugi promote? Minimalism, emphasizing simplicity and the elimination of",
+      "passage": {
+        "text": "Kintsugi, an ancient Japanese art, transforms broken pottery into objects of beauty by highlighting, not hiding, their cracks. Artisans use lacquer mixed with powdered gold, silver, or platinum to repair fractures, creating pieces that often become more valued than their original form.\n\nOriginating in the late fifteenth century, kintsugi reflects the philosophy of wabi-sabi, which honors imperfection and transience. Its message extends beyond ceramics, inspiring personal growth and resilience by advising people to embrace flaws as part of life's narrative. Rather than viewing damage as failure, kintsugi reframes it as transformation, symbolizing strength, authenticity, and renewal in a perfection-driven world.\n\nToday, workshops and studios worldwide teach both its technical craft and its profound philosophy, offering learners not only artistic skills but insights into acceptance, individuality, and creative expression. Kintsugi stands as a timeless reminder that beauty lies in uniqueness and in the stories our \"cracks\" reveal, an\n\nidea that applies to academic life and beyond."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "excess"
+        },
+        {
+          "key": "B",
+          "text": "Ethics, focusing on honor and discipline in craftsmanship"
+        },
+        {
+          "key": "C",
+          "text": "Humility, valuing imperfection and the transient nature of life"
+        },
+        {
+          "key": "D",
+          "text": "Purity, highlighting spiritual cleanliness and ritual renewal"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read an article in a student magazine.",
+      "prompt": "What does the article suggest about the symbolic meaning of repairing pottery with precious metals?",
+      "passage": {
+        "text": "Kintsugi, an ancient Japanese art, transforms broken pottery into objects of beauty by highlighting, not hiding, their cracks. Artisans use lacquer mixed with powdered gold, silver, or platinum to repair fractures, creating pieces that often become more valued than their original form. Originating in the late fifteenth century, kintsugi reflects the philosophy of wabi-sabi, which honors imperfection and transience. Its message extends beyond ceramics, inspiring personal growth and resilience by advising people to embrace flaws as part of life's narrative. Rather than viewing damage as failure, kintsugi reframes it as transformation, symbolizing strength, authenticity, and renewal in a perfection-driven world. Today, workshops and studios worldwide teach both its technical craft and its profound philosophy, offering learners not only artistic skills but insights into acceptance, individuality, and creative expression. Kintsugi stands as a timeless reminder that beauty lies in uniqueness and in the stories our \"cracks\" reveal, an idea that applies to academic life and beyond."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Wealth and luxury are essential for authentic art"
+        },
+        {
+          "key": "B",
+          "text": "Flaws can be turned into sources of value and beauty."
+        },
+        {
+          "key": "C",
+          "text": "Artisans prioritize aesthetics over philosophical significance."
+        },
+        {
+          "key": "D",
+          "text": "Objects lose their cultural value when restored with cheap materials."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read an article in a student magazine.",
+      "prompt": "Why does the author of the article mention a perfection- driven world\"? To argue that modern society has completely abandoned traditional art forms To suggest that flawless craftsmanship is the goal of contemporary design",
+      "passage": {
+        "text": "Reading |\n\nKintsugi, an ancient Japanese art, transforms broken pottery into objects of beauty by highlighting, not hiding, their cracks. Artisans use lacquer mixed with powdered gold, silver, or platinum to repair fractures, creating pieces that often become more valued than their original form.\n\nOriginating in the late fifteenth century, kintsugi reflects the philosophy of wabi-sabi, which honors imperfection and transience. Its message extends beyond ceramics, inspiring personal growth and resilience by advising people to embrace flaws as part of life's narrative. Rather than viewing damage as failure, kintsugi reframes it as transformation, symbolizing strength, authenticity, and renewal in a perfection-driven world. Today, workshops and studios worldwide teach both its technical craft and its profound philosophy, offering learners not only artistic skills but insights into acceptance, individuality, and creative expression. Kintsugi stands as a timeless reminder that beauty lies in uniqueness and in the stories our \"cracks\" reveal, an idea that applies to academic life and beyond."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To contrast kintsugis philosophical message with a"
+        },
+        {
+          "key": "B",
+          "text": "common present-day attitude"
+        },
+        {
+          "key": "C",
+          "text": "To explain why kintsugi techniques are rarely used in"
+        },
+        {
+          "key": "D",
+          "text": "professional pottery today"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "What is the main purpose of the email?",
+      "passage": {
+        "text": "Subject: Software update\nDear Mr. Ahmed,\nI am writing to inform you of a scheduled software update for\nyour computer system, which will take place on Wednesday,\nOctober 5 at 7:00 P.M. The update is essential for improving\nsystem performance, enhancing security protocols, and ensuring\ncompatibility with upcoming applications. Please be advised that\nyour computer may restart multiple times during the process, and\nthe update could take up to 45 minutes to complete. To avoid\ndata loss, kindly save all your work, close any open applications,\nand disconnect any external devices before the update begins.\nYou may wish to save browser bookmarks to a thumb drive as\nwell, but only out of an abundance of caution. If you are working\nremotely or anticipate needing your system during that time,\nplease contact us in advance to reschedule. Should you\nexperience any technical difficulties afterward, our support team\nis available 24/7 to assist you. Thank you for your cooperation.\nBest regards,\nOlivia Green"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To provide notification of software improvements"
+        },
+        {
+          "key": "B",
+          "text": "To offer technical support"
+        },
+        {
+          "key": "C",
+          "text": "To request enhanced security protocols"
+        },
+        {
+          "key": "D",
+          "text": "To ask for updates on a project"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "What does the writer imply about browser bookmarks?",
+      "passage": {
+        "text": "Subject: Software update\nDear Mr. Ahmed,\nI am writing to inform you of a scheduled software update for\nyour computer system, which will take place on Wednesday,\nOctober 5 at 7:00 P.M. The update is essential for improving\nsystem performance, enhancing security protocols, and ensuring\ncompatibility with upcoming applications. Please be advised that\nyour computer may restart multiple times during the process, and\nthe update could take up to 45 minutes to complete. To avoid\ndata loss, kindly save all your work, close any open applications,\nand disconnect any external devices before the update begins.\nYou may wish to save browser bookmarks to a thumb drive as\nwell, but only out of an abundance of caution. If you are working\nremotely or anticipate needing your system during that time,\nplease contact us in advance to reschedule. Should you\nexperience any technical difficulties afterward, our support team\nis available 24/7 to assist you. Thank you for your cooperation.\nBest regards,\nOlivia Green"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They must be disconnected from external devices"
+        },
+        {
+          "key": "B",
+          "text": "They must be installed again after an update"
+        },
+        {
+          "key": "C",
+          "text": "It is unlikely they will be lost during an update"
+        },
+        {
+          "key": "D",
+          "text": "They can be accessed during an update"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "What can be concluded about the computer system during the process?",
+      "passage": {
+        "text": "Subject: Software update\nDear Mr. Ahmed,\nI am writing to inform you of a scheduled software update for\nyour computer system, which will take place on Wednesday,\nOctober 5 at 7:00 P.M. The update is essential for improving\nsystem performance, enhancing security protocols, and ensuring\ncompatibility with upcoming applications. Please be advised that\nyour computer may restart multiple times during the process, and\nthe update could take up to 45 minutes to complete. To avoid\ndata loss, kindly save all your work, close any open applications,\nand disconnect any external devices before the update begins.\nYou may wish to save browser bookmarks to a thumb drive as\nwell, but only out of an abundance of caution. If you are working\nremotely or anticipate needing your system during that time,\nplease contact us in advance to reschedule. Should you\nexperience any technical difficulties afterward, our support team\nis available 24/7 to assist you. Thank you for your cooperation.\nBest regards,\nOlivia Green"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It will be faster."
+        },
+        {
+          "key": "B",
+          "text": "It will restart several times."
+        },
+        {
+          "key": "C",
+          "text": "It will be available for remote work"
+        },
+        {
+          "key": "D",
+          "text": "It will lose data."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, simpler functions help scientists",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power.\n\nOne common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions\n\nthat are otherwise hard to handle.\n\nAnother key tool is the Fourier series, which decomposes repeating patterns-like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality.\n\nWhile these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the original and the simplified version-called the error-needs to be as small as possible. New techniques, like adaptive approximation, adjust the level of detail based on how accurate the result needs to be."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "achieve exact calculations"
+        },
+        {
+          "key": "B",
+          "text": "avoid relying on algorithms"
+        },
+        {
+          "key": "C",
+          "text": "tackle difficult functions more effectively over time"
+        },
+        {
+          "key": "D",
+          "text": "develop steps for solving problems relatively quickly"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is indicated about polynomial approximation in the passage?",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power.\n\nOne common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions that are otherwise hard to handle.\n\nAnother key tool is the Fourier series, which decomposes repeating patterns-like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality.\n\nWhile these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the original and the simplified version-called the error-needs to be as small as possible. New techniques, like adaptive approximation, adjust the level of detail based on how accurate the result needs to be."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It varies in behavior from one point to another."
+        },
+        {
+          "key": "B",
+          "text": "It is less accurate than the Fourier series"
+        },
+        {
+          "key": "C",
+          "text": "It cannot handle infinite sums of terms as well as the Taylor series can."
+        },
+        {
+          "key": "D",
+          "text": "It uses simple math expressions to make complex functions easier to work with."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"decomposes\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power.\n\nOne common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions that are otherwise hard to handle.\n\nAnother key tool is the Fourier series, which decomposes repeating patterns-like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality.\n\nWhile these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the original and the simplified version-called the error-needs to be as small as possible. New techniques, like adaptive approximation, adjust the level of detail based on how accurate the result needs to be."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "runs"
+        },
+        {
+          "key": "B",
+          "text": "breaks down"
+        },
+        {
+          "key": "C",
+          "text": "mixes"
+        },
+        {
+          "key": "D",
+          "text": "enters"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is one application of Fourier series mentioned in the passage?",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power.\n\nOne common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions that are otherwise hard to handle.\n\nAnother key tool is the Fourier series, which decomposes repeating patterns-like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality.\n\nWhile these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the original and the simplified version-called the error-needs to be as small as possible. New techniques, like adaptive approximation, adjust the level of detail based on how accurate the result needs to be."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Simplifying sine and cosine waves"
+        },
+        {
+          "key": "B",
+          "text": "Removing unwanted noise from signals"
+        },
+        {
+          "key": "C",
+          "text": "Compressing images"
+        },
+        {
+          "key": "D",
+          "text": "Modeling heat distribution"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m1_q35",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "35",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention \"the error\"?",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power. One common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions that are otherwise hard to handle. Another key tool is the Fourier series, which decomposes repeating patterns-like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality. While these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the original and the simplified version-called the error -needs to be as small as possible. New techniques, like adaptive approximation, adjust the level of detail based on how accurate the result needs to be.\n\nThe clock will indicate how much time you have to complete Module 2."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To help illustrate the issue of accuracy as it relates to approximation theory"
+        },
+        {
+          "key": "B",
+          "text": "To add another explanation of how polynomial approximation works"
+        },
+        {
+          "key": "C",
+          "text": "To demonstrate an additional benefit of the Fourier series"
+        },
+        {
+          "key": "D",
+          "text": "To suggest that new approximation techniques have so far been inadequate"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m2_q1",
+      "task_type": "complete_words",
+      "order": 18,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "James Cook was a British naval officer, explorer, and cartographer born in 1728. He i|| best kn_ for h three\nvoy across t Pacific Oc , during wh he meticu mapped coast and coll\ndata on astronomy, natural history, and oceanography. Cook is the first European to circumnavigate New Zealand and\nmake contact with the Hawaiian Islands. He is also notable for implementing health measures aboard his ships, such\nas dietary changes to prevent the disease scurvy."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "is",
+          "known",
+          "his",
+          "voyages",
+          "the",
+          "ocean",
+          "which",
+          "meticulously",
+          "coastlines",
+          "collected"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m2_q11",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention \"a teacher's communication with parents\" in paragraph 2?",
+      "passage": {
+        "text": "Understanding Ecological Systems Theory\n\nEcological Systems Theory, introduced by Urie Bronfenbrenner, revolutionized our perception of human psychological development. It posits that individuals are shaped by interactions among multiple overlapping environmental systems. This theory reshaped developmental research, offering a multi- faceted lens that surpasses earlier, linear models. By considering the dynamic interplay between a person and their environment, it highlights the multifactorial nature of psychological growth.\n\nThe theory delineates several environmental layers, beginning with the microsystem, which refers to the institutions and groups that most directly impact the child's development, such as family and school. The mesosystem encompasses the relationships among the microsystems, such as the impact of a teacher's communication with parents on a child's education. Beyond these, the exosystem consists of indirect influences like a parent's workplace stress subtly affecting the home environment. The macrosystem, encompassing broader cultural and societal contexts, frames these interactions with underlying norms and policies.\n\nWhile Bronfenbrenner's model offers an intricate framework, it is not without critique. Some argue that the model underestimates the role of technology, which has created virtual microsystems that transcend geographical limits. Despite these critiques, the theory remains influential in fields ranging from education to public policy, prompting continuous exploration of its"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To illustrate the interactions among microsystems that characterize the mesosystem"
+        },
+        {
+          "key": "B",
+          "text": "To support the claim that the institutions of the microsystem affect children directly"
+        },
+        {
+          "key": "C",
+          "text": "To show that Bronfenbrenner's theory is primarily linear"
+        },
+        {
+          "key": "D",
+          "text": "To suggest that microsystems are more important than the mesosystem"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m2_q12",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The phrase \"subtly affecting\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Understanding Ecological Systems Theory\n\nEcological Systems Theory, introduced by Urie Bronfenbrenner, revolutionized our perception of human psychological development. It posits that individuals are shaped by interactions among multiple overlapping environmental systems. This theory reshaped developmental research, offering a multi- faceted lens that surpasses earlier, linear models. By considering the dynamic interplay between a person and their environment, it highlights the multifactorial nature of psychological growth.\n\nThe theory delineates several environmental layers, beginning with the microsystem, which refers to the institutions and groups that most directly impact the child's development, such as family and school. The mesosystem encompasses the relationships among the microsystems, such as the impact of a teacher's communication with parents on a child's education. Beyond these, the exosystem consists of indirect influences like a parent's workplace stress subtly affecting the home environment. The macrosystem, encompassing broader cultural and societal contexts, frames these interactions with underlying norms and policies.\n\nWhile Bronfenbrenner's model offers an intricate framework, it is not without critique. Some argue that the model underestimates the role of technology, which has created virtual microsystems that transcend geographical limits. Despite these critiques, the theory remains influential in fields ranging from education to public policy, prompting continuous exploration of its applications and adaptations."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "affecting in harmless but unpredictable ways"
+        },
+        {
+          "key": "B",
+          "text": "affecting in long-lasting ways"
+        },
+        {
+          "key": "C",
+          "text": "affecting in ways both positive and negative"
+        },
+        {
+          "key": "D",
+          "text": "affecting in small, barely noticeable ways"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m2_q13",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The passage suggests that criticisms of Bronfenbrenner's model call for which of the following?",
+      "passage": {
+        "text": "Understanding Ecological Systems Theory\n\n].... revolutionized our perception of human psychological development. It posits that individuals are shaped by interactions among multiple overlapping environmental systems. This theory reshaped developmental research, offering a multi- faceted lens that surpasses earlier, linear models. By considering the dynamic interplay between a person and their environment, it highlights the multifactorial nature of psychological growth.\n\nThe theory delineates several environmental layers, beginning with the microsystem, which refers to the institutions and groups that most directly impact the child's development, such as family and school. The mesosystem encompasses the relationships among the microsystems, such as the impact of a teacher's communication with parents on a child's education. Beyond these, the exosystem consists of indirect influences like a parent's workplace stress subtly affecting the home environment. The macrosystem, encompassing broader cultural and societal contexts, frames these interactions with underlying norms and policies.\n\nWhile Bronfenbrenner's model offers an intricate framework, it is not without critique. Some argue that the model underestimates the role of technology, which has created virtual microsystems that transcend geographical limits. Despite these critiques, the theory remains influential in fields ranging from education to public policy, prompting continuous exploration of its applications and adaptations."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Its replacement with a less intricate framework"
+        },
+        {
+          "key": "B",
+          "text": "Its modification to include virtual interactions"
+        },
+        {
+          "key": "C",
+          "text": "Its replacement with a model that gives greater consideration to geographical boundaries"
+        },
+        {
+          "key": "D",
+          "text": "Its exclusion from fields such as education and public policy"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-11_m2_q14",
+      "task_type": "read_academic",
+      "order": 22,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "logical Systems Theory Which of the following best describes the influence of Ecological Systems Theory?",
+      "passage": {
+        "text": "Understanding Ecological Systems Theory • . revolutionized our perception of human psychological development. It posits that individuals are shaped by interactions among multiple overlapping environmental systems. This theory reshaped developmental research, offering a multi- faceted lens that surpasses earlier, linear models. By considering the dynamic interplay between a person and their environment, it highlights the multifactorial nature of psychological growth. The theory delineates several environmental layers, beginning with the microsystem, which refers to the institutions and groups that most directly impact the child's development, such as family and school. The mesosystem encompasses the relationships among the microsystems, such as the impact of a teacher's communication with parents on a child's education. Beyond these, the exosystem consists of indirect influences like a parent's workplace stress subtly affecting the home environment. The macrosystem, encompassing broader cultural and societal contexts, frames these interactions with underlying norms and policies. While Bronfenbrenner's model offers an intricate framework, it is not without critique. Some argue that the model underestimates the role of technology, which has created virtual microsystems that transcend geographical limits. Despite these critiques, the theory remains influential in fields ranging from education to public policy, prompting continuous exploration of its applications and adaptations."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It has had little impact on psychology but has unexpectedly affected other fields."
+        },
+        {
+          "key": "B",
+          "text": "It revolutionized the field of human psychology but is not taken seriously in other fields."
+        },
+        {
+          "key": "C",
+          "text": "It changed the way human psychology is understood and continues to influence other fields."
+        },
+        {
+          "key": "D",
+          "text": "It has gone mostly unnoticed among psychologists and has had little impact on other fields."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.11新托福真题/3.11阅读.pdf"
+    }
+  ]
+}

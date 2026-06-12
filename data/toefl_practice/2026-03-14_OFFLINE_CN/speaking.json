@@ -1,0 +1,96 @@
+{
+  "exam": {
+    "id": "speaking_2026-03-14_OFFLINE_CN",
+    "subject": "speaking",
+    "date": "2026-03-14",
+    "volume": "OFFLINE_CN",
+    "source_pdf": "3.14-国内线下-合集，后续还会补充高质量版本",
+    "duration_seconds": 960,
+    "module_durations": {
+      "m1": 420,
+      "m2": 540
+    },
+    "audio_modules": [
+      {
+        "id": "m1",
+        "label": "Listen and Repeat",
+        "url": "/static/toefl/speaking/2026-03-14_Offline_CN_Speaking.mp3"
+      },
+      {
+        "id": "m2",
+        "label": "Take an Interview",
+        "url": "/static/toefl/speaking/2026-03-14_Offline_CN_Speaking.mp3"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": "speaking_2026-03-14_OFFLINE_CN_m2_q1",
+      "task_type": "take_an_interview",
+      "order": 1,
+      "number": "1",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "You are participating in a research study conducted by your university's Department of Environmental Sciences about environmental practices. You will meet online with a researcher who will ask you some questions.",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-14_OFFLINE_CN_m2_q2",
+      "task_type": "take_an_interview",
+      "order": 2,
+      "number": "2",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "Thank you for agreeing to participate. I'd like to ask you some questions about your environmental practices.",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-14_OFFLINE_CN_m2_q3",
+      "task_type": "take_an_interview",
+      "order": 3,
+      "number": "3",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "First, do you take any specific actions to reduce your environmental impact, such as recycling or conserving energy?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-14_OFFLINE_CN_m2_q4",
+      "task_type": "take_an_interview",
+      "order": 4,
+      "number": "4",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "Give details in your answer. Thank you.",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    }
+  ]
+}

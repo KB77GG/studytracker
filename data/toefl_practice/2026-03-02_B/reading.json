@@ -1,0 +1,834 @@
+{
+  "exam": {
+    "id": "reading_2026-03-02_B",
+    "subject": "reading",
+    "date": "2026-03-02",
+    "volume": "B",
+    "source_pdf": "3.2托福B卷/3.2B阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-03-02_B_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Deserts and extreme environments pose unique challenges for the organisms that inhabit them. These\nar___ are charac__--___ by ha___ conditions su._ _ as int__-_ temperatures, sca_.._ water,\na__ limited veget_ ____. Specialized adapt_ ____ have evo____ in both plants and animals to\nincrease survival. Studying these traits provides insights into the resilience of life and helps in\nunderstanding how ecosystems function under stress. Desert cacti store water in specialized tissues,\nwhile fennec foxes have enlarged ears for heat dissipation."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "areas",
+          "characterized",
+          "harsh",
+          "such",
+          "intense",
+          "scarce",
+          "and",
+          "vegetation",
+          "adaptations",
+          "evolved"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Tigers are solitary animals known for their territorial behavior; males use scent markings and vocalizations to define\ntheir territories. Each ma tiger estab control ov a la territory span several squ miles\nto lo for prey and maintain dominance. This behavior helps reduce conflicts\na patrols t area regu\nover prey, but tigers are known to fiercely defend their territory from intruders when necessary. Often hunting at\nnight, tigers use stealth and their excellent night vision to their advantage."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "male",
+          "establishes",
+          "over",
+          "large",
+          "spanning",
+          "square",
+          "and",
+          "the",
+          "regularly",
+          "look"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a form.",
+      "prompt": "What is the likely purpose of this form? To confirm employment details requested by a leasing office",
+      "passage": {
+        "text": "Applicant: Sarah O'Neill\nTelephone: 555-3210\nEmail: s.oneill@email.com\nIntended Residence: 22 Maple Lane, Apt. 3B, Dublin\nPreferred Move-In: June 15\nEmployment: University student\nPets: None\nApplicant must include government-issued identification and\nemployment status verification to ensure reservation\nof the residence.\nDirect queries to the leasing office at 555-4125."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To apply to become a tenant at 22 Maple Lane, Apt. 3B"
+        },
+        {
+          "key": "B",
+          "text": "To inquire about the status of a university application"
+        },
+        {
+          "key": "C",
+          "text": "To request government-issued identification"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a form.",
+      "prompt": "What can be inferred about Sarah O'Neill's living situation?",
+      "passage": {
+        "text": "Applicant: Sarah O'Neill\nTelephone: 555-3210\nEmail: s.oneill@email.com\nIntended Residence: 22 Maple Lane, Apt. 3B, Dublin\nPreferred Move-In: June 15\nEmployment: University student\nPets: None\nApplicant must include government-issued identification and\nemployment status verification to ensure reservation\nof the residence.\nDirect queries to the leasing office at 555-4125."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "She intends to relocate for school."
+        },
+        {
+          "key": "B",
+          "text": "She prefers a city center apartment."
+        },
+        {
+          "key": "C",
+          "text": "She is not currently a pet owner."
+        },
+        {
+          "key": "D",
+          "text": "She needs immediate housing."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read an e-mail.",
+      "prompt": "What did Ryan do yesterday?",
+      "passage": {
+        "text": "Hi Team,\nlundin University hosted a career fair yesterday. I was able to\nspeak to several promising candidates for summer internships\nwith our company. See their attached resumes. I'd like everyone\nto give me their feedback no later than Friday.\nThanks,\nRyan"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "He took a class at a university"
+        },
+        {
+          "key": "B",
+          "text": "He attended a job fair He was interviewed by a manager."
+        },
+        {
+          "key": "C",
+          "text": "He hired some summer interns"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read an e-mail.",
+      "prompt": "What does Ryan ask his team to do? Share their opinions of some job candidates",
+      "passage": {
+        "text": "Hi Team,\nBlundin University hosted a career fair yesterday. I was able to\nspeak to several promising candidates for summer internships\nwith our company. See their attached resumes. I'd like everyone\nto give me their feedback no later than Friday.\nThanks,\nRyan"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "a summer internship program"
+        },
+        {
+          "key": "B",
+          "text": "Update their résumés by Friday"
+        },
+        {
+          "key": "C",
+          "text": "Introduce themselves to new interns"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "What was this email likely written in response to?",
+      "passage": {
+        "text": "Confirmation and update-student leadership conference\nSubject:\nDear Ms. Taylor,\nI'm pleased to confirm your participation in the upcoming student leadership\nconference, scheduled for next Wednesday from 10:00 A.M. to 3:00 PM. in\nRoom 201 of the Learning Center. Sessions will include effective leadership,\nwith subtopics including building trust and accountability, navigating group\ndynamics, and fostering inclusive collaboration. A catered lunch will be\nprovided at noon.\nPlease note: Due to a scheduling conflict, the final segment may be relocated\nto Room 305. Staff will assist with the transition if needed.\nTo ensure a productive experience, please arrive 10-15 minutes early for\ncheck-in and bring a notebook and pen. If you have dietary restri\nrequire accommodations, contact the student conference coord\nat 555-6784 by Monday.\nWe look forward to your participation in this student leadership &\nWarm regards\nRobert Williams"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Ms. Taylor's presentation at a conference"
+        },
+        {
+          "key": "B",
+          "text": "Ms. Taylor's registration for an event"
+        },
+        {
+          "key": "C",
+          "text": "Ms. Taylor's unforeseen scheduling conflict"
+        },
+        {
+          "key": "D",
+          "text": "Ms. Taylor's request for accommodations"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "What will be the focus of the conference?",
+      "passage": {
+        "text": "Subject:\nConfirmation and update-student leadership conference\nDear Ms. Taylor,\nI'm pleased to confirm your participation in the upcoming student leadership\nconference, scheduled for next Wednesday from 10:00 A.M. to 3:00 P.M. in\nRoom 201 of the Learning Center. Sessions will include effective leadership,\nwith subtopics including building trust and accountability, navigating group\ndynamics, and fostering inclusive collaboration. A catered lunch will be\nprovided at noon.\nPlease note: Due to a scheduling conflict, the final segment may be relocated\nto Room 305. Staff will assist with the transition if needed.\nTo ensure a productive experience, please arrive 10-15 minutes early for\ncheck-in and bring a notebook and pen. If you have dietary restrictions or\nrequire accommodations, contact the student conference coordinator\nat 555-6784 by Monday.\nWe look forward to your participation in this student leadership conference!\nWarm regards,\nRobert Williams"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Applying for summer internships"
+        },
+        {
+          "key": "B",
+          "text": "Improving study techniques"
+        },
+        {
+          "key": "C",
+          "text": "Helping people work together"
+        },
+        {
+          "key": "D",
+          "text": "Using effective tools to improve productivity"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "What is NOT yet known about the conference?",
+      "passage": {
+        "text": "Subject: Confirmation and update-student leadership conference\nDear Ms. Taylor,\nI'm pleased to confirm your participation in the upcoming student leadership\nconference, scheduled for next Wednesday from 10:00 A.M. to 3:00 P.M. in\nRoom 201 of the Learning Center. Sessions will include effective leadership,\nwith subtopics including building trust and accountability, navigating group\ndynamics, and fostering inclusive collaboration. A catered lunch will be\nprovided at noon.\nPlease note: Due to a scheduling conflict, the final segment may be relocated\nto Room 305. Staff will assist with the transition if needed.\nTo ensure a productive experience, please arrive 10-15 minutes early for\ncheck-in and bring a notebook and pen. If you have dietary restrictions or\nrequire accommodations, contact the student conference coordinator\nat 555-6784 by Monday.\nWe look forward to your participation in this student leadership conference!\nWarm regards,\nRobert Williams"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Which subtopics will be covered"
+        },
+        {
+          "key": "B",
+          "text": "In which room the last session will be held"
+        },
+        {
+          "key": "C",
+          "text": "Whether staff will be available to assist"
+        },
+        {
+          "key": "D",
+          "text": "At what time participants should arrive"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "Peter has no experience with spreadsheets and cannot attend class on Wednesdays. He should enroll in",
+      "passage": {
+        "text": "Downtown School of Data Skills\nAll classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation\nThis course is for analysts and researchers who need to show\naudiences easy-to-read graphs and charts.\nI Section G: (virtuall Wednesdaus"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A"
+        },
+        {
+          "key": "B",
+          "text": "Section B"
+        },
+        {
+          "key": "C",
+          "text": "Section C"
+        },
+        {
+          "key": "D",
+          "text": "Section D"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "ollowing notice. What does Michelle need before enrolling in Section D?",
+      "passage": {
+        "text": "beginning September 1\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation\nThis course is for analysts and researchers who need to show\naudiences easy-to-read graphs and charts.\nSection G: (virtual) Wednesdays"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Experience creating new spreadsheet formulas"
+        },
+        {
+          "key": "B",
+          "text": "A research position that requires creating formulas"
+        },
+        {
+          "key": "C",
+          "text": "Training in how to present complex data"
+        },
+        {
+          "key": "D",
+          "text": "Previous experience using spreadsheets"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "Beth has worked with formulas for years and is ready to learn advanced data skills. She should enroll in",
+      "passage": {
+        "text": "All classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation\nThis course is for analysts and researchers who need to show\naudiences easy-to-read graphs and charts.\nSection G: (virtual) Wednesdays"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A, B, or C"
+        },
+        {
+          "key": "B",
+          "text": "Section D or E"
+        },
+        {
+          "key": "C",
+          "text": "Section F"
+        },
+        {
+          "key": "D",
+          "text": "Section G"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"respite\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Urban green spaces, such as parks and community gardens, enhance city life for residents. The contrast between green spaces and the surrounding concrete and glass structures can be a visual respite; such spaces also provide residents with a place to relax and connect with nature, which can significantly improve mental health, reduce stress, and encourage physical activity.\n\nUrban green spaces also contribute to environmental sustainability. They provide a cooler spot within the concrete heat traps surrounding them, absorb rainwater and reduce flooding, and increase biodiversity by providing habitats for various species.\n\nRecent initiatives have focused on creating more green spaces in underserved areas. Some cities are converting abandoned lots into community gardens or small parks. These projects not only provide green spaces but also involve community members in the planning and maintenance of them, fostering a sense of ownership and responsibility.\n\nWhile urban green spaces offer a host of benefits, they are not without drawbacks. When parks and gardens are added in city neighborhoods, they often increase the value of nearby properties. This can unintentionally lead to the displacement of longtime residents who can no longer afford rising rents or property taxes. Another challenge is preserving these spaces-it can be difficult to secure the funding necessary to maintain"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "break"
+        },
+        {
+          "key": "B",
+          "text": "addition"
+        },
+        {
+          "key": "C",
+          "text": "symbol"
+        },
+        {
+          "key": "D",
+          "text": "surprise"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is the relationship between paragraphs 1 and 2?",
+      "passage": {
+        "text": "Urban green spaces, such as parks and community gardens, enhance city life for residents. The contrast between green spaces and the surrounding concrete and glass structures can be a visual respite; such spaces also provide residents with a place to relax and connect with nature, which can significantly improve mental health, reduce stress, and encourage physical activity.\n\nUrban green spaces also contribute to environmental sustainability. They provide a cooler spot within the concrete heat traps surrounding them, absorb rainwater and reduce flooding, and increase biodiversity by providing habitats for various species.\n\nRecent initiatives have focused on creating more green spaces in underserved areas. Some cities are converting abandoned lots into community gardens or small parks. These projects not only provide green spaces but also involve community members in the planning and maintenance of them, fostering a sense of ownership and responsibility.\n\nWhile urban green spaces offer a host of benefits, they are not without drawbacks. When parks and gardens are added in city neighborhoods, they often increase the value of nearby properties. This can unintentionally lead to the displacement of longtime residents who can no longer afford rising rents or property taxes. Another challenge is preserving these spaces-it can be difficult to secure the funding necessary to maintain"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Paragraph 2 describes a new benefit beyond what is mentioned in paragraph 1."
+        },
+        {
+          "key": "B",
+          "text": "Paragraph 2 contradicts the ideas presented in paragraph 1."
+        },
+        {
+          "key": "C",
+          "text": "Paragraph 2 gives a solution to a problem discussed in paragraph 1."
+        },
+        {
+          "key": "D",
+          "text": "Paragraph 2 provides a summary of the detailed information offered in paragraph 1."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "How can cities improve neighborhood residents' sense of responsibility to local green spaces?",
+      "passage": {
+        "text": "Urban green spaces, such as parks and community gardens, enhance city life for residents. The contrast between green spaces and the surrounding concrete and glass structures can be a visual respite; such spaces also provide residents with a place to relax and connect with nature, which can significantly improve mental health, reduce stress, and encourage physical activity.\n\nUrban green spaces also contribute to environmental sustainability. They provide a cooler spot within the concrete heat traps surrounding them, absorb rainwater and reduce flooding, and increase biodiversity by providing habitats for various species.\n\nRecent initiatives have focused on creating more green spaces in underserved areas. Some cities are converting abandoned lots into community gardens or small parks. These projects not only provide green spaces but also involve community members in the planning and maintenance of them, fostering a sense of ownership and responsibility.\n\nWhile urban green spaces offer a host of benefits, they are not without drawbacks. When parks and gardens are added in city neighborhoods, they often increase the value of nearby properties. This can unintentionally lead to the displacement of longtime residents who can no longer afford rising rents or property taxes. Another challenge is preserving these spaces-it can be difficult to secure the funding necessary to maintain them."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "By asking residents to help find funding for them"
+        },
+        {
+          "key": "B",
+          "text": "By asking professional gardeners to plant vegetation"
+        },
+        {
+          "key": "C",
+          "text": "By inviting area residents to help maintain them By arranging for residents to own the land used for them"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention rising rents for neighborhood residents?",
+      "passage": {
+        "text": "Urban green spaces, such as parks and community gardens, enhance city life for residents. The contrast between green spaces and the surrounding concrete and glass structures can be a visual respite; such spaces also provide residents with a place to relax and connect with nature, which can significantly improve mental health, reduce stress, and encourage physical activity.\n\nUrban green spaces also contribute to environmental sustainability. They provide a cooler spot within the concrete heat traps surrounding them, absorb rainwater and reduce flooding, and increase biodiversity by providing habitats for various species.\n\nRecent initiatives have focused on creating more green spaces in underserved areas. Some cities are converting abandoned lots into community gardens or small parks. These projects not only provide green spaces but also involve community members in the planning and maintenance of them, fostering a sense of ownership and responsibility.\n\nWhile urban green spaces offer a host of benefits, they are not without drawbacks. When parks and gardens are added in city neighborhoods, they often increase the value of nearby properties. This can unintentionally lead to the displacement of longtime residents who can no longer afford rising rents or property taxes. Another challenge is preserving these spaces-it can be difficult to secure the funding necessary to maintain them."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To illustrate how urban green spaces increase a neighborhood's desirability"
+        },
+        {
+          "key": "B",
+          "text": "To explain where the funding for building green spaces comes from"
+        },
+        {
+          "key": "C",
+          "text": "To show that green spaces are especially needed in underserved urban areas"
+        },
+        {
+          "key": "D",
+          "text": "To point out one of the disadvantages of urban green spaces"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m2_q1",
+      "task_type": "complete_words",
+      "order": 17,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Reading |\nPaleontology is the scientific study of life's history through the examination of fossil remains. Fossils, incl\nbones, she , and foot _ provide crit evidence o past orga and th environments.\nB_ analyzing su remnants, paleont can reconstruct ancient ecosystems and track evolutionary\nchanges over millions of years. This field offers valuable insights into the development and extinction of species.\nAdvanced techniques like radiometric dating and CT scanning allow scientists to determine precise ages of specimens\nand examine internal structures without damaging delicate fossils."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "including",
+          "shells",
+          "footprints",
+          "critical",
+          "of",
+          "organisms",
+          "their",
+          "by",
+          "such",
+          "paleontologists"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m2_q11",
+      "task_type": "read_academic",
+      "order": 18,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "set in Education The word \"persevere\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "The concept of a growth mindset has gained attention in glocationindsec holiest helic rat abilice the phrase \"growth mindset\" intelligence can be developed through dedication and hard work. This contrasts with a fixed mindset, where individuals believe their abilities are static. Research suggests that students with a growth mindset are more likely to embrace challenges, persevere through ifficulties, and see ettort as a path to mastery. For exampl student who struggles with math but believes they ca improve with practice is displaying a growth mindset. This belief encourages resilience and a positive attitude towards learning. Educators play a crucial role in fostering a growth mindset in their students. Techniques such as praising effort rather than innate ability and providing constructive feedback can help students develop this mindset. Creating a classroom environment that celebrates mistakes as learning opportunities can reinforce the growth mindset philosophy. However, implementing growth mindset strategies is not without challenges, Some students may find it difficult to change how they view their abilities, especially if they have been accustomed to a fixed mindset for a long time. Additionally, educators themselves must genuinely believe in the growth mindset principles to effectively convey them to"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "hurry"
+        },
+        {
+          "key": "B",
+          "text": "change"
+        },
+        {
+          "key": "C",
+          "text": "hesitate"
+        },
+        {
+          "key": "D",
+          "text": "persist NEXT"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m2_q12",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, which of the following is true about students with a growth mindset?",
+      "passage": {
+        "text": "The concept of a growth mindset has gained attention in educational psychology. Coined by Carol Dweck, the phrase \"growth mindset\" refers to the belief that abilities and intelligence can be developed through dedication and hard work. This contrasts with a fixed mindset, where individuals believe their abilities are static.\n\nResearch suggests that students with a growth mindset are more likely to embrace challenges, persevere through difficulties, and see effort as a path to mastery. For example, a student who struggles with math but believes they can improve with practice is displaying a growth mindset. This belief encourages resilience and a positive attitude towards learning.\n\nEducators play a crucial role in fostering a growth mindset in their students. Techniques such as praising effort rather than innate ability and providing constructive feedback can help students develop this mindset. Creating a classroom environment that celebrates mistakes as learning opportunities can reinforce the growth mindset philosophy.\n\nHowever, implementing growth mindset strategies is not without challenges. Some students may find it difficult to change how they view their abilities, especially if they have been accustomed to a fixed mindset for a long time. Additionally, educators themselves must genuinely believe in the growth mindset principles to effectively convey them to their students."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They believe their intelligence is unchangeable"
+        },
+        {
+          "key": "B",
+          "text": "They avoid challenges"
+        },
+        {
+          "key": "C",
+          "text": "They view effort as a means to improve They are naturally talented. X7T#E-96.63.214,120"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m2_q13",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "All of the following are mentioned in the passage as ways educators can foster a growth mindset EXCEPT by",
+      "passage": {
+        "text": "The concept of a growth mindset has gained attention in educational psychology. Coined by Carol Dweck, the phrase \"growth mindset\" refers to the belief that abilities and intelligence can be developed through dedication and hard work. This contrasts with a fixed mindset, where individuals believe their abilities are static.\n\nResearch suggests that students with a growth mindset are more likely to embrace challenges, persevere through difficulties, and see effort as a path to mastery. For example, a student who struggles with math but believes they can improve with practice is displaying a growth mindset. This belief encourages resilience and a positive attitude towards learning.\n\nEducators play a crucial role in fostering a growth mindset in their students. Techniques such as praising effort rather than innate ability and providing constructive feedback can help students develop this mindset. Creating a classroom environment that celebrates mistakes as learning opportunities can reinforce the growth mindset philosophy.\n\nHowever, implementing growth mindset strategies is not without challenges. Some students may find it difficult to change how they view their abilities, especially if they have been accustomed to a fixed mindset for a long time. Additionally, educators themselves must genuinely believe in the growth mindset principles to effectively convey them to their students."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "commending students' efforts"
+        },
+        {
+          "key": "B",
+          "text": "praising students' innate abilities"
+        },
+        {
+          "key": "C",
+          "text": "giving constructive feedback"
+        },
+        {
+          "key": "D",
+          "text": "using mistakes as learning opportunities"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-02_B_m2_q14",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, the implementation of growtt nindset strategies may be challenging because of",
+      "passage": {
+        "text": "The concept of a growth mindset has gained attention in educational psychology. Coined by Carol Dweck, the phrase \"growth mindset\" refers to the belief that abilities and intelligence can be developed through dedication and hard work. This contrasts with a fixed mindset, where individuals believe their abilities are static. Research suggests that students with a growth mindset are more likely to embrace challenges, persevere through difficulties, and see effort as a path to mastery. For example, a student who struggles with math but believes they can improve with practice is displaying a growth mindset. This belief encourages resilience and a positive attitude towards learning. Educators play a crucial role in fostering a growth mindset in their students. Techniques such as praising effort rather than innate ability and providing constructive feedback can help students develop this mindset. Creating a classroom environment that celebrates mistakes as learning opportunities can reinforce the growth mindset philosophy. However, implementing growth mindset strategies is not without challenges. Some students may find it difficult to change how they view their abilities, especially if they have been accustomed to a fixed mindset for a long time. Additionally, educators themselves must genuinely believe in the growth mindset principles to effectively convey them to their students."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "difficulty in changing students' attitudes"
+        },
+        {
+          "key": "B",
+          "text": "lack of support from students' parents"
+        },
+        {
+          "key": "C",
+          "text": "insufficient research on growth mindset"
+        },
+        {
+          "key": "D",
+          "text": "overemphasis on academic performance"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.2托福B卷/3.2B阅读.pdf"
+    }
+  ]
+}

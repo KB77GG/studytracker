@@ -1,0 +1,212 @@
+{
+  "exam": {
+    "id": "speaking_2026-03-23_S1",
+    "subject": "speaking",
+    "date": "2026-03-23",
+    "volume": "S1",
+    "source_pdf": "3.23",
+    "duration_seconds": 960,
+    "module_durations": {
+      "m1": 420,
+      "m2": 540
+    },
+    "audio_modules": [
+      {
+        "id": "m1",
+        "label": "Listen and Repeat",
+        "url": "/static/toefl/speaking/2026-03-23_Set1_Speaking.mp3"
+      },
+      {
+        "id": "m2",
+        "label": "Take an Interview",
+        "url": "/static/toefl/speaking/2026-03-23_Set1_Speaking.mp3"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": "speaking_2026-03-23_S1_m1_q1",
+      "task_type": "listen_and_repeat",
+      "order": 1,
+      "number": "1",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Log into the dashboard with your credentials.",
+      "passage": {
+        "text": "You are being trained to help students use the university's online learning platform."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-23_S1_m1_q2",
+      "task_type": "listen_and_repeat",
+      "order": 2,
+      "number": "2",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Check the assignments tab for homework due dates.",
+      "passage": {
+        "text": "You are being trained to help students use the university's online learning platform."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-23_S1_m1_q3",
+      "task_type": "listen_and_repeat",
+      "order": 3,
+      "number": "3",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Access your course materials to read and download them.",
+      "passage": {
+        "text": "You are being trained to help students use the university's online learning platform."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-23_S1_m1_q4",
+      "task_type": "listen_and_repeat",
+      "order": 4,
+      "number": "4",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Participate in discussion boards to engage with peers.",
+      "passage": {
+        "text": "You are being trained to help students use the university's online learning platform."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-23_S1_m1_q5",
+      "task_type": "listen_and_repeat",
+      "order": 5,
+      "number": "5",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Track your progress by viewing your grades regularly online.",
+      "passage": {
+        "text": "You are being trained to help students use the university's online learning platform."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-23_S1_m1_q6",
+      "task_type": "listen_and_repeat",
+      "order": 6,
+      "number": "6",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Set up your daily notifications to stay updated on any new posts.",
+      "passage": {
+        "text": "You are being trained to help students use the university's online learning platform."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-23_S1_m1_q7",
+      "task_type": "listen_and_repeat",
+      "order": 7,
+      "number": "7",
+      "number_end": null,
+      "directive": "Listen and repeat. You may record only once in test mode.",
+      "prompt": "Please use the help section we provided if you feel the need to resolve any issues.",
+      "passage": {
+        "text": "You are being trained to help students use the university's online learning platform."
+      },
+      "audio_ref": "m1",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-23_S1_m2_q1",
+      "task_type": "take_an_interview",
+      "order": 8,
+      "number": "1",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "To participate, I'd like to ask you some questions about your food and nutrition habits. First, do you follow any specific diet or eating plan?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-23_S1_m2_q2",
+      "task_type": "take_an_interview",
+      "order": 9,
+      "number": "2",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "Thank you, can you describe some foods that you eat on a regular basis?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    },
+    {
+      "id": "speaking_2026-03-23_S1_m2_q3",
+      "task_type": "take_an_interview",
+      "order": 10,
+      "number": "3",
+      "number_end": null,
+      "directive": "Answer the interviewer's question.",
+      "prompt": "What do you think about that argument?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [],
+      "answer": null,
+      "response_type": "record",
+      "content_status": "complete",
+      "grading_status": "manual",
+      "source_ref": "local speaking audio transcript"
+    }
+  ]
+}

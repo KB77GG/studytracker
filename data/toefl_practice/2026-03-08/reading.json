@@ -1,0 +1,886 @@
+{
+  "exam": {
+    "id": "reading_2026-03-08",
+    "subject": "reading",
+    "date": "2026-03-08",
+    "volume": "",
+    "source_pdf": "3.8新托福真题/3.8阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-03-08_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean. This fi. encompasses\nexploration o ocean curr , marine ecosy , and geolo seabed struc\nOceanographers u satellites a other adva technology to monitor and analyze ocean conditions. By\ntracking sea surface temperatures, currents, salinity, and other features, researchers contribute to our understanding\nof climate change. Their work is vital for sustaining ocean health and preserving marine biodiversity."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "field",
+          "the",
+          "of",
+          "currents",
+          "ecosystems",
+          "geological",
+          "strcutures",
+          "use",
+          "and",
+          "advanced"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "The unusual properties of spider silk-a remarkable combination of strength and elasticity-have long attracted the\nattention of many. Spider si has a brea point f greater th steel a may str its fu length\nbef breaking: a 0.01 centi thread c support eighty grams. Spider silk is also very durable, a feature\nwell illustrated by the persistence of cobwebs. Throughout history, humans have adapted spider silk for many\npurposes. For a long period, thick webs were used in Europe as bandages."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "silk",
+          "breaking",
+          "far",
+          "than",
+          "and",
+          "stretch",
+          "full",
+          "before",
+          "centimeter",
+          "can"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read an excerpt from a syllabus.",
+      "prompt": "What is the most likely subject of the course?",
+      "passage": {
+        "text": "This course explores classical mechanics, thermodynamics, and electromagnetism through lectures, labs, and problem-solving sessions.\n\nStudents will develop analytical skills and apply mathematical models to physical systems. Weekly assignments, lab reports, and exams assess understanding.\n\nPrerequisites include calculus.\n\nAttendance and participation are essential for success."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Biology"
+        },
+        {
+          "key": "B",
+          "text": "Calculus"
+        },
+        {
+          "key": "C",
+          "text": "Physics"
+        },
+        {
+          "key": "D",
+          "text": "Sociology"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read an excerpt from a syllabus.",
+      "prompt": "What is NOT mentioned as an assessment method? Weekly exercises",
+      "passage": {
+        "text": "This course explores classical mechanics, thermodynamics, and electromagnetism through lectures, labs, and problem-solving sessions. Students will develop analytical skills and apply mathematical models to physical systems. Weekly assignments, lab reports, and exams assess understanding. Prerequisites include calculus. Attendance and participation are essential for success."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Lab reports"
+        },
+        {
+          "key": "B",
+          "text": "Tests"
+        },
+        {
+          "key": "C",
+          "text": "Essays"
+        },
+        {
+          "key": "D",
+          "text": "--"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read an article",
+      "prompt": "What is the main topic of the article?",
+      "passage": {
+        "text": "Award Winner Returns to Alma Mater\n\nBy Kevin Martin\n\nStudents were stunned when actor Daniel Rivero, famous for his award-winning role in Horizon's Edge, visited Ashburn College on Monday.\n\nRivero, a recent graduate of the Theater Arts program, returned to lead an impromptu drama workshop. Students crowded the theater hall, snapping selfies with the star and asking about his journey from Ashburn to Hollywood.\n\n\"I skipped lunch just to hear him,\" said sophomore Lily Chen. Rivero shared stories from his early auditions, including moments of rejection that taught him resilience. \"Embrace failure-it's the doorway to invention,\" he told\n\nstudents. He also praised Ashburn's faculty for fostering his love of storytelling. \"It feels like I never left,\" he added.\n\nThe visit sparked excitement across campus, with social media flooded by photos from the workshop. For many students, it was a reminder that big dreams can start in small classrooms."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A graduating student is given a role in a Hollywood film"
+        },
+        {
+          "key": "B",
+          "text": "A college campus is the backdrop of a Hollywood film"
+        },
+        {
+          "key": "C",
+          "text": "A film screening on campus draws a large crowd"
+        },
+        {
+          "key": "D",
+          "text": "A celebrated alumnus reconnects with his college"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read an article",
+      "prompt": "What did Daniel Rivero do at Ashburn?",
+      "passage": {
+        "text": "Award Winner Returns to Alma Mater By Kevin Martin\n\nStudents were stunned when actor Daniel Rivero, famous for his award-winning role in Horizon's Edge, visited Ashburn College on Monday. Rivero, a recent graduate of the Theater Arts program, returned to lead an impromptu drama workshop. Students crowded the theater hall, snapping selfies with the star and asking about his journey from Ashburn to Hollywood. \"I skipped lunch just to hear him,\" said sophomore Lily Chen. Rivero shared stories from his early auditions, including moments of rejection that taught him resilience. \"Embrace failure-it's the doorway to invention,\" he told students. He also praised Ashburn's faculty for fostering his love of storytelling. \"It feels like I never left,\" he added. The visit sparked excitement across campus, with social media flooded by photos from the workshop. For many students, it was a reminder that big dreams can start in small classrooms."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "He gave an interview to the student newspaper"
+        },
+        {
+          "key": "B",
+          "text": "He held auditions for his latest film."
+        },
+        {
+          "key": "C",
+          "text": "He taught an unscheduled acting class."
+        },
+        {
+          "key": "D",
+          "text": "He announced his role in an upcoming film"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read an article",
+      "prompt": "What is the meaning of Daniel Rivero's advice to students?",
+      "passage": {
+        "text": "Award Winner Returns to Alma Mater By Kevin Martin Students were stunned when actor Daniel Rivero, famous for his award-winning role in Horizon's Edge, visited Ashburn College on Monday. Rivero, a recent graduate of the Theater Arts program, returned to lead an impromptu drama workshop. Students crowded the theater hall, snapping selfies with the star and asking about his journey from Ashburn to Hollywood. \"I skipped lunch just to hear him,\" said sophomore Lily Chen. Rivero shared stories from his early auditions, including moments of rejection that taught him resilience. \"Embrace failure-it's the doorway to invention,\" he told students. He also praised Ashburn's faculty for fostering his love of storytelling. \"It feels like I never left,\" he added. The visit sparked excitement across campus, with social media flooded by photos from the workshop. For many students, it was a reminder that big dreams can start in small classrooms."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Creative thinking begins when things go wrong"
+        },
+        {
+          "key": "B",
+          "text": "It is good to leave home, but come back often"
+        },
+        {
+          "key": "C",
+          "text": "Poor choices can stifle innovation if you are not careful"
+        },
+        {
+          "key": "D",
+          "text": "Dream big and do not let anyone stand in your way"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Ø Hide Time tage of Spicy Cuisine What is the purpose of the passage? To share research findings related to spice use To promote the widespread use of specific spices To describe an outdated theory about spice use To contrast traditional and contemporary spice",
+      "passage": {
+        "text": "A Unique Advantage of Spicy Cuisine\n\nAre you fond of spicy food? Spices have been used for thousands of years to enhance the flavor of food, originally in cultures where spice plants were native to the area. Today, spice use is widespread across cultures, though certain spices are more prevalent in some cuisines. Indeed, scientists have suggested that hot-climate cuisines feature a greater amount and variety of spices. For example, a recent study found that the number of different spices was much greater in traditional recipes from Southeast Asian countries than in those from northern Europe.\n\nWhy do hot-climate cuisines feature more spices? Some believe that spice consumption is related to cultural preferences. While culture certainly plays a part, scientists have recently suggested that the antimicrobial properties of spices, which prevent the growth of dangerous foodborne microorganisms, ensured their widespread use in hot climates. In such climates, food spoilage was a concern before the availability of refrigeration. Spices with greater antimicrobial or antibacterial properties, such as allspice, cinnamon, cumin, garlic, and onions, were frequently featured in the traditional recipes of hot-climate cuisines and in different combinations. Scientists concluded that food safety precipitated the use of many and multiple spices in hot regions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "consumption"
+        },
+        {
+          "key": "B",
+          "text": "e le d"
+        },
+        {
+          "key": "C",
+          "text": "n"
+        },
+        {
+          "key": "D",
+          "text": "S."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What data were likely collected for the study?",
+      "passage": {
+        "text": "A Unique Advantage of Spicy Cuisine\n\nAre you fond of spicy food? Spices have been used for thousands of years to enhance the flavor of food, originally in cultures where spice plants were native to the area. Today, spice use is widespread across cultures, though certain spices are more prevalent in some cuisines. Indeed, scientists have suggested that hot-climate cuisines feature a greater amount and variety of spices. For example, a recent study found that the number of different spices was much greater in traditional recipes from Southeast Asian countries than in those from northern Europe.\n\nWhy do hot-climate cuisines feature more spices? Some believe that spice consumption is related to cultural preferences. While culture certainly plays a part, scientists have recently suggested that the antimicrobial properties of spices, which prevent the growth of dangerous foodborne microorganisms, ensured their widespread use in hot climates. In such climates, food spoilage was a concern before the availability of refrigeration. Spices with greater antimicrobial or antibacterial properties, such as allspice, cinnamon, cumin, garlic, and onions, were frequently featured in the traditional recipes of hot-climate cuisines and in different combinations. Scientists concluded that food safety precipitated the use of many and multiple spices in hot regions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The number of spices used in a variety of countries"
+        },
+        {
+          "key": "B",
+          "text": "The types of microorganisms on different spices"
+        },
+        {
+          "key": "C",
+          "text": "The food preferences of customers at traditional restaurants"
+        },
+        {
+          "key": "D",
+          "text": "The number of traditional Southeast Asian recipes used in Europe"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, what is suggested about spice usage in food?",
+      "passage": {
+        "text": "A Unique Advantage of Spicy Cuisine\n\nAre you fond of spicy food? Spices have been used for thousands of years to enhance the flavor of food, originally in cultures where spice plants were native to the area. Today, spice use is widespread across cultures, though certain spices are more prevalent in some cuisines. Indeed, scientists have suggested that hot-climate cuisines feature a greater amount and variety of spices. For example, a recent study found that the number of different spices was much greater in traditional recipes from Southeast Asian countries than in those from northern Europe.\n\nWhy do hot-climate cuisines feature more spices? Some believe that spice consumption is related to cultural preferences. While culture certainly plays a part, scientists have recently suggested that the antimicrobial properties of spices, which prevent the growth of dangerous foodborne microorganisms, ensured their widespread use in hot climates. In such climates, food spoilage was a concern before the availability of refrigeration. Spices with greater antimicrobial or antibacterial properties, such as allspice, cinnamon, cumin, garlic, and onions, were frequently featured in the traditional recipes of hot-climate cuisines and in different combinations. Scientists concluded that food safety precipitated the use of many and multiple spices in hot regions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It can conceal the odor of spoiled food."
+        },
+        {
+          "key": "B",
+          "text": "It has caused a rise in demand for native plants"
+        },
+        {
+          "key": "C",
+          "text": "It may prevent bacteria on food from developing"
+        },
+        {
+          "key": "D",
+          "text": "It has decreased substantially in Southeast Asia."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "All of the following are mentioned about spices EXCEPT:",
+      "passage": {
+        "text": "A Unique Advantage of Spicy Cuisine\n\nAre you fond of spicy food? Spices have been used for thousands of years to enhance the flavor of food, originally in cultures where spice plants were native to the area. Today, spice use is widespread across cultures, though certain spices are more prevalent in some cuisines. Indeed, suggested that hot-climate cuisines feature a greater amount and variety of spices. For example, a recent study found that the number of different spices was much greater in traditional recipes from Southeast Asian countries than in those from northern Europe.\n\nWhy do hot-climate cuisines feature more spices? Some believe that spice consumption is related to cultural preferences. While culture certainly plays a part, scientists have recently suggested that the antimicrobial properties of spices, which prevent the growth of dangerous foodborne microorganisms, ensured their widespread use in hot climates. In such climates, food spoilage was a concern before the availability of refrigeration. Spices with greater antimicrobial or antibacterial properties, such as allspice, cinnamon, cumin, garlic, and onions, were frequently featured in the traditional recipes of hot-climate cuisines and in different combinations. Scientists concluded that food safety precipitated the use of many and multiple spices in hot regions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Spices are derived from plant products"
+        },
+        {
+          "key": "B",
+          "text": "Spices require refrigeration to maintain their function."
+        },
+        {
+          "key": "C",
+          "text": "Spice usage is associated with cultural practices."
+        },
+        {
+          "key": "D",
+          "text": "Spice usage varies considerably by cuisine"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "itage of Spicy Cuisine The word \"precipitated\" in the passage is closest in meaning to threw separated caused rained",
+      "passage": {
+        "text": "A Unique Advantage of Spicy Cuisine\n\nAre you fond of spicy food? Spices have been used for thousands of years to enhance the flavor of food, originally in cultures where spice plants were native to the area. Today, spice use is widespread across cultures, though certain spices are more prevalent in some cuisines. Indeed, scientists have suggested that hot-climate cuisines feature a greater amount and variety of spices. For example, a recent study found that the number of different spices was much greater in traditional recipes from Southeast Asian countries than in those from northern Europe.\n\nWhy do hot-climate cuisines feature more spices? Some believe that spice consumption is related to cultural preferences. While culture certainly plays a part, scientists have recently suggested that the antimicrobial properties of spices, which prevent the growth of dangerous foodborne microorganisms, ensured their widespread use in hot climates. In such climates, food spoilage was a concern before the availability of refrigeration. Spices with greater antimicrobial or antibacterial properties, such as allspice, cinnamon, cumin, garlic, and onions, were frequently featured in the traditional recipes of hot-climate cuisines and in different combinations. Scientists concluded that food safety precipitated the use of many and multiple spices in hot regions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "e"
+        },
+        {
+          "key": "B",
+          "text": "d"
+        },
+        {
+          "key": "C",
+          "text": "e"
+        },
+        {
+          "key": "D",
+          "text": "n"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Which aspect of the studio system encouraged filmmakers to innovate?",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling. Silent film stars had to adapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often blurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose diverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The demand for more silent films"
+        },
+        {
+          "key": "B",
+          "text": "The freedom to create experimental films"
+        },
+        {
+          "key": "C",
+          "text": "The inefficiency of film production The boundaries imposed by restrictive contracts"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Hollywood's Golden Age The word \"compelling\" in the passage is closest in meaning modern astonishing",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling. Silent film stars had to adapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often blurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose diverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "n fascinating"
+        },
+        {
+          "key": "B",
+          "text": "complex"
+        },
+        {
+          "key": "C",
+          "text": "n"
+        },
+        {
+          "key": "D",
+          "text": "5. se"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention the introduction of sound in films?",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling. Silent film stars had to adapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often blurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose diverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To highlight a development that led to new, creative narrative techniques"
+        },
+        {
+          "key": "B",
+          "text": "To emphasize the former popularity of silent films"
+        },
+        {
+          "key": "C",
+          "text": "To discuss how sound renewed the careers of silent film stars"
+        },
+        {
+          "key": "D",
+          "text": "To identify the event that started the decline of the studio system"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What inference can be made about the 1948 Supreme Court ruling? It led to a temporary increase in studio profits.",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling. Silent film stars had to adapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often blurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose diverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It allowed independent films to be seen and become"
+        },
+        {
+          "key": "B",
+          "text": "popular."
+        },
+        {
+          "key": "C",
+          "text": "It caused studios to develop more large-scale musical productions."
+        },
+        {
+          "key": "D",
+          "text": "It had no effect on Hollywood's operations"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m1_q35",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "35",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the passage imply about the Hollywood film industry today?",
+      "passage": {
+        "text": "The Dynamics of Hollywood's Golden Age\n\nHollywood's Golden Age, from the 1920s to the 1960s, was a transformative period in cinema history. Under the studio system, major companies like RKO controlled film production, creating an efficient assembly-line process that produced stars such as Humphrey Bogart and Katharine Hepburn. While this system ensured a steady output of films, it often limited creative freedom for directors and actors tied to restrictive contracts. Yet this very constraint led to unexpected innovation as filmmakers sought new ways to tell compelling stories within set boundaries.\n\nA pivotal change during this era was the introduction of sound, forever altering cinematic storytelling. Silent film stars had to adapt or risk obsolescence, while new genres like musicals capitalized on sound technology's possibilities. This shift pushed directors to experiment with narrative structures, often blurring the lines between genres to captivate audiences.\n\nThe decline of the studio system began with a 1948 Supreme Court ruling that dismantled studios' monopolies over theaters. This ruling opened the door for independent filmmakers, whose diverse and unconventional stories began gaining traction in theaters. However, the legacy of the studio system's efficiency and star-making machinery still influences Hollywood's operations today."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Modern studios have completely abandoned all practices from the Golden Age period."
+        },
+        {
+          "key": "B",
+          "text": "Contemporary films commonly use the storytelling techniques developeckduring the 1920s-1960s."
+        },
+        {
+          "key": "C",
+          "text": "Independent filmmakers have entirely replaced the studio system's influence on cinema."
+        },
+        {
+          "key": "D",
+          "text": "The assembly-line process of the studio system still impacts current Hollywood operations."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m2_q1",
+      "task_type": "complete_words",
+      "order": 18,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "* Hide Tim\nThe Renaissance was a period of cultural rebirth in Europe, spanning the fourteenth to seventeenth centuries. A period o cultural, arti Renaissance mar\ni classical liter between the Middle Ages and the modern era. It sparked a cultural awakening that emphasized humanism, individual science. The Renaissance had a profound historical impact, serving as a bridge\nachievement, and secular learning, which reshaped European thought and institutions."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "vibrant",
+          "of",
+          "artistic",
+          "intellectual",
+          "the",
+          "marked",
+          "renewed",
+          "in",
+          "literature",
+          "and"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m2_q11",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"hinges\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Biochemical Systems Theory: Challenges and Implications\n\nBiochemical systems theory, a potent framework for simulating biochemical processes, hinges on mathematical models for predicting the interactions of molecules within cells. The theory's ability to predict metabolic pathways regulated by enzymes (proteins facilitating and managing chemical reactions) offers significant potential for advancements in biotechnology. However, constructing accurate models demands a profound grasp of biology and mathematics, posing significant challenges to researchers. While the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs. Erroneous data can skew predictions, underscoring the delicate balance between mathematical precision and biological variability. That interplay raises questions about the theory's reliability, particularly in drug development, where predicting compounds' effects on metabolic pathways is crucial yet fraught with uncertainty. Furthermore, biochemical systems theory has sparked debates over its ethical implications. By scrutinizing biological systems, researchers identify processes ripe for intervention. Yet this provokes concerns about the manipulation of life at a granular level, including the possibility that interventions could have unintended consequences or adversely affect future generations. As the field evolves, ethical discussions are as dynamic as the biochemical networks themselves."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "focuses"
+        },
+        {
+          "key": "B",
+          "text": "builds"
+        },
+        {
+          "key": "C",
+          "text": "acts"
+        },
+        {
+          "key": "D",
+          "text": "depends I"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m2_q12",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Hide Time",
+      "passage": {
+        "text": "Biochemical Systems Theory: Challenges and Implications\n\nBiochemical systems theory, a potent framework for simulating biochemical processes, hinges on mathematical models for predicting the interactions of molecules within cells. The theory's ability to predict metabolic pathways regulated by enzymes (proteins facilitating and managing chemical reactions) offers significant potential for advancements in biotechnology. However, constructing accurate models demands a profound grasp of biology and mathematics, posing significant challenges to researchers. While the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs. Erroneous data can skew predictions, underscoring the delicate balance between mathematical precision and biological variability. That interplay raises questions about the theory's reliability, particularly in drug development, where predicting compounds effects on metabolic pathways is crucial yet fraught with uncertainty. Furthermore, biochemical systems theory has sparked debates over its ethical implications. By scrutinizing biological systems, researchers identify processes ripe for intervention. Yet this provokes concerns about the manipulation of life at a granular level, including the possibility that interventions could have unintended consequences or adversely affect future generations. As the field evolves, ethical discussions are as dynamic as the biochemical networks themselves."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "ory: Challenges and Implications"
+        },
+        {
+          "key": "B",
+          "text": "Which statement best summarizes the relationship between paragraphs 1 and 2? Paragraph 2 describes a shortcoming of the concept ns) introduced in paragraph 1."
+        },
+        {
+          "key": "C",
+          "text": "Paragraph 2 proposes a solution to a problem discussed in paragraph 1. Paragraph 2 proposes an alternative to the theory presented in paragraph 1. Paragraph 2 illustrates the successful application of the lat theory described in paragraph 1. ds'"
+        },
+        {
+          "key": "D",
+          "text": "y vi"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m2_q13",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author discuss drug development?",
+      "passage": {
+        "text": "Biochemical Systems Theory: Challenges and Implications\n\nBiochemical systems theory, a potent framework for simulating biochemical processes, hinges on mathematical models for predicting the interactions of molecules within cells. The theory's ability to predict metabolic pathways regulated by enzymes (proteins facilitating and managing chemical reactions) offers significant potential for advancements in biotechnology. However, constructing accurate models demands a profound grasp of biology and mathematics, posing significant challenges to researchers. While the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs. Erroneous data can skew predictions, underscoring the delicate balance between mathematical precision and biological variability. That interplay raises questions about the theory's reliability, particularly in drug development, where predicting compounds' effects on metabolic pathways is crucial yet fraught with uncertainty. Furthermore, biochemical systems theory has sparked debates over its ethical implications. By scrutinizing biological systems, researchers identify processes ripe for intervention. Yet this provokes concerns about the manipulation of life at a granular level, including the possibility that interventions could have unintended consequences or adversely affect future generations. As the field evolves, ethical discussions are as dynamic as the biochemical networks themselves."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To emphasize the importance of using accurate data when constructing models"
+        },
+        {
+          "key": "B",
+          "text": "To give an example of an industry that has been transformed by biochemical systems theory"
+        },
+        {
+          "key": "C",
+          "text": "To demonstrate that questions about the theory's reliability have been largely resolved"
+        },
+        {
+          "key": "D",
+          "text": "To suggest that the theory's reliability is less important than discovering industrial applications that work"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-08_m2_q14",
+      "task_type": "read_academic",
+      "order": 22,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the passage imply about the ethical concerns raised by biochemical systems theory?",
+      "passage": {
+        "text": "Biochemical Systems Theory: Challenges and Implications\n\nBiochemical systems theory, a potent framework for simulating biochemical processes, hinges on mathematical models for predicting the interactions of molecules within cells. The theory's ability to predict metabolic pathways regulated by enzymes (proteins facilitating and managing chemical reactions) offers significant potential for advancements in biotechnology. However, constructing accurate models demands a profound grasp of biology and mathematics, posing significant challenges to researchers. While the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs. Erroneous data can skew predictions, underscoring the delicate balance between mathematical precision and biological variability. That interplay raises questions about the theory's reliability, particularly in drug development, where predicting compounds' effects on metabolic pathways is crucial yet fraught with uncertainty. Furthermore, biochemical systems theory has sparked debates over its ethical implications. By scrutinizing biological systems, researchers identify processes ripe for intervention. Yet this provokes concerns about the manipulation of life at a granular level, including the possibility that interventions could have unintended consequences or adversely affect future generations. As the field evolves, ethical discussions are as dynamic as the biochemical networks themselves."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They have been dismissed by most ethicists as unjustified"
+        },
+        {
+          "key": "B",
+          "text": "They are far from being completely resolved as of today"
+        },
+        {
+          "key": "C",
+          "text": "They have been eased thanks to more precise modeling.*"
+        },
+        {
+          "key": "D",
+          "text": "They are causing researchers to abandon the theory"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8新托福真题/3.8阅读.pdf"
+    }
+  ]
+}

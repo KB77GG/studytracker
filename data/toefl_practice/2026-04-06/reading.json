@@ -1,0 +1,715 @@
+{
+  "exam": {
+    "id": "reading_2026-04-06",
+    "subject": "reading",
+    "date": "2026-04-06",
+    "volume": "",
+    "source_pdf": "4.6新托福真题/4.6阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-04-06_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Geology involves the study of Earth's physical structure and substances, the processes that act upon them, and the\nhistory of the planet and its life forms. Environmental geology specif focuses o_ how geolo\nprocesses aff human activ environment. encompasses ar such a natural haz\nassessment, resource management, and land-use planning. By understanding the geological factors that influence\nenvironmental conditions, geologists can help mitigate the impacts of natural disasters and promote sustainable\ndevelopment."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "specifically",
+          "on",
+          "geological",
+          "affect",
+          "activities",
+          "the",
+          "it",
+          "areas",
+          "as",
+          "hazard"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "We are exquisitely sensitive to our surroundings, and environment plays a critical role in the development of a child's\nbrain. But wh happens on _we've rea adulthood? C the br still und the ki of\ncha it d when w were younger? By the time we are twenty-five years old, the brain transformations of\nchildhood are finally over and our brain appears to be fully developed. You might think that who we are as adults is\nthen fixed in place, immovable. But it's not: in adulthood our brains continue to change."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "what",
+          "once",
+          "reached",
+          "can",
+          "brain",
+          "undergo",
+          "kinds",
+          "changes",
+          "did",
+          "we"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "Why is Ms. White receiving the email?",
+      "passage": {
+        "text": "Booking inquiry\nSubject:\nDear Ms. White,\nThanks for your inquiry about a conference room at\nMidtown Center for your state-wide student government\nmeeting. Since you plan to have about 100 attendees, we\nrecommend one of our large conference rooms. A 20 percent\ndeposit is required for placing a reservation.\nRegards,\nDavid Lee"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Because she made an inquiry"
+        },
+        {
+          "key": "B",
+          "text": "Because she reserved a room"
+        },
+        {
+          "key": "C",
+          "text": "Because she canceled an appointment"
+        },
+        {
+          "key": "D",
+          "text": "Because she attended a convention"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "What is the deposit for a reservation?",
+      "passage": {
+        "text": "Subject:\nBooking inquiry\nDear Ms. White,\nThanks for your inquiry about a conference room at\nMidtown Center for your state-wide student government\nmeeting. Since you plan to have about 100 attendees, we\nrecommend one of our large conference rooms. A 20 percent\ndeposit is required for placing a reservation.\nRegards,\nDavid Lee"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "10 percent"
+        },
+        {
+          "key": "B",
+          "text": "15 percent"
+        },
+        {
+          "key": "C",
+          "text": "20 percent"
+        },
+        {
+          "key": "D",
+          "text": "25 percent"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read a blog post.",
+      "prompt": "What can be inferred about Elizabeth Wrenn?",
+      "passage": {
+        "text": "Reviews and Opinions @CampusDaily\nReview of The Kansas Kerfuffle\nPosted by Elizabeth Wrenn, October 15\nIn this sharp-witted comedy, a minor zoning error spirals inte\n1 full-blown town-wide feud-a kerfuffle!- complete with\nbake sale sabotage, runaway goats, and a mayoral debate held\nn a bowling alle\nhe movie delivers fast-paced laughs and small-town charn\nroving that bureaucracy can be hilariously unpredictabl"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "She enjoyed a film."
+        },
+        {
+          "key": "B",
+          "text": "She produced a film."
+        },
+        {
+          "key": "C",
+          "text": "She starred in a film"
+        },
+        {
+          "key": "D",
+          "text": "She helped finance a film"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read a blog post.",
+      "prompt": "What can be concluded about The Kansas Kerfuffle? Its plot is very formulaic and predictable.",
+      "passage": {
+        "text": "Reviews and Opinions @CampusDaily\nReview of The Kansas Kerfuffle\nPosted by Elizabeth Wrenn, October 15\nIn this sharp-witted comedy, a minor zoning error spirals into\na full-blown town-wide feud-a kerfuffle!- complete with\nbak sale ingotage, runaway goats, and a mayoral debate held\nThe movie delivers fast-paced laughs and small-town charm,\nproving that bureaucracy can be hilariously unpredictable."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Its premiere took place in Kansas."
+        },
+        {
+          "key": "B",
+          "text": "It features a dispute about pet ownership."
+        },
+        {
+          "key": "C",
+          "text": "It offers a satirical view of small-town bureaucracy."
+        },
+        {
+          "key": "D",
+          "text": "A"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "What is the main purpose of the email?",
+      "passage": {
+        "text": "mica.agst@dmail.com\nFrom:\nSubject:\nMy thesis proposal\nDear Professor Carter,\nI just want to express my appreciation for your thoughtful feedback on\nmy thesis proposal about renewable-energy adoption. Your notes on\ntightening the methodology and adding comparative case studies were\nvery helpful and gave me a clearer path forward. I have already updated\nmy outine with those changes and plan to send the revised version of\nthe entire proposal next Monday.\nI also really appreciate you making time during office hours to discuss\nmy questions with me and for sharing the relevant policy-analysis\nresources-they are exactly what I need. Your support has made a real\ndifference in how I'm approaching this work, and I feel much more\nconfident about the next steps. I am sincerely grateful for all you have\ndone for me.\nBest regards,\nMicah Agostino"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To confirm the deadline for an assignment"
+        },
+        {
+          "key": "B",
+          "text": "To ask for an extension on a project"
+        },
+        {
+          "key": "C",
+          "text": "To thank a faculty member for their help"
+        },
+        {
+          "key": "D",
+          "text": "To ask for comments on a paper"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "The message mentions Professor Carter doing each of the following EXCEPT meeting Micah during office hours",
+      "passage": {
+        "text": "From:\nmica.agst@dmail.com\nSubject:\nMy thesis proposal\nDear Professor Carter,\nI just want to express my appreciation for your thoughtful feedback on\nmy thesis proposal about renewable-energy adoption. Your notes on\ntightening the methodology and adding comparative case studies were\nvery helpful and gave me a clearer path forward. I have already updated\nmy outline with those changes and plan to send the revised version of\nthe entire proposal next Monday.\nI also really appreciate you making time during office hours to discuss\nmy questions with me and for sharing the relevant policy-analysis\nresources-they are exactly what I need. Your support has made a real\ndifference in how I'm approaching this work, and I feel much more\nconfident about the next steps. I am sincerely grateful for all you have\ndone for me.\nBest regards,\nMicah Agostino"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "reading Micah's thesis proposal"
+        },
+        {
+          "key": "B",
+          "text": "providing extra materials to Micah"
+        },
+        {
+          "key": "C",
+          "text": "helping Micah choose a thesis topic"
+        },
+        {
+          "key": "D",
+          "text": "Aal A"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read an email.",
+      "prompt": "In the next few days, Micah will most likely seek feedback from another professor",
+      "passage": {
+        "text": "mica.agst@dmail.com\nFrom:\nSubject:\nMy thesis proposal\nDear Professor Carter,\nI just want to express my appreciation for your thoughtful feedback on\nmy thesis proposal about renewable-energy adoption. Your notes on\ntightening the methodology and adding comparative case studies were\nvery helpful and gave me a clearer path forward. I have already updated\nmy outline with those changes and plan to send the revised version of\nthe entire proposal next Monday.\nI also really appreciate you making time during office hours to discuss\nmy questions with me and for sharing the relevant policy-analysis\nresources-they are exactly what I need. Your support has made a real\ndifference in how I'm approaching this work, and I feel much more\nconfident about the next steps. I am sincerely grateful for all you have\ndone for me.\nBest regards,\nMicah Agostino"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "update his proposal outline"
+        },
+        {
+          "key": "B",
+          "text": "meet with Professor Carter again"
+        },
+        {
+          "key": "C",
+          "text": "continue revising his entire proposal"
+        },
+        {
+          "key": "D",
+          "text": "A"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read a message exchange.",
+      "prompt": "Why does Angela recommend bringing a lot of water for the hike?",
+      "passage": {
+        "text": "Hi everyone! Want to join me for a hike on Saturday at Green Valley with\nthe Student Outdoors Club?\nWhat time?\nLet's meet at the trailhead at 8:00 AM. Starting early will help us beat the\nheat, which starts creeping in at 9:00 A.M. Or So.\nWhat should we bring?\nWell, for sure, bring PLENTY of water.\nI'll bring extra water-good point about the heat! Do we need a permit?\nI have heard that some hiking areas are now being protected.\nLet me check on that, Tom. Parking is limited carpooling is best.\nI can drive! I've got room for three.\nTil take that offer, Milton."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The trail will eventually climb to an extremely high altitude."
+        },
+        {
+          "key": "B",
+          "text": "The conditions along the trail will be exceptionally windy and dusty."
+        },
+        {
+          "key": "C",
+          "text": "The water for sale along the trail is too expensive."
+        },
+        {
+          "key": "D",
+          "text": "The temperature along the trail will start to climb after about nine a.m."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q30",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read a message exchange.",
+      "prompt": "What does Milton offer to do?",
+      "passage": {
+        "text": "Hi everyone! Want to join me for a hike on Saturday at Green Valley with\nthe Student Outdoors Club?\nWhat time?\nLet's meet at the trailhead at 8:00 A.M. Starting early will help us beat the\nheat, which starts creeping in at 9:00 A.M. Or SO.\nWhat should we bring?\nWell, for sure, bring PLENTY of water.\nI'll bring extra water-good point about the heat! Do we need a permit?\nI have heard that some hiking areas are now being protected.\nLet me check on that, Tom. Parking is limited carpooling is best.\nI can drive! I've got room for three.\nTil take that offer, Milton."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Rent a car for the group"
+        },
+        {
+          "key": "B",
+          "text": "Use his car for carpooling"
+        },
+        {
+          "key": "C",
+          "text": "Bring extra water"
+        },
+        {
+          "key": "D",
+          "text": "Use his home as a gathering place"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q32",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the passage imply about homophily?",
+      "passage": {
+        "text": "Social Networks and Influence\n\nIn today's digital age, social networks play a significant role in shaping opinions and behaviors. The influence of these networks is not merely about the number of connections one might have, but about the quality and nature of those interactions. Sociologists have long been interested in how individuals within a network can influence the group's overall dynamics. This concept is sometimes referred to as social capital.\n\nThe structure of a network can determine the flow of information. An individual positioned at the intersection of various groups, known as a bridge, often plays a crucial role in disseminating information. This person can introduce new ideas and perspectives to different parts of the network, thereby influencing opinions and possibly altering behaviors. Another factor is homophily, where individuals are more likely to form connections with others who are similar to themselves in terms of opinions, values, or social status. While homophily can reinforce existing beliefs, it can also create echo chambers, limiting exposure to diverse perspectives. The presence of influential individuals, often termed opinion leaders, can amplify or mitigate the effects of network structures by means of their social skills or charisma. Sociologists aim to uncover the nuanced ways social networks shape collective behavior."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It ensures the dissemination of diverse ideas."
+        },
+        {
+          "key": "B",
+          "text": "It promotes similarity and continuity within groups."
+        },
+        {
+          "key": "C",
+          "text": "It emphasizes opinion leaders over network structures"
+        },
+        {
+          "key": "D",
+          "text": "It makes it unnecessary to have bridges across networks."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m1_q34",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"nuanced\" in the passage is closest in meaning to many",
+      "passage": {
+        "text": "Social Networks and Influence\n\nIn today's digital age, social networks play a significant role in shaping opinions and behaviors. The influence of these networks is not merely about the number of connections one might have, but about the quality and nature of those interactions. Sociologists have long been interested in how individuals within a network can influence the group's overall dynamics. This concept is sometimes referred to as social capital.\n\nThe structure of a network can determine the flow of information. An individual positioned at the intersection of various groups, known as a bridge, often plays a crucial role in disseminating information. This person can introduce new ideas and perspectives to different parts of the network, thereby influencing opinions and possibly altering behaviors. Another factor is homophily, where individuals are more likely to form connections with others who are similar to themselves in terms of opinions, values, or social status. While homophily can reinforce existing beliefs, it can also create echo chambers, limiting exposure to diverse perspectives. The presence of influential individuals, often termed opinion leaders, can amplify or mitigate the effects of network structures by means of their social skills or charisma. Sociologists aim to uncover the nuanced ways social networks shape collective behavior."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "complex"
+        },
+        {
+          "key": "B",
+          "text": "powerful"
+        },
+        {
+          "key": "C",
+          "text": "general"
+        },
+        {
+          "key": "D",
+          "text": "A"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m2_q1",
+      "task_type": "complete_words",
+      "order": 14,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "The Middle Ages was a period in Europe that spanned roughly between the fifth and fifteenth centuries. This e saw\nsigni changes, mo notably t spread o Christianity a the establ of powe\n| referred to as the \"Dark Ages,\" a name that suggests stagnation and decline, this\nkingdoms. Des being of\nperiod also witnessed remarkable achievements in art, architecture, and learning, laying the groundwork for Europe's\ntransition into the Renaissance and the age of discovery."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "era",
+          "significant",
+          "most",
+          "the",
+          "of",
+          "and",
+          "establishment",
+          "powerful",
+          "despite",
+          "often"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m2_q11",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "ice in U.S. Courts",
+      "passage": {
+        "text": "In the United States, as in some other countries, video evidence has become integral to the criminal justice system as technological advances have made cameras nearly ubiquitous. Police officers often wear body cameras, security cameras monitor public areas, and nearly everyone carries a smartphone capable of recording high-quality videos. While such recordings are widely seen as reliable evidentiary tools, they have certain For example, videos are usually taken from a single vantage point, potentially giving viewers a misleading impression of events. A single camera angle might fail to capture what occurs just outside the frame, leading observers to misinterpret what they see. Additionally, video footage has no way of conveying interpersonal and emotional context: A person's actions might appear antagonistic even if the person was acting in self- Despite these limitations, legal experts emphasize that video evidence plays a significant role in courtrooms. Jurors (people chosen to consider evidence and decide a case) might dismiss eyewitness testimonies as unreliable or perceive oral accounts as inconsistent, while videos show events more directly. When multiple recordings are available from different angles, an even more reliable sense of an incident can emerge. Nevertheless, courts often remind jurors to evaluate video evidence"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "What is the relationship between the first sentence and the second sentence of the passage?"
+        },
+        {
+          "key": "B",
+          "text": "The first sentence makes a generalization, and the second sentence introduces exceptions to the generalization. The first sentence presents one view of a subject, and the second sentence presents a contrasting view. The first sentence makes a claim, and the second sentence provides examples to illustrate that claim."
+        },
+        {
+          "key": "C",
+          "text": "The first sentence introduces a question, and the second sentence offers possible answers to the question."
+        },
+        {
+          "key": "D",
+          "text": "Al Aa la"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m2_q13",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What does the author point out when discussing \"context\"?",
+      "passage": {
+        "text": "In the United States, as in some other countries, video evidence has become integral to the criminal justice system as technological advances have made cameras nearly ubiquitous. Police officers often wear body cameras, security cameras monitor public areas, and nearly everyone carries a smartphone capable of recording high-quality videos. While such recordings are widely seen as reliable evidentiary tools, they have certain limitations. For example, videos are usually taken from a single vantage point, potentially giving viewers a misleading impression of events. A single camera angle might fail to capture what occurs just outside the frame, leading observers to misinterpret what they see. Additionally, video footage has no way of conveying interpersonal and emotional context: A person's actions might appear antagonistic even if the person was acting in self- defense. Despite these limitations, legal experts emphasize that video evidence plays a significant role in courtrooms. Jurors (people chosen to consider evidence and decide a case) might dismiss evewitness testimonies as unreliable or perceive oral accounts as inconsistent, while videos show events more directly. When multiple recordings are available from different angles, an even more reliable sense of an incident can emerge. Nevertheless, courts often remind jurors to evaluate video evidence cautiously."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The setting in which a video is viewed may affect the way viewers perceive the recorded events. People may draw incorrect conclusions about others' motivations from what they observe in a video. Video recordings can be used either to defend an individual's actions or to depict the individual as an aggressor."
+        },
+        {
+          "key": "B",
+          "text": "The reliability of video recordings of events should be compared to the reliability of oral accounts of those events."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m2_q14",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The passage indicates that \"legal experts\" hold which of the following views? Jurors are likely to accept videos as objective depictions of events whereas they view witness testimony with skepticism.",
+      "passage": {
+        "text": "In the United States, as in some other countries, video evidence has become integral to the criminal justice system as technological advances have made cameras nearly ubiquitous. Police officers often wear body cameras, security cameras monitor public areas, and nearly everyone carries a smartphone capable of recording high-quality videos. While such recordings are widely seen as reliable evidentiary tools, they have certain limitations.\n\nFor example, videos are usually taken from a single vantage point, potentially giving viewers a misleading impression of events. A single camera angle might fail to capture what occurs just outside the frame, leading observers to misinterpret what they see. Additionally, video footage has no way of conveying interpersonal and emotional context: A person's actions might appear antagonistic even if the person was acting in self- defense.\n\nDespite these limitations, legal experts emphasize that video evidence plays a significant role in courtrooms. Jurors (people chosen to consider evidence and decide a case) might dismiss eyewitness testimonies as unreliable or perceive oral accounts as inconsistent, while videos show events more directly. When multiple recordings are available from different angles, an even more reliable sense of an incident can emerge. Nevertheless, courts often remind jurors to evaluate video evidence\n\ncautiously."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Recent improvements in technology have made it so easy to display video evidence to jurors that other kinds of evidence may be neglected."
+        },
+        {
+          "key": "B",
+          "text": "Video recordings should not be used as evidence in courtrooms unless multiple recordings taken from different vantage points can be shown."
+        },
+        {
+          "key": "C",
+          "text": "Courts should not undermine jurors abilities by overemphasizing the pe misinterpreting videos."
+        },
+        {
+          "key": "D",
+          "text": "*"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    },
+    {
+      "id": "reading_2026-04-06_m2_q15",
+      "task_type": "read_academic",
+      "order": 18,
+      "number": "15",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"cautiously\" in the passage is closest in meaning to reluctantly carefully decisively",
+      "passage": {
+        "text": "In the United States, as in some other countries, video evidence has become integral to the criminal justice system as technological advances have made cameras nearly ubiquitous. Police officers often wear body cameras, security cameras monitor public areas, and nearly everyone carries a smartphone capable of recording high-quality videos. While such recordings are widely seen as reliable evidentiary tools, they have certain limitations. For example, videos are usually taken from a single vantage point, potentially giving viewers a misleading impression of events. A single camera angle might fail to capture what occurs just outside the frame, leading observers to misinterpret what they see. Additionally, video footage has no way of conveying interpersonal and emotional context: A person's actions might appear antagonistic even if the person was acting in self- defense. Despite these limitations, legal experts emphasize that video evidence plays a significant role in courtrooms. Jurors (people chosen to consider evidence and decide a case) might dismiss eyewitness testimonies as unreliable or perceive oral accounts as inconsistent, while videos show events more directly. When multiple recordings are available from different angles, an even more reliable sense of an incident can emerge. Nevertheless, courts often remind jurors to evaluate video evidence cautiously."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "confidently"
+        },
+        {
+          "key": "B",
+          "text": "2•"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.6新托福真题/4.6阅读.pdf"
+    }
+  ]
+}

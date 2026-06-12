@@ -1,0 +1,841 @@
+{
+  "exam": {
+    "id": "reading_2026-03-15",
+    "subject": "reading",
+    "date": "2026-03-15",
+    "volume": "",
+    "source_pdf": "3.15新托福真题/3.15阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-03-15_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "We know from drawings that have been preserved in caves for over 10,000 years that early humans performed\ndances as a group activity. We mi think th prehistoric peo concentrated on on t basic wo that\nW required f survival: hun _, gathering fo, and making weapons and garments. However, it is clear\nfrom the record that group dancing was important to them. They made masks and costumes; they used much energy\nin the process of dancing; they recorded more drawings of dancing than of any other group activity."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "might",
+          "that",
+          "people",
+          "only",
+          "the",
+          "work",
+          "was",
+          "for",
+          "hunting",
+          "food"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Fossils provide invaluable evidence of evolutionary history, documenting species that lived millions of years ago.\nPaleontologists examine these remains to understand how organisms have changed over time. Natural selection\nexpl how advant traits incr in freq in a popul • Species ad to th\nenvironments, wh leadst incredible dive observed in the biological world today through the\nmechanism of natural selection. The ongoing study of evolution continues to reveal how life on Earth has developed\nand diversified."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "explains",
+          "advantageous",
+          "increase",
+          "frequency",
+          "population",
+          "adapt",
+          "their",
+          "which",
+          "to",
+          "diversity"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read an advertisement.",
+      "prompt": "Whom is the advertisement trying to attract to Larkhaven?",
+      "passage": {
+        "text": "iscover Larkhaven, where lecture halls open t obblestone courtyards abuzz with debate ar steaming coffee. Ivy-clad dorms echo with laughter and late-night study sessions. For students seeking a semester abroad, this vibrant town offers more than classes-it's a journey of ideas, friendships, and unforgettable experiences. Come learn and explore."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Adults seeking to take non-credit classes"
+        },
+        {
+          "key": "B",
+          "text": "Older tourists on a budget"
+        },
+        {
+          "key": "C",
+          "text": "Students wishing to study in a foreign country"
+        },
+        {
+          "key": "D",
+          "text": "Students on summer holiday"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read an advertisement.",
+      "prompt": "Which of the following best describes the town of Larkhaven? Rugged",
+      "passage": {
+        "text": "Discover Larkhaven, where lecture halls open to cobblestone courtyards abuzz with debate and steaming coffee.\n\nIvy-lad dorms echo with laughter and late-night\n\nstudy sessions.\n\nFor students seeking a semester abroad, this vibrant town offers more than classes-it's a journey of ideas, friendships, and unforgettable experiences.\n\nCome learn and explore."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Modern"
+        },
+        {
+          "key": "B",
+          "text": "Sleepy"
+        },
+        {
+          "key": "C",
+          "text": "Lively"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read a label.",
+      "prompt": "How many items are in one case?",
+      "passage": {
+        "text": "Ella Bottled Water (1 Case)\n\n12 bottles Contains: 150 centilitres each\n\nNatural mineral water Ingredient:\n\nProduced by: The Pureway Company Lagos Mainland, Nigeria\n\nN1,000 Cost:\n\n(12) 80 - 399 131506"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "1"
+        },
+        {
+          "key": "B",
+          "text": "12"
+        },
+        {
+          "key": "C",
+          "text": "150"
+        },
+        {
+          "key": "D",
+          "text": "1,000"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read a label.",
+      "prompt": "What is the brand name of the product?",
+      "passage": {
+        "text": "Ella Bottled Water\n\n(1 Case)\n\n12 bottles Contains: 150 centilitres each\n\nNatural mineral water Ingredient:\n\nProduced by: The Pureway Company\n\nLagos Mainland, Nigeria\n\nN1,000 Cost:\n\n(12) 80 - 399 131506"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Ella"
+        },
+        {
+          "key": "B",
+          "text": "Natural"
+        },
+        {
+          "key": "C",
+          "text": "Lagos"
+        },
+        {
+          "key": "D",
+          "text": "Mainland"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "ollowing notice. Peter has no experience with spreadsheets and cannot attend class on Wednesdays. He should enroll in",
+      "passage": {
+        "text": "Downtown School of Data Skills\nAll classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nNata Ranracantation"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A"
+        },
+        {
+          "key": "B",
+          "text": "Section B"
+        },
+        {
+          "key": "C",
+          "text": "Section C"
+        },
+        {
+          "key": "D",
+          "text": "Section D"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "ollowing notice. What does Michelle need before enrolling in Section D?",
+      "passage": {
+        "text": "Downtown School of Data Skills\nAll classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation\nThic nurce ic for analute and racearcher whn need to chaw"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Experience creating new spreadsheet formulas"
+        },
+        {
+          "key": "B",
+          "text": "A research position that requires creating formulas"
+        },
+        {
+          "key": "C",
+          "text": "Training in how to present complex data"
+        },
+        {
+          "key": "D",
+          "text": "Previous experience using spreadsheets"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "Beth has worked with formulas for years and is ready to learn advanced data skills. She should enroll in",
+      "passage": {
+        "text": "Downtown School of Data Skills\nAll classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A, B, or C"
+        },
+        {
+          "key": "B",
+          "text": "Section D or E"
+        },
+        {
+          "key": "C",
+          "text": "Section F"
+        },
+        {
+          "key": "D",
+          "text": "Section G"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read an article in a student newspaper.",
+      "prompt": "All of the following are true of the new nuclear reactor EXCEPT:",
+      "passage": {
+        "text": "keading\n\nYesterday, the university flipped the switch on its new nuclear research reactor in the basement of the Franklin Applied Energy Lab, turning the engineering quad into the hottest spot on campus-literally and figuratively. The reactor, about the size of a classroom, won't charge cell phones or brew coffee; it's built for neutron experiments, advanced materials research, and isotope production. \"The launch of this laboratory will provide unparalleled opportunities for the university,\" said Dr. Evelyn Pillai, project lead. While some students have expressed safety concerns, a university spokesperson assured the community that the reactor is safer than the chemistry labs most first-year students wander into. \"Radiation levels outside the facility are lower than what you'd get on a cross-country flight,\" said Dr. Pillai. Meanwhile, the Physics Club is planning a festive \"Critical Mass Mixer\" for Friday evening, The invitation features an atom whose colorful orbiting electrons are juggled by a mole."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It is located on the engineering quad."
+        },
+        {
+          "key": "B",
+          "text": "It is about the size of a classroom."
+        },
+        {
+          "key": "C",
+          "text": "Its purpose is to provide power to the university"
+        },
+        {
+          "key": "D",
+          "text": "It has caused safety concerns among students."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read an article in a student newspaper.",
+      "prompt": "What claim does the project lead make regarding the safety of the new reactor?",
+      "passage": {
+        "text": "Yesterday, the university flipped the switch on its new nuclear research reactor in the basement of the Franklin Applied Energy Lab,\n\nturning the engineering quad into the hottest spot on\n\ncampus-literally and figuratively. The reactor, about the size of a classroom, won't charge cell phones or brew coffee; it's built for\n\nneutron experiments, advanced materials research, and isotope production. \"The launch of this laboratory will provide unparalleled\n\nopportunities for the university,\" said Dr. Evelyn Pillai, project lead.\n\nWhile some students have expressed safety concerns, a university\n\nspokesperson assured the community that the reactor is safer than\n\nthe chemistry labs most first-year students wander into. \"Radiation\n\nlevels outside the facility are lower than what you'd get on a cross-country flight,\" said Dr. Pillai. Meanwhile, the Physics Club is\n\nplanning a festive \"Critical Mass Mixer\" for Friday evening. The\n\ninvitation features an atom whose colorful orbiting electrons are\n\njuggled by a mole."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It exposes passersby to less radiation than they would receive on an airplane."
+        },
+        {
+          "key": "B",
+          "text": "It will provide opportunities for the university that override worries about safety."
+        },
+        {
+          "key": "C",
+          "text": "It is safer for students than are the industrial reactors located near campus. It is low-power, heavily shielded, and monitored under strict federal guidelines."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read an article in a student newspaper.",
+      "prompt": "Which of the following best describes the attitude represented by the event planned by the Physics Club?",
+      "passage": {
+        "text": "Yesterday, the university flipped the switch on its new nuclear research reactor in the basement of the Franklin Applied Energy Lab, turning the engineering quad into the hottest spot on campus-literally and figuratively. The reactor, about the size of a classroom, won't charge cell phones or brew coffee; it's built for neutron experiments, advanced materials research, and isotope production. \"The launch of this laboratory will provide unparalleled opportunities for the university,\" said Dr. Evelyn Pillai, project lead While some students have expressed safety concerns, a university spokesperson assured the community that the reactor is safer than the chemistry labs most first-year students wander into. \"Radiation levels outside the facility are lower than what you'd get on a cross-country flight,\" said Dr. Pillai. Meanwhile, the Physics Club is planning a festive \"Critical Mass Mixer\" for Friday evening. The invitation features an atom whose colorful orbiting electrons are juggled by a mole."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Concerned but resigned"
+        },
+        {
+          "key": "B",
+          "text": "C Hopeful but cautious"
+        },
+        {
+          "key": "C",
+          "text": "Critical and serious"
+        },
+        {
+          "key": "D",
+          "text": "Lighthearted and celebratory"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"norms\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Social role theory is a significant framework in theoretical sociology, explaining how individuals adopt roles based on\n\nsocietal expectations. Society is structured by roles, each with specific behaviors and norms. A key aspect of social role theory is role conflict, which occurs when the expectations of one role clash with those of another. For instance, a person who is both a parent and an employee might struggle to balance caring for their children and meeting work obligations.\n\nThis conflict can lead to stress and decreased performance in one or both roles. Another important concept is role strain, which is stress within a single role due to competing demands or insufficient resources. An example is a teacher who feels overwhelmed by the need to manage classroom behavior while also keeping lessons engaging. Social role theory also addresses how roles change over time. As society evolves, the expectations attached to roles can shift. For example, the role of women in the workforce has changed dramatically, with\n\nincreasing acceptance of women in leadership. Understanding these dynamics is crucial for analyzing how social structures impact individual behavior and societal change."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "long histories"
+        },
+        {
+          "key": "B",
+          "text": "hidden benefits"
+        },
+        {
+          "key": "C",
+          "text": "practical effects"
+        },
+        {
+          "key": "D",
+          "text": "unwritten rules"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Role Theory Why does the passage mention \"a person who is both a parent and an employee\"?",
+      "passage": {
+        "text": "Social role theory is a significant framework in theoretical sociology, explaining how individuals adopt roles based on societal expectations. Society is structured by roles, each with specific behaviors and norms. A key aspect of social role theory is role conflict, which occurs when the expectations of one role clash with those of another. For instance, a person who is both a parent and an employee might struggle to balance caring for their children and meeting work obligations. This conflict can lead to stress and decreased performance in one or both roles. Another important concept is role strain, which is stress within a single role due to competing demands or insufficient resources. An example is a teacher who feels overwhelmed by the need to manage classroom behavior while also keeping lessons engaging. Social role theory also addresses how roles change over time. As society evolves, the expectations attached to roles can shift. For example, the role of women in the workforce has changed dramatically, with increasing acceptance of women in leadership. Understanding these dynamics is crucial for analyzing how social structures impact individual behavior and societal change."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To show how a person can balance multiple obligations"
+        },
+        {
+          "key": "B",
+          "text": "To imply that roles are not always rigidly defined"
+        },
+        {
+          "key": "C",
+          "text": "To illustrate the concept of role conflict"
+        },
+        {
+          "key": "D",
+          "text": "To emphasize the importance of good childcare e"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the passage mention \"a teacher\"? To support the idea that social role theory is often difficult to understand",
+      "passage": {
+        "text": "Social role theory is a significant framework in theoretical sociology, explaining how individuals adopt roles based on societal expectations. Society is structured by roles, each with specific behaviors and norms. A key aspect of social role theory is role conflict, which occurs when the expectations of one role clash with those of another. For instance, a person\n\nwho is both a parent and an employee might struggle to balance caring for their children and meeting work obligations. This conflict can lead to stress and decreased performance in one or both roles. Another important concept is role strain, which is stress within a single role due to competing demands or insufficient resources. An example is a teacher who feels\n\noverwhelmed by the need to manage classroom behavior while also keeping lessons engaging. Social role theory also addresses how roles change over time. As society evolves, the expectations attached to roles can shift. For example, the role of women in the workforce has changed dramatically, with increasing acceptance of women in leadership. Understanding these dynamics is crucial for analyzing how social structures impact individual behavior and societal change."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To explain how a person might experience competing"
+        },
+        {
+          "key": "B",
+          "text": "demands within a role"
+        },
+        {
+          "key": "C",
+          "text": "To imply that the resources provided to teachers are often insufficient"
+        },
+        {
+          "key": "D",
+          "text": "To demonstrate how behavioral issues make learning difficult for everyone"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The phrase \"these dynamics\" in the passage refers to",
+      "passage": {
+        "text": "Reading |\n\nSocial role theory is a significant framework in theoretical sociology, explaining how individuals adopt roles based on societal expectations. Society is structured by roles, each with specific behaviors and norms. A key aspect of social role theory is role conflict, which occurs when the expectations of one role clash with those of another. For instance, a person who is both a parent and an employee might struggle to balance caring for their children and meeting work obligations. This conflict can lead to stress and decreased performance in one or both roles. Another important concept is role strain, which is stress within a single role due to competing demands or insufficient resources. An example is a teacher who feels overwhelmed by the need to manage classroom behavior while also keeping lessons engaging. Social role theory also addresses how roles change over time. As society evolves, the expectations attached to roles can shift. For example, the role of women in the workforce has changed dramatically, with increasing acceptance of women in leadership. Understanding these dynamics is crucial for analyzing how social structures impact individual behavior and societal change."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "the evolution of social roles over time"
+        },
+        {
+          "key": "B",
+          "text": "competition for leadership positions"
+        },
+        {
+          "key": "C",
+          "text": "interactions between men and women in the workforce"
+        },
+        {
+          "key": "D",
+          "text": "decreasing prestige of some social roles"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m2_q1",
+      "task_type": "complete_words",
+      "order": 17,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Climate change has become one of the most pressing current issues of our time, sparking global conversations. When\ndiscussing climate, it is often confused with weather. Climate specif refers t long-term tre in\ntempe , humidity, wi , and precip that def typical condi tor a reg -not\nju the daily forecast. While weather can shift dramatically from one day to the next, the climate of an area\ndescribes what is normal over decades."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "specifically",
+          "to",
+          "trends",
+          "temperature",
+          "wind",
+          "precipitation",
+          "define",
+          "conditions",
+          "region",
+          "just"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m2_q11",
+      "task_type": "read_academic",
+      "order": 18,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"mimic\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Expert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering. An early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN's system needed constant updates, requiring extensive input from medical professionals. Despite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. Advancements in machine learning and natural language processing could address these issues. By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "replace"
+        },
+        {
+          "key": "B",
+          "text": "combine"
+        },
+        {
+          "key": "C",
+          "text": "imitate"
+        },
+        {
+          "key": "D",
+          "text": "challenge"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m2_q12",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "How did MYCIN diagnose bacterial infections?",
+      "passage": {
+        "text": "Expert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering. An early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN's system needed constant updates, requiring extensive input from medical professionals. Despite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. Advancements in machine learning and natural language processing could address these issues. By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It used a human specialist to evaluate patient data"
+        },
+        {
+          "key": "B",
+          "text": "It applied set rules to analyze patient data"
+        },
+        {
+          "key": "C",
+          "text": "It used data on infection rates to infer the probability of a particular type of bacteria."
+        },
+        {
+          "key": "D",
+          "text": "It relied on information provided directly by the patients"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m2_q13",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is a major limitation of current expert systems mentioned in the passage?",
+      "passage": {
+        "text": "Expert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering. An early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN's system needed constant updates, requiring extensive input from medical professionals. Despite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. Advancements in machine learning and natural language processing could address these issues. By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They are unable to process large datasets"
+        },
+        {
+          "key": "B",
+          "text": "They often provide incorrect results"
+        },
+        {
+          "key": "C",
+          "text": "They need frequent updating"
+        },
+        {
+          "key": "D",
+          "text": "They use databases that are always changing"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-15_m2_q14",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What can be inferred about the future of expert systems?",
+      "passage": {
+        "text": "KeaaIng\n\nExpert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering. An early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN's system needed constant updates, requiring extensive input from medical professionals. Despite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. Advancements in machine learning and natural language processing could address these issues. By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They will probably be limited to use in medical applications."
+        },
+        {
+          "key": "B",
+          "text": "They will one day be able to update themselves without human input."
+        },
+        {
+          "key": "C",
+          "text": "They will become less accurate as the amount of new data increases."
+        },
+        {
+          "key": "D",
+          "text": "They will soon be replaced by more relevant technologies"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.15新托福真题/3.15阅读.pdf"
+    }
+  ]
+}

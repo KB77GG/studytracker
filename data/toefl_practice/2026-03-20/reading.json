@@ -1,0 +1,923 @@
+{
+  "exam": {
+    "id": "reading_2026-03-20",
+    "subject": "reading",
+    "date": "2026-03-20",
+    "volume": "",
+    "source_pdf": "3.20新托福真题/3.20阅读.pdf",
+    "duration_seconds": 1800,
+    "module_durations": {
+      "m1": 1200,
+      "m2": 600
+    },
+    "audio_modules": []
+  },
+  "questions": [
+    {
+      "id": "reading_2026-03-20_m1_q1",
+      "task_type": "complete_words",
+      "order": 1,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "The history of the South Pacific is marked by diverse cultures and significant events. Indigenous popul\ndeveloped com societies wi rich tradi and soc structures. T region's poli and\necon landscapes exper profound cha following colonization by Europeans. Studying this\nhistory allows for a greater understanding of cultural interactions and the ongoing effects of historical events on\ncontemporary South Pacific societies. Traditional navigation techniques using stars and ocean swells enabled\nremarkable voyaging achievements, while contemporary movements focus on cultural preservation, language\nrevitalization, and addressing climate change impacts on island nations."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "populations",
+          "complex",
+          "with",
+          "traditions",
+          "social",
+          "the",
+          "political",
+          "economic",
+          "experienced",
+          "changes"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q11",
+      "task_type": "complete_words",
+      "order": 2,
+      "number": "11",
+      "number_end": "20",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Tigers are solitary animals known for their territorial behavior; males use scent markings and vocalizations to define\ntheir territories. Each ma tiger estab control ov a la territory span several squ miles\na patrols t area regu to lo for prey and maintain dominance. This behavior helps reduce conflicts\nover prey, but tigers are known to fiercely defend their territory from intruders when necessary. Often hunting at\nnight, tigers use stealth and their excellent night vision to their advantage."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "male",
+          "establishes",
+          "over",
+          "large",
+          "spanning",
+          "square",
+          "and",
+          "the",
+          "regularly",
+          "look"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q21",
+      "task_type": "read_daily",
+      "order": 3,
+      "number": "21",
+      "number_end": null,
+      "directive": "Read a webpage.",
+      "prompt": "013:14 Hide Time a webpage. What benefits does a quarterly member have that a monthly member lacks?",
+      "passage": {
+        "text": "https://www.fitlifegym.com\n\nFitLife Gym Membership\n\nMonthly plans cost $30 with equipment access only.\n\nQuarterly ($80) adds group classes and swimming pool privileges.\n\nAnnual members ($300) receive personal training discounts plus\n\nguest passes.\n\nNew members get a one-week free trial but must commit to a minimum three-month membership afterward."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Equipment access and guest passes"
+        },
+        {
+          "key": "B",
+          "text": "Personal training discounts only"
+        },
+        {
+          "key": "C",
+          "text": "Group classes and swimming privileges"
+        },
+        {
+          "key": "D",
+          "text": "Free trial and minimum commitment"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q22",
+      "task_type": "read_daily",
+      "order": 4,
+      "number": "22",
+      "number_end": null,
+      "directive": "Read a webpage.",
+      "prompt": "a webpage. What is required of new members after the one-week free trial ends?",
+      "passage": {
+        "text": "https://www.fitlifegym.com\n\nFitLife Gym Membership\n\nMonthly plans cost $30 with equipment access only. Quarterly ($80) adds group classes and swimming pool privileges.\n\nAnnual members ($300) receive personal training discounts plus guest passes. New members get a one-week free trial but must commit to a minimum three-month membership afterward."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Nothing"
+        },
+        {
+          "key": "B",
+          "text": "SA one-month membership"
+        },
+        {
+          "key": "C",
+          "text": "A three-month membership"
+        },
+        {
+          "key": "D",
+          "text": "T An annual membership"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q23",
+      "task_type": "read_daily",
+      "order": 5,
+      "number": "23",
+      "number_end": null,
+      "directive": "Read an e-mail.",
+      "prompt": "What did Ryan do yesterday?",
+      "passage": {
+        "text": "Hi Team,\nBlundin University hosted a career fair yesterday. I was able to\nspeak to several promising candidates for summer internships\nwith our company. See their attached resumes. I'd like everyone\nto give me their feedback no later than Friday.\nThanks,\nRyan"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "He took a class at a university."
+        },
+        {
+          "key": "B",
+          "text": "He attended a job fair"
+        },
+        {
+          "key": "C",
+          "text": "He was interviewed by a manager"
+        },
+        {
+          "key": "D",
+          "text": "He hired some summer interns."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q24",
+      "task_type": "read_daily",
+      "order": 6,
+      "number": "24",
+      "number_end": null,
+      "directive": "Read an e-mail.",
+      "prompt": "What does Ryan ask his team to do?",
+      "passage": {
+        "text": "Hi Team,\nBlundin University hosted a career fair yesterday. I was able to\nspeak to several promising candidates for summer internships\nwith our company. See their attached resumes. I'd like everyone\nto give me their feedback no later than Friday.\nThanks,\nRyan"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Share their opinions of some job candidates"
+        },
+        {
+          "key": "B",
+          "text": "a summer internship program"
+        },
+        {
+          "key": "C",
+          "text": "Update their résumés by Friday Introduce themselves to new interns"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q25",
+      "task_type": "read_daily",
+      "order": 7,
+      "number": "25",
+      "number_end": null,
+      "directive": "Read an article.",
+      "prompt": "What is the main topic of the article?",
+      "passage": {
+        "text": "Al-Generated Art on Campus\n\nVisitors to the Petrunich Gallery can now view an exhibit of Al-generated\n\npaintings that blur the line between human creativity and machine learning. One standout work, Dream Algorithm, depicts a city floating in a sea of binary\n\ncode, while another, Echoes of Light, uses layered brushstrokes created by\n\nartificial neural networks to mimic sunrise over glass towers.\n\nThe exhibit, which was funded by an arts innovation grant, allows visitors to\n\ninteract with a program that generates custom artwork in real time, allowing\n\nthem to choose themes and color palettes. This feature has become the\n\ncenterpiece of the show, enchanting everyone from art majors to computer science instructors.\n\n\"We're exploring the intersection of creativity and technology,\" said curator Dana Fields. 'It challenges what art means.\"\n\nI made a painting with code-it felt empowering,\" said senior art major\n\nSofia Ramirez. \"It's a new frontier.\""
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "An art exhibit highlighting technology-driven creativity"
+        },
+        {
+          "key": "B",
+          "text": "A debate over mixing art and technology"
+        },
+        {
+          "key": "C",
+          "text": "How students are learning traditional painting"
+        },
+        {
+          "key": "D",
+          "text": "A plan to replace the art gallery with a data center"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q26",
+      "task_type": "read_academic",
+      "order": 8,
+      "number": "26",
+      "number_end": null,
+      "directive": "Read an article.",
+      "prompt": "Which of the following is true of the exhibit?",
+      "passage": {
+        "text": "Al-Generated Art on Campus\n\nVisitors to the Petrunich Gallery can now view an exhibit of Al-generated paintings that blur the line between human creativity and machine learning. One standout work, Dream Algorithm, depicts a city floating in a sea of binary code, while another, Echoes of Light, uses layered brushstrokes created by artificial neural networks to mimic sunrise over glass towers. The exhibit, which was funded by an arts innovation grant, allows visitors to interact with a program that generates custom artwork in real time, allowing them to choose themes and color palettes. This feature has become the centerpiece of the show, enchanting everyone from art majors to computer science instructors. \"We're exploring the intersection of creativity and technology,\" said curator Dana Fields. \"It challenges what art means.\" \"' made a painting with code-it felt empowering,\" said senior art major Sofia Ramirez. \"It's a new frontier.\""
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Its dates have been extended because of public enthusiasm."
+        },
+        {
+          "key": "B",
+          "text": "It prohibits visitor participation"
+        },
+        {
+          "key": "C",
+          "text": "It merges artistic expression with digital innovation."
+        },
+        {
+          "key": "D",
+          "text": "It features computer-aided musical performances."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q27",
+      "task_type": "read_academic",
+      "order": 9,
+      "number": "27",
+      "number_end": null,
+      "directive": "Read an article.",
+      "prompt": "What can be inferred about the impact of the exhibit's interactive portion? It asks visitors to consider the ethical implications of using Al to create art. It has caused visitors to switch majors from art to",
+      "passage": {
+        "text": "Al-Generated Art on Campus\n\nVisitors to the Petrunich Gallery can now view an exhibit of Al-generated paintings that blur the line between human creativity and machine learning.\n\nOne standout work, Dream Algorithm, depicts a city floating in a sea of binary code, while another, Echoes of Light, uses layered brushstrokes created by artificial neural networks to mimic sunrise over glass towers.\n\nThe exhibit, which was funded by an arts innovation grant, allows visitors to\n\ninteract with a program that generates custom artwork in real time, allowing them to choose themes and color palettes. This feature has become the centerpiece of the show, enchanting everyone from art majors to computer\n\nscience instructors.\n\n\"We're exploring the intersection of creativity and technology,\" said\n\ncurator Dana Fields. \"It challenges what art means.\"\n\n\"I made a painting with code-it felt empowering,\" said senior art major Sofia Ramirez. \"It's a new frontier.\""
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "computer science."
+        },
+        {
+          "key": "B",
+          "text": "It has led to calls to replace traditional art with Al art."
+        },
+        {
+          "key": "C",
+          "text": "It tries to help visitors feel comfortable using Al in their"
+        },
+        {
+          "key": "D",
+          "text": "creative endeavors."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q28",
+      "task_type": "read_academic",
+      "order": 10,
+      "number": "28",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "Peter has no experience with spreadsheets and cannot attend class on Wednesdays. He should enroll in",
+      "passage": {
+        "text": "beginning septemoer 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data.\nSection F: (virtual) Mondays\nData Representation\nThis course is for analysts and researchers who need to show\naudiences easy-to-read graphs and charts.\nSection G: (virtual) Wednesdays"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A"
+        },
+        {
+          "key": "B",
+          "text": "Section B"
+        },
+        {
+          "key": "C",
+          "text": "Section C"
+        },
+        {
+          "key": "D",
+          "text": "Section D"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q29",
+      "task_type": "read_academic",
+      "order": 11,
+      "number": "29",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "Ø Hide Time llowing notice. What does Michelle need before enrolling in Section D?",
+      "passage": {
+        "text": "Downtown School of Data Skills\nAll classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Experience creating new spreadsheet formulas"
+        },
+        {
+          "key": "B",
+          "text": "A research position that requires creating formulas"
+        },
+        {
+          "key": "C",
+          "text": "Training in how to present complex data"
+        },
+        {
+          "key": "D",
+          "text": "Previous experience using spreadsheets"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q30",
+      "task_type": "read_academic",
+      "order": 12,
+      "number": "30",
+      "number_end": null,
+      "directive": "Read the following notice.",
+      "prompt": "Ø Hide Time ollowing notice. Beth has worked with formulas for years and is ready to learn advanced data skills. She should enroll in",
+      "passage": {
+        "text": "Downtown School of Data Skills\nAll classes meet for eight sessions from 6:00 P.M. to 7:00 P.M.\nbeginning September 1.\nSpreadsheet Introduction\nStudents will learn how to create spreadsheets and use\nfunctions that can speed up work. This course is good for\nbeginners and those who need to relearn basics.\nSection A: Mondays and Wednesdays\nSection B: Tuesdays and Thursdays\nSection C: (virtual) Wednesdays and Fridays\nFormulas\nInstructors will show students how to use basic spreadsheet\nformulas for business. Students should have basic spreadsheet\nskills before enrolling.\nSection D: Tuesdays\nSection E: (virtual) Thursdays\nData Seminar\nTaught by industry professionals, this course is for researchers\nwho want to learn how to work with complex data."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Section A, B, or C"
+        },
+        {
+          "key": "B",
+          "text": "Section D or E"
+        },
+        {
+          "key": "C",
+          "text": "Section F"
+        },
+        {
+          "key": "D",
+          "text": "Section G"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q31",
+      "task_type": "read_academic",
+      "order": 13,
+      "number": "31",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"groundbreaking\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Augmented Reality for Training\n\nAugmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances its effectiveness. However, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "educational"
+        },
+        {
+          "key": "B",
+          "text": "practical"
+        },
+        {
+          "key": "C",
+          "text": "revolutionary"
+        },
+        {
+          "key": "D",
+          "text": "interesting"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q32",
+      "task_type": "read_academic",
+      "order": 14,
+      "number": "32",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is the function of AR as described in the passage?",
+      "passage": {
+        "text": "Augmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances its effectiveness. However, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "AR artificially enhances human performance"
+        },
+        {
+          "key": "B",
+          "text": "AR produces realistic experiences in a learning environment."
+        },
+        {
+          "key": "C",
+          "text": "AR enables unskilled humans to interact with complex machines."
+        },
+        {
+          "key": "D",
+          "text": "AR produces a digital record of real-world content"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q33",
+      "task_type": "read_academic",
+      "order": 15,
+      "number": "33",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "AR reduces which of the following problems associated with traditional training environments?",
+      "passage": {
+        "text": "Augmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances\n\nHowever, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Their inability to simulate authentic experiences"
+        },
+        {
+          "key": "B",
+          "text": "Their physical dangers"
+        },
+        {
+          "key": "C",
+          "text": "Their inaccessibility to many learners"
+        },
+        {
+          "key": "D",
+          "text": "Their high financial costs 279-1 U E"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q34",
+      "task_type": "read_academic",
+      "order": 16,
+      "number": "34",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author cite studies showing that AR improves retention rates?",
+      "passage": {
+        "text": "Augmented Reality for Training\n\nAugmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances its eftectiveness. However, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To demonstrate its usefulness when practicing emergency protocols"
+        },
+        {
+          "key": "B",
+          "text": "To provide an example of its adaptability"
+        },
+        {
+          "key": "C",
+          "text": "To explain why fields outside medicine and aviation are slower to adopt it"
+        },
+        {
+          "key": "D",
+          "text": "To support the claim that it is useful to industries U E"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m1_q35",
+      "task_type": "read_academic",
+      "order": 17,
+      "number": "35",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Ø Hide Time Reality for Training What is one problem the passage mentions related to the n use of AR?",
+      "passage": {
+        "text": "Augmented reality (AR) has emerged as a groundbreaking tool in the field of human performance technology, particularly in training environments. AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition. For example, AR can simulate complex machinery operations, allowing trainees to interact with virtual components as if they were physically present. This hands-on approach helps learners understand intricate processes without the risks associated with real-world practice. The adaptability of AR makes it suitable for various industries. In medicine, AR can project 3D models of human anatomy, guiding surgeons through complex procedures. In aviation, pilots use AR to practice emergency protocols, offering a safe yet realistic training environment. Studies have shown that these AR applications significantly improve retention rates and performance outcomes. Moreover, AR's ability to customize training scenarios based on individual needs further enhances its effectiveness. However, integrating AR into training programs presents challenges. The technology requires substantial investment in hardware and software development. Additionally, creating accurate and responsive AR content demands expertise that many organizations may lack. Despite these hurdles, the benefits of AR in boosting human performance are undeniable. As the technology continues to evolve, it promises even more sophisticated and effective training solutions.\n\nThe clock will indicate how much time you have to complete Module 2."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The costs associated with making it useful to particular clients h Disagreement among experts regarding its accuracy"
+        },
+        {
+          "key": "B",
+          "text": "A lack of measurable benefits in its present stage of development n The absence of existing training programs into which it R may be integrated"
+        },
+        {
+          "key": "C",
+          "text": "X*9-1"
+        },
+        {
+          "key": "D",
+          "text": "lave to complete Module 2."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m2_q1",
+      "task_type": "complete_words",
+      "order": 18,
+      "number": "1",
+      "number_end": "10",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "prompt": "",
+      "passage": {
+        "text": "Art colonies have historically served as vibrant communities where artists gather to share ideas, collaborate, and create. The comm environment all artists to receive feed from pe and exper with\ninspire creativity, such as coastal towns or rural landscapes. Notable art colonies, like those in Montmartre or Taos, n techniques, enri practice. Su enclaves often emerge in picturesque locations that\ncolonies continue this tradition, adapting to new mediums and technologies while maintaining a spirit of collaboration have produced influential works and fostered movements such as Impressionism and Modernism. Contemporary art\nand innovation."
+      },
+      "audio_ref": null,
+      "options": [],
+      "answer": {
+        "words": [
+          "community",
+          "allows",
+          "to",
+          "feedback",
+          "peers",
+          "experiment",
+          "new",
+          "enriching",
+          "artistic",
+          "such"
+        ],
+        "explanation": null
+      },
+      "response_type": "fill",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m2_q11",
+      "task_type": "read_academic",
+      "order": 19,
+      "number": "11",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "According to the passage, simpler functions help scientists",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power. One common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions that are otherwise hard to handle. Another key tool is the Fourier series, which decomposes repeating patterns-like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality. While these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the original and the simplified version -called the error-needs to be as small as possible. New techniques, like adaptive approximation, adjust the level of detail based on how accurate the result needs to be."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "achieve exact calculations"
+        },
+        {
+          "key": "B",
+          "text": "avoid relying on algorithms"
+        },
+        {
+          "key": "C",
+          "text": "tackle difficult functions more effectively over time develop steps for solving problems relatively quickly x#I9-14"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m2_q12",
+      "task_type": "read_academic",
+      "order": 20,
+      "number": "12",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is indicated about polynomial approximation in the passage?",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power. One common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions that are otherwise hard to handle. Another key tool is the Fourier series, which decomposes repeating patterns-like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality. While these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the original and the simplified version-called the error-needs to be as small as possible. New techniques, like adaptive approximation, adjust the level of detail based on how accurate the result needs to be."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It varies in behavior from one point to another"
+        },
+        {
+          "key": "B",
+          "text": "It is less accurate than the Fourier series"
+        },
+        {
+          "key": "C",
+          "text": "It cannot handle infinite sums of terms as well as the Taylor series can."
+        },
+        {
+          "key": "D",
+          "text": "It uses simple math expressions to make complex functions easier to work with. X79-1"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m2_q13",
+      "task_type": "read_academic",
+      "order": 21,
+      "number": "13",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "The word \"decomposes\" in the passage is closest in meaning to",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power. One common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions that are otherwise hard to handle. Another key tool is the Fourier series, which decomposes repeating patterns -like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality. While these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the sriminal and tha cimalifind warcian rollad tha arrarnande"
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "runs"
+        },
+        {
+          "key": "B",
+          "text": "breaks down"
+        },
+        {
+          "key": "C",
+          "text": "mixes"
+        },
+        {
+          "key": "D",
+          "text": "enters XF19-14"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m2_q14",
+      "task_type": "read_academic",
+      "order": 22,
+      "number": "14",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "What is one application of Fourier series mentioned in the passage?",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power. One common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions that are otherwise hard to handle. Another key tool is the Fourier series, which decomposes repeating patterns-like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality. While these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the original and the simplified version-called the error-needs to be as small as possible. New techniques, like adaptive approximation, adjust the level of detail based on how accurate the result needs to be."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Simplifying sine and cosine waves Removing unwanted noise from signals"
+        },
+        {
+          "key": "B",
+          "text": "Compressing images"
+        },
+        {
+          "key": "C",
+          "text": "Modeling heat distribution X*9-14"
+        },
+        {
+          "key": "D",
+          "text": "Q"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    },
+    {
+      "id": "reading_2026-03-20_m2_q15",
+      "task_type": "read_academic",
+      "order": 23,
+      "number": "15",
+      "number_end": null,
+      "directive": "Read the passage and choose the best answer.",
+      "prompt": "Why does the author mention \"the error\"? To help illustrate the issue of accuracy as it relates to approximation theory",
+      "passage": {
+        "text": "Approximation theory is a part of mathematics that helps us simplify complex problems. Instead of working with difficult functions directly, scientists use simpler ones that are \"close enough\" to get useful results. These simplified functions are often used to build algorithms-step-by-step procedures that solve problems efficiently. This is especially helpful in fields like computer science, where exact calculations can take too much time or power. One common method is polynomial approximation, which uses basic math expressions (polynomials) to stand in for more complicated functions. A special type, called the Taylor series, breaks a function into an infinite sum based on its behavior at a single point. This helps us work with functions that are otherwise hard to handle. Another key tool is the Fourier series, which decomposes repeating patterns-like sound waves-into a mix of sine and cosine waves. This is widely used in signal processing; engineers use Fourier series to filter out noise and enhance data quality. While these methods are powerful, they are not perfect. Accuracy remains a challenge. The difference between the original and the simplified version -called the error-needs to be as small as possible. New techniques, like adaptive approximation, adjust the level of detail based on how accurate the result needs to be."
+      },
+      "audio_ref": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "To add another explanation of how polynomial approximation works"
+        },
+        {
+          "key": "B",
+          "text": "To demonstrate an additional benefit of the Fourier series"
+        },
+        {
+          "key": "C",
+          "text": "To suggest that new approximation techniques have so far been inadequate"
+        },
+        {
+          "key": "D",
+          "text": "c"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.20新托福真题/3.20阅读.pdf"
+    }
+  ]
+}
