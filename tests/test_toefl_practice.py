@@ -1,9 +1,11 @@
 import unittest
 
 from toefl_practice import (
+    _evaluate_listen_repeat,
     _manifest_is_published,
     _question_is_displayable,
     _question_is_gradable,
+    _question_task_type,
     catalog_summary,
     exam_catalog,
     grade_exam_payload,
@@ -122,6 +124,43 @@ class ToeflPracticeTest(unittest.TestCase):
         }
         self.assertTrue(_question_is_displayable(question))
         self.assertFalse(_question_is_gradable(question))
+
+    def test_speaking_task_types_are_kept_separate(self):
+        self.assertEqual(
+            _question_task_type(
+                "speaking",
+                {"directive": "Listen and repeat.", "response_type": "record"},
+            ),
+            "listen_repeat",
+        )
+        self.assertEqual(
+            _question_task_type(
+                "speaking",
+                {
+                    "directive": "Answer the interviewer's question.",
+                    "response_type": "record",
+                },
+            ),
+            "interview",
+        )
+
+    def test_listen_repeat_exact_transcript_scores_five(self):
+        result = _evaluate_listen_repeat(
+            "Use your email address to log in.",
+            "Use your email address to log in.",
+            {"evidence": "test"},
+        )
+        self.assertEqual(result["score"], 5)
+        self.assertEqual(result["alignment"]["content_recall"], 100.0)
+
+    def test_listen_repeat_partial_transcript_is_not_over_scored(self):
+        result = _evaluate_listen_repeat(
+            "When you have finished, be sure to clean up the kitchen.",
+            "When you have finished",
+            {"evidence": "test"},
+        )
+        self.assertLessEqual(result["score"], 3)
+        self.assertGreater(result["score"], 0)
 
     def test_invalid_exam_is_rejected(self):
         self.assertIsNone(public_exam_payload("../secret", "reading"))

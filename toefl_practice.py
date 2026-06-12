@@ -1,10 +1,27 @@
 import copy
 import json
+import math
 import re
+import subprocess
+import threading
+import uuid
 from collections import Counter
+from datetime import datetime
+from difflib import SequenceMatcher
 from pathlib import Path
 
-from flask import Blueprint, jsonify, render_template, request
+import requests
+from flask import Blueprint, current_app, jsonify, render_template, request, session
+from flask_login import current_user
+from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
+
+from models import (
+    StudentProfile,
+    ToeflQuestionResponse,
+    ToeflTestSubmission,
+    User,
+    db,
+)
 
 
 toefl_bp = Blueprint("toefl", __name__)
@@ -17,6 +34,10 @@ SUBJECTS = {
     "writing": {"label": "Writing", "label_zh": "写作", "minutes": 23},
     "speaking": {"label": "Speaking", "label_zh": "口语", "minutes": 16},
 }
+RECORDING_TOKEN_MAX_AGE = 24 * 60 * 60
+MAX_RECORDING_BYTES = 20 * 1024 * 1024
+_WHISPER_MODEL = None
+_WHISPER_LOCK = threading.Lock()
 
 
 def _load_manifest(exam_id: str) -> dict:
@@ -94,6 +115,15 @@ def _module_id(question_id: str) -> str:
     return f"m{match.group(1)}" if match else "main"
 
 
+def _question_task_type(subject: str, question: dict) -> str:
+    directive = str(question.get("directive") or "").lower()
+    if subject == "speaking":
+        return "listen_repeat" if "listen and repeat" in directive else "interview"
+    if subject == "writing" and question.get("response_type") == "free":
+        return "email" if "email" in directive else "academic_discussion"
+    return str(question.get("response_type") or "")
+
+
 def _question_item_count(question: dict) -> int:
     if question.get("response_type") == "fill":
         return max(1, len((question.get("answer") or {}).get("words") or []))
@@ -135,6 +165,7 @@ def public_exam_payload(exam_id: str, subject: str) -> dict | None:
         question = copy.deepcopy(raw)
         question.pop("answer", None)
         question["module_id"] = _module_id(str(question.get("id") or ""))
+        question["task_type"] = _question_task_type(subject, question)
         questions.append(question)
 
     audio_modules = []
@@ -234,6 +265,542 @@ def _normalized_order_sequence(value) -> list[str]:
     ]
 
 
+def _current_practice_profile() -> StudentProfile | None:
+    if getattr(current_user, "is_authenticated", False):
+        if current_user.role != User.ROLE_STUDENT:
+            return None
+        profile = StudentProfile.query.filter_by(
+            user_id=current_user.id,
+            is_deleted=False,
+        ).first()
+        if profile:
+            return profile
+        name = (current_user.display_name or current_user.username or "").strip()
+        if name:
+            return StudentProfile.query.filter_by(
+                full_name=name,
+                is_deleted=False,
+            ).first()
+        return None
+
+    name = (session.get("practice_student_name") or "").strip()
+    if not name:
+        return None
+    profile = StudentProfile.query.filter_by(
+        full_name=name,
+        is_deleted=False,
+    ).first()
+    if not profile:
+        session.pop("practice_student_name", None)
+    return profile
+
+
+def _recording_actor(profile: StudentProfile | None) -> str | None:
+    if profile:
+        return f"student:{profile.id}"
+    is_staff = bool(
+        getattr(current_user, "is_authenticated", False)
+        and current_user.role in {
+            User.ROLE_ADMIN,
+            User.ROLE_TEACHER,
+            User.ROLE_ASSISTANT,
+        }
+    )
+    if not is_staff and not session.get("classroom_unlocked"):
+        return None
+    actor = str(session.get("toefl_recording_actor") or "").strip()
+    if not actor:
+        actor = f"staff:{uuid.uuid4().hex}"
+        session["toefl_recording_actor"] = actor
+    return actor
+
+
+def _recording_serializer() -> URLSafeTimedSerializer:
+    return URLSafeTimedSerializer(
+        current_app.config["SECRET_KEY"],
+        salt="toefl-recording-v1",
+    )
+
+
+def _recording_root() -> Path:
+    root = Path(current_app.config["UPLOAD_FOLDER"]) / "toefl"
+    root.mkdir(parents=True, exist_ok=True)
+    return root
+
+
+def _audio_extension(filename: str, mimetype: str) -> str | None:
+    extension = Path(filename or "").suffix.lower().lstrip(".")
+    allowed = {"webm", "ogg", "mp4", "m4a", "wav", "mp3"}
+    if extension in allowed:
+        return extension
+    mime_map = {
+        "audio/webm": "webm",
+        "video/webm": "webm",
+        "audio/ogg": "ogg",
+        "audio/mp4": "m4a",
+        "audio/x-m4a": "m4a",
+        "audio/wav": "wav",
+        "audio/x-wav": "wav",
+        "audio/mpeg": "mp3",
+    }
+    return mime_map.get((mimetype or "").split(";", 1)[0].lower())
+
+
+def _convert_recording_to_mp3(source: Path, destination: Path) -> None:
+    command = [
+        "ffmpeg",
+        "-y",
+        "-loglevel",
+        "error",
+        "-i",
+        str(source),
+        "-vn",
+        "-ac",
+        "1",
+        "-ar",
+        "16000",
+        "-b:a",
+        "48k",
+        str(destination),
+    ]
+    completed = subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        timeout=90,
+        check=False,
+    )
+    if completed.returncode != 0 or not destination.is_file():
+        raise RuntimeError((completed.stderr or "ffmpeg conversion failed")[:500])
+
+
+def _probe_audio_duration(path: Path) -> float:
+    completed = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
+            str(path),
+        ],
+        capture_output=True,
+        text=True,
+        timeout=20,
+        check=False,
+    )
+    try:
+        return max(0.0, round(float(completed.stdout.strip()), 2))
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _transcribe_recording(path: Path) -> tuple[str, dict]:
+    global _WHISPER_MODEL
+    with _WHISPER_LOCK:
+        if _WHISPER_MODEL is None:
+            import whisper
+
+            _WHISPER_MODEL = whisper.load_model("base")
+        result = _WHISPER_MODEL.transcribe(
+            str(path),
+            language="en",
+            word_timestamps=True,
+            verbose=False,
+            fp16=False,
+        )
+
+    transcript = str(result.get("text") or "").strip()
+    words = []
+    segment_confidence = []
+    for segment in result.get("segments") or []:
+        try:
+            segment_confidence.append(
+                max(0.0, min(1.0, math.exp(float(segment.get("avg_logprob") or 0.0))))
+            )
+        except (TypeError, ValueError):
+            pass
+        for word in segment.get("words") or []:
+            text = str(word.get("word") or "").strip()
+            if not text:
+                continue
+            words.append({
+                "word": text,
+                "start": round(float(word.get("start") or 0.0), 2),
+                "end": round(float(word.get("end") or 0.0), 2),
+                "probability": round(float(word.get("probability") or 0.0), 3),
+            })
+
+    duration = _probe_audio_duration(path)
+    pauses = []
+    for previous, current in zip(words, words[1:]):
+        gap = round(max(0.0, current["start"] - previous["end"]), 2)
+        if gap >= 0.3:
+            pauses.append({
+                "seconds": gap,
+                "after": previous["word"],
+                "before": current["word"],
+            })
+    word_count = len(re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?|\d+", transcript))
+    metrics = {
+        "duration_seconds": duration,
+        "word_count": word_count,
+        "speech_rate_wpm": (
+            round(word_count / duration * 60.0, 1) if duration and word_count else 0.0
+        ),
+        "start_latency_seconds": words[0]["start"] if words else None,
+        "pause_count": len(pauses),
+        "long_pause_count": sum(1 for item in pauses if item["seconds"] >= 1.5),
+        "pauses": pauses[:12],
+        "asr_confidence": (
+            round(sum(segment_confidence) / len(segment_confidence), 3)
+            if segment_confidence
+            else None
+        ),
+        "evidence": "local_whisper_base",
+    }
+    return transcript, metrics
+
+
+def _speech_tokens(value: str) -> list[str]:
+    return re.findall(r"[a-z]+(?:'[a-z]+)?|\d+", (value or "").lower())
+
+
+def _evaluate_listen_repeat(reference: str, transcript: str, metrics: dict) -> dict:
+    expected = _speech_tokens(reference)
+    actual = _speech_tokens(transcript)
+    if not actual:
+        return {
+            "status": "auto_scored",
+            "score": 0,
+            "score_max": 5,
+            "task_type": "listen_repeat",
+            "feedback_zh": "未识别到有效英语作答。",
+            "alignment": {
+                "similarity": 0.0,
+                "content_recall": 0.0,
+                "missing_words": expected,
+                "replacements": [],
+            },
+            "audio_metrics": metrics,
+            "confidence": "low",
+        }
+
+    matcher = SequenceMatcher(a=expected, b=actual, autojunk=False)
+    matched = sum(block.size for block in matcher.get_matching_blocks())
+    similarity = matcher.ratio()
+    recall = matched / len(expected) if expected else 0.0
+    missing_words = []
+    replacements = []
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        if tag in {"delete", "replace"}:
+            missing_words.extend(expected[i1:i2])
+        if tag == "replace":
+            replacements.append({
+                "expected": " ".join(expected[i1:i2]),
+                "heard_as": " ".join(actual[j1:j2]),
+            })
+
+    if actual == expected:
+        score = 5
+    elif similarity >= 0.84 and recall >= 0.84:
+        score = 4
+    elif similarity >= 0.62 and recall >= 0.62:
+        score = 3
+    elif similarity >= 0.30 or recall >= 0.35:
+        score = 2
+    else:
+        score = 1
+
+    if score >= 4:
+        feedback = "复述基本完整；重点检查少量遗漏或替换词。"
+    elif score == 3:
+        feedback = "大部分内容已复述，但有多处遗漏或替换，原句意义可能受影响。"
+    elif score == 2:
+        feedback = "只完成了部分原句，建议先按意群记忆，再完整复述。"
+    else:
+        feedback = "有效复述内容较少，建议先听清关键词并缩短起始停顿。"
+
+    return {
+        "status": "auto_scored",
+        "score": score,
+        "score_max": 5,
+        "task_type": "listen_repeat",
+        "feedback_zh": feedback,
+        "alignment": {
+            "similarity": round(similarity * 100.0, 1),
+            "content_recall": round(recall * 100.0, 1),
+            "missing_words": missing_words[:12],
+            "replacements": replacements[:8],
+        },
+        "audio_metrics": metrics,
+        "confidence": "medium",
+        "limitation_note": "分数基于本地 ASR 转写与原句对齐，是练习估分，不是 ETS 正式换算分。",
+    }
+
+
+def _extract_json_object(value: str) -> dict | None:
+    text_value = (value or "").strip()
+    try:
+        parsed = json.loads(text_value)
+        return parsed if isinstance(parsed, dict) else None
+    except json.JSONDecodeError:
+        start = text_value.find("{")
+        end = text_value.rfind("}")
+        if start < 0 or end <= start:
+            return None
+        try:
+            parsed = json.loads(text_value[start : end + 1])
+        except json.JSONDecodeError:
+            return None
+        return parsed if isinstance(parsed, dict) else None
+
+
+def _deepseek_json(system_prompt: str, payload: dict, max_tokens: int = 1400) -> tuple[dict | None, str]:
+    api_key = current_app.config.get("DEEPSEEK_API_KEY")
+    if not api_key:
+        return None, "missing_deepseek_key"
+    base_url = (
+        current_app.config.get("DEEPSEEK_CHAT_URL")
+        or f"{str(current_app.config.get('DEEPSEEK_API_BASE') or 'https://api.deepseek.com').rstrip('/')}/v1/chat/completions"
+    )
+    model = current_app.config.get("DEEPSEEK_MODEL") or "deepseek-chat"
+    try:
+        response = requests.post(
+            base_url,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": model,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
+                ],
+                "temperature": 0.1,
+                "max_tokens": max_tokens,
+                "response_format": {"type": "json_object"},
+            },
+            timeout=min(
+                45.0,
+                float(current_app.config.get("DEEPSEEK_TIMEOUT") or 45),
+            ),
+        )
+        response.raise_for_status()
+        raw = response.json()
+        content = raw.get("choices", [{}])[0].get("message", {}).get("content", "")
+        parsed = _extract_json_object(content)
+        if not parsed:
+            return None, "invalid_ai_json"
+        parsed["_model"] = raw.get("model") or model
+        return parsed, ""
+    except (requests.RequestException, ValueError, TypeError) as exc:
+        current_app.logger.warning("TOEFL grading request failed: %s", exc)
+        return None, "ai_grading_failed"
+
+
+def _score_0_to_5(value) -> int:
+    try:
+        return max(0, min(5, int(round(float(value)))))
+    except (TypeError, ValueError):
+        return 0
+
+
+def _normalize_ai_grade(payload: dict | None, task_type: str, error: str = "") -> dict:
+    if not payload:
+        return {
+            "status": "pending_review",
+            "score": None,
+            "score_max": 5,
+            "task_type": task_type,
+            "feedback_zh": "作答已保存，自动评分暂不可用，等待教师复核。",
+            "grading_error": error,
+        }
+    score = _score_0_to_5(payload.get("score"))
+    return {
+        "status": "auto_scored",
+        "score": score,
+        "score_max": 5,
+        "task_type": task_type,
+        "feedback_zh": str(payload.get("feedback_zh") or "").strip(),
+        "strengths": [
+            str(item).strip()
+            for item in payload.get("strengths") or []
+            if str(item).strip()
+        ][:3],
+        "improvements": [
+            str(item).strip()
+            for item in payload.get("improvements") or []
+            if str(item).strip()
+        ][:3],
+        "dimensions": (
+            payload.get("dimensions")
+            if isinstance(payload.get("dimensions"), dict)
+            else {}
+        ),
+        "grading_model": payload.get("_model"),
+        "limitation_note": "机器评分为 0-5 练习估分，可由教师复核覆盖。",
+    }
+
+
+def _evaluate_interview(
+    question: str,
+    transcript: str,
+    metrics: dict,
+) -> dict:
+    if not _speech_tokens(transcript):
+        return {
+            "status": "auto_scored",
+            "score": 0,
+            "score_max": 5,
+            "task_type": "interview",
+            "feedback_zh": "未识别到有效英语回答。",
+            "audio_metrics": metrics,
+            "confidence": "low",
+        }
+    payload, error = _deepseek_json(
+        (
+            "You are a TOEFL iBT 2026 Take an Interview evaluator. "
+            "Use a holistic integer 0-5 practice score. Judge task response and relevance, "
+            "elaboration, language accuracy and precision, and delivery only from the supplied "
+            "local-ASR transcript and audio metrics. Do not claim that you heard pronunciation. "
+            "Return JSON only."
+        ),
+        {
+            "question": question,
+            "transcript": transcript,
+            "audio_metrics": metrics,
+            "rubric": {
+                "5": "fully addresses, clear, fluent, well elaborated, precise language",
+                "4": "addresses and elaborates, generally clear, minor limitations",
+                "3": "on topic but underdeveloped or choppy, limited precision",
+                "2": "minimal relevant support and meaning often difficult to discern",
+                "1": "vaguely connected, isolated words or phrases",
+                "0": "blank, no English, unrelated, or unintelligible",
+            },
+            "output_schema": {
+                "score": "integer 0-5",
+                "feedback_zh": "concise Chinese summary",
+                "strengths": ["Chinese string"],
+                "improvements": ["Chinese string"],
+                "dimensions": {
+                    "task_response": "integer 0-5",
+                    "elaboration": "integer 0-5",
+                    "language": "integer 0-5",
+                    "delivery_estimate": "integer 0-5",
+                },
+            },
+        },
+    )
+    grade = _normalize_ai_grade(payload, "interview", error)
+    grade["audio_metrics"] = metrics
+    grade["confidence"] = "medium" if payload else "low"
+    return grade
+
+
+def _evaluate_writing(question: dict, response_text: str) -> dict:
+    task_type = _question_task_type("writing", question)
+    if not response_text.strip():
+        return {
+            "status": "auto_scored",
+            "score": 0,
+            "score_max": 5,
+            "task_type": task_type,
+            "feedback_zh": "未作答。",
+        }
+    if task_type == "email":
+        rubric = {
+            "focus": "communicative purpose, elaboration, language facility, and social conventions",
+            "5": "effective, clearly expressed, precise and idiomatic, appropriate register, almost no errors",
+            "4": "mostly effective, adequately elaborated, appropriate wording and conventions, few errors",
+            "3": "generally accomplishes the task but only partial elaboration and noticeable errors",
+            "2": "mostly ineffective, limited or irrelevant elaboration and accumulated errors",
+            "1": "very little elaboration, disconnected language, serious frequent errors",
+            "0": "blank, non-English, copied, unrelated, or arbitrary text",
+        }
+        dimensions = {
+            "task_fulfillment": "integer 0-5",
+            "elaboration": "integer 0-5",
+            "language": "integer 0-5",
+            "register_and_conventions": "integer 0-5",
+        }
+    else:
+        rubric = {
+            "focus": "relevance, contribution to the discussion, elaboration, and language facility",
+            "5": "relevant, very clear, well elaborated, precise and idiomatic, almost no errors",
+            "4": "relevant, easily understood, adequately elaborated, few errors",
+            "3": "mostly relevant and understandable, some elaboration gaps and noticeable errors",
+            "2": "partially relevant, poorly elaborated, limited language and accumulated errors",
+            "1": "few coherent ideas, severely limited language, serious frequent errors",
+            "0": "blank, non-English, copied, unrelated, or arbitrary text",
+        }
+        dimensions = {
+            "relevance": "integer 0-5",
+            "elaboration": "integer 0-5",
+            "organization": "integer 0-5",
+            "language": "integer 0-5",
+        }
+
+    payload, error = _deepseek_json(
+        (
+            "You are a TOEFL iBT 2026 Writing evaluator. "
+            "Assign one holistic integer 0-5 practice score using the supplied task-specific rubric. "
+            "Do not invent an ETS scaled score. Return JSON only."
+        ),
+        {
+            "task_type": task_type,
+            "prompt": question.get("prompt") or "",
+            "student_response": response_text,
+            "word_count": len(response_text.split()),
+            "rubric": rubric,
+            "output_schema": {
+                "score": "integer 0-5",
+                "feedback_zh": "concise Chinese summary",
+                "strengths": ["Chinese string"],
+                "improvements": ["Chinese string"],
+                "dimensions": dimensions,
+            },
+        },
+    )
+    return _normalize_ai_grade(payload, task_type, error)
+
+
+def _load_recording_metadata(
+    token: str,
+    actor: str,
+    exam_id: str,
+    question_id: str,
+) -> dict | None:
+    try:
+        signed = _recording_serializer().loads(
+            token,
+            max_age=RECORDING_TOKEN_MAX_AGE,
+        )
+    except (BadSignature, SignatureExpired):
+        return None
+    if not isinstance(signed, dict):
+        return None
+    if (
+        signed.get("actor") != actor
+        or signed.get("exam_id") != exam_id
+        or signed.get("question_id") != question_id
+    ):
+        return None
+    relative = Path(str(signed.get("metadata_path") or ""))
+    root = _recording_root().resolve()
+    metadata_path = (root / relative).resolve()
+    if root not in metadata_path.parents or not metadata_path.is_file():
+        return None
+    try:
+        payload = json.loads(metadata_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
 def grade_exam_payload(exam_id: str, subject: str, responses: dict) -> dict | None:
     source = _load_source_exam(exam_id, subject)
     public = public_exam_payload(exam_id, subject)
@@ -316,6 +883,270 @@ def grade_exam_payload(exam_id: str, subject: str, responses: dict) -> dict | No
     }
 
 
+def _apply_constructed_response_grades(
+    exam_id: str,
+    subject: str,
+    responses: dict,
+    recording_tokens: dict,
+    profile: StudentProfile | None,
+    result: dict,
+) -> tuple[dict, dict]:
+    source = _load_source_exam(exam_id, subject) or {}
+    public = public_exam_payload(exam_id, subject) or {}
+    usable_ids = {question["id"] for question in public.get("questions") or []}
+    result_by_id = {item["id"]: item for item in result.get("results") or []}
+    response_metadata = {}
+    constructed_scores = []
+    pending_review_count = 0
+    machine_scored_count = 0
+    actor = _recording_actor(profile)
+
+    for question in source.get("questions") or []:
+        question_id = str(question.get("id") or "")
+        if question_id not in usable_ids:
+            continue
+        response_type = question.get("response_type")
+        if response_type == "free":
+            evaluation = _evaluate_writing(
+                question,
+                str(responses.get(question_id) or ""),
+            )
+            response_metadata[question_id] = {"evaluation": evaluation}
+        elif response_type == "record":
+            metadata = None
+            token = str(recording_tokens.get(question_id) or "")
+            if token and actor:
+                metadata = _load_recording_metadata(
+                    token,
+                    actor,
+                    exam_id,
+                    question_id,
+                )
+            if metadata:
+                evaluation = metadata.get("evaluation") or {
+                    "status": "pending_review",
+                    "score": None,
+                    "score_max": 5,
+                    "task_type": _question_task_type(subject, question),
+                }
+                response_metadata[question_id] = metadata
+            else:
+                evaluation = {
+                    "status": "auto_scored",
+                    "score": 0,
+                    "score_max": 5,
+                    "task_type": _question_task_type(subject, question),
+                    "feedback_zh": "未提交有效录音。",
+                }
+                response_metadata[question_id] = {"evaluation": evaluation}
+        else:
+            continue
+
+        row = result_by_id.get(question_id) or {"id": question_id}
+        row.update({
+            "status": evaluation.get("status") or "pending_review",
+            "task_type": evaluation.get("task_type"),
+            "score": evaluation.get("score"),
+            "score_max": evaluation.get("score_max") or 5,
+            "feedback_zh": evaluation.get("feedback_zh") or "",
+            "strengths": evaluation.get("strengths") or [],
+            "improvements": evaluation.get("improvements") or [],
+        })
+        result_by_id[question_id] = row
+        if evaluation.get("score") is not None:
+            constructed_scores.append(float(evaluation["score"]))
+        if evaluation.get("status") == "pending_review":
+            pending_review_count += 1
+        else:
+            machine_scored_count += 1
+
+    result["results"] = [
+        result_by_id.get(item["id"], item)
+        for item in result.get("results") or []
+    ]
+    result["manual_count"] = pending_review_count
+    result["pending_review_count"] = pending_review_count
+    result["machine_scored_count"] = machine_scored_count
+    result["practice_score"] = (
+        round(sum(constructed_scores) / len(constructed_scores), 1)
+        if constructed_scores
+        else None
+    )
+    result["practice_score_max"] = 5 if constructed_scores else None
+    result["score_note"] = (
+        "0-5 为练习估分；ETS 正式科目分由统计程序生成，本系统不做伪换算。"
+        if constructed_scores
+        else ""
+    )
+    return result, response_metadata
+
+
+def _response_text(value) -> str:
+    if isinstance(value, (list, dict)):
+        return json.dumps(value, ensure_ascii=False)
+    return str(value or "")
+
+
+def _persist_submission(
+    profile: StudentProfile,
+    public: dict,
+    responses: dict,
+    result: dict,
+    response_metadata: dict,
+    duration_seconds: int,
+) -> ToeflTestSubmission:
+    latest = (
+        ToeflTestSubmission.query.filter_by(
+            student_id=profile.id,
+            exam_id=public["id"],
+            subject=public["subject"],
+        )
+        .order_by(ToeflTestSubmission.attempt_number.desc())
+        .first()
+    )
+    attempt_number = int(latest.attempt_number or 0) + 1 if latest else 1
+    now = datetime.utcnow()
+    submission = ToeflTestSubmission(
+        student_id=profile.id,
+        student_name=profile.full_name,
+        exam_id=public["id"],
+        exam_title=public.get("title"),
+        subject=public["subject"],
+        attempt_number=attempt_number,
+        status=(
+            "review_pending"
+            if int(result.get("pending_review_count") or 0)
+            else "graded"
+        ),
+        correct_count=int(result.get("correct") or 0),
+        auto_total=int(result.get("auto_total") or 0),
+        accuracy=float(result.get("accuracy") or 0.0),
+        practice_score=result.get("practice_score"),
+        score_max=result.get("practice_score_max"),
+        duration_seconds=max(0, int(duration_seconds or 0)),
+        responses_json=json.dumps(responses, ensure_ascii=False),
+        results_json=json.dumps(result.get("results") or [], ensure_ascii=False),
+        submitted_at=now,
+    )
+    db.session.add(submission)
+    db.session.flush()
+
+    results_by_id = {
+        str(item.get("id") or ""): item
+        for item in result.get("results") or []
+        if isinstance(item, dict)
+    }
+    for question in public.get("questions") or []:
+        question_id = str(question.get("id") or "")
+        response_result = results_by_id.get(question_id) or {}
+        metadata = response_metadata.get(question_id) or {}
+        evaluation = metadata.get("evaluation") or {}
+        response_type = str(question.get("response_type") or "")
+        machine_score = response_result.get("score")
+        score_max = response_result.get("score_max")
+        if response_type not in {"free", "record"}:
+            machine_score = float(response_result.get("correct_items") or 0)
+            score_max = float(response_result.get("total_items") or 1)
+        grading_engine = "answer_key"
+        if response_type == "record":
+            grading_engine = (
+                "local_whisper_alignment"
+                if question.get("task_type") == "listen_repeat"
+                else "local_whisper+deepseek"
+            )
+        elif response_type == "free":
+            grading_engine = "deepseek"
+
+        db.session.add(ToeflQuestionResponse(
+            submission_id=submission.id,
+            question_id=question_id,
+            question_number=str(question.get("number") or ""),
+            response_type=response_type,
+            task_type=question.get("task_type"),
+            response_text=_response_text(responses.get(question_id)),
+            audio_url=metadata.get("audio_url"),
+            transcript=metadata.get("transcript"),
+            machine_score=machine_score,
+            final_score=machine_score,
+            score_max=score_max,
+            status=str(response_result.get("status") or "submitted"),
+            grading_engine=grading_engine,
+            result_json=json.dumps(
+                evaluation or response_result,
+                ensure_ascii=False,
+            ),
+        ))
+
+    db.session.commit()
+    return submission
+
+
+def _serialize_submission(submission: ToeflTestSubmission) -> dict:
+    return {
+        "id": submission.id,
+        "exam_id": submission.exam_id,
+        "exam_title": submission.exam_title,
+        "subject": submission.subject,
+        "attempt_number": submission.attempt_number,
+        "status": submission.status,
+        "correct": submission.correct_count,
+        "auto_total": submission.auto_total,
+        "accuracy": submission.accuracy,
+        "practice_score": submission.practice_score,
+        "score_max": submission.score_max,
+        "duration_seconds": submission.duration_seconds,
+        "submitted_at": (
+            submission.submitted_at.isoformat()
+            if submission.submitted_at
+            else None
+        ),
+    }
+
+
+def _is_toefl_staff() -> bool:
+    return bool(
+        getattr(current_user, "is_authenticated", False)
+        and current_user.role in {
+            User.ROLE_ADMIN,
+            User.ROLE_TEACHER,
+            User.ROLE_ASSISTANT,
+        }
+    )
+
+
+def _can_access_submission(submission: ToeflTestSubmission) -> bool:
+    if _is_toefl_staff():
+        return True
+    profile = _current_practice_profile()
+    return bool(profile and submission.student_id == profile.id)
+
+
+def _serialize_question_response(row: ToeflQuestionResponse) -> dict:
+    try:
+        result = json.loads(row.result_json or "{}")
+    except json.JSONDecodeError:
+        result = {}
+    return {
+        "id": row.id,
+        "question_id": row.question_id,
+        "question_number": row.question_number,
+        "response_type": row.response_type,
+        "task_type": row.task_type,
+        "response_text": row.response_text or "",
+        "audio_url": row.audio_url or "",
+        "transcript": row.transcript or "",
+        "machine_score": row.machine_score,
+        "teacher_score": row.teacher_score,
+        "final_score": row.final_score,
+        "score_max": row.score_max,
+        "status": row.status,
+        "grading_engine": row.grading_engine,
+        "result": result if isinstance(result, dict) else {},
+        "teacher_feedback": row.teacher_feedback or "",
+        "reviewed_at": row.reviewed_at.isoformat() if row.reviewed_at else None,
+    }
+
+
 @toefl_bp.get("/toefl/tests")
 def index():
     return render_template("toefl/index.html", exams=exam_catalog())
@@ -326,7 +1157,128 @@ def exam(exam_id: str, subject: str):
     payload = public_exam_payload(exam_id, subject)
     if not payload:
         return "托福套卷或科目不存在", 404
+    profile = _current_practice_profile()
+    payload["save_enabled"] = bool(profile)
+    payload["student_name"] = profile.full_name if profile else ""
     return render_template("toefl/exam.html", exam=payload)
+
+
+@toefl_bp.post("/api/toefl/test/<exam_id>/speaking/recording")
+def upload_speaking_recording(exam_id: str):
+    source = _load_source_exam(exam_id, "speaking")
+    public = public_exam_payload(exam_id, "speaking")
+    if not source or not public:
+        return jsonify({"ok": False, "error": "exam_not_found"}), 404
+
+    profile = _current_practice_profile()
+    actor = _recording_actor(profile)
+    if not actor:
+        return jsonify({
+            "ok": False,
+            "error": "student_not_verified",
+            "message": "请先在刷题首页验证学生姓名。",
+        }), 401
+
+    question_id = str(request.form.get("question_id") or "")
+    questions = {
+        str(question.get("id") or ""): question
+        for question in source.get("questions") or []
+    }
+    question = questions.get(question_id)
+    if not question or question.get("response_type") != "record":
+        return jsonify({"ok": False, "error": "question_not_found"}), 404
+
+    audio_file = request.files.get("audio")
+    if not audio_file:
+        return jsonify({"ok": False, "error": "missing_audio"}), 400
+    extension = _audio_extension(audio_file.filename, audio_file.mimetype)
+    if not extension:
+        return jsonify({"ok": False, "error": "unsupported_audio"}), 400
+
+    actor_folder = f"student_{profile.id}" if profile else re.sub(r"[^a-zA-Z0-9_-]", "_", actor)
+    destination_dir = _recording_root() / actor_folder / exam_id
+    destination_dir.mkdir(parents=True, exist_ok=True)
+    stem = uuid.uuid4().hex
+    raw_path = destination_dir / f"{stem}.{extension}"
+    mp3_path = destination_dir / f"{stem}.mp3"
+    metadata_path = destination_dir / f"{stem}.json"
+    retained_audio_path = mp3_path
+    audio_file.save(str(raw_path))
+    if raw_path.stat().st_size > MAX_RECORDING_BYTES:
+        raw_path.unlink(missing_ok=True)
+        return jsonify({"ok": False, "error": "audio_too_large"}), 413
+
+    try:
+        if extension == "mp3":
+            raw_path.replace(mp3_path)
+        else:
+            _convert_recording_to_mp3(raw_path, mp3_path)
+            raw_path.unlink(missing_ok=True)
+        transcript, metrics = _transcribe_recording(mp3_path)
+        task_type = _question_task_type("speaking", question)
+        if task_type == "listen_repeat":
+            evaluation = _evaluate_listen_repeat(
+                str(question.get("prompt") or ""),
+                transcript,
+                metrics,
+            )
+        else:
+            evaluation = _evaluate_interview(
+                str(question.get("prompt") or ""),
+                transcript,
+                metrics,
+            )
+    except Exception as exc:
+        current_app.logger.exception(
+            "TOEFL speaking recording analysis failed exam=%s question=%s",
+            exam_id,
+            question_id,
+        )
+        transcript = ""
+        metrics = {"evidence": "analysis_failed"}
+        evaluation = {
+            "status": "pending_review",
+            "score": None,
+            "score_max": 5,
+            "task_type": _question_task_type("speaking", question),
+            "feedback_zh": "录音已保存，自动分析失败，等待教师复核。",
+            "grading_error": str(exc)[:200],
+        }
+        if not mp3_path.is_file() and raw_path.is_file():
+            retained_audio_path = raw_path
+
+    upload_root = Path(current_app.config["UPLOAD_FOLDER"]).resolve()
+    audio_relative = retained_audio_path.resolve().relative_to(upload_root).as_posix()
+    metadata_relative = metadata_path.resolve().relative_to(
+        _recording_root().resolve()
+    ).as_posix()
+    metadata = {
+        "exam_id": exam_id,
+        "question_id": question_id,
+        "task_type": _question_task_type("speaking", question),
+        "audio_url": f"/uploads/{audio_relative}",
+        "transcript": transcript,
+        "audio_metrics": metrics,
+        "evaluation": evaluation,
+        "created_at": datetime.utcnow().isoformat(),
+    }
+    metadata_path.write_text(
+        json.dumps(metadata, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    token = _recording_serializer().dumps({
+        "actor": actor,
+        "exam_id": exam_id,
+        "question_id": question_id,
+        "metadata_path": metadata_relative,
+    })
+    return jsonify({
+        "ok": True,
+        "recording_token": token,
+        "audio_url": metadata["audio_url"],
+        "transcript": transcript,
+        "evaluation": evaluation,
+    })
 
 
 @toefl_bp.post("/api/toefl/test/<exam_id>/<subject>/grade")
@@ -338,4 +1290,140 @@ def grade(exam_id: str, subject: str):
     result = grade_exam_payload(exam_id, subject, responses)
     if not result:
         return jsonify({"ok": False, "error": "exam_not_found"}), 404
+    profile = _current_practice_profile()
+    recording_tokens = (
+        body.get("recording_tokens")
+        if isinstance(body.get("recording_tokens"), dict)
+        else {}
+    )
+    response_metadata = {}
+    if subject in {"writing", "speaking"}:
+        result, response_metadata = _apply_constructed_response_grades(
+            exam_id,
+            subject,
+            responses,
+            recording_tokens,
+            profile,
+            result,
+        )
+    try:
+        duration_seconds = max(0, int(body.get("duration_seconds") or 0))
+    except (TypeError, ValueError):
+        duration_seconds = 0
+    public = public_exam_payload(exam_id, subject)
+    submission = None
+    if profile and public:
+        submission = _persist_submission(
+            profile,
+            public,
+            responses,
+            result,
+            response_metadata,
+            duration_seconds,
+        )
+    result["synced"] = bool(submission)
+    result["student_name"] = profile.full_name if profile else ""
+    result["submission"] = _serialize_submission(submission) if submission else None
     return jsonify(result)
+
+
+@toefl_bp.get("/api/toefl/submissions")
+def submission_history():
+    profile = _current_practice_profile()
+    if not profile:
+        return jsonify({"ok": False, "error": "student_not_verified"}), 401
+    query = ToeflTestSubmission.query.filter_by(student_id=profile.id)
+    exam_id = str(request.args.get("exam_id") or "").strip()
+    subject = str(request.args.get("subject") or "").strip()
+    if exam_id:
+        query = query.filter_by(exam_id=exam_id)
+    if subject in SUBJECTS:
+        query = query.filter_by(subject=subject)
+    rows = query.order_by(ToeflTestSubmission.submitted_at.desc()).limit(30).all()
+    return jsonify({
+        "ok": True,
+        "student_name": profile.full_name,
+        "submissions": [_serialize_submission(row) for row in rows],
+    })
+
+
+@toefl_bp.get("/api/toefl/submissions/<int:submission_id>")
+def submission_detail(submission_id: int):
+    submission = ToeflTestSubmission.query.get(submission_id)
+    if not submission:
+        return jsonify({"ok": False, "error": "submission_not_found"}), 404
+    if not _can_access_submission(submission):
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    return jsonify({
+        "ok": True,
+        "submission": _serialize_submission(submission),
+        "student_name": submission.student_name,
+        "responses": [
+            _serialize_question_response(row)
+            for row in sorted(
+                submission.responses,
+                key=lambda item: item.id,
+            )
+        ],
+    })
+
+
+@toefl_bp.patch("/api/toefl/responses/<int:response_id>/review")
+def review_question_response(response_id: int):
+    if not _is_toefl_staff():
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    row = ToeflQuestionResponse.query.get(response_id)
+    if not row:
+        return jsonify({"ok": False, "error": "response_not_found"}), 404
+    if row.response_type not in {"free", "record"}:
+        return jsonify({"ok": False, "error": "objective_score_locked"}), 400
+    body = request.get_json(silent=True) or {}
+    try:
+        score = float(body.get("score"))
+    except (TypeError, ValueError):
+        return jsonify({"ok": False, "error": "invalid_score"}), 400
+    if score < 0 or score > 5:
+        return jsonify({"ok": False, "error": "invalid_score"}), 400
+
+    row.teacher_score = round(score, 1)
+    row.final_score = row.teacher_score
+    row.teacher_feedback = str(body.get("feedback") or "").strip()[:4000]
+    row.reviewed_by = current_user.id
+    row.reviewed_at = datetime.utcnow()
+    row.status = "reviewed"
+
+    submission = row.submission
+    constructed = [
+        response
+        for response in submission.responses
+        if response.response_type in {"free", "record"}
+        and response.final_score is not None
+    ]
+    submission.practice_score = (
+        round(sum(float(item.final_score) for item in constructed) / len(constructed), 1)
+        if constructed
+        else None
+    )
+    submission.score_max = 5 if constructed else None
+    submission.status = (
+        "review_pending"
+        if any(item.status == "pending_review" for item in submission.responses)
+        else "graded"
+    )
+    try:
+        stored_results = json.loads(submission.results_json or "[]")
+    except json.JSONDecodeError:
+        stored_results = []
+    if isinstance(stored_results, list):
+        for item in stored_results:
+            if isinstance(item, dict) and item.get("id") == row.question_id:
+                item["score"] = row.final_score
+                item["status"] = "reviewed"
+                item["teacher_feedback"] = row.teacher_feedback
+        submission.results_json = json.dumps(stored_results, ensure_ascii=False)
+    db.session.commit()
+    return jsonify({
+        "ok": True,
+        "response": _serialize_question_response(row),
+        "submission": _serialize_submission(submission),
+    })

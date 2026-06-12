@@ -632,6 +632,104 @@ class ReadingTestSubmission(db.Model):
     task = db.relationship("Task", backref=db.backref("reading_test_submission", uselist=False, cascade="all, delete"))
 
 
+class ToeflTestSubmission(db.Model):
+    """One retained TOEFL practice attempt for a verified student."""
+
+    __tablename__ = "toefl_test_submission"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(
+        db.Integer, db.ForeignKey("student_profile.id"), nullable=False, index=True
+    )
+    student_name = db.Column(db.String(64), nullable=False, index=True)
+    exam_id = db.Column(db.String(64), nullable=False, index=True)
+    exam_title = db.Column(db.String(200))
+    subject = db.Column(db.String(20), nullable=False, index=True)
+    attempt_number = db.Column(db.Integer, default=1, nullable=False)
+    status = db.Column(db.String(24), default="submitted", nullable=False, index=True)
+    correct_count = db.Column(db.Integer, default=0, nullable=False)
+    auto_total = db.Column(db.Integer, default=0, nullable=False)
+    accuracy = db.Column(db.Float, default=0.0, nullable=False)
+    practice_score = db.Column(db.Float)
+    score_max = db.Column(db.Float)
+    duration_seconds = db.Column(db.Integer, default=0, nullable=False)
+    responses_json = db.Column(db.Text)
+    results_json = db.Column(db.Text)
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+    )
+
+    student = db.relationship(
+        "StudentProfile",
+        backref=db.backref(
+            "toefl_test_submissions", lazy="dynamic", cascade="all, delete-orphan"
+        ),
+    )
+    responses = db.relationship(
+        "ToeflQuestionResponse",
+        backref="submission",
+        lazy="selectin",
+        cascade="all, delete-orphan",
+    )
+
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "exam_id",
+            "subject",
+            "attempt_number",
+            name="uq_toefl_submission_attempt",
+        ),
+    )
+
+
+class ToeflQuestionResponse(db.Model):
+    """Retained answer, recording, transcript, and review state for one item."""
+
+    __tablename__ = "toefl_question_response"
+
+    id = db.Column(db.Integer, primary_key=True)
+    submission_id = db.Column(
+        db.Integer,
+        db.ForeignKey("toefl_test_submission.id"),
+        nullable=False,
+        index=True,
+    )
+    question_id = db.Column(db.String(100), nullable=False, index=True)
+    question_number = db.Column(db.String(20))
+    response_type = db.Column(db.String(20), nullable=False)
+    task_type = db.Column(db.String(40))
+    response_text = db.Column(db.Text)
+    audio_url = db.Column(db.String(500))
+    transcript = db.Column(db.Text)
+    machine_score = db.Column(db.Float)
+    teacher_score = db.Column(db.Float)
+    final_score = db.Column(db.Float)
+    score_max = db.Column(db.Float)
+    status = db.Column(db.String(24), default="submitted", nullable=False, index=True)
+    grading_engine = db.Column(db.String(80))
+    result_json = db.Column(db.Text)
+    teacher_feedback = db.Column(db.Text)
+    reviewed_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+    reviewed_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+    )
+
+    reviewer = db.relationship("User", foreign_keys=[reviewed_by])
+
+    __table_args__ = (
+        db.UniqueConstraint(
+            "submission_id",
+            "question_id",
+            name="uq_toefl_submission_question",
+        ),
+    )
+
+
 # ---- Class Feedback (Scheduler) ----
 
 class ClassFeedback(db.Model, TimestampMixin):

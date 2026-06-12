@@ -25,7 +25,14 @@
   </header>
 
   <div class="toefl-statusbar">
-    <div><strong id="sectionLabel">{{ exam.subject_label }}</strong><span class="status-divider">|</span><span id="questionCounter">Question 1 of {{ exam.questions|length }}</span></div>
+    <div>
+      <strong id="sectionLabel">{{ exam.subject_label }}</strong>
+      <span class="status-divider">|</span>
+      <span id="questionCounter">Question 1 of {{ exam.questions|length }}</span>
+      <span class="save-state {{ 'is-linked' if exam.save_enabled else '' }}">
+        {{ '已关联学生：' ~ exam.student_name if exam.save_enabled else '未关联学生，提交不留存' }}
+      </span>
+    </div>
     <div class="timer-cluster">
       <strong id="timerDisplay">00:00:00</strong>
       <button id="timerToggle" type="button">Hide Time</button>

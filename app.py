@@ -73,6 +73,8 @@ from models import (
     ListeningRepeatResult,
     ListeningTestSubmission,
     ReadingTestSubmission,
+    ToeflQuestionResponse,
+    ToeflTestSubmission,
     MockExam,
     MockExamSession,
 )
@@ -2190,6 +2192,13 @@ def ensure_legacy_schema() -> None:
     except Exception as exc:  # pragma: no cover
         current_app.logger.warning(
             "Failed to ensure reading_test_submission table exists: %s", exc
+        )
+    try:
+        ToeflTestSubmission.__table__.create(bind=db.engine, checkfirst=True)
+        ToeflQuestionResponse.__table__.create(bind=db.engine, checkfirst=True)
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.warning(
+            "Failed to ensure TOEFL submission tables exist: %s", exc
         )
 
 

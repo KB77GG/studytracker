@@ -77,6 +77,13 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   font-size: 16px;
 }
 .status-divider { margin: 0 8px; color: #899194; }
+.save-state {
+  margin-left: 14px;
+  color: #9a5b15;
+  font-size: 12px;
+  font-weight: 700;
+}
+.save-state.is-linked { color: var(--teal-dark); }
 .timer-cluster { display: flex; align-items: center; gap: 13px; }
 .timer-cluster strong { min-width: 78px; text-align: right; font-variant-numeric: tabular-nums; }
 .timer-cluster button {
@@ -302,6 +309,22 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
 .record-button--stop { background: var(--danger); }
 .record-button[disabled] { opacity: .45; cursor: default; }
 .recording-playback { width: 100%; margin-top: 22px; }
+.recording-score {
+  display: grid;
+  gap: 5px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid #b7d9d7;
+  border-radius: 8px;
+  background: #eef8f7;
+  text-align: left;
+}
+.recording-score strong { color: var(--teal-dark); font-size: 18px; }
+.recording-score span { color: var(--ink); font-size: 13px; line-height: 1.55; }
+.recording-score--pending_review {
+  border-color: #e2c989;
+  background: #fff8e8;
+}
 .recording-note { margin: 18px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
 
 .module-intro { max-width: 900px; margin: 70px auto 0; text-align: center; }

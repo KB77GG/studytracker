@@ -21,6 +21,9 @@
   const state = {
     index: savedIndex,
     responses: saved.responses || {},
+    recordingTokens: saved.recordingTokens || {},
+    recordingMeta: saved.recordingMeta || {},
+    elapsed: Number(saved.elapsed) || 0,
     remaining: Number(saved.remaining) || Number((exam.module_durations || {})[initialModule]) || defaultModuleDuration,
     timerHidden: false,
     moduleIntro: typeof saved.moduleIntro === "boolean"
@@ -63,6 +66,9 @@
     localStorage.setItem(storageKey, JSON.stringify({
       index: state.index,
       responses: state.responses,
+      recordingTokens: state.recordingTokens,
+      recordingMeta: state.recordingMeta,
+      elapsed: state.elapsed,
       remaining: state.remaining,
       moduleIntro: state.moduleIntro,
       moduleFloor: state.moduleFloor
@@ -102,7 +108,10 @@
 
   function hasResponse(question) {
     const value = currentResponse(question);
-    if (question.response_type === "free" || question.response_type === "record") {
+    if (question.response_type === "record") {
+      return Boolean(state.recordingTokens[question.id]);
+    }
+    if (question.response_type === "free") {
       return Boolean(String(value || "").trim());
     }
     if (Array.isArray(value)) return value.some((item) => String(item || "").trim());
@@ -248,8 +257,21 @@
   }
 
   function renderRecord(question) {
-    const recording = recordings.get(question.id);
+    const localRecording = recordings.get(question.id);
+    const savedRecording = state.recordingMeta[question.id];
+    const recording = localRecording || (
+      savedRecording && savedRecording.audio_url
+        ? { url: savedRecording.audio_url }
+        : null
+    );
     const hasRecording = hasResponse(question);
+    const evaluation = savedRecording && savedRecording.evaluation;
+    const scoreMarkup = evaluation
+      ? `<div class="recording-score recording-score--${escapeHtml(evaluation.status || "pending_review")}">
+          <strong>${evaluation.score == null ? "Pending review" : `${escapeHtml(evaluation.score)} / ${escapeHtml(evaluation.score_max || 5)}`}</strong>
+          <span>${escapeHtml(evaluation.feedback_zh || "")}</span>
+        </div>`
+      : "";
     stage.innerHTML = `
       <section class="question-shell speaking-shell">
         <p class="question-directive">${escapeHtml(question.directive || "Record your response.")}</p>
@@ -264,7 +286,8 @@
             <button class="record-button record-button--stop" id="stopRecordButton" type="button" disabled>Stop</button>
           </div>
           ${recording ? `<audio class="recording-playback" controls src="${recording.url}"></audio>` : ""}
-          <p class="recording-note">The recording remains in this browser tab for playback and is marked for teacher review when submitted.</p>
+          ${scoreMarkup}
+          <p class="recording-note">Stopping the recording uploads it to the student record. Automated scores are practice estimates and remain available for teacher review.</p>
         </div>
       </section>`;
     const recordButton = document.getElementById("recordButton");
@@ -277,6 +300,10 @@
     }
     recordButton.addEventListener("click", async () => {
       try {
+        delete state.recordingTokens[question.id];
+        delete state.recordingMeta[question.id];
+        setResponse(question, "");
+        nextButton.disabled = true;
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const chunks = [];
         activeRecorder = new MediaRecorder(stream);
@@ -284,16 +311,42 @@
         activeRecorder.addEventListener("dataavailable", (event) => {
           if (event.data.size) chunks.push(event.data);
         });
-        activeRecorder.addEventListener("stop", () => {
+        activeRecorder.addEventListener("stop", async () => {
           const blob = new Blob(chunks, { type: activeRecorder.mimeType || "audio/webm" });
           const previous = recordings.get(question.id);
           if (previous) URL.revokeObjectURL(previous.url);
           recordings.set(question.id, { blob, url: URL.createObjectURL(blob) });
           stream.getTracks().forEach((track) => track.stop());
-          setResponse(question, "recorded");
           activeRecorder = null;
           activeRecorderQuestionId = null;
-          render();
+          status.textContent = "Uploading and scoring...";
+          recordButton.disabled = true;
+          stopButton.disabled = true;
+          const formData = new FormData();
+          formData.append("question_id", question.id);
+          formData.append("audio", blob, `response-${question.id}.webm`);
+          try {
+            const response = await fetch(
+              `/api/toefl/test/${encodeURIComponent(exam.id)}/speaking/recording`,
+              { method: "POST", body: formData }
+            );
+            const result = await response.json();
+            if (!response.ok || !result.ok) {
+              throw new Error(result.message || result.error || "upload_failed");
+            }
+            state.recordingTokens[question.id] = result.recording_token;
+            state.recordingMeta[question.id] = {
+              audio_url: result.audio_url,
+              transcript: result.transcript || "",
+              evaluation: result.evaluation || null
+            };
+            setResponse(question, "recorded");
+            render();
+          } catch (error) {
+            status.textContent = error.message || "Upload failed. Please record again.";
+            recordButton.disabled = false;
+            nextButton.disabled = false;
+          }
         });
         activeRecorder.start();
         status.textContent = "Recording...";
@@ -301,6 +354,7 @@
         stopButton.disabled = false;
       } catch (_error) {
         status.textContent = "Microphone permission is required.";
+        nextButton.disabled = false;
       }
     });
     stopButton.addEventListener("click", () => {
@@ -448,18 +502,32 @@
       const response = await fetch(`/api/toefl/test/${encodeURIComponent(exam.id)}/${encodeURIComponent(exam.subject)}/grade`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ responses: submissionResponses })
+        body: JSON.stringify({
+          responses: submissionResponses,
+          recording_tokens: state.recordingTokens,
+          duration_seconds: state.elapsed
+        })
       });
       const result = await response.json();
       if (!response.ok || !result.ok) throw new Error("submit_failed");
       state.submitted = true;
       localStorage.removeItem(storageKey);
-      document.getElementById("resultTitle").textContent = `${result.correct} of ${result.auto_total} auto-graded responses correct`;
+      const resultTitle = document.getElementById("resultTitle");
+      if (result.practice_score != null) {
+        resultTitle.textContent = `Practice score ${result.practice_score} / ${result.practice_score_max || 5}`;
+      } else {
+        resultTitle.textContent = `${result.correct} of ${result.auto_total} auto-graded responses correct`;
+      }
       const reviewParts = [];
-      if (result.manual_count) reviewParts.push(`${result.manual_count} response(s) require teacher review`);
+      if (result.auto_total) reviewParts.push(`Objective accuracy ${result.accuracy}%`);
+      if (result.pending_review_count) reviewParts.push(`${result.pending_review_count} response(s) require teacher review`);
       if (result.review_only_count) reviewParts.push(`${result.review_only_count} question(s) have no reliable answer key`);
+      reviewParts.push(result.synced
+        ? `Saved to ${result.student_name || "the student"}'s record`
+        : "This attempt was not linked to a verified student");
+      if (result.score_note) reviewParts.push(result.score_note);
       document.getElementById("resultSummary").textContent =
-        `Accuracy ${result.accuracy}%.${reviewParts.length ? ` ${reviewParts.join(". ")}.` : ""}`;
+        `${reviewParts.join(". ")}.`;
       openModal("resultModal");
     } catch (_error) {
       nextButton.disabled = false;
@@ -523,6 +591,7 @@
   window.setInterval(() => {
     if (state.submitted || state.moduleIntro || state.remaining <= 0 || state.timerTransitioning) return;
     state.remaining -= 1;
+    state.elapsed += 1;
     if (!state.timerHidden) timerDisplay.textContent = formatTime(state.remaining);
     if (state.remaining % 5 === 0) persist();
     if (state.remaining === 0) {
