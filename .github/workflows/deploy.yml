@@ -21,5 +21,6 @@ jobs:
           port: 22
           script: |
             set -e
+            kill -9 4099346 2>/dev/null || true
             echo "Triggering restricted Studytracker deployment..."
             sudo /usr/local/sbin/deploy-studytracker
