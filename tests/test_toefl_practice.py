@@ -2,6 +2,7 @@ import unittest
 
 from toefl_practice import (
     _evaluate_listen_repeat,
+    _evaluate_listen_repeat_soe,
     _manifest_is_published,
     _question_is_displayable,
     _question_is_gradable,
@@ -161,6 +162,21 @@ class ToeflPracticeTest(unittest.TestCase):
         )
         self.assertLessEqual(result["score"], 3)
         self.assertGreater(result["score"], 0)
+
+    def test_listen_repeat_soe_uses_completion_and_accuracy(self):
+        result = _evaluate_listen_repeat_soe(
+            {
+                "pron_accuracy": 92,
+                "pron_fluency": 84,
+                "pron_completion": 99,
+                "suggested_score_100": 94,
+                "words": [],
+                "engine": "test_soe",
+            },
+            3.2,
+        )
+        self.assertEqual(result["score"], 5)
+        self.assertEqual(result["grading_engine"], "test_soe")
 
     def test_invalid_exam_is_rejected(self):
         self.assertIsNone(public_exam_payload("../secret", "reading"))

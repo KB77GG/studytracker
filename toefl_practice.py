@@ -1,9 +1,7 @@
 import copy
 import json
-import math
 import re
 import subprocess
-import threading
 import uuid
 from collections import Counter
 from datetime import datetime
@@ -15,6 +13,8 @@ from flask import Blueprint, current_app, jsonify, render_template, request, ses
 from flask_login import current_user
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 
+from api.aliyun_asr import transcribe_audio_url
+from api.tencent_soe import evaluate_pronunciation
 from models import (
     StudentProfile,
     ToeflQuestionResponse,
@@ -36,8 +36,6 @@ SUBJECTS = {
 }
 RECORDING_TOKEN_MAX_AGE = 24 * 60 * 60
 MAX_RECORDING_BYTES = 20 * 1024 * 1024
-_WHISPER_MODEL = None
-_WHISPER_LOCK = threading.Lock()
 
 
 def _load_manifest(exam_id: str) -> dict:
@@ -397,73 +395,6 @@ def _probe_audio_duration(path: Path) -> float:
         return 0.0
 
 
-def _transcribe_recording(path: Path) -> tuple[str, dict]:
-    global _WHISPER_MODEL
-    with _WHISPER_LOCK:
-        if _WHISPER_MODEL is None:
-            import whisper
-
-            _WHISPER_MODEL = whisper.load_model("base")
-        result = _WHISPER_MODEL.transcribe(
-            str(path),
-            language="en",
-            word_timestamps=True,
-            verbose=False,
-            fp16=False,
-        )
-
-    transcript = str(result.get("text") or "").strip()
-    words = []
-    segment_confidence = []
-    for segment in result.get("segments") or []:
-        try:
-            segment_confidence.append(
-                max(0.0, min(1.0, math.exp(float(segment.get("avg_logprob") or 0.0))))
-            )
-        except (TypeError, ValueError):
-            pass
-        for word in segment.get("words") or []:
-            text = str(word.get("word") or "").strip()
-            if not text:
-                continue
-            words.append({
-                "word": text,
-                "start": round(float(word.get("start") or 0.0), 2),
-                "end": round(float(word.get("end") or 0.0), 2),
-                "probability": round(float(word.get("probability") or 0.0), 3),
-            })
-
-    duration = _probe_audio_duration(path)
-    pauses = []
-    for previous, current in zip(words, words[1:]):
-        gap = round(max(0.0, current["start"] - previous["end"]), 2)
-        if gap >= 0.3:
-            pauses.append({
-                "seconds": gap,
-                "after": previous["word"],
-                "before": current["word"],
-            })
-    word_count = len(re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?|\d+", transcript))
-    metrics = {
-        "duration_seconds": duration,
-        "word_count": word_count,
-        "speech_rate_wpm": (
-            round(word_count / duration * 60.0, 1) if duration and word_count else 0.0
-        ),
-        "start_latency_seconds": words[0]["start"] if words else None,
-        "pause_count": len(pauses),
-        "long_pause_count": sum(1 for item in pauses if item["seconds"] >= 1.5),
-        "pauses": pauses[:12],
-        "asr_confidence": (
-            round(sum(segment_confidence) / len(segment_confidence), 3)
-            if segment_confidence
-            else None
-        ),
-        "evidence": "local_whisper_base",
-    }
-    return transcript, metrics
-
-
 def _speech_tokens(value: str) -> list[str]:
     return re.findall(r"[a-z]+(?:'[a-z]+)?|\d+", (value or "").lower())
 
@@ -537,7 +468,77 @@ def _evaluate_listen_repeat(reference: str, transcript: str, metrics: dict) -> d
         },
         "audio_metrics": metrics,
         "confidence": "medium",
-        "limitation_note": "分数基于本地 ASR 转写与原句对齐，是练习估分，不是 ETS 正式换算分。",
+        "grading_engine": "asr_reference_alignment",
+        "limitation_note": "分数基于独立 ASR 转写与原句对齐，是练习估分，不是 ETS 正式换算分。",
+    }
+
+
+def _evaluate_listen_repeat_soe(payload: dict, duration_seconds: float) -> dict:
+    accuracy = round(float(payload.get("pron_accuracy") or 0.0), 1)
+    fluency = round(float(payload.get("pron_fluency") or 0.0), 1)
+    completion = round(float(payload.get("pron_completion") or 0.0), 1)
+    if accuracy <= 0 and completion <= 0:
+        score = 0
+    elif completion >= 97 and accuracy >= 88 and fluency >= 75:
+        score = 5
+    elif completion >= 88 and accuracy >= 74:
+        score = 4
+    elif completion >= 65 and accuracy >= 58:
+        score = 3
+    elif completion >= 35 or accuracy >= 40:
+        score = 2
+    else:
+        score = 1
+
+    weak_words = []
+    for item in payload.get("words") or []:
+        if not isinstance(item, dict):
+            continue
+        try:
+            word_accuracy = round(float(item.get("PronAccuracy") or 0.0), 1)
+        except (TypeError, ValueError):
+            continue
+        if word_accuracy >= 75:
+            continue
+        weak_words.append({
+            "word": str(item.get("Word") or "").strip(),
+            "accuracy": word_accuracy,
+        })
+    weak_words.sort(key=lambda item: item["accuracy"])
+
+    if score >= 4:
+        feedback = "复述完整度较高，重点修正个别发音或轻微遗漏。"
+    elif score == 3:
+        feedback = "主要内容基本保留，但完整度或清晰度仍有明显损失。"
+    elif score == 2:
+        feedback = "只完成了部分原句，建议按意群记忆后再完整复述。"
+    else:
+        feedback = "有效复述较少，先抓住内容词并保证句子完整。"
+
+    return {
+        "status": "auto_scored",
+        "score": score,
+        "score_max": 5,
+        "task_type": "listen_repeat",
+        "feedback_zh": feedback,
+        "pronunciation": {
+            "accuracy": accuracy,
+            "fluency": fluency,
+            "completion": completion,
+            "suggested_score_100": round(
+                float(payload.get("suggested_score_100") or 0.0),
+                1,
+            ),
+            "weak_words": weak_words[:8],
+        },
+        "audio_metrics": {
+            "duration_seconds": duration_seconds,
+            "audio_size_bytes": payload.get("audio_size_bytes"),
+            "evidence": "tencent_soe",
+        },
+        "confidence": "high",
+        "grading_engine": payload.get("engine") or "tencent_soe",
+        "limitation_note": "0-5 为练习估分，不是 ETS 正式科目分换算。",
     }
 
 
@@ -698,6 +699,7 @@ def _evaluate_interview(
     grade = _normalize_ai_grade(payload, "interview", error)
     grade["audio_metrics"] = metrics
     grade["confidence"] = "medium" if payload else "low"
+    grade["grading_engine"] = "aliyun_asr+deepseek"
     return grade
 
 
@@ -1050,9 +1052,12 @@ def _persist_submission(
         grading_engine = "answer_key"
         if response_type == "record":
             grading_engine = (
-                "local_whisper_alignment"
-                if question.get("task_type") == "listen_repeat"
-                else "local_whisper+deepseek"
+                evaluation.get("grading_engine")
+                or (
+                    "tencent_soe"
+                    if question.get("task_type") == "listen_repeat"
+                    else "aliyun_asr+deepseek"
+                )
             )
         elif response_type == "free":
             grading_engine = "deepseek"
@@ -1208,55 +1213,99 @@ def upload_speaking_recording(exam_id: str):
         raw_path.unlink(missing_ok=True)
         return jsonify({"ok": False, "error": "audio_too_large"}), 413
 
+    conversion_error = ""
     try:
         if extension == "mp3":
             raw_path.replace(mp3_path)
         else:
             _convert_recording_to_mp3(raw_path, mp3_path)
             raw_path.unlink(missing_ok=True)
-        transcript, metrics = _transcribe_recording(mp3_path)
-        task_type = _question_task_type("speaking", question)
-        if task_type == "listen_repeat":
-            evaluation = _evaluate_listen_repeat(
-                str(question.get("prompt") or ""),
-                transcript,
-                metrics,
-            )
-        else:
-            evaluation = _evaluate_interview(
-                str(question.get("prompt") or ""),
-                transcript,
-                metrics,
-            )
     except Exception as exc:
         current_app.logger.exception(
-            "TOEFL speaking recording analysis failed exam=%s question=%s",
+            "TOEFL speaking conversion failed exam=%s question=%s",
             exam_id,
             question_id,
         )
-        transcript = ""
-        metrics = {"evidence": "analysis_failed"}
-        evaluation = {
-            "status": "pending_review",
-            "score": None,
-            "score_max": 5,
-            "task_type": _question_task_type("speaking", question),
-            "feedback_zh": "录音已保存，自动分析失败，等待教师复核。",
-            "grading_error": str(exc)[:200],
-        }
+        conversion_error = str(exc)[:200]
         if not mp3_path.is_file() and raw_path.is_file():
             retained_audio_path = raw_path
 
     upload_root = Path(current_app.config["UPLOAD_FOLDER"]).resolve()
     audio_relative = retained_audio_path.resolve().relative_to(upload_root).as_posix()
+    audio_url = f"/uploads/{audio_relative}"
+    forwarded_proto = request.headers.get("X-Forwarded-Proto", "").split(",", 1)[0].strip()
+    base_url = request.host_url.rstrip("/")
+    if forwarded_proto:
+        base_url = re.sub(r"^https?://", f"{forwarded_proto}://", base_url)
+    absolute_audio_url = f"{base_url}{audio_url}"
+    task_type = _question_task_type("speaking", question)
+    transcript = ""
+    metrics = {
+        "duration_seconds": _probe_audio_duration(retained_audio_path),
+        "evidence": "recording_saved",
+    }
+    evaluation = None
+    analysis_errors = {}
+
+    if conversion_error:
+        analysis_errors["conversion"] = conversion_error
+    elif task_type == "listen_repeat":
+        soe_ok, soe_payload = evaluate_pronunciation(
+            absolute_audio_url,
+            str(question.get("prompt") or ""),
+        )
+        if soe_ok:
+            evaluation = _evaluate_listen_repeat_soe(
+                soe_payload,
+                metrics["duration_seconds"],
+            )
+            metrics = evaluation.get("audio_metrics") or metrics
+        else:
+            analysis_errors["tencent_soe"] = soe_payload
+            asr_ok, asr_payload = transcribe_audio_url(absolute_audio_url)
+            if asr_ok:
+                transcript = str(asr_payload.get("transcript") or "").strip()
+                metrics = asr_payload.get("audio_metrics") or metrics
+                metrics["evidence"] = "aliyun_asr_fallback"
+                evaluation = _evaluate_listen_repeat(
+                    str(question.get("prompt") or ""),
+                    transcript,
+                    metrics,
+                )
+            else:
+                analysis_errors["aliyun_asr"] = asr_payload
+    else:
+        asr_ok, asr_payload = transcribe_audio_url(absolute_audio_url)
+        if asr_ok:
+            transcript = str(asr_payload.get("transcript") or "").strip()
+            metrics = asr_payload.get("audio_metrics") or metrics
+            metrics["evidence"] = "aliyun_asr"
+            evaluation = _evaluate_interview(
+                str(question.get("prompt") or ""),
+                transcript,
+                metrics,
+            )
+        else:
+            analysis_errors["aliyun_asr"] = asr_payload
+
+    if evaluation is None:
+        evaluation = {
+            "status": "pending_review",
+            "score": None,
+            "score_max": 5,
+            "task_type": task_type,
+            "feedback_zh": "录音已保存，自动分析暂不可用，等待教师复核。",
+            "grading_error": analysis_errors,
+        }
+
     metadata_relative = metadata_path.resolve().relative_to(
         _recording_root().resolve()
     ).as_posix()
     metadata = {
         "exam_id": exam_id,
         "question_id": question_id,
-        "task_type": _question_task_type("speaking", question),
-        "audio_url": f"/uploads/{audio_relative}",
+        "task_type": task_type,
+        "audio_url": audio_url,
         "transcript": transcript,
         "audio_metrics": metrics,
         "evaluation": evaluation,
