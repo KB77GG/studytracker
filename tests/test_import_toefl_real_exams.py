@@ -32,6 +32,38 @@ class ImportToeflRealExamsTest(unittest.TestCase):
         )
         self.assertEqual(len(prompts), 2)
 
+    def test_listening_parser_recovers_common_ocr_markers(self):
+        prompt, options = MODULE.parse_listening_candidate([
+            "Choose the best response.",
+            "O My door is always open.",
+            "= 6 oO There should be enough storage space.",
+            "> ©) Ineed to look up the hours online.",
+            "© The campus bookstore has great reviews.",
+            "1",
+        ])
+        self.assertEqual(prompt, "")
+        self.assertEqual(options, [
+            "My door is always open.",
+            "There should be enough storage space.",
+            "I need to look up the hours online.",
+            "The campus bookstore has great reviews.",
+        ])
+
+    def test_listening_parser_recovers_missing_radio_marker(self):
+        _, options = MODULE.parse_listening_candidate([
+            "What topic will most likely be discussed at a symposium?",
+            "© Designing club T-shirts",
+            "© Installing additional recycling bins",
+            "后 Creating a club webpage",
+            "© What refreshments to offer",
+        ])
+        self.assertEqual(options, [
+            "Designing club T-shirts",
+            "Installing additional recycling bins",
+            "Creating a club webpage",
+            "What refreshments to offer",
+        ])
+
 
 if __name__ == "__main__":
     unittest.main()

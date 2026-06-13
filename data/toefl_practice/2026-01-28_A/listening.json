@@ -45,7 +45,11 @@
         },
         {
           "key": "C",
-          "text": "It was expensive. ©O As far as | know."
+          "text": "It was expensive."
+        },
+        {
+          "key": "D",
+          "text": "As far as | know."
         }
       ],
       "answer": {
@@ -76,7 +80,7 @@
         },
         {
           "key": "B",
-          "text": "| want to go to the exhibit my professor recommended."
+          "text": "want to go to the exhibit my professor recommended."
         },
         {
           "key": "C",
@@ -84,7 +88,7 @@
         },
         {
           "key": "D",
-          "text": "|had tickets for the production last week."
+          "text": "had tickets for the production last week."
         }
       ],
       "answer": {
@@ -111,7 +115,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Ineed help."
+          "text": "I need help."
         },
         {
           "key": "B",
@@ -193,7 +197,15 @@
         },
         {
           "key": "B",
-          "text": "She is going on atrip. dj O She spilled oil in the backseat. , © She wants to sell it next month."
+          "text": "She is going on atrip."
+        },
+        {
+          "key": "C",
+          "text": "She spilled oil in the backseat."
+        },
+        {
+          "key": "D",
+          "text": "She wants to sell it next month."
         }
       ],
       "answer": {
@@ -253,25 +265,25 @@
       "number": "15",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "Why was the man looking for the woman?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Why was the man looking for the woman?"
-        },
-        {
-          "key": "B",
           "text": "To deliver art supplies to her"
         },
         {
+          "key": "B",
+          "text": "To invite her to go to the mall"
+        },
+        {
           "key": "C",
-          "text": "To invite her to go to the mall i O To ask her for painting lessons"
+          "text": "To ask her for painting lessons"
         },
         {
           "key": "D",
-          "text": "To tell her about a store closure cal"
+          "text": "To tell her about a store closure"
         }
       ],
       "answer": {
@@ -302,13 +314,26 @@
         },
         {
           "key": "B",
-          "text": "Relocate to Porterville i © Create a painting for the man > © Purchase art supplies in another town ‘"
+          "text": "Relocate to Porterville"
+        },
+        {
+          "key": "C",
+          "text": "Create a painting for the man"
+        },
+        {
+          "key": "D",
+          "text": "Purchase art supplies in another town"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "1.28新托福真题A卷/2026新托福真题05.pdf | 1.28新托福真题A卷/2026新托福真题05-听力原文.pdf"
     },
     {
@@ -318,21 +343,21 @@
       "number": "17",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What does the woman like about the apartment?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What does the woman like about the apartment?"
-        },
-        {
-          "key": "B",
           "text": "It has a nice view."
         },
         {
+          "key": "B",
+          "text": "It is located near the university."
+        },
+        {
           "key": "C",
-          "text": "Itis located near the university. ; © The landlord is helpful."
+          "text": "The landlord is helpful."
         },
         {
           "key": "D",
@@ -367,13 +392,26 @@
         },
         {
           "key": "B",
-          "text": "Tour a university museum , © Meet her neighbors P © See the landlord"
+          "text": "Tour a university museum"
+        },
+        {
+          "key": "C",
+          "text": "Meet her neighbors"
+        },
+        {
+          "key": "D",
+          "text": "See the landlord"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "1.28新托福真题A卷/2026新托福真题05.pdf | 1.28新托福真题A卷/2026新托福真题05-听力原文.pdf"
     },
     {
@@ -393,7 +431,7 @@
         },
         {
           "key": "B",
-          "text": "Itis not the same for all types of equipment."
+          "text": "It is not the same for all types of equipment."
         },
         {
           "key": "C",
@@ -428,17 +466,30 @@
       "options": [
         {
           "key": "A",
-          "text": "Atule about reporting damage p © Arule about cleaning equipment after use 区 i) © Arule about wearing suitable clothing"
+          "text": "Atule about reporting damage"
         },
         {
           "key": "B",
+          "text": "Arule about cleaning equipment after use"
+        },
+        {
+          "key": "C",
+          "text": "Arule about wearing suitable clothing"
+        },
+        {
+          "key": "D",
           "text": "Arule about not using machines for too long"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "1.28新托福真题A卷/2026新托福真题05.pdf | 1.28新托福真题A卷/2026新托福真题05-听力原文.pdf"
     },
     {
@@ -501,7 +552,7 @@
         },
         {
           "key": "C",
-          "text": "Itwas acceptable to submit paper forms."
+          "text": "It was acceptable to submit paper forms."
         },
         {
           "key": "D",
@@ -610,10 +661,18 @@
       "options": [
         {
           "key": "A",
-          "text": "Aunique artform that began relatively recently ¥y I} © The life and career of an important artist 3 人 © Features of different painting surfaces"
+          "text": "Aunique artform that began relatively recently"
         },
         {
           "key": "B",
+          "text": "The life and career of an important artist"
+        },
+        {
+          "key": "C",
+          "text": "Features of different painting surfaces"
+        },
+        {
+          "key": "D",
           "text": "The development of figurative art"
         }
       ],
@@ -684,15 +743,15 @@
         },
         {
           "key": "B",
-          "text": "Creating a drawing on paper and then copying it onto canvas"
+          "text": "Creating a drawing on paper and then"
         },
         {
           "key": "C",
-          "text": "Pressing two surfaces together and then pulling them apart"
+          "text": "canvas"
         },
         {
           "key": "D",
-          "text": "Letting paint dry on a paper surface and then drawing on top of it"
+          "text": "Pressing two surfaces together and then pulling them apart"
         }
       ],
       "answer": {
@@ -791,25 +850,25 @@
       "number": "30",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "participants asked to do?",
+      "prompt": "In the classic study mentioned, what were",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Count basketball passes made by players"
+          "text": "do?"
         },
         {
           "key": "B",
-          "text": "Spot the person in the gorilla suit"
+          "text": "Count basketball passes made by players"
         },
         {
           "key": "C",
-          "text": "Predict the result of a game"
+          "text": "Spot the person in the gorilla suit"
         },
         {
           "key": "D",
-          "text": "Stop the video when a player dropped the ball"
+          "text": "Predict the result of a game"
         }
       ],
       "answer": {
@@ -830,25 +889,25 @@
       "number": "31",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "aware of intentional blindness?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "To better understand other people's behavior"
+          "text": "the speaker, why do we need to be aware of intentional blindness?"
         },
         {
           "key": "B",
-          "text": "To avoid dangerous situations"
+          "text": "To better understand other people's behavior"
         },
         {
           "key": "C",
-          "text": "To improve focus on all tasks at once"
+          "text": "To avoid dangerous situations"
         },
         {
           "key": "D",
-          "text": "To avoid selective attention at work"
+          "text": "To improve focus on all tasks at once"
         }
       ],
       "answer": {
@@ -953,7 +1012,7 @@
       "options": [
         {
           "key": "A",
-          "text": "|work from home most days."
+          "text": "work from home most days."
         },
         {
           "key": "B",
@@ -986,25 +1045,25 @@
       "number": "4",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "Why is the man taking a train to the",
+      "prompt": "conference?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "conference?"
-        },
-        {
-          "key": "B",
           "text": "He finds driving alone boring."
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "He'd like to finish reading a book on the train."
         },
         {
+          "key": "C",
+          "text": "He does not own a car."
+        },
+        {
           "key": "D",
-          "text": "He does not own a car. ‘ © He wants to do some work as he travels."
+          "text": "He wants to do some work as he travels."
         }
       ],
       "answer": {
@@ -1082,7 +1141,7 @@
         },
         {
           "key": "D",
-          "text": "Itis too expensive for him."
+          "text": "It is too expensive for him."
         }
       ],
       "answer": {
@@ -1113,17 +1172,26 @@
         },
         {
           "key": "B",
-          "text": "Heis saving money for a new bed in his home. 4 O Some hotels are not very comfortable."
+          "text": "Heis saving money for a new bed in his home."
         },
         {
           "key": "C",
+          "text": "Some hotels are not very comfortable."
+        },
+        {
+          "key": "D",
           "text": "Heis unenthusiastic about the woman's idea."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "1.28新托福真题A卷/2026新托福真题05.pdf | 1.28新托福真题A卷/2026新托福真题05-听力原文.pdf"
     },
     {
@@ -1147,11 +1215,11 @@
         },
         {
           "key": "C",
-          "text": "To emphasize how hard trilobites’ ‘ exoskeletons were"
+          "text": "To emphasize how hard trilobites’"
         },
         {
           "key": "D",
-          "text": "To describe what trilobites looked like"
+          "text": "exoskeletons were"
         }
       ],
       "answer": {
@@ -1229,7 +1297,7 @@
         },
         {
           "key": "D",
-          "text": "They covered only a small area of the trilobite's head. 00:00:30 @® What did researchers learn from the fossil in the study?"
+          "text": "They covered only a small area of the trilobite's head. What did researchers learn from the fossil in the study?"
         }
       ],
       "answer": {
@@ -1289,25 +1357,25 @@
       "number": "13",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "learn from recording and analyzing whale",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "The age of each whale in a group"
+          "text": "the speaker, what can researchers learn from recording and analyzing whale songs?"
         },
         {
           "key": "B",
-          "text": "How large the whale population is"
+          "text": "The age of each whale in a group"
         },
         {
           "key": "C",
-          "text": "The intended purpose of whale communication"
+          "text": "How large the whale population is"
         },
         {
           "key": "D",
-          "text": "Whether whales are experiencing environmental stress"
+          "text": "The intended purpose of whale communication"
         }
       ],
       "answer": {
@@ -1346,7 +1414,7 @@
         },
         {
           "key": "D",
-          "text": "They are more complicated than the songs of whales. et |"
+          "text": "They are more complicated than the songs of whales."
         }
       ],
       "answer": {

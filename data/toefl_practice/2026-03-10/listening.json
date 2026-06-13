@@ -37,19 +37,19 @@
       "options": [
         {
           "key": "A",
-          "text": "English and history."
+          "text": "you want to borrow my lawn mower?"
         },
         {
           "key": "B",
-          "text": "How did you find out?"
+          "text": "English and history."
         },
         {
           "key": "C",
-          "text": "That's good advice. Listening | Questions of 32 00:00:17 $"
+          "text": "How did you find out?"
         },
         {
           "key": "D",
-          "text": "The artist came late."
+          "text": "That's good advice. Listening | Questions of 32 00:00:17 $"
         }
       ],
       "answer": {
@@ -158,7 +158,7 @@
         },
         {
           "key": "B",
-          "text": "| found it very engaging."
+          "text": "found it very engaging."
         },
         {
           "key": "C",
@@ -193,21 +193,30 @@
       "options": [
         {
           "key": "A",
-          "text": "like taking notes. Ci O Yes, in the park."
+          "text": "like taking notes."
         },
         {
           "key": "B",
-          "text": "No, on the bottom."
+          "text": "Yes, in the park."
         },
         {
           "key": "C",
+          "text": "No, on the bottom."
+        },
+        {
+          "key": "D",
           "text": "It’s quite expensive."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.10新托福真题/3.10听力.pdf"
     },
     {
@@ -352,7 +361,7 @@
         },
         {
           "key": "D",
-          "text": "He will sit in the grass with the woman's friends. ) = e"
+          "text": "He will sit in the grass with the woman's friends."
         }
       ],
       "answer": {
@@ -379,11 +388,19 @@
       "options": [
         {
           "key": "A",
-          "text": "Alost item bis © anexpensive evening"
+          "text": "Alost item"
         },
         {
           "key": "B",
-          "text": "Alackluster performance sy ¢ : © Amissed bus 17 @"
+          "text": "anexpensive evening"
+        },
+        {
+          "key": "C",
+          "text": "Alackluster performance"
+        },
+        {
+          "key": "D",
+          "text": "Amissed bus"
         }
       ],
       "answer": {
@@ -404,25 +421,25 @@
       "number": "16",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "to be replaced?",
+      "prompt": "Why does the woman mention that her phone battery needs",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Trask for a recommendation"
+          "text": "be replaced?"
         },
         {
           "key": "B",
-          "text": "Tomakea suggestion"
+          "text": "Trask for a recommendation"
         },
         {
           "key": "C",
-          "text": "Tocorrect a previous statement"
+          "text": "Tomakea suggestion"
         },
         {
           "key": "D",
-          "text": "To provide an explanation"
+          "text": "Tocorrect a previous statement"
         }
       ],
       "answer": {
@@ -500,7 +517,7 @@
         },
         {
           "key": "D",
-          "text": "Carrots and spinach Listen to an announcement in a classroom."
+          "text": "Carrots and spinach"
         }
       ],
       "answer": {
@@ -566,19 +583,19 @@
       "options": [
         {
           "key": "A",
-          "text": "Itis too small for the center’s needs."
+          "text": "It is too small for the center’s needs."
         },
         {
           "key": "B",
-          "text": "Itis housed within the library."
+          "text": "It is housed within the library."
         },
         {
           "key": "C",
-          "text": "itis difficult to locate."
+          "text": "It is difficult to locate."
         },
         {
           "key": "D",
-          "text": "Itopens at seven p.m. Listen to an announcement by a university administration."
+          "text": "Itopens at seven p.m."
         }
       ],
       "answer": {
@@ -656,7 +673,7 @@
         },
         {
           "key": "D",
-          "text": "Heat from them can damage pipes. Listen to a campus radio announcement."
+          "text": "Heat from them can damage pipes."
         }
       ],
       "answer": {
@@ -851,7 +868,7 @@
         },
         {
           "key": "D",
-          "text": "Help students do their own sampling Listen to a talk on an art podcast."
+          "text": "Help students do their own sampling"
         }
       ],
       "answer": {
@@ -882,7 +899,7 @@
         },
         {
           "key": "B",
-          "text": "The development and significance of a particular type of art"
+          "text": "The development and significance of a particular type of"
         },
         {
           "key": "C",
@@ -911,25 +928,25 @@
       "number": "30",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Laszlg Moholy-Nagy play in the development of kinetic art?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "He criticized the use of technology in art."
+          "text": "the talk, what role did the Hungarian artist Laszlg Moholy-Nagy play in the development of kinetic art?"
         },
         {
           "key": "B",
-          "text": "He advanced the idea of using movement and light in art."
+          "text": "He criticized the use of technology in art."
         },
         {
           "key": "C",
-          "text": "He was the first to use air and wind to manipulate art."
+          "text": "He advanced the idea of using movement and light in art."
         },
         {
           "key": "D",
-          "text": "He established the first kinetic art museum."
+          "text": "He was the first to use air and wind to manipulate art."
         }
       ],
       "answer": {
@@ -1073,14 +1090,18 @@
       "options": [
         {
           "key": "A",
-          "text": "kwas wonderful to get some fresh air outdoors. (@) The outside vendor request needs approval."
+          "text": "kwas wonderful to get some fresh air outdoors."
         },
         {
           "key": "B",
-          "text": "They went with the student outdoor adventure club."
+          "text": "The outside vendor request needs approval."
         },
         {
           "key": "C",
+          "text": "They went with the student outdoor adventure club."
+        },
+        {
+          "key": "D",
           "text": "There was a tax hike last year, actually."
         }
       ],
@@ -1198,7 +1219,7 @@
         },
         {
           "key": "D",
-          "text": "To point out some errors that were made ‘b)"
+          "text": "To point out some errors that were made"
         }
       ],
       "answer": {
@@ -1225,7 +1246,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Itis too crowded,"
+          "text": "It is too crowded,"
         },
         {
           "key": "B",
@@ -1264,7 +1285,7 @@
       "options": [
         {
           "key": "A",
-          "text": "é O To decline the woman's invitation"
+          "text": "To decline the woman's invitation"
         },
         {
           "key": "B",
@@ -1276,7 +1297,7 @@
         },
         {
           "key": "D",
-          "text": "Toexplain why he chose a specific yoga session Listen to a talk on a science podcast."
+          "text": "Toexplain why he chose a specific yoga session"
         }
       ],
       "answer": {
@@ -1297,17 +1318,17 @@
       "number": "8",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "How does the speaker organize the talk on solar power?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "How does the speaker organize the talk on solar power?"
+          "text": "She outlines solar powers history as an alternative energy resource."
         },
         {
           "key": "B",
-          "text": "She outlines solar powers history as an alternative energy resource. @) She lists the technologies involved in generating solar energy."
+          "text": "She lists the technologies involved in generating solar energy."
         },
         {
           "key": "C",
@@ -1414,25 +1435,25 @@
       "number": "11",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "waste from used solar panels?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "Solar panels produced in the last decade cannot be recycled,"
+          "text": "the speaker, what is causing a rapid increase in waste from used solar panels?"
         },
         {
           "key": "B",
-          "text": "Solar panels in regions with heavy cloud cover are scrapped due to disuse."
+          "text": "Solar panels produced in the last decade cannot be recycled,"
         },
         {
           "key": "C",
-          "text": "Improvements in panel efficiency are leading to frequent replacement."
+          "text": "Solar panels in regions with heavy cloud cover are"
         },
         {
           "key": "D",
-          "text": "Overuse of solar power is overwhelming panel-recycling systems. Listen to a talk in an environmental science class."
+          "text": "disuse."
         }
       ],
       "answer": {
@@ -1459,7 +1480,7 @@
       "options": [
         {
           "key": "A",
-          "text": "{ © Tocontrast two methods of farming"
+          "text": "Tocontrast two methods of farming"
         },
         {
           "key": "B",
@@ -1510,7 +1531,7 @@
         },
         {
           "key": "D",
-          "text": "They can replace chemical fertilizers under certain conditions. Listening | Question 14 0f 15 00:00:27 @ What is a reference site in the work that the speaker describes?"
+          "text": "They can replace chemical fertilizers under certain conditions. What is a reference site in the work that the speaker describes?"
         }
       ],
       "answer": {
@@ -1545,7 +1566,7 @@
         },
         {
           "key": "C",
-          "text": "Itwas surrounded by forested land."
+          "text": "It was surrounded by forested land."
         },
         {
           "key": "D",

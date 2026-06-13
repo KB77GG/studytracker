@@ -37,7 +37,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Itwas due yesterday."
+          "text": "It was due yesterday."
         },
         {
           "key": "B",
@@ -76,7 +76,7 @@
       "options": [
         {
           "key": "A",
-          "text": "|ean provide support."
+          "text": "ean provide support."
         },
         {
           "key": "B",
@@ -115,14 +115,18 @@
       "options": [
         {
           "key": "A",
-          "text": "There's a good Thai restaurant near campus. oO | had to eat my lunch during class."
+          "text": "There's a good Thai restaurant near campus."
         },
         {
           "key": "B",
-          "text": "havent eaten there."
+          "text": "had to eat my lunch during class."
         },
         {
           "key": "C",
+          "text": "havent eaten there."
+        },
+        {
+          "key": "D",
           "text": "had leftovers for dinner yesterday."
         }
       ],
@@ -197,7 +201,11 @@
         },
         {
           "key": "C",
-          "text": "had to change my school password yesterday. z © Do you have overdue books too?"
+          "text": "had to change my school password yesterday."
+        },
+        {
+          "key": "D",
+          "text": "Do you have overdue books too?"
         }
       ],
       "answer": {
@@ -228,7 +236,7 @@
         },
         {
           "key": "B",
-          "text": "| downloaded a fitness app."
+          "text": "downloaded a fitness app."
         },
         {
           "key": "C",
@@ -267,7 +275,7 @@
         },
         {
           "key": "B",
-          "text": "|set my alarm for 8 a.m."
+          "text": "set my alarm for 8 a.m."
         },
         {
           "key": "C",
@@ -275,7 +283,7 @@
         },
         {
           "key": "D",
-          "text": "| don't have a favorite."
+          "text": "don't have a favorite."
         }
       ],
       "answer": {
@@ -345,7 +353,7 @@
         },
         {
           "key": "B",
-          "text": "|sawa rainbow today."
+          "text": "sawa rainbow today."
         },
         {
           "key": "C",
@@ -388,7 +396,7 @@
         },
         {
           "key": "C",
-          "text": "| think the library is closed tomorrow."
+          "text": "think the library is closed tomorrow."
         },
         {
           "key": "D",
@@ -470,7 +478,7 @@
         },
         {
           "key": "D",
-          "text": "| totally agree. -istening"
+          "text": "totally agree. -istening"
         }
       ],
       "answer": {
@@ -618,7 +626,7 @@
         },
         {
           "key": "B",
-          "text": "Itis too expensive."
+          "text": "It is too expensive."
         },
         {
           "key": "C",
@@ -626,7 +634,7 @@
         },
         {
           "key": "D",
-          "text": "She prefers other activities to yoga. \\P)\\"
+          "text": "She prefers other activities to yoga."
         }
       ],
       "answer": {
@@ -686,25 +694,25 @@
       "number": "18",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What will the man most likely do next month?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What will the man most likely do next month?"
-        },
-        {
-          "key": "B",
           "text": "Buy one of Linda's paintings"
         },
         {
+          "key": "B",
+          "text": "Take art classes"
+        },
+        {
           "key": "C",
-          "text": "Take art classes @ Showcase his own paintings"
+          "text": "Showcase his own paintings"
         },
         {
           "key": "D",
-          "text": "Go to Linda's exhibit Listen to an announcement at a university event."
+          "text": "Go to Linda's exhibit"
         }
       ],
       "answer": {
@@ -770,7 +778,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Oo They are only available digitally."
+          "text": "They are only available digitally."
         },
         {
           "key": "B",
@@ -782,7 +790,7 @@
         },
         {
           "key": "D",
-          "text": "They include a copy of the dress code, Listen to an announcement in a classroom."
+          "text": "They include a copy of the dress code,"
         }
       ],
       "answer": {
@@ -842,17 +850,17 @@
       "number": "22",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Why does the speaker mention possible effects of climate",
+      "prompt": "policy decisions?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "policy decisions?"
+          "text": "To explain why good communication is needed for a policy"
         },
         {
           "key": "B",
-          "text": "To explain why good communication is needed for a policy to be successful"
+          "text": "be successful"
         },
         {
           "key": "C",
@@ -860,7 +868,7 @@
         },
         {
           "key": "D",
-          "text": "Toprovide an example of a complex idea that can be visually illustrated OO To identify a problem with the global economic system Listen to an announcement in a university dormitory."
+          "text": "Toprovide an example of a complex idea that can be visually illustrated"
         }
       ],
       "answer": {
@@ -938,42 +946,7 @@
         },
         {
           "key": "D",
-          "text": "Toexplain the importance of having easily available recycling bins Listen to a talk in a marine biology class."
-        }
-      ],
-      "answer": {
-        "keys": [
-          "C"
-        ],
-        "explanation": null
-      },
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "auto",
-      "source_ref": "2.8新托福真题/2.8听力.pdf"
-    },
-    {
-      "id": "listening_2026-02-08_m1_q25",
-      "task_type": "academic_talk",
-      "order": 25,
-      "number": "25",
-      "number_end": null,
-      "directive": "Listen to an announcement or academic talk.",
-      "prompt": "e) Interesting facts about sea otters and other marine",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "The importance of preserving kelp forests"
-        },
-        {
-          "key": "B",
-          "text": "Sea otters and their ecological role"
-        },
-        {
-          "key": "C",
-          "text": "Sea otter adaptations to their habitat"
+          "text": "Toexplain the importance of having easily available recycling bins"
         }
       ],
       "answer": {
@@ -1033,25 +1006,25 @@
       "number": "27",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "ecosystem?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "They keep kelp forests healthy by preying on sea urchins."
+          "text": "sea otters perform in their marine ecosystem?"
         },
         {
           "key": "B",
-          "text": "They remove clams and other invasive shellfish from 1 shorelines."
+          "text": "They keep kelp forests healthy by preying on sea urchins."
         },
         {
           "key": "C",
-          "text": "They are food for predators such as whales and seals."
+          "text": "They remove clams and other invasive shellfish from"
         },
         {
           "key": "D",
-          "text": "They build shelters that act as a buffer against storm damage."
+          "text": "shorelines."
         }
       ],
       "answer": {
@@ -1072,25 +1045,25 @@
       "number": "28",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "According to the speaker, what is one benefit that kelp",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "forests provide?"
+          "text": "the speaker, what is one benefit that kelp forests provide?"
         },
         {
           "key": "B",
-          "text": "They expand shorelines by trapping sediment and building new land. Vf, © They provide habitat for a great diversity of marine life."
+          "text": "They expand shorelines by trapping sediment and building new land."
         },
         {
           "key": "C",
-          "text": "They clean seawater to make it drinkable or suitable for agriculture."
+          "text": "They provide habitat for a great diversity of marine life."
         },
         {
           "key": "D",
-          "text": "They help control the population of sea urchins and other pests. Listen to a talk in a literature class."
+          "text": "They clean seawater to make it drinkable or suitable for agriculture."
         }
       ],
       "answer": {
@@ -1111,21 +1084,21 @@
       "number": "29",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What is the main topic of the talk?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What is the main topic of the talk?"
-        },
-        {
-          "key": "B",
           "text": "How mythology has shaped cultural traditions"
         },
         {
+          "key": "B",
+          "text": "Joseph Campbell's influence on storytelling techniques"
+        },
+        {
           "key": "C",
-          "text": "Joseph Campbell's influence on storytelling techniques V4, © The structure and significance of the hero's journey"
+          "text": "The structure and significance of the hero's journey"
         },
         {
           "key": "D",
@@ -1189,69 +1162,30 @@
       "number": "31",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "Why does the speaker mention a gift?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Why does the speaker mention a gift?"
-        },
-        {
-          "key": "B",
           "text": "Toshow appreciation for storytellers’ creative talents"
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "To point out what makes the hero's journey meaningful"
         },
         {
+          "key": "C",
+          "text": "To describe what the hero receives from a mentor"
+        },
+        {
           "key": "D",
-          "text": "To describe what the hero receives from a mentor Oo To highlight the hero's motivation for starting the journey"
+          "text": "To highlight the hero's motivation for starting the journey"
         }
       ],
       "answer": {
         "keys": [
           "B"
-        ],
-        "explanation": null
-      },
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "auto",
-      "source_ref": "2.8新托福真题/2.8听力.pdf"
-    },
-    {
-      "id": "listening_2026-02-08_m1_q32",
-      "task_type": "academic_talk",
-      "order": 32,
-      "number": "32",
-      "number_end": null,
-      "directive": "Listen to an announcement or academic talk.",
-      "prompt": "storytelling?",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "tis outdated and no longer relevant,"
-        },
-        {
-          "key": "B",
-          "text": "上 limits creativity by focusing only on action and adventure."
-        },
-        {
-          "key": "C",
-          "text": "tis influential because it reflects shared human experiences."
-        },
-        {
-          "key": "D",
-          "text": "It has become more popular due to its use in film and media."
-        }
-      ],
-      "answer": {
-        "keys": [
-          "C"
         ],
         "explanation": null
       },
@@ -1285,7 +1219,7 @@
         },
         {
           "key": "D",
-          "text": "I find it difficult to wait. 人 SN"
+          "text": "I find it difficult to wait."
         }
       ],
       "answer": {
@@ -1394,11 +1328,11 @@
         },
         {
           "key": "B",
-          "text": "Avirus caused some damage. 人"
+          "text": "Avirus caused some damage."
         },
         {
           "key": "C",
-          "text": "A battery would not charge. »"
+          "text": "A battery would not charge."
         },
         {
           "key": "D",
@@ -1456,45 +1390,6 @@
       "source_ref": "2.8新托福真题/2.8听力.pdf"
     },
     {
-      "id": "listening_2026-02-08_m2_q6",
-      "task_type": "conversation",
-      "order": 38,
-      "number": "6",
-      "number_end": null,
-      "directive": "Listen to a conversation.",
-      "prompt": "What does the man encourage the woman to do?",
-      "passage": null,
-      "audio_ref": "m2",
-      "options": [
-        {
-          "key": "A",
-          "text": "Enter a contest"
-        },
-        {
-          "key": "B",
-          "text": "Take an art class"
-        },
-        {
-          "key": "C",
-          "text": "Speak with a judge"
-        },
-        {
-          "key": "D",
-          "text": "Goto see a mural 和 Listening | Question7 of 15 00:00:20 @ sas Te Why does the man mention the Newspaper Club and Student Council?"
-        }
-      ],
-      "answer": {
-        "keys": [
-          "A"
-        ],
-        "explanation": null
-      },
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "auto",
-      "source_ref": "2.8新托福真题/2.8听力.pdf"
-    },
-    {
       "id": "listening_2026-02-08_m2_q8",
       "task_type": "academic_talk",
       "order": 39,
@@ -1507,17 +1402,30 @@
       "options": [
         {
           "key": "A",
-          "text": "The — of achieving flow , © The role of feedback in flow /} (6) The challenges of finding flow-inducing activities"
+          "text": "The — of achieving flow"
         },
         {
           "key": "B",
+          "text": "The role of feedback in flow"
+        },
+        {
+          "key": "C",
+          "text": "The challenges of finding flow-inducing activities"
+        },
+        {
+          "key": "D",
           "text": "The concept and characteristics of flow"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "2.8新托福真题/2.8听力.pdf"
     },
     {
@@ -1605,25 +1513,25 @@
       "number": "11",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What does the speaker say is a challenge to achieving flow?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "What does the speaker say is a challenge to achieving flow?"
-        },
-        {
-          "key": "B",
           "text": "Finding individuals to provide feedback"
         },
         {
+          "key": "B",
+          "text": "Identifying activities that are a proper match with skill level"
+        },
+        {
           "key": "C",
-          "text": "Identifying activities that are a proper match with skill level 1 © Avoiding boredom when a task becomes too easy"
+          "text": "Avoiding boredom when a task becomes too easy"
         },
         {
           "key": "D",
-          "text": "Working on multiple things at the same time Listen to a talk in an environmental science class."
+          "text": "Working on multiple things at the same time"
         }
       ],
       "answer": {
@@ -1722,25 +1630,25 @@
       "number": "14",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "gardens similar?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "They provide recreational areas for city residents."
+          "text": "the talk, how are green roofs and vertical gardens similar?"
         },
         {
           "key": "B",
-          "text": "They do not need additional land to be built."
+          "text": "They provide recreational areas for city residents."
         },
         {
           "key": "C",
-          "text": "They divert rainwater for later use."
+          "text": "They do not need additional land to be built."
         },
         {
           "key": "D",
-          "text": "They are both inexpensive to create agd maintain."
+          "text": "They divert rainwater for later use."
         }
       ],
       "answer": {

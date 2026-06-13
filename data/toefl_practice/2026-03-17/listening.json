@@ -76,7 +76,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Yes, I think itis."
+          "text": "Yes, I think It is."
         },
         {
           "key": "B",
@@ -119,10 +119,14 @@
         },
         {
           "key": "B",
-          "text": "Alike to travel with just a few bags. i © Did you have fun traveling?"
+          "text": "Alike to travel with just a few bags."
         },
         {
           "key": "C",
+          "text": "Did you have fun traveling?"
+        },
+        {
+          "key": "D",
           "text": "Its almost the weekend."
         }
       ],
@@ -279,7 +283,7 @@
         },
         {
           "key": "D",
-          "text": "Ineed to check my schedule first."
+          "text": "I need to check my schedule first."
         }
       ],
       "answer": {
@@ -345,7 +349,7 @@
       "options": [
         {
           "key": "A",
-          "text": "1visiced my family last week."
+          "text": "I visiced my family last week."
         },
         {
           "key": "B",
@@ -462,7 +466,7 @@
       "options": [
         {
           "key": "A",
-          "text": "| was too tired."
+          "text": "was too tired."
         },
         {
           "key": "B",
@@ -573,17 +577,17 @@
       "number": "16",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What will the man check his email for?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What will the man check his email for?"
+          "text": "Amenu"
         },
         {
           "key": "B",
-          "text": "Amenu @ Acoupon"
+          "text": "Acoupon"
         },
         {
           "key": "C",
@@ -669,7 +673,7 @@
         },
         {
           "key": "D",
-          "text": "He will sit in the grass with the woman's friends. Listen to an announcement before a university event."
+          "text": "He will sit in the grass with the woman's friends."
         }
       ],
       "answer": {
@@ -690,25 +694,25 @@
       "number": "19",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Why do attendees need to check in at the registration desk?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "To pick up a name tag and a pamphlet"
+          "text": "attendees need to check in at the registration desk?"
         },
         {
           "key": "B",
-          "text": "Toreserve a slot to make a speech"
+          "text": "To pick up a name tag and a pamphlet"
         },
         {
           "key": "C",
-          "text": "To place a dinner order"
+          "text": "Toreserve a slot to make a speech"
         },
         {
           "key": "D",
-          "text": "To make a donation"
+          "text": "To place a dinner order"
         }
       ],
       "answer": {
@@ -729,25 +733,25 @@
       "number": "20",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What role does the speaker indicate the student government",
+      "prompt": "plays in the gala?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "plays in the gala?"
-        },
-        {
-          "key": "B",
           "text": "Itarranges for event space on campus."
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "Itproduces the program booklets."
         },
         {
+          "key": "C",
+          "text": "Itprovides monetary support."
+        },
+        {
           "key": "D",
-          "text": "Itprovides monetary support. >) Itrecruits speakers and musical acts. Listen to an announcement in a classroom."
+          "text": "Itrecruits speakers and musical acts."
         }
       ],
       "answer": {
@@ -825,7 +829,7 @@
         },
         {
           "key": "D",
-          "text": "To read some instructions Listen to an announcement at a university club meeting."
+          "text": "To read some instructions"
         }
       ],
       "answer": {
@@ -903,7 +907,7 @@
         },
         {
           "key": "D",
-          "text": "Give her ideas for new fundraising activities Listen to a talk in an architecture class."
+          "text": "Give her ideas for new fundraising activities"
         }
       ],
       "answer": {
@@ -1059,7 +1063,7 @@
         },
         {
           "key": "D",
-          "text": "He thinks that it needs major improvement. Listen to a talk in an art history class. »)"
+          "text": "He thinks that it needs major improvement."
         }
       ],
       "answer": {
@@ -1080,21 +1084,21 @@
       "number": "29",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What is the main topic of the talk?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What is the main topic of the talk?"
-        },
-        {
-          "key": "B",
           "text": "Why surrealist artwork became popular with the public"
         },
         {
+          "key": "B",
+          "text": "Wo locations important to the history of surrealism"
+        },
+        {
           "key": "C",
-          "text": "Wo locations important to the history of surrealism ‘4 / if 让 © How one artist embodied the principles of surrealism"
+          "text": "How one artist embodied the principles of surrealism"
         },
         {
           "key": "D",
@@ -1125,10 +1129,18 @@
       "options": [
         {
           "key": "A",
-          "text": "They were envious of Miros talents. / ) © They were right to label Miré a surrealist. 4 © They often looked to Miros works for inspiration."
+          "text": "They were envious of Miros talents."
         },
         {
           "key": "B",
+          "text": "They were right to label Miré a surrealist."
+        },
+        {
+          "key": "C",
+          "text": "They often looked to Miros works for inspiration."
+        },
+        {
+          "key": "D",
           "text": "They produced many more paintings than Miré did."
         }
       ],
@@ -1199,7 +1211,7 @@
         },
         {
           "key": "B",
-          "text": "Itis one of Miré's earliest works of art."
+          "text": "It is one of Miré's earliest works of art."
         },
         {
           "key": "C",
@@ -1246,51 +1258,12 @@
         },
         {
           "key": "D",
-          "text": "Iwill definitely be there."
+          "text": "I will definitely be there."
         }
       ],
       "answer": {
         "keys": [
           "D"
-        ],
-        "explanation": null
-      },
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "auto",
-      "source_ref": "3.17新托福真题/3.17听力.pdf"
-    },
-    {
-      "id": "listening_2026-03-17_m2_q2",
-      "task_type": "listen_and_choose",
-      "order": 33,
-      "number": "2",
-      "number_end": null,
-      "directive": "Choose the best response",
-      "prompt": "",
-      "passage": null,
-      "audio_ref": "m2",
-      "options": [
-        {
-          "key": "A",
-          "text": "No, but would you like some?"
-        },
-        {
-          "key": "B",
-          "text": "川 visit her soon,"
-        },
-        {
-          "key": "C",
-          "text": "Iwas doing some research."
-        },
-        {
-          "key": "D",
-          "text": "Maybe, but we're running late."
-        }
-      ],
-      "answer": {
-        "keys": [
-          "C"
         ],
         "explanation": null
       },
@@ -1312,7 +1285,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Itwas great we could get student tickets."
+          "text": "It was great we could get student tickets."
         },
         {
           "key": "B",
@@ -1429,19 +1402,19 @@
       "options": [
         {
           "key": "A",
-          "text": "Provide some feedback SN © Contact some other students"
+          "text": "Provide some feedback"
         },
         {
           "key": "B",
-          "text": "Take a test on web design"
+          "text": "Contact some other students"
         },
         {
           "key": "C",
-          "text": "Learn web design from the man Listen to a talk on a social science podcast. Listening | Questions of 15 00:00:20 用 What is the main topic of the talk?"
+          "text": "Take a test on web design"
         },
         {
           "key": "D",
-          "text": "How overtime work became common"
+          "text": "Learn web design from the man"
         }
       ],
       "answer": {
@@ -1519,7 +1492,7 @@
         },
         {
           "key": "D",
-          "text": "Ithelps to uphold the status quo. Question 11 of 15 00:00:24 $F According to the speaker, why is it often difficult to overcome pluralistic ignorance?"
+          "text": "Ithelps to uphold the status quo. Question 11 of 15 00:00:24 $F"
         }
       ],
       "answer": {
@@ -1540,25 +1513,25 @@
       "number": "13",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "constructive interference to occur?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "They must cancel each other out."
+          "text": "the talk, what must happen to light waves for constructive interference to occur?"
         },
         {
           "key": "B",
-          "text": "They must be absorbed by the bubble."
+          "text": "They must cancel each other out."
         },
         {
           "key": "C",
-          "text": "They must align to amplify their effects."
+          "text": "They must be absorbed by the bubble."
         },
         {
           "key": "D",
-          "text": "They must reflect only from the outer surface,"
+          "text": "They must align to amplify their effects."
         }
       ],
       "answer": {
@@ -1579,25 +1552,25 @@
       "number": "14",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "keep shifting?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "Because air currents scatter the light unevenly"
+          "text": "the talk, why do the colors on a soap bubble keep shifting?"
         },
         {
           "key": "B",
-          "text": "Because pigments inside the bubble move around"
+          "text": "Because air currents scatter the light unevenly"
         },
         {
           "key": "C",
-          "text": "Because the bubble absorbs different colors as it grows larger"
+          "text": "Because pigments inside the bubble move around"
         },
         {
           "key": "D",
-          "text": "Because certain features of the light and the bubble keep changing"
+          "text": "Because the bubble absorbs different colors as it grows larger"
         }
       ],
       "answer": {

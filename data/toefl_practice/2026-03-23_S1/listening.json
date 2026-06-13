@@ -84,7 +84,7 @@
         },
         {
           "key": "C",
-          "text": "1dont check my email often."
+          "text": "I dont check my email often."
         },
         {
           "key": "D",
@@ -94,6 +94,45 @@
       "answer": {
         "keys": [
           "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.23/3.23 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-23_S1_m1_q3",
+      "task_type": "listen_and_choose",
+      "order": 3,
+      "number": "3",
+      "number_end": null,
+      "directive": "Choose the best response",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "Ihave a spacious room."
+        },
+        {
+          "key": "B",
+          "text": "Iwas planning to."
+        },
+        {
+          "key": "C",
+          "text": "tis near the main campus."
+        },
+        {
+          "key": "D",
+          "text": "We rented a cabin for the weekend."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
         ],
         "explanation": null
       },
@@ -127,7 +166,7 @@
         },
         {
           "key": "D",
-          "text": "Traffic signs help drivers stay safe and informed, Listening | question320f32 0:23 What will the speaker most likely do next?"
+          "text": "Traffic signs help drivers stay safe and informed, What will the speaker most likely do next?"
         }
       ],
       "answer": {
@@ -232,14 +271,18 @@
       "options": [
         {
           "key": "A",
-          "text": "Imstill waiting for feedback, 14 O Sure, Ill go to the orientation."
+          "text": "Imstill waiting for feedback,"
         },
         {
           "key": "B",
-          "text": "Did he like the present?"
+          "text": "Sure, Ill go to the orientation."
         },
         {
           "key": "C",
+          "text": "Did he like the present?"
+        },
+        {
+          "key": "D",
           "text": "Do they go every weekend?"
         }
       ],
@@ -306,10 +349,18 @@
       "options": [
         {
           "key": "A",
-          "text": "Indeed | have. 4 O More to come."
+          "text": "Notvery well-defined,"
         },
         {
           "key": "B",
+          "text": "Indeed | have."
+        },
+        {
+          "key": "C",
+          "text": "More to come."
+        },
+        {
+          "key": "D",
           "text": "Neither of them can."
         }
       ],
@@ -349,7 +400,7 @@
         },
         {
           "key": "D",
-          "text": "Did you enjoy all the celebrations? (4"
+          "text": "Did you enjoy all the celebrations?"
         }
       ],
       "answer": {
@@ -384,7 +435,11 @@
         },
         {
           "key": "C",
-          "text": "llove the smell of fresh coffee beans, ©) My friend drinks it throughout the day. é \\ : )"
+          "text": "llove the smell of fresh coffee beans,"
+        },
+        {
+          "key": "D",
+          "text": "My friend drinks it throughout the day."
         }
       ],
       "answer": {
@@ -405,17 +460,17 @@
       "number": "13",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What is unusual about the performance of King Lear?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What is unusual about the performance of King Lear?"
+          "text": "kwill be held outdoors."
         },
         {
           "key": "B",
-          "text": "kwill be held outdoors. \\ ; © tis amodern adaptation,"
+          "text": "tis amodern adaptation,"
         },
         {
           "key": "C",
@@ -423,7 +478,7 @@
         },
         {
           "key": "D",
-          "text": "Itis ina foreign language."
+          "text": "It is ina foreign language."
         }
       ],
       "answer": {
@@ -450,17 +505,108 @@
       "options": [
         {
           "key": "A",
-          "text": "She is paying for the woman's theater ticket. \\ p © She is an expert on William Shakespeare. \\\\ 外 O She has never read King Lear."
+          "text": "She is paying for the woman's theater ticket."
         },
         {
           "key": "B",
-          "text": "She will be joining the woman at the theater. if : \\\\\\ /"
+          "text": "She is an expert on William Shakespeare."
+        },
+        {
+          "key": "C",
+          "text": "She has never read King Lear."
+        },
+        {
+          "key": "D",
+          "text": "She will be joining the woman at the theater."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
+      "source_ref": "3.23/3.23 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-23_S1_m1_q15",
+      "task_type": "conversation",
+      "order": 14,
+      "number": "15",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What does the price of a two-bedroom apartment depend on?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "How many people will be living in the apartment"
+        },
+        {
+          "key": "B",
+          "text": "What kind of view the apartment has"
+        },
+        {
+          "key": "C",
+          "text": "How long the man is planning to rent the apartment for"
+        },
+        {
+          "key": "D",
+          "text": "Which floor the apartment is located on"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.23/3.23 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-23_S1_m1_q16",
+      "task_type": "conversation",
+      "order": 15,
+      "number": "16",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What will the woman most likely do next?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "Ask the man for money"
+        },
+        {
+          "key": "B",
+          "text": "Show the man an apartment"
+        },
+        {
+          "key": "C",
+          "text": "Take the man on a tour of the lake"
+        },
+        {
+          "key": "D",
+          "text": "Unlock a drawer"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
       "source_ref": "3.23/3.23 套一 听力.docx"
     },
     {
@@ -480,13 +626,26 @@
         },
         {
           "key": "B",
-          "text": "The woman had a question about its content. . © The woman wanted to buy a copy for herself. . © The man wanted the woman to return it."
+          "text": "The woman had a question about its content."
+        },
+        {
+          "key": "C",
+          "text": "The woman wanted to buy a copy for herself."
+        },
+        {
+          "key": "D",
+          "text": "The man wanted the woman to return it."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.23/3.23 套一 听力.docx"
     },
     {
@@ -506,7 +665,15 @@
         },
         {
           "key": "B",
-          "text": "Write a book of her own . © Help the man with his garden . © Seek gardening advice online Listen to an announcement in a university science lab. 人"
+          "text": "Write a book of her own"
+        },
+        {
+          "key": "C",
+          "text": "Help the man with his garden"
+        },
+        {
+          "key": "D",
+          "text": "Seek gardening advice online"
         }
       ],
       "answer": {
@@ -527,25 +694,25 @@
       "number": "19",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What does the speaker imply about students who had recent",
+      "prompt": "training?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "training?"
-        },
-        {
-          "key": "B",
           "text": "Their current training is sufficient."
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "They must conduct training for other students."
         },
         {
+          "key": "C",
+          "text": "They have not been following lab procedures."
+        },
+        {
           "key": "D",
-          "text": "They have not been following lab procedures. GN \\ © They must attend Thursday's training,"
+          "text": "They must attend Thursday's training,"
         }
       ],
       "answer": {
@@ -584,7 +751,7 @@
         },
         {
           "key": "D",
-          "text": "Itis part of new students’ orientation. Listen to an announcement at a gathering of student club leaders."
+          "text": "It is part of new students’ orientation."
         }
       ],
       "answer": {
@@ -623,7 +790,7 @@
         },
         {
           "key": "D",
-          "text": "Itwas implemented because of budget cuts."
+          "text": "It was implemented because of budget cuts."
         }
       ],
       "answer": {
@@ -662,7 +829,7 @@
         },
         {
           "key": "D",
-          "text": "They usually created extra work for student clubs, Listen to a campus radio announcement."
+          "text": "They usually created extra work for student clubs,"
         }
       ],
       "answer": {
@@ -683,17 +850,17 @@
       "number": "23",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What is the purpose of the announcement?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What is the purpose of the announcement?"
+          "text": "Toask for volunteer judges"
         },
         {
           "key": "B",
-          "text": "Toask for volunteer judges { O To say who won a contest"
+          "text": "To say who won a contest"
         },
         {
           "key": "C",
@@ -740,7 +907,7 @@
         },
         {
           "key": "D",
-          "text": "Inacampus building Listen to a lecture in a music class. 9 人"
+          "text": "Inacampus building"
         }
       ],
       "answer": {
@@ -761,30 +928,108 @@
       "number": "25",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Why does the speaker mention religious ceremonies and",
+      "prompt": "athletic competitions?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "athletic competitions?"
+          "text": "Tohighlight the importance of music in Ancient Greece"
         },
         {
           "key": "B",
-          "text": "Tohighlight the importance of music in Ancient Greece ,"
+          "text": "Topoint out that Greek amphitheaters hosted a variety of"
         },
         {
           "key": "C",
-          "text": "Topoint out that Greek amphitheaters hosted a variety of 出 gatherings my, ae © Topoint out that the type of music played in Ancient d Greece depended on the gathering"
+          "text": "gatherings"
         },
         {
           "key": "D",
-          "text": "Toemphasize the skills of aulos players in Ancient Greece"
+          "text": "Topoint out that the type of music played in Ancient d Greece depended on the gathering"
         }
       ],
       "answer": {
         "keys": [
           "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.23/3.23 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-23_S1_m1_q26",
+      "task_type": "academic_talk",
+      "order": 25,
+      "number": "26",
+      "number_end": null,
+      "directive": "Listen to an announcement or academic talk.",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "the speaker, what makes the aulos different from other wind instruments?"
+        },
+        {
+          "key": "B",
+          "text": "The size of its mouthpiece"
+        },
+        {
+          "key": "C",
+          "text": "The thickness of its reeds"
+        },
+        {
+          "key": "D",
+          "text": "The shape of its pipes"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.23/3.23 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-23_S1_m1_q28",
+      "task_type": "academic_talk",
+      "order": 27,
+      "number": "28",
+      "number_end": null,
+      "directive": "Listen to an announcement or academic talk.",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "the aulos over time?"
+        },
+        {
+          "key": "B",
+          "text": "kbeganto be played together with other instruments."
+        },
+        {
+          "key": "C",
+          "text": "ts popularity decreased,"
+        },
+        {
+          "key": "D",
+          "text": "The methods of playing it changed."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
         ],
         "explanation": null
       },
@@ -935,12 +1180,51 @@
         },
         {
           "key": "D",
-          "text": "Atthe next stop. Listening | Question 2of 15 00:00:18 @"
+          "text": "Atthe next stop."
         }
       ],
       "answer": {
         "keys": [
           "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.23/3.23 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-23_S1_m2_q3",
+      "task_type": "listen_and_choose",
+      "order": 32,
+      "number": "3",
+      "number_end": null,
+      "directive": "Choose the best response",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "We have a new training module,"
+        },
+        {
+          "key": "B",
+          "text": "I think Sarah volunteered,"
+        },
+        {
+          "key": "C",
+          "text": "The session has a facilitator."
+        },
+        {
+          "key": "D",
+          "text": "twill be an hour long."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
         ],
         "explanation": null
       },
@@ -956,26 +1240,69 @@
       "number": "4",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "s © Itdid not interest her.",
+      "prompt": "What does the woman imply about a class discussion?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "kwas not completed."
+          "text": "Itdid not interest her."
         },
         {
           "key": "B",
-          "text": "Itcovered many topics."
+          "text": "kwas not completed."
         },
         {
           "key": "C",
-          "text": "Itwas recorded."
+          "text": "Itcovered many topics."
+        },
+        {
+          "key": "D",
+          "text": "It was recorded."
         }
       ],
       "answer": {
         "keys": [
           "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.23/3.23 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-23_S1_m2_q5",
+      "task_type": "conversation",
+      "order": 34,
+      "number": "5",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What will the woman most likely do next?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "Log into a class forum"
+        },
+        {
+          "key": "B",
+          "text": "Visit her professor"
+        },
+        {
+          "key": "C",
+          "text": "Take her computer for servicing"
+        },
+        {
+          "key": "D",
+          "text": "Check out a book on Renaissance architecture"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
         ],
         "explanation": null
       },
@@ -1030,25 +1357,25 @@
       "number": "7",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "Which product is unsuitable for the man’s friend?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "Which product is unsuitable for the man’s friend?"
-        },
-        {
-          "key": "B",
           "text": "Pasta"
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "Milk"
         },
         {
+          "key": "C",
+          "text": "Soy"
+        },
+        {
           "key": "D",
-          "text": "Soy ; © Nats Listen to a talk in an environmental science class."
+          "text": "Nats"
         }
       ],
       "answer": {
@@ -1069,13 +1396,13 @@
       "number": "8",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": ": © The critical habitats and wildlife diversity supported by",
+      "prompt": "What is the main topic of the talk?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "wetlands"
+          "text": "The critical habitats and wildlife diversity supported by wetlands"
         },
         {
           "key": "B",
@@ -1153,7 +1480,7 @@
       "options": [
         {
           "key": "A",
-          "text": ": © Todescribe threats to wetlands from rising sea levels"
+          "text": "Todescribe threats to wetlands from rising sea levels"
         },
         {
           "key": "B",
@@ -1186,13 +1513,13 @@
       "number": "11",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": ". © She compares the costs and benefits associated with",
+      "prompt": "How does the speaker organize the talk?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "maintaining wetlands,"
+          "text": "She compares the costs and benefits associated with maintaining wetlands,"
         },
         {
           "key": "B",
@@ -1204,12 +1531,51 @@
         },
         {
           "key": "D",
-          "text": "She lists and describes the benefits associated with wetlands. Listen to a talk in an architecture class. ‘| | ) &- 7"
+          "text": "She lists and describes the benefits associated with wetlands."
         }
       ],
       "answer": {
         "keys": [
           "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.23/3.23 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-23_S1_m2_q12",
+      "task_type": "academic_talk",
+      "order": 41,
+      "number": "12",
+      "number_end": null,
+      "directive": "Listen to an announcement or academic talk.",
+      "prompt": "What is the main topic of the talk?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "The renewed use of an old construction material"
+        },
+        {
+          "key": "B",
+          "text": "Recent advances in sustainable building materials"
+        },
+        {
+          "key": "C",
+          "text": "The challenges faced by ancient adobe brick builders"
+        },
+        {
+          "key": "D",
+          "text": "Modern alternatives to adobe bricks"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
         ],
         "explanation": null
       },
@@ -1231,11 +1597,11 @@
       "options": [
         {
           "key": "A",
-          "text": "Itwas inspired by adobe construction."
+          "text": "It was inspired by adobe construction."
         },
         {
           "key": "B",
-          "text": "Itis made from very common natural materials."
+          "text": "It is made from very common natural materials."
         },
         {
           "key": "C",
@@ -1264,25 +1630,25 @@
       "number": "14",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "{ i | © Notallmaterlalsfor adobe production are available there.",
+      "prompt": "4 in the southwestern United States?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "More clay for construction is available there than in other places. listening | questin6of2 a 00:17"
+          "text": "Major changes in temperature occur there,"
         },
         {
           "key": "B",
-          "text": "Atthe library."
+          "text": "Airtherehas recently become polluted."
         },
         {
           "key": "C",
-          "text": "Its agroup activity. ‘ O Im fairly certain."
+          "text": "Notallmaterlalsfor adobe production are available there."
         },
         {
           "key": "D",
-          "text": "Tomorrow at noon."
+          "text": "More clay for construction is available there than in other places. listening | questin6of2 a 00:17"
         }
       ],
       "answer": {

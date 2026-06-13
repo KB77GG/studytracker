@@ -76,7 +76,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Yes, | think itis. ty"
+          "text": "Yes, | think It is. ty"
         },
         {
           "key": "B",
@@ -84,7 +84,11 @@
         },
         {
           "key": "C",
-          "text": "Sure, sorry about that. ©) No, tm not going to return it."
+          "text": "Sure, sorry about that."
+        },
+        {
+          "key": "D",
+          "text": "No, tm not going to return it."
         }
       ],
       "answer": {
@@ -154,10 +158,14 @@
         },
         {
           "key": "B",
-          "text": "English and history. ©) How did you find out?"
+          "text": "English and history."
         },
         {
           "key": "C",
+          "text": "How did you find out?"
+        },
+        {
+          "key": "D",
           "text": "That's good advice."
         }
       ],
@@ -263,17 +271,30 @@
       "options": [
         {
           "key": "A",
-          "text": "Itstarts in twenty minutes."
+          "text": "Q tsa requirement for the class."
         },
         {
           "key": "B",
-          "text": "The professor said thece will be a quiz afterwards. \\ { Z O Aprofessor from another university. : i >"
+          "text": "Itstarts in twenty minutes."
+        },
+        {
+          "key": "C",
+          "text": "The professor said thece will be a quiz afterwards."
+        },
+        {
+          "key": "D",
+          "text": "Aprofessor from another university."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.1新托福真题/4.1听力.pdf"
     },
     {
@@ -289,11 +310,19 @@
       "options": [
         {
           "key": "A",
-          "text": "A few candidates are being considered."
+          "text": "6) Ig not sure what the funds will be used for."
         },
         {
           "key": "B",
-          "text": "Last year’s fundraiser was quite successful. 6) The school appreciates the additional support."
+          "text": "A few candidates are being considered."
+        },
+        {
+          "key": "C",
+          "text": "Last year’s fundraiser was quite successful."
+        },
+        {
+          "key": "D",
+          "text": "The school appreciates the additional support."
         }
       ],
       "answer": {
@@ -324,7 +353,7 @@
         },
         {
           "key": "B",
-          "text": "Ineed to check the date."
+          "text": "I need to check the date."
         },
         {
           "key": "C",
@@ -367,7 +396,7 @@
         },
         {
           "key": "C",
-          "text": "| thought it was a powerful speech."
+          "text": "thought it was a powerful speech."
         },
         {
           "key": "D",
@@ -377,41 +406,6 @@
       "answer": {
         "keys": [
           "D"
-        ],
-        "explanation": null
-      },
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "auto",
-      "source_ref": "4.1新托福真题/4.1听力.pdf"
-    },
-    {
-      "id": "listening_2026-04-01_m1_q11",
-      "task_type": "listen_and_choose",
-      "order": 11,
-      "number": "11",
-      "number_end": null,
-      "directive": "Choose the best response",
-      "prompt": "",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "Sure, let's look at some sculpture."
-        },
-        {
-          "key": "B",
-          "text": "Iwish there were more pieces to see."
-        },
-        {
-          "key": "C",
-          "text": "tthe last week of the art exhibit, Oht will feature mostly French paintings."
-        }
-      ],
-      "answer": {
-        "keys": [
-          "B"
         ],
         "explanation": null
       },
@@ -437,7 +431,7 @@
         },
         {
           "key": "B",
-          "text": "|sthat where it goes?"
+          "text": "sthat where it goes?"
         },
         {
           "key": "C",
@@ -445,7 +439,7 @@
         },
         {
           "key": "D",
-          "text": "Yes, intramural sports make me thirsty. Question 13 of 32 00:00:14 @ Question 14 of 32 Which task remains for the woman to complete before she goes on vacation?"
+          "text": "Yes, intramural sports make me thirsty. Question 13 of 32 Question 14 of 32 Which task remains for the woman to complete before she goes on vacation?"
         }
       ],
       "answer": {
@@ -519,46 +513,16 @@
         },
         {
           "key": "C",
-          "text": "He would like a seat close to the stage. 6) H will sit in the grass with the woman's friends."
-        }
-      ],
-      "answer": null,
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "review_only",
-      "source_ref": "4.1新托福真题/4.1听力.pdf"
-    },
-    {
-      "id": "listening_2026-04-01_m1_q17",
-      "task_type": "conversation",
-      "order": 15,
-      "number": "17",
-      "number_end": null,
-      "directive": "Listen to a conversation.",
-      "prompt": "Why does the woman suggest meeting on Friday instead of",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "Thursday?"
-        },
-        {
-          "key": "B",
-          "text": "She is busy with work on Thursday."
-        },
-        {
-          "key": "C",
-          "text": "She needs more time to prepare for the discussion, \" © She 人 Not want to come to campus on Thursday."
+          "text": "He would like a seat close to the stage."
         },
         {
           "key": "D",
-          "text": "The café is not open on Thursday."
+          "text": "H will sit in the grass with the woman's friends."
         }
       ],
       "answer": {
         "keys": [
-          "C"
+          "D"
         ],
         "explanation": null
       },
@@ -592,7 +556,7 @@
         },
         {
           "key": "D",
-          "text": "Her new dorm is close to the library. Listen to an announcement at a university club meeting."
+          "text": "Her new dorm is close to the library."
         }
       ],
       "answer": {
@@ -670,7 +634,7 @@
         },
         {
           "key": "D",
-          "text": "Give her ideas for new fundraising activities Listen to a campus radio announcement."
+          "text": "Give her ideas for new fundraising activities"
         }
       ],
       "answer": {
@@ -691,25 +655,25 @@
       "number": "21",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Who is eligible to borrow a loaner ftevice?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Students who need to use special software"
+          "text": "is eligible to borrow a loaner ftevice?"
         },
         {
           "key": "B",
-          "text": "Students who cannot access campus computer labs"
+          "text": "Students who need to use special software"
         },
         {
           "key": "C",
-          "text": "Students whose laptops are being repaired"
+          "text": "Students who cannot access campus computer labs"
         },
         {
           "key": "D",
-          "text": "Students who have lost their devices ¥ >."
+          "text": "Students whose laptops are being repaired"
         }
       ],
       "answer": {
@@ -730,25 +694,25 @@
       "number": "22",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What does the speaker indicate has changed about the",
+      "prompt": "computer labs?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "computer labs?"
-        },
-        {
-          "key": "B",
           "text": "Students will now be charged for damaged equipment."
         },
         {
+          "key": "B",
+          "text": "Student helpers will now be present at all times."
+        },
+        {
           "key": "C",
-          "text": "Student helpers will now be present at all times. 人 They now close at ten p.m."
+          "text": "They now close at ten p.m."
         },
         {
           "key": "D",
-          "text": "They now require a campus ID for late-night access. i} Listen to an announcement on the university radio station. 玉"
+          "text": "They now require a campus ID for late-night access."
         }
       ],
       "answer": {
@@ -769,23 +733,36 @@
       "number": "23",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "©) Remain seated during a performance",
+      "prompt": "What does the speaker ask students to do?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Buy tickets td concert ©) Take pictures and videos"
+          "text": "Remain seated during a performance"
         },
         {
           "key": "B",
+          "text": "Buy tickets td concert"
+        },
+        {
+          "key": "C",
+          "text": "Take pictures and videos"
+        },
+        {
+          "key": "D",
           "text": "Arrive early for an event"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.1新托福真题/4.1听力.pdf"
     },
     {
@@ -813,7 +790,7 @@
         },
         {
           "key": "D",
-          "text": "Tolocate the correct auditorium entrance Listen to a talk in a biology class."
+          "text": "Tolocate the correct auditorium entrance"
         }
       ],
       "answer": {
@@ -844,7 +821,7 @@
         },
         {
           "key": "B",
-          "text": "How frogs adapt to urban environments 加"
+          "text": "How frogs adapt to urban environments"
         },
         {
           "key": "C",
@@ -873,17 +850,17 @@
       "number": "26",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What does the speaker say about frog reproduction?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What does the speaker say about frog reproduction?"
+          "text": "Frogs’ reproductive cycles are affected by temperature changes."
         },
         {
           "key": "B",
-          "text": "Frogs’ reproductive cycles are affected by temperature changes. 6 Frogs have developed clever ways to protect their eggs."
+          "text": "Frogs have developed clever ways to protect their eggs."
         },
         {
           "key": "C",
@@ -930,7 +907,7 @@
         },
         {
           "key": "D",
-          "text": "Itis in danger of becoming extinct."
+          "text": "It is in danger of becoming extinct."
         }
       ],
       "answer": {
@@ -957,7 +934,7 @@
       "options": [
         {
           "key": "A",
-          "text": "{ O To show how frogs are affected by bee population loss"
+          "text": "To show how frogs are affected by bee population loss"
         },
         {
           "key": "B",
@@ -969,7 +946,7 @@
         },
         {
           "key": "D",
-          "text": "To compare the survival strategies of bees and frogs Listen to a talk in an art history class."
+          "text": "To compare the survival strategies of bees and frogs"
         }
       ],
       "answer": {
@@ -996,7 +973,7 @@
       "options": [
         {
           "key": "A",
-          "text": "OO Why surrealist artwork became popular with the public"
+          "text": "Why surrealist artwork became popular with the public"
         },
         {
           "key": "B",
@@ -1113,11 +1090,11 @@
       "options": [
         {
           "key": "A",
-          "text": "Itwas created in two distinct stages."
+          "text": "It was created in two distinct stages."
         },
         {
           "key": "B",
-          "text": "Itis one of Mird’s earliest works of art,"
+          "text": "It is one of Mird’s earliest works of art,"
         },
         {
           "key": "C",
@@ -1156,7 +1133,7 @@
         },
         {
           "key": "B",
-          "text": "Ithad some valuable insights."
+          "text": "It had some valuable insights."
         },
         {
           "key": "C",
@@ -1234,17 +1211,26 @@
         },
         {
           "key": "B",
-          "text": "At the end of the day, j i} Ly © My favorite rock band."
+          "text": "At the end of the day,"
         },
         {
           "key": "C",
+          "text": "My favorite rock band."
+        },
+        {
+          "key": "D",
           "text": "inthe park."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.1新托福真题/4.1听力.pdf"
     },
     {
@@ -1254,25 +1240,25 @@
       "number": "4",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What does the woman imply about a class discussion?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "What does the woman imply about a class discussion?"
-        },
-        {
-          "key": "B",
           "text": "Itdid not interest her."
         },
         {
+          "key": "B",
+          "text": "It was not completed."
+        },
+        {
           "key": "C",
-          "text": "Itwas not completed. \\ 从 © Itcovered many topics."
+          "text": "Itcovered many topics."
         },
         {
           "key": "D",
-          "text": "itwas recorded."
+          "text": "It was recorded."
         }
       ],
       "answer": {
@@ -1332,25 +1318,25 @@
       "number": "6",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "to Italy?",
+      "prompt": "What does the woman wish had been different about her trip",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "She wishes she could have stayed in Italy longer."
+          "text": "Italy?"
         },
         {
           "key": "B",
-          "text": "She wishes she had visited more churches and art museums,"
+          "text": "She wishes she could have stayed in Italy longer."
         },
         {
           "key": "C",
-          "text": "She wishes she could have studied more with Italian professors."
+          "text": "She wishes she had visited more churches and art museums,"
         },
         {
           "key": "D",
-          "text": "She wishes she had taken the trip over spring break."
+          "text": "She wishes she could have studied more with Italian professors."
         }
       ],
       "answer": {
@@ -1389,7 +1375,7 @@
         },
         {
           "key": "D",
-          "text": "He should research ticket prices for flights to Italy. Listen to a talk in a marine biology class."
+          "text": "He should research ticket prices for flights to Italy."
         }
       ],
       "answer": {
@@ -1428,7 +1414,7 @@
         },
         {
           "key": "D",
-          "text": "The role of renewable energy in ocean science Listening | Question 9 of15 00:00:21 @ According to the speaker, what challenge are shell-building organisms facing?"
+          "text": "The role of renewable energy in ocean science"
         }
       ],
       "answer": {
@@ -1449,25 +1435,25 @@
       "number": "10",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "ocean chemistry on clown fish?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "They migrate to colder regions of the ocean."
+          "text": "the speaker, what is one effect of changes in ocean chemistry on clown fish?"
         },
         {
           "key": "B",
-          "text": "They become more aggressive towards each other."
+          "text": "They migrate to colder regions of the ocean."
         },
         {
           "key": "C",
-          "text": "They lose the ability to regulate body temperature."
+          "text": "They become more aggressive towards each other."
         },
         {
           "key": "D",
-          "text": "They have difficulty perceiving their surroundings."
+          "text": "They lose the ability to regulate body temperature."
         }
       ],
       "answer": {
@@ -1506,7 +1492,7 @@
         },
         {
           "key": "D",
-          "text": "Tohighlight the importance of marine biodiversity Listen to a talk on a personal health podcast."
+          "text": "Tohighlight the importance of marine biodiversity"
         }
       ],
       "answer": {
@@ -1644,25 +1630,25 @@
       "number": "15",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "strongly supported by research?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "Intermittent fasting"
+          "text": "the speaker, which type of biohacking is most strongly supported by research?"
         },
         {
           "key": "B",
-          "text": "Using cognitive enhancers"
+          "text": "Intermittent fasting"
         },
         {
           "key": "C",
-          "text": "‘Soundscapes"
+          "text": "Using cognitive enhancers"
         },
         {
           "key": "D",
-          "text": "Manipulating light exposure"
+          "text": "‘Soundscapes"
         }
       ],
       "answer": {

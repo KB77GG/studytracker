@@ -37,7 +37,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Early Wednesday morning. &"
+          "text": "Early Wednesday morning."
         },
         {
           "key": "B",
@@ -123,13 +123,22 @@
         },
         {
           "key": "C",
-          "text": "Thanks, but | can choose a college myself. | don't have an opinion yet. pinion y"
+          "text": "Thanks, but | can choose a college myself."
+        },
+        {
+          "key": "D",
+          "text": "don't have an opinion yet. pinion y"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.27新托福真题/3.27听力.pdf"
     },
     {
@@ -211,45 +220,6 @@
       "source_ref": "3.27新托福真题/3.27听力.pdf"
     },
     {
-      "id": "listening_2026-03-27_m1_q6",
-      "task_type": "listen_and_choose",
-      "order": 6,
-      "number": "6",
-      "number_end": null,
-      "directive": "Choose the best response",
-      "prompt": "",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "Im stillwaiting for feedback."
-        },
-        {
-          "key": "B",
-          "text": "Sure, I'll go 加 the orientation."
-        },
-        {
-          "key": "C",
-          "text": "Did he like the present?"
-        },
-        {
-          "key": "D",
-          "text": "Do they go every weekend?"
-        }
-      ],
-      "answer": {
-        "keys": [
-          "A"
-        ],
-        "explanation": null
-      },
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "auto",
-      "source_ref": "3.27新托福真题/3.27听力.pdf"
-    },
-    {
       "id": "listening_2026-03-27_m1_q7",
       "task_type": "listen_and_choose",
       "order": 7,
@@ -305,11 +275,15 @@
         },
         {
           "key": "B",
-          "text": "| put the dishes away already."
+          "text": "put the dishes away already."
         },
         {
           "key": "C",
-          "text": "Well have dinner around 7 p.m. Z © The student dining center is great."
+          "text": "Well have dinner around 7 p.m."
+        },
+        {
+          "key": "D",
+          "text": "The student dining center is great."
         }
       ],
       "answer": {
@@ -336,11 +310,11 @@
       "options": [
         {
           "key": "A",
-          "text": "Itturned out to be quite fragile. &"
+          "text": "Itturned out to be quite fragile."
         },
         {
           "key": "B",
-          "text": "| found it very engaging."
+          "text": "found it very engaging."
         },
         {
           "key": "C",
@@ -375,21 +349,30 @@
       "options": [
         {
           "key": "A",
-          "text": "like taking notes. ©, Yes, in the park."
+          "text": "like taking notes."
         },
         {
           "key": "B",
-          "text": "No, on the bottom."
+          "text": "Yes, in the park."
         },
         {
           "key": "C",
+          "text": "No, on the bottom."
+        },
+        {
+          "key": "D",
           "text": "t's quite expensive."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.27新托福真题/3.27听力.pdf"
     },
     {
@@ -448,7 +431,7 @@
         },
         {
           "key": "B",
-          "text": "Oh, | wonder if they'll supply the exercise mats. &"
+          "text": "Oh, | wonder if they'll supply the exercise mats."
         },
         {
           "key": "C",
@@ -594,25 +577,25 @@
       "number": "16",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "to be replaced?",
+      "prompt": "Why does the woman mention that her phone battery needs",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Toask for a recommendation"
+          "text": "be replaced?"
         },
         {
           "key": "B",
-          "text": "To make a suggestion &"
+          "text": "Toask for a recommendation"
         },
         {
           "key": "C",
-          "text": "Tocorrect a previous statement"
+          "text": "To make a suggestion"
         },
         {
           "key": "D",
-          "text": "To provide an explanation"
+          "text": "Tocorrect a previous statement"
         }
       ],
       "answer": {
@@ -690,7 +673,7 @@
         },
         {
           "key": "D",
-          "text": "Carrots and spinach Listen to an announcement in a classroom."
+          "text": "Carrots and spinach"
         }
       ],
       "answer": {
@@ -717,7 +700,7 @@
       "options": [
         {
           "key": "A",
-          "text": "oO To survey graduating students about their experiences"
+          "text": "To survey graduating students about their experiences"
         },
         {
           "key": "B",
@@ -750,25 +733,25 @@
       "number": "20",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What does the speaker imply about the writing center's",
+      "prompt": "current location?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "current location?"
+          "text": "Its too small for the center's needs. C It is housed withilsthe library."
         },
         {
           "key": "B",
-          "text": "Its too small for the center's needs. C Itis housed withilsthe library."
-        },
-        {
-          "key": "C",
           "text": "tis difficult to locate,"
         },
         {
+          "key": "C",
+          "text": "Itopens at seven p.m."
+        },
+        {
           "key": "D",
-          "text": "Itopens at seven p.m. Listen to an announcement by a university administration."
+          "text": "an announcement by a university administration."
         }
       ],
       "answer": {
@@ -838,7 +821,7 @@
         },
         {
           "key": "B",
-          "text": "They can affect lab experiments. 1 ee"
+          "text": "They can affect lab experiments."
         },
         {
           "key": "C",
@@ -846,7 +829,7 @@
         },
         {
           "key": "D",
-          "text": "Heat from them can damage pipes. Listen to a campus radio announcement."
+          "text": "Heat from them can damage pipes."
         }
       ],
       "answer": {
@@ -1033,7 +1016,7 @@
         },
         {
           "key": "B",
-          "text": "She likes Fat itis a unique practice in the history of music."
+          "text": "She likes Fat It is a unique practice in the history of music."
         },
         {
           "key": "C",
@@ -1076,11 +1059,11 @@
         },
         {
           "key": "C",
-          "text": "&"
+          "text": "Help students do their own sampling"
         },
         {
           "key": "D",
-          "text": "Help students do their own sampling Listen to a talk on an art podcast."
+          "text": "a talk on an art podcast."
         }
       ],
       "answer": {
@@ -1111,7 +1094,7 @@
         },
         {
           "key": "B",
-          "text": "The development and significance of a particular type of art"
+          "text": "The development and significance of a particular type of"
         },
         {
           "key": "C",
@@ -1140,25 +1123,25 @@
       "number": "30",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Laszlo Moholy-Nagy play in the development of kinetic art?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "He criticized the use of technology inart."
+          "text": "the talk, what role did the Hungarian artist"
         },
         {
           "key": "B",
-          "text": "He advanced the idea of using movement and light in art."
+          "text": "Moholy-Nagy play in the development of kinetic art?"
         },
         {
           "key": "C",
-          "text": "He was the first to use air and wind to manipulate art."
+          "text": "He criticized the use of technology inart."
         },
         {
           "key": "D",
-          "text": "He established the first kinetic art museum."
+          "text": "He advanced the idea of using movement and light in art."
         }
       ],
       "answer": {
@@ -1189,7 +1172,7 @@
         },
         {
           "key": "B",
-          "text": "It can make it difficult for the audience to engage. &"
+          "text": "It can make it difficult for the audience to engage."
         },
         {
           "key": "C",
@@ -1224,7 +1207,7 @@
       "options": [
         {
           "key": "A",
-          "text": "To summarize the way kinetic art engages its viewers &"
+          "text": "To summarize the way kinetic art engages its viewers"
         },
         {
           "key": "B",
@@ -1263,7 +1246,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Idlove to see it. &"
+          "text": "Idlove to see it."
         },
         {
           "key": "B",
@@ -1310,7 +1293,7 @@
         },
         {
           "key": "C",
-          "text": "| think its in the science building."
+          "text": "think its in the science building."
         },
         {
           "key": "D",
@@ -1353,7 +1336,7 @@
         },
         {
           "key": "D",
-          "text": "She is studying to be an artist. Listening | Question 5of15 00:00:19 @ Why does the woman mention package options?"
+          "text": "She is studying to be an artist. Why does the woman mention package options?"
         }
       ],
       "answer": {
@@ -1374,21 +1357,21 @@
       "number": "6",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "What is the man explaining when he mentions his new",
+      "prompt": "apartment?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "apartment?"
-        },
-        {
-          "key": "B",
           "text": "Why he wants to buy a painting"
         },
         {
+          "key": "B",
+          "text": "Why he has been very busy"
+        },
+        {
           "key": "C",
-          "text": "Why he has been very busy iN © Why he will live close to a museum"
+          "text": "Why he will live close to a museum"
         },
         {
           "key": "D",
@@ -1431,7 +1414,7 @@
         },
         {
           "key": "D",
-          "text": "The schedule of the exhibition Listen to a talk on a health podcast."
+          "text": "The schedule of the exhibition"
         }
       ],
       "answer": {
@@ -1491,21 +1474,21 @@
       "number": "9",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What does the speaker say about memory consolidation?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "What does the speaker say about memory consolidation?"
-        },
-        {
-          "key": "B",
           "text": "Itoccurs mainly during deep sleep stages."
         },
         {
+          "key": "B",
+          "text": "Itaffects problem-solving abilities."
+        },
+        {
           "key": "C",
-          "text": "Itaffects problem-solving abilities. oO It happens primarily in people with sleep disorders."
+          "text": "It happens primarily in people with sleep disorders."
         },
         {
           "key": "D",
@@ -1579,15 +1562,15 @@
         },
         {
           "key": "B",
-          "text": "Maintain a regular sleep schedule Oo Avoid all caffeine consumption"
+          "text": "Maintain a regular sleep schedule"
         },
         {
           "key": "C",
-          "text": "Spend more time in bed Listen to a talk in a biology podcast. Listening | Question 12 0f15 00:00:20 $F What makes tardigrades unique among animals? { © The structure of their eyes"
+          "text": "Avoid all caffeine consumption"
         },
         {
           "key": "D",
-          "text": "The range of their sizes"
+          "text": "Spend more time in bed"
         }
       ],
       "answer": {
@@ -1657,7 +1640,7 @@
         },
         {
           "key": "B",
-          "text": "Itis dependent on the size of a particular tardigrade."
+          "text": "It is dependent on the size of a particular tardigrade."
         },
         {
           "key": "C",
@@ -1686,16 +1669,24 @@
       "number": "15",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "oO To identify a problem with earlier research on tardigrades",
+      "prompt": "done in 2007? &",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "To describe the process that tardigrades use to adapt to the vacuum of space"
+          "text": "To explain why astronomers are interested in tardigrades"
         },
         {
           "key": "B",
+          "text": "To identify a problem with earlier research on tardigrades"
+        },
+        {
+          "key": "C",
+          "text": "To describe the process that tardigrades use to adapt to the vacuum of space"
+        },
+        {
+          "key": "D",
           "text": "To suggest that tardigrades would have difficulty surviving on other planets"
         }
       ],

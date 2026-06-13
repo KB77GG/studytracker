@@ -37,21 +37,30 @@
       "options": [
         {
           "key": "A",
-          "text": "Five trees should be fine. 1% © Yes, the weekend flew by."
+          "text": "Five trees should be fine."
         },
         {
           "key": "B",
-          "text": "Last weekend | went home."
+          "text": "Yes, the weekend flew by."
         },
         {
           "key": "C",
+          "text": "Last weekend | went home."
+        },
+        {
+          "key": "D",
           "text": "Yes, with the college hiking group."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.8线下【后续继续补充】/3.8 -完整一套/3.8 听力.docx"
     },
     {
@@ -75,7 +84,7 @@
         },
         {
           "key": "C",
-          "text": "| don't check my email often."
+          "text": "don't check my email often."
         },
         {
           "key": "D",
@@ -106,7 +115,7 @@
       "options": [
         {
           "key": "A",
-          "text": "| slept well—thanks."
+          "text": "slept well—thanks."
         },
         {
           "key": "B",
@@ -145,7 +154,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Do you want to borrow my lawn mower?"
+          "text": "you want to borrow my lawn mower?"
         },
         {
           "key": "B",
@@ -153,11 +162,11 @@
         },
         {
           "key": "C",
-          "text": "English and history. ©, How did you find out?"
+          "text": "English and history."
         },
         {
           "key": "D",
-          "text": "That's good advice."
+          "text": "How did you find out?"
         }
       ],
       "answer": {
@@ -192,7 +201,11 @@
         },
         {
           "key": "C",
-          "text": "Well need a reservation. i, \\ ne O We should go one day."
+          "text": "Well need a reservation."
+        },
+        {
+          "key": "D",
+          "text": "We should go one day."
         }
       ],
       "answer": {
@@ -219,14 +232,18 @@
       "options": [
         {
           "key": "A",
-          "text": "Imstill waiting for feedback. 《人 © Sure, I'l go to the orientation."
+          "text": "Imstill waiting for feedback."
         },
         {
           "key": "B",
-          "text": "Did he like the present?"
+          "text": "Sure, I'l go to the orientation."
         },
         {
           "key": "C",
+          "text": "Did he like the present?"
+        },
+        {
+          "key": "D",
           "text": "Do they go every weekend?"
         }
       ],
@@ -301,7 +318,11 @@
         },
         {
           "key": "C",
-          "text": "The speaker was difficult to follow. ae © Alecture about climate change. 《"
+          "text": "The speaker was difficult to follow."
+        },
+        {
+          "key": "D",
+          "text": "Alecture about climate change."
         }
       ],
       "answer": {
@@ -367,21 +388,30 @@
       "options": [
         {
           "key": "A",
-          "text": "I like taking notes. 级 © Yes, in the park."
+          "text": "I like taking notes."
         },
         {
           "key": "B",
-          "text": "No, on the bottom."
+          "text": "Yes, in the park."
         },
         {
           "key": "C",
+          "text": "No, on the bottom."
+        },
+        {
+          "key": "D",
           "text": "It's quite expensive."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.8线下【后续继续补充】/3.8 -完整一套/3.8 听力.docx"
     },
     {
@@ -405,7 +435,7 @@
         },
         {
           "key": "C",
-          "text": "| don't have much free time this summer."
+          "text": "don't have much free time this summer."
         },
         {
           "key": "D",
@@ -436,20 +466,102 @@
       "options": [
         {
           "key": "A",
-          "text": "Sure, you can borrow one, 1a © Iwas ina class."
+          "text": "Sure, you can borrow one,"
         },
         {
           "key": "B",
-          "text": "No, please ask Molly."
+          "text": "Iwas ina class."
         },
         {
           "key": "C",
-          "text": "It's around the corner. A\\|"
+          "text": "No, please ask Molly."
+        },
+        {
+          "key": "D",
+          "text": "It's around the corner."
         }
       ],
       "answer": {
         "keys": [
           "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8线下【后续继续补充】/3.8 -完整一套/3.8 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-08_OFFLINE_m1_q13",
+      "task_type": "conversation",
+      "order": 13,
+      "number": "13",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "Why has the woman not bought tickets yet?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "She no longer wants to visit an attraction."
+        },
+        {
+          "key": "B",
+          "text": "She has been unable to connect to a website."
+        },
+        {
+          "key": "C",
+          "text": "She wanted more information about prices."
+        },
+        {
+          "key": "D",
+          "text": "She was waiting for further instructions from the man."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.8线下【后续继续补充】/3.8 -完整一套/3.8 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-08_OFFLINE_m1_q14",
+      "task_type": "conversation",
+      "order": 14,
+      "number": "14",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What will the woman most likely do next?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "Purchase tickets"
+        },
+        {
+          "key": "B",
+          "text": "Check her calendar"
+        },
+        {
+          "key": "C",
+          "text": "Contact her classmates"
+        },
+        {
+          "key": "D",
+          "text": "Call the sculpture garden"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
         ],
         "explanation": null
       },
@@ -465,23 +577,75 @@
       "number": "15",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": ". © Their favorite types of music",
+      "prompt": "What are the man and the woman talking about?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Their plans to attend an event"
+          "text": "The location of a new park"
         },
         {
           "key": "B",
-          "text": "The best places to listen to music %"
+          "text": "Their favorite types of music"
+        },
+        {
+          "key": "C",
+          "text": "Their plans to attend an event"
+        },
+        {
+          "key": "D",
+          "text": "The best places to listen to music"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
+      "source_ref": "3.8线下【后续继续补充】/3.8 -完整一套/3.8 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-08_OFFLINE_m1_q16",
+      "task_type": "conversation",
+      "order": 16,
+      "number": "16",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What does the man imply when he says, “I'll bring a blanket",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "Heis worried that he might get cold."
+        },
+        {
+          "key": "B",
+          "text": "He thinks the tickets are too expensive."
+        },
+        {
+          "key": "C",
+          "text": "He would like a seat close to the stage."
+        },
+        {
+          "key": "D",
+          "text": "He will sit in the grass with the woman's friends."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
       "source_ref": "3.8线下【后续继续补充】/3.8 -完整一套/3.8 听力.docx"
     },
     {
@@ -497,10 +661,18 @@
       "options": [
         {
           "key": "A",
-          "text": "To express concern | S O To correct an error yi ’ fs O To point out a change"
+          "text": "To express concern"
         },
         {
           "key": "B",
+          "text": "To correct an error"
+        },
+        {
+          "key": "C",
+          "text": "To point out a change"
+        },
+        {
+          "key": "D",
           "text": "To identify a benefit"
         }
       ],
@@ -528,11 +700,19 @@
       "options": [
         {
           "key": "A",
-          "text": "Changing his major . © Switching to another university f N © Finishing his degree early"
+          "text": "Changing his major"
         },
         {
           "key": "B",
-          "text": "Taking a class with a small number of students 外 Listen to a campus radio announcement."
+          "text": "Switching to another university"
+        },
+        {
+          "key": "C",
+          "text": "Finishing his degree early"
+        },
+        {
+          "key": "D",
+          "text": "Taking a class with a small number of students"
         }
       ],
       "answer": {
@@ -610,7 +790,7 @@
         },
         {
           "key": "D",
-          "text": "Ina campus building Listen to an announcement at a school event."
+          "text": "Ina campus building"
         }
       ],
       "answer": {
@@ -631,25 +811,25 @@
       "number": "21",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Why will students go to an auditorium?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "To interview some experts in the field"
+          "text": "to an auditorium?"
         },
         {
           "key": "B",
-          "text": "Tolearn about things they will see on some trails"
+          "text": "To interview some experts in the field"
         },
         {
           "key": "C",
-          "text": "To hear about the requirements for becoming a botanist"
+          "text": "Tolearn about things they will see on some trails"
         },
         {
           "key": "D",
-          "text": "To get information about trail routes and closures"
+          "text": "To hear about the requirements for becoming a botanist"
         }
       ],
       "answer": {
@@ -688,7 +868,7 @@
         },
         {
           "key": "D",
-          "text": "Both will involve high physical effort. Listen to an announcement in a university dormitory."
+          "text": "Both will involve high physical effort."
         }
       ],
       "answer": {
@@ -766,7 +946,7 @@
         },
         {
           "key": "D",
-          "text": "They will help residents sort their recycling. Listen toatalkin a music class. Listening | Question 25 of32 00:00:22 多 How does the speaker define “sampling”?"
+          "text": "They will help residents sort their recycling. Listen toatalkin a music class. How does the speaker define “sampling”?"
         }
       ],
       "answer": {
@@ -883,7 +1063,7 @@
         },
         {
           "key": "D",
-          "text": "Help students do their own sampling Listen to a talk on a history podcast."
+          "text": "Help students do their own sampling"
         }
       ],
       "answer": {
@@ -922,7 +1102,7 @@
         },
         {
           "key": "D",
-          "text": "That they created their inventions alone Listening | auestoao ang How did Lewis Latimer learn to be a drafter? 1 © By teaching himself"
+          "text": "That they created their inventions alone"
         }
       ],
       "answer": {
@@ -943,13 +1123,13 @@
       "number": "31",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "{ O To point out why Hiram Maxim was impressed by Latimer",
+      "prompt": "Why does the speaker mention that Latimer was a poet?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "at first"
+          "text": "To point out why Hiram Maxim was impressed by Latimer at first"
         },
         {
           "key": "B",
@@ -982,20 +1162,24 @@
       "number": "32",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "1 © Latimer helped make lightbulbs more available to the",
+      "prompt": "What did Latimer achieve in his work with Hiram Maxim?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Latimer invented a new way of producing electricity."
+          "text": "Latimer helped make lightbulbs more available to the public."
         },
         {
           "key": "B",
-          "text": "Latimer created a new drawing style that was useful for inventors."
+          "text": "Latimer invented a new way of producing electricity."
         },
         {
           "key": "C",
+          "text": "Latimer created a new drawing style that was useful for inventors."
+        },
+        {
+          "key": "D",
           "text": "Latimer made a drawing that helped convince the public of the usefulness of electric lighting."
         }
       ],
@@ -1069,7 +1253,7 @@
         },
         {
           "key": "D",
-          "text": "There was a tax hike last year, actually. GANT /"
+          "text": "There was a tax hike last year, actually. GANT"
         }
       ],
       "answer": null,
@@ -1103,7 +1287,7 @@
         },
         {
           "key": "D",
-          "text": "Ona different site. ANG y, 人"
+          "text": "Ona different site."
         }
       ],
       "answer": null,
@@ -1119,25 +1303,59 @@
       "number": "4",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What did the woman notice yesterday?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "What did the woman notice yesterday?"
-        },
-        {
-          "key": "B",
           "text": "Some content is outdated."
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "Some computers are getting old."
         },
         {
+          "key": "C",
+          "text": "Acomputer lab was closed."
+        },
+        {
           "key": "D",
-          "text": "Acomputer lab was closed. 、 é © Adocument did not print. \\ 一 一 -"
+          "text": "Adocument did not print."
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.8线下【后续继续补充】/3.8 -完整一套/3.8 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-08_OFFLINE_m2_q5",
+      "task_type": "conversation",
+      "order": 35,
+      "number": "5",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "Why does the woman mention three new staff members?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "To correct the man’s misunderstanding"
+        },
+        {
+          "key": "B",
+          "text": "To suggest revising a training schedule"
+        },
+        {
+          "key": "C",
+          "text": "To communicate a sense of urgency"
+        },
+        {
+          "key": "D",
+          "text": "To point out some errors that were made"
         }
       ],
       "answer": null,
@@ -1159,11 +1377,53 @@
       "options": [
         {
           "key": "A",
-          "text": "tis too crowded. \\ : © Itis too early in the morning."
+          "text": "tis too crowded."
         },
         {
           "key": "B",
-          "text": "The instructor is not experienced. : | © The location moves regularly. eee SEE"
+          "text": "It is too early in the morning."
+        },
+        {
+          "key": "C",
+          "text": "The instructor is not experienced."
+        },
+        {
+          "key": "D",
+          "text": "The location moves regularly. eee SEE"
+        }
+      ],
+      "answer": null,
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "review_only",
+      "source_ref": "3.8线下【后续继续补充】/3.8 -完整一套/3.8 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-08_OFFLINE_m2_q7",
+      "task_type": "conversation",
+      "order": 37,
+      "number": "7",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "Why does the man mention his biology seminar?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "To decline the woman's invitation"
+        },
+        {
+          "key": "B",
+          "text": "To point out where he learned about a yoga class"
+        },
+        {
+          "key": "C",
+          "text": "Tohighlight a health benefit of practicing yoga"
+        },
+        {
+          "key": "D",
+          "text": "To explain why he chose a specific yoga session"
         }
       ],
       "answer": null,
@@ -1179,17 +1439,17 @@
       "number": "8",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "How does the speaker organize the talk on solar power?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "How does the speaker organize the talk on solar power?"
+          "text": "She outlines solar power's history as an alternative energy resource,"
         },
         {
           "key": "B",
-          "text": "She outlines solar power's history as an alternative energy resource, 1 i) O She lists the technologies involved in generating solar j energy."
+          "text": "She lists the technologies involved in generating solar j energy."
         },
         {
           "key": "C",
@@ -1219,10 +1479,18 @@
       "options": [
         {
           "key": "A",
-          "text": "To describe how solar panels convert solar energy into electricity _ ) O To discuss innovations in the storage of solar energy ‘ O To explain the cost of installing solar electric systems"
+          "text": "To describe how solar panels convert solar energy into electricity"
         },
         {
           "key": "B",
+          "text": "To discuss innovations in the storage of solar energy"
+        },
+        {
+          "key": "C",
+          "text": "To explain the cost of installing solar electric systems"
+        },
+        {
+          "key": "D",
           "text": "To explain the difficulty and expense of recycling solar panels"
         }
       ],
@@ -1245,19 +1513,19 @@
       "options": [
         {
           "key": "A",
-          "text": "To provide context for a discussion of the solar industry's low carbon footprint / ah"
+          "text": "To provide context for a discussion of the solar industry's low carbon footprint"
         },
         {
           "key": "B",
-          "text": "To suggest that there are reasons for skepticism of the 5 ; solar industry"
+          "text": "To suggest that there are reasons for skepticism of the"
         },
         {
           "key": "C",
-          "text": "To introduce a discussion about the harmful pollutants given off by solar panels"
+          "text": "solar industry"
         },
         {
           "key": "D",
-          "text": "To support the claim that solar power provides energy to underserved areas"
+          "text": "To introduce a discussion about the harmful pollutants given off by solar panels"
         }
       ],
       "answer": null,
@@ -1273,25 +1541,25 @@
       "number": "11",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "According to the speaker, what is causing a rapid increase in",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "waste from used solar panels?"
+          "text": "the speaker, what is causing a rapid increase in waste from used solar panels?"
         },
         {
           "key": "B",
-          "text": "Solar panels produced in the last decade cannot be recycled. V4 { 1 ‘ O Solar panels in regions with heavy cloud cover are ; scrapped due to disuse."
+          "text": "Solar panels produced in the last decade cannot be recycled."
         },
         {
           "key": "C",
-          "text": "Improvements in panel efficiency are leading to frequent replacement."
+          "text": "Solar panels in regions with heavy cloud cover are"
         },
         {
           "key": "D",
-          "text": "Overuse of solar power is overwhelming panel-recycling systems. Listen to a talk in an environmental science class."
+          "text": "disuse."
         }
       ],
       "answer": null,
@@ -1313,7 +1581,7 @@
       "options": [
         {
           "key": "A",
-          "text": "1 © To contrast two methods of farming"
+          "text": "To contrast two methods of farming"
         },
         {
           "key": "B",
@@ -1347,7 +1615,7 @@
       "options": [
         {
           "key": "A",
-          "text": "} © They hold soil particles together."
+          "text": "They hold soil particles together."
         },
         {
           "key": "B",
@@ -1409,20 +1677,24 @@
       "number": "15",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "no © Its soil contained high numbers of bacteria.",
+      "prompt": "f before the intervention?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "Its vines were infected with harmful fungi."
+          "text": "Its soil contained high numbers of bacteria."
         },
         {
           "key": "B",
-          "text": "Itwas surrounded by forested land. 1"
+          "text": "Its vines were infected with harmful fungi."
         },
         {
           "key": "C",
+          "text": "It was surrounded by forested land."
+        },
+        {
+          "key": "D",
           "text": "Its soil was hard and dry."
         }
       ],

@@ -37,15 +37,19 @@
       "options": [
         {
           "key": "A",
-          "text": "No, | will go left toward the university library. ‘ a O They have the option of skipping it."
+          "text": "No, | will go left toward the university library."
         },
         {
           "key": "B",
-          "text": "That will depend on how my exam prep goes."
+          "text": "They have the option of skipping it."
         },
         {
           "key": "C",
-          "text": "Whenever | can get around to it. 8"
+          "text": "That will depend on how my exam prep goes."
+        },
+        {
+          "key": "D",
+          "text": "Whenever | can get around to it."
         }
       ],
       "answer": {
@@ -76,13 +80,26 @@
         },
         {
           "key": "B",
-          "text": "He should submit it to his professor. . © Sandra will be presenting. . | | a © It's approaching soon. \\ | a i S ="
+          "text": "He should submit it to his professor."
+        },
+        {
+          "key": "C",
+          "text": "Sandra will be presenting."
+        },
+        {
+          "key": "D",
+          "text": "It's approaching soon."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -110,7 +127,7 @@
         },
         {
           "key": "D",
-          "text": "Tomorrow sounds good. | Listening | Question 24 of 32 00:00:13 @ What does the speaker recommend doing? oy © Preparing a sample résumé"
+          "text": "Tomorrow sounds good. | What does the speaker recommend doing?"
         }
       ],
       "answer": {
@@ -180,13 +197,65 @@
         },
         {
           "key": "B",
-          "text": "Itgot canceled because of bad weather. ©) I'm already working on it. 了 1 2 © The filing cabinet is empty. j % ="
+          "text": "Itgot canceled because of bad weather."
+        },
+        {
+          "key": "C",
+          "text": "I'm already working on it."
+        },
+        {
+          "key": "D",
+          "text": "The filing cabinet is empty."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
+      "source_ref": "3.25/3.25 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-25_m1_q6",
+      "task_type": "listen_and_choose",
+      "order": 6,
+      "number": "6",
+      "number_end": null,
+      "directive": "Choose the best response",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "It wasn't as exciting as | hoped it would be."
+        },
+        {
+          "key": "B",
+          "text": "Do you want to go for a swim at the campus pool?"
+        },
+        {
+          "key": "C",
+          "text": "always enjoy a good meal at the dining hall."
+        },
+        {
+          "key": "D",
+          "text": "No, | haven't joined the student activities committee."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -206,17 +275,26 @@
         },
         {
           "key": "B",
-          "text": "Because students requested it. : © tts part of the lecture series."
+          "text": "Because students requested it."
         },
         {
           "key": "C",
+          "text": "tts part of the lecture series."
+        },
+        {
+          "key": "D",
           "text": "Avisiting researcher."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -232,7 +310,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Ineed help."
+          "text": "I need help."
         },
         {
           "key": "B",
@@ -271,7 +349,7 @@
       "options": [
         {
           "key": "A",
-          "text": "©) That is my favorite restaurant."
+          "text": "That is my favorite restaurant."
         },
         {
           "key": "B",
@@ -314,7 +392,7 @@
         },
         {
           "key": "B",
-          "text": "| prefer iced coffee without sugar."
+          "text": "prefer iced coffee without sugar."
         },
         {
           "key": "C",
@@ -328,6 +406,45 @@
       "answer": {
         "keys": [
           "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.25/3.25 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-25_m1_q11",
+      "task_type": "listen_and_choose",
+      "order": 11,
+      "number": "11",
+      "number_end": null,
+      "directive": "Choose the best response",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "She is entitled to an answer."
+        },
+        {
+          "key": "B",
+          "text": "That date was suggested by the teaching assistant."
+        },
+        {
+          "key": "C",
+          "text": "Libraries are quiet places."
+        },
+        {
+          "key": "D",
+          "text": "hope they got some of the books | need for class."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
         ],
         "explanation": null
       },
@@ -353,17 +470,26 @@
         },
         {
           "key": "B",
-          "text": "Office chairs are usually manufactured with 3 or 4 legs. : ©) The chain of command here seems to be broken."
+          "text": "Office chairs are usually manufactured with 3 or 4 legs."
         },
         {
           "key": "C",
+          "text": "The chain of command here seems to be broken."
+        },
+        {
+          "key": "D",
           "text": "My friend can repair it."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -373,25 +499,25 @@
       "number": "13",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "What does the woman imply when she mentions ordering",
+      "prompt": "books online?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "books online?"
-        },
-        {
-          "key": "B",
           "text": "She did it to avoid crowds at a bookstore."
         },
         {
+          "key": "B",
+          "text": "She was able to find cheaper books online."
+        },
+        {
           "key": "C",
-          "text": "She was able to find cheaper books online. ©) She could not find all the books she needed online."
+          "text": "She could not find all the books she needed online."
         },
         {
           "key": "D",
-          "text": "©) She waited for a week to receive her books."
+          "text": "She waited for a week to receive her books."
         }
       ],
       "answer": {
@@ -418,17 +544,69 @@
       "options": [
         {
           "key": "A",
-          "text": "He has been receiving biology tutoring. £ © He will graduate at the end of the semester."
+          "text": "He has been receiving biology tutoring."
         },
         {
           "key": "B",
-          "text": "Hewill receive a promotion at the bookstore. } O He might be changing jobs soon. % | |"
+          "text": "He will graduate at the end of the semester."
+        },
+        {
+          "key": "C",
+          "text": "Hewill receive a promotion at the bookstore."
+        },
+        {
+          "key": "D",
+          "text": "He might be changing jobs soon."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
+      "source_ref": "3.25/3.25 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-25_m1_q15",
+      "task_type": "conversation",
+      "order": 15,
+      "number": "15",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What had the woman previously told the man?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "That she had received a good deal on a purchase"
+        },
+        {
+          "key": "B",
+          "text": "That she was not happy with her new paint brushes"
+        },
+        {
+          "key": "C",
+          "text": "That a popular store was going out of business"
+        },
+        {
+          "key": "D",
+          "text": "That the art supply store was not open on Mondays"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -452,7 +630,11 @@
         },
         {
           "key": "C",
-          "text": "He visited the store after the sale ended. * ©) The items he wanted had already sold out. i a"
+          "text": "He visited the store after the sale ended."
+        },
+        {
+          "key": "D",
+          "text": "The items he wanted had already sold out."
         }
       ],
       "answer": {
@@ -491,7 +673,7 @@
         },
         {
           "key": "D",
-          "text": "They were sugar-free. ) 二"
+          "text": "They were sugar-free."
         }
       ],
       "answer": {
@@ -512,23 +694,36 @@
       "number": "18",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "What will the woman do next?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Read her recipe book"
+          "text": "next?"
         },
         {
           "key": "B",
-          "text": "Give the man some chocolate cake ， O Buy some ingredients , © Calla store = Listen to an announcement in a classroom."
+          "text": "Read her recipe book"
+        },
+        {
+          "key": "C",
+          "text": "Give the man some chocolate cake"
+        },
+        {
+          "key": "D",
+          "text": "Buy some ingredients"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -538,25 +733,25 @@
       "number": "19",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "According to the speaker, what can the listeners do next",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Submit an assignment"
+          "text": "the speaker, what can the listeners do next Friday?"
         },
         {
           "key": "B",
-          "text": "Goona field trip"
+          "text": "Submit an assignment"
         },
         {
           "key": "C",
-          "text": "Sign up for an opportunity"
+          "text": "Goona field trip"
         },
         {
           "key": "D",
-          "text": "Give a presentation"
+          "text": "Sign up for an opportunity"
         }
       ],
       "answer": {
@@ -583,7 +778,7 @@
       "options": [
         {
           "key": "A",
-          "text": "©) Late sign-ups can only be done in person."
+          "text": "Late sign-ups can only be done in person."
         },
         {
           "key": "B",
@@ -595,7 +790,7 @@
         },
         {
           "key": "D",
-          "text": "Space is limited. Listen to an announcement on the university radio station. SP) 9 i la \\ a"
+          "text": "Space is limited."
         }
       ],
       "answer": {
@@ -616,30 +811,69 @@
       "number": "21",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
+      "prompt": "What is the main purpose of the announcement?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "To introduce new courses"
+        },
+        {
+          "key": "B",
+          "text": "To provide instructions"
+        },
+        {
+          "key": "C",
+          "text": "To advertise a book"
+        },
+        {
+          "key": "D",
+          "text": "To notify about a problem WERE"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.25/3.25 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-25_m1_q22",
+      "task_type": "academic_talk",
+      "order": 22,
+      "number": "22",
+      "number_end": null,
+      "directive": "Listen to an announcement or academic talk.",
       "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What is the main purpose of the announcement?"
+          "text": "the speaker, what will some course instructors"
         },
         {
           "key": "B",
-          "text": "To introduce new courses"
+          "text": "Contact the campus bookstore"
         },
         {
           "key": "C",
-          "text": "To provide instructions aS © To advertise a book"
+          "text": "Explain some requirements"
         },
         {
           "key": "D",
-          "text": "To notify about a problem * q ’ WERE"
+          "text": "Send out a list of textbooks @) Provide reading materials by email"
         }
       ],
       "answer": {
         "keys": [
-          "D"
+          "C"
         ],
         "explanation": null
       },
@@ -655,25 +889,25 @@
       "number": "23",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What is the main purpose of the announcement?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What is the main purpose of the announcement?"
-        },
-        {
-          "key": "B",
           "text": "To explain how to prepare for a graduation ceremony"
         },
         {
+          "key": "B",
+          "text": "To provide information about a January job fair"
+        },
+        {
           "key": "C",
-          "text": "To provide information about a January job fair 4 O To explain a new graduation requirement"
+          "text": "To explain a new graduation requirement"
         },
         {
           "key": "D",
-          "text": "Toannounce a new writing center feature 《"
+          "text": "Toannounce a new writing center feature"
         }
       ],
       "answer": {
@@ -694,17 +928,25 @@
       "number": "25",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "same period",
+      "prompt": "e sculptures?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "To provide examples of collaborative art forms"
+          "text": "To contrast them with a less well-known art form from the same period"
         },
         {
           "key": "B",
-          "text": "To highlight the religious nature of Renaissance art 74 © Toassert their superiority over other forms of Renaissance ory art"
+          "text": "To provide examples of collaborative art forms"
+        },
+        {
+          "key": "C",
+          "text": "To highlight the religious nature of Renaissance art"
+        },
+        {
+          "key": "D",
+          "text": "Toassert their superiority over other forms of Renaissance ory art"
         }
       ],
       "answer": {
@@ -725,25 +967,25 @@
       "number": "26",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "According to the talk, what was a key advantage of tapestries",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "全 ] over frescoes?"
+          "text": "the talk, what was a key advantage of tapestries"
         },
         {
           "key": "B",
-          "text": "They were cheaper to produce."
+          "text": "over frescoes?"
         },
         {
           "key": "C",
-          "text": "They could be displayed in museums."
+          "text": "They were cheaper to produce."
         },
         {
           "key": "D",
-          "text": "They were easier to transport. , - @) They depicted more complex scenes. %, {"
+          "text": "They could be displayed in museums."
         }
       ],
       "answer": {
@@ -764,25 +1006,25 @@
       "number": "27",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "= tapestries while being transported from one location to",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "» another?"
+          "text": "the speaker, what sometimes happened to"
         },
         {
           "key": "B",
-          "text": "They were used as insulation."
+          "text": "tapestries while being transported from one location to"
         },
         {
           "key": "C",
-          "text": "They were stolen."
+          "text": "another?"
         },
         {
           "key": "D",
-          "text": "They became damaged. 地 ip O Their designs were copied by other artists."
+          "text": "They were used as insulation."
         }
       ],
       "answer": {
@@ -813,7 +1055,15 @@
         },
         {
           "key": "B",
-          "text": "Itinvolved a collaborative effort among several artisans. ©) twas mainly practiced in religious settings. ‘\\ hh © twas more popular than painting. Listen to a talk on a history podcast."
+          "text": "Itinvolved a collaborative effort among several artisans."
+        },
+        {
+          "key": "C",
+          "text": "twas mainly practiced in religious settings."
+        },
+        {
+          "key": "D",
+          "text": "twas more popular than painting."
         }
       ],
       "answer": {
@@ -840,7 +1090,7 @@
       "options": [
         {
           "key": "A",
-          "text": "= O A problem that was solved by a group of women inventors"
+          "text": "A problem that was solved by a group of women inventors"
         },
         {
           "key": "B",
@@ -922,17 +1172,26 @@
         },
         {
           "key": "B",
-          "text": "It took into account the origins of most fires. ©) Ithad all of the features required by law."
+          "text": "It took into account the origins of most fires."
         },
         {
           "key": "C",
+          "text": "It had all of the features required by law."
+        },
+        {
+          "key": "D",
           "text": "It allowed firefighters to reach higher floors."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -952,13 +1211,26 @@
         },
         {
           "key": "B",
-          "text": "They are constructed with iron supports. ©) They cannot be seen from the outside. 全 A O They do not work as well as Connelly’s inventions. ,"
+          "text": "They are constructed with iron supports."
+        },
+        {
+          "key": "C",
+          "text": "They cannot be seen from the outside."
+        },
+        {
+          "key": "D",
+          "text": "They do not work as well as Connelly’s inventions."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -1052,7 +1324,7 @@
       "options": [
         {
           "key": "A",
-          "text": "|go twice a month!"
+          "text": "go twice a month!"
         },
         {
           "key": "B",
@@ -1060,12 +1332,133 @@
         },
         {
           "key": "C",
-          "text": "Anew venue! ©) Whenever they want to."
+          "text": "Anew venue!"
+        },
+        {
+          "key": "D",
+          "text": "Whenever they want to."
         }
       ],
       "answer": {
         "keys": [
           "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.25/3.25 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-25_m2_q4",
+      "task_type": "conversation",
+      "order": 35,
+      "number": "4",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What is the woman's favorite feature of a mobile app?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "Monthly migration updates"
+        },
+        {
+          "key": "B",
+          "text": "A group discussion forum"
+        },
+        {
+          "key": "C",
+          "text": "Analert system"
+        },
+        {
+          "key": "D",
+          "text": "Abird encyclopedia"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.25/3.25 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-25_m2_q5",
+      "task_type": "conversation",
+      "order": 36,
+      "number": "5",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What will the woman most likely do next?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "Provide the man with a calendar"
+        },
+        {
+          "key": "B",
+          "text": "Send the man a link to an app"
+        },
+        {
+          "key": "C",
+          "text": "Join the man for a walk"
+        },
+        {
+          "key": "D",
+          "text": "Help the man repair a book"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.25/3.25 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-25_m2_q6",
+      "task_type": "conversation",
+      "order": 37,
+      "number": "6",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What does the man invite the woman to do?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "Meet his friends"
+        },
+        {
+          "key": "B",
+          "text": "Work with him"
+        },
+        {
+          "key": "C",
+          "text": "Visit a local neighborhood"
+        },
+        {
+          "key": "D",
+          "text": "Borrow a book"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
         ],
         "explanation": null
       },
@@ -1081,17 +1474,25 @@
       "number": "7",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "_ © To describe a new interest",
+      "prompt": "Why does the woman mention lawn mowers?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "To make a recommendation N |"
+          "text": "To identify a lack of skill"
         },
         {
           "key": "B",
-          "text": "To discuss a recent purchase Listen to a talk in an anthropology class."
+          "text": "To describe a new interest"
+        },
+        {
+          "key": "C",
+          "text": "To make a recommendation"
+        },
+        {
+          "key": "D",
+          "text": "To discuss a recent purchase"
         }
       ],
       "answer": {
@@ -1118,7 +1519,7 @@
       "options": [
         {
           "key": "A",
-          "text": "= O The impact of modern society on kinship roles"
+          "text": "The impact of modern society on kinship roles"
         },
         {
           "key": "B",
@@ -1130,7 +1531,7 @@
         },
         {
           "key": "D",
-          "text": "Differences between kinship systems and social structures ZA IS ~~"
+          "text": "Differences between kinship systems and social structures ZA IS"
         }
       ],
       "answer": {
@@ -1161,7 +1562,15 @@
         },
         {
           "key": "B",
-          "text": "They are based on “blood ties. ©) They are a special feature of patrilineal societies. 人 难 个 They are less significant than affinal relationships. Mf |"
+          "text": "They are based on “blood ties."
+        },
+        {
+          "key": "C",
+          "text": "They are a special feature of patrilineal societies."
+        },
+        {
+          "key": "D",
+          "text": "They are less significant than affinal relationships."
         }
       ],
       "answer": {
@@ -1182,25 +1591,25 @@
       "number": "10",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Why does the speaker mention maternal uncles in a",
+      "prompt": "e matrilineal society?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "e matrilineal society?"
-        },
-        {
-          "key": "B",
           "text": "To illustrate how anthropologists might study kinship systems"
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "Toillustrate modern family structures"
         },
         {
+          "key": "C",
+          "text": "To highlight challenges in kinship roles"
+        },
+        {
           "key": "D",
-          "text": "To highlight challenges in kinship roles 74 6) To discuss the importance of extended family 一"
+          "text": "discuss the importance of extended family"
         }
       ],
       "answer": {
@@ -1221,23 +1630,36 @@
       "number": "11",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "ancestry.",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "Kinship charts contain less detail than family trees."
+          "text": "the speaker, how do kinship charts differ from"
         },
         {
           "key": "B",
-          "text": "Kinship charts account for cultural relationships in addition 人 | to biological ones. ty © Kinship charts do not include marriage ties. { Listen to a talk in a psychology class."
+          "text": "J family trees?"
+        },
+        {
+          "key": "C",
+          "text": "Kinship charts are generally used to trace biological ancestry."
+        },
+        {
+          "key": "D",
+          "text": "Kinship charts contain less detail than family trees."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -1257,13 +1679,26 @@
         },
         {
           "key": "B",
-          "text": "The role of feedback in flow WW /) © The challenges of finding flow-inducing activities Alms © The concept and characteristics of flow"
+          "text": "The role of feedback in flow"
+        },
+        {
+          "key": "C",
+          "text": "The challenges of finding flow-inducing activities"
+        },
+        {
+          "key": "D",
+          "text": "The concept and characteristics of flow"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -1283,13 +1718,26 @@
         },
         {
           "key": "B",
-          "text": "To suggest that not everyone can achieve flow ff © Tohighlight the connection of flow to success 2 (2) To provide examples of individuals who often experience flow"
+          "text": "To suggest that not everyone can achieve flow"
+        },
+        {
+          "key": "C",
+          "text": "Tohighlight the connection of flow to success"
+        },
+        {
+          "key": "D",
+          "text": "provide examples of individuals who often experience flow"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -1309,13 +1757,26 @@
         },
         {
           "key": "B",
-          "text": "They enjoy a variety of activities. i, ©) They are often happier and more fulfilled. on O They earn more money than people who do not experience flow."
+          "text": "They enjoy a variety of activities."
+        },
+        {
+          "key": "C",
+          "text": "They are often happier and more fulfilled."
+        },
+        {
+          "key": "D",
+          "text": "They earn more money than people who do not experience flow."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.25/3.25 听力.docx"
     },
     {
@@ -1335,7 +1796,15 @@
         },
         {
           "key": "B",
-          "text": "Identifying activities that are a proper match with skill level /} O Avoiding boredom when a task becomes too easy - 的 Working on multiple things at the same time"
+          "text": "Identifying activities that are a proper match with skill level"
+        },
+        {
+          "key": "C",
+          "text": "Avoiding boredom when a task becomes too easy"
+        },
+        {
+          "key": "D",
+          "text": "Working on multiple things at the same time"
         }
       ],
       "answer": {

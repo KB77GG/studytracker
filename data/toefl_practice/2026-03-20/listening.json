@@ -49,7 +49,7 @@
         },
         {
           "key": "D",
-          "text": "| visit the campus gym a couple times each week. Listening | Question 2 0f32 00:00:18 @"
+          "text": "visit the campus gym a couple times each week."
         }
       ],
       "answer": {
@@ -84,7 +84,7 @@
         },
         {
           "key": "C",
-          "text": "| don't check my email often."
+          "text": "don't check my email often."
         },
         {
           "key": "D",
@@ -123,7 +123,7 @@
         },
         {
           "key": "C",
-          "text": "Itwas recommended to me."
+          "text": "It was recommended to me."
         },
         {
           "key": "D",
@@ -259,41 +259,6 @@
       "source_ref": "3.20新托福真题/3.20听力.pdf"
     },
     {
-      "id": "listening_2026-03-20_m1_q8",
-      "task_type": "listen_and_choose",
-      "order": 7,
-      "number": "8",
-      "number_end": null,
-      "directive": "Choose the best response",
-      "prompt": "",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "| didn't save enough money."
-        },
-        {
-          "key": "B",
-          "text": "Yes, | studied biology in college."
-        },
-        {
-          "key": "C",
-          "text": "Myfinal class ran late. C Fitness classes are beneficial."
-        }
-      ],
-      "answer": {
-        "keys": [
-          "C"
-        ],
-        "explanation": null
-      },
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "auto",
-      "source_ref": "3.20新托福真题/3.20听力.pdf"
-    },
-    {
       "id": "listening_2026-03-20_m1_q9",
       "task_type": "listen_and_choose",
       "order": 8,
@@ -310,10 +275,14 @@
         },
         {
           "key": "B",
-          "text": "Sure, Ill go to the orientation. ©) Did he like the present?"
+          "text": "Sure, Ill go to the orientation."
         },
         {
           "key": "C",
+          "text": "Did he like the present?"
+        },
+        {
+          "key": "D",
           "text": "Do they go every weekend?"
         }
       ],
@@ -388,7 +357,11 @@
         },
         {
           "key": "C",
-          "text": "Another research scientist has just been hired, OO Did you enjoy all the celebrations?"
+          "text": "Another research scientist has just been hired,"
+        },
+        {
+          "key": "D",
+          "text": "Did you enjoy all the celebrations?"
         }
       ],
       "answer": {
@@ -427,7 +400,7 @@
         },
         {
           "key": "D",
-          "text": "| agree, the coffee is strong,"
+          "text": "agree, the coffee is strong,"
         }
       ],
       "answer": {
@@ -526,25 +499,25 @@
       "number": "15",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "trip to Europe?",
+      "prompt": "How does the man respond when the woman mentions her",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "By sharing his own experience"
+          "text": "Europe?"
         },
         {
           "key": "B",
-          "text": "By expressing surprise"
+          "text": "By sharing his own experience"
         },
         {
           "key": "C",
-          "text": "By requesting some information"
+          "text": "By expressing surprise"
         },
         {
           "key": "D",
-          "text": "Bygiving her some advice"
+          "text": "By requesting some information"
         }
       ],
       "answer": {
@@ -643,25 +616,25 @@
       "number": "18",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What will the woman most likely do next?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What will the woman most likely do next?"
-        },
-        {
-          "key": "B",
           "text": "Askthe man for money"
         },
         {
+          "key": "B",
+          "text": "Show the man an apartment"
+        },
+        {
           "key": "C",
-          "text": "Show the man an apartment fi N O Take the man on a tour of the lake"
+          "text": "Take the man on a tour of the lake"
         },
         {
           "key": "D",
-          "text": "Unlock a drawer Listen to an announcement in a classroom."
+          "text": "Unlock a drawer"
         }
       ],
       "answer": {
@@ -721,25 +694,25 @@
       "number": "20",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What will take place next Friday?",
+      "prompt": "C Some projects will be evaluated.",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "C Some projects will be evaluated."
-        },
-        {
-          "key": "B",
           "text": "Some materials will be purchased."
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "An assignment will be explained."
         },
         {
+          "key": "C",
+          "text": "Aguest speaker will be in class."
+        },
+        {
           "key": "D",
-          "text": "Aguest speaker will be in class. Listen to an announcement in a classroom."
+          "text": "an announcement in a classroom."
         }
       ],
       "answer": {
@@ -760,25 +733,25 @@
       "number": "21",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "According to the speaker, what can the listeners do next",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Submit an assignment"
+          "text": "the speaker, what can the listeners do next Friday?"
         },
         {
           "key": "B",
-          "text": "Goona field trip"
+          "text": "Submit an assignment"
         },
         {
           "key": "C",
-          "text": "Sign up for an opportunity"
+          "text": "Goona field trip"
         },
         {
           "key": "D",
-          "text": "Give a presentation"
+          "text": "Sign up for an opportunity"
         }
       ],
       "answer": {
@@ -817,7 +790,7 @@
         },
         {
           "key": "D",
-          "text": "Space is limited. Listen to a campus radio announcement."
+          "text": "Space is limited."
         }
       ],
       "answer": {
@@ -895,7 +868,7 @@
         },
         {
           "key": "D",
-          "text": "macampus building Listen to a talk in a marine biology class."
+          "text": "macampus building"
         }
       ],
       "answer": {
@@ -994,25 +967,25 @@
       "number": "27",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "ecosystem?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "They keep kelp forests healthy by preying on sea urchins."
+          "text": "sea otters perform in their marine ecosystem?"
         },
         {
           "key": "B",
-          "text": "They remove clams and other invasive shellfish from shorelines."
+          "text": "They keep kelp forests healthy by preying on sea urchins."
         },
         {
           "key": "C",
-          "text": "They are food for predators such as whales and seals."
+          "text": "They remove clams and other invasive shellfish from shorelines."
         },
         {
           "key": "D",
-          "text": "They build shelters that act as a buffer against storm damage."
+          "text": "They are food for predators such as whales and seals."
         }
       ],
       "answer": {
@@ -1033,13 +1006,13 @@
       "number": "28",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "According to the speaker, what is one benefit that kelp",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "forests provide?"
+          "text": "the speaker, what is one benefit that kelp forests provide?"
         },
         {
           "key": "B",
@@ -1047,11 +1020,11 @@
         },
         {
           "key": "C",
-          "text": "They provide habitat for a great diversity of marine life. ©) They clean seawater to make it drinkable or suitable for agriculture."
+          "text": "They provide habitat for a great diversity of marine life."
         },
         {
           "key": "D",
-          "text": "They help control the population of sea urchins and other pests. Listen toatalkin a music class."
+          "text": "They clean seawater to make it drinkable or suitable for agriculture."
         }
       ],
       "answer": {
@@ -1150,17 +1123,17 @@
       "number": "31",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What is the speaker's attitude toward sampling?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What is the speaker's attitude toward sampling?"
+          "text": "She disagrees with the criticism that it lacks creativity."
         },
         {
           "key": "B",
-          "text": "She disagrees with the criticism that it lacks creativity. OO She likes that it is a unique practice in the history of music."
+          "text": "She likes that it is a unique practice in the history of music."
         },
         {
           "key": "C",
@@ -1234,11 +1207,11 @@
       "options": [
         {
           "key": "A",
-          "text": "| enjoyed our conversation."
+          "text": "enjoyed our conversation."
         },
         {
           "key": "B",
-          "text": "Ihad a meeting yesterday."
+          "text": "I had a meeting yesterday."
         },
         {
           "key": "C",
@@ -1316,7 +1289,7 @@
         },
         {
           "key": "B",
-          "text": "Iwill see my friends there."
+          "text": "I will see my friends there."
         },
         {
           "key": "C",
@@ -1345,21 +1318,21 @@
       "number": "4",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What is the man’s problem?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "What is the man’s problem?"
-        },
-        {
-          "key": "B",
           "text": "He lacks the incentive to exercise regularly,"
         },
         {
+          "key": "B",
+          "text": "He cannot find a gym he likes,"
+        },
+        {
           "key": "C",
-          "text": "He cannot find a gym he likes, 人 Adasshe wanted to join has been canceled,"
+          "text": "join has been canceled,"
         },
         {
           "key": "D",
@@ -1441,7 +1414,7 @@
         },
         {
           "key": "D",
-          "text": "Ithas very few members. ="
+          "text": "Ithas very few members."
         }
       ],
       "answer": {
@@ -1462,17 +1435,25 @@
       "number": "7",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "7 © Change her schedule",
+      "prompt": "Based on the conversation, what will the woman most likely",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "Volunteer with the man"
+          "text": "Change her schedule"
         },
         {
           "key": "B",
-          "text": "Help the man get a job at the library ‘ © Return a library book = Listen to a talk on an archaeology podcast."
+          "text": "Volunteer with the man"
+        },
+        {
+          "key": "C",
+          "text": "Help the man get a job at the library"
+        },
+        {
+          "key": "D",
+          "text": "Return a library book"
         }
       ],
       "answer": {
@@ -1538,7 +1519,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Itwas most likely religious,"
+          "text": "It was most likely religious,"
         },
         {
           "key": "B",
@@ -1546,11 +1527,11 @@
         },
         {
           "key": "C",
-          "text": "Itwas not discovered until recently."
+          "text": "It was not discovered until recently."
         },
         {
           "key": "D",
-          "text": "Itwas determined by a team of archaeologists."
+          "text": "It was determined by a team of archaeologists."
         }
       ],
       "answer": {
@@ -1577,7 +1558,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Itwas different from any other early printing method."
+          "text": "It was different from any other early printing method."
         },
         {
           "key": "B",
@@ -1610,17 +1591,17 @@
       "number": "11",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What possibility about the Phaistos Disc does the speaker",
+      "prompt": "mention at the end of the talk?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "mention at the end of the talk?"
+          "text": "That it was used as a form of money"
         },
         {
           "key": "B",
-          "text": "That it was used as a form of money 加 That it was a typical artifact among ancient ruins"
+          "text": "That it was a typical artifact among ancient ruins"
         },
         {
           "key": "C",
@@ -1628,7 +1609,7 @@
         },
         {
           "key": "D",
-          "text": "That it was created by an earlier civilization than the Minoans Listen to a talk in an anthropology class."
+          "text": "That it was created by an earlier civilization than the Minoans"
         }
       ],
       "answer": {
@@ -1688,21 +1669,21 @@
       "number": "13",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "Why does the speaker mention Egypt?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "Why does the speaker mention Egypt?"
-        },
-        {
-          "key": "B",
           "text": "To indicate where Ruth Benedict began comparing cultures"
         },
         {
+          "key": "B",
+          "text": "To introduce a theory by an Egyptian anthropologist"
+        },
+        {
           "key": "C",
-          "text": "To introduce a theory by an Egyptian anthropologist /} © Toillustrate an idea that guided Ruth Benedict's work"
+          "text": "Toillustrate an idea that guided Ruth Benedict's work"
         },
         {
           "key": "D",

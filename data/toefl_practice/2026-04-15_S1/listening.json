@@ -37,17 +37,30 @@
       "options": [
         {
           "key": "A",
-          "text": "My door is always open. = 6 oO There should be enough storage space. . > ©) Ineed to look up the hours online."
+          "text": "My door is always open."
         },
         {
           "key": "B",
-          "text": "The campus bookstore has great reviews. 1"
+          "text": "There should be enough storage space."
+        },
+        {
+          "key": "C",
+          "text": "I need to look up the hours online."
+        },
+        {
+          "key": "D",
+          "text": "The campus bookstore has great reviews."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.15/4.15 套一 听力.docx"
     },
     {
@@ -63,11 +76,58 @@
       "options": [
         {
           "key": "A",
-          "text": "Back at the station. 也 oO In an hour. ©) It’s an express train."
+          "text": "Back at the station."
         },
         {
           "key": "B",
+          "text": "In an hour."
+        },
+        {
+          "key": "C",
+          "text": "It’s an express train."
+        },
+        {
+          "key": "D",
           "text": "New York or Boston?"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m1_q3",
+      "task_type": "listen_and_choose",
+      "order": 3,
+      "number": "3",
+      "number_end": null,
+      "directive": "Choose the best response",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "It was a very informative session."
+        },
+        {
+          "key": "B",
+          "text": "It'll start promptly at noon."
+        },
+        {
+          "key": "C",
+          "text": "She was late for class."
+        },
+        {
+          "key": "D",
+          "text": "Yes, I'm on the student business council."
         }
       ],
       "answer": {
@@ -94,20 +154,63 @@
       "options": [
         {
           "key": "A",
-          "text": "Yes, they're about to graduate. 使: No, it's not required."
+          "text": "Yes, they're about to graduate."
         },
         {
           "key": "B",
-          "text": "It’s happening soon."
+          "text": "No, it's not required."
         },
         {
           "key": "C",
+          "text": "It’s happening soon."
+        },
+        {
+          "key": "D",
           "text": "Annie is in her dorm room."
         }
       ],
       "answer": {
         "keys": [
           "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m1_q5",
+      "task_type": "listen_and_choose",
+      "order": 5,
+      "number": "5",
+      "number_end": null,
+      "directive": "Choose the best response",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "visited my family last week."
+        },
+        {
+          "key": "B",
+          "text": "I'm interested in the new museum exhibit."
+        },
+        {
+          "key": "C",
+          "text": "had to park up the street."
+        },
+        {
+          "key": "D",
+          "text": "Isn't this a great picture of the museum? __Historiting || isssstow 7095 Ee What will the woman most likely do?"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
         ],
         "explanation": null
       },
@@ -129,42 +232,24 @@
       "options": [
         {
           "key": "A",
-          "text": "spent four hours writing this assignment. S Yes, please turn the light off. ©) like to go strolling outside campus. »"
+          "text": "spent four hours writing this assignment. S Yes, please turn the light off."
         },
         {
           "key": "B",
-          "text": "Try not to spend too much. ) ) 9 le af"
-        }
-      ],
-      "answer": null,
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "review_only",
-      "source_ref": "4.15/4.15 套一 听力.docx"
-    },
-    {
-      "id": "listening_2026-04-15_S1_m1_q8",
-      "task_type": "listen_and_choose",
-      "order": 8,
-      "number": "8",
-      "number_end": null,
-      "directive": "Choose the best response",
-      "prompt": "",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "usually keep them ina cabinet. 使 Unfortunately, I'm not from around here. ©) The instructions are on the back of the box. | »"
+          "text": "like to go strolling outside campus."
         },
         {
-          "key": "B",
-          "text": "As long as you give it right back. ) 4 9 | Le a 有 \\ @"
+          "key": "C",
+          "text": "Try not to spend too much."
+        },
+        {
+          "key": "D",
+          "text": "le af"
         }
       ],
       "answer": {
         "keys": [
-          "B"
+          "C"
         ],
         "explanation": null
       },
@@ -194,7 +279,11 @@
         },
         {
           "key": "C",
-          "text": "My sister took ballet there. ©) Do they offer private lessons?"
+          "text": "My sister took ballet there."
+        },
+        {
+          "key": "D",
+          "text": "Do they offer private lessons?"
         }
       ],
       "answer": {
@@ -221,11 +310,97 @@
       "options": [
         {
           "key": "A",
-          "text": "Yes, she writes historical fiction. oO We're reading a great novel in my literature class. ) . ©) At the bookshop on Main Street?"
+          "text": "Yes, she writes historical fiction."
         },
         {
           "key": "B",
-          "text": "| love that author."
+          "text": "We're reading a great novel in my literature class."
+        },
+        {
+          "key": "C",
+          "text": "At the bookshop on Main Street?"
+        },
+        {
+          "key": "D",
+          "text": "love that author."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m1_q11",
+      "task_type": "listen_and_choose",
+      "order": 11,
+      "number": "11",
+      "number_end": null,
+      "directive": "Choose the best response",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "That's great for studying."
+        },
+        {
+          "key": "B",
+          "text": "No, I've not read that one."
+        },
+        {
+          "key": "C",
+          "text": "I had to change my school password yesterday."
+        },
+        {
+          "key": "D",
+          "text": "Do you have overdue books too?"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m1_q12",
+      "task_type": "listen_and_choose",
+      "order": 12,
+      "number": "12",
+      "number_end": null,
+      "directive": "Choose the best response",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "They have such great chemistry."
+        },
+        {
+          "key": "B",
+          "text": "It's in the morning."
+        },
+        {
+          "key": "C",
+          "text": "Yes, next time will be good."
+        },
+        {
+          "key": "D",
+          "text": "It's likely on the fourth floor."
         }
       ],
       "answer": {
@@ -252,11 +427,19 @@
       "options": [
         {
           "key": "A",
-          "text": "She did it to avoid crowds at a bookstore. = ©) She was able to find cheaper books online."
+          "text": "She did it to avoid crowds at a bookstore."
         },
         {
           "key": "B",
-          "text": "She could not find all the books she needed online. “|. © She waited for a week to receive her books."
+          "text": "She was able to find cheaper books online."
+        },
+        {
+          "key": "C",
+          "text": "She could not find all the books she needed online."
+        },
+        {
+          "key": "D",
+          "text": "She waited for a week to receive her books."
         }
       ],
       "answer": {
@@ -277,17 +460,17 @@
       "number": "14",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What can be inferred about the man?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What can be inferred about the man?"
+          "text": "He has been receiving biology tutoring."
         },
         {
           "key": "B",
-          "text": "He has been receiving biology tutoring. £ © He will graduate at the end of the semester."
+          "text": "He will graduate at the end of the semester."
         },
         {
           "key": "C",
@@ -295,7 +478,7 @@
         },
         {
           "key": "D",
-          "text": "He might be changing jobs soon. NAN >"
+          "text": "He might be changing jobs soon."
         }
       ],
       "answer": {
@@ -322,11 +505,19 @@
       "options": [
         {
           "key": "A",
-          "text": "Itis damaged."
+          "text": "It is damaged."
         },
         {
           "key": "B",
-          "text": "It does not fit him. { © He does not like the color. R © He found it cheaper elsewhere. 4"
+          "text": "It does not fit him."
+        },
+        {
+          "key": "C",
+          "text": "He does not like the color."
+        },
+        {
+          "key": "D",
+          "text": "He found it cheaper elsewhere."
         }
       ],
       "answer": {
@@ -347,25 +538,64 @@
       "number": "16",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": ": What will the woman most likely do next?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": ": What will the woman most likely do next?"
-        },
-        {
-          "key": "B",
           "text": "Speak with the store manager."
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "Offer the man a store credit."
         },
         {
+          "key": "C",
+          "text": "Check the stock for a larger size."
+        },
+        {
           "key": "D",
-          "text": "Check the stock for a larger size. < © Print a copy of the man’s receipt."
+          "text": "Print a copy of the man’s receipt."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m1_q17",
+      "task_type": "conversation",
+      "order": 17,
+      "number": "17",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What has the man been doing?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "Tending to the student garden"
+        },
+        {
+          "key": "B",
+          "text": "Putting up posters in the student center"
+        },
+        {
+          "key": "C",
+          "text": "Preparing for a club meeting"
+        },
+        {
+          "key": "D",
+          "text": "Putting groceries away"
         }
       ],
       "answer": {
@@ -392,17 +622,30 @@
       "options": [
         {
           "key": "A",
-          "text": "Help the woman prepare some snacks £ © Call the student center"
+          "text": "Help the woman prepare some snacks"
         },
         {
           "key": "B",
-          "text": "Contact some club members 7 © Go shopping for food Listen to an announcement at a university club meeting."
+          "text": "Call the student center"
+        },
+        {
+          "key": "C",
+          "text": "Contact some club members"
+        },
+        {
+          "key": "D",
+          "text": "Go shopping for food"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.15/4.15 套一 听力.docx"
     },
     {
@@ -412,21 +655,21 @@
       "number": "19",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What does the speaker say about a cleanup activity?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What does the speaker say about a cleanup activity?"
-        },
-        {
-          "key": "B",
           "text": "It has been postponed."
         },
         {
+          "key": "B",
+          "text": "It was held last Saturday."
+        },
+        {
           "key": "C",
-          "text": "Itwas held last Saturday. @ Participants must wear a specific T-shirt."
+          "text": "Participants must wear a specific T-shirt."
         },
         {
           "key": "D",
@@ -451,17 +694,25 @@
       "number": "20",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "©) Designing club T-shirts",
+      "prompt": "What topic will most likely be discussed at a symposium?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Installing additional recycling bins 后 Creating a club webpage"
+          "text": "Designing club T-shirts"
         },
         {
           "key": "B",
-          "text": "What refreshments to offer Listen to an announcement in a university dormitory."
+          "text": "Installing additional recycling bins"
+        },
+        {
+          "key": "C",
+          "text": "Creating a club webpage"
+        },
+        {
+          "key": "D",
+          "text": "What refreshments to offer"
         }
       ],
       "answer": {
@@ -482,25 +733,25 @@
       "number": "22",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What does the speaker suggest about unlabeled items in the",
+      "prompt": "kitchen?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "kitchen?"
-        },
-        {
-          "key": "B",
           "text": "They are considered the speaker’s property."
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "Shey are replenished on a daily basis."
         },
         {
+          "key": "C",
+          "text": "Everyone shares responsibility for them."
+        },
+        {
           "key": "D",
-          "text": "Everyone shares responsibility for them. ; \\ © Everyone is welcome to use them. >! Listen to an announcement in a classroom."
+          "text": "Everyone is welcome to use them."
         }
       ],
       "answer": {
@@ -521,16 +772,24 @@
       "number": "23",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "z= © They are later than the syllabus indicates.",
+      "prompt": "What can be inferred about the assignment deadlines?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "They have not yet been determined. oO They are likely to change in the future."
+          "text": "They are later than the syllabus indicates."
         },
         {
           "key": "B",
+          "text": "They have not yet been determined."
+        },
+        {
+          "key": "C",
+          "text": "They are likely to change in the future."
+        },
+        {
+          "key": "D",
           "text": "They were not included in the syllabus."
         }
       ],
@@ -552,17 +811,25 @@
       "number": "24",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "©) Apologetic",
+      "prompt": "describes?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Annoyed"
+          "text": "Indifferent"
         },
         {
           "key": "B",
-          "text": "Amused Listen to a talk in a creative writing class. -"
+          "text": "Apologetic"
+        },
+        {
+          "key": "C",
+          "text": "Annoyed"
+        },
+        {
+          "key": "D",
+          "text": "Amused"
         }
       ],
       "answer": {
@@ -577,54 +844,153 @@
       "source_ref": "4.15/4.15 套一 听力.docx"
     },
     {
-      "id": "listening_2026-04-15_S1_m1_q28",
+      "id": "listening_2026-04-15_S1_m1_q25",
       "task_type": "academic_talk",
-      "order": 28,
-      "number": "28",
+      "order": 25,
+      "number": "25",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What will the class discuss next?",
+      "prompt": "What does the speaker mainly discuss?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Anassignment for the end of the semester @ y, © Asocial gathering that the students will attend y 4 外 的 Afamous author of short stories"
+          "text": "A textbook with many pictures"
         },
         {
           "key": "B",
-          "text": "Astory that a student wrote Listen to a talk on an art podcast."
-        }
-      ],
-      "answer": null,
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "review_only",
-      "source_ref": "4.15/4.15 套一 听力.docx"
-    },
-    {
-      "id": "listening_2026-04-15_S1_m1_q29",
-      "task_type": "academic_talk",
-      "order": 29,
-      "number": "29",
-      "number_end": null,
-      "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What is the main focus of the talk?",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "Aunique artform that began relatively recently"
+          "text": "A guide to understanding common symbols"
         },
         {
-          "key": "B",
-          "text": "The life and career of an important artist V4 \\ 全 Features of different painting surfaces - © The development of figurative art"
+          "key": "C",
+          "text": "Atoolfor generating ideas"
+        },
+        {
+          "key": "D",
+          "text": "A collection of mystery stories"
         }
       ],
       "answer": {
         "keys": [
-          "A"
+          "C"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m1_q26",
+      "task_type": "academic_talk",
+      "order": 26,
+      "number": "26",
+      "number_end": null,
+      "directive": "Listen to an announcement or academic talk.",
+      "prompt": "What is different about the dice that the speaker discusses",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "traditional dice?"
+        },
+        {
+          "key": "B",
+          "text": "They have more sides than traditional dice."
+        },
+        {
+          "key": "C",
+          "text": "They have pictures instead of numbers."
+        },
+        {
+          "key": "D",
+          "text": "They are made of glass instead of plastic."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m1_q27",
+      "task_type": "academic_talk",
+      "order": 27,
+      "number": "27",
+      "number_end": null,
+      "directive": "Listen to an announcement or academic talk.",
+      "prompt": "imagined social gathering to be",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "sad"
+        },
+        {
+          "key": "B",
+          "text": "traditional"
+        },
+        {
+          "key": "C",
+          "text": "scary"
+        },
+        {
+          "key": "D",
+          "text": "funny"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m1_q30",
+      "task_type": "academic_talk",
+      "order": 30,
+      "number": "30",
+      "number_end": null,
+      "directive": "Listen to an announcement or academic talk.",
+      "prompt": "Why does the speaker mention Indonesia?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "To express his admiration for ancient pottery"
+        },
+        {
+          "key": "B",
+          "text": "point out where a technique was invented"
+        },
+        {
+          "key": "C",
+          "text": "To identify an inspiration for Max Ernst’s artwork"
+        },
+        {
+          "key": "D",
+          "text": "To provide an example of a place with ancient artwork"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
         ],
         "explanation": null
       },
@@ -646,17 +1012,69 @@
       "options": [
         {
           "key": "A",
-          "text": "Creating an image and then applying it onto multiple , surfaces Nj © Creating a drawing on paper and then copying it onto canvas 4 ©) Pressing two surfaces together and then pulling them apart"
+          "text": "Creating an image and then applying it onto multiple"
         },
         {
           "key": "B",
-          "text": "Letting paint dry on a paper surface and then drawing on top of it"
+          "text": "surfaces"
+        },
+        {
+          "key": "C",
+          "text": "Creating a drawing on paper and then copying it onto canvas"
+        },
+        {
+          "key": "D",
+          "text": "Pressing two surfaces together and then pulling them apart"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m1_q32",
+      "task_type": "academic_talk",
+      "order": 32,
+      "number": "32",
+      "number_end": null,
+      "directive": "Listen to an announcement or academic talk.",
+      "prompt": "decalcomania?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "Itused a variety of colors and materials."
+        },
+        {
+          "key": "B",
+          "text": "Itinvolved a lack of control on the artist's part."
+        },
+        {
+          "key": "C",
+          "text": "It was made popular by the Surrealist Movement."
+        },
+        {
+          "key": "D",
+          "text": "It had the ability to create similar patterns across various artworks."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
       "source_ref": "4.15/4.15 套一 听力.docx"
     },
     {
@@ -672,16 +1090,63 @@
       "options": [
         {
           "key": "A",
-          "text": "It would be wise to check the school website for details. = CD) Be sure to renew your vehicle registration by tomorrow. . ©) received a link to the new gaming website in my email."
+          "text": "It would be wise to check the school website for details."
         },
         {
           "key": "B",
-          "text": "All of the cash in the register has been moved to the safe. 1"
+          "text": "Be sure to renew your vehicle registration by tomorrow."
+        },
+        {
+          "key": "C",
+          "text": "received a link to the new gaming website in my email."
+        },
+        {
+          "key": "D",
+          "text": "All of the cash in the register has been moved to the safe."
         }
       ],
       "answer": {
         "keys": [
           "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m2_q2",
+      "task_type": "listen_and_choose",
+      "order": 34,
+      "number": "2",
+      "number_end": null,
+      "directive": "Choose the best response",
+      "prompt": "",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "Sure, we can do that."
+        },
+        {
+          "key": "B",
+          "text": "take up gardening."
+        },
+        {
+          "key": "C",
+          "text": "think they live in the forest."
+        },
+        {
+          "key": "D",
+          "text": "That's wonderful for local birds."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
         ],
         "explanation": null
       },
@@ -703,21 +1168,30 @@
       "options": [
         {
           "key": "A",
-          "text": "The water fountain is by the office. 个 The cafeteria staff received new uniforms this week."
+          "text": "The water fountain is by the office."
         },
         {
           "key": "B",
-          "text": "The new seasonal menu begins next Monday."
+          "text": "The cafeteria staff received new uniforms this week."
         },
         {
           "key": "C",
+          "text": "The new seasonal menu begins next Monday."
+        },
+        {
+          "key": "D",
           "text": "Some repairs are being done in the seating area."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.15/4.15 套一 听力.docx"
     },
     {
@@ -733,17 +1207,147 @@
       "options": [
         {
           "key": "A",
-          "text": "It was sold out. £ © It was created by a new chef. = © Its price went up recently."
+          "text": "It was sold out."
         },
         {
           "key": "B",
-          "text": "twas a popular item. 他"
+          "text": "It was created by a new chef."
+        },
+        {
+          "key": "C",
+          "text": "Its price went up recently."
+        },
+        {
+          "key": "D",
+          "text": "twas a popular item."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m2_q5",
+      "task_type": "conversation",
+      "order": 37,
+      "number": "5",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "Why does the woman mention her guests?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "To suggest that one of them is bringing dessert"
+        },
+        {
+          "key": "B",
+          "text": "show why she is careful about choosing desserts"
+        },
+        {
+          "key": "C",
+          "text": "To note that she received a cake recipe from one of them"
+        },
+        {
+          "key": "D",
+          "text": "To explain where she heard about a bakery"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m2_q6",
+      "task_type": "conversation",
+      "order": 38,
+      "number": "6",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "university website?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "It provides a lot of useful information."
+        },
+        {
+          "key": "B",
+          "text": "It is easy to use."
+        },
+        {
+          "key": "C",
+          "text": "It is not frequently used by students."
+        },
+        {
+          "key": "D",
+          "text": "It is not at the quality level it should be."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.15/4.15 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-15_S1_m2_q8",
+      "task_type": "academic_talk",
+      "order": 39,
+      "number": "8",
+      "number_end": null,
+      "directive": "Listen to an announcement or academic talk.",
+      "prompt": "the start of the talk?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "To help explain a potentially unfamiliar concept"
+        },
+        {
+          "key": "B",
+          "text": "To encourage listeners to take her perspective"
+        },
+        {
+          "key": "C",
+          "text": "To describe a situation she has experienced"
+        },
+        {
+          "key": "D",
+          "text": "To compare two different methods for making a decision"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
       "source_ref": "4.15/4.15 套一 听力.docx"
     },
     {
@@ -759,42 +1363,63 @@
       "options": [
         {
           "key": "A",
-          "text": "To suggest that not all business decisions include an \" opportunity cost 1.) 4 有 (的 To provide an example of a decision made by most = businesses oO To illustrate how businesses take opportunity cost into consideration"
+          "text": "To suggest that not all business decisions include an"
         },
         {
           "key": "B",
-          "text": "To highlight the importance of weighing all options before investing"
+          "text": "opportunity cost"
+        },
+        {
+          "key": "C",
+          "text": "provide an example of a decision made by most"
+        },
+        {
+          "key": "D",
+          "text": "businesses"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.15/4.15 套一 听力.docx"
     },
     {
-      "id": "listening_2026-04-15_S1_m2_q11",
+      "id": "listening_2026-04-15_S1_m2_q10",
       "task_type": "academic_talk",
-      "order": 42,
-      "number": "11",
+      "order": 41,
+      "number": "10",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What does the speaker ask listeners to do at the end of the",
+      "prompt": "identifying opportunity costs?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "Create their own definition of opportunity cost ih O Refl heir own decision-maki i a 只 Reflect on their own decision-making experiences"
+          "text": "Calculating non-monetary costs"
         },
         {
           "key": "B",
-          "text": "Break up into small groups for discussion f © Share any experiences they have had making investments Listen to a talk in a psychology class."
+          "text": "comparing unrelated activities"
+        },
+        {
+          "key": "C",
+          "text": "Choosing which factors to consider in making a decision"
+        },
+        {
+          "key": "D",
+          "text": "Deciding whether to borrow money to cover the costs"
         }
       ],
       "answer": {
         "keys": [
-          "B"
+          "A"
         ],
         "explanation": null
       },
@@ -810,13 +1435,13 @@
       "number": "12",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "he © He introduced well-known psychological concepts to",
+      "prompt": "What does the speaker say about Leon Festinger?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "marketing campaigns."
+          "text": "He introduced well-known psychological concepts to marketing campaigns."
         },
         {
           "key": "B",
@@ -828,7 +1453,7 @@
         },
         {
           "key": "D",
-          "text": "He focused on educating people about how to avoid cognitive dissonance. Eee"
+          "text": "He focused on educating people about how to avoid cognitive dissonance."
         }
       ],
       "answer": {
@@ -849,23 +1474,36 @@
       "number": "13",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "©) To show that a clean environment can support mental",
+      "prompt": "Why does the speaker discuss gasoline and electric cars?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "To identify a problem with the concept of cognitive dissonance"
+          "text": "To highlight cooperation between psychologists and environmental scientists"
         },
         {
           "key": "B",
+          "text": "To show that a clean environment can support mental health"
+        },
+        {
+          "key": "C",
+          "text": "To identify a problem with the concept of cognitive dissonance"
+        },
+        {
+          "key": "D",
           "text": "To explain how cognitive dissonance can be useful for advertising products"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.15/4.15 套一 听力.docx"
     },
     {
@@ -920,7 +1558,7 @@
       "options": [
         {
           "key": "A",
-          "text": "SY © She thinks that it can sometimes be beneficial."
+          "text": "She thinks that it can sometimes be beneficial."
         },
         {
           "key": "B",

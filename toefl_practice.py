@@ -36,6 +36,11 @@ SUBJECTS = {
 }
 RECORDING_TOKEN_MAX_AGE = 24 * 60 * 60
 MAX_RECORDING_BYTES = 20 * 1024 * 1024
+UNSAFE_LISTENING_OPTION_RE = re.compile(
+    r"(?:©|〇|○|◯|◎|模块\s*切换|显示\s*答|"
+    r"Listening\s*\|?\s*Question\s*\d+|[\u4e00-\u9fff])",
+    re.I,
+)
 
 
 def _load_manifest(exam_id: str) -> dict:
@@ -108,6 +113,23 @@ def _question_is_gradable(question: dict) -> bool:
     return False
 
 
+def _listening_question_is_publishable(question: dict) -> bool:
+    options = question.get("options") or []
+    return (
+        question.get("response_type") != "mc"
+        or (
+            len(options) == 4
+            and all(
+                2 <= len(str(option.get("text") or "").strip()) <= 350
+                and not UNSAFE_LISTENING_OPTION_RE.search(
+                    str(option.get("text") or "")
+                )
+                for option in options
+            )
+        )
+    )
+
+
 def _module_id(question_id: str) -> str:
     match = re.search(r"_m(\d+)_", question_id or "")
     return f"m{match.group(1)}" if match else "main"
@@ -158,6 +180,8 @@ def public_exam_payload(exam_id: str, subject: str) -> dict | None:
     usable_item_count = 0
     for raw in source.get("questions") or []:
         if not isinstance(raw, dict) or not _question_is_displayable(raw):
+            continue
+        if subject == "listening" and not _listening_question_is_publishable(raw):
             continue
         usable_item_count += _question_item_count(raw)
         question = copy.deepcopy(raw)

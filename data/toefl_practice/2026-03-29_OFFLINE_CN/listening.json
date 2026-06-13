@@ -37,21 +37,30 @@
       "options": [
         {
           "key": "A",
-          "text": "Five trees should be fine. t O Yes, the weekend flew by."
+          "text": "Five trees should be fine."
         },
         {
           "key": "B",
-          "text": "Last weekend | went home."
+          "text": "Yes, the weekend flew by."
         },
         {
           "key": "C",
+          "text": "Last weekend | went home."
+        },
+        {
+          "key": "D",
           "text": "Yes, with the college hiking group."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
@@ -67,7 +76,7 @@
       "options": [
         {
           "key": "A",
-          "text": "| live in a tight-knit community."
+          "text": "live in a tight-knit community."
         },
         {
           "key": "B",
@@ -110,13 +119,26 @@
         },
         {
           "key": "B",
-          "text": "The young married couple is starting a new family. » © Oh, | think it was rescheduled for next Thursday. Z O Yes, he had a good time on the class field trip. \\ A | >"
+          "text": "The young married couple is starting a new family."
+        },
+        {
+          "key": "C",
+          "text": "Oh, | think it was rescheduled for next Thursday."
+        },
+        {
+          "key": "D",
+          "text": "Yes, he had a good time on the class field trip."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
@@ -132,7 +154,7 @@
       "options": [
         {
           "key": "A",
-          "text": "| go to the movies almost every weekend."
+          "text": "go to the movies almost every weekend."
         },
         {
           "key": "B",
@@ -179,13 +201,22 @@
         },
         {
           "key": "C",
-          "text": "Yes, it is an electric vehicle. ©, Oh, that sounds interesting."
+          "text": "Yes, it is an electric vehicle."
+        },
+        {
+          "key": "D",
+          "text": "Oh, that sounds interesting."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
@@ -248,7 +279,11 @@
         },
         {
           "key": "C",
-          "text": "1worked all last week. to \\ ‘ CO No, | prefer natural flavors."
+          "text": "I worked all last week."
+        },
+        {
+          "key": "D",
+          "text": "No, | prefer natural flavors."
         }
       ],
       "answer": {
@@ -275,7 +310,7 @@
       "options": [
         {
           "key": "A",
-          "text": "| like to play football."
+          "text": "like to play football."
         },
         {
           "key": "B",
@@ -380,37 +415,6 @@
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
-      "id": "listening_2026-03-29_OFFLINE_CN_m1_q11",
-      "task_type": "listen_and_choose",
-      "order": 11,
-      "number": "11",
-      "number_end": null,
-      "directive": "Choose the best response",
-      "prompt": "",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "川 haveto check the deadline."
-        },
-        {
-          "key": "B",
-          "text": "enjoy cooking with him. j © The researcher arrived at 9 a.m. 3 © We went last Thursday."
-        }
-      ],
-      "answer": {
-        "keys": [
-          "A"
-        ],
-        "explanation": null
-      },
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "auto",
-      "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
-    },
-    {
       "id": "listening_2026-03-29_OFFLINE_CN_m1_q12",
       "task_type": "listen_and_choose",
       "order": 12,
@@ -427,13 +431,26 @@
         },
         {
           "key": "B",
-          "text": "The ingredients are from local farms. ; O The plane has access in the front and rear. vy} > O You should contact the university library. 全 \\)"
+          "text": "The ingredients are from local farms."
+        },
+        {
+          "key": "C",
+          "text": "The plane has access in the front and rear."
+        },
+        {
+          "key": "D",
+          "text": "You should contact the university library."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
@@ -443,21 +460,21 @@
       "number": "13",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What are the speakers mainly discussing?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What are the speakers mainly discussing?"
-        },
-        {
-          "key": "B",
           "text": "Anew academic program"
         },
         {
+          "key": "B",
+          "text": "Atrip to an art museum"
+        },
+        {
           "key": "C",
-          "text": "Atrip to an art museum \\ »\\ © Adepartment's financial resources"
+          "text": "Adepartment's financial resources"
         },
         {
           "key": "D",
@@ -488,10 +505,18 @@
       "options": [
         {
           "key": "A",
-          "text": "Some design software \\ > © Computer hardware \\\\ 外 © Ameeting schedule"
+          "text": "Some design software"
         },
         {
           "key": "B",
+          "text": "Computer hardware"
+        },
+        {
+          "key": "C",
+          "text": "Ameeting schedule"
+        },
+        {
+          "key": "D",
           "text": "Acourse catalog"
         }
       ],
@@ -507,23 +532,70 @@
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
+      "id": "listening_2026-03-29_OFFLINE_CN_m1_q15",
+      "task_type": "conversation",
+      "order": 15,
+      "number": "15",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What feature of the app does the woman like the most?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "Progress bar"
+        },
+        {
+          "key": "B",
+          "text": "Daily reminders"
+        },
+        {
+          "key": "C",
+          "text": "Chat"
+        },
+        {
+          "key": "D",
+          "text": "Guided sessions"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
+    },
+    {
       "id": "listening_2026-03-29_OFFLINE_CN_m1_q16",
       "task_type": "conversation",
       "order": 16,
       "number": "16",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": ", © To manage her stress",
+      "prompt": "What is the most likely reason that the woman tried the app?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "To share her schedule \\ | 外 © Toseek spiritual guidance"
+          "text": "To manage her stress"
         },
         {
           "key": "B",
-          "text": "To meet new people 各"
+          "text": "To share her schedule"
+        },
+        {
+          "key": "C",
+          "text": "Toseek spiritual guidance"
+        },
+        {
+          "key": "D",
+          "text": "To meet new people"
         }
       ],
       "answer": {
@@ -550,7 +622,7 @@
       "options": [
         {
           "key": "A",
-          "text": "上 © App costs"
+          "text": "App costs"
         },
         {
           "key": "B",
@@ -583,25 +655,25 @@
       "number": "18",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What will the man look into?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What will the man look into?"
-        },
-        {
-          "key": "B",
           "text": "Deleting an app"
         },
         {
+          "key": "B",
+          "text": "Reinstalling some software"
+        },
+        {
           "key": "C",
-          "text": "Reinstalling some software \\j y\\ © Making a purchase"
+          "text": "Making a purchase"
         },
         {
           "key": "D",
-          "text": "Getting a job Listen to an announcement in a classroom."
+          "text": "Getting a job"
         }
       ],
       "answer": {
@@ -679,7 +751,7 @@
         },
         {
           "key": "D",
-          "text": "Bring enough food to class to share Listen to an announcement at a university club meeting. } \\ 和 看 >"
+          "text": "Bring enough food to class to share"
         }
       ],
       "answer": {
@@ -700,25 +772,25 @@
       "number": "21",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "Why does the speaker say a new policy was introduced?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Why does the speaker say a new policy was introduced?"
-        },
-        {
-          "key": "B",
           "text": "To resolve ongoing issues with the clubs website"
         },
         {
+          "key": "B",
+          "text": "To make additional allowances for admitting new club"
+        },
+        {
           "key": "C",
-          "text": "To make additional allowances for admitting new club \" members 妥 O To create a formal process for club members to appeal dismissal + 3"
+          "text": "members"
         },
         {
           "key": "D",
-          "text": "To address club members not regularly attending meetings"
+          "text": "To create a formal process for club members to appeal dismissal"
         }
       ],
       "answer": {
@@ -739,25 +811,25 @@
       "number": "22",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What possible consequence of failure to follow the new policy",
+      "prompt": "does the speaker mention?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "does the speaker mention?"
-        },
-        {
-          "key": "B",
           "text": "Loss of club membership"
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "Afine of 75 dollars"
         },
         {
+          "key": "C",
+          "text": "The need to attend a special meeting"
+        },
+        {
           "key": "D",
-          "text": "The need to attend a special meeting . \\y © Complaints from other club members Listen to an announcement at a university club meeting. 24"
+          "text": "Complaints from other club members"
         }
       ],
       "answer": {
@@ -817,25 +889,25 @@
       "number": "24",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What will probably happen next?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What will probably happen next?"
-        },
-        {
-          "key": "B",
           "text": "Students will propose new volunteer projects."
         },
         {
+          "key": "B",
+          "text": "Students will share information about local schools."
+        },
+        {
           "key": "C",
-          "text": "Students will share information about local schools. y 加"
+          "text": "Students will introduce themselves."
         },
         {
           "key": "D",
-          "text": "Students will introduce themselves. @ Students will raise funds for student clubs. « | tistening Listen to a talk in an art history class. 1"
+          "text": "Students will raise funds for student clubs. | tistening"
         }
       ],
       "answer": {
@@ -856,23 +928,36 @@
       "number": "25",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "全 O To emphasize the religious significance of stained glass",
+      "prompt": "Why does the speaker mention churches?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Toillustrate an effect of stained glass on large spaces §"
+          "text": "To explain how a traditional technique of making stained"
         },
         {
           "key": "B",
-          "text": "To point out a use of stained glass that he expects listeners to be familiar with"
+          "text": "glass was developed"
+        },
+        {
+          "key": "C",
+          "text": "To emphasize the religious significance of stained glass"
+        },
+        {
+          "key": "D",
+          "text": "Toillustrate an effect of stained glass on large spaces"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
@@ -921,21 +1006,25 @@
       "number": "27",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "‘ee O It required frequent maintenance.",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "It was expensive to produce."
+          "text": "the professor, what was a disadvantage of using"
         },
         {
           "key": "B",
-          "text": "Itresulted in a loss of heat. §"
+          "text": "stained glass in homes?"
         },
         {
           "key": "C",
-          "text": "It could break easily during transportation. 】"
+          "text": "It required frequent maintenance."
+        },
+        {
+          "key": "D",
+          "text": "It was expensive to produce."
         }
       ],
       "answer": {
@@ -974,7 +1063,7 @@
         },
         {
           "key": "D",
-          "text": "They often include both lead and copper. Listen to a talk in an art history class."
+          "text": "They often include both lead and copper."
         }
       ],
       "answer": {
@@ -1048,7 +1137,7 @@
         },
         {
           "key": "C",
-          "text": "Itis more geometric than most Impressionist paintings."
+          "text": "It is more geometric than most Impressionist paintings."
         },
         {
           "key": "D",
@@ -1122,7 +1211,7 @@
         },
         {
           "key": "B",
-          "text": "Itwas one of Jones’ last artistic creations."
+          "text": "It was one of Jones’ last artistic creations."
         },
         {
           "key": "C",
@@ -1157,14 +1246,18 @@
       "options": [
         {
           "key": "A",
-          "text": "No, in the conference room. t O See John to get that signed."
+          "text": "No, in the conference room."
         },
         {
           "key": "B",
-          "text": "That topic always sparks discussion."
+          "text": "See John to get that signed."
         },
         {
           "key": "C",
+          "text": "That topic always sparks discussion."
+        },
+        {
+          "key": "D",
           "text": "Next week at eight a.m."
         }
       ],
@@ -1200,7 +1293,7 @@
         },
         {
           "key": "C",
-          "text": "Itwas very informative."
+          "text": "It was very informative."
         },
         {
           "key": "D",
@@ -1235,7 +1328,93 @@
         },
         {
           "key": "B",
-          "text": "Im not sure. 四 © Next to the bookstore. b O Take a taxi downtown. 4"
+          "text": "Im not sure."
+        },
+        {
+          "key": "C",
+          "text": "Next to the bookstore."
+        },
+        {
+          "key": "D",
+          "text": "Take a taxi downtown."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-29_OFFLINE_CN_m2_q4",
+      "task_type": "conversation",
+      "order": 36,
+      "number": "4",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What did the woman originally hope to do this weekend?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "Attend a sporting event"
+        },
+        {
+          "key": "B",
+          "text": "visitan art gallery"
+        },
+        {
+          "key": "C",
+          "text": "Go shopping in town"
+        },
+        {
+          "key": "D",
+          "text": "Decorate her apartment"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
+    },
+    {
+      "id": "listening_2026-03-29_OFFLINE_CN_m2_q5",
+      "task_type": "conversation",
+      "order": 37,
+      "number": "5",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What does the man recommend?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "Taking the bus to Center City"
+        },
+        {
+          "key": "B",
+          "text": "Viewing a local artist's work"
+        },
+        {
+          "key": "C",
+          "text": "Buying a ticket in advance"
+        },
+        {
+          "key": "D",
+          "text": "Dressing for bad weather"
         }
       ],
       "answer": {
@@ -1256,16 +1435,24 @@
       "number": "6",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": ". O She is disappointed with the tasks she was assigned.",
+      "prompt": "What attitude does the woman express about her internship?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "She is excited to apply what she learned to her classwork."
+          "text": "She is concerned that she made many mistakes."
         },
         {
           "key": "B",
+          "text": "She is disappointed with the tasks she was assigned."
+        },
+        {
+          "key": "C",
+          "text": "She is excited to apply what she learned to her classwork."
+        },
+        {
+          "key": "D",
           "text": "She is hopeful that she will be hired to work at the GY marketing firm."
         }
       ],
@@ -1281,31 +1468,70 @@
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
+      "id": "listening_2026-03-29_OFFLINE_CN_m2_q7",
+      "task_type": "conversation",
+      "order": 39,
+      "number": "7",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What does the man imply when he mentions a classmate?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "The man has to complete a market research report for an Sy internship."
+        },
+        {
+          "key": "B",
+          "text": "The man is interested in an internship that involves administrative work."
+        },
+        {
+          "key": "C",
+          "text": "The man has to take classes during the summer."
+        },
+        {
+          "key": "D",
+          "text": "The man wants to learn more about a potential internship."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
+    },
+    {
       "id": "listening_2026-03-29_OFFLINE_CN_m2_q8",
       "task_type": "academic_talk",
       "order": 40,
       "number": "8",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "",
+      "prompt": "What is the main focus of the talk?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "What is the main focus of the talk?"
+          "text": "Ways in which ancient peoples supplied nitrogen and"
         },
         {
           "key": "B",
-          "text": "Ways in which ancient peoples supplied nitrogen and moisture to their fields 人 © Similarities between gardens of ancient Rome and Central /} America"
+          "text": "their fields"
         },
         {
           "key": "C",
-          "text": "A method for studying planting practices of ancient cultures"
+          "text": "Similarities between gardens of ancient Rome and Central"
         },
         {
           "key": "D",
-          "text": "An example of how modern agriculture can learn to benefit from ancient knowledge"
+          "text": "America"
         }
       ],
       "answer": {
@@ -1326,23 +1552,36 @@
       "number": "9",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Why do researchers inject plaster into soil?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "To make the soil more stable"
+          "text": "researchers inject plaster into soil?"
         },
         {
           "key": "B",
-          "text": "To protect plant roots in the soil Vf O To replicate an ancient practice that existed in different parts of the world 人 天 O To obtain casts that match decayed material in shape"
+          "text": "To make the soil more stable"
+        },
+        {
+          "key": "C",
+          "text": "To protect plant roots in the soil"
+        },
+        {
+          "key": "D",
+          "text": "To replicate an ancient practice that existed in different parts of the world"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
@@ -1352,17 +1591,17 @@
       "number": "10",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "agricultural system practiced in the Maya village in Central",
+      "prompt": "America?",
       "passage": null,
       "audio_ref": "m2",
       "options": [
         {
           "key": "A",
-          "text": "America?"
+          "text": "Ittakes advantage of plants that do not decay quickly."
         },
         {
           "key": "B",
-          "text": "Ittakes advantage of plants that do not decay quickly. |, /} O It combines a variety of crops that support each other's growth."
+          "text": "It combines a variety of crops that support each other's growth."
         },
         {
           "key": "C",
@@ -1401,13 +1640,26 @@
         },
         {
           "key": "B",
-          "text": "They considered roses to be more beautiful than other 人 flowers. / © They valued both beauty and practicality. — O They were interested in foreign plant species. Listen to a talk in a biology podcast."
+          "text": "They considered roses to be more beautiful than other"
+        },
+        {
+          "key": "C",
+          "text": "flowers."
+        },
+        {
+          "key": "D",
+          "text": "They valued both beauty and practicality."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "3.29-国内线下-后续还会补充/听力/3.29 听力.docx"
     },
     {
@@ -1462,7 +1714,7 @@
       "options": [
         {
           "key": "A",
-          "text": "{ O They all require water."
+          "text": "They all require water."
         },
         {
           "key": "B",
@@ -1501,11 +1753,11 @@
       "options": [
         {
           "key": "A",
-          "text": "Itwas first discovered when tardigrades were sent into space."
+          "text": "It was first discovered when tardigrades were sent into space."
         },
         {
           "key": "B",
-          "text": "Itis dependent on the size of a particular tardigrade."
+          "text": "It is dependent on the size of a particular tardigrade."
         },
         {
           "key": "C",

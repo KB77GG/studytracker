@@ -34,9 +34,36 @@ STATIC_ROOT = REPO_ROOT / "static" / "toefl"
 LISTENING_Q_RE = re.compile(
     r"^Listening\s*\|?\s*Question\s+(\d+)\s+of\s+(\d+)", re.I
 )
-OPTION_PREFIX_RE = re.compile(
-    r"^\s*(?:[¥yl2aq《\\|()]+\s*)*"
-    r"(?:C?O|QO|OQ|©|〇)(?:\s*[©〇])?\s+(.+?)\s*$",
+OPTION_MARKER_RE = re.compile(
+    r"(?:©|〇|○|◯|◎|[oO][oO0]?|[cC][dDoOqQ0])\)?\s+"
+)
+ASCII_WORD_RE = re.compile(r"[A-Za-z][A-Za-z'’\-]*")
+LISTENING_UI_NOISE_RE = re.compile(
+    r"(?:"
+    r"^\s*2026\s*年\s*真题"
+    r"|^\s*(?:Review|Revi|eview|Volume|Vol|olume)\b.*"
+    r"(?:Back|Bacl|Next|ext|Continue|ontinue|Home)"
+    r"|^\s*Home\b.*模块"
+    r"|模块\s*切换"
+    r"|^\s*显示\s*答案"
+    r")",
+    re.I,
+)
+OPTION_UI_SUFFIX_RES = (
+    re.compile(
+        r"\s+(?:Review\w*|Revi|eview|view|Volume|Vol|olume|folume|"
+        r"votume|vodume|vodule)\b.*(?:Back|Next|Continue|Home|Play)",
+        re.I,
+    ),
+    re.compile(r"\s+(?:<\s*)?Back\b.*(?:Next|Continue|Home)", re.I),
+    re.compile(r"\s+Home\s+(?:[#”]|模块|Module)", re.I),
+    re.compile(r"\s+2026\s*年\s*真题", re.I),
+    re.compile(r"\s+显示\s*答", re.I),
+    re.compile(r"\s+Listening\s*\|?\s*Question\s*\d+", re.I),
+)
+UNSAFE_OPTION_RE = re.compile(
+    r"(?:©|〇|○|◯|◎|模块\s*切换|显示\s*答|"
+    r"Listening\s*\|?\s*Question\s*\d+|[\u4e00-\u9fff])",
     re.I,
 )
 TOKEN_RE = re.compile(r"[A-Za-z]+(?:['-][A-Za-z]+)*|[?.,]")
@@ -346,10 +373,79 @@ def clean_listening_body(lines: list[str], listening) -> list[str]:
             continue
         if line.startswith(("抽取方式：", "文件夹：")):
             continue
+        if LISTENING_UI_NOISE_RE.search(line):
+            continue
         if re.fullmatch(r"[\\|a-z]{1,2}", line, re.I):
             continue
         result.append(line)
     return result
+
+
+def _clean_ocr_option_text(value: str) -> str:
+    value = re.sub(r"\s+", " ", value).strip(" \t|\\")
+    value = re.sub(
+        r"^(?:(?:©|〇|○|◯|◎|[oO][oO0]?|[cC][dDoOqQ0])\)?\s+)+",
+        "",
+        value,
+    )
+    replacements = (
+        (r"^\|\s+", "I "),
+        (r"^1(?=[A-Za-z])", "I "),
+        (r"\bIneed\b", "I need"),
+        (r"\bIhad\b", "I had"),
+        (r"\bIwill\b", "I will"),
+        (r"\bItis\b", "It is"),
+        (r"\bItwas\b", "It was"),
+        (r"\bIthad\b", "It had"),
+        (r"\bAtextbook\b", "A textbook"),
+        (r"\bAguide\b", "A guide"),
+        (r"\bAtool\b", "A tool"),
+        (r"\bAcollection\b", "A collection"),
+        (r"\bAnassignment\b", "An assignment"),
+        (r"\bAsocial\b", "A social"),
+        (r"\bAfamous\b", "A famous"),
+    )
+    for pattern, replacement in replacements:
+        value = re.sub(pattern, replacement, value, flags=re.I)
+    for pattern in OPTION_UI_SUFFIX_RES:
+        match = pattern.search(value)
+        if match:
+            value = value[:match.start()].rstrip()
+    return value.strip()
+
+
+def _extract_option_text(line: str) -> str | None:
+    """Return option text when an OCR radio marker occurs near line start."""
+    for match in OPTION_MARKER_RE.finditer(line[:28]):
+        candidate = _clean_ocr_option_text(line[match.end():])
+        if ASCII_WORD_RE.search(candidate):
+            return candidate
+    return None
+
+
+def _extract_unmarked_option(line: str) -> str | None:
+    """Recover an option whose radio marker disappeared but left OCR debris."""
+    match = ASCII_WORD_RE.search(line)
+    if not match or match.start() == 0:
+        return None
+    prefix = line[:match.start()]
+    if len(prefix) > 18 or prefix.isspace():
+        return None
+    candidate = _clean_ocr_option_text(line[match.start():])
+    return candidate if len(candidate) >= 3 else None
+
+
+def _is_ocr_noise_line(line: str) -> bool:
+    words = ASCII_WORD_RE.findall(line)
+    return not words or (len(line) <= 8 and sum(map(len, words)) <= 3)
+
+
+def _listening_options_are_publishable(options: list[str]) -> bool:
+    return (
+        len(options) == 4
+        and all(2 <= len(option) <= 350 for option in options)
+        and not any(UNSAFE_OPTION_RE.search(option) for option in options)
+    )
 
 
 def listening_segments(section, listening) -> dict[tuple[str, int], list[list[str]]]:
@@ -396,14 +492,18 @@ def parse_listening_candidate(lines: list[str]) -> tuple[str, list[str]]:
             )
         ):
             continue
-        match = OPTION_PREFIX_RE.match(line)
-        if match:
-            option = re.sub(r"\s+", " ", match.group(1)).strip()
-            if option:
-                options.append(option)
+        option = _extract_option_text(line)
+        if option:
+            options.append(option)
+            continue
+        unmarked = _extract_unmarked_option(line) if options else None
+        if unmarked and len(options) < 4:
+            options.append(unmarked)
+            continue
+        if _is_ocr_noise_line(line):
             continue
         if options:
-            options[-1] = f"{options[-1]} {line}".strip()
+            options[-1] = _clean_ocr_option_text(f"{options[-1]} {line}")
         else:
             pre_option.append(line)
     if len(options) == 3 and pre_option:
@@ -547,7 +647,7 @@ def build_listening(
         if module not in available_modules:
             continue
         prompt, options = best_listening_candidate(candidates)
-        if len(options) < 2:
+        if not _listening_options_are_publishable(options):
             continue
         task_type = listening_task(module, number)
         key = answer_for(answers, source_id, "listening", module, number)

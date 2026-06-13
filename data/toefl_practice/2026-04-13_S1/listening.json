@@ -37,19 +37,19 @@
       "options": [
         {
           "key": "A",
-          "text": "Choose the best! GD"
-        },
-        {
-          "key": "B",
           "text": "Keep all of your materials sorted by subject."
         },
         {
-          "key": "C",
+          "key": "B",
           "text": "Biology 101 is the best class the school has to offer."
         },
         {
+          "key": "C",
+          "text": "The school day starts at eight a.m. and ends at three thirty"
+        },
+        {
           "key": "D",
-          "text": "The school day starts at eight a.m. and ends at three thirty 0 \\ p.m. ] O Yes, the organization is currently hiring interns in the \\ business sector."
+          "text": "p.m."
         }
       ],
       "answer": {
@@ -76,7 +76,7 @@
       "options": [
         {
           "key": "A",
-          "text": "1make sure to check the weather forecast first."
+          "text": "I make sure to check the weather forecast first."
         },
         {
           "key": "B",
@@ -84,7 +84,11 @@
         },
         {
           "key": "C",
-          "text": "The climbing gym is on campus. ham \\ ‘ © enjoy spending time outdoors."
+          "text": "The climbing gym is on campus."
+        },
+        {
+          "key": "D",
+          "text": "enjoy spending time outdoors."
         }
       ],
       "answer": {
@@ -115,13 +119,26 @@
         },
         {
           "key": "B",
-          "text": "Alot of folks attended virtually. N I) : © Itgave mea few ideas | hadn't considered before. Ss 4 © Arecording should be available by the end of the week."
+          "text": "Alot of folks attended virtually. N"
+        },
+        {
+          "key": "C",
+          "text": "Itgave mea few ideas | hadn't considered before."
+        },
+        {
+          "key": "D",
+          "text": "Arecording should be available by the end of the week."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.13/4.13 套一 听力.docx"
     },
     {
@@ -149,7 +166,7 @@
         },
         {
           "key": "D",
-          "text": "Late job applications may not be considered. | Listening Question 32 of 32 00:00:19 @® According to the talk, what is one challenge of musical borrowing?"
+          "text": "Late job applications may not be considered. |"
         }
       ],
       "answer": {
@@ -176,21 +193,30 @@
       "options": [
         {
           "key": "A",
-          "text": "The equipment goes in the back. hae | © The student rec center is closed."
+          "text": "The equipment goes in the back."
         },
         {
           "key": "B",
-          "text": "| don't think that’s a good idea."
+          "text": "The student rec center is closed."
         },
         {
           "key": "C",
+          "text": "don't think that’s a good idea."
+        },
+        {
+          "key": "D",
           "text": "We'll have to check it out."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.13/4.13 套一 听力.docx"
     },
     {
@@ -218,7 +244,7 @@
         },
         {
           "key": "D",
-          "text": "| don't know her."
+          "text": "don't know her."
         }
       ],
       "answer": {
@@ -253,11 +279,11 @@
         },
         {
           "key": "C",
-          "text": "| like to go strolling outside campus."
+          "text": "like to go strolling outside campus."
         },
         {
           "key": "D",
-          "text": "Try not to spend too much. * cS A, 9 SEE /}"
+          "text": "Try not to spend too much."
         }
       ],
       "answer": {
@@ -288,7 +314,15 @@
         },
         {
           "key": "B",
-          "text": "It'll start promptly at noon. wi © She was late for class. y) > © Yes, I'm on the student business council. 《"
+          "text": "It'll start promptly at noon."
+        },
+        {
+          "key": "C",
+          "text": "She was late for class."
+        },
+        {
+          "key": "D",
+          "text": "Yes, I'm on the student business council."
         }
       ],
       "answer": {
@@ -339,32 +373,6 @@
       "response_type": "mc",
       "content_status": "complete",
       "grading_status": "auto",
-      "source_ref": "4.13/4.13 套一 听力.docx"
-    },
-    {
-      "id": "listening_2026-04-13_S1_m1_q10",
-      "task_type": "listen_and_choose",
-      "order": 10,
-      "number": "10",
-      "number_end": null,
-      "directive": "Choose the best response",
-      "prompt": "",
-      "passage": null,
-      "audio_ref": "m1",
-      "options": [
-        {
-          "key": "A",
-          "text": "It’s simpler than that."
-        },
-        {
-          "key": "B",
-          "text": "think that's right. , © That works every time. 多 © 川 fgureit out for you. \\ a | = 7"
-        }
-      ],
-      "answer": null,
-      "response_type": "mc",
-      "content_status": "complete",
-      "grading_status": "review_only",
       "source_ref": "4.13/4.13 套一 听力.docx"
     },
     {
@@ -427,7 +435,11 @@
         },
         {
           "key": "C",
-          "text": "prefer action movies over comedies. > © Yes, there's still time to catch a matinee. 4 企 :"
+          "text": "prefer action movies over comedies."
+        },
+        {
+          "key": "D",
+          "text": "Yes, there's still time to catch a matinee."
         }
       ],
       "answer": {
@@ -448,21 +460,21 @@
       "number": "13",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "",
+      "prompt": "What is the woman's complaint about an amusement park?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "What is the woman's complaint about an amusement park?"
-        },
-        {
-          "key": "B",
           "text": "The lines for the rides were too long."
         },
         {
+          "key": "B",
+          "text": "The concession stand ran out of some items."
+        },
+        {
           "key": "C",
-          "text": "The concession stand ran out of some items. \\\\ 人 © The grounds were not well maintained."
+          "text": "The grounds were not well maintained."
         },
         {
           "key": "D",
@@ -481,29 +493,120 @@
       "source_ref": "4.13/4.13 套一 听力.docx"
     },
     {
-      "id": "listening_2026-04-13_S1_m1_q15",
+      "id": "listening_2026-04-13_S1_m1_q14",
       "task_type": "conversation",
-      "order": 15,
-      "number": "15",
+      "order": 14,
+      "number": "14",
       "number_end": null,
       "directive": "Listen to a conversation.",
-      "prompt": "What is the woman looking for?",
+      "prompt": "problems?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "Anew recipe book 7 © Asset of kitchen knives f NY © Agift for a friend 】 © Acooking class 、 人 人 terrain, | yesesornniores ei 光 eTRN What does the man recommend?"
+          "text": "They are unusual for a park of this size."
         },
         {
           "key": "B",
-          "text": "Trying a new restaurant ’ O Attending her friend's birthday party fi NY © Visiting the kitchenware store 】 © Buying an unusual kind of knife 、"
+          "text": "They are likely caused by inexperienced staff."
+        },
+        {
+          "key": "C",
+          "text": "They will probably improve over time."
+        },
+        {
+          "key": "D",
+          "text": "They have already affected park attendance."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-13_S1_m1_q17",
+      "task_type": "conversation",
+      "order": 16,
+      "number": "17",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "¢ restaurant?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "Enthusiastic"
+        },
+        {
+          "key": "B",
+          "text": "Impressed"
+        },
+        {
+          "key": "C",
+          "text": "Indifferent"
+        },
+        {
+          "key": "D",
+          "text": "Dissatisfied"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-13_S1_m1_q18",
+      "task_type": "conversation",
+      "order": 17,
+      "number": "18",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What does the man say he will do?",
+      "passage": null,
+      "audio_ref": "m1",
+      "options": [
+        {
+          "key": "A",
+          "text": "Bring the woman some sushi"
+        },
+        {
+          "key": "B",
+          "text": "Tell the woman about his lunch experience"
+        },
+        {
+          "key": "C",
+          "text": "Find a restaurant with good service"
+        },
+        {
+          "key": "D",
+          "text": "Make a reservation at the sushi restaurant"
+        }
+      ],
+      "answer": {
+        "keys": [
+          "B"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
       "source_ref": "4.13/4.13 套一 听力.docx"
     },
     {
@@ -523,13 +626,26 @@
         },
         {
           "key": "B",
-          "text": "Its equipment is expensive. 1 Ze © Itis only available to graphic design students. S “a : | © Itis replacing an old lab."
+          "text": "Its equipment is expensive."
+        },
+        {
+          "key": "C",
+          "text": "It is only available to graphic design students."
+        },
+        {
+          "key": "D",
+          "text": "It is replacing an old lab."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.13/4.13 套一 听力.docx"
     },
     {
@@ -549,7 +665,15 @@
         },
         {
           "key": "B",
-          "text": "To offer an alternative location for club meetings Ze © To explain how to find Scott Hall 在 ag ¥} Z| © To tell students where to go for graphic design workshops Listen to an announcement on the university radio station. 和"
+          "text": "To offer an alternative location for club meetings"
+        },
+        {
+          "key": "C",
+          "text": "To explain how to find Scott Hall"
+        },
+        {
+          "key": "D",
+          "text": "To tell students where to go for graphic design workshops"
         }
       ],
       "answer": {
@@ -580,7 +704,15 @@
         },
         {
           "key": "B",
-          "text": "To provide instructions (一 \\ O To support innovation ar © To inform about a schedule change"
+          "text": "To provide instructions"
+        },
+        {
+          "key": "C",
+          "text": "To support innovation"
+        },
+        {
+          "key": "D",
+          "text": "To inform about a schedule change"
         }
       ],
       "answer": {
@@ -601,23 +733,36 @@
       "number": "22",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Why are students invited to go to the university website?",
+      "prompt": "",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "To read about some technology"
+          "text": "go to the university website?"
         },
         {
           "key": "B",
-          "text": "To share their homemade art / i . © To find out who this year’s winners are 1 | © To see examples of great essays i \\ Listen to an announcement by a university administration."
+          "text": "To read about some technology"
+        },
+        {
+          "key": "C",
+          "text": "To share their homemade art"
+        },
+        {
+          "key": "D",
+          "text": "To find out who this year’s winners are"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.13/4.13 套一 听力.docx"
     },
     {
@@ -684,7 +829,7 @@
         },
         {
           "key": "D",
-          "text": "Heat from them can damage pipes. Listen to a talk in an economics class. ; lf"
+          "text": "Heat from them can damage pipes."
         }
       ],
       "answer": {
@@ -711,10 +856,18 @@
       "options": [
         {
           "key": "A",
-          "text": "To help explain a potentially unfamiliar concept / , © To encourage listeners to take her perspective ‘ © To describe a situation she has experienced"
+          "text": "To help explain a potentially unfamiliar concept"
         },
         {
           "key": "B",
+          "text": "To encourage listeners to take her perspective"
+        },
+        {
+          "key": "C",
+          "text": "To describe a situation she has experienced"
+        },
+        {
+          "key": "D",
           "text": "To compare two different methods for making a decision"
         }
       ],
@@ -736,17 +889,17 @@
       "number": "26",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "Why does the speaker talk about investing in new",
+      "prompt": "equipment?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "equipment?"
+          "text": "To suggest that not all business decisions include an Q opportunity cost"
         },
         {
           "key": "B",
-          "text": "To suggest that not all business decisions include an Q opportunity cost 1 站 4 © To provide an example of a decision made by most businesses"
+          "text": "To provide an example of a decision made by most businesses"
         },
         {
           "key": "C",
@@ -775,17 +928,17 @@
       "number": "27",
       "number_end": null,
       "directive": "Listen to an announcement or academic talk.",
-      "prompt": "What does the speaker identify as a challenge related to",
+      "prompt": "identifying opportunity costs?",
       "passage": null,
       "audio_ref": "m1",
       "options": [
         {
           "key": "A",
-          "text": "identifying opportunity costs?"
+          "text": "Calculating non-monetary costs"
         },
         {
           "key": "B",
-          "text": "Calculating non-monetary costs / 通 从 © Comparing unrelated activities 四 |"
+          "text": "Comparing unrelated activities"
         },
         {
           "key": "C",
@@ -820,11 +973,19 @@
       "options": [
         {
           "key": "A",
-          "text": "Create their own definition of opportunity cost /@ 外 © Reflect on their own decision-making experiences 4 © Break up into small groups for discussion"
+          "text": "Create their own definition of opportunity cost"
         },
         {
           "key": "B",
-          "text": "Share any experiences they have had making investments Listen to a talk in a music class."
+          "text": "Reflect on their own decision-making experiences"
+        },
+        {
+          "key": "C",
+          "text": "Break up into small groups for discussion"
+        },
+        {
+          "key": "D",
+          "text": "Share any experiences they have had making investments"
         }
       ],
       "answer": {
@@ -902,7 +1063,7 @@
         },
         {
           "key": "D",
-          "text": "To explain the popularity of Brazilian music | Listening Question 31 of 32 00:00:22 及 What does the speaker emphasize about the music of Tan Dun?"
+          "text": "To explain the popularity of Brazilian music | What does the speaker emphasize about the music of Tan"
         }
       ],
       "answer": {
@@ -933,13 +1094,26 @@
         },
         {
           "key": "B",
-          "text": "Class presentations started last week. 只 © 1was impressed by the students’ ideas. » © One solution could be that we each take turns presenting."
+          "text": "Class presentations started last week."
+        },
+        {
+          "key": "C",
+          "text": "I was impressed by the students’ ideas."
+        },
+        {
+          "key": "D",
+          "text": "One solution could be that we each take turns presenting."
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "C"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.13/4.13 套一 听力.docx"
     },
     {
@@ -1006,7 +1180,7 @@
         },
         {
           "key": "D",
-          "text": "Yes, very much. 和 \\ 加 }"
+          "text": "Yes, very much."
         }
       ],
       "answer": {
@@ -1033,10 +1207,18 @@
       "options": [
         {
           "key": "A",
-          "text": "She provides him with a copy of some notes. SN © She meets with him at a nonscheduled time. \\ N © She allows him to submit an assignment late."
+          "text": "She provides him with a copy of some notes."
         },
         {
           "key": "B",
+          "text": "She meets with him at a nonscheduled time."
+        },
+        {
+          "key": "C",
+          "text": "She allows him to submit an assignment late."
+        },
+        {
+          "key": "D",
           "text": "She provides feedback on an essay he wrote."
         }
       ],
@@ -1068,7 +1250,93 @@
         },
         {
           "key": "B",
-          "text": "twill work well. \\ 人 © It should be developed in stages. ’ © Itshould be more general. é ("
+          "text": "twill work well."
+        },
+        {
+          "key": "C",
+          "text": "It should be developed in stages."
+        },
+        {
+          "key": "D",
+          "text": "Itshould be more general."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "A"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-13_S1_m2_q6",
+      "task_type": "conversation",
+      "order": 35,
+      "number": "6",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What does the man imply about a restaurant?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "He really likes its sushi."
+        },
+        {
+          "key": "B",
+          "text": "Its location is inconvenient for him."
+        },
+        {
+          "key": "C",
+          "text": "Its chef deserves an award."
+        },
+        {
+          "key": "D",
+          "text": "It is too expensive for him."
+        }
+      ],
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
+      "response_type": "mc",
+      "content_status": "complete",
+      "grading_status": "auto",
+      "source_ref": "4.13/4.13 套一 听力.docx"
+    },
+    {
+      "id": "listening_2026-04-13_S1_m2_q7",
+      "task_type": "conversation",
+      "order": 36,
+      "number": "7",
+      "number_end": null,
+      "directive": "Listen to a conversation.",
+      "prompt": "What does the man imply when he mentions a bed?",
+      "passage": null,
+      "audio_ref": "m2",
+      "options": [
+        {
+          "key": "A",
+          "text": "He loves sleeping in his sleeping bag at campsites."
+        },
+        {
+          "key": "B",
+          "text": "He is saving money for a new bed in his home."
+        },
+        {
+          "key": "C",
+          "text": "Some hotels are not very comfortable."
+        },
+        {
+          "key": "D",
+          "text": "He is unenthusiastic about the woman's idea."
         }
       ],
       "answer": {
@@ -1095,11 +1363,19 @@
       "options": [
         {
           "key": "A",
-          "text": "They visited the Galapagos Islands for short periods of time. { © They hunted giant tortoises for food."
+          "text": "They visited the Galapagos Islands for short periods of time."
         },
         {
           "key": "B",
-          "text": "They mostly made fairly short trips from Ecuador. . O They were impressed by island animals."
+          "text": "They hunted giant tortoises for food."
+        },
+        {
+          "key": "C",
+          "text": "They mostly made fairly short trips from Ecuador."
+        },
+        {
+          "key": "D",
+          "text": "They were impressed by island animals."
         }
       ],
       "answer": {
@@ -1130,13 +1406,26 @@
         },
         {
           "key": "B",
-          "text": "Goats on the Galapagos were harmed by human activities. if © Goats did not have enough food on the Galapagos. ; - © Goats eat a wide variety of plants. 2 ——— TT ——————————————— a"
+          "text": "Goats on the Galapagos were harmed by human activities."
+        },
+        {
+          "key": "C",
+          "text": "Goats did not have enough food on the Galapagos."
+        },
+        {
+          "key": "D",
+          "text": "Goats eat a wide variety of plants. 2 ——— TT ——————————————— a"
         }
       ],
-      "answer": null,
+      "answer": {
+        "keys": [
+          "D"
+        ],
+        "explanation": null
+      },
       "response_type": "mc",
       "content_status": "complete",
-      "grading_status": "review_only",
+      "grading_status": "auto",
       "source_ref": "4.13/4.13 套一 听力.docx"
     },
     {
@@ -1195,7 +1484,15 @@
         },
         {
           "key": "B",
-          "text": "Aspecies that went extinct thousands of years ago Vf, O Asecond example of an invasive species 7 = © Anewly discovered species of tortoise Listen to a talk on a psychology podcast. . N"
+          "text": "Aspecies that went extinct thousands of years ago"
+        },
+        {
+          "key": "C",
+          "text": "Asecond example of an invasive species"
+        },
+        {
+          "key": "D",
+          "text": "Anewly discovered species of tortoise"
         }
       ],
       "answer": {

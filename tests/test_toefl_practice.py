@@ -56,6 +56,16 @@ class ToeflPracticeTest(unittest.TestCase):
         self.assertTrue(all("answer" not in question for question in payload["questions"]))
         self.assertTrue(all(question.get("options") for question in payload["questions"] if question["response_type"] == "mc"))
 
+    def test_listening_payload_only_exposes_four_option_questions(self):
+        payload = public_exam_payload("2026-04-15_S1", "listening")
+        self.assertIsNotNone(payload)
+        self.assertTrue(payload["questions"])
+        self.assertTrue(all(
+            len(question.get("options") or []) == 4
+            for question in payload["questions"]
+            if question["response_type"] == "mc"
+        ))
+
     def test_grading_accepts_known_correct_answer(self):
         payload = public_exam_payload("2026-01-21_A", "listening")
         first = payload["questions"][0]
