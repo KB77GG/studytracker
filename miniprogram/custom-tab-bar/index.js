@@ -16,8 +16,6 @@ Component({
             let path = ''
             if (type === 'task') {
                 path = `<circle cx="16" cy="16" r="12" fill="none" stroke="${c}" stroke-width="2.4"/><path d="M11.5 16.5l3.5 3.5 6.5-7.5" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`
-            } else if (type === 'hammer') {
-                path = `<path d="M10 13.5l4.8-4.8 2.4 2.4-4.8 4.8z" fill="none" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/><path d="M17.5 11l4.8 4.8-1.9 1.9-4.8-4.8z" fill="none" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/><path d="M9.7 22.3l4.9-4.9" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>`
             } else if (type === 'practice') {
                 path = `<rect x="12" y="5" width="8" height="14" rx="4" fill="none" stroke="${c}" stroke-width="2.4"/><path d="M16 19v4.5" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/><path d="M11 23.5h10" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/><path d="M8.5 13.5c0 4.1 3.3 7.5 7.5 7.5s7.5-3.4 7.5-7.5" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>`
             } else if (type === 'note') {
@@ -42,12 +40,6 @@ Component({
                 text: "我的",
                 iconPath: buildIcon('user', gray),
                 selectedIconPath: buildIcon('user', brand)
-            },
-            {
-                pagePath: "/pages/student/hammer/index",
-                text: "对练",
-                iconPath: buildIcon('practice', gray),
-                selectedIconPath: buildIcon('practice', brand)
             }
         ]
 
@@ -75,7 +67,10 @@ Component({
             }
         ]
 
-        const role = wx.getStorageSync('role');
+        const currentApp = getApp()
+        const role = currentApp.globalData.guestMode
+            ? currentApp.globalData.guestRole
+            : wx.getStorageSync('role')
         this.setData({
             studentList,
             parentList,

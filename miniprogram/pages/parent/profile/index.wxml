@@ -5,7 +5,7 @@
     </view>
     <view class="info">
       <view class="name">{{userInfo.display_name || '家长'}}</view>
-      <view class="role">家长账号</view>
+      <view class="role">{{isGuest ? '演示模式 · 未登录' : '家长账号'}}</view>
     </view>
   </view>
 
@@ -21,8 +21,12 @@
       <text>解除微信绑定</text>
       <text class="arrow">></text>
     </view>
+    <view class="action-item" wx:if="{{isGuest}}" bindtap="exitGuest">
+      <text>登录 / 绑定账号</text>
+      <text class="arrow">></text>
+    </view>
     <view class="action-item logout" bindtap="handleLogout">
-      <text>退出登录</text>
+      <text>{{isGuest ? '退出演示模式' : '退出登录'}}</text>
       <text class="arrow">></text>
     </view>
   </view>

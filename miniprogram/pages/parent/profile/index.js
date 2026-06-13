@@ -5,6 +5,7 @@ const FEEDBACK_TEMPLATE_ID = 'jh8kXPp8x2qnzE3g894HlDzdJ5j7ItGHVG0Qx6oD7PA'
 
 Page({
     data: {
+        isGuest: false,
         userInfo: null,
         feedbackSubscribed: false,
         feedbackSubscribeText: '订阅课堂反馈',
@@ -19,12 +20,43 @@ Page({
             })
         }
 
+        if (app.globalData.guestMode) {
+            this.setData({
+                isGuest: true,
+                userInfo: { display_name: '演示家长' },
+                feedbackSubscribed: false,
+                feedbackSubscribeState: 'guest',
+                feedbackSubscribeText: '登录后可订阅课堂反馈',
+                feedbackSubscribeHint: '演示模式下仅供浏览，登录后可接收课堂反馈提醒'
+            })
+            return
+        }
+
         // Load user info
         const userInfo = wx.getStorageSync('userInfo')
         if (userInfo) {
             this.setData({ userInfo })
         }
         this.refreshSubscribeStatus()
+    },
+
+    promptLogin(content) {
+        wx.showModal({
+            title: '需要登录',
+            content,
+            confirmText: '去登录',
+            success: (res) => {
+                if (res.confirm) {
+                    this.exitGuest()
+                }
+            }
+        })
+    },
+
+    exitGuest() {
+        app.globalData.guestMode = false
+        app.globalData.guestRole = ''
+        wx.reLaunch({ url: '/pages/index/index' })
     },
 
     async refreshSubscribeStatus() {
@@ -83,6 +115,10 @@ Page({
     },
 
     requestFeedbackSubscribe() {
+        if (this.data.isGuest) {
+            this.promptLogin('订阅课堂反馈需要先登录账号。')
+            return
+        }
         if (!FEEDBACK_TEMPLATE_ID) {
             wx.showToast({ title: '模板未配置', icon: 'none' })
             return
@@ -119,6 +155,10 @@ Page({
     },
 
     async handleUnbind() {
+        if (this.data.isGuest) {
+            this.promptLogin('演示模式下未绑定账号，登录后可管理绑定。')
+            return
+        }
         const res = await wx.showModal({
             title: '确认解绑',
             content: '解绑后将无法查看孩子的学习数据，确定要解除微信绑定吗？',
@@ -145,6 +185,10 @@ Page({
     },
 
     async handleLogout() {
+        if (this.data.isGuest) {
+            this.exitGuest()
+            return
+        }
         const res = await wx.showModal({
             title: '确认退出',
             content: '确定要退出登录吗？'

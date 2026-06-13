@@ -1,0 +1,110 @@
+<view class="page">
+  <view class="header">
+    <view>
+      <text class="title">待批改作业</text>
+      <text class="subtitle">共 {{pendingCount}} 项，口语录音可直接播放</text>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state-card">加载中...</view>
+  <view wx:elif="{{tasks.length === 0}}" class="state-card">
+    <text class="empty-title">暂无待批改作业</text>
+    <text class="empty-sub">学生提交后会显示在这里</text>
+  </view>
+
+  <view wx:else class="task-list">
+    <view class="task-card" wx:for="{{tasks}}" wx:key="id" wx:for-index="taskIndex">
+      <view class="task-head">
+        <view class="student-badge">{{item.studentInitial}}</view>
+        <view class="task-head-main">
+          <text class="student-name">{{item.student_name}}</text>
+          <text class="task-meta">{{item.submittedLabel}} · 用时 {{item.durationLabel}}</text>
+        </view>
+        <text class="status-pill">待批改</text>
+      </view>
+
+      <view class="task-body">
+        <text class="category">{{item.category || '作业'}}</text>
+        <text class="detail">{{item.detail || '未填写任务说明'}}</text>
+        <text class="student-note" wx:if="{{item.student_note}}">学生备注：{{item.student_note}}</text>
+      </view>
+
+      <view class="evidence-section" wx:if="{{item.audioFiles.length}}">
+        <text class="section-label">学生录音</text>
+        <view class="audio-list">
+          <button
+            class="audio-button {{playingUrl === audio.url ? 'playing' : ''}}"
+            wx:for="{{item.audioFiles}}"
+            wx:key="url"
+            wx:for-item="audio"
+            data-url="{{audio.url}}"
+            bindtap="playAudio"
+          >{{playingUrl === audio.url ? '停止播放' : audio.label}}</button>
+        </view>
+      </view>
+
+      <view class="evidence-section" wx:if="{{item.imageFiles.length}}">
+        <text class="section-label">作业图片</text>
+        <view class="image-grid">
+          <image
+            class="evidence-image"
+            wx:for="{{item.imageFiles}}"
+            wx:key="*this"
+            src="{{item}}"
+            mode="aspectFill"
+            data-url="{{item}}"
+            data-index="{{taskIndex}}"
+            bindtap="previewImage"
+          ></image>
+        </view>
+      </view>
+
+      <view class="grading-form">
+        <view class="score-row">
+          <view class="field compact">
+            <text class="field-label">得分</text>
+            <input
+              class="score-input"
+              type="digit"
+              placeholder="0-100"
+              value="{{item.accuracyInput}}"
+              data-index="{{taskIndex}}"
+              data-field="accuracyInput"
+              bindinput="updateField"
+            />
+          </view>
+          <view class="field compact">
+            <text class="field-label">完成度</text>
+            <input
+              class="score-input"
+              type="digit"
+              value="{{item.completionInput}}"
+              data-index="{{taskIndex}}"
+              data-field="completionInput"
+              bindinput="updateField"
+            />
+          </view>
+        </view>
+        <view class="field">
+          <text class="field-label">教师评语</text>
+          <textarea
+            class="feedback-input"
+            placeholder="例如：发音清晰，注意句尾语调。"
+            maxlength="500"
+            value="{{item.feedbackInput}}"
+            data-index="{{taskIndex}}"
+            data-field="feedbackInput"
+            bindinput="updateField"
+          ></textarea>
+        </view>
+        <button
+          class="submit-button"
+          loading="{{savingId === item.id}}"
+          disabled="{{savingId !== null}}"
+          data-index="{{taskIndex}}"
+          bindtap="submitGrading"
+        >提交批改</button>
+      </view>
+    </view>
+  </view>
+</view>

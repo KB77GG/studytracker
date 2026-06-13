@@ -1,5 +1,6 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
+const { buildParentStats } = require('../../../utils/demo-data.js')
 
 const decodeParam = (value) => {
     if (value === undefined || value === null) return ''
@@ -37,6 +38,11 @@ Page({
     },
 
     async fetchFeedback() {
+        if (app.globalData.guestMode) {
+            this.setData({ feedbacks: buildParentStats().feedback, loading: false })
+            wx.stopPullDownRefresh()
+            return
+        }
         const studentName = this.data.studentName
         if (!studentName) {
             this.setData({ loading: false })

@@ -50,7 +50,20 @@
   "libVersion": "2.19.4",
   "srcMiniprogramRoot": "",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "pages/student/hammer"
+      },
+      {
+        "type": "file",
+        "value": "utils/aliyun_oral_sdk.js"
+      },
+      {
+        "type": "folder",
+        "value": "vendor/aliyun-oral-sdk"
+      }
+    ],
     "include": []
   },
   "editorSetting": {

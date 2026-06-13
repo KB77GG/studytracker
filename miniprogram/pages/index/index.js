@@ -19,6 +19,7 @@ Page({
         existingLoading: false,
         privacyAgreed: false,
         showPreview: false,
+        showPreviewRoles: false,
         dotList: Array.from({ length: 20 }, (_, index) => index)
     },
 
@@ -32,7 +33,7 @@ Page({
 
     backToWelcome() {
         // 返回欢迎页
-        this.setData({ showLoginForm: false, showPreview: false })
+        this.setData({ showLoginForm: false, showPreview: false, showPreviewRoles: false })
     },
 
     handlePrivacyChange(e) {
@@ -48,9 +49,19 @@ Page({
     },
 
     showPreview() {
-        // Navigate directly into student pages in guest mode (WeChat review compliance)
+        this.setData({ showPreviewRoles: !this.data.showPreviewRoles })
+    },
+
+    enterPreview(e) {
+        const role = e.currentTarget.dataset.role || 'student'
         app.globalData.guestMode = true
-        wx.reLaunch({ url: '/pages/student/home/index' })
+        app.globalData.guestRole = role
+        const routeMap = {
+            student: '/pages/student/home/index',
+            parent: '/pages/parent/home/index',
+            teacher: '/pages/teacher/home/index'
+        }
+        wx.reLaunch({ url: routeMap[role] || routeMap.student })
     },
 
     cacheUserInfo(userInfo) {
@@ -225,6 +236,7 @@ Page({
 
     handleRoleRedirect(role) {
         app.globalData.guestMode = false
+        app.globalData.guestRole = ''
         if (role === 'student') {
             wx.reLaunch({ url: '/pages/student/home/index' })
         } else if (role === 'parent') {

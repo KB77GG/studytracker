@@ -33,7 +33,7 @@
   </view>
 
   <view class="logout-card">
-    <button class="btn-logout" bindtap="handleLogout">退出登录</button>
+    <button class="btn-logout" bindtap="handleLogout">{{isGuest ? '退出演示模式' : '退出登录'}}</button>
   </view>
 
   <view class="bottom-nav">

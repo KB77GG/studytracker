@@ -1,7 +1,9 @@
 const { request } = require('../../../utils/request.js')
+const { buildTeacherMonthlyStats } = require('../../../utils/demo-data.js')
 
 Page({
     data: {
+        isGuest: false,
         month: '',
         subjects: [],
         total: null,
@@ -29,6 +31,17 @@ Page({
     async fetchStats() {
         const month = this.data.month
         if (!month) return
+        if (getApp().globalData.guestMode) {
+            const demo = buildTeacherMonthlyStats()
+            this.setData({
+                isGuest: true,
+                subjects: demo.subjects,
+                total: demo.total,
+                loading: false
+            })
+            wx.stopPullDownRefresh()
+            return
+        }
         this.setData({ loading: true })
         wx.showLoading({ title: '加载中...' })
         try {
@@ -55,6 +68,13 @@ Page({
     },
 
     handleLogout() {
+        const app = getApp()
+        if (app.globalData.guestMode) {
+            app.globalData.guestMode = false
+            app.globalData.guestRole = ''
+            wx.reLaunch({ url: '/pages/index/index' })
+            return
+        }
         wx.showModal({
             title: '退出登录',
             content: '确定要退出登录吗？',
@@ -62,7 +82,6 @@ Page({
                 if (!res.confirm) return
                 wx.removeStorageSync('token')
                 wx.removeStorageSync('role')
-                const app = getApp()
                 app.globalData.token = null
                 app.globalData.role = null
                 wx.reLaunch({ url: '/pages/index/index' })

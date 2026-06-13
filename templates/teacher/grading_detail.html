@@ -50,13 +50,17 @@
                 </div>
                 {% endif %}
 
-                <!-- Evidence: Audio (if any, usually in feedback_audio for now or separate field?) -->
-                <!-- Note: Current Task model stores audio in feedback_audio? No, that's teacher feedback. 
-             Student audio might be in evidence_photos (as mp3 url) or we need to check how it's stored.
-             Based on miniprogram.py, audio is stored in PlanEvidence table for PlanItem, 
-             but for Task it seems mixed in evidence_photos or not explicitly handled?
-             Let's assume evidence_photos might contain audio urls too, or we check file extension.
-        -->
+                {% if evidence_audio %}
+                <div class="info-group">
+                    <label>学生录音</label>
+                    {% for audio_url in evidence_audio %}
+                    <audio controls preload="metadata" style="display:block; width:100%; margin-top:10px;">
+                        <source src="{{ audio_url }}">
+                        当前浏览器不支持音频播放。
+                    </audio>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

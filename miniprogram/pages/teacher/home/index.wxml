@@ -8,9 +8,15 @@
       <input class="bind-input" type="number" placeholder="排课系统老师ID" model:value="{{schedulerTeacherId}}" />
       <button class="bind-btn" size="mini" loading="{{bindLoading}}" disabled="{{bindLoading}}" bindtap="bindSchedulerTeacher">绑定</button>
     </view>
+    <button class="grading-entry-btn" bindtap="openGrading">先查看待批改作业（{{pendingReviewCount}}）</button>
   </view>
 
   <scroll-view wx:else scroll-y class="page-scroll" enhanced="true" show-scrollbar="false" scroll-into-view="{{scrollIntoView}}" scroll-with-animation="true">
+    <view class="guest-banner" wx:if="{{isGuest}}" bindtap="promptLoginFromBanner">
+      <text>当前为演示课表，登录教师账号后查看真实数据</text>
+      <text class="guest-banner-btn">去登录</text>
+    </view>
+
     <view class="teacher-header">
       <view>
         <text class="teacher-title">{{teacherGreeting || '你好'}}，{{teacherName || '老师'}}</text>
@@ -27,10 +33,10 @@
         <text class="kpi-label">今日课程</text>
         <text class="kpi-value">{{dashboardStats.todayCourses}}</text>
       </view>
-      <view class="kpi-item">
+      <view class="kpi-item" bindtap="openGrading">
         <view class="kpi-icon orange">作</view>
-        <text class="kpi-label">待处理</text>
-        <text class="kpi-value">{{dashboardStats.pendingHomework}}</text>
+        <text class="kpi-label">待批改</text>
+        <text class="kpi-value">{{pendingReviewCount}}</text>
       </view>
       <view class="kpi-item">
         <view class="kpi-icon blue">反</view>
@@ -195,10 +201,10 @@
           <text>布置作业</text>
           <text class="quick-sub">可用</text>
         </view>
-        <view class="quick-card muted" data-name="发送通知" bindtap="showUnavailable">
-          <text class="quick-icon">通</text>
-          <text>发送通知</text>
-          <text class="quick-sub">保留入口</text>
+        <view class="quick-card" bindtap="openGrading">
+          <text class="quick-icon">改</text>
+          <text>作业批改</text>
+          <text class="quick-sub">{{pendingReviewCount}} 项待处理</text>
         </view>
         <view class="quick-card muted" data-name="导出报告" bindtap="showUnavailable">
           <text class="quick-icon">报</text>

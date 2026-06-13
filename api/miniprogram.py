@@ -506,6 +506,33 @@ def _sync_plan_item_from_legacy_task(task, *, note=None, evidence_files=None, du
     return item
 
 
+def _task_evidence_type(file_url) -> str:
+    path = str(file_url or "").split("?", 1)[0].split("#", 1)[0].lower()
+    if path.endswith((".mp3", ".wav", ".m4a", ".aac", ".caf", ".ogg", ".webm", ".mp4")):
+        return "audio"
+    if path.endswith((".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".heic")):
+        return "image"
+    if path.endswith((".pdf", ".doc", ".docx")):
+        return "doc"
+    return "other"
+
+
+def _task_evidence_files(task) -> dict:
+    try:
+        files = json.loads(task.evidence_photos or "[]")
+    except (TypeError, ValueError, json.JSONDecodeError):
+        files = []
+    if not isinstance(files, list):
+        files = []
+
+    grouped = {"audio": [], "image": [], "doc": [], "other": []}
+    for file_url in files:
+        if not isinstance(file_url, str) or not file_url.strip():
+            continue
+        grouped[_task_evidence_type(file_url)].append(file_url.strip())
+    return grouped
+
+
 def _safe_float(value, default=0.0):
     try:
         return round(float(value), 1)
@@ -1581,7 +1608,7 @@ def get_student_today_tasks():
             # 反馈字段
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
-            "teacher_note": task.note, # 暂时复用note，前端需区分展示场景
+            "teacher_note": task.feedback_text or task.note,
             # 精听练习字段
             "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
             "listening_exercise_id": task.listening_exercise_id,
@@ -1688,7 +1715,7 @@ def get_task_detail(task_id):
                 # 反馈字段
                 "accuracy": task.accuracy,
                 "completion_rate": task.completion_rate,
-                "teacher_note": task.note,
+                "teacher_note": task.feedback_text or task.note,
                 "student_note": task.student_note,
                 "evidence_photos": json.loads(task.evidence_photos) if task.evidence_photos else [],
                 "feedback_image": task.feedback_image,
@@ -2762,7 +2789,7 @@ def get_parent_stats():
             "detail": t.detail,
             "accuracy": t.accuracy,
             "completion_rate": t.completion_rate,
-            "teacher_note": t.note,
+            "teacher_note": t.feedback_text or t.note,
             "listening_test_result": _serialize_listening_test_submission(listening_test_submission),
         })
 
@@ -3770,6 +3797,28 @@ def _serialize_teacher_homework_task(task: Task) -> dict:
     }
 
 
+def _serialize_teacher_grading_task(task: Task) -> dict:
+    evidence = _task_evidence_files(task)
+    return {
+        "id": task.id,
+        "date": task.date,
+        "student_name": task.student_name,
+        "category": task.category,
+        "detail": task.detail,
+        "student_note": task.student_note,
+        "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        "actual_seconds": task.actual_seconds or 0,
+        "accuracy": task.accuracy,
+        "completion_rate": task.completion_rate,
+        "feedback_text": task.feedback_text or "",
+        "audio_files": evidence["audio"],
+        "image_files": evidence["image"],
+        "document_files": evidence["doc"],
+        "other_files": evidence["other"],
+        "status": task.status,
+    }
+
+
 def _teacher_homework_error(error: str, status: int = 400):
     return jsonify({"ok": False, "error": error}), status
 
@@ -4129,6 +4178,85 @@ def delete_teacher_homework(task_id):
     db.session.delete(task)
     db.session.commit()
     return jsonify({"ok": True})
+
+
+@mp_bp.route("/teacher/grading", methods=["GET"])
+@require_api_user(User.ROLE_TEACHER)
+def list_teacher_grading():
+    """Return submitted assignments created by the current teacher."""
+    user = request.current_api_user
+    tasks = (
+        Task.query.filter(
+            Task.created_by == user.id,
+            Task.student_submitted.is_(True),
+            Task.status.in_(("submitted", "progress", "pending")),
+        )
+        .order_by(Task.submitted_at.desc(), Task.id.desc())
+        .limit(100)
+        .all()
+    )
+    return jsonify({
+        "ok": True,
+        "pending_count": len(tasks),
+        "tasks": [_serialize_teacher_grading_task(task) for task in tasks],
+    })
+
+
+def _teacher_grading_percentage(value, field_name):
+    if value in (None, ""):
+        return None, None
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return None, f"invalid_{field_name}"
+    if parsed < 0 or parsed > 100:
+        return None, f"invalid_{field_name}"
+    return round(parsed, 1), None
+
+
+@mp_bp.route("/teacher/grading/<int:task_id>", methods=["POST"])
+@require_api_user(User.ROLE_TEACHER)
+def submit_teacher_grading(task_id):
+    """Save teacher feedback and mark a submitted assignment as reviewed."""
+    user = request.current_api_user
+    task = Task.query.get_or_404(task_id)
+    if task.created_by != user.id and user.role != User.ROLE_ADMIN:
+        return jsonify({"ok": False, "error": "forbidden_task"}), 403
+    if not task.student_submitted:
+        return jsonify({"ok": False, "error": "task_not_submitted"}), 409
+
+    data = request.get_json(silent=True) or {}
+    accuracy, error = _teacher_grading_percentage(data.get("accuracy"), "accuracy")
+    if error:
+        return jsonify({"ok": False, "error": error}), 400
+    completion_rate, error = _teacher_grading_percentage(
+        data.get("completion_rate"),
+        "completion_rate",
+    )
+    if error:
+        return jsonify({"ok": False, "error": error}), 400
+
+    feedback_text = (data.get("feedback_text") or "").strip()
+    if accuracy is not None:
+        task.accuracy = accuracy
+    task.completion_rate = completion_rate if completion_rate is not None else 100.0
+    task.feedback_text = feedback_text or None
+    task.status = "done"
+
+    item = getattr(task, "plan_item", None)
+    if item:
+        item.student_status = PlanItem.STUDENT_SUBMITTED
+        item.review_status = PlanItem.REVIEW_APPROVED
+        item.review_comment = feedback_text[:255] if feedback_text else None
+        item.review_by = user.id
+        item.review_at = datetime.utcnow()
+        item.locked = True
+
+    db.session.commit()
+    return jsonify({
+        "ok": True,
+        "task": _serialize_teacher_grading_task(task),
+    })
 
 
 @mp_bp.route("/teacher/schedules", methods=["GET"])

@@ -1,5 +1,6 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
+const { buildParentStats } = require('../../../utils/demo-data.js')
 
 Page({
     data: {
@@ -18,6 +19,10 @@ Page({
     },
 
     async fetchStats(studentName) {
+        if (app.globalData.guestMode) {
+            this.setData({ stats: buildParentStats(), loading: false })
+            return
+        }
         wx.showLoading({ title: '加载中...' })
         try {
             const res = await request(`/miniprogram/parent/stats?student_name=${encodeURIComponent(studentName)}`)

@@ -1,6 +1,7 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
 const { getSubscribeSummary, requestTemplateSubscribe } = require('../../../utils/subscribe.js')
+const { buildTeacherSchedules } = require('../../../utils/demo-data.js')
 const COURSE_TEMPLATE_ID = 'AehPa5pMUTnQqXgq-q-wxTAMZyVU-qdkxaO9rbpo-QI'
 const DEFAULT_START_HOUR = 8
 const DEFAULT_END_HOUR = 22
@@ -8,6 +9,7 @@ const HOUR_HEIGHT = 72
 
 Page({
     data: {
+        isGuest: false,
         loading: true,
         viewDays: 7,
         schedules: [],
@@ -30,6 +32,7 @@ Page({
         selectedDate: '',
         selectedItems: [],
         todayItems: [],
+        pendingReviewCount: 0,
         scrollIntoView: '',
         dashboardStats: {
             todayCourses: 0,
@@ -46,6 +49,7 @@ Page({
     },
 
     onShow() {
+        this.setData({ isGuest: !!app.globalData.guestMode })
         this.updateGreeting()
         this.loadTeacherProfile()
         if (!this.data.calendarMonth) {
@@ -56,6 +60,7 @@ Page({
             })
         }
         this.fetchSchedules()
+        this.fetchPendingReviews()
         this.refreshSubscribeStatus()
         if (typeof this.getTabBar === 'function' && this.getTabBar()) {
             this.getTabBar().setData({ selected: 0 })
@@ -95,7 +100,30 @@ Page({
         return normalized
     },
 
+    promptLoginFromBanner() {
+        this.promptLogin('登录教师账号后可查看真实课表与统计。')
+    },
+
+    promptLogin(content) {
+        wx.showModal({
+            title: '需要登录',
+            content,
+            confirmText: '去登录',
+            success: (res) => {
+                if (res.confirm) {
+                    app.globalData.guestMode = false
+                    app.globalData.guestRole = ''
+                    wx.reLaunch({ url: '/pages/index/index' })
+                }
+            }
+        })
+    },
+
     async loadTeacherProfile() {
+        if (this.data.isGuest) {
+            this.setData({ teacherName: '演示老师' })
+            return
+        }
         const cached = app.globalData.userInfo || wx.getStorageSync('userInfo')
         const cachedName = this.resolveTeacherName(cached)
         if (cachedName && cachedName !== this.data.teacherName) {
@@ -121,8 +149,37 @@ Page({
         }
     },
 
+    applyScheduleData(list, dashboardList) {
+        const grouped = this.groupByDate(list)
+        const weekData = this.buildWeekView(list)
+        const monthData = this.buildMonthView(list)
+        const dashboard = this.buildDashboard(dashboardList)
+        this.setData({
+            schedules: grouped,
+            weekDays: weekData.days,
+            monthDays: monthData.days,
+            monthLabel: monthData.label,
+            calendarMonth: monthData.month,
+            selectedDate: monthData.selectedDate || weekData.selectedDate,
+            selectedItems: monthData.selectedItems || weekData.selectedItems,
+            todayItems: dashboard.todayItems,
+            dashboardStats: dashboard.stats,
+            bindRequired: false
+        })
+    },
+
     async fetchSchedules() {
         this.setData({ loading: true })
+        if (this.data.isGuest || app.globalData.guestMode) {
+            const list = buildTeacherSchedules(this.data.calendarMonth)
+            const currentMonth = this.formatMonth(new Date())
+            const dashboardList = (this.data.calendarMonth && this.data.calendarMonth !== currentMonth)
+                ? buildTeacherSchedules()
+                : list
+            this.applyScheduleData(list, dashboardList)
+            this.setData({ loading: false })
+            return
+        }
         try {
             const res = await request('/miniprogram/teacher/schedules', {
                 method: 'GET',
@@ -144,22 +201,7 @@ Page({
                         dashboardList = todayRes.schedules || []
                     }
                 }
-                const grouped = this.groupByDate(list)
-                const weekData = this.buildWeekView(list)
-                const monthData = this.buildMonthView(list)
-                const dashboard = this.buildDashboard(dashboardList)
-                this.setData({
-                    schedules: grouped,
-                    weekDays: weekData.days,
-                    monthDays: monthData.days,
-                    monthLabel: monthData.label,
-                    calendarMonth: monthData.month,
-                    selectedDate: monthData.selectedDate || weekData.selectedDate,
-                    selectedItems: monthData.selectedItems || weekData.selectedItems,
-                    todayItems: dashboard.todayItems,
-                    dashboardStats: dashboard.stats,
-                    bindRequired: false
-                })
+                this.applyScheduleData(list, dashboardList)
             } else {
                 if (res && res.error === 'missing_scheduler_teacher_id') {
                     this.setData({ bindRequired: true, schedules: [] })
@@ -173,6 +215,22 @@ Page({
             wx.showToast({ title: '网络错误', icon: 'none' })
         } finally {
             this.setData({ loading: false })
+        }
+    },
+
+    async fetchPendingReviews() {
+        if (this.data.isGuest || app.globalData.guestMode) {
+            this.setData({ pendingReviewCount: 2 })
+            return
+        }
+        try {
+            const res = await request('/miniprogram/teacher/grading')
+            this.setData({
+                pendingReviewCount: res && res.ok ? Number(res.pending_count || 0) : 0
+            })
+        } catch (error) {
+            console.warn('teacher pending grading load failed', error)
+            this.setData({ pendingReviewCount: 0 })
         }
     },
 
@@ -529,6 +587,14 @@ Page({
         })
     },
 
+    openGrading() {
+        if (this.data.isGuest) {
+            this.promptLogin('查看和批改学生作业需要登录教师账号。')
+            return
+        }
+        wx.navigateTo({ url: '/pages/teacher/grading/index' })
+    },
+
     showUnavailable(e) {
         const name = e.currentTarget.dataset.name || '该功能'
         wx.showToast({ title: `${name}暂未开放`, icon: 'none' })
@@ -555,6 +621,10 @@ Page({
     },
 
     async bindSchedulerTeacher() {
+        if (this.data.isGuest) {
+            this.promptLogin('绑定排课老师ID需要登录教师账号。')
+            return
+        }
         const rawId = (this.data.schedulerTeacherId || '').trim()
         const parsedId = Number(rawId)
         if (!rawId) {
@@ -592,6 +662,15 @@ Page({
     },
 
     async refreshSubscribeStatus() {
+        if (this.data.isGuest || app.globalData.guestMode) {
+            this.setData({
+                hasSubscribed: false,
+                subscribeState: 'guest',
+                subscribeButtonText: '登录后开启提醒',
+                subscribeTip: '登录后可接收课程提醒'
+            })
+            return
+        }
         const summary = await getSubscribeSummary([COURSE_TEMPLATE_ID])
         this.setData(this.buildSubscribeView(summary))
     },
@@ -647,6 +726,10 @@ Page({
     },
 
     requestSubscribe() {
+        if (this.data.isGuest) {
+            this.promptLogin('订阅课程提醒需要登录教师账号。')
+            return
+        }
         if (['reject', 'off'].includes(this.data.subscribeState)) {
             wx.showModal({
                 title: '开启提醒',
@@ -685,6 +768,10 @@ Page({
     },
 
     navigateFeedbackWithSchedule(data = {}) {
+        if (this.data.isGuest) {
+            this.promptLogin('填写课堂反馈需要登录教师账号。')
+            return
+        }
         const params = {
             schedule_uid: data.scheduleUid || data.schedule_uid,
             schedule_id: data.scheduleId || data.schedule_id,
@@ -713,6 +800,10 @@ Page({
     },
 
     navigateHomeworkWithSchedule(data = {}) {
+        if (this.data.isGuest) {
+            this.promptLogin('布置作业需要登录教师账号。')
+            return
+        }
         const params = {
             schedule_uid: data.scheduleUid || data.schedule_uid,
             schedule_id: data.scheduleId || data.schedule_id,

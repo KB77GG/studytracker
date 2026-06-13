@@ -62,11 +62,20 @@
 
           <button class="btn-start {{!landingAgreed ? 'btn-disabled' : ''}}" bindtap="startUse">开始使用</button>
           <button class="btn-ghost" bindtap="showPreview">先浏览功能</button>
+          <view class="preview-role-panel" wx:if="{{showPreviewRoles}}">
+            <text class="preview-title">选择浏览身份</text>
+            <text class="preview-desc">无需登录即可查看只读示例，提交与绑定功能需登录后使用。</text>
+            <view class="preview-role-grid">
+              <button class="preview-role-btn" data-role="student" bindtap="enterPreview">学生端</button>
+              <button class="preview-role-btn" data-role="parent" bindtap="enterPreview">家长端</button>
+              <button class="preview-role-btn" data-role="teacher" bindtap="enterPreview">教师端</button>
+            </view>
+          </view>
         </view>
 
         <view class="login-note">
           <view class="shield-mark"></view>
-          <text>登录后将根据账号自动进入学生端或教师端</text>
+          <text>登录后将根据账号自动进入学生端、家长端或教师端</text>
         </view>
       </view>
     </view>
@@ -105,6 +114,14 @@
           <view class="role-icon-bg">师</view>
           <text class="role-label">我是老师</text>
           <text class="role-desc">查看课表 · 课堂记录</text>
+        </view>
+      </view>
+      <view class="bound-preview">
+        <text>暂不绑定，也可以先查看功能示例</text>
+        <view class="preview-role-grid compact">
+          <button class="preview-role-btn" data-role="student" bindtap="enterPreview">学生端</button>
+          <button class="preview-role-btn" data-role="parent" bindtap="enterPreview">家长端</button>
+          <button class="preview-role-btn" data-role="teacher" bindtap="enterPreview">教师端</button>
         </view>
       </view>
     </view>

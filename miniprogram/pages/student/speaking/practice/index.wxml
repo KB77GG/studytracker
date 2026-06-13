@@ -42,6 +42,9 @@
           {{isPlayingRecord ? '播放中...' : '播放录音'}}
         </button>
       </view>
+      <view class="play-hint" wx:if="{{recordings.length > 0}}">
+        已保存 {{recordings.length}} 条录音，完成练习后统一提交
+      </view>
     </view>
 
     <!-- Navigation -->

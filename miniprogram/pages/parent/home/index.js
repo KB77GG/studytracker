@@ -1,8 +1,10 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
+const { buildParentDemo } = require('../../../utils/demo-data.js')
 
 Page({
     data: {
+        isGuest: false,
         students: [],
         currentStudentIndex: 0,
         stats: null,
@@ -38,6 +40,19 @@ Page({
     },
 
     async fetchStudents() {
+        if (app.globalData.guestMode) {
+            const demo = buildParentDemo()
+            const now = new Date()
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+            this.setData({
+                isGuest: true,
+                students: demo.students,
+                stats: demo.stats,
+                lastUpdateTime: timeStr,
+                loading: false
+            })
+            return
+        }
         try {
             const res = await request('/miniprogram/parent/students')
             if (res.ok && res.students.length > 0) {
@@ -55,6 +70,11 @@ Page({
     },
 
     async fetchStats(studentName) {
+        if (app.globalData.guestMode) {
+            this.setData({ stats: buildParentDemo().stats, loading: false })
+            wx.stopPullDownRefresh()
+            return
+        }
         wx.showLoading({ title: '加载中...' })
         try {
             const res = await request(`/miniprogram/parent/stats?student_name=${encodeURIComponent(studentName)}`)
@@ -84,9 +104,32 @@ Page({
     },
 
     navigateToAddStudent() {
+        if (app.globalData.guestMode) {
+            this.promptLogin('绑定孩子需要先登录账号。')
+            return
+        }
         wx.navigateTo({
             url: '/pages/index/index?action=bind_parent'
         })
+    },
+
+    promptLogin(content) {
+        wx.showModal({
+            title: '需要登录',
+            content,
+            confirmText: '去登录',
+            success: (res) => {
+                if (res.confirm) {
+                    this.goLogin()
+                }
+            }
+        })
+    },
+
+    goLogin() {
+        app.globalData.guestMode = false
+        app.globalData.guestRole = ''
+        wx.reLaunch({ url: '/pages/index/index' })
     },
 
     viewReport() {

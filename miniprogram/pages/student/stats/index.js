@@ -1,4 +1,5 @@
 const app = getApp()
+const { buildStudentStats } = require('../../../utils/demo-data.js')
 
 Page({
     data: {
@@ -25,7 +26,10 @@ Page({
         if (!isGuest) {
             this.fetchStats()
         } else {
-            this.setData({ loading: false })
+            this.setData({
+                stats: buildStudentStats(),
+                loading: false
+            })
         }
     },
 

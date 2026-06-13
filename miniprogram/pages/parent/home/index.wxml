@@ -3,6 +3,11 @@
   <view class="bg-gradient"></view>
 
   <block wx:if="{{students.length > 0}}">
+    <view class="guest-banner" wx:if="{{isGuest}}" bindtap="goLogin">
+      <text>当前为演示数据，登录后查看孩子的真实学习情况</text>
+      <text class="guest-banner-btn">去登录</text>
+    </view>
+
     <!-- 顶部栏 -->
     <view class="header">
       <view class="header-left">

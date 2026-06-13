@@ -25,6 +25,7 @@ Page({
         isRecording: false,
         recordFilePath: null,
         isPlayingRecord: false,
+        recordings: [],
 
         // Progress
         completedSet: {},
@@ -82,9 +83,27 @@ Page({
         // Recording manager
         this.recorderManager = wx.getRecorderManager();
         this.recorderManager.onStop((res) => {
-            this.setData({ isRecording: false, recordFilePath: res.tempFilePath });
+            const phraseIndex = Number.isInteger(this.recordingPhraseIndex)
+                ? this.recordingPhraseIndex
+                : this.data.currentIndex;
+            this.recordingPhraseIndex = null;
+            const phrase = this.data.phrases[phraseIndex] || {};
+            const recordings = (this.data.recordings || []).filter(item => item.phraseIndex !== phraseIndex);
+            recordings.push({
+                phraseIndex,
+                phrase: phrase.phrase || '',
+                filePath: res.tempFilePath,
+                duration: Math.floor((res.duration || 0) / 1000)
+            });
+            recordings.sort((a, b) => a.phraseIndex - b.phraseIndex);
+            this.setData({
+                isRecording: false,
+                recordFilePath: res.tempFilePath,
+                recordings
+            });
         });
         this.recorderManager.onError(() => {
+            this.recordingPhraseIndex = null;
             this.setData({ isRecording: false });
             wx.showToast({ title: '录音失败', icon: 'none' });
         });
@@ -256,11 +275,12 @@ Page({
             this.finishPractice();
             return;
         }
+        const nextRecording = (this.data.recordings || []).find(item => item.phraseIndex === nextIdx);
         this.setData({
             currentIndex: nextIdx,
             currentPhrase: this.data.phrases[nextIdx],
             revealed: false,
-            recordFilePath: null,
+            recordFilePath: nextRecording ? nextRecording.filePath : null,
             isPlayingRecord: false
         });
         setTimeout(() => this.playCurrentPhrase(), 400);
@@ -269,11 +289,12 @@ Page({
     prevPhrase() {
         if (this.data.currentIndex <= 0) return;
         const prevIdx = this.data.currentIndex - 1;
+        const previousRecording = (this.data.recordings || []).find(item => item.phraseIndex === prevIdx);
         this.setData({
             currentIndex: prevIdx,
             currentPhrase: this.data.phrases[prevIdx],
             revealed: false,
-            recordFilePath: null,
+            recordFilePath: previousRecording ? previousRecording.filePath : null,
             isPlayingRecord: false
         });
         setTimeout(() => this.playCurrentPhrase(), 400);
@@ -281,6 +302,7 @@ Page({
 
     // ========== Recording ==========
     startRecording() {
+        this.recordingPhraseIndex = this.data.currentIndex;
         this.setData({ isRecording: true, recordFilePath: null });
         this.recorderManager.start({
             format: 'mp3',
@@ -301,6 +323,14 @@ Page({
 
     // ========== Finish & Submit ==========
     finishPractice() {
+        if (this.data.isRecording) {
+            wx.showToast({ title: '请先松开按钮结束录音', icon: 'none' });
+            return;
+        }
+        if (this.data.taskId && (this.data.recordings || []).length === 0) {
+            wx.showToast({ title: '请至少完成一条录音', icon: 'none' });
+            return;
+        }
         const durationSeconds = this.computeDurationSeconds();
         this.stopTicker();
 
@@ -312,37 +342,74 @@ Page({
         }
     },
 
-    submitTaskResult(durationSeconds) {
+    async submitTaskResult(durationSeconds) {
         if (this.data.isSubmitting) return;
         this.setData({ isSubmitting: true });
         wx.showLoading({ title: '提交中...' });
-        wx.request({
-            url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${this.data.taskId}/submit`,
-            method: 'POST',
-            header: {
-                'Cookie': wx.getStorageSync('cookie'),
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${wx.getStorageSync('token')}`
-            },
-            data: {
-                accuracy: 100,
-                completion_rate: 100,
-                duration_seconds: durationSeconds
-            },
-            success: (res) => {
-                wx.hideLoading();
-                if (res.data.ok) {
-                    this.setData({ finished: true });
-                    wx.showToast({ title: '提交成功', icon: 'success' });
-                } else {
-                    wx.showToast({ title: '提交失败', icon: 'none' });
-                }
-            },
-            fail: () => {
-                wx.hideLoading();
-                wx.showToast({ title: '网络错误', icon: 'none' });
-            },
-            complete: () => this.setData({ isSubmitting: false })
+        try {
+            const evidenceFiles = [];
+            for (let index = 0; index < this.data.recordings.length; index += 1) {
+                wx.showLoading({ title: `上传录音 ${index + 1}/${this.data.recordings.length}` });
+                evidenceFiles.push(await this.uploadRecording(this.data.recordings[index].filePath));
+            }
+
+            const response = await new Promise((resolve, reject) => {
+                wx.request({
+                    url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${this.data.taskId}/submit`,
+                    method: 'POST',
+                    header: {
+                        'Cookie': wx.getStorageSync('cookie'),
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${wx.getStorageSync('token')}`
+                    },
+                    data: {
+                        note: `已提交 ${evidenceFiles.length} 条口语录音`,
+                        evidence_files: evidenceFiles,
+                        duration_seconds: durationSeconds
+                    },
+                    success: resolve,
+                    fail: reject
+                });
+            });
+
+            if (response.data && response.data.ok) {
+                this.setData({ finished: true });
+                wx.showToast({ title: '已提交，等待老师批改', icon: 'success' });
+            } else {
+                wx.showToast({ title: (response.data && response.data.error) || '提交失败', icon: 'none' });
+            }
+        } catch (error) {
+            console.error('Speaking recording submit failed:', error);
+            wx.showToast({ title: '录音上传失败，请重试', icon: 'none' });
+        } finally {
+            wx.hideLoading();
+            this.setData({ isSubmitting: false });
+        }
+    },
+
+    uploadRecording(filePath) {
+        return new Promise((resolve, reject) => {
+            wx.uploadFile({
+                url: `${app.globalData.baseUrl}/miniprogram/upload`,
+                filePath,
+                name: 'file',
+                header: {
+                    'Authorization': `Bearer ${wx.getStorageSync('token')}`
+                },
+                success: (res) => {
+                    try {
+                        const data = JSON.parse(res.data || '{}');
+                        if (res.statusCode >= 200 && res.statusCode < 300 && data.ok && data.url) {
+                            resolve(data.url);
+                            return;
+                        }
+                        reject(new Error(data.error || 'upload_failed'));
+                    } catch (error) {
+                        reject(error);
+                    }
+                },
+                fail: reject
+            });
         });
     },
 

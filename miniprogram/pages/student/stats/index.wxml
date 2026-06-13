@@ -55,7 +55,7 @@
   </view>
 
   <!-- 账号管理 -->
-  <view class="logout-section">
+  <view class="logout-section" wx:if="{{!isGuest}}">
     <button class="btn-unbind" bindtap="handleUnbind">解除微信绑定 (Debug)</button>
     <button class="btn-logout" bindtap="handleLogout">退出登录</button>
   </view>

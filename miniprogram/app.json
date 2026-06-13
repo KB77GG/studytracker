@@ -4,7 +4,6 @@
         "pages/student/home/index",
         "pages/student/notebook/index",
         "pages/student/task/index",
-        "pages/student/hammer/index",
         "pages/student/stats/index",
         "pages/student/dictation/index",
         "pages/student/dictation/practice/index",
@@ -24,6 +23,7 @@
         "pages/teacher/home/index",
         "pages/teacher/feedback/index",
         "pages/teacher/homework/index",
+        "pages/teacher/grading/index",
         "pages/teacher/stats/index"
     ],
     "window": {
@@ -41,12 +41,6 @@
             {
                 "pagePath": "pages/student/home/index",
                 "text": "任务",
-                "iconPath": "images/tabbar/task.png",
-                "selectedIconPath": "images/tabbar/task_active.png"
-            },
-            {
-                "pagePath": "pages/student/hammer/index",
-                "text": "对练",
                 "iconPath": "images/tabbar/task.png",
                 "selectedIconPath": "images/tabbar/task_active.png"
             },

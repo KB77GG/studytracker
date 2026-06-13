@@ -1,6 +1,7 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
 const { getSubscribeSummary, requestTemplateSubscribe } = require('../../../utils/subscribe.js')
+const { buildStudentTasks } = require('../../../utils/demo-data.js')
 const TASK_TEMPLATE_ID = 'GElWxP8srvY_TwH-h69q4XcmgLyNZBsvjp6rSt8dhUU'
 const COURSE_TEMPLATE_ID = 'AehPa5pMUTnQqXgq-q-wxTAMZyVU-qdkxaO9rbpo-QI'
 const MODE_SPELLING_DRILL = 'spelling_drill'
@@ -57,7 +58,10 @@ Page({
         }
         // Guest mode detection
         const isGuest = !!getApp().globalData.guestMode
-        this.setData({ isGuest })
+        this.setData({
+            isGuest,
+            userInfo: isGuest ? { nickName: '演示学生' } : (app.globalData.userInfo || this.data.userInfo)
+        })
 
         this.fetchTasks()
         this.loadNotebookCount()
@@ -388,67 +392,17 @@ Page({
 
     async fetchTasks() {
         // wx.showLoading({ title: '加载中...' }) // 移除 loading 以免闪烁
+        if (this.data.isGuest || getApp().globalData.guestMode) {
+            this.applyTaskData(buildStudentTasks())
+            this.setData({ loading: false })
+            return
+        }
         try {
             const res = await request(`/miniprogram/student/tasks/today?date=${this.data.currentDate}`)
             console.log('Tasks response:', res)
 
             if (res.ok && res.tasks) {
-                const tasks = res.tasks.map(t => {
-                    // Use actual_seconds from backend, default to 0 if not present
-                    const actualSeconds = t.actual_seconds || 0
-                    const plannedSeconds = t.planned_minutes * 60
-                    const iconInfo = this.getModuleIcon(t.module || t.task_name || '')
-
-                    return {
-                        id: t.id,
-                        task_name: t.task_name,
-                        module: t.module,
-                        moduleClass: this.getModuleClass(t.module),
-                        iconText: iconInfo.text,
-                        iconClass: iconInfo.cls,
-                        planned_minutes: t.planned_minutes,
-                        status: t.status,
-                        statusText: this.getStatusText(t.status),
-                        isDone: t.status === 'completed' || t.status === 'submitted',
-                        // Dictation Fields
-                        dictationBookId: t.dictation_book_id,
-                        dictationMode: t.dictation_mode || '',
-                        // Speaking Fields
-                        speakingBookId: t.speaking_book_id,
-                        materialType: t.material_type || null,
-                        materialId: t.material_id || null,
-                        // Listening Fields
-                        listeningResourceType: t.listening_resource_type || 'intensive',
-                        listeningExerciseId: t.listening_exercise_id || '',
-                        listeningSectionNumber: t.listening_section_number || null,
-                        listeningToken: t.listening_token || '',
-                        listeningUrl: t.listening_url || null,
-                        readingTestId: t.reading_test_id || '',
-                        readingPassageNumber: t.reading_passage_number || null,
-                        readingToken: t.reading_token || '',
-                        readingUrl: t.reading_url || null,
-
-                        // Timer state - show actual time spent from backend
-                        timerStatus: 'idle',
-                        elapsedSeconds: actualSeconds,
-                        displayTime: this.formatTime(actualSeconds),
-                        plannedTime: this.formatTime(plannedSeconds),
-                        isOvertime: actualSeconds > plannedSeconds,
-                        sessionId: null
-                    }
-                })
-
-                // 计算进度
-                const total = tasks.length
-                const completed = tasks.filter(t => t.isDone).length
-                const percent = total > 0 ? Math.round((completed / total) * 100) : 0
-                const reviewTaskCount = tasks.filter(t => t.status === 'rejected').length
-
-                this.setData({
-                    tasks,
-                    progress: { total, completed, percent },
-                    reviewTaskCount
-                })
+                this.applyTaskData(res.tasks)
             } else {
                 this.setData({
                     tasks: [],
@@ -463,6 +417,54 @@ Page({
             // wx.hideLoading()
             this.setData({ loading: false })
         }
+    },
+
+    applyTaskData(rawTasks) {
+        const tasks = (rawTasks || []).map(t => {
+            const actualSeconds = t.actual_seconds || 0
+            const plannedSeconds = t.planned_minutes * 60
+            const iconInfo = this.getModuleIcon(t.module || t.task_name || '')
+            return {
+                id: t.id,
+                task_name: t.task_name,
+                module: t.module,
+                moduleClass: this.getModuleClass(t.module),
+                iconText: iconInfo.text,
+                iconClass: iconInfo.cls,
+                planned_minutes: t.planned_minutes,
+                status: t.status,
+                statusText: this.getStatusText(t.status),
+                isDone: t.status === 'completed' || t.status === 'submitted',
+                dictationBookId: t.dictation_book_id,
+                dictationMode: t.dictation_mode || '',
+                speakingBookId: t.speaking_book_id,
+                materialType: t.material_type || null,
+                materialId: t.material_id || null,
+                listeningResourceType: t.listening_resource_type || 'intensive',
+                listeningExerciseId: t.listening_exercise_id || '',
+                listeningSectionNumber: t.listening_section_number || null,
+                listeningToken: t.listening_token || '',
+                listeningUrl: t.listening_url || null,
+                readingTestId: t.reading_test_id || '',
+                readingPassageNumber: t.reading_passage_number || null,
+                readingToken: t.reading_token || '',
+                readingUrl: t.reading_url || null,
+                timerStatus: 'idle',
+                elapsedSeconds: actualSeconds,
+                displayTime: this.formatTime(actualSeconds),
+                plannedTime: this.formatTime(plannedSeconds),
+                isOvertime: actualSeconds > plannedSeconds,
+                sessionId: null
+            }
+        })
+        const total = tasks.length
+        const completed = tasks.filter(t => t.isDone).length
+        const percent = total > 0 ? Math.round((completed / total) * 100) : 0
+        this.setData({
+            tasks,
+            progress: { total, completed, percent },
+            reviewTaskCount: tasks.filter(t => t.status === 'rejected').length
+        })
     },
 
     getModuleClass(module) {
@@ -507,6 +509,10 @@ Page({
     },
 
     goToTaskDetail(e) {
+        if (this.data.isGuest) {
+            this.goLogin()
+            return
+        }
         const taskId = e.currentTarget.dataset.id
         const task = this.data.tasks.find(t => t.id === taskId)
         if (this.openListeningTask(taskId, task)) return
@@ -597,6 +603,10 @@ Page({
 
     // Start timer
     startSpellTask(e) {
+        if (this.data.isGuest) {
+            this.goLogin()
+            return
+        }
         const taskId = e.currentTarget.dataset.id
         if (!taskId) return
         wx.navigateTo({
@@ -605,6 +615,10 @@ Page({
     },
 
     async startTimer(e) {
+        if (this.data.isGuest) {
+            this.goLogin()
+            return
+        }
         console.log('Start button clicked', e) // Debug log
         const taskId = e.currentTarget.dataset.id
         console.log('Task ID:', taskId) // Debug log

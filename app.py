@@ -3964,12 +3964,11 @@ def tasks_page():
             "time_ago": time_ago(item.submitted_at) if item.submitted_at else "",
         })
 
-    # 2. Task (旧版) — 排除听写和跟读任务（自动评分，不需要人工批改）
+    # 2. Task (旧版) — 听写自动评分；口语跟读录音需要老师人工批改
     pending_legacy_tasks = Task.query.filter(
         Task.student_submitted == True,
         Task.status.in_(['submitted', 'progress', 'pending']),
-        Task.dictation_book_id.is_(None),
-        Task.speaking_book_id.is_(None)
+        Task.dictation_book_id.is_(None)
     ).all()
 
     for task in pending_legacy_tasks:
@@ -4094,12 +4093,11 @@ def tasks_page():
 @login_required
 @role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def grading_list():
-    # List tasks that are submitted by students but not yet graded (排除听写和跟读)
+    # List tasks that are submitted by students but not yet graded.
     tasks = Task.query.filter(
         Task.student_submitted == True,
         Task.status.in_(['submitted', 'progress', 'pending']),
-        Task.dictation_book_id.is_(None),
-        Task.speaking_book_id.is_(None)
+        Task.dictation_book_id.is_(None)
     ).order_by(Task.submitted_at.desc()).all()
     
     return render_template("teacher/grading_list.html", tasks=tasks)
@@ -4110,18 +4108,26 @@ def grading_list():
 def grading_detail(task_id):
     task = Task.query.get_or_404(task_id)
     
-    # Parse evidence photos
-    evidence_photos = []
+    evidence_images = []
+    evidence_audio = []
     if task.evidence_photos:
         try:
-            evidence_photos = json.loads(task.evidence_photos)
+            evidence_files = json.loads(task.evidence_photos)
+            for file_url in evidence_files if isinstance(evidence_files, list) else []:
+                path = str(file_url).split("?", 1)[0].lower()
+                if path.endswith((".mp3", ".wav", ".m4a", ".aac", ".caf", ".ogg", ".webm", ".mp4")):
+                    evidence_audio.append(file_url)
+                else:
+                    evidence_images.append(file_url)
         except:
-            evidence_photos = []
+            evidence_images = []
+            evidence_audio = []
             
     return render_template(
         "teacher/grading_detail.html", 
         task=task,
-        evidence_photos=evidence_photos
+        evidence_photos=evidence_images,
+        evidence_audio=evidence_audio,
     )
 
 @app.route("/teacher/grading/<int:task_id>/submit", methods=["POST"])
