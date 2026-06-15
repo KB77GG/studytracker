@@ -487,6 +487,68 @@
     return true;
   }
 
+  function formatReportAnswer(key, text) {
+    const answer = Array.isArray(key) ? key.join(" / ") : String(key || "");
+    const detail = String(text || "");
+    return [answer, detail].filter(Boolean).join(". ") || "未作答";
+  }
+
+  function renderResultReport(result) {
+    const report = result.report || {};
+    const metrics = document.getElementById("resultMetrics");
+    const breakdownSection = document.getElementById("resultBreakdownSection");
+    const breakdown = document.getElementById("resultBreakdown");
+    const wrongSection = document.getElementById("wrongAnswersSection");
+    const wrongAnswers = document.getElementById("wrongAnswers");
+    const metricItems = [];
+    if (result.auto_total) {
+      metricItems.push(["总正确率", `${result.accuracy}%`]);
+      metricItems.push(["正确题数", `${result.correct} / ${result.auto_total}`]);
+      metricItems.push(["错题数", String(report.wrong_count || 0)]);
+    }
+    if (result.practice_score != null) {
+      metricItems.push(["练习估分", `${result.practice_score} / ${result.practice_score_max || 5}`]);
+    }
+    metrics.innerHTML = metricItems.map(([label, value]) => `
+      <div class="result-metric">
+        <span>${escapeHtml(label)}</span>
+        <strong>${escapeHtml(value)}</strong>
+      </div>
+    `).join("");
+
+    const groups = Array.isArray(report.type_breakdown) ? report.type_breakdown : [];
+    breakdownSection.hidden = groups.length === 0;
+    breakdown.innerHTML = groups.map((group) => `
+      <div class="result-breakdown__item">
+        <div>
+          <strong>${escapeHtml(group.label || group.task_type || "Objective")}</strong>
+          <span>${escapeHtml(group.correct)} / ${escapeHtml(group.total)} correct</span>
+        </div>
+        <b>${escapeHtml(group.accuracy)}%</b>
+      </div>
+    `).join("");
+
+    const wrong = Array.isArray(report.wrong_answers) ? report.wrong_answers : [];
+    wrongSection.hidden = wrong.length === 0;
+    wrongAnswers.innerHTML = wrong.map((item) => `
+      <article class="wrong-answer">
+        <div class="wrong-answer__heading">
+          <strong>${escapeHtml((item.module_id || "").toUpperCase())} · Question ${escapeHtml(item.question_number || "")}</strong>
+          <span>${escapeHtml(item.task_label || item.task_type || "")}</span>
+        </div>
+        <p>${escapeHtml(item.prompt || "Choose the best answer.")}</p>
+        <div class="wrong-answer__response is-wrong">
+          <span>你的答案</span>
+          <strong>${escapeHtml(formatReportAnswer(item.selected_answer, item.selected_text))}</strong>
+        </div>
+        <div class="wrong-answer__response is-correct">
+          <span>正确答案</span>
+          <strong>${escapeHtml(formatReportAnswer(item.correct_answer, item.correct_text))}</strong>
+        </div>
+      </article>
+    `).join("");
+  }
+
   async function submitExam() {
     nextButton.disabled = true;
     nextButton.textContent = "Submitting";
@@ -528,6 +590,7 @@
       if (result.score_note) reviewParts.push(result.score_note);
       document.getElementById("resultSummary").textContent =
         `${reviewParts.join(". ")}.`;
+      renderResultReport(result);
       openModal("resultModal");
     } catch (_error) {
       nextButton.disabled = false;

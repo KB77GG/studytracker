@@ -64,6 +64,25 @@ class ImportToeflRealExamsTest(unittest.TestCase):
             "What refreshments to offer",
         ])
 
+    def test_listening_parser_removes_navigation_suffixes(self):
+        _, options = MODULE.parse_listening_candidate([
+            "Choose the best response.",
+            "O I have a group study session then.",
+            "O They work well together.",
+            "O Probably on the weekend.",
+            "O Last week was quite eventful. Review A Module1 - Router",
+        ])
+        self.assertEqual(options[-1], "Last week was quite eventful.")
+
+        _, options = MODULE.parse_listening_candidate([
+            "What is the woman looking for?",
+            "O A new cookbook",
+            "O A food item",
+            "O A gift for her brother",
+            "O A recipe for a meal Listening | Questions of 15 00:00:17",
+        ])
+        self.assertEqual(options[-1], "A recipe for a meal")
+
 
 if __name__ == "__main__":
     unittest.main()

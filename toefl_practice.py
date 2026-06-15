@@ -38,7 +38,10 @@ RECORDING_TOKEN_MAX_AGE = 24 * 60 * 60
 MAX_RECORDING_BYTES = 20 * 1024 * 1024
 UNSAFE_LISTENING_OPTION_RE = re.compile(
     r"(?:©|〇|○|◯|◎|模块\s*切换|显示\s*答|"
-    r"Listening\s*\|?\s*Question\s*\d+|[\u4e00-\u9fff])",
+    r"Listening\s*\|?\s*Questions?\s*(?:\d+|of)|"
+    r"Choose the best response|Module\d*\s*-\s*Route|"
+    r"(?:Review|Volume|Home).*(?:Back|Next|Continue)|"
+    r"[\u4e00-\u9fff])",
     re.I,
 )
 
@@ -115,16 +118,16 @@ def _question_is_gradable(question: dict) -> bool:
 
 def _listening_question_is_publishable(question: dict) -> bool:
     options = question.get("options") or []
+    option_texts = [str(option.get("text") or "").strip() for option in options]
     return (
         question.get("response_type") != "mc"
         or (
             len(options) == 4
             and all(
-                2 <= len(str(option.get("text") or "").strip()) <= 350
-                and not UNSAFE_LISTENING_OPTION_RE.search(
-                    str(option.get("text") or "")
-                )
-                for option in options
+                3 <= len(text) <= 350
+                and re.search(r"[A-Za-z]{2,}", text)
+                and not UNSAFE_LISTENING_OPTION_RE.search(text)
+                for text in option_texts
             )
         )
     )
@@ -136,6 +139,9 @@ def _module_id(question_id: str) -> str:
 
 
 def _question_task_type(subject: str, question: dict) -> str:
+    explicit = str(question.get("task_type") or "").strip()
+    if explicit:
+        return explicit
     directive = str(question.get("directive") or "").lower()
     if subject == "speaking":
         return "listen_repeat" if "listen and repeat" in directive else "interview"
@@ -862,11 +868,21 @@ def grade_exam_payload(exam_id: str, subject: str, responses: dict) -> dict | No
             actual = [str(response or "").strip().lower()] if response else []
             is_correct = actual == expected
             correct_count += int(is_correct)
+            option_map = {
+                str(option.get("key") or "").strip().lower(): str(
+                    option.get("text") or ""
+                ).strip()
+                for option in question.get("options") or []
+            }
             result = {
                 "id": question_id,
                 "status": "correct" if is_correct else "incorrect",
                 "correct_items": int(is_correct),
                 "total_items": 1,
+                "selected_answer": actual[0].upper() if actual else "",
+                "correct_answer": expected[0].upper() if expected else "",
+                "selected_text": option_map.get(actual[0], "") if actual else "",
+                "correct_text": option_map.get(expected[0], "") if expected else "",
             }
         elif response_type == "fill":
             expected = _normalized_sequence(answer.get("words"))
@@ -882,6 +898,8 @@ def grade_exam_payload(exam_id: str, subject: str, responses: dict) -> dict | No
                 "status": "correct" if correct_items == len(expected) else "incorrect",
                 "correct_items": correct_items,
                 "total_items": len(expected),
+                "selected_answer": actual,
+                "correct_answer": expected,
             }
         else:
             auto_total += 1
@@ -894,10 +912,25 @@ def grade_exam_payload(exam_id: str, subject: str, responses: dict) -> dict | No
                 "status": "correct" if is_correct else "incorrect",
                 "correct_items": int(is_correct),
                 "total_items": 1,
+                "selected_answer": actual,
+                "correct_answer": expected,
             }
+        task_type = _question_task_type(subject, question)
+        result.update({
+            "question_number": str(question.get("number") or ""),
+            "module_id": _module_id(str(question_id or "")),
+            "task_type": task_type,
+            "task_label": _task_type_label(subject, task_type),
+            "prompt": str(
+                question.get("prompt")
+                or question.get("directive")
+                or ""
+            ).strip(),
+        })
         results.append(result)
 
     accuracy = round(correct_count / auto_total * 100, 1) if auto_total else 0.0
+    report = _build_objective_report(results, correct_count, auto_total, accuracy)
     return {
         "ok": True,
         "correct": correct_count,
@@ -906,6 +939,81 @@ def grade_exam_payload(exam_id: str, subject: str, responses: dict) -> dict | No
         "review_only_count": review_only_count,
         "accuracy": accuracy,
         "results": results,
+        "report": report,
+    }
+
+
+def _task_type_label(subject: str, task_type: str) -> str:
+    labels = {
+        "listen_and_choose": "Listen and Choose",
+        "conversation": "Conversation",
+        "academic_talk": "Academic Talk",
+        "mc": "Multiple Choice",
+        "fill": "Complete the Words",
+        "order": "Build a Sentence",
+        "email": "Write an Email",
+        "academic_discussion": "Academic Discussion",
+        "listen_repeat": "Listen and Repeat",
+        "interview": "Take an Interview",
+    }
+    return labels.get(task_type) or task_type.replace("_", " ").title() or subject.title()
+
+
+def _build_objective_report(
+    results: list[dict],
+    correct_count: int,
+    auto_total: int,
+    accuracy: float,
+) -> dict:
+    breakdown: dict[str, dict] = {}
+    wrong_answers = []
+    for item in results:
+        total_items = int(item.get("total_items") or 0)
+        if total_items <= 0:
+            continue
+        task_type = str(item.get("task_type") or "objective")
+        group = breakdown.setdefault(task_type, {
+            "task_type": task_type,
+            "label": item.get("task_label") or _task_type_label("", task_type),
+            "correct": 0,
+            "total": 0,
+            "wrong": 0,
+        })
+        correct_items = int(item.get("correct_items") or 0)
+        group["correct"] += correct_items
+        group["total"] += total_items
+        if correct_items < total_items:
+            group["wrong"] += 1
+            wrong_answers.append({
+                key: item.get(key)
+                for key in (
+                    "id",
+                    "question_number",
+                    "module_id",
+                    "task_type",
+                    "task_label",
+                    "prompt",
+                    "selected_answer",
+                    "correct_answer",
+                    "selected_text",
+                    "correct_text",
+                )
+            })
+    type_breakdown = []
+    for group in breakdown.values():
+        group["accuracy"] = (
+            round(group["correct"] / group["total"] * 100, 1)
+            if group["total"]
+            else 0.0
+        )
+        type_breakdown.append(group)
+    return {
+        "correct": correct_count,
+        "total": auto_total,
+        "accuracy": accuracy,
+        "wrong_count": len(wrong_answers),
+        "type_breakdown": type_breakdown,
+        "wrong_answers": wrong_answers,
     }
 
 
@@ -1051,7 +1159,10 @@ def _persist_submission(
         score_max=result.get("practice_score_max"),
         duration_seconds=max(0, int(duration_seconds or 0)),
         responses_json=json.dumps(responses, ensure_ascii=False),
-        results_json=json.dumps(result.get("results") or [], ensure_ascii=False),
+        results_json=json.dumps({
+            "results": result.get("results") or [],
+            "report": result.get("report") or {},
+        }, ensure_ascii=False),
         submitted_at=now,
     )
     db.session.add(submission)
@@ -1130,6 +1241,31 @@ def _serialize_submission(submission: ToeflTestSubmission) -> dict:
             else None
         ),
     }
+
+
+def _submission_result_bundle(submission: ToeflTestSubmission) -> dict:
+    try:
+        stored = json.loads(submission.results_json or "[]")
+    except json.JSONDecodeError:
+        stored = []
+    if isinstance(stored, dict):
+        results = stored.get("results")
+        report = stored.get("report")
+        return {
+            "results": results if isinstance(results, list) else [],
+            "report": report if isinstance(report, dict) else {},
+        }
+    if isinstance(stored, list):
+        return {
+            "results": stored,
+            "report": _build_objective_report(
+                stored,
+                int(submission.correct_count or 0),
+                int(submission.auto_total or 0),
+                float(submission.accuracy or 0.0),
+            ),
+        }
+    return {"results": [], "report": {}}
 
 
 def _is_toefl_staff() -> bool:
@@ -1427,10 +1563,13 @@ def submission_detail(submission_id: int):
         return jsonify({"ok": False, "error": "submission_not_found"}), 404
     if not _can_access_submission(submission):
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    bundle = _submission_result_bundle(submission)
     return jsonify({
         "ok": True,
         "submission": _serialize_submission(submission),
         "student_name": submission.student_name,
+        "report": bundle["report"],
+        "results": bundle["results"],
         "responses": [
             _serialize_question_response(row)
             for row in sorted(
@@ -1483,17 +1622,17 @@ def review_question_response(response_id: int):
         if any(item.status == "pending_review" for item in submission.responses)
         else "graded"
     )
-    try:
-        stored_results = json.loads(submission.results_json or "[]")
-    except json.JSONDecodeError:
-        stored_results = []
-    if isinstance(stored_results, list):
-        for item in stored_results:
-            if isinstance(item, dict) and item.get("id") == row.question_id:
-                item["score"] = row.final_score
-                item["status"] = "reviewed"
-                item["teacher_feedback"] = row.teacher_feedback
-        submission.results_json = json.dumps(stored_results, ensure_ascii=False)
+    stored_bundle = _submission_result_bundle(submission)
+    stored_results = stored_bundle["results"]
+    for item in stored_results:
+        if isinstance(item, dict) and item.get("id") == row.question_id:
+            item["score"] = row.final_score
+            item["status"] = "reviewed"
+            item["teacher_feedback"] = row.teacher_feedback
+    submission.results_json = json.dumps({
+        "results": stored_results,
+        "report": stored_bundle["report"],
+    }, ensure_ascii=False)
     db.session.commit()
     return jsonify({
         "ok": True,

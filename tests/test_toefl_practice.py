@@ -1,12 +1,16 @@
 import unittest
+import json
+from types import SimpleNamespace
 
 from toefl_practice import (
     _evaluate_listen_repeat,
     _evaluate_listen_repeat_soe,
     _manifest_is_published,
+    _listening_question_is_publishable,
     _question_is_displayable,
     _question_is_gradable,
     _question_task_type,
+    _submission_result_bundle,
     catalog_summary,
     exam_catalog,
     grade_exam_payload,
@@ -59,12 +63,63 @@ class ToeflPracticeTest(unittest.TestCase):
     def test_listening_payload_only_exposes_four_option_questions(self):
         payload = public_exam_payload("2026-04-15_S1", "listening")
         self.assertIsNotNone(payload)
-        self.assertTrue(payload["questions"])
+        self.assertEqual(len(payload["questions"]), 47)
         self.assertTrue(all(
             len(question.get("options") or []) == 4
             for question in payload["questions"]
             if question["response_type"] == "mc"
         ))
+
+    def test_listening_publish_gate_rejects_ocr_navigation_pollution(self):
+        question = {
+            "response_type": "mc",
+            "options": [
+                {"key": "A", "text": "A complete answer."},
+                {"key": "B", "text": "Another complete answer."},
+                {"key": "C", "text": "Listening Question 6 of 27 Review Back"},
+                {"key": "D", "text": "The final complete answer."},
+            ],
+        }
+        self.assertFalse(_listening_question_is_publishable(question))
+
+    def test_objective_report_contains_type_accuracy_and_wrong_answers(self):
+        payload = public_exam_payload("2026-04-15_S1", "listening")
+        first = payload["questions"][0]
+        result = grade_exam_payload(
+            "2026-04-15_S1",
+            "listening",
+            {first["id"]: "A"},
+        )
+        self.assertGreaterEqual(result["report"]["wrong_count"], 1)
+        self.assertEqual(
+            result["report"]["type_breakdown"][0]["task_type"],
+            "listen_and_choose",
+        )
+        wrong = next(
+            item
+            for item in result["report"]["wrong_answers"]
+            if item["id"] == first["id"]
+        )
+        self.assertEqual(wrong["selected_answer"], "A")
+        self.assertEqual(wrong["correct_answer"], "C")
+
+    def test_old_submission_results_remain_readable(self):
+        submission = SimpleNamespace(
+            results_json=json.dumps([{
+                "id": "legacy-q1",
+                "status": "incorrect",
+                "correct_items": 0,
+                "total_items": 1,
+                "task_type": "mc",
+                "task_label": "Multiple Choice",
+            }]),
+            correct_count=0,
+            auto_total=1,
+            accuracy=0.0,
+        )
+        bundle = _submission_result_bundle(submission)
+        self.assertEqual(len(bundle["results"]), 1)
+        self.assertEqual(bundle["report"]["wrong_count"], 1)
 
     def test_grading_accepts_known_correct_answer(self):
         payload = public_exam_payload("2026-01-21_A", "listening")

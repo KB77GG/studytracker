@@ -59,11 +59,20 @@ OPTION_UI_SUFFIX_RES = (
     re.compile(r"\s+Home\s+(?:[#”]|模块|Module)", re.I),
     re.compile(r"\s+2026\s*年\s*真题", re.I),
     re.compile(r"\s+显示\s*答", re.I),
-    re.compile(r"\s+Listening\s*\|?\s*Question\s*\d+", re.I),
+    re.compile(
+        r"\s+Listening\s*\|?\s*Questions?\s*(?:\d+|of)\b.*",
+        re.I,
+    ),
+    re.compile(
+        r"\s+(?:Review|Home)\b.*(?:Module\d*\s*-\s*Route|Back|Next|Continue)",
+        re.I,
+    ),
 )
 UNSAFE_OPTION_RE = re.compile(
     r"(?:©|〇|○|◯|◎|模块\s*切换|显示\s*答|"
-    r"Listening\s*\|?\s*Question\s*\d+|[\u4e00-\u9fff])",
+    r"Listening\s*\|?\s*Questions?\s*(?:\d+|of)|"
+    r"(?:Review|Home).*(?:Module\d*\s*-\s*Route|Back|Next|Continue)|"
+    r"[\u4e00-\u9fff])",
     re.I,
 )
 TOKEN_RE = re.compile(r"[A-Za-z]+(?:['-][A-Za-z]+)*|[?.,]")

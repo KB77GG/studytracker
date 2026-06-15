@@ -79,10 +79,19 @@
   </div>
 
   <div class="exam-modal" id="resultModal" hidden>
-    <div class="exam-modal__card">
-      <p class="modal-kicker">Section Complete</p>
+    <div class="exam-modal__card exam-modal__card--report">
+      <p class="modal-kicker">答题报告</p>
       <h2 id="resultTitle">Your responses were submitted.</h2>
       <p id="resultSummary"></p>
+      <div class="result-metrics" id="resultMetrics"></div>
+      <section class="result-section" id="resultBreakdownSection" hidden>
+        <h3>题型正确率</h3>
+        <div class="result-breakdown" id="resultBreakdown"></div>
+      </section>
+      <section class="result-section" id="wrongAnswersSection" hidden>
+        <h3>错题明细</h3>
+        <div class="wrong-answer-list" id="wrongAnswers"></div>
+      </section>
       <a class="modal-button modal-button--link" href="{{ url_for('toefl.index') }}">Back to Test Library</a>
     </div>
   </div>
