@@ -105,7 +105,9 @@ def _normalize_question_options(raw_options):
     for opt in raw_options or []:
         key = str((opt or {}).get("key") or (opt or {}).get("title") or "").strip().upper()
         text = str((opt or {}).get("text") or (opt or {}).get("content") or "").strip()
-        if key and text:
+        # Keep letter-only options (text 为空) so 配对题/地图标注题（答案只是 A-H 字母）
+        # 能渲染出可选项；前端 formatOptionLabel 对空 text 会只显示字母。
+        if key:
             rows.append({"key": key, "text": text})
 
     if rows:
