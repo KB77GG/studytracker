@@ -11,7 +11,11 @@ Page({
         loading: true,
         todayDate: '',
         lastUpdateTime: null,
-        baseUrl: ''
+        baseUrl: '',
+        showTaskDetails: false,
+        activeTaskFilter: '',
+        activeTaskTitle: '',
+        filteredTodayTasks: []
     },
 
     onLoad() {
@@ -44,10 +48,9 @@ Page({
             const demo = buildParentDemo()
             const now = new Date()
             const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
-            this.setData({
+            this.applyStats(demo.stats, {
                 isGuest: true,
                 students: demo.students,
-                stats: demo.stats,
                 lastUpdateTime: timeStr,
                 loading: false
             })
@@ -71,7 +74,7 @@ Page({
 
     async fetchStats(studentName) {
         if (app.globalData.guestMode) {
-            this.setData({ stats: buildParentDemo().stats, loading: false })
+            this.applyStats(buildParentDemo().stats, { loading: false })
             wx.stopPullDownRefresh()
             return
         }
@@ -82,8 +85,7 @@ Page({
                 const now = new Date()
                 const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
 
-                this.setData({
-                    stats: res,
+                this.applyStats(res, {
                     lastUpdateTime: timeStr
                 })
             }
@@ -101,6 +103,41 @@ Page({
         const index = e.detail.value
         this.setData({ currentStudentIndex: index })
         this.fetchStats(this.data.students[index].name)
+    },
+
+    applyStats(stats, extraData) {
+        this.setData(Object.assign({
+            stats,
+            showTaskDetails: false,
+            activeTaskFilter: '',
+            activeTaskTitle: '',
+            filteredTodayTasks: []
+        }, extraData || {}))
+    },
+
+    showTodayTasks(e) {
+        const filter = e.currentTarget.dataset.filter || 'all'
+        const titleMap = {
+            all: '今日全部任务',
+            not_started: '待完成任务',
+            in_progress: '进行中任务',
+            pending_review: '待审核任务',
+            completed: '已完成任务'
+        }
+        const tasks = (this.data.stats && this.data.stats.today_tasks) || []
+        const filtered = filter === 'all'
+            ? tasks
+            : tasks.filter(item => item.state === filter)
+        this.setData({
+            showTaskDetails: true,
+            activeTaskFilter: filter,
+            activeTaskTitle: titleMap[filter] || titleMap.all,
+            filteredTodayTasks: filtered
+        })
+    },
+
+    hideTodayTasks() {
+        this.setData({ showTaskDetails: false })
     },
 
     navigateToAddStudent() {
@@ -143,6 +180,15 @@ Page({
         const student = this.data.students[this.data.currentStudentIndex]
         wx.navigateTo({
             url: `/pages/parent/feedback/index?student=${encodeURIComponent(student.name)}`
+        })
+    },
+
+    viewTaskDetail(e) {
+        const taskId = e.currentTarget.dataset.taskId
+        const student = this.data.students[this.data.currentStudentIndex]
+        if (!taskId || !student) return
+        wx.navigateTo({
+            url: `/pages/parent/task-detail/index?task_id=${encodeURIComponent(taskId)}&student=${encodeURIComponent(student.name)}`
         })
     }
 })

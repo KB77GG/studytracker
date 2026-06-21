@@ -1,0 +1,133 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="state-card">
+    <text class="state-title">正在加载练习详情</text>
+    <text class="state-text">请稍候</text>
+  </view>
+
+  <view wx:elif="{{errorMessage}}" class="state-card">
+    <text class="state-title">暂时无法查看</text>
+    <text class="state-text">{{errorMessage}}</text>
+    <view class="retry-button" bindtap="retry">重新加载</view>
+  </view>
+
+  <block wx:elif="{{detail}}">
+    <view class="hero-card">
+      <view class="hero-meta">
+        <text class="category-tag">{{detail.category}}</text>
+        <text class="date-text">{{detail.date}}</text>
+      </view>
+      <text class="hero-title">{{detail.title}}</text>
+      <view class="hero-status-row">
+        <text class="status-badge {{detail.state}}">{{detail.state_label}}</text>
+        <text class="student-name">{{studentName}}</text>
+      </view>
+      <view class="score-row" wx:if="{{detail.showAccuracy}}">
+        <text class="score-value">{{detail.accuracy}}%</text>
+        <text class="score-label">正确率</text>
+      </view>
+      <text class="summary-copy">{{detail.summary_text}}</text>
+    </view>
+
+    <view class="summary-card" wx:if="{{detail.summary.assigned_total || detail.summary.pending_total}}">
+      <view class="summary-grid">
+        <view class="summary-item" wx:for="{{summaryMetrics}}" wx:key="label">
+          <text class="summary-value">{{item.value}}</text>
+          <text class="summary-label">{{item.label}}</text>
+        </view>
+      </view>
+      <view class="mastery-summary" wx:if="{{detail.kind === 'dictation'}}">
+        <text>已掌握 {{detail.summary.mastered_total || 0}} 个</text>
+        <text>掌握状态按多次复习结果更新</text>
+      </view>
+    </view>
+
+    <view class="note-card" wx:if="{{detail.teacher_note || detail.student_note}}">
+      <view class="note-block" wx:if="{{detail.teacher_note}}">
+        <text class="note-label">老师反馈</text>
+        <text class="note-copy">{{detail.teacher_note}}</text>
+      </view>
+      <view class="note-block" wx:if="{{detail.student_note}}">
+        <text class="note-label">学生备注</text>
+        <text class="note-copy">{{detail.student_note}}</text>
+      </view>
+    </view>
+
+    <view class="section-heading" wx:if="{{detail.items.length}}">
+      <text class="section-title">{{detail.kind === 'dictation' ? '单词记录' : '题目与批改'}}</text>
+      <text class="section-count">{{detail.items.length}} 条</text>
+    </view>
+
+    <scroll-view class="filter-scroll" scroll-x="true" wx:if="{{detail.items.length}}">
+      <view class="filter-row">
+        <view
+          class="filter-chip {{activeFilter === item.key ? 'active' : ''}}"
+          wx:for="{{filters}}"
+          wx:key="key"
+          data-filter="{{item.key}}"
+          bindtap="setFilter"
+        >{{item.label}} {{item.count}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="detail-list" wx:if="{{visibleItems.length}}">
+      <view class="detail-card" wx:for="{{visibleItems}}" wx:key="id">
+        <view class="detail-head">
+          <text class="question-number">{{detail.kind === 'dictation' ? ('Word ' + item.number) : ('Q' + item.number)}}</text>
+          <text class="result-badge {{item.result_status}}">{{item.result_label}}</text>
+        </view>
+        <text class="question-prompt">{{item.prompt}}</text>
+        <text class="translation" wx:if="{{item.translation}}">{{item.translation}}</text>
+        <view class="answer-grid">
+          <view class="answer-block student-answer">
+            <text class="answer-label">学生答案</text>
+            <text class="answer-value">{{item.student_answer}}</text>
+          </view>
+          <view class="answer-block correct-answer">
+            <text class="answer-label">{{item.result_status === 'pending' ? '参考答案' : '正确答案'}}</text>
+            <text class="answer-value">{{item.correct_answer}}</text>
+          </view>
+        </view>
+        <view class="question-audio-button" wx:if="{{item.student_audio_url}}" data-url="{{item.student_audio_url}}" bindtap="playEvidenceAudio">播放本题录音</view>
+        <view class="mastery-row" wx:if="{{detail.kind === 'dictation'}}">
+          <text class="mastery-badge level-{{item.review_level}}">{{item.mastery_label}}</text>
+          <text>作答 {{item.attempt_count}} 次</text>
+          <text>累计错误 {{item.mistake_count}} 次</text>
+          <text wx:if="{{item.next_review_text}}">{{item.next_review_text}}</text>
+        </view>
+        <view class="question-comment" wx:if="{{item.teacher_comment}}">
+          <text class="answer-label">老师批注</text>
+          <text class="comment-copy">{{item.teacher_comment}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-filter" wx:elif="{{detail.items.length}}">该分类下暂无记录</view>
+
+    <view class="submission-card" wx:if="{{!detail.items.length}}">
+      <text class="submission-title">本次暂无逐题记录</text>
+      <text class="submission-copy">这类任务以作业提交或老师批改为主，可查看下方提交材料和反馈。</text>
+    </view>
+
+    <view class="evidence-section" wx:if="{{detail.evidence.image.length || detail.evidence.audio.length}}">
+      <text class="section-title">提交材料</text>
+      <view class="image-grid" wx:if="{{detail.evidence.image.length}}">
+        <image
+          class="evidence-image"
+          wx:for="{{detail.evidence.image}}"
+          wx:key="*this"
+          src="{{item}}"
+          mode="aspectFill"
+          data-url="{{item}}"
+          bindtap="previewImage"
+        ></image>
+      </view>
+      <view
+        class="audio-button"
+        wx:for="{{detail.evidence.audio}}"
+        wx:key="*this"
+        data-url="{{item}}"
+        bindtap="playEvidenceAudio"
+      >播放作业录音 {{index + 1}}</view>
+    </view>
+  </block>
+</view>

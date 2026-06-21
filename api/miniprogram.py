@@ -18,7 +18,8 @@ from models import (
     PlanItemSession, ClassFeedback, ScheduleSnapshot,
     MaterialBank, Question, QuestionOption, SpeakingSession, SpeakingMessage,
     StudentAnswer, StudentSavedWord,
-    DictationBook, ListeningTestSubmission, ReadingTestSubmission
+    DictationBook, DictationWord, DictationRecord, StudentWordMastery,
+    ListeningTestSubmission, ReadingTestSubmission
 )
 from .auth_utils import require_api_user
 from .wechat import send_subscribe_message, send_subscribe_message_result
@@ -2724,6 +2725,341 @@ def get_parent_students():
         "students": students
     })
 
+
+def _parent_task_state(task):
+    if task.status == "done":
+        return "completed", "已完成"
+    if task.status == "submitted" or task.student_submitted:
+        return "pending_review", "待审核"
+    if task.status in ("progress", "in_progress") or (task.actual_seconds or 0) > 0:
+        return "in_progress", "进行中"
+    return "not_started", "待完成"
+
+
+def _parent_clean_question_text(value, limit=600):
+    text_value = html.unescape(str(value or ""))
+    text_value = re.sub(r"<[^>]+>", " ", text_value)
+    text_value = re.sub(r"\$[^$\s]+\$", "____", text_value)
+    text_value = re.sub(r"\s+", " ", text_value).strip()
+    if len(text_value) > limit:
+        return f"{text_value[:limit].rstrip()}…"
+    return text_value
+
+
+def _parent_test_question_map(payload, kind):
+    result = {}
+    container_key = "sections" if kind == "listening_test" else "passages"
+    for container in (payload or {}).get(container_key) or []:
+        for group in container.get("groups") or []:
+            group_prompt = (
+                group.get("question_title")
+                or group.get("title")
+                or group.get("desc")
+                or group.get("collect")
+                or ""
+            )
+            for question in group.get("questions") or []:
+                key = str(question.get("id") or question.get("number") or "").strip()
+                number = str(question.get("number") or "").strip()
+                prompt = _parent_clean_question_text(question.get("title") or group_prompt)
+                if key:
+                    result[key] = prompt
+                if number:
+                    result[number] = prompt
+    return result
+
+
+def _parent_choice_answer_text(raw_value, options):
+    value = str(raw_value or "").strip()
+    if not value:
+        return "未作答"
+    option_map = {str(item.get("key") or "").upper(): item.get("text") or "" for item in options}
+    option_text = option_map.get(value.upper())
+    return f"{value.upper()}. {option_text}" if option_text else value
+
+
+def _parent_material_task_report(task, include_items):
+    questions = list(_iter_task_material_questions(task))
+    answer_rows = StudentAnswer.query.filter_by(task_id=task.id).order_by(StudentAnswer.id).all()
+    answers = {row.question_id: row for row in answer_rows}
+    items = []
+    answered = correct = wrong = pending = 0
+
+    for question in questions:
+        options = _question_options(question)
+        answer = answers.get(question.id)
+        if answer and (answer.text_answer or answer.audio_url):
+            answered += 1
+        if not answer or not (answer.text_answer or answer.audio_url):
+            result_status, result_label = "unanswered", "未作答"
+        elif answer.is_correct is True:
+            correct += 1
+            result_status, result_label = "correct", "正确"
+        elif answer.is_correct is False:
+            wrong += 1
+            result_status, result_label = "wrong", "错误"
+        else:
+            pending += 1
+            result_status, result_label = "pending", "待批改"
+
+        if include_items:
+            items.append({
+                "id": f"question-{question.id}",
+                "number": question.sequence,
+                "prompt": _parent_clean_question_text(_question_display_content(question, options)),
+                "student_answer": "已提交录音" if answer and answer.audio_url else _parent_choice_answer_text(answer.text_answer if answer else "", options),
+                "student_audio": answer.audio_url if answer and answer.audio_url else "",
+                "correct_answer": _parent_choice_answer_text(question.reference_answer, options)
+                if question.reference_answer else "暂无参考答案",
+                "teacher_comment": answer.teacher_comment if answer else "",
+                "result_status": result_status,
+                "result_label": result_label,
+            })
+
+    return {
+        "kind": "material",
+        "summary": {
+            "assigned_total": len(questions),
+            "attempted_total": answered,
+            "correct_total": correct,
+            "wrong_total": wrong,
+            "pending_total": pending,
+            "mastered_total": 0,
+        },
+        "items": items,
+    }
+
+
+def _parent_dictation_task_report(task, include_items):
+    word_query = DictationWord.query.filter_by(book_id=task.dictation_book_id)
+    start = max(1, int(task.dictation_word_start or 1))
+    word_query = word_query.filter(DictationWord.sequence >= start)
+    if task.dictation_word_end:
+        word_query = word_query.filter(DictationWord.sequence <= int(task.dictation_word_end))
+    words = word_query.order_by(DictationWord.sequence).all()
+
+    record_rows = (
+        DictationRecord.query.filter_by(task_id=task.id)
+        .order_by(DictationRecord.created_at, DictationRecord.id)
+        .all()
+    )
+    records_by_word = {}
+    for row in record_rows:
+        records_by_word.setdefault(row.word_id, []).append(row)
+
+    known_word_ids = {word.id for word in words} | set(records_by_word)
+    if not words and known_word_ids:
+        words = DictationWord.query.filter(DictationWord.id.in_(known_word_ids)).order_by(DictationWord.sequence).all()
+
+    student_id = None
+    if record_rows:
+        student_id = record_rows[-1].student_id
+    else:
+        profile = StudentProfile.query.filter_by(full_name=task.student_name, is_deleted=False).first()
+        student_id = profile.user_id if profile else None
+
+    mastery_by_word = {}
+    if student_id and known_word_ids:
+        mastery_rows = StudentWordMastery.query.filter(
+            StudentWordMastery.student_id == student_id,
+            StudentWordMastery.word_id.in_(known_word_ids),
+        ).all()
+        mastery_by_word = {row.word_id: row for row in mastery_rows}
+
+    items = []
+    attempted = correct = wrong = mastered = 0
+    for word in words:
+        attempts = records_by_word.get(word.id) or []
+        latest = attempts[-1] if attempts else None
+        mastery = mastery_by_word.get(word.id)
+        if latest:
+            attempted += 1
+            if latest.is_correct:
+                correct += 1
+                result_status, result_label = "correct", "正确"
+            else:
+                wrong += 1
+                result_status, result_label = "wrong", "需复习"
+        else:
+            result_status, result_label = "unanswered", "未测试"
+
+        level = int(mastery.review_level or 0) if mastery else 0
+        if level >= StudentWordMastery.LEVEL_GRADUATED:
+            mastered += 1
+            mastery_label = "已掌握"
+        elif level > 0:
+            mastery_label = "巩固中"
+        else:
+            mastery_label = "未掌握"
+
+        if include_items:
+            items.append({
+                "id": f"word-{word.id}",
+                "number": word.sequence,
+                "prompt": word.word,
+                "translation": word.translation or word.core_meaning_zh or "",
+                "student_answer": latest.student_answer if latest and latest.student_answer else "未作答",
+                "correct_answer": word.word,
+                "result_status": result_status,
+                "result_label": result_label,
+                "attempt_count": len(attempts),
+                "mistake_count": int(mastery.mistake_count or 0) if mastery else sum(1 for row in attempts if not row.is_correct),
+                "mastery_label": mastery_label,
+                "review_level": level,
+                "next_review_at": mastery.next_review_at.isoformat() if mastery and mastery.next_review_at else None,
+            })
+
+    return {
+        "kind": "dictation",
+        "summary": {
+            "assigned_total": len(words),
+            "attempted_total": attempted,
+            "correct_total": correct,
+            "wrong_total": wrong,
+            "pending_total": 0,
+            "mastered_total": mastered,
+        },
+        "items": items,
+    }
+
+
+def _parent_test_task_report(task, submission, kind, include_items):
+    detail = (
+        _serialize_listening_test_submission(submission, include_details=True)
+        if kind == "listening_test"
+        else _serialize_reading_test_submission(submission, include_details=True)
+    ) or {}
+    rows = detail.get("results") or []
+    items = []
+    prompt_map = {}
+    if include_items:
+        if kind == "listening_test":
+            payload, _ = _load_cambridge_listening_test(task.listening_exercise_id)
+        else:
+            payload, _ = _load_student_reading_test(task.reading_test_id)
+        prompt_map = _parent_test_question_map(payload or {}, kind)
+
+    for index, row in enumerate(rows):
+        numbers = row.get("numbers") or []
+        ids = row.get("ids") or []
+        question_label = row.get("q") or ",".join(str(item) for item in numbers if item is not None) or str(index + 1)
+        lookup_keys = [str(item) for item in ids + numbers if item is not None]
+        prompt = next((prompt_map.get(key) for key in lookup_keys if prompt_map.get(key)), "")
+        is_correct = bool(row.get("correct"))
+        if include_items:
+            items.append({
+                "id": f"test-{index}",
+                "number": question_label,
+                "prompt": prompt or f"第 {question_label} 题",
+                "student_answer": str(row.get("value") or "未作答"),
+                "correct_answer": str(row.get("answer") or "暂无参考答案"),
+                "result_status": "correct" if is_correct else "wrong",
+                "result_label": "正确" if is_correct else "错误",
+            })
+
+    total = int(detail.get("total_count") or len(rows))
+    correct = int(detail.get("correct_count") or 0)
+    wrong = max(0, total - correct)
+    return {
+        "kind": kind,
+        "summary": {
+            "assigned_total": total,
+            "attempted_total": total,
+            "correct_total": correct,
+            "wrong_total": wrong,
+            "pending_total": 0,
+            "mastered_total": 0,
+        },
+        "items": items,
+        "ielts_score": detail.get("ielts_score"),
+        "attempt_count": detail.get("attempt_count"),
+    }
+
+
+def _parent_generic_task_report(task):
+    return {
+        "kind": "submission",
+        "summary": {
+            "assigned_total": 0,
+            "attempted_total": 0,
+            "correct_total": 0,
+            "wrong_total": 0,
+            "pending_total": 1 if task.status == "submitted" or task.student_submitted else 0,
+            "mastered_total": 0,
+        },
+        "items": [],
+    }
+
+
+def _parent_task_report(task, include_items=False):
+    listening_submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
+    reading_submission = ReadingTestSubmission.query.filter_by(task_id=task.id).first()
+    if task.dictation_book_id:
+        report = _parent_dictation_task_report(task, include_items)
+    elif listening_submission:
+        report = _parent_test_task_report(task, listening_submission, "listening_test", include_items)
+    elif reading_submission:
+        report = _parent_test_task_report(task, reading_submission, "reading_test", include_items)
+    elif task.material_id:
+        report = _parent_material_task_report(task, include_items)
+    else:
+        report = _parent_generic_task_report(task)
+
+    summary = report["summary"]
+    if report["kind"] == "dictation":
+        report["summary_text"] = (
+            f"应背 {summary['assigned_total']} 词 · 已测 {summary['attempted_total']} · "
+            f"正确 {summary['correct_total']} · 需复习 {summary['wrong_total']}"
+        )
+    elif summary["assigned_total"]:
+        report["summary_text"] = (
+            f"共 {summary['assigned_total']} 题 · 已答 {summary['attempted_total']} · "
+            f"正确 {summary['correct_total']} · 错误 {summary['wrong_total']}"
+        )
+    elif summary["pending_total"]:
+        report["summary_text"] = "作业已提交，等待老师批改"
+    else:
+        report["summary_text"] = "本次任务暂无逐题作答记录"
+    return report
+
+
+@mp_bp.route("/parent/tasks/<int:task_id>", methods=["GET"])
+@require_api_user(User.ROLE_PARENT)
+def get_parent_task_detail(task_id):
+    """Return one linked student's question- or word-level practice report."""
+    user = request.current_api_user
+    task = Task.query.get(task_id)
+    if not task:
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+
+    link = ParentStudentLink.query.filter_by(
+        parent_id=user.id,
+        student_name=task.student_name,
+        is_active=True,
+    ).first()
+    if not link:
+        return jsonify({"ok": False, "error": "student_not_bound"}), 403
+
+    report = _parent_task_report(task, include_items=True)
+    state, state_label = _parent_task_state(task)
+    report.update({
+        "id": task.id,
+        "student_name": task.student_name,
+        "date": task.date,
+        "category": task.category or "学习任务",
+        "title": _task_display_title(task),
+        "state": state,
+        "state_label": state_label,
+        "accuracy": task.accuracy,
+        "completion_rate": task.completion_rate,
+        "student_note": task.student_note or "",
+        "teacher_note": task.feedback_text or task.note or "",
+        "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        "evidence": _task_evidence_files(task),
+    })
+    return jsonify({"ok": True, "detail": report})
+
+
 @mp_bp.route("/parent/stats", methods=["GET"])
 @require_api_user(User.ROLE_PARENT)
 def get_parent_stats():
@@ -2755,18 +3091,27 @@ def get_parent_stats():
     ).all()
     
     total_tasks = len(today_tasks)
-    completed_count = 0
-    pending_review_count = 0
-    in_progress_count = 0
-    
+    status_counts = {
+        "not_started": 0,
+        "in_progress": 0,
+        "pending_review": 0,
+        "completed": 0,
+    }
+    today_task_items = []
     for t in today_tasks:
-        if t.status == "done":
-            completed_count += 1
-        elif t.status == "submitted" or t.student_submitted:
-            pending_review_count += 1
-        elif t.actual_seconds and t.actual_seconds > 0:
-            in_progress_count += 1
+        state, state_label = _parent_task_state(t)
+        status_counts[state] += 1
+        today_task_items.append({
+            "id": t.id,
+            "category": t.category or "学习任务",
+            "task_name": t.detail or t.category or "学习任务",
+            "planned_minutes": t.planned_minutes or 0,
+            "actual_seconds": t.actual_seconds or 0,
+            "state": state,
+            "state_label": state_label,
+        })
             
+    completed_count = status_counts["completed"]
     completion_rate = round(completed_count / total_tasks * 100) if total_tasks > 0 else 0
     
     # 2. 最近动态 (最近完成的5个任务)
@@ -2782,6 +3127,7 @@ def get_parent_stats():
             if _task_listening_resource_type(t) == LISTENING_RESOURCE_CAMBRIDGE_TEST
             else None
         )
+        task_report = _parent_task_report(t, include_items=False)
         recent_feed.append({
             "id": t.id,
             "date": t.date,
@@ -2790,6 +3136,8 @@ def get_parent_stats():
             "accuracy": t.accuracy,
             "completion_rate": t.completion_rate,
             "teacher_note": t.feedback_text or t.note,
+            "result_summary": task_report["summary_text"],
+            "result_kind": task_report["kind"],
             "listening_test_result": _serialize_listening_test_submission(listening_test_submission),
         })
 
@@ -2887,10 +3235,13 @@ def get_parent_stats():
         "today": {
             "total": total_tasks,
             "completed": completed_count,
-            "pending": pending_review_count,
-            "in_progress": in_progress_count,
+            "not_started": status_counts["not_started"],
+            "in_progress": status_counts["in_progress"],
+            "pending_review": status_counts["pending_review"],
+            "pending": status_counts["pending_review"],
             "rate": completion_rate
         },
+        "today_tasks": today_task_items,
         "recent": recent_feed,
         "weekly": weekly_stats,
         "subjects": subject_stats,

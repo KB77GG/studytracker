@@ -76,7 +76,22 @@ const buildParentStats = () => {
     return {
         ok: true,
         isStudying: true,
-        today: { rate: 80, pending: 1, completed: 4, in_progress: 1, total: 5 },
+        today: {
+            rate: 40,
+            total: 5,
+            not_started: 1,
+            in_progress: 1,
+            pending_review: 1,
+            pending: 1,
+            completed: 2
+        },
+        today_tasks: [
+            { id: 'demo-task-1', category: '雅思听力', task_name: '剑雅听力精听练习', planned_minutes: 30, state: 'completed', state_label: '已完成' },
+            { id: 'demo-task-2', category: '词汇', task_name: '核心词汇拼写复习', planned_minutes: 20, state: 'completed', state_label: '已完成' },
+            { id: 'demo-task-3', category: '雅思阅读', task_name: '阅读长难句分析', planned_minutes: 25, state: 'not_started', state_label: '待完成' },
+            { id: 'demo-task-4', category: '雅思口语', task_name: 'Part 2 录音练习', planned_minutes: 15, state: 'in_progress', state_label: '进行中' },
+            { id: 'demo-task-5', category: '写作', task_name: '小作文批改任务', planned_minutes: 30, state: 'pending_review', state_label: '待审核' }
+        ],
         weekly,
         subjects: [
             { subject: '雅思听力', count: 12, percent: 86 },
@@ -113,6 +128,7 @@ const buildParentStats = () => {
                 status: 'done',
                 accuracy: 88,
                 completion_rate: null,
+                result_summary: '共 25 题 · 已答 25 · 正确 22 · 错误 3',
                 teacher_note: '注意复数和数字信息'
             },
             {
@@ -123,6 +139,7 @@ const buildParentStats = () => {
                 status: 'done',
                 accuracy: 92,
                 completion_rate: null,
+                result_summary: '应背 12 词 · 已测 12 · 正确 10 · 需复习 2',
                 teacher_note: ''
             }
         ]
@@ -133,6 +150,59 @@ const buildParentDemo = () => ({
     students: [{ id: 'demo-student', name: '演示学生' }],
     stats: buildParentStats()
 })
+
+const buildParentTaskDetail = (taskId) => {
+    const today = new Date()
+    const isVocabulary = String(taskId || '').includes('recent-2') || String(taskId || '').includes('vocabulary')
+    if (isVocabulary) {
+        return {
+            id: taskId || 'demo-recent-2',
+            student_name: '演示学生',
+            date: formatDate(addDays(today, -1)),
+            category: '词汇',
+            title: '核心词汇拼写复习',
+            state: 'completed',
+            state_label: '已完成',
+            kind: 'dictation',
+            accuracy: 83,
+            summary_text: '应背 6 词 · 已测 6 · 正确 5 · 需复习 1',
+            summary: { assigned_total: 6, attempted_total: 6, correct_total: 5, wrong_total: 1, pending_total: 0, mastered_total: 2 },
+            teacher_note: '错词安排在下一次复习中再次检测。',
+            student_note: '',
+            evidence: { image: [], audio: [], doc: [], other: [] },
+            items: [
+                { id: 'word-1', number: 1, prompt: 'achieve', translation: '实现；达到', student_answer: 'achieve', correct_answer: 'achieve', result_status: 'correct', result_label: '正确', attempt_count: 1, mistake_count: 0, mastery_label: '已掌握', review_level: 5 },
+                { id: 'word-2', number: 2, prompt: 'accuracy', translation: '准确性', student_answer: 'accurcy', correct_answer: 'accuracy', result_status: 'wrong', result_label: '需复习', attempt_count: 2, mistake_count: 2, mastery_label: '巩固中', review_level: 1, next_review_at: formatDate(addDays(today, 1)) },
+                { id: 'word-3', number: 3, prompt: 'heritage', translation: '遗产；传统', student_answer: 'heritage', correct_answer: 'heritage', result_status: 'correct', result_label: '正确', attempt_count: 1, mistake_count: 0, mastery_label: '已掌握', review_level: 5 },
+                { id: 'word-4', number: 4, prompt: 'independent', translation: '独立的', student_answer: 'independent', correct_answer: 'independent', result_status: 'correct', result_label: '正确', attempt_count: 1, mistake_count: 1, mastery_label: '巩固中', review_level: 3 },
+                { id: 'word-5', number: 5, prompt: 'reputation', translation: '名声；声誉', student_answer: 'reputation', correct_answer: 'reputation', result_status: 'correct', result_label: '正确', attempt_count: 1, mistake_count: 0, mastery_label: '巩固中', review_level: 2 },
+                { id: 'word-6', number: 6, prompt: 'realistic', translation: '现实的；实际的', student_answer: 'realistic', correct_answer: 'realistic', result_status: 'correct', result_label: '正确', attempt_count: 1, mistake_count: 0, mastery_label: '巩固中', review_level: 2 }
+            ]
+        }
+    }
+    return {
+        id: taskId || 'demo-recent-1',
+        student_name: '演示学生',
+        date: formatDate(today),
+        category: '雅思听力',
+        title: '剑雅听力精听练习',
+        state: 'completed',
+        state_label: '已完成',
+        kind: 'listening_test',
+        accuracy: 88,
+        summary_text: '共 4 题 · 已答 4 · 正确 3 · 错误 1',
+        summary: { assigned_total: 4, attempted_total: 4, correct_total: 3, wrong_total: 1, pending_total: 0, mastered_total: 0 },
+        teacher_note: '注意复数形式和数字信息。',
+        student_note: '',
+        evidence: { image: [], audio: [], doc: [], other: [] },
+        items: [
+            { id: 'test-1', number: 1, prompt: 'Complete the notes below. Write ONE WORD ONLY for each answer.', student_answer: 'library', correct_answer: 'library', result_status: 'correct', result_label: '正确' },
+            { id: 'test-2', number: 2, prompt: 'What time does the afternoon session begin?', student_answer: '2:15', correct_answer: '2:30', result_status: 'wrong', result_label: '错误' },
+            { id: 'test-3', number: 3, prompt: 'Choose the correct letter, A, B or C.', student_answer: 'B', correct_answer: 'B', result_status: 'correct', result_label: '正确' },
+            { id: 'test-4', number: 4, prompt: 'Complete the form with the missing information.', student_answer: 'Thursday', correct_answer: 'Thursday', result_status: 'correct', result_label: '正确' }
+        ]
+    }
+}
 
 const buildTeacherSchedules = (monthValue) => {
     const now = new Date()
@@ -185,6 +255,7 @@ const buildTeacherMonthlyStats = () => ({
 
 module.exports = {
     buildParentDemo,
+    buildParentTaskDetail,
     buildParentStats,
     buildStudentStats,
     buildStudentTasks,

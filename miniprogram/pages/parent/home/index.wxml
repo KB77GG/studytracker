@@ -40,6 +40,10 @@
               <text class="live-text">实时学习中</text>
             </view>
           </view>
+          <view class="total-task-link" data-filter="all" bindtap="showTodayTasks">
+            <text>查看全部 {{stats.today.total}} 项</text>
+            <text class="total-task-arrow">›</text>
+          </view>
         </view>
         <view class="stats-rate">
           <text class="rate-num">{{stats.today.rate}}</text>
@@ -48,22 +52,42 @@
         </view>
       </view>
       <view class="stats-grid">
-        <view class="grid-item">
-          <text class="num">{{stats.today.pending}}</text>
-          <text class="label">待审核</text>
+        <view class="grid-item {{activeTaskFilter === 'not_started' ? 'selected' : ''}}" data-filter="not_started" bindtap="showTodayTasks" hover-class="grid-item-pressed">
+          <text class="num">{{stats.today.not_started || 0}}</text>
+          <text class="label">待完成 ›</text>
         </view>
-        <view class="grid-item">
-          <text class="num">{{stats.today.completed}}</text>
-          <text class="label">已完成</text>
-        </view>
-        <view class="grid-item">
+        <view class="grid-item {{activeTaskFilter === 'in_progress' ? 'selected' : ''}}" data-filter="in_progress" bindtap="showTodayTasks" hover-class="grid-item-pressed">
           <text class="num">{{stats.today.in_progress}}</text>
-          <text class="label">进行中</text>
+          <text class="label">进行中 ›</text>
         </view>
-        <view class="grid-item">
-          <text class="num">{{stats.today.total}}</text>
-          <text class="label">总任务</text>
+        <view class="grid-item {{activeTaskFilter === 'pending_review' ? 'selected' : ''}}" data-filter="pending_review" bindtap="showTodayTasks" hover-class="grid-item-pressed">
+          <text class="num">{{stats.today.pending_review || stats.today.pending || 0}}</text>
+          <text class="label">待审核 ›</text>
         </view>
+        <view class="grid-item {{activeTaskFilter === 'completed' ? 'selected' : ''}}" data-filter="completed" bindtap="showTodayTasks" hover-class="grid-item-pressed">
+          <text class="num">{{stats.today.completed}}</text>
+          <text class="label">已完成 ›</text>
+        </view>
+      </view>
+
+      <view class="task-detail-panel" wx:if="{{showTaskDetails}}">
+        <view class="task-detail-head">
+          <text class="task-detail-title">{{activeTaskTitle}}（{{filteredTodayTasks.length}}）</text>
+          <text class="task-detail-close" bindtap="hideTodayTasks">收起</text>
+        </view>
+        <block wx:if="{{filteredTodayTasks.length > 0}}">
+          <view class="parent-task-row" wx:for="{{filteredTodayTasks}}" wx:key="id" data-task-id="{{item.id}}" bindtap="viewTaskDetail" hover-class="parent-task-row-pressed">
+            <view class="parent-task-main">
+              <text class="parent-task-name">{{item.task_name}}</text>
+              <text class="parent-task-meta">{{item.category}}{{item.planned_minutes ? (' · ' + item.planned_minutes + '分钟') : ''}}</text>
+            </view>
+            <view class="parent-task-action">
+              <text class="parent-task-status {{item.state}}">{{item.state_label}}</text>
+              <text class="parent-task-view">查看详情</text>
+            </view>
+          </view>
+        </block>
+        <view class="task-detail-empty" wx:else>当前没有{{activeTaskTitle}}</view>
       </view>
     </view>
 
@@ -148,7 +172,7 @@
             <view class="feed-line"></view>
             <view class="feed-dot {{item.status === 'done' ? 'dot-green' : 'dot-blue'}}"></view>
           </view>
-          <view class="feed-right">
+          <view class="feed-right" data-task-id="{{item.id}}" bindtap="viewTaskDetail" hover-class="feed-right-pressed">
             <view class="feed-header">
               <text class="feed-cat">{{item.category}}</text>
               <text class="feed-date">{{item.date}}</text>
@@ -157,6 +181,7 @@
               <text class="feed-detail">{{item.detail}}</text>
             </view>
             <view class="feed-footer">
+              <view class="feed-result-summary" wx:if="{{item.result_summary}}">{{item.result_summary}}</view>
               <view class="feed-score" wx:if="{{item.accuracy !== null}}">
                 正确率 <text class="highlight">{{item.accuracy}}%</text>
               </view>
@@ -166,6 +191,7 @@
               <view class="feed-teacher-note" wx:if="{{item.teacher_note}}">
                 <text class="note-icon">👩‍🏫</text> {{item.teacher_note}}
               </view>
+              <view class="feed-detail-link">查看题目与批改</view>
             </view>
           </view>
         </view>
