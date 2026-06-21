@@ -2399,6 +2399,13 @@ def require_student_access(student_id: int):
         raise PermissionError("forbidden_student")
 
 
+def can_review_student_submission(user: User, student_id: int) -> bool:
+    """Assistants review the shared queue; teachers remain student-scoped."""
+    if user.role in (User.ROLE_ADMIN, User.ROLE_ASSISTANT):
+        return True
+    return student_id in get_accessible_student_ids(user)
+
+
 def ensure_guardian_token(student: StudentProfile) -> str:
     """Ensure student has a guardian view token; create if missing."""
 
@@ -3377,9 +3384,7 @@ def api_review_plan_item(item_id):
         .filter(PlanItem.id == item_id, PlanItem.is_deleted.is_(False))
         .first_or_404()
     )
-    try:
-        require_student_access(item.plan.student_id)
-    except PermissionError:
+    if not can_review_student_submission(current_user, item.plan.student_id):
         return jsonify({"ok": False, "error": "forbidden"}), 403
 
     data = request.get_json(silent=True) or {}
