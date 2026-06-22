@@ -428,7 +428,8 @@ Page({
             student_id: schedule.student_id,
             student_name: schedule.student_name,
             teacher_id: schedule.teacher_id,
-            date: form.date
+            date: form.date,
+            scope: 'recent'
         }
         return Object.keys(params)
             .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')

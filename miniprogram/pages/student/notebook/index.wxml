@@ -1,19 +1,44 @@
 <view class="page">
   <view class="page-header">
-    <view class="title">错词本</view>
-    <view class="count" wx:if="{{activeTab === 'dictation'}}">共 {{list.length}} 词</view>
+    <view>
+      <view class="title">复习中心</view>
+      <view class="header-subtitle">练习记录、错题与生词统一回顾</view>
+    </view>
+    <view class="count" wx:if="{{activeTab === 'history'}}">共 {{historyList.length}} 条</view>
+    <view class="count" wx:elif="{{activeTab === 'dictation'}}">共 {{list.length}} 词</view>
     <view class="count" wx:elif="{{activeTab === 'reading'}}">共 {{readingList.length}} 词</view>
     <view class="count" wx:else>共 {{vocabList.length}} 词</view>
   </view>
 
-  <!-- Tab switcher -->
+  <view class="history-summary">
+    <view class="summary-item">
+      <text class="summary-value">{{historySummary.completed || 0}}</text>
+      <text class="summary-label">完成练习</text>
+    </view>
+    <view class="summary-item">
+      <text class="summary-value">{{historySummary.total_minutes || 0}}</text>
+      <text class="summary-label">累计分钟</text>
+    </view>
+    <view class="summary-item">
+      <text class="summary-value">{{historySummary.average_accuracy === null ? '—' : historySummary.average_accuracy + '%'}}</text>
+      <text class="summary-label">平均正确率</text>
+    </view>
+  </view>
+
   <view class="tabs">
+    <view
+      class="tab {{activeTab === 'history' ? 'active' : ''}}"
+      data-tab="history"
+      bindtap="switchTab"
+    >
+      <text>练习记录</text>
+    </view>
     <view
       class="tab {{activeTab === 'dictation' ? 'active' : ''}}"
       data-tab="dictation"
       bindtap="switchTab"
     >
-      <text>听写错词</text>
+      <text>听写</text>
       <text class="tab-count" wx:if="{{list.length}}">{{list.length}}</text>
     </view>
     <view
@@ -21,7 +46,7 @@
       data-tab="reading"
       bindtap="switchTab"
     >
-      <text>阅读错词</text>
+      <text>阅读</text>
       <text class="tab-count" wx:if="{{readingList.length}}">{{readingList.length}}</text>
     </view>
     <view
@@ -34,8 +59,43 @@
     </view>
   </view>
 
+  <block wx:if="{{activeTab === 'history'}}">
+    <view class="loading-card" wx:if="{{historyLoading}}">正在加载练习记录...</view>
+    <view class="empty history-empty" wx:elif="{{!historyList.length}}">
+      <text class="empty-title">还没有完成记录</text>
+      <text class="empty-sub">完成任务后，会自动沉淀到这里供你回顾。</text>
+    </view>
+    <view class="history-list" wx:else>
+      <view
+        class="history-card"
+        wx:for="{{historyList}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="openHistoryTask"
+      >
+        <view class="history-mark">{{item.moduleMark}}</view>
+        <view class="history-main">
+          <view class="history-topline">
+            <text class="history-category">{{item.category}}</text>
+            <text class="history-date">{{item.date}}</text>
+          </view>
+          <text class="history-title">{{item.title}}</text>
+          <view class="history-meta">
+            <text>{{item.durationLabel}}</text>
+            <text wx:if="{{item.accuracyLabel}}">正确率 {{item.accuracyLabel}}</text>
+            <text class="feedback-dot" wx:if="{{item.has_feedback || item.hasFeedback}}">有老师反馈</text>
+          </view>
+        </view>
+        <view class="history-side">
+          <text class="history-state {{item.state}}">{{item.stateLabel}}</text>
+          <text class="history-arrow">›</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
   <!-- ═════ Dictation tab ═════ -->
-  <block wx:if="{{activeTab === 'dictation'}}">
+  <block wx:elif="{{activeTab === 'dictation'}}">
     <!-- 上次错词快捷入口 -->
     <view wx:if="{{lastWrongCount > 0}}" class="last-wrong-banner" bindtap="retryLastWrong">
       <view class="banner-left">

@@ -20,7 +20,7 @@
     <view class="progress-card">
       <view class="progress-top">
         <view>
-          <text class="progress-label">今日完成度</text>
+          <text class="progress-label">任务完成度</text>
           <text class="progress-value">{{progress.completed}} / {{progress.total}} 项任务</text>
         </view>
         <view class="streak-box">
@@ -93,6 +93,7 @@
             <view class="task-icon {{item.iconClass}}">{{item.iconText}}</view>
             <view class="task-content">
               <text class="task-name">{{item.task_name}}</text>
+              <text class="task-date overdue" wx:if="{{item.isCarryover}}">{{item.taskDateLabel}}</text>
               <text class="task-time">预计 {{item.planned_minutes}} 分钟</text>
             </view>
           </view>
@@ -117,8 +118,8 @@
     </view>
 
     <view class="empty-state" wx:else>
-      <text class="empty-text">今天没有任务</text>
-      <text class="empty-sub">好好休息，明天继续保持。</text>
+      <text class="empty-text">当前日期没有任务</text>
+      <text class="empty-sub">可切换日期查看其他作业。</text>
     </view>
   </scroll-view>
 </view>

@@ -1523,7 +1523,7 @@ def speaking_tts():
 @mp_bp.route("/student/tasks/today", methods=["GET"])
 @require_api_user(User.ROLE_STUDENT)
 def get_student_today_tasks():
-    """获取学生今日任务"""
+    """获取学生指定日期任务；今天页同时带出仍未完成的历史任务。"""
     from models import Task
     
     user = request.current_api_user
@@ -1541,14 +1541,33 @@ def get_student_today_tasks():
         except ValueError:
             pass # Invalid date format, fallback to today
     
-    # 从 Task 表查询指定日期的任务
-    tasks = Task.query.filter_by(
-        student_name=student.full_name,
-        date=query_date.isoformat()
-    ).all()
+    task_filters = [Task.student_name == student.full_name]
+    if query_date == today:
+        # 未完成任务不能在日期跨天后从学生首页消失。历史日期仍保持
+        # 精确查询，避免学生回看时混入其他日期的任务。
+        task_filters.append(or_(
+            Task.date == query_date.isoformat(),
+            and_(
+                Task.date < query_date.isoformat(),
+                or_(Task.status.is_(None), Task.status != "done"),
+            ),
+        ))
+    else:
+        task_filters.append(Task.date == query_date.isoformat())
+
+    tasks = (
+        Task.query.filter(*task_filters)
+        .order_by(Task.date.desc(), Task.id.desc())
+        .all()
+    )
     
     if not tasks:
-        return jsonify({"ok": True, "tasks": [], "message": "今日无任务"})
+        return jsonify({
+            "ok": True,
+            "date": query_date.isoformat(),
+            "tasks": [],
+            "message": "当前日期无任务",
+        })
 
     # 给缺少 token 的精听任务补上
     tokens_updated = False
@@ -1587,6 +1606,8 @@ def get_student_today_tasks():
 
         tasks_data.append({
             "id": task.id,
+            "date": task.date,
+            "is_carryover": query_date == today and task.date < today.isoformat(),
             "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
             "module": task.category or "其他",
             "exam_system": "",
@@ -1626,7 +1647,7 @@ def get_student_today_tasks():
         
     return jsonify({
         "ok": True, 
-        "date": today.isoformat(),
+        "date": query_date.isoformat(),
         "tasks": tasks_data
     })
 
@@ -1947,6 +1968,68 @@ def list_saved_words():
             }
             for row in rows
         ],
+    })
+
+
+@mp_bp.route("/student/task-history", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def list_student_task_history():
+    """Return completed and submitted tasks for the student's review center."""
+    user = request.current_api_user
+    student = user.student_profile
+    if not student:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    task_query = (
+        Task.query.filter(
+            Task.student_name == student.full_name,
+            or_(
+                Task.status.in_(("done", "submitted")),
+                Task.student_submitted.is_(True),
+            ),
+        )
+        .order_by(Task.date.desc(), Task.id.desc())
+    )
+    tasks = task_query.all()
+
+    completed = sum(1 for task in tasks if task.status == "done")
+    total_seconds = sum(max(0, task.actual_seconds or 0) for task in tasks)
+    accuracy_values = [
+        float(task.accuracy)
+        for task in tasks
+        if task.status == "done" and task.accuracy is not None
+    ]
+
+    items = []
+    for task in tasks:
+        is_completed = task.status == "done"
+        items.append({
+            "id": task.id,
+            "date": task.date,
+            "category": task.category or "学习任务",
+            "title": _task_display_title(task),
+            "state": "completed" if is_completed else "pending_review",
+            "state_label": "已完成" if is_completed else "待审核",
+            "planned_minutes": task.planned_minutes or 0,
+            "actual_seconds": task.actual_seconds or 0,
+            "accuracy": task.accuracy if is_completed else None,
+            "completion_rate": task.completion_rate,
+            "has_feedback": bool(task.feedback_text or task.feedback_audio or task.feedback_image),
+            "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        })
+
+    return jsonify({
+        "ok": True,
+        "items": items,
+        "summary": {
+            "total": len(tasks),
+            "completed": completed,
+            "total_minutes": round(total_seconds / 60, 1),
+            "average_accuracy": (
+                round(sum(accuracy_values) / len(accuracy_values), 1)
+                if accuracy_values else None
+            ),
+        },
     })
 
 
@@ -4340,10 +4423,13 @@ def _build_teacher_homework_values(
 @mp_bp.route("/teacher/homework", methods=["GET"])
 @require_api_user(User.ROLE_TEACHER)
 def list_teacher_homework():
-    """老师查看当前学生某一天已经布置的作业。"""
+    """老师查看当前学生已经布置的作业。"""
     user = request.current_api_user
 
     task_date = (request.args.get("date") or date.today().isoformat()).strip()
+    scope = (request.args.get("scope") or "date").strip()
+    if scope not in {"date", "recent"}:
+        return jsonify({"ok": False, "error": "invalid_scope"}), 400
     try:
         datetime.strptime(task_date, "%Y-%m-%d")
     except ValueError:
@@ -4375,13 +4461,16 @@ def list_teacher_homework():
     if not profile:
         return jsonify({"ok": False, "error": "student_not_found"}), 404
 
+    task_filters = [
+        Task.student_name == profile.full_name,
+        Task.created_by == user.id,
+    ]
+    if scope == "date":
+        task_filters.append(Task.date == task_date)
+
     tasks = (
-        Task.query.filter(
-            Task.student_name == profile.full_name,
-            Task.date == task_date,
-            Task.created_by == user.id,
-        )
-        .order_by(Task.id.desc())
+        Task.query.filter(*task_filters)
+        .order_by(Task.date.desc(), Task.id.desc())
         .limit(100)
         .all()
     )
@@ -4389,6 +4478,7 @@ def list_teacher_homework():
     return jsonify({
         "ok": True,
         "date": task_date,
+        "scope": scope,
         "student_name": profile.full_name,
         "tasks": [_serialize_teacher_homework_task(task) for task in tasks],
     })

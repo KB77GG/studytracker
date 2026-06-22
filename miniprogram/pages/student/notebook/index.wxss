@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
-  background: #f7f8fa;
-  padding: 24rpx;
+  background: #f4f8f8;
+  padding: 34rpx 28rpx 170rpx;
   box-sizing: border-box;
 }
 
@@ -13,14 +13,55 @@
 }
 
 .title {
-  font-size: 34rpx;
-  font-weight: 700;
-  color: #2c3e50;
+  font-size: 42rpx;
+  font-weight: 850;
+  color: #0b1830;
+}
+
+.header-subtitle {
+  margin-top: 8rpx;
+  color: #718096;
+  font-size: 23rpx;
 }
 
 .count {
   font-size: 26rpx;
-  color: #909399;
+  color: #20756f;
+  font-weight: 700;
+}
+
+.history-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rpx;
+  margin-bottom: 22rpx;
+}
+
+.summary-item {
+  min-width: 0;
+  padding: 22rpx 10rpx;
+  border: 1rpx solid #e0ecea;
+  border-radius: 20rpx;
+  background: #fff;
+  text-align: center;
+}
+
+.summary-value,
+.summary-label {
+  display: block;
+}
+
+.summary-value {
+  color: #0f766e;
+  font-family: "DIN Alternate", "Avenir Next", sans-serif;
+  font-size: 34rpx;
+  font-weight: 850;
+}
+
+.summary-label {
+  margin-top: 6rpx;
+  color: #829097;
+  font-size: 20rpx;
 }
 
 /* ── 上次错词 banner ── */
@@ -163,7 +204,8 @@ button.danger {
   gap: 8rpx;
   background: #fff;
   padding: 8rpx;
-  border-radius: 14rpx;
+  border: 1rpx solid #e0ecea;
+  border-radius: 18rpx;
   margin-bottom: 20rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
 }
@@ -176,16 +218,142 @@ button.danger {
   gap: 8rpx;
   padding: 18rpx 0;
   border-radius: 10rpx;
-  font-size: 28rpx;
+  min-width: 0;
+  font-size: 24rpx;
   color: #606266;
   font-weight: 500;
   transition: all 0.2s;
 }
 
 .tab.active {
-  background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+  background: #0f766e;
   color: #fff;
   font-weight: 600;
+}
+
+.loading-card,
+.history-empty {
+  padding: 72rpx 28rpx;
+  border-radius: 22rpx;
+  background: #fff;
+  color: #829097;
+  text-align: center;
+}
+
+.empty-title {
+  display: block;
+  color: #334155;
+  font-size: 28rpx;
+  font-weight: 750;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.history-card {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 24rpx;
+  border: 1rpx solid #e1eceb;
+  border-radius: 22rpx;
+  background: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(23, 58, 64, 0.05);
+}
+
+.history-card:active {
+  background: #f1f8f7;
+}
+
+.history-mark {
+  width: 68rpx;
+  height: 68rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18rpx;
+  background: #e8f7f4;
+  color: #0f766e;
+  font-size: 26rpx;
+  font-weight: 850;
+}
+
+.history-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.history-topline,
+.history-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.history-category {
+  color: #20756f;
+  font-size: 22rpx;
+  font-weight: 750;
+}
+
+.history-date {
+  color: #94a3b8;
+  font-size: 21rpx;
+}
+
+.history-title {
+  display: -webkit-box;
+  margin-top: 7rpx;
+  overflow: hidden;
+  color: #172033;
+  font-size: 27rpx;
+  font-weight: 750;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.history-meta {
+  margin-top: 10rpx;
+  color: #74828f;
+  font-size: 21rpx;
+}
+
+.feedback-dot {
+  color: #9a5b00;
+}
+
+.history-side {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10rpx;
+}
+
+.history-state {
+  padding: 6rpx 12rpx;
+  border-radius: 999rpx;
+  background: #e9f8ef;
+  color: #17864b;
+  font-size: 20rpx;
+  font-weight: 750;
+}
+
+.history-state.pending_review {
+  background: #fff5df;
+  color: #aa6200;
+}
+
+.history-arrow {
+  color: #8aa19f;
+  font-size: 36rpx;
+  line-height: 1;
 }
 
 .tab-count {

@@ -255,7 +255,7 @@ Page({
     },
 
     goNotebook() {
-        wx.navigateTo({
+        wx.switchTab({
             url: '/pages/student/notebook/index'
         })
     },
@@ -426,6 +426,9 @@ Page({
             const iconInfo = this.getModuleIcon(t.module || t.task_name || '')
             return {
                 id: t.id,
+                date: t.date || this.data.currentDate,
+                isCarryover: !!t.is_carryover,
+                taskDateLabel: t.is_carryover ? `${t.date} 任务` : '',
                 task_name: t.task_name,
                 module: t.module,
                 moduleClass: this.getModuleClass(t.module),

@@ -36,6 +36,12 @@ Component({
                 selectedIconPath: buildIcon('task', brand)
             },
             {
+                pagePath: "/pages/student/notebook/index",
+                text: "复习",
+                iconPath: buildIcon('note', gray),
+                selectedIconPath: buildIcon('note', brand)
+            },
+            {
                 pagePath: "/pages/student/stats/index",
                 text: "我的",
                 iconPath: buildIcon('user', gray),

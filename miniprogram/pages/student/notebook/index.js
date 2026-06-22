@@ -53,9 +53,35 @@ function savedWordSourceLabel(kind) {
     return labels[kind] || '网页收藏'
 }
 
+function formatDuration(seconds) {
+    const total = Math.max(0, Number(seconds) || 0)
+    if (!total) return '未计时'
+    if (total < 60) return `${total} 秒`
+    return `${Math.round(total / 60)} 分钟`
+}
+
+function moduleMark(category) {
+    const text = String(category || '')
+    if (text.includes('听')) return 'L'
+    if (text.includes('读')) return 'R'
+    if (text.includes('写')) return 'W'
+    if (text.includes('口')) return 'S'
+    if (text.includes('词') || text.includes('单词')) return 'V'
+    return 'T'
+}
+
 Page({
     data: {
-        activeTab: 'dictation',          // 'dictation' | 'reading' | 'vocab'
+        activeTab: 'history',
+        isGuest: false,
+        historyList: [],
+        historyLoading: false,
+        historySummary: {
+            total: 0,
+            completed: 0,
+            total_minutes: 0,
+            average_accuracy: null
+        },
         // Dictation tab
         list: [],
         isLoading: false,
@@ -69,6 +95,12 @@ Page({
     },
 
     onShow() {
+        if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+            this.getTabBar().setData({ selected: 1 })
+        }
+        const isGuest = !!app.globalData.guestMode
+        this.setData({ isGuest })
+        this.loadHistory()
         this.loadNotebook();
         this.loadLastWrongCount();
         this.loadReadingNotebook();
@@ -81,9 +113,77 @@ Page({
         const tab = e.currentTarget.dataset.tab
         if (!tab || tab === this.data.activeTab) return
         this.setData({ activeTab: tab })
+        if (tab === 'history' && !this.data.historyList.length) {
+            this.loadHistory()
+        }
         if (tab === 'vocab' && !this.data.vocabList.length) {
             this.loadVocab()
         }
+    },
+
+    onPullDownRefresh() {
+        Promise.all([
+            this.loadHistory(),
+            this.loadReadingNotebook(),
+            this.data.activeTab === 'vocab' ? this.loadVocab() : Promise.resolve()
+        ]).finally(() => wx.stopPullDownRefresh())
+    },
+
+    loadHistory() {
+        if (this.data.isGuest || app.globalData.guestMode) {
+            const today = new Date()
+            const yesterday = new Date(today)
+            yesterday.setDate(today.getDate() - 1)
+            const dateText = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`
+            this.setData({
+                historyLoading: false,
+                historySummary: { total: 3, completed: 3, total_minutes: 68, average_accuracy: 88.7 },
+                historyList: [
+                    { id: 'demo-review-1', date: dateText, category: '雅思听力', title: '剑雅听力精听练习', state: 'completed', stateLabel: '已完成', durationLabel: '28 分钟', accuracyLabel: '92%', moduleMark: 'L', hasFeedback: true },
+                    { id: 'demo-review-2', date: dateText, category: '词汇', title: '核心词汇拼写复习', state: 'completed', stateLabel: '已完成', durationLabel: '20 分钟', accuracyLabel: '86%', moduleMark: 'V', hasFeedback: false },
+                    { id: 'demo-review-3', date: dateText, category: '雅思阅读', title: '阅读词汇选择练习', state: 'completed', stateLabel: '已完成', durationLabel: '20 分钟', accuracyLabel: '88%', moduleMark: 'R', hasFeedback: true }
+                ]
+            })
+            return Promise.resolve()
+        }
+
+        this.setData({ historyLoading: true })
+        return request('/miniprogram/student/task-history')
+            .then((res) => {
+                if (!res || !res.ok) throw new Error((res && res.error) || 'load_failed')
+                const historyList = (res.items || []).map(item => ({
+                    ...item,
+                    stateLabel: item.state_label || '已完成',
+                    durationLabel: formatDuration(item.actual_seconds),
+                    accuracyLabel: item.accuracy === null || item.accuracy === undefined
+                        ? ''
+                        : `${Number(item.accuracy).toFixed(1).replace(/\.0$/, '')}%`,
+                    moduleMark: moduleMark(item.category)
+                }))
+                this.setData({
+                    historyList,
+                    historySummary: res.summary || this.data.historySummary
+                })
+            })
+            .catch((err) => {
+                console.warn('load task history failed', err)
+                this.setData({ historyList: [] })
+            })
+            .finally(() => this.setData({ historyLoading: false }))
+    },
+
+    openHistoryTask(e) {
+        if (this.data.isGuest) {
+            wx.showModal({
+                title: '练习记录示例',
+                content: '登录后可查看真实答题记录、错题和老师反馈。',
+                showCancel: false
+            })
+            return
+        }
+        const taskId = e.currentTarget.dataset.id
+        if (!taskId) return
+        wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
     },
 
     loadNotebook() {

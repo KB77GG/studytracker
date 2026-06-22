@@ -87,20 +87,20 @@
 
   <view class="form assigned-card">
     <view class="section-title-row">
-      <text class="section-title">已布置作业</text>
+      <text class="section-title">该学生已布置作业</text>
       <text class="section-count">{{existingTasks.length}} 项</text>
     </view>
     <view class="practice-summary muted" wx:if="{{existingLoading}}">
       <text>正在加载已布置作业...</text>
     </view>
     <view class="empty-hint" wx:elif="{{!existingTasks.length}}">
-      <text>当前日期暂无作业</text>
+      <text>暂无已布置作业</text>
     </view>
     <view class="assigned-list" wx:else>
       <view class="assigned-item" wx:for="{{existingTasks}}" wx:key="id">
         <view class="assigned-main">
           <text class="assigned-title">{{item.detail}}</text>
-          <text class="assigned-meta">{{item.category || '课后作业'}} ｜ {{item.planned_minutes || 0}} 分钟</text>
+          <text class="assigned-meta">{{item.date}} ｜ {{item.category || '课后作业'}} ｜ {{item.planned_minutes || 0}} 分钟</text>
         </view>
         <view class="assigned-side">
           <text class="status-pill">{{item.status_label}}</text>
