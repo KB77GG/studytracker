@@ -7,7 +7,6 @@ from flask_login import LoginManager
 
 from api.dictation import dictation_bp
 from dictation_answers import (
-    accepted_english_answers,
     is_chinese_answer_correct,
     is_english_answer_correct,
     parse_answer_variants,
@@ -20,18 +19,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DictationAnswerTest(unittest.TestCase):
-    def test_accepts_us_and_uk_spelling_in_both_directions(self):
-        self.assertTrue(is_english_answer_correct("behaviour", "behavior"))
-        self.assertTrue(is_english_answer_correct("behavior", "behaviour"))
-        self.assertIn("travelling", accepted_english_answers("traveling"))
-
-    def test_synonyms_are_limited_to_translation_mode(self):
-        self.assertTrue(
-            is_english_answer_correct("bicycle", "bike", allow_synonyms=True)
-        )
-        self.assertFalse(
-            is_english_answer_correct("bicycle", "bike", allow_synonyms=False)
-        )
+    def test_does_not_automatically_accept_regional_spellings_or_synonyms(self):
+        self.assertFalse(is_english_answer_correct("behaviour", "behavior"))
+        self.assertFalse(is_english_answer_correct("behavior", "behaviour"))
+        self.assertFalse(is_english_answer_correct("bicycle", "bike"))
 
     def test_teacher_approved_answers_are_parsed_without_fuzzy_matching(self):
         stored = serialize_answer_variants("cellphone; mobile phone")
@@ -145,13 +136,13 @@ class DictationSubmitApiTest(unittest.TestCase):
             headers=self.headers,
         )
 
-    def test_mode_aware_english_grading(self):
+    def test_english_grading_requires_canonical_or_reviewed_answer(self):
         regional = self.submit(self.behaviour_id, "behavior", "audio_to_en")
         synonym = self.submit(self.bike_id, "bicycle", "zh_to_en")
         audio_synonym = self.submit(self.bike_id, "bicycle", "audio_to_en")
 
-        self.assertTrue(regional.get_json()["is_correct"])
-        self.assertTrue(synonym.get_json()["is_correct"])
+        self.assertFalse(regional.get_json()["is_correct"])
+        self.assertFalse(synonym.get_json()["is_correct"])
         self.assertFalse(audio_synonym.get_json()["is_correct"])
 
     def test_chinese_review_grading(self):
@@ -197,8 +188,8 @@ class DictationSubmitApiTest(unittest.TestCase):
             appeal = db.session.get(DictationAnswerAppeal, appeal_id)
             self.assertEqual(appeal.status, DictationAnswerAppeal.STATUS_APPROVED)
 
-    def test_cannot_appeal_an_answer_that_is_now_accepted(self):
-        response = self.create_appeal(answer="bicycle")
+    def test_cannot_appeal_the_canonical_answer(self):
+        response = self.create_appeal(answer="bike")
         self.assertEqual(response.status_code, 409)
         self.assertEqual(response.get_json()["error"], "answer_already_accepted")
 

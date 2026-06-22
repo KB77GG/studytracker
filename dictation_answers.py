@@ -4,48 +4,6 @@ import json
 import re
 
 
-REGIONAL_SPELLING_PAIRS = (
-    ("behavior", "behaviour"),
-    ("color", "colour"),
-    ("favor", "favour"),
-    ("favorite", "favourite"),
-    ("flavor", "flavour"),
-    ("harbor", "harbour"),
-    ("honor", "honour"),
-    ("humor", "humour"),
-    ("labor", "labour"),
-    ("neighbor", "neighbour"),
-    ("rumor", "rumour"),
-    ("center", "centre"),
-    ("fiber", "fibre"),
-    ("liter", "litre"),
-    ("meter", "metre"),
-    ("theater", "theatre"),
-    ("catalog", "catalogue"),
-    ("dialog", "dialogue"),
-    ("gray", "grey"),
-    ("jewelry", "jewellery"),
-    ("license", "licence"),
-    ("practice", "practise"),
-    ("program", "programme"),
-    ("traveling", "travelling"),
-    ("traveled", "travelled"),
-    ("traveler", "traveller"),
-    ("modeling", "modelling"),
-    ("modeled", "modelled"),
-    ("canceled", "cancelled"),
-    ("canceling", "cancelling"),
-    ("analyze", "analyse"),
-    ("organize", "organise"),
-    ("recognize", "recognise"),
-)
-
-# Only include pairs that are interchangeable for a plain vocabulary prompt.
-COMMON_SYNONYM_GROUPS = (
-    ("bike", "bicycle"),
-    ("bikes", "bicycles"),
-)
-
 _PART_OF_SPEECH_RE = re.compile(
     r"^(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*", re.IGNORECASE
 )
@@ -91,34 +49,17 @@ def parse_answer_variants(value):
     return variants
 
 
-def _expand_equivalent_groups(variants, groups):
-    expanded = set(variants)
-    changed = True
-    while changed:
-        changed = False
-        for group in groups:
-            normalized_group = {normalize_english_answer(item) for item in group}
-            if expanded.intersection(normalized_group) and not normalized_group.issubset(expanded):
-                expanded.update(normalized_group)
-                changed = True
-    return expanded
-
-
-def accepted_english_answers(canonical, accepted_answers=None, allow_synonyms=False):
+def accepted_english_answers(canonical, accepted_answers=None):
     variants = set(parse_answer_variants(canonical))
     variants.update(parse_answer_variants(accepted_answers))
-    variants = _expand_equivalent_groups(variants, REGIONAL_SPELLING_PAIRS)
-    if allow_synonyms:
-        variants = _expand_equivalent_groups(variants, COMMON_SYNONYM_GROUPS)
     return sorted(variants)
 
 
-def is_english_answer_correct(answer, canonical, accepted_answers=None, allow_synonyms=False):
+def is_english_answer_correct(answer, canonical, accepted_answers=None):
     normalized = normalize_english_answer(answer)
     return bool(normalized) and normalized in accepted_english_answers(
         canonical,
         accepted_answers=accepted_answers,
-        allow_synonyms=allow_synonyms,
     )
 
 

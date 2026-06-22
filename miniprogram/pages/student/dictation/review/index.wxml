@@ -47,7 +47,6 @@
                bindinput="onInput"
                confirm-type="done"
                bindconfirm="checkAnswer"/>
-        <view class="answer-length-hint" wx:if="{{answerLengthHint}}">{{answerLengthHint}}</view>
       </view>
 
       <view class="result" wx:else>

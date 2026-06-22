@@ -362,7 +362,6 @@ def upload_book():
         word_col = None
         phonetic_col = None
         translation_col = None
-        accepted_answers_col = None
         
         for col in df.columns:
             if col in ['单词', 'word', 'words', '词汇']:
@@ -371,8 +370,6 @@ def upload_book():
                 phonetic_col = col
             elif col in ['释义', 'translation', 'meaning', '翻译', '中文']:
                 translation_col = col
-            elif col in ['可接受答案', '同义词', 'accepted_answers', 'aliases', 'alternatives']:
-                accepted_answers_col = col
         
         if not word_col:
             return jsonify({
@@ -400,18 +397,12 @@ def upload_book():
             
             phonetic = str(row[phonetic_col]).strip() if phonetic_col and pd.notna(row.get(phonetic_col)) else None
             translation = str(row[translation_col]).strip() if translation_col and pd.notna(row.get(translation_col)) else None
-            accepted_answers = (
-                serialize_answer_variants(row[accepted_answers_col])
-                if accepted_answers_col and pd.notna(row.get(accepted_answers_col))
-                else None
-            )
             
             # Create word entry (no audio paths - using Mini Program TTS)
             word = DictationWord(
                 book_id=book.id,
                 sequence=words_added + 1,
                 word=word_text,
-                accepted_answers=accepted_answers,
                 phonetic=phonetic if phonetic != 'nan' else None,
                 translation=translation if translation != 'nan' else None,
                 audio_us=None,  # Will use Mini Program TTS
@@ -957,16 +948,10 @@ def submit_answer():
     if normalized_mode == "en_to_zh":
         is_correct = is_chinese_answer_correct(student_answer, word.translation)
     else:
-        allow_synonyms = normalized_mode == "zh_to_en" or (
-            not normalized_mode
-            and word.book is not None
-            and (word.book.book_type or "").lower() == "translation"
-        )
         is_correct = is_english_answer_correct(
             student_answer,
             word.word,
             accepted_answers=word.accepted_answers,
-            allow_synonyms=allow_synonyms,
         )
 
     # Record the attempt
@@ -1237,7 +1222,6 @@ def create_answer_appeal():
             student_answer,
             word.word,
             accepted_answers=word.accepted_answers,
-            allow_synonyms=mode == "zh_to_en",
         )
         reference_answer = word.word
     if already_accepted:

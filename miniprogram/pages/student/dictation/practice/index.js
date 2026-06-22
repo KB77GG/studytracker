@@ -5,10 +5,7 @@ const {
     groupBounds,
     normalizeGroupSizes
 } = require('../../../../utils/dictation-groups.js')
-const {
-    englishAnswerLengthHint,
-    isEnglishAnswerCorrect
-} = require('../../../../utils/dictation-answers.js')
+const { isEnglishAnswerCorrect } = require('../../../../utils/dictation-answers.js')
 
 const MODE_AUDIO_TO_EN = 'audio_to_en'
 const MODE_ZH_TO_EN = 'zh_to_en'
@@ -127,7 +124,6 @@ Page({
         attemptCount: 0,
         dictationMode: MODE_AUDIO_TO_EN,
         currentMode: MODE_AUDIO_TO_EN,
-        answerLengthHint: '',
         appealSubmitted: false
     },
 
@@ -397,11 +393,6 @@ Page({
     loadWord: function (index) {
         const word = this.data.words[index];
         const currentMode = resolveDictationMode(word && word.dictationMode, this.data.dictationMode);
-        const answerLengthHint = currentMode === MODE_EN_TO_ZH
-            ? ''
-            : englishAnswerLengthHint(word, {
-                allowSynonyms: currentMode === MODE_ZH_TO_EN
-            });
         this.setData({
             currentWord: word,
             currentIndex: index,
@@ -414,7 +405,6 @@ Page({
             userAnswer: '',
             showHint: false,
             attemptCount: 0,
-            answerLengthHint: answerLengthHint,
             appealSubmitted: false
         });
         this.saveProgress(index);
@@ -699,7 +689,7 @@ Page({
         if (mode === MODE_AUDIO_TO_EN) {
             isCorrect = isEnglishAnswerCorrect(inputRaw, this.data.currentWord);
         } else if (mode === MODE_ZH_TO_EN) {
-            isCorrect = isEnglishAnswerCorrect(inputRaw, this.data.currentWord, { allowSynonyms: true });
+            isCorrect = isEnglishAnswerCorrect(inputRaw, this.data.currentWord);
         } else {
             const input = normalizeChineseAnswer(inputRaw);
             isCorrect = chineseVariants(this.data.currentWord.translation).some(variant => (

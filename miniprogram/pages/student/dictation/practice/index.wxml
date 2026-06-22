@@ -180,7 +180,6 @@
                bindinput="onInput"
                confirm-type="done"
                bindconfirm="checkAnswer"/>
-        <view class="answer-length-hint" wx:if="{{answerLengthHint}}">{{answerLengthHint}}</view>
         <view class="hint-card" wx:if="{{showHint && currentMode === 'audio_to_en'}}">
           <text class="hint-label">提示</text>
           <text class="hint-text">{{currentWord.translation || '暂无释义'}}</text>
