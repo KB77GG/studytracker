@@ -202,6 +202,140 @@
   line-height: 1.4;
 }
 
+.practice-result {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 3px;
+  padding: 7px 9px;
+  border-radius: 8px;
+  background: #f0fdfa;
+  border: 1px solid #ccfbf1;
+}
+
+.practice-result-main {
+  color: #0f766e;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.practice-result-wrong {
+  color: #15803d;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.practice-result-wrong.has-wrong {
+  color: #b45309;
+}
+
+.result-detail-toggle {
+  width: 100%;
+  margin: 3px 0 0;
+  padding: 0 10px;
+  border-radius: 7px;
+  background: #fff;
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+  font-size: 11px;
+  line-height: 2.35;
+}
+
+.result-detail-toggle::after {
+  border: none;
+}
+
+.wrong-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 4px;
+}
+
+.wrong-detail-card {
+  padding: 8px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #fde7c3;
+}
+
+.wrong-detail-head,
+.answer-line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.wrong-question-label {
+  color: #92400e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.wrong-score {
+  color: #94a3b8;
+  font-size: 10px;
+}
+
+.wrong-question-title {
+  display: block;
+  margin-top: 5px;
+  color: #334155;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.answer-line {
+  margin-top: 6px;
+  justify-content: flex-start;
+}
+
+.answer-label {
+  width: 52px;
+  flex-shrink: 0;
+  color: #64748b;
+  font-size: 10px;
+}
+
+.answer-value {
+  flex: 1;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.student-answer .answer-value {
+  color: #b91c1c;
+}
+
+.correct-answer .answer-value {
+  color: #047857;
+}
+
+.wrong-analysis {
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.analysis-label {
+  display: block;
+  margin-bottom: 3px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.analysis-text {
+  display: block;
+  color: #475569;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
 .remove-btn {
   width: 58px;
   flex-shrink: 0;
@@ -209,6 +343,10 @@
 
 .assigned-card {
   border-color: rgba(14, 165, 233, 0.18);
+}
+
+.assigned-item {
+  align-items: flex-start;
 }
 
 .assigned-list {

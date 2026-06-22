@@ -158,7 +158,10 @@ Page({
                     accuracyLabel: item.accuracy === null || item.accuracy === undefined
                         ? ''
                         : `${Number(item.accuracy).toFixed(1).replace(/\.0$/, '')}%`,
-                    moduleMark: moduleMark(item.category)
+                    moduleMark: moduleMark(item.category),
+                    wrongLabel: Number(item.wrong_count || 0) > 0
+                        ? `错题 ${Number(item.wrong_count)} 题`
+                        : ''
                 }))
                 this.setData({
                     historyList,

@@ -147,17 +147,6 @@ page {
   line-height: 1.2;
 }
 
-.progress-overdue {
-  display: inline-block;
-  margin-top: 10rpx;
-  padding: 2rpx 14rpx;
-  border-radius: 999rpx;
-  color: #b46100;
-  background: #fdecd5;
-  font-size: 22rpx;
-  font-weight: 750;
-}
-
 .streak-box {
   width: 112rpx;
   height: 112rpx;
@@ -401,13 +390,6 @@ page {
   color: #0b1830;
   font-size: 25rpx;
   font-weight: 850;
-}
-
-/* 历史日期分组保持中性：同一天可能混有待完成与待审核任务，
-   状态由每张卡片的徽章呈现，标题不再统一标成逾期。 */
-.task-group-header.overdue .task-group-title {
-  color: #64748b;
-  font-weight: 800;
 }
 
 .task-sub {
@@ -656,33 +638,6 @@ page {
 .empty-sub {
   color: #64748b;
   font-size: 25rpx;
-}
-
-.older-pending-entry {
-  margin-top: 18rpx;
-  padding: 22rpx 24rpx;
-  border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1rpx dashed #cdd9de;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.older-pending-entry:active {
-  opacity: 0.85;
-}
-
-.older-pending-text {
-  color: #334155;
-  font-size: 25rpx;
-  font-weight: 750;
-}
-
-.older-pending-arrow {
-  color: #087f77;
-  font-size: 25rpx;
-  font-weight: 800;
 }
 
 @media (max-width: 340px) {

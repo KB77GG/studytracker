@@ -1,3 +1,4 @@
+import json
 import time
 import unittest
 from datetime import date, timedelta
@@ -6,7 +7,7 @@ import jwt
 from flask import Flask
 
 from api.miniprogram import mp_bp
-from models import StudentProfile, Task, User, db
+from models import ListeningTestSubmission, StudentProfile, Task, User, db
 
 
 class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
@@ -24,12 +25,11 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         self.today = date.today()
         self.d1 = self.today - timedelta(days=1)
         self.d2 = self.today - timedelta(days=2)
-        # 首页 carryover 窗口为 3 天：d3 在窗口内、d4 已超出。
+        # 首页固定窗口：前两天、今天、后两天。
         self.d3 = self.today - timedelta(days=3)
-        self.d4 = self.today - timedelta(days=4)
-        # 「未完成作业」页窗口为 5 天：d5 在窗口内、d6 已超出。
-        self.d5 = self.today - timedelta(days=5)
-        self.d6 = self.today - timedelta(days=6)
+        self.p1 = self.today + timedelta(days=1)
+        self.p2 = self.today + timedelta(days=2)
+        self.p3 = self.today + timedelta(days=3)
 
         with self.app.app_context():
             db.create_all()
@@ -60,28 +60,70 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
             db.session.add_all([student, teacher, other_teacher, assistant])
             db.session.flush()
             db.session.add(StudentProfile(user_id=student.id, full_name="可见性学生"))
+            completed_listening = self._task(
+                self.d1,
+                "d1 done",
+                "done",
+                teacher.id,
+                accuracy=88,
+                actual_seconds=1200,
+            )
+            completed_listening.listening_resource_type = "cambridge_test"
+            completed_listening.listening_exercise_id = "ielts11_test1"
             db.session.add_all([
                 self._task(self.today, "today", "pending", teacher.id),
                 self._task(self.today, "today assistant", "pending", assistant.id),
                 self._task(self.d1, "d1 pending", "pending", teacher.id),
-                self._task(
-                    self.d1,
-                    "d1 done",
-                    "done",
-                    teacher.id,
-                    accuracy=88,
-                    actual_seconds=1200,
-                ),
+                completed_listening,
                 self._task(self.d1, "d1 other", "pending", other_teacher.id),
                 self._task(self.d2, "d2 progress", "progress", teacher.id),
                 self._task(self.d3, "d3 pending", "pending", teacher.id),
-                self._task(self.d4, "d4 pending", "pending", teacher.id),
-                self._task(self.d5, "d5 pending", "pending", teacher.id),
-                self._task(self.d6, "d6 pending", "pending", teacher.id),
+                self._task(self.p1, "p1 pending", "pending", teacher.id),
+                self._task(self.p2, "p2 pending", "pending", teacher.id),
+                self._task(self.p3, "p3 pending", "pending", teacher.id),
             ])
+            db.session.flush()
+            db.session.add(ListeningTestSubmission(
+                task_id=completed_listening.id,
+                student_name="可见性学生",
+                test_id="ielts11_test1",
+                test_title="IELTS 11 Test 1 Listening",
+                correct_count=8,
+                total_count=10,
+                accuracy=80,
+                completion_rate=100,
+                answers_json=json.dumps({"943": "150", "948": ""}),
+                results_json=json.dumps([
+                    {
+                        "ids": ["943"],
+                        "numbers": [2],
+                        "q": "2",
+                        "answer": "115",
+                        "value": "150",
+                        "marks": 1,
+                        "awarded": 0,
+                        "correct": False,
+                        "section": 0,
+                    },
+                    {
+                        "ids": ["948"],
+                        "numbers": [7],
+                        "q": "7",
+                        "answer": "door",
+                        "value": "",
+                        "marks": 1,
+                        "awarded": 0,
+                        "correct": False,
+                        "section": 0,
+                    },
+                ]),
+                wrong_numbers_json=json.dumps([2, 7]),
+            ))
             db.session.commit()
             self.student_id = student.id
             self.teacher_id = teacher.id
+            self.other_teacher_id = other_teacher.id
+            self.completed_listening_id = completed_listening.id
 
         self.client = self.app.test_client()
 
@@ -123,22 +165,17 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         return response.get_json()
 
-    def test_today_includes_recent_unfinished_but_not_completed_or_too_old(self):
+    def test_today_contains_only_tasks_assigned_to_today(self):
         payload = self._today_tasks()
         details = {task["task_name"]: task for task in payload["tasks"]}
-        # 今天 + 3 天 carryover 窗口内的未完成任务
         self.assertIn("课后作业 - today", details)
-        self.assertIn("课后作业 - d1 pending", details)
-        self.assertIn("课后作业 - d2 progress", details)
-        self.assertIn("课后作业 - d3 pending", details)
-        # 已完成的历史任务不再 carryover
+        self.assertIn("课后作业 - today assistant", details)
+        self.assertNotIn("课后作业 - d1 pending", details)
         self.assertNotIn("课后作业 - d1 done", details)
-        # 超出 3 天窗口的未完成任务不进今天页
-        self.assertNotIn("课后作业 - d4 pending", details)
-        self.assertNotIn("课后作业 - d5 pending", details)
-        self.assertNotIn("课后作业 - d6 pending", details)
-        self.assertTrue(details["课后作业 - d1 pending"]["is_carryover"])
+        self.assertNotIn("课后作业 - d2 progress", details)
+        self.assertNotIn("课后作业 - p1 pending", details)
         self.assertFalse(details["课后作业 - today"]["is_carryover"])
+        self.assertFalse(payload["outside_home_window"])
 
     def test_today_tasks_expose_assigning_role(self):
         details = {task["task_name"]: task for task in self._today_tasks()["tasks"]}
@@ -147,46 +184,42 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
             details["课后作业 - today assistant"]["assigned_by_role"], "assistant"
         )
 
-    def test_carryover_window_boundary_is_three_days(self):
-        details = [task["task_name"] for task in self._today_tasks()["tasks"]]
-        # d3 在窗口内，d4 刚好超出
-        self.assertIn("课后作业 - d3 pending", details)
-        self.assertNotIn("课后作业 - d4 pending", details)
-
-        # 精确查 d4 那天，任务仍然可见（只是不再 carryover 到今天页）
+    def test_each_visible_date_is_an_exact_date_view(self):
         history = self.client.get(
-            f"/api/miniprogram/student/tasks/today?date={self.d4.isoformat()}",
+            f"/api/miniprogram/student/tasks/today?date={self.d1.isoformat()}",
             headers=self._headers(self.student_id, User.ROLE_STUDENT),
         )
         history_details = [task["task_name"] for task in history.get_json()["tasks"]]
-        self.assertIn("课后作业 - d4 pending", history_details)
+        self.assertIn("课后作业 - d1 pending", history_details)
+        self.assertIn("课后作业 - d1 done", history_details)
+        self.assertNotIn("课后作业 - today", history_details)
+        self.assertNotIn("课后作业 - d2 progress", history_details)
 
-    def test_today_reports_outstanding_count(self):
-        payload = self._today_tasks()
-        # 过去 5 天（d1..d5）仍未完成的任务数：
-        # d1 pending / d1 other / d2 progress / d3 pending / d4 pending / d5 pending = 6
-        # 不含已完成的 d1 done，也不含窗口外的 d6。
-        self.assertEqual(payload["outstanding_count"], 6)
+        future = self.client.get(
+            f"/api/miniprogram/student/tasks/today?date={self.p2.isoformat()}",
+            headers=self._headers(self.student_id, User.ROLE_STUDENT),
+        )
+        future_details = [task["task_name"] for task in future.get_json()["tasks"]]
+        self.assertEqual(future_details, ["课后作业 - p2 pending"])
 
-    def test_outstanding_endpoint_lists_recent_unfinished_by_day(self):
+    def test_dates_outside_five_day_window_require_reassignment(self):
+        for task_date in (self.d3, self.p3):
+            response = self.client.get(
+                f"/api/miniprogram/student/tasks/today?date={task_date.isoformat()}",
+                headers=self._headers(self.student_id, User.ROLE_STUDENT),
+            )
+            self.assertEqual(response.status_code, 200)
+            payload = response.get_json()
+            self.assertEqual(payload["tasks"], [])
+            self.assertTrue(payload["outside_home_window"])
+            self.assertIn("重新布置", payload["message"])
+
+    def test_outstanding_summary_endpoint_has_been_removed(self):
         response = self.client.get(
             "/api/miniprogram/student/tasks/outstanding",
             headers=self._headers(self.student_id, User.ROLE_STUDENT),
         )
-
-        self.assertEqual(response.status_code, 200)
-        payload = response.get_json()
-        items = payload["items"]
-        names = [item["task_name"] for item in items]
-
-        self.assertEqual(len(items), 6)
-        self.assertIn("课后作业 - d5 pending", names)
-        self.assertNotIn("课后作业 - d6 pending", names)   # 超出 5 天窗口
-        self.assertNotIn("课后作业 - d1 done", names)       # 已完成
-        self.assertNotIn("课后作业 - today", names)         # 只回溯过去
-        # 按日期倒序：最近的 d1 排在最前
-        self.assertEqual(items[0]["date"], self.d1.isoformat())
-        self.assertEqual(payload["window_days"], 5)
+        self.assertEqual(response.status_code, 404)
 
     def test_historical_date_remains_an_exact_date_view(self):
         response = self.client.get(
@@ -219,6 +252,10 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         self.assertIn("d1 pending", details)
         self.assertIn("d2 progress", details)
         self.assertNotIn("d1 other", details)  # 其他老师布置的不属于当前老师
+        completed = next(task for task in payload["tasks"] if task["detail"] == "d1 done")
+        self.assertEqual(completed["practice_result"]["kind"], "listening")
+        self.assertEqual(completed["practice_result"]["correct_count"], 8)
+        self.assertEqual(completed["practice_result"]["wrong_numbers"], [2, 7])
 
     def test_student_history_keeps_completed_tasks_available_for_review(self):
         response = self.client.get(
@@ -234,6 +271,31 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         self.assertEqual(payload["summary"]["completed"], 1)
         self.assertEqual(payload["summary"]["total_minutes"], 20.0)
         self.assertEqual(payload["summary"]["average_accuracy"], 88.0)
+        self.assertEqual(payload["summary"]["wrong_tasks"], 1)
+        completed = next(item for item in payload["items"] if item["title"] == "课后作业 - d1 done")
+        self.assertEqual(completed["wrong_count"], 2)
+        self.assertEqual(completed["wrong_numbers"], [2, 7])
+
+    def test_teacher_can_view_each_wrong_answer_and_correct_answer(self):
+        response = self.client.get(
+            f"/api/miniprogram/teacher/homework/{self.completed_listening_id}/result",
+            headers=self._headers(self.teacher_id, User.ROLE_TEACHER),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        details = payload["practice_result"]["wrong_details"]
+        self.assertEqual(len(details), 2)
+        self.assertEqual(details[0]["question_label"], "Q2")
+        self.assertEqual(details[0]["student_answer"], "150")
+        self.assertEqual(details[0]["correct_answer"], "115")
+        self.assertEqual(details[1]["student_answer"], "未作答")
+
+        forbidden = self.client.get(
+            f"/api/miniprogram/teacher/homework/{self.completed_listening_id}/result",
+            headers=self._headers(self.other_teacher_id, User.ROLE_TEACHER),
+        )
+        self.assertEqual(forbidden.status_code, 403)
 
 
 if __name__ == "__main__":

@@ -1520,22 +1520,15 @@ def speaking_tts():
 
 # --- 学生接口 ---
 
-# 今天页最多回溯多少天的未完成任务，保持首页轻量；更早的未完成任务由
-# 「未完成作业」页（OUTSTANDING_WINDOW_DAYS 天）单独承接，不堆在首页。
-CARRYOVER_WINDOW_DAYS = 3
-# 「未完成作业」页只回溯过去这么多天，再早的不展示，避免堆积如山。
-OUTSTANDING_WINDOW_DAYS = 5
-
-
-def _unfinished_task_clause():
-    """未完成（尚未标记 done）的任务条件。"""
-    return or_(Task.status.is_(None), Task.status != "done")
+# 学生首页固定展示「前两天、今天、后两天」五个日期。
+HOME_DATE_PAST_DAYS = 2
+HOME_DATE_FUTURE_DAYS = 2
 
 
 @mp_bp.route("/student/tasks/today", methods=["GET"])
 @require_api_user(User.ROLE_STUDENT)
 def get_student_today_tasks():
-    """获取学生指定日期任务；今天页同时带出最近几天仍未完成的任务。"""
+    """获取学生首页五日窗口内某一天的任务，不跨日期混入任务。"""
     from models import Task
 
     user = request.current_api_user
@@ -1553,34 +1546,21 @@ def get_student_today_tasks():
         except ValueError:
             pass # Invalid date format, fallback to today
 
-    task_filters = [Task.student_name == student.full_name]
-    outstanding_count = 0
-    if query_date == today:
-        # 未完成任务不能在日期跨天后从学生首页消失，但只回溯最近
-        # CARRYOVER_WINDOW_DAYS 天，避免历史遗留任务无限堆积到今天页。
-        # 历史日期仍保持精确查询，避免学生回看时混入其他日期的任务。
-        carryover_start = (query_date - timedelta(days=CARRYOVER_WINDOW_DAYS)).isoformat()
-        task_filters.append(or_(
-            Task.date == query_date.isoformat(),
-            and_(
-                Task.date < query_date.isoformat(),
-                Task.date >= carryover_start,
-                _unfinished_task_clause(),
-            ),
-        ))
+    window_start = today - timedelta(days=HOME_DATE_PAST_DAYS)
+    window_end = today + timedelta(days=HOME_DATE_FUTURE_DAYS)
+    if query_date < window_start or query_date > window_end:
+        return jsonify({
+            "ok": True,
+            "date": query_date.isoformat(),
+            "tasks": [],
+            "outside_home_window": True,
+            "message": "该日期不在首页五日范围内，请联系练习助教或老师重新布置。",
+        })
 
-        # 统计「未完成作业」页将展示的过去 N 天未完成任务数量，供首页入口显示。
-        outstanding_start = (query_date - timedelta(days=OUTSTANDING_WINDOW_DAYS)).isoformat()
-        outstanding_count = (
-            Task.query.filter(
-                Task.student_name == student.full_name,
-                Task.date < query_date.isoformat(),
-                Task.date >= outstanding_start,
-                _unfinished_task_clause(),
-            ).count()
-        )
-    else:
-        task_filters.append(Task.date == query_date.isoformat())
+    task_filters = [
+        Task.student_name == student.full_name,
+        Task.date == query_date.isoformat(),
+    ]
 
     tasks = (
         Task.query.filter(*task_filters)
@@ -1593,7 +1573,7 @@ def get_student_today_tasks():
             "ok": True,
             "date": query_date.isoformat(),
             "tasks": [],
-            "outstanding_count": outstanding_count,
+            "outside_home_window": False,
             "message": "当前日期无任务",
         })
 
@@ -1646,7 +1626,7 @@ def get_student_today_tasks():
         tasks_data.append({
             "id": task.id,
             "date": task.date,
-            "is_carryover": query_date == today and task.date < today.isoformat(),
+            "is_carryover": False,
             "assigned_by_role": creator_roles.get(task.created_by, ""),
             "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
             "module": task.category or "其他",
@@ -1689,63 +1669,7 @@ def get_student_today_tasks():
         "ok": True,
         "date": query_date.isoformat(),
         "tasks": tasks_data,
-        "outstanding_count": outstanding_count,
-    })
-
-
-@mp_bp.route("/student/tasks/outstanding", methods=["GET"])
-@require_api_user(User.ROLE_STUDENT)
-def list_student_outstanding_tasks():
-    """「未完成作业」页：列出过去 OUTSTANDING_WINDOW_DAYS 天仍未完成的任务，
-    按日期倒序返回，前端再按天分组。更早的不展示，避免堆积如山。"""
-    from models import Task
-
-    user = request.current_api_user
-    student = user.student_profile
-    if not student:
-        return jsonify({"ok": False, "error": "no_student_profile"}), 404
-
-    today = date.today()
-    window_start = (today - timedelta(days=OUTSTANDING_WINDOW_DAYS)).isoformat()
-
-    tasks = (
-        Task.query.filter(
-            Task.student_name == student.full_name,
-            Task.date < today.isoformat(),
-            Task.date >= window_start,
-            _unfinished_task_clause(),
-        )
-        .order_by(Task.date.desc(), Task.id.desc())
-        .all()
-    )
-
-    creator_ids = {task.created_by for task in tasks if task.created_by}
-    creator_roles = {}
-    if creator_ids:
-        for uid, crole in (
-            db.session.query(User.id, User.role)
-            .filter(User.id.in_(creator_ids))
-            .all()
-        ):
-            creator_roles[uid] = crole
-
-    items = [
-        {
-            "id": task.id,
-            "date": task.date,
-            "task_name": _task_display_title(task),
-            "module": task.category or "其他",
-            "planned_minutes": task.planned_minutes or 0,
-            "status": task.status or "pending",
-            "assigned_by_role": creator_roles.get(task.created_by, ""),
-        }
-        for task in tasks
-    ]
-
-    return jsonify({
-        "ok": True,
-        "items": items,
-        "window_days": OUTSTANDING_WINDOW_DAYS,
+        "outside_home_window": False,
     })
 
 
@@ -2097,9 +2021,22 @@ def list_student_task_history():
         if task.status == "done" and task.accuracy is not None
     ]
 
+    task_ids = [task.id for task in tasks]
+    practice_results = {}
+    if task_ids:
+        for row in ListeningTestSubmission.query.filter(
+            ListeningTestSubmission.task_id.in_(task_ids)
+        ).all():
+            practice_results[row.task_id] = _serialize_teacher_practice_result("listening", row)
+        for row in ReadingTestSubmission.query.filter(
+            ReadingTestSubmission.task_id.in_(task_ids)
+        ).all():
+            practice_results[row.task_id] = _serialize_teacher_practice_result("reading", row)
+
     items = []
     for task in tasks:
         is_completed = task.status == "done"
+        practice_result = practice_results.get(task.id)
         items.append({
             "id": task.id,
             "date": task.date,
@@ -2113,11 +2050,17 @@ def list_student_task_history():
             "completion_rate": task.completion_rate,
             "has_feedback": bool(task.feedback_text or task.feedback_audio or task.feedback_image),
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+            "result_kind": practice_result["kind"] if practice_result else None,
+            "correct_count": practice_result["correct_count"] if practice_result else None,
+            "total_count": practice_result["total_count"] if practice_result else None,
+            "wrong_count": practice_result["wrong_count"] if practice_result else 0,
+            "wrong_numbers": practice_result["wrong_numbers"] if practice_result else [],
         })
 
+    summary_only = request.args.get("summary_only") in {"1", "true", "yes"}
     return jsonify({
         "ok": True,
-        "items": items,
+        "items": [] if summary_only else items,
         "summary": {
             "total": len(tasks),
             "completed": completed,
@@ -2125,6 +2068,10 @@ def list_student_task_history():
             "average_accuracy": (
                 round(sum(accuracy_values) / len(accuracy_values), 1)
                 if accuracy_values else None
+            ),
+            "wrong_tasks": sum(
+                1 for result in practice_results.values()
+                if result and result["wrong_count"] > 0
             ),
         },
     })
@@ -4280,7 +4227,89 @@ def get_practice_catalog():
     })
 
 
-def _serialize_teacher_homework_task(task: Task) -> dict:
+def _teacher_practice_question_map(task: Task, kind: str) -> dict[str, dict]:
+    if kind == "listening":
+        payload, _ = _load_cambridge_listening_test(task.listening_exercise_id or "")
+        roots = (payload or {}).get("sections") or []
+    else:
+        payload, _ = _load_student_reading_test(task.reading_test_id or "")
+        roots = (payload or {}).get("passages") or []
+
+    question_map = {}
+    for root in roots:
+        for group in root.get("groups") or []:
+            group_title = group.get("question_title") or group.get("title") or ""
+            for question in group.get("questions") or []:
+                context = {
+                    "title": _miniprogram_safe_question_title(
+                        question.get("title") or group_title
+                    ),
+                    "analysis": _miniprogram_safe_rich_text(question.get("analysis") or ""),
+                }
+                for key in (question.get("id"), question.get("number")):
+                    if key not in (None, ""):
+                        question_map[str(key)] = context
+    return question_map
+
+
+def _teacher_wrong_answer_details(task: Task, kind: str, submission) -> list[dict]:
+    try:
+        results = json.loads(submission.results_json or "[]")
+    except Exception:
+        results = []
+    question_map = _teacher_practice_question_map(task, kind)
+    details = []
+    for row in results:
+        if row.get("correct") is True:
+            continue
+        ids = [str(value) for value in (row.get("ids") or []) if value not in (None, "")]
+        numbers = [value for value in (row.get("numbers") or []) if value not in (None, "")]
+        contexts = [question_map[key] for key in ids if key in question_map]
+        title = next((item.get("title") for item in contexts if item.get("title")), "")
+        analysis = next((item.get("analysis") for item in contexts if item.get("analysis")), "")
+        details.append({
+            "question_label": "、".join(f"Q{number}" for number in numbers) or f"Q{row.get('q') or ''}",
+            "question_title": title,
+            "student_answer": row.get("value") if row.get("value") not in (None, "") else "未作答",
+            "correct_answer": row.get("answer") or "",
+            "analysis": analysis,
+            "awarded": row.get("awarded") or 0,
+            "marks": row.get("marks") or 1,
+        })
+    return details
+
+
+def _serialize_teacher_practice_result(
+    kind: str,
+    submission,
+    *,
+    task: Task | None = None,
+    include_details: bool = False,
+) -> dict | None:
+    if not submission:
+        return None
+    try:
+        wrong_numbers = json.loads(submission.wrong_numbers_json or "[]")
+    except Exception:
+        wrong_numbers = []
+    result = {
+        "kind": kind,
+        "kind_label": "听力" if kind == "listening" else "阅读",
+        "correct_count": submission.correct_count,
+        "total_count": submission.total_count,
+        "accuracy": submission.accuracy,
+        "ielts_score": submission.ielts_score,
+        "wrong_numbers": wrong_numbers,
+        "wrong_count": len(wrong_numbers),
+        "attempt_count": submission.attempt_count,
+        "submitted_at": submission.submitted_at.isoformat() if submission.submitted_at else None,
+    }
+    if include_details and task:
+        result["wrong_details"] = _teacher_wrong_answer_details(task, kind, submission)
+    return result
+
+
+def _serialize_teacher_homework_task(task: Task, practice_result: dict | None = None) -> dict:
     listening_section_number = _task_listening_section_number(task)
     source_type = "custom"
     source_summary = task.detail or ""
@@ -4311,9 +4340,15 @@ def _serialize_teacher_homework_task(task: Task) -> dict:
         "category": task.category,
         "detail": task.detail,
         "planned_minutes": task.planned_minutes,
+        "actual_seconds": task.actual_seconds or 0,
         "note": task.note,
         "status": task.status,
         "status_label": status_label,
+        "student_submitted": bool(task.student_submitted),
+        "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        "accuracy": task.accuracy,
+        "completion_rate": task.completion_rate,
+        "practice_result": practice_result,
         "source_type": source_type,
         "source_summary": source_summary,
         "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
@@ -4572,12 +4607,60 @@ def list_teacher_homework():
         .all()
     )
 
+    task_ids = [task.id for task in tasks]
+    practice_results = {}
+    if task_ids:
+        listening_rows = ListeningTestSubmission.query.filter(
+            ListeningTestSubmission.task_id.in_(task_ids)
+        ).all()
+        reading_rows = ReadingTestSubmission.query.filter(
+            ReadingTestSubmission.task_id.in_(task_ids)
+        ).all()
+        for row in listening_rows:
+            practice_results[row.task_id] = _serialize_teacher_practice_result("listening", row)
+        for row in reading_rows:
+            practice_results[row.task_id] = _serialize_teacher_practice_result("reading", row)
+
     return jsonify({
         "ok": True,
         "date": task_date,
         "scope": scope,
         "student_name": profile.full_name,
-        "tasks": [_serialize_teacher_homework_task(task) for task in tasks],
+        "tasks": [
+            _serialize_teacher_homework_task(task, practice_results.get(task.id))
+            for task in tasks
+        ],
+    })
+
+
+@mp_bp.route("/teacher/homework/<int:task_id>/result", methods=["GET"])
+@require_api_user(User.ROLE_TEACHER)
+def get_teacher_homework_result(task_id):
+    """老师按需查看自己布置的听力/阅读作业逐题判分明细。"""
+    user = request.current_api_user
+    task = Task.query.get_or_404(task_id)
+    if task.created_by != user.id:
+        return _teacher_homework_error("forbidden_task", 403)
+
+    submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
+    kind = "listening"
+    if not submission:
+        submission = ReadingTestSubmission.query.filter_by(task_id=task.id).first()
+        kind = "reading"
+    if not submission:
+        return _teacher_homework_error("result_not_found", 404)
+
+    return jsonify({
+        "ok": True,
+        "task_id": task.id,
+        "student_name": task.student_name,
+        "task_title": _task_display_title(task),
+        "practice_result": _serialize_teacher_practice_result(
+            kind,
+            submission,
+            task=task,
+            include_details=True,
+        ),
     })
 
 

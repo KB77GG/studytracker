@@ -83,6 +83,7 @@
           <view class="history-meta">
             <text>{{item.durationLabel}}</text>
             <text wx:if="{{item.accuracyLabel}}">正确率 {{item.accuracyLabel}}</text>
+            <text class="wrong-dot" wx:if="{{item.wrongLabel}}">{{item.wrongLabel}}</text>
             <text class="feedback-dot" wx:if="{{item.has_feedback || item.hasFeedback}}">有老师反馈</text>
           </view>
         </view>

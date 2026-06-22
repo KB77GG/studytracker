@@ -97,10 +97,43 @@
       <text>暂无已布置作业</text>
     </view>
     <view class="assigned-list" wx:else>
-      <view class="assigned-item" wx:for="{{existingTasks}}" wx:key="id">
+      <view class="assigned-item" wx:for="{{existingTasks}}" wx:key="id" wx:for-index="taskIndex">
         <view class="assigned-main">
           <text class="assigned-title">{{item.detail}}</text>
           <text class="assigned-meta">{{item.date}} ｜ {{item.category || '课后作业'}} ｜ {{item.planned_minutes || 0}} 分钟</text>
+          <view class="practice-result" wx:if="{{item.practiceResultSummary}}">
+            <text class="practice-result-main">{{item.practiceResultSummary}}</text>
+            <text class="practice-result-wrong {{item.practice_result.wrong_count > 0 ? 'has-wrong' : ''}}">{{item.practiceWrongSummary}}</text>
+            <button
+              wx:if="{{item.practice_result.wrong_count > 0}}"
+              class="result-detail-toggle"
+              size="mini"
+              data-index="{{taskIndex}}"
+              loading="{{resultLoadingId == item.id}}"
+              bindtap="togglePracticeResult"
+            >{{expandedResultId == item.id ? '收起错题明细' : '查看具体错题'}}</button>
+            <view class="wrong-detail-list" wx:if="{{expandedResultId == item.id}}">
+              <view class="wrong-detail-card" wx:for="{{item.practiceWrongDetails}}" wx:key="question_label" wx:for-item="detail">
+                <view class="wrong-detail-head">
+                  <text class="wrong-question-label">{{detail.question_label}}</text>
+                  <text class="wrong-score">{{detail.awarded}} / {{detail.marks}} 分</text>
+                </view>
+                <text class="wrong-question-title" wx:if="{{detail.question_title}}">{{detail.question_title}}</text>
+                <view class="answer-line student-answer">
+                  <text class="answer-label">学生答案</text>
+                  <text class="answer-value">{{detail.studentAnswerText}}</text>
+                </view>
+                <view class="answer-line correct-answer">
+                  <text class="answer-label">正确答案</text>
+                  <text class="answer-value">{{detail.correctAnswerText}}</text>
+                </view>
+                <view class="wrong-analysis" wx:if="{{detail.analysis}}">
+                  <text class="analysis-label">解析</text>
+                  <text class="analysis-text">{{detail.analysis}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
         </view>
         <view class="assigned-side">
           <text class="status-pill">{{item.status_label}}</text>

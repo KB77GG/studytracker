@@ -30,8 +30,6 @@ Page({
         notebookCount: 0,
         reviewTaskCount: 0,
         reviewDueCount: 0,
-        overdueCount: 0,
-        outstandingCount: 0,
         isGuest: false,
         weekdayText: '',
         quickDates: []
@@ -51,7 +49,7 @@ Page({
             todayStr: dateString,
             userInfo: app.globalData.userInfo || { nickName: '同学' },
             weekdayText: this.getWeekdayText(now),
-            quickDates: this.buildQuickDates(dateString)
+            quickDates: this.buildQuickDates()
         })
     },
 
@@ -68,16 +66,10 @@ Page({
             userInfo: isGuest ? { nickName: '演示学生' } : (app.globalData.userInfo || this.data.userInfo)
         })
 
-        // 从「未完成作业」页跳回时，切到对应任务所在日期再加载。
-        const pendingDate = getApp().globalData.pendingTaskDate
-        if (pendingDate) {
-            getApp().globalData.pendingTaskDate = ''
-            this.applyDate(pendingDate, { fetch: false })
-        }
-
         this.fetchTasks()
         this.loadNotebookCount()
         this.loadReviewDueCount()
+        this.loadReviewTaskCount()
         this.updateGreeting()
 
         if (!isGuest) this.restoreTimerIfNeeded()
@@ -308,6 +300,21 @@ Page({
             })
     },
 
+    loadReviewTaskCount() {
+        if (this.data.isGuest || getApp().globalData.guestMode) {
+            this.setData({ reviewTaskCount: 2 })
+            return
+        }
+        request('/miniprogram/student/task-history?summary_only=1')
+            .then((res) => {
+                const count = res && res.ok && res.summary
+                    ? Number(res.summary.wrong_tasks || 0)
+                    : 0
+                this.setData({ reviewTaskCount: count })
+            })
+            .catch(() => this.setData({ reviewTaskCount: 0 }))
+    },
+
     loadNotebookCount() {
         if (this.data.isGuest) {
             this.setData({ notebookCount: 12 })
@@ -336,7 +343,12 @@ Page({
     },
 
     handleDateChange(e) {
-        this.applyDate(e.detail.value) // YYYY-MM-DD
+        const date = e.detail.value
+        if (!this.isHomeDate(date)) {
+            this.showOutsideWindowNotice()
+            return
+        }
+        this.applyDate(date) // YYYY-MM-DD
     },
 
     selectQuickDate(e) {
@@ -347,13 +359,17 @@ Page({
 
     applyDate(date, options = {}) {
         if (!date) return
+        if (!this.isHomeDate(date)) {
+            this.showOutsideWindowNotice()
+            return
+        }
         const [year, month, day] = date.split('-')
         const dateObj = new Date(`${date}T00:00:00`)
         this.setData({
             currentDate: date,
             dateStr: `${year}/${month}/${day}`,
             weekdayText: this.getWeekdayText(dateObj),
-            quickDates: this.buildQuickDates(date)
+            quickDates: this.buildQuickDates()
         })
         if (options.fetch !== false) this.fetchTasks()
     },
@@ -370,8 +386,7 @@ Page({
         return `${year}-${month}-${day}`
     },
 
-    buildQuickDates(selectedDate) {
-        const selected = new Date(`${selectedDate}T00:00:00`)
+    buildQuickDates() {
         const today = new Date()
         today.setHours(0, 0, 0, 0)
         const labels = {
@@ -381,15 +396,34 @@ Page({
             '1': '明天',
             '2': '后天'
         }
-        return [-2, -1, 0, 1].map(offset => {
-            const d = new Date(selected)
-            d.setDate(selected.getDate() + offset)
+        return [-2, -1, 0, 1, 2].map(offset => {
+            const d = new Date(today)
+            d.setDate(today.getDate() + offset)
             const diffFromToday = Math.round((d.getTime() - today.getTime()) / 86400000)
             return {
                 date: this.formatDateObj(d),
                 label: `${d.getMonth() + 1}/${d.getDate()}`,
                 sub: labels[String(diffFromToday)] || `周${this.getWeekdayText(d)}`
             }
+        })
+    },
+
+    isHomeDate(date) {
+        if (!date) return false
+        const target = new Date(`${date}T00:00:00`)
+        if (Number.isNaN(target.getTime())) return false
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        const diff = Math.round((target.getTime() - today.getTime()) / 86400000)
+        return diff >= -2 && diff <= 2
+    },
+
+    showOutsideWindowNotice() {
+        wx.showModal({
+            title: '请重新布置练习',
+            content: '首页只保留前两天、今天和后两天的任务。如需继续完成更早或更晚的练习，请联系练习助教或老师重新布置。',
+            showCancel: false,
+            confirmText: '知道了'
         })
     },
 
@@ -445,15 +479,12 @@ Page({
             console.log('Tasks response:', res)
 
             if (res.ok && res.tasks) {
-                this.applyTaskData(res.tasks, res.outstanding_count)
+                this.applyTaskData(res.tasks)
             } else {
                 this.setData({
                     tasks: [],
                     progress: { total: 0, completed: 0, percent: 0 },
-                    progressLabel: this.buildProgressLabel(),
-                    reviewTaskCount: 0,
-                    overdueCount: 0,
-                    outstandingCount: 0
+                    progressLabel: this.buildProgressLabel()
                 })
             }
         } catch (err) {
@@ -465,24 +496,15 @@ Page({
         }
     },
 
-    applyTaskData(rawTasks, outstandingCount) {
-        let lastGroupDate = null
+    applyTaskData(rawTasks) {
         const tasks = (rawTasks || []).map(t => {
             const actualSeconds = t.actual_seconds || 0
             const plannedSeconds = t.planned_minutes * 60
             const iconInfo = this.getModuleIcon(t.module || t.task_name || '')
             const taskDate = t.date || this.data.currentDate
-            const isCarryover = !!t.is_carryover
-            // 后端已按日期倒序返回，扁平列表里每个日期连续成块；
-            // 只在每个日期的第一条任务上渲染分组标题，避免逾期任务全堆到今天。
-            const showDateHeader = taskDate !== lastGroupDate
-            lastGroupDate = taskDate
             return {
                 id: t.id,
                 date: taskDate,
-                isCarryover,
-                showDateHeader,
-                dateHeaderLabel: this.buildGroupLabel(taskDate, isCarryover),
                 assignedByRole: t.assigned_by_role || '',
                 assignedByLabel: this.getAssignerLabel(t.assigned_by_role),
                 task_name: t.task_name,
@@ -516,19 +538,13 @@ Page({
                 sessionId: null
             }
         })
-        // 今日完成度只统计今天的任务，逾期补做不污染分母；逾期单独计数展示。
-        const todayTasks = tasks.filter(t => !t.isCarryover)
-        const total = todayTasks.length
-        const completed = todayTasks.filter(t => t.isDone).length
+        const total = tasks.length
+        const completed = tasks.filter(t => t.isDone).length
         const percent = total > 0 ? Math.round((completed / total) * 100) : 0
-        const overdueCount = tasks.filter(t => t.isCarryover && !t.isDone).length
         this.setData({
             tasks,
             progress: { total, completed, percent },
-            progressLabel: this.buildProgressLabel(),
-            overdueCount,
-            outstandingCount: outstandingCount || 0,
-            reviewTaskCount: tasks.filter(t => t.status === 'rejected').length
+            progressLabel: this.buildProgressLabel()
         })
     },
 
@@ -577,28 +593,9 @@ Page({
         return map[status] || status
     },
 
-    buildGroupLabel(dateStr, isCarryover) {
-        if (!isCarryover) return '今日任务'
-        // 历史日期分组用中性文案：同一天可能混有「待完成」和「待审核」任务，
-        // 不统一标成「逾期补做」，具体状态交给每张卡片的状态徽章呈现。
-        const parts = (dateStr || '').split('-')
-        if (parts.length === 3) {
-            return `${Number(parts[1])}月${Number(parts[2])}日`
-        }
-        return '更早任务'
-    },
-
     getAssignerLabel(role) {
         // 默认任务都来自老师，只突出「助教布置」，减少重复标签噪音。
         return role === 'assistant' ? '助教布置' : ''
-    },
-
-    goOutstanding() {
-        if (this.data.isGuest) {
-            this.promptGuestLogin('未完成作业')
-            return
-        }
-        wx.navigateTo({ url: '/pages/student/outstanding/index' })
     },
 
     goToTaskDetail(e) {

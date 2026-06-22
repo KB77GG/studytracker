@@ -85,6 +85,8 @@ Page({
         editingTaskId: null,
         editingTaskSummary: '',
         deletingTaskId: null,
+        resultLoadingId: null,
+        expandedResultId: null,
         saving: false
     },
 
@@ -437,6 +439,71 @@ Page({
             .join('&')
     },
 
+    normalizeExistingTask(task) {
+        const result = task.practice_result
+        if (!result) return task
+        const parts = [
+            `${result.kind_label || '练习'} ${result.correct_count || 0}/${result.total_count || 0}`,
+            `正确率 ${Number(result.accuracy || 0).toFixed(1).replace(/\.0$/, '')}%`
+        ]
+        if (result.ielts_score !== null && result.ielts_score !== undefined) {
+            parts.push(`IELTS ${result.ielts_score}`)
+        }
+        const wrongNumbers = Array.isArray(result.wrong_numbers) ? result.wrong_numbers : []
+        return {
+            ...task,
+            practiceResultSummary: parts.join(' ｜ '),
+            practiceWrongSummary: wrongNumbers.length
+                ? `错题：${wrongNumbers.map(number => `Q${number}`).join('、')}`
+                : '全部答对',
+            practiceWrongDetails: null
+        }
+    },
+
+    formatAnswerValue(value) {
+        if (Array.isArray(value)) return value.join('、') || '未作答'
+        if (value && typeof value === 'object') return JSON.stringify(value)
+        if (value === null || value === undefined || value === '') return '未作答'
+        return String(value)
+    },
+
+    async togglePracticeResult(e) {
+        const index = Number(e.currentTarget.dataset.index)
+        const task = this.data.existingTasks[index]
+        if (!task || !task.practice_result || task.practice_result.wrong_count <= 0) return
+        if (Number(this.data.expandedResultId) === Number(task.id)) {
+            this.setData({ expandedResultId: null })
+            return
+        }
+        if (Array.isArray(task.practiceWrongDetails)) {
+            this.setData({ expandedResultId: task.id })
+            return
+        }
+
+        this.setData({ resultLoadingId: task.id })
+        try {
+            const res = await request(`/miniprogram/teacher/homework/${task.id}/result`)
+            if (!res || !res.ok || !res.practice_result) {
+                wx.showToast({ title: '错题明细加载失败', icon: 'none' })
+                return
+            }
+            const details = (res.practice_result.wrong_details || []).map(item => ({
+                ...item,
+                studentAnswerText: this.formatAnswerValue(item.student_answer),
+                correctAnswerText: this.formatAnswerValue(item.correct_answer)
+            }))
+            this.setData({
+                [`existingTasks[${index}].practiceWrongDetails`]: details,
+                expandedResultId: task.id
+            })
+        } catch (err) {
+            console.warn('load practice result detail failed', err)
+            wx.showToast({ title: '网络错误', icon: 'none' })
+        } finally {
+            this.setData({ resultLoadingId: null })
+        }
+    },
+
     async fetchExistingHomework() {
         const { schedule } = this.data
         if (!schedule.student_id && !schedule.student_name) return
@@ -445,7 +512,9 @@ Page({
             const query = this.buildHomeworkQuery()
             const res = await request(`/miniprogram/teacher/homework?${query}`)
             if (res && res.ok) {
-                this.setData({ existingTasks: res.tasks || [] })
+                this.setData({
+                    existingTasks: (res.tasks || []).map(task => this.normalizeExistingTask(task))
+                })
             }
         } catch (err) {
             console.warn('load existing homework failed', err)

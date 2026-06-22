@@ -22,7 +22,6 @@
         <view>
           <text class="progress-label">{{progressLabel}}</text>
           <text class="progress-value">{{progress.completed}} / {{progress.total}} 项任务</text>
-          <text class="progress-overdue" wx:if="{{overdueCount > 0}}">逾期补做 {{overdueCount}} 项</text>
         </view>
         <view class="streak-box">
           <text class="streak-num">{{progress.percent || 0}}</text>
@@ -88,10 +87,10 @@
     </scroll-view>
 
     <view class="task-list" wx:if="{{tasks.length > 0}}">
-      <block wx:for="{{tasks}}" wx:key="id">
-      <view class="task-group-header {{item.isCarryover ? 'overdue' : ''}}" wx:if="{{item.showDateHeader}}">
-        <text class="task-group-title">{{item.dateHeaderLabel}}</text>
+      <view class="task-group-header">
+        <text class="task-group-title">{{currentDate === todayStr ? '今日任务' : '当日任务'}}</text>
       </view>
+      <block wx:for="{{tasks}}" wx:key="id">
       <view class="task-card {{item.isDone ? 'done' : ''}}">
         <view class="card-main" bindtap="goToTaskDetail" data-id="{{item.id}}">
           <view class="card-left">
@@ -123,20 +122,11 @@
         </view>
       </view>
       </block>
-
-      <view class="older-pending-entry" wx:if="{{outstandingCount > 0}}" bindtap="goOutstanding">
-        <text class="older-pending-text">未完成作业 {{outstandingCount}} 项</text>
-        <text class="older-pending-arrow">查看 ›</text>
-      </view>
     </view>
 
     <view class="empty-state" wx:else>
       <text class="empty-text">当前日期没有任务</text>
-      <text class="empty-sub">可切换日期查看其他作业。</text>
-      <view class="older-pending-entry" wx:if="{{outstandingCount > 0}}" bindtap="goOutstanding">
-        <text class="older-pending-text">未完成作业 {{outstandingCount}} 项</text>
-        <text class="older-pending-arrow">查看 ›</text>
-      </view>
+      <text class="empty-sub">仅显示首页五个日期内由助教或老师布置的任务。</text>
     </view>
   </scroll-view>
 </view>
