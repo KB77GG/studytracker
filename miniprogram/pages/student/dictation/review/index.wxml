@@ -47,6 +47,7 @@
                bindinput="onInput"
                confirm-type="done"
                bindconfirm="checkAnswer"/>
+        <view class="answer-length-hint" wx:if="{{answerLengthHint}}">{{answerLengthHint}}</view>
       </view>
 
       <view class="result" wx:else>
@@ -89,6 +90,12 @@
             <text class="label">英文单词：</text>{{currentWord.word || '-'}}
             <text wx:if="{{currentWord.phonetic}}"> [{{currentWord.phonetic}}]</text>
           </view>
+          <button wx:if="{{!isCorrect}}"
+                  class="answer-appeal-btn"
+                  disabled="{{appealSubmitted}}"
+                  bindtap="submitAnswerAppeal">
+            {{appealSubmitted ? '已提交人工审核' : '判分有疑问？申诉'}}
+          </button>
         </view>
       </view>
     </view>

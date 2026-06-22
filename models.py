@@ -983,6 +983,8 @@ class DictationWord(db.Model, TimestampMixin):
     book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
     sequence = db.Column(db.Integer, nullable=False)  # Order in book (1, 2, 3...)
     word = db.Column(db.String(100), nullable=False)
+    # JSON array of teacher-approved alternative English answers.
+    accepted_answers = db.Column(db.Text)
     phonetic = db.Column(db.String(100))  # IPA phonetic notation
     translation = db.Column(db.Text)  # Chinese translation/meaning
     audio_us = db.Column(db.String(200))  # American English audio path
@@ -1030,6 +1032,46 @@ class DictationRecord(db.Model, TimestampMixin):
     
     def __repr__(self):
         return f"<DictationRecord student={self.student_id} word={self.word_id} correct={self.is_correct}>"
+
+
+class DictationAnswerAppeal(db.Model, TimestampMixin):
+    """Student appeal for an answer that vocabulary practice marked wrong."""
+
+    __tablename__ = "dictation_answer_appeal"
+
+    STATUS_PENDING = "pending"
+    STATUS_APPROVED = "approved"
+    STATUS_REJECTED = "rejected"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), index=True)
+    mode = db.Column(db.String(20), nullable=False, index=True)
+    student_answer = db.Column(db.String(200), nullable=False)
+    reference_answer = db.Column(db.String(200), nullable=False)
+    reason = db.Column(db.String(500))
+    status = db.Column(
+        db.String(20), nullable=False, default=STATUS_PENDING, index=True
+    )
+    reviewer_id = db.Column(db.Integer, db.ForeignKey("user.id"), index=True)
+    reviewed_at = db.Column(db.DateTime, index=True)
+    resolution_note = db.Column(db.String(500))
+    added_to_accepted_answers = db.Column(db.Boolean, nullable=False, default=False)
+
+    student = db.relationship(
+        "User",
+        foreign_keys=[student_id],
+        backref=db.backref("dictation_answer_appeals", lazy="dynamic"),
+    )
+    reviewer = db.relationship("User", foreign_keys=[reviewer_id])
+    word = db.relationship("DictationWord", backref=db.backref("answer_appeals", lazy="dynamic"))
+    book = db.relationship("DictationBook")
+    task = db.relationship("Task")
+
+    def __repr__(self):
+        return f"<DictationAnswerAppeal student={self.student_id} word={self.word_id} status={self.status}>"
 
 
 class StudentWordMastery(db.Model, TimestampMixin):

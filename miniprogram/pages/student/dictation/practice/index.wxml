@@ -1,13 +1,49 @@
 <view class="practice-container">
   <view style="height: env(safe-area-inset-top);"></view>
 
+  <!-- ========== GROUP PREPARATION ========== -->
+  <block wx:if="{{phase === 'group_select'}}">
+    <view class="status-bar group-status-bar">
+      <view class="book-title">{{bookTitle}}</view>
+      <view class="progress-info">共 {{totalWords}} 词</view>
+    </view>
+
+    <view class="group-setup-card">
+      <text class="group-eyebrow">学习准备</text>
+      <text class="group-title">这次想怎么分组？</text>
+      <text class="group-desc">每组依次完成熟悉和听写，最后一组结束后统一提交整个任务。</text>
+
+      <view class="group-plan-list">
+        <view
+          class="group-plan {{selectedGroupPlanKey === item.key ? 'selected' : ''}}"
+          wx:for="{{groupPlans}}"
+          wx:key="key"
+          data-key="{{item.key}}"
+          bindtap="selectGroupPlan"
+          hover-class="group-plan-pressed"
+        >
+          <view class="group-plan-main">
+            <view class="group-plan-title-row">
+              <text class="group-plan-title">{{item.label}} 词</text>
+              <text class="group-recommended" wx:if="{{item.recommended}}">推荐</text>
+            </view>
+            <text class="group-plan-desc">{{item.description}}</text>
+          </view>
+          <view class="group-radio"><view class="group-radio-dot"></view></view>
+        </view>
+      </view>
+
+      <button class="submit-btn group-start-btn" bindtap="startSelectedGroupPlan">按此分组开始</button>
+    </view>
+  </block>
+
   <!-- ========== FAMILIARIZATION PHASE ========== -->
-  <block wx:if="{{phase === 'familiarize'}}">
+  <block wx:elif="{{phase === 'familiarize'}}">
     <!-- Header -->
     <view class="status-bar">
       <view class="book-title">{{bookTitle}}</view>
       <view class="header-right">
-        <view class="progress-info">{{famIndex + 1}} / {{totalWords}}</view>
+        <view class="progress-info">第{{currentGroupIndex + 1}}组 · {{famIndex - groupStart + 1}} / {{groupWordCount}}</view>
         <view class="timer-pill fam-timer">{{famTimerDisplay}}</view>
       </view>
     </view>
@@ -67,13 +103,38 @@
     </view>
   </block>
 
+  <!-- ========== BETWEEN GROUPS ========== -->
+  <block wx:elif="{{phase === 'group_summary'}}">
+    <view class="group-summary-card">
+      <text class="group-summary-kicker">第 {{groupSummaryInfo.groupNumber}} / {{groupSummaryInfo.groupCount}} 组完成</text>
+      <text class="group-summary-title">先停一下，巩固得更牢</text>
+      <view class="group-summary-stats">
+        <view class="group-summary-stat">
+          <text class="group-summary-num">{{groupSummaryInfo.correct}}/{{groupSummaryInfo.total}}</text>
+          <text class="group-summary-label">首次答对</text>
+        </view>
+        <view class="group-summary-stat">
+          <text class="group-summary-num">{{groupSummaryInfo.accuracy}}%</text>
+          <text class="group-summary-label">本组准确率</text>
+        </view>
+        <view class="group-summary-stat">
+          <text class="group-summary-num">{{groupSummaryInfo.wrongCount}}</text>
+          <text class="group-summary-label">本组错词</text>
+        </view>
+      </view>
+      <text class="group-next-note">下一组 {{groupSummaryInfo.nextCount}} 词，将重新进入熟悉阶段。</text>
+      <button class="submit-btn group-continue-btn" bindtap="continueNextGroup">继续下一组</button>
+      <button class="group-later-btn" bindtap="leaveBetweenGroups">稍后继续</button>
+    </view>
+  </block>
+
   <!-- ========== TEST PHASE (existing UI, unchanged) ========== -->
   <block wx:elif="{{phase === 'test'}}">
     <!-- Header -->
     <view class="status-bar">
       <view class="book-title">{{bookTitle}}</view>
       <view class="header-right">
-        <view class="progress-info">{{currentIndex + 1}} / {{totalWords}}</view>
+        <view class="progress-info">第{{currentGroupIndex + 1}}组 · {{currentIndex - groupStart + 1}} / {{groupWordCount}}</view>
         <view class="timer-pill">{{displayTime}}</view>
       </view>
     </view>
@@ -119,6 +180,7 @@
                bindinput="onInput"
                confirm-type="done"
                bindconfirm="checkAnswer"/>
+        <view class="answer-length-hint" wx:if="{{answerLengthHint}}">{{answerLengthHint}}</view>
         <view class="hint-card" wx:if="{{showHint && currentMode === 'audio_to_en'}}">
           <text class="hint-label">提示</text>
           <text class="hint-text">{{currentWord.translation || '暂无释义'}}</text>
@@ -161,6 +223,12 @@
         <view class="compare-block">
           <view class="answer-row wrong">你的答案：{{userAnswer || '（空）'}}</view>
           <view class="answer-row correct">参考答案：{{currentMode === 'en_to_zh' ? (currentWord.translation || '暂无释义') : currentWord.word}}</view>
+          <button wx:if="{{!isCorrect}}"
+                  class="answer-appeal-btn"
+                  disabled="{{appealSubmitted}}"
+                  bindtap="submitAnswerAppeal">
+            {{appealSubmitted ? '已提交人工审核' : '判分有疑问？申诉'}}
+          </button>
         </view>
       </view>
     </view>
@@ -169,7 +237,7 @@
     <view class="action-bar">
       <button wx:if="{{!showResult}}" class="submit-btn" bindtap="checkAnswer">提交</button>
       <button wx:else class="submit-btn next" bindtap="nextWord">
-        {{currentIndex + 1 === totalWords ? '完成练习' : '下一个'}}
+        {{currentIndex + 1 >= groupEnd ? (hasMoreGroups ? '完成本组' : '完成练习') : '下一个'}}
       </button>
     </view>
 

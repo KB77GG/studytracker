@@ -111,6 +111,7 @@
               <tr>
                 <th style="width: 64px;">#</th>
                 <th>单词</th>
+                <th>可接受答案</th>
                 <th>音标</th>
                 <th>释义</th>
               </tr>
@@ -402,11 +403,12 @@
           <tr>
             <td>${index + 1}</td>
             <td><strong>${escapeHtml(word.word || '-')}</strong></td>
+            <td>${escapeHtml((word.accepted_answers || []).join(' / ') || '-')}</td>
             <td class="mlib-muted">${escapeHtml(word.phonetic || '-')}</td>
             <td>${escapeHtml(word.translation || '-')}</td>
           </tr>
         `;
-      }).join('') : '<tr><td colspan="4" class="mlib-empty-cell">暂无单词</td></tr>';
+      }).join('') : '<tr><td colspan="5" class="mlib-empty-cell">暂无单词</td></tr>';
 
       document.getElementById('bookWordsList').innerHTML = rows;
       $('#dictationBookModal').modal('show');

@@ -143,6 +143,13 @@
   box-sizing: border-box;
 }
 
+.answer-length-hint {
+  margin-top: 14rpx;
+  color: #74798a;
+  font-size: 24rpx;
+  text-align: center;
+}
+
 .result {
   margin-top: 36rpx;
 }
@@ -179,6 +186,28 @@
   color: #74798a;
   font-weight: 600;
   margin-right: 4rpx;
+}
+
+.answer-appeal-btn {
+  width: auto;
+  min-height: 58rpx;
+  margin: 16rpx 0 0;
+  padding: 0 22rpx;
+  border: 2rpx solid #d7dde8;
+  border-radius: 999rpx;
+  background: #fff;
+  color: #526075;
+  font-size: 24rpx;
+  line-height: 56rpx;
+}
+
+.answer-appeal-btn::after {
+  border: 0;
+}
+
+.answer-appeal-btn[disabled] {
+  background: #f3f5f8;
+  color: #8a94a6;
 }
 
 .vocab-card {

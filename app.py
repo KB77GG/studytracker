@@ -49,6 +49,7 @@ from toefl_practice import catalog_summary as _toefl_catalog_summary
 from toefl_practice import toefl_bp
 from models import (
     AuditLogEntry,
+    DictationAnswerAppeal,
     PlanEvidence,
     PlanItem,
     PlanItemSession,
@@ -2020,6 +2021,19 @@ def ensure_legacy_schema() -> None:
             current_app.logger.warning(
                 "Failed to ensure index on task.plan_item_id: %s", exc
             )
+    if "dictation_word" in tables:
+        columns = {col["name"] for col in inspector.get_columns("dictation_word")}
+        if "accepted_answers" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text("ALTER TABLE dictation_word ADD COLUMN accepted_answers TEXT")
+                    )
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                if "duplicate column" not in str(exc).lower():
+                    current_app.logger.warning(
+                        "Failed to add accepted_answers to dictation_word: %s", exc
+                    )
     if "student_answer" in tables:
         columns = {col["name"] for col in inspector.get_columns("student_answer")}
         if "is_uncertain" not in columns:
@@ -2169,6 +2183,12 @@ def ensure_legacy_schema() -> None:
                 "Failed to ensure index on user.scheduler_teacher_id: %s", exc
             )
 
+    try:
+        DictationAnswerAppeal.__table__.create(bind=db.engine, checkfirst=True)
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.warning(
+            "Failed to ensure dictation_answer_appeal table exists: %s", exc
+        )
     try:
         StageReport.__table__.create(bind=db.engine, checkfirst=True)
     except Exception as exc:  # pragma: no cover
@@ -6109,7 +6129,7 @@ def materials_view(material_id):
 @login_required
 @role_required(User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def word_examples_page():
-    """Vocabulary enrichment review page."""
+    """Vocabulary content and answer-appeal review page."""
     return render_template("word_examples.html")
 
 

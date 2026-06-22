@@ -182,6 +182,13 @@
   background: rgba(245, 108, 108, 0.1);
 }
 
+.answer-length-hint {
+  margin-top: 14rpx;
+  color: #64748b;
+  font-size: 24rpx;
+  letter-spacing: 1rpx;
+}
+
 .hint-card {
   margin-top: 20rpx;
   background: #EAF6F4;
@@ -359,6 +366,28 @@
   color: #67C23A;
 }
 
+.answer-appeal-btn {
+  width: auto;
+  min-height: 58rpx;
+  margin: 16rpx 0 0;
+  padding: 0 22rpx;
+  border: 2rpx solid #d7dde8;
+  border-radius: 999rpx;
+  background: #fff;
+  color: #526075;
+  font-size: 24rpx;
+  line-height: 56rpx;
+}
+
+.answer-appeal-btn::after {
+  border: 0;
+}
+
+.answer-appeal-btn[disabled] {
+  background: #f3f5f8;
+  color: #8a94a6;
+}
+
 /* Action Bar */
 .action-bar {
   margin-top: 60rpx;
@@ -490,6 +519,211 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10rpx); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Group Preparation ========== */
+.group-status-bar {
+  margin-bottom: 28rpx;
+}
+
+.group-setup-card,
+.group-summary-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40rpx 34rpx;
+  border: 1rpx solid #e6eeec;
+  border-radius: 28rpx;
+  background: #fff;
+  box-shadow: 0 12rpx 36rpx rgba(28, 73, 69, 0.08);
+  animation: fadeIn 0.25s ease;
+}
+
+.group-eyebrow,
+.group-summary-kicker {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #eaf6f4;
+  color: #20756F;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.group-title,
+.group-summary-title {
+  display: block;
+  margin-top: 20rpx;
+  color: #1f3037;
+  font-size: 40rpx;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.group-desc {
+  display: block;
+  margin-top: 12rpx;
+  color: #76858c;
+  font-size: 25rpx;
+  line-height: 1.6;
+}
+
+.group-plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-top: 30rpx;
+}
+
+.group-plan {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 22rpx 24rpx;
+  border: 2rpx solid #e4e9eb;
+  border-radius: 20rpx;
+  background: #fafcfc;
+}
+
+.group-plan-pressed {
+  background: #f0f8f6;
+}
+
+.group-plan.selected {
+  border-color: #36A59D;
+  background: #f0faf8;
+}
+
+.group-plan-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.group-plan-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.group-plan-title {
+  color: #26373d;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.group-recommended {
+  padding: 4rpx 10rpx;
+  border-radius: 999rpx;
+  background: #20756F;
+  color: #fff;
+  font-size: 19rpx;
+  font-weight: 700;
+}
+
+.group-plan-desc {
+  display: block;
+  margin-top: 6rpx;
+  color: #89969c;
+  font-size: 22rpx;
+}
+
+.group-radio {
+  width: 34rpx;
+  height: 34rpx;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3rpx solid #cbd5d8;
+  border-radius: 50%;
+}
+
+.group-plan.selected .group-radio {
+  border-color: #20756F;
+}
+
+.group-radio-dot {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.group-plan.selected .group-radio-dot {
+  background: #20756F;
+}
+
+.group-start-btn,
+.group-continue-btn {
+  width: 100%;
+  margin-top: 32rpx;
+}
+
+.group-summary-card {
+  margin-top: 60rpx;
+  text-align: center;
+}
+
+.group-summary-kicker {
+  display: inline-flex;
+}
+
+.group-summary-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 32rpx;
+}
+
+.group-summary-stat {
+  min-width: 0;
+  padding: 22rpx 8rpx;
+  border-radius: 18rpx;
+  background: #f4f8f7;
+}
+
+.group-summary-num,
+.group-summary-label {
+  display: block;
+}
+
+.group-summary-num {
+  color: #20756F;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.group-summary-label {
+  margin-top: 6rpx;
+  color: #839097;
+  font-size: 20rpx;
+}
+
+.group-next-note {
+  display: block;
+  margin-top: 26rpx;
+  color: #6f7f86;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.group-later-btn {
+  width: 100%;
+  min-height: 72rpx;
+  margin-top: 12rpx;
+  padding: 0;
+  background: transparent;
+  color: #738188;
+  font-size: 25rpx;
+  line-height: 72rpx;
+}
+
+.group-later-btn::after {
+  border: 0;
 }
 
 /* ========== Familiarization Phase ========== */

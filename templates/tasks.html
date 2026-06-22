@@ -576,8 +576,22 @@
         <h3>待审核提交</h3>
         <p>学生提交后的批注、通过和退回入口。</p>
       </div>
-      <span class="task-count-pill">{{ pending_reviews|length }} 条待处理</span>
+      <span class="task-count-pill" id="reviewTotalPill" data-task-count="{{ pending_reviews|length }}">
+        {{ pending_reviews|length }} 条任务待处理
+      </span>
     </div>
+    <section class="word-appeal-review" aria-labelledby="wordAppealTitle">
+      <div class="word-appeal-review__header">
+        <div>
+          <h4 id="wordAppealTitle">词汇判分申诉</h4>
+          <p>核对学生答案；通过后会自动加入该词的可接受答案。</p>
+        </div>
+        <a href="{{ url_for('word_examples_page') }}" class="task-action-link">查看全部词汇审核</a>
+      </div>
+      <div id="wordAppealReviewList" class="word-appeal-review__list">
+        <div class="word-appeal-review__empty">正在加载申诉...</div>
+      </div>
+    </section>
     {% if pending_reviews %}
     <div class="pending-list">
       {% for review in pending_reviews %}
@@ -1828,6 +1842,114 @@
 
 	    .task-empty-note {
 	      margin-top: 12px;
+	    }
+
+	    .word-appeal-review {
+	      margin-top: 14px;
+	      padding: 14px;
+	      border: 1px solid rgba(32, 117, 111, .2);
+	      border-radius: 10px;
+	      background: rgba(232, 247, 245, .55);
+	    }
+
+	    .word-appeal-review__header {
+	      display: flex;
+	      align-items: flex-start;
+	      justify-content: space-between;
+	      gap: 12px;
+	      margin-bottom: 10px;
+	    }
+
+	    .word-appeal-review__header h4 {
+	      margin: 0;
+	      color: var(--task-ink);
+	      font-size: 15px;
+	      font-weight: 800;
+	    }
+
+	    .word-appeal-review__header p {
+	      margin: 4px 0 0;
+	      color: var(--task-muted);
+	      font-size: 12px;
+	    }
+
+	    .word-appeal-review__list {
+	      display: grid;
+	      gap: 10px;
+	    }
+
+	    .word-appeal-item {
+	      padding: 12px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	    }
+
+	    .word-appeal-item__head,
+	    .word-appeal-item__answers,
+	    .word-appeal-item__actions {
+	      display: flex;
+	      align-items: center;
+	      gap: 10px;
+	      flex-wrap: wrap;
+	    }
+
+	    .word-appeal-item__head {
+	      justify-content: space-between;
+	      margin-bottom: 8px;
+	    }
+
+	    .word-appeal-item__answers {
+	      margin-bottom: 10px;
+	      font-size: 13px;
+	    }
+
+	    .word-appeal-item__student-answer {
+	      color: #b42318;
+	      font-weight: 800;
+	    }
+
+	    .word-appeal-item__reference {
+	      color: var(--task-primary-strong);
+	      font-weight: 800;
+	    }
+
+	    .word-appeal-item__actions input {
+	      flex: 1 1 240px;
+	      min-height: 34px;
+	      padding: 6px 10px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	    }
+
+	    .word-appeal-action {
+	      min-height: 34px;
+	      padding: 6px 12px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	      font-size: 12px;
+	      font-weight: 800;
+	      cursor: pointer;
+	    }
+
+	    .word-appeal-action--approve {
+	      border-color: var(--task-primary);
+	      background: var(--task-primary);
+	      color: #fff;
+	    }
+
+	    .word-appeal-action--reject {
+	      border-color: var(--task-danger-soft);
+	      background: var(--task-danger-soft);
+	      color: #991b1b;
+	    }
+
+	    .word-appeal-review__empty {
+	      padding: 12px;
+	      color: var(--task-muted);
+	      font-size: 13px;
+	      text-align: center;
 	    }
 
 	    .modal .backdrop {
@@ -3682,6 +3804,108 @@
         }
       });
     });
+
+    // Vocabulary answer appeals are shown here for discoverability; the full
+    // history and filters remain available in the Vocabulary Review page.
+    (function initWordAppealReview() {
+      const list = document.getElementById('wordAppealReviewList');
+      const totalPill = document.getElementById('reviewTotalPill');
+      if (!list || !totalPill) return;
+
+      const taskCount = Number(totalPill.dataset.taskCount || 0);
+      const escapeAppealHtml = value => String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+      const modeLabel = mode => ({
+        audio_to_en: '听音写词',
+        zh_to_en: '中译英',
+        en_to_zh: '英译中',
+        spelling_drill: '强化拼写'
+      })[mode] || mode || '-';
+
+      function updateCount(appealCount) {
+        totalPill.textContent = `${taskCount} 条任务 · ${appealCount} 条词汇申诉`;
+      }
+
+      async function reviewAppeal(item, decision) {
+        const input = item.querySelector('.word-appeal-note');
+        const buttons = item.querySelectorAll('.word-appeal-action');
+        buttons.forEach(button => { button.disabled = true; });
+        try {
+          const response = await fetch(`/api/dictation/appeals/${item.dataset.appealId}/review`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              decision,
+              resolution_note: input ? input.value.trim() : ''
+            })
+          });
+          const data = await response.json();
+          if (!data.ok) throw new Error(data.error || '审核失败');
+          await loadAppeals();
+        } catch (error) {
+          alert(`审核失败：${error.message}`);
+          buttons.forEach(button => { button.disabled = false; });
+        }
+      }
+
+      function bindActions() {
+        list.querySelectorAll('.word-appeal-action').forEach(button => {
+          button.addEventListener('click', () => {
+            const item = button.closest('.word-appeal-item');
+            reviewAppeal(item, button.dataset.decision);
+          });
+        });
+      }
+
+      async function loadAppeals() {
+        list.innerHTML = '<div class="word-appeal-review__empty">正在加载申诉...</div>';
+        try {
+          const response = await fetch('/api/dictation/appeals?status=pending', {
+            credentials: 'include'
+          });
+          const data = await response.json();
+          if (!data.ok) throw new Error(data.error || '加载失败');
+          const items = data.items || [];
+          updateCount(items.length);
+          if (!items.length) {
+            list.innerHTML = '<div class="word-appeal-review__empty">暂无待审核的词汇申诉。</div>';
+            return;
+          }
+          list.innerHTML = items.map(appeal => `
+            <article class="word-appeal-item" data-appeal-id="${appeal.id}">
+              <div class="word-appeal-item__head">
+                <strong>${escapeAppealHtml(appeal.student_name)} · ${escapeAppealHtml(appeal.word)}</strong>
+                <span class="muted">${escapeAppealHtml(modeLabel(appeal.mode))}</span>
+              </div>
+              <div class="word-appeal-item__answers">
+                <span>学生答案：<span class="word-appeal-item__student-answer">${escapeAppealHtml(appeal.student_answer)}</span></span>
+                <span>参考答案：<span class="word-appeal-item__reference">${escapeAppealHtml(appeal.reference_answer)}</span></span>
+                <span class="muted">${escapeAppealHtml(appeal.translation || '')}</span>
+              </div>
+              <div class="word-appeal-item__actions">
+                <input class="word-appeal-note" type="text" placeholder="审核备注（可选）">
+                <button class="word-appeal-action word-appeal-action--approve" data-decision="approved">
+                  ${appeal.mode === 'en_to_zh' ? '通过' : '通过并收录'}
+                </button>
+                <button class="word-appeal-action word-appeal-action--reject" data-decision="rejected">驳回</button>
+              </div>
+            </article>
+          `).join('');
+          bindActions();
+        } catch (error) {
+          updateCount(0);
+          list.innerHTML = `<div class="word-appeal-review__empty">申诉加载失败：${escapeAppealHtml(error.message)}</div>`;
+        }
+      }
+
+      loadAppeals();
+    })();
 
     // 从 /listening 跳转过来时支持 ?preset_exercise=<id> 自动预选
     (function applyPresetExercise() {

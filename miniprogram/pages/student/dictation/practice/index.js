@@ -1,4 +1,14 @@
 const app = getApp()
+const {
+    buildGroupPlans,
+    findGroupIndex,
+    groupBounds,
+    normalizeGroupSizes
+} = require('../../../../utils/dictation-groups.js')
+const {
+    englishAnswerLengthHint,
+    isEnglishAnswerCorrect
+} = require('../../../../utils/dictation-answers.js')
 
 const MODE_AUDIO_TO_EN = 'audio_to_en'
 const MODE_ZH_TO_EN = 'zh_to_en'
@@ -21,33 +31,6 @@ function resolveDictationMode(dictationMode, bookType) {
 
 function isAudioMode(mode) {
     return mode === MODE_AUDIO_TO_EN
-}
-
-function normalizeEnglishAnswer(value) {
-    return String(value || '')
-        .trim()
-        .toLowerCase()
-        .replace(/[’‘]/g, "'")
-        .replace(/\.{3,}|…+/g, ' ')
-        .replace(/[，,。.!！？?；;：:]/g, ' ')
-        .replace(/[()（）]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-}
-
-function englishVariants(value) {
-    const normalized = normalizeEnglishAnswer(value)
-        .replace(/^(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*/i, '')
-        .replace(/[()（）]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-    if (!normalized) return []
-    const variants = new Set([normalized])
-    normalized.split(/\s*(?:[\/≈；;]|,(?=\s*[a-z]))\s*/).forEach(part => {
-        const item = normalizeEnglishAnswer(part)
-        if (item) variants.add(item)
-    })
-    return Array.from(variants)
 }
 
 function normalizeChineseAnswer(value) {
@@ -115,11 +98,25 @@ Page({
         summaryInfo: null,
 
         // Familiarization phase
-        phase: 'loading',       // 'loading' | 'familiarize' | 'test'
+        phase: 'loading',       // loading | group_select | familiarize | test | group_summary
         famIndex: 0,
         famRevealed: false,
         famTimerSeconds: 1200,  // 20 minutes
         famTimerDisplay: '20:00',
+
+        // Optional grouping for a single assigned task.
+        groupPlans: [],
+        selectedGroupPlanKey: '',
+        groupSizes: [],
+        currentGroupIndex: 0,
+        groupCount: 1,
+        groupStart: 0,
+        groupEnd: 0,
+        groupWordCount: 0,
+        hasMoreGroups: false,
+        groupCorrectStart: 0,
+        groupWrongStart: 0,
+        groupSummaryInfo: null,
 
         // UI State
         inputValue: '',
@@ -129,7 +126,9 @@ Page({
         showHint: false,
         attemptCount: 0,
         dictationMode: MODE_AUDIO_TO_EN,
-        currentMode: MODE_AUDIO_TO_EN
+        currentMode: MODE_AUDIO_TO_EN,
+        answerLengthHint: '',
+        appealSubmitted: false
     },
 
     onLoad: function (options) {
@@ -340,7 +339,7 @@ Page({
                         words: words,
                         totalWords: words.length,
                         currentIndex: 0,
-                        practiceStart: Date.now(),
+                        practiceStart: null,
                         accumulatedSeconds: 0,
                         dictationMode,
                         currentMode: dictationMode
@@ -351,15 +350,39 @@ Page({
                         this.prefetchAudioWindow(0);
                     }
 
-                    const resumeIndex = this.loadProgress(words.length);
-                    if (resumeIndex > 0) {
-                        // Resuming mid-test: skip familiarization
-                        this.setData({ phase: 'test' });
-                        this.loadWord(resumeIndex);
-                        this.startTicker();
-                    } else {
-                        this.enterFamiliarization();
+                    const groupPlans = buildGroupPlans(words.length);
+                    const selectedPlan = groupPlans.find(plan => plan.recommended) || groupPlans[0];
+                    this.setData({
+                        groupPlans,
+                        selectedGroupPlanKey: selectedPlan ? selectedPlan.key : ''
+                    });
+
+                    const saved = this.loadProgress(words.length);
+                    if (!saved) {
+                        this.setData({ phase: 'group_select' });
+                        return;
                     }
+
+                    const savedSizes = normalizeGroupSizes(saved.groupSizes, words.length);
+                    const savedIndex = Math.max(0, Math.min(Number(saved.index) || 0, words.length - 1));
+                    let savedGroupIndex = Number.isInteger(saved.groupIndex)
+                        ? saved.groupIndex
+                        : findGroupIndex(savedSizes, savedIndex);
+                    if (saved.awaitingNextGroup && savedGroupIndex < savedSizes.length - 1) {
+                        savedGroupIndex += 1;
+                    }
+                    this.activateGroup(savedSizes, savedGroupIndex, {
+                        correctStart: saved.awaitingNextGroup ? this.data.correctCount : saved.groupCorrectStart,
+                        wrongStart: saved.awaitingNextGroup ? this.data.wrongWordsDetail.length : saved.groupWrongStart
+                    }, () => {
+                        if (saved.awaitingNextGroup || saved.resumePhase === 'familiarize') {
+                            this.enterFamiliarization();
+                            return;
+                        }
+                        this.setData({ phase: 'test', practiceStart: Date.now() });
+                        this.loadWord(savedIndex);
+                        this.startTicker();
+                    });
                 } else {
                     wx.showToast({ title: '加载失败', icon: 'none' });
                 }
@@ -374,6 +397,11 @@ Page({
     loadWord: function (index) {
         const word = this.data.words[index];
         const currentMode = resolveDictationMode(word && word.dictationMode, this.data.dictationMode);
+        const answerLengthHint = currentMode === MODE_EN_TO_ZH
+            ? ''
+            : englishAnswerLengthHint(word, {
+                allowSynonyms: currentMode === MODE_ZH_TO_EN
+            });
         this.setData({
             currentWord: word,
             currentIndex: index,
@@ -385,7 +413,9 @@ Page({
             inputError: false,
             userAnswer: '',
             showHint: false,
-            attemptCount: 0
+            attemptCount: 0,
+            answerLengthHint: answerLengthHint,
+            appealSubmitted: false
         });
         this.saveProgress(index);
 
@@ -667,10 +697,9 @@ Page({
         const mode = this.data.currentMode || MODE_AUDIO_TO_EN;
         let isCorrect = false;
         if (mode === MODE_AUDIO_TO_EN) {
-            isCorrect = normalizeEnglishAnswer(inputRaw) === normalizeEnglishAnswer(this.data.currentWord.word);
+            isCorrect = isEnglishAnswerCorrect(inputRaw, this.data.currentWord);
         } else if (mode === MODE_ZH_TO_EN) {
-            const input = normalizeEnglishAnswer(inputRaw);
-            isCorrect = englishVariants(this.data.currentWord.word).some(variant => input === variant);
+            isCorrect = isEnglishAnswerCorrect(inputRaw, this.data.currentWord, { allowSynonyms: true });
         } else {
             const input = normalizeChineseAnswer(inputRaw);
             isCorrect = chineseVariants(this.data.currentWord.translation).some(variant => (
@@ -716,6 +745,7 @@ Page({
                 example_en: this.data.currentWord.example_en,
                 example_zh: this.data.currentWord.example_zh,
                 usage_note: this.data.currentWord.usage_note,
+                accepted_answers: this.data.currentWord.accepted_answers || [],
                 wrong: inputRaw,
                 dictationMode: mode
             });
@@ -766,13 +796,105 @@ Page({
         });
     },
 
+    submitAnswerAppeal: function () {
+        if (this.data.appealSubmitted || this.data.isCorrect) return;
+        const word = this.data.currentWord || {};
+        const answer = String(this.data.userAnswer || '').trim();
+        if (!word.id || !answer) return;
+        wx.showModal({
+            title: '申请人工复核',
+            content: `你的答案“${answer}”将提交给老师审核。`,
+            confirmText: '提交申诉',
+            success: (modalRes) => {
+                if (!modalRes.confirm) return;
+                wx.request({
+                    url: `${app.globalData.baseUrl}/dictation/appeals`,
+                    method: 'POST',
+                    header: {
+                        'Cookie': wx.getStorageSync('cookie'),
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${wx.getStorageSync('token')}`
+                    },
+                    data: {
+                        word_id: word.id,
+                        task_id: this.data.taskId,
+                        answer: answer,
+                        mode: this.data.currentMode
+                    },
+                    success: (res) => {
+                        if (res.data && res.data.ok) {
+                            this.setData({ appealSubmitted: true });
+                            wx.showToast({ title: '已提交人工审核', icon: 'none' });
+                            return;
+                        }
+                        const title = res.data && res.data.error === 'answer_already_accepted'
+                            ? '该答案现已可接受'
+                            : '申诉提交失败';
+                        wx.showToast({ title, icon: 'none' });
+                    },
+                    fail: () => wx.showToast({ title: '网络错误', icon: 'none' })
+                });
+            }
+        });
+    },
+
     nextWord: function () {
         const nextIndex = this.data.currentIndex + 1;
-        if (nextIndex < this.data.totalWords) {
+        const groupEnd = this.data.groupEnd || this.data.totalWords;
+        if (nextIndex < groupEnd) {
             this.loadWord(nextIndex);
+        } else if (this.data.hasMoreGroups) {
+            this.finishCurrentGroup();
         } else {
             this.finishPractice();
         }
+    },
+
+    finishCurrentGroup() {
+        this.pauseTimer();
+        this.stopTicker();
+        const total = this.data.groupWordCount;
+        const correct = Math.max(0, this.data.correctCount - this.data.groupCorrectStart);
+        const wrongCount = Math.max(0, this.data.wrongWordsDetail.length - this.data.groupWrongStart);
+        const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
+        this.setData({
+            phase: 'group_summary',
+            groupSummaryInfo: {
+                groupNumber: this.data.currentGroupIndex + 1,
+                groupCount: this.data.groupCount,
+                total,
+                correct,
+                wrongCount,
+                accuracy,
+                nextCount: this.data.groupSizes[this.data.currentGroupIndex + 1] || 0
+            }
+        });
+        this.saveProgress(Math.max(this.data.groupStart, this.data.groupEnd - 1), {
+            awaitingNextGroup: true,
+            resumePhase: 'group_summary'
+        });
+    },
+
+    continueNextGroup() {
+        const nextGroupIndex = this.data.currentGroupIndex + 1;
+        if (nextGroupIndex >= this.data.groupCount) {
+            this.finishPractice();
+            return;
+        }
+        this.activateGroup(this.data.groupSizes, nextGroupIndex, {
+            correctStart: this.data.correctCount,
+            wrongStart: this.data.wrongWordsDetail.length
+        }, () => {
+            this.saveProgress(this.data.groupStart, {
+                awaitingNextGroup: false,
+                resumePhase: 'familiarize'
+            });
+            this.enterFamiliarization();
+        });
+    },
+
+    leaveBetweenGroups() {
+        wx.navigateBack();
     },
 
     finishPractice: function () {
@@ -897,23 +1019,29 @@ Page({
         return null;
     },
 
-    saveProgress(index) {
+    saveProgress(index, extraData = {}) {
         if (!this.data.progressKey) return;
         let elapsed = this.data.accumulatedSeconds || 0;
         if (this.data.practiceStart) {
             elapsed += Math.floor((Date.now() - this.data.practiceStart) / 1000);
         }
-        wx.setStorageSync(this.data.progressKey, {
+        wx.setStorageSync(this.data.progressKey, Object.assign({
             index,
             correctCount: this.data.correctCount,
             wrongWords: this.data.wrongWords,
             wrongWordsDetail: this.data.wrongWordsDetail,
-            accumulatedSeconds: elapsed
-        });
+            accumulatedSeconds: elapsed,
+            groupSizes: this.data.groupSizes,
+            groupIndex: this.data.currentGroupIndex,
+            groupCorrectStart: this.data.groupCorrectStart,
+            groupWrongStart: this.data.groupWrongStart,
+            awaitingNextGroup: false,
+            resumePhase: 'test'
+        }, extraData));
     },
 
     loadProgress(totalWords) {
-        if (!this.data.progressKey) return 0;
+        if (!this.data.progressKey) return null;
         const saved = wx.getStorageSync(this.data.progressKey);
         if (saved && typeof saved.index === 'number') {
             const idx = Math.max(0, Math.min(saved.index, totalWords - 1));
@@ -928,9 +1056,9 @@ Page({
             if (saved.accumulatedSeconds) {
                 this.setData({ accumulatedSeconds: saved.accumulatedSeconds });
             }
-            return idx;
+            return Object.assign({}, saved, { index: idx });
         }
-        return 0;
+        return null;
     },
 
     clearProgress() {
@@ -1014,6 +1142,7 @@ Page({
             example_en: w.example_en,
             example_zh: w.example_zh,
             usage_note: w.usage_note,
+            accepted_answers: w.accepted_answers || [],
             dictationMode: resolveDictationMode(w.dictationMode)
         }));
         this.setData({
@@ -1070,6 +1199,7 @@ Page({
             example_en: w.example_en,
             example_zh: w.example_zh,
             usage_note: w.usage_note,
+            accepted_answers: w.accepted_answers || [],
             dictationMode: resolveDictationMode(w.dictationMode)
         }));
         this.setData({
@@ -1191,22 +1321,69 @@ Page({
         }
     },
 
+    // ========== Group Selection ==========
+    selectGroupPlan(e) {
+        const key = e.currentTarget.dataset.key;
+        if (!key) return;
+        this.setData({ selectedGroupPlanKey: key });
+    },
+
+    startSelectedGroupPlan() {
+        const plans = this.data.groupPlans || [];
+        const plan = plans.find(item => item.key === this.data.selectedGroupPlanKey) || plans[0];
+        if (!plan || !plan.sizes || !plan.sizes.length) {
+            wx.showToast({ title: '暂无可用分组', icon: 'none' });
+            return;
+        }
+        this.activateGroup(plan.sizes, 0, { correctStart: 0, wrongStart: 0 }, () => {
+            this.enterFamiliarization();
+        });
+    },
+
+    activateGroup(sizesValue, groupIndex, baseline, callback) {
+        const sizes = normalizeGroupSizes(sizesValue, this.data.totalWords);
+        const bounds = groupBounds(sizes, groupIndex);
+        const correctStart = baseline && baseline.correctStart != null
+            ? Number(baseline.correctStart) || 0
+            : this.data.correctCount;
+        const wrongStart = baseline && baseline.wrongStart != null
+            ? Number(baseline.wrongStart) || 0
+            : this.data.wrongWordsDetail.length;
+        this.setData({
+            groupSizes: sizes,
+            currentGroupIndex: bounds.groupIndex,
+            groupCount: sizes.length,
+            groupStart: bounds.start,
+            groupEnd: bounds.end,
+            groupWordCount: bounds.size,
+            hasMoreGroups: bounds.groupIndex < sizes.length - 1,
+            groupCorrectStart: correctStart,
+            groupWrongStart: wrongStart,
+            groupSummaryInfo: null,
+            finished: false
+        }, callback);
+    },
+
     // ========== Familiarization Phase ==========
     enterFamiliarization() {
-        const firstWord = this.data.words[0] || {};
+        const firstIndex = this.data.groupStart || 0;
+        const firstWord = this.data.words[firstIndex] || {};
         const firstMode = resolveDictationMode(firstWord.dictationMode, this.data.dictationMode);
+        const timerSeconds = Math.max(300, Math.min(1200, (this.data.groupWordCount || this.data.totalWords) * 24));
+        const timerMinutes = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+        const timerRemainder = String(timerSeconds % 60).padStart(2, '0');
         this.setData({
             phase: 'familiarize',
-            famIndex: 0,
+            famIndex: firstIndex,
             famRevealed: false,
-            famTimerSeconds: 1200,
-            famTimerDisplay: '20:00',
+            famTimerSeconds: timerSeconds,
+            famTimerDisplay: `${timerMinutes}:${timerRemainder}`,
             currentWord: firstWord,
             currentMode: firstMode
         });
         this.startFamTimer();
         if (isAudioMode(firstMode)) {
-            this.prefetchAudioWindow(0);
+            this.prefetchAudioWindow(firstIndex);
             setTimeout(() => this.playCurrentWord(), 500);
         }
     },
@@ -1254,8 +1431,8 @@ Page({
     nextFamWord() {
         const nextIdx = this.data.famIndex + 1;
         let targetIndex = nextIdx;
-        if (nextIdx >= this.data.totalWords) {
-            targetIndex = 0;
+        if (nextIdx >= this.data.groupEnd) {
+            targetIndex = this.data.groupStart;
         }
         const targetWord = this.data.words[targetIndex] || {};
         const targetMode = resolveDictationMode(targetWord.dictationMode, this.data.dictationMode);
@@ -1274,8 +1451,8 @@ Page({
     prevFamWord() {
         const prevIdx = this.data.famIndex - 1;
         let targetIndex = prevIdx;
-        if (prevIdx < 0) {
-            targetIndex = this.data.totalWords - 1;
+        if (prevIdx < this.data.groupStart) {
+            targetIndex = this.data.groupEnd - 1;
         }
         const targetWord = this.data.words[targetIndex] || {};
         const targetMode = resolveDictationMode(targetWord.dictationMode, this.data.dictationMode);
@@ -1295,10 +1472,9 @@ Page({
         this.stopFamTimer();
         this.setData({
             phase: 'test',
-            practiceStart: Date.now(),
-            accumulatedSeconds: 0
+            practiceStart: Date.now()
         });
-        this.loadWord(0);
+        this.loadWord(this.data.groupStart || 0);
         this.startTicker();
     },
 

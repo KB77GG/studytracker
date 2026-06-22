@@ -1,27 +1,36 @@
 .spell-page {
-  min-height: 100vh;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   background: #cfe8f3;
   color: #172033;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
 }
 
+.safe-top {
+  flex: 0 0 auto;
+}
+
 .loading {
-  padding-top: 42vh;
-  text-align: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #405466;
   font-size: 30rpx;
 }
 
+/* ---------- ready ---------- */
 .ready-shell {
-  min-height: 86vh;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 48rpx;
+  padding: 0 40rpx;
+  box-sizing: border-box;
 }
 
 .ready-title {
@@ -37,17 +46,19 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28rpx;
-  width: 68vw;
+  width: 100%;
+  max-width: 560rpx;
 }
 
 .primary-pill,
 .ghost-pill {
-  height: 76rpx;
+  height: 84rpx;
   border-radius: 999rpx;
   font-size: 28rpx;
   font-weight: 700;
   border: 0;
-  line-height: 76rpx;
+  line-height: 84rpx;
+  padding: 0;
 }
 
 .primary-pill {
@@ -56,9 +67,8 @@
 }
 
 .ghost-pill {
-  background: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.5);
   color: #1f2937;
-  border: 2rpx solid rgba(31, 41, 55, 0.08);
 }
 
 .skip-row {
@@ -69,7 +79,9 @@
   font-size: 24rpx;
 }
 
+/* ---------- drill ---------- */
 .top-bar {
+  flex: 0 0 auto;
   height: 86rpx;
   padding: 18rpx 28rpx 0;
   display: grid;
@@ -86,11 +98,11 @@
 
 .dots {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 10rpx;
+  gap: 10rpx 10rpx;
   min-width: 0;
-  overflow: hidden;
 }
 
 .dot {
@@ -108,19 +120,25 @@
 .tools {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 22rpx;
   font-size: 34rpx;
   color: #364b5f;
 }
 
+.tool-star {
+  font-size: 34rpx;
+  line-height: 1;
+}
+
 .drill-center {
-  height: calc(100vh - 210rpx);
-  min-height: 720rpx;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 56rpx 120rpx;
+  padding: 0 56rpx;
   box-sizing: border-box;
   position: relative;
 }
@@ -132,6 +150,7 @@
   opacity: 0;
   left: 50%;
   top: 50%;
+  pointer-events: none;
 }
 
 .word-display {
@@ -169,16 +188,43 @@
   background: #e7671b;
   margin-left: 4rpx;
   vertical-align: -9rpx;
+  animation: cursorBlink 1s steps(1) infinite;
+}
+
+@keyframes cursorBlink {
+  50% { opacity: 0; }
 }
 
 .translation {
   margin-top: 22rpx;
-  max-width: 520rpx;
+  max-width: 560rpx;
   font-size: 26rpx;
   line-height: 1.48;
   color: #111827;
   text-align: center;
   white-space: pre-wrap;
+}
+
+.spell-appeal-btn {
+  width: auto;
+  min-height: 58rpx;
+  margin: 22rpx 0 0;
+  padding: 0 22rpx;
+  border: 2rpx solid #d7dde8;
+  border-radius: 999rpx;
+  background: #fff;
+  color: #526075;
+  font-size: 24rpx;
+  line-height: 56rpx;
+}
+
+.spell-appeal-btn::after {
+  border: 0;
+}
+
+.spell-appeal-btn[disabled] {
+  background: #f3f5f8;
+  color: #8a94a6;
 }
 
 .diff-row {
@@ -212,30 +258,42 @@
   position: fixed;
   left: 40rpx;
   right: 40rpx;
-  bottom: calc(24rpx + env(safe-area-inset-bottom));
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   pointer-events: none;
+  z-index: 20;
 }
 
 .round-control {
   pointer-events: auto;
-  min-width: 112rpx;
-  height: 58rpx;
-  line-height: 58rpx;
+  min-width: 120rpx;
+  height: 72rpx;
+  line-height: 72rpx;
   border-radius: 999rpx;
   border: 0;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.78);
   color: #1f2937;
-  font-size: 32rpx;
+  font-size: 34rpx;
   padding: 0 24rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.round-control text {
+.round-control .key-hint {
   font-size: 20rpx;
   color: #8a98a8;
   margin-left: 8rpx;
+}
+
+.round-control.confirm {
+  background: #f45a12;
+  color: #fff;
+}
+
+.round-control.confirm .key-hint {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .round-control.exit {
@@ -250,19 +308,54 @@
   justify-self: end;
 }
 
+/* CSS-drawn speaker icon (reliable across all platforms) */
+.ic-audio {
+  width: 30rpx;
+  height: 20rpx;
+  position: relative;
+  display: inline-block;
+}
+
+.ic-audio::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4rpx;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6rpx 12rpx 6rpx 0;
+  border-color: transparent #2f4250 transparent transparent;
+}
+
+.ic-audio::after {
+  content: "";
+  position: absolute;
+  left: 12rpx;
+  top: 1rpx;
+  width: 12rpx;
+  height: 18rpx;
+  border: 3rpx solid #2f4250;
+  border-left: 0;
+  border-top-right-radius: 12rpx;
+  border-bottom-right-radius: 12rpx;
+}
+
 .phonetic-pill {
   position: fixed;
   left: 50%;
-  bottom: calc(92rpx + env(safe-area-inset-bottom));
   transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.78);
   border-radius: 999rpx;
   padding: 10rpx 24rpx;
   color: #516172;
   font-size: 22rpx;
+  z-index: 20;
 }
 
+/* ---------- summary ---------- */
 .summary-head {
+  flex: 0 0 auto;
   height: 86rpx;
   display: grid;
   grid-template-columns: 90rpx 1fr 90rpx;
@@ -275,6 +368,8 @@
   border: 0;
   font-size: 48rpx;
   line-height: 70rpx;
+  padding: 0;
+  text-align: left;
 }
 
 .summary-title {
@@ -283,14 +378,10 @@
   font-weight: 700;
 }
 
-.eye {
-  text-align: right;
-  font-size: 30rpx;
-}
-
 .tip-strip {
+  flex: 0 0 auto;
   margin: 0 44rpx 26rpx;
-  height: 54rpx;
+  min-height: 54rpx;
   line-height: 54rpx;
   border-radius: 8rpx;
   background: rgba(216, 229, 235, 0.88);
@@ -300,7 +391,8 @@
 }
 
 .summary-list {
-  height: calc(100vh - 270rpx);
+  flex: 1;
+  min-height: 0;
   padding: 0 44rpx;
   box-sizing: border-box;
 }
@@ -326,10 +418,8 @@
 }
 
 .summary-foot {
-  position: fixed;
-  left: 32rpx;
-  right: 32rpx;
-  bottom: calc(22rpx + env(safe-area-inset-bottom));
+  flex: 0 0 auto;
+  padding: 18rpx 32rpx calc(22rpx + env(safe-area-inset-bottom));
 }
 
 .summary-count {

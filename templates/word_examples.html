@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block page_title %}例句审核{% endblock %}
-{% block page_subtitle %}Vocabulary Enrichment Review{% endblock %}
+{% block page_title %}词汇审核{% endblock %}
+{% block page_subtitle %}Answer Appeals & Vocabulary Review{% endblock %}
 
 {% block content_dashboard %}
 <style>
@@ -67,9 +67,56 @@
   .table td {
     vertical-align: top;
   }
+
+  .appeal-answer {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #b42318;
+  }
+
+  .appeal-reference {
+    color: #167565;
+    font-weight: 600;
+  }
 </style>
 
 <div class="container-fluid">
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+      <div>
+        <strong>判分申诉</strong>
+        <span class="text-muted small ml-2">通过英文申诉后，答案会自动加入该词的可接受答案</span>
+      </div>
+      <div class="d-flex align-items-center mt-2 mt-md-0">
+        <select id="appealStatus" class="form-control form-control-sm mr-2" style="width: 120px;">
+          <option value="pending">待审核</option>
+          <option value="approved">已通过</option>
+          <option value="rejected">已驳回</option>
+          <option value="all">全部</option>
+        </select>
+        <button class="btn btn-sm btn-outline-secondary" id="appealRefreshBtn" type="button">刷新</button>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover mb-0">
+          <thead class="thead-light">
+            <tr>
+              <th style="width: 150px;">学生 / 时间</th>
+              <th style="width: 180px;">词条</th>
+              <th>申诉答案</th>
+              <th style="width: 150px;">状态</th>
+              <th style="width: 230px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="appealsBody">
+            <tr><td colspan="5" class="text-center text-muted py-4">加载中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs" id="statusTabs">
@@ -161,6 +208,11 @@
     booksLoaded: false
   };
 
+  const appealState = {
+    status: 'pending',
+    items: []
+  };
+
   function escapeHtml(value) {
     return String(value || '')
       .replace(/&/g, '&amp;')
@@ -173,6 +225,97 @@
   function fmtDate(value) {
     if (!value) return '-';
     return value.replace('T', ' ').slice(0, 16);
+  }
+
+  function appealModeLabel(mode) {
+    const labels = {
+      audio_to_en: '听音写词',
+      zh_to_en: '中译英',
+      en_to_zh: '英译中',
+      spelling_drill: '强化拼写'
+    };
+    return labels[mode] || mode || '-';
+  }
+
+  function appealStatusLabel(item) {
+    if (item.status === 'approved') return item.added_to_accepted_answers ? '已通过并收录' : '已通过';
+    if (item.status === 'rejected') return '已驳回';
+    return '待审核';
+  }
+
+  function renderAppeals() {
+    const body = document.getElementById('appealsBody');
+    if (!appealState.items.length) {
+      body.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">暂无判分申诉</td></tr>';
+      return;
+    }
+    body.innerHTML = appealState.items.map(item => {
+      const actions = item.status === 'pending' ? `
+        <button class="btn btn-sm btn-success mb-1" onclick="reviewAppeal(${item.id}, 'approved')">
+          ${item.mode === 'en_to_zh' ? '通过' : '通过并收录'}
+        </button>
+        <button class="btn btn-sm btn-outline-danger mb-1" onclick="reviewAppeal(${item.id}, 'rejected')">驳回</button>
+      ` : `<span class="text-muted small">${escapeHtml(item.resolution_note || '已处理')}</span>`;
+      return `
+        <tr>
+          <td>
+            <strong>${escapeHtml(item.student_name)}</strong>
+            <div class="word-sub">${escapeHtml(fmtDate(item.created_at))}</div>
+            ${item.task_id ? `<div class="word-sub">任务 #${item.task_id}</div>` : ''}
+          </td>
+          <td>
+            <div class="word-main">${escapeHtml(item.word)}</div>
+            <div class="word-sub">${escapeHtml(item.translation || '')}</div>
+            <div class="word-sub">${escapeHtml(item.book_title || '')}</div>
+          </td>
+          <td>
+            <div>学生：<span class="appeal-answer">${escapeHtml(item.student_answer)}</span></div>
+            <div>参考：<span class="appeal-reference">${escapeHtml(item.reference_answer)}</span></div>
+            <div class="word-sub mt-1">${escapeHtml(appealModeLabel(item.mode))} · ${escapeHtml(item.reason || '')}</div>
+            ${item.accepted_answers.length ? `<div class="word-sub">当前可接受：${escapeHtml(item.accepted_answers.join(' / '))}</div>` : ''}
+          </td>
+          <td>
+            <span class="status-pill">${escapeHtml(appealStatusLabel(item))}</span>
+            ${item.reviewer_name ? `<div class="word-sub mt-1">${escapeHtml(item.reviewer_name)}</div>` : ''}
+            ${item.reviewed_at ? `<div class="word-sub">${escapeHtml(fmtDate(item.reviewed_at))}</div>` : ''}
+          </td>
+          <td>${actions}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  async function loadAppeals() {
+    const body = document.getElementById('appealsBody');
+    body.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">加载中...</td></tr>';
+    const resp = await fetch(`/api/dictation/appeals?status=${encodeURIComponent(appealState.status)}`, {
+      credentials: 'include'
+    });
+    const data = await resp.json();
+    if (!data.ok) {
+      body.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">加载失败：${escapeHtml(data.error || '未知错误')}</td></tr>`;
+      return;
+    }
+    appealState.items = data.items || [];
+    renderAppeals();
+  }
+
+  async function reviewAppeal(id, decision) {
+    const actionText = decision === 'approved' ? '通过这条申诉' : '驳回这条申诉';
+    if (!confirm(`确定${actionText}？`)) return;
+    const note = prompt('审核备注（可选）', '') || '';
+    const resp = await fetch(`/api/dictation/appeals/${id}/review`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ decision, resolution_note: note })
+    });
+    const data = await resp.json();
+    if (!data.ok) {
+      alert(data.error || '审核失败');
+      return;
+    }
+    await loadAppeals();
   }
 
   function statusLabel(item) {
@@ -335,6 +478,11 @@
     loadItems();
   });
   document.getElementById('refreshBtn').addEventListener('click', loadItems);
+  document.getElementById('appealRefreshBtn').addEventListener('click', loadAppeals);
+  document.getElementById('appealStatus').addEventListener('change', (event) => {
+    appealState.status = event.target.value;
+    loadAppeals();
+  });
   document.getElementById('prevPage').addEventListener('click', () => {
     if (state.page > 1) {
       state.page -= 1;
@@ -348,6 +496,7 @@
     }
   });
 
+  loadAppeals();
   loadItems();
 </script>
 {% endblock %}

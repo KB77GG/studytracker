@@ -36,7 +36,7 @@
         <a class="nav-link {{ 'is-active' if 'materials' in endpoint else '' }}"
           href="{{ url_for('materials_list') }}">材料库</a>
         <a class="nav-link {{ 'is-active' if endpoint == 'word_examples_page' else '' }}"
-          href="{{ url_for('word_examples_page') }}">例句审核</a>
+          href="{{ url_for('word_examples_page') }}">词汇审核</a>
         <a class="nav-link {{ 'is-active' if endpoint == 'tasks_page' else '' }}"
           href="{{ url_for('tasks_page') }}">任务管理</a>
         <a class="nav-link {{ 'is-active' if 'grading' in endpoint else '' }}"

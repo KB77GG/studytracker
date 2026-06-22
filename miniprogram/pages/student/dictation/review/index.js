@@ -1,5 +1,9 @@
 const app = getApp()
 const { request } = require('../../../../utils/request.js')
+const {
+    englishAnswerLengthHint,
+    isEnglishAnswerCorrect
+} = require('../../../../utils/dictation-answers.js')
 
 const MODE_HINT = {
     en_to_zh: '输入中文释义',
@@ -13,8 +17,6 @@ const LEVEL_LABEL = {
     3: '三次复习',
     4: '四次复习'
 }
-
-const normalize = (s) => (s || '').trim().toLowerCase()
 
 Page({
     data: {
@@ -35,7 +37,9 @@ Page({
         correctCount: 0,
         wrongCount: 0,
         finished: false,
-        promotedCount: 0
+        promotedCount: 0,
+        answerLengthHint: '',
+        appealSubmitted: false
     },
 
     onLoad() {
@@ -87,6 +91,11 @@ Page({
         const word = this.data.words[index]
         if (!word) return
         const mode = word.mode || 'en_to_zh'
+        const answerLengthHint = mode === 'en_to_zh'
+            ? ''
+            : englishAnswerLengthHint(word, {
+                allowSynonyms: mode === 'zh_to_en'
+            })
         this.setData({
             currentIndex: index,
             currentWord: word,
@@ -97,7 +106,9 @@ Page({
             showResult: false,
             isCorrect: false,
             correctAnswer: '',
-            userAnswer: ''
+            userAnswer: '',
+            answerLengthHint: answerLengthHint,
+            appealSubmitted: false
         })
         if (mode === 'audio_to_en') {
             setTimeout(() => this.playAudio(), 250)
@@ -141,7 +152,9 @@ Page({
             const exp = (expected || '').replace(/[，,；;。.\s]+/g, '')
             isCorrect = ans.length > 0 && exp.indexOf(ans) >= 0
         } else {
-            isCorrect = normalize(userAns) === normalize(expected)
+            isCorrect = isEnglishAnswerCorrect(userAns, word, {
+                allowSynonyms: mode === 'zh_to_en'
+            })
         }
 
         // Submit to server (which updates mastery row + records the attempt)
@@ -223,6 +236,36 @@ Page({
             .catch(() => {
                 wx.showToast({ title: '网络错误', icon: 'none' })
             })
+    },
+
+    submitAnswerAppeal() {
+        if (this.data.appealSubmitted || this.data.isCorrect) return
+        const word = this.data.currentWord || {}
+        const answer = String(this.data.userAnswer || '').trim()
+        if (!(word.word_id || word.id) || !answer) return
+        wx.showModal({
+            title: '申请人工复核',
+            content: `你的答案“${answer}”将提交给老师审核。`,
+            confirmText: '提交申诉',
+            success: (modalRes) => {
+                if (!modalRes.confirm) return
+                request('/dictation/appeals', {
+                    method: 'POST',
+                    data: {
+                        word_id: word.word_id || word.id,
+                        answer,
+                        mode: this.data.currentMode
+                    }
+                }).then((res) => {
+                    if (res && res.ok) {
+                        this.setData({ appealSubmitted: true })
+                        wx.showToast({ title: '已提交人工审核', icon: 'none' })
+                        return
+                    }
+                    wx.showToast({ title: '申诉提交失败', icon: 'none' })
+                }).catch(() => wx.showToast({ title: '网络错误', icon: 'none' }))
+            }
+        })
     },
 
     backToHome() {

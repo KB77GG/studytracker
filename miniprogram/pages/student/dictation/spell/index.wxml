@@ -1,5 +1,5 @@
 <view class="spell-page">
-  <view style="height: env(safe-area-inset-top);"></view>
+  <view class="safe-top" style="height: env(safe-area-inset-top);"></view>
 
   <view class="loading" wx:if="{{stage === 'loading'}}">加载中...</view>
 
@@ -26,19 +26,21 @@
       </view>
       <view class="tools">
         <text class="tool-star">☆</text>
-        <text class="tool-sliders">⌘</text>
       </view>
     </view>
 
-    <view class="drill-center" bindtap="focusInput">
+    <view class="drill-center" bindtap="focusInput"
+          style="padding-bottom: {{keyboardHeight > 0 ? (keyboardHeight + 96) + 'px' : '180rpx'}};">
       <input class="hidden-input"
              value="{{inputValue}}"
              focus="{{inputFocus}}"
              adjust-position="{{false}}"
              cursor-spacing="160"
              confirm-type="done"
+             confirm-hold="{{false}}"
              bindinput="onInput"
-             bindconfirm="submitOrNext"/>
+             bindconfirm="submitOrNext"
+             bindkeyboardheightchange="onKeyboardHeightChange"/>
 
       <view class="word-display">
         <block wx:if="{{showResult && resultCorrect}}">
@@ -56,20 +58,27 @@
       </view>
 
       <view class="translation">{{currentWord.translation || '暂无释义'}}</view>
+      <button wx:if="{{showResult && !resultCorrect}}"
+              class="spell-appeal-btn"
+              disabled="{{appealSubmitted}}"
+              catchtap="submitAnswerAppeal">
+        {{appealSubmitted ? '已提交人工审核' : '判分有疑问？申诉'}}
+      </button>
     </view>
 
-    <view class="bottom-bar">
-      <button class="round-control exit" bindtap="exitPage">× <text>Esc</text></button>
+    <view class="bottom-bar" style="bottom: {{keyboardHeight > 0 ? (keyboardHeight + 16) + 'px' : 'calc(24rpx + env(safe-area-inset-bottom))'}};">
+      <button class="round-control exit" bindtap="exitPage">×<text class="key-hint">Esc</text></button>
       <button class="round-control hint" bindtap="playCurrentWord">
-        <text wx:if="{{isLoadingAudio}}">...</text>
-        <text wx:else>♬</text>
+        <text wx:if="{{isLoadingAudio}}">···</text>
+        <view wx:else class="ic-audio"></view>
       </button>
       <button class="round-control confirm" bindtap="submitOrNext">
-        {{showResult ? '→' : '✓'}} <text>↵</text>
+        {{showResult ? '→' : '✓'}}<text class="key-hint">↵</text>
       </button>
     </view>
 
-    <view class="phonetic-pill" wx:if="{{showResult && resultCorrect && currentWord.phonetic}}">
+    <view class="phonetic-pill" wx:if="{{showResult && resultCorrect && currentWord.phonetic}}"
+          style="bottom: {{keyboardHeight > 0 ? (keyboardHeight + 84) + 'px' : 'calc(110rpx + env(safe-area-inset-bottom))'}};">
       {{currentWord.phonetic}}
     </view>
   </block>
@@ -78,7 +87,7 @@
     <view class="summary-head">
       <button class="back-btn" bindtap="exitPage">‹</button>
       <view class="summary-title">小结</view>
-      <view class="eye">◉</view>
+      <view></view>
     </view>
     <view class="tip-strip">💡 快速回顾本组单词吧～</view>
 

@@ -1,33 +1,11 @@
 const app = getApp()
 const { request } = require('../../../../utils/request.js')
+const {
+    isEnglishAnswerCorrect,
+    normalizeEnglishAnswer
+} = require('../../../../utils/dictation-answers.js')
 
 const REINSERT_GAP = 3
-
-function normalizeEnglishAnswer(value) {
-    return String(value || '')
-        .trim()
-        .toLowerCase()
-        .replace(/[’‘]/g, "'")
-        .replace(/\.{3,}|…+/g, ' ')
-        .replace(/[，,。.!！？?；;：:]/g, ' ')
-        .replace(/[()（）]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-}
-
-function englishVariants(value) {
-    const normalized = normalizeEnglishAnswer(value)
-        .replace(/^(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*/i, '')
-        .replace(/\s+/g, ' ')
-        .trim()
-    if (!normalized) return []
-    const variants = new Set([normalized])
-    normalized.split(/\s*(?:[\/≈；;]|,(?=\s*[a-z]))\s*/).forEach(part => {
-        const item = normalizeEnglishAnswer(part)
-        if (item) variants.add(item)
-    })
-    return Array.from(variants)
-}
 
 function buildDiff(inputValue, answerValue) {
     const input = normalizeEnglishAnswer(inputValue).replace(/\s+/g, '')
@@ -112,7 +90,15 @@ Page({
         isLoadingAudio: false,
         summaryItems: [],
         remainingCount: 0,
-        skipSpellInReview: false
+        skipSpellInReview: false,
+        keyboardHeight: 0,
+        appealSubmitted: false
+    },
+
+    onKeyboardHeightChange(e) {
+        const height = (e && e.detail && e.detail.height) || 0
+        if (height === this.data.keyboardHeight) return
+        this.setData({ keyboardHeight: height })
     },
 
     onLoad(options) {
@@ -159,6 +145,7 @@ Page({
     },
 
     onUnload() {
+        this.clearAutoAdvance()
         if (this.currentDownloadTask && this.currentDownloadTask.abort) {
             try { this.currentDownloadTask.abort() } catch (e) {}
         }
@@ -290,7 +277,8 @@ Page({
             resultCorrect: false,
             displayWord: word.syllables || word.word,
             diffTop: [],
-            inputFocus: true
+            inputFocus: true,
+            appealSubmitted: false
         })
         setTimeout(() => this.playCurrentWord(), 240)
     },
@@ -321,8 +309,7 @@ Page({
             return
         }
 
-        const answerVariants = englishVariants(word.word)
-        const isCorrect = answerVariants.some(item => item === normalizeEnglishAnswer(raw))
+        const isCorrect = isEnglishAnswerCorrect(raw, word)
         const key = word._originIndex
         if (!this.firstAttempts[key]) {
             this.firstAttempts[key] = {
@@ -346,6 +333,9 @@ Page({
             })
             this.submitMastery(word)
             this.playCurrentWord()
+            this.dismissKeyboard()
+            // Correct: let the green word / syllables / phonetic land, then advance.
+            this.scheduleAutoAdvance()
             return
         }
 
@@ -357,6 +347,60 @@ Page({
             diffTop: buildDiff(raw, word.word),
             inputFocus: false
         })
+        // Wrong: keep the comparison on a clean screen; student taps → when ready.
+        this.dismissKeyboard()
+    },
+
+    submitAnswerAppeal() {
+        if (this.data.appealSubmitted || this.data.resultCorrect) return
+        const word = this.data.currentWord || {}
+        const answer = String(this.data.inputValue || '').trim()
+        if (!(word.word_id || word.id) || !answer) return
+        wx.showModal({
+            title: '申请人工复核',
+            content: `你的答案“${answer}”将提交给老师审核。`,
+            confirmText: '提交申诉',
+            success: (modalRes) => {
+                if (!modalRes.confirm) return
+                request('/dictation/appeals', {
+                    method: 'POST',
+                    data: {
+                        word_id: word.word_id || word.id,
+                        task_id: this.data.taskId,
+                        answer,
+                        mode: 'spelling_drill'
+                    }
+                }).then((res) => {
+                    if (res && res.ok) {
+                        this.setData({ appealSubmitted: true })
+                        wx.showToast({ title: '已提交人工审核', icon: 'none' })
+                        return
+                    }
+                    wx.showToast({ title: '申诉提交失败', icon: 'none' })
+                }).catch(() => wx.showToast({ title: '网络错误', icon: 'none' }))
+            }
+        })
+    },
+
+    dismissKeyboard() {
+        try { wx.hideKeyboard({}) } catch (e) {}
+    },
+
+    scheduleAutoAdvance() {
+        this.clearAutoAdvance()
+        this.autoAdvanceTimer = setTimeout(() => {
+            this.autoAdvanceTimer = null
+            if (this.data.stage === 'drill' && this.data.showResult && this.data.resultCorrect) {
+                this.nextAfterResult()
+            }
+        }, 1100)
+    },
+
+    clearAutoAdvance() {
+        if (this.autoAdvanceTimer) {
+            clearTimeout(this.autoAdvanceTimer)
+            this.autoAdvanceTimer = null
+        }
     },
 
     reinsertCurrentWord() {
@@ -369,6 +413,7 @@ Page({
     },
 
     nextAfterResult() {
+        this.clearAutoAdvance()
         const queue = this.data.queue.slice(1)
         this.showNextWord(queue)
     },

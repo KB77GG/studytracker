@@ -23,8 +23,23 @@ from werkzeug.utils import secure_filename
 
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
-from models import db, User, DictationBook, DictationWord, DictationRecord, StudentWordMastery, Task
+from models import (
+    db,
+    User,
+    DictationAnswerAppeal,
+    DictationBook,
+    DictationWord,
+    DictationRecord,
+    StudentWordMastery,
+    Task,
+)
 from api.qwen import generate_word_enrichment
+from dictation_answers import (
+    is_chinese_answer_correct,
+    is_english_answer_correct,
+    parse_answer_variants,
+    serialize_answer_variants,
+)
 
 
 def require_session_or_bearer(fn):
@@ -159,6 +174,7 @@ def _word_student_payload(word):
         "id": word.id,
         "sequence": word.sequence,
         "word": word.word,
+        "accepted_answers": parse_answer_variants(word.accepted_answers),
         "syllables": _syllabify(word.word),
         "phonetic": word.phonetic,
         "translation": word.translation,
@@ -346,6 +362,7 @@ def upload_book():
         word_col = None
         phonetic_col = None
         translation_col = None
+        accepted_answers_col = None
         
         for col in df.columns:
             if col in ['单词', 'word', 'words', '词汇']:
@@ -354,6 +371,8 @@ def upload_book():
                 phonetic_col = col
             elif col in ['释义', 'translation', 'meaning', '翻译', '中文']:
                 translation_col = col
+            elif col in ['可接受答案', '同义词', 'accepted_answers', 'aliases', 'alternatives']:
+                accepted_answers_col = col
         
         if not word_col:
             return jsonify({
@@ -381,12 +400,18 @@ def upload_book():
             
             phonetic = str(row[phonetic_col]).strip() if phonetic_col and pd.notna(row.get(phonetic_col)) else None
             translation = str(row[translation_col]).strip() if translation_col and pd.notna(row.get(translation_col)) else None
+            accepted_answers = (
+                serialize_answer_variants(row[accepted_answers_col])
+                if accepted_answers_col and pd.notna(row.get(accepted_answers_col))
+                else None
+            )
             
             # Create word entry (no audio paths - using Mini Program TTS)
             word = DictationWord(
                 book_id=book.id,
                 sequence=words_added + 1,
                 word=word_text,
+                accepted_answers=accepted_answers,
                 phonetic=phonetic if phonetic != 'nan' else None,
                 translation=translation if translation != 'nan' else None,
                 audio_us=None,  # Will use Mini Program TTS
@@ -928,10 +953,21 @@ def submit_answer():
         return jsonify({"ok": False, "error": "missing_params"}), 400
 
     word = DictationWord.query.get_or_404(word_id)
-    correct_answer = word.word.lower().strip()
-
-    # Check correctness (exact match for now, can add fuzzy matching later)
-    is_correct = student_answer == correct_answer
+    normalized_mode = str(mode or "").strip().lower()
+    if normalized_mode == "en_to_zh":
+        is_correct = is_chinese_answer_correct(student_answer, word.translation)
+    else:
+        allow_synonyms = normalized_mode == "zh_to_en" or (
+            not normalized_mode
+            and word.book is not None
+            and (word.book.book_type or "").lower() == "translation"
+        )
+        is_correct = is_english_answer_correct(
+            student_answer,
+            word.word,
+            accepted_answers=word.accepted_answers,
+            allow_synonyms=allow_synonyms,
+        )
 
     # Record the attempt
     record = DictationRecord(
@@ -1085,6 +1121,7 @@ def get_review_today():
             "id": w.id,
             "book_id": w.book_id,
             "word": w.word,
+            "accepted_answers": parse_answer_variants(w.accepted_answers),
             "syllables": _syllabify(w.word),
             "phonetic": w.phonetic,
             "translation": w.translation,
@@ -1125,6 +1162,7 @@ def _admin_word_payload(word):
         "book_title": book.title if book else "",
         "sequence": word.sequence,
         "word": word.word,
+        "accepted_answers": parse_answer_variants(word.accepted_answers),
         "phonetic": word.phonetic,
         "translation": word.translation,
         "core_meaning_zh": word.core_meaning_zh,
@@ -1138,6 +1176,175 @@ def _admin_word_payload(word):
         "vocab_reviewed_at": word.vocab_reviewed_at.isoformat() if word.vocab_reviewed_at else None,
         "vocab_report_count": word.vocab_report_count or 0,
     }
+
+
+def _answer_appeal_payload(appeal):
+    student = appeal.student
+    reviewer = appeal.reviewer
+    word = appeal.word
+    book = appeal.book
+    return {
+        "id": appeal.id,
+        "student_id": appeal.student_id,
+        "student_name": (
+            (student.display_name or student.username) if student else "未知学生"
+        ),
+        "word_id": appeal.word_id,
+        "word": word.word if word else appeal.reference_answer,
+        "translation": word.translation if word else "",
+        "accepted_answers": parse_answer_variants(word.accepted_answers) if word else [],
+        "book_id": appeal.book_id,
+        "book_title": book.title if book else "",
+        "task_id": appeal.task_id,
+        "mode": appeal.mode,
+        "student_answer": appeal.student_answer,
+        "reference_answer": appeal.reference_answer,
+        "reason": appeal.reason or "",
+        "status": appeal.status,
+        "reviewer_name": (
+            (reviewer.display_name or reviewer.username) if reviewer else ""
+        ),
+        "reviewed_at": appeal.reviewed_at.isoformat() if appeal.reviewed_at else None,
+        "resolution_note": appeal.resolution_note or "",
+        "added_to_accepted_answers": bool(appeal.added_to_accepted_answers),
+        "created_at": appeal.created_at.isoformat() if appeal.created_at else None,
+    }
+
+
+@dictation_bp.route("/appeals", methods=["POST"])
+@require_session_or_bearer
+def create_answer_appeal():
+    """Create a reviewable appeal for a vocabulary answer marked wrong."""
+    user = _current_api_user()
+    if not user:
+        return jsonify({"ok": False, "error": "unauthorized"}), 401
+
+    data = request.get_json() or {}
+    word_id = data.get("word_id")
+    student_answer = str(data.get("answer") or "").strip()
+    mode = str(data.get("mode") or "audio_to_en").strip().lower()
+    if mode not in {"audio_to_en", "zh_to_en", "en_to_zh", "spelling_drill"}:
+        mode = "audio_to_en"
+    if not word_id or not student_answer:
+        return jsonify({"ok": False, "error": "missing_params"}), 400
+
+    word = DictationWord.query.get_or_404(word_id)
+    if mode == "en_to_zh":
+        already_accepted = is_chinese_answer_correct(student_answer, word.translation)
+        reference_answer = word.translation or word.word
+    else:
+        already_accepted = is_english_answer_correct(
+            student_answer,
+            word.word,
+            accepted_answers=word.accepted_answers,
+            allow_synonyms=mode == "zh_to_en",
+        )
+        reference_answer = word.word
+    if already_accepted:
+        return jsonify({"ok": False, "error": "answer_already_accepted"}), 409
+
+    normalized_answer = (
+        student_answer.lower() if mode != "en_to_zh" else student_answer
+    )
+    existing = (
+        DictationAnswerAppeal.query
+        .filter_by(
+            student_id=user.id,
+            word_id=word.id,
+            mode=mode,
+            student_answer=normalized_answer,
+            status=DictationAnswerAppeal.STATUS_PENDING,
+        )
+        .order_by(DictationAnswerAppeal.id.desc())
+        .first()
+    )
+    if existing:
+        return jsonify({
+            "ok": True,
+            "duplicate": True,
+            "appeal": _answer_appeal_payload(existing),
+        })
+
+    task_id = data.get("task_id")
+    appeal = DictationAnswerAppeal(
+        student_id=user.id,
+        word_id=word.id,
+        book_id=word.book_id,
+        task_id=int(task_id) if str(task_id or "").isdigit() else None,
+        mode=mode,
+        student_answer=normalized_answer,
+        reference_answer=str(reference_answer or word.word)[:200],
+        reason=str(data.get("reason") or "我认为这个答案也应被接受").strip()[:500],
+    )
+    db.session.add(appeal)
+    db.session.commit()
+    return jsonify({"ok": True, "appeal": _answer_appeal_payload(appeal)}), 201
+
+
+@dictation_bp.route("/appeals", methods=["GET"])
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def list_answer_appeals():
+    status = str(request.args.get("status") or "pending").strip().lower()
+    allowed_statuses = {
+        DictationAnswerAppeal.STATUS_PENDING,
+        DictationAnswerAppeal.STATUS_APPROVED,
+        DictationAnswerAppeal.STATUS_REJECTED,
+        "all",
+    }
+    if status not in allowed_statuses:
+        status = DictationAnswerAppeal.STATUS_PENDING
+    query = DictationAnswerAppeal.query.options(
+        joinedload(DictationAnswerAppeal.student),
+        joinedload(DictationAnswerAppeal.reviewer),
+        joinedload(DictationAnswerAppeal.word),
+        joinedload(DictationAnswerAppeal.book),
+    )
+    if status != "all":
+        query = query.filter(DictationAnswerAppeal.status == status)
+    rows = query.order_by(
+        DictationAnswerAppeal.created_at.desc(), DictationAnswerAppeal.id.desc()
+    ).limit(200).all()
+    return jsonify({
+        "ok": True,
+        "status": status,
+        "total": len(rows),
+        "items": [_answer_appeal_payload(item) for item in rows],
+    })
+
+
+@dictation_bp.route("/appeals/<int:appeal_id>/review", methods=["POST"])
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def review_answer_appeal(appeal_id):
+    appeal = DictationAnswerAppeal.query.get_or_404(appeal_id)
+    if appeal.status != DictationAnswerAppeal.STATUS_PENDING:
+        return jsonify({"ok": False, "error": "appeal_already_reviewed"}), 409
+    data = request.get_json() or {}
+    decision = str(data.get("decision") or "").strip().lower()
+    if decision not in {
+        DictationAnswerAppeal.STATUS_APPROVED,
+        DictationAnswerAppeal.STATUS_REJECTED,
+    }:
+        return jsonify({"ok": False, "error": "invalid_decision"}), 400
+
+    added = False
+    if decision == DictationAnswerAppeal.STATUS_APPROVED and appeal.mode != "en_to_zh":
+        answer = parse_answer_variants([appeal.student_answer])
+        if answer and re.search(r"[a-zA-Z]", answer[0]):
+            accepted = parse_answer_variants(appeal.word.accepted_answers)
+            if answer[0] not in accepted:
+                accepted.append(answer[0])
+                appeal.word.accepted_answers = serialize_answer_variants(accepted)
+            added = True
+
+    appeal.status = decision
+    appeal.reviewer_id = current_user.id
+    appeal.reviewed_at = datetime.utcnow()
+    appeal.resolution_note = str(data.get("resolution_note") or "").strip()[:500]
+    appeal.added_to_accepted_answers = added
+    db.session.commit()
+    return jsonify({"ok": True, "appeal": _answer_appeal_payload(appeal)})
 
 
 def _has_enrichment_filter():
