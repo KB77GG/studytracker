@@ -1520,38 +1520,65 @@ def speaking_tts():
 
 # --- 学生接口 ---
 
+# 今天页最多回溯多少天的未完成任务，保持首页轻量；更早的未完成任务由
+# 「未完成作业」页（OUTSTANDING_WINDOW_DAYS 天）单独承接，不堆在首页。
+CARRYOVER_WINDOW_DAYS = 3
+# 「未完成作业」页只回溯过去这么多天，再早的不展示，避免堆积如山。
+OUTSTANDING_WINDOW_DAYS = 5
+
+
+def _unfinished_task_clause():
+    """未完成（尚未标记 done）的任务条件。"""
+    return or_(Task.status.is_(None), Task.status != "done")
+
+
 @mp_bp.route("/student/tasks/today", methods=["GET"])
 @require_api_user(User.ROLE_STUDENT)
 def get_student_today_tasks():
-    """获取学生指定日期任务；今天页同时带出仍未完成的历史任务。"""
+    """获取学生指定日期任务；今天页同时带出最近几天仍未完成的任务。"""
     from models import Task
-    
+
     user = request.current_api_user
     student = user.student_profile
     if not student:
         return jsonify({"ok": False, "error": "no_student_profile"}), 404
-        
+
     today = date.today()
     query_date = today
-    
+
     date_str = request.args.get("date")
     if date_str:
         try:
             query_date = datetime.strptime(date_str, "%Y-%m-%d").date()
         except ValueError:
             pass # Invalid date format, fallback to today
-    
+
     task_filters = [Task.student_name == student.full_name]
+    outstanding_count = 0
     if query_date == today:
-        # 未完成任务不能在日期跨天后从学生首页消失。历史日期仍保持
-        # 精确查询，避免学生回看时混入其他日期的任务。
+        # 未完成任务不能在日期跨天后从学生首页消失，但只回溯最近
+        # CARRYOVER_WINDOW_DAYS 天，避免历史遗留任务无限堆积到今天页。
+        # 历史日期仍保持精确查询，避免学生回看时混入其他日期的任务。
+        carryover_start = (query_date - timedelta(days=CARRYOVER_WINDOW_DAYS)).isoformat()
         task_filters.append(or_(
             Task.date == query_date.isoformat(),
             and_(
                 Task.date < query_date.isoformat(),
-                or_(Task.status.is_(None), Task.status != "done"),
+                Task.date >= carryover_start,
+                _unfinished_task_clause(),
             ),
         ))
+
+        # 统计「未完成作业」页将展示的过去 N 天未完成任务数量，供首页入口显示。
+        outstanding_start = (query_date - timedelta(days=OUTSTANDING_WINDOW_DAYS)).isoformat()
+        outstanding_count = (
+            Task.query.filter(
+                Task.student_name == student.full_name,
+                Task.date < query_date.isoformat(),
+                Task.date >= outstanding_start,
+                _unfinished_task_clause(),
+            ).count()
+        )
     else:
         task_filters.append(Task.date == query_date.isoformat())
 
@@ -1560,12 +1587,13 @@ def get_student_today_tasks():
         .order_by(Task.date.desc(), Task.id.desc())
         .all()
     )
-    
+
     if not tasks:
         return jsonify({
             "ok": True,
             "date": query_date.isoformat(),
             "tasks": [],
+            "outstanding_count": outstanding_count,
             "message": "当前日期无任务",
         })
 
@@ -1580,6 +1608,17 @@ def get_student_today_tasks():
             tokens_updated = True
     if tokens_updated:
         db.session.commit()
+
+    # 批量取布置人角色，避免逐条访问 task.creator 触发 N+1 查询。
+    creator_ids = {task.created_by for task in tasks if task.created_by}
+    creator_roles = {}
+    if creator_ids:
+        for uid, crole in (
+            db.session.query(User.id, User.role)
+            .filter(User.id.in_(creator_ids))
+            .all()
+        ):
+            creator_roles[uid] = crole
 
     tasks_data = []
     for task in tasks:
@@ -1608,6 +1647,7 @@ def get_student_today_tasks():
             "id": task.id,
             "date": task.date,
             "is_carryover": query_date == today and task.date < today.isoformat(),
+            "assigned_by_role": creator_roles.get(task.created_by, ""),
             "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
             "module": task.category or "其他",
             "exam_system": "",
@@ -1646,9 +1686,66 @@ def get_student_today_tasks():
         })
         
     return jsonify({
-        "ok": True, 
+        "ok": True,
         "date": query_date.isoformat(),
-        "tasks": tasks_data
+        "tasks": tasks_data,
+        "outstanding_count": outstanding_count,
+    })
+
+
+@mp_bp.route("/student/tasks/outstanding", methods=["GET"])
+@require_api_user(User.ROLE_STUDENT)
+def list_student_outstanding_tasks():
+    """「未完成作业」页：列出过去 OUTSTANDING_WINDOW_DAYS 天仍未完成的任务，
+    按日期倒序返回，前端再按天分组。更早的不展示，避免堆积如山。"""
+    from models import Task
+
+    user = request.current_api_user
+    student = user.student_profile
+    if not student:
+        return jsonify({"ok": False, "error": "no_student_profile"}), 404
+
+    today = date.today()
+    window_start = (today - timedelta(days=OUTSTANDING_WINDOW_DAYS)).isoformat()
+
+    tasks = (
+        Task.query.filter(
+            Task.student_name == student.full_name,
+            Task.date < today.isoformat(),
+            Task.date >= window_start,
+            _unfinished_task_clause(),
+        )
+        .order_by(Task.date.desc(), Task.id.desc())
+        .all()
+    )
+
+    creator_ids = {task.created_by for task in tasks if task.created_by}
+    creator_roles = {}
+    if creator_ids:
+        for uid, crole in (
+            db.session.query(User.id, User.role)
+            .filter(User.id.in_(creator_ids))
+            .all()
+        ):
+            creator_roles[uid] = crole
+
+    items = [
+        {
+            "id": task.id,
+            "date": task.date,
+            "task_name": _task_display_title(task),
+            "module": task.category or "其他",
+            "planned_minutes": task.planned_minutes or 0,
+            "status": task.status or "pending",
+            "assigned_by_role": creator_roles.get(task.created_by, ""),
+        }
+        for task in tasks
+    ]
+
+    return jsonify({
+        "ok": True,
+        "items": items,
+        "window_days": OUTSTANDING_WINDOW_DAYS,
     })
 
 

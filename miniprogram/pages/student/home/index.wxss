@@ -147,6 +147,17 @@ page {
   line-height: 1.2;
 }
 
+.progress-overdue {
+  display: inline-block;
+  margin-top: 10rpx;
+  padding: 2rpx 14rpx;
+  border-radius: 999rpx;
+  color: #b46100;
+  background: #fdecd5;
+  font-size: 22rpx;
+  font-weight: 750;
+}
+
 .streak-box {
   width: 112rpx;
   height: 112rpx;
@@ -376,6 +387,54 @@ page {
   gap: 18rpx;
 }
 
+.task-group-header {
+  display: flex;
+  align-items: center;
+  margin: 14rpx 4rpx 2rpx;
+}
+
+.task-group-header:first-child {
+  margin-top: 0;
+}
+
+.task-group-title {
+  color: #0b1830;
+  font-size: 25rpx;
+  font-weight: 850;
+}
+
+/* 历史日期分组保持中性：同一天可能混有待完成与待审核任务，
+   状态由每张卡片的徽章呈现，标题不再统一标成逾期。 */
+.task-group-header.overdue .task-group-title {
+  color: #64748b;
+  font-weight: 800;
+}
+
+.task-sub {
+  margin-top: 6rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.task-sub .task-time {
+  margin-top: 0;
+}
+
+.assigner-tag {
+  flex-shrink: 0;
+  padding: 2rpx 12rpx;
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  font-weight: 750;
+  line-height: 1.6;
+}
+
+.assigner-tag.assistant {
+  color: #1d6fe0;
+  background: #e7f0ff;
+}
+
 .task-card {
   padding: 22rpx;
   border-radius: 28rpx;
@@ -597,6 +656,33 @@ page {
 .empty-sub {
   color: #64748b;
   font-size: 25rpx;
+}
+
+.older-pending-entry {
+  margin-top: 18rpx;
+  padding: 22rpx 24rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1rpx dashed #cdd9de;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.older-pending-entry:active {
+  opacity: 0.85;
+}
+
+.older-pending-text {
+  color: #334155;
+  font-size: 25rpx;
+  font-weight: 750;
+}
+
+.older-pending-arrow {
+  color: #087f77;
+  font-size: 25rpx;
+  font-weight: 800;
 }
 
 @media (max-width: 340px) {

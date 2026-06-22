@@ -20,8 +20,9 @@
     <view class="progress-card">
       <view class="progress-top">
         <view>
-          <text class="progress-label">任务完成度</text>
+          <text class="progress-label">{{progressLabel}}</text>
           <text class="progress-value">{{progress.completed}} / {{progress.total}} 项任务</text>
+          <text class="progress-overdue" wx:if="{{overdueCount > 0}}">逾期补做 {{overdueCount}} 项</text>
         </view>
         <view class="streak-box">
           <text class="streak-num">{{progress.percent || 0}}</text>
@@ -87,14 +88,20 @@
     </scroll-view>
 
     <view class="task-list" wx:if="{{tasks.length > 0}}">
-      <view class="task-card {{item.isDone ? 'done' : ''}}" wx:for="{{tasks}}" wx:key="id">
+      <block wx:for="{{tasks}}" wx:key="id">
+      <view class="task-group-header {{item.isCarryover ? 'overdue' : ''}}" wx:if="{{item.showDateHeader}}">
+        <text class="task-group-title">{{item.dateHeaderLabel}}</text>
+      </view>
+      <view class="task-card {{item.isDone ? 'done' : ''}}">
         <view class="card-main" bindtap="goToTaskDetail" data-id="{{item.id}}">
           <view class="card-left">
             <view class="task-icon {{item.iconClass}}">{{item.iconText}}</view>
             <view class="task-content">
               <text class="task-name">{{item.task_name}}</text>
-              <text class="task-date overdue" wx:if="{{item.isCarryover}}">{{item.taskDateLabel}}</text>
-              <text class="task-time">预计 {{item.planned_minutes}} 分钟</text>
+              <view class="task-sub">
+                <text class="assigner-tag {{item.assignedByRole}}" wx:if="{{item.assignedByLabel}}">{{item.assignedByLabel}}</text>
+                <text class="task-time">预计 {{item.planned_minutes}} 分钟</text>
+              </view>
             </view>
           </view>
           <view class="card-right">
@@ -115,11 +122,21 @@
           </view>
         </view>
       </view>
+      </block>
+
+      <view class="older-pending-entry" wx:if="{{outstandingCount > 0}}" bindtap="goOutstanding">
+        <text class="older-pending-text">未完成作业 {{outstandingCount}} 项</text>
+        <text class="older-pending-arrow">查看 ›</text>
+      </view>
     </view>
 
     <view class="empty-state" wx:else>
       <text class="empty-text">当前日期没有任务</text>
       <text class="empty-sub">可切换日期查看其他作业。</text>
+      <view class="older-pending-entry" wx:if="{{outstandingCount > 0}}" bindtap="goOutstanding">
+        <text class="older-pending-text">未完成作业 {{outstandingCount}} 项</text>
+        <text class="older-pending-arrow">查看 ›</text>
+      </view>
     </view>
   </scroll-view>
 </view>

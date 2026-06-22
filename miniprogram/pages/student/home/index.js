@@ -10,6 +10,8 @@ Page({
     data: {
         dateStr: '',
         currentDate: '', // YYYY-MM-DD 格式，用于 picker value 和 API 参数
+        todayStr: '',
+        progressLabel: '今日完成度',
         greeting: '',
         userInfo: null,
         tasks: [],
@@ -28,6 +30,8 @@ Page({
         notebookCount: 0,
         reviewTaskCount: 0,
         reviewDueCount: 0,
+        overdueCount: 0,
+        outstandingCount: 0,
         isGuest: false,
         weekdayText: '',
         quickDates: []
@@ -44,6 +48,7 @@ Page({
         this.setData({
             dateStr: `${year}/${month}/${day}`,
             currentDate: dateString,
+            todayStr: dateString,
             userInfo: app.globalData.userInfo || { nickName: '同学' },
             weekdayText: this.getWeekdayText(now),
             quickDates: this.buildQuickDates(dateString)
@@ -63,13 +68,19 @@ Page({
             userInfo: isGuest ? { nickName: '演示学生' } : (app.globalData.userInfo || this.data.userInfo)
         })
 
+        // 从「未完成作业」页跳回时，切到对应任务所在日期再加载。
+        const pendingDate = getApp().globalData.pendingTaskDate
+        if (pendingDate) {
+            getApp().globalData.pendingTaskDate = ''
+            this.applyDate(pendingDate, { fetch: false })
+        }
+
         this.fetchTasks()
         this.loadNotebookCount()
         this.loadReviewDueCount()
         this.updateGreeting()
 
-        // Restore timer if there's an active one in storage
-        this.restoreTimerIfNeeded()
+        if (!isGuest) this.restoreTimerIfNeeded()
         this.refreshSubscribeStatus()
     },
 
@@ -218,7 +229,7 @@ Page({
 
     requestSubscribe() {
         if (getApp().globalData.guestMode) {
-            this.goLogin()
+            this.promptGuestLogin('任务与课程提醒')
             return
         }
         if (['reject', 'off'].includes(this.data.subscribeState)) {
@@ -255,6 +266,15 @@ Page({
     },
 
     goNotebook() {
+        if (this.data.isGuest) {
+            wx.showModal({
+                title: '复习中心示例',
+                content: '复习中心会集中展示错词、待复盘任务和练习记录。演示模式不会读取或保存本机的个人学习数据。',
+                showCancel: false,
+                confirmText: '继续浏览'
+            })
+            return
+        }
         wx.switchTab({
             url: '/pages/student/notebook/index'
         })
@@ -289,6 +309,10 @@ Page({
     },
 
     loadNotebookCount() {
+        if (this.data.isGuest) {
+            this.setData({ notebookCount: 12 })
+            return
+        }
         try {
             const list = wx.getStorageSync('dictation_notebook') || []
             if (Array.isArray(list)) {
@@ -312,21 +336,17 @@ Page({
     },
 
     handleDateChange(e) {
-        const date = e.detail.value // YYYY-MM-DD
-        const [year, month, day] = date.split('-')
-        const dateObj = new Date(`${date}T00:00:00`)
-        this.setData({
-            currentDate: date,
-            dateStr: `${year}/${month}/${day}`,
-            weekdayText: this.getWeekdayText(dateObj),
-            quickDates: this.buildQuickDates(date)
-        })
-        this.fetchTasks()
+        this.applyDate(e.detail.value) // YYYY-MM-DD
     },
 
     selectQuickDate(e) {
         const date = e.currentTarget.dataset.date
         if (!date || date === this.data.currentDate) return
+        this.applyDate(date)
+    },
+
+    applyDate(date, options = {}) {
+        if (!date) return
         const [year, month, day] = date.split('-')
         const dateObj = new Date(`${date}T00:00:00`)
         this.setData({
@@ -335,7 +355,7 @@ Page({
             weekdayText: this.getWeekdayText(dateObj),
             quickDates: this.buildQuickDates(date)
         })
-        this.fetchTasks()
+        if (options.fetch !== false) this.fetchTasks()
     },
 
     getWeekdayText(dateObj) {
@@ -375,7 +395,30 @@ Page({
 
     goLogin() {
         getApp().globalData.guestMode = false
+        getApp().globalData.guestRole = ''
         wx.reLaunch({ url: '/pages/index/index' })
+    },
+
+    promptGuestLogin(feature) {
+        wx.showModal({
+            title: '演示模式',
+            content: `${feature}会保存个人学习数据，需要登录后使用。你可以取消并继续浏览其他功能。`,
+            cancelText: '继续浏览',
+            confirmText: '去登录',
+            success: (res) => {
+                if (res.confirm) this.goLogin()
+            }
+        })
+    },
+
+    showDemoTaskDetail(task) {
+        if (!task) return
+        wx.showModal({
+            title: task.task_name || '任务详情',
+            content: `科目：${task.module || '综合练习'}\n预计用时：${task.planned_minutes || 0} 分钟\n状态：${task.statusText || '待完成'}\n\n当前展示的是只读示例，无需登录即可继续浏览。`,
+            showCancel: false,
+            confirmText: '继续浏览'
+        })
     },
 
     updateGreeting() {
@@ -402,12 +445,15 @@ Page({
             console.log('Tasks response:', res)
 
             if (res.ok && res.tasks) {
-                this.applyTaskData(res.tasks)
+                this.applyTaskData(res.tasks, res.outstanding_count)
             } else {
                 this.setData({
                     tasks: [],
                     progress: { total: 0, completed: 0, percent: 0 },
-                    reviewTaskCount: 0
+                    progressLabel: this.buildProgressLabel(),
+                    reviewTaskCount: 0,
+                    overdueCount: 0,
+                    outstandingCount: 0
                 })
             }
         } catch (err) {
@@ -419,16 +465,26 @@ Page({
         }
     },
 
-    applyTaskData(rawTasks) {
+    applyTaskData(rawTasks, outstandingCount) {
+        let lastGroupDate = null
         const tasks = (rawTasks || []).map(t => {
             const actualSeconds = t.actual_seconds || 0
             const plannedSeconds = t.planned_minutes * 60
             const iconInfo = this.getModuleIcon(t.module || t.task_name || '')
+            const taskDate = t.date || this.data.currentDate
+            const isCarryover = !!t.is_carryover
+            // 后端已按日期倒序返回，扁平列表里每个日期连续成块；
+            // 只在每个日期的第一条任务上渲染分组标题，避免逾期任务全堆到今天。
+            const showDateHeader = taskDate !== lastGroupDate
+            lastGroupDate = taskDate
             return {
                 id: t.id,
-                date: t.date || this.data.currentDate,
-                isCarryover: !!t.is_carryover,
-                taskDateLabel: t.is_carryover ? `${t.date} 任务` : '',
+                date: taskDate,
+                isCarryover,
+                showDateHeader,
+                dateHeaderLabel: this.buildGroupLabel(taskDate, isCarryover),
+                assignedByRole: t.assigned_by_role || '',
+                assignedByLabel: this.getAssignerLabel(t.assigned_by_role),
                 task_name: t.task_name,
                 module: t.module,
                 moduleClass: this.getModuleClass(t.module),
@@ -460,14 +516,24 @@ Page({
                 sessionId: null
             }
         })
-        const total = tasks.length
-        const completed = tasks.filter(t => t.isDone).length
+        // 今日完成度只统计今天的任务，逾期补做不污染分母；逾期单独计数展示。
+        const todayTasks = tasks.filter(t => !t.isCarryover)
+        const total = todayTasks.length
+        const completed = todayTasks.filter(t => t.isDone).length
         const percent = total > 0 ? Math.round((completed / total) * 100) : 0
+        const overdueCount = tasks.filter(t => t.isCarryover && !t.isDone).length
         this.setData({
             tasks,
             progress: { total, completed, percent },
+            progressLabel: this.buildProgressLabel(),
+            overdueCount,
+            outstandingCount: outstandingCount || 0,
             reviewTaskCount: tasks.filter(t => t.status === 'rejected').length
         })
+    },
+
+    buildProgressLabel() {
+        return this.data.currentDate === this.data.todayStr ? '今日完成度' : '当日完成度'
     },
 
     getModuleClass(module) {
@@ -511,9 +577,35 @@ Page({
         return map[status] || status
     },
 
+    buildGroupLabel(dateStr, isCarryover) {
+        if (!isCarryover) return '今日任务'
+        // 历史日期分组用中性文案：同一天可能混有「待完成」和「待审核」任务，
+        // 不统一标成「逾期补做」，具体状态交给每张卡片的状态徽章呈现。
+        const parts = (dateStr || '').split('-')
+        if (parts.length === 3) {
+            return `${Number(parts[1])}月${Number(parts[2])}日`
+        }
+        return '更早任务'
+    },
+
+    getAssignerLabel(role) {
+        // 默认任务都来自老师，只突出「助教布置」，减少重复标签噪音。
+        return role === 'assistant' ? '助教布置' : ''
+    },
+
+    goOutstanding() {
+        if (this.data.isGuest) {
+            this.promptGuestLogin('未完成作业')
+            return
+        }
+        wx.navigateTo({ url: '/pages/student/outstanding/index' })
+    },
+
     goToTaskDetail(e) {
         if (this.data.isGuest) {
-            this.goLogin()
+            const taskId = e.currentTarget.dataset.id
+            const task = this.data.tasks.find(item => item.id === taskId)
+            this.showDemoTaskDetail(task)
             return
         }
         const taskId = e.currentTarget.dataset.id
@@ -607,7 +699,7 @@ Page({
     // Start timer
     startSpellTask(e) {
         if (this.data.isGuest) {
-            this.goLogin()
+            this.promptGuestLogin('拼写练习')
             return
         }
         const taskId = e.currentTarget.dataset.id
@@ -619,7 +711,7 @@ Page({
 
     async startTimer(e) {
         if (this.data.isGuest) {
-            this.goLogin()
+            this.promptGuestLogin('任务计时与提交')
             return
         }
         console.log('Start button clicked', e) // Debug log
