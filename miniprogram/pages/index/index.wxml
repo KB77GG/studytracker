@@ -12,9 +12,34 @@
     <text class="slogan">让每一次进步都看得见</text>
   </view>
 
-  <view class="main-card">
+  <view class="main-card {{!hasToken && !showLoginForm ? 'welcome-card' : 'auth-card'}}">
     <view class="welcome-intro" wx:if="{{!hasToken && !showLoginForm}}">
       <view class="intro-content">
+        <view class="entry-card">
+          <text class="guest-access-note">无需登录 · 无需授权</text>
+          <text class="welcome-title">先体验，再决定是否登录</text>
+          <text class="welcome-desc">查看示例任务、学习报告与课程安排，不读取手机号、头像或昵称。</text>
+
+          <button class="btn-start" data-role="student" bindtap="enterPreview">免登录体验学生端</button>
+
+          <view class="role-shortcuts">
+            <text class="shortcut-label">也可以体验</text>
+            <view class="shortcut-grid">
+              <view class="role-shortcut" data-role="parent" bindtap="enterPreview" hover-class="role-shortcut-active">
+                <text class="shortcut-title">家长端</text>
+                <text class="shortcut-desc">成长报告与反馈</text>
+              </view>
+              <view class="role-shortcut" data-role="teacher" bindtap="enterPreview" hover-class="role-shortcut-active">
+                <text class="shortcut-title">教师端</text>
+                <text class="shortcut-desc">课表与课堂记录</text>
+              </view>
+            </view>
+          </view>
+
+          <button class="login-entry" bindtap="showLogin">已有账号？登录并同步数据</button>
+        </view>
+
+        <text class="feature-heading">核心功能</text>
         <view class="feature-list">
           <view class="feature-item accent-teal">
             <view class="feature-icon icon-task"></view>
@@ -22,7 +47,6 @@
               <text class="feature-title">学习任务</text>
               <text class="feature-desc">查看每日练习、作业与打卡进度</text>
             </view>
-            <text class="feature-arrow">›</text>
           </view>
           <view class="feature-item accent-blue">
             <view class="feature-icon icon-schedule"></view>
@@ -30,7 +54,6 @@
               <text class="feature-title">课程课表</text>
               <text class="feature-desc">查看课程时间、地点与上课提醒</text>
             </view>
-            <text class="feature-arrow">›</text>
           </view>
           <view class="feature-item accent-amber">
             <view class="feature-icon icon-feedback"></view>
@@ -38,7 +61,6 @@
               <text class="feature-title">学习反馈</text>
               <text class="feature-desc">查看老师反馈、练习结果与改进建议</text>
             </view>
-            <text class="feature-arrow">›</text>
           </view>
           <view class="feature-item accent-violet">
             <view class="feature-icon icon-data"></view>
@@ -46,45 +68,26 @@
               <text class="feature-title">学习数据</text>
               <text class="feature-desc">了解完成率、正确率和阶段表现</text>
             </view>
-            <text class="feature-arrow">›</text>
           </view>
-        </view>
-
-        <view class="cta-stack">
-          <view class="privacy-section">
-            <checkbox-group bindchange="handleLandingPrivacyChange">
-              <label class="privacy-label">
-                <checkbox value="agree" checked="{{landingAgreed}}" color="#087f77" style="transform:scale(0.82)" />
-                <text class="privacy-text">我已阅读并同意 <text class="link" catchtap="openPrivacyContract">《用户协议》</text> 和 <text class="link" catchtap="openPrivacyContract">《隐私政策》</text></text>
-              </label>
-            </checkbox-group>
-          </view>
-
-          <button class="btn-start {{!landingAgreed ? 'btn-disabled' : ''}}" bindtap="startUse">开始使用</button>
-          <button class="btn-ghost" bindtap="showPreview">先浏览功能</button>
-          <view class="preview-role-panel" wx:if="{{showPreviewRoles}}">
-            <text class="preview-title">选择浏览身份</text>
-            <text class="preview-desc">无需登录即可查看只读示例，提交与绑定功能需登录后使用。</text>
-            <view class="preview-role-grid">
-              <button class="preview-role-btn" data-role="student" bindtap="enterPreview">学生端</button>
-              <button class="preview-role-btn" data-role="parent" bindtap="enterPreview">家长端</button>
-              <button class="preview-role-btn" data-role="teacher" bindtap="enterPreview">教师端</button>
-            </view>
-          </view>
-        </view>
-
-        <view class="login-note">
-          <view class="shield-mark"></view>
-          <text>登录后将根据账号自动进入学生端、家长端或教师端</text>
         </view>
       </view>
     </view>
 
     <view class="login-section" wx:if="{{!hasToken && showLoginForm}}">
-      <text class="section-title">继续进入 StudyTracker</text>
-      <text class="section-subtitle">使用微信登录后，系统会自动识别学生、家长或教师身份。</text>
+      <view class="auth-head">
+        <button class="auth-back" bindtap="backToWelcome">返回</button>
+        <text class="auth-kicker">账号登录</text>
+      </view>
+      <text class="section-title auth-title">欢迎回来</text>
+      <text class="section-subtitle auth-subtitle">登录后自动识别学生、家长或教师身份，并同步个人学习数据。</text>
 
-      <view class="privacy-section confirm-privacy">
+      <view class="auth-benefits">
+        <text class="auth-benefit">同步任务</text>
+        <text class="auth-benefit">保存进度</text>
+        <text class="auth-benefit">接收反馈</text>
+      </view>
+
+      <view class="privacy-section auth-privacy">
         <checkbox-group bindchange="handlePrivacyChange">
           <label class="privacy-label">
             <checkbox value="agree" checked="{{privacyAgreed}}" color="#087f77" style="transform:scale(0.82)" />
@@ -93,8 +96,9 @@
         </checkbox-group>
       </view>
 
-      <button class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" bindtap="handleLogin">微信一键登录</button>
-      <button class="btn-back" bindtap="backToWelcome">返回</button>
+      <button class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" bindtap="handleLogin">微信登录</button>
+      <button class="guest-entry" data-role="student" bindtap="enterPreview">暂不登录，继续免登录体验</button>
+      <text class="auth-footnote">仅在你主动登录后绑定账号，不强制获取手机号、头像或昵称。</text>
     </view>
 
     <view class="role-section" wx:if="{{hasToken && isGuest}}">
@@ -117,7 +121,7 @@
         </view>
       </view>
       <view class="bound-preview">
-        <text>暂不绑定，也可以先查看功能示例</text>
+        <text class="bound-preview-text">暂不绑定，也可以先查看功能示例</text>
         <view class="preview-role-grid compact">
           <button class="preview-role-btn" data-role="student" bindtap="enterPreview">学生端</button>
           <button class="preview-role-btn" data-role="parent" bindtap="enterPreview">家长端</button>

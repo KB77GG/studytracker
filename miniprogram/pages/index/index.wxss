@@ -1,12 +1,8 @@
-page {
-  background: #f4f8f8;
-}
-
 .container {
   position: relative;
   min-height: 100vh;
   box-sizing: border-box;
-  padding: 86rpx 36rpx 54rpx;
+  padding: 68rpx 36rpx 54rpx;
   overflow: visible;
   color: #0b1830;
   background:
@@ -81,13 +77,13 @@ page {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 42rpx;
+  margin-bottom: 30rpx;
 }
 
 .app-name {
   color: #087f77;
   font-family: "Avenir Next", "DIN Alternate", "PingFang SC", "Microsoft YaHei", sans-serif;
-  font-size: 72rpx;
+  font-size: 64rpx;
   font-weight: 900;
   line-height: 1.08;
   letter-spacing: 0;
@@ -95,17 +91,17 @@ page {
 }
 
 .sub-name {
-  margin-top: 18rpx;
+  margin-top: 12rpx;
   color: #26384d;
-  font-size: 31rpx;
+  font-size: 28rpx;
   font-weight: 500;
   line-height: 1.4;
 }
 
 .slogan {
-  margin-top: 32rpx;
+  margin-top: 20rpx;
   color: #78aba6;
-  font-size: 30rpx;
+  font-size: 27rpx;
   font-weight: 700;
   line-height: 1.4;
 }
@@ -129,11 +125,27 @@ page {
 .main-card {
   width: 100%;
   box-sizing: border-box;
-  padding: 42rpx 36rpx 44rpx;
-  border-radius: 44rpx;
+  padding: 40rpx 34rpx 42rpx;
+  border-radius: 34rpx;
   background: rgba(255, 255, 255, 0.94);
   border: 1rpx solid rgba(226, 236, 239, 0.92);
   box-shadow: 0 28rpx 72rpx rgba(20, 44, 58, 0.10);
+}
+
+.welcome-card {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.auth-card {
+  animation: cardIn 180ms ease-out both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12rpx); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .intro-content,
@@ -167,53 +179,166 @@ page {
   line-height: 1.6;
 }
 
-.feature-list {
+.entry-card {
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
-  margin-bottom: 36rpx;
+  padding: 36rpx 30rpx 30rpx;
+  border: 1rpx solid rgba(226, 236, 239, 0.96);
+  border-radius: 34rpx;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 24rpx 60rpx rgba(20, 44, 58, 0.10);
 }
 
-.cta-stack {
+.guest-access-note {
+  align-self: flex-start;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #e7f6f3;
+  color: #087f77;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.welcome-title {
+  margin-top: 22rpx;
+  color: #0b1830;
+  font-size: 40rpx;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.welcome-desc {
+  margin: 14rpx 0 28rpx;
+  color: #64748b;
+  font-size: 25rpx;
+  line-height: 1.6;
+}
+
+.role-shortcuts {
+  margin-top: 26rpx;
+}
+
+.shortcut-label,
+.feature-heading {
+  display: block;
+  color: #7b8da3;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.shortcut-grid {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  gap: 14rpx;
+  margin-top: 12rpx;
+  overflow: hidden;
+}
+
+.role-shortcut {
+  width: 0;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 104rpx;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0;
+  padding: 18rpx 20rpx;
+  border: 1rpx solid #dce9e7;
+  border-radius: 20rpx;
+  background: #f7fbfa;
+  text-align: left;
+}
+
+.login-entry::after,
+.guest-entry::after,
+.auth-back::after {
+  border: 0;
+}
+
+.role-shortcut-active {
+  background: #edf7f5;
+  border-color: #aed8d3;
+}
+
+.shortcut-title {
+  color: #163c3a;
+  font-size: 27rpx;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.shortcut-desc {
+  margin-top: 6rpx;
+  color: #74858f;
+  font-size: 21rpx;
+  line-height: 1.35;
+}
+
+.login-entry {
+  min-height: 68rpx;
+  margin: 24rpx 0 0;
+  padding: 0;
+  color: #087f77;
+  background: transparent;
+  font-size: 25rpx;
+  font-weight: 800;
+  line-height: 68rpx;
+}
+
+.feature-heading {
+  margin: 34rpx 4rpx 16rpx;
+}
+
+.feature-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14rpx;
 }
 
 .feature-item {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   position: relative;
-  min-height: 112rpx;
+  min-height: 170rpx;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 24rpx;
-  padding: 22rpx 26rpx 22rpx 28rpx;
-  border-radius: 26rpx;
+  justify-content: flex-start;
+  gap: 14rpx;
+  padding: 24rpx 18rpx;
+  border-radius: 24rpx;
   border: 1rpx solid #e5edf0;
-  border-left: 8rpx solid #68d2c9;
+  border-top: 6rpx solid #68d2c9;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 12rpx 32rpx rgba(20, 44, 58, 0.06);
 }
 
 .feature-item.accent-blue {
-  border-left-color: #7cb8ff;
+  border-top-color: #7cb8ff;
 }
 
 .feature-item.accent-amber {
-  border-left-color: #ffc56f;
+  border-top-color: #ffc56f;
 }
 
 .feature-item.accent-violet {
-  border-left-color: #a997ff;
+  border-top-color: #a997ff;
 }
 
 .feature-icon {
-  width: 74rpx;
-  height: 74rpx;
+  width: 60rpx;
+  height: 60rpx;
   flex-shrink: 0;
-  border-radius: 22rpx;
+  border-radius: 18rpx;
   background-color: #e8f7f4;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 40rpx 40rpx;
+  background-size: 34rpx 34rpx;
 }
 
 .accent-blue .feature-icon {
@@ -247,29 +372,22 @@ page {
 .feature-texts {
   flex: 1;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
+  text-align: center;
 }
 
 .feature-title {
   color: #0b1830;
-  font-size: 31rpx;
+  font-size: 27rpx;
   font-weight: 900;
   line-height: 1.35;
 }
 
 .feature-desc {
-  margin-top: 8rpx;
+  display: block;
+  margin-top: 6rpx;
   color: #64748b;
-  font-size: 24rpx;
+  font-size: 21rpx;
   line-height: 1.42;
-}
-
-.feature-arrow {
-  color: #087f77;
-  font-size: 52rpx;
-  font-weight: 300;
-  line-height: 1;
 }
 
 .privacy-section {
@@ -285,6 +403,89 @@ page {
 
 .confirm-privacy {
   margin-top: 8rpx;
+}
+
+.auth-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 34rpx;
+}
+
+.auth-back {
+  width: auto;
+  min-height: 56rpx;
+  margin: 0;
+  padding: 0 20rpx;
+  border-radius: 999rpx;
+  color: #52637a;
+  background: #f2f6f6;
+  font-size: 23rpx;
+  line-height: 56rpx;
+}
+
+.auth-kicker {
+  color: #087f77;
+  font-size: 23rpx;
+  font-weight: 900;
+  letter-spacing: 2rpx;
+}
+
+.auth-title {
+  margin-bottom: 12rpx;
+  text-align: left;
+  font-size: 46rpx;
+}
+
+.auth-subtitle {
+  margin-bottom: 26rpx;
+  text-align: left;
+}
+
+.auth-benefits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10rpx;
+  margin-bottom: 28rpx;
+}
+
+.auth-benefit {
+  display: block;
+  padding: 13rpx 6rpx;
+  border-radius: 14rpx;
+  background: #eef8f6;
+  color: #28736e;
+  text-align: center;
+  font-size: 21rpx;
+  font-weight: 800;
+}
+
+.auth-privacy {
+  margin: 0 0 22rpx;
+  padding: 20rpx;
+  border: 1rpx solid #e5ecee;
+  border-radius: 18rpx;
+  background: #f8fafb;
+}
+
+.guest-entry {
+  min-height: 72rpx;
+  margin: 14rpx 0 0;
+  padding: 0;
+  color: #087f77;
+  background: transparent;
+  font-size: 25rpx;
+  font-weight: 800;
+  line-height: 72rpx;
+}
+
+.auth-footnote {
+  display: block;
+  margin-top: 12rpx;
+  color: #8997a6;
+  text-align: center;
+  font-size: 21rpx;
+  line-height: 1.5;
 }
 
 .privacy-label {
@@ -482,7 +683,7 @@ page {
 }
 
 .preview-desc,
-.bound-preview > text {
+.bound-preview-text {
   display: block;
   margin-top: 8rpx;
   color: #64748b;
@@ -544,6 +745,10 @@ page {
 
   .main-card {
     padding: 34rpx 26rpx 38rpx;
+  }
+
+  .welcome-card {
+    padding: 0;
   }
 
   .feature-title {

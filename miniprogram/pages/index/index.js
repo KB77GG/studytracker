@@ -7,9 +7,8 @@ Page({
         isGuest: false,
         showBindForm: false,
         showExistingBindForm: false,
-        showLoginForm: false,  // 新增：控制是否显示登录表单
+        showLoginForm: false,
         privacyNeedAuth: false,
-        landingAgreed: false,
         targetRole: '',
         bindName: '',
         bindStudentName: '',
@@ -18,38 +17,29 @@ Page({
         existingPassword: '',
         existingLoading: false,
         privacyAgreed: false,
-        showPreview: false,
-        showPreviewRoles: false,
         dotList: Array.from({ length: 20 }, (_, index) => index)
     },
 
     showLogin() {
-        // 显示登录表单
         this.setData({
             showLoginForm: true,
-            privacyAgreed: false  // 默认为false，必须用户手动勾选
-        })
+            privacyAgreed: false
+        }, () => this.scrollToTop())
     },
 
     backToWelcome() {
-        // 返回欢迎页
-        this.setData({ showLoginForm: false, showPreview: false, showPreviewRoles: false })
+        this.setData({ showLoginForm: false }, () => this.scrollToTop())
+    },
+
+    scrollToTop() {
+        if (typeof wx.pageScrollTo !== 'function') return
+        wx.pageScrollTo({ scrollTop: 0, duration: 0 })
     },
 
     handlePrivacyChange(e) {
         this.setData({
             privacyAgreed: e.detail.value.length > 0
         })
-    },
-
-    handleLandingPrivacyChange(e) {
-        this.setData({
-            landingAgreed: e.detail.value.length > 0
-        })
-    },
-
-    showPreview() {
-        this.setData({ showPreviewRoles: !this.data.showPreviewRoles })
     },
 
     enterPreview(e) {
@@ -133,19 +123,6 @@ Page({
         } else {
             wx.showToast({ title: '当前版本不支持', icon: 'none' })
         }
-    },
-
-    startUse() {
-        // 欢迎页勾选一次
-        if (!this.data.landingAgreed) {
-            wx.showToast({ title: '请先阅读并同意隐私政策', icon: 'none' })
-            return
-        }
-        // 同步勾选状态，进入登录
-        this.setData({
-            showLoginForm: true,
-            privacyAgreed: true
-        })
     },
 
     handleLogin() {
