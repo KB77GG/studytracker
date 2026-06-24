@@ -5,7 +5,10 @@ const {
     groupBounds,
     normalizeGroupSizes
 } = require('../../../../utils/dictation-groups.js')
-const { isEnglishAnswerCorrect } = require('../../../../utils/dictation-answers.js')
+const {
+    isEnglishAnswerCorrect,
+    stripPartOfSpeechPrefix
+} = require('../../../../utils/dictation-answers.js')
 
 const MODE_AUDIO_TO_EN = 'audio_to_en'
 const MODE_ZH_TO_EN = 'zh_to_en'
@@ -62,6 +65,10 @@ function notebookEntryKey(item) {
 
 function audioCacheKey(word) {
     return String(word || '').trim().toLowerCase()
+}
+
+function dictationSpeechText(word) {
+    return stripPartOfSpeechPrefix(word)
 }
 
 function directYoudaoAudioUrl(word) {
@@ -188,10 +195,10 @@ Page({
                 return;
             }
             console.error('Audio Error:', errMsg);
-            if (!this.fallbackTried && this.data.currentWord.word) {
+            const fallbackWord = dictationSpeechText(this.data.currentWord.word);
+            if (!this.fallbackTried && fallbackWord) {
                 this.fallbackTried = true;
-                const trimmed = this.data.currentWord.word.trim();
-                this.downloadAndPlay(directYoudaoAudioUrl(trimmed), trimmed, this.playTokenCounter, true, {
+                this.downloadAndPlay(directYoudaoAudioUrl(fallbackWord), fallbackWord, this.playTokenCounter, true, {
                     cacheKey: this.currentAudioCacheKey
                 });
                 return;
@@ -422,7 +429,8 @@ Page({
         const word = this.data.currentWord.word;
         if (!word) return;
 
-        const trimmed = word.trim();
+        const trimmed = dictationSpeechText(word);
+        if (!trimmed) return;
         this.fallbackTried = false;
         this.playTokenCounter = (this.playTokenCounter || 0) + 1;
         const token = this.playTokenCounter;
@@ -598,7 +606,7 @@ Page({
     },
 
     prefetchAudioForWord(word) {
-        const trimmed = String(word || '').trim();
+        const trimmed = dictationSpeechText(word);
         if (!trimmed) return;
         const cacheKey = audioCacheKey(trimmed);
         const existing = this.audioFileCache && this.audioFileCache[cacheKey];
@@ -645,7 +653,7 @@ Page({
         const seen = {};
         (words || []).forEach(item => {
             const mode = resolveDictationMode(item && item.dictationMode, this.data.dictationMode);
-            const word = String(item && item.word || '').trim();
+            const word = dictationSpeechText(item && item.word);
             const key = audioCacheKey(word);
             if (!word || (mode !== MODE_AUDIO_TO_EN && mode !== MODE_ZH_TO_EN) || seen[key]) return;
             seen[key] = true;

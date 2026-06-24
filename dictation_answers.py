@@ -7,7 +7,19 @@ import re
 _PART_OF_SPEECH_RE = re.compile(
     r"^(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*", re.IGNORECASE
 )
+_PART_OF_SPEECH_PREFIX_RE = re.compile(
+    r"^(?:(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*"
+    r"(?:(?:[/／,，;；、&])|\bor\b)?\s*)+",
+    re.IGNORECASE,
+)
 _VARIANT_SPLIT_RE = re.compile(r"\s*(?:[/≈；;]|,(?=\s*[a-zA-Z]))\s*")
+
+
+def strip_part_of_speech_prefix(value):
+    text = str(value or "").strip()
+    cleaned = _PART_OF_SPEECH_PREFIX_RE.sub("", text).strip()
+    cleaned = re.sub(r"^(?:[/／,，;；、-]\s*)+", "", cleaned).strip()
+    return cleaned
 
 
 def normalize_english_answer(value):
@@ -41,7 +53,7 @@ def parse_answer_variants(value):
     variants = []
     seen = set()
     for raw in raw_items:
-        without_part_of_speech = _PART_OF_SPEECH_RE.sub("", str(raw or "").strip())
+        without_part_of_speech = strip_part_of_speech_prefix(raw)
         normalized = normalize_english_answer(without_part_of_speech)
         if normalized and normalized not in seen:
             variants.append(normalized)

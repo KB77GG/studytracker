@@ -11,6 +11,7 @@ from dictation_answers import (
     is_english_answer_correct,
     parse_answer_variants,
     serialize_answer_variants,
+    strip_part_of_speech_prefix,
 )
 from models import DictationAnswerAppeal, DictationBook, DictationWord, User, db
 
@@ -34,6 +35,8 @@ class DictationAnswerTest(unittest.TestCase):
         )
         self.assertFalse(is_english_answer_correct("effect", "affect"))
         self.assertEqual(parse_answer_variants("n. bike / bicycle"), ["bike", "bicycle"])
+        self.assertEqual(parse_answer_variants("v. / n. account"), ["account"])
+        self.assertEqual(strip_part_of_speech_prefix("v. / n. account"), "account")
 
     def test_chinese_review_answers_remain_supported(self):
         self.assertTrue(is_chinese_answer_correct("自行车", "自行车；脚踏车"))

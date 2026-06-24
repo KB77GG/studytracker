@@ -1,3 +1,12 @@
+function stripPartOfSpeechPrefix(value) {
+    const text = String(value || '').trim()
+    const cleaned = text
+        .replace(/^(?:(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*(?:[\/／,，;；、&]|\bor\b)?\s*)+/i, '')
+        .replace(/^(?:[\/／,，;；、-]\s*)+/, '')
+        .trim()
+    return cleaned
+}
+
 function normalizeEnglishAnswer(value) {
     return String(value || '')
         .trim()
@@ -29,9 +38,7 @@ function parseAnswerVariants(value) {
 
     const seen = new Set()
     rawItems.forEach(raw => {
-        const withoutPartOfSpeech = String(raw || '')
-            .trim()
-            .replace(/^(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*/i, '')
+        const withoutPartOfSpeech = stripPartOfSpeechPrefix(raw)
         const normalized = normalizeEnglishAnswer(withoutPartOfSpeech)
         if (normalized) seen.add(normalized)
     })
@@ -55,5 +62,6 @@ module.exports = {
     englishAnswerVariants,
     isEnglishAnswerCorrect,
     normalizeEnglishAnswer,
-    parseAnswerVariants
+    parseAnswerVariants,
+    stripPartOfSpeechPrefix
 }

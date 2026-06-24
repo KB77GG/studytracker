@@ -39,6 +39,7 @@ from dictation_answers import (
     is_english_answer_correct,
     parse_answer_variants,
     serialize_answer_variants,
+    strip_part_of_speech_prefix,
 )
 
 
@@ -624,7 +625,7 @@ def _kokoro_tts(text: str) -> bytes | None:
 
 def _dictation_tts_text(text: str) -> str:
     """Repeat dictation prompts so plural and tense suffixes are easier to hear."""
-    cleaned = re.sub(r"\s+", " ", (text or "").strip())
+    cleaned = re.sub(r"\s+", " ", strip_part_of_speech_prefix(text))
     if not cleaned:
         return ""
     try:
@@ -752,12 +753,13 @@ def _is_high_quality_mp3(data: bytes) -> bool:
 
 
 def _dictation_tts_cache_paths(word: str, tts_text: str | None = None) -> tuple[Path, Path]:
-    tts_text = tts_text if tts_text is not None else _dictation_tts_text(word)
+    speech_word = strip_part_of_speech_prefix(word)
+    tts_text = tts_text if tts_text is not None else _dictation_tts_text(speech_word)
     voice = (current_app.config.get("KOKORO_TTS_VOICE") or "af_heart").strip()
     lang = (current_app.config.get("KOKORO_TTS_LANG") or "en-us").strip()
     speed = str(current_app.config.get("KOKORO_TTS_SPEED") or "0.88").strip()
 
-    raw_safe = re.sub(r"[^a-zA-Z0-9_-]+", "_", word.lower()) or "tts"
+    raw_safe = re.sub(r"[^a-zA-Z0-9_-]+", "_", speech_word.lower()) or "tts"
     text_hash = hashlib.md5(tts_text.lower().encode()).hexdigest()
     safe_name = raw_safe if len(raw_safe) <= 64 else text_hash
     tts_dir = Path(current_app.config.get("UPLOAD_FOLDER", Path(current_app.root_path) / "uploads")) / "tts_cache"
@@ -794,7 +796,7 @@ def _generate_tts_to_cache(tts_text: str, kokoro_cache: Path, fallback_cache: Pa
 
 def _prewarm_tts_cache(words: list[str]) -> None:
     for word in words:
-        word = (word or "").strip()
+        word = strip_part_of_speech_prefix(word)
         if not word:
             continue
         tts_text = _dictation_tts_text(word)
@@ -860,7 +862,7 @@ def proxy_tts():
     2. DashScope fallback if Kokoro is unavailable.
     3. Youdao only as a last-resort fallback.
     """
-    word = (request.args.get("word") or "").strip()
+    word = strip_part_of_speech_prefix(request.args.get("word"))
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
     tts_text = _dictation_tts_text(word)

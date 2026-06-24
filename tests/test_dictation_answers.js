@@ -1,7 +1,8 @@
 const assert = require('assert')
 const {
     isEnglishAnswerCorrect,
-    parseAnswerVariants
+    parseAnswerVariants,
+    stripPartOfSpeechPrefix
 } = require('../miniprogram/utils/dictation-answers.js')
 
 assert.strictEqual(isEnglishAnswerCorrect('behavior', { word: 'behaviour' }), false)
@@ -17,3 +18,5 @@ assert.strictEqual(
 )
 assert.deepStrictEqual(parseAnswerVariants('["bike", "bicycle"]'), ['bike', 'bicycle'])
 assert.deepStrictEqual(parseAnswerVariants('n. bike / bicycle'), ['bike', 'bicycle'])
+assert.deepStrictEqual(parseAnswerVariants('v. / n. account'), ['account'])
+assert.strictEqual(stripPartOfSpeechPrefix('v. / n. account'), 'account')
