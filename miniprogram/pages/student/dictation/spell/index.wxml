@@ -30,7 +30,7 @@
     </view>
 
     <view class="drill-center" bindtap="focusInput"
-          style="padding-bottom: {{keyboardHeight > 0 ? (keyboardHeight + 96) + 'px' : '180rpx'}};">
+          style="padding-bottom: {{keyboardHeight > 0 ? (keyboardHeight + 56) + 'px' : '156rpx'}};">
       <input class="hidden-input"
              value="{{inputValue}}"
              focus="{{inputFocus}}"
@@ -53,7 +53,15 @@
           <view class="answer-word answer-small">{{displayWord}}</view>
         </block>
         <block wx:else>
-          <text class="typed-word">{{inputValue}}</text><text class="fake-cursor"></text>
+          <view class="slot-row">
+            <block wx:for="{{spellSlots}}" wx:key="index">
+              <view wx:if="{{item.type === 'space'}}" class="slot-space"></view>
+              <text wx:elif="{{item.type === 'fixed'}}" class="slot-fixed">{{item.char}}</text>
+              <view wx:else class="slot {{item.filled ? 'filled' : ''}} {{item.active ? 'active' : ''}} {{item.overflow ? 'overflow' : ''}}">
+                <text class="slot-char">{{item.char}}</text>
+              </view>
+            </block>
+          </view>
         </block>
       </view>
 

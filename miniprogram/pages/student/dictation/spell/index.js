@@ -6,6 +6,7 @@ const {
 } = require('../../../../utils/dictation-answers.js')
 
 const REINSERT_GAP = 3
+const FIXED_SPELL_CHARS = "-‐‑‒–—'’‘`´.,，。.!！？?；;：:()（）[]{}<>/\\|_+*=~@#$%^&\""
 
 function buildDiff(inputValue, answerValue) {
     const input = normalizeEnglishAnswer(inputValue).replace(/\s+/g, '')
@@ -38,6 +39,55 @@ function buildDiff(inputValue, answerValue) {
         }
     }
     return tokens.length ? tokens : [{ char: '', status: 'miss' }]
+}
+
+function isSpellSlotChar(char) {
+    return !(/\s/.test(char) || FIXED_SPELL_CHARS.indexOf(char) >= 0)
+}
+
+function buildSpellSlots(inputValue, answerWord) {
+    const inputChars = Array.from(String(inputValue || '').replace(/\s+/g, ''))
+    const answerChars = Array.from(String(answerWord || ''))
+    const slots = []
+    let inputIndex = 0
+    let activeAssigned = false
+
+    answerChars.forEach((char) => {
+        if (/\s/.test(char)) {
+            slots.push({ type: 'space' })
+            return
+        }
+
+        if (!isSpellSlotChar(char)) {
+            slots.push({ type: 'fixed', char })
+            return
+        }
+
+        const inputChar = inputChars[inputIndex] || ''
+        inputIndex += inputChar ? 1 : 0
+        const slot = {
+            type: 'slot',
+            char: inputChar,
+            filled: !!inputChar
+        }
+        if (!slot.filled && !activeAssigned) {
+            slot.active = true
+            activeAssigned = true
+        }
+        slots.push(slot)
+    })
+
+    while (inputIndex < inputChars.length) {
+        slots.push({
+            type: 'slot',
+            char: inputChars[inputIndex],
+            filled: true,
+            overflow: true
+        })
+        inputIndex += 1
+    }
+
+    return slots
 }
 
 function cleanPhonetic(value) {
@@ -82,6 +132,7 @@ Page({
         completedCount: 0,
         progressDots: [],
         inputValue: '',
+        spellSlots: [],
         inputFocus: true,
         showResult: false,
         resultCorrect: false,
@@ -273,6 +324,7 @@ Page({
             queue: nextQueue,
             currentWord: word,
             inputValue: '',
+            spellSlots: buildSpellSlots('', word.word),
             showResult: false,
             resultCorrect: false,
             displayWord: word.syllables || word.word,
@@ -284,7 +336,11 @@ Page({
     },
 
     onInput(e) {
-        this.setData({ inputValue: e.detail.value })
+        const value = (e && e.detail && e.detail.value) || ''
+        this.setData({
+            inputValue: value,
+            spellSlots: buildSpellSlots(value, this.data.currentWord.word)
+        })
     },
 
     focusInput() {
