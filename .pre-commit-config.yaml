@@ -1,0 +1,26 @@
+# 提交前自动检查。启用一次即可：
+#   pip install pre-commit && pre-commit install
+# 之后每次 git commit 会自动跑下面的钩子；想跳过单次：git commit --no-verify
+#
+# 现阶段以“轻量、不打断既有流程”为主：基础卫生 + ruff/black 只作用于本次改动的文件。
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.md$'
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=2048"]   # 防止误提交大文件/数据产物
+      - id: check-yaml
+      - id: check-json
+        exclude: 'miniprogram/.*'  # 小程序部分 json 带注释，跳过
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff           # 只检查本次改动的 .py（pre-commit 默认只传改动文件）
+        args: ["--fix"]
+      - id: ruff-format    # 等价 black 的格式化

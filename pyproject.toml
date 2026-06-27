@@ -1,0 +1,44 @@
+# 工具配置集中地（lint / 格式化）。
+# 说明：本文件只声明“怎么检查/格式化”，不会自动改你的代码。
+# 现阶段 CI 里 lint 是“只报告、不阻断”，等存量逐步清干净后可改成强制。
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+# 不检查的目录：迁移/一次性脚本、第三方、生成产物、虚拟环境
+extend-exclude = [
+    "scripts",
+    "miniprogram/miniprogram_npm",
+    "outputs",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint]
+# 起步用高信号、低噪音的规则集；存量清理后可逐步加严。
+#   E/W = pycodestyle 风格    F = pyflakes（未定义名、未用导入等真 bug）
+#   I = import 排序           B = bugbear（易错写法）  UP = 语法现代化
+select = ["E", "F", "I", "B", "UP"]
+ignore = [
+    "E501",  # 行过长：存量太多，先不卡（格式化交给 black）
+    "E402",  # 模块级 import 不在顶部：app.py 有运行时导入，先豁免
+    "B008",  # 函数默认值里调用：Flask/SQLAlchemy 常见写法
+]
+
+[tool.ruff.lint.per-file-ignores]
+# 测试文件放宽
+"tests/*" = ["F401", "F811"]
+
+[tool.black]
+line-length = 100
+target-version = ["py313"]
+extend-exclude = '''
+/(
+    scripts
+  | outputs
+  | \.venv
+  | miniprogram/miniprogram_npm
+)/
+'''

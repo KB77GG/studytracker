@@ -1,0 +1,7 @@
+# 开发/工具依赖（生产不需要）。安装：pip install -r requirements-dev.txt
+# 运行依赖见 requirements.txt。
+
+ruff>=0.6          # lint + import 排序 + 部分自动修复
+black>=24.0        # 代码格式化
+pre-commit>=3.7    # git 提交前自动跑检查（需 pre-commit install 启用一次）
+pytest>=8.0        # 跑测试更友好（现有用例 unittest 写法，pytest 也能跑）

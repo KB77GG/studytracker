@@ -1,0 +1,49 @@
+name: CI
+
+# 质量关卡，独立于 deploy.yml（部署流程完全不受影响）。
+# 设计原则：先“观察、不阻断”。lint 只报告问题，不会让构建失败、不会卡住你 push 即部署的流程。
+# 等存量 lint 问题清理干净后，把 lint job 的 continue-on-error 去掉即可改成强制门禁。
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  # 轻量单元测试：纯标准库、零第三方依赖，跑得快、稳定。作为真正的门禁（失败即红）。
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Run dependency-light unit tests
+        run: |
+          python -m unittest \
+            tests.test_miniprogram_guest_access \
+            tests.test_inventory_toefl_materials \
+            tests.test_organize_toefl_materials \
+            tests.test_extract_toefl_answer_keys \
+            tests.test_map_toefl_answers_to_practice_docs \
+            tests.test_import_toefl_official_reading \
+            -v
+
+  # 代码风格/静态检查：现阶段只报告，不阻断（continue-on-error）。
+  lint:
+    runs-on: ubuntu-latest
+    continue-on-error: true   # ← 存量清干净后删掉这一行即变强制门禁
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install ruff
+        run: pip install ruff
+      - name: Ruff check (advisory)
+        run: ruff check --output-format=github .
+      - name: Ruff format check (advisory)
+        run: ruff format --check .
