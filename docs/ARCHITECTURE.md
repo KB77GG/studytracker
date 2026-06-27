@@ -82,8 +82,9 @@ studytracker/
   附带挖出并立项一个既有 bug：is_studying 查询用错列名（start_time→started_at），生产中指示灯从不亮。
 - [ ] **拆超长函数（下一个）**：`get_student_today_tasks()`（148 行）、`get_student_stats()`（line 2537）等——
   `stats_utils.py` 已就绪可复用（student 端同样有 today/完成率聚合）。
-- [ ] **修 is_studying 列名 bug**（已 spawn 独立任务）：`api/miniprogram.py` is_studying 段
-  `PlanItemSession.start_time/end_time` → `started_at/ended_at`。
+- [x] **is_studying bug 已修**（2026-06-27）：除列名（start_time→started_at）外，还发现并修了
+  **时区基准 bug**（检测用 datetime.now() 但 started_at 存的是 utcnow()，差 8 小时仍永远 False）；
+  +4 回归用例。家长端"正在学习"指示灯现可正常点亮。
 - [ ] **拆 `pages/student/hammer/index.js`（2,187 行 / 97 state 字段）**：把录音、TTS、评测、计时拆成独立模块/behavior。**改前务必先手动回归口语全流程**（这页最容易出锅）。
 
 ### P2 — 结构性，时间充裕再做
