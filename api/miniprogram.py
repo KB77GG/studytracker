@@ -22,6 +22,7 @@ from models import (
     ListeningTestSubmission, ReadingTestSubmission
 )
 from .auth_utils import can_view_all_schedules, require_api_user
+from .reading_vocab_grading import grade_reading_vocab_submission
 from .wechat import send_subscribe_message, send_subscribe_message_result
 from .ielts_eval import run_ielts_eval, run_quick_reply
 from .aliyun_asr import transcribe_audio_url
@@ -768,23 +769,6 @@ def _material_question_input_mode(q, material_type: str, options: list[dict]) ->
         return "auto_text"
 
     return "writing"
-
-
-def _normalize_objective_answer(value: str) -> str:
-    text = str(value or "").strip().lower()
-    text = re.sub(r"[‘’`]", "'", text)
-    text = re.sub(r"[“”]", '"', text)
-    text = re.sub(r"\s+", " ", text)
-    text = re.sub(r"^[\W_]+|[\W_]+$", "", text)
-    return text
-
-
-def _objective_answer_alternatives(answer: str) -> set[str]:
-    raw = str(answer or "").strip()
-    if not raw:
-        return set()
-    parts = re.split(r"\s*(?:/|\||\bor\b)\s*", raw, flags=re.IGNORECASE)
-    return {_normalize_objective_answer(part) for part in parts if _normalize_objective_answer(part)}
 
 
 def _task_display_title(task):
@@ -2194,10 +2178,29 @@ def get_reading_vocab_practice(task_id):
     })
 
 
+def _build_reading_vocab_question_view(task, q):
+    """把一道 ORM Question 解析成判分纯函数所需的原始 dict（ORM→值的边界）。"""
+    opts = _question_options(q)
+    return {
+        "question_id": q.id,
+        "input_mode": _material_question_input_mode(q, task.material.type, opts),
+        "options": opts,
+        "reference_answer": q.reference_answer or "",
+        "hint": q.hint or "",
+        "word": _question_display_content(q, opts),
+        "task_id": task.id,
+        "task_title": _task_display_title(task),
+    }
+
+
 @mp_bp.route("/student/tasks/<int:task_id>/reading-vocab-practice/submit", methods=["POST"])
 @require_api_user(User.ROLE_STUDENT)
 def submit_reading_vocab_practice(task_id):
-    """Grade and submit a reading vocab choice practice task."""
+    """Grade and submit a reading vocab choice practice task.
+
+    判分逻辑在纯函数 grade_reading_vocab_submission()（api/reading_vocab_grading.py），
+    本 handler 只负责 I/O：鉴权、解析、删旧记录、把 ORM 解析成 view、入库、改任务状态、拼响应。
+    """
     user = request.current_api_user
     task = Task.query.get(task_id)
     if not task:
@@ -2259,171 +2262,37 @@ def submit_reading_vocab_practice(task_id):
         StudentAnswer.query.filter_by(task_id=task.id, student_id=user.id).delete()
         existing = {}
 
-    # Accuracy is computed over objective questions: radio choices and
-    # IELTS reading text blanks. Writing questions remain teacher-reviewed.
-    objective_total = 0
-    correct_count = 0
-    answered_count = 0  # all questions: choice answered + writing answered
-    writing_total = 0
-    writing_answered = 0
-    wrong_items = []
-    for q in questions:
-        opts = _question_options(q)
-        input_mode = _material_question_input_mode(q, task.material.type, opts)
-        is_auto_text = input_mode == "auto_text"
-        is_writing = input_mode == "writing"
-        if is_writing:
-            writing_total += 1
-        else:
-            objective_total += 1
+    # ORM → 原始值，交给纯判分核心
+    question_views = [_build_reading_vocab_question_view(task, q) for q in questions]
+    prior_by_qid = {
+        qid: {
+            "text_answer": a.text_answer,
+            "is_correct": a.is_correct,
+            "is_uncertain": a.is_uncertain,
+        }
+        for qid, a in existing.items()
+    }
+    result = grade_reading_vocab_submission(
+        question_views,
+        answer_map=answer_map,
+        text_answer_map=text_answer_map,
+        uncertain_ids=uncertain_question_ids,
+        prior_by_qid=prior_by_qid,
+        resubmit_qids=resubmit_qids,
+    )
 
-        # If question is not in this submission and we have an existing answer (redo_wrong path), reuse it
-        if q.id not in resubmit_qids and q.id in existing:
-            prior = existing[q.id]
-            if prior.text_answer:
-                answered_count += 1
-                if is_writing:
-                    writing_answered += 1
-            if not is_writing:
-                if prior.is_correct:
-                    correct_count += 1
-                if (not prior.is_correct) or bool(prior.is_uncertain):
-                    options = {opt["key"]: opt["text"] for opt in opts}
-                    correct_key = str(q.reference_answer or "").strip().upper() if input_mode == "choice" else (q.reference_answer or "")
-                    correct_text = options.get(correct_key, q.reference_answer or q.hint or "")
-                    selected_text = (
-                        (prior.text_answer or "未作答")
-                        if input_mode == "auto_text"
-                        else options.get(prior.text_answer or "", "未作答")
-                    )
-                    wrong_items.append({
-                        "task_id": task.id,
-                        "task_title": _task_display_title(task),
-                        "question_id": q.id,
-                        "word": _question_display_content(q, opts),
-                        "selected_key": prior.text_answer or "未作答",
-                        "selected_text": selected_text,
-                        "correct_key": correct_key,
-                        "correct_text": correct_text,
-                        "hint": q.hint or "",
-                        "is_uncertain": bool(prior.is_uncertain),
-                    })
-            continue
-
-        if is_writing:
-            # Writing question: save text verbatim, no grading.
-            text_val = text_answer_map.get(q.id, "")
-            if text_val:
-                answered_count += 1
-                writing_answered += 1
-            db.session.add(StudentAnswer(
-                task_id=task.id,
-                question_id=q.id,
-                student_id=user.id,
-                answer_type="text",
-                text_answer=text_val,
-                submitted_at=datetime.now(),
-                reviewed=False,  # awaiting teacher review
-                is_correct=None,
-                is_uncertain=False,
-            ))
-            continue
-
-        if is_auto_text:
-            text_val = text_answer_map.get(q.id, "")
-            expected = _objective_answer_alternatives(q.reference_answer or "")
-            normalized = _normalize_objective_answer(text_val)
-            is_correct = bool(normalized) and normalized in expected
-            is_uncertain = q.id in uncertain_question_ids
-            if text_val:
-                answered_count += 1
-            if is_correct:
-                correct_count += 1
-            if (not is_correct) or is_uncertain:
-                wrong_items.append({
-                    "task_id": task.id,
-                    "task_title": _task_display_title(task),
-                    "question_id": q.id,
-                    "word": _question_display_content(q, opts),
-                    "selected_key": text_val or "未作答",
-                    "selected_text": text_val or "未作答",
-                    "correct_key": q.reference_answer or "",
-                    "correct_text": q.reference_answer or "",
-                    "hint": q.hint or "",
-                    "is_uncertain": is_uncertain,
-                })
-            db.session.add(StudentAnswer(
-                task_id=task.id,
-                question_id=q.id,
-                student_id=user.id,
-                answer_type="text",
-                text_answer=text_val,
-                submitted_at=datetime.now(),
-                reviewed=True,
-                is_correct=is_correct,
-                is_uncertain=is_uncertain,
-            ))
-            continue
-
-        selected_key = answer_map.get(q.id, "")
-        options = {opt["key"]: opt["text"] for opt in opts}
-        if selected_key and selected_key not in options:
-            selected_key = ""
-        correct_key = str(q.reference_answer or "").strip().upper()
-        is_correct = bool(selected_key) and selected_key == correct_key
-        is_uncertain = q.id in uncertain_question_ids
-        if selected_key:
-            answered_count += 1
-        if is_correct:
-            correct_count += 1
-        if (not is_correct) or is_uncertain:
-            wrong_items.append({
-                "task_id": task.id,
-                "task_title": _task_display_title(task),
-                "question_id": q.id,
-                "word": _question_display_content(q, opts),
-                "selected_key": selected_key or "未作答",
-                "selected_text": options.get(selected_key, "未作答"),
-                "correct_key": correct_key,
-                "correct_text": options.get(correct_key, q.hint or ""),
-                "hint": q.hint or "",
-                "is_uncertain": is_uncertain,
-            })
-
+    now = datetime.now()
+    for rec in result.records:
         db.session.add(StudentAnswer(
             task_id=task.id,
-            question_id=q.id,
             student_id=user.id,
-            answer_type="choice",
-            text_answer=selected_key,
-            submitted_at=datetime.now(),
-            reviewed=True,
-            is_correct=is_correct,
-            is_uncertain=is_uncertain,
+            submitted_at=now,
+            **rec,
         ))
 
-    total = len(questions)
-    # Accuracy reflects only auto-graded questions; writing questions are
-    # reviewed manually by the teacher and don't influence this metric.
-    accuracy = round((correct_count / objective_total) * 100, 1) if objective_total else 0.0
-    completion_rate = round((answered_count / total) * 100, 1) if total else 0.0
-
-    wrong_summary = ""
-    if wrong_items:
-        wrong_summary = "；".join(
-            (
-                f"{item['word']}（已标记不清楚，你选{item['selected_key']}:{item['selected_text']}，"
-                f"正确{item['correct_key']}:{item['correct_text']}）"
-                if item.get("is_uncertain")
-                else f"{item['word']}（你选{item['selected_key']}:{item['selected_text']}，正确{item['correct_key']}:{item['correct_text']}）"
-            )
-            for item in wrong_items
-        )
-
     final_note = note
-    if wrong_summary:
-        suffix = f"[阅读词汇待复习] {wrong_summary}"
-        final_note = f"{note}\n{suffix}" if note else suffix
+    if result.note_suffix:
+        final_note = f"{note}\n{result.note_suffix}" if note else result.note_suffix
 
     task.student_submitted = True
     task.submitted_at = datetime.now()
@@ -2434,22 +2303,22 @@ def submit_reading_vocab_practice(task_id):
             task.actual_seconds = int(task.actual_seconds or 0) + duration
         else:
             task.actual_seconds = duration
-    task.accuracy = accuracy
-    task.completion_rate = completion_rate
+    task.accuracy = result.accuracy
+    task.completion_rate = result.completion_rate
     task.status = "done"
     db.session.commit()
 
     return jsonify({
         "ok": True,
-        "correct_count": correct_count,
-        "total_count": total,
-        "choice_total": objective_total,
-        "objective_total": objective_total,
-        "writing_total": writing_total,
-        "writing_answered": writing_answered,
-        "accuracy": accuracy,
-        "completion_rate": completion_rate,
-        "wrong_items": wrong_items,
+        "correct_count": result.correct_count,
+        "total_count": result.total,
+        "choice_total": result.objective_total,
+        "objective_total": result.objective_total,
+        "writing_total": result.writing_total,
+        "writing_answered": result.writing_answered,
+        "accuracy": result.accuracy,
+        "completion_rate": result.completion_rate,
+        "wrong_items": result.wrong_items,
     })
 
 @mp_bp.route("/student/tasks/<int:task_id>/submit", methods=["POST"])

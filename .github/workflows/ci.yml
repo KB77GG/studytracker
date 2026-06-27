@@ -21,6 +21,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+      - name: Install minimal deps
+        # 多数轻量测试纯标准库；test_reading_vocab_grading 会 import api.* ，
+        # 触发 api/__init__.py 的 `from flask import Blueprint`，故需 Flask（轻量、秒级）。
+        run: pip install Flask
       - name: Run dependency-light unit tests
         run: |
           python -m unittest \
@@ -30,6 +34,7 @@ jobs:
             tests.test_extract_toefl_answer_keys \
             tests.test_map_toefl_answers_to_practice_docs \
             tests.test_import_toefl_official_reading \
+            tests.test_reading_vocab_grading \
             -v
 
   # 代码风格/静态检查：现阶段只报告，不阻断（continue-on-error）。
