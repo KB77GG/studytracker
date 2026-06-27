@@ -80,8 +80,11 @@ studytracker/
 - [x] **`get_parent_stats()` 聚合已抽离**（2026-06-27）：percent/今日状态/周趋势/学科分布下沉到
   `api/stats_utils.py`（单源化 round(x/y*100)），+10 例纯单测 + 首个 `/parent/stats` 路由测试。
   附带挖出并立项一个既有 bug：is_studying 查询用错列名（start_time→started_at），生产中指示灯从不亮。
-- [ ] **拆超长函数（下一个）**：`get_student_today_tasks()`（148 行）、`get_student_stats()`（line 2537）等——
-  `stats_utils.py` 已就绪可复用（student 端同样有 today/完成率聚合）。
+- [x] **`get_student_stats()` 纯逻辑已抽离**（2026-06-27）：streak/勋章/均率/等级下沉到 `stats_utils.py`
+  （含替换裸 `except: pass` 的 streak 算法），109→76 行，+12 纯单测 + `/student/stats` 路由测试。
+- [~] **`get_student_today_tasks()` 评估后跳过**：~130 行是 ORM→dict 序列化（含 token 生成副作用），
+  无可抽的纯计算，硬抽零可测性收益却有风险。如要瘦身需先补路由测试再拆 I/O，性价比低，暂缓。
+- [ ] **其它超长函数**：`get_task_detail()`（122 行）、`get_student_today_tasks`（如上，需谨慎）等，按需评估。
 - [x] **is_studying bug 已修**（2026-06-27）：除列名（start_time→started_at）外，还发现并修了
   **时区基准 bug**（检测用 datetime.now() 但 started_at 存的是 utcnow()，差 8 小时仍永远 False）；
   +4 回归用例。家长端"正在学习"指示灯现可正常点亮。
