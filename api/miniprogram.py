@@ -3201,11 +3201,13 @@ def get_parent_stats():
         
         if student_profile:
             # 查找活跃的计时会话（最近10分钟内启动且未结束）
-            ten_min_ago = datetime.now() - timedelta(minutes=10)
+            # 注意：started_at 由 start_timer 用 datetime.utcnow() 写入，
+            # 故阈值也必须用 utcnow()，否则本地时区(UTC+8)会差 8 小时导致永远查不到。
+            ten_min_ago = datetime.utcnow() - timedelta(minutes=10)
             active_session = PlanItemSession.query.join(PlanItem).join(StudyPlan).filter(
                 StudyPlan.student_id == student_profile.id,
-                PlanItemSession.start_time >= ten_min_ago,
-                PlanItemSession.end_time.is_(None)
+                PlanItemSession.started_at >= ten_min_ago,
+                PlanItemSession.ended_at.is_(None)
             ).first()
             
             is_studying = active_session is not None

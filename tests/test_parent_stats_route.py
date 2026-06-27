@@ -6,13 +6,21 @@
 
 import time
 import unittest
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import jwt
 from flask import Flask
 
 from api.miniprogram import mp_bp
-from models import ParentStudentLink, StudentProfile, Task, User
+from models import (
+    ParentStudentLink,
+    PlanItem,
+    PlanItemSession,
+    StudentProfile,
+    StudyPlan,
+    Task,
+    User,
+)
 
 
 class ParentStatsRouteTest(unittest.TestCase):
@@ -118,6 +126,95 @@ class ParentStatsRouteTest(unittest.TestCase):
             headers=self._headers(self.parent_id),
         )
         self.assertEqual(resp.status_code, 403)
+
+
+class IsStudyingRouteTest(unittest.TestCase):
+    """回归 is_studying 列名 + UTC 基准 bug：起一个10分钟内、未结束的计时会话应判为正在学习。"""
+
+    def setUp(self):
+        self.app = Flask(__name__)
+        self.app.config.update(
+            SECRET_KEY="test-secret",
+            SQLALCHEMY_DATABASE_URI="sqlite:///:memory:",
+            SQLALCHEMY_TRACK_MODIFICATIONS=False,
+            TESTING=True,
+        )
+        from models import db
+        db.init_app(self.app)
+        self.app.register_blueprint(mp_bp)
+
+        with self.app.app_context():
+            db.create_all()
+            parent = User(username="st_parent", password_hash="x", role=User.ROLE_PARENT, is_active=True)
+            student = User(username="st_student", password_hash="x", role=User.ROLE_STUDENT, is_active=True)
+            teacher = User(username="st_teacher", password_hash="x", role=User.ROLE_TEACHER, is_active=True)
+            db.session.add_all([parent, student, teacher])
+            db.session.flush()
+            profile = StudentProfile(user_id=student.id, full_name="计时甲")
+            db.session.add_all([
+                profile,
+                ParentStudentLink(parent_id=parent.id, student_name="计时甲", is_active=True),
+            ])
+            db.session.flush()
+            plan = StudyPlan(student_id=profile.id, plan_date=date.today(), created_by=teacher.id)
+            db.session.add(plan)
+            db.session.flush()
+            item = PlanItem(plan_id=plan.id, exam_system="toefl", module="reading", task_name="阅读")
+            db.session.add(item)
+            db.session.flush()
+            self.item_id = item.id
+            self.student_uid = student.id
+            self.parent_id = parent.id
+            db.session.commit()
+
+        self.client = self.app.test_client()
+
+    def tearDown(self):
+        with self.app.app_context():
+            from models import db
+            db.session.remove()
+            db.drop_all()
+
+    def _seed_session(self, *, started_minutes_ago, ended):
+        from models import db
+        with self.app.app_context():
+            now = datetime.utcnow()
+            db.session.add(PlanItemSession(
+                plan_item_id=self.item_id,
+                started_at=now - timedelta(minutes=started_minutes_ago),
+                ended_at=now if ended else None,
+                created_by=self.student_uid,
+                source="timer",
+            ))
+            db.session.commit()
+
+    def _headers(self):
+        now = int(time.time())
+        payload = {"sub": str(self.parent_id), "role": User.ROLE_PARENT,
+                   "iat": now, "exp": now + 3600}
+        token = jwt.encode(payload, "test-secret", algorithm="HS256")
+        return {"Authorization": f"Bearer {token}"}
+
+    def _is_studying(self):
+        resp = self.client.get(
+            "/api/miniprogram/parent/stats?student_name=计时甲", headers=self._headers())
+        self.assertEqual(resp.status_code, 200, resp.get_data(as_text=True))
+        return resp.get_json()["isStudying"]
+
+    def test_recent_active_session_is_studying(self):
+        self._seed_session(started_minutes_ago=2, ended=False)
+        self.assertTrue(self._is_studying())
+
+    def test_no_session_not_studying(self):
+        self.assertFalse(self._is_studying())
+
+    def test_ended_session_not_studying(self):
+        self._seed_session(started_minutes_ago=2, ended=True)
+        self.assertFalse(self._is_studying())
+
+    def test_old_session_not_studying(self):
+        self._seed_session(started_minutes_ago=30, ended=False)
+        self.assertFalse(self._is_studying())
 
 
 if __name__ == "__main__":
