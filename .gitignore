@@ -74,3 +74,13 @@ scripts/usage_pattern_batch*.json
 *.swp
 *.swo
 *~
+
+# Generated data artifacts / reports (produced by scripts, not source)
+outputs/
+data/toefl_official_audit/
+data/toefl_real_inventory/
+data/ielts_grammar_60/
+
+# Stray local copies, not part of this repo
+studytracker-web-sidebar-preview/
+ruiran-ielts-planner (2)/
