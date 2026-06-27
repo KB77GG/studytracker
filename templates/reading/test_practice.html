@@ -472,6 +472,40 @@ function normalizeAnswer(value) {
     .toLowerCase();
 }
 
+const readingJudgmentAliases = {
+  Y: "YES",
+  YES: "YES",
+  N: "NO",
+  NO: "NO",
+  NG: "NOT GIVEN",
+  NOTGIVEN: "NOT GIVEN",
+  "NOT GIVEN": "NOT GIVEN",
+  T: "TRUE",
+  TRUE: "TRUE",
+  F: "FALSE",
+  FALSE: "FALSE"
+};
+const readingFullJudgments = new Set(["YES", "NO", "NOT GIVEN", "TRUE", "FALSE"]);
+
+function canonicalJudgmentAnswer(value) {
+  const normalized = String(value || "").trim().toUpperCase().replace(/[\s_-]+/g, " ");
+  const compact = normalized.replace(/[\s_-]+/g, "");
+  return readingJudgmentAliases[normalized] || readingJudgmentAliases[compact] || "";
+}
+
+function fullJudgmentAnswers(answer) {
+  return String(answer || "")
+    .split(/\s*\/\s*|\s+or\s+/i)
+    .map((part) => {
+      const normalized = part.trim().toUpperCase().replace(/[\s_-]+/g, " ");
+      const compact = normalized.replace(/[\s_-]+/g, "");
+      return readingFullJudgments.has(normalized) || compact === "NOTGIVEN"
+        ? canonicalJudgmentAnswer(part)
+        : "";
+    })
+    .filter(Boolean);
+}
+
 function splitAnswer(answer) {
   const raw = String(answer || "");
   return raw.split(/\s*\/\s*|\s+or\s+/i).map(normalizeAnswer).filter(Boolean);
@@ -501,6 +535,19 @@ function questionById(id) {
   return null;
 }
 
+function shouldUseGroupOptions(question, group) {
+  const groupOptions = group.collect_option?.list || [];
+  if (!groupOptions.length) return false;
+  const questionOptions = question.options || [];
+  if (!questionOptions.length) return true;
+  const groupKeys = new Set(groupOptions.map((option) => String(option.key || "").trim().toUpperCase()));
+  const answerKey = String(question.answer || "").trim().toUpperCase();
+  const questionLooksLikeJudgment = questionOptions.every((option) =>
+    canonicalJudgmentAnswer(option.key) || canonicalJudgmentAnswer(option.text)
+  );
+  return groupKeys.has(answerKey) && questionLooksLikeJudgment;
+}
+
 function allQuestions() {
   return testData.passages.flatMap((passage) =>
     (passage.groups || []).flatMap((group) => group.questions || [])
@@ -509,6 +556,13 @@ function allQuestions() {
 
 function questionControl(question, group) {
   const value = answers[question.id] || "";
+  const groupOptions = group.collect_option?.list || [];
+  if (shouldUseGroupOptions(question, group)) {
+    return `<select class="answer-control" data-qid="${question.id}">
+      <option value="">选择</option>
+      ${groupOptions.map((option) => `<option value="${escapeHtml(option.key)}" ${value === option.key ? "selected" : ""}>${escapeHtml(option.key)}</option>`).join("")}
+    </select>`;
+  }
   if (question.options && question.options.length) {
     return `<div class="choice-stack" data-qid="${question.id}">
       ${question.options.map((option) => `
@@ -519,7 +573,6 @@ function questionControl(question, group) {
       `).join("")}
     </div>`;
   }
-  const groupOptions = group.collect_option?.list || [];
   if (groupOptions.length) {
     return `<select class="answer-control" data-qid="${question.id}">
       <option value="">选择</option>
@@ -645,6 +698,10 @@ function isCorrect(question) {
   if (serverRow) return Boolean(serverRow.correct);
   const userValue = answers[question.id] || "";
   const answer = question.answer || "";
+  const judgmentAnswers = fullJudgmentAnswers(answer);
+  if (judgmentAnswers.length) {
+    return judgmentAnswers.includes(canonicalJudgmentAnswer(userValue));
+  }
   if (String(answer).includes(",") && isLetterAnswer(answer)) {
     const expectedLetters = splitLetters(answer);
     const submittedLetters = splitLetters(userValue);

@@ -969,6 +969,39 @@ def _reading_test_answer_is_letters(answer: str) -> bool:
     return bool(letters) and all(re.fullmatch(r"[A-Z]+", letter) for letter in letters)
 
 
+READING_FULL_JUDGMENT_ANSWERS = {"YES", "NO", "NOT GIVEN", "TRUE", "FALSE"}
+READING_JUDGMENT_ALIASES = {
+    "Y": "YES",
+    "YES": "YES",
+    "N": "NO",
+    "NO": "NO",
+    "NG": "NOT GIVEN",
+    "NOTGIVEN": "NOT GIVEN",
+    "NOT GIVEN": "NOT GIVEN",
+    "T": "TRUE",
+    "TRUE": "TRUE",
+    "F": "FALSE",
+    "FALSE": "FALSE",
+}
+
+
+def _reading_judgment_key(value) -> str:
+    text_value = str(value or "").strip().upper()
+    text_value = re.sub(r"[\s_-]+", " ", text_value)
+    compact_value = re.sub(r"[\s_-]+", "", text_value)
+    return READING_JUDGMENT_ALIASES.get(text_value) or READING_JUDGMENT_ALIASES.get(compact_value) or ""
+
+
+def _reading_full_judgment_answers(answer) -> list[str]:
+    values = []
+    for part in re.split(r"\s*/\s*|\s+or\s+", str(answer or ""), flags=re.I):
+        normalized = re.sub(r"[\s_-]+", " ", part.strip().upper())
+        compact = re.sub(r"[\s_-]+", "", normalized)
+        if normalized in READING_FULL_JUDGMENT_ANSWERS or compact == "NOTGIVEN":
+            values.append(_reading_judgment_key(part))
+    return list(dict.fromkeys(item for item in values if item))
+
+
 def _grade_reading_test_answers(payload: dict, answers: dict, passage_number: int | None = None) -> dict:
     if not isinstance(answers, dict):
         answers = {}
@@ -991,7 +1024,10 @@ def _grade_reading_test_answers(payload: dict, answers: dict, passage_number: in
                 value = answers.get(qid, "")
                 total += 1
 
-                if "," in str(answer or ""):
+                judgment_answers = _reading_full_judgment_answers(answer)
+                if judgment_answers:
+                    is_correct = _reading_judgment_key(value) in judgment_answers
+                elif "," in str(answer or ""):
                     expected = _split_listening_test_letters(answer)
                     submitted = _split_listening_test_letters(value)
                     is_correct = bool(expected) and set(submitted) == set(expected)
@@ -1192,6 +1228,73 @@ def _sync_reading_test_score_record(task: Task, payload: dict, grade: dict) -> N
         f"{'、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else '无'}"
         f"{'…' if len(wrong_numbers) > 20 else ''}"
     )
+
+
+def _reading_test_submission_needs_grade_update(row: ReadingTestSubmission, grade: dict) -> bool:
+    try:
+        existing_results = json.loads(row.results_json or "[]")
+    except Exception:
+        existing_results = []
+    try:
+        existing_wrong_numbers = json.loads(row.wrong_numbers_json or "[]")
+    except Exception:
+        existing_wrong_numbers = []
+    return (
+        int(row.correct_count or 0) != int(grade["correct"])
+        or int(row.total_count or 0) != int(grade["total"])
+        or round(float(row.accuracy or 0.0), 1) != round(float(grade["accuracy"] or 0.0), 1)
+        or row.ielts_score != grade.get("ielts_score")
+        or existing_results != grade.get("results")
+        or existing_wrong_numbers != grade.get("wrong_numbers")
+    )
+
+
+def _refresh_reading_test_submission_grade(task: Task, payload: dict, safe_id: str) -> bool:
+    submission = task.reading_test_submission
+    if not submission:
+        return False
+    try:
+        answers = json.loads(submission.answers_json or "{}")
+    except Exception:
+        return False
+    if not isinstance(answers, dict):
+        return False
+
+    grade = _grade_reading_test_answers(
+        payload,
+        answers,
+        passage_number=task.reading_passage_number,
+    )
+    if not _reading_test_submission_needs_grade_update(submission, grade):
+        return False
+
+    title = payload.get("title") or task.detail or safe_id
+    if task.reading_passage_number:
+        title = f"{title} Passage {task.reading_passage_number}"
+    submission.student_name = task.student_name
+    submission.test_id = safe_id
+    submission.test_title = title
+    submission.correct_count = grade["correct"]
+    submission.total_count = grade["total"]
+    submission.accuracy = grade["accuracy"]
+    submission.ielts_score = grade["ielts_score"]
+    submission.results_json = json.dumps(grade["results"], ensure_ascii=False)
+    submission.wrong_numbers_json = json.dumps(grade["wrong_numbers"], ensure_ascii=False)
+    submission.updated_at = datetime.utcnow()
+
+    task.accuracy = grade["accuracy"]
+    task.completion_rate = 100.0
+    wrong_numbers = grade.get("wrong_numbers") or []
+    band_text = f"IELTS Reading {grade['ielts_score']}，" if grade.get("ielts_score") is not None else ""
+    task.student_note = (
+        f"剑雅阅读自动判分：{grade['correct']}/{grade['total']}，"
+        f"{band_text}正确率 {grade['accuracy']}%。"
+        f"{' 错题：' + '、'.join('Q' + str(n) for n in wrong_numbers[:20]) if wrong_numbers else ''}"
+        f"{'…' if len(wrong_numbers) > 20 else ''}"
+    )
+    _sync_plan_item_from_task(task)
+    _sync_reading_test_score_record(task, payload, grade)
+    return True
 
 
 PRACTICE_STAFF_ROLES = {User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT}
@@ -7272,6 +7375,8 @@ def api_reading_test_submission(test_id):
             return jsonify({"ok": False, "error": "task_not_found"}), 404
         if not task.reading_access_token or not secrets.compare_digest(task.reading_access_token, token):
             return jsonify({"ok": False, "error": "invalid_token"}), 403
+        if _refresh_reading_test_submission_grade(task, data, safe_id):
+            db.session.commit()
         return jsonify({
             "ok": True,
             "task": {
@@ -7302,6 +7407,8 @@ def api_reading_test_submission(test_id):
     task = _latest_submitted_task(query.order_by(Task.id.desc()).all())
     if not task:
         return jsonify({"ok": True, "submission": None})
+    if _refresh_reading_test_submission_grade(task, data, safe_id):
+        db.session.commit()
     return jsonify({
         "ok": True,
         "task": {
