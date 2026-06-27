@@ -759,3 +759,320 @@
     font-size: 22rpx;
   }
 }
+
+.container.welcome-mode {
+  min-height: 100vh;
+  padding: 0 0 54rpx;
+  overflow-x: hidden;
+  color: #1c1c1c;
+  background: #ffffff;
+}
+
+.welcome-mode .bg-circle-1,
+.welcome-mode .bg-circle-2,
+.welcome-mode .bottom-flourish {
+  display: none;
+}
+
+.welcome-mode .dot-grid {
+  z-index: 2;
+  top: 64rpx;
+  right: 46rpx;
+  width: 112rpx;
+  gap: 12rpx;
+  opacity: 0.64;
+}
+
+.welcome-mode .dot {
+  width: 14rpx;
+  height: 14rpx;
+  background: #bfe0dd;
+}
+
+.welcome-mode .dot:nth-child(2n),
+.welcome-mode .dot:nth-child(7n) {
+  background: #7fc4bf;
+}
+
+.welcome-mode .dot:nth-child(5n) {
+  background: #e6f2f1;
+}
+
+.welcome-mode .hero {
+  box-sizing: border-box;
+  min-height: 352rpx;
+  margin: 0;
+  padding: 76rpx 48rpx 94rpx;
+  align-items: flex-start;
+  background: linear-gradient(180deg, #e6f2f1 0%, #ffffff 100%);
+}
+
+.welcome-mode .app-name {
+  color: #2e8b87;
+  font-size: 84rpx;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  text-shadow: none;
+}
+
+.welcome-mode .sub-name {
+  margin-top: 20rpx;
+  color: #444444;
+  font-size: 28rpx;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.welcome-mode .slogan {
+  margin-top: 6rpx;
+  color: #888888;
+  font-size: 26rpx;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.welcome-mode .main-card,
+.welcome-mode .welcome-card {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.welcome-mode .entry-card {
+  margin: -36rpx 32rpx 0;
+  padding: 44rpx 40rpx 40rpx;
+  border: 0;
+  border-radius: 40rpx;
+  background: #ffffff;
+  box-shadow: 0 16rpx 60rpx rgba(0, 0, 0, 0.09);
+}
+
+.welcome-mode .guest-access-note {
+  min-height: 58rpx;
+  display: inline-flex;
+  align-items: center;
+  gap: 14rpx;
+  align-self: flex-start;
+  box-sizing: border-box;
+  padding: 0 26rpx 0 14rpx;
+  border-radius: 999rpx;
+  background: #e6f2f1;
+  color: #1b5851;
+  font-size: 25rpx;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.welcome-mode .guest-access-note .shield-mark {
+  display: block;
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 10rpx;
+  background-color: transparent;
+  background-size: 28rpx 28rpx;
+}
+
+.welcome-mode .welcome-title {
+  display: flex;
+  flex-direction: column;
+  margin-top: 32rpx;
+  color: #1c1c1c;
+  font-size: 46rpx;
+  font-weight: 900;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.welcome-mode .welcome-title-line {
+  display: block;
+}
+
+.welcome-mode .welcome-desc {
+  margin: 16rpx 0 36rpx;
+  color: #555555;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.welcome-mode .btn-start {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 96rpx;
+  margin: 0;
+  border-radius: 28rpx;
+  color: #ffffff;
+  background: #2e8b87;
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 96rpx;
+  letter-spacing: 0;
+  box-shadow: 0 12rpx 36rpx rgba(46, 139, 135, 0.32);
+}
+
+.welcome-mode .btn-start-active {
+  background: #237069;
+  transform: scale(0.98);
+}
+
+.welcome-mode .role-shortcuts {
+  margin-top: 36rpx;
+}
+
+.welcome-mode .shortcut-label {
+  color: #888888;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.welcome-mode .shortcut-grid {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.welcome-mode .role-shortcut {
+  position: relative;
+  min-height: 116rpx;
+  padding: 24rpx 48rpx 24rpx 28rpx;
+  border: 1rpx solid #bfe0dd;
+  border-radius: 26rpx;
+  background: #ecf5f4;
+}
+
+.welcome-mode .role-shortcut-active {
+  background: #e6f2f1;
+  border-color: #7fc4bf;
+}
+
+.welcome-mode .shortcut-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-mode .shortcut-title {
+  color: #1c1c1c;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.welcome-mode .shortcut-desc {
+  margin-top: 6rpx;
+  color: #666666;
+  font-size: 24rpx;
+  line-height: 1.35;
+}
+
+.welcome-mode .shortcut-arrow {
+  position: absolute;
+  top: 24rpx;
+  right: 22rpx;
+  color: #2e8b87;
+  font-size: 40rpx;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.welcome-mode .login-entry {
+  position: relative;
+  min-height: 70rpx;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 36rpx 0 0;
+  padding: 30rpx 0 0;
+  color: #237069;
+  background: transparent;
+  border-radius: 0;
+  font-size: 27rpx;
+  font-weight: 800;
+  line-height: 40rpx;
+}
+
+.welcome-mode .login-entry::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1rpx;
+  background: #eeeeee;
+}
+
+.welcome-mode .login-muted {
+  color: #888888;
+  font-weight: 500;
+}
+
+.welcome-mode .login-action {
+  color: #237069;
+  font-weight: 800;
+}
+
+.welcome-mode .login-entry-active {
+  opacity: 0.72;
+}
+
+.welcome-mode .feature-heading {
+  margin: 44rpx 44rpx 28rpx;
+  color: #444444;
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.welcome-mode .feature-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16rpx;
+  padding: 0 44rpx 68rpx;
+}
+
+.welcome-mode .feature-item {
+  min-height: 130rpx;
+  gap: 14rpx;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.welcome-mode .feature-icon {
+  width: 92rpx;
+  height: 92rpx;
+  border-radius: 28rpx;
+  background-size: 44rpx 44rpx;
+}
+
+.welcome-mode .accent-teal .feature-icon {
+  background-color: #e6f2f1;
+}
+
+.welcome-mode .accent-blue .feature-icon {
+  background-color: #e8f0fb;
+}
+
+.welcome-mode .accent-amber .feature-icon {
+  background-color: #fbf1e6;
+}
+
+.welcome-mode .accent-violet .feature-icon {
+  background-color: #f0edfa;
+}
+
+.welcome-mode .feature-title {
+  display: block;
+  color: #555555;
+  text-align: center;
+  font-size: 23rpx;
+  font-weight: 500;
+  line-height: 1.25;
+}

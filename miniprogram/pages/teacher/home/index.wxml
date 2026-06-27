@@ -103,8 +103,13 @@
       </view>
 
       <view id="calendar-section" class="section-head calendar-title">
-        <text>课程表</text>
+        <text>{{isAdmin && scheduleScope === 'all' ? '全部课表' : '课程表'}}</text>
         <text class="section-link">左右滑动切换月份</text>
+      </view>
+
+      <view wx:if="{{isAdmin}}" class="scope-toggle">
+        <view class="scope-tab {{scheduleScope === 'mine' ? 'active' : ''}}" data-scope="mine" bindtap="switchScheduleScope">我的课</view>
+        <view class="scope-tab {{scheduleScope === 'all' ? 'active' : ''}}" data-scope="all" bindtap="switchScheduleScope">全部课</view>
       </view>
 
       <view class="calendar-card" bindtouchstart="onCalendarTouchStart" bindtouchend="onCalendarTouchEnd">

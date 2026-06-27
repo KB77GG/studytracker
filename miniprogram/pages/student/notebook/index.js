@@ -80,8 +80,12 @@ Page({
             total: 0,
             completed: 0,
             total_minutes: 0,
-            average_accuracy: null
+            average_accuracy: null,
+            wrong_tasks: 0
         },
+        pendingReviewCount: 0,
+        wrongQuestionCount: 0,
+        savedWordCount: 0,
         // Dictation tab
         list: [],
         isLoading: false,
@@ -104,9 +108,7 @@ Page({
         this.loadNotebook();
         this.loadLastWrongCount();
         this.loadReadingNotebook();
-        if (this.data.activeTab === 'vocab') {
-            this.loadVocab();
-        }
+        this.loadVocab();
     },
 
     switchTab(e) {
@@ -125,8 +127,26 @@ Page({
         Promise.all([
             this.loadHistory(),
             this.loadReadingNotebook(),
-            this.data.activeTab === 'vocab' ? this.loadVocab() : Promise.resolve()
+            this.loadVocab()
         ]).finally(() => wx.stopPullDownRefresh())
+    },
+
+    refreshReviewCounts() {
+        const historyList = this.data.historyList || []
+        const summary = this.data.historySummary || {}
+        const wrongFromHistory = historyList.reduce((total, item) => (
+            total + Number(item.wrongCount || 0)
+        ), 0)
+        const wrongFromNotebooks = (this.data.list || []).length + (this.data.readingList || []).length
+        const pendingReviewCount = Number(summary.wrong_tasks || 0) || historyList.filter(item => (
+            Number(item.wrongCount || 0) > 0 || item.state === 'pending_review'
+        )).length
+
+        this.setData({
+            pendingReviewCount,
+            wrongQuestionCount: wrongFromHistory || wrongFromNotebooks,
+            savedWordCount: (this.data.vocabList || []).length
+        })
     },
 
     loadHistory() {
@@ -137,12 +157,14 @@ Page({
             const dateText = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`
             this.setData({
                 historyLoading: false,
-                historySummary: { total: 3, completed: 3, total_minutes: 68, average_accuracy: 88.7 },
+                historySummary: { total: 3, completed: 3, total_minutes: 68, average_accuracy: 88.7, wrong_tasks: 2 },
                 historyList: [
-                    { id: 'demo-review-1', date: dateText, category: '雅思听力', title: '剑雅听力精听练习', state: 'completed', stateLabel: '已完成', durationLabel: '28 分钟', accuracyLabel: '92%', moduleMark: 'L', hasFeedback: true },
-                    { id: 'demo-review-2', date: dateText, category: '词汇', title: '核心词汇拼写复习', state: 'completed', stateLabel: '已完成', durationLabel: '20 分钟', accuracyLabel: '86%', moduleMark: 'V', hasFeedback: false },
-                    { id: 'demo-review-3', date: dateText, category: '雅思阅读', title: '阅读词汇选择练习', state: 'completed', stateLabel: '已完成', durationLabel: '20 分钟', accuracyLabel: '88%', moduleMark: 'R', hasFeedback: true }
+                    { id: 'demo-review-1', date: dateText, category: '雅思听力', title: '剑雅听力精听练习', state: 'completed', stateLabel: '已完成', durationLabel: '28 分钟', accuracyLabel: '92%', moduleMark: 'L', wrongCount: 3, wrongLabel: '错题 3 题', needsReview: true, hasFeedback: true },
+                    { id: 'demo-review-2', date: dateText, category: '词汇', title: '核心词汇拼写复习', state: 'completed', stateLabel: '已完成', durationLabel: '20 分钟', accuracyLabel: '86%', moduleMark: 'V', wrongCount: 1, wrongLabel: '错题 1 题', needsReview: true, hasFeedback: false },
+                    { id: 'demo-review-3', date: dateText, category: '雅思阅读', title: '阅读词汇选择练习', state: 'completed', stateLabel: '已完成', durationLabel: '20 分钟', accuracyLabel: '88%', moduleMark: 'R', wrongCount: 0, wrongLabel: '', needsReview: false, hasFeedback: true }
                 ]
+            }, () => {
+                this.refreshReviewCounts()
             })
             return Promise.resolve()
         }
@@ -151,21 +173,26 @@ Page({
         return request('/miniprogram/student/task-history')
             .then((res) => {
                 if (!res || !res.ok) throw new Error((res && res.error) || 'load_failed')
-                const historyList = (res.items || []).map(item => ({
-                    ...item,
-                    stateLabel: item.state_label || '已完成',
-                    durationLabel: formatDuration(item.actual_seconds),
-                    accuracyLabel: item.accuracy === null || item.accuracy === undefined
-                        ? ''
-                        : `${Number(item.accuracy).toFixed(1).replace(/\.0$/, '')}%`,
-                    moduleMark: moduleMark(item.category),
-                    wrongLabel: Number(item.wrong_count || 0) > 0
-                        ? `错题 ${Number(item.wrong_count)} 题`
-                        : ''
-                }))
+                const historyList = (res.items || []).map(item => {
+                    const wrongCount = Number(item.wrong_count || 0)
+                    return {
+                        ...item,
+                        stateLabel: item.state_label || '已完成',
+                        durationLabel: formatDuration(item.actual_seconds),
+                        accuracyLabel: item.accuracy === null || item.accuracy === undefined
+                            ? ''
+                            : `${Number(item.accuracy).toFixed(1).replace(/\.0$/, '')}%`,
+                        moduleMark: moduleMark(item.category),
+                        wrongCount,
+                        wrongLabel: wrongCount > 0 ? `错题 ${wrongCount} 题` : '',
+                        needsReview: wrongCount > 0 || item.state === 'pending_review'
+                    }
+                })
                 this.setData({
                     historyList,
                     historySummary: res.summary || this.data.historySummary
+                }, () => {
+                    this.refreshReviewCounts()
                 })
             })
             .catch((err) => {
@@ -199,13 +226,13 @@ Page({
                     entryKey: dictationEntryKey(item)
                 }));
                 displayList.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
-                this.setData({ list: displayList });
+                this.setData({ list: displayList }, () => this.refreshReviewCounts());
             } else {
-                this.setData({ list: [] });
+                this.setData({ list: [] }, () => this.refreshReviewCounts());
             }
         } catch (e) {
             console.warn('loadNotebook error', e);
-            this.setData({ list: [] });
+            this.setData({ list: [] }, () => this.refreshReviewCounts());
         } finally {
             this.setData({ isLoading: false });
         }
@@ -241,17 +268,17 @@ Page({
                     hint: item.hint || '',
                     updatedAt: item.submitted_at ? new Date(item.submitted_at).getTime() : 0
                 })));
-                this.setData({ readingList: list });
+                this.setData({ readingList: list }, () => this.refreshReviewCounts());
                 try { writeReadingNotebookCache(list); }
                 catch (cacheErr) { console.warn('cache reading notebook error', cacheErr); }
                 return;
             }
 
             const list = sortReadingNotebook(readReadingNotebookCache());
-            this.setData({ readingList: list });
+            this.setData({ readingList: list }, () => this.refreshReviewCounts());
         } catch (e) {
             console.warn('loadReadingNotebook error', e);
-            this.setData({ readingList: sortReadingNotebook(readReadingNotebookCache()) });
+            this.setData({ readingList: sortReadingNotebook(readReadingNotebookCache()) }, () => this.refreshReviewCounts());
         } finally {
             this.setData({ readingLoading: false });
         }
@@ -272,13 +299,13 @@ Page({
                     updatedAt: item.updated_at ? new Date(item.updated_at).getTime() : 0,
                     updatedText: formatDateTime(item.updated_at)
                 }));
-                this.setData({ vocabList: list });
+                this.setData({ vocabList: list }, () => this.refreshReviewCounts());
             } else {
-                this.setData({ vocabList: [] });
+                this.setData({ vocabList: [] }, () => this.refreshReviewCounts());
             }
         } catch (e) {
             console.warn('loadVocab error', e);
-            this.setData({ vocabList: [] });
+            this.setData({ vocabList: [] }, () => this.refreshReviewCounts());
         } finally {
             this.setData({ vocabLoading: false });
         }
@@ -333,7 +360,7 @@ Page({
             success: (res) => {
                 if (res.confirm) {
                     try { wx.removeStorageSync('dictation_notebook'); } catch (e) {}
-                    this.setData({ list: [] });
+                    this.setData({ list: [] }, () => this.refreshReviewCounts());
                 }
             }
         });
@@ -343,7 +370,7 @@ Page({
         const entryKey = e.currentTarget.dataset.entrykey;
         if (!entryKey) return;
         const list = (this.data.list || []).filter(item => item.entryKey !== entryKey);
-        this.setData({ list });
+        this.setData({ list }, () => this.refreshReviewCounts());
         try {
             wx.setStorageSync('dictation_notebook', list.map(item => {
                 const next = { ...item }
@@ -388,7 +415,7 @@ Page({
                         wx.removeStorageSync(getReadingNotebookCacheKey());
                         wx.removeStorageSync('reading_vocab_notebook');
                     } catch (e) {}
-                    this.setData({ readingList: [] });
+                    this.setData({ readingList: [] }, () => this.refreshReviewCounts());
                 }
             }
         });
@@ -398,17 +425,17 @@ Page({
         const id = e.currentTarget.dataset.id;
         if (!id) return;
         const previous = this.data.vocabList || [];
-        this.setData({ vocabList: previous.filter(item => String(item.id) !== String(id)) });
+        this.setData({ vocabList: previous.filter(item => String(item.id) !== String(id)) }, () => this.refreshReviewCounts());
         try {
             const res = await request(`/miniprogram/student/saved-words/${id}`, {
                 method: 'DELETE'
             });
             if (!res.ok) {
-                this.setData({ vocabList: previous });
+                this.setData({ vocabList: previous }, () => this.refreshReviewCounts());
                 wx.showToast({ title: '删除失败', icon: 'none' });
             }
         } catch (err) {
-            this.setData({ vocabList: previous });
+            this.setData({ vocabList: previous }, () => this.refreshReviewCounts());
             wx.showToast({ title: '删除失败', icon: 'none' });
         }
     }

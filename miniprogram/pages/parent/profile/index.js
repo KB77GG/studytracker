@@ -47,10 +47,16 @@ Page({
             confirmText: '去登录',
             success: (res) => {
                 if (res.confirm) {
-                    this.exitGuest()
+                    this.goLogin()
                 }
             }
         })
+    },
+
+    goLogin() {
+        app.globalData.guestMode = false
+        app.globalData.guestRole = ''
+        wx.reLaunch({ url: '/pages/index/index?action=login' })
     },
 
     exitGuest() {

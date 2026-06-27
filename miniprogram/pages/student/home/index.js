@@ -430,7 +430,7 @@ Page({
     goLogin() {
         getApp().globalData.guestMode = false
         getApp().globalData.guestRole = ''
-        wx.reLaunch({ url: '/pages/index/index' })
+        wx.reLaunch({ url: '/pages/index/index?action=login' })
     },
 
     promptGuestLogin(feature) {
@@ -452,6 +452,15 @@ Page({
             content: `科目：${task.module || '综合练习'}\n预计用时：${task.planned_minutes || 0} 分钟\n状态：${task.statusText || '待完成'}\n\n当前展示的是只读示例，无需登录即可继续浏览。`,
             showCancel: false,
             confirmText: '继续浏览'
+        })
+    },
+
+    showExampleTask() {
+        wx.showModal({
+            title: '示例任务',
+            content: '任务里会显示练习名称、预计用时、完成状态和开始入口。老师布置后，你可以直接从这里进入练习、计时和提交。',
+            showCancel: false,
+            confirmText: '知道了'
         })
     },
 

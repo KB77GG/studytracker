@@ -21,7 +21,7 @@
       <text>解除微信绑定</text>
       <text class="arrow">></text>
     </view>
-    <view class="action-item" wx:if="{{isGuest}}" bindtap="exitGuest">
+    <view class="action-item" wx:if="{{isGuest}}" bindtap="goLogin">
       <text>登录 / 绑定账号</text>
       <text class="arrow">></text>
     </view>

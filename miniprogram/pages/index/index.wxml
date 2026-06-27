@@ -1,4 +1,4 @@
-<view class="container {{showLoginForm ? 'confirm-mode' : ''}}">
+<view class="container {{!hasToken && !showLoginForm ? 'welcome-mode' : ''}} {{showLoginForm ? 'confirm-mode' : ''}}">
   <view class="bg-circle-1"></view>
   <view class="bg-circle-2"></view>
   <view class="dot-grid">
@@ -8,7 +8,7 @@
 
   <view class="hero {{showLoginForm ? 'hero-confirm' : ''}}">
     <text class="app-name">StudyTracker</text>
-    <text class="sub-name">Sage Path 睿然国际教育学习管理系统</text>
+    <text class="sub-name">睿然国际教育 · 学习管理系统</text>
     <text class="slogan">让每一次进步都看得见</text>
   </view>
 
@@ -16,58 +16,63 @@
     <view class="welcome-intro" wx:if="{{!hasToken && !showLoginForm}}">
       <view class="intro-content">
         <view class="entry-card">
-          <text class="guest-access-note">无需登录 · 无需授权</text>
-          <text class="welcome-title">先体验，再决定是否登录</text>
-          <text class="welcome-desc">查看示例任务、学习报告与课程安排，不读取手机号、头像或昵称。</text>
+          <view class="guest-access-note">
+            <text class="shield-mark"></text>
+            <text>零授权 · 不读手机号 / 头像 / 昵称</text>
+          </view>
+          <view class="welcome-title">
+            <text class="welcome-title-line">先体验，再决定</text>
+            <text class="welcome-title-line">是否登录</text>
+          </view>
+          <text class="welcome-desc">查看示例任务、学习报告与课程安排，体验后再决定是否登录。</text>
 
-          <button class="btn-start" data-role="student" bindtap="enterPreview">免登录体验学生端</button>
+          <view class="btn-start" data-role="student" bindtap="enterPreview" hover-class="btn-start-active">
+            <text>免登录体验学生端</text>
+          </view>
 
           <view class="role-shortcuts">
             <text class="shortcut-label">也可以体验</text>
             <view class="shortcut-grid">
               <view class="role-shortcut" data-role="parent" bindtap="enterPreview" hover-class="role-shortcut-active">
-                <text class="shortcut-title">家长端</text>
-                <text class="shortcut-desc">成长报告与反馈</text>
+                <view class="shortcut-copy">
+                  <text class="shortcut-title">家长端</text>
+                  <text class="shortcut-desc">成长报告与反馈</text>
+                </view>
+                <text class="shortcut-arrow">›</text>
               </view>
               <view class="role-shortcut" data-role="teacher" bindtap="enterPreview" hover-class="role-shortcut-active">
-                <text class="shortcut-title">教师端</text>
-                <text class="shortcut-desc">课表与课堂记录</text>
+                <view class="shortcut-copy">
+                  <text class="shortcut-title">教师端</text>
+                  <text class="shortcut-desc">课表与课堂记录</text>
+                </view>
+                <text class="shortcut-arrow">›</text>
               </view>
             </view>
           </view>
 
-          <button class="login-entry" bindtap="showLogin">已有账号？登录并同步数据</button>
+          <view class="login-entry" bindtap="showLogin" hover-class="login-entry-active">
+            <text class="login-muted">已有账号？</text>
+            <text class="login-action">登录并同步数据</text>
+          </view>
         </view>
 
         <text class="feature-heading">核心功能</text>
         <view class="feature-list">
           <view class="feature-item accent-teal">
             <view class="feature-icon icon-task"></view>
-            <view class="feature-texts">
-              <text class="feature-title">学习任务</text>
-              <text class="feature-desc">查看每日练习、作业与打卡进度</text>
-            </view>
+            <text class="feature-title">学习任务</text>
           </view>
           <view class="feature-item accent-blue">
             <view class="feature-icon icon-schedule"></view>
-            <view class="feature-texts">
-              <text class="feature-title">课程课表</text>
-              <text class="feature-desc">查看课程时间、地点与上课提醒</text>
-            </view>
+            <text class="feature-title">课程课表</text>
           </view>
           <view class="feature-item accent-amber">
             <view class="feature-icon icon-feedback"></view>
-            <view class="feature-texts">
-              <text class="feature-title">学习反馈</text>
-              <text class="feature-desc">查看老师反馈、练习结果与改进建议</text>
-            </view>
+            <text class="feature-title">学习反馈</text>
           </view>
           <view class="feature-item accent-violet">
             <view class="feature-icon icon-data"></view>
-            <view class="feature-texts">
-              <text class="feature-title">学习数据</text>
-              <text class="feature-desc">了解完成率、正确率和阶段表现</text>
-            </view>
+            <text class="feature-title">学习数据</text>
           </view>
         </view>
       </view>

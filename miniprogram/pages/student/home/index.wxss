@@ -1,5 +1,5 @@
 page {
-  background: #f4f8f8;
+  background: #f7f8f6;
 }
 
 .container {
@@ -7,7 +7,7 @@ page {
   min-height: 100vh;
   box-sizing: border-box;
   overflow: hidden;
-  color: #0b1830;
+  color: #1c1c1c;
 }
 
 .page-bg {
@@ -15,10 +15,8 @@ page {
   top: 0;
   left: 0;
   right: 0;
-  height: 520rpx;
-  background:
-    radial-gradient(circle at 10% 0%, rgba(8, 127, 119, 0.18), transparent 360rpx),
-    linear-gradient(135deg, #e5f5f2 0%, #fbfffd 62%, #fff4dc 100%);
+  height: 100vh;
+  background: #f7f8f6;
   z-index: 0;
 }
 
@@ -61,7 +59,7 @@ page {
   z-index: 1;
   height: 100vh;
   box-sizing: border-box;
-  padding: 54rpx 24rpx 156rpx;
+  padding: 28rpx 28rpx 156rpx;
 }
 
 .header-section {
@@ -69,7 +67,7 @@ page {
   justify-content: space-between;
   align-items: flex-start;
   gap: 20rpx;
-  margin-bottom: 28rpx;
+  margin-bottom: 22rpx;
 }
 
 .greeting {
@@ -79,13 +77,13 @@ page {
 }
 
 .date {
-  color: #64748b;
-  font-size: 25rpx;
+  color: #8a938f;
+  font-size: 24rpx;
   margin-bottom: 8rpx;
 }
 
 .hello {
-  color: #0b1830;
+  color: #1c1c1c;
   font-size: 44rpx;
   font-weight: 900;
   line-height: 1.2;
@@ -97,30 +95,41 @@ page {
 }
 
 .sub-btn {
-  min-width: 132rpx;
-  height: 64rpx;
-  line-height: 62rpx;
-  padding: 0 20rpx;
-  border-radius: 999rpx;
-  border: 1rpx solid #d6e9e6;
-  background: rgba(255, 255, 255, 0.88);
-  color: #087f77;
-  font-size: 23rpx;
+  width: 76rpx;
+  height: 76rpx;
+  min-width: 76rpx;
+  line-height: 76rpx;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: #f4f5f3;
+  color: #237069;
+  font-size: 24rpx;
   font-weight: 800;
-  box-shadow: 0 8rpx 20rpx rgba(8, 127, 119, 0.08);
+  margin: 0;
+  box-shadow: none;
 }
 
 .sub-btn::after {
   border: none;
 }
 
+.sub-btn.subscribed {
+  background: #e6f2f1;
+}
+
+.sub-icon {
+  font-size: 24rpx;
+  line-height: 1;
+}
+
 .progress-card {
   padding: 30rpx;
   margin-bottom: 22rpx;
   border-radius: 32rpx;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1rpx solid #e4edf0;
-  box-shadow: 0 18rpx 44rpx rgba(20, 44, 58, 0.08);
+  background: #fff;
+  border: 1rpx solid #edefec;
+  box-shadow: 0 8rpx 24rpx rgba(20, 44, 58, 0.04);
 }
 
 .progress-top {
@@ -133,7 +142,7 @@ page {
 
 .progress-label {
   display: block;
-  color: #64748b;
+  color: #8a938f;
   font-size: 24rpx;
   font-weight: 700;
   margin-bottom: 8rpx;
@@ -141,7 +150,7 @@ page {
 
 .progress-value {
   display: block;
-  color: #0b1830;
+  color: #1c1c1c;
   font-size: 38rpx;
   font-weight: 900;
   line-height: 1.2;
@@ -150,7 +159,7 @@ page {
 .streak-box {
   width: 112rpx;
   height: 112rpx;
-  border-radius: 32rpx;
+  border-radius: 28rpx;
   display: flex;
   align-items: baseline;
   justify-content: center;
@@ -173,7 +182,7 @@ page {
   height: 18rpx;
   overflow: hidden;
   border-radius: 999rpx;
-  background: #e9eff2;
+  background: #eef2f0;
   margin-bottom: 14rpx;
 }
 
@@ -181,12 +190,12 @@ page {
   height: 100%;
   min-width: 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, #087f77, #58c7bb);
+  background: linear-gradient(90deg, #2e8b87, #237069);
   transition: width 0.3s ease;
 }
 
 .progress-tips {
-  color: #64748b;
+  color: #8a938f;
   font-size: 23rpx;
   line-height: 1.55;
 }
@@ -201,10 +210,9 @@ page {
   margin-bottom: 28rpx;
   border-radius: 32rpx;
   color: #fff;
-  background:
-    radial-gradient(circle at right top, rgba(255, 255, 255, 0.18), transparent 42%),
-    linear-gradient(135deg, #083f42, #007c75);
-  box-shadow: 0 18rpx 36rpx rgba(0, 105, 98, 0.22);
+  background: linear-gradient(135deg, #2e8b87, #1b5851);
+  box-shadow: none;
+  flex-wrap: wrap;
 }
 
 .review-today-card {
@@ -216,10 +224,8 @@ page {
   margin-bottom: 22rpx;
   border-radius: 32rpx;
   color: #fff;
-  background:
-    radial-gradient(circle at right top, rgba(255, 255, 255, 0.22), transparent 50%),
-    linear-gradient(135deg, #d77834, #f1a35a);
-  box-shadow: 0 18rpx 36rpx rgba(196, 110, 50, 0.28);
+  background: linear-gradient(135deg, #d77834, #f1a35a);
+  box-shadow: none;
 }
 
 .review-today-left {
@@ -308,16 +314,29 @@ page {
   font-weight: 800;
 }
 
+.review-cta {
+  width: 100%;
+  min-height: 76rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22rpx;
+  background: #fff;
+  color: #237069;
+  font-size: 27rpx;
+  font-weight: 850;
+}
+
 .section-title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 4rpx 18rpx;
+  margin: 0 4rpx 14rpx;
 }
 
 .section-title {
-  color: #0b1830;
-  font-size: 32rpx;
+  color: #444;
+  font-size: 26rpx;
   font-weight: 900;
 }
 
@@ -325,7 +344,7 @@ page {
   min-height: 44rpx;
   display: flex;
   align-items: center;
-  color: #087f77;
+  color: #237069;
   font-size: 24rpx;
   font-weight: 800;
 }
@@ -345,17 +364,17 @@ page {
   justify-content: center;
   margin-right: 14rpx;
   border-radius: 24rpx;
-  border: 1rpx solid #e4edf0;
-  background: rgba(255, 255, 255, 0.94);
-  color: #52637a;
-  box-shadow: 0 8rpx 20rpx rgba(20, 44, 58, 0.04);
+  border: none;
+  background: #f4f5f3;
+  color: #666;
+  box-shadow: none;
 }
 
 .date-chip.active {
   color: #fff;
-  background: linear-gradient(180deg, #16aa9e, #007d76);
+  background: #2e8b87;
   border-color: transparent;
-  box-shadow: 0 12rpx 26rpx rgba(8, 127, 119, 0.24);
+  box-shadow: none;
 }
 
 .date-main {
@@ -387,7 +406,7 @@ page {
 }
 
 .task-group-title {
-  color: #0b1830;
+  color: #1c1c1c;
   font-size: 25rpx;
   font-weight: 850;
 }
@@ -420,9 +439,9 @@ page {
 .task-card {
   padding: 22rpx;
   border-radius: 28rpx;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1rpx solid #e5edf0;
-  box-shadow: 0 10rpx 26rpx rgba(20, 44, 58, 0.06);
+  background: #fff;
+  border: 1rpx solid #edefec;
+  box-shadow: 0 6rpx 18rpx rgba(20, 44, 58, 0.04);
   transition: transform 0.18s ease, opacity 0.18s ease;
 }
 
@@ -488,7 +507,7 @@ page {
 }
 
 .task-name {
-  color: #0b1830;
+  color: #1c1c1c;
   font-size: 28rpx;
   font-weight: 850;
   line-height: 1.35;
@@ -625,19 +644,70 @@ page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 96rpx 0 120rpx;
+  padding: 10rpx 0 120rpx;
+}
+
+.empty-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 36rpx;
+  margin: 10rpx 0 24rpx;
+  border: 1rpx solid #edefec;
+  border-radius: 32rpx;
+  background: #f7f9f8;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 104rpx;
+  height: 104rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24rpx;
+  border-radius: 50%;
+  background: #e6f2f1;
+  color: #2e8b87;
+  font-size: 48rpx;
+  font-weight: 900;
 }
 
 .empty-text {
-  color: #0b1830;
-  font-size: 32rpx;
+  display: block;
+  color: #1c1c1c;
+  font-size: 30rpx;
   font-weight: 900;
   margin-bottom: 10rpx;
 }
 
 .empty-sub {
-  color: #64748b;
+  display: block;
+  color: #888;
   font-size: 25rpx;
+}
+
+.empty-state .review-entry {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 18rpx;
+}
+
+.example-link {
+  min-height: 54rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  font-size: 25rpx;
+}
+
+.example-muted {
+  color: #999;
+}
+
+.example-action {
+  color: #237069;
+  font-weight: 750;
 }
 
 @media (max-width: 340px) {

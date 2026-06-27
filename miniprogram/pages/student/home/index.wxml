@@ -13,11 +13,13 @@
         <text class="hello">{{greeting}}，{{userInfo.nickName}}</text>
       </view>
       <view class="header-actions">
-        <button class="sub-btn" size="mini" bindtap="requestSubscribe">{{subscribeButtonText}}</button>
+        <button class="sub-btn {{hasSubscribed ? 'subscribed' : ''}}" size="mini" bindtap="requestSubscribe" aria-label="{{subscribeButtonText}}">
+          <text class="sub-icon">铃</text>
+        </button>
       </view>
     </view>
 
-    <view class="progress-card">
+    <view class="progress-card" wx:if="{{tasks.length > 0}}">
       <view class="progress-top">
         <view>
           <text class="progress-label">{{progressLabel}}</text>
@@ -48,28 +50,10 @@
       </view>
     </view>
 
-    <view class="review-entry" bindtap="goNotebook">
-      <view>
-        <view class="review-title">复习中心</view>
-        <view class="review-desc">错题错词，集中攻克</view>
-      </view>
-      <view class="review-stats">
-        <view>
-          <text class="review-num">{{notebookCount}}</text>
-          <text class="review-label">错词</text>
-        </view>
-        <view>
-          <text class="review-num">{{reviewTaskCount}}</text>
-          <text class="review-label">待复盘</text>
-        </view>
-        <text class="review-arrow">›</text>
-      </view>
-    </view>
-
     <view class="section-title-row">
       <text class="section-title">我的任务</text>
       <picker mode="date" value="{{currentDate}}" bindchange="handleDateChange">
-        <view class="section-link">切换日期</view>
+        <view class="section-link">切换日期 ›</view>
       </picker>
     </view>
 
@@ -125,8 +109,34 @@
     </view>
 
     <view class="empty-state" wx:else>
-      <text class="empty-text">当前日期没有任务</text>
-      <text class="empty-sub">仅显示首页五个日期内由助教或老师布置的任务。</text>
+      <view class="empty-card">
+        <view class="empty-icon">✓</view>
+        <text class="empty-text">{{currentDate === todayStr ? '今天老师暂未布置任务' : '这一天暂未布置任务'}}</text>
+        <text class="empty-sub">空出来的时间，正好用来巩固。</text>
+      </view>
+
+      <view class="review-entry" bindtap="goNotebook">
+        <view>
+          <view class="review-title">去复习中心</view>
+          <view class="review-desc">还有内容待巩固</view>
+        </view>
+        <view class="review-stats">
+          <view>
+            <text class="review-num">{{reviewTaskCount}}</text>
+            <text class="review-label">待复盘</text>
+          </view>
+          <view>
+            <text class="review-num">{{notebookCount}}</text>
+            <text class="review-label">错词</text>
+          </view>
+        </view>
+        <view class="review-cta">立即复盘 →</view>
+      </view>
+
+      <view class="example-link" bindtap="showExampleTask">
+        <text class="example-muted">想先了解任务长什么样？</text>
+        <text class="example-action">查看示例任务</text>
+      </view>
     </view>
   </scroll-view>
 </view>

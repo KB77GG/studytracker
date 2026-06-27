@@ -2,26 +2,22 @@
   <view class="page-header">
     <view>
       <view class="title">复习中心</view>
-      <view class="header-subtitle">练习记录、错题与生词统一回顾</view>
+      <view class="header-subtitle">先把错题和生词清掉，正确率自然涨</view>
     </view>
-    <view class="count" wx:if="{{activeTab === 'history'}}">共 {{historyList.length}} 条</view>
-    <view class="count" wx:elif="{{activeTab === 'dictation'}}">共 {{list.length}} 词</view>
-    <view class="count" wx:elif="{{activeTab === 'reading'}}">共 {{readingList.length}} 词</view>
-    <view class="count" wx:else>共 {{vocabList.length}} 词</view>
   </view>
 
   <view class="history-summary">
-    <view class="summary-item">
-      <text class="summary-value">{{historySummary.completed || 0}}</text>
-      <text class="summary-label">完成练习</text>
+    <view class="summary-item primary">
+      <text class="summary-value">{{pendingReviewCount || 0}}</text>
+      <text class="summary-label">待复盘</text>
     </view>
     <view class="summary-item">
-      <text class="summary-value">{{historySummary.total_minutes || 0}}</text>
-      <text class="summary-label">累计分钟</text>
+      <text class="summary-value">{{wrongQuestionCount || 0}}</text>
+      <text class="summary-label">错题</text>
     </view>
     <view class="summary-item">
-      <text class="summary-value">{{historySummary.average_accuracy === null ? '—' : historySummary.average_accuracy + '%'}}</text>
-      <text class="summary-label">平均正确率</text>
+      <text class="summary-value">{{savedWordCount || 0}}</text>
+      <text class="summary-label">生词</text>
     </view>
   </view>
 
@@ -73,23 +69,28 @@
         data-id="{{item.id}}"
         bindtap="openHistoryTask"
       >
-        <view class="history-mark">{{item.moduleMark}}</view>
-        <view class="history-main">
-          <view class="history-topline">
-            <text class="history-category">{{item.category}}</text>
-            <text class="history-date">{{item.date}}</text>
-          </view>
-          <text class="history-title">{{item.title}}</text>
-          <view class="history-meta">
-            <text>{{item.durationLabel}}</text>
-            <text wx:if="{{item.accuracyLabel}}">正确率 {{item.accuracyLabel}}</text>
-            <text class="wrong-dot" wx:if="{{item.wrongLabel}}">{{item.wrongLabel}}</text>
-            <text class="feedback-dot" wx:if="{{item.has_feedback || item.hasFeedback}}">有老师反馈</text>
+        <view class="history-card-main">
+          <view class="history-mark {{item.needsReview ? 'needs-review' : ''}}">{{item.moduleMark}}</view>
+          <view class="history-main">
+            <view class="history-topline">
+              <text class="history-category">{{item.category}}</text>
+              <text class="history-date">{{item.date}}</text>
+            </view>
+            <text class="history-title">{{item.title}}</text>
+            <view class="history-meta">
+              <text>{{item.durationLabel}}</text>
+              <text wx:if="{{item.accuracyLabel}}">正确率 {{item.accuracyLabel}}</text>
+              <text class="feedback-dot" wx:if="{{item.has_feedback || item.hasFeedback}}">有老师反馈</text>
+            </view>
           </view>
         </view>
-        <view class="history-side">
+        <view class="history-footer" wx:if="{{item.needsReview}}">
+          <text class="wrong-dot">{{item.wrongLabel || item.stateLabel}}</text>
+          <view class="history-cta">去复盘</view>
+        </view>
+        <view class="history-footer completed" wx:else>
           <text class="history-state {{item.state}}">{{item.stateLabel}}</text>
-          <text class="history-arrow">›</text>
+          <view class="history-arrow">›</view>
         </view>
       </view>
     </view>
@@ -100,7 +101,7 @@
     <!-- 上次错词快捷入口 -->
     <view wx:if="{{lastWrongCount > 0}}" class="last-wrong-banner" bindtap="retryLastWrong">
       <view class="banner-left">
-        <view class="banner-icon">🔄</view>
+        <view class="banner-icon">↻</view>
         <view class="banner-text">
           <text class="banner-title">上次练习错词</text>
           <text class="banner-desc">{{lastWrongCount}} 个单词待巩固</text>

@@ -1,60 +1,67 @@
 <view class="container">
-  <!-- 访客模式提示条 -->
   <view class="guest-banner" wx:if="{{isGuest}}">
     <text class="guest-text">访客模式浏览中 · 登录查看学习数据</text>
     <view class="guest-login-btn" bindtap="goLogin">登录</view>
   </view>
-  <!-- 头部用户信息 -->
-  <view class="header">
-    <view class="user-info">
-      <view class="avatar">S</view>
-      <view class="info-text">
-        <text class="username">我的学习档案</text>
-        <text class="level">Lv.{{stats.level || 1}} 学习者</text>
+
+  <view class="profile-header">
+    <view class="avatar">{{avatarText}}</view>
+    <view class="profile-main">
+      <view class="name-row">
+        <text class="username">{{displayName}}</text>
+        <text class="level">Lv.{{stats.level || 1}}</text>
       </view>
+      <text class="profile-subtitle">{{stats.goal_label || '学习目标 · 保持节奏'}}</text>
     </view>
   </view>
 
-  <!-- 核心数据卡片 -->
   <view class="stats-grid">
-    <view class="stat-card fire">
-      <view class="icon-dot fire"></view>
+    <view class="stat-card streak">
       <view class="value">{{stats.streak || 0}}</view>
-      <view class="label">连续打卡(天)</view>
+      <view class="label">连续打卡</view>
     </view>
-    <view class="stat-card time">
-      <view class="icon-dot time"></view>
-      <view class="value">{{stats.total_hours || 0}}</view>
-      <view class="label">累计学习(小时)</view>
+    <view class="stat-card practice">
+      <view class="value">{{weeklyPracticeCount || 0}}</view>
+      <view class="label">本周练习</view>
+    </view>
+    <view class="stat-card accuracy">
+      <view class="value small">{{accuracyLabel}}</view>
+      <view class="label">近 7 日正确率</view>
     </view>
   </view>
 
-  <!-- 本周趋势 -->
-  <view class="section">
-    <view class="section-title">本周学习趋势</view>
+  <view class="section chart-section">
+    <view class="section-heading">
+      <view class="section-title">本周学习时长</view>
+      <view class="section-unit">分钟</view>
+    </view>
     <view class="chart-container">
-      <view class="bar-group" wx:for="{{stats.weekly_activity}}" wx:key="date">
+      <view class="bar-group" wx:for="{{weeklyBars}}" wx:key="date">
         <view class="bar-wrapper">
-          <view class="bar" style="height: {{item.count * 24 + 16}}rpx; max-height: 260rpx;"></view>
+          <view class="bar {{item.active ? 'active' : ''}}" style="height: {{item.height}}%;"></view>
         </view>
-        <text class="day-label">{{item.day_label}}</text>
+        <text class="day-label {{item.active ? 'active' : ''}}">{{item.dayLabel}}</text>
       </view>
     </view>
   </view>
 
-  <!-- 勋章墙 -->
-  <view class="section">
-    <view class="section-title">我的勋章</view>
-    <scroll-view scroll-x="true" class="badge-strip">
-      <view class="badge-item" wx:for="{{stats.badges}}" wx:key="id">
+  <view class="section badge-section">
+    <view class="section-heading">
+      <view class="section-title">我的勋章</view>
+      <view class="section-unit">{{unlockedBadgeCount}} / {{badgeGrid.length}} 已解锁</view>
+    </view>
+    <view class="badge-grid">
+      <view class="badge-item {{item.unlocked ? 'unlocked' : 'locked'}}" wx:for="{{badgeGrid}}" wx:key="id">
         <view class="badge-icon">{{item.icon}}</view>
         <text class="badge-name">{{item.name}}</text>
-        <text class="badge-desc">{{item.desc}}</text>
       </view>
-    </scroll-view>
+    </view>
+    <view class="unlock-tip">
+      <text class="tip-icon">!</text>
+      <text class="tip-text">{{nextBadgeTip}}</text>
+    </view>
   </view>
 
-  <!-- 账号管理 -->
   <view class="logout-section" wx:if="{{!isGuest}}">
     <button class="btn-unbind" bindtap="handleUnbind">解除微信绑定 (Debug)</button>
     <button class="btn-logout" bindtap="handleLogout">退出登录</button>

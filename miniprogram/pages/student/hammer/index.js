@@ -154,7 +154,8 @@ Page({
 
   goLogin() {
     getApp().globalData.guestMode = false
-    wx.reLaunch({ url: '/pages/index/index' })
+    getApp().globalData.guestRole = ''
+    wx.reLaunch({ url: '/pages/index/index?action=login' })
   },
 
   cleanupRecordAndAudio() {

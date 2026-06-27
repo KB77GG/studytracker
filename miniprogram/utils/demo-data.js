@@ -12,50 +12,27 @@ const addDays = (date, days) => {
     return result
 }
 
-const buildStudentTasks = () => ([
-    {
-        id: 'demo-listening',
-        task_name: '剑雅听力精听练习',
-        module: '雅思听力',
-        planned_minutes: 30,
-        status: 'completed',
-        actual_seconds: 1680
-    },
-    {
-        id: 'demo-vocabulary',
-        task_name: '核心词汇拼写复习',
-        module: '词汇',
-        planned_minutes: 20,
-        status: 'in_progress',
-        actual_seconds: 480
-    },
-    {
-        id: 'demo-reading',
-        task_name: '阅读长难句分析',
-        module: '雅思阅读',
-        planned_minutes: 25,
-        status: 'pending',
-        actual_seconds: 0
-    }
-])
+const buildStudentTasks = () => []
 
 const buildStudentStats = () => {
     const today = new Date()
     const weeklyActivity = [-6, -5, -4, -3, -2, -1, 0].map((offset, index) => ({
         date: formatDate(addDays(today, offset)),
         day_label: ['一', '二', '三', '四', '五', '六', '日'][index],
-        count: [2, 3, 2, 4, 3, 5, 3][index]
+        count: [1, 1, 2, 1, 2, 0, 1][index],
+        minutes: [24, 36, 72, 18, 44, 0, 28][index]
     }))
     return {
-        streak: 8,
-        total_hours: 26.5,
-        level: 4,
+        streak: 1,
+        total_hours: 6.5,
+        weekly_practice_count: 8,
+        average_accuracy: 76,
+        level: 1,
         weekly_activity: weeklyActivity,
         badges: [
-            { id: 'demo-1', icon: '7', name: '坚持一周', desc: '连续完成学习任务' },
-            { id: 'demo-2', icon: 'A', name: '词汇进阶', desc: '累计复习 300 个词' },
-            { id: 'demo-3', icon: '90', name: '高正确率', desc: '单次练习正确率超过 90%' }
-        ]
+            { id: 'newbie', icon: '芽', name: '初出茅庐', desc: '开始你的学习之旅' }
+        ],
+        goal_label: '雅思目标 6.5 · 距考试 38 天'
     }
 }
 

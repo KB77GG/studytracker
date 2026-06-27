@@ -166,7 +166,7 @@ Page({
     goLogin() {
         app.globalData.guestMode = false
         app.globalData.guestRole = ''
-        wx.reLaunch({ url: '/pages/index/index' })
+        wx.reLaunch({ url: '/pages/index/index?action=login' })
     },
 
     viewReport() {

@@ -109,6 +109,18 @@ Page({
         if (app.globalData.token) {
             this.setData({ hasToken: true })
             this.checkUserRole()
+            return
+        }
+
+        if (options && options.action === 'login') {
+            this.setData({
+                hasToken: false,
+                isGuest: false,
+                showLoginForm: true,
+                showBindForm: false,
+                showExistingBindForm: false,
+                privacyAgreed: false
+            }, () => this.scrollToTop())
         }
     },
 
@@ -218,7 +230,7 @@ Page({
             wx.reLaunch({ url: '/pages/student/home/index' })
         } else if (role === 'parent') {
             wx.reLaunch({ url: '/pages/parent/home/index' })
-        } else if (role === 'teacher') {
+        } else if (role === 'teacher' || role === 'admin') {
             wx.reLaunch({ url: '/pages/teacher/home/index' })
         } else {
             // guest or other

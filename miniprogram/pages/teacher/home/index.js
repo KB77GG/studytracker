@@ -10,6 +10,8 @@ const HOUR_HEIGHT = 72
 Page({
     data: {
         isGuest: false,
+        isAdmin: false,
+        scheduleScope: 'mine',
         loading: true,
         viewDays: 7,
         schedules: [],
@@ -49,7 +51,11 @@ Page({
     },
 
     onShow() {
-        this.setData({ isGuest: !!app.globalData.guestMode })
+        const cachedUser = app.globalData.userInfo || wx.getStorageSync('userInfo')
+        this.setData({
+            isGuest: !!app.globalData.guestMode,
+            isAdmin: !!(cachedUser && cachedUser.can_view_all_schedules)
+        })
         this.updateGreeting()
         this.loadTeacherProfile()
         if (!this.data.calendarMonth) {
@@ -97,6 +103,10 @@ Page({
             app.globalData.role = normalized.role
             wx.setStorageSync('role', normalized.role)
         }
+        const isAdmin = !!normalized.can_view_all_schedules
+        if (isAdmin !== this.data.isAdmin) {
+            this.setData({ isAdmin })
+        }
         return normalized
     },
 
@@ -113,7 +123,7 @@ Page({
                 if (res.confirm) {
                     app.globalData.guestMode = false
                     app.globalData.guestRole = ''
-                    wx.reLaunch({ url: '/pages/index/index' })
+                    wx.reLaunch({ url: '/pages/index/index?action=login' })
                 }
             }
         })
@@ -180,8 +190,11 @@ Page({
             this.setData({ loading: false })
             return
         }
+        const scheduleApi = (this.data.isAdmin && this.data.scheduleScope === 'all')
+            ? '/miniprogram/teacher/all_schedules'
+            : '/miniprogram/teacher/schedules'
         try {
-            const res = await request('/miniprogram/teacher/schedules', {
+            const res = await request(scheduleApi, {
                 method: 'GET',
                 data: {
                     days: this.data.viewDays,
@@ -193,7 +206,7 @@ Page({
                 let dashboardList = list
                 const currentMonth = this.formatMonth(new Date())
                 if (this.data.calendarMonth && this.data.calendarMonth !== currentMonth) {
-                    const todayRes = await request('/miniprogram/teacher/schedules', {
+                    const todayRes = await request(scheduleApi, {
                         method: 'GET',
                         data: { month: currentMonth }
                     })
@@ -201,6 +214,7 @@ Page({
                         dashboardList = todayRes.schedules || []
                     }
                 }
+                this.setData({ bindRequired: false })
                 this.applyScheduleData(list, dashboardList)
             } else {
                 if (res && res.error === 'missing_scheduler_teacher_id') {
@@ -529,6 +543,13 @@ Page({
     switchRange(e) {
         const days = Number(e.currentTarget.dataset.days) || 7
         this.setData({ viewDays: days }, () => this.fetchSchedules())
+    },
+
+    switchScheduleScope(e) {
+        if (!this.data.isAdmin) return
+        const scope = e.currentTarget.dataset.scope === 'all' ? 'all' : 'mine'
+        if (scope === this.data.scheduleScope) return
+        this.setData({ scheduleScope: scope }, () => this.fetchSchedules())
     },
 
     selectDay(e) {
