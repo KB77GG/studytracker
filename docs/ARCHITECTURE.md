@@ -74,7 +74,11 @@ studytracker/
 ### P1 — 中等收益，需小心验证
 
 - [ ] **拆 `api/miniprogram.py`（5,187 行）**：按主题切成多个蓝图文件（schedules / stats / grading / reading-vocab …），路由签名不变，纯搬运 + import，逐块搬、逐块测。
-- [ ] **拆超长函数**：优先 `submit_reading_vocab_practice()`（258 行）、`get_parent_stats()`（190 行）——把判分/统计逻辑抽成纯函数，便于单测。
+- [x] **`submit_reading_vocab_practice()`（256 行）已拆**（2026-06-27）：判分逻辑抽进纯模块
+  `api/reading_vocab_grading.py` + 共享 `api/text_utils.py`，handler 瘦到 ~126 行，新增 14 例单测，
+  完整套件 109 tests 全绿。**模式可复用到下面这些。**
+- [ ] **拆超长函数（下一个）**：`get_parent_stats()`（190 行）、`get_student_today_tasks()`（148 行）等——
+  同法把统计/计算逻辑抽成纯函数 + 配零依赖单测。
 - [ ] **拆 `pages/student/hammer/index.js`（2,187 行 / 97 state 字段）**：把录音、TTS、评测、计时拆成独立模块/behavior。**改前务必先手动回归口语全流程**（这页最容易出锅）。
 
 ### P2 — 结构性，时间充裕再做
