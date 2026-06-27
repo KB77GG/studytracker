@@ -21,7 +21,7 @@ from models import (
     DictationBook, DictationWord, DictationRecord, StudentWordMastery,
     ListeningTestSubmission, ReadingTestSubmission
 )
-from .auth_utils import require_api_user
+from .auth_utils import can_view_all_schedules, require_api_user
 from .wechat import send_subscribe_message, send_subscribe_message_result
 from .ielts_eval import run_ielts_eval, run_quick_reply
 from .aliyun_asr import transcribe_audio_url
@@ -2674,6 +2674,9 @@ def get_student_stats():
     
     # 使用 Task 表进行统计
     student_name = student.full_name
+    today = date.today()
+    week_dates = [(today - timedelta(days=i)) for i in range(6, -1, -1)]
+    week_date_strings = [d.isoformat() for d in week_dates]
     
     # 1. 累计学习时长 (小时)
     total_seconds = db.session.query(func.sum(Task.actual_seconds)).filter(
@@ -2681,6 +2684,19 @@ def get_student_stats():
         Task.status == 'done'
     ).scalar() or 0
     total_hours = round(total_seconds / 3600, 1)
+    accuracy_values = [
+        float(value)
+        for (value,) in db.session.query(Task.accuracy).filter(
+            Task.student_name == student_name,
+            Task.status == 'done',
+            Task.date.in_(week_date_strings),
+            Task.accuracy.isnot(None),
+        ).all()
+    ]
+    average_accuracy = (
+        round(sum(accuracy_values) / len(accuracy_values), 1)
+        if accuracy_values else None
+    )
     
     # 2. 连续打卡天数 (Streak)
     # 获取所有有完成任务的日期，按倒序排列
@@ -2691,7 +2707,6 @@ def get_student_stats():
     
     streak = 0
     if completed_dates:
-        today = date.today()
         last_date_str = completed_dates[0][0] # YYYY-MM-DD string
         try:
             last_date = datetime.strptime(last_date_str, "%Y-%m-%d").date()
@@ -2711,20 +2726,23 @@ def get_student_stats():
             pass
 
     # 3. 本周活跃度 (过去7天)
-    today = date.today()
-    week_dates = [(today - timedelta(days=i)) for i in range(6, -1, -1)]
     weekly_activity = []
+    weekly_practice_count = 0
     
     for d in week_dates:
         d_str = d.isoformat()
-        count = Task.query.filter(
+        day_tasks = Task.query.filter(
             Task.student_name == student_name,
             Task.date == d_str,
             Task.status == 'done'
-        ).count()
+        ).all()
+        count = len(day_tasks)
+        weekly_practice_count += count
+        day_seconds = sum(max(0, task.actual_seconds or 0) for task in day_tasks)
         weekly_activity.append({
             "date": d.strftime("%m-%d"),
             "count": count,
+            "minutes": round(day_seconds / 60),
             "day_label": ["周一","周二","周三","周四","周五","周六","周日"][d.weekday()]
         })
 
@@ -2736,6 +2754,8 @@ def get_student_stats():
         badges.append({"id": "streak_7", "name": "习惯养成", "icon": "📅", "desc": "连续打卡7天"})
     if total_hours >= 10:
         badges.append({"id": "hours_10", "name": "学习新星", "icon": "⭐", "desc": "累计学习10小时"})
+    if average_accuracy is not None and average_accuracy >= 90:
+        badges.append({"id": "accuracy_90", "name": "满分达人", "icon": "A", "desc": "近7日正确率90%+"})
     
     # 如果没有勋章，给一个鼓励勋章
     if not badges:
@@ -2746,6 +2766,8 @@ def get_student_stats():
         "stats": {
             "streak": streak,
             "total_hours": total_hours,
+            "weekly_practice_count": weekly_practice_count,
+            "average_accuracy": average_accuracy,
             "weekly_activity": weekly_activity,
             "badges": badges,
             "level": int(total_hours // 5) + 1  # 简单等级计算：每5小时升一级
@@ -4880,6 +4902,70 @@ def submit_teacher_grading(task_id):
     })
 
 
+def _normalize_teacher_schedules(schedules, fallback_teacher_id=None):
+    """把排课系统返回的课表统一成前端结构，并附上课堂记录。"""
+    schedules = schedules or []
+    normalized = []
+    student_name_map = None
+    for item in schedules:
+        sid, student_id, teacher_id, course_name, start_dt, end_dt, teacher_name, student_name = _extract_schedule_fields(item)
+        if not student_name and student_id:
+            if student_name_map is None:
+                student_ids = set()
+                for sched_item in schedules:
+                    _, sched_student_id, _, _, _, _, _, _ = _extract_schedule_fields(sched_item)
+                    if sched_student_id:
+                        student_ids.add(sched_student_id)
+                if student_ids:
+                    profiles = StudentProfile.query.filter(
+                        StudentProfile.scheduler_student_id.in_(student_ids)
+                    ).all()
+                    student_name_map = {
+                        profile.scheduler_student_id: profile.full_name
+                        for profile in profiles
+                        if profile.scheduler_student_id
+                    }
+                else:
+                    student_name_map = {}
+            student_name = student_name_map.get(student_id)
+        schedule_uid = _build_schedule_uid(sid, teacher_id or fallback_teacher_id, student_id, course_name, start_dt)
+        normalized.append({
+            "schedule_id": sid,
+            "schedule_uid": schedule_uid,
+            "student_id": student_id,
+            "teacher_id": teacher_id,
+            "course_name": course_name,
+            "start_time": start_dt,
+            "end_time": end_dt,
+            "teacher_name": teacher_name,
+            "student_name": student_name,
+            "schedule_date": item.get("schedule_date") or item.get("date"),
+        })
+
+    feedback_map = {}
+    try:
+        schedule_uids = [item["schedule_uid"] for item in normalized if item.get("schedule_uid")]
+        if schedule_uids:
+            feedbacks = ClassFeedback.query.filter(ClassFeedback.schedule_uid.in_(schedule_uids)).all()
+            feedback_map = {feedback.schedule_uid: feedback for feedback in feedbacks}
+    except Exception as exc:
+        current_app.logger.warning("Class feedback lookup failed: %s", exc)
+
+    for item in normalized:
+        feedback = feedback_map.get(item.get("schedule_uid"))
+        if feedback:
+            item["feedback"] = {
+                "id": feedback.id,
+                "text": feedback.feedback_text,
+                "image": feedback.feedback_image,
+                "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
+            }
+        else:
+            item["feedback"] = None
+
+    return normalized
+
+
 @mp_bp.route("/teacher/schedules", methods=["GET"])
 @require_api_user(User.ROLE_TEACHER)
 def teacher_schedules():
@@ -4938,64 +5024,77 @@ def teacher_schedules():
         return jsonify({"ok": False, "error": err}), 400
 
     schedules = data.get("schedules") if isinstance(data, dict) else data
-    schedules = schedules or []
+    normalized = _normalize_teacher_schedules(schedules, fallback_teacher_id=user.scheduler_teacher_id)
 
-    normalized = []
-    student_name_map = None
-    for item in schedules:
-        sid, student_id, teacher_id, course_name, start_dt, end_dt, teacher_name, student_name = _extract_schedule_fields(item)
-        if not student_name and student_id:
-            if student_name_map is None:
-                student_name_map = {}
-                student_ids = {student_id}
-                for sched_item in schedules:
-                    _, sched_student_id, _, _, _, _, _, _ = _extract_schedule_fields(sched_item)
-                    if sched_student_id:
-                        student_ids.add(sched_student_id)
-                if student_ids:
-                    profiles = StudentProfile.query.filter(
-                        StudentProfile.scheduler_student_id.in_(student_ids)
-                    ).all()
-                    student_name_map = {
-                        profile.scheduler_student_id: profile.full_name
-                        for profile in profiles
-                        if profile.scheduler_student_id
-                    }
-            student_name = student_name_map.get(student_id)
-        schedule_uid = _build_schedule_uid(sid, teacher_id or user.scheduler_teacher_id, student_id, course_name, start_dt)
-        normalized.append({
-            "schedule_id": sid,
-            "schedule_uid": schedule_uid,
-            "student_id": student_id,
-            "teacher_id": teacher_id,
-            "course_name": course_name,
-            "start_time": start_dt,
-            "end_time": end_dt,
-            "teacher_name": teacher_name,
-            "student_name": student_name,
-            "schedule_date": item.get("schedule_date") or item.get("date"),
-        })
+    return jsonify({
+        "ok": True,
+        "days": days,
+        "past_days": past_days,
+        "month": month_arg or None,
+        "count": len(normalized),
+        "schedules": normalized
+    })
 
-    feedback_map = {}
+
+def _parse_schedule_range_args():
+    """解析 days / past_days / month 参数，返回 (start_date, end_date, days, past_days, month_arg) 或 error 字符串。"""
+    days = request.args.get("days", 7)
     try:
-        schedule_uids = [item["schedule_uid"] for item in normalized if item.get("schedule_uid")]
-        if schedule_uids:
-            feedbacks = ClassFeedback.query.filter(ClassFeedback.schedule_uid.in_(schedule_uids)).all()
-            feedback_map = {feedback.schedule_uid: feedback for feedback in feedbacks}
-    except Exception as exc:
-        current_app.logger.warning("Class feedback lookup failed: %s", exc)
+        days = int(days)
+    except Exception:
+        days = 7
+    days = max(1, min(days, 60))
 
-    for item in normalized:
-        feedback = feedback_map.get(item.get("schedule_uid"))
-        if feedback:
-            item["feedback"] = {
-                "id": feedback.id,
-                "text": feedback.feedback_text,
-                "image": feedback.feedback_image,
-                "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
-            }
-        else:
-            item["feedback"] = None
+    past_days = request.args.get("past_days", 2)
+    try:
+        past_days = int(past_days)
+    except Exception:
+        past_days = 2
+    past_days = max(0, min(past_days, 14))
+
+    month_arg = (request.args.get("month") or "").strip()
+    if month_arg:
+        try:
+            year_str, month_str = month_arg.split("-", 1)
+            year = int(year_str)
+            month = int(month_str)
+            if month < 1 or month > 12:
+                raise ValueError("month out of range")
+            start_date = date(year, month, 1)
+            if month == 12:
+                end_date = date(year + 1, 1, 1) - timedelta(days=1)
+            else:
+                end_date = date(year, month + 1, 1) - timedelta(days=1)
+        except Exception:
+            return None, None, None, None, None, "invalid_month"
+    else:
+        start_date = date.today() - timedelta(days=past_days)
+        end_date = date.today() + timedelta(days=days)
+    return start_date, end_date, days, past_days, month_arg, None
+
+
+@mp_bp.route("/teacher/all_schedules", methods=["GET"])
+@require_api_user(User.ROLE_TEACHER)
+def teacher_all_schedules():
+    """管理员/超级老师查看全部老师的课表（只读）。
+
+    不按 scheduler_teacher_id 过滤，调用排课系统 range 接口拉取所有老师的课。
+    支持 days / past_days，或 month=YYYY-MM 获取整月。
+    仅 admin 角色或在白名单内的老师账号可访问。
+    """
+    if not can_view_all_schedules(request.current_api_user):
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+
+    start_date, end_date, days, past_days, month_arg, err = _parse_schedule_range_args()
+    if err:
+        return jsonify({"ok": False, "error": err}), 400
+
+    data, err = _fetch_range_schedules_by_dates(start_date, end_date, teacher_id=None)
+    if err:
+        return jsonify({"ok": False, "error": err}), 400
+
+    schedules = data.get("schedules") if isinstance(data, dict) else data
+    normalized = _normalize_teacher_schedules(schedules, fallback_teacher_id=None)
 
     return jsonify({
         "ok": True,

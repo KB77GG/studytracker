@@ -66,6 +66,13 @@ class Config:
     SCHEDULER_BASE_URL = os.environ.get("SCHEDULER_BASE_URL", "http://aliyun-server:5000")
     SCHEDULER_PUSH_TOKEN = os.environ.get("SCHEDULER_PUSH_TOKEN")
 
+    # 允许查看“全部老师课表”的老师账号白名单（username 或 wechat_openid，逗号分隔）。
+    # 默认包含管理员周鑫的账号；admin 角色无需在此列表也始终放行。
+    ALL_SCHEDULE_TEACHER_ACCOUNTS = os.environ.get(
+        "ALL_SCHEDULE_TEACHER_ACCOUNTS",
+        "wx_oA29_7Tb_1769054609_638",
+    )
+
     # DeepSeek API (IELTS speaking evaluation)
     DEEPSEEK_API_BASE = os.environ.get("DEEPSEEK_API_BASE", "https://api.deepseek.com")
     DEEPSEEK_CHAT_URL = os.environ.get("DEEPSEEK_CHAT_URL")

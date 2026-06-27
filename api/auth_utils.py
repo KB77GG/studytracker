@@ -39,6 +39,26 @@ def revoke_token(user: User) -> None:
     db.session.commit()
 
 
+def can_view_all_schedules(user: User) -> bool:
+    """判断某账号是否可以查看全部老师的课表。
+
+    admin 角色始终允许；其余老师需在 ALL_SCHEDULE_TEACHER_ACCOUNTS 白名单内
+    （按 username 或 wechat_openid 匹配）。
+    """
+    if not user:
+        return False
+    if user.role == User.ROLE_ADMIN:
+        return True
+    raw = current_app.config.get("ALL_SCHEDULE_TEACHER_ACCOUNTS") or ""
+    allow = {item.strip() for item in str(raw).split(",") if item.strip()}
+    if not allow:
+        return False
+    return bool(
+        (user.username and user.username in allow)
+        or (user.wechat_openid and user.wechat_openid in allow)
+    )
+
+
 def require_api_user(*roles):
     """Decorator enforcing API bearer auth and optional role filtering."""
 

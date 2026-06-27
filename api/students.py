@@ -18,7 +18,7 @@ from models import (
 )
 
 from . import api_bp
-from .auth_utils import require_api_user
+from .auth_utils import can_view_all_schedules, require_api_user
 
 MAX_STUDENT_RESETS = 2
 
@@ -139,6 +139,7 @@ def api_me():
                 "username": user.username,
                 "display_name": user.display_name,
                 "role": user.role,
+                "can_view_all_schedules": can_view_all_schedules(user),
                 "profile": profile,
                 "children": children,
             },
