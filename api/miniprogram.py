@@ -23,6 +23,7 @@ from models import (
 )
 from .auth_utils import can_view_all_schedules, require_api_user
 from .reading_vocab_grading import grade_reading_vocab_submission
+from .stats_utils import summarize_subjects, summarize_today_status, summarize_weekly
 from .wechat import send_subscribe_message, send_subscribe_message_result
 from .ielts_eval import run_ielts_eval, run_quick_reply
 from .aliyun_asr import transcribe_audio_url
@@ -3108,17 +3109,11 @@ def get_parent_stats():
         date=today.isoformat()
     ).all()
     
-    total_tasks = len(today_tasks)
-    status_counts = {
-        "not_started": 0,
-        "in_progress": 0,
-        "pending_review": 0,
-        "completed": 0,
-    }
     today_task_items = []
+    today_states = []
     for t in today_tasks:
         state, state_label = _parent_task_state(t)
-        status_counts[state] += 1
+        today_states.append(state)
         today_task_items.append({
             "id": t.id,
             "category": t.category or "学习任务",
@@ -3128,9 +3123,12 @@ def get_parent_stats():
             "state": state,
             "state_label": state_label,
         })
-            
-    completed_count = status_counts["completed"]
-    completion_rate = round(completed_count / total_tasks * 100) if total_tasks > 0 else 0
+
+    # 计数/完成率聚合下沉到纯函数；保留 status_counts 等变量名以兼容下方响应块与既有源码断言
+    status_counts = summarize_today_status(today_states)
+    total_tasks = status_counts["total"]
+    completed_count = status_counts["completed_count"]
+    completion_rate = status_counts["rate"]
     
     # 2. 最近动态 (最近完成的5个任务)
     recent_tasks = Task.query.filter(
@@ -3161,52 +3159,32 @@ def get_parent_stats():
 
     # 3. 本周趋势 (过去7天)
     from datetime import timedelta
-    weekly_stats = []
+    weekly_rows = []
     for i in range(6, -1, -1):
         day = today - timedelta(days=i)
         day_str = day.isoformat()
-        
+
         day_tasks = Task.query.filter_by(
             student_name=student_name,
             date=day_str
         ).all()
-        
-        d_total = len(day_tasks)
-        d_completed = sum(1 for t in day_tasks if t.status == "done")
-        d_rate = round(d_completed / d_total * 100) if d_total > 0 else 0
-        
-        weekly_stats.append({
+
+        weekly_rows.append({
             "date": day.strftime("%m-%d"),
-            "total": d_total,
-            "completed": d_completed,
-            "rate": d_rate
+            "total": len(day_tasks),
+            "completed": sum(1 for t in day_tasks if t.status == "done"),
         })
+
+    weekly_stats = summarize_weekly(weekly_rows)
         
     # 3. 学科分布统计 (最近30天)
     thirty_days_ago = today - timedelta(days=30)
-    recent_tasks = Task.query.filter(
+    recent_30day_tasks = Task.query.filter(
         Task.student_name == student_name,
         Task.date >= thirty_days_ago.isoformat()
     ).all()
-    
-    subject_counts = {}
-    total_recent = 0
-    for t in recent_tasks:
-        cat = t.category or "其他"
-        subject_counts[cat] = subject_counts.get(cat, 0) + 1
-        total_recent += 1
-        
-    subject_stats = []
-    for cat, count in subject_counts.items():
-        percent = round(count / total_recent * 100) if total_recent > 0 else 0
-        subject_stats.append({
-            "subject": cat,
-            "count": count,
-            "percent": percent
-        })
-    
-    # 按数量降序排序
-    subject_stats.sort(key=lambda x: x["count"], reverse=True)
+
+    subject_stats = summarize_subjects([t.category for t in recent_30day_tasks])
     
     # 4. 检测是否正在学习（有活跃的计时器）
     # 查找最近10分钟内启动的活跃计时会话

@@ -35,6 +35,7 @@ jobs:
             tests.test_map_toefl_answers_to_practice_docs \
             tests.test_import_toefl_official_reading \
             tests.test_reading_vocab_grading \
+            tests.test_stats_utils \
             -v
 
   # 代码风格/静态检查：现阶段只报告，不阻断（continue-on-error）。
