@@ -23,7 +23,15 @@ from models import (
 )
 from .auth_utils import can_view_all_schedules, require_api_user
 from .reading_vocab_grading import grade_reading_vocab_submission
-from .stats_utils import summarize_subjects, summarize_today_status, summarize_weekly
+from .stats_utils import (
+    average_accuracy,
+    compute_badges,
+    compute_streak,
+    study_level,
+    summarize_subjects,
+    summarize_today_status,
+    summarize_weekly,
+)
 from .wechat import send_subscribe_message, send_subscribe_message_result
 from .ielts_eval import run_ielts_eval, run_quick_reply
 from .aliyun_asr import transcribe_audio_url
@@ -2563,37 +2571,16 @@ def get_student_stats():
             Task.accuracy.isnot(None),
         ).all()
     ]
-    average_accuracy = (
-        round(sum(accuracy_values) / len(accuracy_values), 1)
-        if accuracy_values else None
-    )
-    
+    avg_accuracy = average_accuracy(accuracy_values)
+
     # 2. 连续打卡天数 (Streak)
     # 获取所有有完成任务的日期，按倒序排列
     completed_dates = db.session.query(Task.date).filter(
         Task.student_name == student_name,
         Task.status == 'done'
     ).distinct().order_by(Task.date.desc()).all()
-    
-    streak = 0
-    if completed_dates:
-        last_date_str = completed_dates[0][0] # YYYY-MM-DD string
-        try:
-            last_date = datetime.strptime(last_date_str, "%Y-%m-%d").date()
-            # 如果最后一次打卡是今天或昨天，则连续有效
-            if (today - last_date).days <= 1:
-                streak = 1
-                current_check = last_date
-                for i in range(1, len(completed_dates)):
-                    prev_date_str = completed_dates[i][0]
-                    prev_date = datetime.strptime(prev_date_str, "%Y-%m-%d").date()
-                    if (current_check - prev_date).days == 1:
-                        streak += 1
-                        current_check = prev_date
-                    else:
-                        break
-        except:
-            pass
+
+    streak = compute_streak([row[0] for row in completed_dates], today)
 
     # 3. 本周活跃度 (过去7天)
     weekly_activity = []
@@ -2616,20 +2603,8 @@ def get_student_stats():
             "day_label": ["周一","周二","周三","周四","周五","周六","周日"][d.weekday()]
         })
 
-    # 4. 简单勋章判断
-    badges = []
-    if streak >= 3:
-        badges.append({"id": "streak_3", "name": "坚持不懈", "icon": "🔥", "desc": "连续打卡3天"})
-    if streak >= 7:
-        badges.append({"id": "streak_7", "name": "习惯养成", "icon": "📅", "desc": "连续打卡7天"})
-    if total_hours >= 10:
-        badges.append({"id": "hours_10", "name": "学习新星", "icon": "⭐", "desc": "累计学习10小时"})
-    if average_accuracy is not None and average_accuracy >= 90:
-        badges.append({"id": "accuracy_90", "name": "满分达人", "icon": "A", "desc": "近7日正确率90%+"})
-    
-    # 如果没有勋章，给一个鼓励勋章
-    if not badges:
-        badges.append({"id": "newbie", "name": "初出茅庐", "icon": "🌱", "desc": "开始你的学习之旅"})
+    # 4. 勋章
+    badges = compute_badges(streak, total_hours, avg_accuracy)
 
     return jsonify({
         "ok": True,
@@ -2637,10 +2612,10 @@ def get_student_stats():
             "streak": streak,
             "total_hours": total_hours,
             "weekly_practice_count": weekly_practice_count,
-            "average_accuracy": average_accuracy,
+            "average_accuracy": avg_accuracy,
             "weekly_activity": weekly_activity,
             "badges": badges,
-            "level": int(total_hours // 5) + 1  # 简单等级计算：每5小时升一级
+            "level": study_level(total_hours)
         }
     })
 

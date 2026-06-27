@@ -1,9 +1,14 @@
 """统计聚合纯函数单测（零 DB，只 import api.stats_utils）。"""
 
 import unittest
+from datetime import date, timedelta
 
 from api.stats_utils import (
+    average_accuracy,
+    compute_badges,
+    compute_streak,
     percent,
+    study_level,
     summarize_subjects,
     summarize_today_status,
     summarize_weekly,
@@ -79,6 +84,75 @@ class SubjectsTests(unittest.TestCase):
 
     def test_empty(self):
         self.assertEqual(summarize_subjects([]), [])
+
+
+class AverageAccuracyAndLevelTests(unittest.TestCase):
+    def test_average(self):
+        self.assertIsNone(average_accuracy([]))
+        self.assertEqual(average_accuracy([90, 80]), 85.0)
+        self.assertEqual(average_accuracy([1, 2, 2]), 1.7)  # round(1.666,1)
+
+    def test_level(self):
+        self.assertEqual(study_level(0), 1)
+        self.assertEqual(study_level(4.9), 1)
+        self.assertEqual(study_level(5), 2)
+        self.assertEqual(study_level(12), 3)
+
+
+class StreakTests(unittest.TestCase):
+    def setUp(self):
+        self.today = date(2026, 6, 27)
+
+    def _d(self, days_ago):
+        return (self.today - timedelta(days=days_ago)).isoformat()
+
+    def test_empty(self):
+        self.assertEqual(compute_streak([], self.today), 0)
+
+    def test_today_only(self):
+        self.assertEqual(compute_streak([self._d(0)], self.today), 1)
+
+    def test_yesterday_only_still_counts(self):
+        self.assertEqual(compute_streak([self._d(1)], self.today), 1)
+
+    def test_two_days_ago_breaks(self):
+        self.assertEqual(compute_streak([self._d(2)], self.today), 0)
+
+    def test_consecutive_three(self):
+        self.assertEqual(
+            compute_streak([self._d(0), self._d(1), self._d(2)], self.today), 3
+        )
+
+    def test_stops_at_gap(self):
+        # 今天、昨天连续，然后跳到4天前 → streak=2
+        self.assertEqual(
+            compute_streak([self._d(0), self._d(1), self._d(4)], self.today), 2
+        )
+
+    def test_malformed_date_does_not_crash(self):
+        self.assertEqual(compute_streak(["not-a-date"], self.today), 0)
+
+
+class BadgesTests(unittest.TestCase):
+    @staticmethod
+    def _ids(badges):
+        return {b["id"] for b in badges}
+
+    def test_streak_thresholds(self):
+        self.assertIn("streak_3", self._ids(compute_badges(3, 0, None)))
+        self.assertNotIn("streak_7", self._ids(compute_badges(3, 0, None)))
+        ids7 = self._ids(compute_badges(7, 0, None))
+        self.assertIn("streak_3", ids7)
+        self.assertIn("streak_7", ids7)
+
+    def test_hours_and_accuracy(self):
+        self.assertIn("hours_10", self._ids(compute_badges(0, 10, None)))
+        self.assertIn("accuracy_90", self._ids(compute_badges(0, 0, 90)))
+        self.assertNotIn("accuracy_90", self._ids(compute_badges(0, 0, 89)))
+        self.assertNotIn("accuracy_90", self._ids(compute_badges(0, 0, None)))
+
+    def test_newbie_when_nothing(self):
+        self.assertEqual(self._ids(compute_badges(0, 0, None)), {"newbie"})
 
 
 if __name__ == "__main__":
