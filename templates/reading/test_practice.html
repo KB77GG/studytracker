@@ -493,17 +493,43 @@ function canonicalJudgmentAnswer(value) {
   return readingJudgmentAliases[normalized] || readingJudgmentAliases[compact] || "";
 }
 
-function fullJudgmentAnswers(answer) {
+function fullJudgmentAnswers(answer, group = {}) {
+  const groupUsesJudgment = groupLooksLikeJudgment(group);
   return String(answer || "")
     .split(/\s*\/\s*|\s+or\s+/i)
     .map((part) => {
       const normalized = part.trim().toUpperCase().replace(/[\s_-]+/g, " ");
       const compact = normalized.replace(/[\s_-]+/g, "");
-      return readingFullJudgments.has(normalized) || compact === "NOTGIVEN"
+      const isFull = readingFullJudgments.has(normalized) || compact === "NOTGIVEN";
+      const isShort = ["Y", "N", "NG", "T", "F"].includes(compact);
+      return isFull || (isShort && groupUsesJudgment)
         ? canonicalJudgmentAnswer(part)
         : "";
     })
     .filter(Boolean);
+}
+
+function groupLooksLikeJudgment(group) {
+  const text = `${group.title || ""} ${group.question_title || ""} ${group.desc || ""}`.toUpperCase();
+  return /\b(TRUE|FALSE|YES|NO|NOT\s+GIVEN)\s+IF\b/.test(text) ||
+    /\bWRITE\s+(TRUE|FALSE|YES|NO|NOT\s+GIVEN)/.test(text) ||
+    text.includes("DO THE FOLLOWING STATEMENTS AGREE") ||
+    text.includes("STATEMENTS AGREE WITH") ||
+    text.includes("CLAIMS OF THE WRITER") ||
+    text.includes("VIEWS OF THE WRITER");
+}
+
+function optionLooksLikeJudgment(option) {
+  const key = canonicalJudgmentAnswer(option.key);
+  const text = canonicalJudgmentAnswer(option.text);
+  return Boolean(text || (key && String(option.key || "").trim().length > 1));
+}
+
+function shouldUseQuestionOptions(question, group) {
+  const questionOptions = question.options || [];
+  if (!questionOptions.length) return false;
+  const allJudgmentOptions = questionOptions.every(optionLooksLikeJudgment);
+  return !allJudgmentOptions || groupLooksLikeJudgment(group);
 }
 
 function splitAnswer(answer) {
@@ -535,6 +561,17 @@ function questionById(id) {
   return null;
 }
 
+function groupForQuestion(question) {
+  for (const passage of testData.passages) {
+    for (const group of passage.groups || []) {
+      if ((group.questions || []).some((item) => String(item.id) === String(question.id))) {
+        return group;
+      }
+    }
+  }
+  return {};
+}
+
 function shouldUseGroupOptions(question, group) {
   const groupOptions = group.collect_option?.list || [];
   if (!groupOptions.length) return false;
@@ -563,11 +600,13 @@ function questionControl(question, group) {
       ${groupOptions.map((option) => `<option value="${escapeHtml(option.key)}" ${value === option.key ? "selected" : ""}>${escapeHtml(option.key)}</option>`).join("")}
     </select>`;
   }
-  if (question.options && question.options.length) {
+  if (shouldUseQuestionOptions(question, group)) {
+    const isMulti = String(question.answer || "").includes(",");
+    const selectedValues = splitLetters(value);
     return `<div class="choice-stack" data-qid="${question.id}">
       ${question.options.map((option) => `
         <label class="choice-option">
-          <input type="radio" name="q_${question.id}" value="${escapeHtml(option.key)}" ${value === option.key ? "checked" : ""}>
+          <input type="${isMulti ? "checkbox" : "radio"}" name="q_${question.id}" value="${escapeHtml(option.key)}" ${isMulti ? (selectedValues.includes(String(option.key || "").trim().toUpperCase()) ? "checked" : "") : (value === option.key ? "checked" : "")}>
           <span><strong>${escapeHtml(option.key)}</strong> ${escapeHtml(optionDisplayText(option.key, option.text))}</span>
         </label>
       `).join("")}
@@ -670,7 +709,13 @@ function handleAnswerChange(event) {
   const target = event.target;
   if (target.matches(".choice-stack input")) {
     const stack = target.closest(".choice-stack");
-    answers[stack.dataset.qid] = target.value;
+    if (target.type === "checkbox") {
+      answers[stack.dataset.qid] = Array.from(stack.querySelectorAll("input:checked"))
+        .map((input) => input.value)
+        .join(",");
+    } else {
+      answers[stack.dataset.qid] = target.value;
+    }
   } else if (target.dataset.qid) {
     answers[target.dataset.qid] = target.value;
   }
@@ -698,7 +743,7 @@ function isCorrect(question) {
   if (serverRow) return Boolean(serverRow.correct);
   const userValue = answers[question.id] || "";
   const answer = question.answer || "";
-  const judgmentAnswers = fullJudgmentAnswers(answer);
+  const judgmentAnswers = fullJudgmentAnswers(answer, groupForQuestion(question));
   if (judgmentAnswers.length) {
     return judgmentAnswers.includes(canonicalJudgmentAnswer(userValue));
   }

@@ -840,9 +840,11 @@ def _grade_listening_test_answers(payload: dict, answers: dict, section_number: 
         if unit["kind"] == "checkbox-set":
             expected = _split_listening_test_letters(answer)
             submitted = _split_listening_test_letters(value)
-            extra = len([letter for letter in submitted if letter not in expected])
-            matched = len([letter for letter in submitted if letter in expected])
-            awarded = 0 if extra else min(marks, matched)
+            if len(submitted) > marks:
+                awarded = 0
+            else:
+                matched = len([letter for letter in submitted if letter in expected])
+                awarded = min(marks, matched)
             is_correct = bool(expected) and awarded == marks
         elif unit["kind"] == "checkbox-exact":
             expected = _split_listening_test_letters(answer)
@@ -970,6 +972,7 @@ def _reading_test_answer_is_letters(answer: str) -> bool:
 
 
 READING_FULL_JUDGMENT_ANSWERS = {"YES", "NO", "NOT GIVEN", "TRUE", "FALSE"}
+READING_SHORT_JUDGMENT_ANSWERS = {"Y", "N", "NG", "T", "F"}
 READING_JUDGMENT_ALIASES = {
     "Y": "YES",
     "YES": "YES",
@@ -985,6 +988,25 @@ READING_JUDGMENT_ALIASES = {
 }
 
 
+def _reading_instruction_text(group: dict) -> str:
+    return " ".join(
+        str(group.get(key) or "")
+        for key in ("title", "question_title", "desc")
+    )
+
+
+def _reading_group_has_judgment_instructions(group: dict) -> bool:
+    text_value = _reading_instruction_text(group).upper()
+    return bool(
+        re.search(r"\b(TRUE|FALSE|YES|NO|NOT\s+GIVEN)\s+IF\b", text_value)
+        or re.search(r"\bWRITE\s+(TRUE|FALSE|YES|NO|NOT\s+GIVEN)", text_value)
+        or "DO THE FOLLOWING STATEMENTS AGREE" in text_value
+        or "STATEMENTS AGREE WITH" in text_value
+        or "CLAIMS OF THE WRITER" in text_value
+        or "VIEWS OF THE WRITER" in text_value
+    )
+
+
 def _reading_judgment_key(value) -> str:
     text_value = str(value or "").strip().upper()
     text_value = re.sub(r"[\s_-]+", " ", text_value)
@@ -992,14 +1014,32 @@ def _reading_judgment_key(value) -> str:
     return READING_JUDGMENT_ALIASES.get(text_value) or READING_JUDGMENT_ALIASES.get(compact_value) or ""
 
 
-def _reading_full_judgment_answers(answer) -> list[str]:
+def _reading_judgment_answers(answer, group: dict | None = None) -> list[str]:
     values = []
+    group_uses_judgment = _reading_group_has_judgment_instructions(group or {})
     for part in re.split(r"\s*/\s*|\s+or\s+", str(answer or ""), flags=re.I):
         normalized = re.sub(r"[\s_-]+", " ", part.strip().upper())
         compact = re.sub(r"[\s_-]+", "", normalized)
-        if normalized in READING_FULL_JUDGMENT_ANSWERS or compact == "NOTGIVEN":
+        is_full = normalized in READING_FULL_JUDGMENT_ANSWERS or compact == "NOTGIVEN"
+        is_short = compact in READING_SHORT_JUDGMENT_ANSWERS
+        if is_full or (is_short and group_uses_judgment):
             values.append(_reading_judgment_key(part))
     return list(dict.fromkeys(item for item in values if item))
+
+
+def _reading_group_unordered_multi_answer(group: dict) -> list[str]:
+    questions = group.get("questions") or []
+    if len(questions) < 2:
+        return []
+    first_answer = questions[0].get("answer") or ""
+    if "," not in str(first_answer or "") or not _reading_test_answer_is_letters(first_answer):
+        return []
+    expected = _split_listening_test_letters(first_answer)
+    if len(expected) != len(questions):
+        return []
+    if not all((question.get("answer") or "") == first_answer for question in questions):
+        return []
+    return expected
 
 
 def _grade_reading_test_answers(payload: dict, answers: dict, passage_number: int | None = None) -> dict:
@@ -1017,6 +1057,39 @@ def _grade_reading_test_answers(payload: dict, answers: dict, passage_number: in
         if passage_index_filter is not None and passage_index != passage_index_filter:
             continue
         for group in passage.get("groups") or []:
+            unordered_multi_expected = _reading_group_unordered_multi_answer(group)
+            if unordered_multi_expected:
+                used_letters = set()
+                for question in group.get("questions") or []:
+                    qid = str(question.get("id") or question.get("number"))
+                    number = question.get("number")
+                    answer = question.get("answer") or ""
+                    value = answers.get(qid, "")
+                    total += 1
+                    submitted = _split_listening_test_letters(value)
+                    submitted_letter = submitted[0] if len(submitted) == 1 else ""
+                    is_correct = (
+                        submitted_letter in unordered_multi_expected
+                        and submitted_letter not in used_letters
+                    )
+                    if is_correct:
+                        correct += 1
+                        used_letters.add(submitted_letter)
+                    else:
+                        wrong_numbers.append(number)
+                    results.append({
+                        "ids": [qid],
+                        "numbers": [number],
+                        "q": str(number or ""),
+                        "answer": answer,
+                        "value": value or "",
+                        "marks": 1,
+                        "awarded": 1 if is_correct else 0,
+                        "correct": is_correct,
+                        "passage": passage_index,
+                    })
+                continue
+
             for question in group.get("questions") or []:
                 qid = str(question.get("id") or question.get("number"))
                 number = question.get("number")
@@ -1024,10 +1097,10 @@ def _grade_reading_test_answers(payload: dict, answers: dict, passage_number: in
                 value = answers.get(qid, "")
                 total += 1
 
-                judgment_answers = _reading_full_judgment_answers(answer)
+                judgment_answers = _reading_judgment_answers(answer, group)
                 if judgment_answers:
                     is_correct = _reading_judgment_key(value) in judgment_answers
-                elif "," in str(answer or ""):
+                elif "," in str(answer or "") and _reading_test_answer_is_letters(answer):
                     expected = _split_listening_test_letters(answer)
                     submitted = _split_listening_test_letters(value)
                     is_correct = bool(expected) and set(submitted) == set(expected)
@@ -7151,20 +7224,49 @@ def api_listening_jijing_submit(part_id):
     data = request.get_json(silent=True) or {}
     answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
     results = data.get("results") if isinstance(data.get("results"), list) else []
-    try:
-        total = max(0, int(data.get("total") or 0))
-    except (TypeError, ValueError):
+    if results:
         total = 0
-    try:
-        correct = max(0, int(data.get("correct") or 0))
-    except (TypeError, ValueError):
         correct = 0
+        for row in results:
+            if not isinstance(row, dict):
+                continue
+            try:
+                marks = max(0, int(row.get("marks") or 1))
+            except (TypeError, ValueError):
+                marks = 1
+            try:
+                awarded = max(0, int(row.get("awarded") or 0))
+            except (TypeError, ValueError):
+                awarded = marks if row.get("correct") else 0
+            total += marks
+            correct += min(marks, awarded)
+    else:
+        try:
+            total = max(0, int(data.get("total") or 0))
+        except (TypeError, ValueError):
+            total = 0
+        try:
+            correct = max(0, int(data.get("correct") or 0))
+        except (TypeError, ValueError):
+            correct = 0
     accuracy = round(correct * 100.0 / total, 1) if total else 0.0
-    wrong_numbers = [
-        str(row.get("q") or "").strip()
-        for row in results
-        if isinstance(row, dict) and not row.get("correct") and str(row.get("q") or "").strip()
-    ]
+    wrong_numbers = []
+    for row in results:
+        if not isinstance(row, dict):
+            continue
+        label = str(row.get("q") or "").strip()
+        if not label:
+            continue
+        try:
+            marks = max(0, int(row.get("marks") or 1))
+        except (TypeError, ValueError):
+            marks = 1
+        try:
+            awarded = max(0, int(row.get("awarded") or 0))
+        except (TypeError, ValueError):
+            awarded = marks if row.get("correct") else 0
+        if awarded < marks:
+            wrong_numbers.append(label)
     try:
         duration_seconds = max(0, int(data.get("duration_seconds") or 0))
     except (TypeError, ValueError):

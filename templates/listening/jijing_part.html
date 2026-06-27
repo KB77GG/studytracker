@@ -568,7 +568,10 @@ function normalizeText(value) {
   return String(value || '')
     .trim()
     .toLowerCase()
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '"')
     .replace(/[：]/g, ':')
+    .replace(/[.,!?;:，。！？；：]/g, '')
     .replace(/\s+/g, ' ');
 }
 
@@ -775,21 +778,26 @@ function markUnit(unit) {
   const value = unitValue(unit);
   const marks = Number(unit.dataset.marks || 1);
   let correct = false;
+  let awarded = 0;
 
   if (kind === 'checkboxes' || kind === 'checkbox-set') {
-    const a = splitLetters(answer).sort().join(',');
-    const v = splitLetters(value).sort().join(',');
-    correct = Boolean(a) && a === v;
+    const answers = splitLetters(answer);
+    const values = splitLetters(value);
+    const matched = values.filter(v => answers.includes(v)).length;
+    awarded = values.length > marks ? 0 : Math.min(marks, matched);
+    correct = Boolean(answers.length) && awarded === marks;
   } else if (/^[A-Z](\s*,\s*[A-Z])+$/.test(answer)) {
     correct = splitLetters(answer).includes(String(value).trim().toUpperCase());
+    awarded = correct ? marks : 0;
   } else {
     const alternatives = splitAlternatives(answer);
     correct = alternatives.includes(normalizeText(value));
+    awarded = correct ? marks : 0;
   }
 
   unit.classList.toggle('is-correct', correct);
   unit.classList.toggle('is-wrong', !correct);
-  return { correct, marks, value, answer, q: unit.dataset.q || '' };
+  return { correct, marks, awarded, value, answer, q: unit.dataset.q || '' };
 }
 
 async function syncJijingSubmission(results, correct, total, baseHtml) {
@@ -910,8 +918,8 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   const units = Array.from(document.querySelectorAll('.answer-unit'));
   const results = units.map(markUnit);
   const total = results.reduce((sum, row) => sum + row.marks, 0);
-  const correct = results.reduce((sum, row) => sum + (row.correct ? row.marks : 0), 0);
-  const wrong = results.filter(row => !row.correct);
+  const correct = results.reduce((sum, row) => sum + row.awarded, 0);
+  const wrong = results.filter(row => row.awarded < row.marks);
   document.body.classList.add('show-answers');
   document.getElementById('submitBtn').textContent = '已提交，查看复盘';
   const baseHtml = `

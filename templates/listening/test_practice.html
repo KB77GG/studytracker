@@ -1151,9 +1151,8 @@ function markUnit(unit) {
   if (unit.dataset.kind === 'checkboxes' || unit.dataset.kind === 'checkbox-set') {
     const answers = splitLetters(answer);
     const values = splitLetters(value);
-    const extra = values.filter(v => !answers.includes(v)).length;
     const matched = values.filter(v => answers.includes(v)).length;
-    awarded = extra ? 0 : Math.min(marks, matched);
+    awarded = values.length > marks ? 0 : Math.min(marks, matched);
     correct = Boolean(answers.length) && awarded === marks;
   } else if (/^[A-Z](\s*[,/]\s*[A-Z])*$/.test(answer.trim())) {
     correct = splitLetters(answer).includes(String(value).trim().toUpperCase());
