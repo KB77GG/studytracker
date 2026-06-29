@@ -4764,6 +4764,12 @@ def _normalize_teacher_schedules(schedules, fallback_teacher_id=None):
             "teacher_name": teacher_name,
             "student_name": student_name,
             "schedule_date": item.get("schedule_date") or item.get("date"),
+            # 排课系统新增的学生概况字段，原样透传给小程序（可能为 None）
+            "scheduler_student_id": _first_schedule_value(
+                item, "scheduler_student_id", "student_id", "studentId"
+            ),
+            "student_profile": item.get("student_profile"),
+            "student_profiles": item.get("student_profiles"),
         })
 
     feedback_map = {}
@@ -4928,6 +4934,66 @@ def teacher_all_schedules():
         "count": len(normalized),
         "schedules": normalized
     })
+
+
+_STUDENT_PROFILE_FIELDS = ("grade_level", "profile_summary", "learning_goals", "class_notes")
+
+
+@mp_bp.route("/students/<int:scheduler_student_id>/profile", methods=["PATCH", "POST"])
+@require_api_user(User.ROLE_TEACHER)
+def update_scheduler_student_profile(scheduler_student_id):
+    """老师编辑排课系统的学生概况。
+
+    小程序无法直接访问排课系统（X-Push-Token 是服务端密钥），由本接口代理转发：
+    PATCH /api/students/<scheduler_student_id>/profile。支持部分更新。
+    """
+    base_url = current_app.config.get("SCHEDULER_BASE_URL")
+    token = current_app.config.get("SCHEDULER_PUSH_TOKEN")
+    if not base_url or not token:
+        return jsonify({"ok": False, "error": "scheduler_config_missing"}), 503
+
+    payload = request.get_json(silent=True) or {}
+    body = {
+        key: payload[key]
+        for key in _STUDENT_PROFILE_FIELDS
+        if key in payload and payload[key] is not None
+    }
+    if not body:
+        return jsonify({"ok": False, "error": "empty_payload"}), 400
+
+    try:
+        resp = requests.patch(
+            f"{base_url}/api/students/{scheduler_student_id}/profile",
+            headers={"X-Push-Token": token},
+            json=body,
+            timeout=5,
+        )
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.error("Scheduler profile update failed: %s", exc)
+        return jsonify({"ok": False, "error": "scheduler_request_failed"}), 502
+
+    try:
+        data = resp.json()
+    except Exception:
+        data = None
+
+    if resp.status_code != 200:
+        message = None
+        if isinstance(data, dict):
+            message = data.get("message") or data.get("error")
+        current_app.logger.warning(
+            "Scheduler profile update error: %s %s", resp.status_code, resp.text
+        )
+        return jsonify({
+            "ok": False,
+            "error": message or "scheduler_api_error",
+            "message": message,
+        }), 502
+
+    if isinstance(data, dict):
+        data.setdefault("ok", True)
+        return jsonify(data)
+    return jsonify({"ok": True})
 
 
 @mp_bp.route("/teacher/monthly_stats", methods=["GET"])

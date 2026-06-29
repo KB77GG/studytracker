@@ -192,23 +192,71 @@ const buildTeacherSchedules = (monthValue) => {
         dates = [5, 12, 19].map(day => new Date(year, month - 1, day))
     }
     const courses = [
-        { name: '雅思听力', student: '演示学生', start: '10:00', end: '11:00', feedback: null },
+        {
+            name: '雅思听力',
+            student: '演示学生',
+            start: '10:00',
+            end: '11:00',
+            feedback: null,
+            profile: {
+                grade_level: 'G9',
+                profile_summary: '听力基础尚可，细节捕捉与笔记同步是当前短板。',
+                learning_goals: '两个月内雅思听力稳定在 6.5，地图题不再丢分。',
+                class_notes: '课前发放本节精听音频，课后检查听写订正。',
+                profile_updated_at: '2026-06-28T10:00:00'
+            }
+        },
         {
             name: '雅思阅读',
             student: '陈同学',
             start: '14:00',
             end: '15:30',
-            feedback: { text: '课堂完成情况良好，已记录重点错题。', image: '' }
+            feedback: { text: '课堂完成情况良好，已记录重点错题。', image: '' },
+            profile: {
+                grade_level: 'G11',
+                profile_summary: '词汇量充足，但长难句拆分速度偏慢，影响整体节奏。',
+                learning_goals: '提升 T/F/NG 判断准确率，单篇控制在 18 分钟内。',
+                class_notes: '课前预习生词表，课堂多练定位与同义替换。',
+                profile_updated_at: '2026-06-27T09:30:00'
+            }
         },
-        { name: '词汇巩固', student: '林同学', start: '18:30', end: '19:20', feedback: null }
+        {
+            // 1对2 课程示例：两个学生分别展示/编辑概况
+            name: '词汇巩固（1对2）',
+            student: '林同学、王同学',
+            start: '18:30',
+            end: '19:20',
+            feedback: null,
+            students: [
+                {
+                    scheduler_student_id: 'demo-student-3a',
+                    name: '林同学',
+                    grade_level: 'G8',
+                    profile_summary: '记忆方法偏死记，需引入词根词缀。',
+                    learning_goals: '两周内完成核心词 Unit 1-4 滚动复习。',
+                    class_notes: '课后用小程序背词卡打卡。',
+                    profile_updated_at: '2026-06-26T20:00:00'
+                },
+                {
+                    scheduler_student_id: 'demo-student-3b',
+                    name: '王同学',
+                    grade_level: 'G8',
+                    profile_summary: '词汇量大但拼写不稳，易混词较多。',
+                    learning_goals: '降低拼写错误率，掌握易混词辨析。',
+                    class_notes: '',
+                    profile_updated_at: ''
+                }
+            ]
+        }
     ]
     return dates.map((date, index) => {
         const course = courses[index]
         const dateText = formatDate(date)
-        return {
+        const item = {
             schedule_uid: `demo-schedule-${index + 1}`,
             schedule_id: `demo-${index + 1}`,
             student_id: `demo-student-${index + 1}`,
+            scheduler_student_id: `demo-student-${index + 1}`,
             student_name: course.student,
             teacher_id: 'demo-teacher',
             teacher_name: '演示老师',
@@ -218,6 +266,27 @@ const buildTeacherSchedules = (monthValue) => {
             end_time: `${dateText} ${course.end}`,
             feedback: course.feedback
         }
+        if (course.students) {
+            item.student_profiles = course.students.map(stu => ({
+                scheduler_student_id: stu.scheduler_student_id,
+                name: stu.name,
+                grade_level: stu.grade_level,
+                profile_summary: stu.profile_summary,
+                learning_goals: stu.learning_goals,
+                class_notes: stu.class_notes,
+                profile_updated_at: stu.profile_updated_at,
+                profile: {
+                    grade_level: stu.grade_level,
+                    profile_summary: stu.profile_summary,
+                    learning_goals: stu.learning_goals,
+                    class_notes: stu.class_notes,
+                    profile_updated_at: stu.profile_updated_at
+                }
+            }))
+        } else if (course.profile) {
+            item.student_profile = course.profile
+        }
+        return item
     })
 }
 

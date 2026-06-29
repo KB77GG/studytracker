@@ -788,11 +788,40 @@ Page({
         this.navigateFeedbackWithSchedule(data)
     },
 
+    resolveScheduleItem(data = {}) {
+        if (data.student_profile || data.student_profiles) return data
+        const uid = data.scheduleUid || data.schedule_uid
+        if (!uid) return data
+        const pools = [this.data.selectedItems, this.data.todayItems]
+        for (const pool of pools) {
+            const found = (pool || []).find(item => item.schedule_uid === uid)
+            if (found) return found
+        }
+        const groups = this.data.schedules || []
+        for (const group of groups) {
+            const found = (group.items || []).find(item => item.schedule_uid === uid)
+            if (found) return found
+        }
+        return data
+    },
+
+    stashStudentProfile(data = {}) {
+        const item = this.resolveScheduleItem(data)
+        app.globalData.feedbackProfileSource = {
+            scheduler_student_id: item.scheduler_student_id
+                || data.schedulerStudentId || data.studentId || data.student_id || '',
+            student_name: item.student_name || data.studentName || data.student_name || '',
+            student_profile: item.student_profile || null,
+            student_profiles: item.student_profiles || null
+        }
+    },
+
     navigateFeedbackWithSchedule(data = {}) {
         if (this.data.isGuest) {
             this.promptLogin('填写课堂反馈需要登录教师账号。')
             return
         }
+        this.stashStudentProfile(data)
         const params = {
             schedule_uid: data.scheduleUid || data.schedule_uid,
             schedule_id: data.scheduleId || data.schedule_id,

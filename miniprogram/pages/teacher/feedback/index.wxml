@@ -23,6 +23,96 @@
     </view>
   </view>
 
+  <view class="profile-section">
+    <view class="profile-section-head">
+      <text class="profile-section-title">学生概况</text>
+    </view>
+
+    <view wx:if="{{!hasStudentInfo}}" class="profile-empty">暂无学生信息</view>
+
+    <view wx:for="{{studentProfiles}}" wx:key="index" class="profile-card">
+      <view class="profile-card-head">
+        <text class="profile-name">{{item.name}}</text>
+        <text
+          wx:if="{{editingIndex !== index}}"
+          class="profile-edit-btn"
+          data-index="{{index}}"
+          bindtap="startEditProfile"
+        >编辑</text>
+      </view>
+
+      <block wx:if="{{editingIndex !== index}}">
+        <view class="profile-row">
+          <text class="profile-label">年级/阶段</text>
+          <text class="profile-value">{{item.gradeLevelText}}</text>
+        </view>
+        <view class="profile-row">
+          <text class="profile-label">学生概况</text>
+          <text class="profile-value">{{item.summaryText}}</text>
+        </view>
+        <view class="profile-row">
+          <text class="profile-label">学习目标</text>
+          <text class="profile-value">{{item.goalsText}}</text>
+        </view>
+        <view class="profile-row">
+          <text class="profile-label">上课注意事项</text>
+          <text class="profile-value">{{item.notesText}}</text>
+        </view>
+        <view wx:if="{{item.updatedText}}" class="profile-updated">更新时间：{{item.updatedText}}</view>
+      </block>
+
+      <block wx:else>
+        <view class="profile-edit-field">
+          <text class="profile-edit-label">年级/阶段</text>
+          <input
+            class="profile-input"
+            placeholder="如 G8 / 高一"
+            value="{{profileForm.grade_level}}"
+            data-field="grade_level"
+            bindinput="handleProfileInput"
+          />
+        </view>
+        <view class="profile-edit-field">
+          <text class="profile-edit-label">学生概况</text>
+          <textarea
+            class="profile-textarea"
+            placeholder="基础水平、优势与短板"
+            maxlength="500"
+            value="{{profileForm.profile_summary}}"
+            data-field="profile_summary"
+            bindinput="handleProfileInput"
+          ></textarea>
+        </view>
+        <view class="profile-edit-field">
+          <text class="profile-edit-label">学习目标</text>
+          <textarea
+            class="profile-textarea"
+            placeholder="阶段性目标与时间节点"
+            maxlength="500"
+            value="{{profileForm.learning_goals}}"
+            data-field="learning_goals"
+            bindinput="handleProfileInput"
+          ></textarea>
+        </view>
+        <view class="profile-edit-field">
+          <text class="profile-edit-label">上课注意事项</text>
+          <textarea
+            class="profile-textarea"
+            placeholder="课前准备、课后跟进等"
+            maxlength="500"
+            value="{{profileForm.class_notes}}"
+            data-field="class_notes"
+            bindinput="handleProfileInput"
+          ></textarea>
+        </view>
+        <view class="profile-edit-actions">
+          <button class="profile-cancel-btn" size="mini" bindtap="cancelEditProfile" disabled="{{savingProfile}}">取消</button>
+          <button class="profile-save-btn" size="mini" bindtap="saveProfile" loading="{{savingProfile}}" disabled="{{savingProfile}}">保存</button>
+        </view>
+      </block>
+    </view>
+  </view>
+
   <view class="form">
     <text class="form-label">作业完成情况</text>
     <textarea
