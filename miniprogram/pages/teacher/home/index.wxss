@@ -211,6 +211,7 @@ page {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 18rpx;
   padding: 24rpx 22rpx 24rpx 24rpx;
   border-radius: 26rpx;
@@ -300,6 +301,86 @@ page {
   color: #087f77;
   background: #f5fbfa;
   border: 1rpx solid #cfe9e5;
+}
+
+/* 学生概况(只读，可展开)，整行铺到课次卡片底部 */
+.profile-block {
+  order: 1;
+  width: 100%;
+  margin-top: 2rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid #eef2f5;
+}
+
+.profile-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rpx 0;
+}
+
+.profile-toggle-text {
+  font-size: 24rpx;
+  font-weight: 800;
+  color: #087f77;
+}
+
+.profile-toggle-arrow {
+  font-size: 22rpx;
+  color: #94a3b8;
+}
+
+.profile-detail {
+  margin-top: 10rpx;
+  background: #f7fbfa;
+  border-radius: 16rpx;
+  padding: 16rpx 18rpx;
+}
+
+.profile-student {
+  padding: 2rpx 0;
+}
+
+.profile-student + .profile-student {
+  margin-top: 12rpx;
+  padding-top: 12rpx;
+  border-top: 1rpx dashed #d8e6e3;
+}
+
+.profile-student-name {
+  margin-bottom: 6rpx;
+  font-size: 24rpx;
+  font-weight: 800;
+  color: #0b1830;
+}
+
+.profile-line {
+  display: flex;
+  gap: 12rpx;
+  padding: 5rpx 0;
+}
+
+.pl-label {
+  flex-shrink: 0;
+  width: 156rpx;
+  font-size: 22rpx;
+  color: #94a3b8;
+}
+
+.pl-value {
+  flex: 1;
+  min-width: 0;
+  font-size: 23rpx;
+  line-height: 1.5;
+  color: #1f2d3d;
+  word-break: break-word;
+}
+
+.profile-updated {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: #aab4c0;
+  text-align: right;
 }
 
 .calendar-card {

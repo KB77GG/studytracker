@@ -1,3 +1,22 @@
+<template name="studentProfileBlock">
+  <view wx:if="{{item.hasProfile}}" class="profile-block">
+    <view class="profile-toggle" data-uid="{{item.schedule_uid}}" data-scope="{{scope}}" catchtap="toggleProfile">
+      <text class="profile-toggle-text">学生概况</text>
+      <text class="profile-toggle-arrow">{{item.profileExpanded ? '收起 ▴' : '展开 ▾'}}</text>
+    </view>
+    <view wx:if="{{item.profileExpanded}}" class="profile-detail">
+      <view wx:for="{{item.profiles}}" wx:for-item="p" wx:key="index" class="profile-student">
+        <view wx:if="{{item.profiles.length > 1}}" class="profile-student-name">{{p.name}}</view>
+        <view class="profile-line"><text class="pl-label">年级/阶段</text><text class="pl-value">{{p.gradeLevelText}}</text></view>
+        <view class="profile-line"><text class="pl-label">学生概况</text><text class="pl-value">{{p.summaryText}}</text></view>
+        <view class="profile-line"><text class="pl-label">学习目标</text><text class="pl-value">{{p.goalsText}}</text></view>
+        <view class="profile-line"><text class="pl-label">上课注意事项</text><text class="pl-value">{{p.notesText}}</text></view>
+        <view wx:if="{{p.updatedText}}" class="profile-updated">更新于 {{p.updatedText}}</view>
+      </view>
+    </view>
+  </view>
+</template>
+
 <view class="page">
   <view class="page-bg"></view>
 
@@ -65,6 +84,7 @@
             <view class="course-title">{{item.course_name}}</view>
             <view class="course-meta">学生 {{item.student_name || '—'}} ｜ 老师 {{item.teacher_name || '—'}}</view>
           </view>
+          <template is="studentProfileBlock" data="{{item: item, scope: 'today'}}" />
           <view class="course-actions">
             <button
               class="course-action ghost"
@@ -155,6 +175,7 @@
             <view class="course-title">{{item.course_name}}</view>
             <view class="course-meta">学生 {{item.student_name || '—'}} ｜ 老师 {{item.teacher_name || '—'}}</view>
           </view>
+          <template is="studentProfileBlock" data="{{item: item, scope: 'selected'}}" />
           <view class="course-actions">
             <button
               class="course-action ghost"

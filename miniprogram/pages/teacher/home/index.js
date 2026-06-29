@@ -301,7 +301,9 @@ Page({
                 timeRange: this.formatTimeRange(item.start_time, item.end_time),
                 accentColor: color.border,
                 accentBg: color.bg,
-                _startMinutes: timeInfo.startMinutes
+                _startMinutes: timeInfo.startMinutes,
+                profileExpanded: false,
+                ...this.buildProfileDisplay(item)
             })
         })
 
@@ -352,7 +354,9 @@ Page({
                 timeRange: this.formatTimeRange(item.start_time, item.end_time),
                 accentColor: color.border,
                 accentBg: color.bg,
-                _startMinutes: timeInfo.startMinutes
+                _startMinutes: timeInfo.startMinutes,
+                profileExpanded: false,
+                ...this.buildProfileDisplay(item)
             })
         })
 
@@ -412,7 +416,9 @@ Page({
                 ...item,
                 timeRange: this.formatTimeRange(item.start_time, item.end_time),
                 accentColor: color.border,
-                accentBg: color.bg
+                accentBg: color.bg,
+                profileExpanded: false,
+                ...this.buildProfileDisplay(item)
             }
             if (item.student_id || item.student_name) {
                 students[item.student_id || item.student_name] = true
@@ -533,6 +539,46 @@ Page({
         if (subject.includes('写作')) return { bg: '#fff7ed', border: '#ea580c' }
         if (subject.includes('词汇')) return { bg: '#fce7f3', border: '#db2777' }
         return { bg: '#f1f5f9', border: '#64748b' }
+    },
+
+    buildProfileDisplay(item) {
+        const placeholder = '未填写'
+        const decorate = (profile, name) => ({
+            name: name || item.student_name || '该学生',
+            gradeLevelText: (profile && profile.grade_level) || placeholder,
+            summaryText: (profile && profile.profile_summary) || placeholder,
+            goalsText: (profile && profile.learning_goals) || placeholder,
+            notesText: (profile && profile.class_notes) || placeholder,
+            updatedText: this.formatProfileTime(profile && profile.profile_updated_at)
+        })
+        const entries = []
+        const arr = item.student_profiles
+        if (Array.isArray(arr) && arr.length) {
+            arr.forEach((entry) => {
+                entries.push(decorate(entry.profile || entry, entry.name || entry.student_name))
+            })
+        } else if (item.student_profile) {
+            entries.push(decorate(item.student_profile, item.student_name))
+        }
+        return { profiles: entries, hasProfile: entries.length > 0 }
+    },
+
+    formatProfileTime(value) {
+        if (!value) return ''
+        const str = String(value).replace('T', ' ')
+        // 2026-06-29 10:00:00 -> 2026-06-29 10:00
+        const match = str.match(/^(\d{4}-\d{2}-\d{2})[ ](\d{2}:\d{2})/)
+        if (match) return `${match[1]} ${match[2]}`
+        return str.split('.')[0]
+    },
+
+    toggleProfile(e) {
+        const { uid, scope } = e.currentTarget.dataset
+        const listKey = scope === 'today' ? 'todayItems' : 'selectedItems'
+        const list = this.data[listKey] || []
+        const index = list.findIndex((it) => it.schedule_uid === uid)
+        if (index < 0) return
+        this.setData({ [`${listKey}[${index}].profileExpanded`]: !list[index].profileExpanded })
     },
 
     switchView(e) {
@@ -788,40 +834,11 @@ Page({
         this.navigateFeedbackWithSchedule(data)
     },
 
-    resolveScheduleItem(data = {}) {
-        if (data.student_profile || data.student_profiles) return data
-        const uid = data.scheduleUid || data.schedule_uid
-        if (!uid) return data
-        const pools = [this.data.selectedItems, this.data.todayItems]
-        for (const pool of pools) {
-            const found = (pool || []).find(item => item.schedule_uid === uid)
-            if (found) return found
-        }
-        const groups = this.data.schedules || []
-        for (const group of groups) {
-            const found = (group.items || []).find(item => item.schedule_uid === uid)
-            if (found) return found
-        }
-        return data
-    },
-
-    stashStudentProfile(data = {}) {
-        const item = this.resolveScheduleItem(data)
-        app.globalData.feedbackProfileSource = {
-            scheduler_student_id: item.scheduler_student_id
-                || data.schedulerStudentId || data.studentId || data.student_id || '',
-            student_name: item.student_name || data.studentName || data.student_name || '',
-            student_profile: item.student_profile || null,
-            student_profiles: item.student_profiles || null
-        }
-    },
-
     navigateFeedbackWithSchedule(data = {}) {
         if (this.data.isGuest) {
             this.promptLogin('填写课堂反馈需要登录教师账号。')
             return
         }
-        this.stashStudentProfile(data)
         const params = {
             schedule_uid: data.scheduleUid || data.schedule_uid,
             schedule_id: data.scheduleId || data.schedule_id,
