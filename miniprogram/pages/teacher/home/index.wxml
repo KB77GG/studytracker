@@ -1,10 +1,6 @@
 <template name="studentProfileBlock">
-  <view wx:if="{{item.hasProfile}}" class="profile-block">
-    <view class="profile-toggle" data-uid="{{item.schedule_uid}}" data-scope="{{scope}}" catchtap="toggleProfile">
-      <text class="profile-toggle-text">学生概况</text>
-      <text class="profile-toggle-arrow">{{item.profileExpanded ? '收起 ▴' : '展开 ▾'}}</text>
-    </view>
-    <view wx:if="{{item.profileExpanded}}" class="profile-detail">
+  <view wx:if="{{item.hasProfile && item.profileExpanded}}" class="profile-block">
+    <view class="profile-detail">
       <view wx:for="{{item.profiles}}" wx:for-item="p" wx:key="index" class="profile-student">
         <view wx:if="{{item.profiles.length > 1}}" class="profile-student-name">{{p.name}}</view>
         <view class="profile-line"><text class="pl-label">年级/阶段</text><text class="pl-value">{{p.gradeLevelText}}</text></view>
@@ -82,7 +78,7 @@
           <view class="course-main">
             <view class="course-time">{{item.timeRange}} <text class="tag teal">待上课</text></view>
             <view class="course-title">{{item.course_name}}</view>
-            <view class="course-meta">学生 {{item.student_name || '—'}} ｜ 老师 {{item.teacher_name || '—'}}</view>
+            <view class="course-meta">学生 <text wx:if="{{item.hasProfile}}" class="student-name-link" data-uid="{{item.schedule_uid}}" data-scope="today" catchtap="toggleProfile">{{item.student_name || '—'}}<text class="name-caret">{{item.profileExpanded ? ' ▴' : ' ▾'}}</text></text><text wx:else>{{item.student_name || '—'}}</text> ｜ 老师 {{item.teacher_name || '—'}}</view>
           </view>
           <template is="studentProfileBlock" data="{{item: item, scope: 'today'}}" />
           <view class="course-actions">
@@ -173,7 +169,7 @@
           <view class="schedule-info">
             <view class="course-time">{{item.timeRange}} <text class="tag {{item.feedback ? 'green' : 'blue'}}">{{item.feedback ? '已记录' : '待记录'}}</text></view>
             <view class="course-title">{{item.course_name}}</view>
-            <view class="course-meta">学生 {{item.student_name || '—'}} ｜ 老师 {{item.teacher_name || '—'}}</view>
+            <view class="course-meta">学生 <text wx:if="{{item.hasProfile}}" class="student-name-link" data-uid="{{item.schedule_uid}}" data-scope="selected" catchtap="toggleProfile">{{item.student_name || '—'}}<text class="name-caret">{{item.profileExpanded ? ' ▴' : ' ▾'}}</text></text><text wx:else>{{item.student_name || '—'}}</text> ｜ 老师 {{item.teacher_name || '—'}}</view>
           </view>
           <template is="studentProfileBlock" data="{{item: item, scope: 'selected'}}" />
           <view class="course-actions">
