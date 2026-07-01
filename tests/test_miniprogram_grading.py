@@ -8,6 +8,7 @@ import jwt
 from flask import Flask
 
 from api.miniprogram import (
+    _sync_plan_item_from_legacy_task,
     _task_evidence_files,
     _task_evidence_type,
     _teacher_grading_percentage,
@@ -17,6 +18,41 @@ from models import Task, User, db
 
 
 class MiniprogramGradingTest(unittest.TestCase):
+    def test_sync_plan_item_labels_dictation_tasks(self):
+        submitted_at = datetime(2026, 6, 30, 13, 45)
+        item = SimpleNamespace(
+            exam_system="材料练习",
+            module="未分模块",
+            task_name="材料练习",
+            resource_type=None,
+            resource_id=None,
+            resource_metadata="",
+            student_status="pending",
+            submitted_at=None,
+            student_comment="",
+            actual_seconds=0,
+        )
+        task = SimpleNamespace(
+            plan_item=item,
+            dictation_book_id=7,
+            dictation_mode="zh_to_en",
+            dictation_word_start=37,
+            dictation_word_end=80,
+            submitted_at=submitted_at,
+            actual_seconds=0,
+        )
+
+        synced = _sync_plan_item_from_legacy_task(task)
+        metadata = json.loads(item.resource_metadata)
+
+        self.assertIs(synced, item)
+        self.assertEqual(item.exam_system, "词汇")
+        self.assertEqual(item.module, "词汇")
+        self.assertEqual(item.task_name, "单词默写")
+        self.assertEqual(item.resource_type, "dictation")
+        self.assertEqual(item.resource_id, "dictation_book:7")
+        self.assertEqual(metadata["dictation_word_start"], 37)
+
     def test_task_evidence_type_recognizes_miniprogram_audio_formats(self):
         self.assertEqual(_task_evidence_type("/uploads/answer.mp3"), "audio")
         self.assertEqual(_task_evidence_type("/uploads/answer.m4a?token=abc"), "audio")

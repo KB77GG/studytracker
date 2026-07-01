@@ -490,6 +490,25 @@ def _sync_plan_item_from_legacy_task(task, *, note=None, evidence_files=None, du
     item = getattr(task, "plan_item", None)
     if not item:
         return None
+    if getattr(task, "dictation_book_id", None):
+        current_exam = item.exam_system or ""
+        item.exam_system = (
+            current_exam
+            if current_exam not in {"", "未分类", "材料练习"}
+            else "词汇"
+        )
+        item.module = "词汇"
+        item.task_name = "单词默写"
+        item.resource_type = PlanItem.RESOURCE_DICTATION
+        item.resource_id = f"dictation_book:{task.dictation_book_id}"
+        item.resource_metadata = json.dumps(
+            {
+                "dictation_mode": task.dictation_mode or "audio_to_en",
+                "dictation_word_start": task.dictation_word_start or 1,
+                "dictation_word_end": task.dictation_word_end,
+            },
+            ensure_ascii=False,
+        )
     item.student_status = PlanItem.STUDENT_SUBMITTED
     item.submitted_at = task.submitted_at or datetime.now()
     if note:

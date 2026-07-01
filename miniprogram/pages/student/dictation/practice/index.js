@@ -397,6 +397,14 @@ Page({
         });
     },
 
+    refocusAnswerInput(delay = 50) {
+        this.setData({ inputFocus: false });
+        setTimeout(() => {
+            if (this.data.phase !== 'test' || this.data.showResult || this.data.finished) return;
+            this.setData({ inputFocus: true });
+        }, delay);
+    },
+
     loadWord: function (index) {
         const word = this.data.words[index];
         const currentMode = resolveDictationMode(word && word.dictationMode, this.data.dictationMode);
@@ -407,13 +415,13 @@ Page({
             inputValue: '',
             showResult: false,
             isCorrect: false,
-            inputFocus: true,
+            inputFocus: false,
             inputError: false,
             userAnswer: '',
             showHint: false,
             attemptCount: 0,
             appealSubmitted: false
-        });
+        }, () => this.refocusAnswerInput());
         this.saveProgress(index);
 
         if (isAudioMode(currentMode)) {
@@ -722,6 +730,13 @@ Page({
                 userAnswer: inputRaw,
                 inputError: false,
                 attemptCount: attempts + 1
+            }, () => {
+                if (!this.isFinalPracticeWord()) return;
+                setTimeout(() => {
+                    if (this.data.showResult && this.data.isCorrect && !this.data.finished) {
+                        this.finishPractice();
+                    }
+                }, 600);
             });
             wx.showToast({ title: '正确!', icon: 'success', duration: 1000 });
             if (mode === MODE_ZH_TO_EN) this.playCurrentWord(true);
@@ -754,8 +769,8 @@ Page({
                 inputValue: '',
                 inputError: true,
                 attemptCount: attempts + 1,
-                inputFocus: true
-            });
+                inputFocus: false
+            }, () => this.refocusAnswerInput(30));
             wx.showToast({ title: '再试一次', icon: 'none' });
             return;
         }
@@ -848,6 +863,11 @@ Page({
         }
     },
 
+    isFinalPracticeWord() {
+        const groupEnd = this.data.groupEnd || this.data.totalWords;
+        return this.data.currentIndex + 1 >= groupEnd && !this.data.hasMoreGroups;
+    },
+
     finishCurrentGroup() {
         this.pauseTimer();
         this.stopTicker();
@@ -896,6 +916,10 @@ Page({
     },
 
     finishPractice: function () {
+        this.pauseTimer();
+        this.stopTicker();
+        this.setData({ inputFocus: false });
+
         const total = this.data.totalWords;
         const correct = this.data.correctCount;
         const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
@@ -1079,7 +1103,7 @@ Page({
     onShow() {
         if (this.data.phase === 'familiarize' && this.data.famTimerSeconds > 0) {
             this.startFamTimer();
-        } else if (this.data.phase === 'test') {
+        } else if (this.data.phase === 'test' && !this.data.finished) {
             this.resumeTimer();
         }
     },

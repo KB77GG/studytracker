@@ -2,11 +2,33 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from app import can_review_student_submission
+from app import (
+    PLAN_RESOURCE_DICTATION,
+    _plan_category_for_resource,
+    _plan_item_review_task_name,
+    can_review_student_submission,
+)
 from models import User
 
 
 class TaskReviewPermissionTest(unittest.TestCase):
+    def test_dictation_shadow_task_uses_word_dictation_label(self):
+        self.assertEqual(
+            _plan_category_for_resource(
+                "材料练习",
+                PLAN_RESOURCE_DICTATION,
+                "dictation_book:7",
+            ),
+            ("词汇", "词汇", "单词默写"),
+        )
+        item = SimpleNamespace(
+            resource_type=PLAN_RESOURCE_DICTATION,
+            resource_id="dictation_book:7",
+            task_name="材料练习",
+        )
+
+        self.assertEqual(_plan_item_review_task_name(item), "单词默写")
+
     def test_assistant_can_review_any_student_in_shared_queue(self):
         assistant = SimpleNamespace(role=User.ROLE_ASSISTANT)
 

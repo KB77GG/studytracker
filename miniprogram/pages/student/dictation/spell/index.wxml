@@ -38,6 +38,7 @@
              cursor-spacing="160"
              confirm-type="done"
              confirm-hold="{{false}}"
+             maxlength="-1"
              bindinput="onInput"
              bindconfirm="submitOrNext"
              bindkeyboardheightchange="onKeyboardHeightChange"/>

@@ -307,6 +307,14 @@ Page({
         this.prewarmAudio(words)
     },
 
+    refocusHiddenInput(delay = 50) {
+        this.setData({ inputFocus: false })
+        setTimeout(() => {
+            if (this.data.stage !== 'drill' || this.data.showResult) return
+            this.setData({ inputFocus: true })
+        }, delay)
+    },
+
     startDrill() {
         this.drillStartedAt = Date.now()
         this.setData({ stage: 'drill' })
@@ -329,9 +337,9 @@ Page({
             resultCorrect: false,
             displayWord: word.syllables || word.word,
             diffTop: [],
-            inputFocus: true,
+            inputFocus: false,
             appealSubmitted: false
-        })
+        }, () => this.refocusHiddenInput())
         setTimeout(() => this.playCurrentWord(), 240)
     },
 
@@ -344,8 +352,7 @@ Page({
     },
 
     focusInput() {
-        this.setData({ inputFocus: false })
-        setTimeout(() => this.setData({ inputFocus: true }), 30)
+        this.refocusHiddenInput(30)
     },
 
     submitOrNext() {

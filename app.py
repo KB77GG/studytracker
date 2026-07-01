@@ -469,6 +469,38 @@ def _normalize_task_category(value: str | None):
     return (exam, module, "-".join(rest) if rest else module)
 
 
+def _is_dictation_plan_resource(
+    resource_type: str | None,
+    resource_id: str | None = None,
+) -> bool:
+    return (
+        resource_type == PLAN_RESOURCE_DICTATION
+        or str(resource_id or "").startswith("dictation_book:")
+    )
+
+
+def _plan_category_for_resource(
+    category: str | None,
+    resource_type: str | None = None,
+    resource_id: str | None = None,
+):
+    exam_system, module, task_name = _normalize_task_category(category)
+    if _is_dictation_plan_resource(resource_type, resource_id):
+        display_exam = (
+            exam_system
+            if exam_system not in {"", "未分类", "材料练习"}
+            else "词汇"
+        )
+        return (display_exam, "词汇", "单词默写")
+    return (exam_system, module, task_name)
+
+
+def _plan_item_review_task_name(item: PlanItem) -> str:
+    if _is_dictation_plan_resource(item.resource_type, item.resource_id):
+        return "单词默写"
+    return item.task_name or "学习任务"
+
+
 def _safe_plan_date(value: str | None) -> date:
     try:
         return datetime.strptime(value or "", "%Y-%m-%d").date()
@@ -632,7 +664,11 @@ def _create_plan_item_shadow_for_task(
     resource_metadata: dict | None = None,
 ) -> PlanItem:
     plan = _ensure_study_plan_for_task(student_name, date_value, creator_id)
-    exam_system, module, task_name = _normalize_task_category(category)
+    exam_system, module, task_name = _plan_category_for_resource(
+        category,
+        resource_type,
+        resource_id,
+    )
     student_status, review_status = _plan_status_from_task_status(status)
     next_order = (
         db.session.query(func.max(PlanItem.order_index))
@@ -697,8 +733,13 @@ def _sync_plan_item_from_task(task: Task) -> None:
     elif task.date and item.plan and item.plan.plan_date != _safe_plan_date(task.date):
         if creator_id:
             item.plan = _ensure_study_plan_for_task(task.student_name, task.date, creator_id)
-    exam_system, module, task_name = _normalize_task_category(task.category)
     student_status, review_status = _plan_status_from_task_status(task.status)
+    resource_type, resource_id, resource_metadata = _task_resource_binding_from_task(task)
+    exam_system, module, task_name = _plan_category_for_resource(
+        task.category,
+        resource_type,
+        resource_id,
+    )
     item.exam_system = exam_system
     item.module = module
     item.task_name = task_name
@@ -708,7 +749,6 @@ def _sync_plan_item_from_task(task: Task) -> None:
     item.actual_seconds = max(int(item.actual_seconds or 0), int(task.actual_seconds or 0))
     item.student_status = student_status
     item.review_status = review_status
-    resource_type, resource_id, resource_metadata = _task_resource_binding_from_task(task)
     item.resource_type = resource_type
     item.resource_id = resource_id
     if task.listening_access_token or task.reading_access_token:
@@ -4159,7 +4199,7 @@ def tasks_page():
             "type": "plan_item",
             "id": item.id,
             "student_name": item.plan.student.full_name,
-            "task_name": item.task_name,
+            "task_name": _plan_item_review_task_name(item),
             "student_comment": item.student_comment or "",
             "submitted_at": item.submitted_at,
             "time_ago": time_ago(item.submitted_at) if item.submitted_at else "",
