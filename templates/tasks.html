@@ -112,6 +112,35 @@
     <span class="task-count-pill">{{ items|length }} 条记录</span>
   </div>
 
+  <section class="student-memo-panel" id="studentMemoPanel" aria-labelledby="studentMemoTitle">
+    <div class="student-memo-panel__header">
+      <div>
+        <h3 id="studentMemoTitle">学生备忘录</h3>
+        <p>课后布置框架、薄弱点、下次优先任务。</p>
+      </div>
+      <label for="memoStudentSelect">
+        <span>学生</span>
+        <select id="memoStudentSelect">
+          <option value="">选择学生</option>
+          {% for student_name in all_students %}
+          <option value="{{ student_name }}">{{ student_name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+    <div class="student-memo-editor">
+      <div class="student-memo-editor__preview">
+        <span>当前安排</span>
+        <div id="studentMemoPreview" class="student-memo-preview is-empty">选择学生后显示备忘录。</div>
+      </div>
+      <textarea id="studentMemoInput" rows="4" maxlength="5000" placeholder="例如：听力先完成剑雅 Test；词汇按 Day 计划推进；口语课后录 Part 1 两题。" disabled></textarea>
+      <div class="student-memo-editor__actions">
+        <span id="studentMemoStatus" class="student-memo-status"></span>
+        <button id="studentMemoSave" type="button" disabled>保存备忘录</button>
+      </div>
+    </div>
+  </section>
+
   <form id="taskForm" class="task-form" method="post" action="{{ url_for('tasks_page') }}">
     <div class="task-form-row">
       <div class="field">
@@ -445,6 +474,8 @@
   <div class="task-accordion">
     {% for group in grouped %}
     {% set student = group.grouper|default('未填写学生', true) %}
+    {% set memo_payload = student_memos.get(student) %}
+    {% set memo_text = memo_payload.memo if memo_payload else '' %}
     <details class="student-group" data-student="{{ student }}" {% if loop.first %}open{% endif %}>
       <summary>
         <span class="student-name">{{ student }}</span>
@@ -452,6 +483,15 @@
           <span class="student-count">任务数 {{ group.list|length }}</span>
         </span>
       </summary>
+      <div class="student-group-memo {{ 'is-empty' if not memo_text else '' }}">
+        <div class="student-group-memo__head">
+          <span>课后安排备忘录</span>
+          {% if memo_payload %}
+          <button type="button" class="student-memo-jump" data-memo-student="{{ student }}">{{ '编辑' if memo_text else '填写' }}</button>
+          {% endif %}
+        </div>
+        <div class="student-group-memo__body">{{ memo_text or '暂无备忘录' }}</div>
+      </div>
       <div class="student-tasks">
         <table class="task-table task-subtable">
           <thead>
@@ -1312,6 +1352,7 @@
 	    }
 
 	    .task-workspace > .task-form,
+	    .task-workspace > .student-memo-panel,
 	    .task-workspace > .filter-panel,
 	    .task-workspace > .task-accordion,
 	    .task-workspace > .task-review-panel {
@@ -1321,6 +1362,187 @@
 
 	    .task-workspace > .task-form {
 	      margin-top: 16px;
+	    }
+
+	    .student-memo-panel {
+	      margin-top: 16px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: var(--task-surface);
+	      overflow: hidden;
+	    }
+
+	    .student-memo-panel__header {
+	      display: flex;
+	      align-items: flex-start;
+	      justify-content: space-between;
+	      gap: 16px;
+	      padding: 16px;
+	      border-bottom: 1px solid var(--task-border);
+	      background: #fff;
+	    }
+
+	    .student-memo-panel__header h3 {
+	      margin: 0;
+	    }
+
+	    .student-memo-panel__header p {
+	      margin: 4px 0 0;
+	      color: var(--task-muted);
+	      font-size: 13px;
+	    }
+
+	    .student-memo-panel__header label {
+	      display: flex;
+	      min-width: 220px;
+	      flex-direction: column;
+	      gap: 6px;
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 800;
+	    }
+
+	    .student-memo-panel__header select,
+	    .student-memo-editor textarea {
+	      width: 100%;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-ink);
+	      font-size: 13px;
+	    }
+
+	    .student-memo-panel__header select {
+	      min-height: 36px;
+	      padding: 6px 10px;
+	    }
+
+	    .student-memo-editor {
+	      display: grid;
+	      grid-template-columns: minmax(240px, .85fr) minmax(320px, 1.15fr);
+	      gap: 14px;
+	      padding: 14px 16px 16px;
+	      background: var(--task-surface-soft);
+	    }
+
+	    .student-memo-editor__preview {
+	      min-width: 0;
+	    }
+
+	    .student-memo-editor__preview > span {
+	      display: block;
+	      margin-bottom: 6px;
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 800;
+	    }
+
+	    .student-memo-preview {
+	      min-height: 118px;
+	      padding: 10px 12px;
+	      border: 1px solid rgba(32, 117, 111, .18);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-ink);
+	      font-size: 13px;
+	      line-height: 1.6;
+	      white-space: pre-wrap;
+	    }
+
+	    .student-memo-preview.is-empty {
+	      color: var(--task-muted);
+	    }
+
+	    .student-memo-editor textarea {
+	      min-height: 118px;
+	      padding: 10px 12px;
+	      line-height: 1.6;
+	      resize: vertical;
+	    }
+
+	    .student-memo-panel__header select:focus,
+	    .student-memo-editor textarea:focus {
+	      border-color: var(--task-border-strong);
+	      outline: none;
+	      box-shadow: 0 0 0 3px rgba(32, 117, 111, .12);
+	    }
+
+	    .student-memo-editor__actions {
+	      grid-column: 1 / -1;
+	      display: flex;
+	      align-items: center;
+	      justify-content: flex-end;
+	      gap: 10px;
+	    }
+
+	    .student-memo-status {
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 700;
+	    }
+
+	    #studentMemoSave,
+	    .student-memo-jump {
+	      min-height: 32px;
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: center;
+	      gap: 6px;
+	      padding: 6px 10px;
+	      border-radius: 8px;
+	      border: 1px solid var(--task-border);
+	      background: #fff;
+	      color: var(--task-ink);
+	      font-size: 12px;
+	      font-weight: 800;
+	      line-height: 1;
+	      cursor: pointer;
+	    }
+
+	    #studentMemoSave {
+	      border-color: var(--task-primary);
+	      background: var(--task-primary);
+	      color: #fff;
+	    }
+
+	    #studentMemoSave:disabled,
+	    .student-memo-panel textarea:disabled {
+	      cursor: not-allowed;
+	      opacity: .6;
+	    }
+
+	    .student-group-memo {
+	      margin: 12px;
+	      padding: 12px;
+	      border: 1px solid rgba(32, 117, 111, .16);
+	      border-radius: 8px;
+	      background: rgba(232, 247, 245, .42);
+	    }
+
+	    .student-group-memo.is-empty {
+	      background: #f9fafb;
+	    }
+
+	    .student-group-memo__head {
+	      display: flex;
+	      align-items: center;
+	      justify-content: space-between;
+	      gap: 10px;
+	      margin-bottom: 8px;
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 800;
+	    }
+
+	    .student-group-memo__body {
+	      color: var(--task-ink);
+	      font-size: 13px;
+	      line-height: 1.6;
+	      white-space: pre-wrap;
+	    }
+
+	    .student-group-memo.is-empty .student-group-memo__body {
+	      color: var(--task-muted);
 	    }
 
 	    .task-form {
@@ -2023,11 +2245,25 @@
 	      }
 
 	      .task-workspace > .task-form,
+	      .task-workspace > .student-memo-panel,
 	      .task-workspace > .filter-panel,
 	      .task-workspace > .task-accordion,
 	      .task-workspace > .task-review-panel {
 	        margin-left: 12px;
 	        margin-right: 12px;
+	      }
+
+	      .student-memo-panel__header {
+	        flex-direction: column;
+	        align-items: stretch;
+	      }
+
+	      .student-memo-panel__header label {
+	        min-width: 0;
+	      }
+
+	      .student-memo-editor {
+	        grid-template-columns: minmax(0, 1fr);
 	      }
 
 	      .filter-content input,
@@ -2096,6 +2332,128 @@
     const listeningExerciseSegments = {{ listening_exercise_segments | tojson }};
     const readingExercisePassages = {{ reading_exercise_passages | tojson }};
     const knownStudentOptions = {{ student_picker_options | tojson }};
+    const studentMemoRecordsByName = {{ student_memos | tojson }};
+
+    function setupStudentMemo() {
+      const panel = document.getElementById('studentMemoPanel');
+      const select = document.getElementById('memoStudentSelect');
+      const input = document.getElementById('studentMemoInput');
+      const preview = document.getElementById('studentMemoPreview');
+      const saveBtn = document.getElementById('studentMemoSave');
+      const status = document.getElementById('studentMemoStatus');
+      if (!panel || !select || !input || !preview || !saveBtn || !status) return;
+
+      const normalizeName = value => String(value || '').trim();
+      const findRecord = name => studentMemoRecordsByName[normalizeName(name)] || null;
+
+      function setStatus(text) {
+        status.textContent = text || '';
+      }
+
+      function refreshGroupMemo(name, memo) {
+        document.querySelectorAll('.student-group').forEach(group => {
+          if (normalizeName(group.dataset.student) !== normalizeName(name)) return;
+          const memoBox = group.querySelector('.student-group-memo');
+          const body = group.querySelector('.student-group-memo__body');
+          const button = group.querySelector('.student-memo-jump');
+          if (!memoBox || !body) return;
+          const hasMemo = Boolean(normalizeName(memo));
+          memoBox.classList.toggle('is-empty', !hasMemo);
+          body.textContent = hasMemo ? memo : '暂无备忘录';
+          if (button) button.textContent = hasMemo ? '编辑' : '填写';
+        });
+      }
+
+      function renderMemo(name, options = {}) {
+        const record = findRecord(name);
+        if (!record) {
+          select.value = '';
+          input.value = '';
+          input.disabled = true;
+          saveBtn.disabled = true;
+          preview.textContent = normalizeName(name) ? '未找到学生档案。' : '选择学生后显示备忘录。';
+          preview.classList.add('is-empty');
+          if (!options.keepStatus) setStatus('');
+          return;
+        }
+
+        select.value = record.name;
+        input.disabled = false;
+        saveBtn.disabled = false;
+        input.value = record.memo || '';
+        preview.textContent = record.memo || '暂无备忘录';
+        preview.classList.toggle('is-empty', !normalizeName(record.memo));
+        if (!options.keepStatus) setStatus('');
+      }
+
+      window.setStudentMemoByName = function (name, options = {}) {
+        renderMemo(name, options);
+        if (options.scroll) {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        if (options.focus) {
+          input.focus();
+        }
+      };
+
+      select.addEventListener('change', () => {
+        renderMemo(select.value);
+      });
+
+      input.addEventListener('input', () => {
+        const record = findRecord(select.value);
+        if (!record) return;
+        const nextMemo = input.value.trim();
+        setStatus(nextMemo === normalizeName(record.memo) ? '' : '有未保存修改');
+      });
+
+      saveBtn.addEventListener('click', async () => {
+        const record = findRecord(select.value);
+        if (!record) return;
+        const memo = input.value.trim();
+        saveBtn.disabled = true;
+        input.disabled = true;
+        setStatus('保存中...');
+        try {
+          const res = await fetch(`/api/students/${record.id}/memo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ memo })
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'save_failed');
+          studentMemoRecordsByName[data.student.name] = data.student;
+          record.memo = data.student.memo || '';
+          preview.textContent = record.memo || '暂无备忘录';
+          preview.classList.toggle('is-empty', !normalizeName(record.memo));
+          refreshGroupMemo(record.name, record.memo);
+          setStatus('已保存');
+        } catch (err) {
+          console.error(err);
+          setStatus('保存失败');
+        } finally {
+          saveBtn.disabled = false;
+          input.disabled = false;
+        }
+      });
+
+      document.querySelectorAll('.student-memo-jump[data-memo-student]').forEach(button => {
+        button.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          window.setStudentMemoByName(button.dataset.memoStudent || '', { scroll: true, focus: true });
+        });
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      const initialName =
+        params.get('student_name') ||
+        document.querySelector('.student-group[open]')?.dataset.student ||
+        knownStudentOptions[0]?.name ||
+        '';
+      renderMemo(initialName);
+    }
+    setupStudentMemo();
 
     function setupStudentPicker() {
       const input = document.getElementById('taskStudent');
@@ -2115,6 +2473,9 @@
         input.value = name;
         hideSuggestions();
         updateDictationRangeSuggestion();
+        if (window.setStudentMemoByName) {
+          window.setStudentMemoByName(name);
+        }
       };
       const renderSuggestions = () => {
         const query = normalize(input.value);
@@ -2158,6 +2519,10 @@
         activeIndex = -1;
         renderSuggestions();
         updateDictationRangeSuggestion();
+        const exact = studentMemoRecordsByName[input.value.trim()];
+        if (exact && window.setStudentMemoByName) {
+          window.setStudentMemoByName(exact.name, { keepStatus: true });
+        }
       });
       input.addEventListener('focus', renderSuggestions);
       input.addEventListener('blur', () => {

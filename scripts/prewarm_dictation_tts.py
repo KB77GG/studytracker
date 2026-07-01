@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Pre-bake Kokoro TTS cache for every dictation word in every dictation book.
+"""Pre-bake dictation TTS cache for every word in every dictation book.
 
 Run once after deploying the new TTS pipeline (or whenever
-DICTATION_TTS_REPEAT_COUNT / KOKORO_TTS_* changes invalidate the cache key).
+DICTATION_TTS_PROVIDER_ORDER / provider settings invalidate the cache key).
 Subsequent uploads / task assignments are covered by the in-app background
 prewarm hooks; this script is the one-shot backfill for existing data.
 Config changes create new cache keys; older cache files remain harmless until
@@ -29,7 +29,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from app import app  # noqa: E402
 from models import DictationBook, DictationWord  # noqa: E402
 from api.dictation import (  # noqa: E402
-    _dictation_tts_cache_paths,
+    _dictation_tts_cache_candidates,
     _dictation_tts_text,
     _generate_tts_to_cache,
 )
@@ -69,7 +69,7 @@ def main() -> int:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Print what would be generated without invoking Kokoro.",
+        help="Print what would be generated without invoking TTS providers.",
     )
     parser.add_argument(
         "--force",
@@ -85,17 +85,17 @@ def main() -> int:
             return 0
 
         # Deduplicate by tts_text so each unique phrase is generated once.
-        seen: dict[str, tuple[int, str]] = {}
+        seen: dict[str, tuple[int, str, str]] = {}
         for book_id, title, word in targets:
             tts_text = _dictation_tts_text(word)
             if tts_text and tts_text not in seen:
-                seen[tts_text] = (book_id, word)
+                seen[tts_text] = (book_id, title, word)
 
         total = len(seen)
         print(f"Books: {len({t[0] for t in targets})}, unique TTS phrases: {total}")
         if args.dry_run:
-            for i, (tts_text, (book_id, word)) in enumerate(seen.items(), 1):
-                print(f"  [{i}/{total}] book {book_id}: {word!r}")
+            for i, (tts_text, (book_id, title, word)) in enumerate(seen.items(), 1):
+                print(f"  [{i}/{total}] book {book_id} {title!r}: {word!r}")
             return 0
 
         started = time.time()
@@ -103,30 +103,27 @@ def main() -> int:
         skipped = 0
         failed = 0
 
-        for i, (tts_text, (book_id, word)) in enumerate(seen.items(), 1):
-            kokoro_cache, fallback_cache = _dictation_tts_cache_paths(word, tts_text)
-            cache_hit = kokoro_cache.exists() or fallback_cache.exists()
+        for i, (tts_text, (book_id, title, word)) in enumerate(seen.items(), 1):
+            cache_candidates = _dictation_tts_cache_candidates(word, tts_text)
+            cache_hit = any(path.exists() for _, path in cache_candidates)
             if cache_hit and not args.force:
                 skipped += 1
                 continue
             if args.force and cache_hit:
-                if kokoro_cache.exists():
+                for _, path in cache_candidates:
+                    if not path.exists():
+                        continue
                     try:
-                        kokoro_cache.unlink()
-                    except OSError:
-                        pass
-                if fallback_cache.exists():
-                    try:
-                        fallback_cache.unlink()
+                        path.unlink()
                     except OSError:
                         pass
 
             t0 = time.time()
-            result = _generate_tts_to_cache(tts_text, kokoro_cache, fallback_cache)
+            result = _generate_tts_to_cache(word, tts_text)
             dt = time.time() - t0
             if result:
                 generated += 1
-                tag = "kokoro" if result == kokoro_cache else "fallback"
+                tag = result.name.split("_dict_", 1)[0]
                 print(f"  [{i}/{total}] {word!r} → {tag} ({dt:.2f}s)")
             else:
                 failed += 1

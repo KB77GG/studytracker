@@ -4103,13 +4103,29 @@ def tasks_page():
     top_students = top_students[:5]
     recent_tasks = enriched_items[:5]
 
-    # 获取所有学生用于下拉框
-    all_students = [s.full_name for s in StudentProfile.query.filter_by(is_deleted=False).order_by(StudentProfile.full_name).all()]
+    # 获取所有学生用于下拉框与任务页备忘录
+    student_profiles = (
+        StudentProfile.query.filter_by(is_deleted=False)
+        .order_by(StudentProfile.full_name)
+        .all()
+    )
+    all_students = [s.full_name for s in student_profiles]
+    student_memos = {
+        s.full_name: {
+            "id": s.id,
+            "name": s.full_name,
+            "memo": s.notes or "",
+        }
+        for s in student_profiles
+    }
     student_picker_options = []
-    for name in all_students:
+    for student_profile in student_profiles:
+        name = student_profile.full_name
         pinyin_parts = lazy_pinyin(name)
         student_picker_options.append({
+            "id": student_profile.id,
             "name": name,
+            "memo": student_profile.notes or "",
             "search": " ".join(
                 part for part in [
                     name,
@@ -4317,6 +4333,7 @@ def tasks_page():
         top_students=top_students,
         recent_tasks=recent_tasks,
         all_students=all_students,
+        student_memos=student_memos,
         student_picker_options=student_picker_options,
         period=period,
         all_materials=all_materials,
@@ -4419,6 +4436,35 @@ def api_task_delete(tid):
     db.session.delete(t)
     db.session.commit()
     return jsonify({"ok": True})
+
+
+@app.post("/api/students/<int:student_id>/memo")
+@login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
+def api_student_memo_update(student_id):
+    student = StudentProfile.query.filter_by(
+        id=student_id, is_deleted=False
+    ).first_or_404()
+    if current_user.role == User.ROLE_TEACHER:
+        try:
+            require_student_access(student.id)
+        except PermissionError:
+            return jsonify({"ok": False, "error": "forbidden_student"}), 403
+
+    data = request.get_json(silent=True) or {}
+    memo = (data.get("memo") or "").strip()
+    student.notes = memo[:5000]
+    db.session.commit()
+    return jsonify(
+        {
+            "ok": True,
+            "student": {
+                "id": student.id,
+                "name": student.full_name,
+                "memo": student.notes or "",
+            },
+        }
+    )
 
 # ---- AJAX: 编辑任务（可修改日期/学生/类别/详情/状态/备注，部分字段可选）----
 @app.post("/api/tasks/<int:tid>/edit")

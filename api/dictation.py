@@ -490,12 +490,14 @@ def get_word_audio(word_id):
 
 
 # ============================================================================
-# TTS proxy & cache for mini-program playback
-# Kokoro ONNX first → DashScope fallback → Youdao last-resort fallback.
+# TTS proxy & cache for mini-program playback.
+# Provider order is controlled by DICTATION_TTS_PROVIDER_ORDER.
 # ============================================================================
 
 _KOKORO_LOCK = threading.Lock()
 _KOKORO_ENGINE = None
+_PIPER_LOCK = threading.Lock()
+_PIPER_VOICE = None
 _TTS_WARMUP_LOCK = threading.Lock()
 _TTS_WARMUP_KEYS = set()
 
@@ -511,6 +513,99 @@ def _config_float(name: str, default: float) -> float:
         return float(current_app.config.get(name) or default)
     except (TypeError, ValueError):
         return default
+
+
+def _config_optional_float(name: str) -> float | None:
+    raw = current_app.config.get(name)
+    if raw is None or str(raw).strip() == "":
+        return None
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return None
+
+
+def _dictation_tts_provider_order() -> list[str]:
+    raw = current_app.config.get("DICTATION_TTS_PROVIDER_ORDER") or ""
+    providers = []
+    for item in str(raw).split(","):
+        provider = item.strip().lower()
+        if provider in {"piper", "kokoro", "dashscope", "youdao"} and provider not in providers:
+            providers.append(provider)
+    return providers or ["piper", "kokoro", "youdao"]
+
+
+def _safe_cache_token(value: str) -> str:
+    return re.sub(r"[^a-zA-Z0-9_-]+", "_", str(value or "").strip()) or "default"
+
+
+def _piper_paths() -> tuple[Path, Path]:
+    base_dir = Path(
+        current_app.config.get(
+            "PIPER_TTS_DIR",
+            Path(current_app.root_path) / "data" / "piper",
+        )
+    )
+    voice = _safe_cache_token(current_app.config.get("PIPER_TTS_VOICE") or "en_US-lessac-high")
+    model_path = base_dir / f"{voice}.onnx"
+    return model_path, Path(f"{model_path}.json")
+
+
+def _piper_voice():
+    global _PIPER_VOICE
+    if not _flag_enabled(current_app.config.get("PIPER_TTS_ENABLED"), default=True):
+        return None
+    if _PIPER_VOICE is not None:
+        return _PIPER_VOICE
+
+    model_path, config_path = _piper_paths()
+    if not model_path.exists() or not config_path.exists():
+        return None
+
+    with _PIPER_LOCK:
+        if _PIPER_VOICE is not None:
+            return _PIPER_VOICE
+        try:
+            from piper import PiperVoice
+
+            _PIPER_VOICE = PiperVoice.load(model_path, config_path=config_path)
+            return _PIPER_VOICE
+        except Exception as exc:
+            current_app.logger.warning("Piper init failed: %s", exc)
+            return None
+
+
+def _piper_tts(text: str) -> bytes | None:
+    """Local Piper TTS. Returns MP3 bytes when the voice model is available."""
+    voice = _piper_voice()
+    if voice is None:
+        return None
+
+    try:
+        from piper import SynthesisConfig
+
+        syn_config = SynthesisConfig(
+            length_scale=_config_float("PIPER_TTS_LENGTH_SCALE", 1.15),
+            noise_scale=_config_optional_float("PIPER_TTS_NOISE_SCALE"),
+            noise_w_scale=_config_optional_float("PIPER_TTS_NOISE_W_SCALE"),
+            normalize_audio=True,
+        )
+        out = io.BytesIO()
+        with _PIPER_LOCK:
+            chunks = list(voice.synthesize(text, syn_config))
+        if not chunks:
+            return None
+        with wave.open(out, "wb") as wav:
+            first = chunks[0]
+            wav.setframerate(first.sample_rate)
+            wav.setsampwidth(first.sample_width)
+            wav.setnchannels(first.sample_channels)
+            for chunk in chunks:
+                wav.writeframes(chunk.audio_int16_bytes)
+        return _wav_to_mp3(out.getvalue())
+    except Exception as exc:
+        current_app.logger.warning("Piper TTS error for %s: %s", text, exc)
+        return None
 
 
 def _kokoro_paths() -> tuple[Path, Path]:
@@ -634,7 +729,7 @@ def _dictation_tts_text(text: str) -> str:
         repeat_count = 2
     repeat_count = min(3, max(1, repeat_count))
     if repeat_count <= 1:
-        return cleaned
+        return cleaned if cleaned.endswith((".", "!", "?")) else f"{cleaned}."
     return ". ".join([cleaned] * repeat_count) + "."
 
 
@@ -752,21 +847,55 @@ def _is_high_quality_mp3(data: bytes) -> bool:
     return False
 
 
-def _dictation_tts_cache_paths(word: str, tts_text: str | None = None) -> tuple[Path, Path]:
+def _dictation_provider_cache_key(provider: str) -> str:
+    if provider == "piper":
+        voice = _safe_cache_token(current_app.config.get("PIPER_TTS_VOICE") or "en_US-lessac-high")
+        length = _safe_cache_token(current_app.config.get("PIPER_TTS_LENGTH_SCALE") or "1.15")
+        noise = _safe_cache_token(current_app.config.get("PIPER_TTS_NOISE_SCALE") or "default")
+        noise_w = _safe_cache_token(current_app.config.get("PIPER_TTS_NOISE_W_SCALE") or "default")
+        return f"piper_{voice}_{length}_{noise}_{noise_w}"
+    if provider == "kokoro":
+        voice = _safe_cache_token(current_app.config.get("KOKORO_TTS_VOICE") or "af_heart")
+        lang = _safe_cache_token(current_app.config.get("KOKORO_TTS_LANG") or "en-us")
+        speed = _safe_cache_token(current_app.config.get("KOKORO_TTS_SPEED") or "0.88")
+        return f"kokoro_{voice}_{lang}_{speed}"
+    if provider == "dashscope":
+        model = _safe_cache_token(current_app.config.get("ALIYUN_TTS_MODEL") or "qwen3-tts-flash")
+        voice = _safe_cache_token(current_app.config.get("ALIYUN_TTS_VOICE") or "Cherry")
+        return f"dashscope_{model}_{voice}"
+    if provider == "youdao":
+        return "youdao"
+    return _safe_cache_token(provider)
+
+
+def _dictation_tts_cache_path(provider: str, word: str, tts_text: str | None = None) -> Path:
     speech_word = strip_part_of_speech_prefix(word)
     tts_text = tts_text if tts_text is not None else _dictation_tts_text(speech_word)
-    voice = (current_app.config.get("KOKORO_TTS_VOICE") or "af_heart").strip()
-    lang = (current_app.config.get("KOKORO_TTS_LANG") or "en-us").strip()
-    speed = str(current_app.config.get("KOKORO_TTS_SPEED") or "0.88").strip()
 
     raw_safe = re.sub(r"[^a-zA-Z0-9_-]+", "_", speech_word.lower()) or "tts"
     text_hash = hashlib.md5(tts_text.lower().encode()).hexdigest()
     safe_name = raw_safe if len(raw_safe) <= 64 else text_hash
     tts_dir = Path(current_app.config.get("UPLOAD_FOLDER", Path(current_app.root_path) / "uploads")) / "tts_cache"
     tts_dir.mkdir(parents=True, exist_ok=True)
-    kokoro_cache = tts_dir / f"kokoro_{voice}_{lang}_{speed}_dict_{safe_name}_{text_hash[:8]}.mp3"
-    fallback_cache = tts_dir / f"fallback_dict_{safe_name}_{text_hash[:8]}.mp3"
-    return kokoro_cache, fallback_cache
+    provider_key = _dictation_provider_cache_key(provider)
+    return tts_dir / f"{provider_key}_dict_{safe_name}_{text_hash[:8]}.mp3"
+
+
+def _dictation_tts_cache_paths(word: str, tts_text: str | None = None) -> tuple[Path, Path]:
+    """Backward-compatible primary/fallback cache paths for callers."""
+    provider = _dictation_tts_provider_order()[0]
+    return (
+        _dictation_tts_cache_path(provider, word, tts_text),
+        _dictation_tts_cache_path("youdao", word, tts_text),
+    )
+
+
+def _dictation_tts_cache_candidates(word: str, tts_text: str | None = None) -> list[tuple[str, Path]]:
+    tts_text = tts_text if tts_text is not None else _dictation_tts_text(word)
+    return [
+        (provider, _dictation_tts_cache_path(provider, word, tts_text))
+        for provider in _dictation_tts_provider_order()
+    ]
 
 
 def _send_tts_file(path: Path):
@@ -775,21 +904,30 @@ def _send_tts_file(path: Path):
     return response
 
 
-def _generate_tts_to_cache(tts_text: str, kokoro_cache: Path, fallback_cache: Path) -> Path | None:
-    kokoro_audio = _kokoro_tts(tts_text)
-    if kokoro_audio:
-        kokoro_cache.write_bytes(kokoro_audio)
-        return kokoro_cache
+def _tts_provider_audio(provider: str, tts_text: str) -> bytes | None:
+    if provider == "piper":
+        return _piper_tts(tts_text)
+    if provider == "kokoro":
+        return _kokoro_tts(tts_text)
+    if provider == "dashscope":
+        return _dashscope_tts(tts_text)
+    if provider == "youdao":
+        return _youdao_tts(tts_text)
+    return None
 
-    ds_audio = _dashscope_tts(tts_text)
-    if ds_audio:
-        fallback_cache.write_bytes(ds_audio)
-        return fallback_cache
 
-    youdao_audio = _youdao_tts(tts_text)
-    if youdao_audio:
-        fallback_cache.write_bytes(youdao_audio)
-        return fallback_cache
+def _generate_tts_to_cache(
+    word: str,
+    tts_text: str,
+    primary_cache: Path | None = None,
+    fallback_cache: Path | None = None,
+) -> Path | None:
+    del primary_cache, fallback_cache  # kept for old imports/call shape
+    for provider, cache_path in _dictation_tts_cache_candidates(word, tts_text):
+        audio = _tts_provider_audio(provider, tts_text)
+        if audio:
+            cache_path.write_bytes(audio)
+            return cache_path
 
     return None
 
@@ -800,15 +938,15 @@ def _prewarm_tts_cache(words: list[str]) -> None:
         if not word:
             continue
         tts_text = _dictation_tts_text(word)
-        kokoro_cache, fallback_cache = _dictation_tts_cache_paths(word, tts_text)
-        warmup_key = str(kokoro_cache)
+        cache_candidates = _dictation_tts_cache_candidates(word, tts_text)
+        warmup_key = str(cache_candidates[0][1]) if cache_candidates else tts_text
         with _TTS_WARMUP_LOCK:
             if warmup_key in _TTS_WARMUP_KEYS:
                 continue
             _TTS_WARMUP_KEYS.add(warmup_key)
         try:
-            if not kokoro_cache.exists() and not fallback_cache.exists():
-                _generate_tts_to_cache(tts_text, kokoro_cache, fallback_cache)
+            if not any(path.exists() for _, path in cache_candidates):
+                _generate_tts_to_cache(word, tts_text)
         except Exception as exc:
             current_app.logger.warning("Dictation TTS warmup failed for %s: %s", word, exc)
         finally:
@@ -857,30 +995,25 @@ def schedule_prewarm_for_book(book_id: int) -> None:
 def proxy_tts():
     """Proxy TTS audio with file cache.
 
-    Strategy:
-    1. Kokoro ONNX first for consistent local English pronunciation.
-    2. DashScope fallback if Kokoro is unavailable.
-    3. Youdao only as a last-resort fallback.
+    Strategy follows DICTATION_TTS_PROVIDER_ORDER. Defaults to:
+    1. Piper lessac-high as the lightweight local default.
+    2. Kokoro as local fallback.
+    3. Youdao as last-resort fallback.
     """
     word = strip_part_of_speech_prefix(request.args.get("word"))
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
     tts_text = _dictation_tts_text(word)
-    kokoro_cache, fallback_cache = _dictation_tts_cache_paths(word, tts_text)
-
-    if kokoro_cache.exists():
+    cache_candidates = _dictation_tts_cache_candidates(word, tts_text)
+    for _, cache_path in cache_candidates:
+        if not cache_path.exists():
+            continue
         try:
-            return _send_tts_file(kokoro_cache)
+            return _send_tts_file(cache_path)
         except Exception:
-            kokoro_cache.unlink(missing_ok=True)
+            cache_path.unlink(missing_ok=True)
 
-    if fallback_cache.exists():
-        try:
-            return _send_tts_file(fallback_cache)
-        except Exception:
-            fallback_cache.unlink(missing_ok=True)
-
-    generated_cache = _generate_tts_to_cache(tts_text, kokoro_cache, fallback_cache)
+    generated_cache = _generate_tts_to_cache(word, tts_text)
     if generated_cache:
         return _send_tts_file(generated_cache)
 
