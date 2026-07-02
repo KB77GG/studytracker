@@ -2141,6 +2141,15 @@ def _add_cache_headers(response):
         response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
         response.headers["Pragma"] = "no-cache"
         response.headers["Expires"] = "0"
+    # 安卓微信的 MediaPlayer 只认首次 200 响应里的 Accept-Ranges 来判断能否 seek；
+    # werkzeug 仅在 206 响应带该头，缺了它精听单句 seek 会退化成从头播放整段。
+    if (
+        response.status_code == 200
+        and response.content_type
+        and response.content_type.startswith("audio/")
+        and "Accept-Ranges" not in response.headers
+    ):
+        response.headers["Accept-Ranges"] = "bytes"
     return response
 
 ALLOWED_EVIDENCE_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "pdf", "mp3", "mp4", "wav", "doc", "docx"}
