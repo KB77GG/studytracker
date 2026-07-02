@@ -97,11 +97,13 @@ class Config:
     ALIYUN_TTS_VOICE = os.environ.get("ALIYUN_TTS_VOICE", "Cherry")
     ALIYUN_TTS_LANGUAGE = os.environ.get("ALIYUN_TTS_LANGUAGE", "English")
 
-    # Dictation TTS cache read order. Kokoro cache is preferred, but local neural
-    # generation is controlled separately so production requests stay stable.
+    # Dictation TTS cache read order. Youdao only: the resurrected Kokoro cache
+    # (48kHz + ID3v2.4) failed to play on Android tablets in production
+    # (2026-07-02). Re-enable kokoro only after re-encoding + device testing.
+    # Cache-miss generation is controlled separately below.
     DICTATION_TTS_PROVIDER_ORDER = os.environ.get(
         "DICTATION_TTS_PROVIDER_ORDER",
-        "kokoro,youdao",
+        "youdao",
     )
     DICTATION_TTS_GENERATION_PROVIDER_ORDER = os.environ.get(
         "DICTATION_TTS_GENERATION_PROVIDER_ORDER",

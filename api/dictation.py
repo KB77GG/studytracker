@@ -528,7 +528,7 @@ def _config_optional_float(name: str) -> float | None:
 
 def _dictation_tts_provider_order() -> list[str]:
     providers = _parse_tts_provider_order(current_app.config.get("DICTATION_TTS_PROVIDER_ORDER"))
-    return providers or ["kokoro", "youdao"]
+    return providers or ["youdao"]
 
 
 def _dictation_tts_generation_provider_order() -> list[str]:
@@ -830,7 +830,12 @@ def _wav_to_mp3(raw_audio: bytes) -> bytes | None:
 
 def _youdao_tts(text: str) -> bytes | None:
     """Youdao dictvoice — high-quality for base forms, weak for inflected."""
-    url = f"https://dict.youdao.com/dictvoice?audio={requests.utils.quote(text)}&type=2"
+    # dictvoice 对部分词的"带末尾句号"文本返回 500（如 "inhabitant."），
+    # 去掉末尾句号不改变发音；缓存键仍按原 tts_text 计算，不受影响。
+    query = text.strip().rstrip(".").strip()
+    if not query:
+        return None
+    url = f"https://dict.youdao.com/dictvoice?audio={requests.utils.quote(query)}&type=2"
     try:
         resp = requests.get(url, timeout=5)
         if resp.status_code == 200 and resp.content:
@@ -1071,7 +1076,10 @@ def proxy_tts():
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
     tts_text = _dictation_tts_text(word)
-    cache_candidates = _dictation_tts_cache_candidates(word, tts_text)
+    # include_legacy=False: legacy cache entries (old text variants / old Kokoro
+    # key) resurfaced files that broke playback on Android tablets (2026-07-02).
+    # Serve only cache that matches the current tts_text exactly.
+    cache_candidates = _dictation_tts_cache_candidates(word, tts_text, include_legacy=False)
     for _, cache_path in cache_candidates:
         if not cache_path.exists():
             continue
