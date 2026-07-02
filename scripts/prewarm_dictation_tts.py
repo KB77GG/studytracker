@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """Pre-bake dictation TTS cache for every word in every dictation book.
 
-Run once after deploying the new TTS pipeline (or whenever
-DICTATION_TTS_PROVIDER_ORDER / provider settings invalidate the cache key).
+Run once after deploying the new TTS pipeline (or whenever provider settings
+invalidate the cache key).
 Subsequent uploads / task assignments are covered by the in-app background
 prewarm hooks; this script is the one-shot backfill for existing data.
 Config changes create new cache keys; older cache files remain harmless until
 they are removed by a separate cleanup step.
 
 Usage:
-    python scripts/prewarm_dictation_tts.py              # all non-deleted dictation books
-    python scripts/prewarm_dictation_tts.py --book 12    # one book
-    python scripts/prewarm_dictation_tts.py --dry-run    # just print plan
+    python scripts/prewarm_dictation_tts.py                         # safe default generation chain
+    python scripts/prewarm_dictation_tts.py --provider kokoro        # pre-bake Kokoro cache offline
+    python scripts/prewarm_dictation_tts.py --book 12 --provider kokoro
+    python scripts/prewarm_dictation_tts.py --dry-run                # just print plan
 """
 
 from __future__ import annotations
@@ -33,6 +34,8 @@ from api.dictation import (  # noqa: E402
     _dictation_tts_text,
     _generate_tts_to_cache,
 )
+
+VALID_PROVIDERS = ("kokoro", "youdao", "piper", "dashscope")
 
 
 def collect_words(book_ids: list[int] | None) -> list[tuple[int, str, str]]:
@@ -76,9 +79,26 @@ def main() -> int:
         action="store_true",
         help="Regenerate current-key cache files even if they already exist; stale older-key files are not pruned.",
     )
+    parser.add_argument(
+        "--provider",
+        choices=VALID_PROVIDERS,
+        action="append",
+        help="Restrict generation to a provider (repeatable). Use --provider kokoro to pre-bake Kokoro offline.",
+    )
     args = parser.parse_args()
 
     with app.app_context():
+        provider_order: list[str] | None = None
+        if args.provider:
+            provider_order = []
+            for provider in args.provider:
+                if provider not in provider_order:
+                    provider_order.append(provider)
+            if "kokoro" in provider_order:
+                app.config["KOKORO_TTS_ENABLED"] = "1"
+            if "piper" in provider_order:
+                app.config["PIPER_TTS_ENABLED"] = "1"
+
         targets = collect_words(args.book)
         if not targets:
             print("No dictation words found.")
@@ -93,6 +113,8 @@ def main() -> int:
 
         total = len(seen)
         print(f"Books: {len({t[0] for t in targets})}, unique TTS phrases: {total}")
+        if provider_order:
+            print(f"Providers: {', '.join(provider_order)}")
         if args.dry_run:
             for i, (tts_text, (book_id, title, word)) in enumerate(seen.items(), 1):
                 print(f"  [{i}/{total}] book {book_id} {title!r}: {word!r}")
@@ -104,13 +126,19 @@ def main() -> int:
         failed = 0
 
         for i, (tts_text, (book_id, title, word)) in enumerate(seen.items(), 1):
-            cache_candidates = _dictation_tts_cache_candidates(word, tts_text)
+            cache_candidates = _dictation_tts_cache_candidates(word, tts_text, provider_order)
+            canonical_candidates = _dictation_tts_cache_candidates(
+                word,
+                tts_text,
+                provider_order,
+                include_legacy=False,
+            )
             cache_hit = any(path.exists() for _, path in cache_candidates)
             if cache_hit and not args.force:
                 skipped += 1
                 continue
             if args.force and cache_hit:
-                for _, path in cache_candidates:
+                for _, path in canonical_candidates:
                     if not path.exists():
                         continue
                     try:
@@ -119,7 +147,7 @@ def main() -> int:
                         pass
 
             t0 = time.time()
-            result = _generate_tts_to_cache(word, tts_text)
+            result = _generate_tts_to_cache(word, tts_text, providers=provider_order)
             dt = time.time() - t0
             if result:
                 generated += 1

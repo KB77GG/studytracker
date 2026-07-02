@@ -97,15 +97,19 @@ class Config:
     ALIYUN_TTS_VOICE = os.environ.get("ALIYUN_TTS_VOICE", "Cherry")
     ALIYUN_TTS_LANGUAGE = os.environ.get("ALIYUN_TTS_LANGUAGE", "English")
 
-    # Dictation TTS provider order. Piper is the preferred local provider;
-    # DashScope is not in the default chain because it is unavailable here.
+    # Dictation TTS cache read order. Kokoro cache is preferred, but local neural
+    # generation is controlled separately so production requests stay stable.
     DICTATION_TTS_PROVIDER_ORDER = os.environ.get(
         "DICTATION_TTS_PROVIDER_ORDER",
-        "piper,kokoro,youdao",
+        "kokoro,youdao",
+    )
+    DICTATION_TTS_GENERATION_PROVIDER_ORDER = os.environ.get(
+        "DICTATION_TTS_GENERATION_PROVIDER_ORDER",
+        "youdao",
     )
 
     # Local Piper TTS for dictation word playback
-    PIPER_TTS_ENABLED = os.environ.get("PIPER_TTS_ENABLED", "1")
+    PIPER_TTS_ENABLED = os.environ.get("PIPER_TTS_ENABLED", "0")
     PIPER_TTS_DIR = os.environ.get("PIPER_TTS_DIR", os.path.join(BASE_DIR, "data", "piper"))
     PIPER_TTS_VOICE = os.environ.get("PIPER_TTS_VOICE", "en_US-lessac-high")
     PIPER_TTS_LENGTH_SCALE = os.environ.get("PIPER_TTS_LENGTH_SCALE", "1.15")
@@ -113,7 +117,7 @@ class Config:
     PIPER_TTS_NOISE_W_SCALE = os.environ.get("PIPER_TTS_NOISE_W_SCALE", "")
 
     # Local Kokoro ONNX TTS for dictation word playback
-    KOKORO_TTS_ENABLED = os.environ.get("KOKORO_TTS_ENABLED", "1")
+    KOKORO_TTS_ENABLED = os.environ.get("KOKORO_TTS_ENABLED", "0")
     KOKORO_TTS_DIR = os.environ.get("KOKORO_TTS_DIR", os.path.join(BASE_DIR, "data", "kokoro"))
     KOKORO_TTS_MODEL_URL = os.environ.get(
         "KOKORO_TTS_MODEL_URL",

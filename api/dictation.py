@@ -491,7 +491,8 @@ def get_word_audio(word_id):
 
 # ============================================================================
 # TTS proxy & cache for mini-program playback.
-# Provider order is controlled by DICTATION_TTS_PROVIDER_ORDER.
+# Cache read order is controlled by DICTATION_TTS_PROVIDER_ORDER. Cache-miss
+# generation is controlled separately by DICTATION_TTS_GENERATION_PROVIDER_ORDER.
 # ============================================================================
 
 _KOKORO_LOCK = threading.Lock()
@@ -526,13 +527,24 @@ def _config_optional_float(name: str) -> float | None:
 
 
 def _dictation_tts_provider_order() -> list[str]:
-    raw = current_app.config.get("DICTATION_TTS_PROVIDER_ORDER") or ""
+    providers = _parse_tts_provider_order(current_app.config.get("DICTATION_TTS_PROVIDER_ORDER"))
+    return providers or ["kokoro", "youdao"]
+
+
+def _dictation_tts_generation_provider_order() -> list[str]:
+    providers = _parse_tts_provider_order(
+        current_app.config.get("DICTATION_TTS_GENERATION_PROVIDER_ORDER")
+    )
+    return providers or ["youdao"]
+
+
+def _parse_tts_provider_order(raw) -> list[str]:
     providers = []
     for item in str(raw).split(","):
         provider = item.strip().lower()
         if provider in {"piper", "kokoro", "dashscope", "youdao"} and provider not in providers:
             providers.append(provider)
-    return providers or ["piper", "kokoro", "youdao"]
+    return providers
 
 
 def _safe_cache_token(value: str) -> str:
@@ -868,17 +880,53 @@ def _dictation_provider_cache_key(provider: str) -> str:
     return _safe_cache_token(provider)
 
 
-def _dictation_tts_cache_path(provider: str, word: str, tts_text: str | None = None) -> Path:
+def _dictation_provider_cache_keys(provider: str, include_legacy: bool = False) -> list[str]:
+    keys = [_dictation_provider_cache_key(provider)]
+    if include_legacy and provider == "kokoro":
+        voice = _safe_cache_token(current_app.config.get("KOKORO_TTS_VOICE") or "af_heart")
+        lang = _safe_cache_token(current_app.config.get("KOKORO_TTS_LANG") or "en-us")
+        # Older Kokoro cache files kept the speed value as "0.88"; current safe
+        # tokens normalize it to "0_88". Keep reading both so existing cache
+        # survives provider changes.
+        legacy_speed = str(current_app.config.get("KOKORO_TTS_SPEED") or "0.88").strip() or "0.88"
+        legacy_key = f"kokoro_{voice}_{lang}_{legacy_speed}"
+        if legacy_key not in keys:
+            keys.append(legacy_key)
+    return keys
+
+
+def _dictation_tts_cache_texts(word: str, tts_text: str, include_legacy: bool = False) -> list[str]:
+    texts = [tts_text]
+    if include_legacy:
+        cleaned = re.sub(r"\s+", " ", strip_part_of_speech_prefix(word))
+        if cleaned:
+            legacy_texts = [
+                cleaned,
+                ". ".join([cleaned] * 2) + ".",
+                ". ".join([cleaned] * 3) + ".",
+            ]
+            for legacy_text in legacy_texts:
+                if legacy_text not in texts:
+                    texts.append(legacy_text)
+    return texts
+
+
+def _dictation_tts_cache_path_for_key(provider_key: str, word: str, tts_text: str) -> Path:
     speech_word = strip_part_of_speech_prefix(word)
-    tts_text = tts_text if tts_text is not None else _dictation_tts_text(speech_word)
 
     raw_safe = re.sub(r"[^a-zA-Z0-9_-]+", "_", speech_word.lower()) or "tts"
     text_hash = hashlib.md5(tts_text.lower().encode()).hexdigest()
     safe_name = raw_safe if len(raw_safe) <= 64 else text_hash
     tts_dir = Path(current_app.config.get("UPLOAD_FOLDER", Path(current_app.root_path) / "uploads")) / "tts_cache"
     tts_dir.mkdir(parents=True, exist_ok=True)
-    provider_key = _dictation_provider_cache_key(provider)
     return tts_dir / f"{provider_key}_dict_{safe_name}_{text_hash[:8]}.mp3"
+
+
+def _dictation_tts_cache_path(provider: str, word: str, tts_text: str | None = None) -> Path:
+    speech_word = strip_part_of_speech_prefix(word)
+    tts_text = tts_text if tts_text is not None else _dictation_tts_text(speech_word)
+    provider_key = _dictation_provider_cache_key(provider)
+    return _dictation_tts_cache_path_for_key(provider_key, speech_word, tts_text)
 
 
 def _dictation_tts_cache_paths(word: str, tts_text: str | None = None) -> tuple[Path, Path]:
@@ -890,12 +938,25 @@ def _dictation_tts_cache_paths(word: str, tts_text: str | None = None) -> tuple[
     )
 
 
-def _dictation_tts_cache_candidates(word: str, tts_text: str | None = None) -> list[tuple[str, Path]]:
+def _dictation_tts_cache_candidates(
+    word: str,
+    tts_text: str | None = None,
+    providers: list[str] | None = None,
+    include_legacy: bool = True,
+) -> list[tuple[str, Path]]:
     tts_text = tts_text if tts_text is not None else _dictation_tts_text(word)
-    return [
-        (provider, _dictation_tts_cache_path(provider, word, tts_text))
-        for provider in _dictation_tts_provider_order()
-    ]
+    provider_order = providers if providers is not None else _dictation_tts_provider_order()
+    candidates: list[tuple[str, Path]] = []
+    seen_paths: set[Path] = set()
+    for provider in provider_order:
+        for cache_text in _dictation_tts_cache_texts(word, tts_text, include_legacy):
+            for provider_key in _dictation_provider_cache_keys(provider, include_legacy):
+                path = _dictation_tts_cache_path_for_key(provider_key, word, cache_text)
+                if path in seen_paths:
+                    continue
+                seen_paths.add(path)
+                candidates.append((provider, path))
+    return candidates
 
 
 def _send_tts_file(path: Path):
@@ -921,9 +982,16 @@ def _generate_tts_to_cache(
     tts_text: str,
     primary_cache: Path | None = None,
     fallback_cache: Path | None = None,
+    providers: list[str] | None = None,
 ) -> Path | None:
     del primary_cache, fallback_cache  # kept for old imports/call shape
-    for provider, cache_path in _dictation_tts_cache_candidates(word, tts_text):
+    provider_order = providers if providers is not None else _dictation_tts_generation_provider_order()
+    for provider, cache_path in _dictation_tts_cache_candidates(
+        word,
+        tts_text,
+        provider_order,
+        include_legacy=False,
+    ):
         audio = _tts_provider_audio(provider, tts_text)
         if audio:
             cache_path.write_bytes(audio)
@@ -995,10 +1063,9 @@ def schedule_prewarm_for_book(book_id: int) -> None:
 def proxy_tts():
     """Proxy TTS audio with file cache.
 
-    Strategy follows DICTATION_TTS_PROVIDER_ORDER. Defaults to:
-    1. Piper lessac-high as the lightweight local default.
-    2. Kokoro as local fallback.
-    3. Youdao as last-resort fallback.
+    Cached Kokoro audio is preferred. Cache-miss generation uses a separate,
+    production-safe provider order so local neural models do not cold-load in
+    Gunicorn request workers.
     """
     word = strip_part_of_speech_prefix(request.args.get("word"))
     if not word:
