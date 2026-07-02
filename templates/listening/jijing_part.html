@@ -512,6 +512,9 @@ table.practice-table {
 </div>
 
 <script>
+const pageParams = new URLSearchParams(window.location.search);
+const listeningTaskId = pageParams.get('task_id') || '';
+const listeningTaskToken = pageParams.get('token') || '';
 const part = {{ part|tojson }};
 const staticBase = "{{ url_for('static', filename='listening_jijing/') }}";
 const audio = document.getElementById('audio');
@@ -803,18 +806,23 @@ function markUnit(unit) {
 async function syncJijingSubmission(results, correct, total, baseHtml) {
   const resultBox = document.getElementById('resultBox');
   resultBox.innerHTML = `${baseHtml}<br><span class="muted">正在同步后台记录...</span>`;
+  const payload = {
+    answers: answerSnapshot(),
+    results,
+    correct,
+    total,
+    duration_seconds: Math.max(0, Math.round((Date.now() - practiceStartedAt) / 1000))
+  };
+  if (listeningTaskId && listeningTaskToken) {
+    payload.task_id = Number(listeningTaskId);
+    payload.token = listeningTaskToken;
+  }
   try {
     const response = await fetch(`/api/listening/jijing/${encodeURIComponent(part.id)}/submit`, {
       method: 'POST',
       credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        answers: answerSnapshot(),
-        results,
-        correct,
-        total,
-        duration_seconds: Math.max(0, Math.round((Date.now() - practiceStartedAt) / 1000))
-      })
+      body: JSON.stringify(payload)
     });
     const data = await response.json();
     if (!response.ok || !data.ok) {
@@ -832,7 +840,13 @@ async function syncJijingSubmission(results, correct, total, baseHtml) {
 
 async function loadExistingJijingSubmission() {
   try {
-    const response = await fetch(`/api/listening/jijing/${encodeURIComponent(part.id)}/submission`, {
+    const params = new URLSearchParams();
+    if (listeningTaskId && listeningTaskToken) {
+      params.set('task_id', listeningTaskId);
+      params.set('token', listeningTaskToken);
+    }
+    const query = params.toString();
+    const response = await fetch(`/api/listening/jijing/${encodeURIComponent(part.id)}/submission${query ? `?${query}` : ''}`, {
       credentials: 'same-origin'
     });
     const data = await response.json();

@@ -268,8 +268,138 @@ a.practice-resource:hover {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: var(--fs-xs);
 }
+.practice-assigned {
+  display: none;
+  margin: 0 0 22px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.practice-assigned__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.practice-assigned__head h3 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: var(--fs-xl);
+}
+.practice-assigned__meta {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.practice-assigned__groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.practice-task-group {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--brand-tint);
+  overflow: hidden;
+}
+.practice-task-group__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-strong);
+  font-size: var(--fs-md);
+  font-weight: 900;
+}
+.practice-task-group__count {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.practice-task-list {
+  display: grid;
+  gap: 0;
+}
+.practice-task {
+  display: grid;
+  gap: 7px;
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+}
+.practice-task:last-child {
+  border-bottom: 0;
+}
+.practice-task:hover {
+  background: var(--brand-tint);
+  color: inherit;
+  text-decoration: none;
+}
+.practice-task__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.practice-task__source {
+  color: var(--brand-dark);
+  font-size: var(--fs-xs);
+  font-weight: 900;
+}
+.practice-task__status {
+  border-radius: var(--r-pill);
+  padding: 3px 8px;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-size: var(--fs-xs);
+  font-weight: 900;
+  white-space: nowrap;
+}
+.practice-task__status--done {
+  background: var(--success-soft);
+  color: var(--success);
+}
+.practice-task__status--in_progress {
+  background: #fef3c7;
+  color: var(--warning);
+}
+.practice-task__title {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: var(--fs-base);
+  font-weight: 900;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.practice-task__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+.practice-task-empty {
+  padding: 16px 14px;
+  background: #fff;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
 @media (max-width: 900px) {
   .practice-subjects {
+    grid-template-columns: 1fr;
+  }
+  .practice-assigned__groups {
     grid-template-columns: 1fr;
   }
 }
@@ -296,6 +426,13 @@ a.practice-resource:hover {
   }
   .practice-toefl {
     grid-template-columns: 1fr;
+  }
+  .practice-assigned__head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .practice-assigned__meta {
+    white-space: normal;
   }
 }
 </style>
@@ -327,6 +464,29 @@ a.practice-resource:hover {
     </form>
     <button class="practice-identity__switch" type="button" id="practiceIdentitySwitch" hidden>切换学生</button>
     <div class="practice-identity__error" id="practiceIdentityError"></div>
+  </section>
+
+  <section class="practice-assigned" id="practiceAssignedTasks" aria-label="刷题任务">
+    <div class="practice-assigned__head">
+      <h3>刷题任务</h3>
+      <div class="practice-assigned__meta" id="practiceAssignedMeta">加载中</div>
+    </div>
+    <div class="practice-assigned__groups">
+      <article class="practice-task-group">
+        <h4 class="practice-task-group__title">
+          助教推送教辅刷题
+          <span class="practice-task-group__count" id="practiceAssistantCount">0</span>
+        </h4>
+        <div class="practice-task-list" id="practiceAssistantTasks"></div>
+      </article>
+      <article class="practice-task-group">
+        <h4 class="practice-task-group__title">
+          老师布置作业
+          <span class="practice-task-group__count" id="practiceTeacherCount">0</span>
+        </h4>
+        <div class="practice-task-list" id="practiceTeacherTasks"></div>
+      </article>
+    </div>
   </section>
 
   <nav class="practice-exam-switch" aria-label="考试类型">
@@ -426,14 +586,95 @@ a.practice-resource:hover {
   const switchBtn = document.getElementById('practiceIdentitySwitch');
   const errorEl = document.getElementById('practiceIdentityError');
   const identitySection = document.querySelector('.practice-identity');
+  const assignedSection = document.getElementById('practiceAssignedTasks');
+  const assignedMeta = document.getElementById('practiceAssignedMeta');
+  const assistantList = document.getElementById('practiceAssistantTasks');
+  const teacherList = document.getElementById('practiceTeacherTasks');
+  const assistantCount = document.getElementById('practiceAssistantCount');
+  const teacherCount = document.getElementById('practiceTeacherCount');
   const staffMode = identitySection && identitySection.dataset.practiceStaffMode === '1';
   const staffName = (identitySection && identitySection.dataset.staffName) || '课堂模式';
   const staffHint = (identitySection && identitySection.dataset.staffHint) || '课堂模式：可直接进入题库讲题；提交只做本地判分，不同步到学生记录。';
   let verified = Boolean(staffMode);
 
+  function escapeHtml(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[char];
+    });
+  }
+
   function setError(message) {
     errorEl.textContent = message || '';
     errorEl.style.display = message ? 'block' : 'none';
+  }
+
+  function hideAssignedTasks() {
+    assignedSection.style.display = 'none';
+    assistantList.innerHTML = '';
+    teacherList.innerHTML = '';
+    assistantCount.textContent = '0';
+    teacherCount.textContent = '0';
+    assignedMeta.textContent = '';
+  }
+
+  function taskMeta(task) {
+    const parts = [];
+    if (task.date) parts.push(task.date);
+    if (task.status === 'done' && task.accuracy != null) {
+      parts.push(`正确率 ${task.accuracy}%`);
+    } else if (task.completion_rate != null) {
+      parts.push(`进度 ${task.completion_rate}%`);
+    }
+    return parts.map(escapeHtml).join('<span>·</span>');
+  }
+
+  function renderTaskList(node, tasks) {
+    if (!tasks.length) {
+      node.innerHTML = '<div class="practice-task-empty">暂无任务</div>';
+      return;
+    }
+    node.innerHTML = tasks.map(function (task) {
+      const url = String(task.url || '#');
+      const href = url.startsWith('/') ? url : '#';
+      const status = task.status || 'pending';
+      return `
+        <a class="practice-task" href="${escapeHtml(href)}">
+          <div class="practice-task__top">
+            <span class="practice-task__source">${escapeHtml(task.source_label || task.category || '刷题')}</span>
+            <span class="practice-task__status practice-task__status--${escapeHtml(status)}">${escapeHtml(task.status_label || '')}</span>
+          </div>
+          <p class="practice-task__title">${escapeHtml(task.title || '未命名任务')}</p>
+          <div class="practice-task__meta">${taskMeta(task)}</div>
+        </a>
+      `;
+    }).join('');
+  }
+
+  async function loadAssignedTasks() {
+    if (!assignedSection || staffMode) return;
+    assignedSection.style.display = 'block';
+    assignedMeta.textContent = '加载中';
+    try {
+      const response = await fetch('/api/practice/tasks', { credentials: 'same-origin' });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        hideAssignedTasks();
+        return;
+      }
+      const groups = data.groups || {};
+      const assistantTasks = Array.isArray(groups.assistant) ? groups.assistant : [];
+      const teacherTasks = Array.isArray(groups.teacher) ? groups.teacher : [];
+      assistantCount.textContent = String(assistantTasks.length);
+      teacherCount.textContent = String(teacherTasks.length);
+      renderTaskList(assistantList, assistantTasks);
+      renderTaskList(teacherList, teacherTasks);
+      const total = assistantTasks.length + teacherTasks.length;
+      assignedMeta.textContent = total ? `${total} 个可做任务` : '暂无可做任务';
+    } catch (_error) {
+      assignedMeta.textContent = '任务加载失败';
+      renderTaskList(assistantList, []);
+      renderTaskList(teacherList, []);
+    }
   }
 
   function setVerified(name) {
@@ -445,6 +686,7 @@ a.practice-resource:hover {
     form.hidden = true;
     switchBtn.hidden = false;
     setError('');
+    loadAssignedTasks();
   }
 
   function setStaffMode(name, hint) {
@@ -454,6 +696,7 @@ a.practice-resource:hover {
     form.hidden = true;
     switchBtn.hidden = true;
     setError('');
+    hideAssignedTasks();
   }
 
   function setUnverified(message) {
@@ -462,6 +705,7 @@ a.practice-resource:hover {
     hintEl.textContent = '输入后台学生档案中的姓名后，刷题记录会同步到后台。';
     form.hidden = false;
     switchBtn.hidden = true;
+    hideAssignedTasks();
     if (message) setError(message);
   }
 

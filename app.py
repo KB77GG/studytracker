@@ -402,6 +402,9 @@ def _task_listening_url(task, absolute: bool = True) -> str | None:
     resource_type = _task_listening_resource_type(task)
     if resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
         path = f"/listening/test/{safe_exercise_id}?task_id={task.id}&token={safe_token}"
+        section_number = _task_listening_section_number(task)
+        if section_number:
+            path = f"{path}&section={int(section_number)}"
     elif resource_type == LISTENING_RESOURCE_JIJING:
         path = f"/listening/jijing/{safe_exercise_id}?task_id={task.id}&token={safe_token}"
     else:
@@ -1506,6 +1509,17 @@ def _task_matches_section(task: Task, section_number: int | None) -> bool:
         return int(bound) == int(section_number)
     except (TypeError, ValueError):
         return False
+
+
+def _task_listening_section_number(task: Task | None) -> int | None:
+    metadata = _parse_task_resource_metadata(task)
+    value = metadata.get("listening_section_number")
+    if value in (None, ""):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def _latest_submitted_task(tasks: list[Task]) -> Task | None:
@@ -7272,6 +7286,30 @@ def listening_jijing_part(part_id):
 @app.get("/api/listening/jijing/<part_id>/submission")
 def api_listening_jijing_submission(part_id):
     safe_id = secure_filename(part_id)
+    task_id = request.args.get("task_id", type=int)
+    token = (request.args.get("token") or "").strip()
+    if task_id and token:
+        task = Task.query.get(task_id)
+        if (
+            not task
+            or _task_listening_resource_type(task) != LISTENING_RESOURCE_JIJING
+            or secure_filename(task.listening_exercise_id or "") != safe_id
+        ):
+            return jsonify({"ok": False, "error": "task_not_found"}), 404
+        if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, token):
+            return jsonify({"ok": False, "error": "invalid_token"}), 403
+        return jsonify({
+            "ok": True,
+            "task": {
+                "id": task.id,
+                "status": task.status,
+                "accuracy": task.accuracy,
+                "completion_rate": task.completion_rate,
+                "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+            },
+            "submission": _serialize_listening_test_submission(task.listening_test_submission),
+        })
+
     profile = _current_practice_student_profile()
     if not profile:
         return jsonify({"ok": True, "submission": None})
@@ -7358,7 +7396,27 @@ def api_listening_jijing_submit(part_id):
     except (TypeError, ValueError):
         duration_seconds = 0
 
-    task = _upsert_listening_jijing_self_task(part, safe_id, duration_seconds)
+    task = None
+    task_id = data.get("task_id") or request.args.get("task_id")
+    token = (data.get("token") or request.args.get("token") or "").strip()
+    if task_id:
+        try:
+            task_id = int(task_id)
+        except (TypeError, ValueError):
+            return jsonify({"ok": False, "error": "invalid_task_id"}), 400
+        if not token:
+            return jsonify({"ok": False, "error": "missing_token"}), 400
+        task = Task.query.get(task_id)
+        if (
+            not task
+            or _task_listening_resource_type(task) != LISTENING_RESOURCE_JIJING
+            or secure_filename(task.listening_exercise_id or "") != safe_id
+        ):
+            return jsonify({"ok": False, "error": "task_not_found"}), 404
+        if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, token):
+            return jsonify({"ok": False, "error": "invalid_token"}), 403
+    else:
+        task = _upsert_listening_jijing_self_task(part, safe_id, duration_seconds)
     if not task:
         return jsonify({
             "ok": True,
@@ -8622,6 +8680,55 @@ def _practice_task_status_label(task) -> tuple[str, str]:
     return "pending", "未开始"
 
 
+def _practice_task_sort_key(task: Task) -> tuple[int, str, int]:
+    status_key, _ = _practice_task_status_label(task)
+    status_order = {
+        "in_progress": 0,
+        "pending": 1,
+        "done": 2,
+    }.get(status_key, 3)
+    return (status_order, task.date or "", int(task.id or 0))
+
+
+def _practice_task_source_label(task: Task) -> str:
+    if task.reading_test_id:
+        test_id = (task.reading_test_id or "").strip()
+        if test_id.startswith("reading_jijing_"):
+            return "阅读机经"
+        return "剑雅阅读"
+    if task.listening_exercise_id:
+        resource_type = _task_listening_resource_type(task)
+        if resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+            return "剑雅听力"
+        if resource_type == LISTENING_RESOURCE_JIJING:
+            return "听力机经"
+        return "精听"
+    return "刷题"
+
+
+def _practice_title_with_scope(
+    title: str,
+    number: int | None,
+    labels: tuple[str, ...],
+    display_label: str,
+) -> str:
+    clean_title = (title or "").strip()
+    if not number:
+        return clean_title
+    label_pattern = "|".join(re.escape(label) for label in labels)
+    if re.search(rf"\b(?:{label_pattern})\s*{int(number)}\b", clean_title, re.IGNORECASE):
+        return clean_title
+    return f"{clean_title} · {display_label} {int(number)}" if clean_title else f"{display_label} {int(number)}"
+
+
+def _practice_role_group(role: str | None) -> str | None:
+    if role == User.ROLE_ASSISTANT:
+        return "assistant"
+    if role in (User.ROLE_TEACHER, User.ROLE_ADMIN):
+        return "teacher"
+    return None
+
+
 def _practice_task_payload(task) -> dict | None:
     if task.listening_exercise_id:
         if not task.listening_access_token:
@@ -8637,6 +8744,13 @@ def _practice_task_payload(task) -> dict | None:
         else:
             category = "精听"
         title = task.detail or task.listening_exercise_id
+        if resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+            title = _practice_title_with_scope(
+                title,
+                _task_listening_section_number(task),
+                ("section", "part"),
+                "Part",
+            )
     elif task.reading_test_id:
         if not task.reading_access_token:
             task.reading_access_token = secrets.token_urlsafe(16)
@@ -8646,7 +8760,12 @@ def _practice_task_payload(task) -> dict | None:
         category = "阅读"
         title = task.detail or task.reading_test_id
         if task.reading_passage_number:
-            title = f"{title} · Passage {int(task.reading_passage_number)}"
+            title = _practice_title_with_scope(
+                title,
+                int(task.reading_passage_number),
+                ("passage",),
+                "Passage",
+            )
     else:
         return None
 
@@ -8656,14 +8775,101 @@ def _practice_task_payload(task) -> dict | None:
     return {
         "id": task.id,
         "category": category,
+        "source_label": _practice_task_source_label(task),
         "title": title,
         "url": url,
+        "date": task.date or "",
         "status": status_key,
         "status_label": status_label,
         "accuracy": round(accuracy, 1) if status_key == "done" else None,
         "completion_rate": round(completion, 1) if completion is not None else None,
         "note": task.note or "",
     }
+
+
+@app.route("/api/practice/tasks")
+def api_practice_tasks():
+    """Return assigned web-practice tasks for the current verified student."""
+    if _practice_staff_mode():
+        return jsonify({
+            "ok": True,
+            "verified": False,
+            "groups": {"assistant": [], "teacher": []},
+        })
+
+    profile = _current_practice_student_profile()
+    if not profile:
+        return jsonify({"ok": False, "error": "not_verified"}), 401
+
+    today = date.today()
+    window_start = today - timedelta(days=30)
+    window_end = today + timedelta(days=14)
+    window_start_iso = window_start.isoformat()
+    window_end_iso = window_end.isoformat()
+
+    rows = (
+        Task.query.filter(
+            Task.student_name == profile.full_name,
+            or_(
+                Task.listening_exercise_id.isnot(None),
+                Task.reading_test_id.isnot(None),
+            ),
+            or_(
+                Task.date.is_(None),
+                Task.date == "",
+                Task.date >= window_start_iso,
+                Task.status.notin_(("done", "completed", "finished", "submitted")),
+            ),
+            or_(
+                Task.date.is_(None),
+                Task.date == "",
+                Task.date <= window_end_iso,
+                Task.status.notin_(("done", "completed", "finished", "submitted")),
+            ),
+        )
+        .order_by(Task.date.asc(), Task.id.asc())
+        .all()
+    )
+
+    creator_ids = {task.created_by for task in rows if task.created_by}
+    creator_roles: dict[int, str] = {}
+    if creator_ids:
+        creator_roles = {
+            uid: role
+            for uid, role in db.session.query(User.id, User.role)
+            .filter(User.id.in_(creator_ids))
+            .all()
+        }
+
+    groups = {"assistant": [], "teacher": []}
+    tokens_changed = False
+    for task in sorted(rows, key=_practice_task_sort_key):
+        group_key = _practice_role_group(creator_roles.get(task.created_by))
+        if not group_key:
+            continue
+        had_listening_token = task.listening_access_token
+        had_reading_token = task.reading_access_token
+        payload = _practice_task_payload(task)
+        if not payload:
+            continue
+        payload["assigned_by_role"] = creator_roles.get(task.created_by) or ""
+        payload["assigned_group"] = group_key
+        groups[group_key].append(payload)
+        if (
+            task.listening_access_token != had_listening_token
+            or task.reading_access_token != had_reading_token
+        ):
+            tokens_changed = True
+
+    if tokens_changed:
+        db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "verified": True,
+        "name": profile.full_name,
+        "groups": groups,
+    })
 
 
 @app.route("/api/student/practices/today")
