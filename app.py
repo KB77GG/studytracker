@@ -553,6 +553,7 @@ def _task_resource_binding(
     reading_passage_number=None,
     dictation_book_id=None,
     dictation_mode=None,
+    dictation_order=None,
     dictation_word_start=None,
     dictation_word_end=None,
     speaking_book_id=None,
@@ -578,8 +579,12 @@ def _task_resource_binding(
         }
         return PLAN_RESOURCE_CAMBRIDGE_READING_TEST, str(reading_test_id), metadata
     if dictation_book_id:
+        dictation_order_value = str(dictation_order or "sequence").strip().lower()
+        if dictation_order_value not in {"sequence", "random"}:
+            dictation_order_value = "sequence"
         metadata = {
             "dictation_mode": dictation_mode or "audio_to_en",
+            "dictation_order": dictation_order_value,
             "dictation_word_start": dictation_word_start or 1,
             "dictation_word_end": dictation_word_end,
         }
@@ -618,6 +623,7 @@ def _task_resource_binding_from_task(task: Task) -> tuple[str, str | None, dict]
         return _task_resource_binding(
             dictation_book_id=task.dictation_book_id,
             dictation_mode=task.dictation_mode,
+            dictation_order=getattr(task, "dictation_order", None),
             dictation_word_start=task.dictation_word_start,
             dictation_word_end=task.dictation_word_end,
         )
@@ -2160,6 +2166,7 @@ def allowed_evidence(filename: str) -> bool:
 
 
 VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh", "spelling_drill"}
+VALID_DICTATION_ORDERS = {"sequence", "random"}
 
 
 def resolve_task_dictation_mode(task, book_type: str | None = None) -> str:
@@ -2169,6 +2176,11 @@ def resolve_task_dictation_mode(task, book_type: str | None = None) -> str:
     if (book_type or "").strip().lower() == "translation":
         return "zh_to_en"
     return "audio_to_en"
+
+
+def resolve_task_dictation_order(task) -> str:
+    order = (getattr(task, "dictation_order", "") or "").strip().lower()
+    return order if order in VALID_DICTATION_ORDERS else "sequence"
 
 
 def ensure_legacy_schema() -> None:
@@ -2183,6 +2195,7 @@ def ensure_legacy_schema() -> None:
             "completion_rate": "FLOAT",
             "question_ids": "TEXT",
             "dictation_mode": "VARCHAR(20) DEFAULT 'audio_to_en'",
+            "dictation_order": "VARCHAR(20) DEFAULT 'sequence'",
             "dictation_word_start": "INTEGER DEFAULT 1",
             "dictation_word_end": "INTEGER",
             "speaking_book_id": "INTEGER",
@@ -3883,7 +3896,9 @@ def tasks_page():
             # Set grading mode based on material selection
             grading_mode = "image"
             dictation_mode_raw = (request.form.get("dictation_mode") or "").strip().lower()
+            dictation_order_raw = (request.form.get("dictation_order") or "").strip().lower()
             dictation_mode = None
+            dictation_order = "sequence"
             if material_id:
                 grading_mode = "material"
                 if not category:
@@ -3893,6 +3908,11 @@ def tasks_page():
                         dictation_mode_raw
                         if dictation_mode_raw in VALID_DICTATION_MODES
                         else resolve_task_dictation_mode(None, getattr(dictation_book_data, "book_type", None))
+                    )
+                    dictation_order = (
+                        dictation_order_raw
+                        if dictation_order_raw in VALID_DICTATION_ORDERS
+                        else "sequence"
                     )
             if reading_test_id:
                 grading_mode = "reading_test"
@@ -3916,6 +3936,7 @@ def tasks_page():
                 reading_passage_number=reading_passage_number,
                 dictation_book_id=dictation_task_book_id,
                 dictation_mode=dictation_mode,
+                dictation_order=dictation_order,
                 dictation_word_start=dictation_task_start,
                 dictation_word_end=dictation_task_end,
                 speaking_book_id=speaking_task_book_id,
@@ -3955,6 +3976,7 @@ def tasks_page():
                 question_ids=question_ids,
                 dictation_book_id=dictation_task_book_id,
                 dictation_mode=dictation_mode,
+                dictation_order=dictation_order,
                 dictation_word_start=dictation_task_start,
                 dictation_word_end=dictation_task_end,
                 speaking_book_id=speaking_task_book_id,

@@ -52,6 +52,36 @@ class MiniprogramGradingTest(unittest.TestCase):
         self.assertEqual(item.resource_type, "dictation")
         self.assertEqual(item.resource_id, "dictation_book:7")
         self.assertEqual(metadata["dictation_word_start"], 37)
+        self.assertEqual(metadata["dictation_order"], "sequence")
+
+    def test_sync_plan_item_preserves_random_dictation_order(self):
+        item = SimpleNamespace(
+            exam_system="材料练习",
+            module="未分模块",
+            task_name="材料练习",
+            resource_type=None,
+            resource_id=None,
+            resource_metadata="",
+            student_status="pending",
+            submitted_at=None,
+            student_comment="",
+            actual_seconds=0,
+        )
+        task = SimpleNamespace(
+            plan_item=item,
+            dictation_book_id=7,
+            dictation_mode="audio_to_en",
+            dictation_order="random",
+            dictation_word_start=1,
+            dictation_word_end=50,
+            submitted_at=None,
+            actual_seconds=0,
+        )
+
+        _sync_plan_item_from_legacy_task(task)
+        metadata = json.loads(item.resource_metadata)
+
+        self.assertEqual(metadata["dictation_order"], "random")
 
     def test_task_evidence_type_recognizes_miniprogram_audio_formats(self):
         self.assertEqual(_task_evidence_type("/uploads/answer.mp3"), "audio")

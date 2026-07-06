@@ -70,9 +70,22 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
             )
             completed_listening.listening_resource_type = "cambridge_test"
             completed_listening.listening_exercise_id = "ielts11_test1"
+            random_dictation = self._task(
+                self.today,
+                "random dictation",
+                "pending",
+                teacher.id,
+            )
+            random_dictation.category = "词汇"
+            random_dictation.dictation_book_id = 42
+            random_dictation.dictation_mode = "audio_to_en"
+            random_dictation.dictation_order = "random"
+            random_dictation.dictation_word_start = 1
+            random_dictation.dictation_word_end = 50
             db.session.add_all([
                 self._task(self.today, "today", "pending", teacher.id),
                 self._task(self.today, "today assistant", "pending", assistant.id),
+                random_dictation,
                 self._task(self.d1, "d1 pending", "pending", teacher.id),
                 completed_listening,
                 self._task(self.d1, "d1 other", "pending", other_teacher.id),
@@ -124,6 +137,7 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
             self.teacher_id = teacher.id
             self.other_teacher_id = other_teacher.id
             self.completed_listening_id = completed_listening.id
+            self.random_dictation_id = random_dictation.id
 
         self.client = self.app.test_client()
 
@@ -183,6 +197,20 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         self.assertEqual(
             details["课后作业 - today assistant"]["assigned_by_role"], "assistant"
         )
+
+    def test_dictation_task_exposes_order_in_list_and_detail(self):
+        details = {task["task_name"]: task for task in self._today_tasks()["tasks"]}
+        summary = details["词汇 - random dictation"]
+        self.assertEqual(summary["dictation_order"], "random")
+
+        response = self.client.get(
+            f"/api/miniprogram/student/tasks/{self.random_dictation_id}",
+            headers=self._headers(self.student_id, User.ROLE_STUDENT),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        task = response.get_json()["task"]
+        self.assertEqual(task["dictation_order"], "random")
 
     def test_each_visible_date_is_an_exact_date_view(self):
         history = self.client.get(

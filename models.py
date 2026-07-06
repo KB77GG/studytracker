@@ -489,6 +489,7 @@ class Task(db.Model):
     question_ids = db.Column(db.Text)  # JSON list of selected question IDs
     dictation_book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), index=True)
     dictation_mode = db.Column(db.String(20), default="audio_to_en")
+    dictation_order = db.Column(db.String(20), default="sequence")
     dictation_word_start = db.Column(db.Integer, default=1)  # 1-based index
     dictation_word_end = db.Column(db.Integer)              # Inclusive
     speaking_book_id = db.Column(db.Integer, db.ForeignKey("speaking_book.id"), index=True)

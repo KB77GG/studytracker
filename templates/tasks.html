@@ -337,6 +337,16 @@
         <small id="dictationModeHint" class="form-text text-muted">同一本词书可按任务切换练习方式。</small>
       </div>
     </div>
+    <div class="task-form-row" id="dictationOrderRow" style="display: none;">
+      <div class="field field--wide">
+        <label for="dictationOrderSelect">单词顺序</label>
+        <select id="dictationOrderSelect" name="dictation_order" class="form-select">
+          <option value="sequence">按词书顺序</option>
+          <option value="random">乱序（该任务固定）</option>
+        </select>
+        <small class="form-text text-muted">乱序只影响本次任务的出词队列，不改变词书原始编号。</small>
+      </div>
+    </div>
     <div class="task-form-row" id="questionSelectRow" style="display: none;">
       <div class="field field--wide">
         <label id="questionSelectLabel">选择题目 / 句子</label>
@@ -3022,6 +3032,8 @@
       var dictationModeRow = document.getElementById("dictationModeRow");
       var dictationModeSelect = document.getElementById("dictationModeSelect");
       var dictationModeHint = document.getElementById("dictationModeHint");
+      var dictationOrderRow = document.getElementById("dictationOrderRow");
+      var dictationOrderSelect = document.getElementById("dictationOrderSelect");
       var questionRow = document.getElementById("questionSelectRow");
       var questionIds = document.getElementById("questionIds");
 
@@ -3064,6 +3076,7 @@
           if (isDict) {
             const bookType = option.getAttribute("data-book-type") || "dictation";
             dictationModeRow.style.display = "flex";
+            if (dictationOrderRow) dictationOrderRow.style.display = "flex";
             if (!dictationModeSelect.value || dictationModeSelect.dataset.autofill === "1") {
               dictationModeSelect.value = bookType === "translation" ? "zh_to_en" : "audio_to_en";
               dictationModeSelect.dataset.autofill = "1";
@@ -3075,8 +3088,10 @@
             }
           } else {
             dictationModeRow.style.display = "none";
+            if (dictationOrderRow) dictationOrderRow.style.display = "none";
             dictationModeSelect.value = "audio_to_en";
             dictationModeSelect.dataset.autofill = "1";
+            if (dictationOrderSelect) dictationOrderSelect.value = "sequence";
             if (dictationModeHint) {
               dictationModeHint.textContent = "同一本词书可按任务切换练习方式。";
             }
@@ -3105,10 +3120,12 @@
         detailInput.value = "";
         rangeGroup.style.display = "none";
         if (dictationModeRow) dictationModeRow.style.display = "none";
+        if (dictationOrderRow) dictationOrderRow.style.display = "none";
         if (dictationModeSelect) {
           dictationModeSelect.value = "audio_to_en";
           dictationModeSelect.dataset.autofill = "1";
         }
+        if (dictationOrderSelect) dictationOrderSelect.value = "sequence";
         updateDictationRangeSuggestion(true);
       }
     }

@@ -52,6 +52,7 @@ IELTS_READING_PRACTICE_TYPE = "ielts_reading_practice"
 # no reference shown to the student.
 CHOICE_PRACTICE_TYPES = {READING_VOCAB_CHOICE_TYPE, IELTS_READING_PRACTICE_TYPE, "grammar", "translation"}
 VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh", "spelling_drill"}
+VALID_DICTATION_ORDERS = {"sequence", "random"}
 LISTENING_RESOURCE_INTENSIVE = "intensive"
 LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
 READING_RESOURCE_CAMBRIDGE_TEST = "cambridge_reading_test"
@@ -503,9 +504,10 @@ def _sync_plan_item_from_legacy_task(task, *, note=None, evidence_files=None, du
         item.resource_id = f"dictation_book:{task.dictation_book_id}"
         item.resource_metadata = json.dumps(
             {
-                "dictation_mode": task.dictation_mode or "audio_to_en",
-                "dictation_word_start": task.dictation_word_start or 1,
-                "dictation_word_end": task.dictation_word_end,
+                "dictation_mode": getattr(task, "dictation_mode", None) or "audio_to_en",
+                "dictation_order": _resolve_task_dictation_order(task),
+                "dictation_word_start": getattr(task, "dictation_word_start", None) or 1,
+                "dictation_word_end": getattr(task, "dictation_word_end", None),
             },
             ensure_ascii=False,
         )
@@ -814,6 +816,11 @@ def _resolve_task_dictation_mode(task, book_type=None):
     if (book_type or "").strip().lower() == "translation":
         return "zh_to_en"
     return "audio_to_en"
+
+
+def _resolve_task_dictation_order(task):
+    order = (getattr(task, "dictation_order", "") or "").strip().lower()
+    return order if order in VALID_DICTATION_ORDERS else "sequence"
 
 
 def _merge_aliyun_oral_result(result: dict, oral: dict) -> dict:
@@ -1652,6 +1659,7 @@ def get_student_today_tasks():
             "dictation_book_id": task.dictation_book_id,
             "dictation_book_type": dictation_book_type,
             "dictation_mode": _resolve_task_dictation_mode(task, dictation_book_type),
+            "dictation_order": _resolve_task_dictation_order(task),
             "dictation_word_start": task.dictation_word_start,
             "dictation_word_end": task.dictation_word_end,
             "speaking_book_id": task.speaking_book_id,
@@ -1779,6 +1787,7 @@ def get_task_detail(task_id):
                 "dictation_book_id": task.dictation_book_id,
                 "dictation_book_type": dictation_book_type,
                 "dictation_mode": _resolve_task_dictation_mode(task, dictation_book_type),
+                "dictation_order": _resolve_task_dictation_order(task),
                 "dictation_word_start": task.dictation_word_start,
                 "dictation_word_end": task.dictation_word_end,
                 # Speaking Info
