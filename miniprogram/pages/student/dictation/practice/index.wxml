@@ -148,6 +148,9 @@
             <text class="translation-chinese">{{currentWord.translation || ''}}</text>
             <text class="translation-hint">请写出对应的英文表达</text>
           </view>
+          <view class="play-controls">
+            <button class="mini-btn" size="mini" bindtap="playCurrentWord">重播发音</button>
+          </view>
         </block>
         <!-- English -> Chinese -->
         <block wx:elif="{{currentMode === 'en_to_zh'}}">
@@ -155,6 +158,9 @@
             <text class="translation-chinese">{{currentWord.word || ''}}</text>
             <text class="translation-hint" wx:if="{{currentWord.phonetic}}">[{{currentWord.phonetic}}]</text>
             <text class="translation-hint">请写出对应的中文释义</text>
+          </view>
+          <view class="play-controls" wx:if="{{reviewingWrongWords}}">
+            <button class="mini-btn" size="mini" bindtap="playCurrentWord">重播发音</button>
           </view>
         </block>
         <!-- Audio dictation -->

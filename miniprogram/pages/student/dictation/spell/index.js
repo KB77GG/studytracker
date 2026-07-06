@@ -4,6 +4,7 @@ const {
     isEnglishAnswerCorrect,
     normalizeEnglishAnswer
 } = require('../../../../utils/dictation-answers.js')
+const { applyDictationOrder } = require('../../../../utils/dictation-order.js')
 
 const REINSERT_GAP = 3
 const FIXED_SPELL_CHARS = "-‐‑‒–—'’‘`´.,，。.!！？?；;：:()（）[]{}<>/\\|_+*=~@#$%^&\""
@@ -143,6 +144,7 @@ Page({
         remainingCount: 0,
         skipSpellInReview: false,
         keyboardHeight: 0,
+        dictationOrder: 'sequence',
         appealSubmitted: false
     },
 
@@ -221,7 +223,8 @@ Page({
                     bookTitle: task.task_name || '强化拼写',
                     bookId: task.dictation_book_id,
                     rangeStart: task.dictation_word_start,
-                    rangeEnd: task.dictation_word_end
+                    rangeEnd: task.dictation_word_end,
+                    dictationOrder: task.dictation_order || 'sequence'
                 })
                 this.fetchWords(task.dictation_book_id)
             })
@@ -245,6 +248,15 @@ Page({
                     const start = Math.max(0, (this.data.rangeStart || 1) - 1)
                     const end = this.data.rangeEnd || words.length
                     words = words.slice(start, end)
+                }
+                if (this.data.sourceMode === 'task') {
+                    words = applyDictationOrder(words, {
+                        order: this.data.dictationOrder,
+                        taskId: this.data.taskId,
+                        bookId,
+                        start: this.data.rangeStart,
+                        end: this.data.rangeEnd
+                    })
                 }
                 this.prepareWords(words, res.book && res.book.title)
             })

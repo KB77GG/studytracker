@@ -9,6 +9,7 @@ const {
     isEnglishAnswerCorrect,
     stripPartOfSpeechPrefix
 } = require('../../../../utils/dictation-answers.js')
+const { applyDictationOrder } = require('../../../../utils/dictation-order.js')
 
 const MODE_AUDIO_TO_EN = 'audio_to_en'
 const MODE_ZH_TO_EN = 'zh_to_en'
@@ -131,6 +132,7 @@ Page({
         attemptCount: 0,
         dictationMode: MODE_AUDIO_TO_EN,
         currentMode: MODE_AUDIO_TO_EN,
+        dictationOrder: 'sequence',
         appealSubmitted: false
     },
 
@@ -241,6 +243,7 @@ Page({
                         bookTitle: task.task_name,
                         rangeStart: task.dictation_word_start,
                         rangeEnd: task.dictation_word_end,
+                        dictationOrder: task.dictation_order || 'sequence',
                         dictationMode: dictationMode,
                         currentMode: dictationMode
                     });
@@ -331,6 +334,15 @@ Page({
                     const dictationMode = this.data.taskId
                         ? resolveDictationMode(this.data.dictationMode, bookType)
                         : resolveDictationMode('', bookType);
+                    if (this.data.taskId) {
+                        words = applyDictationOrder(words, {
+                            order: this.data.dictationOrder,
+                            taskId: this.data.taskId,
+                            bookId: id,
+                            start: this.data.rangeStart,
+                            end: this.data.rangeEnd
+                        });
+                    }
                     words = words.map(word => ({
                         ...word,
                         dictationMode
@@ -348,7 +360,7 @@ Page({
                         currentMode: dictationMode
                     });
 
-                    if (isAudioMode(dictationMode)) {
+                    if (isAudioMode(dictationMode) || dictationMode === MODE_ZH_TO_EN) {
                         this.requestServerTtsPrewarm(words);
                         this.prefetchAudioWindow(0);
                     }
@@ -424,9 +436,10 @@ Page({
         }, () => this.refocusAnswerInput());
         this.saveProgress(index);
 
-        if (isAudioMode(currentMode)) {
+        // 强化记忆（看中文写英文）默写时也播发音；错词重练一律播发音
+        if (isAudioMode(currentMode) || currentMode === MODE_ZH_TO_EN || this.data.reviewingWrongWords) {
             setTimeout(() => {
-                this.playCurrentWord();
+                this.playCurrentWord(true);
             }, 500);
             this.prefetchAudioWindow(index + 1);
         }
@@ -600,7 +613,7 @@ Page({
             const item = words[startIndex + offset];
             if (!item) break;
             const mode = resolveDictationMode(item.dictationMode, this.data.dictationMode);
-            if (isAudioMode(mode)) {
+            if (isAudioMode(mode) || mode === MODE_ZH_TO_EN || this.data.reviewingWrongWords) {
                 this.prefetchAudioForWord(item.word);
             }
         }
@@ -663,7 +676,8 @@ Page({
             const mode = resolveDictationMode(item && item.dictationMode, this.data.dictationMode);
             const word = dictationSpeechText(item && item.word);
             const key = audioCacheKey(word);
-            if (!word || (mode !== MODE_AUDIO_TO_EN && mode !== MODE_ZH_TO_EN) || seen[key]) return;
+            if (!word || seen[key]) return;
+            if (!this.data.reviewingWrongWords && mode !== MODE_AUDIO_TO_EN && mode !== MODE_ZH_TO_EN) return;
             seen[key] = true;
             targets.push(word);
         });
@@ -1189,6 +1203,7 @@ Page({
             dictationMode: wrongOnly[0] ? wrongOnly[0].dictationMode : MODE_AUDIO_TO_EN,
             currentMode: wrongOnly[0] ? wrongOnly[0].dictationMode : MODE_AUDIO_TO_EN
         });
+        this.requestServerTtsPrewarm(wrongOnly);
         this.loadWord(0);
         this.startTicker();
     },
@@ -1243,6 +1258,7 @@ Page({
             dictationMode: wrongOnly[0] ? wrongOnly[0].dictationMode : MODE_AUDIO_TO_EN,
             currentMode: wrongOnly[0] ? wrongOnly[0].dictationMode : MODE_AUDIO_TO_EN
         });
+        this.requestServerTtsPrewarm(wrongOnly);
         this.loadWord(0);
         this.startTicker();
     },

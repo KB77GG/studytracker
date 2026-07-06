@@ -68,3 +68,24 @@ assert.strictEqual(page.data.groupStart, 20)
 assert.strictEqual(page.data.groupEnd, 50)
 assert.strictEqual(page.data.hasMoreGroups, false)
 assert.strictEqual(familiarizationStarted, true)
+
+const zhToEnPage = Object.assign({}, practiceDefinition)
+zhToEnPage.data = Object.assign({}, practiceDefinition.data, {
+    totalWords: 50,
+    correctCount: 0,
+    wrongWordsDetail: [],
+    groupPlans: buildGroupPlans(50),
+    selectedGroupPlanKey: '20_30',
+    dictationMode: 'zh_to_en'
+})
+zhToEnPage.setData = function (patch, callback) {
+    Object.assign(this.data, patch)
+    if (callback) callback()
+}
+let zhToEnFamiliarizationStarted = false
+let zhToEnStartedTest = false
+zhToEnPage.enterFamiliarization = () => { zhToEnFamiliarizationStarted = true }
+zhToEnPage.startTest = () => { zhToEnStartedTest = true }
+zhToEnPage.startSelectedGroupPlan()
+assert.strictEqual(zhToEnFamiliarizationStarted, true)
+assert.strictEqual(zhToEnStartedTest, false)
