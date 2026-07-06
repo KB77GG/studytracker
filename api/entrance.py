@@ -206,10 +206,79 @@ def _serialize_paper_full(paper):
 
 
 def _normalize_short_answer(s):
-    """Normalize a short answer for comparison: lowercase + strip + collapse spaces."""
+    """Normalize a short answer for comparison: lowercase + strip + collapse spaces.
+
+    首尾标点/货币符号一并去掉（手机输入法常自动补句号；£115 与 115 视为等价）。
+    学生答案与标准答案走同一函数，两侧对称。
+    """
     if s is None:
         return ""
-    return " ".join(str(s).strip().lower().split())
+    text = " ".join(str(s).strip().lower().split())
+    return text.strip(_ANSWER_EDGE_CHARS)
+
+
+_ANSWER_EDGE_CHARS = (
+    " \t\r\n"
+    "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+    "。，、；：！？·【】（）《》—…￡£€¥“”‘’＂＇．"
+)
+
+
+def _pdf_image_data_uri(url_path):
+    """Convert a stem [image:/static/...] path into a base64 data URI for WeasyPrint.
+
+    仅允许 static/uploads 目录下的真实文件，防止路径穿越。
+    """
+    rel = str(url_path or "").strip().lstrip("/")
+    if not (rel.startswith("static/") or rel.startswith("uploads/")):
+        return None
+    root = os.path.realpath(current_app.root_path)
+    full = os.path.realpath(os.path.join(root, rel))
+    if not full.startswith(root + os.sep) or not os.path.isfile(full):
+        return None
+    mime = {
+        "png": "image/png",
+        "jpg": "image/jpeg",
+        "jpeg": "image/jpeg",
+        "gif": "image/gif",
+        "webp": "image/webp",
+    }.get(full.rsplit(".", 1)[-1].lower())
+    if not mime:
+        return None
+    try:
+        with open(full, "rb") as f:
+            return f"data:{mime};base64," + base64.b64encode(f.read()).decode("ascii")
+    except OSError:
+        return None
+
+
+def _stem_parts_for_pdf(stem):
+    """Split a stem into text lines and embedded images for the PDF template."""
+    parts = []
+    for line in str(stem or "").splitlines():
+        match = re.match(r"^\[image:(.+)\]$", line.strip())
+        if match:
+            data_uri = _pdf_image_data_uri(match.group(1))
+            if data_uri:
+                parts.append({"type": "image", "value": data_uri})
+            continue
+        parts.append({"type": "text", "value": line})
+    return parts
+
+
+def _objective_section_maxes(paper):
+    """Return (listening_max, reading_max) — sum of objective question points."""
+    listening_max = 0
+    reading_max = 0
+    for section in paper.sections:
+        for q in section.questions:
+            if q.question_type == "essay":
+                continue
+            if section.section_type == "listening":
+                listening_max += q.points or 1
+            elif section.section_type == "reading":
+                reading_max += q.points or 1
+    return listening_max, reading_max
 
 
 def _grade_objective_question(question, student_answer):
@@ -697,6 +766,7 @@ def admin_report_pdf(attempt_id):
             ans = answers_by_q.get(q.id)
             qs.append({
                 "stem": stem,
+                "stem_parts": _stem_parts_for_pdf(stem),
                 "options": opts,
                 "question_type": q.question_type,
                 "correct_answer": q.correct_answer,
@@ -730,12 +800,16 @@ def admin_report_pdf(attempt_id):
         reviewer = User.query.get(attempt.reviewer_id)
         reviewer_name = reviewer.username if reviewer else None
 
+    listening_max, reading_max = _objective_section_maxes(paper)
+
     html = render_template(
         "entrance_report_pdf.html",
         invitation=invitation,
         attempt=attempt,
         paper=paper,
         sections=sections_data,
+        listening_max=listening_max,
+        reading_max=reading_max,
         logo_base64=logo_base64,
         target_exam_label=target_exam_label,
         reviewer_name=reviewer_name,

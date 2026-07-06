@@ -60,7 +60,13 @@ function stripOptionKeyPrefix(key, text) {
 }
 
 function formatMultiline(value) {
-  return esc(value).replace(/\n/g, '<br>');
+  return String(value == null ? '' : value).split('\n').map(line => {
+    const match = line.trim().match(/^\[image:(.+)\]$/);
+    if (match) {
+      return `<img src="${esc(match[1].trim())}" alt="" class="my-2 max-w-full rounded border border-gray-200">`;
+    }
+    return esc(line);
+  }).join('<br>');
 }
 
 // ============================================================================
@@ -206,11 +212,19 @@ function renderAttempt(res) {
   const { invitation, attempt, paper, sections } = res;
   $('student-brief').textContent = `${invitation.student_name} · ${EXAM_LABELS[invitation.target_exam] || ''} · ${paper.title}`;
 
+  let listeningMax = 0, readingMax = 0;
+  sections.forEach(sec => sec.questions.forEach(q => {
+    if (q.question_type === 'essay') return;
+    if (sec.section_type === 'listening') listeningMax += q.points || 1;
+    else if (sec.section_type === 'reading') readingMax += q.points || 1;
+  }));
+  const objectiveEarned = (attempt.auto_score_listening || 0) + (attempt.auto_score_reading || 0);
+  const objectiveMax = attempt.auto_score_total_max || (listeningMax + readingMax);
   $('auto-summary').innerHTML = `
     <div class="grid grid-cols-3 gap-2 text-center">
-      <div><div class="text-xs text-gray-600">听力客观</div><div class="text-xl font-bold text-teal-700">${attempt.auto_score_listening || 0}</div></div>
-      <div><div class="text-xs text-gray-600">阅读客观</div><div class="text-xl font-bold text-teal-700">${attempt.auto_score_reading || 0}</div></div>
-      <div><div class="text-xs text-gray-600">客观总分</div><div class="text-xl font-bold text-teal-700">${attempt.auto_score_total_max || 0}</div></div>
+      <div><div class="text-xs text-gray-600">听力客观</div><div class="text-xl font-bold text-teal-700">${attempt.auto_score_listening || 0}<span class="text-sm text-gray-400"> / ${listeningMax}</span></div></div>
+      <div><div class="text-xs text-gray-600">阅读客观</div><div class="text-xl font-bold text-teal-700">${attempt.auto_score_reading || 0}<span class="text-sm text-gray-400"> / ${readingMax}</span></div></div>
+      <div><div class="text-xs text-gray-600">客观总分</div><div class="text-xl font-bold text-teal-700">${objectiveEarned}<span class="text-sm text-gray-400"> / ${objectiveMax}</span></div></div>
     </div>
   `;
 

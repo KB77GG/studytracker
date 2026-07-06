@@ -139,6 +139,11 @@
     color: #0d9488;
     line-height: 1.1;
   }
+  .score-hero .cell .val .denom {
+    font-size: 10pt;
+    font-weight: normal;
+    color: #6b7280;
+  }
   .score-hero .cell.level {
     background: #0d9488;
     border-color: #0d9488;
@@ -190,6 +195,13 @@
     color: #111827;
     overflow-wrap: anywhere;
     word-break: break-word;
+  }
+  .question .stem img.stem-img {
+    display: block;
+    max-width: 100%;
+    margin: 6px 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
   }
   .question .options {
     font-size: 9.5pt;
@@ -291,8 +303,8 @@
 <h2>二、各项成绩汇总</h2>
 <table class="score-hero">
   <tr>
-    <td class="cell"><span class="lbl">听力（客观）</span><span class="val">{{ attempt.auto_score_listening or 0 }}</span></td>
-    <td class="cell"><span class="lbl">阅读（客观）</span><span class="val">{{ attempt.auto_score_reading or 0 }}</span></td>
+    <td class="cell"><span class="lbl">听力（客观）</span><span class="val">{{ attempt.auto_score_listening or 0 }}<span class="denom"> / {{ listening_max }}</span></span></td>
+    <td class="cell"><span class="lbl">阅读（客观）</span><span class="val">{{ attempt.auto_score_reading or 0 }}<span class="denom"> / {{ reading_max }}</span></span></td>
     <td class="cell"><span class="lbl">写作（老师）</span><span class="val">{{ attempt.writing_score if attempt.writing_score is not none else '—' }}</span></td>
     <td class="cell"><span class="lbl">口语（线下）</span><span class="val">{{ attempt.speaking_score if attempt.speaking_score is not none else '—' }}</span></td>
     <td class="cell level"><span class="lbl">建议级别</span><span class="val">{{ attempt.overall_level or '待定' }}</span></td>
@@ -330,7 +342,7 @@
   <div class="section-title">{{ section.title }}　·　{{ section.section_type_label }}</div>
   {% for q in section.questions %}
     <div class="question">
-      <div class="stem">{{ loop.index }}. {{ q.stem }}</div>
+      <div class="stem">{{ loop.index }}. {% for part in q.stem_parts %}{% if part.type == 'image' %}<img class="stem-img" src="{{ part.value }}" alt="">{% else %}{{ part.value }}{% if not loop.last %}<br>{% endif %}{% endif %}{% endfor %}</div>
       {% if q.options %}
         <div class="options">
           {% for opt in q.options %}<b>{{ opt.key }}.</b> {{ opt.text }}　{% endfor %}

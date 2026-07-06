@@ -95,11 +95,7 @@
       `;
 
       if (sec.section_type === 'listening' && sec.audio_url) {
-        const audio = document.createElement('audio');
-        audio.src = sec.audio_url;
-        audio.controls = true;
-        audio.className = 'w-full mb-4';
-        secDiv.appendChild(audio);
+        secDiv.appendChild(buildOncePlayer(sec));
       } else if (sec.section_type === 'listening') {
         const note = document.createElement('div');
         note.className = 'bg-yellow-50 border-l-4 border-yellow-400 p-3 text-sm text-gray-700 mb-4';
@@ -209,6 +205,86 @@
       }
       return escapeHtml(line);
     }).join('<br>');
+  }
+
+  function formatSeconds(sec) {
+    if (!isFinite(sec) || sec < 0) return '--:--';
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${String(s).padStart(2, '0')}`;
+  }
+
+  // 听力音频只允许播放一次：无原生 controls（不可拖动/回放），
+  // 已播放状态按 token+section 记在 localStorage，刷新页面也不能重播。
+  function buildOncePlayer(sec) {
+    const playedKey = `entrance_audio_played_${token}_${sec.id}`;
+    const wrap = document.createElement('div');
+    wrap.className = 'bg-teal-50 border border-teal-100 rounded-lg p-3 mb-4';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'w-full bg-teal-600 hover:bg-teal-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-2 rounded';
+
+    const hint = document.createElement('div');
+    hint.className = 'text-xs text-gray-500 mt-2 text-center';
+
+    const audio = document.createElement('audio');
+    audio.src = sec.audio_url;
+    audio.preload = 'auto';
+
+    let started = false;
+
+    function setDone(text) {
+      btn.disabled = true;
+      btn.textContent = '🎧 音频已播放';
+      hint.textContent = text || '每段音频只能播放一次。';
+    }
+
+    if (localStorage.getItem(playedKey)) {
+      setDone('本段音频已播放过。如因故障未能完整收听，请联系老师重置测试。');
+    } else {
+      btn.textContent = '▶️ 播放听力音频（仅一次）';
+      hint.textContent = '注意：音频只能播放一次，不能暂停、回放或拖动进度，请准备好后再点击。';
+      btn.addEventListener('click', () => {
+        btn.disabled = true;
+        audio.play().then(() => {
+          started = true;
+          try { localStorage.setItem(playedKey, '1'); } catch (e) { /* 隐私模式降级：仅本页生效 */ }
+          btn.textContent = '🎧 正在播放…';
+        }).catch(() => {
+          btn.disabled = false;
+          hint.textContent = '播放失败，请检查网络后重试。';
+        });
+      });
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      if (started && !audio.ended) {
+        hint.textContent = `正在播放 ${formatSeconds(audio.currentTime)} / ${formatSeconds(audio.duration)}`;
+      }
+    });
+    audio.addEventListener('ended', () => {
+      setDone('音频播放完毕，请继续作答。');
+    });
+    // 播放中途出错（如网络中断）：允许从断点继续，但不能回放
+    audio.addEventListener('error', () => {
+      if (!started) return;
+      btn.disabled = false;
+      btn.textContent = '▶️ 继续播放（从中断处）';
+      hint.textContent = '播放中断，点击按钮从中断位置继续。';
+      btn.onclick = () => {
+        btn.disabled = true;
+        audio.play().then(() => { btn.textContent = '🎧 正在播放…'; }).catch(() => {
+          btn.disabled = false;
+          hint.textContent = '仍然无法播放，请联系老师。';
+        });
+      };
+    });
+
+    wrap.appendChild(btn);
+    wrap.appendChild(hint);
+    wrap.appendChild(audio);
+    return wrap;
   }
 
   function optionKey(opt) {
