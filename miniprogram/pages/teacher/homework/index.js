@@ -207,7 +207,7 @@ Page({
             listeningBookIndex,
             listeningTestIndex,
             listeningScopeIndex,
-            listeningBookLabels: listeningBooks.map(book => `剑雅 ${book.book}`),
+            listeningBookLabels: listeningBooks.map(book => book.label || `剑雅 ${book.book}`),
             listeningTestLabels: listeningTests.map(test => `Test ${test.test}`),
             listeningScopeLabels: listeningScopes.map(item => item.label),
             readingBookIndex,
@@ -237,7 +237,7 @@ Page({
                 category: '雅思-听力',
                 detail: `${test.title || ('Cambridge IELTS ' + test.book + ' Test ' + test.test + ' Listening')}${suffix}`,
                 plannedMinutes: scope.scope === 'section' ? 30 : 40,
-                summary: `剑雅 ${test.book} Test ${test.test} · ${scope.label}`
+                summary: `${test.label || ('剑雅 ' + test.book)} Test ${test.test} · ${scope.label}`
             }
         }
         if (source.key === 'cambridge_reading') {

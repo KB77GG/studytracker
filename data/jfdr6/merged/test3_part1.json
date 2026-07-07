@@ -1,0 +1,551 @@
+{
+  "test": 3,
+  "part": 1,
+  "title": "Washing Machine Warranty",
+  "groups": [
+    {
+      "type": 5,
+      "title": "Washing Machine Warranty",
+      "question_title": "",
+      "desc": "Questions 1-10\nComplete the notes below.\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.",
+      "collect": "<b>Personal details</b>\n• Name: Judie Smith\n• Reference number: $1$\n• Time of purchase: $2$ ago\n• Current address: 120 $3$, Oxford\n• Postcode: $4$\n\n<b>Problems</b>\n• The floor was wet because of the $5$.\n• The washing machine was out of control and the woman $6$ immediately.\n• The floor is made of $7$.\n\n<b>Arrangement for the repair work</b>\n• Ask a $8$ to repair the washing machine.\n• The repairman is available $9$.\n• The woman's house is opposite the $10$.",
+      "table": null,
+      "collect_option": {
+        "title": "",
+        "list": null
+      },
+      "questions": [
+        {
+          "number": 1,
+          "title": "Reference number: 【   】",
+          "options": []
+        },
+        {
+          "number": 2,
+          "title": "Time of purchase: 【   】 ago",
+          "options": []
+        },
+        {
+          "number": 3,
+          "title": "Current address: 120 【   】, Oxford",
+          "options": []
+        },
+        {
+          "number": 4,
+          "title": "Postcode: 【   】",
+          "options": []
+        },
+        {
+          "number": 5,
+          "title": "The floor was wet because of the 【   】.",
+          "options": []
+        },
+        {
+          "number": 6,
+          "title": "The washing machine was out of control and the woman 【   】 immediately.",
+          "options": []
+        },
+        {
+          "number": 7,
+          "title": "The floor is made of 【   】.",
+          "options": []
+        },
+        {
+          "number": 8,
+          "title": "Ask a 【   】 to repair the washing machine.",
+          "options": []
+        },
+        {
+          "number": 9,
+          "title": "The repairman is available 【   】.",
+          "options": []
+        },
+        {
+          "number": 10,
+          "title": "The woman's house is opposite the 【   】.",
+          "options": []
+        }
+      ],
+      "needs_image": false,
+      "image_pages": []
+    }
+  ],
+  "transcript": [
+    {
+      "idx": 0,
+      "speaker": "Roger",
+      "en": "Good morning.",
+      "q": []
+    },
+    {
+      "idx": 1,
+      "speaker": "Roger",
+      "en": "This is the Customer Service Department of Kingswell Washing Machine.",
+      "q": []
+    },
+    {
+      "idx": 2,
+      "speaker": "Roger",
+      "en": "Roger speaking, how may I help you?",
+      "q": []
+    },
+    {
+      "idx": 3,
+      "speaker": "Woman",
+      "en": "Good morning.",
+      "q": []
+    },
+    {
+      "idx": 4,
+      "speaker": "Woman",
+      "en": "I'm calling about the washing machine I bought from the mall several months ago.",
+      "q": []
+    },
+    {
+      "idx": 5,
+      "speaker": "Woman",
+      "en": "There's something wrong with it at the moment, so what do I have to do?",
+      "q": []
+    },
+    {
+      "idx": 6,
+      "speaker": "Roger",
+      "en": "OK, first I need to get a few details about this.",
+      "q": []
+    },
+    {
+      "idx": 7,
+      "speaker": "Roger",
+      "en": "Could you give me your name, please?",
+      "q": []
+    },
+    {
+      "idx": 8,
+      "speaker": "Woman",
+      "en": "Yes, it's Judie Smith.",
+      "q": []
+    },
+    {
+      "idx": 9,
+      "speaker": "Roger",
+      "en": "OK.",
+      "q": []
+    },
+    {
+      "idx": 10,
+      "speaker": "Roger",
+      "en": "I need one more thing.",
+      "q": []
+    },
+    {
+      "idx": 11,
+      "speaker": "Roger",
+      "en": "There's a reference number.",
+      "q": []
+    },
+    {
+      "idx": 12,
+      "speaker": "Roger",
+      "en": "It should be in the top right-hand corner of the warranty card we gave you.",
+      "q": []
+    },
+    {
+      "idx": 13,
+      "speaker": "Woman",
+      "en": "Let me have a look … Oh, here it is.",
+      "q": []
+    },
+    {
+      "idx": 14,
+      "speaker": "Woman",
+      "en": "It's CWX576884.",
+      "q": [
+        1
+      ]
+    },
+    {
+      "idx": 15,
+      "speaker": "Roger",
+      "en": "Thanks.",
+      "q": []
+    },
+    {
+      "idx": 16,
+      "speaker": "Roger",
+      "en": "Well, I need to make sure if your washing machine is still within the warranty period, so when did you buy it?",
+      "q": []
+    },
+    {
+      "idx": 17,
+      "speaker": "Woman",
+      "en": "Oh, sure.",
+      "q": []
+    },
+    {
+      "idx": 18,
+      "speaker": "Woman",
+      "en": "I remember I bought it last summer, so … it was about 9 months ago.",
+      "q": [
+        2
+      ]
+    },
+    {
+      "idx": 19,
+      "speaker": "Woman",
+      "en": "And the card here says this washing machine has a 2-year warranty, so it's definitely within the period.",
+      "q": []
+    },
+    {
+      "idx": 20,
+      "speaker": "Roger",
+      "en": "Of course it is, Madam.",
+      "q": []
+    },
+    {
+      "idx": 21,
+      "speaker": "Roger",
+      "en": "All right, then I need your address?",
+      "q": []
+    },
+    {
+      "idx": 22,
+      "speaker": "Woman",
+      "en": "My old address or my current one?",
+      "q": []
+    },
+    {
+      "idx": 23,
+      "speaker": "Roger",
+      "en": "Your current one, as we will send in someone to fix the washing machine for you.",
+      "q": []
+    },
+    {
+      "idx": 24,
+      "speaker": "Woman",
+      "en": "It's 120 Middle Street, Oxford.",
+      "q": [
+        3
+      ]
+    },
+    {
+      "idx": 25,
+      "speaker": "Roger",
+      "en": "And the postcode?",
+      "q": []
+    },
+    {
+      "idx": 26,
+      "speaker": "Woman",
+      "en": "It's GO19 4KE.",
+      "q": [
+        4
+      ]
+    },
+    {
+      "idx": 27,
+      "speaker": "Roger",
+      "en": "Now I need to know the exact problem of the washing machine.",
+      "q": []
+    },
+    {
+      "idx": 28,
+      "speaker": "Roger",
+      "en": "Could you describe it in detail?",
+      "q": []
+    },
+    {
+      "idx": 29,
+      "speaker": "Woman",
+      "en": "Actually the washing machine did work very well until last weekend.",
+      "q": []
+    },
+    {
+      "idx": 30,
+      "speaker": "Woman",
+      "en": "I put some clothes into it, and it worked normally at first, then I just got down to doing some gardening.",
+      "q": []
+    },
+    {
+      "idx": 31,
+      "speaker": "Woman",
+      "en": "But after about 30 minutes when I came back to the house, I found it was leaking!",
+      "q": []
+    },
+    {
+      "idx": 32,
+      "speaker": "Woman",
+      "en": "The water had soaked the entire floor.",
+      "q": [
+        5
+      ]
+    },
+    {
+      "idx": 33,
+      "speaker": "Roger",
+      "en": "I'm sorry to hear that, Madam.",
+      "q": []
+    },
+    {
+      "idx": 34,
+      "speaker": "Roger",
+      "en": "So did you do anything to make the leaking stop?",
+      "q": []
+    },
+    {
+      "idx": 35,
+      "speaker": "Woman",
+      "en": "At that moment, the washing machine was totally out of control, and the alarm on it also started to sound.",
+      "q": []
+    },
+    {
+      "idx": 36,
+      "speaker": "Woman",
+      "en": "I thought there was not much point in pressing any button on the machine, so I just switched off the machine straight away.",
+      "q": [
+        6
+      ]
+    },
+    {
+      "idx": 37,
+      "speaker": "Woman",
+      "en": "Then it stopped leaking at once, thank goodness!",
+      "q": []
+    },
+    {
+      "idx": 38,
+      "speaker": "Roger",
+      "en": "Well, I think that was the only thing you could do.",
+      "q": []
+    },
+    {
+      "idx": 39,
+      "speaker": "Woman",
+      "en": "Oh then, I found my floor was nearly a disaster.",
+      "q": []
+    },
+    {
+      "idx": 40,
+      "speaker": "Woman",
+      "en": "As it is made of wood rather than marble, it could not be soaked in water for a long time, so what I did in the next 2 hours was wiping up the water on the floor!",
+      "q": [
+        7
+      ]
+    },
+    {
+      "idx": 41,
+      "speaker": "Roger",
+      "en": "Right.",
+      "q": []
+    },
+    {
+      "idx": 42,
+      "speaker": "Woman",
+      "en": "Later I tried the washing machine once more, but the problem still existed.",
+      "q": []
+    },
+    {
+      "idx": 43,
+      "speaker": "Roger",
+      "en": "Well, I've taken down all the related information.",
+      "q": []
+    },
+    {
+      "idx": 44,
+      "speaker": "Roger",
+      "en": "Later we'll send a client engineer to your house to fix it.",
+      "q": [
+        8
+      ]
+    },
+    {
+      "idx": 45,
+      "speaker": "Woman",
+      "en": "OK.",
+      "q": []
+    },
+    {
+      "idx": 46,
+      "speaker": "Woman",
+      "en": "Could you arrange the repair work as soon as possible, as I'm too busy at work to do the laundry by hand?",
+      "q": []
+    },
+    {
+      "idx": 47,
+      "speaker": "Woman",
+      "en": "How about this Saturday?",
+      "q": []
+    },
+    {
+      "idx": 48,
+      "speaker": "Roger",
+      "en": "Umm … I have to check the schedule of the repairman … Oh sorry, Madam, Saturday has been occupied.",
+      "q": []
+    },
+    {
+      "idx": 49,
+      "speaker": "Roger",
+      "en": "The earliest day we can arrange for you is next Tuesday.",
+      "q": [
+        9
+      ]
+    },
+    {
+      "idx": 50,
+      "speaker": "Roger",
+      "en": "Is that OK with you?",
+      "q": []
+    },
+    {
+      "idx": 51,
+      "speaker": "Woman",
+      "en": "Fine, I can take a leave from work that day.",
+      "q": []
+    },
+    {
+      "idx": 52,
+      "speaker": "Woman",
+      "en": "Anyway, thanks.",
+      "q": []
+    },
+    {
+      "idx": 53,
+      "speaker": "Woman",
+      "en": "Oh, my house is easy to find.",
+      "q": []
+    },
+    {
+      "idx": 54,
+      "speaker": "Woman",
+      "en": "It's near the Central Market, just across from the Post Office.",
+      "q": [
+        10
+      ]
+    },
+    {
+      "idx": 55,
+      "speaker": "Roger",
+      "en": "All right.",
+      "q": []
+    },
+    {
+      "idx": 56,
+      "speaker": "Roger",
+      "en": "And the last thing, could you tell me your phone number, please?",
+      "q": []
+    },
+    {
+      "idx": 57,
+      "speaker": "Woman",
+      "en": "Sure.",
+      "q": []
+    },
+    {
+      "idx": 58,
+      "speaker": "Woman",
+      "en": "It's 3864 7757.",
+      "q": []
+    },
+    {
+      "idx": 59,
+      "speaker": "Roger",
+      "en": "OK.",
+      "q": []
+    },
+    {
+      "idx": 60,
+      "speaker": "Roger",
+      "en": "I've got it.",
+      "q": []
+    },
+    {
+      "idx": 61,
+      "speaker": "Roger",
+      "en": "The repairman will contact you before he comes.",
+      "q": []
+    },
+    {
+      "idx": 62,
+      "speaker": "Woman",
+      "en": "OK.",
+      "q": []
+    },
+    {
+      "idx": 63,
+      "speaker": "Woman",
+      "en": "Thank you very much.",
+      "q": []
+    },
+    {
+      "idx": 64,
+      "speaker": "Roger",
+      "en": "You're welcome.",
+      "q": []
+    },
+    {
+      "idx": 65,
+      "speaker": "Roger",
+      "en": "Bye!",
+      "q": []
+    },
+    {
+      "idx": 66,
+      "speaker": "Woman",
+      "en": "Bye!",
+      "q": []
+    }
+  ],
+  "analysis": {
+    "1": {
+      "answer": "CWX576884",
+      "analysis": "听前预测：定位词 Reference number；提示词 Reference number，此处应填字母和数字的组合。\n题目解析：第 1-4 题考查个人信息填空。本题中的定位词 Reference number（参考编号）不容易发生替换，只需要跟上音频记录下字母和数字的组合即可。因此答案为 CWX576884。注意 double eight 会出现连读。"
+    },
+    "2": {
+      "answer": "9/nine months",
+      "analysis": "听前预测：定位词 purchase；提示词 Time，此处应填时间类名词。\n题目解析：定位词 purchase 在录音中被替换为 buy，提示词 Time 以 when 体现，注意听之后出现的时间。首先出现了 last summer，但与题干的 ago 无法搭配使用，可排除。随后出现了答案信息：“… it was about 9 months ago.”需要注意的是，答案信息出现后又出现了一个干扰时间 2-year，不但词性不合适，且不符合题干限定 purchase，因为它是 warranty period（保修期限）。因此答案为 9 months 或 nine months。"
+    },
+    "3": {
+      "answer": "Middle Street",
+      "analysis": "听前预测：定位词 address；提示词 address，此处应填地址，格式为“路名＋路”。\n题目解析：题干的条件限定为 Current，意味着录音中很可能会出现 old/previous address 作为干扰信息。另外，表示路的词汇一般为 road、street、avenue、lane、drive 这几个词，而表示路名的单词，录音中通常不会给出拼写，但有规律可循，大部分路名是景观类词汇，如 forest、mountain、lake 等，也可能是方位类词汇，如 north、south 等，本题答案恰好属于后者。因此答案为 Middle Street。"
+    },
+    "4": {
+      "answer": "GO19 4KE",
+      "analysis": "听前预测：定位词 Postcode；提示词 Postcode，此处应填字母和数字的组合。\n题目解析：定位词 Postcode 无法替换，跟上录音即可，但需要注意的是，本题紧跟上一题，答案出现较快，在听到含有 postcode 的问句时，就要集中注意力迅速写下答案。若前一题的地址还没写完，建议平时多练习使用简写，如用 St. 表示 street。因此答案为 GO19 4KE。"
+    },
+    "5": {
+      "answer": "water",
+      "analysis": "听前预测：定位词 floor、wet；提示词 the，此处应填名词。\n题目解析：定位词 floor 出现在答案后，wet 在录音中被替换为 soaked，所以在做该题时需要有意识地先抓取符合答案的名词，结合场景以及前一句所提到的洗衣机漏水（it was leaking）也可以找到答案词。因此答案为 water。"
+    },
+    "6": {
+      "answer": "switched off",
+      "analysis": "听前预测：定位词 out of control；提示词 and、immediately，此处应填动词过去式。\n题目解析：定位词 out of control 在录音中原词重现，但需要注意空白处应填写的动作是 the woman 发出的。out of control 之后出现的动作有 started to sound、pressing any button、switched off、stopped leaking，只有 pressing any button 和 switched off 是这位女士发出的动作，且 pressing any button 以否定形式出现。另外，题干中的 immediately 在录音中被替换为 straight away。因此答案为 switched off。"
+    },
+    "7": {
+      "answer": "wood",
+      "analysis": "听前预测：定位词 floor；提示词 is made of，此处应填表示材质的名词。\n题目解析：本题难度不大，定位词和提示词均在录音中原词重现，注意通过否定信号词 rather than 来排除干扰信息 marble。因此答案为 wood。"
+    },
+    "8": {
+      "answer": "client engineer",
+      "analysis": "听前预测：提示词 Ask、a，此处应填表示人的名词。\n题目解析：考虑到 Ask 和 repair 的同义替换较多，所以本题没有很好的定位词。在预判出空白处要填表示人的名词之后，有意识地去抓取符合预判的词汇即可。录音中没有干扰信息，并将题干中的 repair 替换成了 fix（这是一对高频替换词）。因此答案为 client engineer。"
+    },
+    "9": {
+      "answer": "next Tuesday",
+      "analysis": "听前预测：定位词 repairman；提示词 available，此处应填时间类名词。\n题目解析：本题难度不大，在女士问“How about this Saturday?”时，需要注意听工作人员的回答。工作人员回答周六的时间已经约满了，所以排除 this Saturday 这个干扰信息。接着提出最早的时间是 next Tuesday，提示词 available 在录音中被替换为 we can arrange for you。因此答案为 next Tuesday。注意不能漏掉 next。"
+    },
+    "10": {
+      "answer": "Post Office",
+      "analysis": "听前预测：定位词 house；提示词 opposite、the，此处应填地点类名词。\n题目解析：定位词 house 出现后，答案信息随即出现：“It's near the Central Market, just across from the Post Office.”注意排除干扰信息 Central Market，其前的介词为 near，不符合题干限定 opposite，而 opposite 在录音中被替换为 just across from（就在……对面）。因此答案为 Post Office。"
+    }
+  },
+  "answers": {
+    "1": "CWX576884",
+    "2": "9/nine months",
+    "3": "Middle Street",
+    "4": "GO19 4KE",
+    "5": "water",
+    "6": "switched off",
+    "7": "wood",
+    "8": "client engineer",
+    "9": "next Tuesday",
+    "10": "Post Office"
+  }
+}

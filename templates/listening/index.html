@@ -367,8 +367,8 @@
     </div>
     <nav class="listening-catalog-sidebar__links" aria-label="Cambridge IELTS 书籍索引">
       {% for book in catalog.books %}
-      <a class="listening-catalog-sidebar__link" href="#listening-book-{{ book.book }}-{{ suffix }}">
-        <span>IELTS {{ book.book }}</span>
+      <a class="listening-catalog-sidebar__link" href="#listening-book-{{ book.series or 'cambridge' }}-{{ book.book }}-{{ suffix }}">
+        <span>{% if book.series and book.series != 'cambridge' %}{{ book.label or book.book }}{% else %}IELTS {{ book.book }}{% endif %}</span>
         <span>{{ book.section_count }}</span>
       </a>
       {% endfor %}
@@ -385,12 +385,16 @@
     <div class="listening-catalog-no-results">没有找到匹配的精听资源。</div>
     {% for book in catalog.books %}
     <article class="listening-intensive-book js-listening-book-group"
-             id="listening-book-{{ book.book }}-{{ suffix }}"
-             data-search="ielts {{ book.book }} cambridge {{ book.book }} 剑{{ book.book }}">
+             id="listening-book-{{ book.series or 'cambridge' }}-{{ book.book }}-{{ suffix }}"
+             data-search="{{ book.search_terms or ('ielts ' ~ book.book ~ ' cambridge ' ~ book.book ~ ' 剑' ~ book.book) }}">
       <header class="listening-intensive-book__header">
         <div class="listening-intensive-book__title">
+          {% if book.series and book.series != 'cambridge' %}
+          <span class="listening-intensive-book__label">{{ book.label or book.book }}</span>
+          {% else %}
           <span class="listening-intensive-book__label">Cambridge IELTS</span>
           <span class="listening-intensive-book__number">{{ book.book }}</span>
+          {% endif %}
         </div>
         <span class="listening-intensive-book__meta">{{ book.test_count }} Test · {{ book.section_count }} Section</span>
       </header>

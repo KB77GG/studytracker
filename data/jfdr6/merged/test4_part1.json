@@ -1,0 +1,571 @@
+{
+  "test": 4,
+  "part": 1,
+  "title": "Rented Properties Information About a House",
+  "groups": [
+    {
+      "type": 5,
+      "title": "Rented Properties Information About a House",
+      "question_title": "",
+      "desc": "Questions 1-10\nComplete the notes below.\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.",
+      "collect": "<b>Available date:</b> $1$\n<b>Prices:</b>\n• rent: $2$ $ per month\n• deposit: $1,500\n• $3$: $15\n<b>Facilities:</b>\n• 3 bedrooms and 2 bathrooms\n• a remodelled $4$\n• no $5$\n• a $6$ with a work area\n<b>Utilities:</b>\n• The landlord will provide landscaping service, but the tenants must $7$ the grass.\n• The tenants should pay $15 for trashing and $8$ service.\n• The tenants should pay for electricity, water and gas bills.\n<b>Other information:</b>\nThere is no central air conditioning, but there is a $9$ conditioning unit.\n<b>Name of landlord:</b> Sam $10$",
+      "table": null,
+      "collect_option": {
+        "title": "",
+        "list": null
+      },
+      "questions": [
+        {
+          "number": 1,
+          "title": "Available date: 【   】",
+          "options": []
+        },
+        {
+          "number": 2,
+          "title": "rent: 【   】 $ per month",
+          "options": []
+        },
+        {
+          "number": 3,
+          "title": "【   】: $15",
+          "options": []
+        },
+        {
+          "number": 4,
+          "title": "a remodelled 【   】",
+          "options": []
+        },
+        {
+          "number": 5,
+          "title": "no 【   】",
+          "options": []
+        },
+        {
+          "number": 6,
+          "title": "a 【   】 with a work area",
+          "options": []
+        },
+        {
+          "number": 7,
+          "title": "the tenants must 【   】 the grass",
+          "options": []
+        },
+        {
+          "number": 8,
+          "title": "The tenants should pay $15 for trashing and 【   】 service.",
+          "options": []
+        },
+        {
+          "number": 9,
+          "title": "there is a 【   】 conditioning unit",
+          "options": []
+        },
+        {
+          "number": 10,
+          "title": "Name of landlord: Sam 【   】",
+          "options": []
+        }
+      ],
+      "needs_image": false,
+      "image_pages": []
+    }
+  ],
+  "transcript": [
+    {
+      "idx": 0,
+      "speaker": "Landlord",
+      "en": "Hello?",
+      "q": []
+    },
+    {
+      "idx": 1,
+      "speaker": "Student",
+      "en": "Oh, hello.",
+      "q": []
+    },
+    {
+      "idx": 2,
+      "speaker": "Student",
+      "en": "I wanted to enquire about the house you're going to let out.",
+      "q": []
+    },
+    {
+      "idx": 3,
+      "speaker": "Student",
+      "en": "Is it still available?",
+      "q": []
+    },
+    {
+      "idx": 4,
+      "speaker": "Landlord",
+      "en": "Yes.",
+      "q": []
+    },
+    {
+      "idx": 5,
+      "speaker": "Landlord",
+      "en": "May I ask where you heard about it?",
+      "q": []
+    },
+    {
+      "idx": 6,
+      "speaker": "Landlord",
+      "en": "Was it in an advert?",
+      "q": []
+    },
+    {
+      "idx": 7,
+      "speaker": "Student",
+      "en": "Right, it was.",
+      "q": []
+    },
+    {
+      "idx": 8,
+      "speaker": "Landlord",
+      "en": "OK, what do you want to know?",
+      "q": []
+    },
+    {
+      "idx": 9,
+      "speaker": "Student",
+      "en": "Well, I'm going to share the house with two friends.",
+      "q": []
+    },
+    {
+      "idx": 10,
+      "speaker": "Student",
+      "en": "We've been staying on campus, but we're going to graduate, so we need to find a house as soon as possible.",
+      "q": []
+    },
+    {
+      "idx": 11,
+      "speaker": "Student",
+      "en": "Anyway, could you tell me the exact date when we can move in?",
+      "q": []
+    },
+    {
+      "idx": 12,
+      "speaker": "Landlord",
+      "en": "Well, the contract with my current tenant is due next week, on May 3rd.",
+      "q": []
+    },
+    {
+      "idx": 13,
+      "speaker": "Landlord",
+      "en": "And I need a day to clean and check the things in the house, so I think the house will be ready on 5th May.",
+      "q": [
+        1
+      ]
+    },
+    {
+      "idx": 14,
+      "speaker": "Landlord",
+      "en": "Is that OK?",
+      "q": []
+    },
+    {
+      "idx": 15,
+      "speaker": "Student",
+      "en": "Yes, that will be fine.",
+      "q": []
+    },
+    {
+      "idx": 16,
+      "speaker": "Student",
+      "en": "And what we're most concerned about is the rent.",
+      "q": []
+    },
+    {
+      "idx": 17,
+      "speaker": "Student",
+      "en": "We'd like something around 500 dollars a month for each of us, but we could go up to 600 dollars if we have to.",
+      "q": []
+    },
+    {
+      "idx": 18,
+      "speaker": "Student",
+      "en": "But we can't go beyond that.",
+      "q": []
+    },
+    {
+      "idx": 19,
+      "speaker": "Landlord",
+      "en": "You are lucky – the rent will be 1,700 dollars in total, which is within your budget.",
+      "q": [
+        2
+      ]
+    },
+    {
+      "idx": 20,
+      "speaker": "Landlord",
+      "en": "You'll need to pay monthly to me, by cash or credit card, I don't mind.",
+      "q": []
+    },
+    {
+      "idx": 21,
+      "speaker": "Landlord",
+      "en": "And you'll have to pay me 1,500 dollars as a deposit before you move in.",
+      "q": []
+    },
+    {
+      "idx": 22,
+      "speaker": "Landlord",
+      "en": "The deposit is as insurance, in case you break something.",
+      "q": []
+    },
+    {
+      "idx": 23,
+      "speaker": "Student",
+      "en": "OK, that's reasonable.",
+      "q": []
+    },
+    {
+      "idx": 24,
+      "speaker": "Landlord",
+      "en": "Oh, I nearly forgot.",
+      "q": []
+    },
+    {
+      "idx": 25,
+      "speaker": "Landlord",
+      "en": "One important thing is that you'll be required to provide a credit check to guarantee your ability to pay the rent every month.",
+      "q": [
+        3
+      ]
+    },
+    {
+      "idx": 26,
+      "speaker": "Landlord",
+      "en": "This will charge you 15 dollars.",
+      "q": []
+    },
+    {
+      "idx": 27,
+      "speaker": "Student",
+      "en": "No problem.",
+      "q": []
+    },
+    {
+      "idx": 28,
+      "speaker": "Student",
+      "en": "How about the facilities?",
+      "q": []
+    },
+    {
+      "idx": 29,
+      "speaker": "Landlord",
+      "en": "First there are three bedrooms combined with two bathrooms.",
+      "q": []
+    },
+    {
+      "idx": 30,
+      "speaker": "Landlord",
+      "en": "Then there is a shared kitchen which was refurbished several months ago.",
+      "q": [
+        4
+      ]
+    },
+    {
+      "idx": 31,
+      "speaker": "Landlord",
+      "en": "By the way, do you cook yourselves?",
+      "q": []
+    },
+    {
+      "idx": 32,
+      "speaker": "Student",
+      "en": "Yeah, we like cooking.",
+      "q": []
+    },
+    {
+      "idx": 33,
+      "speaker": "Student",
+      "en": "Do we have to buy our own cookers?",
+      "q": []
+    },
+    {
+      "idx": 34,
+      "speaker": "Landlord",
+      "en": "Basic facilities for cooking are available, but if you want a dishwasher, I'm sorry it needs to be added later.",
+      "q": [
+        5
+      ]
+    },
+    {
+      "idx": 35,
+      "speaker": "Student",
+      "en": "I think the basic facilities are enough for us.",
+      "q": []
+    },
+    {
+      "idx": 36,
+      "speaker": "Student",
+      "en": "Is there any place we can park?",
+      "q": []
+    },
+    {
+      "idx": 37,
+      "speaker": "Student",
+      "en": "As one of my friends has a private car.",
+      "q": []
+    },
+    {
+      "idx": 38,
+      "speaker": "Landlord",
+      "en": "Yes, there is a garage which not only provides space for your car but also has a special section where you can do some of your work.",
+      "q": [
+        6
+      ]
+    },
+    {
+      "idx": 39,
+      "speaker": "Landlord",
+      "en": "It's very quiet for you to concentrate.",
+      "q": []
+    },
+    {
+      "idx": 40,
+      "speaker": "Student",
+      "en": "It sounds so special!",
+      "q": []
+    },
+    {
+      "idx": 41,
+      "speaker": "Landlord",
+      "en": "There are some other utilities I have to tell you.",
+      "q": []
+    },
+    {
+      "idx": 42,
+      "speaker": "Landlord",
+      "en": "There is a garden in front of the house, in which you will find some interesting plants and beautiful flowers.",
+      "q": []
+    },
+    {
+      "idx": 43,
+      "speaker": "Student",
+      "en": "Do we have to take care of these plants and flowers?",
+      "q": []
+    },
+    {
+      "idx": 44,
+      "speaker": "Landlord",
+      "en": "Well, you don't have to worry about that.",
+      "q": []
+    },
+    {
+      "idx": 45,
+      "speaker": "Landlord",
+      "en": "There will be a professional gardener to do the landscaping in the garden regularly.",
+      "q": []
+    },
+    {
+      "idx": 46,
+      "speaker": "Landlord",
+      "en": "But you do need to help water the grass once a week.",
+      "q": [
+        7
+      ]
+    },
+    {
+      "idx": 47,
+      "speaker": "Landlord",
+      "en": "Is it a problem for you?",
+      "q": []
+    },
+    {
+      "idx": 48,
+      "speaker": "Student",
+      "en": "Of course not.",
+      "q": []
+    },
+    {
+      "idx": 49,
+      "speaker": "Student",
+      "en": "We'd like to do that.",
+      "q": []
+    },
+    {
+      "idx": 50,
+      "speaker": "Landlord",
+      "en": "Another thing is, in this district every household is arranged with a cleaner responsible for cleaning up the rubbish and recycling, but this service will cost you 15 dollars every month.",
+      "q": [
+        8
+      ]
+    },
+    {
+      "idx": 51,
+      "speaker": "Student",
+      "en": "What other bills do we have to pay?",
+      "q": []
+    },
+    {
+      "idx": 52,
+      "speaker": "Landlord",
+      "en": "Bills for electricity, water and gas will also be covered by yourselves.",
+      "q": []
+    },
+    {
+      "idx": 53,
+      "speaker": "Student",
+      "en": "OK.",
+      "q": []
+    },
+    {
+      "idx": 54,
+      "speaker": "Student",
+      "en": "One more question, is air-conditioning available in the house?",
+      "q": []
+    },
+    {
+      "idx": 55,
+      "speaker": "Landlord",
+      "en": "If you mean central air-conditioning, I'm afraid there isn't at the moment, but each room has a conditioning unit which is installed on the window.",
+      "q": [
+        9
+      ]
+    },
+    {
+      "idx": 56,
+      "speaker": "Student",
+      "en": "That will be fine.",
+      "q": []
+    },
+    {
+      "idx": 57,
+      "speaker": "Student",
+      "en": "Anyway, I think it's a good place to live in.",
+      "q": []
+    },
+    {
+      "idx": 58,
+      "speaker": "Student",
+      "en": "Can we go and see the house, please?",
+      "q": []
+    },
+    {
+      "idx": 59,
+      "speaker": "Landlord",
+      "en": "Yes, of course.",
+      "q": []
+    },
+    {
+      "idx": 60,
+      "speaker": "Student",
+      "en": "May I have your name and phone number?",
+      "q": []
+    },
+    {
+      "idx": 61,
+      "speaker": "Landlord",
+      "en": "Yes, I'm Sam Dressler.",
+      "q": [
+        10
+      ]
+    },
+    {
+      "idx": 62,
+      "speaker": "Landlord",
+      "en": "That's S-A-M, D-R-E-double S-L-E-R.",
+      "q": [
+        10
+      ]
+    },
+    {
+      "idx": 63,
+      "speaker": "Student",
+      "en": "OK, Sam Dressler, I've got that down.",
+      "q": []
+    },
+    {
+      "idx": 64,
+      "speaker": "Landlord",
+      "en": "And my phone number is 6753 4571.",
+      "q": []
+    },
+    {
+      "idx": 65,
+      "speaker": "Student",
+      "en": "Thank you very much.",
+      "q": []
+    },
+    {
+      "idx": 66,
+      "speaker": "Student",
+      "en": "I'll contact you after discussing it with my two friends.",
+      "q": []
+    },
+    {
+      "idx": 67,
+      "speaker": "Landlord",
+      "en": "No problem.",
+      "q": []
+    },
+    {
+      "idx": 68,
+      "speaker": "Landlord",
+      "en": "Bye!",
+      "q": []
+    },
+    {
+      "idx": 69,
+      "speaker": "Student",
+      "en": "Bye!",
+      "q": []
+    }
+  ],
+  "analysis": {
+    "1": {
+      "answer": "5(th) May/May 5(th)",
+      "analysis": "听前预测：定位词 date；提示词 date，此处应填日期。\n题目解析：定位词 date 出现后，先听到了干扰信息 May 3rd，注意这是房东与现租客合同到期的日子（… is due），接着房东说需要花一天时间来打扫和整理，随后出现的 5th May 才是房子可租住的日期，其中 be ready 对应题干中的 Available。因此答案为 5(th) May 或 May 5(th)。"
+    },
+    "2": {
+      "answer": "1700",
+      "analysis": "听前预测：定位词 rent；提示词 $，此处应填数字。\n题目解析：本题考查对数字的反应速度以及对干扰信息的辨识。定位词 rent 首先出现在学生说的话中，随后出现了好几个数字，不过需要注意这都是学生自己所说，分别为自己的理想价位（每人每月 500 美元）和最高可承受价位（每人每月 600 美元），都是干扰信息。注意听说话者的角色，答案会出现在房东的话中。在学生说完后，房东对 rent 进行说明，这里给出了 1700 这个数字，为真正的房租租金。因此答案为 1700。"
+    },
+    "3": {
+      "answer": "credit check",
+      "analysis": "听前预测：定位词 $15；提示词 rent、deposit，此处应填名词，且与 rent 和 deposit 并列。\n题目解析：本题答案前置，出现在定位词 $15 之前，如果死盯定位词可能会错过答案。通过之前的预判可知，本题答案应与 rent 和 deposit 并列，所以只要在 deposit 和 $1,500 出现后，有意识地听表示并列关系的逻辑衔接，然后抓取符合预判的词汇即可。本题可通过房东所说的 One important thing 这一表示强调的并列信号词锁定答案句：“… you'll be required to provide a credit check to guarantee your ability to pay the rent every month.”抓取其中符合预判的词汇即可，同时可通过之后出现的定位词 $15 进行确认。因此答案为 credit check。"
+    },
+    "4": {
+      "answer": "kitchen",
+      "analysis": "听前预测：提示词 remodelled，此处应填表示房间类型的名词。\n题目解析：本题虽无好的定位词，但可通过上一个信息点 3 bedrooms and 2 bathrooms 来预判答案的出现，之后有意识地抓取表示房间类型的名词即可。答案句为：“Then there is a shared kitchen which was refurbished several months ago.”其中 refurbished 替换了题干 remodelled。因此答案为 kitchen。"
+    },
+    "5": {
+      "answer": "dishwasher",
+      "analysis": "听前预测：提示词 no，此处应填名词。\n题目解析：通过提示词 no 可知，本题的答案应该是被否定了的信息。通过学生对房东的回答“we like cooking”以及提问“Do we have to buy our own cookers?”可知，接下来讨论的内容有关厨房设备。答案信息由转折信号词 but 引出：“… but if you want a dishwasher, I'm sorry it needs to be added later.”其中 it needs to be added later 替换了题干中的 no。因此答案为 dishwasher。"
+    },
+    "6": {
+      "answer": "garage",
+      "analysis": "听前预测：定位词 work area；提示词 a，此处应填表示房间类型的名词。\n题目解析：本题同样是答案前置，出现在定位词 work area 之前。建议通过学生的提问“Is there any place we can park?”去定位下一条信息的出现，房东随即给出答案：“Yes, there is a garage which not only provides space for your car but also has a special section where you can do some of your work.”抓取其中表示房间类型的词汇即可，再根据后面提到的 work area 的同义替换 a special section … do some of your work 进行确认。因此答案为 garage。"
+    },
+    "7": {
+      "answer": "water",
+      "analysis": "听前预测：定位词 landscaping、grass；提示词 must，此处应填动词原形。\n题目解析：本题难度不大，定位词 landscaping 和 grass 均不容易替换。landscaping 出现后，通过转折信号词 But 锁定答案句：“But you do need to help water the grass once a week.”其中 need to 替换了提示词 must，比较容易识别。因此答案为 water。"
+    },
+    "8": {
+      "answer": "recycling",
+      "analysis": "听前预测：定位词 $15、trashing；提示词 and，此处应填与 trashing 并列的名词。\n题目解析：本题定位词 $15 出现于答案之后，且 trashing 在录音中被替换为 cleaning up the rubbish。能识别出这一同义替换即可通过并列连词 and 找到答案词，然后再通过 $15 进行验证即可。当然如果无法一下子识别出 trashing 的同义替换，也可以通过对话的语义推进来定位，接第 7 题之后出现了并列信号词 Another thing is，从而可锁定答案句即将出现，重点听并列出现的信息即可。因此答案为 recycling。"
+    },
+    "9": {
+      "answer": "window",
+      "analysis": "听前预测：定位词 central air conditioning、conditioning unit；提示词 a、conditioning unit，此处应填名词或形容词。\n题目解析：首先听到定位词 central air conditioning 原词重现，随后答案信息由转折信号词 but 引出：“… but each room has a conditioning unit which is installed on the window.”其中另一定位词 conditioning unit 也原词重现，可以修饰它的词只有名词 window。因此答案为 window。"
+    },
+    "10": {
+      "answer": "Dressler",
+      "analysis": "听前预测：定位词 Name；提示词 Name，此处应填人名。\n题目解析：本题比较简单。雅思听力中考查人名时通常会给出拼写，所以注意跟上录音即可。本题的人名中有两个 s，读法为 double s。因此答案为 Dressler。"
+    }
+  },
+  "answers": {
+    "1": "5(th) May/May 5(th)",
+    "2": "1700",
+    "3": "credit check",
+    "4": "kitchen",
+    "5": "dishwasher",
+    "6": "garage",
+    "7": "water",
+    "8": "recycling",
+    "9": "window",
+    "10": "Dressler"
+  }
+}

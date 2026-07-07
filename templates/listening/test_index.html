@@ -182,8 +182,12 @@
     {% for book in books %}
     <article class="listening-book-card">
       <header class="listening-book-card__header">
+        {% if book.series and book.series != 'cambridge' %}
+        <span class="listening-book-card__label">{{ book.label or book.book }}</span>
+        {% else %}
         <span class="listening-book-card__label">Cambridge IELTS</span>
         <span class="listening-book-card__number">{{ book.book }}</span>
+        {% endif %}
       </header>
       <div class="listening-test-grid">
         {% for test in book.tests %}

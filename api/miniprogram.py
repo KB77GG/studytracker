@@ -22,6 +22,7 @@ from models import (
     ListeningTestSubmission, ReadingTestSubmission
 )
 from .auth_utils import can_view_all_schedules, require_api_user
+from .listening_series import parse_test_id
 from .reading_vocab_grading import grade_reading_vocab_submission
 from .stats_utils import (
     average_accuracy,
@@ -3998,13 +3999,11 @@ def submit_class_feedback():
 
 
 def _practice_listening_catalog() -> list[dict]:
-    books: dict[int, list[dict]] = {}
-    for path in sorted(_static_root("listening_tests").glob("ielts*_test*.json")):
-        match = re.match(r"^ielts(?P<book>\d+)_test(?P<test>\d+)\.json$", path.name)
-        if not match:
+    books: dict[tuple, dict] = {}
+    for path in sorted(_static_root("listening_tests").glob("*.json")):
+        info = parse_test_id(path.stem)
+        if not info:
             continue
-        book_no = int(match.group("book"))
-        test_no = int(match.group("test"))
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
         except Exception:
@@ -4022,19 +4021,32 @@ def _practice_listening_catalog() -> list[dict]:
                 "question_name": section.get("question_name") or f"Q{(section_no - 1) * 10 + 1}-{section_no * 10}",
                 "question_count": count,
             })
-        books.setdefault(book_no, []).append({
+        bucket = books.setdefault(
+            (info["order"], info["book"]),
+            {
+                "series": info["series"],
+                "book": info["book"],
+                "label": info["label"],
+                "tests": [],
+            },
+        )
+        bucket["tests"].append({
             "id": path.stem,
-            "book": book_no,
-            "test": test_no,
-            "title": payload.get("title") or f"Cambridge IELTS {book_no} Test {test_no} Listening",
+            "series": info["series"],
+            "book": info["book"],
+            "test": info["test"],
+            "label": info["label"],
+            "title": payload.get("title") or info["title"],
             "section_count": len(sections),
             "question_count": question_count,
             "sections": sections,
         })
-    return [
-        {"book": book_no, "tests": sorted(tests, key=lambda item: item["test"])}
-        for book_no, tests in sorted(books.items())
-    ]
+    result = []
+    for key in sorted(books):
+        bucket = books[key]
+        bucket["tests"].sort(key=lambda item: item["test"])
+        result.append(bucket)
+    return result
 
 
 def _practice_reading_catalog() -> list[dict]:

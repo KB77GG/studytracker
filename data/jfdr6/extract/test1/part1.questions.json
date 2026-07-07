@@ -1,0 +1,51 @@
+{
+  "test": 1,
+  "part": 1,
+  "groups": [
+    {
+      "type": 3,
+      "title": "Community Centre Classes",
+      "question_title": "",
+      "desc": "Questions 1-7\nComplete the table below.\nWrite ONE WORD ONLY for each answer.",
+      "collect": "",
+      "table": {
+        "title": "",
+        "content": [
+          ["<b>Class</b>", "<b>Where</b>", "<b>When</b>", "<b>What to bring</b>"],
+          ["Photography class", "a library", "Saturday $1$", "a camera"],
+          ["$2$ cooking class", "Anita Kitchen", "the $3$ Tuesday of every month", "• an apron\n• $4$ to buy ingredients"],
+          ["Beading class", "a $5$ club", "Wednesday evening", "beads"],
+          ["$6$ class", "a high school", "Monday evening", "own $7$"]
+        ]
+      },
+      "collect_option": {"title": "", "list": null},
+      "questions": [
+        {"number": 1, "title": "Saturday 【   】", "options": []},
+        {"number": 2, "title": "【   】 cooking class", "options": []},
+        {"number": 3, "title": "the 【   】 Tuesday of every month", "options": []},
+        {"number": 4, "title": "【   】 to buy ingredients", "options": []},
+        {"number": 5, "title": "a 【   】 club", "options": []},
+        {"number": 6, "title": "【   】 class", "options": []},
+        {"number": 7, "title": "own 【   】", "options": []}
+      ],
+      "needs_image": false,
+      "image_pages": []
+    },
+    {
+      "type": 5,
+      "title": "Details of Beading Class",
+      "question_title": "",
+      "desc": "Questions 8-10\nComplete the notes below.\nWrite ONE WORD AND/OR A NUMBER for each answer.",
+      "collect": "The first class starts on: $8$\nCost of the class: $100\nRoom No.: $9$\nParking: next to a $10$",
+      "table": null,
+      "collect_option": {"title": "", "list": null},
+      "questions": [
+        {"number": 8, "title": "The first class starts on: 【   】", "options": []},
+        {"number": 9, "title": "Room No.: 【   】", "options": []},
+        {"number": 10, "title": "Parking: next to a 【   】", "options": []}
+      ],
+      "needs_image": false,
+      "image_pages": []
+    }
+  ]
+}
