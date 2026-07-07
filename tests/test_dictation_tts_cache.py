@@ -1,72 +1,117 @@
-"""默写 TTS 缓存读取测试。
+"""默写 TTS 混合音源 (Youdao v1 真人 / Kokoro 兜底) 测试。
 
-2026-07-02 生产事故回归：legacy 缓存（旧文本变体 / 旧 Kokoro 键）被读取链复活后，
-安卓平板放不出声音。proxy_tts 只允许匹配当前文本的缓存。
+背景 (2026-07-02)：
+- Youdao 对基础词返回 MPEG v1 真人录音（干净），对变形词退化成 v2 合成音
+  （听感像"日语英语"）。
+- Kokoro 是统一合成音，变形词没问题，但孤立词的词首会插一个多余元音。
+proxy_tts 用 _is_high_quality_mp3 门控：只在 Youdao 给 v1 时用它，否则改用
+预烤好的 Kokoro 缓存。
 """
 
 import tempfile
 import unittest
-from pathlib import Path
 
+import api.dictation as dictation_mod
 from app import app
 from api.dictation import (
-    _dictation_tts_cache_candidates,
     _dictation_tts_cache_path,
-    _dictation_tts_cache_path_for_key,
     _dictation_tts_text,
+    _is_high_quality_mp3,
 )
 
+# 最小 MPEG 帧头：v1 = 真人高质量，v2 = 合成音
+MP3_V1 = b"\xff\xfb\x90\x64" + b"\x00" * 200
+MP3_V2 = b"\xff\xf3\x90\x64" + b"\x00" * 200
 
-class DictationTtsCacheTest(unittest.TestCase):
+
+class DictationTtsHybridTest(unittest.TestCase):
     def setUp(self):
         self.tmpdir = tempfile.TemporaryDirectory()
         self.client = app.test_client()
         self._old_upload = app.config.get("UPLOAD_FOLDER")
-        self._old_order = app.config.get("DICTATION_TTS_PROVIDER_ORDER")
         app.config["UPLOAD_FOLDER"] = self.tmpdir.name
-        app.config["DICTATION_TTS_PROVIDER_ORDER"] = "youdao"
+        self._old_youdao = dictation_mod._youdao_tts
 
     def tearDown(self):
         app.config["UPLOAD_FOLDER"] = self._old_upload
-        app.config["DICTATION_TTS_PROVIDER_ORDER"] = self._old_order
+        dictation_mod._youdao_tts = self._old_youdao
         self.tmpdir.cleanup()
 
-    def test_proxy_tts_serves_current_text_cache(self):
+    def _write_kokoro(self, word):
         with app.app_context():
-            tts_text = _dictation_tts_text("apple")
-            current = _dictation_tts_cache_path("youdao", "apple", tts_text)
-            current.write_bytes(b"CURRENT-TEXT")
-            legacy = _dictation_tts_cache_path_for_key(
-                "kokoro_af_heart_en-us_0.88", "apple", "apple"
-            )
-            legacy.write_bytes(b"LEGACY-KOKORO")
+            path = _dictation_tts_cache_path("kokoro", word, _dictation_tts_text(word))
+            path.write_bytes(b"KOKORO-" + MP3_V1)
+            return path
 
-        resp = self.client.get("/api/dictation/tts?word=apple")
+    def _write_youdao(self, word, payload):
+        with app.app_context():
+            path = _dictation_tts_cache_path("youdao", word, _dictation_tts_text(word))
+            path.write_bytes(payload)
+            return path
+
+    def _fake_youdao(self, payload):
+        def _fn(_text):
+            return payload
+
+        dictation_mod._youdao_tts = _fn
+
+    # 1. 缓存里有 Youdao 真人录音 → 优先用它，即使 Kokoro 缓存也在
+    def test_cached_youdao_v1_wins_over_kokoro(self):
+        self._write_kokoro("specialist")
+        self._write_youdao("specialist", MP3_V1 + b"YOUDAO")
+        resp = self.client.get("/api/dictation/tts?word=specialist")
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.data, b"CURRENT-TEXT")
+        self.assertTrue(resp.data.endswith(b"YOUDAO"))
 
-    def test_read_candidates_exclude_legacy_texts_and_keys(self):
+    # 2. 缓存的 Youdao 是 v2 合成音 → 跳过，改用 Kokoro
+    def test_cached_youdao_v2_falls_to_kokoro(self):
+        self._write_kokoro("specialists")
+        self._write_youdao("specialists", MP3_V2 + b"SYNTH")
+        resp = self.client.get("/api/dictation/tts?word=specialists")
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(resp.data.startswith(b"KOKORO-"))
+
+    # 3. 无 Youdao 缓存，实时抓到 v1 → 用并落盘
+    def test_live_youdao_v1_served_and_cached(self):
+        self._write_kokoro("economy")
+        self._fake_youdao(MP3_V1 + b"LIVE")
+        resp = self.client.get("/api/dictation/tts?word=economy")
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(resp.data.endswith(b"LIVE"))
         with app.app_context():
-            tts_text = _dictation_tts_text("apple")
-            candidates = _dictation_tts_cache_candidates(
-                "apple", tts_text, include_legacy=False
-            )
-            paths = {path for _, path in candidates}
-            legacy_key_path = _dictation_tts_cache_path_for_key(
-                "kokoro_af_heart_en-us_0.88", "apple", tts_text
-            )
-            legacy_text_path = _dictation_tts_cache_path("youdao", "apple", "apple")
-            self.assertNotIn(legacy_key_path, paths)
-            self.assertNotIn(legacy_text_path, paths)
-            self.assertIn(_dictation_tts_cache_path("youdao", "apple", tts_text), paths)
+            cache = _dictation_tts_cache_path("youdao", "economy", _dictation_tts_text("economy"))
+        self.assertTrue(cache.exists())
 
-    def test_default_provider_order_is_youdao_only(self):
+    # 4. 无 Youdao 缓存，实时只有 v2 → 落到 Kokoro（基础词干净、变形词一致）
+    def test_live_youdao_v2_falls_to_kokoro(self):
+        self._write_kokoro("economies")
+        self._fake_youdao(MP3_V2 + b"SYNTH")
+        resp = self.client.get("/api/dictation/tts?word=economies")
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(resp.data.startswith(b"KOKORO-"))
+
+    # 5. 无 Kokoro 缓存（自由输入词），Youdao 只有 v2 → 兜底也要出声
+    def test_v2_last_resort_when_no_kokoro(self):
+        self._fake_youdao(MP3_V2 + b"ONLYV2")
+        resp = self.client.get("/api/dictation/tts?word=zzqqx")
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(resp.data.endswith(b"ONLYV2"))
+
+    def test_is_high_quality_mp3_distinguishes_versions(self):
+        self.assertTrue(_is_high_quality_mp3(MP3_V1))
+        self.assertFalse(_is_high_quality_mp3(MP3_V2))
+        self.assertFalse(_is_high_quality_mp3(b""))
+
+    def test_default_provider_order_is_youdao_then_kokoro(self):
         from api.dictation import _dictation_tts_provider_order
 
-        with app.app_context():
-            self.assertEqual(_dictation_tts_provider_order(), ["youdao"])
-            app.config["DICTATION_TTS_PROVIDER_ORDER"] = ""
-            self.assertEqual(_dictation_tts_provider_order(), ["youdao"])
+        old = app.config.get("DICTATION_TTS_PROVIDER_ORDER")
+        try:
+            app.config["DICTATION_TTS_PROVIDER_ORDER"] = "youdao,kokoro"
+            with app.app_context():
+                self.assertEqual(_dictation_tts_provider_order(), ["youdao", "kokoro"])
+        finally:
+            app.config["DICTATION_TTS_PROVIDER_ORDER"] = old
 
     def test_tts_text_matches_configured_repeat(self):
         # 默认 DICTATION_TTS_REPEAT_COUNT=1：读一遍、补句号
@@ -75,8 +120,6 @@ class DictationTtsCacheTest(unittest.TestCase):
 
     def test_youdao_query_strips_trailing_period(self):
         # dictvoice 对部分词的带句号文本返回 500，请求前必须去掉末尾句号
-        import api.dictation as dictation_mod
-
         captured = {}
 
         class _FakeResp:

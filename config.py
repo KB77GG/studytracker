@@ -97,13 +97,12 @@ class Config:
     ALIYUN_TTS_VOICE = os.environ.get("ALIYUN_TTS_VOICE", "Cherry")
     ALIYUN_TTS_LANGUAGE = os.environ.get("ALIYUN_TTS_LANGUAGE", "English")
 
-    # Dictation TTS cache read order. Youdao only: the resurrected Kokoro cache
-    # (48kHz + ID3v2.4) failed to play on Android tablets in production
-    # (2026-07-02). Re-enable kokoro only after re-encoding + device testing.
-    # Cache-miss generation is controlled separately below.
+    # Dictation TTS provider preference (prewarm / helpers). proxy_tts itself
+    # runs a quality-gated hybrid: Youdao v1 human recording for base words,
+    # pre-baked Kokoro cache when Youdao would only give a v2 synth voice.
     DICTATION_TTS_PROVIDER_ORDER = os.environ.get(
         "DICTATION_TTS_PROVIDER_ORDER",
-        "youdao",
+        "youdao,kokoro",
     )
     DICTATION_TTS_GENERATION_PROVIDER_ORDER = os.environ.get(
         "DICTATION_TTS_GENERATION_PROVIDER_ORDER",

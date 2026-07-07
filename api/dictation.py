@@ -864,6 +864,16 @@ def _is_high_quality_mp3(data: bytes) -> bool:
     return False
 
 
+def _cache_file_is_high_quality(path: Path) -> bool:
+    """True when a cached mp3 is a Youdao v1 human recording (not v2 synth)."""
+    try:
+        with path.open("rb") as fh:
+            head = fh.read(2048)
+    except OSError:
+        return False
+    return _is_high_quality_mp3(head)
+
+
 def _dictation_provider_cache_key(provider: str) -> str:
     if provider == "piper":
         voice = _safe_cache_token(current_app.config.get("PIPER_TTS_VOICE") or "en_US-lessac-high")
@@ -1066,27 +1076,50 @@ def schedule_prewarm_for_book(book_id: int) -> None:
 
 @dictation_bp.route("/tts", methods=["GET"])
 def proxy_tts():
-    """Proxy TTS audio with file cache.
+    """Proxy TTS audio with a quality-gated hybrid of Youdao and Kokoro.
 
-    Cached Kokoro audio is preferred. Cache-miss generation uses a separate,
-    production-safe provider order so local neural models do not cold-load in
-    Gunicorn request workers.
+    Youdao serves a clean human recording (MPEG v1) for base dictionary words
+    but degrades to a synthetic v2 voice for inflected/uncommon forms. Kokoro is
+    a consistent neural voice that handles inflections but adds a leading-vowel
+    artifact on some isolated words. So: prefer a Youdao v1 recording; when
+    Youdao would only give v2, use the pre-baked Kokoro cache instead.
     """
     word = strip_part_of_speech_prefix(request.args.get("word"))
     if not word:
         return jsonify({"ok": False, "error": "missing_word"}), 400
     tts_text = _dictation_tts_text(word)
-    # include_legacy=False: legacy cache entries (old text variants / old Kokoro
-    # key) resurfaced files that broke playback on Android tablets (2026-07-02).
-    # Serve only cache that matches the current tts_text exactly.
-    cache_candidates = _dictation_tts_cache_candidates(word, tts_text, include_legacy=False)
-    for _, cache_path in cache_candidates:
+
+    youdao_cache = _dictation_tts_cache_path("youdao", word, tts_text)
+    youdao_v2_cached = False  # a low-quality (v2 synth) Youdao clip is on disk
+
+    # 1. Youdao human recording (v1). Fetch+cache on first miss; skip v2 synth.
+    if youdao_cache.exists():
+        if _cache_file_is_high_quality(youdao_cache):
+            return _send_tts_file(youdao_cache)
+        youdao_v2_cached = True
+    else:
+        audio = _youdao_tts(tts_text)
+        if audio:
+            youdao_cache.write_bytes(audio)
+            if _is_high_quality_mp3(audio):
+                return _send_tts_file(youdao_cache)
+            youdao_v2_cached = True
+
+    # 2. Youdao only offers a synth voice here → use the pre-baked Kokoro cache.
+    for _provider, cache_path in _dictation_tts_cache_candidates(
+        word, tts_text, providers=["kokoro"], include_legacy=True
+    ):
         if not cache_path.exists():
             continue
         try:
             return _send_tts_file(cache_path)
         except Exception:
             cache_path.unlink(missing_ok=True)
+
+    # 3. No Kokoro cache (e.g. free-typed word). Serve the Youdao v2 clip we
+    #    already have, else fall back to the generation chain.
+    if youdao_v2_cached and youdao_cache.exists():
+        return _send_tts_file(youdao_cache)
 
     generated_cache = _generate_tts_to_cache(word, tts_text)
     if generated_cache:
