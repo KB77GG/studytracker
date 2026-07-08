@@ -175,35 +175,59 @@
   {% set listening_active = 'tests' %}
   {% include "listening/_mode_nav.html" %}
 
+  {% if sections and sections|length > 1 %}
+  <nav class="listening-series-jump" aria-label="教材目录">
+    {% for group in sections %}
+    <a class="listening-series-jump__link" href="#series-{{ group.key }}">{{ group.name }}</a>
+    {% endfor %}
+  </nav>
+  {% endif %}
+
   {% if not books %}
   <section class="listening-library__empty">还没有生成剑雅整套练习数据。请先运行 build 脚本。</section>
   {% else %}
-  <section class="listening-book-grid">
-    {% for book in books %}
-    <article class="listening-book-card">
-      <header class="listening-book-card__header">
-        {% if book.series and book.series != 'cambridge' %}
-        <span class="listening-book-card__label">{{ book.label or book.book }}</span>
-        {% else %}
-        <span class="listening-book-card__label">Cambridge IELTS</span>
-        <span class="listening-book-card__number">{{ book.book }}</span>
-        {% endif %}
-      </header>
-      <div class="listening-test-grid">
-        {% for test in book.tests %}
-        <a class="listening-test-link{% if test.practice_status %} listening-test-link--done{% endif %}" href="{{ url_for('listening_test_practice', test_id=test.id) }}">
-          <span class="listening-test-link__name">Test {{ test.test }}</span>
-          <span class="listening-test-link__meta">{{ test.section_count }} Section<br>{{ test.question_count }} 题</span>
-          {% if test.practice_status %}
-          <span class="listening-test-link__status">已刷 · {{ test.practice_status.accuracy }}%</span>
+  {% for group in sections %}
+  <section class="listening-series-section" id="series-{{ group.key }}">
+    <h2 class="listening-series-section__title">{{ group.name }}</h2>
+    <div class="listening-book-grid">
+      {% for book in group.books %}
+      <article class="listening-book-card">
+        <header class="listening-book-card__header">
+          {% if book.series and book.series != 'cambridge' %}
+          <span class="listening-book-card__label">{{ book.label or book.book }}</span>
+          {% else %}
+          <span class="listening-book-card__label">Cambridge IELTS</span>
+          <span class="listening-book-card__number">{{ book.book }}</span>
           {% endif %}
-        </a>
-        {% endfor %}
-      </div>
-    </article>
-    {% endfor %}
+        </header>
+        <div class="listening-test-grid">
+          {% for test in book.tests %}
+          <a class="listening-test-link{% if test.practice_status %} listening-test-link--done{% endif %}" href="{{ url_for('listening_test_practice', test_id=test.id) }}">
+            <span class="listening-test-link__name">Test {{ test.test }}</span>
+            <span class="listening-test-link__meta">{{ test.section_count }} Section<br>{{ test.question_count }} 题</span>
+            {% if test.practice_status %}
+            <span class="listening-test-link__status">已刷 · {{ test.practice_status.accuracy }}%</span>
+            {% endif %}
+          </a>
+          {% endfor %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
   </section>
+  {% endfor %}
   {% endif %}
 </main>
+<script>
+  document.querySelectorAll('.listening-series-jump__link').forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      var target = document.querySelector(link.getAttribute('href'));
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', link.getAttribute('href'));
+    });
+  });
+</script>
 </body>
 </html>

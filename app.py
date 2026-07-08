@@ -44,7 +44,7 @@ from pypinyin import lazy_pinyin
 from api import init_app as init_api
 from api.wechat import send_subscribe_message
 from api.tencent_soe import evaluate_pronunciation
-from api.listening_series import parse_intensive_id, parse_test_id
+from api.listening_series import parse_intensive_id, parse_test_id, series_name
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
 from toefl_practice import catalog_summary as _toefl_catalog_summary
 from toefl_practice import toefl_bp
@@ -1770,6 +1770,21 @@ def _listening_test_catalog() -> list[dict]:
         bucket["tests"].sort(key=lambda row: row["test"])
         books.append(bucket)
     return books
+
+
+def _listening_series_sections(books: list[dict]) -> list[dict]:
+    """把整卷目录按系列分组成 [{key, name, books:[...]}]，供模板分区渲染。
+
+    books 已按 (order, book) 排好序，同系列必然相邻，顺序遍历即可保持
+    剑桥雅思在前、9分达人在后。
+    """
+    sections: list[dict] = []
+    for book in books:
+        key = book.get("series") or "cambridge"
+        if not sections or sections[-1]["key"] != key:
+            sections.append({"key": key, "name": series_name(key), "books": []})
+        sections[-1]["books"].append(book)
+    return sections
 
 
 def _reading_test_question_count(payload: dict) -> int:
@@ -7561,7 +7576,13 @@ def listening_test_index():
         _listening_practice_status_map(_current_practice_student_profile()),
     )
     test_count = sum(len(book["tests"]) for book in books)
-    return render_template("listening/test_index.html", books=books, test_count=test_count)
+    sections = _listening_series_sections(books)
+    return render_template(
+        "listening/test_index.html",
+        books=books,
+        sections=sections,
+        test_count=test_count,
+    )
 
 
 @app.route("/listening/test/<test_id>")

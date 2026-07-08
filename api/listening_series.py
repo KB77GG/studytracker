@@ -19,6 +19,7 @@ _SERIES: list[dict] = [
     {
         "key": "cambridge",
         "order": 0,
+        "name": "剑桥雅思",
         "test_re": re.compile(r"^ielts(?P<book>\d+)_test(?P<test>\d+)$", re.IGNORECASE),
         "intensive_re": re.compile(
             r"^ielts(?P<book>\d+)_test(?P<test>\d+)_s(?P<section>\d+)$", re.IGNORECASE
@@ -32,6 +33,7 @@ _SERIES: list[dict] = [
     {
         "key": "jfdr",
         "order": 1,
+        "name": "9分达人",
         "test_re": re.compile(r"^jfdr(?P<book>\d+)_test(?P<test>\d+)$", re.IGNORECASE),
         "intensive_re": re.compile(
             r"^jfdr(?P<book>\d+)_test(?P<test>\d+)_s(?P<section>\d+)$", re.IGNORECASE
@@ -53,6 +55,7 @@ def _match(stem: str, re_field: str) -> dict | None:
             continue
         info = {
             "series": series["key"],
+            "series_name": series["name"],
             "order": series["order"],
             "book": int(match.group("book")),
             "test": int(match.group("test")),
@@ -76,6 +79,14 @@ def parse_test_id(stem: str) -> dict | None:
 def parse_intensive_id(stem: str) -> dict | None:
     """精听 section id（如 ielts18_test1_s1 / jfdr6_test1_s2）→ 系列信息 dict。"""
     return _match(stem, "intensive_re")
+
+
+def series_name(key: str) -> str:
+    """系列 key（cambridge / jfdr）→ 中文目录名，未注册时回退原 key。"""
+    for series in _SERIES:
+        if series["key"] == key:
+            return series["name"]
+    return str(key or "")
 
 
 def series_sort_key(info: dict) -> tuple:
