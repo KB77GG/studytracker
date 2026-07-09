@@ -1,0 +1,635 @@
+{
+  "test": 4,
+  "part": 1,
+  "title": "Student Accommodation",
+  "groups": [
+    {
+      "type": 3,
+      "title": "Student Accommodation",
+      "question_title": "",
+      "desc": "Questions 1-10\nComplete the table below.\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.",
+      "collect": "",
+      "table": {
+        "title": "Student Accommodation",
+        "content": [
+          [
+            "<b>Type</b>",
+            "<b>Cost</b>",
+            "<b>Contract</b>"
+          ],
+          [
+            "College: Single room",
+            "Standard: £3276 per year\nen suite: £$1$ per year\n(meals are not included)",
+            "36 weeks\n(Rooms are not available during the $2$)"
+          ],
+          [
+            "$3$:\nRoom with a family",
+            "£150 per week - all inclusive",
+            "Arrangements are $4$"
+          ],
+          [
+            "Private renting:\nRoom in a shared house\nor a $5$",
+            "From £275 to £490 per month\nAdditional costs (for this year)\n• gas and electricity:\n  approximately £$6$\n  per month\n• $7$: £9\n• $8$",
+            "6 months\nNeed\n• $9$\n• two $10$"
+          ]
+        ]
+      },
+      "collect_option": {
+        "title": "",
+        "list": null
+      },
+      "questions": [
+        {
+          "number": 1,
+          "title": "en suite: £【   】 per year",
+          "options": []
+        },
+        {
+          "number": 2,
+          "title": "during the 【   】",
+          "options": []
+        },
+        {
+          "number": 3,
+          "title": "【   】: Room with a family",
+          "options": []
+        },
+        {
+          "number": 4,
+          "title": "Arrangements are 【   】",
+          "options": []
+        },
+        {
+          "number": 5,
+          "title": "Room in a shared house or a 【   】",
+          "options": []
+        },
+        {
+          "number": 6,
+          "title": "approximately £【   】 per month",
+          "options": []
+        },
+        {
+          "number": 7,
+          "title": "【   】: £9",
+          "options": []
+        },
+        {
+          "number": 8,
+          "title": "【   】",
+          "options": []
+        },
+        {
+          "number": 9,
+          "title": "Need: 【   】",
+          "options": []
+        },
+        {
+          "number": 10,
+          "title": "two 【   】",
+          "options": []
+        }
+      ],
+      "needs_image": false,
+      "image_pages": []
+    }
+  ],
+  "transcript": [
+    {
+      "idx": 0,
+      "speaker": "Darren",
+      "en": "College Accommodation Office, Darren speaking, how may I help you?",
+      "q": []
+    },
+    {
+      "idx": 1,
+      "speaker": "Woman",
+      "en": "Oh, good morning.",
+      "q": []
+    },
+    {
+      "idx": 2,
+      "speaker": "Woman",
+      "en": "I am starting at the college in September and need to find some accommodation.",
+      "q": []
+    },
+    {
+      "idx": 3,
+      "speaker": "Darren",
+      "en": "Right.",
+      "q": []
+    },
+    {
+      "idx": 4,
+      "speaker": "Darren",
+      "en": "Well, there is a list of options.",
+      "q": []
+    },
+    {
+      "idx": 5,
+      "speaker": "Darren",
+      "en": "The first one is to live on campus.",
+      "q": []
+    },
+    {
+      "idx": 6,
+      "speaker": "Darren",
+      "en": "And that'd be a single room.",
+      "q": []
+    },
+    {
+      "idx": 7,
+      "speaker": "Woman",
+      "en": "How much would that cost?",
+      "q": []
+    },
+    {
+      "idx": 8,
+      "speaker": "Darren",
+      "en": "Well, it depends.",
+      "q": []
+    },
+    {
+      "idx": 9,
+      "speaker": "Darren",
+      "en": "You'll be expected to cover 3276 pounds for a standard room for the year.",
+      "q": []
+    },
+    {
+      "idx": 10,
+      "speaker": "Darren",
+      "en": "That's just for a room with a washbasin.",
+      "q": []
+    },
+    {
+      "idx": 11,
+      "speaker": "Darren",
+      "en": "And it'll be 3834 pounds if you want a regular suite equipped with a small bathroom.",
+      "q": [
+        1
+      ]
+    },
+    {
+      "idx": 12,
+      "speaker": "Woman",
+      "en": "I see.",
+      "q": []
+    },
+    {
+      "idx": 13,
+      "speaker": "Woman",
+      "en": "That's a bit over what I expected.",
+      "q": []
+    },
+    {
+      "idx": 14,
+      "speaker": "Darren",
+      "en": "It does include heating, which is quite a saving because energy costs can be high these days, especially in winter.",
+      "q": []
+    },
+    {
+      "idx": 15,
+      "speaker": "Woman",
+      "en": "Hum, does it include meals as well?",
+      "q": []
+    },
+    {
+      "idx": 16,
+      "speaker": "Darren",
+      "en": "No.",
+      "q": []
+    },
+    {
+      "idx": 17,
+      "speaker": "Darren",
+      "en": "All our rooms are self-catering now.",
+      "q": []
+    },
+    {
+      "idx": 18,
+      "speaker": "Darren",
+      "en": "But there is a shared kitchen on each floor where you can cook if you want to.",
+      "q": []
+    },
+    {
+      "idx": 19,
+      "speaker": "Darren",
+      "en": "Or there are plenty of places to eat out on campus.",
+      "q": []
+    },
+    {
+      "idx": 20,
+      "speaker": "Woman",
+      "en": "Ok.",
+      "q": []
+    },
+    {
+      "idx": 21,
+      "speaker": "Woman",
+      "en": "And you mentioned that is the price for the whole year?",
+      "q": []
+    },
+    {
+      "idx": 22,
+      "speaker": "Darren",
+      "en": "Well, you pay annually.",
+      "q": []
+    },
+    {
+      "idx": 23,
+      "speaker": "Darren",
+      "en": "But actually, it's just for 36 weeks.",
+      "q": []
+    },
+    {
+      "idx": 24,
+      "speaker": "Darren",
+      "en": "It doesn't include holidays.",
+      "q": [
+        2
+      ]
+    },
+    {
+      "idx": 25,
+      "speaker": "Darren",
+      "en": "You'll have to vacate the room then.",
+      "q": []
+    },
+    {
+      "idx": 26,
+      "speaker": "Woman",
+      "en": "Oh, hum, I need somewhere for the holidays.",
+      "q": []
+    },
+    {
+      "idx": 27,
+      "speaker": "Woman",
+      "en": "It'll be a long way home, and the flights are too expensive.",
+      "q": []
+    },
+    {
+      "idx": 28,
+      "speaker": "Darren",
+      "en": "Well, there is another option.",
+      "q": []
+    },
+    {
+      "idx": 29,
+      "speaker": "Darren",
+      "en": "Several families who work at the college or have children studying here offer overseas students a room in their homes.",
+      "q": []
+    },
+    {
+      "idx": 30,
+      "speaker": "Woman",
+      "en": "Oh, tell me about it.",
+      "q": []
+    },
+    {
+      "idx": 31,
+      "speaker": "Darren",
+      "en": "We call this arrangement 'Home Welcome'.",
+      "q": [
+        3
+      ]
+    },
+    {
+      "idx": 32,
+      "speaker": "Darren",
+      "en": "And we've still got a few places left at the moment.",
+      "q": []
+    },
+    {
+      "idx": 33,
+      "speaker": "Darren",
+      "en": "You pay 150 pounds per week and that includes breakfast, a packed lunch and dinner, as well as heating.",
+      "q": []
+    },
+    {
+      "idx": 34,
+      "speaker": "Woman",
+      "en": "Is there a contract?",
+      "q": []
+    },
+    {
+      "idx": 35,
+      "speaker": "Woman",
+      "en": "Do you have to stay for the whole year?",
+      "q": []
+    },
+    {
+      "idx": 36,
+      "speaker": "Darren",
+      "en": "No, it's flexible.",
+      "q": [
+        4
+      ]
+    },
+    {
+      "idx": 37,
+      "speaker": "Woman",
+      "en": "Hmm, it sounds perfect, but I'm not sure.",
+      "q": []
+    },
+    {
+      "idx": 38,
+      "speaker": "Woman",
+      "en": "I want to be a little more independent.",
+      "q": []
+    },
+    {
+      "idx": 39,
+      "speaker": "Woman",
+      "en": "Is there somewhere available off campus?",
+      "q": []
+    },
+    {
+      "idx": 40,
+      "speaker": "Darren",
+      "en": "Yes, you can rent a property in town privately.",
+      "q": []
+    },
+    {
+      "idx": 41,
+      "speaker": "Darren",
+      "en": "You might want to rent a room in a shared house.",
+      "q": []
+    },
+    {
+      "idx": 42,
+      "speaker": "Darren",
+      "en": "You'd have a room and a shared kitchen and bathroom with other tenants.",
+      "q": []
+    },
+    {
+      "idx": 43,
+      "speaker": "Woman",
+      "en": "What about if I don't want to share?",
+      "q": []
+    },
+    {
+      "idx": 44,
+      "speaker": "Darren",
+      "en": "You can get what we call a studio.",
+      "q": [
+        5
+      ]
+    },
+    {
+      "idx": 45,
+      "speaker": "Darren",
+      "en": "They are often relatively small, but they'll have everything you need.",
+      "q": []
+    },
+    {
+      "idx": 46,
+      "speaker": "Woman",
+      "en": "Right.",
+      "q": []
+    },
+    {
+      "idx": 47,
+      "speaker": "Woman",
+      "en": "How much would those two options be?",
+      "q": []
+    },
+    {
+      "idx": 48,
+      "speaker": "Darren",
+      "en": "Well, prices vary depending on which part of the town the property is in.",
+      "q": []
+    },
+    {
+      "idx": 49,
+      "speaker": "Darren",
+      "en": "Generally speaking, the cheapest is around 275 pounds a month for each student.",
+      "q": []
+    },
+    {
+      "idx": 50,
+      "speaker": "Woman",
+      "en": "Oh, that's not too bad.",
+      "q": []
+    },
+    {
+      "idx": 51,
+      "speaker": "Darren",
+      "en": "Yes, but it can also be up to 490 pounds, and you still have to pay all your other bills.",
+      "q": []
+    },
+    {
+      "idx": 52,
+      "speaker": "Woman",
+      "en": "What sort of amount would I be looking at for those?",
+      "q": []
+    },
+    {
+      "idx": 53,
+      "speaker": "Darren",
+      "en": "Last year, students were paying, on average, about 43 pounds per month for gas and electricity.",
+      "q": []
+    },
+    {
+      "idx": 54,
+      "speaker": "Darren",
+      "en": "This year, it would probably be somewhere in the region of 48 pounds.",
+      "q": [
+        6
+      ]
+    },
+    {
+      "idx": 55,
+      "speaker": "Woman",
+      "en": "That's a lot.",
+      "q": []
+    },
+    {
+      "idx": 56,
+      "speaker": "Darren",
+      "en": "Yes, they've gone up quite a bit.",
+      "q": []
+    },
+    {
+      "idx": 57,
+      "speaker": "Darren",
+      "en": "And on top of that, you have to pay for water, which would probably be around 9 pounds.",
+      "q": [
+        7
+      ]
+    },
+    {
+      "idx": 58,
+      "speaker": "Woman",
+      "en": "That didn't occur to me.",
+      "q": []
+    },
+    {
+      "idx": 59,
+      "speaker": "Woman",
+      "en": "And I guess I'd have to pay for transportation, too.",
+      "q": [
+        8
+      ]
+    },
+    {
+      "idx": 60,
+      "speaker": "Darren",
+      "en": "That's right.",
+      "q": []
+    },
+    {
+      "idx": 61,
+      "speaker": "Darren",
+      "en": "Most of these properties are quite a long way from the college.",
+      "q": []
+    },
+    {
+      "idx": 62,
+      "speaker": "Woman",
+      "en": "Oh, it just gets worse and worse.",
+      "q": []
+    },
+    {
+      "idx": 63,
+      "speaker": "Woman",
+      "en": "What's the minimum contract for this type of accommodation?",
+      "q": []
+    },
+    {
+      "idx": 64,
+      "speaker": "Darren",
+      "en": "Six months.",
+      "q": []
+    },
+    {
+      "idx": 65,
+      "speaker": "Darren",
+      "en": "And you have to pay a deposit upfront.",
+      "q": [
+        9
+      ]
+    },
+    {
+      "idx": 66,
+      "speaker": "Woman",
+      "en": "That's true.",
+      "q": []
+    },
+    {
+      "idx": 67,
+      "speaker": "Darren",
+      "en": "And you'd have to provide references.",
+      "q": [
+        10
+      ]
+    },
+    {
+      "idx": 68,
+      "speaker": "Darren",
+      "en": "They want two from someone in this country.",
+      "q": []
+    },
+    {
+      "idx": 69,
+      "speaker": "Woman",
+      "en": "I see.",
+      "q": []
+    },
+    {
+      "idx": 70,
+      "speaker": "Woman",
+      "en": "That's not a problem.",
+      "q": []
+    },
+    {
+      "idx": 71,
+      "speaker": "Darren",
+      "en": "If you prefer this accommodation, we can't find the property for you.",
+      "q": []
+    },
+    {
+      "idx": 72,
+      "speaker": "Darren",
+      "en": "You'd have to contact the real estate agent who manages the property for the owner.",
+      "q": []
+    },
+    {
+      "idx": 73,
+      "speaker": "Woman",
+      "en": "Right.",
+      "q": []
+    },
+    {
+      "idx": 74,
+      "speaker": "Woman",
+      "en": "Thanks.",
+      "q": []
+    },
+    {
+      "idx": 75,
+      "speaker": "Woman",
+      "en": "I'd like to see what's available privately.",
+      "q": []
+    },
+    {
+      "idx": 76,
+      "speaker": "Woman",
+      "en": "Could you give me the real estate agent details ...",
+      "q": []
+    }
+  ],
+  "analysis": {
+    "1": {
+      "answer": "3834",
+      "analysis": "听前预测：定位词为 £3276、en suite；提示信息为 £、per year，此处应填每年的住宿费用，且符合 en suite 条件。\n题目解析：定位词 3276 pounds 先出现，且搭配题干 standard 这一要求。接着往下听，听到数字 3834 先记录下来，随后又听到 with a small bathroom，刚好是题干 en suite 的同义替换，由此可确认答案为 3834。注意本题题干 en suite 这个表达较难，但是找到 en suite 并不是做题的必要条件，因为除数字 3276 之外，在本题范围内文中只提供了一个数字，记录下来即为正确答案。"
+    },
+    "2": {
+      "answer": "holidays/holiday",
+      "analysis": "听前预测：定位词为 36 weeks；提示词为 not、during，此处应填负向信息搭配的时间类名词或名词短语。\n题目解析：定位词 36 weeks 先出现，随后马上出现否定句，搭配符合预判的时间类信息 holidays，完全符合命题要求，因此可填写答案。"
+    },
+    "3": {
+      "answer": "Home Welcome",
+      "analysis": "听前预测：定位词为 family；提示词为 room，此处应填住宿类名词或名词短语。\n题目解析：定位词 families 出现较早，由 Darren 提及，随后女生提问想进一步了解情况，因此 Darren 继续补充说他们称这种安排为 Home Welcome，这符合预判答案方向。注意，听力答案大小写都可以，不会影响评分。"
+    },
+    "4": {
+      "answer": "flexible",
+      "analysis": "听前预测：定位词为 contract、arrangements；提示词为 are，此处词性无法准确预判，选取搭配合约、协议类信息填写。\n题目解析：定位词 contract 由女生提出，随后 Darren 回答 flexible，意为“灵活的”，与题干 arrangements are 搭配，意为“合约很灵活（不需要住一整年）”，符合命题要求。注意，表格题的表头信息一定不要漏读，有时会提供重要信息。"
+    },
+    "5": {
+      "answer": "studio",
+      "analysis": "听前预测：定位词为 private renting、shared house；提示词为 a，此处应填住宿类名词或名词短语。\n题目解析：定位词 rent a property in town privately 先出现，随后出现另一个定位词 shared house。此时不要听到一个名词就填写下来，注意等符合预判方向的信息。题干 shared house 被具体展开描述：有独立房间，但需要共享厨房和浴室。耐心听下去，可知 Darren 随后提及的 studio，才是和 shared house 相呼应的住宿类型。注意，做填空题时，不要盯着题干结构做题，做题的本质在于信息而非语法结构或语序。"
+    },
+    "6": {
+      "answer": "48",
+      "analysis": "听前预测：定位词为 gas and electricity；提示词为 £，此处应填每月燃气费和电费的金额总和。\n题目解析：定位词 gas and electricity 前出现的第一个数字 43 pounds 为去年的金额，继续往下听，听到强调今年的数据为 48 英镑。注意熟悉数字类考点常见的干扰形式：时间、态度、程度等。"
+    },
+    "7": {
+      "answer": "water",
+      "analysis": "听前预测：定位词为 £9；提示词为 gas and electricity，此处应填与燃气费、电费同类型的其他住宿相关开销项目。\n题目解析：上一题通过女生评价 “That's a lot.” 而结束。接下来，可以抓取符合本题预判的信息。先听到 water，符合预判，随后听到定位信息 £9，进一步确认答案。"
+    },
+    "8": {
+      "answer": "transportation",
+      "analysis": "听前预测：提示词为 gas and electricity，此处应填与燃气费、电费同类型的其他住宿相关开销项目。\n题目解析：上一题彻底结束后，开始抓听符合预判的信息。随后听到 transportation，符合预判，可以填写。本题最大的障碍可能是语境认知问题，没有该类生活经验的同学可能会觉得交通费和房租没有关系，故而不填。但房屋位置会决定交通成本，因此这也是一个需要考虑的租房因素。"
+    },
+    "9": {
+      "answer": "deposit",
+      "analysis": "听前预测：定位词为 6 months；提示词为 need，此处应填名词或名词短语。\n题目解析：定位词以 six months 的形式出现，接着出现 deposit 一词，该词意为“押金”，符合预判，可以填写。注意积累住宿场景相关词汇，避免听出却写不出的情况。"
+    },
+    "10": {
+      "answer": "references",
+      "analysis": "听前预测：定位词、提示词为 two，此处应填复数名词或中性名词复数短语。\n题目解析：上一题通过女生评价 “That's true.” 而结束。接下来，可以抓听符合预判的信息。先听到 references，符合预判，继而听到定位信息 two，进一步确认答案。本题的做题障碍可能在词汇和语境的认知方面上。其一，reference 是个多义词，结合上下文才能推出其在此意为“推荐信，介绍信”；其二，许多中国学生可能没有碰到过拿着介绍信租房的情况。因此，平时需注意总结听力考试所涉及的语境问题，强化同一类语境的横向梳理。"
+    }
+  },
+  "answers": {
+    "1": "3834",
+    "2": "holidays/holiday",
+    "3": "Home Welcome",
+    "4": "flexible",
+    "5": "studio",
+    "6": "48",
+    "7": "water",
+    "8": "transportation",
+    "9": "deposit",
+    "10": "references"
+  }
+}

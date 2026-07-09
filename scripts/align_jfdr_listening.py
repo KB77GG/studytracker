@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Force-align 9分达人听力6 transcripts to audio (local Mac only, never prod).
+"""Force-align 9分达人听力 transcripts to audio (local Mac only, never prod).
 
-Reads canonical merged transcripts from data/jfdr6/merged/test{N}_part{S}.json
-and audio from data/jfdr6/audio/jfdr6_test{N}_s{S}.mp3, producing
-data/jfdr6/aligned/jfdr6_test{N}_s{S}.json with one timestamped segment per
+Reads canonical merged transcripts from data/jfdr{book}/merged/test{N}_part{S}.json
+and audio from data/jfdr{book}/audio/jfdr{book}_test{N}_s{S}.mp3, producing
+data/jfdr{book}/aligned/jfdr{book}_test{N}_s{S}.json with one timestamped segment per
 transcript sentence (strict 1:1, same order/idx).
 
 Key difference from batch_align_ielts.py: sentences are already final
@@ -38,6 +38,16 @@ MERGED_DIR = PROJECT_ROOT / "data" / "jfdr6" / "merged"
 AUDIO_DIR = PROJECT_ROOT / "data" / "jfdr6" / "audio"
 ALIGNED_DIR = PROJECT_ROOT / "data" / "jfdr6" / "aligned"
 CACHE_DIR = PROJECT_ROOT / "data" / "jfdr6" / "whisper_cache"
+
+
+def configure_paths(book: int) -> Path:
+    global MERGED_DIR, AUDIO_DIR, ALIGNED_DIR, CACHE_DIR
+    jfdr_root = PROJECT_ROOT / "data" / f"jfdr{book}"
+    MERGED_DIR = jfdr_root / "merged"
+    AUDIO_DIR = jfdr_root / "audio"
+    ALIGNED_DIR = jfdr_root / "aligned"
+    CACHE_DIR = jfdr_root / "whisper_cache"
+    return jfdr_root
 
 
 class CachingWhisper:
@@ -89,13 +99,13 @@ class CachingWhisper:
         return slim
 
 
-def iter_exercises() -> list[dict]:
+def iter_exercises(book: int) -> list[dict]:
     items = []
     for path in sorted(MERGED_DIR.glob("test*_part*.json")):
         merged = json.loads(path.read_text(encoding="utf-8"))
         test_no = int(merged["test"])
         part_no = int(merged["part"])
-        exercise_id = f"jfdr6_test{test_no}_s{part_no}"
+        exercise_id = f"jfdr{book}_test{test_no}_s{part_no}"
         items.append(
             {
                 "id": exercise_id,
@@ -125,6 +135,7 @@ def validate_segments(segments: list[dict], sentence_count: int, duration: float
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--book", type=int, default=6, help="9分达人听力 book number")
     parser.add_argument("--model", default="small",
                         help="whisper model; 'small' is the minimum that reliably "
                              "reaches the end of IELTS recordings")
@@ -136,17 +147,18 @@ def main() -> None:
                         help="lcs (global monotonic, robust to sparse ASR) or greedy "
                              "(batch_align_ielts anchor-window)")
     args = parser.parse_args()
+    jfdr_root = configure_paths(args.book)
 
     model = CachingWhisper(args.model)
 
     if args.prewarm:
-        for audio in sorted(AUDIO_DIR.glob("jfdr6_*.mp3")):
+        for audio in sorted(AUDIO_DIR.glob(f"jfdr{args.book}_*.mp3")):
             print(f"prewarm {audio.name}")
             model.transcribe(str(audio), word_timestamps=True, language="en", verbose=False)
         print("prewarm done")
         return
 
-    exercises = iter_exercises()
+    exercises = iter_exercises(args.book)
     if args.only:
         wanted = {x.strip() for x in args.only.split(",") if x.strip()}
         exercises = [e for e in exercises if e["id"] in wanted]
@@ -215,7 +227,7 @@ def main() -> None:
         )
         report["processed"].append(entry["id"])
 
-    report_path = PROJECT_ROOT / "data" / "jfdr6" / "align_report.json"
+    report_path = jfdr_root / "align_report.json"
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({k: (len(v) if isinstance(v, list) else v) for k, v in report.items()}, ensure_ascii=False))
     print(f"report: {report_path}")

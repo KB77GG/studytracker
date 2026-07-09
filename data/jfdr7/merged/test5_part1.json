@@ -1,0 +1,630 @@
+{
+  "test": 5,
+  "part": 1,
+  "title": "Employment Agency: Possible Jobs",
+  "groups": [
+    {
+      "type": 5,
+      "title": "Employment Agency: Possible Jobs",
+      "question_title": "",
+      "desc": "Questions 1-6\nComplete the notes below.\nWrite ONE WORD AND/OR A NUMBER for each answer.",
+      "collect": "<b>First Job</b>\n• Job title: $1$\n• Type of magazine: weekly $2$ magazine\n• Hours per week: $3$ hours\n• Starting salary: £$4$ a month\n\n<b>Second Job</b>\n• Job title: $5$\n• Hours per week: 45 hours\n• Starting salary: £7200 a month\n• Source of information: $6$",
+      "table": null,
+      "collect_option": {
+        "title": "",
+        "list": null
+      },
+      "questions": [
+        {
+          "number": 1,
+          "title": "Job title: 【   】",
+          "options": []
+        },
+        {
+          "number": 2,
+          "title": "Type of magazine: weekly 【   】 magazine",
+          "options": []
+        },
+        {
+          "number": 3,
+          "title": "Hours per week: 【   】 hours",
+          "options": []
+        },
+        {
+          "number": 4,
+          "title": "Starting salary: £【   】 a month",
+          "options": []
+        },
+        {
+          "number": 5,
+          "title": "Job title: 【   】",
+          "options": []
+        },
+        {
+          "number": 6,
+          "title": "Source of information: 【   】",
+          "options": []
+        }
+      ],
+      "needs_image": false,
+      "image_pages": []
+    },
+    {
+      "type": 8,
+      "title": "",
+      "question_title": "What is the man's attitude towards the position of writer in the following different fields?",
+      "desc": "Questions 7-10\nWhat is the man's attitude towards the position of writer in the following different fields?\nWrite the correct letter, A, B or C, next to Questions 7-10.",
+      "collect": "",
+      "table": null,
+      "collect_option": {
+        "title": "Attitudes",
+        "list": [
+          {
+            "title": "A",
+            "content": "very interested in"
+          },
+          {
+            "title": "B",
+            "content": "slightly interested in"
+          },
+          {
+            "title": "C",
+            "content": "not interested in"
+          }
+        ]
+      },
+      "questions": [
+        {
+          "number": 7,
+          "title": "Sports",
+          "options": []
+        },
+        {
+          "number": 8,
+          "title": "Entertainment",
+          "options": []
+        },
+        {
+          "number": 9,
+          "title": "Soap drama",
+          "options": []
+        },
+        {
+          "number": 10,
+          "title": "Business Economy magazine",
+          "options": []
+        }
+      ],
+      "needs_image": false,
+      "image_pages": []
+    }
+  ],
+  "transcript": [
+    {
+      "idx": 0,
+      "speaker": "Woman",
+      "en": "Good morning.",
+      "q": []
+    },
+    {
+      "idx": 1,
+      "speaker": "Woman",
+      "en": "How may I help you?",
+      "q": []
+    },
+    {
+      "idx": 2,
+      "speaker": "Man",
+      "en": "Good morning.",
+      "q": []
+    },
+    {
+      "idx": 3,
+      "speaker": "Man",
+      "en": "We spoke on the phone last week, and I'm ringing to get more details about the job.",
+      "q": []
+    },
+    {
+      "idx": 4,
+      "speaker": "Woman",
+      "en": "That's right.",
+      "q": []
+    },
+    {
+      "idx": 5,
+      "speaker": "Woman",
+      "en": "Thank you for sending in your CV.",
+      "q": []
+    },
+    {
+      "idx": 6,
+      "speaker": "Woman",
+      "en": "We've carefully looked at it, and I think we have several jobs that might suit you.",
+      "q": []
+    },
+    {
+      "idx": 7,
+      "speaker": "Man",
+      "en": "That's great!",
+      "q": []
+    },
+    {
+      "idx": 8,
+      "speaker": "Woman",
+      "en": "The first one is in a magazine based in North London.",
+      "q": []
+    },
+    {
+      "idx": 9,
+      "speaker": "Woman",
+      "en": "They're looking for a reporter.",
+      "q": [
+        1
+      ]
+    },
+    {
+      "idx": 10,
+      "speaker": "Man",
+      "en": "What sort of magazine is it?",
+      "q": []
+    },
+    {
+      "idx": 11,
+      "speaker": "Woman",
+      "en": "They're called Home Solutions, which publishes articles on housing every week, and they want to find someone responsible for collecting the latest news and writing relevant articles.",
+      "q": [
+        2
+      ]
+    },
+    {
+      "idx": 12,
+      "speaker": "Man",
+      "en": "What are the hours of work?",
+      "q": []
+    },
+    {
+      "idx": 13,
+      "speaker": "Woman",
+      "en": "Well, you will be expected to work forty hours a week, but there may be opportunities to do overtime during busy periods.",
+      "q": [
+        3
+      ]
+    },
+    {
+      "idx": 14,
+      "speaker": "Woman",
+      "en": "For example, some may work more than fifty hours a week and get extra pay.",
+      "q": []
+    },
+    {
+      "idx": 15,
+      "speaker": "Woman",
+      "en": "But you're not required to do this.",
+      "q": []
+    },
+    {
+      "idx": 16,
+      "speaker": "Man",
+      "en": "That's reasonable.",
+      "q": []
+    },
+    {
+      "idx": 17,
+      "speaker": "Man",
+      "en": "Do you know what the rates of pay are?",
+      "q": []
+    },
+    {
+      "idx": 18,
+      "speaker": "Woman",
+      "en": "Yes.",
+      "q": []
+    },
+    {
+      "idx": 19,
+      "speaker": "Woman",
+      "en": "It says you'll get a monthly pay of 7000 pounds for the first six months.",
+      "q": [
+        4
+      ]
+    },
+    {
+      "idx": 20,
+      "speaker": "Woman",
+      "en": "And after the probationary period, you'll be eligible for a salary of more than that, maybe 7500 pounds or more.",
+      "q": []
+    },
+    {
+      "idx": 21,
+      "speaker": "Man",
+      "en": "That's good.",
+      "q": []
+    },
+    {
+      "idx": 22,
+      "speaker": "Woman",
+      "en": "So, is that something that might interest you?",
+      "q": []
+    },
+    {
+      "idx": 23,
+      "speaker": "Man",
+      "en": "It is, yes.",
+      "q": []
+    },
+    {
+      "idx": 24,
+      "speaker": "Man",
+      "en": "The only thing is, you say they are in North London, so it would be a pretty long commute for me.",
+      "q": []
+    },
+    {
+      "idx": 25,
+      "speaker": "Woman",
+      "en": "In that case, the second position might suit you better regarding location.",
+      "q": []
+    },
+    {
+      "idx": 26,
+      "speaker": "Woman",
+      "en": "That's a researcher for an electronic engineering company in South London.",
+      "q": [
+        5
+      ]
+    },
+    {
+      "idx": 27,
+      "speaker": "Man",
+      "en": "Yes, that would be a lot closer.",
+      "q": []
+    },
+    {
+      "idx": 28,
+      "speaker": "Woman",
+      "en": "Your CV shows you have relevant working experience in this field.",
+      "q": []
+    },
+    {
+      "idx": 29,
+      "speaker": "Man",
+      "en": "Yes, I worked in the office of a computer engineering company for two years.",
+      "q": []
+    },
+    {
+      "idx": 30,
+      "speaker": "Man",
+      "en": "What about the working hours?",
+      "q": []
+    },
+    {
+      "idx": 31,
+      "speaker": "Woman",
+      "en": "For this job, you'll have to work 45 hours a week and the starting salary is 7200 pounds for the six-month probationary period.",
+      "q": []
+    },
+    {
+      "idx": 32,
+      "speaker": "Man",
+      "en": "That should be nice.",
+      "q": []
+    },
+    {
+      "idx": 33,
+      "speaker": "Woman",
+      "en": "I can arrange for you an interview if you're interested.",
+      "q": []
+    },
+    {
+      "idx": 34,
+      "speaker": "Woman",
+      "en": "But before that, may I ask where you heard about us?",
+      "q": []
+    },
+    {
+      "idx": 35,
+      "speaker": "Woman",
+      "en": "Was it in an advert or did your friend tell you?",
+      "q": []
+    },
+    {
+      "idx": 36,
+      "speaker": "Man",
+      "en": "Neither.",
+      "q": []
+    },
+    {
+      "idx": 37,
+      "speaker": "Man",
+      "en": "It was a website.",
+      "q": [
+        6
+      ]
+    },
+    {
+      "idx": 38,
+      "speaker": "Man",
+      "en": "Then I just got your number from the phone book.",
+      "q": []
+    },
+    {
+      "idx": 39,
+      "speaker": "Woman",
+      "en": "Oh, right.",
+      "q": []
+    },
+    {
+      "idx": 40,
+      "speaker": "Woman",
+      "en": "Apart from full-time jobs, we have some part-time work that might suit you.",
+      "q": []
+    },
+    {
+      "idx": 41,
+      "speaker": "Woman",
+      "en": "Here several magazines are recruiting part-time writers.",
+      "q": []
+    },
+    {
+      "idx": 42,
+      "speaker": "Woman",
+      "en": "Are you interested?",
+      "q": []
+    },
+    {
+      "idx": 43,
+      "speaker": "Man",
+      "en": "What kind of writer exactly?",
+      "q": []
+    },
+    {
+      "idx": 44,
+      "speaker": "Man",
+      "en": "I mean, what types of articles should I write about?",
+      "q": []
+    },
+    {
+      "idx": 45,
+      "speaker": "Woman",
+      "en": "Well, the first one is to do with sports reports.",
+      "q": []
+    },
+    {
+      "idx": 46,
+      "speaker": "Woman",
+      "en": "For this, you're expected to write sports articles twice weekly.",
+      "q": []
+    },
+    {
+      "idx": 47,
+      "speaker": "Man",
+      "en": "Well, I love sports.",
+      "q": []
+    },
+    {
+      "idx": 48,
+      "speaker": "Man",
+      "en": "I'm a football fan.",
+      "q": []
+    },
+    {
+      "idx": 49,
+      "speaker": "Man",
+      "en": "But as far as writing is concerned, I'm not entirely keen on that.",
+      "q": []
+    },
+    {
+      "idx": 50,
+      "speaker": "Man",
+      "en": "I think I'll rule it out.",
+      "q": [
+        7
+      ]
+    },
+    {
+      "idx": 51,
+      "speaker": "Woman",
+      "en": "OK.",
+      "q": []
+    },
+    {
+      "idx": 52,
+      "speaker": "Woman",
+      "en": "Then how about writing something for entertainment?",
+      "q": []
+    },
+    {
+      "idx": 53,
+      "speaker": "Woman",
+      "en": "Does it appeal to you?",
+      "q": []
+    },
+    {
+      "idx": 54,
+      "speaker": "Man",
+      "en": "Entertainment is an exciting topic.",
+      "q": []
+    },
+    {
+      "idx": 55,
+      "speaker": "Man",
+      "en": "I like reading news or articles in this category, but I'm not sure if I should write something about it.",
+      "q": []
+    },
+    {
+      "idx": 56,
+      "speaker": "Man",
+      "en": "Anyway, I'll think about that.",
+      "q": [
+        8
+      ]
+    },
+    {
+      "idx": 57,
+      "speaker": "Man",
+      "en": "Could you give me more details?",
+      "q": []
+    },
+    {
+      "idx": 58,
+      "speaker": "Woman",
+      "en": "OK, I've got your email, and I will send the details to you later.",
+      "q": []
+    },
+    {
+      "idx": 59,
+      "speaker": "Man",
+      "en": "Thanks.",
+      "q": []
+    },
+    {
+      "idx": 60,
+      "speaker": "Woman",
+      "en": "And the third one is writing reviews for soap dramas.",
+      "q": []
+    },
+    {
+      "idx": 61,
+      "speaker": "Man",
+      "en": "Oh, soap drama is my favourite.",
+      "q": [
+        9
+      ]
+    },
+    {
+      "idx": 62,
+      "speaker": "Man",
+      "en": "I worked as a freelance writer in this field three years ago.",
+      "q": []
+    },
+    {
+      "idx": 63,
+      "speaker": "Man",
+      "en": "I think it's pretty worthwhile to give my own opinions and recommendations to the audience.",
+      "q": [
+        9
+      ]
+    },
+    {
+      "idx": 64,
+      "speaker": "Woman",
+      "en": "That's good.",
+      "q": []
+    },
+    {
+      "idx": 65,
+      "speaker": "Woman",
+      "en": "And the last one is writing articles for a business economy magazine.",
+      "q": []
+    },
+    {
+      "idx": 66,
+      "speaker": "Man",
+      "en": "I'm unfamiliar with this field, so I think it might not be easy.",
+      "q": []
+    },
+    {
+      "idx": 67,
+      "speaker": "Woman",
+      "en": "Don't worry too much.",
+      "q": []
+    },
+    {
+      "idx": 68,
+      "speaker": "Woman",
+      "en": "Experience is not essential for this job.",
+      "q": []
+    },
+    {
+      "idx": 69,
+      "speaker": "Woman",
+      "en": "They've got a training session for every recruit.",
+      "q": []
+    },
+    {
+      "idx": 70,
+      "speaker": "Man",
+      "en": "That sounds not too bad.",
+      "q": [
+        10
+      ]
+    },
+    {
+      "idx": 71,
+      "speaker": "Woman",
+      "en": "OK, would you like me to send you the pamphlet so that you can learn more about it?",
+      "q": []
+    },
+    {
+      "idx": 72,
+      "speaker": "Man",
+      "en": "That will be nice.",
+      "q": []
+    },
+    {
+      "idx": 73,
+      "speaker": "Woman",
+      "en": "OK, that's it.",
+      "q": []
+    },
+    {
+      "idx": 74,
+      "speaker": "Woman",
+      "en": "I'll send you all the information later and ...",
+      "q": []
+    }
+  ],
+  "analysis": {
+    "1": {
+      "answer": "reporter",
+      "analysis": "听前预测：定位词为 first job，提示词为 job title，此处应填职业类名词。\n题目解析：本题作为开篇第一题，定位难度不大。在女士和男士两人相互介绍后，听到“The first one is ...”，提示答案即将出现，准备抓取。接着听到职业类词汇 reporter，记录下来即可。本题无干扰信息，难度不大。"
+    },
+    "2": {
+      "answer": "housing",
+      "analysis": "听前预测：定位词为 magazine，提示词为 type、weekly、magazine，此处应填形容词或名词。\n题目解析：上一题结束后，通过男士提问“What sort of magazine is it?”定位到该题。女士回答“They're called Home Solutions, which publishes articles on housing every week ...”，其中 every week 对应题干的 weekly，housing 说明该杂志类型为 housing。注意，原文中的 Home Solutions 是杂志的名称而非类型，并且其也不符合题目的字数要求，因此不能填写。"
+    },
+    "3": {
+      "answer": "40/forty",
+      "analysis": "听前预测：提示词为 per week、hours，此处应填数字。\n题目解析：上一题结束后，通过男士提问“What are the hours of work?”定位到该题。女士回答“... you will be expected to work forty hours a week ...”，forty 符合题干要求，记录下来即可。注意，女士随后提到“... there may be opportunities to do overtime ... some may work more than fifty hours a week ... But you're not required to do this.”，可以判断 50 多个小时是有些加班的人的工作时间，不是必须的，属于干扰信息。"
+    },
+    "4": {
+      "answer": "7000",
+      "analysis": "听前预测：定位词为 salary，提示词为 starting、£、a month，此处应填数字。\n题目解析：上一题结束后，通过男士提问“Do you know what the rates of pay are?”定位到该题。女士回答“... you'll get a monthly pay of 7000 pounds for the first six months.”，其中 monthly 对应题干的 a month，for the first six months 对应 starting，可知 7000 为正确答案。注意，女士随后提到的 7500 pounds 是试用期后可能拿到的工资，属于干扰信息。"
+    },
+    "5": {
+      "answer": "researcher",
+      "analysis": "听前预测：定位词为 second job，提示词为 job title，此处应填职业类名词。\n题目解析：上一题结束后，原文提到 second position，提示答案即将出现，准备抓取。接着听到职业类词汇 researcher，记录下来即可。本题无干扰信息，难度不大。"
+    },
+    "6": {
+      "answer": "website",
+      "analysis": "听前预测：提示词为 source of information，此处应填名词，表示信息来源。\n题目解析：题目已给信息 45 hours、7200 pounds 出现后，通过女士提问“... may I ask where you heard about us?”定位到该题。女士提供的两个选择“Was it in an advert or did your friend tell you?”都被男士否定了“Neither”。男士回答“It was a website.”，可知 website 为正确答案。注意，随后出现的 phone book 是男士找电话号码的来源，不符合题干要求。"
+    },
+    "7": {
+      "answer": "C",
+      "analysis": "听前预测：定位词为 sports。\n题目解析：这组配对题定位难度不大，题目信息在原文皆原词重现。考生在审题时需注意三个选项的区别（very、slightly、not），在听的过程中重点抓取相关信息并对应各个选项即可。本题定位词 sports 由女士提出，定位之后，男士提到“I love sports. I'm a football fan.”。注意，句中男士表示感兴趣的是运动本身，而非写作，因此还不能确认答案。男士接着提到“But as far as writing is concerned, I'm not entirely keen on that. I think I'll rule it out.”，其中 not keen on、rule it out 可以判断男士对运动领域的写作并不感兴趣，因此 C 选项为正确答案。"
+    },
+    "8": {
+      "answer": "B",
+      "analysis": "听前预测：定位词为 entertainment。\n题目解析：上一题结束后，通过女士提问 entertainment 定位到该题。男士回答“Entertainment is an exciting topic ... but I'm not sure if I should write something about it... I'll think about that.”，其中 not sure 和“I'll think about that.”表明他还不确定，要考虑一下，可以判断他是有点儿感兴趣的，因此 B 选项为正确答案。"
+    },
+    "9": {
+      "answer": "A",
+      "analysis": "听前预测：定位词为 soap drama。\n题目解析：通过女士提到的“... the third one is writing reviews for soap dramas.”定位到该题。男士回答“... soap drama is my favourite ... I think it's pretty worthwhile to give my own opinions and recommendations to the audience.”，其中 favourite 和 worthwhile 可以判断他对此非常感兴趣，因此 A 选项为正确答案。"
+    },
+    "10": {
+      "answer": "B",
+      "analysis": "听前预测：定位词为 business economy magazine。\n题目解析：定位词 business economy magazine 原词重现后，男士回答“I'm unfamiliar with this field ... it might not be easy”，可知他的态度是偏否定的。接着女士进行了劝说“Don't worry too much ...”，男士随后回应“That sounds not too bad.”，说明他觉得还不错。之后女士说给他发宣传册了解更多细节，他也表示同意，可以判断他也有点儿感兴趣，因此 B 选项为正确答案。"
+    }
+  },
+  "answers": {
+    "1": "reporter",
+    "2": "housing",
+    "3": "40/forty",
+    "4": "7000",
+    "5": "researcher",
+    "6": "website",
+    "7": "C",
+    "8": "B",
+    "9": "A",
+    "10": "B"
+  }
+}

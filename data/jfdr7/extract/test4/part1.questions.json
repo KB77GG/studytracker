@@ -1,0 +1,40 @@
+{
+  "test": 4,
+  "part": 1,
+  "groups": [
+    {
+      "type": 3,
+      "title": "Student Accommodation",
+      "question_title": "",
+      "desc": "Questions 1-10\nComplete the table below.\nWrite NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.",
+      "collect": "",
+      "table": {
+        "title": "Student Accommodation",
+        "content": [
+          ["<b>Type</b>", "<b>Cost</b>", "<b>Contract</b>"],
+          ["College: Single room", "Standard: £3276 per year\nen suite: £$1$ per year\n(meals are not included)", "36 weeks\n(Rooms are not available during the $2$)"],
+          ["$3$:\nRoom with a family", "£150 per week - all inclusive", "Arrangements are $4$"],
+          ["Private renting:\nRoom in a shared house\nor a $5$", "From £275 to £490 per month\nAdditional costs (for this year)\n• gas and electricity:\n  approximately £$6$\n  per month\n• $7$: £9\n• $8$", "6 months\nNeed\n• $9$\n• two $10$"]
+        ]
+      },
+      "collect_option": {
+        "title": "",
+        "list": null
+      },
+      "questions": [
+        {"number": 1, "title": "en suite: £【   】 per year", "options": []},
+        {"number": 2, "title": "during the 【   】", "options": []},
+        {"number": 3, "title": "【   】: Room with a family", "options": []},
+        {"number": 4, "title": "Arrangements are 【   】", "options": []},
+        {"number": 5, "title": "Room in a shared house or a 【   】", "options": []},
+        {"number": 6, "title": "approximately £【   】 per month", "options": []},
+        {"number": 7, "title": "【   】: £9", "options": []},
+        {"number": 8, "title": "【   】", "options": []},
+        {"number": 9, "title": "Need: 【   】", "options": []},
+        {"number": 10, "title": "two 【   】", "options": []}
+      ],
+      "needs_image": false,
+      "image_pages": []
+    }
+  ]
+}

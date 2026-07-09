@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""9分达人听力6 数据流水线：merge（合并+硬校验）与 build（组装 static JSON）。
+"""9分达人听力数据流水线：merge（合并+硬校验）与 build（组装 static JSON）。
 
-数据流（详见 data/jfdr6/extract/SCHEMA.md）：
+数据流（详见 data/jfdr{book}/extract/SCHEMA.md）：
   extract/test{N}/part{S}.questions.json   ┐
   extract/test{N}/part{S}.transcript.jsonl ├─ merge ─> merged/test{N}_part{S}.json
   extract/test{N}/part{S}.analysis.json    │          + review/test{N}.md（人工校对单）
   extract/answer_key.json                  ┘
-  merged + aligned/ + translations/ ── build ─> static/listening_tests/jfdr6_test{N}.json
-                                              + static/listening/jfdr6_test{N}_s{S}.json + mp3
+  merged + aligned/ + translations/ ── build ─> static/listening_tests/jfdr{book}_test{N}.json
+                                              + static/listening/jfdr{book}_test{N}_s{S}.json + mp3
 
 Usage:
-    python scripts/build_jfdr6_listening.py merge [--test N]
-    python scripts/build_jfdr6_listening.py build [--test N]
+    python scripts/build_jfdr6_listening.py merge [--book B] [--test N]
+    python scripts/build_jfdr6_listening.py build [--book B] [--test N]
 """
 
 from __future__ import annotations
@@ -25,6 +25,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from api.listening_series import parse_intensive_id, parse_test_id  # noqa: E402
+
 JFDR_ROOT = PROJECT_ROOT / "data" / "jfdr6"
 EXTRACT_DIR = JFDR_ROOT / "extract"
 MERGED_DIR = JFDR_ROOT / "merged"
@@ -36,6 +40,34 @@ LISTENING_TESTS_DIR = PROJECT_ROOT / "static" / "listening_tests"
 LISTENING_DIR = PROJECT_ROOT / "static" / "listening"
 
 PLACEHOLDER_RE = re.compile(r"\$(\d+)\$")
+
+
+def configure_paths(book: int) -> None:
+    global JFDR_ROOT, EXTRACT_DIR, MERGED_DIR, REVIEW_DIR
+    global ALIGNED_DIR, TRANSLATIONS_DIR, AUDIO_DIR
+    JFDR_ROOT = PROJECT_ROOT / "data" / f"jfdr{book}"
+    EXTRACT_DIR = JFDR_ROOT / "extract"
+    MERGED_DIR = JFDR_ROOT / "merged"
+    REVIEW_DIR = JFDR_ROOT / "review"
+    ALIGNED_DIR = JFDR_ROOT / "aligned"
+    TRANSLATIONS_DIR = JFDR_ROOT / "translations"
+    AUDIO_DIR = JFDR_ROOT / "audio"
+
+
+def _test_title(book: int, test_no: int) -> str:
+    test_id = f"jfdr{book}_test{test_no}"
+    info = parse_test_id(test_id)
+    if not info:
+        raise SystemExit(f"cannot parse listening test id: {test_id}")
+    return info["title"]
+
+
+def _intensive_title(book: int, test_no: int, part_no: int) -> str:
+    exercise_id = f"jfdr{book}_test{test_no}_s{part_no}"
+    info = parse_intensive_id(exercise_id)
+    if not info:
+        raise SystemExit(f"cannot parse intensive id: {exercise_id}")
+    return info["title"]
 
 # 与 api/text_utils.py 的判分归一化保持一致的宽松比较（仅用于双源答案比对）
 def _norm_answer(value: str) -> str:
@@ -266,11 +298,11 @@ def _expand_answer_alternatives(raw: str) -> list[str]:
     return out or [raw]
 
 
-def build_test(test_no: int) -> None:
+def build_test(test_no: int, book: int) -> None:
     sections = []
     for part_no in (1, 2, 3, 4):
         merged = _load_json(MERGED_DIR / f"test{test_no}_part{part_no}.json")
-        exercise_id = f"jfdr6_test{test_no}_s{part_no}"
+        exercise_id = f"jfdr{book}_test{test_no}_s{part_no}"
         aligned = _load_json(ALIGNED_DIR / f"{exercise_id}.json")
         segments = aligned["segments"]
         translations_path = TRANSLATIONS_DIR / f"test{test_no}_part{part_no}.json"
@@ -388,11 +420,11 @@ def build_test(test_no: int) -> None:
             })
         intensive_payload = {
             "id": exercise_id,
-            "title": f"9分达人听力6 Test {test_no} Part {part_no}",
+            "title": _intensive_title(book, test_no, part_no),
             "audio": f"{exercise_id}.mp3",
             "source": {
-                "provider": "jfdr6_pipeline",
-                "book": "《9分达人雅思听力真题还原及解析6》",
+                "provider": f"jfdr{book}_pipeline",
+                "book": f"《9分达人雅思听力真题还原及解析{book}》",
                 "generated_at": datetime.now(timezone.utc).isoformat(),
             },
             "parts": [{"name": f"Part {part_no}", "segments": intensive_segments}],
@@ -407,14 +439,14 @@ def build_test(test_no: int) -> None:
             shutil.copy2(src_mp3, dst_mp3)
 
     test_payload = {
-        "id": f"jfdr6_test{test_no}",
-        "title": f"9分达人听力6 Test {test_no} Listening",
-        "source": "《9分达人雅思听力真题还原及解析6》",
+        "id": f"jfdr{book}_test{test_no}",
+        "title": _test_title(book, test_no),
+        "source": f"《9分达人雅思听力真题还原及解析{book}》",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "sections": sections,
     }
     LISTENING_TESTS_DIR.mkdir(parents=True, exist_ok=True)
-    out = LISTENING_TESTS_DIR / f"jfdr6_test{test_no}.json"
+    out = LISTENING_TESTS_DIR / f"jfdr{book}_test{test_no}.json"
     out.write_text(json.dumps(test_payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"build -> {out.relative_to(PROJECT_ROOT)}")
 
@@ -448,23 +480,26 @@ def _selfcheck_test(payload: dict) -> None:
     print("selfcheck: OK")
 
 
-def cmd_build(tests: list[int]) -> int:
+def cmd_build(tests: list[int], book: int) -> int:
     for test_no in tests:
-        build_test(test_no)
+        build_test(test_no, book)
     return 0
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["merge", "build"])
-    parser.add_argument("--test", type=int, help="只处理某一套 (1-6)")
+    parser.add_argument("--book", type=int, default=6, help="9分达人听力 book number")
+    parser.add_argument("--tests", type=int, default=6, help="number of tests to process")
+    parser.add_argument("--test", type=int, help="只处理某一套")
     args = parser.parse_args()
+    configure_paths(args.book)
 
-    tests = [args.test] if args.test else [1, 2, 3, 4, 5, 6]
+    tests = [args.test] if args.test else list(range(1, args.tests + 1))
     if args.command == "merge":
         sys.exit(cmd_merge(tests))
     else:
-        sys.exit(cmd_build(tests))
+        sys.exit(cmd_build(tests, args.book))
 
 
 if __name__ == "__main__":

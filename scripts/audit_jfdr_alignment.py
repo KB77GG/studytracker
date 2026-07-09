@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Per-segment confidence audit for jfdr6 forced alignment.
+"""Per-segment confidence audit for jfdr forced alignment.
 
 For each aligned segment, check whether its leading content words actually
 appear in the whisper word stream within a window around the segment's
@@ -8,7 +8,7 @@ wrong audio position). Prints a per-section summary + the specific drifted
 segments so we can decide fixes precisely.
 
 Usage:
-    .venv/bin/python scripts/audit_jfdr_alignment.py [--only jfdr6_test1_s1] [--model small]
+    .venv/bin/python scripts/audit_jfdr_alignment.py [--book 6] [--only jfdr6_test1_s1] [--model small]
 """
 
 from __future__ import annotations
@@ -25,6 +25,13 @@ CACHE_DIR = PROJECT_ROOT / "data" / "jfdr6" / "whisper_cache"
 STOP = {"the", "a", "an", "to", "of", "and", "is", "it", "i", "you", "in", "for",
         "s", "m", "re", "ll", "t", "that", "this", "on", "at", "so", "we", "he",
         "she", "they", "well", "oh", "ok", "okay", "yes", "no", "um", "uh"}
+
+
+def configure_paths(book: int) -> None:
+    global ALIGNED_DIR, CACHE_DIR
+    jfdr_root = PROJECT_ROOT / "data" / f"jfdr{book}"
+    ALIGNED_DIR = jfdr_root / "aligned"
+    CACHE_DIR = jfdr_root / "whisper_cache"
 
 
 def norm(text: str) -> list[str]:
@@ -81,12 +88,14 @@ def audit(exercise_id: str, model: str) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--book", type=int, default=6, help="9分达人听力 book number")
     parser.add_argument("--only")
     parser.add_argument("--model", default="small")
     args = parser.parse_args()
+    configure_paths(args.book)
 
     ids = ([args.only] if args.only
-           else [p.stem for p in sorted(ALIGNED_DIR.glob("jfdr6_*.json"))])
+           else [p.stem for p in sorted(ALIGNED_DIR.glob(f"jfdr{args.book}_*.json"))])
     for exercise_id in ids:
         r = audit(exercise_id, args.model)
         print(f"\n{r['id']}: confidence {r['confidence']} "
