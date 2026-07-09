@@ -165,6 +165,55 @@
   .page-head { align-items: flex-start; flex-direction: column; }
   .tests { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+.listening-collection-nav {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 22px;
+  overflow-x: auto;
+}
+.listening-collection-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 9px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: #fff;
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+.listening-collection-nav a:hover {
+  border-color: var(--brand-light);
+  color: var(--brand-dark);
+}
+.listening-collection-nav span {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+.listening-collection {
+  scroll-margin-top: 18px;
+  margin-bottom: 34px;
+}
+.listening-collection__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 0 14px;
+}
+.listening-collection__header h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: var(--fs-lg);
+}
+.listening-collection__header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
 </style>
 {% include "listening/_library_styles.html" %}
 </head>
@@ -175,7 +224,7 @@
       <p class="listening-library__eyebrow">听力 / 机经</p>
       <h1 class="listening-library__title">听力机经练习</h1>
       {% if catalog %}
-      <p class="listening-library__summary">{{ catalog.book_count }} 套机经卡片 · {{ catalog.part_count }} 个 Part · 本地音频已接入 · 按原站机经编号排序，编号可能不连续</p>
+      <p class="listening-library__summary">{{ catalog.collection_count|default(1) }} 个目录 · {{ catalog.part_count }} 个练习 · 本地音频已接入</p>
       {% endif %}
     </div>
     {% if current_user.is_authenticated %}
@@ -191,32 +240,46 @@
   {% if not books %}
   <section class="listening-library__empty">还没有生成机经数据。请先运行 build 脚本。</section>
   {% else %}
-  <section class="listening-book-grid">
-    {% for book in books %}
-    <article class="listening-book-card">
-      <header class="listening-book-card__header">
-        <span class="listening-book-card__label">机经</span>
-        <span class="listening-book-card__number">{{ book.in_book }}</span>
+    {% set collections = catalog.collections|default([{"id": "idictation", "title": "听力机经", "part_count": catalog.part_count}]) %}
+    <nav class="listening-collection-nav" aria-label="机经目录">
+      {% for collection in collections %}
+      <a href="#collection-{{ collection.id }}">{{ collection.title }} <span>{{ collection.part_count }} 个练习</span></a>
+      {% endfor %}
+    </nav>
+    {% for collection in collections %}
+    <section class="listening-collection" id="collection-{{ collection.id }}">
+      <header class="listening-collection__header">
+        <h2>{{ collection.title }}</h2>
+        <p>{{ collection.test_count|default(collection.book_count) }} 组 · {{ collection.part_count }} 个练习</p>
       </header>
-      <div class="listening-test-grid">
-        {% for test in book.tests %}
-        <section class="listening-jijing-test">
-          <div class="listening-jijing-test__title">{{ test.test_name }}</div>
-          {% for part in test.parts %}
-          <a class="listening-jijing-test__part{% if part.practice_status %} listening-jijing-test__part--done{% endif %}" href="{{ url_for('listening_jijing_part', part_id=part.id) }}">
-            <span>{{ part.part_title }}</span>
-            <span class="listening-jijing-test__meta">
-              {{ part.question_name }}
-              {% if part.practice_status %}<br><strong>已刷 · {{ part.practice_status.accuracy }}%</strong>{% endif %}
-            </span>
-          </a>
-          {% endfor %}
-        </section>
+      <div class="listening-book-grid">
+        {% for book in books if book.get("collection", "idictation") == collection.id %}
+        <article class="listening-book-card">
+          <header class="listening-book-card__header">
+            <span class="listening-book-card__label">{{ book.get("label", "机经") }}</span>
+            <span class="listening-book-card__number">{{ book.in_book }}</span>
+          </header>
+          <div class="listening-test-grid">
+            {% for test in book.tests %}
+            <section class="listening-jijing-test">
+              <div class="listening-jijing-test__title">{{ test.test_name }}</div>
+              {% for part in test.parts %}
+              <a class="listening-jijing-test__part{% if part.practice_status %} listening-jijing-test__part--done{% endif %}" href="{{ url_for('listening_jijing_part', part_id=part.id) }}">
+                <span>{{ part.part_title }}</span>
+                <span class="listening-jijing-test__meta">
+                  {{ part.question_name }}
+                  {% if part.practice_status %}<br><strong>已刷 · {{ part.practice_status.accuracy }}%</strong>{% endif %}
+                </span>
+              </a>
+              {% endfor %}
+            </section>
+            {% endfor %}
+          </div>
+        </article>
         {% endfor %}
       </div>
-    </article>
+    </section>
     {% endfor %}
-  </section>
   {% endif %}
 </main>
 </body>

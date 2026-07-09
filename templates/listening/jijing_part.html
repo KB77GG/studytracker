@@ -465,8 +465,14 @@ table.practice-table {
     <div class="player-inner">
       <div>
         <div class="crumb">Sage Path · Listening</div>
+        {% if part.collection == "xiahuar" %}
+        <h1>{{ part.test_name }}</h1>
+        <div class="meta">{{ part.part_title }} · {{ part.question_name }} · {{ part.question_type }}</div>
+        <div class="meta">{{ part.source_label }}</div>
+        {% else %}
         <h1>{{ part.part_title }} · {{ part.question_name }}</h1>
         <div class="meta">{{ part.question_type }} · Paper {{ part.paper_id }}</div>
+        {% endif %}
       </div>
       <audio id="audio" controls preload="metadata"></audio>
     </div>
@@ -480,7 +486,7 @@ table.practice-table {
       <button class="tab" data-tab="dictation">精听</button>
       <button class="tab" data-tab="analysis">解析</button>
       <button class="tab" data-tab="transcript">原文</button>
-      <a class="tab" href="{{ url_for('listening_jijing_index') }}" style="text-decoration:none;">返回机经列表</a>
+      <a class="tab" href="{{ url_for('listening_jijing_index') }}{% if part.collection %}#collection-{{ part.collection }}{% endif %}" style="text-decoration:none;">返回机经列表</a>
     </nav>
 
     <section class="panel active" id="practicePanel">
