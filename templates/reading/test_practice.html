@@ -440,8 +440,8 @@ body.exam-mode #resetBtn { display: none; }
   <nav class="tabs" id="passageTabs" aria-label="阅读 Passage"></nav>
 
   <section class="layout">
-    <article class="card passage-card" id="passagePanel"></article>
-    <section class="card question-card" id="questionPanel"></section>
+    <article class="card passage-card" id="passagePanel" data-hl-root="reading-passage"></article>
+    <section class="card question-card" id="questionPanel" data-hl-root="reading-questions"></section>
   </section>
 </main>
 
@@ -1033,5 +1033,6 @@ window.__PRACTICE_SOURCE__ = {{ practice_source|default('reading_test')|tojson }
 window.__PRACTICE_SOURCE_REF__ = {{ practice_source_ref|default('')|tojson }};
 </script>
 <script src="{{ url_for('static', filename='js/selection-translate.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/selection-highlight.js') }}" defer></script>
 </body>
 </html>

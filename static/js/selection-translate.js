@@ -18,7 +18,8 @@
     '.q-number',
     '.answer-pill',
     '.transcript-time',
-    '.sel-tx-popover'
+    '.sel-tx-popover',
+    '.ex-hl-toolbar'
   ].join(',');
 
   let popover = null;

@@ -491,7 +491,7 @@ table.practice-table {
 
     <section class="panel active" id="practicePanel">
       <div class="layout">
-        <div id="questionRoot"></div>
+        <div id="questionRoot" data-hl-root="jijing-questions"></div>
         <aside class="card side">
           <h3>本 Part</h3>
           <div class="stat"><span>题号</span><strong>{{ part.question_name }}</strong></div>
@@ -512,7 +512,7 @@ table.practice-table {
     </section>
 
     <section class="panel" id="transcriptPanel">
-      <div class="card" id="transcriptRoot"></div>
+      <div class="card" id="transcriptRoot" data-hl-root="jijing-transcript"></div>
     </section>
   </main>
 </div>
@@ -961,5 +961,6 @@ window.__PRACTICE_SOURCE__ = {{ practice_source|default('listening_jijing')|tojs
 window.__PRACTICE_SOURCE_REF__ = {{ practice_source_ref|default('')|tojson }};
 </script>
 <script src="{{ url_for('static', filename='js/selection-translate.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/selection-highlight.js') }}" defer></script>
 </body>
 </html>

@@ -685,8 +685,8 @@ body.exam-mode .bottom-nav { padding-right: 220px; }
   <nav class="tabs" id="sectionTabs" aria-label="Section"></nav>
   <div class="view-panel active" id="practiceView">
     <div class="layout">
-      <aside class="card transcript-panel" id="transcriptPanel"></aside>
-      <div id="sectionsRoot"></div>
+      <aside class="card transcript-panel" id="transcriptPanel" data-hl-root="listening-transcript"></aside>
+      <div id="sectionsRoot" data-hl-root="listening-questions"></div>
       <aside class="card side">
         <h3 id="scorePanelTitle">整套判分</h3>
         <div class="stat"><span>Section</span><strong id="activeSectionLabel">-</strong></div>
@@ -699,7 +699,7 @@ body.exam-mode .bottom-nav { padding-right: 220px; }
   </div>
   <section class="view-panel card wide-card" id="dictationView"></section>
   <section class="view-panel card wide-card" id="analysisView"></section>
-  <section class="view-panel card wide-card" id="transcriptView"></section>
+  <section class="view-panel card wide-card" id="transcriptView" data-hl-root="listening-transcript-full"></section>
 </main>
 
 <footer class="bottom-nav">
@@ -1550,5 +1550,6 @@ window.__PRACTICE_SOURCE__ = {{ practice_source|default('listening_test')|tojson
 window.__PRACTICE_SOURCE_REF__ = {{ practice_source_ref|default('')|tojson }};
 </script>
 <script src="{{ url_for('static', filename='js/selection-translate.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/selection-highlight.js') }}" defer></script>
 </body>
 </html>
