@@ -19,6 +19,17 @@
   --success: #16a34a;
 }
 * { box-sizing: border-box; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "PingFang SC", sans-serif;
@@ -93,6 +104,7 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
   gap: 16px;
   align-items: start;
 }
+.layout > * { min-width: 0; }
 .card {
   background: var(--paper);
   border: 1px solid var(--line);
@@ -192,14 +204,17 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
   padding: 12px;
   vertical-align: top;
   line-height: 1.55;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
-.practice-table tr:first-child td,
 .practice-table th {
   background: #f8f5ee;
   font-weight: 850;
 }
+.practice-table caption { text-align: left; }
+.bc { display: block; text-align: center; font-weight: 800; }
+.iu { font-style: italic; text-decoration: underline; }
+.duplicate-blank { white-space: nowrap; letter-spacing: .08em; }
 .question-image {
   display: block;
   max-width: 100%;
@@ -460,6 +475,7 @@ body.exam-mode #resetBtn { display: none; }
   </div>
 </footer>
 
+<script src="{{ url_for('static', filename='js/practice_table.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const rawTestData = {{ test | tojson }};
@@ -621,8 +637,9 @@ function allQuestions() {
 function questionControl(question, group) {
   const value = answers[question.id] || "";
   const groupOptions = group.collect_option?.list || [];
+  const answerLabel = `Question ${question.number} answer`;
   if (shouldUseGroupOptions(question, group)) {
-    return `<select class="answer-control" data-qid="${question.id}">
+    return `<select class="answer-control" data-qid="${question.id}" aria-label="${escapeHtml(answerLabel)}">
       <option value="">选择</option>
       ${groupOptions.map((option) => `<option value="${escapeHtml(option.key)}" ${value === option.key ? "selected" : ""}>${escapeHtml(option.key)}</option>`).join("")}
     </select>`;
@@ -633,19 +650,19 @@ function questionControl(question, group) {
     return `<div class="choice-stack" data-qid="${question.id}">
       ${question.options.map((option) => `
         <label class="choice-option">
-          <input type="${isMulti ? "checkbox" : "radio"}" name="q_${question.id}" value="${escapeHtml(option.key)}" ${isMulti ? (selectedValues.includes(String(option.key || "").trim().toUpperCase()) ? "checked" : "") : (value === option.key ? "checked" : "")}>
+          <input type="${isMulti ? "checkbox" : "radio"}" name="q_${question.id}" value="${escapeHtml(option.key)}" aria-label="${escapeHtml(`${answerLabel}: ${option.key}`)}" ${isMulti ? (selectedValues.includes(String(option.key || "").trim().toUpperCase()) ? "checked" : "") : (value === option.key ? "checked" : "")}>
           <span><strong>${escapeHtml(option.key)}</strong> ${escapeHtml(optionDisplayText(option.key, option.text))}</span>
         </label>
       `).join("")}
     </div>`;
   }
   if (groupOptions.length) {
-    return `<select class="answer-control" data-qid="${question.id}">
+    return `<select class="answer-control" data-qid="${question.id}" aria-label="${escapeHtml(answerLabel)}">
       <option value="">选择</option>
       ${groupOptions.map((option) => `<option value="${escapeHtml(option.key)}" ${value === option.key ? "selected" : ""}>${escapeHtml(option.key)}</option>`).join("")}
     </select>`;
   }
-  return `<input class="answer-control" data-qid="${question.id}" value="${escapeHtml(value)}" autocomplete="off" inputmode="text">`;
+  return `<input class="answer-control" data-qid="${question.id}" value="${escapeHtml(value)}" autocomplete="off" inputmode="text" aria-label="${escapeHtml(answerLabel)}">`;
 }
 
 function inlineControl(question, group) {
@@ -656,19 +673,33 @@ function inlineControl(question, group) {
   </span>`;
 }
 
-function replacePlaceholders(text, group) {
+function replacePlaceholders(text, group, context = { seenIds: new Set() }) {
   const questions = new Map((group.questions || []).map((question) => [String(question.id), question]));
-  return escapeHtml(text || "").replace(/\$(\d+)\$/g, (_match, qid) => {
+  return PracticeTable.withPlaceholders(text, (qid) => {
     const question = questions.get(String(qid));
-    return question ? inlineControl(question, group) : `<strong>${qid}</strong>`;
-  }).replace(/\n/g, "<br>");
+    if (!question) return '<span class="duplicate-blank">____</span>';
+    if (context.seenIds.has(String(qid))) {
+      return `<span class="duplicate-blank" aria-hidden="true">____</span><span class="sr-only">Question ${escapeHtml(question.number)} uses the same answer blank as before</span>`;
+    }
+    context.seenIds.add(String(qid));
+    return inlineControl(question, group);
+  });
 }
 
-function renderTable(table, group) {
-  const rows = Array.isArray(table?.content) ? table.content : [];
+function renderTable(table, group, context) {
+  const layout = PracticeTable.layout(table);
+  const rows = layout.rows || [];
   if (!rows.length) return "";
-  return `<div class="table-wrap"><table class="practice-table"><tbody>
-    ${rows.map((row) => `<tr>${(Array.isArray(row) ? row : [row]).map((cell) => `<td>${replacePlaceholders(cell, group)}</td>`).join("")}</tr>`).join("")}
+  const caption = PracticeTable.plainText(table?.title || group.title || group.question_title || 'Question table');
+  return `<div class="table-wrap"><table class="practice-table">
+    <caption class="sr-only">${escapeHtml(caption)}</caption><tbody>
+    ${rows.map((row) => `<tr>${row.map((cell) => {
+      const tag = cell.is_header ? 'th' : 'td';
+      const scope = cell.scope ? ` scope="${escapeHtml(cell.scope)}"` : '';
+      const rowspan = Number(cell.rowspan) > 1 ? ` rowspan="${Number(cell.rowspan)}"` : '';
+      const colspan = Number(cell.colspan) > 1 ? ` colspan="${Number(cell.colspan)}"` : '';
+      return `<${tag}${scope}${rowspan}${colspan}>${replacePlaceholders(cell.text, group, context)}</${tag}>`;
+    }).join("")}</tr>`).join("")}
   </tbody></table></div>`;
 }
 
@@ -694,13 +725,14 @@ function renderOptionBank(group) {
 
 function renderGroup(group) {
   const hasStructured = Boolean(group.collect) || Boolean(group.table?.content);
+  const renderContext = { seenIds: new Set() };
   return `<section class="group">
     ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ""}
     ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ""}
     ${group.img_local || group.img_url ? `<img class="question-image" src="${escapeHtml(group.img_local ? `/static/${group.img_local}` : group.img_url)}" alt="题目图片">` : ""}
     ${renderOptionBank(group)}
-    ${group.collect ? `<div class="collect">${replacePlaceholders(group.collect, group)}</div>` : ""}
-    ${group.table ? renderTable(group.table, group) : ""}
+    ${group.collect ? `<div class="collect">${replacePlaceholders(group.collect, group, renderContext)}</div>` : ""}
+    ${group.table ? renderTable(group.table, group, renderContext) : ""}
     ${hasStructured ? "" : (group.questions || []).map((question) => renderQuestionRow(question, group)).join("")}
     ${hasStructured ? (group.questions || []).map((question) => `<div class="analysis" data-analysis-qid="${question.id}"></div>`).join("") : ""}
   </section>`;

@@ -367,18 +367,13 @@ page {
 }
 
 .practice-table {
-  min-width: 680rpx;
+  display: grid;
   border-left: 2rpx solid #dfe7ea;
   border-top: 2rpx solid #dfe7ea;
 }
 
-.table-row {
-  display: flex;
-}
-
 .table-cell {
-  min-width: 168rpx;
-  flex: 1;
+  min-width: 0;
   padding: 16rpx;
   border-right: 2rpx solid #dfe7ea;
   border-bottom: 2rpx solid #dfe7ea;
@@ -386,8 +381,18 @@ page {
   line-height: 1.55;
   color: #263242;
   background: #fff;
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.table-cell.is-header {
+  background: #f3f8f7;
+  font-weight: 700;
+}
+
+.table-cell .chunk-text {
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 .question-block {

@@ -47,6 +47,7 @@ from api.tencent_soe import evaluate_pronunciation
 from api.listening_series import parse_intensive_id, parse_test_id, series_name
 from api.practice_catalog import pick_continue_target, summarize_book_progress
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
+from practice_tables import normalize_practice_tables
 from toefl_practice import catalog_summary as _toefl_catalog_summary
 from toefl_practice import toefl_bp
 from models import (
@@ -456,7 +457,8 @@ def _load_listening_test_payload(test_id: str) -> tuple[dict | None, Path | None
     if not test_path.exists():
         return None, None, safe_id
     try:
-        return json.loads(test_path.read_text(encoding="utf-8")), test_path, safe_id
+        payload = json.loads(test_path.read_text(encoding="utf-8"))
+        return normalize_practice_tables(payload), test_path, safe_id
     except Exception:
         return None, test_path, safe_id
 
@@ -1803,7 +1805,8 @@ def _load_reading_test_payload(test_id: str) -> tuple[dict | None, Path | None, 
         if not test_path.exists():
             continue
         try:
-            return json.loads(test_path.read_text(encoding="utf-8")), test_path, safe_id
+            payload = json.loads(test_path.read_text(encoding="utf-8"))
+            return normalize_practice_tables(payload), test_path, safe_id
         except Exception:
             return None, test_path, safe_id
     return None, None, safe_id
@@ -7341,7 +7344,7 @@ def listening_jijing_part(part_id):
     part_path = _listening_jijing_root() / "parts" / f"{safe_id}.json"
     if not part_path.exists():
         return "机经练习不存在", 404
-    part = json.loads(part_path.read_text(encoding="utf-8"))
+    part = normalize_practice_tables(json.loads(part_path.read_text(encoding="utf-8")))
     return render_template(
         "listening/jijing_part.html",
         part=part,

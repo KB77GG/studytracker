@@ -27,6 +27,17 @@
   --shadow-md: 0 8px 20px rgba(15,23,42,.08);
 }
 * { box-sizing: border-box; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -116,6 +127,7 @@ audio {
   grid-template-columns: minmax(0, 1fr) 260px;
   gap: 16px;
 }
+.layout > * { min-width: 0; }
 .card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -285,13 +297,16 @@ table.practice-table {
   padding: 10px;
   vertical-align: top;
   line-height: 1.5;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
-.practice-table tr:first-child td {
+.practice-table th {
   background: var(--brand-tint);
   font-weight: 800;
 }
+.practice-table caption { text-align: left; }
+.iu { font-style: italic; text-decoration: underline; }
+.ghost-blank { white-space: nowrap; letter-spacing: .08em; }
 .question-image {
   display: block;
   max-width: 100%;
@@ -518,6 +533,7 @@ table.practice-table {
   </main>
 </div>
 
+<script src="{{ url_for('static', filename='js/practice_table.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const listeningTaskId = pageParams.get('task_id') || '';
@@ -544,17 +560,7 @@ function optionDisplayText(key, text) {
 }
 
 function richText(value) {
-  return escapeHtml(value)
-    .replace(/&lt;b&gt;/g, '<b>')
-    .replace(/&lt;\/b&gt;/g, '</b>')
-    .replace(/&lt;i&gt;/g, '<i>')
-    .replace(/&lt;\/i&gt;/g, '</i>')
-    .replace(/&lt;bc&gt;/g, '<strong class="bc">')
-    .replace(/&lt;\/bc&gt;/g, '</strong>')
-    .replace(/&lt;iu&gt;/g, '<span class="example">')
-    .replace(/&lt;\/iu&gt;/g, '</span>')
-    .replace(/&amp;nbsp;/g, '&nbsp;')
-    .replace(/\n/g, '<br>');
+  return PracticeTable.richText(value);
 }
 
 function msToSeconds(value) {
@@ -614,6 +620,7 @@ function optionBank(group) {
 function controlForItem(item, group, inline = false) {
   const answer = escapeHtml(item.answer || '');
   const qid = `q_${item.id}`;
+  const answerLabel = `Question ${item.number} answer`;
   const options = item.options?.length ? item.options : (group.collect_options?.list || []);
   const wrapperClass = inline ? 'inline-answer' : '';
 
@@ -623,7 +630,7 @@ function controlForItem(item, group, inline = false) {
       <div class="answer-unit options-list" data-kind="${isMulti ? 'checkboxes' : 'radio'}" data-answer="${answer}" data-q="${escapeHtml(item.number)}">
         ${item.options.map(o => `
           <label class="choice">
-            <input type="${isMulti ? 'checkbox' : 'radio'}" name="${qid}" value="${escapeHtml(o.title)}">
+            <input type="${isMulti ? 'checkbox' : 'radio'}" name="${qid}" value="${escapeHtml(o.title)}" aria-label="${escapeHtml(`${answerLabel}: ${o.title}`)}">
             <span class="choice-text">${escapeHtml(o.title)}. ${escapeHtml(optionDisplayText(o.title, o.content))}</span>
           </label>
         `).join('')}
@@ -634,7 +641,7 @@ function controlForItem(item, group, inline = false) {
   if (options.length && group.type !== 2) {
     return `
       <span class="${wrapperClass}">
-        <select class="answer-select answer-unit" data-kind="select" data-answer="${answer}" data-q="${escapeHtml(item.number)}">
+        <select class="answer-select answer-unit" data-kind="select" data-answer="${answer}" data-q="${escapeHtml(item.number)}" aria-label="${escapeHtml(answerLabel)}">
           <option value=""></option>
           ${options.map(o => `<option value="${escapeHtml(o.title)}">${escapeHtml(o.title)}. ${escapeHtml(optionDisplayText(o.title, o.content))}</option>`).join('')}
         </select>
@@ -644,36 +651,43 @@ function controlForItem(item, group, inline = false) {
 
   return `
     <span class="${wrapperClass}">
-      <input class="answer-input answer-unit" data-kind="text" data-answer="${answer}" data-q="${escapeHtml(item.number)}" placeholder="Q${escapeHtml(item.number)}">
+      <input class="answer-input answer-unit" data-kind="text" data-answer="${answer}" data-q="${escapeHtml(item.number)}" placeholder="Q${escapeHtml(item.number)}" aria-label="${escapeHtml(answerLabel)}">
     </span>
   `;
 }
 
-function renderWithPlaceholders(text, group) {
+function renderWithPlaceholders(text, group, context = { seenIds: new Set() }) {
   const itemsById = new Map((group.items || []).map(item => [String(item.id), item]));
-  const raw = String(text || '');
-  let html = '';
-  let last = 0;
-  raw.replace(/\$([^$\s]+)\$/g, (match, id, offset) => {
-    html += escapeHtml(raw.slice(last, offset));
+  return PracticeTable.withPlaceholders(text, (id) => {
     const item = itemsById.get(String(id));
-    html += item ? controlForItem(item, group, true) : '____';
-    last = offset + match.length;
-    return match;
+    if (!item) return '____';
+    if (context.seenIds.has(String(id))) {
+      return `<span class="ghost-blank" aria-hidden="true">____</span><span class="sr-only">Question ${escapeHtml(item.number)} uses the same answer blank as before</span>`;
+    }
+    context.seenIds.add(String(id));
+    return controlForItem(item, group, true);
   });
-  html += escapeHtml(raw.slice(last));
-  return html.replace(/\n/g, '<br>');
 }
 
-function renderTable(group) {
+function renderTable(group, context) {
   const table = group.table;
-  if (!table || !Array.isArray(table.content)) return '';
+  if (!table) return '';
+  const layout = PracticeTable.layout(table);
+  if (!layout.rows.length) return '';
+  const caption = PracticeTable.plainText(table.title || group.title || group.question_title || 'Question table');
   return `
     <div class="table-wrap">
       <table class="practice-table">
+        <caption class="sr-only">${escapeHtml(caption)}</caption>
         <tbody>
-          ${table.content.map(row => `
-            <tr>${row.map(cell => `<td>${renderWithPlaceholders(cell, group)}</td>`).join('')}</tr>
+          ${layout.rows.map(row => `
+            <tr>${row.map(cell => {
+              const tag = cell.is_header ? 'th' : 'td';
+              const scope = cell.scope ? ` scope="${escapeHtml(cell.scope)}"` : '';
+              const rowspan = Number(cell.rowspan) > 1 ? ` rowspan="${Number(cell.rowspan)}"` : '';
+              const colspan = Number(cell.colspan) > 1 ? ` colspan="${Number(cell.colspan)}"` : '';
+              return `<${tag}${scope}${rowspan}${colspan}>${renderWithPlaceholders(cell.text, group, context)}</${tag}>`;
+            }).join('')}</tr>
           `).join('')}
         </tbody>
       </table>
@@ -726,6 +740,7 @@ function usableImage(url) {
 function renderGroup(group) {
   const hasStructuredBlank = group.collect || group.table;
   const combinedMulti = isCombinedMulti(group);
+  const renderContext = { seenIds: new Set() };
   return `
     <article class="card group">
       <h2>${escapeHtml(group.type_name)}</h2>
@@ -733,9 +748,9 @@ function renderGroup(group) {
       ${group.question_title ? `<div class="question-title">${richText(group.question_title)}</div>` : ''}
       ${group.title && group.title !== group.question_title ? `<div class="question-title">${richText(group.title)}</div>` : ''}
       ${usableImage(group.img_url) ? `<img class="question-image" src="${escapeHtml(group.img_url)}" alt="">` : ''}
-      ${group.collect && !combinedMulti ? `<div class="collect">${renderWithPlaceholders(group.collect, group)}</div>` : ''}
+      ${group.collect && !combinedMulti ? `<div class="collect">${renderWithPlaceholders(group.collect, group, renderContext)}</div>` : ''}
       ${combinedMulti ? '' : optionBank(group)}
-      ${renderTable(group)}
+      ${renderTable(group, renderContext)}
       ${combinedMulti ? renderCombinedMulti(group) : ''}
       ${!hasStructuredBlank && !combinedMulti ? (group.items || []).map(item => renderQuestionItem(item, group)).join('') : ''}
       ${hasStructuredBlank ? (group.items || []).map(item => `<div class="answer-note">Q${escapeHtml(item.number)} 答案：${escapeHtml(item.answer || '')}</div>`).join('') : ''}

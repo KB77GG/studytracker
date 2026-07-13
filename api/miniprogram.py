@@ -40,6 +40,7 @@ from .aliyun_tts import synthesize_text
 from .tencent_soe import evaluate_pronunciation
 from .aliyun_oral_warrant import create_oral_warrant
 from .aliyun_oral_task import run_oral_task
+from practice_tables import normalize_practice_table
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
@@ -194,10 +195,38 @@ def _miniprogram_safe_table(table, group: dict):
         safe_rows = []
         for row in rows:
             if isinstance(row, list):
-                safe_rows.append([_miniprogram_safe_collect(cell, group) for cell in row])
+                safe_cells = []
+                for cell in row:
+                    if isinstance(cell, list):
+                        if len(cell) == 2 and all(isinstance(part, int) for part in cell):
+                            safe_cells.append(cell)
+                        else:
+                            safe_cells.append([
+                                _miniprogram_safe_collect(part, group)
+                                for part in cell
+                            ])
+                    else:
+                        safe_cells.append(_miniprogram_safe_collect(cell, group))
+                safe_rows.append(safe_cells)
             else:
                 safe_rows.append(_miniprogram_safe_collect(row, group))
         safe_table["content"] = safe_rows
+    render = table.get("render")
+    if isinstance(render, dict):
+        safe_render = dict(render)
+        safe_render["rows"] = [
+            [
+                {
+                    **cell,
+                    "text": _miniprogram_safe_collect(cell.get("text") or "", group),
+                }
+                for cell in row
+                if isinstance(cell, dict)
+            ]
+            for row in render.get("rows") or []
+            if isinstance(row, list)
+        ]
+        safe_table["render"] = safe_render
     return safe_table
 
 
@@ -255,6 +284,7 @@ def _serialize_cambridge_group(group: dict, legacy_safe: bool = False) -> dict:
             "content": _miniprogram_safe_rich_text(option.get("content") or "") if legacy_safe else option.get("content"),
         })
     combined_multi = _listening_group_is_combined_multi(group)
+    table = normalize_practice_table(group.get("table"))
     return {
         "group_id": group.get("group_id"),
         "type": group.get("type"),
@@ -262,7 +292,7 @@ def _serialize_cambridge_group(group: dict, legacy_safe: bool = False) -> dict:
         "question_title": _miniprogram_safe_rich_text(group.get("question_title") or "") if legacy_safe else group.get("question_title") or "",
         "desc": _miniprogram_safe_rich_text(group.get("desc") or "") if legacy_safe else group.get("desc") or "",
         "collect": _miniprogram_safe_collect(group.get("collect") or "", group) if legacy_safe else group.get("collect") or "",
-        "table": _miniprogram_safe_table(group.get("table"), group) if legacy_safe else group.get("table") or None,
+        "table": _miniprogram_safe_table(table, group) if legacy_safe else table,
         "image_url": _usable_cambridge_image(group),
         "collect_option": {
             "title": _miniprogram_safe_rich_text(collect_option.get("title") or "") if legacy_safe else collect_option.get("title") or "",
@@ -364,6 +394,7 @@ def _serialize_reading_group(group: dict, legacy_safe: bool = False) -> dict:
         key = option.get("key") or option.get("title")
         text = option.get("text") or option.get("content") or ""
         collect_options.append({"key": key, "text": text})
+    table = normalize_practice_table(group.get("table"))
     return {
         "group_id": group.get("group_id"),
         "type": group.get("type"),
@@ -371,7 +402,7 @@ def _serialize_reading_group(group: dict, legacy_safe: bool = False) -> dict:
         "question_title": _miniprogram_safe_rich_text(group.get("question_title") or "") if legacy_safe else group.get("question_title") or "",
         "desc": _miniprogram_safe_rich_text(group.get("desc") or "") if legacy_safe else group.get("desc") or "",
         "collect": _miniprogram_safe_collect(group.get("collect") or "", group) if legacy_safe else group.get("collect") or "",
-        "table": _miniprogram_safe_table(group.get("table"), group) if legacy_safe else group.get("table") or None,
+        "table": _miniprogram_safe_table(table, group) if legacy_safe else table,
         "image_url": _usable_reading_image(group),
         "collect_option": {
             "title": collect_option.get("title") or "",

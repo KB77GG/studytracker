@@ -1,5 +1,6 @@
 const app = getApp()
 const { request } = require('../../../../utils/request.js')
+const { tableLayout: buildPracticeTableLayout } = require('../../../../utils/practice-table.js')
 
 Page({
     data: {
@@ -162,7 +163,7 @@ Page({
             questions.forEach(question => {
                 questionMap[String(question.key)] = question
             })
-            const tableRows = this.buildTableRows(group, questionMap, renderedKeys)
+            const tableLayout = this.buildTableLayout(group, questionMap, renderedKeys)
             const collectChunks = group.collect
                 ? this.splitReferenceText(group.collect, questionMap, renderedKeys)
                 : []
@@ -176,7 +177,9 @@ Page({
                 questionTitleHtml: this.richText(group.question_title || ''),
                 imageUrl: group.image_url || '',
                 collectChunks,
-                tableRows,
+                tableCells: tableLayout.cells,
+                tableStyle: tableLayout.tableStyle,
+                tableLabel: group.table?.title || group.title || group.question_title || 'Question table',
                 optionBank: this.normalizeOptions((group.collect_option || {}).list || []),
                 showOptionBank: !!(((group.collect_option || {}).list || []).length),
                 questions: renderQuestions
@@ -258,16 +261,15 @@ Page({
         return found || parts.length ? parts : [this.textChunk(raw, `${question.key}_title`)]
     },
 
-    buildTableRows(group, questionMap, renderedKeys) {
-        const table = group.table || {}
-        const rows = table.content || []
-        return rows.map((row, rowIndex) => ({
-            rowKey: `${group.group_id || 'g'}_${rowIndex}`,
-            cells: (Array.isArray(row) ? row : [row]).map((cell, cellIndex) => ({
-                cellKey: `${group.group_id || 'g'}_${rowIndex}_${cellIndex}`,
-                chunks: this.splitReferenceText(String(cell || ''), questionMap, renderedKeys)
+    buildTableLayout(group, questionMap, renderedKeys) {
+        const layout = buildPracticeTableLayout(group.table || {})
+        return {
+            ...layout,
+            cells: layout.cells.map(cell => ({
+                ...cell,
+                chunks: this.splitReferenceText(String(cell.text || ''), questionMap, renderedKeys)
             }))
-        }))
+        }
     },
 
     splitReferenceText(raw, questionMap, renderedKeys) {
@@ -331,12 +333,9 @@ Page({
                 this.decorateChoiceState(question, answers[question.key], resultMap[question.key], submitted)
             ))
             nextGroup.collectChunks = this.decorateChunks(nextGroup.collectChunks, answers, resultMap, submitted)
-            nextGroup.tableRows = (nextGroup.tableRows || []).map(row => ({
-                ...row,
-                cells: (row.cells || []).map(cell => ({
-                    ...cell,
-                    chunks: this.decorateChunks(cell.chunks, answers, resultMap, submitted)
-                }))
+            nextGroup.tableCells = (nextGroup.tableCells || []).map(cell => ({
+                ...cell,
+                chunks: this.decorateChunks(cell.chunks, answers, resultMap, submitted)
             }))
             return nextGroup
         })
@@ -510,11 +509,9 @@ Page({
             }
             const fromCollect = this.findQuestionInChunks(group.collectChunks, key)
             if (fromCollect) return fromCollect
-            for (const row of group.tableRows || []) {
-                for (const cell of row.cells || []) {
-                    const found = this.findQuestionInChunks(cell.chunks, key)
-                    if (found) return found
-                }
+            for (const cell of group.tableCells || []) {
+                const found = this.findQuestionInChunks(cell.chunks, key)
+                if (found) return found
             }
         }
         return null

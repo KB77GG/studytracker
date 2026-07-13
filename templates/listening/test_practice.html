@@ -20,6 +20,17 @@
   --success: #16a34a;
 }
 * { box-sizing: border-box; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -107,6 +118,7 @@ audio { width: 100%; display: block; }
   gap: 16px;
   align-items: start;
 }
+.layout > * { min-width: 0; }
 body.result-mode .layout {
   grid-template-columns: 340px minmax(0, 1fr) 260px;
 }
@@ -236,14 +248,15 @@ body.result-mode .layout {
   padding: 12px;
   vertical-align: top;
   line-height: 1.55;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
-.practice-table tr:first-child td,
 .practice-table th {
   background: #f8f5ee;
   font-weight: 850;
 }
+.practice-table caption { text-align: left; }
+.iu { font-style: italic; text-decoration: underline; }
 .option-bank {
   margin: 12px 0 18px;
   padding: 14px;
@@ -717,6 +730,7 @@ if (window.location.protocol === 'file:') {
 }
 </script>
 
+<script src="{{ url_for('static', filename='js/practice_table.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const listeningTaskId = pageParams.get('task_id') || '';
@@ -756,18 +770,7 @@ function optionDisplayText(key, text) {
 }
 
 function richText(value) {
-  return escapeHtml(value)
-    .replace(/&lt;b&gt;/g, '<b>')
-    .replace(/&lt;\/b&gt;/g, '</b>')
-    .replace(/&lt;i&gt;/g, '<i>')
-    .replace(/&lt;\/i&gt;/g, '</i>')
-    .replace(/&lt;bc&gt;/g, '<strong class="bc">')
-    .replace(/&lt;\/bc&gt;/g, '</strong>')
-    .replace(/&lt;iu&gt;/g, '<span class="example">')
-    .replace(/&lt;\/iu&gt;/g, '</span>')
-    .replace(/&lt;divider\s*\/?&gt;/gi, '<hr class="collect-divider">')
-    .replace(/&amp;nbsp;/g, '&nbsp;')
-    .replace(/\n/g, '<br>');
+  return PracticeTable.richText(value);
 }
 
 function usableImage(url) {
@@ -957,13 +960,23 @@ function optionBank(group) {
 
 function renderTable(group, sectionIndex, context) {
   const table = group.table;
-  if (!table || !Array.isArray(table.content)) return '';
+  if (!table) return '';
+  const layout = PracticeTable.layout(table);
+  if (!layout.rows.length) return '';
+  const caption = PracticeTable.plainText(table.title || group.title || group.question_title || 'Question table');
   return `
     <div class="table-wrap">
       <table class="practice-table">
+        <caption class="sr-only">${escapeHtml(caption)}</caption>
         <tbody>
-          ${table.content.map(row => `
-            <tr>${row.map(cell => `<td>${renderCollectText(cell, group, sectionIndex, context)}</td>`).join('')}</tr>
+          ${layout.rows.map(row => `
+            <tr>${row.map(cell => {
+              const tag = cell.is_header ? 'th' : 'td';
+              const scope = cell.scope ? ` scope="${escapeHtml(cell.scope)}"` : '';
+              const rowspan = Number(cell.rowspan) > 1 ? ` rowspan="${Number(cell.rowspan)}"` : '';
+              const colspan = Number(cell.colspan) > 1 ? ` colspan="${Number(cell.colspan)}"` : '';
+              return `<${tag}${scope}${rowspan}${colspan}>${renderCollectText(cell.text, group, sectionIndex, context)}</${tag}>`;
+            }).join('')}</tr>
           `).join('')}
         </tbody>
       </table>
@@ -1000,7 +1013,7 @@ function renderCombinedMulti(group) {
 function controlForQuestion(question, sectionIndex, group = {}, inline = false) {
   const answer = escapeHtml(question.answer || '');
   const qn = escapeHtml(question.number);
-  const baseAttrs = `data-q="${qn}" data-answer="${answer}" data-section="${sectionIndex}" data-id="${escapeHtml(question.id || question.number)}"`;
+  const baseAttrs = `data-q="${qn}" data-answer="${answer}" data-section="${sectionIndex}" data-id="${escapeHtml(question.id || question.number)}" aria-label="Question ${qn} answer"`;
 
   if (question.options && question.options.length) {
     const isMulti = String(question.answer || '').includes(',') || group.type === 9;
@@ -1008,7 +1021,7 @@ function controlForQuestion(question, sectionIndex, group = {}, inline = false) 
       <div class="answer-unit" data-kind="${isMulti ? 'checkboxes' : 'radio'}" ${baseAttrs}>
         ${question.options.map(option => `
           <label class="choice">
-            <input type="${isMulti ? 'checkbox' : 'radio'}" name="${inputName(question)}" value="${escapeHtml(option.title)}">
+            <input type="${isMulti ? 'checkbox' : 'radio'}" name="${inputName(question)}" value="${escapeHtml(option.title)}" aria-label="Question ${qn} answer: ${escapeHtml(option.title)}">
             ${escapeHtml(option.title)}. ${escapeHtml(optionDisplayText(option.title, option.content))}
           </label>
         `).join('')}
@@ -1047,7 +1060,7 @@ function renderCollectText(text, group, sectionIndex, context = { seenIds: new S
       context.seenIds.add(String(id));
       html += controlForQuestion(question, sectionIndex, group, true);
     } else if (question) {
-      html += '<span class="inline-answer ghost-blank">____</span>';
+      html += `<span class="inline-answer ghost-blank" aria-hidden="true">____</span><span class="sr-only">Question ${escapeHtml(question.number)} uses the same answer blank as before</span>`;
     } else {
       html += '____';
     }
