@@ -300,6 +300,34 @@ summary.practice-test-chip::-webkit-details-marker {
   font-variant-numeric: tabular-nums;
   font-weight: 900;
 }
+.practice-reading-test {
+  display: inline-flex;
+  min-width: 0;
+  align-items: stretch;
+  gap: 4px;
+}
+.practice-reading-study {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border: 1px solid var(--brand-light);
+  border-radius: var(--r-sm);
+  background: var(--brand-tint);
+  color: var(--brand-dark);
+  font-size: var(--fs-sm);
+  font-weight: 900;
+  text-decoration: none;
+}
+.practice-reading-study[hidden] {
+  display: none;
+}
+.practice-reading-study:hover,
+.practice-reading-study:focus-visible {
+  background: var(--brand-soft);
+  outline: none;
+}
 .practice-test-panel {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);

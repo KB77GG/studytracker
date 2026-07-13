@@ -6,27 +6,6 @@
 <title>剑桥雅思阅读真题 · Sage Path</title>
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 {% include "listening/_library_styles.html" %}
-<style>
-.reading-test-entry { position: relative; min-width: 0; }
-.reading-test-entry .listening-test-link { height: 100%; }
-.reading-study-entry {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-  padding: 4px 8px;
-  border: 1px solid rgba(47, 142, 135, .3);
-  border-radius: 999px;
-  color: var(--brand-dark);
-  background: #fff;
-  font-size: 12px;
-  font-weight: 900;
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-}
-.reading-study-entry[hidden] { display: none; }
-.reading-study-entry:hover { background: var(--brand-soft); }
-</style>
 </head>
 <body>
 <main class="listening-library">
@@ -48,24 +27,24 @@
   {% if not books %}
   <section class="listening-library__empty">还没有生成剑雅阅读练习数据。请先运行 build 脚本。</section>
   {% else %}
-  <section class="listening-book-grid">
+  <section class="practice-book-list">
     {% for book in books %}
-    <article class="listening-book-card">
-      <header class="listening-book-card__header">
-        <span class="listening-book-card__label">Cambridge IELTS</span>
-        <span class="listening-book-card__number">{{ book.book }}</span>
+    <article class="practice-book-row">
+      <header class="practice-book-identity">
+        <span class="practice-book-name">剑雅 {{ book.book }}</span>
+        <span class="practice-book-progress">共 {{ book.tests|length }} 套 Test</span>
       </header>
-      <div class="listening-test-grid">
+      <div class="practice-test-chips">
         {% for test in book.tests %}
-        <div class="reading-test-entry">
-          <a class="listening-test-link{% if test.practice_status %} listening-test-link--done{% endif %}" href="{{ url_for('reading_test_practice', test_id=test.id) }}">
-            <span class="listening-test-link__name">Test {{ test.test }}</span>
-            <span class="listening-test-link__meta">{{ test.passage_count }} Passage<br>{{ test.question_count }} 题</span>
+        <div class="practice-reading-test">
+          <a class="practice-test-chip{% if test.practice_status %} practice-test-chip--done{% endif %}"
+             href="{{ url_for('reading_test_practice', test_id=test.id) }}">
+            <span>Test {{ test.test }}</span>
             {% if test.practice_status %}
-            <span class="listening-test-link__status">已刷 · {{ test.practice_status.accuracy }}%</span>
+            <span class="practice-test-chip__score">{{ test.practice_status.accuracy }}%</span>
             {% endif %}
           </a>
-          <a class="reading-study-entry" data-reading-study-test="{{ test.id }}" href="/reading/study/{{ test.id }}" hidden>学习</a>
+          <a class="practice-reading-study" data-reading-study-test="{{ test.id }}" href="/reading/study/{{ test.id }}" hidden>学习</a>
         </div>
         {% endfor %}
       </div>
