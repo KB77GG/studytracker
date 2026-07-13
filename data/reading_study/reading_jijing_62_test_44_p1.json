@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_62_test_44",
+  "passage_id": "reading_jijing_62_test_44_p1",
+  "passage_title": "REIKI",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "The spiritual practice of Reiki was first introduced in early 20th century in Japan and continues to be used by its followers today with the intention of treating physical, emotional and mental imbalances and consequent ill-health.",
+      "translation": "灵气疗法这一精神实践于20世纪初首次在日本出现，如今其追随者仍在使用它，希望借此治疗身体、情绪和精神上的失衡以及由此引发的健康问题。",
+      "structure": [
+        {"text": "The spiritual practice of Reiki", "role": "subject", "level": 1},
+        {"text": "was first introduced", "role": "passive_predicate", "level": 1},
+        {"text": "in early 20th century in Japan", "role": "prepositional_phrase", "level": 1},
+        {"text": "and continues to be used by its followers today", "role": "coordinate_predicate", "level": 1},
+        {"text": "with the intention of treating physical, emotional and mental imbalances and consequent ill-health", "role": "purpose_prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["was introduced 与 continues to be used 是共享主语的并列谓语，前者用一般过去时，后者强调延续至今。", "with the intention of 后接动名词 treating，说明追随者使用这种疗法的目的。", "consequent ill-health 指前述各种失衡所导致的健康不佳。"],
+      "expressions": [{"text": "with the intention of", "meaning_zh": "目的是；意在"}, {"text": "continue to be used", "meaning_zh": "继续被使用"}, {"text": "consequent ill-health", "meaning_zh": "由此导致的健康不佳"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "The principles of Reiki involve techniques employed by practitioners they say will channel healing energy through the subject's body, and advocates hold that these techniques can also be used for self-healing.",
+      "translation": "灵气疗法的原理包含一些由治疗师采用的技术；据他们所说，这些技术能使疗愈能量流经接受者的身体。拥护者还认为，这些技术也可用于自我疗愈。",
+      "structure": [
+        {"text": "The principles of Reiki", "role": "subject", "level": 1},
+        {"text": "involve", "role": "verb", "level": 1},
+        {"text": "techniques", "role": "object", "level": 1},
+        {"text": "employed by practitioners", "role": "participial_phrase", "level": 2},
+        {"text": "they say", "role": "parenthetical_clause", "level": 2},
+        {"text": "will channel healing energy through the subject's body", "role": "relative_clause", "level": 2},
+        {"text": "and advocates hold", "role": "coordinate_clause", "level": 1},
+        {"text": "that these techniques can also be used for self-healing", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["employed by practitioners 是过去分词短语，修饰 techniques。", "they say 是插入性主谓结构；will channel 前省略了关系词 that，整个从句继续修饰 techniques。", "第二个 that 引导 hold 的宾语从句，其中 can be used 是被动语态。"],
+      "expressions": [{"text": "channel healing energy", "meaning_zh": "引导疗愈能量"}, {"text": "hold that", "meaning_zh": "认为；主张"}, {"text": "be used for self-healing", "meaning_zh": "用于自我疗愈"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "The name of the practice itself stems from two Japanese characters, pronounced 'rei' which translates to'unseen' or 'spiritual' and 'ki' meaning 'life force' or 'energy'.",
+      "translation": "这种疗法的名称源自两个日文字符：一个读作“rei”，意为“不可见的”或“精神的”；另一个是“ki”，意为“生命力”或“能量”。",
+      "structure": [
+        {"text": "The name of the practice itself", "role": "subject", "level": 1},
+        {"text": "stems from", "role": "verb_phrase", "level": 1},
+        {"text": "two Japanese characters", "role": "object_of_preposition", "level": 1},
+        {"text": "pronounced 'rei'", "role": "participial_phrase", "level": 2},
+        {"text": "which translates to'unseen' or 'spiritual'", "role": "relative_clause", "level": 3},
+        {"text": "and 'ki' meaning 'life force' or 'energy'", "role": "coordinate_participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["stems from 表示名称的词源来自两个日文字符。", "pronounced 与 meaning 都是分词结构，分别解释 rei 和 ki 的读法或含义。", "which 修饰 rei；原文 to 与引号之间缺少空格，属于排版异常。"],
+      "expressions": [{"text": "stem from", "meaning_zh": "源自"}, {"text": "translate to", "meaning_zh": "翻译为；意为"}, {"text": "life force", "meaning_zh": "生命力"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "According to Reiki philosophy, only by undergoing an attunement process performed by a Reiki Master is an individual able to access, then channel this positive energy within, this ability once established is considered to be enduring.",
+      "translation": "按照灵气疗法的理念，个人只有接受由灵气大师实施的调谐过程，才能接触并引导体内的这种正向能量；这种能力一经建立，便被认为会长久保持。",
+      "structure": [
+        {"text": "According to Reiki philosophy", "role": "prepositional_phrase", "level": 1},
+        {"text": "only by undergoing an attunement process", "role": "fronted_adverbial", "level": 1},
+        {"text": "performed by a Reiki Master", "role": "participial_phrase", "level": 2},
+        {"text": "is an individual able", "role": "inverted_main_clause", "level": 1},
+        {"text": "to access, then channel this positive energy within", "role": "adjective_complement", "level": 2},
+        {"text": "this ability once established is considered to be enduring", "role": "coordinate_clause", "level": 1},
+        {"text": "once established", "role": "reduced_adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["only by... 前置引起部分倒装，因此 is 位于主语 an individual 之前。", "performed by... 修饰 attunement process，说明执行者。", "原文用逗号连接两个独立分句，属于逗号拼接；后半句的主语是 this ability。", "once established 是省略了 it is 的状语从句，表示“这种能力一经建立”。"],
+      "expressions": [{"text": "according to", "meaning_zh": "按照；根据"}, {"text": "undergo a process", "meaning_zh": "经历某个过程"}, {"text": "be considered to be", "meaning_zh": "被认为是"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "Once attuned, it is said that an individual has the ability to allow energy to flow to weak or diseased areas of the body, so activating a natural healing process.",
+      "translation": "据说，一旦完成调谐，个人便能让能量流向身体虚弱或患病的部位，从而启动自然疗愈过程。",
+      "structure": [
+        {"text": "Once attuned", "role": "reduced_adverbial_clause", "level": 1},
+        {"text": "it is said", "role": "impersonal_passive", "level": 1},
+        {"text": "that an individual has the ability", "role": "subject_clause", "level": 2},
+        {"text": "to allow energy to flow to weak or diseased areas of the body", "role": "infinitive_complement", "level": 3},
+        {"text": "so activating a natural healing process", "role": "result_participial_phrase", "level": 1}
+      ],
+      "difficult_points": ["Once attuned 是省略结构，语义上的接受调谐者是后文的 an individual。", "it is said that 是非人称被动表达，that 从句承载真正信息。", "allow energy to flow 是 allow＋宾语＋不定式结构。", "so activating... 是现在分词结果状语，表示能量流动由此启动疗愈。"],
+      "expressions": [{"text": "it is said that", "meaning_zh": "据说"}, {"text": "have the ability to", "meaning_zh": "有能力……"}, {"text": "activate a natural healing process", "meaning_zh": "启动自然疗愈过程"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "Reiki energy is considered to be 'intelligent energy' in that it automatically flows to such areas; for this reason, practitioners believe that diagnosis of a specific problem is unnecessary beforehand and that the practice can be used as preventative medicine and encourage healing prior to the onset of tangible symptoms.",
+      "translation": "灵气能量被认为是一种“智能能量”，因为它会自动流向这些部位。因此，治疗师认为，无须事先诊断某个具体问题，而且这种疗法可用作预防性治疗，在明显症状出现前促进康复。",
+      "structure": [
+        {"text": "Reiki energy", "role": "subject", "level": 1},
+        {"text": "is considered to be 'intelligent energy'", "role": "passive_predicate", "level": 1},
+        {"text": "in that it automatically flows to such areas", "role": "adverbial_clause", "level": 1},
+        {"text": "for this reason", "role": "sentence_adverbial", "level": 1},
+        {"text": "practitioners believe", "role": "main_clause", "level": 1},
+        {"text": "that diagnosis of a specific problem is unnecessary beforehand", "role": "object_clause", "level": 2},
+        {"text": "and that the practice can be used as preventative medicine and encourage healing prior to the onset of tangible symptoms", "role": "coordinate_object_clause", "level": 2}
+      ],
+      "difficult_points": ["in that 引导原因状语从句，表示“因为、在于”。", "分号把关于能量特性的陈述与治疗师由此得出的结论分开。", "believe 后有两个并列的 that 宾语从句。", "第二个从句中 can be used 与 encourage 在语义上共享情态动词 can。"],
+      "expressions": [{"text": "in that", "meaning_zh": "因为；在于"}, {"text": "for this reason", "meaning_zh": "因此"}, {"text": "prior to the onset of", "meaning_zh": "在……出现之前"}, {"text": "preventative medicine", "meaning_zh": "预防性治疗"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "Since healing initiated by Reiki treatment is entirely natural, many practitioners are confident that it can be used alongside any other type of treatment without adverse affect; however, others recommend that since the patient may undergo significant internal improvement for certain ailments – diabetes, for example – careful monitoring is required since such improvements may establish a need for an alteration in medication requirements.",
+      "translation": "由于灵气疗法引发的康复过程被认为完全自然，许多治疗师相信它可以与任何其他疗法同时使用而不会产生不良影响。然而，另一些人建议密切监测：因为患者的某些疾病——例如糖尿病——可能在体内出现显著改善，而这种改善可能意味着需要调整用药。",
+      "structure": [
+        {"text": "Since healing initiated by Reiki treatment is entirely natural", "role": "adverbial_clause", "level": 1},
+        {"text": "initiated by Reiki treatment", "role": "participial_phrase", "level": 2},
+        {"text": "many practitioners are confident", "role": "main_clause", "level": 1},
+        {"text": "that it can be used alongside any other type of treatment without adverse affect", "role": "content_clause", "level": 2},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "others recommend", "role": "coordinate_clause", "level": 1},
+        {"text": "that since the patient may undergo significant internal improvement for certain ailments – diabetes, for example – careful monitoring is required", "role": "object_clause", "level": 2},
+        {"text": "since such improvements may establish a need for an alteration in medication requirements", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["句首 Since 从句说明许多治疗师相信可联合治疗的原因；initiated... 修饰 healing。", "however 后转述另一派更谨慎的建议，recommend 后是很长的 that 宾语从句。", "宾语从句内部又含 since 原因从句，破折号中的 diabetes, for example 是对 ailments 的举例。", "adverse affect 疑为 adverse effect 的用词错误，原文按要求保留。"],
+      "expressions": [{"text": "be confident that", "meaning_zh": "确信……"}, {"text": "be used alongside", "meaning_zh": "与……同时使用"}, {"text": "careful monitoring is required", "meaning_zh": "需要密切监测"}, {"text": "establish a need for", "meaning_zh": "表明有必要……"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 8,
+      "sentence": "A 'whole body' Reiki treatment session typically lasts between to 90 minutes.",
+      "translation": "一次“全身”灵气治疗通常持续至多90分钟；原文的时长下限疑有缺失。",
+      "structure": [
+        {"text": "A 'whole body' Reiki treatment session", "role": "subject", "level": 1},
+        {"text": "typically lasts", "role": "verb_phrase", "level": 1},
+        {"text": "between to 90 minutes", "role": "duration_adverbial", "level": 1}
+      ],
+      "difficult_points": ["last 在这里表示“持续”，后接时长。", "between to 90 minutes 结构残缺；between 通常要求 between A and B，原文似乎遗漏了下限和 and。"],
+      "expressions": [{"text": "treatment session", "meaning_zh": "一次治疗疗程"}, {"text": "typically last", "meaning_zh": "通常持续"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 9,
+      "sentence": "The subject is required to lie down – often on a treatment table – clothed in comfortable and loose fitting attire.",
+      "translation": "接受治疗者需要躺下——通常躺在治疗床上——并穿着舒适宽松的衣服。",
+      "structure": [
+        {"text": "The subject", "role": "subject", "level": 1},
+        {"text": "is required", "role": "passive_predicate", "level": 1},
+        {"text": "to lie down", "role": "subject_complement", "level": 1},
+        {"text": "often on a treatment table", "role": "parenthetical_prepositional_phrase", "level": 1},
+        {"text": "clothed in comfortable and loose fitting attire", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": ["be required to do 是被动结构，表示接受治疗者需要做某事。", "破折号之间的内容补充说明躺卧地点。", "clothed in... 是过去分词短语，描述 subject 接受治疗时的穿着状态。"],
+      "expressions": [{"text": "be required to", "meaning_zh": "被要求；需要"}, {"text": "lie down", "meaning_zh": "躺下"}, {"text": "be clothed in", "meaning_zh": "穿着……"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 10,
+      "sentence": "Treatment may involve the practitioner placing their hands on the recipient in a variety of positions; however, some therapists take a non-touching approach, holding their hands a few centimeters away from the body.",
+      "translation": "治疗过程可能包括治疗师以多种姿势把手放在接受者身上；不过，有些治疗师采用非接触方式，让双手悬在距身体几厘米的位置。",
+      "structure": [
+        {"text": "Treatment", "role": "subject", "level": 1},
+        {"text": "may involve", "role": "verb_phrase", "level": 1},
+        {"text": "the practitioner placing their hands on the recipient in a variety of positions", "role": "gerund_phrase", "level": 1},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "some therapists take a non-touching approach", "role": "coordinate_clause", "level": 1},
+        {"text": "holding their hands a few centimeters away from the body", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": ["involve 后接动名词复合结构，the practitioner 是 placing 的逻辑主语。", "however 表示两种治疗手法之间的对比。", "holding... 的逻辑主语是 some therapists，补充说明非接触方式如何操作。"],
+      "expressions": [{"text": "involve doing", "meaning_zh": "包括做……"}, {"text": "in a variety of positions", "meaning_zh": "以多种姿势"}, {"text": "take a non-touching approach", "meaning_zh": "采用非接触方式"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "Hands are usually held in one position for up to 5 minutes before moving on to the next part of the body; between 12 and 20 hand positions are generally used.",
+      "translation": "双手通常会在一个位置停留最多5分钟，然后移至身体的下一个部位；一次治疗一般会采用12至20种手位。",
+      "structure": [
+        {"text": "Hands", "role": "subject", "level": 1},
+        {"text": "are usually held", "role": "passive_predicate", "level": 1},
+        {"text": "in one position for up to 5 minutes", "role": "prepositional_phrase", "level": 1},
+        {"text": "before moving on to the next part of the body", "role": "reduced_adverbial_clause", "level": 1},
+        {"text": "between 12 and 20 hand positions", "role": "subject", "level": 1},
+        {"text": "are generally used", "role": "passive_predicate", "level": 1}
+      ],
+      "difficult_points": ["两个分句都使用被动语态，突出手的位置与操作流程。", "before moving... 是省略主语的动名词结构，动作执行者仍是治疗师。", "between 12 and 20 是规范的范围表达，与上一句残缺的 between 形成对照。"],
+      "expressions": [{"text": "for up to 5 minutes", "meaning_zh": "最长达5分钟"}, {"text": "move on to", "meaning_zh": "转移到；继续到"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "Those who have undergone a Reiki treatment session often state that they experienced a pleasant warmness in the area of focus and a feeling of contentment and relaxation throughout the session.",
+      "translation": "接受过灵气治疗的人常说，他们在重点治疗部位感到舒适的温热，并在整个过程中感到满足和放松。",
+      "structure": [
+        {"text": "Those", "role": "subject", "level": 1},
+        {"text": "who have undergone a Reiki treatment session", "role": "relative_clause", "level": 2},
+        {"text": "often state", "role": "verb_phrase", "level": 1},
+        {"text": "that they experienced a pleasant warmness in the area of focus and a feeling of contentment and relaxation throughout the session", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["who 引导定语从句修饰 Those，Those who... 表示“那些……的人”。", "that 从句陈述接受者报告的体验。", "experienced 后并列两个宾语：a pleasant warmness 与 a feeling of contentment and relaxation。"],
+      "expressions": [{"text": "undergo a treatment session", "meaning_zh": "接受一次治疗"}, {"text": "throughout the session", "meaning_zh": "在整个疗程中"}, {"text": "a feeling of contentment", "meaning_zh": "满足感"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 13,
+      "sentence": "The healing energy is said to originate in the universe itself and is not the passing of personal energy from practitioner to patient; it is therefore thought to be inexhaustible and the personal well-being of the practitioner uncompromised.",
+      "translation": "据说，这种疗愈能量源自宇宙本身，并非治疗师把个人能量传给患者；因此，它被认为取之不尽，而且不会损害治疗师自身的健康。",
+      "structure": [
+        {"text": "The healing energy", "role": "subject", "level": 1},
+        {"text": "is said to originate in the universe itself", "role": "passive_predicate", "level": 1},
+        {"text": "and is not the passing of personal energy from practitioner to patient", "role": "coordinate_predicate", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "is therefore thought to be inexhaustible", "role": "passive_predicate", "level": 1},
+        {"text": "and the personal well-being of the practitioner uncompromised", "role": "elliptical_coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["is said to originate 是“被认为/据说……”的被动报告结构。", "分号后的 it 指 healing energy。", "末尾 and 后省略了 is thought to be，完整语义是治疗师的健康被认为不会受损。", "uncompromised 是主语补足语，表示未受损害。"],
+      "expressions": [{"text": "originate in", "meaning_zh": "起源于"}, {"text": "from practitioner to patient", "meaning_zh": "从治疗师传给患者"}, {"text": "be thought to be inexhaustible", "meaning_zh": "被认为取之不尽"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 14,
+      "sentence": "While some masters and teachers hold that subjects must be receptive to the concept in order for energy to flow, others believe that the attitude of the patient is of no consequence and that benefits will follow regardless; for this reason, those following the latter school of thought say that since Reiki requires no conscious belief it can also benefit the well-being of animals and plant life.",
+      "translation": "一些大师和教师认为，接受者必须愿意接受这一理念，能量才能流动；另一些人则认为，患者的态度并不重要，无论如何都会受益。因此，持后一种观点的人说，既然灵气疗法不要求有意识的信念，它也能改善动物和植物的健康。",
+      "structure": [
+        {"text": "While some masters and teachers hold", "role": "adverbial_clause", "level": 1},
+        {"text": "that subjects must be receptive to the concept in order for energy to flow", "role": "object_clause", "level": 2},
+        {"text": "others believe", "role": "main_clause", "level": 1},
+        {"text": "that the attitude of the patient is of no consequence", "role": "object_clause", "level": 2},
+        {"text": "and that benefits will follow regardless", "role": "coordinate_object_clause", "level": 2},
+        {"text": "for this reason", "role": "sentence_adverbial", "level": 1},
+        {"text": "those following the latter school of thought say", "role": "coordinate_clause", "level": 1},
+        {"text": "that since Reiki requires no conscious belief it can also benefit the well-being of animals and plant life", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["While 在此表示两派观点的对比，而非单纯时间关系。", "hold 与 believe 后分别有 that 宾语从句；believe 后两个 that 从句并列。", "those following... 中 following 是现在分词，修饰 those；latter 指后一派观点。", "最后的 that 从句内部含 since 原因从句，it 指 Reiki。"],
+      "expressions": [{"text": "be receptive to", "meaning_zh": "愿意接受……"}, {"text": "be of no consequence", "meaning_zh": "无关紧要"}, {"text": "regardless", "meaning_zh": "无论如何"}, {"text": "school of thought", "meaning_zh": "思想流派；观点体系"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 15,
+      "sentence": "Controversy surrounds the practice of Reiki, some in opposition as they say that Reiki may offer only a perceived improvement in health and therefore only a 'placebo' effect.",
+      "translation": "灵气疗法一直存在争议；一些人反对它，因为他们认为这种疗法或许只会让人主观感觉健康有所改善，因而产生的不过是“安慰剂”效应。",
+      "structure": [
+        {"text": "Controversy", "role": "subject", "level": 1},
+        {"text": "surrounds", "role": "verb", "level": 1},
+        {"text": "the practice of Reiki", "role": "object", "level": 1},
+        {"text": "some in opposition", "role": "elliptical_coordinate_clause", "level": 1},
+        {"text": "as they say", "role": "adverbial_clause", "level": 2},
+        {"text": "that Reiki may offer only a perceived improvement in health and therefore only a 'placebo' effect", "role": "object_clause", "level": 3}
+      ],
+      "difficult_points": ["原文用逗号连接完整主句和残缺结构 some in opposition，语义上相当于“some are in opposition”。", "as 在这里引导原因状语从句，解释反对者的理由。", "perceived improvement 强调改善可能只是主观感受，而非客观疗效。"],
+      "expressions": [{"text": "controversy surrounds", "meaning_zh": "围绕……存在争议"}, {"text": "be in opposition", "meaning_zh": "持反对态度"}, {"text": "placebo effect", "meaning_zh": "安慰剂效应"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 16,
+      "sentence": "Whilst the practice of Reiki itself is not necessarily considered potentially harmful, some medical practitioners are concerned that its benefits may be over-estimated by patients and that, as a result, they' may ignore or bandon conventional treatments.",
+      "translation": "尽管灵气疗法本身不一定被认为可能有害，一些医务人员仍担心患者会高估它的益处，并因此忽视或放弃常规治疗。",
+      "structure": [
+        {"text": "Whilst the practice of Reiki itself is not necessarily considered potentially harmful", "role": "adverbial_clause", "level": 1},
+        {"text": "some medical practitioners", "role": "subject", "level": 1},
+        {"text": "are concerned", "role": "predicate", "level": 1},
+        {"text": "that its benefits may be over-estimated by patients", "role": "content_clause", "level": 2},
+        {"text": "and that, as a result, they' may ignore or bandon conventional treatments", "role": "coordinate_content_clause", "level": 2}
+      ],
+      "difficult_points": ["Whilst 引导让步状语从句，表示即使疗法本身未必有害，仍存在间接风险。", "concerned 后接两个并列的 that 内容从句。", "第二个从句中的 they 指 patients，而不是 medical practitioners。", "they' 与 bandon 分别疑为多余撇号和 abandon 漏字，原文按要求保留。"],
+      "expressions": [{"text": "not necessarily", "meaning_zh": "不一定"}, {"text": "be concerned that", "meaning_zh": "担心……"}, {"text": "as a result", "meaning_zh": "因此"}, {"text": "conventional treatments", "meaning_zh": "常规治疗"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 17,
+      "sentence": "Others argue against the reliability of Reiki due to the lack of regulation of practitioners, holding that patients may be left vulnerable to illegitimate therapists who lack knowledge and skill.",
+      "translation": "另一些人则因治疗师缺乏监管而质疑灵气疗法的可靠性，认为患者可能容易受到缺乏知识与技能的不合规治疗师伤害。",
+      "structure": [
+        {"text": "Others", "role": "subject", "level": 1},
+        {"text": "argue against", "role": "verb_phrase", "level": 1},
+        {"text": "the reliability of Reiki", "role": "object_of_preposition", "level": 1},
+        {"text": "due to the lack of regulation of practitioners", "role": "reason_prepositional_phrase", "level": 1},
+        {"text": "holding", "role": "participial_phrase", "level": 1},
+        {"text": "that patients may be left vulnerable to illegitimate therapists", "role": "object_clause", "level": 2},
+        {"text": "who lack knowledge and skill", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["due to 短语说明反对者质疑可靠性的原因。", "holding... 是现在分词状语，补充说明 Others 所持的具体观点。", "be left vulnerable to 表示患者可能被置于易受伤害的状态。", "who 引导定语从句，修饰 illegitimate therapists。"],
+      "expressions": [{"text": "argue against", "meaning_zh": "反对；质疑"}, {"text": "due to the lack of", "meaning_zh": "由于缺乏……"}, {"text": "be left vulnerable to", "meaning_zh": "容易受到……伤害"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 18,
+      "sentence": "While Reiki is not connected to any particular religious doctrine, some religious leaders oppose the practice for spiritual reasons; however, others hold that the meditative principles involved in treatment have enhanced their own ability to explore and embrace their own particular religion.",
+      "translation": "虽然灵气疗法与任何特定宗教教义都无关联，一些宗教领袖仍出于精神层面的原因反对它；不过，另一些人认为，治疗中包含的冥想原则增强了他们探索并接纳自身宗教的能力。",
+      "structure": [
+        {"text": "While Reiki is not connected to any particular religious doctrine", "role": "adverbial_clause", "level": 1},
+        {"text": "some religious leaders oppose the practice", "role": "main_clause", "level": 1},
+        {"text": "for spiritual reasons", "role": "reason_prepositional_phrase", "level": 1},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "others hold", "role": "coordinate_clause", "level": 1},
+        {"text": "that the meditative principles involved in treatment have enhanced their own ability", "role": "object_clause", "level": 2},
+        {"text": "involved in treatment", "role": "participial_phrase", "level": 3},
+        {"text": "to explore and embrace their own particular religion", "role": "infinitive_complement", "level": 3}
+      ],
+      "difficult_points": ["While 引导让步从句，说明反对并非因为疗法明确隶属某种宗教。", "however 在分号后引出相反观点。", "involved in treatment 是过去分词短语，修饰 meditative principles。", "to explore and embrace 修饰 ability，说明这种能力的内容。"],
+      "expressions": [{"text": "be connected to", "meaning_zh": "与……有关联"}, {"text": "religious doctrine", "meaning_zh": "宗教教义"}, {"text": "enhance one's ability to", "meaning_zh": "增强某人做……的能力"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 19,
+      "sentence": "Limited scientific studies in the authenticity of Reiki have been conducted.",
+      "translation": "针对灵气疗法真实性的科学研究数量有限。",
+      "structure": [
+        {"text": "Limited scientific studies in the authenticity of Reiki", "role": "subject", "level": 1},
+        {"text": "have been conducted", "role": "passive_predicate", "level": 1}
+      ],
+      "difficult_points": ["Limited 前置修饰 studies，表示此类研究为数不多。", "have been conducted 是现在完成时的被动语态，强调截至目前已有研究被开展。"],
+      "expressions": [{"text": "scientific studies", "meaning_zh": "科学研究"}, {"text": "conduct a study", "meaning_zh": "开展研究"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 20,
+      "sentence": "During research conducted by the Institute of Neurological Studies at South Glasgow University Hospital it was observed that there was a significant decrease in heart rate and blood pressure amongst subjects receiving 30 minutes of Reiki treatment as opposed to a group receiving placebo treatment of 30 minutes rest.",
+      "translation": "南格拉斯哥大学医院神经学研究所开展的一项研究观察到：与接受30分钟休息作为安慰剂处理的一组人相比，接受30分钟灵气治疗的受试者心率和血压显著下降。",
+      "structure": [
+        {"text": "During research", "role": "prepositional_phrase", "level": 1},
+        {"text": "conducted by the Institute of Neurological Studies at South Glasgow University Hospital", "role": "participial_phrase", "level": 2},
+        {"text": "it was observed", "role": "impersonal_passive", "level": 1},
+        {"text": "that there was a significant decrease in heart rate and blood pressure", "role": "subject_clause", "level": 2},
+        {"text": "amongst subjects receiving 30 minutes of Reiki treatment", "role": "prepositional_phrase", "level": 3},
+        {"text": "as opposed to a group receiving placebo treatment of 30 minutes rest", "role": "comparison_phrase", "level": 3}
+      ],
+      "difficult_points": ["conducted... 是过去分词短语，修饰 research。", "it was observed that 是非人称被动结构，that 从句说明观察结果。", "receiving... 分别修饰 subjects 和 a group，说明两组接受的处理。", "as opposed to 引出对照组，表示“而不是；与……相比”。"],
+      "expressions": [{"text": "a significant decrease in", "meaning_zh": "……的显著下降"}, {"text": "as opposed to", "meaning_zh": "与……相对；而不是"}, {"text": "placebo treatment", "meaning_zh": "安慰剂处理"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 21,
+      "sentence": "Since the test group consisted of a small number of subjects just 45 – the research recommendations concluded a requirement for further studies.",
+      "translation": "由于测试组仅由45名受试者组成，研究建议认为还需要开展进一步研究。",
+      "structure": [
+        {"text": "Since the test group consisted of a small number of subjects just 45", "role": "adverbial_clause", "level": 1},
+        {"text": "the research recommendations", "role": "subject", "level": 1},
+        {"text": "concluded", "role": "verb", "level": 1},
+        {"text": "a requirement for further studies", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["Since 引导原因状语从句，说明为什么需要进一步研究。", "just 45 是对 a small number of subjects 的补充说明，但原文破折号位置异常且缺少配对标点。", "concluded a requirement 搭配不自然，语义上是研究结论指出有必要继续研究。"],
+      "expressions": [{"text": "consist of", "meaning_zh": "由……组成"}, {"text": "a requirement for further studies", "meaning_zh": "开展进一步研究的必要性"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 22,
+      "sentence": "A similarly small preliminary study into the potential effects of Reiki on patients suffering mild dementia, conducted in the USA, tentatively suggested that treatment had a positive effect on the subjects' memory abilities; however, research limitations included insufficient analysis of potential placebo affects.",
+      "translation": "美国进行的一项规模同样较小的初步研究，考察了灵气疗法对轻度痴呆患者的潜在影响，并初步显示治疗可能改善受试者的记忆能力；不过，该研究的局限包括对潜在安慰剂效应分析不足。",
+      "structure": [
+        {"text": "A similarly small preliminary study into the potential effects of Reiki on patients suffering mild dementia", "role": "subject", "level": 1},
+        {"text": "suffering mild dementia", "role": "participial_phrase", "level": 2},
+        {"text": "conducted in the USA", "role": "participial_phrase", "level": 1},
+        {"text": "tentatively suggested", "role": "verb_phrase", "level": 1},
+        {"text": "that treatment had a positive effect on the subjects' memory abilities", "role": "object_clause", "level": 2},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "research limitations included insufficient analysis of potential placebo affects", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["主语很长，核心词是 study；conducted in the USA 后置修饰该研究。", "suffering mild dementia 修饰 patients。", "tentatively 表明研究结论只是初步性的，不能视为确定证据。", "placebo affects 疑为 placebo effects 的拼写/用词错误，原文按要求保留。"],
+      "expressions": [{"text": "preliminary study", "meaning_zh": "初步研究"}, {"text": "have a positive effect on", "meaning_zh": "对……产生积极影响"}, {"text": "research limitations", "meaning_zh": "研究局限"}, {"text": "insufficient analysis", "meaning_zh": "分析不足"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 23,
+      "sentence": "Other studies have also attempted to determine correlation between Reiki treatment and improvement in cancer and stroke patients.",
+      "translation": "其他研究也试图确定灵气治疗与癌症及中风患者病情改善之间是否存在关联。",
+      "structure": [
+        {"text": "Other studies", "role": "subject", "level": 1},
+        {"text": "have also attempted", "role": "verb_phrase", "level": 1},
+        {"text": "to determine correlation between Reiki treatment and improvement in cancer and stroke patients", "role": "infinitive_complement", "level": 1}
+      ],
+      "difficult_points": ["have attempted 是现在完成时，概括截至目前其他研究所作的尝试。", "between A and B 构成 correlation 的两个关联对象：灵气治疗与患者改善。", "improvement in cancer and stroke patients 指癌症与中风患者的状况改善。"],
+      "expressions": [{"text": "attempt to determine", "meaning_zh": "试图确定"}, {"text": "correlation between", "meaning_zh": "……之间的关联"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 24,
+      "sentence": "Whilst investigations into the first condition indicated a seemingly positive effect on degrees of fatigue, pain and stress experienced by sufferers, the second project failed to reveal a link between treatment and improvement in the subjects' condition and rehabilitation.",
+      "translation": "对第一种疾病的研究显示，治疗似乎能减轻患者的疲劳、疼痛和压力程度；而第二项研究未能发现治疗与受试者病情改善及康复之间的联系。",
+      "structure": [
+        {"text": "Whilst investigations into the first condition indicated a seemingly positive effect", "role": "adverbial_clause", "level": 1},
+        {"text": "on degrees of fatigue, pain and stress", "role": "prepositional_phrase", "level": 2},
+        {"text": "experienced by sufferers", "role": "participial_phrase", "level": 3},
+        {"text": "the second project", "role": "subject", "level": 1},
+        {"text": "failed to reveal", "role": "verb_phrase", "level": 1},
+        {"text": "a link between treatment and improvement in the subjects' condition and rehabilitation", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["Whilst 在这里表示两项研究结果的对比。", "the first condition 与 the second project 分别回指上一句的癌症研究和中风研究。", "experienced by sufferers 修饰 fatigue, pain and stress。", "fail to reveal 表示研究没有发现证据，并不等于证明二者绝无关联。"],
+      "expressions": [{"text": "a seemingly positive effect on", "meaning_zh": "对……似乎有积极影响"}, {"text": "fail to reveal", "meaning_zh": "未能发现"}, {"text": "a link between", "meaning_zh": "……之间的联系"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 25,
+      "sentence": "Theories have been put forward that the benefits of energy treatments such as Reiki may be scientifically attributed to the effect of electromagnetic fields; however, the majority researchers agree that more extensive investigation is required.",
+      "translation": "有人提出理论，认为灵气等能量疗法的益处或许可以从科学上归因于电磁场的作用；不过，大多数研究人员都认同还需要开展更广泛的研究。",
+      "structure": [
+        {"text": "Theories", "role": "subject", "level": 1},
+        {"text": "have been put forward", "role": "passive_predicate", "level": 1},
+        {"text": "that the benefits of energy treatments such as Reiki may be scientifically attributed to the effect of electromagnetic fields", "role": "appositive_clause", "level": 2},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "the majority researchers agree", "role": "coordinate_clause", "level": 1},
+        {"text": "that more extensive investigation is required", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["that 从句是 Theories 的同位语从句，具体说明理论内容。", "be attributed to 表示把某种结果归因于某个原因。", "however 引出研究界对证据仍不充分的保留态度。", "the majority researchers 疑为 the majority of researchers 或 the majority of the researchers 的漏词，原文按要求保留。"],
+      "expressions": [{"text": "put forward a theory", "meaning_zh": "提出理论"}, {"text": "be attributed to", "meaning_zh": "被归因于"}, {"text": "extensive investigation", "meaning_zh": "广泛的研究"}, {"text": "be required", "meaning_zh": "是必需的"}]
+    }
+  ]
+}

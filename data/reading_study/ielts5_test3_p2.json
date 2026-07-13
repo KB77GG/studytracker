@@ -1,0 +1,1079 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts5_test3_reading",
+  "passage_id": "ielts5_test3_p2",
+  "passage_title": "Disappearing Delta",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The fertile land of the Nile delta is being eroded along Egypt's Mediterranean coast at an astounding rate, in some parts estimated at 100 metres per year.",
+      "translation": "尼罗河三角洲的肥沃土地正在埃及地中海沿岸以惊人的速度遭到侵蚀，有些地方每年减少约100米。",
+      "structure": [
+        {
+          "text": "The fertile land of the Nile delta",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is being eroded along Egypt's Mediterranean coast",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "in some parts estimated at 100 metres per year",
+          "role": "past_participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "being eroded是被动进行时，表示侵蚀正在发生。",
+        "estimated at 100 metres...是插入的过去分词短语，补充说明侵蚀速度。"
+      ],
+      "expressions": [
+        {
+          "text": "be eroded",
+          "meaning_zh": "遭到侵蚀"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "In the past, land scoured away from the coastline by the currents of the Mediterranean Sea used to be replaced by sediment brought down to the delta by the River Nile, but this is no longer happening.",
+      "translation": "过去，被地中海洋流从海岸冲走的土地会由尼罗河带到三角洲的沉积物补回来，但如今已不再如此。",
+      "structure": [
+        {
+          "text": "land scoured away from the coastline by the currents of the Mediterranean Sea",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "used to be replaced by sediment brought down to the delta by the River Nile",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "but this is no longer happening",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "scoured away和brought down都是过去分词短语，分别修饰land和sediment。",
+        "used to be replaced表示过去的规律，而this is no longer happening表示现状改变。"
+      ],
+      "expressions": [
+        {
+          "text": "scour away",
+          "meaning_zh": "冲刷掉"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 3,
+      "sentence": "Up to now, people have blamed this loss of delta land on the two large dams at Aswan in the south of Egypt, which hold back virtually all of the sediment that used to flow down the river.",
+      "translation": "到目前为止，人们一直把三角洲土地的流失归咎于埃及南部阿斯旺的两座大坝，因为它们几乎拦住了原本会顺河流下的全部沉积物。",
+      "structure": [
+        {
+          "text": "people",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have blamed this loss of delta land on the two large dams at Aswan in the south of Egypt",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "which hold back virtually all of the sediment that used to flow down the river",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "which引导定语从句修饰dams。",
+        "that used to flow down the river嵌套修饰sediment。"
+      ],
+      "expressions": [
+        {
+          "text": "blame ... on ...",
+          "meaning_zh": "把……归咎于……"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Before the dams were built, the Nile flowed freely, carrying huge quantities of sediment north from Africa's interior to be deposited on the Nile delta.",
+      "translation": "大坝建成前，尼罗河自由流淌，把非洲内陆的大量沉积物向北带到尼罗河三角洲沉积。",
+      "structure": [
+        {
+          "text": "the Nile",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "flowed freely",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "carrying huge quantities of sediment north from Africa's interior to be deposited on the Nile delta",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "carrying是现在分词，表示尼罗河自由流淌时同时携带沉积物。",
+        "to be deposited是不定式被动，表示沉积物的去向。"
+      ],
+      "expressions": [
+        {
+          "text": "flow freely",
+          "meaning_zh": "自由流淌"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "This continued for 7,000 years, eventually covering a region of over 22,000 square kilometres with layers of fertile silt.",
+      "translation": "这一过程持续了7000年，最终用肥沃淤泥覆盖了超过22000平方公里的区域。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "continued for 7,000 years",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "eventually covering a region of over 22,000 square kilometres with layers of fertile silt",
+          "role": "result_participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "This指代尼罗河持续输送沉积物的过程。",
+        "eventually covering是结果分词结构，说明长期作用的结果。"
+      ],
+      "expressions": [
+        {
+          "text": "fertile silt",
+          "meaning_zh": "肥沃淤泥"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Annual flooding brought in new, nutrient-rich soil to the delta region, replacing what had been washed away by the sea, and dispensing with the need for fertilizers in Egypt's richest food-growing area.",
+      "translation": "每年的洪水给三角洲带来富含养分的新土壤，补充被海水冲走的部分，也使埃及最富饶的农业区无需施肥。",
+      "structure": [
+        {
+          "text": "Annual flooding",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "brought in new, nutrient-rich soil to the delta region",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "replacing what had been washed away by the sea",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "dispensing with the need for fertilizers in Egypt's richest food-growing area",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "replacing和dispensing分别表示洪水带来土壤的两个结果。",
+        "what had been washed away是what引导的名词性从句，作replacing的宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "dispense with",
+          "meaning_zh": "免除、不需要"
+        }
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "But when the Aswan dams were constructed in the 20th century to provide electricity and irrigation, and to protect the huge population centre of Cairo and its surrounding areas from annual flooding and drought, most of the sediment with its natural fertilizer accumulated up above the dam in the southern, upstream half of Lake Nasser, instead of passing down to the delta.",
+      "translation": "但20世纪修建阿斯旺大坝以供电、灌溉并保护开罗人口中心及周边地区免受洪水和干旱影响时，大部分带有天然肥力的沉积物堆积在大坝上游的纳赛尔湖南部，而不是流向三角洲。",
+      "structure": [
+        {
+          "text": "most of the sediment with its natural fertilizer",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "accumulated up above the dam in the southern, upstream half of Lake Nasser",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "instead of passing down to the delta",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "when引导时间状语从句，说明水坝建成后的情况。",
+        "instead of passing down表示沉积物没有继续流向三角洲。"
+      ],
+      "expressions": [
+        {
+          "text": "provide electricity and irrigation",
+          "meaning_zh": "提供电力和灌溉"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "Now, however, there turns out to be more to the story.",
+      "translation": "然而，现在看来事情并不止于此。",
+      "structure": [
+        {
+          "text": "Now, however",
+          "role": "sentence_adverbial",
+          "level": 1
+        },
+        {
+          "text": "there turns out to be more to the story",
+          "role": "existential_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "there turns out to be是存在句型，more to the story表示事情还有其他原因。",
+        "Now, however是转折性的句首插入语。"
+      ],
+      "expressions": [
+        {
+          "text": "more to the story",
+          "meaning_zh": "事情另有隐情"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "It appears that the sediment-free water emerging from the Aswan dams picks up silt and sand as it erodes the river bed and banks on the 800-kilometre trip to Cairo.",
+      "translation": "事实表明，从阿斯旺大坝流出的无沉积物水，在前往开罗的800公里途中侵蚀河床和河岸，重新带走了淤泥和沙子。",
+      "structure": [
+        {
+          "text": "the sediment-free water emerging from the Aswan dams",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "picks up silt and sand",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "as it erodes the river bed and banks on the 800-kilometre trip to Cairo",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "emerging from the Aswan dams是现在分词短语，修饰water。",
+        "as引导时间或伴随状语从句，说明水侵蚀河床的过程。"
+      ],
+      "expressions": [
+        {
+          "text": "pick up",
+          "meaning_zh": "带走、吸收"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "Daniel Jean Stanley of the Smithsonian Institution noticed that water samples taken in Cairo, just before the river enters the delta, indicated that the river sometimes carries more than 850 grams of sediment per cubic metre of water - almost half of what it carried before the dams were built.",
+      "translation": "史密森学会的丹尼尔·让·斯坦利注意到，开罗采集的水样显示，在河流进入三角洲前，河水有时每立方米携带超过850克沉积物，几乎是大坝修建前的一半。",
+      "structure": [
+        {
+          "text": "Daniel Jean Stanley of the Smithsonian Institution",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "noticed",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "that water samples taken in Cairo, just before the river enters the delta, indicated that the river sometimes carries more than 850 grams of sediment per cubic metre of water - almost half of what it carried before the dams were built",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "noticed后接that宾语从句，且从句中又嵌套indicated that。",
+        "taken in Cairo是过去分词短语，修饰water samples。"
+      ],
+      "expressions": [
+        {
+          "text": "indicate that",
+          "meaning_zh": "表明"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "'I'm ashamed to say that the significance of this didn't strike me until after I had read 50 or 60 studies,' says Stanley in Marine Geology.",
+      "translation": "斯坦利在《海洋地质学》中说：“我惭愧地承认，直到读过五六十项研究后，我才意识到这一点的重要性。”",
+      "structure": [
+        {
+          "text": "'I'm ashamed to say",
+          "role": "subject_predicate",
+          "level": 1
+        },
+        {
+          "text": "that the significance of this didn't strike me until after I had read 50 or 60 studies",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "to say后接that宾语从句，说明羞愧的具体内容。",
+        "didn’t strike me until...表示直到读完研究才意识到其意义。"
+      ],
+      "expressions": [
+        {
+          "text": "strike someone",
+          "meaning_zh": "使某人突然意识到"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "'There is still a lot of sediment coming into the delta, but virtually no sediment comes out into the Mediterranean to replenish the coastline.",
+      "translation": "“进入三角洲的沉积物仍然很多，但几乎没有沉积物流入地中海去补充海岸线。",
+      "structure": [
+        {
+          "text": "'There is still a lot of sediment coming into the delta",
+          "role": "subject_predicate",
+          "level": 1
+        },
+        {
+          "text": "but virtually no sediment comes out into the Mediterranean to replenish the coastline",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "There is...but...构成转折并列，说明进入与流出的差异。",
+        "coming into和comes out分别描述沉积物流向。"
+      ],
+      "expressions": [
+        {
+          "text": "replenish the coastline",
+          "meaning_zh": "补充海岸线"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "So this sediment must be trapped on the delta itself.'",
+      "translation": "因此，这些沉积物一定被困在三角洲本身。”",
+      "structure": [
+        {
+          "text": "this sediment",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "must be trapped on the delta itself",
+          "role": "passive_predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "must be trapped是情态动词加被动语态，表示必然推断。",
+        "on the delta itself强调沉积物被困的位置。"
+      ],
+      "expressions": [
+        {
+          "text": "be trapped",
+          "meaning_zh": "被困住"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "Once north of Cairo, most of the Nile water is diverted into more than 10,000 kilometres of irrigation canals and only a small proportion reaches the sea directly through the rivers in the delta.",
+      "translation": "开罗以北后，大部分尼罗河水被分流到超过10000公里的灌溉渠中，只有很少一部分通过三角洲的河流直接到达大海。",
+      "structure": [
+        {
+          "text": "most of the Nile water",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is diverted into more than 10,000 kilometres of irrigation canals",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "only a small proportion reaches the sea directly through the rivers in the delta",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Once north of Cairo是省略主语的时间状语。",
+        "is diverted和reaches构成被动与主动的并列对比。"
+      ],
+      "expressions": [
+        {
+          "text": "be diverted into",
+          "meaning_zh": "被分流到"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "The water in the irrigation canals is still or very slow-moving and thus cannot carry sediment, Stanley explains.",
+      "translation": "斯坦利解释说，灌溉渠里的水静止或流动极慢，因此无法携带沉积物。",
+      "structure": [
+        {
+          "text": "The water in the irrigation canals",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is still or very slow-moving",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "thus cannot carry sediment",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "Stanley explains",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "thus连接前因后果，说明水流慢所以不能带沉积物。",
+        "those who...中的who从句修饰人员时可省略，此处Stanley explains是插入说明。"
+      ],
+      "expressions": [
+        {
+          "text": "carry sediment",
+          "meaning_zh": "携带沉积物"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "The sediment sinks to the bottom of the canals and then is added to fields by farmers or pumped with the water into the four large freshwater lagoons that are located near the outer edges of the delta.",
+      "translation": "沉积物沉到沟渠底部，随后被农民加到田地里，或随水泵入三角洲外围附近的四个大型淡水湖。",
+      "structure": [
+        {
+          "text": "The sediment",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "sinks to the bottom of the canals",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "then is added to fields by farmers or pumped with the water into the four large freshwater lagoons",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "that are located near the outer edges of the delta",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "then连接沉积物沉降和后续处理两个动作。",
+        "that are located是定语从句，修饰freshwater lagoons。"
+      ],
+      "expressions": [
+        {
+          "text": "reach the coastline",
+          "meaning_zh": "到达海岸线"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "So very little of it actually reaches the coastline to replace what is being washed away by the Mediterranean currents.",
+      "translation": "所以真正到达海岸、补偿被地中海洋流冲走部分的沉积物少之又少。",
+      "structure": [
+        {
+          "text": "very little of it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "actually reaches the coastline",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "to replace what is being washed away by the Mediterranean currents",
+          "role": "infinitive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "what is being washed away是what名词性从句，作replace的宾语。",
+        "to replace是不定式，说明沉积物到达海岸的作用。"
+      ],
+      "expressions": [
+        {
+          "text": "account for",
+          "meaning_zh": "占据、构成"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "The farms on the delta plains and fishing and aquaculture in the lagoons account for much of Egypt's food supply.",
+      "translation": "三角洲平原上的农场以及湖泊中的捕捞和水产养殖，供应了埃及大部分食物。",
+      "structure": [
+        {
+          "text": "The farms on the delta plains and fishing and aquaculture in the lagoons",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "account for much of Egypt's food supply",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "fishing and aquaculture是并列主语的一部分。",
+        "account for表示在供应中占相当大比重。"
+      ],
+      "expressions": [
+        {
+          "text": "come to rest",
+          "meaning_zh": "沉降、停留"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "But by the time the sediment has come to rest in the fields and lagoons it is laden with municipal, industrial and agricultural waste from the Cairo region, which is home to more than 40 million people.",
+      "translation": "但沉积物沉降到田地和湖泊时，已经带上了来自开罗地区的城市、工业和农业废物；该地区有超过4000万人口。",
+      "structure": [
+        {
+          "text": "the sediment",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is laden with municipal, industrial and agricultural waste from the Cairo region",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "by the time the sediment has come to rest in the fields and lagoons",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "which is home to more than 40 million people",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "by the time引导时间状语从句。",
+        "which is home to...修饰Cairo region，说明其人口规模。"
+      ],
+      "expressions": [
+        {
+          "text": "build up",
+          "meaning_zh": "积累"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "'Pollutants are building up faster and faster,' says Stanley.",
+      "translation": "斯坦利说：“污染物正在越来越快地积累。”",
+      "structure": [
+        {
+          "text": "Pollutants",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are building up faster and faster",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "says Stanley",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "are building up用现在进行时表示污染正在持续累积。",
+        "faster and faster表示增长速度不断加快。"
+      ],
+      "expressions": [
+        {
+          "text": "coincide with",
+          "meaning_zh": "与……同时发生"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "Based on his investigations of sediment from the delta lagoons, Frederic Siegel of George Washington University concurs.",
+      "translation": "乔治·华盛顿大学的弗雷德里克·西格尔根据对三角洲湖泊沉积物的调查表示赞同。",
+      "structure": [
+        {
+          "text": "Frederic Siegel of George Washington University",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "concurs",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "Based on his investigations of sediment from the delta lagoons",
+          "role": "participial_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Based on...是过去分词短语，说明结论依据。",
+        "concurs表示同意前文关于污染的判断。"
+      ],
+      "expressions": [
+        {
+          "text": "increase significantly",
+          "meaning_zh": "显著增加"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "'In Manzalah Lagoon, for example, the increase in mercury, lead, copper and zinc coincided with the building of the High Dam at Aswan, the availability of cheap electricity, and the development of major power-based industries,' he says.",
+      "translation": "他说：“例如在曼扎拉湖，汞、铅、铜和锌含量的增加，与阿斯旺高坝的修建、廉价电力的供应以及大型电力工业的发展同时发生。”",
+      "structure": [
+        {
+          "text": "the increase in mercury, lead, copper and zinc",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "coincided with the building of the High Dam at Aswan, the availability of cheap electricity, and the development of major power-based industries",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "he says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "coincided with后并列三个名词短语，列出同时发生的因素。",
+        "he says是引语后的报告结构。"
+      ],
+      "expressions": [
+        {
+          "text": "enter the food chain",
+          "meaning_zh": "进入食物链"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "Since that time the concentration of mercury has increased significantly.",
+      "translation": "从那时起，汞的浓度显著增加。",
+      "structure": [
+        {
+          "text": "the concentration of mercury",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has increased significantly",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "has increased用现在完成时表示从过去延续到现在。",
+        "significantly修饰增加幅度。"
+      ],
+      "expressions": [
+        {
+          "text": "upset the ecology",
+          "meaning_zh": "破坏生态"
+        }
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "Lead from engines that use leaded fuels and from other industrial sources has also increased dramatically.",
+      "translation": "使用含铅燃料的发动机以及其他工业来源排放的铅也大幅增加。",
+      "structure": [
+        {
+          "text": "Lead from engines that use leaded fuels and from other industrial sources",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has also increased dramatically",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "that use leaded fuels",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that use leaded fuels修饰engines。",
+        "from...and from...并列说明铅的来源。"
+      ],
+      "expressions": [
+        {
+          "text": "pay closer attention to",
+          "meaning_zh": "更加关注"
+        }
+      ]
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "These poisons can easily enter the food chain, affecting the productivity of fishing and farming.",
+      "translation": "这些毒物很容易进入食物链，影响捕捞和农业的生产力。",
+      "structure": [
+        {
+          "text": "These poisons",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can easily enter the food chain",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "affecting the productivity of fishing and farming",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "affecting是结果分词，说明毒物进入食物链后的影响。",
+        "can easily表示这种进入很容易发生。"
+      ],
+      "expressions": [
+        {
+          "text": "flush out",
+          "meaning_zh": "冲刷排出"
+        }
+      ]
+    },
+    {
+      "id": "E-09",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "Another problem is that agricultural wastes include fertilizers which stimulate increases in plant growth in the lagoons and upset the ecology of the area, with serious effects on the fishing industry.",
+      "translation": "另一个问题是，农业废物含有肥料，这些肥料会刺激湖泊植物生长增加并破坏当地生态，对渔业造成严重影响。",
+      "structure": [
+        {
+          "text": "Another problem",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is that agricultural wastes include fertilizers",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "which stimulate increases in plant growth in the lagoons and upset the ecology of the area",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "with serious effects on the fishing industry",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that agricultural wastes include fertilizers是表语从句。",
+        "which引导定语从句修饰fertilizers，with短语补充结果。"
+      ],
+      "expressions": [
+        {
+          "text": "amount of water available",
+          "meaning_zh": "可用水量"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "According to Siegel, international environmental organisations are beginning to pay closer attention to the region, partly because of the problems of erosion and pollution of the Nile delta, but principally because they fear the impact this situation could have on the whole Mediterranean coastal ecosystem.",
+      "translation": "西格尔说，国际环保组织正开始更加关注这一地区，部分原因是尼罗河三角洲的侵蚀和污染问题，但主要是担心这种状况会影响整个地中海沿岸生态系统。",
+      "structure": [
+        {
+          "text": "international environmental organisations",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are beginning to pay closer attention to the region",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "partly because of the problems of erosion and pollution of the Nile delta, but principally because they fear the impact this situation could have on the whole Mediterranean coastal ecosystem",
+          "role": "adverbial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "partly because...but principally because...构成原因的递进对比。",
+        "this situation could have是fear的宾语从句，could表示可能影响。"
+      ],
+      "expressions": [
+        {
+          "text": "devise a way",
+          "meaning_zh": "想办法"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "But there are no easy solutions.",
+      "translation": "然而，这里没有简单的解决办法。",
+      "structure": [
+        {
+          "text": "there",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are no easy solutions",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "there are是存在句型，真正主语是no easy solutions。",
+        "But引出对上一段问题的限制性结论。"
+      ],
+      "expressions": [
+        {
+          "text": "easier said than done",
+          "meaning_zh": "说起来容易做起来难"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "In the immediate future, Stanley believes that one solution would be to make artificial floods to flush out the delta waterways, in the same way that natural floods did before the construction of the dams.",
+      "translation": "斯坦利认为，近期的一种办法是制造人工洪水冲刷三角洲水道，就像大坝修建前的自然洪水一样。",
+      "structure": [
+        {
+          "text": "one solution",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "would be to make artificial floods",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "to flush out the delta waterways",
+          "role": "infinitive_clause",
+          "level": 2
+        },
+        {
+          "text": "in the same way that natural floods did before the construction of the dams",
+          "role": "comparative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "would be to make是不定式作表语。",
+        "to flush out和that natural floods did...分别表示目的和比较方式。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "He says, however, that in the long term an alternative process such as desalination may have to be used to increase the amount of water available.",
+      "translation": "不过他说，从长远看，可能必须采用海水淡化等替代工艺来增加可用水量。",
+      "structure": [
+        {
+          "text": "an alternative process such as desalination",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "may have to be used",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "to increase the amount of water available",
+          "role": "infinitive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "may have to be used表示将来可能不得不采用。",
+        "to increase是不定式目的状语。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "'In my view, Egypt must devise a way to have more water running through the river and the delta,' says Stanley.",
+      "translation": "斯坦利说：“在我看来，埃及必须想办法让更多水流经河流和三角洲。”",
+      "structure": [
+        {
+          "text": "Egypt",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "must devise a way",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "to have more water running through the river and the delta",
+          "role": "infinitive_clause",
+          "level": 2
+        },
+        {
+          "text": "says Stanley",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "to have more water running...说明way的具体内容。",
+        "running是have的宾语补足语，表示让水持续流动。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "Easier said than done in a desert region with a rapidly growing population.",
+      "translation": "在一个人口快速增长的沙漠地区，这说起来容易做起来难。",
+      "structure": [
+        {
+          "text": "Easier",
+          "role": "subject_complement",
+          "level": 1
+        },
+        {
+          "text": "said than done",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "in a desert region with a rapidly growing population",
+          "role": "adverbial_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Easier said than done是省略主语和be的固定表达。",
+        "with a rapidly growing population是伴随背景的介词短语。"
+      ],
+      "expressions": []
+    }
+  ]
+}

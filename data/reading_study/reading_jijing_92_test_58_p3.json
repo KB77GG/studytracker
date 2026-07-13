@@ -1,0 +1,1094 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_92_test_58",
+  "passage_id": "reading_jijing_92_test_58_p3",
+  "passage_title": "Bondi Beach",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Bondi Beach, Australia's most famous beach, is located in the suburb of Bondi, in the Local Government Area of Waverley, seven kilometers from the centre of Sydney.",
+      "translation": "邦迪海滩是澳大利亚最著名的海滩，位于邦迪郊区，隶属韦弗利地方政府辖区，距悉尼市中心七公里。",
+      "structure": [
+        {"text": "Bondi Beach", "role": "subject", "level": 1},
+        {"text": "Australia's most famous beach", "role": "appositive", "level": 2},
+        {"text": "is located", "role": "verb_phrase", "level": 1},
+        {"text": "in the suburb of Bondi, in the Local Government Area of Waverley", "role": "prepositional_phrase", "level": 1},
+        {"text": "seven kilometers from the centre of Sydney", "role": "distance_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "Australia's most famous beach 是同位语，补充说明 Bondi Beach。",
+        "is located 使用被动形式表达地理位置，后接两个层层细化地点的介词短语。"
+      ],
+      "expressions": [
+        {"text": "be located in", "meaning_zh": "位于……"},
+        {"text": "from the centre of", "meaning_zh": "距……中心"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "\"Bondi\" or\"Boondi\" is an Aboriginal word meaning water breaking over rocks or the sound of breaking waves.",
+      "translation": "“Bondi”或“Boondi”是一个原住民词语，意为水冲过岩石，或碎浪发出的声音。",
+      "structure": [
+        {"text": "\"Bondi\" or\"Boondi\"", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "an Aboriginal word", "role": "complement", "level": 1},
+        {"text": "meaning water breaking over rocks or the sound of breaking waves", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "meaning... 是现在分词短语，后置解释 Aboriginal word 的含义。",
+        "water breaking over rocks 与 the sound of breaking waves 由 or 连接，表示两种释义。"
+      ],
+      "expressions": [
+        {"text": "break over rocks", "meaning_zh": "冲击岩石"},
+        {"text": "the sound of breaking waves", "meaning_zh": "碎浪声"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "The Australian Museum records that Bondi means a place where a flight of nullas took place.",
+      "translation": "澳大利亚博物馆记载，Bondi 意指一个曾发生投掷棍飞掷活动的地方。",
+      "structure": [
+        {"text": "The Australian Museum", "role": "subject", "level": 1},
+        {"text": "records", "role": "verb_phrase", "level": 1},
+        {"text": "that Bondi means a place where a flight of nullas took place", "role": "noun_clause", "level": 2},
+        {"text": "where a flight of nullas took place", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导 records 的宾语从句，说明博物馆的具体记载。",
+        "where 引导定语从句修饰 a place，took place 表示“发生”。"
+      ],
+      "expressions": [
+        {"text": "take place", "meaning_zh": "发生"},
+        {"text": "record that", "meaning_zh": "记载……"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "There are Aboriginal Rock carving on the northern end of the beach at Ben Buckler and south of Bondi Beach near McKenzies Beach on the coastal walk.",
+      "translation": "海滩北端的本·巴克勒以及邦迪海滩以南、麦肯齐斯海滩附近的滨海步道上，都有原住民岩刻。",
+      "structure": [
+        {"text": "There are", "role": "existential_clause", "level": 1},
+        {"text": "Aboriginal Rock carving", "role": "notional_subject", "level": 1},
+        {"text": "on the northern end of the beach at Ben Buckler", "role": "prepositional_phrase", "level": 1},
+        {"text": "and south of Bondi Beach near McKenzies Beach on the coastal walk", "role": "coordinated_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "There are 是存在句结构，真正说明存在事物的是 Aboriginal Rock carving。",
+        "and 连接两处地点，第二处由 south of、near 和 on 三个位置成分共同限定。"
+      ],
+      "expressions": [
+        {"text": "on the northern end of", "meaning_zh": "在……北端"},
+        {"text": "coastal walk", "meaning_zh": "滨海步道"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "The indigenous people of the area at the time of European settlement have generally been welcomed to as the Sydney people or the Eora (Eora means \"the people\").",
+      "translation": "欧洲人定居时期，这一地区的原住民通常被称为悉尼人或 Eora 人（Eora 意为“人们”）。",
+      "structure": [
+        {"text": "The indigenous people of the area at the time of European settlement", "role": "subject", "level": 1},
+        {"text": "have generally been welcomed to as", "role": "verb_phrase", "level": 1},
+        {"text": "the Sydney people or the Eora", "role": "complement", "level": 1},
+        {"text": "Eora means \"the people\"", "role": "parenthesis", "level": 2}
+      ],
+      "difficult_points": [
+        "at the time of European settlement 是时间状语，限定所说的历史时期。",
+        "括号中的独立分句解释 Eora 一词的含义；原文谓语搭配虽不自然但需按原文理解。"
+      ],
+      "expressions": [
+        {"text": "at the time of", "meaning_zh": "在……时期"},
+        {"text": "European settlement", "meaning_zh": "欧洲人定居"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "One theory describes the Eora as a sub-group of the Darug language group which occupied the Cumberland Plain west to the Blue Mountains.",
+      "translation": "一种理论认为，Eora 是达鲁格语群的一个分支；该语群分布在坎伯兰平原，向西延伸至蓝山。",
+      "structure": [
+        {"text": "One theory", "role": "subject", "level": 1},
+        {"text": "describes the Eora as a sub-group of the Darug language group", "role": "verb_phrase", "level": 1},
+        {"text": "which occupied the Cumberland Plain west to the Blue Mountains", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "describe A as B 表示“把 A 描述为 B”或“认为 A 是 B”。",
+        "which 引导定语从句，先行词是 the Darug language group，说明其分布范围。"
+      ],
+      "expressions": [
+        {"text": "describe ... as ...", "meaning_zh": "把……描述为……"},
+        {"text": "a sub-group of", "meaning_zh": "……的一个分支"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "However, another theory suggests that they were a distinct language group of their own.",
+      "translation": "然而，另一种理论认为，他们本身就是一个独立的语言群体。",
+      "structure": [
+        {"text": "However", "role": "conjunctive_adverb", "level": 1},
+        {"text": "another theory", "role": "subject", "level": 1},
+        {"text": "suggests", "role": "verb_phrase", "level": 1},
+        {"text": "that they were a distinct language group of their own", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "However 是连接副词，表示本句观点与上一种理论相对。",
+        "that 引导 suggests 的宾语从句，they 回指 Eora 人。"
+      ],
+      "expressions": [
+        {"text": "a distinct language group", "meaning_zh": "独立的语言群体"},
+        {"text": "of their own", "meaning_zh": "他们自身的；独立拥有的"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "There is no clear evidence for the name or names of the particular band(s) of the Eora that roamed what is now the Waverley area.",
+      "translation": "对于曾活动于如今韦弗利地区的 Eora 特定群体究竟叫什么，目前没有明确证据。",
+      "structure": [
+        {"text": "There is no clear evidence", "role": "existential_clause", "level": 1},
+        {"text": "for the name or names of the particular band(s) of the Eora", "role": "prepositional_phrase", "level": 1},
+        {"text": "that roamed what is now the Waverley area", "role": "relative_clause", "level": 2},
+        {"text": "what is now the Waverley area", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导定语从句，修饰 the particular band(s) of the Eora。",
+        "what is now the Waverley area 是融合关系从句，整体作 roamed 的宾语，意为“如今的韦弗利地区”。"
+      ],
+      "expressions": [
+        {"text": "clear evidence for", "meaning_zh": "关于……的明确证据"},
+        {"text": "what is now", "meaning_zh": "如今的……"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "A number of place names within Waverley, most famously Bondi, have been based on words derived from Aboriginal languages of the Sydney region.",
+      "translation": "韦弗利境内的一些地名——其中最著名的是 Bondi——源自悉尼地区原住民语言中的词汇。",
+      "structure": [
+        {"text": "A number of place names within Waverley", "role": "subject", "level": 1},
+        {"text": "most famously Bondi", "role": "parenthesis", "level": 2},
+        {"text": "have been based on", "role": "verb_phrase", "level": 1},
+        {"text": "words derived from Aboriginal languages of the Sydney region", "role": "prepositional_object", "level": 1},
+        {"text": "derived from Aboriginal languages of the Sydney region", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "most famously Bondi 是插入语，举出最知名的地名实例。",
+        "derived from... 是过去分词短语，后置修饰 words。"
+      ],
+      "expressions": [
+        {"text": "a number of", "meaning_zh": "若干；一些"},
+        {"text": "be based on", "meaning_zh": "以……为基础；源自……"},
+        {"text": "be derived from", "meaning_zh": "源自……"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "From the mid-1800s Bondi Beach was a favourite location for family outings and picnics.",
+      "translation": "从19世纪中叶起，邦迪海滩便成为家庭出游和野餐的热门地点。",
+      "structure": [
+        {"text": "From the mid-1800s", "role": "prepositional_phrase", "level": 1},
+        {"text": "Bondi Beach", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "a favourite location for family outings and picnics", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "From the mid-1800s 表示状态开始的时间，即从19世纪中叶起。",
+        "for family outings and picnics 说明该地点所适合的活动。"
+      ],
+      "expressions": [
+        {"text": "a favourite location for", "meaning_zh": "……的热门地点"},
+        {"text": "family outings", "meaning_zh": "家庭出游"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "The beginnings of the suburb go back to 1809, when the early road builder, William Roberts, received from Governor Bligh a grant of 81 hectares of what is now most of the business and residential area of Bondi Beach.",
+      "translation": "这片郊区的起源可追溯到1809年，当时早期道路建设者威廉·罗伯茨从布莱总督那里获赠81公顷土地，如今邦迪海滩大部分商业和住宅区都位于其上。",
+      "structure": [
+        {"text": "The beginnings of the suburb", "role": "subject", "level": 1},
+        {"text": "go back to 1809", "role": "verb_phrase", "level": 1},
+        {"text": "when the early road builder, William Roberts, received from Governor Bligh a grant of 81 hectares of what is now most of the business and residential area of Bondi Beach", "role": "relative_clause", "level": 2},
+        {"text": "William Roberts", "role": "appositive", "level": 3},
+        {"text": "what is now most of the business and residential area of Bondi Beach", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "when 引导非限制性定语从句，补充说明 1809 年发生的事件。",
+        "what is now... 是融合关系从句，作 of 的宾语，指如今已成为邦迪海滩主要商业和住宅区的土地。"
+      ],
+      "expressions": [
+        {"text": "go back to", "meaning_zh": "追溯到……"},
+        {"text": "receive a grant of", "meaning_zh": "获赠……"},
+        {"text": "business and residential area", "meaning_zh": "商业和住宅区"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "In 1851, Edward Smith Hall and Francis O'Brien purchased 200 acres of the Bondi area that embraced almost the whole frontage of Bondi Beach, and it was named the \"The Bondi Estate.\"",
+      "translation": "1851年，爱德华·史密斯·霍尔和弗朗西斯·奥布莱恩买下邦迪地区200英亩土地，几乎涵盖邦迪海滩整段临海地带；这片土地被命名为“The Bondi Estate”。",
+      "structure": [
+        {"text": "Edward Smith Hall and Francis O'Brien", "role": "subject", "level": 1},
+        {"text": "purchased 200 acres of the Bondi area", "role": "verb_phrase", "level": 1},
+        {"text": "that embraced almost the whole frontage of Bondi Beach", "role": "relative_clause", "level": 2},
+        {"text": "and it was named the \"The Bondi Estate.\"", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "that 引导定语从句，修饰 the Bondi area，说明购地所涵盖的范围。",
+        "and 后是被动结构，it 指代所购土地；句末句点位于引号内部。"
+      ],
+      "expressions": [
+        {"text": "the whole frontage of", "meaning_zh": "……的整段临海地带"},
+        {"text": "be named", "meaning_zh": "被命名为"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "Between 1855 and 1877 O'Brien purchased Hall's share of the land, renamed the land the \"O'Brien Estate,\" and made the beach and the surrounding land available to the public as a picnic ground and amusement resort.",
+      "translation": "1855年至1877年间，奥布莱恩买下霍尔所持的土地份额，把土地改名为“O'Brien Estate”，并将海滩及周边土地作为野餐地和游乐胜地向公众开放。",
+      "structure": [
+        {"text": "Between 1855 and 1877", "role": "prepositional_phrase", "level": 1},
+        {"text": "O'Brien", "role": "subject", "level": 1},
+        {"text": "purchased Hall's share of the land", "role": "verb_phrase", "level": 1},
+        {"text": "renamed the land the \"O'Brien Estate,\"", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "and made the beach and the surrounding land available to the public as a picnic ground and amusement resort", "role": "coordinated_verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "purchased、renamed 和 made 是三个共用主语 O'Brien 的并列谓语。",
+        "make A available to B 表示“使 A 可供 B 使用”，as 后说明土地开放后的用途。"
+      ],
+      "expressions": [
+        {"text": "purchase someone's share", "meaning_zh": "购买某人的份额"},
+        {"text": "make ... available to the public", "meaning_zh": "向公众开放……"},
+        {"text": "amusement resort", "meaning_zh": "游乐胜地"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "As the beach became increasingly popular, O'Brien threatened to stop public beach access.",
+      "translation": "随着海滩日益受欢迎，奥布莱恩威胁要停止公众进入海滩。",
+      "structure": [
+        {"text": "As the beach became increasingly popular", "role": "adverbial_clause", "level": 1},
+        {"text": "O'Brien", "role": "subject", "level": 1},
+        {"text": "threatened", "role": "verb_phrase", "level": 1},
+        {"text": "to stop public beach access", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "As 引导伴随变化的时间状语从句，意为“随着……”。",
+        "threaten to do 表示“威胁要做某事”，不定式说明威胁的具体行动。"
+      ],
+      "expressions": [
+        {"text": "become increasingly popular", "meaning_zh": "越来越受欢迎"},
+        {"text": "threaten to", "meaning_zh": "威胁要……"},
+        {"text": "public access", "meaning_zh": "公众进入权"}
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "However, the Municipal Council believed that the Government needed to intervene to make the beach a public reserve.",
+      "translation": "然而，市议会认为政府需要介入，将海滩划为公共保留地。",
+      "structure": [
+        {"text": "However", "role": "conjunctive_adverb", "level": 1},
+        {"text": "the Municipal Council", "role": "subject", "level": 1},
+        {"text": "believed", "role": "verb_phrase", "level": 1},
+        {"text": "that the Government needed to intervene to make the beach a public reserve", "role": "noun_clause", "level": 2},
+        {"text": "to make the beach a public reserve", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导 believed 的宾语从句，说明市议会的主张。",
+        "to intervene 表示需要采取的行动，后一个不定式 to make... 表示介入的目的。"
+      ],
+      "expressions": [
+        {"text": "need to intervene", "meaning_zh": "需要介入"},
+        {"text": "make ... a public reserve", "meaning_zh": "将……划为公共保留地"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "During the 1900s beach became associated with health, leisure and democracy – a playground everyone could enjoy equally.",
+      "translation": "20世纪期间，海滩开始与健康、休闲和民主联系在一起，成为人人都能平等享受的游乐场。",
+      "structure": [
+        {"text": "During the 1900s", "role": "prepositional_phrase", "level": 1},
+        {"text": "beach", "role": "subject", "level": 1},
+        {"text": "became associated with health, leisure and democracy", "role": "verb_phrase", "level": 1},
+        {"text": "a playground everyone could enjoy equally", "role": "appositive", "level": 2},
+        {"text": "everyone could enjoy equally", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "破折号后的 a playground 是同位语，对海滩所代表的理念作进一步解释。",
+        "everyone could enjoy equally 是省略关系代词 that 的定语从句，修饰 a playground。"
+      ],
+      "expressions": [
+        {"text": "become associated with", "meaning_zh": "开始与……联系在一起"},
+        {"text": "enjoy equally", "meaning_zh": "平等享受"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "Bondi Beach was a working-class suburb throughout most of the twentieth century with migrant people from New Zealand comprising the majority of the local population.",
+      "translation": "在20世纪的大部分时间里，邦迪海滩是一个工人阶级郊区，其中新西兰移民占当地人口的大多数。",
+      "structure": [
+        {"text": "Bondi Beach", "role": "subject", "level": 1},
+        {"text": "was a working-class suburb", "role": "verb_phrase", "level": 1},
+        {"text": "throughout most of the twentieth century", "role": "prepositional_phrase", "level": 1},
+        {"text": "with migrant people from New Zealand comprising the majority of the local population", "role": "with_absolute_construction", "level": 2}
+      ],
+      "difficult_points": [
+        "throughout most of... 表示该状态贯穿20世纪的大部分时期。",
+        "with + 名词 + 现在分词构成独立结构，补充说明当地人口构成。"
+      ],
+      "expressions": [
+        {"text": "working-class suburb", "meaning_zh": "工人阶级郊区"},
+        {"text": "comprise the majority of", "meaning_zh": "占……的大多数"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "The first tramway reached the beach in 1884.",
+      "translation": "第一条有轨电车线路于1884年通达海滩。",
+      "structure": [
+        {"text": "The first tramway", "role": "subject", "level": 1},
+        {"text": "reached", "role": "verb_phrase", "level": 1},
+        {"text": "the beach", "role": "object", "level": 1},
+        {"text": "in 1884", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "reach 是及物动词，后面直接接地点 the beach，不需要介词。",
+        "in 1884 是时间状语，说明有轨电车线路通达海滩的年份。"
+      ],
+      "expressions": [
+        {"text": "reach the beach", "meaning_zh": "通达海滩"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Following this, tram became the first public transportation in Bondi.",
+      "translation": "此后，有轨电车成为邦迪的第一种公共交通方式。",
+      "structure": [
+        {"text": "Following this", "role": "participial_phrase", "level": 1},
+        {"text": "tram", "role": "subject", "level": 1},
+        {"text": "became", "role": "verb_phrase", "level": 1},
+        {"text": "the first public transportation in Bondi", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "Following this 是句首衔接成分，this 指上一句有轨电车抵达海滩一事。",
+        "became 是系动词，后面的名词短语作主语补足语。"
+      ],
+      "expressions": [
+        {"text": "following this", "meaning_zh": "此后；继此之后"},
+        {"text": "public transportation", "meaning_zh": "公共交通"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "As an alternative, this action changed the rule that only rich people can enjoy the beach.",
+      "translation": "作为一种替代选择，这一举措改变了只有富人才能享受海滩的规则。",
+      "structure": [
+        {"text": "As an alternative", "role": "prepositional_phrase", "level": 1},
+        {"text": "this action", "role": "subject", "level": 1},
+        {"text": "changed", "role": "verb_phrase", "level": 1},
+        {"text": "the rule that only rich people can enjoy the beach", "role": "object", "level": 1},
+        {"text": "that only rich people can enjoy the beach", "role": "appositive_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "this action 回指引入有轨电车公共交通这一举措。",
+        "that 引导同位语从句，具体说明 the rule 的内容，而不是修饰某个人或物。"
+      ],
+      "expressions": [
+        {"text": "as an alternative", "meaning_zh": "作为替代选择"},
+        {"text": "change the rule that", "meaning_zh": "改变……这一规则"}
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "By the 1930s Bondi was drawing not only local visitors but also people from elsewhere in Australia and overseas.",
+      "translation": "到20世纪30年代，邦迪吸引的不仅有本地游客，还有来自澳大利亚其他地区和海外的人们。",
+      "structure": [
+        {"text": "By the 1930s", "role": "prepositional_phrase", "level": 1},
+        {"text": "Bondi", "role": "subject", "level": 1},
+        {"text": "was drawing", "role": "verb_phrase", "level": 1},
+        {"text": "not only local visitors but also people from elsewhere in Australia and overseas", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "By the 1930s 表示“到20世纪30年代时”，强调发展到该时期的结果。",
+        "not only... but also... 连接两类并列宾语，突出游客来源范围扩大。"
+      ],
+      "expressions": [
+        {"text": "not only ... but also ...", "meaning_zh": "不仅……而且……"},
+        {"text": "elsewhere in", "meaning_zh": "……的其他地方"}
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "Advertising at the time referred to Bondi Beach as the \"Playground of the Pacific\".",
+      "translation": "当时的广告把邦迪海滩称为“太平洋的游乐场”。",
+      "structure": [
+        {"text": "Advertising at the time", "role": "subject", "level": 1},
+        {"text": "referred to Bondi Beach as", "role": "verb_phrase", "level": 1},
+        {"text": "the \"Playground of the Pacific\"", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "at the time 后置修饰 Advertising，限定为当时的宣传内容。",
+        "refer to A as B 表示“把 A 称作 B”。"
+      ],
+      "expressions": [
+        {"text": "at the time", "meaning_zh": "当时"},
+        {"text": "refer to ... as ...", "meaning_zh": "把……称为……"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "There is a growing trend that people prefer having to relax near seaside instead of living unhealthily in cities.",
+      "translation": "人们越来越倾向于到海边放松，而不是在城市中过着不健康的生活。",
+      "structure": [
+        {"text": "There is a growing trend", "role": "existential_clause", "level": 1},
+        {"text": "that people prefer having to relax near seaside instead of living unhealthily in cities", "role": "appositive_clause", "level": 2},
+        {"text": "instead of living unhealthily in cities", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导同位语从句，说明 a growing trend 的具体内容。",
+        "instead of 后接动名词 living，与前面所偏好的放松方式形成对比；原文 prefer having to relax 搭配不自然但语义可由上下文确定。"
+      ],
+      "expressions": [
+        {"text": "a growing trend", "meaning_zh": "日益明显的趋势"},
+        {"text": "instead of", "meaning_zh": "而不是"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "The increasing popularity of sea bathing during the late 1800s and early 1900s raised concerns about public safety and how to prevent people from drowning.",
+      "translation": "19世纪末至20世纪初，海水浴日益流行，引发了人们对公共安全以及如何防止溺水的担忧。",
+      "structure": [
+        {"text": "The increasing popularity of sea bathing during the late 1800s and early 1900s", "role": "subject", "level": 1},
+        {"text": "raised concerns about", "role": "verb_phrase", "level": 1},
+        {"text": "public safety and how to prevent people from drowning", "role": "prepositional_object", "level": 1},
+        {"text": "how to prevent people from drowning", "role": "wh_infinitive_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "句子主语中心词是 popularity，of sea bathing 和时间成分都对其作限定。",
+        "how to prevent... 是“疑问词 + 不定式”结构，与 public safety 并列作 about 的宾语。"
+      ],
+      "expressions": [
+        {"text": "increasing popularity", "meaning_zh": "日益普及"},
+        {"text": "raise concerns about", "meaning_zh": "引发对……的担忧"},
+        {"text": "prevent ... from drowning", "meaning_zh": "防止……溺水"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "In response, the world's first formally documented surf lifesaving club, the Bondi Surf Bathers'Life Saving Club, was formed in 1907.",
+      "translation": "作为回应，世界上首个有正式记录的冲浪救生俱乐部——邦迪冲浪浴者救生俱乐部——于1907年成立。",
+      "structure": [
+        {"text": "In response", "role": "prepositional_phrase", "level": 1},
+        {"text": "the world's first formally documented surf lifesaving club", "role": "subject", "level": 1},
+        {"text": "the Bondi Surf Bathers'Life Saving Club", "role": "appositive", "level": 2},
+        {"text": "was formed", "role": "verb_phrase", "level": 1},
+        {"text": "in 1907", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "the Bondi Surf Bathers'Life Saving Club 是同位语，给出该俱乐部的名称。",
+        "was formed 是一般过去时的被动语态，表示该组织于1907年成立。"
+      ],
+      "expressions": [
+        {"text": "in response", "meaning_zh": "作为回应"},
+        {"text": "formally documented", "meaning_zh": "有正式记录的"},
+        {"text": "be formed", "meaning_zh": "成立"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "This was powerfully reinforced by the dramatic events of \"Black Sunday\" at Bondi in 1938.",
+      "translation": "1938年邦迪“黑色星期日”的戏剧性事件有力地强化了这一形象。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "was powerfully reinforced", "role": "verb_phrase", "level": 1},
+        {"text": "by the dramatic events of \"Black Sunday\"", "role": "prepositional_phrase", "level": 1},
+        {"text": "at Bondi in 1938", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "This 指代前文所建立的冲浪救生及救生员的重要形象。",
+        "was reinforced 是被动语态，by 短语指出强化这一形象的事件。"
+      ],
+      "expressions": [
+        {"text": "be powerfully reinforced by", "meaning_zh": "被……有力强化"},
+        {"text": "dramatic events", "meaning_zh": "戏剧性事件"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "Some 35,000 people were on the beach and a large group of lifesavers were about to start a surf race when three freak waves hit the beach, sweeping hundreds of people out to sea.",
+      "translation": "当时约有3.5万人在海滩上，一大群救生员正准备开始冲浪比赛，突然三股异常巨浪袭上海滩，把数百人卷入海中。",
+      "structure": [
+        {"text": "Some 35,000 people were on the beach", "role": "main_clause", "level": 1},
+        {"text": "and a large group of lifesavers were about to start a surf race", "role": "coordinated_clause", "level": 1},
+        {"text": "when three freak waves hit the beach", "role": "adverbial_clause", "level": 2},
+        {"text": "sweeping hundreds of people out to sea", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "be about to do... when... 表示“正要做某事，突然发生另一件事”。",
+        "sweeping... 是结果性的现在分词短语，说明巨浪袭击后造成的后果。"
+      ],
+      "expressions": [
+        {"text": "be about to", "meaning_zh": "正准备……"},
+        {"text": "freak waves", "meaning_zh": "异常巨浪"},
+        {"text": "sweep ... out to sea", "meaning_zh": "把……卷入海中"}
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "Lifesavers rescued 300 people.",
+      "translation": "救生员救出了300人。",
+      "structure": [
+        {"text": "Lifesavers", "role": "subject", "level": 1},
+        {"text": "rescued", "role": "verb_phrase", "level": 1},
+        {"text": "300 people", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "rescued 是一般过去时，叙述当时已经完成的救援行动。",
+        "Lifesavers 与上一句 a large group of lifesavers 相呼应，保持叙事主体连续。"
+      ],
+      "expressions": [
+        {"text": "rescue people", "meaning_zh": "营救人员"}
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "The largest mass rescue in the history of surf bathing, it confirmed the place of the lifesaver in the national imagination.",
+      "translation": "作为冲浪海浴史上规模最大的集体救援，这一事件确立了救生员在国民集体想象中的地位。",
+      "structure": [
+        {"text": "The largest mass rescue in the history of surf bathing", "role": "left_dislocation", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "confirmed", "role": "verb_phrase", "level": 1},
+        {"text": "the place of the lifesaver in the national imagination", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "句首名词短语先点明事件性质，随后 it 回指这次大规模救援。",
+        "confirm the place of... 表示巩固或确立某事物在特定观念体系中的地位。"
+      ],
+      "expressions": [
+        {"text": "mass rescue", "meaning_zh": "大规模集体救援"},
+        {"text": "in the history of", "meaning_zh": "在……历史上"},
+        {"text": "confirm the place of", "meaning_zh": "确立……的地位"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "Bondi Beach is the endpoint of the City to Surf Fun Run which is held each year in August.",
+      "translation": "邦迪海滩是“城市到海滩”趣味跑的终点，这项活动每年八月举行。",
+      "structure": [
+        {"text": "Bondi Beach", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "the endpoint of the City to Surf Fun Run", "role": "complement", "level": 1},
+        {"text": "which is held each year in August", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导定语从句，先行词是 the City to Surf Fun Run。",
+        "is held 是被动语态，说明这项跑步活动每年的举办时间。"
+      ],
+      "expressions": [
+        {"text": "the endpoint of", "meaning_zh": "……的终点"},
+        {"text": "be held each year", "meaning_zh": "每年举行"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "Australian surf carnivals further instilled this image.",
+      "translation": "澳大利亚的冲浪嘉年华进一步强化了这一形象。",
+      "structure": [
+        {"text": "Australian surf carnivals", "role": "subject", "level": 1},
+        {"text": "further instilled", "role": "verb_phrase", "level": 1},
+        {"text": "this image", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "further 表示在既有基础上“进一步”加强影响。",
+        "this image 承接前文邦迪及冲浪救生文化所形成的公共形象。"
+      ],
+      "expressions": [
+        {"text": "further instill", "meaning_zh": "进一步灌输或强化"},
+        {"text": "surf carnival", "meaning_zh": "冲浪嘉年华"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "A Royal Surf Carnival was held at Bondi Beach for Queen Elizabeth II during her first visited in Australia in 1954.",
+      "translation": "1954年伊丽莎白二世女王首次访问澳大利亚期间，邦迪海滩为她举办了一场皇家冲浪嘉年华。",
+      "structure": [
+        {"text": "A Royal Surf Carnival", "role": "subject", "level": 1},
+        {"text": "was held", "role": "verb_phrase", "level": 1},
+        {"text": "at Bondi Beach for Queen Elizabeth II", "role": "prepositional_phrase", "level": 1},
+        {"text": "during her first visited in Australia in 1954", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "was held 是一般过去时的被动语态，for Queen Elizabeth II 说明活动为谁而办。",
+        "during 引出时间背景；原文 first visited 形式不合常规，但语义指女王首次访问澳大利亚。"
+      ],
+      "expressions": [
+        {"text": "be held for", "meaning_zh": "为……举办"},
+        {"text": "during a visit", "meaning_zh": "在访问期间"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "Since 1867, there have been over fifty visits by a member of the British Royal Family to Australia.",
+      "translation": "自1867年以来，英国王室成员访问澳大利亚的次数已超过五十次。",
+      "structure": [
+        {"text": "Since 1867", "role": "prepositional_phrase", "level": 1},
+        {"text": "there have been", "role": "existential_clause", "level": 1},
+        {"text": "over fifty visits by a member of the British Royal Family to Australia", "role": "notional_subject", "level": 1}
+      ],
+      "difficult_points": [
+        "Since 1867 与现在完成时 there have been 搭配，表示从过去延续至今的统计。",
+        "by a member... 说明访问者，to Australia 说明访问目的地。"
+      ],
+      "expressions": [
+        {"text": "since 1867", "meaning_zh": "自1867年以来"},
+        {"text": "over fifty visits", "meaning_zh": "五十多次访问"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 34,
+      "sentence": "In addition to many activities, the Bondi Beach Markets is open every Sunday.",
+      "translation": "除众多活动外，邦迪海滩市集每周日也开放。",
+      "structure": [
+        {"text": "In addition to many activities", "role": "prepositional_phrase", "level": 1},
+        {"text": "the Bondi Beach Markets", "role": "subject", "level": 1},
+        {"text": "is open", "role": "verb_phrase", "level": 1},
+        {"text": "every Sunday", "role": "time_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "In addition to 是复合介词，表示在已有活动之外再补充一项。",
+        "is open 描述固定开放状态，every Sunday 表示规律性时间。"
+      ],
+      "expressions": [
+        {"text": "in addition to", "meaning_zh": "除……之外"},
+        {"text": "be open every Sunday", "meaning_zh": "每周日开放"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 35,
+      "sentence": "Many wealthy people spend Christmas Day at the beach.",
+      "translation": "许多富裕人士会在海滩度过圣诞节。",
+      "structure": [
+        {"text": "Many wealthy people", "role": "subject", "level": 1},
+        {"text": "spend", "role": "verb_phrase", "level": 1},
+        {"text": "Christmas Day", "role": "object", "level": 1},
+        {"text": "at the beach", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "spend 后直接接时间 Christmas Day，表示“度过圣诞节”。",
+        "at the beach 是地点状语，说明人们在哪里度过这一天。"
+      ],
+      "expressions": [
+        {"text": "spend Christmas Day", "meaning_zh": "度过圣诞节"}
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 36,
+      "sentence": "However, the shortage of houses occurs when lots of people crushed to the seaside.",
+      "translation": "然而，当大量人群涌向海滨时，住房短缺便会出现。",
+      "structure": [
+        {"text": "However", "role": "conjunctive_adverb", "level": 1},
+        {"text": "the shortage of houses", "role": "subject", "level": 1},
+        {"text": "occurs", "role": "verb_phrase", "level": 1},
+        {"text": "when lots of people crushed to the seaside", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "However 表示转折，从海滩活动的吸引力转到其造成的住房问题。",
+        "when 引导时间状语从句；原文 crushed 用法不自然，结合语境理解为大量人群涌向海滨。"
+      ],
+      "expressions": [
+        {"text": "the shortage of houses", "meaning_zh": "住房短缺"},
+        {"text": "occur when", "meaning_zh": "在……时发生"}
+      ]
+    },
+    {
+      "id": "F-08",
+      "paragraph_label": "F",
+      "sentence_index": 37,
+      "sentence": "Manly is the seashore town which solved this problem.",
+      "translation": "曼利是解决了这一问题的海滨城镇。",
+      "structure": [
+        {"text": "Manly", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "the seashore town", "role": "complement", "level": 1},
+        {"text": "which solved this problem", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导定语从句，修饰 the seashore town。",
+        "this problem 回指上一句提到的人群涌入造成的住房短缺。"
+      ],
+      "expressions": [
+        {"text": "seashore town", "meaning_zh": "海滨城镇"},
+        {"text": "solve this problem", "meaning_zh": "解决这一问题"}
+      ]
+    },
+    {
+      "id": "F-09",
+      "paragraph_label": "F",
+      "sentence_index": 38,
+      "sentence": "However, people still choose Bondi as the satisfied destination rather than Manly.",
+      "translation": "然而，人们仍把邦迪而非曼利选作更合意的目的地。",
+      "structure": [
+        {"text": "However", "role": "conjunctive_adverb", "level": 1},
+        {"text": "people", "role": "subject", "level": 1},
+        {"text": "still choose Bondi as the satisfied destination", "role": "verb_phrase", "level": 1},
+        {"text": "rather than Manly", "role": "comparative_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "choose A as B 表示“选择 A 作为 B”。",
+        "rather than 引出被排除的选择 Manly；原文 satisfied 修饰 destination 不自然，语义为令人满意的目的地。"
+      ],
+      "expressions": [
+        {"text": "choose ... as ...", "meaning_zh": "选择……作为……"},
+        {"text": "rather than", "meaning_zh": "而不是"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 39,
+      "sentence": "Bondi Beach has a commercial area along Campbell Parade and adjacent side streets, featuring many popular cafes, restaurants, and hotels, with views of the contemporary beach.",
+      "translation": "邦迪海滩沿坎贝尔大道及相邻支路分布着商业区，那里有许多热门咖啡馆、餐厅和酒店，并可眺望现代海滩景观。",
+      "structure": [
+        {"text": "Bondi Beach", "role": "subject", "level": 1},
+        {"text": "has a commercial area along Campbell Parade and adjacent side streets", "role": "verb_phrase", "level": 1},
+        {"text": "featuring many popular cafes, restaurants, and hotels", "role": "participial_phrase", "level": 2},
+        {"text": "with views of the contemporary beach", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "featuring... 是现在分词短语，补充描述商业区内的设施。",
+        "with views of... 进一步说明这些场所具备的景观条件。"
+      ],
+      "expressions": [
+        {"text": "adjacent side streets", "meaning_zh": "相邻支路"},
+        {"text": "feature many", "meaning_zh": "拥有许多……"},
+        {"text": "with views of", "meaning_zh": "可看到……景观"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 40,
+      "sentence": "It is depicted as wholly modern and European.",
+      "translation": "它被描绘成完全现代化且具有欧洲风格的地方。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "is depicted as", "role": "verb_phrase", "level": 1},
+        {"text": "wholly modern and European", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "It 回指前文所描述的邦迪海滩或其商业区。",
+        "is depicted as 是被动结构，表示“被描绘为”，后接并列表语。"
+      ],
+      "expressions": [
+        {"text": "be depicted as", "meaning_zh": "被描绘为"},
+        {"text": "wholly modern", "meaning_zh": "完全现代化的"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 41,
+      "sentence": "In the last decade, Bondi Beaches' unique position has seen a dramatic rise in svelte houses and apartments to take advantage of the views and scent of the sea.",
+      "translation": "过去十年中，邦迪海滩的独特位置见证了修长雅致的住宅和公寓大幅增加，以充分利用海景与海洋气息。",
+      "structure": [
+        {"text": "In the last decade", "role": "prepositional_phrase", "level": 1},
+        {"text": "Bondi Beaches' unique position", "role": "subject", "level": 1},
+        {"text": "has seen a dramatic rise in svelte houses and apartments", "role": "verb_phrase", "level": 1},
+        {"text": "to take advantage of the views and scent of the sea", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "has seen 是现在完成时，位置被拟人化为“见证”建筑数量的增长。",
+        "to take advantage of... 是目的状语，说明兴建这些房屋和公寓的目的。"
+      ],
+      "expressions": [
+        {"text": "a dramatic rise in", "meaning_zh": "……的大幅增加"},
+        {"text": "take advantage of", "meaning_zh": "充分利用……"},
+        {"text": "the views and scent of the sea", "meaning_zh": "海景与海洋气息"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 42,
+      "sentence": "The valley running down to the beach is the famous world over for its view of distinctive red-tiled roofs.",
+      "translation": "这条一路延伸至海滩的山谷，因可俯瞰别具一格的红瓦屋顶而闻名世界。",
+      "structure": [
+        {"text": "The valley running down to the beach", "role": "subject", "level": 1},
+        {"text": "running down to the beach", "role": "participial_phrase", "level": 2},
+        {"text": "is the famous world over", "role": "verb_phrase", "level": 1},
+        {"text": "for its view of distinctive red-tiled roofs", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "running down to the beach 是现在分词短语，后置修饰 The valley。",
+        "world over 表示“全世界范围内”；原文 the famous 不合常规，但整体语义是“闻名世界”。"
+      ],
+      "expressions": [
+        {"text": "run down to", "meaning_zh": "一路延伸至……"},
+        {"text": "the world over", "meaning_zh": "全世界"},
+        {"text": "distinctive red-tiled roofs", "meaning_zh": "别具一格的红瓦屋顶"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 43,
+      "sentence": "Those architectures are deeply influenced by British coastal town.",
+      "translation": "那些建筑深受英国沿海城镇风格的影响。",
+      "structure": [
+        {"text": "Those architectures", "role": "subject", "level": 1},
+        {"text": "are deeply influenced", "role": "verb_phrase", "level": 1},
+        {"text": "by British coastal town", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Those architectures 回指前文所说的住宅、公寓及红瓦屋顶建筑。",
+        "are influenced by 是被动结构，指出这些建筑风格的影响来源。"
+      ],
+      "expressions": [
+        {"text": "be deeply influenced by", "meaning_zh": "深受……影响"},
+        {"text": "coastal town", "meaning_zh": "沿海城镇"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 44,
+      "sentence": "Bondi Beach hosted the beach volleyball competition at the 2000 Summer Olympics.",
+      "translation": "邦迪海滩承办了2000年夏季奥运会的沙滩排球比赛。",
+      "structure": [
+        {"text": "Bondi Beach", "role": "subject", "level": 1},
+        {"text": "hosted", "role": "verb_phrase", "level": 1},
+        {"text": "the beach volleyball competition", "role": "object", "level": 1},
+        {"text": "at the 2000 Summer Olympics", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "hosted 是一般过去时，表示邦迪海滩作为比赛举办地。",
+        "at the 2000 Summer Olympics 说明沙滩排球比赛所属的赛事背景。"
+      ],
+      "expressions": [
+        {"text": "host a competition", "meaning_zh": "承办比赛"},
+        {"text": "Summer Olympics", "meaning_zh": "夏季奥运会"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 45,
+      "sentence": "A temporary 10,000-seat stadium, a much smaller stadium, 2 warm-up courts, and 3 training courts were set up to host the tournament.",
+      "translation": "为承办这项赛事，当地搭建了一座临时的万人体育场、一座小得多的体育场、两个热身场和三个训练场。",
+      "structure": [
+        {"text": "A temporary 10,000-seat stadium, a much smaller stadium, 2 warm-up courts, and 3 training courts", "role": "subject", "level": 1},
+        {"text": "were set up", "role": "verb_phrase", "level": 1},
+        {"text": "to host the tournament", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "主语由四类设施并列构成，因此被动谓语使用复数 were set up。",
+        "to host the tournament 是目的状语，说明搭建这些场馆的用途。"
+      ],
+      "expressions": [
+        {"text": "temporary stadium", "meaning_zh": "临时体育场"},
+        {"text": "be set up to", "meaning_zh": "为……而搭建"},
+        {"text": "host the tournament", "meaning_zh": "承办赛事"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 46,
+      "sentence": "The Bondi Beach Volleyball Stadium was constructed for it and stood for just six weeks.",
+      "translation": "邦迪沙滩排球体育场为此而建，仅存在了六周。",
+      "structure": [
+        {"text": "The Bondi Beach Volleyball Stadium", "role": "subject", "level": 1},
+        {"text": "was constructed for it", "role": "verb_phrase", "level": 1},
+        {"text": "and stood for just six weeks", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "was constructed 是被动语态，it 回指前文的奥运沙滩排球赛事。",
+        "and 连接两个谓语，stood 在此表示该临时建筑存在或矗立的时长。"
+      ],
+      "expressions": [
+        {"text": "be constructed for", "meaning_zh": "为……而建"},
+        {"text": "for just six weeks", "meaning_zh": "仅持续六周"}
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 47,
+      "sentence": "Campaigners oppose both the social and environmental consequences of the development.",
+      "translation": "活动人士反对这项开发所带来的社会和环境后果。",
+      "structure": [
+        {"text": "Campaigners", "role": "subject", "level": 1},
+        {"text": "oppose", "role": "verb_phrase", "level": 1},
+        {"text": "both the social and environmental consequences of the development", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "both... and... 连接 social 与 environmental，强调两方面的后果。",
+        "of the development 后置限定 consequences，说明这些后果源于该开发项目。"
+      ],
+      "expressions": [
+        {"text": "oppose the consequences of", "meaning_zh": "反对……所造成的后果"},
+        {"text": "social and environmental consequences", "meaning_zh": "社会和环境后果"}
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 48,
+      "sentence": "The stadium will divide the beach in two and seriously restrict public access for swimming, walking, and other forms of outdoor recreation.",
+      "translation": "这座体育场会把海滩一分为二，并严重限制公众游泳、散步和从事其他户外休闲活动的空间。",
+      "structure": [
+        {"text": "The stadium", "role": "subject", "level": 1},
+        {"text": "will divide the beach in two", "role": "verb_phrase", "level": 1},
+        {"text": "and seriously restrict public access", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "for swimming, walking, and other forms of outdoor recreation", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "divide the beach in two 表示把海滩分成两部分。",
+        "divide 与 restrict 是共用 will 的并列谓语，for 短语列举公众进入海滩的活动目的。"
+      ],
+      "expressions": [
+        {"text": "divide ... in two", "meaning_zh": "把……一分为二"},
+        {"text": "restrict public access", "meaning_zh": "限制公众进入"},
+        {"text": "outdoor recreation", "meaning_zh": "户外休闲活动"}
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 49,
+      "sentence": "People protest for their human rights of having a pure seaside and argue for health life in Bondi.",
+      "translation": "人们为享有纯净海滨的权利而抗议，并主张在邦迪拥有健康的生活。",
+      "structure": [
+        {"text": "People", "role": "subject", "level": 1},
+        {"text": "protest for their human rights of having a pure seaside", "role": "verb_phrase", "level": 1},
+        {"text": "of having a pure seaside", "role": "prepositional_phrase", "level": 2},
+        {"text": "and argue for health life in Bondi", "role": "coordinated_verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "protest 与 argue 是共用主语 People 的并列谓语，分别表达抗议与主张。",
+        "of having... 说明 human rights 的具体内容；原文 health life 搭配不自然，语义指健康生活。"
+      ],
+      "expressions": [
+        {"text": "protest for", "meaning_zh": "为争取……而抗议"},
+        {"text": "human rights", "meaning_zh": "人权"},
+        {"text": "argue for", "meaning_zh": "主张；支持"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 50,
+      "sentence": "\"They're prepared to risk lives and risk the Bondi beach environment for the sake of eight days of volleyball\", said Stephen Uniacke, a construction lawyer involved in the campaign.",
+      "translation": "参与这场运动的建筑律师斯蒂芬·尤尼亚克说：“他们竟准备为了八天的排球比赛，拿生命和邦迪海滩的环境去冒险。”",
+      "structure": [
+        {"text": "\"They're prepared to risk lives and risk the Bondi beach environment for the sake of eight days of volleyball\"", "role": "direct_speech", "level": 1},
+        {"text": "said Stephen Uniacke", "role": "main_clause", "level": 1},
+        {"text": "a construction lawyer involved in the campaign", "role": "appositive", "level": 2},
+        {"text": "involved in the campaign", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "be prepared to do 表示“准备好或甘愿做某事”，两个 risk 构成并列动作。",
+        "a construction lawyer... 是 Stephen Uniacke 的同位语，其中 involved... 是过去分词短语，说明他参与了这场运动。"
+      ],
+      "expressions": [
+        {"text": "be prepared to risk", "meaning_zh": "甘愿冒……风险"},
+        {"text": "for the sake of", "meaning_zh": "为了……"},
+        {"text": "be involved in", "meaning_zh": "参与……"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 51,
+      "sentence": "Other environmental concerns include the possibility that soil dredged up from below the sand will acidify when brought to the surface.",
+      "translation": "其他环境担忧还包括这样一种可能：从沙层下挖出的土壤被带到地表后会发生酸化。",
+      "structure": [
+        {"text": "Other environmental concerns", "role": "subject", "level": 1},
+        {"text": "include", "role": "verb_phrase", "level": 1},
+        {"text": "the possibility that soil dredged up from below the sand will acidify when brought to the surface", "role": "object", "level": 1},
+        {"text": "that soil dredged up from below the sand will acidify when brought to the surface", "role": "appositive_clause", "level": 2},
+        {"text": "dredged up from below the sand", "role": "participial_phrase", "level": 3},
+        {"text": "when brought to the surface", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导同位语从句，具体说明 the possibility 的内容。",
+        "dredged up... 后置修饰 soil；when brought... 是省略了 soil is 的被动时间状语从句。"
+      ],
+      "expressions": [
+        {"text": "environmental concerns", "meaning_zh": "环境担忧"},
+        {"text": "include the possibility that", "meaning_zh": "包括……的可能性"},
+        {"text": "bring to the surface", "meaning_zh": "带到地表"}
+      ]
+    }
+  ]
+}

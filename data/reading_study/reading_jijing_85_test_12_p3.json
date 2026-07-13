@@ -1,0 +1,2378 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_85_test_12",
+  "passage_id": "reading_jijing_85_test_12_p3",
+  "passage_title": "The Fruit Book",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The book is called Fruit Trees and Useful Plants in the Lives of Amazonians, but is better known simply as the \"fruit book\".",
+      "translation": "这本书正式名称为《亚马逊人生活中的果树与实用植物》，但更广为人知的简称是“水果书”。",
+      "structure": [
+        {
+          "text": "The book",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is called Fruit Trees and Useful Plants in the Lives of Amazonians",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "but is better known simply as the \"fruit book\"",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "is called 和 is better known 是并列的被动谓语，共享主语 The book。",
+        "as the \"fruit book\" 中 as 表示“作为”，说明这本书更广为人知的简称。"
+      ],
+      "expressions": [
+        {
+          "text": "be better known as",
+          "meaning_zh": "更为人所知的名字是……"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "The second edition was produced at the request of politicians in western Amazonia.",
+      "translation": "第二版是应亚马逊西部地区政界人士的请求编写的。",
+      "structure": [
+        {
+          "text": "The second edition",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was produced",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "at the request of politicians in western Amazonia",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "at the request of 表示“应……的请求”。",
+        "was produced 是被动语态，强调第二版由外部需求推动产生，而不是说明具体出版者。"
+      ],
+      "expressions": [
+        {
+          "text": "at the request of",
+          "meaning_zh": "应……的请求"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Its blend of hard science and local knowledge on the use and trade of 35 native forest species has been so well received (and well used) that no less a dignitary than Brazil's environment minister, Marina Silva, has written the foreword.",
+      "translation": "这本书融合了严谨的科学研究与关于35种本土森林物种利用和交易的本地知识，广受好评（也被广泛使用），以至于连巴西环境部长玛丽娜·席尔瓦（Marina Silva）这样重要的人物都亲自为它作序。",
+      "structure": [
+        {
+          "text": "Its blend of hard science and local knowledge on the use and trade of 35 native forest species",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has been so well received (and well used)",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that no less a dignitary than Brazil's environment minister, Marina Silva, has written the foreword",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "Marina Silva",
+          "role": "apposition",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "so...that... 是结果状语从句，表示“如此……以至于……”。",
+        "no less a dignitary than 是强调结构，意为“不亚于……这样重要的人物”，强调环境部长亲自作序的分量。",
+        "Marina Silva 是插入的同位语，补充说明 Brazil's environment minister 的具体身份。"
+      ],
+      "expressions": [
+        {
+          "text": "so...that...",
+          "meaning_zh": "如此……以至于……"
+        },
+        {
+          "text": "no less...than...",
+          "meaning_zh": "不亚于……"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "\"There is nothing else like the Shanley book,\" says Adalberto Verrisimo, director of the Institute of People and the Environment of the Amazon.",
+      "translation": "“没有什么书能与香利（Shanley）的这本书相提并论，”亚马逊人与环境研究所所长阿达尔贝托·维里西莫（Adalberto Verrisimo）说道。",
+      "structure": [
+        {
+          "text": "There is nothing else like the Shanley book",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "says Adalberto Verrisimo",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "director of the Institute of People and the Environment of the Amazon",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "there is nothing else like... 是存在句，强调这本书独一无二。",
+        "says Adalberto Verrisimo 主谓倒装。",
+        "director of... 是同位语，补充说明 Adalberto Verrisimo 的身份。"
+      ],
+      "expressions": [
+        {
+          "text": "nothing else like",
+          "meaning_zh": "没有别的可与……相比"
+        }
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "\"It gives science back to the poor, to the people who really need it.\"",
+      "translation": "“它把科学重新交还给穷人，交还给那些真正需要它的人。”",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "gives science back",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to the poor",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "to the people",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "who really need it",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "give sth back to sb 表示“把……归还给……”，喻指把科学知识交还给最需要的人。",
+        "to the people who really need it 是对 to the poor 的进一步说明，who 引导定语从句修饰 the people。"
+      ],
+      "expressions": [
+        {
+          "text": "give sth back to sb",
+          "meaning_zh": "把……归还给……"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Shanley's work on the book began a decade ago, with a plea for help from the Rural Workers' Union of Paragominas, a Brazilian town whose prosperity is based on exploitation of timber.",
+      "translation": "香利围绕这本书的研究工作始于十年前，起因是帕拉戈米纳斯（Paragominas）农村工人联盟发出的求助——这是一个繁荣建立在木材开采基础上的巴西小镇。",
+      "structure": [
+        {
+          "text": "Shanley's work on the book",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "began",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a decade ago",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "with a plea for help from the Rural Workers' Union of Paragominas",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "a Brazilian town",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "whose prosperity is based on exploitation of timber",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "with a plea for help from... 说明这项工作的起点：源自帕拉戈米纳斯农村工人联盟的求助。",
+        "a Brazilian town 是 Paragominas 的同位语。",
+        "whose 引导定语从句，修饰 a Brazilian town，说明该镇繁荣的来源。"
+      ],
+      "expressions": [
+        {
+          "text": "a plea for help",
+          "meaning_zh": "求助的呼声"
+        },
+        {
+          "text": "be based on",
+          "meaning_zh": "建立在……基础上"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "The union realised that logging companies would soon be knocking on the doors of the caboclos, peas ant farmers living on the Rio Capim, an Amazon tributary in the Brazilian state of Para.",
+      "translation": "该联盟意识到，伐木公司很快就会找上卡波克罗人（caboclos）的门——这些农民居住在里约卡平河（Rio Capim）沿岸，那是巴西帕拉州境内亚马逊河的一条支流。",
+      "structure": [
+        {
+          "text": "The union",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "realised",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that logging companies would soon be knocking on the doors of the caboclos",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "peas ant farmers living on the Rio Capim",
+          "role": "apposition",
+          "level": 3
+        },
+        {
+          "text": "living on the Rio Capim",
+          "role": "participial_phrase",
+          "level": 4
+        },
+        {
+          "text": "an Amazon tributary in the Brazilian state of Para",
+          "role": "apposition",
+          "level": 5
+        }
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 realised 的宾语。",
+        "knock on the doors of 是比喻用法，指伐木公司即将“找上门来”。",
+        "peas ant farmers 是 the caboclos 的同位语，说明其身份是“农民”（原文此处排印带有空格，实为 peasant）。"
+      ],
+      "expressions": [
+        {
+          "text": "knock on the doors of",
+          "meaning_zh": "找上……的门；即将找上……"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Isolated and illiterate, the caboclos would have little concept of the true value of their trees; communities downstream had already sold off large blocks of forest for a pittance.",
+      "translation": "由于与外界隔绝且不识字，卡波克罗人对自己林木的真正价值几乎毫无概念；下游的一些社区早已把大片森林以极低的价钱贱卖了出去。",
+      "structure": [
+        {
+          "text": "Isolated and illiterate",
+          "role": "complement",
+          "level": 2
+        },
+        {
+          "text": "the caboclos",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "would have little concept of the true value of their trees",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "communities downstream",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had already sold off large blocks of forest for a pittance",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Isolated and illiterate 是前置的形容词短语，相当于 Because they were isolated and illiterate，说明原因。",
+        "分号连接两个独立分句，前者说明卡波克罗人的处境，后者举出下游社区的前车之鉴。",
+        "for a pittance 表示“以极低的价钱”。"
+      ],
+      "expressions": [
+        {
+          "text": "have little concept of",
+          "meaning_zh": "对……几乎没有概念"
+        },
+        {
+          "text": "for a pittance",
+          "meaning_zh": "以极低廉的价格"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "\"What they wanted to know was how valuable the forests were,\" recalls Shanley, then a researcher in the area for the Massachusetts-based Woods Hole Research Centre.",
+      "translation": "“他们想知道的是这些森林到底有多大价值，”香利回忆道；她当时是马萨诸塞州伍兹霍尔研究中心（Woods Hole Research Centre）派驻当地的研究员。",
+      "structure": [
+        {
+          "text": "What they wanted to know",
+          "role": "noun_clause",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "how valuable the forests were",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "recalls Shanley",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "then a researcher in the area for the Massachusetts-based Woods Hole Research Centre",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "What they wanted to know 是 what 引导的主语从句。",
+        "how valuable the forests were 是表语从句，说明“想知道的内容”具体是什么。",
+        "then a researcher... 是插入的同位语，说明香利当时的身份。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "The Rural Workers' Union wanted to know whether harvesting wild fruits would make economic sense in the Rio Capim.",
+      "translation": "农村工人联盟想知道，在里约卡平河一带采集野生水果是否划算。",
+      "structure": [
+        {
+          "text": "The Rural Workers' Union",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "wanted to know",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "whether harvesting wild fruits would make economic sense in the Rio Capim",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "whether 引导宾语从句，harvesting wild fruits 是从句中的动名词主语。",
+        "make economic sense 表示“具有经济意义、划算”。"
+      ],
+      "expressions": [
+        {
+          "text": "make economic sense",
+          "meaning_zh": "具有经济意义；划算"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "\"There was a lot of interest in trading non-timber forest products (NTFPs),\" Shanley says.",
+      "translation": "“当时人们对交易非木材林产品（NTFPs）很感兴趣，”香利说。",
+      "structure": [
+        {
+          "text": "There was a lot of interest in trading non-timber forest products (NTFPs)",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "Shanley says",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "there was a lot of interest in doing sth 表示“人们对……很感兴趣”。",
+        "NTFPs 是 non-timber forest products 的缩写，此后文中反复出现。"
+      ],
+      "expressions": [
+        {
+          "text": "non-timber forest products",
+          "meaning_zh": "非木材林产品"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "At the time, environmental groups and green-minded businesses were promoting the idea.",
+      "translation": "当时，环保组织和有环保意识的企业都在推广这一理念。",
+      "structure": [
+        {
+          "text": "At the time",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "environmental groups and green-minded businesses",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were promoting",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the idea",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "at the time 指前一句提到的那个时期。",
+        "green-minded 是复合形容词，意为“具有环保意识的”。"
+      ],
+      "expressions": [
+        {
+          "text": "green-minded",
+          "meaning_zh": "具有环保意识的"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "This was the view presented in a seminal paper, Valuation of an Amazonian Rainforest, published in Nature in 1989.",
+      "translation": "这正是1989年发表于《自然》（Nature）杂志上那篇具有开创性影响的论文《亚马逊雨林的价值评估》所提出的观点。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the view",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "presented in a seminal paper",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "Valuation of an Amazonian Rainforest",
+          "role": "apposition",
+          "level": 3
+        },
+        {
+          "text": "published in Nature in 1989",
+          "role": "participial_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "presented in a seminal paper 是过去分词短语，修饰 the view。",
+        "Valuation of an Amazonian Rainforest 是论文标题，作为 a seminal paper 的同位语。",
+        "published in Nature in 1989 是过去分词短语，修饰该论文标题，说明发表的期刊与年份。"
+      ],
+      "expressions": [
+        {
+          "text": "seminal paper",
+          "meaning_zh": "具有开创性影响的论文"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "The researchers had calcu lated that revenues from the sale of fruits could far exceed those from a one- off sale of trees to loggers.",
+      "translation": "研究人员曾测算出，出售水果所得的收入，可能远远超过把树木一次性卖给伐木者所得的收入。",
+      "structure": [
+        {
+          "text": "The researchers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had calcu lated",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that revenues from the sale of fruits could far exceed those from a one- off sale of trees to loggers",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "those from a one- off sale of trees to loggers",
+          "role": "complement",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "had calcu lated 原文排印带有多余空格，实为 calculated（计算得出）。",
+        "that 引导宾语从句，作 calculated 的宾语。",
+        "those 指代 revenues，避免重复；a one- off sale 即 a one-off sale，指“一次性出售”。"
+      ],
+      "expressions": [
+        {
+          "text": "far exceed",
+          "meaning_zh": "远远超过"
+        },
+        {
+          "text": "a one-off sale",
+          "meaning_zh": "一次性出售"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "\"The union was keen to discover whether it made more sense conserving the forest for subsistence use and the possible sale of fruit, game and medicinal plants, than selling trees for timber,\" says Shanley.",
+      "translation": "“联盟一直渴望弄清楚：是为了维持生计、并可能出售水果、野味和药用植物而保护森林，更划算，还是把树木卖去做木材更划算，”香利说。",
+      "structure": [
+        {
+          "text": "The union",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was keen",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to discover whether it made more sense conserving the forest for subsistence use and the possible sale of fruit, game and medicinal plants, than selling trees for timber",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "whether it made more sense conserving the forest for subsistence use and the possible sale of fruit, game and medicinal plants, than selling trees for timber",
+          "role": "noun_clause",
+          "level": 3
+        },
+        {
+          "text": "conserving the forest for subsistence use and the possible sale of fruit, game and medicinal plants",
+          "role": "subject",
+          "level": 4
+        },
+        {
+          "text": "than selling trees for timber",
+          "role": "adverbial_clause",
+          "level": 4
+        },
+        {
+          "text": "says Shanley",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "be keen to do sth 表示“渴望、热衷于做某事”。",
+        "it made more sense doing A than doing B 是比较句型，it 是形式主语，真正主语是两个动名词短语的比较。",
+        "for subsistence use 表示“用于维持生计”。"
+      ],
+      "expressions": [
+        {
+          "text": "be keen to do",
+          "meaning_zh": "渴望做……"
+        },
+        {
+          "text": "make sense",
+          "meaning_zh": "合理；划算"
+        },
+        {
+          "text": "for subsistence use",
+          "meaning_zh": "用于维持生计"
+        }
+      ]
+    },
+    {
+      "id": "C-07",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Whether it would work for the caboclos was far from clear.",
+      "translation": "这种做法对卡波克罗人是否行得通，当时远不明朗。",
+      "structure": [
+        {
+          "text": "Whether it would work for the caboclos",
+          "role": "noun_clause",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "far from clear",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Whether... 引导主语从句，it 指代前文提到的这一构想（保护森林换取水果、猎物等收益的做法）。",
+        "far from clear 表示“远非清楚、并不明朗”。"
+      ],
+      "expressions": [
+        {
+          "text": "far from",
+          "meaning_zh": "远非；一点也不"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "Although Shanley had been invited to work in the Rio Capim, some caboclos were suspicious.",
+      "translation": "尽管香利是受邀前往里约卡平河开展工作的，一些卡波克罗人仍心存疑虑。",
+      "structure": [
+        {
+          "text": "Although Shanley had been invited to work in the Rio Capim",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "some caboclos",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were suspicious",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "although 引导让步状语从句，had been invited 是过去完成时的被动语态。",
+        "主句 some caboclos were suspicious 与让步从句形成转折：即使她受邀前来，当地人仍然不信任。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "\"When Patricia asked if she could study my forest,\" says Joao Fernando Moreira Brito, \"my neighbours said she was a foreigner who'd come to rob me of my trees.\"",
+      "translation": "“帕特里夏（Patricia）问我能否让她研究我的森林，”若昂·费尔南多·莫雷拉·布里托（Joao Fernando Moreira Brito）说，“我的邻居们说，她是个外国人，是来抢走我的树的。”",
+      "structure": [
+        {
+          "text": "When Patricia asked if she could study my forest",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "if she could study my forest",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "says Joao Fernando Moreira Brito",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "my neighbours said",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "she was a foreigner",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "who'd come to rob me of my trees",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "when 引导时间状语从句，if 引导从句内部的宾语从句（asked 的宾语）。",
+        "says Joao Fernando Moreira Brito 是插入句中的转述标签。",
+        "who'd come to rob me of my trees 中 who'd 是 who had 的缩写，定语从句修饰 a foreigner。"
+      ],
+      "expressions": [
+        {
+          "text": "rob sb of sth",
+          "meaning_zh": "抢夺某人的某物"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "In the end, Moreira Brito, or Mangueira as he is known, welcomed Shanley and worked on her study.",
+      "translation": "最终，莫雷拉·布里托——人称芒盖拉（Mangueira）——接纳了香利，并参与了她的研究。",
+      "structure": [
+        {
+          "text": "Moreira Brito",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "or Mangueira as he is known",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "welcomed Shanley",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and worked on her study",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "or Mangueira as he is known 是插入的同位语，说明他的别名“芒盖拉”。",
+        "welcomed 和 worked on 是并列谓语，共享主语 Moreira Brito。"
+      ],
+      "expressions": [
+        {
+          "text": "as sb is known",
+          "meaning_zh": "别名为；人称……"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "His land, an hour's walk from the Rio Capim, is almost entirely covered with primary forest.",
+      "translation": "他的土地距离里约卡平河步行约一小时，几乎完全被原始森林覆盖。",
+      "structure": [
+        {
+          "text": "His land",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "an hour's walk from the Rio Capim",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "is almost entirely covered with primary forest",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "an hour's walk from... 是插入的同位语，说明他的土地与里约卡平河的距离。",
+        "be covered with 表示“被……覆盖”。"
+      ],
+      "expressions": [
+        {
+          "text": "an hour's walk from",
+          "meaning_zh": "距……步行一小时路程"
+        },
+        {
+          "text": "primary forest",
+          "meaning_zh": "原始森林"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "A study of this and other tracts of forest selected by the communities enabled Shanley to identify three trees, found throughout the Amazon, whose fruit was much favoured by the caboclos: bacuri(Platonia insignis), uxi (Endop- leura uchi) and piquia (Cayocas villosum).",
+      "translation": "对这片以及社区选定的其他林地进行的研究，让香利得以确认了三种遍布亚马逊、深受卡波克罗人喜爱其果实的树木：巴库里果（bacuri, Platonia insignis）、乌希果（uxi, Endopleura uchi）和皮基亚果（piquia, Cayocas villosum）。",
+      "structure": [
+        {
+          "text": "A study of this and other tracts of forest",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "selected by the communities",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "enabled Shanley",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to identify three trees",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "found throughout the Amazon",
+          "role": "participial_phrase",
+          "level": 3
+        },
+        {
+          "text": "whose fruit was much favoured by the caboclos",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "bacuri(Platonia insignis), uxi (Endop- leura uchi) and piquia (Cayocas villosum)",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "selected by the communities 是过去分词短语，修饰 tracts of forest。",
+        "enable sb to do sth 表示“使某人能够做某事”。",
+        "whose fruit was much favoured by the caboclos 是定语从句，修饰 three trees，whose 指代这三种树。",
+        "冒号后列举的三个学名是对 three trees 的具体说明（原文括号内排版存在多余空格，属原文本身瑕疵）。"
+      ],
+      "expressions": [
+        {
+          "text": "enable sb to do",
+          "meaning_zh": "使某人能够做……"
+        },
+        {
+          "text": "be favoured by",
+          "meaning_zh": "受……青睐"
+        }
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "The caboclos used their fruits, extracted oils, and knew what sort of wildlife they attracted.",
+      "translation": "卡波克罗人会利用这些果实，提炼果油，也清楚这些树能吸引哪些野生动物。",
+      "structure": [
+        {
+          "text": "The caboclos",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "used their fruits",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "extracted oils",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "and knew",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "what sort of wildlife they attracted",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "used、extracted、knew 是三个并列谓语，共享主语 the caboclos。",
+        "what sort of wildlife they attracted 是宾语从句，作 knew 的宾语。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "But, in the face of aggressive tactics from the logging companies, they had no measure of the trees' financial worth.",
+      "translation": "但面对伐木公司咄咄逼人的手段，他们却完全无法衡量这些树木的经济价值。",
+      "structure": [
+        {
+          "text": "in the face of aggressive tactics from the logging companies",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had no measure of the trees' financial worth",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "in the face of 表示“面对……”。",
+        "have no measure of 表示“对……没有衡量的办法/没有概念”。"
+      ],
+      "expressions": [
+        {
+          "text": "in the face of",
+          "meaning_zh": "面对……"
+        }
+      ]
+    },
+    {
+      "id": "D-08",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "The only way to find out, Shanley decided, was to start from scratch with a scientific study.",
+      "translation": "香利认为，唯一的办法就是从零开始，做一项科学研究。",
+      "structure": [
+        {
+          "text": "The only way to find out",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "Shanley decided",
+          "role": "parenthesis",
+          "level": 2
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to start from scratch with a scientific study",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Shanley decided 是插入语，打断了主语和谓语。",
+        "start from scratch 是习语，意为“从零开始”。"
+      ],
+      "expressions": [
+        {
+          "text": "start from scratch",
+          "meaning_zh": "从零开始"
+        }
+      ]
+    },
+    {
+      "id": "D-09",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "\"From a scientific point of view, hardly anything was known about these trees,\" she says.",
+      "translation": "“从科学的角度来说，人们对这些树木几乎一无所知，”她说。",
+      "structure": [
+        {
+          "text": "From a scientific point of view",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "hardly anything was known about these trees",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "she says",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "from a...point of view 表示“从……的角度来看”。",
+        "hardly anything was known 是几乎全否定的被动语态，强调当时对这些树木知之甚少。"
+      ],
+      "expressions": [
+        {
+          "text": "from a...point of view",
+          "meaning_zh": "从……的角度来看"
+        },
+        {
+          "text": "hardly anything",
+          "meaning_zh": "几乎没有什么"
+        }
+      ]
+    },
+    {
+      "id": "D-10",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "But six years of field research yielded a mass of data on their flowering and fruiting behaviour.",
+      "translation": "但六年的实地研究，最终积累了大量关于这些树木开花结果规律的数据。",
+      "structure": [
+        {
+          "text": "six years of field research",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "yielded",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a mass of data on their flowering and fruiting behaviour",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "six years of field research 作主语，强调持续时间之长。",
+        "a mass of 表示“大量的”。"
+      ],
+      "expressions": [
+        {
+          "text": "a mass of",
+          "meaning_zh": "大量的"
+        },
+        {
+          "text": "yield data",
+          "meaning_zh": "产出数据"
+        }
+      ]
+    },
+    {
+      "id": "D-11",
+      "paragraph_label": "D",
+      "sentence_index": 27,
+      "sentence": "During 1993 and 1994, 30 families weighed everything they used from the forest -game, fruit, fibre, medicinal plants - and documented its source.",
+      "translation": "1993年至1994年间，30户家庭对他们从森林中获取的一切——猎物、水果、纤维、药用植物——都进行了称重，并记录了来源。",
+      "structure": [
+        {
+          "text": "During 1993 and 1994",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "30 families",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "weighed everything",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "they used from the forest",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "game, fruit, fibre, medicinal plants",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "and documented its source",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "they used from the forest 是省略了关系代词的定语从句，修饰 everything。",
+        "破折号之间的内容列举了 everything 具体包括的种类：猎物、水果、纤维、药用植物。",
+        "documented 与 weighed 并列，共享主语 30 families。"
+      ],
+      "expressions": [
+        {
+          "text": "document its source",
+          "meaning_zh": "记录其来源"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "After three logging sales and a major fire in 1997, the researchers were also able to study the ecosystem's reaction to logging and disturbance.",
+      "translation": "在经历了三次伐木交易和1997年的一场大火之后，研究人员还得以研究该生态系统对伐木和干扰的反应。",
+      "structure": [
+        {
+          "text": "After three logging sales and a major fire in 1997",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the researchers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were also able",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to study the ecosystem's reaction to logging and disturbance",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "after 引导时间状语，说明研究这一生态反应的契机。",
+        "be able to do sth 中不定式作补足语。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "They carried out a similar, though less exhaustive, study in 1999, this time with 15 families.",
+      "translation": "他们在1999年开展了一项类似但不那么详尽的研究，这次涉及15户家庭。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "carried out",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a similar, though less exhaustive, study",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "in 1999",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "this time with 15 families",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "though less exhaustive 是插入的让步成分，修饰 similar，说明这次研究规模不及上次全面。",
+        "this time with 15 families 补充说明这次研究的样本规模。"
+      ],
+      "expressions": [
+        {
+          "text": "carry out a study",
+          "meaning_zh": "开展一项研究"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "The changes were striking.",
+      "translation": "这些变化十分显著。",
+      "structure": [
+        {
+          "text": "The changes",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were striking",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "striking 意为“显著的、引人注目的”。",
+        "句子很短，但 the changes 需要回指上文调查中发现的资源使用变化。"
+      ],
+      "expressions": [
+        {
+          "text": "striking",
+          "meaning_zh": "显著的；引人注目的"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "Average annual household consumption of forest fruit had fallen from 89 to 28 kilogrammes between 1993 and 1999.",
+      "translation": "1993年至1999年间，家庭年均森林水果消费量从89公斤降至28公斤。",
+      "structure": [
+        {
+          "text": "Average annual household consumption of forest fruit",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had fallen",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "from 89 to 28 kilogrammes",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "between 1993 and 1999",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "had fallen 是过去完成时，强调这一下降是在1999年这个时间点之前已经完成的变化。",
+        "from...to... 表示数值变化的范围。"
+      ],
+      "expressions": [
+        {
+          "text": "fall from...to...",
+          "meaning_zh": "从……降至……"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 32,
+      "sentence": "\"What we found,\" says Shanley, \"was that fruit collection could coexist with a certain amount of logging, but after the forest fire, it dropped dramatically.\"",
+      "translation": "“我们发现，”香利说，“水果采集是可以与一定程度的伐木活动共存的，但森林大火之后，采集量就急剧下降了。”",
+      "structure": [
+        {
+          "text": "What we found",
+          "role": "noun_clause",
+          "level": 1
+        },
+        {
+          "text": "says Shanley",
+          "role": "parenthesis",
+          "level": 2
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that fruit collection could coexist with a certain amount of logging",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "but after the forest fire, it dropped dramatically",
+          "role": "coordinated_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "What we found 是主语从句，says Shanley 是插入其中的转述标签。",
+        "coexist with 表示“与……共存”。",
+        "it 指代 fruit collection（水果采集量）。"
+      ],
+      "expressions": [
+        {
+          "text": "coexist with",
+          "meaning_zh": "与……共存"
+        },
+        {
+          "text": "drop dramatically",
+          "meaning_zh": "急剧下降"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "Over the same period, fibre use also dropped from around 20 to 4 kilogrammes.",
+      "translation": "在同一时期，纤维使用量也从约20公斤降至4公斤。",
+      "structure": [
+        {
+          "text": "Over the same period",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "fibre use",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also dropped",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "from around 20 to 4 kilogrammes",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "over the same period 呼应上文的1993至1999年区间。",
+        "from around 20 to 4 kilogrammes 表示数量下降的起点和终点，是理解变化幅度的关键。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "The fire and logging also changed the nature of the caboclo diet.",
+      "translation": "大火和伐木活动也改变了卡波克罗人的饮食结构。",
+      "structure": [
+        {
+          "text": "The fire and logging",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also changed",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the nature of the caboclo diet",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "fire 和 logging 并列作主语，说明两个因素共同造成了饮食结构的变化。",
+        "changed the nature of... 不是指改变“自然”，而是指改变了 caboclo 饮食的性质或构成。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 35,
+      "sentence": "In 1993 most households ate game two or three times a month.",
+      "translation": "1993年，大多数家庭每月能吃两三次猎物肉。",
+      "structure": [
+        {
+          "text": "In 1993",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "most households",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "ate game",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "two or three times a month",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "two or three times a month 表示频率。",
+        "game 在这里不是“游戏”，而是指可猎食的野味。"
+      ],
+      "expressions": [
+        {
+          "text": "...times a month",
+          "meaning_zh": "每月……次"
+        }
+      ]
+    },
+    {
+      "id": "E-09",
+      "paragraph_label": "E",
+      "sentence_index": 36,
+      "sentence": "By 1999 some were fortunate if they ate game more than two or three times a year.",
+      "translation": "到1999年，有些家庭如果一年能吃上两三次以上的猎物肉，就已经算幸运的了。",
+      "structure": [
+        {
+          "text": "By 1999",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "some",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were fortunate",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "if they ate game more than two or three times a year",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "by 1999 表示“到1999年为止”，与上一句 in 1993 形成对照。",
+        "were fortunate if... 表示“如果……就算幸运了”，凸显频率骤降之明显。"
+      ],
+      "expressions": [
+        {
+          "text": "be fortunate if...",
+          "meaning_zh": "如果……就算幸运了"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 37,
+      "sentence": "The loss of certain species of tree was especially significant.",
+      "translation": "某些树种的消失所带来的影响尤为显著。",
+      "structure": [
+        {
+          "text": "The loss of certain species of tree",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was especially significant",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "especially significant 强调某些树种的消失影响尤为重大。",
+        "The loss of certain species of tree 是名词化主语，核心不是 species，而是 loss。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 38,
+      "sentence": "Shanley's team persuaded local hunters to weigh their catch, noting the trees under which the animals were caught.",
+      "translation": "香利的团队说服当地猎人为猎物称重，同时记录下猎物是在哪些树下被捕获的。",
+      "structure": [
+        {
+          "text": "Shanley's team",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "persuaded local hunters",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to weigh their catch",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "noting the trees",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "under which the animals were caught",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "persuade sb to do sth 表示“说服某人做某事”。",
+        "noting the trees... 是分词短语作伴随状语，说明研究团队同时记录的内容。",
+        "under which the animals were caught 是“介词+关系代词”引导的定语从句，修饰 the trees。"
+      ],
+      "expressions": [
+        {
+          "text": "persuade sb to do sth",
+          "meaning_zh": "说服某人做某事"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 39,
+      "sentence": "Over the year, they trapped five species of game averaging 232 kilogrammes under piquia trees.",
+      "translation": "这一年里，他们在皮基亚树（piquia）下捕获了五种猎物，平均总重232公斤。",
+      "structure": [
+        {
+          "text": "Over the year",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "trapped five species of game",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "averaging 232 kilogrammes",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "under piquia trees",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "averaging 232 kilogrammes 是现在分词短语，修饰 five species of game，说明其平均重量。",
+        "under piquia trees 说明这些猎物的捕获地点。"
+      ],
+      "expressions": [
+        {
+          "text": "average (数量)",
+          "meaning_zh": "平均为……"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 40,
+      "sentence": "Under copaiba, they caught just two species averaging 63 kilogrammes; and under uxi, four species weighing 38 kilogrammes.",
+      "translation": "在科帕伊巴树（copaiba）下，他们只捕获了两种猎物，平均重63公斤；而在乌希树（uxi）下，则捕获了四种猎物，共重38公斤。",
+      "structure": [
+        {
+          "text": "Under copaiba",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "caught just two species",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "averaging 63 kilogrammes",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "and under uxi",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "four species weighing 38 kilogrammes",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "weighing 38 kilogrammes",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "本句与上一句构成排比结构，分别比较不同树种下捕获猎物的种类与重量。",
+        "and under uxi, four species weighing 38 kilogrammes 中省略了谓语 they caught，与前一分句对称。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 41,
+      "sentence": "At last, the team was getting a handle on which trees were worth keeping, and which could reasonably be sold.",
+      "translation": "研究团队终于开始摸清楚，哪些树值得保留，哪些则可以合理地出售。",
+      "structure": [
+        {
+          "text": "At last",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the team",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was getting a handle on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "which trees were worth keeping",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "and which could reasonably be sold",
+          "role": "coordinated_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "get a handle on 是习语，表示“开始理解、掌握”。",
+        "which trees were worth keeping 和 which could reasonably be sold 是并列的宾语从句，共同作 a handle on 的宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "get a handle on",
+          "meaning_zh": "开始弄懂、掌握"
+        },
+        {
+          "text": "be worth doing",
+          "meaning_zh": "值得做……"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 42,
+      "sentence": "\"This showed that selling piquia trees to loggers for a few dollars made little sense,\" explains Shanley.",
+      "translation": "“这说明，把皮基亚树以几美元的价格卖给伐木者是不划算的，”香利解释道。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "showed",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that selling piquia trees to loggers for a few dollars made little sense",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "selling piquia trees to loggers for a few dollars",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "explains Shanley",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，从句主语是动名词短语 selling piquia trees to loggers for a few dollars。",
+        "make little sense 表示“没有什么意义、不划算”。"
+      ],
+      "expressions": [
+        {
+          "text": "make little sense",
+          "meaning_zh": "没有多大意义；不划算"
+        }
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 43,
+      "sentence": "\"Their local value lies in providing a prized fruit, as well as flowers which attract more game than any other species.\"",
+      "translation": "“它们的本地价值在于能提供珍贵的果实，还能开出比其他任何树种都更能招来猎物的花朵。”",
+      "structure": [
+        {
+          "text": "Their local value",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "lies in",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "providing a prized fruit",
+          "role": "complement",
+          "level": 2
+        },
+        {
+          "text": "as well as flowers",
+          "role": "coordinated_clause",
+          "level": 2
+        },
+        {
+          "text": "which attract more game than any other species",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "lie in doing sth 表示“（价值等）在于……”。",
+        "as well as 连接两种价值来源：珍贵的果实和吸引猎物的花朵。",
+        "which 引导定语从句，修饰 flowers，more...than any other species 是比较结构，表示“胜过其他任何树种”。"
+      ],
+      "expressions": [
+        {
+          "text": "lie in",
+          "meaning_zh": "在于……"
+        },
+        {
+          "text": "attract more...than any other",
+          "meaning_zh": "比其他任何……都更能吸引……"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 44,
+      "sentence": "As a result of these studies, Shanley had to tell the Rural Workers' Union of Paragominas that the Nature thesis could not be applied wholesale to their community - harvesting NTFPs would not always yield more than timber sales.",
+      "translation": "基于这些研究，香利不得不告诉帕拉戈米纳斯农村工人联盟：《自然》那篇论文的观点并不能不加区分地整体套用到他们的社区——采集非木材林产品的收益并非总能超过卖木材的收益。",
+      "structure": [
+        {
+          "text": "As a result of these studies",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "Shanley",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had to tell the Rural Workers' Union of Paragominas",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that the Nature thesis could not be applied wholesale to their community",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "harvesting NTFPs would not always yield more than timber sales",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "as a result of 表示“由于……的结果”。",
+        "that 引导宾语从句，the Nature thesis 指前文提到的《自然》论文中的观点。",
+        "破折号后的内容是对前面论断的具体解释：采集非木材林产品并不总能比卖木材赚得更多。"
+      ],
+      "expressions": [
+        {
+          "text": "as a result of",
+          "meaning_zh": "由于……的结果"
+        },
+        {
+          "text": "be applied wholesale to",
+          "meaning_zh": "被不加区分地整体套用于"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 45,
+      "sentence": "Fruiting patterns of trees such as uxi were unpredictable, for example.",
+      "translation": "举例来说，像乌希树这类树木的结果规律是难以预测的。",
+      "structure": [
+        {
+          "text": "Fruiting patterns of trees such as uxi",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were unpredictable",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "for example",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "such as 举例说明是哪类树，uxi 只是其中一例。",
+        "for example 呼应上一句，具体举例说明“不能整体套用”的原因。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 46,
+      "sentence": "In 1994, one household collected 3,654 uxi fruits; the following year, none at all.",
+      "translation": "1994年，一户人家采集到了3654颗乌希果；而第二年，却一颗都没有。",
+      "structure": [
+        {
+          "text": "In 1994",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "one household",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "collected 3,654 uxi fruits",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the following year",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "none at all",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "分号后的 the following year, none at all 省略了主谓（they collected），与前一分句形成鲜明对比。",
+        "none at all 强调“一个都没有”，突出结果的不可预测性。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 47,
+      "sentence": "This is not to say that wild fruit trees were unimportant.",
+      "translation": "但这并不是说野生果树就不重要。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is not to say",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that wild fruit trees were unimportant",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "this is not to say that... 是习语，表示“这并不是说……”，用于澄清、避免误解。",
+        "that wild fruit trees were unimportant 是宾语从句，说明作者要否定的误解内容。"
+      ],
+      "expressions": [
+        {
+          "text": "this is not to say that",
+          "meaning_zh": "这并不是说……"
+        }
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 48,
+      "sentence": "On the contrary, argues Shanley, they are critical for subsistence, something that is often ignored in much of the current research on NTFPs, which tends to focus on their commercial potential.",
+      "translation": "恰恰相反，香利认为，这些野生果树对维持生计至关重要——而这一点，在当前大量关于非木材林产品、往往只聚焦其商业潜力的研究中常常被忽视。",
+      "structure": [
+        {
+          "text": "On the contrary",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "argues Shanley",
+          "role": "parenthesis",
+          "level": 2
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are critical for subsistence",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "something that is often ignored in much of the current research on NTFPs",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "that is often ignored in much of the current research on NTFPs",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "which tends to focus on their commercial potential",
+          "role": "relative_clause",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "on the contrary 表示“恰恰相反”，与前一句形成对比；argues Shanley 是插入的转述标签。",
+        "something that... 是对“they are critical for subsistence”这一整体判断的同位语概括。",
+        "which 引导定语从句，修饰 NTFPs research，说明当前研究的普遍倾向。"
+      ],
+      "expressions": [
+        {
+          "text": "on the contrary",
+          "meaning_zh": "恰恰相反"
+        },
+        {
+          "text": "be critical for",
+          "meaning_zh": "对……至关重要"
+        },
+        {
+          "text": "tend to focus on",
+          "meaning_zh": "往往聚焦于"
+        }
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 49,
+      "sentence": "Geography was another factor preventing the Rio Capim caboclos from establishing a serious trade in wild fruit: villagers in remote areas could not compete with communities collecting NTFPs close to urban markets, although they could sell them to passing river boats.",
+      "translation": "地理位置是另一个阻碍里约卡平河沿岸卡波克罗人建立起像样的野生水果贸易的因素：偏远地区的村民无法与那些靠近城市市场、便于采集非木材林产品的社区竞争，尽管他们仍可以把水果卖给路过的河船。",
+      "structure": [
+        {
+          "text": "Geography",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "another factor",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "preventing the Rio Capim caboclos from establishing a serious trade in wild fruit",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "villagers in remote areas",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "could not compete with communities collecting NTFPs close to urban markets",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "collecting NTFPs close to urban markets",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "although they could sell them to passing river boats",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "preventing sb from doing sth 是现在分词短语，修饰 another factor，说明地理因素阻碍了什么。",
+        "冒号后的内容具体解释地理因素造成的困境：偏远地区村民无法与靠近城市市场的社区竞争。",
+        "although 引导让步状语从句，说明他们仍有一条有限的销路——卖给过路的河船。"
+      ],
+      "expressions": [
+        {
+          "text": "prevent sb from doing",
+          "meaning_zh": "阻止某人做……"
+        },
+        {
+          "text": "compete with",
+          "meaning_zh": "与……竞争"
+        }
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 50,
+      "sentence": "But Shanley and her colleagues decided to do more than just report their results to the union.",
+      "translation": "但香利和她的同事们决定不能只是把研究结果汇报给联盟，还要做得更多。",
+      "structure": [
+        {
+          "text": "Shanley and her colleagues",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "decided",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to do more than just report their results to the union",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "do more than just do sth 表示“不仅仅做……，还做得更多”。",
+        "to do more than just report... 是 decided 的不定式宾语，说明他们接下来采取的行动目标。"
+      ],
+      "expressions": [
+        {
+          "text": "do more than just...",
+          "meaning_zh": "不仅仅做……"
+        }
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 51,
+      "sentence": "Together with two of her research colleagues, Shanley wrote the fruit book.",
+      "translation": "香利与两位研究同事一起，合作撰写了这本水果书。",
+      "structure": [
+        {
+          "text": "Together with two of her research colleagues",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "Shanley",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "wrote",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the fruit book",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "together with 表示“与……一起”，说明这本书是合著的。",
+        "Together with... 位于句首作伴随状语，真正的主语仍然是 Shanley。"
+      ],
+      "expressions": [
+        {
+          "text": "together with",
+          "meaning_zh": "与……一起"
+        }
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 52,
+      "sentence": "This, the Bible and a publication on medicinal plants co-authored by Shanley and designed for people with minimal literacy skills are about the only books you will see along this stretch of the Rio Capim.",
+      "translation": "这本书、《圣经》，还有一本由香利合著、专为识字能力有限的人设计的药用植物读物，几乎就是你在里约卡平河这一段沿岸能见到的仅有的几本书。",
+      "structure": [
+        {
+          "text": "This, the Bible and a publication on medicinal plants",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "co-authored by Shanley",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "and designed for people with minimal literacy skills",
+          "role": "coordinated_clause",
+          "level": 2
+        },
+        {
+          "text": "are",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "about the only books",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "you will see along this stretch of the Rio Capim",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "co-authored by Shanley 和 designed for people with minimal literacy skills 是并列的过去分词短语，修饰 a publication on medicinal plants。",
+        "about the only books 中 about 表示“差不多、几乎”，修饰 the only books。",
+        "you will see 省略了关系代词，修饰 books。"
+      ],
+      "expressions": [
+        {
+          "text": "co-author",
+          "meaning_zh": "合著"
+        },
+        {
+          "text": "minimal literacy skills",
+          "meaning_zh": "极有限的读写能力"
+        }
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 53,
+      "sentence": "The first print ran to only 3,000 copies, but the fruit book has been remarkably influential, and is used by colleges, peas ant unions, industries and the cabo­clos themselves.",
+      "translation": "首次印刷仅有3000册，但这本水果书的影响力却出人意料地大，如今被大学、农民工会、企业以及卡波克罗人自己广泛使用。",
+      "structure": [
+        {
+          "text": "The first print",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "ran to only 3,000 copies",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "but the fruit book",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has been remarkably influential",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and is used",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "by colleges, peas ant unions, industries and the cabo­clos themselves",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "run to 表示“（数量）达到、共计”，指首印数量。",
+        "has been...and is used 是并列谓语，共享主语 the fruit book。",
+        "peas ant unions 中同样存在原文排印的空格问题，实指 peasant unions（农民工会）。"
+      ],
+      "expressions": [
+        {
+          "text": "run to (a number)",
+          "meaning_zh": "（数量）达到……"
+        }
+      ]
+    },
+    {
+      "id": "I-05",
+      "paragraph_label": "I",
+      "sentence_index": 54,
+      "sentence": "Its success is largely due to the fact that people with poor literacy skills can understand much of the information it contains about the non-timber forest products, thanks to its illustrations, anecdotes, stories and songs.",
+      "translation": "它的成功很大程度上要归功于这样一个事实：得益于书中的插图、轶事、故事和歌谣，读写能力有限的人也能读懂其中关于非木材林产品的大部分信息。",
+      "structure": [
+        {
+          "text": "Its success",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is largely due to",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the fact that people with poor literacy skills can understand much of the information it contains about the non-timber forest products",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "that people with poor literacy skills can understand much of the information",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "it contains about the non-timber forest products",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "thanks to its illustrations, anecdotes, stories and songs",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "be due to the fact that... 表示“是由于……这一事实”，that 引导同位语从句。",
+        "it contains 省略了关系代词，修饰 information。",
+        "thanks to 表示“多亏了……”，说明成功的具体原因。"
+      ],
+      "expressions": [
+        {
+          "text": "be due to the fact that",
+          "meaning_zh": "是由于……这一事实"
+        },
+        {
+          "text": "thanks to",
+          "meaning_zh": "多亏了；由于"
+        }
+      ]
+    },
+    {
+      "id": "I-06",
+      "paragraph_label": "I",
+      "sentence_index": 55,
+      "sentence": "\"The book doesn't tell people what to do,\" says Shanley, \"but it does provide them with choices.\"",
+      "translation": "“这本书并不会告诉人们该怎么做，”香利说，“但它确实为他们提供了选择。”",
+      "structure": [
+        {
+          "text": "The book doesn't tell people",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "what to do",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "says Shanley",
+          "role": "parenthesis",
+          "level": 2
+        },
+        {
+          "text": "but it does provide them with choices",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "tell people what to do 中 what to do 是宾语从句的简化形式（疑问词+不定式）。",
+        "does provide 中 does 是强调助动词，突出“确实提供”。"
+      ],
+      "expressions": [
+        {
+          "text": "provide sb with choices",
+          "meaning_zh": "为某人提供选择"
+        }
+      ]
+    },
+    {
+      "id": "I-07",
+      "paragraph_label": "I",
+      "sentence_index": 56,
+      "sentence": "The caboclos who have used the book now have a much better understanding of which trees to sell to the loggers, and which to protect.",
+      "translation": "用过这本书的卡波克罗人，现在对于哪些树该卖给伐木者、哪些该保护，都有了更清楚的判断。",
+      "structure": [
+        {
+          "text": "The caboclos",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who have used the book",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "now have",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a much better understanding of which trees to sell to the loggers",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "which trees to sell to the loggers",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "and which to protect",
+          "role": "coordinated_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "who have used the book 是定语从句，修饰 the caboclos。",
+        "which trees to sell to the loggers 和 which to protect 是并列的疑问词+不定式结构，作 understanding of 的宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "have a better understanding of",
+          "meaning_zh": "对……有了更好的理解"
+        }
+      ]
+    }
+  ]
+}

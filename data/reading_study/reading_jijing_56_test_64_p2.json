@@ -1,0 +1,598 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_56_test_64",
+  "passage_id": "reading_jijing_56_test_64_p2",
+  "passage_title": "Looking for Life on the Ocean Wave",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "Put one buccaneering entrepreneur-cum-bioscientist on a luxury yacht.",
+      "translation": "让一位富有冒险精神、兼具企业家与生物科学家身份的人登上一艘豪华游艇。",
+      "structure": [
+        {"text": "Put", "role": "imperative_verb", "level": 1},
+        {"text": "one buccaneering entrepreneur-cum-bioscientist", "role": "object", "level": 1},
+        {"text": "on a luxury yacht", "role": "adverbial", "level": 1}
+      ],
+      "difficult_points": ["本句是祈使句，省略了主语 you，以 Put 开头营造设想场景。", "entrepreneur-cum-bioscientist 中的 cum 表示“兼具……身份”。"],
+      "expressions": [{"text": "entrepreneur-cum-bioscientist", "meaning_zh": "企业家兼生物科学家"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "Using some mighty fine nets, let him trawl the world's oceans for the smallest creatures.",
+      "translation": "让他用一些极细密的网在全球海洋中搜寻最微小的生物。",
+      "structure": [
+        {"text": "Using some mighty fine nets", "role": "participle_adverbial", "level": 1},
+        {"text": "let", "role": "imperative_verb", "level": 1},
+        {"text": "him trawl the world's oceans", "role": "object_complement_construction", "level": 1},
+        {"text": "for the smallest creatures", "role": "purpose_adverbial", "level": 1}
+      ],
+      "difficult_points": ["Using 短语说明 trawl 所采用的工具，其逻辑主语是 him。", "let him trawl 是 let + 宾语 + 动词原形结构。"],
+      "expressions": [{"text": "trawl ... for", "meaning_zh": "在……中搜寻"}, {"text": "let somebody do something", "meaning_zh": "让某人做某事"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "Catalogue the genetic diversity of this, the most abundant form of life in the largest habitat on Earth.",
+      "translation": "把这种生命形式的遗传多样性编目记录下来——它是地球最大栖息地中数量最丰富的生命形式。",
+      "structure": [
+        {"text": "Catalogue", "role": "imperative_verb", "level": 1},
+        {"text": "the genetic diversity of this", "role": "object", "level": 1},
+        {"text": "the most abundant form of life in the largest habitat on Earth", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": ["this 回指上一句中的 the smallest creatures，即微生物。", "逗号后的名词短语是 this 的同位语，对其作补充说明。"],
+      "expressions": [{"text": "genetic diversity", "meaning_zh": "遗传多样性"}, {"text": "the most abundant form of life", "meaning_zh": "数量最丰富的生命形式"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "Then hijack the molecular machinery of these microbes to make clean energy, new drugs or boost the ability of the Earth's lungs to \"breathe\" more carbon dioxide, and so limit global warming.",
+      "translation": "然后利用这些微生物的分子机制来制造清洁能源和新药，或增强地球“肺部”吸收更多二氧化碳的能力，从而限制全球变暖。",
+      "structure": [
+        {"text": "Then hijack the molecular machinery of these microbes", "role": "main_clause", "level": 1},
+        {"text": "to make clean energy, new drugs or boost the ability of the Earth's lungs", "role": "purpose_clause", "level": 1},
+        {"text": "to \"breathe\" more carbon dioxide", "role": "infinitive_attributive", "level": 2},
+        {"text": "and so limit global warming", "role": "coordinated_result", "level": 1}
+      ],
+      "difficult_points": ["hijack 在此是比喻，指把微生物的分子机制“拿来为人所用”。", "to make 与 boost 并列，表示利用这种机制的两个目的。", "the Earth's lungs 比喻能够吸收二氧化碳的海洋生态系统。"],
+      "expressions": [{"text": "molecular machinery", "meaning_zh": "分子机制"}, {"text": "limit global warming", "meaning_zh": "限制全球变暖"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "This may sound like the outline for a sci-fi potboiler, but it sums up the remarkable efforts of Craig Venter, the maverick American scientist.",
+      "translation": "这听起来也许像一部通俗科幻小说的故事梗概，但它概括的却是特立独行的美国科学家克雷格·文特尔所付出的非凡努力。",
+      "structure": [
+        {"text": "This may sound like the outline for a sci-fi potboiler", "role": "main_clause", "level": 1},
+        {"text": "but it sums up the remarkable efforts of Craig Venter", "role": "coordinated_clause", "level": 1},
+        {"text": "the maverick American scientist", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": ["This 指代 A 段描述的整套设想。", "but 连接听似虚构与实际科研之间的转折。", "the maverick American scientist 是 Craig Venter 的同位语。"],
+      "expressions": [{"text": "sound like", "meaning_zh": "听起来像"}, {"text": "sum up", "meaning_zh": "概括"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "Seven wars ago.",
+      "translation": "七年前。",
+      "structure": [{"text": "Seven wars ago", "role": "fragmented_time_adverbial", "level": 1}],
+      "difficult_points": ["这是源文保留的残句，语义上应与下一句连读。", "wars 很可能是 years 的 OCR 错误，正常理解为“七年前”。"],
+      "expressions": [{"text": "seven years ago", "meaning_zh": "七年前（按语义还原）"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "Venter announced at the White House that he had identified all the genes - the genome - in the DNA of a human being.",
+      "translation": "文特尔在白宫宣布，他已经识别出一个人类 DNA 中的全部基因，也就是整个基因组。",
+      "structure": [
+        {"text": "Venter announced at the White House", "role": "main_clause", "level": 1},
+        {"text": "that he had identified all the genes - the genome - in the DNA of a human being", "role": "object_clause", "level": 2},
+        {"text": "the genome", "role": "apposition", "level": 3}
+      ],
+      "difficult_points": ["that 引导 announced 的宾语从句。", "had identified 使用过去完成时，表示识别工作发生在宣布之前。", "the genome 插入解释 all the genes。"],
+      "expressions": [{"text": "identify all the genes", "meaning_zh": "识别全部基因"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "It was the culmination of a bitter race with an international consortium of government labs, and his bull-in-a-china-shop approach earned him the epithet \"the boy of science\".",
+      "translation": "这是他与一个由各国政府实验室组成的国际联盟激烈竞赛的最终成果，而他横冲直撞的做事方式也让他得到了“科学界的男孩”这一称号。",
+      "structure": [
+        {"text": "It was the culmination of a bitter race", "role": "main_clause", "level": 1},
+        {"text": "with an international consortium of government labs", "role": "postmodifier", "level": 1},
+        {"text": "and his bull-in-a-china-shop approach earned him the epithet \"the boy of science\"", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["It 回指文特尔识别人类全部基因这一成果。", "bull-in-a-china-shop 是比喻，形容做事鲁莽、横冲直撞。", "earned him the epithet 使用双宾语结构，表示“为他赢得称号”。"],
+      "expressions": [{"text": "the culmination of", "meaning_zh": "……的最终成果"}, {"text": "earn somebody the epithet", "meaning_zh": "使某人获得某一称号"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 9,
+      "sentence": "It did not deter him, and while many of the critics in the scientific establishment who vilified him disappeared from view.",
+      "translation": "这并没有阻止他；与此同时，科学界那些曾诋毁他的批评者中有许多人逐渐淡出了公众视野。",
+      "structure": [
+        {"text": "It did not deter him", "role": "main_clause", "level": 1},
+        {"text": "and while many of the critics in the scientific establishment who vilified him disappeared from view", "role": "coordinated_clause", "level": 1},
+        {"text": "who vilified him", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["It 回指此前的负面称号和批评。", "who vilified him 修饰 critics。", "源句中的 while 形式不完整，可按“与此同时”理解并保留原文。"],
+      "expressions": [{"text": "deter somebody", "meaning_zh": "阻止某人"}, {"text": "disappear from view", "meaning_zh": "淡出视野"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 10,
+      "sentence": "Venter went on to become the first person to read his own genome and is also undertaking an extraordinary effort to create a synthetic genome for an artificial organism.",
+      "translation": "文特尔后来成为第一个解读自身基因组的人，并且还在开展一项非凡的工作：为人工生物创造合成基因组。",
+      "structure": [
+        {"text": "Venter went on to become the first person", "role": "main_clause", "level": 1},
+        {"text": "to read his own genome", "role": "infinitive_attributive", "level": 2},
+        {"text": "and is also undertaking an extraordinary effort", "role": "coordinated_predicate", "level": 1},
+        {"text": "to create a synthetic genome for an artificial organism", "role": "infinitive_attributive", "level": 2}
+      ],
+      "difficult_points": ["went on to become 表示在此前事件之后“接着成为”。", "两个 to 不定式分别修饰 person 和 effort。", "is undertaking 强调这项工作当时仍在进行。"],
+      "expressions": [{"text": "go on to do", "meaning_zh": "接着做某事"}, {"text": "undertake an effort", "meaning_zh": "开展一项工作"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "Today, however, he is bobbing in the middle of the Sea of Cortez, mixing business with pleasure in a project to read marine DNA codes as he sails along the west coast of the Americas.",
+      "translation": "然而如今，他正漂荡在科尔特斯海中央，一边沿美洲西海岸航行，一边在解读海洋 DNA 编码的项目中把工作与乐趣结合起来。",
+      "structure": [
+        {"text": "Today, however, he is bobbing in the middle of the Sea of Cortez", "role": "main_clause", "level": 1},
+        {"text": "mixing business with pleasure in a project", "role": "participle_adverbial", "level": 1},
+        {"text": "to read marine DNA codes", "role": "infinitive_attributive", "level": 2},
+        {"text": "as he sails along the west coast of the Americas", "role": "time_clause", "level": 2}
+      ],
+      "difficult_points": ["mixing 的逻辑主语是 he，补充说明他航行时所做之事。", "to read marine DNA codes 修饰 project。", "as 引导时间从句，表示“当……时”。"],
+      "expressions": [{"text": "mix business with pleasure", "meaning_zh": "寓工作于娱乐"}, {"text": "sail along", "meaning_zh": "沿着……航行"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "His 29-metre sloop, Sorcerer II, is a floating laboratory.",
+      "translation": "他那艘长 29 米、名为“巫师二号”的单桅帆船就是一座浮动实验室。",
+      "structure": [
+        {"text": "His 29-metre sloop", "role": "subject", "level": 1},
+        {"text": "Sorcerer II", "role": "apposition", "level": 1},
+        {"text": "is a floating laboratory", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["Sorcerer II 是 sloop 的同位语，即船名。", "floating laboratory 是比喻性表语，说明船承担实验室功能。"],
+      "expressions": [{"text": "a floating laboratory", "meaning_zh": "浮动实验室"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "Rather than use the traditional method of studying microorganisms by growing them in the lab, which only works with one species in every 100, Venter is obtaining the genetic codes of anything and everything present in sea water.",
+      "translation": "文特尔没有采用在实验室培养微生物的传统研究方法——这种方法每一百种微生物中只能适用于一种——而是在获取海水中所有生物的遗传编码。",
+      "structure": [
+        {"text": "Rather than use the traditional method of studying microorganisms by growing them in the lab", "role": "contrast_adverbial", "level": 1},
+        {"text": "which only works with one species in every 100", "role": "relative_clause", "level": 2},
+        {"text": "Venter is obtaining the genetic codes", "role": "main_clause", "level": 1},
+        {"text": "of anything and everything present in sea water", "role": "postmodifier", "level": 1}
+      ],
+      "difficult_points": ["Rather than 引出被放弃的传统方法，与主句的新方法形成对比。", "which 修饰 the traditional method，而非紧邻的 lab。", "present in sea water 是过去分词短语，修饰 anything and everything。"],
+      "expressions": [{"text": "rather than", "meaning_zh": "而不是"}, {"text": "one in every 100", "meaning_zh": "每一百个中有一个"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "The result is a radical new view of life in the oceans, the modem answer to Charles Darwin's I 9th-century voyage on the HMS Beagle.",
+      "translation": "其结果是形成了一种看待海洋生命的全新激进视角，堪称对查尔斯·达尔文十九世纪乘“小猎犬号”航行的现代回应。",
+      "structure": [
+        {"text": "The result", "role": "subject", "level": 1},
+        {"text": "is a radical new view of life in the oceans", "role": "linking_predicate", "level": 1},
+        {"text": "the modem answer to Charles Darwin's I 9th-century voyage on the HMS Beagle", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": ["逗号后的名词短语是前面 a radical new view 的同位说明。", "modem 和 I 9th-century 是源文 OCR 异常，语义应为 modern 和 19th-century。"],
+      "expressions": [{"text": "a radical new view of", "meaning_zh": "对……的全新激进视角"}, {"text": "the modern answer to", "meaning_zh": "对……的现代回应"}]
+    },
+    {
+      "id": "C-07", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "\"We are starting to view the world in a gene-centred fashion,\" Venter says.",
+      "translation": "文特尔说：“我们开始以基因为中心来看待世界。”",
+      "structure": [
+        {"text": "We are starting to view the world in a gene-centred fashion", "role": "reported_content", "level": 2},
+        {"text": "Venter says", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": ["引语置于 reporting clause 之前，但逻辑上是 says 的内容。", "in a gene-centred fashion 表示看待世界的方式。"],
+      "expressions": [{"text": "view ... in a ... fashion", "meaning_zh": "以……方式看待……"}, {"text": "gene-centred", "meaning_zh": "以基因为中心的"}]
+    },
+    {
+      "id": "C-08", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "\"Our goal is to try to sort out evolution, working back from the genes to what organisms are there.\"",
+      "translation": "“我们的目标是尝试弄清进化过程，从基因反向追溯，判断那里存在着哪些生物。”",
+      "structure": [
+        {"text": "Our goal", "role": "subject", "level": 1},
+        {"text": "is to try to sort out evolution", "role": "linking_predicate", "level": 1},
+        {"text": "working back from the genes", "role": "participle_adverbial", "level": 1},
+        {"text": "to what organisms are there", "role": "prepositional_complement", "level": 2}
+      ],
+      "difficult_points": ["to try to sort out 连用两个不定式，前者作表语，后者作 try 的宾语。", "working back 表示从结果反向推导，其逻辑主语是 we。", "what organisms are there 是 what 引导的名词性从句，作介词 to 的宾语。"],
+      "expressions": [{"text": "sort out", "meaning_zh": "弄清；理清"}, {"text": "work back from", "meaning_zh": "从……反向追溯"}]
+    },
+    {
+      "id": "C-09", "paragraph_label": "C", "sentence_index": 17,
+      "sentence": "He calls his approach\"metagenomics\".",
+      "translation": "他把这种方法称为“宏基因组学”。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "calls", "role": "verb", "level": 1},
+        {"text": "his approach", "role": "object", "level": 1},
+        {"text": "\"metagenomics\"", "role": "object_complement", "level": 1}
+      ],
+      "difficult_points": ["call + 宾语 + 名称是宾语补足语结构，表示“把……称为……”。", "approach 与引号之间缺少空格是源文排版异常。"],
+      "expressions": [{"text": "call ... metagenomics", "meaning_zh": "把……称为宏基因组学"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 18,
+      "sentence": "Microbes make up the vast majority of life on the planet and account for up to 90 per cent of the biological mass in the sea.",
+      "translation": "微生物构成了地球上绝大多数生命，并占海洋生物量的多达 90%。",
+      "structure": [
+        {"text": "Microbes", "role": "subject", "level": 1},
+        {"text": "make up the vast majority of life on the planet", "role": "predicate", "level": 1},
+        {"text": "and account for up to 90 per cent of the biological mass in the sea", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": ["make up 与 account for 是并列谓语，都以 Microbes 为主语。", "up to 表示最高可达该比例。"],
+      "expressions": [{"text": "make up the vast majority of", "meaning_zh": "构成……的绝大多数"}, {"text": "account for up to", "meaning_zh": "占比高达"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 19,
+      "sentence": "They are the central processors of matter and energy in ecosystems.",
+      "translation": "它们是生态系统中物质与能量的核心处理者。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "are the central processors", "role": "linking_predicate", "level": 1},
+        {"text": "of matter and energy in ecosystems", "role": "postmodifier", "level": 1}
+      ],
+      "difficult_points": ["They 回指上一句的 Microbes。", "processors 是拟人化表达，强调微生物在物质和能量循环中的核心作用。"],
+      "expressions": [{"text": "the central processors of", "meaning_zh": "……的核心处理者"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 20,
+      "sentence": "They are responsible for the creation and maintenance of the air we breathe.",
+      "translation": "我们呼吸的空气得以产生和维持，都是它们的作用。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "are responsible for the creation and maintenance of the air", "role": "predicate", "level": 1},
+        {"text": "we breathe", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["we breathe 是省略关系代词 that/which 的定语从句，修饰 the air。", "creation and maintenance 是并列名词，共同受 for 支配。"],
+      "expressions": [{"text": "be responsible for", "meaning_zh": "对……负责；促成……"}, {"text": "creation and maintenance", "meaning_zh": "产生与维持"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 21,
+      "sentence": "They are also, perhaps, our biggest hope of slowing global warming.",
+      "translation": "它们或许也是我们减缓全球变暖的最大希望。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "are also, perhaps, our biggest hope", "role": "linking_predicate", "level": 1},
+        {"text": "of slowing global warming", "role": "postmodifier", "level": 1}
+      ],
+      "difficult_points": ["perhaps 是插入性副词，表示作者对判断有所保留。", "of slowing global warming 修饰 hope，说明希望实现的目标。"],
+      "expressions": [{"text": "the biggest hope of", "meaning_zh": "实现……的最大希望"}, {"text": "slow global warming", "meaning_zh": "减缓全球变暖"}]
+    },
+    {
+      "id": "D-05", "paragraph_label": "D", "sentence_index": 22,
+      "sentence": "Our oceans are the biggest\"sink\" of carbon, thanks in part to organisms that absorb carbon from the atmosphere to build their skeletons and shells, like \"lungs\".",
+      "translation": "海洋是最大的碳“汇”，这在一定程度上要归功于一些生物：它们像“肺”一样从大气中吸收碳来构建自己的骨骼和外壳。",
+      "structure": [
+        {"text": "Our oceans are the biggest\"sink\" of carbon", "role": "main_clause", "level": 1},
+        {"text": "thanks in part to organisms", "role": "cause_adverbial", "level": 1},
+        {"text": "that absorb carbon from the atmosphere", "role": "relative_clause", "level": 2},
+        {"text": "to build their skeletons and shells", "role": "purpose_clause", "level": 3}
+      ],
+      "difficult_points": ["that 引导定语从句，修饰 organisms。", "to build 表示这些生物吸收碳的目的。", "sink 和 lungs 都是比喻，分别突出储碳和吸碳功能。"],
+      "expressions": [{"text": "thanks in part to", "meaning_zh": "部分归功于"}, {"text": "absorb ... from the atmosphere", "meaning_zh": "从大气中吸收……"}]
+    },
+    {
+      "id": "D-06", "paragraph_label": "D", "sentence_index": 23,
+      "sentence": "Remarkably, the vast majority of these organisms are unknown.",
+      "translation": "令人惊讶的是，这些生物中的绝大多数仍不为人知。",
+      "structure": [
+        {"text": "Remarkably", "role": "sentence_adverbial", "level": 1},
+        {"text": "the vast majority of these organisms", "role": "subject", "level": 1},
+        {"text": "are unknown", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["Remarkably 修饰整个句子，表达作者评价。", "unknown 在此不是“身份不明”，而是尚未被科学认识和描述。"],
+      "expressions": [{"text": "the vast majority of", "meaning_zh": "绝大多数"}]
+    },
+    {
+      "id": "D-07", "paragraph_label": "D", "sentence_index": 24,
+      "sentence": "\"It is important to understand their role and function to ensure the survival of the planet and human life,\" says Venter, who is founder and chairman of the J. Craig Venter Institute in Rockville, Maryland.",
+      "translation": "文特尔说：“了解它们的作用和功能，对于确保地球及人类生命的存续至关重要。”文特尔是位于马里兰州罗克维尔的 J. Craig Venter 研究所的创始人兼主席。",
+      "structure": [
+        {"text": "It is important to understand their role and function", "role": "extraposition_construction", "level": 2},
+        {"text": "to ensure the survival of the planet and human life", "role": "purpose_clause", "level": 2},
+        {"text": "says Venter", "role": "reporting_clause", "level": 1},
+        {"text": "who is founder and chairman of the J. Craig Venter Institute in Rockville, Maryland", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["It 是形式主语，真正主语是 to understand their role and function。", "第二个 to 不定式表示了解微生物的目的。", "who 引导非限制性定语从句，补充文特尔的身份。"],
+      "expressions": [{"text": "ensure the survival of", "meaning_zh": "确保……的生存"}, {"text": "role and function", "meaning_zh": "作用与功能"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 25,
+      "sentence": "The Sorcerer II expedition began with a pilot project in 2003 in the Sargasso Sea near Bermuda in which more than a million new genes were discovered in what was thought to be the marine equivalent of a desert.",
+      "translation": "“巫师二号”考察始于 2003 年在百慕大附近马尾藻海开展的一个试点项目；研究人员在那里发现了一百多万个新基因，而此前人们认为那片海域相当于海洋中的沙漠。",
+      "structure": [
+        {"text": "The Sorcerer II expedition began with a pilot project in 2003 in the Sargasso Sea near Bermuda", "role": "main_clause", "level": 1},
+        {"text": "in which more than a million new genes were discovered", "role": "relative_clause", "level": 2},
+        {"text": "in what was thought to be the marine equivalent of a desert", "role": "place_adverbial", "level": 3}
+      ],
+      "difficult_points": ["in which 修饰 pilot project，也可理解为“在该项目中”。", "what 引导名词性从句作介词 in 的宾语。", "was thought to be 是被动结构，表示“此前被认为是”。"],
+      "expressions": [{"text": "begin with a pilot project", "meaning_zh": "从试点项目开始"}, {"text": "the equivalent of", "meaning_zh": "相当于……的事物"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 26,
+      "sentence": "For the next two years, Venter flew back and forth to join the crew as it sampled the waters from Halifax, Nova Scotia, to the Eastern Tropical Pacific.",
+      "translation": "在接下来的两年里，文特尔反复乘飞机往返加入船员队伍；船队从新斯科舍省哈利法克斯一直到东部热带太平洋采集水样。",
+      "structure": [
+        {"text": "For the next two years", "role": "time_adverbial", "level": 1},
+        {"text": "Venter flew back and forth to join the crew", "role": "main_clause", "level": 1},
+        {"text": "as it sampled the waters", "role": "time_clause", "level": 2},
+        {"text": "from Halifax, Nova Scotia, to the Eastern Tropical Pacific", "role": "range_adverbial", "level": 2}
+      ],
+      "difficult_points": ["to join 表示文特尔往返飞行的目的。", "as 引导时间从句，it 指代 crew。", "from ... to ... 表示采样海域的跨度。"],
+      "expressions": [{"text": "back and forth", "meaning_zh": "来来回回"}, {"text": "sample the waters", "meaning_zh": "采集水样"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 27,
+      "sentence": "'I did all the major ocean passages.\" he said.",
+      "translation": "他说：“所有主要的远洋航程我都参加了。”",
+      "structure": [
+        {"text": "I did all the major ocean passages", "role": "reported_content", "level": 2},
+        {"text": "he said", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": ["did 在此不是助动词，而是“完成、经历”的实义动词。", "开头单引号、结尾双引号及句号位置不一致，均为源文标点异常。"],
+      "expressions": [{"text": "ocean passage", "meaning_zh": "远洋航程"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 28,
+      "sentence": "One in particular, through the Panama Canal, up to Cocos Island and down to the Galapagos, \"was a transforming event, phenomenal\" as he combined genomics with writing an autobiography and diving with sharks, all under the gaze of a Discovery Channel TV crew.",
+      "translation": "其中尤其有一次航程穿过巴拿马运河，北上科科斯岛，再南下加拉帕戈斯群岛；那是“一次带来蜕变的非凡经历”，因为他把基因组学研究、撰写自传和与鲨鱼潜水结合在一起，而这一切都在探索频道摄制组的镜头注视下进行。",
+      "structure": [
+        {"text": "One in particular, through the Panama Canal, up to Cocos Island and down to the Galapagos", "role": "subject", "level": 1},
+        {"text": "\"was a transforming event, phenomenal\"", "role": "linking_predicate", "level": 1},
+        {"text": "as he combined genomics with writing an autobiography and diving with sharks", "role": "cause_clause", "level": 2},
+        {"text": "all under the gaze of a Discovery Channel TV crew", "role": "supplement", "level": 1}
+      ],
+      "difficult_points": ["One 回指前句的 major ocean passages。", "as 在此说明这次经历非凡的原因或伴随背景。", "writing an autobiography 与 diving with sharks 并列，共同接在 with 后。"],
+      "expressions": [{"text": "in particular", "meaning_zh": "尤其；特别"}, {"text": "combine ... with ...", "meaning_zh": "把……与……结合"}, {"text": "under the gaze of", "meaning_zh": "在……注视下"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 29,
+      "sentence": "Using phenomenal computing power to reconstruct and analyse microbial DNA, with a single stage of the calculations taking more than a million hours of supercomputer time, a flood of discoveries has come from the latest phase of the expedition.",
+      "translation": "借助强大的计算能力重建并分析微生物 DNA——其中仅一个计算阶段就耗费了超过一百万小时的超级计算机时间——此次考察的最新阶段涌现出大量发现。",
+      "structure": [
+        {"text": "Using phenomenal computing power to reconstruct and analyse microbial DNA", "role": "participle_adverbial", "level": 1},
+        {"text": "with a single stage of the calculations taking more than a million hours of supercomputer time", "role": "with_absolute_construction", "level": 1},
+        {"text": "a flood of discoveries has come from the latest phase of the expedition", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": ["with + 名词 + taking 构成独立结构，补充计算量之大。", "Using 短语按语义修饰研究团队的工作，但源句主句形式上以 discoveries 为主语，存在悬垂修饰。", "a flood of 是比喻，表示发现数量很多。"],
+      "expressions": [{"text": "a flood of discoveries", "meaning_zh": "大量涌现的发现"}, {"text": "come from", "meaning_zh": "来自"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 30,
+      "sentence": "Venter announced in a trio of papers in PloS Biology a few days ago that his team had returned to port with 400 newly discovered microbes and six million new genes.",
+      "translation": "几天前，文特尔在发表于《PloS Biology》的三篇论文中宣布，他的团队返港时带回了 400 种新发现的微生物和 600 万个新基因。",
+      "structure": [
+        {"text": "Venter announced in a trio of papers in PloS Biology a few days ago", "role": "main_clause", "level": 1},
+        {"text": "that his team had returned to port", "role": "object_clause", "level": 2},
+        {"text": "with 400 newly discovered microbes and six million new genes", "role": "accompaniment_adverbial", "level": 2}
+      ],
+      "difficult_points": ["that 引导 announced 的宾语从句。", "had returned 使用过去完成时，表示返港早于宣布。", "with 表示团队返港时所带回的科研成果。"],
+      "expressions": [{"text": "a trio of papers", "meaning_zh": "三篇论文"}, {"text": "return to port", "meaning_zh": "返港"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 31,
+      "sentence": "Each gene contains the instructions used to make the proteins that build and operate living thing'-, and Waiter's bounty doubles the number known to science.",
+      "translation": "每个基因都包含制造蛋白质所需的指令，而这些蛋白质构建并维持生物体的运作；文特尔的这批成果使科学界已知的基因数量翻了一番。",
+      "structure": [
+        {"text": "Each gene contains the instructions", "role": "main_clause", "level": 1},
+        {"text": "used to make the proteins", "role": "participle_attributive", "level": 2},
+        {"text": "that build and operate living thing'-", "role": "relative_clause", "level": 3},
+        {"text": "and Waiter's bounty doubles the number known to science", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["used to make 是过去分词短语，修饰 instructions，并非“过去常常”。", "that 修饰 proteins，build 与 operate 是并列谓语。", "living thing'- 和 Waiter's 是源文 OCR 异常，语义应为 living things 和 Venter's。"],
+      "expressions": [{"text": "contain the instructions used to", "meaning_zh": "包含用于……的指令"}, {"text": "double the number", "meaning_zh": "使数量翻倍"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 32,
+      "sentence": "His company, Synthetic Genomics, wants to harness this genetic information to use the microbes to turn carbon dioxide into propane and other fuels, short-circuiting the traditional geological process where ancient creatures are compressed into coal and oil over the aeons.",
+      "translation": "他的公司 Synthetic Genomics 希望利用这些遗传信息，借助微生物把二氧化碳转化为丙烷及其他燃料，从而绕过古代生物经过漫长年代受压形成煤和石油的传统地质过程。",
+      "structure": [
+        {"text": "His company, Synthetic Genomics, wants to harness this genetic information", "role": "main_clause", "level": 1},
+        {"text": "to use the microbes to turn carbon dioxide into propane and other fuels", "role": "purpose_clause", "level": 2},
+        {"text": "short-circuiting the traditional geological process", "role": "participle_result", "level": 1},
+        {"text": "where ancient creatures are compressed into coal and oil over the aeons", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["第一个 to 表示利用遗传信息的目的，第二个 to 是 use ... to do 结构。", "short-circuiting 表示由前述做法带来的结果，即绕过传统过程。", "where 修饰 process，说明该地质过程中发生的事情。"],
+      "expressions": [{"text": "harness genetic information", "meaning_zh": "利用遗传信息"}, {"text": "turn ... into ...", "meaning_zh": "把……转化为……"}, {"text": "over the aeons", "meaning_zh": "经过极漫长的年代"}]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 33,
+      "sentence": "Another target is hydrogen production, the ultimate clean fuel.",
+      "translation": "另一个目标是生产氢气——这种终极清洁燃料。",
+      "structure": [
+        {"text": "Another target", "role": "subject", "level": 1},
+        {"text": "is hydrogen production", "role": "linking_predicate", "level": 1},
+        {"text": "the ultimate clean fuel", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": ["the ultimate clean fuel 是 hydrogen 的同位说明，而非 production。", "Another 承接上一句将二氧化碳转化为燃料的目标。"],
+      "expressions": [{"text": "the ultimate clean fuel", "meaning_zh": "终极清洁燃料"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 34,
+      "sentence": "When it conn's to climate change, the expedition has thrown up another key insight.",
+      "translation": "谈到气候变化，这次考察又带来了一项关键认识。",
+      "structure": [
+        {"text": "When it conn's to climate change", "role": "topic_adverbial_clause", "level": 1},
+        {"text": "the expedition", "role": "subject", "level": 1},
+        {"text": "has thrown up another key insight", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["conn's 是源文 OCR 异常，按固定表达 comes to 理解。", "throw up 在此不是“呕吐”，而是“产生、带来”。"],
+      "expressions": [{"text": "when it comes to", "meaning_zh": "谈到；就……而言"}, {"text": "throw up an insight", "meaning_zh": "带来一种认识"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 35,
+      "sentence": "Some parts of the ocean have more carbon-hungry organisms than others, and it used to he thought that populations reflected local nutrient levels.",
+      "translation": "海洋中有些区域的碳吸收型生物比其他区域更多，过去人们认为这些种群数量反映了当地的营养水平。",
+      "structure": [
+        {"text": "Some parts of the ocean have more carbon-hungry organisms than others", "role": "main_clause", "level": 1},
+        {"text": "and it used to he thought", "role": "coordinated_passive_clause", "level": 1},
+        {"text": "that populations reflected local nutrient levels", "role": "subject_clause", "level": 2}
+      ],
+      "difficult_points": ["more ... than others 构成比较，others 指海洋中的其他区域。", "it 是形式主语，that 从句是真正被认为的内容。", "he 是源文 OCR 错误，应按 be 理解。"],
+      "expressions": [{"text": "it used to be thought that", "meaning_zh": "过去人们认为……"}, {"text": "reflect local nutrient levels", "meaning_zh": "反映当地营养水平"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 36,
+      "sentence": "Venter has found that t his may not be the case.The culprit could be bacterial viruses phages - which keep microbe levels low in some seas.",
+      "translation": "文特尔发现情况可能并非如此。罪魁祸首可能是噬菌体，也就是使某些海域微生物数量维持在低水平的细菌病毒。",
+      "structure": [
+        {"text": "Venter has found", "role": "main_clause", "level": 1},
+        {"text": "that t his may not be the case", "role": "object_clause", "level": 2},
+        {"text": "The culprit could be bacterial viruses phages", "role": "following_main_clause", "level": 1},
+        {"text": "which keep microbe levels low in some seas", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["源文在 case.The 之间漏空格，导致两个语义句连成一个文本单元，必须原样保留。", "t his 是 this 的 OCR 断裂，回指前一句的传统看法。", "which 修饰 phages，说明噬菌体产生的影响。"],
+      "expressions": [{"text": "may not be the case", "meaning_zh": "情况可能并非如此"}, {"text": "keep ... levels low", "meaning_zh": "使……水平保持较低"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 37,
+      "sentence": "\"If we can understand this relationship more, and find out how to inhibit the viruses, or make the bacteria resistant, we would have a lot more organisms capturing carbon dioxide,\" says Venter.",
+      "translation": "文特尔说：“如果我们能更深入地理解这种关系，弄清如何抑制病毒或使细菌产生抗性，就会有多得多的生物来捕获二氧化碳。”",
+      "structure": [
+        {"text": "If we can understand this relationship more, and find out how to inhibit the viruses, or make the bacteria resistant", "role": "condition_clause", "level": 2},
+        {"text": "we would have a lot more organisms capturing carbon dioxide", "role": "result_clause", "level": 2},
+        {"text": "says Venter", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": ["If 从句中 understand、find out 和 make 构成相关联的行动链。", "how to inhibit 是“疑问词 + 不定式”结构，作 find out 的宾语。", "capturing carbon dioxide 是现在分词短语，修饰 organisms。"],
+      "expressions": [{"text": "find out how to", "meaning_zh": "弄清如何……"}, {"text": "make the bacteria resistant", "meaning_zh": "使细菌产生抗性"}, {"text": "capture carbon dioxide", "meaning_zh": "捕获二氧化碳"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 38,
+      "sentence": "The biggest impact of his project has been on basic science, overturning many established ideas about the tree of life.",
+      "translation": "他的项目对基础科学产生了最大影响，推翻了许多关于生命之树的既有观念。",
+      "structure": [
+        {"text": "The biggest impact of his project", "role": "subject", "level": 1},
+        {"text": "has been on basic science", "role": "linking_predicate", "level": 1},
+        {"text": "overturning many established ideas about the tree of life", "role": "participle_result", "level": 1}
+      ],
+      "difficult_points": ["has been 使用现在完成时，强调影响延续到当前。", "overturning 表示该影响造成的结果。", "the tree of life 是生物进化关系的概念性表达。"],
+      "expressions": [{"text": "have an impact on", "meaning_zh": "对……产生影响"}, {"text": "overturn established ideas", "meaning_zh": "推翻既有观念"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 39,
+      "sentence": "It used to be thought that the protein pigment in our own eyes that enables us to detect light was rare.",
+      "translation": "过去人们认为，我们眼中使我们能够感知光线的蛋白质色素十分罕见。",
+      "structure": [
+        {"text": "It used to be thought", "role": "passive_main_clause", "level": 1},
+        {"text": "that the protein pigment in our own eyes that enables us to detect light was rare", "role": "subject_clause", "level": 2},
+        {"text": "that enables us to detect light", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["It 是形式主语，第一层 that 从句是真正主语。", "第二个 that 修饰 protein pigment。", "enable us to detect 是 enable + 宾语 + 不定式结构。"],
+      "expressions": [{"text": "it used to be thought that", "meaning_zh": "过去人们认为……"}, {"text": "enable somebody to do", "meaning_zh": "使某人能够做某事"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 40,
+      "sentence": "But Venter's gene trawl reveals that all surface marine organisms make proteorhodopsins that detect coloured light.",
+      "translation": "但文特尔的大规模基因搜寻显示，所有海洋表层生物都会产生能够感知有色光的变形视紫红质。",
+      "structure": [
+        {"text": "But Venter's gene trawl reveals", "role": "main_clause", "level": 1},
+        {"text": "that all surface marine organisms make proteorhodopsins", "role": "object_clause", "level": 2},
+        {"text": "that detect coloured light", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["第一个 that 引导 reveals 的宾语从句。", "第二个 that 修饰 proteorhodopsins，并在从句中作主语。", "gene trawl 是对大范围搜寻基因的比喻。"],
+      "expressions": [{"text": "reveal that", "meaning_zh": "揭示……"}, {"text": "detect coloured light", "meaning_zh": "感知有色光"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 41,
+      "sentence": "\"They turn out to be one of the most abundant and important, gene families on the planet,\" he said.",
+      "translation": "他说：“事实证明，它们是地球上数量最丰富、最重要的基因家族之一。”",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 2},
+        {"text": "turn out to be one of the most abundant and important, gene families on the planet", "role": "predicate", "level": 2},
+        {"text": "he said", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": ["They 回指上一句中的 proteorhodopsins。", "turn out to be 表示研究后发现事实如此。", "important 后的逗号属于源文异常，不影响 abundant 和 important 共同修饰 gene families。"],
+      "expressions": [{"text": "turn out to be", "meaning_zh": "结果证明是"}, {"text": "one of the most abundant", "meaning_zh": "数量最丰富的……之一"}]
+    },
+    {
+      "id": "H-05", "paragraph_label": "H", "sentence_index": 42,
+      "sentence": "Blue and green variants are found in different environments - blue light preferred in the open ocean such as the indigo Sargasso Sea and green light along coasts.",
+      "translation": "蓝色和绿色变体分布在不同环境中——开阔海域（如靛蓝色的马尾藻海）偏向蓝光，而沿海区域偏向绿光。",
+      "structure": [
+        {"text": "Blue and green variants", "role": "subject", "level": 1},
+        {"text": "are found in different environments", "role": "passive_predicate", "level": 1},
+        {"text": "blue light preferred in the open ocean such as the indigo Sargasso Sea", "role": "elliptical_explanation", "level": 1},
+        {"text": "and green light along coasts", "role": "coordinated_ellipsis", "level": 1}
+      ],
+      "difficult_points": ["破折号后是对 different environments 的具体解释。", "blue light preferred 省略了 is，green light along coasts 又省略了 is preferred。", "such as 引出 open ocean 的实例。"],
+      "expressions": [{"text": "be found in different environments", "meaning_zh": "分布在不同环境中"}, {"text": "such as", "meaning_zh": "例如"}]
+    },
+    {
+      "id": "H-06", "paragraph_label": "H", "sentence_index": 43,
+      "sentence": "Venter believes these proteins help microbes to use energy from the sun, as plants do, but without photosynthesis.",
+      "translation": "文特尔认为，这些蛋白质帮助微生物像植物一样利用太阳能，但并不通过光合作用。",
+      "structure": [
+        {"text": "Venter believes", "role": "main_clause", "level": 1},
+        {"text": "these proteins help microbes to use energy from the sun", "role": "object_clause", "level": 2},
+        {"text": "as plants do", "role": "comparison_clause", "level": 3},
+        {"text": "but without photosynthesis", "role": "contrast_adverbial", "level": 2}
+      ],
+      "difficult_points": ["believes 后省略了引导宾语从句的 that。", "as plants do 中 do 替代 use energy from the sun。", "but without photosynthesis 说明相似之中存在关键差异。"],
+      "expressions": [{"text": "use energy from the sun", "meaning_zh": "利用太阳能"}, {"text": "without photosynthesis", "meaning_zh": "不通过光合作用"}]
+    },
+    {
+      "id": "H-07", "paragraph_label": "H", "sentence_index": 44,
+      "sentence": "Instead, they use this \"light-harvesting\" machinery to pump charged atoms in the equivalent of solar batteries.",
+      "translation": "相反，它们利用这种“采光”机制，在类似太阳能电池的结构中泵送带电原子。",
+      "structure": [
+        {"text": "Instead", "role": "sentence_adverbial", "level": 1},
+        {"text": "they use this \"light-harvesting\" machinery", "role": "main_clause", "level": 1},
+        {"text": "to pump charged atoms", "role": "purpose_clause", "level": 2},
+        {"text": "in the equivalent of solar batteries", "role": "place_adverbial", "level": 2}
+      ],
+      "difficult_points": ["they 回指微生物，而 this machinery 回指前述蛋白质发挥作用的机制。", "to pump 表示使用这种机制的目的。", "the equivalent of solar batteries 是类比，帮助理解储能方式。"],
+      "expressions": [{"text": "light-harvesting machinery", "meaning_zh": "采光机制"}, {"text": "the equivalent of", "meaning_zh": "类似于……的事物"}]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 45,
+      "sentence": "The team discovered many new proteins that protect microbes from UV rays and some that are involved in repairing the damage caused by UV.",
+      "translation": "团队发现了许多保护微生物免受紫外线伤害的新蛋白质，以及一些参与修复紫外线所致损伤的蛋白质。",
+      "structure": [
+        {"text": "The team discovered many new proteins", "role": "main_clause", "level": 1},
+        {"text": "that protect microbes from UV rays", "role": "relative_clause", "level": 2},
+        {"text": "and some", "role": "coordinated_object", "level": 1},
+        {"text": "that are involved in repairing the damage caused by UV", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["两个 that 从句分别修饰 many new proteins 和 some。", "some 后省略了 proteins，以避免重复。", "caused by UV 是过去分词短语，修饰 damage。"],
+      "expressions": [{"text": "protect ... from ...", "meaning_zh": "保护……免受……"}, {"text": "be involved in", "meaning_zh": "参与；涉及"}, {"text": "repair the damage", "meaning_zh": "修复损伤"}]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 46,
+      "sentence": "They were also surprised to discover that many kinds of protein that were thought to be specific to one kingdom of life were more widespread.",
+      "translation": "他们还惊讶地发现，许多原以为只存在于某一个生物界的蛋白质，其分布实际上更加广泛。",
+      "structure": [
+        {"text": "They were also surprised to discover", "role": "main_clause", "level": 1},
+        {"text": "that many kinds of protein that were thought to be specific to one kingdom of life were more widespread", "role": "object_clause", "level": 2},
+        {"text": "that were thought to be specific to one kingdom of life", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["第一个 that 引导 discover 的宾语从句。", "第二个 that 修饰 many kinds of protein。", "were thought to be 与 were more widespread 分属不同层级，前者在定语从句中，后者是宾语从句谓语。"],
+      "expressions": [{"text": "be surprised to discover", "meaning_zh": "惊讶地发现"}, {"text": "be specific to", "meaning_zh": "为……所特有"}]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 47,
+      "sentence": "This is only the start.",
+      "translation": "这仅仅是个开始。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "is only the start", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["This 概括前文已经取得的一系列发现。", "only 强调目前成果只是更大研究进程的起点。"],
+      "expressions": [{"text": "only the start", "meaning_zh": "仅仅是开始"}]
+    },
+    {
+      "id": "I-04", "paragraph_label": "I", "sentence_index": 48,
+      "sentence": "\"It's clear,\" says Venter, \"that we've only begun to scratch the surface of understanding the microbial world.\"",
+      "translation": "文特尔说：“很明显，我们对微生物世界的认识才刚刚触及表面。”",
+      "structure": [
+        {"text": "It's clear", "role": "extraposition_main_clause", "level": 2},
+        {"text": "says Venter", "role": "reporting_clause", "level": 1},
+        {"text": "that we've only begun to scratch the surface of understanding the microbial world", "role": "subject_clause", "level": 2}
+      ],
+      "difficult_points": ["It 是形式主语，that 从句是真正主语，二者被插入的 says Venter 分隔。", "have begun 使用现在完成时，强调认识过程刚开始且延续至今。", "scratch the surface 是比喻，表示只获得了非常浅显的认识。"],
+      "expressions": [{"text": "scratch the surface of", "meaning_zh": "仅触及……的表面"}, {"text": "the microbial world", "meaning_zh": "微生物世界"}]
+    }
+  ]
+}

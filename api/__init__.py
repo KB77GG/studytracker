@@ -5,16 +5,17 @@ api_bp = Blueprint("api_v1", __name__, url_prefix="/api/v1")
 
 def init_app(app):
     """Register all API blueprints."""
-    from api.wechat import wechat_bp
-    from api.students import api_bp
-    from api.miniprogram import mp_bp
-    from api.materials import material_bp  # New material bank API
-    from api.tts import tts_bp  # TTS API
     from api.azure_tts import azure_tts_bp  # Azure TTS API
     from api.dictation import dictation_bp  # Dictation API
-    from api.ielts_eval import eval_bp  # IELTS speaking eval API
-    from api.speaking_practice import speaking_bp  # Speaking listen & repeat API
     from api.entrance import entrance_bp  # Entrance test API (新生入学测试)
+    from api.ielts_eval import eval_bp  # IELTS speaking eval API
+    from api.materials import material_bp  # New material bank API
+    from api.miniprogram import mp_bp
+    from api.reading_study import reading_study_bp  # Reading Study (阅读句子解析)
+    from api.speaking_practice import speaking_bp  # Speaking listen & repeat API
+    from api.students import api_bp
+    from api.tts import tts_bp  # TTS API
+    from api.wechat import wechat_bp
 
     app.register_blueprint(wechat_bp, url_prefix="/api/wechat")  # Restore url_prefix
     app.register_blueprint(api_bp)
@@ -26,3 +27,4 @@ def init_app(app):
     app.register_blueprint(eval_bp)  # Register IELTS eval
     app.register_blueprint(speaking_bp)  # Register Speaking practice
     app.register_blueprint(entrance_bp)  # Register Entrance test
+    app.register_blueprint(reading_study_bp)  # Register Reading Study

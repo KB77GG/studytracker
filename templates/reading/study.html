@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reading Study · {{ test_id }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reading_study.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <div class="brand-kicker">Sage Path · Reading</div>
+        <div class="brand-title">Reading Study · 阅读句子解析</div>
+      </div>
+      <nav class="mode-switch" aria-label="阅读模式">
+        <a class="mode" href="{{ practice_url }}">Practice</a>
+        <span class="mode active" aria-current="page">Reading Study</span>
+      </nav>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <nav class="passage-picker" id="passagePicker" aria-label="选择 Passage">
+      {% for passage in passages %}
+      <button class="passage-tab{% if loop.first %} active{% endif %}" type="button" data-passage-id="{{ passage.passage_id }}">
+        Passage {{ loop.index }} · {{ passage.difficulty|capitalize }}
+      </button>
+      {% endfor %}
+    </nav>
+    <div class="toolbar-note" id="toolbarNote">点击左侧任意句子查看解析</div>
+  </div>
+
+  <main class="workspace">
+    <section class="panel article-panel" aria-label="阅读原文">
+      <div class="article-head">
+        <div class="eyebrow" id="difficultyLabel">Passage</div>
+        <h1 class="article-title" id="articleTitle">Loading…</h1>
+        <div class="article-meta" id="articleMeta"></div>
+      </div>
+      <div class="article-body" id="articleBody">
+        <div class="loading">正在加载阅读解析…</div>
+      </div>
+    </section>
+
+    <aside class="panel analysis-panel" aria-label="Sentence Analysis">
+      <div class="analysis-head">
+        <div>
+          <div class="analysis-title">Sentence Analysis</div>
+          <div class="analysis-subtitle">理解这句话为什么这样写</div>
+        </div>
+        <div class="sentence-counter" id="sentenceCounter">—</div>
+      </div>
+      <div class="analysis-body" id="analysisBody">
+        <div class="loading">请从左侧选择一句英文</div>
+      </div>
+    </aside>
+  </main>
+
+  <div class="g-overlay" id="gOverlay" hidden>
+    <div class="g-card" role="dialog" aria-modal="true" aria-labelledby="gTitle">
+      <button class="g-close" type="button" aria-label="关闭">✕</button>
+      <div class="g-camp" id="gCamp" data-camp="structure"></div>
+      <h2 class="g-title" id="gTitle"></h2>
+      <p class="g-desc" id="gDesc"></p>
+      <div class="g-ex" id="gEx"></div>
+    </div>
+  </div>
+
+  <div class="g-overlay" id="identityOverlay" hidden>
+    <div class="g-card identity-card" role="dialog" aria-modal="true" aria-labelledby="identityTitle">
+      <button class="identity-close g-close" type="button" aria-label="关闭">✕</button>
+      <div class="g-camp" data-camp="structure">需要学生身份</div>
+      <h2 class="g-title" id="identityTitle">先完成姓名验证</h2>
+      <p class="g-desc">请先回到练习页完成学生姓名验证，再回来收藏表达。</p>
+      <a class="identity-link" href="{{ practice_url }}">前往 Practice</a>
+    </div>
+  </div>
+
+  <script>
+    window.READING_STUDY_CONFIG = {{ {
+      "testId": test_id,
+      "sourceKind": source_kind,
+      "practiceUrl": practice_url,
+      "passages": passages
+    } | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/reading_study.js') }}" defer></script>
+</body>
+</html>

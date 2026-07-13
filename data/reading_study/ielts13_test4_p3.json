@@ -1,0 +1,1928 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts13_test4_reading",
+  "passage_id": "ielts13_test4_p3",
+  "passage_title": "Book Review",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "'Happiness is the ultimate goal because it is self-evidently good.",
+      "translation": "“幸福是终极目标，因为它本身显然就是好的。",
+      "structure": [
+        {
+          "text": "Happiness",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is the ultimate goal",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "because it is self-evidently good",
+          "role": "causal_clause",
+          "level": 2
+        },
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "is self-evidently good",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "because 引导原因状语从句，说明为什么幸福被说成终极目标。",
+        "it 回指 Happiness，避免重复前面的抽象名词。",
+        "self-evidently 表示“不证自明地”，强调说话者认为这一判断无需外部证明。"
+      ],
+      "expressions": [
+        {
+          "text": "ultimate goal",
+          "meaning_zh": "终极目标"
+        },
+        {
+          "text": "self-evidently good",
+          "meaning_zh": "本身显然是好的"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "If we are asked why happiness matters we can give no further external reason.",
+      "translation": "如果有人问我们幸福为什么重要，我们无法给出进一步的外在理由。",
+      "structure": [
+        {
+          "text": "If we are asked why happiness matters",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "we are asked",
+          "role": "passive_clause",
+          "level": 3
+        },
+        {
+          "text": "why happiness matters",
+          "role": "noun_clause",
+          "level": 4
+        },
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can give no further external reason",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "If 引导条件从句，主句说明在这种提问情境下的结果。",
+        "are asked 是被动语态，省略了提问者这一动作发出者。",
+        "why happiness matters 是 asked 的宾语从句，matters 在此表示“重要”。"
+      ],
+      "expressions": [
+        {
+          "text": "give no further reason",
+          "meaning_zh": "无法给出进一步理由"
+        },
+        {
+          "text": "external reason",
+          "meaning_zh": "外在理由"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "It just obviously does matter.'",
+      "translation": "它就是显然重要。”",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "just obviously does matter",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "does matter",
+          "role": "emphatic_predicate",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 回指 happiness，是对前一句问题的直接回答。",
+        "does matter 使用助动词 do 的强调用法，突出“确实重要”。",
+        "句末引号和撇号表明这里结束了 Layard 引文中的一句话。"
+      ],
+      "expressions": [
+        {
+          "text": "does matter",
+          "meaning_zh": "确实重要"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "This pronouncement by Richard Layard, an economist and advocate of 'positive psychology', summarises the beliefs of many people today.",
+      "translation": "经济学家、‘积极心理学’倡导者理查德·莱亚德的这番宣称，概括了当今许多人的信念。",
+      "structure": [
+        {
+          "text": "This pronouncement by Richard Layard",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "by Richard Layard",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "an economist and advocate of 'positive psychology'",
+          "role": "appositive",
+          "level": 2
+        },
+        {
+          "text": "summarises",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the beliefs of many people today",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "This pronouncement 回指前面引用的三句话，是本句主语的核心。",
+        "an economist and advocate of 'positive psychology' 是 Richard Layard 的同位语。",
+        "summarises 后接宾语，表示这番话概括了许多人的共同看法。"
+      ],
+      "expressions": [
+        {
+          "text": "summarise the beliefs of",
+          "meaning_zh": "概括……的信念"
+        },
+        {
+          "text": "advocate of",
+          "meaning_zh": "……的倡导者"
+        }
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "For Layard and others like him, it is obvious that the purpose of government is to promote a state of collective well-being.",
+      "translation": "在莱亚德以及与他相似的人看来，政府的目的显然是促进一种集体福祉状态。",
+      "structure": [
+        {
+          "text": "For Layard and others like him",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "it is obvious",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that the purpose of government is to promote a state of collective well-being",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "the purpose of government",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "to promote a state of collective well-being",
+          "role": "non_finite_clause",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "For Layard and others like him 表示观点归属，相当于“在他们看来”。",
+        "it 是形式主语，真正内容由 that 引导的从句说明。",
+        "to promote... 是表语中的不定式结构，解释政府目的的具体内容。"
+      ],
+      "expressions": [
+        {
+          "text": "the purpose of government",
+          "meaning_zh": "政府的目的"
+        },
+        {
+          "text": "collective well-being",
+          "meaning_zh": "集体福祉"
+        }
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "The only question is how to achieve it, and here positive psychology - a supposed science that not only identifies what makes people happy but also allows their happiness to be measured - can show the way.",
+      "translation": "唯一的问题是如何实现它，而在这里，积极心理学——一门所谓的科学，不仅能识别什么使人快乐，还能让人的幸福被测量——能够指明道路。",
+      "structure": [
+        {
+          "text": "The only question",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is how to achieve it",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "how to achieve it",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "positive psychology - a supposed science that not only identifies what makes people happy but also allows their happiness to be measured -",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "that not only identifies what makes people happy but also allows their happiness to be measured",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "can show the way",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "and 连接两个分句，前半句提出问题，后半句说明积极心理学被认为能提供答案。",
+        "破折号中的 a supposed science... 是对 positive psychology 的插入解释。",
+        "not only... but also... 连接两个并列谓语 identifies 和 allows。",
+        "what makes people happy 是 identifies 的宾语从句。"
+      ],
+      "expressions": [
+        {
+          "text": "show the way",
+          "meaning_zh": "指明道路"
+        },
+        {
+          "text": "a supposed science",
+          "meaning_zh": "一门所谓的科学"
+        },
+        {
+          "text": "not only ... but also ...",
+          "meaning_zh": "不仅……而且……"
+        }
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "Equipped with this science, they say, governments can secure happiness in society in a way they never could in the past.",
+      "translation": "他们说，凭借这门科学，政府能够以过去从未做到的方式保障社会中的幸福。",
+      "structure": [
+        {
+          "text": "Equipped with this science",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "they say",
+          "role": "parenthetical_clause",
+          "level": 1
+        },
+        {
+          "text": "governments",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can secure happiness in society",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in a way they never could in the past",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "they never could in the past",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Equipped with this science 是过去分词短语，表示政府具备这种科学后的条件。",
+        "they say 是插入语，说明这是积极心理学倡导者的观点。",
+        "they never could in the past 是省略关系词的定语从句，修饰 way。"
+      ],
+      "expressions": [
+        {
+          "text": "equipped with",
+          "meaning_zh": "配备有；具备"
+        },
+        {
+          "text": "secure happiness",
+          "meaning_zh": "确保幸福"
+        },
+        {
+          "text": "in a way",
+          "meaning_zh": "以一种方式"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "It is an astonishingly crude and simple-minded way of thinking, and for that very reason increasingly popular.",
+      "translation": "这是一种令人吃惊地粗糙而简单化的思维方式，也正因如此才日益流行。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is an astonishingly crude and simple-minded way of thinking",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and for that very reason increasingly popular",
+          "role": "coordinated_complement",
+          "level": 1
+        },
+        {
+          "text": "for that very reason",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指代上一段中把幸福科学化并交给政府实现的思维方式。",
+        "and 后省略了 it is，形成并列补足语 increasingly popular。",
+        "for that very reason 表示“正因为这个原因”，强调流行原因与粗糙简单有关。"
+      ],
+      "expressions": [
+        {
+          "text": "way of thinking",
+          "meaning_zh": "思维方式"
+        },
+        {
+          "text": "for that very reason",
+          "meaning_zh": "正因为这个原因"
+        },
+        {
+          "text": "increasingly popular",
+          "meaning_zh": "日益流行"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Those who think in this way are oblivious to the vast philosophical literature in which the meaning and value of happiness have been explored and questioned, and write as if nothing of any importance had been thought on the subject until it came to their attention.",
+      "translation": "以这种方式思考的人，对大量探讨并质疑幸福意义与价值的哲学文献视而不见，并且写作时仿佛在他们注意到这个主题之前，没有任何重要思想曾被提出过。",
+      "structure": [
+        {
+          "text": "Those who think in this way",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who think in this way",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "are oblivious to the vast philosophical literature",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in which the meaning and value of happiness have been explored and questioned",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "and write as if nothing of any importance had been thought on the subject until it came to their attention",
+          "role": "coordinated_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "as if nothing of any importance had been thought on the subject until it came to their attention",
+          "role": "comparative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Those who... 中 who 引导定语从句，限定“这些人”。",
+        "in which 引导定语从句，修饰 literature，说明这些文献中探讨的内容。",
+        "are oblivious to 和 write 是同一主语 Those 的两个并列谓语。",
+        "had been thought 是过去完成时被动语态，表示在他们注意到之前已有思想成果。"
+      ],
+      "expressions": [
+        {
+          "text": "be oblivious to",
+          "meaning_zh": "对……视而不见；不了解"
+        },
+        {
+          "text": "vast philosophical literature",
+          "meaning_zh": "大量哲学文献"
+        },
+        {
+          "text": "come to their attention",
+          "meaning_zh": "引起他们的注意"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "It was the philosopher Jeremy Bentham (1748—1832) who was more than anyone else responsible for the development of this way of thinking.",
+      "translation": "对这种思维方式的发展负有最大责任的，是哲学家杰里米·边沁（1748—1832）。",
+      "structure": [
+        {
+          "text": "It was the philosopher Jeremy Bentham (1748—1832) who was more than anyone else responsible for the development of this way of thinking",
+          "role": "cleft_sentence",
+          "level": 1
+        },
+        {
+          "text": "the philosopher Jeremy Bentham (1748—1832)",
+          "role": "focused_subject",
+          "level": 2
+        },
+        {
+          "text": "who was more than anyone else responsible for the development of this way of thinking",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "responsible for the development of this way of thinking",
+          "role": "adjective_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "It was... who... 是强调句，突出 Jeremy Bentham 是关键人物。",
+        "more than anyone else 修饰 responsible，表示“比任何其他人都更负有责任”。",
+        "the development of this way of thinking 指前文批评的幸福功利化思维的形成。"
+      ],
+      "expressions": [
+        {
+          "text": "be responsible for",
+          "meaning_zh": "对……负有责任"
+        },
+        {
+          "text": "the development of",
+          "meaning_zh": "……的发展"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "For Bentham it was obvious that the human good consists of pleasure and the absence of pain.",
+      "translation": "在边沁看来，人类的善显然在于快乐以及痛苦的缺失。",
+      "structure": [
+        {
+          "text": "For Bentham",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "it was obvious",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that the human good consists of pleasure and the absence of pain",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "the human good",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "consists of pleasure and the absence of pain",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "For Bentham 表示观点来源，不是目的状语。",
+        "it 是形式主语，that 从句才是“显然”的具体内容。",
+        "consists of 后接两个并列名词短语：pleasure 和 the absence of pain。"
+      ],
+      "expressions": [
+        {
+          "text": "consist of",
+          "meaning_zh": "由……构成；在于"
+        },
+        {
+          "text": "the absence of pain",
+          "meaning_zh": "痛苦的缺失"
+        }
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "The Greek philosopher Aristotle may have identified happiness with self-realisation in the 4th century BC, and thinkers throughout the ages may have struggled to reconcile the pursuit of happiness with other human values, but for Bentham all this was mere metaphysics or fiction.",
+      "translation": "公元前 4 世纪，希腊哲学家亚里士多德或许曾把幸福等同于自我实现，历代思想家也或许一直努力调和追求幸福与其他人类价值之间的关系，但在边沁看来，这一切不过是形而上学或虚构。",
+      "structure": [
+        {
+          "text": "The Greek philosopher Aristotle",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "may have identified happiness with self-realisation in the 4th century BC",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and thinkers throughout the ages may have struggled to reconcile the pursuit of happiness with other human values",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "to reconcile the pursuit of happiness with other human values",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "but for Bentham all this was mere metaphysics or fiction",
+          "role": "contrasting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "may have identified 和 may have struggled 表示对历史思想的概括性推断。",
+        "throughout the ages 修饰 thinkers 的思想传统跨度，表示“历代”。",
+        "reconcile... with... 表示调和两者之间的关系。",
+        "but 引出边沁的相反态度，all this 概括前面两类思想努力。"
+      ],
+      "expressions": [
+        {
+          "text": "identify happiness with",
+          "meaning_zh": "把幸福等同于……"
+        },
+        {
+          "text": "throughout the ages",
+          "meaning_zh": "历代；古往今来"
+        },
+        {
+          "text": "reconcile ... with ...",
+          "meaning_zh": "调和……与……"
+        },
+        {
+          "text": "mere metaphysics or fiction",
+          "meaning_zh": "不过是形而上学或虚构"
+        }
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "Without knowing anything much of him or the school of moral theory he established - since they are by education and intellectual conviction illiterate in the history of ideas - our advocates of positive psychology follow in his tracks in rejecting as outmoded and irrelevant pretty much the entirety of ethical reflection on human happiness to date.",
+      "translation": "积极心理学的倡导者虽然对他以及他创立的道德理论学派几乎一无所知——因为他们所受教育和思想信念使他们对思想史无知——却追随他的足迹，把迄今为止几乎全部关于人类幸福的伦理反思都斥为过时且无关紧要。",
+      "structure": [
+        {
+          "text": "Without knowing anything much of him or the school of moral theory he established",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "he established",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "since they are by education and intellectual conviction illiterate in the history of ideas",
+          "role": "causal_clause",
+          "level": 2
+        },
+        {
+          "text": "our advocates of positive psychology",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "follow in his tracks",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in rejecting as outmoded and irrelevant pretty much the entirety of ethical reflection on human happiness to date",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Without knowing... 是介词短语，表示这些倡导者并不了解边沁及其理论传统。",
+        "he established 是省略关系词的定语从句，修饰 the school of moral theory。",
+        "破折号中的 since 从句解释他们为什么对思想史无知。",
+        "rejecting as outmoded and irrelevant 中 as 后接宾语补足语，说明他们如何评价伦理反思。"
+      ],
+      "expressions": [
+        {
+          "text": "follow in his tracks",
+          "meaning_zh": "追随他的足迹"
+        },
+        {
+          "text": "outmoded and irrelevant",
+          "meaning_zh": "过时且无关紧要的"
+        },
+        {
+          "text": "ethical reflection",
+          "meaning_zh": "伦理反思"
+        },
+        {
+          "text": "to date",
+          "meaning_zh": "迄今为止"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "But as William Davies notes in his recent book The Happiness Industry, the view that happiness is the only self-evident good is actually a way of limiting moral inquiry.",
+      "translation": "但正如威廉·戴维斯在其近作《幸福产业》中指出的那样，认为幸福是唯一不证自明之善的观点，实际上是一种限制道德探究的方式。",
+      "structure": [
+        {
+          "text": "as William Davies notes in his recent book The Happiness Industry",
+          "role": "comparative_clause",
+          "level": 2
+        },
+        {
+          "text": "the view that happiness is the only self-evident good",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "that happiness is the only self-evident good",
+          "role": "appositive_clause",
+          "level": 2
+        },
+        {
+          "text": "is actually a way of limiting moral inquiry",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "of limiting moral inquiry",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "But 承接上段并转折，引出 Davies 对这种观点的批判。",
+        "as 引导方式/评论性从句，表示“正如……指出”。",
+        "that happiness is... 是 the view 的同位语从句，解释观点内容。",
+        "of limiting moral inquiry 修饰 way，说明这种方式造成的限制。"
+      ],
+      "expressions": [
+        {
+          "text": "self-evident good",
+          "meaning_zh": "不证自明的善"
+        },
+        {
+          "text": "moral inquiry",
+          "meaning_zh": "道德探究"
+        },
+        {
+          "text": "a way of limiting",
+          "meaning_zh": "一种限制……的方式"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "One of the virtues of this rich, lucid and arresting book is that it places the current cult of happiness in a well-defined historical framework.",
+      "translation": "这本内容丰富、清晰而引人注目的书的优点之一，在于它把当下对幸福的崇拜置于一个界定清楚的历史框架中。",
+      "structure": [
+        {
+          "text": "One of the virtues of this rich, lucid and arresting book",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that it places the current cult of happiness in a well-defined historical framework",
+          "role": "predicative_clause",
+          "level": 2
+        },
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "places the current cult of happiness in a well-defined historical framework",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "One of the virtues... 是“one of + 复数名词”结构，谓语动词用单数 is。",
+        "that 引导表语从句，说明这本书的一个优点是什么。",
+        "it 指代 this... book，即 Davies 的 The Happiness Industry。"
+      ],
+      "expressions": [
+        {
+          "text": "one of the virtues of",
+          "meaning_zh": "……的优点之一"
+        },
+        {
+          "text": "cult of happiness",
+          "meaning_zh": "对幸福的狂热崇拜"
+        },
+        {
+          "text": "historical framework",
+          "meaning_zh": "历史框架"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Rightly, Davies begins his story with Bentham, noting that he was far more than a philosopher.",
+      "translation": "戴维斯很恰当地从边沁开始讲述他的故事，并指出边沁远不只是一位哲学家。",
+      "structure": [
+        {
+          "text": "Rightly",
+          "role": "adverbial",
+          "level": 1
+        },
+        {
+          "text": "Davies",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "begins his story with Bentham",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "noting that he was far more than a philosopher",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "that he was far more than a philosopher",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Rightly 是评论性副词，表达作者认为 Davies 的处理方式恰当。",
+        "noting... 是现在分词短语，补充说明 Davies 开篇时指出的内容。",
+        "he 指 Bentham，不是 Davies。"
+      ],
+      "expressions": [
+        {
+          "text": "begin his story with",
+          "meaning_zh": "以……开始叙述"
+        },
+        {
+          "text": "far more than",
+          "meaning_zh": "远不只是"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Davies writes, 'Bentham's activities were those which we might now associate with a public sector management consultant'.",
+      "translation": "戴维斯写道：“边沁的活动属于我们现在可能会联想到公共部门管理顾问的那一类。”",
+      "structure": [
+        {
+          "text": "Davies writes",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "Bentham's activities",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were those",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "which we might now associate with a public sector management consultant",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "associate with a public sector management consultant",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Davies writes 是引述动词结构，后面直接引用书中原话。",
+        "those 指代 activities 的类型，后面由 which 定语从句限定。",
+        "associate with 表示“把……与……联系起来”，with 后是联想对象。"
+      ],
+      "expressions": [
+        {
+          "text": "associate with",
+          "meaning_zh": "把……与……联系起来"
+        },
+        {
+          "text": "public sector",
+          "meaning_zh": "公共部门"
+        },
+        {
+          "text": "management consultant",
+          "meaning_zh": "管理顾问"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "In the 1790s, he wrote to the Home Office suggesting that the departments of government be linked together through a set of 'conversation tubes', and to the Bank of England with a design for a printing device that could produce unforgeable banknotes.",
+      "translation": "在 18 世纪 90 年代，他写信给内政部，建议通过一套“通话管”把政府各部门连接起来；他也写信给英格兰银行，提出一种能印制防伪钞票的印刷装置设计。",
+      "structure": [
+        {
+          "text": "In the 1790s",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "he",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "wrote to the Home Office",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "suggesting that the departments of government be linked together through a set of 'conversation tubes'",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "that the departments of government be linked together through a set of 'conversation tubes'",
+          "role": "noun_clause",
+          "level": 3
+        },
+        {
+          "text": "and to the Bank of England with a design for a printing device that could produce unforgeable banknotes",
+          "role": "coordinated_prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "that could produce unforgeable banknotes",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "suggesting... 是现在分词短语，说明写信给内政部时提出的建议。",
+        "that 从句中 be linked 是虚拟语气，跟在 suggesting 后表示建议内容。",
+        "and to the Bank of England 省略了 wrote，与 wrote to the Home Office 并列。",
+        "that could produce... 修饰 a printing device。"
+      ],
+      "expressions": [
+        {
+          "text": "be linked together",
+          "meaning_zh": "被连接在一起"
+        },
+        {
+          "text": "a set of",
+          "meaning_zh": "一套"
+        },
+        {
+          "text": "printing device",
+          "meaning_zh": "印刷装置"
+        },
+        {
+          "text": "unforgeable banknotes",
+          "meaning_zh": "防伪钞票"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "He drew up plans for a 'frigidarium' to keep provisions such as meat, fish, fruit and vegetables fresh.",
+      "translation": "他还拟定了一个“冷藏室”的方案，用来保持肉、鱼、水果和蔬菜等食品新鲜。",
+      "structure": [
+        {
+          "text": "He",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "drew up plans for a 'frigidarium'",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to keep provisions such as meat, fish, fruit and vegetables fresh",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "such as meat, fish, fruit and vegetables",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "drew up plans 表示“拟定方案”，不是实际建造。",
+        "to keep... fresh 是目的不定式，说明 frigidarium 的用途。",
+        "such as... 举例说明 provisions 包含哪些食品。"
+      ],
+      "expressions": [
+        {
+          "text": "draw up plans",
+          "meaning_zh": "拟定方案"
+        },
+        {
+          "text": "keep ... fresh",
+          "meaning_zh": "使……保持新鲜"
+        },
+        {
+          "text": "such as",
+          "meaning_zh": "例如"
+        }
+      ]
+    },
+    {
+      "id": "C-07",
+      "paragraph_label": "C",
+      "sentence_index": 20,
+      "sentence": "His celebrated design for a prison to be known as a 'Panopticon', in which prisoners would be kept in solitary confinement while being visible at all times to the guards, was very nearly adopted.",
+      "translation": "他著名的监狱设计，即后来被称为“全景敞视监狱”的设计，几乎被采纳；在这种监狱中，囚犯会被单独关押，同时始终处在守卫可见的状态下。",
+      "structure": [
+        {
+          "text": "His celebrated design for a prison to be known as a 'Panopticon'",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "to be known as a 'Panopticon'",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "in which prisoners would be kept in solitary confinement while being visible at all times to the guards",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "while being visible at all times to the guards",
+          "role": "adverbial_clause",
+          "level": 3
+        },
+        {
+          "text": "was very nearly adopted",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "主语很长，核心是 design，谓语是 was very nearly adopted。",
+        "to be known as... 是不定式后置修饰 prison，说明其名称。",
+        "in which 引导非限制性定语从句，解释这种监狱的运作方式。",
+        "while being visible... 是省略结构，表示囚犯被关押的同时也始终可见。"
+      ],
+      "expressions": [
+        {
+          "text": "be known as",
+          "meaning_zh": "被称为"
+        },
+        {
+          "text": "solitary confinement",
+          "meaning_zh": "单独监禁"
+        },
+        {
+          "text": "at all times",
+          "meaning_zh": "始终；随时"
+        },
+        {
+          "text": "be adopted",
+          "meaning_zh": "被采纳"
+        }
+      ]
+    },
+    {
+      "id": "C-08",
+      "paragraph_label": "C",
+      "sentence_index": 21,
+      "sentence": "(Surprisingly, Davies does not discuss the fact that Bentham meant his Panopticon not just as a model prison but also as an instrument of control that could be applied to schools and factories.)",
+      "translation": "（令人惊讶的是，戴维斯并未讨论这样一个事实：边沁所设想的全景敞视监狱不仅是一个模范监狱，也是一种可以应用于学校和工厂的控制工具。）",
+      "structure": [
+        {
+          "text": "Surprisingly",
+          "role": "adverbial",
+          "level": 1
+        },
+        {
+          "text": "Davies",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "does not discuss the fact",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that Bentham meant his Panopticon not just as a model prison but also as an instrument of control that could be applied to schools and factories",
+          "role": "appositive_clause",
+          "level": 2
+        },
+        {
+          "text": "not just as a model prison but also as an instrument of control",
+          "role": "correlative_phrase",
+          "level": 3
+        },
+        {
+          "text": "that could be applied to schools and factories",
+          "role": "relative_clause",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "括号内是作者补充评价，Surprisingly 表明作者认为 Davies 的遗漏出人意料。",
+        "that 引导同位语从句，解释 the fact 的具体内容。",
+        "not just... but also... 连接两个 as 短语，说明 Panopticon 的双重含义。",
+        "that could be applied... 修饰 an instrument of control。"
+      ],
+      "expressions": [
+        {
+          "text": "not just ... but also ...",
+          "meaning_zh": "不仅……而且……"
+        },
+        {
+          "text": "instrument of control",
+          "meaning_zh": "控制工具"
+        },
+        {
+          "text": "be applied to",
+          "meaning_zh": "被应用于"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "Bentham was also a pioneer of the 'science of happiness'.",
+      "translation": "边沁也是‘幸福科学’的先驱。",
+      "structure": [
+        {
+          "text": "Bentham",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was also a pioneer of the 'science of happiness'",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "of the 'science of happiness'",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "also 承接上一段边沁在公共管理方面的活动，补充他在幸福科学方面的角色。",
+        "a pioneer of 表示某领域的开创者或先驱。",
+        "'science of happiness' 带引号，暗示作者对这一说法保持距离。"
+      ],
+      "expressions": [
+        {
+          "text": "a pioneer of",
+          "meaning_zh": "……的先驱"
+        },
+        {
+          "text": "science of happiness",
+          "meaning_zh": "幸福科学"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "If happiness is to be regarded as a science, it has to be measured, and Bentham suggested two ways in which this might be done.",
+      "translation": "如果幸福要被视为一门科学，它就必须能够被测量，而边沁提出了两种可以做到这一点的方法。",
+      "structure": [
+        {
+          "text": "If happiness is to be regarded as a science",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "happiness is to be regarded as a science",
+          "role": "passive_clause",
+          "level": 3
+        },
+        {
+          "text": "it has to be measured",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and Bentham suggested two ways",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "in which this might be done",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "If 从句设定条件：只有把幸福当作科学，测量才成为必要。",
+        "is to be regarded as 表示“要被视为”，含有规范或前提意味。",
+        "in which 引导定语从句，修饰 two ways。",
+        "this 指代前面的 measuring happiness。"
+      ],
+      "expressions": [
+        {
+          "text": "be regarded as",
+          "meaning_zh": "被视为"
+        },
+        {
+          "text": "have to be measured",
+          "meaning_zh": "必须被测量"
+        },
+        {
+          "text": "two ways in which",
+          "meaning_zh": "……的两种方式"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "Viewing happiness as a complex of pleasurable sensations, he suggested that it might be quantified by measuring the human pulse rate.",
+      "translation": "他把幸福看作愉悦感觉的复合体，因此建议可以通过测量人的脉搏率来量化幸福。",
+      "structure": [
+        {
+          "text": "Viewing happiness as a complex of pleasurable sensations",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "he",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "suggested",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that it might be quantified by measuring the human pulse rate",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "by measuring the human pulse rate",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Viewing... 是现在分词短语，说明边沁提出测量方法的思想前提。",
+        "that 引导 suggested 的宾语从句，从句主语 it 指 happiness。",
+        "might be quantified 是情态动词加被动语态，表示“可能被量化”。",
+        "by measuring... 表示量化的手段。"
+      ],
+      "expressions": [
+        {
+          "text": "view ... as ...",
+          "meaning_zh": "把……看作……"
+        },
+        {
+          "text": "a complex of",
+          "meaning_zh": "……的复合体"
+        },
+        {
+          "text": "be quantified by",
+          "meaning_zh": "通过……被量化"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "Alternatively, money could be used as the standard for quantification: if two different goods have the same price, it can be claimed that they produce the same quantity of pleasure in the consumer.",
+      "translation": "或者，金钱可以被用作量化标准：如果两种不同商品价格相同，就可以声称它们在消费者身上产生了相同数量的愉悦。",
+      "structure": [
+        {
+          "text": "Alternatively",
+          "role": "adverbial",
+          "level": 1
+        },
+        {
+          "text": "money",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "could be used as the standard for quantification",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "if two different goods have the same price",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "it can be claimed",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that they produce the same quantity of pleasure in the consumer",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Alternatively 表示提出另一种测量幸福的方法。",
+        "冒号后具体解释如何把金钱用作量化标准。",
+        "if 从句设定价格相同这一条件，主句说明可据此提出的判断。",
+        "it can be claimed 是被动表达，弱化了具体声称者。"
+      ],
+      "expressions": [
+        {
+          "text": "be used as the standard for",
+          "meaning_zh": "被用作……的标准"
+        },
+        {
+          "text": "the same quantity of",
+          "meaning_zh": "相同数量的"
+        },
+        {
+          "text": "in the consumer",
+          "meaning_zh": "在消费者身上"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "Bentham was more attracted by the latter measure.",
+      "translation": "边沁更倾向于后一种测量方法。",
+      "structure": [
+        {
+          "text": "Bentham",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was more attracted by the latter measure",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "by the latter measure",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "more attracted by 是被动形式的形容词化表达，表示“更被……吸引”。",
+        "the latter measure 指上一句提到的用金钱作量化标准，而非脉搏测量。",
+        "latter 用来指两者中的后者，阅读时需要回到前文定位。"
+      ],
+      "expressions": [
+        {
+          "text": "be attracted by",
+          "meaning_zh": "被……吸引；倾向于"
+        },
+        {
+          "text": "the latter measure",
+          "meaning_zh": "后一种测量方法"
+        }
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 27,
+      "sentence": "By associating money so closely to inner experience, Davies writes, Bentham 'set the stage for the entangling of psychological research and capitalism that would shape the business practices of the twentieth century'.",
+      "translation": "戴维斯写道，通过把金钱与内在体验如此紧密地联系起来，边沁“为心理学研究与资本主义的纠缠奠定了基础，而这种纠缠将塑造 20 世纪的商业实践”。",
+      "structure": [
+        {
+          "text": "By associating money so closely to inner experience",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "Davies writes",
+          "role": "parenthetical_clause",
+          "level": 1
+        },
+        {
+          "text": "Bentham",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "set the stage for the entangling of psychological research and capitalism",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that would shape the business practices of the twentieth century",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "By associating... 是介词短语，表示边沁产生后续影响的方式。",
+        "Davies writes 是插入式引述，真正的主干是 Bentham set the stage...",
+        "set the stage for 表示“为……奠定基础/创造条件”。",
+        "that would shape... 修饰 the entangling of psychological research and capitalism。"
+      ],
+      "expressions": [
+        {
+          "text": "associate ... to ...",
+          "meaning_zh": "把……与……联系起来"
+        },
+        {
+          "text": "set the stage for",
+          "meaning_zh": "为……奠定基础"
+        },
+        {
+          "text": "psychological research",
+          "meaning_zh": "心理学研究"
+        },
+        {
+          "text": "business practices",
+          "meaning_zh": "商业实践"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "The Happiness Industry describes how the project of a science of happiness has become integral to capitalism.",
+      "translation": "《幸福产业》描述了“幸福科学”这一项目如何变成资本主义不可分割的一部分。",
+      "structure": [
+        {
+          "text": "The Happiness Industry",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "describes",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "how the project of a science of happiness has become integral to capitalism",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "the project of a science of happiness",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "has become integral to capitalism",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "how 引导 describes 的宾语从句，说明书中描述的过程。",
+        "has become 是现在完成时，强调这一项目已经发展成资本主义的一部分。",
+        "integral to 表示“对……不可或缺/构成……的一部分”。"
+      ],
+      "expressions": [
+        {
+          "text": "the project of",
+          "meaning_zh": "……这一项目"
+        },
+        {
+          "text": "become integral to",
+          "meaning_zh": "成为……不可分割的一部分"
+        },
+        {
+          "text": "capitalism",
+          "meaning_zh": "资本主义"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "We learn much that is interesting about how economic problems are being redefined and treated as psychological maladies.",
+      "translation": "我们从中了解到许多有趣内容，即经济问题如何正被重新定义并被当作心理病症来处理。",
+      "structure": [
+        {
+          "text": "We",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "learn much",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that is interesting",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "about how economic problems are being redefined and treated as psychological maladies",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "how economic problems are being redefined and treated as psychological maladies",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that is interesting 是定语从句，修饰 much。",
+        "about 后接 how 引导的宾语从句，说明学习到的具体内容。",
+        "are being redefined and treated 是现在进行时被动语态，强调这种处理正在发生。",
+        "as psychological maladies 表示经济问题被处理成哪一种性质的问题。"
+      ],
+      "expressions": [
+        {
+          "text": "economic problems",
+          "meaning_zh": "经济问题"
+        },
+        {
+          "text": "be redefined and treated as",
+          "meaning_zh": "被重新定义并当作……处理"
+        },
+        {
+          "text": "psychological maladies",
+          "meaning_zh": "心理病症"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "In addition, Davies shows how the belief that inner states of pleasure and displeasure can be objectively measured has informed management studies and advertising.",
+      "translation": "此外，戴维斯展示了这样一种信念如何影响了管理学研究和广告业：内在的愉悦与不愉悦状态能够被客观测量。",
+      "structure": [
+        {
+          "text": "In addition",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "Davies",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "shows",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "how the belief that inner states of pleasure and displeasure can be objectively measured has informed management studies and advertising",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "that inner states of pleasure and displeasure can be objectively measured",
+          "role": "appositive_clause",
+          "level": 3
+        },
+        {
+          "text": "has informed management studies and advertising",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "how 引导 shows 的宾语从句，整体说明 Davies 展示的内容。",
+        "that inner states... 是 the belief 的同位语从句，解释信念内容。",
+        "has informed 在此不是“通知”，而是“影响、塑造”。",
+        "management studies and advertising 是 informed 的并列宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "in addition",
+          "meaning_zh": "此外"
+        },
+        {
+          "text": "inner states",
+          "meaning_zh": "内在状态"
+        },
+        {
+          "text": "objectively measured",
+          "meaning_zh": "被客观测量"
+        },
+        {
+          "text": "inform management studies",
+          "meaning_zh": "影响管理学研究"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "The tendency of thinkers such as J. B. Watson, the founder of behaviourism*, was that human beings could be shaped, or manipulated, by policymakers and managers.",
+      "translation": "像行为主义创始人 J. B. 沃森这样的思想家的倾向是认为，人类可以被政策制定者和管理者塑造，或者说操控。",
+      "structure": [
+        {
+          "text": "The tendency of thinkers such as J. B. Watson",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "such as J. B. Watson",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "the founder of behaviourism*",
+          "role": "appositive",
+          "level": 2
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that human beings could be shaped, or manipulated, by policymakers and managers",
+          "role": "predicative_clause",
+          "level": 2
+        },
+        {
+          "text": "could be shaped, or manipulated, by policymakers and managers",
+          "role": "passive_verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "such as J. B. Watson 举例说明 thinkers，不能在 J. B. 后误断句。",
+        "the founder of behaviourism* 是 Watson 的同位语，星号对应文中脚注。",
+        "that 引导表语从句，说明这些思想家的倾向内容。",
+        "could be shaped, or manipulated 是被动语态，强调人被外部力量塑造。"
+      ],
+      "expressions": [
+        {
+          "text": "the tendency of",
+          "meaning_zh": "……的倾向"
+        },
+        {
+          "text": "human beings",
+          "meaning_zh": "人类"
+        },
+        {
+          "text": "be shaped, or manipulated, by",
+          "meaning_zh": "被……塑造或操控"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 32,
+      "sentence": "Watson had no factual basis for his view of human action.",
+      "translation": "沃森关于人类行为的观点没有事实依据。",
+      "structure": [
+        {
+          "text": "Watson",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had no factual basis",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "for his view of human action",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "of human action",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "had no factual basis 是否定结构，直接否定其观点的证据基础。",
+        "for his view... 表示事实依据所支持的对象。",
+        "human action 在此指人的行为，而不只是单个动作。"
+      ],
+      "expressions": [
+        {
+          "text": "factual basis",
+          "meaning_zh": "事实依据"
+        },
+        {
+          "text": "view of human action",
+          "meaning_zh": "关于人类行为的观点"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "When he became president of the American Psychological Association in 1915, he 'had never even studied a single human being': his research had been confined to experiments on white rats.",
+      "translation": "当他在 1915 年成为美国心理学会主席时，他“甚至从未研究过一个人类”：他的研究一直局限于对白鼠的实验。",
+      "structure": [
+        {
+          "text": "When he became president of the American Psychological Association in 1915",
+          "role": "temporal_clause",
+          "level": 2
+        },
+        {
+          "text": "he 'had never even studied a single human being'",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "had never even studied",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "his research had been confined to experiments on white rats",
+          "role": "explanatory_clause",
+          "level": 1
+        },
+        {
+          "text": "had been confined to experiments on white rats",
+          "role": "passive_verb_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，定位到 1915 年这一时间点。",
+        "had never even studied 是过去完成时，表示到 1915 年之前从未研究过人类。",
+        "冒号后解释前面引文的依据：他的研究对象仅限于白鼠。",
+        "had been confined to 是过去完成时被动语态，强调限制早已存在。"
+      ],
+      "expressions": [
+        {
+          "text": "a single human being",
+          "meaning_zh": "一个人类个体"
+        },
+        {
+          "text": "be confined to",
+          "meaning_zh": "被限制在"
+        },
+        {
+          "text": "experiments on",
+          "meaning_zh": "关于……的实验"
+        }
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "Yet Watson's reductive model is now widely applied, with 'behaviour change' becoming the goal of governments: in Britain, a 'Behaviour Insights Team' has been established by the government to study how people can be encouraged, at minimum cost to the public purse, to live in what are considered to be socially desirable ways.",
+      "translation": "然而，沃森的还原式模型如今被广泛应用，‘行为改变’成了政府的目标：在英国，政府已经成立了一个‘行为洞察团队’，研究如何以最低公共财政成本鼓励人们按照被认为对社会有益的方式生活。",
+      "structure": [
+        {
+          "text": "Yet Watson's reductive model",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is now widely applied",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "with 'behaviour change' becoming the goal of governments",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "in Britain, a 'Behaviour Insights Team' has been established by the government",
+          "role": "explanatory_clause",
+          "level": 1
+        },
+        {
+          "text": "to study how people can be encouraged, at minimum cost to the public purse, to live in what are considered to be socially desirable ways",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "how people can be encouraged, at minimum cost to the public purse, to live in what are considered to be socially desirable ways",
+          "role": "noun_clause",
+          "level": 3
+        },
+        {
+          "text": "what are considered to be socially desirable ways",
+          "role": "noun_clause",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "Yet 表示转折：尽管 Watson 缺乏事实依据，其模型仍被广泛应用。",
+        "with 'behaviour change' becoming... 是 with 复合结构，说明伴随结果。",
+        "冒号后以英国政府团队为例，解释这种模型的现实应用。",
+        "how 引导 study 的宾语从句，其中 what 引导介词 in 的宾语从句。"
+      ],
+      "expressions": [
+        {
+          "text": "reductive model",
+          "meaning_zh": "还原式模型"
+        },
+        {
+          "text": "widely applied",
+          "meaning_zh": "被广泛应用"
+        },
+        {
+          "text": "at minimum cost to the public purse",
+          "meaning_zh": "以最低公共财政成本"
+        },
+        {
+          "text": "socially desirable ways",
+          "meaning_zh": "社会上认为理想的方式"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 35,
+      "sentence": "Modern industrial societies appear to need the possibility of ever-increasing happiness to motivate them in their labours.",
+      "translation": "现代工业社会似乎需要幸福不断增长的可能性，来激励人们投入劳动。",
+      "structure": [
+        {
+          "text": "Modern industrial societies",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "appear to need the possibility of ever-increasing happiness",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "of ever-increasing happiness",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "to motivate them in their labours",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "in their labours",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "appear to need 表示“似乎需要”，语气比直接说 need 更谨慎。",
+        "ever-increasing happiness 是复合形容词结构，表示持续增长的幸福。",
+        "to motivate them... 是目的不定式，说明这种幸福可能性的社会功能。",
+        "them 指 Modern industrial societies 中的人们或社会成员。"
+      ],
+      "expressions": [
+        {
+          "text": "modern industrial societies",
+          "meaning_zh": "现代工业社会"
+        },
+        {
+          "text": "ever-increasing happiness",
+          "meaning_zh": "不断增长的幸福"
+        },
+        {
+          "text": "motivate them in their labours",
+          "meaning_zh": "激励他们劳动"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 36,
+      "sentence": "But whatever its intellectual pedigree, the idea that governments should be responsible for promoting happiness is always a threat to human freedom.",
+      "translation": "但无论其思想谱系如何，认为政府应负责促进幸福这一想法，始终是对人类自由的威胁。",
+      "structure": [
+        {
+          "text": "whatever its intellectual pedigree",
+          "role": "concessive_clause",
+          "level": 2
+        },
+        {
+          "text": "the idea that governments should be responsible for promoting happiness",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "that governments should be responsible for promoting happiness",
+          "role": "appositive_clause",
+          "level": 2
+        },
+        {
+          "text": "governments should be responsible for promoting happiness",
+          "role": "clause",
+          "level": 3
+        },
+        {
+          "text": "is always a threat to human freedom",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "whatever its intellectual pedigree 是让步从句，表示不论这一观念有何思想渊源。",
+        "that governments should... 是 the idea 的同位语从句，解释想法内容。",
+        "be responsible for 后接动名词 promoting，表示承担促进幸福的责任。",
+        "a threat to human freedom 是作者的总结性判断，点明全文批判立场。"
+      ],
+      "expressions": [
+        {
+          "text": "intellectual pedigree",
+          "meaning_zh": "思想谱系；思想渊源"
+        },
+        {
+          "text": "be responsible for",
+          "meaning_zh": "负责"
+        },
+        {
+          "text": "a threat to human freedom",
+          "meaning_zh": "对人类自由的威胁"
+        }
+      ]
+    }
+  ]
+}

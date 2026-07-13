@@ -1,0 +1,951 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts17_test3_reading",
+  "passage_id": "ielts17_test3_p3",
+  "passage_title": "Building the Skyline: The Birth and Growth of Manhattan's Skyscrapers",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "In Building the Skyline, Jason Barr takes the reader through a detailed history of New York City.",
+      "translation": "在《构筑天际线》一书中，杰森·巴尔带领读者详细回顾了纽约市的历史。",
+      "structure": [
+        {"text": "In Building the Skyline", "role": "prepositional_phrase", "level": 1},
+        {"text": "Jason Barr", "role": "subject", "level": 1},
+        {"text": "takes the reader through a detailed history of New York City", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "句首介词短语说明评价对象是 Building the Skyline 这本书。",
+        "takes the reader through 表示作者带领读者系统经历或了解某段内容。",
+        "a detailed history of New York City 是 through 的宾语，说明书的历史范围。"
+      ],
+      "expressions": [
+        {"text": "take the reader through", "meaning_zh": "带领读者了解"},
+        {"text": "a detailed history of", "meaning_zh": "……的详细历史"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "The book combines geology, history, economics, and a lot of data to explain why business clusters developed where they did and how the early decisions of workers and firms shaped the skyline we see today.",
+      "translation": "这本书结合地质、历史、经济学和大量数据，解释商业集群为何在其所在地形成，以及工人与企业的早期决策如何塑造了我们今天看到的天际线。",
+      "structure": [
+        {"text": "The book", "role": "subject", "level": 1},
+        {"text": "combines geology, history, economics, and a lot of data", "role": "verb_phrase", "level": 1},
+        {"text": "to explain why business clusters developed where they did and how the early decisions of workers and firms shaped the skyline we see today", "role": "non_finite_clause", "level": 1},
+        {"text": "why business clusters developed where they did", "role": "embedded_question", "level": 2},
+        {"text": "how the early decisions of workers and firms shaped the skyline we see today", "role": "embedded_question", "level": 2},
+        {"text": "we see today", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "to explain 表目的，说明书中跨学科材料服务于解释问题。",
+        "why 和 how 引导两个并列的嵌入式疑问从句。",
+        "where they did 中 did 代替 developed，避免重复。",
+        "we see today 是省略关系词的定语从句，修饰 skyline。"
+      ],
+      "expressions": [
+        {"text": "business clusters", "meaning_zh": "商业集群"},
+        {"text": "shape the skyline", "meaning_zh": "塑造天际线"},
+        {"text": "where they did", "meaning_zh": "在其实际形成的地方"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Building the Skyline is organized into two distinct parts.",
+      "translation": "《构筑天际线》被组织成两个截然不同的部分。",
+      "structure": [
+        {"text": "Building the Skyline", "role": "subject", "level": 1},
+        {"text": "is organized into", "role": "passive_verb_phrase", "level": 1},
+        {"text": "two distinct parts", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "is organized into 是被动结构，说明书的组织方式。",
+        "distinct 强调两个部分在内容或写法上有清楚差异。"
+      ],
+      "expressions": [
+        {"text": "be organized into", "meaning_zh": "被组织成"},
+        {"text": "distinct parts", "meaning_zh": "不同的部分"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "The first is primarily historical and addresses New York's settlement and growth from 1609 to 1900; the second deals primarily with the 20th century and is a compilation of chapters commenting on different aspects of New York's urban development.",
+      "translation": "第一部分主要是历史性的，讨论纽约从1609年至1900年的定居与发展；第二部分主要处理20世纪，是一组评论纽约城市发展不同方面的章节汇编。",
+      "structure": [
+        {"text": "The first is primarily historical and addresses New York's settlement and growth from 1609 to 1900", "role": "main_clause", "level": 1},
+        {"text": "the second deals primarily with the 20th century and is a compilation of chapters commenting on different aspects of New York's urban development", "role": "coordinated_clause", "level": 1},
+        {"text": "commenting on different aspects of New York's urban development", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "分号连接两个并列分句，分别概括第一、第二部分。",
+        "The first 和 the second 分别指上一句中的两个 distinct parts。",
+        "commenting on... 是现在分词短语，后置修饰 chapters。",
+        "primarily 在两个分句中都表示主要侧重点。"
+      ],
+      "expressions": [
+        {"text": "address settlement and growth", "meaning_zh": "讨论定居与发展"},
+        {"text": "deal primarily with", "meaning_zh": "主要处理"},
+        {"text": "urban development", "meaning_zh": "城市发展"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "The tone and organization of the book changes somewhat between the first and second parts, as the latter chapters incorporate aspects of Barr's related research papers.",
+      "translation": "本书的语气和组织方式在第一部分与第二部分之间有所变化，因为后面的章节纳入了巴尔相关研究论文的一些内容。",
+      "structure": [
+        {"text": "The tone and organization of the book", "role": "subject", "level": 1},
+        {"text": "changes somewhat between the first and second parts", "role": "verb_phrase", "level": 1},
+        {"text": "as the latter chapters incorporate aspects of Barr's related research papers", "role": "adverbial_clause", "level": 1},
+        {"text": "the latter chapters", "role": "subject", "level": 2},
+        {"text": "incorporate aspects of Barr's related research papers", "role": "verb_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "as 引导原因状语从句，解释书的语气和组织为何变化。",
+        "the latter chapters 指第二部分中的后续章节。",
+        "incorporate aspects of... 表示吸收了相关论文中的部分内容。"
+      ],
+      "expressions": [
+        {"text": "change somewhat", "meaning_zh": "有所变化"},
+        {"text": "incorporate aspects of", "meaning_zh": "纳入……的若干方面"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Barr begins chapter one by taking the reader on a 'helicopter time-machine' ride – giving a fascinating account of how the New York landscape in 1609 might have looked from the sky.",
+      "translation": "巴尔在第一章开头带读者进行一次“直升机时间机器”之旅，对1609年的纽约景观从空中看可能是什么样子作了引人入胜的描述。",
+      "structure": [
+        {"text": "Barr", "role": "subject", "level": 1},
+        {"text": "begins chapter one by taking the reader on a 'helicopter time-machine' ride", "role": "verb_phrase", "level": 1},
+        {"text": "by taking the reader on a 'helicopter time-machine' ride", "role": "prepositional_phrase", "level": 2},
+        {"text": "giving a fascinating account of how the New York landscape in 1609 might have looked from the sky", "role": "participial_phrase", "level": 1},
+        {"text": "how the New York landscape in 1609 might have looked from the sky", "role": "embedded_question", "level": 2}
+      ],
+      "difficult_points": [
+        "by taking... 表示 Barr 开篇采用的方式。",
+        "破折号后的 giving... 补充说明这次“旅程”的内容效果。",
+        "how 引导嵌入式疑问从句，作 account of 的宾语。",
+        "might have looked 表示对过去景象的推测。"
+      ],
+      "expressions": [
+        {"text": "give an account of", "meaning_zh": "描述；叙述"},
+        {"text": "from the sky", "meaning_zh": "从空中看"},
+        {"text": "might have looked", "meaning_zh": "可能曾经看起来"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "He then moves on to a subterranean walking tour of the city, indicating the location of rock and water below the subsoil, before taking the reader back to the surface.",
+      "translation": "随后他转入一次城市地下步行之旅，指出底土以下岩石和水的位置，然后再把读者带回地表。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "then moves on to a subterranean walking tour of the city", "role": "verb_phrase", "level": 1},
+        {"text": "indicating the location of rock and water below the subsoil", "role": "participial_phrase", "level": 1},
+        {"text": "before taking the reader back to the surface", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "then 标记叙述顺序从空中视角转到地下视角。",
+        "indicating... 是现在分词短语，说明 walking tour 中展示的内容。",
+        "before taking... 中 taking 是动名词，表示之后返回地表。"
+      ],
+      "expressions": [
+        {"text": "move on to", "meaning_zh": "接着转向"},
+        {"text": "below the subsoil", "meaning_zh": "在底土以下"},
+        {"text": "back to the surface", "meaning_zh": "回到地表"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "His love of the city comes through as he describes various fun facts about the location of the New York residence of early 19th-century vice-president Aaron Burr as well as a number of legends about the city.",
+      "translation": "当他描述19世纪初副总统阿伦·伯尔在纽约住所位置的各种趣闻以及有关这座城市的一些传说时，他对这座城市的热爱自然流露出来。",
+      "structure": [
+        {"text": "His love of the city", "role": "subject", "level": 1},
+        {"text": "comes through", "role": "verb_phrase", "level": 1},
+        {"text": "as he describes various fun facts about the location of the New York residence of early 19th-century vice-president Aaron Burr as well as a number of legends about the city", "role": "adverbial_clause", "level": 1},
+        {"text": "as well as a number of legends about the city", "role": "coordinated_object", "level": 2}
+      ],
+      "difficult_points": [
+        "comes through 表示情感在文字中显露出来。",
+        "as 引导时间或伴随状语从句，说明这种热爱如何体现。",
+        "as well as 连接 fun facts 和 legends 两类内容。",
+        "early 19th-century vice-president Aaron Burr 是 Aaron Burr 的身份说明。"
+      ],
+      "expressions": [
+        {"text": "come through", "meaning_zh": "显露出来"},
+        {"text": "fun facts", "meaning_zh": "趣闻"},
+        {"text": "as well as", "meaning_zh": "以及"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "Chapters two and three take the reader up to the Civil War (1861–1865), with chapter two focusing on the early development of land and the implementation of a grid system in 1811.",
+      "translation": "第二章和第三章把读者带到内战时期（1861—1865年），其中第二章聚焦土地的早期开发以及1811年网格系统的实施。",
+      "structure": [
+        {"text": "Chapters two and three", "role": "subject", "level": 1},
+        {"text": "take the reader up to the Civil War (1861–1865)", "role": "verb_phrase", "level": 1},
+        {"text": "with chapter two focusing on the early development of land and the implementation of a grid system in 1811", "role": "absolute_construction", "level": 1},
+        {"text": "focusing on the early development of land and the implementation of a grid system in 1811", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "take the reader up to 表示叙述时间推进到内战时期。",
+        "with chapter two focusing... 是 with 复合结构，补充说明第二章主题。",
+        "development 和 implementation 是并列宾语，说明第二章关注两件事。"
+      ],
+      "expressions": [
+        {"text": "take the reader up to", "meaning_zh": "把读者带到……时期"},
+        {"text": "implementation of", "meaning_zh": "……的实施"},
+        {"text": "grid system", "meaning_zh": "网格系统"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "Chapter three focuses on land use before the Civil War.",
+      "translation": "第三章聚焦内战前的土地使用。",
+      "structure": [
+        {"text": "Chapter three", "role": "subject", "level": 1},
+        {"text": "focuses on", "role": "verb_phrase", "level": 1},
+        {"text": "land use before the Civil War", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "focuses on 表示章节的核心主题。",
+        "before the Civil War 限定 land use 的时间范围。"
+      ],
+      "expressions": [
+        {"text": "focus on", "meaning_zh": "聚焦于"},
+        {"text": "land use", "meaning_zh": "土地使用"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Both chapters are informative and well researched and set the stage for the economic analysis that comes later in the book.",
+      "translation": "这两章信息量大且研究充分，并为书中后面出现的经济分析作了铺垫。",
+      "structure": [
+        {"text": "Both chapters", "role": "subject", "level": 1},
+        {"text": "are informative and well researched", "role": "verb_phrase", "level": 1},
+        {"text": "and set the stage for the economic analysis that comes later in the book", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "that comes later in the book", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Both chapters 指第二章和第三章。",
+        "are... and set... 是并列谓语，既评价质量又说明功能。",
+        "that 引导定语从句，修饰 economic analysis。",
+        "set the stage for 表示为后文分析铺垫。"
+      ],
+      "expressions": [
+        {"text": "well researched", "meaning_zh": "研究充分的"},
+        {"text": "set the stage for", "meaning_zh": "为……铺垫"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "I would have liked Barr to expand upon his claim that existing tenements* prevented skyscrapers in certain neighborhoods because 'likely no skyscraper developer was interested in performing the necessary “slum clearance”'.",
+      "translation": "我本希望巴尔能进一步阐述他的说法：现有的廉租公寓阻碍了某些街区出现摩天大楼，因为“很可能没有摩天楼开发商愿意进行必要的‘贫民窟清理’”。",
+      "structure": [
+        {"text": "I would have liked Barr to expand upon his claim", "role": "main_clause", "level": 1},
+        {"text": "Barr to expand upon his claim", "role": "object_complement", "level": 2},
+        {"text": "that existing tenements* prevented skyscrapers in certain neighborhoods", "role": "appositive_clause", "level": 2},
+        {"text": "because 'likely no skyscraper developer was interested in performing the necessary “slum clearance”'", "role": "adverbial_clause", "level": 2},
+        {"text": "performing the necessary “slum clearance”", "role": "gerund_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "would have liked 表示作者对书中未充分展开之处的遗憾。",
+        "that 引导同位语从句，解释 claim 的内容。",
+        "because 后的引语说明 tenements 阻碍摩天楼的理由。",
+        "be interested in 后接动名词 performing。"
+      ],
+      "expressions": [
+        {"text": "expand upon his claim", "meaning_zh": "进一步阐述他的说法"},
+        {"text": "in certain neighborhoods", "meaning_zh": "在某些街区"},
+        {"text": "slum clearance", "meaning_zh": "贫民窟清理"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "Later in the book, Barr makes the claim that the depth of bedrock** was not a limiting factor for developers, as foundation costs were a small fraction of the cost of development.",
+      "translation": "在书的后面，巴尔又提出一种说法：基岩深度并不是开发商的限制因素，因为地基成本只占开发成本的一小部分。",
+      "structure": [
+        {"text": "Later in the book", "role": "adverbial_phrase", "level": 1},
+        {"text": "Barr makes the claim", "role": "main_clause", "level": 1},
+        {"text": "that the depth of bedrock** was not a limiting factor for developers", "role": "appositive_clause", "level": 2},
+        {"text": "as foundation costs were a small fraction of the cost of development", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导同位语从句，说明 claim 的具体内容。",
+        "as 引导原因状语从句，解释为什么基岩深度不是限制因素。",
+        "a small fraction of 表示只占很小比例。"
+      ],
+      "expressions": [
+        {"text": "limiting factor", "meaning_zh": "限制因素"},
+        {"text": "a small fraction of", "meaning_zh": "……的一小部分"}
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "At first glance, it is not obvious why slum clearance would be limiting, while more expensive foundations would not.",
+      "translation": "乍看之下，并不明显为什么贫民窟清理会构成限制，而更昂贵的地基却不会。",
+      "structure": [
+        {"text": "At first glance", "role": "prepositional_phrase", "level": 1},
+        {"text": "it is not obvious", "role": "main_clause", "level": 1},
+        {"text": "why slum clearance would be limiting", "role": "embedded_question", "level": 2},
+        {"text": "while more expensive foundations would not", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "it 是形式主语，真正内容是 why 引导的从句。",
+        "would be limiting 和 would not 形成对比，后者省略 be limiting。",
+        "while 表示对照，而不是单纯时间关系。"
+      ],
+      "expressions": [
+        {"text": "at first glance", "meaning_zh": "乍看之下"},
+        {"text": "it is not obvious why", "meaning_zh": "为什么……并不明显"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "Chapter four focuses on immigration and the location of neighborhoods and tenements in the late 19th century.",
+      "translation": "第四章聚焦19世纪晚期的移民以及街区和廉租公寓的位置。",
+      "structure": [
+        {"text": "Chapter four", "role": "subject", "level": 1},
+        {"text": "focuses on", "role": "verb_phrase", "level": 1},
+        {"text": "immigration and the location of neighborhoods and tenements in the late 19th century", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "focuses on 后接两个并列主题：immigration 和 location。",
+        "in the late 19th century 限定本章讨论的时代背景。"
+      ],
+      "expressions": [
+        {"text": "immigration", "meaning_zh": "移民"},
+        {"text": "in the late 19th century", "meaning_zh": "在19世纪晚期"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "Barr identifies four primary immigrant enclaves and analyzes their locations in terms of the amenities available in the area.",
+      "translation": "巴尔识别出四个主要移民聚居区，并从该地区可获得的便利设施角度分析了它们的位置。",
+      "structure": [
+        {"text": "Barr", "role": "subject", "level": 1},
+        {"text": "identifies four primary immigrant enclaves", "role": "verb_phrase", "level": 1},
+        {"text": "and analyzes their locations in terms of the amenities available in the area", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "available in the area", "role": "adjectival_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "identifies 和 analyzes 是并列谓语，体现先界定对象再分析。",
+        "their locations 中 their 指 four primary immigrant enclaves。",
+        "in terms of 表示分析角度。",
+        "available in the area 后置修饰 amenities。"
+      ],
+      "expressions": [
+        {"text": "immigrant enclaves", "meaning_zh": "移民聚居区"},
+        {"text": "in terms of", "meaning_zh": "从……角度"},
+        {"text": "amenities available", "meaning_zh": "可获得的便利设施"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "Most of these enclaves were located on the least valuable land, between the industries located on the waterfront and the wealthy neighborhoods bordering Central Park.",
+      "translation": "这些聚居区大多位于价值最低的土地上，处在滨水区的工业区与毗邻中央公园的富裕街区之间。",
+      "structure": [
+        {"text": "Most of these enclaves", "role": "subject", "level": 1},
+        {"text": "were located on the least valuable land", "role": "passive_verb_phrase", "level": 1},
+        {"text": "between the industries located on the waterfront and the wealthy neighborhoods bordering Central Park", "role": "prepositional_phrase", "level": 1},
+        {"text": "located on the waterfront", "role": "participial_phrase", "level": 2},
+        {"text": "bordering Central Park", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "were located 是被动结构，说明聚居区的空间位置。",
+        "between...and... 表明这些土地夹在两类区域之间。",
+        "located on the waterfront 修饰 industries，bordering Central Park 修饰 neighborhoods。",
+        "least valuable land 暗示移民聚居区与城市土地价值之间的关系。"
+      ],
+      "expressions": [
+        {"text": "be located on", "meaning_zh": "位于"},
+        {"text": "the least valuable land", "meaning_zh": "价值最低的土地"},
+        {"text": "bordering Central Park", "meaning_zh": "毗邻中央公园"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "Part two of the book begins with a discussion of the economics of skyscraper height.",
+      "translation": "本书第二部分以对摩天楼高度经济学的讨论开始。",
+      "structure": [
+        {"text": "Part two of the book", "role": "subject", "level": 1},
+        {"text": "begins with", "role": "verb_phrase", "level": 1},
+        {"text": "a discussion of the economics of skyscraper height", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "begins with 表示第二部分开篇的主题。",
+        "the economics of skyscraper height 指从经济学角度分析摩天楼高度。"
+      ],
+      "expressions": [
+        {"text": "begin with", "meaning_zh": "以……开始"},
+        {"text": "the economics of", "meaning_zh": "……的经济学"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "In chapter five, Barr distinguishes between engineering height, economic height, and developer height — where engineering height is the tallest building that can be safely made at a given time, economic height is the height that is most efficient from society's point of view, and developer height is the actual height chosen by the developer, who is attempting to maximize return on investment.",
+      "translation": "在第五章中，巴尔区分了工程高度、经济高度和开发商高度——其中工程高度是某一时期可安全建造的最高建筑，经济高度是从社会角度看最有效率的高度，而开发商高度则是开发商实际选择的高度；开发商试图最大化投资回报。",
+      "structure": [
+        {"text": "In chapter five", "role": "prepositional_phrase", "level": 1},
+        {"text": "Barr distinguishes between engineering height, economic height, and developer height", "role": "main_clause", "level": 1},
+        {"text": "where engineering height is the tallest building that can be safely made at a given time, economic height is the height that is most efficient from society's point of view, and developer height is the actual height chosen by the developer, who is attempting to maximize return on investment", "role": "relative_explanatory_clause", "level": 1},
+        {"text": "that can be safely made at a given time", "role": "relative_clause", "level": 2},
+        {"text": "that is most efficient from society's point of view", "role": "relative_clause", "level": 2},
+        {"text": "chosen by the developer", "role": "participial_phrase", "level": 2},
+        {"text": "who is attempting to maximize return on investment", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "distinguishes between 后列出三种高度概念，是本句的核心动作。",
+        "破折号后 where 引出解释性内容，分别定义三种 height。",
+        "三个定义并列，阅读时要对应 engineering、economic、developer 三个术语。",
+        "who 引导非限制性定语从句，补充说明 developer 的目标。"
+      ],
+      "expressions": [
+        {"text": "distinguish between", "meaning_zh": "区分"},
+        {"text": "from society's point of view", "meaning_zh": "从社会角度看"},
+        {"text": "maximize return on investment", "meaning_zh": "最大化投资回报"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 20,
+      "sentence": "Chapter five also has an interesting discussion of the technological advances that led to the construction of skyscrapers.",
+      "translation": "第五章还对促成摩天楼建设的技术进步进行了有趣讨论。",
+      "structure": [
+        {"text": "Chapter five", "role": "subject", "level": 1},
+        {"text": "also has an interesting discussion of the technological advances", "role": "verb_phrase", "level": 1},
+        {"text": "that led to the construction of skyscrapers", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "also 说明第五章除高度经济学外还讨论技术进步。",
+        "that 引导定语从句，修饰 technological advances。",
+        "led to 表示这些技术进步带来了摩天楼建设。"
+      ],
+      "expressions": [
+        {"text": "technological advances", "meaning_zh": "技术进步"},
+        {"text": "lead to the construction of", "meaning_zh": "促成……的建设"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 21,
+      "sentence": "For example, the introduction of iron and steel skeletal frames made thick, load-bearing walls unnecessary, expanding the usable square footage of buildings and increasing the use of windows and availability of natural light.",
+      "translation": "例如，铁和钢骨架框架的引入使厚重的承重墙变得不再必要，从而扩大了建筑可用面积，并增加了窗户的使用和自然光的可获得性。",
+      "structure": [
+        {"text": "For example", "role": "discourse_marker", "level": 1},
+        {"text": "the introduction of iron and steel skeletal frames", "role": "subject", "level": 1},
+        {"text": "made thick, load-bearing walls unnecessary", "role": "verb_phrase", "level": 1},
+        {"text": "expanding the usable square footage of buildings and increasing the use of windows and availability of natural light", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "For example 表示本句是技术进步的具体例证。",
+        "made...unnecessary 是“make + 宾语 + 形容词补足语”结构。",
+        "expanding 和 increasing 是并列现在分词，说明框架技术带来的结果。",
+        "availability of natural light 指自然光进入建筑的可能性提高。"
+      ],
+      "expressions": [
+        {"text": "skeletal frames", "meaning_zh": "骨架框架"},
+        {"text": "load-bearing walls", "meaning_zh": "承重墙"},
+        {"text": "usable square footage", "meaning_zh": "可用面积"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "Chapter six then presents data on building height throughout the 20th century and uses regression analysis to 'predict' building construction.",
+      "translation": "接着，第六章呈现了整个20世纪建筑高度的数据，并使用回归分析来“预测”建筑建设。",
+      "structure": [
+        {"text": "Chapter six", "role": "subject", "level": 1},
+        {"text": "then presents data on building height throughout the 20th century", "role": "verb_phrase", "level": 1},
+        {"text": "and uses regression analysis to 'predict' building construction", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "to 'predict' building construction", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "then 标记章节推进顺序。",
+        "presents 和 uses 是并列谓语，分别对应数据呈现和方法使用。",
+        "to 'predict' 表目的，引号提示这里的预测是模型意义上的。"
+      ],
+      "expressions": [
+        {"text": "data on", "meaning_zh": "关于……的数据"},
+        {"text": "regression analysis", "meaning_zh": "回归分析"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "While less technical than the research paper on which the chapter is based, it is probably more technical than would be preferred by a general audience.",
+      "translation": "虽然它不如该章所依据的研究论文那样技术性强，但对普通读者而言，它可能仍比他们希望的更专业。",
+      "structure": [
+        {"text": "While less technical than the research paper on which the chapter is based", "role": "adverbial_clause", "level": 1},
+        {"text": "on which the chapter is based", "role": "relative_clause", "level": 2},
+        {"text": "it is probably more technical", "role": "main_clause", "level": 1},
+        {"text": "than would be preferred by a general audience", "role": "comparative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "While 引导让步状语，表示虽然该章相对论文更易读。",
+        "on which 引导定语从句，修饰 research paper。",
+        "than would be preferred... 是比较从句，省略了 it。",
+        "a general audience 指非专业普通读者。"
+      ],
+      "expressions": [
+        {"text": "be based on", "meaning_zh": "基于"},
+        {"text": "a general audience", "meaning_zh": "普通读者"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 24,
+      "sentence": "Chapter seven tackles the 'bedrock myth', the assumption that the absence of bedrock close to the surface between Downtown and Midtown New York is the reason for skyscrapers not being built between the two urban centers.",
+      "translation": "第七章处理“基岩神话”，即这样一种假设：纽约市中心区和中城区之间靠近地表处缺少基岩，是这两个城市中心之间没有建造摩天楼的原因。",
+      "structure": [
+        {"text": "Chapter seven", "role": "subject", "level": 1},
+        {"text": "tackles the 'bedrock myth'", "role": "verb_phrase", "level": 1},
+        {"text": "the assumption that the absence of bedrock close to the surface between Downtown and Midtown New York is the reason for skyscrapers not being built between the two urban centers", "role": "apposition", "level": 1},
+        {"text": "that the absence of bedrock close to the surface between Downtown and Midtown New York is the reason for skyscrapers not being built between the two urban centers", "role": "appositive_clause", "level": 2},
+        {"text": "skyscrapers not being built between the two urban centers", "role": "gerund_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "the assumption... 是 'bedrock myth' 的同位语，解释所谓神话的内容。",
+        "that 引导同位语从句，说明 assumption 具体是什么。",
+        "the absence of bedrock... 是从句主语，核心是 absence。",
+        "not being built 是动名词被动结构，作 for 的宾语核心部分。"
+      ],
+      "expressions": [
+        {"text": "tackle the myth", "meaning_zh": "处理/驳斥神话"},
+        {"text": "close to the surface", "meaning_zh": "靠近地表"},
+        {"text": "the reason for", "meaning_zh": "……的原因"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 25,
+      "sentence": "Rather, Barr argues that while deeper bedrock does increase foundation costs, these costs were neither prohibitively high nor were they large compared to the overall cost of building a skyscraper.",
+      "translation": "相反，巴尔认为，虽然更深的基岩确实会增加地基成本，但这些成本既没有高到令人望而却步，与建造摩天楼的总体成本相比也并不算大。",
+      "structure": [
+        {"text": "Rather", "role": "discourse_marker", "level": 1},
+        {"text": "Barr argues", "role": "main_clause", "level": 1},
+        {"text": "that while deeper bedrock does increase foundation costs, these costs were neither prohibitively high nor were they large compared to the overall cost of building a skyscraper", "role": "object_clause", "level": 2},
+        {"text": "while deeper bedrock does increase foundation costs", "role": "adverbial_clause", "level": 3},
+        {"text": "neither prohibitively high nor were they large", "role": "correlative_complement", "level": 3},
+        {"text": "compared to the overall cost of building a skyscraper", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "Rather 标记作者对上一句“基岩神话”的反驳。",
+        "while 引导让步从句，承认地基更深会增加成本。",
+        "does increase 中 does 起强调作用。",
+        "neither...nor... 连接两个否定判断，说明成本并非决定性限制。"
+      ],
+      "expressions": [
+        {"text": "prohibitively high", "meaning_zh": "高到令人却步"},
+        {"text": "compared to", "meaning_zh": "与……相比"},
+        {"text": "overall cost", "meaning_zh": "总体成本"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "What I enjoyed the most about this chapter was Barr's discussion of how foundations are actually built.",
+      "translation": "这一章中我最喜欢的是巴尔关于地基实际如何建造的讨论。",
+      "structure": [
+        {"text": "What I enjoyed the most about this chapter", "role": "subject_clause", "level": 1},
+        {"text": "I enjoyed the most about this chapter", "role": "relative_content", "level": 2},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "Barr's discussion of how foundations are actually built", "role": "subject_complement", "level": 1},
+        {"text": "how foundations are actually built", "role": "embedded_question", "level": 2}
+      ],
+      "difficult_points": [
+        "What 引导主语从句，表示“我最喜欢的东西”。",
+        "the most 是最高级状语，强调最喜欢的部分。",
+        "how 引导嵌入式疑问从句，作 discussion of 的宾语。",
+        "are actually built 是被动语态，关注地基建造过程。"
+      ],
+      "expressions": [
+        {"text": "enjoyed the most", "meaning_zh": "最喜欢"},
+        {"text": "actually built", "meaning_zh": "实际建造"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "He describes the use of caissons, which enable workers to dig down for considerable distances, often below the water table, until they reach bedrock.",
+      "translation": "他描述了沉箱的使用，这种装置使工人能够向下挖相当长的距离，往往低于地下水位，直到到达基岩。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "describes the use of caissons", "role": "verb_phrase", "level": 1},
+        {"text": "which enable workers to dig down for considerable distances", "role": "relative_clause", "level": 2},
+        {"text": "to dig down for considerable distances", "role": "non_finite_clause", "level": 3},
+        {"text": "often below the water table", "role": "parenthetical_phrase", "level": 3},
+        {"text": "until they reach bedrock", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，补充说明 caissons 的作用。",
+        "enable workers to do 是“使某人能够做某事”的结构。",
+        "often below the water table 是插入说明，强调挖掘深度。",
+        "until 引导时间状语从句，说明挖掘持续到到达基岩。"
+      ],
+      "expressions": [
+        {"text": "enable workers to", "meaning_zh": "使工人能够"},
+        {"text": "dig down", "meaning_zh": "向下挖"},
+        {"text": "water table", "meaning_zh": "地下水位"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 28,
+      "sentence": "Barr's thorough technological history discusses not only how caissons work, but also the dangers involved.",
+      "translation": "巴尔详尽的技术史不仅讨论沉箱如何工作，也讨论其中涉及的危险。",
+      "structure": [
+        {"text": "Barr's thorough technological history", "role": "subject", "level": 1},
+        {"text": "discusses not only how caissons work, but also the dangers involved", "role": "verb_phrase", "level": 1},
+        {"text": "not only how caissons work, but also the dangers involved", "role": "correlative_object", "level": 2},
+        {"text": "how caissons work", "role": "embedded_question", "level": 3},
+        {"text": "involved", "role": "participial_modifier", "level": 3}
+      ],
+      "difficult_points": [
+        "not only...but also... 连接两个讨论对象。",
+        "how caissons work 是嵌入式疑问从句，作 discusses 的宾语之一。",
+        "involved 是过去分词，后置修饰 dangers。"
+      ],
+      "expressions": [
+        {"text": "not only ... but also", "meaning_zh": "不仅……而且"},
+        {"text": "the dangers involved", "meaning_zh": "其中涉及的危险"}
+      ]
+    },
+    {
+      "id": "G-06",
+      "paragraph_label": "G",
+      "sentence_index": 29,
+      "sentence": "While this chapter references empirical research papers, it is a relatively easy read.",
+      "translation": "虽然这一章引用了实证研究论文，但读起来相对容易。",
+      "structure": [
+        {"text": "While this chapter references empirical research papers", "role": "adverbial_clause", "level": 1},
+        {"text": "this chapter", "role": "subject", "level": 2},
+        {"text": "references empirical research papers", "role": "verb_phrase", "level": 2},
+        {"text": "it is a relatively easy read", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "While 引导让步状语从句，承认章节有学术引用。",
+        "it 指代 this chapter。",
+        "a relatively easy read 表示可读性较强，与 empirical research papers 形成反差。"
+      ],
+      "expressions": [
+        {"text": "empirical research papers", "meaning_zh": "实证研究论文"},
+        {"text": "a relatively easy read", "meaning_zh": "相对容易读的内容"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 30,
+      "sentence": "Chapters eight and nine focus on the birth of Midtown and the building boom of the 1920s.",
+      "translation": "第八章和第九章聚焦中城的诞生以及20世纪20年代的建筑热潮。",
+      "structure": [
+        {"text": "Chapters eight and nine", "role": "subject", "level": 1},
+        {"text": "focus on", "role": "verb_phrase", "level": 1},
+        {"text": "the birth of Midtown and the building boom of the 1920s", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "Chapters eight and nine 是并列主语。",
+        "the birth of Midtown 和 the building boom 是两个并列主题。",
+        "of the 1920s 限定 building boom 的时期。"
+      ],
+      "expressions": [
+        {"text": "the birth of", "meaning_zh": "……的诞生"},
+        {"text": "building boom", "meaning_zh": "建筑热潮"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 31,
+      "sentence": "Chapter eight contains lengthy discussions of urban economic theory that may serve as a distraction to readers primarily interested in New York.",
+      "translation": "第八章包含对城市经济理论的大篇幅讨论，这可能会分散那些主要对纽约感兴趣的读者的注意力。",
+      "structure": [
+        {"text": "Chapter eight", "role": "subject", "level": 1},
+        {"text": "contains lengthy discussions of urban economic theory", "role": "verb_phrase", "level": 1},
+        {"text": "that may serve as a distraction to readers primarily interested in New York", "role": "relative_clause", "level": 2},
+        {"text": "primarily interested in New York", "role": "adjectival_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导定语从句，修饰 discussions 或其内容整体。",
+        "serve as a distraction 表示这些理论讨论可能让读者分心。",
+        "primarily interested in New York 后置修饰 readers。"
+      ],
+      "expressions": [
+        {"text": "lengthy discussions", "meaning_zh": "冗长/大篇幅讨论"},
+        {"text": "serve as a distraction", "meaning_zh": "成为分散注意力的因素"},
+        {"text": "urban economic theory", "meaning_zh": "城市经济理论"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 32,
+      "sentence": "However, they would be well-suited for undergraduates learning about the economics of cities.",
+      "translation": "然而，这些内容会很适合正在学习城市经济学的本科生。",
+      "structure": [
+        {"text": "However", "role": "discourse_marker", "level": 1},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "would be well-suited for undergraduates", "role": "verb_phrase", "level": 1},
+        {"text": "learning about the economics of cities", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "However 表示从普通读者转向另一个更适合的读者群体。",
+        "they 指上一句的 urban economic theory discussions。",
+        "learning about... 是现在分词短语，修饰 undergraduates。"
+      ],
+      "expressions": [
+        {"text": "be well-suited for", "meaning_zh": "非常适合"},
+        {"text": "the economics of cities", "meaning_zh": "城市经济学"}
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 33,
+      "sentence": "In the next chapter, Barr considers two of the primary explanations for the building boom of the 1920s — the first being exuberance, and the second being financing.",
+      "translation": "在下一章中，巴尔考察了20世纪20年代建筑热潮的两个主要解释——第一个是狂热情绪，第二个是融资。",
+      "structure": [
+        {"text": "In the next chapter", "role": "prepositional_phrase", "level": 1},
+        {"text": "Barr considers two of the primary explanations for the building boom of the 1920s", "role": "main_clause", "level": 1},
+        {"text": "the first being exuberance, and the second being financing", "role": "absolute_construction", "level": 1}
+      ],
+      "difficult_points": [
+        "two of the primary explanations 表示多个主要解释中的两个。",
+        "破折号后使用独立结构，具体列出这两个解释。",
+        "being 在 the first/the second 后说明对应内容是什么。"
+      ],
+      "expressions": [
+        {"text": "primary explanations for", "meaning_zh": "对……的主要解释"},
+        {"text": "building boom", "meaning_zh": "建筑热潮"}
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 34,
+      "sentence": "He uses data to assess the viability of these two explanations and finds that supply and demand factors explain much of the development of the 1920s; though it enabled the boom, cheap credit was not, he argues, the primary cause.",
+      "translation": "他用数据评估这两种解释的可行性，并发现供给和需求因素解释了20世纪20年代的大部分发展；他认为，虽然廉价信贷促成了这场热潮，但它并不是主要原因。",
+      "structure": [
+        {"text": "He uses data to assess the viability of these two explanations and finds", "role": "main_clause", "level": 1},
+        {"text": "to assess the viability of these two explanations", "role": "non_finite_clause", "level": 2},
+        {"text": "that supply and demand factors explain much of the development of the 1920s", "role": "object_clause", "level": 2},
+        {"text": "though it enabled the boom", "role": "adverbial_clause", "level": 1},
+        {"text": "cheap credit was not, he argues, the primary cause", "role": "coordinated_clause", "level": 1},
+        {"text": "he argues", "role": "parenthetical_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "uses 和 finds 是并列谓语，说明作者先评估再得出结论。",
+        "that 引导宾语从句，说明 finds 的内容。",
+        "分号后 though 引导让步从句，承认 cheap credit 的作用有限。",
+        "he argues 是插入语，标记这是 Barr 的论点。"
+      ],
+      "expressions": [
+        {"text": "assess the viability of", "meaning_zh": "评估……的可行性"},
+        {"text": "supply and demand factors", "meaning_zh": "供求因素"},
+        {"text": "the primary cause", "meaning_zh": "主要原因"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 35,
+      "sentence": "In the final chapter (chapter 10), Barr discusses another of his empirical papers that estimates Manhattan land values from the mid-19th century to the present day.",
+      "translation": "在最后一章（第10章）中，巴尔讨论了他的另一篇实证论文，该论文估算了从19世纪中期至今的曼哈顿土地价值。",
+      "structure": [
+        {"text": "In the final chapter (chapter 10)", "role": "prepositional_phrase", "level": 1},
+        {"text": "Barr discusses another of his empirical papers", "role": "main_clause", "level": 1},
+        {"text": "that estimates Manhattan land values from the mid-19th century to the present day", "role": "relative_clause", "level": 2},
+        {"text": "from the mid-19th century to the present day", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "chapter 10 是 final chapter 的括号说明。",
+        "that 引导定语从句，修饰 empirical papers 中的 another。",
+        "from...to... 标出土地价值估算覆盖的时间范围。"
+      ],
+      "expressions": [
+        {"text": "empirical papers", "meaning_zh": "实证论文"},
+        {"text": "to the present day", "meaning_zh": "直到今天"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 36,
+      "sentence": "The data work that went into these estimations is particularly impressive.",
+      "translation": "这些估算背后的数据工作尤其令人印象深刻。",
+      "structure": [
+        {"text": "The data work that went into these estimations", "role": "subject", "level": 1},
+        {"text": "that went into these estimations", "role": "relative_clause", "level": 2},
+        {"text": "is particularly impressive", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "主语核心是 data work，that 从句说明这些数据工作投入到哪些估算中。",
+        "went into 表示投入到、用于某项工作。",
+        "particularly impressive 是作者的明确评价。"
+      ],
+      "expressions": [
+        {"text": "go into", "meaning_zh": "投入到；用于"},
+        {"text": "particularly impressive", "meaning_zh": "尤其令人印象深刻"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 37,
+      "sentence": "Toward the end of the chapter, Barr assesses 'whether skyscrapers are a cause or an effect of high land values'.",
+      "translation": "在本章接近结尾处，巴尔评估了“摩天楼究竟是高土地价值的原因还是结果”。",
+      "structure": [
+        {"text": "Toward the end of the chapter", "role": "prepositional_phrase", "level": 1},
+        {"text": "Barr", "role": "subject", "level": 1},
+        {"text": "assesses 'whether skyscrapers are a cause or an effect of high land values'", "role": "verb_phrase", "level": 1},
+        {"text": "whether skyscrapers are a cause or an effect of high land values", "role": "embedded_question", "level": 2}
+      ],
+      "difficult_points": [
+        "Toward the end... 交代这一评估在章节中的位置。",
+        "whether 引导嵌入式疑问从句，作 assesses 的宾语。",
+        "a cause or an effect 构成二选一问题，讨论因果方向。"
+      ],
+      "expressions": [
+        {"text": "toward the end of", "meaning_zh": "在……接近结尾处"},
+        {"text": "a cause or an effect", "meaning_zh": "原因还是结果"}
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 38,
+      "sentence": "He finds that changes in land values predict future building height, but the reverse is not true.",
+      "translation": "他发现，土地价值的变化可以预测未来建筑高度，但反过来并不成立。",
+      "structure": [
+        {"text": "He finds", "role": "main_clause", "level": 1},
+        {"text": "that changes in land values predict future building height, but the reverse is not true", "role": "object_clause", "level": 2},
+        {"text": "changes in land values predict future building height", "role": "main_clause", "level": 3},
+        {"text": "but the reverse is not true", "role": "coordinated_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，说明研究发现。",
+        "changes in land values 是从句主语，predict 表示统计意义上的预测。",
+        "the reverse 指“未来建筑高度预测土地价值变化”这一相反方向。",
+        "but 连接两个相反结论。"
+      ],
+      "expressions": [
+        {"text": "changes in land values", "meaning_zh": "土地价值变化"},
+        {"text": "the reverse is not true", "meaning_zh": "反过来并不成立"}
+      ]
+    },
+    {
+      "id": "I-05",
+      "paragraph_label": "I",
+      "sentence_index": 39,
+      "sentence": "The book ends with an epilogue, in which Barr discusses the impact of climate change on the city and makes policy suggestions for New York going forward.",
+      "translation": "本书以一篇尾声结束，巴尔在其中讨论气候变化对这座城市的影响，并为纽约未来发展提出政策建议。",
+      "structure": [
+        {"text": "The book", "role": "subject", "level": 1},
+        {"text": "ends with an epilogue", "role": "verb_phrase", "level": 1},
+        {"text": "in which Barr discusses the impact of climate change on the city and makes policy suggestions for New York going forward", "role": "relative_clause", "level": 2},
+        {"text": "discusses the impact of climate change on the city and makes policy suggestions", "role": "compound_verb_phrase", "level": 3},
+        {"text": "going forward", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "in which 引导非限制性定语从句，修饰 epilogue。",
+        "discusses 和 makes 是从句中的并列谓语。",
+        "the impact of...on... 表示某事对某对象的影响。",
+        "going forward 表示面向未来。"
+      ],
+      "expressions": [
+        {"text": "end with an epilogue", "meaning_zh": "以尾声结束"},
+        {"text": "the impact of climate change", "meaning_zh": "气候变化的影响"},
+        {"text": "policy suggestions", "meaning_zh": "政策建议"}
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 40,
+      "sentence": "* a tenement: a multi-occupancy building of any sort, but particularly a run-down apartment building or slum building",
+      "translation": "* tenement：任何类型的多人居住建筑，尤其指破旧的公寓楼或贫民窟建筑。",
+      "structure": [
+        {"text": "* a tenement", "role": "defined_term", "level": 1},
+        {"text": "a multi-occupancy building of any sort", "role": "definition", "level": 1},
+        {"text": "but particularly a run-down apartment building or slum building", "role": "contrastive_specification", "level": 1}
+      ],
+      "difficult_points": [
+        "星号表示这是对正文 tenements* 的脚注解释。",
+        "but particularly 缩小定义重点，强调尤其常指破旧公寓或贫民窟建筑。",
+        "multi-occupancy 表示多人或多户共同居住。"
+      ],
+      "expressions": [
+        {"text": "multi-occupancy building", "meaning_zh": "多人/多户居住建筑"},
+        {"text": "run-down apartment building", "meaning_zh": "破旧公寓楼"}
+      ]
+    },
+    {
+      "id": "K-01",
+      "paragraph_label": "K",
+      "sentence_index": 41,
+      "sentence": "** bedrock: the solid, hard rock in the ground that lies under a loose layer of soil",
+      "translation": "** bedrock：地下坚固的硬岩，位于松散土层之下。",
+      "structure": [
+        {"text": "** bedrock", "role": "defined_term", "level": 1},
+        {"text": "the solid, hard rock in the ground", "role": "definition", "level": 1},
+        {"text": "that lies under a loose layer of soil", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "双星号表示这是对正文 bedrock** 的脚注解释。",
+        "that 引导定语从句，修饰 rock。",
+        "under a loose layer of soil 说明基岩相对于土层的位置。"
+      ],
+      "expressions": [
+        {"text": "solid, hard rock", "meaning_zh": "坚固的硬岩"},
+        {"text": "a loose layer of soil", "meaning_zh": "松散土层"}
+      ]
+    }
+  ]
+}

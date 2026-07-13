@@ -1,0 +1,1693 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_77_test_16",
+  "passage_id": "reading_jijing_77_test_16_p2",
+  "passage_title": "Bestcom—Considerate Computing",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "'Your battery is now fully charged,' announced the laptop to its owner Donald A. Norman in a synthetic voice, with great enthusiasm and may be even a hint of pride.",
+      "translation": "“您的电池已经充满电了，”笔记本电脑用合成语音兴致勃勃地告诉主人唐纳德·A·诺曼，语气里甚至带着一丝得意。",
+      "structure": [
+        {
+          "text": "'Your battery is now fully charged,'",
+          "role": "quoted_object",
+          "level": 2
+        },
+        {
+          "text": "announced the laptop to its owner Donald A. Norman",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to its owner Donald A. Norman",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "in a synthetic voice, with great enthusiasm and may be even a hint of pride",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "句首是被引用的直接引语，作为 announced 的宾语，主谓 announced the laptop 倒装后置。",
+        "may be even a hint of pride 中的 may be 其实是副词 maybe（也许）被拆写成了两个词，并非情态动词短语。",
+        "with great enthusiasm 与 in a synthetic voice 并列，共同修饰 announced 的方式。"
+      ],
+      "expressions": [
+        {
+          "text": "with great enthusiasm",
+          "meaning_zh": "满怀热情地"
+        },
+        {
+          "text": "a hint of",
+          "meaning_zh": "一丝；一点"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "For the record, humans are not at all unfamiliar with distractions and multitasking.",
+      "translation": "需要说明的是，人类对分心和多任务处理其实一点也不陌生。",
+      "structure": [
+        {
+          "text": "For the record",
+          "role": "parenthesis",
+          "level": 2
+        },
+        {
+          "text": "humans",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are not at all unfamiliar with distractions and multitasking",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "with distractions and multitasking",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "For the record 是插入语，表示“需要指出的是、郑重声明”。",
+        "not at all unfamiliar with 是双重否定，实际意思是“非常熟悉”。"
+      ],
+      "expressions": [
+        {
+          "text": "for the record",
+          "meaning_zh": "郑重声明；需要指出的是"
+        },
+        {
+          "text": "not at all unfamiliar with",
+          "meaning_zh": "一点也不陌生，即非常熟悉"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "'We are used to a complex life that gets constantly interrupted by computer's attention-seeking requests, as much as we are familiar with procreation,' laughs Ted Selker of the Massachusetts Institute of Technology (MIT)Media Lab,",
+      "translation": "“我们已经习惯了不断被电脑索求关注的请求打断的复杂生活，就像我们熟悉生育繁衍一样，”麻省理工学院（MIT）媒体实验室的泰德·塞尔克笑着说，",
+      "structure": [
+        {
+          "text": "'We are used to a complex life that gets constantly interrupted by computer's attention-seeking requests, as much as we are familiar with procreation,'",
+          "role": "quoted_object",
+          "level": 2
+        },
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "are used to a complex life",
+          "role": "verb_phrase",
+          "level": 3
+        },
+        {
+          "text": "that gets constantly interrupted by computer's attention-seeking requests",
+          "role": "relative_clause",
+          "level": 4
+        },
+        {
+          "text": "as much as we are familiar with procreation",
+          "role": "comparative_clause",
+          "level": 3
+        },
+        {
+          "text": "laughs Ted Selker of the Massachusetts Institute of Technology (MIT)Media Lab,",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "laughs Ted Selker... 是引语后的倒装说话动词结构，相当于 Ted Selker laughs。",
+        "that 引导定语从句，修饰 a complex life，说明这种生活不断被打断的特点。",
+        "as much as 引导比较状语从句，把“习惯被打扰”比作“熟悉生育繁衍”。",
+        "句子以逗号结尾，是源段落在此处被截断的结果，并非漏打句号。"
+      ],
+      "expressions": [
+        {
+          "text": "be used to",
+          "meaning_zh": "习惯于"
+        },
+        {
+          "text": "as much as",
+          "meaning_zh": "如同；不亚于"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Humanity has been connected to approximately three billion networked telephones, computers, traffic lights and even fridges and picture frames since these things can facilitate our daily lives.",
+      "translation": "人类已经与大约三十亿台联网的电话、电脑、交通信号灯，乃至冰箱和电子相框连接在一起，因为这些设备能给我们的日常生活带来便利。",
+      "structure": [
+        {
+          "text": "Humanity",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has been connected to approximately three billion networked telephones, computers, traffic lights and even fridges and picture frames",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to approximately three billion networked telephones, computers, traffic lights and even fridges and picture frames",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "since these things can facilitate our daily lives",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "since 在此引导原因状语从句，说明人类如此依赖联网设备的原因。",
+        "networked telephones, computers, traffic lights and even fridges and picture frames 是并列名词短语，作 connected to 的宾语，涵盖多种日常联网设备。"
+      ],
+      "expressions": [
+        {
+          "text": "be connected to",
+          "meaning_zh": "与……相连接"
+        },
+        {
+          "text": "facilitate",
+          "meaning_zh": "便利；促进"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "That is why we do not typically turn off the phones, shut down the e-mail system, or close the office door even when we have a meeting coming or a stretch of concentrated work.",
+      "translation": "这就是为什么即便有会议要开或有一段需要专注的工作，我们通常也不会关闭电话、关掉邮件系统或者关上办公室的门。",
+      "structure": [
+        {
+          "text": "That is why",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "we do not typically turn off the phones, shut down the e-mail system, or close the office door",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "even when we have a meeting coming or a stretch of concentrated work",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "That is why 引出的从句解释了前一句所说依赖联网设备造成的直接结果。",
+        "turn off, shut down, close 三个并列动词短语共享同一个否定谓语 do not typically。",
+        "even when 引导让步意味更强的时间状语，强调即使在开会或专注工作时也不会关闭设备。"
+      ],
+      "expressions": [
+        {
+          "text": "that is why",
+          "meaning_zh": "这就是……的原因"
+        },
+        {
+          "text": "turn off",
+          "meaning_zh": "关闭"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "We merely endure the consequences.",
+      "translation": "我们只是默默承受这样做带来的后果。",
+      "structure": [
+        {
+          "text": "We",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "merely endure the consequences",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "merely 强调人们只是被动忍受后果，而非主动解决问题。",
+        "the consequences 呼应前一句所说不关闭设备这一选择所带来的后果。"
+      ],
+      "expressions": [
+        {
+          "text": "endure the consequences",
+          "meaning_zh": "承受后果"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 7,
+      "sentence": "Countless research reports have confirmed that if people are unexpectedly interrupted, they may suffer a drop in work efficiency, and they are more likely to make mistakes.",
+      "translation": "无数研究报告已经证实，如果人们被意外打断，工作效率可能会下降，而且更容易出错。",
+      "structure": [
+        {
+          "text": "Countless research reports",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have confirmed",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that if people are unexpectedly interrupted, they may suffer a drop in work efficiency, and they are more likely to make mistakes",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "if people are unexpectedly interrupted",
+          "role": "adverbial_clause",
+          "level": 3
+        },
+        {
+          "text": "and they are more likely to make mistakes",
+          "role": "coordinated_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 have confirmed 的宾语。",
+        "if 引导条件状语从句，说明产生后续结果的前提。",
+        "and they are more likely to make mistakes 与前一分句并列，同属 confirmed 的内容。"
+      ],
+      "expressions": [
+        {
+          "text": "a drop in",
+          "meaning_zh": "……的下降"
+        },
+        {
+          "text": "be more likely to",
+          "meaning_zh": "更有可能"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "According to Robert G. Picard from the University of Missouri, it appears to build up the feeling of frustration cumulatively, and that stress response makes it difficult to focus again.",
+      "translation": "密苏里大学的罗伯特·G·皮卡德认为，这种挫败感似乎会不断累积，而这种压力反应又会让人难以重新集中注意力。",
+      "structure": [
+        {
+          "text": "According to Robert G. Picard from the University of Missouri",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "it appears to build up the feeling of frustration cumulatively",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to build up the feeling of frustration cumulatively",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "and that stress response makes it difficult to focus again",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "it 是形式主语，真正的意义由 to build up... 不定式短语承担，it appears to do 表示“似乎会……”。",
+        "that stress response 中的 that 是指示形容词，指代前面提到的挫败感所引发的压力反应，而非引导从句的连词。",
+        "Robert G. Picard 中的 G. 是中间名缩写，其后的句号不是句子结束标志。"
+      ],
+      "expressions": [
+        {
+          "text": "according to",
+          "meaning_zh": "根据"
+        },
+        {
+          "text": "build up",
+          "meaning_zh": "逐渐积累"
+        },
+        {
+          "text": "make it difficult to do",
+          "meaning_zh": "使做某事变得困难"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "It is. not solely about productivity and the pace of life.",
+      "translation": "但这不仅仅关乎工作效率和生活节奏。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "not solely about productivity and the pace of life",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "is. 后多出的句号是原文排版错误，应连读为 It is not solely about...。",
+        "not solely about 表示“不仅仅关乎”，是部分否定，暗示还有其他更严重的方面。"
+      ],
+      "expressions": [
+        {
+          "text": "not solely about",
+          "meaning_zh": "不仅仅关乎"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "For some professionals like pilots, drivers, soldiers and doctors, loss of focus can be downright disastrous.",
+      "translation": "对于飞行员、司机、士兵和医生这类职业人士来说，注意力不集中可能会造成彻头彻尾的灾难。",
+      "structure": [
+        {
+          "text": "For some professionals like pilots, drivers, soldiers and doctors",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "loss of focus",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can be downright disastrous",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "like 在这里表示列举例子，pilots, drivers, soldiers and doctors 是 professionals 的举例，而非比较。",
+        "downright 是程度副词，强调“彻头彻尾地、十足地”。"
+      ],
+      "expressions": [
+        {
+          "text": "downright disastrous",
+          "meaning_zh": "彻头彻尾的灾难性后果"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "'If we could find a way to make our computers and phones realise the limits of human attention and memory, they may come off as more thoughtful and courteous,' says Eric Horvitz of Microsoft Research.",
+      "translation": "“如果我们能找到一种办法，让电脑和手机意识到人类注意力和记忆力的极限，它们或许就能给人留下更体贴、更有礼貌的印象，”微软研究院的埃里克·霍维茨说。",
+      "structure": [
+        {
+          "text": "'If we could find a way to make our computers and phones realise the limits of human attention and memory, they may come off as more thoughtful and courteous,'",
+          "role": "quoted_object",
+          "level": 2
+        },
+        {
+          "text": "If we could find a way to make our computers and phones realise the limits of human attention and memory",
+          "role": "conditional_clause",
+          "level": 3
+        },
+        {
+          "text": "to make our computers and phones realise the limits of human attention and memory",
+          "role": "non_finite_clause",
+          "level": 4
+        },
+        {
+          "text": "they may come off as more thoughtful and courteous",
+          "role": "main_clause",
+          "level": 3
+        },
+        {
+          "text": "says Eric Horvitz of Microsoft Research",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "If 引导虚拟条件句，could find 表示对假设情形的推测。",
+        "make sb/sth do 结构中，realise 是不带 to 的原形动词，作宾语补足语。",
+        "come off as 表示“给人……的印象”，courteous 意为“有礼貌的”。"
+      ],
+      "expressions": [
+        {
+          "text": "make sb/sth do",
+          "meaning_zh": "使某人/某物做某事"
+        },
+        {
+          "text": "come off as",
+          "meaning_zh": "给人以……印象"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "Horvitz, Selker and Picard are just a few of a small but prospering group of researchers who are attempting to make computers, phones, cars and other devices to function more like considerate colleagues instead of egocentric oafs.",
+      "translation": "霍维茨、塞尔克和皮卡德只是一小群日益壮大的研究者中的几位，这些研究者正努力让电脑、手机、汽车等设备表现得更像体贴的同事，而不是自我中心的笨蛋。",
+      "structure": [
+        {
+          "text": "Horvitz, Selker and Picard",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are just a few of a small but prospering group of researchers",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "who are attempting to make computers, phones, cars and other devices to function more like considerate colleagues instead of egocentric oafs",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "to make computers, phones, cars and other devices to function more like considerate colleagues instead of egocentric oafs",
+          "role": "non_finite_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "who 引导定语从句，修饰 a small but prospering group of researchers。",
+        "make ... to function 中出现 to，属非正式用法，等同于使役结构 make sth function。",
+        "instead of 引出与前面 considerate colleagues 形成对比的 egocentric oafs（自我中心的笨蛋）。"
+      ],
+      "expressions": [
+        {
+          "text": "a small but prospering group of",
+          "meaning_zh": "一小群但日益壮大的……"
+        },
+        {
+          "text": "instead of",
+          "meaning_zh": "而不是"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "To do this, the machines need new skills of three kinds: sensing, reasoning and communicating.",
+      "translation": "为了做到这一点，机器需要三种新技能：感知、推理和沟通。",
+      "structure": [
+        {
+          "text": "To do this",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "the machines",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "need new skills of three kinds",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "sensing, reasoning and communicating",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "To do this 是目的状语，this 指代前文提到的让设备表现得体贴周到这件事。",
+        "冒号后的 sensing, reasoning and communicating 是对 three kinds 的具体说明。"
+      ],
+      "expressions": [
+        {
+          "text": "of three kinds",
+          "meaning_zh": "三种类型的"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "First, a system must: sense or infer where its owner is and what he or she is doing.",
+      "translation": "首先，系统必须感知或推断出主人在哪里、正在做什么。",
+      "structure": [
+        {
+          "text": "First",
+          "role": "sequencer",
+          "level": 2
+        },
+        {
+          "text": "a system",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "must: sense or infer",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "where its owner is and what he or she is doing",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "must 后接冒号再接动词原形，冒号在此不表示列举，只是排版上的停顿。",
+        "where...and what... 两个从句并列，共同作 sense or infer 的宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "sense or infer",
+          "meaning_zh": "感知或推断"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "Next, it must weigh the value of the messages it wants to convey against the cost of the disruption.",
+      "translation": "接下来，系统必须权衡想要传达的信息的价值与打断带来的代价。",
+      "structure": [
+        {
+          "text": "Next",
+          "role": "sequencer",
+          "level": 2
+        },
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "must weigh the value of the messages it wants to convey against the cost of the disruption",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "it wants to convey",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "weigh A against B 表示“权衡 A 与 B”，中间插入了修饰 messages 的省略关系代词从句 it wants to convey。",
+        "it wants to convey 前省略了关系代词 that/which，修饰 the messages。"
+      ],
+      "expressions": [
+        {
+          "text": "weigh A against B",
+          "meaning_zh": "权衡 A 与 B"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "Then it has to. choose the best mode and time to interject:",
+      "translation": "然后，它还得选择插话提醒的最佳方式和时机：",
+      "structure": [
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has to. choose the best mode and time",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to interject",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "has to. 中多出的句号为原文排版错误，应连读为 has to choose。",
+        "to interject 是不定式作目的状语，说明选择最佳方式和时机是为了插话提醒。"
+      ],
+      "expressions": [
+        {
+          "text": "have to do",
+          "meaning_zh": "不得不做"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "Each of these pushes the limits of computer science and raises issues of privacy, complexity or reliability.",
+      "translation": "这三项要求中的每一项都在挑战计算机科学的极限，并引发了隐私、复杂性或可靠性方面的问题。",
+      "structure": [
+        {
+          "text": "Each of these",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "pushes the limits of computer science",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and raises issues of privacy, complexity or reliability",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Each of these 指代前面提到的感知、推理、沟通这三项技能要求。",
+        "pushes 和 raises 是并列谓语，共用主语 Each of these。"
+      ],
+      "expressions": [
+        {
+          "text": "push the limits of",
+          "meaning_zh": "挑战……的极限"
+        }
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "Nevertheless, 'Attentive'Computing Systems, have started to make an appearance in the latest Volvos, and IBM has designed and developed a communications software called WebSphere that comes with an underlying sense of busyness.",
+      "translation": "尽管如此，“专注型”计算系统已经开始出现在最新款沃尔沃汽车上，而IBM也设计开发了一款名为WebSphere的通信软件，它自带一种感知繁忙程度的底层机制。",
+      "structure": [
+        {
+          "text": "'Attentive'Computing Systems",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have started to make an appearance in the latest Volvos",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and IBM has designed and developed a communications software",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "called WebSphere",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "that comes with an underlying sense of busyness",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "'Attentive'Computing Systems 中间多余的逗号和缺失的空格是原文排版问题，不影响其作为一个专有名词短语。",
+        "called WebSphere 是过去分词短语，补充说明这款软件的名称。",
+        "that 引导定语从句，修饰 a communications software，说明其具备“忙碌感知”的底层机制。"
+      ],
+      "expressions": [
+        {
+          "text": "make an appearance",
+          "meaning_zh": "出现；亮相"
+        },
+        {
+          "text": "come with",
+          "meaning_zh": "带有；配备"
+        }
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Microsoft has been conducting extensive in-house tests of a way more sophisticated system since 2003.",
+      "translation": "自2003年以来，微软一直在对一套复杂得多的系统进行大量内部测试。",
+      "structure": [
+        {
+          "text": "Microsoft",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has been conducting extensive in-house tests of a way more sophisticated system",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "since 2003",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "现在完成进行时 has been conducting 强调测试从2003年持续至今。",
+        "a way more sophisticated system 中 way 是口语化副词，加强 more sophisticated 的程度，相当于 much more。"
+      ],
+      "expressions": [
+        {
+          "text": "in-house tests",
+          "meaning_zh": "内部测试"
+        },
+        {
+          "text": "way more",
+          "meaning_zh": "……得多（口语化加强比较级）"
+        }
+      ]
+    },
+    {
+      "id": "D-08",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "In a couple of years, companies might manage to provide each office employee with a software version of the personal receptionist which is only available to corner-suite executives today.",
+      "translation": "再过几年，企业或许就能设法为每一位普通员工提供一款软件版的私人接待员，而如今这项服务只有高层管理者才能享有。",
+      "structure": [
+        {
+          "text": "In a couple of years",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "companies",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "might manage to provide each office employee with a software version of the personal receptionist",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "which is only available to corner-suite executives today",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "manage to do 表示“设法做到、成功做到”。",
+        "provide sb with sth 结构中插入了较长的宾语 a software version of the personal receptionist。",
+        "which 引导定语从句，修饰 the personal receptionist，说明目前这项服务的使用范围。"
+      ],
+      "expressions": [
+        {
+          "text": "manage to do",
+          "meaning_zh": "设法做到"
+        },
+        {
+          "text": "provide sb with sth",
+          "meaning_zh": "向某人提供某物"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "However, the truth is that most people are not as busy as they claim to be, which explains why we can often stand interruptions from our inconsiderate electronic paraphernalia.",
+      "translation": "然而，事实是大多数人并没有他们所声称的那么忙，这也解释了为什么我们常常能够忍受那些不体贴的电子设备的打扰。",
+      "structure": [
+        {
+          "text": "the truth is",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that most people are not as busy as they claim to be",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "as they claim to be",
+          "role": "comparative_clause",
+          "level": 3
+        },
+        {
+          "text": "which explains why we can often stand interruptions from our inconsiderate electronic paraphernalia",
+          "role": "non_restrictive_relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that 引导表语从句，说明 truth 具体的内容。",
+        "not as busy as 是同级比较的否定形式，claim to be 后省略了 busy。",
+        "which 引导非限制性定语从句，指代前面整个“人们并没有那么忙”这一事实。"
+      ],
+      "expressions": [
+        {
+          "text": "not as ... as ...",
+          "meaning_zh": "不像……那样……"
+        },
+        {
+          "text": "claim to be",
+          "meaning_zh": "声称是"
+        },
+        {
+          "text": "stand",
+          "meaning_zh": "忍受"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "To find out the extent to which such disruption may claim people's daily time, an IBM Research team led by Jennifer Lai from Carnegie Mellon University studied ten managers, researchers and interns at the workplace.",
+      "translation": "为了查明这种打扰究竟会占用人们多少日常时间，由卡内基梅隆大学的詹妮弗·赖领导的一支IBM研究团队对工作场所里的十名经理、研究员和实习生进行了研究。",
+      "structure": [
+        {
+          "text": "To find out the extent to which such disruption may claim people's daily time",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "to which such disruption may claim people's daily time",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "an IBM Research team",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "led by Jennifer Lai from Carnegie Mellon University",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "studied ten managers, researchers and interns at the workplace",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "To find out... 是目的状语，说明研究团队开展调查的目的。",
+        "to which 引导定语从句修饰 the extent，相当于 disruption may claim people's daily time to what extent。",
+        "led by Jennifer Lai from Carnegie Mellon University 是过去分词短语，修饰 an IBM Research team，说明由谁带领。"
+      ],
+      "expressions": [
+        {
+          "text": "find out the extent to which",
+          "meaning_zh": "查明……的程度"
+        },
+        {
+          "text": "led by",
+          "meaning_zh": "由……带领"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "They had the subjects on videotape, and within every period of a specific time, they asked the subjects to evaluate their 'interruptibility'.",
+      "translation": "他们将受试者的活动录像下来，并且在每一段特定时间之内，都要求受试者对自己“可被打断的程度”进行评估。",
+      "structure": [
+        {
+          "text": "They had the subjects on videotape",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and within every period of a specific time",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "they asked the subjects to evaluate their 'interruptibility'",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "to evaluate their 'interruptibility'",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "had the subjects on videotape 表示“将受试者的活动录像”。",
+        "ask sb to do sth 结构中 to evaluate 作宾语补足语。",
+        "interruptibility 是研究者自造的名词，指“可被打断的程度”。"
+      ],
+      "expressions": [
+        {
+          "text": "on videotape",
+          "meaning_zh": "录像记录"
+        },
+        {
+          "text": "ask sb to do sth",
+          "meaning_zh": "要求某人做某事"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "The time a worker spent in leave-me-alone state varied from individual to individual and day to day, and the percentage ranged from 10 to 51.",
+      "translation": "员工处于“不希望被打扰”状态的时间因人而异、也因日而异，其所占比例从10%到51%不等。",
+      "structure": [
+        {
+          "text": "The time",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "a worker spent in leave-me-alone state",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "varied from individual to individual and day to day",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and the percentage ranged from 10 to 51",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "a worker spent in leave-me-alone state 是省略了关系代词 that/which 的定语从句，修饰 The time。",
+        "from individual to individual and day to day 强调这一时间因人而异、因日而异。",
+        "range from...to... 表示数值的波动区间。"
+      ],
+      "expressions": [
+        {
+          "text": "vary from ... to ...",
+          "meaning_zh": "因……而异"
+        },
+        {
+          "text": "range from ... to ...",
+          "meaning_zh": "范围从……到……"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "Generally, the employees wished to work without interruption for roughly 1/3 of the time.",
+      "translation": "总体而言，员工希望大约三分之一的时间能够不受打扰地工作。",
+      "structure": [
+        {
+          "text": "Generally",
+          "role": "sentence_adverbial",
+          "level": 2
+        },
+        {
+          "text": "the employees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "wished to work without interruption for roughly 1/3 of the time",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "without interruption 作方式状语，修饰 to work。",
+        "for roughly 1/3 of the time 说明希望不受打扰的时间比例，约占三分之一。"
+      ],
+      "expressions": [
+        {
+          "text": "without interruption",
+          "meaning_zh": "不受打扰地"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "Similarly, by studying Microsoft workers, Horvitz also came to the discovery that they ordinarily spend over 65 per cent of their day in a low-attention mode.",
+      "translation": "同样，通过研究微软员工，霍维茨也发现他们通常有超过65%的工作时间处于低专注度状态。",
+      "structure": [
+        {
+          "text": "by studying Microsoft workers",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "Horvitz",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also came to the discovery",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that they ordinarily spend over 65 per cent of their day in a low-attention mode",
+          "role": "appositive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "by doing 表示研究的方式手段。",
+        "that 引导同位语从句，具体说明 the discovery 的内容。",
+        "in a low-attention mode 指处于注意力涣散、易被打扰的状态。"
+      ],
+      "expressions": [
+        {
+          "text": "come to the discovery that",
+          "meaning_zh": "发现……"
+        },
+        {
+          "text": "in a low-attention mode",
+          "meaning_zh": "处于低专注度状态"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "Obviously, today's phones and computers are probably correct about two-thirds of time by assuming that their users are always available to answer a call, check an email, or click the 'OK'button on an alert box.",
+      "translation": "显然，如今的电话和电脑靠假定用户随时都能接听电话、查看邮件或点击提示框上的“确定”按钮，大约三分之二的时间是判断正确的。",
+      "structure": [
+        {
+          "text": "today's phones and computers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are probably correct about two-thirds of time",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "by assuming that their users are always available to answer a call, check an email, or click the 'OK'button on an alert box",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "that their users are always available to answer a call, check an email, or click the 'OK'button on an alert box",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "by assuming 表示手段方式，说明设备判断准确的依据是“假定用户随时都能回应”。",
+        "that 引导宾语从句，作 assuming 的宾语。",
+        "answer a call, check an email, or click...三个并列动词短语说明 available 的具体内容。"
+      ],
+      "expressions": [
+        {
+          "text": "be available to do",
+          "meaning_zh": "随时可以做某事"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "But for the considerate systems to be functional and useful, their accuracy has to be above 65 in sending when their users are about to reach their cognitive limit.",
+      "translation": "但要让这些体贴的系统真正发挥作用，它们在判断用户是否即将达到认知极限时，准确率必须超过65%。",
+      "structure": [
+        {
+          "text": "for the considerate systems to be functional and useful",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "their accuracy",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has to be above 65",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in sending",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "when their users are about to reach their cognitive limit",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "for the considerate systems to be functional and useful 是带逻辑主语的不定式短语，作目的状语。",
+        "be about to do 表示“即将做某事”，强调用户马上要达到认知极限的时刻。"
+      ],
+      "expressions": [
+        {
+          "text": "be about to",
+          "meaning_zh": "即将"
+        },
+        {
+          "text": "cognitive limit",
+          "meaning_zh": "认知极限"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 29,
+      "sentence": "Inspired by Horvitz's work, Microsoft prototype Bestcom-Enhanced Telephony (Bestcom-ET)digs a bit deeper into every user's computer to find out clues about what they are dealing with.",
+      "translation": "受霍维茨研究成果的启发，微软原型系统“增强型电话服务”（Bestcom-ET）会更深入地挖掘每个用户的电脑，以找出他们正在处理什么事情的线索。",
+      "structure": [
+        {
+          "text": "Inspired by Horvitz's work",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "Microsoft prototype Bestcom-Enhanced Telephony (Bestcom-ET)",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "digs a bit deeper into every user's computer",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to find out clues about what they are dealing with",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "what they are dealing with",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Inspired by Horvitz's work 是过去分词短语作状语，说明该原型系统的开发受到 Horvitz 研究的启发。",
+        "(Bestcom-ET)digs 中缺失空格是原文排版问题，不影响 digs 是谓语动词。",
+        "what they are dealing with 是 about 的宾语从句，指用户正在处理的事情。"
+      ],
+      "expressions": [
+        {
+          "text": "be inspired by",
+          "meaning_zh": "受……启发"
+        },
+        {
+          "text": "dig deeper into",
+          "meaning_zh": "深入挖掘"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 30,
+      "sentence": "As I said earlier, Microsoft launched an internal beta test of the system in mid-2003.",
+      "translation": "正如我之前所说，微软在2003年年中启动了该系统的内部测试。",
+      "structure": [
+        {
+          "text": "As I said earlier",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "Microsoft",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "launched an internal beta test of the system in mid-2003",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "As 在此引导方式状语从句，意为“正如我之前所说”。",
+        "mid-2003 说明内测启动的具体时间点，是 in 引导的时间状语。"
+      ],
+      "expressions": [
+        {
+          "text": "as I said earlier",
+          "meaning_zh": "正如我之前所说"
+        },
+        {
+          "text": "beta test",
+          "meaning_zh": "内测；测试版测试"
+        }
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 31,
+      "sentence": "Horvitz points out that by the end of last October, nearly 3,800 people had been relying on the system to field their incoming calls.",
+      "translation": "霍维茨指出，截至去年十月底，已有近3800人一直依靠这套系统来处理来电。",
+      "structure": [
+        {
+          "text": "Horvitz",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "points out",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that by the end of last October, nearly 3,800 people had been relying on the system to field their incoming calls",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "by the end of last October",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "to field their incoming calls",
+          "role": "non_finite_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 points out 的宾语。",
+        "had been relying on 是过去完成进行时，强调截至去年十月底之前持续依赖该系统这一状态。",
+        "field 在此作动词，意为“接听、处理（来电）”。"
+      ],
+      "expressions": [
+        {
+          "text": "point out that",
+          "meaning_zh": "指出……"
+        },
+        {
+          "text": "rely on",
+          "meaning_zh": "依赖"
+        },
+        {
+          "text": "field a call",
+          "meaning_zh": "接听/处理来电"
+        }
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 32,
+      "sentence": "Horvitz is, in fact, a tester himself, and as we have our conversation in his office, Bestcom silently takes care of all the calls.",
+      "translation": "事实上，霍维茨自己也是一名测试者；就在我们在他办公室交谈的同时，Bestcom正悄悄地处理着所有来电。",
+      "structure": [
+        {
+          "text": "Horvitz",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is, in fact, a tester himself",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "as we have our conversation in his office",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "and as we have our conversation in his office, Bestcom silently takes care of all the calls",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "in fact 是插入语，强调 Horvitz 本人也是该系统的测试者。",
+        "as 在这里表示时间，意为“当……时候”，与主句动作同时发生。"
+      ],
+      "expressions": [
+        {
+          "text": "in fact",
+          "meaning_zh": "事实上"
+        },
+        {
+          "text": "take care of",
+          "meaning_zh": "处理；照管"
+        }
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 33,
+      "sentence": "Firstly, it checks if the caller is in his address book, the company directory, or the 'recent call' list.",
+      "translation": "首先，它会检查来电者是否出现在他的通讯录、公司通讯目录或“最近来电”名单中。",
+      "structure": [
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "checks",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "if the caller is in his address book, the company directory, or the 'recent call' list",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "if 在此引导宾语从句，相当于 whether，意为“是否”。",
+        "his address book, the company directory, or the 'recent call' list 三者并列，是 in 的宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "address book",
+          "meaning_zh": "通讯录"
+        }
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 34,
+      "sentence": "After triangulating all these resources at the same time, it attempts to figure out what their relationship is.",
+      "translation": "在同时综合比对这些信息来源之后，它会试图弄清楚来电者与户主之间的关系。",
+      "structure": [
+        {
+          "text": "After triangulating all these resources at the same time",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "attempts to figure out what their relationship is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "what their relationship is",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "triangulating 原指用三角测量法定位，这里比喻综合比对多个信息来源。",
+        "figure out 后接 what 引导的宾语从句，说明系统要弄清楚来电者与户主的关系。"
+      ],
+      "expressions": [
+        {
+          "text": "at the same time",
+          "meaning_zh": "同时"
+        },
+        {
+          "text": "figure out",
+          "meaning_zh": "弄清楚；搞明白"
+        }
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 35,
+      "sentence": "The calls that get through are from family, supervisors and people he called earlier that day.",
+      "translation": "能够被接通的电话来自家人、上司以及他当天早些时候打过电话的人。",
+      "structure": [
+        {
+          "text": "The calls",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "that get through",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "are from family, supervisors and people",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "he called earlier that day",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that get through 修饰 The calls，指“被接通的来电”。",
+        "he called earlier that day 前省略了关系代词 that/whom，修饰 people。"
+      ],
+      "expressions": [
+        {
+          "text": "get through",
+          "meaning_zh": "（电话）接通"
+        }
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 36,
+      "sentence": "Other callers will get a message on their screens that say he cannot answer now because he is in a meeting, and will not be available until 3pm.",
+      "translation": "其他来电者的屏幕上则会收到一条消息，说他因为正在开会现在无法接听，而且要到下午三点才有空。",
+      "structure": [
+        {
+          "text": "Other callers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "will get a message on their screens",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that say he cannot answer now because he is in a meeting, and will not be available until 3pm",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "because he is in a meeting",
+          "role": "adverbial_clause",
+          "level": 3
+        },
+        {
+          "text": "and will not be available until 3pm",
+          "role": "coordinated_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that say 修饰 a message，因先行词逻辑上指消息内容本身，故用 say 而非 says。",
+        "because 引导原因状语从句，说明户主此刻无法接听的原因。",
+        "will not be available until 3pm 与前面 cannot answer now 并列，都是消息的内容。"
+      ],
+      "expressions": [
+        {
+          "text": "be available",
+          "meaning_zh": "有空；可联系上"
+        },
+        {
+          "text": "until",
+          "meaning_zh": "直到……为止"
+        }
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 37,
+      "sentence": "The system will scan both Horvitz's and the caller's calendar to check if it can reschedule a callback at a time which works for both of them.",
+      "translation": "系统会同时查看霍维茨和来电者双方的日程表，看能否重新安排一个双方都合适的回电时间。",
+      "structure": [
+        {
+          "text": "The system",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "will scan both Horvitz's and the caller's calendar",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to check if it can reschedule a callback at a time",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "if it can reschedule a callback at a time",
+          "role": "noun_clause",
+          "level": 3
+        },
+        {
+          "text": "which works for both of them",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "both A and B 并列结构，指同时查看 Horvitz 和来电者双方的日程表。",
+        "to check 是不定式作目的状语。",
+        "which 引导定语从句，修饰 a time，说明这一时间对双方都合适。"
+      ],
+      "expressions": [
+        {
+          "text": "both ... and ...",
+          "meaning_zh": "既……又……"
+        },
+        {
+          "text": "work for sb",
+          "meaning_zh": "对某人合适；适用于某人"
+        }
+      ]
+    },
+    {
+      "id": "H-07",
+      "paragraph_label": "H",
+      "sentence_index": 38,
+      "sentence": "Some callers will take that option, while others simply leave a voicemail.",
+      "translation": "有些来电者会接受这个安排，而另一些人则只是留下一条语音留言。",
+      "structure": [
+        {
+          "text": "Some callers will take that option",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "while others simply leave a voicemail",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "while 在这里表示对比，而非时间，突出两类来电者不同的选择。",
+        "that option 指代前一句提到的“重新安排回电时间”这一选项。"
+      ],
+      "expressions": [
+        {
+          "text": "leave a voicemail",
+          "meaning_zh": "留语音留言"
+        }
+      ]
+    },
+    {
+      "id": "H-08",
+      "paragraph_label": "H",
+      "sentence_index": 39,
+      "sentence": "The same happens with e-mails.",
+      "translation": "邮件的处理方式也是如此。",
+      "structure": [
+        {
+          "text": "The same",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "happens with e-mails",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "The same 指代前面描述的整套处理来电的流程，happens with e-mails 表示同样的机制也适用于邮件。",
+        "本句极为简短，是对前面来电处理流程的概括性总结，起承上启下的作用。"
+      ],
+      "expressions": [
+        {
+          "text": "the same happens with",
+          "meaning_zh": "……同样如此"
+        }
+      ]
+    },
+    {
+      "id": "H-09",
+      "paragraph_label": "H",
+      "sentence_index": 40,
+      "sentence": "When Horvitz is not in his office, Bestcom automatically offers to transfer selected callers to his cellphone, unless his calendar implies that he is in a meeting.",
+      "translation": "当霍维茨不在办公室时，Bestcom会自动提议把特定来电者转接到他的手机上，除非他的日程显示他正在开会。",
+      "structure": [
+        {
+          "text": "When Horvitz is not in his office",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "Bestcom",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "automatically offers to transfer selected callers to his cellphone",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "unless his calendar implies that he is in a meeting",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "that he is in a meeting",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，说明系统转接来电的适用情境。",
+        "unless 引导条件状语从句，表示唯一的例外情况。",
+        "offer to do 表示“主动提出做某事”。"
+      ],
+      "expressions": [
+        {
+          "text": "offer to do",
+          "meaning_zh": "主动提出做某事"
+        },
+        {
+          "text": "unless",
+          "meaning_zh": "除非"
+        }
+      ]
+    }
+  ]
+}

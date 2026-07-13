@@ -1,0 +1,1098 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts20_test1_reading",
+  "passage_id": "ielts20_test1_p1",
+  "passage_title": "The kākāpō",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The kākāpō is a nocturnal, flightless parrot that is critically endangered and one of New Zealand’s unique treasures",
+      "translation": "鸮鹦鹉是一种夜行性、不会飞的鹦鹉，已极度濒危，也是新西兰独特的珍宝之一。",
+      "structure": [
+        {"text": "The kākāpō", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "a nocturnal, flightless parrot that is critically endangered and one of New Zealand’s unique treasures", "role": "complement", "level": 1},
+        {"text": "that is critically endangered and one of New Zealand’s unique treasures", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导定语从句，修饰 a nocturnal, flightless parrot。",
+        "critically endangered 和 one of New Zealand’s unique treasures 在从句中共同说明鸮鹦鹉的状态和价值。"
+      ],
+      "expressions": [
+        {"text": "critically endangered", "meaning_zh": "极度濒危的"},
+        {"text": "one of New Zealand’s unique treasures", "meaning_zh": "新西兰独特珍宝之一"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 2,
+      "sentence": "The kākāpō, also known as the owl parrot, is a large, forest-dwelling bird, with a pale owl-like face.",
+      "translation": "鸮鹦鹉又称猫头鹰鹦鹉，是一种大型森林鸟类，有一张浅色、像猫头鹰一样的脸。",
+      "structure": [
+        {"text": "The kākāpō", "role": "subject", "level": 1},
+        {"text": "also known as the owl parrot", "role": "participial_phrase", "level": 2},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "a large, forest-dwelling bird", "role": "complement", "level": 1},
+        {"text": "with a pale owl-like face", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "also known as... 是插入的过去分词短语，补充鸮鹦鹉的别名。",
+        "with 短语补充描述外貌特征，不是新的谓语。"
+      ],
+      "expressions": [
+        {"text": "also known as", "meaning_zh": "又称；也被称为"},
+        {"text": "forest-dwelling", "meaning_zh": "栖息于森林的"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 3,
+      "sentence": "Up to 64 cm in length, it has predominantly yellow-green feathers, forward-facing eyes, a large grey beak, large blue feet, and relatively short wings and tail.",
+      "translation": "它体长可达64厘米，主要有黄绿色羽毛、朝前的眼睛、大灰喙、大蓝脚，以及相对较短的翅膀和尾巴。",
+      "structure": [
+        {"text": "Up to 64 cm in length", "role": "adjectival_phrase", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "has", "role": "verb_phrase", "level": 1},
+        {"text": "predominantly yellow-green feathers, forward-facing eyes, a large grey beak, large blue feet, and relatively short wings and tail", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "句首 Up to 64 cm in length 是外貌描述，说明最大体长。",
+        "has 后面是一串并列身体特征，需要整体理解为外形清单。"
+      ],
+      "expressions": [
+        {"text": "up to 64 cm in length", "meaning_zh": "体长可达64厘米"},
+        {"text": "predominantly yellow-green", "meaning_zh": "主要呈黄绿色"},
+        {"text": "relatively short", "meaning_zh": "相对较短的"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "It is the world’s only flightless parrot, and is also possibly one of the world’s longest-living birds, with a reported lifespan of up to 100 years.",
+      "translation": "它是世界上唯一不会飞的鹦鹉，也可能是世界上最长寿的鸟类之一，据报道寿命可达100年。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "is the world’s only flightless parrot", "role": "verb_phrase", "level": 1},
+        {"text": "and is also possibly one of the world’s longest-living birds", "role": "coordinated_clause", "level": 1},
+        {"text": "with a reported lifespan of up to 100 years", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "and 后省略主语 It，与前半句共享同一主语。",
+        "with a reported lifespan... 补充说明为什么它可能属于最长寿鸟类之一。"
+      ],
+      "expressions": [
+        {"text": "the world’s only", "meaning_zh": "世界上唯一的"},
+        {"text": "one of the world’s longest-living birds", "meaning_zh": "世界上最长寿的鸟类之一"},
+        {"text": "a reported lifespan of", "meaning_zh": "据报道寿命为……"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 5,
+      "sentence": "Kākāpō are solitary birds and tend to occupy the same home range for many years.",
+      "translation": "鸮鹦鹉是独居鸟类，往往会多年占据同一片活动范围。",
+      "structure": [
+        {"text": "Kākāpō", "role": "subject", "level": 1},
+        {"text": "are solitary birds", "role": "verb_phrase", "level": 1},
+        {"text": "and tend to occupy the same home range for many years", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "to occupy the same home range", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "and 连接两个对鸮鹦鹉习性的描述。",
+        "home range 指动物长期活动和觅食的固定范围。"
+      ],
+      "expressions": [
+        {"text": "solitary birds", "meaning_zh": "独居鸟类"},
+        {"text": "tend to occupy", "meaning_zh": "往往占据"},
+        {"text": "home range", "meaning_zh": "活动范围；栖域"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 6,
+      "sentence": "They forage on the ground and climb high into trees.",
+      "translation": "它们在地面觅食，也会爬到高高的树上。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "forage on the ground", "role": "verb_phrase", "level": 1},
+        {"text": "and climb high into trees", "role": "coordinated_verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "They 指代上一句的 Kākāpō。",
+        "forage 和 climb 是并列动作，分别说明地面和树上的活动。"
+      ],
+      "expressions": [
+        {"text": "forage on the ground", "meaning_zh": "在地面觅食"},
+        {"text": "climb high into trees", "meaning_zh": "爬到高处的树上"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 7,
+      "sentence": "They often leap from trees and flap their wings, but at best manage a controlled descent to the ground.",
+      "translation": "它们常从树上跃下并拍动翅膀，但最多只能完成一次受控的下降，落到地面。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "often leap from trees and flap their wings", "role": "verb_phrase", "level": 1},
+        {"text": "but at best manage a controlled descent to the ground", "role": "coordinated_clause", "level": 1},
+        {"text": "at best", "role": "adverbial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "but 表示转折：拍翅并不等于真正飞行。",
+        "at best 限制程度，说明它们最多只能控制下降。"
+      ],
+      "expressions": [
+        {"text": "at best", "meaning_zh": "充其量；最多"},
+        {"text": "a controlled descent", "meaning_zh": "受控下降"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "They are entirely vegetarian, with their diet including the leaves, roots and bark of trees as well as bulbs, and fern fronds.",
+      "translation": "它们完全吃素，食物包括树叶、树根和树皮，以及球茎和蕨类叶状体。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "are entirely vegetarian", "role": "verb_phrase", "level": 1},
+        {"text": "with their diet including the leaves, roots and bark of trees as well as bulbs, and fern fronds", "role": "prepositional_phrase", "level": 1},
+        {"text": "including the leaves, roots and bark of trees as well as bulbs, and fern fronds", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "with 短语补充说明 vegetarian 的具体食物范围。",
+        "as well as 连接额外食物类别，不能只看到前面的树叶、树根和树皮。"
+      ],
+      "expressions": [
+        {"text": "entirely vegetarian", "meaning_zh": "完全素食的"},
+        {"text": "with their diet including", "meaning_zh": "其饮食包括……"},
+        {"text": "as well as", "meaning_zh": "以及"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 9,
+      "sentence": "Kākāpō breed in summer and autumn, but only in years when food is plentiful.",
+      "translation": "鸮鹦鹉在夏季和秋季繁殖，但只在食物充足的年份繁殖。",
+      "structure": [
+        {"text": "Kākāpō", "role": "subject", "level": 1},
+        {"text": "breed in summer and autumn", "role": "verb_phrase", "level": 1},
+        {"text": "but only in years when food is plentiful", "role": "coordinated_phrase", "level": 1},
+        {"text": "when food is plentiful", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "but only 限制繁殖发生的条件，不是每年都繁殖。",
+        "when 引导定语从句，修饰 years。"
+      ],
+      "expressions": [
+        {"text": "breed in summer and autumn", "meaning_zh": "在夏秋繁殖"},
+        {"text": "food is plentiful", "meaning_zh": "食物充足"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 10,
+      "sentence": "Males play no part in incubation or chick-rearing – females alone incubate eggs and feed the chicks.",
+      "translation": "雄鸟不参与孵化或育雏——只有雌鸟负责孵蛋并喂养雏鸟。",
+      "structure": [
+        {"text": "Males", "role": "subject", "level": 1},
+        {"text": "play no part in incubation or chick-rearing", "role": "verb_phrase", "level": 1},
+        {"text": "females alone", "role": "subject", "level": 1},
+        {"text": "incubate eggs and feed the chicks", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "破折号后解释前半句：雄鸟不参与，因此雌鸟独自承担。",
+        "alone 强调只有雌鸟负责孵化和育雏。"
+      ],
+      "expressions": [
+        {"text": "play no part in", "meaning_zh": "不参与……"},
+        {"text": "incubation or chick-rearing", "meaning_zh": "孵化或育雏"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "The 1–4 eggs are laid in soil, which is repeatedly turned over before and during incubation.",
+      "translation": "1到4枚蛋会产在土中，而这些土在孵化前和孵化期间会被反复翻动。",
+      "structure": [
+        {"text": "The 1–4 eggs", "role": "subject", "level": 1},
+        {"text": "are laid in soil", "role": "verb_phrase", "level": 1},
+        {"text": "which is repeatedly turned over before and during incubation", "role": "relative_clause", "level": 2},
+        {"text": "before and during incubation", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "are laid 是被动结构，说明蛋被产下的位置。",
+        "which 指 soil，而不是 eggs，说明土壤会被翻动。"
+      ],
+      "expressions": [
+        {"text": "are laid in soil", "meaning_zh": "产在土中"},
+        {"text": "turned over", "meaning_zh": "翻动；翻过来"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "The female kākāpō has to spend long periods away from the nest searching for food, which leaves the unattended eggs and chicks particularly vulnerable to predators.",
+      "translation": "雌性鸮鹦鹉不得不长时间离巢觅食，这使无人看护的蛋和雏鸟特别容易受到捕食者攻击。",
+      "structure": [
+        {"text": "The female kākāpō", "role": "subject", "level": 1},
+        {"text": "has to spend long periods away from the nest", "role": "verb_phrase", "level": 1},
+        {"text": "searching for food", "role": "participial_phrase", "level": 2},
+        {"text": "which leaves the unattended eggs and chicks particularly vulnerable to predators", "role": "relative_clause", "level": 2},
+        {"text": "particularly vulnerable to predators", "role": "object_complement", "level": 3}
+      ],
+      "difficult_points": [
+        "searching for food 是伴随动作，说明离巢的目的。",
+        "which 指前面整件事，即雌鸟长时间离巢这一情况。",
+        "leaves...vulnerable to... 表示这种情况造成蛋和雏鸟暴露于风险。"
+      ],
+      "expressions": [
+        {"text": "spend long periods away from", "meaning_zh": "长时间离开……"},
+        {"text": "searching for food", "meaning_zh": "寻找食物"},
+        {"text": "vulnerable to predators", "meaning_zh": "容易受到捕食者攻击"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 13,
+      "sentence": "Before humans arrived, kākāpō were common throughout New Zealand’s forests.",
+      "translation": "在人类到来之前，鸮鹦鹉在新西兰各地森林中都很常见。",
+      "structure": [
+        {"text": "Before humans arrived", "role": "adverbial_clause", "level": 1},
+        {"text": "kākāpō", "role": "subject", "level": 1},
+        {"text": "were common throughout New Zealand’s forests", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Before 引导时间状语从句，交代数量变化前的背景。",
+        "throughout New Zealand’s forests 表示分布范围广，而非某一片森林。"
+      ],
+      "expressions": [
+        {"text": "Before humans arrived", "meaning_zh": "在人类到来之前"},
+        {"text": "were common throughout", "meaning_zh": "遍布……且很常见"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 14,
+      "sentence": "However, this all changed with the arrival of the first Polynesian settlers about 700 years ago.",
+      "translation": "然而，约700年前第一批波利尼西亚定居者到来后，这一切都改变了。",
+      "structure": [
+        {"text": "However", "role": "parenthesis", "level": 1},
+        {"text": "this all", "role": "subject", "level": 1},
+        {"text": "changed", "role": "verb_phrase", "level": 1},
+        {"text": "with the arrival of the first Polynesian settlers about 700 years ago", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "However 表示从“常见”转向“数量下降”的转折。",
+        "with the arrival of... 表示变化伴随并起因于定居者到来。"
+      ],
+      "expressions": [
+        {"text": "this all changed with", "meaning_zh": "这一切随着……而改变"},
+        {"text": "the arrival of", "meaning_zh": "……的到来"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 15,
+      "sentence": "For the early settlers, the flightless kākāpō was easy prey.",
+      "translation": "对早期定居者来说，不会飞的鸮鹦鹉是容易捕获的猎物。",
+      "structure": [
+        {"text": "For the early settlers", "role": "prepositional_phrase", "level": 1},
+        {"text": "the flightless kākāpō", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "easy prey", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "For 短语说明从早期定居者的角度看鸮鹦鹉。",
+        "flightless 解释它为什么容易成为 prey。"
+      ],
+      "expressions": [
+        {"text": "easy prey", "meaning_zh": "容易捕获的猎物"},
+        {"text": "flightless", "meaning_zh": "不会飞的"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "They ate its meat and used its feathers to make soft cloaks.",
+      "translation": "他们吃鸮鹦鹉的肉，并用它的羽毛制作柔软的斗篷。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "ate its meat", "role": "verb_phrase", "level": 1},
+        {"text": "and used its feathers", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "to make soft cloaks", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "They 指 early settlers，而 its 指 kākāpō。",
+        "to make soft cloaks 说明使用羽毛的目的。"
+      ],
+      "expressions": [
+        {"text": "used its feathers to make", "meaning_zh": "用它的羽毛制作……"},
+        {"text": "soft cloaks", "meaning_zh": "柔软的斗篷"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "With them came the Polynesian dog and rat, which also preyed on kākāpō.",
+      "translation": "随他们而来的还有波利尼西亚犬和老鼠，它们也捕食鸮鹦鹉。",
+      "structure": [
+        {"text": "With them", "role": "prepositional_phrase", "level": 1},
+        {"text": "came", "role": "verb_phrase", "level": 1},
+        {"text": "the Polynesian dog and rat", "role": "subject", "level": 1},
+        {"text": "which also preyed on kākāpō", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "句子是倒装结构，真正主语是 the Polynesian dog and rat。",
+        "which 指 dog and rat，说明它们也成为鸮鹦鹉的捕食者。"
+      ],
+      "expressions": [
+        {"text": "With them came", "meaning_zh": "随他们而来的还有……"},
+        {"text": "preyed on", "meaning_zh": "捕食"}
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "By the time European colonisers arrived in the early 1800s, kākāpō had become confined to the central North Island and forested parts of the South Island.",
+      "translation": "到19世纪初欧洲殖民者到来时，鸮鹦鹉已经局限于北岛中部和南岛有森林覆盖的部分地区。",
+      "structure": [
+        {"text": "By the time European colonisers arrived in the early 1800s", "role": "adverbial_clause", "level": 1},
+        {"text": "kākāpō", "role": "subject", "level": 1},
+        {"text": "had become confined to the central North Island and forested parts of the South Island", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "By the time 引出时间界点，主句使用过去完成时。",
+        "had become confined to 表示分布范围在欧洲殖民者到来前已经缩小。"
+      ],
+      "expressions": [
+        {"text": "By the time", "meaning_zh": "到……的时候"},
+        {"text": "had become confined to", "meaning_zh": "已经局限于"}
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "The fall in kākāpō numbers was accelerated by European colonisation.",
+      "translation": "欧洲殖民加速了鸮鹦鹉数量的下降。",
+      "structure": [
+        {"text": "The fall in kākāpō numbers", "role": "subject", "level": 1},
+        {"text": "was accelerated", "role": "verb_phrase", "level": 1},
+        {"text": "by European colonisation", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "was accelerated 是被动结构，强调数量下降被加速。",
+        "by European colonisation 指出造成加速的原因或施动者。"
+      ],
+      "expressions": [
+        {"text": "the fall in numbers", "meaning_zh": "数量下降"},
+        {"text": "was accelerated by", "meaning_zh": "被……加速"}
+      ]
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "A great deal of habitat was lost through forest clearance, and introduced species such as deer depleted the remaining forests of food.",
+      "translation": "大量栖息地因森林清理而丧失，引入物种如鹿又耗尽了剩余森林中的食物。",
+      "structure": [
+        {"text": "A great deal of habitat", "role": "subject", "level": 1},
+        {"text": "was lost through forest clearance", "role": "verb_phrase", "level": 1},
+        {"text": "and introduced species such as deer depleted the remaining forests of food", "role": "coordinated_clause", "level": 1},
+        {"text": "such as deer", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "and 连接两个造成数量下降的因素：栖息地丧失和食物减少。",
+        "introduced species 指外来引入物种，不是本土物种。"
+      ],
+      "expressions": [
+        {"text": "A great deal of habitat", "meaning_zh": "大量栖息地"},
+        {"text": "forest clearance", "meaning_zh": "森林清理；砍伐"},
+        {"text": "depleted the remaining forests of food", "meaning_zh": "耗尽剩余森林中的食物"}
+      ]
+    },
+    {
+      "id": "E-09",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "Other predators such as cats, stoats and two more species of rat were also introduced.",
+      "translation": "其他捕食者，如猫、白鼬以及另外两种鼠类，也被引入了。",
+      "structure": [
+        {"text": "Other predators such as cats, stoats and two more species of rat", "role": "subject", "level": 1},
+        {"text": "such as cats, stoats and two more species of rat", "role": "prepositional_phrase", "level": 2},
+        {"text": "were also introduced", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "such as 后列举 other predators 的具体例子。",
+        "were introduced 是被动结构，说明这些捕食者并非原本存在。"
+      ],
+      "expressions": [
+        {"text": "Other predators such as", "meaning_zh": "其他捕食者，如……"},
+        {"text": "were also introduced", "meaning_zh": "也被引入"}
+      ]
+    },
+    {
+      "id": "E-10",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "The kākāpō were in serious trouble.",
+      "translation": "鸮鹦鹉陷入了严重困境。",
+      "structure": [
+        {"text": "The kākāpō", "role": "subject", "level": 1},
+        {"text": "were", "role": "verb_phrase", "level": 1},
+        {"text": "in serious trouble", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "The kākāpō 指整个物种，而非某几只鸟。",
+        "in serious trouble 概括前文多重威胁造成的危机。"
+      ],
+      "expressions": [
+        {"text": "in serious trouble", "meaning_zh": "处于严重困境中"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "In 1894, the New Zealand government launched its first attempt to save the kākāpō.",
+      "translation": "1894年，新西兰政府启动了首次拯救鸮鹦鹉的尝试。",
+      "structure": [
+        {"text": "In 1894", "role": "prepositional_phrase", "level": 1},
+        {"text": "the New Zealand government", "role": "subject", "level": 1},
+        {"text": "launched", "role": "verb_phrase", "level": 1},
+        {"text": "its first attempt to save the kākāpō", "role": "object", "level": 1},
+        {"text": "to save the kākāpō", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "launched 表示正式启动一次保护行动。",
+        "to save the kākāpō 修饰 attempt，说明尝试的目标。"
+      ],
+      "expressions": [
+        {"text": "launched its first attempt to", "meaning_zh": "启动首次……尝试"},
+        {"text": "save the kākāpō", "meaning_zh": "拯救鸮鹦鹉"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "Conservationist Richard Henry led an effort to relocate several hundred of the birds to predator-free Resolution Island in Fiordland.",
+      "translation": "自然保护主义者 Richard Henry 带头努力将数百只鸮鹦鹉迁移到菲奥德兰无捕食者的雷索卢申岛。",
+      "structure": [
+        {"text": "Conservationist Richard Henry", "role": "subject", "level": 1},
+        {"text": "led an effort", "role": "verb_phrase", "level": 1},
+        {"text": "to relocate several hundred of the birds to predator-free Resolution Island in Fiordland", "role": "infinitive_phrase", "level": 2},
+        {"text": "predator-free Resolution Island", "role": "object", "level": 3}
+      ],
+      "difficult_points": [
+        "to relocate... 说明 effort 的具体内容。",
+        "predator-free 表示该岛没有捕食者，是迁移计划的关键条件。"
+      ],
+      "expressions": [
+        {"text": "led an effort to", "meaning_zh": "带头努力做……"},
+        {"text": "relocate several hundred of", "meaning_zh": "迁移数百只……"},
+        {"text": "predator-free", "meaning_zh": "没有捕食者的"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "Unfortunately, the island didn’t remain predator free – stoats arrived within six years, eventually destroying the kākāpō population.",
+      "translation": "不幸的是，这座岛并未一直没有捕食者——白鼬在六年内到来，最终摧毁了鸮鹦鹉种群。",
+      "structure": [
+        {"text": "Unfortunately", "role": "sentence_adverbial", "level": 1},
+        {"text": "the island", "role": "subject", "level": 1},
+        {"text": "didn’t remain predator free", "role": "verb_phrase", "level": 1},
+        {"text": "stoats arrived within six years", "role": "main_clause", "level": 1},
+        {"text": "eventually destroying the kākāpō population", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "破折号后解释为什么该岛没有保持 predator free。",
+        "eventually destroying... 是结果性分词短语，说明白鼬到来的后果。"
+      ],
+      "expressions": [
+        {"text": "didn’t remain predator free", "meaning_zh": "没有保持无捕食者状态"},
+        {"text": "within six years", "meaning_zh": "六年内"},
+        {"text": "eventually destroying", "meaning_zh": "最终摧毁"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "By the mid-1900s, the kākāpō was practically a lost species.",
+      "translation": "到20世纪中期，鸮鹦鹉几乎已经成了一个失去希望的物种。",
+      "structure": [
+        {"text": "By the mid-1900s", "role": "prepositional_phrase", "level": 1},
+        {"text": "the kākāpō", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "practically a lost species", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "By the mid-1900s 设定时间界点，说明危机已发展到极端程度。",
+        "practically 表示“实际上几乎”，强调物种接近消失。"
+      ],
+      "expressions": [
+        {"text": "By the mid-1900s", "meaning_zh": "到20世纪中期"},
+        {"text": "practically a lost species", "meaning_zh": "几乎已经消失的物种"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "Only a few clung to life in the most isolated parts of New Zealand.",
+      "translation": "只有少数鸮鹦鹉在新西兰最偏僻的地区勉强存活。",
+      "structure": [
+        {"text": "Only a few", "role": "subject", "level": 1},
+        {"text": "clung to life", "role": "verb_phrase", "level": 1},
+        {"text": "in the most isolated parts of New Zealand", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Only a few 强调剩余个体数量极少。",
+        "clung to life 是形象表达，表示艰难存活。"
+      ],
+      "expressions": [
+        {"text": "Only a few", "meaning_zh": "只有少数"},
+        {"text": "clung to life", "meaning_zh": "勉强维持生命"},
+        {"text": "the most isolated parts of", "meaning_zh": "……最偏僻的地区"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 28,
+      "sentence": "From 1949 to 1973, the newly formed New Zealand Wildlife Service made over 60 expeditions to find kākāpō, focusing mainly on Fiordland.",
+      "translation": "从1949年到1973年，新成立的新西兰野生动物署进行了60多次寻找鸮鹦鹉的考察，主要集中在菲奥德兰地区。",
+      "structure": [
+        {"text": "From 1949 to 1973", "role": "prepositional_phrase", "level": 1},
+        {"text": "the newly formed New Zealand Wildlife Service", "role": "subject", "level": 1},
+        {"text": "made over 60 expeditions", "role": "verb_phrase", "level": 1},
+        {"text": "to find kākāpō", "role": "infinitive_phrase", "level": 2},
+        {"text": "focusing mainly on Fiordland", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "newly formed 修饰 New Zealand Wildlife Service，说明机构刚成立。",
+        "to find kākāpō 是考察目的，focusing... 说明考察地点重点。"
+      ],
+      "expressions": [
+        {"text": "made over 60 expeditions", "meaning_zh": "进行了60多次考察"},
+        {"text": "focusing mainly on", "meaning_zh": "主要集中于"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 29,
+      "sentence": "Six were caught, but there were no females amongst them and all but one died within a few months of captivity.",
+      "translation": "有六只被捕获，但其中没有雌鸟，而且除一只外，其余都在被圈养后的几个月内死亡。",
+      "structure": [
+        {"text": "Six", "role": "subject", "level": 1},
+        {"text": "were caught", "role": "verb_phrase", "level": 1},
+        {"text": "but there were no females amongst them", "role": "coordinated_clause", "level": 1},
+        {"text": "and all but one died within a few months of captivity", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Six 指六只鸮鹦鹉，were caught 是被动结构。",
+        "all but one 表示“除一只外全部”，说明圈养结果很差。"
+      ],
+      "expressions": [
+        {"text": "all but one", "meaning_zh": "除一个外全部"},
+        {"text": "within a few months of captivity", "meaning_zh": "被圈养后几个月内"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 30,
+      "sentence": "In 1974, a new initiative was launched, and by 1977, 18 more kākāpō were found in Fiordland.",
+      "translation": "1974年，一项新行动启动；到1977年，又有18只鸮鹦鹉在菲奥德兰被发现。",
+      "structure": [
+        {"text": "In 1974", "role": "prepositional_phrase", "level": 1},
+        {"text": "a new initiative", "role": "subject", "level": 1},
+        {"text": "was launched", "role": "verb_phrase", "level": 1},
+        {"text": "and by 1977, 18 more kākāpō were found in Fiordland", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "was launched 和 were found 都是被动结构。",
+        "by 1977 表示到该时间点为止已发现的结果。"
+      ],
+      "expressions": [
+        {"text": "a new initiative was launched", "meaning_zh": "一项新行动启动"},
+        {"text": "18 more", "meaning_zh": "又有18个"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 31,
+      "sentence": "However, there were still no females.",
+      "translation": "然而，仍然没有发现雌鸟。",
+      "structure": [
+        {"text": "However", "role": "parenthesis", "level": 1},
+        {"text": "there were still no females", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "However 表示新增发现仍未解决关键问题。",
+        "there were no females 是存在句，强调缺少雌性个体。"
+      ],
+      "expressions": [
+        {"text": "still no females", "meaning_zh": "仍然没有雌性"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 32,
+      "sentence": "In 1977, a large population of males was spotted in Rakiura – a large island free from stoats, ferrets and weasels.",
+      "translation": "1977年，人们在拉基乌拉发现了一大群雄鸟；拉基乌拉是一座没有白鼬、雪貂和鼬鼠的大岛。",
+      "structure": [
+        {"text": "In 1977", "role": "prepositional_phrase", "level": 1},
+        {"text": "a large population of males", "role": "subject", "level": 1},
+        {"text": "was spotted in Rakiura", "role": "verb_phrase", "level": 1},
+        {"text": "a large island free from stoats, ferrets and weasels", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "was spotted 是被动结构，表示被观察到或发现。",
+        "破折号后的名词短语解释 Rakiura 的生态条件。"
+      ],
+      "expressions": [
+        {"text": "a large population of", "meaning_zh": "一大群；大量"},
+        {"text": "free from", "meaning_zh": "没有；不受……影响"}
+      ]
+    },
+    {
+      "id": "G-06",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "There were about 200 individuals, and in 1980 it was confirmed females were also present.",
+      "translation": "当时约有200只个体，并且到1980年，人们确认雌鸟也存在。",
+      "structure": [
+        {"text": "There were about 200 individuals", "role": "main_clause", "level": 1},
+        {"text": "and in 1980 it was confirmed females were also present", "role": "coordinated_clause", "level": 1},
+        {"text": "it was confirmed", "role": "main_clause", "level": 2},
+        {"text": "females were also present", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "There were... 是存在句，说明该种群规模。",
+        "it was confirmed 后省略 that，真正被确认的内容是 females were also present。"
+      ],
+      "expressions": [
+        {"text": "about 200 individuals", "meaning_zh": "约200只个体"},
+        {"text": "it was confirmed", "meaning_zh": "已确认"}
+      ]
+    },
+    {
+      "id": "G-07",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "These birds have been the foundation of all subsequent work in managing the species.",
+      "translation": "这些鸟成为后来所有物种管理工作的基础。",
+      "structure": [
+        {"text": "These birds", "role": "subject", "level": 1},
+        {"text": "have been", "role": "verb_phrase", "level": 1},
+        {"text": "the foundation of all subsequent work in managing the species", "role": "complement", "level": 1},
+        {"text": "in managing the species", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "These birds 指 Rakiura 发现并确认包括雌鸟的种群。",
+        "have been 使用现在完成时，说明其影响延续到后续保护工作。"
+      ],
+      "expressions": [
+        {"text": "the foundation of", "meaning_zh": "……的基础"},
+        {"text": "subsequent work", "meaning_zh": "后续工作"},
+        {"text": "managing the species", "meaning_zh": "管理该物种"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 35,
+      "sentence": "Unfortunately, predation by feral cats on Rakiura Island led to a rapid decline in kākāpō numbers.",
+      "translation": "不幸的是，拉基乌拉岛上野猫的捕食导致鸮鹦鹉数量迅速下降。",
+      "structure": [
+        {"text": "Unfortunately", "role": "sentence_adverbial", "level": 1},
+        {"text": "predation by feral cats on Rakiura Island", "role": "subject", "level": 1},
+        {"text": "led to", "role": "verb_phrase", "level": 1},
+        {"text": "a rapid decline in kākāpō numbers", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "主语是 predation，而不是 feral cats。",
+        "led to 表示因果关系，说明数量下降的直接原因。"
+      ],
+      "expressions": [
+        {"text": "predation by feral cats", "meaning_zh": "野猫的捕食"},
+        {"text": "led to a rapid decline", "meaning_zh": "导致迅速下降"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 36,
+      "sentence": "As a result, during 1980–97, the surviving population was evacuated to three island sanctuaries: Codfish Island, Maud Island and Little Barrier Island.",
+      "translation": "因此，在1980至1997年间，幸存种群被转移到三个岛屿保护区：科德菲什岛、莫德岛和小巴里尔岛。",
+      "structure": [
+        {"text": "As a result", "role": "parenthesis", "level": 1},
+        {"text": "during 1980–97", "role": "prepositional_phrase", "level": 1},
+        {"text": "the surviving population", "role": "subject", "level": 1},
+        {"text": "was evacuated to three island sanctuaries", "role": "verb_phrase", "level": 1},
+        {"text": "Codfish Island, Maud Island and Little Barrier Island", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "As a result 承接上一句野猫捕食造成的后果。",
+        "冒号后列出 three island sanctuaries 的具体名称。"
+      ],
+      "expressions": [
+        {"text": "As a result", "meaning_zh": "因此"},
+        {"text": "the surviving population", "meaning_zh": "幸存种群"},
+        {"text": "was evacuated to", "meaning_zh": "被转移到"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 37,
+      "sentence": "However, breeding success was hard to achieve.",
+      "translation": "然而，成功繁殖很难实现。",
+      "structure": [
+        {"text": "However", "role": "parenthesis", "level": 1},
+        {"text": "breeding success", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "hard to achieve", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "However 表示转移到保护区后仍存在问题。",
+        "hard to achieve 中不定式主动形式表达被动含义，即“难以被实现”。"
+      ],
+      "expressions": [
+        {"text": "breeding success", "meaning_zh": "繁殖成功"},
+        {"text": "hard to achieve", "meaning_zh": "难以实现"}
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 38,
+      "sentence": "Rats were found to be a major predator of kākāpō chicks and an insufficient number of chicks survived to offset adult mortality.",
+      "translation": "人们发现老鼠是鸮鹦鹉雏鸟的主要捕食者，而且存活下来的雏鸟数量不足以抵消成年鸟死亡。",
+      "structure": [
+        {"text": "Rats", "role": "subject", "level": 1},
+        {"text": "were found to be a major predator of kākāpō chicks", "role": "verb_phrase", "level": 1},
+        {"text": "and an insufficient number of chicks survived to offset adult mortality", "role": "coordinated_clause", "level": 1},
+        {"text": "to offset adult mortality", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "were found to be 是被动报告结构，表示研究发现。",
+        "to offset adult mortality 说明雏鸟存活数量需要达到的作用，但实际不足。"
+      ],
+      "expressions": [
+        {"text": "were found to be", "meaning_zh": "被发现是"},
+        {"text": "a major predator of", "meaning_zh": "……的主要捕食者"},
+        {"text": "offset adult mortality", "meaning_zh": "抵消成年个体死亡"}
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 39,
+      "sentence": "By 1995, although at least 12 chicks had been produced on the islands, only three had survived.",
+      "translation": "到1995年，尽管这些岛上至少孵育出12只雏鸟，但只有3只存活下来。",
+      "structure": [
+        {"text": "By 1995", "role": "prepositional_phrase", "level": 1},
+        {"text": "although at least 12 chicks had been produced on the islands", "role": "adverbial_clause", "level": 1},
+        {"text": "at least 12 chicks", "role": "subject", "level": 2},
+        {"text": "had been produced on the islands", "role": "verb_phrase", "level": 2},
+        {"text": "only three had survived", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "although 引导让步从句，突出生产雏鸟与存活率低之间的反差。",
+        "had been produced 和 had survived 都用过去完成时，回顾截至1995年的结果。"
+      ],
+      "expressions": [
+        {"text": "at least 12 chicks", "meaning_zh": "至少12只雏鸟"},
+        {"text": "only three had survived", "meaning_zh": "只有三只存活下来"}
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 40,
+      "sentence": "The kākāpō population had dropped to 51 birds.",
+      "translation": "鸮鹦鹉种群已降至51只。",
+      "structure": [
+        {"text": "The kākāpō population", "role": "subject", "level": 1},
+        {"text": "had dropped to", "role": "verb_phrase", "level": 1},
+        {"text": "51 birds", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "had dropped to 使用过去完成时，说明截至当时的下降结果。",
+        "51 birds 是极低数量，承接前文繁殖失败的后果。"
+      ],
+      "expressions": [
+        {"text": "had dropped to", "meaning_zh": "已降至"},
+        {"text": "51 birds", "meaning_zh": "51只鸟"}
+      ]
+    },
+    {
+      "id": "H-07",
+      "paragraph_label": "H",
+      "sentence_index": 41,
+      "sentence": "The critical situation prompted an urgent review of kākāpō management in New Zealand.",
+      "translation": "这一危急局面促使新西兰紧急审查鸮鹦鹉管理工作。",
+      "structure": [
+        {"text": "The critical situation", "role": "subject", "level": 1},
+        {"text": "prompted", "role": "verb_phrase", "level": 1},
+        {"text": "an urgent review of kākāpō management in New Zealand", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "critical situation 指前文种群跌至51只的危机。",
+        "prompted 表示直接促成后续管理审查。"
+      ],
+      "expressions": [
+        {"text": "critical situation", "meaning_zh": "危急局面"},
+        {"text": "prompted an urgent review", "meaning_zh": "促成紧急审查"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 42,
+      "sentence": "In 1996, a new Recovery Plan was launched, together with a specialist advisory group called the Kākāpō Scientific and Technical Advisory Committee and a higher amount of funding.",
+      "translation": "1996年，一项新的恢复计划启动，同时成立了一个名为鸮鹦鹉科学与技术咨询委员会的专家咨询小组，并投入了更多资金。",
+      "structure": [
+        {"text": "In 1996", "role": "prepositional_phrase", "level": 1},
+        {"text": "a new Recovery Plan", "role": "subject", "level": 1},
+        {"text": "was launched", "role": "verb_phrase", "level": 1},
+        {"text": "together with a specialist advisory group called the Kākāpō Scientific and Technical Advisory Committee and a higher amount of funding", "role": "prepositional_phrase", "level": 1},
+        {"text": "called the Kākāpō Scientific and Technical Advisory Committee", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "was launched 是被动结构，说明恢复计划被正式启动。",
+        "together with... 补充同时出现的咨询小组和资金支持。",
+        "called... 后置修饰 a specialist advisory group。"
+      ],
+      "expressions": [
+        {"text": "Recovery Plan", "meaning_zh": "恢复计划"},
+        {"text": "specialist advisory group", "meaning_zh": "专家咨询小组"},
+        {"text": "a higher amount of funding", "meaning_zh": "更多资金"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 43,
+      "sentence": "Renewed steps were taken to control predators on the three islands.",
+      "translation": "保护方采取了新的措施来控制这三个岛上的捕食者。",
+      "structure": [
+        {"text": "Renewed steps", "role": "subject", "level": 1},
+        {"text": "were taken", "role": "verb_phrase", "level": 1},
+        {"text": "to control predators on the three islands", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "were taken 是被动结构，常与 steps 搭配表示“采取措施”。",
+        "to control predators 说明这些新措施的目的。"
+      ],
+      "expressions": [
+        {"text": "steps were taken to", "meaning_zh": "采取措施以……"},
+        {"text": "control predators", "meaning_zh": "控制捕食者"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 44,
+      "sentence": "Cats were eradicated from Little Barrier Island in 1980, and possums were eradicated from Codfish Island by 1986.",
+      "translation": "1980年，小巴里尔岛上的猫被清除；到1986年，科德菲什岛上的负鼠也被清除。",
+      "structure": [
+        {"text": "Cats", "role": "subject", "level": 1},
+        {"text": "were eradicated from Little Barrier Island in 1980", "role": "verb_phrase", "level": 1},
+        {"text": "and possums were eradicated from Codfish Island by 1986", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "两个 were eradicated 并列，分别说明不同岛屿上的清除行动。",
+        "in 1980 和 by 1986 的时间含义不同，后者强调到1986年前完成。"
+      ],
+      "expressions": [
+        {"text": "were eradicated from", "meaning_zh": "被从……清除"},
+        {"text": "by 1986", "meaning_zh": "到1986年为止"}
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 45,
+      "sentence": "However, the population did not start to increase until rats were removed from all three islands, and the birds were more intensively managed.",
+      "translation": "然而，直到老鼠从三个岛上全部清除、鸟类得到更密集管理后，鸮鹦鹉种群才开始增加。",
+      "structure": [
+        {"text": "However", "role": "parenthesis", "level": 1},
+        {"text": "the population", "role": "subject", "level": 1},
+        {"text": "did not start to increase", "role": "verb_phrase", "level": 1},
+        {"text": "until rats were removed from all three islands", "role": "adverbial_clause", "level": 2},
+        {"text": "and the birds were more intensively managed", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "not...until... 表示“直到……才……”，强调种群增加较晚发生。",
+        "rats were removed 和 birds were managed 是促成增长的两个条件。"
+      ],
+      "expressions": [
+        {"text": "did not start to increase until", "meaning_zh": "直到……才开始增加"},
+        {"text": "were more intensively managed", "meaning_zh": "得到更密集的管理"}
+      ]
+    },
+    {
+      "id": "I-05",
+      "paragraph_label": "I",
+      "sentence_index": 46,
+      "sentence": "This involved moving the birds between islands, supplementary feeding of adults and rescuing and hand-raising any failing chicks.",
+      "translation": "这包括在岛屿之间转移鸟类、为成年鸟补充喂食，以及救助并人工抚育任何状况不佳的雏鸟。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "involved", "role": "verb_phrase", "level": 1},
+        {"text": "moving the birds between islands, supplementary feeding of adults and rescuing and hand-raising any failing chicks", "role": "object", "level": 1},
+        {"text": "rescuing and hand-raising any failing chicks", "role": "gerund_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "This 指上一句提到的 more intensively managed。",
+        "involved 后接三个并列管理措施：转移、补充喂食、救助并人工抚育。"
+      ],
+      "expressions": [
+        {"text": "This involved", "meaning_zh": "这包括"},
+        {"text": "supplementary feeding", "meaning_zh": "补充喂食"},
+        {"text": "hand-raising", "meaning_zh": "人工抚育"}
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 47,
+      "sentence": "After the first five years of the Recovery Plan, the population was on target.",
+      "translation": "恢复计划实施的前五年后，种群增长达到了预期目标。",
+      "structure": [
+        {"text": "After the first five years of the Recovery Plan", "role": "prepositional_phrase", "level": 1},
+        {"text": "the population", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "on target", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "After 短语设定评估恢复计划成效的时间点。",
+        "on target 表示进展符合既定目标。"
+      ],
+      "expressions": [
+        {"text": "the first five years of", "meaning_zh": "……的前五年"},
+        {"text": "on target", "meaning_zh": "达到目标；进展符合预期"}
+      ]
+    },
+    {
+      "id": "J-02",
+      "paragraph_label": "J",
+      "sentence_index": 48,
+      "sentence": "By 2000, five new females had been produced, and the total population had grown to 62 birds.",
+      "translation": "到2000年，已经繁育出5只新的雌鸟，总种群数量也增长到62只。",
+      "structure": [
+        {"text": "By 2000", "role": "prepositional_phrase", "level": 1},
+        {"text": "five new females", "role": "subject", "level": 1},
+        {"text": "had been produced", "role": "verb_phrase", "level": 1},
+        {"text": "and the total population had grown to 62 birds", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "By 2000 与过去完成时连用，表示到该时间点的结果。",
+        "five new females 对保护很关键，因为前文一直缺少雌鸟。"
+      ],
+      "expressions": [
+        {"text": "had been produced", "meaning_zh": "已经繁育出来"},
+        {"text": "had grown to", "meaning_zh": "已增长到"}
+      ]
+    },
+    {
+      "id": "J-03",
+      "paragraph_label": "J",
+      "sentence_index": 49,
+      "sentence": "For the first time, there was cautious optimism for the future of kākāpō and by June 2020, a total of 210 birds was recorded.",
+      "translation": "人们第一次对鸮鹦鹉的未来持谨慎乐观态度；到2020年6月，记录在册的鸮鹦鹉总数达到210只。",
+      "structure": [
+        {"text": "For the first time", "role": "prepositional_phrase", "level": 1},
+        {"text": "there was cautious optimism for the future of kākāpō", "role": "main_clause", "level": 1},
+        {"text": "and by June 2020, a total of 210 birds was recorded", "role": "coordinated_clause", "level": 1},
+        {"text": "a total of 210 birds", "role": "subject", "level": 2}
+      ],
+      "difficult_points": [
+        "there was cautious optimism 是存在句，表示首次出现乐观情绪。",
+        "by June 2020 说明到该时间点记录的种群数量。"
+      ],
+      "expressions": [
+        {"text": "For the first time", "meaning_zh": "第一次"},
+        {"text": "cautious optimism", "meaning_zh": "谨慎乐观"},
+        {"text": "a total of 210 birds", "meaning_zh": "总计210只鸟"}
+      ]
+    },
+    {
+      "id": "K-01",
+      "paragraph_label": "K",
+      "sentence_index": 50,
+      "sentence": "Today, kākāpō management continues to be guided by the kākāpō Recovery Plan.",
+      "translation": "如今，鸮鹦鹉管理工作仍继续以鸮鹦鹉恢复计划为指导。",
+      "structure": [
+        {"text": "Today", "role": "time_adverbial", "level": 1},
+        {"text": "kākāpō management", "role": "subject", "level": 1},
+        {"text": "continues to be guided", "role": "verb_phrase", "level": 1},
+        {"text": "by the kākāpō Recovery Plan", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "continues to be guided 是延续性的被动结构，说明计划仍在发挥作用。",
+        "by 短语指出指导管理工作的依据。"
+      ],
+      "expressions": [
+        {"text": "continues to be guided by", "meaning_zh": "继续由……指导"},
+        {"text": "kākāpō management", "meaning_zh": "鸮鹦鹉管理工作"}
+      ]
+    },
+    {
+      "id": "K-02",
+      "paragraph_label": "K",
+      "sentence_index": 51,
+      "sentence": "Its key goals are: minimise the loss of genetic diversity in the kākāpō population, restore or maintain sufficient habitat to accommodate the expected increase in the kākāpō population, and ensure stakeholders continue to be fully engaged in the preservation of the species.",
+      "translation": "其关键目标包括：尽量减少鸮鹦鹉种群遗传多样性的损失，恢复或维持足够的栖息地以容纳预期增长的鸮鹦鹉种群，并确保相关利益方继续充分参与该物种的保护。",
+      "structure": [
+        {"text": "Its key goals", "role": "subject", "level": 1},
+        {"text": "are", "role": "verb_phrase", "level": 1},
+        {"text": "minimise the loss of genetic diversity in the kākāpō population", "role": "complement", "level": 1},
+        {"text": "restore or maintain sufficient habitat to accommodate the expected increase in the kākāpō population", "role": "coordinated_complement", "level": 1},
+        {"text": "ensure stakeholders continue to be fully engaged in the preservation of the species", "role": "coordinated_complement", "level": 1},
+        {"text": "to accommodate the expected increase in the kākāpō population", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "冒号后列出三个并列目标：减少遗传多样性损失、恢复或维持栖息地、确保利益方参与。",
+        "to accommodate... 说明为什么需要足够栖息地。",
+        "stakeholders continue to be fully engaged 是 ensure 后的宾语从句，省略了 that。"
+      ],
+      "expressions": [
+        {"text": "key goals", "meaning_zh": "关键目标"},
+        {"text": "genetic diversity", "meaning_zh": "遗传多样性"},
+        {"text": "sufficient habitat", "meaning_zh": "足够的栖息地"},
+        {"text": "be fully engaged in", "meaning_zh": "充分参与"}
+      ]
+    }
+  ]
+}

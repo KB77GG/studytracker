@@ -1,0 +1,2227 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_9_test_81",
+  "passage_id": "reading_jijing_9_test_81_p1",
+  "passage_title": "The Connection Between Culture and Thought",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The world's population has surpassed 7 billion and continues to grow.",
+      "translation": "世界人口已经超过70亿，并且仍在持续增长。",
+      "structure": [
+        {
+          "text": "The world's population",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has surpassed 7 billion",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and continues to grow",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "to grow",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "has surpassed 7 billion 和 continues to grow 是并列谓语，共享主语 population。",
+        "continues to grow 中，不定式 to grow 是 continue 的补足语，表示持续发生的动作。"
+      ],
+      "expressions": [
+        {
+          "text": "continue to do",
+          "meaning_zh": "持续做某事"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Across the globe, humans have many differences.",
+      "translation": "放眼全球，人类之间存在许多差异。",
+      "structure": [
+        {
+          "text": "Across the globe",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "humans have many differences",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Across the globe 是地点状语，置于句首，强调范围之广。",
+        "have differences 表示人类彼此之间存在差异。"
+      ],
+      "expressions": [
+        {
+          "text": "across the globe",
+          "meaning_zh": "放眼全球；全世界范围内"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "These differences can be influenced by factors such as geography, climate, politics, nationality, and many more.",
+      "translation": "这些差异可能受到地理、气候、政治、国籍等诸多因素的影响。",
+      "structure": [
+        {
+          "text": "These differences",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can be influenced",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "by factors such as geography, climate, politics, nationality, and many more",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "can be influenced by 是被动语态，强调差异是被这些因素所影响的对象。",
+        "such as 后列举五个具体因素，geography 到 many more 均为 by 的宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "be influenced by",
+          "meaning_zh": "受……影响"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Culture is one such aspect that can change the way people behave.",
+      "translation": "文化就是这样一个可以改变人们行为方式的因素。",
+      "structure": [
+        {
+          "text": "Culture",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "one such aspect",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "that can change the way people behave",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "people behave",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "one such aspect 中 such 强调这样一种，呼应前一句提到的多种影响因素。",
+        "that 引导定语从句，修饰 aspect，说明文化这一因素的作用。",
+        "the way people behave 中间省略了关系词 that，意为人们行为的方式。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Your culture may influence your clothing, your language, and many aspects of your life.",
+      "translation": "你的文化可能会影响你的穿着、语言以及生活的方方面面。",
+      "structure": [
+        {
+          "text": "Your culture",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "may influence",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "your clothing, your language, and many aspects of your life",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "may influence 表示可能性，而非必然结果。",
+        "your clothing, your language, and many aspects of your life 是三个并列宾语，共同说明文化影响的范围。"
+      ],
+      "expressions": [
+        {
+          "text": "aspects of your life",
+          "meaning_zh": "生活的方方面面"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "But is culture influential enough to change the way an individual thinks?",
+      "translation": "但文化是否有足够的影响力去改变一个人的思维方式呢？",
+      "structure": [
+        {
+          "text": "But",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "is culture influential enough",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to change the way an individual thinks",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "an individual thinks",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "疑问句采用倒装结构，is 提前到主语 culture 之前。",
+        "influential enough to change 是形容词加 enough 加不定式结构，表示足够……以至于……。",
+        "the way an individual thinks 中省略了引导词，相当于 the way (that) an individual thinks。"
+      ],
+      "expressions": [
+        {
+          "text": "influential enough to do",
+          "meaning_zh": "有足够的影响力去做某事"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "It has long been believed that people from different cultures would think differently.",
+      "translation": "人们长期以来一直认为，来自不同文化的人思维方式也会不同。",
+      "structure": [
+        {
+          "text": "It has long been believed",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that people from different cultures would think differently",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "from different cultures",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的主语是后面的 that 从句。",
+        "has long been believed 是现在完成时被动语态，强调这一看法由来已久。"
+      ],
+      "expressions": [
+        {
+          "text": "it has long been believed that",
+          "meaning_zh": "长期以来人们一直认为……"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "For example, a young boy from a farm would talk about cows while a boy from New York will talk about cars.",
+      "translation": "举例来说，来自农场的男孩可能会谈论奶牛，而来自纽约的男孩则会谈论汽车。",
+      "structure": [
+        {
+          "text": "For example",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "a young boy from a farm would talk about cows",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "while a boy from New York will talk about cars",
+          "role": "adverbial_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "while 在这里表示对比，而非当……时候。",
+        "would talk 与 will talk 分别对应两种假设情境下的习惯性行为。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "If two young children from different countries are asked about their thoughts about a painting, they would answer differently because of their cultural backgrounds.",
+      "translation": "如果询问来自不同国家的两个孩子对同一幅画的看法，他们的回答会因为各自的文化背景而有所不同。",
+      "structure": [
+        {
+          "text": "If two young children from different countries are asked about their thoughts about a painting",
+          "role": "conditional_clause",
+          "level": 1
+        },
+        {
+          "text": "two young children from different countries",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "are asked about their thoughts about a painting",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "they would answer differently",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "because of their cultural backgrounds",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "If 引导条件状语从句，被动语态 are asked 说明孩子是被询问的对象。",
+        "would answer 与前面的 if 从句构成假设关系，表示在该条件下会发生的情况。",
+        "because of 后接名词短语，说明回答不同的原因。"
+      ],
+      "expressions": [
+        {
+          "text": "because of",
+          "meaning_zh": "因为；由于"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "In recent years, there has been new research that changed this long-held belief; However, this new research is not the first to explore the idea that culture can change the way we think.",
+      "translation": "近年来出现了改变这一由来已久的观念的新研究；然而，这项新研究并不是第一个探讨文化能否改变我们思维方式这一问题的研究。",
+      "structure": [
+        {
+          "text": "In recent years",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "there has been new research",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that changed this long-held belief",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "However",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "this new research is not the first",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "to explore the idea that culture can change the way we think",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "that culture can change the way we think",
+          "role": "noun_clause",
+          "level": 3
+        },
+        {
+          "text": "we think",
+          "role": "relative_clause",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "分号连接两个相关但相对独立的分句，However 在此处虽居句中却仍起转折作用。",
+        "that changed this long-held belief 是定语从句，修饰 new research。",
+        "not the first to explore 表示并非第一个探讨……的研究，to explore 是不定式作后置定语。"
+      ],
+      "expressions": [
+        {
+          "text": "long-held belief",
+          "meaning_zh": "由来已久的观念"
+        },
+        {
+          "text": "not the first to do",
+          "meaning_zh": "并非第一个做某事的"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Earlier research has provided valuable insight to the question.",
+      "translation": "早期的研究已经为这一问题提供了有价值的见解。",
+      "structure": [
+        {
+          "text": "Earlier research",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has provided",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "valuable insight to the question",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "has provided 是现在完成时，强调早期研究的成果延续至今仍有价值。",
+        "insight to the question 意为对该问题的深刻见解。"
+      ],
+      "expressions": [
+        {
+          "text": "provide insight to",
+          "meaning_zh": "为……提供见解"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "One of the earliest research projects was carried out in the Soviet Union.",
+      "translation": "最早的研究项目之一是在苏联开展的。",
+      "structure": [
+        {
+          "text": "One of the earliest research projects",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was carried out",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in the Soviet Union",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "was carried out 是被动语态，强调研究项目被开展的事实。",
+        "One of the earliest 表示最早的……之一，暗示还有其他类似研究。"
+      ],
+      "expressions": [
+        {
+          "text": "carry out",
+          "meaning_zh": "开展；进行"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "This project was designed to find out whether culture would affect peopled way of thought processing.",
+      "translation": "这个项目旨在探究文化是否会影响人们的思维处理方式。",
+      "structure": [
+        {
+          "text": "This project",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was designed",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to find out whether culture would affect peopled way of thought processing",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "whether culture would affect peopled way of thought processing",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "was designed to do 表示旨在……，说明项目的目的。",
+        "whether 引导宾语从句，作 find out 的宾语，表示是否。",
+        "peopled way 为原文表述，相当于 people's way，指人们的方式。"
+      ],
+      "expressions": [
+        {
+          "text": "be designed to do",
+          "meaning_zh": "旨在做某事"
+        },
+        {
+          "text": "find out whether",
+          "meaning_zh": "查明是否……"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "The researchers focused on how living environment and nationality might influence how people think.",
+      "translation": "研究人员关注的是生活环境和国籍可能如何影响人们的思维方式。",
+      "structure": [
+        {
+          "text": "The researchers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "focused on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "how living environment and nationality might influence how people think",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "how people think",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "focus on 后接 how 引导的宾语从句，从句内部又嵌套了另一个 how 从句。",
+        "how living environment and nationality might influence 与 how people think 是两层嵌套的间接疑问结构。"
+      ],
+      "expressions": [
+        {
+          "text": "focus on",
+          "meaning_zh": "关注；聚焦于"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "The experiment led by Bessett aimed to question such awareness of cognitive psychology.",
+      "translation": "由贝塞特主导的这项实验旨在质疑认知心理学中的这种既有认知。",
+      "structure": [
+        {
+          "text": "The experiment",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "led by Bessett",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "aimed to question such awareness of cognitive psychology",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to question such awareness of cognitive psychology",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "led by Bessett 是过去分词短语，修饰 experiment，说明该实验由贝塞特主导。",
+        "aimed to do 表示以……为目标，to question 是目标内容。",
+        "such awareness 指代前文提到的关于文化影响思维的既有看法。"
+      ],
+      "expressions": [
+        {
+          "text": "aim to do",
+          "meaning_zh": "旨在做某事"
+        }
+      ]
+    },
+    {
+      "id": "C-07",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Bessett conducted several versions of the experiment to test different cognitive processes.",
+      "translation": "贝塞特进行了该实验的多个版本，以测试不同的认知过程。",
+      "structure": [
+        {
+          "text": "Bessett",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "conducted",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "several versions of the experiment",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "to test different cognitive processes",
+          "role": "non_finite_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "several versions of the experiment 指该实验的多种不同变体。",
+        "to test... 是目的状语，说明进行多个版本实验的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "conduct an experiment",
+          "meaning_zh": "开展实验"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "One experiment led by Bessett and Masuku showed an animated video picturing a big fish swimming among smaller fish and other sea creatures.",
+      "translation": "贝塞特和增田主持的一项实验展示了一段动画视频，画面中一条大鱼在小鱼和其他海洋生物间游动。",
+      "structure": [
+        {
+          "text": "One experiment",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "led by Bessett and Masuku",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "showed",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "an animated video",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "picturing a big fish swimming among smaller fish and other sea creatures",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "swimming among smaller fish and other sea creatures",
+          "role": "participial_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "led by Bessett and Masuku 是过去分词短语，修饰 experiment。",
+        "picturing... 是现在分词短语，修饰 video，说明视频画面的内容。",
+        "swimming among... 是现在分词短语，修饰 a big fish，说明大鱼的动作状态。"
+      ],
+      "expressions": [
+        {
+          "text": "picture sth doing sth",
+          "meaning_zh": "描绘某物做某事的画面"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "Subjects were asked to describe the scene.",
+      "translation": "受试者被要求描述这一场景。",
+      "structure": [
+        {
+          "text": "Subjects",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were asked",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to describe the scene",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "were asked to do 是被动语态，表示受试者被要求做某事。",
+        "the scene 指前面提到的动画视频画面。"
+      ],
+      "expressions": [
+        {
+          "text": "be asked to do",
+          "meaning_zh": "被要求做某事"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "The Japanese participants tended to focus on the aquatic background, such as the plants and colour of the water, as well as the relationship between the big and small fish.",
+      "translation": "日本受试者更倾向于关注水中背景，比如水中的植物和水的颜色，以及大鱼和小鱼之间的关系。",
+      "structure": [
+        {
+          "text": "The Japanese participants",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "tended to focus on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to focus on",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "the aquatic background",
+          "role": "object",
+          "level": 2
+        },
+        {
+          "text": "such as the plants and colour of the water",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "as well as the relationship between the big and small fish",
+          "role": "coordinated_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "tend to do 表示倾向于做某事，说明这是一种普遍趋势而非绝对规律。",
+        "such as 后列举背景元素的具体例子。",
+        "as well as 并列另一个关注对象——大鱼和小鱼之间的关系。"
+      ],
+      "expressions": [
+        {
+          "text": "tend to do",
+          "meaning_zh": "倾向于做某事"
+        },
+        {
+          "text": "as well as",
+          "meaning_zh": "以及；还有"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "American participants tended to focus on individual fishes, mainly the larger, more unique looking fish.",
+      "translation": "美国受试者则倾向于关注个体的鱼，主要是那条更大、外形更独特的鱼。",
+      "structure": [
+        {
+          "text": "American participants",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "tended to focus on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "individual fishes",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "mainly the larger, more unique looking fish",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "individual fishes 与前一句的 aquatic background 形成对比，强调个体而非整体。",
+        "mainly the larger, more unique looking fish 是对 individual fishes 的进一步说明，指具体是哪条鱼。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "The experiment suggested that members of Eastern cultures focus more on the overall picture, while members of Western culture focus more on the individuals.",
+      "translation": "该实验表明，东方文化中的人更关注整体画面，而西方文化中的人更关注个体。",
+      "structure": [
+        {
+          "text": "The experiment",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "suggested",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that members of Eastern cultures focus more on the overall picture, while members of Western culture focus more on the individuals",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "members of Eastern cultures focus more on the overall picture",
+          "role": "main_clause",
+          "level": 3
+        },
+        {
+          "text": "while members of Western culture focus more on the individuals",
+          "role": "adverbial_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "suggest that 表示表明、暗示，引出实验得出的结论。",
+        "while 在从句中表对比，连接东西方文化的不同关注点。"
+      ],
+      "expressions": [
+        {
+          "text": "suggest that",
+          "meaning_zh": "表明；暗示"
+        },
+        {
+          "text": "focus more on",
+          "meaning_zh": "更多关注……"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "In another experiment performed by Bessett and Choi, the subjects were presented with some very convincing evidence for a position.",
+      "translation": "在贝塞特和崔进行的另一项实验中，受试者被提供了一些非常有说服力的、支持某一立场的证据。",
+      "structure": [
+        {
+          "text": "In another experiment",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "performed by Bessett and Choi",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "the subjects were presented with some very convincing evidence for a position",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "performed by Bessett and Choi 修饰 experiment，说明实验的主持人。",
+        "were presented with 是被动语态，表示受试者被给予证据。",
+        "for a position 说明证据所支持的对象是某一立场。"
+      ],
+      "expressions": [
+        {
+          "text": "be presented with",
+          "meaning_zh": "被给予；被呈现"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "Both the Korean and the American showed strong support.",
+      "translation": "韩国受试者和美国受试者都表现出强烈的支持。",
+      "structure": [
+        {
+          "text": "Both the Korean and the American",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "showed",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "strong support",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Both...and... 并列两组受试者，强调他们最初的反应是一致的。",
+        "strong support 呼应上一句提到的有说服力的证据，为下文两者态度分化做铺垫。"
+      ],
+      "expressions": [
+        {
+          "text": "show support",
+          "meaning_zh": "表现出支持"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "And after they were given some evidence opposing the position, the Korean started to modified or decreased their support.",
+      "translation": "而在他们收到一些反对该立场的证据后，韩国受试者开始改变或降低自己的支持程度。",
+      "structure": [
+        {
+          "text": "And after they were given some evidence opposing the position",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "opposing the position",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "the Korean started to modified or decreased their support",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "after 引导时间状语从句，were given 是被动语态，表示受试者被给予反对证据。",
+        "opposing the position 是现在分词短语，修饰 evidence，说明证据的性质。",
+        "started to modified or decreased 为原文表述，意思上表示开始改变或降低支持。"
+      ],
+      "expressions": [
+        {
+          "text": "be given evidence",
+          "meaning_zh": "被给予证据"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "However, the American began to give more support to the former argument.",
+      "translation": "然而，美国受试者反而开始更加支持最初的观点。",
+      "structure": [
+        {
+          "text": "However",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "the American began to give more support to the former argument",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "However 表转折，与前一句韩国受试者的反应形成对比。",
+        "the former argument 指最初呈现给他们的、后来受到质疑的那个立场。"
+      ],
+      "expressions": [
+        {
+          "text": "give support to",
+          "meaning_zh": "支持"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "This project suggested that in Korean culture, support for arguments is based on context.",
+      "translation": "这项研究表明，在韩国文化中，对某一论点的支持是基于具体情境的。",
+      "structure": [
+        {
+          "text": "This project",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "suggested",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that in Korean culture, support for arguments is based on context",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "in Korean culture",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "support for arguments is based on context",
+          "role": "main_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，说明该项目得出的结论。",
+        "be based on 表示以……为基础，说明韩国文化中支持态度依赖具体情境。"
+      ],
+      "expressions": [
+        {
+          "text": "be based on",
+          "meaning_zh": "基于"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "Ideas and conclusions are changeable and flexible, so an individual may be more willing to change his or her mind.",
+      "translation": "观点和结论是可变且灵活的，因此个人可能更愿意改变自己的想法。",
+      "structure": [
+        {
+          "text": "Ideas and conclusions are changeable and flexible",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "so an individual may be more willing to change his or her mind",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "to change his or her mind",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "so 引导结果状语，说明观点可变带来的结果是人们更愿意改变想法。",
+        "be willing to do 表示愿意做某事。"
+      ],
+      "expressions": [
+        {
+          "text": "be willing to do",
+          "meaning_zh": "愿意做某事"
+        },
+        {
+          "text": "change one's mind",
+          "meaning_zh": "改变主意"
+        }
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "For Americans, they were less willing to change their original conclusion.",
+      "translation": "而对美国人来说，他们则不太愿意改变自己最初的结论。",
+      "structure": [
+        {
+          "text": "For Americans",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "they were less willing to change their original conclusion",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to change their original conclusion",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "For Americans 置于句首，与前面 Korean culture 的情况形成对比。",
+        "less willing to do 表示较不愿意做某事，与前句的 more willing 相呼应对比。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "Bessett and Ara devised an experiment to test the thought processing of both oriental and occidental worlds.",
+      "translation": "贝塞特和阿拉设计了一项实验，用以测试东方和西方世界的思维处理方式。",
+      "structure": [
+        {
+          "text": "Bessett and Ara",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "devised",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "an experiment",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "to test the thought processing of both oriental and occidental worlds",
+          "role": "non_finite_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "to test... 是不定式作目的状语，说明设计实验的目的。",
+        "both oriental and occidental worlds 并列指代东方与西方两种文化背景。"
+      ],
+      "expressions": [
+        {
+          "text": "devise an experiment",
+          "meaning_zh": "设计一项实验"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "Test subject was given an argument \"All animals with furs hibernate. Rabbit has fur. Therefore, rabbit hibernate\".",
+      "translation": "受试者被给出一个论证：“所有有毛皮的动物都会冬眠。兔子有毛皮。因此，兔子会冬眠。”",
+      "structure": [
+        {
+          "text": "Test subject was given an argument",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "\"All animals with furs hibernate. Rabbit has fur. Therefore, rabbit hibernate\"",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "was given 是被动语态，表示受试者被给予这个论证。",
+        "引号内是一个三段论：大前提、小前提、结论，用来测试受试者的逻辑判断。",
+        "rabbit hibernate 为原文表述，动词未加第三人称单数 -s。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "People from the eastern world questioned the argument as not being logical, because in their knowledge some furry animals just don't hibernate.",
+      "translation": "东方世界的人对这一论证的逻辑性提出质疑，因为在他们的认知中，有些毛皮动物并不冬眠。",
+      "structure": [
+        {
+          "text": "People from the eastern world",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "questioned",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the argument",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "as not being logical",
+          "role": "complement",
+          "level": 2
+        },
+        {
+          "text": "because in their knowledge some furry animals just don't hibernate",
+          "role": "adverbial_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "question...as not being logical 表示质疑……不合逻辑，as 引出质疑的具体内容。",
+        "because 引导原因状语从句，说明东方受试者质疑的依据。"
+      ],
+      "expressions": [
+        {
+          "text": "question sth as",
+          "meaning_zh": "质疑某事是……"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "But the American think the statement is right.",
+      "translation": "但美国受试者却认为这一说法是正确的。",
+      "structure": [
+        {
+          "text": "But",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "the American think",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "the statement is right",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "think 后省略了 that，直接接宾语从句 the statement is right。",
+        "the American 在这里作总称，指代美国受试者这一群体，故谓语用复数 think。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "They assume the logic deduction is based on a correct argument, thus the conclusion is right since the logic is right.",
+      "translation": "他们认为，只要逻辑推理建立在正确的论证之上，既然逻辑正确，那么结论就是正确的。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "assume",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the logic deduction is based on a correct argument",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "thus the conclusion is right",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "since the logic is right",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "assume 后省略 that，直接接宾语从句说明他们的假设。",
+        "thus 引出结果，since 引出原因，两者共同解释美国受试者的推理逻辑。"
+      ],
+      "expressions": [
+        {
+          "text": "be based on",
+          "meaning_zh": "基于"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "From these early experiments in the Soviet Union, one might conclude that our original premise— that culture can impact the way we think—was still correct.",
+      "translation": "从苏联的这些早期实验来看，人们或许会得出这样的结论：我们最初的前提——即文化能够影响我们的思维方式——依然是正确的。",
+      "structure": [
+        {
+          "text": "From these early experiments in the Soviet Union",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "one might conclude",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that our original premise— that culture can impact the way we think—was still correct",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "our original premise",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "that culture can impact the way we think",
+          "role": "apposition",
+          "level": 3
+        },
+        {
+          "text": "we think",
+          "role": "relative_clause",
+          "level": 4
+        },
+        {
+          "text": "was still correct",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that our original premise...was still correct 是宾语从句，中间用两个破折号插入同位语从句解释 premise 的具体内容。",
+        "that culture can impact the way we think 是插入的同位语从句，说明最初前提具体是什么。",
+        "one 泛指人们，might conclude 表示一种推测性的结论。"
+      ],
+      "expressions": [
+        {
+          "text": "conclude that",
+          "meaning_zh": "得出……的结论"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "However, recent research criticises this view, as well as Bessett's early experiments.",
+      "translation": "然而，近期的研究不仅批评了这一观点，也批评了贝塞特的早期实验。",
+      "structure": [
+        {
+          "text": "However",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "recent research criticises this view",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "as well as Bessett's early experiments",
+          "role": "coordinated_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "However 表转折，与上一句前提依然正确的说法相对立。",
+        "as well as 并列了 criticises 的第二个宾语，即贝塞特的早期实验。"
+      ],
+      "expressions": [
+        {
+          "text": "as well as",
+          "meaning_zh": "和；以及"
+        }
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 36,
+      "sentence": "Though these experiments changed the original belief on thought processing, how much does it result from all factors needs further discussion.",
+      "translation": "尽管这些实验改变了人们对思维处理方式的原有看法，但这一改变在多大程度上归因于所有相关因素，仍需进一步讨论。",
+      "structure": [
+        {
+          "text": "Though these experiments changed the original belief on thought processing",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "how much does it result from all factors",
+          "role": "noun_clause",
+          "level": 1
+        },
+        {
+          "text": "needs further discussion",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Though 引导让步状语从句，承认实验确实改变了原有看法。",
+        "how much does it result from all factors 作整个句子的主语，是一个名词性从句，原文保留了疑问语序而未转换为陈述语序。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 37,
+      "sentence": "Fischer thinks Bessett's experiments provide valuable information because his research only provides qualitative descriptions, not results from controlled environment.",
+      "translation": "费舍尔认为，贝塞特的实验提供了有价值的信息，因为他的研究只提供了定性描述，而非来自受控环境的结果。",
+      "structure": [
+        {
+          "text": "Fischer thinks",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "Bessett's experiments provide valuable information",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "because his research only provides qualitative descriptions, not results from controlled environment",
+          "role": "adverbial_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "thinks 后省略 that，直接接宾语从句。",
+        "because 引导原因状语从句，说明费舍尔如此评价的理由。",
+        "not results from controlled environment 与 qualitative descriptions 并列，说明研究结果的性质。"
+      ],
+      "expressions": [
+        {
+          "text": "qualitative description",
+          "meaning_zh": "定性描述"
+        },
+        {
+          "text": "controlled environment",
+          "meaning_zh": "受控环境"
+        }
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 38,
+      "sentence": "Chang partly agrees with him, because there are some social factors that might influence the results.",
+      "translation": "张部分同意他的观点，因为有一些社会因素可能会影响研究结果。",
+      "structure": [
+        {
+          "text": "Chang",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "partly agrees with him",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "because there are some social factors that might influence the results",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "that might influence the results",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "partly agrees with 表示部分同意，暗示张的态度并非完全赞同。",
+        "that might influence the results 是定语从句，修饰 social factors。"
+      ],
+      "expressions": [
+        {
+          "text": "partly agree with",
+          "meaning_zh": "部分同意"
+        }
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 39,
+      "sentence": "Another criticism of Bessett's experiments is that culture was studied as a sub-factor of nationality.",
+      "translation": "对贝塞特实验的另一项批评是，文化被当作国籍之下的一个子因素来研究。",
+      "structure": [
+        {
+          "text": "Another criticism of Bessett's experiments",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that culture was studied as a sub-factor of nationality",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that 引导表语从句，说明另一项批评的具体内容。",
+        "was studied as 是被动语态，表示文化被当作国籍的子因素来处理。"
+      ],
+      "expressions": [
+        {
+          "text": "a sub-factor of",
+          "meaning_zh": "……之下的一个子因素"
+        }
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 40,
+      "sentence": "The experiments assumed that culture would be the same among all members of a nationality.",
+      "translation": "这些实验假定，同一国籍的所有成员的文化都是相同的。",
+      "structure": [
+        {
+          "text": "The experiments",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "assumed",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that culture would be the same among all members of a nationality",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "assumed that 引出实验背后未经检验的假设。",
+        "the same among all members of 表示在……所有成员中都相同。"
+      ],
+      "expressions": [
+        {
+          "text": "assume that",
+          "meaning_zh": "假定；假设"
+        }
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 41,
+      "sentence": "For example, every American that participated in the experiments could be assumed to have the same culture.",
+      "translation": "例如，每一个参加实验的美国人都被假定拥有相同的文化。",
+      "structure": [
+        {
+          "text": "For example",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "every American",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "that participated in the experiments",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "could be assumed to have the same culture",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to have the same culture",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that participated in the experiments 是定语从句，修饰 every American。",
+        "could be assumed to do 是被动语态，表示被假定为……。"
+      ],
+      "expressions": [
+        {
+          "text": "be assumed to do",
+          "meaning_zh": "被假定为……"
+        }
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 42,
+      "sentence": "In reality, culture is much more complicated than nationality.",
+      "translation": "而实际上，文化远比国籍复杂得多。",
+      "structure": [
+        {
+          "text": "In reality",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "culture is much more complicated than nationality",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "In reality 与前面实验的假设形成对比，引出真实情况。",
+        "much more complicated than 是比较级的强调形式，much 加强比较程度。"
+      ],
+      "expressions": [
+        {
+          "text": "in reality",
+          "meaning_zh": "实际上"
+        }
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 43,
+      "sentence": "These early experiments did not control for other factors, such as socioeconomic status, education, ethnicity, and regional differences in culture.",
+      "translation": "这些早期实验没有控制其他因素，比如社会经济地位、教育、民族以及文化上的地区差异。",
+      "structure": [
+        {
+          "text": "These early experiments",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "did not control for",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "other factors",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "such as socioeconomic status, education, ethnicity, and regional differences in culture",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "control for 表示控制（变量），是实验设计中的常用术语。",
+        "such as 后列举四类未被控制的具体因素。"
+      ],
+      "expressions": [
+        {
+          "text": "control for",
+          "meaning_zh": "控制（某变量）"
+        }
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 44,
+      "sentence": "All of these factors could have a big effect on the individual's response.",
+      "translation": "所有这些因素都可能对个体的反应产生重大影响。",
+      "structure": [
+        {
+          "text": "All of these factors",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "could have a big effect on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the individual's response",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "could have a big effect on 表示可能会对……产生重大影响，could 表推测。",
+        "the individual's response 指前文实验中受试者对情境或论证做出的反应。"
+      ],
+      "expressions": [
+        {
+          "text": "have an effect on",
+          "meaning_zh": "对……产生影响"
+        }
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 45,
+      "sentence": "A third criticism of Bessett's experiment is that the content itself should have been more abstract, such as a puzzle or an IQ test.",
+      "translation": "对贝塞特实验的第三项批评是，实验内容本身应该更加抽象，例如采用谜题或智商测试。",
+      "structure": [
+        {
+          "text": "A third criticism of Bessett's experiment",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that the content itself should have been more abstract, such as a puzzle or an IQ test",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "should have been more abstract 是情态动词加完成时结构，表示对过去情况的批评性假设。",
+        "such as 后举例说明更抽象的内容可以是什么。"
+      ],
+      "expressions": [
+        {
+          "text": "should have done",
+          "meaning_zh": "本应该做而实际没做"
+        }
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 46,
+      "sentence": "With objective content, such as nature and animals, people from different countries of the world might have different pre-conceived ideas about these animals.",
+      "translation": "对于自然、动物这类客观内容，来自世界不同国家的人可能对这些动物本身就抱有不同的先入之见。",
+      "structure": [
+        {
+          "text": "With objective content",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "such as nature and animals",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "people from different countries of the world",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "might have different pre-conceived ideas about these animals",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "With objective content...置于句首作状语，说明讨论的对象是客观性内容。",
+        "pre-conceived ideas 指未经验证、事先形成的观念，即先入之见。"
+      ],
+      "expressions": [
+        {
+          "text": "pre-conceived idea",
+          "meaning_zh": "先入之见；成见"
+        }
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 47,
+      "sentence": "Prior knowledge based on geographic location would further complicate the results.",
+      "translation": "基于地理位置形成的已有认知会使结果进一步复杂化。",
+      "structure": [
+        {
+          "text": "Prior knowledge",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "based on geographic location",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "would further complicate the results",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "based on geographic location 是过去分词短语，修饰 prior knowledge，说明这种已有认知的来源。",
+        "complicate 在此为及物动词，表示使……复杂化。"
+      ],
+      "expressions": [
+        {
+          "text": "prior knowledge",
+          "meaning_zh": "已有认知；先验知识"
+        },
+        {
+          "text": "based on",
+          "meaning_zh": "基于"
+        }
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 48,
+      "sentence": "A test that is more abstract, or more quantitative, would provide a more controlled study of how cognitive processing works for different groups of people.",
+      "translation": "一项更抽象或更定量的测试，能够对不同人群的认知处理方式提供更具控制性的研究。",
+      "structure": [
+        {
+          "text": "A test",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "that is more abstract, or more quantitative",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "would provide a more controlled study of how cognitive processing works for different groups of people",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "how cognitive processing works for different groups of people",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that is more abstract, or more quantitative 是定语从句，修饰 test。",
+        "of how cognitive processing works...中 how 引导的从句作介词 of 的宾语，说明研究的具体内容。"
+      ],
+      "expressions": [
+        {
+          "text": "a controlled study",
+          "meaning_zh": "一项受控研究"
+        }
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 49,
+      "sentence": "The research on culture's effect on cognitive processing still goes on today, and while some criticisms exist of Bessett's early studies, the projects still provide valuable insight.",
+      "translation": "关于文化对认知加工影响的研究至今仍在继续，尽管针对贝塞特早期研究存在一些批评，但这些项目依然提供了有价值的见解。",
+      "structure": [
+        {
+          "text": "The research on culture's effect on cognitive processing",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "still goes on today",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and while some criticisms exist of Bessett's early studies",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "the projects still provide valuable insight",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "and 连接两个并列的分句，其中第二个分句内部又嵌套了 while 引导的让步状语从句。",
+        "while 在这里表示尽管、虽然，而非单纯的时间关系。",
+        "criticisms exist of...是不常见的语序，相当于 criticisms of...exist，即存在对……的批评。"
+      ],
+      "expressions": [
+        {
+          "text": "go on",
+          "meaning_zh": "继续"
+        },
+        {
+          "text": "provide valuable insight",
+          "meaning_zh": "提供有价值的见解"
+        }
+      ]
+    },
+    {
+      "id": "J-02",
+      "paragraph_label": "J",
+      "sentence_index": 50,
+      "sentence": "It is important for future research projects to control carefully for the variables, such as culture.",
+      "translation": "对于未来的研究项目而言，谨慎地控制变量（例如文化）非常重要。",
+      "structure": [
+        {
+          "text": "It is important",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "for future research projects",
+          "role": "complement",
+          "level": 2
+        },
+        {
+          "text": "to control carefully for the variables, such as culture",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It is important for sb to do 是形式主语结构，真正的主语是后面的不定式短语。",
+        "control for the variables 是实验研究中的固定表达，指控制变量。"
+      ],
+      "expressions": [
+        {
+          "text": "it is important for sb to do",
+          "meaning_zh": "对某人来说做某事很重要"
+        },
+        {
+          "text": "control for the variables",
+          "meaning_zh": "控制变量"
+        }
+      ]
+    },
+    {
+      "id": "J-03",
+      "paragraph_label": "J",
+      "sentence_index": 51,
+      "sentence": "Something like culture is complex and difficult to define.",
+      "translation": "像文化这样的东西是复杂的，也很难界定。",
+      "structure": [
+        {
+          "text": "Something like culture",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is complex and difficult to define",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to define",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "difficult to define 中不定式 to define 说明难具体难在哪里，即难以下定义。",
+        "Something like culture 是泛指表达，强调文化只是这类难以界定的变量之一。"
+      ],
+      "expressions": [
+        {
+          "text": "difficult to define",
+          "meaning_zh": "难以界定"
+        }
+      ]
+    },
+    {
+      "id": "J-04",
+      "paragraph_label": "J",
+      "sentence_index": 52,
+      "sentence": "It can also be influenced by many other variables, such as geography or education styles.",
+      "translation": "它还可能受到许多其他变量的影响，比如地理位置或教育方式。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can also be influenced by",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "many other variables",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "such as geography or education styles",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "it 指代前一句提到的 culture。",
+        "can also be influenced by 是被动语态，与前文形成呼应，进一步说明文化的复杂性。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "J-05",
+      "paragraph_label": "J",
+      "sentence_index": 53,
+      "sentence": "When studying a variable like culture, it is critical that the researcher create a clear definition for what is— and what is not—considered culture.",
+      "translation": "在研究文化这类变量时，研究者必须对什么被视为文化、什么不被视为文化给出清晰的界定，这一点至关重要。",
+      "structure": [
+        {
+          "text": "When studying a variable like culture",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "it is critical",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that the researcher create a clear definition for what is— and what is not—considered culture",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "what is— and what is not—considered culture",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "it is critical that...后接虚拟语气从句，谓语用 create 原形而非 creates。",
+        "what is—and what is not—considered culture 是并列的两个 what 从句，共同作 for 的宾语，中间用破折号插入说明。"
+      ],
+      "expressions": [
+        {
+          "text": "it is critical that",
+          "meaning_zh": "……是至关重要的"
+        }
+      ]
+    },
+    {
+      "id": "K-01",
+      "paragraph_label": "K",
+      "sentence_index": 54,
+      "sentence": "Another important aspect of modern research is the ethical impact of the research.",
+      "translation": "现代研究的另一个重要方面是研究本身的伦理影响。",
+      "structure": [
+        {
+          "text": "Another important aspect of modern research",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the ethical impact of the research",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "another important aspect of 引出讨论的新角度——研究伦理。",
+        "the research 在此指代前文讨论的关于文化与思维关系的整体研究领域。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "K-02",
+      "paragraph_label": "K",
+      "sentence_index": 55,
+      "sentence": "A researcher must consider carefully whether the results of the research will negatively impact any of the groups involved.",
+      "translation": "研究者必须仔细考虑，研究结果是否会对相关群体产生负面影响。",
+      "structure": [
+        {
+          "text": "A researcher",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "must consider carefully",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "whether the results of the research will negatively impact any of the groups involved",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "involved",
+          "role": "participial_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "whether 引导宾语从句，作 consider 的宾语。",
+        "involved 是过去分词，后置修饰 groups，表示涉及其中的群体。"
+      ],
+      "expressions": [
+        {
+          "text": "negatively impact",
+          "meaning_zh": "产生负面影响"
+        }
+      ]
+    },
+    {
+      "id": "K-03",
+      "paragraph_label": "K",
+      "sentence_index": 56,
+      "sentence": "In an increasingly globalised job economy, generalisations made about nationalities can be harmful to prospective employees.",
+      "translation": "在一个日益全球化的就业经济环境中，针对国籍所做的概括可能会对求职者造成伤害。",
+      "structure": [
+        {
+          "text": "In an increasingly globalised job economy",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "generalisations",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "made about nationalities",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "can be harmful to prospective employees",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "made about nationalities 是过去分词短语，修饰 generalisations，说明这些概括的对象是国籍。",
+        "be harmful to 表示对……有害。"
+      ],
+      "expressions": [
+        {
+          "text": "be harmful to",
+          "meaning_zh": "对……有害"
+        },
+        {
+          "text": "prospective employees",
+          "meaning_zh": "潜在的求职者/雇员"
+        }
+      ]
+    },
+    {
+      "id": "K-04",
+      "paragraph_label": "K",
+      "sentence_index": 57,
+      "sentence": "This information could also impact the way tests and university admissions standards are designed, which would potentially favor one group or create a disadvantage for another.",
+      "translation": "这类信息还可能影响测试和大学招生标准的设计方式，从而可能使某一群体受益，或使另一群体处于不利地位。",
+      "structure": [
+        {
+          "text": "This information",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "could also impact",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the way tests and university admissions standards are designed",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "tests and university admissions standards are designed",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "which would potentially favor one group or create a disadvantage for another",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "the way tests...are designed 中 the way 后省略了 that，直接接从句。",
+        "which 指代前面整个信息影响测试与招生标准设计方式这件事，而非单一名词。"
+      ],
+      "expressions": [
+        {
+          "text": "favor one group",
+          "meaning_zh": "使某一群体受益"
+        },
+        {
+          "text": "create a disadvantage for",
+          "meaning_zh": "使……处于不利地位"
+        }
+      ]
+    },
+    {
+      "id": "K-05",
+      "paragraph_label": "K",
+      "sentence_index": 58,
+      "sentence": "When conducting any research about culture and nationality, researchers should consider all possible effects, positive or negative, that their conclusions may have when published for the world to see.",
+      "translation": "在开展任何关于文化和国籍的研究时，研究者都应当考虑他们的结论一旦公之于众可能产生的所有影响，无论是积极的还是消极的。",
+      "structure": [
+        {
+          "text": "When conducting any research about culture and nationality",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "researchers should consider all possible effects",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "positive or negative",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "that their conclusions may have when published for the world to see",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "when published for the world to see",
+          "role": "adverbial_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "When conducting...是分词短语作时间状语，逻辑主语是 researchers。",
+        "that their conclusions may have...是定语从句，修饰 effects。",
+        "when published for the world to see 是省略了主语和 be 动词的状语从句，完整形式为 when they are published..."
+      ],
+      "expressions": [
+        {
+          "text": "conduct research about",
+          "meaning_zh": "开展关于……的研究"
+        }
+      ]
+    }
+  ]
+}

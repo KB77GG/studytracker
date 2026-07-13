@@ -1,0 +1,2106 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts18_test3_reading",
+  "passage_id": "ielts18_test3_p2",
+  "passage_title": "The steam car",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "When primitive automobiles first began to appear in the 1800s, their engines were based on steam power.",
+      "translation": "当早期汽车在19世纪最初出现时，它们的发动机是以蒸汽动力为基础的。",
+      "structure": [
+        {
+          "text": "When primitive automobiles first began to appear in the 1800s",
+          "role": "temporal_clause",
+          "level": 1
+        },
+        {
+          "text": "primitive automobiles",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "first began to appear",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "their engines",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were based on steam power",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，交代蒸汽动力汽车出现的历史阶段。",
+        "primitive automobiles 指早期、原始形态的汽车，不带贬义。",
+        "were based on 表示技术基础是 steam power。"
+      ],
+      "expressions": [
+        {
+          "text": "begin to appear",
+          "meaning_zh": "开始出现"
+        },
+        {
+          "text": "be based on",
+          "meaning_zh": "以……为基础"
+        },
+        {
+          "text": "steam power",
+          "meaning_zh": "蒸汽动力"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Steam had already enjoyed a long and successful career in the railways, so it was only natural that the technology evolved into a miniaturized version which was separate from the trains.",
+      "translation": "蒸汽技术已经在铁路领域有过漫长而成功的应用历程，因此这项技术发展成一种脱离火车的小型化版本，也就很自然了。",
+      "structure": [
+        {
+          "text": "Steam had already enjoyed a long and successful career in the railways",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "so it was only natural",
+          "role": "result_clause",
+          "level": 1
+        },
+        {
+          "text": "that the technology evolved into a miniaturized version",
+          "role": "subject_clause",
+          "level": 2
+        },
+        {
+          "text": "which was separate from the trains",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "had already enjoyed 使用过去完成时，说明蒸汽在铁路上的成功早于汽车应用。",
+        "so 连接因果关系，前面的成功历史解释后面的技术迁移。",
+        "it was only natural that... 中 it 是形式主语，that 从句是真正主语。",
+        "which 修饰 a miniaturized version，说明这种版本独立于火车。"
+      ],
+      "expressions": [
+        {
+          "text": "enjoy a long and successful career",
+          "meaning_zh": "有过漫长而成功的应用历程"
+        },
+        {
+          "text": "it was only natural that",
+          "meaning_zh": "……是很自然的"
+        },
+        {
+          "text": "evolve into",
+          "meaning_zh": "演变成"
+        },
+        {
+          "text": "miniaturized version",
+          "meaning_zh": "小型化版本"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "But these early cars inherited steam's weaknesses along with its strengths.",
+      "translation": "但是，这些早期汽车在继承蒸汽优点的同时，也继承了它的弱点。",
+      "structure": [
+        {
+          "text": "But",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "these early cars",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "inherited steam's weaknesses",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "along with its strengths",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "But 标示转折，从蒸汽技术的成功转向它在汽车上的局限。",
+        "steam's weaknesses 和 its strengths 形成对照，its 指 steam。",
+        "along with 表示“连同”，说明优点和缺点一起被继承。"
+      ],
+      "expressions": [
+        {
+          "text": "inherit weaknesses",
+          "meaning_zh": "继承弱点"
+        },
+        {
+          "text": "along with",
+          "meaning_zh": "连同；与……一起"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "The boilers had to be lit by hand, and they required about twenty minutes to build up pressure before they could be driven.",
+      "translation": "锅炉必须手动点燃，而且它们需要约二十分钟来积累压力，然后车辆才能开动。",
+      "structure": [
+        {
+          "text": "The boilers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had to be lit by hand",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and they required about twenty minutes",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "to build up pressure",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "before they could be driven",
+          "role": "temporal_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "had to be lit 是情态意义加被动语态，表示必须由人点燃锅炉。",
+        "to build up pressure 表目的，说明二十分钟等待时间的用途。",
+        "before they could be driven 中 they 指装有锅炉的汽车，而不是 boilers 本身。"
+      ],
+      "expressions": [
+        {
+          "text": "be lit by hand",
+          "meaning_zh": "手动点燃"
+        },
+        {
+          "text": "build up pressure",
+          "meaning_zh": "积累压力"
+        }
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "Furthermore, their water reservoirs only lasted for about thirty miles before needing replenishment.",
+      "translation": "此外，它们的储水箱只能支撑大约三十英里的行驶距离，之后就需要补水。",
+      "structure": [
+        {
+          "text": "Furthermore",
+          "role": "discourse_adverbial",
+          "level": 1
+        },
+        {
+          "text": "their water reservoirs",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "only lasted for about thirty miles",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "before needing replenishment",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Furthermore 表示递进，继续列举早期蒸汽车的缺点。",
+        "only lasted for about thirty miles 指储水量能支持的行驶里程有限。",
+        "before needing replenishment 是省略结构，完整含义是 before they needed replenishment。"
+      ],
+      "expressions": [
+        {
+          "text": "last for",
+          "meaning_zh": "持续；支撑"
+        },
+        {
+          "text": "need replenishment",
+          "meaning_zh": "需要补充"
+        }
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "Despite such shortcomings, these newly designed self-propelled carriages offered quick transportation, and by the early 1900s it was not uncommon to see such machines shuttling wealthy citizens around town.",
+      "translation": "尽管有这些缺点，这些新设计的自推进车厢仍提供了快捷交通；到20世纪初，看到这类机器载着富裕市民在城里往返已并不罕见。",
+      "structure": [
+        {
+          "text": "Despite such shortcomings",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "these newly designed self-propelled carriages",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "offered quick transportation",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and by the early 1900s it was not uncommon",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "to see such machines shuttling wealthy citizens around town",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Despite 引导让步性的介词短语，与 offered quick transportation 形成对比。",
+        "self-propelled carriages 指不靠马匹、能自行驱动的早期汽车。",
+        "it was not uncommon to see... 是形式主语结构，真正主语是不定式短语。",
+        "shuttling wealthy citizens around town 是现在分词短语，作 see 的宾语补足语。"
+      ],
+      "expressions": [
+        {
+          "text": "despite such shortcomings",
+          "meaning_zh": "尽管有这些缺点"
+        },
+        {
+          "text": "self-propelled carriages",
+          "meaning_zh": "自推进车厢；早期汽车"
+        },
+        {
+          "text": "it was not uncommon to",
+          "meaning_zh": "……并不罕见"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "But the glory days of steam cars were few.",
+      "translation": "但蒸汽车的辉煌时期并不长。",
+      "structure": [
+        {
+          "text": "But",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "the glory days of steam cars",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were few",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "But 承接上一段的早期流行，转向蒸汽车很快衰落。",
+        "glory days 表示鼎盛时期，而 few 表示数量少、时间短。",
+        "of steam cars 修饰 the glory days，限定是哪种技术的辉煌期。"
+      ],
+      "expressions": [
+        {
+          "text": "glory days",
+          "meaning_zh": "辉煌时期"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "A new technology called the Internal Combustion Engine soon appeared, which offered the ability to drive down the road just moments after starting up.",
+      "translation": "一种名为内燃机的新技术很快出现，它让车辆在启动后片刻就能上路行驶。",
+      "structure": [
+        {
+          "text": "A new technology",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "called the Internal Combustion Engine",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "soon appeared",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "which offered the ability to drive down the road just moments after starting up",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "called the Internal Combustion Engine 是过去分词短语，给 technology 命名。",
+        "which 引导非限制性定语从句，说明内燃机的优势。",
+        "just moments after starting up 强调启动后几乎马上可以行驶。"
+      ],
+      "expressions": [
+        {
+          "text": "internal combustion engine",
+          "meaning_zh": "内燃机"
+        },
+        {
+          "text": "offer the ability to",
+          "meaning_zh": "提供做……的能力"
+        },
+        {
+          "text": "just moments after",
+          "meaning_zh": "仅在……片刻之后"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "At first, these noisy gasoline cars were unpopular because they were more complicated to operate and they had difficult hand-crank starters, which were known to break arms when the engines backfired.",
+      "translation": "起初，这些嘈杂的汽油车并不受欢迎，因为它们操作更复杂，而且配有难用的手摇启动器；这种启动器在发动机回火时会折断人的手臂，是出了名的。",
+      "structure": [
+        {
+          "text": "At first",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "these noisy gasoline cars were unpopular",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "because they were more complicated to operate and they had difficult hand-crank starters",
+          "role": "causal_clause",
+          "level": 2
+        },
+        {
+          "text": "which were known to break arms",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "when the engines backfired",
+          "role": "temporal_clause",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "because 从句列出汽油车最初不受欢迎的两个原因。",
+        "more complicated to operate 中不定式说明 complicated 的方面。",
+        "which 指 difficult hand-crank starters，而不是 gasoline cars。",
+        "when the engines backfired 说明手摇启动器伤人的触发条件。"
+      ],
+      "expressions": [
+        {
+          "text": "at first",
+          "meaning_zh": "起初"
+        },
+        {
+          "text": "be complicated to operate",
+          "meaning_zh": "操作复杂"
+        },
+        {
+          "text": "be known to",
+          "meaning_zh": "以……闻名；据知会……"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "But in 1912 General Motors introduced the electric starter, and over the following few years steam power was gradually phased out.",
+      "translation": "但在1912年，通用汽车推出了电启动器；在随后的几年里，蒸汽动力逐渐被淘汰。",
+      "structure": [
+        {
+          "text": "But in 1912",
+          "role": "discourse_adverbial",
+          "level": 1
+        },
+        {
+          "text": "General Motors",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "introduced the electric starter",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and over the following few years steam power was gradually phased out",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "But 表示转折，电启动器解决了汽油车手摇启动的问题。",
+        "over the following few years 表示变化发生在接下来几年中。",
+        "was gradually phased out 是被动语态，说明蒸汽动力逐步退出市场。"
+      ],
+      "expressions": [
+        {
+          "text": "electric starter",
+          "meaning_zh": "电启动器"
+        },
+        {
+          "text": "over the following few years",
+          "meaning_zh": "在随后的几年里"
+        },
+        {
+          "text": "be phased out",
+          "meaning_zh": "被逐步淘汰"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Even as the market was declining, four brothers made one last effort to rekindle the technology.",
+      "translation": "即使市场正在衰退，四兄弟仍作出最后一次努力，试图重振这项技术。",
+      "structure": [
+        {
+          "text": "Even as the market was declining",
+          "role": "concessive_clause",
+          "level": 1
+        },
+        {
+          "text": "four brothers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "made one last effort",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to rekindle the technology",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Even as 引导让步和时间背景，表示市场衰退之时仍有人尝试。",
+        "made one last effort 表示最后一次努力，暗示此前蒸汽车已接近被淘汰。",
+        "to rekindle the technology 表目的，rekindle 比喻重新激活或复兴技术。"
+      ],
+      "expressions": [
+        {
+          "text": "the market was declining",
+          "meaning_zh": "市场正在衰退"
+        },
+        {
+          "text": "make one last effort",
+          "meaning_zh": "作最后一次努力"
+        },
+        {
+          "text": "rekindle the technology",
+          "meaning_zh": "重振这项技术"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "Between 1906 and 1909, while still attending high school, Abner Doble and his three brothers built their first steam car in their parents' basement.",
+      "translation": "1906年至1909年间，Abner Doble 和他的三个兄弟还在上高中时，就在父母家的地下室里制造出了第一辆蒸汽车。",
+      "structure": [
+        {
+          "text": "Between 1906 and 1909",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "while still attending high school",
+          "role": "temporal_clause",
+          "level": 1
+        },
+        {
+          "text": "Abner Doble and his three brothers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "built their first steam car",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in their parents' basement",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "while still attending high school 是省略结构，完整意思是 while they were still attending high school。",
+        "主语由 Abner Doble and his three brothers 组成，是四兄弟共同完成。",
+        "in their parents' basement 表明制造地点，突出其早期实验性质。"
+      ],
+      "expressions": [
+        {
+          "text": "while still attending",
+          "meaning_zh": "仍在……期间"
+        },
+        {
+          "text": "build their first steam car",
+          "meaning_zh": "制造他们的第一辆蒸汽车"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "It comprised parts taken from a wrecked early steam car but reconfigured to drive an engine of their own design.",
+      "translation": "它由取自一辆早期报废蒸汽车的零件组成，但经过重新配置，用来驱动他们自己设计的发动机。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "comprised parts",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "taken from a wrecked early steam car",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "but reconfigured to drive an engine of their own design",
+          "role": "contrastive_participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "of their own design",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "It 指代上一句的 first steam car。",
+        "taken from... 是过去分词短语，修饰 parts。",
+        "reconfigured 与 taken 并列，说明零件来源于旧车但被重新配置。",
+        "of their own design 修饰 engine，强调发动机是他们自己设计的。"
+      ],
+      "expressions": [
+        {
+          "text": "parts taken from",
+          "meaning_zh": "取自……的零件"
+        },
+        {
+          "text": "be reconfigured to",
+          "meaning_zh": "被重新配置以……"
+        },
+        {
+          "text": "of their own design",
+          "meaning_zh": "由他们自己设计的"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "Though it did not run well, the Doble brothers went on to build a second and third prototype in the following years.",
+      "translation": "尽管它运行得并不好，Doble 兄弟在接下来的几年里继续制造了第二和第三辆原型车。",
+      "structure": [
+        {
+          "text": "Though it did not run well",
+          "role": "concessive_clause",
+          "level": 1
+        },
+        {
+          "text": "the Doble brothers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "went on to build a second and third prototype",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in the following years",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Though 引导让步状语从句，说明第一辆车效果不好并未阻止后续尝试。",
+        "went on to build 表示继续做下一步，而不是简单地“走上去”。",
+        "a second and third prototype 表示第二辆和第三辆原型车。"
+      ],
+      "expressions": [
+        {
+          "text": "run well",
+          "meaning_zh": "运行良好"
+        },
+        {
+          "text": "go on to build",
+          "meaning_zh": "继续建造"
+        },
+        {
+          "text": "prototype",
+          "meaning_zh": "原型车；原型"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "Though the Doble boys' third prototype, nicknamed the Model B, still lacked the convenience of an internal combustion engine, it drew the attention of automobile trade magazines due to its numerous improvements over previous steam cars.",
+      "translation": "尽管 Doble 兄弟的第三辆原型车，也就是被昵称为 Model B 的车，仍缺少内燃机的便利性，但它凭借相较以往蒸汽车的诸多改进，吸引了汽车行业杂志的注意。",
+      "structure": [
+        {
+          "text": "Though the Doble boys' third prototype, nicknamed the Model B, still lacked the convenience of an internal combustion engine",
+          "role": "concessive_clause",
+          "level": 1
+        },
+        {
+          "text": "nicknamed the Model B",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "it drew the attention of automobile trade magazines",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "due to its numerous improvements over previous steam cars",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Though 引导让步从句，承认 Model B 仍不如内燃机方便。",
+        "nicknamed the Model B 是插入的过去分词短语，补充说明第三辆原型车的名称。",
+        "it 指 the Doble boys' third prototype，而不是 internal combustion engine。",
+        "due to 引出吸引行业杂志注意的原因。"
+      ],
+      "expressions": [
+        {
+          "text": "lack the convenience of",
+          "meaning_zh": "缺少……的便利性"
+        },
+        {
+          "text": "draw the attention of",
+          "meaning_zh": "吸引……的注意"
+        },
+        {
+          "text": "due to",
+          "meaning_zh": "由于"
+        },
+        {
+          "text": "improvements over",
+          "meaning_zh": "相较于……的改进"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "The Model B proved to be superior to gasoline automobiles in many ways.",
+      "translation": "事实证明，Model B 在许多方面优于汽油汽车。",
+      "structure": [
+        {
+          "text": "The Model B",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "proved to be superior to gasoline automobiles",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in many ways",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "proved to be 表示后来显示出某种特征，不是“证明去做”。",
+        "superior to 表示优于，to 是固定搭配中的介词。",
+        "in many ways 概括后文将展开的多个优势。"
+      ],
+      "expressions": [
+        {
+          "text": "prove to be",
+          "meaning_zh": "证明是；显示出是"
+        },
+        {
+          "text": "be superior to",
+          "meaning_zh": "优于"
+        },
+        {
+          "text": "in many ways",
+          "meaning_zh": "在许多方面"
+        }
+      ]
+    },
+    {
+      "id": "C-07",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Its high-pressure steam drove the engine pistons in virtual silence, in contrast to clattering gas engines which emitted the aroma of burned hydrocarbons.",
+      "translation": "它的高压蒸汽几乎无声地驱动发动机活塞，这与发出咔嗒声并散发燃烧烃类气味的汽油发动机形成了对比。",
+      "structure": [
+        {
+          "text": "Its high-pressure steam",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "drove the engine pistons in virtual silence",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in contrast to clattering gas engines",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "which emitted the aroma of burned hydrocarbons",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Its 指 Model B 的，说明其蒸汽系统的特点。",
+        "in virtual silence 表示几乎无声，是蒸汽车相对汽油车的优势。",
+        "in contrast to 引出对比对象 clattering gas engines。",
+        "which 修饰 gas engines，说明汽油发动机还会散发燃烧气味。"
+      ],
+      "expressions": [
+        {
+          "text": "high-pressure steam",
+          "meaning_zh": "高压蒸汽"
+        },
+        {
+          "text": "in virtual silence",
+          "meaning_zh": "几乎无声地"
+        },
+        {
+          "text": "in contrast to",
+          "meaning_zh": "与……形成对比"
+        }
+      ]
+    },
+    {
+      "id": "C-08",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "Perhaps most impressively, the Model B was amazingly swift.",
+      "translation": "也许最令人印象深刻的是，Model B 的速度快得惊人。",
+      "structure": [
+        {
+          "text": "Perhaps most impressively",
+          "role": "sentence_adverbial",
+          "level": 1
+        },
+        {
+          "text": "the Model B",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was amazingly swift",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Perhaps most impressively 对整句进行评价，提示这是最突出的优势之一。",
+        "amazingly 修饰 swift，强调速度超出预期。",
+        "swift 在这里表示车辆速度快，而不是动作敏捷。"
+      ],
+      "expressions": [
+        {
+          "text": "perhaps most impressively",
+          "meaning_zh": "也许最令人印象深刻的是"
+        },
+        {
+          "text": "amazingly swift",
+          "meaning_zh": "快得惊人"
+        }
+      ]
+    },
+    {
+      "id": "C-09",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "It could accelerate from zero to sixty miles per hour in just fifteen seconds, a feat described as 'remarkable acceleration' by Automobile magazine in 1914.",
+      "translation": "它能在短短十五秒内从零加速到每小时六十英里，这一成就被《Automobile》杂志在1914年称为“非凡的加速”。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "could accelerate from zero to sixty miles per hour",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in just fifteen seconds",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "a feat described as 'remarkable acceleration' by Automobile magazine in 1914",
+          "role": "apposition",
+          "level": 1
+        },
+        {
+          "text": "described as 'remarkable acceleration'",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指 Model B。",
+        "from zero to sixty miles per hour 表示速度从零到时速六十英里的变化范围。",
+        "a feat 是前面加速能力的同位语，概括这件成就。",
+        "described as... by Automobile magazine 是过去分词短语，说明该成就如何被评价。"
+      ],
+      "expressions": [
+        {
+          "text": "accelerate from zero to",
+          "meaning_zh": "从零加速到"
+        },
+        {
+          "text": "in just fifteen seconds",
+          "meaning_zh": "仅用十五秒"
+        },
+        {
+          "text": "be described as",
+          "meaning_zh": "被描述为"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "The following year Abner Doble drove the Model B from Massachusetts to Detroit in order to seek investment in his automobile design, which he used to open the General Engineering Company.",
+      "translation": "第二年，Abner Doble 驾驶 Model B 从马萨诸塞前往底特律，以便为自己的汽车设计寻求投资；他用这笔投资开办了 General Engineering Company。",
+      "structure": [
+        {
+          "text": "The following year",
+          "role": "noun_phrase_adverbial",
+          "level": 1
+        },
+        {
+          "text": "Abner Doble",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "drove the Model B from Massachusetts to Detroit",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in order to seek investment in his automobile design",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "which he used to open the General Engineering Company",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "The following year 指前文 1914 年之后的一年。",
+        "from Massachusetts to Detroit 表示长途展示和寻求投资的路线。",
+        "in order to 引出明确目的，即 seek investment。",
+        "which 指 investment，而不是 automobile design。"
+      ],
+      "expressions": [
+        {
+          "text": "the following year",
+          "meaning_zh": "第二年"
+        },
+        {
+          "text": "in order to",
+          "meaning_zh": "为了"
+        },
+        {
+          "text": "seek investment in",
+          "meaning_zh": "为……寻求投资"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "He and his brothers immediately began working on the Model C, which was intended to expand upon the innovations of the Model B.",
+      "translation": "他和兄弟们随即开始研发 Model C，这款车旨在扩展 Model B 的创新。",
+      "structure": [
+        {
+          "text": "He and his brothers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "immediately began working on the Model C",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "which was intended to expand upon the innovations of the Model B",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "He 指 Abner Doble。",
+        "began working on 表示开始研发或改进某个型号。",
+        "which 引导非限制性定语从句，说明 Model C 的设计目的。",
+        "expand upon 表示在 Model B 的创新基础上进一步发展。"
+      ],
+      "expressions": [
+        {
+          "text": "begin working on",
+          "meaning_zh": "开始研发；开始从事"
+        },
+        {
+          "text": "be intended to",
+          "meaning_zh": "旨在"
+        },
+        {
+          "text": "expand upon",
+          "meaning_zh": "在……基础上扩展"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "The brothers added features such as a key-based ignition in the cabin, eliminating the need for the operator to manually ignite the boiler.",
+      "translation": "兄弟们增加了一些功能，比如驾驶舱内的钥匙式点火装置，从而消除了驾驶者手动点燃锅炉的需要。",
+      "structure": [
+        {
+          "text": "The brothers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "added features",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "such as a key-based ignition in the cabin",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "eliminating the need for the operator to manually ignite the boiler",
+          "role": "participial_phrase",
+          "level": 1
+        },
+        {
+          "text": "for the operator to manually ignite the boiler",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "such as 引出新增功能的例子。",
+        "key-based ignition in the cabin 指驾驶舱内可用钥匙启动的点火系统。",
+        "eliminating... 是现在分词结果状语，说明新增功能带来的效果。",
+        "for the operator to manually ignite the boiler 是 need 的具体内容。"
+      ],
+      "expressions": [
+        {
+          "text": "features such as",
+          "meaning_zh": "诸如……的功能"
+        },
+        {
+          "text": "eliminate the need for",
+          "meaning_zh": "消除……的需要"
+        },
+        {
+          "text": "manually ignite",
+          "meaning_zh": "手动点燃"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "With these enhancements, the Dobles' new car company promised a steam vehicle which would provide all of the convenience of a gasoline car, but with much greater speed, much simpler driving controls, and a virtually silent powerplant.",
+      "translation": "凭借这些改进，Doble 家族的新汽车公司承诺推出一种蒸汽车，它能提供汽油车的全部便利，同时拥有更高速度、更简单的驾驶控制和几乎无声的动力装置。",
+      "structure": [
+        {
+          "text": "With these enhancements",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Dobles' new car company",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "promised a steam vehicle",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "which would provide all of the convenience of a gasoline car",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "but with much greater speed, much simpler driving controls, and a virtually silent powerplant",
+          "role": "contrastive_prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "With these enhancements 表示凭借前面新增的改进功能。",
+        "which 修饰 a steam vehicle，说明公司承诺的车辆具备哪些特点。",
+        "but with... 不是转向缺点，而是在汽油车便利之外增加更多优势。",
+        "much greater、much simpler 和 virtually silent 构成并列卖点。"
+      ],
+      "expressions": [
+        {
+          "text": "with these enhancements",
+          "meaning_zh": "凭借这些改进"
+        },
+        {
+          "text": "provide all of the convenience of",
+          "meaning_zh": "提供……的全部便利"
+        },
+        {
+          "text": "driving controls",
+          "meaning_zh": "驾驶控制装置"
+        },
+        {
+          "text": "virtually silent",
+          "meaning_zh": "几乎无声的"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "By the following April, the General Engineering Company had received 5,390 deposits for Doble Detroits, which were scheduled for delivery in early 1918.",
+      "translation": "到次年四月，General Engineering Company 已收到 5,390 笔 Doble Detroit 的订金，这些车辆计划在1918年初交付。",
+      "structure": [
+        {
+          "text": "By the following April",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the General Engineering Company",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had received 5,390 deposits for Doble Detroits",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "which were scheduled for delivery in early 1918",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "By the following April 与过去完成时 had received 搭配，表示到某时间点已经完成的累计结果。",
+        "deposits for Doble Detroits 指购买该车型的订金。",
+        "which 修饰 Doble Detroits，说明这些车的预计交付时间。",
+        "were scheduled for delivery 是被动语态，表示被安排交付。"
+      ],
+      "expressions": [
+        {
+          "text": "by the following April",
+          "meaning_zh": "到次年四月"
+        },
+        {
+          "text": "receive deposits for",
+          "meaning_zh": "收到……的订金"
+        },
+        {
+          "text": "be scheduled for delivery",
+          "meaning_zh": "计划交付"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "Later that year Abner Doble delivered unhappy news to those eagerly awaiting the delivery of their modern new cars.",
+      "translation": "那年晚些时候，Abner Doble 向那些急切等待现代新车交付的人传达了令人不快的消息。",
+      "structure": [
+        {
+          "text": "Later that year",
+          "role": "noun_phrase_adverbial",
+          "level": 1
+        },
+        {
+          "text": "Abner Doble",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "delivered unhappy news",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to those eagerly awaiting the delivery of their modern new cars",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "eagerly awaiting the delivery of their modern new cars",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Later that year 承接上一段的时间线，指订单大量出现后的同一年晚些时候。",
+        "delivered unhappy news 中 delivered 表示传达消息，不是交付车辆。",
+        "those eagerly awaiting... 指等待交车的买家。",
+        "awaiting 是现在分词，后置修饰 those。"
+      ],
+      "expressions": [
+        {
+          "text": "deliver news to",
+          "meaning_zh": "向……传达消息"
+        },
+        {
+          "text": "eagerly awaiting",
+          "meaning_zh": "急切等待"
+        },
+        {
+          "text": "the delivery of",
+          "meaning_zh": "……的交付"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "Those buyers who received the handful of completed cars complained that the vehicles were sluggish and erratic, sometimes going in reverse when they should go forward.",
+      "translation": "那些收到少数几辆完工车辆的买家抱怨说，这些车迟缓且不稳定，有时本该前进却倒退。",
+      "structure": [
+        {
+          "text": "Those buyers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who received the handful of completed cars",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "complained",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that the vehicles were sluggish and erratic",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "sometimes going in reverse when they should go forward",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "when they should go forward",
+          "role": "temporal_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "who 引导定语从句修饰 Those buyers，限定为少数收到车的人。",
+        "the handful of completed cars 表示完工车辆数量很少。",
+        "that 从句是 complained 的内容。",
+        "sometimes going in reverse... 是补充说明车辆 erratic 的具体表现。"
+      ],
+      "expressions": [
+        {
+          "text": "a handful of",
+          "meaning_zh": "少数；一小批"
+        },
+        {
+          "text": "sluggish and erratic",
+          "meaning_zh": "迟缓且不稳定"
+        },
+        {
+          "text": "go in reverse",
+          "meaning_zh": "倒退；倒车"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "The new engine design, though innovative, was still plagued with serious glitches.",
+      "translation": "这种新的发动机设计虽然有创新性，但仍受到严重故障的困扰。",
+      "structure": [
+        {
+          "text": "The new engine design",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "though innovative",
+          "role": "concessive_phrase",
+          "level": 1
+        },
+        {
+          "text": "was still plagued with serious glitches",
+          "role": "passive_verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "though innovative 是省略结构，完整意思是 though it was innovative。",
+        "still 表示问题在创新设计中依然存在。",
+        "was plagued with 使用被动语态，强调设计受严重故障困扰。"
+      ],
+      "expressions": [
+        {
+          "text": "though innovative",
+          "meaning_zh": "虽然有创新性"
+        },
+        {
+          "text": "be plagued with",
+          "meaning_zh": "受到……困扰"
+        },
+        {
+          "text": "serious glitches",
+          "meaning_zh": "严重故障"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "The brothers made one final attempt to produce a viable steam automobile.",
+      "translation": "兄弟们最后一次尝试生产一种可行的蒸汽汽车。",
+      "structure": [
+        {
+          "text": "The brothers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "made one final attempt",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to produce a viable steam automobile",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "one final attempt 表示最后一次努力，呼应前文多次原型尝试。",
+        "to produce... 表目的，说明尝试的目标。",
+        "viable 表示技术和商业上可行，而不仅是“能动”。"
+      ],
+      "expressions": [
+        {
+          "text": "make one final attempt",
+          "meaning_zh": "作最后一次尝试"
+        },
+        {
+          "text": "viable steam automobile",
+          "meaning_zh": "可行的蒸汽汽车"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "In early 1924, the Doble brothers shipped a Model E to New York City to be road-tested by the Automobile Club of America.",
+      "translation": "1924年初，Doble 兄弟将一辆 Model E 运往纽约市，由美国汽车俱乐部进行道路测试。",
+      "structure": [
+        {
+          "text": "In early 1924",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Doble brothers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "shipped a Model E to New York City",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to be road-tested by the Automobile Club of America",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "shipped 表示运送车辆，不是“航运公司”的意思。",
+        "to be road-tested 是被动不定式，说明运往纽约的目的。",
+        "by the Automobile Club of America 指测试的执行方。"
+      ],
+      "expressions": [
+        {
+          "text": "be road-tested",
+          "meaning_zh": "接受道路测试"
+        },
+        {
+          "text": "ship ... to",
+          "meaning_zh": "把……运往"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "After sitting overnight in freezing temperatures, the car was pushed out into the road and left to sit for over an hour in the frosty morning air.",
+      "translation": "在严寒中停放了一整夜后，这辆车被推到路上，并被留在寒冷的清晨空气中静置了一个多小时。",
+      "structure": [
+        {
+          "text": "After sitting overnight in freezing temperatures",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the car",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was pushed out into the road",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and left to sit for over an hour in the frosty morning air",
+          "role": "coordinated_passive_verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "After sitting... 是省略结构，逻辑主语是 the car。",
+        "was pushed out 和 left to sit 是并列被动动作。",
+        "freezing temperatures 与 frosty morning air 都强调测试条件寒冷。",
+        "for over an hour 表示静置持续时间超过一小时。"
+      ],
+      "expressions": [
+        {
+          "text": "freezing temperatures",
+          "meaning_zh": "严寒温度"
+        },
+        {
+          "text": "be pushed out into",
+          "meaning_zh": "被推到……中"
+        },
+        {
+          "text": "left to sit",
+          "meaning_zh": "被留下静置"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "At the turn of the key, the boiler lit and reached its operating pressure inside of forty seconds.",
+      "translation": "钥匙一转，锅炉便点燃，并在四十秒内达到工作压力。",
+      "structure": [
+        {
+          "text": "At the turn of the key",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the boiler",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "lit and reached its operating pressure",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "inside of forty seconds",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "At the turn of the key 表示钥匙一转时，强调启动简便。",
+        "lit 和 reached 是并列谓语，描述锅炉启动和达到压力。",
+        "inside of forty seconds 表示不到或在四十秒内，与早期二十分钟形成对比。"
+      ],
+      "expressions": [
+        {
+          "text": "at the turn of the key",
+          "meaning_zh": "钥匙一转"
+        },
+        {
+          "text": "operating pressure",
+          "meaning_zh": "工作压力"
+        },
+        {
+          "text": "inside of forty seconds",
+          "meaning_zh": "在四十秒内"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "As they drove the test vehicle further, they found that its evenly distributed weight lent it surprisingly good handling, even though it was so heavy.",
+      "translation": "随着他们进一步驾驶这辆测试车，他们发现，尽管它很重，但其均匀分布的重量使它具备出人意料的良好操控性。",
+      "structure": [
+        {
+          "text": "As they drove the test vehicle further",
+          "role": "temporal_clause",
+          "level": 1
+        },
+        {
+          "text": "they found",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that its evenly distributed weight lent it surprisingly good handling",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "even though it was so heavy",
+          "role": "concessive_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "As 引导时间从句，表示在进一步试驾过程中发现问题或优点。",
+        "that 从句作 found 的宾语，说明具体发现。",
+        "lent it surprisingly good handling 中 lent 表示“赋予”，it 指测试车。",
+        "even though 引导让步从句，突出车重却操控良好。"
+      ],
+      "expressions": [
+        {
+          "text": "evenly distributed weight",
+          "meaning_zh": "均匀分布的重量"
+        },
+        {
+          "text": "lend it good handling",
+          "meaning_zh": "赋予它良好操控性"
+        },
+        {
+          "text": "even though",
+          "meaning_zh": "尽管"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "As the new Doble steamer was further developed and tested, its maximum speed was pushed to over a hundred miles per hour, and it achieved about fifteen miles per gallon of kerosene with negligible emissions.",
+      "translation": "随着新的 Doble 蒸汽车被进一步开发和测试，它的最高速度被提高到每小时一百多英里，并且每加仑煤油可行驶约十五英里，排放量微乎其微。",
+      "structure": [
+        {
+          "text": "As the new Doble steamer was further developed and tested",
+          "role": "temporal_clause",
+          "level": 1
+        },
+        {
+          "text": "its maximum speed was pushed to over a hundred miles per hour",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and it achieved about fifteen miles per gallon of kerosene",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "with negligible emissions",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "As 引导时间从句，表示开发测试推进的过程中性能提升。",
+        "was pushed to 是被动语态，指最高速度被提升到某水平。",
+        "it achieved about fifteen miles per gallon of kerosene 说明燃油经济性。",
+        "with negligible emissions 补充说明排放量很低。"
+      ],
+      "expressions": [
+        {
+          "text": "be further developed and tested",
+          "meaning_zh": "被进一步开发和测试"
+        },
+        {
+          "text": "maximum speed",
+          "meaning_zh": "最高速度"
+        },
+        {
+          "text": "miles per gallon",
+          "meaning_zh": "每加仑英里数"
+        },
+        {
+          "text": "negligible emissions",
+          "meaning_zh": "微乎其微的排放"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "Sadly, the Dobles' brilliant steam car never was a financial success.",
+      "translation": "遗憾的是，Doble 家族这款出色的蒸汽车从未在财务上取得成功。",
+      "structure": [
+        {
+          "text": "Sadly",
+          "role": "sentence_adverbial",
+          "level": 1
+        },
+        {
+          "text": "the Dobles' brilliant steam car",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "never was a financial success",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Sadly 对整句进行评价，提示技术成功与商业失败之间的反差。",
+        "never was 强调从未达到财务成功。",
+        "financial success 指商业或盈利层面的成功，而不是技术表现。"
+      ],
+      "expressions": [
+        {
+          "text": "financial success",
+          "meaning_zh": "财务成功；商业成功"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "Priced at around $18,000 in 1924, it was popular only among the very wealthy.",
+      "translation": "它在1924年的定价约为18,000美元，因此只在非常富有的人群中受欢迎。",
+      "structure": [
+        {
+          "text": "Priced at around $18,000 in 1924",
+          "role": "participial_phrase",
+          "level": 1
+        },
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was popular only among the very wealthy",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Priced at... 是过去分词短语，说明车辆价格背景。",
+        "it 指 Doble 的 steam car。",
+        "only among the very wealthy 解释其市场狭窄的原因。"
+      ],
+      "expressions": [
+        {
+          "text": "priced at around",
+          "meaning_zh": "定价约为"
+        },
+        {
+          "text": "the very wealthy",
+          "meaning_zh": "非常富有的人"
+        }
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 36,
+      "sentence": "Plus, it is said that no two Model Es were quite the same, because Abner Doble tinkered endlessly with the design.",
+      "translation": "此外，据说没有两辆 Model E 是完全相同的，因为 Abner Doble 对设计进行了无休止的修改。",
+      "structure": [
+        {
+          "text": "Plus",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "it is said",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "that no two Model Es were quite the same",
+          "role": "subject_clause",
+          "level": 2
+        },
+        {
+          "text": "because Abner Doble tinkered endlessly with the design",
+          "role": "causal_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Plus 表示补充另一个商业上难以成功的原因。",
+        "it is said that 是被动报道结构，表示“据说”。",
+        "no two Model Es were quite the same 表示没有两辆车完全相同。",
+        "because 从句解释差异大的原因是设计被不断调整。"
+      ],
+      "expressions": [
+        {
+          "text": "it is said that",
+          "meaning_zh": "据说"
+        },
+        {
+          "text": "no two ... were quite the same",
+          "meaning_zh": "没有两个……完全相同"
+        },
+        {
+          "text": "tinker endlessly with",
+          "meaning_zh": "无休止地修修补补"
+        }
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 37,
+      "sentence": "By the time the company folded in 1931, fewer than fifty of the amazing Model E steam cars had been produced.",
+      "translation": "到公司在1931年倒闭时，这款令人惊叹的 Model E 蒸汽车总共生产还不到五十辆。",
+      "structure": [
+        {
+          "text": "By the time the company folded in 1931",
+          "role": "temporal_clause",
+          "level": 1
+        },
+        {
+          "text": "fewer than fifty of the amazing Model E steam cars",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had been produced",
+          "role": "passive_verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "By the time 引导时间从句，与过去完成被动 had been produced 搭配。",
+        "folded 在这里指公司倒闭或停业。",
+        "fewer than fifty 强调产量极低。",
+        "had been produced 是过去完成被动，说明到倒闭前累计生产数量。"
+      ],
+      "expressions": [
+        {
+          "text": "by the time",
+          "meaning_zh": "到……的时候"
+        },
+        {
+          "text": "the company folded",
+          "meaning_zh": "公司倒闭"
+        },
+        {
+          "text": "fewer than fifty",
+          "meaning_zh": "少于五十"
+        }
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 38,
+      "sentence": "For his whole career, until his death in 1961, Abner Doble remained adamant that steam-powered automobiles were at least equal to gasoline cars, if not superior.",
+      "translation": "在整个职业生涯中，直到1961年去世，Abner Doble 都坚定认为蒸汽动力汽车至少与汽油车相当，甚至可能更胜一筹。",
+      "structure": [
+        {
+          "text": "For his whole career",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "until his death in 1961",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "Abner Doble",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "remained adamant",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that steam-powered automobiles were at least equal to gasoline cars",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "if not superior",
+          "role": "elliptical_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "For his whole career 和 until his death in 1961 共同强调他长期坚持这一看法。",
+        "remained adamant 表示一直坚定不移。",
+        "that 从句说明他坚持的观点。",
+        "if not superior 是省略结构，意思是“如果不是更优的话”。"
+      ],
+      "expressions": [
+        {
+          "text": "for his whole career",
+          "meaning_zh": "在整个职业生涯中"
+        },
+        {
+          "text": "remain adamant that",
+          "meaning_zh": "坚持认为"
+        },
+        {
+          "text": "at least equal to",
+          "meaning_zh": "至少与……相当"
+        },
+        {
+          "text": "if not superior",
+          "meaning_zh": "如果不是更好的话"
+        }
+      ]
+    },
+    {
+      "id": "G-06",
+      "paragraph_label": "G",
+      "sentence_index": 39,
+      "sentence": "Given the evidence, he may have been right.",
+      "translation": "考虑到这些证据，他也许是对的。",
+      "structure": [
+        {
+          "text": "Given the evidence",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "he",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "may have been right",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Given the evidence 表示“考虑到证据”，引出作者的判断基础。",
+        "he 指 Abner Doble。",
+        "may have been right 表示对过去观点的可能性判断。"
+      ],
+      "expressions": [
+        {
+          "text": "given the evidence",
+          "meaning_zh": "考虑到证据"
+        },
+        {
+          "text": "may have been right",
+          "meaning_zh": "也许当时是对的"
+        }
+      ]
+    },
+    {
+      "id": "G-07",
+      "paragraph_label": "G",
+      "sentence_index": 40,
+      "sentence": "Many of the Model E Dobles which have survived are still in good working condition, some having been driven over half a million miles with only normal maintenance.",
+      "translation": "许多保存下来的 Model E Doble 仍处于良好工作状态，其中有些只经过正常维护就已经行驶了五十多万英里。",
+      "structure": [
+        {
+          "text": "Many of the Model E Dobles",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "which have survived",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "are still in good working condition",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "some having been driven over half a million miles with only normal maintenance",
+          "role": "absolute_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "which have survived 修饰 Model E Dobles，指保存至今的车辆。",
+        "are still in good working condition 强调这些旧车仍能正常运转。",
+        "some having been driven... 是独立主格结构，补充说明其中一些车的行驶里程。",
+        "with only normal maintenance 表示不需要特殊维护。"
+      ],
+      "expressions": [
+        {
+          "text": "be in good working condition",
+          "meaning_zh": "处于良好工作状态"
+        },
+        {
+          "text": "over half a million miles",
+          "meaning_zh": "超过五十万英里"
+        },
+        {
+          "text": "normal maintenance",
+          "meaning_zh": "正常维护"
+        }
+      ]
+    },
+    {
+      "id": "G-08",
+      "paragraph_label": "G",
+      "sentence_index": 41,
+      "sentence": "Astonishingly, an unmodified Doble Model E runs clean enough to pass the emissions laws in California today, and they are pretty strict.",
+      "translation": "令人惊讶的是，一辆未经改装的 Doble Model E 如今运行得足够清洁，可以通过加州的排放法规，而这些法规相当严格。",
+      "structure": [
+        {
+          "text": "Astonishingly",
+          "role": "sentence_adverbial",
+          "level": 1
+        },
+        {
+          "text": "an unmodified Doble Model E",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "runs clean enough to pass the emissions laws in California today",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to pass the emissions laws in California today",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "and they are pretty strict",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Astonishingly 表示作者对这辆老车排放表现的惊讶。",
+        "unmodified 表示未经现代改装，突出原始技术本身的清洁程度。",
+        "clean enough to pass 是 enough to 结构，表示清洁程度足以通过法规。",
+        "they 指 the emissions laws in California，而不是车辆。"
+      ],
+      "expressions": [
+        {
+          "text": "clean enough to pass",
+          "meaning_zh": "足够清洁以通过"
+        },
+        {
+          "text": "emissions laws",
+          "meaning_zh": "排放法规"
+        },
+        {
+          "text": "pretty strict",
+          "meaning_zh": "相当严格"
+        }
+      ]
+    },
+    {
+      "id": "G-09",
+      "paragraph_label": "G",
+      "sentence_index": 42,
+      "sentence": "It is true that the technology poses some difficult problems, but you cannot help but wonder how efficient a steam car might be with the benefit of modern materials and computers.",
+      "translation": "诚然，这项技术带来一些难题，但人们不禁会想，如果有现代材料和计算机的帮助，蒸汽车可能会有多高效。",
+      "structure": [
+        {
+          "text": "It is true",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that the technology poses some difficult problems",
+          "role": "subject_clause",
+          "level": 2
+        },
+        {
+          "text": "but you cannot help but wonder",
+          "role": "contrastive_clause",
+          "level": 1
+        },
+        {
+          "text": "how efficient a steam car might be",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "with the benefit of modern materials and computers",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It is true that... 先承认蒸汽技术确实存在难题。",
+        "but 引出转折，作者认为仍值得想象其现代潜力。",
+        "cannot help but wonder 是固定结构，表示“不禁想知道”。",
+        "how efficient a steam car might be 是 wonder 的宾语从句，使用陈述语序。"
+      ],
+      "expressions": [
+        {
+          "text": "pose difficult problems",
+          "meaning_zh": "带来难题"
+        },
+        {
+          "text": "cannot help but wonder",
+          "meaning_zh": "不禁想知道"
+        },
+        {
+          "text": "with the benefit of",
+          "meaning_zh": "借助；得益于"
+        }
+      ]
+    },
+    {
+      "id": "G-10",
+      "paragraph_label": "G",
+      "sentence_index": 43,
+      "sentence": "Under the current pressure to improve automotive performance and reduce emissions, it is not unthinkable that the steam car may rise again.",
+      "translation": "在当前提升汽车性能并减少排放的压力下，蒸汽车可能再次兴起并非不可想象。",
+      "structure": [
+        {
+          "text": "Under the current pressure to improve automotive performance and reduce emissions",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "to improve automotive performance and reduce emissions",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "it is not unthinkable",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that the steam car may rise again",
+          "role": "subject_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Under the current pressure 表示在当前行业压力背景下。",
+        "to improve... and reduce... 修饰 pressure，说明压力来自两个目标。",
+        "it is not unthinkable that... 使用形式主语，真正主语是 that 从句。",
+        "may rise again 呼应文章开头蒸汽车曾经兴起，暗示未来可能复兴。"
+      ],
+      "expressions": [
+        {
+          "text": "under the current pressure",
+          "meaning_zh": "在当前压力下"
+        },
+        {
+          "text": "automotive performance",
+          "meaning_zh": "汽车性能"
+        },
+        {
+          "text": "reduce emissions",
+          "meaning_zh": "减少排放"
+        },
+        {
+          "text": "rise again",
+          "meaning_zh": "再次兴起"
+        }
+      ]
+    }
+  ]
+}

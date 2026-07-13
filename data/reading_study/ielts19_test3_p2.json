@@ -1,0 +1,1031 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts19_test3_reading",
+  "passage_id": "ielts19_test3_p2",
+  "passage_title": "The global importance of wetlands",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Wetlands are areas where water covers the soil, or is present either at or near the surface of the soil, for all or part of the year.",
+      "translation": "湿地是指水覆盖土壤，或在一年中的全部或部分时间里出现在土壤表面或近表面的区域。",
+      "structure": [
+        {"text": "Wetlands", "role": "subject", "level": 1},
+        {"text": "are areas", "role": "verb_phrase", "level": 1},
+        {"text": "where water covers the soil, or is present either at or near the surface of the soil", "role": "relative_clause", "level": 2},
+        {"text": "for all or part of the year", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "where 引导定语从句，说明 areas 的具体特征。",
+        "covers 和 is present 是并列谓语，共同描述水在湿地中的存在方式。",
+        "either at or near the surface of the soil 表示“在土壤表面或近表面”两种位置。"
+      ],
+      "expressions": [
+        {"text": "be present", "meaning_zh": "存在；出现"},
+        {"text": "for all or part of the year", "meaning_zh": "在一年中的全部或部分时间里"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "These are complex ecosystems, rich in unique plant and animal life.",
+      "translation": "这些地方是复杂的生态系统，拥有独特而丰富的动植物生命。",
+      "structure": [
+        {"text": "These", "role": "subject", "level": 1},
+        {"text": "are complex ecosystems", "role": "main_clause", "level": 1},
+        {"text": "rich in unique plant and animal life", "role": "adjective_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "These 指代上一句中的 wetlands。",
+        "rich in unique plant and animal life 是形容词短语，补充说明 ecosystems 的特征。"
+      ],
+      "expressions": [
+        {"text": "complex ecosystems", "meaning_zh": "复杂的生态系统"},
+        {"text": "rich in", "meaning_zh": "富含；盛产"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "But according to the World Wide Fund for Nature (WWF), half of the world's wetlands have disappeared since 1990 - converted or destroyed for commercial development, drainage schemes and the extraction of minerals and peat*.",
+      "translation": "但根据世界自然基金会（WWF）的说法，自1990年以来，世界上一半的湿地已经消失，它们被改造或破坏，用于商业开发、排水工程以及矿物和泥炭的开采。",
+      "structure": [
+        {"text": "according to the World Wide Fund for Nature (WWF)", "role": "prepositional_phrase", "level": 1},
+        {"text": "half of the world's wetlands", "role": "subject", "level": 1},
+        {"text": "have disappeared since 1990", "role": "verb_phrase", "level": 1},
+        {"text": "converted or destroyed for commercial development, drainage schemes and the extraction of minerals and peat*", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "according to 短语交代信息来源，不是句子主干。",
+        "现在完成时 have disappeared 强调湿地从1990年至今已经发生的损失。",
+        "converted or destroyed 是过去分词短语，解释这些湿地消失的方式和原因。"
+      ],
+      "expressions": [
+        {"text": "according to", "meaning_zh": "根据"},
+        {"text": "commercial development", "meaning_zh": "商业开发"},
+        {"text": "the extraction of minerals", "meaning_zh": "矿物开采"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Many of those that remain have been damaged by agricultural pesticides and fertilizers, industrial pollutants, and construction works.",
+      "translation": "许多剩余的湿地也已经受到农业杀虫剂和化肥、工业污染物以及建筑工程的破坏。",
+      "structure": [
+        {"text": "Many of those that remain", "role": "subject", "level": 1},
+        {"text": "that remain", "role": "relative_clause", "level": 2},
+        {"text": "have been damaged", "role": "verb_phrase", "level": 1},
+        {"text": "by agricultural pesticides and fertilizers, industrial pollutants, and construction works", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "those 指代仍然存在的 wetlands。",
+        "that remain 是定语从句，限定“仍保留下来的那些湿地”。",
+        "have been damaged 是现在完成被动语态，强调破坏已经造成。"
+      ],
+      "expressions": [
+        {"text": "those that remain", "meaning_zh": "剩余的那些"},
+        {"text": "be damaged by", "meaning_zh": "受到……破坏"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Throughout history, humans have gathered around wetlands, and their fertile ecosystems have played an important part in human development.",
+      "translation": "纵观历史，人类一直聚居在湿地周围，而湿地肥沃的生态系统在人类发展中发挥了重要作用。",
+      "structure": [
+        {"text": "Throughout history", "role": "prepositional_phrase", "level": 1},
+        {"text": "humans have gathered around wetlands", "role": "main_clause", "level": 1},
+        {"text": "and their fertile ecosystems have played an important part in human development", "role": "coordinated_clause", "level": 1},
+        {"text": "in human development", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Throughout history 表示时间范围，强调这种关系贯穿历史。",
+        "their fertile ecosystems 中的 their 指 wetlands。",
+        "played an important part in 表示“在……中发挥重要作用”。"
+      ],
+      "expressions": [
+        {"text": "throughout history", "meaning_zh": "纵观历史"},
+        {"text": "play an important part in", "meaning_zh": "在……中发挥重要作用"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Consequently, they are of considerable religious, historical and archaeological value to many communities around the world.",
+      "translation": "因此，对世界各地许多社区来说，湿地具有相当大的宗教、历史和考古价值。",
+      "structure": [
+        {"text": "Consequently", "role": "linking_adverb", "level": 1},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "are of considerable religious, historical and archaeological value", "role": "verb_phrase", "level": 1},
+        {"text": "to many communities around the world", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Consequently 表示结果，承接上一句湿地与人类发展的关系。",
+        "they 指代 wetlands。",
+        "be of value 等于 be valuable，这里用名词 value 强调价值类型。"
+      ],
+      "expressions": [
+        {"text": "be of considerable value", "meaning_zh": "具有相当大的价值"},
+        {"text": "around the world", "meaning_zh": "世界各地"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "\"Wetlands directly support the livelihoods and well-being of millions of people,\" says Dr Matthew McCartney, principal researcher and hydrologist at the International Water Management Institute (IWMI).",
+      "translation": "国际水管理研究所（IWMI）的首席研究员兼水文学家 Matthew McCartney 博士说：“湿地直接支撑着数百万人的生计和福祉。”",
+      "structure": [
+        {"text": "Wetlands directly support the livelihoods and well-being of millions of people", "role": "quoted_clause", "level": 1},
+        {"text": "says Dr Matthew McCartney", "role": "reporting_clause", "level": 1},
+        {"text": "principal researcher and hydrologist at the International Water Management Institute (IWMI)", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "引号中的内容是直接引语，says 后面给出说话者。",
+        "principal researcher and hydrologist 是 Dr Matthew McCartney 的同位语，说明其身份。",
+        "livelihoods and well-being 不只指收入，也包括生活福祉。"
+      ],
+      "expressions": [
+        {"text": "support the livelihoods", "meaning_zh": "支撑生计"},
+        {"text": "well-being", "meaning_zh": "福祉；健康幸福"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "\"In many developing countries, large numbers of people are dependent on wetland agriculture for their livelihoods.\"",
+      "translation": "“在许多发展中国家，大量人口依靠湿地农业谋生。”",
+      "structure": [
+        {"text": "In many developing countries", "role": "prepositional_phrase", "level": 1},
+        {"text": "large numbers of people", "role": "subject", "level": 1},
+        {"text": "are dependent on wetland agriculture", "role": "verb_phrase", "level": 1},
+        {"text": "for their livelihoods", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "large numbers of 强调人数很多，后接复数 people。",
+        "be dependent on 表示依赖某物来维持生活。",
+        "for their livelihoods 说明依赖湿地农业的目的和原因。"
+      ],
+      "expressions": [
+        {"text": "large numbers of", "meaning_zh": "大量的"},
+        {"text": "be dependent on", "meaning_zh": "依赖于"},
+        {"text": "for their livelihoods", "meaning_zh": "为了维持生计"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "They also serve a crucial environmental purpose.",
+      "translation": "湿地还发挥着至关重要的环境作用。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "also serve", "role": "verb_phrase", "level": 1},
+        {"text": "a crucial environmental purpose", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "They 继续指代 wetlands。",
+        "serve a purpose 表示“起作用、达到某种目的”，不是“服务某人”。"
+      ],
+      "expressions": [
+        {"text": "serve a purpose", "meaning_zh": "发挥作用；具有用途"},
+        {"text": "crucial environmental purpose", "meaning_zh": "至关重要的环境作用"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "\"Wetlands are one of the key tools in mitigating climate change across the planet,\" says Pieter van Eijk, head of Climate Adaptation at Wetlands International (WI), pointing to their use as buffers that protect coastal areas from sea-level rise and extreme weather events such as hurricanes and flooding.",
+      "translation": "国际湿地组织（WI）气候适应部门负责人 Pieter van Eijk 说：“湿地是全球缓解气候变化的关键工具之一。”他指出，湿地可作为缓冲区，保护沿海地区免受海平面上升以及飓风、洪水等极端天气事件的影响。",
+      "structure": [
+        {"text": "Wetlands are one of the key tools in mitigating climate change across the planet", "role": "quoted_clause", "level": 1},
+        {"text": "says Pieter van Eijk", "role": "reporting_clause", "level": 1},
+        {"text": "head of Climate Adaptation at Wetlands International (WI)", "role": "apposition", "level": 2},
+        {"text": "pointing to their use as buffers", "role": "participial_phrase", "level": 2},
+        {"text": "that protect coastal areas from sea-level rise and extreme weather events such as hurricanes and flooding", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "one of the key tools 后接 in mitigating，说明湿地在减缓气候变化中的作用。",
+        "pointing to 是现在分词短语，补充说明 Pieter van Eijk 提到的具体用途。",
+        "that 引导定语从句，修饰 buffers，说明缓冲区保护沿海地区免受哪些威胁。"
+      ],
+      "expressions": [
+        {"text": "one of the key tools", "meaning_zh": "关键工具之一"},
+        {"text": "mitigating climate change", "meaning_zh": "减缓气候变化"},
+        {"text": "protect ... from ...", "meaning_zh": "保护……免受……"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Wetland coastal forests provide food and water, as well as shelter from storms, and WI and other agencies are working to restore those forests which have been lost.",
+      "translation": "湿地沿海森林提供食物和水，也提供躲避风暴的庇护；国际湿地组织和其他机构正在努力恢复那些已经消失的森林。",
+      "structure": [
+        {"text": "Wetland coastal forests provide food and water, as well as shelter from storms", "role": "main_clause", "level": 1},
+        {"text": "as well as shelter from storms", "role": "coordinated_phrase", "level": 2},
+        {"text": "and WI and other agencies are working to restore those forests", "role": "coordinated_clause", "level": 1},
+        {"text": "which have been lost", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "as well as 连接 food and water 与 shelter，表示额外提供的功能。",
+        "are working to restore 表示正在采取行动恢复森林。",
+        "which have been lost 修饰 those forests，说明恢复对象是已经消失的森林。"
+      ],
+      "expressions": [
+        {"text": "as well as", "meaning_zh": "以及；也"},
+        {"text": "work to restore", "meaning_zh": "努力恢复"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "\"It can be as simple as planting a few trees per hectare to create shade and substantially change a microclimate,\" he says.",
+      "translation": "他说：“这可以简单到每公顷种几棵树，以形成阴凉并显著改变微气候。”",
+      "structure": [
+        {"text": "It can be as simple as planting a few trees per hectare", "role": "quoted_clause", "level": 1},
+        {"text": "to create shade and substantially change a microclimate", "role": "non_finite_clause", "level": 2},
+        {"text": "he says", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "It 指代恢复湿地森林或实施气候项目的做法。",
+        "as simple as 强调措施可能并不复杂。",
+        "to create shade and substantially change a microclimate 是目的不定式，说明种树的效果。"
+      ],
+      "expressions": [
+        {"text": "as simple as", "meaning_zh": "简单到……程度"},
+        {"text": "substantially change", "meaning_zh": "显著改变"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "\"Implementing climate change projects isn't so much about money.\"",
+      "translation": "“实施气候变化项目并不主要是钱的问题。”",
+      "structure": [
+        {"text": "Implementing climate change projects", "role": "subject", "level": 1},
+        {"text": "isn't so much about money", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Implementing climate change projects 是动名词短语作主语。",
+        "isn't so much about money 表示重点不在于资金，而暗示行动方式同样关键。"
+      ],
+      "expressions": [
+        {"text": "implement projects", "meaning_zh": "实施项目"},
+        {"text": "not so much about", "meaning_zh": "并不主要关乎"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "The world's wetlands are, unfortunately, rich sources for in-demand commodities, such as palm oil and pulpwood.",
+      "translation": "不幸的是，全球湿地是棕榈油和纸浆木材等热门商品的重要来源。",
+      "structure": [
+        {"text": "The world's wetlands", "role": "subject", "level": 1},
+        {"text": "are, unfortunately, rich sources for in-demand commodities", "role": "verb_phrase", "level": 1},
+        {"text": "such as palm oil and pulpwood", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "unfortunately 是插入语，体现作者对湿地被开发的负面态度。",
+        "rich sources for 表示湿地能提供大量相关商品资源。",
+        "such as 后列举 in-demand commodities 的例子。"
+      ],
+      "expressions": [
+        {"text": "rich sources for", "meaning_zh": "……的丰富来源"},
+        {"text": "in-demand commodities", "meaning_zh": "需求旺盛的商品"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "Peatlands - wetlands with a waterlogged organic soil layer - are particularly targeted.",
+      "translation": "泥炭地——即带有积水有机土层的湿地——尤其成为被开发的目标。",
+      "structure": [
+        {"text": "Peatlands", "role": "subject", "level": 1},
+        {"text": "wetlands with a waterlogged organic soil layer", "role": "apposition", "level": 2},
+        {"text": "are particularly targeted", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "两个连字符之间的内容解释 Peatlands 是什么。",
+        "are targeted 是被动语态，表示泥炭地被产业开发盯上。",
+        "particularly 强调泥炭地比其他湿地更容易成为目标。"
+      ],
+      "expressions": [
+        {"text": "be particularly targeted", "meaning_zh": "尤其成为目标"},
+        {"text": "waterlogged organic soil layer", "meaning_zh": "积水有机土层"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "When peatlands are drained for cultivation, they become net carbon emitters instead of active carbon stores, and, according to Marcel Silvius, head of Climate-smart Land-use at WI, this practice causes six per cent of all global carbon emissions.",
+      "translation": "当泥炭地被排水用于耕种时，它们会从活跃的碳储存地变成净碳排放源；据国际湿地组织气候智能型土地利用负责人 Marcel Silvius 所说，这种做法造成了全球碳排放总量的6%。",
+      "structure": [
+        {"text": "When peatlands are drained for cultivation", "role": "adverbial_clause", "level": 1},
+        {"text": "they become net carbon emitters instead of active carbon stores", "role": "main_clause", "level": 1},
+        {"text": "according to Marcel Silvius", "role": "prepositional_phrase", "level": 1},
+        {"text": "head of Climate-smart Land-use at WI", "role": "apposition", "level": 2},
+        {"text": "this practice causes six per cent of all global carbon emissions", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，说明泥炭地被排水耕种后的结果。",
+        "instead of 对比 net carbon emitters 和 active carbon stores，突出功能反转。",
+        "this practice 指前面“给泥炭地排水用于耕种”的做法。"
+      ],
+      "expressions": [
+        {"text": "drained for cultivation", "meaning_zh": "排水后用于耕种"},
+        {"text": "net carbon emitters", "meaning_zh": "净碳排放源"},
+        {"text": "carbon stores", "meaning_zh": "碳储存地"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "The clearance of peatlands for planting also increases the risk of forest fires, which release huge amounts of CO2.",
+      "translation": "为种植而清理泥炭地还会增加森林火灾的风险，而森林火灾会释放大量二氧化碳。",
+      "structure": [
+        {"text": "The clearance of peatlands for planting", "role": "subject", "level": 1},
+        {"text": "also increases the risk of forest fires", "role": "verb_phrase", "level": 1},
+        {"text": "which release huge amounts of CO2", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "The clearance of peatlands for planting 是名词短语作主语。",
+        "which 指代 forest fires，而不是 peatlands。",
+        "also 表明这是除碳排放之外的另一项后果。"
+      ],
+      "expressions": [
+        {"text": "increase the risk of", "meaning_zh": "增加……的风险"},
+        {"text": "release huge amounts of", "meaning_zh": "释放大量……"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "\"We're seeing huge peatland forests with extremely high biodiversity value being lost for a few decades of oil palm revenues,\" says Silvius.",
+      "translation": "Silvius 说：“我们看到，具有极高生物多样性价值的大片泥炭地森林，正为了几十年的油棕收益而消失。”",
+      "structure": [
+        {"text": "We're seeing huge peatland forests with extremely high biodiversity value being lost", "role": "quoted_clause", "level": 1},
+        {"text": "with extremely high biodiversity value", "role": "prepositional_phrase", "level": 2},
+        {"text": "being lost for a few decades of oil palm revenues", "role": "participial_phrase", "level": 2},
+        {"text": "says Silvius", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "seeing 后接复合宾语，huge peatland forests 是宾语，being lost 描述其正在消失的状态。",
+        "with extremely high biodiversity value 修饰 peatland forests。",
+        "for a few decades of oil palm revenues 表示牺牲森林换取短期经济收益。"
+      ],
+      "expressions": [
+        {"text": "biodiversity value", "meaning_zh": "生物多样性价值"},
+        {"text": "oil palm revenues", "meaning_zh": "油棕收益"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "The damage starts when logging companies arrive to clear the trees.",
+      "translation": "当伐木公司到来清除树木时，破坏就开始了。",
+      "structure": [
+        {"text": "The damage", "role": "subject", "level": 1},
+        {"text": "starts", "role": "verb_phrase", "level": 1},
+        {"text": "when logging companies arrive to clear the trees", "role": "adverbial_clause", "level": 2},
+        {"text": "to clear the trees", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "when 引导时间状语从句，说明破坏开始的时间点。",
+        "to clear the trees 是目的不定式，说明伐木公司到来的目的。",
+        "The damage 承接前文泥炭地开发造成的破坏。"
+      ],
+      "expressions": [
+        {"text": "logging companies", "meaning_zh": "伐木公司"},
+        {"text": "clear the trees", "meaning_zh": "清除树木"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "They dig ditches to enter the peat swamps by boat and then float the logs out the same way.",
+      "translation": "他们挖沟渠，以便乘船进入泥炭沼泽，然后用同样的方式把原木漂运出去。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "dig ditches", "role": "verb_phrase", "level": 1},
+        {"text": "to enter the peat swamps by boat", "role": "non_finite_clause", "level": 2},
+        {"text": "and then float the logs out the same way", "role": "coordinated_verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "They 指代 logging companies。",
+        "to enter the peat swamps by boat 表示挖沟的目的。",
+        "the same way 指通过这些沟渠和水路把木材运出。"
+      ],
+      "expressions": [
+        {"text": "dig ditches", "meaning_zh": "挖沟渠"},
+        {"text": "the same way", "meaning_zh": "以同样的方式"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "These are then used to drain water out of the peatlands to allow for the planting of corn, oil palms or pulpwood trees.",
+      "translation": "随后，这些沟渠被用来把水从泥炭地中排出，以便种植玉米、油棕或纸浆木材树种。",
+      "structure": [
+        {"text": "These", "role": "subject", "level": 1},
+        {"text": "are then used", "role": "verb_phrase", "level": 1},
+        {"text": "to drain water out of the peatlands", "role": "non_finite_clause", "level": 2},
+        {"text": "to allow for the planting of corn, oil palms or pulpwood trees", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "These 指上一句挖出的 ditches。",
+        "are used to drain 是被动结构，说明沟渠的新用途。",
+        "to allow for 表示排水的进一步目的：使种植成为可能。"
+      ],
+      "expressions": [
+        {"text": "drain water out of", "meaning_zh": "把水从……排出"},
+        {"text": "allow for", "meaning_zh": "使……成为可能；允许"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "Once the water has drained away, bacteria and fungi then break down the carbon in the peat and turn it into CO2 and methane.",
+      "translation": "一旦水被排走，细菌和真菌就会分解泥炭中的碳，并将其转化为二氧化碳和甲烷。",
+      "structure": [
+        {"text": "Once the water has drained away", "role": "adverbial_clause", "level": 1},
+        {"text": "bacteria and fungi", "role": "subject", "level": 1},
+        {"text": "then break down the carbon in the peat", "role": "verb_phrase", "level": 1},
+        {"text": "and turn it into CO2 and methane", "role": "coordinated_verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Once 引导时间状语从句，表示“水一排走就……”。",
+        "break down 和 turn 是并列谓语，主语都是 bacteria and fungi。",
+        "it 指 the carbon in the peat。"
+      ],
+      "expressions": [
+        {"text": "drain away", "meaning_zh": "排走；流干"},
+        {"text": "break down", "meaning_zh": "分解"},
+        {"text": "turn ... into ...", "meaning_zh": "把……转化为……"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "Meanwhile, the remainder of the solid matter in the peat starts to move downwards, in a process known as subsidence**.",
+      "translation": "与此同时，泥炭中剩余的固体物质开始下沉，这一过程被称为沉降。",
+      "structure": [
+        {"text": "Meanwhile", "role": "linking_adverb", "level": 1},
+        {"text": "the remainder of the solid matter in the peat", "role": "subject", "level": 1},
+        {"text": "starts to move downwards", "role": "verb_phrase", "level": 1},
+        {"text": "in a process known as subsidence**", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Meanwhile 表示与碳分解过程同时发生的另一变化。",
+        "the remainder of the solid matter 是较长主语，核心词是 remainder。",
+        "known as subsidence** 是过去分词短语，说明这一过程的名称。"
+      ],
+      "expressions": [
+        {"text": "the remainder of", "meaning_zh": "……的剩余部分"},
+        {"text": "known as", "meaning_zh": "被称为"}
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "Peat comprises 90 per cent water, so this is one of the most alarming consequences of peatland clearances.",
+      "translation": "泥炭含有90%的水分，因此这是清理泥炭地最令人担忧的后果之一。",
+      "structure": [
+        {"text": "Peat comprises 90 per cent water", "role": "main_clause", "level": 1},
+        {"text": "so this is one of the most alarming consequences of peatland clearances", "role": "coordinated_clause", "level": 1},
+        {"text": "of peatland clearances", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "so 连接原因和结果：泥炭含水量高，因此下沉尤其严重。",
+        "this 指上一句提到的 subsidence。",
+        "one of the most alarming consequences 表示“最令人担忧的后果之一”。"
+      ],
+      "expressions": [
+        {"text": "comprise", "meaning_zh": "由……组成；包含"},
+        {"text": "alarming consequences", "meaning_zh": "令人担忧的后果"}
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "\"In the tropics, peat subsides at about four centimetres a year, so within half a century, very large landscapes on Sumatra and Borneo will become flooded as the peat drops below water level,\" says Silvius.",
+      "translation": "Silvius 说：“在热带地区，泥炭每年下沉约四厘米，因此在半个世纪内，苏门答腊和婆罗洲的大片景观会随着泥炭降到水位以下而被淹没。”",
+      "structure": [
+        {"text": "In the tropics", "role": "prepositional_phrase", "level": 1},
+        {"text": "peat subsides at about four centimetres a year", "role": "quoted_clause", "level": 1},
+        {"text": "so within half a century, very large landscapes on Sumatra and Borneo will become flooded", "role": "coordinated_clause", "level": 1},
+        {"text": "as the peat drops below water level", "role": "adverbial_clause", "level": 2},
+        {"text": "says Silvius", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "so 引出泥炭下沉带来的结果。",
+        "within half a century 表示结果发生的时间范围。",
+        "as 引导时间/伴随状语从句，说明大片土地被淹与泥炭下沉同步发生。"
+      ],
+      "expressions": [
+        {"text": "within half a century", "meaning_zh": "在半个世纪内"},
+        {"text": "become flooded", "meaning_zh": "变得被淹没"},
+        {"text": "drop below water level", "meaning_zh": "降到水位以下"}
+      ]
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "\"It's a huge catastrophe that's in preparation.",
+      "translation": "“这是一场正在酝酿中的巨大灾难。",
+      "structure": [
+        {"text": "\"It's a huge catastrophe", "role": "main_clause", "level": 1},
+        {"text": "that's in preparation", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It 指前一句描述的大范围土地被淹风险。",
+        "that 指 a huge catastrophe，说明这场灾难正在形成。",
+        "in preparation 在这里表示灾难还未完全发生，但条件正在积累。"
+      ],
+      "expressions": [
+        {"text": "a huge catastrophe", "meaning_zh": "巨大的灾难"},
+        {"text": "in preparation", "meaning_zh": "正在准备中；正在酝酿中"}
+      ]
+    },
+    {
+      "id": "E-09",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "Some provinces will lose 40 per cent of their landmass.\"",
+      "translation": "一些省份将失去其40%的陆地面积。”",
+      "structure": [
+        {"text": "Some provinces", "role": "subject", "level": 1},
+        {"text": "will lose", "role": "verb_phrase", "level": 1},
+        {"text": "40 per cent of their landmass", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "will lose 表示基于当前趋势做出的未来预测。",
+        "their landmass 指这些省份自身的陆地面积。",
+        "句末引号表示延续上一句的直接引语在此结束。"
+      ],
+      "expressions": [
+        {"text": "landmass", "meaning_zh": "陆地面积；陆块"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "And while these industries affect wetlands in ways that can easily be documented, Dr Dave Tickner of the WWF believes that more subtle impacts can be even more devastating.",
+      "translation": "而尽管这些产业对湿地的影响很容易被记录下来，世界自然基金会的 Dave Tickner 博士认为，更隐蔽的影响可能更加具有破坏性。",
+      "structure": [
+        {"text": "while these industries affect wetlands in ways that can easily be documented", "role": "adverbial_clause", "level": 1},
+        {"text": "that can easily be documented", "role": "relative_clause", "level": 2},
+        {"text": "Dr Dave Tickner of the WWF believes", "role": "main_clause", "level": 1},
+        {"text": "that more subtle impacts can be even more devastating", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "while 引导让步状语从句，表示“尽管……”。",
+        "that can easily be documented 修饰 ways，说明这些影响容易记录。",
+        "believes 后的 that 从句是宾语从句，表达 Tickner 的观点。"
+      ],
+      "expressions": [
+        {"text": "in ways that", "meaning_zh": "以……方式"},
+        {"text": "subtle impacts", "meaning_zh": "隐蔽的影响"},
+        {"text": "even more devastating", "meaning_zh": "更加毁灭性的"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "\"Sediment run-off and fertilizers can be pretty invisible,\" says Tickner.",
+      "translation": "Tickner 说：“沉积物流失和化肥的影响可能相当不易察觉。”",
+      "structure": [
+        {"text": "Sediment run-off and fertilizers", "role": "subject", "level": 1},
+        {"text": "can be pretty invisible", "role": "verb_phrase", "level": 1},
+        {"text": "says Tickner", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Sediment run-off and fertilizers 是并列主语。",
+        "can be 表示可能性，而不是确定事实。",
+        "pretty invisible 在口语化表达中表示“相当不易察觉”。"
+      ],
+      "expressions": [
+        {"text": "sediment run-off", "meaning_zh": "沉积物流失；泥沙径流"},
+        {"text": "pretty invisible", "meaning_zh": "相当不易察觉"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "\"Over-extraction of water is equally invisible.",
+      "translation": "“过度取水同样难以察觉。",
+      "structure": [
+        {"text": "Over-extraction of water", "role": "subject", "level": 1},
+        {"text": "is equally invisible", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Over-extraction of water 是抽象名词短语作主语。",
+        "equally invisible 把过度取水与上一句的污染影响相比较，说明二者同样隐蔽。"
+      ],
+      "expressions": [
+        {"text": "over-extraction of water", "meaning_zh": "过度取水"},
+        {"text": "equally invisible", "meaning_zh": "同样难以察觉"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "You do get shock stories about rivers running red, or even catching fire, but there's seldom one big impact that really hurts a wetland.\"",
+      "translation": "你确实会看到一些令人震惊的报道，比如河流变红，甚至着火，但很少会出现某一个真正重创湿地的巨大影响。”",
+      "structure": [
+        {"text": "You do get shock stories about rivers running red, or even catching fire", "role": "main_clause", "level": 1},
+        {"text": "rivers running red, or even catching fire", "role": "participial_phrase", "level": 2},
+        {"text": "but there's seldom one big impact", "role": "coordinated_clause", "level": 1},
+        {"text": "that really hurts a wetland", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "do get 中的 do 起强调作用，表示确实会出现这类报道。",
+        "rivers running red 和 catching fire 是 about 后的动名词/分词结构，说明 shock stories 的内容。",
+        "that really hurts a wetland 修饰 one big impact。"
+      ],
+      "expressions": [
+        {"text": "shock stories", "meaning_zh": "令人震惊的报道"},
+        {"text": "catch fire", "meaning_zh": "着火"},
+        {"text": "one big impact", "meaning_zh": "一个重大的影响"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "Tickner does not blame anyone for deliberate damage, however.",
+      "translation": "然而，Tickner 并不把蓄意破坏归咎于任何人。",
+      "structure": [
+        {"text": "Tickner", "role": "subject", "level": 1},
+        {"text": "does not blame anyone", "role": "verb_phrase", "level": 1},
+        {"text": "for deliberate damage", "role": "prepositional_phrase", "level": 2},
+        {"text": "however", "role": "linking_adverb", "level": 1}
+      ],
+      "difficult_points": [
+        "however 位于句末，表示与前面对破坏影响的描述形成转折。",
+        "blame anyone for deliberate damage 表示把有意造成的损害归咎于某人。",
+        "does not 强调 Tickner 并非认为人们主观上想破坏湿地。"
+      ],
+      "expressions": [
+        {"text": "blame anyone for", "meaning_zh": "因……责怪某人"},
+        {"text": "deliberate damage", "meaning_zh": "蓄意破坏"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "\"I've worked on wetland issues for 20 years and have never met anybody who wanted to damage a wetland,\" he says.",
+      "translation": "他说：“我从事湿地问题研究已有20年，从未遇到过任何想要破坏湿地的人。”",
+      "structure": [
+        {"text": "I've worked on wetland issues for 20 years", "role": "quoted_clause", "level": 1},
+        {"text": "and have never met anybody", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "who wanted to damage a wetland", "role": "relative_clause", "level": 2},
+        {"text": "he says", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "I've worked 和 have never met 共用主语 I，构成并列现在完成结构。",
+        "for 20 years 表示持续时间，说明经验基础。",
+        "who wanted to damage a wetland 修饰 anybody。"
+      ],
+      "expressions": [
+        {"text": "work on issues", "meaning_zh": "研究/处理相关问题"},
+        {"text": "for 20 years", "meaning_zh": "长达20年"}
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 34,
+      "sentence": "\"It isn't something that people generally set out to do.",
+      "translation": "“这通常不是人们一开始就打算去做的事。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "isn't something", "role": "main_clause", "level": 1},
+        {"text": "that people generally set out to do", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It 指破坏湿地这件事。",
+        "that 引导定语从句，修饰 something。",
+        "set out to do 表示“开始时打算做某事”，强调破坏并非初衷。"
+      ],
+      "expressions": [
+        {"text": "set out to do", "meaning_zh": "开始着手/打算做某事"},
+        {"text": "generally", "meaning_zh": "通常；一般来说"}
+      ]
+    },
+    {
+      "id": "F-08",
+      "paragraph_label": "F",
+      "sentence_index": 35,
+      "sentence": "Quite often, the effects simply come from people trying to make a living.\"",
+      "translation": "很多时候，这些影响只是来自人们试图谋生的行为。”",
+      "structure": [
+        {"text": "Quite often", "role": "adverbial_phrase", "level": 1},
+        {"text": "the effects", "role": "subject", "level": 1},
+        {"text": "simply come from people trying to make a living", "role": "verb_phrase", "level": 1},
+        {"text": "trying to make a living", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Quite often 表示这种情况发生频率很高。",
+        "people trying to make a living 是 come from 的宾语结构，强调影响来自谋生活动。",
+        "simply 表示原因并非恶意，而是日常生计需要。"
+      ],
+      "expressions": [
+        {"text": "come from", "meaning_zh": "来自；源于"},
+        {"text": "make a living", "meaning_zh": "谋生"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 36,
+      "sentence": "Silvius also acknowledges the importance of income generation.",
+      "translation": "Silvius 也承认创造收入的重要性。",
+      "structure": [
+        {"text": "Silvius", "role": "subject", "level": 1},
+        {"text": "also acknowledges", "role": "verb_phrase", "level": 1},
+        {"text": "the importance of income generation", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "also 表明 Silvius 的观点与前文 Tickner 对民生因素的看法相呼应。",
+        "acknowledges 表示承认某一点具有合理性。",
+        "income generation 指为当地人创造收入，而不只是企业收益。"
+      ],
+      "expressions": [
+        {"text": "acknowledge the importance of", "meaning_zh": "承认……的重要性"},
+        {"text": "income generation", "meaning_zh": "收入创造"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 37,
+      "sentence": "\"It's not that we just want to restore the biodiversity of wetlands - which we do - but we recognise there's a need to provide an income for local people.\"",
+      "translation": "“并不是说我们只是想恢复湿地的生物多样性——这当然是我们的目标——而是我们认识到有必要为当地人提供收入来源。”",
+      "structure": [
+        {"text": "It's not that we just want to restore the biodiversity of wetlands", "role": "main_clause", "level": 1},
+        {"text": "which we do", "role": "relative_clause", "level": 2},
+        {"text": "but we recognise", "role": "coordinated_clause", "level": 1},
+        {"text": "there's a need to provide an income for local people", "role": "object_clause", "level": 2},
+        {"text": "to provide an income for local people", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "It's not that ... but ... 用来纠正误解，表示重点不只是恢复生物多样性。",
+        "which we do 是插入性定语从句，确认他们确实想恢复生物多样性。",
+        "there's a need to provide an income 说明保护湿地必须兼顾当地收入。"
+      ],
+      "expressions": [
+        {"text": "restore the biodiversity", "meaning_zh": "恢复生物多样性"},
+        {"text": "recognise there's a need to", "meaning_zh": "认识到有必要……"},
+        {"text": "provide an income for", "meaning_zh": "为……提供收入"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 38,
+      "sentence": "This approach is supported by IWMI.",
+      "translation": "这一做法得到了国际水管理研究所的支持。",
+      "structure": [
+        {"text": "This approach", "role": "subject", "level": 1},
+        {"text": "is supported", "role": "verb_phrase", "level": 1},
+        {"text": "by IWMI", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "This approach 指兼顾湿地恢复与当地收入的思路。",
+        "is supported 是被动语态，说明 IWMI 对该做法持支持态度。"
+      ],
+      "expressions": [
+        {"text": "be supported by", "meaning_zh": "得到……支持"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 39,
+      "sentence": "\"The idea is that people in a developing country will only protect wetlands if they value and profit from them,\" says McCartney.",
+      "translation": "McCartney 说：“其理念是，发展中国家的人们只有在重视湿地并从中获益时，才会保护湿地。”",
+      "structure": [
+        {"text": "The idea is", "role": "main_clause", "level": 1},
+        {"text": "that people in a developing country will only protect wetlands", "role": "predicative_clause", "level": 2},
+        {"text": "if they value and profit from them", "role": "adverbial_clause", "level": 3},
+        {"text": "says McCartney", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "that 引导表语从句，解释 The idea 的具体内容。",
+        "only 与 if 搭配，表达“只有在……条件下才……”。",
+        "them 指 wetlands，value and profit from them 表示既认可其价值又从中获益。"
+      ],
+      "expressions": [
+        {"text": "the idea is that", "meaning_zh": "其理念是……"},
+        {"text": "profit from", "meaning_zh": "从……获益"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 40,
+      "sentence": "\"For sustainability, it's essential that local people are involved in wetland planning and decision making and have clear rights to use wetlands.\"",
+      "translation": "“为了实现可持续性，至关重要的是当地人参与湿地规划和决策，并拥有使用湿地的明确权利。”",
+      "structure": [
+        {"text": "For sustainability", "role": "prepositional_phrase", "level": 1},
+        {"text": "it's essential", "role": "main_clause", "level": 1},
+        {"text": "that local people are involved in wetland planning and decision making and have clear rights to use wetlands", "role": "subject_clause", "level": 2},
+        {"text": "to use wetlands", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "it 是形式主语，真正主语是 that 引导的从句。",
+        "are involved in 和 have clear rights 是 that 从句中的并列谓语。",
+        "For sustainability 表明让当地人参与和拥有权利是为了长期可持续。"
+      ],
+      "expressions": [
+        {"text": "for sustainability", "meaning_zh": "为了可持续性"},
+        {"text": "be involved in", "meaning_zh": "参与"},
+        {"text": "decision making", "meaning_zh": "决策"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 41,
+      "sentence": "The fortunes of wetlands would be improved, Silvius suggests, if more governments recognised their long-term value.",
+      "translation": "Silvius 认为，如果更多政府认识到湿地的长期价值，湿地的命运将会改善。",
+      "structure": [
+        {"text": "The fortunes of wetlands would be improved", "role": "main_clause", "level": 1},
+        {"text": "Silvius suggests", "role": "reporting_clause", "level": 1},
+        {"text": "if more governments recognised their long-term value", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "would be improved 表示在 if 条件满足时可能出现的结果。",
+        "Silvius suggests 是插入式报告语，说明观点来源。",
+        "their long-term value 中 their 指 wetlands。"
+      ],
+      "expressions": [
+        {"text": "long-term value", "meaning_zh": "长期价值"},
+        {"text": "recognise value", "meaning_zh": "认识到价值"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 42,
+      "sentence": "\"Different governments have different attitudes,\" he says, and goes on to explain that some countries place a high priority on restoring wetlands, while others still deny the issue.",
+      "translation": "他说：“不同政府有不同态度。”并接着解释说，一些国家高度重视恢复湿地，而另一些国家仍然否认这一问题。",
+      "structure": [
+        {"text": "Different governments have different attitudes", "role": "quoted_clause", "level": 1},
+        {"text": "he says", "role": "reporting_clause", "level": 1},
+        {"text": "and goes on to explain", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "that some countries place a high priority on restoring wetlands, while others still deny the issue", "role": "object_clause", "level": 2},
+        {"text": "while others still deny the issue", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "goes on to explain 表示在说完直接引语后继续解释。",
+        "that 从句是 explain 的宾语，说明各国态度差异的具体表现。",
+        "while 在这里表示对比：一些国家重视恢复，另一些国家仍否认问题。"
+      ],
+      "expressions": [
+        {"text": "go on to explain", "meaning_zh": "继续解释"},
+        {"text": "place a high priority on", "meaning_zh": "高度重视"},
+        {"text": "deny the issue", "meaning_zh": "否认问题"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 43,
+      "sentence": "McCartney is cautiously optimistic, however.",
+      "translation": "然而，McCartney 持谨慎乐观态度。",
+      "structure": [
+        {"text": "McCartney", "role": "subject", "level": 1},
+        {"text": "is cautiously optimistic", "role": "verb_phrase", "level": 1},
+        {"text": "however", "role": "linking_adverb", "level": 1}
+      ],
+      "difficult_points": [
+        "however 表示与前一句中部分国家仍否认问题形成转折。",
+        "cautiously optimistic 表示乐观但仍有保留，并非完全乐观。"
+      ],
+      "expressions": [
+        {"text": "cautiously optimistic", "meaning_zh": "谨慎乐观"}
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 44,
+      "sentence": "\"Awareness of the importance of wetlands is growing,\" he says.",
+      "translation": "他说：“人们对湿地重要性的认识正在增强。”",
+      "structure": [
+        {"text": "Awareness of the importance of wetlands", "role": "subject", "level": 1},
+        {"text": "is growing", "role": "verb_phrase", "level": 1},
+        {"text": "he says", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Awareness 是抽象名词作主语，核心含义是“认识、意识”。",
+        "of the importance of wetlands 连续两个 of 短语共同修饰 Awareness。",
+        "is growing 表示认识正在逐渐提升。"
+      ],
+      "expressions": [
+        {"text": "awareness of the importance of", "meaning_zh": "对……重要性的认识"},
+        {"text": "be growing", "meaning_zh": "正在增长；增强"}
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 45,
+      "sentence": "\"It's true that wetland degradation still continues at a rapid pace, but my impression is that things are slowly changing.\"",
+      "translation": "“的确，湿地退化仍在快速持续，但我的印象是，情况正在慢慢发生变化。”",
+      "structure": [
+        {"text": "It's true", "role": "main_clause", "level": 1},
+        {"text": "that wetland degradation still continues at a rapid pace", "role": "subject_clause", "level": 2},
+        {"text": "but my impression is", "role": "coordinated_clause", "level": 1},
+        {"text": "that things are slowly changing", "role": "predicative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正内容是第一个 that 从句。",
+        "but 连接事实与乐观判断，形成让步后的转折。",
+        "my impression is that 引出个人判断，语气比确定结论更谨慎。"
+      ],
+      "expressions": [
+        {"text": "wetland degradation", "meaning_zh": "湿地退化"},
+        {"text": "at a rapid pace", "meaning_zh": "以很快的速度"},
+        {"text": "my impression is that", "meaning_zh": "我的印象是……"}
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 46,
+      "sentence": "* peat: a brown deposit formed by the partial decomposition of vegetation in wet acidic conditions, often cut out and dried for use as fuel",
+      "translation": "＊peat：一种棕色沉积物，由植被在潮湿酸性环境中部分分解形成，常被挖出并晒干作为燃料使用。",
+      "structure": [
+        {"text": "* peat", "role": "term", "level": 1},
+        {"text": "a brown deposit formed by the partial decomposition of vegetation in wet acidic conditions", "role": "apposition", "level": 1},
+        {"text": "formed by the partial decomposition of vegetation in wet acidic conditions", "role": "participial_phrase", "level": 2},
+        {"text": "often cut out and dried for use as fuel", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "这是词汇注释，不是正文论证的一部分，但属于源段落文本。",
+        "formed by... 是过去分词短语，说明 peat 的形成方式。",
+        "often cut out and dried for use as fuel 省略了主语 peat，说明其常见用途。"
+      ],
+      "expressions": [
+        {"text": "partial decomposition", "meaning_zh": "部分分解"},
+        {"text": "for use as fuel", "meaning_zh": "作为燃料使用"}
+      ]
+    },
+    {
+      "id": "H-07",
+      "paragraph_label": "H",
+      "sentence_index": 47,
+      "sentence": "** subsidence: the sinking of the Earth's surface, most often caused by the removal of resources from the ground",
+      "translation": "＊＊subsidence：地球表面的下沉，通常由地下资源被移除引起。",
+      "structure": [
+        {"text": "** subsidence", "role": "term", "level": 1},
+        {"text": "the sinking of the Earth's surface", "role": "apposition", "level": 1},
+        {"text": "most often caused by the removal of resources from the ground", "role": "participial_phrase", "level": 2},
+        {"text": "from the ground", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "这是对正文中 subsidence 的词汇注释。",
+        "the sinking of the Earth's surface 是名词化表达，解释该术语的含义。",
+        "caused by the removal of resources from the ground 是过去分词短语，说明常见成因。"
+      ],
+      "expressions": [
+        {"text": "the sinking of the Earth's surface", "meaning_zh": "地表下沉"},
+        {"text": "the removal of resources", "meaning_zh": "资源移除；资源开采"}
+      ]
+    }
+  ]
+}

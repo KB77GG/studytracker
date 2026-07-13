@@ -1,0 +1,722 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts10_test4_reading",
+  "passage_id": "ielts10_test4_p1",
+  "passage_title": "The megafires of California",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Wildfires are becoming an increasing menace in the western United States, with Southern California being the hardest hit area.",
+      "translation": "野火正日益威胁美国西部，而南加州是受灾最严重的地区。",
+      "structure": [
+        {"text": "Wildfires", "role": "subject", "level": 1},
+        {"text": "are becoming", "role": "verb_phrase", "level": 1},
+        {"text": "an increasing menace in the western United States", "role": "complement", "level": 1},
+        {"text": "with Southern California being the hardest hit area", "role": "with_absolute_construction", "level": 1},
+        {"text": "Southern California being the hardest hit area", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "become 后接名词性表语 an increasing menace，表示野火正在逐渐成为更大的威胁。",
+        "with Southern California being... 是“with＋名词＋现在分词”结构，补充说明南加州受灾最重。",
+        "hardest hit 是过去分词 hit 的最高级形式，作定语修饰 area。"
+      ],
+      "expressions": [
+        {"text": "an increasing menace", "meaning_zh": "日益严重的威胁"},
+        {"text": "the hardest hit area", "meaning_zh": "受灾最严重的地区"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "There's a reason fire squads battling more frequent blazes in Southern California are having such difficulty containing the flames, despite better preparedness than ever and decades of experience fighting fires fanned by the 'Santa Ana Winds'.",
+      "translation": "尽管消防队的准备工作比以往任何时候都充分，而且拥有数十年扑救“圣安娜风”助长的火灾的经验，但他们在遏制南加州日益频繁的烈火时仍如此困难，这是有原因的。",
+      "structure": [
+        {"text": "There's a reason", "role": "main_clause", "level": 1},
+        {"text": "fire squads battling more frequent blazes in Southern California are having such difficulty containing the flames", "role": "relative_clause", "level": 2},
+        {"text": "battling more frequent blazes in Southern California", "role": "participial_phrase", "level": 3},
+        {"text": "containing the flames", "role": "non_finite_clause", "level": 3},
+        {"text": "despite better preparedness than ever and decades of experience fighting fires fanned by the 'Santa Ana Winds'", "role": "prepositional_phrase", "level": 1},
+        {"text": "fanned by the 'Santa Ana Winds'", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "reason 后省略关系词 why，后面的完整内容说明消防队难以控制火势这一现象。",
+        "battling... 修饰 fire squads，而 containing... 是 difficulty 后的动名词结构。",
+        "despite 后接两个并列名词短语，表示即使准备充分且经验丰富，控制火势仍很困难。",
+        "fanned by... 是过去分词短语，说明火灾受到“圣安娜风”的助长。"
+      ],
+      "expressions": [
+        {"text": "have difficulty doing", "meaning_zh": "做某事有困难"},
+        {"text": "better preparedness than ever", "meaning_zh": "比以往任何时候都更充分的准备"},
+        {"text": "decades of experience", "meaning_zh": "数十年的经验"},
+        {"text": "contain the flames", "meaning_zh": "控制火势"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "The wildfires themselves, experts say, are generally hotter, faster, and spread more erratically than in the past.",
+      "translation": "专家表示，如今野火本身通常温度更高、蔓延更快，而且比过去扩散得更不规律。",
+      "structure": [
+        {"text": "The wildfires themselves", "role": "subject", "level": 1},
+        {"text": "experts say", "role": "parenthesis", "level": 1},
+        {"text": "are generally hotter, faster", "role": "verb_phrase", "level": 1},
+        {"text": "and spread more erratically", "role": "coordinated_predicate", "level": 1},
+        {"text": "than in the past", "role": "comparative_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "experts say 是插入语，不影响主句 The wildfires... are... and spread... 的结构。",
+        "hotter、faster 与 more erratically 都和过去的野火状况进行比较。",
+        "themselves 用于强调谈论的是野火本身的特征。"
+      ],
+      "expressions": [
+        {"text": "spread erratically", "meaning_zh": "不规律地蔓延"},
+        {"text": "than in the past", "meaning_zh": "与过去相比"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Megafires, also called 'siege fires', are the increasingly frequent blazes that burn 500,000 acres or more - 10 times the size of the average forest fire of 20 years ago.",
+      "translation": "特大火灾也称“围城式火灾”，是如今日益频发、燃烧面积达50万英亩或更多的烈火——其规模是20年前普通森林火灾的10倍。",
+      "structure": [
+        {"text": "Megafires", "role": "subject", "level": 1},
+        {"text": "also called 'siege fires'", "role": "participial_phrase", "level": 2},
+        {"text": "are", "role": "verb_phrase", "level": 1},
+        {"text": "the increasingly frequent blazes", "role": "complement", "level": 1},
+        {"text": "that burn 500,000 acres or more", "role": "relative_clause", "level": 2},
+        {"text": "10 times the size of the average forest fire of 20 years ago", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "also called... 是过去分词短语，对 Megafires 的另一名称作补充说明。",
+        "that 引导定语从句修饰 blazes，说明特大火灾的燃烧面积。",
+        "10 times the size of... 是倍数表达，说明此类火灾与20年前平均森林火灾的规模差距。"
+      ],
+      "expressions": [
+        {"text": "also called", "meaning_zh": "也称为"},
+        {"text": "10 times the size of", "meaning_zh": "规模是……的10倍"},
+        {"text": "or more", "meaning_zh": "或更多"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Some recent wildfires are among the biggest ever in California in terms of acreage burned, according to state figures and news reports.",
+      "translation": "根据该州的数据和新闻报道，若按过火面积衡量，近期的一些野火位列加州有史以来规模最大的火灾之中。",
+      "structure": [
+        {"text": "Some recent wildfires", "role": "subject", "level": 1},
+        {"text": "are", "role": "verb_phrase", "level": 1},
+        {"text": "among the biggest ever in California", "role": "complement", "level": 1},
+        {"text": "in terms of acreage burned", "role": "prepositional_phrase", "level": 1},
+        {"text": "burned", "role": "participial_phrase", "level": 2},
+        {"text": "according to state figures and news reports", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "among the biggest ever 表示跻身有记录以来规模最大的若干场火灾之列。",
+        "in terms of 限定比较标准，这里以被烧毁的土地面积衡量。",
+        "burned 是过去分词，后置修饰 acreage。"
+      ],
+      "expressions": [
+        {"text": "among the biggest ever", "meaning_zh": "位列有史以来规模最大的……之中"},
+        {"text": "in terms of", "meaning_zh": "就……而言；按……衡量"},
+        {"text": "according to", "meaning_zh": "根据"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 6,
+      "sentence": "One explanation for the trend to more superhot fires is that the region, which usually has dry summers, has had significantly below normal precipitation in many recent years.",
+      "translation": "超高温火灾越来越多的一种解释是，这个通常夏季干燥的地区，近些年来有许多年份的降水量显著低于正常水平。",
+      "structure": [
+        {"text": "One explanation for the trend to more superhot fires", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "that the region, which usually has dry summers, has had significantly below normal precipitation in many recent years", "role": "noun_clause", "level": 1},
+        {"text": "which usually has dry summers", "role": "relative_clause", "level": 2},
+        {"text": "has had significantly below normal precipitation", "role": "verb_phrase", "level": 2},
+        {"text": "in many recent years", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导表语从句，具体说明这种趋势背后的一个原因。",
+        "which usually has dry summers 是非限制性定语从句，补充该地区通常的气候特点。",
+        "has had 使用现在完成时，表示降水偏少的状况在多个近年中反复出现并延续至今。"
+      ],
+      "expressions": [
+        {"text": "one explanation for", "meaning_zh": "……的一种解释"},
+        {"text": "the trend to", "meaning_zh": "朝……发展的趋势"},
+        {"text": "significantly below normal", "meaning_zh": "显著低于正常水平"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 7,
+      "sentence": "Another reason, experts say, is related to the century-long policy of the US Forest Service to stop wildfires as quickly as possible.",
+      "translation": "专家表示，另一个原因与美国林务局一项延续百年的政策有关，即尽可能迅速地扑灭野火。",
+      "structure": [
+        {"text": "Another reason", "role": "subject", "level": 1},
+        {"text": "experts say", "role": "parenthesis", "level": 1},
+        {"text": "is related to", "role": "verb_phrase", "level": 1},
+        {"text": "the century-long policy of the US Forest Service", "role": "complement", "level": 1},
+        {"text": "to stop wildfires as quickly as possible", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "experts say 是插入语，主干为 Another reason is related to the... policy。",
+        "to stop wildfires... 是不定式短语，说明该政策的具体内容。",
+        "as quickly as possible 表示在可行范围内尽可能迅速。"
+      ],
+      "expressions": [
+        {"text": "be related to", "meaning_zh": "与……有关"},
+        {"text": "a century-long policy", "meaning_zh": "一项延续百年的政策"},
+        {"text": "as quickly as possible", "meaning_zh": "尽可能迅速地"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "The unintentional consequence has been to halt the natural eradication of underbrush, now the primary fuel for megafires.",
+      "translation": "这一政策无意中造成的后果，是阻止了林下灌木的自然清除；如今这些灌木已成为特大火灾的主要燃料。",
+      "structure": [
+        {"text": "The unintentional consequence", "role": "subject", "level": 1},
+        {"text": "has been", "role": "verb_phrase", "level": 1},
+        {"text": "to halt the natural eradication of underbrush", "role": "complement", "level": 1},
+        {"text": "now the primary fuel for megafires", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "不定式 to halt... 作表语，说明这一无意后果的具体内容。",
+        "now the primary fuel for megafires 是 underbrush 的同位说明，其中省略了 which is。",
+        "eradication 在此指林下灌木通过自然火灾被清除的过程。"
+      ],
+      "expressions": [
+        {"text": "the unintentional consequence", "meaning_zh": "无意造成的后果"},
+        {"text": "halt the natural eradication of", "meaning_zh": "阻止……的自然清除"},
+        {"text": "the primary fuel for", "meaning_zh": "……的主要燃料"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 9,
+      "sentence": "Three other factors contribute to the trend, they add.",
+      "translation": "他们补充说，另外三个因素也促成了这一趋势。",
+      "structure": [
+        {"text": "Three other factors", "role": "subject", "level": 1},
+        {"text": "contribute to", "role": "verb_phrase", "level": 1},
+        {"text": "the trend", "role": "object", "level": 1},
+        {"text": "they add", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "they add 是后置的报道语，they 指前文所说的专家。",
+        "contribute to 表示这些因素共同促成了特大火灾增多的趋势。"
+      ],
+      "expressions": [
+        {"text": "contribute to the trend", "meaning_zh": "促成这一趋势"},
+        {"text": "they add", "meaning_zh": "他们补充说"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 10,
+      "sentence": "First is climate change, marked by a 1-degree Fahrenheit rise in average yearly temperature across the western states.",
+      "translation": "第一个因素是气候变化，其表现是西部各州的年平均气温上升了1华氏度。",
+      "structure": [
+        {"text": "First", "role": "complement", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "climate change", "role": "subject", "level": 1},
+        {"text": "marked by a 1-degree Fahrenheit rise in average yearly temperature across the western states", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "句子采用倒装式列举，实际信息是第一个因素为 climate change。",
+        "marked by... 是过去分词短语，补充说明气候变化的具体表现。",
+        "a rise in temperature 中 in 引出发生上升的指标。"
+      ],
+      "expressions": [
+        {"text": "be marked by", "meaning_zh": "以……为特征"},
+        {"text": "a rise in average yearly temperature", "meaning_zh": "年平均气温的上升"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "Second is fire seasons that on average are 78 days longer than they were 20 years ago.",
+      "translation": "第二个因素是火灾季平均比20年前延长了78天。",
+      "structure": [
+        {"text": "Second", "role": "complement", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "fire seasons", "role": "subject", "level": 1},
+        {"text": "that on average are 78 days longer than they were 20 years ago", "role": "relative_clause", "level": 2},
+        {"text": "than they were 20 years ago", "role": "comparative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "本句延续上一句的倒装式列举，第二个因素是 fire seasons。",
+        "that 引导定语从句，说明如今火灾季的持续时间。",
+        "78 days longer than... 是“数量＋比较级＋than”结构，they 指 fire seasons。"
+      ],
+      "expressions": [
+        {"text": "on average", "meaning_zh": "平均而言"},
+        {"text": "78 days longer than", "meaning_zh": "比……长78天"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "Third is increased construction of homes in wooded areas.",
+      "translation": "第三个因素是在林地中建造的住宅越来越多。",
+      "structure": [
+        {"text": "Third", "role": "complement", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "increased construction of homes in wooded areas", "role": "subject", "level": 1},
+        {"text": "in wooded areas", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "本句仍采用表语前置的列举形式，真正的第三个因素位于 is 之后。",
+        "increased 修饰 construction，表示住宅建设量增加，而不是房屋本身变大。",
+        "wooded areas 指树木繁茂、因而更容易遭遇林火的地区。"
+      ],
+      "expressions": [
+        {"text": "increased construction of homes", "meaning_zh": "住宅建设量的增加"},
+        {"text": "wooded areas", "meaning_zh": "林地；树木繁茂的地区"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 13,
+      "sentence": "'We are increasingly building our homes in fire-prone ecosystems,' says Dominik Kulakowski, adjunct professor of biology at Clark University Graduate School of Geography in Worcester, Massachusetts.",
+      "translation": "“我们越来越多地把住宅建在易发生火灾的生态系统中，”马萨诸塞州伍斯特市克拉克大学地理研究生院生物学兼职教授多米尼克·库拉科夫斯基说。",
+      "structure": [
+        {"text": "'We are increasingly building our homes in fire-prone ecosystems,'", "role": "direct_speech", "level": 1},
+        {"text": "We", "role": "subject", "level": 2},
+        {"text": "are increasingly building", "role": "verb_phrase", "level": 2},
+        {"text": "our homes", "role": "object", "level": 2},
+        {"text": "in fire-prone ecosystems", "role": "prepositional_phrase", "level": 2},
+        {"text": "adjunct professor of biology at Clark University Graduate School of Geography in Worcester, Massachusetts", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "现在进行时配合 increasingly，强调把房屋建在易燃环境中的趋势不断加剧。",
+        "fire-prone 是复合形容词，表示“容易发生火灾的”。",
+        "人名后的长名词短语是同位语，说明说话者的职务和所属机构。"
+      ],
+      "expressions": [
+        {"text": "increasingly build", "meaning_zh": "越来越多地建造"},
+        {"text": "fire-prone ecosystems", "meaning_zh": "易发生火灾的生态系统"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 14,
+      "sentence": "'Doing that in many of the forests of the western US is like building homes on the side of an active volcano.'",
+      "translation": "“在美国西部许多森林里这样做，就如同在一座活火山的山坡上建房。”",
+      "structure": [
+        {"text": "Doing that in many of the forests of the western US", "role": "subject", "level": 1},
+        {"text": "Doing that", "role": "non_finite_clause", "level": 2},
+        {"text": "is like", "role": "verb_phrase", "level": 1},
+        {"text": "building homes on the side of an active volcano", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "Doing that 是动名词短语作主语，that 指把住宅建在易发生火灾的生态系统中。",
+        "is like 后接另一动名词短语，以在活火山旁建房作类比。",
+        "on the side of 在这里指位于火山的山坡或侧面。"
+      ],
+      "expressions": [
+        {"text": "be like doing", "meaning_zh": "就像做……一样"},
+        {"text": "on the side of an active volcano", "meaning_zh": "在活火山的山坡上"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 15,
+      "sentence": "In California, where population growth has averaged more than 600,000 a year for at least a decade, more residential housing is being built.",
+      "translation": "在加利福尼亚州，人口至少十年来平均每年增长60多万，因此正在建造更多住宅。",
+      "structure": [
+        {"text": "In California", "role": "prepositional_phrase", "level": 1},
+        {"text": "where population growth has averaged more than 600,000 a year for at least a decade", "role": "relative_clause", "level": 2},
+        {"text": "population growth", "role": "subject", "level": 3},
+        {"text": "has averaged more than 600,000 a year", "role": "verb_phrase", "level": 3},
+        {"text": "more residential housing", "role": "subject", "level": 1},
+        {"text": "is being built", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "where 引导非限制性定语从句，补充说明加州人口增长的背景。",
+        "has averaged 使用现在完成时，表示这一年均增幅持续了至少十年。",
+        "is being built 是现在进行时的被动语态，强调住宅建设正在持续。"
+      ],
+      "expressions": [
+        {"text": "population growth", "meaning_zh": "人口增长"},
+        {"text": "average more than ... a year", "meaning_zh": "平均每年超过……"},
+        {"text": "for at least a decade", "meaning_zh": "至少十年来"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 16,
+      "sentence": "'What once was open space is now residential homes providing fuel to make fires burn with greater intensity,' says Terry McHale of the California Department of Forestry firefighters' union.",
+      "translation": "“过去曾是开阔地的地方如今成了住宅，为火灾提供燃料，使火势燃烧得更加猛烈，”加州林业部门消防员工会的特里·麦克黑尔说。",
+      "structure": [
+        {"text": "'What once was open space is now residential homes providing fuel to make fires burn with greater intensity,'", "role": "direct_speech", "level": 1},
+        {"text": "What once was open space", "role": "noun_clause", "level": 2},
+        {"text": "is now", "role": "verb_phrase", "level": 2},
+        {"text": "residential homes", "role": "complement", "level": 2},
+        {"text": "providing fuel to make fires burn with greater intensity", "role": "participial_phrase", "level": 2},
+        {"text": "to make fires burn with greater intensity", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "What once was open space 是融合关系词 what 引导的名词性从句，整体作主语。",
+        "providing... 是现在分词短语，说明这些住宅如何增加火灾危险。",
+        "make fires burn 是使役结构，burn 使用不带 to 的动词原形。"
+      ],
+      "expressions": [
+        {"text": "what once was", "meaning_zh": "过去曾经是……的地方"},
+        {"text": "provide fuel to", "meaning_zh": "为……提供燃料"},
+        {"text": "with greater intensity", "meaning_zh": "以更大的强度"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 17,
+      "sentence": "'With so much dryness, so many communities to catch fire, so many fronts to fight, it becomes an almost incredible job.'",
+      "translation": "“如此干燥，又有这么多社区可能起火、这么多火线需要应对，这项工作几乎艰巨得令人难以置信。”",
+      "structure": [
+        {"text": "With so much dryness, so many communities to catch fire, so many fronts to fight", "role": "with_absolute_construction", "level": 1},
+        {"text": "so many communities to catch fire", "role": "noun_phrase", "level": 2},
+        {"text": "so many fronts to fight", "role": "noun_phrase", "level": 2},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "becomes", "role": "verb_phrase", "level": 1},
+        {"text": "an almost incredible job", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "with 后面并列三个背景条件，概括消防工作面临的干旱、社区和多条火线。",
+        "to catch fire 和 to fight 分别后置修饰 communities 与 fronts，表示可能起火的社区和要应对的火线。",
+        "it 指在这些条件下扑灭野火这一整体任务。"
+      ],
+      "expressions": [
+        {"text": "catch fire", "meaning_zh": "着火"},
+        {"text": "fronts to fight", "meaning_zh": "需要应对的多条火线"},
+        {"text": "an almost incredible job", "meaning_zh": "几乎艰巨得令人难以置信的任务"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 18,
+      "sentence": "That said, many experts give California high marks for making progress on preparedness in recent years, after some of the largest fires in state history scorched thousands of acres, burned thousands of homes, and killed numerous people.",
+      "translation": "话虽如此，许多专家仍高度评价加州近年在防火准备方面取得的进展；此前，该州历史上一些规模最大的火灾烧焦了数千英亩土地、焚毁了数千所房屋，并导致多人死亡。",
+      "structure": [
+        {"text": "That said", "role": "participial_phrase", "level": 1},
+        {"text": "many experts", "role": "subject", "level": 1},
+        {"text": "give California high marks", "role": "verb_phrase", "level": 1},
+        {"text": "for making progress on preparedness in recent years", "role": "prepositional_phrase", "level": 1},
+        {"text": "after some of the largest fires in state history scorched thousands of acres, burned thousands of homes, and killed numerous people", "role": "adverbial_clause", "level": 1},
+        {"text": "scorched thousands of acres, burned thousands of homes, and killed numerous people", "role": "coordinated_predicate", "level": 2}
+      ],
+      "difficult_points": [
+        "That said 是固定的让步衔接语，表示尽管前述问题严重，仍需看到加州的进步。",
+        "give California high marks for... 表示专家因某方面进展而高度评价加州。",
+        "after 从句以三个并列谓语概括此前大火造成的土地、住宅和人员损失。"
+      ],
+      "expressions": [
+        {"text": "That said", "meaning_zh": "话虽如此"},
+        {"text": "give ... high marks for", "meaning_zh": "因……而高度评价……"},
+        {"text": "make progress on preparedness", "meaning_zh": "在准备工作方面取得进展"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 19,
+      "sentence": "Stung in the past by criticism of bungling that allowed fires to spread when they might have been contained, personnel are meeting the peculiar challenges of neighborhood- and canyon-hopping fires better than previously, observers say.",
+      "translation": "观察人士说，过去因处置不当、导致原本可能被控制的火灾蔓延而受到批评后，如今工作人员应对那些在社区与峡谷间跳跃蔓延的特殊火灾挑战，已经比从前做得更好。",
+      "structure": [
+        {"text": "Stung in the past by criticism of bungling that allowed fires to spread when they might have been contained", "role": "participial_phrase", "level": 1},
+        {"text": "that allowed fires to spread", "role": "relative_clause", "level": 2},
+        {"text": "when they might have been contained", "role": "adverbial_clause", "level": 3},
+        {"text": "personnel", "role": "subject", "level": 1},
+        {"text": "are meeting the peculiar challenges of neighborhood- and canyon-hopping fires better than previously", "role": "verb_phrase", "level": 1},
+        {"text": "observers say", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Stung... 是过去分词短语，逻辑主语为 personnel，表示工作人员曾因批评而受到触动。",
+        "that 修饰 bungling，说明这种处置不当使火势得以蔓延。",
+        "might have been contained 是“情态动词＋完成式被动”，表示火灾当时本来可能得到控制。",
+        "neighborhood- and canyon-hopping 表示火势会跨越社区和峡谷迅速转移。"
+      ],
+      "expressions": [
+        {"text": "be stung by criticism", "meaning_zh": "因批评而受到刺痛或警醒"},
+        {"text": "allow fires to spread", "meaning_zh": "任由火势蔓延"},
+        {"text": "meet the challenges of", "meaning_zh": "应对……的挑战"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 20,
+      "sentence": "State promises to provide more up-to-date engines, planes, and helicopters to fight fires have been fulfilled.",
+      "translation": "州政府关于提供更新式消防车、飞机和直升机用于灭火的承诺已经兑现。",
+      "structure": [
+        {"text": "State promises to provide more up-to-date engines, planes, and helicopters to fight fires", "role": "subject", "level": 1},
+        {"text": "to provide more up-to-date engines, planes, and helicopters", "role": "non_finite_clause", "level": 2},
+        {"text": "to fight fires", "role": "non_finite_clause", "level": 3},
+        {"text": "have been fulfilled", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "主语中心词是复数 promises，因此谓语使用 have been fulfilled。",
+        "第一个不定式说明承诺的内容，第二个不定式说明这些设备的用途。",
+        "have been fulfilled 是现在完成时被动语态，表示承诺已经得到兑现。"
+      ],
+      "expressions": [
+        {"text": "up-to-date equipment", "meaning_zh": "现代化的设备"},
+        {"text": "fulfill a promise", "meaning_zh": "兑现承诺"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 21,
+      "sentence": "Firefighters' unions that in the past complained of dilapidated equipment, old fire engines, and insufficient blueprints for fire safety are now praising the state's commitment, noting that funding for firefighting has increased, despite huge cuts in many other programs.",
+      "translation": "消防员工会过去曾抱怨设备破旧、消防车老化以及消防安全规划不足，如今却在赞扬州政府的投入，并指出尽管许多其他项目遭到大幅削减，消防经费却有所增加。",
+      "structure": [
+        {"text": "Firefighters' unions", "role": "subject", "level": 1},
+        {"text": "that in the past complained of dilapidated equipment, old fire engines, and insufficient blueprints for fire safety", "role": "relative_clause", "level": 2},
+        {"text": "are now praising the state's commitment", "role": "verb_phrase", "level": 1},
+        {"text": "noting that funding for firefighting has increased", "role": "participial_phrase", "level": 1},
+        {"text": "that funding for firefighting has increased", "role": "noun_clause", "level": 2},
+        {"text": "despite huge cuts in many other programs", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导定语从句修饰 unions，并用 in the past 与主句的 now 形成今昔对比。",
+        "noting... 是现在分词短语，补充工会赞扬州政府时所指出的事实。",
+        "despite 后接名词短语，突出消防经费增加与其他项目大幅削减之间的反差。"
+      ],
+      "expressions": [
+        {"text": "complain of", "meaning_zh": "抱怨……"},
+        {"text": "praise the state's commitment", "meaning_zh": "赞扬州政府的投入与承诺"},
+        {"text": "funding for firefighting", "meaning_zh": "消防经费"},
+        {"text": "despite huge cuts", "meaning_zh": "尽管遭到大幅削减"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 22,
+      "sentence": "'We are pleased that the current state administration has been very proactive in its support of us, and [has] come through with budgetary support of the infrastructure needs we have long sought,' says Mr. McHale of the firefighters' union.",
+      "translation": "消防员工会的麦克黑尔先生说：“我们很高兴，本届州政府一直非常积极地支持我们，并且兑现了承诺，为我们长期争取的基础设施需求提供了预算支持。”",
+      "structure": [
+        {"text": "'We are pleased that the current state administration has been very proactive in its support of us, and [has] come through with budgetary support of the infrastructure needs we have long sought,'", "role": "direct_speech", "level": 1},
+        {"text": "We are pleased", "role": "main_clause", "level": 2},
+        {"text": "that the current state administration has been very proactive in its support of us, and [has] come through with budgetary support of the infrastructure needs we have long sought", "role": "noun_clause", "level": 2},
+        {"text": "has been very proactive in its support of us", "role": "verb_phrase", "level": 3},
+        {"text": "and [has] come through with budgetary support of the infrastructure needs", "role": "coordinated_predicate", "level": 3},
+        {"text": "we have long sought", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "that 从句说明 pleased 的具体原因，其中两个现在完成时谓语由 and 连接。",
+        "方括号中的 [has] 是编辑补入的省略成分，使其与前面的 has been 并列。",
+        "we have long sought 是省略关系代词 that 的定语从句，修饰 infrastructure needs。",
+        "come through with 表示最终兑现承诺并提供所需支持。"
+      ],
+      "expressions": [
+        {"text": "be proactive in", "meaning_zh": "在……方面积极主动"},
+        {"text": "in support of", "meaning_zh": "支持……"},
+        {"text": "come through with", "meaning_zh": "兑现并提供……"},
+        {"text": "budgetary support", "meaning_zh": "预算支持"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 23,
+      "sentence": "Besides providing money to upgrade the fire engines that must traverse the mammoth state and wind along serpentine canyon roads, the state has invested in better command-and-control facilities as well as in the strategies to run them.",
+      "translation": "除了出资升级那些必须横穿这个幅员辽阔的州、沿蜿蜒峡谷道路行驶的消防车外，州政府还投资建设了更好的指挥控制设施，并改进了其运行策略。",
+      "structure": [
+        {"text": "Besides providing money to upgrade the fire engines that must traverse the mammoth state and wind along serpentine canyon roads", "role": "prepositional_phrase", "level": 1},
+        {"text": "to upgrade the fire engines", "role": "non_finite_clause", "level": 2},
+        {"text": "that must traverse the mammoth state and wind along serpentine canyon roads", "role": "relative_clause", "level": 3},
+        {"text": "the state", "role": "subject", "level": 1},
+        {"text": "has invested", "role": "verb_phrase", "level": 1},
+        {"text": "in better command-and-control facilities as well as in the strategies to run them", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Besides providing... 是介词 besides 后接动名词短语，表示除了升级消防车之外还有其他投入。",
+        "that 引导定语从句修饰 fire engines，其中 traverse 与 wind 是并列谓语。",
+        "as well as 连接两个 invest in 的对象，them 指前面的 command-and-control facilities。",
+        "wind 在这里是动词，表示道路蜿蜒延伸，而不是名词“风”。"
+      ],
+      "expressions": [
+        {"text": "Besides doing", "meaning_zh": "除了做……之外"},
+        {"text": "invest in", "meaning_zh": "投资于……"},
+        {"text": "as well as", "meaning_zh": "以及；除……之外还"},
+        {"text": "command-and-control facilities", "meaning_zh": "指挥控制设施"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 24,
+      "sentence": "'In the fire sieges of earlier years, we found that other jurisdictions and states were willing to offer mutual-aid help, but we were not able to communicate adequately with them,' says Kim Zagaris, chief of the state's Office of Emergency Services Fire and Rescue Branch.",
+      "translation": "州紧急服务办公室消防与救援部门负责人金·扎加里斯说：“在早些年的大规模火灾中，我们发现其他辖区和州愿意提供互助援助，但我们无法与他们进行充分沟通。”",
+      "structure": [
+        {"text": "'In the fire sieges of earlier years, we found that other jurisdictions and states were willing to offer mutual-aid help, but we were not able to communicate adequately with them,'", "role": "direct_speech", "level": 1},
+        {"text": "we found", "role": "main_clause", "level": 2},
+        {"text": "that other jurisdictions and states were willing to offer mutual-aid help", "role": "noun_clause", "level": 3},
+        {"text": "but we were not able to communicate adequately with them", "role": "coordinated_clause", "level": 2},
+        {"text": "chief of the state's Office of Emergency Services Fire and Rescue Branch", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "that 从句作 found 的宾语，说明其他地区当时愿意提供互助。",
+        "but 连接转折分句：援助意愿存在，但有效沟通能力不足。",
+        "them 指愿意提供互助援助的 other jurisdictions and states。",
+        "人名后的 chief... 是同位语，说明说话者的职务。"
+      ],
+      "expressions": [
+        {"text": "be willing to", "meaning_zh": "愿意做……"},
+        {"text": "offer mutual-aid help", "meaning_zh": "提供互助援助"},
+        {"text": "be able to communicate adequately", "meaning_zh": "能够进行充分沟通"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 25,
+      "sentence": "After a commission examined and revamped communications procedures, the statewide response 'has become far more professional and responsive,' he says.",
+      "translation": "他说，在一个委员会审查并彻底改进沟通程序后，全州的应急响应“已变得专业、高效得多”。",
+      "structure": [
+        {"text": "After a commission examined and revamped communications procedures", "role": "adverbial_clause", "level": 1},
+        {"text": "examined and revamped", "role": "coordinated_predicate", "level": 2},
+        {"text": "the statewide response", "role": "subject", "level": 1},
+        {"text": "'has become far more professional and responsive,'", "role": "verb_phrase", "level": 1},
+        {"text": "he says", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "After 从句交代全州响应能力改善之前所采取的制度措施。",
+        "examined 与 revamped 是并列谓语，分别表示审查和重新改进程序。",
+        "far 修饰比较级 more professional and responsive，强调提升幅度很大。",
+        "引号只覆盖报道者直接引用的谓语部分，而主语由作者转述。"
+      ],
+      "expressions": [
+        {"text": "revamp procedures", "meaning_zh": "彻底改进程序"},
+        {"text": "statewide response", "meaning_zh": "全州范围的应急响应"},
+        {"text": "far more professional and responsive", "meaning_zh": "专业、高效得多"}
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 26,
+      "sentence": "There is a sense among both government officials and residents that the speed, dedication, and coordination of firefighters from several states and jurisdictions are resulting in greater efficiency than in past 'siege fire' situations.",
+      "translation": "政府官员和居民都认为，来自多个州和辖区的消防员凭借速度、投入和协作，正带来比以往“围城式火灾”中更高的效率。",
+      "structure": [
+        {"text": "There is a sense", "role": "main_clause", "level": 1},
+        {"text": "among both government officials and residents", "role": "prepositional_phrase", "level": 1},
+        {"text": "that the speed, dedication, and coordination of firefighters from several states and jurisdictions are resulting in greater efficiency than in past 'siege fire' situations", "role": "noun_clause", "level": 2},
+        {"text": "the speed, dedication, and coordination of firefighters from several states and jurisdictions", "role": "subject", "level": 3},
+        {"text": "are resulting in", "role": "verb_phrase", "level": 3},
+        {"text": "greater efficiency than in past 'siege fire' situations", "role": "object", "level": 3}
+      ],
+      "difficult_points": [
+        "that 从句与 sense 构成同位内容，说明官员和居民共同持有的看法。",
+        "both...and... 连接 government officials 与 residents 两类人。",
+        "主语由 speed、dedication 和 coordination 三项并列构成，因此谓语使用 are。",
+        "than in past... situations 中省略了 efficiency was，避免重复。"
+      ],
+      "expressions": [
+        {"text": "There is a sense that", "meaning_zh": "人们有一种看法，认为……"},
+        {"text": "both ... and ...", "meaning_zh": "……和……两者都"},
+        {"text": "result in greater efficiency", "meaning_zh": "带来更高效率"}
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 27,
+      "sentence": "In recent years, the Southern California region has improved building codes, evacuation procedures, and procurement of new technology.",
+      "translation": "近年来，南加州地区改进了建筑规范、疏散程序以及新技术的采购工作。",
+      "structure": [
+        {"text": "In recent years", "role": "prepositional_phrase", "level": 1},
+        {"text": "the Southern California region", "role": "subject", "level": 1},
+        {"text": "has improved", "role": "verb_phrase", "level": 1},
+        {"text": "building codes, evacuation procedures, and procurement of new technology", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "has improved 使用现在完成时，概括近年已经取得且影响延续至今的改进。",
+        "improved 后接三个并列宾语，分别涉及建筑、疏散和技术采购。",
+        "procurement 是正式用语，指有组织地购置所需技术或设备。"
+      ],
+      "expressions": [
+        {"text": "building codes", "meaning_zh": "建筑规范"},
+        {"text": "evacuation procedures", "meaning_zh": "疏散程序"},
+        {"text": "procurement of new technology", "meaning_zh": "新技术的采购"}
+      ]
+    },
+    {
+      "id": "J-02",
+      "paragraph_label": "J",
+      "sentence_index": 28,
+      "sentence": "'I am extraordinarily impressed by the improvements we have witnessed,' says Randy Jacobs, a Southern California based lawyer who has had to evacuate both his home and business to escape wildfires.",
+      "translation": "“我们亲眼见证的这些改进给我留下了极其深刻的印象，”南加州律师兰迪·雅各布斯说；为了躲避野火，他曾不得不从自己的住宅和办公场所撤离。",
+      "structure": [
+        {"text": "'I am extraordinarily impressed by the improvements we have witnessed,'", "role": "direct_speech", "level": 1},
+        {"text": "I am extraordinarily impressed", "role": "main_clause", "level": 2},
+        {"text": "by the improvements", "role": "prepositional_phrase", "level": 2},
+        {"text": "we have witnessed", "role": "relative_clause", "level": 3},
+        {"text": "a Southern California based lawyer", "role": "apposition", "level": 1},
+        {"text": "who has had to evacuate both his home and business to escape wildfires", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "we have witnessed 是省略关系代词 that 的定语从句，修饰 improvements。",
+        "a Southern California based lawyer 是 Randy Jacobs 的同位语。",
+        "who 引导定语从句修饰 lawyer，说明他亲身遭遇野火撤离的经历。",
+        "to escape wildfires 是目的状语，说明从住宅和办公地点撤离的原因。"
+      ],
+      "expressions": [
+        {"text": "be impressed by", "meaning_zh": "对……印象深刻"},
+        {"text": "witness improvements", "meaning_zh": "亲眼见证改进"},
+        {"text": "have to evacuate", "meaning_zh": "不得不撤离"},
+        {"text": "escape wildfires", "meaning_zh": "躲避野火"}
+      ]
+    },
+    {
+      "id": "J-03",
+      "paragraph_label": "J",
+      "sentence_index": 29,
+      "sentence": "'Notwithstanding all the damage that will continue to be caused by wildfires, we will no longer suffer the loss of life endured in the past because of the fire prevention and firefighting measures that have been put in place,' he says.",
+      "translation": "他说：“尽管野火仍将继续造成种种破坏，但由于已经落实了防火和灭火措施，我们将不再遭受过去那样的人员伤亡。”",
+      "structure": [
+        {"text": "'Notwithstanding all the damage that will continue to be caused by wildfires, we will no longer suffer the loss of life endured in the past because of the fire prevention and firefighting measures that have been put in place,'", "role": "direct_speech", "level": 1},
+        {"text": "Notwithstanding all the damage that will continue to be caused by wildfires", "role": "prepositional_phrase", "level": 2},
+        {"text": "that will continue to be caused by wildfires", "role": "relative_clause", "level": 3},
+        {"text": "we will no longer suffer the loss of life endured in the past", "role": "main_clause", "level": 2},
+        {"text": "endured in the past", "role": "participial_phrase", "level": 3},
+        {"text": "because of the fire prevention and firefighting measures that have been put in place", "role": "prepositional_phrase", "level": 2},
+        {"text": "that have been put in place", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "Notwithstanding 相当于 despite，后接名词短语引出让步背景。",
+        "that will continue... 修饰 damage，使用将来时被动语态说明损害仍会发生。",
+        "endured in the past 是过去分词短语，后置修饰 the loss of life。",
+        "that have been put in place 修饰 measures，表示这些措施已经得到实施。"
+      ],
+      "expressions": [
+        {"text": "Notwithstanding", "meaning_zh": "尽管"},
+        {"text": "suffer the loss of life", "meaning_zh": "遭受人员伤亡"},
+        {"text": "fire prevention and firefighting measures", "meaning_zh": "防火与灭火措施"},
+        {"text": "put measures in place", "meaning_zh": "落实措施"}
+      ]
+    }
+  ]
+}

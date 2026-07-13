@@ -1,0 +1,2279 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts15_test4_reading",
+  "passage_id": "ielts15_test4_p1",
+  "passage_title": "The Return of the Huarango",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The south coast of Peru is a narrow, 2,000-kilometre-long strip of desert squeezed between the Andes and the Pacific Ocean.",
+      "translation": "秘鲁南部海岸是一条狭长的、长达2000公里的沙漠带，夹在安第斯山脉和太平洋之间。",
+      "structure": [
+        {
+          "text": "The south coast of Peru",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "of Peru",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "is",
+          "role": "linking_verb",
+          "level": 1
+        },
+        {
+          "text": "a narrow, 2,000-kilometre-long strip of desert",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "squeezed between the Andes and the Pacific Ocean",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "主语是 The south coast of Peru，后面的 of Peru 只限定地点。",
+        "2,000-kilometre-long 是复合形容词，整体修饰 strip。",
+        "squeezed between... 是过去分词短语，补充说明这条沙漠带所处的位置。"
+      ],
+      "expressions": [
+        {
+          "text": "a strip of desert",
+          "meaning_zh": "一条沙漠带"
+        },
+        {
+          "text": "squeezed between",
+          "meaning_zh": "被夹在……之间"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "It is also one of the most fragile ecosystems on Earth.",
+      "translation": "它也是地球上最脆弱的生态系统之一。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is also",
+          "role": "linking_verb",
+          "level": 1
+        },
+        {
+          "text": "one of the most fragile ecosystems on Earth",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "on Earth",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指代前一句中的秘鲁南部海岸这一区域。",
+        "one of 后接复数名词 ecosystems，表示“……之一”。"
+      ],
+      "expressions": [
+        {
+          "text": "one of the most fragile ecosystems",
+          "meaning_zh": "最脆弱的生态系统之一"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "It hardly ever rains there, and the only year-round source of water is located tens of metres below the surface.",
+      "translation": "那里几乎从不下雨，而唯一全年都有的水源位于地表以下几十米处。",
+      "structure": [
+        {
+          "text": "It hardly ever rains there",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "hardly ever",
+          "role": "adverbial_phrase",
+          "level": 2
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "the only year-round source of water is located tens of metres below the surface",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "tens of metres below the surface",
+          "role": "adverbial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "hardly ever 是否定频率表达，意思是“几乎从不”。",
+        "and 连接两个并列分句，分别说明降雨稀少和水源很深。",
+        "year-round 修饰 source of water，强调水源全年存在。"
+      ],
+      "expressions": [
+        {
+          "text": "hardly ever",
+          "meaning_zh": "几乎从不"
+        },
+        {
+          "text": "year-round source of water",
+          "meaning_zh": "全年存在的水源"
+        },
+        {
+          "text": "below the surface",
+          "meaning_zh": "在地表以下"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "This is why the huarango tree is so suited to life there: it has the longest roots of any tree in the world.",
+      "translation": "这就是为什么 huarango 树如此适合在那里生存：它拥有世界上所有树木中最长的根系。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "linking_verb",
+          "level": 1
+        },
+        {
+          "text": "why the huarango tree is so suited to life there",
+          "role": "predicative_clause",
+          "level": 1
+        },
+        {
+          "text": "the huarango tree is so suited to life there",
+          "role": "clause_content",
+          "level": 2
+        },
+        {
+          "text": "it has the longest roots of any tree in the world",
+          "role": "explanatory_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "This 指代上一段提到的极端干旱和深层水源。",
+        "why 引导表语从句，解释 huarango 树适应当地环境的原因。",
+        "冒号后的 it has... 进一步说明适应性的具体依据。"
+      ],
+      "expressions": [
+        {
+          "text": "be suited to",
+          "meaning_zh": "适合……"
+        },
+        {
+          "text": "of any tree in the world",
+          "meaning_zh": "在世界上所有树木中"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "They stretch down 50–80 metres and, as well as sucking up water for the tree, they bring it into the higher subsoil, creating a water source for other plant life.",
+      "translation": "它们向下延伸50到80米，并且除了为树木吸收水分外，还把水带到较高的底土层，为其他植物创造水源。",
+      "structure": [
+        {
+          "text": "They stretch down 50–80 metres",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "as well as sucking up water for the tree",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "they bring it into the higher subsoil",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "creating a water source for other plant life",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "They 指代 huarango tree 的 roots。",
+        "as well as 后接动名词 sucking，表示“除了……之外也”。",
+        "it 指代 water，而不是 tree。",
+        "creating... 是现在分词结果状语，说明把水带到高层底土后的结果。"
+      ],
+      "expressions": [
+        {
+          "text": "as well as",
+          "meaning_zh": "除了……之外也"
+        },
+        {
+          "text": "suck up water",
+          "meaning_zh": "吸收水分"
+        },
+        {
+          "text": "create a water source",
+          "meaning_zh": "创造水源"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 6,
+      "sentence": "Dr David Beresford-Jones, archaeobotanist at Cambridge University, has been studying the role of the huarango tree in landscape change in the Lower Ica Valley in southern Peru.",
+      "translation": "剑桥大学的考古植物学家 David Beresford-Jones 博士一直在研究 huarango 树在秘鲁南部下伊卡谷地景观变化中所起的作用。",
+      "structure": [
+        {
+          "text": "Dr David Beresford-Jones",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "archaeobotanist at Cambridge University",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "has been studying",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the role of the huarango tree in landscape change",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "in the Lower Ica Valley in southern Peru",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "两个逗号之间的 archaeobotanist... 是同位语，补充说明人物身份。",
+        "has been studying 是现在完成进行时，强调研究从过去持续到现在。",
+        "the role of... in... 表示“……在……中的作用”。"
+      ],
+      "expressions": [
+        {
+          "text": "has been studying",
+          "meaning_zh": "一直在研究"
+        },
+        {
+          "text": "the role of",
+          "meaning_zh": "……的作用"
+        },
+        {
+          "text": "landscape change",
+          "meaning_zh": "景观变化"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 7,
+      "sentence": "He believes the huarango was key to the ancient people's diet and, because it could reach deep water sources, it allowed local people to withstand years of drought when their other crops failed.",
+      "translation": "他认为 huarango 树是古人饮食中的关键部分，并且因为它能够到达深层水源，所以能让当地人在其他作物歉收时经受住多年的干旱。",
+      "structure": [
+        {
+          "text": "He believes",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "the huarango was key to the ancient people's diet",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 2
+        },
+        {
+          "text": "because it could reach deep water sources",
+          "role": "adverbial_clause",
+          "level": 3
+        },
+        {
+          "text": "it allowed local people to withstand years of drought",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "when their other crops failed",
+          "role": "adverbial_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "believes 后省略 that，后面两个并列内容都是他相信的内容。",
+        "because 从句插入在第二个并列内容前，说明 huarango 能帮助人们抗旱的原因。",
+        "it 在 because 从句中指 huarango，在 it allowed... 中同样指 huarango。",
+        "when their other crops failed 表示其他作物歉收的时间背景。"
+      ],
+      "expressions": [
+        {
+          "text": "be key to",
+          "meaning_zh": "对……至关重要"
+        },
+        {
+          "text": "withstand years of drought",
+          "meaning_zh": "经受住多年的干旱"
+        },
+        {
+          "text": "crops failed",
+          "meaning_zh": "作物歉收"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "But over the centuries huarango trees were gradually replaced with crops.",
+      "translation": "但几个世纪以来，huarango 树逐渐被农作物取代。",
+      "structure": [
+        {
+          "text": "But",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "over the centuries",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "huarango trees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were gradually replaced with",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "crops",
+          "role": "agent_or_replacement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "But 标志话题从 huarango 的价值转向其被替代的变化。",
+        "were replaced with 是被动语态，说明树木被农作物取代。",
+        "over the centuries 强调这一变化是长期逐步发生的。"
+      ],
+      "expressions": [
+        {
+          "text": "over the centuries",
+          "meaning_zh": "几个世纪以来"
+        },
+        {
+          "text": "be replaced with",
+          "meaning_zh": "被……取代"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "Cutting down native woodland leads to erosion, as there is nothing to keep the soil in place.",
+      "translation": "砍伐本地林地会导致侵蚀，因为没有东西能固定住土壤。",
+      "structure": [
+        {
+          "text": "Cutting down native woodland",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "leads to",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "erosion",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "as there is nothing to keep the soil in place",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "to keep the soil in place",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Cutting down native woodland 是动名词短语作主语。",
+        "as 引导原因状语从句，解释为什么砍林会导致侵蚀。",
+        "to keep the soil in place 修饰 nothing，表示“能够固定土壤的东西”。"
+      ],
+      "expressions": [
+        {
+          "text": "lead to erosion",
+          "meaning_zh": "导致侵蚀"
+        },
+        {
+          "text": "keep the soil in place",
+          "meaning_zh": "固定土壤"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "So when the huarangos go, the land turns into a desert.",
+      "translation": "因此，当 huarango 树消失时，土地就会变成沙漠。",
+      "structure": [
+        {
+          "text": "So",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "when the huarangos go",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "the huarangos",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "the land turns into a desert",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "turns into a desert",
+          "role": "verb_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "So 承接前一句的因果关系，说明树木消失带来的结果。",
+        "go 在这里不是“去”，而是指树木消失或不复存在。",
+        "when 引导时间状语从句，主句是 the land turns into a desert。"
+      ],
+      "expressions": [
+        {
+          "text": "turn into",
+          "meaning_zh": "变成"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Nothing grows at all in the Lower Ica Valley now.",
+      "translation": "如今在下伊卡谷地，什么都不生长了。",
+      "structure": [
+        {
+          "text": "Nothing",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "grows",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "at all",
+          "role": "adverbial_phrase",
+          "level": 1
+        },
+        {
+          "text": "in the Lower Ica Valley",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "now",
+          "role": "adverbial",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Nothing 本身是否定主语，表示“没有任何东西”。",
+        "at all 加强否定语气，强调完全不生长。",
+        "now 与前文的历史变化形成对比。"
+      ],
+      "expressions": [
+        {
+          "text": "not at all",
+          "meaning_zh": "完全不"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "For centuries the huarango tree was vital to the people of the neighbouring Middle Ica Valley too.",
+      "translation": "几个世纪以来，huarango 树对邻近的中伊卡谷地的人们也至关重要。",
+      "structure": [
+        {
+          "text": "For centuries",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the huarango tree",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "linking_verb",
+          "level": 1
+        },
+        {
+          "text": "vital to the people of the neighbouring Middle Ica Valley",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "too",
+          "role": "adverbial",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "For centuries 放在句首，突出 huarango 重要性的持续时间。",
+        "be vital to 表示“对……至关重要”。",
+        "too 表示中伊卡谷地与前文下伊卡谷地一样依赖这种树。"
+      ],
+      "expressions": [
+        {
+          "text": "for centuries",
+          "meaning_zh": "几个世纪以来"
+        },
+        {
+          "text": "be vital to",
+          "meaning_zh": "对……至关重要"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "They grew vegetables under it and ate products made from its seed pods.",
+      "translation": "他们在树下种蔬菜，并食用由它的豆荚制成的产品。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "grew vegetables under it",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "ate products made from its seed pods",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "made from its seed pods",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "They 指代中伊卡谷地的人们。",
+        "under it 中的 it 指 huarango tree。",
+        "made from its seed pods 是过去分词短语，修饰 products。"
+      ],
+      "expressions": [
+        {
+          "text": "made from",
+          "meaning_zh": "由……制成"
+        },
+        {
+          "text": "seed pods",
+          "meaning_zh": "豆荚；种荚"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "Its leaves and bark were used for herbal remedies, while its branches were used for charcoal for cooking and heating, and its trunk was used to build houses.",
+      "translation": "它的叶子和树皮被用作草药，而树枝被用来制成做饭和取暖用的木炭，树干则被用来建造房屋。",
+      "structure": [
+        {
+          "text": "Its leaves and bark were used for herbal remedies",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "while its branches were used for charcoal for cooking and heating",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "its branches were used for charcoal",
+          "role": "clause_content",
+          "level": 2
+        },
+        {
+          "text": "for cooking and heating",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "and its trunk was used to build houses",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to build houses",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "句中连续使用被动语态 were used / was used，列举树的不同部分的用途。",
+        "while 在这里表示对比和并列，而不只是时间含义。",
+        "for cooking and heating 修饰 charcoal，说明木炭的用途。",
+        "its 在三处都指 huarango tree。"
+      ],
+      "expressions": [
+        {
+          "text": "be used for",
+          "meaning_zh": "被用于……"
+        },
+        {
+          "text": "herbal remedies",
+          "meaning_zh": "草药疗法；草药"
+        },
+        {
+          "text": "cooking and heating",
+          "meaning_zh": "做饭和取暖"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "But now it is disappearing rapidly.",
+      "translation": "但现在它正在迅速消失。",
+      "structure": [
+        {
+          "text": "But now",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is disappearing",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "rapidly",
+          "role": "adverbial",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "But now 与前面“几个世纪以来很重要”形成明显转折。",
+        "it 指代 huarango tree。",
+        "is disappearing 是现在进行时，强调正在发生的快速变化。"
+      ],
+      "expressions": [
+        {
+          "text": "disappear rapidly",
+          "meaning_zh": "迅速消失"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "The majority of the huarango forests in the valley have already been cleared for fuel and agriculture – initially, these were smallholdings, but now they're huge farms producing crops for the international market.",
+      "translation": "谷地中大多数 huarango 森林已经因燃料和农业用途而被清除——起初这些是小农场，但现在它们成了为国际市场生产作物的大型农场。",
+      "structure": [
+        {
+          "text": "The majority of the huarango forests in the valley",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have already been cleared",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "for fuel and agriculture",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "initially, these were smallholdings",
+          "role": "explanatory_clause",
+          "level": 1
+        },
+        {
+          "text": "but now they're huge farms producing crops for the international market",
+          "role": "contrast_clause",
+          "level": 1
+        },
+        {
+          "text": "producing crops for the international market",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "have already been cleared 是现在完成时的被动语态，强调森林已经被清除。",
+        "破折号后解释被清除后的土地经营形式如何变化。",
+        "these 指被开垦后的土地或农场单位，不是指森林本身仍然存在。",
+        "producing... 是现在分词短语，修饰 huge farms。"
+      ],
+      "expressions": [
+        {
+          "text": "the majority of",
+          "meaning_zh": "大多数……"
+        },
+        {
+          "text": "be cleared for",
+          "meaning_zh": "为……而被清除"
+        },
+        {
+          "text": "the international market",
+          "meaning_zh": "国际市场"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "'Of the forests that were here 1,000 years ago, 99 per cent have already gone,' says botanist Oliver Whaley from Kew Gardens in London, who, together with ethnobotanist Dr William Milliken, is running a pioneering project to protect and restore the rapidly disappearing habitat.",
+      "translation": "伦敦邱园的植物学家 Oliver Whaley 说：“一千年前这里存在的森林中，99%已经消失了。”他正与民族植物学家 William Milliken 博士一起开展一个开创性项目，以保护并恢复这个正在迅速消失的栖息地。",
+      "structure": [
+        {
+          "text": "'Of the forests that were here 1,000 years ago, 99 per cent have already gone,'",
+          "role": "direct_speech",
+          "level": 1
+        },
+        {
+          "text": "that were here 1,000 years ago",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "says botanist Oliver Whaley from Kew Gardens in London",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "who, together with ethnobotanist Dr William Milliken, is running a pioneering project",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "to protect and restore the rapidly disappearing habitat",
+          "role": "infinitive_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "句首直接引语中，Of the forests... 表示“在那些森林之中”。",
+        "that were here 1,000 years ago 是定语从句，修饰 forests。",
+        "who 引导非限制性定语从句，补充说明 Oliver Whaley 正在做的项目。",
+        "to protect and restore... 表示项目目的。"
+      ],
+      "expressions": [
+        {
+          "text": "have already gone",
+          "meaning_zh": "已经消失"
+        },
+        {
+          "text": "run a pioneering project",
+          "meaning_zh": "开展一个开创性项目"
+        },
+        {
+          "text": "protect and restore",
+          "meaning_zh": "保护并恢复"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "In order to succeed, Whaley needs to get the local people on board, and that has meant overcoming local prejudices.",
+      "translation": "为了取得成功，Whaley 需要让当地人支持并参与进来，而这意味着要克服当地人的偏见。",
+      "structure": [
+        {
+          "text": "In order to succeed",
+          "role": "infinitive_phrase",
+          "level": 1
+        },
+        {
+          "text": "Whaley needs to get the local people on board",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to get the local people on board",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "that has meant overcoming local prejudices",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "overcoming local prejudices",
+          "role": "gerund_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "In order to succeed 是目的状语，说明争取当地人支持的原因。",
+        "get the local people on board 是习语，表示让当地人认同并参与。",
+        "that 指代前半句“让当地人支持”这件事。",
+        "has meant 后接动名词 overcoming，表示这件事实际意味着什么。"
+      ],
+      "expressions": [
+        {
+          "text": "in order to succeed",
+          "meaning_zh": "为了取得成功"
+        },
+        {
+          "text": "get people on board",
+          "meaning_zh": "让人支持并参与"
+        },
+        {
+          "text": "overcome local prejudices",
+          "meaning_zh": "克服当地偏见"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "'Increasingly aspirational communities think that if you plant food trees in your home or street, it shows you are poor, and still need to grow your own food,' he says.",
+      "translation": "他说：“越来越有向上追求的社区认为，如果你在家里或街上种食物树，这说明你很穷，还需要自己种食物。”",
+      "structure": [
+        {
+          "text": "'Increasingly aspirational communities think",
+          "role": "report_content_main_clause",
+          "level": 1
+        },
+        {
+          "text": "that if you plant food trees in your home or street, it shows you are poor, and still need to grow your own food",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "if you plant food trees in your home or street",
+          "role": "adverbial_clause",
+          "level": 3
+        },
+        {
+          "text": "it shows you are poor",
+          "role": "main_clause",
+          "level": 3
+        },
+        {
+          "text": "and still need to grow your own food",
+          "role": "coordinated_predicate",
+          "level": 3
+        },
+        {
+          "text": "he says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "that 引导 think 的宾语从句，整个引语表达社区的看法。",
+        "if 从句嵌在宾语从句中，提出“种食物树”的条件。",
+        "it shows 后省略 that，you are poor 是 shows 的宾语从句。",
+        "still need to grow your own food 与 are poor 并列，继续说明被认为贫穷的表现。"
+      ],
+      "expressions": [
+        {
+          "text": "aspirational communities",
+          "meaning_zh": "有向上追求的社区"
+        },
+        {
+          "text": "grow your own food",
+          "meaning_zh": "自己种食物"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "In order to stop the Middle Ica Valley going the same way as the Lower Ica Valley, Whaley is encouraging locals to love the huarangos again.",
+      "translation": "为了阻止中伊卡谷地走上下伊卡谷地的老路，Whaley 正在鼓励当地人重新喜爱 huarango 树。",
+      "structure": [
+        {
+          "text": "In order to stop the Middle Ica Valley going the same way as the Lower Ica Valley",
+          "role": "infinitive_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Middle Ica Valley going the same way as the Lower Ica Valley",
+          "role": "object_complement_structure",
+          "level": 2
+        },
+        {
+          "text": "Whaley",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is encouraging",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "locals to love the huarangos again",
+          "role": "object_and_complement",
+          "level": 1
+        },
+        {
+          "text": "to love the huarangos again",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "In order to... 表示目的，说明 Whaley 鼓励当地人的原因。",
+        "stop + 名词 + doing 表示“阻止某人或某物做某事”。",
+        "going the same way as... 意为“走上与……相同的道路”，这里指生态退化。",
+        "is encouraging 是现在进行时，说明行动正在推进。"
+      ],
+      "expressions": [
+        {
+          "text": "go the same way as",
+          "meaning_zh": "走上与……相同的道路"
+        },
+        {
+          "text": "encourage locals to",
+          "meaning_zh": "鼓励当地人去……"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "'It's a process of cultural resuscitation,' he says.",
+      "translation": "他说：“这是一个文化复苏的过程。”",
+      "structure": [
+        {
+          "text": "'It's a process of cultural resuscitation,'",
+          "role": "direct_speech",
+          "level": 1
+        },
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "a process of cultural resuscitation",
+          "role": "complement",
+          "level": 2
+        },
+        {
+          "text": "he says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "It 指代重新让当地人喜爱 huarango 的行动。",
+        "process of cultural resuscitation 表示这不只是种树，也是恢复文化认同。",
+        "he says 是引语后的报道分句。"
+      ],
+      "expressions": [
+        {
+          "text": "a process of",
+          "meaning_zh": "一个……的过程"
+        },
+        {
+          "text": "cultural resuscitation",
+          "meaning_zh": "文化复苏"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "He has already set up a huarango festival to reinstate a sense of pride in their eco-heritage, and has helped local schoolchildren plant thousands of trees.",
+      "translation": "他已经设立了 huarango 节，以恢复当地人对其生态遗产的自豪感，并且帮助当地学生种下了数千棵树。",
+      "structure": [
+        {
+          "text": "He",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has already set up a huarango festival",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to reinstate a sense of pride in their eco-heritage",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "has helped local schoolchildren plant thousands of trees",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "plant thousands of trees",
+          "role": "bare_infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "两个 has 共享同一个主语 He，列举 Whaley 已经采取的行动。",
+        "to reinstate... 是目的状语，说明举办节日的目的。",
+        "helped local schoolchildren plant... 中 help 后接不带 to 的动词原形 plant。",
+        "their 指当地人的。"
+      ],
+      "expressions": [
+        {
+          "text": "set up a festival",
+          "meaning_zh": "设立一个节日"
+        },
+        {
+          "text": "a sense of pride",
+          "meaning_zh": "自豪感"
+        },
+        {
+          "text": "eco-heritage",
+          "meaning_zh": "生态遗产"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "'In order to get people interested in habitat restoration, you need to plant a tree that is useful to them,' says Whaley.",
+      "translation": "Whaley 说：“为了让人们对栖息地恢复感兴趣，你需要种一种对他们有用的树。”",
+      "structure": [
+        {
+          "text": "'In order to get people interested in habitat restoration",
+          "role": "infinitive_phrase",
+          "level": 1
+        },
+        {
+          "text": "get people interested in habitat restoration",
+          "role": "object_complement_structure",
+          "level": 2
+        },
+        {
+          "text": "you need to plant a tree",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that is useful to them",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "says Whaley",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "In order to... 表示目的，说明种有用树木的原因。",
+        "get people interested in... 是“让人们对……感兴趣”的结构。",
+        "that is useful to them 是定语从句，修饰 a tree。",
+        "them 指当地人。"
+      ],
+      "expressions": [
+        {
+          "text": "get people interested in",
+          "meaning_zh": "让人们对……感兴趣"
+        },
+        {
+          "text": "habitat restoration",
+          "meaning_zh": "栖息地恢复"
+        },
+        {
+          "text": "be useful to",
+          "meaning_zh": "对……有用"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "So, he has been working with local families to attempt to create a sustainable income from the huarangos by turning their products into foodstuffs.",
+      "translation": "因此，他一直在与当地家庭合作，试图通过把 huarango 的产品转化为食品来创造可持续收入。",
+      "structure": [
+        {
+          "text": "So",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "he has been working with local families",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to attempt to create a sustainable income from the huarangos",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "to create a sustainable income from the huarangos",
+          "role": "infinitive_phrase",
+          "level": 3
+        },
+        {
+          "text": "by turning their products into foodstuffs",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "has been working 是现在完成进行时，强调合作持续了一段时间。",
+        "to attempt to create... 说明合作的目的。",
+        "by turning... 表示创造收入的方式。",
+        "their products 指 huarango 的产物，而不是家庭的产品。"
+      ],
+      "expressions": [
+        {
+          "text": "work with local families",
+          "meaning_zh": "与当地家庭合作"
+        },
+        {
+          "text": "create a sustainable income",
+          "meaning_zh": "创造可持续收入"
+        },
+        {
+          "text": "turn products into foodstuffs",
+          "meaning_zh": "把产品转化为食品"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "'Boil up the beans and you get this thick brown syrup like molasses.",
+      "translation": "“把豆子煮开，你就会得到这种像糖蜜一样浓稠的棕色糖浆。",
+      "structure": [
+        {
+          "text": "'Boil up the beans",
+          "role": "imperative_clause",
+          "level": 1
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "you get this thick brown syrup like molasses",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "like molasses",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "这是直接引语的第一句，开头保留引号但引语尚未结束。",
+        "祈使句 Boil up... 与 and 后的结果分句相连，表示“做了前者就会得到后者”。",
+        "like molasses 是比喻，说明糖浆的质地和颜色。"
+      ],
+      "expressions": [
+        {
+          "text": "boil up",
+          "meaning_zh": "煮开；煮沸"
+        },
+        {
+          "text": "like molasses",
+          "meaning_zh": "像糖蜜一样"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "You can also use it in drinks, soups or stews.'",
+      "translation": "你还可以把它用在饮料、汤或炖菜里。”",
+      "structure": [
+        {
+          "text": "You",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can also use",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "it",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "in drinks, soups or stews",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "You 是泛指用法，表示一般人或使用者。",
+        "it 指前一句提到的 thick brown syrup。",
+        "句末的引号表示 Whaley 的这段直接引语结束。"
+      ],
+      "expressions": [
+        {
+          "text": "use it in",
+          "meaning_zh": "把它用于……"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "The pods can be ground into flour to make cakes, and the seeds roasted into a sweet, chocolatey 'coffee'.",
+      "translation": "豆荚可以被磨成面粉来制作蛋糕，种子则可以被烘烤成一种甜甜的、带巧克力味的“咖啡”。",
+      "structure": [
+        {
+          "text": "The pods can be ground into flour",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to make cakes",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "the seeds roasted into a sweet, chocolatey 'coffee'",
+          "role": "elliptical_clause",
+          "level": 1
+        },
+        {
+          "text": "roasted into a sweet, chocolatey 'coffee'",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "can be ground 是情态动词加被动语态，表示豆荚可被磨碎。",
+        "to make cakes 表示磨成面粉的目的。",
+        "and 后省略了 can be，完整理解为 the seeds can be roasted into...。",
+        "'coffee' 加引号说明它类似咖啡，但并非真正的咖啡。"
+      ],
+      "expressions": [
+        {
+          "text": "be ground into flour",
+          "meaning_zh": "被磨成面粉"
+        },
+        {
+          "text": "to make cakes",
+          "meaning_zh": "用来做蛋糕"
+        },
+        {
+          "text": "roasted into",
+          "meaning_zh": "被烘烤制成"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "'It's packed full of vitamins and minerals,' Whaley says.",
+      "translation": "Whaley 说：“它富含维生素和矿物质。”",
+      "structure": [
+        {
+          "text": "'It's packed full of vitamins and minerals,'",
+          "role": "direct_speech",
+          "level": 1
+        },
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "packed full of vitamins and minerals",
+          "role": "complement",
+          "level": 2
+        },
+        {
+          "text": "Whaley says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "It 指前面由 huarango 产物制成的食物或饮品。",
+        "be packed full of 表示“富含”，不是字面上的“被装满”。",
+        "Whaley says 是引语后的报道分句。"
+      ],
+      "expressions": [
+        {
+          "text": "be packed full of",
+          "meaning_zh": "富含……"
+        },
+        {
+          "text": "vitamins and minerals",
+          "meaning_zh": "维生素和矿物质"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 29,
+      "sentence": "And some farmers are already planting huarangos.",
+      "translation": "而且一些农民已经在种植 huarango 树了。",
+      "structure": [
+        {
+          "text": "And",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "some farmers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are already planting",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "huarangos",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "And 承接上一段，说明 Whaley 的设想已经有实际案例。",
+        "are planting 是现在进行时，表示这些农民正在采取行动。",
+        "already 强调这种行动已经开始。"
+      ],
+      "expressions": [
+        {
+          "text": "already planting",
+          "meaning_zh": "已经在种植"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 30,
+      "sentence": "Alberto Benevides, owner of Ica Valley's only certified organic farm, which Whaley helped set up, has been planting the tree for 13 years.",
+      "translation": "Alberto Benevides 是伊卡谷地唯一获得认证的有机农场的主人，这个农场由 Whaley 帮助创办；他已经种这种树13年了。",
+      "structure": [
+        {
+          "text": "Alberto Benevides",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "owner of Ica Valley's only certified organic farm",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "which Whaley helped set up",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "has been planting",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the tree",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "for 13 years",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "owner of... 是同位语，补充说明 Alberto Benevides 的身份。",
+        "which 引导非限制性定语从句，修饰 certified organic farm。",
+        "helped set up 中 help 后接省略 to 的动词原形 set up。",
+        "has been planting... for 13 years 表示种树行为持续了13年。"
+      ],
+      "expressions": [
+        {
+          "text": "certified organic farm",
+          "meaning_zh": "获得认证的有机农场"
+        },
+        {
+          "text": "help set up",
+          "meaning_zh": "帮助创办"
+        },
+        {
+          "text": "for 13 years",
+          "meaning_zh": "长达13年"
+        }
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 31,
+      "sentence": "He produces syrup and flour, and sells these products at an organic farmers' market in Lima.",
+      "translation": "他生产糖浆和面粉，并在利马的一个有机农贸市场出售这些产品。",
+      "structure": [
+        {
+          "text": "He",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "produces syrup and flour",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "sells these products at an organic farmers' market in Lima",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "at an organic farmers' market in Lima",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "He 指 Alberto Benevides。",
+        "produces 和 sells 共享同一个主语 He，构成并列谓语。",
+        "these products 指前面的 syrup and flour。",
+        "farmers' 是复数所有格，表示农民市场。"
+      ],
+      "expressions": [
+        {
+          "text": "organic farmers' market",
+          "meaning_zh": "有机农贸市场"
+        }
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 32,
+      "sentence": "His farm is relatively small and doesn't yet provide him with enough to live on, but he hopes this will change.",
+      "translation": "他的农场相对较小，目前还不能为他提供足够的生活来源，但他希望这种情况会改变。",
+      "structure": [
+        {
+          "text": "His farm is relatively small",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "doesn't yet provide him with enough to live on",
+          "role": "coordinated_predicate",
+          "level": 1
+        },
+        {
+          "text": "to live on",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "but he hopes this will change",
+          "role": "contrast_clause",
+          "level": 1
+        },
+        {
+          "text": "this will change",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "doesn't yet 表示“尚未”，说明现在还不能靠农场维持生活。",
+        "provide him with enough 中 enough 指足够的收入或资源。",
+        "to live on 修饰 enough，表示“赖以生活”。",
+        "this 指农场目前不能提供足够生活来源的状况。"
+      ],
+      "expressions": [
+        {
+          "text": "provide someone with enough to live on",
+          "meaning_zh": "为某人提供足够维持生活的东西"
+        },
+        {
+          "text": "this will change",
+          "meaning_zh": "这种情况会改变"
+        }
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "'The organic market is growing rapidly in Peru,' Benevides says.",
+      "translation": "Benevides 说：“秘鲁的有机市场正在迅速增长。”",
+      "structure": [
+        {
+          "text": "'The organic market is growing rapidly in Peru,'",
+          "role": "direct_speech",
+          "level": 1
+        },
+        {
+          "text": "The organic market",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "is growing rapidly",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "in Peru",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "Benevides says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "is growing rapidly 是现在进行时，强调市场正在快速发展。",
+        "in Peru 限定增长发生的市场范围。",
+        "Benevides says 表明这是农场主对未来信心的依据。"
+      ],
+      "expressions": [
+        {
+          "text": "organic market",
+          "meaning_zh": "有机市场"
+        },
+        {
+          "text": "grow rapidly",
+          "meaning_zh": "快速增长"
+        }
+      ]
+    },
+    {
+      "id": "G-06",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "'I am investing in the future.'",
+      "translation": "“我是在投资未来。”",
+      "structure": [
+        {
+          "text": "'I",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "am investing in",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the future",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "I 指说话者 Benevides。",
+        "am investing in 是现在进行时，表示他当前种植 huarango 的长期投入。",
+        "the future 指未来的有机市场和可持续收益。"
+      ],
+      "expressions": [
+        {
+          "text": "invest in the future",
+          "meaning_zh": "投资未来"
+        }
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 35,
+      "sentence": "But even if Whaley can convince the local people to fall in love with the huarango again, there is still the threat of the larger farms.",
+      "translation": "但是，即使 Whaley 能说服当地人重新爱上 huarango 树，较大型农场的威胁仍然存在。",
+      "structure": [
+        {
+          "text": "But",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "even if Whaley can convince the local people to fall in love with the huarango again",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "Whaley can convince the local people",
+          "role": "clause_content",
+          "level": 2
+        },
+        {
+          "text": "to fall in love with the huarango again",
+          "role": "infinitive_phrase",
+          "level": 3
+        },
+        {
+          "text": "there is still the threat of the larger farms",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "even if 引导让步状语从句，表示即便当地人态度改变，问题仍未解决。",
+        "convince... to do 表示“说服……去做”。",
+        "there is still... 是存在句，强调威胁依然存在。",
+        "the larger farms 指与小农或本地社区相对的大型农场。"
+      ],
+      "expressions": [
+        {
+          "text": "even if",
+          "meaning_zh": "即使"
+        },
+        {
+          "text": "convince someone to",
+          "meaning_zh": "说服某人去……"
+        },
+        {
+          "text": "fall in love with",
+          "meaning_zh": "爱上……"
+        }
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 36,
+      "sentence": "Some of these cut across the forests and break up the corridors that allow the essential movement of mammals, birds and pollen up and down the narrow forest strip.",
+      "translation": "其中一些大型农场横穿森林，打断了那些允许哺乳动物、鸟类和花粉沿狭窄林带上下移动的通道。",
+      "structure": [
+        {
+          "text": "Some of these",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "cut across the forests",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and",
+          "role": "coordinating_conjunction",
+          "level": 1
+        },
+        {
+          "text": "break up the corridors",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that allow the essential movement of mammals, birds and pollen up and down the narrow forest strip",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "up and down the narrow forest strip",
+          "role": "adverbial_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "these 指上一句中的 larger farms。",
+        "cut across 和 break up 是并列谓语，描述大型农场对森林走廊的破坏。",
+        "that 引导定语从句，修饰 corridors。",
+        "movement of mammals, birds and pollen 强调这些走廊对动物和授粉过程都重要。"
+      ],
+      "expressions": [
+        {
+          "text": "cut across",
+          "meaning_zh": "横穿；穿过"
+        },
+        {
+          "text": "break up",
+          "meaning_zh": "打断；分割"
+        },
+        {
+          "text": "essential movement",
+          "meaning_zh": "必要的移动"
+        }
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 37,
+      "sentence": "In the hope of counteracting this, he's persuading farmers to let him plant forest corridors on their land.",
+      "translation": "为了抵消这种影响，他正在劝说农民允许他在他们的土地上种植森林走廊。",
+      "structure": [
+        {
+          "text": "In the hope of counteracting this",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "counteracting this",
+          "role": "gerund_phrase",
+          "level": 2
+        },
+        {
+          "text": "he's persuading farmers",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to let him plant forest corridors on their land",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "plant forest corridors on their land",
+          "role": "bare_infinitive_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "In the hope of... 表示行动目的，不能误解为具体地点。",
+        "this 指大型农场打断森林走廊造成的问题。",
+        "is persuading 是现在进行时，说明劝说工作正在进行。",
+        "let him plant 中 let 后接不带 to 的动词原形 plant。"
+      ],
+      "expressions": [
+        {
+          "text": "in the hope of",
+          "meaning_zh": "怀着……的希望；为了"
+        },
+        {
+          "text": "counteract this",
+          "meaning_zh": "抵消这种影响"
+        },
+        {
+          "text": "persuade farmers to",
+          "meaning_zh": "说服农民去……"
+        }
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 38,
+      "sentence": "He believes the extra woodland will also benefit the farms by reducing their water usage through a lowering of evaporation and providing a refuge for bio-control insects.",
+      "translation": "他认为，额外的林地还会通过降低蒸发从而减少农场用水量，并为生物防治昆虫提供庇护所，从而使农场受益。",
+      "structure": [
+        {
+          "text": "He believes",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "the extra woodland will also benefit the farms",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "by reducing their water usage",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "through a lowering of evaporation",
+          "role": "prepositional_phrase",
+          "level": 4
+        },
+        {
+          "text": "and providing a refuge for bio-control insects",
+          "role": "coordinated_gerund_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "believes 后省略 that，后面的从句说明额外林地对农场的好处。",
+        "by reducing... 和 providing... 是并列方式，说明 benefit 的实现途径。",
+        "their 指 farms 的用水量。",
+        "through a lowering of evaporation 进一步说明如何减少用水。"
+      ],
+      "expressions": [
+        {
+          "text": "benefit the farms",
+          "meaning_zh": "使农场受益"
+        },
+        {
+          "text": "reduce water usage",
+          "meaning_zh": "减少用水量"
+        },
+        {
+          "text": "provide a refuge for",
+          "meaning_zh": "为……提供庇护所"
+        }
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 39,
+      "sentence": "'If we can record biodiversity and see how it all works, then we're in a good position to move on from there.",
+      "translation": "“如果我们能够记录生物多样性并了解整个系统如何运作，那么我们就处在一个可以从那里继续推进的有利位置。",
+      "structure": [
+        {
+          "text": "'If we can record biodiversity and see how it all works",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "record biodiversity",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "see how it all works",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "how it all works",
+          "role": "object_clause",
+          "level": 3
+        },
+        {
+          "text": "then we're in a good position to move on from there",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to move on from there",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "句首 If 引导条件状语从句，then 后是主句。",
+        "record biodiversity 和 see how it all works 是并列动作。",
+        "it all 指该生态系统或生物多样性整体的运作方式。",
+        "in a good position to... 表示具备继续推进的有利条件。"
+      ],
+      "expressions": [
+        {
+          "text": "record biodiversity",
+          "meaning_zh": "记录生物多样性"
+        },
+        {
+          "text": "in a good position to",
+          "meaning_zh": "处于有利位置去……"
+        },
+        {
+          "text": "move on from there",
+          "meaning_zh": "从那里继续推进"
+        }
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 40,
+      "sentence": "Desert habitats can reduce down to very little,' Whaley explains.",
+      "translation": "沙漠栖息地可以缩减到非常小的规模。”Whaley 解释说。",
+      "structure": [
+        {
+          "text": "Desert habitats",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can reduce down to",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "very little",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "Whaley explains",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "can reduce down to very little 表示栖息地即使缩小到很小仍可能存在。",
+        "句中引号结束前一段直接引语。",
+        "Whaley explains 是报道分句，说明前面的话出自 Whaley。"
+      ],
+      "expressions": [
+        {
+          "text": "reduce down to",
+          "meaning_zh": "缩减到"
+        }
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 41,
+      "sentence": "'It's not like a rainforest that needs to have this huge expanse.",
+      "translation": "“它不像雨林那样需要有如此巨大的面积。",
+      "structure": [
+        {
+          "text": "'It's not like a rainforest",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "a rainforest that needs to have this huge expanse",
+          "role": "comparison_object",
+          "level": 2
+        },
+        {
+          "text": "that needs to have this huge expanse",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "to have this huge expanse",
+          "role": "infinitive_phrase",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "It 指沙漠栖息地，不是指某一棵树。",
+        "not like a rainforest 表示与雨林进行对比。",
+        "that 引导定语从句，修饰 rainforest。",
+        "huge expanse 指大面积的连续区域。"
+      ],
+      "expressions": [
+        {
+          "text": "not like",
+          "meaning_zh": "不像……"
+        },
+        {
+          "text": "huge expanse",
+          "meaning_zh": "巨大面积"
+        }
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 42,
+      "sentence": "Life has always been confined to corridors and islands here.",
+      "translation": "这里的生命一直被限制在走廊和岛屿般的区域中。",
+      "structure": [
+        {
+          "text": "Life",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has always been confined to",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "corridors and islands",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "here",
+          "role": "adverbial",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "has been confined to 是现在完成时的被动语态，强调长期以来的限制状态。",
+        "corridors and islands 是比喻，指狭长或零散的栖息地。",
+        "here 指秘鲁伊卡谷地这类沙漠生态区域。"
+      ],
+      "expressions": [
+        {
+          "text": "be confined to",
+          "meaning_zh": "被限制在……"
+        }
+      ]
+    },
+    {
+      "id": "I-05",
+      "paragraph_label": "I",
+      "sentence_index": 43,
+      "sentence": "If you just have a few trees left, the population can grow up quickly because it's used to exploiting water when it arrives.'",
+      "translation": "如果只剩下几棵树，种群也能迅速增长起来，因为它已经习惯了在水到来时利用水。”",
+      "structure": [
+        {
+          "text": "If you just have a few trees left",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "you just have a few trees left",
+          "role": "clause_content",
+          "level": 2
+        },
+        {
+          "text": "the population can grow up quickly",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "because it's used to exploiting water",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "when it arrives",
+          "role": "adverbial_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "If 引导条件状语从句，说明即使只剩少量树木也可能恢复。",
+        "you 是泛指用法，不是特定读者。",
+        "it's used to exploiting water 中 be used to 后接动名词 exploiting，表示“习惯于”。",
+        "when it arrives 中的 it 指 water。"
+      ],
+      "expressions": [
+        {
+          "text": "have a few trees left",
+          "meaning_zh": "还剩下几棵树"
+        },
+        {
+          "text": "be used to exploiting",
+          "meaning_zh": "习惯于利用"
+        }
+      ]
+    },
+    {
+      "id": "I-06",
+      "paragraph_label": "I",
+      "sentence_index": 44,
+      "sentence": "He sees his project as a model that has the potential to be rolled out across other arid areas around the world.",
+      "translation": "他把自己的项目视为一个模式，这个模式有潜力推广到世界各地其他干旱地区。",
+      "structure": [
+        {
+          "text": "He",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "sees his project as a model",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that has the potential to be rolled out across other arid areas around the world",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "to be rolled out across other arid areas around the world",
+          "role": "infinitive_phrase",
+          "level": 3
+        },
+        {
+          "text": "across other arid areas around the world",
+          "role": "prepositional_phrase",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "sees... as... 表示“把……视为……”。",
+        "that 引导定语从句，修饰 a model。",
+        "has the potential to be rolled out 是“有被推广的潜力”的被动表达。",
+        "arid areas 指干旱地区。"
+      ],
+      "expressions": [
+        {
+          "text": "see something as a model",
+          "meaning_zh": "把某事视为一个模式"
+        },
+        {
+          "text": "have the potential to",
+          "meaning_zh": "有潜力去……"
+        },
+        {
+          "text": "be rolled out across",
+          "meaning_zh": "被推广到……"
+        }
+      ]
+    },
+    {
+      "id": "I-07",
+      "paragraph_label": "I",
+      "sentence_index": 45,
+      "sentence": "'If we can do it here, in the most fragile system on Earth, then that's a real message of hope for lots of places, including Africa, where there is drought and they just can't afford to wait for rain.'",
+      "translation": "“如果我们能在这里，在地球上最脆弱的系统中做到这一点，那么这对许多地方来说就是一个真正充满希望的信息，包括非洲，那里有干旱，人们根本等不起降雨。”",
+      "structure": [
+        {
+          "text": "'If we can do it here, in the most fragile system on Earth",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "in the most fragile system on Earth",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "then that's a real message of hope for lots of places",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "including Africa",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "where there is drought and they just can't afford to wait for rain",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "to wait for rain",
+          "role": "infinitive_phrase",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "If 引导条件状语从句，then 后说明如果成功会产生的意义。",
+        "it 指在当地恢复 huarango 栖息地的项目。",
+        "including Africa 补充说明 lots of places 中包含非洲。",
+        "where 引导非限制性定语从句，说明非洲等地面临干旱且不能等待降雨。"
+      ],
+      "expressions": [
+        {
+          "text": "a real message of hope",
+          "meaning_zh": "真正的希望信息"
+        },
+        {
+          "text": "can't afford to wait",
+          "meaning_zh": "等不起；无法承受等待"
+        },
+        {
+          "text": "wait for rain",
+          "meaning_zh": "等待降雨"
+        }
+      ]
+    }
+  ]
+}

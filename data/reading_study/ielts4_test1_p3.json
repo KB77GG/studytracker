@@ -1,0 +1,434 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts4_test1_reading",
+  "passage_id": "ielts4_test1_p3",
+  "passage_title": "Visual Symbols and the Blind",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Part 1",
+      "translation": "第一部分。",
+      "structure": [{"text": "Part 1", "role": "heading", "level": 1}],
+      "difficult_points": ["Part 1 是文章分段标题，不是完整叙述句。", "Part 表示“部分”，数字 1 表示第一部分。"],
+      "expressions": []
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 2,
+      "sentence": "From a number of recent studies, it has become clear that blind people can appreciate the use of outlines and perspectives to describe the arrangement of objects and other surfaces in space.",
+      "translation": "根据近期的一些研究可以明确看出，盲人能够理解使用轮廓和透视来描述物体及其他表面在空间中的排列方式。",
+      "structure": [
+        {"text": "From a number of recent studies", "role": "prepositional_phrase", "level": 1},
+        {"text": "it has become clear", "role": "main_clause", "level": 1},
+        {"text": "that blind people can appreciate the use of outlines and perspectives to describe the arrangement of objects and other surfaces in space", "role": "that_clause", "level": 2},
+        {"text": "the use of outlines and perspectives", "role": "object", "level": 3},
+        {"text": "to describe the arrangement of objects and other surfaces in space", "role": "non_finite_clause", "level": 4}
+      ],
+      "difficult_points": ["it has become clear 是形式主语结构，真正的主语是 that 引导的从句。", "to describe...是不定式，说明使用轮廓和透视的目的。", "appreciate 在这里表示“理解、领会”，不是“欣赏”物品。"],
+      "expressions": [{"text": "it has become clear that", "meaning_zh": "已经明确的是"}, {"text": "the arrangement of", "meaning_zh": "……的排列方式"}]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 3,
+      "sentence": "But pictures are more than literal representations.",
+      "translation": "但图画并不只是对事物的字面呈现。",
+      "structure": [{"text": "pictures", "role": "subject", "level": 1}, {"text": "are more than", "role": "verb_phrase", "level": 1}, {"text": "literal representations", "role": "complement", "level": 1}],
+      "difficult_points": ["more than 表示“不仅仅是”，强调图画还有超出字面再现的意义。", "literal representations 指对现实对象的直接、字面式呈现。"],
+      "expressions": [{"text": "more than", "meaning_zh": "不仅仅是；超过"}]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "This fact was drawn to my attention dramatically when a blind woman in one of my investigations decided on her own initiative to draw a wheel as it was spinning.",
+      "translation": "我的一项研究中，一位盲人女性主动决定把一个正在旋转的轮子画下来，这件事以强烈的方式让我意识到了这一点。",
+      "structure": [
+        {"text": "This fact", "role": "subject", "level": 1},
+        {"text": "was drawn to my attention dramatically", "role": "verb_phrase", "level": 1},
+        {"text": "when a blind woman in one of my investigations decided on her own initiative to draw a wheel as it was spinning", "role": "adverbial_clause", "level": 2},
+        {"text": "a blind woman in one of my investigations", "role": "subject", "level": 3},
+        {"text": "to draw a wheel", "role": "non_finite_clause", "level": 4},
+        {"text": "as it was spinning", "role": "adverbial_clause", "level": 5}
+      ],
+      "difficult_points": ["was drawn to my attention 是被动表达，意为“引起我的注意”。", "on her own initiative 表示“主动地、凭自己的意愿”，不是研究者要求她做的。", "as it was spinning 中 it 指 wheel，说明画的是旋转中的轮子。"],
+      "expressions": [{"text": "draw ... to one's attention", "meaning_zh": "使某人注意到……"}, {"text": "on one's own initiative", "meaning_zh": "主动地；凭自己的意愿"}]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "To show this motion, she traced a curve inside the circle (Fig. 1).",
+      "translation": "为了表现这种运动，她在圆形内部画出了一条曲线（图1）。",
+      "structure": [{"text": "To show this motion", "role": "non_finite_clause", "level": 1}, {"text": "she", "role": "subject", "level": 1}, {"text": "traced", "role": "verb_phrase", "level": 1}, {"text": "a curve inside the circle", "role": "object", "level": 1}],
+      "difficult_points": ["句首 To show this motion 是目的状语，主语与主句 she 一致。", "this motion 指前句轮子正在旋转这一运动。"],
+      "expressions": [{"text": "to show", "meaning_zh": "为了展示；为了表现"}]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "I was taken aback.",
+      "translation": "我大吃一惊。",
+      "structure": [{"text": "I", "role": "subject", "level": 1}, {"text": "was taken aback", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["take someone aback 是固定短语，表示“使某人震惊、措手不及”。", "was taken aback 是被动形式，主语 I 表示受到惊讶。"],
+      "expressions": [{"text": "be taken aback", "meaning_zh": "大吃一惊；感到震惊"}]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "Lines of motion, such as the one she used, are a very recent invention in the history of illustration.",
+      "translation": "运动线（例如她使用的那种线条）在插画史上是非常晚近的发明。",
+      "structure": [{"text": "Lines of motion", "role": "subject", "level": 1}, {"text": "such as the one she used", "role": "parenthesis", "level": 2}, {"text": "are", "role": "verb_phrase", "level": 1}, {"text": "a very recent invention in the history of illustration", "role": "complement", "level": 1}, {"text": "she used", "role": "relative_clause", "level": 3}],
+      "difficult_points": ["such as the one she used 是插入性的举例，the one 指前文的一条运动线。", "in the history of illustration 限定 invention 的历史范围。"],
+      "expressions": [{"text": "such as", "meaning_zh": "例如"}, {"text": "in the history of", "meaning_zh": "在……的历史上"}]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Indeed, as art scholar David Kunzle notes, Wilhelm Busch, a trend-setting nineteenth-century cartoonist, used virtually no motion lines in his popular figures until about 1877.",
+      "translation": "事实上，正如艺术学者戴维·昆茨勒所指出的那样，开创潮流的19世纪漫画家威廉·布希直到大约1877年才在其流行的人物画中使用运动线，而且几乎没有使用。",
+      "structure": [{"text": "Indeed", "role": "conjunctive_adverb", "level": 1}, {"text": "as art scholar David Kunzle notes", "role": "parenthesis", "level": 1}, {"text": "Wilhelm Busch", "role": "subject", "level": 1}, {"text": "a trend-setting nineteenth-century cartoonist", "role": "apposition", "level": 2}, {"text": "used virtually no motion lines in his popular figures until about 1877", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["as art scholar David Kunzle notes 是插入的引用来源说明。", "a trend-setting...是 Wilhelm Busch 的同位语。", "used virtually no...until...表示直到约1877年前几乎没有使用运动线。"],
+      "expressions": [{"text": "as ... notes", "meaning_zh": "正如……指出的那样"}, {"text": "virtually no", "meaning_zh": "几乎没有"}]
+    },
+    {
+      "id": "C-09",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "When I asked several other blind study subjects to draw a spinning wheel, one particularly clever rendition appeared repeatedly: several subjects showed the wheel's spokes as curved lines.",
+      "translation": "当我请其他几位盲人研究对象画一个旋转的轮子时，一种特别巧妙的画法反复出现：几位对象把轮辐画成了曲线。",
+      "structure": [{"text": "When I asked several other blind study subjects to draw a spinning wheel", "role": "adverbial_clause", "level": 1}, {"text": "several other blind study subjects", "role": "object", "level": 2}, {"text": "to draw a spinning wheel", "role": "non_finite_clause", "level": 3}, {"text": "one particularly clever rendition", "role": "subject", "level": 1}, {"text": "appeared repeatedly", "role": "verb_phrase", "level": 1}, {"text": "several subjects showed the wheel's spokes as curved lines", "role": "main_clause", "level": 1}],
+      "difficult_points": ["When 引导时间状语从句，to draw a spinning wheel 是 ask 的宾语补足成分。", "冒号后解释 clever rendition 的具体内容。", "show A as B 表示“把 A 表现为 B”。"],
+      "expressions": [{"text": "study subject", "meaning_zh": "研究对象"}, {"text": "show ... as ...", "meaning_zh": "把……表现为……"}]
+    },
+    {
+      "id": "C-10",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "When asked about these curves, they all described them as metaphorical ways of suggesting motion.",
+      "translation": "当被问及这些曲线时，他们都把曲线描述为暗示运动的比喻性方式。",
+      "structure": [{"text": "When asked about these curves", "role": "adverbial_clause", "level": 1}, {"text": "they all", "role": "subject", "level": 1}, {"text": "described them as metaphorical ways of suggesting motion", "role": "verb_phrase", "level": 1}, {"text": "of suggesting motion", "role": "prepositional_phrase", "level": 2}],
+      "difficult_points": ["When asked 是省略了主语和 be 动词的被动时间从句，完整为 when they were asked。", "them 指前面的 curves，as 后面是对曲线作用的说明。"],
+      "expressions": [{"text": "be asked about", "meaning_zh": "被问及……"}, {"text": "a way of doing", "meaning_zh": "做某事的方式"}]
+    },
+    {
+      "id": "C-11",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Majority rule would argue that this device somehow indicated motion very well.",
+      "translation": "按照多数人的判断，这种做法似乎很有效地表示了运动。",
+      "structure": [{"text": "Majority rule", "role": "subject", "level": 1}, {"text": "would argue", "role": "verb_phrase", "level": 1}, {"text": "that this device somehow indicated motion very well", "role": "that_clause", "level": 2}],
+      "difficult_points": ["Majority rule 指以多数意见作为判断依据，并非一个具体的人。", "would argue 表示一种推断或假设性的判断。", "that 从句中 this device 指用弯曲轮辐表示运动的做法。"],
+      "expressions": [{"text": "majority rule", "meaning_zh": "多数决定原则"}, {"text": "indicate motion", "meaning_zh": "表示运动"}]
+    },
+    {
+      "id": "C-12",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "But was it a better indicator than, say, broken or wavy lines – or any other kind of line, for that matter?",
+      "translation": "但它是否比断线、波浪线——或者就此而言，比其他任何线条——更能表示运动呢？",
+      "structure": [{"text": "was it", "role": "main_clause", "level": 1}, {"text": "a better indicator", "role": "complement", "level": 1}, {"text": "than, say, broken or wavy lines", "role": "comparative_phrase", "level": 1}, {"text": "or any other kind of line", "role": "coordinate_phrase", "level": 1}, {"text": "for that matter", "role": "parenthesis", "level": 2}],
+      "difficult_points": ["这是一般疑问句，it 指前文用弯曲轮辐表示运动的做法。", "say 是插入语，表示“比如说”。", "for that matter 表示“就此而言”，补充扩大比较范围。"],
+      "expressions": [{"text": "for that matter", "meaning_zh": "就此而言；同样"}]
+    },
+    {
+      "id": "C-13",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "The answer was not clear.",
+      "translation": "答案并不明确。",
+      "structure": [{"text": "The answer", "role": "subject", "level": 1}, {"text": "was", "role": "verb_phrase", "level": 1}, {"text": "not clear", "role": "complement", "level": 1}],
+      "difficult_points": ["answer 指前一个比较性问题的答案，而不是某道选择题的答案。", "clear 在这里表示“明确的、容易判断的”。"],
+      "expressions": [{"text": "not clear", "meaning_zh": "不明确"}]
+    },
+    {
+      "id": "C-14",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "So I decided to test whether various lines of motion were apt ways of showing movement or if they were merely idiosyncratic marks.",
+      "translation": "因此，我决定检验各种运动线究竟是否适合表现运动，还是仅仅是带有个人特点的标记。",
+      "structure": [{"text": "So", "role": "conjunctive_adverb", "level": 1}, {"text": "I", "role": "subject", "level": 1}, {"text": "decided", "role": "verb_phrase", "level": 1}, {"text": "to test whether various lines of motion were apt ways of showing movement or if they were merely idiosyncratic marks", "role": "non_finite_clause", "level": 2}, {"text": "whether various lines of motion were apt ways of showing movement", "role": "whether_clause", "level": 3}, {"text": "if they were merely idiosyncratic marks", "role": "if_clause", "level": 3}],
+      "difficult_points": ["decide to test 后接不定式，说明决定进行检验。", "whether...or if...构成“是……还是……”的选择结构。", "apt 表示“适合的”，idiosyncratic 表示个人化、独特而未必有普遍性的。"],
+      "expressions": [{"text": "decide to do", "meaning_zh": "决定做某事"}, {"text": "be apt for", "meaning_zh": "适合于"}]
+    },
+    {
+      "id": "C-15",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "Moreover, I wanted to discover whether there were differences in how the blind and the sighted interpreted lines of motion.",
+      "translation": "此外，我还想了解盲人和视力正常的人在理解运动线方面是否存在差异。",
+      "structure": [{"text": "Moreover", "role": "conjunctive_adverb", "level": 1}, {"text": "I", "role": "subject", "level": 1}, {"text": "wanted to discover", "role": "verb_phrase", "level": 1}, {"text": "whether there were differences in how the blind and the sighted interpreted lines of motion", "role": "whether_clause", "level": 2}, {"text": "how the blind and the sighted interpreted lines of motion", "role": "embedded_question", "level": 3}],
+      "difficult_points": ["whether 从句作 discover 的宾语，询问是否存在差异。", "the blind 和 the sighted 是“盲人”和“视力正常者”的群体名词。", "how 引导的从句说明差异具体体现在哪种理解方式上。"],
+      "expressions": [{"text": "in how", "meaning_zh": "在如何……方面"}, {"text": "interpret", "meaning_zh": "理解；诠释"}]
+    },
+    {
+      "id": "D-16",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "To search out these answers, I created raised-line drawings of five different wheels, depicting spokes with lines that curved, bent, waved, dashed and extended beyond the perimeter of the wheel.",
+      "translation": "为了寻找这些问题的答案，我制作了五个不同轮子的凸线图，用弯曲、折弯、波浪、虚线以及延伸到轮子周界之外的线条来描绘轮辐。",
+      "structure": [{"text": "To search out these answers", "role": "non_finite_clause", "level": 1}, {"text": "I", "role": "subject", "level": 1}, {"text": "created raised-line drawings of five different wheels", "role": "verb_phrase", "level": 1}, {"text": "depicting spokes with lines that curved, bent, waved, dashed and extended beyond the perimeter of the wheel", "role": "participial_phrase", "level": 2}, {"text": "that curved, bent, waved, dashed and extended beyond the perimeter of the wheel", "role": "relative_clause", "level": 3}],
+      "difficult_points": ["To search out 是目的状语，search out 表示“查找、探究”。", "depicting 分词短语补充说明图画如何呈现轮辐。", "that 引导的定语从句修饰 lines，列举线条的不同形态。"],
+      "expressions": [{"text": "search out", "meaning_zh": "查找；探究"}, {"text": "extend beyond", "meaning_zh": "延伸到……之外"}]
+    },
+    {
+      "id": "D-17",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "I then asked eighteen blind volunteers to feel the wheels and assign one of the following motions to each wheel: wobbling, spinning fast, spinning steadily, jerking or braking.",
+      "translation": "随后，我请18名盲人志愿者触摸这些轮子，并为每个轮子指定下列一种运动：摇晃、快速旋转、平稳旋转、猛动或刹车。",
+      "structure": [{"text": "I", "role": "subject", "level": 1}, {"text": "then asked", "role": "verb_phrase", "level": 1}, {"text": "eighteen blind volunteers", "role": "object", "level": 1}, {"text": "to feel the wheels and assign one of the following motions to each wheel", "role": "non_finite_clause", "level": 2}, {"text": "wobbling, spinning fast, spinning steadily, jerking or braking", "role": "apposition", "level": 2}],
+      "difficult_points": ["ask somebody to do something 结构中，不定式说明要求志愿者做的两件事。", "assign A to B 表示“把 A 指派给 B”，这里是给轮子匹配运动类型。", "冒号后列出 five motions 中的具体选项。"],
+      "expressions": [{"text": "blind volunteer", "meaning_zh": "盲人志愿者"}, {"text": "assign ... to ...", "meaning_zh": "把……分配给……"}]
+    },
+    {
+      "id": "D-18",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "My control group consisted of eighteen sighted undergraduates from the University of Toronto.",
+      "translation": "我的对照组由18名来自多伦多大学的视力正常本科生组成。",
+      "structure": [{"text": "My control group", "role": "subject", "level": 1}, {"text": "consisted of", "role": "verb_phrase", "level": 1}, {"text": "eighteen sighted undergraduates from the University of Toronto", "role": "complement", "level": 1}],
+      "difficult_points": ["consist of 是固定短语，表示“由……组成”，不能使用被动语态。", "from the University of Toronto 修饰 undergraduates，说明其来源。"],
+      "expressions": [{"text": "control group", "meaning_zh": "对照组"}, {"text": "consist of", "meaning_zh": "由……组成"}]
+    },
+    {
+      "id": "E-19",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "All but one of the blind subjects assigned distinctive motions to each wheel.",
+      "translation": "除了一名之外，所有盲人受试者都为每个轮子指定了不同的运动。",
+      "structure": [{"text": "All but one of the blind subjects", "role": "subject", "level": 1}, {"text": "assigned", "role": "verb_phrase", "level": 1}, {"text": "distinctive motions", "role": "object", "level": 1}, {"text": "to each wheel", "role": "prepositional_phrase", "level": 1}],
+      "difficult_points": ["All but one 表示“除一个以外的全部”，谓语按 all 使用复数。", "distinctive motions 指各自具有区别性的运动，而不是任意运动。"],
+      "expressions": [{"text": "all but one", "meaning_zh": "除一个以外的全部"}, {"text": "assign ... to ...", "meaning_zh": "把……指定给……"}]
+    },
+    {
+      "id": "E-20",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "Most guessed that the curved spokes indicated that the wheel was spinning steadily; the wavy spokes, they thought, suggested that the wheel was wobbling; and the bent spokes were taken as a sign that the wheel was jerking.",
+      "translation": "大多数人猜测，弯曲的轮辐表示轮子在平稳旋转；他们认为波浪形轮辐暗示轮子在摇晃；而弯折的轮辐则被视为轮子猛动的信号。",
+      "structure": [{"text": "Most", "role": "subject", "level": 1}, {"text": "guessed", "role": "verb_phrase", "level": 1}, {"text": "that the curved spokes indicated that the wheel was spinning steadily", "role": "that_clause", "level": 2}, {"text": "the wavy spokes, they thought, suggested that the wheel was wobbling", "role": "coordinate_clause", "level": 1}, {"text": "the bent spokes were taken as a sign that the wheel was jerking", "role": "coordinate_clause", "level": 1}],
+      "difficult_points": ["三个分号连接并列判断，分别说明三种轮辐与运动的对应关系。", "indicated 后又接 that 从句，说明所表示的具体运动。", "they thought 是插入语；were taken as a sign 是被动结构。"],
+      "expressions": [{"text": "indicate that", "meaning_zh": "表示；表明"}, {"text": "be taken as", "meaning_zh": "被视为"}]
+    },
+    {
+      "id": "E-21",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "Subjects assumed that spokes extending beyond the wheel's perimeter signified that the wheel had its brakes on and that dashed spokes indicated the wheel was spinning quickly.",
+      "translation": "受试者认为，延伸到轮子周界之外的轮辐表示轮子正在刹车，而虚线轮辐表示轮子正在快速旋转。",
+      "structure": [{"text": "Subjects", "role": "subject", "level": 1}, {"text": "assumed", "role": "verb_phrase", "level": 1}, {"text": "that spokes extending beyond the wheel's perimeter signified that the wheel had its brakes on", "role": "that_clause", "level": 2}, {"text": "extending beyond the wheel's perimeter", "role": "participial_phrase", "level": 3}, {"text": "and that dashed spokes indicated the wheel was spinning quickly", "role": "coordinate_clause", "level": 2}],
+      "difficult_points": ["两个并列的 that 从句共同作 assumed 的宾语。", "extending beyond...是现在分词短语，修饰 spokes。", "have one's brakes on 表示“处于刹车状态”。"],
+      "expressions": [{"text": "extend beyond", "meaning_zh": "延伸到……之外"}, {"text": "have one's brakes on", "meaning_zh": "处于刹车状态"}]
+    },
+    {
+      "id": "F-22",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "In addition, the favoured description for the sighted was the favoured description for the blind in every instance.",
+      "translation": "此外，在每一种情况下，视力正常者最偏好的描述也正是盲人最偏好的描述。",
+      "structure": [{"text": "In addition", "role": "conjunctive_adverb", "level": 1}, {"text": "the favoured description for the sighted", "role": "subject", "level": 1}, {"text": "was", "role": "verb_phrase", "level": 1}, {"text": "the favoured description for the blind", "role": "complement", "level": 1}, {"text": "in every instance", "role": "prepositional_phrase", "level": 1}],
+      "difficult_points": ["句子使用表语前置式对比两个群体偏好的描述。", "the sighted 和 the blind 分别指视力正常者和盲人群体。"],
+      "expressions": [{"text": "in every instance", "meaning_zh": "在每一种情况下"}, {"text": "favoured description", "meaning_zh": "最受偏好的描述"}]
+    },
+    {
+      "id": "F-23",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "What is more, the consensus among the sighted was barely higher than that among the blind.",
+      "translation": "更重要的是，视力正常者之间的共识仅仅略高于盲人之间的共识。",
+      "structure": [{"text": "What is more", "role": "conjunctive_adverb", "level": 1}, {"text": "the consensus among the sighted", "role": "subject", "level": 1}, {"text": "was barely higher", "role": "verb_phrase", "level": 1}, {"text": "than that among the blind", "role": "comparative_phrase", "level": 1}],
+      "difficult_points": ["What is more 是连接副词，表示递进，不是疑问句。", "that among the blind 中 that 代替前面的 consensus，避免重复。", "barely higher 表示“仅高一点点”，差异很小。"],
+      "expressions": [{"text": "what is more", "meaning_zh": "更重要的是；此外"}, {"text": "barely higher than", "meaning_zh": "仅略高于"}]
+    },
+    {
+      "id": "F-24",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "Because motion devices are unfamiliar to the blind, the task I gave them involved some problem solving.",
+      "translation": "由于盲人不熟悉这些运动表现手段，我给他们的任务需要进行一定的问题解决。",
+      "structure": [{"text": "Because motion devices are unfamiliar to the blind", "role": "adverbial_clause", "level": 1}, {"text": "the task I gave them", "role": "subject", "level": 1}, {"text": "I gave them", "role": "relative_clause", "level": 2}, {"text": "involved some problem solving", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["Because 引导原因状语从句，说明盲人完成任务需要推理的原因。", "I gave them 是省略关系代词的定语从句，修饰 task。", "problem solving 是名词短语，表示解决问题的过程。"],
+      "expressions": [{"text": "be unfamiliar to", "meaning_zh": "对……不熟悉"}, {"text": "problem solving", "meaning_zh": "问题解决"}]
+    },
+    {
+      "id": "F-25",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "Evidently, however, the blind not only figured out meanings for each line of motion, but as a group they generally came up with the same meaning at least as frequently as did sighted subjects.",
+      "translation": "然而，显然盲人不仅弄清了每种运动线的含义，而且作为一个群体，他们得出相同含义的频率通常至少与视力正常的受试者一样高。",
+      "structure": [{"text": "Evidently, however", "role": "parenthesis", "level": 1}, {"text": "the blind not only figured out meanings for each line of motion", "role": "main_clause", "level": 1}, {"text": "but as a group they generally came up with the same meaning at least as frequently as did sighted subjects", "role": "coordinate_clause", "level": 1}, {"text": "as did sighted subjects", "role": "comparative_clause", "level": 2}],
+      "difficult_points": ["not only...but...连接两个并列谓语，说明盲人的两方面表现。", "as a group 是插入成分，强调把盲人作为群体比较。", "as frequently as did sighted subjects 使用倒装，did 代替 came up with。"],
+      "expressions": [{"text": "figure out", "meaning_zh": "弄清楚；理解"}, {"text": "come up with", "meaning_zh": "提出；想出"}, {"text": "not only ... but ...", "meaning_zh": "不仅……而且……"}]
+    },
+    {
+      "id": "G-26",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "Part 2",
+      "translation": "第二部分。",
+      "structure": [{"text": "Part 2", "role": "heading", "level": 1}],
+      "difficult_points": ["Part 2 是文章分段标题，不是完整叙述句。", "Part 表示“部分”，数字 2 表示第二部分。"],
+      "expressions": []
+    },
+    {
+      "id": "H-27",
+      "paragraph_label": "H",
+      "sentence_index": 27,
+      "sentence": "We have found that the blind understand other kinds of visual metaphors as well.",
+      "translation": "我们发现，盲人同样能够理解其他类型的视觉隐喻。",
+      "structure": [{"text": "We", "role": "subject", "level": 1}, {"text": "have found", "role": "verb_phrase", "level": 1}, {"text": "that the blind understand other kinds of visual metaphors as well", "role": "that_clause", "level": 2}],
+      "difficult_points": ["that 从句作 found 的宾语，说明研究发现的内容。", "as well 放在句末表示“也、同样”。"],
+      "expressions": [{"text": "as well", "meaning_zh": "也；同样"}, {"text": "visual metaphor", "meaning_zh": "视觉隐喻"}]
+    },
+    {
+      "id": "H-28",
+      "paragraph_label": "H",
+      "sentence_index": 28,
+      "sentence": "One blind woman drew a picture of a child inside a heart – choosing that symbol, she said, to show that love surrounded the child.",
+      "translation": "一位盲人女性画了一幅心形图案中有一个孩子的画——她说，她选择这个符号是为了表现爱包围着孩子。",
+      "structure": [{"text": "One blind woman", "role": "subject", "level": 1}, {"text": "drew a picture of a child inside a heart", "role": "verb_phrase", "level": 1}, {"text": "choosing that symbol", "role": "participial_phrase", "level": 2}, {"text": "she said", "role": "parenthesis", "level": 2}, {"text": "to show that love surrounded the child", "role": "non_finite_clause", "level": 3}, {"text": "that love surrounded the child", "role": "that_clause", "level": 4}],
+      "difficult_points": ["破折号后是补充说明，choosing that symbol 表示选择心形符号的行为。", "she said 是插入语，to show...说明选择该符号的目的。", "inside a heart 表示孩子位于心形图案内部。"],
+      "expressions": [{"text": "choose a symbol", "meaning_zh": "选择一个符号"}, {"text": "to show that", "meaning_zh": "为了表现……"}]
+    },
+    {
+      "id": "H-29",
+      "paragraph_label": "H",
+      "sentence_index": 29,
+      "sentence": "With Chang Hong Liu, a doctoral student from China, I have begun exploring how well blind people understand the symbolism behind shapes such as hearts that do not directly represent their meaning.",
+      "translation": "我和来自中国的博士生刘昌宏一起，开始探索盲人对心形等并不直接代表其含义的图形背后的象征意义理解得有多好。",
+      "structure": [{"text": "With Chang Hong Liu, a doctoral student from China", "role": "prepositional_phrase", "level": 1}, {"text": "a doctoral student from China", "role": "apposition", "level": 2}, {"text": "I", "role": "subject", "level": 1}, {"text": "have begun exploring", "role": "verb_phrase", "level": 1}, {"text": "how well blind people understand the symbolism behind shapes such as hearts that do not directly represent their meaning", "role": "embedded_question", "level": 2}, {"text": "that do not directly represent their meaning", "role": "relative_clause", "level": 3}],
+      "difficult_points": ["句首 With 短语说明合作研究者，逗号后的同位语进一步介绍 Liu。", "how well 引导宾语从句，表示“理解得有多好”。", "that 定语从句修饰 shapes，their meaning 指这些形状所象征的含义。"],
+      "expressions": [{"text": "begin exploring", "meaning_zh": "开始探索"}, {"text": "the symbolism behind", "meaning_zh": "……背后的象征意义"}]
+    },
+    {
+      "id": "I-30",
+      "paragraph_label": "I",
+      "sentence_index": 30,
+      "sentence": "We gave a list of twenty pairs of words to sighted subjects and asked them to pick from each pair the term that best related to a circle and the term that best related to a square.",
+      "translation": "我们给视力正常的受试者一份包含20组词语的清单，并要求他们从每组中选出与圆形最相关的词以及与方形最相关的词。",
+      "structure": [{"text": "We", "role": "subject", "level": 1}, {"text": "gave a list of twenty pairs of words to sighted subjects", "role": "verb_phrase", "level": 1}, {"text": "and asked them to pick from each pair the term that best related to a circle and the term that best related to a square", "role": "coordinate_clause", "level": 1}, {"text": "that best related to a circle", "role": "relative_clause", "level": 2}, {"text": "that best related to a square", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["gave 和 asked 是并列谓语，共同说明研究步骤。", "asked them to pick 中 them 是宾语，to pick 是宾语补足语。", "两个 that 定语从句分别修饰两个 term。"],
+      "expressions": [{"text": "a pair of", "meaning_zh": "一对；一组"}, {"text": "relate to", "meaning_zh": "与……相关"}]
+    },
+    {
+      "id": "I-31",
+      "paragraph_label": "I",
+      "sentence_index": 31,
+      "sentence": "For example, we asked: What goes with soft? A circle or a square? Which shape goes with hard?",
+      "translation": "例如，我们问道：“什么与 soft（柔软）相配？圆形还是方形？哪种形状与 hard（坚硬）相配？”",
+      "structure": [{"text": "For example", "role": "parenthesis", "level": 1}, {"text": "we asked", "role": "main_clause", "level": 1}, {"text": "What goes with soft?", "role": "direct_question", "level": 2}, {"text": "A circle or a square?", "role": "alternative_question", "level": 2}, {"text": "Which shape goes with hard?", "role": "direct_question", "level": 2}],
+      "difficult_points": ["冒号后的三个问句是对实验任务的直接示例。", "go with 在此表示“与……相配、联系起来”。"],
+      "expressions": [{"text": "for example", "meaning_zh": "例如"}, {"text": "go with", "meaning_zh": "与……相配；与……联系"}]
+    },
+    {
+      "id": "J-32",
+      "paragraph_label": "J",
+      "sentence_index": 32,
+      "sentence": "All our subjects deemed the circle soft and the square hard.",
+      "translation": "我们所有的受试者都认为圆形柔软、方形坚硬。",
+      "structure": [{"text": "All our subjects", "role": "subject", "level": 1}, {"text": "deemed", "role": "verb_phrase", "level": 1}, {"text": "the circle soft and the square hard", "role": "object_complement", "level": 1}],
+      "difficult_points": ["deem A B 表示“认为 A 是 B”，后面接宾语和宾语补足语。", "soft 和 hard 分别是 circle 与 square 的宾语补足语。"],
+      "expressions": [{"text": "deem ...", "meaning_zh": "认为……"}]
+    },
+    {
+      "id": "J-33",
+      "paragraph_label": "J",
+      "sentence_index": 33,
+      "sentence": "A full 94% ascribed happy to the circle, instead of sad.",
+      "translation": "整整94%的受试者把 happy（快乐）归给圆形，而不是 sad（悲伤）。",
+      "structure": [{"text": "A full 94%", "role": "subject", "level": 1}, {"text": "ascribed happy to the circle", "role": "verb_phrase", "level": 1}, {"text": "instead of sad", "role": "prepositional_phrase", "level": 1}],
+      "difficult_points": ["ascribe A to B 表示“把 A 归因或归属于 B”。", "instead of sad 省略了与前面相同的动词结构，完整意思是而不是把 sad 归给圆形。"],
+      "expressions": [{"text": "ascribe ... to ...", "meaning_zh": "把……归于……"}, {"text": "instead of", "meaning_zh": "而不是"}]
+    },
+    {
+      "id": "J-34",
+      "paragraph_label": "J",
+      "sentence_index": 34,
+      "sentence": "But other pairs revealed less agreement: 79% matched fast to slow and weak to strong, respectively.",
+      "translation": "但其他词对显示出较少的一致性：79%的受试者分别把 fast 与 slow、weak 与 strong 配对。",
+      "structure": [{"text": "But", "role": "conjunctive_adverb", "level": 1}, {"text": "other pairs", "role": "subject", "level": 1}, {"text": "revealed", "role": "verb_phrase", "level": 1}, {"text": "less agreement", "role": "object", "level": 1}, {"text": "79% matched fast to slow and weak to strong, respectively", "role": "explanation", "level": 1}],
+      "difficult_points": ["冒号后具体解释 less agreement 的数据表现。", "respectively 表示前后两组词按顺序对应。", "match A to B 表示把 A 与 B 配对。"],
+      "expressions": [{"text": "reveal agreement", "meaning_zh": "显示一致性"}, {"text": "respectively", "meaning_zh": "分别地"}]
+    },
+    {
+      "id": "J-35",
+      "paragraph_label": "J",
+      "sentence_index": 35,
+      "sentence": "And only 51% linked deep to circle and shallow to square.",
+      "translation": "而只有51%的受试者把 deep 与圆形、shallow 与方形联系起来。",
+      "structure": [{"text": "And only 51%", "role": "subject", "level": 1}, {"text": "linked deep to circle and shallow to square", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["句首 And 连接前句数据，only 强调比例偏低。", "link A to B 表示把两个概念联系起来。"],
+      "expressions": [{"text": "link ... to ...", "meaning_zh": "把……与……联系起来"}]
+    },
+    {
+      "id": "J-36",
+      "paragraph_label": "J",
+      "sentence_index": 36,
+      "sentence": "(See Fig. 2.)",
+      "translation": "（见图2。）",
+      "structure": [{"text": "(See Fig. 2.)", "role": "parenthesis", "level": 1}],
+      "difficult_points": ["括号内是图表引用提示，要求读者参见图2。", "See 是祈使句中的动词，主语 you 被省略。"],
+      "expressions": [{"text": "see Figure", "meaning_zh": "参见图……"}]
+    },
+    {
+      "id": "J-37",
+      "paragraph_label": "J",
+      "sentence_index": 37,
+      "sentence": "When we tested four totally blind volunteers using the same list, we found that their choices closely resembled those made by the sighted subjects.",
+      "translation": "当我们用同一份清单测试四名完全失明的志愿者时，发现他们的选择与视力正常受试者所做的选择非常相似。",
+      "structure": [{"text": "When we tested four totally blind volunteers using the same list", "role": "adverbial_clause", "level": 1}, {"text": "using the same list", "role": "participial_phrase", "level": 2}, {"text": "we", "role": "subject", "level": 1}, {"text": "found", "role": "verb_phrase", "level": 1}, {"text": "that their choices closely resembled those made by the sighted subjects", "role": "that_clause", "level": 2}, {"text": "made by the sighted subjects", "role": "participial_phrase", "level": 3}],
+      "difficult_points": ["When 引导时间状语从句，using the same list 是伴随方式。", "that 从句作 found 的宾语。", "those made by...中 those 代替 choices，过去分词短语修饰 those。"],
+      "expressions": [{"text": "closely resemble", "meaning_zh": "与……非常相似"}, {"text": "using the same list", "meaning_zh": "使用同一份清单"}]
+    },
+    {
+      "id": "J-38",
+      "paragraph_label": "J",
+      "sentence_index": 38,
+      "sentence": "One man, who had been blind since birth, scored extremely well.",
+      "translation": "其中一名男子从出生起就失明，但他的得分非常好。",
+      "structure": [{"text": "One man", "role": "subject", "level": 1}, {"text": "who had been blind since birth", "role": "relative_clause", "level": 2}, {"text": "scored extremely well", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["who 引导非限制性定语从句，补充说明 One man。", "had been blind 是过去完成时，表示在测试前从出生起一直失明。"],
+      "expressions": [{"text": "since birth", "meaning_zh": "自出生以来"}, {"text": "score well", "meaning_zh": "取得好成绩"}]
+    },
+    {
+      "id": "J-39",
+      "paragraph_label": "J",
+      "sentence_index": 39,
+      "sentence": "He made only one match differing from the consensus, assigning \"far\" to square and \"near\" to circle.",
+      "translation": "他只有一组配对不同于多数人的共识：把“远”配给方形，把“近”配给圆形。",
+      "structure": [{"text": "He", "role": "subject", "level": 1}, {"text": "made only one match differing from the consensus", "role": "verb_phrase", "level": 1}, {"text": "differing from the consensus", "role": "participial_phrase", "level": 2}, {"text": "assigning \"far\" to square and \"near\" to circle", "role": "participial_phrase", "level": 2}],
+      "difficult_points": ["differing from the consensus 修饰 match，说明这一配对与多数意见不同。", "assigning 分词短语具体说明这组不同的配对内容。", "make a match 表示完成一次词语与图形的配对。"],
+      "expressions": [{"text": "differ from", "meaning_zh": "不同于"}, {"text": "the consensus", "meaning_zh": "共识；多数意见"}]
+    },
+    {
+      "id": "J-40",
+      "paragraph_label": "J",
+      "sentence_index": 40,
+      "sentence": "In fact, only a small majority of sighted subjects – 53% – had paired far and near to the opposite partners.",
+      "translation": "事实上，只有一小部分多数派视力正常受试者——53%——把 far 和 near 配给了相反的图形。",
+      "structure": [{"text": "In fact", "role": "conjunctive_adverb", "level": 1}, {"text": "only a small majority of sighted subjects", "role": "subject", "level": 1}, {"text": "53%", "role": "parenthesis", "level": 2}, {"text": "had paired far and near to the opposite partners", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["破折号中的 53% 是对 small majority 的具体解释。", "had paired 使用过去完成时，指此前已经完成的配对结果。", "opposite partners 指与预期相反的图形搭配。"],
+      "expressions": [{"text": "in fact", "meaning_zh": "事实上"}, {"text": "a small majority", "meaning_zh": "少数优势的多数"}]
+    },
+    {
+      "id": "J-41",
+      "paragraph_label": "J",
+      "sentence_index": 41,
+      "sentence": "Thus, we concluded that the blind interpret abstract shapes as sighted people do.",
+      "translation": "因此，我们得出结论：盲人对抽象图形的理解方式与视力正常者相同。",
+      "structure": [{"text": "Thus", "role": "conjunctive_adverb", "level": 1}, {"text": "we", "role": "subject", "level": 1}, {"text": "concluded", "role": "verb_phrase", "level": 1}, {"text": "that the blind interpret abstract shapes as sighted people do", "role": "that_clause", "level": 2}, {"text": "as sighted people do", "role": "comparative_clause", "level": 3}],
+      "difficult_points": ["that 从句是 concluded 的宾语，概括研究结论。", "as sighted people do 中 do 代替 interpret abstract shapes，避免重复。", "interpret 在这里表示理解抽象图形背后的含义。"],
+      "expressions": [{"text": "conclude that", "meaning_zh": "得出结论认为……"}, {"text": "as ... do", "meaning_zh": "像……一样"}]
+    }
+  ]
+}

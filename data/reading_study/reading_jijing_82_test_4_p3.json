@@ -1,0 +1,784 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_82_test_4",
+  "passage_id": "reading_jijing_82_test_4_p3",
+  "passage_title": "Keep taking the tablets",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "In the opening pages of Aspirin: The Remarkable Story of a Wonder Drug, Diarmuid Jeffreys describes this little white pill as 'one of the most amazing creations in medical history, a drug so astonishingly versatile that it can relieve headache, ease your aching limbs, lower your temperature and treat some of the deadliest human diseases'.",
+      "translation": "在《阿司匹林：一种奇效药物的非凡故事》一书的开篇，戴尔米德·杰弗里斯将这颗小小的白色药片描述为“医学史上最令人惊叹的创造之一，一种功效多样到令人惊讶的药物，它既能缓解头痛、舒缓四肢酸痛、降低体温，又能治疗一些最致命的人类疾病”。",
+      "structure": [
+        {"text": "In the opening pages of Aspirin: The Remarkable Story of a Wonder Drug", "role": "prepositional_phrase", "level": 1},
+        {"text": "Diarmuid Jeffreys", "role": "subject", "level": 1},
+        {"text": "describes", "role": "verb_phrase", "level": 1},
+        {"text": "this little white pill", "role": "object", "level": 1},
+        {"text": "as 'one of the most amazing creations in medical history, a drug so astonishingly versatile", "role": "complement", "level": 2},
+        {"text": "that it can relieve headache, ease your aching limbs, lower your temperature and treat some of the deadliest human diseases'", "role": "result_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "as 后接的引语是 describe A as B 结构中的 B，说明 Jeffreys 如何形容这颗药片。",
+        "so...versatile that... 是“如此……以至于……”的结果状语从句，说明这种药效有多全面。",
+        "四个并列动词 relieve、ease、lower、treat 共用主语 it，具体列举阿司匹林的功效。"
+      ],
+      "expressions": [
+        {"text": "describe A as B", "meaning_zh": "把A描述为B"},
+        {"text": "so...that...", "meaning_zh": "如此……以至于……"},
+        {"text": "versatile", "meaning_zh": "功能多样的；用途广泛的"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 2,
+      "sentence": "Its properties have been known for thousands of years.",
+      "translation": "它的药用特性已被人们了解了数千年。",
+      "structure": [
+        {"text": "Its properties", "role": "subject", "level": 1},
+        {"text": "have been known", "role": "verb_phrase", "level": 1},
+        {"text": "for thousands of years", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "have been known 是现在完成时的被动语态，强调这一认识由来已久且持续至今。",
+        "Its 指代上一段提到的阿司匹林（这颗白色药片）。"
+      ],
+      "expressions": [
+        {"text": "properties", "meaning_zh": "（物质的）特性"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 3,
+      "sentence": "Ancient Egyptian physicians used extracts from the willow tree as an analgesic, or pain killer.",
+      "translation": "古埃及医生曾用柳树的提取物作为止痛药，即镇痛剂。",
+      "structure": [
+        {"text": "Ancient Egyptian physicians", "role": "subject", "level": 1},
+        {"text": "used", "role": "verb_phrase", "level": 1},
+        {"text": "extracts from the willow tree", "role": "object", "level": 1},
+        {"text": "as an analgesic, or pain killer", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "or pain killer 是对 analgesic 的同义解释，方便读者理解这一术语。",
+        "extracts from the willow tree 中 extracts 为可数名词复数，指“提取物”。"
+      ],
+      "expressions": [
+        {"text": "extracts from", "meaning_zh": "……的提取物"},
+        {"text": "analgesic", "meaning_zh": "镇痛剂"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Centuries later the Greek physician Hippocrates recommended the bark of the willow tree as a remedy for the pains of childbirth and as a fever reducer.",
+      "translation": "几个世纪后，希腊医生希波克拉底推荐将柳树皮用作缓解分娩疼痛的药方，也用作退烧药。",
+      "structure": [
+        {"text": "Centuries later", "role": "adverbial", "level": 1},
+        {"text": "the Greek physician Hippocrates", "role": "subject", "level": 1},
+        {"text": "recommended", "role": "verb_phrase", "level": 1},
+        {"text": "the bark of the willow tree", "role": "object", "level": 1},
+        {"text": "as a remedy for the pains of childbirth", "role": "prepositional_phrase", "level": 2},
+        {"text": "and as a fever reducer", "role": "coordinated_prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "as a remedy...and as a fever reducer 是两个并列的 as 短语，说明柳树皮的两种用途。",
+        "the Greek physician Hippocrates 中同位语说明希波克拉底的身份。"
+      ],
+      "expressions": [
+        {"text": "a remedy for", "meaning_zh": "……的疗法/药方"},
+        {"text": "fever reducer", "meaning_zh": "退烧药"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "But it wasn't until the eighteenth and nineteenth centuries that salicylates the chemical found in the willow tree became the subject of serious scientific investigation.",
+      "translation": "但直到18、19世纪，柳树中所含的化学物质水杨酸盐才成为严肃科学研究的对象。",
+      "structure": [
+        {"text": "it wasn't until the eighteenth and nineteenth centuries", "role": "main_clause", "level": 1},
+        {"text": "that salicylates the chemical found in the willow tree became the subject of serious scientific investigation", "role": "cleft_clause", "level": 2},
+        {"text": "salicylates the chemical", "role": "subject", "level": 3},
+        {"text": "found in the willow tree", "role": "participial_phrase", "level": 4},
+        {"text": "became", "role": "verb_phrase", "level": 3},
+        {"text": "the subject of serious scientific investigation", "role": "complement", "level": 3}
+      ],
+      "difficult_points": [
+        "it wasn't until...that... 是强调句型，强调“直到18、19世纪才……”。",
+        "salicylates 和 the chemical 之间原文缺少逗号，the chemical found in the willow tree 是对 salicylates 的同位语说明。",
+        "found in the willow tree 是过去分词短语，修饰 the chemical。"
+      ],
+      "expressions": [
+        {"text": "it wasn't until...that...", "meaning_zh": "直到……才……"},
+        {"text": "the subject of investigation", "meaning_zh": "研究的对象"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "The race was on to identify the active ingredient and to replicate it synthetically.",
+      "translation": "一场寻找活性成分并以人工方式合成它的竞赛就此展开。",
+      "structure": [
+        {"text": "The race was on", "role": "main_clause", "level": 1},
+        {"text": "to identify the active ingredient", "role": "non_finite_clause", "level": 2},
+        {"text": "and to replicate it synthetically", "role": "coordinated_non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "The race was on 是习语，意为“竞赛已经展开”。",
+        "两个不定式 to identify 和 to replicate 并列，说明这场竞赛的具体目标。",
+        "it 指代前面的 the active ingredient。"
+      ],
+      "expressions": [
+        {"text": "the race was on", "meaning_zh": "竞赛已经展开"},
+        {"text": "active ingredient", "meaning_zh": "活性成分"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "At the end of the nineteenth century a German company, Friedrich Bayer & Co. succeeded in creating a relatively safe and very effective chemical compound, acetylsalicylic acid, which was renamed aspirin.",
+      "translation": "19世纪末，德国拜耳公司成功研制出一种相对安全且效果显著的化合物——乙酰水杨酸，后来被更名为阿司匹林。",
+      "structure": [
+        {"text": "At the end of the nineteenth century", "role": "adverbial", "level": 1},
+        {"text": "a German company, Friedrich Bayer & Co.", "role": "subject", "level": 1},
+        {"text": "succeeded in creating a relatively safe and very effective chemical compound, acetylsalicylic acid", "role": "verb_phrase", "level": 1},
+        {"text": "which was renamed aspirin", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Friedrich Bayer & Co. 是对 a German company 的同位语，说明这家公司的名字。",
+        "acetylsalicylic acid 是对前面 chemical compound 的同位语说明。",
+        "which 引导非限定性定语从句，指代 acetylsalicylic acid，说明它后来被更名为阿司匹林。"
+      ],
+      "expressions": [
+        {"text": "succeed in doing sth", "meaning_zh": "成功做成某事"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "The late nineteenth century was a fertile period for experimentation, partly because of the hunger among scientists to answer some of the great scientific questions, but also because those questions were within their means to answer.",
+      "translation": "19世纪末是科学实验蓬勃发展的时期，部分原因在于科学家们渴望解答一些重大的科学问题，但也因为当时的条件已足以让他们解答这些问题。",
+      "structure": [
+        {"text": "The late nineteenth century", "role": "subject", "level": 1},
+        {"text": "was a fertile period for experimentation", "role": "verb_phrase", "level": 1},
+        {"text": "partly because of the hunger among scientists to answer some of the great scientific questions", "role": "adverbial_clause", "level": 2},
+        {"text": "to answer some of the great scientific questions", "role": "non_finite_clause", "level": 3},
+        {"text": "but also because those questions were within their means to answer", "role": "coordinated_adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "partly because...but also because... 是并列的原因状语，说明这一时期科学实验繁荣的两方面原因。",
+        "within their means to answer 意为“在他们能力所及的范围内可以解答”。"
+      ],
+      "expressions": [
+        {"text": "a fertile period for", "meaning_zh": "……蓬勃发展的时期"},
+        {"text": "within one's means", "meaning_zh": "在某人能力范围之内"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "One scientist in a laboratory with some chemicals and a test tube could make significant breakthroughs whereas today, in order to map the human genome for instance, one needs 'an army of researchers, a bank of computers and millions and millions of dollars'.",
+      "translation": "一位科学家在实验室里，凭借一些化学试剂和一支试管，就能取得重大突破；而如今，比如要绘制人类基因组图谱，则需要“一支庞大的研究团队、大量的电脑以及数以百万计的资金”。",
+      "structure": [
+        {"text": "One scientist in a laboratory with some chemicals and a test tube", "role": "subject", "level": 1},
+        {"text": "could make significant breakthroughs", "role": "verb_phrase", "level": 1},
+        {"text": "whereas today, in order to map the human genome for instance, one needs 'an army of researchers, a bank of computers and millions and millions of dollars'", "role": "adverbial_clause", "level": 2},
+        {"text": "in order to map the human genome", "role": "non_finite_clause", "level": 3},
+        {"text": "one needs", "role": "main_clause", "level": 3},
+        {"text": "'an army of researchers, a bank of computers and millions and millions of dollars'", "role": "object", "level": 3}
+      ],
+      "difficult_points": [
+        "whereas 引导对比状语从句，将过去简单的实验条件与如今的巨大投入相对照。",
+        "in order to map the human genome for instance 是插入的目的状语，for instance 举例说明。",
+        "引号内的内容是 needs 宾语的具体列举，突出如今科研成本之高。"
+      ],
+      "expressions": [
+        {"text": "make a breakthrough", "meaning_zh": "取得突破"},
+        {"text": "in order to", "meaning_zh": "为了"},
+        {"text": "an army of", "meaning_zh": "一大批；大量的"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 10,
+      "sentence": "But an understanding of the nature of science and scientific inquiry is not enough on its own to explain how society innovates.",
+      "translation": "但仅凭对科学本质和科学探究方式的理解，并不足以解释社会是如何实现创新的。",
+      "structure": [
+        {"text": "an understanding of the nature of science and scientific inquiry", "role": "subject", "level": 1},
+        {"text": "is not enough on its own", "role": "verb_phrase", "level": 1},
+        {"text": "to explain how society innovates", "role": "non_finite_clause", "level": 2},
+        {"text": "how society innovates", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "not enough on its own 强调“单凭这一点还不够”。",
+        "to explain 是不定式作结果状语，说明“理解”这件事所不足以达成的目的。",
+        "how 引导的从句作 explain 的宾语，说明需要解释的具体内容。"
+      ],
+      "expressions": [
+        {"text": "not enough on its own", "meaning_zh": "仅凭其自身还不够"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "In the nineteenth century, scientific advance was closely linked to the industrial revolution.",
+      "translation": "在19世纪，科学的进步与工业革命紧密相连。",
+      "structure": [
+        {"text": "In the nineteenth century", "role": "adverbial", "level": 1},
+        {"text": "scientific advance", "role": "subject", "level": 1},
+        {"text": "was closely linked to the industrial revolution", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "was closely linked to 是被动结构，表示两者之间的紧密联系。",
+        "本句承接上一句，具体说明19世纪科学进步与社会变革之间的关系。"
+      ],
+      "expressions": [
+        {"text": "be linked to", "meaning_zh": "与……相关联"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "This was a period when people frequently had the means, motive and determination to take an idea and turn it into reality.",
+      "translation": "那是一个人们常常兼具手段、动机与决心，能够把想法付诸现实的时代。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "was a period", "role": "verb_phrase", "level": 1},
+        {"text": "when people frequently had the means, motive and determination", "role": "relative_clause", "level": 2},
+        {"text": "to take an idea and turn it into reality", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "This 指代上一句提到的19世纪与工业革命紧密相连的科学进步局面。",
+        "when 引导定语从句修饰 period，从句中 the means, motive and determination 三者并列。",
+        "to take an idea and turn it into reality 是并列不定式短语，作目的状语，说明这些条件的用途。"
+      ],
+      "expressions": [
+        {"text": "means, motive and determination", "meaning_zh": "手段、动机与决心"},
+        {"text": "turn sth into reality", "meaning_zh": "把某事变为现实"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "In the case of aspirin that happened piecemeal - a series of minor, often unrelated advances, fertilised by the century's broader economic, medical and scientific developments, that led to one big final breakthrough.",
+      "translation": "就阿司匹林而言，这一过程是零零散散实现的——一系列微小、往往互不相关的进展，在这个世纪更广泛的经济、医学和科学发展的推动下，最终促成了一次重大突破。",
+      "structure": [
+        {"text": "In the case of aspirin", "role": "prepositional_phrase", "level": 1},
+        {"text": "that happened piecemeal", "role": "main_clause", "level": 1},
+        {"text": "a series of minor, often unrelated advances", "role": "apposition", "level": 2},
+        {"text": "fertilised by the century's broader economic, medical and scientific developments", "role": "participial_phrase", "level": 3},
+        {"text": "that led to one big final breakthrough", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 指代前文提到的“把想法变为现实”这一过程，即阿司匹林的发明。",
+        "破折号后的内容是对 piecemeal 这一方式的具体说明，即一系列零散的进展。",
+        "fertilised by...developments 是过去分词短语，修饰 advances，说明这些进展得以产生的推动因素。",
+        "that led to one big final breakthrough 是定语从句，修饰 advances，说明这些进展最终带来的结果。"
+      ],
+      "expressions": [
+        {"text": "piecemeal", "meaning_zh": "零散地；一点一点地"},
+        {"text": "a series of", "meaning_zh": "一系列……"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 14,
+      "sentence": "The link between big money and pharmaceutical innovation is also a significant one.",
+      "translation": "巨额资金与制药创新之间的联系同样意义重大。",
+      "structure": [
+        {"text": "The link between big money and pharmaceutical innovation", "role": "subject", "level": 1},
+        {"text": "is also", "role": "verb_phrase", "level": 1},
+        {"text": "a significant one", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "one 是代词，替代前文语境中的 link，避免重复。",
+        "also 呼应上文提到的其他促成阿司匹林成功的因素，引出资金这一新的角度。"
+      ],
+      "expressions": [
+        {"text": "the link between A and B", "meaning_zh": "A与B之间的联系"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 15,
+      "sentence": "Aspirin is continued shelf life was ensured because for the first 70 years of its life, huge amounts of money were put into promoting it as an ordinary everyday analgesic.",
+      "translation": "阿司匹林得以持续畅销，是因为在它问世后的头70年里，人们投入了大量资金将它作为一种日常止痛药加以推广。",
+      "structure": [
+        {"text": "Aspirin is continued shelf life", "role": "subject", "level": 1},
+        {"text": "was ensured", "role": "verb_phrase", "level": 1},
+        {"text": "because for the first 70 years of its life, huge amounts of money were put into promoting it as an ordinary everyday analgesic", "role": "adverbial_clause", "level": 2},
+        {"text": "were put into promoting it as an ordinary everyday analgesic", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "Aspirin is continued shelf life 是原文的错字，应为 Aspirin's continued shelf life（阿司匹林得以持续畅销），is 应为所有格 's。",
+        "were put into doing 表示“被投入用于做某事”，是被动结构。",
+        "its 指代 Aspirin，life 指阿司匹林作为商品存在的时间。"
+      ],
+      "expressions": [
+        {"text": "continued shelf life", "meaning_zh": "持续的市场生命力/畅销期"},
+        {"text": "put money into doing sth", "meaning_zh": "投入资金做某事"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "In the 1070s other analgesics, such as ibuprofen and paracetamol, were entering the market, and the pharmaceutical companies then focused on publicising these new drugs.",
+      "translation": "20世纪70年代，布洛芬、扑热息痛等其他止痛药开始进入市场，制药公司便转而集中精力宣传这些新药。",
+      "structure": [
+        {"text": "other analgesics", "role": "subject", "level": 1},
+        {"text": "such as ibuprofen and paracetamol", "role": "apposition", "level": 2},
+        {"text": "were entering the market", "role": "verb_phrase", "level": 1},
+        {"text": "and the pharmaceutical companies then focused on publicising these new drugs", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "In the 1070s 中的年代为原文错字，根据上下文应为 In the 1970s（20世纪70年代）。",
+        "such as ibuprofen and paracetamol 是插入的同位语，举例说明 other analgesics 具体所指。",
+        "focused on publicising 中 publicising 是动名词，作介词 on 的宾语。"
+      ],
+      "expressions": [
+        {"text": "such as", "meaning_zh": "例如"},
+        {"text": "focus on doing sth", "meaning_zh": "集中精力做某事"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "But just at the same time, discoveries were made regarding the beneficial role of aspirin in preventing heart attacks, strokes and other afflictions.",
+      "translation": "但就在同一时期，人们发现阿司匹林在预防心脏病发作、中风及其他疾病方面具有有益作用。",
+      "structure": [
+        {"text": "discoveries were made", "role": "main_clause", "level": 1},
+        {"text": "regarding the beneficial role of aspirin", "role": "prepositional_phrase", "level": 2},
+        {"text": "in preventing heart attacks, strokes and other afflictions", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "were made 是被动语态，表示“被发现”，逻辑主语是后面的科学家们。",
+        "just at the same time 与上一句提到的“制药公司专注宣传新药”这一时期相呼应，形成时间上的巧合对比。",
+        "regarding 引出发现的具体内容，即阿司匹林在预防疾病方面的有益作用。"
+      ],
+      "expressions": [
+        {"text": "regarding", "meaning_zh": "关于"},
+        {"text": "the beneficial role of", "meaning_zh": "……的有益作用"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "Had it not been for these findings, this pharmaceutical marvel may well have disappeared.",
+      "translation": "要不是有这些发现，这一制药奇迹很可能早已销声匿迹了。",
+      "structure": [
+        {"text": "Had it not been for these findings", "role": "conditional_clause", "level": 1},
+        {"text": "this pharmaceutical marvel", "role": "subject", "level": 1},
+        {"text": "may well have disappeared", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Had it not been for 是虚拟语气倒装结构，等于 If it had not been for，表示与过去事实相反的假设。",
+        "may well have disappeared 表示对过去情况的推测，意为“很可能已经……”。",
+        "these findings 指代上一句提到的阿司匹林预防疾病的发现。"
+      ],
+      "expressions": [
+        {"text": "if it had not been for", "meaning_zh": "要不是……"},
+        {"text": "may well have done", "meaning_zh": "很可能已经做了……"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 19,
+      "sentence": "So the relationship between big money and drugs is an odd one.",
+      "translation": "因此，巨额资金与药物之间的关系是一种奇特的关系。",
+      "structure": [
+        {"text": "the relationship between big money and drugs", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "an odd one", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "one 替代前面的 relationship，避免重复。",
+        "So 承接上文，从阿司匹林的具体案例引出对资金与药物关系的整体评价。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 20,
+      "sentence": "Commercial markets are necessary for developing new products and ensuring that they remain around long enough for scientists to carry out research on them.",
+      "translation": "商业市场对于开发新产品，以及确保这些产品能存在足够长的时间以供科学家对其展开研究，都是必要的。",
+      "structure": [
+        {"text": "Commercial markets", "role": "subject", "level": 1},
+        {"text": "are necessary for developing new products", "role": "verb_phrase", "level": 1},
+        {"text": "and ensuring that they remain around long enough", "role": "coordinated_prepositional_phrase", "level": 2},
+        {"text": "that they remain around long enough", "role": "noun_clause", "level": 3},
+        {"text": "for scientists to carry out research on them", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "necessary for doing 后接两个并列的动名词短语 developing 和 ensuring，说明商业市场的两方面作用。",
+        "long enough for scientists to carry out research 中 for scientists 是不定式的逻辑主语，说明谁来做研究。",
+        "them 指代前面提到的 new products。"
+      ],
+      "expressions": [
+        {"text": "necessary for", "meaning_zh": "对……必要的"},
+        {"text": "carry out research on", "meaning_zh": "对……展开研究"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 21,
+      "sentence": "But the commercial markets are just as likely to kill off'certain products when something more attractive comes along.",
+      "translation": "但当有更具吸引力的产品出现时，商业市场同样很可能会淘汰掉某些产品。",
+      "structure": [
+        {"text": "the commercial markets", "role": "subject", "level": 1},
+        {"text": "are just as likely to kill off'certain products", "role": "verb_phrase", "level": 1},
+        {"text": "when something more attractive comes along", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "kill off'certain 中的撇号是原文排印错误，正常应写作 kill off certain（淘汰某些），中间没有撇号。",
+        "just as likely to 呼应上一句“市场有助于产品存在”，形成对比：市场同样可能淘汰产品。",
+        "something more attractive 指代任何更具吸引力的新产品或新事物。"
+      ],
+      "expressions": [
+        {"text": "kill off", "meaning_zh": "淘汰；使消失"},
+        {"text": "come along", "meaning_zh": "出现"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "In the case of aspirin, a potential 'wonder drug* was around for over 70 years without anybody investigating the way in which it achieved its effects, because they were making more than enough money out of it as it was.",
+      "translation": "就阿司匹林而言，这种潜在的“奇效药”已经存在了70多年，却一直没有人去研究它产生疗效的具体方式，因为人们仅凭它现有的状态就已经从中赚取了足够多的钱。",
+      "structure": [
+        {"text": "a potential 'wonder drug*", "role": "subject", "level": 1},
+        {"text": "was around for over 70 years", "role": "verb_phrase", "level": 1},
+        {"text": "without anybody investigating the way", "role": "prepositional_phrase", "level": 2},
+        {"text": "in which it achieved its effects", "role": "relative_clause", "level": 3},
+        {"text": "because they were making more than enough money out of it as it was", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "'wonder drug* 中的星号是原文的印刷错误，应为闭合的单引号 'wonder drug'。",
+        "without anybody investigating 是介词 without 后接动名词复合结构，anybody 是动名词的逻辑主语。",
+        "in which it achieved its effects 是定语从句，修饰 the way，说明药物起效的具体途径。",
+        "as it was 意为“就它当时（未经研究）的状态而言”，补充说明赚钱不需要额外研究。"
+      ],
+      "expressions": [
+        {"text": "be around", "meaning_zh": "存在；流通"},
+        {"text": "make money out of", "meaning_zh": "从……中赚钱"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "If ibuprofen or paracetamol had entered the market just a decade earlier, aspirin might then not be here today.",
+      "translation": "如果布洛芬或扑热息痛提早十年进入市场，阿司匹林如今可能就已经不复存在了。",
+      "structure": [
+        {"text": "If ibuprofen or paracetamol had entered the market just a decade earlier", "role": "conditional_clause", "level": 1},
+        {"text": "aspirin might then not be here today", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "本句是与过去事实相反的混合虚拟语气：if 从句用过去完成时，主句用 might + 原形 be，表示对现在结果的推测。",
+        "just a decade earlier 强调提前的时间只有十年，凸显时机之接近。"
+      ],
+      "expressions": [
+        {"text": "enter the market", "meaning_zh": "进入市场"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "It would be just another forgotten drug that people hadn't bothered to explore.",
+      "translation": "它就会只是又一种被人遗忘、无人愿意深入研究的药物。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "would be just another forgotten drug", "role": "verb_phrase", "level": 1},
+        {"text": "that people hadn't bothered to explore", "role": "relative_clause", "level": 2},
+        {"text": "hadn't bothered to explore", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "It 指代上一句假设情境下的阿司匹林。",
+        "would be 与上一句的虚拟语气呼应，表示同一假设下的结果。",
+        "hadn't bothered to do 表示“没有费心去做”。"
+      ],
+      "expressions": [
+        {"text": "bother to do sth", "meaning_zh": "费心做某事"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 25,
+      "sentence": "None of the recent discoveries of aspirin's benefits were made by the big pharmaceutical companies; they were made by scientists working in the public sector.",
+      "translation": "有关阿司匹林益处的这些新近发现，没有一项是大型制药公司做出的；它们都是由在公共部门工作的科学家们做出的。",
+      "structure": [
+        {"text": "None of the recent discoveries of aspirin's benefits", "role": "subject", "level": 1},
+        {"text": "were made by the big pharmaceutical companies", "role": "verb_phrase", "level": 1},
+        {"text": "they were made by scientists", "role": "coordinated_clause", "level": 1},
+        {"text": "working in the public sector", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "None of 后接复数名词，谓语用复数 were，表示“……当中没有一个”。",
+        "分号连接的两个分句形成对比：发现不是由大公司做出，而是由公共部门科学家做出。",
+        "working in the public sector 是现在分词短语，修饰 scientists。"
+      ],
+      "expressions": [
+        {"text": "none of", "meaning_zh": "……中没有一个"},
+        {"text": "the public sector", "meaning_zh": "公共部门"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "'The reason for that is very simple and straightforward,' Jeffreys says in his book.",
+      "translation": "杰弗里斯在书中说：“这背后的原因非常简单明了。”",
+      "structure": [
+        {"text": "'The reason for that is very simple and straightforward,'", "role": "direct_quote", "level": 1},
+        {"text": "Jeffreys says", "role": "main_clause", "level": 1},
+        {"text": "in his book", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "直接引语在前，主谓 Jeffreys says 后置，是引语句常见的倒装顺序。",
+        "that 指代上文提到的“公共部门科学家而非大型制药公司做出发现”这一现象。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "'Drug companies will only pursue research that is going to deliver financial benefits.",
+      "translation": "“制药公司只会去做那些能带来经济利益的研究。",
+      "structure": [
+        {"text": "Drug companies", "role": "subject", "level": 1},
+        {"text": "will only pursue research", "role": "verb_phrase", "level": 1},
+        {"text": "that is going to deliver financial benefits", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导定语从句，修饰 research，说明制药公司愿意开展的研究的条件。",
+        "only 限定谓语，强调“唯有能带来经济利益的研究才会被追求”。"
+      ],
+      "expressions": [
+        {"text": "pursue research", "meaning_zh": "开展研究"},
+        {"text": "deliver financial benefits", "meaning_zh": "带来经济利益"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 28,
+      "sentence": "There's no profit in aspirin any more.",
+      "translation": "阿司匹林已经无利可图了。",
+      "structure": [
+        {"text": "There's no profit in aspirin", "role": "main_clause", "level": 1},
+        {"text": "any more", "role": "adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "any more 与否定词连用，表示“不再……”。",
+        "本句承接上一句，说明制药公司不愿研究阿司匹林的原因之一。"
+      ],
+      "expressions": [
+        {"text": "no profit in", "meaning_zh": "在……方面无利可图"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 29,
+      "sentence": "It is incredibly inexpensive with tiny profit margins and it has no patent any more, so anyone can produce it.'",
+      "translation": "它极其便宜，利润空间微乎其微，而且专利也已失效，因此任何人都可以生产它。”",
+      "structure": [
+        {"text": "It is incredibly inexpensive", "role": "main_clause", "level": 1},
+        {"text": "with tiny profit margins", "role": "prepositional_phrase", "level": 2},
+        {"text": "and it has no patent any more", "role": "coordinated_clause", "level": 1},
+        {"text": "so anyone can produce it", "role": "result_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "with tiny profit margins 是伴随状语，补充说明价格低廉带来的结果——利润微薄。",
+        "so 引导结果状语从句，说明前面两个条件（便宜、无专利）导致的结果。"
+      ],
+      "expressions": [
+        {"text": "profit margins", "meaning_zh": "利润空间/利润率"},
+        {"text": "have no patent", "meaning_zh": "没有专利"}
+      ]
+    },
+    {
+      "id": "G-06",
+      "paragraph_label": "G",
+      "sentence_index": 30,
+      "sentence": "In fact, there's almost a disincentive for drug companies to further boost the drug, he argues, as it could possibly put them out of business by stopping them from selling their more expensive brands.",
+      "translation": "他还指出，事实上，制药公司几乎没有动力去进一步推广这种药，因为这可能会导致他们无法销售价格更高的品牌药物，从而使他们陷入经营困境。",
+      "structure": [
+        {"text": "there's almost a disincentive for drug companies", "role": "main_clause", "level": 1},
+        {"text": "to further boost the drug", "role": "non_finite_clause", "level": 2},
+        {"text": "he argues", "role": "parenthetical", "level": 1},
+        {"text": "as it could possibly put them out of business", "role": "adverbial_clause", "level": 2},
+        {"text": "by stopping them from selling their more expensive brands", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "a disincentive for sb to do sth 表示“使某人不愿做某事的因素”。",
+        "he argues 是插入语，说明这是杰弗里斯的观点。",
+        "it 指代前面提到的“进一步推广阿司匹林”这件事。",
+        "by stopping them from selling... 是方式状语，说明利润受损的具体途径。"
+      ],
+      "expressions": [
+        {"text": "a disincentive for sb to do sth", "meaning_zh": "使某人不愿做某事的因素"},
+        {"text": "put sb out of business", "meaning_zh": "使某人破产/停业"},
+        {"text": "stop sb from doing sth", "meaning_zh": "阻止某人做某事"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 31,
+      "sentence": "So what is the solution to a lack of commercial interest in further exploring the therapeutic benefits of aspirin?",
+      "translation": "那么，面对商业上缺乏兴趣去进一步探索阿司匹林疗效这一问题，解决办法是什么呢？",
+      "structure": [
+        {"text": "what is the solution", "role": "main_clause", "level": 1},
+        {"text": "to a lack of commercial interest", "role": "prepositional_phrase", "level": 2},
+        {"text": "in further exploring the therapeutic benefits of aspirin", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "solution to 后接名词短语，说明问题的具体内容。",
+        "in further exploring... 是介词短语，修饰 interest，说明缺乏兴趣具体针对的方面。"
+      ],
+      "expressions": [
+        {"text": "a lack of", "meaning_zh": "缺乏……"},
+        {"text": "therapeutic benefits", "meaning_zh": "治疗效果/疗效"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 32,
+      "sentence": "More public money going into clinical trials, says Jeffreys.",
+      "translation": "杰弗里斯说，应该有更多公共资金投入到临床试验中。",
+      "structure": [
+        {"text": "More public money going into clinical trials", "role": "main_clause", "level": 1},
+        {"text": "says Jeffreys", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "本句为省略句，省略了 there should be，直接以动名词短语 going into 补充说明公共资金应投向的方向。",
+        "says Jeffreys 是引述语中主谓倒装的结构。"
+      ],
+      "expressions": [
+        {"text": "go into", "meaning_zh": "被投入到……"},
+        {"text": "clinical trials", "meaning_zh": "临床试验"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 33,
+      "sentence": "'If I were the Department of Health.",
+      "translation": "“如果我是卫生部……",
+      "structure": [
+        {"text": "If I were the Department of Health", "role": "conditional_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "were 是虚拟语气，表示与事实相反的假设：说话人假设自己是卫生部。",
+        "原文此处以句号结束，属于排印错误；根据语境，这本是一个未说完的条件从句，应与下一句相连（“如果我是卫生部，我会说……”）。"
+      ],
+      "expressions": [
+        {"text": "if I were", "meaning_zh": "如果我是……（虚拟语气）"}
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 34,
+      "sentence": "I would say \"this is a very inexpensive drug.",
+      "translation": "我会说，‘这是一种非常廉价的药物。",
+      "structure": [
+        {"text": "I", "role": "subject", "level": 1},
+        {"text": "would say", "role": "verb_phrase", "level": 1},
+        {"text": "\"this is a very inexpensive drug", "role": "direct_quote", "level": 2}
+      ],
+      "difficult_points": [
+        "would say 与上一句的 If I were 呼应，构成完整的虚拟语气条件句，但原文用句号将其拆分成独立的两句。",
+        "引号内的内容是设想中卫生部会说的话，此处的双引号在原文中只有开引号未及时闭合，直到 H-05 才闭合。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 35,
+      "sentence": "There may be a lot of other things we could do with it.\"",
+      "translation": "或许我们还能用它做很多其他的事情。’”",
+      "structure": [
+        {"text": "There may be a lot of other things", "role": "main_clause", "level": 1},
+        {"text": "we could do with it", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "we could do with it 前省略了关系代词 that/which，修饰 other things。",
+        "句末的双引号在此处闭合，对应 H-04 中未闭合的开引号，是原文标点跨句的情况。"
+      ],
+      "expressions": [
+        {"text": "do with", "meaning_zh": "处理；利用"}
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 36,
+      "sentence": "We should put a lot more money into trying to find out.'",
+      "translation": "我们应该投入更多资金去弄清楚这一点。”",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "should put a lot more money", "role": "verb_phrase", "level": 1},
+        {"text": "into trying to find out", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "put money into doing sth 表示“把资金投入到做某事上”。",
+        "句末单引号闭合了从 H-03 开始杰弗里斯的整段直接引语。"
+      ],
+      "expressions": [
+        {"text": "put money into doing sth", "meaning_zh": "把资金投入到做某事上"},
+        {"text": "find out", "meaning_zh": "弄清楚；查明"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 37,
+      "sentence": "Jeffreys' book which not only tells the tale of a 'wonder drug' but also explores the nature of innovation and the role of big business, public money and regulation reminds us why such research is so important.",
+      "translation": "杰弗里斯的这本书不仅讲述了一种“奇效药”的故事，还探讨了创新的本质以及大企业、公共资金和监管所扮演的角色，提醒着我们这类研究为何如此重要。",
+      "structure": [
+        {"text": "Jeffreys' book", "role": "subject", "level": 1},
+        {"text": "which not only tells the tale of a 'wonder drug'", "role": "relative_clause", "level": 2},
+        {"text": "but also explores the nature of innovation and the role of big business, public money and regulation", "role": "coordinated_relative_clause", "level": 2},
+        {"text": "reminds us", "role": "verb_phrase", "level": 1},
+        {"text": "why such research is so important", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导的定语从句插入在主语 Jeffreys' book 和谓语 reminds 之间，从句内部又用 not only...but also... 并列两个动词。",
+        "why such research is so important 是宾语从句，作 remind us 的第二个宾语，说明提醒的具体内容。",
+        "book 与 reminds 之间隔着较长的定语从句，理解时需要先跳过从句找到真正的谓语。"
+      ],
+      "expressions": [
+        {"text": "tell the tale of", "meaning_zh": "讲述……的故事"},
+        {"text": "not only...but also...", "meaning_zh": "不仅……而且……"}
+      ]
+    }
+  ]
+}

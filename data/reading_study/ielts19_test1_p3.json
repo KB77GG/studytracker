@@ -1,0 +1,813 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts19_test1_reading",
+  "passage_id": "ielts19_test1_p3",
+  "passage_title": "The persistence and peril of misinformation",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Misinformation—both deliberately promoted and accidentally shared—is perhaps an inevitable part of the world in which we live, but it is not a new problem.",
+      "translation": "错误信息——无论是被有意推广的，还是被无意分享的——也许是我们所生活的世界中不可避免的一部分，但它并不是一个新问题。",
+      "structure": [
+        {"text": "Misinformation—both deliberately promoted and accidentally shared—is perhaps an inevitable part of the world in which we live", "role": "main_clause", "level": 1},
+        {"text": "both deliberately promoted and accidentally shared", "role": "participial_phrase", "level": 2},
+        {"text": "in which we live", "role": "relative_clause", "level": 2},
+        {"text": "but it is not a new problem", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "破折号中的 both deliberately promoted and accidentally shared 插入说明 misinformation 的两种传播方式。",
+        "in which we live 是定语从句，修饰 the world。",
+        "but 引出转折：错误信息虽不可避免，却不是新问题。"
+      ],
+      "expressions": [
+        {"text": "inevitable part of", "meaning_zh": "……不可避免的一部分"},
+        {"text": "deliberately promoted", "meaning_zh": "被有意推广的"},
+        {"text": "accidentally shared", "meaning_zh": "被无意分享的"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "People likely have lied to one another for roughly as long as verbal communication has existed.",
+      "translation": "人们彼此说谎的历史，很可能几乎和口头交流存在的时间一样长。",
+      "structure": [
+        {"text": "People", "role": "subject", "level": 1},
+        {"text": "likely have lied", "role": "verb_phrase", "level": 1},
+        {"text": "to one another", "role": "prepositional_phrase", "level": 1},
+        {"text": "for roughly as long as verbal communication has existed", "role": "prepositional_phrase", "level": 1},
+        {"text": "as verbal communication has existed", "role": "comparative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "likely 位于助动词前，表示作者对事实的推测。",
+        "have lied 是现在完成时，表示从过去延续到现在的行为。",
+        "for roughly as long as... 表示持续时间几乎等同于口头交流存在的时间。"
+      ],
+      "expressions": [
+        {"text": "for roughly as long as", "meaning_zh": "几乎和……一样久"},
+        {"text": "verbal communication", "meaning_zh": "口头交流"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Deceiving others can offer an apparent opportunity to gain strategic advantage, to motivate others to action, or even to protect interpersonal bonds.",
+      "translation": "欺骗他人可能提供一种表面上的机会，用来获得战略优势、促使他人行动，甚至保护人际纽带。",
+      "structure": [
+        {"text": "Deceiving others", "role": "gerund_subject", "level": 1},
+        {"text": "can offer", "role": "verb_phrase", "level": 1},
+        {"text": "an apparent opportunity", "role": "object", "level": 1},
+        {"text": "to gain strategic advantage, to motivate others to action, or even to protect interpersonal bonds", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Deceiving others 是动名词短语作主语。",
+        "apparent 表示这种机会只是看似存在，并不一定正当或真实。",
+        "三个 to do 短语并列，说明欺骗可能服务的不同目的。"
+      ],
+      "expressions": [
+        {"text": "strategic advantage", "meaning_zh": "战略优势"},
+        {"text": "motivate others to action", "meaning_zh": "促使他人行动"},
+        {"text": "interpersonal bonds", "meaning_zh": "人际纽带"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Moreover, people inadvertently have been sharing inaccurate information with one another for thousands of years.",
+      "translation": "此外，几千年来，人们也一直在无意中彼此分享不准确信息。",
+      "structure": [
+        {"text": "Moreover", "role": "discourse_marker", "level": 1},
+        {"text": "people", "role": "subject", "level": 1},
+        {"text": "inadvertently have been sharing", "role": "verb_phrase", "level": 1},
+        {"text": "inaccurate information with one another", "role": "object_phrase", "level": 1},
+        {"text": "for thousands of years", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Moreover 递进补充，说明错误信息还可能源于无意传播。",
+        "have been sharing 是现在完成进行时，强调长期持续。",
+        "inadvertently 表示无意地，与 deliberately promoted 形成对照。"
+      ],
+      "expressions": [
+        {"text": "inadvertently", "meaning_zh": "无意地"},
+        {"text": "inaccurate information", "meaning_zh": "不准确信息"},
+        {"text": "for thousands of years", "meaning_zh": "数千年来"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "However, we currently live in an era in which technology enables information to reach large audiences distributed across the globe, and thus the potential for immediate and widespread effects from misinformation now looms larger than in the past.",
+      "translation": "然而，我们当下生活在这样一个时代：技术使信息能够触达分布在全球的大规模受众，因此错误信息产生即时且广泛影响的可能性如今比过去更加突出。",
+      "structure": [
+        {"text": "However", "role": "discourse_marker", "level": 1},
+        {"text": "we currently live in an era in which technology enables information to reach large audiences distributed across the globe", "role": "main_clause", "level": 1},
+        {"text": "in which technology enables information to reach large audiences distributed across the globe", "role": "relative_clause", "level": 2},
+        {"text": "and thus the potential for immediate and widespread effects from misinformation now looms larger than in the past", "role": "coordinated_clause", "level": 1},
+        {"text": "distributed across the globe", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "in which 引导定语从句，修饰 era。",
+        "enables information to reach... 是 enable + 宾语 + 不定式结构。",
+        "distributed across the globe 后置修饰 large audiences。",
+        "looms larger than in the past 表示风险比过去更显著、更迫近。"
+      ],
+      "expressions": [
+        {"text": "large audiences distributed across the globe", "meaning_zh": "分布全球的大规模受众"},
+        {"text": "immediate and widespread effects", "meaning_zh": "即时且广泛的影响"},
+        {"text": "loom larger", "meaning_zh": "显得更突出；更迫近"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Yet the means to correct misinformation might, over time, be found in those same patterns of mass communication and of the facilitated spread of information.",
+      "translation": "然而，纠正错误信息的方法也许最终会在这些同样的大众传播模式以及信息传播被便利化的模式中找到。",
+      "structure": [
+        {"text": "Yet", "role": "discourse_marker", "level": 1},
+        {"text": "the means to correct misinformation", "role": "subject", "level": 1},
+        {"text": "might, over time, be found", "role": "verb_phrase", "level": 1},
+        {"text": "in those same patterns of mass communication and of the facilitated spread of information", "role": "prepositional_phrase", "level": 1},
+        {"text": "to correct misinformation", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Yet 引出让步式转折：造成风险的传播模式也可能带来纠错手段。",
+        "the means to correct misinformation 中 means 表示“方法、手段”。",
+        "might be found 是被动语态，语气保守。",
+        "over time 插入谓语中，表示需要经过一段时间。"
+      ],
+      "expressions": [
+        {"text": "the means to", "meaning_zh": "……的方法"},
+        {"text": "over time", "meaning_zh": "随着时间推移"},
+        {"text": "mass communication", "meaning_zh": "大众传播"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 7,
+      "sentence": "The main worry regarding misinformation is its potential to unduly influence attitudes and behavior, leading people to think and act differently than they would if they were correctly informed, as suggested by the research teams of Stephan Lewandowsky of the University of Bristol and Elizabeth Marsh of Duke University, among others.",
+      "translation": "关于错误信息的主要担忧，是它可能不当地影响态度和行为，使人们的思考和行动不同于他们在得到正确信息时本会采取的方式；布里斯托大学的斯蒂芬·莱万多夫斯基和杜克大学的伊丽莎白·马什等人的研究团队也提出了这一点。",
+      "structure": [
+        {"text": "The main worry regarding misinformation", "role": "subject", "level": 1},
+        {"text": "is its potential to unduly influence attitudes and behavior", "role": "verb_phrase", "level": 1},
+        {"text": "leading people to think and act differently than they would if they were correctly informed", "role": "participial_phrase", "level": 2},
+        {"text": "if they were correctly informed", "role": "conditional_clause", "level": 3},
+        {"text": "as suggested by the research teams of Stephan Lewandowsky of the University of Bristol and Elizabeth Marsh of Duke University, among others", "role": "elliptical_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "regarding misinformation 是介词短语，修饰 worry。",
+        "its potential to unduly influence... 是表语核心，potential 后接不定式说明可能产生的作用。",
+        "leading people to... 是现在分词短语，说明影响态度和行为的结果。",
+        "if they were correctly informed 是虚拟条件，表示与实际受到错误信息影响的情况相对。"
+      ],
+      "expressions": [
+        {"text": "unduly influence", "meaning_zh": "不当地影响"},
+        {"text": "correctly informed", "meaning_zh": "获得正确信息的"},
+        {"text": "among others", "meaning_zh": "以及其他人"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "In other words, we worry that misinformation might lead people to hold misperceptions (or false beliefs) and that these misperceptions, especially when they occur among large groups of people, may have detrimental, downstream consequences for health, social harmony, and the political climate.",
+      "translation": "换句话说，我们担心错误信息可能会让人们形成错误认知（或错误信念），并且这些错误认知，尤其是在大规模人群中出现时，可能会对健康、社会和谐以及政治气候产生有害的后续影响。",
+      "structure": [
+        {"text": "In other words", "role": "discourse_marker", "level": 1},
+        {"text": "we worry", "role": "main_clause", "level": 1},
+        {"text": "that misinformation might lead people to hold misperceptions (or false beliefs)", "role": "noun_clause", "level": 2},
+        {"text": "and that these misperceptions, especially when they occur among large groups of people, may have detrimental, downstream consequences for health, social harmony, and the political climate", "role": "coordinated_noun_clause", "level": 2},
+        {"text": "when they occur among large groups of people", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "两个 that 从句并列，都是 worry 的宾语。",
+        "or false beliefs 用括号解释 misperceptions。",
+        "especially when... 是插入性的强调，突出大规模人群中的错误认知更危险。",
+        "downstream consequences 指后续连锁影响，不是空间意义上的下游。"
+      ],
+      "expressions": [
+        {"text": "in other words", "meaning_zh": "换句话说"},
+        {"text": "lead people to", "meaning_zh": "使人们……"},
+        {"text": "downstream consequences", "meaning_zh": "后续影响"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 9,
+      "sentence": "At least three observations related to misinformation in the contemporary mass-media environment warrant the attention of researchers, policymakers, and really everyone who watches television, listens to the radio, or reads information online.",
+      "translation": "在当代大众媒体环境中，至少有三项与错误信息相关的观察值得研究者、政策制定者，以及实际上每一个看电视、听广播或在线阅读信息的人的关注。",
+      "structure": [
+        {"text": "At least three observations related to misinformation in the contemporary mass-media environment", "role": "subject", "level": 1},
+        {"text": "related to misinformation", "role": "participial_phrase", "level": 2},
+        {"text": "in the contemporary mass-media environment", "role": "prepositional_phrase", "level": 2},
+        {"text": "warrant the attention", "role": "verb_phrase", "level": 1},
+        {"text": "who watches television, listens to the radio, or reads information online", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "related to misinformation 后置修饰 observations。",
+        "warrant the attention 表示“值得……关注”，warrant 是较正式用法。",
+        "researchers, policymakers, and really everyone... 是并列宾语范围，从专业人士扩展到普通大众。",
+        "who 引导定语从句，修饰 everyone。"
+      ],
+      "expressions": [
+        {"text": "contemporary mass-media environment", "meaning_zh": "当代大众媒体环境"},
+        {"text": "warrant the attention of", "meaning_zh": "值得……关注"},
+        {"text": "policymakers", "meaning_zh": "政策制定者"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 10,
+      "sentence": "First of all, people who encounter misinformation tend to believe it, at least initially.",
+      "translation": "首先，人们在遇到错误信息时，至少一开始往往会相信它。",
+      "structure": [
+        {"text": "First of all", "role": "discourse_marker", "level": 1},
+        {"text": "people who encounter misinformation", "role": "subject", "level": 1},
+        {"text": "who encounter misinformation", "role": "relative_clause", "level": 2},
+        {"text": "tend to believe", "role": "verb_phrase", "level": 1},
+        {"text": "at least initially", "role": "adverbial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "First of all 标记三项观察中的第一项。",
+        "who encounter misinformation 修饰 people，限定讨论对象。",
+        "tend to believe 表示一种通常倾向。",
+        "at least initially 限制相信的时间阶段，表示至少在最初如此。"
+      ],
+      "expressions": [
+        {"text": "first of all", "meaning_zh": "首先"},
+        {"text": "tend to", "meaning_zh": "往往；倾向于"},
+        {"text": "at least initially", "meaning_zh": "至少一开始"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "Secondly, electronic and print media often do not block many types of misinformation before it appears in content available to large audiences.",
+      "translation": "其次，电子媒体和印刷媒体往往不会在许多类型的错误信息出现在面向大规模受众的内容中之前将其拦截。",
+      "structure": [
+        {"text": "Secondly", "role": "discourse_marker", "level": 1},
+        {"text": "electronic and print media", "role": "subject", "level": 1},
+        {"text": "often do not block", "role": "verb_phrase", "level": 1},
+        {"text": "many types of misinformation", "role": "object", "level": 1},
+        {"text": "before it appears in content available to large audiences", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Secondly 标记第二项观察。",
+        "electronic and print media 指电子媒体和纸媒。",
+        "before it appears... 说明媒体未能在信息进入大众内容前预先阻止。",
+        "available to large audiences 后置修饰 content。"
+      ],
+      "expressions": [
+        {"text": "electronic and print media", "meaning_zh": "电子和印刷媒体"},
+        {"text": "available to large audiences", "meaning_zh": "面向大规模受众的"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "Thirdly, countering misinformation once it has enjoyed wide exposure can be a resource-intensive effort.",
+      "translation": "第三，一旦错误信息已经获得广泛曝光，反制它就可能是一项资源密集型工作。",
+      "structure": [
+        {"text": "Thirdly", "role": "discourse_marker", "level": 1},
+        {"text": "countering misinformation once it has enjoyed wide exposure", "role": "gerund_subject", "level": 1},
+        {"text": "once it has enjoyed wide exposure", "role": "adverbial_clause", "level": 2},
+        {"text": "can be", "role": "verb_phrase", "level": 1},
+        {"text": "a resource-intensive effort", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "countering misinformation 是动名词短语作主语。",
+        "once 引导时间条件从句，表示“一旦”。",
+        "has enjoyed wide exposure 是现在完成时，强调已经广泛传播的状态。",
+        "resource-intensive 表示需要大量资源投入。"
+      ],
+      "expressions": [
+        {"text": "counter misinformation", "meaning_zh": "反制错误信息"},
+        {"text": "wide exposure", "meaning_zh": "广泛曝光"},
+        {"text": "resource-intensive effort", "meaning_zh": "资源密集型工作"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 13,
+      "sentence": "Knowing what happens when people initially encounter misinformation holds tremendous importance for estimating the potential for subsequent problems.",
+      "translation": "了解人们最初遇到错误信息时会发生什么，对于估计后续问题的可能性具有极其重要的意义。",
+      "structure": [
+        {"text": "Knowing what happens when people initially encounter misinformation", "role": "gerund_subject", "level": 1},
+        {"text": "what happens", "role": "noun_clause", "level": 2},
+        {"text": "when people initially encounter misinformation", "role": "adverbial_clause", "level": 3},
+        {"text": "holds tremendous importance", "role": "verb_phrase", "level": 1},
+        {"text": "for estimating the potential for subsequent problems", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Knowing... 是动名词短语作主语。",
+        "what happens 是 Knowing 的宾语从句。",
+        "when people initially encounter misinformation 是时间状语从句，说明发生情境。",
+        "for estimating... 表示这种了解的用途。"
+      ],
+      "expressions": [
+        {"text": "hold tremendous importance", "meaning_zh": "具有极其重要的意义"},
+        {"text": "subsequent problems", "meaning_zh": "后续问题"},
+        {"text": "initially encounter", "meaning_zh": "最初遇到"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 14,
+      "sentence": "Although it is fairly routine for individuals to come across information that is false, the question of exactly how—and when—we mentally label information as true or false has garnered philosophical debate.",
+      "translation": "虽然个人遇到虚假信息相当常见，但我们究竟如何以及何时在心理上把信息标记为真或假这一问题，已经引发了哲学争论。",
+      "structure": [
+        {"text": "Although it is fairly routine for individuals to come across information that is false", "role": "adverbial_clause", "level": 1},
+        {"text": "it is fairly routine for individuals to come across information", "role": "clause", "level": 2},
+        {"text": "that is false", "role": "relative_clause", "level": 3},
+        {"text": "the question of exactly how—and when—we mentally label information as true or false", "role": "subject", "level": 1},
+        {"text": "has garnered philosophical debate", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Although 引导让步从句，说明即使遇到虚假信息很常见，判断机制仍有争议。",
+        "it is routine for individuals to... 中 it 是形式主语。",
+        "how—and when— 用破折号插入强调判断真假的方式和时间都重要。",
+        "has garnered philosophical debate 表示已经引发哲学层面的讨论。"
+      ],
+      "expressions": [
+        {"text": "come across", "meaning_zh": "偶然遇到"},
+        {"text": "label information as", "meaning_zh": "把信息标记为"},
+        {"text": "garner philosophical debate", "meaning_zh": "引发哲学争论"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 15,
+      "sentence": "The dilemma is neatly summarized by a contrast between how the 17th-century philosophers René Descartes and Baruch Spinoza described human information engagement, with conflicting predictions that only recently have been empirically tested in robust ways.",
+      "translation": "这一两难问题可以通过17世纪哲学家勒内·笛卡尔和巴鲁赫·斯宾诺莎对人类信息接触方式的不同描述来清楚概括，而这些描述带来了彼此冲突的预测，直到最近才以稳健方式得到实证检验。",
+      "structure": [
+        {"text": "The dilemma", "role": "subject", "level": 1},
+        {"text": "is neatly summarized", "role": "verb_phrase", "level": 1},
+        {"text": "by a contrast between how the 17th-century philosophers René Descartes and Baruch Spinoza described human information engagement", "role": "prepositional_phrase", "level": 1},
+        {"text": "how the 17th-century philosophers René Descartes and Baruch Spinoza described human information engagement", "role": "noun_clause", "level": 2},
+        {"text": "with conflicting predictions that only recently have been empirically tested in robust ways", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "is summarized by 是被动语态，说明 dilemma 由某种对比来概括。",
+        "between 后接 how 引导的名词性从句，表示两位哲学家如何描述信息接触。",
+        "with conflicting predictions 补充说明这种对比带来的不同预测。",
+        "that only recently have been empirically tested 修饰 predictions，only recently 使语序更正式。"
+      ],
+      "expressions": [
+        {"text": "be neatly summarized by", "meaning_zh": "可由……清楚概括"},
+        {"text": "conflicting predictions", "meaning_zh": "相互冲突的预测"},
+        {"text": "empirically tested", "meaning_zh": "经过实证检验的"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "Descartes argued that a person only accepts or rejects information after considering its truth or falsehood; Spinoza argued that people accept all encountered information (or misinformation) by default and then subsequently verify or reject it through a separate cognitive process.",
+      "translation": "笛卡尔认为，一个人只有在考虑信息是真是假之后才会接受或拒绝它；斯宾诺莎则认为，人们默认接受所有遇到的信息（或错误信息），然后再通过一个单独的认知过程去验证或拒绝它。",
+      "structure": [
+        {"text": "Descartes argued that a person only accepts or rejects information after considering its truth or falsehood", "role": "main_clause", "level": 1},
+        {"text": "that a person only accepts or rejects information after considering its truth or falsehood", "role": "noun_clause", "level": 2},
+        {"text": "after considering its truth or falsehood", "role": "prepositional_phrase", "level": 3},
+        {"text": "Spinoza argued that people accept all encountered information (or misinformation) by default and then subsequently verify or reject it through a separate cognitive process", "role": "coordinated_clause", "level": 1},
+        {"text": "through a separate cognitive process", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "分号连接两位哲学家的相反观点。",
+        "only accepts or rejects...after... 表示笛卡尔认为判断先于接受或拒绝。",
+        "by default 表示斯宾诺莎认为人们默认先接受信息。",
+        "subsequently verify or reject it 说明验证或拒绝发生在后续的单独认知过程中。"
+      ],
+      "expressions": [
+        {"text": "by default", "meaning_zh": "默认地"},
+        {"text": "cognitive process", "meaning_zh": "认知过程"},
+        {"text": "truth or falsehood", "meaning_zh": "真实性或虚假性"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "In recent decades, empirical evidence from the research teams of Erik Asp of the University of Chicago and Daniel Gilbert at Harvard University, among others, has supported Spinoza's account: people appear to encode all new information as if it were true, even if only momentarily, and later tag the information as being either true or false, a pattern that seems consistent with the observation that mental resources for skepticism physically reside in a different part of the brain than the resources used in perceiving and encoding.",
+      "translation": "近几十年来，来自芝加哥大学埃里克·阿斯普和哈佛大学丹尼尔·吉尔伯特等人研究团队的实证证据支持了斯宾诺莎的说法：人们似乎会把所有新信息编码为仿佛它是真的，即便只是短暂如此，随后再将信息标记为真或假；这种模式似乎与一个观察相一致，即用于怀疑的心理资源在大脑中的物理位置不同于用于感知和编码的资源。",
+      "structure": [
+        {"text": "In recent decades", "role": "prepositional_phrase", "level": 1},
+        {"text": "empirical evidence from the research teams of Erik Asp of the University of Chicago and Daniel Gilbert at Harvard University, among others", "role": "subject", "level": 1},
+        {"text": "has supported Spinoza's account", "role": "verb_phrase", "level": 1},
+        {"text": "people appear to encode all new information as if it were true, even if only momentarily, and later tag the information as being either true or false", "role": "explanatory_clause", "level": 1},
+        {"text": "that mental resources for skepticism physically reside in a different part of the brain than the resources used in perceiving and encoding", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "冒号后解释 Spinoza's account 得到支持的具体内容。",
+        "as if it were true 使用虚拟语气，表示仿佛信息是真的。",
+        "even if only momentarily 是省略结构，完整含义是 even if it is only momentarily。",
+        "a pattern that seems consistent with... 中 that 引导定语从句，后面又嵌套 observation 的 that 同位语从句。"
+      ],
+      "expressions": [
+        {"text": "empirical evidence", "meaning_zh": "实证证据"},
+        {"text": "encode information", "meaning_zh": "编码信息"},
+        {"text": "be consistent with", "meaning_zh": "与……一致"},
+        {"text": "mental resources for skepticism", "meaning_zh": "用于怀疑的心理资源"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 18,
+      "sentence": "What about our second observation that misinformation often can appear in electronic or print media without being preemptively blocked?",
+      "translation": "那么我们的第二项观察呢：错误信息常常可以在没有被预先拦截的情况下出现在电子媒体或印刷媒体中？",
+      "structure": [
+        {"text": "What about our second observation", "role": "interrogative_clause", "level": 1},
+        {"text": "that misinformation often can appear in electronic or print media without being preemptively blocked", "role": "appositive_clause", "level": 2},
+        {"text": "without being preemptively blocked", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "What about... 用来转换话题，转向第二项观察。",
+        "that 引导同位语从句，具体说明 second observation 的内容。",
+        "without being preemptively blocked 是介词 without 后接动名词被动式。"
+      ],
+      "expressions": [
+        {"text": "what about", "meaning_zh": "那么……呢"},
+        {"text": "preemptively blocked", "meaning_zh": "被预先拦截的"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 19,
+      "sentence": "In support of this, one might consider the nature of regulatory structures in the United States: regulatory agencies here tend to focus on post hoc detection of broadcast information.",
+      "translation": "为支持这一点，我们可以考虑美国监管结构的性质：这里的监管机构往往侧重于对已播出信息的事后检测。",
+      "structure": [
+        {"text": "In support of this", "role": "prepositional_phrase", "level": 1},
+        {"text": "one might consider the nature of regulatory structures in the United States", "role": "main_clause", "level": 1},
+        {"text": "the nature of regulatory structures in the United States", "role": "object", "level": 2},
+        {"text": "regulatory agencies here tend to focus on post hoc detection of broadcast information", "role": "explanatory_clause", "level": 1},
+        {"text": "post hoc detection of broadcast information", "role": "prepositional_object", "level": 2}
+      ],
+      "difficult_points": [
+        "In support of this 表示接下来举例支持前一句观察。",
+        "one might consider 是学术写作中委婉提出例子的表达。",
+        "冒号后解释美国监管结构的具体特点。",
+        "post hoc detection 指事后检测，与 preemptive censoring 相对。"
+      ],
+      "expressions": [
+        {"text": "in support of this", "meaning_zh": "为支持这一点"},
+        {"text": "regulatory structures", "meaning_zh": "监管结构"},
+        {"text": "post hoc detection", "meaning_zh": "事后检测"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 20,
+      "sentence": "Organizations such as the Food and Drug Administration (FDA) offer considerable monitoring and notification functions, but these roles typically do not involve preemptive censoring.",
+      "translation": "像美国食品药品监督管理局（FDA）这样的机构提供相当多的监测和通知功能，但这些角色通常并不包括预先审查。",
+      "structure": [
+        {"text": "Organizations such as the Food and Drug Administration (FDA)", "role": "subject", "level": 1},
+        {"text": "such as the Food and Drug Administration (FDA)", "role": "prepositional_phrase", "level": 2},
+        {"text": "offer considerable monitoring and notification functions", "role": "verb_phrase", "level": 1},
+        {"text": "but these roles typically do not involve preemptive censoring", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "such as... 举出 regulatory agencies 的例子。",
+        "considerable monitoring and notification functions 指相当多的监测和告知职能。",
+        "but 引出限制：这些职能通常不包括预先审查。",
+        "preemptive censoring 与前文 preemptively blocked 呼应。"
+      ],
+      "expressions": [
+        {"text": "monitoring and notification functions", "meaning_zh": "监测和通知功能"},
+        {"text": "preemptive censoring", "meaning_zh": "预先审查"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 21,
+      "sentence": "The FDA oversees direct-to-consumer prescription drug advertising, for example, and has developed mechanisms such as the \"Bad Ad\" program, through which people can report advertising in apparent violation of FDA guidelines on drug risks.",
+      "translation": "例如，FDA监管面向消费者的处方药广告，并建立了“Bad Ad”等机制，人们可以通过这些机制举报看似违反FDA药物风险指南的广告。",
+      "structure": [
+        {"text": "The FDA oversees direct-to-consumer prescription drug advertising", "role": "main_clause", "level": 1},
+        {"text": "for example", "role": "parenthetical_phrase", "level": 1},
+        {"text": "and has developed mechanisms such as the \"Bad Ad\" program", "role": "coordinated_clause", "level": 1},
+        {"text": "through which people can report advertising in apparent violation of FDA guidelines on drug risks", "role": "relative_clause", "level": 2},
+        {"text": "in apparent violation of FDA guidelines on drug risks", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "direct-to-consumer 是复合形容词，修饰 prescription drug advertising。",
+        "for example 插在句中，表明这是监管职能的具体例子。",
+        "through which 是介词 + 关系代词，引导非限制性定语从句修饰 mechanisms。",
+        "in apparent violation of... 表示广告看起来违反了相关指南。"
+      ],
+      "expressions": [
+        {"text": "direct-to-consumer", "meaning_zh": "直接面向消费者的"},
+        {"text": "in apparent violation of", "meaning_zh": "看似违反"},
+        {"text": "guidelines on", "meaning_zh": "关于……的指南"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "Such programs, although laudable and useful, do not keep false advertising off the airwaves.",
+      "translation": "这类项目虽然值得称赞且有用，却并不能让虚假广告远离广播电视媒体。",
+      "structure": [
+        {"text": "Such programs", "role": "subject", "level": 1},
+        {"text": "although laudable and useful", "role": "adverbial_clause", "level": 1},
+        {"text": "do not keep", "role": "verb_phrase", "level": 1},
+        {"text": "false advertising", "role": "object", "level": 1},
+        {"text": "off the airwaves", "role": "object_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "Such programs 指前一句提到的举报机制。",
+        "although laudable and useful 是省略结构，完整含义是 although they are laudable and useful。",
+        "keep false advertising off the airwaves 是 keep + 宾语 + 补足语结构。",
+        "airwaves 指广播电视传播渠道。"
+      ],
+      "expressions": [
+        {"text": "laudable and useful", "meaning_zh": "值得称赞且有用的"},
+        {"text": "keep something off", "meaning_zh": "使某物远离"},
+        {"text": "false advertising", "meaning_zh": "虚假广告"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "In addition, even misinformation that is successfully corrected can continue to affect attitudes.",
+      "translation": "此外，即使是已经被成功纠正的错误信息，也可能继续影响态度。",
+      "structure": [
+        {"text": "In addition", "role": "discourse_marker", "level": 1},
+        {"text": "even misinformation that is successfully corrected", "role": "subject", "level": 1},
+        {"text": "that is successfully corrected", "role": "relative_clause", "level": 2},
+        {"text": "can continue to affect", "role": "verb_phrase", "level": 1},
+        {"text": "attitudes", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "In addition 表示在预防困难之外再补充一个问题。",
+        "even 强调即便纠正成功，影响也可能持续。",
+        "that is successfully corrected 修饰 misinformation。",
+        "continue to affect 表示纠正之后仍会产生后续影响。"
+      ],
+      "expressions": [
+        {"text": "in addition", "meaning_zh": "此外"},
+        {"text": "successfully corrected", "meaning_zh": "被成功纠正的"},
+        {"text": "continue to affect", "meaning_zh": "继续影响"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 24,
+      "sentence": "This leads us to our third observation: a campaign to correct misinformation, even if rhetorically compelling, requires resources and planning to accomplish necessary reach and frequency.",
+      "translation": "这就引出了我们的第三项观察：一场纠正错误信息的运动，即便在修辞上很有说服力，也需要资源和规划，才能达到必要的覆盖范围和接触频率。",
+      "structure": [
+        {"text": "This leads us to our third observation", "role": "main_clause", "level": 1},
+        {"text": "a campaign to correct misinformation, even if rhetorically compelling, requires resources and planning", "role": "explanatory_clause", "level": 1},
+        {"text": "to correct misinformation", "role": "infinitive_phrase", "level": 2},
+        {"text": "even if rhetorically compelling", "role": "adverbial_clause", "level": 2},
+        {"text": "to accomplish necessary reach and frequency", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "This leads us to... 用来承接上一段并引出第三项观察。",
+        "冒号后解释 third observation 的具体内容。",
+        "even if rhetorically compelling 是省略结构，完整含义是 even if it is rhetorically compelling。",
+        "reach and frequency 是传播活动中的覆盖范围和接触频率。"
+      ],
+      "expressions": [
+        {"text": "lead us to", "meaning_zh": "引出；使我们转向"},
+        {"text": "rhetorically compelling", "meaning_zh": "在修辞上有说服力的"},
+        {"text": "reach and frequency", "meaning_zh": "覆盖范围和频率"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 25,
+      "sentence": "For corrective campaigns to be persuasive, audiences need to be able to comprehend them, which requires either effort to frame messages in ways that are accessible or effort to educate and sensitize audiences to the possibility of misinformation.",
+      "translation": "要让纠正性宣传具有说服力，受众需要能够理解它们；这就需要付出努力，用易于理解的方式来组织信息，或者教育并使受众意识到错误信息存在的可能性。",
+      "structure": [
+        {"text": "For corrective campaigns to be persuasive", "role": "prepositional_phrase", "level": 1},
+        {"text": "audiences need to be able to comprehend them", "role": "main_clause", "level": 1},
+        {"text": "which requires either effort to frame messages in ways that are accessible or effort to educate and sensitize audiences to the possibility of misinformation", "role": "relative_clause", "level": 2},
+        {"text": "that are accessible", "role": "relative_clause", "level": 3},
+        {"text": "to educate and sensitize audiences to the possibility of misinformation", "role": "infinitive_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "For...to be persuasive 表示目的或条件：为了让纠正活动有说服力。",
+        "which 引导非限制性定语从句，指代前面“受众需要理解”这一要求。",
+        "either...or... 连接两种努力：设计易懂信息，或教育并敏化受众。",
+        "sensitize audiences to... 意思是使受众对某种可能性更加敏感。"
+      ],
+      "expressions": [
+        {"text": "corrective campaigns", "meaning_zh": "纠正性宣传活动"},
+        {"text": "frame messages", "meaning_zh": "组织/设计信息表达"},
+        {"text": "sensitize audiences to", "meaning_zh": "使受众意识到并敏感于"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "That some audiences might be unaware of the potential for misinformation also suggests the utility of media literacy efforts as early as elementary school.",
+      "translation": "有些受众可能并不了解错误信息存在的可能性，这也表明早在小学阶段开展媒体素养教育是有用的。",
+      "structure": [
+        {"text": "That some audiences might be unaware of the potential for misinformation", "role": "noun_clause_subject", "level": 1},
+        {"text": "some audiences might be unaware of the potential for misinformation", "role": "clause", "level": 2},
+        {"text": "also suggests", "role": "verb_phrase", "level": 1},
+        {"text": "the utility of media literacy efforts as early as elementary school", "role": "object", "level": 1},
+        {"text": "as early as elementary school", "role": "adverbial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "That 引导主语从句，整个从句作 suggests 的主语。",
+        "might be unaware of 表示可能没有意识到，语气谨慎。",
+        "the utility of... 指某项努力的有用性。",
+        "as early as elementary school 强调媒体素养教育应尽早开始。"
+      ],
+      "expressions": [
+        {"text": "be unaware of", "meaning_zh": "没有意识到"},
+        {"text": "media literacy", "meaning_zh": "媒体素养"},
+        {"text": "as early as", "meaning_zh": "早在"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "Even with journalists and scholars pointing to the phenomenon of \"fake news\", people do not distinguish between demonstrably false stories and those based in fact when scanning and processing written information.",
+      "translation": "即便记者和学者都在指出“假新闻”这一现象，人们在浏览和处理书面信息时，也无法区分明显虚假的报道和基于事实的报道。",
+      "structure": [
+        {"text": "Even with journalists and scholars pointing to the phenomenon of \"fake news\"", "role": "prepositional_phrase", "level": 1},
+        {"text": "journalists and scholars pointing to the phenomenon of \"fake news\"", "role": "absolute_phrase", "level": 2},
+        {"text": "people do not distinguish", "role": "main_clause", "level": 1},
+        {"text": "between demonstrably false stories and those based in fact", "role": "prepositional_phrase", "level": 2},
+        {"text": "when scanning and processing written information", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Even with 引导让步背景，表示即便已有提醒。",
+        "pointing to... 是现在分词，说明记者和学者的行动。",
+        "distinguish between...and... 表示在两类故事之间作区分。",
+        "when scanning and processing... 是省略结构，完整含义是 when they are scanning and processing。"
+      ],
+      "expressions": [
+        {"text": "point to the phenomenon of", "meaning_zh": "指出……现象"},
+        {"text": "distinguish between", "meaning_zh": "区分"},
+        {"text": "based in fact", "meaning_zh": "基于事实的"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 28,
+      "sentence": "We live at a time when widespread misinformation is common.",
+      "translation": "我们生活在一个广泛错误信息很常见的时代。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "live", "role": "verb_phrase", "level": 1},
+        {"text": "at a time when widespread misinformation is common", "role": "prepositional_phrase", "level": 1},
+        {"text": "when widespread misinformation is common", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "at a time when... 表示“在一个……的时代”。",
+        "when 引导定语从句，修饰 time。",
+        "widespread misinformation 指大范围传播的错误信息。"
+      ],
+      "expressions": [
+        {"text": "at a time when", "meaning_zh": "在一个……的时代"},
+        {"text": "widespread misinformation", "meaning_zh": "广泛传播的错误信息"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 29,
+      "sentence": "Yet at this time many people also are passionately developing potential solutions and remedies.",
+      "translation": "但与此同时，许多人也在热情地开发潜在的解决方案和补救办法。",
+      "structure": [
+        {"text": "Yet", "role": "discourse_marker", "level": 1},
+        {"text": "at this time", "role": "prepositional_phrase", "level": 1},
+        {"text": "many people", "role": "subject", "level": 1},
+        {"text": "also are passionately developing", "role": "verb_phrase", "level": 1},
+        {"text": "potential solutions and remedies", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "Yet 引出积极转折，说明问题严重但也有人在寻找办法。",
+        "also are developing 中 also 强调另一面情况。",
+        "passionately 表示投入和热情，不只是普通地开发。",
+        "solutions and remedies 共同指应对错误信息的办法。"
+      ],
+      "expressions": [
+        {"text": "potential solutions and remedies", "meaning_zh": "潜在解决方案和补救办法"},
+        {"text": "passionately developing", "meaning_zh": "热情地开发"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 30,
+      "sentence": "The journey forward undoubtedly will be a long and arduous one.",
+      "translation": "前行的道路无疑将漫长而艰难。",
+      "structure": [
+        {"text": "The journey forward", "role": "subject", "level": 1},
+        {"text": "undoubtedly will be", "role": "verb_phrase", "level": 1},
+        {"text": "a long and arduous one", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "journey forward 是比喻，指解决错误信息问题的未来过程。",
+        "undoubtedly 表示作者对困难程度非常确定。",
+        "one 代替 journey，避免重复。"
+      ],
+      "expressions": [
+        {"text": "the journey forward", "meaning_zh": "前行之路"},
+        {"text": "long and arduous", "meaning_zh": "漫长而艰难的"}
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 31,
+      "sentence": "Future remedies will require not only continued theoretical consideration but also the development and maintenance of consistent monitoring tools—and a recognition among fellow members of society that claims which find prominence in the media that are insufficiently based in scientific consensus and social reality should be countered.",
+      "translation": "未来的补救办法不仅需要持续的理论思考，还需要开发并维护一致的监测工具——并且社会成员之间还需要形成一种认识：那些在媒体中受到关注、却没有充分建立在科学共识和社会现实之上的主张，应当被反驳。",
+      "structure": [
+        {"text": "Future remedies", "role": "subject", "level": 1},
+        {"text": "will require", "role": "verb_phrase", "level": 1},
+        {"text": "not only continued theoretical consideration but also the development and maintenance of consistent monitoring tools", "role": "correlative_object", "level": 1},
+        {"text": "and a recognition among fellow members of society that claims which find prominence in the media that are insufficiently based in scientific consensus and social reality should be countered", "role": "coordinated_object", "level": 1},
+        {"text": "that claims which find prominence in the media that are insufficiently based in scientific consensus and social reality should be countered", "role": "appositive_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "not only...but also... 连接未来补救措施需要的两个方面。",
+        "破折号后 and a recognition... 补充第三个必要条件。",
+        "that claims...should be countered 是 recognition 的同位语从句，说明需要认识到的内容。",
+        "which find prominence in the media 和 that are insufficiently based... 都修饰 claims，层层限定应被反驳的主张。"
+      ],
+      "expressions": [
+        {"text": "continued theoretical consideration", "meaning_zh": "持续的理论思考"},
+        {"text": "consistent monitoring tools", "meaning_zh": "一致的监测工具"},
+        {"text": "scientific consensus", "meaning_zh": "科学共识"},
+        {"text": "social reality", "meaning_zh": "社会现实"}
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 32,
+      "sentence": "Misinformation arises as a result of human fallibility and human information needs.",
+      "translation": "错误信息的产生源于人类会犯错这一特性以及人类的信息需求。",
+      "structure": [
+        {"text": "Misinformation", "role": "subject", "level": 1},
+        {"text": "arises", "role": "verb_phrase", "level": 1},
+        {"text": "as a result of human fallibility and human information needs", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "arises 表示某问题或现象产生、出现。",
+        "as a result of 表示原因。",
+        "human fallibility 指人类容易犯错的特性，与 information needs 并列构成成因。"
+      ],
+      "expressions": [
+        {"text": "arise as a result of", "meaning_zh": "由于……而产生"},
+        {"text": "human fallibility", "meaning_zh": "人类易错性"},
+        {"text": "information needs", "meaning_zh": "信息需求"}
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 33,
+      "sentence": "To overcome the worst effects of the phenomenon, we will need coordinated efforts over time, rather than any singular one-time panacea we could hope to offer.",
+      "translation": "要克服这一现象最严重的影响，我们需要长期协调一致的努力，而不是我们可能希望提供的任何单一一次性万能药。",
+      "structure": [
+        {"text": "To overcome the worst effects of the phenomenon", "role": "infinitive_phrase", "level": 1},
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "will need", "role": "verb_phrase", "level": 1},
+        {"text": "coordinated efforts over time", "role": "object", "level": 1},
+        {"text": "rather than any singular one-time panacea we could hope to offer", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "To overcome... 是目的状语，说明需要协调努力的原因。",
+        "coordinated efforts over time 强调长期、协同的应对方式。",
+        "rather than 引出被否定的替代方案。",
+        "we could hope to offer 是省略关系词的定语从句，修饰 panacea。"
+      ],
+      "expressions": [
+        {"text": "coordinated efforts over time", "meaning_zh": "长期协调努力"},
+        {"text": "rather than", "meaning_zh": "而不是"},
+        {"text": "one-time panacea", "meaning_zh": "一次性的万能药"}
+      ]
+    }
+  ]
+}

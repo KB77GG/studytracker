@@ -1,0 +1,2157 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts15_test1_reading",
+  "passage_id": "ielts15_test1_p1",
+  "passage_title": "Nutmeg – a valuable spice",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The nutmeg tree, Myristica fragrans, is a large evergreen tree native to Southeast Asia.",
+      "translation": "肉豆蔻树，即 Myristica fragrans，是一种原产于东南亚的大型常绿树。",
+      "structure": [
+        {
+          "text": "The nutmeg tree, Myristica fragrans,",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "Myristica fragrans",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a large evergreen tree native to Southeast Asia",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "native to Southeast Asia",
+          "role": "adjective_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "逗号中的 Myristica fragrans 是对 The nutmeg tree 的同位语说明。",
+        "native to Southeast Asia 后置修饰 tree，说明这种树的原产地。",
+        "large evergreen tree 是表语，描述主语的类别和特征。"
+      ],
+      "expressions": [
+        {
+          "text": "be native to",
+          "meaning_zh": "原产于"
+        },
+        {
+          "text": "evergreen tree",
+          "meaning_zh": "常绿树"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Until the late 18th century, it only grew in one place in the world: a small group of islands in the Banda Sea, part of the Moluccas – or Spice Islands – in northeastern Indonesia.",
+      "translation": "直到18世纪末，它在世界上只生长在一个地方：班达海上的一小群岛屿，也就是印度尼西亚东北部摩鹿加群岛——又称香料群岛——的一部分。",
+      "structure": [
+        {
+          "text": "Until the late 18th century",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "it only grew",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "in one place in the world",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "a small group of islands in the Banda Sea",
+          "role": "apposition",
+          "level": 1
+        },
+        {
+          "text": "part of the Moluccas – or Spice Islands – in northeastern Indonesia",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "it 指上一句的 The nutmeg tree，而不是某一种香料。",
+        "冒号后的 a small group of islands 具体解释 one place in the world。",
+        "破折号中的 or Spice Islands 是对 the Moluccas 的别名说明。"
+      ],
+      "expressions": [
+        {
+          "text": "Until the late 18th century",
+          "meaning_zh": "直到18世纪末"
+        },
+        {
+          "text": "a small group of islands",
+          "meaning_zh": "一小群岛屿"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "The tree is thickly branched with dense foliage of tough, dark green oval leaves, and produces small, yellow, bell-shaped flowers and pale yellow pear-shaped fruits.",
+      "translation": "这种树枝条浓密，长有由坚韧的深绿色椭圆形叶片组成的茂密叶簇，并会开出小而黄色的钟形花，结出淡黄色的梨形果实。",
+      "structure": [
+        {
+          "text": "The tree",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is thickly branched",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "with dense foliage of tough, dark green oval leaves",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "and produces small, yellow, bell-shaped flowers and pale yellow pear-shaped fruits",
+          "role": "coordinated_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "small, yellow, bell-shaped flowers and pale yellow pear-shaped fruits",
+          "role": "object",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "is thickly branched 与 produces 是同一主语 The tree 的并列谓语。",
+        "with dense foliage... 补充说明树枝浓密的外观特征。",
+        "small, yellow, bell-shaped 和 pale yellow pear-shaped 分别修饰 flowers 与 fruits。"
+      ],
+      "expressions": [
+        {
+          "text": "be thickly branched",
+          "meaning_zh": "枝条浓密"
+        },
+        {
+          "text": "dense foliage",
+          "meaning_zh": "茂密的叶簇"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "The fruit is encased in a fleshy husk.",
+      "translation": "果实被包裹在一层肉质外壳中。",
+      "structure": [
+        {
+          "text": "The fruit",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is encased",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in a fleshy husk",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "is encased 是被动结构，表示果实被外壳包住。",
+        "in a fleshy husk 说明包裹果实的具体部位。",
+        "husk 在植物语境中指果实外层的壳或皮。"
+      ],
+      "expressions": [
+        {
+          "text": "be encased in",
+          "meaning_zh": "被包裹在……中"
+        }
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "When the fruit is ripe, this husk splits into two halves along a ridge running the length of the fruit.",
+      "translation": "果实成熟时，这层外壳会沿着贯穿果实长度方向的一条脊线裂成两半。",
+      "structure": [
+        {
+          "text": "When the fruit is ripe",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "this husk",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "splits into two halves",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "along a ridge running the length of the fruit",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "running the length of the fruit",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，说明外壳裂开的时间条件。",
+        "this husk 指上一句的 fleshy husk。",
+        "running the length of the fruit 后置修饰 ridge，表示脊线沿果实长度延伸。"
+      ],
+      "expressions": [
+        {
+          "text": "split into two halves",
+          "meaning_zh": "裂成两半"
+        },
+        {
+          "text": "along a ridge",
+          "meaning_zh": "沿着一条脊线"
+        }
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "Inside is a purple-brown shiny seed, 2–3 cm long by about 2 cm across, surrounded by a lacy red or crimson covering called an 'aril'.",
+      "translation": "里面是一颗紫褐色、有光泽的种子，长2至3厘米、宽约2厘米，周围包着一层红色或深红色网状覆盖物，称为“假种皮”。",
+      "structure": [
+        {
+          "text": "Inside",
+          "role": "fronted_adverbial",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a purple-brown shiny seed",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "2–3 cm long by about 2 cm across",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "surrounded by a lacy red or crimson covering called an 'aril'",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "called an 'aril'",
+          "role": "participial_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Inside 置于句首形成倒装，真正的主语是 a purple-brown shiny seed。",
+        "2–3 cm long by about 2 cm across 是插入式尺寸说明。",
+        "surrounded by... 和 called... 都是过去分词短语，分别说明种子被什么包围以及覆盖物的名称。"
+      ],
+      "expressions": [
+        {
+          "text": "surrounded by",
+          "meaning_zh": "被……包围"
+        },
+        {
+          "text": "called an 'aril'",
+          "meaning_zh": "被称为“假种皮”"
+        }
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "These are the sources of the two spices nutmeg and mace, the former being produced from the dried seed and the latter from the aril.",
+      "translation": "这些就是肉豆蔻和肉豆蔻衣这两种香料的来源：前者由干燥的种子制成，后者由假种皮制成。",
+      "structure": [
+        {
+          "text": "These",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the sources of the two spices nutmeg and mace",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "the former being produced from the dried seed and the latter from the aril",
+          "role": "absolute_phrase",
+          "level": 1
+        },
+        {
+          "text": "being produced from the dried seed",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "These 指前面提到的 seed 和 aril 两个部分。",
+        "the former 指 nutmeg，the latter 指 mace。",
+        "the former being... 是独立主格结构，补充说明两种香料分别来自哪里。"
+      ],
+      "expressions": [
+        {
+          "text": "the former ... the latter ...",
+          "meaning_zh": "前者……后者……"
+        },
+        {
+          "text": "be produced from",
+          "meaning_zh": "由……制成"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Nutmeg was a highly prized and costly ingredient in European cuisine in the Middle Ages, and was used as a flavouring, medicinal, and preservative agent.",
+      "translation": "在中世纪，肉豆蔻是欧洲烹饪中备受珍视且价格昂贵的原料，也被用作调味剂、药用物质和防腐剂。",
+      "structure": [
+        {
+          "text": "Nutmeg",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was a highly prized and costly ingredient in European cuisine in the Middle Ages",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and was used as a flavouring, medicinal, and preservative agent",
+          "role": "coordinated_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "as a flavouring, medicinal, and preservative agent",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "was...ingredient 与 was used... 是同一主语 Nutmeg 的并列谓语。",
+        "in European cuisine in the Middle Ages 连续两个介词短语分别说明领域和时期。",
+        "flavouring, medicinal, and preservative 三个形容词并列修饰 agent。"
+      ],
+      "expressions": [
+        {
+          "text": "highly prized",
+          "meaning_zh": "备受珍视的"
+        },
+        {
+          "text": "be used as",
+          "meaning_zh": "被用作"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Throughout this period, the Arabs were the exclusive importers of the spice to Europe.",
+      "translation": "在整个这一时期，阿拉伯人是将这种香料进口到欧洲的唯一进口商。",
+      "structure": [
+        {
+          "text": "Throughout this period",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Arabs",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the exclusive importers of the spice to Europe",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Throughout this period 指代前一句的 Middle Ages。",
+        "exclusive importers 强调只有阿拉伯人负责将这种香料输入欧洲。",
+        "of the spice 和 to Europe 分别说明进口的对象和方向。"
+      ],
+      "expressions": [
+        {
+          "text": "Throughout this period",
+          "meaning_zh": "在整个这一时期"
+        },
+        {
+          "text": "exclusive importers",
+          "meaning_zh": "唯一进口商"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "They sold nutmeg for high prices to merchants based in Venice, but they never revealed the exact location of the source of this extremely valuable commodity.",
+      "translation": "他们以高价把肉豆蔻卖给驻在威尼斯的商人，但从未透露这种极其珍贵商品来源地的确切位置。",
+      "structure": [
+        {
+          "text": "They sold nutmeg for high prices to merchants based in Venice",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "for high prices",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "based in Venice",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "but they never revealed the exact location of the source of this extremely valuable commodity",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "of the source of this extremely valuable commodity",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "They 指上一句的 the Arabs。",
+        "based in Venice 是过去分词短语，修饰 merchants。",
+        "but 引出转折：阿拉伯人出售香料，却保守来源地秘密。"
+      ],
+      "expressions": [
+        {
+          "text": "for high prices",
+          "meaning_zh": "以高价"
+        },
+        {
+          "text": "reveal the exact location",
+          "meaning_zh": "透露确切地点"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "The Arab-Venetian dominance of the trade finally ended in 1512, when the Portuguese reached the Banda Islands and began exploiting its precious resources.",
+      "translation": "阿拉伯人与威尼斯对这项贸易的支配最终在1512年结束，当时葡萄牙人抵达班达群岛，并开始开发那里的珍贵资源。",
+      "structure": [
+        {
+          "text": "The Arab-Venetian dominance of the trade",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "finally ended",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in 1512",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "when the Portuguese reached the Banda Islands and began exploiting its precious resources",
+          "role": "relative_clause",
+          "level": 1
+        },
+        {
+          "text": "reached the Banda Islands and began exploiting its precious resources",
+          "role": "coordinated_verb_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "The Arab-Venetian dominance of the trade 是名词短语主语，核心词是 dominance。",
+        "when 引导的从句补充说明1512年发生的具体事件。",
+        "its precious resources 中的 its 指 the Banda Islands 所在地区的资源。"
+      ],
+      "expressions": [
+        {
+          "text": "dominance of the trade",
+          "meaning_zh": "对贸易的支配"
+        },
+        {
+          "text": "begin exploiting",
+          "meaning_zh": "开始开发、利用"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "Always in danger of competition from neighbouring Spain, the Portuguese began subcontracting their spice distribution to Dutch traders.",
+      "translation": "由于始终面临邻国西班牙竞争的威胁，葡萄牙人开始把香料分销分包给荷兰商人。",
+      "structure": [
+        {
+          "text": "Always in danger of competition from neighbouring Spain",
+          "role": "adjective_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Portuguese",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "began subcontracting",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "their spice distribution",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "to Dutch traders",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "句首形容词短语说明葡萄牙人的处境和动机。",
+        "began subcontracting 后接动名词，表示开始分包这一行为。",
+        "their spice distribution 指葡萄牙人的香料分销业务。"
+      ],
+      "expressions": [
+        {
+          "text": "in danger of",
+          "meaning_zh": "处于……危险之中"
+        },
+        {
+          "text": "subcontract ... to ...",
+          "meaning_zh": "把……分包给……"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "Profits began to flow into the Netherlands, and the Dutch commercial fleet swiftly grew into one of the largest in the world.",
+      "translation": "利润开始流入荷兰，而荷兰商船队也迅速发展成为世界上最大的船队之一。",
+      "structure": [
+        {
+          "text": "Profits began to flow into the Netherlands",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "began to flow into the Netherlands",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "and the Dutch commercial fleet swiftly grew into one of the largest in the world",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "one of the largest in the world",
+          "role": "complement",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "and 连接两个结果：利润流入与商船队壮大。",
+        "flow into 用来形象说明财富进入某地。",
+        "one of the largest in the world 表示“世界最大之一”，不是唯一最大。"
+      ],
+      "expressions": [
+        {
+          "text": "flow into",
+          "meaning_zh": "流入"
+        },
+        {
+          "text": "grow into",
+          "meaning_zh": "发展成为"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "The Dutch quietly gained control of most of the shipping and trading of spices in Northern Europe.",
+      "translation": "荷兰人悄然控制了北欧大部分香料航运与贸易。",
+      "structure": [
+        {
+          "text": "The Dutch",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "quietly gained control of",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "most of the shipping and trading of spices in Northern Europe",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "of spices in Northern Europe",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "quietly 表示这种控制权是在不张扬中逐步取得的。",
+        "shipping and trading 是并列名词，指运输和贸易两个环节。",
+        "of spices in Northern Europe 限定被控制的贸易类型和区域。"
+      ],
+      "expressions": [
+        {
+          "text": "gain control of",
+          "meaning_zh": "取得对……的控制"
+        },
+        {
+          "text": "shipping and trading",
+          "meaning_zh": "航运和贸易"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "Then, in 1580, Portugal fell under Spanish rule, and by the end of the 16th century the Dutch found themselves locked out of the market.",
+      "translation": "随后，在1580年，葡萄牙落入西班牙统治之下；到16世纪末，荷兰人发现自己被排除在市场之外。",
+      "structure": [
+        {
+          "text": "Then",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "in 1580",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "Portugal fell under Spanish rule",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and by the end of the 16th century the Dutch found themselves locked out of the market",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "locked out of the market",
+          "role": "object_complement",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "fell under Spanish rule 表示葡萄牙进入西班牙统治之下。",
+        "by the end of... 表示到某一时间点为止形成的结果。",
+        "found themselves locked out of the market 是“发现自己处于某状态”的结构。"
+      ],
+      "expressions": [
+        {
+          "text": "fall under ... rule",
+          "meaning_zh": "落入……统治之下"
+        },
+        {
+          "text": "be locked out of",
+          "meaning_zh": "被排除在……之外"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "As prices for pepper, nutmeg, and other spices soared across Europe, they decided to fight back.",
+      "translation": "随着胡椒、肉豆蔻和其他香料的价格在欧洲各地飙升，他们决定反击。",
+      "structure": [
+        {
+          "text": "As prices for pepper, nutmeg, and other spices soared across Europe",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "prices for pepper, nutmeg, and other spices",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "soared across Europe",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "they decided to fight back",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to fight back",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "As 引导时间或背景状语从句，表示价格上涨这一背景。",
+        "they 指上一句中的 the Dutch。",
+        "fight back 表示荷兰人决定采取行动反击被排除的局面。"
+      ],
+      "expressions": [
+        {
+          "text": "prices ... soared",
+          "meaning_zh": "价格飙升"
+        },
+        {
+          "text": "fight back",
+          "meaning_zh": "反击"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "In 1602, Dutch merchants founded the VOC, a trading corporation better known as the Dutch East India Company.",
+      "translation": "1602年，荷兰商人成立了 VOC，这是一家更为人熟知的名字是荷兰东印度公司的贸易公司。",
+      "structure": [
+        {
+          "text": "In 1602",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "Dutch merchants",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "founded",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the VOC",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "a trading corporation better known as the Dutch East India Company",
+          "role": "apposition",
+          "level": 1
+        },
+        {
+          "text": "better known as the Dutch East India Company",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "a trading corporation 是 the VOC 的同位语。",
+        "better known as... 是过去分词短语，说明 VOC 更常见的名称。",
+        "founded 在这里表示“创立、成立”组织。"
+      ],
+      "expressions": [
+        {
+          "text": "be better known as",
+          "meaning_zh": "更广为人知的名称是"
+        },
+        {
+          "text": "trading corporation",
+          "meaning_zh": "贸易公司"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "By 1617, the VOC was the richest commercial operation in the world.",
+      "translation": "到1617年，VOC 已成为世界上最富有的商业机构。",
+      "structure": [
+        {
+          "text": "By 1617",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the VOC",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the richest commercial operation in the world",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "By 1617 强调到这一时间点 VOC 已达到的状态。",
+        "commercial operation 指商业经营实体，不是一次单独的行动。",
+        "the richest...in the world 是最高级结构，强调其财富规模。"
+      ],
+      "expressions": [
+        {
+          "text": "By 1617",
+          "meaning_zh": "到1617年为止"
+        },
+        {
+          "text": "commercial operation",
+          "meaning_zh": "商业经营机构"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "The company had 50,000 employees worldwide, with a private army of 30,000 men and a fleet of 200 ships.",
+      "translation": "这家公司在全球拥有5万名雇员，还拥有一支3万人的私人军队和一支由200艘船组成的舰队。",
+      "structure": [
+        {
+          "text": "The company",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "50,000 employees worldwide",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "with a private army of 30,000 men and a fleet of 200 ships",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "a private army of 30,000 men and a fleet of 200 ships",
+          "role": "object",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "with 短语补充说明公司除雇员外还拥有的军事和航运力量。",
+        "worldwide 修饰 employees，表示雇员分布在全球。",
+        "of 30,000 men 和 of 200 ships 分别说明 army 与 fleet 的规模。"
+      ],
+      "expressions": [
+        {
+          "text": "employees worldwide",
+          "meaning_zh": "全球雇员"
+        },
+        {
+          "text": "a fleet of",
+          "meaning_zh": "一支由……组成的舰队"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "At the same time, thousands of people across Europe were dying of the plague, a highly contagious and deadly disease.",
+      "translation": "与此同时，欧洲各地成千上万的人正死于鼠疫，这是一种高度传染且致命的疾病。",
+      "structure": [
+        {
+          "text": "At the same time",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "thousands of people across Europe",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were dying of",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the plague",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "a highly contagious and deadly disease",
+          "role": "apposition",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "At the same time 把 VOC 的扩张与欧洲瘟疫背景并列起来。",
+        "were dying of 是过去进行时，强调当时大量死亡正在发生。",
+        "a highly contagious and deadly disease 是 the plague 的同位语解释。"
+      ],
+      "expressions": [
+        {
+          "text": "At the same time",
+          "meaning_zh": "与此同时"
+        },
+        {
+          "text": "die of",
+          "meaning_zh": "死于"
+        },
+        {
+          "text": "highly contagious",
+          "meaning_zh": "高度传染性的"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "Doctors were desperate for a way to stop the spread of this disease, and they decided nutmeg held the cure.",
+      "translation": "医生们迫切想找到阻止这种疾病传播的方法，并认定肉豆蔻有治愈之效。",
+      "structure": [
+        {
+          "text": "Doctors were desperate for a way",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to stop the spread of this disease",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "and they decided nutmeg held the cure",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "nutmeg held the cure",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "were desperate for 表示强烈需求，而不是普通的“想要”。",
+        "to stop... 修饰 a way，说明医生寻找的是何种方法。",
+        "decided 后省略 that，nutmeg held the cure 是医生认定的内容。"
+      ],
+      "expressions": [
+        {
+          "text": "be desperate for",
+          "meaning_zh": "迫切需要"
+        },
+        {
+          "text": "stop the spread of",
+          "meaning_zh": "阻止……传播"
+        },
+        {
+          "text": "hold the cure",
+          "meaning_zh": "拥有治愈方法"
+        }
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "Everybody wanted nutmeg, and many were willing to spare no expense to have it.",
+      "translation": "人人都想要肉豆蔻，许多人愿意不惜一切代价来得到它。",
+      "structure": [
+        {
+          "text": "Everybody wanted nutmeg",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and many were willing to spare no expense to have it",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "to spare no expense",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "to have it",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "many 后省略 people，指很多人。",
+        "were willing to 后接不定式，表示愿意付出代价。",
+        "it 指 nutmeg，说明人们想得到的对象。"
+      ],
+      "expressions": [
+        {
+          "text": "be willing to",
+          "meaning_zh": "愿意"
+        },
+        {
+          "text": "spare no expense",
+          "meaning_zh": "不惜花费；不惜代价"
+        }
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "Nutmeg bought for a few pennies in Indonesia could be sold for 68,000 times its original cost on the streets of London.",
+      "translation": "在印度尼西亚只花几便士买来的肉豆蔻，在伦敦街头可以卖到原价的68000倍。",
+      "structure": [
+        {
+          "text": "Nutmeg bought for a few pennies in Indonesia",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "bought for a few pennies in Indonesia",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "could be sold",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "for 68,000 times its original cost",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "on the streets of London",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "bought for... 是过去分词短语，后置修饰 Nutmeg。",
+        "could be sold 是情态动词加被动结构，表示可能卖出的价格。",
+        "68,000 times its original cost 表示价格是原始成本的68000倍。"
+      ],
+      "expressions": [
+        {
+          "text": "be sold for",
+          "meaning_zh": "以……价格售出"
+        },
+        {
+          "text": "original cost",
+          "meaning_zh": "原始成本"
+        }
+      ]
+    },
+    {
+      "id": "D-08",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "The only problem was the short supply.",
+      "translation": "唯一的问题是供应短缺。",
+      "structure": [
+        {
+          "text": "The only problem",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the short supply",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "The only problem 强调限制需求和高价的唯一障碍。",
+        "short supply 指供应量不足，而不是供应时间短。",
+        "was 连接主语和表语，说明问题的本质。"
+      ],
+      "expressions": [
+        {
+          "text": "short supply",
+          "meaning_zh": "供应短缺"
+        }
+      ]
+    },
+    {
+      "id": "D-09",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "And that's where the Dutch found their opportunity.",
+      "translation": "而这正是荷兰人发现机会的地方。",
+      "structure": [
+        {
+          "text": "And",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "that's",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "where the Dutch found their opportunity",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "the Dutch found their opportunity",
+          "role": "main_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that 指上一句提到的供应短缺问题。",
+        "where 引导表语从句，说明机会出现的点。",
+        "And 用于承接前文，突出荷兰人利用短缺局面的转折。"
+      ],
+      "expressions": [
+        {
+          "text": "find their opportunity",
+          "meaning_zh": "找到机会"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "The Banda Islands were ruled by local sultans who insisted on maintaining a neutral trading policy towards foreign powers.",
+      "translation": "班达群岛由当地苏丹统治，他们坚持对外国势力保持中立的贸易政策。",
+      "structure": [
+        {
+          "text": "The Banda Islands",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were ruled",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "by local sultans",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "who insisted on maintaining a neutral trading policy towards foreign powers",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "maintaining a neutral trading policy towards foreign powers",
+          "role": "gerund_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "were ruled by 是被动结构，说明群岛由谁统治。",
+        "who 引导定语从句，修饰 local sultans。",
+        "insisted on 后接动名词 maintaining，表示坚持实行某政策。"
+      ],
+      "expressions": [
+        {
+          "text": "be ruled by",
+          "meaning_zh": "由……统治"
+        },
+        {
+          "text": "insist on",
+          "meaning_zh": "坚持"
+        },
+        {
+          "text": "neutral trading policy",
+          "meaning_zh": "中立贸易政策"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "This allowed them to avoid the presence of Portuguese or Spanish troops on their soil, but it also left them unprotected from other invaders.",
+      "translation": "这使他们能够避免葡萄牙或西班牙军队出现在自己的土地上，但也让他们在面对其他入侵者时缺乏保护。",
+      "structure": [
+        {
+          "text": "This allowed them to avoid the presence of Portuguese or Spanish troops on their soil",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to avoid the presence of Portuguese or Spanish troops on their soil",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "but it also left them unprotected from other invaders",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "unprotected from other invaders",
+          "role": "object_complement",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "This 指上一句的中立贸易政策。",
+        "allowed them to... 表示这一政策带来的好处。",
+        "but it also left them... 引出负面后果，it 同样指该政策。"
+      ],
+      "expressions": [
+        {
+          "text": "allow ... to ...",
+          "meaning_zh": "使……能够……"
+        },
+        {
+          "text": "leave ... unprotected",
+          "meaning_zh": "使……处于无保护状态"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "In 1621, the Dutch arrived and took over.",
+      "translation": "1621年，荷兰人抵达并接管了这里。",
+      "structure": [
+        {
+          "text": "In 1621",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Dutch",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "arrived and took over",
+          "role": "coordinated_verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "arrived and took over 是连续动作，说明荷兰人到达后取得控制权。",
+        "took over 没有明说宾语，但结合上下文指接管班达群岛。",
+        "In 1621 明确交代荷兰人控制行动发生的时间。"
+      ],
+      "expressions": [
+        {
+          "text": "take over",
+          "meaning_zh": "接管"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "Once securely in control of the Bandas, the Dutch went to work protecting their new investment.",
+      "translation": "一旦稳稳控制了班达群岛，荷兰人便开始着手保护他们的新投资。",
+      "structure": [
+        {
+          "text": "Once securely in control of the Bandas",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "the Dutch",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "went to work",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "protecting their new investment",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Once 引导条件或时间背景，表示“在……之后立刻”。",
+        "securely in control of... 是省略结构，可理解为 once they were securely in control。",
+        "protecting their new investment 说明 went to work 的具体目的或内容。"
+      ],
+      "expressions": [
+        {
+          "text": "in control of",
+          "meaning_zh": "控制着"
+        },
+        {
+          "text": "go to work",
+          "meaning_zh": "开始着手"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "They concentrated all nutmeg production into a few easily guarded areas, uprooting and destroying any trees outside the plantation zones.",
+      "translation": "他们把所有肉豆蔻生产集中到少数容易看守的地区，并连根拔起、毁掉种植区之外的所有树木。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "concentrated all nutmeg production into a few easily guarded areas",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "all nutmeg production",
+          "role": "object",
+          "level": 2
+        },
+        {
+          "text": "into a few easily guarded areas",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "uprooting and destroying any trees outside the plantation zones",
+          "role": "participial_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "They 指荷兰人。",
+        "concentrated...into... 表示把生产集中到特定区域。",
+        "uprooting and destroying 是现在分词短语，说明他们控制生产的附加手段。"
+      ],
+      "expressions": [
+        {
+          "text": "concentrate ... into ...",
+          "meaning_zh": "把……集中到……"
+        },
+        {
+          "text": "outside the plantation zones",
+          "meaning_zh": "在种植区之外"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "Anyone caught growing a nutmeg seedling or carrying seeds without the proper authority was severely punished.",
+      "translation": "任何被发现未经适当授权种植肉豆蔻幼苗或携带种子的人都会受到严厉惩罚。",
+      "structure": [
+        {
+          "text": "Anyone caught growing a nutmeg seedling or carrying seeds without the proper authority",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "caught growing a nutmeg seedling or carrying seeds without the proper authority",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "growing a nutmeg seedling or carrying seeds",
+          "role": "gerund_phrase",
+          "level": 3
+        },
+        {
+          "text": "was severely punished",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Anyone 是主语核心，后面的 caught... 后置修饰它。",
+        "growing 和 carrying 是并列动作，说明会被处罚的行为。",
+        "was severely punished 是被动结构，强调处罚结果。"
+      ],
+      "expressions": [
+        {
+          "text": "without the proper authority",
+          "meaning_zh": "未经适当授权"
+        },
+        {
+          "text": "be severely punished",
+          "meaning_zh": "受到严厉惩罚"
+        }
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 32,
+      "sentence": "In addition, all exported nutmeg was covered with lime to make sure there was no chance a fertile seed which could be grown elsewhere would leave the islands.",
+      "translation": "此外，所有出口的肉豆蔻都被涂上石灰，以确保任何可在别处种植的有生命力种子都不可能离开这些岛屿。",
+      "structure": [
+        {
+          "text": "In addition",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "all exported nutmeg",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was covered with lime",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to make sure there was no chance a fertile seed which could be grown elsewhere would leave the islands",
+          "role": "non_finite_clause",
+          "level": 1
+        },
+        {
+          "text": "there was no chance a fertile seed which could be grown elsewhere would leave the islands",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "which could be grown elsewhere",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "was covered with lime 是被动结构，说明出口前的处理方式。",
+        "to make sure... 表示涂石灰的目的。",
+        "which could be grown elsewhere 修饰 a fertile seed，说明荷兰人防范的是可在外地繁殖的种子。"
+      ],
+      "expressions": [
+        {
+          "text": "In addition",
+          "meaning_zh": "此外"
+        },
+        {
+          "text": "be covered with",
+          "meaning_zh": "被覆盖、涂上"
+        },
+        {
+          "text": "make sure",
+          "meaning_zh": "确保"
+        }
+      ]
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "There was only one obstacle to Dutch domination.",
+      "translation": "荷兰人的支配只剩下一个障碍。",
+      "structure": [
+        {
+          "text": "There was only one obstacle",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to Dutch domination",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "There was 是存在句，信息重点是 only one obstacle。",
+        "to Dutch domination 说明这个障碍阻碍的是荷兰人的支配。",
+        "only 强调障碍已经不多，为下文引出 Run 岛做铺垫。"
+      ],
+      "expressions": [
+        {
+          "text": "obstacle to",
+          "meaning_zh": "……的障碍"
+        }
+      ]
+    },
+    {
+      "id": "E-09",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "One of the Banda Islands, a sliver of land called Run, only 3 km long by less than 1 km wide, was under the control of the British.",
+      "translation": "班达群岛中的一个小岛——名为 Run 的狭长地带，长仅3公里、宽不到1公里——处于英国人的控制之下。",
+      "structure": [
+        {
+          "text": "One of the Banda Islands",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "a sliver of land called Run",
+          "role": "apposition",
+          "level": 1
+        },
+        {
+          "text": "called Run",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "only 3 km long by less than 1 km wide",
+          "role": "apposition",
+          "level": 1
+        },
+        {
+          "text": "was under the control of the British",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "主语核心是 One，两个逗号中的内容补充说明这个岛的名称和大小。",
+        "called Run 是过去分词短语，修饰 a sliver of land。",
+        "under the control of the British 表示该岛由英国控制。"
+      ],
+      "expressions": [
+        {
+          "text": "under the control of",
+          "meaning_zh": "在……控制之下"
+        },
+        {
+          "text": "a sliver of land",
+          "meaning_zh": "一小片狭长土地"
+        }
+      ]
+    },
+    {
+      "id": "E-10",
+      "paragraph_label": "E",
+      "sentence_index": 35,
+      "sentence": "After decades of fighting for control of this tiny island, the Dutch and British arrived at a compromise settlement, the Treaty of Breda, in 1667.",
+      "translation": "在为控制这座小岛而争斗数十年后，荷兰人与英国人在1667年达成了一项妥协协议，即《布雷达条约》。",
+      "structure": [
+        {
+          "text": "After decades of fighting for control of this tiny island",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Dutch and British",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "arrived at",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a compromise settlement",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "the Treaty of Breda",
+          "role": "apposition",
+          "level": 1
+        },
+        {
+          "text": "in 1667",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "After decades of... 说明达成协议前经历了很长时间的争夺。",
+        "arrived at 在这里表示“达成”协议或解决方案。",
+        "the Treaty of Breda 是 a compromise settlement 的同位语。"
+      ],
+      "expressions": [
+        {
+          "text": "fight for control of",
+          "meaning_zh": "为控制……而争斗"
+        },
+        {
+          "text": "arrive at a compromise settlement",
+          "meaning_zh": "达成妥协协议"
+        }
+      ]
+    },
+    {
+      "id": "E-11",
+      "paragraph_label": "E",
+      "sentence_index": 36,
+      "sentence": "Intent on securing their hold over every nutmeg-producing island, the Dutch offered a trade: if the British would give them the island of Run, they would in turn give Britain a distant and much less valuable island in North America.",
+      "translation": "荷兰人一心想确保对每一个产肉豆蔻岛屿的控制，于是提出一项交易：如果英国人把 Run 岛给他们，他们就转而把北美一个遥远且价值低得多的岛屿给英国。",
+      "structure": [
+        {
+          "text": "Intent on securing their hold over every nutmeg-producing island",
+          "role": "adjective_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Dutch offered a trade",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "if the British would give them the island of Run",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "they would in turn give Britain a distant and much less valuable island in North America",
+          "role": "main_clause",
+          "level": 2
+        },
+        {
+          "text": "a distant and much less valuable island in North America",
+          "role": "object",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Intent on... 是句首形容词短语，说明荷兰人提出交易的动机。",
+        "冒号后的 if 从句具体解释 trade 的内容。",
+        "they 在条件句后的主句中指 the Dutch，而 them 指荷兰人，Britain 指英国一方。"
+      ],
+      "expressions": [
+        {
+          "text": "intent on",
+          "meaning_zh": "决心要；一心想"
+        },
+        {
+          "text": "secure their hold over",
+          "meaning_zh": "确保对……的控制"
+        },
+        {
+          "text": "in turn",
+          "meaning_zh": "作为回报；转而"
+        }
+      ]
+    },
+    {
+      "id": "E-12",
+      "paragraph_label": "E",
+      "sentence_index": 37,
+      "sentence": "The British agreed.",
+      "translation": "英国人同意了。",
+      "structure": [
+        {
+          "text": "The British",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "agreed",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "The British 指英国一方的决策者或势力。",
+        "agreed 承接上一句的交易提议，表示同意交换。",
+        "句子很短，但它推动了后文曼哈顿归属变化的结果。"
+      ],
+      "expressions": [
+        {
+          "text": "agree",
+          "meaning_zh": "同意"
+        }
+      ]
+    },
+    {
+      "id": "E-13",
+      "paragraph_label": "E",
+      "sentence_index": 38,
+      "sentence": "That other island was Manhattan, which is how New Amsterdam became New York.",
+      "translation": "那个另一个岛就是曼哈顿，这也就是新阿姆斯特丹后来成为纽约的原因。",
+      "structure": [
+        {
+          "text": "That other island",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "Manhattan",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "which is how New Amsterdam became New York",
+          "role": "relative_clause",
+          "level": 1
+        },
+        {
+          "text": "how New Amsterdam became New York",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "That other island 指上一句中荷兰人交给英国的北美岛屿。",
+        "which 引导非限制性定语从句，指代整件交换事件。",
+        "how 从句说明新阿姆斯特丹变成纽约的历史原因。"
+      ],
+      "expressions": [
+        {
+          "text": "which is how",
+          "meaning_zh": "这就是……的原因或方式"
+        }
+      ]
+    },
+    {
+      "id": "E-14",
+      "paragraph_label": "E",
+      "sentence_index": 39,
+      "sentence": "The Dutch now had a monopoly over the nutmeg trade which would last for another century.",
+      "translation": "荷兰人如今拥有了对肉豆蔻贸易的垄断，而这种垄断又将持续一个世纪。",
+      "structure": [
+        {
+          "text": "The Dutch",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "now had",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a monopoly over the nutmeg trade",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "which would last for another century",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "for another century",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "a monopoly over... 表示对某项贸易的独占控制。",
+        "which 引导定语从句，修饰 monopoly 或这一垄断局面。",
+        "would last 从过去视角看未来，表示此后还会持续。"
+      ],
+      "expressions": [
+        {
+          "text": "have a monopoly over",
+          "meaning_zh": "垄断；独占控制"
+        },
+        {
+          "text": "last for another century",
+          "meaning_zh": "再持续一个世纪"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 40,
+      "sentence": "Then, in 1770, a Frenchman named Pierre Poivre successfully smuggled nutmeg plants to safety in Mauritius, an island off the coast of Africa.",
+      "translation": "后来，在1770年，一位名叫皮埃尔·普瓦夫尔的法国人成功把肉豆蔻植株偷运到非洲海岸外的毛里求斯岛，使其脱离危险。",
+      "structure": [
+        {
+          "text": "Then",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "in 1770",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "a Frenchman named Pierre Poivre",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "named Pierre Poivre",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "successfully smuggled nutmeg plants to safety in Mauritius",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "an island off the coast of Africa",
+          "role": "apposition",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "named Pierre Poivre 后置修饰 a Frenchman，说明此人的姓名。",
+        "smuggled...to safety 表示把植物秘密带到安全地点。",
+        "an island off the coast of Africa 是 Mauritius 的同位语说明。"
+      ],
+      "expressions": [
+        {
+          "text": "smuggle ... to safety",
+          "meaning_zh": "把……偷运到安全地点"
+        },
+        {
+          "text": "off the coast of",
+          "meaning_zh": "在……海岸外"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 41,
+      "sentence": "Some of these were later exported to the Caribbean where they thrived, especially on the island of Grenada.",
+      "translation": "其中一些后来被出口到加勒比地区，并在那里茁壮生长，尤其是在格林纳达岛上。",
+      "structure": [
+        {
+          "text": "Some of these",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were later exported",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to the Caribbean",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "where they thrived",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "especially on the island of Grenada",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Some of these 指上一句被偷运出的肉豆蔻植株中的一部分。",
+        "were later exported 是被动结构，说明这些植物后来被转移到加勒比。",
+        "where 引导定语从句，修饰 the Caribbean，并说明它们在那里生长良好。"
+      ],
+      "expressions": [
+        {
+          "text": "be exported to",
+          "meaning_zh": "被出口到"
+        },
+        {
+          "text": "thrive",
+          "meaning_zh": "茁壮成长；繁荣"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 42,
+      "sentence": "Next, in 1778, a volcanic eruption in the Banda region caused a tsunami that wiped out half the nutmeg groves.",
+      "translation": "接着，在1778年，班达地区的一次火山喷发引发了海啸，摧毁了一半肉豆蔻树林。",
+      "structure": [
+        {
+          "text": "Next",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "in 1778",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "a volcanic eruption in the Banda region",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "caused",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a tsunami",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "that wiped out half the nutmeg groves",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "a volcanic eruption 是 caused 的主语，说明海啸的原因。",
+        "that 引导定语从句，修饰 a tsunami。",
+        "wiped out 强调海啸对肉豆蔻树林造成了毁灭性破坏。"
+      ],
+      "expressions": [
+        {
+          "text": "volcanic eruption",
+          "meaning_zh": "火山喷发"
+        },
+        {
+          "text": "wipe out",
+          "meaning_zh": "彻底摧毁"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 43,
+      "sentence": "Finally, in 1809, the British returned to Indonesia and seized the Banda Islands by force.",
+      "translation": "最后，在1809年，英国人返回印度尼西亚，并以武力夺取了班达群岛。",
+      "structure": [
+        {
+          "text": "Finally",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "in 1809",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the British",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "returned to Indonesia and seized the Banda Islands by force",
+          "role": "coordinated_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "by force",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "returned 和 seized 是同一主语 the British 的连续动作。",
+        "by force 表示英国人夺取群岛的方式是武力。",
+        "Finally 与前面的 Then、Next 形成时间顺序。"
+      ],
+      "expressions": [
+        {
+          "text": "seize ... by force",
+          "meaning_zh": "以武力夺取……"
+        },
+        {
+          "text": "return to",
+          "meaning_zh": "返回"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 44,
+      "sentence": "They returned the islands to the Dutch in 1817, but not before transplanting hundreds of nutmeg seedlings to plantations in several locations across southern Asia.",
+      "translation": "他们在1817年把这些岛屿归还给荷兰人，但在此之前已经把数百株肉豆蔻幼苗移植到南亚多地的种植园。",
+      "structure": [
+        {
+          "text": "They returned the islands to the Dutch in 1817",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "but not before transplanting hundreds of nutmeg seedlings to plantations in several locations across southern Asia",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "transplanting hundreds of nutmeg seedlings",
+          "role": "gerund_phrase",
+          "level": 2
+        },
+        {
+          "text": "to plantations in several locations across southern Asia",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "They 指 the British。",
+        "returned...to... 表示把岛屿归还给荷兰人。",
+        "but not before... 表示在归还之前已经做了某事，强调英国先移植了幼苗。"
+      ],
+      "expressions": [
+        {
+          "text": "not before",
+          "meaning_zh": "在……之前先已经"
+        },
+        {
+          "text": "transplant ... to ...",
+          "meaning_zh": "把……移植到……"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 45,
+      "sentence": "The Dutch nutmeg monopoly was over.",
+      "translation": "荷兰人的肉豆蔻垄断就此结束。",
+      "structure": [
+        {
+          "text": "The Dutch nutmeg monopoly",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "over",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "The Dutch nutmeg monopoly 指荷兰对肉豆蔻贸易的垄断。",
+        "over 在这里是形容词，表示“结束了”。",
+        "句子总结前文走私、自然灾害和英国移植幼苗共同造成的结果。"
+      ],
+      "expressions": [
+        {
+          "text": "be over",
+          "meaning_zh": "结束"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 46,
+      "sentence": "Today, nutmeg is grown in Indonesia, the Caribbean, India, Malaysia, Papua New Guinea and Sri Lanka, and world nutmeg production is estimated to average between 10,000 and 12,000 tonnes per year.",
+      "translation": "如今，肉豆蔻种植于印度尼西亚、加勒比地区、印度、马来西亚、巴布亚新几内亚和斯里兰卡；全球肉豆蔻产量估计平均每年在1万到1.2万吨之间。",
+      "structure": [
+        {
+          "text": "Today",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "nutmeg is grown in Indonesia, the Caribbean, India, Malaysia, Papua New Guinea and Sri Lanka",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "is grown",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "and world nutmeg production is estimated to average between 10,000 and 12,000 tonnes per year",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "to average between 10,000 and 12,000 tonnes per year",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "is grown 是被动结构，说明今天肉豆蔻的种植地区。",
+        "and 连接两个现代情况：种植分布与全球产量估计。",
+        "is estimated to average 表示“据估计平均为”，后接年产量范围。"
+      ],
+      "expressions": [
+        {
+          "text": "be grown in",
+          "meaning_zh": "种植于"
+        },
+        {
+          "text": "be estimated to average",
+          "meaning_zh": "据估计平均为"
+        },
+        {
+          "text": "per year",
+          "meaning_zh": "每年"
+        }
+      ]
+    }
+  ]
+}

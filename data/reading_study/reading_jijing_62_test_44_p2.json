@@ -1,0 +1,563 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_62_test_44",
+  "passage_id": "reading_jijing_62_test_44_p2",
+  "passage_title": "Natural pesticide in India",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "A dramatic story about cotton farmers in India shows how destructive pesticides can be for people and the environment; and why today's agriculture is so dependent on pesticides.",
+      "translation": "一个关于印度棉农的震撼故事揭示了农药对人和环境的破坏力有多大，也说明了当今农业为何如此依赖农药。",
+      "structure": [
+        {"text": "A dramatic story about cotton farmers in India", "role": "subject", "level": 1},
+        {"text": "shows", "role": "verb", "level": 1},
+        {"text": "how destructive pesticides can be for people and the environment", "role": "object_clause", "level": 2},
+        {"text": "and why today's agriculture is so dependent on pesticides", "role": "coordinated_object_clause", "level": 2}
+      ],
+      "difficult_points": ["how 和 why 分别引导两个并列宾语从句，共同作 shows 的宾语。", "how destructive 中 how 修饰形容词 destructive，表示破坏程度。"],
+      "expressions": [{"text": "be dependent on", "meaning_zh": "依赖……"}, {"text": "be destructive for", "meaning_zh": "对……具有破坏性"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "This story also shows that it's possible to stop using chemical pesticides without losing a crop to ravaging insects, and it explains how to do it.",
+      "translation": "这个故事还表明，人们可以停止使用化学农药而不让庄稼毁于害虫，并且它还解释了具体做法。",
+      "structure": [
+        {"text": "This story also shows", "role": "main_clause", "level": 1},
+        {"text": "that it's possible to stop using chemical pesticides without losing a crop to ravaging insects", "role": "object_clause", "level": 2},
+        {"text": "and it explains how to do it", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["宾语从句中的 it 是形式主语，真正主语是 to stop using chemical pesticides。", "without losing 是介词加动名词，说明停用农药不会造成的结果。", "how to do it 是疑问词加不定式结构，it 指代不用农药保护作物。"],
+      "expressions": [{"text": "stop using", "meaning_zh": "停止使用"}, {"text": "lose a crop to", "meaning_zh": "庄稼因……而毁损"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 3,
+      "sentence": "The story began about 30 years ago, a handful of families migrated from the Guntur district of Andhra Pradesh, southeast India, into Punukula, a community of around 900 people farming plots of between two and 10 acres.",
+      "translation": "故事始于大约 30 年前：少数几个家庭从印度东南部安得拉邦贡土尔地区迁入普努库拉；这个社区约有 900 人，耕种着面积在 2 到 10 英亩之间的土地。",
+      "structure": [
+        {"text": "The story began about 30 years ago", "role": "opening_main_clause", "level": 1},
+        {"text": "a handful of families migrated from the Guntur district of Andhra Pradesh, southeast India, into Punukula", "role": "following_main_clause", "level": 1},
+        {"text": "a community of around 900 people", "role": "apposition", "level": 1},
+        {"text": "farming plots of between two and 10 acres", "role": "participle_attributive", "level": 2}
+      ],
+      "difficult_points": ["前两个独立分句仅用逗号连接，是源文的逗号拼接现象。", "a community ... 是 Punukula 的同位语。", "farming 的逻辑主语是 people，说明社区居民的耕作规模。"],
+      "expressions": [{"text": "a handful of", "meaning_zh": "少数几个"}, {"text": "migrate from ... into ...", "meaning_zh": "从……迁入……"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "The outsiders from Guntur brought cotton-culture with them.",
+      "translation": "这些来自贡土尔的外来者把棉花种植方式带到了当地。",
+      "structure": [
+        {"text": "The outsiders from Guntur", "role": "subject", "level": 1},
+        {"text": "brought cotton-culture", "role": "predicate", "level": 1},
+        {"text": "with them", "role": "accompaniment_adverbial", "level": 1}
+      ],
+      "difficult_points": ["outsiders 指上一句迁入普努库拉的家庭。", "bring ... with them 表示迁移时把某种知识或做法一并带来。"],
+      "expressions": [{"text": "bring ... with them", "meaning_zh": "随身带来……"}, {"text": "cotton-culture", "meaning_zh": "棉花种植方式"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "Cotton wooed farmers by promising to bring in more hard cash than the mixed crops they were already growing to eat and sell: millet, sorghum, groundnuts, pigeon peas, mung beans, chili and rice.",
+      "translation": "棉花以能带来比原有混合作物更多现金收入的前景吸引农民；他们原本种植小米、高粱、花生、木豆、绿豆、辣椒和水稻，供自家食用和出售。",
+      "structure": [
+        {"text": "Cotton wooed farmers", "role": "main_clause", "level": 1},
+        {"text": "by promising to bring in more hard cash", "role": "means_adverbial", "level": 1},
+        {"text": "than the mixed crops they were already growing to eat and sell", "role": "comparison_clause", "level": 2},
+        {"text": "millet, sorghum, groundnuts, pigeon peas, mung beans, chili and rice", "role": "appositive_list", "level": 2}
+      ],
+      "difficult_points": ["wooed 是拟人化表达，指棉花的高收益前景吸引了农民。", "they were already growing 是省略关系代词的定语从句，修饰 mixed crops。", "to eat and sell 表示种植这些作物的两个目的。"],
+      "expressions": [{"text": "bring in more hard cash", "meaning_zh": "带来更多现金收入"}, {"text": "promise to", "meaning_zh": "有望；承诺做……"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "But raising cotton meant using pesticides and fertilizers – until then a mystery to the mostly illiterate farmers of the community.",
+      "translation": "但种植棉花意味着要使用农药和化肥，而在那之前，这些东西对社区里大多不识字的农民来说十分陌生。",
+      "structure": [
+        {"text": "raising cotton", "role": "gerund_subject", "level": 1},
+        {"text": "meant using pesticides and fertilizers", "role": "predicate", "level": 1},
+        {"text": "until then a mystery to the mostly illiterate farmers of the community", "role": "supplement", "level": 1}
+      ],
+      "difficult_points": ["raising cotton 是动名词短语作主语，using ... 是动名词作 meant 的宾语。", "破折号后省略了 which had been，用来补充说明农药和化肥此前很陌生。"],
+      "expressions": [{"text": "mean doing", "meaning_zh": "意味着做……"}, {"text": "a mystery to", "meaning_zh": "对……来说是陌生事物"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "When cotton production started spreading through Andhra Pradesh state.",
+      "translation": "当棉花生产开始在安得拉邦各地扩展时。",
+      "structure": [{"text": "When cotton production started spreading through Andhra Pradesh state", "role": "fragmented_time_clause", "level": 1}],
+      "difficult_points": ["本句由 When 引导，按标准语法应有主句，但源文在此误用了句号。", "语义上它可能应与下一句连读，交代棉花高价值吸引农民的时间背景。"],
+      "expressions": [{"text": "spread through", "meaning_zh": "扩展到……各地"}]
+    },
+    {
+      "id": "B-06", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "The high value of cotton made it an exceptionally attractive crop, but growing cotton required chemical fertilizers and pesticides.",
+      "translation": "棉花的高价值使其成为极具吸引力的作物，但种植棉花需要化肥和农药。",
+      "structure": [
+        {"text": "The high value of cotton made it an exceptionally attractive crop", "role": "main_clause", "level": 1},
+        {"text": "but growing cotton required chemical fertilizers and pesticides", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["made it an ... crop 是“使 + 宾语 + 宾补”结构，it 指 cotton。", "growing cotton 是动名词短语，在 but 分句中作主语。"],
+      "expressions": [{"text": "make ... attractive", "meaning_zh": "使……具有吸引力"}, {"text": "require chemical fertilizers", "meaning_zh": "需要化肥"}]
+    },
+    {
+      "id": "B-07", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "As most of the farmers were poor, illiterate, and without previous experience using agricultural chemicals, they were forced to rely on local, small-scale agricultural dealers for advice.",
+      "translation": "由于大多数农民贫穷、不识字，也没有使用农用化学品的经验，他们被迫依靠当地小规模农资经销商提供建议。",
+      "structure": [
+        {"text": "As most of the farmers were poor, illiterate, and without previous experience using agricultural chemicals", "role": "cause_clause", "level": 1},
+        {"text": "they were forced", "role": "passive_main_clause", "level": 1},
+        {"text": "to rely on local, small-scale agricultural dealers for advice", "role": "infinitive_complement", "level": 2}
+      ],
+      "difficult_points": ["As 在此引导原因从句，而非时间从句。", "poor、illiterate 和 without experience 是三个并列表语。", "be forced to 表示因客观处境而不得不依赖经销商。"],
+      "expressions": [{"text": "without previous experience", "meaning_zh": "没有以往经验"}, {"text": "be forced to rely on", "meaning_zh": "被迫依赖"}]
+    },
+    {
+      "id": "B-08", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "The dealers sold them seeds, fertilizers, and pesticides on credit and also guaranteed the purchase of their crop.",
+      "translation": "经销商赊销给他们种子、化肥和农药，并且还保证收购他们的作物。",
+      "structure": [
+        {"text": "The dealers", "role": "subject", "level": 1},
+        {"text": "sold them seeds, fertilizers, and pesticides on credit", "role": "predicate", "level": 1},
+        {"text": "and also guaranteed the purchase of their crop", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": ["sold them ... 是双宾语结构，them 指农民。", "on credit 表示先取得农资、后付款，即赊购。", "guaranteed the purchase 指承诺日后收购作物。"],
+      "expressions": [{"text": "on credit", "meaning_zh": "以赊账方式"}, {"text": "guarantee the purchase of", "meaning_zh": "保证收购……"}]
+    },
+    {
+      "id": "B-09", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "The dealers themselves had little technical knowledge about pesticides.",
+      "translation": "经销商自己其实也几乎没有农药方面的技术知识。",
+      "structure": [
+        {"text": "The dealers themselves", "role": "subject", "level": 1},
+        {"text": "had little technical knowledge", "role": "predicate", "level": 1},
+        {"text": "about pesticides", "role": "postmodifier", "level": 1}
+      ],
+      "difficult_points": ["themselves 是强调代词，突出被农民依赖的人其实也不专业。", "little 修饰不可数名词 knowledge，带有“几乎没有”的否定含义。"],
+      "expressions": [{"text": "technical knowledge about", "meaning_zh": "关于……的技术知识"}]
+    },
+    {
+      "id": "B-10", "paragraph_label": "B", "sentence_index": 12,
+      "sentence": "They merely passed on promotional information from multinational chemical companies that supplied their products.",
+      "translation": "他们只不过转述了供应这些产品的跨国化工公司所提供的宣传信息。",
+      "structure": [
+        {"text": "They merely passed on promotional information", "role": "main_clause", "level": 1},
+        {"text": "from multinational chemical companies", "role": "postmodifier", "level": 1},
+        {"text": "that supplied their products", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["They 回指 dealers；merely 强调其建议缺乏独立专业判断。", "that 修饰 multinational chemical companies，their products 指这些公司的产品。"],
+      "expressions": [{"text": "pass on information", "meaning_zh": "转述信息"}, {"text": "promotional information", "meaning_zh": "宣传信息"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "At first, cotton yields were high, and expenses for pesticides were low because cotton pests had not yet moved in.",
+      "translation": "起初，棉花产量很高，而农药开支很低，因为棉花害虫尚未入侵。",
+      "structure": [
+        {"text": "cotton yields were high", "role": "main_clause", "level": 1},
+        {"text": "and expenses for pesticides were low", "role": "coordinated_clause", "level": 1},
+        {"text": "because cotton pests had not yet moved in", "role": "cause_clause", "level": 2}
+      ],
+      "difficult_points": ["两个并列分句分别说明初期的产量和成本。", "had not yet moved in 用过去完成时，表示在当时之前害虫尚未进入棉田。"],
+      "expressions": [{"text": "cotton yields", "meaning_zh": "棉花产量"}, {"text": "move in", "meaning_zh": "迁入；侵入"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "The farmers had never earned so much!",
+      "translation": "农民们从未赚过这么多钱！",
+      "structure": [
+        {"text": "The farmers", "role": "subject", "level": 1},
+        {"text": "had never earned so much", "role": "past_perfect_predicate", "level": 1}
+      ],
+      "difficult_points": ["过去完成时说明在种棉花之前的所有经历中，他们从未获得如此高收入。", "so much 在语境中省略了 money。"],
+      "expressions": [{"text": "have never earned so much", "meaning_zh": "从未赚过这么多"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "But within a few years, cotton pests like bollworms and aphids plagued the fields, and the farmers saw how rapid insect evolution can be.",
+      "translation": "但短短几年内，棉铃虫和蚜虫等棉花害虫便肆虐农田，农民也见识到了昆虫进化能有多快。",
+      "structure": [
+        {"text": "cotton pests like bollworms and aphids plagued the fields", "role": "main_clause", "level": 1},
+        {"text": "and the farmers saw", "role": "coordinated_clause", "level": 1},
+        {"text": "how rapid insect evolution can be", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["like 引出 cotton pests 的实例。", "how rapid 引导感叹意义的宾语从句，说明进化速度之快。"],
+      "expressions": [{"text": "within a few years", "meaning_zh": "短短几年内"}, {"text": "plague the fields", "meaning_zh": "肆虐农田"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "Repeated spraying killed off the weaker pests, but left the ones most resistant to pesticides to multiply.",
+      "translation": "反复喷药消灭了较弱的害虫，却让最耐药的那些害虫存活并繁殖。",
+      "structure": [
+        {"text": "Repeated spraying", "role": "subject", "level": 1},
+        {"text": "killed off the weaker pests", "role": "predicate", "level": 1},
+        {"text": "but left the ones most resistant to pesticides to multiply", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": ["spraying 是动名词，Repeated spraying 整体作主语。", "the ones 指 pests；most resistant ... 是后置形容词短语。", "leave + 宾语 + to do 在此表示让耐药害虫得以繁殖。"],
+      "expressions": [{"text": "kill off", "meaning_zh": "大量消灭"}, {"text": "be resistant to pesticides", "meaning_zh": "对农药具有抗性"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 17,
+      "sentence": "As pesticide resistance mounted, the farmers had to apply more and more of the pesticides to get the same results.",
+      "translation": "随着害虫的农药抗性增强，农民不得不使用越来越多的农药，才能取得相同效果。",
+      "structure": [
+        {"text": "As pesticide resistance mounted", "role": "time_clause", "level": 1},
+        {"text": "the farmers had to apply more and more of the pesticides", "role": "main_clause", "level": 1},
+        {"text": "to get the same results", "role": "purpose_clause", "level": 2}
+      ],
+      "difficult_points": ["As 表示两个变化同步发生，可译为“随着”。", "more and more 表示农药用量不断递增。", "to get 表示增加用药量的目的。"],
+      "expressions": [{"text": "pesticide resistance", "meaning_zh": "农药抗性"}, {"text": "get the same results", "meaning_zh": "取得相同效果"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 18,
+      "sentence": "At the same time, the pesticides killed off birds, wasps, beetles, spiders, and other predators that had once provided natural control of pest insects.",
+      "translation": "与此同时，农药也杀死了鸟类、黄蜂、甲虫、蜘蛛以及其他曾经自然控制害虫数量的捕食者。",
+      "structure": [
+        {"text": "the pesticides killed off birds, wasps, beetles, spiders, and other predators", "role": "main_clause", "level": 1},
+        {"text": "that had once provided natural control of pest insects", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["that 修饰 other predators，说明这些动物此前的生态作用。", "had once provided 使用过去完成时，表示这种自然控制发生在农药将其杀死之前。"],
+      "expressions": [{"text": "at the same time", "meaning_zh": "与此同时"}, {"text": "provide natural control of", "meaning_zh": "自然控制……"}]
+    },
+    {
+      "id": "C-07", "paragraph_label": "C", "sentence_index": 19,
+      "sentence": "Without these predators, the pests could destroy the entire crop if pesticides were not used.",
+      "translation": "没有这些捕食者，如果不使用农药，害虫就可能毁掉整季作物。",
+      "structure": [
+        {"text": "Without these predators", "role": "condition_adverbial", "level": 1},
+        {"text": "the pests could destroy the entire crop", "role": "main_clause", "level": 1},
+        {"text": "if pesticides were not used", "role": "condition_clause", "level": 2}
+      ],
+      "difficult_points": ["Without 短语和 if 从句共同构成双重条件背景。", "were not used 是被动语态，强调农药是否被使用。"],
+      "expressions": [{"text": "destroy the entire crop", "meaning_zh": "毁掉整季作物"}]
+    },
+    {
+      "id": "C-08", "paragraph_label": "C", "sentence_index": 20,
+      "sentence": "Eventually, farmers were mixing sometimes having to spray their cotton as frequently as two times a week.",
+      "translation": "最终，农民有时不得不频繁地给棉花喷药，甚至达到每周两次。",
+      "structure": [
+        {"text": "farmers were mixing", "role": "malformed_main_clause", "level": 1},
+        {"text": "sometimes having to spray their cotton", "role": "participle_supplement", "level": 1},
+        {"text": "as frequently as two times a week", "role": "frequency_adverbial", "level": 2}
+      ],
+      "difficult_points": ["were mixing 后缺少宾语或连接成分，是源文残缺；结合语境可知农民不断混配并喷洒农药。", "having to spray 表示被迫喷药，as frequently as 强调频率高达每周两次。"],
+      "expressions": [{"text": "have to spray", "meaning_zh": "不得不喷洒"}, {"text": "as frequently as", "meaning_zh": "频繁到……程度"}]
+    },
+    {
+      "id": "C-09", "paragraph_label": "C", "sentence_index": 21,
+      "sentence": "They were really hooked!",
+      "translation": "他们真的已经深陷农药依赖，无法摆脱！",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "were really hooked", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["They 指农民。", "hooked 是比喻，原义为“上钩”，此处指对农药形成严重依赖。"],
+      "expressions": [{"text": "be hooked", "meaning_zh": "上瘾；形成依赖"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 22,
+      "sentence": "The villagers were hesitant, but one of Punukula's village elders decided to risk trying the natural methods instead of pesticides.",
+      "translation": "村民们起初犹豫不决，但普努库拉的一位村中长者决定冒险尝试天然方法来替代农药。",
+      "structure": [
+        {"text": "The villagers were hesitant", "role": "main_clause", "level": 1},
+        {"text": "but one of Punukula's village elders decided", "role": "coordinated_clause", "level": 1},
+        {"text": "to risk trying the natural methods instead of pesticides", "role": "infinitive_complement", "level": 2}
+      ],
+      "difficult_points": ["but 对比全村的犹豫与一位长者的行动。", "risk 后接动名词 trying；to risk 整体作 decided 的宾语。", "instead of 后接名词 pesticides，表示替代对象。"],
+      "expressions": [{"text": "risk trying", "meaning_zh": "冒险尝试"}, {"text": "instead of", "meaning_zh": "而不是；替代"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 23,
+      "sentence": "His son had collapsed with acute pesticide poisoning and survived but the hospital bill was staggering.",
+      "translation": "他的儿子曾因急性农药中毒而昏倒，虽幸存下来，但医院账单高得惊人。",
+      "structure": [
+        {"text": "His son had collapsed with acute pesticide poisoning and survived", "role": "main_clause", "level": 1},
+        {"text": "but the hospital bill was staggering", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["had collapsed 表示昏倒发生在长者决定尝试天然方法之前。", "collapsed 与 survived 并列，但时间逻辑是先中毒昏倒、后幸存。", "staggering 形容账单金额高得惊人。"],
+      "expressions": [{"text": "acute pesticide poisoning", "meaning_zh": "急性农药中毒"}, {"text": "a staggering bill", "meaning_zh": "高得惊人的账单"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 24,
+      "sentence": "SECURE's staff coached this villager on how to protect his cotton crop by using a toolkit of natural methods chat India's Center for\nSustainable Agriculture put together in collaboration with scientists at Andhra Pradesh's state university.",
+      "translation": "SECURE 的工作人员指导这位村民如何使用一套天然方法来保护棉花；这套工具由印度可持续农业中心与安得拉邦州立大学的科学家合作编制。",
+      "structure": [
+        {"text": "SECURE's staff coached this villager", "role": "main_clause", "level": 1},
+        {"text": "on how to protect his cotton crop", "role": "prepositional_complement", "level": 2},
+        {"text": "by using a toolkit of natural methods", "role": "means_adverbial", "level": 2},
+        {"text": "chat India's Center for\nSustainable Agriculture put together in collaboration with scientists at Andhra Pradesh's state university", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["how to protect 是疑问词加不定式，作介词 on 的宾语。", "by using 表示保护作物所采用的方式。", "chat 是源文 OCR 错误，应按 that 理解；该定语从句修饰 toolkit，原文中的换行必须保留。"],
+      "expressions": [{"text": "coach somebody on how to", "meaning_zh": "指导某人如何……"}, {"text": "put together in collaboration with", "meaning_zh": "与……合作编制"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 25,
+      "sentence": "They called the toolkit \"Non-Pesticide Management\" – or \"NPM.\"",
+      "translation": "他们把这套工具称为“非农药管理”，简称“NPM”。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "called", "role": "verb", "level": 1},
+        {"text": "the toolkit", "role": "object", "level": 1},
+        {"text": "\"Non-Pesticide Management\" – or \"NPM.\"", "role": "object_complement", "level": 1}
+      ],
+      "difficult_points": ["call + 宾语 + 名称构成宾语补足语结构。", "or 引出 Non-Pesticide Management 的简称 NPM。"],
+      "expressions": [{"text": "Non-Pesticide Management", "meaning_zh": "非农药管理"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 26,
+      "sentence": "The most important resource in the NPM toolkit was the neem tree (Azadirachta indica) which is common throughout much of India.",
+      "translation": "NPM 工具中最重要的资源是印度楝树（Azadirachta indica），这种树在印度许多地区都很常见。",
+      "structure": [
+        {"text": "The most important resource in the NPM toolkit", "role": "subject", "level": 1},
+        {"text": "was the neem tree (Azadirachta indica)", "role": "linking_predicate", "level": 1},
+        {"text": "which is common throughout much of India", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["括号中的 Azadirachta indica 是 neem tree 的学名。", "which 引导非限制性定语从句，补充印度楝树的分布情况。"],
+      "expressions": [{"text": "be common throughout", "meaning_zh": "广泛分布于……"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 27,
+      "sentence": "Neem tree is a broad-leaved evergreen tree related to mahogany.",
+      "translation": "印度楝是一种与桃花心木近缘的阔叶常绿乔木。",
+      "structure": [
+        {"text": "Neem tree", "role": "subject", "level": 1},
+        {"text": "is a broad-leaved evergreen tree", "role": "linking_predicate", "level": 1},
+        {"text": "related to mahogany", "role": "participle_attributive", "level": 2}
+      ],
+      "difficult_points": ["broad-leaved 和 evergreen 都是复合形容词，修饰 tree。", "related to 是过去分词短语，表示植物分类上的亲缘关系。"],
+      "expressions": [{"text": "be related to", "meaning_zh": "与……有关联或亲缘关系"}, {"text": "broad-leaved evergreen tree", "meaning_zh": "阔叶常绿乔木"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 28,
+      "sentence": "It protects itself against insects by producing a multitude of natural pesticides that work in a variety of ways: with an arsenal of chemical defenses that repel egg-laying, interfere with insect growth, and most important, disrupt the ability of crop-eating insects to sense their food.",
+      "translation": "它通过产生多种天然杀虫成分来抵御昆虫；这些化学防御手段作用各异，能够阻止昆虫产卵、干扰昆虫生长，更重要的是破坏食草昆虫感知食物的能力。",
+      "structure": [
+        {"text": "It protects itself against insects", "role": "main_clause", "level": 1},
+        {"text": "by producing a multitude of natural pesticides", "role": "means_adverbial", "level": 1},
+        {"text": "that work in a variety of ways", "role": "relative_clause", "level": 2},
+        {"text": "that repel egg-laying, interfere with insect growth, and most important, disrupt the ability of crop-eating insects to sense their food", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["by producing 表示印度楝自我保护的方式。", "第一个 that 修饰 natural pesticides；第二个 that 修饰 chemical defenses。", "repel、interfere with 和 disrupt 是三个并列谓语；to sense 修饰 ability。"],
+      "expressions": [{"text": "protect itself against", "meaning_zh": "保护自身免受……"}, {"text": "a multitude of", "meaning_zh": "大量；多种"}, {"text": "interfere with", "meaning_zh": "干扰"}, {"text": "disrupt the ability to", "meaning_zh": "破坏做……的能力"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 29,
+      "sentence": "In fact, neem has been used traditionally in India to protect stored grains from insects and to produce soaps, skin lotions, and other health products.",
+      "translation": "事实上，印度传统上一直使用印度楝来保护储存的谷物免受虫害，并制作肥皂、护肤乳和其他保健产品。",
+      "structure": [
+        {"text": "neem has been used traditionally in India", "role": "passive_main_clause", "level": 1},
+        {"text": "to protect stored grains from insects", "role": "purpose_clause", "level": 2},
+        {"text": "and to produce soaps, skin lotions, and other health products", "role": "coordinated_purpose_clause", "level": 2}
+      ],
+      "difficult_points": ["has been used 是现在完成时的被动语态，表示传统用途延续至今。", "两个 to 不定式并列，说明印度楝的两类用途。", "stored 是过去分词作定语，修饰 grains。"],
+      "expressions": [{"text": "protect ... from insects", "meaning_zh": "保护……免受虫害"}, {"text": "be used traditionally", "meaning_zh": "传统上被使用"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 30,
+      "sentence": "To protect crops from insects, neem seeds are simply ground into a powder that is soaked overnight in water.",
+      "translation": "为保护作物免受虫害，只需把印度楝种子磨成粉末，再将粉末在水中浸泡一夜。",
+      "structure": [
+        {"text": "To protect crops from insects", "role": "purpose_clause", "level": 1},
+        {"text": "neem seeds are simply ground into a powder", "role": "passive_main_clause", "level": 1},
+        {"text": "that is soaked overnight in water", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["句首不定式表示处理印度楝种子的目的。", "are ground 与 is soaked 都是被动语态。", "that 修饰 powder，而不是 neem seeds。"],
+      "expressions": [{"text": "grind ... into a powder", "meaning_zh": "把……磨成粉"}, {"text": "soak overnight", "meaning_zh": "浸泡一夜"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 31,
+      "sentence": "The solution is then sprayed onto the crop.",
+      "translation": "然后把这种溶液喷洒到作物上。",
+      "structure": [
+        {"text": "The solution", "role": "subject", "level": 1},
+        {"text": "is then sprayed", "role": "passive_predicate", "level": 1},
+        {"text": "onto the crop", "role": "direction_adverbial", "level": 1}
+      ],
+      "difficult_points": ["The solution 指上一句中楝树种子粉在水中浸泡后得到的液体。", "被动语态突出处理步骤，而非执行喷洒的人。"],
+      "expressions": [{"text": "spray ... onto the crop", "meaning_zh": "把……喷到作物上"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 32,
+      "sentence": "Another preparation, neem cake, can be mixed into the soil to kill pests and diseases in the soil, and it doubles as an organic fertilizer high in nitrogen.",
+      "translation": "另一种制剂楝饼可以混入土壤，以消灭土壤中的害虫和病害；它同时还是一种高氮有机肥。",
+      "structure": [
+        {"text": "Another preparation, neem cake, can be mixed into the soil", "role": "passive_main_clause", "level": 1},
+        {"text": "to kill pests and diseases in the soil", "role": "purpose_clause", "level": 2},
+        {"text": "and it doubles as an organic fertilizer high in nitrogen", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["neem cake 是 Another preparation 的同位语。", "to kill 表示把楝饼混入土壤的目的。", "double as 表示同一种物质还能兼作另一用途；high in nitrogen 后置修饰 fertilizer。"],
+      "expressions": [{"text": "mix ... into the soil", "meaning_zh": "把……混入土壤"}, {"text": "double as", "meaning_zh": "兼作"}, {"text": "high in nitrogen", "meaning_zh": "含氮量高"}]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 33,
+      "sentence": "Neem trees grow locally, so the only \"cost\" is the labor to prepare neem for application to fields.",
+      "translation": "印度楝在当地自然生长，因此唯一的“成本”就是把楝树材料制备用于农田所需的劳动。",
+      "structure": [
+        {"text": "Neem trees grow locally", "role": "main_clause", "level": 1},
+        {"text": "so the only \"cost\" is the labor", "role": "result_clause", "level": 1},
+        {"text": "to prepare neem for application to fields", "role": "infinitive_attributive", "level": 2}
+      ],
+      "difficult_points": ["so 引出楝树本地可得带来的低成本结果。", "cost 加引号，强调这里没有材料支出，只有人工投入。", "to prepare 修饰 labor，说明劳动的具体内容。"],
+      "expressions": [{"text": "grow locally", "meaning_zh": "在当地生长"}, {"text": "prepare ... for application", "meaning_zh": "制备……以供使用"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 34,
+      "sentence": "The first farmer's trial with NPM was a complete success!",
+      "translation": "第一位农民对 NPM 的试用取得了彻底成功！",
+      "structure": [
+        {"text": "The first farmer's trial with NPM", "role": "subject", "level": 1},
+        {"text": "was a complete success", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["farmer's 表示这次试验由第一位尝试的农民进行。", "complete success 强调结果并非局部改善，而是全面奏效。"],
+      "expressions": [{"text": "a complete success", "meaning_zh": "彻底成功"}, {"text": "a trial with", "meaning_zh": "对……的试用"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 35,
+      "sentence": "His harvest was as good as the harvests of farmers that were using pesticides, and he earned much more because he did not spend a single rupee on pesticides.",
+      "translation": "他的收成和使用农药的农民一样好，而且因为没有在农药上花一卢比，他赚得多得多。",
+      "structure": [
+        {"text": "His harvest was as good as the harvests of farmers", "role": "main_clause", "level": 1},
+        {"text": "that were using pesticides", "role": "relative_clause", "level": 2},
+        {"text": "and he earned much more", "role": "coordinated_clause", "level": 1},
+        {"text": "because he did not spend a single rupee on pesticides", "role": "cause_clause", "level": 2}
+      ],
+      "difficult_points": ["as good as 构成同级比较，比较两类农民的收成。", "that 修饰 farmers，而非 harvests。", "not ... a single rupee 强调完全没有农药支出。"],
+      "expressions": [{"text": "as good as", "meaning_zh": "与……一样好"}, {"text": "spend ... on", "meaning_zh": "在……上花费……"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 36,
+      "sentence": "Inspired by this success, 20 farmers tried NPM the next year.",
+      "translation": "受到这次成功的鼓舞，第二年有 20 位农民尝试了 NPM。",
+      "structure": [
+        {"text": "Inspired by this success", "role": "participle_reason", "level": 1},
+        {"text": "20 farmers", "role": "subject", "level": 1},
+        {"text": "tried NPM the next year", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["Inspired 是过去分词作原因状语，其逻辑主语是 20 farmers。", "this success 回指第一位农民的试验成功。"],
+      "expressions": [{"text": "inspired by", "meaning_zh": "受到……鼓舞"}, {"text": "the next year", "meaning_zh": "第二年"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 37,
+      "sentence": "SECURE posted two well-trained staff in Punukula to teach and help everyone in the village, and the village women put pressure on their husbands to stop using toxic chemicals.",
+      "translation": "SECURE 向普努库拉派驻了两名训练有素的工作人员，负责教导并帮助全村居民；村里的妇女也向丈夫施压，要求他们停止使用有毒化学品。",
+      "structure": [
+        {"text": "SECURE posted two well-trained staff in Punukula", "role": "main_clause", "level": 1},
+        {"text": "to teach and help everyone in the village", "role": "purpose_clause", "level": 2},
+        {"text": "and the village women put pressure on their husbands", "role": "coordinated_clause", "level": 1},
+        {"text": "to stop using toxic chemicals", "role": "infinitive_complement", "level": 2}
+      ],
+      "difficult_points": ["第一个 to 表示派驻员工的目的。", "put pressure on ... to do 表示向某人施压要求其做某事。", "stop using 中 using 是 stop 的动名词宾语。"],
+      "expressions": [{"text": "well-trained staff", "meaning_zh": "训练有素的工作人员"}, {"text": "put pressure on somebody to", "meaning_zh": "向某人施压要求其……"}]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 38,
+      "sentence": "Families that were no longer exposing themselves to pesticides began to feel much better, and the rapid improvement in income, health, and general wellbeing quickly sold everyone on the value of NPM.",
+      "translation": "不再让自己接触农药的家庭开始感觉好得多，而收入、健康和整体福祉的迅速改善很快让所有人都信服了 NPM 的价值。",
+      "structure": [
+        {"text": "Families that were no longer exposing themselves to pesticides began to feel much better", "role": "main_clause", "level": 1},
+        {"text": "that were no longer exposing themselves to pesticides", "role": "relative_clause", "level": 2},
+        {"text": "and the rapid improvement in income, health, and general wellbeing quickly sold everyone on the value of NPM", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["that 修饰 Families，expose oneself to 表示使自己接触有害物。", "sell somebody on something 在此不是销售，而是“使某人相信某事的价值”。"],
+      "expressions": [{"text": "expose themselves to", "meaning_zh": "使自己接触……"}, {"text": "general wellbeing", "meaning_zh": "整体福祉"}, {"text": "sell somebody on", "meaning_zh": "使某人相信……的价值"}]
+    },
+    {
+      "id": "G-06", "paragraph_label": "G", "sentence_index": 39,
+      "sentence": "By 2000, all the farmers in Punukula were using NPM, not only for cotton but for their other crops as well.",
+      "translation": "到 2000 年，普努库拉的所有农民都在使用 NPM，不仅用于棉花，也用于其他作物。",
+      "structure": [
+        {"text": "By 2000", "role": "time_adverbial", "level": 1},
+        {"text": "all the farmers in Punukula were using NPM", "role": "main_clause", "level": 1},
+        {"text": "not only for cotton but for their other crops as well", "role": "correlative_adverbial", "level": 1}
+      ],
+      "difficult_points": ["By 2000 表示到该时间点时已经达到的普及状态。", "not only ... but ... as well 连接 NPM 的两类应用对象。"],
+      "expressions": [{"text": "not only ... but ... as well", "meaning_zh": "不仅……而且……"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 40,
+      "sentence": "The suicide epidemic came to an end.",
+      "translation": "自杀潮就此终结。",
+      "structure": [
+        {"text": "The suicide epidemic", "role": "subject", "level": 1},
+        {"text": "came to an end", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["suicide epidemic 用 epidemic 比喻自杀事件曾大规模蔓延。", "come to an end 是固定表达，表示终止。"],
+      "expressions": [{"text": "come to an end", "meaning_zh": "结束；终止"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 41,
+      "sentence": "And with the cash, health, and energy that returned when they stopped poisoning themselves with pesticides, the villagers were inspired to start more community and business projects.",
+      "translation": "停止用农药毒害自己后，收入、健康和活力重新回归；凭借这些改善，村民们受到鼓舞，开始了更多社区和商业项目。",
+      "structure": [
+        {"text": "with the cash, health, and energy", "role": "accompaniment_adverbial", "level": 1},
+        {"text": "that returned when they stopped poisoning themselves with pesticides", "role": "relative_clause", "level": 2},
+        {"text": "when they stopped poisoning themselves with pesticides", "role": "time_clause", "level": 3},
+        {"text": "the villagers were inspired to start more community and business projects", "role": "passive_main_clause", "level": 1}
+      ],
+      "difficult_points": ["that 修饰 cash, health, and energy，说明这些事物重新回归。", "when 引导时间从句，they 指 villagers。", "were inspired to 表示这些改善促使村民采取新行动。"],
+      "expressions": [{"text": "be inspired to", "meaning_zh": "受到鼓舞去……"}, {"text": "stop poisoning themselves", "meaning_zh": "停止毒害自己"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 42,
+      "sentence": "The women of Punukula created a new source of income by collecting, grinding, and selling neem seeds for NPM in other villages.",
+      "translation": "普努库拉的妇女通过收集、研磨并向其他村庄出售用于 NPM 的印度楝种子，创造了新的收入来源。",
+      "structure": [
+        {"text": "The women of Punukula created a new source of income", "role": "main_clause", "level": 1},
+        {"text": "by collecting, grinding, and selling neem seeds", "role": "means_adverbial", "level": 1},
+        {"text": "for NPM in other villages", "role": "purpose_adverbial", "level": 2}
+      ],
+      "difficult_points": ["by 后的 collecting、grinding 和 selling 是三个并列动名词，说明创收方式。", "for NPM 说明楝树种子的用途，in other villages 说明销售或应用范围。"],
+      "expressions": [{"text": "create a new source of income", "meaning_zh": "创造新的收入来源"}, {"text": "by collecting, grinding, and selling", "meaning_zh": "通过收集、研磨和销售"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 43,
+      "sentence": "The villagers rescued their indentured children and gave them special six-month \"catch-up,\" courses to return to school.",
+      "translation": "村民们解救了被契约束缚做工的孩子，并为他们提供为期六个月的特别“补习”课程，帮助他们重返学校。",
+      "structure": [
+        {"text": "The villagers rescued their indentured children", "role": "main_clause", "level": 1},
+        {"text": "and gave them special six-month \"catch-up,\" courses", "role": "coordinated_predicate", "level": 1},
+        {"text": "to return to school", "role": "purpose_clause", "level": 2}
+      ],
+      "difficult_points": ["indentured children 指因债务或契约被迫劳动的儿童。", "gave them ... courses 是双宾语结构，them 指 children。", "catch-up 后引号内的逗号是源文标点，to return 表示课程目的。"],
+      "expressions": [{"text": "catch-up courses", "meaning_zh": "补习课程"}, {"text": "return to school", "meaning_zh": "重返学校"}]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 44,
+      "sentence": "Fighting against pesticides, and winning, increased village solidarity, self-confidence, and optimism about the future.",
+      "translation": "反对农药并最终获胜，增强了村庄的团结、自信以及对未来的乐观态度。",
+      "structure": [
+        {"text": "Fighting against pesticides, and winning", "role": "gerund_subject", "level": 1},
+        {"text": "increased", "role": "verb", "level": 1},
+        {"text": "village solidarity, self-confidence, and optimism about the future", "role": "compound_object", "level": 1}
+      ],
+      "difficult_points": ["Fighting 与 winning 是并列动名词，共同作句子主语。", "solidarity、self-confidence 和 optimism 是 increased 的三个并列宾语。"],
+      "expressions": [{"text": "fight against", "meaning_zh": "反对；与……抗争"}, {"text": "optimism about the future", "meaning_zh": "对未来的乐观态度"}]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 45,
+      "sentence": "When dealers tried to punish NPM users by paying less for NPM cotton, the farmers united to form a marketing cooperative that found fairer prices elsewhere.",
+      "translation": "当经销商试图以压低 NPM 棉花收购价来惩罚使用者时，农民团结起来成立了营销合作社，在别处找到了更公平的价格。",
+      "structure": [
+        {"text": "When dealers tried to punish NPM users by paying less for NPM cotton", "role": "time_clause", "level": 1},
+        {"text": "the farmers united", "role": "main_clause", "level": 1},
+        {"text": "to form a marketing cooperative", "role": "purpose_clause", "level": 2},
+        {"text": "that found fairer prices elsewhere", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["by paying less 表示经销商惩罚农民的手段。", "to form 表示农民团结起来的目的。", "that 修饰 marketing cooperative，说明合作社取得的结果。"],
+      "expressions": [{"text": "punish ... by doing", "meaning_zh": "通过……惩罚……"}, {"text": "unite to form", "meaning_zh": "团结起来成立"}, {"text": "marketing cooperative", "meaning_zh": "营销合作社"}]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 46,
+      "sentence": "The leadership and collaboration skills that the citizens of Punukula developed in the NPM struggle have helped them to take on other challenges, like water purification, building a cotton gin to add value to the cotton before they sell it, and convincing the state government to support NPM over the objection of multi-national pesticide corporations.",
+      "translation": "普努库拉居民在 NPM 斗争中培养的领导力和协作能力，帮助他们应对其他挑战，例如净化水源、建造轧棉机以在出售棉花前提高其附加值，以及说服州政府不顾跨国农药公司的反对而支持 NPM。",
+      "structure": [
+        {"text": "The leadership and collaboration skills", "role": "compound_subject", "level": 1},
+        {"text": "that the citizens of Punukula developed in the NPM struggle", "role": "relative_clause", "level": 2},
+        {"text": "have helped them to take on other challenges", "role": "predicate", "level": 1},
+        {"text": "like water purification, building a cotton gin to add value to the cotton before they sell it, and convincing the state government to support NPM over the objection of multi-national pesticide corporations", "role": "example_list", "level": 2}
+      ],
+      "difficult_points": ["that 修饰 skills，并在定语从句中作 developed 的宾语。", "helped them to take on 表示这些能力帮助居民承担其他挑战。", "water purification、building 和 convincing 构成并列例项；to add 表示建轧棉机的目的。", "before they sell it 中 it 指 cotton；over the objection of 表示不顾企业反对。"],
+      "expressions": [{"text": "leadership and collaboration skills", "meaning_zh": "领导与协作能力"}, {"text": "take on other challenges", "meaning_zh": "应对其他挑战"}, {"text": "add value to", "meaning_zh": "提高……的附加值"}, {"text": "over the objection of", "meaning_zh": "不顾……的反对"}]
+    }
+  ]
+}

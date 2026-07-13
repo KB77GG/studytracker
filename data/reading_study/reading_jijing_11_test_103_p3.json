@@ -1,0 +1,632 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_11_test_103",
+  "passage_id": "reading_jijing_11_test_103_p3",
+  "passage_title": "Rainwater Harvesting",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "Muthukandiya is a village in Moneragala district, one of the drought-stricken areas in the \"dry zone\" of southern Sri Lanka, where half the country's population of 18 million lives.",
+      "translation": "穆图坎迪亚是莫内拉格勒区的一个村庄；该区位于斯里兰卡南部的“干旱地带”，是饱受旱灾的地区之一，全国1800万人口中有一半居住在这里。",
+      "structure": [
+        {"text": "Muthukandiya", "role": "subject", "level": 1},
+        {"text": "is a village in Moneragala district", "role": "verb_phrase", "level": 1},
+        {"text": "one of the drought-stricken areas in the \"dry zone\" of southern Sri Lanka", "role": "apposition", "level": 2},
+        {"text": "where half the country's population of 18 million lives", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["one of... 是 Moneragala district 的同位语，补充说明该地区的性质与位置。", "where 引导非限制性定语从句，指代前面的 dry zone，而不是紧邻的 southern Sri Lanka。"],
+      "expressions": [{"text": "drought-stricken", "meaning_zh": "遭受严重旱灾的"}, {"text": "one of the ... areas", "meaning_zh": "……地区之一"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "Rainfall in the area varies greatly from year to year, often bringing extreme dry spells in between monsoons.",
+      "translation": "这一地区的降雨量年际变化很大，季风雨季之间常常会出现极端干旱期。",
+      "structure": [
+        {"text": "Rainfall in the area", "role": "subject", "level": 1},
+        {"text": "varies greatly from year to year", "role": "verb_phrase", "level": 1},
+        {"text": "often bringing extreme dry spells in between monsoons", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["from year to year 表示逐年、年与年之间，强调降雨量的年际波动。", "bringing... 是现在分词结果状语，说明降雨不稳定带来的后果。"],
+      "expressions": [{"text": "vary greatly", "meaning_zh": "变化很大"}, {"text": "dry spell", "meaning_zh": "一段持续的干旱期"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "But this drought was much worse than usual.",
+      "translation": "但这次旱灾比往常严重得多。",
+      "structure": [
+        {"text": "this drought", "role": "subject", "level": 1},
+        {"text": "was much worse than usual", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["this drought 特指文章所讨论的这一次旱灾。", "much 修饰比较级 worse，表示严重程度远超往常。"],
+      "expressions": [{"text": "much worse than usual", "meaning_zh": "比往常严重得多"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "Despite some rain in November, only half of Moneragala's 1,400 tube wells were in working order by March.",
+      "translation": "尽管11月下过一些雨，到次年3月，莫内拉格勒的1400口管井仍只有一半能够正常使用。",
+      "structure": [
+        {"text": "Despite some rain in November", "role": "prepositional_phrase", "level": 1},
+        {"text": "only half of Moneragala's 1,400 tube wells", "role": "subject", "level": 1},
+        {"text": "were in working order by March", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["Despite 后接名词短语构成让步状语，不是从句。", "by March 表示截至3月这一时间界限；in working order 意为可正常运转。"],
+      "expressions": [{"text": "in working order", "meaning_zh": "处于正常工作状态"}, {"text": "only half of", "meaning_zh": "仅有一半的"}]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "The drought devastated supplies of rice and freshwater fish, the staple diet of inland villages.",
+      "translation": "旱灾重创了稻米和淡水鱼的供应，而这两者正是内陆村庄的主食。",
+      "structure": [
+        {"text": "The drought", "role": "subject", "level": 1},
+        {"text": "devastated supplies of rice and freshwater fish", "role": "verb_phrase", "level": 1},
+        {"text": "the staple diet of inland villages", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["the staple diet... 是 rice and freshwater fish 的同位语，说明二者对当地生活的重要性。", "devastated 在此不是摧毁实物，而是指使食品供应遭受毁灭性打击。"],
+      "expressions": [{"text": "devastate supplies of", "meaning_zh": "严重破坏……的供应"}, {"text": "staple diet", "meaning_zh": "日常主食"}]
+    },
+    {
+      "id": "A-06", "paragraph_label": "A", "sentence_index": 6,
+      "sentence": "Many local industries closed down and villagers headed for the towns in search of work.",
+      "translation": "许多当地产业停业，村民们纷纷前往城镇寻找工作。",
+      "structure": [
+        {"text": "Many local industries closed down", "role": "main_clause", "level": 1},
+        {"text": "and villagers headed for the towns in search of work", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["and 连接两个并列结果：产业关闭和村民外出谋生。", "in search of work 是介词短语作目的状语，说明前往城镇的原因。"],
+      "expressions": [{"text": "close down", "meaning_zh": "停业；关闭"}, {"text": "in search of work", "meaning_zh": "为了寻找工作"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "The villagers of muthukandiya arrived in the 1970s as part of a government resettlement scheme.",
+      "translation": "穆图坎迪亚的村民于20世纪70年代迁来，是政府移民安置计划的一部分。",
+      "structure": [
+        {"text": "The villagers of muthukandiya", "role": "subject", "level": 1},
+        {"text": "arrived in the 1970s", "role": "verb_phrase", "level": 1},
+        {"text": "as part of a government resettlement scheme", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["as part of... 说明这些村民迁来的政策背景，而不是表示身份比较。", "muthukandiya 在源文此处以小写开头，按原文保留。"],
+      "expressions": [{"text": "as part of", "meaning_zh": "作为……的一部分"}, {"text": "resettlement scheme", "meaning_zh": "移民安置计划"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "Each family was given six acres of land, with no irrigation system.",
+      "translation": "每户家庭获分六英亩土地，但没有配套的灌溉系统。",
+      "structure": [
+        {"text": "Each family", "role": "subject", "level": 1},
+        {"text": "was given six acres of land", "role": "verb_phrase", "level": 1},
+        {"text": "with no irrigation system", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["was given 是双宾语结构 give somebody something 的被动形式。", "with no irrigation system 补充说明分配土地时缺少的关键条件，中文需译出转折意味。"],
+      "expressions": [{"text": "irrigation system", "meaning_zh": "灌溉系统"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "Because crop production, which relies entirely on rainfall, is insufficient to support most families, the village economy relies on men and women working as day-laborers in nearby sugar-cane plantations.",
+      "translation": "由于完全依赖降雨的农作物产量不足以维持大多数家庭的生计，村里的经济便依靠男女村民到附近的甘蔗种植园当日工来支撑。",
+      "structure": [
+        {"text": "Because crop production, which relies entirely on rainfall, is insufficient to support most families", "role": "adverbial_clause", "level": 1},
+        {"text": "which relies entirely on rainfall", "role": "relative_clause", "level": 2},
+        {"text": "the village economy", "role": "subject", "level": 1},
+        {"text": "relies on men and women working as day-laborers in nearby sugar-cane plantations", "role": "verb_phrase", "level": 1},
+        {"text": "working as day-laborers in nearby sugar-cane plantations", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["Because 引导原因状语从句，其中 which 从句插入修饰 crop production。", "working... 是现在分词短语，说明 men and women 以何种方式支撑村庄经济。"],
+      "expressions": [{"text": "rely entirely on", "meaning_zh": "完全依赖"}, {"text": "be insufficient to", "meaning_zh": "不足以……"}, {"text": "support a family", "meaning_zh": "维持家庭生计"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "Three wells have been dug to provide domestic water, but these run dry for much of the year.",
+      "translation": "村里挖了三口井来供应生活用水，但这些井一年中大部分时间都会干涸。",
+      "structure": [
+        {"text": "Three wells have been dug to provide domestic water", "role": "main_clause", "level": 1},
+        {"text": "to provide domestic water", "role": "non_finite_clause", "level": 2},
+        {"text": "but these run dry for much of the year", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["have been dug 是现在完成时的被动语态，表示挖井的结果延续到现在。", "these 指代前面的 three wells；run dry 表示水源逐渐耗尽。"],
+      "expressions": [{"text": "domestic water", "meaning_zh": "生活用水"}, {"text": "run dry", "meaning_zh": "干涸；枯竭"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "Women and children may spend several hours each day walking up to three miles (five kilometers) to fetch water for drinking, washing, and cooking.",
+      "translation": "妇女和儿童每天可能要花数小时，步行最多三英里（五公里），取回饮用、洗涤和做饭所需的水。",
+      "structure": [
+        {"text": "Women and children", "role": "subject", "level": 1},
+        {"text": "may spend several hours each day", "role": "verb_phrase", "level": 1},
+        {"text": "walking up to three miles (five kilometers)", "role": "participial_phrase", "level": 2},
+        {"text": "to fetch water for drinking, washing, and cooking", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["spend time doing 构成固定结构，walking 是说明耗时活动的动名词。", "to fetch water 是目的状语，for 后三个并列动名词说明水的用途。"],
+      "expressions": [{"text": "spend several hours doing", "meaning_zh": "花数小时做某事"}, {"text": "fetch water", "meaning_zh": "取水"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "In 1998, communities in the district discussed water problems with Practical Action South Asia.",
+      "translation": "1998年，该地区的各个社区与南亚实用行动组织讨论了用水问题。",
+      "structure": [
+        {"text": "In 1998", "role": "prepositional_phrase", "level": 1},
+        {"text": "communities in the district", "role": "subject", "level": 1},
+        {"text": "discussed water problems with Practical Action South Asia", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["communities 在此指当地多个社区及其居民，而不是抽象的共同体。", "discuss A with B 表示与某方讨论某事，with 后是参与讨论的组织。"],
+      "expressions": [{"text": "discuss ... with", "meaning_zh": "与……讨论……"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "What followed was a drought mitigation initiative based on a low-cost \"rainwater harvesting\"technology already used in Sri Lanka and elsewhere in the region.",
+      "translation": "随后启动的是一项缓解旱灾的计划，该计划以一种低成本的“雨水收集”技术为基础；这项技术此前已在斯里兰卡及本地区其他地方使用。",
+      "structure": [
+        {"text": "What followed", "role": "noun_clause", "level": 1},
+        {"text": "was a drought mitigation initiative", "role": "verb_phrase", "level": 1},
+        {"text": "based on a low-cost \"rainwater harvesting\"technology", "role": "participial_phrase", "level": 2},
+        {"text": "already used in Sri Lanka and elsewhere in the region", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": ["What followed 是 what 引导的主语从句，意为随后发生的事情。", "源文在引号后的 technology 前缺少空格，按原文保留；already used... 过去分词短语修饰 technology。"],
+      "expressions": [{"text": "drought mitigation", "meaning_zh": "旱灾缓解"}, {"text": "be based on", "meaning_zh": "以……为基础"}, {"text": "elsewhere in the region", "meaning_zh": "本地区其他地方"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "It uses tanks to collect and store rain channeled by gutters and pipes as it runs off the roofs of houses.",
+      "translation": "这项技术利用水箱，收集并储存从屋顶流下、经檐槽和管道导入的雨水。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "uses tanks to collect and store rain", "role": "verb_phrase", "level": 1},
+        {"text": "channeled by gutters and pipes", "role": "participial_phrase", "level": 2},
+        {"text": "as it runs off the roofs of houses", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["It 指代上一句的 rainwater harvesting technology。", "channeled... 修饰 rain；as 从句中的 it 也指雨水，说明雨水从屋顶流下的过程。"],
+      "expressions": [{"text": "collect and store", "meaning_zh": "收集并储存"}, {"text": "run off", "meaning_zh": "从表面流下"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 15,
+      "sentence": "Despite an indigenous tradition of rain-water harvesting and irrigation systems going back to the third century BC, policy-makers in modern times have often overlooked the value of such technologies, and it is only recently that officials have taken much interest in household-level structures.",
+      "translation": "尽管当地收集雨水和建设灌溉系统的传统可追溯至公元前3世纪，现代政策制定者却常常忽视这类技术的价值，直到最近官员们才开始对家庭层面的设施产生浓厚兴趣。",
+      "structure": [
+        {"text": "Despite an indigenous tradition of rain-water harvesting and irrigation systems going back to the third century BC", "role": "prepositional_phrase", "level": 1},
+        {"text": "going back to the third century BC", "role": "participial_phrase", "level": 2},
+        {"text": "policy-makers in modern times have often overlooked the value of such technologies", "role": "main_clause", "level": 1},
+        {"text": "and it is only recently that officials have taken much interest in household-level structures", "role": "coordinated_clause", "level": 1},
+        {"text": "it is only recently that officials have taken much interest in household-level structures", "role": "cleft_sentence", "level": 2}
+      ],
+      "difficult_points": ["Despite 后是含现在分词修饰语的长名词短语，整体表示让步。", "it is only recently that... 是强调句，强调官员真正开始重视这一技术的时间很晚。"],
+      "expressions": [{"text": "go back to", "meaning_zh": "追溯到"}, {"text": "overlook the value of", "meaning_zh": "忽视……的价值"}, {"text": "take much interest in", "meaning_zh": "对……产生浓厚兴趣"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 16,
+      "sentence": "Government and other programmes have, however, been top-down in their conception and application, installing tanks free of charge without providing training in the skills needed to build and maintain them properly.",
+      "translation": "然而，政府及其他项目从构思到实施一直采用自上而下的方式：免费安装水箱，却没有提供正确建造和维护水箱所需的技能培训。",
+      "structure": [
+        {"text": "Government and other programmes", "role": "subject", "level": 1},
+        {"text": "have, however, been top-down in their conception and application", "role": "verb_phrase", "level": 1},
+        {"text": "installing tanks free of charge without providing training", "role": "participial_phrase", "level": 2},
+        {"text": "needed to build and maintain them properly", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": ["however 插在助动词与表语之间，表示与上一句形成转折。", "installing... 是伴随状语；needed... 过去分词短语修饰 skills，them 指代 tanks。"],
+      "expressions": [{"text": "top-down", "meaning_zh": "自上而下的"}, {"text": "free of charge", "meaning_zh": "免费"}, {"text": "provide training in", "meaning_zh": "提供……方面的培训"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 17,
+      "sentence": "Practical Action South Asia's project deliberately took a different approach, aiming to build up a local skills base among builders and users of the tanks, and to create structures and systems so that communities can manage their own rainwater harvesting schemes.",
+      "translation": "南亚实用行动组织的项目有意采取了另一种方式，旨在为水箱的建造者和使用者培养本地技能基础，并建立相应的组织架构和制度，使社区能够自行管理雨水收集计划。",
+      "structure": [
+        {"text": "Practical Action South Asia's project", "role": "subject", "level": 1},
+        {"text": "deliberately took a different approach", "role": "verb_phrase", "level": 1},
+        {"text": "aiming to build up a local skills base among builders and users of the tanks", "role": "participial_phrase", "level": 2},
+        {"text": "and to create structures and systems", "role": "coordinated_non_finite_clause", "level": 2},
+        {"text": "so that communities can manage their own rainwater harvesting schemes", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["aiming... 是现在分词状语，解释 different approach 的具体目标。", "to build up 与 to create 并列；so that 引导目的状语从句，说明建立制度的目的。"],
+      "expressions": [{"text": "take a different approach", "meaning_zh": "采取不同的方法"}, {"text": "build up a skills base", "meaning_zh": "建立技能基础"}, {"text": "manage their own", "meaning_zh": "自行管理"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 18,
+      "sentence": "The community of Muthukandiya was involved throughout.",
+      "translation": "穆图坎迪亚社区全程参与了该项目。",
+      "structure": [
+        {"text": "The community of Muthukandiya", "role": "subject", "level": 1},
+        {"text": "was involved throughout", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["was involved 是被动形式，但表达社区参与其中这一状态。", "throughout 作副词，指从项目开始到结束的整个过程。"],
+      "expressions": [{"text": "be involved throughout", "meaning_zh": "全程参与"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 19,
+      "sentence": "Two meetings were held where villagers analysed their water problems, developed a mitigation plan and selected the rainwater harvesting technology.",
+      "translation": "项目召开了两次会议，村民们在会上分析用水问题、制定缓解方案，并选定了雨水收集技术。",
+      "structure": [
+        {"text": "Two meetings", "role": "subject", "level": 1},
+        {"text": "were held", "role": "verb_phrase", "level": 1},
+        {"text": "where villagers analysed their water problems, developed a mitigation plan and selected the rainwater harvesting technology", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["where 引导定语从句修饰 meetings，相当于 at which，表示在会议上。", "analysed、developed 和 selected 是三个并列谓语，共用主语 villagers。"],
+      "expressions": [{"text": "develop a mitigation plan", "meaning_zh": "制定缓解方案"}, {"text": "select a technology", "meaning_zh": "选定一项技术"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 20,
+      "sentence": "Two local masons received several days' on-the-job training in building the 5,000-litre household storage tanks: surface tanks out of Ferro-cement and underground tanks out of brick.",
+      "translation": "两名当地泥瓦匠接受了数天的在岗培训，学习建造容量为5000升的家用储水箱，即用钢丝网水泥制成的地面水箱和用砖砌成的地下水箱。",
+      "structure": [
+        {"text": "Two local masons", "role": "subject", "level": 1},
+        {"text": "received several days' on-the-job training", "role": "verb_phrase", "level": 1},
+        {"text": "in building the 5,000-litre household storage tanks", "role": "prepositional_phrase", "level": 2},
+        {"text": "surface tanks out of Ferro-cement and underground tanks out of brick", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["in building... 说明培训的内容；5,000-litre 是复合形容词，修饰 storage tanks。", "冒号后列出两类水箱，out of 表示由某种材料制成。"],
+      "expressions": [{"text": "on-the-job training", "meaning_zh": "在岗培训"}, {"text": "out of", "meaning_zh": "用……材料制成"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 21,
+      "sentence": "Each system, including tank, pipes, gutters and filters, cost US$195 –equivalent to a month's income for an average village family.",
+      "translation": "每套系统（包括水箱、管道、檐槽和过滤器）造价195美元，相当于一个普通村民家庭一个月的收入。",
+      "structure": [
+        {"text": "Each system", "role": "subject", "level": 1},
+        {"text": "including tank, pipes, gutters and filters", "role": "participial_phrase", "level": 2},
+        {"text": "cost US$195", "role": "verb_phrase", "level": 1},
+        {"text": "equivalent to a month's income for an average village family", "role": "supplement", "level": 2}
+      ],
+      "difficult_points": ["including... 是插入成分，列举一套系统所含部件。", "破折号后的 equivalent... 补充说明195美元对普通家庭意味着什么；源文破折号后缺少空格，按原文保留。"],
+      "expressions": [{"text": "be equivalent to", "meaning_zh": "相当于"}, {"text": "an average village family", "meaning_zh": "普通村民家庭"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 22,
+      "sentence": "Just over half the cost was provided by the community, in the form of materials and unskilled labour.",
+      "translation": "略高于一半的费用由社区承担，具体以材料和非技术劳动力的形式投入。",
+      "structure": [
+        {"text": "Just over half the cost", "role": "subject", "level": 1},
+        {"text": "was provided by the community", "role": "verb_phrase", "level": 1},
+        {"text": "in the form of materials and unskilled labour", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["Just over half 表示略多于一半，而不是恰好一半。", "in the form of 说明社区并非全部支付现金，而是提供材料和劳动力。"],
+      "expressions": [{"text": "just over half", "meaning_zh": "略高于一半"}, {"text": "in the form of", "meaning_zh": "以……的形式"}]
+    },
+    {
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 23,
+      "sentence": "Practical Action South Asia contributed the rest, including cement, transport and payment for the skilled labour.",
+      "translation": "其余部分由南亚实用行动组织承担，包括水泥、运输费用和技术工人的报酬。",
+      "structure": [
+        {"text": "Practical Action South Asia", "role": "subject", "level": 1},
+        {"text": "contributed the rest", "role": "verb_phrase", "level": 1},
+        {"text": "including cement, transport and payment for the skilled labour", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["the rest 指上一句中社区未承担的剩余成本。", "including... 列举该组织承担成本的具体项目，transport 在此指运输费用。"],
+      "expressions": [{"text": "contribute the rest", "meaning_zh": "承担其余部分"}, {"text": "skilled labour", "meaning_zh": "技术劳动力；技术工人"}]
+    },
+    {
+      "id": "E-07", "paragraph_label": "E", "sentence_index": 24,
+      "sentence": "Households learned how to use and maintain the tanks, and the whole community was trained to keep domestic water supplies clean.",
+      "translation": "各家各户学习了如何使用和维护水箱，整个社区还接受了保持生活用水清洁的培训。",
+      "structure": [
+        {"text": "Households learned how to use and maintain the tanks", "role": "main_clause", "level": 1},
+        {"text": "how to use and maintain the tanks", "role": "noun_clause", "level": 2},
+        {"text": "and the whole community was trained to keep domestic water supplies clean", "role": "coordinated_clause", "level": 1},
+        {"text": "to keep domestic water supplies clean", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["how to... 是疑问词加不定式结构，作 learned 的宾语。", "keep + 宾语 + 形容词 clean 表示使生活用水保持清洁。"],
+      "expressions": [{"text": "use and maintain", "meaning_zh": "使用并维护"}, {"text": "keep ... clean", "meaning_zh": "使……保持清洁"}]
+    },
+    {
+      "id": "E-08", "paragraph_label": "E", "sentence_index": 25,
+      "sentence": "A village rainwater harvesting society was set up to run the project.",
+      "translation": "村里成立了一个雨水收集协会来负责项目运营。",
+      "structure": [
+        {"text": "A village rainwater harvesting society", "role": "subject", "level": 1},
+        {"text": "was set up", "role": "verb_phrase", "level": 1},
+        {"text": "to run the project", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["was set up 是被动语态，表示该协会被成立。", "to run the project 是目的状语，run 在此意为运营、管理。"],
+      "expressions": [{"text": "set up", "meaning_zh": "成立；建立"}, {"text": "run a project", "meaning_zh": "运营一个项目"}]
+    },
+    {
+      "id": "E-09", "paragraph_label": "E", "sentence_index": 26,
+      "sentence": "To date, 37 families in and around Muthukandiya have storage tanks.",
+      "translation": "截至目前，穆图坎迪亚及其周边已有37户家庭配备了储水箱。",
+      "structure": [
+        {"text": "To date", "role": "prepositional_phrase", "level": 1},
+        {"text": "37 families in and around Muthukandiya", "role": "subject", "level": 1},
+        {"text": "have storage tanks", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["To date 表示截至目前，常与现在完成意义搭配。", "in and around Muthukandiya 同时涵盖村内及村庄周边地区。"],
+      "expressions": [{"text": "to date", "meaning_zh": "截至目前"}, {"text": "in and around", "meaning_zh": "在……及其周边"}]
+    },
+    {
+      "id": "E-10", "paragraph_label": "E", "sentence_index": 27,
+      "sentence": "Evaluations show clearly that households with rainwater storage tanks have considerably more water for domestic needs than households relying entirely on wells and ponds.",
+      "translation": "评估清楚表明，装有雨水储存箱的家庭可用于日常生活的水，远多于完全依赖水井和池塘的家庭。",
+      "structure": [
+        {"text": "Evaluations", "role": "subject", "level": 1},
+        {"text": "show clearly", "role": "verb_phrase", "level": 1},
+        {"text": "that households with rainwater storage tanks have considerably more water for domestic needs than households relying entirely on wells and ponds", "role": "noun_clause", "level": 2},
+        {"text": "relying entirely on wells and ponds", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": ["that 引导宾语从句，承载评估得出的核心结论。", "more...than... 比较两类家庭；relying... 修饰后一类 households。"],
+      "expressions": [{"text": "considerably more ... than", "meaning_zh": "比……多得多"}, {"text": "domestic needs", "meaning_zh": "日常生活需要"}, {"text": "rely entirely on", "meaning_zh": "完全依赖"}]
+    },
+    {
+      "id": "E-11", "paragraph_label": "E", "sentence_index": 28,
+      "sentence": "During the driest months, households with tanks may have up to twice as much water available.",
+      "translation": "在最干旱的几个月里，装有水箱的家庭可用水量可能达到原来的两倍。",
+      "structure": [
+        {"text": "During the driest months", "role": "prepositional_phrase", "level": 1},
+        {"text": "households with tanks", "role": "subject", "level": 1},
+        {"text": "may have up to twice as much water available", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["up to 表示最高可达到，说明两倍是上限而非所有家庭的固定数值。", "twice as much water 是倍数表达，available 后置说明这些水可供使用。"],
+      "expressions": [{"text": "up to twice as much", "meaning_zh": "最多达到两倍"}, {"text": "water available", "meaning_zh": "可用水量"}]
+    },
+    {
+      "id": "E-12", "paragraph_label": "E", "sentence_index": 29,
+      "sentence": "Their water is much cleaner, too.",
+      "translation": "而且，他们的用水也干净得多。",
+      "structure": [
+        {"text": "Their water", "role": "subject", "level": 1},
+        {"text": "is much cleaner, too", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["Their 指代装有储水箱的家庭，而不是前文的水井和池塘。", "much 修饰比较级 cleaner，too 表示清洁度是除水量之外的另一项优势。"],
+      "expressions": [{"text": "much cleaner", "meaning_zh": "干净得多"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 30,
+      "sentence": "Nandawathie, a widow in the village, has taken full advantage of the opportunities that rainwater harvesting has brought her family.",
+      "translation": "村里的寡妇南达瓦蒂充分利用了雨水收集给她一家带来的各种机会。",
+      "structure": [
+        {"text": "Nandawathie", "role": "subject", "level": 1},
+        {"text": "a widow in the village", "role": "apposition", "level": 2},
+        {"text": "has taken full advantage of the opportunities", "role": "verb_phrase", "level": 1},
+        {"text": "that rainwater harvesting has brought her family", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["a widow... 是 Nandawathie 的同位语，补充其家庭背景。", "that 引导定语从句修饰 opportunities；bring somebody something 表示给某人带来某物。"],
+      "expressions": [{"text": "take full advantage of", "meaning_zh": "充分利用"}, {"text": "bring opportunities", "meaning_zh": "带来机会"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 31,
+      "sentence": "With a better water supply now close at hand, she began by growing a few vegetables.",
+      "translation": "如今有了近在手边的更充足水源，她先从种植少量蔬菜做起。",
+      "structure": [
+        {"text": "With a better water supply now close at hand", "role": "with_absolute_construction", "level": 1},
+        {"text": "she", "role": "subject", "level": 1},
+        {"text": "began by growing a few vegetables", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["With + 名词 + 形容词短语构成伴随背景，说明她开始种菜的条件。", "begin by doing 表示先从某件事做起；close at hand 意为就在近处、随手可得。"],
+      "expressions": [{"text": "close at hand", "meaning_zh": "近在手边；容易获得"}, {"text": "begin by doing", "meaning_zh": "先从做某事开始"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 32,
+      "sentence": "The income from selling these helped her to open a small shop on her doorstep.",
+      "translation": "出售这些蔬菜所得的收入帮助她在家门口开了一家小店。",
+      "structure": [
+        {"text": "The income from selling these", "role": "subject", "level": 1},
+        {"text": "helped her to open a small shop", "role": "verb_phrase", "level": 1},
+        {"text": "on her doorstep", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["these 指代上一句的 vegetables。", "help somebody to do 表示帮助某人做某事；on her doorstep 在此按字面指就在家门口。"],
+      "expressions": [{"text": "income from doing", "meaning_zh": "通过做某事获得的收入"}, {"text": "open a small shop", "meaning_zh": "开一家小店"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 33,
+      "sentence": "This increased her earnings still further, enabling her to apply for a loan to install solar power in her house.",
+      "translation": "这使她的收入进一步增加，从而让她能够申请贷款，在家中安装太阳能供电设备。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "increased her earnings still further", "role": "verb_phrase", "level": 1},
+        {"text": "enabling her to apply for a loan", "role": "participial_phrase", "level": 2},
+        {"text": "to install solar power in her house", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": ["This 指前一句所说的开设小店这件事。", "enabling... 是结果状语；后一个 to install... 说明申请贷款的目的。"],
+      "expressions": [{"text": "increase earnings", "meaning_zh": "增加收入"}, {"text": "apply for a loan", "meaning_zh": "申请贷款"}]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 34,
+      "sentence": "She is now thinking of building another tank in her garden so that she can grow more vegetables.",
+      "translation": "她现在正考虑在自家园子里再建一个水箱，以便种植更多蔬菜。",
+      "structure": [
+        {"text": "She", "role": "subject", "level": 1},
+        {"text": "is now thinking of building another tank in her garden", "role": "verb_phrase", "level": 1},
+        {"text": "so that she can grow more vegetables", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["think of doing 表示考虑做某事，building 是介词 of 的宾语。", "so that 引导目的状语从句，说明再建水箱的用途。"],
+      "expressions": [{"text": "think of doing", "meaning_zh": "考虑做某事"}, {"text": "so that", "meaning_zh": "以便；为了"}]
+    },
+    {
+      "id": "F-06", "paragraph_label": "F", "sentence_index": 35,
+      "sentence": "Nandawathie also feels safer now that she no longer has to fetch water from the village well in the early morning or late evening.",
+      "translation": "南达瓦蒂现在也觉得更安全了，因为她不必再在清晨或深夜去村里的水井打水。",
+      "structure": [
+        {"text": "Nandawathie", "role": "subject", "level": 1},
+        {"text": "also feels safer", "role": "verb_phrase", "level": 1},
+        {"text": "now that she no longer has to fetch water from the village well in the early morning or late evening", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["now that 是复合连词，意为既然、由于，说明她感到更安全的原因。", "no longer has to 表示不再必须做某事，并非禁止她去取水。"],
+      "expressions": [{"text": "now that", "meaning_zh": "既然；由于"}, {"text": "no longer have to", "meaning_zh": "不必再……"}]
+    },
+    {
+      "id": "F-07", "paragraph_label": "F", "sentence_index": 36,
+      "sentence": "She says that her children no longer complain so much of diarrhoea.",
+      "translation": "她说，孩子们现在已经不再那么频繁地受腹泻困扰。",
+      "structure": [
+        {"text": "She", "role": "subject", "level": 1},
+        {"text": "says", "role": "verb_phrase", "level": 1},
+        {"text": "that her children no longer complain so much of diarrhoea", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": ["that 引导宾语从句，说明她观察到孩子健康状况的变化。", "complain of 在此不是抱怨某事，而是表示自诉患有某种病症。"],
+      "expressions": [{"text": "complain of", "meaning_zh": "诉说患有；受……困扰"}, {"text": "no longer", "meaning_zh": "不再"}]
+    },
+    {
+      "id": "F-08", "paragraph_label": "F", "sentence_index": 37,
+      "sentence": "And her daughter Sandamalee has more time for school work.",
+      "translation": "她的女儿桑达玛莉也有了更多时间做功课。",
+      "structure": [
+        {"text": "her daughter Sandamalee", "role": "subject", "level": 1},
+        {"text": "has more time for school work", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["句首 And 承接前文，补充雨水收集带来的另一项家庭收益。", "Sandamalee 与 her daughter 构成同位关系，指明女儿的姓名。"],
+      "expressions": [{"text": "have more time for", "meaning_zh": "有更多时间用于……"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 38,
+      "sentence": "In the short term, and on a small scale, the project has clearly been a success.",
+      "translation": "从短期和小规模实施的情况来看，这个项目显然是成功的。",
+      "structure": [
+        {"text": "In the short term", "role": "prepositional_phrase", "level": 1},
+        {"text": "and on a small scale", "role": "coordinated_prepositional_phrase", "level": 1},
+        {"text": "the project", "role": "subject", "level": 1},
+        {"text": "has clearly been a success", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["In the short term 与 on a small scale 并列，限定成功结论的时间和范围。", "has been a success 用名词 success 作表语，表示项目取得成功。"],
+      "expressions": [{"text": "in the short term", "meaning_zh": "短期内"}, {"text": "on a small scale", "meaning_zh": "小规模地"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 39,
+      "sentence": "The challenge lies in making such initiatives sustainable and expanding their coverage.",
+      "translation": "真正的挑战在于使这类行动能够持续，并扩大其覆盖范围。",
+      "structure": [
+        {"text": "The challenge", "role": "subject", "level": 1},
+        {"text": "lies in making such initiatives sustainable and expanding their coverage", "role": "verb_phrase", "level": 1},
+        {"text": "making such initiatives sustainable", "role": "gerund_phrase", "level": 2},
+        {"text": "and expanding their coverage", "role": "coordinated_gerund_phrase", "level": 2}
+      ],
+      "difficult_points": ["lie in doing 表示关键或难点在于做某事。", "making... 与 expanding... 是两个并列动名词短语；their 指 initiatives。"],
+      "expressions": [{"text": "the challenge lies in", "meaning_zh": "挑战在于"}, {"text": "expand coverage", "meaning_zh": "扩大覆盖范围"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 40,
+      "sentence": "At a purely technical level, rainwater harvesting is evidently sustainable.",
+      "translation": "单从技术层面来看，雨水收集显然是可持续的。",
+      "structure": [
+        {"text": "At a purely technical level", "role": "prepositional_phrase", "level": 1},
+        {"text": "rainwater harvesting", "role": "subject", "level": 1},
+        {"text": "is evidently sustainable", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["At a ... level 用来限定评价角度，这里只讨论技术可持续性。", "purely 强调该结论尚未涵盖后文的资金和组织问题。"],
+      "expressions": [{"text": "at a technical level", "meaning_zh": "从技术层面看"}, {"text": "evidently sustainable", "meaning_zh": "显然可持续"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 41,
+      "sentence": "In Muthukandiya, the skills required to build and maintain storage tanks were taught fairly easily and can be shared by the two trained masons, who are now finding work with other development agencies in the district.",
+      "translation": "在穆图坎迪亚，建造和维护储水箱所需的技能相当容易传授，而且可以由两名受过培训的泥瓦匠继续传播；他们现在也在该地区其他发展机构找到了工作。",
+      "structure": [
+        {"text": "the skills required to build and maintain storage tanks", "role": "subject", "level": 1},
+        {"text": "required to build and maintain storage tanks", "role": "participial_phrase", "level": 2},
+        {"text": "were taught fairly easily and can be shared by the two trained masons", "role": "verb_phrase", "level": 1},
+        {"text": "who are now finding work with other development agencies in the district", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["required... 是过去分词短语修饰 skills；were taught 与 can be shared 是并列的被动谓语。", "who 引导非限制性定语从句，修饰 the two trained masons。"],
+      "expressions": [{"text": "build and maintain", "meaning_zh": "建造并维护"}, {"text": "share skills", "meaning_zh": "传播技能"}, {"text": "development agency", "meaning_zh": "发展援助机构"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 42,
+      "sentence": "The non-structural elements of the work, especially it's financial and organizational, present a bigger challenge.",
+      "translation": "这项工作中的非工程性因素，尤其是财务和组织方面的问题，构成了更大的挑战。",
+      "structure": [
+        {"text": "The non-structural elements of the work", "role": "subject", "level": 1},
+        {"text": "especially it's financial and organizational", "role": "parenthesis", "level": 2},
+        {"text": "present a bigger challenge", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["non-structural 在此指技术设施以外的财务和组织管理因素。", "it's 是源文语法异常，按语境应为 its financial and organizational elements，但原句按源文保留。"],
+      "expressions": [{"text": "present a bigger challenge", "meaning_zh": "构成更大的挑战"}, {"text": "financial and organizational", "meaning_zh": "财务和组织方面的"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 43,
+      "sentence": "A revolving fund was set up, with households that had already benefited agreeing to contribute a small monthly amount to pay for maintenance, repairs and new tanks.",
+      "translation": "项目设立了一个循环基金，已经受益的家庭同意每月缴纳一小笔钱，用于维护、维修和添置新水箱。",
+      "structure": [
+        {"text": "A revolving fund", "role": "subject", "level": 1},
+        {"text": "was set up", "role": "verb_phrase", "level": 1},
+        {"text": "with households that had already benefited agreeing to contribute a small monthly amount", "role": "with_absolute_construction", "level": 2},
+        {"text": "that had already benefited", "role": "relative_clause", "level": 3},
+        {"text": "to pay for maintenance, repairs and new tanks", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": ["with + households + agreeing 构成独立结构，补充说明基金的筹资机制。", "that 从句修饰 households；to pay for... 说明每月缴款的用途。"],
+      "expressions": [{"text": "revolving fund", "meaning_zh": "循环基金"}, {"text": "contribute a monthly amount", "meaning_zh": "每月缴纳一笔款项"}, {"text": "pay for maintenance", "meaning_zh": "支付维护费用"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 44,
+      "sentence": "However, it appears that the revolving fund concept was not fully understood and it has proved difficult to get households to contribute.",
+      "translation": "然而，循环基金这一概念似乎并未得到充分理解，而且事实证明，要让各家各户缴款十分困难。",
+      "structure": [
+        {"text": "it appears", "role": "main_clause", "level": 1},
+        {"text": "that the revolving fund concept was not fully understood", "role": "noun_clause", "level": 2},
+        {"text": "and it has proved difficult to get households to contribute", "role": "coordinated_clause", "level": 1},
+        {"text": "to get households to contribute", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["第一个 it 是形式主语，真正内容由 that 从句给出。", "第二个 it 也是形式主语；get households to contribute 表示促使各家庭缴款。"],
+      "expressions": [{"text": "it appears that", "meaning_zh": "似乎……"}, {"text": "prove difficult to", "meaning_zh": "事实证明很难……"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 45,
+      "sentence": "Recovering costs from interventions that do not generate income directly will always be a difficult proposition, although this can be overcome if the process is explained more fully at the outset.",
+      "translation": "要从不能直接产生收入的干预项目中收回成本，始终会是一件难事；不过，如果一开始就更充分地解释这一运作过程，这个困难也可以克服。",
+      "structure": [
+        {"text": "Recovering costs from interventions that do not generate income directly", "role": "gerund_phrase", "level": 1},
+        {"text": "that do not generate income directly", "role": "relative_clause", "level": 2},
+        {"text": "will always be a difficult proposition", "role": "verb_phrase", "level": 1},
+        {"text": "although this can be overcome", "role": "adverbial_clause", "level": 1},
+        {"text": "if the process is explained more fully at the outset", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["Recovering... 是动名词短语作主语，其中 that 从句修饰 interventions。", "although 引导让步从句，this 指收回成本这一难题；if 从句给出克服难题的条件。"],
+      "expressions": [{"text": "recover costs", "meaning_zh": "收回成本"}, {"text": "generate income", "meaning_zh": "产生收入"}, {"text": "at the outset", "meaning_zh": "从一开始"}]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 46,
+      "sentence": "The Muthkandiya initiative was planned as a demonstration project, to show that community-based drought mitigation through rainwater harvesting was feasible.",
+      "translation": "穆图坎迪亚的这项行动被规划为一个示范项目，用以证明通过雨水收集开展以社区为基础的旱灾缓解是可行的。",
+      "structure": [
+        {"text": "The Muthkandiya initiative", "role": "subject", "level": 1},
+        {"text": "was planned as a demonstration project", "role": "verb_phrase", "level": 1},
+        {"text": "to show that community-based drought mitigation through rainwater harvesting was feasible", "role": "non_finite_clause", "level": 2},
+        {"text": "that community-based drought mitigation through rainwater harvesting was feasible", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": ["to show... 是目的状语，说明设立示范项目的目的；that 从句作 show 的宾语。", "Muthkandiya 与前文 Muthukandiya 拼写不一致，是源文地名拼写异常，按原文保留。"],
+      "expressions": [{"text": "demonstration project", "meaning_zh": "示范项目"}, {"text": "community-based", "meaning_zh": "以社区为基础的"}, {"text": "be feasible", "meaning_zh": "切实可行"}]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 47,
+      "sentence": "Several other organizations have begun their own projects using the same approach.",
+      "translation": "其他几个组织也已经采用同样的方法启动了各自的项目。",
+      "structure": [
+        {"text": "Several other organizations", "role": "subject", "level": 1},
+        {"text": "have begun their own projects", "role": "verb_phrase", "level": 1},
+        {"text": "using the same approach", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["have begun 是现在完成时，说明示范项目已产生扩散效果。", "using... 是现在分词状语，说明这些组织启动项目时采用的方法。"],
+      "expressions": [{"text": "use the same approach", "meaning_zh": "采用同样的方法"}, {"text": "begin their own projects", "meaning_zh": "启动各自的项目"}]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 48,
+      "sentence": "The feasibility of introducing larger tanks is being investigated.",
+      "translation": "引入更大型水箱的可行性正在接受评估。",
+      "structure": [
+        {"text": "The feasibility of introducing larger tanks", "role": "subject", "level": 1},
+        {"text": "is being investigated", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["of introducing... 是介词加动名词短语，具体说明所评估的可行性内容。", "is being investigated 是现在进行时的被动语态，表示评估工作正在进行。"],
+      "expressions": [{"text": "the feasibility of", "meaning_zh": "……的可行性"}, {"text": "be investigated", "meaning_zh": "接受调查评估"}]
+    },
+    {
+      "id": "J-01", "paragraph_label": "J", "sentence_index": 49,
+      "sentence": "However, a lot of effort and patience are needed to generate the interest, develop the skills and organize the management structures needed to implement sustainable community-based projects.",
+      "translation": "然而，要激发参与兴趣、培养相关技能并建立实施可持续社区项目所需的管理架构，还需要投入大量努力和耐心。",
+      "structure": [
+        {"text": "a lot of effort and patience", "role": "subject", "level": 1},
+        {"text": "are needed", "role": "verb_phrase", "level": 1},
+        {"text": "to generate the interest, develop the skills and organize the management structures", "role": "non_finite_clause", "level": 2},
+        {"text": "needed to implement sustainable community-based projects", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": ["are needed 是被动结构，to 后三个并列动词说明努力与耐心要用于哪些工作。", "needed... 过去分词短语修饰 management structures，并在内部用不定式说明这些架构的用途。"],
+      "expressions": [{"text": "generate interest", "meaning_zh": "激发兴趣"}, {"text": "develop skills", "meaning_zh": "培养技能"}, {"text": "management structures", "meaning_zh": "管理架构"}]
+    },
+    {
+      "id": "J-02", "paragraph_label": "J", "sentence_index": 50,
+      "sentence": "It will probably be some time before rainwater harvesting technologies can spread rapidly and spontaneously across the district's villages, without external support.",
+      "translation": "在没有外部支持的情况下，雨水收集技术恐怕还需要一段时间，才能在全区各村迅速、自发地推广开来。",
+      "structure": [
+        {"text": "It will probably be some time", "role": "main_clause", "level": 1},
+        {"text": "before rainwater harvesting technologies can spread rapidly and spontaneously across the district's villages", "role": "adverbial_clause", "level": 2},
+        {"text": "without external support", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["It will be some time before... 是固定句型，表示还要过一段时间才会发生某事。", "rapidly and spontaneously 并列修饰 spread；without... 强调自主扩散所缺少的外部条件。"],
+      "expressions": [{"text": "it will be some time before", "meaning_zh": "还要过一段时间才……"}, {"text": "spread rapidly and spontaneously", "meaning_zh": "迅速而自发地推广"}, {"text": "external support", "meaning_zh": "外部支持"}]
+    }
+  ]
+}

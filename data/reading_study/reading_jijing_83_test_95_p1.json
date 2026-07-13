@@ -1,0 +1,2118 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_83_test_95",
+  "passage_id": "reading_jijing_83_test_95_p1",
+  "passage_title": "Animal Minds: Parrot Alex",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "In 1977 Irene Pepperberg, a recent graduate of Harvard University, did something very bold.",
+      "translation": "1977年，哈佛大学刚毕业的艾琳·佩珀伯格做了一件非常大胆的事。",
+      "structure": [
+        {
+          "text": "Irene Pepperberg",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "a recent graduate of Harvard University",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "did something very bold",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "In 1977 是时间状语。",
+        "同位语补充 Pepperberg 的身份。"
+      ],
+      "expressions": [
+        {
+          "text": "do something bold",
+          "meaning_zh": "做大胆之事"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "At a time when animals still were considered automatons, she set out to find what was on another creature's mind by talking to it.",
+      "translation": "在当时动物仍被视为自动机器的年代，她着手通过与它交谈来弄清另一种生物心里在想什么。",
+      "structure": [
+        {
+          "text": "when animals still were considered automatons",
+          "role": "time_clause",
+          "level": 2
+        },
+        {
+          "text": "she set out to find",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "what was on another creature's mind",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "when 从句交代当时的科学观念。",
+        "what 从句作 find 的宾语，by talking 表方式。"
+      ],
+      "expressions": [
+        {
+          "text": "set out to",
+          "meaning_zh": "着手做"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "She brought a one-year-old African gray parrot she named Alex into her lab to teach him to reproduce the sounds of the English language.",
+      "translation": "她把一只一岁大的非洲灰鹦鹉带进实验室，并给它取名亚历克斯，教它模仿并复现英语的语音。",
+      "structure": [
+        {
+          "text": "She",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "brought a one-year-old African gray parrot",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "she named Alex",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "to teach him to reproduce the sounds",
+          "role": "purpose_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "she named Alex 是省略关系代词的定语从句。",
+        "to teach 是目的不定式，内部 to reproduce 作宾补。"
+      ],
+      "expressions": [
+        {
+          "text": "reproduce the sounds",
+          "meaning_zh": "复现声音"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "\"I thought if he learned to communicate, I could ask him questions about how he sees the world.\"",
+      "translation": "“我想，如果它学会交流，我就能问它一些问题，了解它如何看待这个世界。”",
+      "structure": [
+        {
+          "text": "I thought",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "if he learned to communicate",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "I could ask him questions",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "about how he sees the world",
+          "role": "embedded_question",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "thought 后省略 that，引出整段想法。",
+        "if 从句设定学会交流的条件，how 从句作 about 的宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "learn to communicate",
+          "meaning_zh": "学会交流"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "When Pepperberg began her dialogue with Alex, who died last September at the age of 31, many scientists believed animals were incapable of any thought.",
+      "translation": "当佩珀伯格开始与亚历克斯展开对话时——他于去年九月去世，享年31岁——许多科学家认为动物根本不具备任何思维能力。",
+      "structure": [
+        {
+          "text": "When Pepperberg began her dialogue with Alex",
+          "role": "time_clause",
+          "level": 2
+        },
+        {
+          "text": "who died last September at the age of 31",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "many scientists believed",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "animals were incapable of any thought",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "who 修饰 Alex，插入说明其去世时间和年龄。",
+        "believed 后省略 that；be incapable of 表示不具备能力。"
+      ],
+      "expressions": [
+        {
+          "text": "be incapable of",
+          "meaning_zh": "不能；无能力"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "They were simply machines, robots programmed to react to stimuli but lacking the ability to think or feel.",
+      "translation": "在他们看来，动物不过是机器，是被编程来对刺激作出反应的机器人，却缺乏思考或感受的能力。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were simply machines",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "robots programmed to react to stimuli",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "but lacking the ability to think or feel",
+          "role": "coordinate_modifier",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "robots 与 machines 同位，进一步解释科学家的看法。",
+        "programmed 与 lacking 是并列的非谓语修饰成分。"
+      ],
+      "expressions": [
+        {
+          "text": "react to stimuli",
+          "meaning_zh": "对刺激作出反应"
+        },
+        {
+          "text": "lack the ability to",
+          "meaning_zh": "缺乏做……的能力"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "Any pet owner would disagree.",
+      "translation": "任何养宠物的人都会不同意这种说法。",
+      "structure": [
+        {
+          "text": "Any pet owner",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "would disagree",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "would 表示从一般经验推断的反应。",
+        "disagree 的对象是动物没有思想这一观点。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "We see the love in our dogs' eyes and know that, of course, they has thoughts and emotions.",
+      "translation": "我们从狗狗的眼神里看到爱，也知道它们当然有想法和情感。",
+      "structure": [
+        {
+          "text": "We",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "see the love in our dogs' eyes and know",
+          "role": "compound_predicate",
+          "level": 1
+        },
+        {
+          "text": "that, of course, they has thoughts and emotions",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "see 与 know 是并列谓语。",
+        "that 从句作 know 的宾语；they has 是源文主谓不一致。"
+      ],
+      "expressions": [
+        {
+          "text": "thoughts and emotions",
+          "meaning_zh": "思想与情感"
+        }
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "But such claims remain highly controversial.",
+      "translation": "但这样的断言仍然极具争议。",
+      "structure": [
+        {
+          "text": "such claims",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "remain highly controversial",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "such claims 回指宠物有思想和情感的说法。",
+        "remain 是系动词，controversial 作表语。"
+      ],
+      "expressions": [
+        {
+          "text": "remain controversial",
+          "meaning_zh": "仍有争议"
+        }
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "Gut instinct is not science, and it is all too easy to project human thoughts and feelings onto another creature.",
+      "translation": "直觉并非科学，而且我们也很容易把人类的思想与感受投射到另一种生物身上。",
+      "structure": [
+        {
+          "text": "Gut instinct is not science",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "it is all too easy",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "to project human thoughts and feelings onto another creature",
+          "role": "infinitive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "and 连接两个独立判断。",
+        "it 是形式主语，to project... 是真正主语。"
+      ],
+      "expressions": [
+        {
+          "text": "gut instinct",
+          "meaning_zh": "直觉"
+        },
+        {
+          "text": "project...onto...",
+          "meaning_zh": "把……投射到……上"
+        }
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "How, then, does a scientist prove that an animal is capable of thinking – that it is able to acquire information about the world and act on it?",
+      "translation": "那么，科学家究竟如何证明某种动物具备思考能力——能够获取关于世界的信息，并据此采取行动？",
+      "structure": [
+        {
+          "text": "does a scientist prove",
+          "role": "interrogative_clause",
+          "level": 1
+        },
+        {
+          "text": "that an animal is capable of thinking",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "that it is able to acquire information about the world and act on it",
+          "role": "appositive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "How 引导方式疑问，prove 后接 that 宾语从句。",
+        "破折号后的第二个 that 从句解释 thinking 的具体含义。"
+      ],
+      "expressions": [
+        {
+          "text": "be capable of",
+          "meaning_zh": "能够"
+        },
+        {
+          "text": "act on information",
+          "meaning_zh": "依据资讯行动"
+        }
+      ]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "\"That's why I started my studies with Alex,\" Pepperberg said.",
+      "translation": "“这就是我开始研究亚历克斯的原因，”佩珀伯格说。",
+      "structure": [
+        {
+          "text": "That's why I started my studies with Alex",
+          "role": "reported_content",
+          "level": 2
+        },
+        {
+          "text": "Pepperberg said",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "why 从句在 That's why 结构中说明原因。",
+        "直接引语前置，Pepperberg said 后置说明说话者。"
+      ],
+      "expressions": [
+        {
+          "text": "That's why",
+          "meaning_zh": "这就是为什么"
+        }
+      ]
+    },
+    {
+      "id": "B-09",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "They were seated – she at her desk, he on top of his cage – in her lab, a windowless room about the size of a boxcar, at Brandeis University.",
+      "translation": "他们坐在她的实验室里——她坐在书桌旁，他站在自己的笼子顶上——那是布兰迪斯大学里一间没有窗户、大小约等于一节货运车厢的房间。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were seated",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "she at her desk, he on top of his cage",
+          "role": "parenthetical_ellipsis",
+          "level": 2
+        },
+        {
+          "text": "a windowless room about the size of a boxcar",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "破折号内两个分句均省略 was seated。",
+        "a windowless room 与 her lab 同位，about the size... 描述大小。"
+      ],
+      "expressions": [
+        {
+          "text": "about the size of",
+          "meaning_zh": "约有……大小"
+        }
+      ]
+    },
+    {
+      "id": "B-10",
+      "paragraph_label": "B",
+      "sentence_index": 14,
+      "sentence": "Newspapers lined the floor; baskets of bright toys were stacked on the shelves.",
+      "translation": "地上铺着报纸；架子上堆放着一篮篮色彩鲜艳的玩具。",
+      "structure": [
+        {
+          "text": "Newspapers lined the floor",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "baskets of bright toys were stacked on the shelves",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "分号连接两个并列独立分句。",
+        "were stacked 是被动语态，描述玩具篮的摆放状态。"
+      ],
+      "expressions": [
+        {
+          "text": "be stacked on",
+          "meaning_zh": "堆放在……上"
+        }
+      ]
+    },
+    {
+      "id": "B-11",
+      "paragraph_label": "B",
+      "sentence_index": 15,
+      "sentence": "They were clearly a team – and because of their work, the notion that animals can think is no longer so fanciful.",
+      "translation": "他们显然是一个团队——而且正因为他们的工作，“动物会思考”这一观念如今已不再显得那么天马行空。",
+      "structure": [
+        {
+          "text": "They were clearly a team",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "because of their work",
+          "role": "cause_phrase",
+          "level": 2
+        },
+        {
+          "text": "the notion that animals can think is no longer so fanciful",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "that animals can think",
+          "role": "appositive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "破折号后的 and 连接团队事实与研究影响。",
+        "that 从句说明 notion 的内容，不是定语从句。"
+      ],
+      "expressions": [
+        {
+          "text": "no longer",
+          "meaning_zh": "不再"
+        },
+        {
+          "text": "the notion that",
+          "meaning_zh": "……这一观念"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Certain skills are considered key signs of higher mental abilities: good memory, a grasp of grammar and symbols, self-awareness, understanding others' motives, imitating others, and being creative.",
+      "translation": "某些技能被视为更高层次心智能力的关键标志：良好的记忆力、对语法和符号的理解、自我意识、对他人动机的洞察、模仿他人的能力，以及创造力。",
+      "structure": [
+        {
+          "text": "Certain skills",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are considered key signs of higher mental abilities",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "good memory, a grasp of grammar and symbols, self-awareness, understanding others' motives, imitating others, and being creative",
+          "role": "appositive_list",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "被动结构表示这些技能被视为高等心智能力的标志。",
+        "冒号后以名词和动名词并列列举具体技能。"
+      ],
+      "expressions": [
+        {
+          "text": "a grasp of",
+          "meaning_zh": "对……的掌握"
+        },
+        {
+          "text": "key signs of",
+          "meaning_zh": "……的关键标志"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Bit by bit, in ingenious experiments, researchers have documented these talents in other species, gradually chipping away at what we thought made human beings distinctive while offering a glimpse of where our own abilities came from.",
+      "translation": "研究人员通过一系列巧妙的实验，一点一点地在其他物种身上记录下这些才能，逐步削弱了我们曾以为使人类独一无二的特质，同时也让我们得以窥见自身能力的来源。",
+      "structure": [
+        {
+          "text": "researchers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have documented these talents in other species",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "gradually chipping away at what we thought made human beings distinctive",
+          "role": "present_participle_clause",
+          "level": 2
+        },
+        {
+          "text": "while offering a glimpse of where our own abilities came from",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "两个分词结构说明研究成果逐渐带来的双重影响。",
+        "what 从句作 at 的宾语；where 从句作 of 的宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "chip away at",
+          "meaning_zh": "逐渐削弱"
+        },
+        {
+          "text": "offer a glimpse of",
+          "meaning_zh": "让人一窥"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "Scrub jays know that other jays are thieves and that stashed food can spoil; sheep can recognize faces; chimpanzees use a variety of tools to probe termite mounds and even use weapons to hunt small mammals; dolphins can imitate human postures; the archerfish, which stuns insects with a sudden blast of water, can learn how to aim its squirt simply by watching an experienced fish perform the task. And Alex the parrot turned out to be a surprisingly good talker.",
+      "translation": "灌丛松鸦知道其他松鸦会偷东西，也知道藏起来的食物会变质；绵羊能够识别面孔；黑猩猩会使用多种工具探查白蚁丘，甚至会使用武器猎捕小型哺乳动物；海豚能模仿人类的姿势；而射水鱼——它能用突然喷出的水柱击晕昆虫——仅仅通过观察一条有经验的同类执行任务，就能学会如何瞄准喷水。至于鹦鹉亚历克斯，则出人意料地成了一个很会“说话”的家伙。",
+      "structure": [
+        {
+          "text": "Scrub jays know that other jays are thieves and that stashed food can spoil",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "the archerfish, which stuns insects with a sudden blast of water, can learn how to aim its squirt",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "And Alex the parrot turned out to be a surprisingly good talker",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "分号串联多种动物能力的并列例证；本句在源文中还连入 Alex 的总结句。",
+        "which 修饰 archerfish；how 从句作 learn 的宾语，by watching 表学习方式。"
+      ],
+      "expressions": [
+        {
+          "text": "turn out to be",
+          "meaning_zh": "结果是"
+        },
+        {
+          "text": "a variety of",
+          "meaning_zh": "多种"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Thirty years after the Alex studies began; Pepperberg and a changing collection of assistants were still giving him English lessons.",
+      "translation": "在“亚历克斯”研究启动三十年后，佩珀伯格和一批不断更替的助手仍在给他上英语课。",
+      "structure": [
+        {
+          "text": "Thirty years after the Alex studies began",
+          "role": "time_adverbial",
+          "level": 1
+        },
+        {
+          "text": "Pepperberg and a changing collection of assistants",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were still giving him English lessons",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "after 内含时间从句 the Alex studies began。",
+        "分号位于时间状语之后是源文标点异常。"
+      ],
+      "expressions": [
+        {
+          "text": "a collection of",
+          "meaning_zh": "一群；一组"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "The humans, along with two younger parrots, also served as Alex's flock, providing the social input all parrots crave.",
+      "translation": "这些人类连同两只更年轻的鹦鹉，也构成了亚历克斯的“鸟群”，为他提供所有鹦鹉都渴望的社交刺激。",
+      "structure": [
+        {
+          "text": "The humans, along with two younger parrots",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "served as Alex's flock",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "providing the social input all parrots crave",
+          "role": "present_participle_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "along with 不改变主语中心词 The humans。",
+        "all parrots crave 是省略关系代词的定语从句，修饰 social input。"
+      ],
+      "expressions": [
+        {
+          "text": "serve as",
+          "meaning_zh": "充当"
+        },
+        {
+          "text": "social input",
+          "meaning_zh": "社交刺激"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "Like any flock, this one – as small as it was – had its share of drama.",
+      "translation": "像任何群体一样，这个小小的“鸟群”也少不了各种风波。",
+      "structure": [
+        {
+          "text": "this one",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "as small as it was",
+          "role": "concessive_clause",
+          "level": 2
+        },
+        {
+          "text": "had its share of drama",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "this one 指 Alex 的小型群体。",
+        "as small as it was 是让步结构，表示尽管规模很小。"
+      ],
+      "expressions": [
+        {
+          "text": "have one's share of",
+          "meaning_zh": "也有不少……"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "Alex dominated his fellow parrots, acted huffy at times around Pepperberg, tolerated the other female humans, and fell to pieces over a male assistant who dropped by for a visit.",
+      "translation": "亚历克斯在同伴鹦鹉面前占据主导地位；在佩珀伯格身边有时会闹别扭；对其他女性人类尚能容忍；而一名偶尔来访的男助手则让他情绪彻底崩溃。",
+      "structure": [
+        {
+          "text": "Alex",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "dominated his fellow parrots, acted huffy at times around Pepperberg, tolerated the other female humans, and fell to pieces",
+          "role": "compound_predicate",
+          "level": 1
+        },
+        {
+          "text": "who dropped by for a visit",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "四个并列谓语概括 Alex 对不同对象的反应。",
+        "who 修饰 a male assistant；fell to pieces 在此表示情绪失控。"
+      ],
+      "expressions": [
+        {
+          "text": "fall to pieces",
+          "meaning_zh": "情绪失控"
+        },
+        {
+          "text": "drop by",
+          "meaning_zh": "顺便来访"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "Pepperberg bought Alex in a Chicago pet store where she let the store's assistant pick him out because she didn't want other scientists saying later that she'd particularly chosen an especially smart bird for her work.",
+      "translation": "佩珀伯格在芝加哥一家宠物店买下了亚历克斯，并让店员替她挑选，因为她不希望日后有其他科学家指责她是特意为研究挑了只格外聪明的鸟。",
+      "structure": [
+        {
+          "text": "Pepperberg",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "bought Alex in a Chicago pet store",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "where she let the store's assistant pick him out",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "because she didn't want other scientists saying later",
+          "role": "cause_clause",
+          "level": 2
+        },
+        {
+          "text": "that she'd particularly chosen an especially smart bird",
+          "role": "object_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "where 修饰 pet store，并引出由店员挑选的安排。",
+        "because 说明这样做是为避免选择偏差，that 从句是 saying 的内容。"
+      ],
+      "expressions": [
+        {
+          "text": "pick out",
+          "meaning_zh": "挑选"
+        },
+        {
+          "text": "particularly chosen",
+          "meaning_zh": "特意挑选"
+        }
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "Given that Alex's brain was the size of a shelled walnut, most researchers thought Pepperberg's interspecies communication study would be futile.",
+      "translation": "鉴于亚历克斯的大脑只有一颗带壳核桃那么大，大多数研究者认为佩珀伯格的跨物种交流研究注定徒劳无功。",
+      "structure": [
+        {
+          "text": "Given that Alex's brain was the size of a shelled walnut",
+          "role": "given_clause",
+          "level": 2
+        },
+        {
+          "text": "most researchers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "thought",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "Pepperberg's interspecies communication study would be futile",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Given that 引导已知背景，表示考虑到脑容量很小。",
+        "thought 后省略 that；would be 表示当时对研究前景的判断。"
+      ],
+      "expressions": [
+        {
+          "text": "given that",
+          "meaning_zh": "考虑到"
+        },
+        {
+          "text": "be futile",
+          "meaning_zh": "徒劳无效"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "\"Some people actually called me crazy for trying this,\" she said.",
+      "translation": "“有些人真的因为我尝试这件事而说我疯了，”她说。",
+      "structure": [
+        {
+          "text": "Some people actually called me crazy for trying this",
+          "role": "reported_content",
+          "level": 2
+        },
+        {
+          "text": "she said",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "call somebody crazy 是宾语加补足语结构。",
+        "for trying this 说明别人称她疯狂的原因。"
+      ],
+      "expressions": [
+        {
+          "text": "call somebody crazy",
+          "meaning_zh": "说某人疯了"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "\"Scientists thought that chimpanzees were better subjects, although, of course, chimps can't speak.\"",
+      "translation": "“科学家认为黑猩猩是更好的研究对象，当然，黑猩猩不会说话。”",
+      "structure": [
+        {
+          "text": "Scientists thought",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that chimpanzees were better subjects",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "although, of course, chimps can't speak",
+          "role": "concessive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that 从句作 thought 的宾语。",
+        "although 引导让步，of course 是插入语。"
+      ],
+      "expressions": [
+        {
+          "text": "better subjects",
+          "meaning_zh": "更合适的研究对象"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "Chimpanzees, bonobos, and gorillas have been taught to use sign language and symbols to communicate with us, often with impressive results.",
+      "translation": "人们已经教会黑猩猩、倭黑猩猩和大猩猩使用手语和符号与我们交流，而且结果往往令人印象深刻。",
+      "structure": [
+        {
+          "text": "Chimpanzees, bonobos, and gorillas",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have been taught to use sign language and symbols",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "to communicate with us",
+          "role": "purpose_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "现在完成时被动表示教学成果延续至今。",
+        "第二个 to 不定式说明使用符号的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "sign language",
+          "meaning_zh": "手语"
+        },
+        {
+          "text": "with impressive results",
+          "meaning_zh": "效果显著"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "The bonobo Kanzi, for instance, carries his symbol-communication board with him so he can \"talk\" to his human researchers, and he has invented combinations of symbols to express his thoughts.",
+      "translation": "例如，倭黑猩猩坎齐随身携带他的符号交流板，这样他就能与人类研究人员“交谈”，而且他还发明了符号组合来表达自己的想法。",
+      "structure": [
+        {
+          "text": "The bonobo Kanzi",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "carries his symbol-communication board with him",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "so he can \"talk\" to his human researchers",
+          "role": "purpose_clause",
+          "level": 2
+        },
+        {
+          "text": "he has invented combinations of symbols to express his thoughts",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "so 引导目的或结果，解释随身携带交流板的作用。",
+        "and 连接另一项能力，to express 是目的不定式。"
+      ],
+      "expressions": [
+        {
+          "text": "for instance",
+          "meaning_zh": "例如"
+        },
+        {
+          "text": "express his thoughts",
+          "meaning_zh": "表达思想"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "Nevertheless, this is not the same thing as having an animal look up at you, open his mouth, and speak.",
+      "translation": "然而，这仍不同于让一只动物抬头看着你、张开嘴巴并开口说话。",
+      "structure": [
+        {
+          "text": "this",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is not the same thing as",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "having an animal look up at you, open his mouth, and speak",
+          "role": "gerund_complement",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "this 回指猿类用符号交流。",
+        "having 后接 animal 作宾语，look、open、speak 是三个并列宾补。"
+      ],
+      "expressions": [
+        {
+          "text": "the same thing as",
+          "meaning_zh": "与……同一回事"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "Under Pepperberg's patient tutelage, Alex learned how to use his vocal tract to imitate almost one hundred English words, including the sounds for various foods, although he calls an apple a \"beanery.\"",
+      "translation": "在佩珀伯格耐心的教导下，亚历克斯学会了如何运用发声器官模仿近一百个英文单词，其中包括多种食物的发音；不过，他把苹果称作“beanery”。",
+      "structure": [
+        {
+          "text": "Alex",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "learned how to use his vocal tract",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "to imitate almost one hundred English words",
+          "role": "purpose_clause",
+          "level": 2
+        },
+        {
+          "text": "although he calls an apple a \"beanery.\"",
+          "role": "concessive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "how to use... 作 learned 的宾语。",
+        "although 引出反差：能模仿近百词，却自创词称呼苹果。"
+      ],
+      "expressions": [
+        {
+          "text": "under somebody's tutelage",
+          "meaning_zh": "在某人指导下"
+        },
+        {
+          "text": "vocal tract",
+          "meaning_zh": "发声道"
+        }
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "\"Apples taste a little bit like bananas to him, and they look a little bit like cherries, Alex made up that word for them,\" Pepperberg said.",
+      "translation": "佩珀伯格说：“在他看来，苹果吃起来有点像香蕉，外观又有点像樱桃，所以亚历克斯就为它们自创了那个词。”",
+      "structure": [
+        {
+          "text": "Apples taste a little bit like bananas to him",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "they look a little bit like cherries",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "Alex made up that word for them",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "Pepperberg said",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "引语中三个并列分句解释 beanery 的构词联想。",
+        "they 指 apples，that word 指 beanery，them 也指 apples。"
+      ],
+      "expressions": [
+        {
+          "text": "make up a word",
+          "meaning_zh": "创造一个词"
+        },
+        {
+          "text": "taste like",
+          "meaning_zh": "尝起来像"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "It sounded a bit mad, the idea of a bird having lessons to practice, and willingly doing it.",
+      "translation": "让一只鸟上课练习，而且还心甘情愿地配合，这个想法听起来确实有点荒唐。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "dummy_subject",
+          "level": 1
+        },
+        {
+          "text": "sounded a bit mad",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "the idea of a bird having lessons to practice, and willingly doing it",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 先行指代后置的 the idea。",
+        "having 与 doing 是并列动名词，it 指上课练习这件事。"
+      ],
+      "expressions": [
+        {
+          "text": "sound a bit mad",
+          "meaning_zh": "听起来有点荒唐"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "But after listening to and observing Alex, it was difficult to argue with Pepperberg's explanation for his behaviors.",
+      "translation": "然而，在聆听并观察了亚历克斯之后，人们就很难再反驳佩珀伯格对他行为的解释了。",
+      "structure": [
+        {
+          "text": "after listening to and observing Alex",
+          "role": "time_clause",
+          "level": 2
+        },
+        {
+          "text": "it was difficult",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to argue with Pepperberg's explanation for his behaviors",
+          "role": "infinitive_subject",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "after 后两个动名词 listening 与 observing 并列。",
+        "it 是形式主语，真正主语是 to argue...。"
+      ],
+      "expressions": [
+        {
+          "text": "argue with an explanation",
+          "meaning_zh": "反驳一种解释"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 34,
+      "sentence": "She wasn't handing him treats for the repetitious work or rapping him on the claws to make him say the sounds.",
+      "translation": "她既没有因为这些重复性的训练就给他零食奖励，也没有敲打他的爪子来逼他发出那些声音。",
+      "structure": [
+        {
+          "text": "She",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "wasn't handing him treats",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "or rapping him on the claws",
+          "role": "coordinate_predicate",
+          "level": 1
+        },
+        {
+          "text": "to make him say the sounds",
+          "role": "purpose_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "handing 与 rapping 是并列的过去进行时谓语。",
+        "to make 表目的，make him say 是使役结构。"
+      ],
+      "expressions": [
+        {
+          "text": "hand somebody treats",
+          "meaning_zh": "给某人零食"
+        },
+        {
+          "text": "make somebody do",
+          "meaning_zh": "使某人做"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 35,
+      "sentence": "\"He has to hear the words over and over before he can correctly imitate them,\" Pepperberg said, after pronouncing \"seven\" for Alex a good dozen times in a row.",
+      "translation": "佩珀伯格在连续十来次对亚历克斯念出“seven”之后说道：“他必须反复听到这些词，才能正确地模仿出来。”",
+      "structure": [
+        {
+          "text": "He has to hear the words over and over",
+          "role": "reported_content",
+          "level": 2
+        },
+        {
+          "text": "before he can correctly imitate them",
+          "role": "time_clause",
+          "level": 3
+        },
+        {
+          "text": "Pepperberg said",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "after pronouncing \"seven\" for Alex a good dozen times in a row",
+          "role": "time_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "before 从句说明正确模仿前必须反复听词。",
+        "after 分词结构说明 Pepperberg 说这话时刚做的示范。"
+      ],
+      "expressions": [
+        {
+          "text": "over and over",
+          "meaning_zh": "反复地"
+        },
+        {
+          "text": "in a row",
+          "meaning_zh": "连续地"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 36,
+      "sentence": "\"I'm not trying to see if Alex can learn a human language,\" she added.",
+      "translation": "她又补充说：“我并不是想看看亚历克斯能不能学会人类语言。”",
+      "structure": [
+        {
+          "text": "I'm not trying to see",
+          "role": "reported_content",
+          "level": 2
+        },
+        {
+          "text": "if Alex can learn a human language",
+          "role": "object_clause",
+          "level": 3
+        },
+        {
+          "text": "she added",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "if 从句作 see 的宾语，意为是否。",
+        "现在进行时 trying 表明她当前研究目的并非教人类语言。"
+      ],
+      "expressions": [
+        {
+          "text": "try to see if",
+          "meaning_zh": "试图弄清是否"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 37,
+      "sentence": "\"That's never been the point.",
+      "translation": "“这从来都不是重点。",
+      "structure": [
+        {
+          "text": "That",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "'s never been the point",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "That 回指检验 Alex 能否学会人类语言。",
+        "现在完成时强调这从来都不是研究目的；引语在源文中跨句延续。"
+      ],
+      "expressions": [
+        {
+          "text": "be the point",
+          "meaning_zh": "是重点"
+        }
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 38,
+      "sentence": "My plan always was to use his imitative skills to get a better understanding of avian cognition.\"",
+      "translation": "我的计划一直是利用他的模仿能力，更深入地理解鸟类的认知。”",
+      "structure": [
+        {
+          "text": "My plan",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "always was",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "to use his imitative skills",
+          "role": "subject_complement",
+          "level": 2
+        },
+        {
+          "text": "to get a better understanding of avian cognition",
+          "role": "purpose_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "第一个 to 不定式作表语，说明计划内容。",
+        "第二个 to 表目的，即借模仿能力理解鸟类认知。"
+      ],
+      "expressions": [
+        {
+          "text": "get a better understanding of",
+          "meaning_zh": "更好地理解"
+        },
+        {
+          "text": "avian cognition",
+          "meaning_zh": "鸟类认知"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 39,
+      "sentence": "In other words, because Alex was able to produce a close approximation of the sounds of some English words, Pepperberg could ask him questions about a bird's basic understanding of the world.",
+      "translation": "换句话说，正因为亚历克斯能够相当逼真地发出一些英语单词的声音，佩珀伯格才得以向他提出问题，以探查一只鸟对世界最基本的理解。",
+      "structure": [
+        {
+          "text": "because Alex was able to produce a close approximation of the sounds",
+          "role": "cause_clause",
+          "level": 2
+        },
+        {
+          "text": "Pepperberg",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "could ask him questions",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "about a bird's basic understanding of the world",
+          "role": "prepositional_complement",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "because 从句说明语言近似发音为何能成为研究工具。",
+        "a close approximation of 表示接近但并非完全相同的发音。"
+      ],
+      "expressions": [
+        {
+          "text": "a close approximation of",
+          "meaning_zh": "与……很接近的近似物"
+        },
+        {
+          "text": "be able to",
+          "meaning_zh": "能够"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 40,
+      "sentence": "She couldn't ask him what he was thinking about, but she could ask him about his knowledge of numbers, shapes, and colors.",
+      "translation": "她无法问他正在想什么，但她可以问他对数字、形状和颜色等概念的掌握情况。",
+      "structure": [
+        {
+          "text": "She couldn't ask him",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "what he was thinking about",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "but she could ask him",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "about his knowledge of numbers, shapes, and colors",
+          "role": "prepositional_complement",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "but 对比无法直接询问思想与可以测试具体知识。",
+        "what 从句作 ask 的直接宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "knowledge of",
+          "meaning_zh": "对……的知识"
+        }
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 41,
+      "sentence": "To demonstrate, Pepperberg carried Alex on her arm to a tall wooden perch in the middle of the room.",
+      "translation": "为了演示，佩珀伯格让亚历克斯站在她的手臂上，把他带到房间中央一根高高的木栖架上。",
+      "structure": [
+        {
+          "text": "To demonstrate",
+          "role": "purpose_clause",
+          "level": 1
+        },
+        {
+          "text": "Pepperberg",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "carried Alex on her arm",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "to a tall wooden perch in the middle of the room",
+          "role": "direction_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "To demonstrate 表示用现场测试来演示前述能力。",
+        "on her arm 描述携带方式，to a perch 表移动终点。"
+      ],
+      "expressions": [
+        {
+          "text": "to demonstrate",
+          "meaning_zh": "为了演示"
+        }
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 42,
+      "sentence": "She then retrieved a green key and a small green cup from a basket on a shelf.",
+      "translation": "随后，她从架子上的一个篮子里取出一把绿色的钥匙和一个小小的绿色杯子。",
+      "structure": [
+        {
+          "text": "She",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "then retrieved a green key and a small green cup",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "from a basket on a shelf",
+          "role": "source_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "a green key 与 a small green cup 是并列宾语。",
+        "from...on... 两层介词短语依次说明物品来源和篮子位置。"
+      ],
+      "expressions": [
+        {
+          "text": "retrieve...from...",
+          "meaning_zh": "从……取出……"
+        }
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 43,
+      "sentence": "She held up the two items to Alex's eye.",
+      "translation": "她把这两样物品举到亚历克斯眼前。",
+      "structure": [
+        {
+          "text": "She",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "held up the two items",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "to Alex's eye",
+          "role": "direction_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "held up 表示举起展示，而不是支撑。",
+        "the two items 指前句的绿色钥匙和绿色杯子。"
+      ],
+      "expressions": [
+        {
+          "text": "hold up",
+          "meaning_zh": "举起展示"
+        }
+      ]
+    },
+    {
+      "id": "G-06",
+      "paragraph_label": "G",
+      "sentence_index": 44,
+      "sentence": "\"What'ssame?\" she asked.",
+      "translation": "“什么是相同的？”她问道。",
+      "structure": [
+        {
+          "text": "What'ssame?",
+          "role": "reported_question",
+          "level": 2
+        },
+        {
+          "text": "she asked",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "What'ssame 是源文将 What's 与 same 连写的异常。",
+        "问题省略了 between them 等成分，实际问两物品相同之处。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "G-07",
+      "paragraph_label": "G",
+      "sentence_index": 45,
+      "sentence": "Without hesitation, Alex's beak opened: \"Co-lor.\"",
+      "translation": "亚历克斯毫不犹豫地张开喙：“颜—色。”",
+      "structure": [
+        {
+          "text": "Without hesitation",
+          "role": "manner_adverbial",
+          "level": 1
+        },
+        {
+          "text": "Alex's beak",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "opened",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "Co-lor",
+          "role": "reported_answer",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Without hesitation 强调 Alex 立即作答。",
+        "冒号引出回答，Co-lor 用连字符模拟鹦鹉分音节发音。"
+      ],
+      "expressions": [
+        {
+          "text": "without hesitation",
+          "meaning_zh": "毫不犹豫"
+        }
+      ]
+    },
+    {
+      "id": "G-08",
+      "paragraph_label": "G",
+      "sentence_index": 46,
+      "sentence": "\"What's different?\"Pepperberg asked.",
+      "translation": "“什么是不同的？”佩珀伯格问。",
+      "structure": [
+        {
+          "text": "What's different?",
+          "role": "reported_question",
+          "level": 2
+        },
+        {
+          "text": "Pepperberg asked",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "疑问词 what 作主语，different 作表语。",
+        "引号与 Pepperberg 之间缺空格是源文排版异常。"
+      ],
+      "expressions": [
+        {
+          "text": "What's different?",
+          "meaning_zh": "有什么不同？"
+        }
+      ]
+    },
+    {
+      "id": "G-09",
+      "paragraph_label": "G",
+      "sentence_index": 47,
+      "sentence": "\"Shape,\" Alex said.",
+      "translation": "“形状。”亚历克斯说道。",
+      "structure": [
+        {
+          "text": "Shape",
+          "role": "reported_answer",
+          "level": 2
+        },
+        {
+          "text": "Alex said",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "单词 Shape 是对不同属性的简短回答。",
+        "Alex said 为后置报告分句。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "G-10",
+      "paragraph_label": "G",
+      "sentence_index": 48,
+      "sentence": "His voice had the digitized sound of a cartoon character.",
+      "translation": "他的声音带着卡通人物那种电子合成般的质感。",
+      "structure": [
+        {
+          "text": "His voice",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had the digitized sound of a cartoon character",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "His 指 Alex。",
+        "digitized sound 用来比喻鹦鹉声音像动画角色的电子音。"
+      ],
+      "expressions": [
+        {
+          "text": "the sound of",
+          "meaning_zh": "……的声音"
+        }
+      ]
+    },
+    {
+      "id": "G-11",
+      "paragraph_label": "G",
+      "sentence_index": 49,
+      "sentence": "Since parrots lack lips (another reason it was difficult for Alex to pronounce some sounds, such as ba), the words seemed to come from the air around him, as if a ventriloquist were speaking.",
+      "translation": "由于鹦鹉没有嘴唇（这也是亚历克斯难以发出某些音、例如 ba 的另一个原因），那些词听起来仿佛不是从他口中发出，而是从他周围的空气里飘来，就像有个腹语术演员在说话一样。",
+      "structure": [
+        {
+          "text": "Since parrots lack lips",
+          "role": "cause_clause",
+          "level": 2
+        },
+        {
+          "text": "another reason it was difficult for Alex to pronounce some sounds",
+          "role": "parenthesis",
+          "level": 3
+        },
+        {
+          "text": "the words",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "seemed to come from the air around him",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "as if a ventriloquist were speaking",
+          "role": "manner_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Since 引导原因，括号内补充嘴唇缺失造成的发音困难。",
+        "as if 使用 were，表达仿佛腹语师在说话的非真实比喻。"
+      ],
+      "expressions": [
+        {
+          "text": "as if",
+          "meaning_zh": "仿佛"
+        },
+        {
+          "text": "lack lips",
+          "meaning_zh": "没有嘴唇"
+        }
+      ]
+    },
+    {
+      "id": "G-12",
+      "paragraph_label": "G",
+      "sentence_index": 50,
+      "sentence": "But the words – and what can only be called the thoughts – were entirely his.",
+      "translation": "然而，这些话——以及只能称之为“思考”的东西——完全出自他自己。",
+      "structure": [
+        {
+          "text": "the words",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "what can only be called the thoughts",
+          "role": "parenthetical_subject",
+          "level": 2
+        },
+        {
+          "text": "were entirely his",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "破折号中的 and 把 thoughts 加入主语。",
+        "what 从句名词化，表示只能称作思想的东西；his 表示完全属于 Alex。"
+      ],
+      "expressions": [
+        {
+          "text": "entirely his",
+          "meaning_zh": "完全属于他"
+        }
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 51,
+      "sentence": "For the next 20 minutes, Alex ran through his tests, distinguishing colors, shapes, sizes, and materials (wool versus wood versus metal).",
+      "translation": "接下来的20分钟里，亚历克斯依次完成各项测试，辨别颜色、形状、大小以及材质（羊毛、木头和金属）。",
+      "structure": [
+        {
+          "text": "Alex",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "ran through his tests",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "distinguishing colors, shapes, sizes, and materials",
+          "role": "present_participle_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "For the next 20 minutes 表持续时间。",
+        "distinguishing 分词短语说明测试中完成的辨别任务。"
+      ],
+      "expressions": [
+        {
+          "text": "run through tests",
+          "meaning_zh": "完成一系列测试"
+        },
+        {
+          "text": "distinguish...",
+          "meaning_zh": "辨别……"
+        }
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 52,
+      "sentence": "He did some simple arithmetic, such as counting the yellow toy blocks among a pile of mixed hues.",
+      "translation": "他还做了一些简单的算术题，比如在一堆颜色混杂的积木中数出黄色玩具块的数量。",
+      "structure": [
+        {
+          "text": "He",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "did some simple arithmetic",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "such as counting the yellow toy blocks among a pile of mixed hues",
+          "role": "example_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "such as 引出简单算术的具体例子。",
+        "counting 是动名词，among 表示在混合颜色的一堆物品中。"
+      ],
+      "expressions": [
+        {
+          "text": "do arithmetic",
+          "meaning_zh": "做算术"
+        },
+        {
+          "text": "such as",
+          "meaning_zh": "例如"
+        }
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 53,
+      "sentence": "And, then, as if to offer final proof of the mind inside his bird's brain, Alex spoke up.",
+      "translation": "随后，他仿佛是在为那颗鸟脑中的“心智”提供最后的证据一般，开口说话了。",
+      "structure": [
+        {
+          "text": "as if to offer final proof of the mind inside his bird's brain",
+          "role": "manner_clause",
+          "level": 2
+        },
+        {
+          "text": "Alex",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "spoke up",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "as if to... 表示仿佛要提供最终证据，并非确定目的。",
+        "And, then 的标点较口语化，用于推进叙述。"
+      ],
+      "expressions": [
+        {
+          "text": "speak up",
+          "meaning_zh": "开口说话"
+        },
+        {
+          "text": "offer proof of",
+          "meaning_zh": "提供……的证据"
+        }
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 54,
+      "sentence": "\"Talk clearly!\" he commanded, when one of the younger birds Pepperberg was also teaching talked with wrong pronunciation.",
+      "translation": "“说清楚点！”当佩珀伯格也在教的一只更年轻的鹦鹉发音不正确时，他命令道。",
+      "structure": [
+        {
+          "text": "Talk clearly!",
+          "role": "reported_command",
+          "level": 2
+        },
+        {
+          "text": "he commanded",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "when one of the younger birds Pepperberg was also teaching talked with wrong pronunciation",
+          "role": "time_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "祈使句 Talk clearly 是 Alex 对另一只鸟的命令。",
+        "Pepperberg was also teaching 是省略关系代词的定语从句，修饰 younger birds。"
+      ],
+      "expressions": [
+        {
+          "text": "with wrong pronunciation",
+          "meaning_zh": "发音不正确地"
+        }
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 55,
+      "sentence": "\"Talk clearly!\"\"Don't be a smart aleck,\" Pepperberg said, shaking her head at him.",
+      "translation": "“说清楚点！”“别自作聪明，”佩珀伯格说着，对他摇了摇头。",
+      "structure": [
+        {
+          "text": "Talk clearly!",
+          "role": "reported_command",
+          "level": 2
+        },
+        {
+          "text": "Don't be a smart aleck",
+          "role": "reported_command",
+          "level": 2
+        },
+        {
+          "text": "Pepperberg said",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "shaking her head at him",
+          "role": "present_participle_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "源文把两个相邻引语的引号连写，必须整体保留。",
+        "shaking 分词短语说明 Pepperberg 说话时摇头的伴随动作。"
+      ],
+      "expressions": [
+        {
+          "text": "smart aleck",
+          "meaning_zh": "自作聪明的人"
+        },
+        {
+          "text": "shake one's head at",
+          "meaning_zh": "对……摇头"
+        }
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 56,
+      "sentence": "\"He knows all this, and he gets bored, so he interrupts the others, or he gives the wrong answer just to be obstinate.",
+      "translation": "“这些他全都懂，可他会觉得无聊，所以就会打断别人，或者干脆为了唱反调而故意答错。",
+      "structure": [
+        {
+          "text": "He knows all this",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "he gets bored",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "so he interrupts the others",
+          "role": "result_clause",
+          "level": 2
+        },
+        {
+          "text": "he gives the wrong answer just to be obstinate",
+          "role": "coordinate_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "引语在本句末尾未闭合，并延续到下一句，这是源文格式。",
+        "so 引出厌倦后的行为结果，or 连接打断别人和故意答错。"
+      ],
+      "expressions": [
+        {
+          "text": "just to be obstinate",
+          "meaning_zh": "只是为了故意作对"
+        },
+        {
+          "text": "get bored",
+          "meaning_zh": "感到厌倦"
+        }
+      ]
+    },
+    {
+      "id": "H-07",
+      "paragraph_label": "H",
+      "sentence_index": 57,
+      "sentence": "At this stage, he's like a teenager; he's moody, and I'm never sure what he'll do.\"",
+      "translation": "到了这个阶段，他就像个青少年：情绪多变，我永远拿不准他接下来会做什么。”",
+      "structure": [
+        {
+          "text": "At this stage",
+          "role": "time_adverbial",
+          "level": 2
+        },
+        {
+          "text": "he's like a teenager",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "he's moody",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "I'm never sure",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "what he'll do",
+          "role": "object_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "本句接续上一句未闭合的直接引语，并在句末闭合。",
+        "分号连接三个判断，what 从句作 sure 的内容补足语。"
+      ],
+      "expressions": [
+        {
+          "text": "at this stage",
+          "meaning_zh": "在这个阶段"
+        },
+        {
+          "text": "be never sure",
+          "meaning_zh": "从不确定"
+        }
+      ]
+    }
+  ]
+}

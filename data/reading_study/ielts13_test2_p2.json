@@ -1,0 +1,988 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts13_test2_reading",
+  "passage_id": "ielts13_test2_p2",
+  "passage_title": "Oxytocin",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Oxytocin is a chemical, a hormone produced in the pituitary gland in the brain.",
+      "translation": "催产素是一种化学物质，是由大脑中的垂体产生的一种激素。",
+      "structure": [
+        {"text": "Oxytocin", "role": "subject", "level": 1},
+        {"text": "is a chemical", "role": "verb_phrase", "level": 1},
+        {"text": "a hormone produced in the pituitary gland in the brain", "role": "apposition", "level": 2},
+        {"text": "produced in the pituitary gland in the brain", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "a hormone 是 a chemical 的同位语，进一步解释催产素的性质。",
+        "produced in... 是过去分词短语，修饰 hormone。",
+        "in the pituitary gland in the brain 连续两个介词短语说明产生部位。"
+      ],
+      "expressions": [
+        {"text": "pituitary gland", "meaning_zh": "垂体"},
+        {"text": "produced in", "meaning_zh": "产生于"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "It was through various studies focusing on animals that scientists first became aware of the influence of oxytocin.",
+      "translation": "科学家最初正是通过各种聚焦动物的研究，才意识到催产素的影响。",
+      "structure": [
+        {"text": "It was through various studies focusing on animals that scientists first became aware of the influence of oxytocin", "role": "cleft_sentence", "level": 1},
+        {"text": "through various studies focusing on animals", "role": "prepositional_phrase", "level": 2},
+        {"text": "focusing on animals", "role": "participial_phrase", "level": 3},
+        {"text": "scientists first became aware of the influence of oxytocin", "role": "main_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It was... that... 是强调句，突出科学家通过动物研究认识到催产素作用。",
+        "focusing on animals 是现在分词短语，修饰 studies。",
+        "became aware of 表示从不了解到意识到。"
+      ],
+      "expressions": [
+        {"text": "become aware of", "meaning_zh": "意识到"},
+        {"text": "the influence of", "meaning_zh": "……的影响"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "They discovered that it helps reinforce the bonds between prairie voles, which mate for life, and triggers the motherly behaviour that sheep show towards their newborn lambs.",
+      "translation": "他们发现，催产素有助于加强草原田鼠之间的纽带——这种田鼠终身配偶制——并会触发母羊对新生羔羊表现出的母性行为。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "discovered that it helps reinforce the bonds between prairie voles", "role": "verb_phrase", "level": 1},
+        {"text": "that it helps reinforce the bonds between prairie voles", "role": "noun_clause", "level": 2},
+        {"text": "which mate for life", "role": "relative_clause", "level": 3},
+        {"text": "and triggers the motherly behaviour that sheep show towards their newborn lambs", "role": "coordinated_clause", "level": 2},
+        {"text": "that sheep show towards their newborn lambs", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导 discovered 的宾语从句，it 指 oxytocin。",
+        "helps reinforce 和 triggers 是宾语从句中的并列谓语。",
+        "which mate for life 修饰 prairie voles，解释这种动物的配偶关系。",
+        "that sheep show... 修饰 motherly behaviour。"
+      ],
+      "expressions": [
+        {"text": "reinforce the bonds between", "meaning_zh": "加强……之间的纽带"},
+        {"text": "mate for life", "meaning_zh": "终身配偶制"},
+        {"text": "motherly behaviour", "meaning_zh": "母性行为"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "It is also released by women in childbirth, strengthening the attachment between mother and baby.",
+      "translation": "女性分娩时也会释放催产素，从而加强母亲和婴儿之间的依恋关系。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "is also released by women in childbirth", "role": "verb_phrase", "level": 1},
+        {"text": "by women in childbirth", "role": "prepositional_phrase", "level": 2},
+        {"text": "strengthening the attachment between mother and baby", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "It 指催产素，is released 是被动语态。",
+        "in childbirth 说明催产素释放的情境。",
+        "strengthening... 是现在分词结果状语，说明释放催产素产生的效果。"
+      ],
+      "expressions": [
+        {"text": "be released by", "meaning_zh": "由……释放"},
+        {"text": "strengthen the attachment between", "meaning_zh": "加强……之间的依恋"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "Few chemicals have as positive a reputation as oxytocin, which is sometimes referred to as the 'love hormone'.",
+      "translation": "很少有化学物质像催产素一样享有如此正面的名声，它有时被称为“爱之激素”。",
+      "structure": [
+        {"text": "Few chemicals", "role": "subject", "level": 1},
+        {"text": "have as positive a reputation as oxytocin", "role": "verb_phrase", "level": 1},
+        {"text": "which is sometimes referred to as the 'love hormone'", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Few chemicals have as... as... 表示很少有化学物质能达到同等正面声誉。",
+        "which 引导非限制性定语从句，补充说明 oxytocin。",
+        "is referred to as 是被动表达，表示“被称作”。"
+      ],
+      "expressions": [
+        {"text": "as positive a reputation as", "meaning_zh": "像……一样正面的名声"},
+        {"text": "be referred to as", "meaning_zh": "被称为"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "One sniff of it can, it is claimed, make a person more trusting, empathetic, generous and cooperative.",
+      "translation": "据称，只要吸入一点催产素，就能让一个人变得更信任他人、更有同理心、更慷慨，也更愿意合作。",
+      "structure": [
+        {"text": "One sniff of it", "role": "subject", "level": 1},
+        {"text": "can, it is claimed, make a person more trusting, empathetic, generous and cooperative", "role": "verb_phrase", "level": 1},
+        {"text": "it is claimed", "role": "parenthetical_clause", "level": 2},
+        {"text": "more trusting, empathetic, generous and cooperative", "role": "object_complement", "level": 2}
+      ],
+      "difficult_points": [
+        "One sniff of it 作主语，it 指催产素。",
+        "it is claimed 是插入语，提示这是某种声称而非作者直接断言。",
+        "make a person more... 使用 make + 宾语 + 宾补结构。",
+        "四个形容词并列，描述被声称增强的社交品质。"
+      ],
+      "expressions": [
+        {"text": "one sniff of", "meaning_zh": "吸入一点……"},
+        {"text": "it is claimed", "meaning_zh": "据称"},
+        {"text": "make a person more", "meaning_zh": "使一个人更……"}
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "It is time, however, to revise this wholly optimistic view.",
+      "translation": "然而，是时候修正这种完全乐观的看法了。",
+      "structure": [
+        {"text": "It is time", "role": "main_clause", "level": 1},
+        {"text": "however", "role": "discourse_marker", "level": 2},
+        {"text": "to revise this wholly optimistic view", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "however 插入句中，标志作者开始转向批判前面的乐观看法。",
+        "It is time to do 是固定句式，表示“该做某事了”。",
+        "wholly optimistic view 指把催产素完全看成正面激素的观点。"
+      ],
+      "expressions": [
+        {"text": "It is time to", "meaning_zh": "是时候……了"},
+        {"text": "revise this view", "meaning_zh": "修正这种看法"},
+        {"text": "wholly optimistic", "meaning_zh": "完全乐观的"}
+      ]
+    },
+    {
+      "id": "A-08",
+      "paragraph_label": "A",
+      "sentence_index": 8,
+      "sentence": "A new wave of studies has shown that its effects vary greatly depending on the person and the circumstances, and it can impact on our social interactions for worse as well as for better.",
+      "translation": "新一波研究已经表明，催产素的效果会因人和情境而大不相同，而且它对我们的社会互动既可能产生负面影响，也可能产生正面影响。",
+      "structure": [
+        {"text": "A new wave of studies", "role": "subject", "level": 1},
+        {"text": "has shown that its effects vary greatly depending on the person and the circumstances", "role": "verb_phrase", "level": 1},
+        {"text": "that its effects vary greatly depending on the person and the circumstances", "role": "noun_clause", "level": 2},
+        {"text": "depending on the person and the circumstances", "role": "participial_phrase", "level": 3},
+        {"text": "and it can impact on our social interactions for worse as well as for better", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "has shown 后接 that 宾语从句，说明新研究的核心发现。",
+        "its effects 中 its 指 oxytocin。",
+        "depending on... 说明效果变化取决于人和情境。",
+        "for worse as well as for better 表示影响可能变坏也可能变好。"
+      ],
+      "expressions": [
+        {"text": "a new wave of studies", "meaning_zh": "新一波研究"},
+        {"text": "vary greatly depending on", "meaning_zh": "因……而大不相同"},
+        {"text": "for worse as well as for better", "meaning_zh": "既可能变坏也可能变好"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Oxytocin's role in human behaviour first emerged in 2005.",
+      "translation": "催产素在人类行为中的作用最早在2005年显现出来。",
+      "structure": [
+        {"text": "Oxytocin's role in human behaviour", "role": "subject", "level": 1},
+        {"text": "first emerged in 2005", "role": "verb_phrase", "level": 1},
+        {"text": "in human behaviour", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Oxytocin's role 是主语核心，in human behaviour 限定研究领域。",
+        "first emerged 表示这一作用首次进入研究视野。",
+        "in 2005 给出人类行为研究兴起的时间。"
+      ],
+      "expressions": [
+        {"text": "role in human behaviour", "meaning_zh": "在人类行为中的作用"},
+        {"text": "first emerged", "meaning_zh": "首次显现"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "In a groundbreaking experiment, Markus Heinrichs and his colleagues at the University of Freiburg, Germany, asked volunteers to do an activity in which they could invest money with an anonymous person who was not guaranteed to be honest.",
+      "translation": "在一项开创性实验中，德国弗赖堡大学的马库斯·海因里希斯及其同事要求志愿者完成一项活动，在活动中他们可以把钱投给一个匿名的人，而这个人并不保证诚实。",
+      "structure": [
+        {"text": "In a groundbreaking experiment", "role": "prepositional_phrase", "level": 2},
+        {"text": "Markus Heinrichs and his colleagues at the University of Freiburg, Germany", "role": "subject", "level": 1},
+        {"text": "asked volunteers to do an activity", "role": "verb_phrase", "level": 1},
+        {"text": "in which they could invest money with an anonymous person", "role": "relative_clause", "level": 2},
+        {"text": "who was not guaranteed to be honest", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "In a groundbreaking experiment 是句首状语，突出实验的开创性。",
+        "at the University of Freiburg, Germany 修饰 his colleagues，说明机构和地点。",
+        "in which 引导定语从句，修饰 an activity。",
+        "who was not guaranteed to be honest 修饰 an anonymous person，说明投资对象存在信任风险。"
+      ],
+      "expressions": [
+        {"text": "groundbreaking experiment", "meaning_zh": "开创性实验"},
+        {"text": "invest money with", "meaning_zh": "把钱投给；与……进行投资互动"},
+        {"text": "be guaranteed to be", "meaning_zh": "被保证会是"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "The team found that participants who had sniffed oxytocin via a nasal spray beforehand invested more money than those who received a placebo instead.",
+      "translation": "研究团队发现，事先通过鼻喷剂吸入催产素的参与者，比那些接受安慰剂的人投入了更多的钱。",
+      "structure": [
+        {"text": "The team", "role": "subject", "level": 1},
+        {"text": "found that participants who had sniffed oxytocin via a nasal spray beforehand invested more money", "role": "verb_phrase", "level": 1},
+        {"text": "that participants who had sniffed oxytocin via a nasal spray beforehand invested more money than those who received a placebo instead", "role": "noun_clause", "level": 2},
+        {"text": "who had sniffed oxytocin via a nasal spray beforehand", "role": "relative_clause", "level": 3},
+        {"text": "than those who received a placebo instead", "role": "comparative_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "found 后接 that 宾语从句，说明实验结果。",
+        "who had sniffed... 修饰 participants，限定吸入催产素的组别。",
+        "than those... 构成比较，those 指另一组参与者。",
+        "placebo 指安慰剂，是对照组所接受的东西。"
+      ],
+      "expressions": [
+        {"text": "via a nasal spray", "meaning_zh": "通过鼻喷剂"},
+        {"text": "beforehand", "meaning_zh": "事先"},
+        {"text": "receive a placebo", "meaning_zh": "接受安慰剂"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "The study was the start of research into the effects of oxytocin on human interactions.",
+      "translation": "这项研究开启了关于催产素对人类互动影响的研究。",
+      "structure": [
+        {"text": "The study", "role": "subject", "level": 1},
+        {"text": "was the start of research into the effects of oxytocin on human interactions", "role": "verb_phrase", "level": 1},
+        {"text": "into the effects of oxytocin on human interactions", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "The study 指上一句提到的2005年实验。",
+        "the start of research into... 表示该研究领域由此开始。",
+        "on human interactions 修饰 effects，说明影响的对象。"
+      ],
+      "expressions": [
+        {"text": "the start of research into", "meaning_zh": "关于……研究的开端"},
+        {"text": "human interactions", "meaning_zh": "人类互动"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "'For eight years, it was quite a lonesome field,' Heinrichs recalls.",
+      "translation": "海因里希斯回忆说：“八年来，这一直是一个相当孤单的研究领域。”",
+      "structure": [
+        {"text": "'For eight years, it was quite a lonesome field,'", "role": "direct_speech", "level": 1},
+        {"text": "For eight years", "role": "prepositional_phrase", "level": 2},
+        {"text": "it was quite a lonesome field", "role": "main_clause", "level": 2},
+        {"text": "Heinrichs recalls", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "引号内是 Heinrichs 的直接引语，后面 Heinrichs recalls 是报道语。",
+        "it 指催产素与人类互动研究这一领域。",
+        "lonesome field 表示研究者很少、领域较冷清。"
+      ],
+      "expressions": [
+        {"text": "quite a lonesome field", "meaning_zh": "相当冷清的领域"},
+        {"text": "recalls", "meaning_zh": "回忆道"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 14,
+      "sentence": "'Now, everyone is interested.'",
+      "translation": "“现在，所有人都感兴趣了。”",
+      "structure": [
+        {"text": "'Now, everyone is interested.'", "role": "direct_speech", "level": 1},
+        {"text": "everyone", "role": "subject", "level": 2},
+        {"text": "is interested", "role": "verb_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "本句延续上一句的直接引语，形成过去冷清与现在热门的对比。",
+        "Now 表示研究领域当前状态的变化。",
+        "everyone 是夸张说法，强调关注度显著上升。"
+      ],
+      "expressions": [
+        {"text": "be interested", "meaning_zh": "感兴趣"}
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 15,
+      "sentence": "These follow-up studies have shown that after a sniff of the hormone, people become more charitable, better at reading emotions on others' faces and at communicating constructively in arguments.",
+      "translation": "这些后续研究表明，吸入这种激素后，人们会变得更慈善，更善于读懂他人脸上的情绪，也更善于在争论中进行建设性沟通。",
+      "structure": [
+        {"text": "These follow-up studies", "role": "subject", "level": 1},
+        {"text": "have shown that after a sniff of the hormone, people become more charitable", "role": "verb_phrase", "level": 1},
+        {"text": "that after a sniff of the hormone, people become more charitable, better at reading emotions on others' faces and at communicating constructively in arguments", "role": "noun_clause", "level": 2},
+        {"text": "after a sniff of the hormone", "role": "prepositional_phrase", "level": 3},
+        {"text": "better at reading emotions on others' faces and at communicating constructively in arguments", "role": "adjective_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "These follow-up studies 指2005年实验之后的一系列研究。",
+        "have shown 后接 that 宾语从句，说明研究结果。",
+        "more charitable、better at reading...、at communicating... 是并列结果。",
+        "constructively in arguments 表示即使在争论中也能以建设性方式沟通。"
+      ],
+      "expressions": [
+        {"text": "follow-up studies", "meaning_zh": "后续研究"},
+        {"text": "read emotions on others' faces", "meaning_zh": "读懂他人脸上的情绪"},
+        {"text": "communicate constructively", "meaning_zh": "建设性地沟通"}
+      ]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 16,
+      "sentence": "Together, the results fuelled the view that oxytocin universally enhanced the positive aspects of our social nature.",
+      "translation": "这些结果合在一起助长了一种观点：催产素会普遍增强我们社会天性中的积极方面。",
+      "structure": [
+        {"text": "Together", "role": "adverbial_phrase", "level": 2},
+        {"text": "the results", "role": "subject", "level": 1},
+        {"text": "fuelled the view", "role": "verb_phrase", "level": 1},
+        {"text": "that oxytocin universally enhanced the positive aspects of our social nature", "role": "appositive_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Together 表示这些研究结果合并产生影响。",
+        "fuelled the view 是比喻表达，表示推动或强化某种观点。",
+        "that 从句解释 the view 的内容。",
+        "universally enhanced 表示被认为对所有人都普遍增强积极社会特征。"
+      ],
+      "expressions": [
+        {"text": "fuel the view that", "meaning_zh": "助长……观点"},
+        {"text": "positive aspects of", "meaning_zh": "……的积极方面"},
+        {"text": "social nature", "meaning_zh": "社会天性"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Then, after a few years, contrasting findings began to emerge.",
+      "translation": "随后，几年之后，相反的研究发现开始出现。",
+      "structure": [
+        {"text": "after a few years", "role": "prepositional_phrase", "level": 2},
+        {"text": "contrasting findings", "role": "subject", "level": 1},
+        {"text": "began to emerge", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Then 标志时间推进，并引出研究走向变化。",
+        "contrasting findings 指与前面乐观结论相反或不一致的发现。",
+        "began to emerge 表示这些证据逐渐出现。"
+      ],
+      "expressions": [
+        {"text": "contrasting findings", "meaning_zh": "相反的发现"},
+        {"text": "begin to emerge", "meaning_zh": "开始出现"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "Simone Shamay-Tsoory at the University of Haifa, Israel, found that when volunteers played a competitive game, those who inhaled the hormone showed more pleasure when they beat other players, and felt more envy when others won.",
+      "translation": "以色列海法大学的西蒙娜·沙迈-楚里发现，当志愿者玩竞争性游戏时，吸入这种激素的人在击败其他玩家时表现出更多愉悦，而在别人获胜时感到更多嫉妒。",
+      "structure": [
+        {"text": "Simone Shamay-Tsoory at the University of Haifa, Israel", "role": "subject", "level": 1},
+        {"text": "found that when volunteers played a competitive game", "role": "verb_phrase", "level": 1},
+        {"text": "that when volunteers played a competitive game, those who inhaled the hormone showed more pleasure when they beat other players, and felt more envy when others won", "role": "noun_clause", "level": 2},
+        {"text": "when volunteers played a competitive game", "role": "adverbial_clause", "level": 3},
+        {"text": "those who inhaled the hormone", "role": "subject", "level": 3},
+        {"text": "when they beat other players", "role": "adverbial_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "found 后接包含多个 when 从句的宾语从句，结构较长。",
+        "those who inhaled the hormone 指吸入催产素的志愿者。",
+        "showed more pleasure 和 felt more envy 是并列谓语，描述两种负面社交倾向。",
+        "when they beat... 与 when others won 分别说明愉悦和嫉妒出现的情境。"
+      ],
+      "expressions": [
+        {"text": "competitive game", "meaning_zh": "竞争性游戏"},
+        {"text": "show more pleasure", "meaning_zh": "表现出更多愉悦"},
+        {"text": "feel more envy", "meaning_zh": "感到更多嫉妒"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "What's more, administering oxytocin also has sharply contrasting outcomes depending on a person's disposition.",
+      "translation": "此外，施用催产素还会因一个人的性情不同而产生截然相反的结果。",
+      "structure": [
+        {"text": "administering oxytocin", "role": "subject", "level": 1},
+        {"text": "also has sharply contrasting outcomes", "role": "verb_phrase", "level": 1},
+        {"text": "depending on a person's disposition", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "What's more 用来补充更进一步的证据。",
+        "administering oxytocin 是动名词短语作主语。",
+        "depending on a person's disposition 说明结果差异取决于个体性情。",
+        "sharply contrasting 强调结果差异非常明显。"
+      ],
+      "expressions": [
+        {"text": "What's more", "meaning_zh": "此外；更重要的是"},
+        {"text": "sharply contrasting outcomes", "meaning_zh": "截然相反的结果"},
+        {"text": "depending on", "meaning_zh": "取决于"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 20,
+      "sentence": "Jennifer Bartz from Mount Sinai School of Medicine, New York, found that it improves people's ability to read emotions, but only if they are not very socially adept to begin with.",
+      "translation": "纽约西奈山医学院的詹妮弗·巴茨发现，催产素能提高人们读懂情绪的能力，但前提是他们一开始并不是很擅长社交。",
+      "structure": [
+        {"text": "Jennifer Bartz from Mount Sinai School of Medicine, New York", "role": "subject", "level": 1},
+        {"text": "found that it improves people's ability to read emotions", "role": "verb_phrase", "level": 1},
+        {"text": "that it improves people's ability to read emotions", "role": "noun_clause", "level": 2},
+        {"text": "but only if they are not very socially adept to begin with", "role": "coordinated_clause", "level": 2},
+        {"text": "if they are not very socially adept to begin with", "role": "conditional_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "it 指催产素，that 从句说明 Bartz 的发现。",
+        "but only if 引出限制条件，削弱“催产素提升能力”的普遍性。",
+        "socially adept 表示社交上熟练或擅长。",
+        "to begin with 指研究开始前或原本的状态。"
+      ],
+      "expressions": [
+        {"text": "ability to read emotions", "meaning_zh": "读懂情绪的能力"},
+        {"text": "only if", "meaning_zh": "只有在……情况下"},
+        {"text": "to begin with", "meaning_zh": "一开始；原本"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 21,
+      "sentence": "Her research also shows that oxytocin in fact reduces cooperation in subjects who are particularly anxious or sensitive to rejection.",
+      "translation": "她的研究还显示，催产素实际上会降低那些特别焦虑或对拒绝敏感的受试者的合作程度。",
+      "structure": [
+        {"text": "Her research", "role": "subject", "level": 1},
+        {"text": "also shows that oxytocin in fact reduces cooperation in subjects", "role": "verb_phrase", "level": 1},
+        {"text": "that oxytocin in fact reduces cooperation in subjects who are particularly anxious or sensitive to rejection", "role": "noun_clause", "level": 2},
+        {"text": "who are particularly anxious or sensitive to rejection", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "also shows 表示这仍是 Bartz 研究中的另一项发现。",
+        "in fact 强调结果与催产素促进合作的乐观观点相反。",
+        "who 引导定语从句，限定 subjects 的类型。",
+        "sensitive to rejection 表示对被拒绝尤其敏感。"
+      ],
+      "expressions": [
+        {"text": "in fact reduces", "meaning_zh": "实际上会降低"},
+        {"text": "sensitive to rejection", "meaning_zh": "对拒绝敏感"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "Another discovery is that oxytocin's effects vary depending on who we are interacting with.",
+      "translation": "另一项发现是，催产素的效果会因我们互动对象的不同而变化。",
+      "structure": [
+        {"text": "Another discovery", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "that oxytocin's effects vary depending on who we are interacting with", "role": "noun_clause", "level": 2},
+        {"text": "depending on who we are interacting with", "role": "participial_phrase", "level": 3},
+        {"text": "who we are interacting with", "role": "noun_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "that 引导表语从句，说明 another discovery 的内容。",
+        "depending on 后接 who 引导的宾语从句。",
+        "who we are interacting with 指社交互动对象。",
+        "本句把变量从个人性情转向互动对象。"
+      ],
+      "expressions": [
+        {"text": "vary depending on", "meaning_zh": "因……而变化"},
+        {"text": "interact with", "meaning_zh": "与……互动"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "Studies conducted by Carolyn DeClerck of the University of Antwerp, Belgium, revealed that people who had received a dose of oxytocin actually became less cooperative when dealing with complete strangers.",
+      "translation": "比利时安特卫普大学的卡罗琳·德克勒克进行的研究显示，接受过一剂催产素的人在面对完全陌生的人时实际上变得更不合作。",
+      "structure": [
+        {"text": "Studies conducted by Carolyn DeClerck of the University of Antwerp, Belgium", "role": "subject", "level": 1},
+        {"text": "conducted by Carolyn DeClerck of the University of Antwerp, Belgium", "role": "participial_phrase", "level": 2},
+        {"text": "revealed that people who had received a dose of oxytocin actually became less cooperative", "role": "verb_phrase", "level": 1},
+        {"text": "who had received a dose of oxytocin", "role": "relative_clause", "level": 3},
+        {"text": "when dealing with complete strangers", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "conducted by... 是过去分词短语，修饰 Studies。",
+        "revealed 后接 that 宾语从句，说明研究发现。",
+        "who had received... 修饰 people，限定实验组。",
+        "when dealing with complete strangers 说明合作性下降发生的情境。"
+      ],
+      "expressions": [
+        {"text": "receive a dose of", "meaning_zh": "接受一剂……"},
+        {"text": "become less cooperative", "meaning_zh": "变得更不合作"},
+        {"text": "complete strangers", "meaning_zh": "完全陌生的人"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "Meanwhile, Carsten De Dreu at the University of Amsterdam in the Netherlands discovered that volunteers given oxytocin showed favouritism: Dutch men became quicker to associate positive words with Dutch names than with foreign ones, for example.",
+      "translation": "与此同时，荷兰阿姆斯特丹大学的卡斯滕·德德鲁发现，服用催产素的志愿者表现出偏袒：例如，荷兰男性会更快地把正面词汇与荷兰名字联系起来，而不是与外国名字联系起来。",
+      "structure": [
+        {"text": "Carsten De Dreu at the University of Amsterdam in the Netherlands", "role": "subject", "level": 1},
+        {"text": "discovered that volunteers given oxytocin showed favouritism", "role": "verb_phrase", "level": 1},
+        {"text": "that volunteers given oxytocin showed favouritism", "role": "noun_clause", "level": 2},
+        {"text": "given oxytocin", "role": "participial_phrase", "level": 3},
+        {"text": "Dutch men became quicker to associate positive words with Dutch names than with foreign ones", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "Meanwhile 表示这是与前一项研究并列的另一项发现。",
+        "given oxytocin 是过去分词短语，修饰 volunteers。",
+        "冒号后的 Dutch men... 是 favouritism 的具体例子。",
+        "than with foreign ones 中 ones 指 names。"
+      ],
+      "expressions": [
+        {"text": "show favouritism", "meaning_zh": "表现出偏袒"},
+        {"text": "associate positive words with", "meaning_zh": "把正面词汇与……联系起来"},
+        {"text": "for example", "meaning_zh": "例如"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "According to De Dreu, oxytocin drives people to care for those in their social circles and defend them from outside dangers.",
+      "translation": "德德鲁认为，催产素会驱使人们关心自己社交圈内的人，并保护他们免受外部危险。",
+      "structure": [
+        {"text": "According to De Dreu", "role": "prepositional_phrase", "level": 2},
+        {"text": "oxytocin", "role": "subject", "level": 1},
+        {"text": "drives people to care for those in their social circles and defend them from outside dangers", "role": "verb_phrase", "level": 1},
+        {"text": "to care for those in their social circles and defend them from outside dangers", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "According to De Dreu 标明观点来源。",
+        "drives people to do 表示催产素推动人们采取某种行为。",
+        "care for 和 defend 是并列动作。",
+        "them 指 those in their social circles。"
+      ],
+      "expressions": [
+        {"text": "according to", "meaning_zh": "根据；按照……的说法"},
+        {"text": "drive people to", "meaning_zh": "驱使人们去"},
+        {"text": "social circles", "meaning_zh": "社交圈"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "So, it appears that oxytocin strengthens biases, rather than promoting general goodwill, as was previously thought.",
+      "translation": "因此，催产素似乎会强化偏见，而不是像以前认为的那样促进普遍的善意。",
+      "structure": [
+        {"text": "it appears that oxytocin strengthens biases", "role": "main_clause", "level": 1},
+        {"text": "that oxytocin strengthens biases", "role": "noun_clause", "level": 2},
+        {"text": "rather than promoting general goodwill", "role": "prepositional_phrase", "level": 2},
+        {"text": "as was previously thought", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "So 表示这是对前文研究的总结推论。",
+        "it appears that... 是谨慎表达，表示“似乎”。",
+        "rather than 引出与 strengthens biases 相反的旧观点。",
+        "as was previously thought 指之前认为催产素会促进普遍善意。"
+      ],
+      "expressions": [
+        {"text": "it appears that", "meaning_zh": "似乎"},
+        {"text": "strengthen biases", "meaning_zh": "强化偏见"},
+        {"text": "general goodwill", "meaning_zh": "普遍善意"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "There were signs of these subtleties from the start.",
+      "translation": "这些微妙差异从一开始就有迹象。",
+      "structure": [
+        {"text": "There were signs of these subtleties", "role": "main_clause", "level": 1},
+        {"text": "of these subtleties", "role": "prepositional_phrase", "level": 2},
+        {"text": "from the start", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "There were 引出存在的信息。",
+        "these subtleties 指催产素效果受人和情境影响的复杂性。",
+        "from the start 表示这种复杂性并非后来才出现。"
+      ],
+      "expressions": [
+        {"text": "signs of", "meaning_zh": "……的迹象"},
+        {"text": "from the start", "meaning_zh": "从一开始"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "Bartz has recently shown that in almost half of the existing research results, oxytocin influenced only certain individuals or in certain circumstances.",
+      "translation": "巴茨最近表明，在现有研究结果中，几乎有一半显示催产素只影响某些个体或只在某些情境下产生影响。",
+      "structure": [
+        {"text": "Bartz", "role": "subject", "level": 1},
+        {"text": "has recently shown that in almost half of the existing research results", "role": "verb_phrase", "level": 1},
+        {"text": "that in almost half of the existing research results, oxytocin influenced only certain individuals or in certain circumstances", "role": "noun_clause", "level": 2},
+        {"text": "in almost half of the existing research results", "role": "prepositional_phrase", "level": 3},
+        {"text": "only certain individuals or in certain circumstances", "role": "coordinated_object", "level": 3}
+      ],
+      "difficult_points": [
+        "has recently shown 使用现在完成时，强调近期研究对当前理解的影响。",
+        "that 引导 shown 的宾语从句。",
+        "in almost half... 是从句中的范围状语。",
+        "only certain individuals or in certain circumstances 强调催产素作用并非普遍。"
+      ],
+      "expressions": [
+        {"text": "existing research results", "meaning_zh": "现有研究结果"},
+        {"text": "certain individuals", "meaning_zh": "某些个体"},
+        {"text": "in certain circumstances", "meaning_zh": "在某些情境下"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "Where once researchers took no notice of such findings, now a more nuanced understanding of oxytocin's effects is propelling investigations down new lines.",
+      "translation": "过去研究人员曾不关注这类发现，而现在，对催产素作用更细致的理解正在推动研究走向新的方向。",
+      "structure": [
+        {"text": "Where once researchers took no notice of such findings", "role": "adverbial_clause", "level": 2},
+        {"text": "now a more nuanced understanding of oxytocin's effects", "role": "subject", "level": 1},
+        {"text": "is propelling investigations down new lines", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Where once... now... 形成过去与现在的对比。",
+        "took no notice of 表示过去研究者忽视这些发现。",
+        "a more nuanced understanding 指更能体现复杂差异的理解。",
+        "is propelling... 使用现在进行时，强调这种理解正在推动新研究。"
+      ],
+      "expressions": [
+        {"text": "take no notice of", "meaning_zh": "不注意；忽视"},
+        {"text": "a more nuanced understanding", "meaning_zh": "更细致的理解"},
+        {"text": "propel investigations down new lines", "meaning_zh": "推动研究走向新方向"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "To Bartz, the key to understanding what the hormone does lies in pinpointing its core function rather than in cataloguing its seemingly endless effects.",
+      "translation": "在巴茨看来，理解这种激素作用的关键在于确定其核心功能，而不是罗列它似乎无穷无尽的效果。",
+      "structure": [
+        {"text": "To Bartz", "role": "prepositional_phrase", "level": 2},
+        {"text": "the key to understanding what the hormone does", "role": "subject", "level": 1},
+        {"text": "what the hormone does", "role": "noun_clause", "level": 2},
+        {"text": "lies in pinpointing its core function", "role": "verb_phrase", "level": 1},
+        {"text": "rather than in cataloguing its seemingly endless effects", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "To Bartz 表示这是 Bartz 的观点。",
+        "the key to understanding... 是主语，what 从句作 understanding 的宾语。",
+        "lies in 后接动名词 pinpointing，表示关键所在。",
+        "rather than in cataloguing... 与 pinpointing 对比，强调不应只罗列效果。"
+      ],
+      "expressions": [
+        {"text": "the key to understanding", "meaning_zh": "理解……的关键"},
+        {"text": "pinpoint its core function", "meaning_zh": "确定其核心功能"},
+        {"text": "seemingly endless effects", "meaning_zh": "似乎无穷无尽的效果"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "There are several hypotheses which are not mutually exclusive.",
+      "translation": "有几种假说，它们并不相互排斥。",
+      "structure": [
+        {"text": "There are several hypotheses", "role": "main_clause", "level": 1},
+        {"text": "which are not mutually exclusive", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "There are 引出接下来要列举的几种解释。",
+        "which 引导定语从句，修饰 hypotheses。",
+        "not mutually exclusive 表示这些假说可以同时成立。"
+      ],
+      "expressions": [
+        {"text": "several hypotheses", "meaning_zh": "几种假说"},
+        {"text": "mutually exclusive", "meaning_zh": "相互排斥的"}
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 32,
+      "sentence": "Oxytocin could help to reduce anxiety and fear.",
+      "translation": "催产素可能有助于减少焦虑和恐惧。",
+      "structure": [
+        {"text": "Oxytocin", "role": "subject", "level": 1},
+        {"text": "could help to reduce anxiety and fear", "role": "verb_phrase", "level": 1},
+        {"text": "to reduce anxiety and fear", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "could 表示可能性，而不是确定结论。",
+        "help to reduce 表示有助于降低某种状态。",
+        "anxiety and fear 是并列宾语，概括负面情绪。"
+      ],
+      "expressions": [
+        {"text": "help to reduce", "meaning_zh": "有助于减少"},
+        {"text": "anxiety and fear", "meaning_zh": "焦虑和恐惧"}
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "Or it could simply motivate people to seek out social connections.",
+      "translation": "或者，它可能只是激励人们去寻求社会联系。",
+      "structure": [
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "could simply motivate people to seek out social connections", "role": "verb_phrase", "level": 1},
+        {"text": "to seek out social connections", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Or 表示这是另一种假说。",
+        "could simply 表示该解释可能更基础、更简单。",
+        "motivate people to do 使用 motivate + 宾语 + 不定式结构。",
+        "seek out social connections 指主动寻找社交联系。"
+      ],
+      "expressions": [
+        {"text": "motivate people to", "meaning_zh": "激励人们去"},
+        {"text": "seek out", "meaning_zh": "寻找；主动寻求"},
+        {"text": "social connections", "meaning_zh": "社会联系"}
+      ]
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "She believes that oxytocin acts as a chemical spotlight that shines on social clues - a shift in posture, a flicker of the eyes, a dip in the voice - making people more attuned to their social environment.",
+      "translation": "她认为，催产素就像一种化学聚光灯，照亮社交线索——姿势的变化、眼神的一闪、声音的下沉——使人们更能察觉自己的社交环境。",
+      "structure": [
+        {"text": "She", "role": "subject", "level": 1},
+        {"text": "believes that oxytocin acts as a chemical spotlight", "role": "verb_phrase", "level": 1},
+        {"text": "that oxytocin acts as a chemical spotlight that shines on social clues", "role": "noun_clause", "level": 2},
+        {"text": "that shines on social clues", "role": "relative_clause", "level": 3},
+        {"text": "a shift in posture, a flicker of the eyes, a dip in the voice", "role": "apposition", "level": 3},
+        {"text": "making people more attuned to their social environment", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "acts as a chemical spotlight 是比喻，说明催产素会突出社交线索。",
+        "that shines on social clues 修饰 spotlight。",
+        "破折号中的三个短语具体举例说明 social clues。",
+        "making people more attuned... 是结果状语，说明聚焦线索带来的效果。"
+      ],
+      "expressions": [
+        {"text": "acts as", "meaning_zh": "充当；起……作用"},
+        {"text": "social clues", "meaning_zh": "社交线索"},
+        {"text": "be attuned to", "meaning_zh": "敏锐感知；适应"}
+      ]
+    },
+    {
+      "id": "E-09",
+      "paragraph_label": "E",
+      "sentence_index": 35,
+      "sentence": "This would explain why it makes us more likely to look others in the eye and improves our ability to identify emotions.",
+      "translation": "这可以解释为什么催产素会让我们更可能直视他人的眼睛，并提高我们识别情绪的能力。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "would explain", "role": "verb_phrase", "level": 1},
+        {"text": "why it makes us more likely to look others in the eye and improves our ability to identify emotions", "role": "noun_clause", "level": 2},
+        {"text": "makes us more likely to look others in the eye", "role": "verb_phrase", "level": 3},
+        {"text": "improves our ability to identify emotions", "role": "coordinated_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "This 指上一句的 chemical spotlight 解释。",
+        "why 引导 explain 的宾语从句，说明该解释能解释的现象。",
+        "makes 和 improves 是 why 从句中的并列谓语。",
+        "look others in the eye 是固定表达，表示直视他人眼睛。"
+      ],
+      "expressions": [
+        {"text": "make us more likely to", "meaning_zh": "使我们更可能"},
+        {"text": "look others in the eye", "meaning_zh": "直视他人的眼睛"},
+        {"text": "identify emotions", "meaning_zh": "识别情绪"}
+      ]
+    },
+    {
+      "id": "E-10",
+      "paragraph_label": "E",
+      "sentence_index": 36,
+      "sentence": "But it could also make things worse for people who are overly sensitive or prone to interpreting social cues in the worst light.",
+      "translation": "但对那些过度敏感或容易以最负面方式解读社交线索的人来说，它也可能让事情变得更糟。",
+      "structure": [
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "could also make things worse for people", "role": "verb_phrase", "level": 1},
+        {"text": "who are overly sensitive or prone to interpreting social cues in the worst light", "role": "relative_clause", "level": 2},
+        {"text": "prone to interpreting social cues in the worst light", "role": "adjective_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "But 引出 chemical spotlight 机制的负面可能。",
+        "make things worse 表示催产素可能加重问题。",
+        "who 引导定语从句，限定 people 的类型。",
+        "in the worst light 表示以最坏、最负面的方式理解。"
+      ],
+      "expressions": [
+        {"text": "make things worse", "meaning_zh": "让事情变得更糟"},
+        {"text": "be prone to", "meaning_zh": "容易……"},
+        {"text": "interpret social cues", "meaning_zh": "解读社交线索"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 37,
+      "sentence": "Perhaps we should not be surprised that the oxytocin story has become more perplexing.",
+      "translation": "也许我们不该对催产素的故事变得更加令人困惑感到惊讶。",
+      "structure": [
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "should not be surprised", "role": "verb_phrase", "level": 1},
+        {"text": "that the oxytocin story has become more perplexing", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Perhaps 表示作者提出一种较温和的判断。",
+        "should not be surprised 后接 that 从句，说明不应惊讶的内容。",
+        "the oxytocin story 指关于催产素作用的研究叙事。",
+        "more perplexing 表示随着研究深入，结论更复杂难解。"
+      ],
+      "expressions": [
+        {"text": "should not be surprised that", "meaning_zh": "不应对……感到惊讶"},
+        {"text": "become more perplexing", "meaning_zh": "变得更令人困惑"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 38,
+      "sentence": "The hormone is found in everything from octopuses to sheep, and its evolutionary roots stretch back half a billion years.",
+      "translation": "从章鱼到绵羊，各种生物体内都能发现这种激素，而它的进化根源可以追溯到五亿年前。",
+      "structure": [
+        {"text": "The hormone", "role": "subject", "level": 1},
+        {"text": "is found in everything from octopuses to sheep", "role": "verb_phrase", "level": 1},
+        {"text": "and its evolutionary roots stretch back half a billion years", "role": "coordinated_clause", "level": 1},
+        {"text": "from octopuses to sheep", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "is found in 是被动语态，表示这种激素存在于多种生物中。",
+        "from octopuses to sheep 表示范围很广。",
+        "its evolutionary roots 指这种激素的进化来源。",
+        "stretch back half a billion years 表示可追溯到非常久远的时间。"
+      ],
+      "expressions": [
+        {"text": "be found in", "meaning_zh": "存在于"},
+        {"text": "from ... to ...", "meaning_zh": "从……到……"},
+        {"text": "stretch back", "meaning_zh": "追溯到"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 39,
+      "sentence": "'It's a very simple and ancient molecule that has been co-opted for many different functions,' says Sue Carter at the University of Illinois, Chicago, USA.",
+      "translation": "美国芝加哥伊利诺伊大学的苏·卡特说：“它是一种非常简单而古老的分子，已经被借用来承担许多不同功能。”",
+      "structure": [
+        {"text": "'It's a very simple and ancient molecule that has been co-opted for many different functions,'", "role": "direct_speech", "level": 1},
+        {"text": "It", "role": "subject", "level": 2},
+        {"text": "It's a very simple and ancient molecule", "role": "verb_phrase", "level": 2},
+        {"text": "that has been co-opted for many different functions", "role": "relative_clause", "level": 3},
+        {"text": "says Sue Carter at the University of Illinois, Chicago, USA", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "引号内是直接引语，says Sue Carter... 是报道语。",
+        "that 引导定语从句，修饰 molecule。",
+        "has been co-opted 是现在完成时被动语态，表示这个古老分子被不同系统借用。",
+        "for many different functions 表示承担多种功能。"
+      ],
+      "expressions": [
+        {"text": "ancient molecule", "meaning_zh": "古老分子"},
+        {"text": "be co-opted for", "meaning_zh": "被借用来承担"},
+        {"text": "many different functions", "meaning_zh": "许多不同功能"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 40,
+      "sentence": "'It affects primitive parts of the brain like the amygdala, so it's going to have many effects on just about everything.'",
+      "translation": "“它会影响大脑中像杏仁核这样的原始部位，因此它会对几乎所有事情产生许多影响。”",
+      "structure": [
+        {"text": "'It affects primitive parts of the brain like the amygdala, so it's going to have many effects on just about everything.'", "role": "direct_speech", "level": 1},
+        {"text": "It affects primitive parts of the brain like the amygdala", "role": "main_clause", "level": 2},
+        {"text": "so it's going to have many effects on just about everything", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "本句延续 Sue Carter 的直接引语。",
+        "like the amygdala 举例说明 primitive parts of the brain。",
+        "so 引出因果关系：影响原始脑区，因此会产生广泛影响。",
+        "just about everything 是夸张表达，强调影响范围很广。"
+      ],
+      "expressions": [
+        {"text": "primitive parts of the brain", "meaning_zh": "大脑的原始部位"},
+        {"text": "have many effects on", "meaning_zh": "对……有许多影响"},
+        {"text": "just about everything", "meaning_zh": "几乎所有事情"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 41,
+      "sentence": "Bartz agrees.",
+      "translation": "巴茨对此表示赞同。",
+      "structure": [
+        {"text": "Bartz", "role": "subject", "level": 1},
+        {"text": "agrees", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "本句简短承接前一位研究者 Sue Carter 的观点。",
+        "agrees 表示 Bartz 对催产素作用复杂性的解释持相同看法。"
+      ],
+      "expressions": [
+        {"text": "agree", "meaning_zh": "同意；赞同"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 42,
+      "sentence": "'Oxytocin probably does some very basic things, but once you add our higher-order thinking and social situations, these basic processes could manifest in different ways depending on individual differences and context.'",
+      "translation": "“催产素可能做的是一些非常基础的事情，但一旦加入我们的高级思维和社会情境，这些基本过程就可能因个体差异和语境不同而以不同方式表现出来。”",
+      "structure": [
+        {"text": "'Oxytocin probably does some very basic things, but once you add our higher-order thinking and social situations, these basic processes could manifest in different ways depending on individual differences and context.'", "role": "direct_speech", "level": 1},
+        {"text": "Oxytocin probably does some very basic things", "role": "main_clause", "level": 2},
+        {"text": "but once you add our higher-order thinking and social situations", "role": "coordinated_clause", "level": 2},
+        {"text": "once you add our higher-order thinking and social situations", "role": "adverbial_clause", "level": 3},
+        {"text": "these basic processes could manifest in different ways depending on individual differences and context", "role": "main_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "本句是 Bartz 的直接引语，概括全文关于复杂性的解释。",
+        "once 引导时间或条件状语从句，表示一旦加入高级思维和社会情境。",
+        "these basic processes 回指催产素所做的 very basic things。",
+        "depending on individual differences and context 说明同一基础过程会因个体和语境不同而表现不同。"
+      ],
+      "expressions": [
+        {"text": "higher-order thinking", "meaning_zh": "高级思维"},
+        {"text": "manifest in different ways", "meaning_zh": "以不同方式表现出来"},
+        {"text": "individual differences and context", "meaning_zh": "个体差异和语境"}
+      ]
+    }
+  ]
+}

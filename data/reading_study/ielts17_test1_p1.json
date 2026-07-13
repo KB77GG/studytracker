@@ -1,0 +1,1033 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts17_test1_reading",
+  "passage_id": "ielts17_test1_p1",
+  "passage_title": "The development of the London underground railway",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "In the first half of the 1800s, London's population grew at an astonishing rate, and the central area became increasingly congested.",
+      "translation": "19世纪上半叶，伦敦人口以惊人的速度增长，市中心也变得越来越拥挤。",
+      "structure": [
+        {"text": "In the first half of the 1800s", "role": "prepositional_phrase", "level": 1},
+        {"text": "London's population grew at an astonishing rate", "role": "main_clause", "level": 1},
+        {"text": "and the central area became increasingly congested", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "句首时间状语限定了伦敦地下铁路问题产生的历史背景。",
+        "and 连接两个并列变化：人口增长和中心区拥堵加剧。",
+        "increasingly 表示程度逐渐上升，强调拥堵是一个发展过程。"
+      ],
+      "expressions": [
+        {"text": "at an astonishing rate", "meaning_zh": "以惊人的速度"},
+        {"text": "increasingly congested", "meaning_zh": "越来越拥挤"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "In addition, the expansion of the overground railway network resulted in more and more passengers arriving in the capital.",
+      "translation": "此外，地上铁路网络的扩张导致越来越多的乘客抵达首都。",
+      "structure": [
+        {"text": "In addition", "role": "discourse_marker", "level": 1},
+        {"text": "the expansion of the overground railway network", "role": "subject", "level": 1},
+        {"text": "resulted in more and more passengers arriving in the capital", "role": "verb_phrase", "level": 1},
+        {"text": "arriving in the capital", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "In addition 表示这一句是在上一句原因之外继续补充。",
+        "主语核心是 expansion，不是 railway network。",
+        "arriving in the capital 是现在分词短语，修饰 passengers。"
+      ],
+      "expressions": [
+        {"text": "result in", "meaning_zh": "导致"},
+        {"text": "more and more", "meaning_zh": "越来越多"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "However, in 1846, a Royal Commission decided that the railways should not be allowed to enter the City, the capital's historic and business centre.",
+      "translation": "然而，1846年，一个皇家委员会决定不应允许铁路进入伦敦城，也就是首都的历史和商业中心。",
+      "structure": [
+        {"text": "However", "role": "discourse_marker", "level": 1},
+        {"text": "in 1846", "role": "prepositional_phrase", "level": 1},
+        {"text": "a Royal Commission decided", "role": "main_clause", "level": 1},
+        {"text": "that the railways should not be allowed to enter the City", "role": "object_clause", "level": 2},
+        {"text": "the capital's historic and business centre", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "However 表示这一决定与铁路扩张带来的需求形成转折。",
+        "that 引导宾语从句，说明委员会决定的具体内容。",
+        "should not be allowed 是被动结构，强调铁路被禁止进入。",
+        "the capital's historic and business centre 是 the City 的同位语。"
+      ],
+      "expressions": [
+        {"text": "be allowed to", "meaning_zh": "被允许做……"},
+        {"text": "historic and business centre", "meaning_zh": "历史和商业中心"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "The result was that the overground railway stations formed a ring around the City.",
+      "translation": "结果是，地上铁路车站在伦敦城周围形成了一圈。",
+      "structure": [
+        {"text": "The result", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "that the overground railway stations formed a ring around the City", "role": "complement_clause", "level": 2},
+        {"text": "around the City", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "The result 回指上一句铁路不能进入伦敦城的决定。",
+        "that 引导表语从句，解释结果是什么。",
+        "formed a ring around the City 表示车站分布在城外一圈。"
+      ],
+      "expressions": [
+        {"text": "The result was that", "meaning_zh": "结果是"},
+        {"text": "form a ring around", "meaning_zh": "在……周围形成一圈"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "The area within consisted of poorly built, overcrowded slums and the streets were full of horse-drawn traffic.",
+      "translation": "这圈以内的区域由建造质量差、过度拥挤的贫民窟组成，街道上也挤满了马拉交通工具。",
+      "structure": [
+        {"text": "The area within consisted of poorly built, overcrowded slums", "role": "main_clause", "level": 1},
+        {"text": "poorly built, overcrowded slums", "role": "object", "level": 2},
+        {"text": "and the streets were full of horse-drawn traffic", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "within 指前一句 ring around the City 以内的区域。",
+        "poorly built 和 overcrowded 并列修饰 slums。",
+        "and 连接两个并列事实：居住环境差和街道交通拥堵。"
+      ],
+      "expressions": [
+        {"text": "consist of", "meaning_zh": "由……组成"},
+        {"text": "be full of", "meaning_zh": "充满……"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "Crossing the City became a nightmare.",
+      "translation": "穿过伦敦城变成了一场噩梦。",
+      "structure": [
+        {"text": "Crossing the City", "role": "gerund_subject", "level": 1},
+        {"text": "became", "role": "verb_phrase", "level": 1},
+        {"text": "a nightmare", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "Crossing the City 是动名词短语作主语。",
+        "became a nightmare 是比喻表达，说明通行困难非常严重。",
+        "the City 指伦敦城这一特定中心区域。"
+      ],
+      "expressions": [
+        {"text": "become a nightmare", "meaning_zh": "变成一场噩梦"}
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "It could take an hour and a half to travel 8 km by horse-drawn carriage or bus.",
+      "translation": "乘坐马车或公共马车行进8公里可能需要一个半小时。",
+      "structure": [
+        {"text": "It could take an hour and a half", "role": "main_clause", "level": 1},
+        {"text": "to travel 8 km by horse-drawn carriage or bus", "role": "infinitive_phrase", "level": 2},
+        {"text": "by horse-drawn carriage or bus", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的内容是不定式短语 to travel 8 km。",
+        "could 表示可能性或通常情况，而不是一次特定行程。",
+        "by horse-drawn carriage or bus 说明当时的交通方式。"
+      ],
+      "expressions": [
+        {"text": "It could take", "meaning_zh": "可能需要"},
+        {"text": "an hour and a half", "meaning_zh": "一个半小时"}
+      ]
+    },
+    {
+      "id": "A-08",
+      "paragraph_label": "A",
+      "sentence_index": 8,
+      "sentence": "Numerous schemes were proposed to resolve these problems, but few succeeded.",
+      "translation": "人们提出了许多方案来解决这些问题，但成功的寥寥无几。",
+      "structure": [
+        {"text": "Numerous schemes were proposed", "role": "main_clause", "level": 1},
+        {"text": "to resolve these problems", "role": "infinitive_phrase", "level": 2},
+        {"text": "but few succeeded", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "were proposed 是被动语态，强调方案被提出这一事实。",
+        "to resolve these problems 表示提出方案的目的。",
+        "but few succeeded 与 Numerous schemes 形成数量上的反差。"
+      ],
+      "expressions": [
+        {"text": "resolve these problems", "meaning_zh": "解决这些问题"},
+        {"text": "few succeeded", "meaning_zh": "很少成功"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Amongst the most vocal advocates for a solution to London's traffic problems was Charles Pearson, who worked as a solicitor for the City of London.",
+      "translation": "在最积极主张解决伦敦交通问题的人中，有一位是查尔斯·皮尔逊，他曾担任伦敦市的律师。",
+      "structure": [
+        {"text": "Amongst the most vocal advocates for a solution to London's traffic problems", "role": "prepositional_phrase", "level": 1},
+        {"text": "was Charles Pearson", "role": "inverted_main_clause", "level": 1},
+        {"text": "who worked as a solicitor for the City of London", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "句子使用倒装，真正的主语 Charles Pearson 放在 was 后面。",
+        "Amongst 引出的介词短语突出他属于最积极的倡导者之一。",
+        "who 引导非限制性定语从句，补充说明 Pearson 的职业身份。"
+      ],
+      "expressions": [
+        {"text": "vocal advocates for", "meaning_zh": "积极倡导……的人"},
+        {"text": "work as", "meaning_zh": "担任；从事"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "He saw both social and economic advantages in building an underground railway that would link the overground railway stations together and clear London slums at the same time.",
+      "translation": "他认为修建一条地下铁路既有社会优势，也有经济优势；这条铁路可以把地上铁路车站连接起来，同时清理伦敦的贫民窟。",
+      "structure": [
+        {"text": "He saw both social and economic advantages", "role": "main_clause", "level": 1},
+        {"text": "in building an underground railway", "role": "prepositional_phrase", "level": 2},
+        {"text": "that would link the overground railway stations together and clear London slums at the same time", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "both ... and ... 强调地下铁路同时具备社会和经济两方面好处。",
+        "in building an underground railway 说明这些优势来自修建地下铁路。",
+        "that 引导定语从句，修饰 an underground railway。",
+        "link ... and clear ... 是地下铁路预期带来的两个并列效果。"
+      ],
+      "expressions": [
+        {"text": "social and economic advantages", "meaning_zh": "社会和经济优势"},
+        {"text": "at the same time", "meaning_zh": "同时"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "His idea was to relocate the poor workers who lived in the inner-city slums to newly constructed suburbs, and to provide cheap rail travel for them to get to work.",
+      "translation": "他的想法是把住在内城区贫民窟的贫困工人迁到新建的郊区，并为他们提供廉价铁路交通，让他们能够上班。",
+      "structure": [
+        {"text": "His idea was", "role": "main_clause", "level": 1},
+        {"text": "to relocate the poor workers who lived in the inner-city slums to newly constructed suburbs", "role": "infinitive_phrase", "level": 2},
+        {"text": "who lived in the inner-city slums", "role": "relative_clause", "level": 3},
+        {"text": "and to provide cheap rail travel for them to get to work", "role": "coordinate_infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "was 后面接两个并列不定式，说明 Pearson 想法的两个部分。",
+        "who lived in the inner-city slums 修饰 the poor workers。",
+        "newly constructed suburbs 是“新建的郊区”，不是已经长期存在的郊区。",
+        "for them to get to work 表示提供廉价铁路出行的目的。"
+      ],
+      "expressions": [
+        {"text": "relocate", "meaning_zh": "重新安置；迁移"},
+        {"text": "newly constructed", "meaning_zh": "新建的"},
+        {"text": "get to work", "meaning_zh": "去上班"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "Pearson's ideas gained support amongst some businessmen and in 1851 he submitted a plan to Parliament.",
+      "translation": "皮尔逊的想法获得了一些商人的支持，并且在1851年他向议会提交了一项计划。",
+      "structure": [
+        {"text": "Pearson's ideas gained support amongst some businessmen", "role": "main_clause", "level": 1},
+        {"text": "and in 1851 he submitted a plan to Parliament", "role": "coordinate_clause", "level": 1},
+        {"text": "to Parliament", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "and 连接两个按时间推进的事件：获得支持和提交计划。",
+        "amongst some businessmen 说明支持来源有限但重要。",
+        "submitted a plan to Parliament 表示该方案进入正式政治程序。"
+      ],
+      "expressions": [
+        {"text": "gain support", "meaning_zh": "获得支持"},
+        {"text": "submit a plan", "meaning_zh": "提交计划"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "It was rejected, but coincided with a proposal from another group for an underground connecting line, which Parliament passed.",
+      "translation": "该计划被否决了，但它恰好与另一个团体提出的地下连接线方案同时出现，而议会通过了那个方案。",
+      "structure": [
+        {"text": "It was rejected", "role": "main_clause", "level": 1},
+        {"text": "but coincided with a proposal from another group for an underground connecting line", "role": "coordinate_clause", "level": 1},
+        {"text": "which Parliament passed", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It 指代 Pearson 提交给议会的计划。",
+        "was rejected 是被动语态，说明该计划没有被采纳。",
+        "but 后面的 coincided with 表示它与另一个方案在时间上相遇。",
+        "which 指代 a proposal，说明议会通过的是另一个团体的方案。"
+      ],
+      "expressions": [
+        {"text": "coincide with", "meaning_zh": "与……同时发生；相吻合"},
+        {"text": "connecting line", "meaning_zh": "连接线"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "The two groups merged and established the Metropolitan Railway Company in August 1854.",
+      "translation": "这两个团体合并，并于1854年8月成立了大都会铁路公司。",
+      "structure": [
+        {"text": "The two groups", "role": "subject", "level": 1},
+        {"text": "merged and established the Metropolitan Railway Company", "role": "verb_phrase", "level": 1},
+        {"text": "in August 1854", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "The two groups 指上一段中的 Pearson 一方和另一个方案团体。",
+        "merged and established 是并列谓语，表示先合并再成立公司。",
+        "in August 1854 标明公司成立的具体时间。"
+      ],
+      "expressions": [
+        {"text": "merge", "meaning_zh": "合并"},
+        {"text": "establish a company", "meaning_zh": "成立公司"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "The company's plan was to construct an underground railway line from the Great Western Railway's (GWR) station at Paddington to the edge of the City at Farringdon Street – a distance of almost 5 km.",
+      "translation": "该公司的计划是修建一条地下铁路线，从位于帕丁顿的大西部铁路车站通往伦敦城边缘的法灵顿街，全程将近5公里。",
+      "structure": [
+        {"text": "The company's plan was", "role": "main_clause", "level": 1},
+        {"text": "to construct an underground railway line", "role": "infinitive_phrase", "level": 2},
+        {"text": "from the Great Western Railway's (GWR) station at Paddington to the edge of the City at Farringdon Street", "role": "prepositional_phrase", "level": 3},
+        {"text": "a distance of almost 5 km", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "was 后接不定式作表语，说明公司计划的内容。",
+        "from ... to ... 明确线路起点和终点。",
+        "破折号后的 a distance of almost 5 km 补充说明线路长度。",
+        "GWR 是 Great Western Railway 的缩写，括号中提供简称。"
+      ],
+      "expressions": [
+        {"text": "construct an underground railway line", "meaning_zh": "修建一条地下铁路线"},
+        {"text": "a distance of almost", "meaning_zh": "距离将近……"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "The organisation had difficulty in raising the funding for such a radical and expensive scheme, not least because of the critical articles printed by the press.",
+      "translation": "这个组织在为这样一个激进且昂贵的方案筹集资金方面遇到了困难，尤其是因为媒体发表了批评性文章。",
+      "structure": [
+        {"text": "The organisation had difficulty", "role": "main_clause", "level": 1},
+        {"text": "in raising the funding for such a radical and expensive scheme", "role": "prepositional_phrase", "level": 2},
+        {"text": "not least because of the critical articles printed by the press", "role": "prepositional_phrase", "level": 1},
+        {"text": "printed by the press", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "had difficulty in doing 表示“做某事有困难”。",
+        "such a radical and expensive scheme 解释筹资困难的方案性质。",
+        "not least because of 表示原因很多，其中媒体批评尤其重要。",
+        "printed by the press 是过去分词短语，修饰 critical articles。"
+      ],
+      "expressions": [
+        {"text": "have difficulty in", "meaning_zh": "在……方面有困难"},
+        {"text": "raise the funding", "meaning_zh": "筹集资金"},
+        {"text": "not least because of", "meaning_zh": "尤其因为"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Objectors argued that the tunnels would collapse under the weight of traffic overhead, buildings would be shaken and passengers would be poisoned by the emissions from the train engines.",
+      "translation": "反对者声称，隧道会在头顶交通的重量下坍塌，建筑物会被震动，乘客会被火车发动机排放的废气毒害。",
+      "structure": [
+        {"text": "Objectors argued", "role": "main_clause", "level": 1},
+        {"text": "that the tunnels would collapse under the weight of traffic overhead, buildings would be shaken and passengers would be poisoned by the emissions from the train engines", "role": "object_clause", "level": 2},
+        {"text": "under the weight of traffic overhead", "role": "prepositional_phrase", "level": 3},
+        {"text": "by the emissions from the train engines", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，列出反对者提出的多个风险。",
+        "would collapse、would be shaken、would be poisoned 是并列预测。",
+        "traffic overhead 指隧道上方的地面交通。",
+        "by the emissions from the train engines 说明乘客被毒害的来源。"
+      ],
+      "expressions": [
+        {"text": "under the weight of", "meaning_zh": "在……重量之下"},
+        {"text": "be poisoned by", "meaning_zh": "被……毒害"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "However, Pearson and his partners persisted.",
+      "translation": "然而，皮尔逊和他的合伙人坚持了下来。",
+      "structure": [
+        {"text": "However", "role": "discourse_marker", "level": 1},
+        {"text": "Pearson and his partners", "role": "subject", "level": 1},
+        {"text": "persisted", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "However 表明他们的态度与反对者的批评形成转折。",
+        "Pearson and his partners 是并列主语。",
+        "persisted 表示他们没有因批评和筹资困难而放弃。"
+      ],
+      "expressions": [
+        {"text": "persist", "meaning_zh": "坚持；坚持下去"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "The GWR, aware that the new line would finally enable them to run trains into the heart of the City, invested almost £250,000 in the scheme.",
+      "translation": "大西部铁路公司意识到新线路最终将使他们能够把火车开进伦敦城中心，于是向该方案投资了近25万英镑。",
+      "structure": [
+        {"text": "The GWR", "role": "subject", "level": 1},
+        {"text": "aware that the new line would finally enable them to run trains into the heart of the City", "role": "adjectival_phrase", "level": 2},
+        {"text": "that the new line would finally enable them to run trains into the heart of the City", "role": "content_clause", "level": 3},
+        {"text": "invested almost £250,000 in the scheme", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "aware that ... 是插入性形容词短语，解释 GWR 投资的原因。",
+        "enable them to run trains into ... 表示新线带来的能力。",
+        "the heart of the City 指伦敦城的核心区域。",
+        "almost £250,000 表示投资额接近25万英镑。"
+      ],
+      "expressions": [
+        {"text": "enable them to", "meaning_zh": "使他们能够"},
+        {"text": "the heart of", "meaning_zh": "……的中心"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "Eventually, over a five-year period, £1m was raised.",
+      "translation": "最终，在五年时间里筹集到了100万英镑。",
+      "structure": [
+        {"text": "Eventually", "role": "adverbial", "level": 1},
+        {"text": "over a five-year period", "role": "prepositional_phrase", "level": 1},
+        {"text": "£1m was raised", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Eventually 表示经过努力之后终于取得结果。",
+        "over a five-year period 说明筹资持续的时间跨度。",
+        "was raised 是被动语态，强调资金被筹集到。"
+      ],
+      "expressions": [
+        {"text": "over a five-year period", "meaning_zh": "在五年期间"},
+        {"text": "raise money", "meaning_zh": "筹钱"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "The chosen route ran beneath existing main roads to minimise the expense of demolishing buildings.",
+      "translation": "选定的路线位于现有主干道路下方，以尽量降低拆除建筑物的费用。",
+      "structure": [
+        {"text": "The chosen route", "role": "subject", "level": 1},
+        {"text": "ran beneath existing main roads", "role": "verb_phrase", "level": 1},
+        {"text": "to minimise the expense of demolishing buildings", "role": "infinitive_phrase", "level": 2},
+        {"text": "of demolishing buildings", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "chosen 是过去分词作定语，表示已经被选定的路线。",
+        "beneath existing main roads 说明线路尽量沿现有道路下方走。",
+        "to minimise ... 是目的状语，解释这样选线的经济原因。",
+        "demolishing buildings 是动名词短语，作 of 的宾语。"
+      ],
+      "expressions": [
+        {"text": "minimise the expense of", "meaning_zh": "尽量降低……费用"},
+        {"text": "existing main roads", "meaning_zh": "现有主干道"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "Originally scheduled to be completed in 21 months, the construction of the underground line took three years.",
+      "translation": "地下线路的建设原计划在21个月内完成，但实际用了三年。",
+      "structure": [
+        {"text": "Originally scheduled to be completed in 21 months", "role": "participial_phrase", "level": 1},
+        {"text": "the construction of the underground line", "role": "subject", "level": 1},
+        {"text": "took three years", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Originally scheduled ... 是过去分词短语，表示原定计划。",
+        "to be completed 是被动不定式，说明工程被完成的计划时间。",
+        "took three years 与 21 months 形成实际耗时和原计划的对比。"
+      ],
+      "expressions": [
+        {"text": "originally scheduled to", "meaning_zh": "原计划……"},
+        {"text": "take three years", "meaning_zh": "花费三年"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "It was built just below street level using a technique known as 'cut and cover'.",
+      "translation": "它建在街面正下方，采用一种称为“明挖回填”的技术。",
+      "structure": [
+        {"text": "It was built just below street level", "role": "main_clause", "level": 1},
+        {"text": "using a technique known as 'cut and cover'", "role": "participial_phrase", "level": 2},
+        {"text": "known as 'cut and cover'", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "It 指代地下线路。",
+        "was built 是被动语态，说明线路被建造的位置。",
+        "using ... 是现在分词短语，说明施工方法。",
+        "known as 'cut and cover' 修饰 technique，给出技术名称。"
+      ],
+      "expressions": [
+        {"text": "just below street level", "meaning_zh": "就在街面下方"},
+        {"text": "known as", "meaning_zh": "被称为"}
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "A trench about ten metres wide and six metres deep was dug, and the sides temporarily held up with timber beams.",
+      "translation": "先挖出一条约十米宽、六米深的沟槽，并用木梁临时支撑沟槽两侧。",
+      "structure": [
+        {"text": "A trench about ten metres wide and six metres deep was dug", "role": "main_clause", "level": 1},
+        {"text": "about ten metres wide and six metres deep", "role": "adjectival_phrase", "level": 2},
+        {"text": "and the sides temporarily held up with timber beams", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "about ten metres wide and six metres deep 后置修饰 A trench。",
+        "was dug 是被动语态，说明沟槽被挖出。",
+        "the sides temporarily held up 省略了 were，是与前半句并列的被动结构。",
+        "with timber beams 表示临时支撑所用的材料。"
+      ],
+      "expressions": [
+        {"text": "temporarily held up", "meaning_zh": "临时支撑"},
+        {"text": "timber beams", "meaning_zh": "木梁"}
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "Brick walls were then constructed, and finally a brick arch was added to create a tunnel.",
+      "translation": "随后建起砖墙，最后加上砖拱，从而形成隧道。",
+      "structure": [
+        {"text": "Brick walls were then constructed", "role": "main_clause", "level": 1},
+        {"text": "and finally a brick arch was added", "role": "coordinate_clause", "level": 1},
+        {"text": "to create a tunnel", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "then 和 finally 标示施工步骤的先后顺序。",
+        "were constructed 和 was added 都是被动语态，描述施工过程。",
+        "to create a tunnel 表示加上砖拱的目的或结果。"
+      ],
+      "expressions": [
+        {"text": "to create a tunnel", "meaning_zh": "以形成隧道"},
+        {"text": "finally", "meaning_zh": "最后"}
+      ]
+    },
+    {
+      "id": "D-08",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "A two-metre-deep layer of soil was laid on top of the tunnel and the road above rebuilt.",
+      "translation": "隧道顶部铺上一层两米深的土，上方的道路也被重建。",
+      "structure": [
+        {"text": "A two-metre-deep layer of soil was laid on top of the tunnel", "role": "main_clause", "level": 1},
+        {"text": "on top of the tunnel", "role": "prepositional_phrase", "level": 2},
+        {"text": "and the road above rebuilt", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "A two-metre-deep layer of soil 是复合形容词修饰 layer。",
+        "was laid 是被动语态，说明土层被铺设。",
+        "the road above rebuilt 省略了 was，与前半句形成并列被动结构。"
+      ],
+      "expressions": [
+        {"text": "on top of", "meaning_zh": "在……顶部"},
+        {"text": "the road above", "meaning_zh": "上方的道路"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "The Metropolitan line, which opened on 10 January 1863, was the world's first underground railway.",
+      "translation": "大都会线于1863年1月10日开通，是世界上第一条地下铁路。",
+      "structure": [
+        {"text": "The Metropolitan line", "role": "subject", "level": 1},
+        {"text": "which opened on 10 January 1863", "role": "relative_clause", "level": 2},
+        {"text": "was the world's first underground railway", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，补充开通日期。",
+        "主句谓语是 was，说明大都会线的历史地位。",
+        "the world's first underground railway 强调这是全球首条地下铁路。"
+      ],
+      "expressions": [
+        {"text": "the world's first", "meaning_zh": "世界上第一条"},
+        {"text": "opened on", "meaning_zh": "于……开通"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "On its first day, almost 40,000 passengers were carried between Paddington and Farringdon, the journey taking about 18 minutes.",
+      "translation": "开通首日，近4万名乘客在帕丁顿和法灵顿之间被运送，全程约18分钟。",
+      "structure": [
+        {"text": "On its first day", "role": "prepositional_phrase", "level": 1},
+        {"text": "almost 40,000 passengers were carried between Paddington and Farringdon", "role": "main_clause", "level": 1},
+        {"text": "the journey taking about 18 minutes", "role": "absolute_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "On its first day 指大都会线开通的第一天。",
+        "were carried 是被动语态，表示乘客被铁路运送。",
+        "the journey taking about 18 minutes 是独立主格结构，补充说明行程耗时。"
+      ],
+      "expressions": [
+        {"text": "almost 40,000 passengers", "meaning_zh": "近4万名乘客"},
+        {"text": "taking about 18 minutes", "meaning_zh": "耗时约18分钟"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "By the end of the Metropolitan's first year of operation, 9.5 million journeys had been made.",
+      "translation": "到大都会线运营第一年结束时，乘客出行次数已达到950万次。",
+      "structure": [
+        {"text": "By the end of the Metropolitan's first year of operation", "role": "prepositional_phrase", "level": 1},
+        {"text": "9.5 million journeys had been made", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "By the end of 表示截至某一时间点。",
+        "had been made 是过去完成时的被动语态，强调到该时间点已经完成的出行次数。",
+        "journeys 在这里指乘坐该线路的出行次数，而不是线路长度。"
+      ],
+      "expressions": [
+        {"text": "By the end of", "meaning_zh": "到……结束时"},
+        {"text": "first year of operation", "meaning_zh": "运营第一年"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "Even as the Metropolitan began operation, the first extensions to the line were being authorised; these were built over the next five years, reaching Moorgate in the east of London and Hammersmith in the west.",
+      "translation": "就在大都会线开始运营时，第一批线路延伸工程也获准建设；这些延伸线在接下来的五年里建成，通向伦敦东部的摩尔门和西部的哈默史密斯。",
+      "structure": [
+        {"text": "Even as the Metropolitan began operation", "role": "adverbial_clause", "level": 1},
+        {"text": "the first extensions to the line were being authorised", "role": "main_clause", "level": 1},
+        {"text": "these were built over the next five years", "role": "coordinate_clause", "level": 1},
+        {"text": "reaching Moorgate in the east of London and Hammersmith in the west", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Even as 表示“就在……的时候”，强调运营和扩建审批几乎同时发生。",
+        "were being authorised 是过去进行时被动语态，说明审批正在进行。",
+        "分号连接两个紧密相关的独立分句。",
+        "reaching ... 是现在分词短语，说明延伸线到达的地点。"
+      ],
+      "expressions": [
+        {"text": "began operation", "meaning_zh": "开始运营"},
+        {"text": "over the next five years", "meaning_zh": "在接下来的五年里"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "The original plan was to pull the trains with steam locomotives, using firebricks in the boilers to provide steam, but these engines were never introduced.",
+      "translation": "最初的计划是用蒸汽机车牵引列车，并在锅炉中使用耐火砖来提供蒸汽，但这些发动机最终从未投入使用。",
+      "structure": [
+        {"text": "The original plan was to pull the trains with steam locomotives", "role": "main_clause", "level": 1},
+        {"text": "using firebricks in the boilers to provide steam", "role": "participial_phrase", "level": 2},
+        {"text": "to provide steam", "role": "infinitive_phrase", "level": 3},
+        {"text": "but these engines were never introduced", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "was 后接不定式，说明原计划的具体做法。",
+        "using firebricks ... 是分词短语，补充蒸汽供应方式。",
+        "but 引出计划与实际结果的转折。",
+        "were never introduced 是被动语态，说明这些发动机并未投入使用。"
+      ],
+      "expressions": [
+        {"text": "The original plan was to", "meaning_zh": "最初计划是……"},
+        {"text": "provide steam", "meaning_zh": "提供蒸汽"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "Instead, the line used specially designed locomotives that were fitted with water tanks in which steam could be condensed.",
+      "translation": "相反，这条线路使用了专门设计的机车，机车配有水箱，蒸汽可以在水箱中冷凝。",
+      "structure": [
+        {"text": "Instead", "role": "discourse_marker", "level": 1},
+        {"text": "the line used specially designed locomotives", "role": "main_clause", "level": 1},
+        {"text": "that were fitted with water tanks", "role": "relative_clause", "level": 2},
+        {"text": "in which steam could be condensed", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "Instead 表示实际采用的方案取代了原计划。",
+        "specially designed 是过去分词短语作定语，说明机车是专门设计的。",
+        "that 修饰 locomotives，说明这些机车配有水箱。",
+        "in which 修饰 water tanks，说明蒸汽在水箱中冷凝。"
+      ],
+      "expressions": [
+        {"text": "specially designed", "meaning_zh": "专门设计的"},
+        {"text": "be fitted with", "meaning_zh": "配备有……"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "However, smoke and fumes remained a problem, even though ventilation shafts were added to the tunnels.",
+      "translation": "然而，烟雾和废气仍然是个问题，尽管隧道中增加了通风井。",
+      "structure": [
+        {"text": "However", "role": "discourse_marker", "level": 1},
+        {"text": "smoke and fumes remained a problem", "role": "main_clause", "level": 1},
+        {"text": "even though ventilation shafts were added to the tunnels", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "However 表示专门设计的机车并未完全解决问题。",
+        "remained a problem 表示问题仍然存在。",
+        "even though 引导让步状语从句，说明即使增加通风井也未解决烟雾问题。",
+        "were added 是被动语态，说明通风井被增设。"
+      ],
+      "expressions": [
+        {"text": "remain a problem", "meaning_zh": "仍然是问题"},
+        {"text": "even though", "meaning_zh": "尽管"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "Despite the extension of the underground railway, by the 1880s, congestion on London's streets had become worse.",
+      "translation": "尽管地下铁路有所延伸，到19世纪80年代，伦敦街道的拥堵已经变得更严重。",
+      "structure": [
+        {"text": "Despite the extension of the underground railway", "role": "prepositional_phrase", "level": 1},
+        {"text": "by the 1880s", "role": "prepositional_phrase", "level": 1},
+        {"text": "congestion on London's streets had become worse", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Despite 引导让步介词短语，表示地下铁路扩展并未解决拥堵。",
+        "by the 1880s 表示到19世纪80年代这一时间点。",
+        "had become worse 是过去完成时，强调到该时点已经恶化。"
+      ],
+      "expressions": [
+        {"text": "Despite", "meaning_zh": "尽管"},
+        {"text": "become worse", "meaning_zh": "变得更糟"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "The problem was partly that the existing underground lines formed a circuit around the centre of London and extended to the suburbs, but did not cross the capital's centre.",
+      "translation": "部分问题在于，现有的地铁线路只是在伦敦中心周围形成一圈，并延伸到郊区，却没有穿过首都中心。",
+      "structure": [
+        {"text": "The problem was partly", "role": "main_clause", "level": 1},
+        {"text": "that the existing underground lines formed a circuit around the centre of London and extended to the suburbs, but did not cross the capital's centre", "role": "complement_clause", "level": 2},
+        {"text": "formed a circuit around the centre of London and extended to the suburbs", "role": "compound_predicate", "level": 3},
+        {"text": "but did not cross the capital's centre", "role": "coordinate_predicate", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导表语从句，解释问题的一部分是什么。",
+        "formed 和 extended 是并列谓语，描述现有线路的范围。",
+        "but did not cross 与前面的环绕和延伸形成转折，指出关键缺陷。",
+        "the capital's centre 指伦敦中心，而不是郊区。"
+      ],
+      "expressions": [
+        {"text": "partly that", "meaning_zh": "部分原因是"},
+        {"text": "form a circuit around", "meaning_zh": "围绕……形成环线"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 36,
+      "sentence": "The 'cut and cover' method of construction was not an option in this part of the capital.",
+      "translation": "在首都的这一地区，“明挖回填”的施工方法并不可行。",
+      "structure": [
+        {"text": "The 'cut and cover' method of construction", "role": "subject", "level": 1},
+        {"text": "was not an option", "role": "verb_phrase", "level": 1},
+        {"text": "in this part of the capital", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "method of construction 说明 cut and cover 是一种施工方法。",
+        "was not an option 表示不可选择或不可行。",
+        "this part of the capital 指伦敦中心区域，那里不适合开挖街道。"
+      ],
+      "expressions": [
+        {"text": "not an option", "meaning_zh": "不可行；不是选择"},
+        {"text": "method of construction", "meaning_zh": "施工方法"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 37,
+      "sentence": "The only alternative was to tunnel deep underground.",
+      "translation": "唯一的替代办法是在地下深处开挖隧道。",
+      "structure": [
+        {"text": "The only alternative", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "to tunnel deep underground", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "The only alternative 强调除此之外没有其他可行方案。",
+        "to tunnel deep underground 是不定式作表语，说明替代方案内容。",
+        "deep underground 与前面的 cut and cover 形成施工深度上的对比。"
+      ],
+      "expressions": [
+        {"text": "the only alternative", "meaning_zh": "唯一的替代办法"},
+        {"text": "deep underground", "meaning_zh": "地下深处"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 38,
+      "sentence": "Although the technology to create these tunnels existed, steam locomotives could not be used in such a confined space.",
+      "translation": "虽然建造这些隧道的技术已经存在，但蒸汽机车无法在如此狭小的空间中使用。",
+      "structure": [
+        {"text": "Although the technology to create these tunnels existed", "role": "adverbial_clause", "level": 1},
+        {"text": "to create these tunnels", "role": "infinitive_phrase", "level": 2},
+        {"text": "steam locomotives could not be used in such a confined space", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Although 引导让步状语从句，说明技术存在并不代表问题解决。",
+        "to create these tunnels 修饰 technology，说明是什么技术。",
+        "could not be used 是被动结构，表示蒸汽机车不适合这种环境。",
+        "such a confined space 指深层隧道内狭小封闭的空间。"
+      ],
+      "expressions": [
+        {"text": "confined space", "meaning_zh": "狭小封闭空间"},
+        {"text": "could not be used", "meaning_zh": "无法被使用"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 39,
+      "sentence": "It wasn't until the development of a reliable electric motor, and a means of transferring power from the generator to a moving train, that the world's first deep-level electric railway, the City & South London, became possible.",
+      "translation": "直到可靠电动机的发展，以及把电力从发电机传输到行驶中列车的方法出现后，世界上第一条深层电气铁路——城市与南伦敦铁路——才成为可能。",
+      "structure": [
+        {"text": "It wasn't until the development of a reliable electric motor, and a means of transferring power from the generator to a moving train", "role": "cleft_clause", "level": 1},
+        {"text": "that the world's first deep-level electric railway, the City & South London, became possible", "role": "main_clause", "level": 1},
+        {"text": "of transferring power from the generator to a moving train", "role": "prepositional_phrase", "level": 2},
+        {"text": "the City & South London", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "It wasn't until ... that ... 是强调句型，强调深层电气铁路成为可能的前提。",
+        "the development of ... 和 a means of ... 是 until 后并列的两个条件。",
+        "transferring power from the generator to a moving train 说明供电方式的关键难题。",
+        "the City & South London 是 the world's first deep-level electric railway 的同位语。"
+      ],
+      "expressions": [
+        {"text": "It wasn't until ... that ...", "meaning_zh": "直到……才……"},
+        {"text": "a means of", "meaning_zh": "一种……的方法"},
+        {"text": "became possible", "meaning_zh": "成为可能"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 40,
+      "sentence": "The line opened in 1890, and ran from the City to Stockwell, south of the River Thames.",
+      "translation": "这条线路于1890年开通，从伦敦城延伸至泰晤士河南岸的斯托克韦尔。",
+      "structure": [
+        {"text": "The line opened in 1890", "role": "main_clause", "level": 1},
+        {"text": "and ran from the City to Stockwell", "role": "coordinate_clause", "level": 1},
+        {"text": "south of the River Thames", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "The line 指上一句的 City & South London。",
+        "opened 和 ran 是并列谓语，分别说明开通时间和线路走向。",
+        "south of the River Thames 补充说明 Stockwell 的位置。"
+      ],
+      "expressions": [
+        {"text": "run from ... to ...", "meaning_zh": "从……延伸到……"},
+        {"text": "opened in", "meaning_zh": "于……开通"}
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 41,
+      "sentence": "The trains were made up of three carriages and driven by electric engines.",
+      "translation": "这些列车由三节车厢组成，并由电动发动机驱动。",
+      "structure": [
+        {"text": "The trains", "role": "subject", "level": 1},
+        {"text": "were made up of three carriages", "role": "verb_phrase", "level": 1},
+        {"text": "and driven by electric engines", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "were made up of 是被动结构，表示列车由三节车厢组成。",
+        "driven by electric engines 省略了 were，与前半句并列。",
+        "electric engines 体现这条深层铁路区别于蒸汽铁路的动力方式。"
+      ],
+      "expressions": [
+        {"text": "be made up of", "meaning_zh": "由……组成"},
+        {"text": "driven by", "meaning_zh": "由……驱动"}
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 42,
+      "sentence": "The carriages were narrow and had tiny windows just below the roof because it was thought that passengers would not want to look out at the tunnel walls.",
+      "translation": "车厢很窄，并且在车顶下方只有很小的窗户，因为当时人们认为乘客不会想向外看隧道墙壁。",
+      "structure": [
+        {"text": "The carriages were narrow and had tiny windows just below the roof", "role": "main_clause", "level": 1},
+        {"text": "because it was thought that passengers would not want to look out at the tunnel walls", "role": "adverbial_clause", "level": 2},
+        {"text": "that passengers would not want to look out at the tunnel walls", "role": "subject_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "were narrow 和 had tiny windows 是并列谓语，描述车厢设计。",
+        "because 引导原因状语从句，解释小窗设计的原因。",
+        "it was thought that 是被动表达，表示当时人们普遍认为。",
+        "look out at the tunnel walls 表示向窗外看隧道墙。"
+      ],
+      "expressions": [
+        {"text": "it was thought that", "meaning_zh": "人们认为"},
+        {"text": "look out at", "meaning_zh": "向外看……"}
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 43,
+      "sentence": "The line was not without its problems, mainly caused by an unreliable power supply.",
+      "translation": "这条线路并非没有问题，这些问题主要由不可靠的电力供应造成。",
+      "structure": [
+        {"text": "The line was not without its problems", "role": "main_clause", "level": 1},
+        {"text": "mainly caused by an unreliable power supply", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "not without its problems 是双重否定表达，意思是“并非没有问题”。",
+        "mainly caused by ... 是过去分词短语，说明问题的主要原因。",
+        "unreliable power supply 指供电不稳定，是早期电气铁路的技术限制。"
+      ],
+      "expressions": [
+        {"text": "not without its problems", "meaning_zh": "并非没有问题"},
+        {"text": "unreliable power supply", "meaning_zh": "不可靠的电力供应"}
+      ]
+    },
+    {
+      "id": "H-07",
+      "paragraph_label": "H",
+      "sentence_index": 44,
+      "sentence": "Although the City & South London Railway was a great technical achievement, it did not make a profit.",
+      "translation": "尽管城市与南伦敦铁路是一项伟大的技术成就，但它并没有盈利。",
+      "structure": [
+        {"text": "Although the City & South London Railway was a great technical achievement", "role": "adverbial_clause", "level": 1},
+        {"text": "it did not make a profit", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Although 引导让步状语从句，承认其技术成就。",
+        "it 指代 the City & South London Railway。",
+        "did not make a profit 与 great technical achievement 形成技术成功和商业失败的对比。"
+      ],
+      "expressions": [
+        {"text": "technical achievement", "meaning_zh": "技术成就"},
+        {"text": "make a profit", "meaning_zh": "盈利"}
+      ]
+    },
+    {
+      "id": "H-08",
+      "paragraph_label": "H",
+      "sentence_index": 45,
+      "sentence": "Then, in 1900, the Central London Railway, known as the 'Tuppenny Tube', began operation using new electric locomotives.",
+      "translation": "随后，在1900年，被称为“两便士地铁”的中央伦敦铁路使用新型电力机车开始运营。",
+      "structure": [
+        {"text": "Then, in 1900", "role": "adverbial_phrase", "level": 1},
+        {"text": "the Central London Railway", "role": "subject", "level": 1},
+        {"text": "known as the 'Tuppenny Tube'", "role": "participial_phrase", "level": 2},
+        {"text": "began operation using new electric locomotives", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Then, in 1900 标明叙事推进到下一条线路。",
+        "known as the 'Tuppenny Tube' 是过去分词短语，说明 Central London Railway 的别称。",
+        "began operation 表示正式开始运营。",
+        "using new electric locomotives 说明其采用的新动力设备。"
+      ],
+      "expressions": [
+        {"text": "known as", "meaning_zh": "被称为"},
+        {"text": "began operation", "meaning_zh": "开始运营"}
+      ]
+    },
+    {
+      "id": "H-09",
+      "paragraph_label": "H",
+      "sentence_index": 46,
+      "sentence": "It was very popular and soon afterwards new railways and extensions were added to the growing tube network.",
+      "translation": "它非常受欢迎，不久之后，新的铁路和延伸线被加入不断扩展的地铁网络。",
+      "structure": [
+        {"text": "It was very popular", "role": "main_clause", "level": 1},
+        {"text": "and soon afterwards new railways and extensions were added to the growing tube network", "role": "coordinate_clause", "level": 1},
+        {"text": "to the growing tube network", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "It 指代上一句的 Central London Railway。",
+        "soon afterwards 表示新线路扩张很快跟随其后。",
+        "were added 是被动语态，说明新铁路和延伸线被纳入网络。",
+        "growing tube network 表示伦敦地铁网络正在扩大。"
+      ],
+      "expressions": [
+        {"text": "soon afterwards", "meaning_zh": "不久之后"},
+        {"text": "growing tube network", "meaning_zh": "不断扩展的地铁网络"}
+      ]
+    },
+    {
+      "id": "H-10",
+      "paragraph_label": "H",
+      "sentence_index": 47,
+      "sentence": "By 1907, the heart of today's Underground system was in place.",
+      "translation": "到1907年，如今伦敦地铁系统的核心已经成形。",
+      "structure": [
+        {"text": "By 1907", "role": "prepositional_phrase", "level": 1},
+        {"text": "the heart of today's Underground system", "role": "subject", "level": 1},
+        {"text": "was in place", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "By 1907 表示截至1907年这一时间点。",
+        "the heart of today's Underground system 指现代伦敦地铁系统的核心部分。",
+        "was in place 表示已经形成并就位，而不是刚开始规划。"
+      ],
+      "expressions": [
+        {"text": "the heart of", "meaning_zh": "……的核心"},
+        {"text": "be in place", "meaning_zh": "已就位；已形成"}
+      ]
+    }
+  ]
+}

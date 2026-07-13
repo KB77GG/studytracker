@@ -1,0 +1,641 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_5_test_59",
+  "passage_id": "reading_jijing_5_test_59_p1",
+  "passage_title": "The role of accidents in business",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "In 1894 Dr John Kellogg and his brother. Will, were supervising a hospital and health spa in Michigan.",
+      "translation": "1894年，约翰·凯洛格博士和他的弟弟威尔当时正在管理密歇根州的一家医院兼健康疗养中心。",
+      "structure": [
+        {"text": "In 1894", "role": "time_adverbial", "level": 1},
+        {"text": "Dr John Kellogg and his brother. Will", "role": "subject", "level": 1},
+        {"text": "were supervising", "role": "verb_phrase", "level": 1},
+        {"text": "a hospital and health spa", "role": "object", "level": 1},
+        {"text": "in Michigan", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["原文在 brother 后误用了句号，Will 实际是对 his brother 的同位说明。", "were supervising 使用过去进行时，交代当时持续进行的管理工作。"],
+      "expressions": [{"text": "health spa", "meaning_zh": "健康疗养中心"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "The patients were on a restricted diet.",
+      "translation": "病人们当时遵循严格受限的饮食。",
+      "structure": [
+        {"text": "The patients", "role": "subject", "level": 1},
+        {"text": "were", "role": "linking_verb", "level": 1},
+        {"text": "on a restricted diet", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["be on a diet 表示“遵循某种饮食安排”，不能按字面理解为“在饮食上”。", "restricted 是过去分词形容词，表示饮食的种类或数量受到限制。"],
+      "expressions": [{"text": "be on a restricted diet", "meaning_zh": "遵循限制性饮食"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "One day, the brothers left cooked wheat untended for more than 24 hours.",
+      "translation": "一天，兄弟俩把煮熟的小麦放着不管，超过了24小时。",
+      "structure": [
+        {"text": "One day", "role": "time_adverbial", "level": 1},
+        {"text": "the brothers", "role": "subject", "level": 1},
+        {"text": "left", "role": "verb", "level": 1},
+        {"text": "cooked wheat", "role": "object", "level": 1},
+        {"text": "untended", "role": "object_complement", "level": 1},
+        {"text": "for more than 24 hours", "role": "duration_adverbial", "level": 1}
+      ],
+      "difficult_points": ["leave＋宾语＋补语表示“使某物处于某种状态”，untended 补充说明小麦无人照看。", "cooked 和 untended 都是过去分词，但前者修饰 wheat，后者充当宾语补足语。"],
+      "expressions": [{"text": "leave something untended", "meaning_zh": "把某物放着无人照管"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "When they returned, they saw what they had done.",
+      "translation": "他们回来时，看到了自己造成的结果。",
+      "structure": [
+        {"text": "When they returned", "role": "adverbial_clause", "level": 1},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "saw", "role": "verb", "level": 1},
+        {"text": "what they had done", "role": "object_clause", "level": 1}
+      ],
+      "difficult_points": ["what they had done 是融合关系词 what 引导的宾语从句，意为“他们所做的事及其结果”。", "had done 使用过去完成时，表示把小麦放置不管发生在他们回来并看到结果之前。"],
+      "expressions": [{"text": "what they had done", "meaning_zh": "他们所做的事；他们造成的结果"}]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "It was no good to eat, but they decided to run the stale wheat through rollers, just to see how it would turn out.",
+      "translation": "这些小麦已经不能吃了，但他们决定把变质的小麦送进滚筒压一压，只想看看最后会变成什么样。",
+      "structure": [
+        {"text": "It was no good to eat", "role": "main_clause", "level": 1},
+        {"text": "but they decided", "role": "coordinate_clause", "level": 1},
+        {"text": "to run the stale wheat through rollers", "role": "infinitive_complement", "level": 2},
+        {"text": "just to see", "role": "purpose_adverbial", "level": 1},
+        {"text": "how it would turn out", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["run the stale wheat through rollers 表示让小麦通过滚筒加工，而不是“跑过滚筒”。", "just to see 是目的不定式，说明他们只是想观察结果。", "how it would turn out 是 see 的宾语从句，turn out 表示“最终呈现某种结果”。"],
+      "expressions": [{"text": "run something through", "meaning_zh": "使某物通过设备加工"}, {"text": "turn out", "meaning_zh": "最后变成；结果是"}]
+    },
+    {
+      "id": "A-06", "paragraph_label": "A", "sentence_index": 6,
+      "sentence": "Normally, the process produced long sheets, but they were surprised to discover that this time the rollers created flat flakes.",
+      "translation": "通常，这道工序会压出长片，但他们惊讶地发现，这一次滚筒压出了扁平的薄片。",
+      "structure": [
+        {"text": "Normally", "role": "sentence_adverbial", "level": 1},
+        {"text": "the process produced long sheets", "role": "main_clause", "level": 1},
+        {"text": "but they were surprised", "role": "coordinate_clause", "level": 1},
+        {"text": "to discover", "role": "infinitive_complement", "level": 2},
+        {"text": "that this time the rollers created flat flakes", "role": "object_clause", "level": 3}
+      ],
+      "difficult_points": ["but 连接通常结果与这次意外结果，构成鲜明对比。", "to discover 是 surprised 的原因或内容补足成分。", "that 从句是 discover 的宾语，this time 强调这次结果不同。"],
+      "expressions": [{"text": "be surprised to discover", "meaning_zh": "惊讶地发现"}]
+    },
+    {
+      "id": "A-07", "paragraph_label": "A", "sentence_index": 7,
+      "sentence": "They baked them, and then tried the same thing with corn.",
+      "translation": "他们把这些薄片烤熟，随后又用玉米进行了同样的尝试。",
+      "structure": [
+        {"text": "They baked them", "role": "main_clause", "level": 1},
+        {"text": "and then tried the same thing", "role": "coordinate_predicate", "level": 1},
+        {"text": "with corn", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["them 指代上一句意外压出的 flat flakes。", "tried the same thing with corn 表示把同样的加工方法用于玉米。"],
+      "expressions": [{"text": "try the same thing with", "meaning_zh": "用……进行同样的尝试"}]
+    },
+    {
+      "id": "A-08", "paragraph_label": "A", "sentence_index": 8,
+      "sentence": "From this accidental discovery came the cornflakes that generations have now been eating for breakfast.",
+      "translation": "正是这一偶然发现，催生了后来一代又一代人早餐食用的玉米片。",
+      "structure": [
+        {"text": "From this accidental discovery", "role": "fronted_adverbial", "level": 1},
+        {"text": "came", "role": "verb", "level": 1},
+        {"text": "the cornflakes", "role": "postposed_subject", "level": 1},
+        {"text": "that generations have now been eating for breakfast", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["地点或来源状语前置触发完全倒装，正常语序是 the cornflakes came from this accidental discovery。", "that 引导定语从句，修饰 cornflakes。", "have been eating 是现在完成进行时，强调这种早餐习惯跨越数代并延续至今。"],
+      "expressions": [{"text": "accidental discovery", "meaning_zh": "偶然发现"}, {"text": "for breakfast", "meaning_zh": "作为早餐"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "Accidents happen; there is nothing predictable and orderly about innovation.",
+      "translation": "意外总会发生；创新本身并没有什么可预测或井然有序之处。",
+      "structure": [
+        {"text": "Accidents happen", "role": "main_clause", "level": 1},
+        {"text": "there is nothing predictable and orderly about innovation", "role": "coordinate_clause", "level": 1},
+        {"text": "predictable and orderly", "role": "postpositive_attributive", "level": 2},
+        {"text": "about innovation", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": ["分号连接两个关系紧密的独立分句，后句解释意外为何属于创新的一部分。", "predictable and orderly 后置修饰 nothing；不定代词的形容词修饰语通常后置。"],
+      "expressions": [{"text": "Accidents happen", "meaning_zh": "意外总会发生"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "Nobel laureate Sir Alan Hodgkin, who discovered how nerve cells transmit electrical impulses between the skin and the brain, commented: 'I believe that the record of my published papers conveys an impression of directedness and planning which does not at all coincide with the actual sequence of events.'",
+      "translation": "诺贝尔奖得主艾伦·霍奇金爵士发现了神经细胞如何在皮肤与大脑之间传递电脉冲。他评论道：“我认为，我发表的论文记录给人一种研究有明确方向和周密计划的印象，而这与事情实际发生的先后顺序完全不符。”",
+      "structure": [
+        {"text": "Nobel laureate Sir Alan Hodgkin", "role": "subject", "level": 1},
+        {"text": "who discovered how nerve cells transmit electrical impulses between the skin and the brain", "role": "relative_clause", "level": 2},
+        {"text": "commented", "role": "verb", "level": 1},
+        {"text": "I believe", "role": "reported_main_clause", "level": 2},
+        {"text": "that the record of my published papers conveys an impression of directedness and planning", "role": "object_clause", "level": 3},
+        {"text": "which does not at all coincide with the actual sequence of events", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": ["who 引导非限制性定语从句，补充说明霍奇金的科学贡献。", "how nerve cells transmit... 是 discovered 的宾语从句。", "which 指代前面的 an impression，说明论文营造出的印象与真实过程不符。", "not at all 强化否定，意为“完全不”。"],
+      "expressions": [{"text": "convey an impression of", "meaning_zh": "传达出……的印象"}, {"text": "coincide with", "meaning_zh": "与……一致"}, {"text": "sequence of events", "meaning_zh": "事件发生的顺序"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "The same rule applies in business.",
+      "translation": "同样的规律也适用于商业领域。",
+      "structure": [
+        {"text": "The same rule", "role": "subject", "level": 1},
+        {"text": "applies", "role": "verb", "level": 1},
+        {"text": "in business", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["The same rule 回指上一段所说的创新过程不可预测。", "apply 在此是不及物动词，表示某项规律“适用”。"],
+      "expressions": [{"text": "apply in", "meaning_zh": "适用于……领域"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "The mistake that gave US cornflakes keeps repeating itself in the history of disruptive innovation, the kind that transforms markets.",
+      "translation": "那次为我们带来玉米片的失误，在颠覆式创新的历史中一再重演；这类创新能够改变市场。",
+      "structure": [
+        {"text": "The mistake", "role": "subject", "level": 1},
+        {"text": "that gave US cornflakes", "role": "relative_clause", "level": 2},
+        {"text": "keeps repeating itself", "role": "verb_phrase", "level": 1},
+        {"text": "in the history of disruptive innovation", "role": "prepositional_phrase", "level": 1},
+        {"text": "the kind", "role": "apposition", "level": 1},
+        {"text": "that transforms markets", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["原文大写 US 按语义应理解为 us，即“给我们带来玉米片”。", "第一个 that 修饰 mistake，第二个 that 修饰 the kind。", "the kind 是 disruptive innovation 的同位语，进一步界定这类创新。"],
+      "expressions": [{"text": "keep repeating itself", "meaning_zh": "一再重演"}, {"text": "disruptive innovation", "meaning_zh": "颠覆式创新"}, {"text": "transform markets", "meaning_zh": "改变市场"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "Louis Daguerre, for, instance, discovered the technique that gave US photography in the 1830s, when drops of mercury from a shattered thermometer produced a photographic image.",
+      "translation": "例如，路易·达盖尔在19世纪30年代发现了摄影技术：当时，一支破碎温度计中滴出的水银意外生成了摄影图像。",
+      "structure": [
+        {"text": "Louis Daguerre", "role": "subject", "level": 1},
+        {"text": "for, instance", "role": "parenthesis", "level": 1},
+        {"text": "discovered", "role": "verb", "level": 1},
+        {"text": "the technique", "role": "object", "level": 1},
+        {"text": "that gave US photography in the 1830s", "role": "relative_clause", "level": 2},
+        {"text": "when drops of mercury from a shattered thermometer produced a photographic image", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["for, instance 是 OCR 标点异常，正常写法为 for instance，作插入语表示“例如”。", "that 引导定语从句修饰 technique；其中 US 按语义应为 us。", "when 从句交代这一技术发现时发生的偶然事件。"],
+      "expressions": [{"text": "for instance", "meaning_zh": "例如"}, {"text": "produce an image", "meaning_zh": "生成图像"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "The microwave was discovered when Peroy Spender, a scientist with Raytheon, was testing a new vacuum tube and discovered that the sweet in his pocket had melted.",
+      "translation": "微波炉的发现源于这样一次偶然：雷神公司的科学家佩罗伊·斯彭德在测试一种新真空管时，发现口袋里的糖果已经融化。",
+      "structure": [
+        {"text": "The microwave was discovered", "role": "main_clause", "level": 1},
+        {"text": "when Peroy Spender, a scientist with Raytheon, was testing a new vacuum tube and discovered", "role": "adverbial_clause", "level": 1},
+        {"text": "a scientist with Raytheon", "role": "apposition", "level": 2},
+        {"text": "was testing a new vacuum tube", "role": "coordinate_predicate", "level": 2},
+        {"text": "discovered that the sweet in his pocket had melted", "role": "coordinate_predicate", "level": 2},
+        {"text": "that the sweet in his pocket had melted", "role": "object_clause", "level": 3}
+      ],
+      "difficult_points": ["主句使用被动语态，突出微波炉这一发现，而不是发现者。", "a scientist with Raytheon 是 Peroy Spender 的同位语。", "when 从句内 was testing 与 discovered 由 and 连接；had melted 表示糖果融化先于他发现。"],
+      "expressions": [{"text": "be discovered when", "meaning_zh": "在……时被发现"}, {"text": "vacuum tube", "meaning_zh": "真空管"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "The artificial sweetener, saccharin, was the unintentional result of a medical scientist's work on a chemical treatment for gastric ulcers.",
+      "translation": "人工甜味剂糖精，是一位医学科学家研究胃溃疡化学疗法时无意间产生的结果。",
+      "structure": [
+        {"text": "The artificial sweetener", "role": "subject", "level": 1},
+        {"text": "saccharin", "role": "apposition", "level": 1},
+        {"text": "was", "role": "linking_verb", "level": 1},
+        {"text": "the unintentional result", "role": "subject_complement", "level": 1},
+        {"text": "of a medical scientist's work on a chemical treatment for gastric ulcers", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": ["saccharin 是 The artificial sweetener 的同位语，点明这种甜味剂是糖精。", "of 短语说明这一意外结果源自何种研究工作。"],
+      "expressions": [{"text": "the unintentional result of", "meaning_zh": "……的无意结果"}, {"text": "chemical treatment for", "meaning_zh": "针对……的化学疗法"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "While working for the firm 3M, researcher Art Fry had no idea he was taking the first steps towards Post- It Notes when he used bits of adhesive office paper that could be easily lifted off the page to replace the scrap paper bookmarks that kept falling out of his hymn book.",
+      "translation": "在3M公司工作期间，研究员阿特·弗莱用一些可以轻松从页面上揭下的粘性办公纸，替代总从赞美诗集里掉出来的废纸书签；当时他完全不知道，自己正在迈出发明便利贴的第一步。",
+      "structure": [
+        {"text": "While working for the firm 3M", "role": "reduced_adverbial_clause", "level": 1},
+        {"text": "researcher Art Fry", "role": "subject", "level": 1},
+        {"text": "had no idea", "role": "verb_phrase", "level": 1},
+        {"text": "he was taking the first steps towards Post- It Notes", "role": "object_clause", "level": 2},
+        {"text": "when he used bits of adhesive office paper", "role": "adverbial_clause", "level": 2},
+        {"text": "that could be easily lifted off the page", "role": "relative_clause", "level": 3},
+        {"text": "to replace the scrap paper bookmarks", "role": "purpose_adverbial", "level": 3},
+        {"text": "that kept falling out of his hymn book", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": ["While working... 是省略了 he was 的时间状语从句，其逻辑主语与主句主语 Art Fry 一致。", "had no idea 后省略了 that，引出他当时不知道的内容。", "第一个 that 修饰 adhesive office paper，第二个 that 修饰 scrap paper bookmarks。", "to replace 表目的，说明粘性纸的实际用途。"],
+      "expressions": [{"text": "have no idea", "meaning_zh": "完全不知道"}, {"text": "take the first steps towards", "meaning_zh": "迈出通往……的第一步"}, {"text": "fall out of", "meaning_zh": "从……中掉出"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 17,
+      "sentence": "Breakthrough and disruptive innovation are rarely driven by orderly process.",
+      "translation": "突破性创新和颠覆式创新很少由井然有序的流程推动。",
+      "structure": [
+        {"text": "Breakthrough and disruptive innovation", "role": "subject", "level": 1},
+        {"text": "are rarely driven", "role": "passive_verb_phrase", "level": 1},
+        {"text": "by orderly process", "role": "agent_phrase", "level": 1}
+      ],
+      "difficult_points": ["are driven 是被动语态，强调创新是否由流程推动。", "rarely 是频率副词，使陈述带有“很少”的否定倾向。"],
+      "expressions": [{"text": "be driven by", "meaning_zh": "由……推动"}, {"text": "disruptive innovation", "meaning_zh": "颠覆式创新"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 18,
+      "sentence": "Usually they come out of a chaotic, haphazard mess, which is why big companies, full of managers schooled in business programmes designed to eliminate random variation and mistakes, struggle with them.",
+      "translation": "它们通常产生于混乱而偶然的局面；这也解释了为什么大公司难以应对这类创新——这些公司里尽是受过商业课程训练的管理者，而课程的目标正是消除随机变化和错误。",
+      "structure": [
+        {"text": "Usually they come out of a chaotic, haphazard mess", "role": "main_clause", "level": 1},
+        {"text": "which is why big companies", "role": "relative_clause", "level": 2},
+        {"text": "full of managers", "role": "adjective_phrase", "level": 3},
+        {"text": "schooled in business programmes", "role": "participial_phrase", "level": 4},
+        {"text": "designed to eliminate random variation and mistakes", "role": "participial_phrase", "level": 5},
+        {"text": "struggle with them", "role": "predicate", "level": 3}
+      ],
+      "difficult_points": ["which 指代前面整件事，并通过 is why 引出大公司应对困难的原因。", "full of managers 是插入性形容词短语，补充说明 big companies。", "schooled... 修饰 managers，designed... 进一步修饰 business programmes。", "them 指代 breakthrough and disruptive innovation。"],
+      "expressions": [{"text": "come out of", "meaning_zh": "产生于；源自"}, {"text": "struggle with", "meaning_zh": "难以应对"}, {"text": "be designed to", "meaning_zh": "旨在……"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 19,
+      "sentence": "In these sorts of environments, accidents are called failures and are discouraged.",
+      "translation": "在这类环境中，意外会被称为失败，并受到压制。",
+      "structure": [
+        {"text": "In these sorts of environments", "role": "prepositional_phrase", "level": 1},
+        {"text": "accidents", "role": "subject", "level": 1},
+        {"text": "are called failures", "role": "passive_predicate", "level": 1},
+        {"text": "and are discouraged", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["are called 与 are discouraged 是共享主语 accidents 的两个并列被动谓语。", "failures 是 call 在被动结构中的主语补足语，表示意外被贴上的标签。"],
+      "expressions": [{"text": "be called failures", "meaning_zh": "被视为失败"}, {"text": "these sorts of", "meaning_zh": "这类……"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 20,
+      "sentence": "It is no surprise then that research from the late British economist Paul Geroski and London Business School's Constantinos Markides found that companies that were skilled at innovation were usually not that skilled when it came to commercialisation, and vice versa.",
+      "translation": "因此，已故英国经济学家保罗·杰罗斯基和伦敦商学院的康斯坦丁诺斯·马基德斯的研究发现：擅长创新的公司通常不太擅长商业化，反之亦然。这一点并不令人意外。",
+      "structure": [
+        {"text": "It is no surprise then", "role": "main_clause", "level": 1},
+        {"text": "that research from the late British economist Paul Geroski and London Business School's Constantinos Markides found", "role": "subject_clause", "level": 2},
+        {"text": "that companies that were skilled at innovation were usually not that skilled", "role": "object_clause", "level": 3},
+        {"text": "that were skilled at innovation", "role": "relative_clause", "level": 4},
+        {"text": "when it came to commercialisation", "role": "adverbial_clause", "level": 4},
+        {"text": "and vice versa", "role": "elliptical_coordinate_clause", "level": 3}
+      ],
+      "difficult_points": ["It 是形式主语，后面的第一个 that 从句才是真正主语。", "found 后的第二个 that 从句是研究发现的内容，其中第三个 that 修饰 companies。", "when it came to... 表示“谈到……时；在……方面”。", "vice versa 表示反向关系同样成立，即擅长商业化者往往不擅长创新。"],
+      "expressions": [{"text": "It is no surprise that", "meaning_zh": "……并不令人意外"}, {"text": "be skilled at", "meaning_zh": "擅长……"}, {"text": "when it comes to", "meaning_zh": "谈到……；在……方面"}, {"text": "vice versa", "meaning_zh": "反之亦然"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 21,
+      "sentence": "Their book, Fast Second, divides businesses into 'colonists' and 'consolidators'.",
+      "translation": "他们的著作《快速跟进者》把企业分为“开拓者”和“整合者”两类。",
+      "structure": [
+        {"text": "Their book", "role": "subject", "level": 1},
+        {"text": "Fast Second", "role": "apposition", "level": 1},
+        {"text": "divides", "role": "verb", "level": 1},
+        {"text": "businesses", "role": "object", "level": 1},
+        {"text": "into 'colonists' and 'consolidators'", "role": "object_complement", "level": 1}
+      ],
+      "difficult_points": ["Fast Second 是 Their book 的同位语，即书名。", "divide A into B and C 表示把 A 划分为 B、C 两类。"],
+      "expressions": [{"text": "divide into", "meaning_zh": "划分为"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 22,
+      "sentence": "Small and nimble, colonists are adept at creating market niches but are terrible institution builders.",
+      "translation": "开拓者规模小、行动灵活，擅长开辟细分市场，却很不善于建设组织体系。",
+      "structure": [
+        {"text": "Small and nimble", "role": "fronted_adjective_phrase", "level": 1},
+        {"text": "colonists", "role": "subject", "level": 1},
+        {"text": "are adept at creating market niches", "role": "predicate", "level": 1},
+        {"text": "but are terrible institution builders", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["Small and nimble 前置描述 colonists 的特征，其逻辑主语就是 colonists。", "but 连接同一主语的两个表语，突出创新能力与组织建设能力的反差。", "creating 是介词 at 后的动名词。"],
+      "expressions": [{"text": "be adept at", "meaning_zh": "擅长……"}, {"text": "create market niches", "meaning_zh": "开辟细分市场"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 23,
+      "sentence": "Consolidators, with their strong cultures of discipline and cost control, know how to take clever ideas from other firms and turn them into mass market items.",
+      "translation": "整合者拥有强调纪律与成本控制的强势文化，懂得如何吸收其他公司的巧妙创意，并将其转化为大众市场产品。",
+      "structure": [
+        {"text": "Consolidators", "role": "subject", "level": 1},
+        {"text": "with their strong cultures of discipline and cost control", "role": "parenthetical_prepositional_phrase", "level": 1},
+        {"text": "know", "role": "verb", "level": 1},
+        {"text": "how to take clever ideas from other firms and turn them into mass market items", "role": "object_clause", "level": 2},
+        {"text": "take clever ideas from other firms", "role": "coordinate_infinitive", "level": 3},
+        {"text": "turn them into mass market items", "role": "coordinate_infinitive", "level": 3}
+      ],
+      "difficult_points": ["with 短语插入补充整合者所拥有的企业文化。", "how to... 是“疑问词＋不定式”结构，充当 know 的宾语。", "take 与 turn 是并列动作，them 指代 clever ideas。"],
+      "expressions": [{"text": "cost control", "meaning_zh": "成本控制"}, {"text": "turn something into", "meaning_zh": "把某物转化为……"}, {"text": "mass market", "meaning_zh": "大众市场"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 24,
+      "sentence": "Microsoft is a prime instance of this.",
+      "translation": "微软就是这种情况的典型例子。",
+      "structure": [
+        {"text": "Microsoft", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "a prime instance of this", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["this 回指整合者善于把其他公司的创意转化为大众产品这一模式。", "prime 在这里表示“典型的、主要的”，不是“最初的”。"],
+      "expressions": [{"text": "a prime instance of", "meaning_zh": "……的典型例子"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 25,
+      "sentence": "With companies spending hundreds of billions of dollars on research and development, US academics Robert Austin and Lee Devin examined how managers can encourage productive slip-ups.",
+      "translation": "鉴于企业在研发上投入数千亿美元，美国学者罗伯特·奥斯汀和李·德文研究了管理者如何鼓励能够产生积极结果的差错。",
+      "structure": [
+        {"text": "With companies spending hundreds of billions of dollars on research and development", "role": "with_absolute_construction", "level": 1},
+        {"text": "companies", "role": "logical_subject", "level": 2},
+        {"text": "spending hundreds of billions of dollars on research and development", "role": "participial_phrase", "level": 2},
+        {"text": "US academics Robert Austin and Lee Devin", "role": "subject", "level": 1},
+        {"text": "examined", "role": "verb", "level": 1},
+        {"text": "how managers can encourage productive slip-ups", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["With companies spending... 是 with 独立结构，交代研究所处的背景。", "spending 的逻辑主语是 companies，而不是两位学者。", "how 引导宾语从句，说明学者研究的问题。"],
+      "expressions": [{"text": "research and development", "meaning_zh": "研究与开发；研发"}, {"text": "encourage productive slip-ups", "meaning_zh": "鼓励能带来成果的差错"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 26,
+      "sentence": "In their article Accident, Intention and Expectation in the Innovation Process, they argue that business processes actually prevent helpful mis-steps from occurring.",
+      "translation": "他们在文章《创新过程中的意外、意图与预期》中提出，企业流程实际上会阻止有益的失误发生。",
+      "structure": [
+        {"text": "In their article Accident, Intention and Expectation in the Innovation Process", "role": "prepositional_phrase", "level": 1},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "argue", "role": "verb", "level": 1},
+        {"text": "that business processes actually prevent helpful mis-steps from occurring", "role": "object_clause", "level": 2},
+        {"text": "prevent helpful mis-steps from occurring", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": ["长书名是介词 in 的宾语，整个介词短语说明观点出处。", "that 从句是 argue 的宾语，陈述作者的核心观点。", "prevent A from doing 表示“阻止 A 做某事或发生”。"],
+      "expressions": [{"text": "argue that", "meaning_zh": "主张；提出……"}, {"text": "prevent something from occurring", "meaning_zh": "阻止某事发生"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 27,
+      "sentence": "According to their catalogue of accidents, not all false steps and mishaps are equal.",
+      "translation": "按照他们对意外情况的分类，并非所有错误步骤和事故都具有同等性质。",
+      "structure": [
+        {"text": "According to their catalogue of accidents", "role": "prepositional_phrase", "level": 1},
+        {"text": "not all false steps and mishaps", "role": "subject", "level": 1},
+        {"text": "are", "role": "linking_verb", "level": 1},
+        {"text": "equal", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["not all 是部分否定，意思是“并非所有……”，而不是“所有都不……”。", "According to 引出判断所依据的分类体系。"],
+      "expressions": [{"text": "according to", "meaning_zh": "根据；按照"}, {"text": "not all", "meaning_zh": "并非所有"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 28,
+      "sentence": "Accidents, they say, come from unlikely mental associations such as memories and vague connections, looking for something and finding it in an unexpected way, looking for one thing and finding something else, and not looking for anything but finding something valuable.",
+      "translation": "他们说，意外可能来自不太可能出现的心理联想，例如记忆和模糊联系；也可能来自寻找某物却以意外方式找到它、寻找一样东西却发现另一样东西，或本来什么都没找却发现了有价值的事物。",
+      "structure": [
+        {"text": "Accidents", "role": "subject", "level": 1},
+        {"text": "they say", "role": "parenthesis", "level": 1},
+        {"text": "come from", "role": "verb_phrase", "level": 1},
+        {"text": "unlikely mental associations such as memories and vague connections", "role": "object_of_preposition", "level": 1},
+        {"text": "looking for something and finding it in an unexpected way", "role": "gerund_phrase", "level": 2},
+        {"text": "looking for one thing and finding something else", "role": "gerund_phrase", "level": 2},
+        {"text": "not looking for anything but finding something valuable", "role": "gerund_phrase", "level": 2}
+      ],
+      "difficult_points": ["they say 是插入语，不影响主干 Accidents come from...。", "such as 后先举名词例子，再列出三个并列的动名词情形。", "三个 looking/finding 结构描述不同类型的意外发现，最后一项中 but 表示反差。"],
+      "expressions": [{"text": "come from", "meaning_zh": "来自；源于"}, {"text": "in an unexpected way", "meaning_zh": "以意想不到的方式"}, {"text": "something else", "meaning_zh": "别的事物"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 29,
+      "sentence": "Accident-prone innovation, they say, requires companies to get outside the 'cone of expectation'.",
+      "translation": "他们认为，容易产生意外成果的创新要求企业走出“预期锥体”。",
+      "structure": [
+        {"text": "Accident-prone innovation", "role": "subject", "level": 1},
+        {"text": "they say", "role": "parenthesis", "level": 1},
+        {"text": "requires", "role": "verb", "level": 1},
+        {"text": "companies", "role": "object", "level": 1},
+        {"text": "to get outside the 'cone of expectation'", "role": "object_complement", "level": 1}
+      ],
+      "difficult_points": ["they say 是插入语，句子主干是 innovation requires companies to...。", "require A to do 表示“要求 A 做某事”。", "cone of expectation 是比喻，指既定预期所限定的思考范围。"],
+      "expressions": [{"text": "accident-prone innovation", "meaning_zh": "容易产生意外成果的创新"}, {"text": "get outside", "meaning_zh": "走出；超越"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 30,
+      "sentence": "It means throwing together groups from diverse backgrounds, and combining ideas in unpredictable ways, other strategies also include having systems that watch out for accidents and examine them for value, generating them when they do not happen often enough, seizing oil the useful ones, capturing their valuable features, and building on them to add value and give potential for useful accidents.",
+      "translation": "这意味着把背景各异的人临时组合起来，并以不可预测的方式融合观点。其他策略还包括：建立能够留意意外并评估其价值的系统；在意外发生得不够频繁时主动制造机会；抓住其中有用的意外；提取它们的宝贵特征；并在此基础上增加价值，为有益意外创造可能。",
+      "structure": [
+        {"text": "It means", "role": "main_clause", "level": 1},
+        {"text": "throwing together groups from diverse backgrounds", "role": "gerund_object", "level": 2},
+        {"text": "combining ideas in unpredictable ways", "role": "coordinate_gerund_object", "level": 2},
+        {"text": "other strategies also include", "role": "coordinate_clause", "level": 1},
+        {"text": "having systems that watch out for accidents and examine them for value", "role": "gerund_object", "level": 2},
+        {"text": "that watch out for accidents and examine them for value", "role": "relative_clause", "level": 3},
+        {"text": "generating them when they do not happen often enough", "role": "coordinate_gerund_object", "level": 2},
+        {"text": "seizing oil the useful ones", "role": "coordinate_gerund_object", "level": 2},
+        {"text": "capturing their valuable features", "role": "coordinate_gerund_object", "level": 2},
+        {"text": "building on them to add value and give potential for useful accidents", "role": "coordinate_gerund_object", "level": 2}
+      ],
+      "difficult_points": ["原文用逗号连接 It means... 与 other strategies... 两个独立分句，属于标点异常。", "include 后接五个并列的动名词结构，列举不同策略。", "that 修饰 systems；其中 them 指 accidents。", "seizing oil 疑为 OCR 错误，结合语境应表达“抓住有用的意外”，但原文按要求保留。"],
+      "expressions": [{"text": "diverse backgrounds", "meaning_zh": "多元背景"}, {"text": "watch out for", "meaning_zh": "留意；密切关注"}, {"text": "build on", "meaning_zh": "以……为基础继续发展"}, {"text": "add value", "meaning_zh": "增加价值"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 31,
+      "sentence": "All this, however, requires thinking that is often counter-intuitive to the way businesses operate.",
+      "translation": "然而，所有这些做法都需要一种思维方式，而这种思维往往有悖于企业通常的运作方式。",
+      "structure": [
+        {"text": "All this", "role": "subject", "level": 1},
+        {"text": "however", "role": "parenthesis", "level": 1},
+        {"text": "requires", "role": "verb", "level": 1},
+        {"text": "thinking", "role": "object", "level": 1},
+        {"text": "that is often counter-intuitive to the way businesses operate", "role": "relative_clause", "level": 2},
+        {"text": "businesses operate", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["however 是插入性连接副词，表示与企业常规管理思路相反。", "第一个 that 引导定语从句修饰 thinking。", "the way 后的 businesses operate 是省略关系词的定语从句，说明“企业运作的方式”。"],
+      "expressions": [{"text": "counter-intuitive to", "meaning_zh": "有悖于……直觉的"}, {"text": "the way businesses operate", "meaning_zh": "企业的运作方式"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 32,
+      "sentence": "In other words, it is the kind of thinking that goes against the beliefs of most business managers.",
+      "translation": "换言之，这是一种违背大多数企业管理者信念的思维方式。",
+      "structure": [
+        {"text": "In other words", "role": "sentence_adverbial", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "the kind of thinking", "role": "subject_complement", "level": 1},
+        {"text": "that goes against the beliefs of most business managers", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["it 回指上一句所说的那种反直觉思维。", "that 引导定语从句修饰 thinking，并在从句中作主语。"],
+      "expressions": [{"text": "in other words", "meaning_zh": "换言之"}, {"text": "go against", "meaning_zh": "违背；与……相反"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 33,
+      "sentence": "It runs counter to the notion frequently pushes by consultants that you can 'harness'creativity and direct it to line up with intention.",
+      "translation": "它与顾问们经常宣扬的一种观念背道而驰：人们可以“驾驭”创造力，并引导它与既定意图保持一致。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "runs counter to", "role": "verb_phrase", "level": 1},
+        {"text": "the notion", "role": "object_of_preposition", "level": 1},
+        {"text": "frequently pushes by consultants", "role": "participial_phrase", "level": 2},
+        {"text": "that you can 'harness'creativity and direct it to line up with intention", "role": "appositive_clause", "level": 2},
+        {"text": "direct it to line up with intention", "role": "coordinate_predicate", "level": 3}
+      ],
+      "difficult_points": ["It 指代前两句所说的反直觉思维。", "frequently pushes by consultants 存在 OCR/语法异常，按语义应是 frequently pushed by consultants，修饰 notion。", "that 从句具体说明 notion 的内容，不是普通定语从句。", "it 指 creativity；line up with 表示“与……保持一致”。"],
+      "expressions": [{"text": "run counter to", "meaning_zh": "与……背道而驰"}, {"text": "line up with", "meaning_zh": "与……一致"}, {"text": "harness creativity", "meaning_zh": "驾驭创造力"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 34,
+      "sentence": "'The cost of accidents business, people tend to call such efforts failure.'",
+      "translation": "原文此处疑有文字缺失；其核心意思是，在商业中，人们往往把这类接纳意外的尝试称为失败。",
+      "structure": [
+        {"text": "The cost of accidents business", "role": "damaged_source_fragment", "level": 1},
+        {"text": "people", "role": "subject", "level": 1},
+        {"text": "tend to call", "role": "verb_phrase", "level": 1},
+        {"text": "such efforts", "role": "object", "level": 1},
+        {"text": "failure", "role": "object_complement", "level": 1}
+      ],
+      "difficult_points": ["引号内开头 The cost of accidents business 语法残缺，疑似 OCR 漏词，无法按完整标准句法解释。", "可识别的主干是 people tend to call such efforts failure，即“人们往往称这类尝试为失败”。", "call A B 是“把 A 称为 B”的宾补结构。"],
+      "expressions": [{"text": "tend to", "meaning_zh": "往往；倾向于"}, {"text": "call something failure", "meaning_zh": "把某事称为失败"}]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 35,
+      "sentence": "There are tentative signs that more companies are starting to realise that failure can lead to commercial gain, and that this is part or the risk-talking that underpins innovation.",
+      "translation": "已有一些初步迹象显示，越来越多的公司开始意识到，失败能够带来商业收益，而且这是支撑创新的风险承担的一部分。",
+      "structure": [
+        {"text": "There are tentative signs", "role": "main_clause", "level": 1},
+        {"text": "that more companies are starting to realise", "role": "relative_clause", "level": 2},
+        {"text": "that failure can lead to commercial gain", "role": "object_clause", "level": 3},
+        {"text": "and that this is part or the risk-talking", "role": "coordinate_object_clause", "level": 3},
+        {"text": "that underpins innovation", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": ["第一个 that 修饰 signs，说明迹象的具体内容。", "realise 后有两个由 and 连接的 that 宾语从句。", "this 指“失败可能带来商业收益”这种认识或现象。", "part or the risk-talking 疑为 part of the risk-taking 的 OCR 错误；末尾 that 修饰 risk-taking。"],
+      "expressions": [{"text": "tentative signs", "meaning_zh": "初步迹象"}, {"text": "lead to commercial gain", "meaning_zh": "带来商业收益"}, {"text": "underpin innovation", "meaning_zh": "支撑创新"}]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 36,
+      "sentence": "Australia's largest brewing company, for example, made a bad error when it launched a new beer called Empire Lager, pitched at younger consumers.",
+      "translation": "例如，澳大利亚最大的酿酒公司在推出一款名为 Empire Lager、面向年轻消费者的新啤酒时，犯了一个严重错误。",
+      "structure": [
+        {"text": "Australia's largest brewing company", "role": "subject", "level": 1},
+        {"text": "for example", "role": "parenthesis", "level": 1},
+        {"text": "made a bad error", "role": "verb_phrase", "level": 1},
+        {"text": "when it launched a new beer", "role": "adverbial_clause", "level": 1},
+        {"text": "called Empire Lager", "role": "participial_phrase", "level": 2},
+        {"text": "pitched at younger consumers", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["when 从句交代公司犯错发生的具体情境。", "called Empire Lager 与 pitched at younger consumers 都是过去分词短语，修饰 a new beer。", "pitched at 表示产品的定位或营销对象是某一群体。"],
+      "expressions": [{"text": "make an error", "meaning_zh": "犯错误"}, {"text": "be pitched at", "meaning_zh": "面向；定位于"}]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 37,
+      "sentence": "Having spent a fortune creating a beer with a sweeter taste, designing a great-looking bottle and a television campaign, Foster's was left with a drink that no-one wanted to buy.",
+      "translation": "福斯特公司花费巨资，酿造口味更甜的啤酒、设计精美酒瓶并制作电视广告，结果手里只剩下一款无人愿意购买的饮料。",
+      "structure": [
+        {"text": "Having spent a fortune", "role": "perfect_participial_phrase", "level": 1},
+        {"text": "creating a beer with a sweeter taste", "role": "gerund_complement", "level": 2},
+        {"text": "designing a great-looking bottle and a television campaign", "role": "coordinate_gerund_complement", "level": 2},
+        {"text": "Foster's", "role": "subject", "level": 1},
+        {"text": "was left with a drink", "role": "passive_verb_phrase", "level": 1},
+        {"text": "that no-one wanted to buy", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["Having spent 是完成式分词结构，表示投入巨资发生在最终滞销之前，其逻辑主语是 Foster's。", "creating 与 designing 说明钱花在什么方面；原文把 bottle and a television campaign 共同置于 designing 后。", "was left with 强调投入之后只得到一个不理想结果。", "that 修饰 a drink，并在 wanted to buy 中作宾语。"],
+      "expressions": [{"text": "spend a fortune", "meaning_zh": "花费巨资"}, {"text": "be left with", "meaning_zh": "最终只剩下；不得不面对"}, {"text": "a television campaign", "meaning_zh": "电视广告宣传活动"}]
+    },
+    {
+      "id": "I-04", "paragraph_label": "I", "sentence_index": 38,
+      "sentence": "The target market was more interested in brands built up by word of mouth.",
+      "translation": "目标消费群体对依靠口碑逐步建立起来的品牌更感兴趣。",
+      "structure": [
+        {"text": "The target market", "role": "subject", "level": 1},
+        {"text": "was more interested in", "role": "verb_phrase", "level": 1},
+        {"text": "brands", "role": "object_of_preposition", "level": 1},
+        {"text": "built up by word of mouth", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["target market 在此指目标消费者群体，而不是抽象的市场地点。", "built up by word of mouth 是过去分词短语，修饰 brands，表示品牌依靠口碑逐渐形成。"],
+      "expressions": [{"text": "target market", "meaning_zh": "目标市场；目标消费群体"}, {"text": "build up", "meaning_zh": "逐步建立"}, {"text": "by word of mouth", "meaning_zh": "通过口碑传播"}]
+    },
+    {
+      "id": "J-01", "paragraph_label": "J", "sentence_index": 39,
+      "sentence": "Instead of wiping the unsuccessfull product launch, Fosters used this lesson learned to go on and develop other brands instead.",
+      "translation": "福斯特没有把这次不成功的产品发布一笔勾销，而是吸取教训，继续开发其他品牌。",
+      "structure": [
+        {"text": "Instead of wiping the unsuccessfull product launch", "role": "prepositional_phrase", "level": 1},
+        {"text": "Fosters", "role": "subject", "level": 1},
+        {"text": "used this lesson learned", "role": "verb_phrase", "level": 1},
+        {"text": "to go on and develop other brands instead", "role": "purpose_adverbial", "level": 1}
+      ],
+      "difficult_points": ["Instead of 后接动名词 wiping，表示实际采取的做法与放弃失败项目相反。", "原文 unsuccessfull 与 Fosters 存在拼写/所有格异常，但需原样保留。", "to go on and develop 表示利用所学教训继续开发其他品牌。"],
+      "expressions": [{"text": "instead of", "meaning_zh": "而不是"}, {"text": "lesson learned", "meaning_zh": "吸取的教训"}, {"text": "go on and develop", "meaning_zh": "继续开发"}]
+    },
+    {
+      "id": "J-02", "paragraph_label": "J", "sentence_index": 40,
+      "sentence": "One of them, Pure Blonde, is now ranked as Australia's fifth-largest beer brand.",
+      "translation": "其中之一 Pure Blonde，如今被列为澳大利亚第五大啤酒品牌。",
+      "structure": [
+        {"text": "One of them", "role": "subject", "level": 1},
+        {"text": "Pure Blonde", "role": "apposition", "level": 1},
+        {"text": "is now ranked", "role": "passive_verb_phrase", "level": 1},
+        {"text": "as Australia's fifth-largest beer brand", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["them 指代上一句所说的 other brands。", "Pure Blonde 是 One of them 的同位语，点明具体品牌。", "be ranked as 表示“被列为、被评定为”。"],
+      "expressions": [{"text": "be ranked as", "meaning_zh": "被列为；被评定为"}]
+    },
+    {
+      "id": "J-03", "paragraph_label": "J", "sentence_index": 41,
+      "sentence": "Unlike Empire Lager, there has been almost no promotion and its sales are generated more by word of mouth.",
+      "translation": "与 Empire Lager 不同，Pure Blonde 几乎没有进行推广，其销量更多是靠口碑带动的。",
+      "structure": [
+        {"text": "Unlike Empire Lager", "role": "prepositional_phrase", "level": 1},
+        {"text": "there has been almost no promotion", "role": "main_clause", "level": 1},
+        {"text": "and its sales are generated more by word of mouth", "role": "coordinate_clause", "level": 1},
+        {"text": "by word of mouth", "role": "agent_phrase", "level": 2}
+      ],
+      "difficult_points": ["Unlike Empire Lager 建立两款产品在营销方式上的对比。", "there has been 是现在完成时的存在句，说明截至现在几乎没有推广。", "its 指 Pure Blonde；are generated 是被动语态，说明销量来源。"],
+      "expressions": [{"text": "unlike", "meaning_zh": "与……不同"}, {"text": "by word of mouth", "meaning_zh": "通过口碑传播"}]
+    },
+    {
+      "id": "K-01", "paragraph_label": "K", "sentence_index": 42,
+      "sentence": "Other companies are taking similar steps to study their own slip-ups.",
+      "translation": "其他公司也在采取类似措施，研究自身的失误。",
+      "structure": [
+        {"text": "Other companies", "role": "subject", "level": 1},
+        {"text": "are taking similar steps", "role": "verb_phrase", "level": 1},
+        {"text": "to study their own slip-ups", "role": "purpose_adverbial", "level": 1}
+      ],
+      "difficult_points": ["现在进行时 are taking 表示这种企业做法正在出现和发展。", "to study 是目的不定式，说明采取这些措施的目的。"],
+      "expressions": [{"text": "take similar steps", "meaning_zh": "采取类似措施"}, {"text": "study their own slip-ups", "meaning_zh": "研究自身的失误"}]
+    },
+    {
+      "id": "K-02", "paragraph_label": "K", "sentence_index": 43,
+      "sentence": "Intuit, the company behind financial tools such as Quicken, holds regular 'When Learning Hurts' sessions.",
+      "translation": "Quicken 等金融工具背后的公司 Intuit，会定期举办名为“学习带来痛苦时”的会议。",
+      "structure": [
+        {"text": "Intuit", "role": "subject", "level": 1},
+        {"text": "the company behind financial tools such as Quicken", "role": "apposition", "level": 1},
+        {"text": "holds", "role": "verb", "level": 1},
+        {"text": "regular 'When Learning Hurts' sessions", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["the company... 是 Intuit 的同位语，解释这家公司以何种产品闻名。", "such as Quicken 举例说明 financial tools。", "When Learning Hurts 是会议名称，不是本句的时间状语从句。"],
+      "expressions": [{"text": "hold regular sessions", "meaning_zh": "定期举办会议"}, {"text": "such as", "meaning_zh": "例如"}]
+    },
+    {
+      "id": "K-03", "paragraph_label": "K", "sentence_index": 44,
+      "sentence": "But this sort of transformation is never easy.",
+      "translation": "但这种转变从来都不容易。",
+      "structure": [
+        {"text": "But", "role": "coordinating_conjunction", "level": 1},
+        {"text": "this sort of transformation", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "never easy", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["But 承接前文企业开始研究失误的积极变化，同时转向说明实施难度。", "never 强化否定，表示这种文化转型在任何时候都不轻松。"],
+      "expressions": [{"text": "this sort of transformation", "meaning_zh": "这种转变"}]
+    },
+    {
+      "id": "K-04", "paragraph_label": "K", "sentence_index": 45,
+      "sentence": "In a market that focuses on the short-term, convincing employees and shareholders to tolerate failure and not play it safe is a big thing to ask.",
+      "translation": "在一个只看重短期结果的市场中，要说服员工和股东容忍失败、不再一味求稳，是一项很难提出的要求。",
+      "structure": [
+        {"text": "In a market", "role": "prepositional_phrase", "level": 1},
+        {"text": "that focuses on the short-term", "role": "relative_clause", "level": 2},
+        {"text": "convincing employees and shareholders to tolerate failure and not play it safe", "role": "gerund_subject", "level": 1},
+        {"text": "to tolerate failure and not play it safe", "role": "object_complement", "level": 2},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "a big thing to ask", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["that 引导定语从句修饰 market，说明市场强调短期表现。", "从 convincing 到 play it safe 是整个句子的动名词主语。", "convince A to do 表示“说服 A 做某事”，to tolerate 与 not play 并列。", "play it safe 是固定表达，表示避免冒险、稳妥行事。"],
+      "expressions": [{"text": "focus on the short-term", "meaning_zh": "关注短期结果"}, {"text": "tolerate failure", "meaning_zh": "容忍失败"}, {"text": "play it safe", "meaning_zh": "稳妥行事；避免冒险"}, {"text": "a big thing to ask", "meaning_zh": "很难提出的要求"}]
+    }
+  ]
+}

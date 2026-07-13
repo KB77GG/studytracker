@@ -1,0 +1,831 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts18_test2_reading",
+  "passage_id": "ielts18_test2_p3",
+  "passage_title": "An ideal city",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The word 'genius' is universally associated with the name of Leonardo da Vinci.",
+      "translation": "“天才”这个词在全世界都与列奥纳多·达·芬奇的名字联系在一起。",
+      "structure": [
+        {"text": "The word 'genius'", "role": "subject", "level": 1},
+        {"text": "is universally associated", "role": "verb_phrase", "level": 1},
+        {"text": "with the name of Leonardo da Vinci", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "is universally associated 是被动语态，表示某种广泛存在的联系。",
+        "universally 强调这种联想具有全球范围或普遍性。",
+        "the name of Leonardo da Vinci 是 with 的宾语，说明“天才”与谁相关。"
+      ],
+      "expressions": [
+        {"text": "be universally associated with", "meaning_zh": "被普遍与……联系起来"},
+        {"text": "the name of", "meaning_zh": "……的名字"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "A true Renaissance man, he embodied scientific spirit, artistic talent and humanist sensibilities.",
+      "translation": "作为一位真正的文艺复兴人，他体现了科学精神、艺术才华和人文主义感受力。",
+      "structure": [
+        {"text": "A true Renaissance man", "role": "appositive", "level": 1},
+        {"text": "he", "role": "subject", "level": 1},
+        {"text": "embodied", "role": "verb_phrase", "level": 1},
+        {"text": "scientific spirit, artistic talent and humanist sensibilities", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "A true Renaissance man 是前置同位语，概括达·芬奇的身份特征。",
+        "embodied 表示“体现”，后面三个名词短语并列作宾语。",
+        "humanist sensibilities 指人文主义的情感和价值取向。"
+      ],
+      "expressions": [
+        {"text": "Renaissance man", "meaning_zh": "文艺复兴式全才"},
+        {"text": "embody", "meaning_zh": "体现"},
+        {"text": "humanist sensibilities", "meaning_zh": "人文主义感受力"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Five hundred years have passed since Leonardo died in his home at Château du Clos Lucé, outside Tours, France.",
+      "translation": "自列奥纳多在法国图尔市外的克洛吕塞城堡家中去世以来，已经过去了五百年。",
+      "structure": [
+        {"text": "Five hundred years", "role": "subject", "level": 1},
+        {"text": "have passed", "role": "verb_phrase", "level": 1},
+        {"text": "since Leonardo died in his home", "role": "adverbial_clause", "level": 2},
+        {"text": "at Château du Clos Lucé, outside Tours, France", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "have passed 是现在完成时，表示从过去事件到现在的时间跨度。",
+        "since 引导时间状语从句，说明五百年从何时算起。",
+        "at Château du Clos Lucé, outside Tours, France 是地点补充，层层说明死亡地点。"
+      ],
+      "expressions": [
+        {"text": "years have passed since", "meaning_zh": "自……以来已经过去若干年"},
+        {"text": "outside Tours, France", "meaning_zh": "在法国图尔市外"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Yet far from fading into insignificance, his thinking has carried down the centuries and still surprises today.",
+      "translation": "然而，他的思想远没有逐渐变得无足轻重，而是跨越数个世纪流传下来，至今仍令人惊讶。",
+      "structure": [
+        {"text": "Yet", "role": "discourse_marker", "level": 1},
+        {"text": "far from fading into insignificance", "role": "prepositional_phrase", "level": 1},
+        {"text": "his thinking", "role": "subject", "level": 1},
+        {"text": "has carried down the centuries", "role": "verb_phrase", "level": 1},
+        {"text": "and still surprises today", "role": "coordinated_verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "far from... 表示“不但不……”，用来否定其思想被遗忘。",
+        "fading into insignificance 是动名词短语，表示变得无足轻重。",
+        "has carried down the centuries 是现在完成时，强调思想长期传承至今。",
+        "and still surprises today 说明这些思想仍具有当代意义。"
+      ],
+      "expressions": [
+        {"text": "far from", "meaning_zh": "远非；不但不"},
+        {"text": "fade into insignificance", "meaning_zh": "变得无足轻重"},
+        {"text": "carry down the centuries", "meaning_zh": "跨越世纪流传下来"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "The Renaissance marked the transition from the 15th century to modernity and took place after the spread of the plague in the 14th century, which caused a global crisis resulting in some 200 million deaths across Europe and Asia.",
+      "translation": "文艺复兴标志着从15世纪走向现代性的过渡，并发生在14世纪瘟疫扩散之后；那场瘟疫造成了一场全球危机，导致欧洲和亚洲约两亿人死亡。",
+      "structure": [
+        {"text": "The Renaissance", "role": "subject", "level": 1},
+        {"text": "marked the transition from the 15th century to modernity", "role": "verb_phrase", "level": 1},
+        {"text": "and took place after the spread of the plague in the 14th century", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "which caused a global crisis", "role": "relative_clause", "level": 2},
+        {"text": "resulting in some 200 million deaths across Europe and Asia", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "marked 与 took place 并列，分别说明文艺复兴的历史意义和发生背景。",
+        "which 引导非限定性定语从句，指代 the spread of the plague。",
+        "resulting in... 是现在分词短语，说明全球危机的后果。",
+        "some 200 million deaths 中 some 表示“大约”。"
+      ],
+      "expressions": [
+        {"text": "mark the transition from", "meaning_zh": "标志着从……的转变"},
+        {"text": "take place after", "meaning_zh": "发生在……之后"},
+        {"text": "resulting in", "meaning_zh": "导致"},
+        {"text": "across Europe and Asia", "meaning_zh": "遍及欧洲和亚洲"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Today, the world is on the cusp of a climate crisis, which is predicted to cause widespread displacement, extinctions and death, if left unaddressed.",
+      "translation": "如今，世界正处在气候危机的边缘；如果不加以应对，预计这场危机将造成大范围流离失所、物种灭绝和死亡。",
+      "structure": [
+        {"text": "Today", "role": "time_adverbial", "level": 1},
+        {"text": "the world", "role": "subject", "level": 1},
+        {"text": "is on the cusp of a climate crisis", "role": "verb_phrase", "level": 1},
+        {"text": "which is predicted to cause widespread displacement, extinctions and death", "role": "relative_clause", "level": 2},
+        {"text": "if left unaddressed", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "on the cusp of 表示处于某事即将发生的边缘。",
+        "which 引导非限定性定语从句，补充说明 climate crisis 的潜在后果。",
+        "is predicted to cause 是被动结构，表示外界预测其会造成后果。",
+        "if left unaddressed 是省略结构，完整含义为 if it is left unaddressed。"
+      ],
+      "expressions": [
+        {"text": "on the cusp of", "meaning_zh": "处在……的边缘"},
+        {"text": "climate crisis", "meaning_zh": "气候危机"},
+        {"text": "widespread displacement", "meaning_zh": "大范围流离失所"},
+        {"text": "left unaddressed", "meaning_zh": "未被处理/应对"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "Then, as now, radical solutions were called for to revolutionise the way people lived and safeguard humanity against catastrophe.",
+      "translation": "那时和现在一样，都需要激进的解决方案来彻底改变人们的生活方式，并保护人类免遭灾难。",
+      "structure": [
+        {"text": "Then, as now", "role": "comparative_adverbial", "level": 1},
+        {"text": "radical solutions", "role": "subject", "level": 1},
+        {"text": "were called for", "role": "verb_phrase", "level": 1},
+        {"text": "to revolutionise the way people lived", "role": "non_finite_clause", "level": 2},
+        {"text": "and safeguard humanity against catastrophe", "role": "coordinated_non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Then, as now 把文艺复兴时代与当代气候危机并置比较。",
+        "were called for 是被动语态，表示“被需要”。",
+        "to revolutionise... and safeguard... 是目的不定式结构，说明解决方案的目标。",
+        "the way people lived 中省略关系词，people lived 修饰 the way。"
+      ],
+      "expressions": [
+        {"text": "radical solutions", "meaning_zh": "激进的解决方案"},
+        {"text": "be called for", "meaning_zh": "被需要"},
+        {"text": "revolutionise the way people lived", "meaning_zh": "彻底改变人们的生活方式"},
+        {"text": "safeguard humanity against catastrophe", "meaning_zh": "保护人类免遭灾难"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "Around 1486 – after a pestilence that killed half the population in Milan, Italy – Leonardo turned his thoughts to urban planning problems.",
+      "translation": "大约在1486年——在一场导致意大利米兰半数人口死亡的瘟疫之后——列奥纳多开始思考城市规划问题。",
+      "structure": [
+        {"text": "Around 1486", "role": "time_adverbial", "level": 1},
+        {"text": "after a pestilence that killed half the population in Milan, Italy", "role": "prepositional_phrase", "level": 1},
+        {"text": "that killed half the population in Milan, Italy", "role": "relative_clause", "level": 2},
+        {"text": "Leonardo", "role": "subject", "level": 1},
+        {"text": "turned his thoughts to urban planning problems", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "破折号中的 after... 插入说明事件背景。",
+        "that 引导定语从句修饰 pestilence，说明瘟疫造成的死亡规模。",
+        "turned his thoughts to 表示把注意力转向某个问题。",
+        "urban planning problems 是达·芬奇开始思考的主题。"
+      ],
+      "expressions": [
+        {"text": "turn his thoughts to", "meaning_zh": "把思考转向"},
+        {"text": "urban planning problems", "meaning_zh": "城市规划问题"},
+        {"text": "half the population", "meaning_zh": "一半人口"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "Following a typical Renaissance trend, he began to work on an 'ideal city' project, which – due to its excessive costs – would remain unfulfilled.",
+      "translation": "顺应文艺复兴时期的典型潮流，他开始着手一个“理想城市”项目；但由于成本过高，这个项目最终未能实现。",
+      "structure": [
+        {"text": "Following a typical Renaissance trend", "role": "participial_phrase", "level": 1},
+        {"text": "he", "role": "subject", "level": 1},
+        {"text": "began to work on", "role": "verb_phrase", "level": 1},
+        {"text": "an 'ideal city' project", "role": "object", "level": 1},
+        {"text": "which – due to its excessive costs – would remain unfulfilled", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Following... 是现在分词短语，表示他顺应某种时代趋势。",
+        "began to work on 表示开始从事某个项目。",
+        "which 引导非限定性定语从句，补充说明项目结局。",
+        "due to its excessive costs 是插入原因，说明项目未能实现的原因。"
+      ],
+      "expressions": [
+        {"text": "typical Renaissance trend", "meaning_zh": "典型的文艺复兴潮流"},
+        {"text": "work on a project", "meaning_zh": "从事一个项目"},
+        {"text": "due to its excessive costs", "meaning_zh": "由于成本过高"},
+        {"text": "remain unfulfilled", "meaning_zh": "仍未实现"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "Yet given that unsustainable urban models are a key cause of global climate change today, it's only natural to wonder how Leonardo might have changed the shape of modern cities.",
+      "translation": "然而，考虑到不可持续的城市模式如今是全球气候变化的一个关键原因，人们自然会好奇列奥纳多本可能如何改变现代城市的形态。",
+      "structure": [
+        {"text": "Yet", "role": "discourse_marker", "level": 1},
+        {"text": "given that unsustainable urban models are a key cause of global climate change today", "role": "participial_phrase", "level": 1},
+        {"text": "it's only natural", "role": "main_clause", "level": 1},
+        {"text": "to wonder", "role": "non_finite_clause", "level": 2},
+        {"text": "how Leonardo might have changed the shape of modern cities", "role": "embedded_question", "level": 3}
+      ],
+      "difficult_points": [
+        "given that... 表示“考虑到……”，引出判断的背景。",
+        "it 是形式主语，真正主语是不定式 to wonder...。",
+        "how 引导嵌入式疑问结构，作 wonder 的内容。",
+        "might have changed 表示对过去未发生可能性的推测。"
+      ],
+      "expressions": [
+        {"text": "unsustainable urban models", "meaning_zh": "不可持续的城市模式"},
+        {"text": "a key cause of", "meaning_zh": "……的关键原因"},
+        {"text": "it's only natural to wonder", "meaning_zh": "自然会想知道"},
+        {"text": "the shape of modern cities", "meaning_zh": "现代城市的形态"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "Although the Renaissance is renowned as an era of incredible progress in art and architecture, it is rarely noted that the 15th century also marked the birth of urbanism as a true academic discipline.",
+      "translation": "尽管文艺复兴以艺术和建筑上的巨大进步而闻名，但人们很少注意到，15世纪也标志着城市规划作为一门真正学术学科的诞生。",
+      "structure": [
+        {"text": "Although the Renaissance is renowned as an era of incredible progress in art and architecture", "role": "adverbial_clause", "level": 1},
+        {"text": "it is rarely noted", "role": "main_clause", "level": 1},
+        {"text": "that the 15th century also marked the birth of urbanism as a true academic discipline", "role": "noun_clause", "level": 2},
+        {"text": "as a true academic discipline", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "Although 引导让步状语从句，承认文艺复兴的常见评价。",
+        "it is rarely noted 是被动结构，it 是形式主语。",
+        "that 引导真正主语从句，说明很少被注意到的内容。",
+        "marked the birth of 表示“标志着……的诞生”。"
+      ],
+      "expressions": [
+        {"text": "be renowned as", "meaning_zh": "以……而闻名"},
+        {"text": "incredible progress", "meaning_zh": "巨大进步"},
+        {"text": "mark the birth of", "meaning_zh": "标志着……的诞生"},
+        {"text": "academic discipline", "meaning_zh": "学术学科"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "The rigour and method behind the conscious conception of a city had been largely missing in Western thought until the moment when prominent Renaissance men pushed forward large-scale urban projects in Italy, such as the reconfiguration of the town of Pienza and the expansion of the city of Ferrara.",
+      "translation": "在西方思想中，有意识地构想一座城市所需的严谨性和方法长期基本缺失，直到杰出的文艺复兴人物在意大利推进大规模城市项目，例如皮恩扎镇的重新布局和费拉拉城的扩建。",
+      "structure": [
+        {"text": "The rigour and method behind the conscious conception of a city", "role": "subject", "level": 1},
+        {"text": "had been largely missing", "role": "verb_phrase", "level": 1},
+        {"text": "in Western thought", "role": "prepositional_phrase", "level": 2},
+        {"text": "until the moment when prominent Renaissance men pushed forward large-scale urban projects in Italy", "role": "adverbial_clause", "level": 2},
+        {"text": "such as the reconfiguration of the town of Pienza and the expansion of the city of Ferrara", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "The rigour and method... 是长主语，核心是 rigour and method。",
+        "had been largely missing 是过去完成进行意义的状态，说明在某一时点前长期缺失。",
+        "until the moment when... 引导时间界限，说明这种缺失到何时改变。",
+        "such as... 举例说明 large-scale urban projects 的具体项目。"
+      ],
+      "expressions": [
+        {"text": "the conscious conception of a city", "meaning_zh": "对城市的有意识构想"},
+        {"text": "largely missing", "meaning_zh": "基本缺失"},
+        {"text": "push forward", "meaning_zh": "推进"},
+        {"text": "large-scale urban projects", "meaning_zh": "大规模城市项目"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "These works surely inspired Leonardo's decision to rethink the design of medieval cities, with their winding and overcrowded streets and with houses piled against one another.",
+      "translation": "这些工程无疑启发了列奥纳多重新思考中世纪城市设计的决定；那些城市有弯曲拥挤的街道，房屋彼此紧挨堆叠。",
+      "structure": [
+        {"text": "These works", "role": "subject", "level": 1},
+        {"text": "surely inspired", "role": "verb_phrase", "level": 1},
+        {"text": "Leonardo's decision to rethink the design of medieval cities", "role": "object", "level": 1},
+        {"text": "to rethink the design of medieval cities", "role": "non_finite_clause", "level": 2},
+        {"text": "with their winding and overcrowded streets and with houses piled against one another", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "These works 指上一句提到的意大利城市项目。",
+        "decision to rethink 中不定式说明 decision 的内容。",
+        "with... and with... 两个介词短语补充 medieval cities 的特点。",
+        "piled against one another 是过去分词短语，形容房屋相互挤靠。"
+      ],
+      "expressions": [
+        {"text": "inspire someone's decision to", "meaning_zh": "启发某人决定去……"},
+        {"text": "rethink the design of", "meaning_zh": "重新思考……的设计"},
+        {"text": "winding and overcrowded streets", "meaning_zh": "弯曲而拥挤的街道"},
+        {"text": "piled against one another", "meaning_zh": "彼此挤靠堆叠"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 14,
+      "sentence": "It is not easy to identify a coordinated vision of Leonardo's ideal city because of his disordered way of working with notes and sketches.",
+      "translation": "由于列奥纳多以零散的笔记和草图方式工作，要识别出他理想城市的一个协调一致的愿景并不容易。",
+      "structure": [
+        {"text": "It is not easy", "role": "main_clause", "level": 1},
+        {"text": "to identify a coordinated vision of Leonardo's ideal city", "role": "non_finite_clause", "level": 2},
+        {"text": "because of his disordered way of working with notes and sketches", "role": "prepositional_phrase", "level": 2},
+        {"text": "working with notes and sketches", "role": "gerund_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正主语是 to identify...。",
+        "coordinated vision 指相互一致、成体系的城市构想。",
+        "because of 后接名词短语，不是从句。",
+        "way of working with... 中 working 是动名词，说明工作方式。"
+      ],
+      "expressions": [
+        {"text": "identify a coordinated vision", "meaning_zh": "识别出协调一致的愿景"},
+        {"text": "disordered way of working", "meaning_zh": "杂乱的工作方式"},
+        {"text": "notes and sketches", "meaning_zh": "笔记和草图"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 15,
+      "sentence": "But from the largest collection of Leonardo's papers ever assembled, a series of innovative thoughts can be reconstructed regarding the foundation of a new city along the Ticino River, which runs from Switzerland into Italy and is 248 kilometres long.",
+      "translation": "但从有史以来汇编规模最大的列奥纳多文稿集中，可以重构出一系列关于在提契诺河沿岸建立新城市的创新想法；这条河从瑞士流入意大利，全长248公里。",
+      "structure": [
+        {"text": "But from the largest collection of Leonardo's papers ever assembled", "role": "prepositional_phrase", "level": 1},
+        {"text": "a series of innovative thoughts", "role": "subject", "level": 1},
+        {"text": "can be reconstructed", "role": "verb_phrase", "level": 1},
+        {"text": "regarding the foundation of a new city along the Ticino River", "role": "prepositional_phrase", "level": 2},
+        {"text": "which runs from Switzerland into Italy and is 248 kilometres long", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "But from... 引出与上一句“不容易识别”相反的可能性。",
+        "ever assembled 是过去分词短语，修饰 collection，表示“曾被汇编的”。",
+        "can be reconstructed 是被动语态，表示思想可以被重构出来。",
+        "which 引导非限定性定语从句，补充说明 Ticino River。"
+      ],
+      "expressions": [
+        {"text": "the largest collection ever assembled", "meaning_zh": "有史以来汇编的最大合集"},
+        {"text": "a series of innovative thoughts", "meaning_zh": "一系列创新想法"},
+        {"text": "be reconstructed", "meaning_zh": "被重构"},
+        {"text": "the foundation of a new city", "meaning_zh": "新城市的建立"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "He designed the city for the easy transport of goods and clean urban spaces, and he wanted a comfortable and spacious city, with well-ordered streets and architecture.",
+      "translation": "他设计这座城市，是为了便于货物运输和提供清洁的城市空间；他想要一座舒适而宽敞的城市，拥有井然有序的街道和建筑。",
+      "structure": [
+        {"text": "He designed the city", "role": "main_clause", "level": 1},
+        {"text": "for the easy transport of goods and clean urban spaces", "role": "prepositional_phrase", "level": 2},
+        {"text": "and he wanted", "role": "coordinated_clause", "level": 1},
+        {"text": "a comfortable and spacious city", "role": "object", "level": 1},
+        {"text": "with well-ordered streets and architecture", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "for... 表示设计城市的目标或用途。",
+        "the easy transport of goods 与 clean urban spaces 并列，说明两个目标。",
+        "and 连接两个独立分句，分别说明设计目的和理想状态。",
+        "with well-ordered streets and architecture 后置补充说明城市的特征。"
+      ],
+      "expressions": [
+        {"text": "easy transport of goods", "meaning_zh": "便利的货物运输"},
+        {"text": "clean urban spaces", "meaning_zh": "清洁的城市空间"},
+        {"text": "comfortable and spacious", "meaning_zh": "舒适而宽敞的"},
+        {"text": "well-ordered streets", "meaning_zh": "井然有序的街道"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "He recommended 'high, strong walls', with 'towers and battlements of all necessary and pleasant beauty'.",
+      "translation": "他建议建造“高大坚固的城墙”，并配有“兼具必要性与愉悦美感的塔楼和城垛”。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "recommended", "role": "verb_phrase", "level": 1},
+        {"text": "'high, strong walls'", "role": "object", "level": 1},
+        {"text": "with 'towers and battlements of all necessary and pleasant beauty'", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "recommended 后接他提出的具体建筑元素。",
+        "引号表示这些词可能来自达·芬奇原始表达或文稿概念。",
+        "with... 补充说明城墙应配备的附属结构。",
+        "of all necessary and pleasant beauty 同时强调实用需要和审美效果。"
+      ],
+      "expressions": [
+        {"text": "high, strong walls", "meaning_zh": "高大坚固的城墙"},
+        {"text": "towers and battlements", "meaning_zh": "塔楼和城垛"},
+        {"text": "necessary and pleasant beauty", "meaning_zh": "必要且令人愉悦的美感"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 18,
+      "sentence": "His plans for a modern and 'rational' city were consistent with Renaissance ideals.",
+      "translation": "他关于现代且“理性”城市的规划与文艺复兴理想是一致的。",
+      "structure": [
+        {"text": "His plans for a modern and 'rational' city", "role": "subject", "level": 1},
+        {"text": "were consistent", "role": "verb_phrase", "level": 1},
+        {"text": "with Renaissance ideals", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "His plans for... 是长主语，核心词是 plans。",
+        "modern and 'rational' 并列修饰 city，说明达·芬奇城市设计的取向。",
+        "were consistent with 表示与某种理念相一致。"
+      ],
+      "expressions": [
+        {"text": "be consistent with", "meaning_zh": "与……一致"},
+        {"text": "Renaissance ideals", "meaning_zh": "文艺复兴理想"},
+        {"text": "rational city", "meaning_zh": "理性城市"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 19,
+      "sentence": "But, in keeping with his personality, Leonardo included several innovations in his urban design.",
+      "translation": "但与他的个性相符，列奥纳多在其城市设计中加入了几项创新。",
+      "structure": [
+        {"text": "But", "role": "discourse_marker", "level": 1},
+        {"text": "in keeping with his personality", "role": "prepositional_phrase", "level": 1},
+        {"text": "Leonardo", "role": "subject", "level": 1},
+        {"text": "included", "role": "verb_phrase", "level": 1},
+        {"text": "several innovations in his urban design", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "But 引出在符合时代思想之外的个人创新。",
+        "in keeping with 表示“与……一致”。",
+        "several innovations 是宾语，说明他并非只遵循传统。",
+        "in his urban design 限定创新所在领域。"
+      ],
+      "expressions": [
+        {"text": "in keeping with", "meaning_zh": "与……一致"},
+        {"text": "include several innovations", "meaning_zh": "包含几项创新"},
+        {"text": "urban design", "meaning_zh": "城市设计"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 20,
+      "sentence": "Leonardo wanted the city to be built on several levels, linked with vertical outdoor staircases.",
+      "translation": "列奥纳多希望这座城市建在多个层级上，并由垂直的户外楼梯连接起来。",
+      "structure": [
+        {"text": "Leonardo", "role": "subject", "level": 1},
+        {"text": "wanted", "role": "verb_phrase", "level": 1},
+        {"text": "the city", "role": "object", "level": 1},
+        {"text": "to be built on several levels", "role": "object_complement", "level": 2},
+        {"text": "linked with vertical outdoor staircases", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "wanted the city to be built 是“want + 宾语 + 不定式”结构。",
+        "to be built 是被动不定式，表示城市被建成多个层级。",
+        "linked with... 是过去分词短语，补充这些层级如何连接。",
+        "vertical outdoor staircases 指垂直的户外楼梯。"
+      ],
+      "expressions": [
+        {"text": "be built on several levels", "meaning_zh": "建在多个层级上"},
+        {"text": "linked with", "meaning_zh": "由……连接"},
+        {"text": "vertical outdoor staircases", "meaning_zh": "垂直户外楼梯"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 21,
+      "sentence": "This design can be seen in some of today's high-rise buildings but was unconventional at the time.",
+      "translation": "这种设计可以在今天的一些高层建筑中看到，但在当时并不常规。",
+      "structure": [
+        {"text": "This design", "role": "subject", "level": 1},
+        {"text": "can be seen", "role": "verb_phrase", "level": 1},
+        {"text": "in some of today's high-rise buildings", "role": "prepositional_phrase", "level": 2},
+        {"text": "but was unconventional", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "at the time", "role": "time_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "can be seen 是被动结构，表示这种设计在现代建筑中可见。",
+        "but 连接现在可见与当时不寻常两个对比信息。",
+        "was unconventional 省略了主语 This design。",
+        "at the time 指达·芬奇所处时代。"
+      ],
+      "expressions": [
+        {"text": "high-rise buildings", "meaning_zh": "高层建筑"},
+        {"text": "unconventional at the time", "meaning_zh": "在当时非传统的"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "Indeed, this idea of taking full advantage of the interior spaces wasn't implemented until the 1920s and 1930s, with the birth of the Modernist movement.",
+      "translation": "事实上，这种充分利用内部空间的想法直到20世纪二三十年代现代主义运动诞生时才得到实施。",
+      "structure": [
+        {"text": "Indeed", "role": "discourse_marker", "level": 1},
+        {"text": "this idea of taking full advantage of the interior spaces", "role": "subject", "level": 1},
+        {"text": "wasn't implemented", "role": "verb_phrase", "level": 1},
+        {"text": "until the 1920s and 1930s", "role": "time_adverbial", "level": 2},
+        {"text": "with the birth of the Modernist movement", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Indeed 用来进一步强调上一句“当时非传统”。",
+        "of taking full advantage... 是介词短语，说明 idea 的内容。",
+        "wasn't implemented until... 表示“直到……才被实施”。",
+        "with the birth of... 表示伴随现代主义运动诞生。"
+      ],
+      "expressions": [
+        {"text": "take full advantage of", "meaning_zh": "充分利用"},
+        {"text": "interior spaces", "meaning_zh": "内部空间"},
+        {"text": "be implemented", "meaning_zh": "被实施"},
+        {"text": "Modernist movement", "meaning_zh": "现代主义运动"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 23,
+      "sentence": "While in the upper layers of the city, people could walk undisturbed between elegant palaces and streets, the lower layer was the place for services, trade, transport and industry.",
+      "translation": "在城市上层，人们可以在优雅的宫殿和街道之间不受干扰地行走；而下层则是服务、贸易、运输和工业所在之处。",
+      "structure": [
+        {"text": "While in the upper layers of the city", "role": "adverbial_clause", "level": 1},
+        {"text": "people could walk undisturbed", "role": "main_clause", "level": 1},
+        {"text": "between elegant palaces and streets", "role": "prepositional_phrase", "level": 2},
+        {"text": "the lower layer", "role": "subject", "level": 1},
+        {"text": "was the place for services, trade, transport and industry", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "While 在这里表示空间和功能上的对比，而不只是时间。",
+        "in the upper layers of the city 是省略结构，完整含义为 while people were in...。",
+        "undisturbed 表示行走不受服务和工业活动干扰。",
+        "the lower layer 与 upper layers 对比，说明多层城市的功能分区。"
+      ],
+      "expressions": [
+        {"text": "upper layers of the city", "meaning_zh": "城市上层"},
+        {"text": "walk undisturbed", "meaning_zh": "不受干扰地行走"},
+        {"text": "the place for", "meaning_zh": "……所在之处"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 24,
+      "sentence": "But the true originality of Leonardo's vision was its fusion of architecture and engineering.",
+      "translation": "但列奥纳多构想真正的原创性在于它融合了建筑与工程。",
+      "structure": [
+        {"text": "But", "role": "discourse_marker", "level": 1},
+        {"text": "the true originality of Leonardo's vision", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "its fusion of architecture and engineering", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "But 引出比功能分层更核心的创新点。",
+        "the true originality 是主语核心，表示真正的原创性。",
+        "its 指 Leonardo's vision。",
+        "fusion of architecture and engineering 表示建筑与工程的结合。"
+      ],
+      "expressions": [
+        {"text": "true originality", "meaning_zh": "真正的原创性"},
+        {"text": "fusion of architecture and engineering", "meaning_zh": "建筑与工程的融合"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 25,
+      "sentence": "Leonardo designed extensive hydraulic plants to create artificial canals throughout the city.",
+      "translation": "列奥纳多设计了大规模水利设施，以在全城建造人工运河。",
+      "structure": [
+        {"text": "Leonardo", "role": "subject", "level": 1},
+        {"text": "designed", "role": "verb_phrase", "level": 1},
+        {"text": "extensive hydraulic plants", "role": "object", "level": 1},
+        {"text": "to create artificial canals throughout the city", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "extensive hydraulic plants 指规模较大的水利设施。",
+        "to create... 是目的不定式，说明设计这些设施的用途。",
+        "throughout the city 表示人工运河遍布全城。",
+        "hydraulic 与 canal 共同体现工程设计维度。"
+      ],
+      "expressions": [
+        {"text": "hydraulic plants", "meaning_zh": "水利设施"},
+        {"text": "artificial canals", "meaning_zh": "人工运河"},
+        {"text": "throughout the city", "meaning_zh": "遍布全城"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "The canals, regulated by clocks and basins, were supposed to make it easier for boats to navigate inland.",
+      "translation": "这些由时钟和水池调节的运河，本应让船只更容易在内陆航行。",
+      "structure": [
+        {"text": "The canals", "role": "subject", "level": 1},
+        {"text": "regulated by clocks and basins", "role": "participial_phrase", "level": 2},
+        {"text": "were supposed", "role": "verb_phrase", "level": 1},
+        {"text": "to make it easier for boats to navigate inland", "role": "non_finite_clause", "level": 2},
+        {"text": "for boats to navigate inland", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "regulated by... 是过去分词短语，说明运河如何被控制。",
+        "were supposed to 表示设计意图或预期功能。",
+        "make it easier 中 it 是形式宾语，真正宾语是 for boats to navigate inland。",
+        "navigate inland 表示在内陆水道航行。"
+      ],
+      "expressions": [
+        {"text": "regulated by", "meaning_zh": "由……调节"},
+        {"text": "be supposed to", "meaning_zh": "本应；被认为会"},
+        {"text": "make it easier for", "meaning_zh": "使……更容易"},
+        {"text": "navigate inland", "meaning_zh": "在内陆航行"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "Leonardo also thought that the width of the streets ought to match the average height of the adjacent houses: a rule still followed in many contemporary cities across Italy, to allow access to sun and reduce the risk of damage from earthquakes.",
+      "translation": "列奥纳多还认为，街道宽度应与相邻房屋的平均高度相匹配：这条规则如今仍被意大利许多当代城市遵循，以便阳光进入并降低地震造成损害的风险。",
+      "structure": [
+        {"text": "Leonardo also thought", "role": "main_clause", "level": 1},
+        {"text": "that the width of the streets ought to match the average height of the adjacent houses", "role": "noun_clause", "level": 2},
+        {"text": "a rule still followed in many contemporary cities across Italy", "role": "appositive", "level": 1},
+        {"text": "still followed in many contemporary cities across Italy", "role": "participial_phrase", "level": 2},
+        {"text": "to allow access to sun and reduce the risk of damage from earthquakes", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导 thought 的宾语从句，说明达·芬奇关于街道宽度的规则。",
+        "ought to match 表示应当与……相匹配。",
+        "冒号后的 a rule 是对前面规则的同位说明。",
+        "to allow... and reduce... 是目的不定式，解释这条规则的功能。"
+      ],
+      "expressions": [
+        {"text": "ought to match", "meaning_zh": "应当匹配"},
+        {"text": "adjacent houses", "meaning_zh": "相邻房屋"},
+        {"text": "allow access to sun", "meaning_zh": "允许阳光进入"},
+        {"text": "reduce the risk of damage", "meaning_zh": "降低损害风险"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 28,
+      "sentence": "Although some of these features existed in Roman cities, before Leonardo's drawings there had never been a multi-level, compact modern city which was thoroughly technically conceived.",
+      "translation": "尽管其中一些特征在罗马城市中已经存在，但在列奥纳多的图纸之前，从未有过一座经过彻底技术构想的多层紧凑型现代城市。",
+      "structure": [
+        {"text": "Although some of these features existed in Roman cities", "role": "adverbial_clause", "level": 1},
+        {"text": "before Leonardo's drawings", "role": "prepositional_phrase", "level": 1},
+        {"text": "there had never been", "role": "existential_clause", "level": 1},
+        {"text": "a multi-level, compact modern city", "role": "logical_subject", "level": 1},
+        {"text": "which was thoroughly technically conceived", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Although 引导让步状语从句，承认部分特征并非全新。",
+        "there had never been 是过去完成时的存在句，强调在达·芬奇之前从未出现。",
+        "multi-level, compact modern city 是被强调的城市类型。",
+        "which 引导定语从句，说明该城市是从技术上被全面构想出来的。"
+      ],
+      "expressions": [
+        {"text": "some of these features", "meaning_zh": "其中一些特征"},
+        {"text": "multi-level, compact modern city", "meaning_zh": "多层紧凑型现代城市"},
+        {"text": "technically conceived", "meaning_zh": "从技术上构想的"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 29,
+      "sentence": "Indeed, it wasn't until the 19th century that some of his ideas were applied.",
+      "translation": "事实上，直到19世纪，他的一些想法才得到应用。",
+      "structure": [
+        {"text": "Indeed", "role": "discourse_marker", "level": 1},
+        {"text": "it wasn't until the 19th century", "role": "emphatic_clause", "level": 1},
+        {"text": "that some of his ideas were applied", "role": "that_clause", "level": 2},
+        {"text": "were applied", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "it wasn't until... that... 是强调句型，表示“直到……才……”。",
+        "some of his ideas 指达·芬奇城市设计中的部分构想。",
+        "were applied 是被动语态，强调这些想法被后人应用。",
+        "Indeed 进一步说明其构想超前于时代。"
+      ],
+      "expressions": [
+        {"text": "it wasn't until", "meaning_zh": "直到……才"},
+        {"text": "be applied", "meaning_zh": "被应用"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 30,
+      "sentence": "For example, the subdivision of the city by function – with services and infrastructures located in the lower levels and wide and well-ventilated boulevards and walkways above for residents – is an idea that can be found in Georges-Eugène Haussmann's renovation of Paris under Emperor Napoleon III between 1853 and 1870.",
+      "translation": "例如，按功能划分城市——服务设施和基础设施位于较低层级，而为居民设置的宽阔且通风良好的林荫大道和步道位于上方——这一想法可以在乔治-欧仁·奥斯曼于1853年至1870年间在拿破仑三世统治下对巴黎的改造中找到。",
+      "structure": [
+        {"text": "For example", "role": "discourse_marker", "level": 1},
+        {"text": "the subdivision of the city by function", "role": "subject", "level": 1},
+        {"text": "with services and infrastructures located in the lower levels and wide and well-ventilated boulevards and walkways above for residents", "role": "with_phrase", "level": 2},
+        {"text": "is an idea", "role": "verb_phrase", "level": 1},
+        {"text": "that can be found in Georges-Eugène Haussmann's renovation of Paris under Emperor Napoleon III between 1853 and 1870", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "破折号中的 with... 详细解释按功能划分城市的具体方式。",
+        "located in the lower levels 是过去分词短语，修饰 services and infrastructures。",
+        "wide and well-ventilated boulevards and walkways above for residents 与前面的 lower levels 构成上下层对比。",
+        "that 引导定语从句修饰 an idea，说明该想法后来可在巴黎改造中看到。"
+      ],
+      "expressions": [
+        {"text": "subdivision of the city by function", "meaning_zh": "按功能划分城市"},
+        {"text": "services and infrastructures", "meaning_zh": "服务设施和基础设施"},
+        {"text": "well-ventilated boulevards", "meaning_zh": "通风良好的林荫大道"},
+        {"text": "renovation of Paris", "meaning_zh": "巴黎改造"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 31,
+      "sentence": "Today, Leonardo's ideas are not simply valid, they actually suggest a way forward for urban planning.",
+      "translation": "如今，列奥纳多的想法不仅仍然有效，它们实际上还为城市规划指出了一条前进道路。",
+      "structure": [
+        {"text": "Today", "role": "time_adverbial", "level": 1},
+        {"text": "Leonardo's ideas", "role": "subject", "level": 1},
+        {"text": "are not simply valid", "role": "verb_phrase", "level": 1},
+        {"text": "they actually suggest", "role": "independent_clause", "level": 1},
+        {"text": "a way forward for urban planning", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "not simply valid 表示不仅仅是有效，后面会补充更强结论。",
+        "逗号连接两个并列分句，第二个 they 指 Leonardo's ideas。",
+        "actually 强调这些想法在当代仍有实践启发。",
+        "a way forward 表示未来可行的发展方向。"
+      ],
+      "expressions": [
+        {"text": "not simply valid", "meaning_zh": "不仅仅有效"},
+        {"text": "suggest a way forward", "meaning_zh": "提出前进方向"},
+        {"text": "urban planning", "meaning_zh": "城市规划"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 32,
+      "sentence": "Many scholars think that the compact city, built upwards instead of outwards, integrated with nature (especially water systems), with efficient transport infrastructure, could help modern cities become more efficient and sustainable.",
+      "translation": "许多学者认为，紧凑型城市——向上而非向外建设、与自然（尤其是水系统）融合，并拥有高效交通基础设施——能够帮助现代城市变得更加高效和可持续。",
+      "structure": [
+        {"text": "Many scholars think", "role": "main_clause", "level": 1},
+        {"text": "that the compact city", "role": "noun_clause", "level": 2},
+        {"text": "built upwards instead of outwards", "role": "participial_phrase", "level": 3},
+        {"text": "integrated with nature (especially water systems)", "role": "participial_phrase", "level": 3},
+        {"text": "with efficient transport infrastructure", "role": "prepositional_phrase", "level": 3},
+        {"text": "could help modern cities become more efficient and sustainable", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导 think 的宾语从句，从句主语是 the compact city。",
+        "built upwards instead of outwards 与 integrated with nature 都是后置分词短语，修饰 compact city。",
+        "with efficient transport infrastructure 继续补充 compact city 的特征。",
+        "help modern cities become... 是 help 后接宾语和省略 to 的不定式。"
+      ],
+      "expressions": [
+        {"text": "compact city", "meaning_zh": "紧凑型城市"},
+        {"text": "built upwards instead of outwards", "meaning_zh": "向上而非向外建设"},
+        {"text": "integrated with nature", "meaning_zh": "与自然融合"},
+        {"text": "efficient transport infrastructure", "meaning_zh": "高效交通基础设施"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 33,
+      "sentence": "This is yet another reason why Leonardo was aligned so closely with modern urban planning and centuries ahead of his time.",
+      "translation": "这又是一个原因，说明列奥纳多为何与现代城市规划如此紧密契合，并领先于他的时代数百年。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "is yet another reason", "role": "verb_phrase", "level": 1},
+        {"text": "why Leonardo was aligned so closely with modern urban planning", "role": "relative_clause", "level": 2},
+        {"text": "and centuries ahead of his time", "role": "coordinated_adjective_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "This 指上一句紧凑、向上、亲近自然的城市理念仍适用于今天。",
+        "yet another reason 表示“又一个原因”，承接全文对达·芬奇超前性的论证。",
+        "why 引导定语从句，修饰 reason。",
+        "centuries ahead of his time 表示领先其时代数百年。"
+      ],
+      "expressions": [
+        {"text": "yet another reason why", "meaning_zh": "又一个说明……的原因"},
+        {"text": "be aligned with", "meaning_zh": "与……一致/契合"},
+        {"text": "modern urban planning", "meaning_zh": "现代城市规划"},
+        {"text": "ahead of his time", "meaning_zh": "领先于他的时代"}
+      ]
+    }
+  ]
+}

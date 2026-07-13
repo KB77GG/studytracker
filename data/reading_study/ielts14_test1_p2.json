@@ -1,0 +1,2266 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts14_test1_reading",
+  "passage_id": "ielts14_test1_p2",
+  "passage_title": "The growth of bike-sharing schemes around the world",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The original idea for an urban bike-sharing scheme dates back to a summer's day in Amsterdam in 1965.",
+      "translation": "城市自行车共享计划的最初想法可以追溯到1965年阿姆斯特丹的一个夏日。",
+      "structure": [
+        {
+          "text": "The original idea for an urban bike-sharing scheme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "dates back to",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a summer's day in Amsterdam in 1965",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "for an urban bike-sharing scheme 是后置介词短语，说明 idea 的内容。",
+        "dates back to 表示“追溯到”，强调这个想法的历史来源。",
+        "in Amsterdam in 1965 连续两个介词短语分别交代地点和时间。"
+      ],
+      "expressions": [
+        {
+          "text": "date back to",
+          "meaning_zh": "追溯到"
+        },
+        {
+          "text": "bike-sharing scheme",
+          "meaning_zh": "自行车共享计划"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Provo, the organisation that came up with the idea, was a group of Dutch activists who wanted to change society.",
+      "translation": "Provo 是提出这个想法的组织，由一群想改变社会的荷兰活动家组成。",
+      "structure": [
+        {
+          "text": "Provo",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "the organisation that came up with the idea",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "was a group of Dutch activists",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "who wanted to change society",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "the organisation that came up with the idea 是同位语，解释 Provo 是什么组织。",
+        "that came up with the idea 是定语从句，修饰 organisation。",
+        "who wanted to change society 是定语从句，说明 activists 的目标。"
+      ],
+      "expressions": [
+        {
+          "text": "come up with",
+          "meaning_zh": "提出；想出"
+        },
+        {
+          "text": "change society",
+          "meaning_zh": "改变社会"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "They believed the scheme, which was known as the Witte Fietsenplan, was an answer to the perceived threats of air pollution and consumerism.",
+      "translation": "他们认为这个被称为 Witte Fietsenplan 的计划，是应对人们所感知到的空气污染和消费主义威胁的一种办法。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "believed",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the scheme, which was known as the Witte Fietsenplan, was an answer to the perceived threats of air pollution and consumerism",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "which was known as the Witte Fietsenplan",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "believed 后省略了 that，引出完整的宾语从句。",
+        "which was known as the Witte Fietsenplan 是非限制性定语从句，补充说明 the scheme。",
+        "perceived threats 表示“被认为存在的威胁”，不一定是客观量化的威胁。"
+      ],
+      "expressions": [
+        {
+          "text": "be known as",
+          "meaning_zh": "被称为"
+        },
+        {
+          "text": "an answer to",
+          "meaning_zh": "应对……的办法"
+        },
+        {
+          "text": "perceived threats",
+          "meaning_zh": "被感知到的威胁"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "In the centre of Amsterdam, they painted a small number of used bikes white.",
+      "translation": "他们在阿姆斯特丹市中心把少量二手自行车漆成白色。",
+      "structure": [
+        {
+          "text": "In the centre of Amsterdam",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "painted a small number of used bikes white",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "句首介词短语交代动作发生地点，不是从句。",
+        "painted ... white 是“动词 + 宾语 + 宾补”结构，white 描述宾语变化后的状态。"
+      ],
+      "expressions": [
+        {
+          "text": "a small number of",
+          "meaning_zh": "少量的"
+        }
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "They also distributed leaflets describing the dangers of cars and inviting people to use the white bikes.",
+      "translation": "他们还分发传单，说明汽车的危害，并邀请人们使用这些白色自行车。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also distributed leaflets",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "describing the dangers of cars and inviting people to use the white bikes",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "describing 和 inviting 是并列的现在分词，修饰 leaflets 的内容和用途。",
+        "to use the white bikes 是不定式短语，作 inviting people 的补足内容。"
+      ],
+      "expressions": [
+        {
+          "text": "distribute leaflets",
+          "meaning_zh": "分发传单"
+        },
+        {
+          "text": "the dangers of",
+          "meaning_zh": "……的危害"
+        }
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "The bikes were then left unlocked at various locations around the city, to be used by anyone in need of transport.",
+      "translation": "随后，这些自行车被不上锁地留在城市各处，供任何需要交通工具的人使用。",
+      "structure": [
+        {
+          "text": "The bikes",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were then left unlocked",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "at various locations around the city",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "to be used by anyone in need of transport",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "were left unlocked 是被动结构，unlocked 是宾语补足语转化来的主语补足状态。",
+        "to be used by anyone 表目的，说明把车留在各处的用途。",
+        "in need of transport 后置修饰 anyone，表示“需要交通工具的人”。"
+      ],
+      "expressions": [
+        {
+          "text": "be left unlocked",
+          "meaning_zh": "被不上锁地留下"
+        },
+        {
+          "text": "in need of",
+          "meaning_zh": "需要"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "Luud Schimmelpennink, a Dutch industrial engineer who still lives and cycles in Amsterdam, was heavily involved in the original scheme.",
+      "translation": "Luud Schimmelpennink 是一位至今仍在阿姆斯特丹生活并骑车的荷兰工业工程师，他深度参与了最初的计划。",
+      "structure": [
+        {
+          "text": "Luud Schimmelpennink",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "a Dutch industrial engineer who still lives and cycles in Amsterdam",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "was heavily involved in the original scheme",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "a Dutch industrial engineer 是同位语，补充说明人物身份。",
+        "who still lives and cycles in Amsterdam 是定语从句，说明这位工程师与阿姆斯特丹的持续联系。",
+        "was heavily involved in 表示“深度参与”，不是简单的“被卷入”。"
+      ],
+      "expressions": [
+        {
+          "text": "be heavily involved in",
+          "meaning_zh": "深度参与"
+        },
+        {
+          "text": "the original scheme",
+          "meaning_zh": "最初的计划"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "He recalls how the scheme succeeded in attracting a great deal of attention—particularly when it came to publicising Provo's aims—but struggled to get off the ground.",
+      "translation": "他回忆说，这一计划成功吸引了大量关注——尤其是在宣传 Provo 的目标方面——但在真正启动实施上却困难重重。",
+      "structure": [
+        {
+          "text": "He",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "recalls",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "how the scheme succeeded in attracting a great deal of attention—particularly when it came to publicising Provo's aims—but struggled to get off the ground",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "when it came to publicising Provo's aims",
+          "role": "adverbial_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "how 引导 recalls 的宾语从句，概括计划成功与受挫的两个方面。",
+        "破折号中的 particularly when ... 是插入说明，强调吸引关注主要体现在宣传目标上。",
+        "get off the ground 是习语，表示项目真正启动或开始运转。"
+      ],
+      "expressions": [
+        {
+          "text": "a great deal of attention",
+          "meaning_zh": "大量关注"
+        },
+        {
+          "text": "when it comes to",
+          "meaning_zh": "当谈到；在……方面"
+        },
+        {
+          "text": "get off the ground",
+          "meaning_zh": "开始顺利运转"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "The police were opposed to Provo's initiatives and almost as soon as the white bikes were distributed around the city, they removed them.",
+      "translation": "警方反对 Provo 的倡议，而且几乎在白色自行车刚被分发到城市各处时，就把它们移走了。",
+      "structure": [
+        {
+          "text": "The police",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were opposed to Provo's initiatives",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "almost as soon as the white bikes were distributed around the city",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "they removed them",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "were opposed to 表示“反对”，主语是 The police。",
+        "as soon as 引导时间状语从句，说明移走自行车发生得非常快。",
+        "they 和 them 分别指代警方和白色自行车，指代关系要分清。"
+      ],
+      "expressions": [
+        {
+          "text": "be opposed to",
+          "meaning_zh": "反对"
+        },
+        {
+          "text": "as soon as",
+          "meaning_zh": "一……就……"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "However, for Schimmelpennink and for bike-sharing schemes in general, this was just the beginning.",
+      "translation": "然而，对 Schimmelpennink 以及总体上的自行车共享计划来说，这仅仅是个开始。",
+      "structure": [
+        {
+          "text": "for Schimmelpennink and for bike-sharing schemes in general",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "this",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was just the beginning",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "However 标记转折，说明前面的失败并非故事终点。",
+        "for ... and for ... 并列两个适用对象，表示“对……而言”。",
+        "this 指代前文最早的白色自行车计划及其遭遇。"
+      ],
+      "expressions": [
+        {
+          "text": "in general",
+          "meaning_zh": "总体而言"
+        },
+        {
+          "text": "just the beginning",
+          "meaning_zh": "只是开始"
+        }
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "'The first Witte Fietsenplan was just a symbolic thing,' he says.",
+      "translation": "他说：“第一个 Witte Fietsenplan 只是一件象征性的事情。”",
+      "structure": [
+        {
+          "text": "The first Witte Fietsenplan",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was just a symbolic thing",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "he says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "引号内是直接引语，he says 是引语后的报道分句。",
+        "just a symbolic thing 强调这个计划更重在象征意义，而非实际运营规模。"
+      ],
+      "expressions": [
+        {
+          "text": "symbolic thing",
+          "meaning_zh": "象征性的事情"
+        }
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "'We painted a few bikes white, that was all.",
+      "translation": "“我们只是把几辆自行车漆成白色，仅此而已。",
+      "structure": [
+        {
+          "text": "We",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "painted a few bikes white",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that was all",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "painted a few bikes white 仍是“动词 + 宾语 + 宾补”结构。",
+        "that was all 表示“仅此而已”，强调行动规模很有限。"
+      ],
+      "expressions": [
+        {
+          "text": "that was all",
+          "meaning_zh": "仅此而已"
+        }
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "Things got more serious when I became a member of the Amsterdam city council two years later.'",
+      "translation": "两年后我成为阿姆斯特丹市议会议员时，事情变得更严肃了。”",
+      "structure": [
+        {
+          "text": "Things",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "got more serious",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "when I became a member of the Amsterdam city council two years later",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Things 泛指局势或事情的发展，不指具体物品。",
+        "when 引导时间状语从句，说明计划变得更严肃的时间背景。",
+        "two years later 修饰 became，指首次计划之后两年。"
+      ],
+      "expressions": [
+        {
+          "text": "get more serious",
+          "meaning_zh": "变得更严肃；进入更认真阶段"
+        },
+        {
+          "text": "city council",
+          "meaning_zh": "市议会"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "Schimmelpennink seized this opportunity to present a more elaborate Witte Fietsenplan to the city council.",
+      "translation": "Schimmelpennink 抓住这个机会，向市议会提交了一个更详尽的 Witte Fietsenplan。",
+      "structure": [
+        {
+          "text": "Schimmelpennink",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "seized this opportunity",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to present a more elaborate Witte Fietsenplan to the city council",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "seized this opportunity 表示主动抓住机会，承接前文成为市议会议员。",
+        "to present ... 是目的状语，说明抓住机会要做什么。",
+        "more elaborate 表示方案比早期象征性行动更详细、更成体系。"
+      ],
+      "expressions": [
+        {
+          "text": "seize this opportunity",
+          "meaning_zh": "抓住这个机会"
+        },
+        {
+          "text": "present ... to",
+          "meaning_zh": "向……提交/展示……"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "'My idea was that the municipality of Amsterdam would distribute 10,000 white bikes over the city, for everyone to use,' he explains.",
+      "translation": "他解释说：“我的想法是，阿姆斯特丹市政府将在全城投放一万辆白色自行车，供所有人使用。”",
+      "structure": [
+        {
+          "text": "My idea",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "linking_verb",
+          "level": 1
+        },
+        {
+          "text": "that the municipality of Amsterdam would distribute 10,000 white bikes over the city, for everyone to use",
+          "role": "predicative_clause",
+          "level": 2
+        },
+        {
+          "text": "he explains",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "that 引导表语从句，具体说明 idea 的内容。",
+        "would distribute 表示计划中的做法，而不是已经发生的事实。",
+        "for everyone to use 是不定式复合结构，说明投放自行车的用途。"
+      ],
+      "expressions": [
+        {
+          "text": "the municipality of",
+          "meaning_zh": "……市政府"
+        },
+        {
+          "text": "for everyone to use",
+          "meaning_zh": "供所有人使用"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "'I made serious calculations.",
+      "translation": "“我做了认真的测算。",
+      "structure": [
+        {
+          "text": "I",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "made serious calculations",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "serious calculations 强调方案经过严肃测算，不是随意设想。",
+        "这是直接引语的前半部分，引号会在后一句结束。"
+      ],
+      "expressions": [
+        {
+          "text": "make calculations",
+          "meaning_zh": "进行计算；做测算"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "It turned out that a white bicycle—per person, per kilometer—would cost the municipality only 10% of what it contributed to public transport per person per kilometre.'",
+      "translation": "结果表明，按每人每公里计算，一辆白色自行车只会花费市政府对公共交通每人每公里补贴额的10%。",
+      "structure": [
+        {
+          "text": "It turned out",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that a white bicycle—per person, per kilometer—would cost the municipality only 10% of what it contributed to public transport per person per kilometre",
+          "role": "subject_clause",
+          "level": 2
+        },
+        {
+          "text": "what it contributed to public transport per person per kilometre",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "It turned out that ... 表示“结果证明……”，it 是形式主语。",
+        "破折号中的 per person, per kilometer 插入说明计算口径。",
+        "what it contributed to public transport 是 what 引导的名词性从句，作介词 of 的宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "It turned out that",
+          "meaning_zh": "结果证明"
+        },
+        {
+          "text": "contribute to public transport",
+          "meaning_zh": "为公共交通出资/补贴"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "Nevertheless, the council unanimously rejected the plan.",
+      "translation": "然而，市议会一致否决了这个计划。",
+      "structure": [
+        {
+          "text": "the council",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "unanimously rejected the plan",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Nevertheless 标记让步转折，说明尽管成本测算有利，结果仍被否决。",
+        "unanimously 表示“一致地”，说明并非少数反对。"
+      ],
+      "expressions": [
+        {
+          "text": "unanimously reject",
+          "meaning_zh": "一致否决"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "'They said that the bicycle belongs to the past.",
+      "translation": "“他们说，自行车属于过去。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "said",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that the bicycle belongs to the past",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "They 指前一句中的 the council，即市议会成员。",
+        "belongs to the past 表示被认为已经过时，而不是字面“属于过去”。"
+      ],
+      "expressions": [
+        {
+          "text": "belong to the past",
+          "meaning_zh": "属于过去；已经过时"
+        }
+      ]
+    },
+    {
+      "id": "C-07",
+      "paragraph_label": "C",
+      "sentence_index": 20,
+      "sentence": "They saw a glorious future for the car,' says Schimmelpennink.",
+      "translation": "他们认为汽车有着光辉的未来，”Schimmelpennink 说。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "saw a glorious future for the car",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "says Schimmelpennink",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "saw a glorious future for the car 表示他们看好汽车的发展前景。",
+        "says Schimmelpennink 是倒装式报道分句，主语在动词后面。"
+      ],
+      "expressions": [
+        {
+          "text": "a glorious future",
+          "meaning_zh": "光辉的未来"
+        }
+      ]
+    },
+    {
+      "id": "C-08",
+      "paragraph_label": "C",
+      "sentence_index": 21,
+      "sentence": "But he was not in the least discouraged.",
+      "translation": "但他一点也没有气馁。",
+      "structure": [
+        {
+          "text": "he",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was not in the least discouraged",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "But 与前面计划被否决形成转折。",
+        "not in the least 是强否定表达，表示“一点也不”。"
+      ],
+      "expressions": [
+        {
+          "text": "not in the least",
+          "meaning_zh": "一点也不"
+        },
+        {
+          "text": "be discouraged",
+          "meaning_zh": "气馁"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "Schimmelpennink never stopped believing in bike-sharing, and in the mid-90s, two Danes asked for his help to set up a system in Copenhagen.",
+      "translation": "Schimmelpennink 从未停止相信自行车共享；20世纪90年代中期，两名丹麦人请他帮忙在哥本哈根建立一个系统。",
+      "structure": [
+        {
+          "text": "Schimmelpennink",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "never stopped believing in bike-sharing",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and in the mid-90s, two Danes asked for his help to set up a system in Copenhagen",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "never stopped believing in 强调信念持续存在。",
+        "and 连接两个独立分句，后一分句主语是 two Danes。",
+        "to set up a system in Copenhagen 说明请求帮助的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "believe in",
+          "meaning_zh": "相信；认可"
+        },
+        {
+          "text": "set up a system",
+          "meaning_zh": "建立一个系统"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "The result was the world's first large-scale bike-share programme.",
+      "translation": "其结果就是世界上第一个大规模自行车共享项目。",
+      "structure": [
+        {
+          "text": "The result",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was the world's first large-scale bike-share programme",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "The result 承接上一句两名丹麦人请求帮助建立系统这件事。",
+        "large-scale 修饰 bike-share programme，突出规模不同于早期象征性实验。"
+      ],
+      "expressions": [
+        {
+          "text": "large-scale",
+          "meaning_zh": "大规模的"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "It worked on a deposit: 'You dropped a coin in the bike and when you returned it, you got your money back.'",
+      "translation": "它采用押金机制：“你往车里投一枚硬币，归还自行车时就能拿回钱。”",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "worked on a deposit",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "You dropped a coin in the bike and when you returned it, you got your money back",
+          "role": "direct_speech",
+          "level": 2
+        },
+        {
+          "text": "when you returned it",
+          "role": "adverbial_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "It 指上一句的 bike-share programme。",
+        "work on a deposit 表示按押金机制运作。",
+        "when you returned it 是时间状语从句，it 指自行车。"
+      ],
+      "expressions": [
+        {
+          "text": "work on a deposit",
+          "meaning_zh": "按押金方式运作"
+        },
+        {
+          "text": "get your money back",
+          "meaning_zh": "拿回钱"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "After setting up the Danish system, Schimmelpennink decided to try his luck again in the Netherlands—and this time he succeeded in arousing the interest of the Dutch Ministry of Transport.",
+      "translation": "建立丹麦系统之后，Schimmelpennink 决定再次在荷兰碰碰运气——这一次他成功引起了荷兰交通部的兴趣。",
+      "structure": [
+        {
+          "text": "After setting up the Danish system",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "Schimmelpennink",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "decided to try his luck again in the Netherlands",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and this time he succeeded in arousing the interest of the Dutch Ministry of Transport",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "After setting up ... 是现在分词短语，表示时间背景。",
+        "try his luck again 表示再次尝试，不是字面“试运气”那么随意。",
+        "succeeded in arousing the interest of ... 表示成功引起某机构兴趣。"
+      ],
+      "expressions": [
+        {
+          "text": "try one's luck",
+          "meaning_zh": "碰碰运气；尝试"
+        },
+        {
+          "text": "succeed in doing",
+          "meaning_zh": "成功做成某事"
+        },
+        {
+          "text": "arouse the interest of",
+          "meaning_zh": "引起……的兴趣"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "'Times had changed,' he recalls.",
+      "translation": "他回忆道：“时代已经变了。”",
+      "structure": [
+        {
+          "text": "Times",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had changed",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "he recalls",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "had changed 用过去完成时，表示在他再次尝试之前时代已经发生变化。",
+        "Times 指社会环境和公众观念，而不是具体的“时间次数”。"
+      ],
+      "expressions": [
+        {
+          "text": "Times had changed",
+          "meaning_zh": "时代已经变了"
+        }
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 27,
+      "sentence": "'People had become more environmentally conscious, and the Danish experiment had proved that bike-sharing was a real possibility.'",
+      "translation": "“人们已经变得更有环保意识，而丹麦的实验也已经证明，自行车共享是真正可行的。”",
+      "structure": [
+        {
+          "text": "People",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had become more environmentally conscious",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "and the Danish experiment had proved that bike-sharing was a real possibility",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "that bike-sharing was a real possibility",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "had become 和 had proved 都用过去完成时，说明这些变化发生在荷兰新计划之前。",
+        "environmentally conscious 表示有环保意识，不只是“意识到环境”。",
+        "that 引导 proved 的宾语从句，说明丹麦实验证明的内容。"
+      ],
+      "expressions": [
+        {
+          "text": "environmentally conscious",
+          "meaning_zh": "有环保意识的"
+        },
+        {
+          "text": "a real possibility",
+          "meaning_zh": "真正可行的事"
+        }
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 28,
+      "sentence": "A new Witte Fietsenplan was launched in 1999 in Amsterdam.",
+      "translation": "1999年，一个新的 Witte Fietsenplan 在阿姆斯特丹启动。",
+      "structure": [
+        {
+          "text": "A new Witte Fietsenplan",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was launched",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in 1999 in Amsterdam",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "was launched 是被动语态，强调计划被启动。",
+        "in 1999 和 in Amsterdam 分别交代时间和地点。"
+      ],
+      "expressions": [
+        {
+          "text": "be launched",
+          "meaning_zh": "被启动；推出"
+        }
+      ]
+    },
+    {
+      "id": "D-08",
+      "paragraph_label": "D",
+      "sentence_index": 29,
+      "sentence": "However, riding a white bike was no longer free; it cost one guilder per trip and payment was made with a chip card developed by the Dutch bank Postbank.",
+      "translation": "不过，骑白色自行车不再免费；每次行程要花一荷兰盾，并且通过荷兰银行 Postbank 开发的芯片卡付款。",
+      "structure": [
+        {
+          "text": "riding a white bike",
+          "role": "gerund_subject",
+          "level": 1
+        },
+        {
+          "text": "was no longer free",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "it cost one guilder per trip",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "payment was made with a chip card developed by the Dutch bank Postbank",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "riding a white bike 是动名词短语作主语。",
+        "分号连接两个紧密相关的说明：不免费以及如何付款。",
+        "developed by the Dutch bank Postbank 是过去分词短语，修饰 chip card。"
+      ],
+      "expressions": [
+        {
+          "text": "no longer",
+          "meaning_zh": "不再"
+        },
+        {
+          "text": "per trip",
+          "meaning_zh": "每次行程"
+        },
+        {
+          "text": "payment was made with",
+          "meaning_zh": "用……付款"
+        }
+      ]
+    },
+    {
+      "id": "D-09",
+      "paragraph_label": "D",
+      "sentence_index": 30,
+      "sentence": "Schimmelpennink designed conspicuous, sturdy white bikes locked in special racks which could be opened with the chip card—the plan started with 250 bikes, distributed over five stations.",
+      "translation": "Schimmelpennink 设计了醒目而结实的白色自行车，它们锁在可用芯片卡打开的专用车架上——该计划开始时有250辆自行车，分布在5个站点。",
+      "structure": [
+        {
+          "text": "Schimmelpennink",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "designed conspicuous, sturdy white bikes",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "locked in special racks which could be opened with the chip card",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "the plan started with 250 bikes, distributed over five stations",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "locked in special racks 是过去分词短语，修饰 white bikes。",
+        "which could be opened with the chip card 是定语从句，修饰 special racks。",
+        "破折号后补充计划初始规模，distributed over five stations 修饰 250 bikes。"
+      ],
+      "expressions": [
+        {
+          "text": "conspicuous, sturdy",
+          "meaning_zh": "醒目且结实的"
+        },
+        {
+          "text": "be distributed over",
+          "meaning_zh": "分布在"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "Theo Molenaar, who was a system designer for the project, worked alongside Schimmelpennink.",
+      "translation": "Theo Molenaar 是该项目的一名系统设计师，他与 Schimmelpennink 一起工作。",
+      "structure": [
+        {
+          "text": "Theo Molenaar",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who was a system designer for the project",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "worked alongside Schimmelpennink",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "who 引导非限制性定语从句，补充 Theo Molenaar 的身份。",
+        "worked alongside 表示并肩合作，而不仅是地点上“在旁边工作”。"
+      ],
+      "expressions": [
+        {
+          "text": "system designer",
+          "meaning_zh": "系统设计师"
+        },
+        {
+          "text": "work alongside",
+          "meaning_zh": "与……并肩工作"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 32,
+      "sentence": "'I remember when we were testing the bike racks, he announced that he had already designed better ones.",
+      "translation": "“我记得我们测试自行车架时，他宣布自己已经设计出了更好的车架。",
+      "structure": [
+        {
+          "text": "I",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "remember",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "when we were testing the bike racks",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "he announced that he had already designed better ones",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "when we were testing the bike racks 交代记忆中的时间场景。",
+        "that he had already designed better ones 是 announced 的宾语从句。",
+        "ones 替代前面的 bike racks，避免重复。"
+      ],
+      "expressions": [
+        {
+          "text": "test the bike racks",
+          "meaning_zh": "测试自行车架"
+        },
+        {
+          "text": "design better ones",
+          "meaning_zh": "设计出更好的同类产品"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "But of course, we had to go through with the ones we had.'",
+      "translation": "但当然，我们不得不继续使用已经有的那些。”",
+      "structure": [
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had to go through with the ones we had",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "we had",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "But of course 标记转折，说明即便有更好设计也无法立刻更换。",
+        "go through with 表示坚持完成或继续推进某事。",
+        "the ones we had 中省略关系代词，we had 修饰 ones。"
+      ],
+      "expressions": [
+        {
+          "text": "go through with",
+          "meaning_zh": "坚持完成；继续推进"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "The system, however, was prone to vandalism and theft.",
+      "translation": "然而，这个系统容易遭到故意破坏和盗窃。",
+      "structure": [
+        {
+          "text": "The system",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was prone to vandalism and theft",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "however 插入主语和谓语之间，表示与前面对设计推进的叙述形成转折。",
+        "be prone to 表示“容易受到/倾向于发生”，后接名词 vandalism and theft。"
+      ],
+      "expressions": [
+        {
+          "text": "be prone to",
+          "meaning_zh": "易于遭受；有……倾向"
+        },
+        {
+          "text": "vandalism and theft",
+          "meaning_zh": "故意破坏和盗窃"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 35,
+      "sentence": "'After every weekend there would always be a couple of bikes missing,' Molenaar says.",
+      "translation": "Molenaar 说：“每个周末之后，总会有几辆自行车不见。”",
+      "structure": [
+        {
+          "text": "After every weekend",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "there would always be a couple of bikes missing",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "Molenaar says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "there would always be 是存在句，would 表示过去反复发生的情况。",
+        "a couple of bikes missing 中 missing 作后置状态补足，表示自行车不见了。",
+        "After every weekend 是介词短语，不是从句。"
+      ],
+      "expressions": [
+        {
+          "text": "a couple of",
+          "meaning_zh": "几个；两三个"
+        },
+        {
+          "text": "go missing",
+          "meaning_zh": "失踪；不见"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 36,
+      "sentence": "'I really have no idea what people did with them, because they could instantly be recognised as white bikes.'",
+      "translation": "“我真的不知道人们拿它们做了什么，因为它们一眼就能被认出是白色自行车。”",
+      "structure": [
+        {
+          "text": "I",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "really have no idea",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "what people did with them",
+          "role": "noun_clause",
+          "level": 2
+        },
+        {
+          "text": "because they could instantly be recognised as white bikes",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "what people did with them 是名词性从句，作 idea 的内容补足。",
+        "they 和 them 都指丢失的白色自行车。",
+        "could instantly be recognised as 是被动结构，表示很容易立刻被认出来。"
+      ],
+      "expressions": [
+        {
+          "text": "have no idea",
+          "meaning_zh": "不知道"
+        },
+        {
+          "text": "be recognised as",
+          "meaning_zh": "被认作"
+        }
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 37,
+      "sentence": "But the biggest blow came when Postbank decided to abolish the chip card, because it wasn't profitable.",
+      "translation": "但最大的打击出现在 Postbank 决定取消芯片卡时，因为它并不盈利。",
+      "structure": [
+        {
+          "text": "the biggest blow",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "came",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "when Postbank decided to abolish the chip card",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "because it wasn't profitable",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "the biggest blow 是抽象主语，指对项目影响最大的挫折。",
+        "when 引导时间状语从句，说明打击发生的节点。",
+        "because it wasn't profitable 中 it 指 chip card 或相关芯片卡业务。"
+      ],
+      "expressions": [
+        {
+          "text": "the biggest blow",
+          "meaning_zh": "最大的打击"
+        },
+        {
+          "text": "abolish the chip card",
+          "meaning_zh": "取消芯片卡"
+        }
+      ]
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 38,
+      "sentence": "'That chip card was pivotal to the system,' Molenaar says.",
+      "translation": "Molenaar 说：“那张芯片卡对这个系统至关重要。”",
+      "structure": [
+        {
+          "text": "That chip card",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was pivotal to the system",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "Molenaar says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "pivotal to 表示对某事具有核心作用，比 important 更强调关键性。",
+        "That chip card 指上一句 Postbank 决定取消的芯片卡。"
+      ],
+      "expressions": [
+        {
+          "text": "be pivotal to",
+          "meaning_zh": "对……至关重要"
+        }
+      ]
+    },
+    {
+      "id": "E-09",
+      "paragraph_label": "E",
+      "sentence_index": 39,
+      "sentence": "'To continue the project we would have needed to set up another system, but the business partner had lost interest.'",
+      "translation": "“为了继续这个项目，我们本来需要建立另一个系统，但商业伙伴已经失去了兴趣。”",
+      "structure": [
+        {
+          "text": "To continue the project",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "would have needed to set up another system",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "but the business partner had lost interest",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "To continue the project 是目的状语，说明另建系统的原因。",
+        "would have needed to 表示过去条件下本来会需要做的事。",
+        "had lost interest 用过去完成时，表示商业伙伴在继续推进前已经不感兴趣。"
+      ],
+      "expressions": [
+        {
+          "text": "set up another system",
+          "meaning_zh": "建立另一个系统"
+        },
+        {
+          "text": "lose interest",
+          "meaning_zh": "失去兴趣"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 40,
+      "sentence": "Schimmelpennink was disappointed, but—characteristically—not for long.",
+      "translation": "Schimmelpennink 很失望，但这很符合他的性格——失望并没有持续多久。",
+      "structure": [
+        {
+          "text": "Schimmelpennink",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was disappointed",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "but—characteristically—not for long",
+          "role": "coordinated_ellipsis",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "but 后省略了 he was disappointed，not for long 表示失望没有持续太久。",
+        "characteristically 是插入语，说明这种很快振作符合他的典型性格。",
+        "破折号突出插入评价，阅读时不要把它误作主干。"
+      ],
+      "expressions": [
+        {
+          "text": "not for long",
+          "meaning_zh": "不会持续太久"
+        },
+        {
+          "text": "characteristically",
+          "meaning_zh": "典型地；符合一贯性格地"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 41,
+      "sentence": "In 2002 he got a call from the French advertising corporation JCDecaux, who wanted to set up his bike-sharing scheme in Vienna.",
+      "translation": "2002年，他接到法国广告公司 JCDecaux 的电话；这家公司想在维也纳建立他的自行车共享计划。",
+      "structure": [
+        {
+          "text": "In 2002",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "he",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "got a call from the French advertising corporation JCDecaux",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "who wanted to set up his bike-sharing scheme in Vienna",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "who 引导非限制性定语从句，修饰 corporation JCDecaux。",
+        "his bike-sharing scheme 中 his 指 Schimmelpennink，说明该方案源于他的构想。",
+        "set up ... in Vienna 说明公司联系他的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "get a call from",
+          "meaning_zh": "接到……的电话"
+        },
+        {
+          "text": "advertising corporation",
+          "meaning_zh": "广告公司"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 42,
+      "sentence": "'That went really well.",
+      "translation": "“那进展得非常顺利。",
+      "structure": [
+        {
+          "text": "That",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "went really well",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "That 指在维也纳建立的自行车共享系统。",
+        "went really well 表示项目进展顺利，而不是字面“走得好”。"
+      ],
+      "expressions": [
+        {
+          "text": "go really well",
+          "meaning_zh": "进展非常顺利"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 43,
+      "sentence": "After Vienna, they set up a system in Lyon.",
+      "translation": "继维也纳之后，他们又在里昂建立了一个系统。",
+      "structure": [
+        {
+          "text": "After Vienna",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "set up a system in Lyon",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "After Vienna 表示继维也纳之后，是时间和顺序提示。",
+        "they 指 JCDecaux 等实施方，而不是所有城市。"
+      ],
+      "expressions": [
+        {
+          "text": "set up a system",
+          "meaning_zh": "建立一个系统"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 44,
+      "sentence": "Then in 2007, Paris followed.",
+      "translation": "随后在2007年，巴黎也跟进了。",
+      "structure": [
+        {
+          "text": "Then in 2007",
+          "role": "adverbial_phrase",
+          "level": 2
+        },
+        {
+          "text": "Paris",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "followed",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Paris followed 是拟人化表达，指巴黎也采用了类似系统。",
+        "Then in 2007 给出时间顺序，承接维也纳和里昂之后的发展。"
+      ],
+      "expressions": [
+        {
+          "text": "follow",
+          "meaning_zh": "随后采用；跟进"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 45,
+      "sentence": "That was a decisive moment in the history of bike-sharing.'",
+      "translation": "那是自行车共享历史上的决定性时刻。”",
+      "structure": [
+        {
+          "text": "That",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was a decisive moment",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "in the history of bike-sharing",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "That 指巴黎跟进建立共享单车系统这件事。",
+        "decisive moment 表示具有转折意义的关键时刻。",
+        "in the history of bike-sharing 限定这个时刻的重要性所在的领域。"
+      ],
+      "expressions": [
+        {
+          "text": "a decisive moment",
+          "meaning_zh": "决定性时刻"
+        },
+        {
+          "text": "in the history of",
+          "meaning_zh": "在……的历史上"
+        }
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 46,
+      "sentence": "The huge and unexpected success of the Parisian bike-sharing programme, which now boasts more than 20,000 bicycles, inspired cities all over the world to set up their own schemes, all modelled on Schimmelpennink's.",
+      "translation": "巴黎自行车共享项目取得了巨大而出人意料的成功，如今它拥有两万多辆自行车；这一成功激励了世界各地的城市建立自己的计划，而这些计划都以 Schimmelpennink 的方案为蓝本。",
+      "structure": [
+        {
+          "text": "The huge and unexpected success of the Parisian bike-sharing programme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "which now boasts more than 20,000 bicycles",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "inspired cities all over the world to set up their own schemes",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "all modelled on Schimmelpennink's",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "主语很长，核心是 success，of 短语说明是哪一个项目的成功。",
+        "which now boasts more than 20,000 bicycles 是非限制性定语从句，补充巴黎项目规模。",
+        "all modelled on Schimmelpennink's 是过去分词短语，说明各城市方案的共同参照。"
+      ],
+      "expressions": [
+        {
+          "text": "unexpected success",
+          "meaning_zh": "意外的成功"
+        },
+        {
+          "text": "boast more than",
+          "meaning_zh": "拥有超过"
+        },
+        {
+          "text": "modelled on",
+          "meaning_zh": "以……为蓝本"
+        }
+      ]
+    },
+    {
+      "id": "F-08",
+      "paragraph_label": "F",
+      "sentence_index": 47,
+      "sentence": "'It's wonderful that this happened,' he says.",
+      "translation": "他说：“这件事发生了，真是太好了。”",
+      "structure": [
+        {
+          "text": "It",
+          "role": "formal_subject",
+          "level": 1
+        },
+        {
+          "text": "It's wonderful",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "that this happened",
+          "role": "subject_clause",
+          "level": 2
+        },
+        {
+          "text": "he says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "It's wonderful that ... 中 It 是形式主语，真正评价对象是 that 从句。",
+        "this happened 指他的共享单车理念在世界范围内扩散。",
+        "he says 是报道分句，标明引语来源。"
+      ],
+      "expressions": [
+        {
+          "text": "It is wonderful that",
+          "meaning_zh": "……是很棒的"
+        }
+      ]
+    },
+    {
+      "id": "F-09",
+      "paragraph_label": "F",
+      "sentence_index": 48,
+      "sentence": "'But financially I didn't really benefit from it, because I never filed for a patent.'",
+      "translation": "“但在经济上我并没有真正从中获益，因为我从未申请专利。”",
+      "structure": [
+        {
+          "text": "financially",
+          "role": "adverbial_phrase",
+          "level": 2
+        },
+        {
+          "text": "I",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "didn't really benefit from it",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "because I never filed for a patent",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "financially 限定获益的方面，说明不是否认精神或声誉层面的意义。",
+        "benefit from it 中 it 指全球共享单车方案的扩散。",
+        "because 引导原因状语从句，说明未获经济收益的原因。"
+      ],
+      "expressions": [
+        {
+          "text": "benefit from",
+          "meaning_zh": "从……中获益"
+        },
+        {
+          "text": "file for a patent",
+          "meaning_zh": "申请专利"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 49,
+      "sentence": "In Amsterdam today, 38% of all trips are made by bike and, along with Copenhagen, it is regarded as one of the two most cycle-friendly capitals in the world—but the city never got another Witte Fietsenplan.",
+      "translation": "如今在阿姆斯特丹，38%的出行由自行车完成；它与哥本哈根一起被认为是世界上两个最适合骑行的首都之一——但这座城市再也没有获得另一个 Witte Fietsenplan。",
+      "structure": [
+        {
+          "text": "38% of all trips",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are made by bike",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "along with Copenhagen",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "it is regarded as one of the two most cycle-friendly capitals in the world",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "but the city never got another Witte Fietsenplan",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "are made by bike 是被动结构，表示出行方式。",
+        "it 指 Amsterdam，而不是 Copenhagen。",
+        "破折号后 but 引出反差：骑行友好却没有新的白色自行车计划。"
+      ],
+      "expressions": [
+        {
+          "text": "be made by bike",
+          "meaning_zh": "通过自行车完成"
+        },
+        {
+          "text": "be regarded as",
+          "meaning_zh": "被认为是"
+        },
+        {
+          "text": "cycle-friendly",
+          "meaning_zh": "适合骑行的"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 50,
+      "sentence": "Molenaar believes this may be because everybody in Amsterdam already has a bike.",
+      "translation": "Molenaar 认为，这可能是因为阿姆斯特丹每个人都已经有自行车。",
+      "structure": [
+        {
+          "text": "Molenaar",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "believes",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "this may be because everybody in Amsterdam already has a bike",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "because everybody in Amsterdam already has a bike",
+          "role": "predicative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "believes 后省略 that，引出宾语从句。",
+        "this 指阿姆斯特丹没有再获得白色自行车计划这件事。",
+        "may be because 表示推测原因，不是确定结论。"
+      ],
+      "expressions": [
+        {
+          "text": "may be because",
+          "meaning_zh": "可能是因为"
+        }
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 51,
+      "sentence": "Schimmelpennink, however, cannot see that this changes Amsterdam's need for a bike-sharing scheme.",
+      "translation": "然而，Schimmelpennink 并不认为这会改变阿姆斯特丹对自行车共享计划的需求。",
+      "structure": [
+        {
+          "text": "Schimmelpennink",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "cannot see",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that this changes Amsterdam's need for a bike-sharing scheme",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "however 插入主语后，表示与 Molenaar 的解释相反。",
+        "cannot see that ... 表示“不认为/看不出……”，不是视觉意义。",
+        "this 指“人人已有自行车”这一情况。"
+      ],
+      "expressions": [
+        {
+          "text": "cannot see that",
+          "meaning_zh": "不认为；看不出"
+        },
+        {
+          "text": "need for",
+          "meaning_zh": "对……的需求"
+        }
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 52,
+      "sentence": "'People who travel on the underground don't carry their bikes around.",
+      "translation": "“乘坐地铁的人不会随身带着他们的自行车。",
+      "structure": [
+        {
+          "text": "People who travel on the underground",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who travel on the underground",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "don't carry their bikes around",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "who travel on the underground 是定语从句，限定 People 的范围。",
+        "carry their bikes around 表示随身携带自行车四处走。",
+        "underground 在英式英语中指地铁。"
+      ],
+      "expressions": [
+        {
+          "text": "travel on the underground",
+          "meaning_zh": "乘坐地铁出行"
+        },
+        {
+          "text": "carry ... around",
+          "meaning_zh": "随身带着……到处走"
+        }
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 53,
+      "sentence": "But often they need additional transport to reach their final destination.'",
+      "translation": "但他们往往需要额外的交通工具才能到达最终目的地。”",
+      "structure": [
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "need additional transport",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to reach their final destination",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "they 指上一句中乘坐地铁的人。",
+        "additional transport 表示地铁之外的补充交通方式。",
+        "to reach their final destination 表目的，说明需要额外交通的原因。"
+      ],
+      "expressions": [
+        {
+          "text": "additional transport",
+          "meaning_zh": "额外的交通方式"
+        },
+        {
+          "text": "final destination",
+          "meaning_zh": "最终目的地"
+        }
+      ]
+    },
+    {
+      "id": "G-06",
+      "paragraph_label": "G",
+      "sentence_index": 54,
+      "sentence": "Although he thinks it is strange that a city like Amsterdam does not have a successful bike-sharing scheme, he is optimistic about the future.",
+      "translation": "虽然他认为像阿姆斯特丹这样的城市没有成功的自行车共享计划很奇怪，但他对未来持乐观态度。",
+      "structure": [
+        {
+          "text": "Although he thinks it is strange that a city like Amsterdam does not have a successful bike-sharing scheme",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "it is strange that a city like Amsterdam does not have a successful bike-sharing scheme",
+          "role": "object_clause",
+          "level": 3
+        },
+        {
+          "text": "he",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is optimistic about the future",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Although 引导让步状语从句，主句是 he is optimistic about the future。",
+        "thinks 后的 it is strange that ... 中 it 是形式主语，真正内容是 that 从句。",
+        "a city like Amsterdam 强调阿姆斯特丹这样骑行条件优越的城市。"
+      ],
+      "expressions": [
+        {
+          "text": "be optimistic about",
+          "meaning_zh": "对……乐观"
+        },
+        {
+          "text": "a city like",
+          "meaning_zh": "像……这样的城市"
+        }
+      ]
+    },
+    {
+      "id": "G-07",
+      "paragraph_label": "G",
+      "sentence_index": 55,
+      "sentence": "'In the '60s we didn't stand a chance because people were prepared to give their lives to keep cars in the city.",
+      "translation": "“在20世纪60年代，我们毫无机会，因为人们愿意付出生命也要把汽车留在城市里。",
+      "structure": [
+        {
+          "text": "In the '60s",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "didn't stand a chance",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "because people were prepared to give their lives to keep cars in the city",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "stand a chance 是习语，表示“有机会成功”。",
+        "because 引导原因状语从句，解释当年没有机会的社会心理原因。",
+        "to give their lives to keep cars in the city 带有夸张色彩，强调人们当时维护汽车地位的强烈态度。"
+      ],
+      "expressions": [
+        {
+          "text": "stand a chance",
+          "meaning_zh": "有机会"
+        },
+        {
+          "text": "be prepared to",
+          "meaning_zh": "愿意；准备好"
+        },
+        {
+          "text": "give their lives",
+          "meaning_zh": "付出生命"
+        }
+      ]
+    },
+    {
+      "id": "G-08",
+      "paragraph_label": "G",
+      "sentence_index": 56,
+      "sentence": "But that mentality has totally changed.",
+      "translation": "但那种心态已经完全改变了。",
+      "structure": [
+        {
+          "text": "that mentality",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has totally changed",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "But 标记与20世纪60年代的情况形成转折。",
+        "that mentality 指前一句中人们拼命保留汽车的心态。",
+        "has changed 用现在完成时，强调变化影响延续到现在。"
+      ],
+      "expressions": [
+        {
+          "text": "mentality",
+          "meaning_zh": "心态；思维方式"
+        },
+        {
+          "text": "totally changed",
+          "meaning_zh": "完全改变了"
+        }
+      ]
+    },
+    {
+      "id": "G-09",
+      "paragraph_label": "G",
+      "sentence_index": 57,
+      "sentence": "Today everybody longs for cities that are not dominated by cars.'",
+      "translation": "如今，每个人都向往不由汽车主导的城市。”",
+      "structure": [
+        {
+          "text": "Today",
+          "role": "adverbial_phrase",
+          "level": 2
+        },
+        {
+          "text": "everybody",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "longs for cities",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that are not dominated by cars",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "longs for 表示强烈向往，不只是普通想要。",
+        "that are not dominated by cars 是定语从句，修饰 cities。",
+        "be dominated by cars 表示城市空间和交通被汽车主导。"
+      ],
+      "expressions": [
+        {
+          "text": "long for",
+          "meaning_zh": "渴望；向往"
+        },
+        {
+          "text": "be dominated by",
+          "meaning_zh": "被……主导"
+        }
+      ]
+    }
+  ]
+}

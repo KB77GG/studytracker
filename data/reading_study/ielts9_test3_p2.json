@@ -1,0 +1,644 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts9_test3_reading",
+  "passage_id": "ielts9_test3_p2",
+  "passage_title": "Tidal Power",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Operating on the same principle as wind turbines, the power in sea turbines comes from tidal currents which turn blades similar to ships' propellers, but, unlike wind, the tides are predictable and the power input is constant.",
+      "translation": "海上涡轮机与风力涡轮机遵循相同原理，其动力来自带动类似船舶螺旋桨叶片的潮汐水流；但与风不同，潮汐可以预测，输入功率也是稳定的。",
+      "structure": [
+        {"text": "Operating on the same principle as wind turbines", "role": "participial_phrase", "level": 1},
+        {"text": "the power in sea turbines", "role": "subject", "level": 1},
+        {"text": "comes from tidal currents", "role": "verb_phrase", "level": 1},
+        {"text": "which turn blades similar to ships' propellers", "role": "relative_clause", "level": 2},
+        {"text": "but, unlike wind, the tides are predictable and the power input is constant", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "句首现在分词短语的逻辑主语是 sea turbines，说明其工作原理。",
+        "which 引导定语从句修饰 tidal currents；but 后并列两个主系表结构。",
+        "unlike wind 是插入的比较短语，强调潮汐比风更可预测。"
+      ],
+      "expressions": [
+        {"text": "operate on the same principle as", "meaning_zh": "遵循与……相同的原理"},
+        {"text": "power input", "meaning_zh": "输入功率"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "The technology raises the prospect of Britain becoming self-sufficient in renewable energy and drastically reducing its carbon dioxide emissions.",
+      "translation": "这项技术使英国有望在可再生能源方面实现自给自足，并大幅减少二氧化碳排放。",
+      "structure": [
+        {"text": "The technology", "role": "subject", "level": 1},
+        {"text": "raises", "role": "verb", "level": 1},
+        {"text": "the prospect of Britain becoming self-sufficient in renewable energy and drastically reducing its carbon dioxide emissions", "role": "object", "level": 1},
+        {"text": "Britain becoming self-sufficient in renewable energy and drastically reducing its carbon dioxide emissions", "role": "gerund_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "prospect of 后接动名词复合结构，Britain 是 becoming 和 reducing 的逻辑主语。",
+        "becoming 与 reducing 并列，分别表示能源自给和减排两个预期结果。"
+      ],
+      "expressions": [
+        {"text": "raise the prospect of", "meaning_zh": "带来……的希望"},
+        {"text": "become self-sufficient in", "meaning_zh": "在……方面实现自给自足"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "If tide, wind and wave power are all developed, Britain would be able to close gas, coal and nuclear plants and export renewable power to other parts of Europe.",
+      "translation": "如果潮汐能、风能和波浪能都得到开发，英国就能够关闭燃气、燃煤和核电厂，并向欧洲其他地区出口可再生能源。",
+      "structure": [
+        {"text": "If tide, wind and wave power are all developed", "role": "conditional_clause", "level": 1},
+        {"text": "Britain", "role": "subject", "level": 1},
+        {"text": "would be able to close gas, coal and nuclear plants and export renewable power to other parts of Europe", "role": "predicate", "level": 1},
+        {"text": "close gas, coal and nuclear plants", "role": "infinitive_complement", "level": 2},
+        {"text": "export renewable power to other parts of Europe", "role": "coordinated_infinitive", "level": 2}
+      ],
+      "difficult_points": [
+        "If 从句用一般现在时，主句用 would，构成对未来条件的假设。",
+        "be able to 后并列 close 和 export 两个动词，说明可能带来的两项行动。"
+      ],
+      "expressions": [
+        {"text": "be able to", "meaning_zh": "能够"},
+        {"text": "export renewable power", "meaning_zh": "出口可再生能源"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Unlike wind power, which Britain originally developed and then abandoned for 20 years allowing the Dutch to make it a major industry, undersea turbines could become a big export earner to island nations such as Japan and New Zealand.",
+      "translation": "与风能不同，英国最初开发了风能，却随后放弃了二十年，让荷兰人把它发展成一个大型产业；海底涡轮机则可能成为日本、新西兰等岛国赚取出口收入的重要产业。",
+      "structure": [
+        {"text": "Unlike wind power", "role": "comparative_phrase", "level": 1},
+        {"text": "which Britain originally developed and then abandoned for 20 years", "role": "relative_clause", "level": 2},
+        {"text": "allowing the Dutch to make it a major industry", "role": "participial_phrase", "level": 2},
+        {"text": "undersea turbines", "role": "subject", "level": 1},
+        {"text": "could become", "role": "verb_phrase", "level": 1},
+        {"text": "a big export earner to island nations such as Japan and New Zealand", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "which 引导定语从句修饰 wind power，developed 和 abandoned 共用主语 Britain。",
+        "allowing the Dutch... 是结果性的分词短语，说明英国放弃后荷兰获得的发展机会。",
+        "export earner 指能带来出口收入的产业，such as 后列举岛国例子。"
+      ],
+      "expressions": [
+        {"text": "abandon for 20 years", "meaning_zh": "放弃二十年"},
+        {"text": "make it a major industry", "meaning_zh": "把它发展成大型产业"},
+        {"text": "export earner", "meaning_zh": "出口创汇产业"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Tidal sites have already been identified that will produce one sixth or more of the UK's power—and at prices competitive with modern gas turbines and undercutting those of the already ailing nuclear industry.",
+      "translation": "人们已经找到了潮汐能站点，它们能够产生英国六分之一甚至更多的电力，而且价格可以与现代燃气涡轮机竞争，并低于已经陷入困境的核能产业。",
+      "structure": [
+        {"text": "Tidal sites", "role": "subject", "level": 1},
+        {"text": "have already been identified", "role": "passive_predicate", "level": 1},
+        {"text": "that will produce one sixth or more of the UK's power", "role": "relative_clause", "level": 2},
+        {"text": "at prices competitive with modern gas turbines", "role": "prepositional_phrase", "level": 1},
+        {"text": "and undercutting those of the already ailing nuclear industry", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "that 引导定语从句修饰 tidal sites，说明这些站点的发电能力。",
+        "competitive 与 undercutting 并列说明价格优势，those 指代 prices。"
+      ],
+      "expressions": [
+        {"text": "one sixth or more of", "meaning_zh": "六分之一或更多"},
+        {"text": "competitive with", "meaning_zh": "可与……竞争"},
+        {"text": "undercut the prices of", "meaning_zh": "价格低于……"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "One site alone, the Pentland Firth, between Orkney and mainland Scotland, could produce 10% of the country's electricity with banks of turbines under the sea, and another at Alderney in the Channel Islands three times the 1,200 megawatts of Britain's largest and newest nuclear plant, Sizewell B, in Suffolk.",
+      "translation": "仅彭特兰海峡一个站点——位于奥克尼群岛与苏格兰大陆之间——凭借海下成排的涡轮机就能产生该国 10% 的电力；海峡群岛奥尔德尼岛的另一个站点，发电量则是英国最大、最新核电厂萨兹韦尔 B（位于萨福克）的 1200 兆瓦的三倍。",
+      "structure": [
+        {"text": "One site alone, the Pentland Firth", "role": "subject", "level": 1},
+        {"text": "between Orkney and mainland Scotland", "role": "parenthetical_modifier", "level": 2},
+        {"text": "could produce 10% of the country's electricity", "role": "predicate", "level": 1},
+        {"text": "with banks of turbines under the sea", "role": "prepositional_phrase", "level": 2},
+        {"text": "and another at Alderney in the Channel Islands", "role": "coordinated_subject", "level": 1},
+        {"text": "three times the 1,200 megawatts of Britain's largest and newest nuclear plant", "role": "elliptical_predicate", "level": 1},
+        {"text": "Sizewell B", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "句中两个并列站点的第二个谓语省略了 could produce，需从前半句补出。",
+        "between... 和 at Alderney... 是地点插入成分；Sizewell B 是核电厂名称的同位语。",
+        "three times the 1,200 megawatts 表示发电量为 1200 兆瓦的三倍。"
+      ],
+      "expressions": [
+        {"text": "one site alone", "meaning_zh": "仅一个站点"},
+        {"text": "three times", "meaning_zh": "三倍"}
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "Other sites identified include the Bristol Channel and the west coast of Scotland, particularly the channel between Campbeltown and Northern Ireland.",
+      "translation": "已确定的其他站点包括布里斯托尔海峡和苏格兰西海岸，尤其是坎贝尔敦与北爱尔兰之间的海峡。",
+      "structure": [
+        {"text": "Other sites identified", "role": "subject", "level": 1},
+        {"text": "include", "role": "verb", "level": 1},
+        {"text": "the Bristol Channel and the west coast of Scotland", "role": "object", "level": 1},
+        {"text": "particularly the channel between Campbeltown and Northern Ireland", "role": "supplementary_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "identified 是过去分词，修饰 other sites，表示已经被确定的站点。",
+        "particularly 后的地点是对苏格兰西海岸的进一步具体说明。"
+      ],
+      "expressions": [
+        {"text": "sites identified", "meaning_zh": "已确定的站点"}
+      ]
+    },
+    {
+      "id": "C-08",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "Work on designs for the new turbine blades and sites are well advanced at the University of Southampton's sustainable energy research group.",
+      "translation": "南安普顿大学可持续能源研究小组对新型涡轮机叶片和站点的设计工作已经进展顺利。",
+      "structure": [
+        {"text": "Work on designs for the new turbine blades and sites", "role": "subject", "level": 1},
+        {"text": "are", "role": "verb", "level": 1},
+        {"text": "well advanced", "role": "complement", "level": 1},
+        {"text": "at the University of Southampton's sustainable energy research group", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "work 是不可数名词，句意是“工作进展”，不是具体的工作岗位。",
+        "for the new turbine blades and sites 修饰 designs，at 短语说明研究工作所在机构。"
+      ],
+      "expressions": [
+        {"text": "work on designs for", "meaning_zh": "关于……设计的工作"},
+        {"text": "be well advanced", "meaning_zh": "进展顺利"}
+      ]
+    },
+    {
+      "id": "C-09",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "The first station is expected to be installed off Lynmouth in Devon shortly to test the technology in a venture jointly funded by the Department of Trade and Industry and the European Union.",
+      "translation": "预计第一座站点不久将在德文郡林茅斯近海安装，用于测试这项技术；该项目由英国贸易工业部和欧盟共同资助。",
+      "structure": [
+        {"text": "The first station", "role": "subject", "level": 1},
+        {"text": "is expected to be installed", "role": "passive_predicate", "level": 1},
+        {"text": "off Lynmouth in Devon", "role": "prepositional_phrase", "level": 1},
+        {"text": "shortly", "role": "adverbial", "level": 1},
+        {"text": "to test the technology", "role": "purpose_clause", "level": 2},
+        {"text": "in a venture jointly funded by the Department of Trade and Industry and the European Union", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "is expected to be installed 是“预计将被安装”的被动结构。",
+        "to test 表示安装的目的，jointly funded 是过去分词短语，修饰 venture。"
+      ],
+      "expressions": [
+        {"text": "be expected to", "meaning_zh": "预计会……"},
+        {"text": "jointly funded by", "meaning_zh": "由……共同资助"}
+      ]
+    },
+    {
+      "id": "C-10",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "Abu Bakr Bahaj, in charge of the Southampton research, said: 'The prospects for energy from tidal currents are far better than from wind because the flows of water are predictable and constant.",
+      "translation": "负责南安普顿研究的阿布·巴克尔·巴哈吉说：“潮汐水流产生能源的前景远好于风能，因为水流是可预测且稳定的。”",
+      "structure": [
+        {"text": "Abu Bakr Bahaj", "role": "subject", "level": 1},
+        {"text": "in charge of the Southampton research", "role": "parenthetical_modifier", "level": 2},
+        {"text": "said", "role": "verb", "level": 1},
+        {"text": "The prospects for energy from tidal currents are far better than from wind", "role": "reported_clause", "level": 2},
+        {"text": "because the flows of water are predictable and constant", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "in charge of... 是插入的身份说明，主句核心是 Bahaj said。",
+        "better than from wind 省略了 energy，because 从句解释潮汐能优势的原因。"
+      ],
+      "expressions": [
+        {"text": "be in charge of", "meaning_zh": "负责"},
+        {"text": "the prospects for", "meaning_zh": "……的前景"}
+      ]
+    },
+    {
+      "id": "C-11",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "The technology for dealing with the hostile saline environment under the sea has been developed in the North Sea oil industry and much is already known about turbine blade design, because of wind power and ship propellers.",
+      "translation": "应对海下恶劣盐水环境的技术已经在北海石油工业中得到开发；由于风能和船舶螺旋桨的经验，人们对涡轮机叶片设计也已经有了大量了解。",
+      "structure": [
+        {"text": "The technology for dealing with the hostile saline environment under the sea", "role": "subject", "level": 1},
+        {"text": "has been developed", "role": "passive_predicate", "level": 1},
+        {"text": "in the North Sea oil industry", "role": "prepositional_phrase", "level": 1},
+        {"text": "and much is already known about turbine blade design", "role": "coordinated_clause", "level": 1},
+        {"text": "because of wind power and ship propellers", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "for dealing with... 修饰 technology，dealing with 是介词 for 后的动名词。",
+        "and 连接两个并列分句；much 在第二句中作代词，表示“大量知识”。",
+        "because of 是介词短语，说明叶片设计知识的来源，不是原因从句。"
+      ],
+      "expressions": [
+        {"text": "deal with the environment", "meaning_zh": "应对环境"},
+        {"text": "much is known about", "meaning_zh": "对……已有很多了解"}
+      ]
+    },
+    {
+      "id": "C-12",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "There are a few technical difficulties, but I believe in the next five to ten years we will be installing commercial marine turbine farms.'",
+      "translation": "虽然存在一些技术难题，但我相信在未来五到十年内，我们将会安装商业化的海上涡轮机群。”",
+      "structure": [
+        {"text": "There are a few technical difficulties", "role": "existential_clause", "level": 1},
+        {"text": "but I believe", "role": "coordinated_clause", "level": 1},
+        {"text": "in the next five to ten years", "role": "time_adverbial", "level": 2},
+        {"text": "we will be installing commercial marine turbine farms", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "there are 是存在句，but 后的 believe 引导说话者的判断。",
+        "will be installing 是将来进行时，表示未来一段时间内持续进行的安装工作。"
+      ],
+      "expressions": [
+        {"text": "technical difficulties", "meaning_zh": "技术难题"},
+        {"text": "commercial marine turbine farms", "meaning_zh": "商业化海上涡轮机群"}
+      ]
+    },
+    {
+      "id": "C-13",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "Southampton has been awarded £215,000 over three years to develop the turbines and is working with Marine Current Turbines, a subsidiary of IT Power, on the Lynmouth project.",
+      "translation": "南安普顿大学已获得为期三年、金额 21.5 万英镑的拨款来开发这些涡轮机，并正与 IT Power 的子公司 Marine Current Turbines 合作开展林茅斯项目。",
+      "structure": [
+        {"text": "Southampton", "role": "subject", "level": 1},
+        {"text": "has been awarded £215,000 over three years", "role": "passive_predicate", "level": 1},
+        {"text": "to develop the turbines", "role": "purpose_clause", "level": 2},
+        {"text": "and is working with Marine Current Turbines", "role": "coordinated_predicate", "level": 1},
+        {"text": "a subsidiary of IT Power", "role": "apposition", "level": 2},
+        {"text": "on the Lynmouth project", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "has been awarded 是现在完成时被动语态，Southampton 指该大学或研究团队。",
+        "to develop 表示拨款用途，a subsidiary of IT Power 是公司名称的同位说明。"
+      ],
+      "expressions": [
+        {"text": "be awarded funding", "meaning_zh": "获得资金"},
+        {"text": "work with", "meaning_zh": "与……合作"}
+      ]
+    },
+    {
+      "id": "C-14",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "EU research has now identified 106 potential sites for tidal power, 80% round the coasts of Britain.",
+      "translation": "欧盟的研究目前已经确定了 106 个潜在潮汐能站点，其中 80% 分布在英国沿海。",
+      "structure": [
+        {"text": "EU research", "role": "subject", "level": 1},
+        {"text": "has now identified", "role": "verb_phrase", "level": 1},
+        {"text": "106 potential sites for tidal power", "role": "object", "level": 1},
+        {"text": "80% round the coasts of Britain", "role": "supplementary_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "has identified 是现在完成时，强调研究至今取得的结果。",
+        "句末 80% 是省略结构，完整含义是 80% of the sites are round the coasts。"
+      ],
+      "expressions": [
+        {"text": "potential sites for", "meaning_zh": "……的潜在站点"}
+      ]
+    },
+    {
+      "id": "C-15",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "The best sites are between islands or around heavily indented coasts where there are strong tidal currents.",
+      "translation": "最理想的站点位于岛屿之间，或位于海岸线曲折、潮汐水流强劲的地区。",
+      "structure": [
+        {"text": "The best sites", "role": "subject", "level": 1},
+        {"text": "are between islands or around heavily indented coasts", "role": "predicate", "level": 1},
+        {"text": "where there are strong tidal currents", "role": "relative_adverb_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "between... or around... 是两个并列地点表语。",
+        "where 引导地点定语从句，there are 说明这些地方存在强劲潮流。"
+      ],
+      "expressions": [
+        {"text": "heavily indented coasts", "meaning_zh": "曲折多湾的海岸"},
+        {"text": "tidal currents", "meaning_zh": "潮汐水流"}
+      ]
+    },
+    {
+      "id": "D-16",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "A marine turbine blade needs to be only one third of the size of a wind generator to produce three times as much power.",
+      "translation": "海上涡轮机叶片只需达到风力发电机叶片三分之一的大小，就能产生三倍的电力。",
+      "structure": [
+        {"text": "A marine turbine blade", "role": "subject", "level": 1},
+        {"text": "needs to be", "role": "verb_phrase", "level": 1},
+        {"text": "only one third of the size of a wind generator", "role": "complement", "level": 1},
+        {"text": "to produce three times as much power", "role": "purpose_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "needs to be...to produce... 表示达到某种大小就能实现相应产能。",
+        "three times as much power 是倍数比较结构，意为三倍那么多的电力。"
+      ],
+      "expressions": [
+        {"text": "one third of the size of", "meaning_zh": "……大小的三分之一"},
+        {"text": "three times as much", "meaning_zh": "三倍之多"}
+      ]
+    },
+    {
+      "id": "D-17",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "The blades will be about 20 meters in diameter, so around 30 meters of water is required.",
+      "translation": "叶片直径约为 20 米，因此需要约 30 米深的水域。",
+      "structure": [
+        {"text": "The blades", "role": "subject", "level": 1},
+        {"text": "will be", "role": "verb", "level": 1},
+        {"text": "about 20 meters in diameter", "role": "complement", "level": 1},
+        {"text": "so around 30 meters of water is required", "role": "result_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "will be 后接尺寸表语，in diameter 说明 20 米是直径。",
+        "so 引出结果分句，is required 是被动语态，表示所需水深。"
+      ],
+      "expressions": [
+        {"text": "in diameter", "meaning_zh": "直径为"},
+        {"text": "be required", "meaning_zh": "被需要；要求达到"}
+      ]
+    },
+    {
+      "id": "D-18",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "Unlike wind power, there are unlikely to be environmental objections.",
+      "translation": "与风能不同，潮汐能不太可能引发环境方面的反对意见。",
+      "structure": [
+        {"text": "Unlike wind power", "role": "comparative_phrase", "level": 1},
+        {"text": "there are unlikely to be environmental objections", "role": "existential_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "there are unlikely to be 是存在句，unlikely 修饰整个存在判断。",
+        "Unlike wind power 省略了比较对象，实际比较的是潮汐能与风能的环境影响。"
+      ],
+      "expressions": [
+        {"text": "environmental objections", "meaning_zh": "环境方面的反对意见"}
+      ]
+    },
+    {
+      "id": "D-19",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Fish and other creatures are thought unlikely to be at risk from the relatively slow-turning blades.",
+      "translation": "人们认为，鱼类和其他生物不太可能受到转速相对较慢的叶片的伤害。",
+      "structure": [
+        {"text": "Fish and other creatures", "role": "subject", "level": 1},
+        {"text": "are thought", "role": "passive_predicate", "level": 1},
+        {"text": "unlikely to be at risk from the relatively slow-turning blades", "role": "subject_complement", "level": 1},
+        {"text": "to be at risk from the relatively slow-turning blades", "role": "infinitive_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "are thought unlikely to... 是 think + 宾语 + 补语的被动形式，意为“被认为不太可能……”。",
+        "slow-turning 是复合形容词，修饰 blades；be at risk from 表示面临……风险。"
+      ],
+      "expressions": [
+        {"text": "be thought unlikely to", "meaning_zh": "被认为不太可能……"},
+        {"text": "be at risk from", "meaning_zh": "面临……的风险"}
+      ]
+    },
+    {
+      "id": "D-20",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "Each turbine will be mounted on a tower which will connect to the national power supply grid via underwater cables.",
+      "translation": "每台涡轮机都将安装在塔架上，塔架再通过水下电缆连接到国家供电网络。",
+      "structure": [
+        {"text": "Each turbine", "role": "subject", "level": 1},
+        {"text": "will be mounted on a tower", "role": "passive_predicate", "level": 1},
+        {"text": "which will connect to the national power supply grid via underwater cables", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "which 指代 tower，不是 turbine；塔架将连接到电网。",
+        "will be mounted 是被动语态，via underwater cables 表示连接所用的方式。"
+      ],
+      "expressions": [
+        {"text": "be mounted on", "meaning_zh": "安装在……上"},
+        {"text": "connect to the grid", "meaning_zh": "连接到电网"}
+      ]
+    },
+    {
+      "id": "D-21",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "The towers will stick out of the water and be lit, to warn shipping, and also be designed to be lifted out of the water for maintenance and to clean seaweed from the blades.",
+      "translation": "塔架会露出水面并设置灯光以警示船只，同时还会设计成可以吊出水面进行维护、清除叶片上的海藻。",
+      "structure": [
+        {"text": "The towers", "role": "subject", "level": 1},
+        {"text": "will stick out of the water and be lit", "role": "coordinated_predicate", "level": 1},
+        {"text": "to warn shipping", "role": "purpose_clause", "level": 2},
+        {"text": "and also be designed to be lifted out of the water", "role": "coordinated_predicate", "level": 1},
+        {"text": "for maintenance and to clean seaweed from the blades", "role": "purpose_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "will 后并列 stick out、be lit 和 be designed 三个谓语，主语始终是 towers。",
+        "to warn shipping 表示亮灯目的；to be lifted 是 design 的被动不定式。",
+        "for maintenance 与 to clean 并列说明吊出水面的用途。"
+      ],
+      "expressions": [
+        {"text": "stick out of the water", "meaning_zh": "露出水面"},
+        {"text": "be designed to", "meaning_zh": "被设计成……"},
+        {"text": "for maintenance", "meaning_zh": "用于维护"}
+      ]
+    },
+    {
+      "id": "E-22",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "Dr Bahaj has done most work on the Alderney site, where there are powerful currents.",
+      "translation": "巴哈吉博士的大部分工作都在奥尔德尼站点进行，那里有强劲的水流。",
+      "structure": [
+        {"text": "Dr Bahaj", "role": "subject", "level": 1},
+        {"text": "has done most work", "role": "verb_phrase", "level": 1},
+        {"text": "on the Alderney site", "role": "prepositional_phrase", "level": 1},
+        {"text": "where there are powerful currents", "role": "relative_adverb_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "has done 是现在完成时，表示截至目前工作主要集中在该站点。",
+        "where 引导地点定语从句，there are 说明该地点的潮流条件。"
+      ],
+      "expressions": [
+        {"text": "do most work on", "meaning_zh": "主要在……开展工作"},
+        {"text": "powerful currents", "meaning_zh": "强劲水流"}
+      ]
+    },
+    {
+      "id": "E-23",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "The single undersea turbine farm would produce far more power than needed for the Channel Islands and most would be fed into the French Grid and be re-imported into Britain via the cable under the Channel.",
+      "translation": "这座单一的海底涡轮机群产生的电力将远远超过海峡群岛的需求，其中大部分会输入法国电网，再通过海峡下方的电缆重新输回英国。",
+      "structure": [
+        {"text": "The single undersea turbine farm", "role": "subject", "level": 1},
+        {"text": "would produce", "role": "verb_phrase", "level": 1},
+        {"text": "far more power than needed for the Channel Islands", "role": "object", "level": 1},
+        {"text": "and most would be fed into the French Grid and be re-imported into Britain", "role": "coordinated_clause", "level": 1},
+        {"text": "via the cable under the Channel", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "than needed 是比较结构，省略了 than the Channel Islands need。",
+        "most 指代 most of the power；be fed 和 be re-imported 是两个并列被动谓语。"
+      ],
+      "expressions": [
+        {"text": "far more ... than needed", "meaning_zh": "远多于所需"},
+        {"text": "be fed into the grid", "meaning_zh": "输入电网"},
+        {"text": "be re-imported into", "meaning_zh": "重新输入……"}
+      ]
+    },
+    {
+      "id": "F-24",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "One technical difficulty is cavitation, where low pressure behind a turning blade causes air bubbles.",
+      "translation": "一个技术难题是空化现象，即旋转叶片后方的低压会形成气泡。",
+      "structure": [
+        {"text": "One technical difficulty", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb", "level": 1},
+        {"text": "cavitation", "role": "complement", "level": 1},
+        {"text": "where low pressure behind a turning blade causes air bubbles", "role": "relative_adverb_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "冒号后的 where 从句解释 cavitation 的具体机制，where 在这里可理解为“在这种现象中”。",
+        "behind a turning blade 修饰 low pressure，causes 的宾语是 air bubbles。"
+      ],
+      "expressions": [
+        {"text": "technical difficulty", "meaning_zh": "技术难题"},
+        {"text": "low pressure", "meaning_zh": "低压"}
+      ]
+    },
+    {
+      "id": "F-25",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "These can cause vibration and damage the blades of the turbines.",
+      "translation": "这些气泡会造成振动并损坏涡轮机叶片。",
+      "structure": [
+        {"text": "These", "role": "subject", "level": 1},
+        {"text": "can cause vibration and damage the blades of the turbines", "role": "predicate", "level": 1},
+        {"text": "cause vibration", "role": "verb_object_pair", "level": 2},
+        {"text": "damage the blades of the turbines", "role": "coordinated_verb_object", "level": 2}
+      ],
+      "difficult_points": [
+        "These 指代上一句的 air bubbles，而不是 cavitation 这个现象本身。",
+        "can 后并列 cause 和 damage，两个动词共用主语。"
+      ],
+      "expressions": [
+        {"text": "cause vibration", "meaning_zh": "造成振动"},
+        {"text": "damage the blades", "meaning_zh": "损坏叶片"}
+      ]
+    },
+    {
+      "id": "F-26",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "Dr Bahaj said: 'We have to test a number of blade types to avoid this happening or at least make sure it does not damage the turbines or reduce performance.",
+      "translation": "巴哈吉博士说：“我们必须测试多种叶片类型，以避免这种情况发生，或者至少确保它不会损坏涡轮机或降低性能。",
+      "structure": [
+        {"text": "Dr Bahaj", "role": "subject", "level": 1},
+        {"text": "said", "role": "verb", "level": 1},
+        {"text": "We have to test a number of blade types", "role": "reported_clause", "level": 2},
+        {"text": "to avoid this happening", "role": "purpose_clause", "level": 3},
+        {"text": "or at least make sure it does not damage the turbines or reduce performance", "role": "coordinated_purpose_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "to avoid 和 make sure 并列说明测试的目的，this 指代空化造成的问题。",
+        "make sure 后接省略 that 的宾语从句，其中 it 指代 cavitation 或气泡现象。",
+        "damage 与 reduce 并列作 does not 的谓语。"
+      ],
+      "expressions": [
+        {"text": "a number of", "meaning_zh": "许多；若干"},
+        {"text": "avoid ... happening", "meaning_zh": "避免……发生"},
+        {"text": "make sure", "meaning_zh": "确保"}
+      ]
+    },
+    {
+      "id": "F-27",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "Another slight concern is submerged debris floating into the blades.",
+      "translation": "另一个小小的担忧是，水下漂浮物可能会撞入叶片。",
+      "structure": [
+        {"text": "Another slight concern", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb", "level": 1},
+        {"text": "submerged debris floating into the blades", "role": "complement", "level": 1},
+        {"text": "floating into the blades", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "floating into the blades 是现在分词短语，修饰 submerged debris，说明漂浮物的运动。",
+        "submerged debris 是不可数名词短语，指水下的杂物而非某一种具体物体。"
+      ],
+      "expressions": [
+        {"text": "a slight concern", "meaning_zh": "一个小担忧"},
+        {"text": "submerged debris", "meaning_zh": "水下漂浮物"}
+      ]
+    },
+    {
+      "id": "F-28",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "So far we do not know how much of a problem it might be.",
+      "translation": "到目前为止，我们还不知道它可能会造成多大的问题。",
+      "structure": [
+        {"text": "So far", "role": "sentence_adverbial", "level": 1},
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "do not know", "role": "verb_phrase", "level": 1},
+        {"text": "how much of a problem it might be", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "how much of a problem 是固定疑问结构，意为“问题有多严重”。",
+        "it 指代上一句的 submerged debris，might 表示不确定的可能性。"
+      ],
+      "expressions": [
+        {"text": "so far", "meaning_zh": "到目前为止"},
+        {"text": "how much of a problem", "meaning_zh": "多大的问题"}
+      ]
+    },
+    {
+      "id": "F-29",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "We will have to make the turbines robust because the sea is a hostile environment, but all the signs that we can do it are good.'",
+      "translation": "由于海洋环境恶劣，我们必须让涡轮机足够坚固，但所有迹象都表明我们能够做到这一点。”",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "will have to make the turbines robust", "role": "predicate", "level": 1},
+        {"text": "because the sea is a hostile environment", "role": "adverbial_clause", "level": 2},
+        {"text": "but all the signs that we can do it are good", "role": "coordinated_clause", "level": 1},
+        {"text": "that we can do it", "role": "appositive_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "make the turbines robust 是 make + 宾语 + 形容词补语结构，表示使涡轮机坚固。",
+        "because 从句解释必须坚固的原因，that 从句说明 signs 的具体内容。",
+        "all the signs are good 是“迹象良好”，不是指所有标志物的外观。"
+      ],
+      "expressions": [
+        {"text": "make ... robust", "meaning_zh": "使……坚固"},
+        {"text": "a hostile environment", "meaning_zh": "恶劣环境"},
+        {"text": "all the signs are good", "meaning_zh": "一切迹象都很好"}
+      ]
+    }
+  ]
+}

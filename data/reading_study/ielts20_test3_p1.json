@@ -1,0 +1,1026 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts20_test3_reading",
+  "passage_id": "ielts20_test3_p1",
+  "passage_title": "Frozen Food",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "At some point in history, humans discovered that ice preserved food.",
+      "translation": "在人类历史上的某个时刻，人们发现冰可以保存食物。",
+      "structure": [
+        {"text": "At some point in history", "role": "prepositional_phrase", "level": 1},
+        {"text": "humans", "role": "subject", "level": 1},
+        {"text": "discovered", "role": "verb_phrase", "level": 1},
+        {"text": "that ice preserved food", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "At some point in history 是时间状语，表示具体时间不确定。",
+        "that 从句作 discovered 的宾语，说明发现的内容。"
+      ],
+      "expressions": [
+        {"text": "At some point in history", "meaning_zh": "在历史上的某个时刻"},
+        {"text": "preserved food", "meaning_zh": "保存食物"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "There is evidence that winter ice was stored to preserve food in the summer as far back as 10,000 years ago.",
+      "translation": "有证据表明，早在一万年前，人们就会储存冬季的冰，用来在夏天保存食物。",
+      "structure": [
+        {"text": "There is evidence", "role": "main_clause", "level": 1},
+        {"text": "that winter ice was stored to preserve food in the summer as far back as 10,000 years ago", "role": "noun_clause", "level": 2},
+        {"text": "was stored", "role": "verb_phrase", "level": 3},
+        {"text": "to preserve food in the summer", "role": "infinitive_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "There is evidence that... 是存在句加同位语从句，说明证据内容。",
+        "as far back as 强调这种做法年代非常久远。"
+      ],
+      "expressions": [
+        {"text": "There is evidence that", "meaning_zh": "有证据表明……"},
+        {"text": "as far back as", "meaning_zh": "早在……"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Two thousand years ago, the inhabitants of South America’s Andean mountains had a unique means of conserving potatoes for later consumption.",
+      "translation": "两千年前，南美安第斯山区的居民有一种独特的方法，可以保存土豆以供日后食用。",
+      "structure": [
+        {"text": "Two thousand years ago", "role": "time_adverbial", "level": 1},
+        {"text": "the inhabitants of South America’s Andean mountains", "role": "subject", "level": 1},
+        {"text": "had", "role": "verb_phrase", "level": 1},
+        {"text": "a unique means of conserving potatoes for later consumption", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "of South America’s Andean mountains 修饰 inhabitants，说明居民来源。",
+        "means of conserving... 表示保存土豆的方法，for later consumption 说明目的。"
+      ],
+      "expressions": [
+        {"text": "a unique means of", "meaning_zh": "一种独特的……方法"},
+        {"text": "for later consumption", "meaning_zh": "供日后食用"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "They froze them overnight, then trampled them to squeeze out the moisture, then dried them in the sun.",
+      "translation": "他们先把土豆冻一夜，然后踩踏它们以挤出水分，再把它们放在阳光下晒干。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "froze them overnight", "role": "verb_phrase", "level": 1},
+        {"text": "then trampled them to squeeze out the moisture", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "then dried them in the sun", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "to squeeze out the moisture", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "They 指安第斯山区居民，them 指 potatoes。",
+        "三个动作 froze、trampled、dried 按顺序说明保存步骤。"
+      ],
+      "expressions": [
+        {"text": "squeeze out the moisture", "meaning_zh": "挤出水分"},
+        {"text": "dried them in the sun", "meaning_zh": "把它们在阳光下晒干"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "This preserved their nutritional value—if not their aesthetic appeal.",
+      "translation": "这保留了它们的营养价值——即使并没有保留它们的外观吸引力。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "preserved", "role": "verb_phrase", "level": 1},
+        {"text": "their nutritional value", "role": "object", "level": 1},
+        {"text": "if not their aesthetic appeal", "role": "parenthetical_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "This 指上一句描述的冻、踩、晒干过程。",
+        "if not... 表示让步或保留：营养价值保住了，但美观未必保住。"
+      ],
+      "expressions": [
+        {"text": "nutritional value", "meaning_zh": "营养价值"},
+        {"text": "aesthetic appeal", "meaning_zh": "美观吸引力"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Natural ice remained the main form of refrigeration until late in the 19th century.",
+      "translation": "直到19世纪末，天然冰仍然是主要的制冷形式。",
+      "structure": [
+        {"text": "Natural ice", "role": "subject", "level": 1},
+        {"text": "remained", "role": "verb_phrase", "level": 1},
+        {"text": "the main form of refrigeration", "role": "complement", "level": 1},
+        {"text": "until late in the 19th century", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "remained 表示一种状态持续不变。",
+        "until late in the 19th century 说明天然冰作为主要制冷方式持续到何时。"
+      ],
+      "expressions": [
+        {"text": "the main form of", "meaning_zh": "……的主要形式"},
+        {"text": "late in the 19th century", "meaning_zh": "19世纪末"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "In the early 1800s, ship owners from Boston, USA, had enormous blocks of Arctic ice towed all over the Atlantic for the purpose of food preservation.",
+      "translation": "19世纪初，美国波士顿的船主让巨大的北极冰块被拖运到大西洋各地，用于保存食物。",
+      "structure": [
+        {"text": "In the early 1800s", "role": "prepositional_phrase", "level": 1},
+        {"text": "ship owners from Boston, USA", "role": "subject", "level": 1},
+        {"text": "had enormous blocks of Arctic ice towed all over the Atlantic", "role": "verb_phrase", "level": 1},
+        {"text": "for the purpose of food preservation", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "had...towed 是使役结构，表示让冰块被拖运。",
+        "for the purpose of... 明确说明拖运北极冰的用途。"
+      ],
+      "expressions": [
+        {"text": "had enormous blocks of Arctic ice towed", "meaning_zh": "让巨大北极冰块被拖运"},
+        {"text": "for the purpose of", "meaning_zh": "为了……目的"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "In 1851, railroads first began putting blocks of ice in insulated rail cars to send butter from Ogdensburg, New York, to Boston.",
+      "translation": "1851年，铁路公司首次开始把冰块放进隔热铁路车厢，以便把黄油从纽约州奥格登斯堡运往波士顿。",
+      "structure": [
+        {"text": "In 1851", "role": "prepositional_phrase", "level": 1},
+        {"text": "railroads", "role": "subject", "level": 1},
+        {"text": "first began putting blocks of ice in insulated rail cars", "role": "verb_phrase", "level": 1},
+        {"text": "to send butter from Ogdensburg, New York, to Boston", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "began putting... 表示开始采用一种运输做法。",
+        "to send butter... 是目的状语，说明冰块和隔热车厢的用途。"
+      ],
+      "expressions": [
+        {"text": "insulated rail cars", "meaning_zh": "隔热铁路车厢"},
+        {"text": "began putting blocks of ice", "meaning_zh": "开始放置冰块"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "Finally, in 1870, Australian inventors found a way to make ‘mechanical ice’.",
+      "translation": "终于，在1870年，澳大利亚发明家找到了制造“机械冰”的方法。",
+      "structure": [
+        {"text": "Finally", "role": "sentence_adverbial", "level": 1},
+        {"text": "in 1870", "role": "prepositional_phrase", "level": 1},
+        {"text": "Australian inventors", "role": "subject", "level": 1},
+        {"text": "found a way to make ‘mechanical ice’", "role": "verb_phrase", "level": 1},
+        {"text": "to make ‘mechanical ice’", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Finally 承接前文天然冰阶段，标志人工制冷技术出现。",
+        "to make... 修饰 a way，说明方法的用途。"
+      ],
+      "expressions": [
+        {"text": "found a way to", "meaning_zh": "找到做……的方法"},
+        {"text": "mechanical ice", "meaning_zh": "机械制冰"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "They used a compressor to force a gas — ammonia at first and later Freon — through a condenser.",
+      "translation": "他们使用压缩机迫使一种气体——起初是氨，后来是氟利昂——通过冷凝器。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "used a compressor", "role": "verb_phrase", "level": 1},
+        {"text": "to force a gas — ammonia at first and later Freon — through a condenser", "role": "infinitive_phrase", "level": 2},
+        {"text": "ammonia at first and later Freon", "role": "apposition", "level": 3}
+      ],
+      "difficult_points": [
+        "to force... 说明压缩机的作用。",
+        "两个破折号之间解释 a gas 在不同时期具体是什么。"
+      ],
+      "expressions": [
+        {"text": "used a compressor to force", "meaning_zh": "使用压缩机迫使……"},
+        {"text": "through a condenser", "meaning_zh": "通过冷凝器"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "The compressed gas gave up some of its heat as it moved through the condenser.",
+      "translation": "压缩后的气体在通过冷凝器时释放出一部分热量。",
+      "structure": [
+        {"text": "The compressed gas", "role": "subject", "level": 1},
+        {"text": "gave up some of its heat", "role": "verb_phrase", "level": 1},
+        {"text": "as it moved through the condenser", "role": "adverbial_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "compressed 是过去分词作形容词，修饰 gas。",
+        "as 引导时间状语从句，表示释放热量发生在通过冷凝器时。"
+      ],
+      "expressions": [
+        {"text": "gave up some of its heat", "meaning_zh": "释放出部分热量"},
+        {"text": "moved through the condenser", "meaning_zh": "通过冷凝器"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "Then the gas was released quickly into a low-pressure evaporator coil where it became liquid and cold.",
+      "translation": "随后，这种气体被迅速释放到低压蒸发器盘管中，在那里变成寒冷的液体。",
+      "structure": [
+        {"text": "Then", "role": "time_adverbial", "level": 1},
+        {"text": "the gas", "role": "subject", "level": 1},
+        {"text": "was released quickly into a low-pressure evaporator coil", "role": "verb_phrase", "level": 1},
+        {"text": "where it became liquid and cold", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "was released 是被动结构，描述制冷流程的下一步。",
+        "where 引导定语从句，修饰 evaporator coil。"
+      ],
+      "expressions": [
+        {"text": "low-pressure evaporator coil", "meaning_zh": "低压蒸发器盘管"},
+        {"text": "became liquid and cold", "meaning_zh": "变成寒冷的液体"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "Air was blown over the evaporator coil and then this cooled air passed into an insulated compartment, lowering its temperature to freezing point.",
+      "translation": "空气被吹过蒸发器盘管，随后冷却后的空气进入隔热舱室，把舱内温度降到冰点。",
+      "structure": [
+        {"text": "Air", "role": "subject", "level": 1},
+        {"text": "was blown over the evaporator coil", "role": "verb_phrase", "level": 1},
+        {"text": "and then this cooled air passed into an insulated compartment", "role": "coordinated_clause", "level": 1},
+        {"text": "lowering its temperature to freezing point", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "was blown 是被动结构，说明空气被送过盘管。",
+        "lowering... 是结果性分词短语，说明冷却空气进入后的效果。"
+      ],
+      "expressions": [
+        {"text": "passed into an insulated compartment", "meaning_zh": "进入隔热舱室"},
+        {"text": "to freezing point", "meaning_zh": "到冰点"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "Initially, this process was invented to keep Australian beer cool even in hot weather.",
+      "translation": "最初，这一过程是为了即使在炎热天气中也让澳大利亚啤酒保持凉爽而发明的。",
+      "structure": [
+        {"text": "Initially", "role": "sentence_adverbial", "level": 1},
+        {"text": "this process", "role": "subject", "level": 1},
+        {"text": "was invented", "role": "verb_phrase", "level": 1},
+        {"text": "to keep Australian beer cool even in hot weather", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Initially 标明最初用途，后文会转向肉类出口。",
+        "to keep...cool 是目的状语，说明发明这一过程的初衷。"
+      ],
+      "expressions": [
+        {"text": "was invented to", "meaning_zh": "被发明来……"},
+        {"text": "even in hot weather", "meaning_zh": "即使在炎热天气中"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "But Australian cattlemen were quick to realize that, if they could put this new invention on a ship, they could export meat across the oceans.",
+      "translation": "但澳大利亚牧牛人很快意识到，如果能把这项新发明装到船上，他们就可以跨洋出口肉类。",
+      "structure": [
+        {"text": "But Australian cattlemen", "role": "subject", "level": 1},
+        {"text": "were quick to realize", "role": "verb_phrase", "level": 1},
+        {"text": "that, if they could put this new invention on a ship, they could export meat across the oceans", "role": "noun_clause", "level": 2},
+        {"text": "if they could put this new invention on a ship", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "were quick to realize 表示很快意识到商业机会。",
+        "that 从句中嵌套 if 条件句，说明实现出口肉类的条件。"
+      ],
+      "expressions": [
+        {"text": "were quick to realize", "meaning_zh": "很快意识到"},
+        {"text": "export meat across the oceans", "meaning_zh": "跨洋出口肉类"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "In 1880, a shipment of Australian beef and mutton was sent, frozen, to England.",
+      "translation": "1880年，一批澳大利亚牛肉和羊肉以冷冻状态被运往英格兰。",
+      "structure": [
+        {"text": "In 1880", "role": "prepositional_phrase", "level": 1},
+        {"text": "a shipment of Australian beef and mutton", "role": "subject", "level": 1},
+        {"text": "was sent", "role": "verb_phrase", "level": 1},
+        {"text": "frozen", "role": "participial_phrase", "level": 2},
+        {"text": "to England", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "was sent 是被动结构，说明货物被运送。",
+        "frozen 插入在谓语和地点之间，说明运输时的状态。"
+      ],
+      "expressions": [
+        {"text": "a shipment of", "meaning_zh": "一批货物"},
+        {"text": "was sent, frozen, to", "meaning_zh": "以冷冻状态被运往"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "While the food frozen this way was still palatable, there was some deterioration.",
+      "translation": "虽然以这种方式冷冻的食物仍然可以入口，但品质有所下降。",
+      "structure": [
+        {"text": "While the food frozen this way was still palatable", "role": "adverbial_clause", "level": 1},
+        {"text": "frozen this way", "role": "participial_phrase", "level": 2},
+        {"text": "there was some deterioration", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "While 引导让步从句，表示可食用与品质下降同时存在。",
+        "frozen this way 后置修饰 food，指用机械制冷运输的食物。"
+      ],
+      "expressions": [
+        {"text": "still palatable", "meaning_zh": "仍然可入口的"},
+        {"text": "some deterioration", "meaning_zh": "一定程度的品质下降"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "During the freezing process, crystals formed within the cells of the food, and when the ice expanded and the cells burst, this spoiled the flavor and texture of the food.",
+      "translation": "在冷冻过程中，晶体在食物细胞内形成；当冰膨胀、细胞破裂时，就会破坏食物的味道和质地。",
+      "structure": [
+        {"text": "During the freezing process", "role": "prepositional_phrase", "level": 1},
+        {"text": "crystals formed within the cells of the food", "role": "main_clause", "level": 1},
+        {"text": "when the ice expanded and the cells burst", "role": "adverbial_clause", "level": 1},
+        {"text": "this spoiled the flavor and texture of the food", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "and 后接 when 从句，引出细胞破裂造成食物品质受损的机制。",
+        "this 指前面冰晶形成、膨胀并使细胞破裂的过程。"
+      ],
+      "expressions": [
+        {"text": "During the freezing process", "meaning_zh": "在冷冻过程中"},
+        {"text": "flavor and texture", "meaning_zh": "味道和质地"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "The modern frozen food industry began with the indigenous Inuit people of Canada.",
+      "translation": "现代冷冻食品工业始于加拿大的原住民因纽特人。",
+      "structure": [
+        {"text": "The modern frozen food industry", "role": "subject", "level": 1},
+        {"text": "began with", "role": "verb_phrase", "level": 1},
+        {"text": "the indigenous Inuit people of Canada", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "began with 表示现代冷冻食品工业的源头。",
+        "indigenous 修饰 Inuit people，强调其原住民身份。"
+      ],
+      "expressions": [
+        {"text": "modern frozen food industry", "meaning_zh": "现代冷冻食品工业"},
+        {"text": "began with", "meaning_zh": "始于"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "In 1912, a biology student in Massachusetts, USA, named Clarence Birdseye, ran out of money and went to Labrador in Canada to trap and trade furs.",
+      "translation": "1912年，美国马萨诸塞州一名叫 Clarence Birdseye 的生物学学生钱花光了，于是前往加拿大拉布拉多捕猎并买卖毛皮。",
+      "structure": [
+        {"text": "In 1912", "role": "prepositional_phrase", "level": 1},
+        {"text": "a biology student in Massachusetts, USA, named Clarence Birdseye", "role": "subject", "level": 1},
+        {"text": "named Clarence Birdseye", "role": "participial_phrase", "level": 2},
+        {"text": "ran out of money and went to Labrador in Canada", "role": "verb_phrase", "level": 1},
+        {"text": "to trap and trade furs", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "named Clarence Birdseye 是后置分词短语，说明这名学生的名字。",
+        "ran out of money 和 went to Labrador 是连续动作，to trap and trade furs 说明去那里的目的。"
+      ],
+      "expressions": [
+        {"text": "ran out of money", "meaning_zh": "钱花光了"},
+        {"text": "to trap and trade furs", "meaning_zh": "为了捕猎并买卖毛皮"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "While he was there, he became fascinated with how the Inuit would quickly freeze fish in the Arctic air.",
+      "translation": "他在那里时，对因纽特人如何在北极空气中快速冷冻鱼产生了浓厚兴趣。",
+      "structure": [
+        {"text": "While he was there", "role": "adverbial_clause", "level": 1},
+        {"text": "he", "role": "subject", "level": 1},
+        {"text": "became fascinated with", "role": "verb_phrase", "level": 1},
+        {"text": "how the Inuit would quickly freeze fish in the Arctic air", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "While 引导时间状语从句，说明兴趣产生的背景。",
+        "how 从句作 with 的宾语，说明他着迷的具体内容。"
+      ],
+      "expressions": [
+        {"text": "became fascinated with", "meaning_zh": "对……产生浓厚兴趣"},
+        {"text": "quickly freeze fish", "meaning_zh": "快速冷冻鱼"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "The fish looked and tasted fresh even months later.",
+      "translation": "这些鱼即使数月后看起来和尝起来仍然新鲜。",
+      "structure": [
+        {"text": "The fish", "role": "subject", "level": 1},
+        {"text": "looked and tasted fresh", "role": "verb_phrase", "level": 1},
+        {"text": "even months later", "role": "time_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "looked and tasted 是并列系动词，共用形容词 fresh。",
+        "even months later 强调快速冷冻能长期保持新鲜。"
+      ],
+      "expressions": [
+        {"text": "looked and tasted fresh", "meaning_zh": "看起来和尝起来都新鲜"},
+        {"text": "even months later", "meaning_zh": "甚至数月之后"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "Birdseye returned to the USA in 1917 and began developing mechanical freezers capable of quick-freezing food.",
+      "translation": "Birdseye 于1917年返回美国，并开始研发能够快速冷冻食物的机械冷冻机。",
+      "structure": [
+        {"text": "Birdseye", "role": "subject", "level": 1},
+        {"text": "returned to the USA in 1917", "role": "verb_phrase", "level": 1},
+        {"text": "and began developing mechanical freezers capable of quick-freezing food", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "capable of quick-freezing food", "role": "adjectival_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "returned 和 began developing 是并列动作。",
+        "capable of... 后置修饰 mechanical freezers，说明设备能力。"
+      ],
+      "expressions": [
+        {"text": "began developing", "meaning_zh": "开始研发"},
+        {"text": "capable of quick-freezing food", "meaning_zh": "能够快速冷冻食物"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "Birdseye methodically kept inventing better freezers and gradually built a business selling frozen fish from Gloucester, Massachusetts.",
+      "translation": "Birdseye 有条不紊地不断发明更好的冷冻机，并逐渐建立起一家销售马萨诸塞州格洛斯特冷冻鱼的企业。",
+      "structure": [
+        {"text": "Birdseye", "role": "subject", "level": 1},
+        {"text": "methodically kept inventing better freezers", "role": "verb_phrase", "level": 1},
+        {"text": "and gradually built a business selling frozen fish from Gloucester, Massachusetts", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "selling frozen fish from Gloucester, Massachusetts", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "kept inventing 表示持续不断地改进冷冻机。",
+        "selling frozen fish... 修饰 business，说明企业经营内容。"
+      ],
+      "expressions": [
+        {"text": "methodically kept inventing", "meaning_zh": "有条不紊地不断发明"},
+        {"text": "gradually built a business", "meaning_zh": "逐渐建立起一门生意"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "In 1929, his business was sold and became General Foods, but he stayed with the company as director of research, and his division continued to innovate.",
+      "translation": "1929年，他的企业被出售并成为 General Foods，但他继续留在公司担任研究主管，他的部门也持续创新。",
+      "structure": [
+        {"text": "In 1929", "role": "prepositional_phrase", "level": 1},
+        {"text": "his business was sold and became General Foods", "role": "main_clause", "level": 1},
+        {"text": "but he stayed with the company as director of research", "role": "coordinated_clause", "level": 1},
+        {"text": "and his division continued to innovate", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "was sold 和 became 共同说明企业归属变化。",
+        "but 后说明 Birdseye 本人仍留在公司并继续推动创新。"
+      ],
+      "expressions": [
+        {"text": "stayed with the company", "meaning_zh": "留在公司"},
+        {"text": "continued to innovate", "meaning_zh": "继续创新"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "Birdseye was responsible for several key innovations that made the frozen food industry possible.",
+      "translation": "Birdseye 促成了几项关键创新，使冷冻食品工业成为可能。",
+      "structure": [
+        {"text": "Birdseye", "role": "subject", "level": 1},
+        {"text": "was responsible for", "role": "verb_phrase", "level": 1},
+        {"text": "several key innovations", "role": "object", "level": 1},
+        {"text": "that made the frozen food industry possible", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "was responsible for 表示他对这些创新起关键作用。",
+        "that 引导定语从句，说明这些创新的重要后果。"
+      ],
+      "expressions": [
+        {"text": "was responsible for", "meaning_zh": "促成；对……负责"},
+        {"text": "key innovations", "meaning_zh": "关键创新"},
+        {"text": "made ... possible", "meaning_zh": "使……成为可能"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "He developed quick-freezing techniques that reduced the damage that crystals caused, as well as the technique of freezing the product in the package it was to be sold in.",
+      "translation": "他开发了速冻技术，减少冰晶造成的损害；还开发了把产品直接在其销售包装中冷冻的技术。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "developed quick-freezing techniques", "role": "verb_phrase", "level": 1},
+        {"text": "that reduced the damage that crystals caused", "role": "relative_clause", "level": 2},
+        {"text": "that crystals caused", "role": "relative_clause", "level": 3},
+        {"text": "as well as the technique of freezing the product in the package it was to be sold in", "role": "coordinated_object", "level": 1}
+      ],
+      "difficult_points": [
+        "第一个 that 修饰 quick-freezing techniques，第二个 that 修饰 damage。",
+        "as well as 连接另一项技术：在销售包装中冷冻产品。"
+      ],
+      "expressions": [
+        {"text": "quick-freezing techniques", "meaning_zh": "速冻技术"},
+        {"text": "reduced the damage", "meaning_zh": "减少损害"},
+        {"text": "as well as", "meaning_zh": "以及"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 28,
+      "sentence": "He also introduced the use of cellophane, the first transparent material for food packaging, which allowed consumers to see the quality of the product.",
+      "translation": "他还引入了玻璃纸的使用，这是第一种用于食品包装的透明材料，使消费者能够看到产品质量。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "also introduced", "role": "verb_phrase", "level": 1},
+        {"text": "the use of cellophane", "role": "object", "level": 1},
+        {"text": "the first transparent material for food packaging", "role": "apposition", "level": 2},
+        {"text": "which allowed consumers to see the quality of the product", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "the first transparent material... 是 cellophane 的同位语。",
+        "which 引导非限制性定语从句，说明透明包装带来的消费者好处。"
+      ],
+      "expressions": [
+        {"text": "introduced the use of", "meaning_zh": "引入……的使用"},
+        {"text": "transparent material", "meaning_zh": "透明材料"},
+        {"text": "the quality of the product", "meaning_zh": "产品质量"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 29,
+      "sentence": "Birdseye products also came in convenient size packages that could be prepared with a minimum of effort.",
+      "translation": "Birdseye 产品还采用尺寸便利的包装，只需最少的努力就能准备好。",
+      "structure": [
+        {"text": "Birdseye products", "role": "subject", "level": 1},
+        {"text": "also came in", "role": "verb_phrase", "level": 1},
+        {"text": "convenient size packages", "role": "object", "level": 1},
+        {"text": "that could be prepared with a minimum of effort", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "came in 表示产品以某种包装形式出售。",
+        "that 从句修饰 packages，说明这种包装便于准备食用。"
+      ],
+      "expressions": [
+        {"text": "came in convenient size packages", "meaning_zh": "采用便利规格包装"},
+        {"text": "with a minimum of effort", "meaning_zh": "用最少的努力"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 30,
+      "sentence": "But there were still obstacles.",
+      "translation": "但仍然存在障碍。",
+      "structure": [
+        {"text": "But", "role": "coordinating_conjunction", "level": 1},
+        {"text": "there were still obstacles", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "But 表示前文创新之后仍有问题没有解决。",
+        "there were 是存在句，obstacles 是真正的信息中心。"
+      ],
+      "expressions": [
+        {"text": "there were still obstacles", "meaning_zh": "仍然存在障碍"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 31,
+      "sentence": "In the 1930s, few grocery stores could afford to buy freezers for a market that wasn’t established yet.",
+      "translation": "20世纪30年代，很少有杂货店买得起冷冻柜来服务一个尚未形成的市场。",
+      "structure": [
+        {"text": "In the 1930s", "role": "prepositional_phrase", "level": 1},
+        {"text": "few grocery stores", "role": "subject", "level": 1},
+        {"text": "could afford to buy freezers", "role": "verb_phrase", "level": 1},
+        {"text": "for a market that wasn’t established yet", "role": "prepositional_phrase", "level": 1},
+        {"text": "that wasn’t established yet", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "few 表示否定倾向，说明能买冷冻柜的店很少。",
+        "that 从句修饰 market，说明冷冻食品市场还没有成熟。"
+      ],
+      "expressions": [
+        {"text": "could afford to buy", "meaning_zh": "买得起"},
+        {"text": "wasn’t established yet", "meaning_zh": "尚未建立起来"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 32,
+      "sentence": "So, Birdseye leased inexpensive freezer cases to them.",
+      "translation": "因此，Birdseye 把价格低廉的冷冻陈列柜租给他们。",
+      "structure": [
+        {"text": "So", "role": "parenthesis", "level": 1},
+        {"text": "Birdseye", "role": "subject", "level": 1},
+        {"text": "leased", "role": "verb_phrase", "level": 1},
+        {"text": "inexpensive freezer cases", "role": "object", "level": 1},
+        {"text": "to them", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "So 表示这是为解决杂货店买不起冷冻柜而采取的做法。",
+        "them 指上一句的 grocery stores。"
+      ],
+      "expressions": [
+        {"text": "leased ... to them", "meaning_zh": "把……租给他们"},
+        {"text": "inexpensive freezer cases", "meaning_zh": "价格低廉的冷冻陈列柜"}
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 33,
+      "sentence": "He also leased insulated railroad cars so that he could ship his products nationwide.",
+      "translation": "他还租用隔热铁路车厢，以便把产品运往全国各地。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "also leased insulated railroad cars", "role": "verb_phrase", "level": 1},
+        {"text": "so that he could ship his products nationwide", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "also 表明除了租冷冻柜，他还解决运输问题。",
+        "so that 引导目的状语从句，说明租铁路车厢的目的。"
+      ],
+      "expressions": [
+        {"text": "insulated railroad cars", "meaning_zh": "隔热铁路车厢"},
+        {"text": "ship his products nationwide", "meaning_zh": "把产品运往全国"}
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 34,
+      "sentence": "However, few consumers had freezers large enough or efficient enough to take advantage of the products.",
+      "translation": "然而，很少有消费者拥有足够大或足够高效、能充分利用这些产品的冷冻柜。",
+      "structure": [
+        {"text": "However", "role": "parenthesis", "level": 1},
+        {"text": "few consumers", "role": "subject", "level": 1},
+        {"text": "had", "role": "verb_phrase", "level": 1},
+        {"text": "freezers large enough or efficient enough to take advantage of the products", "role": "object", "level": 1},
+        {"text": "to take advantage of the products", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "However 引出新的障碍：消费者家中设备不足。",
+        "large enough or efficient enough 后接不定式，说明达到何种程度才可使用产品。"
+      ],
+      "expressions": [
+        {"text": "large enough or efficient enough", "meaning_zh": "足够大或足够高效"},
+        {"text": "take advantage of", "meaning_zh": "利用"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 35,
+      "sentence": "Sales increased in the early 1940s, when World War II gave a boost to the frozen food industry because tin was being used for munitions.",
+      "translation": "20世纪40年代初，销量上升；当时第二次世界大战推动了冷冻食品行业，因为锡正被用于制造军需品。",
+      "structure": [
+        {"text": "Sales", "role": "subject", "level": 1},
+        {"text": "increased in the early 1940s", "role": "verb_phrase", "level": 1},
+        {"text": "when World War II gave a boost to the frozen food industry", "role": "relative_clause", "level": 2},
+        {"text": "because tin was being used for munitions", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "when 从句补充说明 early 1940s 这一时期的背景。",
+        "because 从句解释战争为何推动冷冻食品行业。"
+      ],
+      "expressions": [
+        {"text": "gave a boost to", "meaning_zh": "推动；促进"},
+        {"text": "was being used for", "meaning_zh": "正被用于"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 36,
+      "sentence": "Canned foods were rationed to save tin for the war effort, while frozen foods were abundant and cheap.",
+      "translation": "罐装食品受到配给限制，以便为战争节省锡；而冷冻食品供应充足且价格低廉。",
+      "structure": [
+        {"text": "Canned foods", "role": "subject", "level": 1},
+        {"text": "were rationed", "role": "verb_phrase", "level": 1},
+        {"text": "to save tin for the war effort", "role": "infinitive_phrase", "level": 2},
+        {"text": "while frozen foods were abundant and cheap", "role": "adverbial_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "to save tin... 说明罐装食品被配给的目的。",
+        "while 表示对比：罐头受限，冷冻食品却充足便宜。"
+      ],
+      "expressions": [
+        {"text": "were rationed", "meaning_zh": "被配给；受限供应"},
+        {"text": "war effort", "meaning_zh": "战争努力；战时需要"},
+        {"text": "abundant and cheap", "meaning_zh": "充足且便宜"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 37,
+      "sentence": "Finally, by the 1950s, refrigerator technology had developed far enough to make these appliances affordable for the average family.",
+      "translation": "最终，到20世纪50年代，冰箱技术已经发展到足以让普通家庭买得起这些电器的程度。",
+      "structure": [
+        {"text": "Finally", "role": "sentence_adverbial", "level": 1},
+        {"text": "by the 1950s", "role": "prepositional_phrase", "level": 1},
+        {"text": "refrigerator technology", "role": "subject", "level": 1},
+        {"text": "had developed far enough", "role": "verb_phrase", "level": 1},
+        {"text": "to make these appliances affordable for the average family", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "had developed 使用过去完成时，说明到20世纪50年代时技术已经达到某水平。",
+        "far enough to... 表示发展程度足以产生后面的结果。"
+      ],
+      "expressions": [
+        {"text": "had developed far enough to", "meaning_zh": "已经发展到足以……"},
+        {"text": "affordable for the average family", "meaning_zh": "普通家庭买得起"}
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 38,
+      "sentence": "By 1953, 33 million US families owned a refrigerator, and manufacturers were gradually increasing the size of the freezer compartments in them.",
+      "translation": "到1953年，3300万美国家庭拥有冰箱，制造商也在逐渐增大其中冷冻室的尺寸。",
+      "structure": [
+        {"text": "By 1953", "role": "prepositional_phrase", "level": 1},
+        {"text": "33 million US families", "role": "subject", "level": 1},
+        {"text": "owned a refrigerator", "role": "verb_phrase", "level": 1},
+        {"text": "and manufacturers were gradually increasing the size of the freezer compartments in them", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "By 1953 说明截至该时间点的普及情况。",
+        "them 指 refrigerators，表示制造商加大冰箱中的冷冻室。"
+      ],
+      "expressions": [
+        {"text": "owned a refrigerator", "meaning_zh": "拥有一台冰箱"},
+        {"text": "freezer compartments", "meaning_zh": "冷冻室"}
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 39,
+      "sentence": "1950s families were also looking for convenience at mealtimes, so the moment was right for the arrival of the ‘TV Dinner’.",
+      "translation": "20世纪50年代的家庭也在寻求用餐时的便利，因此“电视晚餐”的出现正逢其时。",
+      "structure": [
+        {"text": "1950s families", "role": "subject", "level": 1},
+        {"text": "were also looking for convenience at mealtimes", "role": "verb_phrase", "level": 1},
+        {"text": "so the moment was right for the arrival of the ‘TV Dinner’", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "were looking for 表示当时持续存在的消费需求。",
+        "so 引导结果，说明电视晚餐出现的时机合适。"
+      ],
+      "expressions": [
+        {"text": "looking for convenience", "meaning_zh": "寻求便利"},
+        {"text": "the moment was right for", "meaning_zh": "……的时机正合适"}
+      ]
+    },
+    {
+      "id": "J-02",
+      "paragraph_label": "J",
+      "sentence_index": 40,
+      "sentence": "Swanson Foods was a large, nationally recognized producer of canned and frozen poultry.",
+      "translation": "Swanson Foods 是一家大型、全国知名的罐装和冷冻禽肉生产商。",
+      "structure": [
+        {"text": "Swanson Foods", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "a large, nationally recognized producer of canned and frozen poultry", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "nationally recognized 修饰 producer，表示其全国知名。",
+        "of canned and frozen poultry 说明公司生产的产品类别。"
+      ],
+      "expressions": [
+        {"text": "nationally recognized", "meaning_zh": "全国知名的"},
+        {"text": "producer of", "meaning_zh": "……的生产商"}
+      ]
+    },
+    {
+      "id": "J-03",
+      "paragraph_label": "J",
+      "sentence_index": 41,
+      "sentence": "In 1954, the company adapted some of Birdseye’s freezing techniques, and with the help of a clever name and a huge advertising budget, it launched the first ‘TV Dinner’.",
+      "translation": "1954年，该公司改造采用了 Birdseye 的一些冷冻技术，并在一个巧妙名称和巨额广告预算的帮助下，推出了第一款“电视晚餐”。",
+      "structure": [
+        {"text": "In 1954", "role": "prepositional_phrase", "level": 1},
+        {"text": "the company", "role": "subject", "level": 1},
+        {"text": "adapted some of Birdseye’s freezing techniques", "role": "verb_phrase", "level": 1},
+        {"text": "with the help of a clever name and a huge advertising budget", "role": "prepositional_phrase", "level": 1},
+        {"text": "it launched the first ‘TV Dinner’", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "adapted 表示改造并采用已有技术，不是完全照搬。",
+        "with the help of... 说明产品成功推出还依赖命名和广告预算。"
+      ],
+      "expressions": [
+        {"text": "adapted some of", "meaning_zh": "改造采用部分……"},
+        {"text": "with the help of", "meaning_zh": "在……帮助下"},
+        {"text": "launched the first", "meaning_zh": "推出第一款……"}
+      ]
+    },
+    {
+      "id": "J-04",
+      "paragraph_label": "J",
+      "sentence_index": 42,
+      "sentence": "This consisted of frozen turkey, potatoes and vegetables served in the same segmented aluminum tray that was used by airlines.",
+      "translation": "这款产品由冷冻火鸡、土豆和蔬菜组成，盛放在航空公司所使用的同类分格铝托盘中。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "consisted of", "role": "verb_phrase", "level": 1},
+        {"text": "frozen turkey, potatoes and vegetables served in the same segmented aluminum tray", "role": "object", "level": 1},
+        {"text": "served in the same segmented aluminum tray", "role": "participial_phrase", "level": 2},
+        {"text": "that was used by airlines", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "This 指第一款 TV Dinner。",
+        "served... 后置修饰食物，that 从句进一步修饰 tray。"
+      ],
+      "expressions": [
+        {"text": "consisted of", "meaning_zh": "由……组成"},
+        {"text": "segmented aluminum tray", "meaning_zh": "分格铝托盘"}
+      ]
+    },
+    {
+      "id": "J-05",
+      "paragraph_label": "J",
+      "sentence_index": 43,
+      "sentence": "The product was an instant success.",
+      "translation": "这款产品立刻获得成功。",
+      "structure": [
+        {"text": "The product", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "an instant success", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "The product 指上一句的 TV Dinner。",
+        "instant success 表示上市后立即取得商业成功。"
+      ],
+      "expressions": [
+        {"text": "an instant success", "meaning_zh": "一举成功；立刻成功"}
+      ]
+    },
+    {
+      "id": "J-06",
+      "paragraph_label": "J",
+      "sentence_index": 44,
+      "sentence": "Within a year, Swanson had sold 13 million TV dinners.",
+      "translation": "一年之内，Swanson 就售出了1300万份电视晚餐。",
+      "structure": [
+        {"text": "Within a year", "role": "prepositional_phrase", "level": 1},
+        {"text": "Swanson", "role": "subject", "level": 1},
+        {"text": "had sold", "role": "verb_phrase", "level": 1},
+        {"text": "13 million TV dinners", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "Within a year 强调销售增长速度快。",
+        "had sold 使用过去完成时，概括一年内已经完成的销量。"
+      ],
+      "expressions": [
+        {"text": "Within a year", "meaning_zh": "一年之内"},
+        {"text": "had sold 13 million", "meaning_zh": "已售出1300万"}
+      ]
+    },
+    {
+      "id": "J-07",
+      "paragraph_label": "J",
+      "sentence_index": 45,
+      "sentence": "American consumers couldn’t resist the combination of a trusted brand name, a single-serving package and the convenience of a meal that could be ready after only 25 minutes in a hot oven.",
+      "translation": "美国消费者无法抗拒这种组合：可信赖的品牌名称、单人份包装，以及只需在热烤箱中加热25分钟即可享用的便利餐食。",
+      "structure": [
+        {"text": "American consumers", "role": "subject", "level": 1},
+        {"text": "couldn’t resist", "role": "verb_phrase", "level": 1},
+        {"text": "the combination of a trusted brand name, a single-serving package and the convenience of a meal", "role": "object", "level": 1},
+        {"text": "that could be ready after only 25 minutes in a hot oven", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "the combination of... 后列出三项吸引消费者的因素。",
+        "that 从句修饰 meal，说明这种餐食准备时间短。"
+      ],
+      "expressions": [
+        {"text": "couldn’t resist", "meaning_zh": "无法抗拒"},
+        {"text": "a trusted brand name", "meaning_zh": "值得信赖的品牌名称"},
+        {"text": "single-serving package", "meaning_zh": "单人份包装"}
+      ]
+    },
+    {
+      "id": "J-08",
+      "paragraph_label": "J",
+      "sentence_index": 46,
+      "sentence": "By 1959, Americans were spending $2.7 billion annually on frozen foods, and half a billion of that was spent on ready-prepared meals such as the TV Dinner.",
+      "translation": "到1959年，美国人每年在冷冻食品上花费27亿美元，其中5亿美元用于电视晚餐等预制餐食。",
+      "structure": [
+        {"text": "By 1959", "role": "prepositional_phrase", "level": 1},
+        {"text": "Americans", "role": "subject", "level": 1},
+        {"text": "were spending $2.7 billion annually on frozen foods", "role": "verb_phrase", "level": 1},
+        {"text": "and half a billion of that was spent on ready-prepared meals such as the TV Dinner", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "were spending 表示当时持续的消费规模。",
+        "that 指前面的 $2.7 billion，half a billion 是其中一部分。"
+      ],
+      "expressions": [
+        {"text": "annually on frozen foods", "meaning_zh": "每年在冷冻食品上"},
+        {"text": "ready-prepared meals", "meaning_zh": "预制餐食"}
+      ]
+    },
+    {
+      "id": "K-01",
+      "paragraph_label": "K",
+      "sentence_index": 47,
+      "sentence": "Today, the US frozen food industry has a turnover of over $67 billion annually, with $26.6 billion of that sold to consumers for home consumption.",
+      "translation": "如今，美国冷冻食品行业年营业额超过670亿美元，其中266亿美元面向消费者家庭消费。",
+      "structure": [
+        {"text": "Today", "role": "time_adverbial", "level": 1},
+        {"text": "the US frozen food industry", "role": "subject", "level": 1},
+        {"text": "has a turnover of over $67 billion annually", "role": "verb_phrase", "level": 1},
+        {"text": "with $26.6 billion of that sold to consumers for home consumption", "role": "prepositional_phrase", "level": 1},
+        {"text": "sold to consumers for home consumption", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "has a turnover of... 表示行业年营业额达到某规模。",
+        "with 短语补充说明其中面向家庭消费者的销售额。"
+      ],
+      "expressions": [
+        {"text": "has a turnover of", "meaning_zh": "营业额为……"},
+        {"text": "for home consumption", "meaning_zh": "用于家庭消费"}
+      ]
+    },
+    {
+      "id": "K-02",
+      "paragraph_label": "K",
+      "sentence_index": 48,
+      "sentence": "The remaining $40 billion in frozen food sales come through restaurants, cafeterias, hospitals and schools, and that represents a third of the total food service sales.",
+      "translation": "剩余400亿美元的冷冻食品销售来自餐馆、自助餐厅、医院和学校，而这占整个餐饮服务销售额的三分之一。",
+      "structure": [
+        {"text": "The remaining $40 billion in frozen food sales", "role": "subject", "level": 1},
+        {"text": "come through restaurants, cafeterias, hospitals and schools", "role": "verb_phrase", "level": 1},
+        {"text": "and that represents a third of the total food service sales", "role": "coordinated_clause", "level": 1},
+        {"text": "a third of the total food service sales", "role": "object", "level": 2}
+      ],
+      "difficult_points": [
+        "remaining 表示在家庭消费之外剩下的销售额部分。",
+        "that 指前面通过机构渠道产生的400亿美元销售额。"
+      ],
+      "expressions": [
+        {"text": "The remaining $40 billion", "meaning_zh": "剩余400亿美元"},
+        {"text": "represents a third of", "meaning_zh": "占……的三分之一"}
+      ]
+    }
+  ]
+}

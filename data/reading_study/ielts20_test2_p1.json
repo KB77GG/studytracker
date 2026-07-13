@@ -1,0 +1,2186 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts20_test2_reading",
+  "passage_id": "ielts20_test2_p1",
+  "passage_title": "Manatees",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Manatees, also known as sea cows, are aquatic mammals that belong to a group of animals called Sirenia.",
+      "translation": "海牛，也被称为“海牛类动物”或海中奶牛，是属于一类名为海牛目的水生哺乳动物。",
+      "structure": [
+        {
+          "text": "Manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also known as sea cows",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "are aquatic mammals",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that belong to a group of animals called Sirenia",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "called Sirenia",
+          "role": "participial_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "also known as sea cows 是插入式过去分词短语，补充说明 Manatees 的别称。",
+        "that 引导定语从句，修饰 aquatic mammals，说明海牛所属的动物类别。",
+        "called Sirenia 是过去分词短语，修饰 a group of animals。"
+      ],
+      "expressions": [
+        {
+          "text": "also known as",
+          "meaning_zh": "也被称为"
+        },
+        {
+          "text": "belong to",
+          "meaning_zh": "属于"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "This group also contains dugongs.",
+      "translation": "这一类动物还包括儒艮。",
+      "structure": [
+        {
+          "text": "This group",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also contains",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "dugongs",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "This group 指上一句中的 a group of animals called Sirenia。",
+        "also 表示递进，说明儒艮也属于同一动物类群。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Dugongs and manatees look quite alike – they are similar in size, colour and shape, and both have flexible flippers for forelimbs.",
+      "translation": "儒艮和海牛看起来很相似——它们在大小、颜色和形状上相近，而且两者都有灵活的鳍状前肢。",
+      "structure": [
+        {
+          "text": "Dugongs and manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "look quite alike",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "they are similar in size, colour and shape",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "both have flexible flippers for forelimbs",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "for forelimbs",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "破折号后的内容具体解释 look quite alike 的表现。",
+        "they 指 Dugongs and manatees，是复数代词。",
+        "for forelimbs 表示这些 flexible flippers 充当前肢。"
+      ],
+      "expressions": [
+        {
+          "text": "look quite alike",
+          "meaning_zh": "看起来非常相似"
+        },
+        {
+          "text": "be similar in",
+          "meaning_zh": "在……方面相似"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "However, the manatee has a broad, rounded tail, whereas the dugong’s is fluked, like that of a whale.",
+      "translation": "然而，海牛的尾巴宽而圆，而儒艮的尾巴呈叉状，就像鲸的尾巴一样。",
+      "structure": [
+        {
+          "text": "However",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "the manatee has a broad, rounded tail",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "whereas the dugong’s is fluked",
+          "role": "contrast_clause",
+          "level": 1
+        },
+        {
+          "text": "like that of a whale",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "However 引出与前一句相似点相反的差异。",
+        "whereas 表示对比，连接海牛尾巴和儒艮尾巴的不同形状。",
+        "the dugong’s 后省略了 tail，that of a whale 中 that 也指 tail。"
+      ],
+      "expressions": [
+        {
+          "text": "whereas",
+          "meaning_zh": "然而；相比之下"
+        },
+        {
+          "text": "like that of",
+          "meaning_zh": "像……的那样"
+        }
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "There are three species of manatees: the West Indian manatee (Trichechus manatus), the African manatee (Trichechus senegalensis) and the Amazonian manatee (Trichechus inunguis).",
+      "translation": "海牛共有三个物种：西印度海牛、非洲海牛和亚马孙海牛。",
+      "structure": [
+        {
+          "text": "There are three species of manatees",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "of manatees",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "the West Indian manatee (Trichechus manatus), the African manatee (Trichechus senegalensis) and the Amazonian manatee (Trichechus inunguis)",
+          "role": "apposition",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "There are 是存在句，真正的信息焦点是 three species of manatees。",
+        "冒号后的三个名词短语列举 three species 的具体种类。",
+        "括号中的拉丁学名是对每个物种名称的补充说明。"
+      ],
+      "expressions": [
+        {
+          "text": "species of",
+          "meaning_zh": "……的物种"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Unlike most mammals, manatees have only six bones in their neck – most others, including humans and giraffes, have seven.",
+      "translation": "与大多数哺乳动物不同，海牛的脖子里只有六块骨头——其他大多数哺乳动物，包括人类和长颈鹿，都有七块。",
+      "structure": [
+        {
+          "text": "Unlike most mammals",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "manatees have only six bones in their neck",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "in their neck",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "most others, including humans and giraffes, have seven",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "including humans and giraffes",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Unlike most mammals 是介词短语，放在句首表示对比。",
+        "most others 指 most other mammals，后面省略了 mammals。",
+        "including humans and giraffes 是插入成分，举例说明 most others。"
+      ],
+      "expressions": [
+        {
+          "text": "unlike most mammals",
+          "meaning_zh": "不同于大多数哺乳动物"
+        },
+        {
+          "text": "including",
+          "meaning_zh": "包括"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "This short neck allows a manatee to move its head up and down, but not side to side.",
+      "translation": "这种短脖子使海牛能够上下移动头部，但不能左右摆动。",
+      "structure": [
+        {
+          "text": "This short neck",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "allows",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a manatee to move its head up and down",
+          "role": "object_complement",
+          "level": 1
+        },
+        {
+          "text": "but not side to side",
+          "role": "ellipsis",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "allows a manatee to move 是 allow sb to do 结构，表示“使某人能够做某事”。",
+        "This short neck 指上一句提到的只有六块颈骨的短脖子。",
+        "but not side to side 中省略了 move its head，表示不能左右移动头部。"
+      ],
+      "expressions": [
+        {
+          "text": "allow ... to",
+          "meaning_zh": "使……能够"
+        },
+        {
+          "text": "side to side",
+          "meaning_zh": "从一侧到另一侧；左右地"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "To see something on its left or its right, a manatee must turn its entire body, steering with its flippers.",
+      "translation": "为了看见左侧或右侧的东西，海牛必须转动整个身体，并用鳍状肢控制方向。",
+      "structure": [
+        {
+          "text": "To see something on its left or its right",
+          "role": "non_finite_clause",
+          "level": 1
+        },
+        {
+          "text": "a manatee",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "must turn its entire body",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "steering with its flippers",
+          "role": "participial_phrase",
+          "level": 1
+        },
+        {
+          "text": "with its flippers",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "To see something... 是目的状语，说明转动身体的原因。",
+        "must turn its entire body 强调海牛不是只转头，而是必须转动整个身体。",
+        "steering with its flippers 是现在分词短语，补充说明转动身体时如何控制方向。"
+      ],
+      "expressions": [
+        {
+          "text": "turn its entire body",
+          "meaning_zh": "转动整个身体"
+        },
+        {
+          "text": "steer with",
+          "meaning_zh": "用……控制方向"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Manatees have pectoral flippers but no back limbs, only a tail for propulsion.",
+      "translation": "海牛有胸鳍，但没有后肢，只有一条用于推进的尾巴。",
+      "structure": [
+        {
+          "text": "Manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have pectoral flippers",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "but no back limbs",
+          "role": "coordinate_object",
+          "level": 1
+        },
+        {
+          "text": "only a tail for propulsion",
+          "role": "apposition",
+          "level": 1
+        },
+        {
+          "text": "for propulsion",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "but no back limbs 与 have pectoral flippers 形成转折对比，说明海牛没有后肢。",
+        "only a tail for propulsion 补充说明没有后肢后剩下的推进结构。",
+        "for propulsion 表示用途，即尾巴用于推动身体前进。"
+      ],
+      "expressions": [
+        {
+          "text": "for propulsion",
+          "meaning_zh": "用于推进"
+        }
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "They do have pelvic bones, however – a leftover from their evolution from a four-legged to a fully aquatic animal.",
+      "translation": "不过，它们确实有骨盆骨——这是它们从四足动物进化为完全水生动物后留下的残余。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "do have pelvic bones",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "however",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "a leftover from their evolution from a four-legged to a fully aquatic animal",
+          "role": "apposition",
+          "level": 1
+        },
+        {
+          "text": "from their evolution from a four-legged to a fully aquatic animal",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "do have 中 do 起强调作用，表示“确实有”。",
+        "however 放在句中，表示与上一句“没有后肢”形成转折。",
+        "破折号后的 a leftover 解释 pelvic bones 的来源和意义。"
+      ],
+      "expressions": [
+        {
+          "text": "do have",
+          "meaning_zh": "确实有"
+        },
+        {
+          "text": "a leftover from",
+          "meaning_zh": "来自……的残余"
+        }
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "Manatees share some visual similarities to elephants.",
+      "translation": "海牛在外观上与大象有一些相似之处。",
+      "structure": [
+        {
+          "text": "Manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "share",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "some visual similarities to elephants",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "to elephants",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "share 在这里表示“具有共同特征”，不是“分享”。",
+        "visual similarities 指外观上的相似点。",
+        "to elephants 说明比较对象是大象。"
+      ],
+      "expressions": [
+        {
+          "text": "share similarities to",
+          "meaning_zh": "与……有相似之处"
+        }
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "Like elephants, manatees have thick, wrinkled skin.",
+      "translation": "像大象一样，海牛也有厚而皱的皮肤。",
+      "structure": [
+        {
+          "text": "Like elephants",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "thick, wrinkled skin",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Like elephants 是介词短语，表示与大象相似。",
+        "thick 和 wrinkled 并列修饰 skin，说明皮肤的两个特征。"
+      ],
+      "expressions": [
+        {
+          "text": "like elephants",
+          "meaning_zh": "像大象一样"
+        }
+      ]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "They also have some hairs covering their bodies which help them sense vibrations in the water around them.",
+      "translation": "它们身上还覆盖着一些毛发，这些毛发帮助它们感知周围水中的震动。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also have some hairs",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "covering their bodies",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "which help them sense vibrations in the water around them",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "in the water around them",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "covering their bodies 是现在分词短语，修饰 some hairs。",
+        "which 引导定语从句，指代 some hairs，而不是 bodies。",
+        "help them sense 是 help sb do 结构，表示“帮助它们感知”。"
+      ],
+      "expressions": [
+        {
+          "text": "sense vibrations",
+          "meaning_zh": "感知震动"
+        },
+        {
+          "text": "around them",
+          "meaning_zh": "在它们周围"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "Seagrasses and other marine plants make up most of a manatee’s diet.",
+      "translation": "海草和其他海洋植物构成了海牛饮食的大部分。",
+      "structure": [
+        {
+          "text": "Seagrasses and other marine plants",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "make up",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "most of a manatee’s diet",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "of a manatee’s diet",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "make up 在这里表示“构成”，不是“编造”或“化妆”。",
+        "most of a manatee’s diet 说明这些植物在海牛饮食中的主要比例。",
+        "marine plants 指海洋植物，与 Seagrasses 一起构成并列主语。"
+      ],
+      "expressions": [
+        {
+          "text": "make up most of",
+          "meaning_zh": "构成……的大部分"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "Manatees spend about eight hours each day grazing and uprooting plants.",
+      "translation": "海牛每天大约花八个小时吃草并连根拔起植物。",
+      "structure": [
+        {
+          "text": "Manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "spend about eight hours each day",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "grazing and uprooting plants",
+          "role": "gerund_phrase",
+          "level": 1
+        },
+        {
+          "text": "each day",
+          "role": "time_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "spend time doing 是固定结构，表示“花时间做某事”。",
+        "grazing and uprooting plants 是两个并列的动名词动作。",
+        "about eight hours each day 表示频率和持续时间，不是总时长。"
+      ],
+      "expressions": [
+        {
+          "text": "spend ... doing",
+          "meaning_zh": "花费……做某事"
+        },
+        {
+          "text": "each day",
+          "meaning_zh": "每天"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "They eat up to 15% of their weight in food each day.",
+      "translation": "它们每天吃掉的食物最多可达自身体重的15%。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "eat up to 15% of their weight",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "of their weight",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "in food",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "each day",
+          "role": "time_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "up to 表示“多达”，强调最高数量。",
+        "15% of their weight 指相当于自身重量的百分比。",
+        "in food 说明这个重量比例是以食物量来计算的。"
+      ],
+      "expressions": [
+        {
+          "text": "up to",
+          "meaning_zh": "多达"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "African manatees are omnivorous – studies have shown that molluscs and fish make up a small part of their diets.",
+      "translation": "非洲海牛是杂食性的——研究表明，软体动物和鱼类在它们的饮食中占一小部分。",
+      "structure": [
+        {
+          "text": "African manatees are omnivorous",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "studies have shown",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that molluscs and fish make up a small part of their diets",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "molluscs and fish",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "make up a small part of their diets",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "破折号后的 studies have shown... 用研究结果解释 omnivorous。",
+        "that 引导宾语从句，作 shown 的内容。",
+        "make up a small part of their diets 表示只占饮食的一小部分。"
+      ],
+      "expressions": [
+        {
+          "text": "studies have shown that",
+          "meaning_zh": "研究表明"
+        },
+        {
+          "text": "make up a small part of",
+          "meaning_zh": "构成……的一小部分"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "West Indian and Amazonian manatees are both herbivores.",
+      "translation": "西印度海牛和亚马孙海牛都是食草动物。",
+      "structure": [
+        {
+          "text": "West Indian and Amazonian manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are both",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "herbivores",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "West Indian and Amazonian 并列修饰 manatees，表示两个物种。",
+        "both 强调两个物种都属于 herbivores。",
+        "herbivores 与上一句 omnivorous 形成饮食类型对比。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Manatees' teeth are all molars – flat, rounded teeth for grinding food.",
+      "translation": "海牛的牙齿全都是臼齿——也就是用于研磨食物的扁平圆形牙齿。",
+      "structure": [
+        {
+          "text": "Manatees' teeth",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are all",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "molars",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "flat, rounded teeth for grinding food",
+          "role": "apposition",
+          "level": 1
+        },
+        {
+          "text": "for grinding food",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Manatees' 是复数名词所有格，表示“海牛的”。",
+        "破折号后的 flat, rounded teeth for grinding food 解释 molars 的特点和用途。",
+        "for grinding food 表示功能，即用于磨碎食物。"
+      ],
+      "expressions": [
+        {
+          "text": "for grinding food",
+          "meaning_zh": "用于研磨食物"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "Due to manatees’ abrasive aquatic plant diet, these teeth get worn down and they eventually fall out, so they continually grow new teeth that get pushed forward to replace the ones they lose.",
+      "translation": "由于海牛以粗糙的水生植物为食，这些牙齿会被磨损并最终脱落，因此它们会不断长出新牙，新牙会被向前推来替代失去的牙齿。",
+      "structure": [
+        {
+          "text": "Due to manatees’ abrasive aquatic plant diet",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "these teeth get worn down and they eventually fall out",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "so they continually grow new teeth",
+          "role": "result_clause",
+          "level": 1
+        },
+        {
+          "text": "that get pushed forward to replace the ones they lose",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "to replace the ones they lose",
+          "role": "non_finite_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Due to 引出原因，说明牙齿磨损的根源是粗糙的水生植物饮食。",
+        "get worn down 和 fall out 是并列结果，描述牙齿先磨损再脱落。",
+        "that 引导定语从句，修饰 new teeth，说明新牙会被向前推。",
+        "the ones they lose 中 ones 指 teeth，they lose 是省略关系词的定语从句。"
+      ],
+      "expressions": [
+        {
+          "text": "due to",
+          "meaning_zh": "由于"
+        },
+        {
+          "text": "get worn down",
+          "meaning_zh": "被磨损"
+        },
+        {
+          "text": "fall out",
+          "meaning_zh": "脱落"
+        },
+        {
+          "text": "replace the ones",
+          "meaning_zh": "替代那些……"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "Instead of having incisors to grasp their food, manatees have lips which function like a pair of hands to help tear food away from the seafloor.",
+      "translation": "海牛没有用来抓取食物的门齿，而是有像一双手一样起作用的嘴唇，帮助它们把食物从海底撕扯下来。",
+      "structure": [
+        {
+          "text": "Instead of having incisors to grasp their food",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "manatees have lips",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "which function like a pair of hands to help tear food away from the seafloor",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "like a pair of hands",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "to help tear food away from the seafloor",
+          "role": "non_finite_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Instead of having... 表示替代关系，说明海牛没有用门齿抓食物。",
+        "which 引导定语从句，修饰 lips，说明嘴唇的功能。",
+        "to help tear food away from the seafloor 表示嘴唇像手一样起作用的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "instead of",
+          "meaning_zh": "而不是"
+        },
+        {
+          "text": "function like",
+          "meaning_zh": "像……一样起作用"
+        },
+        {
+          "text": "tear ... away from",
+          "meaning_zh": "把……从……撕离"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "Manatees are fully aquatic, but as mammals, they need to come up to the surface to breathe.",
+      "translation": "海牛完全生活在水中，但作为哺乳动物，它们需要浮到水面呼吸。",
+      "structure": [
+        {
+          "text": "Manatees are fully aquatic",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "but as mammals",
+          "role": "contrast_phrase",
+          "level": 1
+        },
+        {
+          "text": "they need to come up to the surface",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "to breathe",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "but 引出看似矛盾的信息：虽然完全水生，但仍需呼吸空气。",
+        "as mammals 是身份说明，解释为什么它们需要到水面呼吸。",
+        "to breathe 是目的状语，说明 come up to the surface 的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "fully aquatic",
+          "meaning_zh": "完全水生的"
+        },
+        {
+          "text": "come up to the surface",
+          "meaning_zh": "浮到水面"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "When awake, they typically surface every two to four minutes, but they can hold their breath for much longer.",
+      "translation": "醒着时，它们通常每两到四分钟浮出水面一次，但它们能憋气更长时间。",
+      "structure": [
+        {
+          "text": "When awake",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "they typically surface every two to four minutes",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "but they can hold their breath for much longer",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "for much longer",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "When awake 是省略结构，完整含义是 when they are awake。",
+        "surface 在这里是动词，表示“浮出水面”。",
+        "but 引出实际憋气能力比通常换气间隔更长的对比。"
+      ],
+      "expressions": [
+        {
+          "text": "hold their breath",
+          "meaning_zh": "屏住呼吸；憋气"
+        },
+        {
+          "text": "every two to four minutes",
+          "meaning_zh": "每两到四分钟"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "Adult manatees sleep underwater for 10–12 hours a day, but they come up for air every 15–20 minutes.",
+      "translation": "成年海牛每天在水下睡10到12个小时，但它们每15到20分钟就会上来换气。",
+      "structure": [
+        {
+          "text": "Adult manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "sleep underwater for 10–12 hours a day",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "but they come up for air every 15–20 minutes",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "for air",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "for 10–12 hours a day 表示每天睡眠的持续时长。",
+        "come up for air 是固定表达，表示浮上来呼吸空气。",
+        "but 连接两个事实：睡在水下，但仍需定期换气。"
+      ],
+      "expressions": [
+        {
+          "text": "come up for air",
+          "meaning_zh": "上来换气"
+        },
+        {
+          "text": "a day",
+          "meaning_zh": "每天"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "Active manatees need to breathe more frequently.",
+      "translation": "活动中的海牛需要更频繁地呼吸。",
+      "structure": [
+        {
+          "text": "Active manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "need to breathe",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "more frequently",
+          "role": "adverbial_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Active manatees 指处于活动状态的海牛，与睡眠或静止状态形成对比。",
+        "need to breathe 是 need to do 结构，表示生理上的需要。",
+        "more frequently 是比较级副词短语，说明呼吸间隔更短。"
+      ],
+      "expressions": [
+        {
+          "text": "more frequently",
+          "meaning_zh": "更频繁地"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "It’s thought that manatees use their muscular diaphragm and breathing to adjust their buoyancy.",
+      "translation": "人们认为，海牛会利用肌肉发达的横膈膜和呼吸来调节自身浮力。",
+      "structure": [
+        {
+          "text": "It’s thought",
+          "role": "passive_clause",
+          "level": 1
+        },
+        {
+          "text": "that manatees use their muscular diaphragm and breathing to adjust their buoyancy",
+          "role": "subject_clause",
+          "level": 2
+        },
+        {
+          "text": "manatees use their muscular diaphragm and breathing",
+          "role": "main_clause",
+          "level": 3
+        },
+        {
+          "text": "to adjust their buoyancy",
+          "role": "non_finite_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "It’s thought that... 是被动表达，表示“人们认为……”。",
+        "that 从句是真正的信息内容，It 是形式主语。",
+        "to adjust their buoyancy 表示使用横膈膜和呼吸的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "It’s thought that",
+          "meaning_zh": "人们认为"
+        },
+        {
+          "text": "adjust their buoyancy",
+          "meaning_zh": "调节它们的浮力"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "They may use diaphragm contractions to compress and store gas in folds in their large intestine to help them float.",
+      "translation": "它们可能利用横膈膜收缩来压缩并储存大肠褶皱中的气体，从而帮助自己漂浮。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "may use diaphragm contractions",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to compress and store gas in folds in their large intestine",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "in folds in their large intestine",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "to help them float",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "may 表示推测或可能性，说明这是可能的机制。",
+        "to compress and store gas 是目的不定式，说明 diaphragm contractions 的作用。",
+        "in folds in their large intestine 是嵌套介词短语，说明气体储存的位置。",
+        "to help them float 表示最终目的，即帮助海牛漂浮。"
+      ],
+      "expressions": [
+        {
+          "text": "compress and store",
+          "meaning_zh": "压缩并储存"
+        },
+        {
+          "text": "help them float",
+          "meaning_zh": "帮助它们漂浮"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "The West Indian manatee reaches about 3.5 metres long and weighs on average around 500 kilogrammes.",
+      "translation": "西印度海牛身长约3.5米，平均体重约500千克。",
+      "structure": [
+        {
+          "text": "The West Indian manatee",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "reaches about 3.5 metres long",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and weighs on average around 500 kilogrammes",
+          "role": "coordinate_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "on average",
+          "role": "adverbial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "reaches about 3.5 metres long 用 reach 表示达到某一长度。",
+        "weighs on average around 500 kilogrammes 说明平均体重，而不是固定体重。",
+        "about 和 around 都表示近似数值。"
+      ],
+      "expressions": [
+        {
+          "text": "on average",
+          "meaning_zh": "平均而言"
+        },
+        {
+          "text": "around 500 kilogrammes",
+          "meaning_zh": "约500千克"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "It moves between fresh water and salt water, taking advantage of coastal mangroves and coral reefs, rivers, lakes and inland lagoons.",
+      "translation": "它在淡水和咸水之间活动，利用沿海红树林、珊瑚礁、河流、湖泊和内陆泻湖等栖息环境。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "moves between fresh water and salt water",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "between fresh water and salt water",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "taking advantage of coastal mangroves and coral reefs, rivers, lakes and inland lagoons",
+          "role": "participial_phrase",
+          "level": 1
+        },
+        {
+          "text": "of coastal mangroves and coral reefs, rivers, lakes and inland lagoons",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指上一句的 The West Indian manatee。",
+        "between fresh water and salt water 表示活动范围跨越淡水和咸水环境。",
+        "taking advantage of... 是现在分词短语，说明它如何利用多种栖息地。"
+      ],
+      "expressions": [
+        {
+          "text": "move between",
+          "meaning_zh": "在……之间移动"
+        },
+        {
+          "text": "take advantage of",
+          "meaning_zh": "利用"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "There are two subspecies of West Indian manatee: the Antillean manatee is found in waters from the Bahamas to Brazil, whereas the Florida manatee is found in US waters, although some individuals have been recorded in the Bahamas.",
+      "translation": "西印度海牛有两个亚种：安的列斯海牛分布在从巴哈马到巴西的水域，而佛罗里达海牛分布在美国水域，尽管也有一些个体在巴哈马被记录到。",
+      "structure": [
+        {
+          "text": "There are two subspecies of West Indian manatee",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "the Antillean manatee is found in waters from the Bahamas to Brazil",
+          "role": "explanatory_clause",
+          "level": 1
+        },
+        {
+          "text": "whereas the Florida manatee is found in US waters",
+          "role": "contrast_clause",
+          "level": 1
+        },
+        {
+          "text": "although some individuals have been recorded in the Bahamas",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "from the Bahamas to Brazil",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "There are two subspecies 是存在句，冒号后说明两个亚种的分布。",
+        "is found in 表示“分布于、见于”，是被动形式但常用于描述物种分布。",
+        "whereas 引出两个亚种分布范围的对比。",
+        "although 从句补充说明佛罗里达海牛也有个体曾在巴哈马被记录。"
+      ],
+      "expressions": [
+        {
+          "text": "be found in",
+          "meaning_zh": "分布于；见于"
+        },
+        {
+          "text": "from ... to ...",
+          "meaning_zh": "从……到……"
+        },
+        {
+          "text": "have been recorded",
+          "meaning_zh": "已有记录"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "In winter, the Florida manatee is typically restricted to Florida.",
+      "translation": "在冬季，佛罗里达海牛通常只限于佛罗里达地区活动。",
+      "structure": [
+        {
+          "text": "In winter",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Florida manatee",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is typically restricted to Florida",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to Florida",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "In winter 限定时间，说明这种分布限制主要发生在冬季。",
+        "is restricted to 表示范围被限制在某地。",
+        "typically 表示通常情况，不排除个别例外。"
+      ],
+      "expressions": [
+        {
+          "text": "be restricted to",
+          "meaning_zh": "被限制在；仅限于"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "When the ambient water temperature drops below 20°C, it takes refuge in naturally and artificially warmed water, such as at the warm-water outfalls from power plants.",
+      "translation": "当周围水温降到20°C以下时，它会躲到自然或人工加热的水域中，例如发电厂排出的温水口附近。",
+      "structure": [
+        {
+          "text": "When the ambient water temperature drops below 20°C",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "it takes refuge in naturally and artificially warmed water",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "in naturally and artificially warmed water",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "such as at the warm-water outfalls from power plants",
+          "role": "example_phrase",
+          "level": 1
+        },
+        {
+          "text": "from power plants",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，说明海牛寻找温暖水域的条件。",
+        "it 指 the Florida manatee。",
+        "takes refuge in 表示“躲避到、避难于”，不是普通的 take。",
+        "such as 后给出人工温水的具体例子。"
+      ],
+      "expressions": [
+        {
+          "text": "drop below",
+          "meaning_zh": "降到……以下"
+        },
+        {
+          "text": "take refuge in",
+          "meaning_zh": "躲避到；在……避难"
+        },
+        {
+          "text": "such as",
+          "meaning_zh": "例如"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "The African manatee is also about 3.5 metres long and found in the sea along the west coast of Africa, from Mauritania down to Angola.",
+      "translation": "非洲海牛也大约有3.5米长，分布在非洲西海岸沿线的海域，从毛里塔尼亚一直到安哥拉。",
+      "structure": [
+        {
+          "text": "The African manatee",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is also about 3.5 metres long",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and found in the sea along the west coast of Africa",
+          "role": "coordinate_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "along the west coast of Africa",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "from Mauritania down to Angola",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "is also about 3.5 metres long 与上一段西印度海牛的体长形成类比。",
+        "and found 省略了 is，完整含义是 and is found。",
+        "from Mauritania down to Angola 说明沿非洲西海岸的南北分布范围。"
+      ],
+      "expressions": [
+        {
+          "text": "be found in",
+          "meaning_zh": "分布于"
+        },
+        {
+          "text": "along the west coast of",
+          "meaning_zh": "沿着……西海岸"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "The species also makes use of rivers, with the mammals seen in landlocked countries such as Mali and Niger.",
+      "translation": "该物种也会利用河流，人们还在马里和尼日尔等内陆国家见到过这种哺乳动物。",
+      "structure": [
+        {
+          "text": "The species",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also makes use of rivers",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "with the mammals seen in landlocked countries such as Mali and Niger",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "seen in landlocked countries such as Mali and Niger",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "such as Mali and Niger",
+          "role": "example_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "The species 指上一句的 African manatee。",
+        "makes use of 表示“利用”，强调河流也是其活动环境。",
+        "with the mammals seen... 是 with 复合结构，补充说明它们也出现在内陆国家。",
+        "landlocked countries 指不临海的国家，与前一句 west coast 形成地理扩展。"
+      ],
+      "expressions": [
+        {
+          "text": "make use of",
+          "meaning_zh": "利用"
+        },
+        {
+          "text": "landlocked countries",
+          "meaning_zh": "内陆国家"
+        }
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 35,
+      "sentence": "The Amazonian manatee is the smallest species, though it is still a big animal.",
+      "translation": "亚马孙海牛是最小的物种，不过它仍然是一种大型动物。",
+      "structure": [
+        {
+          "text": "The Amazonian manatee",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is the smallest species",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "though it is still a big animal",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "it is still a big animal",
+          "role": "main_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "the smallest species 是在三种海牛之间进行比较。",
+        "though 引导让步从句，说明“最小”并不等于体型小。",
+        "it 指 The Amazonian manatee。"
+      ],
+      "expressions": [
+        {
+          "text": "the smallest species",
+          "meaning_zh": "最小的物种"
+        },
+        {
+          "text": "though",
+          "meaning_zh": "尽管；不过"
+        }
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 36,
+      "sentence": "It grows to about 2.5 metres long and 350 kilogrammes.",
+      "translation": "它可长到约2.5米长、350千克重。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "grows to about 2.5 metres long and 350 kilogrammes",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "about 2.5 metres long and 350 kilogrammes",
+          "role": "complement",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指 The Amazonian manatee。",
+        "grows to 表示“长到、达到”，后面接体长和体重数值。",
+        "about 表示近似值，不是精确测量。"
+      ],
+      "expressions": [
+        {
+          "text": "grow to",
+          "meaning_zh": "长到；达到"
+        }
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 37,
+      "sentence": "Amazonian manatees favour calm, shallow waters that are above 23°C.",
+      "translation": "亚马孙海牛偏好温度高于23°C的平静浅水区。",
+      "structure": [
+        {
+          "text": "Amazonian manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "favour",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "calm, shallow waters",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "that are above 23°C",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "favour 在这里表示“偏好”，不是“帮助”。",
+        "calm 和 shallow 并列修饰 waters，说明水域特点。",
+        "that 引导定语从句，修饰 waters，限定水温条件。"
+      ],
+      "expressions": [
+        {
+          "text": "favour calm, shallow waters",
+          "meaning_zh": "偏好平静的浅水区"
+        },
+        {
+          "text": "above 23°C",
+          "meaning_zh": "高于23°C"
+        }
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 38,
+      "sentence": "This species is found in fresh water in the Amazon Basin in Brazil, as well as in Colombia, Ecuador and Peru.",
+      "translation": "这一物种分布在巴西亚马孙盆地的淡水中，也分布在哥伦比亚、厄瓜多尔和秘鲁。",
+      "structure": [
+        {
+          "text": "This species",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is found in fresh water in the Amazon Basin in Brazil",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in fresh water in the Amazon Basin in Brazil",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "as well as in Colombia, Ecuador and Peru",
+          "role": "coordinate_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "This species 指亚马孙海牛。",
+        "is found in 用于描述物种分布。",
+        "in fresh water in the Amazon Basin in Brazil 连续介词短语逐层说明水域、流域和国家。",
+        "as well as 表示补充并列，加入另外三个国家。"
+      ],
+      "expressions": [
+        {
+          "text": "as well as",
+          "meaning_zh": "以及；也"
+        },
+        {
+          "text": "be found in",
+          "meaning_zh": "分布于"
+        }
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 39,
+      "sentence": "All three manatee species are endangered or at a heightened risk of extinction.",
+      "translation": "所有三种海牛都已濒危，或面临更高的灭绝风险。",
+      "structure": [
+        {
+          "text": "All three manatee species",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are endangered",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "or at a heightened risk of extinction",
+          "role": "coordinate_complement",
+          "level": 1
+        },
+        {
+          "text": "of extinction",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "All three manatee species 概括前文提到的三种海牛。",
+        "endangered 和 at a heightened risk of extinction 是并列的保护状态描述。",
+        "heightened risk of extinction 表示灭绝风险升高，语气比普通 risk 更强。"
+      ],
+      "expressions": [
+        {
+          "text": "at a heightened risk of",
+          "meaning_zh": "面临更高的……风险"
+        },
+        {
+          "text": "risk of extinction",
+          "meaning_zh": "灭绝风险"
+        }
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 40,
+      "sentence": "The African manatee and Amazonian manatee are both listed as Vulnerable by the International Union for Conservation of Nature (IUCN).",
+      "translation": "非洲海牛和亚马孙海牛都被国际自然保护联盟列为易危物种。",
+      "structure": [
+        {
+          "text": "The African manatee and Amazonian manatee",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are both listed as Vulnerable",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "by the International Union for Conservation of Nature (IUCN)",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "as Vulnerable",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "are listed as 是被动结构，表示“被列为”。",
+        "both 强调两个物种都属于同一保护等级。",
+        "by the International Union for Conservation of Nature (IUCN) 说明列名的机构。"
+      ],
+      "expressions": [
+        {
+          "text": "be listed as",
+          "meaning_zh": "被列为"
+        }
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 41,
+      "sentence": "It is estimated that 140,000 Amazonian manatees were killed between 1935 and 1954 for their meat, fat and skin, with the latter used to make leather.",
+      "translation": "据估计，1935年至1954年间，有14万头亚马孙海牛因其肉、脂肪和皮而被杀，其中皮被用来制革。",
+      "structure": [
+        {
+          "text": "It is estimated",
+          "role": "passive_clause",
+          "level": 1
+        },
+        {
+          "text": "that 140,000 Amazonian manatees were killed between 1935 and 1954 for their meat, fat and skin",
+          "role": "subject_clause",
+          "level": 2
+        },
+        {
+          "text": "between 1935 and 1954",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "for their meat, fat and skin",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "with the latter used to make leather",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "It is estimated that... 是被动估计表达，It 是形式主语。",
+        "were killed 是被动语态，突出海牛遭捕杀的事实。",
+        "the latter 指前面列举的 meat, fat and skin 中最后一项 skin。",
+        "used to make leather 是过去分词短语，说明 skin 的用途。"
+      ],
+      "expressions": [
+        {
+          "text": "It is estimated that",
+          "meaning_zh": "据估计"
+        },
+        {
+          "text": "between ... and ...",
+          "meaning_zh": "在……和……之间"
+        },
+        {
+          "text": "the latter",
+          "meaning_zh": "后者；最后一项"
+        }
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 42,
+      "sentence": "In more recent years, African manatee decline has been tied to incidental capture in fishing nets and hunting.",
+      "translation": "近年来，非洲海牛数量下降与被渔网意外捕获以及捕猎有关。",
+      "structure": [
+        {
+          "text": "In more recent years",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "African manatee decline",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has been tied to incidental capture in fishing nets and hunting",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in fishing nets",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "In more recent years 将时间范围从上一句的历史捕杀转到近年情况。",
+        "has been tied to 是现在完成时被动结构，表示“被联系到、与……有关”。",
+        "incidental capture 指非目标性的意外捕获。"
+      ],
+      "expressions": [
+        {
+          "text": "in more recent years",
+          "meaning_zh": "近年来"
+        },
+        {
+          "text": "be tied to",
+          "meaning_zh": "与……有关"
+        },
+        {
+          "text": "incidental capture",
+          "meaning_zh": "意外捕获"
+        }
+      ]
+    },
+    {
+      "id": "I-05",
+      "paragraph_label": "I",
+      "sentence_index": 43,
+      "sentence": "Manatee hunting is now illegal in every country the African species is found in.",
+      "translation": "如今，在非洲海牛分布的每一个国家，捕猎海牛都是非法的。",
+      "structure": [
+        {
+          "text": "Manatee hunting",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is now illegal",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in every country the African species is found in",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the African species is found in",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Manatee hunting 是动名词短语作主语，表示捕猎海牛这一行为。",
+        "in every country 后接省略关系词的定语从句，修饰 country。",
+        "the African species 指非洲海牛这一物种。"
+      ],
+      "expressions": [
+        {
+          "text": "is now illegal",
+          "meaning_zh": "现在是非法的"
+        },
+        {
+          "text": "be found in",
+          "meaning_zh": "分布于"
+        }
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 44,
+      "sentence": "The two subspecies of West Indian manatee are listed as Endangered by the IUCN.",
+      "translation": "西印度海牛的两个亚种被国际自然保护联盟列为濒危物种。",
+      "structure": [
+        {
+          "text": "The two subspecies of West Indian manatee",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are listed as Endangered",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "by the IUCN",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "of West Indian manatee",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "The two subspecies 指前文的 Antillean manatee 和 Florida manatee。",
+        "are listed as Endangered 是被动结构，说明官方保护等级。",
+        "by the IUCN 说明作出该列名的机构。"
+      ],
+      "expressions": [
+        {
+          "text": "be listed as",
+          "meaning_zh": "被列为"
+        }
+      ]
+    },
+    {
+      "id": "J-02",
+      "paragraph_label": "J",
+      "sentence_index": 45,
+      "sentence": "Both are also expected to undergo a decline of 20% over the next 40 years.",
+      "translation": "这两个亚种预计在未来40年里还会减少20%。",
+      "structure": [
+        {
+          "text": "Both",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are also expected",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to undergo a decline of 20% over the next 40 years",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "of 20%",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "over the next 40 years",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Both 指上一句提到的两个西印度海牛亚种。",
+        "are expected to 是被动预测表达，表示“预计会”。",
+        "undergo a decline of 20% 表示经历20%的下降，而不是增长。"
+      ],
+      "expressions": [
+        {
+          "text": "be expected to",
+          "meaning_zh": "预计会"
+        },
+        {
+          "text": "undergo a decline",
+          "meaning_zh": "经历下降"
+        },
+        {
+          "text": "over the next 40 years",
+          "meaning_zh": "在未来40年里"
+        }
+      ]
+    },
+    {
+      "id": "J-03",
+      "paragraph_label": "J",
+      "sentence_index": 46,
+      "sentence": "A review of almost 1,800 cases of entanglement in fishing nets and of plastic consumption among marine mammals in US waters from 2009 to 2020 found that at least 700 cases involved manatees.",
+      "translation": "一项对2009年至2020年美国水域中海洋哺乳动物近1800起被渔网缠住和误食塑料案例的回顾发现，其中至少700起涉及海牛。",
+      "structure": [
+        {
+          "text": "A review of almost 1,800 cases of entanglement in fishing nets and of plastic consumption among marine mammals in US waters from 2009 to 2020",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "of almost 1,800 cases of entanglement in fishing nets and of plastic consumption",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "among marine mammals in US waters",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "found",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that at least 700 cases involved manatees",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "句子主语很长，核心是 A review，后面多个 of 和介词短语都在修饰 review 或 cases。",
+        "from 2009 to 2020 限定该 review 所覆盖的时间范围。",
+        "that 引导宾语从句，说明这项回顾发现的内容。",
+        "at least 700 cases involved manatees 表示至少700起案例与海牛有关。"
+      ],
+      "expressions": [
+        {
+          "text": "a review of",
+          "meaning_zh": "对……的回顾研究"
+        },
+        {
+          "text": "at least",
+          "meaning_zh": "至少"
+        },
+        {
+          "text": "involve manatees",
+          "meaning_zh": "涉及海牛"
+        }
+      ]
+    },
+    {
+      "id": "J-04",
+      "paragraph_label": "J",
+      "sentence_index": 47,
+      "sentence": "The chief cause of death in Florida manatees is boat strikes.",
+      "translation": "佛罗里达海牛死亡的主要原因是船只撞击。",
+      "structure": [
+        {
+          "text": "The chief cause of death in Florida manatees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "of death",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "in Florida manatees",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "boat strikes",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "The chief cause 是主语核心，后面的 of death 和 in Florida manatees 限定原因的范围。",
+        "boat strikes 指船只撞击事件，是复合名词。",
+        "is 连接主语和表语，给出主要死因。"
+      ],
+      "expressions": [
+        {
+          "text": "the chief cause of",
+          "meaning_zh": "……的主要原因"
+        }
+      ]
+    },
+    {
+      "id": "J-05",
+      "paragraph_label": "J",
+      "sentence_index": 48,
+      "sentence": "However, laws in certain parts of Florida now limit boat speeds during winter, allowing slow-moving manatees more time to respond.",
+      "translation": "不过，佛罗里达部分地区的法律现在会在冬季限制船速，让行动缓慢的海牛有更多时间作出反应。",
+      "structure": [
+        {
+          "text": "However",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "laws in certain parts of Florida",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "now limit boat speeds during winter",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "during winter",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "allowing slow-moving manatees more time to respond",
+          "role": "participial_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "However 表示与上一句“船只撞击是主要死因”形成缓和或转折。",
+        "laws in certain parts of Florida 是主语，核心词是 laws。",
+        "allowing... 是现在分词短语，表示限制船速带来的结果。",
+        "more time to respond 中不定式说明 more time 的用途。"
+      ],
+      "expressions": [
+        {
+          "text": "limit boat speeds",
+          "meaning_zh": "限制船速"
+        },
+        {
+          "text": "more time to respond",
+          "meaning_zh": "更多反应时间"
+        }
+      ]
+    }
+  ]
+}

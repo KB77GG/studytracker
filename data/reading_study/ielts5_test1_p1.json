@@ -1,0 +1,786 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts5_test1_reading",
+  "passage_id": "ielts5_test1_p1",
+  "passage_title": "Johnson's Dictionary",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "For the century before Johnson's Dictionary was published in 1755, there had been concern about the state of the English language.",
+      "translation": "在约翰逊《词典》于1755年出版之前的一个世纪里，人们一直对英语的状况感到担忧。",
+      "structure": [
+        {"text": "For the century before Johnson's Dictionary was published in 1755", "role": "prepositional_phrase", "level": 1},
+        {"text": "before Johnson's Dictionary was published in 1755", "role": "adverbial_clause", "level": 2},
+        {"text": "there had been concern", "role": "main_clause", "level": 1},
+        {"text": "about the state of the English language", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "For the century before ... 表示持续时间范围，是整句的时间背景。",
+        "there had been 是过去完成时的存在句，说明担忧早在词典出版前已经存在。",
+        "about the state of the English language 限定 concern 的具体内容。"
+      ],
+      "expressions": [
+        {"text": "there had been concern about", "meaning_zh": "此前一直存在对……的担忧"},
+        {"text": "the state of", "meaning_zh": "……的状况"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "There was no standard way of speaking or writing and no agreement as to the best way of bringing some order to the chaos of English spelling.",
+      "translation": "当时既没有标准的说话或写作方式，也没有人就如何最好地为混乱的英语拼写建立秩序达成一致。",
+      "structure": [
+        {"text": "There was no standard way of speaking or writing", "role": "main_clause", "level": 1},
+        {"text": "no agreement", "role": "coordinate_object", "level": 1},
+        {"text": "as to the best way of bringing some order to the chaos of English spelling", "role": "prepositional_phrase", "level": 1},
+        {"text": "of bringing some order to the chaos of English spelling", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "There was no ... and no ... 并列说明两个缺失：标准方式和共识。",
+        "as to 表示“关于”，引出 agreement 的内容。",
+        "bringing some order to the chaos 是动名词短语，表示给混乱局面带来秩序。"
+      ],
+      "expressions": [
+        {"text": "standard way of", "meaning_zh": "……的标准方式"},
+        {"text": "as to", "meaning_zh": "关于；至于"},
+        {"text": "bring order to chaos", "meaning_zh": "给混乱带来秩序"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Dr Johnson provided the solution.",
+      "translation": "约翰逊博士提供了解决方案。",
+      "structure": [
+        {"text": "Dr Johnson", "role": "subject", "level": 1},
+        {"text": "provided", "role": "verb_phrase", "level": 1},
+        {"text": "the solution", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "这句承接前文的语言混乱问题，the solution 指解决英语标准化问题的方案。",
+        "provided 是谓语动词，强调约翰逊主动给出解决办法。",
+        "the solution 使用定冠词，说明它是针对前面问题的具体解决方案。"
+      ],
+      "expressions": [
+        {"text": "provide the solution", "meaning_zh": "提供解决方案"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "There had, of course, been dictionaries in the past, the first of these being a little book of some 120 pages, compiled by a certain Robert Cawdray, published in 1604 under the title A Table Alphabeticall 'of hard usuall English wordes'.",
+      "translation": "当然，过去也曾有过词典，其中第一本是一本约120页的小书，由一位名叫 Robert Cawdray 的人编纂，于1604年以《A Table Alphabeticall “of hard usuall English wordes”》为题出版。",
+      "structure": [
+        {"text": "There had, of course, been dictionaries in the past", "role": "main_clause", "level": 1},
+        {"text": "of course", "role": "parenthetical_adverbial", "level": 1},
+        {"text": "the first of these being a little book of some 120 pages", "role": "absolute_phrase", "level": 1},
+        {"text": "compiled by a certain Robert Cawdray", "role": "participial_phrase", "level": 2},
+        {"text": "published in 1604 under the title A Table Alphabeticall 'of hard usuall English wordes'", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "There had been 使用过去完成时，说明早于约翰逊词典的词典已经存在。",
+        "the first of these being ... 是独立主格结构，补充说明第一本词典。",
+        "compiled by 和 published in 是过去分词短语，分别说明编者和出版信息。",
+        "书名中的拼写 hard usuall English wordes 保留早期英语形式。"
+      ],
+      "expressions": [
+        {"text": "in the past", "meaning_zh": "在过去"},
+        {"text": "under the title", "meaning_zh": "以……为题"},
+        {"text": "compiled by", "meaning_zh": "由……编纂"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Like the various dictionaries that came after it during the seventeenth century, Cawdray's tended to concentrate on 'scholarly' words; one function of the dictionary was to enable its student to convey an impression of fine learning.",
+      "translation": "和17世纪中随后出现的各种词典一样，Cawdray 的词典往往侧重于“学术性”词汇；词典的一个功能是让使用者传达出学识渊博的印象。",
+      "structure": [
+        {"text": "Like the various dictionaries that came after it during the seventeenth century", "role": "prepositional_phrase", "level": 1},
+        {"text": "that came after it during the seventeenth century", "role": "relative_clause", "level": 2},
+        {"text": "Cawdray's tended to concentrate", "role": "main_clause", "level": 1},
+        {"text": "on 'scholarly' words", "role": "prepositional_phrase", "level": 1},
+        {"text": "one function of the dictionary was to enable its student to convey an impression of fine learning", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Like 是介词，比较 Cawdray 的词典与后来词典的共同特点。",
+        "Cawdray's 省略了 dictionary，指 Cawdray 编纂的词典。",
+        "分号连接两个相关独立分句，后半句解释这类词典的功能。",
+        "to enable its student to convey ... 是不定式结构，说明词典功能。"
+      ],
+      "expressions": [
+        {"text": "tend to concentrate on", "meaning_zh": "往往集中于"},
+        {"text": "convey an impression of", "meaning_zh": "传达出……的印象"},
+        {"text": "fine learning", "meaning_zh": "高深学问；渊博学识"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 6,
+      "sentence": "Beyond the practical need to make order out of chaos, the rise of dictionaries is associated with the rise of the English middle class, who were anxious to define and circumscribe the various worlds to conquer—lexical as well as social and commercial.",
+      "translation": "除了从混乱中建立秩序的实际需要之外，词典的兴起还与英国中产阶级的兴起有关；他们急于界定并限定各种需要征服的领域——既包括词汇领域，也包括社会和商业领域。",
+      "structure": [
+        {"text": "Beyond the practical need to make order out of chaos", "role": "prepositional_phrase", "level": 1},
+        {"text": "the rise of dictionaries", "role": "subject", "level": 1},
+        {"text": "is associated", "role": "verb_phrase", "level": 1},
+        {"text": "with the rise of the English middle class", "role": "prepositional_phrase", "level": 1},
+        {"text": "who were anxious to define and circumscribe the various worlds to conquer", "role": "relative_clause", "level": 2},
+        {"text": "lexical as well as social and commercial", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "Beyond 表示“不仅限于”，引出词典兴起的更深层社会原因。",
+        "be associated with 表示“与……有关”。",
+        "who 引导非限制性定语从句，修饰 the English middle class。",
+        "破折号后的 lexical as well as social and commercial 解释 various worlds 的类型。"
+      ],
+      "expressions": [
+        {"text": "make order out of chaos", "meaning_zh": "从混乱中建立秩序"},
+        {"text": "be associated with", "meaning_zh": "与……相关"},
+        {"text": "as well as", "meaning_zh": "以及；也"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 7,
+      "sentence": "It is highly appropriate that Dr Samuel Johnson, the very model of an eighteenth-century literary man, as famous in his own time as in ours, should have published his Dictionary at the very beginning of the heyday of the middle class.",
+      "translation": "塞缪尔·约翰逊博士这位18世纪文学人的典型代表，在他自己的时代和在我们今天一样著名，恰好在中产阶级鼎盛时期的开端出版他的《词典》，这是非常合适的。",
+      "structure": [
+        {"text": "It is highly appropriate", "role": "main_clause", "level": 1},
+        {"text": "that Dr Samuel Johnson, the very model of an eighteenth-century literary man, as famous in his own time as in ours, should have published his Dictionary at the very beginning of the heyday of the middle class", "role": "subject_clause", "level": 2},
+        {"text": "the very model of an eighteenth-century literary man", "role": "apposition", "level": 3},
+        {"text": "as famous in his own time as in ours", "role": "comparative_phrase", "level": 3},
+        {"text": "at the very beginning of the heyday of the middle class", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "It is highly appropriate 是形式主语结构，that 从句才是实际判断内容。",
+        "the very model ... 是同位语，解释 Johnson 的身份。",
+        "as famous ... as ... 是同级比较，表示他在当时和现在都很有名。",
+        "should have published 在这里表达一种恰如其分的历史安排。"
+      ],
+      "expressions": [
+        {"text": "highly appropriate", "meaning_zh": "非常合适"},
+        {"text": "the very model of", "meaning_zh": "……的典型代表"},
+        {"text": "the heyday of", "meaning_zh": "……的鼎盛时期"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 8,
+      "sentence": "Johnson was a poet and critic who raised common sense to the heights of genius.",
+      "translation": "约翰逊是一位诗人和评论家，他把常识提升到了天才的高度。",
+      "structure": [
+        {"text": "Johnson", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "a poet and critic", "role": "complement", "level": 1},
+        {"text": "who raised common sense to the heights of genius", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "who 引导定语从句，修饰 a poet and critic。",
+        "raised ... to ... 表示把某物提升到某种高度。",
+        "common sense 与 genius 形成反差，突出约翰逊把常识发挥到极高水平。"
+      ],
+      "expressions": [
+        {"text": "raise ... to the heights of", "meaning_zh": "把……提升到……的高度"},
+        {"text": "common sense", "meaning_zh": "常识；判断力"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 9,
+      "sentence": "His approach to the problems that had worried writers throughout the late seventeenth and early eighteenth centuries was intensely practical.",
+      "translation": "对于那些在17世纪晚期和18世纪早期一直困扰作家的问题，他的处理方法极其实用。",
+      "structure": [
+        {"text": "His approach to the problems that had worried writers throughout the late seventeenth and early eighteenth centuries", "role": "subject", "level": 1},
+        {"text": "to the problems", "role": "prepositional_phrase", "level": 2},
+        {"text": "that had worried writers throughout the late seventeenth and early eighteenth centuries", "role": "relative_clause", "level": 3},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "intensely practical", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "主语是 His approach to the problems ... 这个长名词短语。",
+        "that 引导定语从句，修饰 problems。",
+        "had worried 使用过去完成时，说明这些问题在约翰逊之前已长期存在。",
+        "intensely practical 表明他的解决思路重在实际操作。"
+      ],
+      "expressions": [
+        {"text": "approach to the problems", "meaning_zh": "处理问题的方法"},
+        {"text": "intensely practical", "meaning_zh": "极其实用"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 10,
+      "sentence": "Up until his time, the task of producing a dictionary on such a large scale had seemed impossible without the establishment of an academy to make decisions about right and wrong usage.",
+      "translation": "在他那个时代以前，如此大规模编纂词典的任务，如果没有建立一个学院来决定正确和错误的用法，似乎是不可能完成的。",
+      "structure": [
+        {"text": "Up until his time", "role": "prepositional_phrase", "level": 1},
+        {"text": "the task of producing a dictionary on such a large scale", "role": "subject", "level": 1},
+        {"text": "of producing a dictionary on such a large scale", "role": "prepositional_phrase", "level": 2},
+        {"text": "had seemed impossible", "role": "verb_phrase", "level": 1},
+        {"text": "without the establishment of an academy", "role": "prepositional_phrase", "level": 1},
+        {"text": "to make decisions about right and wrong usage", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Up until his time 表示到约翰逊时代之前为止。",
+        "the task of producing ... 是句子主语，核心是 task。",
+        "had seemed impossible 使用过去完成时，表示在约翰逊行动之前人们已有的看法。",
+        "without ... to make decisions ... 说明人们认为需要学院来裁定用法。"
+      ],
+      "expressions": [
+        {"text": "on such a large scale", "meaning_zh": "以如此大的规模"},
+        {"text": "make decisions about", "meaning_zh": "对……作出决定"},
+        {"text": "right and wrong usage", "meaning_zh": "正确和错误的用法"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "Johnson decided he did not need an academy to settle arguments about language; he would write a dictionary himself; and he would do it single-handed.",
+      "translation": "约翰逊认定，他不需要一个学院来解决关于语言的争论；他会亲自写一本词典；而且他会独自完成。",
+      "structure": [
+        {"text": "Johnson decided", "role": "main_clause", "level": 1},
+        {"text": "he did not need an academy to settle arguments about language", "role": "object_clause", "level": 2},
+        {"text": "to settle arguments about language", "role": "infinitive_phrase", "level": 3},
+        {"text": "he would write a dictionary himself", "role": "coordinate_clause", "level": 1},
+        {"text": "he would do it single-handed", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "decided 后省略 that，引出约翰逊的判断。",
+        "三个分号连接递进的独立分句，展现他的决心。",
+        "to settle arguments about language 说明 academy 的预期功能。",
+        "single-handed 表示独自完成，突出任务难度和个人能力。"
+      ],
+      "expressions": [
+        {"text": "settle arguments about", "meaning_zh": "解决关于……的争论"},
+        {"text": "single-handed", "meaning_zh": "独自地；单枪匹马地"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "Johnson signed the contract for the Dictionary with the bookseller Robert Dodsley at a breakfast held at the Golden Anchor Inn near Holborn Bar on 18 June 1764.",
+      "translation": "约翰逊于1764年6月18日在 Holborn Bar 附近的 Golden Anchor Inn 的一场早餐会上，与书商 Robert Dodsley 签署了《词典》合同。",
+      "structure": [
+        {"text": "Johnson", "role": "subject", "level": 1},
+        {"text": "signed", "role": "verb_phrase", "level": 1},
+        {"text": "the contract for the Dictionary", "role": "object", "level": 1},
+        {"text": "with the bookseller Robert Dodsley", "role": "prepositional_phrase", "level": 1},
+        {"text": "at a breakfast held at the Golden Anchor Inn near Holborn Bar on 18 June 1764", "role": "prepositional_phrase", "level": 1},
+        {"text": "held at the Golden Anchor Inn near Holborn Bar", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "for the Dictionary 修饰 contract，说明合同对象。",
+        "with the bookseller Robert Dodsley 说明签约对象。",
+        "held at ... 是过去分词短语，修饰 breakfast。",
+        "at、near、on 多个介词短语依次给出场合、地点和日期。"
+      ],
+      "expressions": [
+        {"text": "sign the contract", "meaning_zh": "签署合同"},
+        {"text": "held at", "meaning_zh": "在……举行"}
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "He was to be paid £1,575 in instalments, and from this he took money to rent 17 Gough Square, in which he set up his 'dictionary workshop'.",
+      "translation": "他将分期获得1,575英镑报酬，并从这笔钱中拿出一部分租下 Gough Square 17号，在那里建立了他的“词典工作室”。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "was to be paid", "role": "verb_phrase", "level": 1},
+        {"text": "£1,575 in instalments", "role": "object", "level": 1},
+        {"text": "from this he took money to rent 17 Gough Square", "role": "coordinate_clause", "level": 1},
+        {"text": "to rent 17 Gough Square", "role": "infinitive_phrase", "level": 2},
+        {"text": "in which he set up his 'dictionary workshop'", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "was to be paid 表示合同安排中的将来付款。",
+        "in instalments 表示分期支付。",
+        "from this 中 this 指前面的报酬。",
+        "in which 引导定语从句，修饰 17 Gough Square。"
+      ],
+      "expressions": [
+        {"text": "be paid in instalments", "meaning_zh": "分期获得付款"},
+        {"text": "set up", "meaning_zh": "建立；设立"},
+        {"text": "dictionary workshop", "meaning_zh": "词典工作室"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 14,
+      "sentence": "James Boswell, his biographer, described the garret where Johnson worked as 'fitted up like a counting house' with a long desk running down the middle at which the copying clerks would work standing up.",
+      "translation": "他的传记作者 James Boswell 把约翰逊工作的阁楼描述为“布置得像一间账房”，里面有一张沿中间延伸的长桌，抄写员会站着在桌旁工作。",
+      "structure": [
+        {"text": "James Boswell, his biographer", "role": "subject", "level": 1},
+        {"text": "his biographer", "role": "apposition", "level": 2},
+        {"text": "described", "role": "verb_phrase", "level": 1},
+        {"text": "the garret where Johnson worked", "role": "object", "level": 1},
+        {"text": "where Johnson worked", "role": "relative_clause", "level": 2},
+        {"text": "as 'fitted up like a counting house'", "role": "object_complement", "level": 1},
+        {"text": "at which the copying clerks would work standing up", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "his biographer 是 James Boswell 的同位语，说明身份。",
+        "describe ... as ... 表示“把……描述为……”。",
+        "where Johnson worked 修饰 garret。",
+        "at which 引导定语从句，修饰 a long desk，说明抄写员工作的地点。"
+      ],
+      "expressions": [
+        {"text": "describe ... as ...", "meaning_zh": "把……描述为……"},
+        {"text": "fitted up like", "meaning_zh": "布置得像……"},
+        {"text": "standing up", "meaning_zh": "站着"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 15,
+      "sentence": "Johnson himself was stationed on a rickety chair at an 'old crazy deal table' surrounded by a chaos of borrowed books.",
+      "translation": "约翰逊本人则坐在一把摇摇晃晃的椅子上，旁边是一张“破旧松木桌”，周围堆满了杂乱的借来书籍。",
+      "structure": [
+        {"text": "Johnson himself", "role": "subject", "level": 1},
+        {"text": "was stationed", "role": "verb_phrase", "level": 1},
+        {"text": "on a rickety chair", "role": "prepositional_phrase", "level": 1},
+        {"text": "at an 'old crazy deal table'", "role": "prepositional_phrase", "level": 1},
+        {"text": "surrounded by a chaos of borrowed books", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "himself 强调约翰逊本人，与抄写员形成对照。",
+        "was stationed 表示他被安置或坐在某处。",
+        "surrounded by ... 是过去分词短语，说明桌椅周围的环境。",
+        "a chaos of borrowed books 形象说明工作空间的杂乱。"
+      ],
+      "expressions": [
+        {"text": "be stationed on", "meaning_zh": "被安置在；坐在"},
+        {"text": "surrounded by", "meaning_zh": "被……围绕"},
+        {"text": "a chaos of", "meaning_zh": "一片混乱的……"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "He was also helped by six assistants, two of whom died whilst the Dictionary was still in preparation.",
+      "translation": "他还得到了六名助手的帮助，其中两人在《词典》仍在编纂期间去世。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "was also helped", "role": "verb_phrase", "level": 1},
+        {"text": "by six assistants", "role": "agent_phrase", "level": 1},
+        {"text": "two of whom died whilst the Dictionary was still in preparation", "role": "relative_clause", "level": 2},
+        {"text": "whilst the Dictionary was still in preparation", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "was also helped 是被动语态，说明约翰逊并非完全没有助手。",
+        "two of whom 引导非限制性定语从句，指 six assistants 中的两人。",
+        "whilst 引导时间状语从句，表示词典仍在准备期间。",
+        "in preparation 表示编纂或筹备尚未完成。"
+      ],
+      "expressions": [
+        {"text": "be helped by", "meaning_zh": "得到……的帮助"},
+        {"text": "in preparation", "meaning_zh": "在准备中；编纂中"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 17,
+      "sentence": "The work was immense; filling about eighty large notebooks (and without a library to hand), Johnson wrote the definitions of over 40,000 words, and illustrated their many meanings with some 114,000 quotations drawn from English writing on every subject, from the Elizabethans to his own time.",
+      "translation": "这项工作规模巨大；约翰逊写满了约80本大笔记本（而且手边没有图书馆可用），为四万多个词写下定义，并用约11.4万条取自各类英文写作的引文说明这些词的多种含义，范围从伊丽莎白时代作家到他自己的时代。",
+      "structure": [
+        {"text": "The work was immense", "role": "main_clause", "level": 1},
+        {"text": "filling about eighty large notebooks", "role": "participial_phrase", "level": 1},
+        {"text": "without a library to hand", "role": "prepositional_phrase", "level": 1},
+        {"text": "Johnson wrote the definitions of over 40,000 words", "role": "coordinate_clause", "level": 1},
+        {"text": "illustrated their many meanings with some 114,000 quotations", "role": "compound_verb_phrase", "level": 1},
+        {"text": "drawn from English writing on every subject", "role": "participial_phrase", "level": 2},
+        {"text": "from the Elizabethans to his own time", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "分号后具体展开 The work was immense 的规模。",
+        "filling about eighty large notebooks 是分词短语，说明工作量。",
+        "without a library to hand 是插入信息，强调工作条件困难。",
+        "drawn from ... 是过去分词短语，修饰 quotations 的来源。"
+      ],
+      "expressions": [
+        {"text": "without a library to hand", "meaning_zh": "手边没有图书馆可用"},
+        {"text": "drawn from", "meaning_zh": "取自……"},
+        {"text": "from ... to ...", "meaning_zh": "从……到……"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 18,
+      "sentence": "He did not expect to achieve complete originality.",
+      "translation": "他并不期望实现完全的原创性。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "did not expect", "role": "verb_phrase", "level": 1},
+        {"text": "to achieve complete originality", "role": "infinitive_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "He 指 Johnson。",
+        "did not expect to 表示并不指望达到某个目标。",
+        "complete originality 指完全原创，后文说明他借鉴了以往词典。"
+      ],
+      "expressions": [
+        {"text": "expect to achieve", "meaning_zh": "期望实现"},
+        {"text": "complete originality", "meaning_zh": "完全原创性"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 19,
+      "sentence": "Working to a deadline, he had to draw on the best of all previous dictionaries, and to make his work one of heroic synthesis.",
+      "translation": "由于要赶期限，他不得不借鉴此前所有词典中最好的部分，并把自己的作品打造成一次英雄式的综合。",
+      "structure": [
+        {"text": "Working to a deadline", "role": "participial_phrase", "level": 1},
+        {"text": "he", "role": "subject", "level": 1},
+        {"text": "had to draw", "role": "verb_phrase", "level": 1},
+        {"text": "on the best of all previous dictionaries", "role": "prepositional_phrase", "level": 1},
+        {"text": "to make his work one of heroic synthesis", "role": "coordinate_infinitive_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Working to a deadline 是分词短语，说明他受截止日期限制。",
+        "draw on 表示利用、借鉴，不是“画在上面”。",
+        "the best of all previous dictionaries 指以往词典中的优秀成果。",
+        "one of heroic synthesis 表示这部作品是一种宏大的综合。"
+      ],
+      "expressions": [
+        {"text": "work to a deadline", "meaning_zh": "按期限工作"},
+        {"text": "draw on", "meaning_zh": "利用；借鉴"},
+        {"text": "heroic synthesis", "meaning_zh": "宏大的综合"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 20,
+      "sentence": "In fact, it was very much more.",
+      "translation": "事实上，它远不止于此。",
+      "structure": [
+        {"text": "In fact", "role": "discourse_marker", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "very much more", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "it 指 Johnson 的词典工作。",
+        "In fact 用于修正或加强前一句的评价。",
+        "very much more 表示远远不止“综合”这么简单。"
+      ],
+      "expressions": [
+        {"text": "in fact", "meaning_zh": "事实上"},
+        {"text": "very much more", "meaning_zh": "远不止如此"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 21,
+      "sentence": "Unlike his predecessors, Johnson treated English very practically, as a living language, with many different shades of meaning.",
+      "translation": "与前人不同，约翰逊非常务实地看待英语，把它视为一种活的语言，具有许多不同层次的含义。",
+      "structure": [
+        {"text": "Unlike his predecessors", "role": "prepositional_phrase", "level": 1},
+        {"text": "Johnson", "role": "subject", "level": 1},
+        {"text": "treated English", "role": "verb_phrase", "level": 1},
+        {"text": "very practically", "role": "adverbial", "level": 1},
+        {"text": "as a living language", "role": "prepositional_phrase", "level": 1},
+        {"text": "with many different shades of meaning", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Unlike his predecessors 表示与此前词典编纂者的对比。",
+        "treated English ... as ... 是“把英语视为……”的结构。",
+        "a living language 表示不断变化、有实际用法的语言。",
+        "shades of meaning 指细微的意义差别。"
+      ],
+      "expressions": [
+        {"text": "unlike his predecessors", "meaning_zh": "与他的前人不同"},
+        {"text": "treat ... as ...", "meaning_zh": "把……视为……"},
+        {"text": "shades of meaning", "meaning_zh": "意义的细微差别"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "He adopted his definitions on the principle of English common law—according to precedent.",
+      "translation": "他按照英国普通法的原则——依据先例——来采用自己的定义。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "adopted", "role": "verb_phrase", "level": 1},
+        {"text": "his definitions", "role": "object", "level": 1},
+        {"text": "on the principle of English common law", "role": "prepositional_phrase", "level": 1},
+        {"text": "according to precedent", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "on the principle of 表示采用定义所依据的原则。",
+        "English common law 与 according to precedent 互相解释，指按先例行事。",
+        "破折号后的短语进一步说明普通法原则的含义。"
+      ],
+      "expressions": [
+        {"text": "on the principle of", "meaning_zh": "基于……原则"},
+        {"text": "according to precedent", "meaning_zh": "依据先例"}
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "After its publication, his Dictionary was not seriously rivalled for over a century.",
+      "translation": "出版之后，他的《词典》在一个多世纪里都没有遇到真正严肃的竞争者。",
+      "structure": [
+        {"text": "After its publication", "role": "prepositional_phrase", "level": 1},
+        {"text": "his Dictionary", "role": "subject", "level": 1},
+        {"text": "was not seriously rivalled", "role": "verb_phrase", "level": 1},
+        {"text": "for over a century", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "After its publication 指词典出版之后。",
+        "was not seriously rivalled 是被动语态，表示没有作品能真正与之竞争。",
+        "for over a century 表示这种领先地位持续了一个多世纪。"
+      ],
+      "expressions": [
+        {"text": "after its publication", "meaning_zh": "在它出版之后"},
+        {"text": "for over a century", "meaning_zh": "超过一个世纪"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 24,
+      "sentence": "After many vicissitudes the Dictionary was finally published on 15 April 1755.",
+      "translation": "历经诸多波折后，《词典》终于在1755年4月15日出版。",
+      "structure": [
+        {"text": "After many vicissitudes", "role": "prepositional_phrase", "level": 1},
+        {"text": "the Dictionary", "role": "subject", "level": 1},
+        {"text": "was finally published", "role": "verb_phrase", "level": 1},
+        {"text": "on 15 April 1755", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "After many vicissitudes 表示出版前经历了许多起伏和困难。",
+        "was finally published 是被动语态，finally 强调最终完成。",
+        "on 15 April 1755 给出具体出版日期。"
+      ],
+      "expressions": [
+        {"text": "after many vicissitudes", "meaning_zh": "历经诸多波折"},
+        {"text": "finally published", "meaning_zh": "终于出版"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 25,
+      "sentence": "It was instantly recognised as a landmark throughout Europe.",
+      "translation": "它立刻被整个欧洲视为一座里程碑。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "was instantly recognised", "role": "verb_phrase", "level": 1},
+        {"text": "as a landmark", "role": "prepositional_phrase", "level": 1},
+        {"text": "throughout Europe", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "It 指 Johnson's Dictionary。",
+        "was instantly recognised 是被动语态，强调外界立即认可。",
+        "as a landmark 表示被视作具有里程碑意义的作品。",
+        "throughout Europe 表示认可范围遍及欧洲。"
+      ],
+      "expressions": [
+        {"text": "be recognised as", "meaning_zh": "被认为是"},
+        {"text": "throughout Europe", "meaning_zh": "遍及欧洲"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "'This very noble work,' wrote the leading Italian lexicographer, 'will be a perpetual monument of Fame to the Author, an Honour to his own Country in particular, and a general Benefit to the republic of Letters throughout Europe.'",
+      "translation": "“这部非常高贵的作品，”意大利著名词典学家写道，“将成为作者声誉的永久丰碑，尤其是他自己国家的荣耀，并将普遍造福整个欧洲的文学共和国。”",
+      "structure": [
+        {"text": "'This very noble work,'", "role": "quoted_subject", "level": 1},
+        {"text": "wrote the leading Italian lexicographer", "role": "reporting_clause", "level": 1},
+        {"text": "will be", "role": "verb_phrase", "level": 1},
+        {"text": "a perpetual monument of Fame to the Author, an Honour to his own Country in particular, and a general Benefit to the republic of Letters throughout Europe", "role": "complement", "level": 1},
+        {"text": "to the republic of Letters throughout Europe", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "句子采用引语中插入 reporting clause 的结构。",
+        "the leading Italian lexicographer 是 wrote 的主语，表示评价来源。",
+        "will be 后面并列三个补语：丰碑、荣耀和益处。",
+        "the republic of Letters 指欧洲文学或学术共同体。"
+      ],
+      "expressions": [
+        {"text": "a perpetual monument of Fame", "meaning_zh": "声誉的永久丰碑"},
+        {"text": "in particular", "meaning_zh": "尤其"},
+        {"text": "a general Benefit to", "meaning_zh": "对……的普遍益处"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "The fact that Johnson had taken on the Academies of Europe and matched them (everyone knew that forty French academics had taken forty years to produce the first French national dictionary) was cause for much English celebration.",
+      "translation": "约翰逊挑战了欧洲的学院并与之匹敌这一事实，成了英国人大加庆祝的理由（人人都知道，40名法国学者花了40年才编成第一部法国国家词典）。",
+      "structure": [
+        {"text": "The fact that Johnson had taken on the Academies of Europe and matched them", "role": "subject", "level": 1},
+        {"text": "that Johnson had taken on the Academies of Europe and matched them", "role": "content_clause", "level": 2},
+        {"text": "everyone knew that forty French academics had taken forty years to produce the first French national dictionary", "role": "parenthetical_clause", "level": 1},
+        {"text": "that forty French academics had taken forty years to produce the first French national dictionary", "role": "object_clause", "level": 2},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "cause for much English celebration", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "主语是 The fact that ... 这个长名词性结构。",
+        "had taken on and matched 使用过去完成时，说明成就发生在庆祝评价之前。",
+        "括号中的内容提供法国词典耗时耗人的对比背景。",
+        "cause for much English celebration 表示这件事成为英国人庆祝的理由。"
+      ],
+      "expressions": [
+        {"text": "take on", "meaning_zh": "挑战；对抗"},
+        {"text": "cause for celebration", "meaning_zh": "值得庆祝的理由"},
+        {"text": "national dictionary", "meaning_zh": "国家词典"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 28,
+      "sentence": "Johnson had worked for nine years, 'with little assistance of the learned, and without any patronage of the great; not in the soft obscurities of retirement, or under the shelter of academic bowers, but amidst inconvenience and distraction, in sickness and in sorrow'.",
+      "translation": "约翰逊工作了九年，“几乎没有学者的帮助，也没有权贵的赞助；不是在隐居的柔和幽暗中，也不是在学术殿堂的庇护下，而是在不便与干扰之中，在疾病与悲伤之中”。",
+      "structure": [
+        {"text": "Johnson", "role": "subject", "level": 1},
+        {"text": "had worked", "role": "verb_phrase", "level": 1},
+        {"text": "for nine years", "role": "prepositional_phrase", "level": 1},
+        {"text": "with little assistance of the learned", "role": "prepositional_phrase", "level": 1},
+        {"text": "without any patronage of the great", "role": "prepositional_phrase", "level": 1},
+        {"text": "not in the soft obscurities of retirement, or under the shelter of academic bowers, but amidst inconvenience and distraction, in sickness and in sorrow", "role": "contrast_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "had worked for nine years 概括词典编纂耗时。",
+        "引号部分是约翰逊自己的描述，强调缺乏帮助和赞助。",
+        "not ... but ... 对比理想学术环境和实际艰难环境。",
+        "with、without、in、under、amidst 多个介词短语层层说明工作条件。"
+      ],
+      "expressions": [
+        {"text": "with little assistance", "meaning_zh": "几乎没有帮助"},
+        {"text": "without any patronage", "meaning_zh": "没有任何赞助"},
+        {"text": "amidst inconvenience and distraction", "meaning_zh": "在不便与干扰之中"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 29,
+      "sentence": "For all its faults and eccentricities his two-volume work is a masterpiece and a landmark—in his own words, 'setting the orthography, displaying the analogy, regulating the structures, and ascertaining the significations of English words'.",
+      "translation": "尽管这部两卷本作品有各种缺点和怪异之处，它仍是一部杰作和里程碑——用他自己的话说，它“确定了英语词的正字法，展示了类比关系，规范了结构，并明确了词义”。",
+      "structure": [
+        {"text": "For all its faults and eccentricities", "role": "prepositional_phrase", "level": 1},
+        {"text": "his two-volume work", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "a masterpiece and a landmark", "role": "complement", "level": 1},
+        {"text": "in his own words", "role": "prepositional_phrase", "level": 1},
+        {"text": "setting the orthography, displaying the analogy, regulating the structures, and ascertaining the significations of English words", "role": "quoted_participial_list", "level": 2}
+      ],
+      "difficult_points": [
+        "For all 表示“尽管有”，不是“为了所有”。",
+        "its faults and eccentricities 指词典本身的缺点和怪异处。",
+        "破折号后的引语用四个并列现在分词说明词典的作用。",
+        "two-volume work 指这部词典由两卷组成。"
+      ],
+      "expressions": [
+        {"text": "for all its faults", "meaning_zh": "尽管有其缺点"},
+        {"text": "a masterpiece and a landmark", "meaning_zh": "杰作和里程碑"},
+        {"text": "in his own words", "meaning_zh": "用他自己的话说"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 30,
+      "sentence": "It is the cornerstone of Standard English, an achievement which, in James Boswell's words, 'conferred stability on the language of his country'.",
+      "translation": "它是标准英语的基石，用 James Boswell 的话说，这一成就“赋予了他的国家的语言以稳定性”。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "the cornerstone of Standard English", "role": "complement", "level": 1},
+        {"text": "an achievement which, in James Boswell's words, 'conferred stability on the language of his country'", "role": "apposition", "level": 1},
+        {"text": "which, in James Boswell's words, 'conferred stability on the language of his country'", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It 指 Johnson 的 Dictionary。",
+        "the cornerstone of Standard English 是核心评价，表示其基础性地位。",
+        "an achievement 是前面评价的同位语。",
+        "which 引导定语从句，说明这一成就对英语的影响。"
+      ],
+      "expressions": [
+        {"text": "the cornerstone of", "meaning_zh": "……的基石"},
+        {"text": "confer stability on", "meaning_zh": "赋予……稳定性"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 31,
+      "sentence": "The Dictionary, together with his other writing, made Johnson famous and so well esteemed that his friends were able to prevail upon King George III to offer him a pension.",
+      "translation": "《词典》连同他的其他作品，使约翰逊声名远扬并备受尊敬，以至于他的朋友们能够说服乔治三世国王给他一笔养老金。",
+      "structure": [
+        {"text": "The Dictionary, together with his other writing", "role": "subject", "level": 1},
+        {"text": "together with his other writing", "role": "prepositional_phrase", "level": 2},
+        {"text": "made", "role": "verb_phrase", "level": 1},
+        {"text": "Johnson famous and so well esteemed", "role": "object_complement", "level": 1},
+        {"text": "that his friends were able to prevail upon King George III to offer him a pension", "role": "result_clause", "level": 2},
+        {"text": "to offer him a pension", "role": "infinitive_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "The Dictionary 是主语核心，together with his other writing 是附加成分。",
+        "made Johnson famous and so well esteemed 是 make + 宾语 + 宾补结构。",
+        "so ... that ... 引导结果从句，说明他受尊敬的程度。",
+        "prevail upon King George III to ... 表示说服国王做某事。"
+      ],
+      "expressions": [
+        {"text": "together with", "meaning_zh": "连同；和……一起"},
+        {"text": "so well esteemed that", "meaning_zh": "如此受尊敬以至于"},
+        {"text": "prevail upon ... to", "meaning_zh": "说服……做……"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 32,
+      "sentence": "From then on, he was to become the Johnson of folklore.",
+      "translation": "从那以后，他将成为民间传说中的那个约翰逊。",
+      "structure": [
+        {"text": "From then on", "role": "prepositional_phrase", "level": 1},
+        {"text": "he", "role": "subject", "level": 1},
+        {"text": "was to become", "role": "verb_phrase", "level": 1},
+        {"text": "the Johnson of folklore", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "From then on 表示从获得声誉和养老金以后。",
+        "was to become 表示后来将会成为某种形象。",
+        "the Johnson of folklore 指进入大众记忆和传说中的约翰逊形象。"
+      ],
+      "expressions": [
+        {"text": "from then on", "meaning_zh": "从那以后"},
+        {"text": "be to become", "meaning_zh": "后来将成为"}
+      ]
+    }
+  ]
+}

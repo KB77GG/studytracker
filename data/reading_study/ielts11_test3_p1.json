@@ -1,0 +1,914 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts11_test3_reading",
+  "passage_id": "ielts11_test3_p1",
+  "passage_title": "THE STORY OF SILK",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Silk is a fine, smooth material produced from the cocoons - soft protective shells - that are made by mulberry silkworms (insect larvae).",
+      "translation": "丝绸是一种细腻光滑的材料，由蚕茧制成；蚕茧是桑蚕（昆虫幼虫）织成的柔软保护壳。",
+      "structure": [
+        {"text": "Silk", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "a fine, smooth material", "role": "complement", "level": 1},
+        {"text": "produced from the cocoons", "role": "participial_phrase", "level": 2},
+        {"text": "soft protective shells", "role": "apposition", "level": 2},
+        {"text": "that are made by mulberry silkworms (insect larvae)", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "produced from... 是过去分词短语，修饰 material，说明丝绸的原料来源。",
+        "两个连字符之间的 soft protective shells 是 cocoons 的同位解释。",
+        "that 引导定语从句，指代 protective shells，而括号内容解释 silkworms。"
+      ],
+      "expressions": [
+        {"text": "be produced from", "meaning_zh": "由……制成"},
+        {"text": "protective shell", "meaning_zh": "保护壳"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Legend has it that it was Lei Tzu, wife of the Yellow Emperor, ruler of China in about 3000 BC, who discovered silkworms.",
+      "translation": "传说，约公元前3000年统治中国的黄帝之妻嫘祖发现了桑蚕。",
+      "structure": [
+        {"text": "Legend has it", "role": "main_clause", "level": 1},
+        {"text": "that it was Lei Tzu, wife of the Yellow Emperor, ruler of China in about 3000 BC, who discovered silkworms", "role": "noun_clause", "level": 2},
+        {"text": "wife of the Yellow Emperor", "role": "apposition", "level": 3},
+        {"text": "ruler of China in about 3000 BC", "role": "apposition", "level": 3},
+        {"text": "who discovered silkworms", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "Legend has it that... 是固定句式，表示“传说……”。",
+        "it was Lei Tzu who... 是强调结构，突出发现桑蚕的人是嫘祖。",
+        "wife... 与 ruler... 分别补充说明嫘祖和黄帝的身份。"
+      ],
+      "expressions": [
+        {"text": "Legend has it that", "meaning_zh": "传说……"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "One account of the story goes that as she was taking a walk in her husband's gardens, she discovered that silkworms were responsible for the destruction of several mulberry trees.",
+      "translation": "这个故事的一种说法是，她在丈夫的花园里散步时，发现几棵桑树遭到破坏是桑蚕所致。",
+      "structure": [
+        {"text": "One account of the story", "role": "subject", "level": 1},
+        {"text": "goes", "role": "verb_phrase", "level": 1},
+        {"text": "that as she was taking a walk in her husband's gardens, she discovered that silkworms were responsible for the destruction of several mulberry trees", "role": "noun_clause", "level": 2},
+        {"text": "as she was taking a walk in her husband's gardens", "role": "adverbial_clause", "level": 3},
+        {"text": "that silkworms were responsible for the destruction of several mulberry trees", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "goes that... 在讲述故事版本时表示“说法是……”。",
+        "as 引导时间状语从句，表示她散步期间发生了后面的发现。",
+        "第二个 that 从句作 discovered 的宾语，be responsible for 表示“是……的原因”。"
+      ],
+      "expressions": [
+        {"text": "one account of", "meaning_zh": "关于……的一种说法"},
+        {"text": "take a walk", "meaning_zh": "散步"},
+        {"text": "be responsible for", "meaning_zh": "是……的原因；对……负责"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "She collected a number of cocoons and sat down to have a rest.",
+      "translation": "她收集了一些蚕茧，然后坐下来休息。",
+      "structure": [
+        {"text": "She", "role": "subject", "level": 1},
+        {"text": "collected a number of cocoons", "role": "verb_phrase", "level": 1},
+        {"text": "and sat down", "role": "coordinated_clause", "level": 1},
+        {"text": "to have a rest", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "collected 与 sat down 是由 and 连接的连续动作，共用主语 She。",
+        "to have a rest 是目的不定式，说明她坐下来的目的。"
+      ],
+      "expressions": [
+        {"text": "a number of", "meaning_zh": "一些；若干"},
+        {"text": "have a rest", "meaning_zh": "休息一下"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "It just so happened that while she was sipping some tea, one of the cocoons that she had collected landed in the hot tea and started to unravel into a fine thread.",
+      "translation": "事情恰巧是这样：她小口喝茶时，收集来的一个蚕茧落入热茶中，开始散开成一根细丝。",
+      "structure": [
+        {"text": "It just so happened", "role": "main_clause", "level": 1},
+        {"text": "that while she was sipping some tea, one of the cocoons that she had collected landed in the hot tea and started to unravel into a fine thread", "role": "noun_clause", "level": 2},
+        {"text": "while she was sipping some tea", "role": "adverbial_clause", "level": 3},
+        {"text": "one of the cocoons", "role": "subject", "level": 3},
+        {"text": "that she had collected", "role": "relative_clause", "level": 4},
+        {"text": "landed in the hot tea and started to unravel into a fine thread", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "It just so happened that... 表示“碰巧发生了……”，It 是形式主语。",
+        "while 从句交代蚕茧落入茶中时她正在进行的动作。",
+        "that she had collected 修饰 cocoons，过去完成时表示收集发生在掉落之前。",
+        "landed 与 started 是并列谓语，unravel 在这里指蚕茧散成丝线。"
+      ],
+      "expressions": [
+        {"text": "It just so happened that", "meaning_zh": "碰巧……"},
+        {"text": "unravel into", "meaning_zh": "散开成为……"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "Lei Tzu found that she could wind this thread around her fingers.",
+      "translation": "嫘祖发现，她可以把这根丝线缠绕在手指上。",
+      "structure": [
+        {"text": "Lei Tzu", "role": "subject", "level": 1},
+        {"text": "found", "role": "verb_phrase", "level": 1},
+        {"text": "that she could wind this thread around her fingers", "role": "noun_clause", "level": 2},
+        {"text": "wind this thread around her fingers", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "that 从句作 found 的宾语，说明她发现的具体内容。",
+        "wind 在这里读作动词，表示将线缠绕在某物周围。"
+      ],
+      "expressions": [
+        {"text": "wind A around B", "meaning_zh": "把 A 缠绕在 B 上"}
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "Subsequently, she persuaded her husband to allow her to rear silkworms on a grove of mulberry trees.",
+      "translation": "随后，她说服丈夫允许她在一片桑树林中养蚕。",
+      "structure": [
+        {"text": "Subsequently", "role": "adverbial", "level": 1},
+        {"text": "she", "role": "subject", "level": 1},
+        {"text": "persuaded her husband", "role": "verb_phrase", "level": 1},
+        {"text": "to allow her to rear silkworms on a grove of mulberry trees", "role": "non_finite_clause", "level": 2},
+        {"text": "to rear silkworms on a grove of mulberry trees", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "persuade somebody to do 表示“说服某人做某事”。",
+        "allow her to rear... 中 her 是 allow 的宾语，也是 rear 的逻辑主语。",
+        "rear 在这里作动词，表示饲养桑蚕。"
+      ],
+      "expressions": [
+        {"text": "persuade somebody to do", "meaning_zh": "说服某人做某事"},
+        {"text": "allow somebody to do", "meaning_zh": "允许某人做某事"}
+      ]
+    },
+    {
+      "id": "A-08",
+      "paragraph_label": "A",
+      "sentence_index": 8,
+      "sentence": "She also devised a special reel to draw the fibres from the cocoon into a single thread so that they would be strong enough to be woven into fabric.",
+      "translation": "她还设计了一种特殊的绕线轮，把蚕茧中的纤维抽成一根丝线，使丝线足够结实，可以织成布料。",
+      "structure": [
+        {"text": "She", "role": "subject", "level": 1},
+        {"text": "also devised", "role": "verb_phrase", "level": 1},
+        {"text": "a special reel", "role": "object", "level": 1},
+        {"text": "to draw the fibres from the cocoon into a single thread", "role": "non_finite_clause", "level": 2},
+        {"text": "so that they would be strong enough to be woven into fabric", "role": "adverbial_clause", "level": 2},
+        {"text": "to be woven into fabric", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "to draw... 是目的不定式，说明绕线轮的用途。",
+        "so that 引导目的或结果状语从句，they 指抽出的 fibres。",
+        "strong enough to be woven 中不定式使用被动形式，表示丝线被织成布。"
+      ],
+      "expressions": [
+        {"text": "devise a special method", "meaning_zh": "设计一种特殊方法"},
+        {"text": "draw A into B", "meaning_zh": "把 A 拉成 B"},
+        {"text": "strong enough to", "meaning_zh": "足够结实以至于能……"}
+      ]
+    },
+    {
+      "id": "A-09",
+      "paragraph_label": "A",
+      "sentence_index": 9,
+      "sentence": "While it is unknown just how much of this is true, it is certainly known that silk cultivation has existed in China for several millennia.",
+      "translation": "虽然这些传说究竟有多少属实尚不可知，但可以确定的是，养蚕制丝在中国已存在数千年。",
+      "structure": [
+        {"text": "While it is unknown just how much of this is true", "role": "adverbial_clause", "level": 1},
+        {"text": "just how much of this is true", "role": "noun_clause", "level": 2},
+        {"text": "it is certainly known", "role": "main_clause", "level": 1},
+        {"text": "that silk cultivation has existed in China for several millennia", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "While 引导让步状语从句，含义相当于“尽管”。",
+        "两个 it 都是形式主语，真正内容分别由 how much 从句和 that 从句表达。",
+        "has existed 使用现在完成时，强调养蚕制丝从古代持续至今。"
+      ],
+      "expressions": [
+        {"text": "it is unknown", "meaning_zh": "尚不可知"},
+        {"text": "for several millennia", "meaning_zh": "数千年来"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "Originally, silkworm farming was solely restricted to women, and it was they who were responsible for the growing, harvesting and weaving.",
+      "translation": "最初，养蚕完全仅限女性从事，种桑、收丝和织造也都由她们负责。",
+      "structure": [
+        {"text": "Originally", "role": "adverbial", "level": 1},
+        {"text": "silkworm farming", "role": "subject", "level": 1},
+        {"text": "was solely restricted to women", "role": "verb_phrase", "level": 1},
+        {"text": "and it was they who were responsible for the growing, harvesting and weaving", "role": "coordinated_clause", "level": 1},
+        {"text": "who were responsible for the growing, harvesting and weaving", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "be restricted to 表示被限定于某类人，solely 强调“仅仅”。",
+        "it was they who... 是强调结构，突出负责各道工序的是女性。",
+        "growing、harvesting 和 weaving 是三个并列的动名词。"
+      ],
+      "expressions": [
+        {"text": "be restricted to", "meaning_zh": "仅限于……"},
+        {"text": "be responsible for", "meaning_zh": "负责……"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "Silk quickly grew into a symbol of status, and originally only royalty were entitled to have clothes made of silk.",
+      "translation": "丝绸很快成为身份地位的象征，最初只有皇室成员有权穿用丝绸制成的衣服。",
+      "structure": [
+        {"text": "Silk", "role": "subject", "level": 1},
+        {"text": "quickly grew into a symbol of status", "role": "verb_phrase", "level": 1},
+        {"text": "and originally only royalty were entitled to have clothes made of silk", "role": "coordinated_clause", "level": 1},
+        {"text": "to have clothes made of silk", "role": "non_finite_clause", "level": 2},
+        {"text": "made of silk", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "grow into 表示逐渐发展或转变成某种事物。",
+        "be entitled to 表示拥有做某事的权利。",
+        "have clothes made of silk 在这里表示拥有丝绸制成的衣服，made of silk 修饰 clothes。"
+      ],
+      "expressions": [
+        {"text": "grow into", "meaning_zh": "发展成为"},
+        {"text": "a symbol of status", "meaning_zh": "身份地位的象征"},
+        {"text": "be entitled to", "meaning_zh": "有权……"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "The rules were gradually relaxed over the years until finally during the Qing Dynasty (1644-1911 AD), even peasants, the lowest caste, were also entitled to wear silk.",
+      "translation": "这些规定逐年放宽，最终到了清朝（公元1644—1911年），就连社会等级最低的农民也有权穿丝绸。",
+      "structure": [
+        {"text": "The rules", "role": "subject", "level": 1},
+        {"text": "were gradually relaxed", "role": "verb_phrase", "level": 1},
+        {"text": "over the years", "role": "prepositional_phrase", "level": 1},
+        {"text": "until finally during the Qing Dynasty (1644-1911 AD), even peasants, the lowest caste, were also entitled to wear silk", "role": "adverbial_clause", "level": 1},
+        {"text": "the lowest caste", "role": "apposition", "level": 2},
+        {"text": "to wear silk", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "were relaxed 是被动结构，表示限制规定被逐渐放宽。",
+        "until 引出这一变化最终达到的阶段。",
+        "the lowest caste 是 peasants 的同位语，说明其当时的社会等级。"
+      ],
+      "expressions": [
+        {"text": "over the years", "meaning_zh": "多年间；逐年"},
+        {"text": "relax the rules", "meaning_zh": "放宽规定"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "Sometime during the Han Dynasty (206 BC-220 AD), silk was so prized that it was also used as a unit of currency.",
+      "translation": "汉朝（公元前206年至公元220年）的某个时期，丝绸极为珍贵，甚至被用作一种货币单位。",
+      "structure": [
+        {"text": "Sometime during the Han Dynasty (206 BC-220 AD)", "role": "adverbial", "level": 1},
+        {"text": "silk", "role": "subject", "level": 1},
+        {"text": "was so prized", "role": "verb_phrase", "level": 1},
+        {"text": "that it was also used as a unit of currency", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "so...that... 构成结果结构，表示丝绸珍贵到可以充当货币。",
+        "prized 在这里是形容词化的过去分词，意为“受到珍视的”。",
+        "it 指代 silk，was used as 是被动结构。"
+      ],
+      "expressions": [
+        {"text": "so prized that", "meaning_zh": "珍贵到……"},
+        {"text": "be used as", "meaning_zh": "被用作……"},
+        {"text": "a unit of currency", "meaning_zh": "货币单位"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 14,
+      "sentence": "Government officials were paid their salary in silk, and farmers paid their taxes in grain and silk.",
+      "translation": "政府官员的俸禄以丝绸支付，农民则用粮食和丝绸纳税。",
+      "structure": [
+        {"text": "Government officials", "role": "subject", "level": 1},
+        {"text": "were paid their salary in silk", "role": "verb_phrase", "level": 1},
+        {"text": "and farmers paid their taxes in grain and silk", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "were paid their salary 是双宾语结构的被动形式，意为“获得俸禄”。",
+        "两个 in 短语均说明支付所采用的实物形式，而非地点。"
+      ],
+      "expressions": [
+        {"text": "pay a salary in", "meaning_zh": "以……支付薪酬"},
+        {"text": "pay taxes", "meaning_zh": "纳税"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 15,
+      "sentence": "Silk was also used as diplomatic gifts by the emperor.",
+      "translation": "皇帝还把丝绸用作外交礼物。",
+      "structure": [
+        {"text": "Silk", "role": "subject", "level": 1},
+        {"text": "was also used", "role": "verb_phrase", "level": 1},
+        {"text": "as diplomatic gifts", "role": "prepositional_phrase", "level": 1},
+        {"text": "by the emperor", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "was used 是被动语态，动作执行者由 by the emperor 引出。",
+        "as diplomatic gifts 说明丝绸所充当的用途和身份。"
+      ],
+      "expressions": [
+        {"text": "be used as", "meaning_zh": "被用作……"},
+        {"text": "diplomatic gifts", "meaning_zh": "外交礼物"}
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 16,
+      "sentence": "Fishing lines, bowstrings, musical instruments and paper were all made using silk.",
+      "translation": "钓鱼线、弓弦、乐器和纸张都曾以丝绸制成。",
+      "structure": [
+        {"text": "Fishing lines, bowstrings, musical instruments and paper", "role": "subject", "level": 1},
+        {"text": "were all made", "role": "verb_phrase", "level": 1},
+        {"text": "using silk", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "四个并列名词共同构成复数主语。",
+        "using silk 是现在分词短语，说明制作这些物品所使用的材料。"
+      ],
+      "expressions": [
+        {"text": "be made using", "meaning_zh": "使用……制成"}
+      ]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 17,
+      "sentence": "The earliest indication of silk paper being used was discovered in the tomb of a noble who is estimated to have died around 168 AD.",
+      "translation": "人们在一位贵族的墓中发现了使用丝纸的最早迹象，据估计，这位贵族约于公元168年去世。",
+      "structure": [
+        {"text": "The earliest indication of silk paper being used", "role": "subject", "level": 1},
+        {"text": "of silk paper being used", "role": "prepositional_phrase", "level": 2},
+        {"text": "was discovered", "role": "verb_phrase", "level": 1},
+        {"text": "in the tomb of a noble", "role": "prepositional_phrase", "level": 1},
+        {"text": "who is estimated to have died around 168 AD", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "being used 是动名词的被动形式，作 of 的宾语。",
+        "who 指代 a noble，而不是 tomb。",
+        "is estimated to have died 用完成不定式表示被估算的死亡发生在过去。"
+      ],
+      "expressions": [
+        {"text": "the earliest indication of", "meaning_zh": "……的最早迹象"},
+        {"text": "be estimated to have done", "meaning_zh": "据估计曾经……"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "Demand for this exotic fabric eventually created the lucrative trade route now known as the Silk Road, taking silk westward and bringing gold, silver and wool to the East.",
+      "translation": "对这种异域织物的需求最终催生了一条利润丰厚的贸易路线，也就是如今的丝绸之路；它把丝绸运往西方，又把黄金、白银和羊毛带到东方。",
+      "structure": [
+        {"text": "Demand for this exotic fabric", "role": "subject", "level": 1},
+        {"text": "eventually created", "role": "verb_phrase", "level": 1},
+        {"text": "the lucrative trade route", "role": "object", "level": 1},
+        {"text": "now known as the Silk Road", "role": "participial_phrase", "level": 2},
+        {"text": "taking silk westward and bringing gold, silver and wool to the East", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "now known as... 是过去分词短语，修饰 trade route。",
+        "taking 与 bringing 是并列的现在分词，说明这条路线双向运输的作用。",
+        "lucrative 表示能够带来丰厚利润。"
+      ],
+      "expressions": [
+        {"text": "demand for", "meaning_zh": "对……的需求"},
+        {"text": "be known as", "meaning_zh": "被称为……"},
+        {"text": "lucrative trade route", "meaning_zh": "利润丰厚的贸易路线"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "It was named the Silk Road after its most precious commodity, which was considered to be worth more than gold.",
+      "translation": "这条路线以其最珍贵的商品命名为“丝绸之路”，而丝绸当时被认为比黄金还贵重。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "was named the Silk Road", "role": "verb_phrase", "level": 1},
+        {"text": "after its most precious commodity", "role": "prepositional_phrase", "level": 1},
+        {"text": "which was considered to be worth more than gold", "role": "relative_clause", "level": 2},
+        {"text": "to be worth more than gold", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "after 在这里表示“以……命名”，不是时间上的“之后”。",
+        "which 指代 its most precious commodity，即丝绸。",
+        "was considered to be... 是被动结构，表示“被认为是……”。"
+      ],
+      "expressions": [
+        {"text": "be named after", "meaning_zh": "以……命名"},
+        {"text": "be considered to be", "meaning_zh": "被认为是……"},
+        {"text": "be worth more than", "meaning_zh": "比……更有价值"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 20,
+      "sentence": "The Silk Road stretched over 6,000 kilometres from Eastern China to the Mediterranean Sea, following the Great Wall of China, climbing the Pamir mountain range, crossing modern-day Afghanistan and going on to the Middle East, with a major trading market in Damascus.",
+      "translation": "丝绸之路从中国东部延伸至地中海，绵延六千多公里；路线沿着中国长城，翻越帕米尔山脉，穿过今天的阿富汗，再通向中东，并在大马士革设有一个主要贸易市场。",
+      "structure": [
+        {"text": "The Silk Road", "role": "subject", "level": 1},
+        {"text": "stretched over 6,000 kilometres", "role": "verb_phrase", "level": 1},
+        {"text": "from Eastern China to the Mediterranean Sea", "role": "prepositional_phrase", "level": 1},
+        {"text": "following the Great Wall of China, climbing the Pamir mountain range, crossing modern-day Afghanistan and going on to the Middle East", "role": "participial_phrase", "level": 2},
+        {"text": "with a major trading market in Damascus", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "from...to... 交代路线的起点和终点。",
+        "following、climbing、crossing 和 going 是四个并列分词，依次描写路线走向。",
+        "with 短语补充说明大马士革拥有主要贸易市场。"
+      ],
+      "expressions": [
+        {"text": "stretch over", "meaning_zh": "绵延超过……"},
+        {"text": "go on to", "meaning_zh": "继续通往……"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 21,
+      "sentence": "From there, the merchandise was shipped across the Mediterranean Sea.",
+      "translation": "货物从那里经地中海运往别处。",
+      "structure": [
+        {"text": "From there", "role": "prepositional_phrase", "level": 1},
+        {"text": "the merchandise", "role": "subject", "level": 1},
+        {"text": "was shipped", "role": "verb_phrase", "level": 1},
+        {"text": "across the Mediterranean Sea", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "there 指代上一句提到的中东地区，尤其是大马士革贸易市场。",
+        "was shipped 是被动语态，表示货物被海运出去。"
+      ],
+      "expressions": [
+        {"text": "be shipped across", "meaning_zh": "经……运送"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 22,
+      "sentence": "Few merchants travelled the entire route; goods were handled mostly by a series of middlemen.",
+      "translation": "很少有商人走完整条路线；货物大多由一连串中间商接手转运。",
+      "structure": [
+        {"text": "Few merchants", "role": "subject", "level": 1},
+        {"text": "travelled the entire route", "role": "verb_phrase", "level": 1},
+        {"text": "goods", "role": "subject", "level": 1},
+        {"text": "were handled mostly", "role": "verb_phrase", "level": 1},
+        {"text": "by a series of middlemen", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "分号连接两个关系紧密的独立分句，后句解释商人为何不必走完全程。",
+        "Few 带否定意味，表示“几乎没有”。",
+        "were handled 表示货物在沿途由不同中间商经手。"
+      ],
+      "expressions": [
+        {"text": "the entire route", "meaning_zh": "整条路线"},
+        {"text": "a series of", "meaning_zh": "一系列……"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "With the mulberry silkworm being native to China, the country was the world's sole producer of silk for many hundreds of years.",
+      "translation": "由于桑蚕原产于中国，中国在数百年间一直是世界上唯一的丝绸生产国。",
+      "structure": [
+        {"text": "With the mulberry silkworm being native to China", "role": "with_absolute_construction", "level": 1},
+        {"text": "the country", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "the world's sole producer of silk", "role": "complement", "level": 1},
+        {"text": "for many hundreds of years", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "With＋名词＋being 构成独立结构，交代中国独占丝绸生产的背景原因。",
+        "the country 指代 China。",
+        "sole 表示“唯一的”，强调当时中国的垄断地位。"
+      ],
+      "expressions": [
+        {"text": "be native to", "meaning_zh": "原产于……"},
+        {"text": "sole producer", "meaning_zh": "唯一生产者"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "The secret of silk-making eventually reached the rest of the world via the Byzantine Empire, which ruled over the Mediterranean region of southern Europe, North Africa and the Middle East during the period 330-1453 AD.",
+      "translation": "丝绸制作的秘密最终经由拜占庭帝国传到世界其他地区；公元330至1453年间，该帝国统治着南欧、北非和中东的地中海地区。",
+      "structure": [
+        {"text": "The secret of silk-making", "role": "subject", "level": 1},
+        {"text": "eventually reached", "role": "verb_phrase", "level": 1},
+        {"text": "the rest of the world", "role": "object", "level": 1},
+        {"text": "via the Byzantine Empire", "role": "prepositional_phrase", "level": 1},
+        {"text": "which ruled over the Mediterranean region of southern Europe, North Africa and the Middle East during the period 330-1453 AD", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "via 表示传播所经过的途径，即经由拜占庭帝国。",
+        "which 引导非限制性定语从句，补充介绍 Byzantine Empire。",
+        "ruled over 表示对某一地区进行统治。"
+      ],
+      "expressions": [
+        {"text": "the rest of the world", "meaning_zh": "世界其他地区"},
+        {"text": "via", "meaning_zh": "经由；通过"},
+        {"text": "rule over", "meaning_zh": "统治……"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "According to another legend, monks working for the Byzantine emperor Justinian smuggled silkworm eggs to Constantinople (Istanbul in modern-day Turkey) in 550 AD, concealed inside hollow bamboo walking canes.",
+      "translation": "另一则传说称，公元550年，为拜占庭皇帝查士丁尼效力的修士把蚕卵藏在中空的竹手杖里，偷运到了君士坦丁堡（今土耳其伊斯坦布尔）。",
+      "structure": [
+        {"text": "According to another legend", "role": "prepositional_phrase", "level": 1},
+        {"text": "monks", "role": "subject", "level": 1},
+        {"text": "working for the Byzantine emperor Justinian", "role": "participial_phrase", "level": 2},
+        {"text": "smuggled silkworm eggs to Constantinople (Istanbul in modern-day Turkey) in 550 AD", "role": "verb_phrase", "level": 1},
+        {"text": "concealed inside hollow bamboo walking canes", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "working for... 是现在分词短语，修饰 monks。",
+        "括号中的 Istanbul in modern-day Turkey 说明 Constantinople 的现代名称和位置。",
+        "concealed... 是过去分词短语，修饰 silkworm eggs，说明蚕卵如何被隐藏。"
+      ],
+      "expressions": [
+        {"text": "according to", "meaning_zh": "根据；据……所说"},
+        {"text": "smuggle A to B", "meaning_zh": "把 A 偷运到 B"},
+        {"text": "be concealed inside", "meaning_zh": "被藏在……里面"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "The Byzantines were as secretive as the Chinese, however, and for many centuries the weaving and trading of silk fabric was a strict imperial monopoly.",
+      "translation": "不过，拜占庭人和中国人一样严守秘密，而且丝绸的织造与贸易在许多个世纪里一直受到帝国严格垄断。",
+      "structure": [
+        {"text": "The Byzantines", "role": "subject", "level": 1},
+        {"text": "were", "role": "verb_phrase", "level": 1},
+        {"text": "as secretive as the Chinese", "role": "complement", "level": 1},
+        {"text": "however", "role": "parenthesis", "level": 1},
+        {"text": "and for many centuries the weaving and trading of silk fabric was a strict imperial monopoly", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "as...as... 是同级比较，说明拜占庭人保密程度不亚于中国人。",
+        "however 插在句中，表示与秘密已经外传这一事实形成转折。",
+        "the weaving and trading of silk fabric 整体指一项受帝国垄断的产业活动，因此原文使用单数 was。"
+      ],
+      "expressions": [
+        {"text": "as secretive as", "meaning_zh": "与……一样严守秘密"},
+        {"text": "a strict monopoly", "meaning_zh": "严格垄断"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 27,
+      "sentence": "Then in the seventh century, the Arabs conquered Persia, capturing their magnificent silks in the process.",
+      "translation": "随后在7世纪，阿拉伯人征服了波斯，并在这一过程中夺得了当地精美的丝绸。",
+      "structure": [
+        {"text": "Then in the seventh century", "role": "adverbial", "level": 1},
+        {"text": "the Arabs", "role": "subject", "level": 1},
+        {"text": "conquered Persia", "role": "verb_phrase", "level": 1},
+        {"text": "capturing their magnificent silks in the process", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "capturing... 是现在分词短语，表示征服波斯过程中伴随发生的结果。",
+        "their 指代 Persia 或波斯人，silks 在这里指精美丝织品。",
+        "in the process 表示“在这一过程中”。"
+      ],
+      "expressions": [
+        {"text": "in the process", "meaning_zh": "在这一过程中"}
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 28,
+      "sentence": "Silk production thus spread through Africa, Sicily and Spain as the Arabs swept through these lands.",
+      "translation": "因此，随着阿拉伯人席卷这些地区，丝绸生产传到了非洲、西西里岛和西班牙。",
+      "structure": [
+        {"text": "Silk production", "role": "subject", "level": 1},
+        {"text": "thus spread", "role": "verb_phrase", "level": 1},
+        {"text": "through Africa, Sicily and Spain", "role": "prepositional_phrase", "level": 1},
+        {"text": "as the Arabs swept through these lands", "role": "adverbial_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "thus 表明丝绸生产的扩散是阿拉伯人征服波斯的后续结果。",
+        "as 引导时间或伴随状语从句，说明扩散与阿拉伯人的推进同步发生。",
+        "swept through 形象地表示快速而广泛地经过并征服。"
+      ],
+      "expressions": [
+        {"text": "spread through", "meaning_zh": "传播到……各地"},
+        {"text": "sweep through", "meaning_zh": "席卷；迅速穿过"}
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 29,
+      "sentence": "Andalusia in southern Spain was Europe's main silk-producing centre in the tenth century.",
+      "translation": "10世纪时，西班牙南部的安达卢西亚是欧洲主要的丝绸生产中心。",
+      "structure": [
+        {"text": "Andalusia in southern Spain", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "Europe's main silk-producing centre", "role": "complement", "level": 1},
+        {"text": "in the tenth century", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "in southern Spain 是后置介词短语，限定 Andalusia 的位置。",
+        "silk-producing 是复合形容词，修饰 centre，表示“生产丝绸的”。"
+      ],
+      "expressions": [
+        {"text": "main producing centre", "meaning_zh": "主要生产中心"}
+      ]
+    },
+    {
+      "id": "D-08",
+      "paragraph_label": "D",
+      "sentence_index": 30,
+      "sentence": "By the thirteenth century, however, Italy had become Europe's leader in silk production and export.",
+      "translation": "然而，到13世纪时，意大利已成为欧洲丝绸生产和出口的领头者。",
+      "structure": [
+        {"text": "By the thirteenth century", "role": "prepositional_phrase", "level": 1},
+        {"text": "however", "role": "parenthesis", "level": 1},
+        {"text": "Italy", "role": "subject", "level": 1},
+        {"text": "had become", "role": "verb_phrase", "level": 1},
+        {"text": "Europe's leader in silk production and export", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "By＋时间点与过去完成时 had become 搭配，表示到该时间为止已经完成的变化。",
+        "however 表示欧洲丝绸中心已从安达卢西亚转向意大利。",
+        "in silk production and export 限定 leader 所领先的领域。"
+      ],
+      "expressions": [
+        {"text": "become a leader in", "meaning_zh": "成为……领域的领先者"}
+      ]
+    },
+    {
+      "id": "D-09",
+      "paragraph_label": "D",
+      "sentence_index": 31,
+      "sentence": "Venetian merchants traded extensively in silk and encouraged silk growers to settle in Italy.",
+      "translation": "威尼斯商人大量从事丝绸贸易，并鼓励养蚕户在意大利定居。",
+      "structure": [
+        {"text": "Venetian merchants", "role": "subject", "level": 1},
+        {"text": "traded extensively in silk", "role": "verb_phrase", "level": 1},
+        {"text": "and encouraged silk growers to settle in Italy", "role": "coordinated_clause", "level": 1},
+        {"text": "to settle in Italy", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "traded 与 encouraged 是两个并列谓语，共用主语 Venetian merchants。",
+        "trade in 表示经营某种商品的贸易。",
+        "encourage somebody to do 表示鼓励某人做某事。"
+      ],
+      "expressions": [
+        {"text": "trade extensively in", "meaning_zh": "大量经营……贸易"},
+        {"text": "encourage somebody to do", "meaning_zh": "鼓励某人做某事"},
+        {"text": "settle in", "meaning_zh": "在……定居"}
+      ]
+    },
+    {
+      "id": "D-10",
+      "paragraph_label": "D",
+      "sentence_index": 32,
+      "sentence": "Even now, silk processed in the province of Como in northern Italy enjoys an esteemed reputation.",
+      "translation": "即使在今天，意大利北部科莫省加工的丝绸仍享有盛誉。",
+      "structure": [
+        {"text": "Even now", "role": "adverbial", "level": 1},
+        {"text": "silk", "role": "subject", "level": 1},
+        {"text": "processed in the province of Como in northern Italy", "role": "participial_phrase", "level": 2},
+        {"text": "enjoys", "role": "verb_phrase", "level": 1},
+        {"text": "an esteemed reputation", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "processed... 是过去分词短语，修饰 silk，表示丝绸的加工地点。",
+        "Even now 强调这一历史声誉一直延续到今天。",
+        "enjoy a reputation 表示“享有声誉”，并非字面上的“享受”。"
+      ],
+      "expressions": [
+        {"text": "even now", "meaning_zh": "即使到现在"},
+        {"text": "enjoy an esteemed reputation", "meaning_zh": "享有盛誉"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "The nineteenth century and industrialisation saw the downfall of the European silk industry.",
+      "translation": "19世纪和工业化见证了欧洲丝绸业的衰落。",
+      "structure": [
+        {"text": "The nineteenth century and industrialisation", "role": "subject", "level": 1},
+        {"text": "saw", "role": "verb_phrase", "level": 1},
+        {"text": "the downfall of the European silk industry", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "时间与历史进程被拟人化为主语，saw 表示“见证、发生了”。",
+        "downfall 在这里指欧洲丝绸产业由盛转衰，而不是突然消失。"
+      ],
+      "expressions": [
+        {"text": "see the downfall of", "meaning_zh": "见证……的衰落"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "Cheaper Japanese silk, trade in which was greatly facilitated by the opening of the Suez Canal, was one of the many factors driving the trend.",
+      "translation": "更便宜的日本丝绸是推动这一衰落趋势的诸多因素之一，而苏伊士运河的开通又大大便利了这种丝绸的贸易。",
+      "structure": [
+        {"text": "Cheaper Japanese silk", "role": "subject", "level": 1},
+        {"text": "trade in which was greatly facilitated by the opening of the Suez Canal", "role": "relative_clause", "level": 2},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "one of the many factors", "role": "complement", "level": 1},
+        {"text": "driving the trend", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "trade in which 是“介词＋关系代词”结构，which 指 Japanese silk。",
+        "was facilitated 是被动语态，by 短语说明苏伊士运河开通促进了贸易。",
+        "driving the trend 是现在分词短语，修饰 factors；the trend 指欧洲丝绸业衰落。"
+      ],
+      "expressions": [
+        {"text": "be facilitated by", "meaning_zh": "受到……促进；因……而便利"},
+        {"text": "one of the many factors", "meaning_zh": "诸多因素之一"},
+        {"text": "drive the trend", "meaning_zh": "推动这一趋势"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 35,
+      "sentence": "Then in the twentieth century, new manmade fibres, such as nylon, started to be used in what had traditionally been silk products, such as stockings and parachutes.",
+      "translation": "到了20世纪，尼龙等新型人造纤维开始用于原本一向由丝绸制成的产品，例如长筒袜和降落伞。",
+      "structure": [
+        {"text": "Then in the twentieth century", "role": "adverbial", "level": 1},
+        {"text": "new manmade fibres", "role": "subject", "level": 1},
+        {"text": "such as nylon", "role": "apposition", "level": 2},
+        {"text": "started to be used", "role": "verb_phrase", "level": 1},
+        {"text": "in what had traditionally been silk products", "role": "prepositional_phrase", "level": 1},
+        {"text": "such as stockings and parachutes", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "to be used 是不定式的被动形式，说明新纤维开始被采用。",
+        "what 引导名词性从句，意为“过去一向属于丝制品的那些产品”。",
+        "两个 such as 分别举例说明人造纤维和传统丝制品。"
+      ],
+      "expressions": [
+        {"text": "start to be used", "meaning_zh": "开始被使用"},
+        {"text": "such as", "meaning_zh": "例如"},
+        {"text": "traditionally", "meaning_zh": "传统上；一向"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 36,
+      "sentence": "The two world wars, which interrupted the supply of raw material from Japan, also stifled the European silk industry.",
+      "translation": "两次世界大战中断了日本原材料的供应，也抑制了欧洲丝绸业的发展。",
+      "structure": [
+        {"text": "The two world wars", "role": "subject", "level": 1},
+        {"text": "which interrupted the supply of raw material from Japan", "role": "relative_clause", "level": 2},
+        {"text": "also stifled", "role": "verb_phrase", "level": 1},
+        {"text": "the European silk industry", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，补充说明两次世界大战造成的供应中断。",
+        "from Japan 修饰 raw material，说明原材料的来源。",
+        "stifled 表示压制、阻碍某一产业的发展。"
+      ],
+      "expressions": [
+        {"text": "interrupt the supply of", "meaning_zh": "中断……的供应"},
+        {"text": "stifle an industry", "meaning_zh": "抑制一个产业的发展"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 37,
+      "sentence": "After the Second World War, Japan's silk production was restored, with improved production and quality of raw silk.",
+      "translation": "第二次世界大战后，日本恢复了丝绸生产，生丝的产量和质量都有所提升。",
+      "structure": [
+        {"text": "After the Second World War", "role": "prepositional_phrase", "level": 1},
+        {"text": "Japan's silk production", "role": "subject", "level": 1},
+        {"text": "was restored", "role": "verb_phrase", "level": 1},
+        {"text": "with improved production and quality of raw silk", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "was restored 是被动结构，表示日本的丝绸生产得以恢复。",
+        "with 短语补充说明恢复后生丝产量与质量的改善。",
+        "improved 同时修饰 production 和 quality。"
+      ],
+      "expressions": [
+        {"text": "be restored", "meaning_zh": "得到恢复"},
+        {"text": "with improved production and quality", "meaning_zh": "伴随着产量和质量的提升"}
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 38,
+      "sentence": "Japan was to remain the world's biggest producer of raw silk, and practically the only major exporter of raw silk, until the 1970s.",
+      "translation": "此后直到20世纪70年代，日本一直是世界最大的生丝生产国，而且实际上也是唯一的生丝主要出口国。",
+      "structure": [
+        {"text": "Japan", "role": "subject", "level": 1},
+        {"text": "was to remain", "role": "verb_phrase", "level": 1},
+        {"text": "the world's biggest producer of raw silk", "role": "complement", "level": 1},
+        {"text": "and practically the only major exporter of raw silk", "role": "coordinated_complement", "level": 1},
+        {"text": "until the 1970s", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "was to remain 是“过去将来”的叙事用法，表示从当时往后一直保持某种地位。",
+        "producer 与 exporter 是并列表语，共同说明日本的行业地位。",
+        "practically 在这里表示“实际上、几乎可以说”。"
+      ],
+      "expressions": [
+        {"text": "be to remain", "meaning_zh": "此后一直保持……"},
+        {"text": "major exporter", "meaning_zh": "主要出口国"}
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 39,
+      "sentence": "However, in more recent decades, China has gradually recaptured its position as the world's biggest producer and exporter of raw silk and silk yarn.",
+      "translation": "然而，近几十年来，中国逐渐重新夺回了世界最大生丝和丝线生产国与出口国的地位。",
+      "structure": [
+        {"text": "However", "role": "parenthesis", "level": 1},
+        {"text": "in more recent decades", "role": "prepositional_phrase", "level": 1},
+        {"text": "China", "role": "subject", "level": 1},
+        {"text": "has gradually recaptured", "role": "verb_phrase", "level": 1},
+        {"text": "its position as the world's biggest producer and exporter of raw silk and silk yarn", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "has recaptured 使用现在完成时，表示中国地位的恢复发生于近几十年并延续至今。",
+        "recaptured 暗示中国重新获得了历史上曾经拥有的领先地位。",
+        "as 后面的成分具体说明 position 的内容。"
+      ],
+      "expressions": [
+        {"text": "in more recent decades", "meaning_zh": "近几十年来"},
+        {"text": "recapture its position as", "meaning_zh": "重新夺回作为……的地位"}
+      ]
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 40,
+      "sentence": "Today, around 125,000 metric tons of silk are produced in the world, and almost two thirds of that production takes place in China.",
+      "translation": "如今，全球丝绸产量约为12.5万公吨，其中近三分之二产自中国。",
+      "structure": [
+        {"text": "Today", "role": "adverbial", "level": 1},
+        {"text": "around 125,000 metric tons of silk", "role": "subject", "level": 1},
+        {"text": "are produced", "role": "verb_phrase", "level": 1},
+        {"text": "in the world", "role": "prepositional_phrase", "level": 1},
+        {"text": "and almost two thirds of that production takes place in China", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "are produced 是被动语态，主语中心是表示数量的 metric tons。",
+        "that production 指前半句提到的全球约12.5万公吨丝绸产量。",
+        "takes place 在产量语境中表示“发生、产生于”，即产自中国。"
+      ],
+      "expressions": [
+        {"text": "almost two thirds of", "meaning_zh": "将近三分之二的……"},
+        {"text": "take place", "meaning_zh": "发生；产生"}
+      ]
+    }
+  ]
+}

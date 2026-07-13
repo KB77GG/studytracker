@@ -1,0 +1,1844 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts17_test3_reading",
+  "passage_id": "ielts17_test3_p2",
+  "passage_title": "Palm oil",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Palm oil is an edible oil derived from the fruit of the African oil palm tree, and is currently the most consumed vegetable oil in the world.",
+      "translation": "棕榈油是一种从非洲油棕树果实中提取的食用油，目前是世界上消费量最大的植物油。",
+      "structure": [
+        {
+          "text": "Palm oil",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is an edible oil derived from the fruit of the African oil palm tree",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "derived from the fruit of the African oil palm tree",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "and is currently the most consumed vegetable oil in the world",
+          "role": "coordinated_verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "derived from 是过去分词短语，修饰 edible oil，说明来源。",
+        "and 连接两个并列表语：一种食用油，以及当前消费量最大的植物油。",
+        "the most consumed 使用最高级，强调全球消费量排名第一。"
+      ],
+      "expressions": [
+        {
+          "text": "edible oil",
+          "meaning_zh": "食用油"
+        },
+        {
+          "text": "derived from",
+          "meaning_zh": "源自；从……提取"
+        },
+        {
+          "text": "the most consumed",
+          "meaning_zh": "消费量最大的"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "It's almost certainly in the soap we wash with in the morning, the sandwich we have for lunch, and the biscuits we snack on during the day.",
+      "translation": "它几乎肯定存在于我们早晨用来洗漱的肥皂、午餐吃的三明治，以及白天当零食吃的饼干中。",
+      "structure": [
+        {
+          "text": "It's almost certainly",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "in the soap we wash with in the morning, the sandwich we have for lunch, and the biscuits we snack on during the day",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "we wash with in the morning",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "we have for lunch",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "we snack on during the day",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指代 palm oil，说明它在日常用品中非常普遍。",
+        "soap、sandwich 和 biscuits 是并列介词宾语。",
+        "三个省略关系代词的定语从句分别修饰前面的日常用品。"
+      ],
+      "expressions": [
+        {
+          "text": "almost certainly",
+          "meaning_zh": "几乎肯定"
+        },
+        {
+          "text": "snack on",
+          "meaning_zh": "把……当零食吃"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Why is palm oil so attractive for manufacturers?",
+      "translation": "为什么棕榈油对制造商如此有吸引力？",
+      "structure": [
+        {
+          "text": "Why",
+          "role": "interrogative_adverb",
+          "level": 1
+        },
+        {
+          "text": "is palm oil so attractive for manufacturers",
+          "role": "interrogative_clause",
+          "level": 1
+        },
+        {
+          "text": "for manufacturers",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Why 引出原因问题，为下一句的 Primarily because 作铺垫。",
+        "attractive for manufacturers 指对制造商有实际商业吸引力，而非外观吸引人。"
+      ],
+      "expressions": [
+        {
+          "text": "attractive for",
+          "meaning_zh": "对……有吸引力"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Primarily because its unique properties – such as remaining solid at room temperature – make it an ideal ingredient for long-term preservation, allowing many packaged foods on supermarket shelves to have 'best before' dates of months, even years, into the future.",
+      "translation": "主要是因为它的独特性质——例如在室温下保持固态——使它成为长期保存的理想成分，让超市货架上的许多包装食品能够拥有数月甚至数年之后的“最佳食用期”。",
+      "structure": [
+        {
+          "text": "Primarily because its unique properties",
+          "role": "reason_clause_fragment",
+          "level": 1
+        },
+        {
+          "text": "such as remaining solid at room temperature",
+          "role": "example_phrase",
+          "level": 2
+        },
+        {
+          "text": "make it an ideal ingredient for long-term preservation",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "allowing many packaged foods on supermarket shelves to have 'best before' dates of months, even years, into the future",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Primarily because 回答上一句 Why 的问题，形式上是省略主句的原因片段。",
+        "破折号中的 such as 短语举例说明 unique properties。",
+        "make it an ideal ingredient 是 make + 宾语 + 宾补结构。",
+        "allowing 是结果性分词，说明棕榈油带来的保存效果。"
+      ],
+      "expressions": [
+        {
+          "text": "unique properties",
+          "meaning_zh": "独特性质"
+        },
+        {
+          "text": "at room temperature",
+          "meaning_zh": "在室温下"
+        },
+        {
+          "text": "an ideal ingredient for",
+          "meaning_zh": "……的理想成分"
+        },
+        {
+          "text": "long-term preservation",
+          "meaning_zh": "长期保存"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Many farmers have seized the opportunity to maximise the planting of oil palm trees.",
+      "translation": "许多农民抓住机会，尽可能扩大油棕树的种植。",
+      "structure": [
+        {
+          "text": "Many farmers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have seized the opportunity",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to maximise the planting of oil palm trees",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "have seized 使用现在完成时，说明农民已经利用了这一机会。",
+        "to maximise 是目的状语，说明抓住机会是为了扩大种植。",
+        "oil palm trees 指生产棕榈油的油棕树，不等同于 palm oil 本身。"
+      ],
+      "expressions": [
+        {
+          "text": "seize the opportunity",
+          "meaning_zh": "抓住机会"
+        },
+        {
+          "text": "maximise the planting of",
+          "meaning_zh": "最大限度地扩大……种植"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Between 1990 and 2012, the global land area devoted to growing oil palm trees grew from 6 to 17 million hectares, now accounting for around ten percent of total cropland in the entire world.",
+      "translation": "1990年至2012年间，全球用于种植油棕树的土地面积从600万公顷增长到1700万公顷，如今约占全世界耕地总面积的10%。",
+      "structure": [
+        {
+          "text": "Between 1990 and 2012",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "the global land area devoted to growing oil palm trees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "devoted to growing oil palm trees",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "grew from 6 to 17 million hectares",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "now accounting for around ten percent of total cropland in the entire world",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "devoted to 是过去分词短语，修饰 land area。",
+        "grew from ... to ... 表示数量从一个数值增长到另一个数值。",
+        "now accounting for 是结果/补充性分词短语，说明当前所占比例。"
+      ],
+      "expressions": [
+        {
+          "text": "devoted to",
+          "meaning_zh": "用于；投入于"
+        },
+        {
+          "text": "grow from ... to ...",
+          "meaning_zh": "从……增长到……"
+        },
+        {
+          "text": "account for",
+          "meaning_zh": "占"
+        },
+        {
+          "text": "total cropland",
+          "meaning_zh": "耕地总面积"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "From a mere two million tonnes of palm oil being produced annually globally 50 years ago, there are now around 60 million tonnes produced every single year, a figure looking likely to double or even triple by the middle of the century.",
+      "translation": "50年前，全球每年仅生产约200万吨棕榈油；如今每年产量约为6000万吨，而且这一数字到本世纪中叶可能翻倍甚至增至三倍。",
+      "structure": [
+        {
+          "text": "From a mere two million tonnes of palm oil being produced annually globally 50 years ago",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "there are now around 60 million tonnes produced every single year",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "produced every single year",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "a figure looking likely to double or even triple by the middle of the century",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "From ... 50 years ago 与 now 形成时间对比，突出产量增长。",
+        "there are 是存在句，核心信息是当前年产量。",
+        "a figure 是同位语，回指 around 60 million tonnes。",
+        "looking likely to double or even triple 表示该数字很可能继续增长。"
+      ],
+      "expressions": [
+        {
+          "text": "a mere",
+          "meaning_zh": "仅仅"
+        },
+        {
+          "text": "every single year",
+          "meaning_zh": "每一年"
+        },
+        {
+          "text": "look likely to",
+          "meaning_zh": "看起来很可能"
+        },
+        {
+          "text": "by the middle of the century",
+          "meaning_zh": "到本世纪中叶"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "However, there are multiple reasons why conservationists cite the rapid spread of oil palm plantations as a major concern.",
+      "translation": "然而，自然保护人士把油棕种植园的快速扩张列为重大担忧，是有多重原因的。",
+      "structure": [
+        {
+          "text": "However",
+          "role": "discourse_marker",
+          "level": 2
+        },
+        {
+          "text": "there are multiple reasons",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "why conservationists cite the rapid spread of oil palm plantations as a major concern",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "cite the rapid spread of oil palm plantations as a major concern",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "However 转向棕榈油扩张带来的环境问题。",
+        "why 引导定语从句，修饰 reasons。",
+        "cite ... as ... 表示“把……列为/视为……”。"
+      ],
+      "expressions": [
+        {
+          "text": "multiple reasons why",
+          "meaning_zh": "……的多重原因"
+        },
+        {
+          "text": "cite ... as ...",
+          "meaning_zh": "把……列为……"
+        },
+        {
+          "text": "a major concern",
+          "meaning_zh": "重大担忧"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "There are countless news stories of deforestation, habitat destruction and dwindling species populations, all as a direct result of land clearing to establish oil palm tree monoculture on an industrial scale, particularly in Malaysia and Indonesia.",
+      "translation": "关于森林砍伐、栖息地破坏以及物种数量减少的新闻报道不计其数，这些都是为了以工业规模建立油棕树单一种植而清理土地的直接结果，尤其是在马来西亚和印度尼西亚。",
+      "structure": [
+        {
+          "text": "There are countless news stories",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "of deforestation, habitat destruction and dwindling species populations",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "all as a direct result of land clearing",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "to establish oil palm tree monoculture on an industrial scale",
+          "role": "infinitive_phrase",
+          "level": 3
+        },
+        {
+          "text": "particularly in Malaysia and Indonesia",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "There are 引出大量新闻报道，后面的 of 短语说明报道内容。",
+        "all as a direct result 回指前面三个环境后果。",
+        "to establish 是目的状语，说明清理土地的原因。",
+        "on an industrial scale 表示规模化、工业化的种植方式。"
+      ],
+      "expressions": [
+        {
+          "text": "countless news stories",
+          "meaning_zh": "无数新闻报道"
+        },
+        {
+          "text": "as a direct result of",
+          "meaning_zh": "作为……的直接结果"
+        },
+        {
+          "text": "on an industrial scale",
+          "meaning_zh": "以工业规模"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "Endangered species – most famously the Sumatran orangutan, but also rhinos, elephants, tigers, and numerous other fauna – have suffered from the unstoppable spread of oil palm plantations.",
+      "translation": "濒危物种——最著名的是苏门答腊猩猩，也包括犀牛、大象、老虎以及许多其他动物——都因油棕种植园不可阻挡的扩张而遭受伤害。",
+      "structure": [
+        {
+          "text": "Endangered species",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "most famously the Sumatran orangutan, but also rhinos, elephants, tigers, and numerous other fauna",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "have suffered from the unstoppable spread of oil palm plantations",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "破折号中的内容是对 Endangered species 的举例说明。",
+        "have suffered from 使用现在完成时，强调受害影响延续至今。",
+        "unstoppable spread 带有强烈评价，突出扩张难以遏制。"
+      ],
+      "expressions": [
+        {
+          "text": "endangered species",
+          "meaning_zh": "濒危物种"
+        },
+        {
+          "text": "suffer from",
+          "meaning_zh": "遭受"
+        },
+        {
+          "text": "unstoppable spread",
+          "meaning_zh": "不可阻挡的扩张"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "'Palm oil is surely one of the greatest threats to global biodiversity,' declares Dr Farnon Ellwood of the University of the West of England, Bristol.",
+      "translation": "“棕榈油无疑是全球生物多样性面临的最大威胁之一，”布里斯托尔西英格兰大学的 Farnon Ellwood 博士宣称。",
+      "structure": [
+        {
+          "text": "Palm oil is surely one of the greatest threats to global biodiversity",
+          "role": "quoted_clause",
+          "level": 1
+        },
+        {
+          "text": "declares Dr Farnon Ellwood",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "of the University of the West of England, Bristol",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "surely 表示说话者确信，语气很强。",
+        "one of the greatest threats to 是“最严重威胁之一”的结构。",
+        "declares 引出直接引语来源，语气比 says 更正式有力。"
+      ],
+      "expressions": [
+        {
+          "text": "one of the greatest threats to",
+          "meaning_zh": "对……最大的威胁之一"
+        },
+        {
+          "text": "global biodiversity",
+          "meaning_zh": "全球生物多样性"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "'Palm oil is replacing rainforest, and rainforest is where all the species are.",
+      "translation": "“棕榈油正在取代雨林，而雨林正是所有这些物种所在的地方。",
+      "structure": [
+        {
+          "text": "Palm oil is replacing rainforest",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and rainforest is where all the species are",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "where all the species are",
+          "role": "predicative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "is replacing 使用进行时，强调雨林被油棕种植持续替代。",
+        "where all the species are 是表语从句，说明雨林的重要生态位置。",
+        "句首引号表示直接引语继续，下一句才结束这段引语。"
+      ],
+      "expressions": [
+        {
+          "text": "replace rainforest",
+          "meaning_zh": "取代雨林"
+        },
+        {
+          "text": "where all the species are",
+          "meaning_zh": "所有物种所在之处"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "That's a problem.'",
+      "translation": "这是个问题。”",
+      "structure": [
+        {
+          "text": "That's a problem",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "That 回指上一句“棕榈油取代雨林”这一事实。",
+        "句末引号表示 Ellwood 的直接引语结束。"
+      ],
+      "expressions": [
+        {
+          "text": "a problem",
+          "meaning_zh": "一个问题"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "This has led to some radical questions among environmentalists, such as whether consumers should try to boycott palm oil entirely.",
+      "translation": "这在环保人士中引发了一些激进的问题，例如消费者是否应该尝试完全抵制棕榈油。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has led to some radical questions among environmentalists",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "such as whether consumers should try to boycott palm oil entirely",
+          "role": "example_phrase",
+          "level": 2
+        },
+        {
+          "text": "whether consumers should try to boycott palm oil entirely",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "This 回指棕榈油对雨林和生物多样性的威胁。",
+        "has led to 表示造成某种讨论或后果。",
+        "whether 引导名词性从句，说明 radical questions 的具体内容。"
+      ],
+      "expressions": [
+        {
+          "text": "lead to",
+          "meaning_zh": "导致；引发"
+        },
+        {
+          "text": "radical questions",
+          "meaning_zh": "激进的问题"
+        },
+        {
+          "text": "boycott palm oil entirely",
+          "meaning_zh": "完全抵制棕榈油"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "Meanwhile Bhavani Shankar, Professor at London's School of Oriental and African Studies, argues, 'It's easy to say that palm oil is the enemy and we should be against it.",
+      "translation": "与此同时，伦敦大学亚非学院教授 Bhavani Shankar 认为：“说棕榈油是敌人、我们应该反对它很容易。",
+      "structure": [
+        {
+          "text": "Meanwhile Bhavani Shankar",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "Professor at London's School of Oriental and African Studies",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "argues",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "It's easy to say that palm oil is the enemy and we should be against it",
+          "role": "quoted_clause",
+          "level": 2
+        },
+        {
+          "text": "that palm oil is the enemy and we should be against it",
+          "role": "object_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Meanwhile 引出与 Ellwood 相比更审慎的另一种观点。",
+        "Professor at ... 是同位语，说明 Bhavani Shankar 的身份。",
+        "It's easy to say that 使用形式主语 it，真正内容是不定式 to say。",
+        "引号内句子未结束，后面两句继续他的直接引语。"
+      ],
+      "expressions": [
+        {
+          "text": "It's easy to say that",
+          "meaning_zh": "说……很容易"
+        },
+        {
+          "text": "be against",
+          "meaning_zh": "反对"
+        }
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "It makes for a more dramatic story, and it's very intuitive.",
+      "translation": "这会形成一个更有戏剧性的故事，而且非常符合直觉。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "makes for a more dramatic story",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and it's very intuitive",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "It 指代把棕榈油视为敌人的简单叙事。",
+        "makes for 表示“导致、促成”，不是“制造给”。",
+        "intuitive 表示这种叙事容易被直觉接受。"
+      ],
+      "expressions": [
+        {
+          "text": "make for",
+          "meaning_zh": "促成；造成"
+        },
+        {
+          "text": "a dramatic story",
+          "meaning_zh": "戏剧化的故事"
+        }
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "But given the complexity of the argument, I think a much more nuanced story is closer to the truth.'",
+      "translation": "但考虑到这个论证的复杂性，我认为一个更加细致入微的说法才更接近事实。”",
+      "structure": [
+        {
+          "text": "But given the complexity of the argument",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "I",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "think",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a much more nuanced story is closer to the truth",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "given 在这里是介词，表示“考虑到”。",
+        "a much more nuanced story 指比简单抵制更复杂、更有层次的解释。",
+        "closer to the truth 是比较级结构，强调更接近真实情况。",
+        "句末引号表示 Shankar 的直接引语结束。"
+      ],
+      "expressions": [
+        {
+          "text": "given the complexity of",
+          "meaning_zh": "考虑到……的复杂性"
+        },
+        {
+          "text": "a nuanced story",
+          "meaning_zh": "更细致入微的说法"
+        },
+        {
+          "text": "closer to the truth",
+          "meaning_zh": "更接近事实"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "One response to the boycott movement has been the argument for the vital role palm oil plays in lifting many millions of people in the developing world out of poverty.",
+      "translation": "对抵制运动的一种回应是，有人提出棕榈油在帮助发展中国家数百万人摆脱贫困方面发挥着至关重要的作用。",
+      "structure": [
+        {
+          "text": "One response to the boycott movement",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has been the argument",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "for the vital role palm oil plays",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "palm oil plays",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "in lifting many millions of people in the developing world out of poverty",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "has been 使用现在完成时，表示这种回应已经形成并持续存在。",
+        "palm oil plays 是省略关系代词的定语从句，修饰 role。",
+        "in lifting ... out of poverty 说明 role 的具体作用。",
+        "many millions of people 表示人数极多，不是精确的“几百万”。"
+      ],
+      "expressions": [
+        {
+          "text": "boycott movement",
+          "meaning_zh": "抵制运动"
+        },
+        {
+          "text": "vital role",
+          "meaning_zh": "至关重要的作用"
+        },
+        {
+          "text": "lift ... out of poverty",
+          "meaning_zh": "使……摆脱贫困"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "Is it desirable to have palm oil boycotted, replaced, eliminated from the global supply chain, given how many low-income people in developing countries depend on it for their livelihoods?",
+      "translation": "考虑到发展中国家有多少低收入人群依靠棕榈油维持生计，让棕榈油被抵制、替代并从全球供应链中消除，是否可取呢？",
+      "structure": [
+        {
+          "text": "Is it desirable",
+          "role": "interrogative_clause",
+          "level": 1
+        },
+        {
+          "text": "to have palm oil boycotted, replaced, eliminated from the global supply chain",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "have palm oil boycotted, replaced, eliminated",
+          "role": "causative_structure",
+          "level": 3
+        },
+        {
+          "text": "given how many low-income people in developing countries depend on it for their livelihoods",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "how many low-income people in developing countries depend on it for their livelihoods",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "it 是形式主语，真正主语是后面的 to have ... 结构。",
+        "have palm oil boycotted, replaced, eliminated 是 have + 宾语 + 过去分词，表示使棕榈油被处理。",
+        "given 是介词，表示“考虑到”。",
+        "depend on it for their livelihoods 说明棕榈油与低收入人群生计相关。"
+      ],
+      "expressions": [
+        {
+          "text": "global supply chain",
+          "meaning_zh": "全球供应链"
+        },
+        {
+          "text": "low-income people",
+          "meaning_zh": "低收入人群"
+        },
+        {
+          "text": "depend on ... for their livelihoods",
+          "meaning_zh": "依靠……维持生计"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "How best to strike a utilitarian balance between these competing factors has become a serious bone of contention.",
+      "translation": "如何最好地在这些相互竞争的因素之间取得功利主义意义上的平衡，已经成为一个严重的争议焦点。",
+      "structure": [
+        {
+          "text": "How best to strike a utilitarian balance between these competing factors",
+          "role": "subject_clause",
+          "level": 1
+        },
+        {
+          "text": "has become",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a serious bone of contention",
+          "role": "subject_complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "How best to ... 是疑问词 + 不定式结构，整体作主语。",
+        "strike a balance between 表示在多个因素之间取得平衡。",
+        "bone of contention 是习语，表示争议焦点。"
+      ],
+      "expressions": [
+        {
+          "text": "strike a balance between",
+          "meaning_zh": "在……之间取得平衡"
+        },
+        {
+          "text": "competing factors",
+          "meaning_zh": "相互竞争的因素"
+        },
+        {
+          "text": "bone of contention",
+          "meaning_zh": "争议焦点"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 21,
+      "sentence": "Even the deforestation argument isn't as straightforward as it seems.",
+      "translation": "即使是关于森林砍伐的论点，也不像表面看起来那么简单。",
+      "structure": [
+        {
+          "text": "Even the deforestation argument",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "isn't as straightforward as it seems",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "as it seems",
+          "role": "comparative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Even 强调连看似明确的森林砍伐问题也有复杂性。",
+        "as straightforward as it seems 是同级比较结构，否定后表示“不像看起来那么简单”。"
+      ],
+      "expressions": [
+        {
+          "text": "deforestation argument",
+          "meaning_zh": "森林砍伐论点"
+        },
+        {
+          "text": "as straightforward as it seems",
+          "meaning_zh": "像看起来那样简单"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "Oil palm plantations produce at least four and potentially up to ten times more oil per hectare than soybean, rapeseed, sunflower or other competing oils.",
+      "translation": "油棕种植园每公顷产出的油至少是大豆、油菜籽、向日葵或其他竞争性油料作物的四倍，甚至可能高达十倍。",
+      "structure": [
+        {
+          "text": "Oil palm plantations",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "produce at least four and potentially up to ten times more oil per hectare",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "than soybean, rapeseed, sunflower or other competing oils",
+          "role": "comparative_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "at least four and potentially up to ten times more 是倍数比较结构。",
+        "per hectare 表示单位面积产量，是比较的关键指标。",
+        "than 后列出与棕榈油竞争的其他油料来源。"
+      ],
+      "expressions": [
+        {
+          "text": "at least",
+          "meaning_zh": "至少"
+        },
+        {
+          "text": "up to ten times more",
+          "meaning_zh": "高达十倍多"
+        },
+        {
+          "text": "per hectare",
+          "meaning_zh": "每公顷"
+        },
+        {
+          "text": "competing oils",
+          "meaning_zh": "竞争性油料"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "That immensely high yield – which is predominantly what makes it so profitable – is potentially also an ecological benefit.",
+      "translation": "这种极高的产量——这主要也是使它如此有利可图的原因——潜在地也是一种生态优势。",
+      "structure": [
+        {
+          "text": "That immensely high yield",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "which is predominantly what makes it so profitable",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "what makes it so profitable",
+          "role": "predicative_clause",
+          "level": 3
+        },
+        {
+          "text": "is potentially also an ecological benefit",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "which 引导插入式非限制性定语从句，解释高产量与利润的关系。",
+        "what makes it so profitable 是 what 从句，作 is 的表语。",
+        "potentially also 表明作者提出的是可能的生态优势，而非绝对结论。"
+      ],
+      "expressions": [
+        {
+          "text": "high yield",
+          "meaning_zh": "高产量"
+        },
+        {
+          "text": "profitable",
+          "meaning_zh": "有利可图的"
+        },
+        {
+          "text": "ecological benefit",
+          "meaning_zh": "生态益处"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "If ten times more palm oil can be produced from a patch of land than any competing oil, then ten times more land would need to be cleared in order to produce the same volume of oil from that competitor.",
+      "translation": "如果同一块土地能生产出的棕榈油是任何竞争性油料的十倍，那么若要从那种竞争油料中生产同等体积的油，就需要清理十倍的土地。",
+      "structure": [
+        {
+          "text": "If ten times more palm oil can be produced from a patch of land than any competing oil",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "then ten times more land would need to be cleared",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "in order to produce the same volume of oil from that competitor",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "If ... then ... 构成条件推理，解释高产量为何可能减少土地需求。",
+        "can be produced 和 would need to be cleared 都是被动表达。",
+        "in order to 表示目的，说明清理更多土地是为了生产同等油量。",
+        "that competitor 指前面提到的其他竞争性油料。"
+      ],
+      "expressions": [
+        {
+          "text": "a patch of land",
+          "meaning_zh": "一块土地"
+        },
+        {
+          "text": "need to be cleared",
+          "meaning_zh": "需要被清理"
+        },
+        {
+          "text": "the same volume of",
+          "meaning_zh": "同等体积的"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "As for the question of carbon emissions, the issue really depends on what oil palm trees are replacing.",
+      "translation": "至于碳排放问题，关键实际上取决于油棕树正在取代什么。",
+      "structure": [
+        {
+          "text": "As for the question of carbon emissions",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "the issue",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "really depends on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "what oil palm trees are replacing",
+          "role": "noun_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "As for 用来转换话题到碳排放。",
+        "depends on 后接 what 引导的名词性从句。",
+        "are replacing 使用现在进行时，强调种植扩张正在替代其他土地用途。"
+      ],
+      "expressions": [
+        {
+          "text": "As for",
+          "meaning_zh": "至于"
+        },
+        {
+          "text": "carbon emissions",
+          "meaning_zh": "碳排放"
+        },
+        {
+          "text": "depend on",
+          "meaning_zh": "取决于"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "Crops vary in the degree to which they sequester carbon – in other words, the amount of carbon they capture from the atmosphere and store within the plant.",
+      "translation": "不同作物在固碳程度上有所不同——换句话说，它们从大气中捕获并储存在植物体内的碳量不同。",
+      "structure": [
+        {
+          "text": "Crops",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "vary in the degree",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to which they sequester carbon",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "in other words",
+          "role": "discourse_marker",
+          "level": 2
+        },
+        {
+          "text": "the amount of carbon they capture from the atmosphere and store within the plant",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "they capture from the atmosphere and store within the plant",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "to which 引导定语从句，修饰 degree，表示“固碳到何种程度”。",
+        "in other words 引出对 sequester carbon 的解释。",
+        "they capture ... and store ... 是省略关系代词的定语从句，修饰 carbon。"
+      ],
+      "expressions": [
+        {
+          "text": "vary in the degree",
+          "meaning_zh": "在程度上有所不同"
+        },
+        {
+          "text": "sequester carbon",
+          "meaning_zh": "固碳"
+        },
+        {
+          "text": "in other words",
+          "meaning_zh": "换句话说"
+        }
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "The more carbon a plant sequesters, the more it reduces the effect of climate change.",
+      "translation": "植物固碳越多，它就越能减轻气候变化的影响。",
+      "structure": [
+        {
+          "text": "The more carbon a plant sequesters",
+          "role": "comparative_clause",
+          "level": 1
+        },
+        {
+          "text": "the more it reduces the effect of climate change",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "the effect of climate change",
+          "role": "object",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "The more ..., the more ... 是“越……越……”结构。",
+        "it 指代 a plant，说明固碳量与减缓气候变化之间的关系。",
+        "reduces the effect 表示减弱影响，而不是完全消除气候变化。"
+      ],
+      "expressions": [
+        {
+          "text": "The more ..., the more ...",
+          "meaning_zh": "越……越……"
+        },
+        {
+          "text": "the effect of climate change",
+          "meaning_zh": "气候变化的影响"
+        }
+      ]
+    },
+    {
+      "id": "F-08",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "As Shankar explains: '[Palm oil production] actually sequesters more carbon in some ways than other alternatives.",
+      "translation": "正如 Shankar 解释的：“[棕榈油生产]在某些方面实际上比其他替代选择固存更多碳。",
+      "structure": [
+        {
+          "text": "As Shankar explains",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "[Palm oil production] actually sequesters more carbon",
+          "role": "quoted_clause",
+          "level": 1
+        },
+        {
+          "text": "in some ways",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "than other alternatives",
+          "role": "comparative_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "As 引导方式状语从句，说明后面的观点来自 Shankar 的解释。",
+        "actually 用来强调该观点与直觉可能不同。",
+        "than other alternatives 构成比较，比较对象是其他替代油料或生产方式。",
+        "句末未闭合引号，后面两句仍是同一段引语。"
+      ],
+      "expressions": [
+        {
+          "text": "in some ways",
+          "meaning_zh": "在某些方面"
+        },
+        {
+          "text": "other alternatives",
+          "meaning_zh": "其他替代选择"
+        }
+      ]
+    },
+    {
+      "id": "F-09",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "[…] Of course, if you're cutting down virgin forest it's terrible – that's what's happening in Indonesia and Malaysia, it's been allowed to get out of hand.",
+      "translation": "[……]当然，如果你砍伐原始森林，那很糟糕——这正是印度尼西亚和马来西亚正在发生的事情，而且情况已经被放任到失控。",
+      "structure": [
+        {
+          "text": "Of course",
+          "role": "discourse_marker",
+          "level": 2
+        },
+        {
+          "text": "if you're cutting down virgin forest",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "it's terrible",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that's what's happening in Indonesia and Malaysia",
+          "role": "explanatory_clause",
+          "level": 1
+        },
+        {
+          "text": "it's been allowed to get out of hand",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "句首 […] 表示引文中间有省略内容，必须保留。",
+        "if 引导条件从句，说明砍伐原始森林这种情境确实很糟。",
+        "that's what's happening 是 what 引导的表语从句，说明印尼和马来西亚的情况。",
+        "get out of hand 是习语，表示情况失控。"
+      ],
+      "expressions": [
+        {
+          "text": "cut down virgin forest",
+          "meaning_zh": "砍伐原始森林"
+        },
+        {
+          "text": "what's happening",
+          "meaning_zh": "正在发生的事情"
+        },
+        {
+          "text": "get out of hand",
+          "meaning_zh": "失控"
+        }
+      ]
+    },
+    {
+      "id": "F-10",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "But if it's replacing rice, for example, it might actually sequester more carbon.'",
+      "translation": "但如果它取代的是水稻，例如，它实际上可能会固存更多碳。”",
+      "structure": [
+        {
+          "text": "But if it's replacing rice",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "for example",
+          "role": "discourse_marker",
+          "level": 2
+        },
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "might actually sequester more carbon",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "But 与上一句砍伐原始森林的负面情形形成对比。",
+        "if it's replacing rice 指替代对象不同时，碳影响也不同。",
+        "might actually 表示可能且带有反直觉色彩。",
+        "句末引号结束 Shankar 的引语。"
+      ],
+      "expressions": [
+        {
+          "text": "for example",
+          "meaning_zh": "例如"
+        },
+        {
+          "text": "might actually",
+          "meaning_zh": "实际上可能"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 31,
+      "sentence": "The industry is now regulated by a group called the Roundtable on Sustainable Palm Oil (RSPO), consisting of palm growers, retailers, product manufacturers, and other interested parties.",
+      "translation": "该行业如今由一个名为“可持续棕榈油圆桌会议”（RSPO）的组织监管，该组织由棕榈种植者、零售商、产品制造商以及其他利益相关方组成。",
+      "structure": [
+        {
+          "text": "The industry",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is now regulated by a group",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "called the Roundtable on Sustainable Palm Oil (RSPO)",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "consisting of palm growers, retailers, product manufacturers, and other interested parties",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "is regulated by 是被动语态，说明行业被某组织监管。",
+        "called ... 是过去分词短语，说明 group 的名称。",
+        "consisting of 是现在分词短语，说明该组织的成员构成。"
+      ],
+      "expressions": [
+        {
+          "text": "be regulated by",
+          "meaning_zh": "由……监管"
+        },
+        {
+          "text": "Sustainable Palm Oil",
+          "meaning_zh": "可持续棕榈油"
+        },
+        {
+          "text": "interested parties",
+          "meaning_zh": "利益相关方"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 32,
+      "sentence": "Over the past decade or so, an agreement has gradually been reached regarding standards that producers of palm oil have to meet in order for their product to be regarded as officially 'sustainable'.",
+      "translation": "在过去大约十年里，关于棕榈油生产者必须达到哪些标准才能让其产品被官方认定为“可持续”，各方逐渐达成了一项协议。",
+      "structure": [
+        {
+          "text": "Over the past decade or so",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "an agreement",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has gradually been reached",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "regarding standards",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "that producers of palm oil have to meet",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "in order for their product to be regarded as officially 'sustainable'",
+          "role": "purpose_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "has gradually been reached 是现在完成时被动语态，强调协议逐步形成。",
+        "regarding standards 表示协议涉及的对象。",
+        "that 引导定语从句，修饰 standards。",
+        "in order for ... to ... 表示目的条件，即产品获得官方可持续认定。"
+      ],
+      "expressions": [
+        {
+          "text": "over the past decade or so",
+          "meaning_zh": "在过去大约十年里"
+        },
+        {
+          "text": "reach an agreement",
+          "meaning_zh": "达成协议"
+        },
+        {
+          "text": "be regarded as",
+          "meaning_zh": "被视为"
+        }
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "The RSPO insists upon no virgin forest clearing, transparency and regular assessment of carbon stocks, among other criteria.",
+      "translation": "RSPO 坚持的标准包括不得清理原始森林、透明度以及对碳储量的定期评估等。",
+      "structure": [
+        {
+          "text": "The RSPO",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "insists upon no virgin forest clearing, transparency and regular assessment of carbon stocks",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "among other criteria",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "insists upon 表示该组织对标准的坚持或要求。",
+        "no virgin forest clearing、transparency 和 regular assessment 是并列标准。",
+        "among other criteria 表示这些只是标准的一部分。"
+      ],
+      "expressions": [
+        {
+          "text": "insist upon",
+          "meaning_zh": "坚持要求"
+        },
+        {
+          "text": "virgin forest clearing",
+          "meaning_zh": "原始森林清理"
+        },
+        {
+          "text": "carbon stocks",
+          "meaning_zh": "碳储量"
+        }
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "Only once these requirements are fully satisfied is the oil allowed to be sold as certified sustainable palm oil (CSPO).",
+      "translation": "只有在这些要求完全得到满足之后，这种油才被允许作为认证可持续棕榈油（CSPO）出售。",
+      "structure": [
+        {
+          "text": "Only once these requirements are fully satisfied",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "is the oil allowed",
+          "role": "inverted_passive_clause",
+          "level": 1
+        },
+        {
+          "text": "to be sold as certified sustainable palm oil (CSPO)",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Only once 位于句首触发部分倒装，所以出现 is the oil allowed。",
+        "are fully satisfied 是被动结构，表示要求被完全满足。",
+        "to be sold as ... 说明被允许的具体行为和销售身份。"
+      ],
+      "expressions": [
+        {
+          "text": "Only once",
+          "meaning_zh": "只有一旦"
+        },
+        {
+          "text": "fully satisfied",
+          "meaning_zh": "完全满足"
+        },
+        {
+          "text": "certified sustainable",
+          "meaning_zh": "经认证可持续的"
+        }
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "Recent figures show that the RSPO now certifies around 12 million tonnes of palm oil annually, equivalent to roughly 21 percent of the world's total palm oil production.",
+      "translation": "最新数据显示，RSPO 目前每年认证约1200万吨棕榈油，相当于全球棕榈油总产量的大约21%。",
+      "structure": [
+        {
+          "text": "Recent figures",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "show",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that the RSPO now certifies around 12 million tonnes of palm oil annually",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "equivalent to roughly 21 percent of the world's total palm oil production",
+          "role": "adjective_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "figures 在这里是“数据”，不是人物或图形。",
+        "that 引导宾语从句，说明数据显示的内容。",
+        "equivalent to 是形容词短语，补充说明1200万吨对应的全球比例。"
+      ],
+      "expressions": [
+        {
+          "text": "Recent figures show that",
+          "meaning_zh": "最新数据显示"
+        },
+        {
+          "text": "equivalent to",
+          "meaning_zh": "相当于"
+        },
+        {
+          "text": "total palm oil production",
+          "meaning_zh": "棕榈油总产量"
+        }
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 36,
+      "sentence": "There is even hope that oil palm plantations might not need to be such sterile monocultures, or 'green deserts', as Ellwood describes them.",
+      "translation": "甚至还有希望认为，油棕种植园或许不必成为如此贫瘠的单一种植区，或者如 Ellwood 所描述的“绿色沙漠”。",
+      "structure": [
+        {
+          "text": "There is even hope",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "that oil palm plantations might not need to be such sterile monocultures",
+          "role": "appositive_clause",
+          "level": 2
+        },
+        {
+          "text": "or 'green deserts'",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "as Ellwood describes them",
+          "role": "adverbial_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "There is hope that 引出一种较乐观的可能性。",
+        "might not need to 表示“不一定需要”，语气谨慎。",
+        "'green deserts' 是比喻，指看似绿色但生态单一贫瘠的种植园。",
+        "as Ellwood describes them 说明这一说法来自 Ellwood。"
+      ],
+      "expressions": [
+        {
+          "text": "There is hope that",
+          "meaning_zh": "有希望认为"
+        },
+        {
+          "text": "sterile monocultures",
+          "meaning_zh": "贫瘠的单一种植区"
+        },
+        {
+          "text": "green deserts",
+          "meaning_zh": "绿色沙漠"
+        }
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 37,
+      "sentence": "New research at Ellwood's lab hints at one plant which might make all the difference.",
+      "translation": "Ellwood 实验室的新研究提示，有一种植物可能会带来决定性改变。",
+      "structure": [
+        {
+          "text": "New research at Ellwood's lab",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "hints at one plant",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "which might make all the difference",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "hints at 表示研究只是暗示一种可能性，而非最终证明。",
+        "which 引导定语从句，修饰 one plant。",
+        "make all the difference 是习语，表示产生关键影响。"
+      ],
+      "expressions": [
+        {
+          "text": "hint at",
+          "meaning_zh": "暗示"
+        },
+        {
+          "text": "make all the difference",
+          "meaning_zh": "产生决定性影响"
+        }
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 38,
+      "sentence": "The bird's nest fern (Asplenium nidus) grows on trees in an epiphytic fashion (meaning it's dependent on the tree only for support, not for nutrients), and is native to many tropical regions, where as a keystone species it performs a vital ecological role.",
+      "translation": "鸟巢蕨（Asplenium nidus）以附生方式生长在树上（意思是它依赖树木只是为了支撑，而不是为了获取养分），并原产于许多热带地区；在那里，作为关键物种，它发挥着重要的生态作用。",
+      "structure": [
+        {
+          "text": "The bird's nest fern (Asplenium nidus)",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "grows on trees in an epiphytic fashion",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "meaning it's dependent on the tree only for support, not for nutrients",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "and is native to many tropical regions",
+          "role": "coordinated_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "where as a keystone species it performs a vital ecological role",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "括号中的 meaning 解释 epiphytic fashion 的含义。",
+        "only for support, not for nutrients 用对比说明这种植物与树的关系。",
+        "where 引导定语从句，修饰 many tropical regions。",
+        "as a keystone species 是介词短语，说明它在生态系统中的身份。"
+      ],
+      "expressions": [
+        {
+          "text": "in an epiphytic fashion",
+          "meaning_zh": "以附生方式"
+        },
+        {
+          "text": "be dependent on",
+          "meaning_zh": "依赖于"
+        },
+        {
+          "text": "be native to",
+          "meaning_zh": "原产于"
+        },
+        {
+          "text": "keystone species",
+          "meaning_zh": "关键物种"
+        }
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 39,
+      "sentence": "Ellwood believes that reintroducing the bird's nest fern into oil palm plantations could potentially allow these areas to recover their biodiversity, providing a home for all manner of species, from fungi and bacteria, to invertebrates such as insects, amphibians, reptiles and even mammals.",
+      "translation": "Ellwood 认为，把鸟巢蕨重新引入油棕种植园，可能会让这些地区恢复生物多样性，为各种各样的物种提供栖息地，从真菌和细菌，到昆虫等无脊椎动物、两栖动物、爬行动物，甚至哺乳动物。",
+      "structure": [
+        {
+          "text": "Ellwood",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "believes",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that reintroducing the bird's nest fern into oil palm plantations could potentially allow these areas to recover their biodiversity",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "reintroducing the bird's nest fern into oil palm plantations",
+          "role": "gerund_phrase",
+          "level": 3
+        },
+        {
+          "text": "providing a home for all manner of species",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "from fungi and bacteria, to invertebrates such as insects, amphibians, reptiles and even mammals",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，说明 Ellwood 的观点。",
+        "reintroducing ... 是动名词短语，在宾语从句中作主语。",
+        "allow these areas to recover 是 allow + 宾语 + 不定式结构。",
+        "providing 是结果性分词短语，说明恢复生物多样性后的生态效果。"
+      ],
+      "expressions": [
+        {
+          "text": "reintroduce ... into ...",
+          "meaning_zh": "把……重新引入……"
+        },
+        {
+          "text": "recover their biodiversity",
+          "meaning_zh": "恢复生物多样性"
+        },
+        {
+          "text": "all manner of species",
+          "meaning_zh": "各种各样的物种"
+        },
+        {
+          "text": "providing a home for",
+          "meaning_zh": "为……提供栖息地"
+        }
+      ]
+    }
+  ]
+}

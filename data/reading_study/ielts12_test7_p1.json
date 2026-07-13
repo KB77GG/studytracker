@@ -1,0 +1,704 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts12_test7_reading",
+  "passage_id": "ielts12_test7_p1",
+  "passage_title": "Flying tortoises",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Forests of spiny cacti cover much of the uneven lava plains that separate the interior of the Galápagos island of Isabela from the Pacific Ocean.",
+      "translation": "茂密的多刺仙人掌林覆盖着大片崎岖不平的熔岩平原，这些平原将加拉帕戈斯群岛中伊莎贝拉岛的内陆与太平洋分隔开来。",
+      "structure": [
+        {"text": "Forests of spiny cacti", "role": "subject", "level": 1},
+        {"text": "of spiny cacti", "role": "prepositional_phrase", "level": 2},
+        {"text": "cover", "role": "verb_phrase", "level": 1},
+        {"text": "much of the uneven lava plains", "role": "object", "level": 1},
+        {"text": "that separate the interior of the Galápagos island of Isabela from the Pacific Ocean", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导的定语从句修饰 lava plains，说明这片熔岩平原把岛屿内陆和太平洋分隔开。",
+        "much of 修饰 the uneven lava plains，表示“大部分”，而不是修饰 cacti。"
+      ],
+      "expressions": [
+        {"text": "separate A from B", "meaning_zh": "将A与B分隔开"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "With its five distinct volcanoes, the island resembles a lunar landscape.",
+      "translation": "岛上有五座各具特色的火山，使这座岛屿看起来像月球表面。",
+      "structure": [
+        {"text": "With its five distinct volcanoes", "role": "prepositional_phrase", "level": 1},
+        {"text": "the island", "role": "subject", "level": 1},
+        {"text": "resembles", "role": "verb_phrase", "level": 1},
+        {"text": "a lunar landscape", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "With 引导的介词短语说明该岛屿的背景特征，不是从句。",
+        "resemble 是及物动词，后面直接接宾语，不加介词。"
+      ],
+      "expressions": [
+        {"text": "resemble", "meaning_zh": "与……相似；像"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Only the thick vegetation at the skirt of the often cloud-covered peak of Sierra Negra offers respite from the barren terrain below.",
+      "translation": "唯有生长在常年云雾笼罩的谢拉内格拉火山山脚处的茂密植被，才能让人从下方贫瘠的地形中得到片刻喘息。",
+      "structure": [
+        {"text": "Only the thick vegetation at the skirt of the often cloud-covered peak of Sierra Negra", "role": "subject", "level": 1},
+        {"text": "at the skirt of the often cloud-covered peak of Sierra Negra", "role": "prepositional_phrase", "level": 2},
+        {"text": "offers", "role": "verb_phrase", "level": 1},
+        {"text": "respite from the barren terrain below", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "Only 修饰整个主语，强调“唯有这片植被”才提供喘息之地。",
+        "skirt 在这里指山脚，而不是“裙子”的本义。",
+        "often cloud-covered 是复合形容词，修饰 peak，意为“常被云雾笼罩的”。"
+      ],
+      "expressions": [
+        {"text": "offer respite from", "meaning_zh": "提供从……中喘息的机会"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "This inhospitable environment is home to the giant Galápagos tortoise.",
+      "translation": "这片荒芜的环境正是加拉帕戈斯象龟的栖息地。",
+      "structure": [
+        {"text": "This inhospitable environment", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "home to the giant Galápagos tortoise", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "be home to 表示“是……的栖息地/家园”，This inhospitable environment 承接前一句对恶劣地形的描述。",
+        "the giant Galápagos tortoise 用单数泛指整个物种，而非特指某一只。"
+      ],
+      "expressions": [
+        {"text": "be home to", "meaning_zh": "是……的栖息地"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "Some time after the Galápagos's birth, around five million years ago, the islands were colonised by one or more tortoises from mainland South America.",
+      "translation": "加拉帕戈斯群岛形成后的某个时期——大约五百万年前——这些岛屿开始被来自南美大陆的一种或多种陆龟所占据。",
+      "structure": [
+        {"text": "Some time after the Galápagos's birth", "role": "prepositional_phrase", "level": 1},
+        {"text": "around five million years ago", "role": "apposition", "level": 1},
+        {"text": "the islands", "role": "subject", "level": 1},
+        {"text": "were colonised", "role": "verb_phrase", "level": 1},
+        {"text": "by one or more tortoises from mainland South America", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "around five million years ago 是插入语，具体说明前面 Some time after the Galápagos's birth 所指的时间。",
+        "were colonised by 是被动语态，强调岛屿“被……占据”，而非主动占据。"
+      ],
+      "expressions": [
+        {"text": "be colonised by", "meaning_zh": "被……占据/殖民"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "As these ancestral tortoises settled on the individual islands, the different populations adapted to their unique environments, giving rise to at least 14 different subspecies.",
+      "translation": "随着这些祖先陆龟分别定居在各个岛屿上，不同种群逐渐适应了各自独特的环境，从而演化出至少14个不同的亚种。",
+      "structure": [
+        {"text": "As these ancestral tortoises settled on the individual islands", "role": "adverbial_clause", "level": 1},
+        {"text": "these ancestral tortoises", "role": "subject", "level": 2},
+        {"text": "settled on the individual islands", "role": "verb_phrase", "level": 2},
+        {"text": "the different populations", "role": "subject", "level": 1},
+        {"text": "adapted to their unique environments", "role": "verb_phrase", "level": 1},
+        {"text": "giving rise to at least 14 different subspecies", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "As 引导时间/伴随状语从句，表示“随着……”。",
+        "giving rise to 是现在分词短语作结果状语，说明适应环境所带来的结果。"
+      ],
+      "expressions": [
+        {"text": "adapt to", "meaning_zh": "适应"},
+        {"text": "give rise to", "meaning_zh": "引起；导致；使产生"}
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "Island life agreed with them.",
+      "translation": "岛屿生活很适合它们。",
+      "structure": [
+        {"text": "Island life", "role": "subject", "level": 1},
+        {"text": "agreed with", "role": "verb_phrase", "level": 1},
+        {"text": "them", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "agree with 在这里意为“对……有益、适合”，不是常见的“同意”之意。",
+        "them 指代前文提到的 tortoises，即陆龟。"
+      ],
+      "expressions": [
+        {"text": "agree with", "meaning_zh": "适合；对……有益（此处非“同意”之意）"}
+      ]
+    },
+    {
+      "id": "A-08",
+      "paragraph_label": "A",
+      "sentence_index": 8,
+      "sentence": "In the absence of significant predators, they grew to become the largest and longest-living tortoises on the planet, weighing more than 400 kilograms, occasionally exceeding 1.8 metres in length and living for more than a century.",
+      "translation": "由于没有重要的天敌，它们逐渐长成了地球上体型最大、寿命最长的陆龟，体重超过400公斤，体长有时超过1.8米，寿命可超过一个世纪。",
+      "structure": [
+        {"text": "In the absence of significant predators", "role": "prepositional_phrase", "level": 1},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "grew to become the largest and longest-living tortoises on the planet", "role": "verb_phrase", "level": 1},
+        {"text": "weighing more than 400 kilograms", "role": "participial_phrase", "level": 2},
+        {"text": "occasionally exceeding 1.8 metres in length", "role": "participial_phrase", "level": 2},
+        {"text": "and living for more than a century", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "In the absence of 表示“在没有……的情况下”，说明缺乏天敌这一原因。",
+        "weighing...occasionally exceeding...and living... 三个现在分词短语并列，分别从体重、体长、寿命三方面补充说明前面的结果。"
+      ],
+      "expressions": [
+        {"text": "in the absence of", "meaning_zh": "在没有……的情况下"},
+        {"text": "grow to become", "meaning_zh": "逐渐成长为"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Before human arrival, the archipelago's tortoises numbered in the hundreds of thousands.",
+      "translation": "在人类到来之前，这片群岛上的陆龟数量多达数十万只。",
+      "structure": [
+        {"text": "Before human arrival", "role": "prepositional_phrase", "level": 1},
+        {"text": "the archipelago's tortoises", "role": "subject", "level": 1},
+        {"text": "numbered in the hundreds of thousands", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "number in 表示“数量达到……”，后接具体的数量范围。",
+        "Before human arrival 作时间状语，为下文人类到来后对陆龟的剥削行为做对比铺垫。"
+      ],
+      "expressions": [
+        {"text": "number in the hundreds of thousands", "meaning_zh": "数量达数十万"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "From the 17th century onwards, pirates took a few on board for food, but the arrival of whaling ships in the 1790s saw this exploitation grow exponentially.",
+      "translation": "从17世纪起，海盗们开始捕捉一些陆龟带上船作为食物，但18世纪90年代捕鲸船的出现使得这种猎捕行为呈指数级增长。",
+      "structure": [
+        {"text": "From the 17th century onwards", "role": "prepositional_phrase", "level": 1},
+        {"text": "pirates took a few on board for food", "role": "main_clause", "level": 1},
+        {"text": "but the arrival of whaling ships in the 1790s saw this exploitation grow exponentially", "role": "coordinated_clause", "level": 1},
+        {"text": "this exploitation grow exponentially", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "see sth do sth 结构中，saw...grow 意为“使得这种剥削行为增长”，the arrival 是逻辑主语而非动作发出者。",
+        "take...on board 指“把……带上船”。"
+      ],
+      "expressions": [
+        {"text": "take sth on board", "meaning_zh": "把……带上船"},
+        {"text": "grow exponentially", "meaning_zh": "呈指数级增长"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "Relatively immobile and capable of surviving for months without food or water, the tortoises were taken on board these ships to act as food supplies during long ocean passages.",
+      "translation": "由于行动相对迟缓，又能数月不吃不喝地存活，陆龟被带上这些船只，充当远洋航行途中的食物储备。",
+      "structure": [
+        {"text": "Relatively immobile and capable of surviving for months without food or water", "role": "adjective_phrase", "level": 1},
+        {"text": "the tortoises", "role": "subject", "level": 1},
+        {"text": "were taken on board these ships", "role": "verb_phrase", "level": 1},
+        {"text": "to act as food supplies during long ocean passages", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "句首形容词短语 Relatively immobile and capable of... 说明陆龟被捕捉的原因，相当于省略主语和 being 的状语。",
+        "to act as 表示目的，说明将陆龟带上船的用途。"
+      ],
+      "expressions": [
+        {"text": "capable of doing", "meaning_zh": "能够做……"},
+        {"text": "act as", "meaning_zh": "充当；起……作用"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "Sometimes, their bodies were processed into high-grade oil.",
+      "translation": "有时，它们的身体还被加工成高级油脂。",
+      "structure": [
+        {"text": "Sometimes", "role": "adverbial", "level": 1},
+        {"text": "their bodies", "role": "subject", "level": 1},
+        {"text": "were processed into high-grade oil", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "be processed into 表示“被加工成……”，为被动语态。",
+        "their 指代前面提到的 tortoises，即陆龟的躯体。"
+      ],
+      "expressions": [
+        {"text": "be processed into", "meaning_zh": "被加工成"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "In total, an estimated 200,000 animals were taken from the archipelago before the 20th century.",
+      "translation": "总计约有二十万只陆龟在20世纪之前被带离这片群岛。",
+      "structure": [
+        {"text": "In total", "role": "adverbial", "level": 1},
+        {"text": "an estimated 200,000 animals", "role": "subject", "level": 1},
+        {"text": "were taken from the archipelago", "role": "verb_phrase", "level": 1},
+        {"text": "before the 20th century", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "an estimated 200,000 animals 中 estimated 是过去分词作前置修饰，表示“估计有……”。",
+        "before the 20th century 限定这一数字统计所涵盖的时间范围。"
+      ],
+      "expressions": [
+        {"text": "an estimated", "meaning_zh": "估计的（数量）"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 14,
+      "sentence": "This historical exploitation was then exacerbated when settlers came to the islands.",
+      "translation": "当定居者来到这些岛屿后，这种历史性的剥削进一步加剧。",
+      "structure": [
+        {"text": "This historical exploitation", "role": "subject", "level": 1},
+        {"text": "was then exacerbated", "role": "verb_phrase", "level": 1},
+        {"text": "when settlers came to the islands", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "exacerbate 表示“使恶化、加剧”，被动语态强调剥削行为被定居者的到来所加剧。",
+        "This historical exploitation 指代前文提到的海盗和捕鲸船对陆龟的猎捕行为。"
+      ],
+      "expressions": [
+        {"text": "exacerbate", "meaning_zh": "使恶化；加剧"}
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 15,
+      "sentence": "They hunted the tortoises and destroyed their habitat to clear land for agriculture.",
+      "translation": "他们猎杀陆龟，破坏它们的栖息地，以便开垦土地用于农业生产。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "hunted the tortoises", "role": "verb_phrase", "level": 1},
+        {"text": "and destroyed their habitat", "role": "coordinated_clause", "level": 1},
+        {"text": "to clear land for agriculture", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "to clear land for agriculture 是不定式作目的状语，说明破坏栖息地的目的。",
+        "hunted 和 destroyed 是并列谓语，共用主语 They（定居者）。"
+      ],
+      "expressions": [
+        {"text": "clear land for", "meaning_zh": "开垦土地用于……"}
+      ]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 16,
+      "sentence": "They also introduced alien species - ranging from cattle, pigs, goats, rats and dogs to plants and ants - that either prey on the eggs and young tortoises or damage or destroy their habitat.",
+      "translation": "他们还引入了外来物种——从牛、猪、山羊、老鼠、狗，到植物和蚂蚁应有尽有——这些物种要么捕食龟蛋和幼龟，要么破坏甚至摧毁它们的栖息地。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "also introduced", "role": "verb_phrase", "level": 1},
+        {"text": "alien species", "role": "object", "level": 1},
+        {"text": "ranging from cattle, pigs, goats, rats and dogs to plants and ants", "role": "participial_phrase", "level": 2},
+        {"text": "that either prey on the eggs and young tortoises or damage or destroy their habitat", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "破折号中间的 ranging from A to B 是插入的分词短语，列举 alien species 的具体范围。",
+        "that 引导定语从句修饰 alien species，either...or 连接这些物种造成破坏的两种方式。"
+      ],
+      "expressions": [
+        {"text": "range from A to B", "meaning_zh": "范围从A到B"},
+        {"text": "prey on", "meaning_zh": "捕食"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Today, only 11 of the original subspecies survive and of these, several are highly endangered.",
+      "translation": "如今，最初的亚种中只有11个存活下来，而这其中有几个已经濒临灭绝。",
+      "structure": [
+        {"text": "Today", "role": "adverbial", "level": 1},
+        {"text": "only 11 of the original subspecies", "role": "subject", "level": 1},
+        {"text": "survive", "role": "verb_phrase", "level": 1},
+        {"text": "and of these, several are highly endangered", "role": "coordinated_clause", "level": 1},
+        {"text": "of these", "role": "prepositional_phrase", "level": 2},
+        {"text": "several", "role": "subject", "level": 2},
+        {"text": "are highly endangered", "role": "verb_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "of these 提前置于分句句首，指代前面的11个亚种，起承接说明的作用。",
+        "only 11 与第一段提到的 at least 14 different subspecies 形成对比，说明亚种数量已经减少。"
+      ],
+      "expressions": [
+        {"text": "highly endangered", "meaning_zh": "极度濒危的"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "In 1989, work began on a tortoise-breeding centre just outside the town of Puerto Villamil on Isabela, dedicated to protecting the island's tortoise populations.",
+      "translation": "1989年，人们在伊莎贝拉岛上普埃尔托维拉米尔镇外开始建设一座旨在保护该岛陆龟种群的繁育中心。",
+      "structure": [
+        {"text": "In 1989", "role": "prepositional_phrase", "level": 1},
+        {"text": "work", "role": "subject", "level": 1},
+        {"text": "began on a tortoise-breeding centre just outside the town of Puerto Villamil on Isabela", "role": "verb_phrase", "level": 1},
+        {"text": "dedicated to protecting the island's tortoise populations", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "dedicated to 是过去分词短语，修饰前面的 breeding centre，说明其建立的宗旨。",
+        "begin on 表示“在……上开始动工/开展”。"
+      ],
+      "expressions": [
+        {"text": "be dedicated to doing", "meaning_zh": "致力于做……"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "The centre's captive-breeding programme proved to be extremely successful, and it eventually had to deal with an overpopulation problem.",
+      "translation": "该中心的圈养繁殖项目取得了极大成功，以至于最终不得不面对种群数量过剩的问题。",
+      "structure": [
+        {"text": "The centre's captive-breeding programme", "role": "subject", "level": 1},
+        {"text": "proved to be extremely successful", "role": "verb_phrase", "level": 1},
+        {"text": "and it eventually had to deal with an overpopulation problem", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "prove to be 表示“结果证明是……”，说明繁殖项目最终呈现出的效果。",
+        "deal with 在这里指“处理、应对”过剩问题。"
+      ],
+      "expressions": [
+        {"text": "prove to be", "meaning_zh": "被证明是"},
+        {"text": "deal with", "meaning_zh": "处理；应对"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "The problem was also a pressing one.",
+      "translation": "这个问题同样也十分紧迫。",
+      "structure": [
+        {"text": "The problem", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "also a pressing one", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "one 是代词，指代前面的 problem，避免重复。",
+        "also 呼应前一段提到的过度繁殖问题，说明这是继物种过剩之后的又一紧迫问题。"
+      ],
+      "expressions": [
+        {"text": "a pressing problem", "meaning_zh": "紧迫的问题"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "Captive-bred tortoises can't be reintroduced into the wild until they're at least five years old and weigh at least 4.5 kilograms, at which point their size and weight - and their hardened shells - are sufficient to protect them from predators.",
+      "translation": "圈养繁殖的陆龟要等到至少五岁、体重至少达到4.5公斤才能被放归野外，到那时，它们的体型体重——以及变硬的龟壳——才足以保护它们免受天敌侵害。",
+      "structure": [
+        {"text": "Captive-bred tortoises", "role": "subject", "level": 1},
+        {"text": "can't be reintroduced into the wild", "role": "verb_phrase", "level": 1},
+        {"text": "until they're at least five years old and weigh at least 4.5 kilograms", "role": "adverbial_clause", "level": 2},
+        {"text": "they", "role": "subject", "level": 3},
+        {"text": "'re at least five years old", "role": "verb_phrase", "level": 3},
+        {"text": "and weigh at least 4.5 kilograms", "role": "coordinated_clause", "level": 3},
+        {"text": "at which point their size and weight - and their hardened shells - are sufficient to protect them from predators", "role": "relative_clause", "level": 2},
+        {"text": "to protect them from predators", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "until 引导的从句说明放归野外的前提条件，'re...and weigh 两个并列谓语共用主语 they。",
+        "at which point 引导非限制性定语从句，指代前面达到年龄体重条件的那一时刻。",
+        "and their hardened shells 用破折号插入，补充说明另一项能够提供保护的因素。"
+      ],
+      "expressions": [
+        {"text": "be reintroduced into the wild", "meaning_zh": "被重新放归野外"},
+        {"text": "be sufficient to do", "meaning_zh": "足以做……"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "But if people wait too long after that point, the tortoises eventually become too large to transport.",
+      "translation": "但如果人们在那之后等待过久，陆龟最终会变得太大而无法运输。",
+      "structure": [
+        {"text": "But if people wait too long after that point", "role": "adverbial_clause", "level": 1},
+        {"text": "people", "role": "subject", "level": 2},
+        {"text": "wait too long after that point", "role": "verb_phrase", "level": 2},
+        {"text": "the tortoises eventually become too large to transport", "role": "main_clause", "level": 1},
+        {"text": "too large to transport", "role": "complement", "level": 2}
+      ],
+      "difficult_points": [
+        "too...to do 结构表示“太……以至于不能……”。",
+        "that point 指代前一句中陆龟达到可放归条件的年龄和体重时间点。"
+      ],
+      "expressions": [
+        {"text": "too...to do", "meaning_zh": "太……而不能……"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "For years, repatriation efforts were carried out in small numbers, with the tortoises carried on the backs of men over weeks of long, treacherous hikes along narrow trails.",
+      "translation": "多年来，遣返工作一直是小规模进行的，陆龟被人们背在背上，沿着狭窄小径走过数周艰险漫长的跋涉。",
+      "structure": [
+        {"text": "For years", "role": "prepositional_phrase", "level": 1},
+        {"text": "repatriation efforts", "role": "subject", "level": 1},
+        {"text": "were carried out in small numbers", "role": "verb_phrase", "level": 1},
+        {"text": "with the tortoises carried on the backs of men over weeks of long, treacherous hikes along narrow trails", "role": "prepositional_phrase", "level": 1},
+        {"text": "carried on the backs of men over weeks of long, treacherous hikes along narrow trails", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "with the tortoises carried... 是 with 复合结构，carried 为过去分词，表示陆龟“被背负”的状态。",
+        "over weeks of long, treacherous hikes 表示“历经数周艰险的跋涉”，说明遣返耗时之久。"
+      ],
+      "expressions": [
+        {"text": "carry out", "meaning_zh": "进行；实施"},
+        {"text": "in small numbers", "meaning_zh": "小规模地；数量不多地"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "But in November 2010, the environmentalist and Galápagos National Park liaison officer Godfrey Merlin, a visiting private motor yacht captain and a helicopter pilot gathered around a table in a small cafe in Puerto Ayora on the island of Santa Cruz to work out more ambitious reintroduction.",
+      "translation": "但在2010年11月，环保人士兼加拉帕戈斯国家公园联络官戈弗雷·梅林、一位来访的私人机动游艇船长和一位直升机飞行员，聚集在圣克鲁斯岛普埃尔托阿约拉一家小咖啡馆的桌旁，共同商讨更具雄心的重新引入计划。",
+      "structure": [
+        {"text": "But in November 2010", "role": "prepositional_phrase", "level": 1},
+        {"text": "the environmentalist and Galápagos National Park liaison officer Godfrey Merlin, a visiting private motor yacht captain and a helicopter pilot", "role": "subject", "level": 1},
+        {"text": "gathered around a table in a small cafe in Puerto Ayora on the island of Santa Cruz", "role": "verb_phrase", "level": 1},
+        {"text": "to work out more ambitious reintroduction", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "主语由三个并列成分组成：Godfrey Merlin（前面的职衔是同位语说明其身份）、船长和飞行员。",
+        "to work out 是不定式作目的状语，说明这次聚会的目的。"
+      ],
+      "expressions": [
+        {"text": "work out", "meaning_zh": "制定；想出（计划、办法）"},
+        {"text": "gather around", "meaning_zh": "围坐；聚集在……周围"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "The aim was to use a helicopter to move 300 of the breeding centre's tortoises to various locations close to Sierra Negra.",
+      "translation": "他们的目标是利用直升机，将繁育中心的300只陆龟运送到谢拉内格拉附近的多个地点。",
+      "structure": [
+        {"text": "The aim", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "to use a helicopter to move 300 of the breeding centre's tortoises to various locations close to Sierra Negra", "role": "complement", "level": 1},
+        {"text": "to move 300 of the breeding centre's tortoises to various locations close to Sierra Negra", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "两个不定式 to use...to move 嵌套，前者作表语，后者说明使用直升机的目的。",
+        "The aim 指代前一句提到的会面所要商定的更具雄心的重新引入计划。"
+      ],
+      "expressions": [
+        {"text": "close to", "meaning_zh": "靠近……"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "This unprecedented effort was made possible by the owners of the 67-metre yacht White Cloud, who provided the Galápagos National Park with free use of their helicopter and its experienced pilot, as well as the logistical support of the yacht, its captain and crew.",
+      "translation": "这项前所未有的行动之所以能够实现，得益于67米长的“白云号”游艇的船主——他们免费提供了直升机及其经验丰富的飞行员，以及游艇本身及其船长和船员的后勤支持。",
+      "structure": [
+        {"text": "This unprecedented effort", "role": "subject", "level": 1},
+        {"text": "was made possible", "role": "verb_phrase", "level": 1},
+        {"text": "by the owners of the 67-metre yacht White Cloud", "role": "prepositional_phrase", "level": 1},
+        {"text": "who provided the Galápagos National Park with free use of their helicopter and its experienced pilot, as well as the logistical support of the yacht, its captain and crew", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "was made possible by 表示“得以实现，归功于……”，被动语态引出行动背后的支持者。",
+        "who 引导的定语从句修饰 the owners，说明船主具体提供了哪些支持。",
+        "provide sb with sth 中宾语并列：free use of...以及 as well as 引出的 the logistical support of..."
+      ],
+      "expressions": [
+        {"text": "make sth possible", "meaning_zh": "使某事成为可能"},
+        {"text": "provide sb with sth", "meaning_zh": "为某人提供某物"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "Originally an air ambulance, the yacht's helicopter has a rear double door and a large internal space that's well suited for cargo, so a custom crate was designed to hold up to 33 tortoises with a total weight of about 150 kilograms.",
+      "translation": "这架直升机最初是一架救护直升机，配有后部双开门和宽敞的内部空间，非常适合装载货物，因此专门设计了一个定制箱笼，可容纳多达33只、总重约150公斤的陆龟。",
+      "structure": [
+        {"text": "Originally an air ambulance", "role": "apposition", "level": 1},
+        {"text": "the yacht's helicopter", "role": "subject", "level": 1},
+        {"text": "has a rear double door and a large internal space", "role": "verb_phrase", "level": 1},
+        {"text": "that's well suited for cargo", "role": "relative_clause", "level": 2},
+        {"text": "so a custom crate was designed", "role": "coordinated_clause", "level": 1},
+        {"text": "to hold up to 33 tortoises with a total weight of about 150 kilograms", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Originally an air ambulance 是省略了 being 的状语成分，说明直升机原本的用途。",
+        "that's well suited for cargo 修饰 a large internal space，说明其适合装货的特点。",
+        "so 引导结果状语从句，说明正因空间适合装货才设计了定制箱笼。"
+      ],
+      "expressions": [
+        {"text": "be well suited for", "meaning_zh": "非常适合于……"},
+        {"text": "up to", "meaning_zh": "多达；至多"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "This weight, together with that of the fuel, pilot and four crew, approached the helicopter's maximum payload, and there were times when it was clearly right on the edge of the helicopter's capabilities.",
+      "translation": "这一重量，加上燃油、飞行员和四名机组人员的重量，已接近直升机的最大载荷，有时甚至明显逼近其性能极限。",
+      "structure": [
+        {"text": "This weight", "role": "subject", "level": 1},
+        {"text": "together with that of the fuel, pilot and four crew", "role": "apposition", "level": 2},
+        {"text": "approached the helicopter's maximum payload", "role": "verb_phrase", "level": 1},
+        {"text": "and there were times", "role": "coordinated_clause", "level": 1},
+        {"text": "when it was clearly right on the edge of the helicopter's capabilities", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "together with that of...crew 是插入语，that 指代前面的 weight，补充说明还应算入的其他重量。",
+        "when 引导定语从句修饰 times，说明直升机接近极限的具体情形。"
+      ],
+      "expressions": [
+        {"text": "together with", "meaning_zh": "连同；加上"},
+        {"text": "right on the edge of", "meaning_zh": "正处于……的边缘"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "During a period of three days, a group of volunteers from the breeding centre worked around the clock to prepare the young tortoises for transport.",
+      "translation": "在为期三天的时间里，一支来自繁育中心的志愿者团队夜以继日地工作，为幼龟的运输做准备。",
+      "structure": [
+        {"text": "During a period of three days", "role": "prepositional_phrase", "level": 1},
+        {"text": "a group of volunteers from the breeding centre", "role": "subject", "level": 1},
+        {"text": "worked around the clock", "role": "verb_phrase", "level": 1},
+        {"text": "to prepare the young tortoises for transport", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "around the clock 表示“夜以继日、不间断地”。",
+        "to prepare...for transport 是不定式作目的状语，说明志愿者工作的目的。"
+      ],
+      "expressions": [
+        {"text": "around the clock", "meaning_zh": "夜以继日；不间断地"},
+        {"text": "prepare sth for", "meaning_zh": "为……做准备"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "Meanwhile, park wardens, dropped off ahead of time in remote locations, cleared landing sites within the thick brush, cacti and lava rocks.",
+      "translation": "与此同时，提前被空投到偏远地点的公园管理员，正在茂密的灌木丛、仙人掌和熔岩石之间清理出降落场地。",
+      "structure": [
+        {"text": "Meanwhile", "role": "adverbial", "level": 1},
+        {"text": "park wardens", "role": "subject", "level": 1},
+        {"text": "dropped off ahead of time in remote locations", "role": "participial_phrase", "level": 2},
+        {"text": "cleared landing sites within the thick brush, cacti and lava rocks", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "dropped off ahead of time in remote locations 是过去分词短语，插入主谓之间修饰 park wardens，说明他们是如何提前被送到当地的。",
+        "Meanwhile 表示这项准备工作与前一句志愿者为幼龟做准备是同时进行的。"
+      ],
+      "expressions": [
+        {"text": "drop off", "meaning_zh": "放下；投放（人或物）"},
+        {"text": "ahead of time", "meaning_zh": "提前"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 31,
+      "sentence": "Upon their release, the juvenile tortoises quickly spread out over their ancestral territory, investigating their new surroundings and feeding on the vegetation.",
+      "translation": "获释之后，幼龟们迅速在祖先的领地上四散开来，探索着新的环境，取食周围的植被。",
+      "structure": [
+        {"text": "Upon their release", "role": "prepositional_phrase", "level": 1},
+        {"text": "the juvenile tortoises", "role": "subject", "level": 1},
+        {"text": "quickly spread out over their ancestral territory", "role": "verb_phrase", "level": 1},
+        {"text": "investigating their new surroundings", "role": "participial_phrase", "level": 2},
+        {"text": "and feeding on the vegetation", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Upon 表示“一……就”，此处指“一获释便……”。",
+        "investigating...and feeding... 是伴随状语的现在分词短语，说明幼龟散开时同时进行的动作。"
+      ],
+      "expressions": [
+        {"text": "upon doing", "meaning_zh": "一……就……"},
+        {"text": "spread out", "meaning_zh": "散开；分散"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 32,
+      "sentence": "Eventually, one tiny tortoise came across a fully grown giant who had been lumbering around the island for around a hundred years.",
+      "translation": "最终，一只幼小的陆龟遇到了一只已经在岛上蹒跚生活了近百年的成年巨龟。",
+      "structure": [
+        {"text": "Eventually", "role": "adverbial", "level": 1},
+        {"text": "one tiny tortoise", "role": "subject", "level": 1},
+        {"text": "came across", "role": "verb_phrase", "level": 1},
+        {"text": "a fully grown giant", "role": "object", "level": 1},
+        {"text": "who had been lumbering around the island for around a hundred years", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "come across 表示“偶然遇到”。",
+        "had been lumbering 是过去完成进行时，强调这只巨龟在遇见之前已持续生活了很长时间。"
+      ],
+      "expressions": [
+        {"text": "come across", "meaning_zh": "偶然遇到"},
+        {"text": "lumber around", "meaning_zh": "笨重缓慢地行走"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "The two stood side by side, a powerful symbol of the regeneration of an ancient species.",
+      "translation": "这一大一小的两只陆龟并肩而立，成为古老物种得以重生的有力象征。",
+      "structure": [
+        {"text": "The two", "role": "subject", "level": 1},
+        {"text": "stood side by side", "role": "verb_phrase", "level": 1},
+        {"text": "a powerful symbol of the regeneration of an ancient species", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "a powerful symbol... 是同位语，补充说明这一场景所代表的意义。",
+        "The two 指代前一句中的 one tiny tortoise 和 a fully grown giant，即一幼一老两只陆龟。"
+      ],
+      "expressions": [
+        {"text": "side by side", "meaning_zh": "并肩地；并排地"}
+      ]
+    }
+  ]
+}

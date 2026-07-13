@@ -1,0 +1,684 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts19_test4_reading",
+  "passage_id": "ielts19_test4_p2",
+  "passage_title": "Deep-sea mining",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "When Professor Mat Upton found that a microbe from a deep-sea sponge was killing pathogenic bugs in his laboratory, he realised it could be a breakthrough in the fight against antibiotic-resistant superbugs, which are responsible for thousands of deaths a year in the UK alone.",
+      "translation": "马特·厄普顿教授发现深海海绵中的一种微生物能杀死实验室里的致病菌时，意识到它可能会成为对抗耐抗生素超级细菌的一项突破；仅在英国，这些超级细菌每年就造成数千人死亡。",
+      "structure": [
+        {"text": "When Professor Mat Upton found that a microbe from a deep-sea sponge was killing pathogenic bugs in his laboratory", "role": "adverbial_clause", "level": 1},
+        {"text": "a microbe from a deep-sea sponge", "role": "subject", "level": 2},
+        {"text": "was killing pathogenic bugs", "role": "predicate", "level": 2},
+        {"text": "he", "role": "subject", "level": 1},
+        {"text": "realised", "role": "verb", "level": 1},
+        {"text": "it could be a breakthrough in the fight against antibiotic-resistant superbugs", "role": "object_clause", "level": 1},
+        {"text": "which are responsible for thousands of deaths a year in the UK alone", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "When 引导的时间状语从句说明厄普顿产生这一判断的时间背景。",
+        "which 指代前面的 antibiotic-resistant superbugs，而不是 breakthrough。",
+        "it 在宾语从句中指代这种来自海绵的微生物。"
+      ],
+      "expressions": [
+        {"text": "a breakthrough in the fight against", "meaning_zh": "在对抗……方面的突破"},
+        {"text": "be responsible for", "meaning_zh": "对……负责；导致"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Further tests confirmed that an antibiotic from the sponge bacteria, found living more than 700 metres under the sea at the Rockall Trough in the north-east Atlantic, was previously unknown to science, boosting its potential as a life-saving medicine.",
+      "translation": "进一步的测试证实，这种来自海绵细菌的抗生素此前尚未被科学界发现；这些细菌生活在东北大西洋罗科尔海槽海面下700多米处，而这一发现也提升了它作为救命药物的潜力。",
+      "structure": [
+        {"text": "Further tests", "role": "subject", "level": 1},
+        {"text": "confirmed", "role": "verb", "level": 1},
+        {"text": "that an antibiotic from the sponge bacteria, found living more than 700 metres under the sea at the Rockall Trough in the north-east Atlantic, was previously unknown to science", "role": "object_clause", "level": 1},
+        {"text": "found living more than 700 metres under the sea at the Rockall Trough in the north-east Atlantic", "role": "past_participial_modifier", "level": 2},
+        {"text": "boosting its potential as a life-saving medicine", "role": "present_participial_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "found living... 是过去分词短语，修饰 sponge bacteria，补充说明细菌的发现地点。",
+        "boosting... 是现在分词结果状语，表示这一发现提升了药物潜力。"
+      ],
+      "expressions": [
+        {"text": "previously unknown to science", "meaning_zh": "此前科学界未知的"},
+        {"text": "life-saving medicine", "meaning_zh": "救命药物"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "But Upton, and other scientists who view the deep ocean and its wealth of unique and undocumented species as a prospecting ground for new medicines, fear such potential will be lost in the rush to exploit the deep sea's equally rich metal and mineral resources.",
+      "translation": "但厄普顿以及其他把深海及其丰富的独特、未记录物种视为新药勘探地的科学家担心，在争相开发深海同样丰富的金属和矿产资源时，这种潜力会被葬送。",
+      "structure": [
+        {"text": "Upton, and other scientists", "role": "subject", "level": 1},
+        {"text": "who view the deep ocean and its wealth of unique and undocumented species as a prospecting ground for new medicines", "role": "relative_clause", "level": 2},
+        {"text": "fear", "role": "verb", "level": 1},
+        {"text": "such potential will be lost in the rush to exploit the deep sea's equally rich metal and mineral resources", "role": "object_clause", "level": 1},
+        {"text": "to exploit the deep sea's equally rich metal and mineral resources", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "who 引导的定语从句修饰 scientists，说明这些科学家的看法。",
+        "will be lost 是被动语态，such potential 指前文新药研发的潜力。",
+        "in the rush to exploit 表示在急于开发资源的过程中。"
+      ],
+      "expressions": [
+        {"text": "a prospecting ground for", "meaning_zh": "……的勘探地"},
+        {"text": "in the rush to", "meaning_zh": "在争相……的过程中"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "\"We're looking at the bioactive potential of marine resources, to see if there are any more medicines or drugs down there before we destroy it for ever,\" says Upton, a medical microbiologist at the University of Plymouth.",
+      "translation": "“我们正在研究海洋资源的生物活性潜力，想在永远毁掉它之前看看那里是否还有更多药物，”普利茅斯大学医学微生物学家厄普顿说。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "'re looking at", "role": "verb", "level": 1},
+        {"text": "the bioactive potential of marine resources", "role": "object", "level": 1},
+        {"text": "to see if there are any more medicines or drugs down there", "role": "purpose_clause", "level": 1},
+        {"text": "before we destroy it for ever", "role": "adverbial_clause", "level": 2},
+        {"text": "says Upton", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "to see... 表示研究海洋资源的目的，if 引导其中的宾语从句。",
+        "it 指代前面作为整体被开发的海洋资源或深海环境。"
+      ],
+      "expressions": [
+        {"text": "look at the potential of", "meaning_zh": "研究……的潜力"},
+        {"text": "for ever", "meaning_zh": "永远地"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "He is among many scientists urging a halt to deep-sea mining, asking for time to weigh up the pros and cons.",
+      "translation": "他和许多科学家一起呼吁暂停深海采矿，要求留出时间权衡利弊。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "is among many scientists", "role": "verb_complement", "level": 1},
+        {"text": "urging a halt to deep-sea mining", "role": "present_participial_modifier", "level": 2},
+        {"text": "asking for time to weigh up the pros and cons", "role": "present_participial_clause", "level": 1},
+        {"text": "to weigh up the pros and cons", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "urging 和 asking 是现在分词短语，分别补充说明科学家的行动。",
+        "to weigh up... 是 time 的目的性后置修饰，意为用时间权衡利弊。"
+      ],
+      "expressions": [
+        {"text": "urge a halt to", "meaning_zh": "呼吁暂停"},
+        {"text": "weigh up the pros and cons", "meaning_zh": "权衡利弊"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "\"In sustainability terms, this could be a better way of exploiting the economic potential of the deep sea,\" he argues.",
+      "translation": "他认为：“从可持续性的角度看，这可能是开发深海经济潜力的更好方式。”",
+      "structure": [
+        {"text": "In sustainability terms", "role": "sentence_adverbial", "level": 1},
+        {"text": "this", "role": "subject", "level": 1},
+        {"text": "could be", "role": "verb", "level": 1},
+        {"text": "a better way of exploiting the economic potential of the deep sea", "role": "subject_complement", "level": 1},
+        {"text": "of exploiting the economic potential of the deep sea", "role": "prepositional_complement", "level": 2}
+      ],
+      "difficult_points": [
+        "this 指代暂停采矿、先研究海洋资源潜力的做法。",
+        "of exploiting... 修饰 way，说明这种方式具体用于开发什么。"
+      ],
+      "expressions": [
+        {"text": "in sustainability terms", "meaning_zh": "从可持续性的角度看"},
+        {"text": "economic potential", "meaning_zh": "经济潜力"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "Oceanographers using remotely operated vehicles have spotted many new species.",
+      "translation": "使用遥控潜水器的海洋学家已经发现了许多新物种。",
+      "structure": [
+        {"text": "Oceanographers using remotely operated vehicles", "role": "subject", "level": 1},
+        {"text": "using remotely operated vehicles", "role": "present_participial_modifier", "level": 2},
+        {"text": "have spotted", "role": "verb", "level": 1},
+        {"text": "many new species", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "using remotely operated vehicles 是现在分词短语，修饰 Oceanographers。",
+        "现在完成时 have spotted 强调发现已经发生且对当前讨论仍有意义。"
+      ],
+      "expressions": [
+        {"text": "remotely operated vehicle", "meaning_zh": "遥控潜水器"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Among them have been sea cucumbers with tails allowing them to sail along the ocean floor, and a rare \"Dumbo\" octopus, found 3,000 metres under the Pacific Ocean, off the coast of California.",
+      "translation": "其中包括尾巴能帮助自己沿海底移动的海参，以及一种稀有的“Dumbo”章鱼；后者是在加利福尼亚海岸外、太平洋海面下3000米处发现的。",
+      "structure": [
+        {"text": "Among them", "role": "fronted_complement", "level": 1},
+        {"text": "have been", "role": "verb", "level": 1},
+        {"text": "sea cucumbers with tails allowing them to sail along the ocean floor, and a rare \"Dumbo\" octopus", "role": "subject", "level": 1},
+        {"text": "allowing them to sail along the ocean floor", "role": "present_participial_modifier", "level": 2},
+        {"text": "found 3,000 metres under the Pacific Ocean, off the coast of California", "role": "past_participial_modifier", "level": 2}
+      ],
+      "difficult_points": [
+        "Among them 位于句首引起倒装，真正主语在 have been 后面。",
+        "allowing them 中的 them 指 sea cucumbers，说明尾巴的功能。",
+        "found... 修饰 Dumbo octopus，交代章鱼的发现地点。"
+      ],
+      "expressions": [
+        {"text": "sail along the ocean floor", "meaning_zh": "沿着海底移动"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Any one of these could offer lifesaving potential.",
+      "translation": "其中任何一种生物都可能具有挽救生命的潜力。",
+      "structure": [
+        {"text": "Any one of these", "role": "subject", "level": 1},
+        {"text": "could offer", "role": "verb", "level": 1},
+        {"text": "lifesaving potential", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "Any one of these 指前面提到的海参或 Dumbo 章鱼中的任意一种。",
+        "could 表示可能性，而不是过去时。"
+      ],
+      "expressions": [
+        {"text": "offer lifesaving potential", "meaning_zh": "具有挽救生命的潜力"}
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "Upton estimates it could take up to a decade for a newly discovered antibiotic to become a medicine—but the race towards commercial mining in the ocean abyss has already begun.",
+      "translation": "厄普顿估计，一种新发现的抗生素可能需要长达十年才能成为药物——但在深海进行商业采矿的竞赛已经开始。",
+      "structure": [
+        {"text": "Upton", "role": "subject", "level": 1},
+        {"text": "estimates", "role": "verb", "level": 1},
+        {"text": "it could take up to a decade for a newly discovered antibiotic to become a medicine", "role": "object_clause", "level": 1},
+        {"text": "for a newly discovered antibiotic to become a medicine", "role": "extraposed_subject", "level": 2},
+        {"text": "the race towards commercial mining in the ocean abyss", "role": "subject", "level": 1},
+        {"text": "has already begun", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "it 是形式主语，真正的逻辑主语是 for...to become a medicine。",
+        "up to a decade 表示最长可能需要十年，不是恰好十年。",
+        "破折号后转折指出药物研发很慢，而商业采矿竞赛已经启动。"
+      ],
+      "expressions": [
+        {"text": "up to a decade", "meaning_zh": "长达十年"},
+        {"text": "the race towards", "meaning_zh": "争相迈向……的竞赛"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "The deep sea contains more nickel, cobalt and rare earth metals than all land reserves combined, according to the US Geological Survey.",
+      "translation": "据美国地质调查局称，深海所含的镍、钴和稀土金属超过陆地全部储量的总和。",
+      "structure": [
+        {"text": "The deep sea", "role": "subject", "level": 1},
+        {"text": "contains", "role": "verb", "level": 1},
+        {"text": "more nickel, cobalt and rare earth metals than all land reserves combined", "role": "object", "level": 1},
+        {"text": "according to the US Geological Survey", "role": "sentence_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "than all land reserves combined 中 combined 表示陆地各项储量合计。",
+        "according to... 是来源状语，说明信息来自美国地质调查局。"
+      ],
+      "expressions": [
+        {"text": "rare earth metals", "meaning_zh": "稀土金属"},
+        {"text": "combined", "meaning_zh": "合计的；总和的"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "Mining corporations argue that deep-sea exploration could help diversify the supply of metals and point to the fact that demand for resources such as copper, aluminium, cobalt for electric car batteries and other metals to power technology and smartphones is soaring.",
+      "translation": "采矿企业认为，深海勘探有助于使金属供应来源多样化，并指出，对铜、铝、用于电动汽车电池的钴以及驱动科技产品和智能手机的其他金属等资源的需求正在飙升。",
+      "structure": [
+        {"text": "Mining corporations", "role": "subject", "level": 1},
+        {"text": "argue", "role": "verb", "level": 1},
+        {"text": "that deep-sea exploration could help diversify the supply of metals", "role": "object_clause", "level": 1},
+        {"text": "and point to the fact", "role": "coordinated_predicate", "level": 1},
+        {"text": "that demand for resources such as copper, aluminium, cobalt for electric car batteries and other metals to power technology and smartphones is soaring", "role": "appositive_clause", "level": 2},
+        {"text": "to power technology and smartphones", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "argue 和 point to 并列作谓语，后面分别接两个观点。",
+        "the fact 后的 that 从句说明企业所指出的事实。",
+        "to power technology and smartphones 修饰 other metals，说明这些金属的用途。"
+      ],
+      "expressions": [
+        {"text": "diversify the supply of", "meaning_zh": "使……的供应来源多样化"},
+        {"text": "demand for", "meaning_zh": "对……的需求"},
+        {"text": "is soaring", "meaning_zh": "正在飙升"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "They say that deep-sea mining could yield far superior ore to land mining with little, if any, waste.",
+      "translation": "他们表示，深海采矿产出的矿石可能远优于陆地采矿，而且几乎不会产生废料。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "say", "role": "verb", "level": 1},
+        {"text": "that deep-sea mining could yield far superior ore to land mining with little, if any, waste", "role": "object_clause", "level": 1},
+        {"text": "far superior ore to land mining", "role": "object", "level": 2},
+        {"text": "with little, if any, waste", "role": "prepositional_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "little, if any, waste 是省略结构，意为即便有废料也很少。",
+        "superior to 是比较结构，不能把 to 理解为不定式标记。"
+      ],
+      "expressions": [
+        {"text": "yield superior ore", "meaning_zh": "产出更优质的矿石"},
+        {"text": "if any", "meaning_zh": "如果有的话（表示极少）"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "Different methods of extraction exist, but most involve employing some form of converted machinery previously used in terrestrial mining to excavate materials from the sea floor, at depths of up to 6,000 metres, then drawing a seawater slurry, containing rock and other solid particles, from the sea floor to ships on the surface.",
+      "translation": "采矿有不同的开采方法，但大多数方法都要使用某种由陆地采矿设备改造而来的机械，从最深6000米的海床挖掘材料，然后把含有岩石和其他固体颗粒的海水泥浆从海床抽到海面的船上。",
+      "structure": [
+        {"text": "Different methods of extraction", "role": "subject", "level": 1},
+        {"text": "exist", "role": "verb", "level": 1},
+        {"text": "most", "role": "subject", "level": 1},
+        {"text": "involve employing some form of converted machinery", "role": "verb_object", "level": 1},
+        {"text": "previously used in terrestrial mining", "role": "past_participial_modifier", "level": 2},
+        {"text": "to excavate materials from the sea floor", "role": "purpose_clause", "level": 2},
+        {"text": "then drawing a seawater slurry, containing rock and other solid particles, from the sea floor to ships on the surface", "role": "coordinated_non_finite_clause", "level": 2},
+        {"text": "containing rock and other solid particles", "role": "present_participial_modifier", "level": 3}
+      ],
+      "difficult_points": [
+        "but 连接两个分句，后半句省略了与前句相同的谓语存在结构。",
+        "previously used 修饰 machinery，表示机械原本用于陆地采矿。",
+        "to excavate 与 then drawing 依次表示开采设备的两个操作步骤。"
+      ],
+      "expressions": [
+        {"text": "methods of extraction", "meaning_zh": "开采方法"},
+        {"text": "terrestrial mining", "meaning_zh": "陆地采矿"},
+        {"text": "at depths of up to", "meaning_zh": "深达……"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "The slurry is then \"de-watered\" and transferred to another vessel for shipping.",
+      "translation": "随后，这些泥浆会被“脱水”，并转移到另一艘船上运输。",
+      "structure": [
+        {"text": "The slurry", "role": "subject", "level": 1},
+        {"text": "is then \"de-watered\" and transferred", "role": "coordinated_passive_predicate", "level": 1},
+        {"text": "to another vessel", "role": "prepositional_complement", "level": 1},
+        {"text": "for shipping", "role": "purpose_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "is... de-watered and transferred 是两个并列的被动动作。",
+        "for shipping 表示转移到另一艘船上的目的。"
+      ],
+      "expressions": [
+        {"text": "be transferred to", "meaning_zh": "被转移到"}
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Extracted seawater is pumped back down and discharged close to the sea floor.",
+      "translation": "抽出的海水会被重新泵回深处，并在靠近海床的地方排放。",
+      "structure": [
+        {"text": "Extracted seawater", "role": "subject", "level": 1},
+        {"text": "is pumped back down and discharged", "role": "coordinated_passive_predicate", "level": 1},
+        {"text": "close to the sea floor", "role": "place_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "Extracted 是过去分词作前置定语，表示被抽出的海水。",
+        "pumped 和 discharged 是并列的被动动作。"
+      ],
+      "expressions": [
+        {"text": "pump back down", "meaning_zh": "重新泵回深处"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "But environmental and legal groups have urged caution, arguing there are potentially massive and unknown ramifications for the environment and for nearby communities, and that the global regulatory framework is not yet drafted.",
+      "translation": "但环保组织和法律团体呼吁保持谨慎，认为这可能给环境和附近社区带来巨大且未知的后果，而且全球监管框架尚未制定。",
+      "structure": [
+        {"text": "environmental and legal groups", "role": "subject", "level": 1},
+        {"text": "have urged caution", "role": "verb", "level": 1},
+        {"text": "arguing there are potentially massive and unknown ramifications for the environment and for nearby communities", "role": "present_participial_clause", "level": 1},
+        {"text": "and that the global regulatory framework is not yet drafted", "role": "coordinated_object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "arguing 后并列省略了 that，接两个他们提出的理由。",
+        "there are... 是存在句，ramifications 才是实际主语。",
+        "is not yet drafted 是被动语态，强调监管框架尚未被制定。"
+      ],
+      "expressions": [
+        {"text": "urge caution", "meaning_zh": "呼吁谨慎"},
+        {"text": "regulatory framework", "meaning_zh": "监管框架"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "\"Despite arising in the last half century, the ‘new global gold rush’ of deep-sea mining shares many features with past resource scrambles—including a general disregard for environmental and social impacts, and the marginalisation of indigenous peoples and their rights,\" a paper, written by Julie Hunter and Julian Aguon, from Blue Ocean Law, and Pradeep Singh, from the Center for Marine Environmental Sciences, Bremen, argues.",
+      "translation": "不来梅海洋环境科学中心的普里迪普·辛格，以及蓝色海洋法律机构的朱莉·亨特和朱利安·阿贡撰写的一篇论文指出：“尽管深海采矿这个‘新的全球淘金热’只在上世纪后半叶出现，它仍与过去的资源争夺有许多相似之处——包括普遍忽视环境和社会影响，以及边缘化原住民及其权利。”",
+      "structure": [
+        {"text": "Despite arising in the last half century", "role": "prepositional_participial_clause", "level": 1},
+        {"text": "the ‘new global gold rush’ of deep-sea mining", "role": "subject", "level": 1},
+        {"text": "shares many features with past resource scrambles", "role": "predicate", "level": 1},
+        {"text": "including a general disregard for environmental and social impacts, and the marginalisation of indigenous peoples and their rights", "role": "supplementary_modifier", "level": 2},
+        {"text": "a paper, written by Julie Hunter and Julian Aguon, from Blue Ocean Law, and Pradeep Singh, from the Center for Marine Environmental Sciences, Bremen, argues", "role": "reporting_clause", "level": 1},
+        {"text": "written by Julie Hunter and Julian Aguon, from Blue Ocean Law, and Pradeep Singh, from the Center for Marine Environmental Sciences, Bremen", "role": "past_participial_modifier", "level": 2}
+      ],
+      "difficult_points": [
+        "Despite arising... 是让步结构，arising 的逻辑主语是 the new global gold rush。",
+        "including 后列举过去资源争夺的具体特征，而不是新的谓语。",
+        "主句把 a paper 放在句首，真正的报告动词 argues 在句末。"
+      ],
+      "expressions": [
+        {"text": "the new global gold rush", "meaning_zh": "新的全球淘金热"},
+        {"text": "share features with", "meaning_zh": "与……有共同特征"},
+        {"text": "the marginalisation of", "meaning_zh": "对……的边缘化"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "The authors say that knowledge of the deep seabed remains extremely limited.",
+      "translation": "作者说，我们对深海海床的了解仍然极其有限。",
+      "structure": [
+        {"text": "The authors", "role": "subject", "level": 1},
+        {"text": "say", "role": "verb", "level": 1},
+        {"text": "that knowledge of the deep seabed remains extremely limited", "role": "object_clause", "level": 1},
+        {"text": "knowledge of the deep seabed", "role": "subject", "level": 2},
+        {"text": "remains extremely limited", "role": "predicate", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导 say 的宾语从句，说明作者的具体观点。",
+        "of the deep seabed 修饰 knowledge，表示了解的对象。"
+      ],
+      "expressions": [
+        {"text": "remain extremely limited", "meaning_zh": "仍然极其有限"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "\"The surface of the Moon, Mars and even Venus have all been mapped and studied in much greater detail, leading marine scientists to commonly remark that, with respect to the deep sea, ‘We don't yet know what we need to know.’",
+      "translation": "“月球、火星甚至金星的表面都已经被绘制地图并得到更详细的研究，这使海洋科学家常常感叹：就深海而言，‘我们还不知道自己需要知道什么。’”",
+      "structure": [
+        {"text": "The surface of the Moon, Mars and even Venus", "role": "subject", "level": 1},
+        {"text": "have all been mapped and studied in much greater detail", "role": "coordinated_passive_predicate", "level": 1},
+        {"text": "leading marine scientists to commonly remark", "role": "result_participial_clause", "level": 1},
+        {"text": "that, with respect to the deep sea, ‘We don't yet know what we need to know.’", "role": "object_clause", "level": 2},
+        {"text": "what we need to know", "role": "embedded_noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "leading... 是结果状语，表示前面的研究差距导致科学家发出感叹。",
+        "what we need to know 是 know 的宾语从句，意为‘我们需要知道的东西’。",
+        "with respect to the deep sea 表示‘就深海而言’。"
+      ],
+      "expressions": [
+        {"text": "in much greater detail", "meaning_zh": "以详尽得多的程度"},
+        {"text": "with respect to", "meaning_zh": "就……而言"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "Scientific research—including a recent paper in Marine Policy journal—has suggested the deep seabed, and hydrothermal vents, which are created when seawater meets volcanic magma, have crucial impacts upon biodiversity and the global climate.",
+      "translation": "科学研究——包括《海洋政策》期刊最近发表的一篇论文——表明，深海海床以及水热喷口对生物多样性和全球气候有着至关重要的影响；水热喷口是在海水与火山岩浆接触时形成的。",
+      "structure": [
+        {"text": "Scientific research—including a recent paper in Marine Policy journal—", "role": "subject", "level": 1},
+        {"text": "has suggested", "role": "verb", "level": 1},
+        {"text": "the deep seabed, and hydrothermal vents, which are created when seawater meets volcanic magma, have crucial impacts upon biodiversity and the global climate", "role": "object_clause", "level": 1},
+        {"text": "which are created when seawater meets volcanic magma", "role": "relative_clause", "level": 2},
+        {"text": "when seawater meets volcanic magma", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "破折号中的内容是对 Scientific research 的补充说明。",
+        "which 修饰 hydrothermal vents，说明水热喷口的形成方式。",
+        "has suggested 后接省略 that 的宾语从句。"
+      ],
+      "expressions": [
+        {"text": "crucial impacts upon", "meaning_zh": "对……的关键影响"},
+        {"text": "biodiversity", "meaning_zh": "生物多样性"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "The mineral-rich vents and their surrounds are also home to many well-known animals including crustaceans, tubeworms, clams, slugs, anemones and fish.",
+      "translation": "这些富含矿物质的喷口及其周边也是许多知名动物的栖息地，包括甲壳类动物、管虫、蛤蜊、蛞蝓、海葵和鱼类。",
+      "structure": [
+        {"text": "The mineral-rich vents and their surrounds", "role": "subject", "level": 1},
+        {"text": "are also home to", "role": "verb_complement", "level": 1},
+        {"text": "many well-known animals", "role": "complement", "level": 1},
+        {"text": "including crustaceans, tubeworms, clams, slugs, anemones and fish", "role": "supplementary_modifier", "level": 2}
+      ],
+      "difficult_points": [
+        "home to 是表语结构，表示‘是……的栖息地’，不是动作动词。",
+        "including 后面的名词列举 home to 的动物种类。"
+      ],
+      "expressions": [
+        {"text": "be home to", "meaning_zh": "是……的栖息地"},
+        {"text": "mineral-rich", "meaning_zh": "富含矿物质的"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "\"It is becoming increasingly clear that deep-sea mining poses a grave threat to these vital seabed functions,\" the paper says.",
+      "translation": "论文指出：“越来越明显的是，深海采矿会对这些重要的海床功能构成严重威胁。”",
+      "structure": [
+        {"text": "It", "role": "formal_subject", "level": 1},
+        {"text": "is becoming increasingly clear", "role": "predicate", "level": 1},
+        {"text": "that deep-sea mining poses a grave threat to these vital seabed functions", "role": "extraposed_subject_clause", "level": 1},
+        {"text": "the paper says", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的主语是 that 引导的从句。",
+        "increasingly clear 表示这一判断正变得越来越明确。"
+      ],
+      "expressions": [
+        {"text": "pose a grave threat to", "meaning_zh": "对……构成严重威胁"},
+        {"text": "become increasingly clear", "meaning_zh": "变得越来越明显"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "\"Extraction methods would produce large sediment plumes and involve the discharge of waste back into the ocean, significantly disturbing seafloor environments,\" the paper continues.",
+      "translation": "论文继续写道：“开采方法会产生巨大的沉积物羽流，并将废物排回海洋，从而严重扰乱海床环境。”",
+      "structure": [
+        {"text": "Extraction methods", "role": "subject", "level": 1},
+        {"text": "would produce large sediment plumes and involve the discharge of waste back into the ocean", "role": "coordinated_predicate", "level": 1},
+        {"text": "significantly disturbing seafloor environments", "role": "result_participial_clause", "level": 1},
+        {"text": "the paper continues", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "would 表示对开采后果的推测或条件性预测。",
+        "produce 和 involve 是并列谓语，共同说明开采方法的影响。",
+        "disturbing... 是现在分词结果状语，逻辑主语是前面的 extraction methods。"
+      ],
+      "expressions": [
+        {"text": "sediment plumes", "meaning_zh": "沉积物羽流"},
+        {"text": "the discharge of waste", "meaning_zh": "废物排放"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "\"On deep-sea vents, scientists are clear,\" says Dr Jon Copley of the National Oceanography Centre, Southampton: \"we don't want mining on them.\"",
+      "translation": "南安普敦国家海洋学中心的乔恩·科普利博士说：“对于深海喷口，科学家的立场很明确：我们不希望在那里采矿。”",
+      "structure": [
+        {"text": "On deep-sea vents", "role": "topic_adverbial", "level": 1},
+        {"text": "scientists", "role": "subject", "level": 1},
+        {"text": "are clear", "role": "predicate", "level": 1},
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "don't want", "role": "verb", "level": 1},
+        {"text": "mining on them", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "On deep-sea vents 是话题状语，说明 clear 这一判断针对的对象。",
+        "want 后接动名词 mining，表示不希望进行采矿活动；them 指 vents。"
+      ],
+      "expressions": [
+        {"text": "be clear on", "meaning_zh": "对……立场明确"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "The oceans occupy around 70% of the planet and are relatively unexplored, says Mike Johnston, chief executive of Nautilus, a Canadian underwater exploration company: \"It makes sense to explore this untapped potential in an environmentally sustainable way, instead of continually looking at the fast-depleting land resources of the planet to meet society's rising needs.\"",
+      "translation": "加拿大水下勘探公司Nautilus的首席执行官迈克·约翰斯顿说，海洋约占地球面积的70%，而且相对尚未被探索：“以环境可持续的方式探索这一未开发的潜力是合理的，而不是不断依赖正在迅速耗竭的陆地资源来满足社会日益增长的需求。”",
+      "structure": [
+        {"text": "The oceans", "role": "subject", "level": 1},
+        {"text": "occupy around 70% of the planet and are relatively unexplored", "role": "coordinated_predicate", "level": 1},
+        {"text": "It", "role": "formal_subject", "level": 1},
+        {"text": "makes sense", "role": "predicate", "level": 1},
+        {"text": "to explore this untapped potential in an environmentally sustainable way", "role": "extraposed_subject", "level": 1},
+        {"text": "instead of continually looking at the fast-depleting land resources of the planet", "role": "contrastive_adverbial", "level": 1},
+        {"text": "to meet society's rising needs", "role": "purpose_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It makes sense 是形式主语结构，真正主语是 to explore...。",
+        "instead of 后接动名词，表示与不断依赖陆地资源相对的选择。",
+        "to meet... 表示使用陆地资源的目的。"
+      ],
+      "expressions": [
+        {"text": "make sense to", "meaning_zh": "做……是合理的"},
+        {"text": "untapped potential", "meaning_zh": "尚未开发的潜力"},
+        {"text": "meet rising needs", "meaning_zh": "满足日益增长的需求"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "Those leading the global rush to place giant mining machines thousands of metres below the sea surface say the environmental impacts will be far lower than on land.",
+      "translation": "那些带头推动把巨型采矿机器放到海面下数千米处的人说，深海采矿对环境的影响会远低于陆地采矿。",
+      "structure": [
+        {"text": "Those leading the global rush to place giant mining machines thousands of metres below the sea surface", "role": "subject", "level": 1},
+        {"text": "leading the global rush to place giant mining machines thousands of metres below the sea surface", "role": "present_participial_modifier", "level": 2},
+        {"text": "say", "role": "verb", "level": 1},
+        {"text": "the environmental impacts will be far lower than on land", "role": "object_clause", "level": 1},
+        {"text": "to place giant mining machines thousands of metres below the sea surface", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "Those leading... 中 leading 短语修饰 Those，指带头推进项目的人。",
+        "to place... 修饰 rush，说明这场竞赛的具体目标。",
+        "than on land 省略了 than the environmental impacts are on land。"
+      ],
+      "expressions": [
+        {"text": "lead the global rush to", "meaning_zh": "带头推动……竞赛"},
+        {"text": "environmental impacts", "meaning_zh": "环境影响"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "But critics say exotic and little-known ecosystems in the deep oceans could be destroyed and must be protected.",
+      "translation": "但批评者说，深海中奇异而鲜为人知的生态系统可能会被摧毁，必须得到保护。",
+      "structure": [
+        {"text": "critics", "role": "subject", "level": 1},
+        {"text": "say", "role": "verb", "level": 1},
+        {"text": "exotic and little-known ecosystems in the deep oceans could be destroyed and must be protected", "role": "object_clause", "level": 1},
+        {"text": "could be destroyed and must be protected", "role": "coordinated_passive_predicate", "level": 2}
+      ],
+      "difficult_points": [
+        "say 后的宾语从句省略了 that。",
+        "could be destroyed 与 must be protected 是同一生态系统的两个并列被动谓语。"
+      ],
+      "expressions": [
+        {"text": "little-known ecosystems", "meaning_zh": "鲜为人知的生态系统"},
+        {"text": "must be protected", "meaning_zh": "必须受到保护"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "\"Mining will be the greatest assault on deep-sea ecosystems ever inflicted by humans,\" according to hydrothermal vent expert Verena Tunnicliffe, at the University of Victoria in Canada.",
+      "translation": "加拿大维多利亚大学的水热喷口专家维罗妮卡·通尼克利夫说：“采矿将是人类迄今对深海生态系统施加的最大打击。”",
+      "structure": [
+        {"text": "Mining", "role": "subject", "level": 1},
+        {"text": "will be", "role": "verb", "level": 1},
+        {"text": "the greatest assault on deep-sea ecosystems ever inflicted by humans", "role": "subject_complement", "level": 1},
+        {"text": "ever inflicted by humans", "role": "past_participial_modifier", "level": 2},
+        {"text": "according to hydrothermal vent expert Verena Tunnicliffe", "role": "attribution_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "ever inflicted by humans 修饰 assault，表示人类迄今造成的打击。",
+        "according to... 是消息来源，不是 mining 的方式状语。"
+      ],
+      "expressions": [
+        {"text": "the greatest assault on", "meaning_zh": "对……的最大打击"},
+        {"text": "ever inflicted by", "meaning_zh": "迄今由……施加的"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "She argues that active vents must be off-limits for mining to protect the new knowledge and biotechnology spin-offs they can deliver, and that strict controls must be in place elsewhere.",
+      "translation": "她认为，为了保护这些活跃喷口能够带来的新知识和生物技术衍生成果，采矿必须禁止进入这些区域；在其他地方也必须实施严格管控。",
+      "structure": [
+        {"text": "She", "role": "subject", "level": 1},
+        {"text": "argues", "role": "verb", "level": 1},
+        {"text": "that active vents must be off-limits for mining to protect the new knowledge and biotechnology spin-offs they can deliver", "role": "object_clause", "level": 1},
+        {"text": "to protect the new knowledge and biotechnology spin-offs they can deliver", "role": "purpose_clause", "level": 2},
+        {"text": "they can deliver", "role": "relative_clause", "level": 3},
+        {"text": "and that strict controls must be in place elsewhere", "role": "coordinated_object_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "argues 后有两个由 that 引导的并列宾语从句。",
+        "to protect... 表示禁止采矿的目的；they 指 active vents。",
+        "they can deliver 中 deliver 的宾语是前面的 knowledge 和 spin-offs。"
+      ],
+      "expressions": [
+        {"text": "be off-limits for", "meaning_zh": "禁止……进入或使用"},
+        {"text": "be in place", "meaning_zh": "到位；得到实施"},
+        {"text": "biotechnology spin-offs", "meaning_zh": "生物技术衍生成果"}
+      ]
+    }
+  ]
+}

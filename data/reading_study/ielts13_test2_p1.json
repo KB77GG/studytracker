@@ -1,0 +1,1829 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts13_test2_reading",
+  "passage_id": "ielts13_test2_p1",
+  "passage_title": "Bringing cinnamon to Europe",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Cinnamon is a sweet, fragrant spice produced from the inner bark of trees of the genus Cinnamomum, which is native to the Indian subcontinent.",
+      "translation": "肉桂是一种香甜芬芳的香料，由樟属树木的内层树皮制成，而这种树原产于印度次大陆。",
+      "structure": [
+        {
+          "text": "Cinnamon",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a sweet, fragrant spice produced from the inner bark of trees of the genus Cinnamomum",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "produced from the inner bark of trees of the genus Cinnamomum",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "which is native to the Indian subcontinent",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "produced from... 是过去分词短语，说明肉桂这种香料的来源。",
+        "which 引导非限制性定语从句，补充说明 Cinnamomum 这一属的原产地。",
+        "native to 表示“原产于”，不是“本地人”的意思。"
+      ],
+      "expressions": [
+        {
+          "text": "be produced from",
+          "meaning_zh": "由……制成"
+        },
+        {
+          "text": "be native to",
+          "meaning_zh": "原产于"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "It was known in biblical times, and is mentioned in several books of the Bible, both as an ingredient that was mixed with oils for anointing people's bodies, and also as a token indicating friendship among lovers and friends.",
+      "translation": "它在《圣经》时代就已为人所知，并在《圣经》的几卷书中被提到，既作为一种与油混合、用于涂抹人体的成分，也作为表示恋人和朋友之间友谊的象征。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was known in biblical times",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and is mentioned in several books of the Bible",
+          "role": "coordinated_predicate",
+          "level": 1
+        },
+        {
+          "text": "both as an ingredient that was mixed with oils for anointing people's bodies, and also as a token indicating friendship among lovers and friends",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "that was mixed with oils for anointing people's bodies",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "indicating friendship among lovers and friends",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指上一句的 cinnamon，全句说明肉桂在宗教文本中的早期用途。",
+        "was known 和 is mentioned 是并列被动谓语，但时态不同，分别指过去已知和文本中被提及。",
+        "both...and also... 连接两种用途：身体涂油成分和友谊象征。",
+        "that was mixed... 修饰 ingredient，indicating... 修饰 token。"
+      ],
+      "expressions": [
+        {
+          "text": "be mentioned in",
+          "meaning_zh": "在……中被提到"
+        },
+        {
+          "text": "both ... and also ...",
+          "meaning_zh": "既……也……"
+        },
+        {
+          "text": "as a token indicating",
+          "meaning_zh": "作为表示……的象征"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "In ancient Rome, mourners attending funerals burnt cinnamon to create a pleasant scent.",
+      "translation": "在古罗马，参加葬礼的哀悼者会焚烧肉桂，以营造令人愉悦的香气。",
+      "structure": [
+        {
+          "text": "In ancient Rome",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "mourners attending funerals",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "attending funerals",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "burnt cinnamon",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to create a pleasant scent",
+          "role": "non_finite_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "attending funerals 是现在分词短语，后置修饰 mourners。",
+        "burnt cinnamon 是主干动作，说明葬礼场景中的肉桂用途。",
+        "to create... 是目的不定式，说明焚烧肉桂的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "create a pleasant scent",
+          "meaning_zh": "营造宜人的香气"
+        },
+        {
+          "text": "attend funerals",
+          "meaning_zh": "参加葬礼"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Most often, however, the spice found its primary use as an additive to food and drink.",
+      "translation": "不过，在大多数情况下，这种香料的主要用途是作为食品和饮料的添加物。",
+      "structure": [
+        {
+          "text": "Most often",
+          "role": "adverbial_phrase",
+          "level": 1
+        },
+        {
+          "text": "however",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "the spice",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "found its primary use",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "as an additive to food and drink",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "however 插入句中，表示与前面宗教或葬礼用途相比，最常见用途另有所指。",
+        "found its primary use 是拟人化表达，意思是“主要被用于”。",
+        "as an additive... 说明肉桂最主要的功能定位。"
+      ],
+      "expressions": [
+        {
+          "text": "find its primary use as",
+          "meaning_zh": "主要被用作"
+        },
+        {
+          "text": "an additive to",
+          "meaning_zh": "……的添加物"
+        }
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "In the Middle Ages, Europeans who could afford the spice used it to flavour food, particularly meat, and to impress those around them with their ability to purchase an expensive condiment from the 'exotic' East.",
+      "translation": "在中世纪，买得起这种香料的欧洲人用它给食物调味，尤其是肉类，并通过展示自己有能力购买来自“异域”东方的昂贵调味品来让周围的人印象深刻。",
+      "structure": [
+        {
+          "text": "In the Middle Ages",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "Europeans who could afford the spice",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who could afford the spice",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "used it to flavour food, particularly meat, and to impress those around them",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "with their ability to purchase an expensive condiment from the 'exotic' East",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "who could afford the spice 修饰 Europeans，限定为买得起肉桂的人。",
+        "to flavour... and to impress... 是并列目的，说明使用肉桂的两个动机。",
+        "with their ability... 表示他们用购买昂贵调味品的能力来给他人留下印象。",
+        "'exotic' East 中引号暗示这是欧洲人眼中的异域东方。"
+      ],
+      "expressions": [
+        {
+          "text": "could afford",
+          "meaning_zh": "买得起；负担得起"
+        },
+        {
+          "text": "impress those around them",
+          "meaning_zh": "给周围的人留下深刻印象"
+        },
+        {
+          "text": "an expensive condiment",
+          "meaning_zh": "昂贵的调味品"
+        }
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "At a banquet, a host would offer guests a plate with various spices piled upon it as a sign of the wealth at his or her disposal.",
+      "translation": "在宴会上，主人会给客人端上一只盘子，盘中堆放着各种香料，以此作为自己可支配财富的象征。",
+      "structure": [
+        {
+          "text": "At a banquet",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "a host",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "would offer guests a plate",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "with various spices piled upon it",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "piled upon it",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "as a sign of the wealth at his or her disposal",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "would 表示过去常见做法，而不是单纯的将来。",
+        "with various spices piled upon it 描述盘子的附带状态。",
+        "at his or her disposal 修饰 wealth，表示主人能够支配的财富。"
+      ],
+      "expressions": [
+        {
+          "text": "as a sign of",
+          "meaning_zh": "作为……的标志"
+        },
+        {
+          "text": "at one's disposal",
+          "meaning_zh": "由某人支配；可供某人使用"
+        }
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "Cinnamon was also reported to have health benefits, and was thought to cure various ailments, such as indigestion.",
+      "translation": "据说肉桂还有健康益处，并被认为能治疗各种疾病，例如消化不良。",
+      "structure": [
+        {
+          "text": "Cinnamon",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was also reported to have health benefits",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and was thought to cure various ailments",
+          "role": "coordinated_predicate",
+          "level": 1
+        },
+        {
+          "text": "such as indigestion",
+          "role": "apposition",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "was reported to have 和 was thought to cure 都是被动表达，说明当时人们的看法。",
+        "and 后省略了主语 Cinnamon，与前半句共用同一主语。",
+        "such as indigestion 举例说明 ailments 的范围。"
+      ],
+      "expressions": [
+        {
+          "text": "be reported to have",
+          "meaning_zh": "据说具有"
+        },
+        {
+          "text": "be thought to",
+          "meaning_zh": "被认为会"
+        },
+        {
+          "text": "health benefits",
+          "meaning_zh": "健康益处"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Toward the end of the Middle Ages, the European middle classes began to desire the lifestyle of the elite, including their consumption of spices.",
+      "translation": "中世纪末期，欧洲中产阶级开始向往精英阶层的生活方式，其中包括他们对香料的消费。",
+      "structure": [
+        {
+          "text": "Toward the end of the Middle Ages",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the European middle classes",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "began to desire",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the lifestyle of the elite",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "including their consumption of spices",
+          "role": "participial_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Toward the end of... 表示接近某一时期的末端。",
+        "began to desire 说明中产阶级开始追求精英生活方式。",
+        "including... 补充说明精英生活方式中包含香料消费。"
+      ],
+      "expressions": [
+        {
+          "text": "toward the end of",
+          "meaning_zh": "接近……末期"
+        },
+        {
+          "text": "the lifestyle of the elite",
+          "meaning_zh": "精英阶层的生活方式"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "This led to a growth in demand for cinnamon and other spices.",
+      "translation": "这导致人们对肉桂和其他香料的需求增长。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "led to",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a growth in demand for cinnamon and other spices",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "This 指上一句中产阶级追求精英生活方式这一变化。",
+        "lead to 表示造成某种结果。",
+        "a growth in demand for... 中 demand 后接 for，表示对香料的需求。"
+      ],
+      "expressions": [
+        {
+          "text": "lead to a growth in demand for",
+          "meaning_zh": "导致对……的需求增长"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "At that time, cinnamon was transported by Arab merchants, who closely guarded the secret of the source of the spice from potential rivals.",
+      "translation": "当时，肉桂由阿拉伯商人运输，他们严密守护这种香料来源的秘密，以防潜在竞争者得知。",
+      "structure": [
+        {
+          "text": "At that time",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "cinnamon",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was transported by Arab merchants",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "who closely guarded the secret of the source of the spice from potential rivals",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "from potential rivals",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "was transported 是被动结构，运输者由 by Arab merchants 引出。",
+        "who 引导非限制性定语从句，补充说明阿拉伯商人的做法。",
+        "guarded...from potential rivals 表示防止竞争对手得知来源秘密。"
+      ],
+      "expressions": [
+        {
+          "text": "be transported by",
+          "meaning_zh": "由……运输"
+        },
+        {
+          "text": "closely guard the secret",
+          "meaning_zh": "严密守护秘密"
+        },
+        {
+          "text": "potential rivals",
+          "meaning_zh": "潜在竞争者"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "They took it from India, where it was grown, on camels via an overland route to the Mediterranean.",
+      "translation": "他们用骆驼沿陆路把它从印度运到地中海；印度正是肉桂的种植地。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "took it from India",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "where it was grown",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "on camels",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "via an overland route to the Mediterranean",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "They 指阿拉伯商人，it 指 cinnamon。",
+        "where it was grown 补充说明 India 是肉桂种植地。",
+        "on camels 和 via an overland route 分别说明运输工具和路线。"
+      ],
+      "expressions": [
+        {
+          "text": "via an overland route",
+          "meaning_zh": "经由陆路路线"
+        },
+        {
+          "text": "be grown",
+          "meaning_zh": "被种植"
+        }
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "Their journey ended when they reached Alexandria.",
+      "translation": "当他们到达亚历山大港时，这段旅程便结束了。",
+      "structure": [
+        {
+          "text": "Their journey",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "ended",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "when they reached Alexandria",
+          "role": "adverbial_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Their 指阿拉伯商人的运输旅程。",
+        "when 引导时间状语从句，说明旅程结束的时间点。",
+        "reached Alexandria 表明陆路运输的终点是亚历山大港。"
+      ],
+      "expressions": [
+        {
+          "text": "journey ended when",
+          "meaning_zh": "旅程在……时结束"
+        }
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "European traders sailed there to purchase their supply of cinnamon, then brought it back to Venice.",
+      "translation": "欧洲商人航行到那里购买自己的肉桂供应，然后把它带回威尼斯。",
+      "structure": [
+        {
+          "text": "European traders",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "sailed there",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to purchase their supply of cinnamon",
+          "role": "non_finite_clause",
+          "level": 1
+        },
+        {
+          "text": "then brought it back to Venice",
+          "role": "coordinated_predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "there 指上一句的 Alexandria。",
+        "to purchase... 是目的不定式，说明欧洲商人航行前往的目的。",
+        "then brought... 与 sailed 并列，共用主语 European traders。"
+      ],
+      "expressions": [
+        {
+          "text": "purchase their supply of",
+          "meaning_zh": "购买他们所需的……供应"
+        },
+        {
+          "text": "bring it back to",
+          "meaning_zh": "把它带回……"
+        }
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 14,
+      "sentence": "The spice then travelled from that great trading city to markets all around Europe.",
+      "translation": "随后，这种香料从那座伟大的贸易城市运往欧洲各地的市场。",
+      "structure": [
+        {
+          "text": "The spice",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "then travelled",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "from that great trading city",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "to markets all around Europe",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "The spice 继续指 cinnamon。",
+        "that great trading city 指上一句的 Venice。",
+        "from...to... 描述肉桂在欧洲贸易网络中的流动方向。"
+      ],
+      "expressions": [
+        {
+          "text": "all around Europe",
+          "meaning_zh": "欧洲各地"
+        },
+        {
+          "text": "trading city",
+          "meaning_zh": "贸易城市"
+        }
+      ]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 15,
+      "sentence": "Because the overland trade route allowed for only small quantities of the spice to reach Europe, and because Venice had a virtual monopoly of the trade, the Venetians could set the price of cinnamon exorbitantly high.",
+      "translation": "由于陆上贸易路线只允许少量这种香料抵达欧洲，而且威尼斯几乎垄断了这项贸易，威尼斯人得以把肉桂价格定得极高。",
+      "structure": [
+        {
+          "text": "Because the overland trade route allowed for only small quantities of the spice to reach Europe",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "and because Venice had a virtual monopoly of the trade",
+          "role": "coordinated_adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "the Venetians",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "could set the price of cinnamon exorbitantly high",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "两个 Because 从句并列，给出价格高企的两个原因。",
+        "allowed for only small quantities...to reach Europe 表示陆路贸易限制了供应量。",
+        "a virtual monopoly 表示几乎垄断，而不一定是法律上的完全垄断。",
+        "exorbitantly high 修饰价格，强调高到不合理。"
+      ],
+      "expressions": [
+        {
+          "text": "small quantities of",
+          "meaning_zh": "少量的"
+        },
+        {
+          "text": "have a virtual monopoly of",
+          "meaning_zh": "几乎垄断……"
+        },
+        {
+          "text": "set the price exorbitantly high",
+          "meaning_zh": "把价格定得极高"
+        }
+      ]
+    },
+    {
+      "id": "B-09",
+      "paragraph_label": "B",
+      "sentence_index": 16,
+      "sentence": "These prices, coupled with the increasing demand, spurred the search for new routes to Asia by Europeans eager to take part in the spice trade.",
+      "translation": "这些价格，加上不断增长的需求，推动了渴望参与香料贸易的欧洲人寻找通往亚洲的新路线。",
+      "structure": [
+        {
+          "text": "These prices",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "coupled with the increasing demand",
+          "role": "participial_phrase",
+          "level": 1
+        },
+        {
+          "text": "spurred",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the search for new routes to Asia by Europeans eager to take part in the spice trade",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "eager to take part in the spice trade",
+          "role": "adjective_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "coupled with... 是插入的过去分词短语，补充另一个推动因素。",
+        "spurred 表示促使或刺激某种行动发生。",
+        "eager to take part... 修饰 Europeans，说明欧洲人寻找新路线的动机。"
+      ],
+      "expressions": [
+        {
+          "text": "coupled with",
+          "meaning_zh": "加上；连同"
+        },
+        {
+          "text": "spur the search for",
+          "meaning_zh": "推动对……的寻找"
+        },
+        {
+          "text": "take part in",
+          "meaning_zh": "参与"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Seeking the high profits promised by the cinnamon market, Portuguese traders arrived on the island of Ceylon in the Indian Ocean toward the end of the 15th century.",
+      "translation": "为了追求肉桂市场所承诺的高额利润，葡萄牙商人在15世纪末抵达印度洋上的锡兰岛。",
+      "structure": [
+        {
+          "text": "Seeking the high profits promised by the cinnamon market",
+          "role": "participial_phrase",
+          "level": 1
+        },
+        {
+          "text": "promised by the cinnamon market",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "Portuguese traders",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "arrived on the island of Ceylon in the Indian Ocean",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "toward the end of the 15th century",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Seeking... 是现在分词短语，说明葡萄牙商人到来的目的或动机。",
+        "promised by the cinnamon market 后置修饰 high profits。",
+        "toward the end of the 15th century 给出抵达时间。"
+      ],
+      "expressions": [
+        {
+          "text": "seek high profits",
+          "meaning_zh": "追求高额利润"
+        },
+        {
+          "text": "toward the end of",
+          "meaning_zh": "接近……末期"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "Before Europeans arrived on the island, the state had organized the cultivation of cinnamon.",
+      "translation": "在欧洲人抵达该岛之前，当地国家已经组织了肉桂种植。",
+      "structure": [
+        {
+          "text": "Before Europeans arrived on the island",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "the state",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had organized",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the cultivation of cinnamon",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Before 引导时间状语从句，建立欧洲人到来前后的时间关系。",
+        "had organized 是过去完成时，表示在欧洲人抵达之前种植体系已经存在。",
+        "the cultivation of cinnamon 指系统性的肉桂栽培。"
+      ],
+      "expressions": [
+        {
+          "text": "organize the cultivation of",
+          "meaning_zh": "组织……的种植"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "People belonging to the ethnic group called the Salagama would peel the bark off young shoots of the cinnamon plant in the rainy season, when the wet bark was more pliable.",
+      "translation": "属于萨拉伽马这一族群的人会在雨季从肉桂幼枝上剥下树皮，因为那时潮湿的树皮更柔韧。",
+      "structure": [
+        {
+          "text": "People belonging to the ethnic group called the Salagama",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "belonging to the ethnic group called the Salagama",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "would peel the bark off young shoots of the cinnamon plant",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in the rainy season",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "when the wet bark was more pliable",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "belonging to... 和 called... 共同说明 People 的族群身份。",
+        "would peel 表示过去经常性的做法。",
+        "when 引导的从句修饰 rainy season，说明雨季适合剥皮的原因。",
+        "pliable 表示柔韧、易弯曲，和树皮容易处理有关。"
+      ],
+      "expressions": [
+        {
+          "text": "belonging to",
+          "meaning_zh": "属于"
+        },
+        {
+          "text": "peel the bark off",
+          "meaning_zh": "剥下树皮"
+        },
+        {
+          "text": "in the rainy season",
+          "meaning_zh": "在雨季"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 20,
+      "sentence": "During the peeling process, they curled the bark into the 'stick' shape still associated with the spice today.",
+      "translation": "在剥皮过程中，他们把树皮卷成如今仍与这种香料联系在一起的“棒状”。",
+      "structure": [
+        {
+          "text": "During the peeling process",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "curled the bark into the 'stick' shape",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "still associated with the spice today",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "they 指上一句的 Salagama 人群。",
+        "curled...into... 表示把树皮卷成某种形状。",
+        "still associated... 是过去分词短语，修饰 the 'stick' shape。"
+      ],
+      "expressions": [
+        {
+          "text": "curl A into B",
+          "meaning_zh": "把A卷成B"
+        },
+        {
+          "text": "be associated with",
+          "meaning_zh": "与……联系在一起"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 21,
+      "sentence": "The Salagama then gave the finished product to the king as a form of tribute.",
+      "translation": "随后，萨拉伽马人把成品作为一种贡品献给国王。",
+      "structure": [
+        {
+          "text": "The Salagama",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "then gave",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the finished product",
+          "role": "direct_object",
+          "level": 1
+        },
+        {
+          "text": "to the king",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "as a form of tribute",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "then 表示这一动作发生在剥皮和卷制之后。",
+        "the finished product 指加工完成的肉桂。",
+        "as a form of tribute 说明给国王的性质是贡品。"
+      ],
+      "expressions": [
+        {
+          "text": "the finished product",
+          "meaning_zh": "成品"
+        },
+        {
+          "text": "as a form of tribute",
+          "meaning_zh": "作为一种贡品"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 22,
+      "sentence": "When the Portuguese arrived, they needed to increase production significantly, and so enslaved many other members of the Ceylonese native population, forcing them to work in cinnamon harvesting.",
+      "translation": "葡萄牙人到来后，需要大幅提高产量，于是奴役了许多锡兰本地居民，迫使他们从事肉桂采收工作。",
+      "structure": [
+        {
+          "text": "When the Portuguese arrived",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "they needed to increase production significantly",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and so enslaved many other members of the Ceylonese native population",
+          "role": "coordinated_predicate",
+          "level": 1
+        },
+        {
+          "text": "forcing them to work in cinnamon harvesting",
+          "role": "participial_phrase",
+          "level": 1
+        },
+        {
+          "text": "to work in cinnamon harvesting",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "When 从句交代葡萄牙人到来这一时间背景。",
+        "needed to increase... 与 enslaved... 之间有因果关系，由 and so 表达。",
+        "forcing them... 是结果性的现在分词短语，说明奴役带来的后果。",
+        "them 指被奴役的锡兰本地居民。"
+      ],
+      "expressions": [
+        {
+          "text": "increase production significantly",
+          "meaning_zh": "大幅提高产量"
+        },
+        {
+          "text": "force someone to work",
+          "meaning_zh": "迫使某人工作"
+        },
+        {
+          "text": "native population",
+          "meaning_zh": "本地居民"
+        }
+      ]
+    },
+    {
+      "id": "C-07",
+      "paragraph_label": "C",
+      "sentence_index": 23,
+      "sentence": "In 1518, the Portuguese built a fort on Ceylon, which enabled them to protect the island, so helping them to develop a monopoly in the cinnamon trade and generate very high profits.",
+      "translation": "1518年，葡萄牙人在锡兰建造了一座堡垒，这使他们能够保护该岛，从而帮助他们在肉桂贸易中形成垄断并获得极高利润。",
+      "structure": [
+        {
+          "text": "In 1518",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Portuguese built a fort on Ceylon",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "which enabled them to protect the island",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "so helping them to develop a monopoly in the cinnamon trade and generate very high profits",
+          "role": "participial_phrase",
+          "level": 1
+        },
+        {
+          "text": "to develop a monopoly in the cinnamon trade and generate very high profits",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "which 指代前面建造堡垒这件事，说明其带来的能力。",
+        "enabled them to protect... 表示堡垒让葡萄牙人能够控制和保护岛屿。",
+        "so helping... 是结果性分词短语，说明保护岛屿进一步帮助他们垄断贸易。",
+        "develop 和 generate 并列，共用 to。"
+      ],
+      "expressions": [
+        {
+          "text": "enable someone to",
+          "meaning_zh": "使某人能够"
+        },
+        {
+          "text": "develop a monopoly in",
+          "meaning_zh": "在……形成垄断"
+        },
+        {
+          "text": "generate very high profits",
+          "meaning_zh": "产生极高利润"
+        }
+      ]
+    },
+    {
+      "id": "C-08",
+      "paragraph_label": "C",
+      "sentence_index": 24,
+      "sentence": "In the late 16th century, for example, they enjoyed a tenfold profit when shipping cinnamon over a journey of eight days from Ceylon to India.",
+      "translation": "例如，在16世纪末，他们把肉桂从锡兰运往印度，航程八天，便能获得十倍利润。",
+      "structure": [
+        {
+          "text": "In the late 16th century",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "for example",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "enjoyed a tenfold profit",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "when shipping cinnamon over a journey of eight days from Ceylon to India",
+          "role": "adverbial_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "for example 表明这一句是对上一句高额利润的例证。",
+        "they 指葡萄牙人。",
+        "when shipping... 是省略结构，相当于 when they were shipping...",
+        "tenfold profit 表示十倍利润。"
+      ],
+      "expressions": [
+        {
+          "text": "a tenfold profit",
+          "meaning_zh": "十倍利润"
+        },
+        {
+          "text": "over a journey of",
+          "meaning_zh": "在……的行程中"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "When the Dutch arrived off the coast of southern Asia at the very beginning of the 17th century, they set their sights on displacing the Portuguese as kings of cinnamon.",
+      "translation": "17世纪初，荷兰人抵达南亚海岸附近时，他们把目标锁定在取代葡萄牙人成为肉桂之王上。",
+      "structure": [
+        {
+          "text": "When the Dutch arrived off the coast of southern Asia at the very beginning of the 17th century",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "the Dutch",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "arrived off the coast of southern Asia",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "they set their sights on displacing the Portuguese as kings of cinnamon",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "displacing the Portuguese as kings of cinnamon",
+          "role": "gerund_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "When 从句交代荷兰人抵达的时间和地点。",
+        "set their sights on 后接动名词，表示把目标定为某事。",
+        "displacing the Portuguese 表示取代葡萄牙人在肉桂贸易中的地位。",
+        "as kings of cinnamon 是比喻，指占据肉桂贸易主导地位。"
+      ],
+      "expressions": [
+        {
+          "text": "set one's sights on",
+          "meaning_zh": "把目标定在"
+        },
+        {
+          "text": "displace someone as",
+          "meaning_zh": "取代某人成为"
+        },
+        {
+          "text": "at the very beginning of",
+          "meaning_zh": "在……刚开始时"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "The Dutch allied themselves with Kandy, an inland kingdom on Ceylon.",
+      "translation": "荷兰人与康提结盟，康提是锡兰岛上的一个内陆王国。",
+      "structure": [
+        {
+          "text": "The Dutch",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "allied themselves with",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "Kandy",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "an inland kingdom on Ceylon",
+          "role": "apposition",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "allied themselves with 表示主动与某一方结盟。",
+        "Kandy 后的名词短语是同位语，解释康提的身份。",
+        "on Ceylon 指康提位于锡兰岛上。"
+      ],
+      "expressions": [
+        {
+          "text": "ally oneself with",
+          "meaning_zh": "与……结盟"
+        },
+        {
+          "text": "an inland kingdom",
+          "meaning_zh": "一个内陆王国"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 27,
+      "sentence": "In return for payments of elephants and cinnamon, they protected the native king from the Portuguese.",
+      "translation": "作为大象和肉桂贡品的回报，他们保护当地国王免受葡萄牙人的侵扰。",
+      "structure": [
+        {
+          "text": "In return for payments of elephants and cinnamon",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "protected",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the native king",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "from the Portuguese",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "In return for... 表示交换条件或回报。",
+        "they 指荷兰人，the native king 指康提国王。",
+        "protect...from... 表示保护某人免受某方威胁。"
+      ],
+      "expressions": [
+        {
+          "text": "in return for",
+          "meaning_zh": "作为……的回报"
+        },
+        {
+          "text": "protect someone from",
+          "meaning_zh": "保护某人免受……"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 28,
+      "sentence": "By 1640, the Dutch broke the 150-year Portuguese monopoly when they overran and occupied their factories.",
+      "translation": "到1640年，荷兰人在攻占并占领葡萄牙人的工厂时，打破了葡萄牙长达150年的垄断。",
+      "structure": [
+        {
+          "text": "By 1640",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Dutch",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "broke the 150-year Portuguese monopoly",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "when they overran and occupied their factories",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "overran and occupied",
+          "role": "compound_verb",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "By 1640 表示到1640年这一时间点为止。",
+        "the 150-year Portuguese monopoly 指葡萄牙持续约150年的垄断地位。",
+        "when 从句说明荷兰人通过攻占工厂打破垄断。",
+        "their factories 中 their 指葡萄牙人的工厂。"
+      ],
+      "expressions": [
+        {
+          "text": "break the monopoly",
+          "meaning_zh": "打破垄断"
+        },
+        {
+          "text": "overrun and occupy",
+          "meaning_zh": "攻占并占领"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 29,
+      "sentence": "By 1658, they had permanently expelled the Portuguese from the island, thereby gaining control of the lucrative cinnamon trade.",
+      "translation": "到1658年，他们已将葡萄牙人永久逐出该岛，从而控制了利润丰厚的肉桂贸易。",
+      "structure": [
+        {
+          "text": "By 1658",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "had permanently expelled the Portuguese from the island",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "thereby gaining control of the lucrative cinnamon trade",
+          "role": "participial_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "had expelled 是过去完成时，表示到1658年驱逐已经完成。",
+        "permanently 强调葡萄牙人被长期或最终赶出该岛。",
+        "thereby gaining... 是结果性分词短语，说明驱逐带来的直接后果。",
+        "lucrative 表示利润丰厚。"
+      ],
+      "expressions": [
+        {
+          "text": "expel someone from",
+          "meaning_zh": "把某人逐出……"
+        },
+        {
+          "text": "gain control of",
+          "meaning_zh": "获得对……的控制"
+        },
+        {
+          "text": "lucrative trade",
+          "meaning_zh": "利润丰厚的贸易"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "In order to protect their hold on the market, the Dutch, like the Portuguese before them, treated the native inhabitants harshly.",
+      "translation": "为了保护他们对市场的控制，荷兰人像之前的葡萄牙人一样，严酷地对待当地居民。",
+      "structure": [
+        {
+          "text": "In order to protect their hold on the market",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Dutch",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "like the Portuguese before them",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "treated the native inhabitants harshly",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "In order to... 表示目的，说明荷兰人严酷统治的动机。",
+        "their hold on the market 指他们对肉桂市场的控制力。",
+        "like the Portuguese before them 是插入比较，说明荷兰人延续了葡萄牙人的做法。"
+      ],
+      "expressions": [
+        {
+          "text": "in order to",
+          "meaning_zh": "为了"
+        },
+        {
+          "text": "protect their hold on",
+          "meaning_zh": "保护他们对……的控制"
+        },
+        {
+          "text": "treat someone harshly",
+          "meaning_zh": "严酷地对待某人"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "Because of the need to boost production and satisfy Europe's ever-increasing appetite for cinnamon, the Dutch began to alter the harvesting practices of the Ceylonese.",
+      "translation": "由于需要提高产量并满足欧洲对肉桂日益增长的需求，荷兰人开始改变锡兰人的采收方式。",
+      "structure": [
+        {
+          "text": "Because of the need to boost production and satisfy Europe's ever-increasing appetite for cinnamon",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "to boost production and satisfy Europe's ever-increasing appetite for cinnamon",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "the Dutch",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "began to alter",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the harvesting practices of the Ceylonese",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Because of 后接名词短语 the need，说明改变采收方式的原因。",
+        "to boost... and satisfy... 是并列不定式，解释 need 的具体内容。",
+        "appetite for cinnamon 是比喻表达，指欧洲对肉桂的强烈需求。",
+        "harvesting practices 指采收方法或惯例。"
+      ],
+      "expressions": [
+        {
+          "text": "boost production",
+          "meaning_zh": "提高产量"
+        },
+        {
+          "text": "satisfy Europe's ever-increasing appetite for",
+          "meaning_zh": "满足欧洲对……日益增长的需求"
+        },
+        {
+          "text": "alter the harvesting practices",
+          "meaning_zh": "改变采收方式"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 32,
+      "sentence": "Over time, the supply of cinnamon trees on the island became nearly exhausted, due to systematic stripping of the bark.",
+      "translation": "随着时间推移，由于系统性剥取树皮，岛上的肉桂树供应几乎枯竭。",
+      "structure": [
+        {
+          "text": "Over time",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the supply of cinnamon trees on the island",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "became nearly exhausted",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "due to systematic stripping of the bark",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Over time 表示这一结果是逐渐形成的。",
+        "the supply of cinnamon trees 是主语，核心词是 supply。",
+        "became nearly exhausted 表示资源几乎耗尽。",
+        "due to 引出耗尽的原因，即系统性剥皮。"
+      ],
+      "expressions": [
+        {
+          "text": "over time",
+          "meaning_zh": "随着时间推移"
+        },
+        {
+          "text": "become nearly exhausted",
+          "meaning_zh": "几乎耗尽"
+        },
+        {
+          "text": "due to",
+          "meaning_zh": "由于"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "Eventually, the Dutch began cultivating their own cinnamon trees to supplement the diminishing number of wild trees available for use.",
+      "translation": "最终，荷兰人开始栽培自己的肉桂树，以补充可供使用的野生树木数量的减少。",
+      "structure": [
+        {
+          "text": "Eventually",
+          "role": "adverbial_phrase",
+          "level": 1
+        },
+        {
+          "text": "the Dutch",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "began cultivating their own cinnamon trees",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to supplement the diminishing number of wild trees available for use",
+          "role": "non_finite_clause",
+          "level": 1
+        },
+        {
+          "text": "available for use",
+          "role": "adjective_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Eventually 表示在资源被过度消耗之后出现的最终做法。",
+        "began cultivating 后接动名词，说明荷兰人开始主动种植肉桂树。",
+        "to supplement... 是目的不定式，说明栽培肉桂树的目的。",
+        "available for use 修饰 wild trees，表示仍可被使用的野生树木。"
+      ],
+      "expressions": [
+        {
+          "text": "begin cultivating",
+          "meaning_zh": "开始栽培"
+        },
+        {
+          "text": "supplement the diminishing number of",
+          "meaning_zh": "补充不断减少的……数量"
+        },
+        {
+          "text": "available for use",
+          "meaning_zh": "可供使用"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 34,
+      "sentence": "Then, in 1796, the English arrived on Ceylon, thereby displacing the Dutch from their control of the cinnamon monopoly.",
+      "translation": "随后，在1796年，英国人抵达锡兰，从而取代荷兰人，夺取了他们对肉桂垄断的控制权。",
+      "structure": [
+        {
+          "text": "Then",
+          "role": "adverbial_phrase",
+          "level": 1
+        },
+        {
+          "text": "in 1796",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the English",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "arrived on Ceylon",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "thereby displacing the Dutch from their control of the cinnamon monopoly",
+          "role": "participial_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Then 承接前文殖民控制权的变化。",
+        "thereby displacing... 是结果性的分词短语，说明英国人到来带来的后果。",
+        "their control 指荷兰人此前对肉桂垄断的控制。"
+      ],
+      "expressions": [
+        {
+          "text": "thereby displacing",
+          "meaning_zh": "从而取代"
+        },
+        {
+          "text": "control of the monopoly",
+          "meaning_zh": "对垄断的控制"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 35,
+      "sentence": "By the middle of the 19th century, production of cinnamon reached 1,000 tons a year, after a lower grade quality of the spice became acceptable to European tastes.",
+      "translation": "到19世纪中叶，在较低等级的肉桂也被欧洲口味接受之后，肉桂年产量达到了1000吨。",
+      "structure": [
+        {
+          "text": "By the middle of the 19th century",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "production of cinnamon",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "reached 1,000 tons a year",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "after a lower grade quality of the spice became acceptable to European tastes",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "became acceptable to European tastes",
+          "role": "verb_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "By the middle of... 表示到某一时期为止的结果。",
+        "production of cinnamon 是主语，reached 后接年产量。",
+        "after 从句说明产量上升的背景条件。",
+        "became acceptable to European tastes 表示较低等级的香料被欧洲消费者接受。"
+      ],
+      "expressions": [
+        {
+          "text": "reach 1,000 tons a year",
+          "meaning_zh": "达到每年1000吨"
+        },
+        {
+          "text": "become acceptable to",
+          "meaning_zh": "变得为……所接受"
+        },
+        {
+          "text": "European tastes",
+          "meaning_zh": "欧洲人的口味"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 36,
+      "sentence": "By that time, cinnamon was being grown in other parts of the Indian Ocean region and in the West Indies, Brazil, and Guyana.",
+      "translation": "到那时，肉桂已经在印度洋地区的其他地方，以及西印度群岛、巴西和圭亚那种植。",
+      "structure": [
+        {
+          "text": "By that time",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "cinnamon",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was being grown",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in other parts of the Indian Ocean region and in the West Indies, Brazil, and Guyana",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "By that time 指到19世纪中叶左右。",
+        "was being grown 是过去进行时的被动结构，表示肉桂正在多地被种植。",
+        "in other parts... and in... 并列列出肉桂种植范围的扩展。"
+      ],
+      "expressions": [
+        {
+          "text": "by that time",
+          "meaning_zh": "到那时"
+        },
+        {
+          "text": "be being grown",
+          "meaning_zh": "正在被种植"
+        },
+        {
+          "text": "other parts of",
+          "meaning_zh": "……的其他地区"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 37,
+      "sentence": "Not only was a monopoly of cinnamon becoming impossible, but the spice trade overall was diminishing in economic potential, and was eventually superseded by the rise of trade in coffee, tea, chocolate, and sugar.",
+      "translation": "不仅肉桂垄断变得不可能，整个香料贸易的经济潜力也在下降，并最终被咖啡、茶、巧克力和糖贸易的兴起所取代。",
+      "structure": [
+        {
+          "text": "Not only was a monopoly of cinnamon becoming impossible",
+          "role": "inverted_clause",
+          "level": 1
+        },
+        {
+          "text": "but the spice trade overall was diminishing in economic potential",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "and was eventually superseded by the rise of trade in coffee, tea, chocolate, and sugar",
+          "role": "coordinated_predicate",
+          "level": 1
+        },
+        {
+          "text": "by the rise of trade in coffee, tea, chocolate, and sugar",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Not only 位于句首引起部分倒装，正常语序是 a monopoly...was becoming impossible。",
+        "but 后说明更广泛的趋势：整个香料贸易的经济潜力下降。",
+        "was eventually superseded 是被动结构，表示香料贸易最终被其他商品贸易取代。",
+        "the rise of trade in... 列出取代香料贸易的商品类别。"
+      ],
+      "expressions": [
+        {
+          "text": "Not only ... but ...",
+          "meaning_zh": "不仅……而且……"
+        },
+        {
+          "text": "diminish in economic potential",
+          "meaning_zh": "经济潜力下降"
+        },
+        {
+          "text": "be superseded by",
+          "meaning_zh": "被……取代"
+        }
+      ]
+    }
+  ]
+}

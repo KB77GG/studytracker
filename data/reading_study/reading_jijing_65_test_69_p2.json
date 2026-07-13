@@ -1,0 +1,759 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_65_test_69",
+  "passage_id": "reading_jijing_65_test_69_p2",
+  "passage_title": "Worldly Wealth",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The world's population is expected to stablize at around nine billion.",
+      "translation": "预计世界人口将在约九十亿的水平上趋于稳定。",
+      "structure": [
+        {"text": "The world's population", "role": "subject", "level": 1},
+        {"text": "is expected", "role": "passive_verb", "level": 1},
+        {"text": "to stablize at around nine billion", "role": "subject_complement", "level": 2}
+      ],
+      "difficult_points": [
+        "is expected to 表示“预计会”，是不定式作主语补足语的被动结构。",
+        "原文 stablize 为 stabilize 的拼写异常，但不影响句意。"
+      ],
+      "expressions": [
+        {"text": "be expected to", "meaning_zh": "预计会"},
+        {"text": "stabilize at", "meaning_zh": "稳定在某一水平"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Will it be possible for nine billion people to have the lifestyle enjoyed today only by the wealthy?",
+      "translation": "九十亿人是否都有可能过上如今只有富人才享有的生活？",
+      "structure": [
+        {"text": "Will it be possible", "role": "main_clause", "level": 1},
+        {"text": "for nine billion people to have the lifestyle", "role": "extraposed_subject", "level": 2},
+        {"text": "enjoyed today only by the wealthy", "role": "past_participle_modifier", "level": 3}
+      ],
+      "difficult_points": [
+        "it 是形式主语，真正的主语是 for nine billion people to have...。",
+        "enjoyed today only by the wealthy 是过去分词短语，后置修饰 lifestyle。"
+      ],
+      "expressions": [
+        {"text": "be possible for someone to do", "meaning_zh": "某人有可能做某事"},
+        {"text": "the wealthy", "meaning_zh": "富人群体"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "One school of thought says no: not only should the majority of the world's people resign themselves to poverty forever, but rich nations must also revert to simpler lifestyles in order to save the planet.",
+      "translation": "一种观点认为不可能：世界上大多数人不仅得永远接受贫困，富裕国家也必须回归更简朴的生活方式，才能拯救地球。",
+      "structure": [
+        {"text": "One school of thought says no", "role": "main_clause", "level": 1},
+        {"text": "not only should the majority of the world's people resign themselves to poverty forever", "role": "inverted_coordinate_clause", "level": 2},
+        {"text": "but rich nations must also revert to simpler lifestyles", "role": "coordinate_clause", "level": 2},
+        {"text": "in order to save the planet", "role": "purpose_adverbial", "level": 3}
+      ],
+      "difficult_points": [
+        "not only 位于分句开头触发部分倒装，因此 should 放在主语之前。",
+        "not only...but... 连接两项并列主张，冒号后的内容解释 says no 的具体含义。"
+      ],
+      "expressions": [
+        {"text": "school of thought", "meaning_zh": "思想流派；一种观点"},
+        {"text": "resign oneself to", "meaning_zh": "无奈接受"},
+        {"text": "revert to", "meaning_zh": "恢复；回归到"},
+        {"text": "in order to", "meaning_zh": "为了"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Admittedly, there may be political or social barriers to achieving a rich world.",
+      "translation": "诚然，实现一个普遍富裕的世界可能会面临政治或社会障碍。",
+      "structure": [
+        {"text": "Admittedly", "role": "sentence_adverbial", "level": 1},
+        {"text": "there may be political or social barriers", "role": "existential_clause", "level": 1},
+        {"text": "to achieving a rich world", "role": "prepositional_complement", "level": 2}
+      ],
+      "difficult_points": [
+        "Admittedly 用于先承认一种限制，为后文转折让步。",
+        "barriers to 中 to 是介词，因此后接动名词 achieving。"
+      ],
+      "expressions": [
+        {"text": "barrier to", "meaning_zh": "实现某事的障碍"},
+        {"text": "achieve a rich world", "meaning_zh": "实现普遍富裕的世界"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "But in fact there seems to be no insuperable physical or ecological reason why nine billion people should not achieve a comfortable lifestyle, using technology only slightly more advanced than that which we now possess.",
+      "translation": "但事实上，似乎不存在任何无法克服的物质或生态原因，能够阻止九十亿人仅凭比现有技术略先进一点的技术过上舒适生活。",
+      "structure": [
+        {"text": "But in fact there seems to be no insuperable physical or ecological reason", "role": "main_clause", "level": 1},
+        {"text": "why nine billion people should not achieve a comfortable lifestyle", "role": "relative_clause", "level": 2},
+        {"text": "using technology only slightly more advanced than that", "role": "present_participle_adverbial", "level": 2},
+        {"text": "which we now possess", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "why 引导的关系从句修饰 reason，should not 在此表达“没有理由不能做到”。",
+        "that 代指 technology，which we now possess 又进一步修饰 that。",
+        "using... 是方式状语，说明实现舒适生活所使用的手段。"
+      ],
+      "expressions": [
+        {"text": "in fact", "meaning_zh": "事实上"},
+        {"text": "achieve a comfortable lifestyle", "meaning_zh": "过上舒适的生活"},
+        {"text": "slightly more advanced than", "meaning_zh": "比……略先进"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "In thinking about the future of civilization, we ought to start by asking w hat people want.",
+      "translation": "思考文明的未来时，我们应该先问一问人们想要什么。",
+      "structure": [
+        {"text": "In thinking about the future of civilization", "role": "time_adverbial", "level": 1},
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "ought to start", "role": "predicate", "level": 1},
+        {"text": "by asking w hat people want", "role": "means_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "In thinking about... 相当于 when we think about...，说明情境。",
+        "by asking 表示采取的起始方式；原文 w hat 是 what 的断词异常。"
+      ],
+      "expressions": [
+        {"text": "think about the future of", "meaning_zh": "思考……的未来"},
+        {"text": "start by doing", "meaning_zh": "从做某事开始"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "The evidence demonstrates that as people get richer they w ant a greater range of personal technology, they want lots of room (preferably near or in natural surroundings) and they w ant greater speed in travel.",
+      "translation": "证据表明，随着人们变得富裕，他们会想拥有种类更多的个人科技产品、更多空间（最好靠近自然或身处自然环境），并追求更快的出行速度。",
+      "structure": [
+        {"text": "The evidence demonstrates", "role": "main_clause", "level": 1},
+        {"text": "that as people get richer they w ant a greater range of personal technology", "role": "object_clause", "level": 2},
+        {"text": "they want lots of room (preferably near or in natural surroundings)", "role": "coordinate_clause", "level": 2},
+        {"text": "and they w ant greater speed in travel", "role": "coordinate_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "as people get richer 是时间兼变化状语，表示“随着人们越来越富裕”。",
+        "that 后实际并列了三个需求分句；括号内容补充说明 room 的理想位置。",
+        "原文两处 w ant 均为 want 的断词异常。"
+      ],
+      "expressions": [
+        {"text": "the evidence demonstrates that", "meaning_zh": "证据表明"},
+        {"text": "a greater range of", "meaning_zh": "种类更多的"},
+        {"text": "natural surroundings", "meaning_zh": "自然环境"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "More possessions, more space, more mobility.",
+      "translation": "更多财物、更大空间、更强流动性。",
+      "structure": [
+        {"text": "More possessions", "role": "parallel_noun_phrase", "level": 1},
+        {"text": "more space", "role": "parallel_noun_phrase", "level": 1},
+        {"text": "more mobility", "role": "parallel_noun_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "这是省略谓语的三个并列名词短语，用来概括上一句的三类需求。",
+        "mobility 在此既包括出行能力，也包含自由移动的便利程度。"
+      ],
+      "expressions": [
+        {"text": "mobility", "meaning_zh": "流动性；出行能力"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "In the developed world, the personal technologies of the wealthy, including telephones, washing machines and ears, have become necessities within a generation or two.",
+      "translation": "在发达世界，富人使用的个人科技产品，包括电话、洗衣机和汽车，已经在一两代人的时间里变成了生活必需品。",
+      "structure": [
+        {"text": "In the developed world", "role": "place_adverbial", "level": 1},
+        {"text": "the personal technologies of the wealthy", "role": "subject", "level": 1},
+        {"text": "including telephones, washing machines and ears", "role": "supplement", "level": 2},
+        {"text": "have become necessities within a generation or two", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "including... 是插入式补充，列举 personal technologies 的实例。",
+        "原文 ears 按语境应为 cars 的 OCR 错误；英文保留原样，译文按“汽车”理解。"
+      ],
+      "expressions": [
+        {"text": "the developed world", "meaning_zh": "发达世界"},
+        {"text": "within a generation or two", "meaning_zh": "在一两代人的时间内"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "Increasing productivity that results m decreasing costs for such goods has been responsible for the greatest gains in the standard of living, and there is every reason to believe that this will continue.",
+      "translation": "生产率提高使这类商品的成本下降，这一直是生活水平大幅提升的主要原因，而且我们完全有理由相信这种趋势还会继续。",
+      "structure": [
+        {"text": "Increasing productivity that results m decreasing costs for such goods", "role": "subject", "level": 1},
+        {"text": "has been responsible for the greatest gains in the standard of living", "role": "predicate", "level": 1},
+        {"text": "and there is every reason to believe", "role": "coordinate_clause", "level": 1},
+        {"text": "that this will continue", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that results... 是定语从句，修饰 productivity；原文 results m 应按 results in 理解。",
+        "this 指生产率提高、成本下降并推动生活水平提升这一趋势。",
+        "there is every reason to believe 是强调“完全有理由相信”的存在句式。"
+      ],
+      "expressions": [
+        {"text": "be responsible for", "meaning_zh": "是……的原因；促成"},
+        {"text": "standard of living", "meaning_zh": "生活水平"},
+        {"text": "there is every reason to believe", "meaning_zh": "完全有理由相信"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "As affluence grows, the amount of energy and raw- materials used for production of machinery w ill therefore escalate.",
+      "translation": "随着社会日益富裕，用于制造机器的能源和原材料数量也会相应增加。",
+      "structure": [
+        {"text": "As affluence grows", "role": "time_adverbial_clause", "level": 2},
+        {"text": "the amount of energy and raw- materials", "role": "subject", "level": 1},
+        {"text": "used for production of machinery", "role": "past_participle_modifier", "level": 2},
+        {"text": "w ill therefore escalate", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "used for... 是过去分词短语，后置修饰 energy and raw-materials。",
+        "As 表示“随着”；原文 w ill 为 will 的断词异常，raw- materials 也有异常空格。"
+      ],
+      "expressions": [
+        {"text": "as affluence grows", "meaning_zh": "随着富裕程度提高"},
+        {"text": "escalate", "meaning_zh": "逐步增加；升级"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "But this need not mean an end to the machine age.",
+      "translation": "但这并不一定意味着机器时代的终结。",
+      "structure": [
+        {"text": "But this", "role": "subject", "level": 1},
+        {"text": "need not mean", "role": "predicate", "level": 1},
+        {"text": "an end to the machine age", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "this 指上一句所说能源和原材料消耗量上升。",
+        "need not 表示“不一定、未必”，而不是“没有必要去意味着”。"
+      ],
+      "expressions": [
+        {"text": "need not mean", "meaning_zh": "未必意味着"},
+        {"text": "an end to", "meaning_zh": "……的终结"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "Rather than being throw n away, materials from old machinery can be recycled by manufacturers.",
+      "translation": "旧机器上的材料可以由制造商回收利用，而不必被丢弃。",
+      "structure": [
+        {"text": "Rather than being throw n away", "role": "alternative_adverbial", "level": 2},
+        {"text": "materials from old machinery", "role": "subject", "level": 1},
+        {"text": "can be recycled", "role": "passive_verb", "level": 1},
+        {"text": "by manufacturers", "role": "agent_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "Rather than being... 表示被否定的替代做法，与后面的 can be recycled 对照。",
+        "原文 throw n 是 thrown 的断词异常；两处 being/be recycled 都是被动意义。"
+      ],
+      "expressions": [
+        {"text": "rather than", "meaning_zh": "而不是"},
+        {"text": "throw away", "meaning_zh": "丢弃"},
+        {"text": "be recycled", "meaning_zh": "被回收利用"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "And long before all fossil fuels are exhausted, their rising prices may compel industrial society not only to become more energy efficient but also to find alternative energy sources sufficient for the demands of an advanced technological civilization nuclear fission, nuclear fusion, solar energy, chemical photosynthesis, geothermal, biomass or some yet unknown source of energy.",
+      "translation": "而且，早在化石燃料全部耗尽之前，其不断上涨的价格就可能迫使工业社会不仅提高能源效率，还要寻找足以满足先进技术文明需求的替代能源，例如核裂变、核聚变、太阳能、化学光合作用、地热能、生物质能，或某种尚未知晓的能源。",
+      "structure": [
+        {"text": "long before all fossil fuels are exhausted", "role": "time_adverbial_clause", "level": 2},
+        {"text": "their rising prices may compel industrial society", "role": "main_clause", "level": 1},
+        {"text": "not only to become more energy efficient but also to find alternative energy sources", "role": "object_complement", "level": 2},
+        {"text": "sufficient for the demands of an advanced technological civilization", "role": "adjective_modifier", "level": 3}
+      ],
+      "difficult_points": [
+        "their 指 fossil fuels；long before 强调价格压力会在燃料耗尽很久以前出现。",
+        "compel industrial society to... 是“迫使工业社会做……”，后接 not only...but also... 两个并列不定式。",
+        "civilization 后缺少预期的标点，随后是一串 alternative energy sources 的例子。"
+      ],
+      "expressions": [
+        {"text": "fossil fuels", "meaning_zh": "化石燃料"},
+        {"text": "compel someone to do", "meaning_zh": "迫使某人做某事"},
+        {"text": "energy efficient", "meaning_zh": "能源利用效率高的"},
+        {"text": "alternative energy sources", "meaning_zh": "替代能源"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 15,
+      "sentence": "The growth of cities and suburbs is often seen as a threat to the environment.",
+      "translation": "城市和郊区的扩张常被视为对环境的威胁。",
+      "structure": [
+        {"text": "The growth of cities and suburbs", "role": "subject", "level": 1},
+        {"text": "is often seen", "role": "passive_verb", "level": 1},
+        {"text": "as a threat to the environment", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "be seen as 是被动结构，表示“被看作”。",
+        "growth 在此不是人口增长本身，而是城市与郊区范围的扩张。"
+      ],
+      "expressions": [
+        {"text": "be seen as", "meaning_zh": "被视为"},
+        {"text": "a threat to", "meaning_zh": "对……的威胁"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "However, in fact the increasing amount of land consumed by agriculture is a far greater danger than urban sprawl.",
+      "translation": "然而事实上，与城市蔓延相比，农业不断占用更多土地才是大得多的危险。",
+      "structure": [
+        {"text": "However, in fact", "role": "sentence_adverbial", "level": 1},
+        {"text": "the increasing amount of land consumed by agriculture", "role": "subject", "level": 1},
+        {"text": "consumed by agriculture", "role": "past_participle_modifier", "level": 2},
+        {"text": "is a far greater danger than urban sprawl", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "consumed by agriculture 是过去分词短语，修饰 land。",
+        "far 修饰比较级 greater，强调农业占地的危险大得多。"
+      ],
+      "expressions": [
+        {"text": "urban sprawl", "meaning_zh": "城市无序扩张；城市蔓延"},
+        {"text": "a far greater danger than", "meaning_zh": "比……危险得多"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "Stopping the growth of farms is the best way to preserve many of the world's remaining wild areas.",
+      "translation": "遏制农田扩张，是保护世界许多残存荒野地区的最佳方式。",
+      "structure": [
+        {"text": "Stopping the growth of farms", "role": "gerund_subject", "level": 1},
+        {"text": "is the best way", "role": "linking_predicate", "level": 1},
+        {"text": "to preserve many of the world's remaining wild areas", "role": "infinitive_modifier", "level": 2}
+      ],
+      "difficult_points": [
+        "Stopping... 是动名词短语作主语，指停止农田面积继续增长。",
+        "to preserve... 后置修饰 way，说明这种方式要实现的目标。"
+      ],
+      "expressions": [
+        {"text": "the best way to", "meaning_zh": "做……的最佳方式"},
+        {"text": "preserve wild areas", "meaning_zh": "保护荒野地区"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "But is a dramatic downsizing of farmland possible?",
+      "translation": "但大幅缩减农田面积真的可行吗？",
+      "structure": [
+        {"text": "But is", "role": "inverted_predicate", "level": 1},
+        {"text": "a dramatic downsizing of farmland", "role": "subject", "level": 1},
+        {"text": "possible", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "这是一般疑问句，系动词 is 提至主语之前。",
+        "downsizing 原常用于组织或规模缩减，此处指大幅减少农田面积。"
+      ],
+      "expressions": [
+        {"text": "a dramatic downsizing of", "meaning_zh": "……的大幅缩减"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "Thanks to the grow th of agricultural productivity, reforestation and 're-wilding' has been under way in the industrial countries for generations.",
+      "translation": "得益于农业生产率的提高，重新造林和“恢复荒野”已在工业化国家持续了好几代人。",
+      "structure": [
+        {"text": "Thanks to the grow th of agricultural productivity", "role": "cause_adverbial", "level": 1},
+        {"text": "reforestation and 're-wilding'", "role": "compound_subject", "level": 1},
+        {"text": "has been under way", "role": "predicate", "level": 1},
+        {"text": "in the industrial countries for generations", "role": "adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "Thanks to 引出原因；原文 grow th 是 growth 的断词异常。",
+        "has been under way 表示一项过程已经开展并持续至今；原文并列主语后使用 has，属于源文语法异常。"
+      ],
+      "expressions": [
+        {"text": "thanks to", "meaning_zh": "得益于；由于"},
+        {"text": "be under way", "meaning_zh": "正在进行"},
+        {"text": "for generations", "meaning_zh": "历经数代"}
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "Since 1950 more land in the US has been set aside in parks than has been occupied by urban and suburban growth.",
+      "translation": "自1950年以来，美国划作公园的土地面积，比城市和郊区扩张所占用的土地还要多。",
+      "structure": [
+        {"text": "Since 1950", "role": "time_adverbial", "level": 1},
+        {"text": "more land in the US has been set aside in parks", "role": "main_clause", "level": 1},
+        {"text": "than has been occupied by urban and suburban growth", "role": "comparative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "more...than... 比较两类土地面积：划为公园的土地与被城市扩张占用的土地。",
+        "than 从句省略了重复的 land，并采用 has been occupied 的被动形式。"
+      ],
+      "expressions": [
+        {"text": "set aside", "meaning_zh": "留出；划作专用"},
+        {"text": "be occupied by", "meaning_zh": "被……占用"}
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "And much of what was farmland in the nineteenth century is now forest again.",
+      "translation": "而十九世纪曾经是农田的许多土地，如今又恢复成了森林。",
+      "structure": [
+        {"text": "much of what was farmland in the nineteenth century", "role": "subject", "level": 1},
+        {"text": "what was farmland in the nineteenth century", "role": "fused_relative_clause", "level": 2},
+        {"text": "is now forest again", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "what was farmland 是融合关系从句，相当于“曾经是农田的土地”。",
+        "much of 修饰 what 从句所指的土地，forest 在系动词后作表语。"
+      ],
+      "expressions": [
+        {"text": "much of what", "meaning_zh": "……中的很大一部分"}
+      ]
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "Taking the best Iowa maize growers as the norm for world food productivity, it has been calculated that less than a tenth of present cropland could support a population of 10 billion.",
+      "translation": "如果把艾奥瓦州最优秀的玉米种植者视为全球粮食生产率的标准，据计算，现有耕地不到十分之一的面积就足以供养一百亿人口。",
+      "structure": [
+        {"text": "Taking the best Iowa maize growers as the norm for world food productivity", "role": "present_participle_adverbial", "level": 2},
+        {"text": "it has been calculated", "role": "passive_reporting_clause", "level": 1},
+        {"text": "that less than a tenth of present cropland could support a population of 10 billion", "role": "extraposed_subject", "level": 2}
+      ],
+      "difficult_points": [
+        "Taking A as B 表示“把 A 视为 B”，在此设定计算所用的生产率基准。",
+        "it 是形式主语，that 从句才是被计算得出的实际内容。",
+        "less than a tenth of present cropland 是 support 的主语，不是人口比例。"
+      ],
+      "expressions": [
+        {"text": "take something as the norm", "meaning_zh": "把某事物作为标准"},
+        {"text": "it has been calculated that", "meaning_zh": "据计算"},
+        {"text": "support a population of", "meaning_zh": "供养……人口"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "In The Environment Game, a vision of a utopia that would be at once high-tech and environmentalist.",
+      "translation": "在《环境游戏》中，描绘了一个同时兼具高科技与环保理念的乌托邦愿景。",
+      "structure": [
+        {"text": "In The Environment Game", "role": "source_adverbial", "level": 1},
+        {"text": "a vision of a utopia", "role": "noun_phrase_fragment", "level": 1},
+        {"text": "that would be at once high-tech and environmentalist", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "该句按原文是缺少谓语的残句，语义上应与下一句作者的设想相连。",
+        "that 修饰 utopia；at once A and B 表示“既 A 又 B”。"
+      ],
+      "expressions": [
+        {"text": "a vision of", "meaning_zh": "对……的构想"},
+        {"text": "at once ... and ...", "meaning_zh": "既……又……"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "Nigel Calder suggested that 'nourishing but unpalatable primary food produced by industrial techniques - like yeast from petroleum may be fed to animals, so that we can continue to eat our customary meat, eggs. milk, butter, and cheese and so that people in underdeveloped countries can have adequate supplies of animal protein for the first time.'",
+      "translation": "奈杰尔·考尔德提出，可以把“有营养但难以下咽、由工业技术生产的基础食品——例如用石油制成的酵母——喂给动物，这样我们便能继续食用惯常的肉、蛋、奶、黄油和奶酪，也能让欠发达国家的人第一次获得充足的动物蛋白供应”。",
+      "structure": [
+        {"text": "Nigel Calder suggested", "role": "main_clause", "level": 1},
+        {"text": "that 'nourishing but unpalatable primary food produced by industrial techniques - like yeast from petroleum may be fed to animals", "role": "object_clause", "level": 2},
+        {"text": "so that we can continue to eat our customary meat, eggs. milk, butter, and cheese", "role": "purpose_clause", "level": 3},
+        {"text": "and so that people in underdeveloped countries can have adequate supplies of animal protein for the first time.'", "role": "coordinate_purpose_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "produced by industrial techniques 是过去分词短语，修饰 primary food；like yeast from petroleum 给出例子。",
+        "两个 so that 从句并列，分别说明让富裕社会保留惯常饮食和让欠发达国家获得蛋白质。",
+        "原文 eggs. milk 的句点是源文标点异常，这里仍作为同一列举理解。"
+      ],
+      "expressions": [
+        {"text": "be fed to", "meaning_zh": "被喂给"},
+        {"text": "continue to", "meaning_zh": "继续做"},
+        {"text": "adequate supplies of", "meaning_zh": "充足的……供应"},
+        {"text": "for the first time", "meaning_zh": "第一次"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 25,
+      "sentence": "In the long run. tissue-cloning techniques could be used to grow desired portions of meat by themselves.",
+      "translation": "从长远来看，可以利用组织克隆技术单独培育人们想要的肉类部位。",
+      "structure": [
+        {"text": "In the long run", "role": "time_adverbial", "level": 1},
+        {"text": "tissue-cloning techniques", "role": "subject", "level": 1},
+        {"text": "could be used", "role": "passive_verb", "level": 1},
+        {"text": "to grow desired portions of meat by themselves", "role": "purpose_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "原文在 In the long run 后误用句点，但语义上它仍是全句的时间状语。",
+        "by themselves 修饰肉的特定部位，表示无需培育整只动物就能单独生长。"
+      ],
+      "expressions": [
+        {"text": "in the long run", "meaning_zh": "从长远来看"},
+        {"text": "be used to do", "meaning_zh": "被用于做某事"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "Once their DNA has been extracted to create cow less steaks and chicken less drumsticks, domesticated species of livestock, bred for millennia to be stupid or to have grotesquely enhanced traits, should be allowed to become extinct, except for a few specimens in zoos.",
+      "translation": "一旦提取了这些家畜的 DNA，用来制造不需要牛的牛排和不需要鸡的鸡腿，那么经过数千年繁育、变得愚钝或具有畸形强化特征的家养牲畜物种，除了动物园保留少数样本外，就可以任其灭绝。",
+      "structure": [
+        {"text": "Once their DNA has been extracted to create cow less steaks and chicken less drumsticks", "role": "time_adverbial_clause", "level": 2},
+        {"text": "domesticated species of livestock", "role": "subject", "level": 1},
+        {"text": "bred for millennia to be stupid or to have grotesquely enhanced traits", "role": "past_participle_modifier", "level": 2},
+        {"text": "should be allowed to become extinct, except for a few specimens in zoos", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "their 指后文的 domesticated species of livestock，先在 Once 从句中提前出现。",
+        "bred for millennia... 是插入式过去分词短语，补充说明家畜长期被人为育种的结果。",
+        "except for... 限定 become extinct，表示动物园中的少数个体除外。"
+      ],
+      "expressions": [
+        {"text": "extract DNA", "meaning_zh": "提取 DNA"},
+        {"text": "be bred for", "meaning_zh": "为某种目的被繁育"},
+        {"text": "be allowed to become extinct", "meaning_zh": "被任其灭绝"},
+        {"text": "except for", "meaning_zh": "除……之外"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "However, game such as wild deer, rabbits and wild ducks w ill be ever more abundant as farms revert to wilderness, so this could supplement the laboratory-grown meat in the diets of tomorrow's affluent.",
+      "translation": "不过，随着农场恢复为荒野，野鹿、野兔和野鸭等野味会越来越丰富，因此它们可以补充未来富裕人群饮食中的实验室培育肉。",
+      "structure": [
+        {"text": "However, game such as wild deer, rabbits and wild ducks w ill be ever more abundant", "role": "main_clause", "level": 1},
+        {"text": "as farms revert to wilderness", "role": "time_adverbial_clause", "level": 2},
+        {"text": "so this could supplement the laboratory-grown meat", "role": "result_clause", "level": 1},
+        {"text": "in the diets of tomorrow's affluent", "role": "prepositional_modifier", "level": 2}
+      ],
+      "difficult_points": [
+        "game 在此指可猎食的野生动物，不是“游戏”；such as 引出例子。",
+        "this 指前面所说日益丰富的野味；as 表示农场恢复荒野的伴随变化。",
+        "原文 w ill 为 will 的断词异常；the affluent 指富裕人群。"
+      ],
+      "expressions": [
+        {"text": "revert to wilderness", "meaning_zh": "恢复为荒野"},
+        {"text": "ever more abundant", "meaning_zh": "越来越丰富"},
+        {"text": "supplement", "meaning_zh": "补充"},
+        {"text": "laboratory-grown meat", "meaning_zh": "实验室培育肉"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 28,
+      "sentence": "With rising personal incomes come rising expectations of mobility.",
+      "translation": "随着个人收入提高，人们对出行能力的期待也随之上升。",
+      "structure": [
+        {"text": "With rising personal incomes", "role": "accompanying_adverbial", "level": 1},
+        {"text": "come", "role": "inverted_predicate", "level": 1},
+        {"text": "rising expectations of mobility", "role": "subject", "level": 1}
+      ],
+      "difficult_points": [
+        "这是完全倒装，正常语序是 rising expectations of mobility come with...。",
+        "两个 rising 分别修饰 incomes 和 expectations，突出二者同步增长。"
+      ],
+      "expressions": [
+        {"text": "rising expectations of", "meaning_zh": "对……日益提高的期待"},
+        {"text": "personal incomes", "meaning_zh": "个人收入"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 29,
+      "sentence": "This is another luxury of today's rich that could become a necessity of tomorrow's global population - particularly if its members choose to live widely dispersed in a post-agrarian wilderness.",
+      "translation": "这是当今富人的另一项奢侈条件，却可能成为未来全球人口的必需品——尤其是在这些人选择分散居住于后农业时代荒野的情况下。",
+      "structure": [
+        {"text": "This is another luxury of today's rich", "role": "main_clause", "level": 1},
+        {"text": "that could become a necessity of tomorrow's global population", "role": "relative_clause", "level": 2},
+        {"text": "particularly if its members choose to live widely dispersed in a post-agrarian wilderness", "role": "conditional_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "This 指上一句的 mobility；that 修饰 luxury，并说明它未来可能成为必需品。",
+        "its members 中 its 指 tomorrow's global population。",
+        "live widely dispersed 表示居住地点广泛分散，过去分词 dispersed 作主语补足语。"
+      ],
+      "expressions": [
+        {"text": "become a necessity", "meaning_zh": "成为必需品"},
+        {"text": "choose to", "meaning_zh": "选择做某事"},
+        {"text": "widely dispersed", "meaning_zh": "广泛分散的"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 30,
+      "sentence": "In his recent book Free Flight. James Fallows, a pilot as well as a writer, describes serious attempts by both state and private entrepreneurs in the USA to promote an 'air taxi' system within the price range of today's middle class and perhaps tomorrow's global population.",
+      "translation": "在近作《自由飞行》中，既是飞行员又是作家的詹姆斯·法洛斯描述了美国政府和私营企业家为推广“空中出租车”系统所作的认真尝试；其价格处于当今中产阶级、或许也包括未来全球人口的承受范围之内。",
+      "structure": [
+        {"text": "In his recent book Free Flight", "role": "source_adverbial", "level": 1},
+        {"text": "James Fallows, a pilot as well as a writer", "role": "subject_with_apposition", "level": 1},
+        {"text": "describes serious attempts by both state and private entrepreneurs in the USA", "role": "predicate", "level": 1},
+        {"text": "to promote an 'air taxi' system within the price range of today's middle class and perhaps tomorrow's global population", "role": "infinitive_modifier", "level": 2}
+      ],
+      "difficult_points": [
+        "原文在书名 Free Flight 后误用句点，语义上 In... 是 describes 的出处状语。",
+        "a pilot as well as a writer 是 James Fallows 的同位语。",
+        "to promote... 修饰 attempts，说明尝试的具体目标；within the price range 表示价格可承受。"
+      ],
+      "expressions": [
+        {"text": "as well as", "meaning_zh": "以及；既……又……"},
+        {"text": "serious attempts to", "meaning_zh": "为做……而进行的认真尝试"},
+        {"text": "promote a system", "meaning_zh": "推广一种系统"},
+        {"text": "within the price range of", "meaning_zh": "在……可承受的价格范围内"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 31,
+      "sentence": "Two of the chief obstacles to the science fiction fantasy of the personal plane or hover car are price and danger.",
+      "translation": "个人飞机或悬浮汽车这一科幻构想面临的主要障碍中，有两项是价格和危险性。",
+      "structure": [
+        {"text": "Two of the chief obstacles to the science fiction fantasy of the personal plane or hover car", "role": "subject", "level": 1},
+        {"text": "are", "role": "linking_verb", "level": 1},
+        {"text": "price and danger", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "Two of 表明价格和危险只是多个主要障碍中的两个。",
+        "to the science fiction fantasy 修饰 obstacles，表示实现这一幻想所面临的障碍。"
+      ],
+      "expressions": [
+        {"text": "chief obstacles to", "meaning_zh": "实现……的主要障碍"},
+        {"text": "science fiction fantasy", "meaning_zh": "科幻构想"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 32,
+      "sentence": "While technological improvements are driving prices down, piloting an aircraft in three dimensions is still more difficult than driving a car in two. and pilot error causes more fatalities than driver error.",
+      "translation": "尽管技术进步正在压低价格，但在三维空间中驾驶飞机仍比在二维平面上驾驶汽车更困难，而且飞行员失误造成的死亡人数也多于驾驶员失误。",
+      "structure": [
+        {"text": "While technological improvements are driving prices down", "role": "concessive_clause", "level": 2},
+        {"text": "piloting an aircraft in three dimensions is still more difficult than driving a car in two", "role": "main_clause", "level": 1},
+        {"text": "and pilot error causes more fatalities than driver error", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "While 引导让步从句，说明降价并没有消除操作难度和安全问题。",
+        "piloting... 与 driving... 都是动名词短语，在 more difficult than 结构中比较。",
+        "原文 two. and 的句点为标点异常，语义上 and 仍连接后一个并列分句。"
+      ],
+      "expressions": [
+        {"text": "drive prices down", "meaning_zh": "压低价格"},
+        {"text": "more difficult than", "meaning_zh": "比……更困难"},
+        {"text": "cause fatalities", "meaning_zh": "造成死亡"},
+        {"text": "pilot error", "meaning_zh": "飞行员操作失误"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 33,
+      "sentence": "But before long our aircraft and cars will be piloted by computers which arc never tired or stressed.",
+      "translation": "但用不了多久，我们的飞机和汽车将由永远不会疲劳或紧张的计算机驾驶。",
+      "structure": [
+        {"text": "But before long", "role": "time_adverbial", "level": 1},
+        {"text": "our aircraft and cars", "role": "subject", "level": 1},
+        {"text": "will be piloted by computers", "role": "passive_predicate", "level": 1},
+        {"text": "which arc never tired or stressed", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导定语从句修饰 computers，解释计算机驾驶更安全的原因。",
+        "原文 arc 按语境应为 are 的 OCR 错误；will be piloted 是将来时被动语态。"
+      ],
+      "expressions": [
+        {"text": "before long", "meaning_zh": "不久以后"},
+        {"text": "be piloted by", "meaning_zh": "由……驾驶"}
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 34,
+      "sentence": "So perhaps there are some grounds for optimism when viewing the future of civilization.",
+      "translation": "因此，在展望文明的未来时，我们或许有一些理由保持乐观。",
+      "structure": [
+        {"text": "So perhaps there are some grounds for optimism", "role": "existential_clause", "level": 1},
+        {"text": "when viewing the future of civilization", "role": "reduced_time_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "there are some grounds for... 表示“有一些……的理由或依据”。",
+        "when viewing... 是省略主语和 be 动词的时间从句，逻辑主语泛指我们。"
+      ],
+      "expressions": [
+        {"text": "grounds for optimism", "meaning_zh": "保持乐观的理由"},
+        {"text": "view the future of", "meaning_zh": "看待……的未来"}
+      ]
+    },
+    {
+      "id": "J-02",
+      "paragraph_label": "J",
+      "sentence_index": 35,
+      "sentence": "With the help of technology, and without putting serious strains on the global environment, possessions, space and mobility can be achieved for all the projected population of the world.",
+      "translation": "借助技术，并且不给全球环境造成严重压力，未来预计的全体世界人口都可以获得财物、空间和出行能力。",
+      "structure": [
+        {"text": "With the help of technology", "role": "means_adverbial", "level": 1},
+        {"text": "without putting serious strains on the global environment", "role": "negative_condition_adverbial", "level": 1},
+        {"text": "possessions, space and mobility", "role": "compound_subject", "level": 1},
+        {"text": "can be achieved for all the projected population of the world", "role": "passive_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "With... 与 without... 是两个并列的前置状语，分别说明手段和环境限制。",
+        "possessions, space and mobility 是被动句主语，呼应前文概括的三类富裕生活需求。",
+        "projected population 指根据预测未来将达到的世界人口总量。"
+      ],
+      "expressions": [
+        {"text": "with the help of", "meaning_zh": "借助"},
+        {"text": "put strains on", "meaning_zh": "给……造成压力"},
+        {"text": "the projected population", "meaning_zh": "预计人口规模"}
+      ]
+    }
+  ]
+}

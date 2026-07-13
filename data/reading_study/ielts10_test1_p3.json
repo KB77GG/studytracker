@@ -1,0 +1,801 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts10_test1_reading",
+  "passage_id": "ielts10_test1_p3",
+  "passage_title": "The Psychology of Innovation",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "Innovation is key to business survival, and companies put substantial resources into inspiring employees to develop new ideas.",
+      "translation": "创新是企业生存的关键，公司会投入大量资源，激励员工提出新想法。",
+      "structure": [
+        {"text": "Innovation is key to business survival", "role": "main_clause", "level": 1},
+        {"text": "and companies put substantial resources into inspiring employees to develop new ideas", "role": "coordinated_clause", "level": 1},
+        {"text": "inspiring employees to develop new ideas", "role": "non_finite_clause", "level": 2},
+        {"text": "to develop new ideas", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": ["and 连接两个完整分句，分别说明创新的重要性和公司的投入。", "put resources into doing 表示“投入资源做某事”，其中 to develop... 是 employees 的宾语补足语。"],
+      "expressions": [
+        {"text": "be key to", "meaning_zh": "对……至关重要"},
+        {"text": "put substantial resources into", "meaning_zh": "为……投入大量资源"},
+        {"text": "develop new ideas", "meaning_zh": "提出新想法"}
+      ]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "There are, nevertheless, people working in luxurious, state-of-the-art centres designed to stimulate innovation who find that their environment doesn't make them feel at all creative.",
+      "translation": "然而，有些人在豪华、先进且旨在激发创新的中心工作，却发现这样的环境丝毫没有让他们感到更有创造力。",
+      "structure": [
+        {"text": "There are, nevertheless, people", "role": "main_clause", "level": 1},
+        {"text": "working in luxurious, state-of-the-art centres", "role": "participial_phrase", "level": 2},
+        {"text": "designed to stimulate innovation", "role": "participial_phrase", "level": 3},
+        {"text": "to stimulate innovation", "role": "non_finite_clause", "level": 4},
+        {"text": "who find that their environment doesn't make them feel at all creative", "role": "relative_clause", "level": 2},
+        {"text": "that their environment doesn't make them feel at all creative", "role": "noun_clause", "level": 3},
+        {"text": "them feel at all creative", "role": "complement", "level": 4}
+      ],
+      "difficult_points": ["working... 与 who find... 都修饰 people，designed... 则进一步修饰 centres。", "make them feel creative 是“make + 宾语 + 动词原形”结构，at all 加强否定语气。", "nevertheless 是插入性的转折副词，不属于从句。"],
+      "expressions": [
+        {"text": "state-of-the-art", "meaning_zh": "最先进的"},
+        {"text": "be designed to", "meaning_zh": "旨在……"},
+        {"text": "stimulate innovation", "meaning_zh": "激发创新"}
+      ]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "And there are those who don't have a budget, or much space, but who innovate successfully.",
+      "translation": "也有人既没有预算，也没有多少空间，却能成功创新。",
+      "structure": [
+        {"text": "there are those", "role": "main_clause", "level": 1},
+        {"text": "who don't have a budget, or much space", "role": "relative_clause", "level": 2},
+        {"text": "but who innovate successfully", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["those 在此泛指“那些人”，由后面的两个 who 定语从句共同限定。", "but 连接两个形成反差的定语从句：资源有限，却能成功创新。"],
+      "expressions": [
+        {"text": "innovate successfully", "meaning_zh": "成功实现创新"}
+      ]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "For Robert B. Cialdini, Professor of Psychology at Arizona State University, one reason that companies don't succeed as often as they should is that innovation starts with recruitment.",
+      "translation": "亚利桑那州立大学心理学教授 Robert B. Cialdini 认为，公司未能达到应有成功频率的一个原因，是创新始于招聘。",
+      "structure": [
+        {"text": "For Robert B. Cialdini", "role": "prepositional_phrase", "level": 1},
+        {"text": "Professor of Psychology at Arizona State University", "role": "apposition", "level": 2},
+        {"text": "one reason that companies don't succeed as often as they should", "role": "subject", "level": 1},
+        {"text": "that companies don't succeed as often as they should", "role": "relative_clause", "level": 2},
+        {"text": "as often as they should", "role": "adverbial_clause", "level": 3},
+        {"text": "is that innovation starts with recruitment", "role": "verb_phrase", "level": 1},
+        {"text": "that innovation starts with recruitment", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": ["第一个 that 引导定语从句修饰 reason，第二个 that 引导表语从句说明具体原因。", "as often as they should 省略了 succeed，表示“达到本应有的成功频率”。"],
+      "expressions": [
+        {"text": "as often as", "meaning_zh": "像……那样频繁"},
+        {"text": "start with recruitment", "meaning_zh": "从招聘开始"}
+      ]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "Research shows that the fit between an employee's values and a company's values makes a difference to what contribution they make and whether, two years after they join, they're still at the company.",
+      "translation": "研究表明，员工价值观与公司价值观的契合程度，会影响他们能作出怎样的贡献，也会影响他们入职两年后是否仍留在公司。",
+      "structure": [
+        {"text": "Research shows", "role": "main_clause", "level": 1},
+        {"text": "that the fit between an employee's values and a company's values makes a difference", "role": "noun_clause", "level": 2},
+        {"text": "between an employee's values and a company's values", "role": "prepositional_phrase", "level": 3},
+        {"text": "to what contribution they make", "role": "prepositional_phrase", "level": 3},
+        {"text": "what contribution they make", "role": "noun_clause", "level": 4},
+        {"text": "and whether, two years after they join, they're still at the company", "role": "noun_clause", "level": 3},
+        {"text": "two years after they join", "role": "adverbial_clause", "level": 4}
+      ],
+      "difficult_points": ["主语中心词是 fit，between...and... 说明哪两种价值观之间的契合。", "what 与 whether 引导的两个名词性从句并列，都是 make a difference to 的对象。", "they 在文中采用中性单数指代，回指 an employee。"],
+      "expressions": [
+        {"text": "the fit between A and B", "meaning_zh": "A 与 B 之间的契合"},
+        {"text": "make a difference to", "meaning_zh": "对……产生影响"}
+      ]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "Studies at Harvard Business School show that, although some individuals may be more creative than others, almost every individual can be creative in the right circumstances.",
+      "translation": "哈佛商学院的研究表明，虽然有些人可能比其他人更有创造力，但几乎每个人都能在合适的环境中发挥创造力。",
+      "structure": [
+        {"text": "Studies at Harvard Business School show", "role": "main_clause", "level": 1},
+        {"text": "that, although some individuals may be more creative than others, almost every individual can be creative in the right circumstances", "role": "noun_clause", "level": 2},
+        {"text": "although some individuals may be more creative than others", "role": "adverbial_clause", "level": 3},
+        {"text": "almost every individual can be creative", "role": "main_clause", "level": 3},
+        {"text": "in the right circumstances", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": ["although 从句嵌套在 show 的 that 宾语从句中，先承认个体差异，再提出普遍可能性。", "others 代替 other individuals，避免重复。"],
+      "expressions": [
+        {"text": "in the right circumstances", "meaning_zh": "在合适的环境下"}
+      ]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 7,
+      "sentence": "One of the most famous photographs in the story of rock'n'roll emphasises Cialdini's view.",
+      "translation": "摇滚乐史上最著名的照片之一印证了 Cialdini 的观点。",
+      "structure": [
+        {"text": "One of the most famous photographs in the story of rock'n'roll", "role": "subject", "level": 1},
+        {"text": "emphasises", "role": "verb_phrase", "level": 1},
+        {"text": "Cialdini's view", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["one of 后接复数名词 photographs，但句子主语中心是 One，所以谓语用单数。", "emphasises 在此并非“加重语气”，而是表示这张照片突显、印证了其观点。"],
+      "expressions": [
+        {"text": "one of the most famous", "meaning_zh": "最著名的……之一"}
+      ]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 8,
+      "sentence": "The 1956 picture of singers Elvis Presley, Carl Perkins, Johnny Cash and Jerry Lee Lewis jamming at a piano in Sun Studios in Memphis tells a hidden story.",
+      "translation": "这张拍摄于1956年的照片记录了 Elvis Presley、Carl Perkins、Johnny Cash 和 Jerry Lee Lewis 在孟菲斯太阳录音室围着钢琴即兴演奏的场景，而它背后另有一段不为人知的故事。",
+      "structure": [
+        {"text": "The 1956 picture of singers Elvis Presley, Carl Perkins, Johnny Cash and Jerry Lee Lewis", "role": "subject", "level": 1},
+        {"text": "jamming at a piano in Sun Studios in Memphis", "role": "participial_phrase", "level": 2},
+        {"text": "tells", "role": "verb_phrase", "level": 1},
+        {"text": "a hidden story", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["jamming... 是现在分词短语，修饰照片中的四位歌手。", "tell a story 的主语是 picture，表示照片展现或揭示一段故事。"],
+      "expressions": [
+        {"text": "tell a hidden story", "meaning_zh": "揭示一段不为人知的故事"}
+      ]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 9,
+      "sentence": "Sun's 'million-dollar quartet' could have been a quintet.",
+      "translation": "太阳唱片公司的“百万美元四重奏”原本可能成为五重奏。",
+      "structure": [
+        {"text": "Sun's 'million-dollar quartet'", "role": "subject", "level": 1},
+        {"text": "could have been", "role": "verb_phrase", "level": 1},
+        {"text": "a quintet", "role": "complement", "level": 1}
+      ],
+      "difficult_points": ["could have been 表示过去本有可能发生、但实际没有发生的情况。", "quartet 与 quintet 分别指四人组合和五人组合。"],
+      "expressions": []
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 10,
+      "sentence": "Missing from the picture is Roy Orbison, a greater natural singer than Lewis, Perkins or Cash.",
+      "translation": "照片中缺少的是 Roy Orbison；论天生的歌唱才华，他胜过 Lewis、Perkins 和 Cash。",
+      "structure": [
+        {"text": "Missing from the picture", "role": "complement", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "Roy Orbison", "role": "subject", "level": 1},
+        {"text": "a greater natural singer than Lewis, Perkins or Cash", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["表语 Missing from the picture 被置于句首，真正的主语是 Roy Orbison。", "逗号后的名词短语是 Roy Orbison 的同位语，说明他的歌唱天赋。"],
+      "expressions": [
+        {"text": "be missing from", "meaning_zh": "未出现在；从……中缺失"}
+      ]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "Sam Phillips, who owned Sun, wanted to revolutionise popular music with songs that fused black and white music, and country and blues.",
+      "translation": "太阳唱片公司的老板 Sam Phillips 希望通过融合黑人音乐与白人音乐、乡村音乐与布鲁斯的歌曲，彻底革新流行音乐。",
+      "structure": [
+        {"text": "Sam Phillips", "role": "subject", "level": 1},
+        {"text": "who owned Sun", "role": "relative_clause", "level": 2},
+        {"text": "wanted to revolutionise popular music", "role": "verb_phrase", "level": 1},
+        {"text": "with songs", "role": "prepositional_phrase", "level": 2},
+        {"text": "that fused black and white music, and country and blues", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["who owned Sun 是非限制性定语从句，补充 Sam Phillips 的身份。", "that 引导定语从句修饰 songs，两个 and 分别连接两组要融合的音乐类型。"],
+      "expressions": [
+        {"text": "revolutionise popular music", "meaning_zh": "彻底革新流行音乐"},
+        {"text": "fuse A and B", "meaning_zh": "融合 A 与 B"}
+      ]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "Presley, Cash, Perkins and Lewis instinctively understood Phillips's ambition and believed in it.",
+      "translation": "Presley、Cash、Perkins 和 Lewis 本能地理解 Phillips 的抱负，并且认同这一目标。",
+      "structure": [
+        {"text": "Presley, Cash, Perkins and Lewis", "role": "subject", "level": 1},
+        {"text": "instinctively understood Phillips's ambition", "role": "verb_phrase", "level": 1},
+        {"text": "and believed in it", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["understood 与 believed in 是共用同一主语的并列谓语。", "it 指代 Phillips's ambition；believe in 在此表示认同、信奉，而非仅仅相信其存在。"],
+      "expressions": [
+        {"text": "believe in", "meaning_zh": "认同；信奉"},
+        {"text": "understand someone's ambition", "meaning_zh": "理解某人的抱负"}
+      ]
+    },
+    {
+      "id": "C-07", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "Orbison wasn't inspired by the goal, and only ever achieved one hit with the Sun label.",
+      "translation": "Orbison 并未受到这一目标的激励，而且在太阳唱片旗下始终只有一首歌走红。",
+      "structure": [
+        {"text": "Orbison", "role": "subject", "level": 1},
+        {"text": "wasn't inspired by the goal", "role": "verb_phrase", "level": 1},
+        {"text": "and only ever achieved one hit with the Sun label", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["wasn't inspired 是被动结构，表示该目标未能激发 Orbison。", "only ever 加强限制语气，表示在整个相关时期内仅有一次成功。"],
+      "expressions": [
+        {"text": "be inspired by", "meaning_zh": "受到……激励"},
+        {"text": "achieve one hit", "meaning_zh": "取得一次热门作品的成功"}
+      ]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 14,
+      "sentence": "The value fit matters, says Cialdini, because innovation is, in part, a process of change, and under that pressure we, as a species, behave differently.",
+      "translation": "Cialdini 说，价值观是否契合很重要，因为创新在一定程度上是一个变化的过程；在这种压力下，人类这一物种会表现得不同。",
+      "structure": [
+        {"text": "The value fit matters", "role": "main_clause", "level": 1},
+        {"text": "says Cialdini", "role": "parenthesis", "level": 1},
+        {"text": "because innovation is, in part, a process of change", "role": "adverbial_clause", "level": 2},
+        {"text": "and under that pressure we, as a species, behave differently", "role": "coordinated_clause", "level": 2},
+        {"text": "as a species", "role": "parenthesis", "level": 3}
+      ],
+      "difficult_points": ["says Cialdini 是插入的引述语，句子主干从 The value fit matters 开始。", "because 引导原因状语从句，and 又在该原因说明中连接另一项事实。", "as a species 是插入说明，强调这里的 we 指整个人类。"],
+      "expressions": [
+        {"text": "in part", "meaning_zh": "在一定程度上"},
+        {"text": "under pressure", "meaning_zh": "在压力之下"}
+      ]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 15,
+      "sentence": "'When things change, we are hard-wired to play it safe.'",
+      "translation": "“当情况发生变化时，我们天生就会采取稳妥保守的做法。”",
+      "structure": [
+        {"text": "When things change", "role": "adverbial_clause", "level": 1},
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "are hard-wired", "role": "verb_phrase", "level": 1},
+        {"text": "to play it safe", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["be hard-wired to 是比喻性被动表达，指某种反应仿佛与生俱来。", "play it safe 是固定表达，意为避免冒险、选择稳妥做法。"],
+      "expressions": [
+        {"text": "be hard-wired to", "meaning_zh": "天生倾向于……"},
+        {"text": "play it safe", "meaning_zh": "谨慎行事；不冒险"}
+      ]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 16,
+      "sentence": "Managers should therefore adopt an approach that appears counter-intuitive – they should explain what stands to be lost if the company fails to seize a particular opportunity.",
+      "translation": "因此，管理者应采取一种看似有违直觉的做法：向员工说明，如果公司未能抓住某个特定机会，可能会失去什么。",
+      "structure": [
+        {"text": "Managers should therefore adopt an approach", "role": "main_clause", "level": 1},
+        {"text": "that appears counter-intuitive", "role": "relative_clause", "level": 2},
+        {"text": "they should explain", "role": "main_clause", "level": 1},
+        {"text": "what stands to be lost", "role": "noun_clause", "level": 2},
+        {"text": "to be lost", "role": "non_finite_clause", "level": 3},
+        {"text": "if the company fails to seize a particular opportunity", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["that 引导定语从句修饰 approach，破折号后具体解释这种做法。", "what stands to be lost 是 explain 的宾语从句，what 同时作从句主语。", "fail to do 表示未能做某事，seize an opportunity 表示抓住机会。"],
+      "expressions": [
+        {"text": "adopt an approach", "meaning_zh": "采取一种方法"},
+        {"text": "stand to lose", "meaning_zh": "可能会失去"},
+        {"text": "seize an opportunity", "meaning_zh": "抓住机会"}
+      ]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 17,
+      "sentence": "Studies show that we invariably take more gambles when threatened with a loss than when offered a reward.",
+      "translation": "研究表明，与得到奖励时相比，面临损失威胁时我们总会更愿意冒险。",
+      "structure": [
+        {"text": "Studies show", "role": "main_clause", "level": 1},
+        {"text": "that we invariably take more gambles", "role": "noun_clause", "level": 2},
+        {"text": "when threatened with a loss", "role": "adverbial_clause", "level": 3},
+        {"text": "than when offered a reward", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["两个 when 从句都省略了主语 we 和 are，完整形式分别为 when we are threatened... 与 when we are offered...。", "more...than... 比较面对损失和获得奖励两种情境下的冒险倾向。"],
+      "expressions": [
+        {"text": "take a gamble", "meaning_zh": "冒险"},
+        {"text": "be threatened with a loss", "meaning_zh": "面临损失的威胁"}
+      ]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 18,
+      "sentence": "Managing innovation is a delicate art.",
+      "translation": "管理创新是一门需要谨慎拿捏的艺术。",
+      "structure": [
+        {"text": "Managing innovation", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "a delicate art", "role": "complement", "level": 1}
+      ],
+      "difficult_points": ["Managing innovation 是动名词短语，整体充当主语。", "a delicate art 是比喻，强调创新管理需要精细判断，而非字面上的艺术门类。"],
+      "expressions": [
+        {"text": "a delicate art", "meaning_zh": "一门需要谨慎拿捏的艺术"}
+      ]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 19,
+      "sentence": "It's easy for a company to be pulled in conflicting directions as the marketing, product development, and finance departments each get different feedback from different sets of people.",
+      "translation": "由于市场、产品开发和财务部门各自从不同人群那里获得不同反馈，公司很容易被拉向彼此冲突的方向。",
+      "structure": [
+        {"text": "It's easy", "role": "main_clause", "level": 1},
+        {"text": "for a company to be pulled in conflicting directions", "role": "non_finite_clause", "level": 2},
+        {"text": "to be pulled in conflicting directions", "role": "non_finite_clause", "level": 3},
+        {"text": "as the marketing, product development, and finance departments each get different feedback from different sets of people", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["It 是形式主语，真正的主语是 for a company to be pulled...。", "to be pulled 是被动不定式，形象地表示公司受到不同部门意见的牵引。", "as 在此引导原因状语从句，each 强调三个部门分别获得不同反馈。"],
+      "expressions": [
+        {"text": "be pulled in conflicting directions", "meaning_zh": "被拉向相互冲突的方向"},
+        {"text": "get feedback from", "meaning_zh": "从……获得反馈"}
+      ]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 20,
+      "sentence": "And without a system which ensures collaborative exchanges within the company, it's also easy for small 'pockets of innovation' to disappear.",
+      "translation": "如果没有一套确保公司内部协作交流的机制，小范围的“创新点”也很容易消失。",
+      "structure": [
+        {"text": "without a system", "role": "prepositional_phrase", "level": 1},
+        {"text": "which ensures collaborative exchanges within the company", "role": "relative_clause", "level": 2},
+        {"text": "it's also easy", "role": "main_clause", "level": 1},
+        {"text": "for small 'pockets of innovation' to disappear", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["without 引出的介词短语表达否定条件，可译为“如果没有……”。", "which 引导定语从句修饰 system。", "it 是形式主语，真正的主语是 for...to disappear。"],
+      "expressions": [
+        {"text": "collaborative exchanges", "meaning_zh": "协作交流"},
+        {"text": "pockets of innovation", "meaning_zh": "零散的小范围创新"}
+      ]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 21,
+      "sentence": "Innovation is a contact sport.",
+      "translation": "创新是一项需要人与人密切互动的“接触性运动”。",
+      "structure": [
+        {"text": "Innovation", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "a contact sport", "role": "complement", "level": 1}
+      ],
+      "difficult_points": ["a contact sport 是比喻，强调创新依赖人与人之间的接触、碰撞与协作。", "这里不是说创新属于体育运动，翻译时需保留其互动性的含义。"],
+      "expressions": []
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 22,
+      "sentence": "You can't brief people just by saying, 'We're going in this direction and I'm going to take you with me.'",
+      "translation": "你不能只是说“我们要朝这个方向走，我会带着你们一起”，就以为已经向大家交代清楚了。",
+      "structure": [
+        {"text": "You can't brief people", "role": "main_clause", "level": 1},
+        {"text": "just by saying", "role": "prepositional_phrase", "level": 2},
+        {"text": "'We're going in this direction", "role": "main_clause", "level": 3},
+        {"text": "and I'm going to take you with me.'", "role": "coordinated_clause", "level": 3}
+      ],
+      "difficult_points": ["by saying 表示方式，说明仅靠说一句话不足以完成 brief people。", "brief 在此作动词，表示向人说明任务或计划，而不是形容“简短的”。", "引语中的 be going to 在前半句表示行动方向，在后半句表示计划带领他人。"],
+      "expressions": [
+        {"text": "brief people", "meaning_zh": "向人交代情况或任务"},
+        {"text": "take someone with you", "meaning_zh": "带某人一起行动"}
+      ]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 23,
+      "sentence": "Cialdini believes that this 'follow-the-leader syndrome' is dangerous, not least because it encourages bosses to go it alone.",
+      "translation": "Cialdini 认为，这种“唯领导是从的综合征”很危险，尤其因为它会鼓励管理者独断专行。",
+      "structure": [
+        {"text": "Cialdini believes", "role": "main_clause", "level": 1},
+        {"text": "that this 'follow-the-leader syndrome' is dangerous", "role": "noun_clause", "level": 2},
+        {"text": "not least because it encourages bosses to go it alone", "role": "adverbial_clause", "level": 3},
+        {"text": "bosses", "role": "object", "level": 4},
+        {"text": "to go it alone", "role": "complement", "level": 4}
+      ],
+      "difficult_points": ["not least because 表示“尤其是因为”，强调后面的原因很重要。", "encourage bosses to do 是“动词 + 宾语 + 不定式宾补”结构。", "go it alone 指不与他人合作、独自作决定或行动。"],
+      "expressions": [
+        {"text": "not least because", "meaning_zh": "尤其是因为"},
+        {"text": "go it alone", "meaning_zh": "独自行动；单干"}
+      ]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 24,
+      "sentence": "'It's been scientifically proven that three people will be better than one at solving problems, even if that one person is the smartest person in the field.'",
+      "translation": "“科学已经证明，三个人共同解决问题会胜过一个人，即使那个人是该领域最聪明的人。”",
+      "structure": [
+        {"text": "It's been scientifically proven", "role": "main_clause", "level": 1},
+        {"text": "that three people will be better than one at solving problems", "role": "noun_clause", "level": 2},
+        {"text": "at solving problems", "role": "prepositional_phrase", "level": 3},
+        {"text": "even if that one person is the smartest person in the field", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["It 是形式主语，that 从句才是被科学证明的具体内容。", "one 代替 one person，与 three people 形成数量对比。", "even if 引导让步状语从句，表示即使单个人能力极强，结论仍成立。"],
+      "expressions": [
+        {"text": "be scientifically proven", "meaning_zh": "得到科学证明"},
+        {"text": "solve problems", "meaning_zh": "解决问题"},
+        {"text": "even if", "meaning_zh": "即使"}
+      ]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 25,
+      "sentence": "To prove his point, Cialdini cites an interview with molecular biologist James Watson.",
+      "translation": "为了证明自己的观点，Cialdini 引用了对分子生物学家 James Watson 的一次访谈。",
+      "structure": [
+        {"text": "To prove his point", "role": "non_finite_clause", "level": 1},
+        {"text": "Cialdini", "role": "subject", "level": 1},
+        {"text": "cites", "role": "verb_phrase", "level": 1},
+        {"text": "an interview with molecular biologist James Watson", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["句首不定式 To prove... 表示目的，其逻辑主语是 Cialdini。", "cite 在学术语境中表示引用某项材料作为证据。"],
+      "expressions": [
+        {"text": "prove one's point", "meaning_zh": "证明某人的观点"},
+        {"text": "cite an interview", "meaning_zh": "引用一次访谈"}
+      ]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 26,
+      "sentence": "Watson, together with Francis Crick, discovered the structure of DNA, the genetic information carrier of all living organisms.",
+      "translation": "Watson 与 Francis Crick 一起发现了 DNA 的结构；DNA 是所有生物的遗传信息载体。",
+      "structure": [
+        {"text": "Watson", "role": "subject", "level": 1},
+        {"text": "together with Francis Crick", "role": "prepositional_phrase", "level": 2},
+        {"text": "discovered", "role": "verb_phrase", "level": 1},
+        {"text": "the structure of DNA", "role": "object", "level": 1},
+        {"text": "the genetic information carrier of all living organisms", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["together with Francis Crick 是补充成分，主语中心仍是 Watson。", "逗号后的名词短语是 DNA 的同位语，解释其功能。"],
+      "expressions": [
+        {"text": "together with", "meaning_zh": "与……一起"},
+        {"text": "genetic information carrier", "meaning_zh": "遗传信息载体"}
+      ]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 27,
+      "sentence": "'When asked how they had cracked the code ahead of an array of highly accomplished rival investigators, he said something that stunned me.",
+      "translation": "“当被问及他们如何抢在一批成就卓著的竞争研究者之前破解密码时，他说了一番令我震惊的话。",
+      "structure": [
+        {"text": "When asked how they had cracked the code ahead of an array of highly accomplished rival investigators", "role": "adverbial_clause", "level": 1},
+        {"text": "how they had cracked the code ahead of an array of highly accomplished rival investigators", "role": "noun_clause", "level": 2},
+        {"text": "he said something", "role": "main_clause", "level": 1},
+        {"text": "that stunned me", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["When asked... 省略了 he was，表示 Watson 被问到问题时。", "how 引导 asked 的宾语从句，其中过去完成时表示破解发生在那次询问之前。", "that 引导定语从句修饰 something。"],
+      "expressions": [
+        {"text": "crack the code", "meaning_zh": "破解密码；解开难题"},
+        {"text": "ahead of", "meaning_zh": "先于……"},
+        {"text": "an array of", "meaning_zh": "一批；一系列"}
+      ]
+    },
+    {
+      "id": "F-06", "paragraph_label": "F", "sentence_index": 28,
+      "sentence": "He said he and Crick had succeeded because they were aware that they weren't the most intelligent of the scientists pursuing the answer.",
+      "translation": "他说，他和 Crick 之所以成功，是因为他们清楚自己并不是那些寻找答案的科学家中最聪明的。",
+      "structure": [
+        {"text": "He said", "role": "main_clause", "level": 1},
+        {"text": "he and Crick had succeeded", "role": "noun_clause", "level": 2},
+        {"text": "because they were aware", "role": "adverbial_clause", "level": 3},
+        {"text": "that they weren't the most intelligent of the scientists pursuing the answer", "role": "noun_clause", "level": 4},
+        {"text": "pursuing the answer", "role": "participial_phrase", "level": 5}
+      ],
+      "difficult_points": ["said 后省略 that，he and Crick had succeeded 是其宾语从句。", "because 从句说明成功原因，其中 be aware 又接 that 宾语从句。", "pursuing the answer 是现在分词短语，后置修饰 scientists。"],
+      "expressions": [
+        {"text": "be aware that", "meaning_zh": "清楚意识到……"},
+        {"text": "pursue the answer", "meaning_zh": "寻找答案"}
+      ]
+    },
+    {
+      "id": "F-07", "paragraph_label": "F", "sentence_index": 29,
+      "sentence": "The smartest scientist was called Rosalind Franklin who, Watson said, \"was so intelligent she rarely sought advice\".'",
+      "translation": "最聪明的科学家名叫 Rosalind Franklin；Watson 说，她“聪明到很少向别人寻求建议”。",
+      "structure": [
+        {"text": "The smartest scientist", "role": "subject", "level": 1},
+        {"text": "was called Rosalind Franklin", "role": "verb_phrase", "level": 1},
+        {"text": "who, Watson said, \"was so intelligent she rarely sought advice\"", "role": "relative_clause", "level": 2},
+        {"text": "Watson said", "role": "parenthesis", "level": 3},
+        {"text": "was so intelligent", "role": "verb_phrase", "level": 3},
+        {"text": "she rarely sought advice", "role": "adverbial_clause", "level": 4}
+      ],
+      "difficult_points": ["who 引导定语从句修饰 Rosalind Franklin，Watson said 是插入的引述语。", "so intelligent 后省略了 that，构成 so...that... 结果结构。", "seek advice 表示主动向他人征求意见。"],
+      "expressions": [
+        {"text": "so ... that ...", "meaning_zh": "如此……以至于……"},
+        {"text": "seek advice", "meaning_zh": "征求建议"}
+      ]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 30,
+      "sentence": "Teamwork taps into one of the basic drivers of human behavior.",
+      "translation": "团队合作利用了人类行为的一项基本驱动力。",
+      "structure": [
+        {"text": "Teamwork", "role": "subject", "level": 1},
+        {"text": "taps into", "role": "verb_phrase", "level": 1},
+        {"text": "one of the basic drivers of human behavior", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["tap into 在此表示利用某种已有的力量或资源。", "one of 后接复数名词 drivers，表示多项基本驱动力中的一种。"],
+      "expressions": [
+        {"text": "tap into", "meaning_zh": "利用；发掘"},
+        {"text": "a basic driver of", "meaning_zh": "……的一项基本驱动力"}
+      ]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 31,
+      "sentence": "'The principle of social proof is so pervasive that we don't even recognise it,' says Cialdini.",
+      "translation": "Cialdini 说：“社会认同原理影响如此广泛，以至于我们甚至察觉不到它。”",
+      "structure": [
+        {"text": "The principle of social proof", "role": "subject", "level": 1},
+        {"text": "is so pervasive", "role": "verb_phrase", "level": 1},
+        {"text": "that we don't even recognise it", "role": "adverbial_clause", "level": 2},
+        {"text": "says Cialdini", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": ["so...that... 引导结果，说明该原理普遍到难以被人察觉。", "it 指代 the principle of social proof；引语后的 says Cialdini 是倒装引述语。"],
+      "expressions": [
+        {"text": "the principle of social proof", "meaning_zh": "社会认同原理"},
+        {"text": "so ... that ...", "meaning_zh": "如此……以至于……"}
+      ]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 32,
+      "sentence": "'If your project is being resisted, for example, by a group of veteran employees, ask another old-timer to speak up for it.'",
+      "translation": "“例如，如果你的项目正受到一群资深员工的抵制，就请另一位老员工站出来为它说话。”",
+      "structure": [
+        {"text": "If your project is being resisted, for example, by a group of veteran employees", "role": "adverbial_clause", "level": 1},
+        {"text": "is being resisted", "role": "verb_phrase", "level": 2},
+        {"text": "ask another old-timer", "role": "main_clause", "level": 1},
+        {"text": "to speak up for it", "role": "complement", "level": 2}
+      ],
+      "difficult_points": ["is being resisted 是现在进行时的被动语态，强调抵制正在发生。", "主句是祈使句，省略主语 you；ask someone to do 表示请某人做某事。", "it 指代 your project。"],
+      "expressions": [
+        {"text": "veteran employees", "meaning_zh": "资深员工"},
+        {"text": "speak up for", "meaning_zh": "公开支持；为……辩护"}
+      ]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 33,
+      "sentence": "Cialdini is not alone in advocating this strategy.",
+      "translation": "并非只有 Cialdini 一人主张采用这种策略。",
+      "structure": [
+        {"text": "Cialdini", "role": "subject", "level": 1},
+        {"text": "is not alone", "role": "verb_phrase", "level": 1},
+        {"text": "in advocating this strategy", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": ["not alone in doing 表示并非只有某人持有某种观点或采取某种做法。", "advocate 在此作动词，表示公开支持或提倡某项策略。"],
+      "expressions": [
+        {"text": "be not alone in doing", "meaning_zh": "并非只有……做某事"},
+        {"text": "advocate a strategy", "meaning_zh": "主张采用某种策略"}
+      ]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 34,
+      "sentence": "Research shows that peer power, used horizontally not vertically, is much more powerful than any boss's speech.",
+      "translation": "研究表明，同伴影响力在横向而非纵向发挥作用时，比任何老板的讲话都强大得多。",
+      "structure": [
+        {"text": "Research shows", "role": "main_clause", "level": 1},
+        {"text": "that peer power, used horizontally not vertically, is much more powerful than any boss's speech", "role": "noun_clause", "level": 2},
+        {"text": "used horizontally not vertically", "role": "participial_phrase", "level": 3},
+        {"text": "is much more powerful", "role": "verb_phrase", "level": 3},
+        {"text": "than any boss's speech", "role": "comparative_phrase", "level": 3}
+      ],
+      "difficult_points": ["used horizontally not vertically 是过去分词短语，修饰 peer power。", "horizontally 指同级同事之间，vertically 指由上级向下级施加影响。", "than 引出比较对象 any boss's speech。"],
+      "expressions": [
+        {"text": "peer power", "meaning_zh": "同伴影响力"},
+        {"text": "horizontally not vertically", "meaning_zh": "横向而非纵向地"}
+      ]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 35,
+      "sentence": "Writing, visualizing and prototyping can stimulate the flow of new ideas.",
+      "translation": "写作、视觉化呈现和制作原型都能促进新想法不断涌现。",
+      "structure": [
+        {"text": "Writing, visualizing and prototyping", "role": "subject", "level": 1},
+        {"text": "can stimulate", "role": "verb_phrase", "level": 1},
+        {"text": "the flow of new ideas", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["三个并列的动名词共同作主语，概括三种促进创新的方法。", "the flow of new ideas 比喻新想法持续产生和流动。"],
+      "expressions": [
+        {"text": "stimulate the flow of new ideas", "meaning_zh": "促进新想法不断涌现"}
+      ]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 36,
+      "sentence": "Cialdini cites scores of research papers and historical events that prove that even something as simple as writing deepens every individual's engagement in the project.",
+      "translation": "Cialdini 引用了大量研究论文和历史事件，证明即使像写作这样简单的事情，也能加深每个人对项目的投入。",
+      "structure": [
+        {"text": "Cialdini", "role": "subject", "level": 1},
+        {"text": "cites", "role": "verb_phrase", "level": 1},
+        {"text": "scores of research papers and historical events", "role": "object", "level": 1},
+        {"text": "that prove that even something as simple as writing deepens every individual's engagement in the project", "role": "relative_clause", "level": 2},
+        {"text": "that even something as simple as writing deepens every individual's engagement in the project", "role": "noun_clause", "level": 3},
+        {"text": "as simple as writing", "role": "comparative_phrase", "level": 4}
+      ],
+      "difficult_points": ["第一个 that 引导定语从句修饰 papers and events，第二个 that 引导 prove 的宾语从句。", "something as simple as writing 是“as + 形容词 + as”结构，强调写作看似简单。", "engagement in the project 指参与者对项目的投入和参与程度。"],
+      "expressions": [
+        {"text": "scores of", "meaning_zh": "大量；许多"},
+        {"text": "deepen engagement in", "meaning_zh": "加深对……的投入"}
+      ]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 37,
+      "sentence": "It is, he says, the reason why all those competitions on breakfast cereal packets encouraged us to write in saying, in no more than 10 words: 'I like Kellogg's Corn Flakes because...'",
+      "translation": "他说，这正是为什么早餐麦片包装上的那些竞赛会鼓励我们投稿，用不超过10个词写下：“我喜欢 Kellogg's 玉米片，因为……”",
+      "structure": [
+        {"text": "It is", "role": "main_clause", "level": 1},
+        {"text": "he says", "role": "parenthesis", "level": 1},
+        {"text": "the reason", "role": "complement", "level": 1},
+        {"text": "why all those competitions on breakfast cereal packets encouraged us to write in", "role": "relative_clause", "level": 2},
+        {"text": "us", "role": "object", "level": 3},
+        {"text": "to write in", "role": "complement", "level": 3},
+        {"text": "saying, in no more than 10 words: 'I like Kellogg's Corn Flakes because...'", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": ["It 回指上一句所说的写作能加深投入这一事实，he says 是插入语。", "why 引导定语从句修饰 reason，说明竞赛鼓励人们投稿的原因。", "saying... 是现在分词短语，说明投稿时要写的具体内容。"],
+      "expressions": [
+        {"text": "the reason why", "meaning_zh": "……的原因"},
+        {"text": "write in", "meaning_zh": "写信投稿或参加活动"},
+        {"text": "in no more than 10 words", "meaning_zh": "用不超过10个词"}
+      ]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 38,
+      "sentence": "The very act of writing makes us more likely to believe it.",
+      "translation": "写作这一行为本身就会让我们更倾向于相信自己写下的内容。",
+      "structure": [
+        {"text": "The very act of writing", "role": "subject", "level": 1},
+        {"text": "makes", "role": "verb_phrase", "level": 1},
+        {"text": "us", "role": "object", "level": 1},
+        {"text": "more likely to believe it", "role": "complement", "level": 2},
+        {"text": "to believe it", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": ["very 在此作强调形容词，表示“正是……本身”，不是“非常”。", "make us more likely 是“make + 宾语 + 形容词宾补”结构。", "it 指代一个人亲自写下的观点或说法。"],
+      "expressions": [
+        {"text": "the very act of", "meaning_zh": "……这一行为本身"},
+        {"text": "be more likely to", "meaning_zh": "更有可能……"}
+      ]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 39,
+      "sentence": "Authority doesn't have to inhibit innovation but it often does.",
+      "translation": "权威并非必然会抑制创新，但现实中往往如此。",
+      "structure": [
+        {"text": "Authority doesn't have to inhibit innovation", "role": "main_clause", "level": 1},
+        {"text": "but it often does", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["doesn't have to 表示“不一定、并非必须”，不是“禁止”。", "does 代替前面的 inhibit innovation，避免重复；it 指 Authority。"],
+      "expressions": [
+        {"text": "inhibit innovation", "meaning_zh": "抑制创新"}
+      ]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 40,
+      "sentence": "The wrong kind of leadership will lead to what Cialdini calls 'captainitis,' the regrettable tendency of team members to opt out of team responsibilities that are properly theirs.",
+      "translation": "错误的领导方式会导致 Cialdini 所说的“队长病”，也就是团队成员逃避本应由自己承担的团队责任这一令人遗憾的倾向。",
+      "structure": [
+        {"text": "The wrong kind of leadership", "role": "subject", "level": 1},
+        {"text": "will lead to", "role": "verb_phrase", "level": 1},
+        {"text": "what Cialdini calls 'captainitis,'", "role": "noun_clause", "level": 2},
+        {"text": "the regrettable tendency of team members to opt out of team responsibilities that are properly theirs", "role": "apposition", "level": 2},
+        {"text": "to opt out of team responsibilities", "role": "non_finite_clause", "level": 3},
+        {"text": "that are properly theirs", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": ["what 引导名词性从句作 lead to 的宾语，what 同时作 calls 的宾语补足关系成分。", "逗号后的长名词短语是 captainitis 的同位解释。", "that 引导定语从句修饰 responsibilities，theirs 表示“本应由他们承担的责任”。"],
+      "expressions": [
+        {"text": "lead to", "meaning_zh": "导致"},
+        {"text": "opt out of", "meaning_zh": "退出；逃避参与"},
+        {"text": "team responsibilities", "meaning_zh": "团队责任"}
+      ]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 41,
+      "sentence": "He calls it captainitis because, he says, 'crew members of multipilot aircraft exhibit a sometimes deadly passivity when the flight captain makes a clearly wrong-headed decision.'",
+      "translation": "他说，之所以称其为“队长病”，是因为“多飞行员机组的成员在机长作出明显错误的决定时，有时会表现出足以致命的消极被动”。",
+      "structure": [
+        {"text": "He calls it captainitis", "role": "main_clause", "level": 1},
+        {"text": "because, he says, 'crew members of multipilot aircraft exhibit a sometimes deadly passivity", "role": "adverbial_clause", "level": 2},
+        {"text": "he says", "role": "parenthesis", "level": 3},
+        {"text": "when the flight captain makes a clearly wrong-headed decision", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["call it captainitis 是“call + 宾语 + 宾补”结构，表示给这种现象命名。", "because 引导原因从句，he says 插入在从句开头。", "when 从句说明机组成员表现出消极被动的具体情境。"],
+      "expressions": [
+        {"text": "exhibit passivity", "meaning_zh": "表现出消极被动"},
+        {"text": "make a wrong-headed decision", "meaning_zh": "作出错误的决定"}
+      ]
+    },
+    {
+      "id": "I-04", "paragraph_label": "I", "sentence_index": 42,
+      "sentence": "This behavior is not, he says, unique to air travel, but can happen in any workplace where the leader is overbearing.",
+      "translation": "他说，这种行为并非航空领域独有，而是可能发生在任何领导者专横强势的工作场所。",
+      "structure": [
+        {"text": "This behavior is not", "role": "main_clause", "level": 1},
+        {"text": "he says", "role": "parenthesis", "level": 1},
+        {"text": "unique to air travel", "role": "complement", "level": 1},
+        {"text": "but can happen in any workplace", "role": "coordinated_clause", "level": 1},
+        {"text": "where the leader is overbearing", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["he says 是插入语，不影响主干 is not unique... but can happen...。", "be unique to 表示某事物为某领域所独有。", "where 引导定语从句修饰 workplace。"],
+      "expressions": [
+        {"text": "be unique to", "meaning_zh": "为……所独有"},
+        {"text": "an overbearing leader", "meaning_zh": "专横强势的领导者"}
+      ]
+    },
+    {
+      "id": "J-01", "paragraph_label": "J", "sentence_index": 43,
+      "sentence": "At the other end of the scale is the 1980s Memphis design collective, a group of young designers for whom 'the only rule was that there were no rules'.",
+      "translation": "处在另一极端的是20世纪80年代的孟菲斯设计团体；对这群年轻设计师来说，“唯一的规则就是没有规则”。",
+      "structure": [
+        {"text": "At the other end of the scale", "role": "prepositional_phrase", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "the 1980s Memphis design collective", "role": "subject", "level": 1},
+        {"text": "a group of young designers", "role": "apposition", "level": 2},
+        {"text": "for whom 'the only rule was that there were no rules'", "role": "relative_clause", "level": 3},
+        {"text": "that there were no rules", "role": "noun_clause", "level": 4}
+      ],
+      "difficult_points": ["地点介词短语置于句首引起完全倒装，真正主语是 the 1980s Memphis design collective。", "a group... 是 collective 的同位语，for whom 引导定语从句修饰 designers。", "that there were no rules 是系动词 was 后的表语从句。"],
+      "expressions": [
+        {"text": "at the other end of the scale", "meaning_zh": "处在另一个极端"}
+      ]
+    },
+    {
+      "id": "J-02", "paragraph_label": "J", "sentence_index": 44,
+      "sentence": "This environment encouraged a free interchange of ideas, which led to more creativity with form, function, colour and materials that revolutionised attitudes to furniture design.",
+      "translation": "这种环境鼓励思想自由交流，从而催生了在形式、功能、色彩和材料方面的更多创意，并彻底改变了人们对家具设计的看法。",
+      "structure": [
+        {"text": "This environment", "role": "subject", "level": 1},
+        {"text": "encouraged", "role": "verb_phrase", "level": 1},
+        {"text": "a free interchange of ideas", "role": "object", "level": 1},
+        {"text": "which led to more creativity with form, function, colour and materials", "role": "relative_clause", "level": 2},
+        {"text": "that revolutionised attitudes to furniture design", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["which 引导非限制性定语从句，指代前面鼓励思想自由交流这件事。", "that 引导定语从句，说明这些在形式、功能、色彩和材料上的创意改变了人们的态度。", "lead to 表示前一环境产生了后一结果。"],
+      "expressions": [
+        {"text": "a free interchange of ideas", "meaning_zh": "思想的自由交流"},
+        {"text": "lead to", "meaning_zh": "促成；导致"},
+        {"text": "revolutionise attitudes to", "meaning_zh": "彻底改变对……的看法"}
+      ]
+    },
+    {
+      "id": "K-01", "paragraph_label": "K", "sentence_index": 45,
+      "sentence": "Many theorists believe the ideal boss should lead from behind, taking pride in collective accomplishment and giving credit where it is due.",
+      "translation": "许多理论家认为，理想的领导者应在幕后引领，以集体成就为荣，并在应当肯定之处给予认可。",
+      "structure": [
+        {"text": "Many theorists believe", "role": "main_clause", "level": 1},
+        {"text": "the ideal boss should lead from behind", "role": "noun_clause", "level": 2},
+        {"text": "taking pride in collective accomplishment", "role": "participial_phrase", "level": 3},
+        {"text": "and giving credit where it is due", "role": "participial_phrase", "level": 3},
+        {"text": "where it is due", "role": "adverbial_clause", "level": 4}
+      ],
+      "difficult_points": ["believe 后省略 that，the ideal boss... 是宾语从句。", "taking 与 giving 是并列的现在分词短语，补充说明这种领导方式。", "where it is due 表示“在理应给予认可的地方”，it 指 credit。"],
+      "expressions": [
+        {"text": "lead from behind", "meaning_zh": "在幕后引领"},
+        {"text": "take pride in", "meaning_zh": "以……为荣"},
+        {"text": "give credit where it is due", "meaning_zh": "在应当肯定之处给予认可"}
+      ]
+    },
+    {
+      "id": "K-02", "paragraph_label": "K", "sentence_index": 46,
+      "sentence": "Cialdini says: 'Leaders should encourage everyone to contribute and simultaneously assure all concerned that every recommendation is important to making the right decision and will be given full attention.'",
+      "translation": "Cialdini 说：“领导者应鼓励每个人作出贡献，同时向所有相关人员保证，每一项建议对于作出正确决定都很重要，并会得到充分重视。”",
+      "structure": [
+        {"text": "Cialdini says", "role": "main_clause", "level": 1},
+        {"text": "'Leaders should encourage everyone to contribute", "role": "main_clause", "level": 2},
+        {"text": "everyone", "role": "object", "level": 3},
+        {"text": "to contribute", "role": "complement", "level": 3},
+        {"text": "and simultaneously assure all concerned", "role": "coordinated_clause", "level": 2},
+        {"text": "that every recommendation is important to making the right decision and will be given full attention.'", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": ["encourage 与 assure 是以 Leaders 为主语的并列谓语。", "all concerned 表示所有相关人员，concerned 是后置形容词。", "that 从句作 assure 的内容，其中 is important 与 will be given 并列。"],
+      "expressions": [
+        {"text": "encourage everyone to contribute", "meaning_zh": "鼓励每个人作出贡献"},
+        {"text": "all concerned", "meaning_zh": "所有相关人员"},
+        {"text": "be given full attention", "meaning_zh": "得到充分重视"}
+      ]
+    },
+    {
+      "id": "K-03", "paragraph_label": "K", "sentence_index": 47,
+      "sentence": "The frustrating thing about innovation is that there are many approaches, but no magic formula.",
+      "translation": "创新令人沮丧之处在于，方法虽多，却没有神奇的万能公式。",
+      "structure": [
+        {"text": "The frustrating thing about innovation", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "that there are many approaches, but no magic formula", "role": "noun_clause", "level": 2},
+        {"text": "there are many approaches", "role": "main_clause", "level": 3},
+        {"text": "but no magic formula", "role": "coordinated_clause", "level": 3}
+      ],
+      "difficult_points": ["that 引导表语从句，具体说明创新中令人沮丧的事情。", "but no magic formula 是省略结构，完整含义是 but there is no magic formula。"],
+      "expressions": [
+        {"text": "the frustrating thing about", "meaning_zh": "……令人沮丧之处"},
+        {"text": "no magic formula", "meaning_zh": "没有万能公式"}
+      ]
+    },
+    {
+      "id": "K-04", "paragraph_label": "K", "sentence_index": 48,
+      "sentence": "However, a manager who wants to create a truly innovative culture can make their job a lot easier by recognising these psychological realities.",
+      "translation": "不过，管理者如果想营造真正具有创新精神的文化，只要认识到这些心理规律，就能让自己的工作轻松许多。",
+      "structure": [
+        {"text": "However", "role": "parenthesis", "level": 1},
+        {"text": "a manager", "role": "subject", "level": 1},
+        {"text": "who wants to create a truly innovative culture", "role": "relative_clause", "level": 2},
+        {"text": "to create a truly innovative culture", "role": "non_finite_clause", "level": 3},
+        {"text": "can make their job a lot easier", "role": "verb_phrase", "level": 1},
+        {"text": "by recognising these psychological realities", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": ["who 引导定语从句修饰 manager，其中 to create... 作 wants 的宾语。", "make their job easier 是“make + 宾语 + 形容词宾补”结构。", "their 使用中性单数指代，回指 a manager；by doing 表示实现结果的方式。"],
+      "expressions": [
+        {"text": "create an innovative culture", "meaning_zh": "营造创新文化"},
+        {"text": "make one's job easier", "meaning_zh": "让某人的工作更轻松"},
+        {"text": "recognise psychological realities", "meaning_zh": "认识到心理规律"}
+      ]
+    }
+  ]
+}

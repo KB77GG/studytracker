@@ -1,0 +1,354 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_40_test_75",
+  "passage_id": "reading_jijing_40_test_75_p3",
+  "passage_title": "Source of Knowledge",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "What counts as knowledge?", "translation": "什么才算知识？",
+      "structure": [{"text": "What", "role": "subject", "level": 1}, {"text": "counts as knowledge", "role": "predicate", "level": 1}],
+      "difficult_points": ["What 是疑问代词，在句中作主语。", "count as 表示“被视为、算作”，询问的是知识的判定标准。"],
+      "expressions": [{"text": "count as", "meaning_zh": "被视为；算作"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "What do we mean when we say that we know some-thing?", "translation": "当我们说自己知道某件事时，我们究竟是什么意思？",
+      "structure": [{"text": "What do we mean", "role": "main_question", "level": 1}, {"text": "when we say that we know some-thing", "role": "time_clause", "level": 2}],
+      "difficult_points": ["when 从句限定“所指为何”的具体语境。", "that we know some-thing 是 say 的宾语从句；some-thing 为源文异常断词。"],
+      "expressions": [{"text": "what do we mean when", "meaning_zh": "当……时我们是什么意思"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "What is the status of different. kinds of knowledge?", "translation": "不同种类的知识各自具有怎样的地位？",
+      "structure": [{"text": "What", "role": "subject_complement", "level": 1}, {"text": "is", "role": "linking_verb", "level": 1}, {"text": "the status of different. kinds of knowledge", "role": "subject", "level": 1}],
+      "difficult_points": ["这是疑问表语前置结构，实际询问 different kinds of knowledge 的 status。", "different 后的句点是源文标点异常，语义上 different 修饰 kinds。"],
+      "expressions": [{"text": "the status of", "meaning_zh": "……的地位或性质"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "In order to explore those questions we are going to focus on one particular area of knowledge medicine.", "translation": "为了探讨这些问题，我们将聚焦一个特定的知识领域——医学。",
+      "structure": [{"text": "In order to explore those questions", "role": "purpose_infinitive", "level": 2}, {"text": "we", "role": "subject", "level": 1}, {"text": "are going to focus on one particular area of knowledge medicine", "role": "predicate", "level": 1}],
+      "difficult_points": ["In order to ... 是目的状语。", "medicine 与 one particular area of knowledge 构成同位关系，源文缺少分隔标点。"],
+      "expressions": [{"text": "in order to", "meaning_zh": "为了"}, {"text": "focus on", "meaning_zh": "聚焦于"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "How do you know when you are ill?", "translation": "你如何知道自己什么时候生病了？",
+      "structure": [{"text": "How do you know", "role": "main_question", "level": 1}, {"text": "when you are ill", "role": "embedded_question", "level": 2}],
+      "difficult_points": ["How 询问判断疾病的方式。", "when you are ill 是 know 的宾语从句，使用陈述语序。"],
+      "expressions": []
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "This may seem to be an absurd question.", "translation": "这可能看起来是个荒谬的问题。",
+      "structure": [{"text": "This", "role": "subject", "level": 1}, {"text": "may seem to be", "role": "linking_predicate", "level": 1}, {"text": "an absurd question", "role": "subject_complement", "level": 1}],
+      "difficult_points": ["This 回指上一句提出的问题。", "may seem to be 表示表面判断，而非确定事实。"],
+      "expressions": [{"text": "seem to be", "meaning_zh": "似乎是"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "You know you are ill because you feel ill; your body tells you that you are ill.", "translation": "你知道自己病了，是因为你感觉不适；你的身体会告诉你，你生病了。",
+      "structure": [{"text": "You know you are ill because you feel ill", "role": "first_main_clause", "level": 1}, {"text": "your body tells you that you are ill", "role": "second_main_clause", "level": 1}],
+      "difficult_points": ["you are ill 是省略 that 的 know 宾语从句，because 从句说明原因。", "分号连接两个相互解释的独立分句；that 从句作 tells 的直接宾语。"],
+      "expressions": [{"text": "feel ill", "meaning_zh": "感觉不适"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "You may know that you feel pain or discomfort Iml knowing you are ill is a bit. more complex.", "translation": "你或许知道自己感到疼痛或不适，但判断自己是否生病则稍微复杂一些。",
+      "structure": [{"text": "You may know that you feel pain or discomfort", "role": "first_main_clause", "level": 1}, {"text": "Iml knowing you are ill", "role": "second_clause_subject", "level": 1}, {"text": "is a bit. more complex", "role": "second_clause_predicate", "level": 1}],
+      "difficult_points": ["that you feel ... 是 know 的宾语从句。", "Iml 很可能是 OCR 对 but/and 的误识；a bit 后的句点也是源文异常，整体表达“稍微更复杂”。"],
+      "expressions": [{"text": "pain or discomfort", "meaning_zh": "疼痛或不适"}, {"text": "a bit more complex", "meaning_zh": "稍微更复杂"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "At times, people experience the symptoms of illness, but in tact they are simply tired or over-worked or they may just have a hangover.", "translation": "有时，人们出现了疾病症状，但实际上可能只是疲劳、过度劳累，或者不过是宿醉。",
+      "structure": [{"text": "people experience the symptoms of illness", "role": "first_main_clause", "level": 1}, {"text": "but in tact they are simply tired or over-worked", "role": "contrastive_clause", "level": 1}, {"text": "or they may just have a hangover", "role": "alternative_clause", "level": 1}],
+      "difficult_points": ["but 引出症状与真实原因之间的反差。", "in tact 是源文 OCR 异常，语义按 in fact 理解；两个 or 列出不同可能。"],
+      "expressions": [{"text": "at times", "meaning_zh": "有时"}, {"text": "experience symptoms", "meaning_zh": "出现症状"}]
+    },
+    {
+      "id": "B-06", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "At other limes, people may be suffering from a disease and fail to be aware of the illness until it has reached a late stage in its development.", "translation": "另一些时候，人们可能正患有疾病，却直到病情发展到晚期才意识到它。",
+      "structure": [{"text": "people may be suffering from a disease and fail to be aware of the illness", "role": "compound_predicate", "level": 1}, {"text": "until it has reached a late stage in its development", "role": "time_clause", "level": 2}],
+      "difficult_points": ["may be suffering 与 fail 由 and 连接，共享主语 people。", "until 从句表示意识到疾病的时间界限；两个 it 均指 illness，limes 是源文 OCR 异常。"],
+      "expressions": [{"text": "suffer from", "meaning_zh": "患有"}, {"text": "be aware of", "meaning_zh": "意识到"}, {"text": "reach a late stage", "meaning_zh": "发展到晚期"}]
+    },
+    {
+      "id": "B-07", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "So how do we know we are ill, and what counts as knowledge?", "translation": "那么，我们怎样知道自己病了？什么又能算作知识？",
+      "structure": [{"text": "how do we know we are ill", "role": "first_coordinate_question", "level": 1}, {"text": "and what counts as knowledge", "role": "second_coordinate_question", "level": 1}],
+      "difficult_points": ["and 连接两个彼此关联的疑问句。", "we are ill 是省略 that 的宾语从句；第二问中的 What 作主语。"],
+      "expressions": [{"text": "count as knowledge", "meaning_zh": "算作知识"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "Think about this example.", "translation": "想一想下面这个例子。",
+      "structure": [{"text": "Think about", "role": "imperative_predicate", "level": 1}, {"text": "this example", "role": "object", "level": 1}],
+      "difficult_points": ["这是省略主语 you 的祈使句。", "this example 指下文展开的就医情境。"],
+      "expressions": [{"text": "think about", "meaning_zh": "思考；考虑"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "You feel unwell.", "translation": "你感觉身体不适。",
+      "structure": [{"text": "You", "role": "subject", "level": 1}, {"text": "feel", "role": "linking_verb", "level": 1}, {"text": "unwell", "role": "subject_complement", "level": 1}],
+      "difficult_points": ["feel 在这里是系动词。", "unwell 描述总体身体状态，而不是具体疾病诊断。"],
+      "expressions": [{"text": "feel unwell", "meaning_zh": "感觉身体不适"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "You have a bad cough and always seem to be tired.", "translation": "你咳嗽得很厉害，而且似乎总是很疲惫。",
+      "structure": [{"text": "You", "role": "subject", "level": 1}, {"text": "have a bad cough", "role": "first_predicate", "level": 1}, {"text": "and always seem to be tired", "role": "second_predicate", "level": 1}],
+      "difficult_points": ["have 与 seem 是共享主语 You 的并列谓语。", "seem to be 表示观察到的状态尚未得到医学确认。"],
+      "expressions": [{"text": "have a bad cough", "meaning_zh": "咳嗽得很厉害"}, {"text": "seem to be tired", "meaning_zh": "似乎很疲惫"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "Perhaps it could be stress at work, or may be you should give up smoking.", "translation": "也许是工作压力所致，也可能你应该戒烟。",
+      "structure": [{"text": "Perhaps it could be stress at work", "role": "first_speculative_clause", "level": 1}, {"text": "or may be you should give up smoking", "role": "alternative_clause", "level": 1}],
+      "difficult_points": ["it 指前述咳嗽和疲惫的原因。", "or 连接两种自我解释；may be 在源文中分写，语义相当于 maybe。"],
+      "expressions": [{"text": "stress at work", "meaning_zh": "工作压力"}, {"text": "give up smoking", "meaning_zh": "戒烟"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "You tool worse.", "translation": "你的感觉变得更糟。",
+      "structure": [{"text": "You", "role": "subject", "level": 1}, {"text": "tool worse", "role": "linking_predicate", "level": 1}],
+      "difficult_points": ["tool 是源文 OCR 异常，结合语境应理解为 feel。", "worse 是比较级，表示症状较之前加重。"],
+      "expressions": [{"text": "feel worse", "meaning_zh": "感觉更糟"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 17,
+      "sentence": "You visit the doctor who listens to your chest and heart, take's your temperature and blood pressure, and then finally prescribes antibiotics lor your cough.", "translation": "你去看医生；医生听诊你的胸部和心脏，测量体温和血压，最后为咳嗽开了抗生素。",
+      "structure": [{"text": "You visit the doctor", "role": "main_clause", "level": 1}, {"text": "who listens to your chest and heart, take's your temperature and blood pressure, and then finally prescribes antibiotics lor your cough", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["who 引导定语从句，修饰 doctor，内部有三个并列谓语。", "take's 和 lor 分别是源文 OCR 异常，语义按 takes 与 for 理解。"],
+      "expressions": [{"text": "take one's temperature", "meaning_zh": "测量某人的体温"}, {"text": "prescribe antibiotics for", "meaning_zh": "针对……开抗生素"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 18,
+      "sentence": "Things do not improve but you struggle on thinking you should pull yourself together, perhaps things will ease off at work soon.", "translation": "情况没有好转，但你仍勉强坚持，心想自己应该振作起来，也许工作压力很快就会缓解。",
+      "structure": [{"text": "Things do not improve", "role": "first_main_clause", "level": 1}, {"text": "but you struggle on", "role": "contrastive_main_clause", "level": 1}, {"text": "thinking you should pull yourself together", "role": "participle_adverbial", "level": 2}, {"text": "perhaps things will ease off at work soon", "role": "supplementary_clause", "level": 1}],
+      "difficult_points": ["thinking ... 是现在分词状语，说明坚持时的想法。", "you should ... 是省略 that 的 thinking 宾语从句；逗号后是补充的自我推测。"],
+      "expressions": [{"text": "struggle on", "meaning_zh": "勉强坚持下去"}, {"text": "pull yourself together", "meaning_zh": "振作起来"}, {"text": "ease off", "meaning_zh": "缓解；减轻"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 19,
+      "sentence": "A return visit to your doctor shocks you.", "translation": "再次去看医生所得的结果让你大吃一惊。",
+      "structure": [{"text": "A return visit to your doctor", "role": "subject", "level": 1}, {"text": "shocks", "role": "verb", "level": 1}, {"text": "you", "role": "object", "level": 1}],
+      "difficult_points": ["A return visit 是名词化主语，指再次就诊。", "shocks 用一般现在时配合情境叙述，使过程更直接。"],
+      "expressions": [{"text": "a return visit", "meaning_zh": "复诊；再次来访"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 20,
+      "sentence": "This time the doctor, drawing on yours of training and experience, diagnoses pneumonia.", "translation": "这一次，医生凭借多年的训练和经验，诊断出肺炎。",
+      "structure": [{"text": "the doctor", "role": "subject", "level": 1}, {"text": "drawing on yours of training and experience", "role": "participle_adverbial", "level": 2}, {"text": "diagnoses pneumonia", "role": "predicate", "level": 1}],
+      "difficult_points": ["drawing on ... 是现在分词状语，说明诊断所依据的资源。", "yours 是源文 OCR 异常，语义按 years 理解。"],
+      "expressions": [{"text": "draw on training and experience", "meaning_zh": "利用训练和经验"}, {"text": "diagnose pneumonia", "meaning_zh": "诊断出肺炎"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 21,
+      "sentence": "This means that you will need bed rest and a consider able time off work.", "translation": "这意味着你需要卧床休息，并且要请相当长一段时间的假。",
+      "structure": [{"text": "This means", "role": "main_clause", "level": 1}, {"text": "that you will need bed rest and a consider able time off work", "role": "object_clause", "level": 2}],
+      "difficult_points": ["This 指代上一句的肺炎诊断。", "that 从句说明诊断带来的结果；consider able 是源文异常断词，语义按 considerable 理解。"],
+      "expressions": [{"text": "bed rest", "meaning_zh": "卧床休息"}, {"text": "time off work", "meaning_zh": "离岗休假时间"}]
+    },
+    {
+      "id": "D-05", "paragraph_label": "D", "sentence_index": 22,
+      "sentence": "The scenario is transformed.", "translation": "整个情境由此发生了转变。",
+      "structure": [{"text": "The scenario", "role": "subject", "level": 1}, {"text": "is transformed", "role": "passive_predicate", "level": 1}],
+      "difficult_points": ["is transformed 使用被动语态，强调诊断改变了对症状的理解。", "scenario 不只是客观症状，也包括患者赋予症状的解释。"],
+      "expressions": [{"text": "be transformed", "meaning_zh": "发生根本转变"}]
+    },
+    {
+      "id": "D-06", "paragraph_label": "D", "sentence_index": 23,
+      "sentence": "Although you still have the same symptoms, you no longer think that these are caused by pressure at work.", "translation": "尽管症状仍然相同，你已经不再认为它们是由工作压力造成的。",
+      "structure": [{"text": "Although you still have the same symptoms", "role": "concessive_clause", "level": 2}, {"text": "you no longer think", "role": "main_clause", "level": 1}, {"text": "that these are caused by pressure at work", "role": "object_clause", "level": 2}],
+      "difficult_points": ["Although 从句突出症状没变而解释已变。", "these 指 symptoms；are caused 使用被动语态。"],
+      "expressions": [{"text": "no longer", "meaning_zh": "不再"}, {"text": "be caused by", "meaning_zh": "由……造成"}]
+    },
+    {
+      "id": "D-07", "paragraph_label": "D", "sentence_index": 24,
+      "sentence": "You now have proof that you are ill.", "translation": "现在你有了自己患病的证据。",
+      "structure": [{"text": "You", "role": "subject", "level": 1}, {"text": "now have proof", "role": "predicate", "level": 1}, {"text": "that you are ill", "role": "content_clause", "level": 2}],
+      "difficult_points": ["that 从句说明 proof 的具体内容。", "now 与此前仅凭主观感受形成对比。"],
+      "expressions": [{"text": "have proof that", "meaning_zh": "有证据证明……"}]
+    },
+    {
+      "id": "D-08", "paragraph_label": "D", "sentence_index": 25,
+      "sentence": "This is the result of the combination of your own subjective experience and the diagnosis of someone who has the stains of a medical expert.", "translation": "这是你自身的主观体验与一位具有医学专家身份者的诊断相结合的结果。",
+      "structure": [{"text": "This", "role": "subject", "level": 1}, {"text": "is the result of the combination of your own subjective experience and the diagnosis of someone", "role": "linking_predicate", "level": 1}, {"text": "who has the stains of a medical expert", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["This 指上一句获得的患病证据。", "who 从句修饰 someone；stains 是源文 OCR 异常，语境中应为 status。"],
+      "expressions": [{"text": "the combination of ... and ...", "meaning_zh": "……与……的结合"}, {"text": "subjective experience", "meaning_zh": "主观体验"}]
+    },
+    {
+      "id": "D-09", "paragraph_label": "D", "sentence_index": 26,
+      "sentence": "You have a medically authenticated diagnosis and it appears that you are seriously ill; you know you are ill and have evidence upon which to base this knowledge.", "translation": "你得到了医学上认可的诊断，而且看来病情严重；你知道自己病了，也有了支撑这一认知的证据。",
+      "structure": [{"text": "You have a medically authenticated diagnosis", "role": "first_main_clause", "level": 1}, {"text": "and it appears that you are seriously ill", "role": "second_main_clause", "level": 1}, {"text": "you know you are ill and have evidence", "role": "third_main_clause", "level": 1}, {"text": "upon which to base this knowledge", "role": "relative_infinitive_clause", "level": 2}],
+      "difficult_points": ["it 是形式主语，that 从句是真正主语。", "upon which 中 which 指 evidence，to base ... 说明证据的用途。", "know 与 have 共享第三分句的主语 you。"],
+      "expressions": [{"text": "medically authenticated", "meaning_zh": "经医学确认的"}, {"text": "base knowledge on evidence", "meaning_zh": "以证据作为知识的基础"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 27,
+      "sentence": "This scenario shows many different sources of knowledge.", "translation": "这一情境展现了许多不同的知识来源。",
+      "structure": [{"text": "This scenario", "role": "subject", "level": 1}, {"text": "shows", "role": "verb", "level": 1}, {"text": "many different sources of knowledge", "role": "object", "level": 1}],
+      "difficult_points": ["This scenario 回指前面从自我判断到医生诊断的全过程。", "sources of knowledge 是下文将要分类讨论的中心概念。"],
+      "expressions": [{"text": "sources of knowledge", "meaning_zh": "知识来源"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 28,
+      "sentence": "For example, you decide to consult the doctor in the first place because you feel unwell - this is personal knowledge about your own body.", "translation": "例如，你一开始因为感觉不适而决定咨询医生——这属于关于自己身体的个人知识。",
+      "structure": [{"text": "you decide to consult the doctor in the first place", "role": "main_clause", "level": 1}, {"text": "because you feel unwell", "role": "reason_clause", "level": 2}, {"text": "this is personal knowledge about your own body", "role": "explanatory_clause", "level": 1}],
+      "difficult_points": ["because 从句解释最初就医决定的原因。", "破折号后的 this 指个人对不适的感受和判断。"],
+      "expressions": [{"text": "consult the doctor", "meaning_zh": "咨询医生；就医"}, {"text": "in the first place", "meaning_zh": "起初；一开始"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 29,
+      "sentence": "However, the doctor's expert diagno-sis is based on experience and training, with sources of knowledge as diverse as other experts, laboratory reports, medical textbooks and yours of experience.", "translation": "然而，医生的专业诊断建立在经验和训练之上，其知识来源十分多样，包括其他专家、实验室报告、医学教材以及多年的经验。",
+      "structure": [{"text": "the doctor's expert diagno-sis", "role": "subject", "level": 1}, {"text": "is based on experience and training", "role": "passive_predicate", "level": 1}, {"text": "with sources of knowledge as diverse as other experts, laboratory reports, medical textbooks and yours of experience", "role": "with_adverbial", "level": 2}],
+      "difficult_points": ["is based on 表示专业诊断的依据。", "with 短语补充说明知识来源；diagno-sis 与 yours 分别是源文断词/OCR 异常，后者应为 years。"],
+      "expressions": [{"text": "be based on", "meaning_zh": "以……为基础"}, {"text": "sources as diverse as", "meaning_zh": "包括多种多样的来源"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 30,
+      "sentence": "One source of knowledge is the experience of our own bodies; the personal knowledge we have of change's that might be significant, as well as the subjec-tive experience of poin and physical distress.", "translation": "知识的一个来源是我们对自身身体的体验：既包括我们对可能具有重要意义的变化所掌握的个人知识，也包括对疼痛和身体不适的主观体验。",
+      "structure": [{"text": "One source of knowledge is the experience of our own bodies", "role": "main_clause", "level": 1}, {"text": "the personal knowledge we have of change's that might be significant", "role": "appositive_expansion", "level": 1}, {"text": "as well as the subjec-tive experience of poin and physical distress", "role": "coordinate_apposition", "level": 1}],
+      "difficult_points": ["分号后两个名词短语具体解释 bodily experience 包含什么。", "we have 是省略关系词的定语从句，修饰 knowledge；that 修饰 change's。", "change's、subjec-tive、poin 均为源文异常，语义分别按 changes、subjective、pain 理解。"],
+      "expressions": [{"text": "as well as", "meaning_zh": "以及；还包括"}, {"text": "physical distress", "meaning_zh": "身体不适或痛苦"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 31,
+      "sentence": "These experiences are mediated by other forms of knowledge such as the words we have available to describe our experience and the common sense of our families and friends as well as that drown from popular culture.", "translation": "这些体验会受到其他知识形式的调节，例如我们可用于描述体验的词语、家人朋友的常识，以及从大众文化中获得的常识。",
+      "structure": [{"text": "These experiences", "role": "subject", "level": 1}, {"text": "are mediated by other forms of knowledge", "role": "passive_predicate", "level": 1}, {"text": "such as the words we have available to describe our experience and the common sense of our families and friends as well as that drown from popular culture", "role": "example_apposition", "level": 2}],
+      "difficult_points": ["are mediated by 表示身体体验会经过语言和社会知识的中介。", "we have available 是修饰 words 的省略关系词结构；that 替代 common sense。", "drown 是源文 OCR 异常，语义按 drawn 理解。"],
+      "expressions": [{"text": "be mediated by", "meaning_zh": "受……调节或中介"}, {"text": "drawn from popular culture", "meaning_zh": "源自大众文化"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 32,
+      "sentence": "Over the post decade, for example, Western culture has seen a significant emphasis on stress-related illness in the media.", "translation": "例如，在过去十年中，西方文化中的媒体明显加强了对压力相关疾病的关注。",
+      "structure": [{"text": "Over the post decade", "role": "time_adverbial", "level": 1}, {"text": "Western culture", "role": "subject", "level": 1}, {"text": "has seen a significant emphasis on stress-related illness in the media", "role": "predicate", "level": 1}],
+      "difficult_points": ["Western culture has seen ... 是拟人表达，意为这一文化环境中出现了某种趋势。", "post 是源文 OCR 异常，结合 decade 应按 past 理解。"],
+      "expressions": [{"text": "a significant emphasis on", "meaning_zh": "对……的显著强调"}, {"text": "stress-related illness", "meaning_zh": "压力相关疾病"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 33,
+      "sentence": "Refer-ence to being 'stressed end' has become a common response in daily exchanges in the workplace and has become port of popular common-sense knowledge.", "translation": "在职场日常交流中，提到自己“压力大到极点”已成为常见回应，也成了大众常识的一部分。",
+      "structure": [{"text": "Refer-ence to being 'stressed end'", "role": "subject", "level": 1}, {"text": "has become a common response in daily exchanges in the workplace", "role": "first_predicate", "level": 1}, {"text": "and has become port of popular common-sense knowledge", "role": "second_predicate", "level": 1}],
+      "difficult_points": ["两个 has become 共享同一主语，分别说明语言习惯和知识地位。", "Refer-ence、stressed end、port 均为源文异常，语义分别按 Reference、stressed out、part 理解。"],
+      "expressions": [{"text": "daily exchanges", "meaning_zh": "日常交流"}, {"text": "common-sense knowledge", "meaning_zh": "常识性知识"}]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 34,
+      "sentence": "It is thus not surprising that we might seek such an explanation of physical symp-toms of discomfort.", "translation": "因此，我们可能会用这种方式解释身体不适的症状，也就不足为奇了。",
+      "structure": [{"text": "It", "role": "dummy_subject", "level": 1}, {"text": "is thus not surprising", "role": "linking_predicate", "level": 1}, {"text": "that we might seek such an explanation of physical symp-toms of discomfort", "role": "subject_clause", "level": 2}],
+      "difficult_points": ["It 是形式主语，that 从句是真正主语。", "such an explanation 指用压力解释不适；symp-toms 是源文异常断词。"],
+      "expressions": [{"text": "it is not surprising that", "meaning_zh": "……不足为奇"}, {"text": "seek an explanation of", "meaning_zh": "寻求对……的解释"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 35,
+      "sentence": "We might also rely on Ihe observations of others who know us.", "translation": "我们也可能依赖那些了解我们的人的观察。",
+      "structure": [{"text": "We", "role": "subject", "level": 1}, {"text": "might also rely on Ihe observations of others", "role": "predicate", "level": 1}, {"text": "who know us", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["who 引导定语从句，修饰 others。", "Ihe 是源文 OCR 异常，语义按 the 理解。"],
+      "expressions": [{"text": "rely on the observations of", "meaning_zh": "依赖……的观察"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 36,
+      "sentence": "Comments from friends and family such as 'you do look ill' or 'that's a bad cough' might be another source of knowledge.", "translation": "亲友所说的“你看起来确实病了”或“你咳得很厉害”等话，也可能成为另一种知识来源。",
+      "structure": [{"text": "Comments from friends and family", "role": "subject", "level": 1}, {"text": "such as 'you do look ill' or 'that's a bad cough'", "role": "example_apposition", "level": 2}, {"text": "might be another source of knowledge", "role": "predicate", "level": 1}],
+      "difficult_points": ["such as 后列举亲友评论的具体内容。", "you do look ill 中 do 用于强调，表示“确实看起来病了”。"],
+      "expressions": [{"text": "another source of knowledge", "meaning_zh": "另一种知识来源"}, {"text": "do look ill", "meaning_zh": "确实看起来生病了"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 37,
+      "sentence": "Complementary health practices, such as holistic medicine, produce their own sets of knowledge upon which we might also draw in deciding the nature and degree of our ill health and about possible treatments.", "translation": "整体医学等补充性健康实践也会形成自身的知识体系；我们在判断病情的性质、程度以及可能的治疗方法时，也可能借助这些知识。",
+      "structure": [{"text": "Complementary health practices", "role": "subject", "level": 1}, {"text": "such as holistic medicine", "role": "example_apposition", "level": 2}, {"text": "produce their own sets of knowledge", "role": "predicate", "level": 1}, {"text": "upon which we might also draw in deciding the nature and degree of our ill health and about possible treatments", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["upon which 中 which 指 sets of knowledge，draw upon 表示利用。", "in deciding ... 说明利用这些知识的情境，and about possible treatments 与前面判断内容并列。"],
+      "expressions": [{"text": "complementary health practices", "meaning_zh": "补充性健康实践"}, {"text": "draw upon knowledge", "meaning_zh": "利用知识"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 38,
+      "sentence": "Perhaps the most influential and authoritative source of knowledge is the medical knowledge provided by the general practitioner.", "translation": "也许最有影响力、最具权威性的知识来源，是全科医生提供的医学知识。",
+      "structure": [{"text": "the most influential and authoritative source of knowledge", "role": "subject", "level": 1}, {"text": "is", "role": "linking_verb", "level": 1}, {"text": "the medical knowledge provided by the general practitioner", "role": "subject_complement", "level": 1}],
+      "difficult_points": ["provided by ... 是过去分词短语，后置修饰 medical knowledge。", "Perhaps 表示作者保留一定程度，而最高级强调医学知识的社会权威。"],
+      "expressions": [{"text": "authoritative source", "meaning_zh": "权威来源"}, {"text": "general practitioner", "meaning_zh": "全科医生"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 39,
+      "sentence": "We expect he doctor to hove access to expert knowledge.", "translation": "我们期望医生能够获取专业知识。",
+      "structure": [{"text": "We", "role": "subject", "level": 1}, {"text": "expect", "role": "verb", "level": 1}, {"text": "he doctor to hove access to expert knowledge", "role": "complex_object", "level": 2}],
+      "difficult_points": ["expect someone to do 是“宾语＋不定式宾补”结构。", "he 与 hove 是源文 OCR 异常，语义分别按 the 与 have 理解。"],
+      "expressions": [{"text": "have access to", "meaning_zh": "能够获取或使用"}, {"text": "expert knowledge", "meaning_zh": "专业知识"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 40,
+      "sentence": "This is socially sanctioned.", "translation": "这种权威得到了社会认可。",
+      "structure": [{"text": "This", "role": "subject", "level": 1}, {"text": "is socially sanctioned", "role": "passive_predicate", "level": 1}],
+      "difficult_points": ["This 回指社会对医生专业知识和权威的期待。", "sanctioned 在此表示“认可、批准”，不是“制裁”。"],
+      "expressions": [{"text": "socially sanctioned", "meaning_zh": "得到社会认可的"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 41,
+      "sentence": "It would not be acceptable to notify our employer Unit we simply felt too unwell to turn up for work or that our faith healer, astrologer, therapist or even our priest thought it was not a good idea.", "translation": "如果我们只是因为自觉身体太差而无法上班，或仅因信仰治疗师、占星师、治疗师甚至牧师认为上班不妥，就这样通知雇主，通常不会被接受。",
+      "structure": [{"text": "It would not be acceptable", "role": "main_clause", "level": 1}, {"text": "to notify our employer", "role": "real_subject_infinitive", "level": 2}, {"text": "Unit we simply felt too unwell to turn up for work", "role": "first_content_clause", "level": 2}, {"text": "or that our faith healer, astrologer, therapist or even our priest thought it was not a good idea", "role": "second_content_clause", "level": 2}],
+      "difficult_points": ["It 是形式主语，to notify ... 是真正主语。", "or 连接两项无法构成正式请假依据的理由；thought 后的 it was ... 是宾语从句。", "Unit 是源文 OCR 异常，语境中应表达 that/if 一类连接关系。"],
+      "expressions": [{"text": "turn up for work", "meaning_zh": "到岗上班"}, {"text": "it would not be acceptable to", "meaning_zh": "做……不会被接受"}]
+    },
+    {
+      "id": "H-05", "paragraph_label": "H", "sentence_index": 42,
+      "sentence": "We need on expert medical diagnosis in order to obtain the necessary certificate it we need to be off work for more than the statutory self-certificaion period.", "translation": "如果需要离岗超过法定的自行证明期限，我们就必须获得专业医学诊断，以取得必要的证明。",
+      "structure": [{"text": "We need on expert medical diagnosis", "role": "main_clause", "level": 1}, {"text": "in order to obtain the necessary certificate", "role": "purpose_infinitive", "level": 2}, {"text": "it we need to be off work for more than the statutory self-certificaion period", "role": "conditional_clause", "level": 2}],
+      "difficult_points": ["in order to ... 说明需要医学诊断的目的。", "on、it、self-certificaion 为源文 OCR 异常，语义分别按 an、if、self-certification 理解。"],
+      "expressions": [{"text": "obtain the necessary certificate", "meaning_zh": "取得必要证明"}, {"text": "be off work", "meaning_zh": "休假不上班"}]
+    },
+    {
+      "id": "H-06", "paragraph_label": "H", "sentence_index": 43,
+      "sentence": "The knowledge of the medical sciences is privileged in this respect in contemporary Western culture.", "translation": "在当代西方文化中，医学科学知识在这方面享有特权地位。",
+      "structure": [{"text": "The knowledge of the medical sciences", "role": "subject", "level": 1}, {"text": "is privileged", "role": "passive_predicate", "level": 1}, {"text": "in this respect in contemporary Western culture", "role": "scope_adverbial", "level": 1}],
+      "difficult_points": ["privileged 表示医学知识获得高于其他知识形式的制度地位。", "in this respect 指在证明疾病和正当化请假方面。"],
+      "expressions": [{"text": "in this respect", "meaning_zh": "在这方面"}, {"text": "be privileged", "meaning_zh": "享有特权地位"}]
+    },
+    {
+      "id": "H-07", "paragraph_label": "H", "sentence_index": 44,
+      "sentence": "Medical practitioners are also seen as having the required expert knowledge that permits then legally to pre-scribe drugs and treatment to which patients would not otherwise have access.", "translation": "医疗从业者也被认为拥有必要的专业知识，使他们依法能够开具药物和治疗方案；否则患者无权获得这些资源。",
+      "structure": [{"text": "Medical practitioners are also seen as having the required expert knowledge", "role": "passive_main_clause", "level": 1}, {"text": "that permits then legally to pre-scribe drugs and treatment", "role": "relative_clause", "level": 2}, {"text": "to which patients would not otherwise have access", "role": "relative_clause", "level": 3}],
+      "difficult_points": ["be seen as having ... 表示被认为拥有某种知识。", "第一个 that 修饰 knowledge；to which 中 which 指 drugs and treatment。", "then 与 pre-scribe 为源文异常，语义按 them 与 prescribe 理解。"],
+      "expressions": [{"text": "be seen as having", "meaning_zh": "被认为拥有"}, {"text": "prescribe drugs and treatment", "meaning_zh": "开具药物和治疗方案"}, {"text": "would not otherwise have access", "meaning_zh": "否则将无法获得"}]
+    },
+    {
+      "id": "H-08", "paragraph_label": "H", "sentence_index": 45,
+      "sentence": "However there is a rauge of different knowledge upon which we draw when making decisions about our own state of health.", "translation": "然而，我们在判断自身健康状况时，会借助一系列不同类型的知识。",
+      "structure": [{"text": "there is a rauge of different knowledge", "role": "existential_clause", "level": 1}, {"text": "upon which we draw", "role": "relative_clause", "level": 2}, {"text": "when making decisions about our own state of health", "role": "time_clause_reduction", "level": 2}],
+      "difficult_points": ["upon which 中 which 指 different knowledge，draw upon 表示利用。", "when making ... 是省略 we are 的时间从句；rauge 为源文 OCR 异常，语义按 range 理解。"],
+      "expressions": [{"text": "a range of", "meaning_zh": "一系列"}, {"text": "make decisions about", "meaning_zh": "就……作出判断"}, {"text": "state of health", "meaning_zh": "健康状况"}]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 46,
+      "sentence": "However, there is more than existing knowledge in this little story; new knowledge is constructed within it.", "translation": "不过，这个小故事中不只有现成的知识；新的知识也在其中被建构出来。",
+      "structure": [{"text": "there is more than existing knowledge in this little story", "role": "existential_clause", "level": 1}, {"text": "new knowledge is constructed within it", "role": "second_main_clause", "level": 1}],
+      "difficult_points": ["more than 表示故事中存在的内容不止 existing knowledge。", "分号连接对比性的两句；it 指 this little story，is constructed 使用被动语态。"],
+      "expressions": [{"text": "existing knowledge", "meaning_zh": "现有知识"}, {"text": "construct new knowledge", "meaning_zh": "建构新知识"}]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 47,
+      "sentence": "Given the doctor's medical training and background, she may hypothrsie'is this now pneumonia?' and then proceed to look for eevidence about it.", "translation": "鉴于医生的医学训练和背景，她可能会提出假设：“这现在是肺炎吗？”然后继续寻找相关证据。",
+      "structure": [{"text": "Given the doctor's medical training and background", "role": "condition_adverbial", "level": 1}, {"text": "she may hypothrsie'is this now pneumonia?'", "role": "first_predicate", "level": 1}, {"text": "and then proceed to look for eevidence about it", "role": "second_predicate", "level": 1}],
+      "difficult_points": ["Given ... 是介词短语，表示医生形成假设的背景依据。", "两个谓语由 and 连接；hypothrsie 与 eevidence 是源文 OCR 异常，语义按 hypothesise 与 evidence 理解。", "末尾 it 指肺炎这一诊断假设。"],
+      "expressions": [{"text": "given one's training and background", "meaning_zh": "鉴于某人的训练和背景"}, {"text": "proceed to do", "meaning_zh": "接着做……"}, {"text": "look for evidence", "meaning_zh": "寻找证据"}]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 48,
+      "sentence": "She will use observations and instruments to assess the evidence and critically interpret it in the light of her training and new experience both for you and for the doctor.", "translation": "她会运用观察和仪器评估证据，并依据自己的训练和新经验对证据作出批判性解释；这一过程会为你和医生双方带来新的认识。",
+      "structure": [{"text": "She", "role": "subject", "level": 1}, {"text": "will use observations and instruments", "role": "predicate", "level": 1}, {"text": "to assess the evidence and critically interpret it", "role": "purpose_infinitive", "level": 2}, {"text": "in the light of her training and new experience both for you and for the doctor", "role": "basis_adverbial", "level": 2}],
+      "difficult_points": ["to assess 与 interpret 由 and 连接，共同说明使用观察和仪器的目的。", "it 指 evidence；in the light of 表示解释证据所依据的背景。", "both for you and for the doctor 表明新经验对患者和医生双方都有意义，源句修饰关系略显松散。"],
+      "expressions": [{"text": "assess the evidence", "meaning_zh": "评估证据"}, {"text": "in the light of", "meaning_zh": "依据；鉴于"}, {"text": "critically interpret", "meaning_zh": "批判性地解释"}]
+    },
+    {
+      "id": "I-04", "paragraph_label": "I", "sentence_index": 49,
+      "sentence": "This will then be added to the doctor's medical knowledge and may help in future diagnosis of pneumonia.", "translation": "这些新经验随后会被纳入医生的医学知识，并可能有助于今后诊断肺炎。",
+      "structure": [{"text": "This", "role": "subject", "level": 1}, {"text": "will then be added to the doctor's medical knowledge", "role": "first_passive_predicate", "level": 1}, {"text": "and may help in future diagnosis of pneumonia", "role": "second_predicate", "level": 1}],
+      "difficult_points": ["This 回指医生在本次诊断中形成的新经验和知识。", "will be added 是被动语态；may help 与其共享主语 This。"],
+      "expressions": [{"text": "be added to one's knowledge", "meaning_zh": "被纳入某人的知识体系"}, {"text": "help in future diagnosis", "meaning_zh": "有助于今后的诊断"}]
+    }
+  ]
+}

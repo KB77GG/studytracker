@@ -1,0 +1,323 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_14_test_23",
+  "passage_id": "reading_jijing_14_test_23_p3",
+  "passage_title": "Driverless cars",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "Driverless cars may be set to become reality.",
+      "translation": "无人驾驶汽车或许即将成为现实。",
+      "structure": [{"text": "Driverless cars", "role": "subject", "level": 1}, {"text": "may be set to become reality", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["may 表示可能性，说明这一判断仍非确定事实。", "be set to do 表示某事很可能即将发生，并非字面上的“被设置”。"],
+      "expressions": [{"text": "be set to", "meaning_zh": "即将；很可能会"}, {"text": "become reality", "meaning_zh": "成为现实"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "At least that is, if the executives behind the taxi app, Uber, are to be believed.",
+      "translation": "至少，如果出租车应用优步背后的高管所言可信，情况就是如此。",
+      "structure": [{"text": "At least that is", "role": "main_clause", "level": 1}, {"text": "if the executives behind the taxi app, Uber, are to be believed", "role": "adverbial_clause", "level": 1}, {"text": "Uber", "role": "apposition", "level": 2}],
+      "difficult_points": ["that 指代上一句“无人驾驶汽车即将成为现实”这一判断。", "if ... are to be believed 是固定的条件表达，意为如果这些人的话可信；Uber 是 taxi app 的同位语。"],
+      "expressions": [{"text": "if ... are to be believed", "meaning_zh": "如果……所言可信"}, {"text": "the executives behind", "meaning_zh": "……背后的高管"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "Currently, Uber is taking its biggest steps yet towards a driver-free world, launching the Uber Advanced Technologies Centre in Pittsburgh.",
+      "translation": "目前，优步正在为迈向无人驾驶世界采取迄今最重大的行动：在匹兹堡成立优步先进技术中心。",
+      "structure": [{"text": "Uber", "role": "subject", "level": 1}, {"text": "is taking its biggest steps yet towards a driver-free world", "role": "verb_phrase", "level": 1}, {"text": "launching the Uber Advanced Technologies Centre in Pittsburgh", "role": "participial_phrase", "level": 2}],
+      "difficult_points": ["yet 与最高级 biggest 连用，表示截至目前最重大的。", "launching... 是现在分词状语，具体说明优步所采取的重大行动。"],
+      "expressions": [{"text": "take steps towards", "meaning_zh": "采取行动迈向……"}, {"text": "launch a centre", "meaning_zh": "成立一个中心"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "The ultimate goal of this institution is to 'do research and development, primarily in the areas of mapping and vehicle safety and autonomy technology'.",
+      "translation": "该机构的最终目标是“开展研发工作，主要涉及地图绘制、车辆安全和自动驾驶技术领域”。",
+      "structure": [{"text": "The ultimate goal of this institution", "role": "subject", "level": 1}, {"text": "is to 'do research and development, primarily in the areas of mapping and vehicle safety and autonomy technology'", "role": "verb_phrase", "level": 1}, {"text": "primarily in the areas of mapping and vehicle safety and autonomy technology", "role": "prepositional_phrase", "level": 2}],
+      "difficult_points": ["to do... 是不定式作表语，解释该机构的最终目标。", "primarily... 限定研发工作的重点领域；原文用单引号标出机构目标。"],
+      "expressions": [{"text": "ultimate goal", "meaning_zh": "最终目标"}, {"text": "research and development", "meaning_zh": "研究与开发"}, {"text": "in the areas of", "meaning_zh": "在……领域"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "To date, Uber has provided a chauffeur-driven taxi service for American clients.",
+      "translation": "截至目前，优步一直为美国客户提供由专职司机驾驶的出租车服务。",
+      "structure": [{"text": "To date", "role": "prepositional_phrase", "level": 1}, {"text": "Uber", "role": "subject", "level": 1}, {"text": "has provided a chauffeur-driven taxi service for American clients", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["To date 表示截至目前，与现在完成时 has provided 呼应。", "chauffeur-driven 是过去分词复合形容词，表示由专职司机驾驶。"],
+      "expressions": [{"text": "to date", "meaning_zh": "截至目前"}, {"text": "provide a service for", "meaning_zh": "为……提供服务"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "Venturing into the realms of driverless cars is therefore a new direction which will require massive investment.",
+      "translation": "因此，进军无人驾驶汽车领域是一个需要巨额投资的新方向。",
+      "structure": [{"text": "Venturing into the realms of driverless cars", "role": "gerund_phrase", "level": 1}, {"text": "is therefore a new direction", "role": "verb_phrase", "level": 1}, {"text": "which will require massive investment", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["Venturing... 是动名词短语作主语，表示进入一个新领域这件事。", "which 引导定语从句修饰 a new direction，说明该方向所需投入。"],
+      "expressions": [{"text": "venture into", "meaning_zh": "大胆进入；涉足"}, {"text": "require massive investment", "meaning_zh": "需要巨额投资"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "It is indeed a huge leap of faith on Uber's part, since technology has yet to catch up with the idea of a fully autonomous vehicle.",
+      "translation": "这对优步而言确实是一次基于信念的巨大冒险，因为现有技术还没有赶上完全自动驾驶汽车这一构想。",
+      "structure": [{"text": "It is indeed a huge leap of faith on Uber's part", "role": "main_clause", "level": 1}, {"text": "since technology has yet to catch up with the idea of a fully autonomous vehicle", "role": "adverbial_clause", "level": 1}],
+      "difficult_points": ["It 指代优步进军无人驾驶汽车领域这件事；on Uber's part 表示从优步这一方来看。", "has yet to do 表示尚未做成；since 在此引导原因状语从句。"],
+      "expressions": [{"text": "a leap of faith", "meaning_zh": "基于信念的冒险之举"}, {"text": "on ...'s part", "meaning_zh": "就……而言"}, {"text": "catch up with", "meaning_zh": "赶上"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "On the as well as stay in lane, and maintain a steady cruising seed.",
+      "translation": "（原文此句严重残缺）……以及保持在车道内，并维持稳定的巡航速度。",
+      "structure": [{"text": "On the", "role": "incomplete_opening", "level": 1}, {"text": "as well as stay in lane", "role": "coordinated_verb_phrase", "level": 1}, {"text": "and maintain a steady cruising seed", "role": "coordinated_verb_phrase", "level": 1}],
+      "difficult_points": ["源句从 On the 后明显缺失内容，无法恢复完整主干，翻译仅呈现仍可辨认的信息。", "cruising seed 是源文拼写异常，按语境应为 cruising speed（巡航速度），原句按源文保留。"],
+      "expressions": [{"text": "stay in lane", "meaning_zh": "保持在车道内"}, {"text": "maintain a steady cruising speed", "meaning_zh": "保持稳定巡航速度（按语境还原的积累形式）"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "In a patchwork fashion such cars could eventually build up to almost full automation and Uber believes that car owners will readily embrace the idea of driverless taxis.",
+      "translation": "通过逐项拼合功能，这类汽车最终可能接近完全自动化；优步相信，车主会欣然接受无人驾驶出租车的概念。",
+      "structure": [{"text": "In a patchwork fashion", "role": "prepositional_phrase", "level": 1}, {"text": "such cars could eventually build up to almost full automation", "role": "main_clause", "level": 1}, {"text": "and Uber believes", "role": "coordinated_clause", "level": 1}, {"text": "that car owners will readily embrace the idea of driverless taxis", "role": "noun_clause", "level": 2}],
+      "difficult_points": ["In a patchwork fashion 表示通过把不同功能逐步拼合起来，而非一次完成。", "that 引导 believes 的宾语从句；readily 表示乐意、毫不迟疑地接受。"],
+      "expressions": [{"text": "build up to", "meaning_zh": "逐步发展到"}, {"text": "embrace the idea of", "meaning_zh": "欣然接受……的理念"}]
+    },
+    {
+      "id": "B-06", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "In Uber's eyes, current car owners only stand to gain by the introduction of such technology.",
+      "translation": "在优步看来，现有车主只会从这项技术的引入中获益。",
+      "structure": [{"text": "In Uber's eyes", "role": "prepositional_phrase", "level": 1}, {"text": "current car owners", "role": "subject", "level": 1}, {"text": "only stand to gain by the introduction of such technology", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["In Uber's eyes 限定本句只是优步方面的观点。", "stand to gain 表示很可能获得利益；by 引出获益所凭借的变化。"],
+      "expressions": [{"text": "in ...'s eyes", "meaning_zh": "在……看来"}, {"text": "stand to gain", "meaning_zh": "很可能获益"}, {"text": "the introduction of technology", "meaning_zh": "技术的引入"}]
+    },
+    {
+      "id": "B-07", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "Hiring a driverless cab means that the client does not have to pay for the cost of the driver in the cab fee.",
+      "translation": "乘坐无人驾驶出租车意味着，客户不必在车费中承担司机的成本。",
+      "structure": [{"text": "Hiring a driverless cab", "role": "gerund_phrase", "level": 1}, {"text": "means", "role": "verb_phrase", "level": 1}, {"text": "that the client does not have to pay for the cost of the driver in the cab fee", "role": "noun_clause", "level": 2}],
+      "difficult_points": ["Hiring... 是动名词短语作主语，这里指雇用或乘坐无人驾驶出租车。", "that 从句作 means 的宾语；in the cab fee 表示司机成本原本包含在车费之中。"],
+      "expressions": [{"text": "does not have to", "meaning_zh": "不必"}, {"text": "pay for the cost of", "meaning_zh": "承担……的成本"}]
+    },
+    {
+      "id": "B-08", "paragraph_label": "B", "sentence_index": 12,
+      "sentence": "The only cost incurred by clients is for fuel, plus wear and tear.",
+      "translation": "客户需要承担的成本只有燃料费，外加车辆正常损耗。",
+      "structure": [{"text": "The only cost incurred by clients", "role": "subject", "level": 1}, {"text": "incurred by clients", "role": "participial_phrase", "level": 2}, {"text": "is for fuel, plus wear and tear", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["incurred by clients 是过去分词短语，修饰 cost，表示由客户承担的。", "wear and tear 是固定搭配，指正常使用造成的磨损，而不是两个独立费用项目。"],
+      "expressions": [{"text": "cost incurred by", "meaning_zh": "由……承担的成本"}, {"text": "wear and tear", "meaning_zh": "正常损耗"}]
+    },
+    {
+      "id": "B-09", "paragraph_label": "B", "sentence_index": 13,
+      "sentence": "It is certainly an attractive proposition.",
+      "translation": "这无疑是一个很有吸引力的提议。",
+      "structure": [{"text": "It", "role": "subject", "level": 1}, {"text": "is certainly an attractive proposition", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["It 指代前文所述无人驾驶出租车能降低客户费用这一方案。", "proposition 在此指可供考虑的主张或方案，不是语法中的命题。"],
+      "expressions": [{"text": "an attractive proposition", "meaning_zh": "有吸引力的方案"}]
+    },
+    {
+      "id": "B-10", "paragraph_label": "B", "sentence_index": 14,
+      "sentence": "Uber stands to benefit, too, since employees currently working as taxi drivers will be removed from the company's payroll.",
+      "translation": "优步也很可能从中获益，因为目前担任出租车司机的员工将不再列入公司的工资名册。",
+      "structure": [{"text": "Uber stands to benefit, too", "role": "main_clause", "level": 1}, {"text": "since employees currently working as taxi drivers will be removed from the company's payroll", "role": "adverbial_clause", "level": 1}, {"text": "currently working as taxi drivers", "role": "participial_phrase", "level": 2}],
+      "difficult_points": ["since 引导原因状语从句，解释优步获益的方式。", "working... 修饰 employees；be removed from the payroll 委婉表示公司不再支付这些司机的工资。"],
+      "expressions": [{"text": "stand to benefit", "meaning_zh": "很可能获益"}, {"text": "be removed from the payroll", "meaning_zh": "不再列入工资名册"}]
+    },
+    {
+      "id": "B-11", "paragraph_label": "B", "sentence_index": 15,
+      "sentence": "Apparently for car drivers and Uber, it is a win-win situation.",
+      "translation": "显然，对乘客和优步而言，这似乎是一个双赢局面。",
+      "structure": [{"text": "for car drivers and Uber", "role": "prepositional_phrase", "level": 1}, {"text": "it", "role": "subject", "level": 1}, {"text": "is a win-win situation", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["it 指无人驾驶出租车的引入；for... 指明被认为获益的双方。", "car drivers 在上下文中用词略含混，可能指乘车者或驾驶者，翻译结合费用讨论处理为乘客。"],
+      "expressions": [{"text": "a win-win situation", "meaning_zh": "双赢局面"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "Not everyone will benefit however from this technology, the car industry being an obvious example.",
+      "translation": "然而，并非所有人都会从这项技术中受益，汽车行业就是一个明显的例子。",
+      "structure": [{"text": "Not everyone", "role": "subject", "level": 1}, {"text": "will benefit however from this technology", "role": "verb_phrase", "level": 1}, {"text": "the car industry being an obvious example", "role": "absolute_construction", "level": 2}],
+      "difficult_points": ["Not everyone 是部分否定，表示并非人人都受益，而不是所有人都不受益。", "the car industry being... 是独立主格结构，补充一个不受益的例子。"],
+      "expressions": [{"text": "benefit from", "meaning_zh": "从……中受益"}, {"text": "an obvious example", "meaning_zh": "一个明显的例子"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 17,
+      "sentence": "Not surprisingly, the industry views the concept of selt-driving cars with a sense of growing alarm.",
+      "translation": "不出所料，汽车行业对自动驾驶汽车这一概念感到日益忧虑。",
+      "structure": [{"text": "the industry", "role": "subject", "level": 1}, {"text": "views the concept of selt-driving cars with a sense of growing alarm", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["view A with B 表示以某种态度看待某事，with 后是行业的情绪。", "selt-driving 是源文拼写错误，按语境应为 self-driving，原句按源文保留。"],
+      "expressions": [{"text": "not surprisingly", "meaning_zh": "不出所料"}, {"text": "with growing alarm", "meaning_zh": "怀着日益加深的忧虑"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 18,
+      "sentence": "Such technology could well prove the death knell for private car ownership.",
+      "translation": "这项技术很可能最终敲响私人汽车所有制的丧钟。",
+      "structure": [{"text": "Such technology", "role": "subject", "level": 1}, {"text": "could well prove the death knell for private car ownership", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["could well 表示很可能，well 在此加强可能性。", "prove 在此意为结果证明是；death knell 是比喻，指某事物走向终结的信号。"],
+      "expressions": [{"text": "could well", "meaning_zh": "很可能"}, {"text": "prove the death knell for", "meaning_zh": "成为……走向终结的信号"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 19,
+      "sentence": "As a result, the industry is dragging its feet over the manufacture and introduction of fully automated vehicles onto the market, due to commercial issues.",
+      "translation": "因此，出于商业利益方面的顾虑，汽车行业一直拖延全自动汽车的制造及市场投放。",
+      "structure": [{"text": "the industry", "role": "subject", "level": 1}, {"text": "is dragging its feet over the manufacture and introduction of fully automated vehicles onto the market", "role": "verb_phrase", "level": 1}, {"text": "due to commercial issues", "role": "prepositional_phrase", "level": 1}],
+      "difficult_points": ["drag one's feet over 是比喻表达，指故意拖延、不积极推进。", "due to... 给出行业拖延的商业原因；onto the market 与 introduction 搭配，表示推向市场。"],
+      "expressions": [{"text": "as a result", "meaning_zh": "因此"}, {"text": "drag one's feet over", "meaning_zh": "在……问题上拖延"}, {"text": "introduce ... onto the market", "meaning_zh": "把……投放市场"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 20,
+      "sentence": "The commercial aspect apart, there is also the safety issue.",
+      "translation": "撇开商业层面不谈，还存在安全问题。",
+      "structure": [{"text": "The commercial aspect apart", "role": "absolute_construction", "level": 1}, {"text": "there is also the safety issue", "role": "main_clause", "level": 1}],
+      "difficult_points": ["The commercial aspect apart 是独立结构，相当于 apart from the commercial aspect。", "there is 是存在句，将讨论重点从商业问题转向安全问题。"],
+      "expressions": [{"text": "... apart", "meaning_zh": "撇开……不谈"}, {"text": "safety issue", "meaning_zh": "安全问题"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 21,
+      "sentence": "Whilst a fully automated car could respond to most eventualities in the course of a trip, would it be capable of responding to unforeseen events, such as changes in route or unexpected diversions?",
+      "translation": "虽然全自动汽车或许能应对行程中的大多数情况，但它能否处理路线变化或临时改道等意外事件呢？",
+      "structure": [{"text": "Whilst a fully automated car could respond to most eventualities in the course of a trip", "role": "adverbial_clause", "level": 1}, {"text": "would it be capable of responding to unforeseen events", "role": "main_clause", "level": 1}, {"text": "such as changes in route or unexpected diversions", "role": "prepositional_phrase", "level": 2}],
+      "difficult_points": ["Whilst 引导让步状语从句，主句以疑问倒装形式提出质疑。", "eventualities 指可能出现的各种情况；such as 后列举 unforeseen events 的例子。"],
+      "expressions": [{"text": "in the course of", "meaning_zh": "在……过程中"}, {"text": "be capable of responding to", "meaning_zh": "能够应对"}, {"text": "unforeseen events", "meaning_zh": "不可预见的事件"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 22,
+      "sentence": "Evidently legislative authorities are also of this opinion.",
+      "translation": "显然，立法机构也持这种看法。",
+      "structure": [{"text": "legislative authorities", "role": "subject", "level": 1}, {"text": "are also of this opinion", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["this opinion 指上一句对全自动汽车处理突发事件能力的担忧。", "be of an opinion 是较正式的表达，相当于 hold an opinion。"],
+      "expressions": [{"text": "legislative authorities", "meaning_zh": "立法机构"}, {"text": "be of this opinion", "meaning_zh": "持这种看法"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 23,
+      "sentence": "Currently, no matter how much automation a car has, it still requires a driver with a full licence behind the wheel to drive on public roads.",
+      "translation": "目前，无论一辆汽车的自动化程度有多高，要在公共道路上行驶，仍必须有一名持完整驾照的司机坐在驾驶位上。",
+      "structure": [{"text": "no matter how much automation a car has", "role": "adverbial_clause", "level": 1}, {"text": "it", "role": "subject", "level": 1}, {"text": "still requires a driver with a full licence behind the wheel", "role": "verb_phrase", "level": 1}, {"text": "to drive on public roads", "role": "non_finite_clause", "level": 2}],
+      "difficult_points": ["no matter how much... 引导让步状语从句，表示自动化程度再高也不例外。", "it 指 a car；behind the wheel 表示坐在驾驶位负责驾驶，to drive... 说明适用情境。"],
+      "expressions": [{"text": "no matter how much", "meaning_zh": "无论……有多少"}, {"text": "behind the wheel", "meaning_zh": "坐在驾驶位；负责驾驶"}, {"text": "on public roads", "meaning_zh": "在公共道路上"}]
+    },
+    {
+      "id": "D-05", "paragraph_label": "D", "sentence_index": 24,
+      "sentence": "Whilst robot drivers, on the whole, have the upper hand on their human counterparts safety-wise, that still does not guarantee that they will become legal.",
+      "translation": "尽管总体而言，机器人司机在安全性方面胜过人类司机，但这仍不能保证它们会获得合法地位。",
+      "structure": [{"text": "Whilst robot drivers, on the whole, have the upper hand on their human counterparts safety-wise", "role": "adverbial_clause", "level": 1}, {"text": "that still does not guarantee", "role": "main_clause", "level": 1}, {"text": "that they will become legal", "role": "noun_clause", "level": 2}],
+      "difficult_points": ["Whilst 引导让步从句；have the upper hand on 表示相较人类司机占优势。", "主句 that 指机器人司机更安全这一事实；宾语从句中的 they 指 robot drivers。"],
+      "expressions": [{"text": "on the whole", "meaning_zh": "总体而言"}, {"text": "have the upper hand", "meaning_zh": "占优势"}, {"text": "human counterparts", "meaning_zh": "对应的人类同行"}]
+    },
+    {
+      "id": "D-06", "paragraph_label": "D", "sentence_index": 25,
+      "sentence": "As a consortium of researchers put it, 'I self-driving cars cut the roughly 40,000 annual US traffic fatalities in half, the car makers might get not 20,000 thank-you notes, but 20,000 lawsuits.'",
+      "translation": "正如一个研究联盟所说：“如果自动驾驶汽车把美国每年约4万起交通死亡人数减半，汽车制造商得到的可能不是2万封感谢信，而是2万份诉讼。”",
+      "structure": [{"text": "As a consortium of researchers put it", "role": "adverbial_clause", "level": 1}, {"text": "'I self-driving cars cut the roughly 40,000 annual US traffic fatalities in half", "role": "conditional_clause", "level": 2}, {"text": "the car makers might get not 20,000 thank-you notes, but 20,000 lawsuits.'", "role": "main_clause", "level": 2}],
+      "difficult_points": ["As ... put it 表示正如某方所说，引出直接引语。", "引语开头 I 是源文 OCR 错误，按语境应为 If；not...but... 对比感谢信与诉讼，突出法律风险。"],
+      "expressions": [{"text": "as ... put it", "meaning_zh": "正如……所说"}, {"text": "cut ... in half", "meaning_zh": "把……减少一半"}, {"text": "not ... but ...", "meaning_zh": "不是……而是……"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 26,
+      "sentence": "Interestingly, Uber are now undertaking an aggressive hiring campaign for taxi drivers to meet the demand for their taxi app.",
+      "translation": "有趣的是，优步目前正大力招聘出租车司机，以满足其叫车应用带来的需求。",
+      "structure": [{"text": "Uber", "role": "subject", "level": 1}, {"text": "are now undertaking an aggressive hiring campaign for taxi drivers", "role": "verb_phrase", "level": 1}, {"text": "to meet the demand for their taxi app", "role": "non_finite_clause", "level": 2}],
+      "difficult_points": ["Uber 在英式英语中可按集体名词使用复数谓语 are。", "to meet... 是目的状语；aggressive 在此表示力度很大、积极推进，而非具有攻击性。"],
+      "expressions": [{"text": "undertake a hiring campaign", "meaning_zh": "开展招聘活动"}, {"text": "meet the demand for", "meaning_zh": "满足对……的需求"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 27,
+      "sentence": "It seems that even Uber is less than confident that driverless taxis will soon become a reality.",
+      "translation": "看来，就连优步自己也不太相信无人驾驶出租车很快会成为现实。",
+      "structure": [{"text": "It seems", "role": "main_clause", "level": 1}, {"text": "that even Uber is less than confident", "role": "noun_clause", "level": 2}, {"text": "that driverless taxis will soon become a reality", "role": "noun_clause", "level": 3}],
+      "difficult_points": ["It 是形式主语，第一个 that 从句是真正主语。", "第二个 that 从句说明 confident 的具体内容；less than confident 是委婉说法，实际表示不太有信心。"],
+      "expressions": [{"text": "it seems that", "meaning_zh": "看来……"}, {"text": "less than confident", "meaning_zh": "不太有信心"}, {"text": "become a reality", "meaning_zh": "成为现实"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 28,
+      "sentence": "Whether Uber is backing a doomed campaign or instead is about to bring in a technology that will be universally greeted with positivity and acceptance depends entirely on your viewpoint.",
+      "translation": "优步究竟是在支持一场注定失败的行动，还是即将引入一项会得到普遍欢迎和接受的技术，完全取决于你的立场。",
+      "structure": [{"text": "Whether Uber is backing a doomed campaign or instead is about to bring in a technology that will be universally greeted with positivity and acceptance", "role": "noun_clause", "level": 1}, {"text": "that will be universally greeted with positivity and acceptance", "role": "relative_clause", "level": 2}, {"text": "depends entirely on your viewpoint", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["Whether...or... 引导主语从句，列出对优步行动的两种相反解读。", "that 从句修饰 technology；depends 的主语是前面整个 Whether 从句。"],
+      "expressions": [{"text": "a doomed campaign", "meaning_zh": "注定失败的行动"}, {"text": "be about to bring in", "meaning_zh": "即将引入"}, {"text": "depend entirely on", "meaning_zh": "完全取决于"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 29,
+      "sentence": "John Reynolds, a Pittsburgh taxi driver, is angry at Uber's attitude on fully automated technology.",
+      "translation": "匹兹堡出租车司机约翰·雷诺兹对优步对待全自动技术的态度感到愤怒。",
+      "structure": [{"text": "John Reynolds", "role": "subject", "level": 1}, {"text": "a Pittsburgh taxi driver", "role": "apposition", "level": 2}, {"text": "is angry at Uber's attitude on fully automated technology", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["a Pittsburgh taxi driver 是 John Reynolds 的同位语，交代他的立场来源。", "be angry at 指对某事感到愤怒；on 引出优步态度所针对的议题。"],
+      "expressions": [{"text": "be angry at", "meaning_zh": "对……感到愤怒"}, {"text": "attitude on", "meaning_zh": "对……问题的态度"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 30,
+      "sentence": "'They are completely disregarding individual livelihoods, such as mine, as well as those of big car manufacturers in the pursuit of money.",
+      "translation": "“他们为了追逐金钱，完全无视个人的生计——例如我自己的生计——也无视大型汽车制造商相关人员的生计。",
+      "structure": [{"text": "They", "role": "subject", "level": 1}, {"text": "are completely disregarding individual livelihoods", "role": "verb_phrase", "level": 1}, {"text": "such as mine", "role": "parenthesis", "level": 2}, {"text": "as well as those of big car manufacturers", "role": "coordinated_object", "level": 1}, {"text": "in the pursuit of money", "role": "prepositional_phrase", "level": 1}],
+      "difficult_points": ["They 指优步等推动无人驾驶技术的一方；mine 代替 my livelihood。", "those 代替 livelihoods，避免重复；in the pursuit of 表示为了追求某物。"],
+      "expressions": [{"text": "disregard individual livelihoods", "meaning_zh": "无视个人生计"}, {"text": "as well as", "meaning_zh": "以及"}, {"text": "in the pursuit of", "meaning_zh": "为了追求"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 31,
+      "sentence": "Admittedly things change and we have to roll with the times, but there should be some safeguards in place to protect those potentially affected by the introduction of new technologies.",
+      "translation": "诚然，时代会变化，我们也必须顺应潮流，但仍应设置一些保障措施，保护那些可能受到新技术引入影响的人。",
+      "structure": [{"text": "things change and we have to roll with the times", "role": "main_clause", "level": 1}, {"text": "but there should be some safeguards in place", "role": "coordinated_clause", "level": 1}, {"text": "to protect those potentially affected by the introduction of new technologies", "role": "non_finite_clause", "level": 2}, {"text": "potentially affected by the introduction of new technologies", "role": "participial_phrase", "level": 3}],
+      "difficult_points": ["Admittedly 先承认技术变化不可避免，but 再引出说话者真正强调的保护诉求。", "those 指受到影响的人；affected... 是过去分词短语修饰 those。"],
+      "expressions": [{"text": "roll with the times", "meaning_zh": "顺应时代变化"}, {"text": "safeguards in place", "meaning_zh": "已设置的保障措施"}, {"text": "be affected by", "meaning_zh": "受到……影响"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 32,
+      "sentence": "I guess I'm biased, being a taxi driver myself, but it's difficult to see it objectively.'",
+      "translation": "我想我确实有偏向，毕竟我自己就是出租车司机，但要客观看待这件事实在很难。”",
+      "structure": [{"text": "I guess", "role": "main_clause", "level": 1}, {"text": "I'm biased", "role": "noun_clause", "level": 2}, {"text": "being a taxi driver myself", "role": "participial_phrase", "level": 2}, {"text": "but it's difficult to see it objectively.'", "role": "coordinated_clause", "level": 1}],
+      "difficult_points": ["being... 是原因性现在分词短语，解释说话者为何承认自己有偏向。", "第一个 it 是形式主语，to see it objectively 是真正主语；第二个 it 指无人驾驶技术争议。"],
+      "expressions": [{"text": "be biased", "meaning_zh": "带有偏见或立场倾向"}, {"text": "see ... objectively", "meaning_zh": "客观看待……"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 33,
+      "sentence": "Susie Greenacre, a redident of Pittsburgh, has no such reservations about driverless cars.",
+      "translation": "匹兹堡居民苏茜·格里纳克对无人驾驶汽车没有这样的顾虑。",
+      "structure": [{"text": "Susie Greenacre", "role": "subject", "level": 1}, {"text": "a redident of Pittsburgh", "role": "apposition", "level": 2}, {"text": "has no such reservations about driverless cars", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["a redident... 是主语的同位语；redident 是源文拼写错误，按语境应为 resident。", "such reservations 指上一段出租车司机对生计与安全的那些顾虑。"],
+      "expressions": [{"text": "have no reservations about", "meaning_zh": "对……毫无保留或顾虑"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 34,
+      "sentence": "'I'm all for it.",
+      "translation": "“我完全支持它。",
+      "structure": [{"text": "I", "role": "subject", "level": 1}, {"text": "'I'm all for it", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["it 指无人驾驶汽车这一技术和推广主张。", "be all for 是口语固定表达，表示完全赞成，并非“为了它”。"],
+      "expressions": [{"text": "be all for", "meaning_zh": "完全赞成"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 35,
+      "sentence": "Driverless cars have my backing, any day!",
+      "translation": "无论什么时候，我都支持无人驾驶汽车！",
+      "structure": [{"text": "Driverless cars", "role": "subject", "level": 1}, {"text": "have my backing", "role": "verb_phrase", "level": 1}, {"text": "any day", "role": "adverbial", "level": 1}],
+      "difficult_points": ["have my backing 表示得到我的支持，backing 是名词。", "any day 在此加强肯定语气，表示随时都会支持，而不是某个具体日期。"],
+      "expressions": [{"text": "have my backing", "meaning_zh": "得到我的支持"}, {"text": "any day", "meaning_zh": "无论何时；随时"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 36,
+      "sentence": "I hate the stress of rush-hour traffic| I think if I could just hop in a driverless car which would take me anywhere I wanted I would never want to drive again!'",
+      "translation": "我讨厌高峰时段交通带来的压力。我想，如果我只需跳上一辆无人驾驶汽车，它就能带我去任何想去的地方，我就再也不会想自己开车了！”",
+      "structure": [{"text": "I hate the stress of rush-hour traffic", "role": "main_clause", "level": 1}, {"text": "I think", "role": "main_clause", "level": 1}, {"text": "if I could just hop in a driverless car which would take me anywhere I wanted", "role": "conditional_clause", "level": 2}, {"text": "which would take me anywhere I wanted", "role": "relative_clause", "level": 3}, {"text": "I would never want to drive again!'", "role": "main_clause", "level": 2}],
+      "difficult_points": ["traffic 后的竖线是源文异常分隔符，语义上相当于句号，原句按源文保留。", "if 从句与 would 主句构成假设；which 修饰 driverless car，anywhere 后省略关系副词 where。"],
+      "expressions": [{"text": "rush-hour traffic", "meaning_zh": "高峰时段交通"}, {"text": "hop in", "meaning_zh": "迅速上车"}, {"text": "never want to ... again", "meaning_zh": "再也不想……"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 37,
+      "sentence": "Jason Steiner, a school teacher in a Pittsburgh secondary school, is inclined to agree with Susie.'Whilst I'm not averse to driving, I would swap the stressful daily commute by car to a driverless one if I had the chance!",
+      "translation": "匹兹堡一所中学的教师杰森·斯坦纳倾向于赞同苏茜的看法。“虽然我并不排斥开车，但如果有机会，我愿意把充满压力的每日驾车通勤换成无人驾驶出行！”",
+      "structure": [{"text": "Jason Steiner", "role": "subject", "level": 1}, {"text": "a school teacher in a Pittsburgh secondary school", "role": "apposition", "level": 2}, {"text": "is inclined to agree with Susie", "role": "verb_phrase", "level": 1}, {"text": "'Whilst I'm not averse to driving", "role": "adverbial_clause", "level": 1}, {"text": "I would swap the stressful daily commute by car to a driverless one", "role": "main_clause", "level": 1}, {"text": "if I had the chance", "role": "conditional_clause", "level": 2}],
+      "difficult_points": ["源文在 Susie. 与引语 'Whilst 之间缺少空格；为保证原文完整复现，此处作为同一分析块保留。", "Whilst 引导让步从句；one 代替 commute，if 从句表达假设条件。"],
+      "expressions": [{"text": "be inclined to agree with", "meaning_zh": "倾向于赞同"}, {"text": "be averse to", "meaning_zh": "排斥；反感"}, {"text": "daily commute", "meaning_zh": "每日通勤"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 38,
+      "sentence": "It just takes the pressure off driving.",
+      "translation": "它就是能减轻驾驶的压力。",
+      "structure": [{"text": "It", "role": "subject", "level": 1}, {"text": "just takes the pressure off driving", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["It 指改用无人驾驶汽车出行这件事。", "take the pressure off 表示减轻某人或某事承受的压力。"],
+      "expressions": [{"text": "take the pressure off", "meaning_zh": "减轻……的压力"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 39,
+      "sentence": "I would be slightly wary though, of completely dependent on a robot-driven car when it comes to having to react to unexpected obstacles in the road.'",
+      "translation": "不过，说到必须应对道路上的意外障碍时，我还是会有些担心完全依赖机器人驾驶的汽车。”",
+      "structure": [{"text": "I", "role": "subject", "level": 1}, {"text": "would be slightly wary though", "role": "verb_phrase", "level": 1}, {"text": "of completely dependent on a robot-driven car", "role": "prepositional_phrase", "level": 2}, {"text": "when it comes to having to react to unexpected obstacles in the road", "role": "adverbial_clause", "level": 2}],
+      "difficult_points": ["of completely dependent 是源文语法异常，按语境应为 of being completely dependent，原句按源文保留。", "when it comes to 后接动名词，表示谈到某种情形；having to react 表示不得不作出反应。"],
+      "expressions": [{"text": "be wary of", "meaning_zh": "对……有所警惕"}, {"text": "be dependent on", "meaning_zh": "依赖"}, {"text": "when it comes to", "meaning_zh": "当谈到……时"}]
+    }
+  ]
+}

@@ -1,0 +1,494 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts9_test4_reading",
+  "passage_id": "ielts9_test4_p2",
+  "passage_title": "Young children's sense of identity",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "A sense of self develops in young children by degrees.",
+      "translation": "幼儿的自我意识是逐步发展的。",
+      "structure": [
+        {"text": "A sense of self", "role": "subject", "level": 1},
+        {"text": "develops", "role": "verb", "level": 1},
+        {"text": "in young children", "role": "prepositional_phrase", "level": 2},
+        {"text": "by degrees", "role": "adverbial", "level": 2}
+      ],
+      "difficult_points": ["of self 是介词短语，后置修饰 sense，表示“自我意识”。", "by degrees 表示变化逐渐发生，而非按具体等级划分。"],
+      "expressions": [{"text": "a sense of self", "meaning_zh": "自我意识"}, {"text": "by degrees", "meaning_zh": "逐渐地"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "The process can usefully be thought of in terms of the gradual emergence of two somewhat separate features: the self as a subject, and the self as an object.",
+      "translation": "我们可以把这个过程理解为两个相对独立的特征逐渐显现：作为主体的自我和作为客体的自我。",
+      "structure": [
+        {"text": "The process", "role": "subject", "level": 1},
+        {"text": "can usefully be thought of", "role": "passive_verb_phrase", "level": 1},
+        {"text": "in terms of the gradual emergence of two somewhat separate features", "role": "prepositional_phrase", "level": 2},
+        {"text": "the self as a subject, and the self as an object", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["can be thought of 是被动结构，意为“可以被理解为”。", "冒号后的两个名词短语具体解释 two somewhat separate features。", "as a subject 与 as an object 分别表示自我作为认识主体和认识客体。"],
+      "expressions": [{"text": "be thought of in terms of", "meaning_zh": "从……角度来理解"}, {"text": "the gradual emergence of", "meaning_zh": "……的逐渐显现"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "William James introduced the distinction in 1892, and contemporaries of his, such as Charles Cooley, added to the developing debate.",
+      "translation": "威廉·詹姆斯于1892年提出了这一区分，他的同代学者（如查尔斯·库利）则进一步推动了这场正在发展的讨论。",
+      "structure": [
+        {"text": "William James", "role": "subject", "level": 1},
+        {"text": "introduced the distinction in 1892", "role": "verb_phrase", "level": 1},
+        {"text": "and contemporaries of his", "role": "coordinated_subject", "level": 1},
+        {"text": "such as Charles Cooley", "role": "parenthesis", "level": 2},
+        {"text": "added to the developing debate", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": ["and 连接两个独立分句，第二个分句的主语是 contemporaries of his。", "of his 表示“他的同代人”，such as Charles Cooley 是举例说明。"],
+      "expressions": [{"text": "introduce a distinction", "meaning_zh": "提出一种区分"}, {"text": "add to the debate", "meaning_zh": "推动／丰富讨论"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "Ever since then psychologists have continued building on the theory.",
+      "translation": "自那以后，心理学家一直在这套理论的基础上继续发展。",
+      "structure": [
+        {"text": "Ever since then", "role": "time_adverbial", "level": 2},
+        {"text": "psychologists", "role": "subject", "level": 1},
+        {"text": "have continued building on the theory", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["Ever since then 与现在完成时 have continued 呼应，表示从过去延续至今。", "build on the theory 表示在已有理论基础上继续拓展，而非建造实物。"],
+      "expressions": [{"text": "ever since then", "meaning_zh": "自那以后一直"}, {"text": "build on a theory", "meaning_zh": "在某理论基础上发展"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "According to James, a child's first step on the road to self-understanding can be seen as the recognition that he or she exists.",
+      "translation": "按照詹姆斯的观点，儿童通往自我理解的第一步，可以看作是认识到自己的存在。",
+      "structure": [
+        {"text": "According to James", "role": "prepositional_phrase", "level": 2},
+        {"text": "a child's first step on the road to self-understanding", "role": "subject", "level": 1},
+        {"text": "can be seen as the recognition", "role": "passive_verb_phrase", "level": 1},
+        {"text": "that he or she exists", "role": "content_clause", "level": 2}
+      ],
+      "difficult_points": ["on the road to self-understanding 比喻自我理解的发展过程。", "that he or she exists 是同位语性质的内容从句，说明 recognition 的具体内容。"],
+      "expressions": [{"text": "on the road to", "meaning_zh": "在通往……的过程中"}, {"text": "be seen as", "meaning_zh": "被视为"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "This is an aspect of the self that he labelled 'self-as-subject', and he gave it various elements.",
+      "translation": "这是自我的一个方面，詹姆斯将其称为“作为主体的自我”，并认为它包含多种要素。",
+      "structure": [
+        {"text": "This is an aspect of the self", "role": "main_clause", "level": 1},
+        {"text": "that he labelled 'self-as-subject'", "role": "relative_clause", "level": 2},
+        {"text": "and he gave it various elements", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["that 引导定语从句，修饰 an aspect of the self，并在从句中作 labelled 的宾语。", "第二个 it 指 self-as-subject 这一概念；gave it various elements 意为赋予它若干构成要素。"],
+      "expressions": [{"text": "an aspect of", "meaning_zh": "……的一个方面"}, {"text": "label ... as ...", "meaning_zh": "把……称为……"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "These included an awareness of one's own agency (i.e. one's power to act), and an awareness of one's distinctiveness from other people.",
+      "translation": "这些要素包括对自身能动性的认识（即自己采取行动的能力），以及对自己有别于他人的认识。",
+      "structure": [
+        {"text": "These", "role": "subject", "level": 1},
+        {"text": "included", "role": "verb", "level": 1},
+        {"text": "an awareness of one's own agency", "role": "object", "level": 1},
+        {"text": "i.e. one's power to act", "role": "parenthesis", "level": 2},
+        {"text": "and an awareness of one's distinctiveness from other people", "role": "coordinated_object", "level": 1}
+      ],
+      "difficult_points": ["These 回指上一句的 various elements。", "i.e. 后的插入成分解释 agency，即个人采取行动的能力。", "两个 an awareness of 结构并列，分别对应能动性和与他人的区别。"],
+      "expressions": [{"text": "an awareness of", "meaning_zh": "对……的认识"}, {"text": "the power to act", "meaning_zh": "采取行动的能力"}, {"text": "distinctiveness from", "meaning_zh": "与……的差异性"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "These features gradually emerge as infants explore their world and interact with caregivers.",
+      "translation": "随着婴儿探索周围世界并与照护者互动，这些特征逐渐显现出来。",
+      "structure": [
+        {"text": "These features", "role": "subject", "level": 1},
+        {"text": "gradually emerge", "role": "verb_phrase", "level": 1},
+        {"text": "as infants explore their world and interact with caregivers", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["as 引导时间状语从句，表示这些特征伴随婴儿的活动逐渐形成。", "explore 与 interact 是并列谓语，共用从句主语 infants。"],
+      "expressions": [{"text": "gradually emerge", "meaning_zh": "逐渐显现"}, {"text": "interact with", "meaning_zh": "与……互动"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "Cooley (1902) suggested that a sense of the self-as-subject was primarily concerned with being able to exercise power.",
+      "translation": "库利（1902）认为，作为主体的自我意识主要与行使控制力的能力有关。",
+      "structure": [
+        {"text": "Cooley (1902)", "role": "subject", "level": 1},
+        {"text": "suggested", "role": "verb", "level": 1},
+        {"text": "that a sense of the self-as-subject was primarily concerned with being able to exercise power", "role": "object_clause", "level": 2},
+        {"text": "being able to exercise power", "role": "gerund_phrase", "level": 3}
+      ],
+      "difficult_points": ["that 引导 suggested 的宾语从句，陈述库利的观点。", "be concerned with 此处表示“与……有关”，不是“担心”。", "being able to exercise power 是介词 with 后的动名词结构。"],
+      "expressions": [{"text": "be primarily concerned with", "meaning_zh": "主要与……有关"}, {"text": "exercise power", "meaning_zh": "行使控制力"}]
+    },
+    {
+      "id": "B-06", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "He proposed that the earliest examples of this are an infant's attempts to control physical objects, such as toys or his or her own limbs.",
+      "translation": "他提出，这方面最早的表现是婴儿试图控制实物，例如玩具或自己的四肢。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "proposed", "role": "verb", "level": 1},
+        {"text": "that the earliest examples of this are an infant's attempts to control physical objects", "role": "object_clause", "level": 2},
+        {"text": "to control physical objects", "role": "infinitive_clause", "level": 3},
+        {"text": "such as toys or his or her own limbs", "role": "example_phrase", "level": 3}
+      ],
+      "difficult_points": ["this 回指上一句所说的行使控制力。", "to control physical objects 是不定式，后置说明 attempts 的内容。", "his or her 用来兼顾不同性别，均指 infant。"],
+      "expressions": [{"text": "the earliest examples of", "meaning_zh": "……最早的表现"}, {"text": "attempt to", "meaning_zh": "试图做……"}]
+    },
+    {
+      "id": "B-07", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "This is followed by attempts to affect the behavior of other people.",
+      "translation": "随后，婴儿会尝试影响他人的行为。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "is followed by", "role": "passive_verb_phrase", "level": 1},
+        {"text": "attempts to affect the behavior of other people", "role": "prepositional_complement", "level": 2},
+        {"text": "to affect the behavior of other people", "role": "infinitive_clause", "level": 3}
+      ],
+      "difficult_points": ["This 指上一句婴儿控制实物的尝试。", "is followed by 是被动结构，表示后一发展阶段紧随其后。"],
+      "expressions": [{"text": "be followed by", "meaning_zh": "随后是……"}, {"text": "affect the behavior of", "meaning_zh": "影响……的行为"}]
+    },
+    {
+      "id": "B-08", "paragraph_label": "B", "sentence_index": 12,
+      "sentence": "For example, infants learn that when they cry or smile someone responds to them.",
+      "translation": "例如，婴儿会发现，当他们哭泣或微笑时，会有人对他们作出回应。",
+      "structure": [
+        {"text": "For example", "role": "discourse_marker", "level": 1},
+        {"text": "infants learn", "role": "main_clause", "level": 1},
+        {"text": "that when they cry or smile someone responds to them", "role": "object_clause", "level": 2},
+        {"text": "when they cry or smile", "role": "adverbial_clause", "level": 3},
+        {"text": "someone responds to them", "role": "main_clause_within_object", "level": 3}
+      ],
+      "difficult_points": ["that 引导 learn 的宾语从句，when 从句又嵌套在其中。", "cry or smile 是 when 从句中的并列谓语。", "them 均指 infants，而 someone 泛指照护者等他人。"],
+      "expressions": [{"text": "respond to", "meaning_zh": "对……作出回应"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "Another powerful source of information for infants about the effects they can have on the world around them is provided when others mimic them.",
+      "translation": "当他人模仿婴儿时，这也为婴儿了解自己能够对周围世界产生何种影响提供了一个重要的信息来源。",
+      "structure": [
+        {"text": "Another powerful source of information for infants about the effects they can have on the world around them", "role": "subject", "level": 1},
+        {"text": "they can have on the world around them", "role": "relative_clause", "level": 2},
+        {"text": "is provided", "role": "passive_verb_phrase", "level": 1},
+        {"text": "when others mimic them", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["they can have on the world around them 是省略关系代词的定语从句，修饰 effects。", "两个 they/them 都指 infants，others 则指模仿婴儿的其他人。", "when 从句说明这一信息来源在何种情境下产生。"],
+      "expressions": [{"text": "a source of information", "meaning_zh": "信息来源"}, {"text": "have an effect on", "meaning_zh": "对……产生影响"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "Many parents spend a lot of time, particularly in the early months, copying their infant's vocalizations and expressions.",
+      "translation": "许多父母会花大量时间模仿婴儿的发声和表情，尤其是在出生后的最初几个月。",
+      "structure": [
+        {"text": "Many parents", "role": "subject", "level": 1},
+        {"text": "spend a lot of time", "role": "verb_phrase", "level": 1},
+        {"text": "particularly in the early months", "role": "parenthesis", "level": 2},
+        {"text": "copying their infant's vocalizations and expressions", "role": "gerund_clause", "level": 2}
+      ],
+      "difficult_points": ["copying 是动名词，与 spend time 构成 spend time doing 结构。", "particularly in the early months 是插入的时间说明，强调这种模仿在早期尤为常见。"],
+      "expressions": [{"text": "spend time doing", "meaning_zh": "花时间做……"}, {"text": "vocalizations and expressions", "meaning_zh": "发声和表情"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "In addition, young children enjoy looking in mirrors, where the movements they can see are dependent upon their own movements.",
+      "translation": "此外，幼儿喜欢照镜子；他们在镜中看到的动作取决于自己的动作。",
+      "structure": [
+        {"text": "In addition", "role": "discourse_marker", "level": 1},
+        {"text": "young children enjoy looking in mirrors", "role": "main_clause", "level": 1},
+        {"text": "where the movements they can see are dependent upon their own movements", "role": "relative_clause", "level": 2},
+        {"text": "they can see", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["where 引导非限制性定语从句，补充说明在镜子中出现的情况。", "they can see 是省略关系代词的定语从句，修饰 movements。", "their own movements 指幼儿本人实际做出的动作。"],
+      "expressions": [{"text": "be dependent upon", "meaning_zh": "取决于……"}, {"text": "in addition", "meaning_zh": "此外"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "This is not to say that infants recognize the reflection as their own image (a later development).",
+      "translation": "这并不是说婴儿已经认出镜中的影像就是自己——那是更晚才会出现的能力。",
+      "structure": [
+        {"text": "This is not to say", "role": "main_clause", "level": 1},
+        {"text": "that infants recognize the reflection as their own image", "role": "object_clause", "level": 2},
+        {"text": "a later development", "role": "parenthesis", "level": 3}
+      ],
+      "difficult_points": ["This is not to say that 用来限制前一句可能引出的过度推论。", "recognize A as B 表示“认出／视 A 为 B”。", "括号中的 a later development 指认出自身影像这一能力出现得更晚。"],
+      "expressions": [{"text": "This is not to say that", "meaning_zh": "这并不是说……"}, {"text": "recognize ... as ...", "meaning_zh": "认出……是……"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 17,
+      "sentence": "However, Lewis and Brooks-Gunn (1979) suggest that infants' developing understanding that the movements they see in the mirror are contingent on their own, leads to a growing awareness that they are distinct from other people.",
+      "translation": "然而，刘易斯和布鲁克斯-冈恩（1979）认为，婴儿逐渐明白镜中动作取决于自己的动作，而这种理解会使他们越来越意识到自己不同于他人。",
+      "structure": [
+        {"text": "However, Lewis and Brooks-Gunn (1979) suggest", "role": "main_clause", "level": 1},
+        {"text": "that infants' developing understanding that the movements they see in the mirror are contingent on their own, leads to a growing awareness that they are distinct from other people", "role": "object_clause", "level": 2},
+        {"text": "that the movements they see in the mirror are contingent on their own", "role": "content_clause", "level": 3},
+        {"text": "they see in the mirror", "role": "relative_clause", "level": 4},
+        {"text": "that they are distinct from other people", "role": "content_clause", "level": 3}
+      ],
+      "difficult_points": ["suggest 后是一个长宾语从句，其主语核心是 infants' developing understanding，谓语是 leads。", "第一个 that 从句说明 understanding 的内容，其中 they see in the mirror 修饰 movements。", "their own 省略了 movements；末尾 that 从句说明 awareness 的具体内容。"],
+      "expressions": [{"text": "be contingent on", "meaning_zh": "取决于……"}, {"text": "lead to a growing awareness", "meaning_zh": "使人越来越意识到"}, {"text": "be distinct from", "meaning_zh": "不同于……"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 18,
+      "sentence": "This is because they, and only they, can change the reflection in the mirror.",
+      "translation": "这是因为只有他们自己能够改变镜中的影像。",
+      "structure": [
+        {"text": "This is", "role": "main_clause", "level": 1},
+        {"text": "because they, and only they, can change the reflection in the mirror", "role": "predicative_clause", "level": 2},
+        {"text": "and only they", "role": "parenthesis", "level": 3},
+        {"text": "can change the reflection in the mirror", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": ["This 指上一句中婴儿逐渐意识到自己有别于他人的结论。", "and only they 是插入的强调成分，突出只有婴儿本人能控制镜像。"],
+      "expressions": [{"text": "This is because", "meaning_zh": "这是因为……"}, {"text": "change the reflection", "meaning_zh": "改变镜中影像"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 19,
+      "sentence": "This understanding that children gain of themselves as active agents continues to develop in their attempts to co-operate with others in play.",
+      "translation": "儿童把自己理解为主动行动者的这种认识，会在他们尝试与他人合作游戏的过程中继续发展。",
+      "structure": [
+        {"text": "This understanding", "role": "subject", "level": 1},
+        {"text": "that children gain of themselves as active agents", "role": "relative_clause", "level": 2},
+        {"text": "continues to develop", "role": "verb_phrase", "level": 1},
+        {"text": "in their attempts to co-operate with others in play", "role": "prepositional_phrase", "level": 2},
+        {"text": "to co-operate with others in play", "role": "infinitive_clause", "level": 3}
+      ],
+      "difficult_points": ["that 引导定语从句修饰 understanding；gain an understanding of themselves 表示形成对自身的认识。", "as active agents 是宾语补足语，说明 children 如何看待 themselves。", "to co-operate ... 是不定式，说明 attempts 的具体内容。"],
+      "expressions": [{"text": "active agents", "meaning_zh": "主动行动者"}, {"text": "co-operate with", "meaning_zh": "与……合作"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 20,
+      "sentence": "Dunn (1988) points out that it is in such day-to-day relationships and interactions that the child's understanding of his- or herself emerges.",
+      "translation": "邓恩（1988）指出，儿童对自我的理解正是在这种日常关系和互动中形成的。",
+      "structure": [
+        {"text": "Dunn (1988) points out", "role": "main_clause", "level": 1},
+        {"text": "that it is in such day-to-day relationships and interactions that the child's understanding of his- or herself emerges", "role": "object_clause", "level": 2},
+        {"text": "it is in such day-to-day relationships and interactions that", "role": "cleft_construction", "level": 3},
+        {"text": "the child's understanding of his- or herself emerges", "role": "focused_clause", "level": 3}
+      ],
+      "difficult_points": ["points out 后接宾语从句，陈述邓恩的观点。", "it is ... that 是强调句型，强调自我理解形成的环境。", "his- or herself 是兼顾男女儿童的写法，均回指 the child。"],
+      "expressions": [{"text": "point out that", "meaning_zh": "指出……"}, {"text": "day-to-day relationships and interactions", "meaning_zh": "日常关系与互动"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 21,
+      "sentence": "Empirical investigations of the self-as-subject in young children are, however, rather scarce because of difficulties of communication: even if young infants can reflect on their experience, they certainly cannot express this aspect of the self directly.",
+      "translation": "然而，由于沟通存在困难，针对幼儿“作为主体的自我”的实证研究相当少：即使年幼的婴儿能够反思自身经历，他们也肯定无法直接表达自我的这一方面。",
+      "structure": [
+        {"text": "Empirical investigations of the self-as-subject in young children", "role": "subject", "level": 1},
+        {"text": "are, however, rather scarce", "role": "main_clause", "level": 1},
+        {"text": "because of difficulties of communication", "role": "reason_adverbial", "level": 2},
+        {"text": "even if young infants can reflect on their experience", "role": "concessive_clause", "level": 2},
+        {"text": "they certainly cannot express this aspect of the self directly", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": ["however 插在系动词后，表示与前文理论发展的转折。", "冒号后解释 communication difficulties：即使婴儿能反思，也无法直接表达。", "even if 引导让步状语从句，they 指 young infants。"],
+      "expressions": [{"text": "empirical investigations", "meaning_zh": "实证研究"}, {"text": "because of difficulties of", "meaning_zh": "由于……方面的困难"}, {"text": "reflect on", "meaning_zh": "反思……"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 22,
+      "sentence": "Once children have acquired a certain level of self-awareness, they begin to place themselves in a whole series of categories, which together play such an important part in defining them uniquely as 'themselves'.",
+      "translation": "一旦儿童形成了一定程度的自我意识，他们就开始把自己归入一系列类别；这些类别共同在界定其独特自我方面发挥重要作用。",
+      "structure": [
+        {"text": "Once children have acquired a certain level of self-awareness", "role": "adverbial_clause", "level": 2},
+        {"text": "they begin to place themselves in a whole series of categories", "role": "main_clause", "level": 1},
+        {"text": "which together play such an important part in defining them uniquely as 'themselves'", "role": "relative_clause", "level": 2},
+        {"text": "in defining them uniquely as 'themselves'", "role": "gerund_phrase", "level": 3}
+      ],
+      "difficult_points": ["Once 引导时间兼条件状语从句，表示达到一定自我意识之后。", "which 指代 a whole series of categories，而不是 children。", "defining them ... as 'themselves' 表示这些类别共同塑造儿童独特的自我身份。"],
+      "expressions": [{"text": "acquire a certain level of", "meaning_zh": "达到一定程度的……"}, {"text": "a whole series of", "meaning_zh": "一整套／一系列……"}, {"text": "play an important part in", "meaning_zh": "在……中发挥重要作用"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 23,
+      "sentence": "This second step in the development of a full sense of self is what James called the 'self-as-object'.",
+      "translation": "完整自我意识发展的第二步，就是詹姆斯所说的“作为客体的自我”。",
+      "structure": [
+        {"text": "This second step in the development of a full sense of self", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "what James called the 'self-as-object'", "role": "predicative_clause", "level": 2}
+      ],
+      "difficult_points": ["what 引导表语从句，并在从句中作 called 的宾语。", "call A B 是双宾语式结构，此处表示詹姆斯把这一阶段称为 self-as-object。"],
+      "expressions": [{"text": "a full sense of self", "meaning_zh": "完整的自我意识"}, {"text": "what ... called ...", "meaning_zh": "……所称的……"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 24,
+      "sentence": "This has been seen by many to be the aspect of the self which is most influenced by social elements, since it is made up of social roles (such as student, brother, colleague) and characteristics which derive their meaning from comparison or interaction with other people (such as trustworthiness, shyness, sporting ability).",
+      "translation": "许多人认为，这是自我中最受社会因素影响的方面，因为它由社会角色（如学生、兄弟、同事）以及通过同他人比较或互动才获得意义的特征（如可信、羞怯和运动能力）构成。",
+      "structure": [
+        {"text": "This has been seen by many to be the aspect of the self", "role": "passive_verb_phrase", "level": 1},
+        {"text": "which is most influenced by social elements", "role": "relative_clause", "level": 2},
+        {"text": "since it is made up of social roles (such as student, brother, colleague) and characteristics", "role": "adverbial_clause", "level": 2},
+        {"text": "which derive their meaning from comparison or interaction with other people", "role": "relative_clause", "level": 3},
+        {"text": "such as trustworthiness, shyness, sporting ability", "role": "example_phrase", "level": 4}
+      ],
+      "difficult_points": ["This 指 self-as-object；has been seen ... to be 是“被许多人认为是”的被动结构。", "since 引导原因状语从句，it 同样指 self-as-object。", "第二个 which 仅修饰 characteristics，说明这些特征的意义来自人际比较或互动。", "两个 such as 分别列举 social roles 和 characteristics，不应混在一起理解。"],
+      "expressions": [{"text": "be influenced by", "meaning_zh": "受……影响"}, {"text": "be made up of", "meaning_zh": "由……构成"}, {"text": "derive meaning from", "meaning_zh": "从……获得意义"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 25,
+      "sentence": "Cooley and other researchers suggested a close connection between a person's own understanding of their identity and other people's understanding of it.",
+      "translation": "库利和其他研究者认为，一个人对自身身份的理解与他人对其身份的理解之间存在密切联系。",
+      "structure": [
+        {"text": "Cooley and other researchers", "role": "subject", "level": 1},
+        {"text": "suggested", "role": "verb", "level": 1},
+        {"text": "a close connection between a person's own understanding of their identity and other people's understanding of it", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["between A and B 连接两种 understanding，构成比较关系。", "their 是单数性别中立代词，指 a person；句末 it 指该人的 identity。"],
+      "expressions": [{"text": "a close connection between ... and ...", "meaning_zh": "……与……之间的密切联系"}, {"text": "understanding of identity", "meaning_zh": "对身份的理解"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 26,
+      "sentence": "Cooley believed that people build up their sense of identity from the reactions of others to them, and from the view they believe others have of them.",
+      "translation": "库利认为，人们根据他人对自己的反应，以及自己认为他人如何看待自己，逐步形成身份认同。",
+      "structure": [
+        {"text": "Cooley believed", "role": "main_clause", "level": 1},
+        {"text": "that people build up their sense of identity from the reactions of others to them, and from the view", "role": "object_clause", "level": 2},
+        {"text": "they believe others have of them", "role": "relative_clause", "level": 3},
+        {"text": "others have of them", "role": "object_clause", "level": 4}
+      ],
+      "difficult_points": ["两个 from 短语并列，共同说明身份认同的来源。", "they believe 插入定语从句内部；完整含义是 the view (that) others have of them。", "they 和 them 都指 people，others 指周围的其他人。"],
+      "expressions": [{"text": "build up a sense of identity", "meaning_zh": "逐步形成身份认同"}, {"text": "the reactions of others to", "meaning_zh": "他人对……的反应"}, {"text": "the view ... have of", "meaning_zh": "……对……的看法"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 27,
+      "sentence": "He called the self-as-object the 'looking-glass self', since people come to see themselves as they are reflected in others.",
+      "translation": "他把“作为客体的自我”称为“镜中自我”，因为人们逐渐通过他人对自己的反映来看待自己。",
+      "structure": [
+        {"text": "He called the self-as-object the 'looking-glass self'", "role": "main_clause", "level": 1},
+        {"text": "since people come to see themselves", "role": "adverbial_clause", "level": 2},
+        {"text": "as they are reflected in others", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["call A B 表示“把 A 称为 B”，the self-as-object 是宾语，looking-glass self 是宾补。", "since 引导原因状语从句；come to see 表示逐渐开始形成某种看法。", "as they are reflected in others 表示按照他人反映出的样子，they 指 people。"],
+      "expressions": [{"text": "come to see", "meaning_zh": "逐渐开始认识到／看待"}, {"text": "be reflected in", "meaning_zh": "在……中得到反映"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 28,
+      "sentence": "Mead (1934) went even further, and saw the self and the social world as inextricably bound together: 'The self is essentially a social structure, and it arises in social experience … it is impossible to conceive of a self arising outside of social experience.'",
+      "translation": "米德（1934）更进一步，认为自我与社会世界密不可分：“自我本质上是一种社会结构，它产生于社会经验……无法设想一个脱离社会经验而产生的自我。”",
+      "structure": [
+        {"text": "Mead (1934) went even further", "role": "main_clause", "level": 1},
+        {"text": "and saw the self and the social world as inextricably bound together", "role": "coordinated_predicate", "level": 1},
+        {"text": "The self is essentially a social structure", "role": "quoted_main_clause", "level": 2},
+        {"text": "and it arises in social experience", "role": "quoted_coordinated_clause", "level": 2},
+        {"text": "it is impossible to conceive of a self arising outside of social experience", "role": "quoted_main_clause", "level": 2}
+      ],
+      "difficult_points": ["see A as B 表示“把 A 看作 B”，bound together 是过去分词作补语。", "冒号后的引文具体说明自我为何与社会世界密不可分。", "末句 it 是形式主语，真正内容是 to conceive of ...；arising 修饰 a self。"],
+      "expressions": [{"text": "go even further", "meaning_zh": "更进一步"}, {"text": "be inextricably bound together", "meaning_zh": "密不可分"}, {"text": "conceive of", "meaning_zh": "设想／构想"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 29,
+      "sentence": "Lewis and Brooks-Gunn argued that an important developmental milestone is reached when children become able to recognize themselves visually without the support of seeing contingent movement.",
+      "translation": "刘易斯和布鲁克斯-冈恩认为，当儿童无需借助同步动作就能从视觉上认出自己时，他们便达到了一个重要的发展里程碑。",
+      "structure": [
+        {"text": "Lewis and Brooks-Gunn argued", "role": "main_clause", "level": 1},
+        {"text": "that an important developmental milestone is reached", "role": "object_clause", "level": 2},
+        {"text": "when children become able to recognize themselves visually", "role": "adverbial_clause", "level": 3},
+        {"text": "without the support of seeing contingent movement", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": ["that 引导 argued 的宾语从句，其中 milestone is reached 使用被动语态。", "when 从句说明达到这一里程碑的条件和时点。", "contingent movement 指镜像随儿童自身动作同步变化这一线索。"],
+      "expressions": [{"text": "developmental milestone", "meaning_zh": "发展里程碑"}, {"text": "become able to", "meaning_zh": "开始能够……"}, {"text": "without the support of", "meaning_zh": "无需借助……"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 30,
+      "sentence": "This recognition occurs around their second birthday.",
+      "translation": "这种识别能力大约在儿童两岁时出现。",
+      "structure": [
+        {"text": "This recognition", "role": "subject", "level": 1},
+        {"text": "occurs", "role": "verb", "level": 1},
+        {"text": "around their second birthday", "role": "time_adverbial", "level": 2}
+      ],
+      "difficult_points": ["This recognition 回指无需动作线索也能从视觉上认出自己。", "around 表示大致时间，因此不是严格在两岁生日当天。"],
+      "expressions": [{"text": "occur around", "meaning_zh": "大约在……发生"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 31,
+      "sentence": "In one experiment, Lewis and Brooks-Gunn (1979) dabbed some red powder on the noses of children who were playing in front of a mirror, and then observed how often they touched their noses.",
+      "translation": "在一项实验中，刘易斯和布鲁克斯-冈恩（1979）在一群正对着镜子玩耍的儿童鼻子上点了些红色粉末，随后观察他们触摸鼻子的频率。",
+      "structure": [
+        {"text": "In one experiment", "role": "prepositional_phrase", "level": 2},
+        {"text": "Lewis and Brooks-Gunn (1979)", "role": "subject", "level": 1},
+        {"text": "dabbed some red powder on the noses of children", "role": "verb_phrase", "level": 1},
+        {"text": "who were playing in front of a mirror", "role": "relative_clause", "level": 2},
+        {"text": "and then observed how often they touched their noses", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": ["who 引导定语从句，修饰 children。", "dab ... on ... 表示把少量粉末点在鼻子上。", "how often 引导 observed 的宾语从句，询问动作发生的频率；they 指 children。"],
+      "expressions": [{"text": "dab ... on ...", "meaning_zh": "把……轻涂在……上"}, {"text": "in front of", "meaning_zh": "在……前面"}, {"text": "observe how often", "meaning_zh": "观察……发生的频率"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 32,
+      "sentence": "The psychologists reasoned that if the children knew what they usually looked like, they would be surprised by the unusual red mark and would start touching it.",
+      "translation": "心理学家推断，如果这些儿童知道自己平时是什么样子，就会对异常的红色印记感到惊讶，并开始触摸它。",
+      "structure": [
+        {"text": "The psychologists reasoned", "role": "main_clause", "level": 1},
+        {"text": "that if the children knew what they usually looked like, they would be surprised by the unusual red mark and would start touching it", "role": "object_clause", "level": 2},
+        {"text": "if the children knew what they usually looked like", "role": "conditional_clause", "level": 3},
+        {"text": "what they usually looked like", "role": "object_clause", "level": 4},
+        {"text": "they would be surprised by the unusual red mark and would start touching it", "role": "result_clause", "level": 3}
+      ],
+      "difficult_points": ["reasoned 后接宾语从句，内部又包含 if 条件句。", "what they usually looked like 是 knew 的宾语从句，what 同时作 like 的宾语。", "would be surprised 与 would start touching 是并列谓语；it 指 the unusual red mark。"],
+      "expressions": [{"text": "reason that", "meaning_zh": "推断……"}, {"text": "be surprised by", "meaning_zh": "对……感到惊讶"}, {"text": "start doing", "meaning_zh": "开始做……"}]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 33,
+      "sentence": "On the other hand, they found that children of 15 to 18 months are generally not able to recognize themselves unless other cues such as movement are present.",
+      "translation": "另一方面，他们发现，15至18个月大的儿童通常还无法认出自己，除非有动作等其他线索。",
+      "structure": [
+        {"text": "On the other hand", "role": "discourse_marker", "level": 1},
+        {"text": "they found", "role": "main_clause", "level": 1},
+        {"text": "that children of 15 to 18 months are generally not able to recognize themselves", "role": "object_clause", "level": 2},
+        {"text": "unless other cues such as movement are present", "role": "conditional_clause", "level": 3}
+      ],
+      "difficult_points": ["they 指刘易斯和布鲁克斯-冈恩等研究者。", "unless 引导否定条件，相当于 if ... not，说明儿童需要其他线索才能认出自己。", "are present 此处表示线索“存在／可获得”。"],
+      "expressions": [{"text": "on the other hand", "meaning_zh": "另一方面"}, {"text": "be able to recognize", "meaning_zh": "能够识别……"}, {"text": "unless ... are present", "meaning_zh": "除非存在……"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 34,
+      "sentence": "Finally, perhaps the most graphic expressions of self-awareness in general can be seen in the displays of rage which are most common from 18 months to 3 years of age.",
+      "translation": "最后，自我意识最鲜明的普遍表现，或许可以从18个月至3岁儿童最常见的暴怒行为中看到。",
+      "structure": [
+        {"text": "Finally", "role": "discourse_marker", "level": 1},
+        {"text": "perhaps the most graphic expressions of self-awareness in general", "role": "subject", "level": 1},
+        {"text": "can be seen in the displays of rage", "role": "passive_verb_phrase", "level": 1},
+        {"text": "which are most common from 18 months to 3 years of age", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["can be seen 使用被动语态，意为可以从暴怒表现中观察到自我意识。", "which 引导定语从句，修饰 displays of rage，而非 self-awareness。", "graphic 此处意为“鲜明、生动”，不是“图形的”。"],
+      "expressions": [{"text": "graphic expressions of", "meaning_zh": "……的鲜明表现"}, {"text": "displays of rage", "meaning_zh": "暴怒的表现"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 35,
+      "sentence": "In a longitudinal study of groups of three or four children, Bronson (1975) found that the intensity of the frustration and anger in their disagreements increased sharply between the ages of 1 and 2 years.",
+      "translation": "在一项针对三四名儿童小组的纵向研究中，布朗森（1975）发现，儿童争执中的挫败感和愤怒程度在一至两岁之间急剧增强。",
+      "structure": [
+        {"text": "In a longitudinal study of groups of three or four children", "role": "prepositional_phrase", "level": 2},
+        {"text": "Bronson (1975) found", "role": "main_clause", "level": 1},
+        {"text": "that the intensity of the frustration and anger in their disagreements increased sharply between the ages of 1 and 2 years", "role": "object_clause", "level": 2},
+        {"text": "increased sharply", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": ["longitudinal study 指对同一研究对象随时间进行跟踪的纵向研究。", "that 从句的主语核心是 the intensity，而非 frustration and anger，因此谓语用单数含义。", "their 指参与研究的 children。"],
+      "expressions": [{"text": "a longitudinal study", "meaning_zh": "纵向研究"}, {"text": "the intensity of", "meaning_zh": "……的强度"}, {"text": "increase sharply", "meaning_zh": "急剧增加"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 36,
+      "sentence": "Often, the children's disagreements involved a struggle over a toy that none of them had played with before or after the tug-of-war: the children seemed to be disputing ownership rather than wanting to play with it.",
+      "translation": "孩子们的争执往往围绕争抢一件玩具展开，而无论争抢前还是争抢后，他们谁也没有玩过它：孩子们似乎是在争夺所有权，而不是真的想玩这个玩具。",
+      "structure": [
+        {"text": "Often, the children's disagreements involved a struggle over a toy", "role": "main_clause", "level": 1},
+        {"text": "that none of them had played with before or after the tug-of-war", "role": "relative_clause", "level": 2},
+        {"text": "the children seemed to be disputing ownership", "role": "main_clause", "level": 1},
+        {"text": "rather than wanting to play with it", "role": "contrastive_phrase", "level": 2}
+      ],
+      "difficult_points": ["that 引导定语从句修饰 a toy，并在 played with 后作介词宾语。", "none of them 指参与争抢的孩子；before or after the tug-of-war 说明他们并非真正想玩。", "rather than 连接 disputing ownership 与 wanting to play，突出争的是所有权而非使用玩具。"],
+      "expressions": [{"text": "involve a struggle over", "meaning_zh": "涉及对……的争夺"}, {"text": "tug-of-war", "meaning_zh": "拉扯争抢"}, {"text": "rather than", "meaning_zh": "而不是……"}, {"text": "dispute ownership", "meaning_zh": "争夺所有权"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 37,
+      "sentence": "Although it may be less marked in other societies, the link between the sense of 'self' and of 'ownership' is a notable feature of childhood in Western societies.",
+      "translation": "尽管这种现象在其他社会中可能不那么明显，但“自我”意识与“所有权”意识之间的联系，是西方社会儿童期的一个显著特征。",
+      "structure": [
+        {"text": "Although it may be less marked in other societies", "role": "concessive_clause", "level": 2},
+        {"text": "the link between the sense of 'self' and of 'ownership'", "role": "subject", "level": 1},
+        {"text": "is a notable feature of childhood in Western societies", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": ["Although 引导让步状语从句，it 指自我感与所有权感之间的联系。", "between the sense of 'self' and of 'ownership' 中第二个 the sense 被省略，两个 of 短语并列。", "marked 此处表示“明显的”，notable 则表示“显著、值得注意的”。"],
+      "expressions": [{"text": "be less marked", "meaning_zh": "不那么明显"}, {"text": "the link between ... and ...", "meaning_zh": "……与……之间的联系"}, {"text": "a notable feature of", "meaning_zh": "……的一个显著特征"}]
+    }
+  ]
+}

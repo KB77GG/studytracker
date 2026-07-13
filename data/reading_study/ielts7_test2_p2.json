@@ -1,0 +1,719 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts7_test2_reading",
+  "passage_id": "ielts7_test2_p2",
+  "passage_title": "The True Cost Of Food",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "For more than forty years the cost of food has been rising.",
+      "translation": "四十多年来，食品成本一直在上涨。",
+      "structure": [
+        {"text": "For more than forty years", "role": "time_adverbial", "level": 2},
+        {"text": "the cost of food", "role": "subject", "level": 1},
+        {"text": "has been rising", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "has been rising 使用现在完成进行时，强调上涨从过去持续至今。",
+        "the cost of food 指食品的总体成本，而非某一次购买的价格。"
+      ],
+      "expressions": [
+        {"text": "for more than forty years", "meaning_zh": "四十多年来"},
+        {"text": "the cost of food", "meaning_zh": "食品成本"}
+      ]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "It has now reached a point where a growing number of people believe that it is far too high, and that bringing it down will be one of the great challenges of the twenty-first century.",
+      "translation": "如今，食品成本已高到这样一个程度：越来越多的人认为它实在过高，而且降低食品成本将成为二十一世纪的重大挑战之一。",
+      "structure": [
+        {"text": "It has now reached a point", "role": "main_clause", "level": 1},
+        {"text": "where a growing number of people believe", "role": "relative_clause", "level": 2},
+        {"text": "that it is far too high", "role": "object_clause", "level": 3},
+        {"text": "and that bringing it down will be one of the great challenges of the twenty-first century", "role": "coordinated_object_clause", "level": 3},
+        {"text": "bringing it down", "role": "gerund_subject", "level": 4}
+      ],
+      "difficult_points": [
+        "where 引导定语从句修饰 a point，表示“到了……的程度”。",
+        "两个 that 从句由 and 并列，都是 believe 的宾语。",
+        "bringing it down 是动名词短语作第二个 that 从句的主语，it 指食品成本。"
+      ],
+      "expressions": [
+        {"text": "reach a point where", "meaning_zh": "达到……的程度"},
+        {"text": "a growing number of", "meaning_zh": "越来越多的"},
+        {"text": "bring it down", "meaning_zh": "将其降低"}
+      ]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "That cost, however, is not in immediate cash.",
+      "translation": "然而，这种成本并不是眼前直接支付的现金。",
+      "structure": [
+        {"text": "That cost", "role": "subject", "level": 1},
+        {"text": "however", "role": "parenthesis", "level": 2},
+        {"text": "is not in immediate cash", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "however 是插入成分，承接上句并引出对 cost 含义的转折说明。",
+        "not in immediate cash 表示这种代价不是消费者当下直接付出的现金。"
+      ],
+      "expressions": [
+        {"text": "immediate cash", "meaning_zh": "眼前直接支付的现金"}
+      ]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "In the west at least, most food is now far cheaper to buy in relative terms than it was in 1960.",
+      "translation": "至少在西方，相对而言，如今大多数食品都比1960年便宜得多。",
+      "structure": [
+        {"text": "In the west at least", "role": "scope_adverbial", "level": 2},
+        {"text": "most food", "role": "subject", "level": 1},
+        {"text": "is now far cheaper to buy", "role": "main_predicate", "level": 1},
+        {"text": "in relative terms", "role": "manner_adverbial", "level": 2},
+        {"text": "than it was in 1960", "role": "comparative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "far 修饰比较级 cheaper，表示“便宜得多”。",
+        "than it was in 1960 是比较从句，it 指 most food，was 后省略了 cheaper to buy。",
+        "in relative terms 限定比较口径，意为“相对而言”。"
+      ],
+      "expressions": [
+        {"text": "at least", "meaning_zh": "至少"},
+        {"text": "in relative terms", "meaning_zh": "相对而言"}
+      ]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "The cost is in the collateral damage of the very methods of food production that have made the food cheaper: in the pollution of water, the enervation of soil, the destruction of wildlife, the harm to animal welfare and the threat to human health caused by modern industrial agriculture.",
+      "translation": "真正的代价在于那些恰恰让食品变便宜的生产方式所造成的附带损害：水体污染、土壤活力衰退、野生动物遭到破坏、动物福利受损，以及现代工业化农业对人类健康构成的威胁。",
+      "structure": [
+        {"text": "The cost is in the collateral damage", "role": "main_clause", "level": 1},
+        {"text": "of the very methods of food production", "role": "postmodifier", "level": 2},
+        {"text": "that have made the food cheaper", "role": "relative_clause", "level": 3},
+        {"text": "in the pollution of water, the enervation of soil, the destruction of wildlife, the harm to animal welfare and the threat to human health", "role": "appositive_list", "level": 2},
+        {"text": "caused by modern industrial agriculture", "role": "past_participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "the very methods 中 very 作强调词，意为“恰恰是这些方法”。",
+        "that 引导定语从句修饰 methods of food production，而不是 damage。",
+        "冒号后的并列清单具体解释 collateral damage；句末过去分词短语说明这些损害由现代工业化农业造成。"
+      ],
+      "expressions": [
+        {"text": "collateral damage", "meaning_zh": "附带损害"},
+        {"text": "animal welfare", "meaning_zh": "动物福利"},
+        {"text": "pose a threat to human health", "meaning_zh": "对人类健康构成威胁"}
+      ]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "First mechanisation, then mass use of chemical fertilisers and pesticides, then monocultures, then battery rearing of livestock, and now genetic engineering - the onward march of intensive farming has seemed unstoppable in the last half-century, as the yields of produce have soared.",
+      "translation": "先是机械化，接着是化肥和农药的大规模使用，然后是单一栽培，再到笼养牲畜，如今又发展到基因工程——过去半个世纪里，集约化农业一路推进，似乎势不可挡，因为农产品产量大幅飙升。",
+      "structure": [
+        {"text": "First mechanisation, then mass use of chemical fertilisers and pesticides, then monocultures, then battery rearing of livestock, and now genetic engineering", "role": "fronted_sequence", "level": 2},
+        {"text": "the onward march of intensive farming", "role": "subject", "level": 1},
+        {"text": "has seemed unstoppable", "role": "main_predicate", "level": 1},
+        {"text": "in the last half-century", "role": "time_adverbial", "level": 2},
+        {"text": "as the yields of produce have soared", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "破折号前用 First、then、now 列出农业技术发展的连续阶段，为后面的概括铺垫。",
+        "the onward march 是比喻，表示集约化农业持续向前扩张。",
+        "as 引导原因或伴随情形状语从句，说明农产品产量同时大幅增长。"
+      ],
+      "expressions": [
+        {"text": "mass use of", "meaning_zh": "大规模使用"},
+        {"text": "the onward march of", "meaning_zh": "……的持续推进"},
+        {"text": "seem unstoppable", "meaning_zh": "似乎势不可挡"},
+        {"text": "yields of produce", "meaning_zh": "农产品产量"}
+      ]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "But the damage it has caused has been colossal.",
+      "translation": "但它造成的破坏也是巨大的。",
+      "structure": [
+        {"text": "the damage", "role": "subject", "level": 1},
+        {"text": "it has caused", "role": "relative_clause", "level": 2},
+        {"text": "has been colossal", "role": "main_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "it has caused 是省略关系代词 that/which 的定语从句，修饰 the damage。",
+        "it 指上一句的 intensive farming，而非 produce。"
+      ],
+      "expressions": [
+        {"text": "cause damage", "meaning_zh": "造成破坏"}
+      ]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "In Britain, for example, many of our best-loved farmland birds, such as the skylark, the grey partridge, the lapwing and the corn bunting, have vanished from huge stretches of countryside, as have even more wild flowers and insects.",
+      "translation": "例如在英国，许多最受人喜爱的农田鸟类——如云雀、灰山鹑、凤头麦鸡和黍鹀——已经从大片乡村消失，而消失的野花和昆虫数量甚至更多。",
+      "structure": [
+        {"text": "In Britain, for example", "role": "place_adverbial", "level": 2},
+        {"text": "many of our best-loved farmland birds", "role": "subject", "level": 1},
+        {"text": "such as the skylark, the grey partridge, the lapwing and the corn bunting", "role": "exemplification", "level": 2},
+        {"text": "have vanished from huge stretches of countryside", "role": "main_predicate", "level": 1},
+        {"text": "as have even more wild flowers and insects", "role": "comparative_inverted_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "such as 后的四种鸟是对 farmland birds 的举例说明。",
+        "as have even more wild flowers and insects 使用倒装，完整意思是 even more wild flowers and insects have vanished。",
+        "huge stretches of countryside 指连绵的大片乡村地区。"
+      ],
+      "expressions": [
+        {"text": "vanish from", "meaning_zh": "从……消失"},
+        {"text": "huge stretches of", "meaning_zh": "大片的……"},
+        {"text": "best-loved", "meaning_zh": "最受喜爱的"}
+      ]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "This is a direct result of the way we have produced our food in the last four decades.",
+      "translation": "这是过去四十年来我们的食品生产方式直接造成的结果。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "is a direct result of the way", "role": "main_predicate", "level": 1},
+        {"text": "we have produced our food", "role": "relative_clause", "level": 2},
+        {"text": "in the last four decades", "role": "time_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "This 回指上句所说鸟类、野花和昆虫大规模消失的现象。",
+        "we have produced our food 是省略关系副词 in which 的定语从句，说明食品生产的方式。"
+      ],
+      "expressions": [
+        {"text": "a direct result of", "meaning_zh": "……的直接结果"},
+        {"text": "in the last four decades", "meaning_zh": "在过去四十年里"}
+      ]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "Thousands of miles of hedgerows, thousands of ponds, have disappeared from the landscape.",
+      "translation": "绵延数千英里的树篱和成千上万的池塘已经从乡间景观中消失。",
+      "structure": [
+        {"text": "Thousands of miles of hedgerows, thousands of ponds", "role": "compound_subject", "level": 1},
+        {"text": "have disappeared", "role": "verb_phrase", "level": 1},
+        {"text": "from the landscape", "role": "place_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "两个并列名词短语共同作主语，逗号起列举作用。",
+        "thousands of miles of 修饰 hedgerows，表示树篱的总延伸长度，而非树篱数量。"
+      ],
+      "expressions": [
+        {"text": "disappear from the landscape", "meaning_zh": "从景观中消失"}
+      ]
+    },
+    {
+      "id": "B-06", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "The faecal filth of salmon farming has driven wild salmon from many of the sea lochs and rivers of Scotland.",
+      "translation": "鲑鱼养殖产生的粪便污染已经把野生鲑鱼赶出了苏格兰的许多海湾湖和河流。",
+      "structure": [
+        {"text": "The faecal filth of salmon farming", "role": "subject", "level": 1},
+        {"text": "has driven wild salmon", "role": "main_predicate", "level": 1},
+        {"text": "from many of the sea lochs and rivers of Scotland", "role": "place_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "drive ... from ... 表示“迫使……离开……”，这里不是驾驶之意。",
+        "of salmon farming 修饰 faecal filth，说明粪便污染来自鲑鱼养殖。"
+      ],
+      "expressions": [
+        {"text": "drive ... from ...", "meaning_zh": "迫使……离开……"},
+        {"text": "salmon farming", "meaning_zh": "鲑鱼养殖"}
+      ]
+    },
+    {
+      "id": "B-07", "paragraph_label": "B", "sentence_index": 12,
+      "sentence": "Natural soil fertility is dropping in many areas because of continuous industrial fertiliser and pesticide use, while the growth of algae is increasing in lakes because of the fertiliser run-off.",
+      "translation": "由于持续使用工业化肥和农药，许多地区的天然土壤肥力正在下降；与此同时，化肥径流又使湖泊中的藻类不断增生。",
+      "structure": [
+        {"text": "Natural soil fertility is dropping in many areas", "role": "main_clause", "level": 1},
+        {"text": "because of continuous industrial fertiliser and pesticide use", "role": "cause_adverbial", "level": 2},
+        {"text": "while the growth of algae is increasing in lakes", "role": "coordinated_adverbial_clause", "level": 1},
+        {"text": "because of the fertiliser run-off", "role": "cause_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "while 连接两个同时发生并形成对照的环境后果：土壤肥力下降和藻类增长。",
+        "两个 because of 后接名词短语，均为原因状语，不是原因状语从句。",
+        "fertiliser run-off 指化肥随地表水流入湖泊形成的径流污染。"
+      ],
+      "expressions": [
+        {"text": "soil fertility", "meaning_zh": "土壤肥力"},
+        {"text": "because of", "meaning_zh": "由于"},
+        {"text": "fertiliser run-off", "meaning_zh": "化肥径流"}
+      ]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "Put it all together and it looks like a battlefield, but consumers rarely make the connection at the dinner table.",
+      "translation": "把这一切综合起来看，呈现出的景象就像战场一样；但消费者吃饭时很少会把食物与这些破坏联系起来。",
+      "structure": [
+        {"text": "Put it all together", "role": "imperative_clause", "level": 1},
+        {"text": "and it looks like a battlefield", "role": "result_clause", "level": 1},
+        {"text": "but consumers rarely make the connection", "role": "coordinated_clause", "level": 1},
+        {"text": "at the dinner table", "role": "context_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "祈使句加 and 构成条件—结果关系，相当于“如果把这一切放在一起看，就会……”。",
+        "make the connection 指意识到食品消费与前述环境破坏之间的联系。",
+        "at the dinner table 不只是地点，也代表消费者用餐和消费食品的情境。"
+      ],
+      "expressions": [
+        {"text": "put it all together", "meaning_zh": "把这一切综合起来看"},
+        {"text": "make the connection", "meaning_zh": "意识到其中的联系"}
+      ]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "That is mainly because the costs of all this damage are what economists refer to as externalities: they are outside the main transaction, which is for example producing and selling a field of wheat, and are borne directly by neither producers nor consumers.",
+      "translation": "这主要是因为，经济学家把所有这些损害的成本称为“外部性”：它们处在主要交易之外——主要交易例如种植并出售一片田地的小麦——既不由生产者直接承担，也不由消费者直接承担。",
+      "structure": [
+        {"text": "That is mainly because", "role": "main_clause", "level": 1},
+        {"text": "the costs of all this damage are what economists refer to as externalities", "role": "predicative_clause", "level": 2},
+        {"text": "what economists refer to as externalities", "role": "fused_relative_clause", "level": 3},
+        {"text": "they are outside the main transaction", "role": "explanatory_clause", "level": 1},
+        {"text": "which is for example producing and selling a field of wheat", "role": "relative_clause", "level": 2},
+        {"text": "and are borne directly by neither producers nor consumers", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "what economists refer to as externalities 是融合关系从句，what 相当于 the thing that。",
+        "冒号后的内容解释 externalities 为何属于交易之外的成本。",
+        "which 修饰 the main transaction；句末 are borne 与 are outside 共用主语 they。",
+        "neither ... nor ... 表示生产者和消费者双方都不直接承担这些成本。"
+      ],
+      "expressions": [
+        {"text": "refer to ... as ...", "meaning_zh": "把……称为……"},
+        {"text": "outside the main transaction", "meaning_zh": "处于主要交易之外"},
+        {"text": "be borne by", "meaning_zh": "由……承担"},
+        {"text": "neither ... nor ...", "meaning_zh": "既不……也不……"}
+      ]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "To many, the costs may not even appear to be financial at all, but merely aesthetic - a terrible shame, but nothing to do with money.",
+      "translation": "在许多人看来，这些代价甚至可能完全不像经济成本，而似乎只是审美上的损失——确实令人痛惜，却与金钱无关。",
+      "structure": [
+        {"text": "To many", "role": "viewpoint_adverbial", "level": 2},
+        {"text": "the costs", "role": "subject", "level": 1},
+        {"text": "may not even appear to be financial at all", "role": "main_predicate", "level": 1},
+        {"text": "but merely aesthetic", "role": "coordinated_complement", "level": 1},
+        {"text": "a terrible shame, but nothing to do with money", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "appear to be 后接两个由 but 对照的表语 financial 和 aesthetic。",
+        "not ... at all 加强否定，表示“完全不”。",
+        "破折号后的同位说明呈现许多人的看法：虽令人惋惜，却似乎不涉及金钱。"
+      ],
+      "expressions": [
+        {"text": "appear to be", "meaning_zh": "看起来是"},
+        {"text": "nothing to do with", "meaning_zh": "与……无关"}
+      ]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "And anyway they, as consumers of food, certainly aren't paying for it, are they?",
+      "translation": "况且，他们作为食品消费者肯定没有为此付钱，不是吗？",
+      "structure": [
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "as consumers of food", "role": "parenthetical_complement", "level": 2},
+        {"text": "certainly aren't paying for it", "role": "main_predicate", "level": 1},
+        {"text": "are they", "role": "question_tag", "level": 2}
+      ],
+      "difficult_points": [
+        "as consumers of food 是插入语，说明 they 的身份。",
+        "it 回指前文所说环境损害的成本。",
+        "否定陈述后接肯定附加问句 are they，带有反问意味，并为下文反转观点。"
+      ],
+      "expressions": [
+        {"text": "pay for", "meaning_zh": "为……付出代价"},
+        {"text": "consumers of food", "meaning_zh": "食品消费者"}
+      ]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 17,
+      "sentence": "But the costs to society can actually be quantified and, when added up, can amount to staggering sums.",
+      "translation": "但社会所承担的这些成本其实可以量化，而且加总起来可能高得惊人。",
+      "structure": [
+        {"text": "the costs to society", "role": "subject", "level": 1},
+        {"text": "can actually be quantified", "role": "passive_predicate", "level": 1},
+        {"text": "when added up", "role": "reduced_adverbial_clause", "level": 2},
+        {"text": "can amount to staggering sums", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "when added up 是省略 they are 的被动状语从句，逻辑主语是 costs。",
+        "两个 can 谓语由 and 并列：成本能够被量化，也可能累计成巨额数字。"
+      ],
+      "expressions": [
+        {"text": "be quantified", "meaning_zh": "被量化"},
+        {"text": "add up", "meaning_zh": "加总"},
+        {"text": "amount to", "meaning_zh": "总计达到"},
+        {"text": "staggering sums", "meaning_zh": "惊人的巨额数目"}
+      ]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 18,
+      "sentence": "A remarkable exercise in doing this has been carried out by one of the world's leading thinkers on the future of agriculture, Professor Jules Pretty, Director of the Centre for Environment and Society at the University of Essex.",
+      "translation": "世界上研究农业未来的顶尖思想家之一——埃塞克斯大学环境与社会中心主任朱尔斯·普雷蒂教授——开展了一项引人注目的测算工作。",
+      "structure": [
+        {"text": "A remarkable exercise in doing this", "role": "subject", "level": 1},
+        {"text": "has been carried out", "role": "passive_predicate", "level": 1},
+        {"text": "by one of the world's leading thinkers on the future of agriculture", "role": "agent_phrase", "level": 2},
+        {"text": "Professor Jules Pretty", "role": "apposition", "level": 2},
+        {"text": "Director of the Centre for Environment and Society at the University of Essex", "role": "apposition", "level": 3}
+      ],
+      "difficult_points": [
+        "doing this 指上一句所说量化并汇总社会成本。",
+        "句子采用现在完成时的被动语态，真正的执行者由 by 短语引出。",
+        "Professor Jules Pretty 和 Director ... 是连续同位语，具体说明 one of the world's leading thinkers 是谁。"
+      ],
+      "expressions": [
+        {"text": "carry out", "meaning_zh": "开展；实施"},
+        {"text": "leading thinkers on", "meaning_zh": "……领域的顶尖思想家"},
+        {"text": "the future of agriculture", "meaning_zh": "农业的未来"}
+      ]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 19,
+      "sentence": "Professor Pretty and his colleagues calculated the externalities of British agriculture for one particular year.",
+      "translation": "普雷蒂教授及其同事计算了英国农业在某一特定年份产生的外部成本。",
+      "structure": [
+        {"text": "Professor Pretty and his colleagues", "role": "compound_subject", "level": 1},
+        {"text": "calculated", "role": "verb", "level": 1},
+        {"text": "the externalities of British agriculture", "role": "object", "level": 1},
+        {"text": "for one particular year", "role": "time_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "externalities 在此指未直接计入市场交易、却由社会承担的农业外部成本。",
+        "for one particular year 限定计算所覆盖的时间范围。"
+      ],
+      "expressions": [
+        {"text": "calculate the externalities", "meaning_zh": "计算外部成本"},
+        {"text": "one particular year", "meaning_zh": "某一特定年份"}
+      ]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 20,
+      "sentence": "They added up the costs of repairing the damage it caused, and came up with a total figure of £2,343m.",
+      "translation": "他们把修复英国农业所造成损害的成本全部加起来，得出了23.43亿英镑的总额。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "added up the costs", "role": "verb_phrase", "level": 1},
+        {"text": "of repairing the damage", "role": "gerund_complement", "level": 2},
+        {"text": "it caused", "role": "relative_clause", "level": 3},
+        {"text": "and came up with a total figure of £2,343m", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "repairing 是动名词，作介词 of 的宾语，说明这些 costs 用于修复损害。",
+        "it caused 是省略 that/which 的定语从句，it 指 British agriculture。",
+        "come up with 在此表示通过计算“得出”一个总数。"
+      ],
+      "expressions": [
+        {"text": "add up the costs", "meaning_zh": "汇总成本"},
+        {"text": "repair the damage", "meaning_zh": "修复损害"},
+        {"text": "come up with", "meaning_zh": "得出；提出"},
+        {"text": "a total figure of", "meaning_zh": "总额为……"}
+      ]
+    },
+    {
+      "id": "D-05", "paragraph_label": "D", "sentence_index": 21,
+      "sentence": "This is equivalent to £208 for every hectare of arable land and permanent pasture, almost as much again as the total government and EU spend on British farming in that year.",
+      "translation": "这相当于每公顷耕地和永久牧场承担208英镑，几乎又等于当年英国政府和欧盟用于英国农业的总支出。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "is equivalent to £208", "role": "main_predicate", "level": 1},
+        {"text": "for every hectare of arable land and permanent pasture", "role": "rate_adverbial", "level": 2},
+        {"text": "almost as much again as the total government and EU spend on British farming in that year", "role": "comparative_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "This 回指上一句的23.43亿英镑总成本。",
+        "as much again as 表示“还要再有同样多”，这里意为几乎相当于另一笔政府和欧盟总支出。",
+        "spend 在此作名词，表示政府和欧盟的总支出。"
+      ],
+      "expressions": [
+        {"text": "be equivalent to", "meaning_zh": "相当于"},
+        {"text": "as much again as", "meaning_zh": "几乎又与……一样多"},
+        {"text": "government spend on", "meaning_zh": "政府在……上的支出"}
+      ]
+    },
+    {
+      "id": "D-06", "paragraph_label": "D", "sentence_index": 22,
+      "sentence": "And according to Professor Pretty, it was a conservative estimate.",
+      "translation": "而且据普雷蒂教授说，这还只是一个保守估计。",
+      "structure": [
+        {"text": "according to Professor Pretty", "role": "source_adverbial", "level": 2},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "was a conservative estimate", "role": "main_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "it 指前文计算出的英国农业外部成本总额。",
+        "conservative estimate 表示计算倾向于低估而非夸大实际成本。"
+      ],
+      "expressions": [
+        {"text": "according to", "meaning_zh": "据……所说"},
+        {"text": "a conservative estimate", "meaning_zh": "保守估计"}
+      ]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 23,
+      "sentence": "The costs included: £120m for removal of pesticides; £16m for removal of nitrates; £55m for removal of phosphates and soil; £23m for the removal of the bug cryptosporidium from drinking water by water companies; £125m for damage to wildlife habitats, hedgerows and dry stone walls; £1,113m from emissions of gases likely to contribute to climate change; £106m from soil erosion and organic carbon losses; £169m from food poisoning; and £607m from cattle disease.",
+      "translation": "这些成本包括：清除农药1.2亿英镑；清除硝酸盐1600万英镑；清除磷酸盐和土壤5500万英镑；水务公司从饮用水中清除隐孢子虫2300万英镑；野生动物栖息地、树篱和干石墙受损1.25亿英镑；可能加剧气候变化的气体排放11.13亿英镑；土壤侵蚀和有机碳流失1.06亿英镑；食物中毒1.69亿英镑；以及牛类疾病6.07亿英镑。",
+      "structure": [
+        {"text": "The costs included", "role": "main_clause", "level": 1},
+        {"text": "£120m for removal of pesticides; £16m for removal of nitrates; £55m for removal of phosphates and soil; £23m for the removal of the bug cryptosporidium from drinking water by water companies; £125m for damage to wildlife habitats, hedgerows and dry stone walls", "role": "object_list", "level": 2},
+        {"text": "£1,113m from emissions of gases", "role": "object_list_item", "level": 2},
+        {"text": "likely to contribute to climate change", "role": "adjectival_phrase", "level": 3},
+        {"text": "£106m from soil erosion and organic carbon losses; £169m from food poisoning; and £607m from cattle disease", "role": "object_list", "level": 2}
+      ],
+      "difficult_points": [
+        "冒号后是由分号分隔的九项成本，所有项目共同作 included 的宾语。",
+        "by water companies 修饰 removal，说明清除隐孢子虫这一工作的执行者。",
+        "likely to contribute to climate change 是形容词短语，后置修饰 gases，而不是 emissions。"
+      ],
+      "expressions": [
+        {"text": "removal of", "meaning_zh": "清除……"},
+        {"text": "contribute to climate change", "meaning_zh": "加剧气候变化"},
+        {"text": "soil erosion", "meaning_zh": "土壤侵蚀"},
+        {"text": "organic carbon losses", "meaning_zh": "有机碳流失"}
+      ]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 24,
+      "sentence": "Professor Pretty draws a simple but memorable conclusion from all this: our food bills are actually threefold.",
+      "translation": "普雷蒂教授由此得出一个简单却令人难忘的结论：我们的食品账单实际上是三重的。",
+      "structure": [
+        {"text": "Professor Pretty", "role": "subject", "level": 1},
+        {"text": "draws a simple but memorable conclusion", "role": "main_predicate", "level": 1},
+        {"text": "from all this", "role": "source_adverbial", "level": 2},
+        {"text": "our food bills are actually threefold", "role": "appositive_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "冒号后的完整句具体说明 conclusion 的内容，属于同位解释。",
+        "threefold 不是单纯“三倍价格”，而是下句所解释的三种不同支付渠道。"
+      ],
+      "expressions": [
+        {"text": "draw a conclusion from", "meaning_zh": "从……得出结论"},
+        {"text": "food bills", "meaning_zh": "食品账单"}
+      ]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 25,
+      "sentence": "We are paying for our supposedly cheaper food in three separate ways: once over the counter, secondly through our taxes, which provide the enormous subsidies propping up modern intensive farming, and thirdly to clean up the mess that modern farming leaves behind.",
+      "translation": "我们其实以三种不同方式为那些所谓更便宜的食品买单：第一是在柜台直接付款；第二是通过税收付款，这些税收提供巨额补贴以支撑现代集约化农业；第三是为清理现代农业留下的烂摊子而付款。",
+      "structure": [
+        {"text": "We are paying for our supposedly cheaper food", "role": "main_clause", "level": 1},
+        {"text": "in three separate ways", "role": "manner_adverbial", "level": 2},
+        {"text": "once over the counter", "role": "enumerated_adverbial", "level": 2},
+        {"text": "secondly through our taxes", "role": "enumerated_adverbial", "level": 2},
+        {"text": "which provide the enormous subsidies propping up modern intensive farming", "role": "relative_clause", "level": 3},
+        {"text": "propping up modern intensive farming", "role": "present_participial_phrase", "level": 4},
+        {"text": "and thirdly to clean up the mess that modern farming leaves behind", "role": "enumerated_adverbial", "level": 2},
+        {"text": "that modern farming leaves behind", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "supposedly 带有质疑意味，表示食品只是“号称”更便宜。",
+        "which 引导非限制性定语从句，修饰 taxes；propping up ... 又后置修饰 subsidies。",
+        "第三项 to clean up ... 表目的或用途；that 从句修饰 the mess，表示现代农业遗留的问题。"
+      ],
+      "expressions": [
+        {"text": "pay for", "meaning_zh": "为……付钱或承担代价"},
+        {"text": "over the counter", "meaning_zh": "在柜台直接支付"},
+        {"text": "prop up", "meaning_zh": "支撑；扶持"},
+        {"text": "clean up the mess", "meaning_zh": "收拾烂摊子"}
+      ]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 26,
+      "sentence": "So can the true cost of food be brought down?",
+      "translation": "那么，食品的真实成本能够降下来吗？",
+      "structure": [
+        {"text": "can", "role": "modal_auxiliary", "level": 1},
+        {"text": "the true cost of food", "role": "subject", "level": 1},
+        {"text": "be brought down", "role": "passive_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "情态动词 can 提至主语前构成一般疑问句。",
+        "be brought down 是被动结构，bring down 在此意为“降低”。"
+      ],
+      "expressions": [
+        {"text": "the true cost of", "meaning_zh": "……的真实成本"},
+        {"text": "bring down", "meaning_zh": "降低"}
+      ]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 27,
+      "sentence": "Breaking away from industrial agriculture as the solution to hunger may be very hard for some countries, but in Britain, where the immediate need to supply food is less urgent, and the costs and the damage of intensive farming have been clearly seen, it may be more feasible.",
+      "translation": "对一些国家来说，要摆脱把工业化农业作为解决饥饿问题的办法，可能非常困难；但在英国，食品供应的迫切性较低，而且集约化农业的成本与危害已经显现，因此这样做可能更可行。",
+      "structure": [
+        {"text": "Breaking away from industrial agriculture as the solution to hunger", "role": "gerund_subject", "level": 1},
+        {"text": "may be very hard", "role": "main_predicate", "level": 1},
+        {"text": "for some countries", "role": "affected_party_adverbial", "level": 2},
+        {"text": "but in Britain", "role": "coordinated_clause_frame", "level": 1},
+        {"text": "where the immediate need to supply food is less urgent", "role": "relative_clause", "level": 2},
+        {"text": "and the costs and the damage of intensive farming have been clearly seen", "role": "coordinated_relative_clause", "level": 2},
+        {"text": "it may be more feasible", "role": "coordinated_main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Breaking away from ... 是动名词短语作前半句主语；as the solution to hunger 说明工业化农业被视作何种角色。",
+        "where 引导非限制性定语从句修饰 Britain，并与后面的 and 分句共同交代英国的条件。",
+        "句末 it 回指 breaking away from industrial agriculture 这件事。",
+        "have been clearly seen 是现在完成时的被动语态，表示相关成本与破坏已经显现。"
+      ],
+      "expressions": [
+        {"text": "break away from", "meaning_zh": "摆脱；脱离"},
+        {"text": "the solution to", "meaning_zh": "……的解决办法"},
+        {"text": "the immediate need to", "meaning_zh": "立即……的迫切需求"},
+        {"text": "be more feasible", "meaning_zh": "更可行"}
+      ]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 28,
+      "sentence": "The government needs to create sustainable, competitive and diverse farming and food sectors, which will contribute to a thriving and sustainable rural economy, and advance environmental, economic, health, and animal welfare goals.",
+      "translation": "政府需要建立可持续、有竞争力且多元化的农业和食品行业，使其既能促进繁荣而可持续的农村经济，也能推进环境、经济、健康和动物福利目标。",
+      "structure": [
+        {"text": "The government", "role": "subject", "level": 1},
+        {"text": "needs to create", "role": "main_predicate", "level": 1},
+        {"text": "sustainable, competitive and diverse farming and food sectors", "role": "object", "level": 1},
+        {"text": "which will contribute to a thriving and sustainable rural economy", "role": "relative_clause", "level": 2},
+        {"text": "and advance environmental, economic, health, and animal welfare goals", "role": "coordinated_predicate", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，先行词是 farming and food sectors。",
+        "contribute 和 advance 是 which 从句内由 and 连接的两个并列谓语。",
+        "environmental、economic、health 和 animal welfare 并列修饰 goals。"
+      ],
+      "expressions": [
+        {"text": "contribute to", "meaning_zh": "促进；有助于"},
+        {"text": "a thriving rural economy", "meaning_zh": "繁荣的农村经济"},
+        {"text": "advance ... goals", "meaning_zh": "推进……目标"},
+        {"text": "diverse sectors", "meaning_zh": "多元化行业"}
+      ]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 29,
+      "sentence": "But if industrial agriculture is to be replaced, what is a viable alternative?",
+      "translation": "但如果要取代工业化农业，什么才是可行的替代方案？",
+      "structure": [
+        {"text": "if industrial agriculture is to be replaced", "role": "conditional_clause", "level": 2},
+        {"text": "what", "role": "subject_complement_question_word", "level": 1},
+        {"text": "is a viable alternative", "role": "main_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "if 从句中的 be to do 表示计划或必要性，结合被动语态意为“如果要被取代”。",
+        "what 询问能够充当 a viable alternative 的事物。"
+      ],
+      "expressions": [
+        {"text": "a viable alternative", "meaning_zh": "可行的替代方案"},
+        {"text": "be replaced", "meaning_zh": "被取代"}
+      ]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 30,
+      "sentence": "Professor Pretty feels that organic farming would be too big a jump in thinking and in practices for many farmers.",
+      "translation": "普雷蒂教授认为，对许多农民来说，转向有机农业会使思维和实践发生过于巨大的跨越。",
+      "structure": [
+        {"text": "Professor Pretty feels", "role": "main_clause", "level": 1},
+        {"text": "that organic farming would be too big a jump", "role": "object_clause", "level": 2},
+        {"text": "in thinking and in practices", "role": "postmodifier", "level": 3},
+        {"text": "for many farmers", "role": "affected_party_adverbial", "level": 3}
+      ],
+      "difficult_points": [
+        "that 从句作 feels 的宾语，说明普雷蒂教授的判断。",
+        "too big a jump 采用 too + 形容词 + a + 名词的特殊语序。",
+        "in thinking and in practices 说明“跨越”发生在思维与实践两个方面。"
+      ],
+      "expressions": [
+        {"text": "too big a jump", "meaning_zh": "过于巨大的跨越"},
+        {"text": "in thinking and in practices", "meaning_zh": "在思维和实践方面"},
+        {"text": "organic farming", "meaning_zh": "有机农业"}
+      ]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 31,
+      "sentence": "Furthermore, the price premium would put the produce out of reach of many poorer consumers.",
+      "translation": "此外，较高的溢价会使许多较贫困的消费者买不起这些农产品。",
+      "structure": [
+        {"text": "Furthermore", "role": "sentence_adverbial", "level": 2},
+        {"text": "the price premium", "role": "subject", "level": 1},
+        {"text": "would put the produce", "role": "main_predicate", "level": 1},
+        {"text": "out of reach of many poorer consumers", "role": "object_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "put + 宾语 + 补语构成复合宾语结构，out of reach ... 描述 produce 所处状态。",
+        "price premium 指有机农产品高于普通产品的额外价格，而非奖金。"
+      ],
+      "expressions": [
+        {"text": "price premium", "meaning_zh": "价格溢价"},
+        {"text": "put ... out of reach of ...", "meaning_zh": "使……超出……的承受能力"}
+      ]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 32,
+      "sentence": "He is recommending the immediate introduction of a 'Greener Food Standard', which would push the market towards more sustainable environmental practices than the current norm, while not requiring the full commitment to organic production.",
+      "translation": "他建议立即引入一项“绿色食品标准”；该标准会推动市场采用比现行规范更可持续的环保做法，同时又不要求生产者完全投身有机生产。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "is recommending the immediate introduction of a 'Greener Food Standard'", "role": "main_predicate", "level": 1},
+        {"text": "which would push the market towards more sustainable environmental practices than the current norm", "role": "relative_clause", "level": 2},
+        {"text": "while not requiring the full commitment to organic production", "role": "reduced_adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，先行词是 a 'Greener Food Standard'。",
+        "push the market towards 表示通过标准引导市场朝某方向转变。",
+        "while not requiring ... 是省略主语和助动词的状语结构，逻辑主语仍是该标准。",
+        "than the current norm 是比较结构，比较新标准与现行惯例下环保做法的可持续程度。"
+      ],
+      "expressions": [
+        {"text": "the immediate introduction of", "meaning_zh": "立即引入……"},
+        {"text": "push the market towards", "meaning_zh": "推动市场走向……"},
+        {"text": "the current norm", "meaning_zh": "现行规范；当前常态"},
+        {"text": "full commitment to", "meaning_zh": "对……的全面投入"}
+      ]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 33,
+      "sentence": "Such a standard would comprise agreed practices for different kinds of farming, covering agrochemical use, soil health, land management, water and energy use, food safety and animal health.",
+      "translation": "这样的标准将包含针对不同农业类型商定的做法，涵盖农用化学品使用、土壤健康、土地管理、水和能源使用、食品安全以及动物健康。",
+      "structure": [
+        {"text": "Such a standard", "role": "subject", "level": 1},
+        {"text": "would comprise", "role": "verb_phrase", "level": 1},
+        {"text": "agreed practices for different kinds of farming", "role": "object", "level": 1},
+        {"text": "covering agrochemical use, soil health, land management, water and energy use, food safety and animal health", "role": "present_participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "agreed 是过去分词作定语，表示这些 practices 是各方商定的。",
+        "covering 引导现在分词短语，补充说明标准所包含做法的覆盖范围。",
+        "water and energy use 中 use 同时受 water 和 energy 修饰。"
+      ],
+      "expressions": [
+        {"text": "comprise", "meaning_zh": "包含；由……构成"},
+        {"text": "different kinds of", "meaning_zh": "不同种类的"},
+        {"text": "land management", "meaning_zh": "土地管理"},
+        {"text": "food safety", "meaning_zh": "食品安全"}
+      ]
+    },
+    {
+      "id": "G-06", "paragraph_label": "G", "sentence_index": 34,
+      "sentence": "It could go a long way, he says, to shifting consumers as well as farmers towards a more sustainable system of agriculture.",
+      "translation": "他说，这项标准可以在很大程度上推动消费者和农民共同转向更可持续的农业体系。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "could go a long way", "role": "main_predicate", "level": 1},
+        {"text": "he says", "role": "parenthesis", "level": 2},
+        {"text": "to shifting consumers as well as farmers", "role": "prepositional_complement", "level": 2},
+        {"text": "towards a more sustainable system of agriculture", "role": "direction_adverbial", "level": 3}
+      ],
+      "difficult_points": [
+        "It 指上一句的 Such a standard，即拟议中的绿色食品标准。",
+        "go a long way to 中 to 是介词，因此后接动名词 shifting。",
+        "as well as 连接 consumers 和 farmers，表示两类群体都将发生转变；he says 是插入语。"
+      ],
+      "expressions": [
+        {"text": "go a long way to", "meaning_zh": "对……大有帮助"},
+        {"text": "as well as", "meaning_zh": "以及；也"},
+        {"text": "shift ... towards ...", "meaning_zh": "推动……转向……"},
+        {"text": "a sustainable system of agriculture", "meaning_zh": "可持续农业体系"}
+      ]
+    }
+  ]
+}

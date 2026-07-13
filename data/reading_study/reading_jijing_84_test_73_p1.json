@@ -1,0 +1,843 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_84_test_73",
+  "passage_id": "reading_jijing_84_test_73_p1",
+  "passage_title": "Dirty River But Clean Water",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Fire and flood are two of humanity's worst nightmares.",
+      "translation": "火灾和洪水是人类最可怕的两大梦魇。",
+      "structure": [
+        {"text": "Fire and flood", "role": "subject", "level": 1},
+        {"text": "are", "role": "verb_phrase", "level": 1},
+        {"text": "two of humanity's worst nightmares", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "Fire and flood 是并列主语，共用系动词 are。",
+        "two of humanity's worst nightmares 表示“人类最可怕的梦魇中的两种”。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "People have, therefore, always sought to control them.",
+      "translation": "因此，人们一直试图控制它们。",
+      "structure": [
+        {"text": "People", "role": "subject", "level": 1},
+        {"text": "have, therefore, always sought", "role": "verb_phrase", "level": 1},
+        {"text": "to control them", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "therefore 插入在助动词 have 和主动词之间，起承接上文因果关系的作用。",
+        "sought to control 中 seek to do 表示“试图做某事”。",
+        "them 指代前一句提到的 Fire and flood。"
+      ],
+      "expressions": [
+        {"text": "seek to do sth", "meaning_zh": "试图做某事"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Forest fires are snuffed out quickly.",
+      "translation": "森林火灾很快就被扑灭。",
+      "structure": [
+        {"text": "Forest fires", "role": "subject", "level": 1},
+        {"text": "are snuffed out", "role": "verb_phrase", "level": 1},
+        {"text": "quickly", "role": "adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "are snuffed out 是被动语态，表示火被“扑灭”。",
+        "quickly 强调应对火灾之迅速，与后文洪水难以控制形成对比。"
+      ],
+      "expressions": [
+        {"text": "snuff out", "meaning_zh": "扑灭；熄灭"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "The flow of rivers is regulated by weirs and dams.",
+      "translation": "河流的流量由堰坝和水坝控制。",
+      "structure": [
+        {"text": "The flow of rivers", "role": "subject", "level": 1},
+        {"text": "of rivers", "role": "prepositional_phrase", "level": 2},
+        {"text": "is regulated", "role": "verb_phrase", "level": 1},
+        {"text": "by weirs and dams", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "is regulated by 是被动结构，by 后引出施动者堰坝和水坝。",
+        "The flow of rivers 作主语，强调被调控的对象是河流的流量本身。"
+      ],
+      "expressions": [
+        {"text": "be regulated by", "meaning_zh": "由……调节/控制"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "At least, that is how it used to be.",
+      "translation": "至少，过去情况一直是这样的。",
+      "structure": [
+        {"text": "At least", "role": "adverbial", "level": 1},
+        {"text": "that is", "role": "main_clause", "level": 1},
+        {"text": "how it used to be", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 指代前面描述的“控制火灾和洪水”的做法。",
+        "used to be 表示过去经常性的状态，暗示现在已经不同。"
+      ],
+      "expressions": [
+        {"text": "used to be", "meaning_zh": "过去曾经是"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "But foresters have learned that forests need fires to clear out the brash and even to get seeds to germinate.",
+      "translation": "但是林业工作者已经认识到，森林需要火来清除枯枝杂草，甚至需要靠火使种子发芽。",
+      "structure": [
+        {"text": "foresters have learned", "role": "main_clause", "level": 1},
+        {"text": "that forests need fires", "role": "noun_clause", "level": 2},
+        {"text": "to clear out the brash", "role": "non_finite_clause", "level": 3},
+        {"text": "and even to get seeds to germinate", "role": "coordinated_non_finite_clause", "level": 3},
+        {"text": "to germinate", "role": "non_finite_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，说明林业工作者认识到的内容。",
+        "两个不定式 to clear out 和 to get 并列，说明森林需要火的两个目的。",
+        "get seeds to germinate 是“使种子……”的使役结构。"
+      ],
+      "expressions": [
+        {"text": "clear out", "meaning_zh": "清除"},
+        {"text": "get sb/sth to do sth", "meaning_zh": "使……做某事"}
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "And a similar revelation is now –dawning on hydrologists.",
+      "translation": "如今，水文学家也在逐渐意识到同样的道理。",
+      "structure": [
+        {"text": "a similar revelation", "role": "subject", "level": 1},
+        {"text": "is now –dawning", "role": "verb_phrase", "level": 1},
+        {"text": "on hydrologists", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "dawn on sb 表示“逐渐被某人意识到”，revelation 是这一顿悟的主语。",
+        "–dawning 前的短横线是原文排版留下的错字，并非标点，读作 dawning。"
+      ],
+      "expressions": [
+        {"text": "dawn on sb", "meaning_zh": "被某人逐渐意识到"}
+      ]
+    },
+    {
+      "id": "A-08",
+      "paragraph_label": "A",
+      "sentence_index": 8,
+      "sentence": "Rivers – and the ecosystems they support – need floods.",
+      "translation": "河流——以及它们所支撑的生态系统——都需要洪水。",
+      "structure": [
+        {"text": "Rivers", "role": "subject", "level": 1},
+        {"text": "and the ecosystems they support", "role": "parenthetical_apposition", "level": 2},
+        {"text": "they support", "role": "relative_clause", "level": 3},
+        {"text": "need floods", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "两个破折号之间的内容是插入成分，补充说明河流所支撑的生态系统。",
+        "they support 前省略了关系代词 that/which，修饰 ecosystems。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "A-09",
+      "paragraph_label": "A",
+      "sentence_index": 9,
+      "sentence": "That is why a man-made torrent has been surging down the Grand Canyon.",
+      "translation": "这就是人造洪流一直奔涌而下、流经大峡谷的原因。",
+      "structure": [
+        {"text": "That is", "role": "main_clause", "level": 1},
+        {"text": "why a man-made torrent has been surging down the Grand Canyon", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "That 指代前文提到的“河流和生态系统都需要洪水”这一认识。",
+        "has been surging 是现在完成进行时，强调洪流持续奔涌的动作。"
+      ],
+      "expressions": [
+        {"text": "that is why", "meaning_zh": "这就是……的原因"},
+        {"text": "surge down", "meaning_zh": "奔涌而下"}
+      ]
+    },
+    {
+      "id": "A-10",
+      "paragraph_label": "A",
+      "sentence_index": 10,
+      "sentence": "By Thursday March 6th it was running at full throttle, which was expected to be sustained for 60 hours.",
+      "translation": "到3月6日星期四，水流已达到最大流速，预计这一流量将持续60个小时。",
+      "structure": [
+        {"text": "By Thursday March 6th", "role": "adverbial", "level": 1},
+        {"text": "it was running at full throttle", "role": "main_clause", "level": 1},
+        {"text": "which was expected to be sustained for 60 hours", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "it 指代前一句中的 man-made torrent（人造洪流）。",
+        "which 指代前面整个分句“水流已达到最大流速”这一情况。",
+        "was expected to be sustained 是被动语态，表示预计这一状态将维持。"
+      ],
+      "expressions": [
+        {"text": "at full throttle", "meaning_zh": "全速；全力"},
+        {"text": "be sustained for", "meaning_zh": "持续……时间"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "Floods once raged through the canyon every year.",
+      "translation": "洪水曾经每年都会席卷这座峡谷。",
+      "structure": [
+        {"text": "Floods", "role": "subject", "level": 1},
+        {"text": "once raged through the canyon", "role": "verb_phrase", "level": 1},
+        {"text": "every year", "role": "adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "once 在此表示“曾经”，暗示这种情况现在已不复存在。",
+        "rage through 表示洪水猛烈地席卷、肆虐。"
+      ],
+      "expressions": [
+        {"text": "rage through", "meaning_zh": "席卷；肆虐"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "Spring Snow from as far away as Wyoming would melt and swell the Colorado river to a flow that averaged around 1,500 cubic metres (50,000 cubic feet) a second.",
+      "translation": "远在怀俄明州的春雪融化后，会使科罗拉多河的流量增大，平均达到每秒约1500立方米（5万立方英尺）。",
+      "structure": [
+        {"text": "Spring Snow from as far away as Wyoming", "role": "subject", "level": 1},
+        {"text": "from as far away as Wyoming", "role": "prepositional_phrase", "level": 2},
+        {"text": "would melt and swell the Colorado river", "role": "verb_phrase", "level": 1},
+        {"text": "to a flow", "role": "prepositional_phrase", "level": 1},
+        {"text": "that averaged around 1,500 cubic metres (50,000 cubic feet) a second", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "would 表示过去反复发生的习惯性动作，即“过去常常会”。",
+        "swell...to a flow that 中 that 引导定语从句修饰 flow，说明流量的具体数值。",
+        "from as far away as Wyoming 强调雪的来源之远。"
+      ],
+      "expressions": [
+        {"text": "as far away as", "meaning_zh": "远至……"},
+        {"text": "swell...to", "meaning_zh": "使……增大到"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "Every eight years or so, that figure rose to almost 3,000 cubic metres.",
+      "translation": "大约每隔八年，这一数字就会升至近3000立方米。",
+      "structure": [
+        {"text": "Every eight years or so", "role": "adverbial", "level": 1},
+        {"text": "that figure", "role": "subject", "level": 1},
+        {"text": "rose to almost 3,000 cubic metres", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "that figure 指代前一句中提到的河流流量数值。",
+        "or so 表示“大约、左右”。"
+      ],
+      "expressions": [
+        {"text": "or so", "meaning_zh": "左右；大约"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 14,
+      "sentence": "These floods infused the river with sediment, carved its beaches and built its sandbars.",
+      "translation": "这些洪水为河流注入了沉积物，冲刷出了河岸，也堆积出了沙洲。",
+      "structure": [
+        {"text": "These floods", "role": "subject", "level": 1},
+        {"text": "infused the river with sediment", "role": "verb_phrase", "level": 1},
+        {"text": "carved its beaches", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "and built its sandbars", "role": "coordinated_verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "三个并列谓语 infused、carved、built 共用主语 These floods。",
+        "infuse A with B 表示“向A中注入/灌输B”。"
+      ],
+      "expressions": [
+        {"text": "infuse A with B", "meaning_zh": "把B注入A"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "However, in the four decades since the building of the Glen Canyon dam, just upstream of the Grand Canyon, the only sediment that it has collected has come from tiny, undammed tributaries.",
+      "translation": "然而，在格伦峡谷大坝——就在大峡谷上游——建成以来的四十年间，大坝所收集到的沉积物都只来自一些未被拦截的小支流。",
+      "structure": [
+        {"text": "in the four decades since the building of the Glen Canyon dam", "role": "prepositional_phrase", "level": 1},
+        {"text": "since the building of the Glen Canyon dam", "role": "prepositional_phrase", "level": 2},
+        {"text": "just upstream of the Grand Canyon", "role": "apposition", "level": 2},
+        {"text": "the only sediment", "role": "subject", "level": 1},
+        {"text": "that it has collected", "role": "relative_clause", "level": 2},
+        {"text": "has come from tiny, undammed tributaries", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "just upstream of the Grand Canyon 是插入语，补充说明大坝的位置。",
+        "that it has collected 是定语从句，修饰 the only sediment，it 指代大坝。",
+        "since 引出时间起点，与主句的现在完成时呼应，强调从建坝至今的持续状态。"
+      ],
+      "expressions": [
+        {"text": "upstream of", "meaning_zh": "在……上游"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Even that has not been much use as those tributaries are not powerful enough to distribute the sediment in an ecologically valuable way.",
+      "translation": "即便如此，这些沉积物也没什么用处，因为那些支流的力量还不足以把沉积物以具有生态价值的方式分布开来。",
+      "structure": [
+        {"text": "Even that", "role": "subject", "level": 1},
+        {"text": "has not been much use", "role": "verb_phrase", "level": 1},
+        {"text": "as those tributaries are not powerful enough", "role": "adverbial_clause", "level": 2},
+        {"text": "to distribute the sediment in an ecologically valuable way", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 指代上一句提到的、来自小支流的少量沉积物。",
+        "as 在此引导原因状语从句，相当于 because。",
+        "not...enough to do 表示“不足以做某事”。"
+      ],
+      "expressions": [
+        {"text": "not...enough to do", "meaning_zh": "不足以做……"},
+        {"text": "in a...way", "meaning_zh": "以……方式"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "This lack of flooding has harmed local wildlife.",
+      "translation": "洪水的缺失已经伤害了当地的野生动物。",
+      "structure": [
+        {"text": "This lack of flooding", "role": "subject", "level": 1},
+        {"text": "has harmed", "role": "verb_phrase", "level": 1},
+        {"text": "local wildlife", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "This 指代前文提到的洪水缺失、沉积物无法有效分布这一情况。",
+        "has harmed 是现在完成时，强调伤害已经产生并持续至今。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "The humpback chub, for example, thrived in the rust-red waters of the Colorado.",
+      "translation": "例如，驼背鲈鱼过去就在科罗拉多河铁锈红色的水域中生长繁盛。",
+      "structure": [
+        {"text": "The humpback chub", "role": "subject", "level": 1},
+        {"text": "for example", "role": "parenthetical", "level": 2},
+        {"text": "thrived", "role": "verb_phrase", "level": 1},
+        {"text": "in the rust-red waters of the Colorado", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "thrived 用一般过去时，暗示这种繁盛状态是过去的情形，与后文的衰退形成对比。",
+        "for example 是插入语，引出下文具体的物种实例。"
+      ],
+      "expressions": [
+        {"text": "thrive in", "meaning_zh": "在……中茁壮成长/繁盛"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Recently, though, its population has crashed.",
+      "translation": "然而，最近它的种群数量却骤然崩溃。",
+      "structure": [
+        {"text": "Recently", "role": "adverbial", "level": 1},
+        {"text": "though", "role": "conjunctive_adverb", "level": 1},
+        {"text": "its population has crashed", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "though 放在句中作插入语，表示转折，相当于 however。",
+        "crash 在此指数量“骤然下跌、崩溃”。"
+      ],
+      "expressions": [
+        {"text": "population crashes", "meaning_zh": "种群数量骤降"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "At first sight, it looked as if the reason was that the chub were being eaten by trout introduced for sport fishing in the mid-20th century.",
+      "translation": "乍看之下，原因似乎是鲈鱼被20世纪中期为垂钓运动引进的鳟鱼所捕食。",
+      "structure": [
+        {"text": "At first sight", "role": "adverbial", "level": 1},
+        {"text": "it looked as if", "role": "main_clause", "level": 1},
+        {"text": "the reason was", "role": "noun_clause", "level": 2},
+        {"text": "that the chub were being eaten by trout", "role": "noun_clause", "level": 3},
+        {"text": "introduced for sport fishing in the mid-20th century", "role": "participial_phrase", "level": 4}
+      ],
+      "difficult_points": [
+        "as if 引导表语从句，表示表面看起来的情况，暗示后文将有反转。",
+        "were being eaten by 是过去进行时的被动语态。",
+        "introduced for sport fishing 是过去分词短语，修饰 trout，说明鳟鱼被引进的目的。"
+      ],
+      "expressions": [
+        {"text": "at first sight", "meaning_zh": "乍看之下"},
+        {"text": "as if", "meaning_zh": "似乎；好像"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "But trout and chub co-existed until the Glen Canyon dam was built, so something else is going on.",
+      "translation": "但鳟鱼和鲈鱼在格伦峡谷大坝建成之前一直共存，所以一定另有原因。",
+      "structure": [
+        {"text": "trout and chub co-existed", "role": "main_clause", "level": 1},
+        {"text": "until the Glen Canyon dam was built", "role": "adverbial_clause", "level": 2},
+        {"text": "so something else is going on", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "until 引导的从句说明共存状态持续到大坝建成为止，说明鳟鱼并非真正原因。",
+        "something else is going on 意为“另有隐情/别的事情在发生”。"
+      ],
+      "expressions": [
+        {"text": "something else is going on", "meaning_zh": "另有隐情；另有原因"}
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "Steve Gloss, of the United States' Geological Survey(USGS), reckons that the chub's decline is the result of their losing their most valuable natural defense, the Colorado's rusty sediment.",
+      "translation": "美国地质调查局（USGS）的史蒂夫·格洛斯认为，鲈鱼数量的下降是它们失去最宝贵的天然屏障——科罗拉多河那锈红色沉积物——的结果。",
+      "structure": [
+        {"text": "Steve Gloss, of the United States' Geological Survey(USGS),", "role": "subject", "level": 1},
+        {"text": "reckons", "role": "verb_phrase", "level": 1},
+        {"text": "that the chub's decline is the result of their losing their most valuable natural defense", "role": "noun_clause", "level": 2},
+        {"text": "their losing their most valuable natural defense", "role": "gerund_phrase", "level": 3},
+        {"text": "the Colorado's rusty sediment", "role": "apposition", "level": 3}
+      ],
+      "difficult_points": [
+        "of the United States' Geological Survey(USGS) 是插入的同位语，说明 Steve Gloss 的身份。",
+        "their losing 是“物主代词+动名词”结构，作介词 of 的宾语。",
+        "the Colorado's rusty sediment 是对 most valuable natural defense 的具体说明。"
+      ],
+      "expressions": [
+        {"text": "reckon that", "meaning_zh": "认为；估计"},
+        {"text": "the result of", "meaning_zh": "……的结果"}
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "The chub were well adapted to the poor visibility created by the thick, red water which gave the river its name, and depended on it to hide from predators.",
+      "translation": "鲈鱼很好地适应了浑浊的红色河水造成的低能见度——正是这种河水让这条河得名——并依靠这种浑浊来躲避天敌。",
+      "structure": [
+        {"text": "The chub", "role": "subject", "level": 1},
+        {"text": "were well adapted to the poor visibility", "role": "verb_phrase", "level": 1},
+        {"text": "created by the thick, red water", "role": "participial_phrase", "level": 2},
+        {"text": "which gave the river its name", "role": "relative_clause", "level": 3},
+        {"text": "and depended on it to hide from predators", "role": "coordinated_verb_phrase", "level": 1},
+        {"text": "to hide from predators", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "created by the thick, red water 是过去分词短语，修饰 visibility。",
+        "which 引导非限定性定语从句，指代前面的 thick, red water。",
+        "it 指代前面提到的 poor visibility（浑浊、低能见度）。"
+      ],
+      "expressions": [
+        {"text": "be adapted to", "meaning_zh": "适应于"},
+        {"text": "depend on...to do", "meaning_zh": "依靠……来做"}
+      ]
+    },
+    {
+      "id": "D-08",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "Without the cloudy water the chub became vulnerable.",
+      "translation": "没有了浑浊的河水，鲈鱼就变得容易受到攻击。",
+      "structure": [
+        {"text": "Without the cloudy water", "role": "prepositional_phrase", "level": 1},
+        {"text": "the chub became vulnerable", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Without 引导条件性的介词短语，相当于“如果没有”。",
+        "the cloudy water 呼应前文的 poor visibility，指遮蔽视线的浑浊河水。"
+      ],
+      "expressions": [
+        {"text": "become vulnerable", "meaning_zh": "变得脆弱/易受攻击"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "And the chub are not alone.",
+      "translation": "而鲈鱼并非唯一的受害者。",
+      "structure": [
+        {"text": "the chub", "role": "subject", "level": 1},
+        {"text": "are not alone", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "not alone 在此意为“不是唯一（受影响的物种）”，而非字面“不孤单”。",
+        "And 承接上文，引出下文更多受影响物种的具体举例。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "In the years since the Glen Canyon dam was built, several species have vanished altogether.",
+      "translation": "自格伦峡谷大坝建成以来的这些年里，好几个物种已经彻底消失了。",
+      "structure": [
+        {"text": "In the years", "role": "prepositional_phrase", "level": 1},
+        {"text": "since the Glen Canyon dam was built", "role": "relative_clause", "level": 2},
+        {"text": "several species have vanished altogether", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "since 从句修饰 the years，说明是从大坝建成起算的这些年。",
+        "have vanished 是现在完成时，强调消失的状态持续至今。"
+      ],
+      "expressions": [
+        {"text": "vanish altogether", "meaning_zh": "彻底消失"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "These include the Colorado pike-minnow, the razorback sucker and the round-tail chub.",
+      "translation": "这些物种包括科罗拉多鱼、剃刀背鱼和圆尾鲈鱼。",
+      "structure": [
+        {"text": "These", "role": "subject", "level": 1},
+        {"text": "include", "role": "verb_phrase", "level": 1},
+        {"text": "the Colorado pike-minnow, the razorback sucker and the round-tail chub", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "These 指代上一句提到的“已消失的物种”。",
+        "三个物种名称并列作宾语，具体说明消失的鱼类种类。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "Meanwhile, aliens including fathead minnows, channel catfish and common carp, which would have been hard, put to survive in the savage waters of the undammed canyon, have moved in.",
+      "translation": "与此同时，包括胖头鱼、鲶鱼和普通鲤鱼在内的外来物种趁机进入——这些物种原本很难在未筑坝时汹涌的河水中存活。",
+      "structure": [
+        {"text": "aliens", "role": "subject", "level": 1},
+        {"text": "including fathead minnows, channel catfish and common carp", "role": "participial_phrase", "level": 2},
+        {"text": "which would have been hard, put to survive in the savage waters of the undammed canyon", "role": "relative_clause", "level": 2},
+        {"text": "in the savage waters of the undammed canyon", "role": "prepositional_phrase", "level": 3},
+        {"text": "have moved in", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "which would have been hard, put to survive 中的逗号为原文错字，原意应是固定搭配 hard put to survive（很难存活下去）。",
+        "including...common carp 是现在分词短语，列举外来物种的具体种类。",
+        "which 引导非限定性定语从句，修饰 aliens，说明这些外来物种原本难以存活的处境。"
+      ],
+      "expressions": [
+        {"text": "hard put to do sth", "meaning_zh": "很难做成某事"},
+        {"text": "move in", "meaning_zh": "迁入；进入"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "So flooding is the obvious answer.",
+      "translation": "因此，洪水显然是解决方法。",
+      "structure": [
+        {"text": "flooding", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "the obvious answer", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "So 承接前文的问题，引出解决方案。",
+        "the obvious answer 暗示这一方案显而易见，但未必容易实现，为下一句的转折作铺垫。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "Unfortunately, it is easier said than done.",
+      "translation": "不幸的是，说起来容易做起来难。",
+      "structure": [
+        {"text": "it is easier said than done", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "it 是形式主语，指代前面提到的“引发洪水”这件事。",
+        "easier said than done 是固定表达，意为“说起来容易做起来难”。"
+      ],
+      "expressions": [
+        {"text": "easier said than done", "meaning_zh": "说起来容易做起来难"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "Floods were sent down the Grand Canyon in 1996 and 2004 and the results were mixed.",
+      "translation": "1996年和2004年，人们曾向大峡谷放洪，但结果好坏参半。",
+      "structure": [
+        {"text": "Floods were sent down the Grand Canyon", "role": "main_clause", "level": 1},
+        {"text": "in 1996 and 2004", "role": "adverbial", "level": 1},
+        {"text": "and the results were mixed", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "were sent 是被动语态，表示洪水是被人为引导下泄的。",
+        "mixed 在此表示“好坏参半、有得有失”。"
+      ],
+      "expressions": [
+        {"text": "results were mixed", "meaning_zh": "结果好坏参半"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "In 1996 the flood was allowed to go on too long.",
+      "translation": "1996年那次洪水被放任持续的时间太长了。",
+      "structure": [
+        {"text": "In 1996", "role": "adverbial", "level": 1},
+        {"text": "the flood", "role": "subject", "level": 1},
+        {"text": "was allowed to go on too long", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "was allowed to 是被动语态，表示“被允许/被放任”。",
+        "too long 为下文沉积物被冲出峡谷这一问题埋下伏笔。"
+      ],
+      "expressions": [
+        {"text": "go on", "meaning_zh": "持续"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "To start with, all seemed well.",
+      "translation": "起初，一切似乎都很顺利。",
+      "structure": [
+        {"text": "To start with", "role": "adverbial", "level": 1},
+        {"text": "all seemed well", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "To start with 是固定表达，意为“起初、首先”。",
+        "all 泛指放洪初期的整体情况，为下文的转折“however”作对比铺垫。"
+      ],
+      "expressions": [
+        {"text": "to start with", "meaning_zh": "起初；首先"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 34,
+      "sentence": "The floodwaters built up sandbanks and infused the river with sediment.",
+      "translation": "洪水堆积起了沙洲，也为河流注入了沉积物。",
+      "structure": [
+        {"text": "The floodwaters", "role": "subject", "level": 1},
+        {"text": "built up sandbanks", "role": "verb_phrase", "level": 1},
+        {"text": "and infused the river with sediment", "role": "coordinated_verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "built up 和 infused 是并列谓语，共用主语 The floodwaters。",
+        "本句描述放洪初期的积极效果，与下一句 Eventually 引出的负面结果形成对比。"
+      ],
+      "expressions": [
+        {"text": "build up", "meaning_zh": "堆积；建立"}
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 35,
+      "sentence": "Eventually, however, the continued flow washed most of the sediment out of the canyon.",
+      "translation": "然而，持续不断的水流最终还是把大部分沉积物冲出了峡谷。",
+      "structure": [
+        {"text": "Eventually, however", "role": "adverbial", "level": 1},
+        {"text": "the continued flow", "role": "subject", "level": 1},
+        {"text": "washed most of the sediment out of the canyon", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "however 在此插入句中，表示转折，与前一句“起初顺利”相对。",
+        "wash...out of 表示“把……冲出”。"
+      ],
+      "expressions": [
+        {"text": "wash sth out of", "meaning_zh": "把……冲出"}
+      ]
+    },
+    {
+      "id": "F-08",
+      "paragraph_label": "F",
+      "sentence_index": 36,
+      "sentence": "This problem was avoided in 2004, but unfortunately, on that occasion, the volume of sand available behind the dam was too low to rebuild the sandbanks.",
+      "translation": "2004年这一问题得以避免，但不幸的是，那次大坝后方可用的沙量太少，不足以重建沙洲。",
+      "structure": [
+        {"text": "This problem was avoided in 2004", "role": "main_clause", "level": 1},
+        {"text": "but unfortunately, on that occasion, the volume of sand available behind the dam was too low", "role": "coordinated_clause", "level": 1},
+        {"text": "available behind the dam", "role": "adjective_phrase", "level": 2},
+        {"text": "to rebuild the sandbanks", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "This problem 指代上文提到的“沉积物被冲出峡谷”这一问题。",
+        "available behind the dam 是形容词短语，修饰 the volume of sand，说明是大坝后方可用的沙量。",
+        "too low to rebuild 是“too...to do”结构，表示“太少而无法……”。"
+      ],
+      "expressions": [
+        {"text": "too...to do", "meaning_zh": "太……而不能……"}
+      ]
+    },
+    {
+      "id": "F-09",
+      "paragraph_label": "F",
+      "sentence_index": 37,
+      "sentence": "This time, the USGS is convinced that things will be better.",
+      "translation": "这一次，美国地质调查局确信情况会更好。",
+      "structure": [
+        {"text": "This time", "role": "adverbial", "level": 1},
+        {"text": "the USGS is convinced", "role": "main_clause", "level": 1},
+        {"text": "that things will be better", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "be convinced that 表示“确信……”，that 引导宾语从句说明确信的内容。",
+        "This time 与前文1996年、2004年两次放洪经历形成对比，引出这次的乐观预期。"
+      ],
+      "expressions": [
+        {"text": "be convinced that", "meaning_zh": "确信……"}
+      ]
+    },
+    {
+      "id": "F-10",
+      "paragraph_label": "F",
+      "sentence_index": 38,
+      "sentence": "The amount of sediment available is three times greater than it was in 2004.",
+      "translation": "现在可用的沉积物数量是2004年的三倍。",
+      "structure": [
+        {"text": "The amount of sediment available", "role": "subject", "level": 1},
+        {"text": "available", "role": "adjective_phrase", "level": 2},
+        {"text": "is three times greater", "role": "verb_phrase", "level": 1},
+        {"text": "than it was in 2004", "role": "comparative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "available 后置修饰 sediment，表示“可用的沉积物”。",
+        "three times greater than 是倍数比较结构，表示“是……的三倍”。",
+        "it 指代 the amount of sediment available。"
+      ],
+      "expressions": [
+        {"text": "three times greater than", "meaning_zh": "是……的三倍"}
+      ]
+    },
+    {
+      "id": "F-11",
+      "paragraph_label": "F",
+      "sentence_index": 39,
+      "sentence": "So if a flood is going to do some good, this is the time to unleash one.",
+      "translation": "所以，如果放洪要产生效果，现在正是放洪的时候。",
+      "structure": [
+        {"text": "if a flood is going to do some good", "role": "conditional_clause", "level": 2},
+        {"text": "this is the time", "role": "main_clause", "level": 1},
+        {"text": "to unleash one", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "if 引导条件状语从句，说明放洪产生效果的前提。",
+        "one 指代前面提到的 a flood，避免重复。",
+        "to unleash one 是不定式短语，修饰 the time，说明“放洪的时机”。"
+      ],
+      "expressions": [
+        {"text": "do some good", "meaning_zh": "产生效果；有益处"},
+        {"text": "unleash", "meaning_zh": "释放；引发"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 40,
+      "sentence": "Even so, it may turn out to be an empty gesture.",
+      "translation": "即便如此，这次放洪也可能只是一种徒劳的姿态。",
+      "structure": [
+        {"text": "Even so", "role": "adverbial", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "may turn out to be an empty gesture", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Even so 表示“即便如此”，承接上文放洪的必要性，引出下文的保留态度。",
+        "it 指代这次即将进行的放洪。",
+        "turn out to be 表示“结果证明是”。"
+      ],
+      "expressions": [
+        {"text": "turn out to be", "meaning_zh": "结果证明是"},
+        {"text": "an empty gesture", "meaning_zh": "徒劳的姿态；空洞的表示"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 41,
+      "sentence": "At less than 1,200 cubic metres a second, this flood is smaller than even an average spring flood, let alone one of the mightier deluges of the past.",
+      "translation": "以每秒不到1200立方米的流量计算，这次洪水甚至比一次普通的春季洪水规模都要小，更不用说过去那些更为壮观的大洪水了。",
+      "structure": [
+        {"text": "At less than 1,200 cubic metres a second", "role": "prepositional_phrase", "level": 1},
+        {"text": "this flood", "role": "subject", "level": 1},
+        {"text": "is smaller than even an average spring flood", "role": "verb_phrase", "level": 1},
+        {"text": "let alone one of the mightier deluges of the past", "role": "elliptical_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "let alone 表示“更不用说”，后面省略了与前面相同的谓语部分。",
+        "even 强调比较的对象已经是较小的春季洪水，突显本次洪水规模之小。"
+      ],
+      "expressions": [
+        {"text": "let alone", "meaning_zh": "更不用说"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 42,
+      "sentence": "Those glorious inundations moved massive quantities of sediment through the Grand Canyon, wiping the slate dirty, and making a muddy mess of silt and muck that would make modern river rafters cringe.",
+      "translation": "过去那些壮观的洪水曾把大量沉积物带过大峡谷，将河床重新“抹脏”，形成一片泥沙淤积的浑浊景象，让今天的漂流者望而却步。",
+      "structure": [
+        {"text": "Those glorious inundations", "role": "subject", "level": 1},
+        {"text": "moved massive quantities of sediment through the Grand Canyon", "role": "verb_phrase", "level": 1},
+        {"text": "wiping the slate dirty", "role": "participial_phrase", "level": 2},
+        {"text": "and making a muddy mess of silt and muck", "role": "participial_phrase", "level": 2},
+        {"text": "that would make modern river rafters cringe", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "wiping the slate dirty 和 making a muddy mess 都是现在分词短语，说明洪水带来的伴随结果。",
+        "wipe the slate dirty 是对习语 wipe the slate clean（重新开始）的反用，制造反差效果。",
+        "that 引导定语从句修饰 a muddy mess of silt and muck，would make...cringe 表示“会让……感到畏缩”。"
+      ],
+      "expressions": [
+        {"text": "make sb cringe", "meaning_zh": "让某人畏缩/尴尬"}
+      ]
+    }
+  ]
+}

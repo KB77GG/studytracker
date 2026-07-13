@@ -1,0 +1,580 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts10_test3_reading",
+  "passage_id": "ielts10_test3_p2",
+  "passage_title": "Autumn leaves",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "One of the most captivating natural events of the year in many areas throughout North America is the turning of the leaves in the fall.",
+      "translation": "在北美许多地区，一年中最迷人的自然景象之一就是秋季树叶变色。",
+      "structure": [
+        {"text": "One of the most captivating natural events of the year", "role": "subject", "level": 1},
+        {"text": "in many areas throughout North America", "role": "prepositional_phrase", "level": 2},
+        {"text": "is the turning of the leaves in the fall", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": ["One of 后接复数名词，但主语中心是 One，因此谓语用 is。", "the turning of the leaves 指树叶颜色在秋季发生变化。"],
+      "expressions": [
+        {"text": "one of the most captivating", "meaning_zh": "最迷人的……之一"},
+        {"text": "throughout", "meaning_zh": "遍及"}
+      ]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "The colours are magnificent, but the question of exactly why some trees turn yellow or orange, and others red or purple, is something which has long puzzled scientists.",
+      "translation": "这些色彩绚丽壮观，但为什么有些树会变黄或变橙，而另一些会变红或变紫，这个问题长期以来一直困扰着科学家。",
+      "structure": [
+        {"text": "The colours are magnificent", "role": "main_clause", "level": 1},
+        {"text": "but the question of exactly why some trees turn yellow or orange, and others red or purple, is something", "role": "coordinated_clause", "level": 1},
+        {"text": "why some trees turn yellow or orange, and others red or purple", "role": "noun_clause", "level": 2},
+        {"text": "which has long puzzled scientists", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["why 引导名词性从句，说明 the question 的具体内容。", "others 后省略 trees turn，which 从句修饰 something。"],
+      "expressions": [
+        {"text": "puzzle scientists", "meaning_zh": "使科学家困惑"},
+        {"text": "have long done", "meaning_zh": "长期以来一直……"}
+      ]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 3,
+      "sentence": "Summer leaves are green because they are full of chlorophyll, the molecule that captures sunlight and converts that energy into new building materials for the tree.",
+      "translation": "夏天的树叶之所以呈绿色，是因为其中充满叶绿素；这种分子能够捕获阳光，并把光能转化为树木生长所需的新物质。",
+      "structure": [
+        {"text": "Summer leaves are green", "role": "main_clause", "level": 1},
+        {"text": "because they are full of chlorophyll", "role": "adverbial_clause", "level": 2},
+        {"text": "the molecule", "role": "apposition", "level": 3},
+        {"text": "that captures sunlight and converts that energy into new building materials for the tree", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": ["because 从句解释树叶呈绿色的原因。", "the molecule 是 chlorophyll 的同位语，that 从句进一步说明其作用。"],
+      "expressions": [
+        {"text": "be full of", "meaning_zh": "充满"},
+        {"text": "convert ... into ...", "meaning_zh": "把……转化为……"}
+      ]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "As fall approaches in the northern hemisphere, the amount of solar energy available declines considerably.",
+      "translation": "随着北半球秋季临近，可获得的太阳能量大幅减少。",
+      "structure": [
+        {"text": "As fall approaches in the northern hemisphere", "role": "adverbial_clause", "level": 2},
+        {"text": "the amount of solar energy available", "role": "subject", "level": 1},
+        {"text": "declines considerably", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["As 表示“随着”，引导伴随变化的状语从句。", "available 是形容词后置修饰 solar energy。"],
+      "expressions": [
+        {"text": "as ... approaches", "meaning_zh": "随着……临近"},
+        {"text": "decline considerably", "meaning_zh": "大幅减少"}
+      ]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "For many trees - evergreen conifers being an exception - the best strategy is to abandon photosynthesis* until the spring.",
+      "translation": "对许多树木而言——常绿针叶树除外——最佳策略是暂停光合作用，直到春天来临。",
+      "structure": [
+        {"text": "For many trees", "role": "prepositional_phrase", "level": 2},
+        {"text": "evergreen conifers being an exception", "role": "parenthesis", "level": 2},
+        {"text": "the best strategy is", "role": "main_clause", "level": 1},
+        {"text": "to abandon photosynthesis* until the spring", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["破折号中的 being an exception 是独立主格结构，说明常绿针叶树不适用。", "不定式作表语，说明 best strategy 的具体内容。"],
+      "expressions": [
+        {"text": "be an exception", "meaning_zh": "是例外"},
+        {"text": "abandon photosynthesis", "meaning_zh": "停止光合作用"}
+      ]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "So rather than maintaining the now redundant leaves throughout the winter, the tree saves its precious resources and discards them.",
+      "translation": "因此，树木不会整个冬天都保留如今已无用的叶片，而是保存宝贵资源并将叶片脱落。",
+      "structure": [
+        {"text": "rather than maintaining the now redundant leaves throughout the winter", "role": "prepositional_phrase", "level": 2},
+        {"text": "the tree", "role": "subject", "level": 1},
+        {"text": "saves its precious resources and discards them", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["rather than 后接动名词，表示被舍弃的做法。", "them 指 the now redundant leaves，而非 resources。"],
+      "expressions": [
+        {"text": "rather than", "meaning_zh": "而不是"},
+        {"text": "precious resources", "meaning_zh": "宝贵资源"}
+      ]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "But before letting its leaves go, the tree dismantles their chlorophyll molecules and ships their valuable nitrogen back into the twigs.",
+      "translation": "但在让叶片脱落之前，树木会分解其中的叶绿素分子，并把宝贵的氮输送回细枝。",
+      "structure": [
+        {"text": "before letting its leaves go", "role": "prepositional_phrase", "level": 2},
+        {"text": "the tree", "role": "subject", "level": 1},
+        {"text": "dismantles their chlorophyll molecules", "role": "verb_phrase", "level": 1},
+        {"text": "and ships their valuable nitrogen back into the twigs", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["letting its leaves go 指让叶片自然脱落。", "两个 their 都指 leaves，说明叶片中的叶绿素与氮。"],
+      "expressions": [
+        {"text": "let ... go", "meaning_zh": "让……脱离；放弃"},
+        {"text": "ship ... back into ...", "meaning_zh": "把……输送回……"}
+      ]
+    },
+    {
+      "id": "B-06", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "As chlorophyll is depleted, other colours that have been dominated by it throughout the summer begin to be revealed.",
+      "translation": "随着叶绿素逐渐耗尽，那些整个夏季一直被它遮盖的其他颜色开始显现。",
+      "structure": [
+        {"text": "As chlorophyll is depleted", "role": "adverbial_clause", "level": 2},
+        {"text": "other colours", "role": "subject", "level": 1},
+        {"text": "that have been dominated by it throughout the summer", "role": "relative_clause", "level": 2},
+        {"text": "begin to be revealed", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["is depleted 和 have been dominated 都是被动结构。", "定语从句中的 it 指 chlorophyll，主句说明其他色素随之显现。"],
+      "expressions": [
+        {"text": "be depleted", "meaning_zh": "被耗尽"},
+        {"text": "begin to be revealed", "meaning_zh": "开始显现"}
+      ]
+    },
+    {
+      "id": "B-07", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "This unmasking explains the autumn colours of yellow and orange, but not the brilliant reds and purples of trees such as the maple or sumac.",
+      "translation": "这种显色过程解释了秋叶为何呈黄色和橙色，却解释不了枫树或漆树等树木鲜艳的红色和紫色。",
+      "structure": [
+        {"text": "This unmasking", "role": "subject", "level": 1},
+        {"text": "explains the autumn colours of yellow and orange", "role": "verb_phrase", "level": 1},
+        {"text": "but not the brilliant reds and purples of trees such as the maple or sumac", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["unmasking 指叶绿素减少后其他颜色显露的过程。", "but not 后省略 explains，形成对比并避免重复。"],
+      "expressions": [
+        {"text": "such as", "meaning_zh": "例如"},
+        {"text": "brilliant reds and purples", "meaning_zh": "鲜艳的红色和紫色"}
+      ]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 10,
+      "sentence": "The source of the red is widely known: it is created by anthocyanins, water-soluble plant pigments reflecting the red to blue range of the visible spectrum.",
+      "translation": "红色的来源已广为人知：它由花青素产生；花青素是一种水溶性植物色素，能反射可见光谱中从红到蓝的光。",
+      "structure": [
+        {"text": "The source of the red is widely known", "role": "main_clause", "level": 1},
+        {"text": "it is created by anthocyanins", "role": "coordinated_clause", "level": 1},
+        {"text": "water-soluble plant pigments", "role": "apposition", "level": 2},
+        {"text": "reflecting the red to blue range of the visible spectrum", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": ["冒号后的分句具体解释红色的来源，it 指 the red。", "water-soluble plant pigments 是 anthocyanins 的同位语。"],
+      "expressions": [
+        {"text": "be widely known", "meaning_zh": "广为人知"},
+        {"text": "the visible spectrum", "meaning_zh": "可见光谱"}
+      ]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "They belong to a class of sugar-based chemical compounds also known as flavonoids.",
+      "translation": "它们属于一类以糖为基础、又称黄酮类化合物的化学物质。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "belong to a class of sugar-based chemical compounds", "role": "verb_phrase", "level": 1},
+        {"text": "also known as flavonoids", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["They 指上一句中的 anthocyanins。", "also known as ... 是过去分词短语，修饰 chemical compounds。"],
+      "expressions": [
+        {"text": "belong to a class of", "meaning_zh": "属于一类……"},
+        {"text": "also known as", "meaning_zh": "又称为"}
+      ]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "What's puzzling is that anthocyanins are actually newly minted, made in the leaves at the same time as the tree is preparing to drop them.",
+      "translation": "令人费解的是，花青素其实是新近生成的：树木在准备让叶片脱落的同时，才在叶片中制造它们。",
+      "structure": [
+        {"text": "What's puzzling", "role": "noun_clause", "level": 1},
+        {"text": "is that anthocyanins are actually newly minted", "role": "main_clause", "level": 1},
+        {"text": "made in the leaves", "role": "participial_phrase", "level": 2},
+        {"text": "at the same time as the tree is preparing to drop them", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["What 引导主语从句，that 引导表语从句。", "newly minted 是比喻说法，表示花青素刚刚生成；them 指 leaves。"],
+      "expressions": [
+        {"text": "what's puzzling is that", "meaning_zh": "令人费解的是"},
+        {"text": "at the same time as", "meaning_zh": "与……同时"}
+      ]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "But it is hard to make sense of the manufacture of anthocyanins - why should a tree bother making new chemicals in its leaves when it's already scrambling to withdraw and preserve the ones already there?",
+      "translation": "但花青素的生成很难解释：既然树木已经在竭力回收并保存叶片中现有的化学物质，它为什么还要费力制造新的化学物质呢？",
+      "structure": [
+        {"text": "it is hard to make sense of the manufacture of anthocyanins", "role": "main_clause", "level": 1},
+        {"text": "why should a tree bother making new chemicals in its leaves", "role": "noun_clause", "level": 2},
+        {"text": "when it's already scrambling to withdraw and preserve the ones already there", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["it 是形式主语，to make sense of ... 是真正主语。", "ones 代替 chemicals，when 从句突出“回收旧物质”与“制造新物质”的矛盾。"],
+      "expressions": [
+        {"text": "make sense of", "meaning_zh": "理解；解释"},
+        {"text": "bother doing", "meaning_zh": "费心做……"},
+        {"text": "scramble to", "meaning_zh": "竭力赶着做……"}
+      ]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 14,
+      "sentence": "Some theories about anthocyanins have argued that they might act as a chemical defence against attacks by insects or fungi, or that they might attract fruit-eating birds or increase a leaf's tolerance to freezing.",
+      "translation": "一些有关花青素的理论认为，它们可能充当抵御昆虫或真菌侵袭的化学防线，也可能吸引食果鸟类，或提高叶片的耐冻能力。",
+      "structure": [
+        {"text": "Some theories about anthocyanins have argued", "role": "main_clause", "level": 1},
+        {"text": "that they might act as a chemical defence against attacks by insects or fungi", "role": "noun_clause", "level": 2},
+        {"text": "or that they might attract fruit-eating birds or increase a leaf's tolerance to freezing", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": ["两个 that 从句由 or 连接，共同作 argued 的宾语。", "they 指 anthocyanins，第二个从句中 attract 和 increase 是并列谓语。"],
+      "expressions": [
+        {"text": "act as", "meaning_zh": "充当"},
+        {"text": "a defence against", "meaning_zh": "抵御……的防线"},
+        {"text": "tolerance to freezing", "meaning_zh": "耐冻能力"}
+      ]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 15,
+      "sentence": "However there are problems with each of these theories, including the fact that leaves are red for such a relatively short period that the expense of energy needed to manufacture the anthocyanins would outweigh any anti-fungal or anti-herbivore activity achieved.",
+      "translation": "然而，这些理论各有问题，其中之一是叶片呈红色的时间很短，以至于制造花青素所耗费的能量会超过由此获得的任何抗真菌或抗食草动物效益。",
+      "structure": [
+        {"text": "there are problems with each of these theories", "role": "main_clause", "level": 1},
+        {"text": "including the fact", "role": "participial_phrase", "level": 2},
+        {"text": "that leaves are red for such a relatively short period that the expense of energy needed to manufacture the anthocyanins would outweigh any anti-fungal or anti-herbivore activity achieved", "role": "noun_clause", "level": 3},
+        {"text": "that the expense of energy needed to manufacture the anthocyanins would outweigh any anti-fungal or anti-herbivore activity achieved", "role": "adverbial_clause", "level": 4}
+      ],
+      "difficult_points": ["第一个 that 说明 the fact，第二个 that 与 such 构成结果结构。", "needed ... 修饰 energy，achieved 修饰 activity；outweigh 表示成本超过收益。"],
+      "expressions": [
+        {"text": "the expense of energy", "meaning_zh": "能量成本"},
+        {"text": "outweigh", "meaning_zh": "超过；比……更重要"}
+      ]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 16,
+      "sentence": "It has also been proposed that trees may produce vivid red colours to convince herbivorous insects that they are healthy and robust and would be easily able to mount chemical defences against infestation.",
+      "translation": "另有观点提出，树木产生鲜艳红色，可能是为了让食草昆虫相信它们健康强壮，能够轻易建立化学防御来抵抗虫害。",
+      "structure": [
+        {"text": "It has also been proposed", "role": "main_clause", "level": 1},
+        {"text": "that trees may produce vivid red colours", "role": "noun_clause", "level": 2},
+        {"text": "to convince herbivorous insects", "role": "non_finite_clause", "level": 3},
+        {"text": "that they are healthy and robust and would be easily able to mount chemical defences against infestation", "role": "noun_clause", "level": 4}
+      ],
+      "difficult_points": ["It 是形式主语，第一个 that 从句是真正主语。", "第二个 that 从句作 convince 的内容宾语，they 指 trees。"],
+      "expressions": [
+        {"text": "It has been proposed that", "meaning_zh": "有观点提出"},
+        {"text": "convince ... that", "meaning_zh": "使……相信"},
+        {"text": "mount chemical defences", "meaning_zh": "建立化学防御"}
+      ]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 17,
+      "sentence": "If insects paid attention to such advertisements, they might be prompted to lay their eggs on a duller, and presumably less resistant host.",
+      "translation": "如果昆虫会留意这类信号，它们可能会转而在颜色较暗、推测也更缺乏抵抗力的宿主上产卵。",
+      "structure": [
+        {"text": "If insects paid attention to such advertisements", "role": "adverbial_clause", "level": 2},
+        {"text": "they might be prompted", "role": "main_clause", "level": 1},
+        {"text": "to lay their eggs on a duller, and presumably less resistant host", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["If 从句与 might 构成假设语气，说明尚未证实的可能性。", "be prompted to 表示被促使去做某事；advertisements 比喻叶片红色信号。"],
+      "expressions": [
+        {"text": "pay attention to", "meaning_zh": "留意"},
+        {"text": "be prompted to", "meaning_zh": "被促使去……"},
+        {"text": "lay eggs", "meaning_zh": "产卵"}
+      ]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 18,
+      "sentence": "The flaw in this theory lies in the lack of proof to support it.",
+      "translation": "这一理论的缺陷在于缺少支持它的证据。",
+      "structure": [
+        {"text": "The flaw in this theory", "role": "subject", "level": 1},
+        {"text": "lies in the lack of proof", "role": "verb_phrase", "level": 1},
+        {"text": "to support it", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["lie in 表示问题或原因“在于”某处。", "it 指 this theory，不定式后置修饰 proof。"],
+      "expressions": [
+        {"text": "the flaw in", "meaning_zh": "……的缺陷"},
+        {"text": "lie in", "meaning_zh": "在于"},
+        {"text": "the lack of proof", "meaning_zh": "缺乏证据"}
+      ]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 19,
+      "sentence": "No one has as yet ascertained whether more robust trees sport the brightest leaves, or whether insects make choices according to colour intensity.",
+      "translation": "迄今还没有人确定，更强壮的树是否拥有最鲜艳的叶片，也没有确定昆虫是否会根据颜色强度作出选择。",
+      "structure": [
+        {"text": "No one has as yet ascertained", "role": "main_clause", "level": 1},
+        {"text": "whether more robust trees sport the brightest leaves", "role": "noun_clause", "level": 2},
+        {"text": "or whether insects make choices according to colour intensity", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": ["两个 whether 从句由 or 连接，共同作 ascertained 的宾语。", "sport 在这里作动词，表示“拥有并显露”；as yet 表示迄今为止。"],
+      "expressions": [
+        {"text": "as yet", "meaning_zh": "迄今为止"},
+        {"text": "ascertain whether", "meaning_zh": "确定是否"},
+        {"text": "according to", "meaning_zh": "根据"}
+      ]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 20,
+      "sentence": "Perhaps the most plausible suggestion as to why leaves would go to the trouble of making anthocyanins when they're busy packing up for the winter is the theory known as the 'light screen' hypothesis.",
+      "translation": "对于叶片为何会在忙着为冬季收尾时仍费力制造花青素，或许最可信的解释是所谓的“光屏障”假说。",
+      "structure": [
+        {"text": "the most plausible suggestion", "role": "subject", "level": 1},
+        {"text": "as to why leaves would go to the trouble of making anthocyanins", "role": "prepositional_phrase", "level": 2},
+        {"text": "when they're busy packing up for the winter", "role": "adverbial_clause", "level": 3},
+        {"text": "is the theory", "role": "main_clause", "level": 1},
+        {"text": "known as the 'light screen' hypothesis", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["句子主干是 suggestion is the theory，中间插入对 suggestion 内容的说明。", "go to the trouble of 表示费力做某事，they 指 leaves。"],
+      "expressions": [
+        {"text": "the most plausible suggestion", "meaning_zh": "最可信的解释"},
+        {"text": "go to the trouble of", "meaning_zh": "不辞辛苦地做"},
+        {"text": "be known as", "meaning_zh": "被称为"}
+      ]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 21,
+      "sentence": "It sounds paradoxical, because the idea behind this hypothesis is that the red pigment is made in autumn leaves to protect chlorophyll, the light-absorbing chemical, from too much light.",
+      "translation": "这听起来自相矛盾，因为该假说认为，秋叶制造红色色素是为了保护叶绿素这种吸光物质，使其免受过强光照。",
+      "structure": [
+        {"text": "It sounds paradoxical", "role": "main_clause", "level": 1},
+        {"text": "because the idea behind this hypothesis is", "role": "adverbial_clause", "level": 2},
+        {"text": "that the red pigment is made in autumn leaves to protect chlorophyll", "role": "noun_clause", "level": 3},
+        {"text": "the light-absorbing chemical", "role": "apposition", "level": 4},
+        {"text": "from too much light", "role": "prepositional_phrase", "level": 4}
+      ],
+      "difficult_points": ["because 从句中，that 引导表语从句说明假说内容。", "the light-absorbing chemical 是 chlorophyll 的同位语，protect ... from ... 表示保护其免受强光。"],
+      "expressions": [
+        {"text": "sound paradoxical", "meaning_zh": "听起来自相矛盾"},
+        {"text": "protect ... from ...", "meaning_zh": "保护……免受……"}
+      ]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 22,
+      "sentence": "Why does chlorophyll need protection when it is the natural world's supreme light absorber?",
+      "translation": "既然叶绿素是自然界最出色的吸光物质，它为什么还需要保护呢？",
+      "structure": [
+        {"text": "Why does chlorophyll need protection", "role": "main_clause", "level": 1},
+        {"text": "when it is the natural world's supreme light absorber", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["when 在这里带有“既然”的让步意味，而非单纯表示时间。", "it 指 chlorophyll，supreme 强调其吸光能力极强。"],
+      "expressions": [
+        {"text": "need protection", "meaning_zh": "需要保护"},
+        {"text": "light absorber", "meaning_zh": "吸光物质"}
+      ]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 23,
+      "sentence": "Why protect chlorophyll at a time when the tree is breaking it down to salvage as much of it as possible?",
+      "translation": "树木正在分解叶绿素并尽可能多地回收它时，为什么还要保护它呢？",
+      "structure": [
+        {"text": "Why protect chlorophyll", "role": "main_clause", "level": 1},
+        {"text": "at a time", "role": "prepositional_phrase", "level": 2},
+        {"text": "when the tree is breaking it down", "role": "relative_clause", "level": 3},
+        {"text": "to salvage as much of it as possible", "role": "non_finite_clause", "level": 4}
+      ],
+      "difficult_points": ["这是省略主语和助动词的疑问句，完整形式可理解为 Why should the tree protect ...。", "两个 it 都指 chlorophyll，to salvage ... 表示分解的目的。"],
+      "expressions": [
+        {"text": "break ... down", "meaning_zh": "分解……"},
+        {"text": "as much of ... as possible", "meaning_zh": "尽可能多的……"}
+      ]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 24,
+      "sentence": "Chlorophyll, although exquisitely evolved to capture the energy of sunlight, can sometimes be overwhelmed by it, especially in situations of drought, low temperatures, or nutrient deficiency.",
+      "translation": "叶绿素虽然经过精妙进化，能够捕获太阳能，但有时也会承受不了这种能量，尤其是在干旱、低温或营养不足的情况下。",
+      "structure": [
+        {"text": "Chlorophyll", "role": "subject", "level": 1},
+        {"text": "although exquisitely evolved to capture the energy of sunlight", "role": "adverbial_clause", "level": 2},
+        {"text": "can sometimes be overwhelmed by it", "role": "verb_phrase", "level": 1},
+        {"text": "especially in situations of drought, low temperatures, or nutrient deficiency", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": ["although 后省略 chlorophyll is，形成让步结构。", "it 指 the energy of sunlight；be overwhelmed by 表示承受不了过量能量。"],
+      "expressions": [
+        {"text": "be overwhelmed by", "meaning_zh": "承受不了；被……压倒"},
+        {"text": "nutrient deficiency", "meaning_zh": "营养不足"}
+      ]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 25,
+      "sentence": "Moreover, the problem of oversensitivity to light is even more acute in the fall, when the leaf is busy preparing for winter by dismantling its internal machinery.",
+      "translation": "而且，秋季对光线过度敏感的问题更加严重，因为此时叶片正忙着通过拆解内部机制为冬季作准备。",
+      "structure": [
+        {"text": "the problem of oversensitivity to light is even more acute in the fall", "role": "main_clause", "level": 1},
+        {"text": "when the leaf is busy preparing for winter", "role": "relative_clause", "level": 2},
+        {"text": "by dismantling its internal machinery", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": ["when 引导非限制性定语从句，补充说明 in the fall。", "by dismantling ... 表示叶片为冬季作准备的方式。"],
+      "expressions": [
+        {"text": "oversensitivity to", "meaning_zh": "对……过度敏感"},
+        {"text": "be busy doing", "meaning_zh": "忙于做……"},
+        {"text": "prepare for", "meaning_zh": "为……作准备"}
+      ]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 26,
+      "sentence": "The energy absorbed by the chlorophyll molecules of the unstable autumn leaf is not immediately channelled into useful products and processes, as it would be in an intact summer leaf.",
+      "translation": "状态不稳定的秋叶中，叶绿素分子吸收的能量无法像在完整的夏叶中那样，立即被输送去生成有用的物质并参与相关过程。",
+      "structure": [
+        {"text": "The energy", "role": "subject", "level": 1},
+        {"text": "absorbed by the chlorophyll molecules of the unstable autumn leaf", "role": "participial_phrase", "level": 2},
+        {"text": "is not immediately channelled into useful products and processes", "role": "verb_phrase", "level": 1},
+        {"text": "as it would be in an intact summer leaf", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["absorbed ... 是过去分词短语修饰 energy，主句也是被动语态。", "as 从句中 would be 后省略 channelled into useful products and processes。"],
+      "expressions": [
+        {"text": "be channelled into", "meaning_zh": "被输送用于……"},
+        {"text": "an intact summer leaf", "meaning_zh": "结构完整的夏叶"}
+      ]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 27,
+      "sentence": "The weakened fall leaf then becomes vulnerable to the highly destructive effects of the oxygen created by the excited chlorophyll molecules.",
+      "translation": "于是，已经衰弱的秋叶很容易受到活跃叶绿素分子所产生的氧的强烈破坏。",
+      "structure": [
+        {"text": "The weakened fall leaf", "role": "subject", "level": 1},
+        {"text": "then becomes vulnerable to the highly destructive effects of the oxygen", "role": "verb_phrase", "level": 1},
+        {"text": "created by the excited chlorophyll molecules", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": ["weakened 是过去分词作定语，描述秋叶已衰弱的状态。", "created ... 修饰 oxygen，而不是 effects。"],
+      "expressions": [
+        {"text": "become vulnerable to", "meaning_zh": "变得容易受……伤害"},
+        {"text": "destructive effects", "meaning_zh": "破坏性影响"}
+      ]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 28,
+      "sentence": "Even if you had never suspected that this is what was going on when leaves turn red, there are clues out there.",
+      "translation": "即使你从未怀疑过树叶变红时发生的正是这一过程，现实中仍有线索可循。",
+      "structure": [
+        {"text": "Even if you had never suspected", "role": "adverbial_clause", "level": 2},
+        {"text": "that this is what was going on when leaves turn red", "role": "noun_clause", "level": 3},
+        {"text": "what was going on", "role": "noun_clause", "level": 4},
+        {"text": "there are clues out there", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": ["Even if 引导让步状语从句，that 从句作 suspected 的宾语。", "what was going on 是表语从句，表示当时正在发生的事情。"],
+      "expressions": [
+        {"text": "even if", "meaning_zh": "即使"},
+        {"text": "go on", "meaning_zh": "发生；进行"}
+      ]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 29,
+      "sentence": "One is straightforward: on many trees, the leaves that are the reddest are those on the side of the tree which gets most sun.",
+      "translation": "其中一个线索很直接：在许多树上，最红的叶片都位于树木接受阳光最多的一侧。",
+      "structure": [
+        {"text": "One is straightforward", "role": "main_clause", "level": 1},
+        {"text": "the leaves", "role": "subject", "level": 1},
+        {"text": "that are the reddest", "role": "relative_clause", "level": 2},
+        {"text": "are those on the side of the tree", "role": "main_clause", "level": 1},
+        {"text": "which gets most sun", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["One 指 clues 中的一条，冒号后具体说明该线索。", "those 代替 leaves，which 从句修饰 the side of the tree。"],
+      "expressions": [
+        {"text": "be straightforward", "meaning_zh": "直接明了"},
+        {"text": "get most sun", "meaning_zh": "接受最多阳光"}
+      ]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 30,
+      "sentence": "Not only that, but the red is brighter on the upper side of the leaf.",
+      "translation": "不仅如此，叶片上表面的红色也更加鲜艳。",
+      "structure": [
+        {"text": "Not only that", "role": "parenthesis", "level": 2},
+        {"text": "but the red is brighter", "role": "main_clause", "level": 1},
+        {"text": "on the upper side of the leaf", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": ["Not only that, but ... 用于在前一证据上补充更进一步的事实。", "the red 指叶片呈现的红色，比较级 brighter 暗含与下表面相比。"],
+      "expressions": [
+        {"text": "not only that, but", "meaning_zh": "不仅如此，而且"}
+      ]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 31,
+      "sentence": "It has also been recognized for decades that the best conditions for intense red colours are dry, sunny days and cool nights, conditions that nicely match those that make leaves susceptible to excess light.",
+      "translation": "人们几十年前就认识到，形成浓烈红色的最佳条件是干燥晴朗的白天和凉爽的夜晚；这些条件恰好与使叶片容易受到过量光照伤害的条件一致。",
+      "structure": [
+        {"text": "It has also been recognized for decades", "role": "main_clause", "level": 1},
+        {"text": "that the best conditions for intense red colours are dry, sunny days and cool nights", "role": "noun_clause", "level": 2},
+        {"text": "conditions", "role": "apposition", "level": 2},
+        {"text": "that nicely match those", "role": "relative_clause", "level": 3},
+        {"text": "that make leaves susceptible to excess light", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": ["It 是形式主语，that 从句说明被长期认识到的事实。", "conditions 是前述天气的同位语，those 代替 conditions，两个 that 从句层层修饰。"],
+      "expressions": [
+        {"text": "It has been recognized that", "meaning_zh": "人们已经认识到"},
+        {"text": "be susceptible to", "meaning_zh": "容易受……影响"}
+      ]
+    },
+    {
+      "id": "H-05", "paragraph_label": "H", "sentence_index": 32,
+      "sentence": "And finally, trees such as maples usually get much redder the more north you travel in the northern hemisphere.",
+      "translation": "最后，在北半球越往北走，枫树等树木通常就会变得越红。",
+      "structure": [
+        {"text": "trees such as maples usually get much redder", "role": "main_clause", "level": 1},
+        {"text": "the more north you travel in the northern hemisphere", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["get much redder 中 get 是系动词，much 修饰比较级 redder。", "the more north ... 表示位置越向北，暗含颜色越红的关联比较。"],
+      "expressions": [
+        {"text": "such as", "meaning_zh": "例如"},
+        {"text": "get much redder", "meaning_zh": "变得红得多"}
+      ]
+    },
+    {
+      "id": "H-06", "paragraph_label": "H", "sentence_index": 33,
+      "sentence": "It's colder there, they're more stressed, their chlorophyll is more sensitive and it needs more sunblock.",
+      "translation": "那里气温更低，树木承受的压力更大，叶绿素也更加敏感，因此需要更多“防晒保护”。",
+      "structure": [
+        {"text": "It's colder there", "role": "main_clause", "level": 1},
+        {"text": "they're more stressed", "role": "coordinated_clause", "level": 1},
+        {"text": "their chlorophyll is more sensitive", "role": "coordinated_clause", "level": 1},
+        {"text": "and it needs more sunblock", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["四个并列分句依次形成低温、压力、敏感和需要保护的因果链。", "they 指 trees，it 指 chlorophyll；sunblock 比喻花青素的遮光作用。"],
+      "expressions": [
+        {"text": "be more stressed", "meaning_zh": "承受更大压力"},
+        {"text": "need more sunblock", "meaning_zh": "需要更多防晒保护"}
+      ]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 34,
+      "sentence": "What is still not fully understood, however, is why some trees resort to producing red pigments while others don't bother, and simply reveal their orange or yellow hues.",
+      "translation": "然而，人们仍未完全弄清楚，为什么有些树会选择制造红色色素，而另一些树却不这样做，只显露橙色或黄色。",
+      "structure": [
+        {"text": "What is still not fully understood", "role": "noun_clause", "level": 1},
+        {"text": "however", "role": "parenthesis", "level": 2},
+        {"text": "is why some trees resort to producing red pigments while others don't bother, and simply reveal their orange or yellow hues", "role": "main_clause", "level": 1},
+        {"text": "while others don't bother, and simply reveal their orange or yellow hues", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["What 从句作主语，why 从句作表语。", "others 指 other trees，don't bother 后省略 producing red pigments。"],
+      "expressions": [
+        {"text": "resort to doing", "meaning_zh": "采取……做法"},
+        {"text": "don't bother", "meaning_zh": "不费心去做"},
+        {"text": "reveal one's hues", "meaning_zh": "显露自身色彩"}
+      ]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 35,
+      "sentence": "Do these trees have other means at their disposal to prevent overexposure to light in autumn?",
+      "translation": "这些树是否还有其他可用的办法，来防止秋季受到过量光照呢？",
+      "structure": [
+        {"text": "Do these trees have other means at their disposal", "role": "main_clause", "level": 1},
+        {"text": "to prevent overexposure to light in autumn", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["at their disposal 后置修饰 means，表示可供这些树使用。", "不定式说明 other means 的用途。"],
+      "expressions": [
+        {"text": "at one's disposal", "meaning_zh": "可供某人使用"},
+        {"text": "prevent overexposure to", "meaning_zh": "防止过度暴露于……"}
+      ]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 36,
+      "sentence": "Their story, though not as spectacular to the eye, will surely turn out to be as subtle and as complex.",
+      "translation": "它们的故事虽然看上去没有那么壮观，但最终一定会显现出同样的微妙与复杂。",
+      "structure": [
+        {"text": "Their story", "role": "subject", "level": 1},
+        {"text": "though not as spectacular to the eye", "role": "adverbial_clause", "level": 2},
+        {"text": "will surely turn out to be as subtle and as complex", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["though 后省略 their story is，形成让步状语。", "turn out to be 表示最终被证明或显现为某种状态。"],
+      "expressions": [
+        {"text": "to the eye", "meaning_zh": "在视觉上"},
+        {"text": "turn out to be", "meaning_zh": "最终显现为"},
+        {"text": "as subtle and as complex", "meaning_zh": "同样微妙而复杂"}
+      ]
+    }
+  ]
+}

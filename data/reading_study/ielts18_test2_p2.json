@@ -1,0 +1,511 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts18_test2_reading",
+  "passage_id": "ielts18_test2_p2",
+  "passage_title": "Living with artificial intelligence",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "This has been the decade of AI, with one astonishing feat after another.",
+      "translation": "这十年堪称人工智能的十年，惊人的成就接连出现。",
+      "structure": [{"text": "This has been the decade of AI, with one astonishing feat after another.","role": "main_clause","level": 1}],
+      "difficult_points": ["This 指当前这一个十年，而不是某个具体事件。", "with one astonishing feat after another 是伴随状语，强调成就连续出现。"],
+      "expressions": [{"text": "one ... after another","meaning_zh": "一个接一个"}]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "A chess-playing AI that can defeat not only all human chess players, but also all previous human-programmed chess machines, after learning the game in just four hours?",
+      "translation": "一个下棋AI，在只学习四小时后，不仅能击败所有人类棋手，还能击败此前所有由人类编程的下棋机器？",
+      "structure": [{"text": "A chess-playing AI that can defeat not only all human chess players, but also all previous human-programmed chess machines, after learning the game in just four hours?","role": "elliptical_question","level": 1}],
+      "difficult_points": ["这是省略式问句，实际是在举例说明 AI 的惊人成就。", "not only ... but also ... 连接两个 defeat 的宾语，范围从人类棋手扩展到旧机器。", "after learning ... 是时间状语，突出学习时间极短。"],
+      "expressions": [{"text": "not only ... but also ...","meaning_zh": "不仅……而且……"}, {"text": "human-programmed","meaning_zh": "由人类编程的"}]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "That's yesterday's news, what's next?",
+      "translation": "那已经是昨天的新闻了，接下来还有什么？",
+      "structure": [{"text": "That's yesterday's news, what's next?","role": "coordinated_question","level": 1}],
+      "difficult_points": ["yesterday's news 是习语，表示已经过时或不再新鲜的事情。", "what's next 用反问语气强调 AI 发展速度很快。"],
+      "expressions": [{"text": "yesterday's news","meaning_zh": "过时的新闻"}, {"text": "what's next","meaning_zh": "接下来是什么"}]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "True, these prodigious accomplishments are all in so-called narrow AI, where machines perform highly specialised tasks.",
+      "translation": "诚然，这些惊人成就都属于所谓的狭义人工智能，在这种人工智能中，机器执行高度专门化的任务。",
+      "structure": [{"text": "True, these prodigious accomplishments are all in so-called narrow AI, where machines perform highly specialised tasks.","role": "main_clause","level": 1}],
+      "difficult_points": ["True 是让步性话语标记，先承认一个限制。", "where 引导非限制性定语从句，说明 narrow AI 的特点。"],
+      "expressions": [{"text": "so-called","meaning_zh": "所谓的"}, {"text": "highly specialised tasks","meaning_zh": "高度专门化的任务"}]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "But many experts believe this restriction is very temporary.",
+      "translation": "但许多专家认为，这种限制只是非常暂时的。",
+      "structure": [{"text": "But many experts believe this restriction is very temporary.","role": "main_clause","level": 1}],
+      "difficult_points": ["But 与上一句 narrow AI 的限制形成转折。", "this restriction 指 AI 目前只擅长狭窄任务这一限制。"],
+      "expressions": [{"text": "this restriction","meaning_zh": "这种限制"}, {"text": "very temporary","meaning_zh": "非常暂时的"}]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "By mid-century, we may have artificial general intelligence (AGI) – machines that can achieve human-level performance on the full range of tasks that we ourselves can tackle.",
+      "translation": "到本世纪中叶，我们可能会拥有通用人工智能（AGI）——也就是能在我们自己可以处理的全部任务范围内达到人类水平表现的机器。",
+      "structure": [{"text": "By mid-century, we may have artificial general intelligence (AGI) – machines that can achieve human-level performance on the full range of tasks that we ourselves can tackle.","role": "main_clause","level": 1}],
+      "difficult_points": ["By mid-century 是时间状语，表示到本世纪中叶之前或之时。", "破折号后 machines ... 是对 AGI 的解释。", "两个 that 分别修饰 machines 和 tasks。"],
+      "expressions": [{"text": "artificial general intelligence","meaning_zh": "通用人工智能"}, {"text": "human-level performance","meaning_zh": "人类水平的表现"}]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "If so, there's little reason to think it will stop there.",
+      "translation": "如果真是这样，就几乎没有理由认为它会止步于此。",
+      "structure": [{"text": "If so, there's little reason to think it will stop there.","role": "conditional_clause","level": 1}],
+      "difficult_points": ["If so 承接上一段关于 AGI 可能出现的假设。", "it 指机器智能或 AI 的发展。"],
+      "expressions": [{"text": "little reason to think","meaning_zh": "几乎没有理由认为"}, {"text": "stop there","meaning_zh": "止步于此"}]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Machines will be free of many of the physical constraints on human intelligence.",
+      "translation": "机器将不受许多人类智能所受的物理限制。",
+      "structure": [{"text": "Machines will be free of many of the physical constraints on human intelligence.","role": "main_clause","level": 1}],
+      "difficult_points": ["be free of 表示“不受……限制”。", "constraints on human intelligence 指限制人类智能发挥的物理条件。"],
+      "expressions": [{"text": "be free of","meaning_zh": "不受……影响"}, {"text": "physical constraints","meaning_zh": "物理限制"}]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Our brains run at slow biochemical processing speeds on the power of a light bulb, and their size is restricted by the dimensions of the human birth canal.",
+      "translation": "我们的大脑以缓慢的生化处理速度运行，能耗不过相当于一个灯泡，而且其大小还受人类产道尺寸限制。",
+      "structure": [{"text": "Our brains run at slow biochemical processing speeds on the power of a light bulb, and their size is restricted by the dimensions of the human birth canal.","role": "compound_clause","level": 1}],
+      "difficult_points": ["and 连接两个并列分句，分别说明运行速度/能耗和尺寸限制。", "is restricted by 是被动语态，说明大脑大小受产道尺寸约束。"],
+      "expressions": [{"text": "processing speeds","meaning_zh": "处理速度"}, {"text": "be restricted by","meaning_zh": "受……限制"}]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "It is remarkable what they accomplish, given these handicaps.",
+      "translation": "考虑到这些不利条件，它们所能完成的事情相当了不起。",
+      "structure": [{"text": "It is remarkable what they accomplish, given these handicaps.","role": "main_clause","level": 1}],
+      "difficult_points": ["It is remarkable 中 it 是形式主语，what they accomplish 是真正评价的内容。", "given these handicaps 表示“考虑到这些障碍”。"],
+      "expressions": [{"text": "It is remarkable","meaning_zh": "这很了不起"}, {"text": "given","meaning_zh": "考虑到"}]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "But they may be as far from the physical limits of thought as our eyes are from the incredibly powerful Webb Space Telescope.",
+      "translation": "但它们距离思维的物理极限，可能就像我们的眼睛距离威力惊人的韦布空间望远镜那样遥远。",
+      "structure": [{"text": "But they may be as far from the physical limits of thought as our eyes are from the incredibly powerful Webb Space Telescope.","role": "comparative_clause","level": 1}],
+      "difficult_points": ["they 指人类大脑，承接上一句。", "as far from ... as ... 是比较结构，用眼睛和望远镜的差距类比大脑和思维极限的差距。"],
+      "expressions": [{"text": "as far from ... as ...","meaning_zh": "距离……就像……距离……一样远"}, {"text": "physical limits of thought","meaning_zh": "思维的物理极限"}]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "Once machines are better than us at designing even smarter machines, progress towards these limits could accelerate.",
+      "translation": "一旦机器比我们更擅长设计更智能的机器，朝这些极限迈进的速度就可能加快。",
+      "structure": [{"text": "Once machines are better than us at designing even smarter machines, progress towards these limits could accelerate.","role": "time_clause","level": 1}],
+      "difficult_points": ["Once 引导时间/条件从句，表示“一旦……”。", "these limits 指上一段中的 physical limits of thought。"],
+      "expressions": [{"text": "better than us at","meaning_zh": "比我们更擅长"}, {"text": "could accelerate","meaning_zh": "可能加速"}]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "What would this mean for us?",
+      "translation": "这对我们意味着什么？",
+      "structure": [{"text": "What would this mean for us?","role": "interrogative_clause","level": 1}],
+      "difficult_points": ["this 指机器智能加速接近思维极限这一前景。", "would 表示假设语气，讨论可能后果。"],
+      "expressions": [{"text": "mean for us","meaning_zh": "对我们意味着"}]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "Could we ensure a safe and worthwhile coexistence with such machines?",
+      "translation": "我们能否确保与这样的机器安全且有价值地共存？",
+      "structure": [{"text": "Could we ensure a safe and worthwhile coexistence with such machines?","role": "interrogative_clause","level": 1}],
+      "difficult_points": ["Could 引出可能性问题，而非简单能力陈述。", "such machines 指超越人类并能设计更智能机器的 AI。"],
+      "expressions": [{"text": "safe and worthwhile coexistence","meaning_zh": "安全且有价值的共存"}]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "On the plus side, AI is already useful and profitable for many things, and super AI might be expected to be super useful and super profitable.",
+      "translation": "从积极方面看，AI已经在许多事情上有用且有利可图，而超级AI也许可以被期待变得超级有用、超级有利可图。",
+      "structure": [{"text": "On the plus side, AI is already useful and profitable for many things, and super AI might be expected to be super useful and super profitable.","role": "compound_clause","level": 1}],
+      "difficult_points": ["On the plus side 表示先讨论积极面。", "might be expected to be 是被动结构，表示人们可能期待超级AI具备这些优点。"],
+      "expressions": [{"text": "On the plus side","meaning_zh": "从积极方面看"}, {"text": "be expected to","meaning_zh": "被期待"}]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "But the more powerful AI becomes, the more important it will be to specify its goals with great care.",
+      "translation": "但AI越强大，谨慎明确规定它的目标就越重要。",
+      "structure": [{"text": "But the more powerful AI becomes, the more important it will be to specify its goals with great care.","role": "comparative_correlative","level": 1}],
+      "difficult_points": ["the more ..., the more ... 是“越……越……”结构。", "it 是形式主语，真正主语是 to specify its goals with great care。"],
+      "expressions": [{"text": "the more ..., the more ...","meaning_zh": "越……越……"}, {"text": "with great care","meaning_zh": "非常谨慎地"}]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Folklore is full of tales of people who ask for the wrong thing, with disastrous consequences – King Midas, for example, might have wished that everything he touched turned to gold, but didn't really intend this to apply to his breakfast.",
+      "translation": "民间传说中充满了人们许错愿并带来灾难性后果的故事——例如，迈达斯国王也许希望自己触碰的一切都变成金子，但他其实并不想让这件事适用于自己的早餐。",
+      "structure": [{"text": "Folklore is full of tales of people who ask for the wrong thing, with disastrous consequences – King Midas, for example, might have wished that everything he touched turned to gold, but didn't really intend this to apply to his breakfast.","role": "main_clause","level": 1}],
+      "difficult_points": ["who ask for the wrong thing 是定语从句，修饰 people。", "破折号后 King Midas 的例子说明错误设定目标会产生荒谬后果。", "this 指 everything he touched turned to gold 这一愿望规则。"],
+      "expressions": [{"text": "be full of","meaning_zh": "充满"}, {"text": "disastrous consequences","meaning_zh": "灾难性后果"}, {"text": "apply to","meaning_zh": "适用于"}]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "So we need to create powerful AI machines that are 'human-friendly' – that have goals reliably aligned with our own values.",
+      "translation": "因此，我们需要创造强大的、“对人类友好”的AI机器——也就是其目标能可靠地与我们自身价值观保持一致的机器。",
+      "structure": [{"text": "So we need to create powerful AI machines that are 'human-friendly' – that have goals reliably aligned with our own values.","role": "main_clause","level": 1}],
+      "difficult_points": ["So 表示这是前文“目标设定风险”的结论。", "两个 that 都引导定语从句，分别说明 AI machines 的友好性和目标一致性。"],
+      "expressions": [{"text": "human-friendly","meaning_zh": "对人类友好的"}, {"text": "aligned with","meaning_zh": "与……一致"}]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "One thing that makes this task difficult is that we are far from reliably human-friendly ourselves.",
+      "translation": "让这项任务变难的一个原因是，我们人类自身远远谈不上可靠地对人类友好。",
+      "structure": [{"text": "One thing that makes this task difficult is that we are far from reliably human-friendly ourselves.","role": "main_clause","level": 1}],
+      "difficult_points": ["that makes this task difficult 是定语从句，修饰 One thing。", "第二个 that 引导表语从句，说明困难的具体原因。"],
+      "expressions": [{"text": "far from","meaning_zh": "远非"}, {"text": "ourselves","meaning_zh": "我们自己"}]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "We do many terrible things to each other and to many other creatures with whom we share the planet.",
+      "translation": "我们会对彼此以及与我们共享这个星球的许多其他生物做出许多可怕的事情。",
+      "structure": [{"text": "We do many terrible things to each other and to many other creatures with whom we share the planet.","role": "main_clause","level": 1}],
+      "difficult_points": ["to each other 和 to many other creatures 并列，说明伤害对象。", "with whom we share the planet 是定语从句，修饰 creatures。"],
+      "expressions": [{"text": "each other","meaning_zh": "彼此"}, {"text": "share the planet","meaning_zh": "共享这个星球"}]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "If superintelligent machines don't do a lot better than us, we'll be in deep trouble.",
+      "translation": "如果超级智能机器不能比我们做得好得多，我们就会陷入大麻烦。",
+      "structure": [{"text": "If superintelligent machines don't do a lot better than us, we'll be in deep trouble.","role": "conditional_clause","level": 1}],
+      "difficult_points": ["If 引导条件从句，说明危险出现的前提。", "do a lot better than us 指在道德表现上远胜于人类。"],
+      "expressions": [{"text": "do a lot better than","meaning_zh": "比……做得好得多"}, {"text": "be in deep trouble","meaning_zh": "陷入大麻烦"}]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "We'll have powerful new intelligence amplifying the dark sides of our own fallible natures.",
+      "translation": "我们将拥有强大的新智能，而它会放大我们自身易犯错天性中的阴暗面。",
+      "structure": [{"text": "We'll have powerful new intelligence amplifying the dark sides of our own fallible natures.","role": "main_clause","level": 1}],
+      "difficult_points": ["amplifying ... 是现在分词后置结构，说明 new intelligence 的作用。", "fallible natures 指人类容易犯错、不可靠的本性。"],
+      "expressions": [{"text": "amplify the dark sides","meaning_zh": "放大阴暗面"}, {"text": "fallible natures","meaning_zh": "易犯错的天性"}]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "For safety's sake, then, we want the machines to be ethically as well as cognitively superhuman.",
+      "translation": "因此，为了安全起见，我们希望机器不仅在认知上超越人类，也在伦理上超越人类。",
+      "structure": [{"text": "For safety's sake, then, we want the machines to be ethically as well as cognitively superhuman.","role": "main_clause","level": 1}],
+      "difficult_points": ["For safety's sake 表示目的或理由，即出于安全考虑。", "ethically as well as cognitively 并列，强调道德和认知两个维度。"],
+      "expressions": [{"text": "For safety's sake","meaning_zh": "为了安全起见"}, {"text": "as well as","meaning_zh": "也；以及"}]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "We want them to aim for the moral high ground, not for the troughs in which many of us spend some of our time.",
+      "translation": "我们希望它们瞄准道德高地，而不是瞄准我们许多人有时会陷入的低谷。",
+      "structure": [{"text": "We want them to aim for the moral high ground, not for the troughs in which many of us spend some of our time.","role": "main_clause","level": 1}],
+      "difficult_points": ["them 指 machines。", "not for the troughs 与 aim for the moral high ground 对比，表示不要走向道德低处。", "in which 引导定语从句，修饰 troughs。"],
+      "expressions": [{"text": "aim for","meaning_zh": "以……为目标"}, {"text": "moral high ground","meaning_zh": "道德高地"}]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "Luckily, they'll be smart enough for the job.",
+      "translation": "幸运的是，它们会足够聪明，能够胜任这项工作。",
+      "structure": [{"text": "Luckily, they'll be smart enough for the job.","role": "main_clause","level": 1}],
+      "difficult_points": ["they 指未来的机器。", "smart enough for the job 表示足够聪明以承担寻找道德方向的任务。"],
+      "expressions": [{"text": "smart enough for","meaning_zh": "足够聪明以胜任"}]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "If there are routes to the moral high ground, they'll be better than us at finding them and steering us in the right direction.",
+      "translation": "如果存在通往道德高地的路径，它们会比我们更善于找到这些路径，并引导我们走向正确方向。",
+      "structure": [{"text": "If there are routes to the moral high ground, they'll be better than us at finding them and steering us in the right direction.","role": "conditional_clause","level": 1}],
+      "difficult_points": ["If there are routes ... 是条件从句，假设存在通向更高道德状态的方法。", "them 指 routes；us 指人类。"],
+      "expressions": [{"text": "routes to","meaning_zh": "通往……的路径"}, {"text": "steer ... in the right direction","meaning_zh": "引导……走向正确方向"}]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "However, there are two big problems with this utopian vision.",
+      "translation": "然而，这种乌托邦式愿景存在两个大问题。",
+      "structure": [{"text": "However, there are two big problems with this utopian vision.","role": "main_clause","level": 1}],
+      "difficult_points": ["However 标志从积极设想转向问题。", "this utopian vision 指前文由超智能机器引导人类走向道德高地的设想。"],
+      "expressions": [{"text": "utopian vision","meaning_zh": "乌托邦式愿景"}]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "One is how we get the machines started on the journey; the other is what it would mean to reach this destination.",
+      "translation": "一个问题是我们如何让机器开始这段旅程；另一个问题是到达这个目的地究竟意味着什么。",
+      "structure": [{"text": "One is how we get the machines started on the journey; the other is what it would mean to reach this destination.","role": "compound_clause","level": 1}],
+      "difficult_points": ["分号连接两个并列说明，分别解释 two big problems。", "how 和 what 分别引导表语从句。"],
+      "expressions": [{"text": "get ... started","meaning_zh": "让……开始"}, {"text": "reach this destination","meaning_zh": "到达这个目的地"}]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "The 'getting started' problem is that we need to tell the machines what they're looking for with sufficient clarity that we can be confident they will find it – whatever 'it' actually turns out to be.",
+      "translation": "所谓“如何开始”的问题是，我们需要足够清楚地告诉机器它们要寻找什么，以便我们能确信它们会找到它——无论这个“它”最终到底是什么。",
+      "structure": [{"text": "The 'getting started' problem is that we need to tell the machines what they're looking for with sufficient clarity that we can be confident they will find it – whatever 'it' actually turns out to be.","role": "main_clause","level": 1}],
+      "difficult_points": ["that 引导表语从句，解释 getting started problem。", "what they're looking for 是宾语从句，作 tell 的内容。", "with sufficient clarity that ... 表示清楚到足以让我们有信心。", "whatever 'it' actually turns out to be 是让步补充，承认目标本身可能尚不明确。"],
+      "expressions": [{"text": "with sufficient clarity","meaning_zh": "以足够清晰的方式"}, {"text": "turn out to be","meaning_zh": "结果是"}]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "This won't be easy, given that we are tribal creatures and conflicted about the ideals ourselves.",
+      "translation": "这并不容易，因为我们是有部落倾向的生物，而且我们自己对这些理想也充满矛盾。",
+      "structure": [{"text": "This won't be easy, given that we are tribal creatures and conflicted about the ideals ourselves.","role": "main_clause","level": 1}],
+      "difficult_points": ["This 指清晰告诉机器道德目标这件事。", "given that 引导原因背景，说明为什么这件事困难。"],
+      "expressions": [{"text": "given that","meaning_zh": "鉴于；考虑到"}, {"text": "conflicted about","meaning_zh": "对……感到矛盾"}]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "We often ignore the suffering of strangers and even contribute to it, at least indirectly.",
+      "translation": "我们常常忽视陌生人的痛苦，甚至至少间接地助长这种痛苦。",
+      "structure": [{"text": "We often ignore the suffering of strangers and even contribute to it, at least indirectly.","role": "compound_verb_phrase","level": 1}],
+      "difficult_points": ["ignore 和 contribute to 是并列谓语，说明人类道德不可靠。", "it 指 the suffering of strangers。"],
+      "expressions": [{"text": "contribute to","meaning_zh": "促成；助长"}, {"text": "at least indirectly","meaning_zh": "至少间接地"}]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "How then do we point machines in the direction of something better?",
+      "translation": "那么，我们又该如何把机器指向更好的方向呢？",
+      "structure": [{"text": "How then do we point machines in the direction of something better?","role": "interrogative_clause","level": 1}],
+      "difficult_points": ["then 表示基于前面人类自身矛盾的结论性追问。", "point machines in the direction of ... 是比喻表达，表示引导机器追求某种目标。"],
+      "expressions": [{"text": "point ... in the direction of","meaning_zh": "把……指向……方向"}]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "As for the 'destination' problem, we might, by putting ourselves in the hands of these moral guides and gatekeepers, be sacrificing our own autonomy – an important part of what makes us human.",
+      "translation": "至于“目的地”问题，我们把自己交到这些道德向导和守门人手中时，可能会牺牲自己的自主性——而自主性是使我们成为人的重要部分。",
+      "structure": [{"text": "As for the 'destination' problem, we might, by putting ourselves in the hands of these moral guides and gatekeepers, be sacrificing our own autonomy – an important part of what makes us human.","role": "main_clause","level": 1}],
+      "difficult_points": ["As for 转入讨论第二个问题。", "by putting ourselves ... 是方式状语，说明牺牲自主性的方式。", "破折号后 an important part ... 解释 autonomy 的重要性。"],
+      "expressions": [{"text": "As for","meaning_zh": "至于"}, {"text": "put ourselves in the hands of","meaning_zh": "把自己交到……手中"}, {"text": "autonomy","meaning_zh": "自主性"}]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "Machines who are better than us at sticking to the moral high ground may be expected to discourage some of the lapses we presently take for granted.",
+      "translation": "比我们更善于坚守道德高地的机器，可能会被期待去阻止一些我们目前习以为常的失误或越界行为。",
+      "structure": [{"text": "Machines who are better than us at sticking to the moral high ground may be expected to discourage some of the lapses we presently take for granted.","role": "main_clause","level": 1}],
+      "difficult_points": ["who 引导定语从句，修饰 Machines。", "may be expected to 是被动表达，表示人们可能期待机器发挥约束作用。", "we presently take for granted 是定语从句，修饰 lapses。"],
+      "expressions": [{"text": "stick to","meaning_zh": "坚守"}, {"text": "take for granted","meaning_zh": "认为理所当然"}]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "We might lose our freedom to discriminate in favour of our own communities, for example.",
+      "translation": "例如，我们可能会失去偏袒自己群体的自由。",
+      "structure": [{"text": "We might lose our freedom to discriminate in favour of our own communities, for example.","role": "main_clause","level": 1}],
+      "difficult_points": ["might 表示可能后果，而非确定事实。", "to discriminate in favour of ... 修饰 freedom，说明是哪一种自由。"],
+      "expressions": [{"text": "discriminate in favour of","meaning_zh": "偏袒"}, {"text": "for example","meaning_zh": "例如"}]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 36,
+      "sentence": "Loss of freedom to behave badly isn't always a bad thing, of course: denying ourselves the freedom to put children to work in factories or to smoke in restaurants are signs of progress.",
+      "translation": "当然，失去做坏事的自由并不总是坏事：不允许自己让儿童进工厂劳动，或不允许在餐馆吸烟，都是进步的标志。",
+      "structure": [{"text": "Loss of freedom to behave badly isn't always a bad thing, of course: denying ourselves the freedom to put children to work in factories or to smoke in restaurants are signs of progress.","role": "main_clause","level": 1}],
+      "difficult_points": ["of course 缓和语气，承认限制坏行为自由也可能是进步。", "冒号后举例解释 loss of freedom 为什么不一定是坏事。", "to put ... or to smoke ... 是并列不定式，说明被放弃的自由。"],
+      "expressions": [{"text": "behave badly","meaning_zh": "行为不端"}, {"text": "signs of progress","meaning_zh": "进步的标志"}]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 37,
+      "sentence": "But are we ready for ethical silicon police limiting our options?",
+      "translation": "但是，我们准备好接受限制我们选择的伦理硅警察了吗？",
+      "structure": [{"text": "But are we ready for ethical silicon police limiting our options?","role": "interrogative_clause","level": 1}],
+      "difficult_points": ["But 引出对技术道德监管的担忧。", "ethical silicon police 是比喻，指由 AI 承担的伦理约束力量。", "limiting our options 是现在分词短语，修饰 police。"],
+      "expressions": [{"text": "be ready for","meaning_zh": "准备好接受"}, {"text": "limiting our options","meaning_zh": "限制我们的选择"}]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 38,
+      "sentence": "They might be so good at doing it that we won't notice them; but few of us are likely to welcome such a future.",
+      "translation": "它们可能非常擅长这样做，以至于我们都不会注意到它们；但我们中很少有人可能会欢迎这样的未来。",
+      "structure": [{"text": "They might be so good at doing it that we won't notice them; but few of us are likely to welcome such a future.","role": "compound_clause","level": 1}],
+      "difficult_points": ["so ... that ... 是结果结构，表示擅长到让人察觉不到。", "分号后 but 引出转折：即便不易察觉，人们也未必欢迎。", "it 指限制人类选项的伦理监管。"],
+      "expressions": [{"text": "so ... that ...","meaning_zh": "如此……以至于……"}, {"text": "be likely to","meaning_zh": "可能"}]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 39,
+      "sentence": "These issues might seem far-fetched, but they are to some extent already here.",
+      "translation": "这些问题可能看起来遥远离奇，但在某种程度上它们已经出现了。",
+      "structure": [{"text": "These issues might seem far-fetched, but they are to some extent already here.","role": "compound_clause","level": 1}],
+      "difficult_points": ["might seem 表示让步：承认这些问题看似遥远。", "but 引出作者观点，即问题已经部分成为现实。"],
+      "expressions": [{"text": "far-fetched","meaning_zh": "牵强的；离奇的"}, {"text": "to some extent","meaning_zh": "在某种程度上"}]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 40,
+      "sentence": "AI already has some input into how resources are used in our National Health Service (NHS) here in the UK, for example.",
+      "translation": "例如，在英国，AI已经在某种程度上参与了国民医疗服务体系（NHS）资源如何使用的决策。",
+      "structure": [{"text": "AI already has some input into how resources are used in our National Health Service (NHS) here in the UK, for example.","role": "main_clause","level": 1}],
+      "difficult_points": ["has some input into 表示对某事有一定参与或影响。", "how resources are used 是宾语从句，作介词 into 的宾语。", "for example 表明 NHS 是问题已出现的例子。"],
+      "expressions": [{"text": "have some input into","meaning_zh": "对……有一定影响"}, {"text": "resources are used","meaning_zh": "资源被使用"}]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 41,
+      "sentence": "If it was given a greater role, it might do so much more efficiently than humans can manage and act in the interests of taxpayers and those who use the health system.",
+      "translation": "如果赋予它更大的角色，它也许能比人类更高效地做到这一点，并按照纳税人和医疗系统使用者的利益行事。",
+      "structure": [{"text": "If it was given a greater role, it might do so much more efficiently than humans can manage and act in the interests of taxpayers and those who use the health system.","role": "conditional_clause","level": 1}],
+      "difficult_points": ["If it was given ... 是被动条件从句，it 指 AI。", "do so 指代前一句中参与资源使用决策。", "those who use the health system 中 who 引导定语从句。"],
+      "expressions": [{"text": "be given a greater role","meaning_zh": "被赋予更大角色"}, {"text": "act in the interests of","meaning_zh": "按照……的利益行事"}]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 42,
+      "sentence": "However, we'd be depriving some humans (e.g., senior doctors) of the control they presently enjoy.",
+      "translation": "然而，这样我们会剥夺一些人（例如资深医生）目前享有的控制权。",
+      "structure": [{"text": "However, we'd be depriving some humans (e.g., senior doctors) of the control they presently enjoy.","role": "main_clause","level": 1}],
+      "difficult_points": ["However 表示从效率好处转向权力损失。", "deprive ... of ... 表示剥夺某人的某物。", "they presently enjoy 是定语从句，修饰 the control。"],
+      "expressions": [{"text": "deprive ... of ...","meaning_zh": "剥夺……的……"}, {"text": "presently enjoy","meaning_zh": "目前享有"}]
+    },
+    {
+      "id": "I-05",
+      "paragraph_label": "I",
+      "sentence_index": 43,
+      "sentence": "Since we'd want to ensure that people are treated equally and that policies are fair, the goals of AI would need to be specified correctly.",
+      "translation": "由于我们会希望确保人们受到平等对待，并确保政策公平，AI的目标就需要被正确设定。",
+      "structure": [{"text": "Since we'd want to ensure that people are treated equally and that policies are fair, the goals of AI would need to be specified correctly.","role": "reason_clause","level": 1}],
+      "difficult_points": ["Since 引导原因状语从句，说明为什么目标必须正确设定。", "两个 that 从句并列，都是 ensure 的宾语。", "would need to be specified 是情态表达加被动语态。"],
+      "expressions": [{"text": "be treated equally","meaning_zh": "受到平等对待"}, {"text": "specified correctly","meaning_zh": "被正确设定"}]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 44,
+      "sentence": "We have a new powerful technology to deal with – itself, literally, a new way of thinking.",
+      "translation": "我们有一种需要应对的强大新技术——它本身从字面上说就是一种新的思维方式。",
+      "structure": [{"text": "We have a new powerful technology to deal with – itself, literally, a new way of thinking.","role": "main_clause","level": 1}],
+      "difficult_points": ["to deal with 是不定式后置定语，修饰 technology。", "破折号后 itself ... a new way of thinking 是对这项技术的补充说明。"],
+      "expressions": [{"text": "deal with","meaning_zh": "应对；处理"}, {"text": "a new way of thinking","meaning_zh": "一种新的思维方式"}]
+    },
+    {
+      "id": "J-02",
+      "paragraph_label": "J",
+      "sentence_index": 45,
+      "sentence": "For our own safety, we need to point these new thinkers in the right direction and get them to act well for us.",
+      "translation": "为了我们自身的安全，我们需要把这些新的思考者引向正确方向，并让它们为我们良好行事。",
+      "structure": [{"text": "For our own safety, we need to point these new thinkers in the right direction and get them to act well for us.","role": "main_clause","level": 1}],
+      "difficult_points": ["For our own safety 表示目的，说明为什么要引导 AI。", "point ... and get ... 是并列谓语结构。", "these new thinkers 指具有新思维方式的 AI。"],
+      "expressions": [{"text": "point ... in the right direction","meaning_zh": "把……引向正确方向"}, {"text": "act well for us","meaning_zh": "为我们良好行事"}]
+    },
+    {
+      "id": "J-03",
+      "paragraph_label": "J",
+      "sentence_index": 46,
+      "sentence": "It is not yet clear whether this is possible, but if it is, it will require a cooperative spirit and a willingness to set aside self-interest.",
+      "translation": "目前尚不清楚这是否可能，但如果可能，它将需要一种合作精神，以及搁置自身利益的意愿。",
+      "structure": [{"text": "It is not yet clear whether this is possible, but if it is, it will require a cooperative spirit and a willingness to set aside self-interest.","role": "compound_clause","level": 1}],
+      "difficult_points": ["It is not yet clear 中 it 是形式主语，whether 从句是真正内容。", "if it is 省略 possible，意思是“如果这是可能的”。", "a cooperative spirit and a willingness ... 是并列宾语。"],
+      "expressions": [{"text": "not yet clear","meaning_zh": "尚不清楚"}, {"text": "set aside self-interest","meaning_zh": "搁置自身利益"}]
+    },
+    {
+      "id": "K-01",
+      "paragraph_label": "K",
+      "sentence_index": 47,
+      "sentence": "Both general intelligence and moral reasoning are often thought to be uniquely human capacities.",
+      "translation": "通用智能和道德推理通常都被认为是人类独有的能力。",
+      "structure": [{"text": "Both general intelligence and moral reasoning are often thought to be uniquely human capacities.","role": "main_clause","level": 1}],
+      "difficult_points": ["Both ... and ... 连接两个并列主语。", "are often thought to be 是被动结构，表示普遍看法。"],
+      "expressions": [{"text": "moral reasoning","meaning_zh": "道德推理"}, {"text": "uniquely human capacities","meaning_zh": "人类独有的能力"}]
+    },
+    {
+      "id": "K-02",
+      "paragraph_label": "K",
+      "sentence_index": 48,
+      "sentence": "But safety seems to require that we think of them as a package: if we are to give general intelligence to machines, we'll need to give them moral authority, too.",
+      "translation": "但安全似乎要求我们把二者视为一个整体：如果我们要把通用智能赋予机器，也需要把道德权威赋予它们。",
+      "structure": [{"text": "But safety seems to require that we think of them as a package: if we are to give general intelligence to machines, we'll need to give them moral authority, too.","role": "main_clause","level": 1}],
+      "difficult_points": ["that 引导 require 的宾语从句，说明安全要求的内容。", "them 指 general intelligence and moral reasoning。", "冒号后 if 从句解释为什么二者要被视为一个整体。"],
+      "expressions": [{"text": "think of ... as ...","meaning_zh": "把……视为……"}, {"text": "moral authority","meaning_zh": "道德权威"}]
+    },
+    {
+      "id": "K-03",
+      "paragraph_label": "K",
+      "sentence_index": 49,
+      "sentence": "And where exactly would that leave human beings?",
+      "translation": "那么，这究竟会把人类置于何种境地？",
+      "structure": [{"text": "And where exactly would that leave human beings?","role": "interrogative_clause","level": 1}],
+      "difficult_points": ["And 承接上一句，将讨论转向人类自身处境。", "that 指把通用智能和道德权威都交给机器这件事。", "leave human beings 表示使人类处于某种状态。"],
+      "expressions": [{"text": "where exactly would that leave","meaning_zh": "那究竟会让……处于何种境地"}]
+    },
+    {
+      "id": "K-04",
+      "paragraph_label": "K",
+      "sentence_index": 50,
+      "sentence": "All the more reason to think about the destination now and to be careful about what we wish for.",
+      "translation": "这就更有理由现在思考目的地，并谨慎对待我们所希望的东西。",
+      "structure": [{"text": "All the more reason to think about the destination now and to be careful about what we wish for.","role": "elliptical_clause","level": 1}],
+      "difficult_points": ["这是省略句，完整含义是 there is all the more reason ...。", "to think ... and to be careful ... 是并列不定式，说明“理由”指向的两项行动。", "what we wish for 是宾语从句，作介词 about 的宾语。"],
+      "expressions": [{"text": "All the more reason to","meaning_zh": "更有理由去"}, {"text": "be careful about what we wish for","meaning_zh": "谨慎对待自己的愿望"}]
+    }
+  ]
+}

@@ -1,0 +1,1817 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_84_test_73",
+  "passage_id": "reading_jijing_84_test_73_p2",
+  "passage_title": "Activities for Children",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Twenty-five years ago, children in London walked to school and played in parks and playing fields after school and at the weekend.",
+      "translation": "二十五年前，伦敦的孩子们步行上学，放学后和周末则在公园和运动场里玩耍。",
+      "structure": [
+        {
+          "text": "Twenty-five years ago",
+          "role": "time_adverbial",
+          "level": 1
+        },
+        {
+          "text": "children in London",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "walked to school",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and played in parks and playing fields after school and at the weekend",
+          "role": "coordinated_predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "walked 和 played 是并列谓语，共同以 children in London 为主语。",
+        "after school and at the weekend 是两个并列的时间状语，说明 played 发生的时段。"
+      ],
+      "expressions": [
+        {
+          "text": "playing fields",
+          "meaning_zh": "运动场；球场"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Today they are usually driven to school by parents anxious about safety and spend hours glued to television screens or computer games.",
+      "translation": "如今，孩子们通常由担心安全问题的家长开车接送上学，还要花上好几个小时盯着电视屏幕或电脑游戏。",
+      "structure": [
+        {
+          "text": "Today",
+          "role": "time_adverbial",
+          "level": 1
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are usually driven to school",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "by parents anxious about safety",
+          "role": "agent_phrase",
+          "level": 2
+        },
+        {
+          "text": "and spend hours glued to television screens or computer games",
+          "role": "coordinated_predicate",
+          "level": 1
+        },
+        {
+          "text": "glued to television screens or computer games",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "anxious about safety 是形容词短语，后置修饰 parents，说明家长担心安全问题。",
+        "are driven 与 spend 是并列谓语，共同以 they 为主语。",
+        "glued to 是过去分词短语，修饰 hours，表示长时间盯着屏幕。"
+      ],
+      "expressions": [
+        {
+          "text": "be anxious about",
+          "meaning_zh": "对……感到担忧"
+        },
+        {
+          "text": "be glued to",
+          "meaning_zh": "目不转睛地盯着"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Meanwhile, community playing fields are being sold off to property developers at an alarming rate.",
+      "translation": "与此同时，社区的运动场正以惊人的速度被卖给房地产开发商。",
+      "structure": [
+        {
+          "text": "Meanwhile",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "community playing fields",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are being sold off to property developers",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "at an alarming rate",
+          "role": "manner_adverbial",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "are being sold off 是现在进行时的被动语态，强调出售正在持续发生。",
+        "at an alarming rate 修饰卖地的速度，表示情况令人担忧。"
+      ],
+      "expressions": [
+        {
+          "text": "sell off",
+          "meaning_zh": "廉价出售；抛售"
+        },
+        {
+          "text": "at an alarming rate",
+          "meaning_zh": "以令人担忧的速度"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "'This change in lifestyle has, sadly, meant greater restrictions on children,' says Neil Armstrong, Professor of Health and Exercise Sciences at the University of Exeter.",
+      "translation": "“这种生活方式的改变可悲地意味着孩子们受到了更多限制，”埃克塞特大学健康与运动科学教授尼尔·阿姆斯特朗说道。",
+      "structure": [
+        {
+          "text": "'This change in lifestyle has, sadly, meant greater restrictions on children,'",
+          "role": "direct_quote",
+          "level": 1
+        },
+        {
+          "text": "This change in lifestyle",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "has, sadly, meant greater restrictions on children",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "says Neil Armstrong",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "Professor of Health and Exercise Sciences at the University of Exeter",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "sadly 插入在 has 和 meant 之间，是说话人的态度状语。",
+        "Professor of Health and Exercise Sciences... 是同位语，补充说明 Neil Armstrong 的身份。",
+        "直接引语与 says 引导的转述结构相结合，说话主体是 Armstrong。"
+      ],
+      "expressions": [
+        {
+          "text": "greater restrictions on",
+          "meaning_zh": "对……更多的限制"
+        }
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "'If children continue to be this inactive, they'll be storing up big problems for the future.'",
+      "translation": "“如果孩子们继续这样缺乏运动，他们将来会给自己埋下大问题。”",
+      "structure": [
+        {
+          "text": "If children continue to be this inactive",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "they'll be storing up big problems for the future",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "If 引导条件状语从句，this inactive 中 this 作程度副词，相当于 so。",
+        "will be storing up 是将来进行时，强调问题会逐渐累积。"
+      ],
+      "expressions": [
+        {
+          "text": "store up problems",
+          "meaning_zh": "积累隐患；埋下问题"
+        }
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "In 1985, Professor Armstrong headed a five-year research project into children's fitness.",
+      "translation": "1985年，阿姆斯特朗教授主持了一项为期五年、关于儿童体质的研究项目。",
+      "structure": [
+        {
+          "text": "In 1985",
+          "role": "time_adverbial",
+          "level": 1
+        },
+        {
+          "text": "Professor Armstrong",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "headed a five-year research project into children's fitness",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "a five-year research project 中复合形容词 five-year 修饰 project，表示为期五年。",
+        "into children's fitness 说明研究项目的具体方向。"
+      ],
+      "expressions": [
+        {
+          "text": "head a research project",
+          "meaning_zh": "主持一项研究项目"
+        }
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "The results, published in 1990, were alarming.",
+      "translation": "1990年发布的这项研究结果令人担忧。",
+      "structure": [
+        {
+          "text": "The results",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "published in 1990",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "were alarming",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "published in 1990 是过去分词短语，插入在主语和谓语之间，补充说明结果的发表时间。",
+        "results 指代上一句提到的五年研究项目的调查结果。"
+      ],
+      "expressions": [
+        {
+          "text": "be alarming",
+          "meaning_zh": "令人担忧"
+        }
+      ]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "The survey, which monitored 700 11-16-year-olds, found that 48 per cent of girls and 41 per cent of boys already exceeded safe cholesterol levels set for children by the American Heart Foundation.",
+      "translation": "这项监测了700名11至16岁青少年的调查发现，48%的女孩和41%的男孩的胆固醇水平已经超过了美国心脏基金会为儿童设定的安全标准。",
+      "structure": [
+        {
+          "text": "The survey",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "which monitored 700 11-16-year-olds",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "found",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "that 48 per cent of girls and 41 per cent of boys already exceeded safe cholesterol levels set for children by the American Heart Foundation",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "set for children by the American Heart Foundation",
+          "role": "reduced_relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "which monitored... 是非限制性定语从句，插入说明调查的对象。",
+        "that 引导宾语从句，作 found 的宾语。",
+        "set for children by... 是过去分词短语，修饰 cholesterol levels，表示这些标准由美国心脏基金会为儿童设定。"
+      ],
+      "expressions": [
+        {
+          "text": "exceed safe levels",
+          "meaning_zh": "超过安全水平"
+        }
+      ]
+    },
+    {
+      "id": "B-09",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Armstrong adds, \"heart is a muscle and need exercise, or it loses its strength.\"",
+      "translation": "阿姆斯特朗补充说：“心脏是一块肌肉，需要锻炼，否则就会失去力量。”",
+      "structure": [
+        {
+          "text": "Armstrong adds",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "\"heart is a muscle and need exercise, or it loses its strength.\"",
+          "role": "direct_quote",
+          "level": 1
+        },
+        {
+          "text": "heart is a muscle and need exercise",
+          "role": "coordinated_clause",
+          "level": 2
+        },
+        {
+          "text": "or it loses its strength",
+          "role": "coordinated_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "need 与主语 heart 不一致，原文如此，应为 needs，属于原文本身的语法错误。",
+        "or 引导选择关系，表示不锻炼就会导致心脏失去力量。"
+      ],
+      "expressions": [
+        {
+          "text": "lose its strength",
+          "meaning_zh": "失去力量"
+        }
+      ]
+    },
+    {
+      "id": "B-10",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "It also found that 13 per cent of boys and 10 per cent of girls were overweight.",
+      "translation": "调查还发现，13%的男孩和10%的女孩超重。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also found",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "that 13 per cent of boys and 10 per cent of girls were overweight",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指代前文的 The survey。",
+        "that 从句作 found 的宾语，说明调查的另一项发现。"
+      ],
+      "expressions": [
+        {
+          "text": "be overweight",
+          "meaning_zh": "超重"
+        }
+      ]
+    },
+    {
+      "id": "B-11",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "More disturbingly, the survey found that over a four-day period, half the girls and one-third of the boys did less exercise than the equivalent of a brisk 10-minute walk.",
+      "translation": "更令人担忧的是，调查发现，在为期四天的观察期内，一半的女孩和三分之一的男孩的运动量还不及快走十分钟。",
+      "structure": [
+        {
+          "text": "More disturbingly",
+          "role": "sentence_adverbial",
+          "level": 1
+        },
+        {
+          "text": "the survey found",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that over a four-day period, half the girls and one-third of the boys did less exercise than the equivalent of a brisk 10-minute walk",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "over a four-day period",
+          "role": "time_adverbial",
+          "level": 3
+        },
+        {
+          "text": "than the equivalent of a brisk 10-minute walk",
+          "role": "comparative_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "More disturbingly 是副词性插入语，表达说话人对调查结果的态度。",
+        "that 从句内部又包含 over a four-day period 时间状语和 than 引导的比较结构。",
+        "less...than the equivalent of 表示运动量少于快走10分钟的量。"
+      ],
+      "expressions": [
+        {
+          "text": "the equivalent of",
+          "meaning_zh": "相当于……的量"
+        },
+        {
+          "text": "a brisk walk",
+          "meaning_zh": "快走"
+        }
+      ]
+    },
+    {
+      "id": "B-12",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "High levels of cholesterol, excess body fat and inactivity are believed to increase the risk of coronary heart disease.",
+      "translation": "人们认为，高胆固醇、体脂过多和缺乏运动会增加患冠心病的风险。",
+      "structure": [
+        {
+          "text": "High levels of cholesterol, excess body fat and inactivity",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are believed to increase the risk of coronary heart disease",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "to increase the risk of coronary heart disease",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "三个并列名词短语共同作主语。",
+        "are believed to 是被动语态的“据信”结构，后接不定式补足语。"
+      ],
+      "expressions": [
+        {
+          "text": "be believed to",
+          "meaning_zh": "被认为；据信"
+        },
+        {
+          "text": "increase the risk of",
+          "meaning_zh": "增加……的风险"
+        }
+      ]
+    },
+    {
+      "id": "C-13",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "Physical education is under pressure in the UK – most schools devote little more than 100 minutes a week to it in curriculum time, which is less than many other European countries.",
+      "translation": "英国的体育教育正承受压力——大多数学校在课程时间中每周只给体育课分配略多于100分钟，比许多其他欧洲国家都要少。",
+      "structure": [
+        {
+          "text": "Physical education is under pressure in the UK",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "most schools devote little more than 100 minutes a week to it in curriculum time",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "which is less than many other European countries",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "破折号后的分句具体说明体育教育承压的表现。",
+        "little more than 表示“仅仅比……多一点”，强调时间之少。",
+        "which 引导非限制性定语从句，指代前面提到的每周课时数。"
+      ],
+      "expressions": [
+        {
+          "text": "be under pressure",
+          "meaning_zh": "承受压力"
+        },
+        {
+          "text": "little more than",
+          "meaning_zh": "仅仅比……多一点"
+        },
+        {
+          "text": "in curriculum time",
+          "meaning_zh": "在课程时间内"
+        }
+      ]
+    },
+    {
+      "id": "C-14",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "Three European countries are giving children a head start in PE, France, Austria and\nSwitzerland – offer at least two hours in primary and secondary schools.",
+      "translation": "三个欧洲国家——法国、奥地利和瑞士——让本国孩子在体育课上抢占先机，中小学每周至少安排两小时体育课。",
+      "structure": [
+        {
+          "text": "Three European countries are giving children a head start in PE",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "France, Austria and\nSwitzerland",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "offer at least two hours in primary and secondary schools",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "原句结构混乱，France, Austria and Switzerland 本应是 Three European countries 的同位语，却被插在整句中间，属于原文表达错误。",
+        "give sb a head start in 表示在某方面让人领先或占优势。",
+        "offer at least two hours 的主语实际是 France, Austria and Switzerland 三国。"
+      ],
+      "expressions": [
+        {
+          "text": "give someone a head start",
+          "meaning_zh": "让……占得先机"
+        },
+        {
+          "text": "at least",
+          "meaning_zh": "至少"
+        }
+      ]
+    },
+    {
+      "id": "C-15",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "These findings, from the European Union of Physical Education Associations, prompted specialists in children's physiology to call on European governments to give youngsters a daily PE programme.",
+      "translation": "这些来自欧洲体育教育协会联盟的调查结果，促使儿童生理学专家呼吁欧洲各国政府为青少年提供每日体育课程。",
+      "structure": [
+        {
+          "text": "These findings",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "from the European Union of Physical Education Associations",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "prompted specialists in children's physiology",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to call on European governments to give youngsters a daily PE programme",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "to give youngsters a daily PE programme",
+          "role": "infinitive_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "prompt sb to do 表示促使某人做某事。",
+        "call on ... to 表示呼吁某人做某事，此处呼吁对象是欧洲各国政府。",
+        "两个不定式短语层层嵌套，第二个不定式说明呼吁的具体内容。"
+      ],
+      "expressions": [
+        {
+          "text": "prompt someone to do",
+          "meaning_zh": "促使某人做……"
+        },
+        {
+          "text": "call on ... to",
+          "meaning_zh": "呼吁……做……"
+        }
+      ]
+    },
+    {
+      "id": "C-16",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "The survey shows that the UK ranks 13th out of the 25 countries, with Ireland bottom, averaging under an hour a week for PE.",
+      "translation": "调查显示，英国在25个国家中排名第13位，爱尔兰垫底，英国平均每周体育课时不到一小时。",
+      "structure": [
+        {
+          "text": "The survey shows",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that the UK ranks 13th out of the 25 countries",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "with Ireland bottom",
+          "role": "absolute_construction",
+          "level": 2
+        },
+        {
+          "text": "averaging under an hour a week for PE",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "with Ireland bottom 是 with 引导的独立主格结构，省略了 being，表示“爱尔兰垫底”。",
+        "averaging 是现在分词短语，补充说明英国每周体育课时的具体情况。"
+      ],
+      "expressions": [
+        {
+          "text": "rank ... out of",
+          "meaning_zh": "在……中排名第……"
+        },
+        {
+          "text": "bottom",
+          "meaning_zh": "垫底；排名最后"
+        }
+      ]
+    },
+    {
+      "id": "C-17",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "From age six to 18\u0000British children received, on average, 106 minutes of PE a week.",
+      "translation": "从6岁到18岁，英国儿童平均每周只能上106分钟的体育课。",
+      "structure": [
+        {
+          "text": "From age six to 18\u0000British children",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "received, on average, 106 minutes of PE a week",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "From age six to 18 表示年龄范围，修饰整句。",
+        "on average 插入在谓语中间，说明是平均数据。"
+      ],
+      "expressions": [
+        {
+          "text": "on average",
+          "meaning_zh": "平均而言"
+        }
+      ]
+    },
+    {
+      "id": "C-18",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "Professor Armstrong, who presented the findings at the meeting, noted that since the introduction of the national curriculum there had been a marked fall in the time devoted to PE in UK schools, with only a minority of pupils getting two hours a week.",
+      "translation": "在会议上介绍这些调查结果的阿姆斯特朗教授指出，自国家课程推行以来，英国学校用于体育课的时间明显减少，如今只有少数学生每周能上到两小时体育课。",
+      "structure": [
+        {
+          "text": "Professor Armstrong",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who presented the findings at the meeting",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "noted",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "that since the introduction of the national curriculum there had been a marked fall in the time devoted to PE in UK schools",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "since the introduction of the national curriculum",
+          "role": "time_adverbial",
+          "level": 3
+        },
+        {
+          "text": "devoted to PE in UK schools",
+          "role": "reduced_relative_clause",
+          "level": 3
+        },
+        {
+          "text": "with only a minority of pupils getting two hours a week",
+          "role": "absolute_construction",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "who 引导非限制性定语从句，补充介绍 Armstrong 在会议上的角色。",
+        "that 引导宾语从句，其中 since 引导时间状语，there had been 是过去完成时的存在句。",
+        "devoted to PE... 是过去分词短语，修饰 the time。",
+        "with only a minority... 是 with 独立主格结构，补充说明现状。"
+      ],
+      "expressions": [
+        {
+          "text": "a marked fall in",
+          "meaning_zh": "……显著下降"
+        },
+        {
+          "text": "a minority of",
+          "meaning_zh": "少数的"
+        }
+      ]
+    },
+    {
+      "id": "D-19",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "As a former junior football international, Professor Armstrong is a passionate advocate for sport.",
+      "translation": "作为曾经的青年足球国脚，阿姆斯特朗教授是体育运动的热心倡导者。",
+      "structure": [
+        {
+          "text": "As a former junior football international",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "Professor Armstrong",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is a passionate advocate for sport",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "As 引导身份状语，说明阿姆斯特朗曾经的运动员身份。",
+        "a passionate advocate for 表示某人是……的热心倡导者。"
+      ],
+      "expressions": [
+        {
+          "text": "a passionate advocate for",
+          "meaning_zh": "……的热心倡导者"
+        }
+      ]
+    },
+    {
+      "id": "D-20",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "Although the Government has poured millions into beefing up sport in the community, there is less commitment to it as part of the crammed school curriculum.",
+      "translation": "尽管政府已经投入大量资金加强社区体育，但作为繁重学校课程一部分的体育却没有得到同等重视。",
+      "structure": [
+        {
+          "text": "Although the Government has poured millions into beefing up sport in the community",
+          "role": "concessive_clause",
+          "level": 2
+        },
+        {
+          "text": "there is less commitment to it",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "as part of the crammed school curriculum",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Although 引导让步状语从句，与主句形成对比。",
+        "pour millions into doing 表示投入大量资金做某事。",
+        "it 指代前文的 sport。"
+      ],
+      "expressions": [
+        {
+          "text": "pour millions into",
+          "meaning_zh": "投入大量资金于"
+        },
+        {
+          "text": "beef up",
+          "meaning_zh": "加强；强化"
+        }
+      ]
+    },
+    {
+      "id": "D-21",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "This means that many children never acquire the necessary skills to thrive in team games.",
+      "translation": "这意味着许多孩子始终没能掌握在团队运动中出色表现所需的技能。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "means",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "that many children never acquire the necessary skills to thrive in team games",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "to thrive in team games",
+          "role": "infinitive_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "This 指代前一句提到的学校对体育重视不足的情况。",
+        "to thrive in team games 是不定式短语，修饰 skills，说明技能的用途。"
+      ],
+      "expressions": [
+        {
+          "text": "acquire the necessary skills",
+          "meaning_zh": "掌握必要的技能"
+        },
+        {
+          "text": "thrive in",
+          "meaning_zh": "在……中表现出色"
+        }
+      ]
+    },
+    {
+      "id": "D-22",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "If they are no good at them, they lose interest and establish an inactive pattern of behaviour.",
+      "translation": "如果他们不擅长这些运动，就会失去兴趣，进而形成一种缺乏运动的行为模式。",
+      "structure": [
+        {
+          "text": "If they are no good at them",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "they lose interest",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "and establish an inactive pattern of behaviour",
+          "role": "coordinated_predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "them 指代前句的 team games。",
+        "lose interest 与 establish 是并列谓语，说明缺乏技能带来的连锁反应。"
+      ],
+      "expressions": [
+        {
+          "text": "be no good at",
+          "meaning_zh": "不擅长"
+        },
+        {
+          "text": "an inactive pattern of behaviour",
+          "meaning_zh": "缺乏运动的行为模式"
+        }
+      ]
+    },
+    {
+      "id": "D-23",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "When this is coupled with a poor diet, it will lead inevitably to weight gain.",
+      "translation": "当这种情况再加上不良饮食习惯时，必然会导致体重增加。",
+      "structure": [
+        {
+          "text": "When this is coupled with a poor diet",
+          "role": "time_clause",
+          "level": 2
+        },
+        {
+          "text": "it will lead inevitably to weight gain",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "be coupled with 表示与……相结合，this 指代前句的 inactive pattern of behaviour。",
+        "lead inevitably to 强调后果的必然性。"
+      ],
+      "expressions": [
+        {
+          "text": "be coupled with",
+          "meaning_zh": "与……相结合"
+        },
+        {
+          "text": "lead to weight gain",
+          "meaning_zh": "导致体重增加"
+        }
+      ]
+    },
+    {
+      "id": "D-24",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "Seventy per cent of British children give up all sport when they leave school, compared with only 20 per cent of French teenagers.",
+      "translation": "70%的英国孩子一离开学校就放弃了所有运动，相比之下，法国青少年中只有20%如此。",
+      "structure": [
+        {
+          "text": "Seventy per cent of British children",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "give up all sport",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "when they leave school",
+          "role": "time_clause",
+          "level": 2
+        },
+        {
+          "text": "compared with only 20 per cent of French teenagers",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "when 引导时间状语从句，说明放弃运动的时间点。",
+        "compared with 是过去分词短语，引出与法国青少年的比较。"
+      ],
+      "expressions": [
+        {
+          "text": "give up",
+          "meaning_zh": "放弃"
+        },
+        {
+          "text": "compared with",
+          "meaning_zh": "与……相比"
+        }
+      ]
+    },
+    {
+      "id": "D-25",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "Professor Armstrong believes that there is far too great an emphasis on team games at school.",
+      "translation": "阿姆斯特朗教授认为，学校对团队运动的重视程度实在是过头了。",
+      "structure": [
+        {
+          "text": "Professor Armstrong believes",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that there is far too great an emphasis on team games at school",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "far too great an emphasis 是 too...a/an 结构的强调形式，相当于 too great an emphasis，far 加强语气。",
+        "there is an emphasis on 表示对……的强调程度。"
+      ],
+      "expressions": [
+        {
+          "text": "far too great an emphasis on",
+          "meaning_zh": "对……过分强调"
+        }
+      ]
+    },
+    {
+      "id": "D-26",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "\"We need to look at the time devoted to PE and balance it between individual and pair activities, such as aerobics and badminton, as well as team sports.",
+      "translation": "“我们需要审视体育课的时间安排，让个人项目、双人项目（比如有氧操和羽毛球）和团队运动之间保持平衡。”",
+      "structure": [
+        {
+          "text": "We need to look at the time devoted to PE",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "devoted to PE",
+          "role": "reduced_relative_clause",
+          "level": 2
+        },
+        {
+          "text": "and balance it between individual and pair activities, such as aerobics and badminton, as well as team sports",
+          "role": "coordinated_predicate",
+          "level": 1
+        },
+        {
+          "text": "such as aerobics and badminton",
+          "role": "example_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "devoted to PE 是过去分词短语，修饰 the time。",
+        "balance ... between A and B, as well as C 表示在三类活动之间取得平衡。",
+        "it 指代前文的 the time (devoted to PE)。"
+      ],
+      "expressions": [
+        {
+          "text": "balance ... between",
+          "meaning_zh": "在……之间取得平衡"
+        },
+        {
+          "text": "as well as",
+          "meaning_zh": "以及；还有"
+        }
+      ]
+    },
+    {
+      "id": "D-27",
+      "paragraph_label": "D",
+      "sentence_index": 27,
+      "sentence": "\"He added that children need to have the opportunity to take part in a wide variety of individual, partner and team sports.",
+      "translation": "他还补充说，孩子们需要有机会参与个人、双人和团队等各种各样的运动项目。",
+      "structure": [
+        {
+          "text": "He added",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "that children need to have the opportunity to take part in a wide variety of individual, partner and team sports",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "to take part in a wide variety of individual, partner and team sports",
+          "role": "infinitive_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "句首多出的引号紧贴在 He 之前，是原文标点错位，属于源文本身的排版问题。",
+        "have the opportunity to do 表示拥有做某事的机会。",
+        "a wide variety of 修饰后面并列的三类运动。"
+      ],
+      "expressions": [
+        {
+          "text": "have the opportunity to",
+          "meaning_zh": "有机会做……"
+        },
+        {
+          "text": "a wide variety of",
+          "meaning_zh": "各种各样的"
+        }
+      ]
+    },
+    {
+      "id": "E-28",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "The good news, however, is that a few small companies and children's activity groups have reacted positively and creatively to the problem.",
+      "translation": "然而，好消息是，一些小公司和儿童活动团体已经积极且富有创意地应对了这一问题。",
+      "structure": [
+        {
+          "text": "The good news",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "however",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "that a few small companies and children's activity groups have reacted positively and creatively to the problem",
+          "role": "complement_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "however 是插入的转折副词，衔接上文令人担忧的调查结果。",
+        "that 从句作表语，说明好消息的具体内容。"
+      ],
+      "expressions": [
+        {
+          "text": "react positively and creatively to",
+          "meaning_zh": "积极且富有创意地应对"
+        }
+      ]
+    },
+    {
+      "id": "E-29",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "Take That, shouts Gloria Thomas, striking a disco pose astride her mini-spacehopper.",
+      "translation": "“Take That！”格洛丽亚·托马斯喊道，跨坐在迷你太空球上摆出迪斯科的姿势。",
+      "structure": [
+        {
+          "text": "Take That",
+          "role": "direct_quote",
+          "level": 1
+        },
+        {
+          "text": "shouts Gloria Thomas",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "striking a disco pose astride her mini-spacehopper",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "引导语 shouts Gloria Thomas 采用倒装，正常语序是 Gloria Thomas shouts。",
+        "striking 现在分词短语说明喊话时的动作，逻辑主语是 Gloria Thomas。",
+        "astride 表示跨坐在……上。"
+      ],
+      "expressions": [
+        {
+          "text": "strike a pose",
+          "meaning_zh": "摆姿势"
+        },
+        {
+          "text": "astride",
+          "meaning_zh": "跨坐着"
+        }
+      ]
+    },
+    {
+      "id": "E-30",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "Take That, echo a flock of toddlers, adopting outrageous postures astride their space hoppers.",
+      "translation": "“Take That！”一群蹒跚学步的孩子跟着喊道，跨坐在太空球上摆出各种夸张的姿势。",
+      "structure": [
+        {
+          "text": "Take That",
+          "role": "direct_quote",
+          "level": 1
+        },
+        {
+          "text": "echo a flock of toddlers",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "adopting outrageous postures astride their space hoppers",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "echo 在此表示“跟着喊/附和”，主语倒装为 a flock of toddlers echo。",
+        "a flock of toddlers 本是形容鸟群的量词用法，这里借用来形容一群蹒跚学步的孩子。"
+      ],
+      "expressions": [
+        {
+          "text": "a flock of",
+          "meaning_zh": "一群"
+        },
+        {
+          "text": "adopt a posture",
+          "meaning_zh": "摆出姿势"
+        }
+      ]
+    },
+    {
+      "id": "E-31",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "'Michael Jackson, she shouts, and they all do a spoof fan-crazed shriek.",
+      "translation": "“迈克尔·杰克逊！”她喊道，孩子们全都发出模仿痴狂粉丝的尖叫。",
+      "structure": [
+        {
+          "text": "'Michael Jackson",
+          "role": "direct_quote",
+          "level": 1
+        },
+        {
+          "text": "she shouts",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "and they all do a spoof fan-crazed shriek",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "引语前的单引号没有对应的右引号，属于原文标点缺失。",
+        "a spoof fan-crazed shriek 中 fan-crazed 是复合形容词，模仿痴狂粉丝的尖叫。"
+      ],
+      "expressions": [
+        {
+          "text": "a spoof",
+          "meaning_zh": "模仿的；戏仿的"
+        }
+      ]
+    },
+    {
+      "id": "E-32",
+      "paragraph_label": "E",
+      "sentence_index": 32,
+      "sentence": "During the wild and chaotic hopper race across the studio floor, commands like this are issued and responded to with untrammelled glee.",
+      "translation": "在这场穿越工作室地面、混乱而狂野的太空球赛跑中，类似的口令被喊出，孩子们也毫无拘束、欣喜若狂地回应着。",
+      "structure": [
+        {
+          "text": "During the wild and chaotic hopper race across the studio floor",
+          "role": "time_adverbial",
+          "level": 2
+        },
+        {
+          "text": "commands like this",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are issued and responded to",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "with untrammelled glee",
+          "role": "manner_adverbial",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "are issued and responded to 是两个被动谓语并列，共享主语 commands like this。",
+        "with untrammelled glee 表示毫无拘束的喜悦，修饰孩子们回应命令的方式。"
+      ],
+      "expressions": [
+        {
+          "text": "respond to",
+          "meaning_zh": "回应；响应"
+        },
+        {
+          "text": "untrammelled glee",
+          "meaning_zh": "毫无拘束的喜悦"
+        }
+      ]
+    },
+    {
+      "id": "E-33",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "The sight of 15 bouncing seven-year-olds who seem about to launch into orbit at every bounce brings tears to the eyes.",
+      "translation": "看着15个七岁孩子蹦蹦跳跳，仿佛每一次弹跳都要飞入太空一般，这场面让人笑出了眼泪。",
+      "structure": [
+        {
+          "text": "The sight of 15 bouncing seven-year-olds",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who seem about to launch into orbit at every bounce",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "brings tears to the eyes",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "who 引导的定语从句修饰 seven-year-olds，说明他们蹦跳的夸张样子。",
+        "be about to do 表示即将做某事，此处夸张地形容孩子们蹦跳的样子仿佛要飞入太空。",
+        "bring tears to the eyes 是固定表达，指因感动或大笑而落泪。"
+      ],
+      "expressions": [
+        {
+          "text": "be about to",
+          "meaning_zh": "即将"
+        },
+        {
+          "text": "bring tears to the eyes",
+          "meaning_zh": "让人热泪盈眶（因感动或大笑）"
+        }
+      ]
+    },
+    {
+      "id": "E-34",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "Uncoordinated, loud, excited and emotional, children provide raw comedy.",
+      "translation": "手脚不协调、吵闹、兴奋又情绪外露，孩子们本身就是天然的喜剧。",
+      "structure": [
+        {
+          "text": "Uncoordinated, loud, excited and emotional",
+          "role": "fronted_complement",
+          "level": 2
+        },
+        {
+          "text": "children",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "provide raw comedy",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "句首四个并列形容词前置，充当描述 children 状态的补语，相当于 Being uncoordinated, loud, excited and emotional。",
+        "raw comedy 指未经修饰、天然流露的喜剧效果。"
+      ],
+      "expressions": [
+        {
+          "text": "raw comedy",
+          "meaning_zh": "原生态的喜剧效果"
+        }
+      ]
+    },
+    {
+      "id": "F-35",
+      "paragraph_label": "F",
+      "sentence_index": 35,
+      "sentence": "Any cardiovascular exercise is a good option, and it doesn't necessarily have to be high intensity.",
+      "translation": "任何心血管运动都是不错的选择，而且不一定非要高强度。",
+      "structure": [
+        {
+          "text": "Any cardiovascular exercise",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is a good option",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "and it doesn't necessarily have to be high intensity",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "it 指代前文的 cardiovascular exercise。",
+        "doesn't necessarily have to be 表示“不必一定是”，语气委婉。"
+      ],
+      "expressions": [
+        {
+          "text": "cardiovascular exercise",
+          "meaning_zh": "心血管运动；有氧运动"
+        },
+        {
+          "text": "not necessarily",
+          "meaning_zh": "不一定"
+        }
+      ]
+    },
+    {
+      "id": "F-36",
+      "paragraph_label": "F",
+      "sentence_index": 36,
+      "sentence": "It can be anything that gets your heart rate up: such as walking the dog, swimming, miming, skipping, hiking.",
+      "translation": "只要能让心率提高的运动都可以：比如遛狗、游泳、模仿哑剧动作、跳绳、远足。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can be anything",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "that gets your heart rate up",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "such as walking the dog, swimming, miming, skipping, hiking",
+          "role": "example_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that 引导定语从句修饰 anything，说明这项运动只需能提高心率。",
+        "冒号后列举具体的运动形式作为例证。"
+      ],
+      "expressions": [
+        {
+          "text": "get one's heart rate up",
+          "meaning_zh": "提高心率"
+        }
+      ]
+    },
+    {
+      "id": "F-37",
+      "paragraph_label": "F",
+      "sentence_index": 37,
+      "sentence": "\"Even walking through the grocery store can be exercise,\" Samis-Smith said.",
+      "translation": "“甚至逛超市走一走也能算是运动，”萨米斯-史密斯说。",
+      "structure": [
+        {
+          "text": "Even walking through the grocery store can be exercise",
+          "role": "direct_quote",
+          "level": 1
+        },
+        {
+          "text": "walking through the grocery store",
+          "role": "gerund_subject",
+          "level": 2
+        },
+        {
+          "text": "Samis-Smith said",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "动名词短语 walking through the grocery store 作主语。",
+        "Even 强调即使是逛超市这样的日常活动也能算运动。"
+      ],
+      "expressions": [
+        {
+          "text": "even",
+          "meaning_zh": "甚至；即使"
+        }
+      ]
+    },
+    {
+      "id": "F-38",
+      "paragraph_label": "F",
+      "sentence_index": 38,
+      "sentence": "What they don't know is that they're at a Fit Kids class, and that the fun is a disguise for the serious exercise plan they're covertly being taken through.",
+      "translation": "他们不知道的是，自己正在上一堂 Fit Kids 健身课，而这些乐趣只是掩盖了他们正暗中被引导完成的严格锻炼计划。",
+      "structure": [
+        {
+          "text": "What they don't know",
+          "role": "noun_clause",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "that they're at a Fit Kids class",
+          "role": "complement_clause",
+          "level": 2
+        },
+        {
+          "text": "and that the fun is a disguise for the serious exercise plan they're covertly being taken through",
+          "role": "coordinated_complement_clause",
+          "level": 2
+        },
+        {
+          "text": "they're covertly being taken through",
+          "role": "reduced_relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "What 引导的主语从句表示“他们不知道的事”。",
+        "两个 that 从句并列作表语，说明具体不知道的两件事。",
+        "they're covertly being taken through 省略了关系代词 that/which，修饰 exercise plan，是现在进行时的被动语态。"
+      ],
+      "expressions": [
+        {
+          "text": "a disguise for",
+          "meaning_zh": "……的伪装"
+        },
+        {
+          "text": "covertly",
+          "meaning_zh": "秘密地；暗中地"
+        }
+      ]
+    },
+    {
+      "id": "F-39",
+      "paragraph_label": "F",
+      "sentence_index": 39,
+      "sentence": "Fit Kids trains parents to run fitness classes for children.",
+      "translation": "Fit Kids 培训家长来为孩子们上健身课。",
+      "structure": [
+        {
+          "text": "Fit Kids",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "trains parents",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to run fitness classes for children",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "train sb to do 表示培训某人做某事。",
+        "Fit Kids 是公司名称，指前文提到的健身课程机构。"
+      ],
+      "expressions": [
+        {
+          "text": "train someone to do",
+          "meaning_zh": "培训某人做……"
+        }
+      ]
+    },
+    {
+      "id": "F-40",
+      "paragraph_label": "F",
+      "sentence_index": 40,
+      "sentence": "'Ninety per cent of children don't like team sports,'says company director, Gillian Gale.",
+      "translation": "“百分之九十的孩子不喜欢团队运动，”公司总监吉莉安·盖尔说道。",
+      "structure": [
+        {
+          "text": "'Ninety per cent of children don't like team sports,'",
+          "role": "direct_quote",
+          "level": 1
+        },
+        {
+          "text": "says company director, Gillian Gale",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "Gillian Gale",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "引号与 says 之间原文缺少空格，属于排版问题，不影响理解。",
+        "Gillian Gale 是 company director 的同位语，说明说话人的具体姓名。"
+      ],
+      "expressions": [
+        {
+          "text": "company director",
+          "meaning_zh": "公司总监"
+        }
+      ]
+    },
+    {
+      "id": "G-41",
+      "paragraph_label": "G",
+      "sentence_index": 41,
+      "sentence": "A Prevention survey found that children whose parents keep in shape are much more likely to have healthy body weights themselves.",
+      "translation": "一项《Prevention》杂志的调查发现，父母保持良好体形的孩子，自己拥有健康体重的可能性也大得多。",
+      "structure": [
+        {
+          "text": "A Prevention survey found",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that children whose parents keep in shape are much more likely to have healthy body weights themselves",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "whose parents keep in shape",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "A Prevention survey 中 Prevention 是杂志名，作专有名词修饰 survey。",
+        "whose 引导定语从句修饰 children，说明其父母的状态。",
+        "be more likely to 表示“更有可能”，themselves 强调孩子自身。"
+      ],
+      "expressions": [
+        {
+          "text": "keep in shape",
+          "meaning_zh": "保持体形；保持健康"
+        },
+        {
+          "text": "be likely to",
+          "meaning_zh": "很可能"
+        }
+      ]
+    },
+    {
+      "id": "G-42",
+      "paragraph_label": "G",
+      "sentence_index": 42,
+      "sentence": "\"There's nothing worse than telling a child what he needs to do and not doing it yourself,\" says Elizabeth Ward, R.D., a Boston nutritional consultant and author of Healthy Foods, Healthy Kids .",
+      "translation": "“没有什么比告诉孩子该做什么、自己却不身体力行更糟糕的了，”波士顿营养顾问、《健康食品，健康孩子》一书作者伊丽莎白·沃德说道。",
+      "structure": [
+        {
+          "text": "There's nothing worse than telling a child what he needs to do and not doing it yourself",
+          "role": "direct_quote",
+          "level": 1
+        },
+        {
+          "text": "telling a child what he needs to do",
+          "role": "gerund_phrase",
+          "level": 2
+        },
+        {
+          "text": "and not doing it yourself",
+          "role": "coordinated_gerund_phrase",
+          "level": 2
+        },
+        {
+          "text": "says Elizabeth Ward",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "R.D., a Boston nutritional consultant and author of Healthy Foods, Healthy Kids",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "nothing worse than doing sth 表示“没有什么比……更糟”。",
+        "what he needs to do 是 telling 的间接宾语从句，说明告诉孩子的具体内容。",
+        "R.D. 及后面内容是 Elizabeth Ward 的同位语，说明其身份与著作。"
+      ],
+      "expressions": [
+        {
+          "text": "there's nothing worse than",
+          "meaning_zh": "没有什么比……更糟"
+        },
+        {
+          "text": "nutritional consultant",
+          "meaning_zh": "营养顾问"
+        }
+      ]
+    },
+    {
+      "id": "G-43",
+      "paragraph_label": "G",
+      "sentence_index": 43,
+      "sentence": "\"Set a good example and get your nutritional house in order first.\"",
+      "translation": "“先树立好榜样，把自己的营养习惯调整好。”",
+      "structure": [
+        {
+          "text": "Set a good example",
+          "role": "imperative_clause",
+          "level": 1
+        },
+        {
+          "text": "and get your nutritional house in order first",
+          "role": "coordinated_imperative_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "祈使句省略主语 you，直接以动词原形开头。",
+        "get one's house in order 是习语，字面指“把房子收拾整齐”，此处比喻先调整好自己的营养习惯。"
+      ],
+      "expressions": [
+        {
+          "text": "set a good example",
+          "meaning_zh": "树立好榜样"
+        },
+        {
+          "text": "get one's house in order",
+          "meaning_zh": "先把自己的事情理顺"
+        }
+      ]
+    },
+    {
+      "id": "G-44",
+      "paragraph_label": "G",
+      "sentence_index": 44,
+      "sentence": "In the 1930s and '40s, kids expended 800 calories a day just walking, carrying water, and doing other chores, notes Fima Lifshitz, M.D., a pediatric endocrinologist in Santa Barbara.",
+      "translation": "“在20世纪三四十年代，孩子们仅靠走路、提水和做其他家务活，每天就能消耗800卡路里，”圣巴巴拉的儿科内分泌学专家菲玛·利夫希茨说道。",
+      "structure": [
+        {
+          "text": "In the 1930s and '40s",
+          "role": "time_adverbial",
+          "level": 1
+        },
+        {
+          "text": "kids expended 800 calories a day",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "just walking, carrying water, and doing other chores",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "notes Fima Lifshitz",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "M.D., a pediatric endocrinologist in Santa Barbara",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "just walking, carrying water, and doing other chores 是并列现在分词短语，说明消耗热量的具体方式。",
+        "M.D. 及后文是 Fima Lifshitz 的同位语，说明其身份。",
+        "notes 在此作转述动词，相当于 says。"
+      ],
+      "expressions": [
+        {
+          "text": "expend calories",
+          "meaning_zh": "消耗热量"
+        },
+        {
+          "text": "pediatric endocrinologist",
+          "meaning_zh": "儿科内分泌学专家"
+        }
+      ]
+    },
+    {
+      "id": "G-45",
+      "paragraph_label": "G",
+      "sentence_index": 45,
+      "sentence": "\"Now, kids in obese families are expending only 200 calories a day in physical activity,\" says Lifshitz, \"incorporate more movement in your family's life park farther away from the stores at the mall, take stairs instead of the elevator, and walk to nearbyfriends' houses instead of driving.\"",
+      "translation": "“现在，肥胖家庭的孩子每天体力活动消耗的热量只有200卡路里，”利夫希茨说，“要在日常生活中增加更多运动量：把车停得离商场入口远一点，用爬楼梯代替坐电梯，步行去附近朋友家而不是开车去。”",
+      "structure": [
+        {
+          "text": "Now, kids in obese families are expending only 200 calories a day in physical activity",
+          "role": "direct_quote",
+          "level": 1
+        },
+        {
+          "text": "says Lifshitz",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "incorporate more movement in your family's life",
+          "role": "imperative_clause",
+          "level": 2
+        },
+        {
+          "text": "park farther away from the stores at the mall",
+          "role": "imperative_clause",
+          "level": 2
+        },
+        {
+          "text": "take stairs instead of the elevator",
+          "role": "coordinated_imperative_clause",
+          "level": 2
+        },
+        {
+          "text": "and walk to nearbyfriends' houses instead of driving",
+          "role": "coordinated_imperative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "引号内后半部分句子结构混乱，incorporate more movement in your family's life 与 park farther away... 之间原文缺少必要的断句，疑似源文本身脱漏或拼接错误。",
+        "park farther away、take stairs、walk to...均为并列的祈使句，建议增加日常活动量的具体做法。",
+        "nearbyfriends' 缺少空格，应为 nearby friends'，原文如此保留。"
+      ],
+      "expressions": [
+        {
+          "text": "incorporate ... in",
+          "meaning_zh": "把……融入"
+        },
+        {
+          "text": "instead of",
+          "meaning_zh": "而不是"
+        }
+      ]
+    }
+  ]
+}

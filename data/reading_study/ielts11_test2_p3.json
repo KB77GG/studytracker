@@ -1,0 +1,808 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts11_test2_reading",
+  "passage_id": "ielts11_test2_p3",
+  "passage_title": "Neuroaesthetics",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "An emerging discipline called neuroaesthetics is seeking to bring scientific objectivity to the study of art, and has already given us a better understanding of many masterpieces.",
+      "translation": "一门名为“神经美学”的新兴学科正试图以科学的客观性研究艺术，并且已经帮助我们更深入地理解了许多杰作。",
+      "structure": [
+        {"text": "An emerging discipline called neuroaesthetics", "role": "subject", "level": 1},
+        {"text": "called neuroaesthetics", "role": "participial_phrase", "level": 2},
+        {"text": "is seeking to bring scientific objectivity to the study of art", "role": "verb_phrase", "level": 1},
+        {"text": "to bring scientific objectivity to the study of art", "role": "non_finite_clause", "level": 2},
+        {"text": "and has already given us a better understanding of many masterpieces", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "called neuroaesthetics 是过去分词短语，后置修饰 discipline。",
+        "seek to do 表示“力求做某事”，and 后省略了与前一分句相同的主语。"
+      ],
+      "expressions": [
+        {"text": "bring objectivity to", "meaning_zh": "为……带来客观性"},
+        {"text": "give someone a better understanding of", "meaning_zh": "使某人更深入地理解……"}
+      ]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "The blurred imagery of Impressionist paintings seems to stimulate the brain's amygdala, for instance.",
+      "translation": "例如，印象派画作中模糊的意象似乎会刺激大脑的杏仁核。",
+      "structure": [
+        {"text": "The blurred imagery of Impressionist paintings", "role": "subject", "level": 1},
+        {"text": "seems to stimulate", "role": "verb_phrase", "level": 1},
+        {"text": "to stimulate the brain's amygdala", "role": "non_finite_clause", "level": 2},
+        {"text": "the brain's amygdala", "role": "object", "level": 2},
+        {"text": "for instance", "role": "discourse_marker", "level": 1}
+      ],
+      "difficult_points": [
+        "seem to do 表示根据现象作出的谨慎判断，而非确定结论。",
+        "of Impressionist paintings 修饰 imagery，说明这些意象来自印象派画作。"
+      ],
+      "expressions": [
+        {"text": "seem to stimulate", "meaning_zh": "似乎会刺激"},
+        {"text": "for instance", "meaning_zh": "例如"}
+      ]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "Since the amygdala plays a crucial role in our feelings, that finding might explain why many people find these pieces so moving.",
+      "translation": "由于杏仁核在人的情感中起着关键作用，这一发现或许能解释为什么许多人觉得这些作品如此动人。",
+      "structure": [
+        {"text": "Since the amygdala plays a crucial role in our feelings", "role": "adverbial_clause", "level": 1},
+        {"text": "the amygdala", "role": "subject", "level": 2},
+        {"text": "plays a crucial role in our feelings", "role": "verb_phrase", "level": 2},
+        {"text": "that finding might explain", "role": "main_clause", "level": 1},
+        {"text": "why many people find these pieces so moving", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Since 引导原因状语从句，说明该发现能够作出解释的生理依据。",
+        "why 引导 explain 的宾语从句，其中 find + 宾语 + 形容词表示“觉得……如何”。"
+      ],
+      "expressions": [
+        {"text": "play a crucial role in", "meaning_zh": "在……中起关键作用"},
+        {"text": "find something moving", "meaning_zh": "觉得某事物感人"}
+      ]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "Could the same approach also shed light on abstract twentieth-century pieces, from Mondrian's geometrical blocks of colour, to Pollock's seemingly haphazard arrangements of splashed paint on canvas?",
+      "translation": "同样的方法是否也能阐明二十世纪的抽象作品——从蒙德里安的几何色块，到波洛克看似随意地泼洒在画布上的颜料布局？",
+      "structure": [
+        {"text": "Could the same approach also shed light on abstract twentieth-century pieces", "role": "main_clause", "level": 1},
+        {"text": "the same approach", "role": "subject", "level": 1},
+        {"text": "shed light on abstract twentieth-century pieces", "role": "verb_phrase", "level": 1},
+        {"text": "from Mondrian's geometrical blocks of colour, to Pollock's seemingly haphazard arrangements of splashed paint on canvas", "role": "prepositional_phrase", "level": 2},
+        {"text": "splashed paint on canvas", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "Could 置于主语之前构成一般疑问句，此处引出研究能否解释抽象艺术的问题。",
+        "from... to... 列出抽象作品的范围，seemingly 修饰 haphazard，强调只是“看似随意”。"
+      ],
+      "expressions": [
+        {"text": "shed light on", "meaning_zh": "阐明；帮助理解"},
+        {"text": "seemingly haphazard", "meaning_zh": "看似杂乱无章的"}
+      ]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "Sceptics believe that people claim to like such works simply because they are famous.",
+      "translation": "怀疑者认为，人们声称喜欢这类作品，仅仅是因为这些作品很有名。",
+      "structure": [
+        {"text": "Sceptics", "role": "subject", "level": 1},
+        {"text": "believe", "role": "verb_phrase", "level": 1},
+        {"text": "that people claim to like such works simply because they are famous", "role": "noun_clause", "level": 2},
+        {"text": "to like such works", "role": "non_finite_clause", "level": 3},
+        {"text": "because they are famous", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导 believe 的宾语从句，从句内 claim 后接不定式。",
+        "they 指代 such works，而不是 people；because 从句说明声称喜欢的原因。"
+      ],
+      "expressions": [
+        {"text": "claim to do", "meaning_zh": "声称做某事"},
+        {"text": "simply because", "meaning_zh": "仅仅因为"}
+      ]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "We certainly do have an inclination to follow the crowd.",
+      "translation": "我们的确有从众的倾向。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "certainly do have", "role": "verb_phrase", "level": 1},
+        {"text": "an inclination to follow the crowd", "role": "object", "level": 1},
+        {"text": "to follow the crowd", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "do 放在实义动词 have 前起强调作用，表示“确实有”。",
+        "to follow the crowd 是不定式短语，后置说明 inclination 的具体内容。"
+      ],
+      "expressions": [
+        {"text": "have an inclination to", "meaning_zh": "有做……的倾向"},
+        {"text": "follow the crowd", "meaning_zh": "随大流；从众"}
+      ]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "When asked to make simple perceptual decisions such as matching a shape to its rotated image, for example, people often choose a definitively wrong answer if they see others doing the same.",
+      "translation": "例如，当被要求作出简单的感知判断——比如把一个形状与其旋转后的图像配对——如果看到别人也这样选，人们往往会选择一个明确错误的答案。",
+      "structure": [
+        {"text": "When asked to make simple perceptual decisions such as matching a shape to its rotated image", "role": "adverbial_clause", "level": 1},
+        {"text": "to make simple perceptual decisions", "role": "non_finite_clause", "level": 2},
+        {"text": "such as matching a shape to its rotated image", "role": "prepositional_phrase", "level": 2},
+        {"text": "people often choose a definitively wrong answer", "role": "main_clause", "level": 1},
+        {"text": "if they see others doing the same", "role": "adverbial_clause", "level": 2},
+        {"text": "others doing the same", "role": "object_complement", "level": 3}
+      ],
+      "difficult_points": [
+        "When asked... 是省略了 people are 的被动时间状语从句。",
+        "see others doing the same 使用 see + 宾语 + 现在分词，表示看到他人正在作出同样选择。"
+      ],
+      "expressions": [
+        {"text": "make perceptual decisions", "meaning_zh": "作出感知判断"},
+        {"text": "do the same", "meaning_zh": "做同样的事"}
+      ]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "It is easy to imagine that this mentality would have even more impact on a fuzzy concept like art appreciation, where there is no right or wrong answer.",
+      "translation": "不难想象，这种心态会对艺术鉴赏这类模糊概念产生更大的影响，因为在这一领域并没有非对即错的答案。",
+      "structure": [
+        {"text": "It is easy to imagine", "role": "main_clause", "level": 1},
+        {"text": "to imagine that this mentality would have even more impact on a fuzzy concept like art appreciation", "role": "non_finite_clause", "level": 2},
+        {"text": "that this mentality would have even more impact on a fuzzy concept like art appreciation", "role": "noun_clause", "level": 3},
+        {"text": "where there is no right or wrong answer", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的主语是后面的 to imagine... 不定式结构。",
+        "where 引导非限制性定语从句，修饰 art appreciation 所代表的领域。"
+      ],
+      "expressions": [
+        {"text": "have an impact on", "meaning_zh": "对……产生影响"},
+        {"text": "art appreciation", "meaning_zh": "艺术鉴赏"}
+      ]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 9,
+      "sentence": "Angelina Hawley-Dolan, of Boston College, Massachusetts, responded to this debate by asking volunteers to view pairs of paintings - either the creations of famous abstract artists or the doodles of infants, chimps and elephants.",
+      "translation": "马萨诸塞州波士顿学院的安杰利娜·霍利-多兰通过让志愿者观看成对的画作来回应这场争论：画作要么出自著名抽象艺术家，要么是婴儿、黑猩猩和大象的涂鸦。",
+      "structure": [
+        {"text": "Angelina Hawley-Dolan, of Boston College, Massachusetts", "role": "subject", "level": 1},
+        {"text": "responded to this debate", "role": "verb_phrase", "level": 1},
+        {"text": "by asking volunteers to view pairs of paintings", "role": "prepositional_phrase", "level": 1},
+        {"text": "volunteers to view pairs of paintings", "role": "object_complement", "level": 2},
+        {"text": "either the creations of famous abstract artists or the doodles of infants, chimps and elephants", "role": "appositive", "level": 2}
+      ],
+      "difficult_points": [
+        "by asking... 表示回应争论所采用的方式，ask 后使用“宾语 + 不定式”。",
+        "either... or... 并列说明两类画作，破折号后的内容是对 paintings 的补充解释。"
+      ],
+      "expressions": [
+        {"text": "respond to a debate", "meaning_zh": "回应一场争论"},
+        {"text": "ask someone to do", "meaning_zh": "要求某人做某事"}
+      ]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 10,
+      "sentence": "They then had to judge which they preferred.",
+      "translation": "随后，他们必须判断自己更喜欢哪一幅。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "then had to judge", "role": "verb_phrase", "level": 1},
+        {"text": "which they preferred", "role": "noun_clause", "level": 2},
+        {"text": "they preferred", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导 judge 的宾语从句，表示两幅画中更喜欢哪一幅。",
+        "preferred 后省略了由 which 代替的宾语 painting。"
+      ],
+      "expressions": [
+        {"text": "judge which", "meaning_zh": "判断哪一个"}
+      ]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "A third of the paintings were given no captions, while many were labelled incorrectly - volunteers might think they were viewing a chimp's messy brushstrokes when they were actually seeing an acclaimed masterpiece.",
+      "translation": "三分之一的画作没有附说明文字，另有许多画作被错误标注——志愿者可能以为自己看到的是黑猩猩杂乱的笔触，实际看到的却是一幅备受赞誉的杰作。",
+      "structure": [
+        {"text": "A third of the paintings were given no captions", "role": "main_clause", "level": 1},
+        {"text": "while many were labelled incorrectly", "role": "adverbial_clause", "level": 1},
+        {"text": "volunteers might think", "role": "main_clause", "level": 1},
+        {"text": "they were viewing a chimp's messy brushstrokes", "role": "noun_clause", "level": 2},
+        {"text": "when they were actually seeing an acclaimed masterpiece", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "while 在此连接两种对照情况：没有说明文字与被错误标注。",
+        "think 后省略了 that；when 在后半句体现认知与事实之间的反差。"
+      ],
+      "expressions": [
+        {"text": "be labelled incorrectly", "meaning_zh": "被错误标注"},
+        {"text": "an acclaimed masterpiece", "meaning_zh": "备受赞誉的杰作"}
+      ]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "In each set of trials, volunteers generally preferred the work of renowned artists, even when they believed it was by an animal or a child.",
+      "translation": "在每组试验中，志愿者通常更喜欢知名艺术家的作品，即便他们以为作品出自动物或儿童之手。",
+      "structure": [
+        {"text": "In each set of trials", "role": "prepositional_phrase", "level": 1},
+        {"text": "volunteers", "role": "subject", "level": 1},
+        {"text": "generally preferred the work of renowned artists", "role": "verb_phrase", "level": 1},
+        {"text": "even when they believed it was by an animal or a child", "role": "adverbial_clause", "level": 2},
+        {"text": "it was by an animal or a child", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "even when 引导让步意味很强的时间状语从句，突出偏好不受错误标签影响。",
+        "believed 后省略 that，it 指代 the work。"
+      ],
+      "expressions": [
+        {"text": "a set of trials", "meaning_zh": "一组试验"},
+        {"text": "renowned artists", "meaning_zh": "知名艺术家"}
+      ]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "It seems that the viewer can sense the artist's vision in paintings, even if they can't explain why.",
+      "translation": "看来，观者能够感受到画作中艺术家的构想，即使他们无法解释其中缘由。",
+      "structure": [
+        {"text": "It seems", "role": "main_clause", "level": 1},
+        {"text": "that the viewer can sense the artist's vision in paintings", "role": "noun_clause", "level": 2},
+        {"text": "the artist's vision", "role": "object", "level": 3},
+        {"text": "even if they can't explain why", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It seems that... 用于谨慎地概括实验所支持的结论。",
+        "why 是疑问副词，代表“为何能感受到艺术家的构想”，其后内容被省略。"
+      ],
+      "expressions": [
+        {"text": "sense the artist's vision", "meaning_zh": "感知艺术家的构想"},
+        {"text": "even if", "meaning_zh": "即使"}
+      ]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 14,
+      "sentence": "Robert Pepperell, an artist based at Cardiff University, creates ambiguous works that are neither entirely abstract nor clearly representational.",
+      "translation": "卡迪夫大学的艺术家罗伯特·佩珀雷尔创作的作品含义模糊，既不完全抽象，也不具有清晰的具象性。",
+      "structure": [
+        {"text": "Robert Pepperell", "role": "subject", "level": 1},
+        {"text": "an artist based at Cardiff University", "role": "appositive", "level": 1},
+        {"text": "based at Cardiff University", "role": "participial_phrase", "level": 2},
+        {"text": "creates ambiguous works", "role": "verb_phrase", "level": 1},
+        {"text": "that are neither entirely abstract nor clearly representational", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "an artist... 是 Robert Pepperell 的同位语，其中 based... 是过去分词短语。",
+        "neither... nor... 并列两个表语，说明作品介于抽象与具象之间。"
+      ],
+      "expressions": [
+        {"text": "be based at", "meaning_zh": "任职于；驻于"},
+        {"text": "neither ... nor ...", "meaning_zh": "既不……也不……"}
+      ]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 15,
+      "sentence": "In one study, Pepperell and his collaborators asked volunteers to decide how 'powerful' they considered an artwork to be, and whether they saw anything familiar in the piece.",
+      "translation": "在一项研究中，佩珀雷尔及其合作者要求志愿者判断一件艺术品在他们看来有多“有感染力”，以及他们是否在作品中看到了熟悉的东西。",
+      "structure": [
+        {"text": "In one study", "role": "prepositional_phrase", "level": 1},
+        {"text": "Pepperell and his collaborators", "role": "subject", "level": 1},
+        {"text": "asked volunteers to decide", "role": "verb_phrase", "level": 1},
+        {"text": "how 'powerful' they considered an artwork to be", "role": "noun_clause", "level": 2},
+        {"text": "whether they saw anything familiar in the piece", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "how 和 whether 分别引导两个并列的宾语从句，共同作 decide 的内容。",
+        "consider an artwork to be... 是“consider + 宾语 + 不定式补语”结构。"
+      ],
+      "expressions": [
+        {"text": "ask someone to decide", "meaning_zh": "要求某人作出判断"},
+        {"text": "consider something to be", "meaning_zh": "认为某物是……"}
+      ]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 16,
+      "sentence": "The longer they took to answer these questions, the more highly they rated the piece under scrutiny, and the greater their neural activity.",
+      "translation": "他们回答这些问题所用的时间越长，对正在审视的作品评价就越高，神经活动也越强。",
+      "structure": [
+        {"text": "The longer they took to answer these questions", "role": "comparative_clause", "level": 1},
+        {"text": "to answer these questions", "role": "non_finite_clause", "level": 2},
+        {"text": "the more highly they rated the piece under scrutiny", "role": "main_clause", "level": 1},
+        {"text": "under scrutiny", "role": "prepositional_phrase", "level": 2},
+        {"text": "and the greater their neural activity", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "the + 比较级..., the + 比较级... 表示“越……，就越……”。",
+        "and 后的 the greater their neural activity 省略了 was，以名词结构并列第二个结果。"
+      ],
+      "expressions": [
+        {"text": "the longer ..., the more ...", "meaning_zh": "越……，就越……"},
+        {"text": "under scrutiny", "meaning_zh": "受到仔细审视"}
+      ]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 17,
+      "sentence": "It would seem that the brain sees these images as puzzles, and the harder it is to decipher the meaning, the more rewarding is the moment of recognition.",
+      "translation": "大脑似乎把这些图像视作谜题，而且含义越难解读，辨认出来的那一刻就越令人满足。",
+      "structure": [
+        {"text": "It would seem", "role": "main_clause", "level": 1},
+        {"text": "that the brain sees these images as puzzles", "role": "noun_clause", "level": 2},
+        {"text": "sees these images as puzzles", "role": "verb_phrase", "level": 3},
+        {"text": "the harder it is to decipher the meaning", "role": "comparative_clause", "level": 1},
+        {"text": "the more rewarding is the moment of recognition", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "would seem 比 seems 更委婉，表示根据研究结果进行推断。",
+        "第二分句使用“the + 比较级”关联结构，the more rewarding 后为表语前置造成的倒装。"
+      ],
+      "expressions": [
+        {"text": "see something as", "meaning_zh": "把某事物视为……"},
+        {"text": "decipher the meaning", "meaning_zh": "解读含义"},
+        {"text": "the moment of recognition", "meaning_zh": "辨认出来的时刻"}
+      ]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 18,
+      "sentence": "And what about artists such as Mondrian, whose paintings consist exclusively of horizontal and vertical lines encasing blocks of colour?",
+      "translation": "那么像蒙德里安这样的艺术家呢？他的画作完全由包围着色块的水平线和垂直线构成。",
+      "structure": [
+        {"text": "And what about artists such as Mondrian", "role": "main_clause", "level": 1},
+        {"text": "such as Mondrian", "role": "prepositional_phrase", "level": 2},
+        {"text": "whose paintings consist exclusively of horizontal and vertical lines encasing blocks of colour", "role": "relative_clause", "level": 2},
+        {"text": "encasing blocks of colour", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "what about... 是用于引入新例证或议题的省略式疑问结构。",
+        "whose 引导非限制性定语从句，encasing... 是现在分词短语，修饰 lines。"
+      ],
+      "expressions": [
+        {"text": "what about", "meaning_zh": "那么……又如何"},
+        {"text": "consist exclusively of", "meaning_zh": "完全由……构成"}
+      ]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 19,
+      "sentence": "Mondrian's works are deceptively simple, but eye-tracking studies confirm that they are meticulously composed, and that simply rotating a piece radically changes the way we view it.",
+      "translation": "蒙德里安的作品看似简单，但眼动追踪研究证实，它们的构图极为精细，而且仅仅旋转一幅作品就会彻底改变我们观看它的方式。",
+      "structure": [
+        {"text": "Mondrian's works are deceptively simple", "role": "main_clause", "level": 1},
+        {"text": "but eye-tracking studies confirm", "role": "coordinated_clause", "level": 1},
+        {"text": "that they are meticulously composed", "role": "noun_clause", "level": 2},
+        {"text": "and that simply rotating a piece radically changes the way we view it", "role": "noun_clause", "level": 2},
+        {"text": "simply rotating a piece", "role": "subject", "level": 3},
+        {"text": "the way we view it", "role": "object", "level": 3}
+      ],
+      "difficult_points": [
+        "deceptively simple 表示“看起来简单，实际并非如此”，不能直译为“欺骗性地简单”。",
+        "两个 that 从句并列作 confirm 的宾语；第二个从句以动名词短语作主语。"
+      ],
+      "expressions": [
+        {"text": "deceptively simple", "meaning_zh": "看似简单实则不然"},
+        {"text": "be meticulously composed", "meaning_zh": "构图极为精细"},
+        {"text": "radically change", "meaning_zh": "彻底改变"}
+      ]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 20,
+      "sentence": "With the originals, volunteers' eyes tended to stay longer on certain places in the image, but with the altered versions they would flit across a piece more rapidly.",
+      "translation": "观看原作时，志愿者的目光往往会在图像中的某些位置停留更久；而观看改动后的版本时，他们的视线会更快地掠过整幅作品。",
+      "structure": [
+        {"text": "With the originals", "role": "prepositional_phrase", "level": 1},
+        {"text": "volunteers' eyes", "role": "subject", "level": 1},
+        {"text": "tended to stay longer on certain places in the image", "role": "verb_phrase", "level": 1},
+        {"text": "but with the altered versions", "role": "coordinated_clause", "level": 1},
+        {"text": "they would flit across a piece more rapidly", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "两个 with 短语分别表示观看原作和改动版本时的条件。",
+        "they 指代 volunteers' eyes，would 表示实验中反复出现的典型行为。"
+      ],
+      "expressions": [
+        {"text": "tend to do", "meaning_zh": "往往会做某事"},
+        {"text": "flit across", "meaning_zh": "快速掠过"}
+      ]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 21,
+      "sentence": "As a result, the volunteers considered the altered versions less pleasurable when they later rated the work.",
+      "translation": "因此，志愿者后来给作品评分时，认为改动后的版本不那么令人愉悦。",
+      "structure": [
+        {"text": "As a result", "role": "discourse_marker", "level": 1},
+        {"text": "the volunteers", "role": "subject", "level": 1},
+        {"text": "considered the altered versions less pleasurable", "role": "verb_phrase", "level": 1},
+        {"text": "the altered versions", "role": "object", "level": 1},
+        {"text": "less pleasurable", "role": "object_complement", "level": 1},
+        {"text": "when they later rated the work", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "consider + 宾语 + 形容词补语表示“认为某物具有某种性质”。",
+        "when 引导时间状语从句，说明这种判断是在后来评分时作出的。"
+      ],
+      "expressions": [
+        {"text": "as a result", "meaning_zh": "因此"},
+        {"text": "rate the work", "meaning_zh": "给作品评分"}
+      ]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 22,
+      "sentence": "In a similar study, Oshin Vartanian of Toronto University asked volunteers to compare original paintings with ones which he had altered by moving objects around within the frame.",
+      "translation": "在一项类似的研究中，多伦多大学的奥辛·瓦塔尼安让志愿者把原画与他通过移动画框内物体位置而改动过的版本进行比较。",
+      "structure": [
+        {"text": "In a similar study", "role": "prepositional_phrase", "level": 1},
+        {"text": "Oshin Vartanian of Toronto University", "role": "subject", "level": 1},
+        {"text": "asked volunteers to compare original paintings with ones", "role": "verb_phrase", "level": 1},
+        {"text": "which he had altered by moving objects around within the frame", "role": "relative_clause", "level": 2},
+        {"text": "by moving objects around within the frame", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "ones 代替前文的 paintings，以避免重复；which 引导定语从句修饰 ones。",
+        "had altered 使用过去完成时，表示改动画作发生在让志愿者比较之前。"
+      ],
+      "expressions": [
+        {"text": "compare something with", "meaning_zh": "把某物与……比较"},
+        {"text": "within the frame", "meaning_zh": "在画框之内"}
+      ]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 23,
+      "sentence": "He found that almost everyone preferred the original, whether it was a Van Gogh still life or an abstract by Miró.",
+      "translation": "他发现，几乎所有人都更喜欢原作，无论那是梵高的静物画，还是米罗的抽象画。",
+      "structure": [
+        {"text": "He found", "role": "main_clause", "level": 1},
+        {"text": "that almost everyone preferred the original", "role": "noun_clause", "level": 2},
+        {"text": "whether it was a Van Gogh still life or an abstract by Miró", "role": "adverbial_clause", "level": 2},
+        {"text": "a Van Gogh still life or an abstract by Miró", "role": "complement", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导 found 的宾语从句，概括实验中的共同偏好。",
+        "whether... or... 在此表示让步，意为“无论是……还是……”。"
+      ],
+      "expressions": [
+        {"text": "prefer the original", "meaning_zh": "更喜欢原作"},
+        {"text": "whether ... or ...", "meaning_zh": "无论……还是……"}
+      ]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 24,
+      "sentence": "Vartanian also found that changing the composition of the paintings reduced activation in those brain areas linked with meaning and interpretation.",
+      "translation": "瓦塔尼安还发现，改变画作的构图会降低大脑中与意义和解读相关区域的活跃程度。",
+      "structure": [
+        {"text": "Vartanian also found", "role": "main_clause", "level": 1},
+        {"text": "that changing the composition of the paintings reduced activation in those brain areas linked with meaning and interpretation", "role": "noun_clause", "level": 2},
+        {"text": "changing the composition of the paintings", "role": "subject", "level": 3},
+        {"text": "reduced activation in those brain areas", "role": "verb_phrase", "level": 3},
+        {"text": "linked with meaning and interpretation", "role": "participial_phrase", "level": 4}
+      ],
+      "difficult_points": [
+        "that 从句中 changing... 是动名词短语，整体作主语。",
+        "linked with... 是过去分词短语，后置修饰 brain areas。"
+      ],
+      "expressions": [
+        {"text": "change the composition", "meaning_zh": "改变构图"},
+        {"text": "be linked with", "meaning_zh": "与……相关"}
+      ]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 25,
+      "sentence": "In another experiment, Alex Forsythe of the University of Liverpool analysed the visual intricacy of different pieces of art, and her results suggest that many artists use a key level of detail to please the brain.",
+      "translation": "在另一项实验中，利物浦大学的亚历克斯·福赛思分析了不同艺术品的视觉复杂程度，她的结果表明，许多艺术家会采用一个恰到好处的细节层次来取悦大脑。",
+      "structure": [
+        {"text": "In another experiment", "role": "prepositional_phrase", "level": 1},
+        {"text": "Alex Forsythe of the University of Liverpool", "role": "subject", "level": 1},
+        {"text": "analysed the visual intricacy of different pieces of art", "role": "verb_phrase", "level": 1},
+        {"text": "and her results suggest", "role": "coordinated_clause", "level": 1},
+        {"text": "that many artists use a key level of detail to please the brain", "role": "noun_clause", "level": 2},
+        {"text": "to please the brain", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "and 连接实验行为与实验结果两个独立分句，主语分别是 Forsythe 和 her results。",
+        "to please the brain 是目的状语，说明艺术家采用特定细节层次的作用。"
+      ],
+      "expressions": [
+        {"text": "visual intricacy", "meaning_zh": "视觉复杂程度"},
+        {"text": "a key level of detail", "meaning_zh": "恰到好处的细节层次"}
+      ]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 26,
+      "sentence": "Too little and the work is boring, but too much results in a kind of 'perceptual overload', according to Forsythe.",
+      "translation": "福赛思认为，细节太少，作品就会乏味；但细节太多，则会造成某种“感知过载”。",
+      "structure": [
+        {"text": "Too little and the work is boring", "role": "main_clause", "level": 1},
+        {"text": "Too little", "role": "elliptical_clause", "level": 2},
+        {"text": "but too much results in a kind of 'perceptual overload'", "role": "coordinated_clause", "level": 1},
+        {"text": "according to Forsythe", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Too little 省略了 detail；“名词短语 + and + 分句”表达条件及其结果。",
+        "too much 同样省略 detail，并作为 results in 的主语。"
+      ],
+      "expressions": [
+        {"text": "result in", "meaning_zh": "导致"},
+        {"text": "perceptual overload", "meaning_zh": "感知过载"},
+        {"text": "according to", "meaning_zh": "根据；按照……的说法"}
+      ]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 27,
+      "sentence": "What's more, appealing pieces both abstract and representational, show signs of 'fractals' - repeated motifs recurring in different scales.",
+      "translation": "此外，无论是抽象还是具象的悦目作品，都显现出“分形”的迹象——即以不同尺度反复出现的图案。",
+      "structure": [
+        {"text": "What's more", "role": "discourse_marker", "level": 1},
+        {"text": "appealing pieces both abstract and representational", "role": "subject", "level": 1},
+        {"text": "both abstract and representational", "role": "postpositive_modifier", "level": 2},
+        {"text": "show signs of 'fractals'", "role": "verb_phrase", "level": 1},
+        {"text": "repeated motifs recurring in different scales", "role": "appositive", "level": 2},
+        {"text": "recurring in different scales", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "both abstract and representational 是后置修饰语，说明 pieces 同时涵盖抽象与具象作品。",
+        "破折号后的名词短语解释 fractals，recurring... 又后置修饰 motifs。"
+      ],
+      "expressions": [
+        {"text": "what's more", "meaning_zh": "此外；而且"},
+        {"text": "show signs of", "meaning_zh": "显示出……的迹象"},
+        {"text": "recur in different scales", "meaning_zh": "以不同尺度反复出现"}
+      ]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 28,
+      "sentence": "Fractals are common throughout nature, for example in the shapes of mountain peaks or the branches of trees.",
+      "translation": "分形在自然界中十分常见，例如山峰的形状或树木枝杈的形态中就有分形。",
+      "structure": [
+        {"text": "Fractals", "role": "subject", "level": 1},
+        {"text": "are common", "role": "verb_phrase", "level": 1},
+        {"text": "throughout nature", "role": "prepositional_phrase", "level": 1},
+        {"text": "for example in the shapes of mountain peaks or the branches of trees", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "throughout nature 表示分形广泛存在于整个自然界。",
+        "for example 后的介词短语列举分形在自然界中的两种具体表现。"
+      ],
+      "expressions": [
+        {"text": "be common throughout", "meaning_zh": "广泛存在于……"},
+        {"text": "for example", "meaning_zh": "例如"}
+      ]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 29,
+      "sentence": "It is possible that our visual system, which evolved in the great outdoors, finds it easier to process such patterns.",
+      "translation": "我们的视觉系统是在广阔的户外环境中演化而来的，因此它可能觉得这类图案更容易处理。",
+      "structure": [
+        {"text": "It is possible", "role": "main_clause", "level": 1},
+        {"text": "that our visual system, which evolved in the great outdoors, finds it easier to process such patterns", "role": "noun_clause", "level": 2},
+        {"text": "which evolved in the great outdoors", "role": "relative_clause", "level": 3},
+        {"text": "finds it easier to process such patterns", "role": "verb_phrase", "level": 3},
+        {"text": "to process such patterns", "role": "non_finite_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "句首 It 是形式主语，that 从句是真正的主语。",
+        "finds it easier to process... 中 it 是形式宾语，真正的宾语是后面的不定式。"
+      ],
+      "expressions": [
+        {"text": "the great outdoors", "meaning_zh": "广阔的户外环境"},
+        {"text": "find it easier to do", "meaning_zh": "觉得做某事更容易"}
+      ]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 30,
+      "sentence": "It is also intriguing that the brain appears to process movement when we see a handwritten letter, as if we are replaying the writer's moment of creation.",
+      "translation": "同样耐人寻味的是，当我们看到手写字母时，大脑似乎会处理书写动作，仿佛我们正在重演书写者创作的那一刻。",
+      "structure": [
+        {"text": "It is also intriguing", "role": "main_clause", "level": 1},
+        {"text": "that the brain appears to process movement", "role": "noun_clause", "level": 2},
+        {"text": "to process movement", "role": "non_finite_clause", "level": 3},
+        {"text": "when we see a handwritten letter", "role": "adverbial_clause", "level": 2},
+        {"text": "as if we are replaying the writer's moment of creation", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It 是形式主语，that 从句说明真正“耐人寻味”的现象。",
+        "as if 引导方式状语从句，把大脑处理动作比作重演书写过程。"
+      ],
+      "expressions": [
+        {"text": "appear to do", "meaning_zh": "似乎会做某事"},
+        {"text": "as if", "meaning_zh": "仿佛；好像"},
+        {"text": "moment of creation", "meaning_zh": "创作的时刻"}
+      ]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 31,
+      "sentence": "This has led some to wonder whether Pollock's works feel so dynamic because the brain reconstructs the energetic actions the artist used as he painted.",
+      "translation": "这使一些人思考：波洛克的作品之所以显得如此富有动感，是否是因为大脑重构了艺术家作画时所采用的充满活力的动作。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "has led some to wonder", "role": "verb_phrase", "level": 1},
+        {"text": "whether Pollock's works feel so dynamic because the brain reconstructs the energetic actions the artist used as he painted", "role": "noun_clause", "level": 2},
+        {"text": "because the brain reconstructs the energetic actions the artist used", "role": "adverbial_clause", "level": 3},
+        {"text": "the artist used", "role": "relative_clause", "level": 4},
+        {"text": "as he painted", "role": "adverbial_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "lead someone to wonder whether... 表示“使某人开始思考是否……”。",
+        "the artist used 是省略关系代词 that 的定语从句，修饰 actions；as 表示作画时。"
+      ],
+      "expressions": [
+        {"text": "lead someone to wonder", "meaning_zh": "使某人开始思考"},
+        {"text": "feel dynamic", "meaning_zh": "显得富有动感"}
+      ]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 32,
+      "sentence": "This may be down to our brain's 'mirror neurons', which are known to mimic others' actions.",
+      "translation": "这可能要归因于大脑中的“镜像神经元”，这种神经元以模仿他人的动作而为人所知。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "may be down to our brain's 'mirror neurons'", "role": "verb_phrase", "level": 1},
+        {"text": "which are known to mimic others' actions", "role": "relative_clause", "level": 2},
+        {"text": "to mimic others' actions", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "be down to 表示“由……造成；归因于……”，不是空间意义上的“向下”。",
+        "which 引导非限制性定语从句，指代 mirror neurons。"
+      ],
+      "expressions": [
+        {"text": "be down to", "meaning_zh": "归因于；由……造成"},
+        {"text": "be known to do", "meaning_zh": "被认为会做某事"}
+      ]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 33,
+      "sentence": "The hypothesis will need to be thoroughly tested, however.",
+      "translation": "不过，这一假说还需要得到全面检验。",
+      "structure": [
+        {"text": "The hypothesis", "role": "subject", "level": 1},
+        {"text": "will need to be thoroughly tested", "role": "verb_phrase", "level": 1},
+        {"text": "to be thoroughly tested", "role": "non_finite_clause", "level": 2},
+        {"text": "however", "role": "discourse_marker", "level": 1}
+      ],
+      "difficult_points": [
+        "need to be tested 是不定式的被动形式，假说是被检验的对象。",
+        "however 置于句末，用逗号隔开，表示对前述推测的限制。"
+      ],
+      "expressions": [
+        {"text": "be thoroughly tested", "meaning_zh": "得到全面检验"}
+      ]
+    },
+    {
+      "id": "H-05", "paragraph_label": "H", "sentence_index": 34,
+      "sentence": "It might even be the case that we could use neuroaesthetic studies to understand the longevity of some pieces of artwork.",
+      "translation": "甚至有可能的是，我们可以利用神经美学研究来理解某些艺术作品为何能够经久不衰。",
+      "structure": [
+        {"text": "It might even be the case", "role": "main_clause", "level": 1},
+        {"text": "that we could use neuroaesthetic studies to understand the longevity of some pieces of artwork", "role": "noun_clause", "level": 2},
+        {"text": "use neuroaesthetic studies", "role": "verb_phrase", "level": 3},
+        {"text": "to understand the longevity of some pieces of artwork", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "It might be the case that... 是谨慎提出可能性的结构，that 从句说明具体可能性。",
+        "to understand... 是目的状语；longevity 在此指艺术品长期保持影响力。"
+      ],
+      "expressions": [
+        {"text": "it might be the case that", "meaning_zh": "有可能……"},
+        {"text": "the longevity of", "meaning_zh": "……的持久生命力"}
+      ]
+    },
+    {
+      "id": "H-06", "paragraph_label": "H", "sentence_index": 35,
+      "sentence": "While the fashions of the time might shape what is currently popular, works that are best adapted to our visual system may be the most likely to linger once the trends of previous generations have been forgotten.",
+      "translation": "尽管时代风尚可能塑造当下的流行取向，但最契合我们视觉系统的作品，或许最有可能在前几代人的潮流被遗忘后继续流传。",
+      "structure": [
+        {"text": "While the fashions of the time might shape what is currently popular", "role": "adverbial_clause", "level": 1},
+        {"text": "what is currently popular", "role": "noun_clause", "level": 2},
+        {"text": "works that are best adapted to our visual system", "role": "subject", "level": 1},
+        {"text": "that are best adapted to our visual system", "role": "relative_clause", "level": 2},
+        {"text": "may be the most likely to linger", "role": "verb_phrase", "level": 1},
+        {"text": "once the trends of previous generations have been forgotten", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "While 引导让步状语从句；what 引导宾语从句，表示“当前流行的事物”。",
+        "once 引导时间状语从句，其中 have been forgotten 是现在完成时的被动语态。"
+      ],
+      "expressions": [
+        {"text": "be adapted to", "meaning_zh": "适应；契合"},
+        {"text": "be likely to linger", "meaning_zh": "很可能长久留存"},
+        {"text": "the trends of previous generations", "meaning_zh": "前几代人的潮流"}
+      ]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 36,
+      "sentence": "It's still early days for the field of neuroaesthetics - and these studies are probably only a taste of what is to come.",
+      "translation": "神经美学领域仍处于起步阶段，而这些研究或许只是未来成果的一次初步展示。",
+      "structure": [
+        {"text": "It's still early days for the field of neuroaesthetics", "role": "main_clause", "level": 1},
+        {"text": "for the field of neuroaesthetics", "role": "prepositional_phrase", "level": 1},
+        {"text": "and these studies are probably only a taste of what is to come", "role": "coordinated_clause", "level": 1},
+        {"text": "what is to come", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "early days 是固定说法，表示某领域尚处于发展的早期阶段。",
+        "what is to come 是 what 引导的名词性从句，表示未来将出现的事物。"
+      ],
+      "expressions": [
+        {"text": "be early days for", "meaning_zh": "对……而言尚处于起步阶段"},
+        {"text": "a taste of what is to come", "meaning_zh": "未来事物的初步体验"}
+      ]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 37,
+      "sentence": "It would, however, be foolish to reduce art appreciation to a set of scientific laws.",
+      "translation": "然而，把艺术鉴赏归结为一套科学规律将是愚蠢的。",
+      "structure": [
+        {"text": "It would, however, be foolish", "role": "main_clause", "level": 1},
+        {"text": "however", "role": "discourse_marker", "level": 1},
+        {"text": "to reduce art appreciation to a set of scientific laws", "role": "non_finite_clause", "level": 2},
+        {"text": "a set of scientific laws", "role": "object_complement", "level": 3}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的主语是 to reduce... 不定式短语。",
+        "reduce A to B 表示把复杂的 A 简化或归结为 B，带有批判意味。"
+      ],
+      "expressions": [
+        {"text": "reduce something to", "meaning_zh": "把某事物归结为……"},
+        {"text": "a set of", "meaning_zh": "一套；一组"}
+      ]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 38,
+      "sentence": "We shouldn't underestimate the importance of the style of a particular artist, their place in history and the artistic environment of their time.",
+      "translation": "我们不应低估某位艺术家的个人风格、其历史地位以及所处时代的艺术环境的重要性。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "shouldn't underestimate", "role": "verb_phrase", "level": 1},
+        {"text": "the importance of the style of a particular artist, their place in history and the artistic environment of their time", "role": "object", "level": 1},
+        {"text": "the style of a particular artist, their place in history and the artistic environment of their time", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "the importance of 后接三个并列成分：艺术家风格、历史地位和时代艺术环境。",
+        "their 是单数不定性别用法，指代 a particular artist。"
+      ],
+      "expressions": [
+        {"text": "underestimate the importance of", "meaning_zh": "低估……的重要性"},
+        {"text": "place in history", "meaning_zh": "历史地位"}
+      ]
+    },
+    {
+      "id": "I-04", "paragraph_label": "I", "sentence_index": 39,
+      "sentence": "Abstract art offers both a challenge and the freedom to play with different interpretations.",
+      "translation": "抽象艺术既带来挑战，也赋予人们探索不同解读的自由。",
+      "structure": [
+        {"text": "Abstract art", "role": "subject", "level": 1},
+        {"text": "offers", "role": "verb_phrase", "level": 1},
+        {"text": "both a challenge and the freedom to play with different interpretations", "role": "object", "level": 1},
+        {"text": "to play with different interpretations", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "both... and... 并列 offer 的两个宾语：a challenge 与 the freedom。",
+        "to play with... 后置修饰 freedom，说明这种自由的具体内容。"
+      ],
+      "expressions": [
+        {"text": "offer both ... and ...", "meaning_zh": "既提供……又提供……"},
+        {"text": "play with different interpretations", "meaning_zh": "探索不同的解读"}
+      ]
+    },
+    {
+      "id": "I-05", "paragraph_label": "I", "sentence_index": 40,
+      "sentence": "In some ways, it's not so different to science, where we are constantly looking for systems and decoding meaning so that we can view and appreciate the world in a new way.",
+      "translation": "在某些方面，抽象艺术与科学并没有太大不同；在科学中，我们不断寻找体系、解读意义，从而能以新的方式看待和认识世界。",
+      "structure": [
+        {"text": "In some ways", "role": "prepositional_phrase", "level": 1},
+        {"text": "it's not so different to science", "role": "main_clause", "level": 1},
+        {"text": "where we are constantly looking for systems and decoding meaning", "role": "relative_clause", "level": 2},
+        {"text": "looking for systems and decoding meaning", "role": "verb_phrase", "level": 3},
+        {"text": "so that we can view and appreciate the world in a new way", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "it 指代前句的 abstract art；where 引导非限制性定语从句，修饰 science。",
+        "so that 引导目的或结果状语从句，view 与 appreciate 并列。"
+      ],
+      "expressions": [
+        {"text": "in some ways", "meaning_zh": "在某些方面"},
+        {"text": "look for systems", "meaning_zh": "寻找体系"},
+        {"text": "in a new way", "meaning_zh": "以新的方式"}
+      ]
+    }
+  ]
+}

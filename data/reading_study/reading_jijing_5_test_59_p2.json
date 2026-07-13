@@ -1,0 +1,445 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_5_test_59",
+  "passage_id": "reading_jijing_5_test_59_p2",
+  "passage_title": "How Fair is Fair Trade?",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "The fair-trade movement began in Europe in earnest in the post-war period, but only in the last 25 years has it grown to include producers and consumers in over 60 countries.",
+      "translation": "公平贸易运动在战后时期才真正在欧洲兴起，但直到最近 25 年，它才发展到涵盖 60 多个国家的生产者和消费者。",
+      "structure": [
+        {"text": "The fair-trade movement began in Europe in earnest in the post-war period", "role": "main_clause", "level": 1},
+        {"text": "but only in the last 25 years has it grown", "role": "inverted_coordinated_clause", "level": 1},
+        {"text": "to include producers and consumers in over 60 countries", "role": "result_clause", "level": 2}
+      ],
+      "difficult_points": ["in earnest 表示该运动在战后才真正认真、全面地展开。", "only in the last 25 years 位于句首触发部分倒装，因此使用 has it grown。", "it 指代 the fair-trade movement。"],
+      "expressions": [{"text": "in earnest", "meaning_zh": "认真地；真正地"}, {"text": "grow to include", "meaning_zh": "发展到涵盖"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 2,
+      "sentence": "In the 1950s and 60s, many people in the developed world felt passionately about the enormous disparities between developed and developing countries, and they believed the system of international trade shut out African, Asian, and South American producers who could not compete with multinational companies or who came from states that, for political reasons, were not trading with the West.",
+      "translation": "在 20 世纪五六十年代，发达国家的许多人强烈关注发达国家与发展中国家之间的巨大差距；他们认为，国际贸易体系将非洲、亚洲和南美洲的生产者拒之门外，因为这些生产者要么无法与跨国公司竞争，要么来自因政治原因不与西方进行贸易的国家。",
+      "structure": [
+        {"text": "many people in the developed world felt passionately about the enormous disparities between developed and developing countries", "role": "main_clause", "level": 1},
+        {"text": "and they believed", "role": "coordinated_clause", "level": 1},
+        {"text": "the system of international trade shut out African, Asian, and South American producers", "role": "object_clause", "level": 2},
+        {"text": "who could not compete with multinational companies or who came from states that, for political reasons, were not trading with the West", "role": "coordinated_relative_clauses", "level": 3}
+      ],
+      "difficult_points": ["believed 后省略 that，后面的完整句子作宾语从句。", "两个 who 从句并列修饰 producers，分别说明两类受排斥的生产者。", "that 修饰 states，for political reasons 是插入其中的原因状语。"],
+      "expressions": [{"text": "enormous disparities between", "meaning_zh": "……之间的巨大差距"}, {"text": "shut out", "meaning_zh": "排斥；拒之门外"}, {"text": "compete with", "meaning_zh": "与……竞争"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 3,
+      "sentence": "The catchphrase 'Trade Not Aid' was used by church groups and trade unions – early supporters of fair trade – who also considered that international aid was either a pittance or a covert form of subjugation.",
+      "translation": "“要贸易，不要援助”这句口号由教会团体和工会使用——它们是公平贸易的早期支持者——这些团体还认为，国际援助要么少得可怜，要么是一种隐蔽的支配手段。",
+      "structure": [
+        {"text": "The catchphrase 'Trade Not Aid' was used by church groups and trade unions", "role": "passive_main_clause", "level": 1},
+        {"text": "early supporters of fair trade", "role": "apposition", "level": 1},
+        {"text": "who also considered", "role": "relative_clause", "level": 2},
+        {"text": "that international aid was either a pittance or a covert form of subjugation", "role": "object_clause", "level": 3}
+      ],
+      "difficult_points": ["破折号中的名词短语是 church groups and trade unions 的同位说明。", "who 回指这两个组织，而不是 fair trade。", "either ... or ... 连接对国际援助的两种负面判断。"],
+      "expressions": [{"text": "either ... or ...", "meaning_zh": "要么……要么……"}, {"text": "a covert form of", "meaning_zh": "一种隐蔽形式的……"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "These days, much fair trade does include aid: developed-world volunteers offer their services, and there is free training for producers and their workers.",
+      "translation": "如今，许多公平贸易项目确实包含援助：发达国家的志愿者提供服务，生产者及其工人也能获得免费培训。",
+      "structure": [
+        {"text": "These days, much fair trade does include aid", "role": "main_clause", "level": 1},
+        {"text": "developed-world volunteers offer their services", "role": "explanatory_clause", "level": 1},
+        {"text": "and there is free training for producers and their workers", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["does include 中 does 用于强调，意为“确实包含”。", "冒号后的两个分句具体解释援助的形式。", "there is 是存在句，free training 是真正的信息中心。"],
+      "expressions": [{"text": "offer their services", "meaning_zh": "提供服务"}, {"text": "free training for", "meaning_zh": "面向……的免费培训"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 5,
+      "sentence": "Tea, coffee, cocoa, cotton, flowers, handicrafts, and gold are all major fair-trade items, with coffee being the most recognisable, fund on supermarket shelves and at café chains throughout the developed world.",
+      "translation": "茶、咖啡、可可、棉花、鲜花、手工艺品和黄金都是主要的公平贸易商品，其中咖啡最为人熟知，在发达国家各地的超市货架和连锁咖啡馆都能看到。",
+      "structure": [
+        {"text": "Tea, coffee, cocoa, cotton, flowers, handicrafts, and gold", "role": "compound_subject", "level": 1},
+        {"text": "are all major fair-trade items", "role": "linking_predicate", "level": 1},
+        {"text": "with coffee being the most recognisable", "role": "with_absolute_construction", "level": 1},
+        {"text": "fund on supermarket shelves and at café chains throughout the developed world", "role": "participle_supplement", "level": 2}
+      ],
+      "difficult_points": ["with coffee being ... 是 with 独立结构，突出咖啡在这些商品中最知名。", "fund 是源文 OCR 错误，按 found 理解，表示咖啡在各处都能找到。", "on supermarket shelves 与 at café chains 并列说明出现地点。"],
+      "expressions": [{"text": "fair-trade items", "meaning_zh": "公平贸易商品"}, {"text": "throughout the developed world", "meaning_zh": "遍及发达国家"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 6,
+      "sentence": "Although around two million farmers and workers produce fair-trade items, this is a tiny number in relation to total global trade.",
+      "translation": "尽管约有两百万农民和工人生产公平贸易商品，但相对于全球贸易总量而言，这个数字仍然很小。",
+      "structure": [
+        {"text": "Although around two million farmers and workers produce fair-trade items", "role": "concession_clause", "level": 1},
+        {"text": "this is a tiny number", "role": "main_clause", "level": 1},
+        {"text": "in relation to total global trade", "role": "comparison_adverbial", "level": 1}
+      ],
+      "difficult_points": ["Although 引导让步从句，与主句中的 tiny 形成数量大但占比小的反差。", "this 指代 around two million farmers and workers 这一数字。"],
+      "expressions": [{"text": "in relation to", "meaning_zh": "相对于；与……相比"}, {"text": "total global trade", "meaning_zh": "全球贸易总量"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 7,
+      "sentence": "Still, fair-trade advocates maintain that the system has positively impacted upon many more people worldwide, while the critics claim that if those two million returned to the mainstream trading system, they would receive higher prices for their goods or labour.",
+      "translation": "尽管如此，公平贸易的支持者坚持认为，该体系已经对全球更多人产生了积极影响；而批评者则声称，如果那两百万人回归主流贸易体系，他们的商品或劳动会获得更高价格。",
+      "structure": [
+        {"text": "fair-trade advocates maintain", "role": "main_clause", "level": 1},
+        {"text": "that the system has positively impacted upon many more people worldwide", "role": "object_clause", "level": 2},
+        {"text": "while the critics claim", "role": "contrast_clause", "level": 1},
+        {"text": "that if those two million returned to the mainstream trading system, they would receive higher prices for their goods or labour", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["while 在此表示对比，连接支持者和批评者的相反观点。", "if ... returned, ... would receive 是与现实情况相反或不确定的假设。", "those two million 回指前句的农民和工人。"],
+      "expressions": [{"text": "maintain that", "meaning_zh": "坚持认为"}, {"text": "impact upon", "meaning_zh": "对……产生影响"}, {"text": "mainstream trading system", "meaning_zh": "主流贸易体系"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 8,
+      "sentence": "Fair trade is supposed to be a trade that is fair to producers.",
+      "translation": "公平贸易理应是一种对生产者公平的贸易。",
+      "structure": [
+        {"text": "Fair trade", "role": "subject", "level": 1},
+        {"text": "is supposed to be a trade", "role": "passive_predicate", "level": 1},
+        {"text": "that is fair to producers", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["be supposed to 表示按其理念或定义“理应如此”。", "that 引导定语从句修饰 a trade。"],
+      "expressions": [{"text": "be supposed to be", "meaning_zh": "理应是"}, {"text": "be fair to", "meaning_zh": "对……公平"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 9,
+      "sentence": "Its basic tenet is that developed-world consumers will pay slightly more for end products in the knowledge that developing-world producers have been equitably remunerated, and that the products have been made in decent circumstances.",
+      "translation": "它的基本原则是：发达国家的消费者愿意为最终产品多支付一点，因为他们知道发展中国家的生产者获得了公平报酬，而且产品是在体面条件下制造的。",
+      "structure": [
+        {"text": "Its basic tenet is", "role": "main_clause", "level": 1},
+        {"text": "that developed-world consumers will pay slightly more for end products", "role": "predicative_clause", "level": 2},
+        {"text": "in the knowledge", "role": "reason_adverbial", "level": 2},
+        {"text": "that developing-world producers have been equitably remunerated, and that the products have been made in decent circumstances", "role": "coordinated_appositive_clauses", "level": 3}
+      ],
+      "difficult_points": ["第一个 that 引导表语从句，说明 basic tenet 的内容。", "in the knowledge that 表示消费者是在了解某事实的情况下付费。", "后两个 that 从句并列，分别说明生产者待遇和生产条件。"],
+      "expressions": [{"text": "basic tenet", "meaning_zh": "基本原则"}, {"text": "in the knowledge that", "meaning_zh": "知道……；基于……的认识"}, {"text": "be equitably remunerated", "meaning_zh": "获得公平报酬"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 10,
+      "sentence": "Additionally, the fair-trade system diers from that of the open market because there is a minimum price paid for goods, which may be higher than that of the open market.",
+      "translation": "此外，公平贸易体系不同于开放市场体系，因为商品有一个最低收购价，而这个价格可能高于开放市场价格。",
+      "structure": [
+        {"text": "the fair-trade system diers from that of the open market", "role": "main_clause", "level": 1},
+        {"text": "because there is a minimum price paid for goods", "role": "cause_clause", "level": 2},
+        {"text": "which may be higher than that of the open market", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["diers 是源文 OCR 异常，应按 differs 理解。", "第一个 that 替代 system，避免重复 the system of the open market。", "which 修饰 minimum price；第二个 that 替代 price。"],
+      "expressions": [{"text": "differ from", "meaning_zh": "不同于"}, {"text": "minimum price", "meaning_zh": "最低价格"}, {"text": "be higher than", "meaning_zh": "高于"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 11,
+      "sentence": "Secondly, a small premium, earmarked for community development, is added in good years; for example, coee co-operatives in South America frequently receive an additional 25c per kilogram.",
+      "translation": "其次，在收成好的年份还会增加一小笔专用于社区发展的溢价；例如，南美洲的咖啡合作社经常每公斤额外获得 25 美分。",
+      "structure": [
+        {"text": "a small premium", "role": "subject", "level": 1},
+        {"text": "earmarked for community development", "role": "participle_attributive", "level": 2},
+        {"text": "is added in good years", "role": "passive_predicate", "level": 1},
+        {"text": "coee co-operatives in South America frequently receive an additional 25c per kilogram", "role": "example_clause", "level": 1}
+      ],
+      "difficult_points": ["earmarked for 是过去分词短语，修饰 premium，说明这笔钱的指定用途。", "分号后以 for example 给出前述机制的具体实例。", "coee 是源文 OCR 错误，按 coffee 理解。"],
+      "expressions": [{"text": "be earmarked for", "meaning_zh": "专门用于"}, {"text": "community development", "meaning_zh": "社区发展"}, {"text": "per kilogram", "meaning_zh": "每公斤"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 12,
+      "sentence": "Lastly, purchasers of fair-trade products may assist with crop pre-financing or with the training of producers and workers, which could take the form of improving product quality, using environmentally friendly fertilisers, or raising literacy.",
+      "translation": "最后，公平贸易产品的采购者可以协助提供作物生产前融资，或培训生产者和工人；培训可以采取提高产品质量、使用环保肥料或提升识字水平等形式。",
+      "structure": [
+        {"text": "purchasers of fair-trade products may assist with crop pre-financing or with the training of producers and workers", "role": "main_clause", "level": 1},
+        {"text": "which could take the form of", "role": "relative_clause", "level": 2},
+        {"text": "improving product quality, using environmentally friendly fertilisers, or raising literacy", "role": "gerund_complements", "level": 3}
+      ],
+      "difficult_points": ["两个 with 短语并列，说明采购者可提供的两类协助。", "which 就近指 training，而非整个主句。", "improving、using 和 raising 是三个并列动名词，列举培训内容。"],
+      "expressions": [{"text": "assist with", "meaning_zh": "协助……"}, {"text": "take the form of", "meaning_zh": "采取……的形式"}, {"text": "raise literacy", "meaning_zh": "提高识字水平"}]
+    },
+    {
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 13,
+      "sentence": "Research has shown that non-fair-trade farmers copy some fair-trade farming practices, and, occasionally, encourage social progress.",
+      "translation": "研究表明，非公平贸易体系中的农民会借鉴一些公平贸易耕作方式，并且偶尔也会推动社会进步。",
+      "structure": [
+        {"text": "Research has shown", "role": "main_clause", "level": 1},
+        {"text": "that non-fair-trade farmers copy some fair-trade farming practices", "role": "object_clause", "level": 2},
+        {"text": "and, occasionally, encourage social progress", "role": "coordinated_predicate", "level": 2}
+      ],
+      "difficult_points": ["that 引导 shown 的宾语从句。", "copy 与 encourage 是并列谓语，共用主语 non-fair-trade farmers。", "occasionally 被逗号隔开，强调第二种效果只是偶尔出现。"],
+      "expressions": [{"text": "research has shown that", "meaning_zh": "研究表明……"}, {"text": "encourage social progress", "meaning_zh": "推动社会进步"}]
+    },
+    {
+      "id": "E-07", "paragraph_label": "E", "sentence_index": 14,
+      "sentence": "In exchange for ethical purchase and other assistance, fair-trade producers agree not to use child or slave labour, to adhere to the United Nations Charter on Human Rights, to provide safe workplaces, and to protect the environment despite these not being legally binding in their own countries.",
+      "translation": "作为对道德采购及其他援助的交换，公平贸易生产者同意不使用童工或奴工，遵守《联合国人权宪章》，提供安全的工作场所并保护环境，尽管这些要求在其本国并不具有法律约束力。",
+      "structure": [
+        {"text": "In exchange for ethical purchase and other assistance", "role": "exchange_adverbial", "level": 1},
+        {"text": "fair-trade producers agree", "role": "main_clause", "level": 1},
+        {"text": "not to use child or slave labour, to adhere to the United Nations Charter on Human Rights, to provide safe workplaces, and to protect the environment", "role": "coordinated_infinitive_complements", "level": 2},
+        {"text": "despite these not being legally binding in their own countries", "role": "concession_adverbial", "level": 2}
+      ],
+      "difficult_points": ["四个不定式并列作 agree 的内容，第一个以 not 否定。", "despite 后接 these not being 的动名词复合结构。", "these 回指前面列出的劳动、人权、工作场所和环保要求。"],
+      "expressions": [{"text": "in exchange for", "meaning_zh": "作为……的交换"}, {"text": "adhere to", "meaning_zh": "遵守"}, {"text": "be legally binding", "meaning_zh": "具有法律约束力"}]
+    },
+    {
+      "id": "E-08", "paragraph_label": "E", "sentence_index": 15,
+      "sentence": "However, few non-fair-trade farmers have adopted these practices, viewing them as little more than rich-world conceits.",
+      "translation": "然而，很少有非公平贸易农民采用这些做法，因为他们认为这些做法不过是富裕国家自以为是的观念。",
+      "structure": [
+        {"text": "few non-fair-trade farmers have adopted these practices", "role": "main_clause", "level": 1},
+        {"text": "viewing them as little more than rich-world conceits", "role": "participle_reason", "level": 1}
+      ],
+      "difficult_points": ["few 本身带否定含义，表示采用者很少。", "viewing 的逻辑主语是 farmers，说明他们不采用这些做法的认知原因。", "them 回指 these practices；little more than 表示“不过是”。"],
+      "expressions": [{"text": "adopt these practices", "meaning_zh": "采用这些做法"}, {"text": "view ... as ...", "meaning_zh": "把……视为……"}, {"text": "little more than", "meaning_zh": "不过是"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 16,
+      "sentence": "So that consumers know which products are made under fair-trade conditions, goods are labelled, and, these days, a single European and American umbrella organisation supervises labelling, standardisation, and inspection.",
+      "translation": "为了让消费者知道哪些产品是在公平贸易条件下生产的，商品会被贴上标签；如今，一个统一覆盖欧洲和美国的组织负责监督标签、标准化和检查工作。",
+      "structure": [
+        {"text": "So that consumers know which products are made under fair-trade conditions", "role": "purpose_clause", "level": 1},
+        {"text": "which products are made under fair-trade conditions", "role": "object_clause", "level": 2},
+        {"text": "goods are labelled", "role": "main_clause", "level": 1},
+        {"text": "and, these days, a single European and American umbrella organisation supervises labelling, standardisation, and inspection", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["So that 引导目的从句，说明贴标签的目的。", "which 引导宾语从句，作 know 的宾语。", "umbrella organisation 指统辖多个相关机构或地区的综合组织。"],
+      "expressions": [{"text": "so that", "meaning_zh": "以便；为了"}, {"text": "under fair-trade conditions", "meaning_zh": "在公平贸易条件下"}, {"text": "umbrella organisation", "meaning_zh": "综合性统辖组织"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 17,
+      "sentence": "While fair trade is increasing, the system is far from perfect.",
+      "translation": "虽然公平贸易正在增长，但这一体系远非完美。",
+      "structure": [
+        {"text": "While fair trade is increasing", "role": "concession_clause", "level": 1},
+        {"text": "the system is far from perfect", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": ["While 在此表示让步，相当于 although，而非单纯表示时间。", "far from perfect 是“远非完美”，语气比 not perfect 更强。"],
+      "expressions": [{"text": "be far from perfect", "meaning_zh": "远非完美"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 18,
+      "sentence": "First and foremost, there are expenses involved in becoming a fair-trade-certified producer, meaning the desperately poor rarely participate, so the very farmers fair-trade advocates originally hoped to support are excluded.",
+      "translation": "首要的问题是，成为获得公平贸易认证的生产者需要承担费用，这意味着赤贫者很少能够参与，因此恰恰是公平贸易倡导者最初希望帮助的农民被排除在外。",
+      "structure": [
+        {"text": "there are expenses involved in becoming a fair-trade-certified producer", "role": "existential_main_clause", "level": 1},
+        {"text": "meaning the desperately poor rarely participate", "role": "participle_result", "level": 1},
+        {"text": "so the very farmers fair-trade advocates originally hoped to support are excluded", "role": "result_clause", "level": 1},
+        {"text": "fair-trade advocates originally hoped to support", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["meaning 引出认证成本造成的直接结果。", "the very farmers 中 very 用于强调“恰恰就是那些农民”。", "farmers 后省略关系代词 whom/that，它在定语从句中作 support 的宾语。"],
+      "expressions": [{"text": "first and foremost", "meaning_zh": "首先且最重要的是"}, {"text": "be involved in", "meaning_zh": "涉及；伴随"}, {"text": "be excluded", "meaning_zh": "被排除在外"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 19,
+      "sentence": "Secondly, because conforming to the standards of fair-trade certification is costly, some producers deliberately mislabel their goods.",
+      "translation": "其次，由于遵守公平贸易认证标准成本高昂，一些生产者会故意给商品贴上不实标签。",
+      "structure": [
+        {"text": "because conforming to the standards of fair-trade certification is costly", "role": "cause_clause", "level": 1},
+        {"text": "conforming to the standards of fair-trade certification", "role": "gerund_subject", "level": 2},
+        {"text": "some producers deliberately mislabel their goods", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": ["because 引导原因从句。", "conforming 是动名词，在原因从句中作主语。", "mislabel 表示贴上错误或误导性标签。"],
+      "expressions": [{"text": "conform to the standards of", "meaning_zh": "遵守……标准"}, {"text": "deliberately mislabel", "meaning_zh": "故意贴错标签"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 20,
+      "sentence": "The fair-trade monitoring process is patchy, and unfortunately, around 12% of fair-trade-labelled produce is nothing of the kind.",
+      "translation": "公平贸易的监督过程并不完善；遗憾的是，约 12% 贴有公平贸易标签的农产品其实根本不是公平贸易产品。",
+      "structure": [
+        {"text": "The fair-trade monitoring process is patchy", "role": "main_clause", "level": 1},
+        {"text": "and unfortunately, around 12% of fair-trade-labelled produce is nothing of the kind", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": ["patchy 在此表示监督覆盖不完整、质量不稳定。", "nothing of the kind 是固定表达，意为“根本不是那么回事”。", "produce 在此作不可数名词，指农产品。"],
+      "expressions": [{"text": "monitoring process", "meaning_zh": "监督过程"}, {"text": "nothing of the kind", "meaning_zh": "根本不是那回事"}]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 21,
+      "sentence": "Next, a crop may genuinely be produced under fair-trade conditions, but due to a lack of demand cannot be sold as fair trade, so goes onto the open market, where prices are mostly lower.",
+      "translation": "此外，一种作物可能确实按照公平贸易条件生产，但由于需求不足，无法作为公平贸易商品出售，于是只能进入价格通常更低的开放市场。",
+      "structure": [
+        {"text": "a crop may genuinely be produced under fair-trade conditions", "role": "main_clause", "level": 1},
+        {"text": "but due to a lack of demand cannot be sold as fair trade", "role": "coordinated_predicate", "level": 1},
+        {"text": "so goes onto the open market", "role": "result_clause", "level": 1},
+        {"text": "where prices are mostly lower", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["but 和 so 后都省略了重复主语 a crop。", "due to a lack of demand 说明无法按公平贸易出售的原因。", "where 修饰 the open market，说明该市场中的价格情况。"],
+      "expressions": [{"text": "due to a lack of demand", "meaning_zh": "由于需求不足"}, {"text": "be sold as", "meaning_zh": "作为……出售"}, {"text": "go onto the open market", "meaning_zh": "进入开放市场"}]
+    },
+    {
+      "id": "G-06", "paragraph_label": "G", "sentence_index": 22,
+      "sentence": "It is estimated that only between 18-37% of fair-trade output is actually sold as fair trade.",
+      "translation": "据估计，公平贸易产量中实际上只有 18% 至 37% 最终以公平贸易商品出售。",
+      "structure": [
+        {"text": "It is estimated", "role": "passive_main_clause", "level": 1},
+        {"text": "that only between 18-37% of fair-trade output is actually sold as fair trade", "role": "subject_clause", "level": 2}
+      ],
+      "difficult_points": ["It 是形式主语，that 从句承载真正被估计的内容。", "is sold 使用被动语态，关注产量最终如何进入市场。", "between 18-37% 是源文的范围写法，语义为 18% 到 37%。"],
+      "expressions": [{"text": "it is estimated that", "meaning_zh": "据估计……"}, {"text": "fair-trade output", "meaning_zh": "公平贸易产量"}]
+    },
+    {
+      "id": "G-07", "paragraph_label": "G", "sentence_index": 23,
+      "sentence": "Sadly, there is little reliable research on the real relationship between costs incurred and revenue for fair-trade farmers, although empirical evidence suggests that many never realise a profit.",
+      "translation": "遗憾的是，关于公平贸易农民所承担成本与所得收入之间真实关系的可靠研究很少，尽管经验证据表明许多人从未真正盈利。",
+      "structure": [
+        {"text": "there is little reliable research", "role": "existential_main_clause", "level": 1},
+        {"text": "on the real relationship between costs incurred and revenue for fair-trade farmers", "role": "postmodifier", "level": 1},
+        {"text": "although empirical evidence suggests", "role": "concession_clause", "level": 1},
+        {"text": "that many never realise a profit", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["little 修饰不可数名词 research，表示几乎没有，含否定意味。", "incurred 是过去分词，后置修饰 costs，意为已经发生或承担的成本。", "that 从句作 suggests 的宾语，many 指许多公平贸易农民。"],
+      "expressions": [{"text": "costs incurred", "meaning_zh": "已发生的成本"}, {"text": "empirical evidence suggests that", "meaning_zh": "经验证据表明……"}, {"text": "realise a profit", "meaning_zh": "实现盈利"}]
+    },
+    {
+      "id": "G-08", "paragraph_label": "G", "sentence_index": 24,
+      "sentence": "Partly, reporting from producers is inadequate, and ways of determining profit may not include credit, harvesting, transport, or processing.",
+      "translation": "部分原因是生产者提供的报告不充分，而且计算利润的方法可能没有把信贷、收割、运输或加工成本包括在内。",
+      "structure": [
+        {"text": "reporting from producers is inadequate", "role": "main_clause", "level": 1},
+        {"text": "and ways of determining profit may not include credit, harvesting, transport, or processing", "role": "coordinated_clause", "level": 1},
+        {"text": "of determining profit", "role": "postmodifier", "level": 2}
+      ],
+      "difficult_points": ["Partly 承接上一句，表示研究不足只是由部分原因造成。", "determining 是动名词，作介词 of 的宾语。", "credit、harvesting、transport 和 processing 是可能被漏算的成本项目。"],
+      "expressions": [{"text": "reporting from producers", "meaning_zh": "生产者提交的报告"}, {"text": "ways of determining profit", "meaning_zh": "计算利润的方法"}]
+    },
+    {
+      "id": "G-09", "paragraph_label": "G", "sentence_index": 25,
+      "sentence": "Sometimes, the price paid to fair-trade producers is lower than that of the open market, so while a crop may be sold, elsewhere it could have earnt more, or where there are profits, they are often taken by the corporate firms that buy the goods and sell them on to retailers.",
+      "translation": "有时，支付给公平贸易生产者的价格低于开放市场价格，因此即使作物卖了出去，换个地方本可以卖得更多；而即便产生利润，利润也往往被那些买入商品再转售给零售商的公司拿走。",
+      "structure": [
+        {"text": "the price paid to fair-trade producers is lower than that of the open market", "role": "main_clause", "level": 1},
+        {"text": "so while a crop may be sold, elsewhere it could have earnt more", "role": "result_clause", "level": 1},
+        {"text": "or where there are profits, they are often taken by the corporate firms", "role": "alternative_clause", "level": 1},
+        {"text": "that buy the goods and sell them on to retailers", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["paid to fair-trade producers 是过去分词短语，修饰 price；that 替代 price。", "could have earnt 表示过去本可能获得但未获得的更高收益。", "where there are profits 中 where 相当于“在存在利润的情况下”，they 指 profits。", "that 修饰 corporate firms，buy 与 sell on 是并列谓语。"],
+      "expressions": [{"text": "be lower than that of", "meaning_zh": "低于……的水平"}, {"text": "could have earned more", "meaning_zh": "本可以赚得更多"}, {"text": "sell ... on to", "meaning_zh": "把……转售给……"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 26,
+      "sentence": "There are problems with the developed-world part of the equation too.",
+      "translation": "公平贸易链条中发达国家这一端也存在问题。",
+      "structure": [
+        {"text": "There are", "role": "existential_construction", "level": 1},
+        {"text": "problems", "role": "notional_subject", "level": 1},
+        {"text": "with the developed-world part of the equation too", "role": "postmodifier", "level": 1}
+      ],
+      "difficult_points": ["There are 是存在句，真正的信息中心是 problems。", "part of the equation 是比喻，指公平贸易体系中发达国家这一环节。"],
+      "expressions": [{"text": "part of the equation", "meaning_zh": "整个问题或体系中的一个环节"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 27,
+      "sentence": "People who volunteer to work for fair-trade concerns may do so believing they are assisting farmers and communities, whereas their labour serves to enrich middlemen and retailers.",
+      "translation": "自愿为公平贸易机构工作的人可能以为自己在帮助农民和社区，然而他们的劳动实际上却让中间商和零售商获利。",
+      "structure": [
+        {"text": "People who volunteer to work for fair-trade concerns may do so", "role": "main_clause", "level": 1},
+        {"text": "who volunteer to work for fair-trade concerns", "role": "relative_clause", "level": 2},
+        {"text": "believing they are assisting farmers and communities", "role": "participle_adverbial", "level": 1},
+        {"text": "whereas their labour serves to enrich middlemen and retailers", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["do so 替代 volunteer to work，避免重复。", "believing 的逻辑主语是 People，后面省略 that 的句子作 believing 的宾语。", "whereas 引出志愿者主观意图与实际结果的鲜明对比。"],
+      "expressions": [{"text": "volunteer to work for", "meaning_zh": "自愿为……工作"}, {"text": "serve to", "meaning_zh": "起到……作用"}, {"text": "enrich middlemen", "meaning_zh": "使中间商获利"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 28,
+      "sentence": "Companies involved in West African cocoa production have been criticised for this.",
+      "translation": "参与西非可可生产的公司已经因此受到批评。",
+      "structure": [
+        {"text": "Companies involved in West African cocoa production", "role": "subject", "level": 1},
+        {"text": "involved in West African cocoa production", "role": "participle_attributive", "level": 2},
+        {"text": "have been criticised for this", "role": "passive_predicate", "level": 1}
+      ],
+      "difficult_points": ["involved in 是过去分词短语，后置修饰 Companies。", "this 回指前句中志愿劳动让中间商和零售商获利的情况。"],
+      "expressions": [{"text": "be involved in", "meaning_zh": "参与……"}, {"text": "be criticised for", "meaning_zh": "因……受到批评"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 29,
+      "sentence": "In the developed world, the right to use a fair-trade logo is also expensive for packers and retailers, and sometimes a substantial amount of the money received from sale is ploughed back into marketing.",
+      "translation": "在发达国家，包装商和零售商取得公平贸易标志使用权的成本也很高，而且有时销售所得中的相当一部分又被投入营销。",
+      "structure": [
+        {"text": "the right to use a fair-trade logo is also expensive for packers and retailers", "role": "main_clause", "level": 1},
+        {"text": "to use a fair-trade logo", "role": "infinitive_attributive", "level": 2},
+        {"text": "and sometimes a substantial amount of the money received from sale is ploughed back into marketing", "role": "coordinated_clause", "level": 1},
+        {"text": "received from sale", "role": "participle_attributive", "level": 2}
+      ],
+      "difficult_points": ["to use a fair-trade logo 修饰 the right，说明权利的具体内容。", "received from sale 是过去分词短语，修饰 money。", "is ploughed back into 是被动表达，指资金被重新投入营销。"],
+      "expressions": [{"text": "the right to use", "meaning_zh": "使用……的权利"}, {"text": "a substantial amount of", "meaning_zh": "相当大一部分"}, {"text": "plough ... back into", "meaning_zh": "把……重新投入……"}]
+    },
+    {
+      "id": "H-05", "paragraph_label": "H", "sentence_index": 30,
+      "sentence": "In richer parts of the developed world, notably in London, packers and retailers charge high prices for fair-trade products.",
+      "translation": "在发达国家较富裕的地区，尤其是伦敦，包装商和零售商会为公平贸易产品收取高价。",
+      "structure": [
+        {"text": "In richer parts of the developed world", "role": "place_adverbial", "level": 1},
+        {"text": "notably in London", "role": "parenthetical_example", "level": 1},
+        {"text": "packers and retailers", "role": "compound_subject", "level": 1},
+        {"text": "charge high prices for fair-trade products", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["notably in London 是插入性的具体例子，限定 richer parts。", "charge high prices for 表示针对某商品索取高价。"],
+      "expressions": [{"text": "notably", "meaning_zh": "尤其；特别是"}, {"text": "charge high prices for", "meaning_zh": "为……收取高价"}]
+    },
+    {
+      "id": "H-06", "paragraph_label": "H", "sentence_index": 31,
+      "sentence": "Consumers imagine they are paying so much because more money is returned to producers when profit-taking by retailers or packers is a more likely scenario.",
+      "translation": "消费者以为自己支付高价是因为更多钱会返还给生产者，而更可能的情况其实是零售商或包装商从中牟利。",
+      "structure": [
+        {"text": "Consumers imagine", "role": "main_clause", "level": 1},
+        {"text": "they are paying so much because more money is returned to producers", "role": "object_clause", "level": 2},
+        {"text": "because more money is returned to producers", "role": "cause_clause", "level": 3},
+        {"text": "when profit-taking by retailers or packers is a more likely scenario", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["imagine 后省略 that，后面内容是消费者的主观想法。", "because 从句说明消费者所设想的高价原因。", "when 在此带有“然而事实上”的对照意味，并非单纯时间关系。"],
+      "expressions": [{"text": "return money to producers", "meaning_zh": "把资金返还给生产者"}, {"text": "a more likely scenario", "meaning_zh": "更可能的情况"}, {"text": "profit-taking", "meaning_zh": "获取利润"}]
+    },
+    {
+      "id": "H-07", "paragraph_label": "H", "sentence_index": 32,
+      "sentence": "One UK café chain is known to have passed on 1.6% of the extra 18% is charged for fair-trade coee to producers.",
+      "translation": "据悉，英国一家连锁咖啡馆对公平贸易咖啡额外加收了 18%，但其中仅有 1.6% 转交给生产者。",
+      "structure": [
+        {"text": "One UK café chain is known", "role": "passive_main_clause", "level": 1},
+        {"text": "to have passed on 1.6%", "role": "perfect_infinitive_complement", "level": 2},
+        {"text": "of the extra 18% is charged for fair-trade coee", "role": "malformed_postmodifier", "level": 2},
+        {"text": "to producers", "role": "recipient_adverbial", "level": 2}
+      ],
+      "difficult_points": ["is known to have passed on 是“据悉已经转交”的被动报道结构，完成不定式表示动作已发生。", "of the extra 18% is charged 语法残缺，疑似源文漏掉 that；语义为“额外收取的 18% 中”。", "coee 是源文 OCR 错误，应按 coffee 理解。"],
+      "expressions": [{"text": "be known to have done", "meaning_zh": "据悉已经做了……"}, {"text": "pass ... on to", "meaning_zh": "把……转交给……"}]
+    },
+    {
+      "id": "H-08", "paragraph_label": "H", "sentence_index": 33,
+      "sentence": "However, this happens with other items at the supermarket or cafe, so perhaps consumers are naive to believe fair-traders behave otherwise.",
+      "translation": "不过，超市或咖啡馆里的其他商品也存在这种情况，因此消费者若以为公平贸易商会有不同做法，或许有些天真。",
+      "structure": [
+        {"text": "this happens with other items at the supermarket or cafe", "role": "main_clause", "level": 1},
+        {"text": "so perhaps consumers are naive", "role": "result_clause", "level": 1},
+        {"text": "to believe fair-traders behave otherwise", "role": "infinitive_complement", "level": 2}
+      ],
+      "difficult_points": ["this 回指企业只把少量额外收费转给生产者的做法。", "to believe 说明消费者“天真”的具体表现。", "otherwise 表示“以不同方式”，即认为公平贸易商不会像普通商家那样逐利。"],
+      "expressions": [{"text": "be naive to believe", "meaning_zh": "天真地认为"}, {"text": "behave otherwise", "meaning_zh": "采取不同做法"}]
+    },
+    {
+      "id": "H-09", "paragraph_label": "H", "sentence_index": 34,
+      "sentence": "In addition, there are struggling farmers in rich countries, too, so some critics think fair-trade associations should certify them.",
+      "translation": "此外，富裕国家也有处境艰难的农民，因此一些批评者认为公平贸易协会也应当认证他们。",
+      "structure": [
+        {"text": "there are struggling farmers in rich countries, too", "role": "existential_clause", "level": 1},
+        {"text": "so some critics think", "role": "result_clause", "level": 1},
+        {"text": "fair-trade associations should certify them", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["struggling 是现在分词作定语，表示农民正面临经济困难。", "think 后省略 that，后面的句子作宾语从句。", "them 回指 rich countries 中处境艰难的 farmers。"],
+      "expressions": [{"text": "struggling farmers", "meaning_zh": "处境艰难的农民"}, {"text": "certify them", "meaning_zh": "为他们提供认证"}]
+    },
+    {
+      "id": "H-10", "paragraph_label": "H", "sentence_index": 35,
+      "sentence": "Other critics find the entire fair-trade system awed – nothing more than a colossal marketing scam- and they would rather assist the genuinely poor in more transparent ways, but this criticism may be overblown since fair trade has endured for and been praised in the developing world itself.",
+      "translation": "另一些批评者认为整个公平贸易体系存在缺陷，不过是一场巨大的营销骗局；他们宁愿以更透明的方式帮助真正的穷人。但这种批评可能有所夸大，因为公平贸易在发展中国家本身长期存在并受到赞扬。",
+      "structure": [
+        {"text": "Other critics find the entire fair-trade system awed", "role": "main_clause", "level": 1},
+        {"text": "nothing more than a colossal marketing scam", "role": "appositive_evaluation", "level": 1},
+        {"text": "and they would rather assist the genuinely poor in more transparent ways", "role": "coordinated_clause", "level": 1},
+        {"text": "but this criticism may be overblown since fair trade has endured for and been praised in the developing world itself", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["awed 是源文 OCR 异常，按 flawed 理解；find + 宾语 + 形容词构成宾语补足语。", "nothing more than 强调批评者认为该体系“不过是”营销骗局。", "would rather 后接动词原形 assist，表示宁愿采取另一种帮助方式。", "has endured for 结构疑似缺少时间成分，但应保留原文；since 引出作者认为批评可能夸大的原因。"],
+      "expressions": [{"text": "nothing more than", "meaning_zh": "不过是"}, {"text": "would rather assist", "meaning_zh": "宁愿帮助"}, {"text": "in more transparent ways", "meaning_zh": "以更透明的方式"}, {"text": "be overblown", "meaning_zh": "被夸大"}]
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_6_test_71",
+  "passage_id": "reading_jijing_6_test_71_p2",
+  "passage_title": "Sustainable growth at Didcot The outline of a report by South Oxfordshire District Council",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "The UK Government's South East Plan proposes additional housing growth in the town of Didcot, which has been a designated growth area since 1979.",
+      "translation": "英国政府的《东南地区规划》提议在迪德科特镇进一步增加住房；该镇自1979年以来一直被指定为发展区。",
+      "structure": [
+        {"text": "The UK Government's South East Plan", "role": "subject", "level": 1},
+        {"text": "proposes additional housing growth in the town of Didcot", "role": "predicate", "level": 1},
+        {"text": "which has been a designated growth area since 1979", "role": "nonrestrictive_relative_clause", "level": 2}
+      ],
+      "difficult_points": ["which 引导非限制性定语从句，指代 Didcot，而不是 South East Plan。", "has been...since 1979 用现在完成时表示这一指定状态延续至今。"],
+      "expressions": [{"text": "propose additional growth", "meaning_zh": "提议进一步发展"}, {"text": "designated growth area", "meaning_zh": "指定发展区"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "We in South Oxfordshire District Council consider that, although Didcot does have potential for further growth, such development should be sustainable, well-planned, and supported by adequate infrastructure and community services.",
+      "translation": "南牛津郡区议会认为，尽管迪德科特确实具有进一步发展的潜力，但这种发展应当可持续、规划周密，并有充足的基础设施和社区服务作为支撑。",
+      "structure": [
+        {"text": "We in South Oxfordshire District Council consider", "role": "main_clause", "level": 1},
+        {"text": "although Didcot does have potential for further growth", "role": "concessive_clause", "level": 3},
+        {"text": "that, although Didcot does have potential for further growth, such development should be sustainable, well-planned", "role": "object_clause", "level": 2},
+        {"text": "and supported by adequate infrastructure and community services", "role": "coordinate_complement", "level": 2}
+      ],
+      "difficult_points": ["that 引导 consider 的宾语从句，although 从句嵌套其中表达让步。", "does have 中 does 用于强调，意为“确实具有”。", "sustainable、well-planned 与 supported... 是三个并列表语。"],
+      "expressions": [{"text": "have potential for", "meaning_zh": "具有……的潜力"}, {"text": "further growth", "meaning_zh": "进一步发展"}, {"text": "be supported by", "meaning_zh": "得到……支持"}, {"text": "adequate infrastructure", "meaning_zh": "充足的基础设施"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 3,
+      "sentence": "Recent experience in Didcot has demonstrated that large greenfield [1] developments cannot resource all the necessary infrastructure and low-cost housing requirements.",
+      "translation": "迪德科特近期的经验表明，大型绿地开发项目无法为所有必要的基础设施和低成本住房需求提供资金。",
+      "structure": [
+        {"text": "Recent experience in Didcot", "role": "subject", "level": 1},
+        {"text": "has demonstrated", "role": "predicate", "level": 1},
+        {"text": "that large greenfield [1] developments cannot resource all the necessary infrastructure and low-cost housing requirements", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["that 从句说明迪德科特经验所证明的结论。", "resource 在此作动词，指为项目需求提供资金和资源；greenfield 的脚注见文末。"],
+      "expressions": [{"text": "recent experience has demonstrated that", "meaning_zh": "近期经验表明"}, {"text": "low-cost housing", "meaning_zh": "低成本住房"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "The ensuing compromises create a legacy of local transport, infrastructure and community services deficits, with no obvious means of correction.",
+      "translation": "由此作出的妥协遗留下当地交通、基础设施和社区服务不足的问题，而且没有明显的补救办法。",
+      "structure": [
+        {"text": "The ensuing compromises", "role": "subject", "level": 1},
+        {"text": "create a legacy of local transport, infrastructure and community services deficits", "role": "predicate", "level": 1},
+        {"text": "with no obvious means of correction", "role": "accompanying_adverbial", "level": 2}
+      ],
+      "difficult_points": ["ensuing 表示这些妥协是上一句资金不足随之产生的结果。", "with... 是伴随状语，说明这些遗留缺口还缺乏明确的纠正手段。"],
+      "expressions": [{"text": "the ensuing compromises", "meaning_zh": "由此产生的妥协"}, {"text": "create a legacy of", "meaning_zh": "留下……的后患"}, {"text": "means of correction", "meaning_zh": "纠正手段"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "We wish to ensure that there is greater recognition of the cost attached to housing growth, and that a means is found to resource the establishment of sustainable communities in growth areas.",
+      "translation": "我们希望确保人们更充分地认识到住房增长所附带的成本，并找到为发展区建设可持续社区提供资金的办法。",
+      "structure": [
+        {"text": "We wish to ensure", "role": "main_clause", "level": 1},
+        {"text": "that there is greater recognition of the cost attached to housing growth", "role": "object_clause", "level": 2},
+        {"text": "attached to housing growth", "role": "past_participle_modifier", "level": 3},
+        {"text": "and that a means is found to resource the establishment of sustainable communities in growth areas", "role": "coordinate_object_clause", "level": 2}
+      ],
+      "difficult_points": ["两个 that 从句并列，都是 ensure 的宾语。", "attached to... 是过去分词短语，修饰 cost；a means is found 使用被动语态。", "resource 再次作动词，表示为社区建设提供资源。"],
+      "expressions": [{"text": "ensure that", "meaning_zh": "确保"}, {"text": "recognition of the cost", "meaning_zh": "对成本的认识"}, {"text": "be attached to", "meaning_zh": "与……相伴；附加于"}, {"text": "sustainable communities", "meaning_zh": "可持续社区"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 6,
+      "sentence": "Until the 1950s, the development of job opportunities in the railway industry, and in a large, military ordnance depot, was the spur to Didcot's expansion.",
+      "translation": "直到20世纪50年代，铁路行业以及一座大型军械库所创造的就业机会，一直是推动迪德科特扩张的动力。",
+      "structure": [
+        {"text": "Until the 1950s", "role": "time_adverbial", "level": 1},
+        {"text": "the development of job opportunities in the railway industry, and in a large, military ordnance depot", "role": "subject", "level": 1},
+        {"text": "was the spur to Didcot's expansion", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["长主语中心词是 development，两个 in 短语说明就业机会出现的行业和地点。", "spur 在此是名词，指促成迪德科特扩张的推动力。"],
+      "expressions": [{"text": "job opportunities", "meaning_zh": "就业机会"}, {"text": "the spur to", "meaning_zh": "推动……的动力"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 7,
+      "sentence": "Development at that time was geared to providing homes for the railway and depot workers, with limited investment in shopping and other services for the local population.",
+      "translation": "当时的发展重点是为铁路和军械库工人提供住房，而在服务当地居民的购物设施及其他服务方面投入有限。",
+      "structure": [
+        {"text": "Development at that time", "role": "subject", "level": 1},
+        {"text": "was geared to providing homes for the railway and depot workers", "role": "predicate", "level": 1},
+        {"text": "with limited investment in shopping and other services for the local population", "role": "accompanying_adverbial", "level": 2}
+      ],
+      "difficult_points": ["be geared to 中 to 是介词，因此后接动名词 providing。", "with limited investment... 补充说明这种发展在公共服务投入上的局限。"],
+      "expressions": [{"text": "be geared to doing", "meaning_zh": "以做……为重点"}, {"text": "limited investment in", "meaning_zh": "对……投入有限"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 8,
+      "sentence": "Didcot failed to develop Broadway as a compact town centre, and achieved only a strip of shops along one side of the main street hemmed in by low density housing and service trade uses.",
+      "translation": "迪德科特未能把百老汇街发展成紧凑型镇中心，最终只形成了主街一侧的一排商店，周围被低密度住宅和服务业用地所包围。",
+      "structure": [
+        {"text": "Didcot failed to develop Broadway as a compact town centre", "role": "main_clause", "level": 1},
+        {"text": "and achieved only a strip of shops along one side of the main street", "role": "coordinate_predicate", "level": 1},
+        {"text": "hemmed in by low density housing and service trade uses", "role": "past_participle_modifier", "level": 2}
+      ],
+      "difficult_points": ["develop A as B 表示“把 A 建设成 B”。", "hemmed in... 是过去分词短语，语义上修饰 a strip of shops，说明其被周边用地限制。"],
+      "expressions": [{"text": "fail to", "meaning_zh": "未能做某事"}, {"text": "a strip of shops", "meaning_zh": "一排商店"}, {"text": "be hemmed in by", "meaning_zh": "被……包围或限制"}, {"text": "low density housing", "meaning_zh": "低密度住宅"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 9,
+      "sentence": "From the 1970s, strategic planning policies directed significant new housing development to Didcot.",
+      "translation": "从20世纪70年代起，战略规划政策把大量新的住房开发项目引向了迪德科特。",
+      "structure": [
+        {"text": "From the 1970s", "role": "time_adverbial", "level": 1},
+        {"text": "strategic planning policies", "role": "subject", "level": 1},
+        {"text": "directed significant new housing development to Didcot", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["direct A to B 在此指政策把住房开发的规模和位置导向迪德科特。", "development 是不可数概念，significant 在这里表示规模可观。"],
+      "expressions": [{"text": "strategic planning policies", "meaning_zh": "战略规划政策"}, {"text": "direct development to", "meaning_zh": "把开发引向"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 10,
+      "sentence": "Planners recognised Didcot's potential, with rapid growth in local job opportunities and good rail connections for those choosing to work farther afield.",
+      "translation": "规划人员认识到迪德科特的潜力：当地就业机会快速增长，铁路交通便利，也适合那些选择到更远地区工作的人。",
+      "structure": [
+        {"text": "Planners", "role": "subject", "level": 1},
+        {"text": "recognised Didcot's potential", "role": "predicate", "level": 1},
+        {"text": "with rapid growth in local job opportunities and good rail connections", "role": "supporting_adverbial", "level": 2},
+        {"text": "for those choosing to work farther afield", "role": "prepositional_modifier", "level": 3}
+      ],
+      "difficult_points": ["with 短语列出潜力的两项依据：就业增长和铁路连接。", "choosing to work farther afield 是现在分词短语，修饰 those；farther afield 指更远的外地。"],
+      "expressions": [{"text": "recognise the potential", "meaning_zh": "认识到潜力"}, {"text": "rail connections", "meaning_zh": "铁路交通连接"}, {"text": "farther afield", "meaning_zh": "到更远的地方"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 11,
+      "sentence": "However, the town is bisected by the east-west railway, and people living in Ladygrove, the urban extension to the north which has been built since the 1980s, felt, and still feel, cut off from the town and its community.",
+      "translation": "然而，东西向铁路把该镇一分为二；住在莱迪格罗夫的人——那里是自20世纪80年代开始建设的北部城区扩展区——过去感到、现在仍感到自己与镇区及其社区相隔绝。",
+      "structure": [
+        {"text": "the town is bisected by the east-west railway", "role": "main_clause", "level": 1},
+        {"text": "and people living in Ladygrove", "role": "coordinate_subject", "level": 1},
+        {"text": "the urban extension to the north which has been built since the 1980s", "role": "apposition", "level": 2},
+        {"text": "felt, and still feel, cut off from the town and its community", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["living in Ladygrove 是现在分词短语修饰 people；随后同位语解释 Ladygrove。", "which 修饰 urban extension；felt, and still feel 强调隔绝感从过去延续到现在。", "feel cut off 中 cut off 是主语补足语，表示“感到被隔绝”。"],
+      "expressions": [{"text": "be bisected by", "meaning_zh": "被……一分为二"}, {"text": "urban extension", "meaning_zh": "城区扩展区"}, {"text": "feel cut off from", "meaning_zh": "感到与……隔绝"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 12,
+      "sentence": "Population growth in the new housing areas failed to spark adequate private-sector investment in town centre uses, and the limited investment which did take place - Didcot Market Place development in 1982, for instance - did not succeed in delivering the number and range of town centre uses needed by the growing population.",
+      "translation": "新住宅区的人口增长未能带动私营部门对镇中心功能的充分投资；而确实发生的有限投资——例如1982年的迪德科特市场广场开发——也未能提供不断增长的人口所需的镇中心设施数量和种类。",
+      "structure": [
+        {"text": "Population growth in the new housing areas failed to spark adequate private-sector investment in town centre uses", "role": "main_clause", "level": 1},
+        {"text": "and the limited investment which did take place", "role": "coordinate_subject", "level": 1},
+        {"text": "Didcot Market Place development in 1982, for instance", "role": "parenthetical_example", "level": 2},
+        {"text": "did not succeed in delivering the number and range of town centre uses needed by the growing population", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["which did take place 修饰 investment，did 强调“确实发生过”。", "破折号中的内容是插入的具体例子，不是句子主干。", "needed by... 是过去分词短语，修饰 town centre uses。"],
+      "expressions": [{"text": "spark investment", "meaning_zh": "带动投资"}, {"text": "private-sector investment", "meaning_zh": "私营部门投资"}, {"text": "succeed in doing", "meaning_zh": "成功做到"}, {"text": "the number and range of", "meaning_zh": "……的数量和种类"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 13,
+      "sentence": "In 1990, public-sector finance was used to buy the land required for the Orchard Centre development, comprising a superstore, parking and a new street of stores running parallel to Broadway.",
+      "translation": "1990年，公共资金被用于购买果园中心开发项目所需的土地；该项目包括一家大型超市、停车场，以及一条与百老汇街平行的新商业街。",
+      "structure": [
+        {"text": "public-sector finance was used to buy the land", "role": "main_clause", "level": 1},
+        {"text": "required for the Orchard Centre development", "role": "past_participle_modifier", "level": 2},
+        {"text": "comprising a superstore, parking and a new street of stores", "role": "present_participle_supplement", "level": 2},
+        {"text": "running parallel to Broadway", "role": "present_participle_modifier", "level": 3}
+      ],
+      "difficult_points": ["required... 修饰 land，表示开发项目所需的土地。", "comprising... 补充说明 Orchard Centre development 的组成。", "running parallel to Broadway 修饰 a new street of stores。"],
+      "expressions": [{"text": "public-sector finance", "meaning_zh": "公共部门资金"}, {"text": "be used to do", "meaning_zh": "被用于做某事"}, {"text": "run parallel to", "meaning_zh": "与……平行延伸"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 14,
+      "sentence": "The development took 13 years to complete.",
+      "translation": "该开发项目历时13年才完成。",
+      "structure": [
+        {"text": "The development", "role": "subject", "level": 1},
+        {"text": "took 13 years", "role": "predicate", "level": 1},
+        {"text": "to complete", "role": "result_infinitive", "level": 2}
+      ],
+      "difficult_points": ["take + 时间 + to do 表示完成某事耗费多长时间。", "development 指上一句的 Orchard Centre 开发项目。"],
+      "expressions": [{"text": "take 13 years to complete", "meaning_zh": "历时13年完成"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 15,
+      "sentence": "The idea that, by obliging developers of new housing to contribute to the cost of infrastructure and service requirements, all the necessary finance could be raised, has proved unachievable.",
+      "translation": "原先有一种设想：要求新住房开发商承担基础设施和服务需求的部分成本，便能筹齐全部必要资金；事实证明这种设想无法实现。",
+      "structure": [
+        {"text": "The idea", "role": "subject", "level": 1},
+        {"text": "that, by obliging developers of new housing to contribute to the cost of infrastructure and service requirements, all the necessary finance could be raised", "role": "appositive_clause", "level": 2},
+        {"text": "by obliging developers of new housing to contribute to the cost of infrastructure and service requirements", "role": "means_adverbial", "level": 3},
+        {"text": "has proved unachievable", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["that 从句是 idea 的同位语，解释设想的具体内容。", "by obliging... 是嵌入同位语从句的方式状语，oblige someone to do 表示要求某人做某事。", "主干被长同位语隔开，实际是 The idea has proved unachievable。"],
+      "expressions": [{"text": "oblige someone to do", "meaning_zh": "要求某人做某事"}, {"text": "contribute to the cost of", "meaning_zh": "承担……的部分成本"}, {"text": "raise finance", "meaning_zh": "筹集资金"}, {"text": "prove unachievable", "meaning_zh": "被证明无法实现"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 16,
+      "sentence": "Substantial public finance was still needed to deliver major projects such as the new link road to the A34 on the outskirts of the town at Milton, the improved railway crossing at Marsh Bridge and new schools.",
+      "translation": "要落实多项重大工程，仍然需要大量公共资金，例如在米尔顿镇郊修建连接 A34 公路的新道路、改善马什桥铁路道口，以及建设新学校。",
+      "structure": [
+        {"text": "Substantial public finance", "role": "subject", "level": 1},
+        {"text": "was still needed", "role": "passive_predicate", "level": 1},
+        {"text": "to deliver major projects", "role": "purpose_adverbial", "level": 2},
+        {"text": "such as the new link road to the A34 on the outskirts of the town at Milton, the improved railway crossing at Marsh Bridge and new schools", "role": "example_supplement", "level": 2}
+      ],
+      "difficult_points": ["to deliver... 说明公共资金的用途，deliver projects 指把项目落实完成。", "such as 后并列列举三类重大项目。"],
+      "expressions": [{"text": "substantial public finance", "meaning_zh": "大量公共资金"}, {"text": "deliver major projects", "meaning_zh": "落实重大项目"}, {"text": "on the outskirts of", "meaning_zh": "在……郊区"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 17,
+      "sentence": "Such projects were delayed due to difficulties in securing public finance.",
+      "translation": "由于难以获得公共资金，这些项目被推迟了。",
+      "structure": [
+        {"text": "Such projects", "role": "subject", "level": 1},
+        {"text": "were delayed", "role": "passive_predicate", "level": 1},
+        {"text": "due to difficulties in securing public finance", "role": "cause_adverbial", "level": 2}
+      ],
+      "difficult_points": ["Such projects 回指上一句列举的道路、铁路道口和学校项目。", "due to 引出原因；difficulties in 后接动名词 securing。"],
+      "expressions": [{"text": "be delayed due to", "meaning_zh": "因……而被推迟"}, {"text": "secure public finance", "meaning_zh": "获得公共资金"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 18,
+      "sentence": "The same problem also held back expansion of health and social services in the town.",
+      "translation": "同一问题也阻碍了镇内医疗与社会服务的扩展。",
+      "structure": [
+        {"text": "The same problem", "role": "subject", "level": 1},
+        {"text": "also held back", "role": "predicate", "level": 1},
+        {"text": "expansion of health and social services in the town", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["The same problem 指难以获得公共资金。", "hold back 是短语动词，在此意为阻碍服务扩张。"],
+      "expressions": [{"text": "hold back expansion", "meaning_zh": "阻碍扩展"}, {"text": "health and social services", "meaning_zh": "医疗与社会服务"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 19,
+      "sentence": "In recent years, government policy, in particular the requirement for developers that forty percent of the units in a new housing development should be low cost homes, has had a major impact on the economics of such development, as it has limited the developers' contribution to the costs of infrastructure.",
+      "translation": "近年来，政府政策——尤其是要求开发商把新住宅项目中40%的住房设为低成本住房——对这类开发项目的经济账产生了重大影响，因为这一要求限制了开发商可用于承担基础设施成本的资金。",
+      "structure": [
+        {"text": "government policy", "role": "subject", "level": 1},
+        {"text": "in particular the requirement for developers that forty percent of the units in a new housing development should be low cost homes", "role": "apposition", "level": 2},
+        {"text": "has had a major impact on the economics of such development", "role": "predicate", "level": 1},
+        {"text": "as it has limited the developers' contribution to the costs of infrastructure", "role": "cause_clause", "level": 2}
+      ],
+      "difficult_points": ["in particular 后的长名词短语具体说明 government policy，that 从句解释 requirement 的内容。", "主语中心词是单数 policy，所以谓语使用 has had。", "as 引导原因从句，it 指前述政府要求，而非 development。"],
+      "expressions": [{"text": "in particular", "meaning_zh": "尤其"}, {"text": "have a major impact on", "meaning_zh": "对……产生重大影响"}, {"text": "the economics of", "meaning_zh": "……的经济可行性"}, {"text": "contribution to the costs of", "meaning_zh": "对……成本的资金贡献"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 20,
+      "sentence": "The planning authorities are facing difficult choices in prioritising the items of infrastructure which must be funded by development, and this, in turn, means that from now on public finance will need to provide a greater proportion of infrastructure project costs.",
+      "translation": "规划部门在确定哪些基础设施项目应优先由开发项目出资时面临艰难选择，而这反过来意味着，从现在起公共资金将需要承担更高比例的基础设施项目成本。",
+      "structure": [
+        {"text": "The planning authorities are facing difficult choices", "role": "main_clause", "level": 1},
+        {"text": "in prioritising the items of infrastructure which must be funded by development", "role": "prepositional_complement", "level": 2},
+        {"text": "and this, in turn, means", "role": "coordinate_clause", "level": 1},
+        {"text": "that from now on public finance will need to provide a greater proportion of infrastructure project costs", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["which 修饰 items of infrastructure，说明这些项目必须由开发活动出资。", "this 概括前半句的艰难取舍；in turn 表示由此进一步导致后果。", "that 从句是 means 的宾语，from now on 是其时间状语。"],
+      "expressions": [{"text": "face difficult choices", "meaning_zh": "面临艰难选择"}, {"text": "prioritise", "meaning_zh": "确定优先顺序"}, {"text": "in turn", "meaning_zh": "继而；反过来"}, {"text": "a greater proportion of", "meaning_zh": "更高比例的"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 21,
+      "sentence": "The Government's Sustainable Communities Plan seeks a holistic approach to new urban development in which housing, employment, services and infrastructure of all kinds are carefully planned and delivered in a way which avoids the infrastructure deficits that have occurred in places like Didcot in the past.",
+      "translation": "政府的《可持续社区规划》寻求一种面向新城市开发的整体方法，使住房、就业、服务和各种基础设施都得到周密规划和落实，从而避免迪德科特等地过去出现过的基础设施缺口。",
+      "structure": [
+        {"text": "The Government's Sustainable Communities Plan seeks a holistic approach to new urban development", "role": "main_clause", "level": 1},
+        {"text": "in which housing, employment, services and infrastructure of all kinds are carefully planned and delivered", "role": "relative_clause", "level": 2},
+        {"text": "in a way which avoids the infrastructure deficits", "role": "manner_adverbial", "level": 2},
+        {"text": "that have occurred in places like Didcot in the past", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["in which 引导定语从句修饰 approach，并描述这种整体方法的内容。", "which avoids... 修饰 way；that have occurred... 又修饰 infrastructure deficits。", "planned and delivered 是并列的被动谓语，表示既规划也落实。"],
+      "expressions": [{"text": "seek a holistic approach to", "meaning_zh": "寻求处理……的整体方法"}, {"text": "of all kinds", "meaning_zh": "各种各样的"}, {"text": "in a way which", "meaning_zh": "以一种能够……的方式"}, {"text": "infrastructure deficits", "meaning_zh": "基础设施缺口"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 22,
+      "sentence": "This report, therefore, is structured around the individual components of a sustainable community, and shows the baseline position for each component.",
+      "translation": "因此，本报告围绕可持续社区的各个组成部分展开，并说明每个部分的基准现状。",
+      "structure": [
+        {"text": "This report", "role": "subject", "level": 1},
+        {"text": "therefore", "role": "sentence_adverbial", "level": 1},
+        {"text": "is structured around the individual components of a sustainable community", "role": "passive_predicate", "level": 1},
+        {"text": "and shows the baseline position for each component", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["therefore 是插入式连接副词，承接上一句规划所强调的整体方法。", "is structured 与 shows 共用主语 This report，但前者被动、后者主动。"],
+      "expressions": [{"text": "be structured around", "meaning_zh": "围绕……组织"}, {"text": "individual components", "meaning_zh": "各个组成部分"}, {"text": "baseline position", "meaning_zh": "基准现状"}]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 23,
+      "sentence": "Didcot has been identified as one of the towns with which the Government is working to evaluate whether additional growth will strengthen the economic potential of the town, deliver the necessary infrastructure and improve environmental standards.",
+      "translation": "迪德科特已被确定为政府合作评估的城镇之一，评估内容是进一步发展能否增强该镇的经济潜力、提供必要的基础设施并改善环境标准。",
+      "structure": [
+        {"text": "Didcot has been identified as one of the towns", "role": "main_clause", "level": 1},
+        {"text": "with which the Government is working", "role": "relative_clause", "level": 2},
+        {"text": "to evaluate whether additional growth will strengthen the economic potential of the town", "role": "purpose_adverbial", "level": 2},
+        {"text": "deliver the necessary infrastructure and improve environmental standards", "role": "coordinate_predicate", "level": 3}
+      ],
+      "difficult_points": ["with which 引导定语从句，which 指 towns；work with 表示政府与这些城镇合作。", "whether 引导 evaluate 的宾语从句，additional growth 是三个并列谓语 strengthen、deliver、improve 的共同主语。", "has been identified 使用现在完成时被动语态，强调已经完成的认定。"],
+      "expressions": [{"text": "be identified as", "meaning_zh": "被确定为"}, {"text": "work with", "meaning_zh": "与……合作"}, {"text": "economic potential", "meaning_zh": "经济潜力"}, {"text": "improve environmental standards", "meaning_zh": "改善环境标准"}]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 24,
+      "sentence": "A programme of work, including discussions with the local community about their aspirations for the town as well as other stakeholders, will be undertaken over the coming months, and will lead to the development of a strategic master plan.",
+      "translation": "未来几个月将开展一项工作计划，其中包括与当地社区讨论他们对该镇的期望，并与其他利益相关者进行交流；这项工作最终将促成战略总体规划的制定。",
+      "structure": [
+        {"text": "A programme of work", "role": "subject", "level": 1},
+        {"text": "including discussions with the local community about their aspirations for the town as well as other stakeholders", "role": "present_participle_supplement", "level": 2},
+        {"text": "will be undertaken over the coming months", "role": "passive_predicate", "level": 1},
+        {"text": "and will lead to the development of a strategic master plan", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["including... 补充说明 programme of work 的内容；原文 as well as other stakeholders 存在省略，语义上指也与其他利益相关者讨论。", "will be undertaken 与 will lead to 共用主语，但前者是被动结构。", "their 指 local community，而不是 Government。"],
+      "expressions": [{"text": "a programme of work", "meaning_zh": "一项工作计划"}, {"text": "aspirations for", "meaning_zh": "对……的期望"}, {"text": "over the coming months", "meaning_zh": "在未来几个月里"}, {"text": "lead to the development of", "meaning_zh": "促成……的制定或发展"}]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 25,
+      "sentence": "The challenge will be in optimising scarce resources to achieve maximum benefits for the town.",
+      "translation": "挑战在于如何优化配置稀缺资源，使该镇获得最大收益。",
+      "structure": [
+        {"text": "The challenge", "role": "subject", "level": 1},
+        {"text": "will be", "role": "linking_verb", "level": 1},
+        {"text": "in optimising scarce resources", "role": "subject_complement", "level": 1},
+        {"text": "to achieve maximum benefits for the town", "role": "purpose_adverbial", "level": 2}
+      ],
+      "difficult_points": ["be in doing 表示关键或难点在于做某事。", "to achieve... 是目的状语，说明优化稀缺资源希望取得的结果。"],
+      "expressions": [{"text": "optimise scarce resources", "meaning_zh": "优化配置稀缺资源"}, {"text": "achieve maximum benefits", "meaning_zh": "取得最大收益"}]
+    },
+    {
+      "id": "I-04", "paragraph_label": "I", "sentence_index": 26,
+      "sentence": "[1] land that has never previously been built on",
+      "translation": "[1] 以前从未进行过建设的土地。",
+      "structure": [
+        {"text": "land", "role": "head_noun", "level": 1},
+        {"text": "that has never previously been built on", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["这是对 greenfield 的脚注释义，不是正文中的完整句子。", "that 修饰 land；build on land 表示在土地上建设，变成被动后介词 on 保留在句尾。"],
+      "expressions": [{"text": "build on land", "meaning_zh": "在土地上建设"}]
+    }
+  ]
+}

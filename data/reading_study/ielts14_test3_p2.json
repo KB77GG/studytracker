@@ -1,0 +1,1469 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts14_test3_reading",
+  "passage_id": "ielts14_test3_p2",
+  "passage_title": "Saving bugs to find new drugs",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "More drugs than you might think are derived from, or inspired by, compounds found in living things.",
+      "translation": "比你想象中更多的药物源自生物体内发现的化合物，或受到这些化合物的启发。",
+      "structure": [
+        {
+          "text": "More drugs than you might think",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "than you might think",
+          "role": "comparative_clause",
+          "level": 2
+        },
+        {
+          "text": "are derived from, or inspired by, compounds found in living things",
+          "role": "passive_verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "than you might think 嵌入主语中，表示数量超过读者预期。",
+        "are derived from 和 inspired by 是并列的被动表达，说明药物与自然化合物的两种关系。",
+        "found in living things 是过去分词短语，修饰 compounds。"
+      ],
+      "expressions": [
+        {
+          "text": "be derived from",
+          "meaning_zh": "源自"
+        },
+        {
+          "text": "be inspired by",
+          "meaning_zh": "受到……启发"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Looking to nature for the soothing and curing of our ailments is nothing new—we have been doing it for tens of thousands of years.",
+      "translation": "从自然界寻找缓解和治愈疾病的方法并不新鲜——我们已经这样做了数万年。",
+      "structure": [
+        {
+          "text": "Looking to nature for the soothing and curing of our ailments",
+          "role": "gerund_subject",
+          "level": 1
+        },
+        {
+          "text": "is nothing new",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "we have been doing it for tens of thousands of years",
+          "role": "coordinated_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Looking to nature ... 是动名词短语作主语。",
+        "破折号后补充说明为什么这件事并不新鲜。",
+        "have been doing 使用现在完成进行时，强调这种做法从过去延续到现在。"
+      ],
+      "expressions": [
+        {
+          "text": "look to nature for",
+          "meaning_zh": "向自然界寻找"
+        },
+        {
+          "text": "nothing new",
+          "meaning_zh": "并不新鲜"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "You only have to look at other primates—such as the capuchin monkeys who rub themselves with toxin-oozing millipedes to deter mosquitoes, or the chimpanzees who use noxious forest plants to rid themselves of intestinal parasites—to realise that our ancient ancestors too probably had a basic grasp of medicine.",
+      "translation": "你只要看看其他灵长类动物——例如用渗出毒素的千足虫擦身体来驱赶蚊子的卷尾猴，或用有毒森林植物清除肠道寄生虫的黑猩猩——就会意识到，我们的远古祖先很可能也掌握了基本的医学知识。",
+      "structure": [
+        {
+          "text": "You",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "only have to look at other primates",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "such as the capuchin monkeys who rub themselves with toxin-oozing millipedes to deter mosquitoes, or the chimpanzees who use noxious forest plants to rid themselves of intestinal parasites",
+          "role": "appositive_example",
+          "level": 2
+        },
+        {
+          "text": "to realise that our ancient ancestors too probably had a basic grasp of medicine",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "两个破折号之间是 examples，举例说明 other primates。",
+        "who rub themselves ... 和 who use ... 是两个定语从句，分别修饰 monkeys 和 chimpanzees。",
+        "to realise ... 表结果或目的，说明看这些例子能够得出的认识。"
+      ],
+      "expressions": [
+        {
+          "text": "have to look at",
+          "meaning_zh": "只需要看看"
+        },
+        {
+          "text": "deter mosquitoes",
+          "meaning_zh": "驱赶蚊子"
+        },
+        {
+          "text": "a basic grasp of",
+          "meaning_zh": "对……的基本掌握"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Pharmaceutical science and chemistry built on these ancient foundations and perfected the extraction, characterisation, modification and testing of these natural products.",
+      "translation": "药物科学和化学建立在这些古老基础之上，并完善了对这些天然产物的提取、表征、改造和测试。",
+      "structure": [
+        {
+          "text": "Pharmaceutical science and chemistry",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "built on these ancient foundations",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and perfected the extraction, characterisation, modification and testing of these natural products",
+          "role": "coordinated_verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "built on 和 perfected 是并列谓语，共同说明现代学科如何发展古老经验。",
+        "the extraction, characterisation, modification and testing 是四个并列名词，都是 perfected 的宾语内容。",
+        "these natural products 指前文来自生物体的天然化合物或产物。"
+      ],
+      "expressions": [
+        {
+          "text": "build on",
+          "meaning_zh": "建立在……之上"
+        },
+        {
+          "text": "natural products",
+          "meaning_zh": "天然产物"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Then, for a while, modern pharmaceutical science moved its focus away from nature and into the laboratory, designing chemical compounds from scratch.",
+      "translation": "后来有一段时间，现代药物科学把关注重点从自然转向实验室，从零开始设计化学化合物。",
+      "structure": [
+        {
+          "text": "modern pharmaceutical science",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "moved its focus away from nature and into the laboratory",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "designing chemical compounds from scratch",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "for a while 是插入状语，表示这种研究取向持续了一段时间。",
+        "away from nature and into the laboratory 构成方向上的对比。",
+        "designing ... from scratch 是现在分词短语，说明转向实验室后的具体做法。"
+      ],
+      "expressions": [
+        {
+          "text": "move its focus away from",
+          "meaning_zh": "把重点从……移开"
+        },
+        {
+          "text": "from scratch",
+          "meaning_zh": "从零开始"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "The main cause of this shift is that although there are plenty of promising chemical compounds in nature, finding them is far from easy.",
+      "translation": "这种转变的主要原因是，尽管自然界中有大量有前景的化学化合物，但找到它们远非易事。",
+      "structure": [
+        {
+          "text": "The main cause of this shift",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "linking_verb",
+          "level": 1
+        },
+        {
+          "text": "that although there are plenty of promising chemical compounds in nature, finding them is far from easy",
+          "role": "predicative_clause",
+          "level": 2
+        },
+        {
+          "text": "although there are plenty of promising chemical compounds in nature",
+          "role": "adverbial_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that 引导表语从句，解释 main cause 的具体内容。",
+        "although 引导让步从句，承认自然界中存在许多有前景的化合物。",
+        "finding them 是动名词短语作从句主语，them 指 promising chemical compounds。"
+      ],
+      "expressions": [
+        {
+          "text": "the main cause of",
+          "meaning_zh": "……的主要原因"
+        },
+        {
+          "text": "far from easy",
+          "meaning_zh": "远非易事"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "Securing sufficient numbers of the organism in question, isolating and characterising the compounds of interest, and producing large quantities of these compounds are all significant hurdles.",
+      "translation": "获得足够数量的相关生物体、分离并表征感兴趣的化合物，以及大量生产这些化合物，都是重大障碍。",
+      "structure": [
+        {
+          "text": "Securing sufficient numbers of the organism in question, isolating and characterising the compounds of interest, and producing large quantities of these compounds",
+          "role": "compound_gerund_subject",
+          "level": 1
+        },
+        {
+          "text": "are all significant hurdles",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "三个动名词短语并列作复合主语，因此谓语用 are。",
+        "in question 表示“所讨论的/相关的”，修饰 organism。",
+        "compounds of interest 指研究者关注、可能有用的化合物。"
+      ],
+      "expressions": [
+        {
+          "text": "in question",
+          "meaning_zh": "所讨论的；相关的"
+        },
+        {
+          "text": "compounds of interest",
+          "meaning_zh": "感兴趣的化合物"
+        },
+        {
+          "text": "significant hurdles",
+          "meaning_zh": "重大障碍"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "Laboratory-based drug discovery has achieved varying levels of success, something which has now prompted the development of new approaches focusing once again on natural products.",
+      "translation": "以实验室为基础的药物发现取得了不同程度的成功，而这也促使人们发展出再次聚焦天然产物的新方法。",
+      "structure": [
+        {
+          "text": "Laboratory-based drug discovery",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has achieved varying levels of success",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "something which has now prompted the development of new approaches focusing once again on natural products",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "which has now prompted the development of new approaches focusing once again on natural products",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "something 指代前面整句“实验室药物发现成败不一”这一情况。",
+        "which 引导定语从句修饰 something，说明该情况带来的结果。",
+        "focusing once again on natural products 是现在分词短语，修饰 new approaches。"
+      ],
+      "expressions": [
+        {
+          "text": "varying levels of success",
+          "meaning_zh": "不同程度的成功"
+        },
+        {
+          "text": "prompt the development of",
+          "meaning_zh": "促使……的发展"
+        },
+        {
+          "text": "once again",
+          "meaning_zh": "再次"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "With the ability to mine genomes for useful compounds, it is now evident that we have barely scratched the surface of nature's molecular diversity.",
+      "translation": "有了从基因组中挖掘有用化合物的能力，现在显而易见的是，我们几乎还没有触及自然界分子多样性的表层。",
+      "structure": [
+        {
+          "text": "With the ability to mine genomes for useful compounds",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "it is now evident",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that we have barely scratched the surface of nature's molecular diversity",
+          "role": "subject_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "With the ability ... 表示新的技术条件或背景。",
+        "it is now evident that ... 中 it 是形式主语，真正主语是 that 从句。",
+        "scratched the surface 是比喻，表示只了解了很小一部分。"
+      ],
+      "expressions": [
+        {
+          "text": "mine genomes for",
+          "meaning_zh": "从基因组中挖掘"
+        },
+        {
+          "text": "scratch the surface of",
+          "meaning_zh": "仅触及……的表面"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "This realisation, together with several looming health crises, such as antibiotic resistance, has put bioprospecting—the search for useful compounds in nature—firmly back on the map.",
+      "translation": "这一认识，加上若干迫在眉睫的健康危机，如抗生素耐药性，使生物勘探——在自然界中寻找有用化合物——重新受到明确关注。",
+      "structure": [
+        {
+          "text": "This realisation, together with several looming health crises, such as antibiotic resistance",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has put bioprospecting—the search for useful compounds in nature—firmly back on the map",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the search for useful compounds in nature",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "主语核心是 This realisation；together with ... 是附加成分，不决定谓语单复数。",
+        "破折号中 the search ... 是 bioprospecting 的同位解释。",
+        "back on the map 是习语，表示重新受到关注或重回重要位置。"
+      ],
+      "expressions": [
+        {
+          "text": "looming health crises",
+          "meaning_zh": "迫近的健康危机"
+        },
+        {
+          "text": "back on the map",
+          "meaning_zh": "重新受到关注"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "Insects are the undisputed masters of the terrestrial domain, where they occupy every possible niche.",
+      "translation": "昆虫是陆地领域无可争议的主宰，它们在那里占据着每一个可能的生态位。",
+      "structure": [
+        {
+          "text": "Insects",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are the undisputed masters of the terrestrial domain",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "where they occupy every possible niche",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "where 引导非限制性定语从句，修饰 terrestrial domain。",
+        "undisputed masters 是强调性表达，说明昆虫在陆地生态中的优势。",
+        "niche 在生态语境中指“生态位”，不是普通的“角落”。"
+      ],
+      "expressions": [
+        {
+          "text": "undisputed masters",
+          "meaning_zh": "无可争议的主宰"
+        },
+        {
+          "text": "occupy every possible niche",
+          "meaning_zh": "占据每一个可能的生态位"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "Consequently, they have a bewildering array of interactions with other organisms, something which has driven the evolution of an enormous range of very interesting compounds for defensive and offensive purposes.",
+      "translation": "因此，它们与其他生物有着令人眼花缭乱的各种相互作用，而这推动了大量非常有趣的化合物的进化，用于防御和进攻目的。",
+      "structure": [
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have a bewildering array of interactions with other organisms",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "something which has driven the evolution of an enormous range of very interesting compounds for defensive and offensive purposes",
+          "role": "apposition",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Consequently 表示前一句生态位广泛带来的结果。",
+        "something 指代昆虫与其他生物复杂互动这一事实。",
+        "for defensive and offensive purposes 修饰 compounds 的用途。"
+      ],
+      "expressions": [
+        {
+          "text": "a bewildering array of",
+          "meaning_zh": "令人眼花缭乱的大量"
+        },
+        {
+          "text": "drive the evolution of",
+          "meaning_zh": "推动……的进化"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "Their remarkable diversity exceeds that of every other group of animals on the planet combined.",
+      "translation": "它们非凡的多样性超过了地球上所有其他动物群体合起来的多样性。",
+      "structure": [
+        {
+          "text": "Their remarkable diversity",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "exceeds that of every other group of animals on the planet combined",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Their 指昆虫的，承接本段主题。",
+        "that of ... 中 that 代替 diversity，避免重复。",
+        "combined 表示“合计起来”，加强比较力度。"
+      ],
+      "expressions": [
+        {
+          "text": "remarkable diversity",
+          "meaning_zh": "非凡的多样性"
+        },
+        {
+          "text": "on the planet combined",
+          "meaning_zh": "在地球上合计起来"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "Yet even though insects are far and away the most diverse animals in existence, their potential as sources of therapeutic compounds is yet to be realised.",
+      "translation": "然而，尽管昆虫无疑是现存最多样化的动物，它们作为治疗性化合物来源的潜力仍有待实现。",
+      "structure": [
+        {
+          "text": "even though insects are far and away the most diverse animals in existence",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "their potential as sources of therapeutic compounds",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is yet to be realised",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Yet 和 even though 共同形成强转折：多样性高但潜力未被利用。",
+        "far and away 是强调表达，表示“远远地、无疑地”。",
+        "is yet to be realised 表示“仍有待实现”，是正式写法。"
+      ],
+      "expressions": [
+        {
+          "text": "far and away",
+          "meaning_zh": "无疑；遥遥领先地"
+        },
+        {
+          "text": "be yet to be realised",
+          "meaning_zh": "仍有待实现"
+        },
+        {
+          "text": "therapeutic compounds",
+          "meaning_zh": "治疗性化合物"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 15,
+      "sentence": "From the tiny proportion of insects that have been investigated, several promising compounds have been identified.",
+      "translation": "在已经被研究过的极小比例昆虫中，人们已经识别出几种有前景的化合物。",
+      "structure": [
+        {
+          "text": "From the tiny proportion of insects that have been investigated",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "several promising compounds",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have been identified",
+          "role": "passive_verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "that have been investigated 是定语从句，修饰 insects。",
+        "have been identified 是现在完成时的被动语态，强调已有发现。",
+        "From the tiny proportion ... 表示发现来自样本很小的研究范围。"
+      ],
+      "expressions": [
+        {
+          "text": "tiny proportion of",
+          "meaning_zh": "极小比例的"
+        },
+        {
+          "text": "promising compounds",
+          "meaning_zh": "有前景的化合物"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "For example, alloferon, an antimicrobial compound produced by blow fly larvae, is used as an antiviral and antitumor agent in South Korea and Russia.",
+      "translation": "例如，alloferon 是一种由丽蝇幼虫产生的抗菌化合物，在韩国和俄罗斯被用作抗病毒和抗肿瘤药剂。",
+      "structure": [
+        {
+          "text": "alloferon",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "an antimicrobial compound produced by blow fly larvae",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "is used as an antiviral and antitumor agent in South Korea and Russia",
+          "role": "passive_verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "an antimicrobial compound ... 是同位语，解释 alloferon 是什么。",
+        "produced by blow fly larvae 是过去分词短语，修饰 compound。",
+        "is used as 表示用途，后面并列 antiviral and antitumor agent。"
+      ],
+      "expressions": [
+        {
+          "text": "be used as",
+          "meaning_zh": "被用作"
+        },
+        {
+          "text": "antimicrobial compound",
+          "meaning_zh": "抗菌化合物"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "The larvae of a few other insect species are being investigated for the potent antimicrobial compounds they produce.",
+      "translation": "其他少数昆虫物种的幼虫正在因其产生的强效抗菌化合物而受到研究。",
+      "structure": [
+        {
+          "text": "The larvae of a few other insect species",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are being investigated",
+          "role": "passive_verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "for the potent antimicrobial compounds they produce",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "they produce",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "are being investigated 是现在进行时的被动语态，表示研究正在进行。",
+        "for 表示研究原因或对象，即因为这些幼虫产生的化合物。",
+        "they produce 是省略关系代词的定语从句，修饰 compounds。"
+      ],
+      "expressions": [
+        {
+          "text": "be investigated for",
+          "meaning_zh": "因……而被研究"
+        },
+        {
+          "text": "potent antimicrobial compounds",
+          "meaning_zh": "强效抗菌化合物"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "Meanwhile, a compound from the venom of the wasp Polybia paulista has potential in cancer treatment.",
+      "translation": "与此同时，一种来自 Polybia paulista 黄蜂毒液的化合物在癌症治疗方面具有潜力。",
+      "structure": [
+        {
+          "text": "a compound from the venom of the wasp Polybia paulista",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has potential in cancer treatment",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "from the venom of the wasp Polybia paulista 后置修饰 compound，说明来源。",
+        "has potential in 表示在某领域有应用潜力。",
+        "Meanwhile 引出另一个并行例子。"
+      ],
+      "expressions": [
+        {
+          "text": "have potential in",
+          "meaning_zh": "在……方面有潜力"
+        },
+        {
+          "text": "cancer treatment",
+          "meaning_zh": "癌症治疗"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 19,
+      "sentence": "Why is it that insects have received relatively little attention in bioprospecting?",
+      "translation": "为什么昆虫在生物勘探中受到的关注相对较少呢？",
+      "structure": [
+        {
+          "text": "Why is it that",
+          "role": "emphatic_question_frame",
+          "level": 1
+        },
+        {
+          "text": "insects have received relatively little attention in bioprospecting",
+          "role": "content_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Why is it that ... 是强调式疑问结构，用来引出原因分析。",
+        "have received 使用现在完成时，说明到目前为止昆虫受关注不足。",
+        "relatively little attention 表示相对于其潜力和多样性而言关注较少。"
+      ],
+      "expressions": [
+        {
+          "text": "receive relatively little attention",
+          "meaning_zh": "受到相对较少关注"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 20,
+      "sentence": "Firstly, there are so many insects that, without some manner of targeted approach, investigating this huge variety of species is a daunting task.",
+      "translation": "首先，昆虫数量和种类太多，以至于如果没有某种有针对性的方法，研究如此庞大的物种多样性就是一项令人畏惧的任务。",
+      "structure": [
+        {
+          "text": "there are so many insects",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "that, without some manner of targeted approach, investigating this huge variety of species is a daunting task",
+          "role": "result_clause",
+          "level": 2
+        },
+        {
+          "text": "investigating this huge variety of species",
+          "role": "gerund_subject",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "so many ... that ... 构成结果状语结构，说明昆虫数量带来的后果。",
+        "without some manner of targeted approach 是插入介词短语，说明缺少针对性方法时的情况。",
+        "investigating ... 是动名词短语作 that 从句中的主语。"
+      ],
+      "expressions": [
+        {
+          "text": "targeted approach",
+          "meaning_zh": "有针对性的方法"
+        },
+        {
+          "text": "a daunting task",
+          "meaning_zh": "令人畏惧的任务"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 21,
+      "sentence": "Secondly, insects are generally very small, and the glands inside them that secrete potentially useful compounds are smaller still.",
+      "translation": "其次，昆虫通常非常小，而它们体内分泌潜在有用化合物的腺体还要更小。",
+      "structure": [
+        {
+          "text": "insects",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are generally very small",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "and the glands inside them that secrete potentially useful compounds are smaller still",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "that secrete potentially useful compounds",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "and 连接两个分句，后一个分句的主语是 the glands inside them。",
+        "that secrete potentially useful compounds 是定语从句，修饰 glands。",
+        "smaller still 表示“还要更小”，still 用来加强比较。"
+      ],
+      "expressions": [
+        {
+          "text": "potentially useful compounds",
+          "meaning_zh": "潜在有用的化合物"
+        },
+        {
+          "text": "smaller still",
+          "meaning_zh": "还要更小"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "This can make it difficult to obtain sufficient quantities of the compound for subsequent testing.",
+      "translation": "这会使获得足够数量的化合物以进行后续测试变得困难。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "can make it difficult",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to obtain sufficient quantities of the compound for subsequent testing",
+          "role": "object_complement_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "This 指上一句昆虫小、腺体更小这一情况。",
+        "make it difficult to ... 中 it 是形式宾语，真正宾语是后面的不定式。",
+        "for subsequent testing 表示获得化合物数量的用途。"
+      ],
+      "expressions": [
+        {
+          "text": "make it difficult to",
+          "meaning_zh": "使做某事变得困难"
+        },
+        {
+          "text": "subsequent testing",
+          "meaning_zh": "后续测试"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "Thirdly, although we consider insects to be everywhere, the reality of this ubiquity is vast numbers of a few extremely common species.",
+      "translation": "第三，虽然我们认为昆虫无处不在，但这种普遍存在的现实其实是少数极常见物种数量巨大。",
+      "structure": [
+        {
+          "text": "although we consider insects to be everywhere",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "the reality of this ubiquity",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is vast numbers of a few extremely common species",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "although 引导让步从句，承认昆虫看似随处可见。",
+        "this ubiquity 指昆虫“无处不在”这一现象。",
+        "vast numbers of a few extremely common species 表示数量集中在少数常见物种上。"
+      ],
+      "expressions": [
+        {
+          "text": "consider ... to be",
+          "meaning_zh": "认为……是"
+        },
+        {
+          "text": "vast numbers of",
+          "meaning_zh": "大量的"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "Many insect species are infrequently encountered and very difficult to rear in captivity, which, again, can leave us with insufficient material to work with.",
+      "translation": "许多昆虫物种很少被遇到，而且很难人工饲养；这又会让我们缺乏足够的研究材料。",
+      "structure": [
+        {
+          "text": "Many insect species",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are infrequently encountered and very difficult to rear in captivity",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "which, again, can leave us with insufficient material to work with",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "are infrequently encountered 是被动语态，表示这些物种很少被人发现或接触。",
+        "to rear in captivity 是不定式，说明 very difficult 的具体内容。",
+        "which 指代前面整个情况，说明它导致材料不足。"
+      ],
+      "expressions": [
+        {
+          "text": "rear in captivity",
+          "meaning_zh": "人工饲养"
+        },
+        {
+          "text": "insufficient material",
+          "meaning_zh": "不足的材料"
+        },
+        {
+          "text": "work with",
+          "meaning_zh": "用于处理/研究"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 25,
+      "sentence": "My colleagues and I at Aberystwyth University in the UK have developed an approach in which we use our knowledge of ecology as a guide to target our efforts.",
+      "translation": "我和英国阿伯里斯特威斯大学的同事们开发了一种方法，在这种方法中，我们用生态学知识作为指南来集中我们的研究努力。",
+      "structure": [
+        {
+          "text": "My colleagues and I at Aberystwyth University in the UK",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have developed an approach",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in which we use our knowledge of ecology as a guide to target our efforts",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "at Aberystwyth University in the UK 修饰 My colleagues and I，说明研究者所属机构。",
+        "in which 引导定语从句，修饰 approach。",
+        "use ... as a guide to target our efforts 表示用生态知识指导筛选方向。"
+      ],
+      "expressions": [
+        {
+          "text": "develop an approach",
+          "meaning_zh": "开发一种方法"
+        },
+        {
+          "text": "use ... as a guide",
+          "meaning_zh": "把……作为指南"
+        },
+        {
+          "text": "target our efforts",
+          "meaning_zh": "集中努力方向"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "The creatures that particularly interest us are the many insects that secrete powerful poison for subduing prey and keeping it fresh for future consumption.",
+      "translation": "尤其让我们感兴趣的生物，是许多会分泌强力毒素的昆虫，这些毒素用于制服猎物并使其保持新鲜以供日后食用。",
+      "structure": [
+        {
+          "text": "The creatures that particularly interest us",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "that particularly interest us",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "are the many insects that secrete powerful poison for subduing prey and keeping it fresh for future consumption",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "that secrete powerful poison",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "第一个 that 从句修饰 creatures，说明感兴趣的对象。",
+        "第二个 that 从句修饰 insects，说明这些昆虫的特征。",
+        "for subduing prey and keeping it fresh 并列说明 poison 的用途，it 指 prey。"
+      ],
+      "expressions": [
+        {
+          "text": "particularly interest us",
+          "meaning_zh": "尤其使我们感兴趣"
+        },
+        {
+          "text": "subdue prey",
+          "meaning_zh": "制服猎物"
+        },
+        {
+          "text": "future consumption",
+          "meaning_zh": "日后食用"
+        }
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "There are even more insects that are masters of exploiting filthy habitats, such as faeces and carcasses, where they are regularly challenged by thousands of micro-organisms.",
+      "translation": "还有更多昆虫善于利用肮脏的栖息地，例如粪便和尸体；在这些地方，它们经常受到成千上万微生物的挑战。",
+      "structure": [
+        {
+          "text": "There are even more insects",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "that are masters of exploiting filthy habitats",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "such as faeces and carcasses",
+          "role": "example_phrase",
+          "level": 2
+        },
+        {
+          "text": "where they are regularly challenged by thousands of micro-organisms",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "There are 引出存在句，说明还有另一类昆虫值得关注。",
+        "that are masters of ... 修饰 insects，masters of 表示非常擅长。",
+        "where 引导定语从句，修饰 filthy habitats，说明这些环境中的微生物压力。"
+      ],
+      "expressions": [
+        {
+          "text": "masters of exploiting",
+          "meaning_zh": "善于利用……的高手"
+        },
+        {
+          "text": "filthy habitats",
+          "meaning_zh": "肮脏的栖息地"
+        },
+        {
+          "text": "be challenged by",
+          "meaning_zh": "受到……挑战"
+        }
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 28,
+      "sentence": "These insects have many antimicrobial compounds for dealing with pathogenic bacteria and fungi, suggesting that there is certainly potential to find many compounds that can serve as or inspire new antibiotics.",
+      "translation": "这些昆虫拥有许多用于应对致病细菌和真菌的抗菌化合物，这表明我们当然有潜力找到许多可以作为新抗生素或启发新抗生素研发的化合物。",
+      "structure": [
+        {
+          "text": "These insects",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have many antimicrobial compounds for dealing with pathogenic bacteria and fungi",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "suggesting that there is certainly potential to find many compounds that can serve as or inspire new antibiotics",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "that can serve as or inspire new antibiotics",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "for dealing with ... 修饰 compounds，说明化合物的功能。",
+        "suggesting 是现在分词，概括前面事实所暗示的意义。",
+        "serve as or inspire new antibiotics 中 serve as 和 inspire 并列，表示两种药物开发路径。"
+      ],
+      "expressions": [
+        {
+          "text": "deal with",
+          "meaning_zh": "应对；处理"
+        },
+        {
+          "text": "pathogenic bacteria and fungi",
+          "meaning_zh": "致病细菌和真菌"
+        },
+        {
+          "text": "serve as",
+          "meaning_zh": "充当；作为"
+        }
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 29,
+      "sentence": "Although natural history knowledge points us in the right direction, it doesn't solve the problems associated with obtaining useful compounds from insects.",
+      "translation": "虽然自然史知识为我们指明了正确方向，但它并不能解决从昆虫中获得有用化合物相关的问题。",
+      "structure": [
+        {
+          "text": "Although natural history knowledge points us in the right direction",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "doesn't solve the problems associated with obtaining useful compounds from insects",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Although 引导让步从句，承认自然史知识有帮助但有限。",
+        "it 指 natural history knowledge。",
+        "associated with obtaining ... 是过去分词短语，修饰 problems。"
+      ],
+      "expressions": [
+        {
+          "text": "point us in the right direction",
+          "meaning_zh": "为我们指明正确方向"
+        },
+        {
+          "text": "be associated with",
+          "meaning_zh": "与……相关"
+        }
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 30,
+      "sentence": "Fortunately, it is now possible to snip out the stretches of the insect's DNA that carry the codes for the interesting compounds and insert them into cell lines that allow larger quantities to be produced.",
+      "translation": "幸运的是，现在可以剪取昆虫 DNA 中携带这些有趣化合物编码的片段，并把它们插入能够生产更大量化合物的细胞系中。",
+      "structure": [
+        {
+          "text": "it is now possible",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to snip out the stretches of the insect's DNA that carry the codes for the interesting compounds and insert them into cell lines that allow larger quantities to be produced",
+          "role": "subject_clause",
+          "level": 2
+        },
+        {
+          "text": "that carry the codes for the interesting compounds",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "that allow larger quantities to be produced",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "it is now possible 中 it 是形式主语，真正内容是后面的不定式短语。",
+        "snip out 和 insert 是并列动作，说明基因工程处理过程。",
+        "两个 that 从句分别修饰 stretches of DNA 和 cell lines。"
+      ],
+      "expressions": [
+        {
+          "text": "snip out",
+          "meaning_zh": "剪取"
+        },
+        {
+          "text": "carry the codes for",
+          "meaning_zh": "携带……的编码"
+        },
+        {
+          "text": "cell lines",
+          "meaning_zh": "细胞系"
+        }
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 31,
+      "sentence": "And although the road from isolating and characterising compounds with desirable qualities to developing a commercial product is very long and full of pitfalls, the variety of successful animal-derived pharmaceuticals on the market demonstrates there is a precedent here that is worth exploring.",
+      "translation": "而且，尽管从分离和表征具有理想特性的化合物到开发商业产品的道路非常漫长且充满陷阱，但市场上各种成功的动物源药物表明，这里存在一个值得探索的先例。",
+      "structure": [
+        {
+          "text": "although the road from isolating and characterising compounds with desirable qualities to developing a commercial product is very long and full of pitfalls",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "the variety of successful animal-derived pharmaceuticals on the market",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "demonstrates there is a precedent here that is worth exploring",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that is worth exploring",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "although 引导让步从句，主句从 the variety ... 开始。",
+        "from ... to ... 描述从基础研究到商业产品的完整路径。",
+        "there is a precedent here that is worth exploring 是 demonstrates 后省略 that 的宾语从句。"
+      ],
+      "expressions": [
+        {
+          "text": "full of pitfalls",
+          "meaning_zh": "充满陷阱"
+        },
+        {
+          "text": "animal-derived pharmaceuticals",
+          "meaning_zh": "动物源药物"
+        },
+        {
+          "text": "worth exploring",
+          "meaning_zh": "值得探索"
+        }
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 32,
+      "sentence": "With every bit of wilderness that disappears, we deprive ourselves of potential medicines.",
+      "translation": "每失去一点荒野，我们就剥夺了自己获得潜在药物的机会。",
+      "structure": [
+        {
+          "text": "With every bit of wilderness that disappears",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "that disappears",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "deprive ourselves of potential medicines",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "With every bit of wilderness that disappears 表示每一次荒野减少所带来的伴随结果。",
+        "that disappears 修饰 wilderness。",
+        "deprive ourselves of 表示“使自己失去”，强调人类自身承担损失。"
+      ],
+      "expressions": [
+        {
+          "text": "every bit of wilderness",
+          "meaning_zh": "每一点荒野"
+        },
+        {
+          "text": "deprive ourselves of",
+          "meaning_zh": "使我们自己失去"
+        }
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 33,
+      "sentence": "As much as I'd love to help develop a groundbreaking insect-derived medicine, my main motivation for looking at insects in this way is conservation.",
+      "translation": "尽管我很想帮助开发一种突破性的昆虫源药物，但我以这种方式研究昆虫的主要动机是保护自然。",
+      "structure": [
+        {
+          "text": "As much as I'd love to help develop a groundbreaking insect-derived medicine",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "my main motivation for looking at insects in this way",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is conservation",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "As much as 引导让步，表示“尽管很……”。",
+        "I'd 是 I would 的缩写，表达愿望或倾向。",
+        "for looking at insects in this way 修饰 motivation，说明动机对应的研究方式。"
+      ],
+      "expressions": [
+        {
+          "text": "As much as",
+          "meaning_zh": "尽管；虽然很"
+        },
+        {
+          "text": "groundbreaking",
+          "meaning_zh": "突破性的"
+        },
+        {
+          "text": "main motivation",
+          "meaning_zh": "主要动机"
+        }
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 34,
+      "sentence": "I sincerely believe that all species, however small and seemingly insignificant, have a right to exist for their own sake.",
+      "translation": "我真诚地相信，所有物种，无论多么微小、看似多么无足轻重，都有为自身而存在的权利。",
+      "structure": [
+        {
+          "text": "I",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "sincerely believe",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that all species, however small and seemingly insignificant, have a right to exist for their own sake",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "however small and seemingly insignificant",
+          "role": "concessive_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that 引导 believe 的宾语从句，说明作者的核心信念。",
+        "however small and seemingly insignificant 是让步插入语，强调不因微小而失去价值。",
+        "for their own sake 表示“为了其自身”，而不是因为对人类有用。"
+      ],
+      "expressions": [
+        {
+          "text": "have a right to exist",
+          "meaning_zh": "有存在的权利"
+        },
+        {
+          "text": "for their own sake",
+          "meaning_zh": "为了其自身"
+        }
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 35,
+      "sentence": "If we can shine a light on the darker recesses of nature's medicine cabinet, exploring the useful chemistry of the most diverse animals on the planet, I believe we can make people think differently about the value of nature.",
+      "translation": "如果我们能够照亮自然药柜中更隐秘的角落，探索地球上最多样化动物的有用化学成分，我相信我们能够让人们以不同方式思考自然的价值。",
+      "structure": [
+        {
+          "text": "If we can shine a light on the darker recesses of nature's medicine cabinet, exploring the useful chemistry of the most diverse animals on the planet",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "exploring the useful chemistry of the most diverse animals on the planet",
+          "role": "participial_phrase",
+          "level": 3
+        },
+        {
+          "text": "I",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "believe we can make people think differently about the value of nature",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "If 引导条件状语从句，主句是 I believe ...。",
+        "exploring ... 是现在分词短语，补充说明 shine a light 的具体方式。",
+        "make people think differently 是“make + 宾语 + 动词原形”结构，表示促使人改变看法。"
+      ],
+      "expressions": [
+        {
+          "text": "shine a light on",
+          "meaning_zh": "照亮；揭示"
+        },
+        {
+          "text": "nature's medicine cabinet",
+          "meaning_zh": "自然界的药柜"
+        },
+        {
+          "text": "the value of nature",
+          "meaning_zh": "自然的价值"
+        }
+      ]
+    }
+  ]
+}

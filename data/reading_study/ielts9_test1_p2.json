@@ -1,0 +1,816 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts9_test1_reading",
+  "passage_id": "ielts9_test1_p2",
+  "passage_title": "IS THERE ANYBODY OUT THERE?",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The primary reason for the search is basic curiosity—the same curiosity about the natural world that drives all pure science.",
+      "translation": "开展这项搜寻的首要原因是出于基本的好奇心——也就是那种驱动一切纯科学研究、让人探索自然世界的好奇心。",
+      "structure": [
+        {"text": "The primary reason for the search", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb", "level": 1},
+        {"text": "basic curiosity", "role": "complement", "level": 1},
+        {"text": "the same curiosity about the natural world", "role": "apposition", "level": 1},
+        {"text": "that drives all pure science", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "破折号后的名词短语是对 basic curiosity 的同位解释。",
+        "that 引导定语从句，修饰 the same curiosity，drive 的宾语是 all pure science。"
+      ],
+      "expressions": [
+        {"text": "the primary reason for", "meaning_zh": "……的首要原因"},
+        {"text": "the natural world", "meaning_zh": "自然世界"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "We want to know whether we are alone in the Universe.",
+      "translation": "我们想知道，宇宙中是否只有我们。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "want to know", "role": "verb_phrase", "level": 1},
+        {"text": "whether we are alone in the Universe", "role": "object_clause", "level": 1},
+        {"text": "we", "role": "subject", "level": 2},
+        {"text": "are alone in the Universe", "role": "predicate", "level": 2}
+      ],
+      "difficult_points": [
+        "whether 引导 know 的宾语从句，表示“是否”。",
+        "alone 在这里是表语，意为宇宙中没有其他生命相伴。"
+      ],
+      "expressions": [
+        {"text": "want to know whether", "meaning_zh": "想知道是否……"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "We want to know whether life evolves naturally if given the right conditions, or whether there is something very special about the Earth to have fostered the variety of life forms that we see around us on the planet.",
+      "translation": "我们想知道，在具备适当条件时生命是否会自然进化；或者，地球是否有什么非常特殊之处，能够孕育出我们在这颗星球上周围所看到的各种生命形态。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "want to know", "role": "verb_phrase", "level": 1},
+        {"text": "whether life evolves naturally if given the right conditions", "role": "object_clause", "level": 1},
+        {"text": "if given the right conditions", "role": "reduced_adverbial_clause", "level": 2},
+        {"text": "or whether there is something very special about the Earth", "role": "coordinated_object_clause", "level": 1},
+        {"text": "to have fostered the variety of life forms", "role": "non_finite_clause", "level": 2},
+        {"text": "that we see around us on the planet", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "两个 whether 从句并列作 know 的宾语，第二个从句由 or 引出另一种可能。",
+        "if given the right conditions 是省略了主语和 be 动词的条件从句，完整形式是 if it is given…。",
+        "to have fostered 表示先于现在的结果，that 从句修饰 life forms。"
+      ],
+      "expressions": [
+        {"text": "evolve naturally", "meaning_zh": "自然进化"},
+        {"text": "given the right conditions", "meaning_zh": "在具备适当条件的情况下"},
+        {"text": "foster the variety of", "meaning_zh": "孕育……的多样性"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "The simple detection of a radio signal will be sufficient to answer this most basic of all the questions.",
+      "translation": "只要探测到一个无线电信号，就足以回答所有问题中最基本的这个问题。",
+      "structure": [
+        {"text": "The simple detection of a radio signal", "role": "subject", "level": 1},
+        {"text": "will be", "role": "verb", "level": 1},
+        {"text": "sufficient", "role": "complement", "level": 1},
+        {"text": "to answer this most basic of all the questions", "role": "purpose_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "主语 detection 是动名词化名词，中心意思是“探测到”而不是“信号”。",
+        "to answer 表示足够的目的或结果；this most basic of all the questions 是最高级结构。"
+      ],
+      "expressions": [
+        {"text": "be sufficient to", "meaning_zh": "足以……"},
+        {"text": "the most basic of", "meaning_zh": "……中最基本的"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "In this sense, SETI is another cog in the machinery of pure science which is continually pushing out the horizon of our knowledge.",
+      "translation": "从这个意义上说，SETI 是纯科学这台机器中的另一枚齿轮，而纯科学正在不断拓展我们的知识边界。",
+      "structure": [
+        {"text": "In this sense", "role": "sentence_adverbial", "level": 1},
+        {"text": "SETI", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb", "level": 1},
+        {"text": "another cog in the machinery of pure science", "role": "complement", "level": 1},
+        {"text": "which is continually pushing out the horizon of our knowledge", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "another cog 是比喻，指 SETI 像机器齿轮一样参与纯科学的推进。",
+        "which 指代前面的 machinery of pure science（也可理解为整个科学体系），从句说明其持续拓展知识边界。"
+      ],
+      "expressions": [
+        {"text": "in this sense", "meaning_zh": "从这个意义上说"},
+        {"text": "push out the horizon of", "meaning_zh": "拓展……的边界"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "However, there are other reasons for being interested in whether life exists elsewhere.",
+      "translation": "不过，人们对其他地方是否存在生命感兴趣，还有其他原因。",
+      "structure": [
+        {"text": "However", "role": "discourse_marker", "level": 1},
+        {"text": "there are other reasons", "role": "main_clause", "level": 1},
+        {"text": "for being interested in whether life exists elsewhere", "role": "prepositional_phrase", "level": 1},
+        {"text": "whether life exists elsewhere", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "there are 是存在句，真正的核心名词是 other reasons。",
+        "for being interested 中 being 是介词 for 的动名词宾语，whether 从句作 interested in 的宾语。"
+      ],
+      "expressions": [
+        {"text": "be interested in whether", "meaning_zh": "对是否……感兴趣"}
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "For example, we have had civilization on Earth for perhaps only a few thousand years, and the threats of nuclear war and pollution over the last few decades have told us that our survival may be tenuous.",
+      "translation": "例如，地球上的人类文明或许仅有几千年历史，而过去几十年来核战争和污染的威胁告诉我们，人类的生存可能十分脆弱。",
+      "structure": [
+        {"text": "For example", "role": "sentence_adverbial", "level": 1},
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "have had", "role": "verb_phrase", "level": 1},
+        {"text": "civilization on Earth", "role": "object", "level": 1},
+        {"text": "the threats of nuclear war and pollution", "role": "subject", "level": 1},
+        {"text": "over the last few decades", "role": "prepositional_phrase", "level": 2},
+        {"text": "have told us", "role": "verb_phrase", "level": 1},
+        {"text": "that our survival may be tenuous", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "and 连接两个并列分句，第二分句的主语是 the threats，而不是 pollution。",
+        "that 引导 told us 的宾语从句，may be tenuous 表示对人类生存脆弱性的可能判断。"
+      ],
+      "expressions": [
+        {"text": "for perhaps only a few thousand years", "meaning_zh": "或许仅仅几千年"},
+        {"text": "our survival may be tenuous", "meaning_zh": "我们的生存可能很脆弱"}
+      ]
+    },
+    {
+      "id": "A-08",
+      "paragraph_label": "A",
+      "sentence_index": 8,
+      "sentence": "Will we last another two thousand years or will we wipe ourselves out?",
+      "translation": "我们还能再延续两千年，还是会自我毁灭？",
+      "structure": [
+        {"text": "Will we last another two thousand years", "role": "alternative_clause", "level": 1},
+        {"text": "will we wipe ourselves out", "role": "alternative_clause", "level": 1},
+        {"text": "ourselves", "role": "reflexive_object", "level": 2}
+      ],
+      "difficult_points": [
+        "两个 will 开头的疑问分句由 or 连接，提出两种相反的未来结果。",
+        "wipe ourselves out 是“把我们自己消灭掉”，ourselves 是 wipe 的反身宾语。"
+      ],
+      "expressions": [
+        {"text": "last another two thousand years", "meaning_zh": "再延续两千年"},
+        {"text": "wipe ourselves out", "meaning_zh": "自我毁灭"}
+      ]
+    },
+    {
+      "id": "A-09",
+      "paragraph_label": "A",
+      "sentence_index": 9,
+      "sentence": "Since the lifetime of a planet like ours is several billion years, we can expect that, if other civilizations do survive in our galaxy, their ages will range from zero to several billion years.",
+      "translation": "由于像地球这样的行星寿命长达数十亿年，我们可以预想，如果其他文明确实在我们的银河系中存续下来，它们的年龄将从零岁到数十亿岁不等。",
+      "structure": [
+        {"text": "Since the lifetime of a planet like ours is several billion years", "role": "adverbial_clause", "level": 1},
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "can expect", "role": "verb_phrase", "level": 1},
+        {"text": "that, if other civilizations do survive in our galaxy, their ages will range from zero to several billion years", "role": "object_clause", "level": 1},
+        {"text": "if other civilizations do survive in our galaxy", "role": "conditional_clause", "level": 2},
+        {"text": "their ages will range from zero to several billion years", "role": "content_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Since 引导原因状语从句，主句的 that 从句是 expect 的宾语。",
+        "if 从句嵌在 that 从句中；do survive 用 do 强调“确实存活”。",
+        "range from ... to ... 表示年龄范围从零到数十亿年。"
+      ],
+      "expressions": [
+        {"text": "a planet like ours", "meaning_zh": "像我们这颗行星一样的行星"},
+        {"text": "range from ... to ...", "meaning_zh": "从……到……不等"}
+      ]
+    },
+    {
+      "id": "A-10",
+      "paragraph_label": "A",
+      "sentence_index": 10,
+      "sentence": "Thus any mere existence of such a civilization will tell us that long-term survival is possible, and gives us some cause for optimism.",
+      "translation": "因此，仅仅是这样一种文明的存在，就会告诉我们长期生存是可能的，也会给我们带来一些乐观的理由。",
+      "structure": [
+        {"text": "Thus", "role": "sentence_adverbial", "level": 1},
+        {"text": "any mere existence of such a civilization", "role": "subject", "level": 1},
+        {"text": "will tell us", "role": "verb_phrase", "level": 1},
+        {"text": "that long-term survival is possible", "role": "object_clause", "level": 2},
+        {"text": "and gives us some cause for optimism", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "any mere existence 是主语，mere 强调“仅仅存在这一事实”就足以说明问题。",
+        "and 连接 will tell 与 gives 两个谓语，第二个动词承接同一主语。"
+      ],
+      "expressions": [
+        {"text": "long-term survival", "meaning_zh": "长期生存"},
+        {"text": "cause for optimism", "meaning_zh": "乐观的理由"}
+      ]
+    },
+    {
+      "id": "A-11",
+      "paragraph_label": "A",
+      "sentence_index": 11,
+      "sentence": "It is even possible that the older civilization may pass on the benefits of their experience in dealing with threats to survival such as nuclear war and global pollution, and other threats that we haven't yet discovered.",
+      "translation": "甚至有可能，更古老的文明会把他们应对核战争、全球污染等生存威胁的经验传授给我们，以及传授应对其他尚未发现的威胁的经验。",
+      "structure": [
+        {"text": "It is even possible", "role": "main_clause", "level": 1},
+        {"text": "that the older civilization may pass on the benefits of their experience", "role": "content_clause", "level": 1},
+        {"text": "in dealing with threats to survival", "role": "prepositional_phrase", "level": 2},
+        {"text": "such as nuclear war and global pollution", "role": "example_phrase", "level": 3},
+        {"text": "that we haven't yet discovered", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的主语是 that 引导的内容从句。",
+        "in dealing with 说明这些经验用于应对威胁，such as 后列举具体例子。",
+        "that we haven't yet discovered 修饰 other threats，表示尚未发现的威胁。"
+      ],
+      "expressions": [
+        {"text": "pass on the benefits of", "meaning_zh": "传递……的益处"},
+        {"text": "deal with threats to", "meaning_zh": "应对对……的威胁"}
+      ]
+    },
+    {
+      "id": "B-12",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "In discussing whether we are alone, most SETI scientists adopt two ground rules.",
+      "translation": "在讨论我们是否孤独时，大多数 SETI 科学家会遵守两条基本规则。",
+      "structure": [
+        {"text": "In discussing whether we are alone", "role": "prepositional_phrase", "level": 1},
+        {"text": "whether we are alone", "role": "object_clause", "level": 2},
+        {"text": "most SETI scientists", "role": "subject", "level": 1},
+        {"text": "adopt", "role": "verb", "level": 1},
+        {"text": "two ground rules", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "In discussing 是介词加动名词，表示“在讨论……时”。",
+        "whether 从句作 discussing 的宾语，ground rules 指开展搜寻时预先约定的原则。"
+      ],
+      "expressions": [
+        {"text": "adopt ground rules", "meaning_zh": "采用基本规则"}
+      ]
+    },
+    {
+      "id": "B-13",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "First, UFOs (Unidentified Flying Objects) are generally ignored since most scientists don't consider the evidence for them to be strong enough to bear serious consideration although it is also important to keep an open mind in case any really convincing evidence emerges in the future.",
+      "translation": "第一，UFO（不明飞行物）通常会被忽略，因为大多数科学家认为有关 UFO 的证据还不够有力，无法进行严肃考量；不过，保持开放的心态也很重要，以防将来出现真正有说服力的证据。",
+      "structure": [
+        {"text": "First", "role": "discourse_marker", "level": 1},
+        {"text": "UFOs (Unidentified Flying Objects)", "role": "subject", "level": 1},
+        {"text": "are generally ignored", "role": "passive_predicate", "level": 1},
+        {"text": "since most scientists don't consider the evidence for them to be strong enough", "role": "adverbial_clause", "level": 1},
+        {"text": "to bear serious consideration", "role": "result_infinitive", "level": 2},
+        {"text": "although it is also important to keep an open mind", "role": "concessive_clause", "level": 1},
+        {"text": "in case any really convincing evidence emerges in the future", "role": "purpose_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "since 引导原因从句，consider + 宾语 + to be 表示“认为某物是……”。",
+        "strong enough to bear serious consideration 是“足够强到值得严肃考虑”的 enough...to 结构。",
+        "although 和 in case 分别引出让步与预防性条件，it 是形式主语。"
+      ],
+      "expressions": [
+        {"text": "bear serious consideration", "meaning_zh": "值得严肃考虑"},
+        {"text": "keep an open mind", "meaning_zh": "保持开放心态"},
+        {"text": "in case", "meaning_zh": "以防；万一"}
+      ]
+    },
+    {
+      "id": "B-14",
+      "paragraph_label": "B",
+      "sentence_index": 14,
+      "sentence": "Second, we make a very conservative assumption that we are looking for a life form that is pretty well like us, since if it differs radically from us we may well not recognize it as a life form, quite apart from whether we are able to communicate with it.",
+      "translation": "第二，我们采取一个非常保守的假设：我们寻找的生命形态基本上应当与我们相似；因为如果它与我们截然不同，我们很可能认不出它是生命，更不用说我们是否能够与它交流了。",
+      "structure": [
+        {"text": "Second", "role": "discourse_marker", "level": 1},
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "make a very conservative assumption", "role": "predicate", "level": 1},
+        {"text": "that we are looking for a life form", "role": "appositive_clause", "level": 2},
+        {"text": "that is pretty well like us", "role": "relative_clause", "level": 3},
+        {"text": "since if it differs radically from us we may well not recognize it as a life form", "role": "adverbial_clause", "level": 1},
+        {"text": "if it differs radically from us", "role": "conditional_clause", "level": 2},
+        {"text": "quite apart from whether we are able to communicate with it", "role": "supplementary_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "第一个 that 从句是 assumption 的同位语，第二个 that 定语从句修饰 a life form。",
+        "since 从句中又嵌套 if 条件句；may well 表示“很可能”。",
+        "quite apart from 是“撇开……不谈”，whether 从句作介词 from 的宾语。"
+      ],
+      "expressions": [
+        {"text": "make a conservative assumption", "meaning_zh": "作出保守假设"},
+        {"text": "differ radically from", "meaning_zh": "与……截然不同"},
+        {"text": "may well", "meaning_zh": "很可能"}
+      ]
+    },
+    {
+      "id": "B-15",
+      "paragraph_label": "B",
+      "sentence_index": 15,
+      "sentence": "In other words, the life form we are looking for may well have two green heads and seven fingers, but it will nevertheless resemble us in that it should communicate with its fellows, be interested in the Universe, live on a planet orbiting a star like our Sun, and perhaps most restrictively, have a chemistry, like us, based on carbon and water.",
+      "translation": "换句话说，我们寻找的生命形态完全可能有两个绿色的头和七根手指，但它仍会在这些方面与我们相似：应当能与同类交流、对宇宙感兴趣、生活在围绕一颗类似太阳的恒星运行的行星上，而且或许最严格的限制是，它的化学组成和我们一样以碳和水为基础。",
+      "structure": [
+        {"text": "In other words", "role": "sentence_adverbial", "level": 1},
+        {"text": "the life form we are looking for", "role": "subject", "level": 1},
+        {"text": "we are looking for", "role": "relative_clause", "level": 2},
+        {"text": "may well have two green heads and seven fingers", "role": "predicate", "level": 1},
+        {"text": "but it will nevertheless resemble us", "role": "coordinated_clause", "level": 1},
+        {"text": "in that it should communicate with its fellows, be interested in the Universe, live on a planet orbiting a star like our Sun, and perhaps most restrictively, have a chemistry", "role": "explanatory_clause", "level": 2},
+        {"text": "based on carbon and water", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "the life form we are looking for 中关系代词被省略，we are looking for 修饰 life form。",
+        "in that 引出说明 resemble us 的具体方面，后面并列四个动词短语共用 should。",
+        "orbiting a star 和 based on carbon and water 都是非谓语短语，分别修饰 planet 和 chemistry。"
+      ],
+      "expressions": [
+        {"text": "in other words", "meaning_zh": "换句话说"},
+        {"text": "resemble us in that", "meaning_zh": "在……方面与我们相似"},
+        {"text": "be based on", "meaning_zh": "以……为基础"}
+      ]
+    },
+    {
+      "id": "C-16",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Even when we make these assumptions, our understanding of other life forms is still severely limited.",
+      "translation": "即使作出这些假设，我们对其他生命形态的了解仍然非常有限。",
+      "structure": [
+        {"text": "Even when we make these assumptions", "role": "concessive_adverbial_clause", "level": 1},
+        {"text": "our understanding of other life forms", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb", "level": 1},
+        {"text": "still severely limited", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "Even when 引导让步时间状语从句，表示即使满足这个条件，结论仍成立。",
+        "understanding 是主语中心词，of other life forms 说明了解的对象。"
+      ],
+      "expressions": [
+        {"text": "be severely limited", "meaning_zh": "受到严重限制；非常有限"}
+      ]
+    },
+    {
+      "id": "C-17",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "We do not even know, for example, how many stars have planets, and we certainly do not know how likely it is that life will arise naturally, given the right conditions.",
+      "translation": "例如，我们甚至不知道有多少恒星拥有行星；而且，在具备适当条件的情况下，生命自然产生的可能性有多大，我们当然也不知道。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "do not even know", "role": "verb_phrase", "level": 1},
+        {"text": "how many stars have planets", "role": "object_clause", "level": 2},
+        {"text": "and we certainly do not know", "role": "coordinated_clause", "level": 1},
+        {"text": "how likely it is that life will arise naturally", "role": "object_clause", "level": 2},
+        {"text": "given the right conditions", "role": "reduced_adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "how many 和 how likely 分别引导 know 的疑问宾语从句，而不是直接提问。",
+        "how likely it is 中 it 是形式主语，真正内容是 that life will arise naturally。",
+        "given the right conditions 是省略结构，表示“在条件具备的情况下”。"
+      ],
+      "expressions": [
+        {"text": "how likely it is that", "meaning_zh": "……的可能性有多大"},
+        {"text": "arise naturally", "meaning_zh": "自然产生"}
+      ]
+    },
+    {
+      "id": "C-18",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "However, when we look at the 100 billion stars in our galaxy (the Milky Way), and 100 billion galaxies in the observable Universe, it seems inconceivable that at least one of these planets does not have a life form on it: in fact, the best educated guess we can make, using the little we do know about the conditions for carbon-based life, leads us to estimate that perhaps one in 100,000 stars might have a life-bearing planet orbiting it.",
+      "translation": "然而，当我们看到银河系（即 Milky Way）中的一千亿颗恒星，以及可观测宇宙中的一千亿个星系时，很难想象这些行星中竟没有至少一颗拥有生命形态；事实上，根据我们对碳基生命条件所知的少量信息作出的最佳科学推测认为，大约每十万颗恒星中就可能有一颗拥有一颗围绕其运行、能够孕育生命的行星。",
+      "structure": [
+        {"text": "However", "role": "discourse_marker", "level": 1},
+        {"text": "when we look at the 100 billion stars in our galaxy (the Milky Way), and 100 billion galaxies in the observable Universe", "role": "adverbial_clause", "level": 1},
+        {"text": "it seems inconceivable", "role": "main_clause", "level": 1},
+        {"text": "that at least one of these planets does not have a life form on it", "role": "content_clause", "level": 2},
+        {"text": "the best educated guess we can make", "role": "subject", "level": 1},
+        {"text": "using the little we do know about the conditions for carbon-based life", "role": "participial_phrase", "level": 2},
+        {"text": "leads us to estimate", "role": "verb_phrase", "level": 1},
+        {"text": "that perhaps one in 100,000 stars might have a life-bearing planet orbiting it", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "when 引导的时间状语从句很长，主句用 it 作形式主语，真正内容由 that 从句说明。",
+        "冒号后是对前面判断的进一步解释；we can make 和 we do know 都是嵌入名词短语中的定语从句。",
+        "orbiting it 是现在分词短语，修饰 planet，it 指代 one in 100,000 stars 所对应的恒星。"
+      ],
+      "expressions": [
+        {"text": "it seems inconceivable that", "meaning_zh": "很难想象……"},
+        {"text": "carbon-based life", "meaning_zh": "碳基生命"},
+        {"text": "lead us to estimate", "meaning_zh": "使我们估计"}
+      ]
+    },
+    {
+      "id": "C-19",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "That means that our nearest neighbours are perhaps 100 light years away, which is almost next door in astronomical terms.",
+      "translation": "这意味着我们最近的邻居可能在一百光年之外；从天文学角度说，这几乎就像在隔壁。",
+      "structure": [
+        {"text": "That", "role": "subject", "level": 1},
+        {"text": "means", "role": "verb", "level": 1},
+        {"text": "that our nearest neighbours are perhaps 100 light years away", "role": "object_clause", "level": 2},
+        {"text": "which is almost next door in astronomical terms", "role": "non_restrictive_relative_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "第一个 that 是指示代词，指代上一句的估算；第二个 that 引导 means 的宾语从句。",
+        "which 引导非限制性定语从句，补充说明一百光年的距离在天文学尺度上很近。"
+      ],
+      "expressions": [
+        {"text": "light years away", "meaning_zh": "相距若干光年"},
+        {"text": "in astronomical terms", "meaning_zh": "从天文学角度说"}
+      ]
+    },
+    {
+      "id": "D-20",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "An alien civilization could choose many different ways of sending information across the galaxy, but many of these either require too much energy, or else are severely attenuated while traversing the vast distances across the galaxy.",
+      "translation": "外星文明可以选择许多不同方式把信息传遍银河系，但其中很多方式要么需要太多能量，要么在穿越银河系的漫长距离时会严重衰减。",
+      "structure": [
+        {"text": "An alien civilization", "role": "subject", "level": 1},
+        {"text": "could choose", "role": "verb_phrase", "level": 1},
+        {"text": "many different ways of sending information across the galaxy", "role": "object", "level": 1},
+        {"text": "but many of these", "role": "coordinated_subject", "level": 1},
+        {"text": "either require too much energy, or else are severely attenuated", "role": "coordinated_predicate", "level": 1},
+        {"text": "while traversing the vast distances across the galaxy", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "ways of sending 中 sending 是介词 of 的动名词，说明传递信息的方式。",
+        "either...or else... 连接两种缺点；while traversing 省略了与主句相同的主语。"
+      ],
+      "expressions": [
+        {"text": "ways of sending information", "meaning_zh": "传递信息的方式"},
+        {"text": "be severely attenuated", "meaning_zh": "受到严重衰减"}
+      ]
+    },
+    {
+      "id": "D-21",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "It turns out that, for a given amount of transmitted power, radio waves in the frequency range 1000 to 3000 MHz travel the greatest distance, and so all searches to date have concentrated on looking for radio waves in this frequency range.",
+      "translation": "事实证明，在传输功率相同的情况下，频率范围为 1000 到 3000 MHz 的无线电波传播距离最远，因此迄今为止所有搜寻都集中于寻找这一频段的无线电波。",
+      "structure": [
+        {"text": "It turns out", "role": "main_clause", "level": 1},
+        {"text": "that, for a given amount of transmitted power, radio waves in the frequency range 1000 to 3000 MHz travel the greatest distance", "role": "content_clause", "level": 1},
+        {"text": "for a given amount of transmitted power", "role": "prepositional_phrase", "level": 2},
+        {"text": "and so all searches to date have concentrated", "role": "coordinated_clause", "level": 1},
+        {"text": "on looking for radio waves in this frequency range", "role": "prepositional_complement", "level": 2}
+      ],
+      "difficult_points": [
+        "It turns out that 是固定结构，it 为形式主语，that 从句呈现事实。",
+        "for a given amount of transmitted power 是比较条件；looking for 是 concentrate on 后的动名词。"
+      ],
+      "expressions": [
+        {"text": "It turns out that", "meaning_zh": "事实证明……"},
+        {"text": "to date", "meaning_zh": "迄今为止"},
+        {"text": "concentrate on", "meaning_zh": "集中于"}
+      ]
+    },
+    {
+      "id": "D-22",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "So far there have been a number of searches by various groups around the world, including Australian searches using the radio telescope at Parkes, New South Wales.",
+      "translation": "到目前为止，世界各地不同团体已经开展了多次搜寻，其中包括澳大利亚在新南威尔士州帕克斯使用射电望远镜进行的搜寻。",
+      "structure": [
+        {"text": "So far", "role": "sentence_adverbial", "level": 1},
+        {"text": "there have been a number of searches", "role": "existential_clause", "level": 1},
+        {"text": "by various groups around the world", "role": "prepositional_phrase", "level": 2},
+        {"text": "including Australian searches", "role": "participial_phrase", "level": 1},
+        {"text": "using the radio telescope at Parkes, New South Wales", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "there have been 是现在完成时的存在句，核心名词是 a number of searches。",
+        "including 引出具体例子，using 短语说明澳大利亚搜寻所使用的设备。"
+      ],
+      "expressions": [
+        {"text": "so far", "meaning_zh": "到目前为止"},
+        {"text": "a number of", "meaning_zh": "许多；若干"}
+      ]
+    },
+    {
+      "id": "D-23",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "Until now there have not been any detections from the few hundred stars which have been searched.",
+      "translation": "截至目前，在已经搜寻过的几百颗恒星中还没有发现任何信号。",
+      "structure": [
+        {"text": "Until now", "role": "sentence_adverbial", "level": 1},
+        {"text": "there have not been any detections", "role": "existential_clause", "level": 1},
+        {"text": "from the few hundred stars", "role": "prepositional_phrase", "level": 2},
+        {"text": "which have been searched", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "there have not been 是否定存在句，any detections 是真正主语。",
+        "which have been searched 是现在完成时被动语态的定语从句，修饰 stars。"
+      ],
+      "expressions": [
+        {"text": "until now", "meaning_zh": "截至目前"}
+      ]
+    },
+    {
+      "id": "D-24",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "The scale of the searches has been increased dramatically since 1992, when the US Congress voted NASA $10 million per year for ten years to conduct a thorough search for extra-terrestrial life.",
+      "translation": "自 1992 年以来，搜寻的规模大幅扩大；当年美国国会投票决定连续十年每年拨给 NASA 一千万美元，用于彻底搜寻地外生命。",
+      "structure": [
+        {"text": "The scale of the searches", "role": "subject", "level": 1},
+        {"text": "has been increased dramatically", "role": "passive_predicate", "level": 1},
+        {"text": "since 1992", "role": "prepositional_phrase", "level": 1},
+        {"text": "when the US Congress voted NASA $10 million per year for ten years", "role": "relative_clause", "level": 2},
+        {"text": "to conduct a thorough search for extra-terrestrial life", "role": "purpose_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "has been increased 是现在完成时被动语态，强调规模从过去到现在的扩大。",
+        "when 引导非限制性定语从句，补充说明 1992 年发生的拨款决定。",
+        "vote somebody an amount 是“投票拨给某人某款”，to conduct 表示拨款的用途。"
+      ],
+      "expressions": [
+        {"text": "the scale of", "meaning_zh": "……的规模"},
+        {"text": "increase dramatically", "meaning_zh": "大幅增加"},
+        {"text": "conduct a thorough search", "meaning_zh": "进行彻底搜寻"}
+      ]
+    },
+    {
+      "id": "D-25",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "Much of the money in this project is being spent on developing the special hardware needed to search many frequencies at once.",
+      "translation": "这个项目的大部分资金都花在开发特殊硬件上，这些硬件用于同时搜寻多个频率。",
+      "structure": [
+        {"text": "Much of the money in this project", "role": "subject", "level": 1},
+        {"text": "is being spent", "role": "passive_predicate", "level": 1},
+        {"text": "on developing the special hardware", "role": "prepositional_complement", "level": 1},
+        {"text": "needed to search many frequencies at once", "role": "reduced_relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "is being spent 是现在进行时被动语态，表示资金目前正被投入。",
+        "needed to search... 是过去分词短语，修饰 hardware；to search 表示硬件的用途。"
+      ],
+      "expressions": [
+        {"text": "be spent on", "meaning_zh": "花费在……上"},
+        {"text": "at once", "meaning_zh": "同时"}
+      ]
+    },
+    {
+      "id": "D-26",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "The project has two parts.",
+      "translation": "这个项目分为两个部分。",
+      "structure": [
+        {"text": "The project", "role": "subject", "level": 1},
+        {"text": "has", "role": "verb", "level": 1},
+        {"text": "two parts", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "has 在这里表示“包含、分成”，two parts 是其宾语。",
+        "这句短句承上启下，后文分别介绍两个部分。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-27",
+      "paragraph_label": "D",
+      "sentence_index": 27,
+      "sentence": "One part is a targeted search using the world's largest radio telescopes, the American-operated telescope in Arecibo, Puerto Rico and the French telescope in Nancy in France.",
+      "translation": "其中一部分是定向搜寻，使用世界上最大的射电望远镜，包括波多黎各阿雷西博的美国运营望远镜和法国南锡的法国望远镜。",
+      "structure": [
+        {"text": "One part", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb", "level": 1},
+        {"text": "a targeted search using the world's largest radio telescopes", "role": "complement", "level": 1},
+        {"text": "using the world's largest radio telescopes", "role": "participial_phrase", "level": 2},
+        {"text": "the American-operated telescope in Arecibo, Puerto Rico and the French telescope in Nancy in France", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "using 短语修饰 targeted search，说明定向搜寻所使用的望远镜。",
+        "逗号后的两个望远镜名称是 radio telescopes 的同位语，而 American-operated 是复合形容词。"
+      ],
+      "expressions": [
+        {"text": "a targeted search", "meaning_zh": "定向搜寻"},
+        {"text": "radio telescope", "meaning_zh": "射电望远镜"}
+      ]
+    },
+    {
+      "id": "D-28",
+      "paragraph_label": "D",
+      "sentence_index": 28,
+      "sentence": "This part of the project is searching the nearest 1000 likely stars with high sensitivity for signals in the frequency range 1000 to 3000 MHz.",
+      "translation": "项目的这一部分正以高灵敏度搜寻距离最近、最有可能的 1000 颗恒星，寻找频率在 1000 到 3000 MHz 范围内的信号。",
+      "structure": [
+        {"text": "This part of the project", "role": "subject", "level": 1},
+        {"text": "is searching", "role": "verb_phrase", "level": 1},
+        {"text": "the nearest 1000 likely stars", "role": "object", "level": 1},
+        {"text": "with high sensitivity", "role": "adverbial_phrase", "level": 1},
+        {"text": "for signals in the frequency range 1000 to 3000 MHz", "role": "purpose_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "is searching 是现在进行时，强调该搜寻工作正在进行。",
+        "likely 作定语修饰 stars，for signals 表示搜寻的目标，而不是另一个地点。"
+      ],
+      "expressions": [
+        {"text": "with high sensitivity", "meaning_zh": "以高灵敏度"},
+        {"text": "the frequency range", "meaning_zh": "频率范围"}
+      ]
+    },
+    {
+      "id": "D-29",
+      "paragraph_label": "D",
+      "sentence_index": 29,
+      "sentence": "The other part of the project is an undirected search which is monitoring all of space with a lower sensitivity, using the smaller antennas of NASA's Deep Space Network.",
+      "translation": "项目的另一部分是非定向搜寻，它以较低灵敏度监测整个太空，使用的是 NASA 深空网络中较小的天线。",
+      "structure": [
+        {"text": "The other part of the project", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb", "level": 1},
+        {"text": "an undirected search", "role": "complement", "level": 1},
+        {"text": "which is monitoring all of space with a lower sensitivity", "role": "relative_clause", "level": 2},
+        {"text": "using the smaller antennas of NASA's Deep Space Network", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导定语从句修饰 an undirected search，说明非定向搜寻的工作方式。",
+        "using 短语与主句共享主语，说明监测所用的设备；with a lower sensitivity 表示较低的灵敏度。"
+      ],
+      "expressions": [
+        {"text": "an undirected search", "meaning_zh": "非定向搜寻"},
+        {"text": "monitor all of space", "meaning_zh": "监测整个太空"}
+      ]
+    },
+    {
+      "id": "E-30",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "There is considerable debate over how we should react if we detect a signal from an alien civilization.",
+      "translation": "如果我们探测到外星文明发来的信号，应该如何回应，这个问题引发了相当大的争论。",
+      "structure": [
+        {"text": "There is considerable debate", "role": "existential_clause", "level": 1},
+        {"text": "over how we should react", "role": "prepositional_complement", "level": 1},
+        {"text": "if we detect a signal from an alien civilization", "role": "conditional_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "there is 是存在句，considerable debate 是真正主语。",
+        "how 引导介词 over 的宾语从句，if 条件从句嵌在其中。"
+      ],
+      "expressions": [
+        {"text": "considerable debate over", "meaning_zh": "围绕……的广泛争论"},
+        {"text": "react to", "meaning_zh": "回应；对……作出反应"}
+      ]
+    },
+    {
+      "id": "E-31",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "Everybody agrees that we should not reply immediately.",
+      "translation": "所有人都同意，我们不应该立即回复。",
+      "structure": [
+        {"text": "Everybody", "role": "subject", "level": 1},
+        {"text": "agrees", "role": "verb", "level": 1},
+        {"text": "that we should not reply immediately", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 从句作 agrees 的宾语，表达大家共同认可的观点。",
+        "should not reply 是情态动词加否定，immediately 修饰 reply。"
+      ],
+      "expressions": [
+        {"text": "agree that", "meaning_zh": "同意……"},
+        {"text": "reply immediately", "meaning_zh": "立即回复"}
+      ]
+    },
+    {
+      "id": "E-32",
+      "paragraph_label": "E",
+      "sentence_index": 32,
+      "sentence": "Quite apart from the impracticality of sending a reply over such large distances at short notice, it raises a host of ethical questions that would have to be addressed by the global community before any reply could be sent.",
+      "translation": "撇开在这么远的距离上临时发送回复并不现实这一点不谈，这还会引发一系列伦理问题，而这些问题必须由全球社会处理后，才能发送任何回复。",
+      "structure": [
+        {"text": "Quite apart from the impracticality of sending a reply over such large distances at short notice", "role": "supplementary_phrase", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "raises", "role": "verb", "level": 1},
+        {"text": "a host of ethical questions", "role": "object", "level": 1},
+        {"text": "that would have to be addressed by the global community", "role": "relative_clause", "level": 2},
+        {"text": "before any reply could be sent", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Quite apart from 是插入性的让步表达，it 指代立即回复这一做法。",
+        "that 从句修饰 ethical questions，would have to be addressed 是情态动词的被动结构。",
+        "before 从句说明发送回复的先决条件。"
+      ],
+      "expressions": [
+        {"text": "quite apart from", "meaning_zh": "撇开……不谈"},
+        {"text": "a host of", "meaning_zh": "大量；一系列"},
+        {"text": "address ethical questions", "meaning_zh": "处理伦理问题"}
+      ]
+    },
+    {
+      "id": "E-33",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "Would the human race face the culture shock if faced with a superior and much older civilization?",
+      "translation": "如果面对一个更强大、历史更悠久的文明，人类会遭受文化冲击吗？",
+      "structure": [
+        {"text": "Would the human race face the culture shock", "role": "main_clause", "level": 1},
+        {"text": "if faced with a superior and much older civilization", "role": "conditional_clause", "level": 1},
+        {"text": "faced with a superior and much older civilization", "role": "reduced_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "if faced with 省略了主语和 be 动词，完整形式是 if the human race were faced with…。",
+        "Would 开头构成对未来假设的疑问，superior 表示在能力或地位上更强。"
+      ],
+      "expressions": [
+        {"text": "face the culture shock", "meaning_zh": "遭受文化冲击"},
+        {"text": "be faced with", "meaning_zh": "面对；面临"}
+      ]
+    },
+    {
+      "id": "E-34",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "Luckily, there is no urgency about this.",
+      "translation": "幸运的是，这件事并不紧迫。",
+      "structure": [
+        {"text": "Luckily", "role": "sentence_adverbial", "level": 1},
+        {"text": "there is no urgency about this", "role": "existential_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Luckily 是句子副词，表达作者对整件事的评价。",
+        "there is no urgency 是存在句，about this 说明“不紧迫”针对前文的回复问题。"
+      ],
+      "expressions": [
+        {"text": "no urgency", "meaning_zh": "没有紧迫性"}
+      ]
+    },
+    {
+      "id": "E-35",
+      "paragraph_label": "E",
+      "sentence_index": 35,
+      "sentence": "The stars being searched are hundreds of light years away, so it takes hundreds of years for their signal to reach us, and a further few hundred years for our reply to reach them.",
+      "translation": "正在被搜寻的恒星距离我们数百光年，因此它们的信号要经过数百年才能到达我们，而我们的回复还要再经过几百年才能到达它们。",
+      "structure": [
+        {"text": "The stars being searched", "role": "subject", "level": 1},
+        {"text": "being searched", "role": "reduced_relative_clause", "level": 2},
+        {"text": "are hundreds of light years away", "role": "predicate", "level": 1},
+        {"text": "so it takes hundreds of years for their signal to reach us", "role": "result_clause", "level": 1},
+        {"text": "for their signal to reach us", "role": "infinitive_clause", "level": 2},
+        {"text": "and a further few hundred years for our reply to reach them", "role": "coordinated_result", "level": 1}
+      ],
+      "difficult_points": [
+        "being searched 是现在分词被动结构，修饰 stars，表示“正在被搜寻的恒星”。",
+        "it takes...for...to... 是形式主语结构，两个 for 不定式分别说明信号和回复所需时间。"
+      ],
+      "expressions": [
+        {"text": "hundreds of light years away", "meaning_zh": "相距数百光年"},
+        {"text": "it takes ... for ... to ...", "meaning_zh": "……需要……时间才能……"}
+      ]
+    },
+    {
+      "id": "E-36",
+      "paragraph_label": "E",
+      "sentence_index": 36,
+      "sentence": "It's not important, then, if there's a delay of a few years, or decades, while the human race debates the question of whether to reply, and perhaps carefully drafts a reply.",
+      "translation": "所以，在人类讨论是否回复、或许还仔细起草回复的几年乃至几十年里，即使有所延迟也并不重要。",
+      "structure": [
+        {"text": "It's not important", "role": "main_clause", "level": 1},
+        {"text": "then", "role": "sentence_adverbial", "level": 1},
+        {"text": "if there's a delay of a few years, or decades", "role": "conditional_clause", "level": 1},
+        {"text": "while the human race debates the question of whether to reply", "role": "time_clause", "level": 2},
+        {"text": "whether to reply", "role": "embedded_question", "level": 3},
+        {"text": "and perhaps carefully drafts a reply", "role": "coordinated_predicate", "level": 2}
+      ],
+      "difficult_points": [
+        "It's 是形式主语，if 从句说明“什么事情”不重要；then 表示由前文推导出的结论。",
+        "while 引导时间从句，其中 whether to reply 是 question 的内容，and 连接 debates 与 drafts。",
+        "a few years, or decades 是同位补充，强调延迟即使长达几十年也无妨。"
+      ],
+      "expressions": [
+        {"text": "a delay of", "meaning_zh": "……的延迟"},
+        {"text": "debate the question of whether", "meaning_zh": "讨论是否……的问题"},
+        {"text": "draft a reply", "meaning_zh": "起草回复"}
+      ]
+    }
+  ]
+}

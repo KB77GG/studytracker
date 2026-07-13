@@ -1,0 +1,832 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts11_test3_reading",
+  "passage_id": "ielts11_test3_p2",
+  "passage_title": "Great Migrations",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Animal migration, however it is defined, is far more than just the movement of animals.",
+      "translation": "无论怎样定义，动物迁徙都远不只是动物的移动。",
+      "structure": [
+        {"text": "Animal migration", "role": "subject", "level": 1},
+        {"text": "however it is defined", "role": "adverbial_clause", "level": 2},
+        {"text": "is far more than just the movement of animals", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "however it is defined 是让步状语从句，表示“不论它如何被定义”。",
+        "far more than 用 far 加强比较，强调迁徙的内涵远超单纯移动。"
+      ],
+      "expressions": [
+        {"text": "however it is defined", "meaning_zh": "无论如何定义"},
+        {"text": "far more than", "meaning_zh": "远不只是；远远超过"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "It can loosely be described as travel that takes place at regular intervals—often in an annual cycle—that may involve many members of a species, and is rewarded only after a long journey.",
+      "translation": "宽泛地说，迁徙可被描述为定期发生的旅行——通常以一年为周期——可能有同一物种的许多个体参与，而且只有经过长途跋涉之后才会有所回报。",
+      "structure": [
+        {"text": "It can loosely be described as travel", "role": "main_clause", "level": 1},
+        {"text": "that takes place at regular intervals—often in an annual cycle", "role": "relative_clause", "level": 2},
+        {"text": "that may involve many members of a species, and is rewarded only after a long journey", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "两个 that 定语从句都修饰 travel，分别说明发生频率和迁徙的参与者及回报。",
+        "第二个定语从句中 may involve 与 is rewarded 共用主语 that，后者为被动语态。",
+        "often in an annual cycle 是破折号引出的补充说明。"
+      ],
+      "expressions": [
+        {"text": "be described as", "meaning_zh": "被描述为"},
+        {"text": "at regular intervals", "meaning_zh": "每隔固定时间；定期"},
+        {"text": "an annual cycle", "meaning_zh": "年度周期"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "It suggests inherited instinct.",
+      "translation": "它体现出一种遗传而来的本能。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "suggests", "role": "verb_phrase", "level": 1},
+        {"text": "inherited instinct", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "It 指代前文所描述的动物迁徙行为。",
+        "suggest 在此意为“表明、体现”，而不是“建议”。"
+      ],
+      "expressions": [
+        {"text": "inherited instinct", "meaning_zh": "遗传本能"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "The biologist Hugh Dingle has identified five characteristics that apply, in varying degrees and combinations, to all migrations.",
+      "translation": "生物学家 Hugh Dingle 总结出了五项特征，它们以不同程度和不同组合适用于所有迁徙。",
+      "structure": [
+        {"text": "The biologist Hugh Dingle", "role": "subject", "level": 1},
+        {"text": "has identified five characteristics", "role": "verb_phrase", "level": 1},
+        {"text": "that apply, in varying degrees and combinations, to all migrations", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Hugh Dingle 与 The biologist 构成同位关系，说明这位生物学家的姓名。",
+        "that 引导定语从句修饰 five characteristics。",
+        "in varying degrees and combinations 是插入成分，说明五项特征并非以相同方式出现在每次迁徙中。"
+      ],
+      "expressions": [
+        {"text": "identify characteristics", "meaning_zh": "识别并归纳特征"},
+        {"text": "apply to", "meaning_zh": "适用于"},
+        {"text": "in varying degrees", "meaning_zh": "在不同程度上"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "They are prolonged movements that carry animals outside familiar habitats; they tend to be linear, not zigzaggy; they involve special behaviours concerning preparation (such as overfeeding) and arrival; they demand special allocations of energy.",
+      "translation": "迁徙是把动物带离熟悉栖息地的长时间移动；路线往往是直线式的，而非曲折往返；它包含与准备（如过量进食）和抵达有关的特殊行为；还需要专门调配能量。",
+      "structure": [
+        {"text": "They are prolonged movements", "role": "main_clause", "level": 1},
+        {"text": "that carry animals outside familiar habitats", "role": "relative_clause", "level": 2},
+        {"text": "they tend to be linear, not zigzaggy", "role": "coordinated_clause", "level": 1},
+        {"text": "they involve special behaviours concerning preparation (such as overfeeding) and arrival", "role": "coordinated_clause", "level": 1},
+        {"text": "they demand special allocations of energy", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "分号连接四个并列分句，逐项列出迁徙的特征。",
+        "that carry ... 是定语从句，修饰 prolonged movements。",
+        "concerning preparation ... and arrival 是介词短语，限定 special behaviours 所涉及的阶段。"
+      ],
+      "expressions": [
+        {"text": "tend to", "meaning_zh": "往往；倾向于"},
+        {"text": "special allocations of energy", "meaning_zh": "能量的专门调配"},
+        {"text": "familiar habitats", "meaning_zh": "熟悉的栖息地"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "And one more: migrating animals maintain an intense attentiveness to the greater mission, which keeps them undistracted by temptations and undeterred by challenges that would turn other animals aside.",
+      "translation": "此外还有一点：迁徙中的动物始终高度专注于更大的使命，这使它们不受诱惑干扰，也不因那些会让其他动物偏离方向的挑战而退缩。",
+      "structure": [
+        {"text": "migrating animals maintain an intense attentiveness to the greater mission", "role": "main_clause", "level": 1},
+        {"text": "which keeps them undistracted by temptations and undeterred by challenges", "role": "relative_clause", "level": 2},
+        {"text": "that would turn other animals aside", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 指代前面“高度专注于更大使命”这一状态，并说明其结果。",
+        "keep them undistracted ... and undeterred ... 是“keep + 宾语 + 宾补”的并列结构。",
+        "that 引导定语从句修饰 challenges；turn ... aside 表示使其偏离目标。"
+      ],
+      "expressions": [
+        {"text": "maintain an intense attentiveness to", "meaning_zh": "始终高度专注于"},
+        {"text": "be undeterred by", "meaning_zh": "不因……而退缩"},
+        {"text": "turn ... aside", "meaning_zh": "使……偏离方向或目标"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "An arctic tern, on its 20,000 km flight from the extreme south of South America to the Arctic Circle, will take no notice of a nice smelly herring offered from a bird-watcher's boat along the way.",
+      "translation": "一只北极燕鸥在从南美洲最南端飞往北极圈的两万公里旅途中，对沿途观鸟者船上递来的一条气味诱人的鲱鱼也会毫不理会。",
+      "structure": [
+        {"text": "An arctic tern", "role": "subject", "level": 1},
+        {"text": "on its 20,000 km flight from the extreme south of South America to the Arctic Circle", "role": "prepositional_phrase", "level": 2},
+        {"text": "will take no notice of a nice smelly herring", "role": "verb_phrase", "level": 1},
+        {"text": "offered from a bird-watcher's boat along the way", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "两个逗号之间的介词短语补充说明燕鸥所处的长途飞行。",
+        "offered ... 是过去分词短语，后置修饰 herring，含被动意义。",
+        "take no notice of 表示完全不理会。"
+      ],
+      "expressions": [
+        {"text": "take no notice of", "meaning_zh": "完全不理会"},
+        {"text": "along the way", "meaning_zh": "沿途；在过程中"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "While local gulls will dive voraciously for such handouts, the tern flies on.",
+      "translation": "当地海鸥会贪婪地俯冲下来争抢这种投喂，而北极燕鸥却继续飞行。",
+      "structure": [
+        {"text": "While local gulls will dive voraciously for such handouts", "role": "adverbial_clause", "level": 2},
+        {"text": "the tern", "role": "subject", "level": 1},
+        {"text": "flies on", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "While 在此表示对比而非时间，相当于“然而、而”。",
+        "flies on 中 on 作副词，表示不停止、继续向前飞。"
+      ],
+      "expressions": [
+        {"text": "fly on", "meaning_zh": "继续飞行"},
+        {"text": "dive for", "meaning_zh": "俯冲争取……"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Why?",
+      "translation": "为什么呢？",
+      "structure": [
+        {"text": "Why", "role": "interrogative", "level": 1}
+      ],
+      "difficult_points": [
+        "这是一个省略式疑问句，完整含义是询问燕鸥为何不理会食物。",
+        "独立成句的 Why 承上启下，引出下一句的原因解释。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "The arctic tern resists distraction because it is driven at that moment by an instinctive sense of something we humans find admirable: larger purpose.",
+      "translation": "北极燕鸥之所以能抵御干扰，是因为那一刻驱使它的是一种我们人类也赞赏的本能意识：更宏大的目标。",
+      "structure": [
+        {"text": "The arctic tern resists distraction", "role": "main_clause", "level": 1},
+        {"text": "because it is driven at that moment by an instinctive sense of something", "role": "adverbial_clause", "level": 2},
+        {"text": "we humans find admirable", "role": "relative_clause", "level": 3},
+        {"text": "larger purpose", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "because 引导原因状语从句，其中 is driven by 是被动结构，意为“受到……驱使”。",
+        "we humans find admirable 是省略关系代词的定语从句，修饰 something。",
+        "冒号后的 larger purpose 具体解释 something 的内容。"
+      ],
+      "expressions": [
+        {"text": "resist distraction", "meaning_zh": "抵御干扰"},
+        {"text": "be driven by", "meaning_zh": "受到……驱使"},
+        {"text": "larger purpose", "meaning_zh": "更宏大的目标"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "In other words, it is determined to reach its destination.",
+      "translation": "换句话说，它下定决心要抵达目的地。",
+      "structure": [
+        {"text": "In other words", "role": "prepositional_phrase", "level": 2},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "is determined to reach its destination", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "In other words 表示对上一句的通俗改述。",
+        "be determined to do 表示意志坚定地去做某事，不是被动语态的普通动作。"
+      ],
+      "expressions": [
+        {"text": "in other words", "meaning_zh": "换句话说"},
+        {"text": "be determined to", "meaning_zh": "下定决心做……"},
+        {"text": "reach one's destination", "meaning_zh": "抵达目的地"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "The bird senses that it can eat, rest and mate later.",
+      "translation": "这只鸟本能地知道，它可以稍后再进食、休息和交配。",
+      "structure": [
+        {"text": "The bird", "role": "subject", "level": 1},
+        {"text": "senses", "role": "verb_phrase", "level": 1},
+        {"text": "that it can eat, rest and mate later", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导 senses 的宾语从句，说明燕鸥感知到的内容。",
+        "eat、rest 和 mate 是三个共用情态动词 can 的并列动词。"
+      ],
+      "expressions": [
+        {"text": "sense that", "meaning_zh": "意识到；本能地感知到"}
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "Right now it is totally focused on the journey; its undivided intent is arrival.",
+      "translation": "此刻它全部注意力都集中在旅程上；它唯一的目标就是抵达。",
+      "structure": [
+        {"text": "it is totally focused on the journey", "role": "main_clause", "level": 1},
+        {"text": "its undivided intent is arrival", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "分号连接两个意义紧密且结构完整的分句，后句进一步解释专注的目标。",
+        "undivided 修饰 intent，表示意图没有被其他需求分散。"
+      ],
+      "expressions": [
+        {"text": "be focused on", "meaning_zh": "专注于"},
+        {"text": "undivided intent", "meaning_zh": "专一而不分散的意图"}
+      ]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 14,
+      "sentence": "Reaching some gravelly coastline in the Arctic, upon which other arctic terns have converged, will serve its larger purpose as shaped by evolution: finding a place, a time, and a set of circumstances in which it can successfully hatch and rear offspring.",
+      "translation": "抵达北极某处遍布砾石的海岸——其他北极燕鸥也已聚集在那里——将实现进化塑造的更大目标：找到合适的地点、时间和一系列条件，以便成功孵化并养育后代。",
+      "structure": [
+        {"text": "Reaching some gravelly coastline in the Arctic", "role": "non_finite_clause", "level": 1},
+        {"text": "upon which other arctic terns have converged", "role": "relative_clause", "level": 2},
+        {"text": "will serve its larger purpose as shaped by evolution", "role": "verb_phrase", "level": 1},
+        {"text": "finding a place, a time, and a set of circumstances", "role": "apposition", "level": 2},
+        {"text": "in which it can successfully hatch and rear offspring", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "句首动名词短语 Reaching ... 作整个句子的主语。",
+        "upon which 引导非限制性定语从句，which 指代 coastline。",
+        "冒号后的 finding ... 解释 larger purpose；in which 从句修饰 circumstances。"
+      ],
+      "expressions": [
+        {"text": "converge upon", "meaning_zh": "汇聚到……"},
+        {"text": "serve a larger purpose", "meaning_zh": "服务于更宏大的目标"},
+        {"text": "rear offspring", "meaning_zh": "养育后代"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "But migration is a complex issue, and biologists define it differently, depending in part on what sorts of animals they study.",
+      "translation": "然而，迁徙是一个复杂的问题，生物学家对它的定义各不相同，部分取决于他们研究的是哪类动物。",
+      "structure": [
+        {"text": "migration is a complex issue", "role": "main_clause", "level": 1},
+        {"text": "and biologists define it differently", "role": "coordinated_clause", "level": 1},
+        {"text": "depending in part on what sorts of animals they study", "role": "participial_phrase", "level": 2},
+        {"text": "what sorts of animals they study", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "and 连接两个并列主句，分别说明迁徙的复杂性和定义差异。",
+        "depending ... 是现在分词短语，补充说明定义不同的影响因素。",
+        "what sorts of animals they study 是介词 on 的宾语从句。"
+      ],
+      "expressions": [
+        {"text": "a complex issue", "meaning_zh": "复杂的问题"},
+        {"text": "depend in part on", "meaning_zh": "部分取决于"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Joel Berger, of the University of Montana, who works on the American pronghorn and other large terrestrial mammals, prefers what he calls a simple, practical definition suited to his beasts: 'movements from a seasonal home area away to another home area and back again'.",
+      "translation": "蒙大拿大学的 Joel Berger 研究美国叉角羚等大型陆生哺乳动物，他更喜欢一种被自己称为简单实用、且适合其研究对象的定义：“从一处季节性栖息地迁往另一处，再返回原地的移动”。",
+      "structure": [
+        {"text": "Joel Berger", "role": "subject", "level": 1},
+        {"text": "of the University of Montana", "role": "prepositional_phrase", "level": 2},
+        {"text": "who works on the American pronghorn and other large terrestrial mammals", "role": "relative_clause", "level": 2},
+        {"text": "prefers what he calls a simple, practical definition suited to his beasts", "role": "verb_phrase", "level": 1},
+        {"text": "what he calls a simple, practical definition suited to his beasts", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "who 引导非限制性定语从句，补充说明 Berger 的研究对象。",
+        "what he calls ... 是 prefers 的宾语从句，what 同时在从句中作 calls 的宾语。",
+        "suited to his beasts 是过去分词短语，后置修饰 definition；冒号后的引文给出定义内容。"
+      ],
+      "expressions": [
+        {"text": "work on", "meaning_zh": "研究；从事"},
+        {"text": "be suited to", "meaning_zh": "适合于"},
+        {"text": "back again", "meaning_zh": "再返回原处"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Generally the reason for such seasonal back-and-forth movement is to seek resources that aren't available within a single area year-round.",
+      "translation": "一般来说，这种季节性往返移动是为了寻找全年无法在同一地区获得的资源。",
+      "structure": [
+        {"text": "the reason for such seasonal back-and-forth movement", "role": "subject", "level": 1},
+        {"text": "is to seek resources", "role": "verb_phrase", "level": 1},
+        {"text": "that aren't available within a single area year-round", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "to seek resources 是不定式作表语，说明这种移动的目的。",
+        "that 引导定语从句修饰 resources；year-round 表示全年持续。"
+      ],
+      "expressions": [
+        {"text": "back-and-forth movement", "meaning_zh": "往返移动"},
+        {"text": "year-round", "meaning_zh": "全年；一年到头"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "But daily vertical movements by zooplankton in the ocean—upward by night to seek food, downward by day to escape predators—can also be considered migration.",
+      "translation": "不过，海洋浮游动物每天的垂直移动——夜间向上觅食，白天下潜躲避捕食者——也可以被视为迁徙。",
+      "structure": [
+        {"text": "daily vertical movements by zooplankton in the ocean", "role": "subject", "level": 1},
+        {"text": "upward by night to seek food, downward by day to escape predators", "role": "apposition", "level": 2},
+        {"text": "can also be considered migration", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "破折号之间的内容具体解释 vertical movements 的两个方向、时间和目的。",
+        "两个 to do 不定式分别表示向上和向下移动的目的。",
+        "can be considered 是情态动词加被动语态，表示可被归类为迁徙。"
+      ],
+      "expressions": [
+        {"text": "vertical movements", "meaning_zh": "垂直移动"},
+        {"text": "be considered", "meaning_zh": "被视为"},
+        {"text": "escape predators", "meaning_zh": "躲避捕食者"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "So can the movement of aphids when, having depleted the young leaves on one food plant, their offspring then fly onward to a different host plant, with no one aphid ever returning to where it started.",
+      "translation": "蚜虫的移动也可以算作迁徙：当一株食用植物的嫩叶被吃光后，其后代会继续飞往另一株寄主植物，而且没有任何一只蚜虫会回到出发地。",
+      "structure": [
+        {"text": "So can the movement of aphids", "role": "inverted_clause", "level": 1},
+        {"text": "when, having depleted the young leaves on one food plant, their offspring then fly onward to a different host plant", "role": "adverbial_clause", "level": 2},
+        {"text": "having depleted the young leaves on one food plant", "role": "participial_phrase", "level": 3},
+        {"text": "with no one aphid ever returning to where it started", "role": "with_construction", "level": 2},
+        {"text": "where it started", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "So can ... 是倒装结构，承接上句 can also be considered migration。",
+        "having depleted ... 是完成式分词结构，表示嫩叶耗尽发生在后代飞走之前。",
+        "with no one aphid ever returning ... 是 with 复合结构，补充说明没有个体完成往返。"
+      ],
+      "expressions": [
+        {"text": "fly onward to", "meaning_zh": "继续飞往"},
+        {"text": "host plant", "meaning_zh": "寄主植物"},
+        {"text": "return to where ... started", "meaning_zh": "回到……出发的地方"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "Dingle is an evolutionary biologist who studies insects.",
+      "translation": "Dingle 是一位研究昆虫的进化生物学家。",
+      "structure": [
+        {"text": "Dingle", "role": "subject", "level": 1},
+        {"text": "is an evolutionary biologist", "role": "main_clause", "level": 1},
+        {"text": "who studies insects", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "who 引导限制性定语从句，修饰 evolutionary biologist。",
+        "studies 在此意为“研究”，不是“学习课程”。"
+      ],
+      "expressions": [
+        {"text": "evolutionary biologist", "meaning_zh": "进化生物学家"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "His definition is more intricate than Berger's, citing those five features that distinguish migration from other forms of movement.",
+      "translation": "他的定义比 Berger 的更为细致复杂，其中列举了将迁徙与其他移动形式区分开的五项特征。",
+      "structure": [
+        {"text": "His definition", "role": "subject", "level": 1},
+        {"text": "is more intricate than Berger's", "role": "verb_phrase", "level": 1},
+        {"text": "citing those five features", "role": "participial_phrase", "level": 2},
+        {"text": "that distinguish migration from other forms of movement", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "Berger's 省略了 definition，以避免重复。",
+        "citing ... 是现在分词短语，补充说明 Dingle 定义的内容。",
+        "that 引导定语从句修饰 features；distinguish A from B 表示区分两者。"
+      ],
+      "expressions": [
+        {"text": "more intricate than", "meaning_zh": "比……更为复杂细致"},
+        {"text": "distinguish ... from ...", "meaning_zh": "把……与……区分开"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "They allow for the fact that, for example, aphids will become sensitive to blue light (from the sky) when it's time for takeoff on their big journey, and sensitive to yellow light (reflected from tender young leaves) when it's appropriate to land.",
+      "translation": "这些特征考虑到了这样一种事实：例如，蚜虫在该启程进行长途迁徙时会对（来自天空的）蓝光变得敏感，而在适合降落时则会对（由鲜嫩叶片反射的）黄光变得敏感。",
+      "structure": [
+        {"text": "They allow for the fact", "role": "main_clause", "level": 1},
+        {"text": "that, for example, aphids will become sensitive to blue light (from the sky)", "role": "noun_clause", "level": 2},
+        {"text": "when it's time for takeoff on their big journey", "role": "adverbial_clause", "level": 3},
+        {"text": "and sensitive to yellow light (reflected from tender young leaves)", "role": "coordinated_phrase", "level": 2},
+        {"text": "when it's appropriate to land", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导 fact 的同位语从句，具体说明这些特征所涵盖的事实。",
+        "and sensitive to ... 与前面的 become sensitive to ... 并列，省略了重复的 aphids will become。",
+        "两个 when 从句分别说明对蓝光和黄光敏感的时间条件。"
+      ],
+      "expressions": [
+        {"text": "allow for the fact that", "meaning_zh": "考虑到……这一事实"},
+        {"text": "become sensitive to", "meaning_zh": "变得对……敏感"},
+        {"text": "be appropriate to", "meaning_zh": "适合做……"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "Birds will fatten themselves with heavy feeding in advance of a long migrational flight.",
+      "translation": "鸟类会在长途迁徙飞行之前大量进食，使自己增肥。",
+      "structure": [
+        {"text": "Birds", "role": "subject", "level": 1},
+        {"text": "will fatten themselves with heavy feeding", "role": "verb_phrase", "level": 1},
+        {"text": "in advance of a long migrational flight", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "fatten themselves 是反身结构，表示鸟类通过进食使自己长胖。",
+        "in advance of 表示某事发生之前，用于说明储备能量的时间。"
+      ],
+      "expressions": [
+        {"text": "fatten oneself", "meaning_zh": "使自己增肥"},
+        {"text": "in advance of", "meaning_zh": "在……之前"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "The value of his definition, Dingle argues, is that it focuses attention on what the phenomenon of wildebeest migration shares with the phenomenon of the aphids, and therefore helps guide researchers towards understanding how evolution has produced them all.",
+      "translation": "Dingle 认为，他这一定义的价值在于，它把注意力集中到角马迁徙现象与蚜虫迁徙现象的共同之处，因此有助于引导研究人员理解进化是如何造就所有这些现象的。",
+      "structure": [
+        {"text": "The value of his definition", "role": "subject", "level": 1},
+        {"text": "Dingle argues", "role": "parenthesis", "level": 2},
+        {"text": "is that it focuses attention on what the phenomenon of wildebeest migration shares with the phenomenon of the aphids", "role": "complement", "level": 1},
+        {"text": "what the phenomenon of wildebeest migration shares with the phenomenon of the aphids", "role": "noun_clause", "level": 2},
+        {"text": "and therefore helps guide researchers towards understanding how evolution has produced them all", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Dingle argues 是插入语，主干是 The value ... is that ...。",
+        "that 引导表语从句，其中 what 从句作介词 on 的宾语，表示两种现象的共同点。",
+        "how evolution has produced them all 是 understanding 的宾语从句；them 指前述各类迁徙现象。"
+      ],
+      "expressions": [
+        {"text": "focus attention on", "meaning_zh": "把注意力集中于"},
+        {"text": "share with", "meaning_zh": "与……共有"},
+        {"text": "guide ... towards understanding", "meaning_zh": "引导……逐步理解"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "Human behaviour, however, is having a detrimental impact on animal migration.",
+      "translation": "然而，人类行为正在对动物迁徙产生不利影响。",
+      "structure": [
+        {"text": "Human behaviour", "role": "subject", "level": 1},
+        {"text": "however", "role": "conjunctive_adverb", "level": 2},
+        {"text": "is having a detrimental impact on animal migration", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "however 是插入的连接副词，使论述从迁徙定义转向人类造成的威胁。",
+        "现在进行时 is having 强调这种不利影响正在发生。"
+      ],
+      "expressions": [
+        {"text": "have a detrimental impact on", "meaning_zh": "对……产生不利影响"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "The pronghorn, which resembles an antelope, though they are unrelated, is the fastest land mammal of the New World.",
+      "translation": "叉角羚虽然与羚羊并无亲缘关系，却长得像羚羊，是新大陆速度最快的陆生哺乳动物。",
+      "structure": [
+        {"text": "The pronghorn", "role": "subject", "level": 1},
+        {"text": "which resembles an antelope", "role": "relative_clause", "level": 2},
+        {"text": "though they are unrelated", "role": "adverbial_clause", "level": 3},
+        {"text": "is the fastest land mammal of the New World", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，补充说明叉角羚的外形。",
+        "though 引导让步状语从句；they 指 pronghorn 与 antelope 这两类动物。",
+        "New World 在此指美洲。"
+      ],
+      "expressions": [
+        {"text": "resemble", "meaning_zh": "与……相似"},
+        {"text": "be unrelated", "meaning_zh": "没有亲缘关系"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "One population, which spends the summer in the mountainous Grand Teton National Park of the western USA, follows a narrow route from its summer range in the mountains, across a river, and down onto the plains.",
+      "translation": "其中一个种群夏季生活在美国西部多山的大提顿国家公园，它们沿一条狭窄路线离开山中的夏季栖息地，穿过一条河，再下到平原。",
+      "structure": [
+        {"text": "One population", "role": "subject", "level": 1},
+        {"text": "which spends the summer in the mountainous Grand Teton National Park of the western USA", "role": "relative_clause", "level": 2},
+        {"text": "follows a narrow route", "role": "verb_phrase", "level": 1},
+        {"text": "from its summer range in the mountains, across a river, and down onto the plains", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，说明该种群的夏季栖息地。",
+        "from、across 和 down onto 构成并列的路线成分，依次描写迁徙路径。",
+        "range 在此指动物活动或栖息的区域，而非“范围”。"
+      ],
+      "expressions": [
+        {"text": "spend the summer", "meaning_zh": "度过夏季"},
+        {"text": "follow a narrow route", "meaning_zh": "沿狭窄路线行进"},
+        {"text": "summer range", "meaning_zh": "夏季活动区域"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "Here they wait out the frozen months, feeding mainly on sagebrush blown clear of snow.",
+      "translation": "它们在这里熬过冰冻的几个月，主要以被风吹去积雪的山艾为食。",
+      "structure": [
+        {"text": "they wait out the frozen months", "role": "main_clause", "level": 1},
+        {"text": "feeding mainly on sagebrush", "role": "participial_phrase", "level": 2},
+        {"text": "blown clear of snow", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "wait out 表示一直等待到困难时期结束，即“熬过”。",
+        "feeding ... 是现在分词短语，说明等待期间的伴随行为。",
+        "blown clear of snow 是过去分词短语修饰 sagebrush，表示其上的雪被风吹净。"
+      ],
+      "expressions": [
+        {"text": "wait out", "meaning_zh": "熬过；等到……结束"},
+        {"text": "feed on", "meaning_zh": "以……为食"},
+        {"text": "be blown clear of", "meaning_zh": "被风吹得不再覆盖……"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "These pronghorn are notable for the invariance of their migration route and the severity of its constriction at three bottlenecks.",
+      "translation": "这些叉角羚以迁徙路线恒定不变，以及路线在三处瓶颈地带极其狭窄而著称。",
+      "structure": [
+        {"text": "These pronghorn", "role": "subject", "level": 1},
+        {"text": "are notable for", "role": "verb_phrase", "level": 1},
+        {"text": "the invariance of their migration route and the severity of its constriction at three bottlenecks", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "be notable for 表示“因……而引人注意”，后接两个 and 连接的名词短语。",
+        "its 指 migration route；constriction 描述路线在瓶颈处变得极其狭窄。"
+      ],
+      "expressions": [
+        {"text": "be notable for", "meaning_zh": "因……而著称或引人注意"},
+        {"text": "migration route", "meaning_zh": "迁徙路线"},
+        {"text": "at a bottleneck", "meaning_zh": "在瓶颈地带"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "If they can't pass through each of the three during their spring migration, they can't reach their bounty of summer grazing; if they can't pass through again in autumn, escaping south onto those windblown plains, they are likely to die trying to overwinter in the deep snow.",
+      "translation": "如果春季迁徙时无法穿过这三处瓶颈，它们就到不了夏季草料丰美之地；如果秋季无法再次通过并向南逃到那些风扫的平原，它们很可能在深雪中试图越冬时死去。",
+      "structure": [
+        {"text": "If they can't pass through each of the three during their spring migration", "role": "adverbial_clause", "level": 2},
+        {"text": "they can't reach their bounty of summer grazing", "role": "main_clause", "level": 1},
+        {"text": "if they can't pass through again in autumn", "role": "adverbial_clause", "level": 2},
+        {"text": "escaping south onto those windblown plains", "role": "participial_phrase", "level": 3},
+        {"text": "they are likely to die trying to overwinter in the deep snow", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "分号连接春季和秋季两个平行的条件—结果结构。",
+        "escaping south ... 是现在分词短语，补充说明秋季通过瓶颈后的行动方向。",
+        "die trying to overwinter 表示“在试图越冬的过程中死去”，trying 是伴随情况。"
+      ],
+      "expressions": [
+        {"text": "pass through", "meaning_zh": "穿过；通过"},
+        {"text": "be likely to", "meaning_zh": "很可能"},
+        {"text": "overwinter", "meaning_zh": "越冬"}
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "Pronghorn, dependent on distance vision and speed to keep safe from predators, traverse high, open shoulders of land, where they can see and run.",
+      "translation": "叉角羚依靠远距离视力和速度躲避捕食者，因此会穿越地势高而开阔的山肩，在那里它们既能看清四周，也能奔跑。",
+      "structure": [
+        {"text": "Pronghorn", "role": "subject", "level": 1},
+        {"text": "dependent on distance vision and speed to keep safe from predators", "role": "adjective_phrase", "level": 2},
+        {"text": "traverse high, open shoulders of land", "role": "verb_phrase", "level": 1},
+        {"text": "where they can see and run", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "dependent on ... 是形容词短语，补充说明叉角羚选择路线所依赖的生存条件。",
+        "to keep safe from predators 是目的不定式。",
+        "where 引导非限制性定语从句，修饰 open shoulders of land。"
+      ],
+      "expressions": [
+        {"text": "be dependent on", "meaning_zh": "依赖于"},
+        {"text": "keep safe from", "meaning_zh": "躲避……以保持安全"},
+        {"text": "traverse", "meaning_zh": "横穿；穿越"}
+      ]
+    },
+    {
+      "id": "F-08",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "At one of the bottlenecks, forested hills rise to form a V, leaving a corridor of open ground only about 150 metres wide, filled with private homes.",
+      "translation": "在其中一处瓶颈，两侧林木覆盖的山丘隆起形成 V 字形，只留下一条约150米宽、布满私人住宅的开阔地带。",
+      "structure": [
+        {"text": "forested hills rise to form a V", "role": "main_clause", "level": 1},
+        {"text": "leaving a corridor of open ground only about 150 metres wide", "role": "participial_phrase", "level": 2},
+        {"text": "filled with private homes", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "to form a V 表示山丘隆起所形成的结果。",
+        "leaving ... 是现在分词短语，说明 V 形地势留下的狭窄通道。",
+        "filled with private homes 是过去分词短语，后置修饰 corridor of open ground。"
+      ],
+      "expressions": [
+        {"text": "form a V", "meaning_zh": "形成 V 字形"},
+        {"text": "a corridor of open ground", "meaning_zh": "一条开阔地通道"},
+        {"text": "be filled with", "meaning_zh": "布满；充满"}
+      ]
+    },
+    {
+      "id": "F-09",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "Increasing development is leading toward a crisis for the pronghorn, threatening to choke off their passageway.",
+      "translation": "不断扩张的开发活动正把叉角羚推向危机，可能会彻底堵塞它们的迁徙通道。",
+      "structure": [
+        {"text": "Increasing development", "role": "subject", "level": 1},
+        {"text": "is leading toward a crisis for the pronghorn", "role": "verb_phrase", "level": 1},
+        {"text": "threatening to choke off their passageway", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "is leading toward 用现在进行时强调危机正在逐渐形成。",
+        "threatening ... 是现在分词短语，说明开发活动带来的进一步威胁。",
+        "choke off 比喻把通道完全阻断。"
+      ],
+      "expressions": [
+        {"text": "lead toward a crisis", "meaning_zh": "逐步导致危机"},
+        {"text": "threaten to", "meaning_zh": "可能造成；威胁要"},
+        {"text": "choke off", "meaning_zh": "阻塞；切断"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "Conservation scientists, along with some biologists and land managers within the USA's National Park Service and other agencies, are now working to preserve migrational behaviours, not just species and habitats.",
+      "translation": "自然保护科学家，以及美国国家公园管理局和其他机构的一些生物学家与土地管理人员，如今正致力于保护迁徙行为本身，而不只是保护物种和栖息地。",
+      "structure": [
+        {"text": "Conservation scientists", "role": "subject", "level": 1},
+        {"text": "along with some biologists and land managers within the USA's National Park Service and other agencies", "role": "prepositional_phrase", "level": 2},
+        {"text": "are now working to preserve migrational behaviours", "role": "verb_phrase", "level": 1},
+        {"text": "not just species and habitats", "role": "contrastive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "along with ... 是插入的伴随成分，谓语 are 仍与复数主语 Conservation scientists 一致。",
+        "to preserve ... 是 work 的目的内容。",
+        "not just ... 强调保护目标已经从物种和栖息地扩展到迁徙行为。"
+      ],
+      "expressions": [
+        {"text": "along with", "meaning_zh": "连同；以及"},
+        {"text": "work to preserve", "meaning_zh": "致力于保护"},
+        {"text": "not just", "meaning_zh": "不只是"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "A National Forest has recognised the path of the pronghorn, much of which passes across its land, as a protected migration corridor.",
+      "translation": "一处国家森林已把叉角羚的路线认定为受保护的迁徙走廊，其中很大一部分穿过该森林的土地。",
+      "structure": [
+        {"text": "A National Forest", "role": "subject", "level": 1},
+        {"text": "has recognised the path of the pronghorn", "role": "verb_phrase", "level": 1},
+        {"text": "much of which passes across its land", "role": "relative_clause", "level": 2},
+        {"text": "as a protected migration corridor", "role": "object_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "recognise A as B 表示“把 A 认定为 B”。",
+        "much of which 引导非限制性定语从句，which 指 the path；its 指 National Forest。"
+      ],
+      "expressions": [
+        {"text": "recognise ... as ...", "meaning_zh": "把……认定为……"},
+        {"text": "migration corridor", "meaning_zh": "迁徙走廊"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 36,
+      "sentence": "But neither the Forest Service nor the Park Service can control what happens on private land at a bottleneck.",
+      "translation": "但是，无论是林务局还是公园管理局，都无法控制瓶颈处私人土地上发生的事情。",
+      "structure": [
+        {"text": "neither the Forest Service nor the Park Service", "role": "subject", "level": 1},
+        {"text": "can control", "role": "verb_phrase", "level": 1},
+        {"text": "what happens on private land at a bottleneck", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "neither ... nor ... 连接两个机构，表示两者都不能采取所述行动。",
+        "what 引导 control 的宾语从句，并在从句中作 happens 的主语。"
+      ],
+      "expressions": [
+        {"text": "neither ... nor ...", "meaning_zh": "既不……也不……"},
+        {"text": "private land", "meaning_zh": "私人土地"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 37,
+      "sentence": "And with certain other migrating species, the challenge is complicated further—by vastly greater distances traversed, more jurisdictions, more borders, more dangers along the way.",
+      "translation": "对于某些其他迁徙物种，挑战则因远为漫长的迁徙距离、更多的管辖区域、更多的边界以及沿途更多的危险而进一步复杂化。",
+      "structure": [
+        {"text": "with certain other migrating species", "role": "prepositional_phrase", "level": 2},
+        {"text": "the challenge", "role": "subject", "level": 1},
+        {"text": "is complicated further", "role": "verb_phrase", "level": 1},
+        {"text": "by vastly greater distances traversed, more jurisdictions, more borders, more dangers along the way", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "with ... 在此引出所讨论的其他迁徙物种，相当于“就……而言”。",
+        "is complicated 是被动语态，破折号后的 by 短语列出使挑战加剧的四项因素。",
+        "traversed 是过去分词，后置修饰 distances，表示迁徙中走过的距离。"
+      ],
+      "expressions": [
+        {"text": "be complicated further by", "meaning_zh": "因……而进一步复杂化"},
+        {"text": "along the way", "meaning_zh": "沿途"},
+        {"text": "vastly greater", "meaning_zh": "大得多；远为庞大"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 38,
+      "sentence": "We will require wisdom and resoluteness to ensure that migrating species can continue their journeying a while longer.",
+      "translation": "我们需要智慧和坚定意志，才能确保迁徙物种在未来一段时间里继续它们的旅程。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "will require wisdom and resoluteness", "role": "verb_phrase", "level": 1},
+        {"text": "to ensure that migrating species can continue their journeying a while longer", "role": "non_finite_clause", "level": 2},
+        {"text": "that migrating species can continue their journeying a while longer", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "to ensure ... 是目的不定式，说明人类需要智慧和决心的目的。",
+        "that 引导 ensure 的宾语从句；a while longer 表示再持续一段时间。",
+        "journeying 在此为名词化表达，概括各物种持续不断的迁徙活动。"
+      ],
+      "expressions": [
+        {"text": "wisdom and resoluteness", "meaning_zh": "智慧与坚定意志"},
+        {"text": "ensure that", "meaning_zh": "确保……"},
+        {"text": "a while longer", "meaning_zh": "再持续一段时间"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,737 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts10_test2_reading",
+  "passage_id": "ielts10_test2_p2",
+  "passage_title": "Gifted children and learning",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Internationally, 'giftedness' is most frequently determined by a score on a general intelligence test, known as an IQ test, which is above a chosen cut-off point, usually at around the top 2–5%.",
+      "translation": "在国际上，“天赋”最常依据一般智力测试的分数来判定；这种测试又称智商测试，分数须高于选定的门槛，通常要进入最高的2%至5%。",
+      "structure": [
+        {"text": "'giftedness' is most frequently determined by a score on a general intelligence test", "role": "main_clause", "level": 1},
+        {"text": "known as an IQ test", "role": "participial_phrase", "level": 2},
+        {"text": "which is above a chosen cut-off point", "role": "relative_clause", "level": 2},
+        {"text": "usually at around the top 2–5%", "role": "parenthesis", "level": 3}
+      ],
+      "difficult_points": [
+        "is determined by 是被动结构，说明“天赋”的判定依据。",
+        "known as ... 修饰 test，which 从句则说明用于判定的分数必须超过门槛。"
+      ],
+      "expressions": [
+        {"text": "be determined by", "meaning_zh": "由……决定"},
+        {"text": "be known as", "meaning_zh": "被称为……"},
+        {"text": "cut-off point", "meaning_zh": "分界点；门槛"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Children's educational environment contributes to the IQ score and the way intelligence is used.",
+      "translation": "儿童所处的教育环境会影响其智商得分以及运用智力的方式。",
+      "structure": [
+        {"text": "Children's educational environment", "role": "subject", "level": 1},
+        {"text": "contributes to", "role": "verb_phrase", "level": 1},
+        {"text": "the IQ score and the way intelligence is used", "role": "object", "level": 1},
+        {"text": "intelligence is used", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "contribute to 在这里表示“影响、促成”，不只是“贡献”。",
+        "the way 后省略关系词 that 或 in which，intelligence is used 修饰 way。"
+      ],
+      "expressions": [
+        {"text": "contribute to", "meaning_zh": "促成；影响"},
+        {"text": "the way ... is used", "meaning_zh": "……被运用的方式"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "For example, a very close positive relationship was found when children's IQ scores were compared with their home educational provision (Freeman, 2010).",
+      "translation": "例如，将儿童的智商分数与其家庭教育条件进行比较时，研究发现二者存在非常密切的正相关关系（Freeman，2010）。",
+      "structure": [
+        {"text": "a very close positive relationship was found", "role": "main_clause", "level": 1},
+        {"text": "when children's IQ scores were compared with their home educational provision", "role": "adverbial_clause", "level": 2},
+        {"text": "Freeman, 2010", "role": "parenthesis", "level": 2}
+      ],
+      "difficult_points": [
+        "主句和 when 从句都使用被动语态，未直接说明研究者是谁。",
+        "positive relationship 指一个变量越高，另一个通常也越高。"
+      ],
+      "expressions": [
+        {"text": "a positive relationship", "meaning_zh": "正相关关系"},
+        {"text": "be compared with", "meaning_zh": "与……比较"},
+        {"text": "educational provision", "meaning_zh": "教育条件；教育供给"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "The higher the children's IQ scores, especially over IQ 130, the better the quality of their educational backup, measured in terms of reported verbal interactions with parents, number of books and activities in their home etc.",
+      "translation": "儿童的智商分数越高——尤其是超过130时——其教育支持的质量就越好；这种质量通过与父母的言语互动、家中书籍数量和活动等指标来衡量。",
+      "structure": [
+        {"text": "The higher the children's IQ scores", "role": "adverbial_clause", "level": 2},
+        {"text": "especially over IQ 130", "role": "parenthesis", "level": 3},
+        {"text": "the better the quality of their educational backup", "role": "main_clause", "level": 1},
+        {"text": "measured in terms of reported verbal interactions with parents, number of books and activities in their home etc.", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "The higher ..., the better ... 是“越……，就越……”的比较关联结构。",
+        "measured ... 是过去分词短语，说明 educational backup 的质量如何衡量。"
+      ],
+      "expressions": [
+        {"text": "the higher ..., the better ...", "meaning_zh": "越……，就越好……"},
+        {"text": "be measured in terms of", "meaning_zh": "依据……来衡量"},
+        {"text": "educational backup", "meaning_zh": "教育支持"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "Because IQ tests are decidedly influenced by what the child has learned, they are to some extent measures of current achievement based on age-norms; that is, how well the children have learned to manipulate their knowledge and know-how within the terms of the test.",
+      "translation": "由于智商测试明显受到儿童既有学习内容的影响，因此它在某种程度上衡量的是以年龄常模为依据的当前成就；也就是说，衡量儿童在测试框架内运用知识和技能的熟练程度。",
+      "structure": [
+        {"text": "Because IQ tests are decidedly influenced by what the child has learned", "role": "adverbial_clause", "level": 2},
+        {"text": "what the child has learned", "role": "noun_clause", "level": 3},
+        {"text": "they are to some extent measures of current achievement", "role": "main_clause", "level": 1},
+        {"text": "based on age-norms", "role": "participial_phrase", "level": 2},
+        {"text": "that is, how well the children have learned to manipulate their knowledge and know-how within the terms of the test", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "what 引导名词性从句，作介词 by 的宾语，表示儿童已经学到的内容。",
+        "that is 后的 how well 从句具体解释 current achievement 的含义。"
+      ],
+      "expressions": [
+        {"text": "be influenced by", "meaning_zh": "受……影响"},
+        {"text": "to some extent", "meaning_zh": "在某种程度上"},
+        {"text": "that is", "meaning_zh": "也就是说"},
+        {"text": "within the terms of", "meaning_zh": "在……的限定范围内"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "The vocabulary aspect, for example, is dependent on having heard those words.",
+      "translation": "例如，词汇方面的测试表现取决于儿童是否听到过那些词。",
+      "structure": [
+        {"text": "The vocabulary aspect", "role": "subject", "level": 1},
+        {"text": "for example", "role": "parenthesis", "level": 2},
+        {"text": "is dependent on", "role": "verb_phrase", "level": 1},
+        {"text": "having heard those words", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "be dependent on 后接动名词，表示测试词汇能力依赖过去的语言接触。",
+        "having heard 是完成式动名词，强调“听到”发生在接受测试之前。"
+      ],
+      "expressions": [
+        {"text": "be dependent on", "meaning_zh": "取决于；依赖于"},
+        {"text": "having heard", "meaning_zh": "此前听到过"}
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "But IQ tests can neither identify the processes of learning and thinking nor predict creativity.",
+      "translation": "但是，智商测试既无法识别学习和思考的过程，也无法预测创造力。",
+      "structure": [
+        {"text": "IQ tests", "role": "subject", "level": 1},
+        {"text": "can neither identify the processes of learning and thinking", "role": "verb_phrase", "level": 1},
+        {"text": "nor predict creativity", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "neither ... nor ... 连接 identify 和 predict 两个并列谓语。",
+        "本句指出智商分数无法呈现认知过程，也不能直接推断创造力。"
+      ],
+      "expressions": [
+        {"text": "neither ... nor ...", "meaning_zh": "既不……也不……"},
+        {"text": "predict creativity", "meaning_zh": "预测创造力"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Excellence does not emerge without appropriate help.",
+      "translation": "卓越的表现离不开适当的帮助。",
+      "structure": [
+        {"text": "Excellence", "role": "subject", "level": 1},
+        {"text": "does not emerge", "role": "verb_phrase", "level": 1},
+        {"text": "without appropriate help", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "emerge 表示卓越表现逐渐显现，而非突然出现。",
+        "not ... without ... 可自然理解为“没有……就不会……”。"
+      ],
+      "expressions": [
+        {"text": "emerge", "meaning_zh": "显现；形成"},
+        {"text": "appropriate help", "meaning_zh": "适当的帮助"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "To reach an exceptionally high standard in any area, very able children need the means to learn, which includes material to work with and focused challenging tuition – and the encouragement to follow their dream.",
+      "translation": "要在任何领域达到极高水平，能力出众的儿童都需要学习所需的条件，包括可供使用的材料、有针对性且有挑战性的指导，以及追寻梦想的鼓励。",
+      "structure": [
+        {"text": "To reach an exceptionally high standard in any area", "role": "non_finite_clause", "level": 2},
+        {"text": "very able children need the means to learn", "role": "main_clause", "level": 1},
+        {"text": "which includes material to work with and focused challenging tuition", "role": "relative_clause", "level": 2},
+        {"text": "and the encouragement to follow their dream", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "句首不定式表示目的；which 指 the means to learn，并列举其内容。",
+        "to work with 和 to follow their dream 分别后置修饰 material 和 encouragement。"
+      ],
+      "expressions": [
+        {"text": "reach a high standard", "meaning_zh": "达到高水平"},
+        {"text": "the means to learn", "meaning_zh": "学习所需的条件"},
+        {"text": "follow one's dream", "meaning_zh": "追寻梦想"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "There appears to be a qualitative difference in the way the intellectually highly able think, compared with more average-ability or older pupils, for whom external regulation by the teacher often compensates for lack of internal regulation.",
+      "translation": "智力极强者的思维方式似乎与能力较普通或年龄较大的学生存在质的差异；对后者而言，教师的外部调控往往会弥补其内部调控的不足。",
+      "structure": [
+        {"text": "There appears to be a qualitative difference", "role": "main_clause", "level": 1},
+        {"text": "in the way the intellectually highly able think", "role": "prepositional_phrase", "level": 2},
+        {"text": "compared with more average-ability or older pupils", "role": "participial_phrase", "level": 2},
+        {"text": "for whom external regulation by the teacher often compensates for lack of internal regulation", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "the intellectually highly able 是“the + 形容词”结构，指智力极强的人；think 修饰 way。",
+        "for whom 引导定语从句，whom 指 more average-ability or older pupils。"
+      ],
+      "expressions": [
+        {"text": "a qualitative difference", "meaning_zh": "质的差异"},
+        {"text": "compared with", "meaning_zh": "与……相比"},
+        {"text": "compensate for", "meaning_zh": "弥补"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "To be at their most effective in their self-regulation, all children can be helped to identify their own ways of learning – metacognition – which will include strategies of planning, monitoring, evaluation, and choice of what to learn.",
+      "translation": "为了最大限度地发挥自我调节能力，所有儿童都可以在帮助下找到自己的学习方式——即元认知——其中包括规划、监控、评估以及选择学习内容的策略。",
+      "structure": [
+        {"text": "To be at their most effective in their self-regulation", "role": "non_finite_clause", "level": 2},
+        {"text": "all children can be helped to identify their own ways of learning", "role": "main_clause", "level": 1},
+        {"text": "metacognition", "role": "apposition", "level": 2},
+        {"text": "which will include strategies of planning, monitoring, evaluation, and choice of what to learn", "role": "relative_clause", "level": 2},
+        {"text": "what to learn", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "can be helped to identify 是被动结构，表示儿童可以得到帮助来识别学习方式。",
+        "破折号中的 metacognition 解释前面的 ways of learning，which 从句继续说明其组成。"
+      ],
+      "expressions": [
+        {"text": "at one's most effective", "meaning_zh": "处于最高效的状态"},
+        {"text": "self-regulation", "meaning_zh": "自我调节"},
+        {"text": "identify one's own ways of learning", "meaning_zh": "找到自己的学习方式"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "Emotional awareness is also part of metacognition, so children should be helped to be aware of their feelings around the area to be learned, feelings of curiosity or confidence, for example.",
+      "translation": "情绪觉察也是元认知的一部分，因此应帮助儿童意识到自己对学习领域的感受，例如好奇或自信。",
+      "structure": [
+        {"text": "Emotional awareness is also part of metacognition", "role": "main_clause", "level": 1},
+        {"text": "so children should be helped to be aware of their feelings around the area to be learned", "role": "coordinated_clause", "level": 1},
+        {"text": "to be learned", "role": "non_finite_clause", "level": 2},
+        {"text": "feelings of curiosity or confidence", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "so 引出结果，should be helped 是被动结构，强调儿童需要外界帮助。",
+        "to be learned 是不定式的被动形式，后置修饰 area；后面的 feelings ... 是举例说明。"
+      ],
+      "expressions": [
+        {"text": "be part of", "meaning_zh": "是……的一部分"},
+        {"text": "be aware of", "meaning_zh": "意识到"},
+        {"text": "feelings of curiosity or confidence", "meaning_zh": "好奇或自信的感受"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "High achievers have been found to use self-regulatory learning strategies more often and more effectively than lower achievers, and are better able to transfer these strategies to deal with unfamiliar tasks.",
+      "translation": "研究发现，高成就者比低成就者更频繁、更有效地使用自我调节学习策略，也更善于迁移这些策略来处理陌生任务。",
+      "structure": [
+        {"text": "High achievers have been found to use self-regulatory learning strategies more often and more effectively than lower achievers", "role": "main_clause", "level": 1},
+        {"text": "and are better able to transfer these strategies", "role": "coordinated_clause", "level": 1},
+        {"text": "to deal with unfamiliar tasks", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "have been found to use 是“被发现会……”的被动结构。",
+        "are better able 与 have been found 并列，共同以 High achievers 为主语。"
+      ],
+      "expressions": [
+        {"text": "self-regulatory learning strategies", "meaning_zh": "自我调节学习策略"},
+        {"text": "transfer strategies", "meaning_zh": "迁移策略"},
+        {"text": "deal with unfamiliar tasks", "meaning_zh": "处理陌生任务"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "This happens to such a high degree in some children that they appear to be demonstrating talent in particular areas.",
+      "translation": "这种情况在一些儿童身上表现得极为突出，以至于他们似乎在特定领域展现出了天赋。",
+      "structure": [
+        {"text": "This happens to such a high degree in some children", "role": "main_clause", "level": 1},
+        {"text": "that they appear to be demonstrating talent in particular areas", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "such a high degree ... that ... 是结果结构，表示程度之高带来的表现。",
+        "appear to be demonstrating 使用不定式进行体，表示看起来正在展现天赋。"
+      ],
+      "expressions": [
+        {"text": "to such a high degree that", "meaning_zh": "达到如此高的程度，以至于"},
+        {"text": "demonstrate talent", "meaning_zh": "展现天赋"},
+        {"text": "in particular areas", "meaning_zh": "在特定领域"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "Overviewing research on the thinking process of highly able children, (Shore and Kanevsky, 1993) put the instructor's problem succinctly: 'If they [the gifted] merely think more quickly, then we need only teach more quickly.",
+      "translation": "Shore 和 Kanevsky（1993）在综述高能力儿童思维过程的研究时，简明地概括了教师的问题：“如果他们——这些天赋儿童——只是思考得更快，那么我们只需教得更快。",
+      "structure": [
+        {"text": "Overviewing research on the thinking process of highly able children", "role": "participial_phrase", "level": 2},
+        {"text": "Shore and Kanevsky, 1993", "role": "parenthesis", "level": 2},
+        {"text": "put the instructor's problem succinctly", "role": "main_clause", "level": 1},
+        {"text": "If they [the gifted] merely think more quickly", "role": "adverbial_clause", "level": 2},
+        {"text": "then we need only teach more quickly", "role": "main_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Overviewing ... 是现在分词短语，逻辑主语是 Shore and Kanevsky。",
+        "If ... then ... 构成条件关系，the gifted 解释代词 they。"
+      ],
+      "expressions": [
+        {"text": "the thinking process", "meaning_zh": "思维过程"},
+        {"text": "put the problem succinctly", "meaning_zh": "简明地概括问题"},
+        {"text": "need only do", "meaning_zh": "只需要做……"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "If they merely make fewer errors, then we can shorten the practice.'",
+      "translation": "如果他们只是犯的错误更少，那么我们就可以缩短练习时间。”",
+      "structure": [
+        {"text": "If they merely make fewer errors", "role": "adverbial_clause", "level": 2},
+        {"text": "then we can shorten the practice", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "If 引导条件状语从句，then 明确标示条件成立后的结果。",
+        "fewer 修饰可数名词 errors，表示错误数量更少。"
+      ],
+      "expressions": [
+        {"text": "make fewer errors", "meaning_zh": "犯更少的错误"},
+        {"text": "shorten the practice", "meaning_zh": "缩短练习时间"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "But of course, this is not entirely the case; adjustments have to be made in methods of learning and teaching, to take account of the many ways individuals think.",
+      "translation": "但显然，事实并非完全如此；学习和教学方法必须作出调整，以考虑个体多种多样的思维方式。",
+      "structure": [
+        {"text": "this is not entirely the case", "role": "main_clause", "level": 1},
+        {"text": "adjustments have to be made in methods of learning and teaching", "role": "coordinated_clause", "level": 1},
+        {"text": "to take account of the many ways individuals think", "role": "non_finite_clause", "level": 2},
+        {"text": "individuals think", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "the case 表示“实际情况”，not entirely 限定否定程度。",
+        "individuals think 是省略关系词的定语从句，修饰 the many ways。"
+      ],
+      "expressions": [
+        {"text": "be the case", "meaning_zh": "是实际情况"},
+        {"text": "make adjustments in", "meaning_zh": "对……作出调整"},
+        {"text": "take account of", "meaning_zh": "考虑到"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "Yet in order to learn by themselves, the gifted do need some support from their teachers.",
+      "translation": "然而，为了能够自主学习，天赋儿童确实需要教师给予一定支持。",
+      "structure": [
+        {"text": "in order to learn by themselves", "role": "non_finite_clause", "level": 2},
+        {"text": "the gifted", "role": "subject", "level": 1},
+        {"text": "do need some support from their teachers", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "the gifted 是“the + 形容词”结构，泛指有天赋的儿童。",
+        "do need 中 do 用于强调，表示他们“确实”需要支持。"
+      ],
+      "expressions": [
+        {"text": "in order to", "meaning_zh": "为了"},
+        {"text": "learn by themselves", "meaning_zh": "自主学习"},
+        {"text": "support from", "meaning_zh": "来自……的支持"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Conversely, teachers who have a tendency to 'overdirect' can diminish their gifted pupils' learning autonomy.",
+      "translation": "反过来，倾向于“过度指导”的教师会削弱天赋学生的学习自主性。",
+      "structure": [
+        {"text": "teachers", "role": "subject", "level": 1},
+        {"text": "who have a tendency to 'overdirect'", "role": "relative_clause", "level": 2},
+        {"text": "can diminish their gifted pupils' learning autonomy", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "who 引导定语从句修饰 teachers。",
+        "their 指 teachers；overdirect 的引号表明这是作者概括的“过度指导”行为。"
+      ],
+      "expressions": [
+        {"text": "have a tendency to", "meaning_zh": "倾向于"},
+        {"text": "diminish learning autonomy", "meaning_zh": "削弱学习自主性"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "Although 'spoon-feeding' can produce extremely high examination results, these are not always followed by equally impressive life successes.",
+      "translation": "尽管“填鸭式教学”能够带来极高的考试成绩，但这些成绩未必总能转化为同样出色的人生成就。",
+      "structure": [
+        {"text": "Although 'spoon-feeding' can produce extremely high examination results", "role": "adverbial_clause", "level": 2},
+        {"text": "these", "role": "subject", "level": 1},
+        {"text": "are not always followed by equally impressive life successes", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Although 引导让步状语从句，these 回指 examination results。",
+        "are not always followed by 表示高分之后不一定会出现同等出色的人生成就。"
+      ],
+      "expressions": [
+        {"text": "spoon-feeding", "meaning_zh": "填鸭式教学"},
+        {"text": "be followed by", "meaning_zh": "随后出现；带来"},
+        {"text": "life successes", "meaning_zh": "人生成就"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "Too much dependence on the teacher risks loss of autonomy and motivation to discover.",
+      "translation": "过度依赖教师会带来失去自主性和探索动力的风险。",
+      "structure": [
+        {"text": "Too much dependence on the teacher", "role": "subject", "level": 1},
+        {"text": "risks", "role": "verb_phrase", "level": 1},
+        {"text": "loss of autonomy and motivation to discover", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "risk 在这里作动词，后接名词短语表示可能导致的不良结果。",
+        "to discover 后置修饰 motivation，表示主动探索的动力。"
+      ],
+      "expressions": [
+        {"text": "dependence on", "meaning_zh": "对……的依赖"},
+        {"text": "risk loss of", "meaning_zh": "有失去……的风险"},
+        {"text": "motivation to discover", "meaning_zh": "探索的动力"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "However, when teachers help pupils to reflect on their own learning and thinking activities, they increase their pupils' self-regulation.",
+      "translation": "然而，当教师帮助学生反思自己的学习和思维活动时，就能增强学生的自我调节能力。",
+      "structure": [
+        {"text": "when teachers help pupils to reflect on their own learning and thinking activities", "role": "adverbial_clause", "level": 2},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "increase their pupils' self-regulation", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "when 引导时间兼条件意义的状语从句。",
+        "主句的 they 指 teachers，their pupils 指这些教师所教的学生。"
+      ],
+      "expressions": [
+        {"text": "reflect on", "meaning_zh": "反思"},
+        {"text": "increase self-regulation", "meaning_zh": "增强自我调节能力"}
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "For a young child, it may be just the simple question 'What have you learned today?' which helps them to recognize what they are doing.",
+      "translation": "对于年幼的儿童而言，也许只需问一句“你今天学到了什么？”，就能帮助他们认识到自己正在做什么。",
+      "structure": [
+        {"text": "it may be just the simple question 'What have you learned today?'", "role": "main_clause", "level": 1},
+        {"text": "which helps them to recognize", "role": "relative_clause", "level": 2},
+        {"text": "what they are doing", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导定语从句，指代前面的 the simple question。",
+        "what they are doing 是名词性从句，作 recognize 的宾语。"
+      ],
+      "expressions": [
+        {"text": "help someone to recognize", "meaning_zh": "帮助某人认识到"},
+        {"text": "what they are doing", "meaning_zh": "他们正在做的事情"}
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "Given that a fundamental goal of education is to transfer control of learning from teachers to pupils, improving pupils' learning-to-learn techniques should be a major outcome of the school experience, especially for the highly competent.",
+      "translation": "鉴于教育的根本目标之一是把学习的控制权从教师转移给学生，改善学生“学会学习”的技巧应当成为学校教育的一项主要成果，尤其对能力很强的学生而言。",
+      "structure": [
+        {"text": "Given that a fundamental goal of education is to transfer control of learning from teachers to pupils", "role": "adverbial_clause", "level": 2},
+        {"text": "improving pupils' learning-to-learn techniques", "role": "non_finite_clause", "level": 1},
+        {"text": "should be a major outcome of the school experience", "role": "main_clause", "level": 1},
+        {"text": "especially for the highly competent", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Given that 表示“鉴于”，引导说明判断依据的状语从句。",
+        "improving ... 是动名词短语作主语；the highly competent 指能力很强的学生。"
+      ],
+      "expressions": [
+        {"text": "given that", "meaning_zh": "鉴于"},
+        {"text": "transfer control from ... to ...", "meaning_zh": "把控制权从……转移到……"},
+        {"text": "a major outcome of", "meaning_zh": "……的一项主要成果"}
+      ]
+    },
+    {
+      "id": "D-08",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "There are quite a number of new methods which can help, such as child-initiated learning, ability-peer tutoring, etc.",
+      "translation": "有相当多的新方法能够发挥作用，例如儿童主导式学习、同等能力伙伴辅导等。",
+      "structure": [
+        {"text": "There are quite a number of new methods", "role": "main_clause", "level": 1},
+        {"text": "which can help", "role": "relative_clause", "level": 2},
+        {"text": "such as child-initiated learning, ability-peer tutoring, etc.", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导定语从句修饰 new methods。",
+        "such as 后列举两种把学习主动权更多交给儿童的方法。"
+      ],
+      "expressions": [
+        {"text": "quite a number of", "meaning_zh": "相当多的"},
+        {"text": "child-initiated learning", "meaning_zh": "儿童主导式学习"},
+        {"text": "peer tutoring", "meaning_zh": "同伴辅导"}
+      ]
+    },
+    {
+      "id": "D-09",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "Such practices have been found to be particularly useful for bright children from deprived areas.",
+      "translation": "研究发现，这类做法对来自贫困地区的聪明儿童尤其有帮助。",
+      "structure": [
+        {"text": "Such practices", "role": "subject", "level": 1},
+        {"text": "have been found to be particularly useful", "role": "verb_phrase", "level": 1},
+        {"text": "for bright children from deprived areas", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "have been found to be 是被动结构，表示研究结果表明这些做法有效。",
+        "deprived areas 指资源匮乏、社会经济条件较差的地区。"
+      ],
+      "expressions": [
+        {"text": "be particularly useful for", "meaning_zh": "对……尤其有帮助"},
+        {"text": "deprived areas", "meaning_zh": "贫困或资源匮乏地区"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "But scientific progress is not all theoretical; knowledge is also vital to outstanding performance: individuals who know a great deal about a specific domain will achieve at a higher level than those who do not (Elshout, 1995).",
+      "translation": "然而，科学进步并非全是理论问题；知识对卓越表现同样至关重要：对某一特定领域了解很多的人，会比不了解的人取得更高水平的成就（Elshout，1995）。",
+      "structure": [
+        {"text": "scientific progress is not all theoretical", "role": "main_clause", "level": 1},
+        {"text": "knowledge is also vital to outstanding performance", "role": "coordinated_clause", "level": 1},
+        {"text": "individuals who know a great deal about a specific domain will achieve at a higher level than those who do not", "role": "coordinated_clause", "level": 1},
+        {"text": "who know a great deal about a specific domain", "role": "relative_clause", "level": 2},
+        {"text": "who do not", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "冒号后的分句具体解释知识为何对出色表现至关重要。",
+        "those 指 individuals，who do not 后省略 know a great deal about a specific domain。"
+      ],
+      "expressions": [
+        {"text": "be vital to", "meaning_zh": "对……至关重要"},
+        {"text": "know a great deal about", "meaning_zh": "非常了解……"},
+        {"text": "achieve at a higher level", "meaning_zh": "取得更高水平的成就"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "Research with creative scientists by Simonton (1988) brought him to the conclusion that above a certain high level, characteristics such as independence seemed to contribute more to reaching the highest levels of expertise than intellectual skills, due to the great demands of effort and time needed for learning and practice.",
+      "translation": "Simonton（1988）对创造型科学家的研究使他得出结论：当智力达到一定高水平后，独立性等特质对达到最高专业水平的贡献似乎超过智力技能，因为学习和练习需要投入大量精力与时间。",
+      "structure": [
+        {"text": "Research with creative scientists by Simonton (1988) brought him to the conclusion", "role": "main_clause", "level": 1},
+        {"text": "that above a certain high level, characteristics such as independence seemed to contribute more to reaching the highest levels of expertise than intellectual skills", "role": "noun_clause", "level": 2},
+        {"text": "due to the great demands of effort and time", "role": "prepositional_phrase", "level": 3},
+        {"text": "needed for learning and practice", "role": "participial_phrase", "level": 4}
+      ],
+      "difficult_points": [
+        "that 引导同位语从句，说明 conclusion 的具体内容。",
+        "contribute more ... than ... 比较独立性等特质与智力技能的贡献大小。",
+        "needed ... 是过去分词短语，修饰 effort and time。"
+      ],
+      "expressions": [
+        {"text": "bring someone to the conclusion that", "meaning_zh": "使某人得出……的结论"},
+        {"text": "contribute to", "meaning_zh": "促成；有助于"},
+        {"text": "the highest levels of expertise", "meaning_zh": "最高的专业水平"},
+        {"text": "due to", "meaning_zh": "由于"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "Creativity in all forms can be seen as expertise mixed with a high level of motivation (Weisberg, 1993).",
+      "translation": "各种形式的创造力都可以看作专业能力与高度动机的结合（Weisberg，1993）。",
+      "structure": [
+        {"text": "Creativity in all forms", "role": "subject", "level": 1},
+        {"text": "can be seen as", "role": "verb_phrase", "level": 1},
+        {"text": "expertise mixed with a high level of motivation", "role": "complement", "level": 1},
+        {"text": "mixed with a high level of motivation", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "can be seen as 是被动结构，表示“可以被理解为”。",
+        "mixed with ... 是过去分词短语，说明专业能力与高度动机相结合。"
+      ],
+      "expressions": [
+        {"text": "in all forms", "meaning_zh": "以各种形式"},
+        {"text": "be seen as", "meaning_zh": "被视为"},
+        {"text": "a high level of motivation", "meaning_zh": "高度的动机"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "To sum up, learning is affected by emotions of both the individual and significant others.",
+      "translation": "总而言之，学习会受到学习者本人以及对其重要的他人情绪的影响。",
+      "structure": [
+        {"text": "To sum up", "role": "parenthesis", "level": 2},
+        {"text": "learning", "role": "subject", "level": 1},
+        {"text": "is affected by emotions", "role": "verb_phrase", "level": 1},
+        {"text": "of both the individual and significant others", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "To sum up 是总结全文观点的连接表达。",
+        "significant others 指对学习者有重要影响的人，而不是泛指其他所有人。"
+      ],
+      "expressions": [
+        {"text": "to sum up", "meaning_zh": "总而言之"},
+        {"text": "be affected by", "meaning_zh": "受到……影响"},
+        {"text": "significant others", "meaning_zh": "重要他人"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "Positive emotions facilitate the creative aspects of learning and negative emotions inhibit it.",
+      "translation": "积极情绪会促进学习中的创造性方面，而消极情绪则会抑制它。",
+      "structure": [
+        {"text": "Positive emotions facilitate the creative aspects of learning", "role": "main_clause", "level": 1},
+        {"text": "and negative emotions inhibit it", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "and 连接两个意义相对的并列分句，形成积极与消极情绪的对比。",
+        "it 指代 learning，而不是单独指 creative aspects。"
+      ],
+      "expressions": [
+        {"text": "facilitate", "meaning_zh": "促进；使更容易"},
+        {"text": "the creative aspects of", "meaning_zh": "……的创造性方面"},
+        {"text": "inhibit", "meaning_zh": "抑制；阻碍"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "Fear, for example, can limit the development of curiosity, which is a strong force in scientific advance, because it motivates problem-solving behavior.",
+      "translation": "例如，恐惧会限制好奇心的发展；而好奇心是推动科学进步的强大力量，因为它能激发解决问题的行为。",
+      "structure": [
+        {"text": "Fear", "role": "subject", "level": 1},
+        {"text": "for example", "role": "parenthesis", "level": 2},
+        {"text": "can limit the development of curiosity", "role": "verb_phrase", "level": 1},
+        {"text": "which is a strong force in scientific advance", "role": "relative_clause", "level": 2},
+        {"text": "because it motivates problem-solving behavior", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，修饰 curiosity。",
+        "because 从句解释好奇心为何能推动科学进步，其中 it 仍指 curiosity。"
+      ],
+      "expressions": [
+        {"text": "limit the development of", "meaning_zh": "限制……的发展"},
+        {"text": "a strong force in", "meaning_zh": "推动……的强大力量"},
+        {"text": "problem-solving behavior", "meaning_zh": "解决问题的行为"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "In Boekaerts' (1991) review of emotion in the learning of very high IQ and highly achieving children, she found emotional forces in harness.",
+      "translation": "Boekaerts（1991）在回顾高智商、高成就儿童学习中的情绪作用时，发现情绪力量受到了有效调动。",
+      "structure": [
+        {"text": "In Boekaerts' (1991) review of emotion in the learning of very high IQ and highly achieving children", "role": "prepositional_phrase", "level": 2},
+        {"text": "she", "role": "subject", "level": 1},
+        {"text": "found emotional forces in harness", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "she 指 Boekaerts，句首介词短语交代研究出处和范围。",
+        "in harness 原指牲畜套上挽具，此处比喻情绪力量得到控制和运用。"
+      ],
+      "expressions": [
+        {"text": "a review of", "meaning_zh": "对……的综述"},
+        {"text": "in harness", "meaning_zh": "受到控制并被有效利用"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 34,
+      "sentence": "They were not only curious, but often had a strong desire to control their environment, improve their learning efficiency, and increase their own learning resources.",
+      "translation": "这些儿童不仅充满好奇，而且往往强烈希望掌控自己的环境、提高学习效率并增加自身的学习资源。",
+      "structure": [
+        {"text": "They were not only curious", "role": "main_clause", "level": 1},
+        {"text": "but often had a strong desire", "role": "coordinated_clause", "level": 1},
+        {"text": "to control their environment, improve their learning efficiency, and increase their own learning resources", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "They 指上一句中的高智商、高成就儿童。",
+        "not only ... but ... 连接表语 curious 和谓语 had；三个动词共同说明 desire 的内容。"
+      ],
+      "expressions": [
+        {"text": "have a strong desire to", "meaning_zh": "强烈希望……"},
+        {"text": "improve learning efficiency", "meaning_zh": "提高学习效率"},
+        {"text": "increase learning resources", "meaning_zh": "增加学习资源"}
+      ]
+    }
+  ]
+}

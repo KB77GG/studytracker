@@ -1,0 +1,939 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts18_test1_reading",
+  "passage_id": "ielts18_test1_p3",
+  "passage_title": "Conquering Earth's space junk problem",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Last year, commercial companies, military and civil departments and amateurs sent more than 400 satellites into orbit, over four times the yearly average in the previous decade.",
+      "translation": "去年，商业公司、军事和民用部门以及业余爱好者将400多颗卫星送入轨道，是此前十年年均数量的四倍多。",
+      "structure": [
+        {"text": "Last year", "role": "adverbial_phrase", "level": 1},
+        {"text": "commercial companies, military and civil departments and amateurs", "role": "compound_subject", "level": 1},
+        {"text": "sent more than 400 satellites into orbit", "role": "verb_phrase", "level": 1},
+        {"text": "over four times the yearly average in the previous decade", "role": "appositive_measure", "level": 1}
+      ],
+      "difficult_points": [
+        "主语由 commercial companies、departments 和 amateurs 三类发射主体并列构成。",
+        "sent...into orbit 表示把卫星送入轨道。",
+        "over four times... 是补充数量说明，比较去年发射量与此前十年的年均值。"
+      ],
+      "expressions": [
+        {"text": "send satellites into orbit", "meaning_zh": "将卫星送入轨道"},
+        {"text": "over four times", "meaning_zh": "四倍多"},
+        {"text": "yearly average", "meaning_zh": "年均数量"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Numbers could rise even more sharply if leading space companies follow through on plans to deploy hundreds to thousands of large constellations of satellites to space in the next few years.",
+      "translation": "如果领先的航天公司在未来几年落实向太空部署数百到数千个大型卫星星座的计划，这一数量可能还会更急剧上升。",
+      "structure": [
+        {"text": "Numbers", "role": "subject", "level": 1},
+        {"text": "could rise even more sharply", "role": "verb_phrase", "level": 1},
+        {"text": "if leading space companies follow through on plans to deploy hundreds to thousands of large constellations of satellites to space in the next few years", "role": "adverbial_clause", "level": 1},
+        {"text": "to deploy hundreds to thousands of large constellations of satellites to space", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "could 表示预测中的可能性，而非已经发生的事实。",
+        "if 引导条件状语从句，说明数量急升的前提。",
+        "follow through on plans 表示把计划真正执行到底。",
+        "hundreds to thousands of 表示数量范围跨度很大。"
+      ],
+      "expressions": [
+        {"text": "rise sharply", "meaning_zh": "急剧上升"},
+        {"text": "follow through on plans", "meaning_zh": "落实计划"},
+        {"text": "constellations of satellites", "meaning_zh": "卫星星座"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "All that traffic can lead to disaster.",
+      "translation": "所有这些太空交通都可能导致灾难。",
+      "structure": [
+        {"text": "All that traffic", "role": "subject", "level": 1},
+        {"text": "can lead to", "role": "verb_phrase", "level": 1},
+        {"text": "disaster", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "traffic 在这里指大量卫星和空间物体的活动，不是地面交通。",
+        "can 表示潜在风险。",
+        "lead to disaster 概括后文碰撞案例的严重后果。"
+      ],
+      "expressions": [
+        {"text": "lead to disaster", "meaning_zh": "导致灾难"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Ten years ago, a US commercial Iridium satellite smashed into an inactive Russian communications satellite called Cosmos-2251, creating thousands of new pieces of space shrapnel that now threaten other satellites in low Earth orbit – the zone stretching up to 2,000 kilometres in altitude.",
+      "translation": "十年前，一颗美国商业铱星卫星撞上了一颗名为Cosmos-2251的俄罗斯废弃通信卫星，产生了数千块新的太空碎片，如今这些碎片威胁着低地球轨道上的其他卫星——低地球轨道是延伸到海拔2000公里以内的区域。",
+      "structure": [
+        {"text": "Ten years ago", "role": "adverbial_phrase", "level": 1},
+        {"text": "a US commercial Iridium satellite", "role": "subject", "level": 1},
+        {"text": "smashed into an inactive Russian communications satellite called Cosmos-2251", "role": "verb_phrase", "level": 1},
+        {"text": "called Cosmos-2251", "role": "participial_phrase", "level": 2},
+        {"text": "creating thousands of new pieces of space shrapnel that now threaten other satellites in low Earth orbit", "role": "participial_phrase", "level": 1},
+        {"text": "that now threaten other satellites in low Earth orbit", "role": "relative_clause", "level": 2},
+        {"text": "the zone stretching up to 2,000 kilometres in altitude", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "smashed into 表示高速撞击，比普通 hit 语气更强。",
+        "creating... 是现在分词结果状语，说明碰撞产生了大量碎片。",
+        "that 引导定语从句，修饰 space shrapnel。",
+        "破折号后的 the zone... 是 low Earth orbit 的解释。"
+      ],
+      "expressions": [
+        {"text": "smash into", "meaning_zh": "猛烈撞上"},
+        {"text": "space shrapnel", "meaning_zh": "太空碎片"},
+        {"text": "low Earth orbit", "meaning_zh": "低地球轨道"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "Altogether, there are roughly 20,000 human-made objects in orbit, from working satellites to small rocket pieces.",
+      "translation": "总计约有2万个在人造物体处于轨道上，从运行中的卫星到小块火箭碎片不等。",
+      "structure": [
+        {"text": "Altogether", "role": "discourse_marker", "level": 1},
+        {"text": "there are roughly 20,000 human-made objects in orbit", "role": "existential_clause", "level": 1},
+        {"text": "from working satellites to small rocket pieces", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "there are 是存在句，用来说明轨道中物体总量。",
+        "roughly 表示约数，不是精确统计。",
+        "from...to... 列出 human-made objects 的范围。"
+      ],
+      "expressions": [
+        {"text": "human-made objects", "meaning_zh": "人造物体"},
+        {"text": "from ... to ...", "meaning_zh": "从……到……"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "And satellite operators can't steer away from every potential crash, because each move consumes time and fuel that could otherwise be used for the spacecraft's main job.",
+      "translation": "而卫星运营者不可能避开每一次潜在碰撞，因为每次机动都会消耗时间和燃料，而这些本可用于航天器的主要任务。",
+      "structure": [
+        {"text": "And", "role": "discourse_marker", "level": 1},
+        {"text": "satellite operators can't steer away from every potential crash", "role": "main_clause", "level": 1},
+        {"text": "because each move consumes time and fuel that could otherwise be used for the spacecraft's main job", "role": "adverbial_clause", "level": 1},
+        {"text": "that could otherwise be used for the spacecraft's main job", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "can't steer away from every potential crash 表示无法通过机动规避所有风险。",
+        "because 引导原因状语从句，解释规避并非总可行。",
+        "that 引导定语从句，修饰 time and fuel。",
+        "otherwise 表示如果不用于规避碰撞，本可用于主要任务。"
+      ],
+      "expressions": [
+        {"text": "steer away from", "meaning_zh": "避开"},
+        {"text": "potential crash", "meaning_zh": "潜在碰撞"},
+        {"text": "otherwise be used for", "meaning_zh": "本可用于"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "Concern about space junk goes back to the beginning of the satellite era, but the number of objects in orbit is rising so rapidly that researchers are investigating new ways of attacking the problem.",
+      "translation": "人们对太空垃圾的担忧可以追溯到卫星时代初期，但轨道中物体数量增长如此迅速，以至于研究人员正在探索解决这一问题的新方法。",
+      "structure": [
+        {"text": "Concern about space junk goes back to the beginning of the satellite era", "role": "main_clause", "level": 1},
+        {"text": "but the number of objects in orbit is rising so rapidly that researchers are investigating new ways of attacking the problem", "role": "coordinated_clause", "level": 1},
+        {"text": "so rapidly that researchers are investigating new ways of attacking the problem", "role": "result_clause", "level": 2},
+        {"text": "of attacking the problem", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "goes back to 表示担忧由来已久。",
+        "but 转向当前问题的新严重性。",
+        "so...that... 表示数量增长快到促使研究人员寻找新办法。",
+        "attacking the problem 意为处理或解决问题，不是字面攻击。"
+      ],
+      "expressions": [
+        {"text": "go back to", "meaning_zh": "追溯到"},
+        {"text": "so rapidly that", "meaning_zh": "如此迅速以至于"},
+        {"text": "ways of attacking the problem", "meaning_zh": "解决问题的方法"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Several teams are trying to improve methods for assessing what is in orbit, so that satellite operators can work more efficiently in ever-more-crowded space.",
+      "translation": "几个团队正试图改进评估轨道中物体的方法，以便卫星运营者能在日益拥挤的太空中更高效地工作。",
+      "structure": [
+        {"text": "Several teams", "role": "subject", "level": 1},
+        {"text": "are trying to improve methods for assessing what is in orbit", "role": "verb_phrase", "level": 1},
+        {"text": "what is in orbit", "role": "embedded_question", "level": 2},
+        {"text": "so that satellite operators can work more efficiently in ever-more-crowded space", "role": "purpose_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "are trying to improve 表示正在进行中的研究努力。",
+        "what is in orbit 是嵌入式疑问从句，作 assessing 的宾语。",
+        "so that 引导目的状语从句。",
+        "ever-more-crowded 表示拥挤程度持续增加。"
+      ],
+      "expressions": [
+        {"text": "improve methods for", "meaning_zh": "改进……的方法"},
+        {"text": "work more efficiently", "meaning_zh": "更高效地工作"},
+        {"text": "ever-more-crowded", "meaning_zh": "日益拥挤的"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Some researchers are now starting to compile a massive data set that includes the best possible information on where everything is in orbit.",
+      "translation": "一些研究人员现在开始编制一个庞大的数据集，其中包含关于轨道中所有物体位置的尽可能最佳信息。",
+      "structure": [
+        {"text": "Some researchers", "role": "subject", "level": 1},
+        {"text": "are now starting to compile a massive data set", "role": "verb_phrase", "level": 1},
+        {"text": "that includes the best possible information on where everything is in orbit", "role": "relative_clause", "level": 2},
+        {"text": "where everything is in orbit", "role": "embedded_question", "level": 3}
+      ],
+      "difficult_points": [
+        "are now starting to compile 表示一项刚开始推进的工作。",
+        "that 引导定语从句，修饰 data set。",
+        "where 引导嵌入式疑问从句，作 information on 的内容。",
+        "best possible information 强调信息质量尽可能高。"
+      ],
+      "expressions": [
+        {"text": "compile a data set", "meaning_zh": "编制数据集"},
+        {"text": "best possible information", "meaning_zh": "尽可能最佳的信息"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "Others are developing taxonomies of space debris – working on measuring properties such as the shape and size of an object, so that satellite operators know how much to worry about what's coming their way.",
+      "translation": "其他研究人员正在建立太空碎片分类体系——研究测量物体形状和大小等属性，以便卫星运营者知道该对迎面而来的东西担心到什么程度。",
+      "structure": [
+        {"text": "Others", "role": "subject", "level": 1},
+        {"text": "are developing taxonomies of space debris", "role": "verb_phrase", "level": 1},
+        {"text": "working on measuring properties such as the shape and size of an object", "role": "participial_phrase", "level": 1},
+        {"text": "so that satellite operators know how much to worry about what's coming their way", "role": "purpose_clause", "level": 1},
+        {"text": "how much to worry about what's coming their way", "role": "embedded_question", "level": 2}
+      ],
+      "difficult_points": [
+        "Others 与上一句 Some researchers 对应，表示另一类研究方向。",
+        "破折号后的 working on... 解释 taxonomies 如何建立。",
+        "such as 引出 properties 的例子。",
+        "what's coming their way 是宾语从句，指可能接近卫星的碎片。"
+      ],
+      "expressions": [
+        {"text": "taxonomies of space debris", "meaning_zh": "太空碎片分类体系"},
+        {"text": "work on measuring", "meaning_zh": "研究测量"},
+        {"text": "come their way", "meaning_zh": "朝他们而来"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "The alternative, many say, is unthinkable.",
+      "translation": "许多人说，另一种可能的后果是不可想象的。",
+      "structure": [
+        {"text": "The alternative", "role": "subject", "level": 1},
+        {"text": "many say", "role": "parenthetical_clause", "level": 1},
+        {"text": "is unthinkable", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "The alternative 指如果不改进太空垃圾管理可能出现的另一种结果。",
+        "many say 是插入语，表明这是许多人的判断。",
+        "unthinkable 强调后果严重到难以接受。"
+      ],
+      "expressions": [
+        {"text": "the alternative", "meaning_zh": "另一种选择/后果"},
+        {"text": "unthinkable", "meaning_zh": "不可想象的"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "Just a few uncontrolled space crashes could generate enough debris to set off a runaway cascade of fragments, rendering near-Earth space unusable.",
+      "translation": "仅仅几次失控的太空碰撞就可能产生足够多的碎片，引发碎片失控连锁反应，使近地空间无法使用。",
+      "structure": [
+        {"text": "Just a few uncontrolled space crashes", "role": "subject", "level": 1},
+        {"text": "could generate enough debris", "role": "verb_phrase", "level": 1},
+        {"text": "to set off a runaway cascade of fragments", "role": "non_finite_clause", "level": 2},
+        {"text": "rendering near-Earth space unusable", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Just a few 强调少数碰撞就可能造成严重后果。",
+        "enough...to... 表示碎片数量足以触发连锁反应。",
+        "rendering... 是结果状语，说明连锁反应的最终后果。",
+        "near-Earth space unusable 是“宾语 + 形容词补足语”结构。"
+      ],
+      "expressions": [
+        {"text": "set off", "meaning_zh": "引发"},
+        {"text": "runaway cascade", "meaning_zh": "失控连锁反应"},
+        {"text": "render ... unusable", "meaning_zh": "使……无法使用"}
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "'If we go on like this, we will reach a point of no return,' says Carolin Frueh, an astrodynamical researcher at Purdue University in West Lafayette, Indiana.",
+      "translation": "普渡大学位于印第安纳州西拉法叶的天体动力学研究员卡罗琳·弗吕说：“如果我们继续这样下去，我们将到达不可逆转的临界点。”",
+      "structure": [
+        {"text": "If we go on like this", "role": "adverbial_clause", "level": 1},
+        {"text": "we will reach a point of no return", "role": "quoted_main_clause", "level": 1},
+        {"text": "says Carolin Frueh", "role": "reporting_clause", "level": 1},
+        {"text": "an astrodynamical researcher at Purdue University in West Lafayette, Indiana", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "If 引导条件从句，go on like this 指继续当前太空垃圾增长趋势。",
+        "will reach 表示对未来后果的强预测。",
+        "a point of no return 指无法回头的临界点。",
+        "引语后的 says 是倒装式引述结构。"
+      ],
+      "expressions": [
+        {"text": "go on like this", "meaning_zh": "继续这样下去"},
+        {"text": "point of no return", "meaning_zh": "不可逆转的临界点"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "Even as our ability to monitor space objects increases, so too does the total number of items in orbit.",
+      "translation": "即使我们监测太空物体的能力在增强，轨道中物体的总数也同样在增加。",
+      "structure": [
+        {"text": "Even as our ability to monitor space objects increases", "role": "adverbial_clause", "level": 1},
+        {"text": "our ability to monitor space objects", "role": "subject", "level": 2},
+        {"text": "so too does the total number of items in orbit", "role": "inverted_main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Even as 表示“即使在……的同时”，形成让步关系。",
+        "to monitor space objects 是不定式短语，修饰 ability。",
+        "so too does... 是倒装结构，表示另一件事也同样发生。",
+        "does 代替 increases，避免重复。"
+      ],
+      "expressions": [
+        {"text": "ability to monitor", "meaning_zh": "监测能力"},
+        {"text": "so too does", "meaning_zh": "……也同样如此"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "That means companies, governments and other players in space are collaborating in new ways to avoid a shared threat.",
+      "translation": "这意味着公司、政府和太空中的其他参与者正在以新的方式合作，以避免一个共同威胁。",
+      "structure": [
+        {"text": "That means", "role": "main_clause", "level": 1},
+        {"text": "companies, governments and other players in space are collaborating in new ways", "role": "object_clause", "level": 2},
+        {"text": "to avoid a shared threat", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "That 回指前一句监测能力增加但轨道物体也增加的局面。",
+        "means 后省略 that，引出宾语从句。",
+        "companies, governments and other players 是并列主语。",
+        "to avoid a shared threat 表目的。"
+      ],
+      "expressions": [
+        {"text": "collaborate in new ways", "meaning_zh": "以新方式合作"},
+        {"text": "shared threat", "meaning_zh": "共同威胁"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "International groups such as the Inter-Agency Space Debris Coordination Committee have developed guidelines on space sustainability.",
+      "translation": "国际组织，如机构间空间碎片协调委员会，已经制定了关于太空可持续性的指导方针。",
+      "structure": [
+        {"text": "International groups such as the Inter-Agency Space Debris Coordination Committee", "role": "subject", "level": 1},
+        {"text": "such as the Inter-Agency Space Debris Coordination Committee", "role": "example_phrase", "level": 2},
+        {"text": "have developed guidelines on space sustainability", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "such as 引出 International groups 的例子。",
+        "have developed 是现在完成时，强调准则已经形成并与现在相关。",
+        "on space sustainability 表示准则涉及的主题。"
+      ],
+      "expressions": [
+        {"text": "develop guidelines on", "meaning_zh": "制定关于……的指导方针"},
+        {"text": "space sustainability", "meaning_zh": "太空可持续性"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Those include inactivating satellites at the end of their useful life by venting pressurised materials or leftover fuel that might lead to explosions.",
+      "translation": "这些准则包括在卫星使用寿命结束时，通过释放加压材料或剩余燃料使卫星失效，因为这些材料或燃料可能导致爆炸。",
+      "structure": [
+        {"text": "Those", "role": "subject", "level": 1},
+        {"text": "include inactivating satellites at the end of their useful life", "role": "verb_phrase", "level": 1},
+        {"text": "by venting pressurised materials or leftover fuel", "role": "prepositional_phrase", "level": 1},
+        {"text": "that might lead to explosions", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Those 指上一句的 guidelines。",
+        "include 后接动名词 inactivating，说明准则内容之一。",
+        "by venting... 表方式，说明如何使卫星失效。",
+        "that 引导定语从句，修饰 materials or leftover fuel。"
+      ],
+      "expressions": [
+        {"text": "at the end of their useful life", "meaning_zh": "在其使用寿命结束时"},
+        {"text": "lead to explosions", "meaning_zh": "导致爆炸"},
+        {"text": "leftover fuel", "meaning_zh": "剩余燃料"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "The intergovernmental groups also advise lowering satellites deep enough into the atmosphere that they will burn up or disintegrate within 25 years.",
+      "translation": "这些政府间组织还建议将卫星降到大气层中足够深的位置，使其在25年内燃烧殆尽或解体。",
+      "structure": [
+        {"text": "The intergovernmental groups", "role": "subject", "level": 1},
+        {"text": "also advise lowering satellites deep enough into the atmosphere", "role": "verb_phrase", "level": 1},
+        {"text": "lowering satellites deep enough into the atmosphere", "role": "gerund_clause", "level": 2},
+        {"text": "that they will burn up or disintegrate within 25 years", "role": "result_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "advise 后接动名词 lowering，表示建议采取的行动。",
+        "deep enough...that... 构成结果关系，说明降低到何种程度。",
+        "they 指 satellites。",
+        "burn up 和 disintegrate 是并列结果。"
+      ],
+      "expressions": [
+        {"text": "deep enough into the atmosphere", "meaning_zh": "深入大气层到足够程度"},
+        {"text": "burn up or disintegrate", "meaning_zh": "燃烧殆尽或解体"}
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "But so far, only about half of all missions have abided by this 25-year goal, says Holger Krag, head of the European Space Agency's space-debris office in Darmstadt, Germany.",
+      "translation": "但欧洲航天局位于德国达姆施塔特的空间碎片办公室负责人霍尔格·克拉格说，到目前为止，只有约一半的任务遵守了这一25年目标。",
+      "structure": [
+        {"text": "But so far", "role": "discourse_marker", "level": 1},
+        {"text": "only about half of all missions have abided by this 25-year goal", "role": "reported_clause", "level": 1},
+        {"text": "says Holger Krag", "role": "reporting_clause", "level": 1},
+        {"text": "head of the European Space Agency's space-debris office in Darmstadt, Germany", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "But 标记现实执行情况与前文建议之间的转折。",
+        "have abided by 是现在完成时，说明截至目前的遵守情况。",
+        "only about half 强调合规程度不足。",
+        "head of... 是 Holger Krag 的同位语身份说明。"
+      ],
+      "expressions": [
+        {"text": "so far", "meaning_zh": "到目前为止"},
+        {"text": "abide by", "meaning_zh": "遵守"},
+        {"text": "25-year goal", "meaning_zh": "25年目标"}
+      ]
+    },
+    {
+      "id": "C-07",
+      "paragraph_label": "C",
+      "sentence_index": 20,
+      "sentence": "Operators of the planned large constellations of satellites say they will be responsible stewards in their enterprises in space, but Krag worries that problems could increase, despite their best intentions.",
+      "translation": "计划中的大型卫星星座运营者表示，他们会在太空事业中做负责任的管理者，但克拉格担心，尽管他们有最好的意图，问题仍可能增加。",
+      "structure": [
+        {"text": "Operators of the planned large constellations of satellites say", "role": "main_clause", "level": 1},
+        {"text": "they will be responsible stewards in their enterprises in space", "role": "object_clause", "level": 2},
+        {"text": "but Krag worries", "role": "coordinated_clause", "level": 1},
+        {"text": "that problems could increase", "role": "object_clause", "level": 2},
+        {"text": "despite their best intentions", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "say 后省略 that，引出运营者的承诺。",
+        "but 连接承诺与 Krag 的担忧，形成对比。",
+        "could increase 表示问题仍有可能恶化。",
+        "despite their best intentions 表让步，说明即使出发点良好也可能出问题。"
+      ],
+      "expressions": [
+        {"text": "responsible stewards", "meaning_zh": "负责任的管理者"},
+        {"text": "despite their best intentions", "meaning_zh": "尽管他们有良好意图"}
+      ]
+    },
+    {
+      "id": "C-08",
+      "paragraph_label": "C",
+      "sentence_index": 21,
+      "sentence": "'What happens to those that fail or go bankrupt?' he asks.",
+      "translation": "他问道：“那些失败或破产的企业怎么办？”",
+      "structure": [
+        {"text": "What happens to those", "role": "interrogative_clause", "level": 1},
+        {"text": "that fail or go bankrupt", "role": "relative_clause", "level": 2},
+        {"text": "he asks", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "those 指代那些卫星星座运营者或相关企业。",
+        "that 引导定语从句，修饰 those。",
+        "fail 和 go bankrupt 是并列谓语，表示失败或破产两种情况。"
+      ],
+      "expressions": [
+        {"text": "go bankrupt", "meaning_zh": "破产"},
+        {"text": "what happens to", "meaning_zh": "……会怎样"}
+      ]
+    },
+    {
+      "id": "C-09",
+      "paragraph_label": "C",
+      "sentence_index": 22,
+      "sentence": "'They are probably not going to spend money to remove their satellites from space.'",
+      "translation": "“他们很可能不会花钱把自己的卫星从太空中移除。”",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "are probably not going to spend money", "role": "verb_phrase", "level": 1},
+        {"text": "to remove their satellites from space", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "They 回指上一句失败或破产的运营者。",
+        "are probably not going to 表示对未来行为的推测。",
+        "to remove... 表目的，说明花钱的用途。"
+      ],
+      "expressions": [
+        {"text": "spend money to", "meaning_zh": "花钱做……"},
+        {"text": "remove their satellites from space", "meaning_zh": "把他们的卫星移出太空"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "In theory, given the vastness of space, satellite operators should have plenty of room for all these missions to fly safely without ever nearing another object.",
+      "translation": "理论上，考虑到太空的广阔，卫星运营者应该有足够空间让所有这些任务安全飞行，完全不接近其他物体。",
+      "structure": [
+        {"text": "In theory", "role": "prepositional_phrase", "level": 1},
+        {"text": "given the vastness of space", "role": "participial_phrase", "level": 1},
+        {"text": "satellite operators should have plenty of room", "role": "main_clause", "level": 1},
+        {"text": "for all these missions to fly safely without ever nearing another object", "role": "non_finite_clause", "level": 2},
+        {"text": "without ever nearing another object", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "In theory 表示接下来是理论层面的判断。",
+        "given... 表示“考虑到……”，是条件/背景状语。",
+        "for all these missions to fly safely 是不定式复合结构，说明 room 的用途。",
+        "without ever nearing... 表示安全飞行的理想状态。"
+      ],
+      "expressions": [
+        {"text": "in theory", "meaning_zh": "理论上"},
+        {"text": "given the vastness of space", "meaning_zh": "考虑到太空的广阔"},
+        {"text": "plenty of room", "meaning_zh": "足够空间"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "So some scientists are tackling the problem of space junk by trying to find out where all the debris is to a high degree of precision.",
+      "translation": "因此，一些科学家正通过试图以高度精确的方式确定所有碎片所在位置，来处理太空垃圾问题。",
+      "structure": [
+        {"text": "So", "role": "discourse_marker", "level": 1},
+        {"text": "some scientists", "role": "subject", "level": 1},
+        {"text": "are tackling the problem of space junk", "role": "verb_phrase", "level": 1},
+        {"text": "by trying to find out where all the debris is to a high degree of precision", "role": "prepositional_phrase", "level": 1},
+        {"text": "where all the debris is", "role": "embedded_question", "level": 2}
+      ],
+      "difficult_points": [
+        "So 表示从理论空间充足转向需要精确定位的解决办法。",
+        "by trying... 表方式，说明科学家如何处理问题。",
+        "where 引导嵌入式疑问从句，作 find out 的宾语。",
+        "to a high degree of precision 修饰定位的精确程度。"
+      ],
+      "expressions": [
+        {"text": "tackle the problem of", "meaning_zh": "处理……问题"},
+        {"text": "find out where", "meaning_zh": "弄清……在哪里"},
+        {"text": "to a high degree of precision", "meaning_zh": "以高度精确的方式"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "That would alleviate the need for many of the unnecessary manoeuvres that are carried out to avoid potential collisions.",
+      "translation": "那将减少许多为避免潜在碰撞而进行的不必要机动操作的需求。",
+      "structure": [
+        {"text": "That", "role": "subject", "level": 1},
+        {"text": "would alleviate the need for many of the unnecessary manoeuvres", "role": "verb_phrase", "level": 1},
+        {"text": "that are carried out to avoid potential collisions", "role": "relative_clause", "level": 2},
+        {"text": "to avoid potential collisions", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "That 指前一句高精度确定碎片位置这件事。",
+        "would alleviate 表示这种方法预期能减轻需求。",
+        "that 引导定语从句，修饰 manoeuvres。",
+        "are carried out 是被动语态，说明机动操作被执行的目的。"
+      ],
+      "expressions": [
+        {"text": "alleviate the need for", "meaning_zh": "减少对……的需求"},
+        {"text": "carry out manoeuvres", "meaning_zh": "执行机动操作"},
+        {"text": "potential collisions", "meaning_zh": "潜在碰撞"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "'If you knew precisely where everything was, you would almost never have a problem,' says Marlon Sorge, a space-debris specialist at the Aerospace Corporation in El Segundo, California.",
+      "translation": "位于加州埃尔塞贡多的航空航天公司太空碎片专家马龙·索尔格说：“如果你能精确知道所有东西在哪里，几乎就永远不会有问题。”",
+      "structure": [
+        {"text": "If you knew precisely where everything was", "role": "adverbial_clause", "level": 1},
+        {"text": "where everything was", "role": "embedded_question", "level": 2},
+        {"text": "you would almost never have a problem", "role": "quoted_main_clause", "level": 1},
+        {"text": "says Marlon Sorge", "role": "reporting_clause", "level": 1},
+        {"text": "a space-debris specialist at the Aerospace Corporation in El Segundo, California", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "If 引导条件从句，knew 与 would have 构成虚拟条件语气。",
+        "where everything was 是嵌入式疑问从句，作 knew 的宾语。",
+        "almost never 强调精准定位能极大降低问题发生概率。",
+        "a space-debris specialist... 是 Marlon Sorge 的身份说明。"
+      ],
+      "expressions": [
+        {"text": "know precisely where", "meaning_zh": "精确知道……在哪里"},
+        {"text": "almost never", "meaning_zh": "几乎从不"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "The field is called space traffic management, because it's similar to managing traffic on the roads or in the air.",
+      "translation": "这个领域被称为空间交通管理，因为它类似于管理道路交通或空中交通。",
+      "structure": [
+        {"text": "The field", "role": "subject", "level": 1},
+        {"text": "is called space traffic management", "role": "passive_verb_phrase", "level": 1},
+        {"text": "because it's similar to managing traffic on the roads or in the air", "role": "adverbial_clause", "level": 1},
+        {"text": "managing traffic on the roads or in the air", "role": "gerund_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "is called 是被动结构，用来引出术语 space traffic management。",
+        "because 引导原因从句，解释命名逻辑。",
+        "managing traffic 是动名词短语，作 similar to 的宾语。",
+        "on the roads or in the air 对照道路交通和空中交通。"
+      ],
+      "expressions": [
+        {"text": "space traffic management", "meaning_zh": "空间交通管理"},
+        {"text": "be similar to", "meaning_zh": "类似于"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 28,
+      "sentence": "Think about a busy day at an airport, says Moriba Jah, an astrodynamicist at the University of Texas at Austin: planes line up in the sky, landing and taking off close to one another in a carefully choreographed routine.",
+      "translation": "德克萨斯大学奥斯汀分校的天体动力学家莫里巴·贾说，想想机场繁忙的一天：飞机在空中排队，在一套精心协调的流程中彼此靠近地降落和起飞。",
+      "structure": [
+        {"text": "Think about a busy day at an airport", "role": "imperative_clause", "level": 1},
+        {"text": "says Moriba Jah", "role": "reporting_clause", "level": 1},
+        {"text": "an astrodynamicist at the University of Texas at Austin", "role": "apposition", "level": 1},
+        {"text": "planes line up in the sky", "role": "main_clause", "level": 1},
+        {"text": "landing and taking off close to one another in a carefully choreographed routine", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Think about 是祈使句，用机场场景帮助读者类比。",
+        "冒号后具体描述机场交通管理的画面。",
+        "landing and taking off 是并列现在分词，补充说明 planes 的动作。",
+        "carefully choreographed routine 暗示空中交通有精密协调。"
+      ],
+      "expressions": [
+        {"text": "line up in the sky", "meaning_zh": "在空中排队"},
+        {"text": "close to one another", "meaning_zh": "彼此靠近"},
+        {"text": "carefully choreographed routine", "meaning_zh": "精心协调的流程"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 29,
+      "sentence": "Air-traffic controllers know the location of the planes down to one metre in accuracy.",
+      "translation": "空中交通管制员知道飞机的位置，精确到一米。",
+      "structure": [
+        {"text": "Air-traffic controllers", "role": "subject", "level": 1},
+        {"text": "know the location of the planes", "role": "verb_phrase", "level": 1},
+        {"text": "down to one metre in accuracy", "role": "adverbial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "down to 表示精确程度达到某一细小单位。",
+        "in accuracy 说明 one metre 是定位精度。",
+        "该句与后文太空碎片位置不清形成对比。"
+      ],
+      "expressions": [
+        {"text": "down to one metre", "meaning_zh": "精确到一米"},
+        {"text": "in accuracy", "meaning_zh": "在精度上"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "The same can't be said for space debris.",
+      "translation": "但太空碎片并不能这样说。",
+      "structure": [
+        {"text": "The same", "role": "subject", "level": 1},
+        {"text": "can't be said", "role": "passive_verb_phrase", "level": 1},
+        {"text": "for space debris", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "The same 指上一句“位置可精确到一米”这一情况。",
+        "can't be said 是被动表达，表示同样说法不适用于太空碎片。",
+        "for space debris 指对照对象从飞机转为太空碎片。"
+      ],
+      "expressions": [
+        {"text": "the same can't be said for", "meaning_zh": "同样情况不适用于"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "Not all objects in orbit are known, and even those included in databases are not tracked consistently.",
+      "translation": "并非所有轨道中的物体都为人所知，即便是那些已纳入数据库的物体，也没有得到持续一致的追踪。",
+      "structure": [
+        {"text": "Not all objects in orbit are known", "role": "main_clause", "level": 1},
+        {"text": "and even those included in databases are not tracked consistently", "role": "coordinated_clause", "level": 1},
+        {"text": "included in databases", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Not all 表示部分否定，不是所有物体都未知。",
+        "even those 强调即使已进数据库的物体也存在问题。",
+        "included in databases 是过去分词短语，修饰 those。",
+        "are not tracked consistently 是被动语态，说明追踪缺乏连续一致性。"
+      ],
+      "expressions": [
+        {"text": "not all", "meaning_zh": "并非所有"},
+        {"text": "tracked consistently", "meaning_zh": "被持续一致地追踪"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "An additional problem is that there is no authoritative catalogue that accurately lists the orbits of all known space debris.",
+      "translation": "另一个问题是，没有一个权威目录能够准确列出所有已知太空碎片的轨道。",
+      "structure": [
+        {"text": "An additional problem", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "that there is no authoritative catalogue that accurately lists the orbits of all known space debris", "role": "complement_clause", "level": 2},
+        {"text": "that accurately lists the orbits of all known space debris", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导表语从句，解释 additional problem 的内容。",
+        "there is no... 是存在句否定，强调权威目录缺失。",
+        "第二个 that 引导定语从句，修饰 catalogue。",
+        "all known space debris 指目前已知的全部太空碎片。"
+      ],
+      "expressions": [
+        {"text": "additional problem", "meaning_zh": "另一个问题"},
+        {"text": "authoritative catalogue", "meaning_zh": "权威目录"},
+        {"text": "accurately lists", "meaning_zh": "准确列出"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "Jah illustrates this with a web-based database that he has developed.",
+      "translation": "贾用自己开发的一个基于网络的数据库说明了这一点。",
+      "structure": [
+        {"text": "Jah", "role": "subject", "level": 1},
+        {"text": "illustrates this with a web-based database", "role": "verb_phrase", "level": 1},
+        {"text": "that he has developed", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "this 指上一句没有权威目录准确列出轨道的问题。",
+        "with a web-based database 表示说明问题所用的工具。",
+        "that 引导定语从句，修饰 database。",
+        "has developed 是现在完成时，说明数据库由 Jah 开发完成并仍相关。"
+      ],
+      "expressions": [
+        {"text": "illustrate this with", "meaning_zh": "用……说明这一点"},
+        {"text": "web-based database", "meaning_zh": "基于网络的数据库"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 34,
+      "sentence": "It draws on several sources, such as catalogues maintained by the US and Russian governments, to visualise where objects are in space.",
+      "translation": "它利用多个来源，例如美国和俄罗斯政府维护的目录，来可视化物体在太空中的位置。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "draws on several sources", "role": "verb_phrase", "level": 1},
+        {"text": "such as catalogues maintained by the US and Russian governments", "role": "example_phrase", "level": 1},
+        {"text": "maintained by the US and Russian governments", "role": "participial_phrase", "level": 2},
+        {"text": "to visualise where objects are in space", "role": "non_finite_clause", "level": 1},
+        {"text": "where objects are in space", "role": "embedded_question", "level": 2}
+      ],
+      "difficult_points": [
+        "It 指 Jah 开发的 web-based database。",
+        "draws on 表示利用多个数据来源。",
+        "maintained by... 是过去分词短语，修饰 catalogues。",
+        "where 引导嵌入式疑问从句，作 visualise 的内容。"
+      ],
+      "expressions": [
+        {"text": "draw on several sources", "meaning_zh": "利用多个来源"},
+        {"text": "visualise where", "meaning_zh": "可视化显示……的位置"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 35,
+      "sentence": "When he types in an identifier for a particular space object, the database draws a purple line to designate its orbit.",
+      "translation": "当他输入某个特定太空物体的识别码时，数据库会画出一条紫色线来标示它的轨道。",
+      "structure": [
+        {"text": "When he types in an identifier for a particular space object", "role": "adverbial_clause", "level": 1},
+        {"text": "he types in an identifier", "role": "main_clause", "level": 2},
+        {"text": "the database draws a purple line", "role": "main_clause", "level": 1},
+        {"text": "to designate its orbit", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，说明数据库响应的触发条件。",
+        "types in 表示输入信息。",
+        "to designate its orbit 表目的，说明画紫色线的用途。",
+        "its 指 particular space object。"
+      ],
+      "expressions": [
+        {"text": "type in an identifier", "meaning_zh": "输入识别码"},
+        {"text": "designate its orbit", "meaning_zh": "标示其轨道"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 36,
+      "sentence": "Only this doesn't quite work for a number of objects, such as a Russian rocket body designated in the database as object number 32280.",
+      "translation": "只是，对于一些物体来说，这种做法并不完全奏效，比如数据库中被标为32280号物体的一个俄罗斯火箭体。",
+      "structure": [
+        {"text": "Only", "role": "discourse_marker", "level": 1},
+        {"text": "this doesn't quite work for a number of objects", "role": "main_clause", "level": 1},
+        {"text": "such as a Russian rocket body designated in the database as object number 32280", "role": "example_phrase", "level": 1},
+        {"text": "designated in the database as object number 32280", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Only 在句首表示转折，相当于“只是”。",
+        "doesn't quite work 表示不完全有效，而非完全失败。",
+        "such as 引出具体例子。",
+        "designated...as... 是过去分词短语，说明该火箭体在数据库中的编号。"
+      ],
+      "expressions": [
+        {"text": "doesn't quite work", "meaning_zh": "不太奏效"},
+        {"text": "a number of objects", "meaning_zh": "一些物体"},
+        {"text": "designated as", "meaning_zh": "被指定/标记为"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 37,
+      "sentence": "When Jah enters that number, the database draws two purple lines: the US and Russian sources contain two completely different orbits for the same object.",
+      "translation": "当贾输入那个编号时，数据库画出两条紫色线：美国和俄罗斯的数据源给同一物体包含了两条完全不同的轨道。",
+      "structure": [
+        {"text": "When Jah enters that number", "role": "adverbial_clause", "level": 1},
+        {"text": "the database draws two purple lines", "role": "main_clause", "level": 1},
+        {"text": "the US and Russian sources contain two completely different orbits for the same object", "role": "explanatory_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，说明输入编号后的结果。",
+        "冒号后解释为什么会出现两条紫色线。",
+        "two completely different orbits 强调两个数据源之间严重不一致。",
+        "for the same object 表明问题不在于对象不同，而在于轨道记录冲突。"
+      ],
+      "expressions": [
+        {"text": "completely different", "meaning_zh": "完全不同"},
+        {"text": "for the same object", "meaning_zh": "针对同一物体"}
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 38,
+      "sentence": "Jah says that it is almost impossible to tell which is correct, unless a third source of information made it possible to cross-correlate.",
+      "translation": "贾说，几乎不可能判断哪一个是正确的，除非第三个信息源使交叉关联成为可能。",
+      "structure": [
+        {"text": "Jah says", "role": "main_clause", "level": 1},
+        {"text": "that it is almost impossible to tell which is correct", "role": "object_clause", "level": 2},
+        {"text": "it is almost impossible to tell", "role": "main_clause", "level": 3},
+        {"text": "which is correct", "role": "embedded_question", "level": 4},
+        {"text": "unless a third source of information made it possible to cross-correlate", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，说明 Jah 的判断。",
+        "it 是形式主语，真正主语是 to tell which is correct。",
+        "which is correct 是嵌入式疑问从句。",
+        "unless 引导条件从句，说明只有第三方信息源才能解决冲突。"
+      ],
+      "expressions": [
+        {"text": "almost impossible to tell", "meaning_zh": "几乎无法判断"},
+        {"text": "make it possible to", "meaning_zh": "使……成为可能"},
+        {"text": "cross-correlate", "meaning_zh": "交叉关联"}
+      ]
+    },
+    {
+      "id": "F-08",
+      "paragraph_label": "F",
+      "sentence_index": 39,
+      "sentence": "Jah describes himself as a space environmentalist: 'I want to make space a place that is safe to operate, that is free and useful for generations to come.'",
+      "translation": "贾把自己描述为一名太空环保主义者：“我想让太空成为一个运行安全、自由且对子孙后代有用的地方。”",
+      "structure": [
+        {"text": "Jah describes himself as a space environmentalist", "role": "main_clause", "level": 1},
+        {"text": "as a space environmentalist", "role": "prepositional_phrase", "level": 2},
+        {"text": "I want to make space a place", "role": "quoted_main_clause", "level": 1},
+        {"text": "that is safe to operate, that is free and useful for generations to come", "role": "relative_clause", "level": 2},
+        {"text": "for generations to come", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "describe oneself as 表示把自己定位为某种身份。",
+        "冒号后是 Jah 对自己目标的直接引语。",
+        "make space a place 是“make + 宾语 + 名词补足语”结构。",
+        "两个 that 引导并列定语从句，说明 place 的特征。"
+      ],
+      "expressions": [
+        {"text": "describe himself as", "meaning_zh": "把自己描述为"},
+        {"text": "safe to operate", "meaning_zh": "运行安全的"},
+        {"text": "generations to come", "meaning_zh": "未来世代"}
+      ]
+    },
+    {
+      "id": "F-09",
+      "paragraph_label": "F",
+      "sentence_index": 40,
+      "sentence": "Until that happens, he argues, the space community will continue devolving into a tragedy in which all spaceflight operators are polluting a common resource.",
+      "translation": "他认为，在那实现之前，太空共同体将继续退化为一场悲剧，在这场悲剧中，所有航天运营者都在污染一种共同资源。",
+      "structure": [
+        {"text": "Until that happens", "role": "adverbial_clause", "level": 1},
+        {"text": "he argues", "role": "parenthetical_clause", "level": 1},
+        {"text": "the space community will continue devolving into a tragedy", "role": "main_clause", "level": 1},
+        {"text": "in which all spaceflight operators are polluting a common resource", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Until that happens 指直到太空成为安全、自由且有益的地方。",
+        "he argues 是插入语，标记后文是 Jah 的观点。",
+        "continue devolving into 表示情况持续恶化为某种状态。",
+        "in which 引导定语从句，修饰 tragedy。"
+      ],
+      "expressions": [
+        {"text": "devolve into a tragedy", "meaning_zh": "退化成一场悲剧"},
+        {"text": "polluting a common resource", "meaning_zh": "污染共同资源"},
+        {"text": "space community", "meaning_zh": "太空共同体"}
+      ]
+    }
+  ]
+}

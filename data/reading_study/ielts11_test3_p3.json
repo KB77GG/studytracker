@@ -1,0 +1,894 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts11_test3_reading",
+  "passage_id": "ielts11_test3_p3",
+  "passage_title": "Preface to 'How the Other Half Thinks: Adventures in Mathematical Reasoning'",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Occasionally, in some difficult musical compositions, there are beautiful, but easy parts—parts so simple a beginner could play them.",
+      "translation": "有时，在一些高难度的乐曲中，也会出现优美却简单的片段——简单到初学者都能演奏。",
+      "structure": [
+        {"text": "Occasionally", "role": "adverbial", "level": 1},
+        {"text": "in some difficult musical compositions", "role": "prepositional_phrase", "level": 1},
+        {"text": "there are beautiful, but easy parts", "role": "main_clause", "level": 1},
+        {"text": "parts so simple a beginner could play them", "role": "appositive", "level": 2},
+        {"text": "a beginner could play them", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "there are 是存在句结构，真正介绍的是 beautiful, but easy parts。",
+        "破折号后的 parts... 是同位语，对前面的 parts 作进一步解释。",
+        "so simple 后省略了结果从句连接词 that，意为“简单到初学者都能演奏”。"
+      ],
+      "expressions": [
+        {"text": "musical compositions", "meaning_zh": "音乐作品；乐曲"},
+        {"text": "so simple a beginner could play them", "meaning_zh": "简单到初学者都能演奏"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "So it is with mathematics as well.",
+      "translation": "数学也是如此。",
+      "structure": [
+        {"text": "So", "role": "complement", "level": 1},
+        {"text": "it is", "role": "main_clause", "level": 1},
+        {"text": "with mathematics", "role": "prepositional_phrase", "level": 1},
+        {"text": "as well", "role": "adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "So it is with... 是固定倒装表达，表示“……也是如此”。",
+        "So 回指上句所说“困难作品中也有简单部分”这一情况。"
+      ],
+      "expressions": [
+        {"text": "So it is with", "meaning_zh": "……也是如此"},
+        {"text": "as well", "meaning_zh": "也；同样"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "There are some discoveries in advanced mathematics that do not depend on specialized knowledge, not even on algebra, geometry, or trigonometry.",
+      "translation": "高等数学中有些发现并不依赖专业知识，甚至不需要代数、几何或三角学知识。",
+      "structure": [
+        {"text": "There are some discoveries in advanced mathematics", "role": "main_clause", "level": 1},
+        {"text": "in advanced mathematics", "role": "prepositional_phrase", "level": 2},
+        {"text": "that do not depend on specialized knowledge", "role": "relative_clause", "level": 2},
+        {"text": "not even on algebra, geometry, or trigonometry", "role": "supplement", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导限制性定语从句，修饰 discoveries。",
+        "not even on... 承接 depend on，省略了重复的 depend。",
+        "specialized knowledge 先概括，随后用 algebra、geometry 和 trigonometry 具体说明。"
+      ],
+      "expressions": [
+        {"text": "advanced mathematics", "meaning_zh": "高等数学"},
+        {"text": "depend on", "meaning_zh": "依赖"},
+        {"text": "specialized knowledge", "meaning_zh": "专业知识"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Instead they may involve, at most, a little arithmetic, such as 'the sum of two odd numbers is even', and common sense.",
+      "translation": "相反，它们至多只涉及一点算术，例如“两个奇数之和是偶数”，再加上一些常识。",
+      "structure": [
+        {"text": "Instead", "role": "adverbial", "level": 1},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "may involve", "role": "verb_phrase", "level": 1},
+        {"text": "at most", "role": "adverbial", "level": 1},
+        {"text": "a little arithmetic", "role": "object", "level": 1},
+        {"text": "such as 'the sum of two odd numbers is even', and common sense", "role": "example_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "they 指代上句中的 some discoveries。",
+        "at most 是插入成分，限定所需知识的最高程度。",
+        "such as 后的引语举例说明 arithmetic，and common sense 则与 a little arithmetic 并列。"
+      ],
+      "expressions": [
+        {"text": "at most", "meaning_zh": "至多"},
+        {"text": "common sense", "meaning_zh": "常识"},
+        {"text": "the sum of", "meaning_zh": "……之和"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "Each of the eight chapters in this book illustrates this phenomenon.",
+      "translation": "本书八章中的每一章都展示了这一现象。",
+      "structure": [
+        {"text": "Each of the eight chapters in this book", "role": "subject", "level": 1},
+        {"text": "in this book", "role": "prepositional_phrase", "level": 2},
+        {"text": "illustrates", "role": "verb_phrase", "level": 1},
+        {"text": "this phenomenon", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "Each of 后接复数名词，但主语中心词 Each 为单数，因此谓语用 illustrates。",
+        "this phenomenon 指前文所述“高等数学中也有无需专业知识即可理解的发现”。"
+      ],
+      "expressions": [
+        {"text": "illustrate a phenomenon", "meaning_zh": "展示一种现象"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "Anyone can understand every step in the reasoning.",
+      "translation": "任何人都能理解推理过程中的每一步。",
+      "structure": [
+        {"text": "Anyone", "role": "subject", "level": 1},
+        {"text": "can understand", "role": "verb_phrase", "level": 1},
+        {"text": "every step", "role": "object", "level": 1},
+        {"text": "in the reasoning", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Anyone 表示“不论是谁”，与 can 连用强调普遍可理解性。",
+        "in the reasoning 后置修饰 every step，指推理过程中的每一个环节。"
+      ],
+      "expressions": [
+        {"text": "every step in the reasoning", "meaning_zh": "推理过程中的每一步"}
+      ]
+    },
+    {
+      "id": "A-07",
+      "paragraph_label": "A",
+      "sentence_index": 7,
+      "sentence": "The thinking in each chapter uses at most only elementary arithmetic, and sometimes not even that.",
+      "translation": "每一章所用的思维至多只需要基础算术，有时甚至连基础算术也不需要。",
+      "structure": [
+        {"text": "The thinking in each chapter", "role": "subject", "level": 1},
+        {"text": "in each chapter", "role": "prepositional_phrase", "level": 2},
+        {"text": "uses", "role": "verb_phrase", "level": 1},
+        {"text": "at most only elementary arithmetic", "role": "object", "level": 1},
+        {"text": "and sometimes not even that", "role": "coordinated_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "in each chapter 后置修饰 thinking，而不是修饰谓语 uses。",
+        "that 指代 elementary arithmetic，避免重复。",
+        "not even that 是省略结构，完整含义是 sometimes the thinking does not even use elementary arithmetic。"
+      ],
+      "expressions": [
+        {"text": "elementary arithmetic", "meaning_zh": "基础算术"},
+        {"text": "not even that", "meaning_zh": "甚至连那也不需要"}
+      ]
+    },
+    {
+      "id": "A-08",
+      "paragraph_label": "A",
+      "sentence_index": 8,
+      "sentence": "Thus all readers will have the chance to participate in a mathematical experience, to appreciate the beauty of mathematics, and to become familiar with its logical, yet intuitive, style of thinking.",
+      "translation": "因此，所有读者都有机会亲身参与数学体验，欣赏数学之美，并熟悉它既合乎逻辑又富于直觉的思维方式。",
+      "structure": [
+        {"text": "Thus", "role": "adverbial", "level": 1},
+        {"text": "all readers", "role": "subject", "level": 1},
+        {"text": "will have the chance", "role": "verb_phrase", "level": 1},
+        {"text": "to participate in a mathematical experience", "role": "non_finite_clause", "level": 2},
+        {"text": "to appreciate the beauty of mathematics", "role": "non_finite_clause", "level": 2},
+        {"text": "to become familiar with its logical, yet intuitive, style of thinking", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "三个 to do 结构并列，共同说明 the chance 的具体内容。",
+        "its 指代 mathematics。",
+        "logical, yet intuitive 用 yet 表示看似相反的两种特点同时存在。"
+      ],
+      "expressions": [
+        {"text": "have the chance to", "meaning_zh": "有机会做……"},
+        {"text": "participate in", "meaning_zh": "参与"},
+        {"text": "become familiar with", "meaning_zh": "熟悉"},
+        {"text": "style of thinking", "meaning_zh": "思维方式"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "One of my purposes in writing this book is to give readers who haven't had the opportunity to see and enjoy real mathematics the chance to appreciate the mathematical way of thinking.",
+      "translation": "我写这本书的目的之一，是让那些过去没有机会接触并享受真正数学的读者，有机会领略数学的思维方式。",
+      "structure": [
+        {"text": "One of my purposes in writing this book", "role": "subject", "level": 1},
+        {"text": "in writing this book", "role": "prepositional_phrase", "level": 2},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "to give readers who haven't had the opportunity to see and enjoy real mathematics the chance", "role": "subject_complement", "level": 1},
+        {"text": "who haven't had the opportunity to see and enjoy real mathematics", "role": "relative_clause", "level": 2},
+        {"text": "to appreciate the mathematical way of thinking", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "主干是 One of my purposes... is to give readers the chance。",
+        "who 引导定语从句，修饰 readers；其中 to see and enjoy... 修饰 opportunity。",
+        "give readers the chance 是双宾语结构，末尾的不定式说明 chance 的内容。"
+      ],
+      "expressions": [
+        {"text": "one of my purposes", "meaning_zh": "我的目的之一"},
+        {"text": "have the opportunity to", "meaning_zh": "有机会做……"},
+        {"text": "the mathematical way of thinking", "meaning_zh": "数学的思维方式"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "I want to reveal not only some of the fascinating discoveries, but, more importantly, the reasoning behind them.",
+      "translation": "我不仅想展示一些引人入胜的发现，更重要的是，还想揭示这些发现背后的推理。",
+      "structure": [
+        {"text": "I", "role": "subject", "level": 1},
+        {"text": "want to reveal", "role": "verb_phrase", "level": 1},
+        {"text": "not only some of the fascinating discoveries", "role": "object", "level": 1},
+        {"text": "but, more importantly, the reasoning behind them", "role": "coordinated_object", "level": 1},
+        {"text": "behind them", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "not only... but... 连接两个并列宾语：discoveries 和 reasoning。",
+        "more importantly 是插入语，突出第二项才是作者更看重的内容。",
+        "them 指代 fascinating discoveries。"
+      ],
+      "expressions": [
+        {"text": "not only ... but", "meaning_zh": "不仅……而且……"},
+        {"text": "more importantly", "meaning_zh": "更重要的是"},
+        {"text": "the reasoning behind", "meaning_zh": "……背后的推理"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "In that respect, this book differs from most books on mathematics written for the general public.",
+      "translation": "在这一点上，本书不同于大多数面向普通大众撰写的数学书籍。",
+      "structure": [
+        {"text": "In that respect", "role": "prepositional_phrase", "level": 1},
+        {"text": "this book", "role": "subject", "level": 1},
+        {"text": "differs from", "role": "verb_phrase", "level": 1},
+        {"text": "most books on mathematics", "role": "object", "level": 1},
+        {"text": "written for the general public", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "that respect 回指作者重在呈现数学推理，而不只是介绍发现。",
+        "written for the general public 是过去分词短语，后置修饰 books on mathematics。"
+      ],
+      "expressions": [
+        {"text": "in that respect", "meaning_zh": "在那一点上"},
+        {"text": "differ from", "meaning_zh": "不同于"},
+        {"text": "the general public", "meaning_zh": "普通大众"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "Some present the lives of colorful mathematicians.",
+      "translation": "有些书介绍富有传奇色彩的数学家的生平。",
+      "structure": [
+        {"text": "Some", "role": "subject", "level": 1},
+        {"text": "present", "role": "verb_phrase", "level": 1},
+        {"text": "the lives of colorful mathematicians", "role": "object", "level": 1},
+        {"text": "of colorful mathematicians", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Some 是代词，指代上句中的 some books on mathematics。",
+        "colorful 在此不是“色彩鲜艳的”，而是形容人物经历丰富、有传奇色彩。"
+      ],
+      "expressions": [
+        {"text": "present the lives of", "meaning_zh": "介绍……的生平"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "Others describe important applications of mathematics.",
+      "translation": "另一些书则描述数学的重要应用。",
+      "structure": [
+        {"text": "Others", "role": "subject", "level": 1},
+        {"text": "describe", "role": "verb_phrase", "level": 1},
+        {"text": "important applications of mathematics", "role": "object", "level": 1},
+        {"text": "of mathematics", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Others 与前句 Some 呼应，表示“另一些书”。",
+        "applications of mathematics 表示数学在其他领域中的实际运用。"
+      ],
+      "expressions": [
+        {"text": "applications of mathematics", "meaning_zh": "数学的应用"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 14,
+      "sentence": "Yet others go into mathematical procedures, but assume that the reader is adept in using algebra.",
+      "translation": "还有一些书会深入讲解数学步骤，却假定读者已经熟练掌握代数。",
+      "structure": [
+        {"text": "Yet others", "role": "subject", "level": 1},
+        {"text": "go into mathematical procedures", "role": "verb_phrase", "level": 1},
+        {"text": "but assume", "role": "coordinated_predicate", "level": 1},
+        {"text": "that the reader is adept in using algebra", "role": "noun_clause", "level": 2},
+        {"text": "in using algebra", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "Yet others 延续 Some... Others... 的列举，意为“还有另一些书”。",
+        "but 连接同一主语的两个谓语 go into 与 assume，并带有转折意味。",
+        "that 引导 assume 的宾语从句；be adept in 表示“擅长、熟练”。"
+      ],
+      "expressions": [
+        {"text": "go into", "meaning_zh": "深入讨论"},
+        {"text": "be adept in", "meaning_zh": "擅长；熟练掌握"},
+        {"text": "mathematical procedures", "meaning_zh": "数学步骤"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "I hope this book will help bridge that notorious gap that separates the two cultures: the humanities and the sciences, or should I say the right brain (intuitive) and the left brain (analytical, numerical).",
+      "translation": "我希望本书能帮助弥合那道众所周知的鸿沟——它将两种文化分隔开来：人文与科学，或者更准确地说，直觉型的右脑与分析、数字型的左脑。",
+      "structure": [
+        {"text": "I hope", "role": "main_clause", "level": 1},
+        {"text": "this book will help bridge that notorious gap", "role": "noun_clause", "level": 2},
+        {"text": "that separates the two cultures", "role": "relative_clause", "level": 3},
+        {"text": "the humanities and the sciences", "role": "appositive", "level": 3},
+        {"text": "or should I say the right brain (intuitive) and the left brain (analytical, numerical)", "role": "parenthetical_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "hope 后省略了宾语从句连接词 that，从句主语是 this book。",
+        "第二个 that 引导定语从句，修饰 notorious gap。",
+        "冒号后的 the humanities and the sciences 是 the two cultures 的同位解释。",
+        "should I say 是疑问式插入语，用来修正并更精确地表述前面的说法。"
+      ],
+      "expressions": [
+        {"text": "bridge the gap", "meaning_zh": "弥合鸿沟"},
+        {"text": "the humanities and the sciences", "meaning_zh": "人文学科与科学"},
+        {"text": "or should I say", "meaning_zh": "或者更准确地说"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "As the chapters will illustrate, mathematics is not restricted to the analytical and numerical; intuition plays a significant role.",
+      "translation": "正如各章将要说明的，数学并不局限于分析和数字；直觉也发挥着重要作用。",
+      "structure": [
+        {"text": "As the chapters will illustrate", "role": "adverbial_clause", "level": 1},
+        {"text": "mathematics", "role": "subject", "level": 1},
+        {"text": "is not restricted to the analytical and numerical", "role": "verb_phrase", "level": 1},
+        {"text": "intuition", "role": "subject", "level": 1},
+        {"text": "plays a significant role", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "As 引导方式从句，意为“正如……将说明的那样”。",
+        "the analytical and numerical 是“the + 形容词”结构，名词化后指分析与数字层面。",
+        "分号连接两个意义紧密的独立分句，后句补充说明直觉的重要性。"
+      ],
+      "expressions": [
+        {"text": "be restricted to", "meaning_zh": "局限于"},
+        {"text": "play a significant role", "meaning_zh": "发挥重要作用"},
+        {"text": "as ... will illustrate", "meaning_zh": "正如……将说明的"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "The alleged gap can be narrowed or completely overcome by anyone, in part because each of us is far from using the full capacity of either side of the brain.",
+      "translation": "这道所谓的鸿沟，任何人都可以缩小甚至完全跨越，部分原因在于我们每个人都远未充分运用大脑任何一侧的全部能力。",
+      "structure": [
+        {"text": "The alleged gap", "role": "subject", "level": 1},
+        {"text": "can be narrowed or completely overcome", "role": "verb_phrase", "level": 1},
+        {"text": "by anyone", "role": "prepositional_phrase", "level": 1},
+        {"text": "in part", "role": "adverbial", "level": 1},
+        {"text": "because each of us is far from using the full capacity of either side of the brain", "role": "adverbial_clause", "level": 2},
+        {"text": "using the full capacity of either side of the brain", "role": "gerund_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "can be narrowed or... overcome 是情态动词后的并列被动结构。",
+        "because 引导原因状语从句，解释为何这道鸿沟能够被跨越。",
+        "be far from doing 表示“远未做到”，不是空间上的距离。",
+        "either side of the brain 在否定含义的语境中表示大脑两侧的任何一侧。"
+      ],
+      "expressions": [
+        {"text": "in part because", "meaning_zh": "部分原因是"},
+        {"text": "be far from doing", "meaning_zh": "远未做到"},
+        {"text": "full capacity", "meaning_zh": "全部能力；全部潜能"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "To illustrate our human potential, I cite a structural engineer who is an artist, an electrical engineer who is an opera singer, an opera singer who published mathematical research, and a mathematician who publishes short stories.",
+      "translation": "为了说明人的潜能，我举了几个例子：一位兼具艺术家身份的结构工程师、一位唱歌剧的电气工程师、一位发表过数学研究的歌剧演员，以及一位发表短篇小说的数学家。",
+      "structure": [
+        {"text": "To illustrate our human potential", "role": "non_finite_clause", "level": 1},
+        {"text": "I", "role": "subject", "level": 1},
+        {"text": "cite", "role": "verb_phrase", "level": 1},
+        {"text": "a structural engineer who is an artist", "role": "object", "level": 1},
+        {"text": "who is an artist", "role": "relative_clause", "level": 2},
+        {"text": "an electrical engineer who is an opera singer, an opera singer who published mathematical research, and a mathematician who publishes short stories", "role": "coordinated_object", "level": 1}
+      ],
+      "difficult_points": [
+        "句首不定式 To illustrate... 表示目的。",
+        "cite 后接四个并列的人物例子，每个职业名词后都有 who 引导的定语从句。",
+        "四个例子把通常分属科学与人文艺术的身份组合起来，具体支撑前文观点。"
+      ],
+      "expressions": [
+        {"text": "illustrate human potential", "meaning_zh": "说明人的潜能"},
+        {"text": "cite", "meaning_zh": "举例；引用"},
+        {"text": "publish research", "meaning_zh": "发表研究成果"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Other scientists have written books to explain their fields to non-scientists, but have necessarily had to omit the mathematics, although it provides the foundation of their theories.",
+      "translation": "其他科学家也写过向非科学人士解释自身领域的书，但他们不得不省略其中的数学，尽管数学构成了其理论的基础。",
+      "structure": [
+        {"text": "Other scientists", "role": "subject", "level": 1},
+        {"text": "have written books", "role": "verb_phrase", "level": 1},
+        {"text": "to explain their fields to non-scientists", "role": "non_finite_clause", "level": 2},
+        {"text": "but have necessarily had to omit the mathematics", "role": "coordinated_predicate", "level": 1},
+        {"text": "although it provides the foundation of their theories", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "to explain... 是目的状语，说明科学家写书的目的。",
+        "but 后省略了重复主语 Other scientists，并用 have had to 表示一直不得不如此。",
+        "although 引导让步状语从句，其中 it 指代 the mathematics。",
+        "their theories 中 their 指这些科学家各自领域的理论。"
+      ],
+      "expressions": [
+        {"text": "explain their fields to", "meaning_zh": "向……解释其研究领域"},
+        {"text": "have to omit", "meaning_zh": "不得不省略"},
+        {"text": "provide the foundation of", "meaning_zh": "构成……的基础"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "The reader must remain a tantalized spectator rather than an involved participant, since the appropriate language for describing the details in much of science is mathematics, whether the subject is expanding universe, subatomic particles, or chromosomes.",
+      "translation": "读者只能做一个心痒难耐的旁观者，而无法成为亲自参与者，因为描述许多科学领域细节的恰当语言是数学，无论主题是膨胀的宇宙、亚原子粒子还是染色体。",
+      "structure": [
+        {"text": "The reader", "role": "subject", "level": 1},
+        {"text": "must remain", "role": "verb_phrase", "level": 1},
+        {"text": "a tantalized spectator rather than an involved participant", "role": "subject_complement", "level": 1},
+        {"text": "since the appropriate language for describing the details in much of science is mathematics", "role": "adverbial_clause", "level": 2},
+        {"text": "for describing the details in much of science", "role": "prepositional_phrase", "level": 3},
+        {"text": "whether the subject is expanding universe, subatomic particles, or chromosomes", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "rather than 连接两个对比的表语 spectator 与 participant。",
+        "since 引导原因状语从句，说明读者无法深入参与的原因。",
+        "for describing... 后置修饰 language，其中 in much of science 修饰 details。",
+        "whether... or... 表示无论研究主题属于列举中的哪一种情况。"
+      ],
+      "expressions": [
+        {"text": "rather than", "meaning_zh": "而不是"},
+        {"text": "an involved participant", "meaning_zh": "亲自参与者"},
+        {"text": "the appropriate language for", "meaning_zh": "适合用来……的语言"},
+        {"text": "subatomic particles", "meaning_zh": "亚原子粒子"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "Though the broad outline of a scientific theory can be sketched intuitively, when a part of the physical universe is finally understood, its description often looks like a page in a mathematics text.",
+      "translation": "虽然科学理论的大致轮廓可以凭直觉勾勒出来，但当物质宇宙的某一部分最终得到理解时，对它的描述往往看起来就像数学课本中的一页。",
+      "structure": [
+        {"text": "Though the broad outline of a scientific theory can be sketched intuitively", "role": "adverbial_clause", "level": 1},
+        {"text": "when a part of the physical universe is finally understood", "role": "adverbial_clause", "level": 1},
+        {"text": "a part of the physical universe", "role": "subject", "level": 2},
+        {"text": "is finally understood", "role": "verb_phrase", "level": 2},
+        {"text": "its description", "role": "subject", "level": 1},
+        {"text": "often looks like a page in a mathematics text", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Though 引导让步状语从句，与主句形成“虽可直观概述，但精确描述仍是数学形式”的对照。",
+        "when 引导时间状语从句，位于让步从句和主句之间。",
+        "its 指代 a part of the physical universe。",
+        "can be sketched 和 is... understood 都是被动语态。"
+      ],
+      "expressions": [
+        {"text": "the broad outline of", "meaning_zh": "……的大致轮廓"},
+        {"text": "be sketched intuitively", "meaning_zh": "凭直觉勾勒"},
+        {"text": "look like", "meaning_zh": "看起来像"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "Still, the non-mathematical reader can go far in understanding mathematical reasoning.",
+      "translation": "尽管如此，不具备数学背景的读者仍然可以相当深入地理解数学推理。",
+      "structure": [
+        {"text": "Still", "role": "adverbial", "level": 1},
+        {"text": "the non-mathematical reader", "role": "subject", "level": 1},
+        {"text": "can go far", "role": "verb_phrase", "level": 1},
+        {"text": "in understanding mathematical reasoning", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Still 是连接副词，承接上段并引出转折，不是从句连接词。",
+        "go far in doing 是比喻表达，指在某方面取得很大进展或达到较深程度。",
+        "non-mathematical reader 指不具备数学专业背景的读者。"
+      ],
+      "expressions": [
+        {"text": "go far in doing", "meaning_zh": "在……方面达到较深程度"},
+        {"text": "mathematical reasoning", "meaning_zh": "数学推理"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "This book presents the details that illustrate the mathematical style of thinking, which involves sustained, step-by-step analysis, experiments, and insights.",
+      "translation": "本书呈现了体现数学思维方式的细节，而这种思维方式包含持续的、循序渐进的分析、实验和洞见。",
+      "structure": [
+        {"text": "This book", "role": "subject", "level": 1},
+        {"text": "presents", "role": "verb_phrase", "level": 1},
+        {"text": "the details", "role": "object", "level": 1},
+        {"text": "that illustrate the mathematical style of thinking", "role": "relative_clause", "level": 2},
+        {"text": "which involves sustained, step-by-step analysis, experiments, and insights", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导限制性定语从句，修饰 details。",
+        "which 引导非限制性定语从句，语义上指代 the mathematical style of thinking。",
+        "sustained 和 step-by-step 共同修饰 analysis，experiments 与 insights 则和 analysis 并列。"
+      ],
+      "expressions": [
+        {"text": "style of thinking", "meaning_zh": "思维方式"},
+        {"text": "step-by-step analysis", "meaning_zh": "循序渐进的分析"},
+        {"text": "involve", "meaning_zh": "包含；涉及"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "You will turn these pages much more slowly than when reading a novel or a newspaper.",
+      "translation": "你翻阅这些书页的速度，会比阅读小说或报纸时慢得多。",
+      "structure": [
+        {"text": "You", "role": "subject", "level": 1},
+        {"text": "will turn these pages", "role": "verb_phrase", "level": 1},
+        {"text": "much more slowly", "role": "adverbial", "level": 1},
+        {"text": "than when reading a novel or a newspaper", "role": "comparative_clause", "level": 2},
+        {"text": "when reading a novel or a newspaper", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "much 修饰比较级 more slowly，强调慢得多。",
+        "than 后的 when reading... 是省略结构，可理解为 than you do when you are reading...。",
+        "turn these pages 在语境中指阅读并逐页推进，而不只是机械翻页。"
+      ],
+      "expressions": [
+        {"text": "much more slowly than", "meaning_zh": "比……慢得多"},
+        {"text": "turn these pages", "meaning_zh": "翻阅这些书页"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "It may help to have a pencil and paper ready to check claims and carry out experiments.",
+      "translation": "备好纸笔，以便核验书中的论断并亲手做实验，可能会有所帮助。",
+      "structure": [
+        {"text": "It may help", "role": "main_clause", "level": 1},
+        {"text": "to have a pencil and paper ready", "role": "non_finite_clause", "level": 2},
+        {"text": "to check claims and carry out experiments", "role": "non_finite_clause", "level": 3},
+        {"text": "check claims", "role": "verb_phrase", "level": 4},
+        {"text": "carry out experiments", "role": "coordinated_verb_phrase", "level": 4}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的主语是 to have a pencil and paper ready。",
+        "have + 宾语 + ready 表示“把……准备好”。",
+        "to check... and carry out... 表示备好纸笔的目的，两个动词短语并列。"
+      ],
+      "expressions": [
+        {"text": "have ... ready", "meaning_zh": "把……准备好"},
+        {"text": "check claims", "meaning_zh": "核验论断"},
+        {"text": "carry out experiments", "meaning_zh": "开展实验"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "As I wrote, I kept in mind two types of readers: those who enjoyed mathematics until they were turned off by an unpleasant episode, usually around fifth grade, and mathematics aficionados, who will find much that is new throughout the book.",
+      "translation": "写作时，我心里始终想着两类读者：一类人原本喜欢数学，直到通常在五年级左右的一次不愉快经历使他们失去兴趣；另一类是数学爱好者，他们会在全书中发现许多新内容。",
+      "structure": [
+        {"text": "As I wrote", "role": "adverbial_clause", "level": 1},
+        {"text": "I kept in mind two types of readers", "role": "main_clause", "level": 1},
+        {"text": "those who enjoyed mathematics until they were turned off by an unpleasant episode", "role": "appositive", "level": 2},
+        {"text": "who enjoyed mathematics", "role": "relative_clause", "level": 3},
+        {"text": "until they were turned off by an unpleasant episode", "role": "adverbial_clause", "level": 3},
+        {"text": "mathematics aficionados, who will find much that is new throughout the book", "role": "coordinated_appositive", "level": 2}
+      ],
+      "difficult_points": [
+        "As I wrote 是时间状语从句，表示“在我写作时”。",
+        "冒号后列出 two types of readers：those... 与 mathematics aficionados。",
+        "be turned off by 在此表示因不愉快经历而对数学失去兴趣。",
+        "who will find... 是非限制性定语从句，修饰 mathematics aficionados；其中 that is new 修饰 much。"
+      ],
+      "expressions": [
+        {"text": "keep in mind", "meaning_zh": "牢记；心里想着"},
+        {"text": "be turned off by", "meaning_zh": "因……而失去兴趣"},
+        {"text": "mathematics aficionados", "meaning_zh": "数学爱好者"},
+        {"text": "throughout the book", "meaning_zh": "贯穿全书"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "This book also serves readers who simply want to sharpen their analytical skills.",
+      "translation": "本书也适合那些只是想提升分析能力的读者。",
+      "structure": [
+        {"text": "This book", "role": "subject", "level": 1},
+        {"text": "also serves", "role": "verb_phrase", "level": 1},
+        {"text": "readers", "role": "object", "level": 1},
+        {"text": "who simply want to sharpen their analytical skills", "role": "relative_clause", "level": 2},
+        {"text": "to sharpen their analytical skills", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "serve 在此意为“满足……的需要、适合……”，不是“服务某人”的狭义用法。",
+        "who 引导定语从句，限定 readers。",
+        "want 后接不定式 to sharpen... 作宾语。"
+      ],
+      "expressions": [
+        {"text": "sharpen analytical skills", "meaning_zh": "提升分析能力"},
+        {"text": "serve readers", "meaning_zh": "满足读者需要"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "Many careers, such as law and medicine, require extended, precise analysis.",
+      "translation": "许多职业，例如法律和医学，都需要长时间而精确的分析。",
+      "structure": [
+        {"text": "Many careers", "role": "subject", "level": 1},
+        {"text": "such as law and medicine", "role": "example_phrase", "level": 2},
+        {"text": "require", "role": "verb_phrase", "level": 1},
+        {"text": "extended, precise analysis", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "such as law and medicine 是插入的举例成分，说明 careers 的具体类型。",
+        "extended 在此表示分析需要持续、深入展开，而非空间上的“延长”。"
+      ],
+      "expressions": [
+        {"text": "require precise analysis", "meaning_zh": "需要精确分析"},
+        {"text": "such as", "meaning_zh": "例如"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "Each chapter offers practice in following a sustained and closely argued line of thought.",
+      "translation": "每一章都提供练习，让读者学习跟随一条持续展开且论证严密的思路。",
+      "structure": [
+        {"text": "Each chapter", "role": "subject", "level": 1},
+        {"text": "offers", "role": "verb_phrase", "level": 1},
+        {"text": "practice", "role": "object", "level": 1},
+        {"text": "in following a sustained and closely argued line of thought", "role": "prepositional_phrase", "level": 2},
+        {"text": "a sustained and closely argued line of thought", "role": "object", "level": 3}
+      ],
+      "difficult_points": [
+        "practice in doing 表示“在做某事方面的练习”。",
+        "sustained 和 closely argued 都修饰 line of thought，分别强调思路连贯展开与论证严密。",
+        "following 在此表示理解并跟上论证进程。"
+      ],
+      "expressions": [
+        {"text": "offer practice in", "meaning_zh": "提供……方面的练习"},
+        {"text": "a line of thought", "meaning_zh": "一条思路；思维脉络"},
+        {"text": "closely argued", "meaning_zh": "论证严密的"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "That mathematics can develop this skill is shown by these two testimonials:",
+      "translation": "以下两则亲身证明表明，数学能够培养这种能力：",
+      "structure": [
+        {"text": "That mathematics can develop this skill", "role": "noun_clause", "level": 1},
+        {"text": "mathematics", "role": "subject", "level": 2},
+        {"text": "can develop", "role": "verb_phrase", "level": 2},
+        {"text": "this skill", "role": "object", "level": 2},
+        {"text": "is shown", "role": "verb_phrase", "level": 1},
+        {"text": "by these two testimonials", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "That 引导主语从句，整个从句充当 is shown 的主语。",
+        "this skill 指前文的 analytical skills，尤其是持续而精确地分析论证的能力。",
+        "is shown by 是被动结构，冒号表示后文将给出两则具体证明。"
+      ],
+      "expressions": [
+        {"text": "develop this skill", "meaning_zh": "培养这种能力"},
+        {"text": "be shown by", "meaning_zh": "由……表明"},
+        {"text": "testimonials", "meaning_zh": "亲身证明；证言"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 31,
+      "sentence": "A physician wrote, 'The discipline of analytical thought processes [in mathematics] prepared me extremely well for medical school.",
+      "translation": "一位医生写道：“数学中分析性思维过程的训练，使我为医学院的学习做好了极为充分的准备。",
+      "structure": [
+        {"text": "A physician wrote", "role": "reporting_clause", "level": 1},
+        {"text": "The discipline of analytical thought processes [in mathematics]", "role": "subject", "level": 1},
+        {"text": "of analytical thought processes [in mathematics]", "role": "prepositional_phrase", "level": 2},
+        {"text": "prepared", "role": "verb_phrase", "level": 1},
+        {"text": "me", "role": "object", "level": 1},
+        {"text": "extremely well for medical school", "role": "object_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "A physician wrote 是引述分句，逗号后进入直接引语。",
+        "主语中心词是 discipline，of analytical thought processes 说明训练的内容。",
+        "prepare someone for something 表示“使某人为某事做好准备”。"
+      ],
+      "expressions": [
+        {"text": "analytical thought processes", "meaning_zh": "分析性思维过程"},
+        {"text": "prepare someone well for", "meaning_zh": "使某人为……做好充分准备"},
+        {"text": "medical school", "meaning_zh": "医学院"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 32,
+      "sentence": "In medicine one is faced with a problem which must be thoroughly analyzed before a solution can be found.",
+      "translation": "在医学中，人们会面对一个问题，而必须先对其进行彻底分析，之后才能找到解决办法。",
+      "structure": [
+        {"text": "In medicine", "role": "prepositional_phrase", "level": 1},
+        {"text": "one", "role": "subject", "level": 1},
+        {"text": "is faced with a problem", "role": "verb_phrase", "level": 1},
+        {"text": "which must be thoroughly analyzed", "role": "relative_clause", "level": 2},
+        {"text": "before a solution can be found", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "one 是泛指代词，表示医学工作者或一般人在此情境中的经历。",
+        "which 引导定语从句，修饰 problem。",
+        "must be... analyzed 与 can be found 都是被动语态。",
+        "before 引导时间状语从句，强调分析先于找到解决方案。"
+      ],
+      "expressions": [
+        {"text": "be faced with", "meaning_zh": "面对"},
+        {"text": "be thoroughly analyzed", "meaning_zh": "得到彻底分析"},
+        {"text": "find a solution", "meaning_zh": "找到解决办法"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "The process is similar to doing mathematics.'",
+      "translation": "这个过程与做数学题很相似。”",
+      "structure": [
+        {"text": "The process", "role": "subject", "level": 1},
+        {"text": "is similar to", "role": "verb_phrase", "level": 1},
+        {"text": "doing mathematics", "role": "gerund_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "The process 指上句所述“分析问题后寻找解决方案”的过程。",
+        "be similar to 中 to 是介词，因此后接动名词 doing，而非动词原形。",
+        "句末单引号关闭从 G-01 开始的医生引语。"
+      ],
+      "expressions": [
+        {"text": "be similar to", "meaning_zh": "与……相似"},
+        {"text": "doing mathematics", "meaning_zh": "进行数学推理；做数学题"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "A lawyer made the same point, 'Although I had no background in law—not even one political science course—I did well at one of the best law schools.",
+      "translation": "一位律师表达了同样的观点：“虽然我没有任何法律背景——甚至连一门政治学课程都没上过——但我在一所顶尖法学院表现出色。",
+      "structure": [
+        {"text": "A lawyer made the same point", "role": "reporting_clause", "level": 1},
+        {"text": "Although I had no background in law—not even one political science course", "role": "adverbial_clause", "level": 1},
+        {"text": "not even one political science course", "role": "supplement", "level": 2},
+        {"text": "I", "role": "subject", "level": 1},
+        {"text": "did well", "role": "verb_phrase", "level": 1},
+        {"text": "at one of the best law schools", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "made the same point 表示律师的证言与医生的观点一致。",
+        "Although 引导让步状语从句，与主句 I did well... 形成反差。",
+        "破折号后的 not even... 补充并强化 no background in law。",
+        "one of 后接复数 law schools，表示顶尖法学院之一。"
+      ],
+      "expressions": [
+        {"text": "make the same point", "meaning_zh": "表达同样的观点"},
+        {"text": "have no background in", "meaning_zh": "没有……方面的背景"},
+        {"text": "do well at", "meaning_zh": "在……表现出色"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "I attribute much of my success there to having learned, through the study of mathematics, and, in particular, theorems, how to analyze complicated principles.",
+      "translation": "我把自己在那里取得的大部分成功，归因于通过学习数学，尤其是学习定理，掌握了分析复杂原理的方法。",
+      "structure": [
+        {"text": "I", "role": "subject", "level": 1},
+        {"text": "attribute", "role": "verb_phrase", "level": 1},
+        {"text": "much of my success there", "role": "object", "level": 1},
+        {"text": "to having learned", "role": "prepositional_phrase", "level": 1},
+        {"text": "through the study of mathematics, and, in particular, theorems", "role": "prepositional_phrase", "level": 2},
+        {"text": "how to analyze complicated principles", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "attribute A to B 表示“把 A 归因于 B”，to 是介词，后接 having learned。",
+        "there 指代上句中的 one of the best law schools。",
+        "through... 是方式状语，in particular theorems 进一步突出数学学习中的定理。",
+        "how to analyze... 是“疑问词 + 不定式”结构，作 learned 的宾语。"
+      ],
+      "expressions": [
+        {"text": "attribute ... to", "meaning_zh": "把……归因于"},
+        {"text": "in particular", "meaning_zh": "尤其"},
+        {"text": "analyze complicated principles", "meaning_zh": "分析复杂原理"}
+      ]
+    },
+    {
+      "id": "G-06",
+      "paragraph_label": "G",
+      "sentence_index": 36,
+      "sentence": "Lawyers who have studied mathematics can master the legal principles in a way that most others cannot.'",
+      "translation": "学过数学的律师能够以大多数其他人做不到的方式掌握法律原则。”",
+      "structure": [
+        {"text": "Lawyers who have studied mathematics", "role": "subject", "level": 1},
+        {"text": "who have studied mathematics", "role": "relative_clause", "level": 2},
+        {"text": "can master", "role": "verb_phrase", "level": 1},
+        {"text": "the legal principles", "role": "object", "level": 1},
+        {"text": "in a way", "role": "prepositional_phrase", "level": 1},
+        {"text": "that most others cannot", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "第一个 who 引导定语从句，限定 Lawyers。",
+        "that 引导定语从句，修饰 way。",
+        "most others 指大多数其他未受数学训练的人；cannot 后省略了重复的 master the legal principles in that way。",
+        "句末单引号关闭从 G-04 开始的律师引语。"
+      ],
+      "expressions": [
+        {"text": "master the legal principles", "meaning_zh": "掌握法律原则"},
+        {"text": "in a way that", "meaning_zh": "以一种……的方式"}
+      ]
+    },
+    {
+      "id": "G-07",
+      "paragraph_label": "G",
+      "sentence_index": 37,
+      "sentence": "I hope you will share my delight in watching as simple, even naive, questions lead to remarkable solutions and purely theoretical discoveries find unanticipated applications.",
+      "translation": "我希望你也能分享我的喜悦，看着简单甚至天真的问题引出非凡的解决方案，纯理论的发现获得意想不到的应用。",
+      "structure": [
+        {"text": "I hope", "role": "main_clause", "level": 1},
+        {"text": "you will share my delight", "role": "noun_clause", "level": 2},
+        {"text": "in watching", "role": "prepositional_phrase", "level": 3},
+        {"text": "as simple, even naive, questions lead to remarkable solutions", "role": "adverbial_clause", "level": 4},
+        {"text": "simple, even naive, questions", "role": "subject", "level": 5},
+        {"text": "purely theoretical discoveries find unanticipated applications", "role": "coordinated_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "hope 后省略 that，you will share... 是宾语从句。",
+        "in watching 中 in 是介词，watching 后接两个省略连接词 that 的感官动词宾语补足结构。",
+        "as 引导伴随情境，表示作者在观看这些变化发生时感到喜悦。",
+        "questions lead to solutions 与 discoveries find applications 是两个并列的“主语 + 动词 + 宾语”结构。"
+      ],
+      "expressions": [
+        {"text": "share my delight in", "meaning_zh": "分享我在……中的喜悦"},
+        {"text": "lead to remarkable solutions", "meaning_zh": "带来非凡的解决方案"},
+        {"text": "theoretical discoveries", "meaning_zh": "理论发现"},
+        {"text": "find unanticipated applications", "meaning_zh": "获得意想不到的应用"}
+      ]
+    }
+  ]
+}

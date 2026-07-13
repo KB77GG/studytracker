@@ -1,0 +1,767 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts17_test3_reading",
+  "passage_id": "ielts17_test3_p1",
+  "passage_title": "The thylacine",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The extinct thylacine, also known as the Tasmanian tiger, was a marsupial* that bore a superficial resemblance to a dog.",
+      "translation": "已经灭绝的袋狼，也被称为塔斯马尼亚虎，是一种有袋类动物，外表上与狗有些相似。",
+      "structure": [
+        {"text": "The extinct thylacine", "role": "subject", "level": 1},
+        {"text": "also known as the Tasmanian tiger", "role": "participial_phrase", "level": 2},
+        {"text": "was a marsupial*", "role": "verb_phrase", "level": 1},
+        {"text": "that bore a superficial resemblance to a dog", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "also known as the Tasmanian tiger 是过去分词短语，补充说明 thylacine 的别名。",
+        "marsupial 后的星号对应文末词汇注释。",
+        "that 引导定语从句，说明这种动物与狗只有表面相似。"
+      ],
+      "expressions": [
+        {"text": "also known as", "meaning_zh": "也被称为"},
+        {"text": "bear a resemblance to", "meaning_zh": "与……相似"},
+        {"text": "superficial resemblance", "meaning_zh": "表面相似"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Its most distinguishing feature was the 13–19 dark brown stripes over its back, beginning at the rear of the body and extending onto the tail.",
+      "translation": "它最显著的特征是背部的13到19条深棕色条纹，这些条纹从身体后部开始，并延伸到尾巴上。",
+      "structure": [
+        {"text": "Its most distinguishing feature", "role": "subject", "level": 1},
+        {"text": "was the 13–19 dark brown stripes over its back", "role": "verb_phrase", "level": 1},
+        {"text": "beginning at the rear of the body and extending onto the tail", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Its 指代 thylacine，说明袋狼的外形特征。",
+        "the 13–19 dark brown stripes 是表语，说明最显著特征是什么。",
+        "beginning 和 extending 是并列现在分词，描述条纹的位置走向。"
+      ],
+      "expressions": [
+        {"text": "distinguishing feature", "meaning_zh": "显著特征"},
+        {"text": "extend onto", "meaning_zh": "延伸到……上"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "The thylacine's average nose-to-tail length for adult males was 162.6 cm, compared to 153.7 cm for females.",
+      "translation": "成年雄性袋狼从鼻端到尾端的平均长度为162.6厘米，相比之下雌性为153.7厘米。",
+      "structure": [
+        {"text": "The thylacine's average nose-to-tail length for adult males", "role": "subject", "level": 1},
+        {"text": "was 162.6 cm", "role": "verb_phrase", "level": 1},
+        {"text": "compared to 153.7 cm for females", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "nose-to-tail length 指从鼻端到尾端的身体长度。",
+        "for adult males 限定数据对象为成年雄性。",
+        "compared to 引出雌性数据，用于性别之间的尺寸对比。"
+      ],
+      "expressions": [
+        {"text": "average nose-to-tail length", "meaning_zh": "鼻端到尾端的平均长度"},
+        {"text": "compared to", "meaning_zh": "与……相比"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "The thylacine appeared to occupy most types of terrain except dense rainforest, with open eucalyptus forest thought to be its prime habitat.",
+      "translation": "袋狼似乎栖息于除茂密雨林之外的大多数地形，其中开阔的桉树林被认为是它的主要栖息地。",
+      "structure": [
+        {"text": "The thylacine appeared to occupy most types of terrain except dense rainforest", "role": "main_clause", "level": 1},
+        {"text": "to occupy most types of terrain except dense rainforest", "role": "infinitive_phrase", "level": 2},
+        {"text": "with open eucalyptus forest thought to be its prime habitat", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "appeared to 表示基于证据的推测，而不是绝对断言。",
+        "except dense rainforest 排除了茂密雨林这一地形。",
+        "with ... thought to be ... 是伴随说明，补充主要栖息地。"
+      ],
+      "expressions": [
+        {"text": "appear to", "meaning_zh": "似乎"},
+        {"text": "prime habitat", "meaning_zh": "主要栖息地"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "In terms of feeding, it was exclusively carnivorous, and its stomach was muscular with an ability to distend so that it could eat large amounts of food at one time, probably an adaptation to compensate for long periods when hunting was unsuccessful and food scarce.",
+      "translation": "从进食方面看，它完全是食肉动物，胃部肌肉发达并能扩张，因此一次可以吃下大量食物；这大概是一种适应，用来弥补长期捕猎失败、食物短缺的时期。",
+      "structure": [
+        {"text": "In terms of feeding", "role": "prepositional_phrase", "level": 1},
+        {"text": "it was exclusively carnivorous", "role": "main_clause", "level": 1},
+        {"text": "and its stomach was muscular with an ability to distend", "role": "coordinate_clause", "level": 1},
+        {"text": "so that it could eat large amounts of food at one time", "role": "adverbial_clause", "level": 2},
+        {"text": "when hunting was unsuccessful and food scarce", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "In terms of feeding 限定讨论角度为进食习性。",
+        "so that 引导结果或目的状语从句，说明胃能扩张带来的进食能力。",
+        "probably an adaptation 是对前面能力的解释，说明这可能是一种适应性特征。",
+        "when hunting was unsuccessful and food scarce 修饰 long periods，说明食物不足的情境。"
+      ],
+      "expressions": [
+        {"text": "in terms of", "meaning_zh": "就……而言"},
+        {"text": "exclusively carnivorous", "meaning_zh": "完全食肉的"},
+        {"text": "compensate for", "meaning_zh": "弥补；补偿"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "The thylacine was not a fast runner and probably caught its prey by exhausting it during a long pursuit.",
+      "translation": "袋狼并不是跑得很快的动物，它很可能通过长时间追逐、耗尽猎物体力来捕获猎物。",
+      "structure": [
+        {"text": "The thylacine was not a fast runner", "role": "main_clause", "level": 1},
+        {"text": "and probably caught its prey by exhausting it during a long pursuit", "role": "coordinate_clause", "level": 1},
+        {"text": "by exhausting it during a long pursuit", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "not a fast runner 说明袋狼捕猎并不依靠短距离速度。",
+        "probably 表示对捕猎方式的推测。",
+        "by exhausting it 说明捕猎方式是消耗猎物体力，其中 it 指 prey。"
+      ],
+      "expressions": [
+        {"text": "catch its prey", "meaning_zh": "捕获猎物"},
+        {"text": "during a long pursuit", "meaning_zh": "在长时间追逐中"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "During long-distance chases, thylacines were likely to have relied more on scent than any other sense.",
+      "translation": "在长距离追逐中，袋狼很可能更多依靠嗅觉，而不是任何其他感官。",
+      "structure": [
+        {"text": "During long-distance chases", "role": "prepositional_phrase", "level": 1},
+        {"text": "thylacines were likely to have relied more on scent than any other sense", "role": "main_clause", "level": 1},
+        {"text": "more on scent than any other sense", "role": "comparative_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "were likely to have relied 表示对过去行为的推测。",
+        "more ... than ... 构成比较，突出嗅觉的重要性。",
+        "any other sense 指除嗅觉外的其他感官。"
+      ],
+      "expressions": [
+        {"text": "be likely to have", "meaning_zh": "很可能已经"},
+        {"text": "rely on scent", "meaning_zh": "依靠嗅觉"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "They emerged to hunt during the evening, night and early morning and tended to retreat to the hills and forest for shelter during the day.",
+      "translation": "它们会在傍晚、夜间和清晨出来捕猎，白天则倾向于退到山地和森林中躲避。",
+      "structure": [
+        {"text": "They emerged to hunt during the evening, night and early morning", "role": "main_clause", "level": 1},
+        {"text": "to hunt", "role": "infinitive_phrase", "level": 2},
+        {"text": "and tended to retreat to the hills and forest for shelter during the day", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "They 指代 thylacines。",
+        "to hunt 表示出来活动的目的。",
+        "during the evening, night and early morning 与 during the day 形成活动时间对比。",
+        "for shelter 表示退到山地和森林的目的。"
+      ],
+      "expressions": [
+        {"text": "emerge to hunt", "meaning_zh": "出来捕猎"},
+        {"text": "tend to", "meaning_zh": "倾向于"},
+        {"text": "for shelter", "meaning_zh": "为了躲避；寻求庇护"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Despite the common name 'tiger', the thylacine had a shy, nervous temperament.",
+      "translation": "尽管它的俗名中有“虎”字，袋狼的性情却害羞而紧张。",
+      "structure": [
+        {"text": "Despite the common name 'tiger'", "role": "prepositional_phrase", "level": 1},
+        {"text": "the thylacine", "role": "subject", "level": 1},
+        {"text": "had a shy, nervous temperament", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Despite 引导让步介词短语，表示名称与真实性情形成反差。",
+        "common name 'tiger' 指 Tasmanian tiger 这个俗称中的 tiger。",
+        "shy, nervous temperament 描述性格，而不是外形。"
+      ],
+      "expressions": [
+        {"text": "Despite", "meaning_zh": "尽管"},
+        {"text": "temperament", "meaning_zh": "性情；气质"}
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "Although mainly nocturnal, it was sighted moving during the day and some individuals were even recorded basking in the sun.",
+      "translation": "虽然袋狼主要在夜间活动，但有人看到它白天移动，甚至记录到一些个体在晒太阳。",
+      "structure": [
+        {"text": "Although mainly nocturnal", "role": "reduced_adverbial_clause", "level": 1},
+        {"text": "it was sighted moving during the day", "role": "main_clause", "level": 1},
+        {"text": "and some individuals were even recorded basking in the sun", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Although mainly nocturnal 是省略结构，完整含义是 although it was mainly nocturnal。",
+        "was sighted moving 是被动结构，表示有人目击它在移动。",
+        "were even recorded basking 强调白天晒太阳的记录更出乎意料。"
+      ],
+      "expressions": [
+        {"text": "mainly nocturnal", "meaning_zh": "主要夜间活动的"},
+        {"text": "be sighted doing", "meaning_zh": "被目击正在做……"},
+        {"text": "bask in the sun", "meaning_zh": "晒太阳"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "The thylacine had an extended breeding season from winter to spring, with indications that some breeding took place throughout the year.",
+      "translation": "袋狼有一个从冬季延续到春季的较长繁殖季，并且有迹象表明某些繁殖全年都会发生。",
+      "structure": [
+        {"text": "The thylacine had an extended breeding season from winter to spring", "role": "main_clause", "level": 1},
+        {"text": "from winter to spring", "role": "prepositional_phrase", "level": 2},
+        {"text": "with indications that some breeding took place throughout the year", "role": "prepositional_phrase", "level": 1},
+        {"text": "that some breeding took place throughout the year", "role": "content_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "extended breeding season 表示繁殖季持续时间较长。",
+        "with indications that ... 补充说明还有证据显示全年繁殖的可能。",
+        "took place 在这里表示繁殖发生。",
+        "throughout the year 表示贯穿全年。"
+      ],
+      "expressions": [
+        {"text": "breeding season", "meaning_zh": "繁殖季"},
+        {"text": "take place", "meaning_zh": "发生"},
+        {"text": "throughout the year", "meaning_zh": "全年"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "The thylacine, like all marsupials, was tiny and hairless when born.",
+      "translation": "袋狼像所有有袋类动物一样，出生时很小且没有毛发。",
+      "structure": [
+        {"text": "The thylacine", "role": "subject", "level": 1},
+        {"text": "like all marsupials", "role": "prepositional_phrase", "level": 1},
+        {"text": "was tiny and hairless", "role": "verb_phrase", "level": 1},
+        {"text": "when born", "role": "reduced_adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "like all marsupials 是插入性比较，说明袋狼幼体特征属于有袋类共同特征。",
+        "tiny and hairless 是并列形容词，描述出生时状态。",
+        "when born 是省略结构，完整含义是 when it was born。"
+      ],
+      "expressions": [
+        {"text": "like all marsupials", "meaning_zh": "像所有有袋类动物一样"},
+        {"text": "when born", "meaning_zh": "出生时"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "Newborns crawled into the pouch on the belly of their mother, and attached themselves to one of the four teats, remaining there for up to three months.",
+      "translation": "新生幼崽会爬进母亲腹部的育儿袋，并吸附在四个乳头之一上，在那里停留长达三个月。",
+      "structure": [
+        {"text": "Newborns crawled into the pouch on the belly of their mother", "role": "main_clause", "level": 1},
+        {"text": "and attached themselves to one of the four teats", "role": "coordinate_clause", "level": 1},
+        {"text": "remaining there for up to three months", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Newborns 指刚出生的袋狼幼崽。",
+        "attached themselves to 表示幼崽主动附着在乳头上。",
+        "remaining there 是现在分词短语，补充说明幼崽停留的位置和时间。",
+        "up to three months 表示最长可达三个月。"
+      ],
+      "expressions": [
+        {"text": "attach themselves to", "meaning_zh": "附着在……上"},
+        {"text": "up to", "meaning_zh": "长达；多达"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "When old enough to leave the pouch, the young stayed in a lair such as a deep rocky cave, well-hidden nest or hollow log, whilst the mother hunted.",
+      "translation": "当幼崽大到可以离开育儿袋时，它们会待在窝穴中，例如深岩洞、隐蔽的巢或空心原木里，而母亲则外出捕猎。",
+      "structure": [
+        {"text": "When old enough to leave the pouch", "role": "reduced_adverbial_clause", "level": 1},
+        {"text": "the young stayed in a lair such as a deep rocky cave, well-hidden nest or hollow log", "role": "main_clause", "level": 1},
+        {"text": "such as a deep rocky cave, well-hidden nest or hollow log", "role": "prepositional_phrase", "level": 2},
+        {"text": "whilst the mother hunted", "role": "adverbial_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "When old enough ... 是省略结构，意思是 when they were old enough。",
+        "the young 指幼崽，不是年轻的成年个体。",
+        "such as 后列举 lair 的具体类型。",
+        "whilst 引导时间状语从句，说明母亲捕猎时幼崽待在窝中。"
+      ],
+      "expressions": [
+        {"text": "old enough to", "meaning_zh": "足够大可以……"},
+        {"text": "such as", "meaning_zh": "例如"},
+        {"text": "well-hidden", "meaning_zh": "隐蔽很好的"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "Approximately 4,000 years ago, the thylacine was widespread throughout New Guinea and most of mainland Australia, as well as the island of Tasmania.",
+      "translation": "大约4000年前，袋狼广泛分布于新几内亚和澳大利亚大陆大部分地区，以及塔斯马尼亚岛。",
+      "structure": [
+        {"text": "Approximately 4,000 years ago", "role": "adverbial_phrase", "level": 1},
+        {"text": "the thylacine was widespread", "role": "main_clause", "level": 1},
+        {"text": "throughout New Guinea and most of mainland Australia", "role": "prepositional_phrase", "level": 1},
+        {"text": "as well as the island of Tasmania", "role": "coordinate_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Approximately 表示时间为估计值。",
+        "was widespread 表示分布广泛，而不是数量必然很多。",
+        "throughout ... as well as ... 列出袋狼当时分布的多个区域。"
+      ],
+      "expressions": [
+        {"text": "approximately", "meaning_zh": "大约"},
+        {"text": "be widespread throughout", "meaning_zh": "广泛分布于"},
+        {"text": "as well as", "meaning_zh": "以及"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "The most recent, well-dated occurrence of a thylacine on the mainland is a carbon-dated fossil from Murray Cave in Western Australia, which is around 3,100 years old.",
+      "translation": "在澳大利亚大陆上最近且年代测定可靠的袋狼记录，是一块来自西澳大利亚默里洞穴的碳定年化石，年代约为3100年前。",
+      "structure": [
+        {"text": "The most recent, well-dated occurrence of a thylacine on the mainland", "role": "subject", "level": 1},
+        {"text": "is a carbon-dated fossil from Murray Cave in Western Australia", "role": "verb_phrase", "level": 1},
+        {"text": "which is around 3,100 years old", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "well-dated 表示年代测定较可靠。",
+        "on the mainland 指澳大利亚大陆，与塔斯马尼亚岛相对。",
+        "which 引导非限制性定语从句，补充说明该化石的年代。",
+        "around 3,100 years old 表示约数。"
+      ],
+      "expressions": [
+        {"text": "well-dated occurrence", "meaning_zh": "年代测定可靠的出现记录"},
+        {"text": "carbon-dated fossil", "meaning_zh": "碳定年化石"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "Its extinction coincided closely with the arrival of wild dogs called dingoes in Australia and a similar predator in New Guinea.",
+      "translation": "它的灭绝与澳大利亚被称为澳洲野犬的野狗到来，以及新几内亚一种类似捕食者的出现，在时间上高度吻合。",
+      "structure": [
+        {"text": "Its extinction", "role": "subject", "level": 1},
+        {"text": "coincided closely with the arrival of wild dogs called dingoes in Australia and a similar predator in New Guinea", "role": "verb_phrase", "level": 1},
+        {"text": "called dingoes", "role": "participial_phrase", "level": 2},
+        {"text": "in Australia and a similar predator in New Guinea", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Its 指代袋狼。",
+        "coincided closely with 表示时间上高度重合，不直接等于证明因果。",
+        "called dingoes 是过去分词短语，说明 wild dogs 的名称。",
+        "and a similar predator in New Guinea 与 wild dogs called dingoes 并列。"
+      ],
+      "expressions": [
+        {"text": "coincide closely with", "meaning_zh": "与……高度吻合"},
+        {"text": "a similar predator", "meaning_zh": "类似的捕食者"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "Dingoes never reached Tasmania, and most scientists see this as the main reason for the thylacine's survival there.",
+      "translation": "澳洲野犬从未到达塔斯马尼亚，大多数科学家认为这是袋狼在那里存活下来的主要原因。",
+      "structure": [
+        {"text": "Dingoes never reached Tasmania", "role": "main_clause", "level": 1},
+        {"text": "and most scientists see this as the main reason for the thylacine's survival there", "role": "coordinate_clause", "level": 1},
+        {"text": "for the thylacine's survival there", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "this 指代澳洲野犬从未到达塔斯马尼亚这一事实。",
+        "see this as ... 表示科学家把这一事实视为原因。",
+        "there 指 Tasmania，说明袋狼在塔斯马尼亚幸存。"
+      ],
+      "expressions": [
+        {"text": "see this as", "meaning_zh": "把这视为"},
+        {"text": "the main reason for", "meaning_zh": "……的主要原因"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "The dramatic decline of the thylacine in Tasmania, which began in the 1830s and continued for a century, is generally attributed to the relentless efforts of sheep farmers and bounty hunters** with shotguns.",
+      "translation": "塔斯马尼亚袋狼数量的急剧下降始于19世纪30年代，并持续了一个世纪；这通常被归因于羊农和持枪赏金猎人持续不断的猎杀努力。",
+      "structure": [
+        {"text": "The dramatic decline of the thylacine in Tasmania", "role": "subject", "level": 1},
+        {"text": "which began in the 1830s and continued for a century", "role": "relative_clause", "level": 2},
+        {"text": "is generally attributed to the relentless efforts of sheep farmers and bounty hunters** with shotguns", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，补充下降开始和持续的时间。",
+        "is generally attributed to 是被动结构，表示通常被归因于。",
+        "bounty hunters 后的双星号对应文末词汇注释。",
+        "with shotguns 修饰 sheep farmers and bounty hunters，说明他们使用猎枪。"
+      ],
+      "expressions": [
+        {"text": "dramatic decline", "meaning_zh": "急剧下降"},
+        {"text": "be attributed to", "meaning_zh": "被归因于"},
+        {"text": "relentless efforts", "meaning_zh": "持续不懈的努力"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "While this determined campaign undoubtedly played a large part, it is likely that various other factors also contributed to the decline and eventual extinction of the species.",
+      "translation": "虽然这场坚决的猎杀行动无疑起了很大作用，但很可能还有其他各种因素也促成了该物种数量下降并最终灭绝。",
+      "structure": [
+        {"text": "While this determined campaign undoubtedly played a large part", "role": "adverbial_clause", "level": 1},
+        {"text": "it is likely", "role": "main_clause", "level": 1},
+        {"text": "that various other factors also contributed to the decline and eventual extinction of the species", "role": "subject_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "While 引导让步状语从句，承认猎杀行动的重要作用。",
+        "it is likely that 是形式主语结构，真正主语是 that 从句。",
+        "contributed to 表示“促成”，说明其他因素也产生影响。",
+        "eventual extinction 表示最终结果是灭绝。"
+      ],
+      "expressions": [
+        {"text": "play a large part", "meaning_zh": "起很大作用"},
+        {"text": "contribute to", "meaning_zh": "促成；导致"},
+        {"text": "eventual extinction", "meaning_zh": "最终灭绝"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "These include competition with wild dogs introduced by European settlers, loss of habitat along with the disappearance of prey species, and a distemper-like disease which may also have affected the thylacine.",
+      "translation": "这些因素包括与欧洲定居者引入的野狗竞争、栖息地丧失以及猎物物种消失，还有一种类似犬瘟热的疾病，这种疾病也可能影响了袋狼。",
+      "structure": [
+        {"text": "These include competition with wild dogs introduced by European settlers", "role": "main_clause", "level": 1},
+        {"text": "introduced by European settlers", "role": "participial_phrase", "level": 2},
+        {"text": "loss of habitat along with the disappearance of prey species", "role": "coordinate_object", "level": 1},
+        {"text": "and a distemper-like disease which may also have affected the thylacine", "role": "coordinate_object", "level": 1},
+        {"text": "which may also have affected the thylacine", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "These 指代上一句的 various other factors。",
+        "introduced by European settlers 修饰 wild dogs，说明野狗来源。",
+        "competition、loss 和 disease 是 include 后并列的三个因素。",
+        "which 引导定语从句，说明疾病可能也影响了袋狼。"
+      ],
+      "expressions": [
+        {"text": "loss of habitat", "meaning_zh": "栖息地丧失"},
+        {"text": "along with", "meaning_zh": "连同；以及"},
+        {"text": "prey species", "meaning_zh": "猎物物种"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "There was only one successful attempt to breed a thylacine in captivity, at Melbourne Zoo in 1899.",
+      "translation": "只有一次人工圈养繁殖袋狼的尝试成功过，那是在1899年的墨尔本动物园。",
+      "structure": [
+        {"text": "There was only one successful attempt", "role": "main_clause", "level": 1},
+        {"text": "to breed a thylacine in captivity", "role": "infinitive_phrase", "level": 2},
+        {"text": "at Melbourne Zoo in 1899", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "There was 是存在句，引出唯一成功案例。",
+        "to breed a thylacine in captivity 修饰 attempt，说明尝试内容。",
+        "only one 强调圈养繁殖成功极其罕见。"
+      ],
+      "expressions": [
+        {"text": "in captivity", "meaning_zh": "在圈养状态下"},
+        {"text": "successful attempt to", "meaning_zh": "成功的……尝试"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "This was despite the large numbers that went through some zoos, particularly London Zoo and Tasmania's Hobart Zoo.",
+      "translation": "尽管有大量袋狼曾被送入一些动物园，尤其是伦敦动物园和塔斯马尼亚的霍巴特动物园，但成功案例仍只有这一次。",
+      "structure": [
+        {"text": "This was despite the large numbers", "role": "main_clause", "level": 1},
+        {"text": "that went through some zoos", "role": "relative_clause", "level": 2},
+        {"text": "particularly London Zoo and Tasmania's Hobart Zoo", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "This 指代只有一次圈养繁殖成功这一事实。",
+        "despite 引出让步，说明进入动物园的数量多但成功少。",
+        "that 引导定语从句，修饰 the large numbers。",
+        "particularly 后列举最相关的动物园。"
+      ],
+      "expressions": [
+        {"text": "despite", "meaning_zh": "尽管"},
+        {"text": "large numbers", "meaning_zh": "大量"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "The famous naturalist John Gould foresaw the thylacine's demise when he published his Mammals of Australia between 1848 and 1863, writing, 'The numbers of this singular animal will speedily diminish, extermination will have its full sway, and it will then, like the wolf of England and Scotland, be recorded as an animal of the past.'",
+      "translation": "著名博物学家约翰·古尔德在1848年至1863年间出版《澳大利亚哺乳动物》时，就预见了袋狼的灭亡，他写道：“这种独特动物的数量将迅速减少，灭绝将全面占据上风，随后它将像英格兰和苏格兰的狼一样，被记录为过去的动物。”",
+      "structure": [
+        {"text": "The famous naturalist John Gould foresaw the thylacine's demise", "role": "main_clause", "level": 1},
+        {"text": "when he published his Mammals of Australia between 1848 and 1863", "role": "adverbial_clause", "level": 2},
+        {"text": "writing", "role": "participial_phrase", "level": 2},
+        {"text": "The numbers of this singular animal will speedily diminish", "role": "quoted_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "foresaw 表示约翰·古尔德提前预见了袋狼的灭亡。",
+        "when 引导时间状语从句，说明他在出版著作期间写下预言。",
+        "writing 引出直接引语，后面的内容是他的原话。",
+        "will speedily diminish 和 will have its full sway 体现他对灭绝趋势的预测。"
+      ],
+      "expressions": [
+        {"text": "foresee the demise", "meaning_zh": "预见灭亡"},
+        {"text": "speedily diminish", "meaning_zh": "迅速减少"},
+        {"text": "an animal of the past", "meaning_zh": "成为过去的动物"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 25,
+      "sentence": "However, there seems to have been little public pressure to preserve the thylacine, nor was much concern expressed by scientists at the decline of this species in the decades that followed.",
+      "translation": "然而，当时似乎几乎没有公众压力要求保护袋狼，在随后几十年里，科学家们也没有对这个物种的衰退表达太多关切。",
+      "structure": [
+        {"text": "However", "role": "discourse_marker", "level": 1},
+        {"text": "there seems to have been little public pressure to preserve the thylacine", "role": "main_clause", "level": 1},
+        {"text": "nor was much concern expressed by scientists", "role": "inverted_coordinate_clause", "level": 1},
+        {"text": "in the decades that followed", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "However 表示古尔德曾预警，但社会反应不足。",
+        "seems to have been 表示对过去情况的推测。",
+        "nor 位于句首引起倒装，表示科学界也没有多少关切。",
+        "that followed 修饰 decades，指随后几十年。"
+      ],
+      "expressions": [
+        {"text": "public pressure to", "meaning_zh": "要求……的公众压力"},
+        {"text": "express concern", "meaning_zh": "表达关切"},
+        {"text": "in the decades that followed", "meaning_zh": "在随后的几十年里"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "A notable exception was T.T. Flynn, Professor of Biology at the University of Tasmania.",
+      "translation": "一个值得注意的例外是T.T.弗林，他是塔斯马尼亚大学的生物学教授。",
+      "structure": [
+        {"text": "A notable exception", "role": "subject", "level": 1},
+        {"text": "was T.T. Flynn", "role": "verb_phrase", "level": 1},
+        {"text": "Professor of Biology at the University of Tasmania", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "A notable exception 指与上一句公众和科学界普遍冷淡不同的人。",
+        "Professor of Biology at the University of Tasmania 是 T.T. Flynn 的同位语。",
+        "notable 强调这个例外值得特别关注。"
+      ],
+      "expressions": [
+        {"text": "a notable exception", "meaning_zh": "一个值得注意的例外"},
+        {"text": "Professor of Biology", "meaning_zh": "生物学教授"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "In 1914, he was sufficiently concerned about the scarcity of the thylacine to suggest that some should be captured and placed on a small island.",
+      "translation": "1914年，他对袋狼稀少的情况非常担忧，以至于建议捕获一些袋狼并将它们安置在一个小岛上。",
+      "structure": [
+        {"text": "In 1914", "role": "prepositional_phrase", "level": 1},
+        {"text": "he was sufficiently concerned about the scarcity of the thylacine", "role": "main_clause", "level": 1},
+        {"text": "to suggest that some should be captured and placed on a small island", "role": "infinitive_phrase", "level": 2},
+        {"text": "that some should be captured and placed on a small island", "role": "object_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "sufficiently ... to ... 表示担忧程度足以促使他提出建议。",
+        "scarcity of the thylacine 指袋狼数量稀少。",
+        "some 指一些袋狼个体。",
+        "should be captured and placed 是被动结构，表示建议采取的保护行动。"
+      ],
+      "expressions": [
+        {"text": "sufficiently concerned about", "meaning_zh": "对……足够担忧"},
+        {"text": "scarcity", "meaning_zh": "稀少；短缺"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 28,
+      "sentence": "But it was not until 1929, with the species on the very edge of extinction, that Tasmania's Animals and Birds Protection Board passed a motion protecting thylacines only for the month of December, which was thought to be their prime breeding season.",
+      "translation": "但是直到1929年，在该物种已经处于灭绝边缘时，塔斯马尼亚动物和鸟类保护委员会才通过一项动议，只在12月份保护袋狼，而12月被认为是它们的主要繁殖季。",
+      "structure": [
+        {"text": "But it was not until 1929, with the species on the very edge of extinction", "role": "cleft_clause", "level": 1},
+        {"text": "that Tasmania's Animals and Birds Protection Board passed a motion", "role": "main_clause", "level": 1},
+        {"text": "protecting thylacines only for the month of December", "role": "participial_phrase", "level": 2},
+        {"text": "which was thought to be their prime breeding season", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "it was not until ... that ... 是强调句型，突出保护来得很晚。",
+        "with the species on the very edge of extinction 是伴随状语，说明当时物种已濒临灭绝。",
+        "protecting thylacines only for the month of December 修饰 motion，说明动议内容很有限。",
+        "which 指代 December，说明12月被认为是主要繁殖季。"
+      ],
+      "expressions": [
+        {"text": "not until ... that ...", "meaning_zh": "直到……才……"},
+        {"text": "on the very edge of extinction", "meaning_zh": "处于灭绝边缘"},
+        {"text": "pass a motion", "meaning_zh": "通过一项动议"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 29,
+      "sentence": "The last known wild thylacine to be killed was shot by a farmer in the north-east of Tasmania in 1930, leaving just captive specimens.",
+      "translation": "已知最后一只被杀死的野生袋狼于1930年在塔斯马尼亚东北部被一名农民射杀，此后只剩下圈养标本。",
+      "structure": [
+        {"text": "The last known wild thylacine to be killed", "role": "subject", "level": 1},
+        {"text": "was shot by a farmer in the north-east of Tasmania in 1930", "role": "verb_phrase", "level": 1},
+        {"text": "leaving just captive specimens", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "to be killed 是不定式被动，修饰 The last known wild thylacine。",
+        "was shot by a farmer 是被动语态，说明射杀者和地点时间。",
+        "leaving just captive specimens 表示这一事件造成的结果：只剩圈养个体。"
+      ],
+      "expressions": [
+        {"text": "last known", "meaning_zh": "已知最后的"},
+        {"text": "captive specimens", "meaning_zh": "圈养标本"}
+      ]
+    },
+    {
+      "id": "G-06",
+      "paragraph_label": "G",
+      "sentence_index": 30,
+      "sentence": "Official protection of the species by the Tasmanian government was introduced in July 1936, 59 days before the last known individual died in Hobart Zoo on 7th September, 1936.",
+      "translation": "塔斯马尼亚政府对该物种的官方保护于1936年7月出台，而这距离已知最后一个个体于1936年9月7日在霍巴特动物园死亡仅有59天。",
+      "structure": [
+        {"text": "Official protection of the species by the Tasmanian government", "role": "subject", "level": 1},
+        {"text": "was introduced in July 1936", "role": "verb_phrase", "level": 1},
+        {"text": "59 days before the last known individual died in Hobart Zoo on 7th September, 1936", "role": "appositive_time_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "was introduced 是被动语态，说明官方保护措施被推出。",
+        "59 days before ... 强调保护措施出台得非常晚。",
+        "the last known individual 指已知最后一只袋狼个体。",
+        "on 7th September, 1936 给出最后个体死亡的具体日期。"
+      ],
+      "expressions": [
+        {"text": "official protection", "meaning_zh": "官方保护"},
+        {"text": "be introduced", "meaning_zh": "被推出；被引入"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 31,
+      "sentence": "There have been numerous expeditions and searches for the thylacine over the years, none of which has produced definitive evidence that thylacines still exist.",
+      "translation": "多年来，人们进行了许多寻找袋狼的考察和搜索，但没有任何一次提供袋狼仍然存在的确凿证据。",
+      "structure": [
+        {"text": "There have been numerous expeditions and searches for the thylacine over the years", "role": "main_clause", "level": 1},
+        {"text": "none of which has produced definitive evidence", "role": "relative_clause", "level": 2},
+        {"text": "that thylacines still exist", "role": "content_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "There have been 是现在完成时存在句，说明多年间一直有搜索活动。",
+        "none of which 指前面的 numerous expeditions and searches。",
+        "definitive evidence 表示确凿证据，不是传闻或不确定线索。",
+        "that 引导同位语从句，解释 evidence 的内容。"
+      ],
+      "expressions": [
+        {"text": "over the years", "meaning_zh": "多年来"},
+        {"text": "definitive evidence", "meaning_zh": "确凿证据"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 32,
+      "sentence": "The species was declared extinct by the Tasmanian government in 1986.",
+      "translation": "1986年，塔斯马尼亚政府宣布该物种灭绝。",
+      "structure": [
+        {"text": "The species", "role": "subject", "level": 1},
+        {"text": "was declared extinct", "role": "verb_phrase", "level": 1},
+        {"text": "by the Tasmanian government in 1986", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "The species 指袋狼这一物种。",
+        "was declared extinct 是被动语态，表示被官方宣布灭绝。",
+        "in 1986 说明正式宣布发生的时间，比最后个体死亡晚很多。"
+      ],
+      "expressions": [
+        {"text": "be declared extinct", "meaning_zh": "被宣布灭绝"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 33,
+      "sentence": "* marsupial: a mammal, such as a kangaroo, whose young are born incompletely developed and are typically carried and suckled in a pouch on the mother's belly",
+      "translation": "* 有袋类动物：一种哺乳动物，例如袋鼠；其幼崽出生时发育不完全，通常会在母亲腹部的育儿袋中被携带和哺乳。",
+      "structure": [
+        {"text": "* marsupial: a mammal", "role": "definition_head", "level": 1},
+        {"text": "such as a kangaroo", "role": "example_phrase", "level": 2},
+        {"text": "whose young are born incompletely developed and are typically carried and suckled in a pouch on the mother's belly", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "这是文末词汇注释，不是正文叙述段落。",
+        "whose 引导定语从句，说明有袋类动物幼崽的典型特征。",
+        "are born、are carried 和 are suckled 都是被动结构。"
+      ],
+      "expressions": [
+        {"text": "such as", "meaning_zh": "例如"},
+        {"text": "incompletely developed", "meaning_zh": "发育不完全的"}
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 34,
+      "sentence": "** bounty hunters: people who are paid a reward for killing a wild animal",
+      "translation": "** 赏金猎人：因杀死野生动物而获得报酬的人。",
+      "structure": [
+        {"text": "** bounty hunters: people", "role": "definition_head", "level": 1},
+        {"text": "who are paid a reward for killing a wild animal", "role": "relative_clause", "level": 2},
+        {"text": "for killing a wild animal", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "这是 bounty hunters 的词汇注释，对应正文中的双星号。",
+        "who 引导定语从句，解释这类人是谁。",
+        "are paid a reward 是被动语态，表示他们因杀死野生动物而获得报酬。"
+      ],
+      "expressions": [
+        {"text": "be paid a reward for", "meaning_zh": "因……获得报酬"}
+      ]
+    }
+  ]
+}

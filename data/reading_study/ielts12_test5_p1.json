@@ -1,0 +1,1733 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts12_test5_reading",
+  "passage_id": "ielts12_test5_p1",
+  "passage_title": "Cork",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Cork - the thick bark of the cork oak tree (Quercus suber) - is a remarkable material.",
+      "translation": "软木——软木橡树（学名 Quercus suber）的厚树皮——是一种非凡的材料。",
+      "structure": [
+        {
+          "text": "Cork",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "the thick bark of the cork oak tree (Quercus suber)",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a remarkable material",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "两个破折号之间的内容是 Cork 的同位语，说明软木具体指的是什么。",
+        "Quercus suber 是软木橡树的拉丁学名，括注在名词后作补充说明。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "It is tough, elastic, buoyant, and fire-resistant, and suitable for a wide range of purposes.",
+      "translation": "它坚韧、有弹性、能漂浮、耐火，并且适用于广泛的用途。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "tough, elastic, buoyant, and fire-resistant",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "and suitable for a wide range of purposes",
+          "role": "coordinated_complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "and 连接两组并列表语：前一组是四个形容词，后一组是 suitable for...。",
+        "fire-resistant 是复合形容词，意为“耐火的”。"
+      ],
+      "expressions": [
+        {
+          "text": "a wide range of",
+          "meaning_zh": "广泛的……"
+        },
+        {
+          "text": "fire-resistant",
+          "meaning_zh": "耐火的"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "It has also been used for millennia: the ancient Egyptians sealed their sarcophagi (stone coffins) with cork, while the ancient Greeks and Romans used it for anything from beehives to sandals.",
+      "translation": "软木也已被使用了数千年：古埃及人用软木密封他们的石棺，而古希腊人和古罗马人则将其用于从蜂箱到凉鞋的各种物品。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has also been used",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "for millennia",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the ancient Egyptians sealed their sarcophagi (stone coffins) with cork",
+          "role": "elaboration_clause",
+          "level": 1
+        },
+        {
+          "text": "while the ancient Greeks and Romans used it for anything from beehives to sandals",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "the ancient Greeks and Romans",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "used it for anything from beehives to sandals",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "冒号后的内容是对“使用了数千年”的具体举例说明，属于同位性质的阐述。",
+        "while 在这里表示对比，将古埃及人和古希腊罗马人的不同用法并列起来。",
+        "from beehives to sandals 列举用途范围的两端，泛指各种各样的物品。"
+      ],
+      "expressions": [
+        {
+          "text": "for millennia",
+          "meaning_zh": "长达数千年"
+        },
+        {
+          "text": "anything from A to B",
+          "meaning_zh": "从A到B的各种东西"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "And the cork oak itself is an extraordinary tree.",
+      "translation": "而软木橡树本身就是一种非凡的树。",
+      "structure": [
+        {
+          "text": "And",
+          "role": "conjunction",
+          "level": 1
+        },
+        {
+          "text": "the cork oak itself",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "an extraordinary tree",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "itself 是强调代词，突出软木橡树这种树木本身（而不只是它的树皮）的不凡之处。",
+        "And 承接上一段关于软木材料的介绍，引出本段对树木本身的描写。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Its bark grows up to 20 cm in thickness, insulating the tree like a coat wrapped around the trunk and branches and keeping the inside at a constant 20°C all year round.",
+      "translation": "软木橡树的树皮可以长到20厘米厚，像一件裹住树干和枝条的外套一样为树木保温，使内部全年保持恒定的20摄氏度。",
+      "structure": [
+        {
+          "text": "Its bark",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "grows up to 20 cm in thickness",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "insulating the tree",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "like a coat wrapped around the trunk and branches",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "wrapped around the trunk and branches",
+          "role": "participial_phrase",
+          "level": 4
+        },
+        {
+          "text": "and keeping the inside at a constant 20°C all year round",
+          "role": "coordinated_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "insulating... 和 keeping... 是并列的现在分词短语，共同修饰主句，说明树皮生长带来的效果。",
+        "like a coat wrapped around the trunk and branches 把树皮比作裹住树干和枝条的外套。",
+        "a constant 20°C 表示恒定不变的温度，all year round 强调这种恒温状态贯穿全年。"
+      ],
+      "expressions": [
+        {
+          "text": "up to",
+          "meaning_zh": "最多达到"
+        },
+        {
+          "text": "all year round",
+          "meaning_zh": "全年；一年到头"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Developed most probably as a defence against forest fires, the bark of the cork oak has a particular cellular structure - with about 40 million cells per cubic centimetre - that technology has never succeeded in replicating.",
+      "translation": "软木橡树的树皮很可能是为了抵御森林火灾而演化形成的，它拥有一种特殊的细胞结构——每立方厘米约有4000万个细胞——这种结构是科技始终未能复制出来的。",
+      "structure": [
+        {
+          "text": "Developed most probably as a defence against forest fires",
+          "role": "participial_phrase",
+          "level": 1
+        },
+        {
+          "text": "as a defence against forest fires",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "the bark of the cork oak",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a particular cellular structure",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "with about 40 million cells per cubic centimetre",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "that technology has never succeeded in replicating",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "technology",
+          "role": "subject",
+          "level": 3
+        },
+        {
+          "text": "has never succeeded in replicating",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Developed... 是位于句首的过去分词短语，逻辑主语是 the bark，说明树皮很可能是演化出来抵御森林火灾的。",
+        "两个破折号之间的内容插入说明这种细胞结构的具体密度。",
+        "that 引导定语从句修饰 cellular structure，指出技术始终未能复制这种结构，that 同时也是 replicating 的逻辑宾语。"
+      ],
+      "expressions": [
+        {
+          "text": "a defence against",
+          "meaning_zh": "抵御……的防御机制"
+        },
+        {
+          "text": "succeed in doing",
+          "meaning_zh": "成功做成某事"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "The cells are filled with air, which is why cork is so buoyant.",
+      "translation": "这些细胞里充满了空气，这就是为什么软木如此具有浮力的原因。",
+      "structure": [
+        {
+          "text": "The cells",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are filled with air",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "which is why cork is so buoyant",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "why cork is so buoyant",
+          "role": "noun_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "which 指代前面整句“细胞里充满空气”这件事，而不是某个具体名词。",
+        "why cork is so buoyant 是 is 的表语从句，说明“原因”具体是什么。"
+      ],
+      "expressions": [
+        {
+          "text": "be filled with",
+          "meaning_zh": "充满……"
+        },
+        {
+          "text": "which is why",
+          "meaning_zh": "这就是……的原因"
+        }
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "It also has an elasticity that means you can squash it and watch it spring back to its original size and shape when you release the pressure.",
+      "translation": "软木还具有弹性，这意味着你可以把它压扁，然后在松开压力后看着它弹回原来的大小和形状。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "also has",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "an elasticity",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "that means you can squash it and watch it spring back to its original size and shape when you release the pressure",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "you can squash it and watch it spring back to its original size and shape",
+          "role": "noun_clause",
+          "level": 3
+        },
+        {
+          "text": "watch it spring back to its original size and shape",
+          "role": "coordinated_clause",
+          "level": 4
+        },
+        {
+          "text": "when you release the pressure",
+          "role": "adverbial_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that 引导定语从句修饰 elasticity，说明这种弹性具体体现在什么方面。",
+        "watch it spring back 中 spring back 是不带 to 的原形动词，作 watch 的宾语补足语。",
+        "when 从句表示“松开压力之后”，是弹性恢复发生的时间条件。"
+      ],
+      "expressions": [
+        {
+          "text": "spring back to",
+          "meaning_zh": "弹回到……"
+        },
+        {
+          "text": "release the pressure",
+          "meaning_zh": "释放压力"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "Cork oaks grow in a number of Mediterranean countries, including Portugal, Spain, Italy, Greece and Morocco.",
+      "translation": "软木橡树生长在多个地中海国家，包括葡萄牙、西班牙、意大利、希腊和摩洛哥。",
+      "structure": [
+        {
+          "text": "Cork oaks",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "grow",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in a number of Mediterranean countries",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "including Portugal, Spain, Italy, Greece and Morocco",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "including... 是现在分词短语，具体列举出有哪些地中海国家。",
+        "a number of 表示“若干个”，并非确切数量。"
+      ],
+      "expressions": [
+        {
+          "text": "a number of",
+          "meaning_zh": "若干个；一些"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "They flourish in warm, sunny climates where there is a minimum of 400 millimetres of rain per year, and not more than 800 millimetres.",
+      "translation": "它们在温暖阳光充足、年降雨量至少400毫米且不超过800毫米的气候条件下茁壮生长。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "flourish",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in warm, sunny climates",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "where there is a minimum of 400 millimetres of rain per year",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "and not more than 800 millimetres",
+          "role": "coordinated_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "where 引导定语从句修饰 climates，说明这种气候的具体降雨范围。",
+        "and not more than 800 millimetres 承前省略了 there is，与前面的降雨量下限并列，构成上限。"
+      ],
+      "expressions": [
+        {
+          "text": "a minimum of",
+          "meaning_zh": "最少……；……的下限"
+        },
+        {
+          "text": "flourish in",
+          "meaning_zh": "在……中茁壮生长"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Like grape vines, the trees thrive in poor soil, putting down deep roots in search of moisture and nutrients.",
+      "translation": "和葡萄藤一样，这些树木能在贫瘠的土壤中茁壮生长，深深扎根以寻找水分和养分。",
+      "structure": [
+        {
+          "text": "Like grape vines",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the trees",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "thrive in poor soil",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "putting down deep roots",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "in search of moisture and nutrients",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Like grape vines 是介词短语作比较状语，把软木橡树与葡萄藤作类比。",
+        "putting down... 是现在分词短语，说明树木在贫瘠土壤中扎根的方式。",
+        "in search of 表示“为了寻找……”，说明深深扎根的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "thrive in",
+          "meaning_zh": "在……中茁壮成长"
+        },
+        {
+          "text": "put down roots",
+          "meaning_zh": "扎根"
+        },
+        {
+          "text": "in search of",
+          "meaning_zh": "为了寻找"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "Southern Portugal's Alentejo region meets all of these requirements, which explains why, by the early 20th century, this region had become the world's largest producer of cork, and why today it accounts for roughly half of all cork production around the world.",
+      "translation": "葡萄牙南部的阿连特茹地区满足所有这些条件，这就解释了为什么到20世纪初该地区已成为世界上最大的软木生产地，也解释了为什么如今它仍占全球软木产量的大约一半。",
+      "structure": [
+        {
+          "text": "Southern Portugal's Alentejo region",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "meets",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "all of these requirements",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "which explains why, by the early 20th century, this region had become the world's largest producer of cork, and why today it accounts for roughly half of all cork production around the world",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "why, by the early 20th century, this region had become the world's largest producer of cork",
+          "role": "noun_clause",
+          "level": 3
+        },
+        {
+          "text": "by the early 20th century",
+          "role": "prepositional_phrase",
+          "level": 4
+        },
+        {
+          "text": "and why today it accounts for roughly half of all cork production around the world",
+          "role": "coordinated_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "which 指代前面“阿连特茹地区满足所有条件”这一整件事，引出其结果。",
+        "两个 why 从句并列，分别说明该地区在20世纪初和当今的地位。",
+        "had become 用过去完成时，表示到20世纪初之前已经形成的状态。"
+      ],
+      "expressions": [
+        {
+          "text": "meet the requirements",
+          "meaning_zh": "满足条件"
+        },
+        {
+          "text": "account for",
+          "meaning_zh": "占（比例）"
+        },
+        {
+          "text": "the world's largest producer of",
+          "meaning_zh": "世界上最大的……生产地"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "Most cork forests are family-owned.",
+      "translation": "大多数软木林都是家族所有的。",
+      "structure": [
+        {
+          "text": "Most cork forests",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "family-owned",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "family-owned 是复合形容词，意为“家族所有的”。",
+        "Most 修饰 cork forests，说明这是普遍现象而非全部。"
+      ],
+      "expressions": [
+        {
+          "text": "family-owned",
+          "meaning_zh": "家族所有的"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "Many of these family businesses, and indeed many of the trees themselves, are around 200 years old.",
+      "translation": "这些家族企业中有许多，事实上包括许多树木本身，都有大约200年的历史。",
+      "structure": [
+        {
+          "text": "Many of these family businesses",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "and indeed many of the trees themselves",
+          "role": "coordinated_subject",
+          "level": 1
+        },
+        {
+          "text": "are",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "around 200 years old",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "and indeed many of the trees themselves 是插入的并列主语，强调不仅企业历史悠久，树木本身也是如此。",
+        "themselves 用于强调“树木本身”，呼应前面的家族企业。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "Cork production is, above all, an exercise in patience.",
+      "translation": "软木生产，最重要的是，是一场对耐心的考验。",
+      "structure": [
+        {
+          "text": "Cork production",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "above all",
+          "role": "parenthesis",
+          "level": 2
+        },
+        {
+          "text": "an exercise in patience",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "above all 插入在系动词和表语之间，起强调作用，意为“最重要的是”。",
+        "an exercise in patience 是比喻说法，把软木生产比作一场对耐心的考验。"
+      ],
+      "expressions": [
+        {
+          "text": "above all",
+          "meaning_zh": "最重要的是；尤其是"
+        },
+        {
+          "text": "an exercise in",
+          "meaning_zh": "一场对……的考验"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "From the planting of a cork sapling to the first harvest takes 25 years, and a gap of approximately a decade must separate harvests from an individual tree.",
+      "translation": "从种下一棵软木橡树幼苗到第一次采收需要25年时间，而且同一棵树的两次采收之间必须间隔大约十年。",
+      "structure": [
+        {
+          "text": "From the planting of a cork sapling to the first harvest",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "takes 25 years",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and a gap of approximately a decade must separate harvests from an individual tree",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "a gap of approximately a decade",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "must separate harvests from an individual tree",
+          "role": "verb_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "From...to... 的介词短语作整个句子的主语，表示“从……到……的这段过程”。",
+        "must separate 表示这种间隔是硬性要求，而非建议。"
+      ],
+      "expressions": [
+        {
+          "text": "from A to B",
+          "meaning_zh": "从A到B"
+        },
+        {
+          "text": "a gap of",
+          "meaning_zh": "……的间隔"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "And for top-quality cork, it's necessary to wait a further 15 or 20 years.",
+      "translation": "而要获得顶级品质的软木，还有必要再多等15到20年。",
+      "structure": [
+        {
+          "text": "And",
+          "role": "conjunction",
+          "level": 1
+        },
+        {
+          "text": "for top-quality cork",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "it's necessary",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "to wait a further 15 or 20 years",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "it's necessary to wait... 中 it 是形式主语，真正的主语是后面的不定式 to wait...。",
+        "a further 15 or 20 years 表示在此前25年基础上还要额外等待的时间。"
+      ],
+      "expressions": [
+        {
+          "text": "it's necessary to",
+          "meaning_zh": "有必要……"
+        },
+        {
+          "text": "a further",
+          "meaning_zh": "又，另外的"
+        }
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "You even have to wait for the right kind of summer's day to harvest cork.",
+      "translation": "你甚至必须等到合适的夏日天气，才能采收软木。",
+      "structure": [
+        {
+          "text": "You",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "even have to wait",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "for the right kind of summer's day",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "to harvest cork",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "even 强调等待程度之高，连合适的采收天气都需要等待。",
+        "to harvest cork 是不定式作目的状语，说明等待合适天气的目的。"
+      ],
+      "expressions": [
+        {
+          "text": "have to wait for",
+          "meaning_zh": "不得不等待"
+        }
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "If the bark is stripped on a day when it's too cold - or when the air is damp - the tree will be damaged.",
+      "translation": "如果在天气过冷或空气潮湿的日子剥取树皮，树木就会受到损伤。",
+      "structure": [
+        {
+          "text": "If the bark is stripped on a day",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "when it's too cold",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "or when the air is damp",
+          "role": "coordinated_clause",
+          "level": 2
+        },
+        {
+          "text": "the tree will be damaged",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "If 引导条件状语从句，说明剥树皮的天气条件不当会造成的后果。",
+        "when it's too cold 和 or when the air is damp 并列修饰 a day，说明两种不适宜剥皮的天气。",
+        "两个破折号之间的内容是插入的第二种不利天气条件，与前面并列。"
+      ],
+      "expressions": [
+        {
+          "text": "strip the bark",
+          "meaning_zh": "剥树皮"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "Cork harvesting is a very specialised profession.",
+      "translation": "软木采收是一项高度专业化的职业。",
+      "structure": [
+        {
+          "text": "Cork harvesting",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a very specialised profession",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Cork harvesting 是动名词短语作主语，指“采收软木”这项工作。",
+        "specialised 表示需要专门技能，而非一般人可以胜任。"
+      ],
+      "expressions": [
+        {
+          "text": "a specialised profession",
+          "meaning_zh": "一种专门的职业"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "No mechanical means of stripping cork bark has been invented, so the job is done by teams of highly skilled workers.",
+      "translation": "目前还没有发明出剥取软木树皮的机械化方法，所以这项工作由技艺高超的工人团队完成。",
+      "structure": [
+        {
+          "text": "No mechanical means of stripping cork bark",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "of stripping cork bark",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "has been invented",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "so the job is done by teams of highly skilled workers",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "is done",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "by teams of highly skilled workers",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "has been invented 使用现在完成时被动语态，强调至今仍未发明。",
+        "so 引出结果，说明正因没有机械化手段，才需要依靠人工完成。",
+        "of stripping cork bark 是动名词短语作后置定语，修饰 means。"
+      ],
+      "expressions": [
+        {
+          "text": "mechanical means of",
+          "meaning_zh": "机械化的……方式"
+        },
+        {
+          "text": "highly skilled",
+          "meaning_zh": "技艺高超的"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "First, they make vertical cuts down the bark using small sharp axes, then lever it away in pieces as large as they can manage.",
+      "translation": "首先，他们使用小巧锋利的斧头沿树皮纵向切割，然后把树皮撬下来，尽量撬成能够处理的最大块。",
+      "structure": [
+        {
+          "text": "First",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "they",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "make vertical cuts down the bark",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "using small sharp axes",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "then lever it away in pieces as large as they can manage",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "as large as they can manage",
+          "role": "comparative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "First...then... 表示动作的先后顺序，先切割后撬开。",
+        "using small sharp axes 是伴随状语，说明切割所用的工具。",
+        "as large as they can manage 是比较结构，表示“尽可能大，只要他们能应付”。"
+      ],
+      "expressions": [
+        {
+          "text": "lever away",
+          "meaning_zh": "撬开；撬起"
+        },
+        {
+          "text": "as large as one can manage",
+          "meaning_zh": "尽可能大（在能力范围内）"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "The most skilful cork-strippers prise away a semi-circular husk that runs the length of the trunk from just above ground level to the first branches.",
+      "translation": "最熟练的剥皮工人会撬下一整块半圆形的树皮，这块树皮从紧贴地面之上一直延伸到第一根树枝处，贯穿树干的整个长度。",
+      "structure": [
+        {
+          "text": "The most skilful cork-strippers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "prise away",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a semi-circular husk",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "that runs the length of the trunk from just above ground level to the first branches",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "from just above ground level to the first branches",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "that 引导定语从句修饰 husk，说明这块树皮的具体走向和长度。",
+        "runs the length of 表示“贯穿……的整个长度”。",
+        "from just above ground level to the first branches 说明树皮覆盖范围的起止点。"
+      ],
+      "expressions": [
+        {
+          "text": "prise away",
+          "meaning_zh": "撬下；撬起"
+        },
+        {
+          "text": "run the length of",
+          "meaning_zh": "贯穿……的长度"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "It is then dried on the ground for about four months, before being taken to factories, where it is boiled to kill any insects that might remain in the cork.",
+      "translation": "树皮随后在地面上晾晒大约四个月，再被送往工厂，在那里经过蒸煮以杀灭可能残留在软木里的任何昆虫。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is then dried",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "on the ground",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "for about four months",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "before being taken to factories",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "where it is boiled to kill any insects that might remain in the cork",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "to kill any insects that might remain in the cork",
+          "role": "non_finite_clause",
+          "level": 3
+        },
+        {
+          "text": "that might remain in the cork",
+          "role": "relative_clause",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "before being taken to factories 是动名词的被动式，指树皮被送去工厂之前的这段时间。",
+        "where 引导定语从句修饰 factories，说明工厂里对树皮做了什么处理。",
+        "to kill... 是不定式作目的状语，说明蒸煮的目的；that might remain... 进一步修饰 insects。"
+      ],
+      "expressions": [
+        {
+          "text": "be taken to",
+          "meaning_zh": "被送往"
+        },
+        {
+          "text": "kill insects",
+          "meaning_zh": "杀灭虫害"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "Over 60% of cork then goes on to be made into traditional bottle stoppers, with most of the remainder being used in the construction trade.",
+      "translation": "超过60%的软木随后会被制成传统的瓶塞，而大部分剩余部分则被用于建筑行业。",
+      "structure": [
+        {
+          "text": "Over 60% of cork",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "then goes on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to be made into traditional bottle stoppers",
+          "role": "non_finite_clause",
+          "level": 2
+        },
+        {
+          "text": "with most of the remainder being used in the construction trade",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "most of the remainder being used in the construction trade",
+          "role": "non_finite_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "goes on to be made into 表示“接下来被制成……”，不定式说明后续加工的结果。",
+        "with 后接“名词＋现在分词被动式”的独立结构，补充说明剩余部分的去向。",
+        "the remainder 指未被制成瓶塞的剩余软木。"
+      ],
+      "expressions": [
+        {
+          "text": "go on to do",
+          "meaning_zh": "接着去做；随后……"
+        },
+        {
+          "text": "be made into",
+          "meaning_zh": "被制成"
+        }
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "Corkboard and cork tiles are ideal for thermal and acoustic insulation, while granules of cork are used in the manufacture of concrete.",
+      "translation": "软木板和软木瓷砖非常适合用于隔热和隔音，而软木颗粒则被用于混凝土的制造。",
+      "structure": [
+        {
+          "text": "Corkboard and cork tiles",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are ideal for thermal and acoustic insulation",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "while granules of cork are used in the manufacture of concrete",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "granules of cork",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "are used in the manufacture of concrete",
+          "role": "verb_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "while 在这里表示并列对比，列举软木的另一种用途。",
+        "thermal and acoustic insulation 并列表示“隔热”和“隔音”两种功能。"
+      ],
+      "expressions": [
+        {
+          "text": "be ideal for",
+          "meaning_zh": "非常适合……"
+        },
+        {
+          "text": "thermal and acoustic insulation",
+          "meaning_zh": "隔热隔音"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "Recent years have seen the end of the virtual monopoly of cork as the material for bottle stoppers, due to concerns about the effect it may have on the contents of the bottle.",
+      "translation": "由于人们担心软木可能对瓶中内容物产生影响，近年来软木作为瓶塞材料近乎垄断的地位已宣告终结。",
+      "structure": [
+        {
+          "text": "Recent years",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have seen",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the end of the virtual monopoly of cork as the material for bottle stoppers",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "as the material for bottle stoppers",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "due to concerns about the effect it may have on the contents of the bottle",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "it may have on the contents of the bottle",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Recent years have seen 是拟人化表达，字面“最近几年见证了……”，实际指“近年来发生了……的变化”。",
+        "as the material for bottle stoppers 说明软木此前所扮演的角色。",
+        "effect 后省略了关系代词 that/which，it may have 是省略引导词的定语从句，修饰 effect。"
+      ],
+      "expressions": [
+        {
+          "text": "a virtual monopoly of",
+          "meaning_zh": "几乎垄断……的地位"
+        },
+        {
+          "text": "due to",
+          "meaning_zh": "由于"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "This is caused by a chemical compound called 2,4,6-trichloroanisole (TCA), which forms through the interaction of plant phenols, chlorine and mould.",
+      "translation": "这是由一种名为2,4,6-三氯苯甲醚（TCA）的化合物引起的，这种化合物是通过植物酚、氯和霉菌相互作用形成的。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is caused by",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a chemical compound called 2,4,6-trichloroanisole (TCA)",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "called 2,4,6-trichloroanisole (TCA)",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "which forms through the interaction of plant phenols, chlorine and mould",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "This 指代上一句提到的“软木垄断地位终结”这一现象。",
+        "called... 是过去分词短语，修饰 compound，给出这种化合物的名称。",
+        "which 引导定语从句，说明这种化合物是如何形成的。"
+      ],
+      "expressions": [
+        {
+          "text": "be caused by",
+          "meaning_zh": "由……引起"
+        },
+        {
+          "text": "the interaction of",
+          "meaning_zh": "……的相互作用"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "The tiniest concentrations - as little as three or four parts to a trillion - can spoil the taste of the product contained in the bottle.",
+      "translation": "极其微小的浓度——低至一万亿分之三或四——就能破坏瓶中产品的味道。",
+      "structure": [
+        {
+          "text": "The tiniest concentrations",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "as little as three or four parts to a trillion",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "can spoil",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the taste of the product contained in the bottle",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "contained in the bottle",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "两个破折号之间的内容具体说明“极微小浓度”到底有多小。",
+        "as little as 强调数量之少，带有强调语气。",
+        "contained in the bottle 是过去分词短语，后置修饰 product。"
+      ],
+      "expressions": [
+        {
+          "text": "as little as",
+          "meaning_zh": "少至；仅仅"
+        },
+        {
+          "text": "spoil the taste of",
+          "meaning_zh": "破坏……的味道"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "The result has been a gradual yet steady move first towards plastic stoppers and, more recently, to aluminium screw caps.",
+      "translation": "结果是逐渐但持续地先转向塑料瓶塞，最近又转向了铝制螺旋盖。",
+      "structure": [
+        {
+          "text": "The result",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has been",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a gradual yet steady move",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "first towards plastic stoppers",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "and, more recently, to aluminium screw caps",
+          "role": "coordinated_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "gradual yet steady 两个形容词并列修饰 move，强调变化虽然缓慢但持续不断。",
+        "first...more recently... 表示这一转变分为两个阶段：先转向塑料瓶塞，后来又转向铝制螺旋盖。"
+      ],
+      "expressions": [
+        {
+          "text": "a gradual yet steady move towards",
+          "meaning_zh": "缓慢而持续地转向……"
+        },
+        {
+          "text": "more recently",
+          "meaning_zh": "最近；近来"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "These substitutes are cheaper to manufacture and, in the case of screw caps, more convenient for the user.",
+      "translation": "这些替代品制造成本更低，而且就螺旋盖而言，对使用者来说也更方便。",
+      "structure": [
+        {
+          "text": "These substitutes",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "cheaper to manufacture",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "and, in the case of screw caps, more convenient for the user",
+          "role": "coordinated_clause",
+          "level": 1
+        },
+        {
+          "text": "in the case of screw caps",
+          "role": "parenthesis",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "cheaper to manufacture 中不定式说明“更便宜”具体体现在制造这一方面。",
+        "in the case of screw caps 是插入语，限定“更方便”这一优点仅针对螺旋盖而言。"
+      ],
+      "expressions": [
+        {
+          "text": "in the case of",
+          "meaning_zh": "就……而言"
+        },
+        {
+          "text": "convenient for",
+          "meaning_zh": "对……方便"
+        }
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 32,
+      "sentence": "The classic cork stopper does have several advantages, however.",
+      "translation": "然而，传统的软木瓶塞确实具有若干优点。",
+      "structure": [
+        {
+          "text": "The classic cork stopper",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "does have",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "several advantages",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "however",
+          "role": "parenthesis",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "does have 中助动词 does 起强调作用，强调“确实具有”。",
+        "however 位于句末，起转折作用，呼应上一段软木瓶塞逐渐被取代的内容。"
+      ],
+      "expressions": [
+        {
+          "text": "have advantages",
+          "meaning_zh": "具有优势"
+        }
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "Firstly, its traditional image is more in keeping with that of the type of high quality goods with which it has long been associated.",
+      "translation": "首先，软木瓶塞的传统形象更符合那类它长期以来与之相关联的高品质商品的形象。",
+      "structure": [
+        {
+          "text": "Firstly",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "its traditional image",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is more in keeping with",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that of the type of high quality goods",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "with which it has long been associated",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "that 指代前面的 image，即“……的形象”，用来避免重复。",
+        "with which it has long been associated 是介词提前的定语从句，修饰 high quality goods，说明软木长期以来与高档商品的形象相联系。",
+        "be in keeping with 表示“与……相符、相称”。"
+      ],
+      "expressions": [
+        {
+          "text": "be in keeping with",
+          "meaning_zh": "与……相符/相称"
+        },
+        {
+          "text": "be associated with",
+          "meaning_zh": "与……联系在一起"
+        }
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "Secondly - and very importantly - cork is a sustainable product that can be recycled without difficulty.",
+      "translation": "其次——这一点也非常重要——软木是一种可持续的产品，能够轻而易举地被回收利用。",
+      "structure": [
+        {
+          "text": "Secondly",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "and very importantly",
+          "role": "parenthesis",
+          "level": 2
+        },
+        {
+          "text": "cork",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a sustainable product",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "that can be recycled without difficulty",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "两个破折号之间的内容强调这一点的重要性。",
+        "that 引导定语从句修饰 product，说明这种可持续产品的具体特性——易于回收。"
+      ],
+      "expressions": [
+        {
+          "text": "without difficulty",
+          "meaning_zh": "轻而易举地"
+        },
+        {
+          "text": "a sustainable product",
+          "meaning_zh": "可持续的产品"
+        }
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "Moreover, cork forests are a resource which support local biodiversity, and prevent desertification in the regions where they are planted.",
+      "translation": "此外，软木林是一种资源，既能支持当地的生物多样性，又能防止其种植地区的荒漠化。",
+      "structure": [
+        {
+          "text": "Moreover",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "cork forests",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "a resource",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "which support local biodiversity",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "and prevent desertification in the regions where they are planted",
+          "role": "coordinated_clause",
+          "level": 2
+        },
+        {
+          "text": "where they are planted",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "which 引导定语从句修饰 resource，说明软木林作为一种资源所发挥的作用。",
+        "and 连接 support...和 prevent...两个并列谓语，说明软木林的两种生态作用。",
+        "where 引导定语从句修饰 regions，说明种植软木林的地区。"
+      ],
+      "expressions": [
+        {
+          "text": "support biodiversity",
+          "meaning_zh": "支持生物多样性"
+        },
+        {
+          "text": "prevent desertification",
+          "meaning_zh": "防止荒漠化"
+        }
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 36,
+      "sentence": "So, given the current concerns about environmental issues, the future of this ancient material once again looks promising.",
+      "translation": "因此，考虑到当前人们对环境问题的关注，这种古老材料的未来再次看起来充满希望。",
+      "structure": [
+        {
+          "text": "So",
+          "role": "parenthesis",
+          "level": 1
+        },
+        {
+          "text": "given the current concerns about environmental issues",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the future of this ancient material",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "once again looks promising",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "given 在这里是介词，意为“考虑到……”，引出原因。",
+        "once again 强调这种古老材料的前景“再次”变得光明，呼应它历史上曾经辉煌的地位。"
+      ],
+      "expressions": [
+        {
+          "text": "given",
+          "meaning_zh": "考虑到"
+        },
+        {
+          "text": "look promising",
+          "meaning_zh": "前景看好"
+        }
+      ]
+    }
+  ]
+}

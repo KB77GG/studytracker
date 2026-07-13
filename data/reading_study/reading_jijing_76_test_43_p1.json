@@ -1,0 +1,637 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_76_test_43",
+  "passage_id": "reading_jijing_76_test_43_p1",
+  "passage_title": "DEPRESSION",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "It is often more difficult for outsiders and non-sufferers to understand mental rather than physical illness in others.",
+      "translation": "对于局外人和未患病者来说，理解他人的心理疾病往往比理解身体疾病更加困难。",
+      "structure": [
+        {"text": "It is often more difficult", "role": "anticipatory_it_main_clause", "level": 1},
+        {"text": "for outsiders and non-sufferers", "role": "logical_subject", "level": 2},
+        {"text": "to understand mental rather than physical illness in others", "role": "infinitive_subject", "level": 2},
+        {"text": "mental rather than physical illness", "role": "object_with_contrast", "level": 3},
+        {"text": "in others", "role": "postmodifier", "level": 3}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的主语是后面的不定式 to understand...。",
+        "rather than 构成对比，说明更难理解的是心理疾病，而非身体疾病。"
+      ],
+      "expressions": [
+        {"text": "rather than", "meaning_zh": "而不是"},
+        {"text": "mental illness", "meaning_zh": "心理疾病"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "While it may be easy for us to sympathise with individuals living with the burden of a physical illness or disability, there is often a stigma attached to being mentally ill, or a belief that such conditions only exist in individuals who lack the strength of character to cope with the real world.",
+      "translation": "尽管我们或许很容易同情那些承受身体疾病或残障之苦的人，但心理疾病往往带有污名，人们也可能认为，这类状况只会出现在缺乏坚强性格、无法应对现实世界的人身上。",
+      "structure": [
+        {"text": "While it may be easy for us to sympathise with individuals living with the burden of a physical illness or disability", "role": "concessive_clause", "level": 1},
+        {"text": "for us to sympathise with individuals", "role": "infinitive_complement", "level": 2},
+        {"text": "living with the burden of a physical illness or disability", "role": "present_participle_postmodifier", "level": 3},
+        {"text": "there is often a stigma attached to being mentally ill", "role": "existential_main_clause", "level": 1},
+        {"text": "attached to being mentally ill", "role": "past_participle_postmodifier", "level": 2},
+        {"text": "or a belief that such conditions only exist in individuals who lack the strength of character to cope with the real world", "role": "coordinated_subject_complement", "level": 1},
+        {"text": "that such conditions only exist in individuals", "role": "content_clause", "level": 2},
+        {"text": "who lack the strength of character to cope with the real world", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "While 引导让步从句，与后面的 there is... 主句形成转折。",
+        "living with... 是现在分词短语，修饰 individuals。",
+        "that 引导同位内容从句说明 belief 的具体内容，who 则修饰 individuals。"
+      ],
+      "expressions": [
+        {"text": "sympathise with", "meaning_zh": "同情"},
+        {"text": "live with the burden of", "meaning_zh": "承受……的负担"},
+        {"text": "a stigma attached to", "meaning_zh": "附着于……的污名"},
+        {"text": "cope with", "meaning_zh": "应对"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "The pressures of modern life seem to have resulted in an increase in cases of emotional disharmony and government initiatives in many countries have, of late, focussed on increasing the general public's awareness and sympathy towards sufferers of mental illness and related conditions.",
+      "translation": "现代生活的压力似乎已导致情绪失调病例增加，而许多国家的政府近来已着力提升公众对心理疾病及相关病症患者的认识与同情。",
+      "structure": [
+        {"text": "The pressures of modern life", "role": "subject", "level": 1},
+        {"text": "seem to have resulted in an increase in cases of emotional disharmony", "role": "predicate", "level": 1},
+        {"text": "to have resulted in", "role": "perfect_infinitive_complement", "level": 2},
+        {"text": "and government initiatives in many countries", "role": "coordinated_subject", "level": 1},
+        {"text": "have, of late, focussed on increasing the general public's awareness and sympathy", "role": "coordinated_predicate", "level": 1},
+        {"text": "of late", "role": "parenthetical_time_adverbial", "level": 2},
+        {"text": "increasing the general public's awareness and sympathy towards sufferers of mental illness and related conditions", "role": "gerund_complement", "level": 2}
+      ],
+      "difficult_points": [
+        "句子由 and 连接两个独立主干：生活压力导致病例增加，政府举措则着力提高公众意识。",
+        "seem to have resulted 使用完成式不定式，表示结果已经发生。",
+        "of late 是插入式时间状语，意为“近来”。"
+      ],
+      "expressions": [
+        {"text": "result in", "meaning_zh": "导致"},
+        {"text": "an increase in", "meaning_zh": "……的增加"},
+        {"text": "focus on", "meaning_zh": "着力于"},
+        {"text": "raise awareness", "meaning_zh": "提高认识"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Clinical depression, or 'major depressive disorder', a state of extreme sadness or despair, is said to affect up to almost 20% of the population at some point in their lives prior to the age of 40.",
+      "translation": "据称，临床抑郁症（又称“重度抑郁障碍”，即一种极度悲伤或绝望的状态）会在近20%的人口年满40岁之前的某个人生阶段影响他们。",
+      "structure": [
+        {"text": "Clinical depression", "role": "subject", "level": 1},
+        {"text": "or 'major depressive disorder'", "role": "apposition", "level": 2},
+        {"text": "a state of extreme sadness or despair", "role": "apposition", "level": 2},
+        {"text": "is said to affect up to almost 20% of the population", "role": "passive_reporting_predicate", "level": 1},
+        {"text": "to affect up to almost 20% of the population", "role": "infinitive_complement", "level": 2},
+        {"text": "at some point in their lives", "role": "time_adverbial", "level": 1},
+        {"text": "prior to the age of 40", "role": "time_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "两个逗号间的 or... 和 a state... 都是对 Clinical depression 的同位解释。",
+        "is said to affect 是“据称会影响”的被动报道结构。",
+        "up to almost 20% 表示比例最高接近20%，原文搭配略显冗余但需保留。"
+      ],
+      "expressions": [
+        {"text": "be said to", "meaning_zh": "据称"},
+        {"text": "at some point", "meaning_zh": "在某个阶段"},
+        {"text": "prior to", "meaning_zh": "在……之前"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Studies have shown that this disorder is the leading cause of disability in North America; in the UK almost 3 million people are said to be diagnosed with some form of depression at any one time, and experts believe that as many as a further 9 million other cases may go undiagnosed.",
+      "translation": "研究表明，这种疾病是北美致残的首要原因；在英国，据称任何时候都有近300万人被诊断患有某种形式的抑郁症，而专家认为，另外多达900万例可能尚未得到诊断。",
+      "structure": [
+        {"text": "Studies have shown", "role": "main_clause", "level": 1},
+        {"text": "that this disorder is the leading cause of disability in North America", "role": "object_clause", "level": 2},
+        {"text": "in the UK almost 3 million people", "role": "second_clause_subject", "level": 1},
+        {"text": "are said to be diagnosed with some form of depression at any one time", "role": "passive_reporting_predicate", "level": 1},
+        {"text": "to be diagnosed with some form of depression", "role": "passive_infinitive_complement", "level": 2},
+        {"text": "and experts believe", "role": "coordinated_main_clause", "level": 1},
+        {"text": "that as many as a further 9 million other cases may go undiagnosed", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "分号连接两个紧密相关但语法独立的陈述，后半部分又由 and 连接专家判断。",
+        "are said to be diagnosed 是报道被动结构，其中 to be diagnosed 本身也是被动形式。",
+        "go undiagnosed 中 go 是系动词，表示“处于未被诊断的状态”。"
+      ],
+      "expressions": [
+        {"text": "the leading cause of", "meaning_zh": "……的首要原因"},
+        {"text": "be diagnosed with", "meaning_zh": "被诊断患有"},
+        {"text": "as many as", "meaning_zh": "多达"},
+        {"text": "go undiagnosed", "meaning_zh": "未得到诊断"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "World Health Organisation projections indicate that clinical depression may become the second most significant cause of disability' on a global scale by 2020.",
+      "translation": "世界卫生组织的预测显示，到2020年，临床抑郁症可能会成为全球第二大致残原因。",
+      "structure": [
+        {"text": "World Health Organisation projections", "role": "subject", "level": 1},
+        {"text": "indicate", "role": "predicate", "level": 1},
+        {"text": "that clinical depression may become the second most significant cause of disability' on a global scale by 2020", "role": "object_clause", "level": 2},
+        {"text": "clinical depression", "role": "embedded_subject", "level": 3},
+        {"text": "may become the second most significant cause of disability'", "role": "embedded_predicate", "level": 3},
+        {"text": "on a global scale", "role": "scope_adverbial", "level": 3},
+        {"text": "by 2020", "role": "deadline_adverbial", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导 indicate 的宾语从句，完整说明预测的内容。",
+        "by 2020 表示“不晚于2020年”的时间界限。",
+        "disability 后的撇号属于源文异常，不影响其“致残原因”的含义。"
+      ],
+      "expressions": [
+        {"text": "on a global scale", "meaning_zh": "在全球范围内"},
+        {"text": "by 2020", "meaning_zh": "到2020年为止"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "However, such figures are not unanimously supported, as some experts believe that the diagnostic criteria used to identify the condition are not precise enough, leading to other types of depression being wrongly classified as 'clinical'.",
+      "translation": "然而，这些数据并未获得一致认可，因为一些专家认为，用于识别该病症的诊断标准不够精确，从而导致其他类型的抑郁症被错误地归类为“临床抑郁症”。",
+      "structure": [
+        {"text": "such figures are not unanimously supported", "role": "main_clause", "level": 1},
+        {"text": "as some experts believe", "role": "reason_clause", "level": 2},
+        {"text": "that the diagnostic criteria used to identify the condition are not precise enough", "role": "object_clause", "level": 3},
+        {"text": "used to identify the condition", "role": "past_participle_postmodifier", "level": 4},
+        {"text": "to identify the condition", "role": "purpose_infinitive", "level": 5},
+        {"text": "leading to other types of depression being wrongly classified as 'clinical'", "role": "result_participle_clause", "level": 2},
+        {"text": "other types of depression being wrongly classified as 'clinical'", "role": "gerund_complement", "level": 3}
+      ],
+      "difficult_points": [
+        "as 在这里引导原因从句，相当于“因为”，不是时间含义。",
+        "used to identify... 是过去分词短语，后置修饰 diagnostic criteria。",
+        "leading to... 表示前述标准不精确所造成的结果，being classified 是动名词的被动形式。"
+      ],
+      "expressions": [
+        {"text": "unanimously supported", "meaning_zh": "获得一致支持"},
+        {"text": "diagnostic criteria", "meaning_zh": "诊断标准"},
+        {"text": "lead to", "meaning_zh": "导致"},
+        {"text": "be classified as", "meaning_zh": "被归类为"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "Many of us may experience periods of low morale or mood and feelings of dejection, as a natural human response to negative events in our lives such as bereavement, redundancy or breakdown of a relationship.",
+      "translation": "我们许多人都可能经历士气低落、情绪低迷或沮丧的时期，这是人类面对生活中丧亲、失业或关系破裂等负面事件时的自然反应。",
+      "structure": [
+        {"text": "Many of us", "role": "subject", "level": 1},
+        {"text": "may experience", "role": "predicate", "level": 1},
+        {"text": "periods of low morale or mood and feelings of dejection", "role": "compound_object", "level": 1},
+        {"text": "as a natural human response to negative events in our lives", "role": "supplementary_description", "level": 1},
+        {"text": "such as bereavement, redundancy or breakdown of a relationship", "role": "example_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "as a natural human response... 是补充说明，表明这些情绪是对负面事件的自然反应。",
+        "such as 后列举 bereavement、redundancy 和 relationship breakdown 三类事件。"
+      ],
+      "expressions": [
+        {"text": "feelings of dejection", "meaning_zh": "沮丧感"},
+        {"text": "a response to", "meaning_zh": "对……的反应"},
+        {"text": "breakdown of a relationship", "meaning_zh": "关系破裂"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "Some of us may even experience periods of depression and low levels of motivation which have no tangible reason or trigger.",
+      "translation": "我们当中有些人甚至可能经历一段抑郁、动力低下的时期，却找不到任何明确的原因或诱因。",
+      "structure": [
+        {"text": "Some of us", "role": "subject", "level": 1},
+        {"text": "may even experience", "role": "predicate", "level": 1},
+        {"text": "periods of depression and low levels of motivation", "role": "compound_object", "level": 1},
+        {"text": "which have no tangible reason or trigger", "role": "relative_clause", "level": 2},
+        {"text": "no tangible reason or trigger", "role": "embedded_object", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导定语从句，语义上说明前面所述抑郁和动力低下的时期没有明确诱因。",
+        "tangible 在这里不是“可触摸的”，而是“明确、可确认的”。"
+      ],
+      "expressions": [
+        {"text": "low levels of motivation", "meaning_zh": "动力不足"},
+        {"text": "tangible reason", "meaning_zh": "明确可辨的原因"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "Clinical depression is classified as an on-going state of negativity, with no tangible cause, where sufferers enter a spiral of persistent negative thinking, often experiencing irritability, perpetual tiredness and listlessness.",
+      "translation": "临床抑郁症被界定为一种没有明确原因、持续存在的消极状态；在这种状态下，患者会陷入持续负面思维的恶性循环，并常常感到易怒、长期疲惫和无精打采。",
+      "structure": [
+        {"text": "Clinical depression", "role": "subject", "level": 1},
+        {"text": "is classified as an on-going state of negativity", "role": "passive_predicate", "level": 1},
+        {"text": "with no tangible cause", "role": "supplementary_prepositional_phrase", "level": 2},
+        {"text": "where sufferers enter a spiral of persistent negative thinking", "role": "relative_clause", "level": 2},
+        {"text": "sufferers", "role": "embedded_subject", "level": 3},
+        {"text": "enter a spiral of persistent negative thinking", "role": "embedded_predicate", "level": 3},
+        {"text": "often experiencing irritability, perpetual tiredness and listlessness", "role": "accompanying_participle_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "where 并非指具体地点，而是把 state of negativity 当作一种“处境”加以说明。",
+        "experiencing... 的逻辑主语是 sufferers，补充患者陷入负面思维时伴随的症状。",
+        "a spiral of... 表示一种不断加剧、难以摆脱的循环过程。"
+      ],
+      "expressions": [
+        {"text": "be classified as", "meaning_zh": "被界定为"},
+        {"text": "enter a spiral of", "meaning_zh": "陷入……的恶性循环"},
+        {"text": "persistent negative thinking", "meaning_zh": "持续的负面思维"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Sufferers of clinical depression are said to be at higher risk of resorting to drug abuse or even suicide attempts than the rest of the population.",
+      "translation": "据称，与其他人群相比，临床抑郁症患者更有可能诉诸药物滥用，甚至尝试自杀。",
+      "structure": [
+        {"text": "Sufferers of clinical depression", "role": "subject", "level": 1},
+        {"text": "are said to be at higher risk", "role": "passive_reporting_predicate", "level": 1},
+        {"text": "to be at higher risk of resorting to drug abuse or even suicide attempts", "role": "infinitive_complement", "level": 2},
+        {"text": "resorting to drug abuse or even suicide attempts", "role": "gerund_complement", "level": 3},
+        {"text": "than the rest of the population", "role": "comparison_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "are said to be 是报道被动结构，表示这一判断来自一般研究或说法。",
+        "than 引出的比较对象是 the rest of the population，对应前面的 higher risk。",
+        "resort to 表示在困境中“诉诸”某种通常不理想的做法。"
+      ],
+      "expressions": [
+        {"text": "be at higher risk of", "meaning_zh": "面临更高的……风险"},
+        {"text": "resort to", "meaning_zh": "诉诸"},
+        {"text": "the rest of the population", "meaning_zh": "其余人群"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "Clinical depression is generally diagnosed when an individual is observed to exhibit an excessively depressed mood and/or 'anhedonia' – an inability to experience pleasure from positive experiences such as enjoying a meal or pleasurable social interaction – for a period of two weeks or more, in conjunction with five or more additional recognised symptoms.",
+      "translation": "一般而言，如果观察到一个人持续两周或更久表现出过度低落的情绪和/或“快感缺失”——即无法从享用美食或愉快的社交互动等积极体验中感受到快乐——并同时出现另外五种或更多公认症状，便会被诊断为临床抑郁症。",
+      "structure": [
+        {"text": "Clinical depression is generally diagnosed", "role": "main_clause", "level": 1},
+        {"text": "when an individual is observed to exhibit an excessively depressed mood and/or 'anhedonia'", "role": "condition_time_clause", "level": 2},
+        {"text": "is observed to exhibit", "role": "passive_complex_predicate", "level": 3},
+        {"text": "an inability to experience pleasure from positive experiences such as enjoying a meal or pleasurable social interaction", "role": "apposition", "level": 3},
+        {"text": "to experience pleasure from positive experiences", "role": "infinitive_postmodifier", "level": 4},
+        {"text": "such as enjoying a meal or pleasurable social interaction", "role": "example_phrase", "level": 5},
+        {"text": "for a period of two weeks or more", "role": "duration_adverbial", "level": 2},
+        {"text": "in conjunction with five or more additional recognised symptoms", "role": "condition_adverbial", "level": 2}
+      ],
+      "difficult_points": [
+        "when 从句给出诊断发生的条件，而不只是说明时间。",
+        "两个破折号之间是对 anhedonia 的同位解释，核心含义是无法从积极体验中获得快乐。",
+        "is observed to exhibit 是被动结构，表示“被观察到表现出”。",
+        "for... 与 in conjunction with... 分别限定症状持续时长和同时满足的附加条件。"
+      ],
+      "expressions": [
+        {"text": "be diagnosed", "meaning_zh": "被诊断"},
+        {"text": "be observed to", "meaning_zh": "被观察到……"},
+        {"text": "for a period of", "meaning_zh": "持续一段……时间"},
+        {"text": "in conjunction with", "meaning_zh": "连同；与……同时"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "These additional symptoms may include overwhelming feelings of sadness; inability to sleep, or conversely, excessive sleeping; feelings of guilt, nervousness, abandonment or fear; inability to concentrate; interference with memory capabilities; fixation with death or extreme change in eating habits and associated weight gain or loss.",
+      "translation": "这些附加症状可能包括：强烈的悲伤感；无法入睡，或相反地，睡眠过度；内疚、紧张、被遗弃或恐惧感；无法集中注意力；记忆能力受到干扰；执着于死亡，或者饮食习惯发生极端变化并伴随体重增加或下降。",
+      "structure": [
+        {"text": "These additional symptoms", "role": "subject", "level": 1},
+        {"text": "may include", "role": "predicate", "level": 1},
+        {"text": "overwhelming feelings of sadness", "role": "list_item", "level": 2},
+        {"text": "inability to sleep, or conversely, excessive sleeping", "role": "list_item", "level": 2},
+        {"text": "feelings of guilt, nervousness, abandonment or fear", "role": "list_item", "level": 2},
+        {"text": "inability to concentrate", "role": "list_item", "level": 2},
+        {"text": "interference with memory capabilities", "role": "list_item", "level": 2},
+        {"text": "fixation with death or extreme change in eating habits and associated weight gain or loss", "role": "list_item", "level": 2}
+      ],
+      "difficult_points": [
+        "分号将 may include 后面的多组并列症状分隔开来，所有项目都作 include 的宾语。",
+        "conversely 表示前后症状相反：既可能失眠，也可能睡眠过度。",
+        "associated 修饰 weight gain or loss，表示体重变化与饮食习惯的改变相伴。"
+      ],
+      "expressions": [
+        {"text": "inability to", "meaning_zh": "无法……"},
+        {"text": "interference with", "meaning_zh": "对……的干扰"},
+        {"text": "fixation with", "meaning_zh": "对……的执着"},
+        {"text": "associated with", "meaning_zh": "与……相关联"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 14,
+      "sentence": "Clinical depression was originally solely attributed to chemical imbalance in the brain, and while anti-depressant drugs which work to optimise levels of 'feel good' chemicals – serotonin and norepinephrine – are still commonly prescribed today, experts now believe that onset of depression may be caused by a number, and often combination of, physiological and socio-psychological factors.",
+      "translation": "临床抑郁症最初完全被归因于大脑中的化学物质失衡；如今，用于优化血清素和去甲肾上腺素这类“使人感觉良好”的化学物质水平的抗抑郁药仍被普遍开具，但专家现在认为，抑郁症的发作可能由多种生理和社会心理因素造成，而且往往是这些因素共同作用的结果。",
+      "structure": [
+        {"text": "Clinical depression was originally solely attributed to chemical imbalance in the brain", "role": "first_main_clause", "level": 1},
+        {"text": "while anti-depressant drugs which work to optimise levels of 'feel good' chemicals – serotonin and norepinephrine – are still commonly prescribed today", "role": "concessive_clause", "level": 2},
+        {"text": "which work to optimise levels of 'feel good' chemicals", "role": "relative_clause", "level": 3},
+        {"text": "to optimise levels of 'feel good' chemicals", "role": "purpose_infinitive", "level": 4},
+        {"text": "serotonin and norepinephrine", "role": "apposition", "level": 4},
+        {"text": "experts now believe", "role": "second_main_clause", "level": 1},
+        {"text": "that onset of depression may be caused by a number, and often combination of, physiological and socio-psychological factors", "role": "object_clause", "level": 2},
+        {"text": "may be caused by", "role": "embedded_passive_predicate", "level": 3}
+      ],
+      "difficult_points": [
+        "句子由 and 连接两层观点：早期归因与当代专家看法；while 从句嵌在第二部分中表示让步。",
+        "which 修饰 anti-depressant drugs，说明药物通过优化相关化学物质水平发挥作用。",
+        "破折号中的 serotonin and norepinephrine 是对 'feel good' chemicals 的同位举例。",
+        "a number, and often combination of 属于源文略不规范的并列，语义是“多种因素，而且往往是多因素组合”。"
+      ],
+      "expressions": [
+        {"text": "be attributed to", "meaning_zh": "被归因于"},
+        {"text": "work to optimise", "meaning_zh": "发挥优化……的作用"},
+        {"text": "be prescribed", "meaning_zh": "被开具处方"},
+        {"text": "be caused by", "meaning_zh": "由……造成"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 15,
+      "sentence": "Treatment approaches vary quite dramatically from place to place and are often tailored to an individual's particular situation; however, some variation of a combination of medication and psychotherapy is most commonly used.",
+      "translation": "治疗方法因地区而有很大差异，而且通常会根据个人的具体情况进行调整；不过，最常见的做法仍是以某种方式将药物治疗与心理治疗结合起来。",
+      "structure": [
+        {"text": "Treatment approaches", "role": "subject", "level": 1},
+        {"text": "vary quite dramatically from place to place", "role": "first_predicate", "level": 1},
+        {"text": "and are often tailored to an individual's particular situation", "role": "coordinated_passive_predicate", "level": 1},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "some variation of a combination of medication and psychotherapy", "role": "second_clause_subject", "level": 1},
+        {"text": "is most commonly used", "role": "second_clause_passive_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "前半句的 vary 和 are tailored 共用主语 Treatment approaches。",
+        "分号后的 however 是连接副词，引出与“方法差异很大”相对照的普遍做法。",
+        "some variation of a combination 表示具体组合形式可能不同，而非单一固定方案。"
+      ],
+      "expressions": [
+        {"text": "vary from place to place", "meaning_zh": "因地而异"},
+        {"text": "be tailored to", "meaning_zh": "根据……量身调整"},
+        {"text": "a combination of", "meaning_zh": "……的组合"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "The more controversial electroconvulsive therapy (ECT) may also be used where initial approaches fail.",
+      "translation": "如果初始治疗方法无效，也可能采用更具争议的电休克疗法（ECT）。",
+      "structure": [
+        {"text": "The more controversial electroconvulsive therapy (ECT)", "role": "subject", "level": 1},
+        {"text": "may also be used", "role": "passive_predicate", "level": 1},
+        {"text": "where initial approaches fail", "role": "condition_clause", "level": 2},
+        {"text": "initial approaches", "role": "embedded_subject", "level": 3},
+        {"text": "fail", "role": "embedded_predicate", "level": 3}
+      ],
+      "difficult_points": [
+        "where 在此不是地点关系词，而是引导条件，含义接近“在初始方法失败的情况下”。",
+        "may be used 是情态动词加被动语态，表示一种可能采用的治疗选择。"
+      ],
+      "expressions": [
+        {"text": "initial approaches", "meaning_zh": "初始治疗方法"},
+        {"text": "may be used", "meaning_zh": "可能被采用"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "In extreme cases, where an individual exhibits behaviour which Indicates that they may cause physical harm to themselves, psychiatric hospitalisation may be necessary as a form of intensive therapy.",
+      "translation": "在极端情况下，如果一个人表现出的行为显示其可能伤害自己的身体，那么住进精神病院可能是必要的，可作为一种强化治疗。",
+      "structure": [
+        {"text": "In extreme cases", "role": "condition_adverbial", "level": 1},
+        {"text": "where an individual exhibits behaviour which Indicates that they may cause physical harm to themselves", "role": "supplementary_relative_clause", "level": 2},
+        {"text": "which Indicates that they may cause physical harm to themselves", "role": "relative_clause", "level": 3},
+        {"text": "that they may cause physical harm to themselves", "role": "object_clause", "level": 4},
+        {"text": "psychiatric hospitalisation", "role": "subject", "level": 1},
+        {"text": "may be necessary", "role": "predicate", "level": 1},
+        {"text": "as a form of intensive therapy", "role": "role_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "where 从句补充说明 extreme cases 具体指什么情形。",
+        "which 修饰 behaviour，而 that 从句则作 Indicates 的宾语，说明行为显示出的风险。",
+        "they 和 themselves 均回指不限定性别的 an individual。",
+        "Indicates 的大写属于源文异常，应按普通动词 indicates 理解。"
+      ],
+      "expressions": [
+        {"text": "in extreme cases", "meaning_zh": "在极端情况下"},
+        {"text": "cause physical harm to", "meaning_zh": "对……造成身体伤害"},
+        {"text": "as a form of", "meaning_zh": "作为一种……形式"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 18,
+      "sentence": "Some recent studies, such as those published by the Archives of General Psychiatry, hold that around a quarter of diagnosed clinical depression cases should actually be considered as significant but none-the-less ordinary sadness and maladjustment to coping with trials in life, indicating that in such cases, psychotherapy rather than treatment through medication is required.",
+      "translation": "近期的一些研究，例如《普通精神病学档案》发表的研究，认为大约四分之一被诊断为临床抑郁症的病例其实应被视为程度严重但仍属普通的悲伤，以及面对生活磨难时的适应不良；这表明在此类情况下，需要的是心理治疗而非药物治疗。",
+      "structure": [
+        {"text": "Some recent studies", "role": "subject", "level": 1},
+        {"text": "such as those published by the Archives of General Psychiatry", "role": "example_phrase", "level": 2},
+        {"text": "published by the Archives of General Psychiatry", "role": "past_participle_postmodifier", "level": 3},
+        {"text": "hold", "role": "predicate", "level": 1},
+        {"text": "that around a quarter of diagnosed clinical depression cases should actually be considered as significant but none-the-less ordinary sadness and maladjustment to coping with trials in life", "role": "object_clause", "level": 2},
+        {"text": "should actually be considered as", "role": "embedded_passive_predicate", "level": 3},
+        {"text": "indicating that in such cases, psychotherapy rather than treatment through medication is required", "role": "result_participle_clause", "level": 2},
+        {"text": "that in such cases, psychotherapy rather than treatment through medication is required", "role": "object_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "hold that 在这里表示“持有……观点”，that 从句包含研究的核心结论。",
+        "published by... 是过去分词短语，修饰 those，those 代指 studies。",
+        "indicating... 的逻辑内容承接整个前述研究结论，并进一步推出治疗选择。",
+        "rather than 连接 psychotherapy 与 medication treatment，强调前者才是所需方案。"
+      ],
+      "expressions": [
+        {"text": "around a quarter of", "meaning_zh": "大约四分之一的"},
+        {"text": "be considered as", "meaning_zh": "被视为"},
+        {"text": "cope with trials in life", "meaning_zh": "应对生活中的磨难"},
+        {"text": "rather than", "meaning_zh": "而不是"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 19,
+      "sentence": "Recovery as a result of psychotherapy tends, in most cases, to be a slower process than improvements related to medication; however, improvements as a result of psychological treatment, once achieved, have been observed in some individuals to be more long term and sustainable than those attained through prescription drugs.",
+      "translation": "在大多数情况下，通过心理治疗实现康复的过程往往比药物带来的改善更慢；然而，一旦心理治疗取得成效，人们观察到某些患者的改善比处方药带来的改善更持久、更具可持续性。",
+      "structure": [
+        {"text": "Recovery as a result of psychotherapy", "role": "first_clause_subject", "level": 1},
+        {"text": "tends, in most cases, to be a slower process than improvements related to medication", "role": "first_clause_predicate", "level": 1},
+        {"text": "in most cases", "role": "parenthetical_adverbial", "level": 2},
+        {"text": "related to medication", "role": "past_participle_postmodifier", "level": 2},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "improvements as a result of psychological treatment", "role": "second_clause_subject", "level": 1},
+        {"text": "once achieved", "role": "reduced_time_clause", "level": 2},
+        {"text": "have been observed in some individuals to be more long term and sustainable than those attained through prescription drugs", "role": "second_clause_passive_predicate", "level": 1},
+        {"text": "attained through prescription drugs", "role": "past_participle_postmodifier", "level": 2}
+      ],
+      "difficult_points": [
+        "分号前后形成“见效较慢”与“效果更持久”的对比，however 明确标出转折。",
+        "once achieved 是省略了 improvements are 的时间从句，意为“一旦取得”。",
+        "those 代指 improvements，attained through... 修饰 those，避免重复。",
+        "have been observed... to be 是被动观察结构，表示研究中发现这些改善更持久。"
+      ],
+      "expressions": [
+        {"text": "as a result of", "meaning_zh": "由于；作为……的结果"},
+        {"text": "tend to", "meaning_zh": "往往会"},
+        {"text": "once achieved", "meaning_zh": "一旦实现"},
+        {"text": "prescription drugs", "meaning_zh": "处方药"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 20,
+      "sentence": "Various counselling approaches exist, though all focus on enhancing the subject's ability to function on a personal and interpersonal level.",
+      "translation": "咨询方法多种多样，但它们都着重提升接受治疗者在个人及人际层面正常生活与发挥作用的能力。",
+      "structure": [
+        {"text": "Various counselling approaches", "role": "main_clause_subject", "level": 1},
+        {"text": "exist", "role": "main_clause_predicate", "level": 1},
+        {"text": "though all focus on enhancing the subject's ability to function on a personal and interpersonal level", "role": "concessive_clause", "level": 2},
+        {"text": "enhancing the subject's ability", "role": "gerund_complement", "level": 3},
+        {"text": "to function on a personal and interpersonal level", "role": "infinitive_postmodifier", "level": 4}
+      ],
+      "difficult_points": [
+        "though 引导让步关系：方法虽不同，但关注点一致。",
+        "to function... 修饰 ability，说明要增强的是哪方面的能力。",
+        "subject 在此指接受研究或治疗的人，而非“学科”。"
+      ],
+      "expressions": [
+        {"text": "focus on", "meaning_zh": "着重于"},
+        {"text": "enhance the ability to", "meaning_zh": "提升……的能力"},
+        {"text": "on an interpersonal level", "meaning_zh": "在人际层面"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 21,
+      "sentence": "Sessions involve encouragement of an individual to view themselves and their relationships in a more positive manner, with the intention of helping patients to replace negative thoughts with a more positive outlook.",
+      "translation": "治疗过程包括鼓励个人以更积极的方式看待自己及其人际关系，目的是帮助患者用更积极的人生观取代消极想法。",
+      "structure": [
+        {"text": "Sessions", "role": "subject", "level": 1},
+        {"text": "involve", "role": "predicate", "level": 1},
+        {"text": "encouragement of an individual to view themselves and their relationships in a more positive manner", "role": "object", "level": 1},
+        {"text": "to view themselves and their relationships in a more positive manner", "role": "infinitive_postmodifier", "level": 2},
+        {"text": "with the intention of helping patients to replace negative thoughts with a more positive outlook", "role": "purpose_prepositional_phrase", "level": 1},
+        {"text": "helping patients to replace negative thoughts with a more positive outlook", "role": "gerund_complement", "level": 2},
+        {"text": "to replace negative thoughts with a more positive outlook", "role": "object_complement_infinitive", "level": 3}
+      ],
+      "difficult_points": [
+        "encouragement 后的 of an individual to view... 表示鼓励某人采取某种看法。",
+        "themselves 和 their 均回指不限定性别的 an individual。",
+        "with the intention of... 是目的表达，其中 replace A with B 表示用B取代A。"
+      ],
+      "expressions": [
+        {"text": "in a positive manner", "meaning_zh": "以积极的方式"},
+        {"text": "with the intention of", "meaning_zh": "目的是"},
+        {"text": "replace ... with ...", "meaning_zh": "用……取代……"},
+        {"text": "a positive outlook", "meaning_zh": "积极的人生观"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 22,
+      "sentence": "It is apparent that susceptibility to depression can run in families.",
+      "translation": "显然，抑郁症的易感性可能具有家族聚集性。",
+      "structure": [
+        {"text": "It is apparent", "role": "anticipatory_it_main_clause", "level": 1},
+        {"text": "that susceptibility to depression can run in families", "role": "subject_clause", "level": 2},
+        {"text": "susceptibility to depression", "role": "embedded_subject", "level": 3},
+        {"text": "can run in families", "role": "embedded_predicate", "level": 3}
+      ],
+      "difficult_points": [
+        "It 是形式主语，that 从句才是 is apparent 所评价的真正内容。",
+        "run in families 是固定表达，指某种疾病或特征在家族中遗传或聚集。"
+      ],
+      "expressions": [
+        {"text": "It is apparent that", "meaning_zh": "显然……"},
+        {"text": "susceptibility to", "meaning_zh": "对……的易感性"},
+        {"text": "run in families", "meaning_zh": "在家族中遗传或聚集"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 23,
+      "sentence": "However, it remains unclear as to whether this is truly an inherited genetic trait or whether biological and environmental factors common to family members may be at the root of the problem.",
+      "translation": "然而，目前仍不清楚这究竟是真正遗传而来的基因特征，还是家庭成员共有的生物与环境因素才是问题的根源。",
+      "structure": [
+        {"text": "it remains unclear", "role": "anticipatory_it_main_clause", "level": 1},
+        {"text": "as to whether this is truly an inherited genetic trait or whether biological and environmental factors common to family members may be at the root of the problem", "role": "content_clause", "level": 2},
+        {"text": "whether this is truly an inherited genetic trait", "role": "first_alternative_clause", "level": 3},
+        {"text": "or whether biological and environmental factors common to family members may be at the root of the problem", "role": "second_alternative_clause", "level": 3},
+        {"text": "common to family members", "role": "adjective_postmodifier", "level": 4},
+        {"text": "may be at the root of the problem", "role": "embedded_predicate", "level": 4}
+      ],
+      "difficult_points": [
+        "as to whether... 引出“不清楚”的具体问题，两个 whether 分句构成二选一。",
+        "this 回指上一句所说的抑郁症易感性具有家族聚集性的现象。",
+        "common to family members 后置修饰 biological and environmental factors。",
+        "be at the root of 表示“是……的根源”。"
+      ],
+      "expressions": [
+        {"text": "remain unclear", "meaning_zh": "仍不清楚"},
+        {"text": "as to whether", "meaning_zh": "关于是否"},
+        {"text": "common to", "meaning_zh": "为……所共有"},
+        {"text": "be at the root of", "meaning_zh": "是……的根源"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 24,
+      "sentence": "In some cases, sufferers of depression may need to unlearn certain behaviours and attitudes they have established in life and develop new coping strategies designed to help them deal with problems they may encounter, undoing patterns of destructive behaviour they may have observed in their role models and acquired for themselves.",
+      "translation": "在某些情况下，抑郁症患者可能需要摒弃自己在生活中形成的某些行为与态度，并培养新的应对策略，帮助自己处理可能遇到的问题，同时改掉那些从榜样身上观察并自行习得的破坏性行为模式。",
+      "structure": [
+        {"text": "In some cases", "role": "condition_adverbial", "level": 1},
+        {"text": "sufferers of depression", "role": "subject", "level": 1},
+        {"text": "may need to unlearn certain behaviours and attitudes they have established in life", "role": "first_coordinated_predicate", "level": 1},
+        {"text": "they have established in life", "role": "relative_clause_with_omitted_object", "level": 2},
+        {"text": "and develop new coping strategies designed to help them deal with problems they may encounter", "role": "second_coordinated_predicate", "level": 1},
+        {"text": "designed to help them deal with problems they may encounter", "role": "past_participle_postmodifier", "level": 2},
+        {"text": "they may encounter", "role": "relative_clause_with_omitted_object", "level": 3},
+        {"text": "undoing patterns of destructive behaviour they may have observed in their role models and acquired for themselves", "role": "accompanying_participle_clause", "level": 2},
+        {"text": "they may have observed in their role models and acquired for themselves", "role": "relative_clause_with_omitted_object", "level": 3}
+      ],
+      "difficult_points": [
+        "unlearn 和 develop 是由 and 连接的两个动作，共同受 may need to 支配。",
+        "they have established...、they may encounter 和 they may have observed... 都省略了作宾语的关系代词。",
+        "designed to help... 是过去分词短语，修饰 coping strategies。",
+        "undoing... 补充说明培养新策略时要消除旧有模式，其逻辑主语仍是 sufferers。"
+      ],
+      "expressions": [
+        {"text": "coping strategies", "meaning_zh": "应对策略"},
+        {"text": "deal with problems", "meaning_zh": "处理问题"},
+        {"text": "patterns of destructive behaviour", "meaning_zh": "破坏性行为模式"},
+        {"text": "role models", "meaning_zh": "榜样"}
+      ]
+    }
+  ]
+}

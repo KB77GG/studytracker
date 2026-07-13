@@ -1561,3 +1561,53 @@ class MockExamSession(db.Model):
 
     def __repr__(self) -> str:
         return f"<MockExamSession exam={self.exam_id} student={self.student_name} section={self.current_section}>"
+
+
+# ---- Reading Study (阅读句子解析) ----
+
+
+class ReadingPassageAnalysis(db.Model, TimestampMixin):
+    """One row per reading passage with its offline-generated analysis payload."""
+
+    __tablename__ = "reading_passage_analysis"
+
+    id = db.Column(db.Integer, primary_key=True)
+    passage_id = db.Column(db.String(64), unique=True, nullable=False, index=True)
+    test_id = db.Column(db.String(64), nullable=False, index=True)
+    source_kind = db.Column(db.String(32), nullable=False, index=True)
+    passage_title = db.Column(db.String(255), nullable=False)
+    difficulty = db.Column(db.String(16), nullable=False)
+    schema_version = db.Column(db.Integer, nullable=False, default=1)
+    generation_standard = db.Column(db.String(32), nullable=False, default="reading_study_v1")
+    content_hash = db.Column(db.String(64), nullable=False)
+    sentence_count = db.Column(db.Integer, nullable=False, default=0)
+    status = db.Column(db.String(16), nullable=False, default="ready")
+    payload_json = db.Column(db.Text, nullable=False)
+
+    def __repr__(self) -> str:
+        return f"<ReadingPassageAnalysis {self.passage_id} status={self.status}>"
+
+
+class StudentSavedExpression(db.Model, TimestampMixin):
+    """A student expression bookmark, deduplicated by normalized text."""
+
+    __tablename__ = "student_saved_expression"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id", "normalized_text", name="uq_saved_expression_student_text"
+        ),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(
+        db.Integer, db.ForeignKey("student_profile.id"), nullable=False, index=True
+    )
+    text = db.Column(db.String(255), nullable=False)
+    normalized_text = db.Column(db.String(255), nullable=False)
+    meaning_zh = db.Column(db.String(255), nullable=False, default="")
+    source_kind = db.Column(db.String(32), nullable=False, default="")
+    passage_id = db.Column(db.String(64), nullable=False, default="", index=True)
+    sentence_id = db.Column(db.String(16), nullable=False, default="")
+
+    def __repr__(self) -> str:
+        return f"<StudentSavedExpression student={self.student_id} text={self.normalized_text!r}>"

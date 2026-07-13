@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_81_test_93",
+  "passage_id": "reading_jijing_81_test_93_p2",
+  "passage_title": "The Brains Business",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "For those of a certain age and educational background, it is hard to think of higher education without thinking of ancient institutions.",
+      "translation": "对于具有某种年龄和教育背景的人来说，一想到高等教育，就很难不联想到古老的学府。",
+      "structure": [{"text": "For those of a certain age and educational background", "role": "perspective_adverbial", "level": 1}, {"text": "it is hard", "role": "main_clause", "level": 1}, {"text": "to think of higher education without thinking of ancient institutions", "role": "extraposed_subject", "level": 2}],
+      "difficult_points": ["it 是形式主语，真正主语是 to think... 不定式。", "without thinking... 表示这类人无法把高等教育与古老机构分开理解。"],
+      "expressions": [{"text": "of a certain age", "meaning_zh": "达到一定年龄的"}, {"text": "educational background", "meaning_zh": "教育背景"}, {"text": "think of A without thinking of B", "meaning_zh": "想到 A 就无法不联想到 B"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "Some universities are of a venerable age - the University of bologna was founded in 1088, the University of Oxford in 1096 - and many of them have a strong sense of tradition.",
+      "translation": "一些大学历史悠久——博洛尼亚大学创立于1088年，牛津大学创立于1096年——其中许多都有强烈的传统意识。",
+      "structure": [{"text": "Some universities are of a venerable age", "role": "main_clause", "level": 1}, {"text": "the University of bologna was founded in 1088, the University of Oxford in 1096", "role": "parenthetical_example", "level": 2}, {"text": "and many of them have a strong sense of tradition", "role": "coordinate_clause", "level": 1}],
+      "difficult_points": ["破折号中列举两所古老大学，第二项省略了 was founded。", "them 指 Some universities；原文 bologna 未大写。"],
+      "expressions": [{"text": "be of a venerable age", "meaning_zh": "历史悠久"}, {"text": "be founded in", "meaning_zh": "创立于"}, {"text": "a strong sense of tradition", "meaning_zh": "强烈的传统意识"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "The truly old ones make the most of their pedigrees, and those of a more recent vintage work hard to create an aura of antiquity.",
+      "translation": "真正古老的大学会充分利用自己的历史血统，而年代较新的大学则努力营造古老气息。",
+      "structure": [{"text": "The truly old ones make the most of their pedigrees", "role": "main_clause", "level": 1}, {"text": "and those of a more recent vintage", "role": "coordinate_subject", "level": 1}, {"text": "work hard to create an aura of antiquity", "role": "coordinate_predicate", "level": 1}],
+      "difficult_points": ["ones 与 those 都代替 universities；pedigrees 比喻大学的历史传承。", "of a more recent vintage 借用葡萄酒年份说法，指建校年代较晚。"],
+      "expressions": [{"text": "make the most of", "meaning_zh": "充分利用"}, {"text": "of a more recent vintage", "meaning_zh": "年代较新的"}, {"text": "create an aura of", "meaning_zh": "营造……的氛围"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "Yet these tradition-loving (or -creating) institutions are currently enduring a thunderstorm of changes so fundamental that some say the very idea of the university is being challenged.",
+      "translation": "然而，这些热爱传统（或创造传统）的机构正经受一场变革风暴；变革如此根本，以至有人认为连大学这一概念本身都受到了挑战。",
+      "structure": [{"text": "these tradition-loving (or -creating) institutions are currently enduring a thunderstorm of changes", "role": "main_clause", "level": 1}, {"text": "so fundamental that some say", "role": "degree_result_clause", "level": 2}, {"text": "the very idea of the university is being challenged", "role": "object_clause", "level": 3}],
+      "difficult_points": ["tradition-loving 与省略 tradition 的 -creating 对照，暗示有些传统是刻意营造的。", "so...that... 表示变革根本到引发后述结果；say 后省略 that。", "is being challenged 是现在进行时被动语态。"],
+      "expressions": [{"text": "endure a thunderstorm of changes", "meaning_zh": "经受一场变革风暴"}, {"text": "so ... that ...", "meaning_zh": "如此……以至于……"}, {"text": "the very idea of", "meaning_zh": "……这一概念本身"}]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "Universities are experimenting with new ways of funding (most notably through student fees), forging partnerships with private companies and engaging in mergers and acquisitions.",
+      "translation": "大学正在尝试新的筹资方式（最显著的是收取学费）、与私营企业建立合作关系，并参与兼并收购。",
+      "structure": [{"text": "Universities are experimenting with new ways of funding", "role": "main_clause", "level": 1}, {"text": "most notably through student fees", "role": "parenthetical_means", "level": 2}, {"text": "forging partnerships with private companies", "role": "coordinate_participle", "level": 1}, {"text": "and engaging in mergers and acquisitions", "role": "coordinate_participle", "level": 1}],
+      "difficult_points": ["experimenting、forging 与 engaging 是大学正在采取的三个并列行动。", "括号说明新筹资方式中最突出的做法；mergers and acquisitions 是商业术语“并购”。"],
+      "expressions": [{"text": "experiment with", "meaning_zh": "尝试"}, {"text": "ways of funding", "meaning_zh": "筹资方式"}, {"text": "forge partnerships with", "meaning_zh": "与……建立合作关系"}, {"text": "mergers and acquisitions", "meaning_zh": "兼并与收购"}]
+    },
+    {
+      "id": "A-06", "paragraph_label": "A", "sentence_index": 6,
+      "sentence": "Such changes ate tugging at the ivy's toots.",
+      "translation": "这些变化正在撼动象征古老大学传统的常春藤根基。",
+      "structure": [{"text": "Such changes", "role": "subject", "level": 1}, {"text": "ate tugging at", "role": "predicate", "level": 1}, {"text": "the ivy's toots", "role": "prepositional_object", "level": 1}],
+      "difficult_points": ["Such changes 回指大学筹资、校企合作与并购等变化。", "原文 ate 应为 are，toots 应为 roots；tug at the ivy's roots 比喻动摇古老大学的传统根基。"],
+      "expressions": [{"text": "tug at the roots", "meaning_zh": "撼动根基"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "This is happening for four reasons.",
+      "translation": "这一切的发生有四个原因。",
+      "structure": [{"text": "This", "role": "subject", "level": 1}, {"text": "is happening", "role": "predicate", "level": 1}, {"text": "for four reasons", "role": "cause_adverbial", "level": 2}],
+      "difficult_points": ["This 概括上一段大学正在经历的根本变化。", "for four reasons 引出下文四项分条解释。"],
+      "expressions": [{"text": "happen for four reasons", "meaning_zh": "因四个原因而发生"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "The first is the democratisation of higher educa-tion -\"massification\". in the language of the educational profession.",
+      "translation": "第一个原因是高等教育的民主化——用教育界的话说，就是“大众化”。",
+      "structure": [{"text": "The first", "role": "subject", "level": 1}, {"text": "is the democratisation of higher educa-tion", "role": "linking_predicate", "level": 1}, {"text": "\"massification\"", "role": "apposition", "level": 2}, {"text": "in the language of the educational profession", "role": "perspective_adverbial", "level": 2}],
+      "difficult_points": ["The first 后省略 reason；massification 是对 democratisation 的教育专业术语改称。", "原文 educa-tion 为断词，且 massification 后误用句点。"],
+      "expressions": [{"text": "the democratisation of higher education", "meaning_zh": "高等教育民主化"}, {"text": "in the language of", "meaning_zh": "用……的术语来说"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "In the rich world, massification has been going on for some time.",
+      "translation": "在富裕国家，高等教育大众化已经持续了一段时间。",
+      "structure": [{"text": "In the rich world", "role": "place_adverbial", "level": 1}, {"text": "massification", "role": "subject", "level": 1}, {"text": "has been going on for some time", "role": "predicate", "level": 1}],
+      "difficult_points": ["the rich world 指发达或富裕国家。", "has been going on 是现在完成进行式意义，强调过程持续至今。"],
+      "expressions": [{"text": "the rich world", "meaning_zh": "富裕国家"}, {"text": "go on for some time", "meaning_zh": "持续一段时间"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "The proportion of adults with higher educational qualifications in developed countries almost doubled between l975 and 2000.",
+      "translation": "1975至2000年间，发达国家拥有高等教育学历的成年人比例几乎翻了一番。",
+      "structure": [{"text": "The proportion of adults with higher educational qualifications in developed countries", "role": "subject", "level": 1}, {"text": "almost doubled", "role": "predicate", "level": 1}, {"text": "between l975 and 2000", "role": "time_adverbial", "level": 2}],
+      "difficult_points": ["with... 修饰 adults，表示拥有高等教育学历的成年人。", "原文 l975 用小写字母 l 代替数字 1，应按1975理解。"],
+      "expressions": [{"text": "the proportion of", "meaning_zh": "……的比例"}, {"text": "higher educational qualifications", "meaning_zh": "高等教育学历"}, {"text": "almost double", "meaning_zh": "几乎翻倍"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "From 22% to 41%.",
+      "translation": "从22%上升到41%。",
+      "structure": [{"text": "From 22% to 41%", "role": "elliptical_range", "level": 1}],
+      "difficult_points": ["这是省略主语和谓语的数字补充，具体说明上一句“几乎翻倍”。", "完整语义是 The proportion rose from 22% to 41%。"],
+      "expressions": [{"text": "from 22% to 41%", "meaning_zh": "从22%到41%"}]
+    },
+    {
+      "id": "B-06", "paragraph_label": "B", "sentence_index": 12,
+      "sentence": "Most of the rich countries are still struggling to digest this huge growth in numbers.",
+      "translation": "大多数富裕国家仍在努力消化人数如此巨大的增长。",
+      "structure": [{"text": "Most of the rich countries", "role": "subject", "level": 1}, {"text": "are still struggling", "role": "predicate", "level": 1}, {"text": "to digest this huge growth in numbers", "role": "subject_complement", "level": 2}],
+      "difficult_points": ["digest 是比喻用法，指制度和资源适应学生人数增长。", "this huge growth 回指高等教育人口比例从22%升至41%。"],
+      "expressions": [{"text": "struggle to", "meaning_zh": "努力应对"}, {"text": "digest growth", "meaning_zh": "消化增长带来的压力"}, {"text": "growth in numbers", "meaning_zh": "人数增长"}]
+    },
+    {
+      "id": "B-07", "paragraph_label": "B", "sentence_index": 13,
+      "sentence": "Now massification is spreading to the developing world.",
+      "translation": "如今，高等教育大众化正在向发展中国家扩展。",
+      "structure": [{"text": "Now", "role": "time_adverbial", "level": 1}, {"text": "massification", "role": "subject", "level": 1}, {"text": "is spreading to the developing world", "role": "predicate", "level": 1}],
+      "difficult_points": ["现在进行时 is spreading 强调扩展过程正在发生。", "the developing world 与前文 the rich world 相对，指发展中国家。"],
+      "expressions": [{"text": "spread to", "meaning_zh": "扩展到"}, {"text": "the developing world", "meaning_zh": "发展中国家"}]
+    },
+    {
+      "id": "B-08", "paragraph_label": "B", "sentence_index": 14,
+      "sentence": "China doubled its student population in the late 1990s, and India is trying to follow suit.",
+      "translation": "中国在20世纪90年代末将大学生人数翻了一番，印度也正努力仿效。",
+      "structure": [{"text": "China doubled its student population in the late 1990s", "role": "main_clause", "level": 1}, {"text": "and India is trying to follow suit", "role": "coordinate_clause", "level": 1}],
+      "difficult_points": ["its 指 China；student population 指学生总人数。", "follow suit 是固定表达，表示印度仿照中国扩大高等教育规模。"],
+      "expressions": [{"text": "double the student population", "meaning_zh": "使学生人数翻倍"}, {"text": "follow suit", "meaning_zh": "仿效；照着做"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "The second reason is the rise of the knowledge economy.",
+      "translation": "第二个原因是知识经济的兴起。",
+      "structure": [{"text": "The second reason", "role": "subject", "level": 1}, {"text": "is the rise of the knowledge economy", "role": "linking_predicate", "level": 1}],
+      "difficult_points": ["The second reason 承接上一段的四原因框架。", "the rise of 表示知识经济作为经济形态逐渐兴起。"],
+      "expressions": [{"text": "the rise of", "meaning_zh": "……的兴起"}, {"text": "knowledge economy", "meaning_zh": "知识经济"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "The world is in the grips of a \"soft revolution\" in which knowledge is replacing physical resources as the main driver of economic growth.",
+      "translation": "世界正处于一场“软革命”的控制之下；在这场革命中，知识正在取代物质资源，成为经济增长的主要驱动力。",
+      "structure": [{"text": "The world is in the grips of a \"soft revolution\"", "role": "main_clause", "level": 1}, {"text": "in which knowledge is replacing physical resources", "role": "relative_clause", "level": 2}, {"text": "as the main driver of economic growth", "role": "object_complement", "level": 3}],
+      "difficult_points": ["in which 修饰 soft revolution，说明这场革命的内容。", "replace A as B 表示取代 A 成为 B；main driver 比喻主要推动力量。"],
+      "expressions": [{"text": "be in the grips of", "meaning_zh": "处于……的强烈影响下"}, {"text": "replace A as B", "meaning_zh": "取代 A 成为 B"}, {"text": "the main driver of", "meaning_zh": "……的主要驱动力"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 17,
+      "sentence": "Between 1985 and 1997, the contribution of knowledge-based industries to total value added increased from 51% to 59% in Germany and from 45% to 51% in Britain.",
+      "translation": "1985至1997年间，知识型产业对总增加值的贡献在德国从51%升至59%，在英国从45%升至51%。",
+      "structure": [{"text": "Between 1985 and 1997", "role": "time_adverbial", "level": 1}, {"text": "the contribution of knowledge-based industries to total value added", "role": "subject", "level": 1}, {"text": "increased from 51% to 59% in Germany", "role": "predicate", "level": 1}, {"text": "and from 45% to 51% in Britain", "role": "coordinate_range", "level": 1}],
+      "difficult_points": ["主语中心是 contribution，of 和 to 短语分别说明贡献者及贡献对象。", "两组 from...to... 分别对应德国和英国，第二项省略 increased。"],
+      "expressions": [{"text": "knowledge-based industries", "meaning_zh": "知识型产业"}, {"text": "total value added", "meaning_zh": "总增加值"}, {"text": "increase from ... to ...", "meaning_zh": "从……增长到……"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 18,
+      "sentence": "The best companies are now devoting at least a third of their investment to knowledge-intensive intangibles such as R&D, licensing, and marketing.",
+      "translation": "最优秀的公司如今把至少三分之一的投资用于研发、许可和营销等知识密集型无形资产。",
+      "structure": [{"text": "The best companies", "role": "subject", "level": 1}, {"text": "are now devoting at least a third of their investment", "role": "predicate", "level": 1}, {"text": "to knowledge-intensive intangibles", "role": "prepositional_complement", "level": 2}, {"text": "such as R&D, licensing, and marketing", "role": "example_supplement", "level": 2}],
+      "difficult_points": ["devote A to B 表示把投资投入某领域。", "knowledge-intensive intangibles 指依赖知识但没有实体形态的资产；such as 后列举实例。"],
+      "expressions": [{"text": "devote investment to", "meaning_zh": "把投资用于"}, {"text": "at least a third of", "meaning_zh": "至少三分之一"}, {"text": "knowledge-intensive intangibles", "meaning_zh": "知识密集型无形资产"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 19,
+      "sentence": "Universities are among the most important engines of the knowledge economy.",
+      "translation": "大学是知识经济最重要的引擎之一。",
+      "structure": [{"text": "Universities", "role": "subject", "level": 1}, {"text": "are among the most important engines of the knowledge economy", "role": "linking_predicate", "level": 1}],
+      "difficult_points": ["among 表示大学属于多个重要驱动力之一。", "engines 是比喻，指推动知识经济运转和发展的机构。"],
+      "expressions": [{"text": "be among the most important", "meaning_zh": "属于最重要的……之一"}, {"text": "engines of the knowledge economy", "meaning_zh": "知识经济的引擎"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 20,
+      "sentence": "Not only do they produce the brain workers who man it, they also provide much of its backbone, from laboratories to libraries to computer networks.",
+      "translation": "大学不仅培养支撑知识经济的人才，还提供其大部分基础设施，从实验室、图书馆到计算机网络。",
+      "structure": [{"text": "Not only do they produce the brain workers", "role": "inverted_main_clause", "level": 1}, {"text": "who man it", "role": "relative_clause", "level": 2}, {"text": "they also provide much of its backbone", "role": "coordinate_clause", "level": 1}, {"text": "from laboratories to libraries to computer networks", "role": "range_supplement", "level": 2}],
+      "difficult_points": ["Not only 位于句首触发部分倒装，因此 do 位于 they 前。", "they 指 universities；it 与 its 指 knowledge economy。", "man 作动词表示为某系统配备人员；backbone 比喻基础支撑。"],
+      "expressions": [{"text": "not only ... also ...", "meaning_zh": "不仅……还……"}, {"text": "provide the backbone", "meaning_zh": "提供核心基础支撑"}, {"text": "from A to B to C", "meaning_zh": "从 A、B 到 C"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 21,
+      "sentence": "The third factor is globalisation..",
+      "translation": "第三个因素是全球化。",
+      "structure": [{"text": "The third factor", "role": "subject", "level": 1}, {"text": "is globalisation", "role": "linking_predicate", "level": 1}],
+      "difficult_points": ["The third factor 延续全文按四个原因展开的结构。", "原文句末有两个句点，英文按源文保留。"],
+      "expressions": [{"text": "the third factor", "meaning_zh": "第三个因素"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 22,
+      "sentence": "The death of distance is transforming academia just as radically as it is transforming business.",
+      "translation": "距离的消失正在彻底改变学术界，其程度与它改变商业界一样深刻。",
+      "structure": [{"text": "The death of distance", "role": "subject", "level": 1}, {"text": "is transforming academia", "role": "predicate", "level": 1}, {"text": "just as radically as it is transforming business", "role": "comparative_clause", "level": 2}],
+      "difficult_points": ["death of distance 比喻交通通信发展使地理距离不再构成障碍。", "just as...as... 比较全球化改变学术和商业的程度；it 指 death of distance 这一现象。"],
+      "expressions": [{"text": "the death of distance", "meaning_zh": "地理距离障碍的消失"}, {"text": "transform academia", "meaning_zh": "改变学术界"}, {"text": "just as radically as", "meaning_zh": "与……一样彻底"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 23,
+      "sentence": "The number of people from developed countries studying abroad has doubled over the past twenty years, to 1.9 million; universities are opening campuses all around the world; and a growing number of countries are trying to turn higher education into an export industry.",
+      "translation": "过去20年里，发达国家出国留学的人数翻了一番，达到190万；大学正在世界各地开设校园；越来越多的国家试图把高等教育变成出口产业。",
+      "structure": [{"text": "The number of people from developed countries studying abroad has doubled over the past twenty years, to 1.9 million", "role": "main_clause", "level": 1}, {"text": "universities are opening campuses all around the world", "role": "coordinate_clause", "level": 1}, {"text": "and a growing number of countries are trying", "role": "coordinate_clause", "level": 1}, {"text": "to turn higher education into an export industry", "role": "subject_complement", "level": 2}],
+      "difficult_points": ["studying abroad 是现在分词短语，修饰 people；主语中心是 The number，因此谓语用 has。", "分号连接全球化的三种表现。", "turn A into B 表示把高等教育作为可向国外出售的服务产业。"],
+      "expressions": [{"text": "study abroad", "meaning_zh": "出国留学"}, {"text": "over the past twenty years", "meaning_zh": "过去二十年间"}, {"text": "a growing number of", "meaning_zh": "越来越多的"}, {"text": "turn A into B", "meaning_zh": "把 A 变成 B"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 24,
+      "sentence": "The fourth is competition.",
+      "translation": "第四个原因是竞争。",
+      "structure": [{"text": "The fourth", "role": "subject", "level": 1}, {"text": "is competition", "role": "linking_predicate", "level": 1}],
+      "difficult_points": ["The fourth 后省略 factor 或 reason。", "competition 引出大学之间以及传统大学与私营企业之间的竞争。"],
+      "expressions": []
+    },
+    {
+      "id": "D-05", "paragraph_label": "D", "sentence_index": 25,
+      "sentence": "Traditional universities are being forced to compete for students and research grants, and private companies are trying to break into a sector which they regard as \"the new health care\".",
+      "translation": "传统大学正被迫争夺学生和科研经费，而私营企业也试图打入这个被它们视为“新医疗产业”的领域。",
+      "structure": [{"text": "Traditional universities are being forced", "role": "passive_main_clause", "level": 1}, {"text": "to compete for students and research grants", "role": "subject_complement", "level": 2}, {"text": "and private companies are trying to break into a sector", "role": "coordinate_clause", "level": 1}, {"text": "which they regard as \"the new health care\"", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["are being forced 是现在进行时被动语态，强调竞争压力正在加剧。", "which 修饰 sector；regard A as B 表示企业把高等教育看作下一个巨大商业市场。"],
+      "expressions": [{"text": "be forced to compete for", "meaning_zh": "被迫争夺"}, {"text": "research grants", "meaning_zh": "科研经费"}, {"text": "break into a sector", "meaning_zh": "打入某个行业"}, {"text": "regard A as B", "meaning_zh": "把 A 视为 B"}]
+    },
+    {
+      "id": "D-06", "paragraph_label": "D", "sentence_index": 26,
+      "sentence": "The World Bank calculates that global spending on higher education amounts to $300 billion a year, or 1 % of global economic output.",
+      "translation": "世界银行估算，全球高等教育支出每年达3000亿美元，相当于全球经济产出的1%。",
+      "structure": [{"text": "The World Bank calculates", "role": "main_clause", "level": 1}, {"text": "that global spending on higher education amounts to $300 billion a year", "role": "object_clause", "level": 2}, {"text": "or 1 % of global economic output", "role": "apposition", "level": 2}],
+      "difficult_points": ["that 从句是 calculates 的宾语；amount to 表示总额达到。", "or 后的比例是对3000亿美元规模的换算说明；原文 1 与 % 之间有空格。"],
+      "expressions": [{"text": "global spending on", "meaning_zh": "全球对……的支出"}, {"text": "amount to", "meaning_zh": "总计达到"}, {"text": "economic output", "meaning_zh": "经济产出"}]
+    },
+    {
+      "id": "D-07", "paragraph_label": "D", "sentence_index": 27,
+      "sentence": "There are more than 80 million students worldwide, and 3.5 million people are employed to teach them or look after them.",
+      "translation": "全球有超过8000万名学生，另有350万人受雇从事教学或照管学生。",
+      "structure": [{"text": "There are more than 80 million students worldwide", "role": "existential_clause", "level": 1}, {"text": "and 3.5 million people are employed", "role": "coordinate_passive_clause", "level": 1}, {"text": "to teach them or look after them", "role": "purpose_adverbial", "level": 2}],
+      "difficult_points": ["两处 them 都指 students。", "are employed to... 是被动结构加目的不定式，teach 与 look after 并列。"],
+      "expressions": [{"text": "worldwide", "meaning_zh": "在全球范围内"}, {"text": "be employed to", "meaning_zh": "受雇做某事"}, {"text": "look after", "meaning_zh": "照管"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 28,
+      "sentence": "All this sounds as though a golden age for universities has arrived.",
+      "translation": "这一切听起来仿佛大学的黄金时代已经到来。",
+      "structure": [{"text": "All this", "role": "subject", "level": 1}, {"text": "sounds", "role": "linking_verb", "level": 1}, {"text": "as though a golden age for universities has arrived", "role": "subject_complement_clause", "level": 2}],
+      "difficult_points": ["All this 概括高等教育规模、知识经济、全球化和市场竞争带来的机会。", "as though 引导表语从句，表示表面印象，暗示下文将转折。"],
+      "expressions": [{"text": "sound as though", "meaning_zh": "听起来仿佛"}, {"text": "a golden age for", "meaning_zh": "……的黄金时代"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 29,
+      "sentence": "However, inside academia, particularly in Europe, it. does not feel like it.",
+      "translation": "然而，在学术界内部，尤其是欧洲，人们并没有这种黄金时代已经到来的感觉。",
+      "structure": [{"text": "inside academia", "role": "domain_adverbial", "level": 1}, {"text": "particularly in Europe", "role": "supplementary_adverbial", "level": 1}, {"text": "it. does not feel like it", "role": "main_clause", "level": 1}],
+      "difficult_points": ["句尾 it 回指 a golden age has arrived 这一感觉。", "原文第一个 it 后多出句点；整体是非人称感受表达。"],
+      "expressions": [{"text": "inside academia", "meaning_zh": "在学术界内部"}, {"text": "feel like it", "meaning_zh": "感觉是这样"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 30,
+      "sentence": "Academics complain and administrators are locked in bad-tempered exchanges with the politicians who fund them.",
+      "translation": "学者们怨声载道，大学管理者则与为其提供资金的政治人物陷入充满火药味的争论。",
+      "structure": [{"text": "Academics complain", "role": "main_clause", "level": 1}, {"text": "and administrators are locked in bad-tempered exchanges with the politicians", "role": "coordinate_clause", "level": 1}, {"text": "who fund them", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["be locked in 表示陷入难以脱身的争执。", "who 修饰 politicians；them 语义上指大学或其管理者所代表的机构。"],
+      "expressions": [{"text": "be locked in exchanges with", "meaning_zh": "陷入与……的争论"}, {"text": "bad-tempered exchanges", "meaning_zh": "充满敌意的争论"}, {"text": "fund", "meaning_zh": "为……提供资金"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 31,
+      "sentence": "What has gone wrong?",
+      "translation": "究竟出了什么问题？",
+      "structure": [{"text": "What", "role": "interrogative_subject", "level": 1}, {"text": "has gone wrong", "role": "predicate", "level": 1}],
+      "difficult_points": ["What 作主语，因此不使用助动词倒装。", "go wrong 是固定表达，询问形势为何没有如预期发展。"],
+      "expressions": [{"text": "go wrong", "meaning_zh": "出问题"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 32,
+      "sentence": "The biggest problem is the role of the state.",
+      "translation": "最大的问题在于国家所扮演的角色。",
+      "structure": [{"text": "The biggest problem", "role": "subject", "level": 1}, {"text": "is the role of the state", "role": "linking_predicate", "level": 1}],
+      "difficult_points": ["the state 在此指政府及公共财政体系。", "the role of the state 引出政府既推动大众化、又不愿充分出资的矛盾。"],
+      "expressions": [{"text": "the role of the state", "meaning_zh": "国家或政府的角色"}]
+    },
+    {
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 33,
+      "sentence": "If more and more governments are embracing massification, few of them are willing to draw the appropriate conclusion from their enthusiasm: that they should either provide the requisite hinds (as the Scandinavian countries do) or allow universities to charge realistic fees.",
+      "translation": "尽管越来越多政府在接受高等教育大众化，却很少有政府愿意从这种热情中得出恰当结论：它们要么应提供所需资金（如斯堪的纳维亚国家所做），要么应允许大学收取符合实际成本的学费。",
+      "structure": [{"text": "If more and more governments are embracing massification", "role": "concessive_clause", "level": 2}, {"text": "few of them are willing to draw the appropriate conclusion from their enthusiasm", "role": "main_clause", "level": 1}, {"text": "that they should either provide the requisite hinds", "role": "appositive_clause", "level": 2}, {"text": "or allow universities to charge realistic fees", "role": "coordinate_predicate", "level": 3}],
+      "difficult_points": ["If 在此接近 although，表达政府虽支持大众化却不愿承担后果。", "冒号后的 that 从句解释 appropriate conclusion；either...or... 连接两种政策选择。", "原文 hinds 按语境应为 funds；as...do 中 do 代替 provide funds。"],
+      "expressions": [{"text": "embrace massification", "meaning_zh": "接受高等教育大众化"}, {"text": "draw the appropriate conclusion", "meaning_zh": "得出恰当结论"}, {"text": "provide the requisite funds", "meaning_zh": "提供所需资金"}, {"text": "charge realistic fees", "meaning_zh": "收取符合实际成本的费用"}]
+    },
+    {
+      "id": "E-07", "paragraph_label": "E", "sentence_index": 34,
+      "sentence": "Many governments have tried to square the circle through lighter management, but management cannot make up for lack of resources.",
+      "translation": "许多政府试图通过更轻量的管理来调和这一矛盾，但管理无法弥补资源不足。",
+      "structure": [{"text": "Many governments have tried", "role": "main_clause", "level": 1}, {"text": "to square the circle through lighter management", "role": "subject_complement", "level": 2}, {"text": "but management cannot make up for lack of resources", "role": "contrast_clause", "level": 1}],
+      "difficult_points": ["square the circle 原指不可能的几何问题，此处比喻同时扩大入学又不增加资源的难题。", "through 引出政府尝试的方法；but 指出管理改进不能替代实际资源。"],
+      "expressions": [{"text": "square the circle", "meaning_zh": "解决看似不可能调和的矛盾"}, {"text": "make up for", "meaning_zh": "弥补"}, {"text": "lack of resources", "meaning_zh": "资源不足"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 35,
+      "sentence": "What, if anything can be done?",
+      "translation": "那么，如果真有办法的话，究竟能做些什么？",
+      "structure": [{"text": "What", "role": "interrogative_object", "level": 1}, {"text": "if anything", "role": "parenthetical_qualification", "level": 2}, {"text": "can be done", "role": "passive_predicate", "level": 1}],
+      "difficult_points": ["if anything 是插入语，表示作者不预设一定存在解决办法。", "What 是 do 的宾语，因被动结构移到句首；原文 anything 后缺少逗号。"],
+      "expressions": [{"text": "if anything", "meaning_zh": "如果真有什么的话"}, {"text": "what can be done", "meaning_zh": "能做些什么"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 36,
+      "sentence": "Techno-utopians believe that higher education is ripe for revolution.",
+      "translation": "技术乌托邦主义者认为，高等教育已经到了适合彻底变革的时机。",
+      "structure": [{"text": "Techno-utopians believe", "role": "main_clause", "level": 1}, {"text": "that higher education is ripe for revolution", "role": "object_clause", "level": 2}],
+      "difficult_points": ["that 从句是 believe 的宾语。", "be ripe for 比喻条件已经成熟；revolution 指高等教育模式的彻底改变。"],
+      "expressions": [{"text": "be ripe for", "meaning_zh": "时机已成熟；适合"}, {"text": "Techno-utopians", "meaning_zh": "技术乌托邦主义者"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 37,
+      "sentence": "The university, they say, is a hopelessly antiquated institution, wedded in outdated practices such as tenure and lectures, and incapable of serving a new world of mass audiences and just-in-time information.",
+      "translation": "他们认为，大学是一种无可救药地陈旧的机构，固守终身教职和课堂讲授等过时做法，也无力服务于一个面向大众、要求即时信息的新世界。",
+      "structure": [{"text": "The university", "role": "subject", "level": 1}, {"text": "they say", "role": "parenthetical_reporting_clause", "level": 2}, {"text": "is a hopelessly antiquated institution", "role": "linking_predicate", "level": 1}, {"text": "wedded in outdated practices such as tenure and lectures, and incapable of serving a new world of mass audiences and just-in-time information", "role": "adjective_supplement", "level": 2}],
+      "difficult_points": ["they say 是插入式报道语，they 指 Techno-utopians。", "wedded in 按语义应为 wedded to，表示大学固守旧做法；原文介词异常。", "wedded... 与 incapable... 并列补充说明 institution。"],
+      "expressions": [{"text": "hopelessly antiquated", "meaning_zh": "无可救药地陈旧"}, {"text": "be wedded to", "meaning_zh": "固守；执着于"}, {"text": "be incapable of", "meaning_zh": "无力做"}, {"text": "just-in-time information", "meaning_zh": "即时信息"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 38,
+      "sentence": "\"Thirty wars from now the big university campuses will be relics,\"says Peter Drucker, a veteran management guru.",
+      "translation": "资深管理学大师彼得·德鲁克说：“再过三十年，大型大学校园将成为历史遗迹。”",
+      "structure": [{"text": "\"Thirty wars from now the big university campuses will be relics,\"", "role": "quoted_clause", "level": 2}, {"text": "says Peter Drucker", "role": "reporting_clause", "level": 1}, {"text": "a veteran management guru", "role": "apposition", "level": 2}],
+      "difficult_points": ["引语置于 reporting clause 之前；a veteran management guru 是 Peter Drucker 的同位语。", "原文 wars 按语境应为 years，且引号后与 says 之间缺空格。"],
+      "expressions": [{"text": "from now", "meaning_zh": "从现在起；以后"}, {"text": "be relics", "meaning_zh": "成为历史遗迹"}, {"text": "management guru", "meaning_zh": "管理学大师"}]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 39,
+      "sentence": "\"I consider the American research university of the past 40 years to be a failure.\"",
+      "translation": "“我认为过去40年的美国研究型大学是失败的。”",
+      "structure": [{"text": "I", "role": "subject", "level": 1}, {"text": "consider", "role": "predicate", "level": 1}, {"text": "the American research university of the past 40 years", "role": "object", "level": 1}, {"text": "to be a failure", "role": "object_complement", "level": 2}],
+      "difficult_points": ["consider A to be B 表示认为 A 是 B。", "the American research university 泛指过去40年的美国研究型大学模式。"],
+      "expressions": [{"text": "consider A to be B", "meaning_zh": "认为 A 是 B"}, {"text": "research university", "meaning_zh": "研究型大学"}]
+    },
+    {
+      "id": "F-06", "paragraph_label": "F", "sentence_index": 40,
+      "sentence": "Fortunately, in his view, help is on the way in the form of Internet tuition and for-profit universities.",
+      "translation": "幸运的是，在他看来，网络教学和营利性大学正以解决方案的形式到来。",
+      "structure": [{"text": "Fortunately", "role": "sentence_adverbial", "level": 1}, {"text": "in his view", "role": "perspective_adverbial", "level": 1}, {"text": "help is on the way", "role": "main_clause", "level": 1}, {"text": "in the form of Internet tuition and for-profit universities", "role": "form_adverbial", "level": 2}],
+      "difficult_points": ["his 指 Peter Drucker；in his view 限定这是他的观点。", "help is on the way 是比喻，表示解决方案即将出现；in the form of 说明形式。"],
+      "expressions": [{"text": "in one's view", "meaning_zh": "在某人看来"}, {"text": "help is on the way", "meaning_zh": "解决办法即将出现"}, {"text": "in the form of", "meaning_zh": "以……的形式"}, {"text": "for-profit universities", "meaning_zh": "营利性大学"}]
+    },
+    {
+      "id": "F-07", "paragraph_label": "F", "sentence_index": 41,
+      "sentence": "Cultural conservatives, on the other hand, believe that the best way forward is backward.",
+      "translation": "另一方面，文化保守主义者认为，最好的前进道路是向后回归。",
+      "structure": [{"text": "Cultural conservatives", "role": "subject", "level": 1}, {"text": "on the other hand", "role": "sentence_adverbial", "level": 1}, {"text": "believe", "role": "predicate", "level": 1}, {"text": "that the best way forward is backward", "role": "object_clause", "level": 2}],
+      "difficult_points": ["on the other hand 将文化保守主义者与技术乌托邦主义者对比。", "the best way forward is backward 是悖论式表达，意为回归传统才是出路。"],
+      "expressions": [{"text": "on the other hand", "meaning_zh": "另一方面"}, {"text": "the best way forward", "meaning_zh": "最好的前进道路"}]
+    },
+    {
+      "id": "F-08", "paragraph_label": "F", "sentence_index": 42,
+      "sentence": "They think it is foolish to waste higher education on people who would rather study \"Seinfeld\" than Socrates, and disingenuous to contuse the pursuit of truth with the pursuit of profit.",
+      "translation": "他们认为，把高等教育浪费在宁愿研究《宋飞正传》也不愿研究苏格拉底的人身上是愚蠢的，而把追求真理与追逐利润混为一谈则是不诚实的。",
+      "structure": [{"text": "They think", "role": "main_clause", "level": 1}, {"text": "it is foolish to waste higher education on people", "role": "object_clause", "level": 2}, {"text": "who would rather study \"Seinfeld\" than Socrates", "role": "relative_clause", "level": 3}, {"text": "and disingenuous to contuse the pursuit of truth with the pursuit of profit", "role": "coordinate_complement", "level": 2}],
+      "difficult_points": ["it 是形式主语，to waste... 是第一个真正主语；第二个并列表语省略 it is。", "who 修饰 people；would rather A than B 表示宁愿 A 而不愿 B。", "原文 contuse 按语境应为 confuse，指把追求真理和利润混淆。"],
+      "expressions": [{"text": "waste something on", "meaning_zh": "把某物浪费在……上"}, {"text": "would rather A than B", "meaning_zh": "宁愿 A 而不愿 B"}, {"text": "the pursuit of truth", "meaning_zh": "对真理的追求"}, {"text": "confuse A with B", "meaning_zh": "把 A 与 B 混淆"}]
+    }
+  ]
+}

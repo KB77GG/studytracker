@@ -1,0 +1,501 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_71_test_1",
+  "passage_id": "reading_jijing_71_test_1_p2",
+  "passage_title": "Subtitling: Some Strategies",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "When movies made in one language are shown to speakers of another, the two methods of resolving the language barrier are subtitling and dubbing.",
+      "translation": "当一种语言制作的电影放映给另一种语言的观众时，解决语言障碍有两种方法：字幕翻译和配音。",
+      "structure": [
+        {"text": "When movies made in one language are shown to speakers of another", "role": "time_adverbial_clause", "level": 2},
+        {"text": "made in one language", "role": "past_participle_modifier", "level": 3},
+        {"text": "the two methods of resolving the language barrier", "role": "subject", "level": 1},
+        {"text": "are subtitling and dubbing", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["made in one language 是过去分词短语，修饰 movies。", "another 后省略了 language；主句用 are 连接 methods 与两种具体方法。"],
+      "expressions": [{"text": "resolve the language barrier", "meaning_zh": "解决语言障碍"}, {"text": "subtitling and dubbing", "meaning_zh": "字幕翻译与配音"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "Subtitling is the written translation of the words, usually appearing discreetly at the bottom of the screen, while dubbing is the recording of voices in the target language.",
+      "translation": "字幕翻译是对台词进行书面翻译，通常低调地显示在屏幕底部；而配音则是用目标语言录制对白。",
+      "structure": [
+        {"text": "Subtitling is the written translation of the words", "role": "main_clause", "level": 1},
+        {"text": "usually appearing discreetly at the bottom of the screen", "role": "present_participle_supplement", "level": 2},
+        {"text": "while dubbing is the recording of voices in the target language", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["appearing... 是现在分词短语，补充说明字幕出现的位置和方式。", "while 在此表达对比而非时间，区分字幕与配音。"],
+      "expressions": [{"text": "written translation", "meaning_zh": "书面翻译"}, {"text": "at the bottom of the screen", "meaning_zh": "在屏幕底部"}, {"text": "target language", "meaning_zh": "目标语言"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 3,
+      "sentence": "Dubbing, although seemingly more accessible to movie watches, comes with many disadvantages.",
+      "translation": "配音虽然看似更容易被电影观众接受，却也伴随着许多缺点。",
+      "structure": [
+        {"text": "Dubbing", "role": "subject", "level": 1},
+        {"text": "although seemingly more accessible to movie watches", "role": "reduced_concessive_clause", "level": 2},
+        {"text": "comes with many disadvantages", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["although 后省略了 it is，构成让步性的省略结构。", "原文 movie watches 应为 movie watchers 的拼写异常，指电影观众。"],
+      "expressions": [{"text": "be accessible to", "meaning_zh": "容易被……理解或接受"}, {"text": "come with disadvantages", "meaning_zh": "伴随缺点"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "For a start, it is expensive, hence it needs a large audience to justify the cost, yet even big films carry no guarantee of such commercial success.",
+      "translation": "首先，配音成本高昂，因此需要大量观众才能证明这笔投入值得；然而，即使是大片也无法保证取得这样的商业成功。",
+      "structure": [
+        {"text": "For a start, it is expensive", "role": "main_clause", "level": 1},
+        {"text": "hence it needs a large audience to justify the cost", "role": "result_clause", "level": 1},
+        {"text": "yet even big films carry no guarantee of such commercial success", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["it 在前两个分句中都指 dubbing；hence 引出成本高带来的结果。", "yet 引出反转：即使观众基数可能很大的大片也不能保证商业回报。"],
+      "expressions": [{"text": "for a start", "meaning_zh": "首先"}, {"text": "justify the cost", "meaning_zh": "证明成本投入合理"}, {"text": "carry no guarantee of", "meaning_zh": "无法保证"}, {"text": "commercial success", "meaning_zh": "商业成功"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "In addition, the dubbed voices may seem detached or inappropriate to the characters, or otherwise, the absurdity of having an undereducated American ranffian saying. 'Je voudrais déclarer un vol' becomes too much, affecting appreciation of the film.",
+      "translation": "此外，配音后的声音可能显得与人物脱节或不相称；又或者，让一个没受过多少教育的美国恶棍说出法语“我要报案说有盗窃”，其荒诞感会过于强烈，从而影响观众欣赏影片。",
+      "structure": [
+        {"text": "the dubbed voices may seem detached or inappropriate to the characters", "role": "main_clause", "level": 1},
+        {"text": "the absurdity of having an undereducated American ranffian saying. 'Je voudrais déclarer un vol'", "role": "coordinate_subject", "level": 1},
+        {"text": "becomes too much", "role": "coordinate_predicate", "level": 1},
+        {"text": "affecting appreciation of the film", "role": "result_participle_clause", "level": 2}
+      ],
+      "difficult_points": ["detached or inappropriate 是 seem 后的并列表语，说明声音与角色不协调。", "having...saying... 是介词 of 后的动名词结构；原文 ranffian 应为 ruffian，且 saying 后句点属于异常断句。", "affecting... 是现在分词结果状语，说明荒诞感造成的影响。"],
+      "expressions": [{"text": "seem detached from", "meaning_zh": "显得与……脱节"}, {"text": "be inappropriate to", "meaning_zh": "与……不相称"}, {"text": "affect appreciation of", "meaning_zh": "影响对……的欣赏"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "Finally, films and TV programs now have an increasingly rapid turnover rate, and subtitling is faster and more practical in such situations.",
+      "translation": "最后，如今电影和电视节目的更新速度越来越快，在这种情况下，字幕翻译更迅速也更实用。",
+      "structure": [
+        {"text": "films and TV programs now have an increasingly rapid turnover rate", "role": "main_clause", "level": 1},
+        {"text": "and subtitling is faster and more practical", "role": "coordinate_clause", "level": 1},
+        {"text": "in such situations", "role": "situation_adverbial", "level": 2}
+      ],
+      "difficult_points": ["turnover rate 在此指影视内容更新和更替的速度。", "such situations 回指节目周转速度加快的制作环境。"],
+      "expressions": [{"text": "an increasingly rapid turnover rate", "meaning_zh": "越来越快的更替速度"}, {"text": "more practical", "meaning_zh": "更实用"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 7,
+      "sentence": "However, one should not assume subtitling is easier than dubbing.",
+      "translation": "不过，人们不应想当然地认为字幕翻译比配音容易。",
+      "structure": [
+        {"text": "one", "role": "generic_subject", "level": 1},
+        {"text": "should not assume", "role": "predicate", "level": 1},
+        {"text": "subtitling is easier than dubbing", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["one 是泛指代词，表示一般意义上的“人们”。", "assume 后省略了宾语从句连接词 that。"],
+      "expressions": [{"text": "should not assume", "meaning_zh": "不应想当然地认为"}, {"text": "be easier than", "meaning_zh": "比……容易"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 8,
+      "sentence": "Subtitling requires careful strategies, and here I will outline some of them.",
+      "translation": "字幕翻译需要谨慎的策略，下面我将概述其中几种。",
+      "structure": [
+        {"text": "Subtitling requires careful strategies", "role": "main_clause", "level": 1},
+        {"text": "and here I will outline some of them", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["them 指前半句的 strategies。", "here 不是单纯地点副词，而是提示下文将开始介绍策略。"],
+      "expressions": [{"text": "require careful strategies", "meaning_zh": "需要审慎的策略"}, {"text": "outline some of", "meaning_zh": "概述其中一些"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 9,
+      "sentence": "In order to do this, a sample movie is needed, and the one examined here is an Italian movie subtitled into English.",
+      "translation": "为了说明这些策略，需要选取一部样片；这里考察的是一部配有英文字幕的意大利电影。",
+      "structure": [
+        {"text": "In order to do this", "role": "purpose_adverbial", "level": 1},
+        {"text": "a sample movie is needed", "role": "main_clause", "level": 1},
+        {"text": "and the one examined here is an Italian movie", "role": "coordinate_clause", "level": 1},
+        {"text": "subtitled into English", "role": "past_participle_modifier", "level": 2}
+      ],
+      "difficult_points": ["this 指概述字幕策略这件事；the one 用来替代重复的 sample movie。", "examined here 与 subtitled into English 都是过去分词短语，分别修饰 one 和 movie。"],
+      "expressions": [{"text": "in order to", "meaning_zh": "为了"}, {"text": "a sample movie", "meaning_zh": "一部样片"}, {"text": "be subtitled into", "meaning_zh": "被译制成……字幕"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 10,
+      "sentence": "Comprehension of subtitles will always be affected by lack of familiarity with the values, beliefs, and interactive differences between the host and viewing cultures.",
+      "translation": "如果不熟悉原文化与观众文化在价值观、信念和互动方式上的差异，对字幕的理解就总会受到影响。",
+      "structure": [
+        {"text": "Comprehension of subtitles", "role": "subject", "level": 1},
+        {"text": "will always be affected", "role": "passive_predicate", "level": 1},
+        {"text": "by lack of familiarity with the values, beliefs, and interactive differences", "role": "cause_adverbial", "level": 2},
+        {"text": "between the host and viewing cultures", "role": "prepositional_modifier", "level": 3}
+      ],
+      "difficult_points": ["by 短语说明字幕理解受到影响的原因。", "host culture 指影片来源文化，viewing culture 指观众所在文化；between 修饰 differences。"],
+      "expressions": [{"text": "be affected by", "meaning_zh": "受到……影响"}, {"text": "lack of familiarity with", "meaning_zh": "对……不熟悉"}, {"text": "cultural differences", "meaning_zh": "文化差异"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "The subtitlers need to be aware of this in order to translate true meaning.",
+      "translation": "字幕译者必须意识到这一点，才能译出真正的含义。",
+      "structure": [
+        {"text": "The subtitlers", "role": "subject", "level": 1},
+        {"text": "need to be aware of this", "role": "predicate", "level": 1},
+        {"text": "in order to translate true meaning", "role": "purpose_adverbial", "level": 2}
+      ],
+      "difficult_points": ["this 指上一句所说两种文化之间的价值观、信念和互动差异。", "in order to 引出字幕译者关注文化差异的目的。"],
+      "expressions": [{"text": "be aware of", "meaning_zh": "意识到"}, {"text": "translate true meaning", "meaning_zh": "译出真实含义"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "Thus, before beginning any work, a brief 'cultural audit' is absolutely necessary, involving a comparison of the two cultures in relation to the storyline of the movie.",
+      "translation": "因此，在开始任何工作之前，绝对有必要进行一次简短的“文化审查”，即结合电影情节比较两种文化。",
+      "structure": [
+        {"text": "before beginning any work", "role": "time_adverbial", "level": 2},
+        {"text": "a brief 'cultural audit'", "role": "subject", "level": 1},
+        {"text": "is absolutely necessary", "role": "linking_predicate", "level": 1},
+        {"text": "involving a comparison of the two cultures in relation to the storyline of the movie", "role": "present_participle_supplement", "level": 2}
+      ],
+      "difficult_points": ["before beginning... 是省略主语的时间结构，逻辑主语是字幕译者。", "involving... 补充解释 cultural audit 的具体内容。"],
+      "expressions": [{"text": "cultural audit", "meaning_zh": "文化审查"}, {"text": "in relation to", "meaning_zh": "结合；与……相关"}, {"text": "the storyline of", "meaning_zh": "……的故事情节"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 13,
+      "sentence": "The movie is set in the late 1960s, at a time when the wealth and materialism of American society was very high, contrasting the relative poverty of Italian village life.",
+      "translation": "电影背景设在20世纪60年代末，当时美国社会高度富裕且物质主义盛行，与意大利乡村生活的相对贫困形成鲜明对比。",
+      "structure": [
+        {"text": "The movie is set in the late 1960s", "role": "main_clause", "level": 1},
+        {"text": "at a time when the wealth and materialism of American society was very high", "role": "time_modifier", "level": 2},
+        {"text": "when the wealth and materialism of American society was very high", "role": "relative_clause", "level": 3},
+        {"text": "contrasting the relative poverty of Italian village life", "role": "present_participle_supplement", "level": 2}
+      ],
+      "difficult_points": ["when 修饰 a time，说明20世纪60年代末的社会背景。", "contrasting... 是现在分词短语，说明美国社会与意大利乡村生活的反差。", "并列主语 wealth and materialism 后原文使用 was，属于源文数的一致异常。"],
+      "expressions": [{"text": "be set in", "meaning_zh": "以……为背景"}, {"text": "at a time when", "meaning_zh": "在……的时期"}, {"text": "contrast the relative poverty of", "meaning_zh": "与……的相对贫困形成对比"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 14,
+      "sentence": "The plot tells the story of a poor couple who dream of winning large sums of money by gambling in a card game against a wealthy elderly American woman, who occasionally visits Italy just for that purpose.",
+      "translation": "影片讲述一对贫穷夫妇的故事：他们梦想通过与一位富有的美国老妇人赌牌赢得巨款，而这位老妇人偶尔到意大利来，正是为了赌牌。",
+      "structure": [
+        {"text": "The plot tells the story of a poor couple", "role": "main_clause", "level": 1},
+        {"text": "who dream of winning large sums of money by gambling in a card game against a wealthy elderly American woman", "role": "relative_clause", "level": 2},
+        {"text": "by gambling in a card game", "role": "means_adverbial", "level": 3},
+        {"text": "who occasionally visits Italy just for that purpose", "role": "nonrestrictive_relative_clause", "level": 2}
+      ],
+      "difficult_points": ["第一个 who 修饰 a poor couple，第二个 who 修饰 American woman。", "by gambling... 说明赢取巨款的方式；that purpose 指参加这场赌牌。"],
+      "expressions": [{"text": "tell the story of", "meaning_zh": "讲述……的故事"}, {"text": "dream of doing", "meaning_zh": "梦想做某事"}, {"text": "large sums of money", "meaning_zh": "大笔金钱"}, {"text": "for that purpose", "meaning_zh": "为此目的"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 15,
+      "sentence": "The final thematic assertion that there are more important factors than money reflects the warmth and solidarity of the Italian village in the face of adversity.",
+      "translation": "影片最终提出的主题——世上还有比金钱更重要的因素——体现了意大利村庄面对逆境时的温情与团结。",
+      "structure": [
+        {"text": "The final thematic assertion", "role": "subject", "level": 1},
+        {"text": "that there are more important factors than money", "role": "appositive_clause", "level": 2},
+        {"text": "reflects the warmth and solidarity of the Italian village", "role": "predicate", "level": 1},
+        {"text": "in the face of adversity", "role": "situation_adverbial", "level": 2}
+      ],
+      "difficult_points": ["that 从句是 assertion 的同位语，解释影片最后表达的主题。", "in the face of adversity 表示村民在逆境之下表现出的温情和团结。"],
+      "expressions": [{"text": "thematic assertion", "meaning_zh": "主题主张"}, {"text": "warmth and solidarity", "meaning_zh": "温情与团结"}, {"text": "in the face of adversity", "meaning_zh": "面对逆境"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 16,
+      "sentence": "Although these themes are universal, one could speculate that a Western audience might not like or identify with them as much, give the increasing urbanisation and materialism of their own society.",
+      "translation": "尽管这些主题具有普遍性，但考虑到西方社会自身日益加剧的城市化和物质主义，人们可以推测西方观众未必会同样喜欢或认同这些主题。",
+      "structure": [
+        {"text": "Although these themes are universal", "role": "concessive_clause", "level": 2},
+        {"text": "one could speculate", "role": "main_clause", "level": 1},
+        {"text": "that a Western audience might not like or identify with them as much", "role": "object_clause", "level": 2},
+        {"text": "give the increasing urbanisation and materialism of their own society", "role": "cause_adverbial", "level": 2}
+      ],
+      "difficult_points": ["them 指上一句所概括的影片主题；like 与 identify with 是并列谓语。", "as much 表示西方观众的喜爱或认同程度可能没有那么高。", "原文 give 按语境应为 given，表示“考虑到”。"],
+      "expressions": [{"text": "speculate that", "meaning_zh": "推测"}, {"text": "identify with", "meaning_zh": "认同；产生共鸣"}, {"text": "increasing urbanisation", "meaning_zh": "日益加剧的城市化"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 17,
+      "sentence": "The most immediate translation issue relates to the movie's title, 'Lo Scopone Scientifico',translates as 'Scientific Scopone', whereas the English title is, 'The Scientific Card Player'.'Scopone' is the name of a traditional Italian card game of great antiquity.",
+      "translation": "最直接的翻译问题与片名有关：《Lo Scopone Scientifico》直译为“科学斯科波内”，而英文片名却是《科学纸牌玩家》。“Scopone”是一种历史非常悠久的意大利传统纸牌游戏。",
+      "structure": [
+        {"text": "The most immediate translation issue relates to the movie's title", "role": "main_clause", "level": 1},
+        {"text": "'Lo Scopone Scientifico',translates as 'Scientific Scopone'", "role": "appositive_clause", "level": 2},
+        {"text": "whereas the English title is, 'The Scientific Card Player'", "role": "contrast_clause", "level": 2},
+        {"text": "'Scopone' is the name of a traditional Italian card game of great antiquity", "role": "coordinate_statement", "level": 1}
+      ],
+      "difficult_points": ["whereas 引出意大利文直译与实际英文片名之间的对比。", "原文 title 后的同位内容语法不完整，且逗号后及两句之间缺少空格，因此为保证原文完整合并处理。", "of great antiquity 表示这种纸牌游戏历史非常悠久。"],
+      "expressions": [{"text": "relate to", "meaning_zh": "与……有关"}, {"text": "translate as", "meaning_zh": "译作"}, {"text": "of great antiquity", "meaning_zh": "历史非常悠久"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 18,
+      "sentence": "Obviously, the translators could not use this name, obscure to the Westren viewers, but they insert a blander and inappropriate term.",
+      "translation": "显然，译者不能使用这个西方观众不熟悉的名称，但他们换上的说法却更平淡，而且并不恰当。",
+      "structure": [
+        {"text": "the translators could not use this name", "role": "main_clause", "level": 1},
+        {"text": "obscure to the Westren viewers", "role": "adjective_supplement", "level": 2},
+        {"text": "but they insert a blander and inappropriate term", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["obscure to... 是形容词短语，补充说明 this name 对观众而言生僻。", "原文 Westren 应为 Western；insert 使用一般现在时，与前面的 could not 在时态上不一致，均按原文保留。"],
+      "expressions": [{"text": "be obscure to", "meaning_zh": "对……而言生僻"}, {"text": "an inappropriate term", "meaning_zh": "不恰当的说法"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 19,
+      "sentence": "An even clearer subtitling lapse is that the betting is always done using, apparently, ludicrously high figures.",
+      "translation": "一个更明显的字幕失误是，影片中的下注金额看起来总是高得荒唐。",
+      "structure": [
+        {"text": "An even clearer subtitling lapse", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "that the betting is always done using, apparently, ludicrously high figures", "role": "subject_complement_clause", "level": 2}
+      ],
+      "difficult_points": ["that 从句作表语，具体说明 subtitling lapse 是什么。", "using... 是方式状语；apparently 是插入语，表示从字幕呈现看来金额高得离谱。"],
+      "expressions": [{"text": "subtitling lapse", "meaning_zh": "字幕翻译失误"}, {"text": "ludicrously high figures", "meaning_zh": "高得荒唐的数字"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 20,
+      "sentence": "Subtitles such as, 'Let's start with a million' regularly jump out.",
+      "translation": "像“我们从一百万开始下注”这样的字幕经常显得格外突兀。",
+      "structure": [
+        {"text": "Subtitles such as, 'Let's start with a million'", "role": "subject", "level": 1},
+        {"text": "regularly jump out", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["such as 后引出具体字幕例子；原文 such as 后多了逗号。", "jump out 在此不是“跳出来”，而是指内容显眼、突兀。"],
+      "expressions": [{"text": "such as", "meaning_zh": "例如"}, {"text": "jump out", "meaning_zh": "显得醒目或突兀"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 21,
+      "sentence": "This is a literal translation of the figures (in Italian lira), yet it is the dollar with which the English-speaking audience would associate.",
+      "translation": "这些数字是按意大利里拉直译的，但英语观众会把这样的金额联想到美元。",
+      "structure": [
+        {"text": "This is a literal translation of the figures (in Italian lira)", "role": "main_clause", "level": 1},
+        {"text": "yet it is the dollar", "role": "contrast_clause", "level": 1},
+        {"text": "with which the English-speaking audience would associate", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["This 指前一句中“一百万”等金额字幕；括号说明原数字的币种是意大利里拉。", "with which 是介词前置的定语从句，语义为 audience would associate the figures with the dollar；原句省略了明确宾语。"],
+      "expressions": [{"text": "a literal translation of", "meaning_zh": "对……的直译"}, {"text": "associate with", "meaning_zh": "把……与……联系起来"}, {"text": "English-speaking audience", "meaning_zh": "英语观众"}]
+    },
+    {
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 22,
+      "sentence": "The result is an apparent lack of plausibility, changing the comedic nature of the film.",
+      "translation": "结果是影片显得缺乏可信度，其喜剧性质也因此发生了改变。",
+      "structure": [
+        {"text": "The result", "role": "subject", "level": 1},
+        {"text": "is an apparent lack of plausibility", "role": "linking_predicate", "level": 1},
+        {"text": "changing the comedic nature of the film", "role": "result_participle_clause", "level": 2}
+      ],
+      "difficult_points": ["The result 指币种直译使英语观众误以为赌注以美元计价的后果。", "changing... 是现在分词结果状语，表示可信度问题进一步改变了影片的喜剧效果。"],
+      "expressions": [{"text": "lack of plausibility", "meaning_zh": "缺乏可信度"}, {"text": "the comedic nature of", "meaning_zh": "……的喜剧性质"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 23,
+      "sentence": "With respect to the specific subtitling used, there are five.",
+      "translation": "就影片采用的具体字幕策略而言，共有五种。",
+      "structure": [
+        {"text": "With respect to the specific subtitling used", "role": "topic_adverbial", "level": 1},
+        {"text": "used", "role": "past_participle_modifier", "level": 2},
+        {"text": "there are five", "role": "existential_clause", "level": 1}
+      ],
+      "difficult_points": ["With respect to 用于引出讨论主题。", "used 是过去分词，修饰 subtitling；five 后省略了 strategies。"],
+      "expressions": [{"text": "with respect to", "meaning_zh": "就……而言"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 24,
+      "sentence": "Let us begin with the subtitle, 'The old bag's here.'",
+      "translation": "我们先来看这句字幕：“那个老太婆来了。”",
+      "structure": [
+        {"text": "Let us", "role": "imperative_subject_predicate", "level": 1},
+        {"text": "begin with the subtitle", "role": "bare_infinitive_complement", "level": 1},
+        {"text": "'The old bag's here.'", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["Let us begin... 是用于组织论述的祈使表达。", "引号内容是 subtitle 的同位语，old bag 是带侮辱色彩的习语。"],
+      "expressions": [{"text": "begin with", "meaning_zh": "从……开始"}, {"text": "old bag", "meaning_zh": "老太婆（侮辱性称呼）"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 25,
+      "sentence": "This is idiomatic in English, being an insulting term for an elderly woman.",
+      "translation": "这是英语中的习惯说法，是对老年女性的侮辱性称呼。",
+      "structure": [
+        {"text": "This is idiomatic in English", "role": "main_clause", "level": 1},
+        {"text": "being an insulting term for an elderly woman", "role": "present_participle_explanation", "level": 2}
+      ],
+      "difficult_points": ["This 指上一句的 old bag。", "being... 是现在分词短语，补充解释该表达的具体语用含义。"],
+      "expressions": [{"text": "be idiomatic in", "meaning_zh": "在……语言中是地道习语"}, {"text": "an insulting term for", "meaning_zh": "对……的侮辱性称呼"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 26,
+      "sentence": "However, it is a simple expression comprising only two words, one of which is literally intended('old').",
+      "translation": "不过，这个表达结构简单，只有两个词，其中一个词 old 仍取其字面意义。",
+      "structure": [
+        {"text": "it is a simple expression", "role": "main_clause", "level": 1},
+        {"text": "comprising only two words", "role": "present_participle_modifier", "level": 2},
+        {"text": "one of which is literally intended('old')", "role": "nonrestrictive_relative_clause", "level": 2}
+      ],
+      "difficult_points": ["comprising... 修饰 expression，说明它只由两个词构成。", "one of which 中 which 指 two words；原文 intended('old') 缺空格，语义是 old 取字面义。"],
+      "expressions": [{"text": "comprise", "meaning_zh": "由……组成"}, {"text": "be literally intended", "meaning_zh": "按字面含义使用"}]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 27,
+      "sentence": "I would speculate that the same idiom occurs in Italian (that is, the direct translation of'old' and 'bag' in Italian carries the same idiomatic meaning).",
+      "translation": "我推测意大利语中也有相同的习语，也就是说，把 old 和 bag 直接译成意大利语后，仍具有相同的习语含义。",
+      "structure": [
+        {"text": "I would speculate", "role": "main_clause", "level": 1},
+        {"text": "that the same idiom occurs in Italian", "role": "object_clause", "level": 2},
+        {"text": "that is, the direct translation of'old' and 'bag' in Italian carries the same idiomatic meaning", "role": "parenthetical_explanation", "level": 2}
+      ],
+      "difficult_points": ["that 从句是 speculate 的宾语；would 使推测语气更审慎。", "括号中 that is 引出改述；原文 of'old' 之间缺少空格。"],
+      "expressions": [{"text": "speculate that", "meaning_zh": "推测"}, {"text": "direct translation", "meaning_zh": "直接翻译"}, {"text": "carry the same meaning", "meaning_zh": "具有相同含义"}]
+    },
+    {
+      "id": "F-06", "paragraph_label": "F", "sentence_index": 28,
+      "sentence": "This is the strategy of Transfer, where the full expression without time or space consideration is given.",
+      "translation": "这就是“直接转移”策略，即不考虑时间或空间限制，完整呈现原表达。",
+      "structure": [
+        {"text": "This is the strategy of Transfer", "role": "main_clause", "level": 1},
+        {"text": "where the full expression without time or space consideration is given", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["This 指将完整习语直接对应呈现的方法。", "where 引导非限制性定语从句，解释 Transfer 策略的操作方式。"],
+      "expressions": [{"text": "without consideration", "meaning_zh": "不加考虑"}, {"text": "the full expression", "meaning_zh": "完整表达"}]
+    },
+    {
+      "id": "F-07", "paragraph_label": "F", "sentence_index": 29,
+      "sentence": "Otherwise, there could well be a closely aligned idiom, in which case the strategy would be Imitation, where there are similar lexical elements between both languages.",
+      "translation": "另一种可能是，两种语言中存在高度对应的习语；在这种情况下采用的便是“模仿”策略，即两种语言之间具有相似的词汇成分。",
+      "structure": [
+        {"text": "there could well be a closely aligned idiom", "role": "existential_clause", "level": 1},
+        {"text": "in which case the strategy would be Imitation", "role": "relative_adverbial_clause", "level": 2},
+        {"text": "where there are similar lexical elements between both languages", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["could well 表示“很可能”；closely aligned 指两种语言中的习语高度对应。", "in which case 承接前述可能性；where 从句进一步解释 Imitation 的特征。"],
+      "expressions": [{"text": "could well be", "meaning_zh": "很可能是"}, {"text": "in which case", "meaning_zh": "在这种情况下"}, {"text": "lexical elements", "meaning_zh": "词汇成分"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 30,
+      "sentence": "Continuing with idioms, we read, 'Catches win matches'.",
+      "translation": "继续讨论习语，我们看到一句字幕：“接球赢比赛。”",
+      "structure": [
+        {"text": "Continuing with idioms", "role": "present_participle_adverbial", "level": 2},
+        {"text": "we read", "role": "main_clause", "level": 1},
+        {"text": "'Catches win matches'", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["Continuing... 是现在分词状语，逻辑主语是 we。", "Catches win matches 是押韵的体育习语，强调成功接球有助于获胜。"],
+      "expressions": [{"text": "continue with", "meaning_zh": "继续讨论"}, {"text": "Catches win matches", "meaning_zh": "接球制胜"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 31,
+      "sentence": "This derives from certain ball games, such as cricket, where catching the ball after it is struck by the batsman contributes towards winning the game.",
+      "translation": "这个说法源自某些球类运动，例如板球；在板球中，击球手击球后将球接住有助于赢得比赛。",
+      "structure": [
+        {"text": "This derives from certain ball games", "role": "main_clause", "level": 1},
+        {"text": "such as cricket", "role": "example_supplement", "level": 2},
+        {"text": "where catching the ball after it is struck by the batsman contributes towards winning the game", "role": "relative_clause", "level": 2},
+        {"text": "after it is struck by the batsman", "role": "time_adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["This 指上一句习语；where 修饰 cricket，解释该说法的运动背景。", "catching the ball 是动名词短语作主语；it 指 ball。"],
+      "expressions": [{"text": "derive from", "meaning_zh": "源自"}, {"text": "contribute towards doing", "meaning_zh": "有助于做某事"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 32,
+      "sentence": "There are no such sporting cultures in Italy followed.",
+      "translation": "意大利并没有人们会参与或关注的这种体育文化。",
+      "structure": [
+        {"text": "There are no such sporting cultures", "role": "existential_clause", "level": 1},
+        {"text": "in Italy", "role": "place_adverbial", "level": 2},
+        {"text": "followed", "role": "past_participle_modifier", "level": 2}
+      ],
+      "difficult_points": ["原句语序生硬，followed 语义上是过去分词，修饰 sporting cultures。", "such sporting cultures 指板球等孕育“接球制胜”说法的运动文化。"],
+      "expressions": [{"text": "sporting culture", "meaning_zh": "体育文化"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 33,
+      "sentence": "Thus, one can be certain that other words were used in the original Italian, but that these have a similar pragmatic effect (in meaning and idiomatic nature).",
+      "translation": "因此可以确定，意大利语原文使用的是别的词语，但这些词在含义和习语性质上产生了相似的语用效果。",
+      "structure": [
+        {"text": "one can be certain", "role": "main_clause", "level": 1},
+        {"text": "that other words were used in the original Italian", "role": "object_clause", "level": 2},
+        {"text": "but that these have a similar pragmatic effect", "role": "coordinate_object_clause", "level": 2},
+        {"text": "in meaning and idiomatic nature", "role": "parenthetical_modifier", "level": 3}
+      ],
+      "difficult_points": ["两个 that 从句由 but 连接，都是 be certain 的内容。", "these 指 original Italian 中使用的 other words；括号限定 pragmatic effect 的具体层面。"],
+      "expressions": [{"text": "be certain that", "meaning_zh": "可以确定"}, {"text": "pragmatic effect", "meaning_zh": "语用效果"}, {"text": "idiomatic nature", "meaning_zh": "习语性质"}]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 34,
+      "sentence": "The strategy used is thus Paraphrasing, where different expressions specific to the source language (Italian) and target language(English) are required.",
+      "translation": "因此这里使用的是“释义改写”策略，即源语言（意大利语）和目标语言（英语）需要采用各自特有但效果相近的不同表达。",
+      "structure": [
+        {"text": "The strategy used", "role": "subject", "level": 1},
+        {"text": "is thus Paraphrasing", "role": "linking_predicate", "level": 1},
+        {"text": "where different expressions specific to the source language (Italian) and target language(English) are required", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["used 是过去分词，修饰 strategy；where 从句解释 Paraphrasing 的做法。", "specific to... 修饰 expressions；原文 language(English) 之间缺少空格。"],
+      "expressions": [{"text": "be specific to", "meaning_zh": "为……所特有"}, {"text": "source language", "meaning_zh": "源语言"}, {"text": "target language", "meaning_zh": "目标语言"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 35,
+      "sentence": "Later on, we read, 'A sign of destiny'.",
+      "translation": "稍后，我们又看到一句字幕：“命运的征兆。”",
+      "structure": [
+        {"text": "Later on", "role": "time_adverbial", "level": 1},
+        {"text": "we read", "role": "main_clause", "level": 1},
+        {"text": "'A sign of destiny'", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["Later on 用于推进影片例证的时间顺序。", "引号内容是 read 的宾语，destiny 在此指命运的安排。"],
+      "expressions": [{"text": "later on", "meaning_zh": "稍后"}, {"text": "a sign of destiny", "meaning_zh": "命运的征兆"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 36,
+      "sentence": "When this subtitle appears, there are actually two to three people speaking with equal force at the same time.",
+      "translation": "这句字幕出现时，实际上有两三个人同时以同样强的语气说话。",
+      "structure": [
+        {"text": "When this subtitle appears", "role": "time_adverbial_clause", "level": 2},
+        {"text": "there are actually two to three people", "role": "existential_clause", "level": 1},
+        {"text": "speaking with equal force at the same time", "role": "present_participle_modifier", "level": 2}
+      ],
+      "difficult_points": ["speaking... 是现在分词短语，修饰 two to three people。", "with equal force 表示几位说话者的重要性或语气强度相当。"],
+      "expressions": [{"text": "at the same time", "meaning_zh": "同时"}, {"text": "with equal force", "meaning_zh": "以同等强度"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 37,
+      "sentence": "Space and time constraints render it impossible to have them all translated, so only the quoted subtitle appears, using the strategy known as Condensation.",
+      "translation": "空间和时间限制使得无法把他们所有人的话都译出来，因此画面上只出现了所引的这一句字幕，采用的是“压缩”策略。",
+      "structure": [
+        {"text": "Space and time constraints render it impossible", "role": "main_clause", "level": 1},
+        {"text": "to have them all translated", "role": "extraposed_object", "level": 2},
+        {"text": "so only the quoted subtitle appears", "role": "result_clause", "level": 1},
+        {"text": "using the strategy known as Condensation", "role": "present_participle_adverbial", "level": 2}
+      ],
+      "difficult_points": ["render it impossible to... 中 it 是形式宾语，真正内容是不定式。", "have them all translated 是 have + 宾语 + 过去分词，表示让所有人的话都得到翻译。", "known as Condensation 是过去分词短语，修饰 strategy。"],
+      "expressions": [{"text": "space and time constraints", "meaning_zh": "空间和时间限制"}, {"text": "render it impossible to", "meaning_zh": "使做某事成为不可能"}, {"text": "be known as", "meaning_zh": "被称为"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 38,
+      "sentence": "Finally, we read scopa – an Italian word referring to a variation of the central card game.",
+      "translation": "最后，我们看到 scopa 一词——这是一个意大利语词，指影片核心纸牌游戏的一种变体。",
+      "structure": [
+        {"text": "we read scopa", "role": "main_clause", "level": 1},
+        {"text": "an Italian word", "role": "apposition", "level": 2},
+        {"text": "referring to a variation of the central card game", "role": "present_participle_modifier", "level": 3}
+      ],
+      "difficult_points": ["破折号后的 an Italian word 是 scopa 的同位语。", "referring to... 是现在分词短语，修饰 word 并解释其所指。"],
+      "expressions": [{"text": "refer to", "meaning_zh": "指的是"}, {"text": "a variation of", "meaning_zh": "……的一种变体"}]
+    },
+    {
+      "id": "H-05", "paragraph_label": "H", "sentence_index": 39,
+      "sentence": "Being unique to Italy, there is no equivalent word in English, so the strategy used here is Regination, where the subtitler leaves the word in the original language.",
+      "translation": "由于这个词是意大利独有的，英语中没有对应词，所以这里采用的是“保留原文”策略，即字幕译者把该词留在原语言中。",
+      "structure": [
+        {"text": "Being unique to Italy", "role": "cause_participle_clause", "level": 2},
+        {"text": "there is no equivalent word in English", "role": "existential_clause", "level": 1},
+        {"text": "so the strategy used here is Regination", "role": "result_clause", "level": 1},
+        {"text": "where the subtitler leaves the word in the original language", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["Being unique to Italy 逻辑上修饰 scopa，但形式上与紧随其后的 there 存在悬垂结构。", "used here 修饰 strategy；where 从句解释该策略如何操作。", "Regination 是源文给出的策略名称，英文保留原样。"],
+      "expressions": [{"text": "be unique to", "meaning_zh": "为……所独有"}, {"text": "equivalent word", "meaning_zh": "对应词"}, {"text": "leave the word in the original language", "meaning_zh": "保留原语言中的词"}]
+    },
+    {
+      "id": "H-06", "paragraph_label": "H", "sentence_index": 40,
+      "sentence": "The meaning remains obvious from the context, and only in such minimal and unlikely situations does this strategy become acceptable.",
+      "translation": "这个词的含义从语境中仍然显而易见，而且只有在这种极少出现、可能性很低的情况下，这一策略才可以接受。",
+      "structure": [
+        {"text": "The meaning remains obvious from the context", "role": "main_clause", "level": 1},
+        {"text": "and only in such minimal and unlikely situations", "role": "fronted_adverbial", "level": 1},
+        {"text": "does this strategy become acceptable", "role": "inverted_clause", "level": 1}
+      ],
+      "difficult_points": ["remain obvious 中 obvious 是主语补足语，from the context 说明判断依据。", "only + 状语置于分句开头触发部分倒装，因此 does 位于主语之前。"],
+      "expressions": [{"text": "be obvious from the context", "meaning_zh": "从语境中显而易见"}, {"text": "become acceptable", "meaning_zh": "变得可以接受"}]
+    }
+  ]
+}

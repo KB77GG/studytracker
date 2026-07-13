@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_76_test_43",
+  "passage_id": "reading_jijing_76_test_43_p2",
+  "passage_title": "British Architecture 2",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "Architecture is about evolution, not revolution.",
+      "translation": "建筑关乎演进，而非革命式突变。",
+      "structure": [{"text": "Architecture", "role": "subject", "level": 1}, {"text": "is about evolution", "role": "linking_predicate", "level": 1}, {"text": "not revolution", "role": "contrast_complement", "level": 1}],
+      "difficult_points": ["about 在此表示建筑发展的本质所关乎的内容。", "not revolution 与 evolution 形成押韵式对比，强调渐进变化。"],
+      "expressions": [{"text": "be about", "meaning_zh": "关乎；核心在于"}, {"text": "evolution, not revolution", "meaning_zh": "演进而非革命"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "It used to be thought that once the Romans pulled out of Britain in the fifth century, their elegant villas, carefully-planned towns and engineering marvels like Hadrian's Wall simply fell into decay as British culture was plunged into the Dark Ages.",
+      "translation": "过去人们认为，公元5世纪罗马人一撤离不列颠，他们优雅的别墅、精心规划的城镇以及哈德良长城等工程奇迹便迅速衰败，因为英国文化由此陷入了黑暗时代。",
+      "structure": [
+        {"text": "It used to be thought", "role": "passive_reporting_clause", "level": 1},
+        {"text": "that once the Romans pulled out of Britain in the fifth century", "role": "object_clause", "level": 2},
+        {"text": "their elegant villas, carefully-planned towns and engineering marvels like Hadrian's Wall simply fell into decay", "role": "main_clause_within_object", "level": 3},
+        {"text": "as British culture was plunged into the Dark Ages", "role": "cause_clause", "level": 3}
+      ],
+      "difficult_points": ["It 是形式主语，that 后是过去人们所相信的完整观点。", "once 引导时间从句；their 指 Romans。", "as 引导原因或伴随背景，was plunged into 是被动结构。"],
+      "expressions": [{"text": "used to be thought", "meaning_zh": "过去人们认为"}, {"text": "pull out of", "meaning_zh": "撤离"}, {"text": "fall into decay", "meaning_zh": "陷入衰败"}, {"text": "be plunged into", "meaning_zh": "被投入；陷入"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "It took the Norman Conquest of 1066 to bring back the light, and the othic cathedral-builders of the Middle Ages played an important part in the revival of British culture.",
+      "translation": "直到1066年的诺曼征服才重新带来文明之光，而中世纪的哥特式大教堂建造者在英国文化复兴中发挥了重要作用。",
+      "structure": [
+        {"text": "It took the Norman Conquest of 1066 to bring back the light", "role": "main_clause", "level": 1},
+        {"text": "and the othic cathedral-builders of the Middle Ages", "role": "coordinate_subject", "level": 1},
+        {"text": "played an important part in the revival of British culture", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["It took A to do 表示需要 A 才实现某事，此处 light 比喻文明复兴。", "原文 othic 缺少首字母 G，应按 Gothic 理解。"],
+      "expressions": [{"text": "bring back the light", "meaning_zh": "重新带来文明之光"}, {"text": "play an important part in", "meaning_zh": "在……中发挥重要作用"}, {"text": "the revival of", "meaning_zh": "……的复兴"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "However, the truth is not as simple as that Romano-British culture – and that included architecture along with language, religion, political organization and the arts – survived long after the Roman withdrawal.",
+      "translation": "然而，事实并非如此简单：罗马—不列颠文化——其中包括建筑，也包括语言、宗教、政治组织和艺术——在罗马撤离后很久仍然延续。",
+      "structure": [
+        {"text": "the truth is not as simple as that", "role": "main_clause", "level": 1},
+        {"text": "Romano-British culture", "role": "subject", "level": 1},
+        {"text": "and that included architecture along with language, religion, political organization and the arts", "role": "parenthetical_clause", "level": 2},
+        {"text": "survived long after the Roman withdrawal", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["原文 that 与 Romano-British 之间缺少冒号或句号，语义上后半句用于纠正前述简单叙事。", "破折号内 that 指 Romano-British culture，说明其包含的文化领域。", "long after 强调文化延续远超罗马军政撤离的时间。"],
+      "expressions": [{"text": "not as simple as that", "meaning_zh": "并非那么简单"}, {"text": "along with", "meaning_zh": "连同；以及"}, {"text": "long after", "meaning_zh": "在……很久以后"}]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "And although the Anglo- Saxons had a sophisticated building style of their own, little survives to bear witness to their achievements as the vast majority of Anglo-Saxon buildings were made of wood.",
+      "translation": "而且，尽管盎格鲁—撒克逊人拥有自己成熟精巧的建筑风格，却几乎没有遗迹能证明其成就，因为绝大多数盎格鲁—撒克逊建筑都是木结构。",
+      "structure": [
+        {"text": "although the Anglo- Saxons had a sophisticated building style of their own", "role": "concessive_clause", "level": 2},
+        {"text": "little survives", "role": "main_clause", "level": 1},
+        {"text": "to bear witness to their achievements", "role": "result_infinitive", "level": 2},
+        {"text": "as the vast majority of Anglo-Saxon buildings were made of wood", "role": "cause_clause", "level": 2}
+      ],
+      "difficult_points": ["little 作代词主语，表示留存下来的实物很少。", "to bear witness... 说明幸存遗迹本可发挥的证明作用；as 引出遗迹稀少的原因。", "原文 Anglo- Saxons 的连字符后多了空格。"],
+      "expressions": [{"text": "of their own", "meaning_zh": "他们自己的"}, {"text": "bear witness to", "meaning_zh": "证明；见证"}, {"text": "the vast majority of", "meaning_zh": "绝大多数"}, {"text": "be made of", "meaning_zh": "由……制成"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "Even so, the period between the Norman landing at Pevensey in 1066 and the day in 1485 when Richard III lost his horse and his head at Bosworth, ushering in the Tudors and the /Early Modern period, marks a rare flowering of British building.",
+      "translation": "即便如此，从1066年诺曼人在佩文西登陆，到1485年理查三世在博斯沃思丢掉战马和性命、由此开启都铎王朝及近代早期的这段时期，仍标志着英国建筑一次罕见的繁荣。",
+      "structure": [
+        {"text": "the period between the Norman landing at Pevensey in 1066 and the day in 1485", "role": "subject", "level": 1},
+        {"text": "when Richard III lost his horse and his head at Bosworth", "role": "relative_clause", "level": 2},
+        {"text": "ushering in the Tudors and the /Early Modern period", "role": "result_participle_clause", "level": 2},
+        {"text": "marks a rare flowering of British building", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["长主语是 the period between A and B，谓语直到 marks 才出现。", "when 修饰 the day in 1485；ushering in... 说明理查三世战败带来的历史结果。", "原文 /Early 前多出斜杠，英文保留。"],
+      "expressions": [{"text": "even so", "meaning_zh": "即便如此"}, {"text": "usher in", "meaning_zh": "开启；迎来"}, {"text": "mark a flowering of", "meaning_zh": "标志着……的繁荣"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "And it is all the more remarkable because the underlying ethos of medieval architecture was 'fitness for purpose'.",
+      "translation": "这一繁荣尤其值得注意，因为中世纪建筑背后的基本理念是“适合用途”。",
+      "structure": [
+        {"text": "it is all the more remarkable", "role": "main_clause", "level": 1},
+        {"text": "because the underlying ethos of medieval architecture was 'fitness for purpose'", "role": "cause_clause", "level": 2}
+      ],
+      "difficult_points": ["it 指上一句所说英国建筑的罕见繁荣。", "all the more 表示因后述原因而“更加”；fitness for purpose 指以实际用途为设计准则。"],
+      "expressions": [{"text": "all the more remarkable", "meaning_zh": "更加值得注意"}, {"text": "underlying ethos", "meaning_zh": "深层理念"}, {"text": "fitness for purpose", "meaning_zh": "适合用途；功能适配"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "The great cathedrals and parish churches that lifted up their towers to heaven were not only acts of devotion in stone; they were also fiercely functional buildings.",
+      "translation": "那些将塔楼高举向天空的大教堂和教区教堂，不仅是以石头表达的虔诚信仰，也是功能性极强的建筑。",
+      "structure": [
+        {"text": "The great cathedrals and parish churches", "role": "subject", "level": 1},
+        {"text": "that lifted up their towers to heaven", "role": "relative_clause", "level": 2},
+        {"text": "were not only acts of devotion in stone", "role": "predicate", "level": 1},
+        {"text": "they were also fiercely functional buildings", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["that 修饰 cathedrals and parish churches；lifted up... 带有拟人色彩。", "not only...also... 跨分号连接宗教象征与实用功能两个方面。"],
+      "expressions": [{"text": "acts of devotion", "meaning_zh": "虔诚信仰的表达"}, {"text": "in stone", "meaning_zh": "以石材形式体现"}, {"text": "fiercely functional", "meaning_zh": "功能性极强"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "Castles served their particular purpose and their battlements and turrets were for use rather than ornament.",
+      "translation": "城堡服务于其特定用途，城垛和塔楼是为了使用，而不是为了装饰。",
+      "structure": [
+        {"text": "Castles served their particular purpose", "role": "main_clause", "level": 1},
+        {"text": "and their battlements and turrets", "role": "coordinate_subject", "level": 1},
+        {"text": "were for use rather than ornament", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["their 在两处均指 castles。", "for use rather than ornament 对比防御构件的实用目的和装饰目的。"],
+      "expressions": [{"text": "serve a particular purpose", "meaning_zh": "服务于特定用途"}, {"text": "for use rather than ornament", "meaning_zh": "为实用而非装饰"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "In a sense, the buildings of the 16th century were also governed by fitness for purpose – only now, the purpose was very different.",
+      "translation": "从某种意义上说，16世纪的建筑同样受“适合用途”理念支配——只是此时用途已经大不相同。",
+      "structure": [
+        {"text": "In a sense", "role": "sentence_adverbial", "level": 1},
+        {"text": "the buildings of the 16th century were also governed by fitness for purpose", "role": "main_clause", "level": 1},
+        {"text": "only now, the purpose was very different", "role": "contrast_supplement", "level": 1}
+      ],
+      "difficult_points": ["were governed by 使用被动语态，表示设计受到某种理念支配。", "only now 在破折号后转折，指出功能导向仍在，但功能内容已经改变。"],
+      "expressions": [{"text": "in a sense", "meaning_zh": "从某种意义上说"}, {"text": "be governed by", "meaning_zh": "受……支配"}]
+    },
+    {
+      "id": "B-06", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "In domestic architecture, in particular, buildings were used to display status and wealth.",
+      "translation": "尤其在住宅建筑中，建筑被用来展示地位和财富。",
+      "structure": [
+        {"text": "In domestic architecture", "role": "domain_adverbial", "level": 1},
+        {"text": "in particular", "role": "sentence_adverbial", "level": 1},
+        {"text": "buildings were used", "role": "passive_predicate", "level": 1},
+        {"text": "to display status and wealth", "role": "purpose_adverbial", "level": 2}
+      ],
+      "difficult_points": ["in particular 是插入语，突出住宅建筑这一领域。", "were used to display 是被动结构加目的不定式。"],
+      "expressions": [{"text": "domestic architecture", "meaning_zh": "住宅建筑"}, {"text": "in particular", "meaning_zh": "尤其"}, {"text": "display status and wealth", "meaning_zh": "展示地位和财富"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "This stately and curious workmanship showed itself in various ways.",
+      "translation": "这种宏伟而精巧的工艺以多种方式展现出来。",
+      "structure": [{"text": "This stately and curious workmanship", "role": "subject", "level": 1}, {"text": "showed itself", "role": "predicate", "level": 1}, {"text": "in various ways", "role": "manner_adverbial", "level": 2}],
+      "difficult_points": ["This workmanship 回指用建筑展示地位和财富的精巧设计。", "showed itself 是反身结构，表示某种特征通过具体形式显现。"],
+      "expressions": [{"text": "show itself in", "meaning_zh": "在……中表现出来"}, {"text": "in various ways", "meaning_zh": "以多种方式"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "A greater sense of security led to more outward-looking buildings, as opposed to the medieval arrangement where the need for defense created houses that faced inward onto a courtyard or series of courtyards.",
+      "translation": "安全感增强带来了更为开放、朝向外部的建筑，这与中世纪的格局相反；当时防御需求使房屋向内朝着一个或一系列庭院。",
+      "structure": [
+        {"text": "A greater sense of security led to more outward-looking buildings", "role": "main_clause", "level": 1},
+        {"text": "as opposed to the medieval arrangement", "role": "contrast_adverbial", "level": 2},
+        {"text": "where the need for defense created houses", "role": "relative_clause", "level": 2},
+        {"text": "that faced inward onto a courtyard or series of courtyards", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["as opposed to 将文艺复兴后的外向建筑与中世纪内向布局对比。", "where 修饰 arrangement；that 修饰 houses，形成嵌套定语从句。"],
+      "expressions": [{"text": "a sense of security", "meaning_zh": "安全感"}, {"text": "lead to", "meaning_zh": "导致"}, {"text": "as opposed to", "meaning_zh": "与……相对"}, {"text": "face inward", "meaning_zh": "朝向内部"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "This allowed for much more in the way of exterior ornament.",
+      "translation": "这使建筑外部可以采用多得多的装饰。",
+      "structure": [{"text": "This", "role": "subject", "level": 1}, {"text": "allowed for", "role": "predicate", "level": 1}, {"text": "much more in the way of exterior ornament", "role": "object", "level": 1}],
+      "difficult_points": ["This 指安全感增强后建筑转向外向布局。", "in the way of 表示“在……方面、属于……一类”，此处限定外部装饰。"],
+      "expressions": [{"text": "allow for", "meaning_zh": "使……成为可能"}, {"text": "in the way of", "meaning_zh": "在……方面"}, {"text": "exterior ornament", "meaning_zh": "外部装饰"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "The rooms themselves tended to be bigger and lighter – as an expensive commodity, the use of great expanses of glass was in itself a statement of wealth.",
+      "translation": "房间本身往往更大、更明亮——由于玻璃是昂贵商品，大面积使用玻璃本身就是财富的宣示。",
+      "structure": [
+        {"text": "The rooms themselves tended to be bigger and lighter", "role": "main_clause", "level": 1},
+        {"text": "as an expensive commodity", "role": "supplement", "level": 2},
+        {"text": "the use of great expanses of glass", "role": "subject", "level": 1},
+        {"text": "was in itself a statement of wealth", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["破折号连接房间更明亮与大面积使用玻璃所象征的财富。", "as an expensive commodity 逻辑上描述 glass，形式上是省略补充。", "in itself 强调仅仅大面积用玻璃这一事实就足以显示财富。"],
+      "expressions": [{"text": "tend to be", "meaning_zh": "往往是"}, {"text": "great expanses of", "meaning_zh": "大面积的"}, {"text": "in itself", "meaning_zh": "本身"}, {"text": "a statement of wealth", "meaning_zh": "财富的宣示"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "There was also a general move towards balanced and symmetrical exteriors with central entrances.",
+      "translation": "建筑外观也普遍转向均衡、对称，并采用中央入口。",
+      "structure": [{"text": "There was also a general move", "role": "existential_clause", "level": 1}, {"text": "towards balanced and symmetrical exteriors", "role": "direction_complement", "level": 2}, {"text": "with central entrances", "role": "prepositional_modifier", "level": 2}],
+      "difficult_points": ["a move towards 表示设计趋势逐渐转向某种风格。", "with central entrances 修饰 exteriors，补充对称外观的入口特征。"],
+      "expressions": [{"text": "a general move towards", "meaning_zh": "普遍转向"}, {"text": "balanced and symmetrical", "meaning_zh": "均衡且对称的"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 17,
+      "sentence": "With the exception of Inigo Jones (1573-1652), whose confident handling of classical detail and proportion set him apart from all other architects of the period, most early 17th century buildings tended to take the innocent exuberance of late Tudor work one step further.",
+      "translation": "除伊尼戈·琼斯（1573—1652）外——他对古典细节和比例的娴熟把握使其有别于同时代所有建筑师——大多数17世纪早期建筑都倾向于将都铎晚期作品朴拙而丰盛的风格再推进一步。",
+      "structure": [
+        {"text": "With the exception of Inigo Jones (1573-1652)", "role": "exception_adverbial", "level": 1},
+        {"text": "whose confident handling of classical detail and proportion set him apart from all other architects of the period", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "most early 17th century buildings tended", "role": "main_clause", "level": 1},
+        {"text": "to take the innocent exuberance of late Tudor work one step further", "role": "subject_complement", "level": 2}
+      ],
+      "difficult_points": ["whose 指 Inigo Jones；set him apart 表示其能力使他与同行不同。", "主句主语是 most early 17th century buildings，前置例外和定语从句很长。", "take...one step further 表示把某一既有风格进一步发展。"],
+      "expressions": [{"text": "with the exception of", "meaning_zh": "除……之外"}, {"text": "set someone apart from", "meaning_zh": "使某人与……区别开"}, {"text": "tend to", "meaning_zh": "倾向于"}, {"text": "take something one step further", "meaning_zh": "把某事进一步推进"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 18,
+      "sentence": "/But during the 1640s and 50s the Civil War and its aftermath sent many gentlemen and nobles to the Continent either to escape the fighting or, when the war was lost, to follow Charles II into exile.",
+      "translation": "但在17世纪40至50年代，内战及其后果迫使许多绅士和贵族前往欧洲大陆，要么躲避战火，要么在战争失败后追随查理二世流亡。",
+      "structure": [
+        {"text": "the Civil War and its aftermath sent many gentlemen and nobles to the Continent", "role": "main_clause", "level": 1},
+        {"text": "either to escape the fighting", "role": "purpose_adverbial", "level": 2},
+        {"text": "when the war was lost", "role": "time_adverbial_clause", "level": 3},
+        {"text": "or, when the war was lost, to follow Charles II into exile", "role": "coordinate_purpose_adverbial", "level": 2}
+      ],
+      "difficult_points": ["send someone to... 在此不是主动派遣，而是指局势迫使他们离开。", "either...or... 连接两种前往大陆的目的；when 从句嵌在第二项中。", "原文句首 /But 多出斜杠。"],
+      "expressions": [{"text": "the Civil War and its aftermath", "meaning_zh": "内战及其后果"}, {"text": "escape the fighting", "meaning_zh": "躲避战火"}, {"text": "follow someone into exile", "meaning_zh": "追随某人流亡"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 19,
+      "sentence": "There they came into contact with French, Dutch and Italian architecture and, with Charles's restoration in 1660, there was a flurry of building activity as royalists reclaimed their property and built themselves houses reflecting the latest European trends.",
+      "translation": "他们在那里接触到法国、荷兰和意大利建筑；随着查理二世于1660年复辟，保王党人收回财产并为自己建造体现欧洲最新潮流的住宅，建筑活动一时兴盛。",
+      "structure": [
+        {"text": "There they came into contact with French, Dutch and Italian architecture", "role": "main_clause", "level": 1},
+        {"text": "with Charles's restoration in 1660", "role": "time_adverbial", "level": 2},
+        {"text": "there was a flurry of building activity", "role": "coordinate_existential_clause", "level": 1},
+        {"text": "as royalists reclaimed their property and built themselves houses reflecting the latest European trends", "role": "time_cause_clause", "level": 2}
+      ],
+      "difficult_points": ["句首 There 是地点副词，第二个 there 则构成存在句。", "as 从句说明建筑热潮出现时保王党人的行动；reflecting... 修饰 houses。", "Charles's restoration 指查理二世复辟，而非建筑修复。"],
+      "expressions": [{"text": "come into contact with", "meaning_zh": "接触到"}, {"text": "a flurry of", "meaning_zh": "一阵密集的"}, {"text": "reclaim property", "meaning_zh": "收回财产"}, {"text": "reflect the latest trends", "meaning_zh": "体现最新潮流"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 20,
+      "sentence": "The British Baroque was a reassertion of authority, an expression of absolutist ideology by men who remembered a world turned upside down during the Civil War.",
+      "translation": "英国巴洛克是对权威的重新宣示，也是经历并记得内战期间世界天翻地覆的那些人对绝对主义意识形态的表达。",
+      "structure": [
+        {"text": "The British Baroque", "role": "subject", "level": 1},
+        {"text": "was a reassertion of authority", "role": "linking_predicate", "level": 1},
+        {"text": "an expression of absolutist ideology by men", "role": "apposition", "level": 1},
+        {"text": "who remembered a world turned upside down during the Civil War", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["a reassertion 与 an expression 是解释 British Baroque 的并列表语。", "who 修饰 men；turned upside down 是过去分词短语，修饰 world。"],
+      "expressions": [{"text": "a reassertion of authority", "meaning_zh": "对权威的重新宣示"}, {"text": "absolutist ideology", "meaning_zh": "绝对主义意识形态"}, {"text": "turn upside down", "meaning_zh": "使天翻地覆"}]
+    },
+    {
+      "id": "D-05", "paragraph_label": "D", "sentence_index": 21,
+      "sentence": "The style is heavy and rich, sometimes overblown and melodramatic.",
+      "translation": "这种风格厚重而华丽，有时显得过度夸张、戏剧化。",
+      "structure": [{"text": "The style", "role": "subject", "level": 1}, {"text": "is heavy and rich", "role": "linking_predicate", "level": 1}, {"text": "sometimes overblown and melodramatic", "role": "supplementary_complement", "level": 1}],
+      "difficult_points": ["The style 指 British Baroque。", "逗号后的形容词省略重复的 is，补充风格有时呈现的负面特征。"],
+      "expressions": [{"text": "heavy and rich", "meaning_zh": "厚重而华丽"}, {"text": "overblown and melodramatic", "meaning_zh": "过度夸张且戏剧化"}]
+    },
+    {
+      "id": "D-06", "paragraph_label": "D", "sentence_index": 22,
+      "sentence": "The politics which underpin it are questionable, but its products are breathtaking.",
+      "translation": "支撑这种风格的政治理念值得质疑，但它所产生的建筑作品却令人惊叹。",
+      "structure": [
+        {"text": "The politics", "role": "subject", "level": 1},
+        {"text": "which underpin it", "role": "relative_clause", "level": 2},
+        {"text": "are questionable", "role": "predicate", "level": 1},
+        {"text": "but its products are breathtaking", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["which 修饰 politics；it 和 its 均指 British Baroque style。", "but 对比这种风格的政治基础与其建筑成果的审美价值。"],
+      "expressions": [{"text": "underpin", "meaning_zh": "构成……的基础；支撑"}, {"text": "be questionable", "meaning_zh": "值得质疑"}, {"text": "be breathtaking", "meaning_zh": "令人惊叹"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 23,
+      "sentence": "The huge glass-and-iron Crystal Palace, designed by Joseph Paxton to house the Great Exhibition of 1851, shows another strand to 19th century architecture – one which embraced new industrial processes.",
+      "translation": "由约瑟夫·帕克斯顿设计、用于举办1851年万国工业博览会的巨型玻璃铁构水晶宫，展现了19世纪建筑的另一条发展脉络——拥抱新工业工艺。",
+      "structure": [
+        {"text": "The huge glass-and-iron Crystal Palace", "role": "subject", "level": 1},
+        {"text": "designed by Joseph Paxton to house the Great Exhibition of 1851", "role": "past_participle_modifier", "level": 2},
+        {"text": "shows another strand to 19th century architecture", "role": "predicate", "level": 1},
+        {"text": "one which embraced new industrial processes", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["designed... 是过去分词短语修饰 Crystal Palace；to house 表示设计目的。", "one 是 another strand 的同位替代词，which 修饰 one。"],
+      "expressions": [{"text": "be designed to", "meaning_zh": "被设计用于"}, {"text": "another strand to", "meaning_zh": "……的另一条发展脉络"}, {"text": "embrace new processes", "meaning_zh": "采用新工艺"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 24,
+      "sentence": "But it wasn't long before even this confidence in progress came to be regarded with suspicion.",
+      "translation": "但没过多久，甚至这种对进步的信心也开始受到怀疑。",
+      "structure": [
+        {"text": "it wasn't long before", "role": "time_construction", "level": 1},
+        {"text": "even this confidence in progress", "role": "subject", "level": 2},
+        {"text": "came to be regarded with suspicion", "role": "predicate", "level": 2}
+      ],
+      "difficult_points": ["it wasn't long before... 表示“没过多久就……”。", "this confidence 回指水晶宫所体现的对工业进步的信心；came to be regarded 表示看法逐渐改变。"],
+      "expressions": [{"text": "it wasn't long before", "meaning_zh": "没过多久就"}, {"text": "confidence in progress", "meaning_zh": "对进步的信心"}, {"text": "be regarded with suspicion", "meaning_zh": "受到怀疑"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 25,
+      "sentence": "Mass production resulted in buildings and furnishings that were too perfect, as the individual craftsman no longer had a major role in their creation.",
+      "translation": "大规模生产造出了过于完美的建筑和陈设，因为个体工匠在创作过程中已不再发挥主要作用。",
+      "structure": [
+        {"text": "Mass production resulted in buildings and furnishings", "role": "main_clause", "level": 1},
+        {"text": "that were too perfect", "role": "relative_clause", "level": 2},
+        {"text": "as the individual craftsman no longer had a major role in their creation", "role": "cause_clause", "level": 2}
+      ],
+      "difficult_points": ["that 修饰 buildings and furnishings；too perfect 暗含工业产品因缺乏手工痕迹而显得不自然。", "as 引出原因；their 指 buildings and furnishings。"],
+      "expressions": [{"text": "mass production", "meaning_zh": "大规模生产"}, {"text": "result in", "meaning_zh": "导致"}, {"text": "have a major role in", "meaning_zh": "在……中发挥主要作用"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 26,
+      "sentence": "Railing against the dehumanising effects of industrialisation, reformers like John Ruskin and William Morris made a concerted effort to return to hand-crafted, pre-industrial manufacturing techniques.Morris's influence grew from the production of furniture and textiles, until by the 1880s a generation of principled young architects was following his call for good, honest construction.",
+      "translation": "约翰·拉斯金和威廉·莫里斯等改革者强烈反对工业化造成的非人化影响，并共同努力回归手工制作的前工业时代生产技术。莫里斯的影响从家具和纺织品生产领域不断扩大，到19世纪80年代，一代有原则的年轻建筑师已开始响应他对优质、诚实建造的倡议。",
+      "structure": [
+        {"text": "Railing against the dehumanising effects of industrialisation", "role": "present_participle_adverbial", "level": 2},
+        {"text": "reformers like John Ruskin and William Morris made a concerted effort to return to hand-crafted, pre-industrial manufacturing techniques", "role": "main_clause", "level": 1},
+        {"text": "Morris's influence grew from the production of furniture and textiles", "role": "coordinate_statement", "level": 1},
+        {"text": "until by the 1880s a generation of principled young architects was following his call for good, honest construction", "role": "time_result_clause", "level": 2}
+      ],
+      "difficult_points": ["Railing against... 是现在分词状语，逻辑主语是 reformers。", "make a concerted effort to 表示多人协力做某事；hand-crafted 与 pre-industrial 并列修饰 techniques。", "原文 techniques.Morris's 两句之间缺少空格，为保证原文完整合并处理；his 指 Morris。"],
+      "expressions": [{"text": "rail against", "meaning_zh": "强烈反对"}, {"text": "make a concerted effort to", "meaning_zh": "协力做某事"}, {"text": "hand-crafted", "meaning_zh": "手工制作的"}, {"text": "follow someone's call for", "meaning_zh": "响应某人对……的倡议"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 27,
+      "sentence": "The most important trends in early 20th century architecture simply passed Britain by.",
+      "translation": "20世纪早期建筑中最重要的潮流几乎完全绕过了英国。",
+      "structure": [{"text": "The most important trends in early 20th century architecture", "role": "subject", "level": 1}, {"text": "simply passed Britain by", "role": "predicate", "level": 1}],
+      "difficult_points": ["pass someone by 在此表示某种发展没有影响或惠及某地。", "simply 加强语气，强调英国与国际现代建筑潮流脱节。"],
+      "expressions": [{"text": "pass someone by", "meaning_zh": "绕过；未对……产生影响"}, {"text": "architectural trends", "meaning_zh": "建筑潮流"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 28,
+      "sentence": "Whilst Gropius was working on cold, hard expanses of glass, and Le Corbusier was experimenting with the use of reinforced concrete frames, we had staid establishment architects like Edwin Lutyens producing Neo-Georgian and Renaissance country houses for an outmoded landed class.",
+      "translation": "当格罗皮乌斯探索冷峻坚硬的大片玻璃、勒·柯布西耶试验钢筋混凝土框架时，英国却只有埃德温·鲁琴斯这类保守的主流建筑师，为已经过时的地主阶层设计新乔治式和文艺复兴式乡间宅邸。",
+      "structure": [
+        {"text": "Whilst Gropius was working on cold, hard expanses of glass", "role": "contrast_clause", "level": 2},
+        {"text": "and Le Corbusier was experimenting with the use of reinforced concrete frames", "role": "coordinate_contrast_clause", "level": 2},
+        {"text": "we had staid establishment architects like Edwin Lutyens", "role": "main_clause", "level": 1},
+        {"text": "producing Neo-Georgian and Renaissance country houses for an outmoded landed class", "role": "present_participle_modifier", "level": 2}
+      ],
+      "difficult_points": ["Whilst 引导对比：欧洲建筑师创新时，英国主流仍然保守。", "producing... 修饰 architects；landed class 指依靠土地资产的阶层。", "had 在此不是完成时，而是“拥有、出现”。"],
+      "expressions": [{"text": "work on", "meaning_zh": "致力于；研究"}, {"text": "experiment with", "meaning_zh": "试验"}, {"text": "reinforced concrete frames", "meaning_zh": "钢筋混凝土框架"}, {"text": "outmoded landed class", "meaning_zh": "过时的地主阶层"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 29,
+      "sentence": "In addition there were slightly batty architect-craftsmen, the heirs of William Morris, still trying to turn the clock back to before the Industrial Revolution by making chairs and spurning new technology.",
+      "translation": "此外，还有一些略显古怪的建筑师兼工匠——威廉·莫里斯的继承者——仍试图通过制作椅子、拒绝新技术，把时代倒退回工业革命之前。",
+      "structure": [
+        {"text": "there were slightly batty architect-craftsmen", "role": "existential_clause", "level": 1},
+        {"text": "the heirs of William Morris", "role": "apposition", "level": 2},
+        {"text": "still trying to turn the clock back to before the Industrial Revolution", "role": "present_participle_modifier", "level": 2},
+        {"text": "by making chairs and spurning new technology", "role": "means_adverbial", "level": 3}
+      ],
+      "difficult_points": ["the heirs of William Morris 是 architect-craftsmen 的同位语，指理念继承者。", "trying... 是现在分词短语修饰这些人；by 引出他们采用的方式。", "turn the clock back 是比喻，指试图恢复过去的时代。"],
+      "expressions": [{"text": "turn the clock back", "meaning_zh": "让时代倒退；恢复旧制"}, {"text": "spurn new technology", "meaning_zh": "摒弃新技术"}, {"text": "the heirs of", "meaning_zh": "……的思想继承者"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 30,
+      "sentence": "Only a handful of Modern Movement buildings of any real merit were produced here during the 1920s and 1930s, and most of these were the work of foreign architects such as Serge Chermayeff, Berthold Lubetkin and Erno Goldf inger who had settled in this country.",
+      "translation": "20世纪20至30年代，英国只建成了少数真正有价值的现代主义建筑，而且其中大多数出自谢尔盖·切尔马耶夫、伯特霍尔德·卢贝特金和厄尔诺·戈德芬格等定居英国的外国建筑师之手。",
+      "structure": [
+        {"text": "Only a handful of Modern Movement buildings of any real merit were produced here during the 1920s and 1930s", "role": "main_clause", "level": 1},
+        {"text": "and most of these were the work of foreign architects", "role": "coordinate_clause", "level": 1},
+        {"text": "such as Serge Chermayeff, Berthold Lubetkin and Erno Goldf inger", "role": "example_supplement", "level": 2},
+        {"text": "who had settled in this country", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["a handful of 强调数量极少；of any real merit 修饰 buildings。", "these 指前半句的少数现代主义建筑；who 修饰列举的 foreign architects。", "原文 Goldf inger 是 Goldfinger 的断词异常。"],
+      "expressions": [{"text": "a handful of", "meaning_zh": "少数"}, {"text": "of real merit", "meaning_zh": "真正有价值的"}, {"text": "be the work of", "meaning_zh": "出自……之手"}, {"text": "settle in", "meaning_zh": "定居于"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 31,
+      "sentence": "After the Second World War the situation began to change.",
+      "translation": "第二次世界大战后，情况开始改变。",
+      "structure": [{"text": "After the Second World War", "role": "time_adverbial", "level": 1}, {"text": "the situation", "role": "subject", "level": 1}, {"text": "began to change", "role": "predicate", "level": 1}],
+      "difficult_points": ["the situation 指英国此前错过现代建筑主要潮流的状态。", "began to change 表示战后转变是一个逐步展开的过程。"],
+      "expressions": [{"text": "the situation began to change", "meaning_zh": "情况开始改变"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 32,
+      "sentence": "The Modern Movement's belief in progress and the future struck a chord with the mood of post-war Britain and, as reconstruction began under Attlee's Labour government in 1945, there was a desperate need for cheap housing which could be produced quickly.",
+      "translation": "现代主义运动对进步和未来的信念与战后英国的社会情绪产生共鸣；1945年艾德礼工党政府领导重建启动后，社会迫切需要能够快速建造的廉价住房。",
+      "structure": [
+        {"text": "The Modern Movement's belief in progress and the future struck a chord with the mood of post-war Britain", "role": "main_clause", "level": 1},
+        {"text": "as reconstruction began under Attlee's Labour government in 1945", "role": "time_clause", "level": 2},
+        {"text": "there was a desperate need for cheap housing", "role": "coordinate_existential_clause", "level": 1},
+        {"text": "which could be produced quickly", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["strike a chord with 表示现代主义理念与战后情绪产生共鸣。", "as 引导时间背景；which 修饰 cheap housing，说明快速建造的要求。"],
+      "expressions": [{"text": "belief in progress", "meaning_zh": "对进步的信念"}, {"text": "strike a chord with", "meaning_zh": "与……产生共鸣"}, {"text": "a desperate need for", "meaning_zh": "对……的迫切需求"}, {"text": "post-war Britain", "meaning_zh": "战后英国"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 33,
+      "sentence": "The use of prefabricated elements, metal frames, concrete cladding and the absence of decoration – all of which had been embraced by Modernists abroad and viewed with suspicion by the British -were adopted to varying degrees for housing developments and schools.",
+      "translation": "预制构件、金属框架、混凝土覆层以及无装饰设计——这些都已被国外现代主义者接受、却曾遭英国人怀疑——如今不同程度地被用于住宅开发和学校建设。",
+      "structure": [
+        {"text": "The use of prefabricated elements, metal frames, concrete cladding and the absence of decoration", "role": "subject", "level": 1},
+        {"text": "all of which had been embraced by Modernists abroad and viewed with suspicion by the British", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "were adopted to varying degrees", "role": "passive_predicate", "level": 1},
+        {"text": "for housing developments and schools", "role": "purpose_adverbial", "level": 2}
+      ],
+      "difficult_points": ["all of which 回指破折号前列举的现代主义建筑手段。", "had been embraced 与 viewed 共用被动助动词，分别说明国外接受和英国怀疑。", "原文 British -were 中连字符与 were 相连，且主语中心短语 The use 与复数 were 存在一致异常。"],
+      "expressions": [{"text": "prefabricated elements", "meaning_zh": "预制构件"}, {"text": "be viewed with suspicion", "meaning_zh": "受到怀疑"}, {"text": "to varying degrees", "meaning_zh": "在不同程度上"}, {"text": "be adopted for", "meaning_zh": "被用于"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 34,
+      "sentence": "Local authorities, charged with the task of rebuilding city center, became important patrons of architecture.",
+      "translation": "承担重建市中心任务的地方政府，成为建筑事业的重要资助者。",
+      "structure": [
+        {"text": "Local authorities", "role": "subject", "level": 1},
+        {"text": "charged with the task of rebuilding city center", "role": "past_participle_modifier", "level": 2},
+        {"text": "became important patrons of architecture", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["charged with... 是过去分词短语，修饰 Local authorities，表示被赋予任务。", "patrons 不只是欣赏者，而是委托和资助建筑项目的机构。"],
+      "expressions": [{"text": "be charged with the task of", "meaning_zh": "被赋予……任务"}, {"text": "patrons of architecture", "meaning_zh": "建筑项目的资助者"}]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 35,
+      "sentence": "This represented a shift away from the private individuals who had dominated the architectural scene for centuries.",
+      "translation": "这代表建筑领域开始摆脱数百年来由私人主导的格局。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "represented a shift away from the private individuals", "role": "predicate", "level": 1},
+        {"text": "who had dominated the architectural scene for centuries", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["This 指地方政府成为重要建筑委托人这一变化。", "who 修饰 private individuals；had dominated 表示私人主导发生在公共机构崛起之前。"],
+      "expressions": [{"text": "represent a shift away from", "meaning_zh": "代表从……转离"}, {"text": "dominate the architectural scene", "meaning_zh": "主导建筑领域"}, {"text": "for centuries", "meaning_zh": "数百年来"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 36,
+      "sentence": "Since the War it has been corporate bodies like these local authorities, together with national and multinational companies, and large educational institutions, which have dominated British architecture.",
+      "translation": "战后以来，主导英国建筑的一直是这类地方政府等法人机构，以及国内和跨国公司、大型教育机构。",
+      "structure": [
+        {"text": "Since the War", "role": "time_adverbial", "level": 1},
+        {"text": "it has been corporate bodies like these local authorities, together with national and multinational companies, and large educational institutions", "role": "cleft_main_clause", "level": 1},
+        {"text": "which have dominated British architecture", "role": "cleft_clause", "level": 2}
+      ],
+      "difficult_points": ["这是强调句结构 it has been...which...，突出战后主导建筑的机构类型。", "together with 连接地方政府、公司和教育机构；which 的先行内容是整组机构。"],
+      "expressions": [{"text": "corporate bodies", "meaning_zh": "法人机构"}, {"text": "together with", "meaning_zh": "连同"}, {"text": "multinational companies", "meaning_zh": "跨国公司"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 37,
+      "sentence": "By the late 1980s the Modern Movement, unfairly blamed for the social experiments implicit in high- rise housing, had lost out to irony and spectacle in the shape of post-modernism, with its cheerful borrowings from anywhere and any period.",
+      "translation": "到20世纪80年代末，现代主义运动因高层住宅中隐含的社会实验而受到不公正指责，并已败给以反讽和奇观为特征的后现代主义；后者轻松地从任何地方、任何时代借用元素。",
+      "structure": [
+        {"text": "By the late 1980s the Modern Movement", "role": "subject", "level": 1},
+        {"text": "unfairly blamed for the social experiments implicit in high- rise housing", "role": "past_participle_supplement", "level": 2},
+        {"text": "had lost out to irony and spectacle in the shape of post-modernism", "role": "predicate", "level": 1},
+        {"text": "with its cheerful borrowings from anywhere and any period", "role": "accompanying_adverbial", "level": 2}
+      ],
+      "difficult_points": ["blamed... 是过去分词短语，补充现代主义受到的批评；implicit in... 修饰 experiments。", "lose out to 表示在竞争中败给；in the shape of 说明 irony and spectacle 以何种流派呈现。", "its 指 post-modernism；原文 high- rise 连字符后有异常空格。"],
+      "expressions": [{"text": "be unfairly blamed for", "meaning_zh": "因……受到不公正指责"}, {"text": "be implicit in", "meaning_zh": "隐含于"}, {"text": "lose out to", "meaning_zh": "败给"}, {"text": "in the shape of", "meaning_zh": "以……的形式"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 38,
+      "sentence": "But now, in the new Millennium, even post-modernism is showing signs of age.",
+      "translation": "但如今进入新千年后，就连后现代主义也显露出老态。",
+      "structure": [
+        {"text": "But now, in the new Millennium", "role": "time_adverbial", "level": 1},
+        {"text": "even post-modernism", "role": "subject", "level": 1},
+        {"text": "is showing signs of age", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["even 强调曾取代现代主义的后现代主义也开始过时。", "show signs of age 是比喻表达，把建筑流派拟人化为显露老态。"],
+      "expressions": [{"text": "show signs of age", "meaning_zh": "显露老态；开始过时"}, {"text": "in the new Millennium", "meaning_zh": "在新千年"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 39,
+      "sentence": "What comes next?",
+      "translation": "接下来会出现什么？",
+      "structure": [{"text": "What", "role": "interrogative_subject", "level": 1}, {"text": "comes next", "role": "predicate", "level": 1}],
+      "difficult_points": ["What 本身作主语，因此疑问句不需要助动词倒装。", "next 指后现代主义之后的下一种建筑思潮。"],
+      "expressions": [{"text": "come next", "meaning_zh": "接下来出现"}]
+    },
+    {
+      "id": "H-05", "paragraph_label": "H", "sentence_index": 40,
+      "sentence": "Post-post-modernism?",
+      "translation": "后后现代主义吗？",
+      "structure": [{"text": "Post-post-modernism", "role": "elliptical_question", "level": 1}],
+      "difficult_points": ["这是省略完整谓语的反问式名词短语，呼应上一句。", "Post-post-modernism 是作者仿照 post-modernism 临时构造的名称，带有调侃意味。"],
+      "expressions": []
+    }
+  ]
+}

@@ -1,0 +1,284 @@
+{
+  "schema_version":1,
+  "generation_standard":"reading_study_v1",
+  "source_kind":"reading_test",
+  "test_id":"ielts8_test4_reading",
+  "passage_id":"ielts8_test4_p3",
+  "passage_title":"Collecting Ant Specimens",
+  "difficulty":"complex",
+  "sentences":[
+    {
+      "id":"A-01","paragraph_label":"A","sentence_index":1,"sentence":"Collecting ants can be as simple as picking up stray ones and placing them in a glass jar, or as complicated as completing an exhaustive survey of all species present in an area and estimating their relative abundances.",
+      "translation":"采集蚂蚁可以简单到只是捡起零散的蚂蚁放进玻璃罐，也可以复杂到对某一区域内出现的全部物种进行彻底调查，并估算它们的相对丰度。",
+      "structure":[{"text":"Collecting ants","role":"gerund_subject","level":1},{"text":"can be as simple as picking up stray ones and placing them in a glass jar","role":"main_predicate","level":1},{"text":"or as complicated as completing an exhaustive survey of all species present in an area and estimating their relative abundances","role":"coordinated_complement","level":1},{"text":"present in an area","role":"adjectival_phrase","level":2}],
+      "difficult_points":["Collecting ants 是动名词短语作主语。","as simple as ... or as complicated as ... 构成两端对照，两个 as 后都接动名词短语。","ones 代替 ants；present in an area 后置修饰 all species。"],
+      "expressions":[{"text":"as simple as","meaning_zh":"简单到……"},{"text":"an exhaustive survey of","meaning_zh":"对……的全面调查"},{"text":"relative abundances","meaning_zh":"相对丰度"}]
+    },
+    {
+      "id":"A-02","paragraph_label":"A","sentence_index":2,"sentence":"The exact method used will depend on the final purpose of the collections.",
+      "translation":"具体采用哪种方法，将取决于采集工作的最终目的。",
+      "structure":[{"text":"The exact method","role":"subject","level":1},{"text":"used","role":"past_participial_phrase","level":2},{"text":"will depend on the final purpose of the collections","role":"main_predicate","level":1}],
+      "difficult_points":["used 是过去分词，后置修饰 method，相当于 which is used。","collections 在此指多次或多组采集工作及其所得标本，而非一般意义的收藏品。"],
+      "expressions":[{"text":"depend on","meaning_zh":"取决于"},{"text":"the final purpose of","meaning_zh":"……的最终目的"}]
+    },
+    {
+      "id":"A-03","paragraph_label":"A","sentence_index":3,"sentence":"For taxonomy, or classification, long series, from a single nest, which contain all castes (workers, including majors and minors, and, if present, queens and males) are desirable, to allow the determination of variation within species.",
+      "translation":"对于分类学研究而言，最好从同一个蚁巢采集数量较多、涵盖所有阶级的系列标本——包括工蚁中的大型和小型个体，以及巢中若有的蚁后和雄蚁——以便确定物种内部的差异。",
+      "structure":[{"text":"For taxonomy, or classification","role":"purpose_adverbial","level":2},{"text":"long series","role":"subject","level":1},{"text":"from a single nest","role":"postmodifier","level":2},{"text":"which contain all castes","role":"relative_clause","level":2},{"text":"workers, including majors and minors, and, if present, queens and males","role":"parenthetical_list","level":3},{"text":"are desirable","role":"main_predicate","level":1},{"text":"to allow the determination of variation within species","role":"purpose_clause","level":2}],
+      "difficult_points":["主干是 long series are desirable，中间插入多个修饰成分。","which 引导定语从句修饰 long series；括号内具体列举 all castes。","if present 是省略结构，完整意思是 if queens and males are present；句末不定式表示目的。"],
+      "expressions":[{"text":"from a single nest","meaning_zh":"来自同一个蚁巢"},{"text":"if present","meaning_zh":"如果存在"},{"text":"variation within species","meaning_zh":"物种内部差异"}]
+    },
+    {
+      "id":"A-04","paragraph_label":"A","sentence_index":4,"sentence":"For ecological studies, the most important factor is collecting identifiable samples of as many of the different species present as possible.",
+      "translation":"对于生态学研究，最重要的是尽可能多地采集不同物种中可以鉴定的样本。",
+      "structure":[{"text":"For ecological studies","role":"purpose_adverbial","level":2},{"text":"the most important factor","role":"subject","level":1},{"text":"is collecting identifiable samples","role":"main_predicate","level":1},{"text":"of as many of the different species present as possible","role":"postmodifier","level":2}],
+      "difficult_points":["collecting ... 是动名词短语作表语，说明最重要的因素是什么。","as many ... as possible 表示“尽可能多的……”，present 后置修饰 species。"],
+      "expressions":[{"text":"the most important factor","meaning_zh":"最重要的因素"},{"text":"as many ... as possible","meaning_zh":"尽可能多的……"},{"text":"identifiable samples","meaning_zh":"可鉴定的样本"}]
+    },
+    {
+      "id":"A-05","paragraph_label":"A","sentence_index":5,"sentence":"Unfortunately, these methods are not always compatible.",
+      "translation":"遗憾的是，这些方法并不总能彼此兼容。",
+      "structure":[{"text":"Unfortunately","role":"sentence_adverbial","level":2},{"text":"these methods","role":"subject","level":1},{"text":"are not always compatible","role":"main_predicate","level":1}],
+      "difficult_points":["these methods 回指分类学采集与生态学采集采用的不同策略。","not always 表示“不总是”，并非“从不”；compatible 指两种研究目标难以同时满足。"],
+      "expressions":[{"text":"not always compatible","meaning_zh":"并不总是兼容"}]
+    },
+    {
+      "id":"A-06","paragraph_label":"A","sentence_index":6,"sentence":"The taxonomist sometimes overlooks whole species in favour of those groups currently under study, while the ecologist often collects only a limited number of specimens of each species, thus reducing their value for taxonomic investigations.",
+      "translation":"分类学家有时会偏重当前正在研究的类群，从而完全忽略某些物种；而生态学家往往对每个物种只采集少量标本，因此降低了这些标本用于分类学研究的价值。",
+      "structure":[{"text":"The taxonomist sometimes overlooks whole species","role":"main_clause","level":1},{"text":"in favour of those groups currently under study","role":"preference_adverbial","level":2},{"text":"currently under study","role":"adjectival_phrase","level":3},{"text":"while the ecologist often collects only a limited number of specimens of each species","role":"contrastive_clause","level":1},{"text":"thus reducing their value for taxonomic investigations","role":"result_participial_phrase","level":2}],
+      "difficult_points":["while 对比分类学家和生态学家的采集偏差。","those groups 中 those 指特定蚂蚁类群，currently under study 后置修饰 groups。","thus reducing ... 是现在分词结果状语，their 指 specimens。"],
+      "expressions":[{"text":"in favour of","meaning_zh":"偏重；优先选择"},{"text":"under study","meaning_zh":"正在研究中"},{"text":"a limited number of","meaning_zh":"数量有限的"},{"text":"reduce the value of","meaning_zh":"降低……的价值"}]
+    },
+    {
+      "id":"B-01","paragraph_label":"B","sentence_index":7,"sentence":"To collect as wide a range of species as possible, several methods must be used.",
+      "translation":"为了采集尽可能广泛的物种，必须采用多种方法。",
+      "structure":[{"text":"To collect as wide a range of species as possible","role":"purpose_clause","level":2},{"text":"several methods","role":"subject","level":1},{"text":"must be used","role":"passive_predicate","level":1}],
+      "difficult_points":["句首不定式短语表示采用多种方法的目的。","as wide a range ... as possible 使用 as + 形容词 + a + 名词的语序，意为“范围尽可能广”。"],
+      "expressions":[{"text":"as wide a range of ... as possible","meaning_zh":"范围尽可能广的……"},{"text":"several methods must be used","meaning_zh":"必须采用多种方法"}]
+    },
+    {
+      "id":"B-02","paragraph_label":"B","sentence_index":8,"sentence":"These include hand collecting, using baits to attract the ants, ground litter sampling, and the use of pitfall traps.",
+      "translation":"这些方法包括人工采集、用诱饵吸引蚂蚁、地表枯落物取样以及使用陷阱。",
+      "structure":[{"text":"These","role":"subject","level":1},{"text":"include","role":"verb","level":1},{"text":"hand collecting, using baits to attract the ants, ground litter sampling, and the use of pitfall traps","role":"object_list","level":1},{"text":"to attract the ants","role":"purpose_clause","level":2}],
+      "difficult_points":["These 回指上一句的 several methods。","include 后列出四类并列采集方式；using baits 中的不定式说明诱饵的用途。"],
+      "expressions":[{"text":"use baits to attract","meaning_zh":"使用诱饵吸引"},{"text":"ground litter sampling","meaning_zh":"地表枯落物取样"},{"text":"pitfall traps","meaning_zh":"陷阱式捕捉器"}]
+    },
+    {
+      "id":"B-03","paragraph_label":"B","sentence_index":9,"sentence":"Hand collecting consists of searching for ants everywhere they are likely to occur.",
+      "translation":"人工采集就是在蚂蚁可能出现的所有地方进行搜寻。",
+      "structure":[{"text":"Hand collecting","role":"subject","level":1},{"text":"consists of searching for ants","role":"main_predicate","level":1},{"text":"everywhere they are likely to occur","role":"place_clause","level":2}],
+      "difficult_points":["consist of 后接动名词 searching，说明人工采集的组成方式。","everywhere 引导地点从句，they 指 ants；be likely to 表示可能发生。"],
+      "expressions":[{"text":"consist of","meaning_zh":"由……组成"},{"text":"search for","meaning_zh":"搜寻"},{"text":"be likely to occur","meaning_zh":"可能出现"}]
+    },
+    {
+      "id":"B-04","paragraph_label":"B","sentence_index":10,"sentence":"This includes on the ground, under rocks, logs or other objects on the ground, in rotten wood on the ground or on trees, in vegetation, on tree trunks and under bark.",
+      "translation":"搜寻地点包括地面上、石块或原木等地面物体下面、地面或树上的腐木中、植被里、树干上以及树皮下。",
+      "structure":[{"text":"This","role":"subject","level":1},{"text":"includes","role":"verb","level":1},{"text":"on the ground, under rocks, logs or other objects on the ground, in rotten wood on the ground or on trees, in vegetation, on tree trunks and under bark","role":"place_list","level":1}],
+      "difficult_points":["This 指前句所说在蚂蚁可能出现的地方搜寻。","include 后全部是并列地点介词短语；on the ground or on trees 修饰 rotten wood 所在位置。"],
+      "expressions":[{"text":"in rotten wood","meaning_zh":"在腐木中"},{"text":"under bark","meaning_zh":"在树皮下"}]
+    },
+    {
+      "id":"B-05","paragraph_label":"B","sentence_index":11,"sentence":"When possible, collections should be made from nests or foraging columns and at least 20 to 25 individuals collected.",
+      "translation":"条件允许时，应从蚁巢或觅食队列中采集，并至少收集20至25只个体。",
+      "structure":[{"text":"When possible","role":"reduced_adverbial_clause","level":2},{"text":"collections should be made from nests or foraging columns","role":"passive_main_clause","level":1},{"text":"and at least 20 to 25 individuals collected","role":"elliptical_coordinated_clause","level":1}],
+      "difficult_points":["When possible 是省略 it is 的条件状语，表示条件允许时。","and 后省略了 should be，完整结构为 at least 20 to 25 individuals should be collected。","foraging columns 指蚂蚁外出觅食时形成的队列。"],
+      "expressions":[{"text":"when possible","meaning_zh":"条件允许时"},{"text":"foraging columns","meaning_zh":"觅食队列"},{"text":"at least","meaning_zh":"至少"}]
+    },
+    {
+      "id":"B-06","paragraph_label":"B","sentence_index":12,"sentence":"This will ensure that all individuals are of the same species, and so increase their value for detailed studies.",
+      "translation":"这样可以确保所有个体属于同一物种，从而提高这些标本用于详细研究的价值。",
+      "structure":[{"text":"This","role":"subject","level":1},{"text":"will ensure","role":"verb_phrase","level":1},{"text":"that all individuals are of the same species","role":"object_clause","level":2},{"text":"and so increase their value for detailed studies","role":"coordinated_predicate","level":1}],
+      "difficult_points":["This 回指从同一蚁巢或觅食队列采集足够个体的做法。","ensure 后的 that 从句说明所确保的结果；and so 表示进一步结果。","are of the same species 相当于 belong to the same species。"],
+      "expressions":[{"text":"ensure that","meaning_zh":"确保……"},{"text":"be of the same species","meaning_zh":"属于同一物种"},{"text":"increase their value for","meaning_zh":"提高其用于……的价值"}]
+    },
+    {
+      "id":"B-07","paragraph_label":"B","sentence_index":13,"sentence":"Since some species are largely nocturnal, collecting should not be confined to daytime.",
+      "translation":"由于有些物种主要在夜间活动，采集工作不应局限于白天。",
+      "structure":[{"text":"Since some species are largely nocturnal","role":"cause_clause","level":2},{"text":"collecting","role":"gerund_subject","level":1},{"text":"should not be confined to daytime","role":"passive_predicate","level":1}],
+      "difficult_points":["Since 引导原因状语从句，此处不是“自从”的时间含义。","collecting 是动名词作主语；be confined to 表示被限制在某范围内。"],
+      "expressions":[{"text":"be largely nocturnal","meaning_zh":"主要在夜间活动"},{"text":"be confined to","meaning_zh":"局限于"}]
+    },
+    {
+      "id":"B-08","paragraph_label":"B","sentence_index":14,"sentence":"Specimens are collected using an aspirator (often called a pooter), forceps, a fine, moistened paint brush, or fingers, if the ants are known not to sting.",
+      "translation":"采集标本时可以使用吸虫器（通常称为 pooter）、镊子、湿润的细画笔；如果确认蚂蚁不会蜇人，也可以直接用手指。",
+      "structure":[{"text":"Specimens are collected","role":"passive_main_clause","level":1},{"text":"using an aspirator (often called a pooter), forceps, a fine, moistened paint brush, or fingers","role":"means_participial_phrase","level":2},{"text":"often called a pooter","role":"past_participial_phrase","level":3},{"text":"if the ants are known not to sting","role":"conditional_clause","level":2}],
+      "difficult_points":["using ... 是现在分词短语作方式状语，后面列出多种工具。","called a pooter 是过去分词短语修饰 aspirator。","are known not to sting 是被动结构，not to sting 作主语补足语；if 条件主要限制使用 fingers。"],
+      "expressions":[{"text":"be known not to","meaning_zh":"已知不会……"},{"text":"a fine, moistened paint brush","meaning_zh":"湿润的细画笔"}]
+    },
+    {
+      "id":"B-09","paragraph_label":"B","sentence_index":15,"sentence":"Individual insects are placed in plastic or glass tubes (1.5–3.0 ml capacity for small ants, 5–8 ml for larger ants) containing 75% to 95% ethanol.",
+      "translation":"每只昆虫分别放入塑料管或玻璃管中（小型蚂蚁用容量1.5至3.0毫升的管，大型蚂蚁用5至8毫升的管），管内装有浓度75%至95%的乙醇。",
+      "structure":[{"text":"Individual insects","role":"subject","level":1},{"text":"are placed in plastic or glass tubes","role":"passive_predicate","level":1},{"text":"1.5–3.0 ml capacity for small ants, 5–8 ml for larger ants","role":"parenthesis","level":2},{"text":"containing 75% to 95% ethanol","role":"present_participial_phrase","level":2}],
+      "difficult_points":["括号内省略 tubes/capacity，分别说明小型和大型蚂蚁所用容器容量。","containing ... 后置修饰 tubes，表示管中装有乙醇。","Individual 强调昆虫逐只放置，而非“个体的”所有格。"],
+      "expressions":[{"text":"be placed in","meaning_zh":"被放入"},{"text":"containing 75% to 95% ethanol","meaning_zh":"装有75%至95%乙醇"}]
+    },
+    {
+      "id":"B-10","paragraph_label":"B","sentence_index":16,"sentence":"Plastic tubes with secure tops are better than glass because they are lighter, and do not break as easily if mishandled.",
+      "translation":"带牢固盖子的塑料管比玻璃管更好，因为它们更轻，而且即使操作不当也不那么容易破裂。",
+      "structure":[{"text":"Plastic tubes with secure tops","role":"subject","level":1},{"text":"are better than glass","role":"main_predicate","level":1},{"text":"because they are lighter, and do not break as easily","role":"cause_clause","level":2},{"text":"if mishandled","role":"reduced_conditional_clause","level":3}],
+      "difficult_points":["glass 在比较中代指 glass tubes。","because 从句中 are lighter 与 do not break ... 共用主语 they。","if mishandled 省略 they are，表示管子若被不当处理。"],
+      "expressions":[{"text":"secure tops","meaning_zh":"牢固的盖子"},{"text":"break as easily","meaning_zh":"同样容易破裂"},{"text":"if mishandled","meaning_zh":"若操作不当"}]
+    },
+    {
+      "id":"C-01","paragraph_label":"C","sentence_index":17,"sentence":"Baits can be used to attract and concentrate foragers.",
+      "translation":"可以用诱饵吸引觅食蚂蚁，并让它们集中起来。",
+      "structure":[{"text":"Baits","role":"subject","level":1},{"text":"can be used","role":"passive_predicate","level":1},{"text":"to attract and concentrate foragers","role":"purpose_clause","level":2}],
+      "difficult_points":["can be used 是被动结构，句末不定式说明诱饵的用途。","attract 和 concentrate 共用宾语 foragers；concentrate 在此是使动用法。"],
+      "expressions":[{"text":"be used to attract","meaning_zh":"被用来吸引"},{"text":"concentrate foragers","meaning_zh":"使觅食个体集中"}]
+    },
+    {
+      "id":"C-02","paragraph_label":"C","sentence_index":18,"sentence":"This often increases the number of individuals collected and attracts species that are otherwise elusive.",
+      "translation":"这种方法往往能增加采集到的个体数量，还能吸引到用其他方法难以捕获的物种。",
+      "structure":[{"text":"This","role":"subject","level":1},{"text":"often increases the number of individuals collected","role":"main_predicate","level":1},{"text":"collected","role":"past_participial_phrase","level":2},{"text":"and attracts species","role":"coordinated_predicate","level":1},{"text":"that are otherwise elusive","role":"relative_clause","level":2}],
+      "difficult_points":["collected 后置修饰 individuals，指实际采集到的个体。","that 引导定语从句修饰 species；otherwise 意为“若不用这种方法”。"],
+      "expressions":[{"text":"increase the number of","meaning_zh":"增加……的数量"},{"text":"otherwise elusive","meaning_zh":"用其他方法难以捕获的"}]
+    },
+    {
+      "id":"C-03","paragraph_label":"C","sentence_index":19,"sentence":"Sugars and meats or oils will attract different species and a range should be utilised.",
+      "translation":"糖类与肉类或油脂会吸引不同物种，因此应使用多种诱饵。",
+      "structure":[{"text":"Sugars and meats or oils","role":"compound_subject","level":1},{"text":"will attract different species","role":"main_predicate","level":1},{"text":"and a range should be utilised","role":"coordinated_passive_clause","level":1}],
+      "difficult_points":["and 连接两个完整分句，后半句主语 a range 指一系列不同类型的诱饵。","should be utilised 是被动语态，表达方法建议。"],
+      "expressions":[{"text":"attract different species","meaning_zh":"吸引不同物种"},{"text":"a range should be utilised","meaning_zh":"应采用多种类型"}]
+    },
+    {
+      "id":"C-04","paragraph_label":"C","sentence_index":20,"sentence":"These baits can be placed either on the ground or on the trunks of trees or large shrubs.",
+      "translation":"这些诱饵可以放在地面上，也可以放在树木或大型灌木的树干上。",
+      "structure":[{"text":"These baits","role":"subject","level":1},{"text":"can be placed","role":"passive_predicate","level":1},{"text":"either on the ground or on the trunks of trees or large shrubs","role":"alternative_place_adverbial","level":2}],
+      "difficult_points":["either ... or ... 连接两个可选择的放置地点。","第二个 or 位于 trees or large shrubs 内部，连接 trunks 所属的两类植物。"],
+      "expressions":[{"text":"either ... or ...","meaning_zh":"或者……或者……"},{"text":"the trunks of trees","meaning_zh":"树干"}]
+    },
+    {
+      "id":"C-05","paragraph_label":"C","sentence_index":21,"sentence":"When placed on the ground, baits should be situated on small paper cards or other flat, light-coloured surfaces, or in test-tubes or vials.",
+      "translation":"诱饵放在地面上时，应置于小纸卡或其他平坦的浅色表面上，也可装在试管或小瓶中。",
+      "structure":[{"text":"When placed on the ground","role":"reduced_adverbial_clause","level":2},{"text":"baits","role":"subject","level":1},{"text":"should be situated","role":"passive_predicate","level":1},{"text":"on small paper cards or other flat, light-coloured surfaces, or in test-tubes or vials","role":"place_adverbial","level":2}],
+      "difficult_points":["When placed ... 省略 baits are，逻辑主语是 baits。","be situated on/in 表示诱饵应放置的位置；两个 or 分别连接表面选择和容器选择。"],
+      "expressions":[{"text":"be situated on","meaning_zh":"放置在……上"},{"text":"flat, light-coloured surfaces","meaning_zh":"平坦的浅色表面"}]
+    },
+    {
+      "id":"C-06","paragraph_label":"C","sentence_index":22,"sentence":"This makes it easier to spot ants and to capture them before they can escape into the surrounding leaf litter.",
+      "translation":"这样更容易发现并捕捉蚂蚁，赶在它们逃入周围的枯枝落叶层之前将其抓住。",
+      "structure":[{"text":"This","role":"subject","level":1},{"text":"makes it easier","role":"causative_structure","level":1},{"text":"to spot ants and to capture them","role":"real_object","level":2},{"text":"before they can escape into the surrounding leaf litter","role":"time_clause","level":2}],
+      "difficult_points":["make it easier to do 中 it 是形式宾语，真正宾语是后面的两个不定式。","them 和 they 都指 ants；before 从句强调必须在蚂蚁逃走前完成捕捉。"],
+      "expressions":[{"text":"make it easier to","meaning_zh":"使做……更容易"},{"text":"spot ants","meaning_zh":"发现蚂蚁"},{"text":"escape into","meaning_zh":"逃入"},{"text":"leaf litter","meaning_zh":"枯枝落叶层"}]
+    },
+    {
+      "id":"D-01","paragraph_label":"D","sentence_index":23,"sentence":"Many ants are small and forage primarily in the layer of leaves and other debris on the ground.",
+      "translation":"许多蚂蚁体型很小，主要在地面的落叶和其他碎屑层中觅食。",
+      "structure":[{"text":"Many ants","role":"subject","level":1},{"text":"are small","role":"main_predicate","level":1},{"text":"and forage primarily","role":"coordinated_predicate","level":1},{"text":"in the layer of leaves and other debris on the ground","role":"place_adverbial","level":2}],
+      "difficult_points":["are 和 forage 是共用主语 Many ants 的两个并列谓语。","on the ground 修饰 the layer，说明落叶及碎屑层的位置。"],
+      "expressions":[{"text":"forage primarily in","meaning_zh":"主要在……觅食"},{"text":"leaves and other debris","meaning_zh":"落叶和其他碎屑"}]
+    },
+    {
+      "id":"D-02","paragraph_label":"D","sentence_index":24,"sentence":"Collecting these species by hand can be difficult.",
+      "translation":"人工采集这些物种可能很困难。",
+      "structure":[{"text":"Collecting these species by hand","role":"gerund_subject","level":1},{"text":"can be difficult","role":"main_predicate","level":1}],
+      "difficult_points":["Collecting ... 是动名词短语作主语，整件事被评价为 difficult。","by hand 表示采集方式，与后文借助漏斗的方法形成对比。"],
+      "expressions":[{"text":"collect ... by hand","meaning_zh":"人工采集……"}]
+    },
+    {
+      "id":"D-03","paragraph_label":"D","sentence_index":25,"sentence":"One of the most successful ways to collect them is to gather the leaf litter in which they are foraging and extract the ants from it.",
+      "translation":"采集这些蚂蚁最有效的方法之一，是收集它们正在其中觅食的枯枝落叶，再从中分离出蚂蚁。",
+      "structure":[{"text":"One of the most successful ways to collect them","role":"subject","level":1},{"text":"to collect them","role":"infinitive_postmodifier","level":2},{"text":"is to gather the leaf litter","role":"main_predicate","level":1},{"text":"in which they are foraging","role":"relative_clause","level":2},{"text":"and extract the ants from it","role":"coordinated_infinitive","level":1}],
+      "difficult_points":["主语中心是 One，of ... ways 和 to collect them 都对其作限定。","in which 引导定语从句修饰 leaf litter，介词 in 被提前。","gather 与 extract 是表语不定式中的并列动作，第二个 to 被省略；it 指 leaf litter。"],
+      "expressions":[{"text":"one of the most successful ways to","meaning_zh":"最有效的……方法之一"},{"text":"extract ... from ...","meaning_zh":"从……中分离出……"}]
+    },
+    {
+      "id":"D-04","paragraph_label":"D","sentence_index":26,"sentence":"This is most commonly done by placing leaf litter on a screen over a large funnel, often under some heat.",
+      "translation":"最常见的做法是把枯枝落叶放在大漏斗上方的筛网上，通常还要适当加热。",
+      "structure":[{"text":"This","role":"subject","level":1},{"text":"is most commonly done","role":"passive_predicate","level":1},{"text":"by placing leaf litter on a screen over a large funnel","role":"means_adverbial","level":2},{"text":"often under some heat","role":"parenthetical_adverbial","level":2}],
+      "difficult_points":["This 指从枯枝落叶中分离蚂蚁的方法。","by 后接动名词说明具体手段；over a large funnel 修饰 screen 的位置。","under some heat 表示在一定加热条件下处理。"],
+      "expressions":[{"text":"be commonly done by","meaning_zh":"通常通过……完成"},{"text":"place ... on a screen","meaning_zh":"把……放在筛网上"}]
+    },
+    {
+      "id":"D-05","paragraph_label":"D","sentence_index":27,"sentence":"As the leaf litter dries from above, ants (and other animals) move downward and eventually fall out the bottom and are collected in alcohol placed below the funnel.",
+      "translation":"随着枯枝落叶从上方逐渐变干，蚂蚁（以及其他动物）会向下移动，最终从底部掉出，并落入漏斗下方放置的酒精中被收集起来。",
+      "structure":[{"text":"As the leaf litter dries from above","role":"time_clause","level":2},{"text":"ants (and other animals)","role":"subject","level":1},{"text":"move downward","role":"main_predicate","level":1},{"text":"and eventually fall out the bottom","role":"coordinated_predicate","level":1},{"text":"and are collected in alcohol","role":"coordinated_passive_predicate","level":1},{"text":"placed below the funnel","role":"past_participial_phrase","level":2}],
+      "difficult_points":["As 引导时间从句，表示落叶变干过程中动物逐步下移。","move、fall 和 are collected 是三个并列谓语，前两个主动，最后一个被动。","placed below the funnel 后置修饰 alcohol，不是修饰 ants。"],
+      "expressions":[{"text":"move downward","meaning_zh":"向下移动"},{"text":"fall out the bottom","meaning_zh":"从底部掉出"},{"text":"be collected in alcohol","meaning_zh":"被收集在酒精中"}]
+    },
+    {
+      "id":"D-06","paragraph_label":"D","sentence_index":28,"sentence":"This method works especially well in rainforests and marshy areas.",
+      "translation":"这种方法在雨林和沼泽地区尤其有效。",
+      "structure":[{"text":"This method","role":"subject","level":1},{"text":"works especially well","role":"main_predicate","level":1},{"text":"in rainforests and marshy areas","role":"place_adverbial","level":2}],
+      "difficult_points":["This method 指利用筛网、漏斗和干燥过程分离蚂蚁的方法。","work well 在此表示方法效果好，而不是“工作顺利”。"],
+      "expressions":[{"text":"work especially well","meaning_zh":"效果尤其好"},{"text":"marshy areas","meaning_zh":"沼泽地区"}]
+    },
+    {
+      "id":"D-07","paragraph_label":"D","sentence_index":29,"sentence":"A method of improving the catch when using a funnel is to sift the leaf litter through a coarse screen before placing it above the funnel.",
+      "translation":"使用漏斗时，提高捕获量的一种方法，是先用粗筛筛过枯枝落叶，再将其放到漏斗上方。",
+      "structure":[{"text":"A method of improving the catch","role":"subject","level":1},{"text":"when using a funnel","role":"reduced_time_clause","level":2},{"text":"is to sift the leaf litter through a coarse screen","role":"main_predicate","level":1},{"text":"before placing it above the funnel","role":"reduced_time_clause","level":2}],
+      "difficult_points":["主干为 A method ... is to sift ...，of improving the catch 修饰 method。","when using ... 和 before placing ... 都省略操作人员这一逻辑主语。","it 指 the leaf litter，而不是 coarse screen。"],
+      "expressions":[{"text":"improve the catch","meaning_zh":"提高捕获量"},{"text":"sift ... through a coarse screen","meaning_zh":"用粗筛筛……"},{"text":"before placing","meaning_zh":"在放置……之前"}]
+    },
+    {
+      "id":"D-08","paragraph_label":"D","sentence_index":30,"sentence":"This will concentrate the litter and remove larger leaves and twigs.",
+      "translation":"这样可以使枯落物更加集中，并去除较大的叶片和细枝。",
+      "structure":[{"text":"This","role":"subject","level":1},{"text":"will concentrate the litter","role":"main_predicate","level":1},{"text":"and remove larger leaves and twigs","role":"coordinated_predicate","level":1}],
+      "difficult_points":["This 回指先用粗筛筛枯落物的步骤。","concentrate 和 remove 共用主语 This 及助动词 will，第二个 will 被省略。"],
+      "expressions":[{"text":"concentrate the litter","meaning_zh":"使枯落物集中"},{"text":"remove larger leaves and twigs","meaning_zh":"去除较大的叶片和细枝"}]
+    },
+    {
+      "id":"D-09","paragraph_label":"D","sentence_index":31,"sentence":"It will also allow more litter to be sampled when using a limited number of funnels.",
+      "translation":"在漏斗数量有限的情况下，这样也能对更多枯落物进行取样。",
+      "structure":[{"text":"It","role":"subject","level":1},{"text":"will also allow","role":"main_predicate","level":1},{"text":"more litter to be sampled","role":"object_complement","level":2},{"text":"when using a limited number of funnels","role":"reduced_adverbial_clause","level":2}],
+      "difficult_points":["allow + 宾语 + to be done 构成复合宾语，litter 是被取样的对象。","when using ... 是省略句，表示操作人员只能使用数量有限的漏斗时。"],
+      "expressions":[{"text":"allow ... to be sampled","meaning_zh":"使……能够被取样"},{"text":"a limited number of","meaning_zh":"数量有限的"}]
+    },
+    {
+      "id":"E-01","paragraph_label":"E","sentence_index":32,"sentence":"The pitfall trap is another commonly used tool for collecting ants.",
+      "translation":"陷阱是另一种常用的蚂蚁采集工具。",
+      "structure":[{"text":"The pitfall trap","role":"subject","level":1},{"text":"is another commonly used tool","role":"main_predicate","level":1},{"text":"for collecting ants","role":"purpose_postmodifier","level":2}],
+      "difficult_points":["commonly used 是过去分词短语作前置定语，修饰 tool。","for collecting ants 说明工具用途，for 后接动名词。"],
+      "expressions":[{"text":"a commonly used tool for","meaning_zh":"用于……的常用工具"},{"text":"pitfall trap","meaning_zh":"陷阱式捕捉器"}]
+    },
+    {
+      "id":"E-02","paragraph_label":"E","sentence_index":33,"sentence":"A pitfall trap can be any small container placed in the ground with the top level with the surrounding surface and filled with a preservative.",
+      "translation":"陷阱可以是任何埋在地下的小容器，其顶部与周围地面齐平，容器内装有防腐液。",
+      "structure":[{"text":"A pitfall trap","role":"subject","level":1},{"text":"can be any small container","role":"main_predicate","level":1},{"text":"placed in the ground","role":"past_participial_phrase","level":2},{"text":"with the top level with the surrounding surface","role":"with_absolute_construction","level":2},{"text":"and filled with a preservative","role":"coordinated_participial_phrase","level":2}],
+      "difficult_points":["placed in the ground 和 filled with ... 都是过去分词短语，修饰 container。","with the top level with ... 是 with 复合结构，level 在此为形容词“齐平的”。","filled 的逻辑对象是 container，不是 top。"],
+      "expressions":[{"text":"be placed in the ground","meaning_zh":"被埋入地下"},{"text":"be level with","meaning_zh":"与……齐平"},{"text":"be filled with a preservative","meaning_zh":"装有防腐液"}]
+    },
+    {
+      "id":"E-03","paragraph_label":"E","sentence_index":34,"sentence":"Ants are collected when they fall into the trap while foraging.",
+      "translation":"蚂蚁在觅食时掉入陷阱，因而被收集起来。",
+      "structure":[{"text":"Ants are collected","role":"passive_main_clause","level":1},{"text":"when they fall into the trap","role":"time_clause","level":2},{"text":"while foraging","role":"reduced_time_clause","level":3}],
+      "difficult_points":["when 从句说明蚂蚁被收集的时机和机制。","while foraging 省略 they are，逻辑主语是 ants，表示掉入陷阱时正在觅食。"],
+      "expressions":[{"text":"fall into the trap","meaning_zh":"掉入陷阱"},{"text":"while foraging","meaning_zh":"觅食时"}]
+    },
+    {
+      "id":"E-04","paragraph_label":"E","sentence_index":35,"sentence":"The diameter of the traps can vary from about 18 mm to 10 cm and the number used can vary from a few to several hundred.",
+      "translation":"陷阱的直径可以从约18毫米到10厘米不等，使用数量也可以从几个到数百个不等。",
+      "structure":[{"text":"The diameter of the traps","role":"subject","level":1},{"text":"can vary from about 18 mm to 10 cm","role":"main_predicate","level":1},{"text":"and the number used","role":"coordinated_subject","level":1},{"text":"used","role":"past_participial_phrase","level":2},{"text":"can vary from a few to several hundred","role":"coordinated_predicate","level":1}],
+      "difficult_points":["and 连接两个结构平行的完整分句，分别谈直径和数量。","used 是过去分词后置修饰 the number，指实际使用的陷阱数量。","vary from ... to ... 表示变化范围。"],
+      "expressions":[{"text":"vary from ... to ...","meaning_zh":"从……到……不等"},{"text":"a few to several hundred","meaning_zh":"几个到数百个"}]
+    },
+    {
+      "id":"E-05","paragraph_label":"E","sentence_index":36,"sentence":"The size of the traps used is influenced largely by personal preference (although larger sizes are generally better), while the number will be determined by the study being undertaken.",
+      "translation":"所用陷阱的大小主要取决于个人偏好（尽管一般来说尺寸越大越好），而陷阱数量则由正在开展的研究决定。",
+      "structure":[{"text":"The size of the traps used","role":"subject","level":1},{"text":"used","role":"past_participial_phrase","level":2},{"text":"is influenced largely by personal preference","role":"passive_predicate","level":1},{"text":"although larger sizes are generally better","role":"concessive_clause","level":2},{"text":"while the number will be determined by the study being undertaken","role":"contrastive_clause","level":1},{"text":"being undertaken","role":"present_participial_passive_phrase","level":2}],
+      "difficult_points":["used 后置修饰 traps；although 从句对个人偏好作让步补充。","while 对比影响陷阱大小和数量的不同因素。","being undertaken 是现在分词的被动形式，修饰 study，表示正在开展的研究。"],
+      "expressions":[{"text":"be influenced by personal preference","meaning_zh":"受个人偏好影响"},{"text":"be determined by","meaning_zh":"由……决定"},{"text":"the study being undertaken","meaning_zh":"正在开展的研究"}]
+    },
+    {
+      "id":"E-06","paragraph_label":"E","sentence_index":37,"sentence":"The preservative used is usually ethylene glycol or propylene glycol, as alcohol will evaporate quickly and the traps will dry out.",
+      "translation":"所用防腐液通常是乙二醇或丙二醇，因为酒精会迅速蒸发，导致陷阱干涸。",
+      "structure":[{"text":"The preservative used","role":"subject","level":1},{"text":"used","role":"past_participial_phrase","level":2},{"text":"is usually ethylene glycol or propylene glycol","role":"main_predicate","level":1},{"text":"as alcohol will evaporate quickly and the traps will dry out","role":"cause_clause","level":2}],
+      "difficult_points":["used 是过去分词后置修饰 preservative。","as 引导原因从句，解释为何不用酒精作防腐液。","从句中 alcohol will evaporate 与 the traps will dry out 是因果相连的两个并列分句。"],
+      "expressions":[{"text":"evaporate quickly","meaning_zh":"迅速蒸发"},{"text":"dry out","meaning_zh":"干涸；变干"},{"text":"the preservative used","meaning_zh":"所用防腐液"}]
+    },
+    {
+      "id":"E-07","paragraph_label":"E","sentence_index":38,"sentence":"One advantage of pitfall traps is that they can be used to collect over a period of time with minimal maintenance and intervention.",
+      "translation":"陷阱的一项优点是，它们可以在一段时间内持续采集，而且只需极少维护和干预。",
+      "structure":[{"text":"One advantage of pitfall traps","role":"subject","level":1},{"text":"is","role":"linking_verb","level":1},{"text":"that they can be used to collect over a period of time with minimal maintenance and intervention","role":"predicative_clause","level":2}],
+      "difficult_points":["that 从句作表语，具体说明 advantage 的内容。","be used to collect 表被动用途；over a period of time 强调能够持续运行。","with minimal maintenance and intervention 表示所需维护和人为干预很少。"],
+      "expressions":[{"text":"one advantage of","meaning_zh":"……的一项优点"},{"text":"over a period of time","meaning_zh":"在一段时间内"},{"text":"with minimal maintenance and intervention","meaning_zh":"只需极少维护和干预"}]
+    },
+    {
+      "id":"E-08","paragraph_label":"E","sentence_index":39,"sentence":"One disadvantage is that some species are not collected as they either avoid the traps or do not commonly encounter them while foraging.",
+      "translation":"其缺点之一是，有些物种无法被采集到，因为它们要么会避开陷阱，要么在觅食时通常不会遇到陷阱。",
+      "structure":[{"text":"One disadvantage","role":"subject","level":1},{"text":"is","role":"linking_verb","level":1},{"text":"that some species are not collected","role":"predicative_clause","level":2},{"text":"as they either avoid the traps or do not commonly encounter them","role":"cause_clause","level":3},{"text":"while foraging","role":"reduced_time_clause","level":4}],
+      "difficult_points":["that 从句作表语说明缺点；其中 are not collected 是被动语态。","as 引导原因从句，either ... or ... 连接 avoid 和 do not encounter 两种原因。","them 指 traps；while foraging 省略 they are，逻辑主语是 some species。"],
+      "expressions":[{"text":"one disadvantage is that","meaning_zh":"一项缺点是……"},{"text":"either ... or ...","meaning_zh":"要么……要么……"},{"text":"avoid the traps","meaning_zh":"避开陷阱"},{"text":"while foraging","meaning_zh":"觅食时"}]
+    }
+  ]
+}

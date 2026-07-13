@@ -1,0 +1,932 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts19_test3_reading",
+  "passage_id": "ielts19_test3_p3",
+  "passage_title": "Is the era of artificial speech translation upon us?",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Noise, Alex Waibel tells me, is one of the major challenges that artificial speech translation has to meet.",
+      "translation": "亚历克斯·韦贝尔告诉我，噪音是人工语音翻译必须应对的主要挑战之一。",
+      "structure": [
+        {"text": "Noise", "role": "subject", "level": 1},
+        {"text": "Alex Waibel tells me", "role": "parenthetical_clause", "level": 1},
+        {"text": "is one of the major challenges", "role": "verb_phrase", "level": 1},
+        {"text": "that artificial speech translation has to meet", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Alex Waibel tells me 是插入语，主句核心是 Noise is one of the major challenges。",
+        "one of 后接复数名词 challenges，表示“主要挑战之一”。",
+        "that 引导定语从句，修饰 challenges。"
+      ],
+      "expressions": [
+        {"text": "artificial speech translation", "meaning_zh": "人工语音翻译"},
+        {"text": "meet challenges", "meaning_zh": "应对挑战"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "A device may be able to recognise speech in a laboratory, or a meeting room, but will struggle to cope with the kind of background noise I can hear in my office surrounding Professor Waibel as he speaks to me from Kyoto station in Japan.",
+      "translation": "设备也许能在实验室或会议室里识别语音，但会很难处理我在办公室里能听到的那种背景噪音；这些噪音正围绕着在日本京都站与我通话的韦贝尔教授。",
+      "structure": [
+        {"text": "A device may be able to recognise speech in a laboratory, or a meeting room", "role": "main_clause", "level": 1},
+        {"text": "but will struggle to cope with the kind of background noise", "role": "coordinated_clause", "level": 1},
+        {"text": "I can hear in my office", "role": "relative_clause", "level": 2},
+        {"text": "surrounding Professor Waibel", "role": "participial_phrase", "level": 2},
+        {"text": "as he speaks to me from Kyoto station in Japan", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "may be able to 与 will struggle to 形成对比，说明实验环境和真实环境的差异。",
+        "the kind of background noise 后省略关系词，I can hear... 修饰 noise。",
+        "surrounding Professor Waibel 是现在分词短语，说明噪音的位置或来源。",
+        "as 引导时间状语从句，说明他说话时所在情境。"
+      ],
+      "expressions": [
+        {"text": "struggle to cope with", "meaning_zh": "难以应对"},
+        {"text": "background noise", "meaning_zh": "背景噪音"},
+        {"text": "recognise speech", "meaning_zh": "识别语音"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "I'm struggling to follow him in English, on a scratchy line that reminds me we are nearly 10,000 kilometres apart—and that distance is still an obstacle to communication even if you're speaking the same language, as we are.",
+      "translation": "我正努力用英语听懂他说的话，电话线路杂音很大，这提醒我我们相隔将近一万公里——而且即便我们像现在这样说同一种语言，距离仍然是沟通的障碍。",
+      "structure": [
+        {"text": "I'm struggling to follow him in English", "role": "main_clause", "level": 1},
+        {"text": "on a scratchy line", "role": "prepositional_phrase", "level": 1},
+        {"text": "that reminds me we are nearly 10,000 kilometres apart", "role": "relative_clause", "level": 2},
+        {"text": "and that distance is still an obstacle to communication", "role": "coordinated_noun_clause", "level": 2},
+        {"text": "even if you're speaking the same language, as we are", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "I'm struggling to follow him 表示“我很难听懂他”。",
+        "that reminds me 后接两个并列内容：距离很远，以及距离仍是障碍。",
+        "even if 引导让步状语从句，说明即使语言相同也会有沟通障碍。",
+        "as we are 是省略结构，意思是“正如我们现在这样”。"
+      ],
+      "expressions": [
+        {"text": "struggle to follow", "meaning_zh": "难以听懂/跟上"},
+        {"text": "an obstacle to communication", "meaning_zh": "沟通障碍"},
+        {"text": "even if", "meaning_zh": "即使"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "We haven't reached the future yet.",
+      "translation": "我们还没有抵达那个未来。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "haven't reached", "role": "verb_phrase", "level": 1},
+        {"text": "the future", "role": "object", "level": 1},
+        {"text": "yet", "role": "adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "haven't reached 是现在完成时的否定形式，强调预期中的未来尚未成为现实。",
+        "the future 指理想中的即时、顺畅人工语音翻译时代。",
+        "yet 常用于完成时否定句，表示“还没有”。"
+      ],
+      "expressions": [
+        {"text": "not yet", "meaning_zh": "尚未"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "If we had, Waibel would have been able to speak more comfortably in his native German and I would have been able to hear his words in English.",
+      "translation": "如果我们已经抵达了那个未来，韦贝尔本可以更自在地用他的母语德语说话，而我本可以用英语听到他的话。",
+      "structure": [
+        {"text": "If we had", "role": "conditional_clause", "level": 1},
+        {"text": "Waibel would have been able to speak more comfortably in his native German", "role": "main_clause", "level": 1},
+        {"text": "and I would have been able to hear his words in English", "role": "coordinated_clause", "level": 1},
+        {"text": "in his native German", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "If we had 省略 reached the future，承接上一句。",
+        "would have been able to 是对过去未实现情况的虚拟表达。",
+        "两个 would have been able to 并列，分别描述说话者和听者在理想技术下的状态。"
+      ],
+      "expressions": [
+        {"text": "native German", "meaning_zh": "母语德语"},
+        {"text": "would have been able to", "meaning_zh": "本来能够"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "At Karlsruhe Institute of Technology, where he is a professor of computer science, Waibel and his colleagues already give lectures in German that their students can follow in English via an electronic translator.",
+      "translation": "在卡尔斯鲁厄理工学院，韦贝尔担任计算机科学教授，他和同事们已经用德语授课，而学生可以通过电子翻译器用英语跟上这些课程。",
+      "structure": [
+        {"text": "At Karlsruhe Institute of Technology", "role": "prepositional_phrase", "level": 1},
+        {"text": "where he is a professor of computer science", "role": "relative_clause", "level": 2},
+        {"text": "Waibel and his colleagues", "role": "subject", "level": 1},
+        {"text": "already give lectures in German", "role": "verb_phrase", "level": 1},
+        {"text": "that their students can follow in English via an electronic translator", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "where 引导非限制性定语从句，补充说明地点与韦贝尔的身份。",
+        "that their students can follow... 修饰 lectures，说明学生如何理解德语讲座。",
+        "via an electronic translator 表示通过电子翻译器这一媒介。"
+      ],
+      "expressions": [
+        {"text": "give lectures", "meaning_zh": "授课；做讲座"},
+        {"text": "via an electronic translator", "meaning_zh": "通过电子翻译器"},
+        {"text": "follow in English", "meaning_zh": "用英语听懂/跟上"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "The system generates text that students can read on their laptops or phones, so the process is somewhat similar to subtitling.",
+      "translation": "该系统生成学生可以在笔记本电脑或手机上阅读的文本，因此这个过程有点类似字幕。",
+      "structure": [
+        {"text": "The system generates text", "role": "main_clause", "level": 1},
+        {"text": "that students can read on their laptops or phones", "role": "relative_clause", "level": 2},
+        {"text": "so the process is somewhat similar to subtitling", "role": "result_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "that 引导定语从句，修饰 text。",
+        "so 引出结果，说明文本生成方式为什么类似字幕。",
+        "somewhat similar to 表示“有点类似于”，语气不绝对。"
+      ],
+      "expressions": [
+        {"text": "generate text", "meaning_zh": "生成文本"},
+        {"text": "somewhat similar to", "meaning_zh": "有点类似于"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "It helps that lecturers speak clearly, don't have to compete with background chatter, and say much the same thing each year.",
+      "translation": "有利的一点是，授课教师说话清楚，不必与背景闲聊声竞争，而且每年说的内容大体相同。",
+      "structure": [
+        {"text": "It helps", "role": "main_clause", "level": 1},
+        {"text": "that lecturers speak clearly, don't have to compete with background chatter, and say much the same thing each year", "role": "noun_clause", "level": 2},
+        {"text": "speak clearly, don't have to compete with background chatter, and say much the same thing each year", "role": "parallel_verb_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "It helps that... 中 It 是形式主语，that 从句说明真正有帮助的情况。",
+        "三个并列谓语 speak、don't have to compete、say 描述课堂环境较容易处理的原因。",
+        "much the same thing 表示内容大致相同。"
+      ],
+      "expressions": [
+        {"text": "compete with background chatter", "meaning_zh": "与背景闲聊声竞争"},
+        {"text": "much the same thing", "meaning_zh": "大致相同的内容"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "The idea of artificial speech translation has been around for a long time.",
+      "translation": "人工语音翻译这一想法已经存在很久了。",
+      "structure": [
+        {"text": "The idea of artificial speech translation", "role": "subject", "level": 1},
+        {"text": "has been around", "role": "verb_phrase", "level": 1},
+        {"text": "for a long time", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "has been around 是现在完成时，表示想法从过去延续至今。",
+        "be around 在这里表示“存在”。",
+        "of artificial speech translation 修饰 idea，说明想法的内容。"
+      ],
+      "expressions": [
+        {"text": "has been around", "meaning_zh": "已经存在"},
+        {"text": "for a long time", "meaning_zh": "很久"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "Douglas Adams' science fiction novel, The Hitchhiker's Guide to the Galaxy, published in 1979, featured a life form called the \"Babel fish\" which, when placed in the ear, enabled a listener to understand any language in the universe.",
+      "translation": "道格拉斯·亚当斯1979年出版的科幻小说《银河系漫游指南》中出现了一种名为“巴别鱼”的生命体；当它被放进耳朵里时，能让听者理解宇宙中的任何语言。",
+      "structure": [
+        {"text": "Douglas Adams' science fiction novel, The Hitchhiker's Guide to the Galaxy, published in 1979", "role": "subject", "level": 1},
+        {"text": "published in 1979", "role": "participial_phrase", "level": 2},
+        {"text": "featured a life form called the \"Babel fish\"", "role": "verb_phrase", "level": 1},
+        {"text": "which, when placed in the ear, enabled a listener to understand any language in the universe", "role": "relative_clause", "level": 2},
+        {"text": "when placed in the ear", "role": "elliptical_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "The Hitchhiker's Guide to the Galaxy 是 Douglas Adams' science fiction novel 的同位语。",
+        "published in 1979 是过去分词短语，后置说明小说出版时间。",
+        "called the \"Babel fish\" 修饰 a life form。",
+        "which 引导定语从句，说明 Babel fish 的功能；when placed... 是省略的时间状语从句。"
+      ],
+      "expressions": [
+        {"text": "science fiction novel", "meaning_zh": "科幻小说"},
+        {"text": "a life form called", "meaning_zh": "一种名为……的生命体"},
+        {"text": "enable a listener to", "meaning_zh": "使听者能够"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "It came to represent one of those devices that technology enthusiasts dream of long before they become practically realisable, like TVs flat enough to hang on walls: objects that we once could only dream of having but that are now commonplace.",
+      "translation": "它后来代表了一类设备：技术爱好者在它们真正可实现之前很久就梦想拥有的东西，就像薄到可以挂在墙上的电视一样；这些东西曾经只能存在于我们的梦想中，如今却已司空见惯。",
+      "structure": [
+        {"text": "It came to represent one of those devices", "role": "main_clause", "level": 1},
+        {"text": "that technology enthusiasts dream of long before they become practically realisable", "role": "relative_clause", "level": 2},
+        {"text": "long before they become practically realisable", "role": "adverbial_clause", "level": 3},
+        {"text": "like TVs flat enough to hang on walls", "role": "prepositional_phrase", "level": 2},
+        {"text": "objects that we once could only dream of having but that are now commonplace", "role": "appositive", "level": 1}
+      ],
+      "difficult_points": [
+        "came to represent 表示“后来成为……的代表”。",
+        "that technology enthusiasts dream of 修饰 devices，dream of 的宾语由关系词承担。",
+        "long before 引导时间状语从句，强调梦想早于技术可实现。",
+        "冒号后的 objects... 解释 those devices 这类物品的共同特征。"
+      ],
+      "expressions": [
+        {"text": "come to represent", "meaning_zh": "后来代表"},
+        {"text": "technology enthusiasts", "meaning_zh": "技术爱好者"},
+        {"text": "practically realisable", "meaning_zh": "实际可实现的"},
+        {"text": "commonplace", "meaning_zh": "司空见惯的"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "Now devices that look like prototype Babel fish have started to appear, riding a wave of advances in artificial translation and voice recognition.",
+      "translation": "如今，看起来像巴别鱼原型的设备已经开始出现，它们乘着人工翻译和语音识别进步的浪潮而来。",
+      "structure": [
+        {"text": "Now", "role": "adverbial", "level": 1},
+        {"text": "devices that look like prototype Babel fish", "role": "subject", "level": 1},
+        {"text": "that look like prototype Babel fish", "role": "relative_clause", "level": 2},
+        {"text": "have started to appear", "role": "verb_phrase", "level": 1},
+        {"text": "riding a wave of advances in artificial translation and voice recognition", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "that look like prototype Babel fish 修饰 devices。",
+        "have started to appear 是现在完成时，表示这类设备已经开始进入现实。",
+        "riding a wave of... 是现在分词短语，比喻借助技术进步的浪潮。"
+      ],
+      "expressions": [
+        {"text": "prototype", "meaning_zh": "原型"},
+        {"text": "ride a wave of advances", "meaning_zh": "乘着进步浪潮"},
+        {"text": "voice recognition", "meaning_zh": "语音识别"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "At this stage, however, they seem to be regarded as eye-catching novelties rather than steps towards what Waibel calls \"making a language-transparent society\".",
+      "translation": "然而，在这个阶段，它们似乎被看作吸引眼球的新奇玩意，而不是迈向韦贝尔所谓“打造语言透明社会”的步骤。",
+      "structure": [
+        {"text": "At this stage, however", "role": "adverbial_phrase", "level": 1},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "seem to be regarded", "role": "verb_phrase", "level": 1},
+        {"text": "as eye-catching novelties rather than steps towards what Waibel calls \"making a language-transparent society\"", "role": "prepositional_phrase", "level": 1},
+        {"text": "what Waibel calls \"making a language-transparent society\"", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "they 指前文出现的原型翻译设备。",
+        "seem to be regarded 是被动结构，表示外界如何看待它们。",
+        "rather than 连接两种定位：新奇玩意与迈向社会变革的步骤。",
+        "what Waibel calls... 是名词性从句，作 towards 的宾语。"
+      ],
+      "expressions": [
+        {"text": "at this stage", "meaning_zh": "在这个阶段"},
+        {"text": "eye-catching novelties", "meaning_zh": "吸引眼球的新奇物"},
+        {"text": "rather than", "meaning_zh": "而不是"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "They tend to be domestic devices or applications suitable for hotel check-ins, for example, providing a practical alternative to speaking traveller's English.",
+      "translation": "例如，它们往往是家用设备，或适合酒店入住场景的应用，为说旅行英语提供一种实用替代方案。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "tend to be", "role": "verb_phrase", "level": 1},
+        {"text": "domestic devices or applications suitable for hotel check-ins", "role": "subject_complement", "level": 1},
+        {"text": "for example", "role": "parenthetical_phrase", "level": 1},
+        {"text": "providing a practical alternative to speaking traveller's English", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "tend to be 表示通常或倾向于属于某类。",
+        "suitable for hotel check-ins 后置修饰 applications。",
+        "providing... 是现在分词短语，说明这类应用的作用。",
+        "traveller's English 指旅行者在实用场景中使用的英语。"
+      ],
+      "expressions": [
+        {"text": "hotel check-ins", "meaning_zh": "酒店入住登记"},
+        {"text": "a practical alternative to", "meaning_zh": "……的实用替代方案"},
+        {"text": "traveller's English", "meaning_zh": "旅行英语"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "The efficiency of the translator is less important than the social function.",
+      "translation": "翻译器的效率不如其社交功能重要。",
+      "structure": [
+        {"text": "The efficiency of the translator", "role": "subject", "level": 1},
+        {"text": "is less important than", "role": "verb_phrase", "level": 1},
+        {"text": "the social function", "role": "comparative_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "The efficiency of the translator 是主语，核心词是 efficiency。",
+        "less important than 构成比较结构。",
+        "the social function 指在现实交往中帮助完成沟通任务的功能。"
+      ],
+      "expressions": [
+        {"text": "less important than", "meaning_zh": "不如……重要"},
+        {"text": "social function", "meaning_zh": "社交功能"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "However, \"Professionals are less inclined to be patient in a conversation,\" founder and CEO at Waverly Labs, Andrew Ochoa, observes.",
+      "translation": "然而，Waverly Labs 的创始人兼首席执行官安德鲁·奥乔亚指出：“专业人士在交谈中不太愿意保持耐心。”",
+      "structure": [
+        {"text": "However", "role": "discourse_marker", "level": 1},
+        {"text": "\"Professionals are less inclined to be patient in a conversation,\"", "role": "quoted_clause", "level": 1},
+        {"text": "founder and CEO at Waverly Labs, Andrew Ochoa", "role": "subject", "level": 1},
+        {"text": "observes", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "However 引出从休闲场景到专业场景的转折。",
+        "引语放在句首，observes 放在引述者后面，是报道话语结构。",
+        "founder and CEO at Waverly Labs 是 Andrew Ochoa 的身份说明。",
+        "be less inclined to 表示“不太倾向于”。"
+      ],
+      "expressions": [
+        {"text": "be less inclined to", "meaning_zh": "不太倾向于"},
+        {"text": "be patient in a conversation", "meaning_zh": "在交谈中保持耐心"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "To redress this, Waverly is now preparing a new model for professional applications, which entails performance improvements in speech recognition, translation accuracy and the time it takes to deliver the translated speech.",
+      "translation": "为了纠正这一点，Waverly 现在正在为专业应用准备一款新型号，这涉及语音识别、翻译准确性以及输出译后语音所需时间方面的性能改进。",
+      "structure": [
+        {"text": "To redress this", "role": "infinitive_phrase", "level": 1},
+        {"text": "Waverly is now preparing a new model for professional applications", "role": "main_clause", "level": 1},
+        {"text": "which entails performance improvements in speech recognition, translation accuracy and the time it takes to deliver the translated speech", "role": "relative_clause", "level": 2},
+        {"text": "the time it takes to deliver the translated speech", "role": "noun_phrase", "level": 3},
+        {"text": "to deliver the translated speech", "role": "infinitive_phrase", "level": 4}
+      ],
+      "difficult_points": [
+        "To redress this 是目的状语，this 指专业人士缺乏耐心这一问题。",
+        "which 引导非限制性定语从句，补充说明新型号包含的改进。",
+        "entails 表示“必然包含、涉及”。",
+        "the time it takes to... 中 it takes 是省略关系词的结构，修饰 time。"
+      ],
+      "expressions": [
+        {"text": "redress this", "meaning_zh": "纠正这一点"},
+        {"text": "professional applications", "meaning_zh": "专业应用"},
+        {"text": "translation accuracy", "meaning_zh": "翻译准确性"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "For a conversation, both speakers need to have devices called Pilots (translator earpieces) in their ears.",
+      "translation": "在一场对话中，双方说话者都需要把名为 Pilots 的设备（翻译耳机）戴在耳朵里。",
+      "structure": [
+        {"text": "For a conversation", "role": "prepositional_phrase", "level": 1},
+        {"text": "both speakers", "role": "subject", "level": 1},
+        {"text": "need to have", "role": "verb_phrase", "level": 1},
+        {"text": "devices called Pilots (translator earpieces)", "role": "object", "level": 1},
+        {"text": "in their ears", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "For a conversation 限定使用条件：要进行对话。",
+        "both speakers 强调双方都需要设备。",
+        "called Pilots 是过去分词短语，后置修饰 devices。",
+        "括号中的 translator earpieces 解释 Pilots 是翻译耳机。"
+      ],
+      "expressions": [
+        {"text": "both speakers", "meaning_zh": "双方说话者"},
+        {"text": "translator earpieces", "meaning_zh": "翻译耳机"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "\"We find that there's a barrier with sharing one of the earphones with a stranger,\" says Ochoa.",
+      "translation": "奥乔亚说：“我们发现，与陌生人共用其中一只耳机存在障碍。”",
+      "structure": [
+        {"text": "\"We find that there's a barrier with sharing one of the earphones with a stranger,\"", "role": "quoted_clause", "level": 1},
+        {"text": "We find", "role": "main_clause", "level": 2},
+        {"text": "that there's a barrier with sharing one of the earphones with a stranger", "role": "noun_clause", "level": 3},
+        {"text": "says Ochoa", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "We find that... 中 that 引导宾语从句，说明发现的内容。",
+        "there's a barrier 表示存在障碍。",
+        "with sharing... 中 sharing 是介词 with 的宾语。",
+        "says Ochoa 放在引语之后，是常见引述结构。"
+      ],
+      "expressions": [
+        {"text": "there's a barrier with", "meaning_zh": "在……方面存在障碍"},
+        {"text": "with a stranger", "meaning_zh": "与陌生人"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "That can't have been totally unexpected.",
+      "translation": "这不可能完全出乎意料。",
+      "structure": [
+        {"text": "That", "role": "subject", "level": 1},
+        {"text": "can't have been", "role": "verb_phrase", "level": 1},
+        {"text": "totally unexpected", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "That 指人们不愿与陌生人共用耳机这件事。",
+        "can't have been 是对过去情况的否定推断。",
+        "totally unexpected 表示“完全没有预料到”，否定后意思是“并非完全意外”。"
+      ],
+      "expressions": [
+        {"text": "can't have been", "meaning_zh": "不可能曾经是"},
+        {"text": "totally unexpected", "meaning_zh": "完全出乎意料的"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "The problem would be solved if earpiece translators became sufficiently prevalent that strangers would be likely to already have their own in their ears.",
+      "translation": "如果耳机翻译器变得足够普及，以至于陌生人很可能已经自己戴着一个，这个问题就会得到解决。",
+      "structure": [
+        {"text": "The problem would be solved", "role": "main_clause", "level": 1},
+        {"text": "if earpiece translators became sufficiently prevalent", "role": "conditional_clause", "level": 2},
+        {"text": "that strangers would be likely to already have their own in their ears", "role": "result_clause", "level": 3},
+        {"text": "their own", "role": "pronoun_phrase", "level": 4}
+      ],
+      "difficult_points": [
+        "would be solved 表示假设情况下问题会被解决。",
+        "if 引导条件从句，条件是耳机翻译器足够普及。",
+        "sufficiently...that... 构成“足够……以至于……”的结果结构。",
+        "their own 省略 devices 或 earpiece translators。"
+      ],
+      "expressions": [
+        {"text": "would be solved if", "meaning_zh": "如果……就会被解决"},
+        {"text": "sufficiently prevalent", "meaning_zh": "足够普及"},
+        {"text": "be likely to", "meaning_zh": "很可能"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "Whether that happens, and how quickly, will probably depend not so much on the earpieces themselves, but on the prevalence of voice-controlled devices and artificial translation in general.",
+      "translation": "这是否会发生以及会以多快速度发生，可能并不主要取决于这些耳机本身，而是取决于语音控制设备和人工翻译整体上的普及程度。",
+      "structure": [
+        {"text": "Whether that happens, and how quickly", "role": "noun_clause_subject", "level": 1},
+        {"text": "will probably depend", "role": "verb_phrase", "level": 1},
+        {"text": "not so much on the earpieces themselves, but on the prevalence of voice-controlled devices and artificial translation in general", "role": "correlative_prepositional_phrase", "level": 1},
+        {"text": "in general", "role": "adverbial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Whether that happens, and how quickly 是主语从句，包含两个问题。",
+        "not so much...but... 表示“与其说取决于……不如说取决于……”。",
+        "the earpieces themselves 强调耳机本身并非主要决定因素。",
+        "prevalence 指普及程度。"
+      ],
+      "expressions": [
+        {"text": "depend not so much on...but on", "meaning_zh": "与其说取决于……不如说取决于……"},
+        {"text": "voice-controlled devices", "meaning_zh": "语音控制设备"},
+        {"text": "in general", "meaning_zh": "总体上"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "Waibel highlights the significance of certain Asian nations, noting that voice translation has really taken off in countries such as Japan with a range of systems.",
+      "translation": "韦贝尔强调某些亚洲国家的重要性，并指出语音翻译已经在日本等拥有一系列系统的国家真正流行起来。",
+      "structure": [
+        {"text": "Waibel", "role": "subject", "level": 1},
+        {"text": "highlights the significance of certain Asian nations", "role": "verb_phrase", "level": 1},
+        {"text": "noting that voice translation has really taken off in countries such as Japan with a range of systems", "role": "participial_phrase", "level": 1},
+        {"text": "that voice translation has really taken off in countries such as Japan with a range of systems", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "highlights 表示强调某些国家的重要性。",
+        "noting that... 是现在分词短语，补充韦贝尔的说明。",
+        "has taken off 是现在完成时，表示语音翻译已经开始快速流行。",
+        "with a range of systems 修饰 countries such as Japan，说明这些国家已有多种系统。"
+      ],
+      "expressions": [
+        {"text": "highlight the significance of", "meaning_zh": "强调……的重要性"},
+        {"text": "take off", "meaning_zh": "开始流行；迅速发展"},
+        {"text": "a range of systems", "meaning_zh": "一系列系统"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "There is still a long way to go, though.",
+      "translation": "不过，仍然还有很长的路要走。",
+      "structure": [
+        {"text": "There is", "role": "existential_clause", "level": 1},
+        {"text": "still a long way to go", "role": "noun_phrase", "level": 1},
+        {"text": "though", "role": "discourse_marker", "level": 1}
+      ],
+      "difficult_points": [
+        "There is a long way to go 是固定表达，表示仍有大量工作要做。",
+        "still 强调即便已有发展，距离成熟仍远。",
+        "though 放在句末，表示转折语气。"
+      ],
+      "expressions": [
+        {"text": "a long way to go", "meaning_zh": "还有很长的路要走"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "A translation system needs to be simultaneous, like the translator's voice speaking over the foreign politician being interviewed on the TV, rather than in sections that oblige speakers to pause after every few remarks and wait for the translation to be delivered.",
+      "translation": "翻译系统需要做到同步，就像电视上译员的声音覆盖正在接受采访的外国政治家讲话那样，而不是分段进行、迫使说话者每说几句话就停下来等待译文输出。",
+      "structure": [
+        {"text": "A translation system needs to be simultaneous", "role": "main_clause", "level": 1},
+        {"text": "like the translator's voice speaking over the foreign politician being interviewed on the TV", "role": "prepositional_phrase", "level": 1},
+        {"text": "being interviewed on the TV", "role": "participial_phrase", "level": 2},
+        {"text": "rather than in sections that oblige speakers to pause after every few remarks and wait for the translation to be delivered", "role": "prepositional_phrase", "level": 1},
+        {"text": "that oblige speakers to pause after every few remarks and wait for the translation to be delivered", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "needs to be simultaneous 是本句核心要求：翻译必须同步。",
+        "like... 给出同步翻译的类比，即电视采访中的同声传译。",
+        "rather than 引出被否定的分段翻译方式。",
+        "that oblige speakers to pause... 修饰 sections，说明分段翻译会迫使说话者停顿等待。"
+      ],
+      "expressions": [
+        {"text": "simultaneous", "meaning_zh": "同步的"},
+        {"text": "speaking over", "meaning_zh": "盖过……讲话进行翻译"},
+        {"text": "oblige speakers to", "meaning_zh": "迫使说话者……"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "It needs to work offline, for situations where internet access isn't possible, and to address apprehensions about the amount of private speech data accumulating in the cloud, having been sent to servers for processing.",
+      "translation": "它需要能够离线工作，以适用于无法联网的情境，并回应人们对大量私人语音数据被发送到服务器处理后在云端累积的担忧。",
+      "structure": [
+        {"text": "It needs to work offline", "role": "main_clause", "level": 1},
+        {"text": "for situations where internet access isn't possible", "role": "prepositional_phrase", "level": 1},
+        {"text": "where internet access isn't possible", "role": "relative_clause", "level": 2},
+        {"text": "and to address apprehensions about the amount of private speech data accumulating in the cloud", "role": "coordinated_infinitive_phrase", "level": 1},
+        {"text": "having been sent to servers for processing", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "It 指翻译系统。",
+        "where internet access isn't possible 修饰 situations，说明离线工作适用场景。",
+        "to address apprehensions 与 to work offline 并列，说明第二个需求。",
+        "having been sent... 是完成式被动分词，说明语音数据已经被发送到服务器处理。"
+      ],
+      "expressions": [
+        {"text": "work offline", "meaning_zh": "离线工作"},
+        {"text": "address apprehensions about", "meaning_zh": "回应对……的担忧"},
+        {"text": "private speech data", "meaning_zh": "私人语音数据"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "Systems not only need to cope with physical challenges such as noise, they will also need to be socially aware by addressing people in the right way.",
+      "translation": "系统不仅需要应对噪音等物理挑战，还需要通过以恰当方式称呼或对待人们来具备社会意识。",
+      "structure": [
+        {"text": "Systems not only need to cope with physical challenges such as noise", "role": "main_clause", "level": 1},
+        {"text": "not only need to cope with", "role": "verb_phrase", "level": 2},
+        {"text": "they will also need to be socially aware", "role": "coordinated_clause", "level": 1},
+        {"text": "by addressing people in the right way", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "not only...also... 构成递进，说明系统需求从物理层面扩展到社会层面。",
+        "cope with physical challenges such as noise 呼应文章开头的噪音问题。",
+        "socially aware 指能理解社交规范和称呼方式。",
+        "by addressing people in the right way 说明体现社会意识的方式。"
+      ],
+      "expressions": [
+        {"text": "cope with physical challenges", "meaning_zh": "应对物理挑战"},
+        {"text": "socially aware", "meaning_zh": "具有社会意识的"},
+        {"text": "in the right way", "meaning_zh": "以恰当方式"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 28,
+      "sentence": "Some cultural traditions demand solemn respect for academic status, for example, and it is only polite to respect this.",
+      "translation": "例如，一些文化传统要求对学术地位表示庄重的尊重，而尊重这一点才是礼貌的。",
+      "structure": [
+        {"text": "Some cultural traditions", "role": "subject", "level": 1},
+        {"text": "demand solemn respect for academic status", "role": "verb_phrase", "level": 1},
+        {"text": "for example", "role": "parenthetical_phrase", "level": 1},
+        {"text": "and it is only polite to respect this", "role": "coordinated_clause", "level": 1},
+        {"text": "to respect this", "role": "infinitive_real_subject", "level": 2}
+      ],
+      "difficult_points": [
+        "for example 插入句中，说明这是社交规范的一个例子。",
+        "demand solemn respect for academic status 表示文化传统要求正式尊重学术身份。",
+        "it is only polite to... 中 it 是形式主语，to respect this 是真正主语。",
+        "this 指前半句提到的对学术地位的尊重。"
+      ],
+      "expressions": [
+        {"text": "solemn respect", "meaning_zh": "庄重的尊重"},
+        {"text": "academic status", "meaning_zh": "学术地位"},
+        {"text": "it is only polite to", "meaning_zh": "……才是礼貌的"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 29,
+      "sentence": "Etiquette-sensitive artificial translators could relieve people of the need to know these differing cultural norms.",
+      "translation": "对礼仪敏感的人工翻译器可以让人们不必了解这些不同的文化规范。",
+      "structure": [
+        {"text": "Etiquette-sensitive artificial translators", "role": "subject", "level": 1},
+        {"text": "could relieve", "role": "verb_phrase", "level": 1},
+        {"text": "people", "role": "object", "level": 1},
+        {"text": "of the need to know these differing cultural norms", "role": "prepositional_phrase", "level": 1},
+        {"text": "to know these differing cultural norms", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Etiquette-sensitive 是复合形容词，表示能感知礼仪差异。",
+        "relieve people of the need to... 是固定结构，表示使人们免于某种需要。",
+        "these differing cultural norms 指前文提到的不同文化礼仪规范。"
+      ],
+      "expressions": [
+        {"text": "etiquette-sensitive", "meaning_zh": "对礼仪敏感的"},
+        {"text": "relieve people of the need to", "meaning_zh": "使人们无需……"},
+        {"text": "cultural norms", "meaning_zh": "文化规范"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 30,
+      "sentence": "At the same time, they might help to preserve local customs, slowing the spread of habits associated with international English, such as its readiness to get on first-name terms.",
+      "translation": "与此同时，它们也可能帮助保留本地习俗，减缓与国际英语相关的习惯传播，例如国际英语中容易直呼其名的倾向。",
+      "structure": [
+        {"text": "At the same time", "role": "adverbial_phrase", "level": 1},
+        {"text": "they might help to preserve local customs", "role": "main_clause", "level": 1},
+        {"text": "slowing the spread of habits associated with international English", "role": "participial_phrase", "level": 1},
+        {"text": "associated with international English", "role": "participial_phrase", "level": 2},
+        {"text": "such as its readiness to get on first-name terms", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "they 指对礼仪敏感的人工翻译器。",
+        "slowing... 是现在分词短语，说明保护本地习俗的结果。",
+        "associated with international English 后置修饰 habits。",
+        "its readiness to get on first-name terms 指国际英语中较快使用名字相称的倾向。"
+      ],
+      "expressions": [
+        {"text": "preserve local customs", "meaning_zh": "保留本地习俗"},
+        {"text": "associated with", "meaning_zh": "与……相关"},
+        {"text": "get on first-name terms", "meaning_zh": "以名字相称"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 31,
+      "sentence": "Professors and other professionals will not outsource language awareness to software, though.",
+      "translation": "不过，教授和其他专业人士不会把语言意识外包给软件。",
+      "structure": [
+        {"text": "Professors and other professionals", "role": "subject", "level": 1},
+        {"text": "will not outsource", "role": "verb_phrase", "level": 1},
+        {"text": "language awareness", "role": "object", "level": 1},
+        {"text": "to software", "role": "prepositional_phrase", "level": 1},
+        {"text": "though", "role": "discourse_marker", "level": 1}
+      ],
+      "difficult_points": [
+        "though 位于句末，表达转折。",
+        "outsource...to software 是比喻用法，指把语言意识交给软件处理。",
+        "language awareness 指对语言、语境和文化含义的敏感理解。"
+      ],
+      "expressions": [
+        {"text": "outsource something to software", "meaning_zh": "把某事外包给软件"},
+        {"text": "language awareness", "meaning_zh": "语言意识"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 32,
+      "sentence": "If the technology matures into seamless, ubiquitous artificial speech translation, it will actually add value to language skills.",
+      "translation": "如果这项技术成熟为无缝且无处不在的人工语音翻译，它实际上会提升语言技能的价值。",
+      "structure": [
+        {"text": "If the technology matures into seamless, ubiquitous artificial speech translation", "role": "conditional_clause", "level": 1},
+        {"text": "the technology matures into", "role": "verb_phrase", "level": 2},
+        {"text": "it will actually add value to language skills", "role": "main_clause", "level": 1},
+        {"text": "to language skills", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "If 引导条件从句，设想技术成熟后的情况。",
+        "matures into 表示发展成熟为某种形态。",
+        "seamless, ubiquitous 两个形容词共同修饰 artificial speech translation。",
+        "add value to 表示增加某物的价值。"
+      ],
+      "expressions": [
+        {"text": "mature into", "meaning_zh": "成熟发展为"},
+        {"text": "seamless, ubiquitous", "meaning_zh": "无缝且无处不在的"},
+        {"text": "add value to", "meaning_zh": "提升……的价值"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 33,
+      "sentence": "Whether it will help people conduct their family lives or relationships is open to question—though one noteworthy possibility is that it could overcome the language barriers that often arise between generations after migration, leaving children and their grandparents without a shared language.",
+      "translation": "它是否会帮助人们经营家庭生活或人际关系仍有待讨论——不过，一个值得注意的可能性是，它或许能够克服移民后不同代际之间常常出现的语言障碍；这种障碍会让孩子和祖父母没有共同语言。",
+      "structure": [
+        {"text": "Whether it will help people conduct their family lives or relationships", "role": "noun_clause_subject", "level": 1},
+        {"text": "is open to question", "role": "verb_phrase", "level": 1},
+        {"text": "though one noteworthy possibility is that it could overcome the language barriers", "role": "adverbial_clause", "level": 1},
+        {"text": "that often arise between generations after migration", "role": "relative_clause", "level": 2},
+        {"text": "leaving children and their grandparents without a shared language", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Whether 引导主语从句，整个从句作 is open to question 的主语。",
+        "is open to question 表示尚不确定、有待讨论。",
+        "though 引导让步补充，提出一个值得注意的应用可能。",
+        "leaving... 是现在分词短语，说明语言障碍造成的结果。"
+      ],
+      "expressions": [
+        {"text": "be open to question", "meaning_zh": "有待讨论；尚不确定"},
+        {"text": "noteworthy possibility", "meaning_zh": "值得注意的可能性"},
+        {"text": "language barriers", "meaning_zh": "语言障碍"},
+        {"text": "a shared language", "meaning_zh": "共同语言"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 34,
+      "sentence": "Whatever uses it is put to, though, it will never be as good as the real thing.",
+      "translation": "不过，无论它被用于什么用途，它永远都不会像真实的语言交流本身那么好。",
+      "structure": [
+        {"text": "Whatever uses it is put to", "role": "concessive_clause", "level": 1},
+        {"text": "though", "role": "discourse_marker", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "will never be", "role": "verb_phrase", "level": 1},
+        {"text": "as good as the real thing", "role": "comparative_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "Whatever 引导让步从句，表示无论用途如何。",
+        "is put to 是被动结构，意思是“被用于”。",
+        "though 插入句中，承接上一段并转折。",
+        "as good as the real thing 表示像真实事物本身一样好。"
+      ],
+      "expressions": [
+        {"text": "whatever uses it is put to", "meaning_zh": "无论它被用于什么用途"},
+        {"text": "the real thing", "meaning_zh": "真实的事物本身"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 35,
+      "sentence": "Even if voice-morphing technology simulates the speaker's voice, their lip movements won't match, and they will look like they are in a dubbed movie.",
+      "translation": "即便变声技术能模拟说话者的声音，他们的唇部动作也不会匹配，看起来会像身处一部配音电影中。",
+      "structure": [
+        {"text": "Even if voice-morphing technology simulates the speaker's voice", "role": "adverbial_clause", "level": 1},
+        {"text": "their lip movements won't match", "role": "main_clause", "level": 1},
+        {"text": "and they will look like they are in a dubbed movie", "role": "coordinated_clause", "level": 1},
+        {"text": "like they are in a dubbed movie", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "Even if 引导让步从句，承认声音可以被模拟。",
+        "their 指使用翻译技术的人，lip movements 指口型。",
+        "won't match 表示声音与口型不同步。",
+        "like they are in a dubbed movie 是口语化比较，说明不自然的视觉效果。"
+      ],
+      "expressions": [
+        {"text": "voice-morphing technology", "meaning_zh": "变声技术"},
+        {"text": "lip movements", "meaning_zh": "唇部动作"},
+        {"text": "dubbed movie", "meaning_zh": "配音电影"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 36,
+      "sentence": "The contrast will underline the value of shared languages, and the value of learning them.",
+      "translation": "这种反差会凸显共同语言的价值，以及学习这些语言的价值。",
+      "structure": [
+        {"text": "The contrast", "role": "subject", "level": 1},
+        {"text": "will underline", "role": "verb_phrase", "level": 1},
+        {"text": "the value of shared languages", "role": "object", "level": 1},
+        {"text": "and the value of learning them", "role": "coordinated_object", "level": 1}
+      ],
+      "difficult_points": [
+        "The contrast 指人工翻译效果与真实共享语言之间的差异。",
+        "underline 在这里是比喻，表示凸显、强调。",
+        "the value of shared languages 与 the value of learning them 并列。"
+      ],
+      "expressions": [
+        {"text": "underline the value of", "meaning_zh": "凸显……的价值"},
+        {"text": "shared languages", "meaning_zh": "共同语言"}
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 37,
+      "sentence": "Sharing a language can promote a sense of belonging and community, as with the international scientists who use English as a lingua franca, where their predecessors used Latin.",
+      "translation": "共享一种语言能够促进归属感和共同体意识，正如使用英语作为通用语的国际科学家那样；在他们的前辈那里，拉丁语曾承担这一角色。",
+      "structure": [
+        {"text": "Sharing a language", "role": "gerund_subject", "level": 1},
+        {"text": "can promote", "role": "verb_phrase", "level": 1},
+        {"text": "a sense of belonging and community", "role": "object", "level": 1},
+        {"text": "as with the international scientists who use English as a lingua franca", "role": "prepositional_phrase", "level": 1},
+        {"text": "where their predecessors used Latin", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Sharing a language 是动名词短语作主语。",
+        "a sense of belonging and community 指归属感和共同体意识。",
+        "who use English as a lingua franca 修饰 international scientists。",
+        "where their predecessors used Latin 中 where 指国际科学共同体的语境。"
+      ],
+      "expressions": [
+        {"text": "a sense of belonging", "meaning_zh": "归属感"},
+        {"text": "lingua franca", "meaning_zh": "通用语"},
+        {"text": "predecessors", "meaning_zh": "前辈；前人"}
+      ]
+    },
+    {
+      "id": "I-05",
+      "paragraph_label": "I",
+      "sentence_index": 38,
+      "sentence": "Though the practical need for a common language will diminish, the social value of sharing one will persist.",
+      "translation": "虽然对共同语言的实际需求会减少，但共享一种语言的社会价值会持续存在。",
+      "structure": [
+        {"text": "Though the practical need for a common language will diminish", "role": "adverbial_clause", "level": 1},
+        {"text": "the practical need for a common language", "role": "subject", "level": 2},
+        {"text": "will diminish", "role": "verb_phrase", "level": 2},
+        {"text": "the social value of sharing one", "role": "subject", "level": 1},
+        {"text": "will persist", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Though 引导让步从句，承认技术会降低实用需求。",
+        "one 代替 a common language，避免重复。",
+        "will persist 与 will diminish 对比，说明社会价值不会随实用需求一起消失。"
+      ],
+      "expressions": [
+        {"text": "practical need", "meaning_zh": "实际需求"},
+        {"text": "social value", "meaning_zh": "社会价值"},
+        {"text": "will persist", "meaning_zh": "将持续存在"}
+      ]
+    },
+    {
+      "id": "I-06",
+      "paragraph_label": "I",
+      "sentence_index": 39,
+      "sentence": "And software will never be a substitute for the subtle but vital understanding that comes with knowledge of a language.",
+      "translation": "而软件永远无法替代伴随语言知识而来的那种微妙却至关重要的理解。",
+      "structure": [
+        {"text": "And", "role": "coordinating_conjunction", "level": 1},
+        {"text": "software", "role": "subject", "level": 1},
+        {"text": "will never be", "role": "verb_phrase", "level": 1},
+        {"text": "a substitute for the subtle but vital understanding", "role": "subject_complement", "level": 1},
+        {"text": "that comes with knowledge of a language", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "And 放在句首，强调结论性的补充。",
+        "a substitute for 表示“……的替代品”。",
+        "subtle but vital 用转折并列形容理解的微妙性和重要性。",
+        "that comes with knowledge of a language 修饰 understanding，说明这种理解来自语言知识。"
+      ],
+      "expressions": [
+        {"text": "a substitute for", "meaning_zh": "……的替代品"},
+        {"text": "subtle but vital", "meaning_zh": "微妙却至关重要的"},
+        {"text": "come with knowledge of", "meaning_zh": "伴随对……的了解而来"}
+      ]
+    }
+  ]
+}

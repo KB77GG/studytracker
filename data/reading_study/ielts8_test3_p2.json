@@ -1,0 +1,851 @@
+{
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "There has always been an interest in geniuses and prodigies.",
+      "translation": "人们一直对天才和神童感兴趣。",
+      "structure": [
+        {
+          "text": "There",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has always been an interest in geniuses and prodigies",
+          "role": "existential_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "There has always been是存在句。",
+        "interest in短语说明关注对象。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "The word 'genius', from the Latin gens (= family) and the term 'genius', meaning 'begetter', comes from the early Roman cult of a divinity as the head of the family.",
+      "translation": "“天才”一词源于拉丁语gens（家族）和表示“生育者”的genius，来自早期罗马把神祇视为家族之首的崇拜。",
+      "structure": [
+        {
+          "text": "The word 'genius'",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "comes from the early Roman cult of a divinity as the head of the family",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "from the Latin gens (= family) and the term 'genius', meaning 'begetter'",
+          "role": "appositive",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "meaning begetter是同位语解释词源。",
+        "comes from说明词语来源。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "In its earliest form, genius was concerned with the ability of the head of the family, the pater familias, to perpetuate himself.",
+      "translation": "在最初的含义中，genius与家族首领“家父”延续自身的能力有关。",
+      "structure": [
+        {
+          "text": "genius",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was concerned with the ability of the head of the family, the pater familias, to perpetuate himself",
+          "role": "linking_predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "was concerned with表示与某能力有关。",
+        "the pater familias是head of the family的同位语。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Gradually, genius came to represent a person's characteristics and thence an individual's highest attributes derived from his 'genius' or guiding spirit.",
+      "translation": "逐渐地，genius开始代表一个人的特征，进而代表由其“天才”或引导精神产生的最高品质。",
+      "structure": [
+        {
+          "text": "genius",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "came to represent a person's characteristics and thence an individual's highest attributes",
+          "role": "predicate_object",
+          "level": 1
+        },
+        {
+          "text": "derived from his 'genius' or guiding spirit",
+          "role": "past_participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "came to represent表示逐渐获得含义。",
+        "derived from是过去分词修饰attributes。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "Today, people still look to stars or genes, astrology or genetics, in the hope of finding the source of exceptional abilities or personal characteristics.",
+      "translation": "如今，人们仍寄希望于从明星或基因、占星术或遗传学中找到非凡能力或个人特征的来源。",
+      "structure": [
+        {
+          "text": "people",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "still look to stars or genes, astrology or genetics",
+          "role": "predicate_object",
+          "level": 1
+        },
+        {
+          "text": "in the hope of finding the source of exceptional abilities or personal characteristics",
+          "role": "adverbial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "in the hope of是不定式目的短语。",
+        "stars or genes、astrology or genetics是并列宾语。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "The concept of genius and of gifts has become part of our folk culture, and attitudes are ambivalent towards them.",
+      "translation": "天才和天赋的概念已经成为民间文化的一部分，而人们对它们的态度很矛盾。",
+      "structure": [
+        {
+          "text": "The concept of genius and of gifts",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has become part of our folk culture",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "attitudes are ambivalent towards them",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "and连接become和attitudes两个分句。",
+        "ambivalent towards表示态度矛盾。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "We envy the gifted and mistrust them.",
+      "translation": "我们羡慕有天赋的人，也不信任他们。",
+      "structure": [
+        {
+          "text": "We",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "envy the gifted and mistrust them",
+          "role": "compound_predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "envy和mistrust是并列谓语。",
+        "the gifted是形容词作名词。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "In the mythology of giftedness, it is popularly believed that if people are talented in one area, they must be defective in another, that intellectuals are impractical, that prodigies burn too brightly too soon and burn out, that gifted people are eccentric, that they are physical weaklings, that there's a thin line between genius and madness, that genius runs in families, that the gifted are so clever they don't need special help, that giftedness is the same as having a high IQ, that some races are more intelligent or musical or mathematical than others, that genius goes unrecognised and unrewarded, that adversity makes men wise or that people with gifts have a responsibility to use them.",
+      "translation": "关于天赋的神话中，人们普遍认为：一个领域有才能的人必定在另一领域有缺陷，知识分子不切实际，神童过早燃烧又过早耗尽，有天赋者古怪、身体虚弱，天才和疯狂只有一线之隔，天才具有家族遗传性，有天赋者太聪明不需要特殊帮助，天赋等同于高智商，某些种族比其他种族更聪明或更擅长音乐和数学，天才不被认可也得不到奖励，逆境使人聪明，或有天赋者有责任运用天赋。",
+      "structure": [
+        {
+          "text": "it",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is popularly believed that if people are talented in one area, they must be defective in another",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "that intellectuals are impractical, that prodigies burn too brightly too soon and burn out",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "it is believed是无人称被动，后接多个that从句。",
+        "if从句说明第一条民间信念。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Language has been enriched with such terms as 'highbrow', 'egghead', 'blue-stocking', 'wiseacre', 'know-all', 'boffin' and, for many, 'intellectual' is a term of denigration.",
+      "translation": "语言中出现了“高眉”“书呆子”“女学究”“自以为无所不知的人”“博学者”等词，对很多人而言，“知识分子”也是贬义词。",
+      "structure": [
+        {
+          "text": "Language",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has been enriched with such terms as",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "'intellectual' is a term of denigration",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "has been enriched是现在完成时被动。",
+        "引号词语是such terms的列举同位语。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "The nineteenth century saw considerable interest in the nature of genius, and produced not a few studies of famous prodigies.",
+      "translation": "19世纪人们对天才本质产生了浓厚兴趣，也开展了不少著名神童研究。",
+      "structure": [
+        {
+          "text": "The nineteenth century",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "saw considerable interest in the nature of genius, and produced not a few studies of famous prodigies",
+          "role": "compound_predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "saw...and produced是两个并列谓语。",
+        "not a few表示不少。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Perhaps for us today, two of the most significant aspects of most of these studies of genius are the frequency with which early encouragement and teaching by parents and tutors had beneficial effects on the intellectual, artistic or musical development of the children but caused great difficulties of adjustment later in their lives, and the frequency with which abilities went unrecognised by teachers and schools.",
+      "translation": "今天看来，这些天才研究最重要的两个方面或许是：父母和导师早期的鼓励与教育常对儿童智力、艺术或音乐发展有益，却给他们日后的适应带来困难；以及能力常未被教师和学校发现。",
+      "structure": [
+        {
+          "text": "two of the most significant aspects",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are the frequency with which early encouragement and teaching by parents and tutors had beneficial effects",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "and the frequency with which abilities went unrecognised by teachers and schools",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "with which引导定语从句修饰frequency。",
+        "两个frequency并列说明研究发现。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "However, the difficulty with the evidence produced by these studies, fascinating as they are in collecting together anecdotes and apparent similarities and exceptions, is that they are not what we would today call norm-referenced.",
+      "translation": "然而，这些研究提供的证据虽然搜集了许多轶事、相似之处和例外，却存在一个问题：按今天的说法，它们不是常模参照的。",
+      "structure": [
+        {
+          "text": "the difficulty with the evidence produced by these studies",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is that they are not what we would today call norm-referenced",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "fascinating as they are in collecting together anecdotes and apparent similarities and exceptions",
+          "role": "concessive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "fascinating as they are是倒装让步从句。",
+        "what we would call是嵌套定语从句。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "In other words, when, for instance, information is collated about early illnesses, methods of upbringing, schooling, etc., we must also take into account information from other historical sources about how common or exceptional these were at the time.",
+      "translation": "换句话说，当我们整理早期疾病、教养方式、学校教育等信息时，还必须从其他历史资料中考虑这些情况在当时有多普遍或罕见。",
+      "structure": [
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "must also take into account information from other historical sources",
+          "role": "predicate_object",
+          "level": 1
+        },
+        {
+          "text": "when, for instance, information is collated about early illnesses, methods of upbringing, schooling, etc.",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "when引导时间从句。",
+        "must take into account表示必须考虑。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "For instance, infant mortality was high and life expectancy much shorter than today, home tutoring was common in the families of the nobility and wealthy, bullying and corporal punishment were common at the best independent schools and, for the most part, the cases studied were members of the privileged classes.",
+      "translation": "例如，婴儿死亡率很高、预期寿命比今天短得多，贵族和富裕家庭普遍请家庭教师，最好的私立学校也常有欺凌和体罚，而且研究案例大多来自特权阶层。",
+      "structure": [
+        {
+          "text": "infant mortality",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was high and life expectancy much shorter than today",
+          "role": "compound_predicate",
+          "level": 1
+        },
+        {
+          "text": "home tutoring was common in the families of the nobility and wealthy",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "多个分句并列陈述历史背景。",
+        "shorter than today是比较结构。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "It was only with the growth of paediatrics and psychology in the twentieth century that studies could be carried out on a more objective, if still not always very scientific, basis.",
+      "translation": "直到20世纪儿科和心理学发展后，研究才得以在更客观（但仍不总是十分科学）的基础上开展。",
+      "structure": [
+        {
+          "text": "studies",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "could be carried out on a more objective, if still not always very scientific, basis",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "It was only with the growth of paediatrics and psychology in the twentieth century",
+          "role": "adverbial_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "It was only with...that...是强调结构。",
+        "could be carried out是情态被动。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "Geniuses, however they are defined, are but the peaks which stand out through the mist of history and are visible to the particular observer from his or her particular vantage point.",
+      "translation": "天才无论如何定义，都只是从历史迷雾中突出的山峰，能否看见取决于观察者各自的视角。",
+      "structure": [
+        {
+          "text": "Geniuses",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are but the peaks which stand out through the mist of history",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "however they are defined",
+          "role": "concessive_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "however they are defined是让步从句。",
+        "which引导定语从句修饰peaks。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "Change the observers and the vantage points, clear away some of the mist, and a different lot of peaks appear.",
+      "translation": "换一批观察者、换一些视角、拨开部分迷雾，就会出现另一批山峰。",
+      "structure": [
+        {
+          "text": "a different lot of peaks",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "appear",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "Change the observers and the vantage points, clear away some of the mist",
+          "role": "imperative_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "祈使句Change...作条件背景。",
+        "appear是主句谓语。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "Genius is a term we apply to those whom we recognise for their outstanding achievements and who stand near the end of the continuum of human abilities which reaches back through the mundane and mediocre to the incapable.",
+      "translation": "我们把天才这个词用于那些因杰出成就而受到认可、处于人类能力连续体末端的人；这一连续体从平庸普通延伸到无能。",
+      "structure": [
+        {
+          "text": "Genius",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is a term we apply to those whom we recognise for their outstanding achievements",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "who stand near the end of the continuum of human abilities",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "whom和who分别引导定语从句。",
+        "continuum从平庸延伸到无能是比喻性修饰。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "There is still much truth in Dr Samuel Johnson's observation, 'The true genius is a mind of large general powers, accidentally determined to some particular direction'.",
+      "translation": "塞缪尔·约翰逊博士的观察仍很有道理：“真正的天才是具有广泛一般能力的头脑，偶然被决定朝某个特定方向发展。”",
+      "structure": [
+        {
+          "text": "There",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is still much truth in Dr Samuel Johnson's observation",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "The true genius is a mind of large general powers",
+          "role": "quoted_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "There is存在句后接引用同位语。",
+        "引语说明genius的定义。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "We may disagree with the 'general', for we doubt if all musicians of genius could have become scientists of genius or vice versa, but there is no doubting the accidental determination which nurtured or triggered their gifts into those channels into which they have poured their powers so successfully.",
+      "translation": "我们可能不同意“一般”这个说法，因为很难相信所有天才音乐家都能成为天才科学家，反之亦然；但不可否认，偶然的决定孕育或触发了他们的天赋，使其进入他们成功施展能力的领域。",
+      "structure": [
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "may disagree with the 'general'",
+          "role": "predicate_object",
+          "level": 1
+        },
+        {
+          "text": "but there is no doubting the accidental determination which nurtured or triggered their gifts into those channels",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "may disagree与there is no doubting构成转折。",
+        "which修饰determination并说明其作用。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "Along the continuum of abilities are hundreds of thousands of gifted men and women, boys and girls.",
+      "translation": "沿着能力连续体，还有成百上千成千上万的有天赋男女老少。",
+      "structure": [
+        {
+          "text": "Along the continuum of abilities",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are hundreds of thousands of gifted men and women, boys and girls",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "along the continuum是地点/范围状语。",
+        "gifted men and women与boys and girls并列。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "What we appreciate, enjoy or marvel at in the works of genius or the achievements of prodigies are the manifestations of skills or abilities which are similar to, but so much superior to, our own.",
+      "translation": "我们在天才作品或神童成就中欣赏、享受或惊叹的，是与自身相似却远胜于自身的技能或能力的表现。",
+      "structure": [
+        {
+          "text": "What we appreciate, enjoy or marvel at in the works of genius or the achievements of prodigies",
+          "role": "subject_clause",
+          "level": 1
+        },
+        {
+          "text": "are the manifestations of skills or abilities",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "which are similar to, but so much superior to, our own",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "What引导主语从句。",
+        "which定语从句比较能力相似性和优越性。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "But that their minds are not different from our own is demonstrated by the fact that the hard-won discoveries of scientists like Kepler or Einstein become the commonplace knowledge of schoolchildren and the once outrageous shapes and colours of an artist like Paul Klee so soon appear on the fabrics we wear.",
+      "translation": "科学家开普勒或爱因斯坦艰苦获得的发现如今成了小学生的常识，艺术家保罗·克利曾经惊世骇俗的形状和色彩很快出现在我们穿的衣物上，这些事实证明他们的头脑与我们并无不同。",
+      "structure": [
+        {
+          "text": "the hard-won discoveries of scientists like Kepler or Einstein",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "become the commonplace knowledge of schoolchildren",
+          "role": "predicate_object_complement",
+          "level": 1
+        },
+        {
+          "text": "the once outrageous shapes and colours of an artist like Paul Klee so soon appear on the fabrics we wear",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "become与appear构成并列事实。",
+        "we wear修饰fabrics。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "This does not minimise the supremacy of their achievements, which outstrip our own as the sub-four-minute milers outstrip our jogging.",
+      "translation": "这并没有降低他们成就的卓越性；正如不到四分钟跑完一英里的运动员远胜于我们的慢跑一样。",
+      "structure": [
+        {
+          "text": "This",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "does not minimise the supremacy of their achievements",
+          "role": "predicate_object",
+          "level": 1
+        },
+        {
+          "text": "which outstrip our own as the sub-four-minute milers outstrip our jogging",
+          "role": "relative_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "which引导非限制性定语从句。",
+        "as...as比较两个跑步表现。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "To think of geniuses and the gifted as having uniquely different brains is only reasonable if we accept that each human brain is uniquely different.",
+      "translation": "只有在接受每个人的大脑都独一无二的前提下，把天才和有天赋者看成拥有完全不同的大脑才合理。",
+      "structure": [
+        {
+          "text": "To think of geniuses and the gifted as having uniquely different brains",
+          "role": "subject_infinitive",
+          "level": 1
+        },
+        {
+          "text": "is only reasonable",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "if we accept that each human brain is uniquely different",
+          "role": "conditional_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "To think...是不定式主语。",
+        "if从句是合理性的条件。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "The purpose of instruction is to make us even more different from one another, and in the process of being educated we can learn from the achievements of those more gifted than ourselves.",
+      "translation": "教育的目的在于让我们彼此更加不同；在受教育过程中，我们可以从比自己更有天赋者的成就中学习。",
+      "structure": [
+        {
+          "text": "The purpose of instruction",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is to make us even more different from one another",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "we can learn from the achievements of those more gifted than ourselves",
+          "role": "coordinate_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "is to make是不定式表语。",
+        "those more gifted than ourselves是定语修饰those。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "But before we try to emulate geniuses or encourage our children to do so we should note that some of the things we learn from them may prove unpalatable.",
+      "translation": "但在尝试模仿天才或鼓励孩子这样做之前，应注意我们从他们身上学到的一些东西可能令人难以接受。",
+      "structure": [
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "should note that some of the things we learn from them may prove unpalatable",
+          "role": "verb_object",
+          "level": 1
+        },
+        {
+          "text": "before we try to emulate geniuses or encourage our children to do so",
+          "role": "adverbial_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "before引导时间状语从句。",
+        "that从句作note的宾语。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "We may envy their achievements and fame, but we should also recognise the price they may have paid in terms of perseverance, single-mindedness, dedication, restrictions on their personal lives, the demands upon their energies and time, and how often they had to display great courage to preserve their integrity or to make their way to the top.",
+      "translation": "我们可能羡慕他们的成就和名声，但也应认识到他们可能付出的代价：毅力、专心、奉献、对个人生活的限制、对精力和时间的要求，以及他们常常必须展现巨大勇气来维护正直或登上顶峰。",
+      "structure": [
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "should also recognise the price they may have paid",
+          "role": "verb_object",
+          "level": 1
+        },
+        {
+          "text": "in terms of perseverance, single-mindedness, dedication, restrictions on their personal lives",
+          "role": "adverbial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "may have paid是对过去付出的推测。",
+        "in terms of后列举代价。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 29,
+      "sentence": "Genius and giftedness are relative descriptive terms of no real substance.",
+      "translation": "天才和天赋是没有实际实体的相对描述性术语。",
+      "structure": [
+        {
+          "text": "Genius and giftedness",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are relative descriptive terms of no real substance",
+          "role": "linking_predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "are relative descriptive terms是系表结构。",
+        "of no real substance说明缺乏实体。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 30,
+      "sentence": "We may, at best, give them some precision by defining them and placing them in a context but, whatever we do, we should never delude ourselves into believing that gifted children or geniuses are different from the rest of humanity, save in the degree to which they have developed the performance of their abilities.",
+      "translation": "我们至多可以通过定义并置于语境中赋予它们一定精确性；但无论如何，都不应自欺地认为有天赋的孩子或天才与其他人类不同，除了他们在多大程度上发展了自身能力的表现。",
+      "structure": [
+        {
+          "text": "we",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "should never delude ourselves into believing that gifted children or geniuses are different from the rest of humanity",
+          "role": "predicate_object",
+          "level": 1
+        },
+        {
+          "text": "save in the degree to which they have developed the performance of their abilities",
+          "role": "concessive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "delude ourselves into believing是固定结构。",
+        "save in the degree to which是例外范围从句。"
+      ],
+      "expressions": []
+    }
+  ],
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts8_test3_reading",
+  "passage_id": "ielts8_test3_p2",
+  "passage_title": "The Nature of Genius",
+  "difficulty": "medium"
+}

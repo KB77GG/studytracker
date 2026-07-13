@@ -1,0 +1,391 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts4_test3_reading",
+  "passage_id": "ielts4_test3_p3",
+  "passage_title": "Obtaining Linguistic Data",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Many procedures are available for obtaining data about a language.",
+      "translation": "有许多方法可以获取有关某种语言的数据。",
+      "structure": [{"text": "Many procedures", "role": "subject", "level": 1}, {"text": "are available", "role": "verb_phrase", "level": 1}, {"text": "for obtaining data about a language", "role": "prepositional_phrase", "level": 1}],
+      "difficult_points": ["be available for doing 表示“可用于做某事”。", "for obtaining...中的 obtaining 是动名词，说明这些方法的用途。"],
+      "expressions": [{"text": "be available for", "meaning_zh": "可用于；可获得"}, {"text": "obtain data", "meaning_zh": "获取数据"}]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "They range from a carefully planned, intensive field investigation in a foreign country to a casual introspection about one's mother tongue carried out in an armchair at home.",
+      "translation": "这些方法的范围从在国外精心规划的密集田野调查，到在家中的扶手椅上对母语进行的随意内省。",
+      "structure": [{"text": "They", "role": "subject", "level": 1}, {"text": "range from a carefully planned, intensive field investigation in a foreign country to a casual introspection about one's mother tongue carried out in an armchair at home", "role": "verb_phrase", "level": 1}, {"text": "carried out in an armchair at home", "role": "participial_phrase", "level": 2}],
+      "difficult_points": ["range from...to...表示“范围从……到……”。", "carried out 修饰 introspection，表示在家中进行的内省，而不是修饰 mother tongue。", "introspection 指对自身语言直觉的内省观察。"],
+      "expressions": [{"text": "range from ... to ...", "meaning_zh": "范围从……到……"}, {"text": "carry out an investigation", "meaning_zh": "开展调查"}]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 3,
+      "sentence": "In all cases, someone has to act as a source of language data — an informant.",
+      "translation": "在所有情况下，都必须有人充当语言数据的来源——也就是信息提供者。",
+      "structure": [{"text": "In all cases", "role": "prepositional_phrase", "level": 1}, {"text": "someone", "role": "subject", "level": 1}, {"text": "has to act as", "role": "verb_phrase", "level": 1}, {"text": "a source of language data", "role": "complement", "level": 1}, {"text": "an informant", "role": "apposition", "level": 1}],
+      "difficult_points": ["has to 表示必要性，说明研究必须有语言数据提供者。", "破折号后的 an informant 是对 source 的同位语解释。"],
+      "expressions": [{"text": "act as", "meaning_zh": "充当；担任"}, {"text": "a source of", "meaning_zh": "……的来源"}]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Informants are (ideally) native speakers of a language, who provide utterances for analysis and other kinds of information about the language (e.g. translations, comments about correctness, or judgments on usage).",
+      "translation": "信息提供者（理想情况下）是某种语言的母语者，他们提供供分析的语句以及有关该语言的其他信息（例如翻译、关于正确性的评论或对用法的判断）。",
+      "structure": [{"text": "Informants", "role": "subject", "level": 1}, {"text": "(ideally) native speakers of a language", "role": "verb_phrase", "level": 1}, {"text": "who provide utterances for analysis and other kinds of information about the language", "role": "relative_clause", "level": 2}, {"text": "(e.g. translations, comments about correctness, or judgments on usage)", "role": "parenthesis", "level": 2}],
+      "difficult_points": ["who 引导非限制性定语从句，补充说明 native speakers 的作用。", "for analysis 修饰 utterances，表示这些语句供研究者分析。", "括号内列举 information 的具体类型。"],
+      "expressions": [{"text": "native speaker", "meaning_zh": "母语者"}, {"text": "for analysis", "meaning_zh": "用于分析"}]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "Often, when studying their mother tongue, linguists act as their own informants, judging the ambiguity, acceptability, or other properties of utterances against their own intuitions.",
+      "translation": "研究自己的母语时，语言学家常常充当自己的信息提供者，根据自身直觉判断语句的歧义性、可接受性或其他性质。",
+      "structure": [{"text": "Often", "role": "conjunctive_adverb", "level": 1}, {"text": "when studying their mother tongue", "role": "adverbial_clause", "level": 1}, {"text": "linguists", "role": "subject", "level": 1}, {"text": "act as their own informants", "role": "verb_phrase", "level": 1}, {"text": "judging the ambiguity, acceptability, or other properties of utterances against their own intuitions", "role": "participial_phrase", "level": 2}],
+      "difficult_points": ["when studying 省略了主语和 be 动词，完整为 when they are studying。", "judging 分词短语表示伴随的判断行为，逻辑主语是 linguists。", "against their own intuitions 表示“以自己的直觉为依据”。"],
+      "expressions": [{"text": "act as one's own", "meaning_zh": "充当自己的……"}, {"text": "against one's intuitions", "meaning_zh": "依据某人的直觉"}]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "The convenience of this approach makes it widely used, and it is considered the norm in the generative approach to linguistics.",
+      "translation": "这种方法的便利性使其得到广泛使用，而且在生成语言学方法中它被视为规范。",
+      "structure": [{"text": "The convenience of this approach", "role": "subject", "level": 1}, {"text": "makes it widely used", "role": "verb_phrase", "level": 1}, {"text": "and it is considered the norm in the generative approach to linguistics", "role": "coordinate_clause", "level": 1}],
+      "difficult_points": ["make it widely used 是“使它被广泛使用”的使役结构，it 指前文方法。", "and 连接两个并列分句，第二句使用被动语态。", "the generative approach to linguistics 指生成语言学研究方法。"],
+      "expressions": [{"text": "make ... widely used", "meaning_zh": "使……得到广泛使用"}, {"text": "be considered the norm", "meaning_zh": "被视为规范"}]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "But a linguist's personal judgments are often uncertain, or disagree with the judgments of other linguists, at which point recourse is needed to more objective methods of enquiry, using non-linguists as informants.",
+      "translation": "但是，语言学家个人的判断常常并不确定，或者与其他语言学家的判断不一致；这时就需要求助于更客观的调查方法，并以非语言学家作为信息提供者。",
+      "structure": [{"text": "a linguist's personal judgments", "role": "subject", "level": 1}, {"text": "are often uncertain, or disagree with the judgments of other linguists", "role": "verb_phrase", "level": 1}, {"text": "at which point", "role": "relative_clause", "level": 2}, {"text": "recourse is needed to more objective methods of enquiry", "role": "main_clause", "level": 2}, {"text": "using non-linguists as informants", "role": "participial_phrase", "level": 3}],
+      "difficult_points": ["or 连接 judgments 的两个可能问题：不确定或与他人不一致。", "at which point 指出现上述问题的时刻，which 指整个前述情况。", "recourse is needed to 是“需要求助于”的正式表达，using 短语说明方法如何实施。"],
+      "expressions": [{"text": "disagree with", "meaning_zh": "不同意；与……不一致"}, {"text": "have recourse to", "meaning_zh": "求助于"}, {"text": "objective method", "meaning_zh": "客观方法"}]
+    },
+    {
+      "id": "B-08",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "The latter procedure is unavoidable when working on foreign languages, or child speech.",
+      "translation": "研究外语或儿童言语时，后一种方法是不可避免的。",
+      "structure": [{"text": "The latter procedure", "role": "subject", "level": 1}, {"text": "is unavoidable", "role": "verb_phrase", "level": 1}, {"text": "when working on foreign languages, or child speech", "role": "adverbial_clause", "level": 2}],
+      "difficult_points": ["The latter procedure 指上一句提到使用非语言学家作为信息提供者的方法。", "when working 省略主语，逻辑主语是研究者。", "or child speech 与 foreign languages 并列，表示研究儿童言语。"],
+      "expressions": [{"text": "the latter", "meaning_zh": "后者"}, {"text": "be unavoidable", "meaning_zh": "不可避免"}]
+    },
+    {
+      "id": "C-09",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "Many factors must be considered when selecting informants – whether one is working with single speakers (a common situation when a language has not been described before), two people interacting, small groups or large-scale samples.",
+      "translation": "选择信息提供者时必须考虑许多因素——研究对象可以是单个说话者（某种语言此前尚未被描述时的常见情况）、互动的两个人、小群体或大规模样本。",
+      "structure": [{"text": "Many factors", "role": "subject", "level": 1}, {"text": "must be considered", "role": "verb_phrase", "level": 1}, {"text": "when selecting informants", "role": "adverbial_clause", "level": 2}, {"text": "whether one is working with single speakers (a common situation when a language has not been described before), two people interacting, small groups or large-scale samples", "role": "whether_clause", "level": 2}, {"text": "when a language has not been described before", "role": "adverbial_clause", "level": 4}],
+      "difficult_points": ["must be considered 是被动结构，many factors 是被考虑的对象。", "破折号后列举研究对象的四种规模。", "whether 从句嵌入括号说明，when 从句说明何时单个说话者是常见情况。"],
+      "expressions": [{"text": "take ... into consideration", "meaning_zh": "考虑……"}, {"text": "large-scale sample", "meaning_zh": "大规模样本"}]
+    },
+    {
+      "id": "C-10",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "Age, sex, social background and other aspects of identity are important, as these factors are known to influence the kind of language used.",
+      "translation": "年龄、性别、社会背景和身份的其他方面都很重要，因为已知这些因素会影响所使用的语言类型。",
+      "structure": [{"text": "Age, sex, social background and other aspects of identity", "role": "subject", "level": 1}, {"text": "are important", "role": "verb_phrase", "level": 1}, {"text": "as these factors are known to influence the kind of language used", "role": "adverbial_clause", "level": 2}, {"text": "known to influence the kind of language used", "role": "complement", "level": 3}],
+      "difficult_points": ["as 引导原因状语从句，解释这些身份因素为何重要。", "are known to influence 是“被认为会影响”的被动结构。", "used 是过去分词，修饰 language，表示实际使用的语言。"],
+      "expressions": [{"text": "be known to", "meaning_zh": "众所周知会……"}, {"text": "influence the kind of", "meaning_zh": "影响……的类型"}]
+    },
+    {
+      "id": "C-11",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "The topic of conversation and the characteristics of the social setting (e.g. the level of formality) are also highly relevant, as are the personal qualities of the informants (e.g. their fluency and consistency).",
+      "translation": "谈话主题和社会环境的特征（例如正式程度）也非常重要，信息提供者的个人素质（例如流利度和一致性）同样如此。",
+      "structure": [{"text": "The topic of conversation and the characteristics of the social setting", "role": "subject", "level": 1}, {"text": "are also highly relevant", "role": "verb_phrase", "level": 1}, {"text": "as are the personal qualities of the informants", "role": "inverted_coordinate_clause", "level": 1}, {"text": "(e.g. the level of formality)", "role": "parenthesis", "level": 2}, {"text": "(e.g. their fluency and consistency)", "role": "parenthesis", "level": 2}],
+      "difficult_points": ["as are the personal qualities...是倒装结构，正常语序为 the personal qualities... are also highly relevant。", "两个括号分别举例说明社会环境和个人素质。", "relevant 在这里表示与研究结果密切相关。"],
+      "expressions": [{"text": "social setting", "meaning_zh": "社会环境"}, {"text": "be relevant", "meaning_zh": "具有相关性；重要"}]
+    },
+    {
+      "id": "C-12",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "For large studies, scrupulous attention has been paid to the sampling theory employed, and in all cases, decisions have to be made about the best investigative techniques to use.",
+      "translation": "对于大型研究，人们会特别仔细地关注所采用的抽样理论；在所有情况下，都必须决定使用哪些最佳调查技术。",
+      "structure": [{"text": "For large studies", "role": "prepositional_phrase", "level": 1}, {"text": "scrupulous attention has been paid to the sampling theory employed", "role": "main_clause", "level": 1}, {"text": "employed", "role": "participial_phrase", "level": 2}, {"text": "in all cases", "role": "prepositional_phrase", "level": 1}, {"text": "decisions have to be made about the best investigative techniques to use", "role": "coordinate_clause", "level": 1}, {"text": "to use", "role": "non_finite_clause", "level": 2}],
+      "difficult_points": ["has been paid to 是现在完成时被动，attention 是被关注的对象。", "employed 是过去分词，修饰 sampling theory。", "techniques to use 中不定式修饰 techniques，表示要采用的技术。"],
+      "expressions": [{"text": "pay attention to", "meaning_zh": "关注"}, {"text": "scrupulous attention", "meaning_zh": "极其仔细的关注"}]
+    },
+    {
+      "id": "D-13",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "Today, researchers often tape-record informants.",
+      "translation": "如今，研究人员经常对信息提供者进行录音。",
+      "structure": [{"text": "Today", "role": "adverbial", "level": 1}, {"text": "researchers", "role": "subject", "level": 1}, {"text": "often tape-record", "role": "verb_phrase", "level": 1}, {"text": "informants", "role": "object", "level": 1}],
+      "difficult_points": ["tape-record 是动词，表示用录音带或录音设备记录。", "informants 是 tape-record 的宾语。"],
+      "expressions": [{"text": "tape-record", "meaning_zh": "录音"}]
+    },
+    {
+      "id": "D-14",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "This enables the linguist's claims about the language to be checked, and provides a way of making those claims more accurate (“difficult” pieces of speech can be listened to repeatedly).",
+      "translation": "这使得语言学家关于该语言的论断可以得到核查，并提供了使这些论断更准确的方法（“困难的”语段可以反复聆听）。",
+      "structure": [{"text": "This", "role": "subject", "level": 1}, {"text": "enables the linguist's claims about the language to be checked", "role": "verb_phrase", "level": 1}, {"text": "to be checked", "role": "non_finite_clause", "level": 2}, {"text": "and provides a way of making those claims more accurate", "role": "coordinate_clause", "level": 1}, {"text": "(“difficult” pieces of speech can be listened to repeatedly)", "role": "parenthesis", "level": 2}],
+      "difficult_points": ["enable A to be done 表示“使 A 能够被做”，这里是使论断得到核查。", "and 连接 enables 和 provides 两个谓语。", "making those claims more accurate 是 way of 的动名词结构。"],
+      "expressions": [{"text": "enable ... to be checked", "meaning_zh": "使……得到核查"}, {"text": "make ... more accurate", "meaning_zh": "使……更准确"}]
+    },
+    {
+      "id": "D-15",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "But obtaining naturalistic, good-quality data is never easy.",
+      "translation": "但是，获取自然且高质量的数据从来都不容易。",
+      "structure": [{"text": "obtaining naturalistic, good-quality data", "role": "gerund_phrase", "level": 1}, {"text": "is never easy", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["obtaining...是动名词短语作主语。", "naturalistic 指自然发生、未经人为操控的，good-quality 修饰 data。"],
+      "expressions": [{"text": "good-quality data", "meaning_zh": "高质量数据"}, {"text": "never easy", "meaning_zh": "从来不容易"}]
+    },
+    {
+      "id": "D-16",
+      "paragraph_label": "D",
+      "sentence_index": 16,
+      "sentence": "People talk abnormally when they know they are being recorded, and sound quality can be poor.",
+      "translation": "人们知道自己正在被录音时会说得不自然，而且录音质量可能很差。",
+      "structure": [{"text": "People talk abnormally", "role": "main_clause", "level": 1}, {"text": "when they know they are being recorded", "role": "adverbial_clause", "level": 2}, {"text": "they are being recorded", "role": "passive_clause", "level": 3}, {"text": "and sound quality can be poor", "role": "coordinate_clause", "level": 1}],
+      "difficult_points": ["when 从句中 they know 后又嵌套了一个 they are being recorded 从句。", "are being recorded 是现在进行时被动，表示正在被录音。", "and 连接人说话异常与录音质量差两个问题。"],
+      "expressions": [{"text": "be recorded", "meaning_zh": "被录音；被记录"}, {"text": "sound quality", "meaning_zh": "声音质量"}]
+    },
+    {
+      "id": "D-17",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "A variety of tape-recording procedures have thus been devised to minimize the “observer's paradox” (how to observe the way people behave when they are not being observed).",
+      "translation": "因此，人们设计了各种录音程序，以尽量减少“观察者悖论”（即如何观察人们在未被观察时的行为）。",
+      "structure": [{"text": "A variety of tape-recording procedures", "role": "subject", "level": 1}, {"text": "have thus been devised", "role": "verb_phrase", "level": 1}, {"text": "to minimize the “observer's paradox”", "role": "non_finite_clause", "level": 2}, {"text": "(how to observe the way people behave when they are not being observed)", "role": "parenthesis", "level": 2}, {"text": "when they are not being observed", "role": "adverbial_clause", "level": 4}],
+      "difficult_points": ["have been devised 是现在完成时被动，强调程序已经被设计出来。", "to minimize 表示设计这些程序的目的。", "括号解释 observer's paradox，内部 when 从句说明未被观察的状态。"],
+      "expressions": [{"text": "a variety of", "meaning_zh": "各种各样的"}, {"text": "be devised to", "meaning_zh": "被设计用来……"}, {"text": "minimize", "meaning_zh": "使……最小化"}]
+    },
+    {
+      "id": "D-18",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "Some recordings are made without the speakers being aware of the fact – a procedure that obtains very natural data, though ethical objections must be anticipated.",
+      "translation": "有些录音是在说话者不知情的情况下进行的——这种方法能获得非常自然的数据，尽管必须预先考虑伦理方面的反对意见。",
+      "structure": [{"text": "Some recordings", "role": "subject", "level": 1}, {"text": "are made without the speakers being aware of the fact", "role": "verb_phrase", "level": 1}, {"text": "a procedure that obtains very natural data", "role": "apposition", "level": 1}, {"text": "that obtains very natural data", "role": "relative_clause", "level": 2}, {"text": "though ethical objections must be anticipated", "role": "adverbial_clause", "level": 2}],
+      "difficult_points": ["without the speakers being aware 是独立主格式结构，表示说话者不知情。", "a procedure 是对前面录音方式的同位语，that 修饰 procedure。", "though 引导让步从句，must be anticipated 是被动结构。"],
+      "expressions": [{"text": "be aware of", "meaning_zh": "意识到；知晓"}, {"text": "ethical objection", "meaning_zh": "伦理反对意见"}]
+    },
+    {
+      "id": "D-19",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Alternatively, attempts can be made to make the speaker forget about the recording, such as keeping the tape recorder out of sight, or using radio microphones.",
+      "translation": "或者，也可以设法让说话者忘记录音这件事，例如把录音机藏起来，或使用无线电麦克风。",
+      "structure": [{"text": "Alternatively", "role": "conjunctive_adverb", "level": 1}, {"text": "attempts can be made", "role": "main_clause", "level": 1}, {"text": "to make the speaker forget about the recording", "role": "non_finite_clause", "level": 2}, {"text": "such as keeping the tape recorder out of sight, or using radio microphones", "role": "example_phrase", "level": 2}],
+      "difficult_points": ["attempts can be made 是被动表达，表示“可以进行尝试”。", "make the speaker forget 是使役结构，forget 后接 about。", "such as 后列出两种具体做法。"],
+      "expressions": [{"text": "make an attempt", "meaning_zh": "进行尝试"}, {"text": "out of sight", "meaning_zh": "不在视线内；藏起来"}]
+    },
+    {
+      "id": "D-20",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "A useful technique is to introduce a topic that quickly involves the speaker, and stimulates a natural language style (e.g. asking older informants about how times have changed in their locality).",
+      "translation": "一种有用的技巧是引入一个能迅速让说话者投入其中并激发自然语言风格的话题（例如询问年长的信息提供者当地的时代变迁）。",
+      "structure": [{"text": "A useful technique", "role": "subject", "level": 1}, {"text": "is", "role": "verb_phrase", "level": 1}, {"text": "to introduce a topic that quickly involves the speaker, and stimulates a natural language style", "role": "complement", "level": 1}, {"text": "that quickly involves the speaker, and stimulates a natural language style", "role": "relative_clause", "level": 2}, {"text": "(e.g. asking older informants about how times have changed in their locality)", "role": "parenthesis", "level": 2}],
+      "difficult_points": ["to introduce...是表语，说明 technique 的具体内容。", "that 定语从句修饰 topic，内部有 involves 和 stimulates 两个并列谓语。", "about how times have changed 是 ask about 的宾语从句。"],
+      "expressions": [{"text": "involve someone", "meaning_zh": "使某人投入其中"}, {"text": "stimulate a natural style", "meaning_zh": "激发自然的风格"}]
+    },
+    {
+      "id": "E-21",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "An audio tape recording does not solve all the linguist's problems, however.",
+      "translation": "然而，录音并不能解决语言学家的所有问题。",
+      "structure": [{"text": "An audio tape recording", "role": "subject", "level": 1}, {"text": "does not solve", "role": "verb_phrase", "level": 1}, {"text": "all the linguist's problems", "role": "object", "level": 1}, {"text": "however", "role": "conjunctive_adverb", "level": 1}],
+      "difficult_points": ["however 放在句末，表示转折。", "solve all problems 表示录音有帮助但作用并非万能。"],
+      "expressions": [{"text": "solve a problem", "meaning_zh": "解决问题"}]
+    },
+    {
+      "id": "E-22",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "Speech is often unclear and ambiguous.",
+      "translation": "言语常常含糊不清且有歧义。",
+      "structure": [{"text": "Speech", "role": "subject", "level": 1}, {"text": "is often unclear and ambiguous", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["unclear 和 ambiguous 是并列表语，共同描述 speech。", "ambiguous 表示可能有多种理解，而不只是声音小。"],
+      "expressions": [{"text": "unclear and ambiguous", "meaning_zh": "含糊且有歧义"}]
+    },
+    {
+      "id": "E-23",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "Where possible, therefore, the recording has to be supplemented by the observer's written comments on the non-verbal behavior of the participants, and about the context in general.",
+      "translation": "因此，只要可能，就必须用观察者对参与者非语言行为及总体语境的书面评论来补充录音。",
+      "structure": [{"text": "Where possible", "role": "adverbial_clause", "level": 1}, {"text": "therefore", "role": "conjunctive_adverb", "level": 1}, {"text": "the recording has to be supplemented by the observer's written comments", "role": "main_clause", "level": 1}, {"text": "on the non-verbal behavior of the participants, and about the context in general", "role": "prepositional_phrase", "level": 2}],
+      "difficult_points": ["Where possible 是省略结构，完整为 where it is possible。", "has to be supplemented by 是必须被……补充的被动结构。", "comments 后的两个介词短语说明评论涉及的内容。"],
+      "expressions": [{"text": "where possible", "meaning_zh": "只要可能"}, {"text": "be supplemented by", "meaning_zh": "由……补充"}]
+    },
+    {
+      "id": "E-24",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "A facial expression, for example, can dramatically alter the meaning of what is said.",
+      "translation": "例如，一个面部表情就可能彻底改变所说内容的含义。",
+      "structure": [{"text": "A facial expression", "role": "subject", "level": 1}, {"text": "for example", "role": "parenthesis", "level": 1}, {"text": "can dramatically alter", "role": "verb_phrase", "level": 1}, {"text": "the meaning of what is said", "role": "object", "level": 1}, {"text": "what is said", "role": "noun_clause", "level": 2}],
+      "difficult_points": ["what is said 是名词性从句，指“所说的话”。", "dramatically 是程度副词，强调表情可能造成的巨大影响。"],
+      "expressions": [{"text": "alter the meaning of", "meaning_zh": "改变……的含义"}, {"text": "what is said", "meaning_zh": "所说的话"}]
+    },
+    {
+      "id": "E-25",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "Video recordings avoid these problems to a large extent, but even they have limitations (the camera cannot be everywhere), and transcriptions always benefit from any additional commentary provided by an observer.",
+      "translation": "录像在很大程度上可以避免这些问题，但即使录像也有局限（摄像机不可能无处不在），而且文字转录总能从观察者提供的任何补充评论中受益。",
+      "structure": [{"text": "Video recordings avoid these problems to a large extent", "role": "main_clause", "level": 1}, {"text": "but even they have limitations", "role": "coordinate_clause", "level": 1}, {"text": "(the camera cannot be everywhere)", "role": "parenthesis", "level": 2}, {"text": "and transcriptions always benefit from any additional commentary provided by an observer", "role": "coordinate_clause", "level": 1}, {"text": "provided by an observer", "role": "participial_phrase", "level": 2}],
+      "difficult_points": ["but 和 and 连接三个并列信息，说明录像的优点与局限。", "even they 中 they 指 video recordings。", "provided by an observer 是过去分词短语，修饰 commentary。"],
+      "expressions": [{"text": "to a large extent", "meaning_zh": "在很大程度上"}, {"text": "benefit from", "meaning_zh": "从……中受益"}]
+    },
+    {
+      "id": "F-26",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "Linguists also make great use of structured sessions, in which they systematically ask their informants for utterances that describe certain actions, objects or behaviour.",
+      "translation": "语言学家还广泛利用结构化会话，在这种会话中，他们系统地要求信息提供者说出描述特定动作、物体或行为的语句。",
+      "structure": [{"text": "Linguists", "role": "subject", "level": 1}, {"text": "also make great use of structured sessions", "role": "verb_phrase", "level": 1}, {"text": "in which they systematically ask their informants for utterances", "role": "relative_clause", "level": 2}, {"text": "that describe certain actions, objects or behaviour", "role": "relative_clause", "level": 3}],
+      "difficult_points": ["in which 引导定语从句，which 指 structured sessions。", "ask somebody for something 表示向某人索取某物。", "that describe...修饰 utterances，说明语句的内容。"],
+      "expressions": [{"text": "make great use of", "meaning_zh": "充分利用"}, {"text": "structured session", "meaning_zh": "结构化会话"}]
+    },
+    {
+      "id": "F-27",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "With a bilingual informant, or through use of an interpreter, it is possible to use translation techniques (\"How do you say table in your language?\").",
+      "translation": "有了双语信息提供者，或者通过使用口译员，就可以采用翻译技巧（“用你的语言怎么说 table？”）。",
+      "structure": [{"text": "With a bilingual informant, or through use of an interpreter", "role": "prepositional_phrase", "level": 1}, {"text": "it is possible", "role": "main_clause", "level": 1}, {"text": "to use translation techniques", "role": "non_finite_clause", "level": 2}, {"text": "(\"How do you say table in your language?\")", "role": "parenthesis", "level": 2}],
+      "difficult_points": ["it is possible 是形式主语结构，真正内容是 to use translation techniques。", "With...和 through...分别说明实现翻译技巧的两种条件。", "引号内是直接示例问句。"],
+      "expressions": [{"text": "through use of", "meaning_zh": "通过使用……"}, {"text": "translation technique", "meaning_zh": "翻译技巧"}]
+    },
+    {
+      "id": "F-28",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "A large number of points can be covered in a short time, using interview worksheets and questionnaires.",
+      "translation": "利用访谈工作表和问卷，可以在短时间内涵盖大量要点。",
+      "structure": [{"text": "A large number of points", "role": "subject", "level": 1}, {"text": "can be covered", "role": "verb_phrase", "level": 1}, {"text": "in a short time", "role": "prepositional_phrase", "level": 1}, {"text": "using interview worksheets and questionnaires", "role": "participial_phrase", "level": 2}],
+      "difficult_points": ["can be covered 是情态动词加被动语态，points 是被涵盖的内容。", "using 短语说明实现快速覆盖的工具。"],
+      "expressions": [{"text": "a large number of", "meaning_zh": "大量的"}, {"text": "in a short time", "meaning_zh": "在短时间内"}]
+    },
+    {
+      "id": "F-29",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "Often, the researcher wishes to obtain information about just a single variable, in which case a restricted set of questions may be used.",
+      "translation": "研究人员常常只想获取关于单个变量的信息，在这种情况下可以使用一组有限的问题。",
+      "structure": [{"text": "Often", "role": "conjunctive_adverb", "level": 1}, {"text": "the researcher wishes to obtain information about just a single variable", "role": "main_clause", "level": 1}, {"text": "in which case a restricted set of questions may be used", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["wishes to obtain 是 wish 后接不定式，表示研究目的。", "in which case 指前面“只研究一个变量”的情况。", "may be used 是被动结构，表示可以采用有限问题集。"],
+      "expressions": [{"text": "obtain information about", "meaning_zh": "获取关于……的信息"}, {"text": "a restricted set of", "meaning_zh": "一组有限的……"}]
+    },
+    {
+      "id": "F-30",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "A particular feature of pronunciation, for example, can be elicited by asking the informant to say a restricted set of words.",
+      "translation": "例如，通过让信息提供者说出一组有限的词语，就可以引出某一特定的发音特征。",
+      "structure": [{"text": "A particular feature of pronunciation", "role": "subject", "level": 1}, {"text": "for example", "role": "parenthesis", "level": 1}, {"text": "can be elicited", "role": "verb_phrase", "level": 1}, {"text": "by asking the informant to say a restricted set of words", "role": "prepositional_phrase", "level": 1}, {"text": "to say a restricted set of words", "role": "non_finite_clause", "level": 2}],
+      "difficult_points": ["can be elicited by 是“可以通过……引出”的被动结构。", "asking the informant to say...中 to say 是 ask 的宾语补足语。"],
+      "expressions": [{"text": "a feature of pronunciation", "meaning_zh": "发音特征"}, {"text": "elicit", "meaning_zh": "引出；诱发"}]
+    },
+    {
+      "id": "F-31",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "There are also several direct methods of elicitation, such as asking informants to fill in the blanks in a substitution frame (e.g. I ___ see a car), or feeding them the wrong stimulus for correction (\"Is it possible to say I no can see?\").",
+      "translation": "还有几种直接引出语言材料的方法，例如要求信息提供者填写替换框架中的空格（如 I ___ see a car），或者故意给出错误刺激让他们纠正（“可以说 I no can see 吗？”）。",
+      "structure": [{"text": "There are also several direct methods of elicitation", "role": "main_clause", "level": 1}, {"text": "such as asking informants to fill in the blanks in a substitution frame", "role": "example_phrase", "level": 2}, {"text": "(e.g. I ___ see a car)", "role": "parenthesis", "level": 3}, {"text": "or feeding them the wrong stimulus for correction", "role": "coordinate_phrase", "level": 2}, {"text": "(\"Is it possible to say I no can see?\")", "role": "parenthesis", "level": 3}],
+      "difficult_points": ["There are 是存在句，真正的信息中心是 several direct methods。", "such as 后列出两种 elicitation 方法，or 连接第二种方法。", "ask/ feed 后的不定式或 for correction 说明受试者要做的纠正任务。"],
+      "expressions": [{"text": "fill in the blanks", "meaning_zh": "填写空格"}, {"text": "for correction", "meaning_zh": "用于纠正"}]
+    },
+    {
+      "id": "G-32",
+      "paragraph_label": "G",
+      "sentence_index": 32,
+      "sentence": "A representative sample of language, compiled for the purpose of linguistic analysis, is known as a corpus.",
+      "translation": "为语言学分析而编制的、具有代表性的语言样本称为语料库。",
+      "structure": [{"text": "A representative sample of language", "role": "subject", "level": 1}, {"text": "compiled for the purpose of linguistic analysis", "role": "participial_phrase", "level": 2}, {"text": "is known as", "role": "verb_phrase", "level": 1}, {"text": "a corpus", "role": "complement", "level": 1}],
+      "difficult_points": ["compiled 是过去分词短语，修饰 sample，说明编制用途。", "be known as 表示“被称为”。"],
+      "expressions": [{"text": "for the purpose of", "meaning_zh": "为了……的目的"}, {"text": "be known as", "meaning_zh": "被称为"}]
+    },
+    {
+      "id": "G-33",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "A corpus enables the linguist to make unbiased statements about frequency of usage, and it provides accessible data for the use of different researchers.",
+      "translation": "语料库使语言学家能够对使用频率作出不偏不倚的陈述，并为不同研究人员提供易于使用的数据。",
+      "structure": [{"text": "A corpus", "role": "subject", "level": 1}, {"text": "enables the linguist to make unbiased statements about frequency of usage", "role": "verb_phrase", "level": 1}, {"text": "to make unbiased statements about frequency of usage", "role": "non_finite_clause", "level": 2}, {"text": "and it provides accessible data for the use of different researchers", "role": "coordinate_clause", "level": 1}],
+      "difficult_points": ["enable somebody to do 表示“使某人能够做某事”。", "and 连接语料库的两个作用。", "for the use of different researchers 表示供不同研究人员使用。"],
+      "expressions": [{"text": "unbiased statement", "meaning_zh": "不偏不倚的陈述"}, {"text": "frequency of usage", "meaning_zh": "使用频率"}]
+    },
+    {
+      "id": "G-34",
+      "paragraph_label": "G",
+      "sentence_index": 34,
+      "sentence": "Its range and size are variable.",
+      "translation": "语料库的涵盖范围和规模各不相同。",
+      "structure": [{"text": "Its range and size", "role": "subject", "level": 1}, {"text": "are variable", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["Its 指代前文的 corpus。", "range 和 size 是并列主语，variable 表示会变化的。"],
+      "expressions": [{"text": "be variable", "meaning_zh": "各不相同；可变"}]
+    },
+    {
+      "id": "G-35",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "Some corpora attempt to cover the language as a whole, taking extracts from many kinds of text; others are extremely selective, providing a collection of material that deals only with a particular linguistic feature.",
+      "translation": "有些语料库试图涵盖整种语言，从多种文本中抽取片段；另一些则极具选择性，只提供涉及某一特定语言特征的材料集合。",
+      "structure": [{"text": "Some corpora attempt to cover the language as a whole", "role": "main_clause", "level": 1}, {"text": "taking extracts from many kinds of text", "role": "participial_phrase", "level": 2}, {"text": "others are extremely selective", "role": "coordinate_clause", "level": 1}, {"text": "providing a collection of material that deals only with a particular linguistic feature", "role": "participial_phrase", "level": 2}, {"text": "that deals only with a particular linguistic feature", "role": "relative_clause", "level": 3}],
+      "difficult_points": ["分号连接两类语料库，前后形成对比。", "taking 和 providing 分词短语分别说明两类语料库的做法。", "that 定语从句修饰 material，说明材料只涉及一个特征。"],
+      "expressions": [{"text": "as a whole", "meaning_zh": "作为整体；整体上"}, {"text": "deal with", "meaning_zh": "涉及；处理"}]
+    },
+    {
+      "id": "G-36",
+      "paragraph_label": "G",
+      "sentence_index": 36,
+      "sentence": "The size of the corpus depends on practical factors, such as the time available to collect, process and store the data: it can take up to several hours to provide an accurate transcription of a few minutes of speech.",
+      "translation": "语料库的规模取决于实际因素，例如收集、处理和存储数据所需的时间：为几分钟的语音提供准确转录可能需要数小时。",
+      "structure": [{"text": "The size of the corpus", "role": "subject", "level": 1}, {"text": "depends on practical factors", "role": "verb_phrase", "level": 1}, {"text": "such as the time available to collect, process and store the data", "role": "example_phrase", "level": 2}, {"text": "available to collect, process and store the data", "role": "participial_phrase", "level": 3}, {"text": "it can take up to several hours to provide an accurate transcription of a few minutes of speech", "role": "coordinate_clause", "level": 1}, {"text": "to provide an accurate transcription of a few minutes of speech", "role": "non_finite_clause", "level": 2}],
+      "difficult_points": ["available to collect...修饰 time，说明用于收集、处理和存储数据的时间。", "冒号后解释 practical factors 的具体影响。", "it can take...是形式主语结构，真正内容是不定式 to provide...。"],
+      "expressions": [{"text": "depend on", "meaning_zh": "取决于"}, {"text": "up to several hours", "meaning_zh": "长达数小时"}, {"text": "accurate transcription", "meaning_zh": "准确的转录"}]
+    },
+    {
+      "id": "G-37",
+      "paragraph_label": "G",
+      "sentence_index": 37,
+      "sentence": "Sometimes a small sample of data will be enough to decide a linguistic hypothesis; by contrast, corpora in major research projects can total millions of words.",
+      "translation": "有时，一小份数据样本就足以判定一个语言学假设；相比之下，重大研究项目中的语料库可能总计数百万词。",
+      "structure": [{"text": "Sometimes", "role": "adverbial", "level": 1}, {"text": "a small sample of data", "role": "subject", "level": 1}, {"text": "will be enough to decide a linguistic hypothesis", "role": "verb_phrase", "level": 1}, {"text": "by contrast", "role": "conjunctive_adverb", "level": 1}, {"text": "corpora in major research projects", "role": "subject", "level": 1}, {"text": "can total millions of words", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["分号连接两个对比情况，by contrast 明确提示后文转折。", "be enough to do 表示“足以做某事”。", "total 在这里作动词，表示总计达到。"],
+      "expressions": [{"text": "be enough to", "meaning_zh": "足以……"}, {"text": "by contrast", "meaning_zh": "相比之下"}]
+    },
+    {
+      "id": "G-38",
+      "paragraph_label": "G",
+      "sentence_index": 38,
+      "sentence": "An important principle is that all corpora, whatever their size, are inevitably limited in their coverage, and always need to be supplemented by data derived from the intuitions of native speakers of the language, through either introspection or experimentation.",
+      "translation": "一个重要原则是，无论规模大小，所有语料库在覆盖范围上都不可避免地存在局限，而且总需要通过内省或实验，用源自该语言母语者直觉的数据加以补充。",
+      "structure": [{"text": "An important principle", "role": "subject", "level": 1}, {"text": "is", "role": "verb_phrase", "level": 1}, {"text": "that all corpora, whatever their size, are inevitably limited in their coverage, and always need to be supplemented by data derived from the intuitions of native speakers of the language, through either introspection or experimentation", "role": "that_clause", "level": 2}, {"text": "whatever their size", "role": "concessive_clause", "level": 3}, {"text": "derived from the intuitions of native speakers of the language", "role": "participial_phrase", "level": 3}, {"text": "through either introspection or experimentation", "role": "prepositional_phrase", "level": 3}],
+      "difficult_points": ["that 从句是表语从句，具体说明 important principle。", "whatever their size 是让步结构，表示无论语料库多大。", "need to be supplemented by 是被动结构，derived from 修饰 data，through 短语说明补充数据的途径。"],
+      "expressions": [{"text": "be limited in", "meaning_zh": "在……方面受限"}, {"text": "be supplemented by", "meaning_zh": "由……补充"}, {"text": "derive from", "meaning_zh": "源自；来自"}]
+    }
+  ]
+}

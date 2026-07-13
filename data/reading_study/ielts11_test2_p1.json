@@ -1,0 +1,858 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts11_test2_reading",
+  "passage_id": "ielts11_test2_p1",
+  "passage_title": "Raising the Mary Rose",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "On 19 July 1545, English and French fleets were engaged in a sea battle off the coast of southern England in the area of water called the Solent, between Portsmouth and the Isle of Wight.",
+      "translation": "1545年7月19日，英法舰队在英格兰南部海岸外一片名为索伦特海峡的水域交战，该水域位于朴次茅斯与怀特岛之间。",
+      "structure": [
+        {"text": "On 19 July 1545", "role": "time_adverbial", "level": 1},
+        {"text": "English and French fleets", "role": "subject", "level": 1},
+        {"text": "were engaged in a sea battle", "role": "verb_phrase", "level": 1},
+        {"text": "off the coast of southern England", "role": "place_adverbial", "level": 1},
+        {"text": "called the Solent", "role": "participial_phrase", "level": 2},
+        {"text": "between Portsmouth and the Isle of Wight", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "were engaged in 在这里表示两支舰队“正在进行”海战，而不是“被雇用”。",
+        "called the Solent 是过去分词短语，后置修饰 the area of water。",
+        "between Portsmouth and the Isle of Wight 补充说明索伦特海峡的位置。"
+      ],
+      "expressions": [
+        {"text": "be engaged in", "meaning_zh": "参与；从事"},
+        {"text": "off the coast of", "meaning_zh": "在……海岸外"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Among the English vessels was a warship by the name of Mary Rose.",
+      "translation": "英国舰船中有一艘名为“玛丽·罗斯号”的战舰。",
+      "structure": [
+        {"text": "Among the English vessels", "role": "place_adverbial", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "a warship by the name of Mary Rose", "role": "subject", "level": 1}
+      ],
+      "difficult_points": [
+        "地点成分 Among the English vessels 位于句首，引起主语和谓语完全倒装。",
+        "句子的实际主语是 a warship，而 by the name of Mary Rose 表示“名为玛丽·罗斯号”。"
+      ],
+      "expressions": [
+        {"text": "by the name of", "meaning_zh": "名为……"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Built in Portsmouth some 35 years earlier, she had had a long and successful fighting career, and was a favourite of King Henry VIII.",
+      "translation": "这艘船约在35年前于朴次茅斯建成，曾有过漫长而辉煌的征战生涯，并深受亨利八世国王喜爱。",
+      "structure": [
+        {"text": "Built in Portsmouth some 35 years earlier", "role": "participial_phrase", "level": 1},
+        {"text": "she", "role": "subject", "level": 1},
+        {"text": "had had a long and successful fighting career", "role": "verb_phrase", "level": 1},
+        {"text": "was a favourite of King Henry VIII", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "Built in Portsmouth 是过去分词短语，逻辑主语为 she，表示被动含义。",
+        "had had 是过去完成时，前一个 had 是助动词，后一个 had 表示“拥有、经历”。",
+        "she 使用拟人化方式指代前句的 warship。"
+      ],
+      "expressions": [
+        {"text": "a favourite of", "meaning_zh": "受……喜爱的人或事物"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Accounts of what happened to the ship vary: while witnesses agree that she was not hit by the French, some maintain that she was outdated, overladen and sailing too low in the water, others that she was mishandled by undisciplined crew.",
+      "translation": "关于这艘船遭遇了什么，各方说法不一：目击者虽一致认为它并未被法军击中，但有人坚称它船体老旧、载重过多且吃水过深，另一些人则认为它遭到了缺乏纪律的船员的不当操控。",
+      "structure": [
+        {"text": "Accounts of what happened to the ship", "role": "subject", "level": 1},
+        {"text": "what happened to the ship", "role": "noun_clause", "level": 2},
+        {"text": "vary", "role": "verb_phrase", "level": 1},
+        {"text": "while witnesses agree that she was not hit by the French", "role": "adverbial_clause", "level": 1},
+        {"text": "that she was not hit by the French", "role": "noun_clause", "level": 2},
+        {"text": "some maintain that she was outdated, overladen and sailing too low in the water", "role": "main_clause", "level": 1},
+        {"text": "others that she was mishandled by undisciplined crew", "role": "elliptical_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "what happened to the ship 是 what 引导的名词性从句，作介词 of 的宾语。",
+        "while 在这里引导让步关系，意为“尽管”。",
+        "others 后省略了与前文相同的 maintain，使两种观点形成并列。",
+        "outdated、overladen 和 sailing too low 共同描述第一种沉船原因。"
+      ],
+      "expressions": [
+        {"text": "accounts vary", "meaning_zh": "说法不一"},
+        {"text": "maintain that", "meaning_zh": "坚称；主张"},
+        {"text": "be mishandled by", "meaning_zh": "被……不当操控"}
+      ]
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "What is undisputed, however, is that the Mary Rose sank into the Solent that day, taking at least 500 men with her.",
+      "translation": "然而，无可争议的是，玛丽·罗斯号当天沉入了索伦特海峡，至少500人随船丧生。",
+      "structure": [
+        {"text": "What is undisputed", "role": "subject_clause", "level": 1},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "that the Mary Rose sank into the Solent that day", "role": "predicative_clause", "level": 1},
+        {"text": "taking at least 500 men with her", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "What is undisputed 是主语从句，意为“无可争议的事情”。",
+        "that 引导表语从句，具体说明无可争议的事实。",
+        "taking at least 500 men with her 是结果性的现在分词短语，表示沉船造成的后果。"
+      ],
+      "expressions": [
+        {"text": "What is undisputed is that", "meaning_zh": "无可争议的是……"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "After the battle, attempts were made to recover the ship, but these failed.",
+      "translation": "战斗结束后，人们曾尝试打捞这艘船，但这些尝试都失败了。",
+      "structure": [
+        {"text": "After the battle", "role": "time_adverbial", "level": 1},
+        {"text": "attempts were made to recover the ship", "role": "main_clause", "level": 1},
+        {"text": "to recover the ship", "role": "infinitive_phrase", "level": 2},
+        {"text": "but these failed", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "attempts were made 是被动表达，重点落在打捞尝试本身而非行动者。",
+        "to recover the ship 修饰 attempts，说明尝试的目的。",
+        "these 指代前面的 attempts。"
+      ],
+      "expressions": [
+        {"text": "make attempts to", "meaning_zh": "尝试做……"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "The Mary Rose came to rest on the seabed, lying on her starboard (right) side at an angle of approximately 60 degrees.",
+      "translation": "玛丽·罗斯号最终沉落在海床上，向右舷倾侧，倾角约为60度。",
+      "structure": [
+        {"text": "The Mary Rose", "role": "subject", "level": 1},
+        {"text": "came to rest on the seabed", "role": "verb_phrase", "level": 1},
+        {"text": "lying on her starboard (right) side", "role": "participial_phrase", "level": 1},
+        {"text": "at an angle of approximately 60 degrees", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "came to rest 表示船最终停止移动并停落在海床上。",
+        "lying 是现在分词，补充描述船停落后的姿态。",
+        "starboard 后括号中的 right 是对航海术语“右舷”的解释。"
+      ],
+      "expressions": [
+        {"text": "come to rest", "meaning_zh": "最终停下；停落"},
+        {"text": "at an angle of", "meaning_zh": "以……的角度"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "The hull (the body of the ship) acted as a trap for the sand and mud carried by Solent currents.",
+      "translation": "船体（即船的主体）如同一个陷阱，将索伦特海峡水流携带的沙和泥截留了下来。",
+      "structure": [
+        {"text": "The hull (the body of the ship)", "role": "subject", "level": 1},
+        {"text": "acted as a trap", "role": "verb_phrase", "level": 1},
+        {"text": "for the sand and mud carried by Solent currents", "role": "prepositional_phrase", "level": 1},
+        {"text": "carried by Solent currents", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "the body of the ship 是对 hull 的同位解释。",
+        "carried by Solent currents 是过去分词短语，修饰 sand and mud，表示这些物质被水流携带。",
+        "acted as a trap 是比喻性表达，说明船体能够截留泥沙。"
+      ],
+      "expressions": [
+        {"text": "act as", "meaning_zh": "起……作用；充当"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "As a result, the starboard side filled rapidly, leaving the exposed port (left) side to be eroded by marine organisms and mechanical degradation.",
+      "translation": "因此，右舷一侧很快被泥沙填满，而暴露在外的左舷则受到海洋生物和机械性破坏的侵蚀。",
+      "structure": [
+        {"text": "As a result", "role": "conjunctive_adverbial", "level": 1},
+        {"text": "the starboard side", "role": "subject", "level": 1},
+        {"text": "filled rapidly", "role": "verb_phrase", "level": 1},
+        {"text": "leaving the exposed port (left) side to be eroded by marine organisms and mechanical degradation", "role": "participial_phrase", "level": 1},
+        {"text": "to be eroded by marine organisms and mechanical degradation", "role": "infinitive_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "leaving 引导结果性分词短语，说明右舷被填满后左舷所处的状态。",
+        "exposed 是过去分词作定语，表示左舷没有泥沙覆盖。",
+        "to be eroded 是不定式的被动形式，表示左舷遭受侵蚀。"
+      ],
+      "expressions": [
+        {"text": "as a result", "meaning_zh": "因此"},
+        {"text": "be eroded by", "meaning_zh": "受到……侵蚀"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "Because of the way the ship sank, nearly all of the starboard half survived intact.",
+      "translation": "由于船只沉没时的姿态，右舷一半几乎完整地保存了下来。",
+      "structure": [
+        {"text": "Because of the way the ship sank", "role": "reason_adverbial", "level": 1},
+        {"text": "the ship sank", "role": "relative_clause", "level": 2},
+        {"text": "nearly all of the starboard half", "role": "subject", "level": 1},
+        {"text": "survived intact", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "the ship sank 是省略关系词的定语从句，修饰 the way。",
+        "survived intact 表示不仅留存下来，而且保持完整，intact 作主语补足语。"
+      ],
+      "expressions": [
+        {"text": "because of", "meaning_zh": "由于"},
+        {"text": "survive intact", "meaning_zh": "完整保存下来"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "During the seventeenth and eighteenth centuries, the entire site became covered with a layer of hard grey clay, which minimised further erosion.",
+      "translation": "在17和18世纪，整个遗址逐渐被一层坚硬的灰色黏土覆盖，从而最大限度地减少了进一步侵蚀。",
+      "structure": [
+        {"text": "During the seventeenth and eighteenth centuries", "role": "time_adverbial", "level": 1},
+        {"text": "the entire site", "role": "subject", "level": 1},
+        {"text": "became covered with a layer of hard grey clay", "role": "verb_phrase", "level": 1},
+        {"text": "which minimised further erosion", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "became covered 强调遗址逐渐进入“被覆盖”的状态。",
+        "which 引导非限制性定语从句，指代前面由黏土覆盖这一整体情况。",
+        "further erosion 指在此前侵蚀基础上可能继续发生的侵蚀。"
+      ],
+      "expressions": [
+        {"text": "be covered with", "meaning_zh": "被……覆盖"},
+        {"text": "minimise further erosion", "meaning_zh": "最大限度减少进一步侵蚀"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "Then, on 16 June 1836, some fishermen in the Solent found that their equipment was caught on an underwater obstruction, which turned out to be the Mary Rose.",
+      "translation": "后来，1836年6月16日，索伦特海峡的一些渔民发现自己的设备被水下障碍物卡住，而这处障碍物最终证实就是玛丽·罗斯号。",
+      "structure": [
+        {"text": "Then, on 16 June 1836", "role": "time_adverbial", "level": 1},
+        {"text": "some fishermen in the Solent", "role": "subject", "level": 1},
+        {"text": "found", "role": "verb_phrase", "level": 1},
+        {"text": "that their equipment was caught on an underwater obstruction", "role": "noun_clause", "level": 2},
+        {"text": "which turned out to be the Mary Rose", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，说明渔民发现的情况。",
+        "which 引导非限制性定语从句，指代 an underwater obstruction。",
+        "turned out to be 表示经过查明后“原来是”。"
+      ],
+      "expressions": [
+        {"text": "be caught on", "meaning_zh": "被……钩住或卡住"},
+        {"text": "turn out to be", "meaning_zh": "结果是；原来是"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "Diver John Deane happened to be exploring another sunken ship nearby, and the fishermen approached him, asking him to free their gear.",
+      "translation": "潜水员约翰·迪恩当时碰巧正在附近探查另一艘沉船，渔民便找到他，请他帮忙解救他们的设备。",
+      "structure": [
+        {"text": "Diver John Deane", "role": "subject", "level": 1},
+        {"text": "happened to be exploring another sunken ship nearby", "role": "verb_phrase", "level": 1},
+        {"text": "the fishermen approached him", "role": "coordinated_clause", "level": 1},
+        {"text": "asking him to free their gear", "role": "participial_phrase", "level": 2},
+        {"text": "to free their gear", "role": "infinitive_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "happened to be exploring 表示他当时碰巧正在进行探查，兼有偶然性和进行意味。",
+        "asking 是伴随状况的现在分词，逻辑主语是 the fishermen。",
+        "ask somebody to do something 表示请求某人做某事。"
+      ],
+      "expressions": [
+        {"text": "happen to be doing", "meaning_zh": "碰巧正在做……"},
+        {"text": "ask somebody to do something", "meaning_zh": "请求某人做某事"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "Deane dived down, and found the equipment caught on a timber protruding slightly from the seabed.",
+      "translation": "迪恩潜入水下，发现设备卡在一根略微伸出海床的木料上。",
+      "structure": [
+        {"text": "Deane", "role": "subject", "level": 1},
+        {"text": "dived down", "role": "verb_phrase", "level": 1},
+        {"text": "found the equipment caught on a timber", "role": "coordinated_predicate", "level": 1},
+        {"text": "caught on a timber", "role": "object_complement", "level": 2},
+        {"text": "protruding slightly from the seabed", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "found the equipment caught 是“find＋宾语＋宾语补足语”结构，caught 描述设备的状态。",
+        "protruding slightly from the seabed 是现在分词短语，修饰 a timber。",
+        "timber 在这里指沉船残留的木构件，而非泛指木材。"
+      ],
+      "expressions": [
+        {"text": "protrude from", "meaning_zh": "从……伸出"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "Exploring further, he uncovered several other timbers and a bronze gun.",
+      "translation": "继续探查后，他又发现了几根木构件和一门青铜炮。",
+      "structure": [
+        {"text": "Exploring further", "role": "participial_phrase", "level": 1},
+        {"text": "he", "role": "subject", "level": 1},
+        {"text": "uncovered", "role": "verb_phrase", "level": 1},
+        {"text": "several other timbers and a bronze gun", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "Exploring further 是现在分词短语，表示与主句动作相伴的进一步探查。",
+        "uncovered 在此不是简单“揭开覆盖物”，而是指通过探查发现遗物。"
+      ],
+      "expressions": [
+        {"text": "explore further", "meaning_zh": "进一步探查"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Deane continued diving on the site intermittently until 1840, recovering several more guns, two bows, various timbers, part of a pump and various other small finds.",
+      "translation": "迪恩断断续续地在该遗址潜水作业直至1840年，打捞出另外几门炮、两把弓、各种木构件、一个泵的部分零件以及其他多种小型遗物。",
+      "structure": [
+        {"text": "Deane", "role": "subject", "level": 1},
+        {"text": "continued diving on the site intermittently until 1840", "role": "verb_phrase", "level": 1},
+        {"text": "recovering several more guns, two bows, various timbers, part of a pump and various other small finds", "role": "participial_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "continued diving 表示持续进行潜水活动，intermittently 则说明活动并非连续不断。",
+        "recovering 引导伴随结果的分词短语，概括这一时期打捞出的物品。",
+        "finds 是考古语境中的名词，指被发现的遗物。"
+      ],
+      "expressions": [
+        {"text": "continue doing", "meaning_zh": "继续做……"},
+        {"text": "small finds", "meaning_zh": "小型出土物或发现物"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 17,
+      "sentence": "The Mary Rose then faded into obscurity for another hundred years.",
+      "translation": "此后，玛丽·罗斯号又沉寂了一百年，逐渐被人遗忘。",
+      "structure": [
+        {"text": "The Mary Rose", "role": "subject", "level": 1},
+        {"text": "then faded into obscurity", "role": "verb_phrase", "level": 1},
+        {"text": "for another hundred years", "role": "duration_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "faded into obscurity 是比喻表达，表示逐渐不再受到关注，而非船体实际消失。",
+        "another hundred years 指在此前沉没和短暂探查之后又过去了一百年。"
+      ],
+      "expressions": [
+        {"text": "fade into obscurity", "meaning_zh": "逐渐湮没无闻"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 18,
+      "sentence": "But in 1965, military historian and amateur diver Alexander McKee, in conjunction with the British Sub-Aqua Club, initiated a project called 'Solent Ships'.",
+      "translation": "但在1965年，军事史学家兼业余潜水员亚历山大·麦基与英国水下俱乐部合作，发起了一个名为“索伦特船只”的项目。",
+      "structure": [
+        {"text": "in 1965", "role": "time_adverbial", "level": 1},
+        {"text": "military historian and amateur diver Alexander McKee", "role": "subject", "level": 1},
+        {"text": "in conjunction with the British Sub-Aqua Club", "role": "prepositional_phrase", "level": 1},
+        {"text": "initiated", "role": "verb_phrase", "level": 1},
+        {"text": "a project called 'Solent Ships'", "role": "object", "level": 1},
+        {"text": "called 'Solent Ships'", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "military historian and amateur diver 是 Alexander McKee 的两个并列身份。",
+        "in conjunction with 表示麦基与该俱乐部共同合作。",
+        "called 'Solent Ships' 是过去分词短语，修饰 project。"
+      ],
+      "expressions": [
+        {"text": "in conjunction with", "meaning_zh": "与……共同；联合"},
+        {"text": "initiate a project", "meaning_zh": "发起一个项目"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "While on paper this was a plan to examine a number of known wrecks in the Solent, what McKee really hoped for was to find the Mary Rose.",
+      "translation": "尽管从书面计划看，该项目旨在考察索伦特海峡中多处已知沉船，但麦基真正希望的是找到玛丽·罗斯号。",
+      "structure": [
+        {"text": "While on paper this was a plan to examine a number of known wrecks in the Solent", "role": "adverbial_clause", "level": 1},
+        {"text": "to examine a number of known wrecks in the Solent", "role": "infinitive_phrase", "level": 2},
+        {"text": "what McKee really hoped for", "role": "subject_clause", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "to find the Mary Rose", "role": "predicative_complement", "level": 1}
+      ],
+      "difficult_points": [
+        "While 在此引导让步状语从句，表示公开计划与真实目标之间的反差。",
+        "on paper 表示“从书面或名义上看”，并非指计划写在纸上的物理位置。",
+        "what McKee really hoped for 是主语从句，to find the Mary Rose 作表语。"
+      ],
+      "expressions": [
+        {"text": "on paper", "meaning_zh": "从书面或名义上看"},
+        {"text": "hope for", "meaning_zh": "希望得到；期待"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "Ordinary search techniques proved unsatisfactory, so McKee entered into collaboration with Harold E. Edgerton, professor of electrical engineering at the Massachusetts Institute of Technology.",
+      "translation": "常规搜索技术被证明效果不佳，因此麦基开始与麻省理工学院电气工程教授哈罗德·E. 埃杰顿合作。",
+      "structure": [
+        {"text": "Ordinary search techniques", "role": "subject", "level": 1},
+        {"text": "proved unsatisfactory", "role": "verb_phrase", "level": 1},
+        {"text": "so McKee entered into collaboration with Harold E. Edgerton", "role": "coordinated_clause", "level": 1},
+        {"text": "professor of electrical engineering at the Massachusetts Institute of Technology", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "proved 在这里是系动词，意为“结果表明是”，unsatisfactory 作表语。",
+        "so 连接因果关系：常规技术不理想，因此麦基寻求合作。",
+        "句末的 professor 短语是 Harold E. Edgerton 的同位语，补充其身份。"
+      ],
+      "expressions": [
+        {"text": "prove unsatisfactory", "meaning_zh": "被证明不尽如人意"},
+        {"text": "enter into collaboration with", "meaning_zh": "开始与……合作"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "In 1967, Edgerton's side-scan sonar systems revealed a large, unusually shaped object, which McKee believed was the Mary Rose.",
+      "translation": "1967年，埃杰顿的侧扫声呐系统探测到一个体积巨大、形状异常的物体，麦基认为那就是玛丽·罗斯号。",
+      "structure": [
+        {"text": "In 1967", "role": "time_adverbial", "level": 1},
+        {"text": "Edgerton's side-scan sonar systems", "role": "subject", "level": 1},
+        {"text": "revealed", "role": "verb_phrase", "level": 1},
+        {"text": "a large, unusually shaped object", "role": "object", "level": 1},
+        {"text": "which McKee believed was the Mary Rose", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "unusually shaped 是过去分词构成的复合修饰语，表示物体形状异常。",
+        "which 引导非限制性定语从句，并在从句 was the Mary Rose 中作主语。",
+        "McKee believed 插入在关系词与谓语之间，表达这是麦基的判断。"
+      ],
+      "expressions": [
+        {"text": "side-scan sonar", "meaning_zh": "侧扫声呐"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 22,
+      "sentence": "Further excavations revealed stray pieces of timber and an iron gun.",
+      "translation": "进一步的发掘发现了一些散落的木构件和一门铁炮。",
+      "structure": [
+        {"text": "Further excavations", "role": "subject", "level": 1},
+        {"text": "revealed", "role": "verb_phrase", "level": 1},
+        {"text": "stray pieces of timber and an iron gun", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "revealed 以 excavations 作主语，是用研究活动代指研究人员发现结果的表达。",
+        "stray 在这里表示木料零散分布、脱离原有结构。"
+      ],
+      "expressions": [
+        {"text": "further excavations", "meaning_zh": "进一步的发掘"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 23,
+      "sentence": "But the climax to the operation came when, on 5 May 1971, part of the ship's frame was uncovered.",
+      "translation": "但整个行动的高潮出现在1971年5月5日，当时船体框架的一部分被发掘出来。",
+      "structure": [
+        {"text": "the climax to the operation", "role": "subject", "level": 1},
+        {"text": "came", "role": "verb_phrase", "level": 1},
+        {"text": "when, on 5 May 1971, part of the ship's frame was uncovered", "role": "adverbial_clause", "level": 1},
+        {"text": "part of the ship's frame", "role": "subject", "level": 2},
+        {"text": "was uncovered", "role": "verb_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "the climax came when 表示“高潮出现在……之时”。",
+        "when 引导时间状语从句，其中插入了更具体的日期。",
+        "was uncovered 是被动语态，行动者在上下文中无需明说。"
+      ],
+      "expressions": [
+        {"text": "the climax to", "meaning_zh": "……的高潮"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "McKee and his team now knew for certain that they had found the wreck, but were as yet unaware that it also housed a treasure trove of beautifully preserved artefacts.",
+      "translation": "此时麦基和他的团队已经确定找到了沉船，但当时仍不知道船内还藏有大量保存完好的珍贵文物。",
+      "structure": [
+        {"text": "McKee and his team", "role": "subject", "level": 1},
+        {"text": "now knew for certain", "role": "verb_phrase", "level": 1},
+        {"text": "that they had found the wreck", "role": "noun_clause", "level": 2},
+        {"text": "but were as yet unaware", "role": "coordinated_predicate", "level": 1},
+        {"text": "that it also housed a treasure trove of beautifully preserved artefacts", "role": "noun_clause", "level": 2},
+        {"text": "beautifully preserved", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "两个 that 从句分别作 knew 和 unaware 后的信息内容。",
+        "but 后省略了主语 McKee and his team，与前半句共用主语。",
+        "had found 使用过去完成时，强调找到沉船发生在他们确认这一点之前。",
+        "it 指代 the wreck，housed 表示沉船内部容纳、藏有文物。"
+      ],
+      "expressions": [
+        {"text": "know for certain", "meaning_zh": "确切知道"},
+        {"text": "as yet", "meaning_zh": "到当时为止；尚"},
+        {"text": "a treasure trove of", "meaning_zh": "大量珍贵的……"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "Interest in the project grew, and in 1979, The Mary Rose Trust was formed, with Prince Charles as its President and Dr Margaret Rule its Archaeological Director.",
+      "translation": "人们对该项目的兴趣日益浓厚；1979年，玛丽·罗斯信托基金会成立，查尔斯王子担任主席，玛格丽特·鲁尔博士担任考古主管。",
+      "structure": [
+        {"text": "Interest in the project", "role": "subject", "level": 1},
+        {"text": "grew", "role": "verb_phrase", "level": 1},
+        {"text": "in 1979, The Mary Rose Trust was formed", "role": "coordinated_clause", "level": 1},
+        {"text": "with Prince Charles as its President and Dr Margaret Rule its Archaeological Director", "role": "with_absolute_construction", "level": 1}
+      ],
+      "difficult_points": [
+        "was formed 是被动结构，表示信托基金会成立。",
+        "with 复合结构补充说明基金会成立后的两项人事安排。",
+        "Dr Margaret Rule 后省略了与前项对应的 as，但含义仍是“担任考古主管”。"
+      ],
+      "expressions": [
+        {"text": "interest in", "meaning_zh": "对……的兴趣"},
+        {"text": "with somebody as", "meaning_zh": "由某人担任……"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "The decision whether or not to salvage the wreck was not an easy one, although an excavation in 1978 had shown that it might be possible to raise the hull.",
+      "translation": "是否打捞沉船并不是一个容易作出的决定，尽管1978年的一次发掘已经表明，抬升船体或许可行。",
+      "structure": [
+        {"text": "The decision whether or not to salvage the wreck", "role": "subject", "level": 1},
+        {"text": "whether or not to salvage the wreck", "role": "content_clause", "level": 2},
+        {"text": "was not an easy one", "role": "verb_phrase", "level": 1},
+        {"text": "although an excavation in 1978 had shown that it might be possible to raise the hull", "role": "adverbial_clause", "level": 1},
+        {"text": "that it might be possible to raise the hull", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "whether or not to salvage the wreck 具体说明 decision 的内容。",
+        "one 指代 decision，用来避免重复。",
+        "although 引导让步状语从句：技术可能可行并不意味着决策容易。",
+        "it 是形式主语，真正的主语是 to raise the hull。"
+      ],
+      "expressions": [
+        {"text": "whether or not to", "meaning_zh": "是否要……"},
+        {"text": "it might be possible to", "meaning_zh": "或许可以……"}
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "While the original aim was to raise the hull if at all feasible, the operation was not given the go-ahead until January 1982, when all the necessary information was available.",
+      "translation": "尽管最初的目标是在完全可行的情况下抬升船体，但直到1982年1月，在所有必要信息都已具备后，这项行动才获准实施。",
+      "structure": [
+        {"text": "While the original aim was to raise the hull if at all feasible", "role": "adverbial_clause", "level": 1},
+        {"text": "to raise the hull", "role": "predicative_complement", "level": 2},
+        {"text": "if at all feasible", "role": "elliptical_clause", "level": 2},
+        {"text": "the operation", "role": "subject", "level": 1},
+        {"text": "was not given the go-ahead until January 1982", "role": "verb_phrase", "level": 1},
+        {"text": "when all the necessary information was available", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "While 引导让步状语从句，连接最初目标与迟迟未获批准的事实。",
+        "if at all feasible 是省略结构，完整含义为 if raising the hull was at all feasible。",
+        "not ... until 表示“直到……才”，强调获批时间较晚。",
+        "when 引导非限制性定语从句，补充说明1982年1月时的条件。"
+      ],
+      "expressions": [
+        {"text": "if at all feasible", "meaning_zh": "只要确实可行"},
+        {"text": "give the go-ahead", "meaning_zh": "批准实施"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "An important factor in trying to salvage the Mary Rose was that the remaining hull was an open shell.",
+      "translation": "打捞玛丽·罗斯号时一个重要的考量是，残存的船体是一个敞开的空壳结构。",
+      "structure": [
+        {"text": "An important factor in trying to salvage the Mary Rose", "role": "subject", "level": 1},
+        {"text": "in trying to salvage the Mary Rose", "role": "prepositional_phrase", "level": 2},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "that the remaining hull was an open shell", "role": "predicative_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "in trying to salvage the Mary Rose 限定 factor 所涉及的情境。",
+        "that 引导表语从句，具体说明这个重要因素是什么。",
+        "open shell 指船体不再是封闭完整结构，因而打捞时更加脆弱。"
+      ],
+      "expressions": [
+        {"text": "an important factor in", "meaning_zh": "……中的一个重要因素"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "This led to an important decision being taken: namely to carry out the lifting operation in three very distinct stages.",
+      "translation": "这一点促成了一项重要决定：也就是把抬升作业分为三个界限分明的阶段实施。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "led to", "role": "verb_phrase", "level": 1},
+        {"text": "an important decision being taken", "role": "gerund_phrase", "level": 1},
+        {"text": "to carry out the lifting operation in three very distinct stages", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "This 指代上一句所说船体是敞开空壳这一情况。",
+        "being taken 是动名词的被动形式，与 decision 构成 lead to 后的宾语。",
+        "冒号后的 namely 引出决定的具体内容。"
+      ],
+      "expressions": [
+        {"text": "lead to", "meaning_zh": "导致；促成"},
+        {"text": "carry out an operation", "meaning_zh": "实施一项作业"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "The hull was attached to a lifting frame via a network of bolts and lifting wires.",
+      "translation": "船体通过由螺栓和起吊钢索组成的网络连接到一个起吊框架上。",
+      "structure": [
+        {"text": "The hull", "role": "subject", "level": 1},
+        {"text": "was attached to a lifting frame", "role": "verb_phrase", "level": 1},
+        {"text": "via a network of bolts and lifting wires", "role": "means_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "was attached to 是被动结构，表示船体被固定在起吊框架上。",
+        "via 引出实现连接所采用的方式或媒介。",
+        "a network of 强调大量螺栓与钢索相互配合形成连接系统。"
+      ],
+      "expressions": [
+        {"text": "be attached to", "meaning_zh": "被连接或固定在……上"},
+        {"text": "a network of", "meaning_zh": "由……构成的网络"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "The problem of the hull being sucked back downwards into the mud was overcome by using 12 hydraulic jacks.",
+      "translation": "通过使用12台液压千斤顶，人们克服了船体被吸回下方泥层的问题。",
+      "structure": [
+        {"text": "The problem of the hull being sucked back downwards into the mud", "role": "subject", "level": 1},
+        {"text": "the hull being sucked back downwards into the mud", "role": "gerund_phrase", "level": 2},
+        {"text": "was overcome", "role": "verb_phrase", "level": 1},
+        {"text": "by using 12 hydraulic jacks", "role": "means_adverbial", "level": 1}
+      ],
+      "difficult_points": [
+        "being sucked 是动名词的被动形式，说明 problem 的具体内容。",
+        "was overcome by 使用被动语态，并由 by using 引出解决手段。",
+        "back downwards 表明船体在被抬起后可能再次向下陷入泥中。"
+      ],
+      "expressions": [
+        {"text": "overcome a problem by", "meaning_zh": "通过……克服问题"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "These raised it a few centimetres over a period of several days, as the lifting frame rose slowly up its four legs.",
+      "translation": "在几天时间里，这些千斤顶把船体抬高了几厘米，同时起吊框架沿着四条支腿缓慢上升。",
+      "structure": [
+        {"text": "These", "role": "subject", "level": 1},
+        {"text": "raised it a few centimetres", "role": "verb_phrase", "level": 1},
+        {"text": "over a period of several days", "role": "duration_adverbial", "level": 1},
+        {"text": "as the lifting frame rose slowly up its four legs", "role": "adverbial_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "These 指代上一句的 12 hydraulic jacks，it 指代 the hull。",
+        "as 引导时间状语从句，表示船体和框架的动作同步进行。",
+        "raise it a few centimetres 中距离短语作宾语补足性成分，说明抬升幅度。"
+      ],
+      "expressions": [
+        {"text": "over a period of", "meaning_zh": "在……的一段时间内"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "It was only when the hull was hanging freely from the lifting frame, clear of the seabed and the suction effect of the surrounding mud, that the salvage operation progressed to the second stage.",
+      "translation": "只有当船体自由悬挂在起吊框架下，完全脱离海床和周围泥层的吸力时，打捞作业才进入第二阶段。",
+      "structure": [
+        {"text": "It was only when the hull was hanging freely from the lifting frame", "role": "cleft_construction", "level": 1},
+        {"text": "when the hull was hanging freely from the lifting frame", "role": "adverbial_clause", "level": 2},
+        {"text": "clear of the seabed and the suction effect of the surrounding mud", "role": "subject_complement", "level": 2},
+        {"text": "that the salvage operation progressed to the second stage", "role": "focused_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "It was only when ... that ... 是强调结构，突出进入第二阶段所需的时间条件。",
+        "clear of 表示船体已经摆脱海床及泥层吸力。",
+        "hanging freely 表示船体不再由海床承托，而是完全悬吊在框架上。"
+      ],
+      "expressions": [
+        {"text": "It was only when ... that ...", "meaning_zh": "只有当……时才……"},
+        {"text": "clear of", "meaning_zh": "脱离；避开"},
+        {"text": "progress to", "meaning_zh": "推进到……阶段"}
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 34,
+      "sentence": "In this stage, the lifting frame was fixed to a hook attached to a crane, and the hull was lifted completely clear of the seabed and transferred underwater into the lifting cradle.",
+      "translation": "在这一阶段，起吊框架被固定在与起重机相连的吊钩上，船体随后被完全吊离海床，并在水下转移到起吊托架中。",
+      "structure": [
+        {"text": "In this stage", "role": "stage_adverbial", "level": 1},
+        {"text": "the lifting frame", "role": "subject", "level": 1},
+        {"text": "was fixed to a hook attached to a crane", "role": "verb_phrase", "level": 1},
+        {"text": "attached to a crane", "role": "participial_phrase", "level": 2},
+        {"text": "the hull was lifted completely clear of the seabed", "role": "coordinated_clause", "level": 1},
+        {"text": "transferred underwater into the lifting cradle", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": [
+        "attached to a crane 是过去分词短语，修饰 a hook，而不是 lifting frame。",
+        "was lifted 和 transferred 共用主语 the hull 及助动词 was，构成并列被动谓语。",
+        "underwater 是状语，说明转移过程在水下完成。"
+      ],
+      "expressions": [
+        {"text": "be fixed to", "meaning_zh": "被固定在……上"},
+        {"text": "be transferred into", "meaning_zh": "被转移到……中"}
+      ]
+    },
+    {
+      "id": "F-08",
+      "paragraph_label": "F",
+      "sentence_index": 35,
+      "sentence": "This required precise positioning to locate the legs into the 'stabbing guides' of the lifting cradle.",
+      "translation": "这需要精确定位，才能把支腿安放进起吊托架的“插入式导向槽”中。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "required", "role": "verb_phrase", "level": 1},
+        {"text": "precise positioning", "role": "object", "level": 1},
+        {"text": "to locate the legs into the 'stabbing guides' of the lifting cradle", "role": "purpose_infinitive", "level": 1}
+      ],
+      "difficult_points": [
+        "This 指代把船体在水下转移进起吊托架的操作。",
+        "to locate 表示精确定位的目的，即让支腿进入导向装置。",
+        "locate 在此表示把部件准确安置到指定位置，而不是“发现位置”。"
+      ],
+      "expressions": [
+        {"text": "require precise positioning", "meaning_zh": "需要精确定位"}
+      ]
+    },
+    {
+      "id": "F-09",
+      "paragraph_label": "F",
+      "sentence_index": 36,
+      "sentence": "The lifting cradle was designed to fit the hull using archaeological survey drawings, and was fitted with air bags to provide additional cushioning for the hull's delicate timber framework.",
+      "translation": "起吊托架依据考古测绘图设计，以贴合船体；托架还装有气囊，为船体脆弱的木质框架提供额外缓冲。",
+      "structure": [
+        {"text": "The lifting cradle", "role": "subject", "level": 1},
+        {"text": "was designed to fit the hull", "role": "verb_phrase", "level": 1},
+        {"text": "using archaeological survey drawings", "role": "participial_phrase", "level": 1},
+        {"text": "was fitted with air bags", "role": "coordinated_predicate", "level": 1},
+        {"text": "to provide additional cushioning for the hull's delicate timber framework", "role": "purpose_infinitive", "level": 2}
+      ],
+      "difficult_points": [
+        "was designed 和 was fitted 是共用主语 The lifting cradle 的并列被动谓语。",
+        "using archaeological survey drawings 表示设计托架时所依据的工具或资料。",
+        "to provide 引出安装气囊的目的。",
+        "fit the hull 表示托架的形状与船体相配，而不是“把船体安装进去”。"
+      ],
+      "expressions": [
+        {"text": "be designed to", "meaning_zh": "被设计用于……"},
+        {"text": "be fitted with", "meaning_zh": "配备有……"},
+        {"text": "provide cushioning for", "meaning_zh": "为……提供缓冲"}
+      ]
+    },
+    {
+      "id": "F-10",
+      "paragraph_label": "F",
+      "sentence_index": 37,
+      "sentence": "The third and final stage was to lift the entire structure into the air, by which time the hull was also supported from below.",
+      "translation": "第三个也是最后一个阶段是把整个结构吊出水面；到那时，船体也已从下方得到支撑。",
+      "structure": [
+        {"text": "The third and final stage", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "to lift the entire structure into the air", "role": "predicative_complement", "level": 1},
+        {"text": "by which time the hull was also supported from below", "role": "relative_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "to lift the entire structure into the air 是不定式作表语，说明第三阶段的内容。",
+        "by which time 相当于 by that time，表示“到那个时候”。",
+        "was supported from below 是被动结构，说明船体此时有了底部支撑。"
+      ],
+      "expressions": [
+        {"text": "by which time", "meaning_zh": "到那时"},
+        {"text": "be supported from below", "meaning_zh": "从下方得到支撑"}
+      ]
+    },
+    {
+      "id": "F-11",
+      "paragraph_label": "F",
+      "sentence_index": 38,
+      "sentence": "Finally, on 11 October 1982, millions of people around the world held their breath as the timber skeleton of the Mary Rose was lifted clear of the water, ready to be returned home to Portsmouth.",
+      "translation": "终于，在1982年10月11日，当玛丽·罗斯号的木质骨架被吊离水面、即将重返朴次茅斯故乡时，世界各地数百万人都屏息凝神。",
+      "structure": [
+        {"text": "Finally, on 11 October 1982", "role": "time_adverbial", "level": 1},
+        {"text": "millions of people around the world", "role": "subject", "level": 1},
+        {"text": "held their breath", "role": "verb_phrase", "level": 1},
+        {"text": "as the timber skeleton of the Mary Rose was lifted clear of the water", "role": "adverbial_clause", "level": 1},
+        {"text": "ready to be returned home to Portsmouth", "role": "adjective_phrase", "level": 2},
+        {"text": "to be returned home to Portsmouth", "role": "infinitive_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "held their breath 是习语，表示人们因紧张和期待而屏息关注。",
+        "as 引导时间状语从句，说明全球观众屏息的时刻。",
+        "ready to be returned 是形容词短语补充船体被吊起后的状态，其中不定式使用被动形式。",
+        "the timber skeleton 指只剩木质框架的船体，而非完整船只。"
+      ],
+      "expressions": [
+        {"text": "hold one's breath", "meaning_zh": "屏息以待"},
+        {"text": "be lifted clear of", "meaning_zh": "被吊起并完全脱离……"},
+        {"text": "be ready to be returned", "meaning_zh": "即将被送回"}
+      ]
+    }
+  ]
+}

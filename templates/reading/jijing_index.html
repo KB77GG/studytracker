@@ -6,6 +6,27 @@
 <title>阅读机经练习 · Sage Path</title>
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 {% include "listening/_library_styles.html" %}
+<style>
+.reading-test-entry { position: relative; min-width: 0; }
+.reading-test-entry .listening-test-link { height: 100%; }
+.reading-study-entry {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  padding: 4px 8px;
+  border: 1px solid rgba(47, 142, 135, .3);
+  border-radius: 999px;
+  color: var(--brand-dark);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+}
+.reading-study-entry[hidden] { display: none; }
+.reading-study-entry:hover { background: var(--brand-soft); }
+</style>
 </head>
 <body>
 <main class="listening-library">
@@ -35,13 +56,16 @@
       </header>
       <div class="listening-test-grid">
         {% for test in book.tests %}
-        <a class="listening-test-link{% if test.practice_status %} listening-test-link--done{% endif %}" href="{{ url_for('reading_jijing_practice', test_id=test.id) }}">
-          <span class="listening-test-link__name">Test {{ test.test }}</span>
-          <span class="listening-test-link__meta">{{ test.passage_count }} Passage<br>{{ test.question_count }} 题</span>
-          {% if test.practice_status %}
-          <span class="listening-test-link__status">已刷 · {{ test.practice_status.accuracy }}%</span>
-          {% endif %}
-        </a>
+        <div class="reading-test-entry">
+          <a class="listening-test-link{% if test.practice_status %} listening-test-link--done{% endif %}" href="{{ url_for('reading_jijing_practice', test_id=test.id) }}">
+            <span class="listening-test-link__name">Test {{ test.test }}</span>
+            <span class="listening-test-link__meta">{{ test.passage_count }} Passage<br>{{ test.question_count }} 题</span>
+            {% if test.practice_status %}
+            <span class="listening-test-link__status">已刷 · {{ test.practice_status.accuracy }}%</span>
+            {% endif %}
+          </a>
+          <a class="reading-study-entry" data-reading-study-test="{{ test.id }}" href="/reading/study/{{ test.id }}" hidden>学习</a>
+        </div>
         {% endfor %}
       </div>
     </article>
@@ -49,5 +73,20 @@
   </section>
   {% endif %}
 </main>
+<script>
+(async function revealReadingStudyEntries() {
+  try {
+    const response = await fetch("/api/reading-study/catalog", { credentials: "same-origin" });
+    if (!response.ok) return;
+    const data = await response.json();
+    const available = new Set((data.sources?.reading_jijing || []).map((row) => row.test_id));
+    document.querySelectorAll("[data-reading-study-test]").forEach((link) => {
+      if (available.has(link.dataset.readingStudyTest)) link.hidden = false;
+    });
+  } catch (_error) {
+    // 解析入口是渐进增强；查询失败不影响目录页。
+  }
+})();
+</script>
 </body>
 </html>

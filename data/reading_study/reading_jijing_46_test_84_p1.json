@@ -1,0 +1,529 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_46_test_84",
+  "passage_id": "reading_jijing_46_test_84_p1",
+  "passage_title": "Secret of Thailand's Success?",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "It is a question officials here in Asia are being posed more and more: Why are your economies so vibrant?",
+      "translation": "亚洲官员越来越频繁地被问到这样一个问题：为什么你们的经济如此充满活力？",
+      "structure": [
+        {"text": "It is a question", "role": "main_clause", "level": 1},
+        {"text": "officials here in Asia are being posed more and more", "role": "reduced_relative_clause", "level": 2},
+        {"text": "Why are your economies so vibrant?", "role": "question_content", "level": 2}
+      ],
+      "difficult_points": ["officials 是 being posed 的承受者，原文用被动语态表示官员被人提问。", "Why 引导的直接问句具体说明前面的 question，采用疑问语序。"],
+      "expressions": [{"text": "more and more", "meaning_zh": "越来越频繁地"}, {"text": "pose a question", "meaning_zh": "提出问题"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "Answers include young and swelling populations, decreased debt, growing cities, emerging middle-class consumer sectors, evolving markets and, of course, (China's rise.",
+      "translation": "答案包括年轻且不断增长的人口、下降的债务、扩张中的城市、新兴的中产消费群体、不断演变的市场，当然还有中国的崛起。",
+      "structure": [
+        {"text": "Answers", "role": "subject", "level": 1},
+        {"text": "include", "role": "predicate", "level": 1},
+        {"text": "young and swelling populations, decreased debt, growing cities, emerging middle-class consumer sectors, evolving markets and, of course, (China's rise", "role": "compound_object", "level": 1}
+      ],
+      "difficult_points": ["include 后接多个并列名词短语，共同列举经济活力的来源。", "young、swelling、decreased、growing、emerging 和 evolving 分别作前置修饰语；China 前的左括号是源文异常。"],
+      "expressions": [{"text": "middle-class consumer sectors", "meaning_zh": "中产阶级消费群体"}, {"text": "China's rise", "meaning_zh": "中国的崛起"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "Add this to that list: Women and their increasing role in Asia's economies.",
+      "translation": "还要把这一项加进清单：女性，以及她们在亚洲经济中日益重要的作用。",
+      "structure": [
+        {"text": "Add", "role": "imperative_predicate", "level": 1},
+        {"text": "this", "role": "object", "level": 1},
+        {"text": "to that list", "role": "prepositional_complement", "level": 1},
+        {"text": "Women and their increasing role in Asia's economies", "role": "appositive_explanation", "level": 2}
+      ],
+      "difficult_points": ["本句是祈使句，省略了主语 you。", "冒号后的名词短语解释 this 的具体内容。"],
+      "expressions": [{"text": "add ... to the list", "meaning_zh": "把……加入清单"}, {"text": "play an increasing role", "meaning_zh": "发挥越来越重要的作用"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "The idea is that the more opportunities women have, the more vibrant economies are and, consequently, the less need there is to amass a huge public debt to boost growth.",
+      "translation": "其观点是：女性拥有的机会越多，经济就越有活力，因此也越没有必要积累巨额公共债务来刺激增长。",
+      "structure": [
+        {"text": "The idea is", "role": "main_clause", "level": 1},
+        {"text": "that the more opportunities women have, the more vibrant economies are", "role": "predicative_clause", "level": 2},
+        {"text": "the less need there is to amass a huge public debt", "role": "comparative_parallel_clause", "level": 2},
+        {"text": "to boost growth", "role": "purpose_infinitive", "level": 3}
+      ],
+      "difficult_points": ["that 引导表语从句，说明 idea 的具体内容。", "the more..., the more... 与 the less... 构成“越……越……”的关联比较结构。", "to amass 修饰 need，to boost growth 表示积累债务的目的。"],
+      "expressions": [{"text": "amass a huge public debt", "meaning_zh": "累积巨额公共债务"}, {"text": "boost growth", "meaning_zh": "刺激增长"}]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "It is an idea bolstered by a new survey by MasterCard International Inc., which compares the socio-economic level of women with men in Asia-Pacific nations.",
+      "translation": "万事达国际公司的一项新调查为这一观点提供了支持；该调查比较了亚太国家中女性与男性的社会经济水平。",
+      "structure": [
+        {"text": "It is an idea", "role": "main_clause", "level": 1},
+        {"text": "bolstered by a new survey by MasterCard International Inc.", "role": "past_participle_modifier", "level": 2},
+        {"text": "which compares the socio-economic level of women with men in Asia-Pacific nations", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["bolstered by 是过去分词短语，修饰 idea，表示该观点得到调查支持。", "which 指代 a new survey，并在定语从句中作主语。"],
+      "expressions": [{"text": "be bolstered by", "meaning_zh": "得到……的支持"}, {"text": "compare ... with ...", "meaning_zh": "把……与……比较"}]
+    },
+    {
+      "id": "A-06", "paragraph_label": "A", "sentence_index": 6,
+      "sentence": "The gauge uses four key indicators: participation in the labour force, college education, managerial positions, and above-median income.",
+      "translation": "这一衡量指标采用四项关键标准：劳动参与、大学教育、管理职位以及高于中位数的收入。",
+      "structure": [
+        {"text": "The gauge", "role": "subject", "level": 1},
+        {"text": "uses", "role": "predicate", "level": 1},
+        {"text": "four key indicators", "role": "object", "level": 1},
+        {"text": "participation in the labour force, college education, managerial positions, and above-median income", "role": "appositive_list", "level": 2}
+      ],
+      "difficult_points": ["冒号后的四项并列内容具体解释 four key indicators。", "above-median 是复合形容词，表示高于收入中位数。"],
+      "expressions": [{"text": "key indicator", "meaning_zh": "关键指标"}, {"text": "participation in the labour force", "meaning_zh": "劳动参与"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "Which Asian nation is doing host when it comes to women's advancement?",
+      "translation": "谈到女性发展，哪个亚洲国家表现最好？",
+      "structure": [
+        {"text": "Which Asian nation", "role": "interrogative_subject", "level": 1},
+        {"text": "is doing host", "role": "predicate", "level": 1},
+        {"text": "when it comes to women's advancement", "role": "topic_adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["Which Asian nation 是疑问主语，因此主句核心是在询问国家。", "when it comes to 表示“谈到……时”；doing host 应为源文中的用词异常，结合语境理解为“表现最好”。"],
+      "expressions": [{"text": "when it comes to", "meaning_zh": "谈到；就……而言"}, {"text": "women's advancement", "meaning_zh": "女性发展与进步"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "Thailand.",
+      "translation": "泰国。",
+      "structure": [{"text": "Thailand", "role": "elliptical_answer", "level": 1}],
+      "difficult_points": ["这是对上一句问句的省略回答，完整意思是 Thailand is doing best。", "单独使用国名形成强调，使答案直接醒目。"],
+      "expressions": []
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "It scored 92.3 of a possible 100, and according to MasterCard's index, 100 equals gender equality.",
+      "translation": "泰国在满分100分中获得92.3分；按照万事达的指数，100分代表性别平等。",
+      "structure": [
+        {"text": "It scored 92.3 of a possible 100", "role": "coordinate_clause", "level": 1},
+        {"text": "according to MasterCard's index", "role": "viewpoint_adverbial", "level": 2},
+        {"text": "100 equals gender equality", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["It 回指上一句的 Thailand。", "and 连接两个并列分句，后句解释指数满分所代表的含义。"],
+      "expressions": [{"text": "according to", "meaning_zh": "根据"}, {"text": "gender equality", "meaning_zh": "性别平等"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "The survey was based on interviews with 300 to 350 women in thirteen nations and national statistics.",
+      "translation": "这项调查以对13个国家300至350名女性的访谈以及各国统计数据为基础。",
+      "structure": [
+        {"text": "The survey", "role": "subject", "level": 1},
+        {"text": "was based on", "role": "passive_predicate", "level": 1},
+        {"text": "interviews with 300 to 350 women in thirteen nations and national statistics", "role": "prepositional_complement", "level": 1}
+      ],
+      "difficult_points": ["was based on 表示调查的依据，采用被动语态。", "and 连接 interviews 与 national statistics 两类调查依据。"],
+      "expressions": [{"text": "be based on", "meaning_zh": "以……为依据"}, {"text": "national statistics", "meaning_zh": "国家统计数据"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "Malaysia came in second with a score of 86.2, while China came in third with 68.4.",
+      "translation": "马来西亚以86.2分位居第二，中国则以68.4分排名第三。",
+      "structure": [
+        {"text": "Malaysia came in second with a score of 86.2", "role": "main_clause", "level": 1},
+        {"text": "while China came in third with 68.4", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["come in second/third 表示在排名中位列第二或第三。", "while 在此表示对照而非时间，连接马来西亚和中国的名次。"],
+      "expressions": [{"text": "come in second", "meaning_zh": "位列第二"}, {"text": "with a score of", "meaning_zh": "以……的分数"}]
+    },
+    {
+      "id": "B-06", "paragraph_label": "B", "sentence_index": 12,
+      "sentence": "The average score in Asia was 67.7.",
+      "translation": "亚洲的平均得分为67.7分。",
+      "structure": [{"text": "The average score in Asia", "role": "subject", "level": 1}, {"text": "was", "role": "linking_verb", "level": 1}, {"text": "67.7", "role": "subject_complement", "level": 1}],
+      "difficult_points": ["in Asia 修饰 average score，限定统计范围。", "was 后的数字作表语，说明平均得分。"],
+      "expressions": [{"text": "average score", "meaning_zh": "平均得分"}]
+    },
+    {
+      "id": "B-07", "paragraph_label": "B", "sentence_index": 13,
+      "sentence": "At the bottom of the list is South Korea (45.5), followed by Indonesia (52.5), and Japan (54.5).",
+      "translation": "榜单垫底的是韩国（45.5分），其后是印度尼西亚（52.5分）和日本（54.5分）。",
+      "structure": [
+        {"text": "At the bottom of the list", "role": "fronted_locative", "level": 1},
+        {"text": "is South Korea (45.5)", "role": "inverted_main_clause", "level": 1},
+        {"text": "followed by Indonesia (52.5), and Japan (54.5)", "role": "past_participle_supplement", "level": 2}
+      ],
+      "difficult_points": ["地点状语置于句首后发生完全倒装，真正的主语是 South Korea。", "followed by 是过去分词短语，补充说明其后的排名。"],
+      "expressions": [{"text": "at the bottom of the list", "meaning_zh": "位于榜单末尾"}, {"text": "be followed by", "meaning_zh": "后面紧接着……"}]
+    },
+    {
+      "id": "B-08", "paragraph_label": "B", "sentence_index": 14,
+      "sentence": "Perhaps it is a bizarre coincidence, yet MasterCard's findings fit quite neatly with two important issues in Asia: economic leadership and debt.",
+      "translation": "这也许只是一个奇怪的巧合，但万事达的调查结果恰好与亚洲的两个重要问题非常吻合：经济领导力和债务。",
+      "structure": [
+        {"text": "Perhaps it is a bizarre coincidence", "role": "coordinate_clause", "level": 1},
+        {"text": "yet MasterCard's findings fit quite neatly with two important issues in Asia", "role": "contrast_clause", "level": 1},
+        {"text": "economic leadership and debt", "role": "appositive_explanation", "level": 2}
+      ],
+      "difficult_points": ["yet 连接两个转折并列分句，强调巧合与实际吻合之间的反差。", "冒号后的 economic leadership and debt 具体说明 two important issues。"],
+      "expressions": [{"text": "fit neatly with", "meaning_zh": "与……恰好吻合"}, {"text": "economic leadership", "meaning_zh": "经济领导地位"}]
+    },
+    {
+      "id": "B-09", "paragraph_label": "B", "sentence_index": 15,
+      "sentence": "Thailand, Malaysia, and China are three economies widely seen as the future of Asia.Thailand's economic boom in recent years has prompted many leaders in the region to look at its growth strategy.",
+      "translation": "泰国、马来西亚和中国被广泛视为代表亚洲未来的三个经济体。近年来泰国的经济繁荣促使该地区许多领导人研究其增长战略。",
+      "structure": [
+        {"text": "Thailand, Malaysia, and China are three economies", "role": "first_main_clause", "level": 1},
+        {"text": "widely seen as the future of Asia", "role": "past_participle_modifier", "level": 2},
+        {"text": "Thailand's economic boom in recent years has prompted many leaders in the region", "role": "second_main_clause", "level": 1},
+        {"text": "to look at its growth strategy", "role": "object_complement_infinitive", "level": 2}
+      ],
+      "difficult_points": ["seen as 是过去分词短语，修饰 three economies，表示外界对三国的普遍看法。", "prompt sb to do sth 表示“促使某人做某事”；its 回指 Thailand。", "Asia. 与 Thailand's 之间缺少空格是源文排版异常，两句因此保留在同一条中。"],
+      "expressions": [{"text": "be seen as", "meaning_zh": "被视为"}, {"text": "prompt ... to ...", "meaning_zh": "促使……做……"}, {"text": "economic boom", "meaning_zh": "经济繁荣"}]
+    },
+    {
+      "id": "B-10", "paragraph_label": "B", "sentence_index": 16,
+      "sentence": "Malaysia, which has a female central bank governor, is one of Asia's rising economic powers.",
+      "translation": "马来西亚拥有一位女性央行行长，是亚洲正在崛起的经济强国之一。",
+      "structure": [
+        {"text": "Malaysia", "role": "subject", "level": 1},
+        {"text": "which has a female central bank governor", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "is one of Asia's rising economic powers", "role": "predicate_complement", "level": 1}
+      ],
+      "difficult_points": ["which 引导非限制性定语从句，补充说明 Malaysia。", "one of 后接复数名词 economic powers，表示众多经济强国之一。"],
+      "expressions": [{"text": "central bank governor", "meaning_zh": "中央银行行长"}, {"text": "rising economic power", "meaning_zh": "正在崛起的经济强国"}]
+    },
+    {
+      "id": "B-11", "paragraph_label": "B", "sentence_index": 17,
+      "sentence": "China, of course, is the world's hottest economy, and one that is shaking up trade patterns and business decisions everywhere.",
+      "translation": "当然，中国是全球最炙手可热的经济体，也正深刻改变着各地的贸易格局和商业决策。",
+      "structure": [
+        {"text": "China, of course, is the world's hottest economy", "role": "main_clause", "level": 1},
+        {"text": "and one", "role": "coordinate_subject_complement", "level": 1},
+        {"text": "that is shaking up trade patterns and business decisions everywhere", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["one 与 economy 同位，避免重复该名词。", "that 引导定语从句修饰 one，说明中国经济产生的影响。"],
+      "expressions": [{"text": "shake up", "meaning_zh": "彻底改变；重塑"}, {"text": "trade patterns", "meaning_zh": "贸易格局"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 18,
+      "sentence": "Something all three economies have in common is an above-average level of female participation.",
+      "translation": "这三个经济体的共同点是，女性参与程度都高于平均水平。",
+      "structure": [
+        {"text": "Something", "role": "subject_head", "level": 1},
+        {"text": "all three economies have in common", "role": "relative_clause", "level": 2},
+        {"text": "is an above-average level of female participation", "role": "predicate_complement", "level": 1}
+      ],
+      "difficult_points": ["all three economies have in common 是省略关系代词 that 的定语从句，修饰 Something。", "above-average 是复合形容词，修饰 level。"],
+      "expressions": [{"text": "have in common", "meaning_zh": "有共同之处"}, {"text": "above-average level", "meaning_zh": "高于平均的水平"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 19,
+      "sentence": "What the three worst ranked economies share are severe long-term economic challenges of high levels of debt and a female workforce that is being neglected.",
+      "translation": "排名最末的三个经济体共同面临的是严峻的长期经济挑战：高额债务，以及一支遭到忽视的女性劳动力队伍。",
+      "structure": [
+        {"text": "What the three worst ranked economies share", "role": "subject_clause", "level": 1},
+        {"text": "are", "role": "linking_verb", "level": 1},
+        {"text": "severe long-term economic challenges of high levels of debt and a female workforce", "role": "subject_complement", "level": 1},
+        {"text": "that is being neglected", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["What 引导主语从句，含义是“这三个经济体共有的事物”。", "that 引导定语从句修饰 a female workforce，is being neglected 是现在进行时的被动语态。"],
+      "expressions": [{"text": "long-term economic challenges", "meaning_zh": "长期经济挑战"}, {"text": "female workforce", "meaning_zh": "女性劳动力"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 20,
+      "sentence": "Research in economic history is very conclusive on the role of women in economic growth and development, says Yuwa Hedrick-Wong, an economic adviser to MasterCard.",
+      "translation": "万事达经济顾问余华德表示，经济史研究已经非常明确地证明了女性在经济增长与发展中的作用。",
+      "structure": [
+        {"text": "Research in economic history is very conclusive on the role of women in economic growth and development", "role": "reported_content_clause", "level": 1},
+        {"text": "says Yuwa Hedrick-Wong", "role": "inverted_reporting_clause", "level": 1},
+        {"text": "an economic adviser to MasterCard", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["引语内容置于 reporting clause 之前，says Yuwa Hedrick-Wong 使用谓语在前的倒装表达。", "an economic adviser to MasterCard 是同位语，补充说明发言者身份。"],
+      "expressions": [{"text": "be conclusive on", "meaning_zh": "对……有明确结论"}, {"text": "economic growth and development", "meaning_zh": "经济增长与发展"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 21,
+      "sentence": "The more extensive women's participation at all areas of economic activities, the higher the probability for stronger economic growth.",
+      "translation": "女性参与各领域经济活动的范围越广，实现更强劲经济增长的可能性就越高。",
+      "structure": [
+        {"text": "The more extensive women's participation at all areas of economic activities", "role": "comparative_condition", "level": 1},
+        {"text": "the higher the probability for stronger economic growth", "role": "comparative_result", "level": 1}
+      ],
+      "difficult_points": ["the more..., the higher... 是“越……越……”的关联比较结构。", "原句省略了两部分中的系动词，使表达更紧凑；at all areas 是源文搭配。"],
+      "expressions": [{"text": "economic activities", "meaning_zh": "经济活动"}, {"text": "the higher the probability", "meaning_zh": "可能性越高"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 22,
+      "sentence": "That, Hedrick-Wong says, means societies and economies that consistently fail to fully incorporate women's ability and talent in businesses, and the workplace will suffer the consequences.",
+      "translation": "余华德说，这意味着，那些始终未能在企业和职场中充分吸纳女性能力与才华的社会和经济体将承担后果。",
+      "structure": [
+        {"text": "That", "role": "subject", "level": 1},
+        {"text": "Hedrick-Wong says", "role": "parenthetical_reporting_clause", "level": 2},
+        {"text": "means", "role": "predicate", "level": 1},
+        {"text": "societies and economies that consistently fail to fully incorporate women's ability and talent in businesses, and the workplace will suffer the consequences", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["That 回指上一句关于女性参与和经济增长概率之间的关系。", "Hedrick-Wong says 是插入语；that 引导定语从句修饰 societies and economies。", "will suffer the consequences 是 means 后宾语从句的主要谓语。"],
+      "expressions": [{"text": "incorporate ... in ...", "meaning_zh": "将……纳入……"}, {"text": "suffer the consequences", "meaning_zh": "承担后果"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 23,
+      "sentence": "Take Korea, which has been walking in place economically in recent years.",
+      "translation": "以韩国为例，近年来其经济一直停滞不前。",
+      "structure": [
+        {"text": "Take Korea", "role": "imperative_main_clause", "level": 1},
+        {"text": "which has been walking in place economically in recent years", "role": "nonrestrictive_relative_clause", "level": 2}
+      ],
+      "difficult_points": ["Take Korea 是举例时常用的祈使表达，意为“以韩国为例”。", "which 指代 Korea；has been walking 表示近年持续存在的状态。"],
+      "expressions": [{"text": "take ...", "meaning_zh": "以……为例"}, {"text": "walk in place economically", "meaning_zh": "经济停滞不前"}]
+    },
+    {
+      "id": "C-07", "paragraph_label": "C", "sentence_index": 24,
+      "sentence": "Immediately following the 1997— 1998 Asian financial crisis, Korea became a regional role model as growth boomed and unemployment fell.",
+      "translation": "1997—1998年亚洲金融危机刚结束后，随着经济增长腾飞、失业率下降，韩国成为地区典范。",
+      "structure": [
+        {"text": "Immediately following the 1997— 1998 Asian financial crisis", "role": "time_adverbial", "level": 1},
+        {"text": "Korea became a regional role model", "role": "main_clause", "level": 1},
+        {"text": "as growth boomed and unemployment fell", "role": "accompanying_clause", "level": 2}
+      ],
+      "difficult_points": ["following 在此是介词，表示“在……之后”，整个短语作时间状语。", "as 引导伴随背景从句，内部有 growth boomed 与 unemployment fell 两个并列结构。"],
+      "expressions": [{"text": "financial crisis", "meaning_zh": "金融危机"}, {"text": "regional role model", "meaning_zh": "地区典范"}]
+    },
+    {
+      "id": "C-08", "paragraph_label": "C", "sentence_index": 25,
+      "sentence": "Yet a massive increase in household debt left consumers overexposed and growth slowed.",
+      "translation": "然而，家庭债务大幅增加，使消费者背负了过高风险，经济增长也随之放缓。",
+      "structure": [
+        {"text": "a massive increase in household debt", "role": "subject", "level": 1},
+        {"text": "left consumers overexposed", "role": "first_predicate_object_complement", "level": 1},
+        {"text": "and growth slowed", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["leave + object + adjective 构成宾补结构，overexposed 说明 consumers 的状态。", "and 后的 growth slowed 是独立并列分句，而不是 left 的第二个宾语。"],
+      "expressions": [{"text": "a massive increase in", "meaning_zh": "……的大幅增加"}, {"text": "household debt", "meaning_zh": "家庭债务"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 26,
+      "sentence": "Maybe it is a just coincidence that Korea also ranks low on measures of gender equality published by the United Nations.",
+      "translation": "韩国在联合国公布的性别平等指标中排名同样靠后，也许这只是巧合。",
+      "structure": [
+        {"text": "Maybe it is a just coincidence", "role": "main_clause", "level": 1},
+        {"text": "that Korea also ranks low on measures of gender equality", "role": "content_clause", "level": 2},
+        {"text": "published by the United Nations", "role": "past_participle_modifier", "level": 3}
+      ],
+      "difficult_points": ["that 引导内容从句，具体说明 coincidence 的内容。", "published by the United Nations 是过去分词短语，修饰 measures of gender equality。"],
+      "expressions": [{"text": "rank low on", "meaning_zh": "在……方面排名靠后"}, {"text": "measures of gender equality", "meaning_zh": "性别平等衡量指标"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 27,
+      "sentence": "As of 2003, for example, it ranked below Honduras, Paraguay, Mauritius, and Ukraine in terms of women's economic and political empowerment.",
+      "translation": "例如，截至2003年，韩国在女性经济和政治赋权方面的排名低于洪都拉斯、巴拉圭、毛里求斯和乌克兰。",
+      "structure": [
+        {"text": "As of 2003", "role": "time_adverbial", "level": 1},
+        {"text": "it ranked below Honduras, Paraguay, Mauritius, and Ukraine", "role": "main_clause", "level": 1},
+        {"text": "in terms of women's economic and political empowerment", "role": "aspect_adverbial", "level": 1}
+      ],
+      "difficult_points": ["it 回指上一句的 Korea。", "in terms of 限定比较排名的方面，即女性的经济与政治赋权。"],
+      "expressions": [{"text": "as of", "meaning_zh": "截至"}, {"text": "in terms of", "meaning_zh": "就……而言"}, {"text": "economic and political empowerment", "meaning_zh": "经济与政治赋权"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 28,
+      "sentence": "Utilising more of its female workforce would deepen Korea's labour pool and increase potential growth rates in the economy.",
+      "translation": "更充分地利用女性劳动力，将扩大韩国的劳动力储备，并提高经济的潜在增长率。",
+      "structure": [
+        {"text": "Utilising more of its female workforce", "role": "gerund_subject", "level": 1},
+        {"text": "would deepen Korea's labour pool", "role": "first_predicate", "level": 1},
+        {"text": "and increase potential growth rates in the economy", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["Utilising 是动名词，连同后面的宾语构成整句主语。", "would 表示假设结果；deepen 与 increase 是两个并列谓语。"],
+      "expressions": [{"text": "female workforce", "meaning_zh": "女性劳动力"}, {"text": "potential growth rates", "meaning_zh": "潜在增长率"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 29,
+      "sentence": "The same goes for Japan.",
+      "translation": "日本也是如此。",
+      "structure": [{"text": "The same", "role": "subject", "level": 1}, {"text": "goes", "role": "predicate", "level": 1}, {"text": "for Japan", "role": "prepositional_complement", "level": 1}],
+      "difficult_points": ["The same 回指上一句关于利用女性劳动力可促进经济增长的结论。", "go for 在此表示某一说法同样适用于某对象。"],
+      "expressions": [{"text": "the same goes for", "meaning_zh": "……也同样如此"}]
+    },
+    {
+      "id": "D-05", "paragraph_label": "D", "sentence_index": 30,
+      "sentence": "The reluctance of Asia's biggest economy to increase female participation and let more women into the executive suite exacerbates its biggest long-term challenge: a declining birth rate.",
+      "translation": "亚洲最大经济体不愿提高女性参与度、让更多女性进入高管层，这加剧了其最严重的长期挑战：出生率下降。",
+      "structure": [
+        {"text": "The reluctance of Asia's biggest economy to increase female participation and let more women into the executive suite", "role": "subject", "level": 1},
+        {"text": "exacerbates", "role": "predicate", "level": 1},
+        {"text": "its biggest long-term challenge", "role": "object", "level": 1},
+        {"text": "a declining birth rate", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["to increase 与 let 并列修饰 reluctance，说明日本不愿做的两件事。", "its 回指 Asia's biggest economy，即日本；冒号后的名词短语解释 challenge。"],
+      "expressions": [{"text": "increase female participation", "meaning_zh": "提高女性参与度"}, {"text": "executive suite", "meaning_zh": "企业高管层"}, {"text": "exacerbate a challenge", "meaning_zh": "加剧挑战"}]
+    },
+    {
+      "id": "D-06", "paragraph_label": "D", "sentence_index": 31,
+      "sentence": "In 2003, the number of children per Japanese woman fell to a record low of 1.29 versus about. 2 in the early 1970s.",
+      "translation": "2003年，日本平均每名女性的子女数降至创纪录的1.29人，而20世纪70年代初约为2人。",
+      "structure": [
+        {"text": "In 2003", "role": "time_adverbial", "level": 1},
+        {"text": "the number of children per Japanese woman", "role": "subject", "level": 1},
+        {"text": "fell to a record low of 1.29", "role": "predicate_complement", "level": 1},
+        {"text": "versus about. 2 in the early 1970s", "role": "comparison_phrase", "level": 1}
+      ],
+      "difficult_points": ["the number of 是主语中心，谓语用单数形式 fell。", "versus 引出与20世纪70年代初数据的对比；about 后的句点是源文异常。"],
+      "expressions": [{"text": "fall to a record low", "meaning_zh": "降至历史最低点"}, {"text": "in the early 1970s", "meaning_zh": "20世纪70年代初"}]
+    },
+    {
+      "id": "D-07", "paragraph_label": "D", "sentence_index": 32,
+      "sentence": "Preliminary government statistics suggest the rate declined further in 2004.",
+      "translation": "政府初步统计数据显示，这一比率在2004年进一步下降。",
+      "structure": [
+        {"text": "Preliminary government statistics", "role": "subject", "level": 1},
+        {"text": "suggest", "role": "predicate", "level": 1},
+        {"text": "the rate declined further in 2004", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["suggest 后接省略 that 的宾语从句。", "the rate 回指上一句的每名女性子女数量所体现的生育率。"],
+      "expressions": [{"text": "preliminary statistics", "meaning_zh": "初步统计数据"}, {"text": "decline further", "meaning_zh": "进一步下降"}]
+    },
+    {
+      "id": "D-08", "paragraph_label": "D", "sentence_index": 33,
+      "sentence": "The trend is nothing short of a crisis for a highly indebted nation of 126 million that has yet to figure out how to fund the national pension system down the road.",
+      "translation": "对于一个拥有1.26亿人口、负债累累且尚未找到未来如何为国家养老金体系筹资的国家而言，这一趋势无异于一场危机。",
+      "structure": [
+        {"text": "The trend is nothing short of a crisis", "role": "main_clause", "level": 1},
+        {"text": "for a highly indebted nation of 126 million", "role": "affected_party_adverbial", "level": 1},
+        {"text": "that has yet to figure out", "role": "relative_clause", "level": 2},
+        {"text": "how to fund the national pension system down the road", "role": "interrogative_infinitive_complement", "level": 3}
+      ],
+      "difficult_points": ["nothing short of 表示“简直就是”，用于强调严重程度。", "that 指代 a highly indebted nation；how to fund 是“疑问词 + 不定式”结构，作 figure out 的宾语。"],
+      "expressions": [{"text": "nothing short of", "meaning_zh": "简直就是；无异于"}, {"text": "have yet to", "meaning_zh": "尚未"}, {"text": "down the road", "meaning_zh": "在未来"}]
+    },
+    {
+      "id": "D-09", "paragraph_label": "D", "sentence_index": 34,
+      "sentence": "Yet Japan has been slow to realise that for many women, the decision to delay childbirth is a form of rebellion against societal expectations to have children and become housewives,",
+      "translation": "然而，日本迟迟没有意识到，对许多女性而言，推迟生育的决定是对社会期待她们生儿育女并成为家庭主妇的一种反抗，",
+      "structure": [
+        {"text": "Japan has been slow to realise", "role": "main_clause", "level": 1},
+        {"text": "that for many women, the decision to delay childbirth is a form of rebellion against societal expectations", "role": "object_clause", "level": 2},
+        {"text": "to have children and become housewives", "role": "infinitive_modifier", "level": 3}
+      ],
+      "difficult_points": ["has been slow to realise 表示日本长期以来迟迟未能认识到某事。", "that 引导宾语从句；to delay childbirth 修饰 decision。", "to have children 与 become housewives 并列，说明 societal expectations 的内容；句末逗号是源文异常。"],
+      "expressions": [{"text": "be slow to realise", "meaning_zh": "迟迟没有意识到"}, {"text": "delay childbirth", "meaning_zh": "推迟生育"}, {"text": "a form of rebellion against", "meaning_zh": "对……的一种反抗"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 35,
+      "sentence": "It may be 2005, yet having children is a career-ending decision for millions of bright, ambit ions, and well-educated Japanese,",
+      "translation": "尽管已经是2005年，但对数百万聪明、有抱负且受过良好教育的日本女性来说，生育仍是一个会终结职业生涯的决定，",
+      "structure": [
+        {"text": "It may be 2005", "role": "concessive_clause", "level": 1},
+        {"text": "yet having children", "role": "gerund_subject", "level": 1},
+        {"text": "is a career-ending decision", "role": "predicate_complement", "level": 1},
+        {"text": "for millions of bright, ambit ions, and well-educated Japanese", "role": "affected_party_adverbial", "level": 1}
+      ],
+      "difficult_points": ["yet 引出与时代背景相反的现实，表示强烈转折。", "having children 是动名词短语作主语；career-ending 是复合形容词。", "ambit ions 是源文拼写断裂，Japanese 在语境中指日本女性；句末逗号保留源文异常。"],
+      "expressions": [{"text": "career-ending decision", "meaning_zh": "终结职业生涯的决定"}, {"text": "well-educated", "meaning_zh": "受过良好教育的"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 36,
+      "sentence": "Until corrected, Japan's birth rate will drop and economic growth will lag,",
+      "translation": "在这一问题得到纠正之前，日本的生育率将继续下降，经济增长也会滞后，",
+      "structure": [
+        {"text": "Until corrected", "role": "reduced_time_clause", "level": 1},
+        {"text": "Japan's birth rate will drop", "role": "main_clause", "level": 1},
+        {"text": "and economic growth will lag", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["Until corrected 是省略结构，可理解为 until this situation is corrected。", "and 连接两个并列结果：生育率下降与经济增长落后；句末逗号为源文异常。"],
+      "expressions": [{"text": "birth rate", "meaning_zh": "生育率"}, {"text": "economic growth will lag", "meaning_zh": "经济增长将会滞后"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 37,
+      "sentence": "UN Secretary General Kofi Annan was absolutely right earlier this month when he said no other policy is as likely to raise economic productivity than the empowerment of women.",
+      "translation": "联合国秘书长科菲·安南本月早些时候说，没有其他政策比赋权女性更有可能提高经济生产率；他的这一说法完全正确。",
+      "structure": [
+        {"text": "UN Secretary General Kofi Annan was absolutely right earlier this month", "role": "main_clause", "level": 1},
+        {"text": "when he said", "role": "time_clause", "level": 2},
+        {"text": "no other policy is as likely to raise economic productivity than the empowerment of women", "role": "object_clause", "level": 3}
+      ],
+      "difficult_points": ["when 引导时间从句，说明安南何时发表了被评价为正确的观点。", "said 后省略 that；no other policy...than... 表示女性赋权在各种政策中最可能提高生产率。"],
+      "expressions": [{"text": "raise economic productivity", "meaning_zh": "提高经济生产率"}, {"text": "the empowerment of women", "meaning_zh": "女性赋权"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 38,
+      "sentence": "Here, in Thailand, the government is getting some decent marks in this regard, and the economy's 6 per cent-plus growth rate may be a direct result.",
+      "translation": "在泰国，政府在这方面获得了相当不错的评价，而该国超过6%的经济增长率或许正是一个直接结果。",
+      "structure": [
+        {"text": "the government is getting some decent marks in this regard", "role": "first_main_clause", "level": 1},
+        {"text": "and the economy's 6 per cent-plus growth rate may be a direct result", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["in this regard 回指赋予女性更多经济机会这一方面。", "and 后是独立并列分句；may 表示作者对因果关系持保留判断。"],
+      "expressions": [{"text": "get decent marks", "meaning_zh": "获得不错的评价"}, {"text": "in this regard", "meaning_zh": "在这方面"}, {"text": "a direct result", "meaning_zh": "直接结果"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 39,
+      "sentence": "Thailand still has a long way to go.",
+      "translation": "泰国仍有很长的路要走。",
+      "structure": [{"text": "Thailand", "role": "subject", "level": 1}, {"text": "still has", "role": "predicate", "level": 1}, {"text": "a long way to go", "role": "object", "level": 1}],
+      "difficult_points": ["still 表明虽然已有进展，但改进尚未完成。", "a long way to go 是习惯表达，并非仅指实际距离。"],
+      "expressions": [{"text": "have a long way to go", "meaning_zh": "仍有很长的路要走"}]
+    },
+    {
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 40,
+      "sentence": "Yet the Bank of Thailand's deputy governor, Tarisa Watanagase, is a woman, as are seven of nine assistant governors.",
+      "translation": "不过，泰国央行副行长塔丽莎·瓦塔纳格塞是一名女性，九位助理行长中也有七位是女性。",
+      "structure": [
+        {"text": "the Bank of Thailand's deputy governor", "role": "subject", "level": 1},
+        {"text": "Tarisa Watanagase", "role": "apposition", "level": 2},
+        {"text": "is a woman", "role": "predicate_complement", "level": 1},
+        {"text": "as are seven of nine assistant governors", "role": "comparative_inverted_clause", "level": 2}
+      ],
+      "difficult_points": ["Tarisa Watanagase 是同位语，说明副行长的姓名。", "as are seven... 使用倒装，完整意思是 seven of nine assistant governors are women too。"],
+      "expressions": [{"text": "deputy governor", "meaning_zh": "副行长"}, {"text": "assistant governor", "meaning_zh": "助理行长"}]
+    },
+    {
+      "id": "E-07", "paragraph_label": "E", "sentence_index": 41,
+      "sentence": "Then there's Jada Wattanasiritham, who runs Siam Commercial Bank Plc, Thailand's fourth-biggest lender.",
+      "translation": "此外还有佳达·瓦塔纳西里探，她执掌泰国第四大贷款机构——暹罗商业银行。",
+      "structure": [
+        {"text": "Then there's Jada Wattanasiritham", "role": "existential_main_clause", "level": 1},
+        {"text": "who runs Siam Commercial Bank Plc", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "Thailand's fourth-biggest lender", "role": "apposition", "level": 3}
+      ],
+      "difficult_points": ["there's 是 there is 的缩写，用于引出另一个实例。", "who 指代 Jada Wattanasiritham；Thailand's fourth-biggest lender 与 Siam Commercial Bank Plc 构成同位关系。"],
+      "expressions": [{"text": "run a bank", "meaning_zh": "经营一家银行"}, {"text": "fourth-biggest lender", "meaning_zh": "第四大贷款机构"}]
+    },
+    {
+      "id": "E-08", "paragraph_label": "E", "sentence_index": 42,
+      "sentence": "How many female chief executives can you name in Japan or Korea?",
+      "translation": "你能说出多少位日本或韩国的女性首席执行官？",
+      "structure": [
+        {"text": "How many female chief executives", "role": "interrogative_object", "level": 1},
+        {"text": "can you name", "role": "main_question_clause", "level": 1},
+        {"text": "in Japan or Korea", "role": "scope_adverbial", "level": 1}
+      ],
+      "difficult_points": ["How many 引导特殊疑问句，询问能够列举出的女性高管数量。", "这是反问，暗示日本和韩国的女性首席执行官很少。"],
+      "expressions": [{"text": "chief executive", "meaning_zh": "首席执行官"}, {"text": "name", "meaning_zh": "说出；列举"}]
+    },
+    {
+      "id": "E-09", "paragraph_label": "E", "sentence_index": 43,
+      "sentence": "Looked at broadly in Asia, MasterCard's survey is on to something.",
+      "translation": "从整个亚洲的广阔视角来看，万事达的调查确实发现了重要问题。",
+      "structure": [
+        {"text": "Looked at broadly in Asia", "role": "past_participle_adverbial", "level": 1},
+        {"text": "MasterCard's survey", "role": "subject", "level": 1},
+        {"text": "is on to something", "role": "predicate_complement", "level": 1}
+      ],
+      "difficult_points": ["Looked at 是过去分词短语作视角状语，逻辑上表示“当这项调查被广泛审视时”。", "be on to something 是习惯表达，表示已经发现了值得重视的线索或道理。"],
+      "expressions": [{"text": "looked at broadly", "meaning_zh": "从广泛角度来看"}, {"text": "be on to something", "meaning_zh": "发现了重要线索或道理"}]
+    },
+    {
+      "id": "E-10", "paragraph_label": "E", "sentence_index": 44,
+      "sentence": "It is that giving women more opportunities to contribute to an economy is not just about fairness, but dollars and sense, too.",
+      "translation": "这个道理就是：给予女性更多为经济作贡献的机会，不仅关乎公平，也关乎实实在在的经济利益。",
+      "structure": [
+        {"text": "It is", "role": "main_clause", "level": 1},
+        {"text": "that giving women more opportunities to contribute to an economy is not just about fairness, but dollars and sense, too", "role": "predicative_clause", "level": 2}
+      ],
+      "difficult_points": ["It 回指上一句的 something，that 引导表语从句说明其具体内容。", "giving women more opportunities 是动名词短语作从句主语；to contribute 修饰 opportunities。", "not just...but... 表示“不仅……而且……”，dollars and sense 借用固定表达强调经济利益。"],
+      "expressions": [{"text": "contribute to an economy", "meaning_zh": "为经济作出贡献"}, {"text": "not just ... but ...", "meaning_zh": "不仅……而且……"}, {"text": "dollars and sense", "meaning_zh": "实际经济利益"}]
+    }
+  ]
+}

@@ -1,0 +1,596 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_46_test_84",
+  "passage_id": "reading_jijing_46_test_84_p3",
+  "passage_title": "Rise of the Robots",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "If you are into technology, you are living in wonderful times.",
+      "translation": "如果你热衷于科技，那么你正生活在一个精彩的时代。",
+      "structure": [
+        {"text": "If you are into technology", "role": "conditional_clause", "level": 2},
+        {"text": "you", "role": "subject", "level": 1},
+        {"text": "are living", "role": "predicate", "level": 1},
+        {"text": "in wonderful times", "role": "adverbial", "level": 1}
+      ],
+      "difficult_points": ["If 引导真实条件状语从句，说明后面判断成立的前提。", "be into 表示对某事物很感兴趣，并非表示身处其内部。"],
+      "expressions": [{"text": "be into technology", "meaning_zh": "热衷于科技"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "Things are developing in leaps and bounds, especially gadgets.",
+      "translation": "各种事物都在突飞猛进地发展，尤其是各类电子设备。",
+      "structure": [
+        {"text": "Things", "role": "subject", "level": 1},
+        {"text": "are developing", "role": "predicate", "level": 1},
+        {"text": "in leaps and bounds", "role": "manner_adverbial", "level": 1},
+        {"text": "especially gadgets", "role": "supplement", "level": 1}
+      ],
+      "difficult_points": ["in leaps and bounds 是习语，强调发展速度非常快。", "especially gadgets 是补充说明，突出电子设备这一类。"],
+      "expressions": [{"text": "in leaps and bounds", "meaning_zh": "突飞猛进地"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "Let us look at the technology that is set to break through.",
+      "translation": "让我们来看看那些即将取得突破的技术。",
+      "structure": [
+        {"text": "Let us", "role": "imperative_predicate", "level": 1},
+        {"text": "look at the technology", "role": "object_complement", "level": 1},
+        {"text": "that is set to break through", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["that 引导定语从句，修饰 technology。", "be set to do 表示某事已具备条件、即将发生。"],
+      "expressions": [{"text": "be set to", "meaning_zh": "即将；准备好要"}, {"text": "break through", "meaning_zh": "取得突破"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "CELESTRON SKYSCOUT",
+      "translation": "星特朗 SkyScout 天空侦察仪",
+      "structure": [{"text": "CELESTRON SKYSCOUT", "role": "section_heading", "level": 1}],
+      "difficult_points": ["这是产品名称构成的小节标题，不是完整句子。", "全大写用于标示即将介绍的科技产品。"],
+      "expressions": []
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 5,
+      "sentence": "Backyard stargazing goes seriously hi-tech with the Celestron SkyScout, which was judged to be the Best of Innovations at the New York Consumer Electronics Show press preview event in November.",
+      "translation": "有了星特朗 SkyScout，后院观星也变得相当高科技；该产品在11月纽约消费电子展的媒体预展活动中被评为“最佳创新产品”。",
+      "structure": [
+        {"text": "Backyard stargazing", "role": "subject", "level": 1},
+        {"text": "goes seriously hi-tech", "role": "predicate", "level": 1},
+        {"text": "with the Celestron SkyScout", "role": "means_adverbial", "level": 1},
+        {"text": "which was judged to be the Best of Innovations at the New York Consumer Electronics Show press preview event in November", "role": "nonrestrictive_relative_clause", "level": 2}
+      ],
+      "difficult_points": ["which 引导非限制性定语从句，指代 the Celestron SkyScout。", "was judged to be 是被动结构，表示“被评定为”。"],
+      "expressions": [{"text": "go hi-tech", "meaning_zh": "变得高科技化"}, {"text": "be judged to be", "meaning_zh": "被评定为"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 6,
+      "sentence": "It is not difficult to see why.",
+      "translation": "原因并不难理解。",
+      "structure": [
+        {"text": "It", "role": "formal_subject", "level": 1},
+        {"text": "is not difficult", "role": "linking_predicate", "level": 1},
+        {"text": "to see why", "role": "real_subject", "level": 2}
+      ],
+      "difficult_points": ["It 是形式主语，真正的主语是后面的不定式 to see why。", "why 在此省略了具体原因，承接上句的获奖事实并引出下文。"],
+      "expressions": [{"text": "It is not difficult to see why", "meaning_zh": "原因不难理解"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 7,
+      "sentence": "The SkyScout is a hand-held viewing device that is capable of finding and identifying more than 6,000 celestial objects visible to the naked eye, thus transforming the night sky into your own personal planetarium.",
+      "translation": "SkyScout 是一种手持观测设备，能够发现并识别6,000多个肉眼可见的天体，从而把夜空变成你的私人天文馆。",
+      "structure": [
+        {"text": "The SkyScout", "role": "subject", "level": 1},
+        {"text": "is a hand-held viewing device", "role": "linking_predicate", "level": 1},
+        {"text": "that is capable of finding and identifying more than 6,000 celestial objects visible to the naked eye", "role": "relative_clause", "level": 2},
+        {"text": "thus transforming the night sky into your own personal planetarium", "role": "result_participle_clause", "level": 2}
+      ],
+      "difficult_points": ["that 引导定语从句，修饰 viewing device。", "visible to the naked eye 是后置形容词短语，修饰 celestial objects。", "thus transforming 是现在分词结果状语，说明该设备带来的结果。"],
+      "expressions": [{"text": "be capable of", "meaning_zh": "能够"}, {"text": "visible to the naked eye", "meaning_zh": "肉眼可见的"}, {"text": "transform ... into ...", "meaning_zh": "把……变成……"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 8,
+      "sentence": "Using GPS technology and a substantial celestial database, the camcorder-sized SkyScout enables stargazers to point the device at any visible object in the sky, press a button, and then listen to a commentary.",
+      "translation": "借助 GPS 技术和庞大的天体数据库，这款摄像机大小的 SkyScout 能让观星者把设备对准天空中任何可见物体，按下按钮，然后收听相关解说。",
+      "structure": [
+        {"text": "Using GPS technology and a substantial celestial database", "role": "means_participle_clause", "level": 2},
+        {"text": "the camcorder-sized SkyScout", "role": "subject", "level": 1},
+        {"text": "enables stargazers", "role": "predicate_object", "level": 1},
+        {"text": "to point the device at any visible object in the sky, press a button, and then listen to a commentary", "role": "object_complement", "level": 2}
+      ],
+      "difficult_points": ["Using... 是现在分词短语，说明 SkyScout 实现功能所借助的手段。", "enable somebody to do 构成宾语加不定式补足语。", "point、press 和 listen 是三个并列动作，共用 to。"],
+      "expressions": [{"text": "enable ... to ...", "meaning_zh": "使……能够……"}, {"text": "point ... at ...", "meaning_zh": "把……对准……"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 9,
+      "sentence": "For the truly celestially challenged, if you want to view a star or planet but do not have a clue which bit of the heavens to look in, do not despair; the SkyScout's \"locate\" feature will guide you to it using illuminated arrows in the viewfinder.",
+      "translation": "对于那些确实不懂观星的人来说，如果你想看某颗恒星或行星，却完全不知道该朝天空的哪个方向找，也别灰心；SkyScout 的“定位”功能会利用取景器中的发光箭头引导你找到它。",
+      "structure": [
+        {"text": "For the truly celestially challenged", "role": "viewpoint_adverbial", "level": 1},
+        {"text": "if you want to view a star or planet but do not have a clue which bit of the heavens to look in", "role": "conditional_clause", "level": 2},
+        {"text": "do not despair", "role": "imperative_main_clause", "level": 1},
+        {"text": "the SkyScout's \"locate\" feature will guide you to it using illuminated arrows in the viewfinder", "role": "coordinated_main_clause", "level": 1}
+      ],
+      "difficult_points": ["the celestially challenged 是幽默说法，指不擅长辨认天体的人。", "which bit of the heavens to look in 是“疑问词＋不定式”结构，作 clue 的内容补充。", "it 指前文想观看的 a star or planet。"],
+      "expressions": [{"text": "not have a clue", "meaning_zh": "毫无头绪"}, {"text": "do not despair", "meaning_zh": "不要灰心"}, {"text": "guide ... to ...", "meaning_zh": "引导……找到……"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 10,
+      "sentence": "NOKIA N91",
+      "translation": "诺基亚 N91",
+      "structure": [{"text": "NOKIA N91", "role": "section_heading", "level": 1}],
+      "difficult_points": ["这是产品型号构成的小节标题，不是完整句子。", "全大写用于标明下文介绍的手机产品。"],
+      "expressions": []
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 11,
+      "sentence": "This amazing mobile jukebox is due out early in 2006.",
+      "translation": "这款令人惊叹的移动音乐盒预计于2006年初上市。",
+      "structure": [
+        {"text": "This amazing mobile jukebox", "role": "subject", "level": 1},
+        {"text": "is due out", "role": "predicate", "level": 1},
+        {"text": "early in 2006", "role": "time_adverbial", "level": 1}
+      ],
+      "difficult_points": ["mobile jukebox 是比喻，突出手机随身播放大量音乐的功能。", "be due out 表示产品预计发布或上市。"],
+      "expressions": [{"text": "be due out", "meaning_zh": "预计发布；即将上市"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 12,
+      "sentence": "Nokia's N91 looks set to be in a class of its own as a multimedia mobile phone.",
+      "translation": "作为一款多媒体手机，诺基亚 N91 看来将独树一帜。",
+      "structure": [
+        {"text": "Nokia's N91", "role": "subject", "level": 1},
+        {"text": "looks set to be", "role": "linking_predicate", "level": 1},
+        {"text": "in a class of its own", "role": "subject_complement", "level": 1},
+        {"text": "as a multimedia mobile phone", "role": "capacity_adverbial", "level": 1}
+      ],
+      "difficult_points": ["look set to do 表示从目前情况看很可能会发生。", "in a class of its own 是习语，表示出类拔萃、独一档。"],
+      "expressions": [{"text": "look set to", "meaning_zh": "看来将会"}, {"text": "in a class of its own", "meaning_zh": "独树一帜"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 13,
+      "sentence": "It will play music, take photos, surf the web and download videos, store contact details, and generally organise your life.",
+      "translation": "它可以播放音乐、拍照、上网和下载视频、保存联系人信息，还能从总体上帮你安排生活。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "will play music, take photos, surf the web and download videos, store contact details, and generally organise your life", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": ["多个动词短语并列，共用情态意义的 will。", "generally organise your life 是概括性表达，夸张地总结手机的个人管理功能。"],
+      "expressions": [{"text": "surf the web", "meaning_zh": "浏览网页"}, {"text": "store contact details", "meaning_zh": "保存联系人信息"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 14,
+      "sentence": "The robust little phone, resplendent in its stainless steel case, is the first Nokia to be equipped with a hard drive (4Gb), which means that it can store up to 3,000 songs.",
+      "translation": "这款小巧耐用的手机配上不锈钢外壳，显得十分亮眼；它是首款配备4GB硬盘的诺基亚手机，这意味着它最多可以存储3,000首歌曲。",
+      "structure": [
+        {"text": "The robust little phone", "role": "subject", "level": 1},
+        {"text": "resplendent in its stainless steel case", "role": "supplementary_adjective_phrase", "level": 2},
+        {"text": "is the first Nokia to be equipped with a hard drive (4Gb)", "role": "linking_predicate", "level": 1},
+        {"text": "which means that it can store up to 3,000 songs", "role": "nonrestrictive_relative_clause", "level": 2}
+      ],
+      "difficult_points": ["resplendent... 是插入的形容词短语，补充手机外观。", "to be equipped... 是后置不定式，修饰 the first Nokia。", "which 指代前面“配有硬盘”这一整件事。"],
+      "expressions": [{"text": "be equipped with", "meaning_zh": "配备有"}, {"text": "up to", "meaning_zh": "多达；最多"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 15,
+      "sentence": "The N91, which has a hi-fi quality headset and remote control, supports a wide range of digital music formats, including MP3, Real, WAV, and WMA.",
+      "translation": "N91 配有高保真耳机和遥控器，并支持包括 MP3、Real、WAV 和 WMA 在内的多种数字音乐格式。",
+      "structure": [
+        {"text": "The N91", "role": "subject", "level": 1},
+        {"text": "which has a hi-fi quality headset and remote control", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "supports a wide range of digital music formats", "role": "predicate_object", "level": 1},
+        {"text": "including MP3, Real, WAV, and WMA", "role": "example_participle_phrase", "level": 2}
+      ],
+      "difficult_points": ["which 引导非限制性定语从句，补充 N91 的配件。", "including 后列举 formats 所包含的具体格式。"],
+      "expressions": [{"text": "a wide range of", "meaning_zh": "多种多样的"}, {"text": "support ... formats", "meaning_zh": "支持……格式"}]
+    },
+    {
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 16,
+      "sentence": "It uses wireless technology to allow users to find and buy music from the operator's music store.",
+      "translation": "它利用无线技术，让用户可以从运营商的音乐商店查找并购买音乐。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "uses wireless technology", "role": "predicate_object", "level": 1},
+        {"text": "to allow users to find and buy music from the operator's music store", "role": "purpose_clause", "level": 2}
+      ],
+      "difficult_points": ["to allow... 是目的状语，说明使用无线技术的目的。", "allow users to find and buy 中，不定式作宾语补足语，find 与 buy 并列。"],
+      "expressions": [{"text": "allow ... to ...", "meaning_zh": "让……能够……"}, {"text": "wireless technology", "meaning_zh": "无线技术"}]
+    },
+    {
+      "id": "E-07", "paragraph_label": "E", "sentence_index": 17,
+      "sentence": "You can also drag and drop music from your PC to the N91 and manage and share playlists.",
+      "translation": "你还可以把音乐从电脑直接拖放到 N91 上，并管理和分享播放列表。",
+      "structure": [
+        {"text": "You", "role": "subject", "level": 1},
+        {"text": "can also drag and drop music from your PC to the N91", "role": "predicate_object", "level": 1},
+        {"text": "and manage and share playlists", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": ["drag and drop 是计算机操作中的固定搭配，表示拖放文件。", "manage and share 与 drag and drop 并列，共用 can。"],
+      "expressions": [{"text": "drag and drop", "meaning_zh": "拖放"}, {"text": "manage and share playlists", "meaning_zh": "管理和分享播放列表"}]
+    },
+    {
+      "id": "E-08", "paragraph_label": "E", "sentence_index": 18,
+      "sentence": "If you can find the time, you can get on the blower, too.",
+      "translation": "如果你还能抽出时间，也可以用它打个电话。",
+      "structure": [
+        {"text": "If you can find the time", "role": "conditional_clause", "level": 2},
+        {"text": "you", "role": "subject", "level": 1},
+        {"text": "can get on the blower, too", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["If 从句带有幽默意味：功能太多，甚至可能没时间打电话。", "get on the blower 是非正式英式表达，意思是打电话。"],
+      "expressions": [{"text": "find the time", "meaning_zh": "抽出时间"}, {"text": "get on the blower", "meaning_zh": "打电话（非正式）"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 19,
+      "sentence": "SEIKO SPECTRUM E-PAPER WATCH",
+      "translation": "精工 Spectrum 电子纸手表",
+      "structure": [{"text": "SEIKO SPECTRUM E-PAPER WATCH", "role": "section_heading", "level": 1}],
+      "difficult_points": ["这是品牌、系列名和产品类别组成的小节标题。", "E-PAPER 修饰 WATCH，表示表盘采用电子纸技术。"],
+      "expressions": [{"text": "e-paper", "meaning_zh": "电子纸"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 20,
+      "sentence": "The Seiko Spectrum is no ordinary wristwatch.",
+      "translation": "精工 Spectrum 可不是一块普通的腕表。",
+      "structure": [
+        {"text": "The Seiko Spectrum", "role": "subject", "level": 1},
+        {"text": "is no ordinary wristwatch", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["no ordinary 是强调性否定，意思是“绝非普通的”。", "本句用简短判断引出这款手表的独特之处。"],
+      "expressions": [{"text": "no ordinary", "meaning_zh": "绝非普通的"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 21,
+      "sentence": "At first glance, it is an attractive and futuristic bracelet-style watch.",
+      "translation": "乍一看，它是一款外形美观、充满未来感的手镯式手表。",
+      "structure": [
+        {"text": "At first glance", "role": "viewpoint_adverbial", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "is an attractive and futuristic bracelet-style watch", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["At first glance 限定判断只是初看时的印象。", "bracelet-style 是复合形容词，表示外形像手镯。"],
+      "expressions": [{"text": "at first glance", "meaning_zh": "乍一看"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 22,
+      "sentence": "Look closer, however, and you will notice that its display is unlike any you have seen before.",
+      "translation": "不过，仔细看看，你就会发现它的显示屏与你以前见过的任何一种都不同。",
+      "structure": [
+        {"text": "Look closer", "role": "imperative_clause", "level": 1},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "and you will notice", "role": "result_main_clause", "level": 1},
+        {"text": "that its display is unlike any you have seen before", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["“祈使句＋and＋陈述句”表示做前一动作便会得到后一结果。", "any 后省略了 display，you have seen before 是修饰 any 的定语从句。"],
+      "expressions": [{"text": "look closer", "meaning_zh": "仔细看"}, {"text": "be unlike any ...", "meaning_zh": "与任何……都不同"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 23,
+      "sentence": "Rather than the usual LCD screen, the display is made of \"e-paper\" - from the electronic paper pioneers E Ink Corp - and shows a constantly changing mosaic pattern along with the time.",
+      "translation": "显示屏采用的不是普通液晶屏，而是由电子纸先驱 E Ink 公司提供的“电子纸”，它在显示时间的同时还会呈现不断变化的马赛克图案。",
+      "structure": [
+        {"text": "Rather than the usual LCD screen", "role": "contrast_adverbial", "level": 1},
+        {"text": "the display", "role": "subject", "level": 1},
+        {"text": "is made of \"e-paper\" - from the electronic paper pioneers E Ink Corp -", "role": "passive_predicate", "level": 1},
+        {"text": "and shows a constantly changing mosaic pattern along with the time", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": ["Rather than 引出与普通 LCD screen 的对比。", "破折号之间的 from... 补充电子纸的来源。", "is made of 与 shows 是同一主语下的并列谓语。"],
+      "expressions": [{"text": "rather than", "meaning_zh": "而不是"}, {"text": "be made of", "meaning_zh": "由……制成"}, {"text": "along with", "meaning_zh": "连同；与……一起"}]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 24,
+      "sentence": "Because e-paper is so flexible and thin, it allows the display to curve round the wrist along with the watch band - something conventional liquid-crystal displays cannot do, as they have to be flat.",
+      "translation": "由于电子纸非常柔韧轻薄，它能让显示屏随着表带弯曲并贴合手腕——这是传统液晶显示屏做不到的，因为后者必须保持平整。",
+      "structure": [
+        {"text": "Because e-paper is so flexible and thin", "role": "reason_clause", "level": 2},
+        {"text": "it allows the display to curve round the wrist along with the watch band", "role": "main_clause", "level": 1},
+        {"text": "something conventional liquid-crystal displays cannot do", "role": "appositive_relative_construction", "level": 2},
+        {"text": "as they have to be flat", "role": "reason_clause", "level": 2}
+      ],
+      "difficult_points": ["it 指代 e-paper，allow 后接 display 加不定式补足语。", "something 后接省略关系代词 that 的定语从句。", "they 指 conventional liquid-crystal displays，as 引出其做不到弯曲的原因。"],
+      "expressions": [{"text": "allow ... to ...", "meaning_zh": "使……能够……"}, {"text": "curve round", "meaning_zh": "沿……弯曲"}, {"text": "have to be flat", "meaning_zh": "必须保持平整"}]
+    },
+    {
+      "id": "G-06", "paragraph_label": "G", "sentence_index": 25,
+      "sentence": "Seiko says the e-paper display not only produces far better contrast than an LCD screen, but requires no power to retain an image, so the batteries last longer.",
+      "translation": "精工表示，电子纸显示屏不仅比液晶屏呈现出好得多的对比度，而且在维持图像时无需耗电，因此电池续航更久。",
+      "structure": [
+        {"text": "Seiko says", "role": "reporting_clause", "level": 1},
+        {"text": "the e-paper display not only produces far better contrast than an LCD screen, but requires no power to retain an image", "role": "object_clause", "level": 2},
+        {"text": "so the batteries last longer", "role": "result_clause", "level": 2}
+      ],
+      "difficult_points": ["says 后省略了引导宾语从句的 that。", "not only... but... 连接 produces 与 requires 两个并列谓语。", "to retain an image 说明 power 的用途，so 引出省电带来的结果。"],
+      "expressions": [{"text": "not only ... but ...", "meaning_zh": "不仅……而且……"}, {"text": "retain an image", "meaning_zh": "维持图像"}]
+    },
+    {
+      "id": "G-07", "paragraph_label": "G", "sentence_index": 26,
+      "sentence": "Seiko is releasing only 500 of the watches next month, priced at about £1,250 - so you'd better lose no time.",
+      "translation": "精工下个月只会发售500块这种手表，每块定价约1,250英镑——所以你最好赶快行动。",
+      "structure": [
+        {"text": "Seiko", "role": "subject", "level": 1},
+        {"text": "is releasing only 500 of the watches next month", "role": "predicate_object", "level": 1},
+        {"text": "priced at about £1,250", "role": "past_participle_clause", "level": 2},
+        {"text": "so you'd better lose no time", "role": "result_clause", "level": 2}
+      ],
+      "difficult_points": ["priced at... 是过去分词短语，补充 watches 的售价。", "you'd better 是 you had better 的缩写，后接动词原形。", "lose no time 意为不要耽搁，结合限量发售暗示要尽快购买。"],
+      "expressions": [{"text": "be priced at", "meaning_zh": "定价为"}, {"text": "had better", "meaning_zh": "最好"}, {"text": "lose no time", "meaning_zh": "立即行动；不耽搁"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 27,
+      "sentence": "HIGH-DEFINITION TV",
+      "translation": "高清电视",
+      "structure": [{"text": "HIGH-DEFINITION TV", "role": "section_heading", "level": 1}],
+      "difficult_points": ["这是产品类别小节标题，不是完整句子。", "HIGH-DEFINITION 是复合形容词，表示高清晰度的。"],
+      "expressions": [{"text": "high-definition TV", "meaning_zh": "高清电视"}]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 28,
+      "sentence": "HDTV, already available in the United States, Japan, and Australia, will hit the UK in 2006.",
+      "translation": "已在美国、日本和澳大利亚上市的高清电视，将于2006年进入英国市场。",
+      "structure": [
+        {"text": "HDTV", "role": "subject", "level": 1},
+        {"text": "already available in the United States, Japan, and Australia", "role": "supplementary_adjective_phrase", "level": 2},
+        {"text": "will hit the UK", "role": "predicate_object", "level": 1},
+        {"text": "in 2006", "role": "time_adverbial", "level": 1}
+      ],
+      "difficult_points": ["already available... 是插入的形容词短语，补充 HDTV 当前的上市地区。", "hit the UK 在产品语境中表示进入英国市场，而非“撞击英国”。"],
+      "expressions": [{"text": "be available in", "meaning_zh": "在……可以买到；已在……上市"}, {"text": "hit the UK", "meaning_zh": "进入英国市场"}]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 29,
+      "sentence": "When you watch a programme filmed in the HD format, you will see a much sharper, clearer and more vibrant image.",
+      "translation": "当你观看以高清格式拍摄的节目时，会看到清晰度高得多、更加鲜明且更有活力的画面。",
+      "structure": [
+        {"text": "When you watch a programme filmed in the HD format", "role": "time_clause", "level": 2},
+        {"text": "you", "role": "subject", "level": 1},
+        {"text": "will see", "role": "predicate", "level": 1},
+        {"text": "a much sharper, clearer and more vibrant image", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["filmed in the HD format 是过去分词短语，后置修饰 programme。", "sharper、clearer 和 more vibrant 三个比较级并列，much 加强比较程度。"],
+      "expressions": [{"text": "be filmed in the HD format", "meaning_zh": "以高清格式拍摄"}, {"text": "a more vibrant image", "meaning_zh": "更鲜明生动的画面"}]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 30,
+      "sentence": "This is due partly to the way a programme is filmed, but also to the high-definition TV set itself, which uses either 720 or 1,080 visible rows of pixels (depending on which format the individual HDTV uses) to display images, compared to the 576 rows of pixels used in current sets.",
+      "translation": "这部分归因于节目的拍摄方式，也归因于高清电视机本身：它采用720或1,080行可见像素来显示图像（具体取决于该高清电视采用哪种格式），而目前的电视机只使用576行像素。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "is due partly to the way a programme is filmed, but also to the high-definition TV set itself", "role": "linking_predicate", "level": 1},
+        {"text": "which uses either 720 or 1,080 visible rows of pixels (depending on which format the individual HDTV uses) to display images", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "compared to the 576 rows of pixels used in current sets", "role": "comparison_participle_clause", "level": 2}
+      ],
+      "difficult_points": ["This 指上句所说画面更清晰鲜明这一现象。", "the way 后面的 a programme is filmed 是省略关系词的定语从句。", "which 指 high-definition TV set itself；depending on... 是插入说明。", "used in current sets 是过去分词短语，修饰 576 rows of pixels。"],
+      "expressions": [{"text": "be due to", "meaning_zh": "归因于"}, {"text": "depending on", "meaning_zh": "取决于"}, {"text": "compared to", "meaning_zh": "与……相比"}]
+    },
+    {
+      "id": "J-01", "paragraph_label": "J", "sentence_index": 31,
+      "sentence": "ELECTROLUX TRILOBITE 2.0 ROBOT VACUUM CLEANER",
+      "translation": "伊莱克斯 Trilobite 2.0 机器人吸尘器",
+      "structure": [{"text": "ELECTROLUX TRILOBITE 2.0 ROBOT VACUUM CLEANER", "role": "section_heading", "level": 1}],
+      "difficult_points": ["这是品牌、型号和产品类别组成的小节标题。", "ROBOT VACUUM CLEANER 指能自主运行的机器人吸尘器。"],
+      "expressions": [{"text": "robot vacuum cleaner", "meaning_zh": "机器人吸尘器"}]
+    },
+    {
+      "id": "K-01", "paragraph_label": "K", "sentence_index": 32,
+      "sentence": "Next time you are expecting visitors, do not bother to vacuum first - wait until they arrive, and then entertain them with this little gadget.",
+      "translation": "下次有客人要来时，别费心提前吸尘——等他们到了，再用这个小装置给他们助兴。",
+      "structure": [
+        {"text": "Next time you are expecting visitors", "role": "time_clause", "level": 2},
+        {"text": "do not bother to vacuum first", "role": "imperative_main_clause", "level": 1},
+        {"text": "wait until they arrive", "role": "coordinated_imperative_clause", "level": 1},
+        {"text": "and then entertain them with this little gadget", "role": "coordinated_imperative_clause", "level": 1}
+      ],
+      "difficult_points": ["Next time 后直接接从句，整体作时间状语。", "do not bother to do 表示不必费心做某事。", "wait 与 entertain 是连续的祈使动作，until 引导等待的时间终点。"],
+      "expressions": [{"text": "expect visitors", "meaning_zh": "等候访客到来"}, {"text": "do not bother to", "meaning_zh": "不必费心去"}, {"text": "entertain ... with ...", "meaning_zh": "用……给……助兴"}]
+    },
+    {
+      "id": "K-02", "paragraph_label": "K", "sentence_index": 33,
+      "sentence": "The Electrolux Trilobite 2.0 is a robotic vacuum cleaner that navigates its way around your floors using ultrasound, just like a bat.",
+      "translation": "伊莱克斯 Trilobite 2.0 是一款机器人吸尘器，它像蝙蝠一样利用超声波在地面上自主寻找路线。",
+      "structure": [
+        {"text": "The Electrolux Trilobite 2.0", "role": "subject", "level": 1},
+        {"text": "is a robotic vacuum cleaner", "role": "linking_predicate", "level": 1},
+        {"text": "that navigates its way around your floors using ultrasound", "role": "relative_clause", "level": 2},
+        {"text": "just like a bat", "role": "comparison_adverbial", "level": 1}
+      ],
+      "difficult_points": ["that 引导定语从句，修饰 robotic vacuum cleaner。", "using ultrasound 是现在分词方式状语，说明导航手段。", "just like a bat 把其超声导航方式与蝙蝠相比。"],
+      "expressions": [{"text": "navigate its way around", "meaning_zh": "在……中自主寻找路线"}, {"text": "using ultrasound", "meaning_zh": "利用超声波"}]
+    },
+    {
+      "id": "K-03", "paragraph_label": "K", "sentence_index": 34,
+      "sentence": "It pings out ultrasound vibrations at surfaces to create a map of the room, which it remembers for future cleaning assignments.",
+      "translation": "它向各个表面发射超声波振动，以绘制房间地图，并把这张地图记下来供日后执行清洁任务时使用。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "pings out ultrasound vibrations at surfaces", "role": "predicate_object", "level": 1},
+        {"text": "to create a map of the room", "role": "purpose_clause", "level": 2},
+        {"text": "which it remembers for future cleaning assignments", "role": "nonrestrictive_relative_clause", "level": 2}
+      ],
+      "difficult_points": ["to create... 是目的状语，说明发射超声波的用途。", "which 指 a map of the room，在从句中作 remembers 的宾语。"],
+      "expressions": [{"text": "create a map of", "meaning_zh": "绘制……的地图"}, {"text": "for future ...", "meaning_zh": "供日后……使用"}]
+    },
+    {
+      "id": "K-04", "paragraph_label": "K", "sentence_index": 35,
+      "sentence": "The Trilobite has no problem avoiding collision with things placed on the floor.",
+      "translation": "Trilobite 能够轻松避开与地面物品的碰撞。",
+      "structure": [
+        {"text": "The Trilobite", "role": "subject", "level": 1},
+        {"text": "has no problem", "role": "predicate_object", "level": 1},
+        {"text": "avoiding collision with things placed on the floor", "role": "gerund_complement", "level": 2}
+      ],
+      "difficult_points": ["have no problem doing 表示做某事毫无困难。", "placed on the floor 是过去分词短语，后置修饰 things。"],
+      "expressions": [{"text": "have no problem doing", "meaning_zh": "做……毫无困难"}, {"text": "avoid collision with", "meaning_zh": "避免与……碰撞"}]
+    },
+    {
+      "id": "K-05", "paragraph_label": "K", "sentence_index": 36,
+      "sentence": "Special magnetic strips are placed in doorways, near stairs and other openings.",
+      "translation": "人们会在门口、楼梯附近和其他开口处放置专用磁条。",
+      "structure": [
+        {"text": "Special magnetic strips", "role": "subject", "level": 1},
+        {"text": "are placed", "role": "passive_predicate", "level": 1},
+        {"text": "in doorways, near stairs and other openings", "role": "place_adverbial", "level": 1}
+      ],
+      "difficult_points": ["are placed 是被动语态，重点在磁条的放置位置而非放置者。", "in doorways 与 near stairs and other openings 并列列举地点。"],
+      "expressions": [{"text": "be placed in", "meaning_zh": "被放置在"}]
+    },
+    {
+      "id": "K-06", "paragraph_label": "K", "sentence_index": 37,
+      "sentence": "These act as a wall, keeping the Trilobite in the room.",
+      "translation": "这些磁条起到墙壁的作用，把 Trilobite 限制在房间内。",
+      "structure": [
+        {"text": "These", "role": "subject", "level": 1},
+        {"text": "act as a wall", "role": "predicate", "level": 1},
+        {"text": "keeping the Trilobite in the room", "role": "result_participle_clause", "level": 2}
+      ],
+      "difficult_points": ["These 指代上句的 special magnetic strips。", "keeping... 是现在分词结果状语，说明磁条充当墙壁产生的效果。"],
+      "expressions": [{"text": "act as", "meaning_zh": "充当；起……作用"}, {"text": "keep ... in ...", "meaning_zh": "使……留在……内"}]
+    },
+    {
+      "id": "K-07", "paragraph_label": "K", "sentence_index": 38,
+      "sentence": "You can also programme it to glide round when you're at work or after you've gone to bed.",
+      "translation": "你还可以设定程序，让它在你上班时或上床睡觉后四处清扫。",
+      "structure": [
+        {"text": "You", "role": "subject", "level": 1},
+        {"text": "can also programme it", "role": "predicate_object", "level": 1},
+        {"text": "to glide round", "role": "object_complement", "level": 2},
+        {"text": "when you're at work or after you've gone to bed", "role": "time_clause", "level": 2}
+      ],
+      "difficult_points": ["programme it to do 是宾语加不定式补足语，表示设定它执行某动作。", "when 与 after 引导两个并列时间条件。", "you've gone 是现在完成时，强调上床这一动作在清扫开始前已完成。"],
+      "expressions": [{"text": "programme ... to ...", "meaning_zh": "设定……去做……"}, {"text": "be at work", "meaning_zh": "在上班"}]
+    },
+    {
+      "id": "K-08", "paragraph_label": "K", "sentence_index": 39,
+      "sentence": "When Electrolux introduced the original Trilobite in 2001, it was voted among the 100 most innovative designs (though whether the judges were dedicated couch potatoes, and thus biased, we were not aide to discover).",
+      "translation": "2001年伊莱克斯推出初代 Trilobite 时，它被评入100项最具创新性的设计之列（不过，那些评委是否都是铁杆“沙发土豆”、因而有所偏袒，我们未能查明）。",
+      "structure": [
+        {"text": "When Electrolux introduced the original Trilobite in 2001", "role": "time_clause", "level": 2},
+        {"text": "it was voted among the 100 most innovative designs", "role": "main_clause", "level": 1},
+        {"text": "though whether the judges were dedicated couch potatoes, and thus biased, we were not aide to discover", "role": "parenthetical_concessive_clause", "level": 2}
+      ],
+      "difficult_points": ["it 指 the original Trilobite，was voted among 表示被评入某一行列。", "whether... 是 discover 的宾语，但为强调而前置。", "原文的 aide 很可能是 able 的录入异常，按要求保留；couch potatoes 幽默地指久坐懒动的人。"],
+      "expressions": [{"text": "be voted among", "meaning_zh": "被评入……之列"}, {"text": "couch potato", "meaning_zh": "终日懒坐看电视的人"}, {"text": "and thus biased", "meaning_zh": "因而有所偏袒"}]
+    },
+    {
+      "id": "K-09", "paragraph_label": "K", "sentence_index": 40,
+      "sentence": "The name comes from the hard-shelled sea creature from the Paleozoic era (between 250 million and 560 million years ago) that roamed the ocean floor feeding on particles and small animals.",
+      "translation": "这个名字源自古生代（距今2.5亿至5.6亿年）一种带硬壳的海洋生物，它曾在海底游荡，以微粒和小动物为食。",
+      "structure": [
+        {"text": "The name", "role": "subject", "level": 1},
+        {"text": "comes from the hard-shelled sea creature from the Paleozoic era (between 250 million and 560 million years ago)", "role": "predicate", "level": 1},
+        {"text": "that roamed the ocean floor feeding on particles and small animals", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["that 引导定语从句，修饰 hard-shelled sea creature。", "feeding on... 是现在分词伴随状语，其逻辑主语是该海洋生物。", "括号说明 Paleozoic era 在原文中的年代范围。"],
+      "expressions": [{"text": "come from", "meaning_zh": "源自"}, {"text": "roam the ocean floor", "meaning_zh": "在海底游荡"}, {"text": "feed on", "meaning_zh": "以……为食"}]
+    },
+    {
+      "id": "L-01", "paragraph_label": "L", "sentence_index": 41,
+      "sentence": "HONDA ASIMO ROBOT",
+      "translation": "本田 ASIMO 机器人",
+      "structure": [{"text": "HONDA ASIMO ROBOT", "role": "section_heading", "level": 1}],
+      "difficult_points": ["这是品牌、型号和产品类别组成的小节标题。", "全大写用于引出最后一项科技产品。"],
+      "expressions": []
+    },
+    {
+      "id": "M-01", "paragraph_label": "M", "sentence_index": 42,
+      "sentence": "Need an extra pair of hands around the office?",
+      "translation": "办公室里需要多一个帮手吗？",
+      "structure": [
+        {"text": "Need", "role": "elliptical_predicate", "level": 1},
+        {"text": "an extra pair of hands", "role": "object", "level": 1},
+        {"text": "around the office", "role": "place_adverbial", "level": 1}
+      ],
+      "difficult_points": ["这是省略主语 you 和助动词 do 的口语化问句。", "an extra pair of hands 是借代，指额外的帮手，而非真的一双手。"],
+      "expressions": [{"text": "an extra pair of hands", "meaning_zh": "额外的帮手"}]
+    },
+    {
+      "id": "M-02", "paragraph_label": "M", "sentence_index": 43,
+      "sentence": "Look no further; this mouth, the Honda Motor Company showcased its second-generation humanoid robot, Asimo.",
+      "translation": "不用再找了；就在这个“mouth”（原文如此），本田汽车公司展示了第二代人形机器人 Asimo。",
+      "structure": [
+        {"text": "Look no further", "role": "imperative_clause", "level": 1},
+        {"text": "this mouth", "role": "time_adverbial", "level": 1},
+        {"text": "the Honda Motor Company", "role": "subject", "level": 1},
+        {"text": "showcased its second-generation humanoid robot, Asimo", "role": "predicate_object", "level": 1}
+      ],
+      "difficult_points": ["Look no further 是固定表达，表示不用再寻找。", "原文 mouth 很可能是 month 的录入异常，按源文保留，译文予以提示。", "Asimo 是 its second-generation humanoid robot 的同位语。"],
+      "expressions": [{"text": "look no further", "meaning_zh": "不用再找了"}, {"text": "showcase", "meaning_zh": "展示"}, {"text": "humanoid robot", "meaning_zh": "人形机器人"}]
+    },
+    {
+      "id": "M-03", "paragraph_label": "M", "sentence_index": 44,
+      "sentence": "The machine has come along way since its first incarnation five years ago.",
+      "translation": "自五年前问世第一代以来，这台机器已经取得了很大进步。",
+      "structure": [
+        {"text": "The machine", "role": "subject", "level": 1},
+        {"text": "has come along way", "role": "predicate", "level": 1},
+        {"text": "since its first incarnation five years ago", "role": "time_adverbial", "level": 1}
+      ],
+      "difficult_points": ["原文 along way 很可能是 a long way 的连写异常，按源文保留。", "has come 使用现在完成时，概括从五年前到现在的发展。", "incarnation 在产品语境中指某一代或某个版本。"],
+      "expressions": [{"text": "since its first incarnation", "meaning_zh": "自第一代问世以来"}]
+    },
+    {
+      "id": "M-04", "paragraph_label": "M", "sentence_index": 45,
+      "sentence": "The 1.3 metre-tall droid is now capable of performing a variety of office tasks, including reception duties, serving drinks and acting as an information guide, as well as making deliveries.",
+      "translation": "这台1.3米高的机器人如今能够执行多种办公室任务，包括接待、送饮料、充当信息向导以及递送物品。",
+      "structure": [
+        {"text": "The 1.3 metre-tall droid", "role": "subject", "level": 1},
+        {"text": "is now capable of performing a variety of office tasks", "role": "linking_predicate", "level": 1},
+        {"text": "including reception duties, serving drinks and acting as an information guide, as well as making deliveries", "role": "example_participle_phrase", "level": 2}
+      ],
+      "difficult_points": ["be capable of 后接动名词 performing，表示具备执行任务的能力。", "including 后列举任务，其中 serving、acting 和 making 都是动名词形式。", "as well as 补充最后一项任务，语气弱于主并列。"],
+      "expressions": [{"text": "be capable of performing", "meaning_zh": "能够执行"}, {"text": "a variety of", "meaning_zh": "多种"}, {"text": "act as", "meaning_zh": "充当"}, {"text": "as well as", "meaning_zh": "以及"}]
+    },
+    {
+      "id": "M-05", "paragraph_label": "M", "sentence_index": 46,
+      "sentence": "Using multiple sensors, Asimo has the ability to recognise the surrounding environment and interact with people using integrated circuit tags.",
+      "translation": "借助多个传感器，Asimo 能够识别周围环境，并通过集成电路标签与人互动。",
+      "structure": [
+        {"text": "Using multiple sensors", "role": "means_participle_clause", "level": 2},
+        {"text": "Asimo", "role": "subject", "level": 1},
+        {"text": "has the ability", "role": "predicate_object", "level": 1},
+        {"text": "to recognise the surrounding environment and interact with people using integrated circuit tags", "role": "infinitive_complement", "level": 2}
+      ],
+      "difficult_points": ["句首 Using multiple sensors 的逻辑主语是 Asimo，表示它借助传感器。", "to recognise 与 interact 是并列不定式，共同说明 ability 的内容。", "using integrated circuit tags 更贴近 interact，说明与人互动所借助的技术。"],
+      "expressions": [{"text": "have the ability to", "meaning_zh": "有能力做"}, {"text": "interact with", "meaning_zh": "与……互动"}, {"text": "integrated circuit tags", "meaning_zh": "集成电路标签"}]
+    },
+    {
+      "id": "M-06", "paragraph_label": "M", "sentence_index": 47,
+      "sentence": "It can walk and run at a fair pace, and push a cart.",
+      "translation": "它能以相当快的速度行走和奔跑，还能推手推车。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "can walk and run at a fair pace", "role": "predicate", "level": 1},
+        {"text": "and push a cart", "role": "coordinated_predicate", "level": 1}
+      ],
+      "difficult_points": ["walk、run 和 push 是并列谓语，共用情态动词 can。", "at a fair pace 表示速度相当不错，而不是强调公平。"],
+      "expressions": [{"text": "at a fair pace", "meaning_zh": "以相当快的速度"}, {"text": "push a cart", "meaning_zh": "推手推车"}]
+    },
+    {
+      "id": "M-07", "paragraph_label": "M", "sentence_index": 48,
+      "sentence": "Honda plans to start using Asimo's receptionist functions at its Wako Building in Japan early in 2006, and it is hoped it will become available for leasing afterwards.",
+      "translation": "本田计划于2006年初开始在日本和光大楼启用 Asimo 的接待功能，并希望此后能将它投入租赁市场。",
+      "structure": [
+        {"text": "Honda plans to start using Asimo's receptionist functions at its Wako Building in Japan early in 2006", "role": "main_clause", "level": 1},
+        {"text": "and it is hoped", "role": "coordinated_passive_clause", "level": 1},
+        {"text": "it will become available for leasing afterwards", "role": "subject_clause", "level": 2}
+      ],
+      "difficult_points": ["plan to start using 中连续出现不定式和动名词：to start 作 plan 的宾语，using 作 start 的宾语。", "第一个 its 指 Honda，后一个 it 指 Asimo。", "it is hoped 中首个 it 是形式主语，真正内容是后面的从句。"],
+      "expressions": [{"text": "plan to start using", "meaning_zh": "计划开始使用"}, {"text": "become available for leasing", "meaning_zh": "可供租赁"}]
+    },
+    {
+      "id": "M-08", "paragraph_label": "M", "sentence_index": 49,
+      "sentence": "It could soon be pushing a cart at an office near you.",
+      "translation": "不久后，它或许就会在你附近的某间办公室里推着手推车。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "could soon be pushing", "role": "predicate", "level": 1},
+        {"text": "a cart", "role": "object", "level": 1},
+        {"text": "at an office near you", "role": "place_adverbial", "level": 1}
+      ],
+      "difficult_points": ["could 表示对未来可能性的推测，不是过去时。", "be pushing 使用进行体，使未来应用场景显得具体可见。", "near you 修饰 office，意为你附近的某间办公室。"],
+      "expressions": [{"text": "at an office near you", "meaning_zh": "在你附近的办公室"}]
+    }
+  ]
+}

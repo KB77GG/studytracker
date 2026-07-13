@@ -1,0 +1,391 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_78_test_102",
+  "passage_id": "reading_jijing_78_test_102_p1",
+  "passage_title": "Volatility Kills",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": ". Despite gun battles in the capital of Chad, rioting in Kenya, and Galloping inflation in Zimbabwe, the economies of sub-Saharan Africa are, as a whole, in better shape than they were a few years ago.",
+      "translation": "尽管乍得首都发生枪战、肯尼亚出现骚乱、津巴布韦通货膨胀迅猛，但撒哈拉以南非洲的经济总体上比几年前状况更好。",
+      "structure": [
+        {"text": "Despite gun battles in the capital of Chad, rioting in Kenya, and Galloping inflation in Zimbabwe", "role": "concessive_prepositional_phrase", "level": 1},
+        {"text": "the economies of sub-Saharan Africa", "role": "subject", "level": 1},
+        {"text": "are, as a whole, in better shape", "role": "predicate", "level": 1},
+        {"text": "as a whole", "role": "parenthetical_adverbial", "level": 2},
+        {"text": "than they were a few years ago", "role": "comparison_clause", "level": 2}
+      ],
+      "difficult_points": ["Despite 后接三个并列名词短语，构成让步背景。", "than 从句将当前经济状况与几年前比较；句首句点及 Galloping 的大写均为源文异常。"],
+      "expressions": [{"text": "as a whole", "meaning_zh": "总体上"}, {"text": "in better shape", "meaning_zh": "状况更好"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "The World Bank has reported recently that this part of the continent experienced a respectable growth rate of 5.6 percent in 2006 and a higher rate from 1995 to 2005 than in previous decades.",
+      "translation": "世界银行最近报告称，该大陆这一地区2006年的增长率达到可观的5.6%，而且1995年至2005年的增长率高于此前数十年。",
+      "structure": [
+        {"text": "The World Bank has reported recently", "role": "main_clause", "level": 1},
+        {"text": "that this part of the continent experienced a respectable growth rate of 5.6 percent in 2006 and a higher rate from 1995 to 2005 than in previous decades", "role": "object_clause", "level": 2},
+        {"text": "this part of the continent", "role": "embedded_subject", "level": 3},
+        {"text": "experienced a respectable growth rate of 5.6 percent in 2006 and a higher rate from 1995 to 2005", "role": "embedded_predicate", "level": 3},
+        {"text": "than in previous decades", "role": "comparison_phrase", "level": 4}
+      ],
+      "difficult_points": ["that 引导 reported 的宾语从句。", "a respectable growth rate 和 a higher rate 是 experienced 的并列宾语，后者与 previous decades 比较。"],
+      "expressions": [{"text": "a growth rate of", "meaning_zh": "……的增长率"}, {"text": "previous decades", "meaning_zh": "此前数十年"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "The bank has given a cautions assessment that the region may have reached a turning point.",
+      "translation": "该银行谨慎地评估认为，这一地区可能已经到达转折点。",
+      "structure": [
+        {"text": "The bank", "role": "subject", "level": 1},
+        {"text": "has given a cautions assessment", "role": "predicate", "level": 1},
+        {"text": "that the region may have reached a turning point", "role": "appositive_clause", "level": 2},
+        {"text": "may have reached", "role": "modal_perfect_predicate", "level": 3}
+      ],
+      "difficult_points": ["that 从句说明 assessment 的具体内容。", "may have reached 表示对已经发生之事的推测；cautions 应为 cautious，是源文拼写异常。"],
+      "expressions": [{"text": "reach a turning point", "meaning_zh": "到达转折点"}, {"text": "give an assessment", "meaning_zh": "作出评估"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "An overriding question for developmental economists remains whether the upswing will continue so Africans can grow their way out of poverty that relegates some 40 percent of the nearly 744 million in that region to living on less than a dollar a day.",
+      "translation": "发展经济学家面临的首要问题仍是，这股上升势头能否持续，使非洲人依靠增长摆脱贫困；这种贫困让该地区近7.44亿人口中的约40%每天生活费不足一美元。",
+      "structure": [
+        {"text": "An overriding question for developmental economists", "role": "subject", "level": 1},
+        {"text": "remains", "role": "linking_verb", "level": 1},
+        {"text": "whether the upswing will continue", "role": "subject_complement_clause", "level": 2},
+        {"text": "so Africans can grow their way out of poverty", "role": "result_clause", "level": 3},
+        {"text": "that relegates some 40 percent of the nearly 744 million in that region to living on less than a dollar a day", "role": "relative_clause", "level": 4},
+        {"text": "to living on less than a dollar a day", "role": "object_complement_prepositional_phrase", "level": 5}
+      ],
+      "difficult_points": ["whether 从句作 remains 的表语，说明这个关键问题是什么。", "that 修饰 poverty；relegate A to doing 表示使A陷入某种境地。", "grow their way out of poverty 指通过经济增长逐步摆脱贫困。"],
+      "expressions": [{"text": "an overriding question", "meaning_zh": "首要问题"}, {"text": "grow one's way out of poverty", "meaning_zh": "依靠增长摆脱贫困"}, {"text": "relegate ... to ...", "meaning_zh": "使……陷入……"}]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "The optimism, when inspected more closely, may be short-lived because of the persistence of a devastating pattern of economic volatility that has lingered for decades.",
+      "translation": "仔细审视后会发现，这种乐观情绪可能只是昙花一现，因为一种破坏性的经济波动模式已经持续了数十年。",
+      "structure": [
+        {"text": "The optimism", "role": "subject", "level": 1},
+        {"text": "when inspected more closely", "role": "reduced_time_clause", "level": 2},
+        {"text": "may be short-lived", "role": "predicate", "level": 1},
+        {"text": "because of the persistence of a devastating pattern of economic volatility", "role": "reason_prepositional_phrase", "level": 1},
+        {"text": "that has lingered for decades", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["when inspected... 省略了 the optimism is，是被动形式的缩略时间从句。", "that 修饰 economic volatility 的 pattern，说明这种模式持续已久。"],
+      "expressions": [{"text": "short-lived", "meaning_zh": "短暂的"}, {"text": "economic volatility", "meaning_zh": "经济波动"}, {"text": "linger for decades", "meaning_zh": "持续数十年"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "\"In reality, African countries grow as fast as Asian countries and other developing countries during the good times, but afterward they see growth collapses,\" comments Jorge Arbache, a senior World Bank economist.",
+      "translation": "世界银行资深经济学家豪尔赫·阿尔巴切评论说：“事实上，非洲国家在景气时期增长得和亚洲国家及其他发展中国家一样快，但此后它们会遭遇增长崩溃。”",
+      "structure": [
+        {"text": "African countries grow as fast as Asian countries and other developing countries during the good times", "role": "quoted_first_clause", "level": 2},
+        {"text": "as fast as Asian countries and other developing countries", "role": "comparison_phrase", "level": 3},
+        {"text": "but afterward they see growth collapses", "role": "quoted_coordinated_clause", "level": 2},
+        {"text": "comments Jorge Arbache", "role": "inverted_reporting_clause", "level": 1},
+        {"text": "a senior World Bank economist", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["引语后使用 comments Jorge Arbache，是报道语的主谓倒装。", "as fast as 构成同级比较；but 转而指出随后发生增长崩溃。"],
+      "expressions": [{"text": "in reality", "meaning_zh": "事实上"}, {"text": "as fast as", "meaning_zh": "与……一样快"}, {"text": "growth collapses", "meaning_zh": "增长崩溃"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "\"How to prevent collapses may be as important as promoting growth.\"",
+      "translation": "“如何防止崩溃，可能与促进增长同样重要。”",
+      "structure": [
+        {"text": "How to prevent collapses", "role": "wh_infinitive_subject", "level": 1},
+        {"text": "may be", "role": "linking_predicate", "level": 1},
+        {"text": "as important as promoting growth", "role": "comparative_subject_complement", "level": 1},
+        {"text": "promoting growth", "role": "gerund_comparison_complement", "level": 2}
+      ],
+      "difficult_points": ["How to prevent collapses 是“疑问词+不定式”结构，整体作主语。", "as important as 表示两件事同等重要，第二个 as 后接动名词。"],
+      "expressions": [{"text": "prevent collapses", "meaning_zh": "防止崩溃"}, {"text": "as important as", "meaning_zh": "与……同样重要"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "If these collapses had not occurred, he observes, the level of gross domestic product for each citizen of the 48 nations of sub -Saharan Africa would have been third higher.",
+      "translation": "他指出，如果这些崩溃没有发生，撒哈拉以南非洲48个国家的人均国内生产总值水平本会高出三分之一。",
+      "structure": [
+        {"text": "If these collapses had not occurred", "role": "counterfactual_condition_clause", "level": 1},
+        {"text": "he observes", "role": "parenthetical_reporting_clause", "level": 1},
+        {"text": "the level of gross domestic product for each citizen of the 48 nations of sub -Saharan Africa", "role": "subject", "level": 1},
+        {"text": "would have been third higher", "role": "counterfactual_main_predicate", "level": 1}
+      ],
+      "difficult_points": ["had not occurred 与 would have been 构成对过去事实相反的第三类条件句。", "he observes 是插入式报道语；third higher 应理解为 a third higher，sub -Saharan 的空格也是源文异常。"],
+      "expressions": [{"text": "gross domestic product", "meaning_zh": "国内生产总值"}, {"text": "would have been", "meaning_zh": "本来会是"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 9,
+      "sentence": ". the prerequisites to prevent the next crash are not in place, according to a World Bank study issued in January, Is Africa's Recent Growth Robust?",
+      "translation": "世界银行一月份发布的研究《非洲近期的增长稳健吗？》指出，防止下一次崩溃的必要条件尚未具备。",
+      "structure": [
+        {"text": "the prerequisites to prevent the next crash", "role": "subject", "level": 1},
+        {"text": "to prevent the next crash", "role": "infinitive_postmodifier", "level": 2},
+        {"text": "are not in place", "role": "predicate", "level": 1},
+        {"text": "according to a World Bank study issued in January", "role": "source_adverbial", "level": 1},
+        {"text": "issued in January", "role": "past_participle_postmodifier", "level": 2},
+        {"text": "Is Africa's Recent Growth Robust?", "role": "study_title", "level": 2}
+      ],
+      "difficult_points": ["to prevent... 修饰 prerequisites，说明这些必要条件的用途。", "Is Africa's Recent Growth Robust? 是研究标题；句首句点和小写 the 为源文异常。"],
+      "expressions": [{"text": "prerequisites to", "meaning_zh": "……的先决条件"}, {"text": "be in place", "meaning_zh": "已经具备"}, {"text": "according to", "meaning_zh": "根据"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 10,
+      "sentence": "The growth period that began in 1995, driven by a commodities boom spurred in particular by demand from China, may not be sustainable, because the economic fundamentals- new investment and the ability to stave off inflation, among other factors-are absent.",
+      "translation": "始于1995年的增长期由大宗商品繁荣推动，而这轮繁荣尤其受到中国需求的拉动；但这种增长可能难以持续，因为新投资、抵御通胀的能力等经济基本面并不存在。",
+      "structure": [
+        {"text": "The growth period that began in 1995", "role": "subject", "level": 1},
+        {"text": "that began in 1995", "role": "relative_clause", "level": 2},
+        {"text": "driven by a commodities boom spurred in particular by demand from China", "role": "past_participle_supplement", "level": 2},
+        {"text": "spurred in particular by demand from China", "role": "past_participle_postmodifier", "level": 3},
+        {"text": "may not be sustainable", "role": "predicate", "level": 1},
+        {"text": "because the economic fundamentals- new investment and the ability to stave off inflation, among other factors-are absent", "role": "reason_clause", "level": 2},
+        {"text": "new investment and the ability to stave off inflation, among other factors", "role": "apposition", "level": 3}
+      ],
+      "difficult_points": ["两个过去分词 driven 和 spurred 构成嵌套修饰：前者说明增长期，后者说明商品繁荣。", "破折号之间列举 economic fundamentals；源文破折号两侧空格不规范但需保留。", "stave off 表示阻止或延缓通胀。"],
+      "expressions": [{"text": "commodities boom", "meaning_zh": "大宗商品繁荣"}, {"text": "economic fundamentals", "meaning_zh": "经济基本面"}, {"text": "stave off inflation", "meaning_zh": "抵御通货膨胀"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "The region lacks the necessary infrastructure that would encourage investors to look to Africa to find the next Bengaluru ( Bangalore ) or Shenzhen, a November report from the bank concludes.",
+      "translation": "该银行十一月的一份报告总结称，这一地区缺乏必要的基础设施，无法吸引投资者到非洲寻找下一个班加罗尔或深圳。",
+      "structure": [
+        {"text": "The region lacks the necessary infrastructure", "role": "reported_main_clause", "level": 2},
+        {"text": "that would encourage investors to look to Africa to find the next Bengaluru ( Bangalore ) or Shenzhen", "role": "relative_clause", "level": 3},
+        {"text": "to look to Africa", "role": "object_complement_infinitive", "level": 4},
+        {"text": "to find the next Bengaluru ( Bangalore ) or Shenzhen", "role": "purpose_infinitive", "level": 5},
+        {"text": "a November report from the bank concludes", "role": "postposed_reporting_clause", "level": 1}
+      ],
+      "difficult_points": ["句末 a November report... 是后置报道语，前面整句是其结论内容。", "that 修饰 infrastructure；其中两个不定式分别表示 encourage 的宾补和寻找目标。"],
+      "expressions": [{"text": "necessary infrastructure", "meaning_zh": "必要基础设施"}, {"text": "encourage investors to", "meaning_zh": "鼓励投资者……"}, {"text": "look to", "meaning_zh": "把目光投向"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "For sub–Saharan countries rich in oil and other resources, a boom period may even undermine efforts to institute sound economic practices..",
+      "translation": "对于石油及其他资源丰富的撒哈拉以南国家而言，繁荣期甚至可能削弱推行稳健经济做法的努力。",
+      "structure": [
+        {"text": "For sub–Saharan countries rich in oil and other resources", "role": "scope_adverbial", "level": 1},
+        {"text": "rich in oil and other resources", "role": "adjective_postmodifier", "level": 2},
+        {"text": "a boom period", "role": "subject", "level": 1},
+        {"text": "may even undermine efforts", "role": "predicate", "level": 1},
+        {"text": "to institute sound economic practices", "role": "infinitive_postmodifier", "level": 2}
+      ],
+      "difficult_points": ["rich in... 后置修饰 countries。", "to institute... 修饰 efforts，说明努力的目标；句末双句点是源文异常。"],
+      "expressions": [{"text": "undermine efforts to", "meaning_zh": "削弱做……的努力"}, {"text": "institute sound economic practices", "meaning_zh": "推行稳健的经济做法"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "From 1996 to 2005, with growth accelerating, measures of governance– factors such as political stability, rule of law, and control of corruption- actually worsened, especially for countries endowed with abundant mineral resources, the January report notes.",
+      "translation": "一月份的报告指出，从1996年到2005年，尽管增长加速，治理指标——如政治稳定、法治和腐败控制——实际上却恶化了，资源丰富的国家尤为如此。",
+      "structure": [
+        {"text": "From 1996 to 2005", "role": "time_adverbial", "level": 2},
+        {"text": "with growth accelerating", "role": "with_absolute_construction", "level": 2},
+        {"text": "measures of governance", "role": "reported_clause_subject", "level": 2},
+        {"text": "factors such as political stability, rule of law, and control of corruption", "role": "apposition", "level": 3},
+        {"text": "actually worsened", "role": "reported_clause_predicate", "level": 2},
+        {"text": "especially for countries endowed with abundant mineral resources", "role": "scope_adverbial", "level": 2},
+        {"text": "endowed with abundant mineral resources", "role": "past_participle_postmodifier", "level": 3},
+        {"text": "the January report notes", "role": "postposed_reporting_clause", "level": 1}
+      ],
+      "difficult_points": ["with growth accelerating 是 with 独立结构，交代经济增长加速的伴随背景。", "破折号间是 measures of governance 的同位举例。", "句末 the January report notes 是后置报道语。"],
+      "expressions": [{"text": "rule of law", "meaning_zh": "法治"}, {"text": "control of corruption", "meaning_zh": "腐败控制"}, {"text": "be endowed with", "meaning_zh": "拥有；被赋予"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 14,
+      "sentence": ". Perhaps the most incisive analysis of the volatility question comes from Paul Collier, a longtime specialist in African economics at the University of Oxford and author of the recent book The Bottom Billion.",
+      "translation": "对于经济波动问题，最为深刻的分析或许来自保罗·科利尔；他长期研究非洲经济，任职于牛津大学，也是新近出版的《最底层的十亿人》一书作者。",
+      "structure": [
+        {"text": "Perhaps the most incisive analysis of the volatility question", "role": "subject", "level": 1},
+        {"text": "comes from Paul Collier", "role": "predicate", "level": 1},
+        {"text": "a longtime specialist in African economics at the University of Oxford", "role": "apposition", "level": 2},
+        {"text": "and author of the recent book The Bottom Billion", "role": "coordinated_apposition", "level": 2}
+      ],
+      "difficult_points": ["两个同位成分共同补充 Paul Collier 的身份。", "句首独立句点属于源文异常；The Bottom Billion 是书名。"],
+      "expressions": [{"text": "incisive analysis", "meaning_zh": "深刻敏锐的分析"}, {"text": "come from", "meaning_zh": "来自"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 15,
+      "sentence": "He advocates a range of options that the U.S. and other nations could adopt when formulating policy toward African countries.",
+      "translation": "他主张采取一系列方案，美国及其他国家在制定对非洲国家的政策时可以采纳这些方案。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "advocates a range of options", "role": "predicate", "level": 1},
+        {"text": "that the U.S. and other nations could adopt when formulating policy toward African countries", "role": "relative_clause", "level": 2},
+        {"text": "when formulating policy toward African countries", "role": "reduced_time_clause", "level": 3}
+      ],
+      "difficult_points": ["that 修饰 options，并在从句中作 adopt 的宾语。", "when formulating... 省略了 the U.S. and other nations are，说明采纳方案的时间情境。"],
+      "expressions": [{"text": "advocate a range of", "meaning_zh": "主张一系列……"}, {"text": "formulate policy toward", "meaning_zh": "制定针对……的政策"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 16,
+      "sentence": "They include revamped trade measures, better-apportioned aid, and sustained military intervention in certain instances, to avert what he sees as a rapidly accelerating divergence of the world's poorest, primarily in Africa, from the rest of the world, even other developing nations such India and China.",
+      "translation": "这些方案包括改革后的贸易措施、更合理分配的援助，以及在特定情况下持续进行军事干预，目的在于避免他所认为的差距迅速扩大：世界最贫困的人群（主要在非洲）与世界其他地区、甚至印度和中国等其他发展中国家日益分化。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "include revamped trade measures, better-apportioned aid, and sustained military intervention in certain instances", "role": "predicate", "level": 1},
+        {"text": "to avert", "role": "purpose_infinitive", "level": 2},
+        {"text": "what he sees as a rapidly accelerating divergence of the world's poorest, primarily in Africa, from the rest of the world", "role": "fused_relative_object", "level": 3},
+        {"text": "he sees as a rapidly accelerating divergence", "role": "embedded_clause", "level": 4},
+        {"text": "primarily in Africa", "role": "parenthetical_postmodifier", "level": 4},
+        {"text": "even other developing nations such India and China", "role": "supplementary_example", "level": 3}
+      ],
+      "difficult_points": ["to avert 表示列举这些政策的目的。", "what he sees as... 是融合关系结构，整体作 avert 的宾语。", "divergence of A from B 表示A与B之间日益拉开的差距；such India 缺少 as，是源文异常。"],
+      "expressions": [{"text": "military intervention", "meaning_zh": "军事干预"}, {"text": "in certain instances", "meaning_zh": "在特定情况下"}, {"text": "avert a divergence", "meaning_zh": "避免差距扩大"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 17,
+      "sentence": "Collier finds that bad governance is the main reason countries fail to take advantage of the revenue bonanza that results from a boom.",
+      "translation": "科利尔发现，治理不善是各国未能充分利用繁荣所带来巨额收入的主要原因。",
+      "structure": [
+        {"text": "Collier finds", "role": "main_clause", "level": 1},
+        {"text": "that bad governance is the main reason countries fail to take advantage of the revenue bonanza that results from a boom", "role": "object_clause", "level": 2},
+        {"text": "countries fail to take advantage of the revenue bonanza", "role": "relative_clause_with_omitted_marker", "level": 3},
+        {"text": "that results from a boom", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": ["that 引导 finds 的宾语从句。", "countries fail... 是省略 why/that 的 reason 后置说明；第二个 that 修饰 revenue bonanza。"],
+      "expressions": [{"text": "bad governance", "meaning_zh": "治理不善"}, {"text": "take advantage of", "meaning_zh": "充分利用"}, {"text": "result from", "meaning_zh": "由……产生"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 18,
+      "sentence": "moreover, a democratic government, he adds, often makes the aftermath of a boom worse.",
+      "translation": "他补充说，而且民主政府往往会让经济繁荣后的局面变得更糟。",
+      "structure": [
+        {"text": "moreover", "role": "conjunctive_adverb", "level": 1},
+        {"text": "a democratic government", "role": "subject", "level": 1},
+        {"text": "he adds", "role": "parenthetical_reporting_clause", "level": 1},
+        {"text": "often makes the aftermath of a boom worse", "role": "complex_transitive_predicate", "level": 1},
+        {"text": "worse", "role": "object_complement", "level": 2}
+      ],
+      "difficult_points": ["he adds 是插入式报道语，不影响主句结构。", "make + object + worse 是复合宾语结构；句首 moreover 小写为源文异常。"],
+      "expressions": [{"text": "the aftermath of", "meaning_zh": "……的后果或后续局面"}, {"text": "make ... worse", "meaning_zh": "使……恶化"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 19,
+      "sentence": "\"Instead of democracy disciplining governments to manage these resource booms well, what happens is that the resource revenues corrupt the normal functioning of democracy-unless you stop ( them from) corrupting the normal function of democracy with sufficient checks and balances\", he said at a talk ion January at the Carnegie Council in New York City.",
+      "translation": "他一月份在纽约卡内基伦理委员会的一次演讲中说：“实际情况并非民主制度约束政府妥善管理资源繁荣，而是资源收入破坏了民主的正常运作——除非通过充分的制衡机制阻止它们这样做。”",
+      "structure": [
+        {"text": "Instead of democracy disciplining governments to manage these resource booms well", "role": "rejected_alternative_prepositional_phrase", "level": 2},
+        {"text": "democracy disciplining governments", "role": "gerund_clause", "level": 3},
+        {"text": "to manage these resource booms well", "role": "object_complement_infinitive", "level": 4},
+        {"text": "what happens", "role": "fused_relative_subject", "level": 2},
+        {"text": "is", "role": "linking_verb", "level": 2},
+        {"text": "that the resource revenues corrupt the normal functioning of democracy", "role": "subject_complement_clause", "level": 3},
+        {"text": "unless you stop ( them from) corrupting the normal function of democracy with sufficient checks and balances", "role": "exception_condition_clause", "level": 3},
+        {"text": "he said at a talk ion January at the Carnegie Council in New York City", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": ["Instead of 后接带独立逻辑主语 democracy 的动名词结构。", "what happens 是融合关系结构作主语，that 从句作 is 的表语。", "unless 引出例外条件；stop them from doing 表示阻止它们做某事。", "( them from) 和 ion January 均属源文排版或拼写异常。"],
+      "expressions": [{"text": "instead of", "meaning_zh": "并非；而不是"}, {"text": "the normal functioning of", "meaning_zh": "……的正常运作"}, {"text": "checks and balances", "meaning_zh": "制衡机制"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 20,
+      "sentence": "Collier advocates that African nations institute an array of standards and codes to bolster governments, one of which would substitute auctions for bribes in apportioning mineral rights and another of which would tax export revenues adequately.",
+      "translation": "科利尔主张非洲国家建立一整套标准和规范来强化政府，其中一项是以拍卖取代分配采矿权时的贿赂，另一项则是对出口收入充分征税。",
+      "structure": [
+        {"text": "Collier advocates", "role": "main_clause", "level": 1},
+        {"text": "that African nations institute an array of standards and codes to bolster governments", "role": "object_clause", "level": 2},
+        {"text": "to bolster governments", "role": "purpose_infinitive", "level": 3},
+        {"text": "one of which would substitute auctions for bribes in apportioning mineral rights", "role": "first_nonrestrictive_relative_clause", "level": 2},
+        {"text": "and another of which would tax export revenues adequately", "role": "second_nonrestrictive_relative_clause", "level": 2}
+      ],
+      "difficult_points": ["advocates 后的 that 从句使用原形 institute，属于主张类动词触发的虚拟语气。", "one of which 和 another of which 分别说明两项标准；which 回指 standards and codes。"],
+      "expressions": [{"text": "an array of", "meaning_zh": "一整套"}, {"text": "substitute ... for ...", "meaning_zh": "以……取代……"}, {"text": "apportion mineral rights", "meaning_zh": "分配采矿权"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 21,
+      "sentence": "He cites the Democratic Republic of the Congo, which took in $ 200 million from mineral exports in 2006 yet collected only $86000 in royalties for its treasury.",
+      "translation": "他以刚果民主共和国为例：该国2006年从矿产出口中获得2亿美元，却仅为国库收取了8.6万美元的特许权使用费。",
+      "structure": [
+        {"text": "He cites the Democratic Republic of the Congo", "role": "main_clause", "level": 1},
+        {"text": "which took in $ 200 million from mineral exports in 2006", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "yet collected only $86000 in royalties for its treasury", "role": "coordinated_relative_predicate", "level": 2}
+      ],
+      "difficult_points": ["which 回指 the Democratic Republic of the Congo，并引出补充信息。", "yet 连接反差强烈的两项收入数据；金额中的空格格式为源文原样。"],
+      "expressions": [{"text": "cite ... as an example", "meaning_zh": "引用……为例"}, {"text": "take in", "meaning_zh": "获得收入"}, {"text": "collect royalties", "meaning_zh": "收取特许权使用费"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 22,
+      "sentence": "\"If a nation gets these points right, \" he argues, \"It's going to develop.",
+      "translation": "他认为：“如果一个国家把这些要点做对了，它就会发展。”",
+      "structure": [
+        {"text": "If a nation gets these points right", "role": "condition_clause", "level": 2},
+        {"text": "he argues", "role": "interrupted_reporting_clause", "level": 1},
+        {"text": "It's going to develop", "role": "quoted_main_clause", "level": 2}
+      ],
+      "difficult_points": ["he argues 插入在一段连续引语中，将条件从句与主句分开。", "get these points right 表示正确处理这些关键事项；本句结尾引号尚未闭合是跨句引语的源文格式。"],
+      "expressions": [{"text": "get ... right", "meaning_zh": "把……做对"}, {"text": "be going to develop", "meaning_zh": "将会发展"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 23,
+      "sentence": "If it gets them wrong, it won't.\"",
+      "translation": "“如果做错了，它就不会发展。”",
+      "structure": [
+        {"text": "If it gets them wrong", "role": "condition_clause", "level": 1},
+        {"text": "it won't", "role": "main_clause_with_ellipsis", "level": 1}
+      ],
+      "difficult_points": ["them 回指上一句的 these points。", "won't 后省略 develop，避免重复；句末引号闭合前一句开始的引语。"],
+      "expressions": [{"text": "get ... wrong", "meaning_zh": "把……做错"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 24,
+      "sentence": ". To encourage reform, Collier recommends that the G8 nations agree to accept these measures as voluntary guidelines for multinationals doing business in Africa- companies, for instance, would only enter new contracts through auctions monitored by an international verification group.",
+      "translation": "为了推动改革，科利尔建议八国集团同意将这些措施作为在非洲经营的跨国公司的自愿准则；例如，企业只能通过由国际核查小组监督的拍卖来签订新合同。",
+      "structure": [
+        {"text": "To encourage reform", "role": "purpose_infinitive", "level": 1},
+        {"text": "Collier recommends", "role": "main_clause", "level": 1},
+        {"text": "that the G8 nations agree to accept these measures as voluntary guidelines for multinationals doing business in Africa", "role": "object_clause", "level": 2},
+        {"text": "doing business in Africa", "role": "present_participle_postmodifier", "level": 3},
+        {"text": "companies, for instance, would only enter new contracts through auctions", "role": "example_clause", "level": 2},
+        {"text": "monitored by an international verification group", "role": "past_participle_postmodifier", "level": 3}
+      ],
+      "difficult_points": ["To encourage... 是目的状语；that 从句说明 recommends 的内容。", "破折号后用 companies 的具体做法解释 voluntary guidelines。", "monitored by... 修饰 auctions；句首句点和 Africa 后的连字符为源文格式。"],
+      "expressions": [{"text": "encourage reform", "meaning_zh": "推动改革"}, {"text": "voluntary guidelines", "meaning_zh": "自愿准则"}, {"text": "enter new contracts", "meaning_zh": "签订新合同"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 25,
+      "sentence": "Such an agreement would follow the examples of the so-called Kimberley Process, which has effectively undercut the trade in blood diamonds, and the Extractive Industries Transparency Initiative, in which a government must report to its citizens the revenues it receives from sales of natural resources.",
+      "translation": "这样的协议将效仿所谓的“金伯利进程”和“采掘业透明度倡议”：前者有效遏制了血钻贸易，后者要求政府向公民报告其通过出售自然资源获得的收入。",
+      "structure": [
+        {"text": "Such an agreement", "role": "subject", "level": 1},
+        {"text": "would follow the examples of the so-called Kimberley Process", "role": "predicate", "level": 1},
+        {"text": "which has effectively undercut the trade in blood diamonds", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "and the Extractive Industries Transparency Initiative", "role": "coordinated_object", "level": 1},
+        {"text": "in which a government must report to its citizens the revenues it receives from sales of natural resources", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "it receives from sales of natural resources", "role": "relative_clause_with_omitted_object", "level": 3}
+      ],
+      "difficult_points": ["两个非限制性定语从句分别说明 Kimberley Process 和 Transparency Initiative。", "it receives... 省略关系代词 that，修饰 revenues。"],
+      "expressions": [{"text": "follow the examples of", "meaning_zh": "效仿……的先例"}, {"text": "undercut the trade in", "meaning_zh": "削弱……的贸易"}, {"text": "report to its citizens", "meaning_zh": "向其公民报告"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 26,
+      "sentence": ". These measures, he says, are more important than elevating aid levels, an approach emphasized by economist Jeffrey D. Sachs of Columbia University and celebrity activists such as Bono.",
+      "translation": "他说，这些措施比提高援助水平更重要；提高援助正是哥伦比亚大学经济学家杰弗里·D·萨克斯以及波诺等明星活动人士所强调的方法。",
+      "structure": [
+        {"text": "These measures", "role": "subject", "level": 1},
+        {"text": "he says", "role": "parenthetical_reporting_clause", "level": 1},
+        {"text": "are more important than elevating aid levels", "role": "comparative_predicate", "level": 1},
+        {"text": "elevating aid levels", "role": "gerund_comparison_complement", "level": 2},
+        {"text": "an approach emphasized by economist Jeffrey D. Sachs of Columbia University and celebrity activists such as Bono", "role": "apposition", "level": 2},
+        {"text": "emphasized by economist Jeffrey D. Sachs of Columbia University and celebrity activists such as Bono", "role": "past_participle_postmodifier", "level": 3}
+      ],
+      "difficult_points": ["he says 是插入语；more important than 后以动名词短语作比较对象。", "an approach 同位解释 elevating aid levels；句首句点为源文异常。"],
+      "expressions": [{"text": "elevate aid levels", "meaning_zh": "提高援助水平"}, {"text": "an approach emphasized by", "meaning_zh": "由……强调的方法"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 27,
+      "sentence": "Collier insists that first Angola receives tens of billions of dollars in oil revenue and whether it gets a few hundred million more or less in aid is really second-order.",
+      "translation": "科利尔坚持认为，首先，安哥拉获得数百亿美元的石油收入；相比之下，它多获得或少获得几亿美元援助其实只是次要问题。",
+      "structure": [
+        {"text": "Collier insists", "role": "main_clause", "level": 1},
+        {"text": "that first Angola receives tens of billions of dollars in oil revenue and whether it gets a few hundred million more or less in aid is really second-order", "role": "object_clause", "level": 2},
+        {"text": "first Angola receives tens of billions of dollars in oil revenue", "role": "first_coordinated_clause", "level": 3},
+        {"text": "and whether it gets a few hundred million more or less in aid", "role": "coordinated_subject_clause", "level": 3},
+        {"text": "is really second-order", "role": "embedded_predicate", "level": 3}
+      ],
+      "difficult_points": ["that 从句内由 and 连接一个事实陈述与一个 whether 主语从句。", "whether... 作 is second-order 的主语，表示援助多几亿或少几亿这一问题。", "first 在源文中衔接略生硬，应理解为“首先要看到”。"],
+      "expressions": [{"text": "tens of billions of", "meaning_zh": "数百亿的"}, {"text": "more or less", "meaning_zh": "更多或更少"}, {"text": "second-order", "meaning_zh": "次要的"}]
+    }
+  ]
+}

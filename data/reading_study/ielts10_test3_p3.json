@@ -1,0 +1,1033 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts10_test3_reading",
+  "passage_id": "ielts10_test3_p3",
+  "passage_title": "Beyond the blue horizon",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "An important archaeological discovery on the island of Éfaté in the Pacific archipelago of Vanuatu has revealed traces of an ancient seafaring people, the distant ancestors of today's Polynesians.",
+      "translation": "太平洋瓦努阿图群岛的埃法特岛上，一项重要考古发现揭示了一个古老航海民族的踪迹，他们是如今波利尼西亚人的远祖。",
+      "structure": [
+        {"text": "An important archaeological discovery on the island of Éfaté in the Pacific archipelago of Vanuatu", "role": "subject", "level": 1},
+        {"text": "on the island of Éfaté in the Pacific archipelago of Vanuatu", "role": "prepositional_phrase", "level": 2},
+        {"text": "has revealed", "role": "verb_phrase", "level": 1},
+        {"text": "traces of an ancient seafaring people", "role": "object", "level": 1},
+        {"text": "the distant ancestors of today's Polynesians", "role": "appositive", "level": 2}
+      ],
+      "difficult_points": [
+        "句子主语很长，中心词是 discovery，两个介词短语进一步限定发现地点。",
+        "the distant ancestors... 是 ancient seafaring people 的同位语，补充说明这一民族的身份。",
+        "has revealed 使用现在完成时，强调考古发现对当前认识产生的结果。"
+      ],
+      "expressions": [
+        {"text": "archaeological discovery", "meaning_zh": "考古发现"},
+        {"text": "reveal traces of", "meaning_zh": "揭示……的踪迹"},
+        {"text": "distant ancestors", "meaning_zh": "远祖"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "The site came to light only by chance.",
+      "translation": "这个遗址纯属偶然才被发现。",
+      "structure": [
+        {"text": "The site", "role": "subject", "level": 1},
+        {"text": "came to light", "role": "verb_phrase", "level": 1},
+        {"text": "only by chance", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "came to light 是固定表达，不是字面上的“来到光下”，而是“被发现”。",
+        "only by chance 强调发现并非有计划的考古勘探，而是完全出于偶然。"
+      ],
+      "expressions": [
+        {"text": "come to light", "meaning_zh": "被发现；为人所知"},
+        {"text": "by chance", "meaning_zh": "偶然地"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "An agricultural worker, digging in the grounds of a derelict plantation, scraped open a grave - the first of dozens in a burial ground some 3,000 years ago.",
+      "translation": "一名农业工人在一座废弃种植园的土地上挖掘时，刮开了一座坟墓——它是约三千年前一片墓地中数十座坟墓里最先发现的一座。",
+      "structure": [
+        {"text": "An agricultural worker", "role": "subject", "level": 1},
+        {"text": "digging in the grounds of a derelict plantation", "role": "participial_phrase", "level": 2},
+        {"text": "scraped open", "role": "verb_phrase", "level": 1},
+        {"text": "a grave", "role": "object", "level": 1},
+        {"text": "the first of dozens in a burial ground some 3,000 years ago", "role": "appositive", "level": 2}
+      ],
+      "difficult_points": [
+        "digging... 是现在分词短语，补充说明工人发现坟墓时正在进行的动作。",
+        "两个逗号把分词短语与主句隔开，主干是 An agricultural worker scraped open a grave。",
+        "破折号后的名词短语与 a grave 构成同位关系，说明它是整片墓地中首先暴露的一座。"
+      ],
+      "expressions": [
+        {"text": "in the grounds of", "meaning_zh": "在……的土地上"},
+        {"text": "derelict plantation", "meaning_zh": "废弃的种植园"},
+        {"text": "burial ground", "meaning_zh": "墓地"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "It is the oldest cemetery ever found in the Pacific islands, and it harbors the remains of an ancient people archaeologists call the Lapita.",
+      "translation": "这是太平洋岛屿上迄今发现的最古老墓地，其中保存着考古学家称为拉皮塔人的一个古老民族的遗骸。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "is the oldest cemetery ever found in the Pacific islands", "role": "verb_phrase", "level": 1},
+        {"text": "ever found in the Pacific islands", "role": "participial_phrase", "level": 2},
+        {"text": "and it harbors the remains of an ancient people", "role": "coordinated_clause", "level": 1},
+        {"text": "archaeologists call the Lapita", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "ever found... 是过去分词短语，后置修饰 cemetery，表示“迄今被发现的”。",
+        "and 连接两个共享话题但各有主语 it 的并列分句。",
+        "archaeologists call the Lapita 是省略关系词 whom/that 的定语从句，修饰 an ancient people。"
+      ],
+      "expressions": [
+        {"text": "the oldest ... ever found", "meaning_zh": "迄今发现的最古老的……"},
+        {"text": "harbor the remains of", "meaning_zh": "保存着……的遗骸"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "They were daring blue-water adventurers who used basic canoes to rove across the ocean.",
+      "translation": "他们是勇敢的远洋冒险者，使用简陋的独木舟在海上四处航行。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "were daring blue-water adventurers", "role": "verb_phrase", "level": 1},
+        {"text": "who used basic canoes to rove across the ocean", "role": "relative_clause", "level": 2},
+        {"text": "to rove across the ocean", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "who 引导限制性定语从句，说明这些 adventurers 如何进行远洋活动。",
+        "to rove... 是目的不定式，说明使用独木舟的目的。",
+        "blue-water 在此指远离海岸的深海或远洋，而非单纯描述海水颜色。"
+      ],
+      "expressions": [
+        {"text": "blue-water adventurers", "meaning_zh": "远洋冒险者"},
+        {"text": "rove across", "meaning_zh": "在……四处航行"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "But they were not just explorers.",
+      "translation": "但他们并不仅仅是探险者。",
+      "structure": [
+        {"text": "But", "role": "coordinating_conjunction", "level": 1},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "were not just explorers", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "句首 But 承接上文并引出身份上的进一步转折。",
+        "not just 暗示下文会用 also 补充他们除探险者之外的另一重身份。"
+      ],
+      "expressions": [
+        {"text": "not just", "meaning_zh": "不仅仅是"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "They were also pioneers who carried with them everything they would need to build new lives - their livestock, taro seedlings and stone tools.",
+      "translation": "他们还是开拓者，随身带着建立新生活所需的一切——牲畜、芋头幼苗和石器。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "were also pioneers", "role": "verb_phrase", "level": 1},
+        {"text": "who carried with them everything", "role": "relative_clause", "level": 2},
+        {"text": "they would need to build new lives", "role": "relative_clause", "level": 3},
+        {"text": "to build new lives", "role": "non_finite_clause", "level": 4},
+        {"text": "their livestock, taro seedlings and stone tools", "role": "appositive", "level": 2}
+      ],
+      "difficult_points": [
+        "who 引导定语从句修饰 pioneers，carried with them 表示“随身携带”。",
+        "they would need... 是省略关系词 that 的定语从句，修饰 everything。",
+        "破折号后的三项内容具体解释 everything 所包含的物资。"
+      ],
+      "expressions": [
+        {"text": "carry with them", "meaning_zh": "随身携带"},
+        {"text": "build new lives", "meaning_zh": "建立新的生活"},
+        {"text": "stone tools", "meaning_zh": "石器"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Within the span of several centuries, the Lapita stretched the boundaries of their world from the jungle-clad volcanoes of Papua New Guinea to the loneliest coral outliers of Tonga.",
+      "translation": "在短短几个世纪里，拉皮塔人把自己的世界边界从巴布亚新几内亚丛林覆盖的火山，一直拓展到汤加最偏远的珊瑚岛。",
+      "structure": [
+        {"text": "Within the span of several centuries", "role": "prepositional_phrase", "level": 1},
+        {"text": "the Lapita", "role": "subject", "level": 1},
+        {"text": "stretched", "role": "verb_phrase", "level": 1},
+        {"text": "the boundaries of their world", "role": "object", "level": 1},
+        {"text": "from the jungle-clad volcanoes of Papua New Guinea to the loneliest coral outliers of Tonga", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "from... to... 给出拉皮塔人活动范围扩张的两个地理端点。",
+        "stretched the boundaries 是比喻用法，表示拓展已知世界或活动区域的边界。",
+        "jungle-clad 是复合形容词，意为“被丛林覆盖的”。"
+      ],
+      "expressions": [
+        {"text": "within the span of", "meaning_zh": "在……的时间跨度内"},
+        {"text": "stretch the boundaries of", "meaning_zh": "拓展……的边界"},
+        {"text": "from ... to ...", "meaning_zh": "从……到……"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "The Lapita left precious few clues about themselves, but Éfaté expands the volume of data available to researchers dramatically.",
+      "translation": "拉皮塔人留下的自身线索少得可怜，但埃法特岛的发现大幅增加了研究人员可获得的数据量。",
+      "structure": [
+        {"text": "The Lapita", "role": "subject", "level": 1},
+        {"text": "left precious few clues about themselves", "role": "verb_phrase", "level": 1},
+        {"text": "but Éfaté expands the volume of data available to researchers dramatically", "role": "coordinated_clause", "level": 1},
+        {"text": "available to researchers", "role": "adjectival_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "precious few 是带强调意味的表达，表示“少得可怜”，而不是“珍贵的少数”。",
+        "but 连接资料匮乏与新发现增加资料量这两个相反事实。",
+        "available to researchers 后置修饰 data，dramatically 修饰 expands。"
+      ],
+      "expressions": [
+        {"text": "precious few", "meaning_zh": "少得可怜"},
+        {"text": "expand the volume of data", "meaning_zh": "增加数据量"},
+        {"text": "available to researchers", "meaning_zh": "研究人员可获得的"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "The remains of 62 individuals have been uncovered so far, and archaeologists were also thrilled to find six complete Lapita pots.",
+      "translation": "迄今已出土六十二人的遗骸，考古学家还因发现六只完整的拉皮塔陶罐而十分振奋。",
+      "structure": [
+        {"text": "The remains of 62 individuals", "role": "subject", "level": 1},
+        {"text": "have been uncovered so far", "role": "verb_phrase", "level": 1},
+        {"text": "and archaeologists were also thrilled", "role": "coordinated_clause", "level": 1},
+        {"text": "to find six complete Lapita pots", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "have been uncovered 是现在完成时的被动语态，与 so far 呼应。",
+        "and 连接两个发现成果，后半句的主语变为 archaeologists。",
+        "to find... 补充说明考古学家感到 thrilled 的原因。"
+      ],
+      "expressions": [
+        {"text": "be uncovered", "meaning_zh": "被发掘；出土"},
+        {"text": "so far", "meaning_zh": "迄今为止"},
+        {"text": "be thrilled to", "meaning_zh": "因……而十分振奋"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "Other items included a Lapita burial urn with modeled birds arranged on the rim as though peering down at the human remains sealed inside.",
+      "translation": "其他物品包括一只拉皮塔人的葬瓮，瓮沿排列着鸟形塑像，仿佛正低头凝视封存在瓮内的人类遗骸。",
+      "structure": [
+        {"text": "Other items", "role": "subject", "level": 1},
+        {"text": "included", "role": "verb_phrase", "level": 1},
+        {"text": "a Lapita burial urn", "role": "object", "level": 1},
+        {"text": "with modeled birds arranged on the rim", "role": "prepositional_phrase", "level": 2},
+        {"text": "arranged on the rim", "role": "participial_phrase", "level": 3},
+        {"text": "as though peering down at the human remains sealed inside", "role": "adverbial_clause", "level": 3},
+        {"text": "sealed inside", "role": "participial_phrase", "level": 4}
+      ],
+      "difficult_points": [
+        "with modeled birds... 是 with 复合结构，说明葬瓮边缘的装饰状态。",
+        "arranged 和 sealed 都是过去分词，分别后置修饰 birds 与 remains。",
+        "as though peering... 省略了 the birds were，赋予鸟形塑像仿佛向下凝视的动态效果。"
+      ],
+      "expressions": [
+        {"text": "be arranged on", "meaning_zh": "被排列在……上"},
+        {"text": "as though", "meaning_zh": "仿佛；好像"},
+        {"text": "peer down at", "meaning_zh": "向下凝视"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "'It's an important discovery,' says Matthew Spriggs, professor of archaeology at the Australian National University and head of the international team digging up the site, 'for it conclusively identifies the remains as Lapita.'",
+      "translation": "澳大利亚国立大学考古学教授、遗址国际发掘团队负责人马修·斯普里格斯说：“这是一项重要发现，因为它确凿地证明这些遗骸属于拉皮塔人。”",
+      "structure": [
+        {"text": "'It's an important discovery,'", "role": "direct_speech", "level": 1},
+        {"text": "says Matthew Spriggs", "role": "main_clause", "level": 1},
+        {"text": "professor of archaeology at the Australian National University and head of the international team digging up the site", "role": "appositive", "level": 2},
+        {"text": "digging up the site", "role": "participial_phrase", "level": 3},
+        {"text": "'for it conclusively identifies the remains as Lapita.'", "role": "adverbial_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "引语被 says Matthew Spriggs 及其长同位语插入并分隔成两部分。",
+        "professor... and head... 是 Matthew Spriggs 的并列同位语，说明其职位。",
+        "for 在后半段引语中是表示原因的连词，相当于 because。",
+        "identify A as B 表示“确认 A 是 B”。"
+      ],
+      "expressions": [
+        {"text": "dig up the site", "meaning_zh": "发掘遗址"},
+        {"text": "conclusively identify ... as ...", "meaning_zh": "确凿地确认……为……"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "DNA teased from these human remains may help answer one of the most puzzling questions in Pacific anthropology: did all Pacific islanders spring from one source or many?",
+      "translation": "从这些人类遗骸中艰难提取出的 DNA，或许有助于回答太平洋人类学中最令人困惑的问题之一：所有太平洋岛民究竟源自一个祖源，还是多个祖源？",
+      "structure": [
+        {"text": "DNA teased from these human remains", "role": "subject", "level": 1},
+        {"text": "teased from these human remains", "role": "participial_phrase", "level": 2},
+        {"text": "may help answer", "role": "verb_phrase", "level": 1},
+        {"text": "one of the most puzzling questions in Pacific anthropology", "role": "object", "level": 1},
+        {"text": "did all Pacific islanders spring from one source or many?", "role": "appositive_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "teased from... 是过去分词短语，修饰 DNA；tease 在此表示小心而费力地提取。",
+        "may help answer 中 help 后直接接动词原形 answer。",
+        "冒号后的直接疑问句具体说明前面的 one of the most puzzling questions。",
+        "one source or many 中 many 省略了 sources。"
+      ],
+      "expressions": [
+        {"text": "help answer a question", "meaning_zh": "有助于回答问题"},
+        {"text": "one of the most puzzling questions", "meaning_zh": "最令人困惑的问题之一"},
+        {"text": "spring from", "meaning_zh": "起源于"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "Was there only one outward migration from a single point in Asia, or several from different points?",
+      "translation": "当时是只有一次从亚洲某个地点向外的迁徙，还是有数次从不同地点出发的迁徙？",
+      "structure": [
+        {"text": "Was there", "role": "existential_clause", "level": 1},
+        {"text": "only one outward migration from a single point in Asia", "role": "subject", "level": 1},
+        {"text": "or several from different points", "role": "coordinated_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "这是 there be 存在句的一般疑问形式，be 动词 Was 提至句首。",
+        "or 连接两种迁徙假说，several 后省略了 outward migrations。",
+        "from a single point 与 from different points 构成来源地点上的对照。"
+      ],
+      "expressions": [
+        {"text": "outward migration", "meaning_zh": "向外迁徙"},
+        {"text": "from a single point", "meaning_zh": "从单一地点出发"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 15,
+      "sentence": "'This represents the best opportunity we've had yet,' says Spriggs, 'to find out who the Lapita actually were, where they came from, and who their closest descendants are today.'",
+      "translation": "斯普里格斯说：“这是我们迄今获得的最好机会，可以借此弄清拉皮塔人究竟是谁、来自哪里，以及如今谁是他们关系最近的后裔。”",
+      "structure": [
+        {"text": "'This represents the best opportunity we've had yet,'", "role": "direct_speech", "level": 1},
+        {"text": "we've had yet", "role": "relative_clause", "level": 2},
+        {"text": "says Spriggs", "role": "main_clause", "level": 1},
+        {"text": "'to find out who the Lapita actually were, where they came from, and who their closest descendants are today.'", "role": "non_finite_clause", "level": 2},
+        {"text": "who the Lapita actually were", "role": "noun_clause", "level": 3},
+        {"text": "where they came from", "role": "noun_clause", "level": 3},
+        {"text": "who their closest descendants are today", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "we've had yet 是省略关系词 that 的定语从句，修饰 opportunity。",
+        "to find out... 是不定式短语，说明这一机会可用于做什么。",
+        "find out 后接三个并列的 wh-宾语从句，均使用陈述语序。",
+        "引述语 says Spriggs 插在完整引语中间。"
+      ],
+      "expressions": [
+        {"text": "represent the best opportunity", "meaning_zh": "构成最佳机会"},
+        {"text": "find out", "meaning_zh": "查明；弄清"},
+        {"text": "closest descendants", "meaning_zh": "关系最近的后裔"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "There is one stubborn question for which archaeology has yet to provide any answers: how did the Lapita accomplish the ancient equivalent of a moon landing, many times over?",
+      "translation": "有一个棘手问题，考古学至今仍未给出任何答案：拉皮塔人如何一次又一次地完成了古代版的登月壮举？",
+      "structure": [
+        {"text": "There is one stubborn question", "role": "existential_clause", "level": 1},
+        {"text": "for which archaeology has yet to provide any answers", "role": "relative_clause", "level": 2},
+        {"text": "how did the Lapita accomplish the ancient equivalent of a moon landing, many times over?", "role": "appositive_clause", "level": 2},
+        {"text": "many times over", "role": "adverbial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "for which 是“介词 + 关系代词”结构，which 指代 one stubborn question。",
+        "has yet to provide 表示“迄今仍未提供”，带有尚待完成的意味。",
+        "冒号后的疑问句具体说明 stubborn question 的内容。",
+        "the ancient equivalent of a moon landing 用现代登月比喻古代远洋航行的难度。"
+      ],
+      "expressions": [
+        {"text": "have yet to", "meaning_zh": "尚未……"},
+        {"text": "provide answers", "meaning_zh": "给出答案"},
+        {"text": "the equivalent of", "meaning_zh": "相当于……的事物"},
+        {"text": "many times over", "meaning_zh": "一再；多次"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "No-one has found one of their canoes or any rigging, which could reveal how the canoes were sailed.",
+      "translation": "没有人发现过他们的独木舟或任何索具，而这些物品本可揭示他们如何操纵独木舟航行。",
+      "structure": [
+        {"text": "No-one", "role": "subject", "level": 1},
+        {"text": "has found", "role": "verb_phrase", "level": 1},
+        {"text": "one of their canoes or any rigging", "role": "object", "level": 1},
+        {"text": "which could reveal how the canoes were sailed", "role": "relative_clause", "level": 2},
+        {"text": "how the canoes were sailed", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，概括指代前面的 canoes or rigging。",
+        "how 引导 reveal 的宾语从句，使用陈述语序。",
+        "were sailed 是被动语态，关注独木舟被如何操纵，而非操纵者。"
+      ],
+      "expressions": [
+        {"text": "reveal how", "meaning_zh": "揭示如何……"},
+        {"text": "be sailed", "meaning_zh": "被操纵航行"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "Nor do the oral histories and traditions of later Polynesians offer any insights, for they turn into myths long before they reach as far back in time as the Lapita.",
+      "translation": "后来波利尼西亚人的口述历史和传统也未提供任何线索，因为在追溯到拉皮塔人的时代之前很久，这些叙述就已演变成神话。",
+      "structure": [
+        {"text": "Nor do the oral histories and traditions of later Polynesians offer any insights", "role": "main_clause", "level": 1},
+        {"text": "the oral histories and traditions of later Polynesians", "role": "subject", "level": 2},
+        {"text": "for they turn into myths", "role": "adverbial_clause", "level": 1},
+        {"text": "long before they reach as far back in time as the Lapita", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "否定词 Nor 位于句首，引起助动词 do 与主语倒装。",
+        "for 是表示原因的并列连词，解释口述历史为何无法提供线索。",
+        "两个 they 的指代都承接 oral histories and traditions。",
+        "as far back in time as 表示在时间上追溯到与拉皮塔人同样久远的时期。"
+      ],
+      "expressions": [
+        {"text": "offer insights", "meaning_zh": "提供见解或线索"},
+        {"text": "turn into myths", "meaning_zh": "演变成神话"},
+        {"text": "as far back in time as", "meaning_zh": "在时间上追溯到与……一样久远"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 19,
+      "sentence": "'All we can say for certain is that the Lapita found canoes that were capable of ocean voyages, and they had the ability to sail them,' says Geoff Irwin, a professor of archaeology at the University of Auckland.",
+      "translation": "奥克兰大学考古学教授杰夫·欧文说：“我们唯一能确定的是，拉皮塔人拥有能够远洋航行的独木舟，而且他们有能力驾驭这些船只。”",
+      "structure": [
+        {"text": "All we can say for certain", "role": "subject", "level": 1},
+        {"text": "we can say for certain", "role": "relative_clause", "level": 2},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "that the Lapita found canoes that were capable of ocean voyages, and they had the ability to sail them", "role": "noun_clause", "level": 2},
+        {"text": "that were capable of ocean voyages", "role": "relative_clause", "level": 3},
+        {"text": "and they had the ability to sail them", "role": "coordinated_clause", "level": 3},
+        {"text": "says Geoff Irwin", "role": "main_clause", "level": 1},
+        {"text": "a professor of archaeology at the University of Auckland", "role": "appositive", "level": 2}
+      ],
+      "difficult_points": [
+        "All 后的 we can say for certain 是省略关系词 that 的定语从句。",
+        "that 引导表语从句，说明“唯一能确定的事”的具体内容。",
+        "第二个 that 引导定语从句，修饰 canoes。",
+        "them 指代 canoes，says Geoff Irwin 是引语后的倒装式引述结构。"
+      ],
+      "expressions": [
+        {"text": "say for certain", "meaning_zh": "确定地说"},
+        {"text": "be capable of", "meaning_zh": "能够……"},
+        {"text": "have the ability to", "meaning_zh": "有能力……"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 20,
+      "sentence": "Those sailing skills, he says, were developed and passed down over thousands of years by earlier mariners who worked their way through the archipelagoes of the western Pacific, making short crossings to nearby islands.",
+      "translation": "他说，这些航海技能由更早期的航海者历经数千年发展并传承下来；他们一路穿行于西太平洋群岛之间，短途渡海前往附近岛屿。",
+      "structure": [
+        {"text": "Those sailing skills", "role": "subject", "level": 1},
+        {"text": "he says", "role": "parenthesis", "level": 1},
+        {"text": "were developed and passed down over thousands of years by earlier mariners", "role": "verb_phrase", "level": 1},
+        {"text": "who worked their way through the archipelagoes of the western Pacific", "role": "relative_clause", "level": 2},
+        {"text": "making short crossings to nearby islands", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "he says 是插入语，去掉后主干仍是 Those sailing skills were developed and passed down。",
+        "were developed and passed down 是两个并列的被动谓语。",
+        "who 引导定语从句修饰 earlier mariners。",
+        "making... 是伴随方式的现在分词短语，说明航海者如何逐步穿越群岛。"
+      ],
+      "expressions": [
+        {"text": "pass down", "meaning_zh": "传承；流传"},
+        {"text": "over thousands of years", "meaning_zh": "历经数千年"},
+        {"text": "work their way through", "meaning_zh": "一路穿行于……"},
+        {"text": "make short crossings", "meaning_zh": "进行短途渡海"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 21,
+      "sentence": "The real adventure didn't begin, however, until their Lapita descendants sailed out of sight of land, with empty horizons on every side.",
+      "translation": "然而，真正的冒险直到他们的拉皮塔后裔驶出陆地视线、四面只剩空旷地平线时才开始。",
+      "structure": [
+        {"text": "The real adventure", "role": "subject", "level": 1},
+        {"text": "didn't begin", "role": "verb_phrase", "level": 1},
+        {"text": "however", "role": "conjunctive_adverb", "level": 1},
+        {"text": "until their Lapita descendants sailed out of sight of land", "role": "adverbial_clause", "level": 2},
+        {"text": "with empty horizons on every side", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "not... until... 表示“直到……才……”，否定作用落在 begin 的时间上。",
+        "however 是插入性的连接副词，由两个逗号隔开。",
+        "with empty horizons on every side 是伴随状态，描写离岸后四面无陆地可见。",
+        "out of sight of land 表示已经驶到看不见陆地的距离。"
+      ],
+      "expressions": [
+        {"text": "not ... until ...", "meaning_zh": "直到……才……"},
+        {"text": "out of sight of land", "meaning_zh": "看不见陆地"},
+        {"text": "on every side", "meaning_zh": "四面八方"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "This must have been as difficult for them as landing on the moon is for us today.",
+      "translation": "这对他们而言必定如同今天登月对我们一样艰难。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "must have been", "role": "verb_phrase", "level": 1},
+        {"text": "as difficult for them", "role": "complement", "level": 1},
+        {"text": "as landing on the moon is for us today", "role": "adverbial_clause", "level": 2},
+        {"text": "landing on the moon", "role": "subject", "level": 3}
+      ],
+      "difficult_points": [
+        "must have been 表示对过去情况的高度肯定推测。",
+        "as... as... 构成同级比较，将古代远洋航行与现代登月的难度相比。",
+        "第二个 as 从句中 landing on the moon 是动名词短语作主语。",
+        "This 指代上一句所述驶出陆地视线的远洋冒险。"
+      ],
+      "expressions": [
+        {"text": "must have been", "meaning_zh": "过去必定是"},
+        {"text": "as difficult ... as ...", "meaning_zh": "与……一样困难"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "Certainly it distinguished them from their ancestors, but what gave them the courage to launch out on such risky voyages?",
+      "translation": "这种壮举无疑使他们有别于祖先，但究竟是什么赋予他们勇气，去踏上如此危险的航程？",
+      "structure": [
+        {"text": "Certainly it distinguished them from their ancestors", "role": "main_clause", "level": 1},
+        {"text": "but what gave them the courage", "role": "coordinated_clause", "level": 1},
+        {"text": "to launch out on such risky voyages", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "it 指代拉皮塔人驶出陆地视线进行远洋航行这一行为。",
+        "but 后是特殊疑问句，what 本身充当主语，因此不需要助动词倒装。",
+        "to launch out... 后置修饰 courage，说明他们鼓起勇气去做什么。",
+        "distinguish A from B 表示使 A 区别于 B。"
+      ],
+      "expressions": [
+        {"text": "distinguish ... from ...", "meaning_zh": "使……区别于……"},
+        {"text": "give them the courage to", "meaning_zh": "给予他们做……的勇气"},
+        {"text": "launch out on", "meaning_zh": "开始从事；踏上"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 24,
+      "sentence": "The Lapita's thrust into the Pacific was eastward, against the prevailing trade winds, Irwin notes.",
+      "translation": "欧文指出，拉皮塔人向太平洋推进的方向是向东，正对着盛行信风。",
+      "structure": [
+        {"text": "The Lapita's thrust into the Pacific", "role": "subject", "level": 1},
+        {"text": "was eastward", "role": "verb_phrase", "level": 1},
+        {"text": "against the prevailing trade winds", "role": "prepositional_phrase", "level": 1},
+        {"text": "Irwin notes", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "thrust 在此作名词，指拉皮塔人向太平洋深处的推进。",
+        "against 表示航行方向与 prevailing trade winds 相反。",
+        "Irwin notes 是置于陈述内容后的引述语。"
+      ],
+      "expressions": [
+        {"text": "thrust into", "meaning_zh": "向……推进"},
+        {"text": "prevailing trade winds", "meaning_zh": "盛行信风"},
+        {"text": "against the wind", "meaning_zh": "逆风"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 25,
+      "sentence": "Those nagging headwinds, he argues, may have been the key to their success.",
+      "translation": "他认为，那些持续不断的逆风或许正是他们成功的关键。",
+      "structure": [
+        {"text": "Those nagging headwinds", "role": "subject", "level": 1},
+        {"text": "he argues", "role": "parenthesis", "level": 1},
+        {"text": "may have been", "role": "verb_phrase", "level": 1},
+        {"text": "the key to their success", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "he argues 是插入语，不影响主句的完整语法结构。",
+        "may have been 表示对过去情况的可能性推测。",
+        "headwinds 通常是阻力，句中却称其为成功关键，形成看似矛盾的观点并引出解释。"
+      ],
+      "expressions": [
+        {"text": "may have been", "meaning_zh": "过去可能是"},
+        {"text": "the key to", "meaning_zh": "……的关键"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 26,
+      "sentence": "'They could sail out for days into the unknown and assess the area, secure in the knowledge that if they didn't find anything, they could turn about and catch a swift ride back on the trade winds.",
+      "translation": "“他们可以连续数日驶向未知海域并考察那片区域，同时心里很踏实：如果一无所获，他们就能掉头乘着信风迅速返航。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "could sail out for days into the unknown and assess the area", "role": "verb_phrase", "level": 1},
+        {"text": "secure in the knowledge", "role": "adjectival_phrase", "level": 2},
+        {"text": "that if they didn't find anything, they could turn about and catch a swift ride back on the trade winds", "role": "noun_clause", "level": 3},
+        {"text": "if they didn't find anything", "role": "adverbial_clause", "level": 4},
+        {"text": "they could turn about and catch a swift ride back on the trade winds", "role": "main_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "sail out 与 assess 是由 and 连接、共用情态动词 could 的并列谓语。",
+        "secure in the knowledge... 是形容词短语作伴随状语，表示他们因掌握某信息而安心。",
+        "that 引导 knowledge 的同位语从句，其中又嵌套 if 条件从句。",
+        "turn about 和 catch a swift ride back 表示借助信风掉头快速返航。"
+      ],
+      "expressions": [
+        {"text": "sail into the unknown", "meaning_zh": "驶入未知海域"},
+        {"text": "secure in the knowledge that", "meaning_zh": "确信……而感到安心"},
+        {"text": "turn about", "meaning_zh": "掉头"},
+        {"text": "catch a swift ride back", "meaning_zh": "借势迅速返回"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 27,
+      "sentence": "This is what would have made the whole thing work.'",
+      "translation": "正是这一点使整套做法得以奏效。”",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "what would have made the whole thing work", "role": "noun_clause", "level": 2},
+        {"text": "made the whole thing work", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "what 引导表语从句，并在从句中充当主语，意为“使整件事奏效的因素”。",
+        "would have made 表示对过去机制的推断。",
+        "make + 宾语 + 动词原形构成使役结构，work 表示“奏效”。"
+      ],
+      "expressions": [
+        {"text": "make the whole thing work", "meaning_zh": "使整套做法奏效"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 28,
+      "sentence": "Once out there, skilled seafarers would have detected abundant leads to follow to land: seabirds, coconuts and twigs carried out to sea by the tides, and the afternoon pile-up of clouds on the horizon which often indicates an island in the distance.",
+      "translation": "一旦到了外海，经验丰富的航海者便会发现许多可循此前往陆地的线索：海鸟、被潮水带到海上的椰子和树枝，以及午后地平线上堆积的云层——这种云层往往表明远处有岛屿。",
+      "structure": [
+        {"text": "Once out there", "role": "adverbial_clause", "level": 1},
+        {"text": "skilled seafarers", "role": "subject", "level": 1},
+        {"text": "would have detected", "role": "verb_phrase", "level": 1},
+        {"text": "abundant leads to follow to land", "role": "object", "level": 1},
+        {"text": "to follow to land", "role": "non_finite_clause", "level": 2},
+        {"text": "seabirds, coconuts and twigs carried out to sea by the tides, and the afternoon pile-up of clouds on the horizon", "role": "appositive", "level": 2},
+        {"text": "carried out to sea by the tides", "role": "participial_phrase", "level": 3},
+        {"text": "which often indicates an island in the distance", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "Once out there 是省略了 they were 的时间状语从句。",
+        "to follow to land 是不定式，后置修饰 leads，表示可循着前往陆地的线索。",
+        "冒号后的并列名词具体列举 abundant leads。",
+        "carried... 修饰 coconuts and twigs；which 从句修饰 afternoon pile-up of clouds。"
+      ],
+      "expressions": [
+        {"text": "abundant leads", "meaning_zh": "大量线索"},
+        {"text": "be carried out to sea", "meaning_zh": "被带到海上"},
+        {"text": "on the horizon", "meaning_zh": "在地平线上"},
+        {"text": "in the distance", "meaning_zh": "在远处"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 29,
+      "sentence": "For returning explorers, successful or not, the geography of their own archipelagoes would have provided a safety net.",
+      "translation": "对于返航的探险者来说，无论探索成功与否，自家群岛的地理布局都会成为一道安全保障。",
+      "structure": [
+        {"text": "For returning explorers", "role": "prepositional_phrase", "level": 1},
+        {"text": "successful or not", "role": "elliptical_clause", "level": 2},
+        {"text": "the geography of their own archipelagoes", "role": "subject", "level": 1},
+        {"text": "would have provided", "role": "verb_phrase", "level": 1},
+        {"text": "a safety net", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "successful or not 是省略结构，完整含义为 whether they were successful or not。",
+        "would have provided 表示作者对过去航行情境的推断。",
+        "a safety net 是比喻，指群岛地理形态提供的防失踪保障。"
+      ],
+      "expressions": [
+        {"text": "successful or not", "meaning_zh": "无论成功与否"},
+        {"text": "provide a safety net", "meaning_zh": "提供安全保障"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 30,
+      "sentence": "Without this to go by, overshooting their home ports, getting lost and sailing off into eternity would have been all too easy.",
+      "translation": "如果没有这一参照，错过家乡港口、迷失方向并从此驶入无尽大海，都会变得太容易发生。",
+      "structure": [
+        {"text": "Without this to go by", "role": "prepositional_phrase", "level": 1},
+        {"text": "to go by", "role": "non_finite_clause", "level": 2},
+        {"text": "overshooting their home ports, getting lost and sailing off into eternity", "role": "subject", "level": 1},
+        {"text": "would have been all too easy", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Without this to go by 表示缺少可作为判断依据的群岛地理参照。",
+        "三个并列的动名词短语共同充当主语。",
+        "would have been 表示对与事实相反或未必实际发生的过去后果的推断。",
+        "all too easy 表示“过于容易发生”，带有负面评价。"
+      ],
+      "expressions": [
+        {"text": "go by", "meaning_zh": "以……为依据"},
+        {"text": "get lost", "meaning_zh": "迷失方向"},
+        {"text": "all too easy", "meaning_zh": "太容易发生"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 31,
+      "sentence": "Vanuatu, for example, stretches more than 500 miles in a northwest-southeast trend, its scores of intervisible islands forming a backstop for mariners riding the trade winds home.",
+      "translation": "例如，瓦努阿图沿西北—东南方向绵延五百多英里，数十座彼此可见的岛屿为乘信风返航的水手构成了一道屏障。",
+      "structure": [
+        {"text": "Vanuatu", "role": "subject", "level": 1},
+        {"text": "for example", "role": "parenthesis", "level": 1},
+        {"text": "stretches more than 500 miles in a northwest-southeast trend", "role": "verb_phrase", "level": 1},
+        {"text": "its scores of intervisible islands forming a backstop for mariners riding the trade winds home", "role": "absolute_construction", "level": 2},
+        {"text": "riding the trade winds home", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "for example 是插入语，用瓦努阿图具体说明群岛如何形成安全网。",
+        "its scores of... forming... 是独立主格结构，补充说明主句产生的保障作用。",
+        "riding the trade winds home 是现在分词短语，后置修饰 mariners。",
+        "intervisible 表示岛屿彼此处在可视范围内。"
+      ],
+      "expressions": [
+        {"text": "stretch more than", "meaning_zh": "绵延超过……"},
+        {"text": "form a backstop for", "meaning_zh": "为……形成安全屏障"},
+        {"text": "ride the trade winds home", "meaning_zh": "乘信风返航"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 32,
+      "sentence": "All this presupposes one essential detail, says Atholl Anderson, professor of prehistory at the Australian National University: the Lapita had mastered the advanced art of sailing against the wind.",
+      "translation": "澳大利亚国立大学史前史教授阿索尔·安德森说，所有这些推论都预设了一个关键细节：拉皮塔人已经掌握先进的逆风航行技术。",
+      "structure": [
+        {"text": "All this", "role": "subject", "level": 1},
+        {"text": "presupposes", "role": "verb_phrase", "level": 1},
+        {"text": "one essential detail", "role": "object", "level": 1},
+        {"text": "says Atholl Anderson", "role": "main_clause", "level": 1},
+        {"text": "professor of prehistory at the Australian National University", "role": "appositive", "level": 2},
+        {"text": "the Lapita had mastered the advanced art of sailing against the wind", "role": "appositive_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "All this 指代前文关于逆风出航、顺风返航及地理安全网的整套解释。",
+        "says Atholl Anderson 是插入式引述语，其后的名词短语是人物同位语。",
+        "冒号后的完整分句具体解释 one essential detail。",
+        "had mastered 使用过去完成时，表示这种能力须在相关航行之前已经掌握。"
+      ],
+      "expressions": [
+        {"text": "presuppose", "meaning_zh": "以……为前提；预设"},
+        {"text": "one essential detail", "meaning_zh": "一个关键细节"},
+        {"text": "master the art of", "meaning_zh": "掌握……的技艺"},
+        {"text": "sail against the wind", "meaning_zh": "逆风航行"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 33,
+      "sentence": "'And there's no proof they could do any such thing,' Anderson says.",
+      "translation": "安德森说：“而且没有证据证明他们能做到这样的事。”",
+      "structure": [
+        {"text": "And", "role": "coordinating_conjunction", "level": 1},
+        {"text": "there's no proof", "role": "existential_clause", "level": 1},
+        {"text": "they could do any such thing", "role": "relative_clause", "level": 2},
+        {"text": "Anderson says", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "there's 是 there is 的缩写，构成存在句。",
+        "they could do any such thing 是省略关系词 that 的定语从句，修饰 proof。",
+        "any such thing 指代上一句所说的逆风航行。",
+        "Anderson says 是直接引语后的引述语。"
+      ],
+      "expressions": [
+        {"text": "there is no proof", "meaning_zh": "没有证据"},
+        {"text": "any such thing", "meaning_zh": "任何这样的事情"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 34,
+      "sentence": "'There has been this assumption they did, and people have built canoes to re-create those early voyages based on that assumption.",
+      "translation": "“人们一直有这样一种假设，认为他们具备这种能力；而且人们还基于该假设建造独木舟，重现那些早期航程。",
+      "structure": [
+        {"text": "There has been this assumption", "role": "existential_clause", "level": 1},
+        {"text": "they did", "role": "appositive_clause", "level": 2},
+        {"text": "and people have built canoes", "role": "coordinated_clause", "level": 1},
+        {"text": "to re-create those early voyages", "role": "non_finite_clause", "level": 2},
+        {"text": "based on that assumption", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "they did 是省略 that 的同位语从句，解释 assumption 的内容；did 代替 could sail against the wind。",
+        "两个分句都用现在完成时，说明假设及据此开展的活动延续到当前讨论。",
+        "to re-create... 是目的不定式，说明建造独木舟的目的。",
+        "based on that assumption 表明重建航程所依据的前提。"
+      ],
+      "expressions": [
+        {"text": "there has been an assumption", "meaning_zh": "一直存在一种假设"},
+        {"text": "re-create early voyages", "meaning_zh": "重现早期航程"},
+        {"text": "based on that assumption", "meaning_zh": "基于该假设"}
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 35,
+      "sentence": "But nobody has any idea what their canoes looked like or how they were rigged.'",
+      "translation": "但没有人知道他们的独木舟是什么样子，也不知道船上的索具如何安装。”",
+      "structure": [
+        {"text": "But nobody", "role": "subject", "level": 1},
+        {"text": "has any idea", "role": "verb_phrase", "level": 1},
+        {"text": "what their canoes looked like", "role": "noun_clause", "level": 2},
+        {"text": "or how they were rigged", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "what 与 how 分别引导两个并列的同位语从句，说明 idea 的具体内容。",
+        "两个从句都是间接疑问句，采用陈述语序。",
+        "were rigged 是被动语态，指独木舟上的帆索系统如何装配。",
+        "they 在 how 从句中指代 canoes。"
+      ],
+      "expressions": [
+        {"text": "have no idea", "meaning_zh": "完全不知道"},
+        {"text": "what ... looked like", "meaning_zh": "……是什么样子"},
+        {"text": "be rigged", "meaning_zh": "装配帆索"}
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 36,
+      "sentence": "Rather than give all the credit to human skill, Anderson invokes the winds of chance.",
+      "translation": "安德森没有把全部功劳归于人类技巧，而是援引了机缘之风的作用。",
+      "structure": [
+        {"text": "Rather than give all the credit to human skill", "role": "prepositional_phrase", "level": 1},
+        {"text": "Anderson", "role": "subject", "level": 1},
+        {"text": "invokes", "role": "verb_phrase", "level": 1},
+        {"text": "the winds of chance", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "rather than 后接动词原形 give，表示舍弃一种解释而采用另一种解释。",
+        "give all the credit to 表示把全部功劳归于某因素。",
+        "the winds of chance 兼具字面和比喻意义，既指风向变化，也指偶然机缘。"
+      ],
+      "expressions": [
+        {"text": "rather than", "meaning_zh": "而不是"},
+        {"text": "give all the credit to", "meaning_zh": "把全部功劳归于"},
+        {"text": "invoke", "meaning_zh": "援引……作为解释"}
+      ]
+    },
+    {
+      "id": "J-02",
+      "paragraph_label": "J",
+      "sentence_index": 37,
+      "sentence": "El Niño, the same climate disruption that affects the Pacific today, may have helped scatter the Lapita, Anderson suggests.",
+      "translation": "安德森提出，厄尔尼诺——如今仍影响太平洋的同一种气候扰动——可能曾促使拉皮塔人分散迁徙。",
+      "structure": [
+        {"text": "El Niño", "role": "subject", "level": 1},
+        {"text": "the same climate disruption that affects the Pacific today", "role": "appositive", "level": 2},
+        {"text": "that affects the Pacific today", "role": "relative_clause", "level": 3},
+        {"text": "may have helped scatter", "role": "verb_phrase", "level": 1},
+        {"text": "the Lapita", "role": "object", "level": 1},
+        {"text": "Anderson suggests", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "两个逗号之间的名词短语是 El Niño 的同位语。",
+        "that 引导定语从句，修饰 climate disruption。",
+        "may have helped 表示对过去可能产生的作用进行推测，help 后接动词原形 scatter。",
+        "Anderson suggests 是置于陈述内容后的引述语。"
+      ],
+      "expressions": [
+        {"text": "climate disruption", "meaning_zh": "气候扰动"},
+        {"text": "may have helped", "meaning_zh": "过去可能曾促使"},
+        {"text": "scatter", "meaning_zh": "使分散迁徙"}
+      ]
+    },
+    {
+      "id": "J-03",
+      "paragraph_label": "J",
+      "sentence_index": 38,
+      "sentence": "He points out that climate data obtained from slow-growing corals around the Pacific indicate a series of unusually frequent El Niños around the time of the Lapita expansion.",
+      "translation": "他指出，从太平洋各地生长缓慢的珊瑚中获得的气候数据表明，在拉皮塔人扩张时期前后，曾出现一系列异常频繁的厄尔尼诺现象。",
+      "structure": [
+        {"text": "He", "role": "subject", "level": 1},
+        {"text": "points out", "role": "verb_phrase", "level": 1},
+        {"text": "that climate data obtained from slow-growing corals around the Pacific indicate a series of unusually frequent El Niños around the time of the Lapita expansion", "role": "noun_clause", "level": 2},
+        {"text": "climate data obtained from slow-growing corals around the Pacific", "role": "subject", "level": 3},
+        {"text": "obtained from slow-growing corals around the Pacific", "role": "participial_phrase", "level": 4},
+        {"text": "indicate", "role": "verb_phrase", "level": 3},
+        {"text": "a series of unusually frequent El Niños", "role": "object", "level": 3},
+        {"text": "around the time of the Lapita expansion", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导 point out 的宾语从句，从句主语是较长的 climate data...。",
+        "obtained from... 是过去分词短语，后置修饰 climate data。",
+        "从句谓语 indicate 与复数中心词 data 保持一致。",
+        "around the time of 表示大致处于某一事件发生的时期前后。"
+      ],
+      "expressions": [
+        {"text": "point out that", "meaning_zh": "指出……"},
+        {"text": "data obtained from", "meaning_zh": "从……获得的数据"},
+        {"text": "a series of", "meaning_zh": "一系列"},
+        {"text": "around the time of", "meaning_zh": "大约在……时期"}
+      ]
+    },
+    {
+      "id": "J-04",
+      "paragraph_label": "J",
+      "sentence_index": 39,
+      "sentence": "By reversing the regular east-to-west flow of the trade winds for weeks at a time, these 'super El Niños' might have taken the Lapita on long unplanned voyages.",
+      "translation": "这些“超级厄尔尼诺”可能通过一次连续数周逆转信风通常由东向西的流向，使拉皮塔人踏上漫长而计划外的航程。",
+      "structure": [
+        {"text": "By reversing the regular east-to-west flow of the trade winds for weeks at a time", "role": "prepositional_phrase", "level": 1},
+        {"text": "these 'super El Niños'", "role": "subject", "level": 1},
+        {"text": "might have taken", "role": "verb_phrase", "level": 1},
+        {"text": "the Lapita", "role": "object", "level": 1},
+        {"text": "on long unplanned voyages", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "By reversing... 是方式状语，说明超级厄尔尼诺如何影响航程。",
+        "might have taken 表示对过去可能发生之事的推测。",
+        "take someone on a voyage 表示使某人踏上或经历一段航程。",
+        "for weeks at a time 表示每次持续数周。"
+      ],
+      "expressions": [
+        {"text": "reverse the flow of", "meaning_zh": "逆转……的流向"},
+        {"text": "for weeks at a time", "meaning_zh": "每次连续数周"},
+        {"text": "take ... on a voyage", "meaning_zh": "使……踏上航程"},
+        {"text": "unplanned voyages", "meaning_zh": "计划外的航程"}
+      ]
+    },
+    {
+      "id": "K-01",
+      "paragraph_label": "K",
+      "sentence_index": 40,
+      "sentence": "However they did it, the Lapita spread themselves a third of the way across the Pacific, then called it quits for reasons known only to them.",
+      "translation": "无论他们用什么方式做到，拉皮塔人都已横跨太平洋三分之一的距离，随后却因只有他们自己知道的原因停止了扩张。",
+      "structure": [
+        {"text": "However they did it", "role": "adverbial_clause", "level": 1},
+        {"text": "the Lapita", "role": "subject", "level": 1},
+        {"text": "spread themselves a third of the way across the Pacific", "role": "verb_phrase", "level": 1},
+        {"text": "then called it quits", "role": "coordinated_clause", "level": 1},
+        {"text": "for reasons known only to them", "role": "prepositional_phrase", "level": 2},
+        {"text": "known only to them", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "However 在此引导让步状语从句，意为“无论以何种方式”，不是表示转折的连接副词。",
+        "spread themselves... 描述其分布范围扩展到横跨太平洋三分之一。",
+        "called it quits 是习语，表示决定停止。",
+        "known only to them 是过去分词短语，后置修饰 reasons。"
+      ],
+      "expressions": [
+        {"text": "however they did it", "meaning_zh": "无论他们如何做到"},
+        {"text": "a third of the way across", "meaning_zh": "横跨……三分之一的距离"},
+        {"text": "call it quits", "meaning_zh": "决定停止"},
+        {"text": "for reasons known only to", "meaning_zh": "出于只有……知道的原因"}
+      ]
+    },
+    {
+      "id": "K-02",
+      "paragraph_label": "K",
+      "sentence_index": 41,
+      "sentence": "Ahead lay the vast emptiness of the central Pacific and perhaps they were too thinly stretched to venture farther.",
+      "translation": "前方是中太平洋的浩瀚空域，也许他们的人员分布已过于分散，无法继续向更远处进发。",
+      "structure": [
+        {"text": "Ahead lay the vast emptiness of the central Pacific", "role": "inverted_clause", "level": 1},
+        {"text": "the vast emptiness of the central Pacific", "role": "subject", "level": 2},
+        {"text": "and perhaps they were too thinly stretched", "role": "coordinated_clause", "level": 1},
+        {"text": "to venture farther", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "地点副词 Ahead 置于句首引起完全倒装，主语是 the vast emptiness...，谓语是 lay。",
+        "and 连接客观地理状况与作者提出的可能解释。",
+        "too... to... 表示“过于……而无法……”。",
+        "thinly stretched 指人口或资源分布过散、力量被摊得太薄。"
+      ],
+      "expressions": [
+        {"text": "ahead lay", "meaning_zh": "前方是……"},
+        {"text": "be thinly stretched", "meaning_zh": "分布过于分散；力量摊薄"},
+        {"text": "venture farther", "meaning_zh": "向更远处冒险前进"}
+      ]
+    },
+    {
+      "id": "K-03",
+      "paragraph_label": "K",
+      "sentence_index": 42,
+      "sentence": "They probably never numbered more than a few thousand in total, and in their rapid migration eastward they encountered hundreds of islands - more than 300 in Fiji alone.",
+      "translation": "他们的总人数很可能从未超过几千；而在迅速向东迁徙的过程中，他们遇到了数百座岛屿——仅斐济就有三百多座。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "probably never numbered more than a few thousand in total", "role": "verb_phrase", "level": 1},
+        {"text": "and in their rapid migration eastward they encountered hundreds of islands", "role": "coordinated_clause", "level": 1},
+        {"text": "in their rapid migration eastward", "role": "prepositional_phrase", "level": 2},
+        {"text": "more than 300 in Fiji alone", "role": "appositive", "level": 2}
+      ],
+      "difficult_points": [
+        "number 在此作动词，表示“人数达到”，never more than 限定总人口上限。",
+        "and 连接人口规模与迁徙途中所遇岛屿数量两个事实。",
+        "破折号后的名词短语补充说明 hundreds of islands，突出仅斐济一地就有三百多座。",
+        "alone 位于 Fiji 后表示“仅斐济一处”。"
+      ],
+      "expressions": [
+        {"text": "number more than", "meaning_zh": "人数超过"},
+        {"text": "in total", "meaning_zh": "总计"},
+        {"text": "rapid migration eastward", "meaning_zh": "迅速向东迁徙"},
+        {"text": "in Fiji alone", "meaning_zh": "仅在斐济一地"}
+      ]
+    }
+  ]
+}

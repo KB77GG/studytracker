@@ -1,0 +1,848 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts11_test4_reading",
+  "passage_id": "ielts11_test4_p1",
+  "passage_title": "Research using twins",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "To biomedical researchers all over the world, twins offer a precious opportunity to untangle the influence of genes and the environment - of nature and nurture.",
+      "translation": "对世界各地的生物医学研究人员来说，双胞胎提供了一个宝贵的机会，能帮助人们厘清基因与环境的影响——也就是先天与后天的作用。",
+      "structure": [
+        {"text": "To biomedical researchers all over the world", "role": "prepositional_phrase", "level": 1},
+        {"text": "twins", "role": "subject", "level": 1},
+        {"text": "offer", "role": "verb_phrase", "level": 1},
+        {"text": "a precious opportunity", "role": "object", "level": 1},
+        {"text": "to untangle the influence of genes and the environment", "role": "non_finite_clause", "level": 2},
+        {"text": "of nature and nurture", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "句首介词短语说明这一机会是针对生物医学研究人员而言的。",
+        "to untangle... 是不定式短语，修饰 opportunity，说明机会的具体内容。",
+        "破折号后的 of nature and nurture 是对 genes and the environment 的同位语说明。"
+      ],
+      "expressions": [
+        {"text": "a precious opportunity", "meaning_zh": "宝贵的机会"},
+        {"text": "untangle the influence of", "meaning_zh": "厘清……的影响"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Because identical twins come from a single fertilized egg that splits into two, they share virtually the same genetic code.",
+      "translation": "因为同卵双胞胎来自同一个受精卵分裂而成的两个个体，所以他们的基因密码几乎完全相同。",
+      "structure": [
+        {"text": "Because identical twins come from a single fertilized egg that splits into two", "role": "adverbial_clause", "level": 1},
+        {"text": "that splits into two", "role": "relative_clause", "level": 2},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "share virtually the same genetic code", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Because 引导原因状语从句，解释同卵双胞胎基因相同的原因。",
+        "that splits into two 是定语从句，修饰 a single fertilized egg，说明受精卵分裂成两个的过程。"
+      ],
+      "expressions": [
+        {"text": "share the same genetic code", "meaning_zh": "拥有相同的基因密码"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Any differences between them - one twin having younger looking skin, for example - must be due to environmental factors such as less time spent in the sun.",
+      "translation": "他们之间的任何差异——比如其中一个双胞胎的皮肤看起来更年轻——必定是环境因素造成的，比如晒太阳的时间较少。",
+      "structure": [
+        {"text": "Any differences between them", "role": "subject", "level": 1},
+        {"text": "one twin having younger looking skin, for example", "role": "apposition", "level": 2},
+        {"text": "must be due to", "role": "verb_phrase", "level": 1},
+        {"text": "environmental factors such as less time spent in the sun", "role": "complement", "level": 1},
+        {"text": "less time spent in the sun", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "两个破折号之间的内容是插入语，举例说明双胞胎间可能存在的差异。",
+        "one twin having younger looking skin 是独立主格结构，起举例说明的作用。",
+        "must be due to 表示对原因的强烈推断，即“必定是由……造成的”。"
+      ],
+      "expressions": [
+        {"text": "be due to", "meaning_zh": "由……造成；因……所致"},
+        {"text": "environmental factors", "meaning_zh": "环境因素"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Alternatively, by comparing the experiences of identical twins with those of fraternal twins, who come from separate eggs and share on average half their DNA, researchers can quantify the extent to which our genes affect our lives.",
+      "translation": "另一种方法是，通过比较同卵双胞胎与异卵双胞胎（异卵双胞胎来自不同的卵子，平均共享一半的DNA）的经历，研究人员可以量化基因对我们生活的影响程度。",
+      "structure": [
+        {"text": "by comparing the experiences of identical twins with those of fraternal twins", "role": "prepositional_phrase", "level": 1},
+        {"text": "who come from separate eggs and share on average half their DNA", "role": "relative_clause", "level": 2},
+        {"text": "researchers", "role": "subject", "level": 1},
+        {"text": "can quantify", "role": "verb_phrase", "level": 1},
+        {"text": "the extent to which our genes affect our lives", "role": "object", "level": 1},
+        {"text": "to which our genes affect our lives", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "by comparing... 是方式状语，说明研究人员采用的具体方法。",
+        "those 代替前面的 the experiences，避免重复。",
+        "who 引导定语从句，修饰 fraternal twins，补充说明异卵双胞胎的来源。",
+        "the extent to which... 中 to which 引导定语从句，修饰 extent，表示“基因影响生活的程度”。"
+      ],
+      "expressions": [
+        {"text": "by comparing A with B", "meaning_zh": "通过将A与B比较"},
+        {"text": "quantify the extent to which", "meaning_zh": "量化……的程度"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "If identical twins are more similar to each other with respect to an ailment than fraternal twins are, then vulnerability to the disease must be rooted at least in part in heredity.",
+      "translation": "如果同卵双胞胎在某种疾病上彼此的相似度高于异卵双胞胎，那么患病的易感性至少在一定程度上必定源于遗传。",
+      "structure": [
+        {"text": "If identical twins are more similar to each other with respect to an ailment", "role": "adverbial_clause", "level": 1},
+        {"text": "with respect to an ailment", "role": "prepositional_phrase", "level": 2},
+        {"text": "than fraternal twins are", "role": "adverbial_clause", "level": 2},
+        {"text": "vulnerability to the disease", "role": "subject", "level": 1},
+        {"text": "must be rooted", "role": "verb_phrase", "level": 1},
+        {"text": "at least in part in heredity", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "If 引导条件状语从句，than fraternal twins are 是比较状语从句嵌套其中。",
+        "be rooted in 表示“根源在于”，at least in part 修饰整个谓语，限定程度。"
+      ],
+      "expressions": [
+        {"text": "with respect to", "meaning_zh": "关于；就……而言"},
+        {"text": "be rooted in", "meaning_zh": "根源在于"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 6,
+      "sentence": "These two lines of research - studying the differences between identical twins to pinpoint the influence of environment, and comparing identical twins with fraternal ones to measure the role of inheritance - have been crucial to understanding the interplay of nature and nurture in determining our personalities, behavior, and vulnerability to disease.",
+      "translation": "这两条研究路径——通过研究同卵双胞胎之间的差异来确定环境的影响，以及通过比较同卵双胞胎与异卵双胞胎来衡量遗传的作用——对于理解先天与后天在决定我们的性格、行为以及患病易感性方面的相互作用，都至关重要。",
+      "structure": [
+        {"text": "These two lines of research", "role": "subject", "level": 1},
+        {"text": "studying the differences between identical twins to pinpoint the influence of environment", "role": "apposition", "level": 2},
+        {"text": "to pinpoint the influence of environment", "role": "non_finite_clause", "level": 3},
+        {"text": "and comparing identical twins with fraternal ones to measure the role of inheritance", "role": "apposition", "level": 2},
+        {"text": "to measure the role of inheritance", "role": "non_finite_clause", "level": 3},
+        {"text": "have been crucial to", "role": "verb_phrase", "level": 1},
+        {"text": "understanding the interplay of nature and nurture in determining our personalities, behavior, and vulnerability to disease", "role": "complement", "level": 1},
+        {"text": "in determining our personalities, behavior, and vulnerability to disease", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "两个破折号之间的动名词短语是对 These two lines of research 的同位语说明，具体解释这两条研究路径的内容。",
+        "两个 to 不定式分别表示这两条路径各自的研究目的。",
+        "be crucial to doing 中 to 是介词，后接动名词 understanding。"
+      ],
+      "expressions": [
+        {"text": "pinpoint the influence of", "meaning_zh": "确定……的影响"},
+        {"text": "be crucial to", "meaning_zh": "对……至关重要"},
+        {"text": "the interplay of", "meaning_zh": "……的相互作用"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 7,
+      "sentence": "The idea of using twins to measure the influence of heredity dates back to 1875, when the English scientist Francis Galton first suggested the approach (and coined the phrase 'nature and nurture').",
+      "translation": "利用双胞胎来衡量遗传影响这一想法可以追溯到1875年，当时英国科学家弗朗西斯·高尔顿首次提出了这种方法（并创造了“先天与后天”这一说法）。",
+      "structure": [
+        {"text": "The idea of using twins to measure the influence of heredity", "role": "subject", "level": 1},
+        {"text": "of using twins to measure the influence of heredity", "role": "prepositional_phrase", "level": 2},
+        {"text": "dates back to 1875", "role": "verb_phrase", "level": 1},
+        {"text": "when the English scientist Francis Galton first suggested the approach", "role": "relative_clause", "level": 2},
+        {"text": "and coined the phrase 'nature and nurture'", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "when 引导非限定性定语从句，修饰 1875，补充说明那一年发生的事情。",
+        "and coined... 与 first suggested 并列，共用主语 Francis Galton。",
+        "date back to 表示“可追溯到”。"
+      ],
+      "expressions": [
+        {"text": "date back to", "meaning_zh": "追溯到"},
+        {"text": "coin a phrase", "meaning_zh": "创造一个说法/短语"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 8,
+      "sentence": "But twin studies took a surprising twist in the 1980s, with the arrival of studies into identical twins who had been separated at birth and reunited as adults.",
+      "translation": "但在20世纪80年代，随着关于那些出生时分离、成年后又重聚的同卵双胞胎的研究出现，双胞胎研究出现了令人惊讶的转折。",
+      "structure": [
+        {"text": "twin studies", "role": "subject", "level": 1},
+        {"text": "took a surprising twist", "role": "verb_phrase", "level": 1},
+        {"text": "in the 1980s", "role": "prepositional_phrase", "level": 1},
+        {"text": "with the arrival of studies into identical twins", "role": "prepositional_phrase", "level": 1},
+        {"text": "who had been separated at birth and reunited as adults", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "with 引导的介词短语补充说明转折出现的伴随情况，即新研究的出现。",
+        "who 引导定语从句，修饰 identical twins，had been separated 和 reunited 并列，共用助动词 had been。"
+      ],
+      "expressions": [
+        {"text": "take a surprising twist", "meaning_zh": "出现令人惊讶的转折"},
+        {"text": "be separated at birth", "meaning_zh": "出生时便分离"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 9,
+      "sentence": "Over two decades 137 sets of twins eventually visited Thomas Bouchard's lab in what became known as the Minnesota Study of Twins Reared Apart.",
+      "translation": "在二十多年的时间里，最终有137对双胞胎参与了托马斯·布沙尔实验室的研究，这项研究后来被称为“明尼苏达分开抚养双胞胎研究”。",
+      "structure": [
+        {"text": "Over two decades", "role": "prepositional_phrase", "level": 1},
+        {"text": "137 sets of twins", "role": "subject", "level": 1},
+        {"text": "eventually visited", "role": "verb_phrase", "level": 1},
+        {"text": "Thomas Bouchard's lab", "role": "object", "level": 1},
+        {"text": "in what became known as the Minnesota Study of Twins Reared Apart", "role": "prepositional_phrase", "level": 2},
+        {"text": "what became known as the Minnesota Study of Twins Reared Apart", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "what 引导名词性从句，作介词 in 的宾语，指代这项研究后来被称呼的名字。",
+        "become known as 表示“被称为”。"
+      ],
+      "expressions": [
+        {"text": "become known as", "meaning_zh": "被称为"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 10,
+      "sentence": "Numerous tests were carried out on the twins, and they were each asked more than 15,000 questions.",
+      "translation": "研究人员对这些双胞胎进行了大量测试，每人还被问及了超过15,000个问题。",
+      "structure": [
+        {"text": "Numerous tests", "role": "subject", "level": 1},
+        {"text": "were carried out on the twins", "role": "verb_phrase", "level": 1},
+        {"text": "and they were each asked more than 15,000 questions", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "were carried out 是被动语态，强调测试本身而非施动者。",
+        "were... asked 也是被动语态，each 修饰 they，表示“每人”。"
+      ],
+      "expressions": [
+        {"text": "carry out a test", "meaning_zh": "进行测试"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 11,
+      "sentence": "Bouchard and his colleagues used this mountain of data to identify how far twins were affected by their genetic makeup.",
+      "translation": "布沙尔和他的同事们利用这一大堆数据来确定双胞胎受基因构成影响的程度。",
+      "structure": [
+        {"text": "Bouchard and his colleagues", "role": "subject", "level": 1},
+        {"text": "used this mountain of data", "role": "verb_phrase", "level": 1},
+        {"text": "to identify how far twins were affected by their genetic makeup", "role": "non_finite_clause", "level": 2},
+        {"text": "how far twins were affected by their genetic makeup", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "to identify... 是不定式短语，表示使用数据的目的。",
+        "how far 引导宾语从句，作 identify 的宾语，表示受影响的程度。"
+      ],
+      "expressions": [
+        {"text": "this mountain of data", "meaning_zh": "海量的数据"},
+        {"text": "be affected by", "meaning_zh": "受……影响"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 12,
+      "sentence": "The key to their approach was a statistical concept called heritability.",
+      "translation": "他们方法的关键在于一个叫做“遗传率”的统计学概念。",
+      "structure": [
+        {"text": "The key to their approach", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "a statistical concept", "role": "complement", "level": 1},
+        {"text": "called heritability", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "The key to 表示“……的关键在于”，was 之后接的是表语。",
+        "called heritability 是过去分词短语，修饰 a statistical concept，说明这一概念的名称。"
+      ],
+      "expressions": [
+        {"text": "the key to", "meaning_zh": "……的关键"},
+        {"text": "a statistical concept", "meaning_zh": "统计学概念"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 13,
+      "sentence": "In broad terms, the heritability of a trait measures the extent to which differences among members of a population can be explained by differences in their genetics.",
+      "translation": "笼统地说，某一特质的遗传率衡量的是：一个群体成员之间的差异，在多大程度上可以用他们基因上的差异来解释。",
+      "structure": [
+        {"text": "In broad terms", "role": "prepositional_phrase", "level": 1},
+        {"text": "the heritability of a trait", "role": "subject", "level": 1},
+        {"text": "measures", "role": "verb_phrase", "level": 1},
+        {"text": "the extent to which differences among members of a population can be explained by differences in their genetics", "role": "object", "level": 1},
+        {"text": "to which differences among members of a population can be explained by differences in their genetics", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "In broad terms 是插入的方式状语，表示“笼统地说”。",
+        "to which 引导定语从句，修饰 the extent，说明差异被基因解释的程度。",
+        "can be explained by 是被动语态，表示差异的成因可用基因差异来说明。"
+      ],
+      "expressions": [
+        {"text": "in broad terms", "meaning_zh": "笼统地说；大体上"},
+        {"text": "the extent to which", "meaning_zh": "……的程度"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 14,
+      "sentence": "And wherever Bouchard and other scientists looked, it seemed, they found the invisible hand of genetic influence helping to shape our lives.",
+      "translation": "而且，似乎无论布沙尔和其他科学家研究哪里，他们都发现基因影响这只无形的手在塑造着我们的生活。",
+      "structure": [
+        {"text": "wherever Bouchard and other scientists looked", "role": "adverbial_clause", "level": 1},
+        {"text": "it seemed", "role": "parenthesis", "level": 2},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "found", "role": "verb_phrase", "level": 1},
+        {"text": "the invisible hand of genetic influence", "role": "object", "level": 1},
+        {"text": "helping to shape our lives", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "wherever 引导让步/地点状语从句，表示“无论……在哪里”。",
+        "it seemed 是插入语，不影响主句的主谓结构。",
+        "helping to shape our lives 是现在分词短语，修饰 the invisible hand of genetic influence，作宾语补足语。"
+      ],
+      "expressions": [
+        {"text": "the invisible hand of", "meaning_zh": "……这只无形的手"},
+        {"text": "shape our lives", "meaning_zh": "塑造我们的生活"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 15,
+      "sentence": "Lately, however, twin studies have helped lead scientists to a radical new conclusion: that nature and nurture are not the only elemental forces at work.",
+      "translation": "然而，近来的双胞胎研究促使科学家们得出了一个全新且激进的结论：先天与后天并不是唯一在起作用的根本力量。",
+      "structure": [
+        {"text": "Lately, however", "role": "adverbial_phrase", "level": 1},
+        {"text": "twin studies", "role": "subject", "level": 1},
+        {"text": "have helped lead scientists to a radical new conclusion", "role": "verb_phrase", "level": 1},
+        {"text": "that nature and nurture are not the only elemental forces at work", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "冒号后的 that 从句是对 a radical new conclusion 的具体解释，作同位语。",
+        "at work 修饰 forces，表示“在起作用的”。"
+      ],
+      "expressions": [
+        {"text": "help lead someone to a conclusion", "meaning_zh": "促使某人得出结论"},
+        {"text": "at work", "meaning_zh": "在起作用；在运作"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 16,
+      "sentence": "According to a recent field called epigenetics, there is a third factor also in play, one that in some cases serves as a bridge between the environment and our genes, and in others operates on its own to shape who we are.",
+      "translation": "根据一门叫做表观遗传学的新兴学科，还存在第三种起作用的因素——它在某些情况下充当环境与基因之间的桥梁，而在另一些情况下则独立发挥作用，塑造我们的自我。",
+      "structure": [
+        {"text": "According to a recent field called epigenetics", "role": "prepositional_phrase", "level": 1},
+        {"text": "called epigenetics", "role": "participial_phrase", "level": 2},
+        {"text": "there is a third factor also in play", "role": "main_clause", "level": 1},
+        {"text": "one that in some cases serves as a bridge between the environment and our genes", "role": "apposition", "level": 2},
+        {"text": "that in some cases serves as a bridge between the environment and our genes", "role": "relative_clause", "level": 3},
+        {"text": "and in others operates on its own to shape who we are", "role": "coordinated_clause", "level": 3},
+        {"text": "to shape who we are", "role": "non_finite_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "one 指代前面的 a third factor，引出后面的定语从句作进一步说明。",
+        "that 引导的定语从句中，serves 与 operates 并列，分别说明这一因素在不同情况下的作用。",
+        "in others 是 in other cases 的省略，与前面的 in some cases 对应。"
+      ],
+      "expressions": [
+        {"text": "in play", "meaning_zh": "在起作用；在发挥影响"},
+        {"text": "serve as a bridge between", "meaning_zh": "充当……之间的桥梁"},
+        {"text": "on its own", "meaning_zh": "独立地；靠自身"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 17,
+      "sentence": "Epigenetic processes are chemical reactions tied to neither nature nor nurture but representing what researchers have called a 'third component'.",
+      "translation": "表观遗传过程是一种既不属于先天也不属于后天的化学反应，研究人员将其称为“第三成分”。",
+      "structure": [
+        {"text": "Epigenetic processes", "role": "subject", "level": 1},
+        {"text": "are", "role": "verb_phrase", "level": 1},
+        {"text": "chemical reactions", "role": "complement", "level": 1},
+        {"text": "tied to neither nature nor nurture", "role": "participial_phrase", "level": 2},
+        {"text": "but representing what researchers have called a 'third component'", "role": "participial_phrase", "level": 2},
+        {"text": "what researchers have called a 'third component'", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "tied to neither...nor... 和 representing... 都是分词短语，并列修饰 chemical reactions。",
+        "what 引导宾语从句，作 representing 的宾语，指代研究者所称呼的名字。"
+      ],
+      "expressions": [
+        {"text": "tied to", "meaning_zh": "与……相关联"},
+        {"text": "neither ... nor ...", "meaning_zh": "既不……也不……"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 18,
+      "sentence": "These reactions influence how our genetic code is expressed: how each gene is strengthened or weakened, even turned on or off, to build our bones, brains and all the other parts of our bodies.",
+      "translation": "这些反应会影响我们的基因密码如何被表达：即每个基因如何被增强或削弱，甚至被开启或关闭，从而构建我们的骨骼、大脑及身体的其他所有部分。",
+      "structure": [
+        {"text": "These reactions", "role": "subject", "level": 1},
+        {"text": "influence", "role": "verb_phrase", "level": 1},
+        {"text": "how our genetic code is expressed", "role": "noun_clause", "level": 2},
+        {"text": "how each gene is strengthened or weakened, even turned on or off", "role": "apposition", "level": 2},
+        {"text": "to build our bones, brains and all the other parts of our bodies", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "冒号后的内容是对前面 how our genetic code is expressed 的具体展开说明。",
+        "is strengthened or weakened 与 turned on or off 并列，都是被动语态，描述基因表达的方式。",
+        "to build... 是不定式短语，表示基因表达调控最终达到的目的。"
+      ],
+      "expressions": [
+        {"text": "turn on or off", "meaning_zh": "开启或关闭"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 19,
+      "sentence": "If you think of our DNA as an immense piano keyboard and our genes as the keys - each key symbolizing a segment of DNA responsible for a particular note, or trait, and all the keys combining to make us who we are - then epigenetic processes determine when and how each key can be struck, changing the tune being played.",
+      "translation": "如果把我们的DNA想象成一架巨大的钢琴键盘，把基因想象成琴键——每个琴键代表负责某一特定音符（即某种特质）的一段DNA，所有琴键组合在一起造就了独一无二的我们——那么表观遗传过程决定的是何时以及如何弹奏每个琴键，从而改变正在演奏的曲调。",
+      "structure": [
+        {"text": "If you think of our DNA as an immense piano keyboard and our genes as the keys", "role": "adverbial_clause", "level": 1},
+        {"text": "each key symbolizing a segment of DNA responsible for a particular note, or trait", "role": "participial_phrase", "level": 2},
+        {"text": "responsible for a particular note, or trait", "role": "adjective_phrase", "level": 3},
+        {"text": "and all the keys combining to make us who we are", "role": "participial_phrase", "level": 2},
+        {"text": "epigenetic processes", "role": "subject", "level": 1},
+        {"text": "determine", "role": "verb_phrase", "level": 1},
+        {"text": "when and how each key can be struck", "role": "noun_clause", "level": 2},
+        {"text": "changing the tune being played", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "If 引导条件状语从句，两个破折号之间的独立主格结构补充说明比喻的细节。",
+        "each key symbolizing... 和 all the keys combining... 都是独立主格结构，没有独立的主谓一致关系。",
+        "when and how each key can be struck 是 determine 的宾语从句。",
+        "changing the tune being played 是现在分词短语作结果状语，being played 修饰 tune。"
+      ],
+      "expressions": [
+        {"text": "think of A as B", "meaning_zh": "把A想象成/看作B"},
+        {"text": "be responsible for", "meaning_zh": "负责；对应"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 20,
+      "sentence": "One way the study of epigenetics is revolutionizing our understanding of biology is by revealing a mechanism by which the environment directly impacts on genes.",
+      "translation": "表观遗传学研究正在革新我们对生物学理解的方式之一，就是揭示了一种让环境能够直接影响基因的机制。",
+      "structure": [
+        {"text": "One way", "role": "subject", "level": 1},
+        {"text": "the study of epigenetics is revolutionizing our understanding of biology", "role": "relative_clause", "level": 2},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "by revealing a mechanism", "role": "prepositional_phrase", "level": 1},
+        {"text": "by which the environment directly impacts on genes", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "One way 后省略了关系副词 that/in which，the study...biology 是省略引导词的定语从句修饰 way。",
+        "by which 引导定语从句，修饰 a mechanism，which 指代 mechanism 本身。"
+      ],
+      "expressions": [
+        {"text": "revolutionize one's understanding of", "meaning_zh": "彻底改变对……的理解"},
+        {"text": "impact on", "meaning_zh": "对……产生影响"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 21,
+      "sentence": "Studies of animals, for example, have shown that when a rat experiences stress during pregnancy, it can cause epigenetic changes in a fetus that lead to behavioral problems as the rodent grows up.",
+      "translation": "例如，动物研究表明，当一只老鼠在怀孕期间经历压力时，这会导致胎儿发生表观遗传变化，从而在这只啮齿动物成长过程中引发行为问题。",
+      "structure": [
+        {"text": "Studies of animals, for example", "role": "subject", "level": 1},
+        {"text": "have shown", "role": "verb_phrase", "level": 1},
+        {"text": "that when a rat experiences stress during pregnancy, it can cause epigenetic changes in a fetus that lead to behavioral problems as the rodent grows up", "role": "noun_clause", "level": 2},
+        {"text": "when a rat experiences stress during pregnancy", "role": "adverbial_clause", "level": 3},
+        {"text": "it can cause epigenetic changes in a fetus", "role": "main_clause", "level": 3},
+        {"text": "that lead to behavioral problems", "role": "relative_clause", "level": 4},
+        {"text": "as the rodent grows up", "role": "adverbial_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "that 引导 shown 的宾语从句，从句内部又嵌套 when 引导的时间状语从句。",
+        "it 指代前面 when 从句所描述的整个情况。",
+        "that lead to behavioral problems 是定语从句，修饰 epigenetic changes。",
+        "as 在此表示“随着”，引导时间状语从句。"
+      ],
+      "expressions": [
+        {"text": "experience stress", "meaning_zh": "经历压力"},
+        {"text": "lead to", "meaning_zh": "导致"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 22,
+      "sentence": "Other epigenetic processes appear to occur randomly, while others are normal, such as those that guide embryonic cells as they become heart, brain, or liver cells, for example.",
+      "translation": "另一些表观遗传过程似乎是随机发生的，而另一些则是正常的，比如那些引导胚胎细胞发育成心脏、大脑或肝脏细胞的过程。",
+      "structure": [
+        {"text": "Other epigenetic processes", "role": "subject", "level": 1},
+        {"text": "appear to occur randomly", "role": "verb_phrase", "level": 1},
+        {"text": "while others are normal", "role": "adverbial_clause", "level": 2},
+        {"text": "such as those that guide embryonic cells as they become heart, brain, or liver cells, for example", "role": "apposition", "level": 3},
+        {"text": "that guide embryonic cells", "role": "relative_clause", "level": 4},
+        {"text": "as they become heart, brain, or liver cells", "role": "adverbial_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "while 表示对比，连接“随机发生”与“正常发生”两类表观遗传过程。",
+        "those 指代 epigenetic processes，that 引导的定语从句修饰 those。",
+        "as 在此表示“随着……的过程”，说明胚胎细胞分化的时间关系。"
+      ],
+      "expressions": [
+        {"text": "occur randomly", "meaning_zh": "随机发生"},
+        {"text": "guide embryonic cells", "meaning_zh": "引导胚胎细胞（发育）"}
+      ]
+    },
+    {
+      "id": "J-01",
+      "paragraph_label": "J",
+      "sentence_index": 23,
+      "sentence": "Geneticist Danielle Reed has worked with many twins over the years and thought deeply about what twin studies have taught us.",
+      "translation": "遗传学家丹妮尔·里德多年来与许多双胞胎打交道，并深入思考了双胞胎研究教会我们的东西。",
+      "structure": [
+        {"text": "Geneticist Danielle Reed", "role": "subject", "level": 1},
+        {"text": "has worked with many twins over the years", "role": "verb_phrase", "level": 1},
+        {"text": "and thought deeply about what twin studies have taught us", "role": "coordinated_clause", "level": 1},
+        {"text": "what twin studies have taught us", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "has worked 与 thought 是并列谓语，共用主语 Geneticist Danielle Reed。",
+        "what 引导宾语从句，作 about 的宾语，指代双胞胎研究带来的启示。"
+      ],
+      "expressions": [
+        {"text": "think deeply about", "meaning_zh": "深入思考"}
+      ]
+    },
+    {
+      "id": "J-02",
+      "paragraph_label": "J",
+      "sentence_index": 24,
+      "sentence": "'It's very clear when you look at twins that much of what they share is hardwired,' she says.",
+      "translation": "她说：“当你观察双胞胎时会非常清楚地发现，他们身上很多共同之处都是天生固有的。”",
+      "structure": [
+        {"text": "It's very clear", "role": "main_clause", "level": 1},
+        {"text": "when you look at twins", "role": "adverbial_clause", "level": 2},
+        {"text": "that much of what they share is hardwired", "role": "noun_clause", "level": 2},
+        {"text": "what they share", "role": "noun_clause", "level": 3},
+        {"text": "she says", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的主语是后面的 that 从句。",
+        "what they share 是 much of 的宾语从句，指代双胞胎共有的特质。",
+        "hardwired 本义指硬件层面固化，这里比喻“与生俱来、难以改变的”。"
+      ],
+      "expressions": [
+        {"text": "hardwired", "meaning_zh": "天生固有的；与生俱来的"}
+      ]
+    },
+    {
+      "id": "J-03",
+      "paragraph_label": "J",
+      "sentence_index": 25,
+      "sentence": "'Many things about them are absolutely the same and unalterable.",
+      "translation": "“关于他们的很多方面完全相同，且无法改变。”",
+      "structure": [
+        {"text": "Many things about them", "role": "subject", "level": 1},
+        {"text": "are absolutely the same and unalterable", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "about them 修饰 Many things，指双胞胎之间共有的方面。",
+        "the same 与 unalterable 并列作表语，强调这些方面既相同又无法改变。"
+      ],
+      "expressions": [
+        {"text": "unalterable", "meaning_zh": "不可改变的"}
+      ]
+    },
+    {
+      "id": "J-04",
+      "paragraph_label": "J",
+      "sentence_index": 26,
+      "sentence": "But it's also clear, when you get to know them, that other things about them are different.",
+      "translation": "“但同样清楚的是，当你真正了解他们后会发现，关于他们的另一些方面却各不相同。”",
+      "structure": [
+        {"text": "it's also clear", "role": "main_clause", "level": 1},
+        {"text": "when you get to know them", "role": "adverbial_clause", "level": 2},
+        {"text": "that other things about them are different", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "it 是形式主语，that 从句是真正的主语内容，与前一句形成对照。",
+        "when you get to know them 是插入的时间状语从句，位于主句和 that 从句之间。"
+      ],
+      "expressions": [
+        {"text": "get to know", "meaning_zh": "逐渐了解"}
+      ]
+    },
+    {
+      "id": "J-05",
+      "paragraph_label": "J",
+      "sentence_index": 27,
+      "sentence": "Epigenetics is the origin of a lot of those differences, in my view.'",
+      "translation": "“在我看来，表观遗传学正是这些差异中很多部分的根源。”",
+      "structure": [
+        {"text": "Epigenetics", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "the origin of a lot of those differences", "role": "complement", "level": 1},
+        {"text": "in my view", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "those differences 呼应前一句提到的“各不相同的方面”。",
+        "in my view 是插入的观点状语，表明这是个人判断而非定论。"
+      ],
+      "expressions": [
+        {"text": "the origin of", "meaning_zh": "……的根源"},
+        {"text": "in my view", "meaning_zh": "在我看来"}
+      ]
+    },
+    {
+      "id": "K-01",
+      "paragraph_label": "K",
+      "sentence_index": 28,
+      "sentence": "Reed credits Thomas Bouchard's work for today's surge in twin studies.",
+      "translation": "里德将当今双胞胎研究的激增归功于托马斯·布沙尔的工作。",
+      "structure": [
+        {"text": "Reed", "role": "subject", "level": 1},
+        {"text": "credits", "role": "verb_phrase", "level": 1},
+        {"text": "Thomas Bouchard's work", "role": "object", "level": 1},
+        {"text": "for today's surge in twin studies", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "credit A for B 表示“把B归功于A”，此处指把双胞胎研究的兴盛归功于布沙尔的工作。",
+        "today's surge in twin studies 指当前双胞胎研究数量或热度的大幅增长。"
+      ],
+      "expressions": [
+        {"text": "credit A for B", "meaning_zh": "把B归功于A"},
+        {"text": "a surge in", "meaning_zh": "……的激增"}
+      ]
+    },
+    {
+      "id": "K-02",
+      "paragraph_label": "K",
+      "sentence_index": 29,
+      "sentence": "'He was the trailblazer,' she says.",
+      "translation": "她说：“他是这一领域的开拓者。”",
+      "structure": [
+        {"text": "He was the trailblazer", "role": "main_clause", "level": 1},
+        {"text": "she says", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "the trailblazer 指最早开辟某一领域道路的人，此处指布沙尔在双胞胎研究上的开创性地位。",
+        "she says 是引语后置的说话人标注，为插入式结构。"
+      ],
+      "expressions": [
+        {"text": "trailblazer", "meaning_zh": "开拓者；先驱"}
+      ]
+    },
+    {
+      "id": "K-03",
+      "paragraph_label": "K",
+      "sentence_index": 30,
+      "sentence": "'We forget that 50 years ago things like heart disease were thought to be caused entirely by lifestyle.",
+      "translation": "“我们常常忘记，在50年前，像心脏病这样的疾病曾被认为完全是由生活方式造成的。”",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "forget", "role": "verb_phrase", "level": 1},
+        {"text": "that 50 years ago things like heart disease were thought to be caused entirely by lifestyle", "role": "noun_clause", "level": 2},
+        {"text": "were thought to be caused entirely by lifestyle", "role": "verb_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 forget 的宾语。",
+        "were thought to be caused by 是双重被动结构，表示“曾被认为是由……造成的”。"
+      ],
+      "expressions": [
+        {"text": "be thought to be", "meaning_zh": "被认为是"},
+        {"text": "be caused by", "meaning_zh": "由……造成"}
+      ]
+    },
+    {
+      "id": "K-04",
+      "paragraph_label": "K",
+      "sentence_index": 31,
+      "sentence": "Schizophrenia was thought to be due to poor mothering.",
+      "translation": "精神分裂症曾被认为是由不当的母亲养育方式所致。",
+      "structure": [
+        {"text": "Schizophrenia", "role": "subject", "level": 1},
+        {"text": "was thought", "role": "verb_phrase", "level": 1},
+        {"text": "to be due to poor mothering", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "was thought to be 是被动语态加不定式的结构，表示“曾被认为是”。",
+        "poor mothering 指不当或不称职的母亲养育方式，而非泛指母亲。"
+      ],
+      "expressions": [
+        {"text": "be due to", "meaning_zh": "由……所致"}
+      ]
+    },
+    {
+      "id": "K-05",
+      "paragraph_label": "K",
+      "sentence_index": 32,
+      "sentence": "Twin studies have allowed us to be more reflective about what people are actually born with and what's caused by experience.'",
+      "translation": "“双胞胎研究让我们能够更深入地反思，哪些是人们与生俱来的，哪些是后天经历所造成的。”",
+      "structure": [
+        {"text": "Twin studies", "role": "subject", "level": 1},
+        {"text": "have allowed us", "role": "verb_phrase", "level": 1},
+        {"text": "to be more reflective about what people are actually born with and what's caused by experience", "role": "non_finite_clause", "level": 2},
+        {"text": "what people are actually born with", "role": "noun_clause", "level": 3},
+        {"text": "and what's caused by experience", "role": "coordinated_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "allow sb to do 表示“使某人能够做某事”。",
+        "两个 what 从句并列，作 about 的宾语，分别指“天生具有的”和“后天经历造成的”。"
+      ],
+      "expressions": [
+        {"text": "be reflective about", "meaning_zh": "对……进行反思"},
+        {"text": "be born with", "meaning_zh": "天生具有"}
+      ]
+    },
+    {
+      "id": "L-01",
+      "paragraph_label": "L",
+      "sentence_index": 33,
+      "sentence": "Having said that, Reed adds, the latest work in epigenetics promises to take our understanding even further.",
+      "translation": "话虽如此，里德补充说，表观遗传学领域的最新研究有望让我们的理解更进一步。",
+      "structure": [
+        {"text": "Having said that", "role": "participial_phrase", "level": 2},
+        {"text": "Reed adds", "role": "parenthesis", "level": 2},
+        {"text": "the latest work in epigenetics", "role": "subject", "level": 1},
+        {"text": "promises to take our understanding even further", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Having said that 是现在分词短语作状语，表示“话虽如此、尽管这样说”，逻辑主语是 Reed。",
+        "Reed adds 是插入语，不是句子的主干。",
+        "promise to do 表示“有望、很可能会”，并非字面上的承诺。"
+      ],
+      "expressions": [
+        {"text": "having said that", "meaning_zh": "话虽如此"},
+        {"text": "promise to do", "meaning_zh": "有望；很可能会"}
+      ]
+    },
+    {
+      "id": "L-02",
+      "paragraph_label": "L",
+      "sentence_index": 34,
+      "sentence": "'What I like to say is that nature writes some things in pencil and some things in pen,' she says.",
+      "translation": "她说：“我喜欢这样说：先天用铅笔写下了一些东西，也用钢笔写下了一些东西。”",
+      "structure": [
+        {"text": "What I like to say", "role": "noun_clause", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "that nature writes some things in pencil and some things in pen", "role": "noun_clause", "level": 2},
+        {"text": "she says", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "What I like to say 是主语从句，指代说话人接下来要表达的观点。",
+        "in pencil 与 in pen 对比，比喻“可修改的”与“不可修改的”两类特质。"
+      ],
+      "expressions": [
+        {"text": "write in pencil / in pen", "meaning_zh": "用铅笔/钢笔写（比喻可改/不可改）"}
+      ]
+    },
+    {
+      "id": "L-03",
+      "paragraph_label": "L",
+      "sentence_index": 35,
+      "sentence": "'Things written in pen you can't change.",
+      "translation": "“用钢笔写下的东西，你无法更改。”",
+      "structure": [
+        {"text": "Things written in pen", "role": "object", "level": 1},
+        {"text": "written in pen", "role": "participial_phrase", "level": 2},
+        {"text": "you can't change", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Things written in pen 是宾语前置，正常语序应为 you can't change things written in pen，此处为强调而提前。",
+        "written in pen 是过去分词短语，修饰 Things。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "L-04",
+      "paragraph_label": "L",
+      "sentence_index": 36,
+      "sentence": "That's DNA.",
+      "translation": "“那就是DNA。”",
+      "structure": [
+        {"text": "That's DNA", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "That 指代前一句“用钢笔写下、无法更改的东西”，即代指 DNA。",
+        "此句是对前一句比喻的直接点明，语气简洁、强调结论。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "L-05",
+      "paragraph_label": "L",
+      "sentence_index": 37,
+      "sentence": "But things written in pencil you can.",
+      "translation": "“但用铅笔写下的东西，你却可以（更改）。”",
+      "structure": [
+        {"text": "things written in pencil", "role": "object", "level": 1},
+        {"text": "written in pencil", "role": "participial_phrase", "level": 2},
+        {"text": "you can", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "本句同样是宾语前置结构，与上一句形成对照。",
+        "can 后省略了 change，完整表达为 you can change them。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "L-06",
+      "paragraph_label": "L",
+      "sentence_index": 38,
+      "sentence": "That's epigenetics.",
+      "translation": "“那就是表观遗传学。”",
+      "structure": [
+        {"text": "That's epigenetics", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "That 指代前一句“用铅笔写下、可以更改的东西”，即代指表观遗传学所调控的部分。",
+        "此句与 That's DNA 形成对称结构，呼应铅笔与钢笔的比喻。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "L-07",
+      "paragraph_label": "L",
+      "sentence_index": 39,
+      "sentence": "Now that we're actually able to look at the DNA and see where the pencil writings are, it's sort of a whole new world.'",
+      "translation": "“既然我们如今真的能够审视DNA，看清哪些是‘铅笔痕迹’，这就仿佛打开了一个全新的世界。”",
+      "structure": [
+        {"text": "Now that we're actually able to look at the DNA and see where the pencil writings are", "role": "adverbial_clause", "level": 1},
+        {"text": "to look at the DNA and see where the pencil writings are", "role": "non_finite_clause", "level": 2},
+        {"text": "where the pencil writings are", "role": "noun_clause", "level": 3},
+        {"text": "it's sort of a whole new world", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "Now that 引导原因状语从句，表示“既然”。",
+        "see where the pencil writings are 中 where 引导宾语从句，指“铅笔痕迹在哪里”，呼应前文的比喻。",
+        "sort of 是口语化的模糊限定语，表示“有点像、可以说是”。"
+      ],
+      "expressions": [
+        {"text": "now that", "meaning_zh": "既然"},
+        {"text": "sort of", "meaning_zh": "有点；可以说是"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_73_test_5",
+  "passage_id": "reading_jijing_73_test_5_p2",
+  "passage_title": "Why are so few tigers man-eaters?",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "As you leave the Bandhavgarh National Park in central India, there is a notice which shows a huge, placid tiger.",
+      "translation": "当你离开印度中部的班达迦国家公园时，会看到一块告示牌，上面画着一只体形庞大、神态平静的老虎。",
+      "structure": [
+        {"text": "As you leave the Bandhavgarh National Park in central India", "role": "time_adverbial_clause", "level": 2},
+        {"text": "there is a notice", "role": "existential_clause", "level": 1},
+        {"text": "which shows a huge, placid tiger", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["As 在此表示“当……时”，引导时间状语从句。", "which 引导定语从句修饰 notice；show 在此指告示牌上呈现图像。"],
+      "expressions": [{"text": "there is a notice", "meaning_zh": "有一块告示牌"}, {"text": "a huge, placid tiger", "meaning_zh": "一只庞大而平静的老虎"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "The notice says, 'You may not have seen me, but I have seen you.'",
+      "translation": "告示牌上写着：“你也许没有见过我，但我已经见过你。”",
+      "structure": [
+        {"text": "The notice says", "role": "reporting_clause", "level": 1},
+        {"text": "'You may not have seen me", "role": "quoted_clause", "level": 2},
+        {"text": "but I have seen you.'", "role": "contrast_quoted_clause", "level": 2}
+      ],
+      "difficult_points": ["may not have seen 是情态动词加完成式，表示对过去经历的不确定判断。", "两个完成时分句由 but 对比，突出老虎可能暗中观察游客。"],
+      "expressions": [{"text": "may not have done", "meaning_zh": "也许没有做过"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "There are more than a billion people In India and Indian tigers probably see humans every single day of their lives.",
+      "translation": "印度有十亿以上人口，印度老虎很可能一生中每天都能看到人类。",
+      "structure": [
+        {"text": "There are more than a billion people In India", "role": "existential_clause", "level": 1},
+        {"text": "and Indian tigers probably see humans", "role": "coordinate_clause", "level": 1},
+        {"text": "every single day of their lives", "role": "frequency_adverbial", "level": 2}
+      ],
+      "difficult_points": ["their 指 Indian tigers，而不是 humans。", "every single day 强调频率极高；原文 In 的大写属于源文异常。"],
+      "expressions": [{"text": "more than a billion", "meaning_zh": "十亿以上"}, {"text": "every single day", "meaning_zh": "每一天；天天"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "Tigers can and do kill almost everything they meet in the jungle, they will kill even attack elephants and rhino.",
+      "translation": "老虎能够、也确实会杀死它们在丛林里遇到的几乎所有动物，甚至会攻击大象和犀牛。",
+      "structure": [
+        {"text": "Tigers can and do kill almost everything", "role": "main_clause", "level": 1},
+        {"text": "they meet in the jungle", "role": "relative_clause", "level": 2},
+        {"text": "they will kill even attack elephants and rhino", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["everything 后省略关系代词 that，they meet... 是定语从句。", "can and do kill 中 do 用于强调事实；后半句 kill even attack 语法异常，按语义理解为“甚至会攻击”。", "两个独立分句仅用逗号连接，是源文的逗号拼接。"],
+      "expressions": [{"text": "can and do", "meaning_zh": "能够而且确实会"}, {"text": "almost everything", "meaning_zh": "几乎所有事物"}]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "Surely, then, it is a little strange that attacks on humans are not more frequent.",
+      "translation": "那么，人类遭到老虎攻击的频率并没有更高，这确实有些奇怪。",
+      "structure": [
+        {"text": "Surely, then", "role": "sentence_adverbial", "level": 1},
+        {"text": "it is a little strange", "role": "main_clause", "level": 1},
+        {"text": "that attacks on humans are not more frequent", "role": "extraposed_subject", "level": 2}
+      ],
+      "difficult_points": ["it 是形式主语，真正主语是 that 从句。", "then 表示根据前述老虎的能力和接触人类的频率得出这一疑问。"],
+      "expressions": [{"text": "attacks on humans", "meaning_zh": "对人类的袭击"}, {"text": "it is strange that", "meaning_zh": "奇怪的是"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "Some people might argue that these attacks were in fact common in the past.",
+      "translation": "有些人可能会提出，这类袭击过去其实很常见。",
+      "structure": [
+        {"text": "Some people might argue", "role": "main_clause", "level": 1},
+        {"text": "that these attacks were in fact common in the past", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["might 使 argue 的语气更委婉，表示一种可能的反驳。", "these attacks 回指老虎袭击人类；in fact 用于强化“过去常见”的主张。"],
+      "expressions": [{"text": "might argue that", "meaning_zh": "可能会主张"}, {"text": "in fact", "meaning_zh": "事实上"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "British writers of adventure stories, such as Jim Corbett, gave the impression that village life in India in the early years of the twentieth century involved a stage of constant siege by man-eating tigers.",
+      "translation": "以吉姆·科贝特为代表的英国冒险故事作家给人一种印象：20世纪初的印度乡村生活仿佛长期处于食人虎的围困之中。",
+      "structure": [
+        {"text": "British writers of adventure stories, such as Jim Corbett", "role": "subject", "level": 1},
+        {"text": "gave the impression", "role": "predicate", "level": 1},
+        {"text": "that village life in India in the early years of the twentieth century involved a stage of constant siege by man-eating tigers", "role": "appositive_clause", "level": 2}
+      ],
+      "difficult_points": ["such as Jim Corbett 是插入的举例，不改变主语中心词 writers。", "that 从句解释 impression 的具体内容；siege 原指围城，此处比喻村庄不断受到食人虎威胁。"],
+      "expressions": [{"text": "give the impression that", "meaning_zh": "给人……的印象"}, {"text": "in the early years of", "meaning_zh": "在……早期"}, {"text": "under constant siege", "meaning_zh": "持续处于围困或威胁中"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "But they may have overstated the terror spread by tigers.",
+      "translation": "但他们可能夸大了老虎所造成的恐怖。",
+      "structure": [
+        {"text": "But they", "role": "subject", "level": 1},
+        {"text": "may have overstated", "role": "predicate", "level": 1},
+        {"text": "the terror spread by tigers", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["they 指上一句的英国冒险故事作家。", "may have overstated 是情态动词完成式，表示对过去夸大行为的推测；spread by tigers 修饰 terror。"],
+      "expressions": [{"text": "may have overstated", "meaning_zh": "可能夸大了"}, {"text": "spread terror", "meaning_zh": "散播恐惧"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "There were also far more tigers around in those days (probably 60.000 in the subcontinent compared to just 3000 today).",
+      "translation": "而且当时的老虎数量远多于现在（整个次大陆可能有六万只，而今天只有三千只）。",
+      "structure": [
+        {"text": "There were also far more tigers around", "role": "existential_clause", "level": 1},
+        {"text": "in those days", "role": "time_adverbial", "level": 2},
+        {"text": "probably 60.000 in the subcontinent compared to just 3000 today", "role": "parenthetical_comparison", "level": 2}
+      ],
+      "difficult_points": ["far 修饰比较级 more，表示过去老虎数量多得多。", "括号比较过去与今天的数量；原文 60.000 按语境表示 60,000。"],
+      "expressions": [{"text": "far more", "meaning_zh": "多得多"}, {"text": "compared to", "meaning_zh": "与……相比"}, {"text": "the subcontinent", "meaning_zh": "印度次大陆"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "So in proportion, attacks appear to have been as rare then as they are today.",
+      "translation": "因此按比例来看，当时的袭击似乎和今天一样罕见。",
+      "structure": [
+        {"text": "So in proportion", "role": "sentence_adverbial", "level": 1},
+        {"text": "attacks appear", "role": "main_clause", "level": 1},
+        {"text": "to have been as rare then as they are today", "role": "subject_complement", "level": 2}
+      ],
+      "difficult_points": ["appear to have been 使用完成不定式，表示对过去袭击频率的判断。", "as rare...as... 比较过去和今天的相对袭击比例；they 指 attacks。"],
+      "expressions": [{"text": "in proportion", "meaning_zh": "按比例"}, {"text": "appear to have been", "meaning_zh": "看来过去一直是"}, {"text": "as rare as", "meaning_zh": "与……一样罕见"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "It is widely assumed that the constraint is fear; but what exactly are tigers afraid of?",
+      "translation": "人们普遍认为，制约老虎攻击人类的是恐惧；但老虎究竟害怕什么？",
+      "structure": [
+        {"text": "It is widely assumed", "role": "passive_reporting_clause", "level": 1},
+        {"text": "that the constraint is fear", "role": "extraposed_subject", "level": 2},
+        {"text": "but what exactly are tigers afraid of", "role": "coordinate_question", "level": 1}
+      ],
+      "difficult_points": ["It 是形式主语，that 从句是被普遍假定的内容。", "what 是介词 of 的宾语，疑问句中移到句首，但 of 保留在句尾。"],
+      "expressions": [{"text": "it is widely assumed that", "meaning_zh": "人们普遍认为"}, {"text": "be afraid of", "meaning_zh": "害怕"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "Can they really know that we may be even better armed than they are?",
+      "translation": "它们真的会知道，我们的武装甚至可能比它们更强吗？",
+      "structure": [
+        {"text": "Can they really know", "role": "main_question", "level": 1},
+        {"text": "that we may be even better armed than they are", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["they 指 tigers，we 指 humans。", "better armed than they are 是比较结构，than 从句省略了重复的 armed。"],
+      "expressions": [{"text": "be better armed than", "meaning_zh": "比……装备或武装更强"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "Surely not.",
+      "translation": "当然不会。",
+      "structure": [{"text": "Surely not", "role": "elliptical_response", "level": 1}],
+      "difficult_points": ["这是对上一句疑问的省略回答，完整含义是 Surely they cannot know that。", "Surely 强化作者的否定判断。"],
+      "expressions": [{"text": "surely not", "meaning_zh": "当然不是；当然不会"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "Has the species programmed the experiences of all tigers with humans its genes to be inherited as instinct?",
+      "translation": "难道虎这一物种把所有老虎与人类相遇的经验写进了基因，使其作为本能遗传下来吗？",
+      "structure": [
+        {"text": "Has the species programmed", "role": "main_question", "level": 1},
+        {"text": "the experiences of all tigers with humans", "role": "object", "level": 1},
+        {"text": "its genes", "role": "location_complement", "level": 1},
+        {"text": "to be inherited as instinct", "role": "purpose_adverbial", "level": 2}
+      ],
+      "difficult_points": ["原文 humans 与 its genes 之间缺少 into，语义应为 programmed the experiences into its genes。", "to be inherited 是不定式被动结构，说明写入基因后的遗传结果。", "the species 指老虎这一物种整体。"],
+      "expressions": [{"text": "be inherited as instinct", "meaning_zh": "作为本能遗传"}, {"text": "program into genes", "meaning_zh": "写入基因"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "Perhaps.",
+      "translation": "也许如此。",
+      "structure": [{"text": "Perhaps", "role": "elliptical_response", "level": 1}],
+      "difficult_points": ["这是省略回答，承认遗传本能这一解释存在可能性。", "Perhaps 表示作者并不完全排除该假设，但也不把它视为最终答案。"],
+      "expressions": []
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "But I think the explanation may be more simple and, in a way, more intriguing.",
+      "translation": "但我认为，真正的解释可能更简单，而且在某种意义上也更耐人寻味。",
+      "structure": [
+        {"text": "But I think", "role": "main_clause", "level": 1},
+        {"text": "the explanation may be more simple", "role": "object_clause", "level": 2},
+        {"text": "and, in a way, more intriguing", "role": "coordinate_complement", "level": 2}
+      ],
+      "difficult_points": ["think 后省略了 that，引出作者自己的解释。", "more simple 与 more intriguing 是并列表语；in a way 是插入语，限定后一判断。"],
+      "expressions": [{"text": "in a way", "meaning_zh": "在某种意义上"}, {"text": "more intriguing", "meaning_zh": "更耐人寻味"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 17,
+      "sentence": "Since the growth of ethology in the 1950s. we have tried to understand animal behaviour from the animal's point of view.",
+      "translation": "自20世纪50年代动物行为学兴起以来，我们一直尝试从动物自身的视角理解其行为。",
+      "structure": [
+        {"text": "Since the growth of ethology in the 1950s", "role": "time_adverbial", "level": 1},
+        {"text": "we", "role": "subject", "level": 1},
+        {"text": "have tried to understand animal behaviour", "role": "predicate", "level": 1},
+        {"text": "from the animal's point of view", "role": "perspective_adverbial", "level": 2}
+      ],
+      "difficult_points": ["Since 与现在完成时 have tried 配合，表示从20世纪50年代持续至今。", "原文 1950s 后误用句点，语义上 Since 短语仍修饰主句。"],
+      "expressions": [{"text": "from the animal's point of view", "meaning_zh": "从动物的视角"}, {"text": "animal behaviour", "meaning_zh": "动物行为"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 18,
+      "sentence": "Until the first elegant experiments by pioneers in the field such as Konrad Lorenz, naturalists wrote about animals as if they were slightly less intelligent humans.",
+      "translation": "在康拉德·洛伦兹等领域先驱完成最早一批精巧实验之前，博物学家描写动物时，仿佛它们只是智力稍低一些的人类。",
+      "structure": [
+        {"text": "Until the first elegant experiments by pioneers in the field such as Konrad Lorenz", "role": "time_adverbial", "level": 1},
+        {"text": "naturalists wrote about animals", "role": "main_clause", "level": 1},
+        {"text": "as if they were slightly less intelligent humans", "role": "manner_clause", "level": 2}
+      ],
+      "difficult_points": ["Until 短语标明传统动物观持续到早期动物行为学实验出现之前。", "as if 引导方式从句；they 指 animals，表示人们把动物人格化。"],
+      "expressions": [{"text": "pioneers in the field", "meaning_zh": "该领域的先驱"}, {"text": "as if", "meaning_zh": "仿佛"}, {"text": "write about", "meaning_zh": "描写；论述"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 19,
+      "sentence": "Jim Corbett's breathless accounts of his duels with a an-eaters in truth tell us more about Jim Corbett than they do about the animals.",
+      "translation": "吉姆·科贝特对自己与食人虎搏斗所作的紧张叙述，事实上让我们更多地了解了科贝特本人，而不是那些动物。",
+      "structure": [
+        {"text": "Jim Corbett's breathless accounts of his duels with a an-eaters", "role": "subject", "level": 1},
+        {"text": "in truth tell us more about Jim Corbett", "role": "predicate", "level": 1},
+        {"text": "than they do about the animals", "role": "comparative_clause", "level": 2}
+      ],
+      "difficult_points": ["than 从句中 do 代替重复的 tell us，they 指 accounts。", "原文 a an-eaters 是 man-eaters 的 OCR 异常；breathless 描写叙述紧张刺激。"],
+      "expressions": [{"text": "breathless accounts of", "meaning_zh": "对……的紧张刺激叙述"}, {"text": "in truth", "meaning_zh": "事实上"}, {"text": "tell us more about A than B", "meaning_zh": "让我们更多了解 A 而非 B"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 20,
+      "sentence": "The principle of ethology, on the other hand, requires us to attempt to think in the same way as the animal we are studying thinks, and to observe every tiny detail of its behaviour without imposing our own human significances on its actions.",
+      "translation": "另一方面，动物行为学的原则要求我们努力以研究对象自身的方式思考，并观察其行为的每一个细节，而不把人类自己的意义强加于它的行动。",
+      "structure": [
+        {"text": "The principle of ethology, on the other hand, requires us", "role": "main_clause", "level": 1},
+        {"text": "to attempt to think in the same way as the animal we are studying thinks", "role": "object_complement", "level": 2},
+        {"text": "the animal we are studying", "role": "relative_clause", "level": 3},
+        {"text": "and to observe every tiny detail of its behaviour without imposing our own human significances on its actions", "role": "coordinate_object_complement", "level": 2}
+      ],
+      "difficult_points": ["require us to... 后接两个并列不定式：to attempt... 和 to observe...。", "the animal 后省略关系代词 that；as 后的 animal...thinks 是比较从句。", "without imposing... 表示研究时应避免把人类解释强加给动物。"],
+      "expressions": [{"text": "on the other hand", "meaning_zh": "另一方面"}, {"text": "in the same way as", "meaning_zh": "以与……相同的方式"}, {"text": "every tiny detail of", "meaning_zh": "……的每个细微之处"}, {"text": "impose something on", "meaning_zh": "把某事强加于"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 21,
+      "sentence": "I suspect that a tiger's afraid of humans lies not in some preprogramed ancestral logic but in the way he actually perceives us visually.",
+      "translation": "我怀疑，老虎对人类的恐惧并非来自某种预设的祖先逻辑，而是来自它在视觉上实际感知我们的方式。",
+      "structure": [
+        {"text": "I suspect", "role": "main_clause", "level": 1},
+        {"text": "that a tiger's afraid of humans lies not in some preprogramed ancestral logic", "role": "object_clause", "level": 2},
+        {"text": "but in the way he actually perceives us visually", "role": "coordinate_complement", "level": 2},
+        {"text": "he actually perceives us visually", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["not in...but in... 对比恐惧的两种可能来源。", "the way 后省略关系词 that/in which，he 指 tiger。", "原文 a tiger's afraid 应为 a tiger's fear，preprogramed 也为源文拼写形式。"],
+      "expressions": [{"text": "lie not in ... but in ...", "meaning_zh": "不在于……而在于……"}, {"text": "perceive visually", "meaning_zh": "从视觉上感知"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 22,
+      "sentence": "If you think like a tiger, a human in a car might appear just to be a part of the car, and because tigers don't eat cars the human is safe-unless the car is menacing the tiger or its cubs, in which case a brave or enraged tiger may charge.",
+      "translation": "如果从老虎的角度思考，车里的人可能看起来只是汽车的一部分；老虎不吃汽车，所以人是安全的——除非汽车威胁到老虎或幼崽，在这种情况下，勇敢或被激怒的老虎可能会冲过来。",
+      "structure": [
+        {"text": "If you think like a tiger", "role": "conditional_clause", "level": 2},
+        {"text": "a human in a car might appear just to be a part of the car", "role": "main_clause", "level": 1},
+        {"text": "because tigers don't eat cars the human is safe", "role": "cause_and_result_clause", "level": 1},
+        {"text": "unless the car is menacing the tiger or its cubs, in which case a brave or enraged tiger may charge", "role": "exception_clause", "level": 2}
+      ],
+      "difficult_points": ["appear to be 表示“看起来是”；If 从句要求读者采用老虎视角。", "because 从句与 the human is safe 之间没有逗号，但前者说明后者原因。", "unless 引出安全判断的例外；in which case 承接该例外情形。"],
+      "expressions": [{"text": "appear to be", "meaning_zh": "看起来是"}, {"text": "a part of", "meaning_zh": "……的一部分"}, {"text": "in which case", "meaning_zh": "在这种情况下"}, {"text": "may charge", "meaning_zh": "可能冲击或扑来"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 23,
+      "sentence": "A human on foot is a different sort of puzzle.",
+      "translation": "步行的人对老虎来说则是另一种难题。",
+      "structure": [
+        {"text": "A human on foot", "role": "subject", "level": 1},
+        {"text": "is a different sort of puzzle", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["on foot 表示步行，与上一句 car 中的人形成对比。", "puzzle 在此指老虎难以从视觉上判断这种目标的体形。"],
+      "expressions": [{"text": "on foot", "meaning_zh": "步行"}, {"text": "a different sort of", "meaning_zh": "另一种"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 24,
+      "sentence": "Imagine a tiger sees a man who is 1.8m tall.",
+      "translation": "设想一只老虎看到一个身高1.8米的人。",
+      "structure": [
+        {"text": "Imagine", "role": "imperative_predicate", "level": 1},
+        {"text": "a tiger sees a man", "role": "object_clause", "level": 2},
+        {"text": "who is 1.8m tall", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["Imagine 后省略 that，引出设想的完整情境。", "who 引导定语从句修饰 a man。"],
+      "expressions": [{"text": "imagine that", "meaning_zh": "设想"}, {"text": "1.8m tall", "meaning_zh": "身高1.8米"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 25,
+      "sentence": "A tiger is less than 1m tall but they may be up to 3m long from head to tail.",
+      "translation": "老虎身高不足1米，但从头到尾可能长达3米。",
+      "structure": [
+        {"text": "A tiger is less than 1m tall", "role": "main_clause", "level": 1},
+        {"text": "but they may be up to 3m long", "role": "contrast_clause", "level": 1},
+        {"text": "from head to tail", "role": "extent_adverbial", "level": 2}
+      ],
+      "difficult_points": ["but 对比老虎站立高度与身体长度。", "they 语义上指泛指的 tigers，但与前面单数 A tiger 存在源文数的不一致。"],
+      "expressions": [{"text": "less than", "meaning_zh": "少于"}, {"text": "up to", "meaning_zh": "多达"}, {"text": "from head to tail", "meaning_zh": "从头到尾"}]
+    },
+    {
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 26,
+      "sentence": "So when a tiger sees the man face on, it might not be unreasonable for him to assume that the man is 6m long.",
+      "translation": "所以，当老虎从正面看到这个人时，它把此人推断为身长6米，或许并非毫无道理。",
+      "structure": [
+        {"text": "when a tiger sees the man face on", "role": "time_adverbial_clause", "level": 2},
+        {"text": "it might not be unreasonable", "role": "main_clause", "level": 1},
+        {"text": "for him to assume", "role": "extraposed_subject", "level": 2},
+        {"text": "that the man is 6m long", "role": "object_clause", "level": 3}
+      ],
+      "difficult_points": ["it 是形式主语，for him to assume... 是真正主语；him 指 tiger。", "face on 表示从正面看；not unreasonable 是委婉的双重否定，意为“有一定道理”。"],
+      "expressions": [{"text": "face on", "meaning_zh": "从正面"}, {"text": "it is not unreasonable for", "meaning_zh": "某人这样做并非没有道理"}, {"text": "assume that", "meaning_zh": "假定"}]
+    },
+    {
+      "id": "E-07", "paragraph_label": "E", "sentence_index": 27,
+      "sentence": "If he meet a deer of this size, he might attack the animal by leaping on its back, but when he looks behind the mind he can't see a back.",
+      "translation": "如果它遇到这么大的鹿，可能会跳到鹿背上发动攻击；但当它把目光移到这个人身后时，却看不到可供扑上的背部。",
+      "structure": [
+        {"text": "If he meet a deer of this size", "role": "conditional_clause", "level": 2},
+        {"text": "he might attack the animal by leaping on its back", "role": "main_clause", "level": 1},
+        {"text": "but when he looks behind the mind", "role": "contrast_time_clause", "level": 2},
+        {"text": "he can't see a back", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["he 指 tiger；its 指 deer；by leaping... 说明老虎攻击大型猎物的方式。", "原文 he meet 应为 he meets，behind the mind 按语境很可能应为 behind the man。", "but 对比老虎对鹿的正常攻击判断与面对直立人类时的视觉困惑。"],
+      "expressions": [{"text": "of this size", "meaning_zh": "这种体形的"}, {"text": "leap on", "meaning_zh": "跳到……之上"}]
+    },
+    {
+      "id": "E-08", "paragraph_label": "E", "sentence_index": 28,
+      "sentence": "From the front the man is huge, but looked at from the side he all but disappears.",
+      "translation": "从正面看，这个人十分高大；但从侧面看，他几乎就消失了。",
+      "structure": [
+        {"text": "From the front the man is huge", "role": "main_clause", "level": 1},
+        {"text": "but looked at from the side", "role": "reduced_passive_clause", "level": 2},
+        {"text": "he all but disappears", "role": "contrast_clause", "level": 1}
+      ],
+      "difficult_points": ["looked at from the side 是省略 when he is 的过去分词结构，逻辑主语为 the man。", "all but 意为“几乎、差一点就”，不是“除了……全都”。"],
+      "expressions": [{"text": "from the front", "meaning_zh": "从正面"}, {"text": "from the side", "meaning_zh": "从侧面"}, {"text": "all but", "meaning_zh": "几乎"}]
+    },
+    {
+      "id": "E-09", "paragraph_label": "E", "sentence_index": 29,
+      "sentence": "This must be very disconcerting.",
+      "translation": "这一定会让老虎非常困惑。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "must be very disconcerting", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["This 指人类正面看很庞大、侧面看却几乎消失的视觉矛盾。", "must 在此表示有充分依据的推断，而不是义务。"],
+      "expressions": [{"text": "must be", "meaning_zh": "一定是"}, {"text": "disconcerting", "meaning_zh": "令人困惑不安的"}]
+    },
+    {
+      "id": "E-10", "paragraph_label": "E", "sentence_index": 30,
+      "sentence": "A hunter has to be confident that it can tackle its prey, and no one is confident when they are disconcerted.",
+      "translation": "捕猎者必须确信自己能够对付猎物，而任何个体在困惑不安时都不会有信心。",
+      "structure": [
+        {"text": "A hunter has to be confident", "role": "main_clause", "level": 1},
+        {"text": "that it can tackle its prey", "role": "adjective_complement_clause", "level": 2},
+        {"text": "and no one is confident", "role": "coordinate_clause", "level": 1},
+        {"text": "when they are disconcerted", "role": "time_adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["that 从句补充 confident 的具体内容；it 和 its 指泛指的 hunter。", "they 回指不定代词 no one，是单数意义的性别中立代词。"],
+      "expressions": [{"text": "be confident that", "meaning_zh": "确信"}, {"text": "tackle its prey", "meaning_zh": "对付猎物"}]
+    },
+    {
+      "id": "E-11", "paragraph_label": "E", "sentence_index": 31,
+      "sentence": "This is especially true of a solitary hunter such as the tiger and may explain why lions-particularly young lionesses who tend to encourage one another to take risks are more dangerous than tigers.",
+      "translation": "这一点对老虎这样的独居猎手尤其适用，也可能解释为何狮子——尤其是那些往往会互相鼓励冒险的年轻母狮——比老虎更危险。",
+      "structure": [
+        {"text": "This is especially true of a solitary hunter such as the tiger", "role": "main_clause", "level": 1},
+        {"text": "and may explain", "role": "coordinate_predicate", "level": 1},
+        {"text": "why lions-particularly young lionesses who tend to encourage one another to take risks are more dangerous than tigers", "role": "object_clause", "level": 2},
+        {"text": "who tend to encourage one another to take risks", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["This 指捕猎者困惑时缺乏攻击信心这一规律。", "why 从句是 explain 的宾语；who 修饰 young lionesses。", "原文 lions-particularly 前只有一个连字符且缺少闭合破折号，应按插入说明理解。"],
+      "expressions": [{"text": "be especially true of", "meaning_zh": "尤其适用于"}, {"text": "a solitary hunter", "meaning_zh": "独居猎手"}, {"text": "encourage one another to", "meaning_zh": "互相鼓励做某事"}, {"text": "take risks", "meaning_zh": "冒险"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 32,
+      "sentence": "If the theory that a tiger is disconcerted to find that a standing human is both very big and yet somehow invisible is correct, the opposite should be true of a squatting human.",
+      "translation": "如果“老虎发现直立的人既非常庞大、却又似乎看不见其纵深，因而感到困惑”这一理论成立，那么对蹲着的人来说，情况应该正好相反。",
+      "structure": [
+        {"text": "If the theory", "role": "conditional_clause", "level": 2},
+        {"text": "that a tiger is disconcerted to find that a standing human is both very big and yet somehow invisible", "role": "appositive_clause", "level": 3},
+        {"text": "the opposite should be true", "role": "main_clause", "level": 1},
+        {"text": "of a squatting human", "role": "prepositional_complement", "level": 2}
+      ],
+      "difficult_points": ["第一个 that 从句解释 theory，第二个 that 从句是 find 的宾语。", "both...and yet... 把人的正面巨大与侧面近乎不可见并列为矛盾特征。", "be true of 表示某种情况适用于某对象；the opposite 指蹲姿不会造成同样错觉。"],
+      "expressions": [{"text": "be disconcerted to find", "meaning_zh": "发现……而感到困惑"}, {"text": "be true of", "meaning_zh": "适用于"}, {"text": "the opposite", "meaning_zh": "相反的情况"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 33,
+      "sentence": "A squatting human is half he size and presents twice the spread of back, and more closely resembles a medium-sized deer.",
+      "translation": "蹲着的人高度只有原来的一半，展现出的背部宽度却是原来的两倍，因此看起来更像一只中等体形的鹿。",
+      "structure": [
+        {"text": "A squatting human is half he size", "role": "main_clause", "level": 1},
+        {"text": "and presents twice the spread of back", "role": "coordinate_predicate", "level": 1},
+        {"text": "and more closely resembles a medium-sized deer", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["原文 half he size 按语境应为 half the size。", "三个并列谓语分别描述蹲姿的高度、背部展开面积和外形相似度。", "twice the spread of back 指老虎视觉中可见的背部横向面积约为两倍。"],
+      "expressions": [{"text": "half the size", "meaning_zh": "尺寸的一半"}, {"text": "twice the", "meaning_zh": "……的两倍"}, {"text": "resemble", "meaning_zh": "与……相似"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 34,
+      "sentence": "If tigers were simply frightened of all humans, then a squatting person would be no more attractive as a target than a standing one.",
+      "translation": "如果老虎只是害怕所有人，那么蹲着的人作为攻击目标，应该不会比站着的人更有吸引力。",
+      "structure": [
+        {"text": "If tigers were simply frightened of all humans", "role": "hypothetical_conditional_clause", "level": 2},
+        {"text": "then a squatting person would be no more attractive as a target", "role": "main_clause", "level": 1},
+        {"text": "than a standing one", "role": "comparative_phrase", "level": 2}
+      ],
+      "difficult_points": ["were...would be 构成与作者假设相反或待检验的条件结构。", "no more...than... 表示两者在吸引力上没有差别；one 代替 person。"],
+      "expressions": [{"text": "be frightened of", "meaning_zh": "害怕"}, {"text": "no more ... than ...", "meaning_zh": "并不比……更……"}, {"text": "as a target", "meaning_zh": "作为目标"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 35,
+      "sentence": "This, however appears not to be the case.",
+      "translation": "然而，事实似乎并非如此。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "however", "role": "sentence_adverbial", "level": 1},
+        {"text": "appears not to be the case", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["This 指蹲着的人与站着的人同样不具吸引力的推论。", "not to be the case 表示实际情况与上述推论不符；原文 however 后缺少逗号。"],
+      "expressions": [{"text": "appear not to be the case", "meaning_zh": "情况似乎并非如此"}]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 36,
+      "sentence": "Many incidents of attacks on people involving villagers squatting or bending over to cut grass for fodder or building material.",
+      "translation": "许多袭人事件都涉及蹲着或弯腰割草的村民，这些草被用作饲料或建筑材料。",
+      "structure": [
+        {"text": "Many incidents of attacks on people", "role": "noun_phrase_fragment", "level": 1},
+        {"text": "involving villagers squatting or bending over", "role": "present_participle_modifier", "level": 2},
+        {"text": "to cut grass", "role": "purpose_adverbial", "level": 3},
+        {"text": "for fodder or building material", "role": "purpose_modifier", "level": 3}
+      ],
+      "difficult_points": ["该句按原文缺少谓语，是用名词短语补充支持上一句结论的残句。", "involving... 修饰 incidents；squatting 与 bending over 是 villagers 的两种姿态。", "to cut grass 表示弯腰或蹲下的目的，for... 说明草的用途。"],
+      "expressions": [{"text": "incidents of attacks on", "meaning_zh": "袭击……的事件"}, {"text": "bend over", "meaning_zh": "弯腰"}, {"text": "cut grass for fodder", "meaning_zh": "割草作饲料"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 37,
+      "sentence": "The fact that humans stand upright may therefore not just be something that distinguishes them from nearly all other species, but also a factor that helped them to survive in a dangerous and unpredictable environment.",
+      "translation": "因此，人类直立这一事实可能不仅使他们区别于几乎所有其他物种，也是帮助他们在危险且不可预测的环境中生存下来的一个因素。",
+      "structure": [
+        {"text": "The fact that humans stand upright", "role": "subject", "level": 1},
+        {"text": "may therefore not just be something that distinguishes them from nearly all other species", "role": "predicate", "level": 1},
+        {"text": "but also a factor", "role": "coordinate_complement", "level": 1},
+        {"text": "that helped them to survive in a dangerous and unpredictable environment", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["that humans stand upright 是 fact 的同位语从句。", "not just...but also... 连接两个并列表语 something 与 a factor。", "两个定语从句分别修饰 something 和 a factor；them 均指 humans。"],
+      "expressions": [{"text": "stand upright", "meaning_zh": "直立站立"}, {"text": "distinguish someone from", "meaning_zh": "使某人与……区分开"}, {"text": "help someone to survive", "meaning_zh": "帮助某人生存"}, {"text": "unpredictable environment", "meaning_zh": "不可预测的环境"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 38,
+      "sentence": "Note:",
+      "translation": "注：",
+      "structure": [{"text": "Note", "role": "note_heading", "level": 1}],
+      "difficult_points": ["这是文末注释的标题，不属于正文论证句。", "冒号提示下一项将解释专业术语 Ethology。"],
+      "expressions": []
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 39,
+      "sentence": "Ethology = the branch of zoology that studies the behaviour of animals in their natural habitats",
+      "translation": "动物行为学＝动物学的一个分支，研究动物在其自然栖息地中的行为。",
+      "structure": [
+        {"text": "Ethology", "role": "defined_term", "level": 1},
+        {"text": "the branch of zoology", "role": "definition", "level": 1},
+        {"text": "that studies the behaviour of animals in their natural habitats", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["等号连接被定义术语 Ethology 与其定义。", "that 引导定语从句修饰 branch；their 指 animals。"],
+      "expressions": [{"text": "the branch of zoology", "meaning_zh": "动物学的分支"}, {"text": "natural habitats", "meaning_zh": "自然栖息地"}]
+    }
+  ]
+}

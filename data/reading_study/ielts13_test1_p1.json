@@ -1,0 +1,784 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts13_test1_reading",
+  "passage_id": "ielts13_test1_p1",
+  "passage_title": "Case Study: Tourism New Zealand website",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "New Zealand is a small country of four million inhabitants, a long-haul flight from all the major tourist-generating markets of the world.",
+      "translation": "新西兰是一个只有四百万人口的小国，与世界上主要的旅游客源市场之间都隔着一段长途飞行的距离。",
+      "structure": [
+        {"text": "New Zealand", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "a small country of four million inhabitants", "role": "complement", "level": 1},
+        {"text": "a long-haul flight from all the major tourist-generating markets of the world", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "a long-haul flight...是同位语，补充说明新西兰与主要客源市场之间的距离感，而不是并列的第二个表语。",
+        "tourist-generating markets 指“产生游客的市场”，即客源国/地区。"
+      ],
+      "expressions": [
+        {"text": "long-haul flight", "meaning_zh": "长途航班"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Tourism currently makes up 9% of the country's gross domestic product, and is the country's largest export sector.",
+      "translation": "旅游业目前占该国国内生产总值的9%，是该国最大的出口部门。",
+      "structure": [
+        {"text": "Tourism", "role": "subject", "level": 1},
+        {"text": "currently makes up 9% of the country's gross domestic product", "role": "verb_phrase", "level": 1},
+        {"text": "and is the country's largest export sector", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "makes up 和 is 是并列谓语，共用主语 Tourism。",
+        "make up 表示“占（比例）”，而不是“组成、编造”。"
+      ],
+      "expressions": [
+        {"text": "make up", "meaning_zh": "占（比例）；构成"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "Unlike other export sectors, which make products and then sell them overseas, tourism brings its customers to New Zealand.",
+      "translation": "与其他出口部门不同——那些部门生产产品然后运往海外销售——旅游业则是把顾客带到新西兰来。",
+      "structure": [
+        {"text": "Unlike other export sectors", "role": "prepositional_phrase", "level": 1},
+        {"text": "which make products and then sell them overseas", "role": "relative_clause", "level": 2},
+        {"text": "tourism", "role": "subject", "level": 1},
+        {"text": "brings its customers to New Zealand", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "which 引导的定语从句插在 Unlike other export sectors 之后，修饰 other export sectors，说明它们通常的运作方式。",
+        "Unlike 引出对比，突出旅游业与其他出口部门在“卖产品”还是“带客户”上的根本不同。"
+      ],
+      "expressions": [
+        {"text": "unlike", "meaning_zh": "与……不同"}
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "The product is the country itself - the people, the places and the experiences.",
+      "translation": "旅游业的“产品”就是这个国家本身——它的人民、地方和各种体验。",
+      "structure": [
+        {"text": "The product", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "the country itself", "role": "complement", "level": 1},
+        {"text": "the people, the places and the experiences", "role": "apposition", "level": 1}
+      ],
+      "difficult_points": [
+        "破折号后的三个并列名词短语是对 the country itself 的具体展开说明。",
+        "The product 承接上一句，指新西兰旅游业作为“出口产品”所卖的东西。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "A-05",
+      "paragraph_label": "A",
+      "sentence_index": 5,
+      "sentence": "In 1999, Tourism New Zealand launched a campaign to communicate a new brand position to the world.",
+      "translation": "1999年，新西兰旅游局发起了一场宣传活动，向世界传达一种新的品牌定位。",
+      "structure": [
+        {"text": "In 1999", "role": "prepositional_phrase", "level": 1},
+        {"text": "Tourism New Zealand", "role": "subject", "level": 1},
+        {"text": "launched a campaign", "role": "verb_phrase", "level": 1},
+        {"text": "to communicate a new brand position to the world", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "to communicate...是不定式作目的状语，说明发起这场活动的目的。",
+        "a new brand position 指新西兰在这次活动中确立的全新品牌定位。"
+      ],
+      "expressions": [
+        {"text": "launch a campaign", "meaning_zh": "发起一场活动"}
+      ]
+    },
+    {
+      "id": "A-06",
+      "paragraph_label": "A",
+      "sentence_index": 6,
+      "sentence": "The campaign focused on New Zealand's scenic beauty, exhilarating outdoor activities and authentic Maori culture, and it made New Zealand one of the strongest national brands in the world.",
+      "translation": "这场活动聚焦于新西兰的自然风光、令人振奋的户外活动以及地道的毛利文化，使新西兰成为世界上最强大的国家品牌之一。",
+      "structure": [
+        {"text": "The campaign", "role": "subject", "level": 1},
+        {"text": "focused on New Zealand's scenic beauty, exhilarating outdoor activities and authentic Maori culture", "role": "verb_phrase", "level": 1},
+        {"text": "and it made New Zealand one of the strongest national brands in the world", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "it 指代前面的 The campaign，made 后接双宾语结构，New Zealand 是宾语，one of the strongest national brands 是宾语补足语。",
+        "focused 和 made 是并列谓语，共用主语 The campaign。"
+      ],
+      "expressions": [
+        {"text": "focus on", "meaning_zh": "聚焦于；专注于"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "A key feature of the campaign was the website www.newzealand.com, which provided potential visitors to New Zealand with a single gateway to everything the destination had to offer.",
+      "translation": "这场活动的一个关键内容是网站www.newzealand.com，它为新西兰的潜在游客提供了一个统一的入口，通往这个目的地所能提供的一切。",
+      "structure": [
+        {"text": "A key feature of the campaign", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "the website www.newzealand.com", "role": "complement", "level": 1},
+        {"text": "which provided potential visitors to New Zealand with a single gateway to everything the destination had to offer", "role": "relative_clause", "level": 2},
+        {"text": "the destination had to offer", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导的定语从句修饰 the website，说明这个网站的作用。",
+        "everything (that) the destination had to offer 中省略了关系代词 that，从句修饰 everything。"
+      ],
+      "expressions": [
+        {"text": "provide sb with sth", "meaning_zh": "为某人提供某物"},
+        {"text": "a gateway to", "meaning_zh": "通往……的门户/入口"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "The heart of the website was a database of tourism service operators, both those based in New Zealand and those based abroad which offered tourism services to the country.",
+      "translation": "该网站的核心是一个旅游服务运营商数据库，既包括总部设在新西兰的运营商，也包括那些设在海外、为新西兰提供旅游服务的运营商。",
+      "structure": [
+        {"text": "The heart of the website", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "a database of tourism service operators", "role": "complement", "level": 1},
+        {"text": "both those based in New Zealand and those based abroad", "role": "apposition", "level": 2},
+        {"text": "which offered tourism services to the country", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "both...and...并列结构补充说明 operators 包括的两类：本土的和海外的。",
+        "which 引导的定语从句只修饰紧挨着的 those based abroad，说明这些海外运营商的共同点。"
+      ],
+      "expressions": [
+        {"text": "based in", "meaning_zh": "总部/基地设在……"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 9,
+      "sentence": "Any tourism-related business could be listed by filling in a simple form.",
+      "translation": "任何与旅游相关的企业只需填写一份简单的表格，就可以被列入该网站。",
+      "structure": [
+        {"text": "Any tourism-related business", "role": "subject", "level": 1},
+        {"text": "could be listed", "role": "verb_phrase", "level": 1},
+        {"text": "by filling in a simple form", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "by filling in 是介词加动名词，表示实现“被列入”这一结果的方式。",
+        "could be listed 是被动语态，强调企业“被收录”进数据库这一动作。"
+      ],
+      "expressions": [
+        {"text": "fill in a form", "meaning_zh": "填写表格"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 10,
+      "sentence": "This meant that even the smallest bed and breakfast address or specialist activity provider could gain a web presence with access to an audience of long-haul visitors.",
+      "translation": "这就意味着，即使是最小的家庭旅馆或专业活动供应商，也能借此获得网络曝光，接触到大批长途游客。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "meant", "role": "verb_phrase", "level": 1},
+        {"text": "that even the smallest bed and breakfast address or specialist activity provider could gain a web presence with access to an audience of long-haul visitors", "role": "noun_clause", "level": 2},
+        {"text": "with access to an audience of long-haul visitors", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "This 指代上一句“只需填表即可被收录”这一做法。",
+        "even 强调“即使是最小的”企业也能获得同样的网络曝光机会。"
+      ],
+      "expressions": [
+        {"text": "gain a web presence", "meaning_zh": "获得网络曝光度"}
+      ]
+    },
+    {
+      "id": "B-05",
+      "paragraph_label": "B",
+      "sentence_index": 11,
+      "sentence": "In addition, because participating businesses were able to update the details they gave on a regular basis, the information provided remained accurate.",
+      "translation": "此外，由于参与的企业能够定期更新自己提供的信息，网站上的信息也就始终保持准确。",
+      "structure": [
+        {"text": "In addition", "role": "adverbial", "level": 1},
+        {"text": "because participating businesses were able to update the details they gave on a regular basis", "role": "adverbial_clause", "level": 1},
+        {"text": "they gave", "role": "relative_clause", "level": 3},
+        {"text": "the information provided remained accurate", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "the details (that) they gave 省略了关系代词，从句修饰 the details。",
+        "the information provided 中 provided 是过去分词作后置定语，修饰 information，即“所提供的信息”。"
+      ],
+      "expressions": [
+        {"text": "on a regular basis", "meaning_zh": "定期地"}
+      ]
+    },
+    {
+      "id": "B-06",
+      "paragraph_label": "B",
+      "sentence_index": 12,
+      "sentence": "And to maintain and improve standards, Tourism New Zealand organised a scheme whereby organisations appearing on the website underwent an independent evaluation against a set of agreed national standards of quality.",
+      "translation": "而且，为了维持并提升标准，新西兰旅游局还组织了一项机制，让在网站上出现的机构接受一套公认的国家质量标准的独立评估。",
+      "structure": [
+        {"text": "And to maintain and improve standards", "role": "non_finite_clause", "level": 1},
+        {"text": "Tourism New Zealand", "role": "subject", "level": 1},
+        {"text": "organised a scheme", "role": "verb_phrase", "level": 1},
+        {"text": "whereby organisations appearing on the website underwent an independent evaluation against a set of agreed national standards of quality", "role": "relative_clause", "level": 2},
+        {"text": "appearing on the website", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "to maintain and improve standards 是不定式作目的状语，位于句首。",
+        "whereby 引导定语从句修饰 a scheme，意为“凭借这一机制”，appearing on the website 是分词短语修饰 organisations。"
+      ],
+      "expressions": [
+        {"text": "whereby", "meaning_zh": "凭借（该办法/机制），据此"}
+      ]
+    },
+    {
+      "id": "B-07",
+      "paragraph_label": "B",
+      "sentence_index": 13,
+      "sentence": "As part of this, the effect of each business on the environment was considered.",
+      "translation": "作为这一评估的一部分，每家企业对环境的影响也被纳入考量。",
+      "structure": [
+        {"text": "As part of this", "role": "prepositional_phrase", "level": 1},
+        {"text": "the effect of each business on the environment", "role": "subject", "level": 1},
+        {"text": "was considered", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "this 指代前一句提到的独立评估机制。",
+        "was considered 是被动语态，强调环境影响“被纳入”评估范围。"
+      ],
+      "expressions": [
+        {"text": "as part of", "meaning_zh": "作为……的一部分"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "To communicate the New Zealand experience, the site also carried features relating to famous people and places.",
+      "translation": "为了传达新西兰的旅行体验，该网站还刊载了与知名人物和地点相关的专题内容。",
+      "structure": [
+        {"text": "To communicate the New Zealand experience", "role": "non_finite_clause", "level": 1},
+        {"text": "the site", "role": "subject", "level": 1},
+        {"text": "also carried features", "role": "verb_phrase", "level": 1},
+        {"text": "relating to famous people and places", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "To communicate...是不定式作目的状语，位于句首。",
+        "relating to 是现在分词短语作后置定语，修饰 features。"
+      ],
+      "expressions": [
+        {"text": "relate to", "meaning_zh": "与……相关"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "One of the most popular was an interview with former New Zealand All Blacks rugby captain Tana Umaga.",
+      "translation": "其中最受欢迎的内容之一，是对新西兰全黑队前橄榄球队长塔纳·乌马加的采访。",
+      "structure": [
+        {"text": "One of the most popular", "role": "subject", "level": 1},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "an interview with former New Zealand All Blacks rugby captain Tana Umaga", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "One of the most popular 承接上一句的 features，指“这些专题内容中最受欢迎的一个”。",
+        "the most popular 后省略了 features，完整含义是“最受欢迎的专题内容之一”。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "Another feature that attracted a lot of attention was an interactive journey through a number of the locations chosen for blockbuster films which had made use of New Zealand's stunning scenery as a backdrop.",
+      "translation": "另一个引起广泛关注的内容，是一场互动式的旅程，带领游客游览多部曾以新西兰壮丽风光为背景取景的大片拍摄地。",
+      "structure": [
+        {"text": "Another feature", "role": "subject", "level": 1},
+        {"text": "that attracted a lot of attention", "role": "relative_clause", "level": 2},
+        {"text": "was", "role": "verb_phrase", "level": 1},
+        {"text": "an interactive journey through a number of the locations", "role": "complement", "level": 1},
+        {"text": "chosen for blockbuster films", "role": "participial_phrase", "level": 2},
+        {"text": "which had made use of New Zealand's stunning scenery as a backdrop", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that attracted a lot of attention 是定语从句修饰主语 Another feature。",
+        "chosen for blockbuster films 是过去分词短语修饰 the locations，which 引导的定语从句进一步修饰 blockbuster films。"
+      ],
+      "expressions": [
+        {"text": "make use of", "meaning_zh": "利用"}
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "As the site developed, additional features were added to help independent travellers devise their own customised itineraries.",
+      "translation": "随着网站的发展，网站又添加了更多内容，帮助自由行游客制定属于自己的定制行程。",
+      "structure": [
+        {"text": "As the site developed", "role": "adverbial_clause", "level": 1},
+        {"text": "additional features", "role": "subject", "level": 1},
+        {"text": "were added", "role": "verb_phrase", "level": 1},
+        {"text": "to help independent travellers devise their own customised itineraries", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "As 在这里表示“随着”，引导时间状语从句。",
+        "to help...devise...是不定式作目的状语，help 后接不带 to 的不定式 devise。"
+      ],
+      "expressions": [
+        {"text": "help sb do sth", "meaning_zh": "帮助某人做某事"}
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "To make it easier to plan motoring holidays, the site catalogued the most popular driving routes in the country, highlighting different routes according to the season and indicating distances and times.",
+      "translation": "为了让规划自驾游变得更容易，该网站整理了全国最受欢迎的自驾路线，按季节标出不同路线，并标明距离和所需时间。",
+      "structure": [
+        {"text": "To make it easier to plan motoring holidays", "role": "non_finite_clause", "level": 1},
+        {"text": "the site", "role": "subject", "level": 1},
+        {"text": "catalogued the most popular driving routes in the country", "role": "verb_phrase", "level": 1},
+        {"text": "highlighting different routes according to the season", "role": "participial_phrase", "level": 2},
+        {"text": "and indicating distances and times", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "To make it easier...是不定式作目的状语，it 是形式宾语，真正的宾语是 to plan motoring holidays。",
+        "highlighting...and indicating...是并列的现在分词短语，作伴随状语，说明网站整理路线时具体做了什么。"
+      ],
+      "expressions": [
+        {"text": "catalogue", "meaning_zh": "编目；整理列出"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 19,
+      "sentence": "Later, a Travel Planner feature was added, which allowed visitors to click and 'bookmark' places or attractions they were interested in, and then view the results on a map.",
+      "translation": "后来，网站又新增了“旅行规划”功能，游客可以点击并“收藏”自己感兴趣的地点或景点，然后在地图上查看结果。",
+      "structure": [
+        {"text": "Later", "role": "adverbial", "level": 1},
+        {"text": "a Travel Planner feature", "role": "subject", "level": 1},
+        {"text": "was added", "role": "verb_phrase", "level": 1},
+        {"text": "which allowed visitors to click and 'bookmark' places or attractions they were interested in, and then view the results on a map", "role": "relative_clause", "level": 2},
+        {"text": "they were interested in", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导的定语从句修饰 a Travel Planner feature，说明这一功能的作用。",
+        "places or attractions (that) they were interested in 省略了关系代词，从句修饰 places or attractions。",
+        "allowed visitors to click...and (to) view...是并列的不定式短语，共用 to。"
+      ],
+      "expressions": [
+        {"text": "be interested in", "meaning_zh": "对……感兴趣"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "The Travel Planner offered suggested routes and public transport options between the chosen locations.",
+      "translation": "该规划功能会提供建议路线，以及所选地点之间的公共交通选择。",
+      "structure": [
+        {"text": "The Travel Planner", "role": "subject", "level": 1},
+        {"text": "offered", "role": "verb_phrase", "level": 1},
+        {"text": "suggested routes and public transport options between the chosen locations", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "the chosen locations 指用户在网站上已经点选/收藏的地点。",
+        "suggested routes and public transport options 是并列宾语，都是 The Travel Planner 提供的内容。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "There were also links to accommodation in the area.",
+      "translation": "网站上还附有该地区住宿的相关链接。",
+      "structure": [
+        {"text": "There were also", "role": "verb_phrase", "level": 1},
+        {"text": "links to accommodation in the area", "role": "subject", "level": 1}
+      ],
+      "difficult_points": [
+        "There were 是存在句结构，真正的信息中心是 links to accommodation。",
+        "in the area 指代前文提到的用户所选定的旅行地点周边区域。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "By registering with the website, users could save their Travel Plan and return to it later, or print it out to take on the visit.",
+      "translation": "通过在网站上注册，用户可以保存自己的旅行计划并稍后再返回查看，或者打印出来带在旅途中使用。",
+      "structure": [
+        {"text": "By registering with the website", "role": "prepositional_phrase", "level": 1},
+        {"text": "users", "role": "subject", "level": 1},
+        {"text": "could save their Travel Plan and return to it later", "role": "verb_phrase", "level": 1},
+        {"text": "or print it out", "role": "coordinated_clause", "level": 1},
+        {"text": "to take on the visit", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "By registering 是介词加动名词，表示实现后面一系列操作的前提条件。",
+        "save...and return...or print...三个并列谓语共用主语 users，to take on the visit 是不定式作目的状语，修饰 print it out。"
+      ],
+      "expressions": [
+        {"text": "register with", "meaning_zh": "在……注册"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "The website also had a 'Your Words' section where anyone could submit a blog of their New Zealand travels for possible inclusion on the website.",
+      "translation": "网站还设有一个“你的文字”板块，任何人都可以在此提交自己新西兰之旅的博客，供网站考虑收录。",
+      "structure": [
+        {"text": "The website", "role": "subject", "level": 1},
+        {"text": "also had", "role": "verb_phrase", "level": 1},
+        {"text": "a 'Your Words' section", "role": "object", "level": 1},
+        {"text": "where anyone could submit a blog of their New Zealand travels for possible inclusion on the website", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "where 引导的定语从句修饰 a 'Your Words' section，说明这个板块的用途。",
+        "for possible inclusion on the website 表示提交博客的目的，即“以便有可能被网站收录”。"
+      ],
+      "expressions": [
+        {"text": "for possible inclusion", "meaning_zh": "以便可能被收录"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 24,
+      "sentence": "The Tourism New Zealand website won two Webby awards for online achievement and innovation.",
+      "translation": "新西兰旅游局的网站曾荣获两项Webby奖，以表彰其在网络成就和创新方面的贡献。",
+      "structure": [
+        {"text": "The Tourism New Zealand website", "role": "subject", "level": 1},
+        {"text": "won", "role": "verb_phrase", "level": 1},
+        {"text": "two Webby awards for online achievement and innovation", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "for online achievement and innovation 说明获奖所表彰的具体领域。",
+        "two Webby awards 承接前文，是对该网站获得外部认可的具体例证。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 25,
+      "sentence": "More importantly perhaps, the growth of tourism to New Zealand was impressive.",
+      "translation": "或许更重要的是，新西兰旅游业的增长令人印象深刻。",
+      "structure": [
+        {"text": "More importantly perhaps", "role": "adverbial", "level": 1},
+        {"text": "the growth of tourism to New Zealand", "role": "subject", "level": 1},
+        {"text": "was impressive", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "More importantly perhaps 是插入的评注性状语，表明作者认为这一点比前面提到的获奖更值得关注。",
+        "perhaps 削弱了 more importantly 的绝对语气，体现作者谨慎的态度。"
+      ],
+      "expressions": []
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 26,
+      "sentence": "Overall tourism expenditure increased by an average of 6.9% per year between 1999 and 2004.",
+      "translation": "1999年至2004年间，旅游总支出平均每年增长6.9%。",
+      "structure": [
+        {"text": "Overall tourism expenditure", "role": "subject", "level": 1},
+        {"text": "increased by an average of 6.9% per year", "role": "verb_phrase", "level": 1},
+        {"text": "between 1999 and 2004", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "increase by 表示增长的幅度，接具体的百分比数字。",
+        "an average of 6.9% per year 说明这是1999至2004年间的年均增长率，而非总增长率。"
+      ],
+      "expressions": [
+        {"text": "increase by", "meaning_zh": "增长了（某幅度）"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 27,
+      "sentence": "From Britain, visits to New Zealand grew at an average annual rate of 13% between 2002 and 2006, compared to a rate of 4% overall for British visits abroad.",
+      "translation": "从英国出发前往新西兰的游客数量，在2002年至2006年间平均每年增长13%，相比之下，英国人出境旅游总体的年均增长率只有4%。",
+      "structure": [
+        {"text": "From Britain", "role": "prepositional_phrase", "level": 1},
+        {"text": "visits to New Zealand", "role": "subject", "level": 1},
+        {"text": "grew at an average annual rate of 13%", "role": "verb_phrase", "level": 1},
+        {"text": "between 2002 and 2006", "role": "prepositional_phrase", "level": 1},
+        {"text": "compared to a rate of 4% overall for British visits abroad", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "compared to 是过去分词短语作状语，把新西兰的13%增速与英国人出境游整体4%的增速进行对比。",
+        "From Britain 修饰 visits，指“从英国出发的游客数量”，而不是修饰整个句子。"
+      ],
+      "expressions": [
+        {"text": "compared to", "meaning_zh": "与……相比"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "The website was set up to allow both individuals and travel organisations to create itineraries and travel packages to suit their own needs and interests.",
+      "translation": "该网站的设立，是为了让个人游客和旅行机构都能够根据自己的需求和兴趣，创建行程和旅游套餐。",
+      "structure": [
+        {"text": "The website", "role": "subject", "level": 1},
+        {"text": "was set up", "role": "verb_phrase", "level": 1},
+        {"text": "to allow both individuals and travel organisations to create itineraries and travel packages", "role": "non_finite_clause", "level": 2},
+        {"text": "to suit their own needs and interests", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "to allow...是不定式作目的状语，说明网站设立的目的；其中 both A and B 是 allow 的宾语。",
+        "to suit...是第二层不定式，说明创建行程套餐所要达到的效果。"
+      ],
+      "expressions": [
+        {"text": "suit sb's needs", "meaning_zh": "满足某人的需求"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "On the website, visitors can search for activities not solely by geographical location, but also by the particular nature of the activity.",
+      "translation": "在网站上，游客不仅可以按地理位置搜索活动，还可以按活动的具体性质进行搜索。",
+      "structure": [
+        {"text": "On the website", "role": "prepositional_phrase", "level": 1},
+        {"text": "visitors", "role": "subject", "level": 1},
+        {"text": "can search for activities", "role": "verb_phrase", "level": 1},
+        {"text": "not solely by geographical location, but also by the particular nature of the activity", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "not solely...but also...是并列结构，说明搜索活动的两种方式，而不是排他关系。",
+        "by geographical location 和 by the particular nature of the activity 分别对应两种检索方式，均修饰 search for。"
+      ],
+      "expressions": [
+        {"text": "not solely...but also", "meaning_zh": "不仅……而且……"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "This is important as research shows that activities are the key driver of visitor satisfaction, contributing 74% to visitor satisfaction, while transport and accommodation account for the remaining 26%.",
+      "translation": "这一点很重要，因为研究表明，各类活动是游客满意度的关键驱动因素，占游客满意度的74%，而交通和住宿则占剩余的26%。",
+      "structure": [
+        {"text": "This is important", "role": "main_clause", "level": 1},
+        {"text": "as research shows that activities are the key driver of visitor satisfaction", "role": "adverbial_clause", "level": 2},
+        {"text": "that activities are the key driver of visitor satisfaction", "role": "noun_clause", "level": 3},
+        {"text": "contributing 74% to visitor satisfaction", "role": "participial_phrase", "level": 3},
+        {"text": "while transport and accommodation account for the remaining 26%", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "as 在这里引导原因状语从句，意为“因为”。",
+        "contributing 74%...是现在分词短语，补充说明 activities 对满意度的具体贡献比例。",
+        "while 表示对比，将活动的74%与交通住宿的26%相对照。"
+      ],
+      "expressions": [
+        {"text": "the key driver of", "meaning_zh": "……的关键驱动因素"},
+        {"text": "account for", "meaning_zh": "占（比例）"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 31,
+      "sentence": "The more activities that visitors undertake, the more satisfied they will be.",
+      "translation": "游客参与的活动越多，他们就会越满意。",
+      "structure": [
+        {"text": "The more activities that visitors undertake", "role": "adverbial_clause", "level": 1},
+        {"text": "the more satisfied they will be", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "the more...the more...是“越……越……”的固定句式，表示两者程度同步变化。",
+        "activities that visitors undertake 中 that 引导定语从句修饰 activities，从句谓语 undertake 意为“从事、参与”。"
+      ],
+      "expressions": [
+        {"text": "the more...the more...", "meaning_zh": "越……就越……"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 32,
+      "sentence": "It has also been found that visitors enjoy cultural activities most when they are interactive, such as visiting a marae (meeting ground) to learn about traditional Maori life.",
+      "translation": "研究还发现，当文化活动具有互动性时，游客最为享受，例如参观毛利人的聚会场地marae，了解传统的毛利生活。",
+      "structure": [
+        {"text": "It has also been found", "role": "main_clause", "level": 1},
+        {"text": "that visitors enjoy cultural activities most when they are interactive", "role": "noun_clause", "level": 2},
+        {"text": "when they are interactive", "role": "adverbial_clause", "level": 3},
+        {"text": "such as visiting a marae (meeting ground) to learn about traditional Maori life", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "It has been found that...是形式主语结构，真正的内容是 that 引导的从句。",
+        "such as visiting...举例说明什么样的活动算作“互动性文化活动”。"
+      ],
+      "expressions": [
+        {"text": "It has been found that", "meaning_zh": "研究发现……"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 33,
+      "sentence": "Many long-haul travellers enjoy such learning experiences, which provide them with stories to take home to their friends and family.",
+      "translation": "许多长途游客喜欢这类学习性的体验，因为这能带给他们可以讲给亲友听的故事。",
+      "structure": [
+        {"text": "Many long-haul travellers", "role": "subject", "level": 1},
+        {"text": "enjoy such learning experiences", "role": "verb_phrase", "level": 1},
+        {"text": "which provide them with stories to take home to their friends and family", "role": "relative_clause", "level": 2},
+        {"text": "to take home to their friends and family", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，修饰 such learning experiences，补充说明这类体验带来的好处。",
+        "to take home...是不定式作后置定语，修饰 stories，说明这些故事的用途。"
+      ],
+      "expressions": [
+        {"text": "provide sb with sth", "meaning_zh": "为某人提供某物"}
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 34,
+      "sentence": "In addition, it appears that visitors to New Zealand don't want to be 'one of the crowd' and find activities that involve only a few people more special and meaningful.",
+      "translation": "此外，新西兰的游客似乎并不想成为“大众中的一员”，他们觉得只有少数人参与的活动更特别、更有意义。",
+      "structure": [
+        {"text": "In addition", "role": "adverbial", "level": 1},
+        {"text": "it appears", "role": "main_clause", "level": 1},
+        {"text": "that visitors to New Zealand don't want to be 'one of the crowd' and find activities that involve only a few people more special and meaningful", "role": "noun_clause", "level": 2},
+        {"text": "that involve only a few people", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "it appears that...是形式主语结构，真正的内容是 that 引导的从句。",
+        "don't want to be...and find...是并列谓语，共用主语 visitors，find 后接宾语 activities 和宾语补足语 more special and meaningful。",
+        "that involve only a few people 是定语从句，修饰 activities。"
+      ],
+      "expressions": [
+        {"text": "it appears that", "meaning_zh": "看起来……；似乎……"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 35,
+      "sentence": "It could be argued that New Zealand is not a typical destination.",
+      "translation": "可以说，新西兰并不是一个典型的旅游目的地。",
+      "structure": [
+        {"text": "It could be argued", "role": "main_clause", "level": 1},
+        {"text": "that New Zealand is not a typical destination", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It could be argued that...是形式主语结构，it 代替后面 that 引导的从句。",
+        "could be argued 用情态动词加被动语态，语气委婉，表示这是一种可能的观点而非绝对结论。"
+      ],
+      "expressions": [
+        {"text": "it could be argued that", "meaning_zh": "可以说……；有人可能会说……"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 36,
+      "sentence": "New Zealand is a small country with a visitor economy composed mainly of small businesses.",
+      "translation": "新西兰是一个小国，其旅游经济主要由中小企业构成。",
+      "structure": [
+        {"text": "New Zealand", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "a small country with a visitor economy", "role": "complement", "level": 1},
+        {"text": "composed mainly of small businesses", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "composed mainly of small businesses 是过去分词短语，修饰 a visitor economy，说明其构成。",
+        "with a visitor economy...是介词短语，作 a small country 的后置修饰语，补充说明这个国家的旅游经济特点。"
+      ],
+      "expressions": [
+        {"text": "be composed of", "meaning_zh": "由……组成"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 37,
+      "sentence": "It is generally perceived as a safe English-speaking country with a reliable transport infrastructure.",
+      "translation": "人们普遍认为新西兰是一个安全的英语国家，拥有可靠的交通基础设施。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "is generally perceived as", "role": "verb_phrase", "level": 1},
+        {"text": "a safe English-speaking country with a reliable transport infrastructure", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "It 指代前文的 New Zealand。",
+        "be perceived as 表示“被认为是”，被动语态强调这是一种普遍看法。"
+      ],
+      "expressions": [
+        {"text": "be perceived as", "meaning_zh": "被认为是……"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 38,
+      "sentence": "Because of the long-haul flight, most visitors stay for longer (average 20 days) and want to see as much of the country as possible on what is often seen as a once-in-a-lifetime visit.",
+      "translation": "由于飞行路途遥远，大多数游客会停留更长时间（平均20天），并希望在这趟常被视为一生一次的旅行中，尽可能多地游览这个国家。",
+      "structure": [
+        {"text": "Because of the long-haul flight", "role": "prepositional_phrase", "level": 1},
+        {"text": "most visitors", "role": "subject", "level": 1},
+        {"text": "stay for longer (average 20 days)", "role": "verb_phrase", "level": 1},
+        {"text": "and want to see as much of the country as possible", "role": "coordinated_clause", "level": 1},
+        {"text": "on what is often seen as a once-in-a-lifetime visit", "role": "prepositional_phrase", "level": 2},
+        {"text": "what is often seen as a once-in-a-lifetime visit", "role": "noun_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "stay...and want...是并列谓语，共用主语 most visitors。",
+        "as much of the country as possible 是“as...as possible”结构，表示“尽可能多地”。",
+        "what is often seen as...是 what 引导的名词性从句，作介词 on 的宾语，指代这次旅行本身。"
+      ],
+      "expressions": [
+        {"text": "as much as possible", "meaning_zh": "尽可能多地"},
+        {"text": "once-in-a-lifetime", "meaning_zh": "一生一次的；难得的"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 39,
+      "sentence": "However, the underlying lessons apply anywhere - the effectiveness of a strong brand, a strategy based on unique experiences and a comprehensive and user-friendly website.",
+      "translation": "然而，这些深层的经验适用于任何地方——一个强势品牌的有效性、一套基于独特体验的策略，以及一个全面且用户友好的网站。",
+      "structure": [
+        {"text": "However", "role": "adverbial", "level": 1},
+        {"text": "the underlying lessons", "role": "subject", "level": 1},
+        {"text": "apply anywhere", "role": "verb_phrase", "level": 1},
+        {"text": "the effectiveness of a strong brand, a strategy based on unique experiences and a comprehensive and user-friendly website", "role": "apposition", "level": 1},
+        {"text": "based on unique experiences", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "破折号后的三个并列名词短语是对 the underlying lessons 的具体说明，即这些经验具体指什么。",
+        "based on unique experiences 是过去分词短语，修饰 a strategy。"
+      ],
+      "expressions": [
+        {"text": "apply anywhere", "meaning_zh": "适用于任何地方"},
+        {"text": "based on", "meaning_zh": "基于"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,551 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_6_test_71",
+  "passage_id": "reading_jijing_6_test_71_p3",
+  "passage_title": "Language diversity",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "One of the most influential ideas in the study of languages is that of universal grammar (UG).",
+      "translation": "语言研究中最具影响力的观点之一，就是普遍语法（UG）理论。",
+      "structure": [
+        {"text": "One of the most influential ideas in the study of languages", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "that of universal grammar (UG)", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["that 在此是替代词，代指前面的 idea，避免重复。", "One of 后接复数名词 ideas，但整个主语中心是 One，因此谓语用 is。"],
+      "expressions": [{"text": "one of the most influential ideas", "meaning_zh": "最具影响力的观点之一"}, {"text": "the study of languages", "meaning_zh": "语言研究"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "Put forward by Noam Chomsky in the 1960s, it is widely interpreted as meaning that all languages are basically the same, and that the human brain is born language-ready, with an in-built programme that is able to interpret the common rules underlying any mother tongue.",
+      "translation": "这一理论由诺姆·乔姆斯基于20世纪60年代提出，人们普遍将其理解为：所有语言基本相同，而且人脑天生就已具备学习语言的准备，内置程序能够解读任何母语背后的共同规则。",
+      "structure": [
+        {"text": "Put forward by Noam Chomsky in the 1960s", "role": "past_participle_adverbial", "level": 2},
+        {"text": "it is widely interpreted as meaning", "role": "main_clause", "level": 1},
+        {"text": "that all languages are basically the same", "role": "content_clause", "level": 2},
+        {"text": "and that the human brain is born language-ready", "role": "coordinate_content_clause", "level": 2},
+        {"text": "with an in-built programme that is able to interpret the common rules underlying any mother tongue", "role": "with_absolute_construction", "level": 2}
+      ],
+      "difficult_points": ["句首过去分词短语 Put forward... 的逻辑主语是 it，it 指普遍语法理论。", "两个 that 从句并列，说明 meaning 的具体内容。", "that is able to... 修饰 programme；underlying... 又是现在分词短语修饰 rules。"],
+      "expressions": [{"text": "put forward", "meaning_zh": "提出"}, {"text": "be interpreted as", "meaning_zh": "被理解为"}, {"text": "in-built programme", "meaning_zh": "内置程序"}, {"text": "underlying rules", "meaning_zh": "深层的共同规则"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "For five decades this idea prevailed, and influenced work in linguistics, psychology and cognitive science.",
+      "translation": "五十年来，这一观点一直占据主导地位，并影响了语言学、心理学和认知科学领域的研究。",
+      "structure": [
+        {"text": "For five decades", "role": "time_adverbial", "level": 1},
+        {"text": "this idea", "role": "subject", "level": 1},
+        {"text": "prevailed", "role": "predicate", "level": 1},
+        {"text": "and influenced work in linguistics, psychology and cognitive science", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["this idea 回指前文的普遍语法理论。", "prevailed 与 influenced 是同一主语之下的并列谓语。"],
+      "expressions": [{"text": "prevail", "meaning_zh": "占据主导地位"}, {"text": "cognitive science", "meaning_zh": "认知科学"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "To understand language, it implied, you must sweep aside the huge diversity of languages, and find their common human core.",
+      "translation": "这一观点意味着，要理解语言，就必须暂时撇开语言的巨大多样性，找出它们共通的人类核心。",
+      "structure": [
+        {"text": "To understand language", "role": "purpose_adverbial", "level": 2},
+        {"text": "it implied", "role": "parenthetical_clause", "level": 2},
+        {"text": "you must sweep aside the huge diversity of languages", "role": "main_clause", "level": 1},
+        {"text": "and find their common human core", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["it implied 是插入语，it 仍指普遍语法观点。", "sweep aside 与 find 是 must 支配的并列动词，their 指各种语言。"],
+      "expressions": [{"text": "sweep aside", "meaning_zh": "暂且撇开"}, {"text": "common human core", "meaning_zh": "共通的人类核心"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "Since the theory of UG was proposed, linguists have identified many universal language rules.",
+      "translation": "自普遍语法理论提出以来，语言学家已经归纳出许多普遍性的语言规则。",
+      "structure": [
+        {"text": "Since the theory of UG was proposed", "role": "time_clause", "level": 2},
+        {"text": "linguists", "role": "subject", "level": 1},
+        {"text": "have identified many universal language rules", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["Since 引导时间状语从句，主句用现在完成时表示从过去延续至今的成果。", "was proposed 是被动语态，表示理论被提出。"],
+      "expressions": [{"text": "propose a theory", "meaning_zh": "提出理论"}, {"text": "identify rules", "meaning_zh": "识别并归纳规则"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "However, there are almost always exceptions.",
+      "translation": "然而，这些规则几乎总有例外。",
+      "structure": [
+        {"text": "However", "role": "conjunctive_adverbial", "level": 1},
+        {"text": "there are almost always exceptions", "role": "existential_clause", "level": 1}
+      ],
+      "difficult_points": ["However 是连接副词，承接上句并引出转折，并非从句连接词。", "there are 是存在句结构，真正的信息焦点是 exceptions。"],
+      "expressions": [{"text": "there are exceptions", "meaning_zh": "存在例外"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 7,
+      "sentence": "It was once believed, for example, that if a language had syllables[1] that begin with a vowel and end with a consonant (VC), it would also have syllables that begin with a consonant and end with a vowel (CV).",
+      "translation": "例如，人们一度认为，如果一种语言有以元音开头、以辅音结尾的音节（VC），那么它也会有以辅音开头、以元音结尾的音节（CV）。",
+      "structure": [
+        {"text": "It was once believed", "role": "passive_reporting_clause", "level": 1},
+        {"text": "for example", "role": "parenthetical_adverbial", "level": 2},
+        {"text": "if a language had syllables[1] that begin with a vowel and end with a consonant (VC)", "role": "conditional_clause", "level": 3},
+        {"text": "it would also have syllables that begin with a consonant and end with a vowel (CV)", "role": "content_clause", "level": 2}
+      ],
+      "difficult_points": ["It 是形式主语，真正的内容由后面的 that 从句承载。", "if 从句与 would have 构成过去视角下的条件推断。", "两处 that 都引导定语从句，分别修饰两种 syllables。"],
+      "expressions": [{"text": "it was once believed that", "meaning_zh": "人们一度认为"}, {"text": "begin with", "meaning_zh": "以……开头"}, {"text": "end with", "meaning_zh": "以……结尾"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "This universal lasted until 1999, when linguists showed that Arrernte, spoken by Indigenous Australians from the area around Alice Springs in the Northern Territory, has VC syllables but no CV syllables.",
+      "translation": "这一普遍规律一直维持到1999年；当时语言学家证明，澳大利亚北领地爱丽斯泉周边地区的原住民所使用的阿兰特语有VC音节，却没有CV音节。",
+      "structure": [
+        {"text": "This universal lasted until 1999", "role": "main_clause", "level": 1},
+        {"text": "when linguists showed", "role": "nonrestrictive_time_clause", "level": 2},
+        {"text": "that Arrernte, spoken by Indigenous Australians from the area around Alice Springs in the Northern Territory, has VC syllables but no CV syllables", "role": "object_clause", "level": 3},
+        {"text": "spoken by Indigenous Australians from the area around Alice Springs in the Northern Territory", "role": "past_participle_modifier", "level": 4}
+      ],
+      "difficult_points": ["when 引导非限制性时间从句，补充说明这一规律在1999年被推翻的事件。", "spoken by... 是过去分词短语，修饰 Arrernte。", "has VC syllables but no CV syllables 中后半部分省略了重复的 has。"],
+      "expressions": [{"text": "last until", "meaning_zh": "持续到"}, {"text": "show that", "meaning_zh": "证明；表明"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 9,
+      "sentence": "Other non-universal universals describe the basic rules of putting words together.",
+      "translation": "还有一些并非真正普适的“普遍规律”，描述的是词语组合的基本规则。",
+      "structure": [
+        {"text": "Other non-universal universals", "role": "subject", "level": 1},
+        {"text": "describe", "role": "predicate", "level": 1},
+        {"text": "the basic rules of putting words together", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["non-universal universals 是刻意的矛盾式表达，指号称普遍却存在例外的规律。", "putting words together 是介词 of 后的动名词短语，说明 rules 的内容。"],
+      "expressions": [{"text": "put words together", "meaning_zh": "组合词语"}, {"text": "basic rules of", "meaning_zh": "……的基本规则"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 10,
+      "sentence": "Take the rule that every language contains four basic word classes: nouns, verbs, adjectives and adverbs.",
+      "translation": "以这样一条规则为例：每种语言都包含四种基本词类，即名词、动词、形容词和副词。",
+      "structure": [
+        {"text": "Take the rule", "role": "imperative_main_clause", "level": 1},
+        {"text": "that every language contains four basic word classes", "role": "appositive_clause", "level": 2},
+        {"text": "nouns, verbs, adjectives and adverbs", "role": "appositive_list", "level": 2}
+      ],
+      "difficult_points": ["Take... 是祈使句，在论述中表示“以……为例”。", "that 从句说明 rule 的具体内容，是同位语从句；冒号后列出四种词类。"],
+      "expressions": [{"text": "take the rule that", "meaning_zh": "以……规则为例"}, {"text": "word classes", "meaning_zh": "词类"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "Work in the past two decades has shown that several languages lack an open adverb class, which means that new adverbs cannot be readily formed, unlike in English where you can turn any adjective into an adverb, for example 'soft' into 'softly'.",
+      "translation": "过去二十年的研究表明，有几种语言没有开放的副词词类，这意味着它们无法轻易创造新副词；英语则不同，任何形容词都可以变成副词，例如把 soft 变成 softly。",
+      "structure": [
+        {"text": "Work in the past two decades has shown", "role": "main_clause", "level": 1},
+        {"text": "that several languages lack an open adverb class", "role": "object_clause", "level": 2},
+        {"text": "which means that new adverbs cannot be readily formed", "role": "nonrestrictive_relative_clause", "level": 3},
+        {"text": "unlike in English where you can turn any adjective into an adverb", "role": "contrastive_adverbial", "level": 3},
+        {"text": "for example 'soft' into 'softly'", "role": "example_parenthesis", "level": 4}
+      ],
+      "difficult_points": ["which 指代“这些语言没有开放副词词类”这一整件事，而非只修饰 class。", "where 引导定语从句修饰 English，说明英语中的构词方式。", "cannot be readily formed 使用被动语态；末尾例子省略了 turn。"],
+      "expressions": [{"text": "in the past two decades", "meaning_zh": "在过去二十年中"}, {"text": "lack an open class", "meaning_zh": "缺少开放词类"}, {"text": "turn ... into ...", "meaning_zh": "把……变成……"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "Others, such as Lao, spoken in Laos, have no adjectives at all.",
+      "translation": "另一些语言，例如老挝境内使用的老挝语，则根本没有形容词。",
+      "structure": [
+        {"text": "Others", "role": "subject", "level": 1},
+        {"text": "such as Lao", "role": "example_parenthesis", "level": 2},
+        {"text": "spoken in Laos", "role": "past_participle_modifier", "level": 3},
+        {"text": "have no adjectives at all", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["Others 代指另一些语言，而不是人。", "spoken in Laos 是过去分词短语，补充说明 Lao；at all 加强否定语气。"],
+      "expressions": [{"text": "such as", "meaning_zh": "例如"}, {"text": "not ... at all", "meaning_zh": "根本不……"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "More controversially, some linguists argue that a few languages, such as Straits Salish, spoken by indigenous people from north-western regions of North America, do not even have distinct nouns or verbs.",
+      "translation": "更具争议的是，一些语言学家认为，少数语言——例如北美西北部原住民所使用的海峡萨利希语——甚至没有彼此独立的名词和动词。",
+      "structure": [
+        {"text": "More controversially", "role": "stance_adverbial", "level": 1},
+        {"text": "some linguists argue", "role": "main_clause", "level": 1},
+        {"text": "that a few languages, such as Straits Salish, spoken by indigenous people from north-western regions of North America, do not even have distinct nouns or verbs", "role": "object_clause", "level": 2},
+        {"text": "spoken by indigenous people from north-western regions of North America", "role": "past_participle_modifier", "level": 3}
+      ],
+      "difficult_points": ["that 从句是 argue 的宾语，主语是 a few languages。", "spoken by... 修饰 Straits Salish，夹在宾语从句主语与谓语之间。", "distinct 在此意为作为不同词类而独立存在，并非“显著的”。"],
+      "expressions": [{"text": "more controversially", "meaning_zh": "更具争议的是"}, {"text": "argue that", "meaning_zh": "主张；认为"}, {"text": "distinct nouns or verbs", "meaning_zh": "彼此独立的名词或动词词类"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "Instead, they have a single class of words to include events, objects and qualities.",
+      "translation": "相反，它们只有一个涵盖事件、物体和性质的统一词类。",
+      "structure": [
+        {"text": "Instead", "role": "conjunctive_adverbial", "level": 1},
+        {"text": "they", "role": "subject", "level": 1},
+        {"text": "have a single class of words", "role": "predicate", "level": 1},
+        {"text": "to include events, objects and qualities", "role": "infinitive_modifier", "level": 2}
+      ],
+      "difficult_points": ["they 回指上句所说的少数语言。", "to include... 修饰 a single class of words，说明该词类涵盖的内容。"],
+      "expressions": [{"text": "a single class of", "meaning_zh": "单一类别的"}, {"text": "include events, objects and qualities", "meaning_zh": "涵盖事件、物体和性质"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 15,
+      "sentence": "Even apparently indisputable universals have been found lacking.",
+      "translation": "即便是那些看似无可争议的普遍规律，也被发现并不成立。",
+      "structure": [
+        {"text": "Even apparently indisputable universals", "role": "subject", "level": 1},
+        {"text": "have been found lacking", "role": "passive_predicate", "level": 1}
+      ],
+      "difficult_points": ["apparently 修饰 indisputable，表示“表面看来无可争议”。", "find something lacking 的被动形式为 be found lacking，意为“被发现有所欠缺、不成立”。"],
+      "expressions": [{"text": "apparently indisputable", "meaning_zh": "看似无可争议的"}, {"text": "be found lacking", "meaning_zh": "被发现存在缺陷"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 16,
+      "sentence": "This includes recursion, or the ability to infinitely place one grammatical unit inside a similar unit, such as 'Jack thinks that Mary thinks that ... the bus will be on time'.",
+      "translation": "其中包括递归，也就是把一个语法单位无限嵌套进同类单位的能力，例如“杰克认为玛丽认为……公交车会准时到”。",
+      "structure": [
+        {"text": "This includes recursion", "role": "main_clause", "level": 1},
+        {"text": "or the ability to infinitely place one grammatical unit inside a similar unit", "role": "apposition", "level": 2},
+        {"text": "to infinitely place one grammatical unit inside a similar unit", "role": "infinitive_modifier", "level": 3},
+        {"text": "such as 'Jack thinks that Mary thinks that ... the bus will be on time'", "role": "example_adverbial", "level": 2}
+      ],
+      "difficult_points": ["or 后的名词短语是 recursion 的同位解释。", "to infinitely place... 修饰 ability，示例中的多个 that 从句逐层嵌套，展示递归。"],
+      "expressions": [{"text": "the ability to", "meaning_zh": "做……的能力"}, {"text": "place ... inside ...", "meaning_zh": "把……置于……之中"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 17,
+      "sentence": "It is widely considered to be the most essential characteristic of human language, one that sets it apart from the communications of all other animals.",
+      "translation": "递归被普遍认为是人类语言最根本的特征，正是这一特征将人类语言与其他所有动物的交流方式区分开来。",
+      "structure": [
+        {"text": "It is widely considered to be the most essential characteristic of human language", "role": "passive_main_clause", "level": 1},
+        {"text": "one", "role": "apposition", "level": 2},
+        {"text": "that sets it apart from the communications of all other animals", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["句首 It 指上一句的 recursion，不是形式主语。", "one 与 characteristic 同位，that 引导定语从句修饰 one；从句中的 it 指 human language。"],
+      "expressions": [{"text": "be widely considered to be", "meaning_zh": "被普遍认为是"}, {"text": "set ... apart from ...", "meaning_zh": "使……区别于……"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 18,
+      "sentence": "Yet Dan Everett at Illinois State University recently published controversial work showing that Amazonian Piraha does not have this quality.",
+      "translation": "然而，伊利诺伊州立大学的丹·埃弗雷特最近发表了一项有争议的研究，表明亚马孙地区的皮拉罕语并不具备这种特性。",
+      "structure": [
+        {"text": "Yet", "role": "conjunctive_adverbial", "level": 1},
+        {"text": "Dan Everett at Illinois State University", "role": "subject", "level": 1},
+        {"text": "recently published controversial work", "role": "predicate", "level": 1},
+        {"text": "showing that Amazonian Piraha does not have this quality", "role": "present_participle_modifier", "level": 2}
+      ],
+      "difficult_points": ["showing... 是现在分词短语，后置修饰 work，并说明研究结论。", "this quality 回指前文的 recursion（递归能力）。"],
+      "expressions": [{"text": "publish controversial work", "meaning_zh": "发表有争议的研究"}, {"text": "show that", "meaning_zh": "表明"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 19,
+      "sentence": "But what if the very diversity of languages is the key to understanding human communication?",
+      "translation": "但如果恰恰是语言的多样性，才是理解人类交流的关键呢？",
+      "structure": [
+        {"text": "But", "role": "coordinating_conjunction", "level": 1},
+        {"text": "what if", "role": "hypothetical_question_frame", "level": 1},
+        {"text": "the very diversity of languages is the key to understanding human communication", "role": "hypothetical_clause", "level": 2}
+      ],
+      "difficult_points": ["what if 用于提出假设性问题，可译为“如果……又会怎样/如果其实……呢”。", "very 在名词前表示强调，意为“正是、恰恰是”；to 是介词，后接 understanding。"],
+      "expressions": [{"text": "what if", "meaning_zh": "如果……又怎样；如果其实……呢"}, {"text": "the key to understanding", "meaning_zh": "理解……的关键"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 20,
+      "sentence": "Linguists Nicholas Evans of the Australian National University in Canberra, and Stephen Levinson of the Max Planck Institute for Psycholinguistics in Nijmegen, the Netherlands, believe that languages do not share a common set of rules.",
+      "translation": "澳大利亚国立大学的语言学家尼古拉斯·埃文斯和荷兰奈梅亨马克斯·普朗克心理语言学研究所的斯蒂芬·莱文森认为，各种语言并不共享一套共同规则。",
+      "structure": [
+        {"text": "Linguists Nicholas Evans of the Australian National University in Canberra, and Stephen Levinson of the Max Planck Institute for Psycholinguistics in Nijmegen, the Netherlands", "role": "compound_subject", "level": 1},
+        {"text": "believe", "role": "predicate", "level": 1},
+        {"text": "that languages do not share a common set of rules", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["长主语由 Nicholas Evans 和 Stephen Levinson 两人并列构成，其余地点和机构信息都是后置修饰。", "that 引导 believe 的宾语从句；a common set of rules 意为一套共同规则。"],
+      "expressions": [{"text": "share a common set of rules", "meaning_zh": "共享一套共同规则"}, {"text": "believe that", "meaning_zh": "认为"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 21,
+      "sentence": "Instead, they say, their sheer variety is a defining feature of human communication - something not seen in other animals.",
+      "translation": "相反，他们认为，语言纯粹而巨大的多样性才是人类交流的决定性特征——这是其他动物所不具备的。",
+      "structure": [
+        {"text": "Instead", "role": "conjunctive_adverbial", "level": 1},
+        {"text": "they say", "role": "parenthetical_clause", "level": 2},
+        {"text": "their sheer variety is a defining feature of human communication", "role": "main_clause", "level": 1},
+        {"text": "something not seen in other animals", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": ["they say 是插入语，they 指 Evans 和 Levinson。", "something... 对前面的 defining feature 作补充说明；not seen... 是过去分词短语修饰 something。"],
+      "expressions": [{"text": "sheer variety", "meaning_zh": "极大的多样性"}, {"text": "a defining feature of", "meaning_zh": "……的决定性特征"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 22,
+      "sentence": "While there is no doubt that human thinking influences the form that language takes, if Evans and Levinson are correct, language in turn shapes our brains.",
+      "translation": "尽管毫无疑问，人类思维会影响语言所采取的形式，但如果埃文斯和莱文森是对的，那么语言反过来也会塑造我们的大脑。",
+      "structure": [
+        {"text": "While there is no doubt that human thinking influences the form that language takes", "role": "concessive_clause", "level": 2},
+        {"text": "that human thinking influences the form that language takes", "role": "content_clause", "level": 3},
+        {"text": "if Evans and Levinson are correct", "role": "conditional_clause", "level": 2},
+        {"text": "language in turn shapes our brains", "role": "main_clause", "level": 1}
+      ],
+      "difficult_points": ["While 在此引导让步从句，意为“尽管”，而非“与此同时”。", "第一个 that 引出 doubt 的内容，第二个 that 引导定语从句修饰 form。", "in turn 表示反向作用：思维影响语言，而语言也塑造大脑。"],
+      "expressions": [{"text": "there is no doubt that", "meaning_zh": "毫无疑问"}, {"text": "in turn", "meaning_zh": "反过来；转而"}, {"text": "shape our brains", "meaning_zh": "塑造我们的大脑"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 23,
+      "sentence": "This suggests that humans are more diverse than we thought, with our brains having differences depending on the language environment in which we grew up.",
+      "translation": "这表明，人类彼此之间的差异比我们原先想象的更大；我们的大脑会因成长时所处的语言环境不同而有所差异。",
+      "structure": [
+        {"text": "This suggests", "role": "main_clause", "level": 1},
+        {"text": "that humans are more diverse than we thought", "role": "object_clause", "level": 2},
+        {"text": "with our brains having differences", "role": "with_absolute_construction", "level": 2},
+        {"text": "depending on the language environment in which we grew up", "role": "present_participle_modifier", "level": 3}
+      ],
+      "difficult_points": ["This 指上一句“语言会反过来塑造大脑”这一推论。", "with our brains having... 是 with 复合结构，补充说明人类多样性的表现。", "in which we grew up 修饰 language environment，which 是介词 in 的宾语。"],
+      "expressions": [{"text": "suggest that", "meaning_zh": "表明"}, {"text": "depend on", "meaning_zh": "取决于"}, {"text": "language environment", "meaning_zh": "语言环境"}]
+    },
+    {
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 24,
+      "sentence": "And that leads to a disturbing conclusion: every time a language becomes extinct, humanity loses an important piece of diversity.",
+      "translation": "而这会导向一个令人不安的结论：每当一种语言灭绝，人类就失去多样性中的重要一块。",
+      "structure": [
+        {"text": "And that leads to a disturbing conclusion", "role": "main_clause", "level": 1},
+        {"text": "every time a language becomes extinct", "role": "time_clause", "level": 2},
+        {"text": "humanity loses an important piece of diversity", "role": "explanatory_clause", "level": 2}
+      ],
+      "difficult_points": ["that 回指前文关于语言环境塑造大脑、造成人类差异的观点。", "冒号后解释 conclusion 的具体内容；every time 引导时间从句，意为“每当”。"],
+      "expressions": [{"text": "lead to a conclusion", "meaning_zh": "导向一个结论"}, {"text": "become extinct", "meaning_zh": "灭绝"}, {"text": "a piece of diversity", "meaning_zh": "多样性的一部分"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 25,
+      "sentence": "If languages do not obey a single set of shared rules, then how are they created?",
+      "translation": "如果各种语言并不遵循同一套共同规则，那么它们究竟是如何形成的呢？",
+      "structure": [
+        {"text": "If languages do not obey a single set of shared rules", "role": "conditional_clause", "level": 2},
+        {"text": "then how are they created", "role": "interrogative_main_clause", "level": 1}
+      ],
+      "difficult_points": ["If 从句提出前提，then 引出的主句采用疑问语序。", "are they created 是被动语态，they 指各种语言。"],
+      "expressions": [{"text": "obey a set of rules", "meaning_zh": "遵循一套规则"}, {"text": "a single set of shared rules", "meaning_zh": "同一套共同规则"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 26,
+      "sentence": "'Instead of universals. you get standard engineering solutions that languages adopt again and again, and then you get outliers.' says Evans.",
+      "translation": "埃文斯说：“得到的不是普遍规律，而是各种语言反复采用的标准工程式解决方案，此外还会出现一些离群的例外。”",
+      "structure": [
+        {"text": "Instead of universals", "role": "contrastive_adverbial", "level": 2},
+        {"text": "you get standard engineering solutions", "role": "quoted_main_clause", "level": 1},
+        {"text": "that languages adopt again and again", "role": "relative_clause", "level": 2},
+        {"text": "and then you get outliers", "role": "coordinate_clause", "level": 1},
+        {"text": "says Evans", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": ["源文在 universals 后使用句点且 says 前另有句点，属于原始排版，英文保持不改。", "that 引导定语从句修饰 solutions；you 是泛指，并非特定读者。", "outliers 指不符合常见倾向的语言例外。"],
+      "expressions": [{"text": "instead of", "meaning_zh": "而不是"}, {"text": "again and again", "meaning_zh": "反复地"}, {"text": "standard engineering solutions", "meaning_zh": "标准化的工程式解决方案"}, {"text": "outlier", "meaning_zh": "离群的例外"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 27,
+      "sentence": "He and Levinson argue that this is because any given language is a complex system shaped by many factors, including culture, genetics and history.",
+      "translation": "他和莱文森认为，这是因为任何一种具体语言都是由文化、遗传和历史等多种因素塑造的复杂系统。",
+      "structure": [
+        {"text": "He and Levinson argue", "role": "main_clause", "level": 1},
+        {"text": "that this is because any given language is a complex system shaped by many factors", "role": "object_clause", "level": 2},
+        {"text": "because any given language is a complex system shaped by many factors", "role": "predicative_reason_clause", "level": 3},
+        {"text": "including culture, genetics and history", "role": "example_participle_phrase", "level": 4}
+      ],
+      "difficult_points": ["He 指 Evans，this 指语言呈现常见解决方案和离群例外的现象。", "because 从句在 that 从句中作表语，解释原因。", "shaped by... 是过去分词短语，修饰 system。"],
+      "expressions": [{"text": "any given language", "meaning_zh": "任何一种具体语言"}, {"text": "be shaped by", "meaning_zh": "由……塑造"}, {"text": "a complex system", "meaning_zh": "复杂系统"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 28,
+      "sentence": "There- are no absolutely universal traits of language, they say, only tendencies.",
+      "translation": "他们说，语言并不存在绝对普遍的特征，只有各种倾向。",
+      "structure": [
+        {"text": "There- are no absolutely universal traits of language", "role": "existential_clause", "level": 1},
+        {"text": "they say", "role": "parenthetical_clause", "level": 2},
+        {"text": "only tendencies", "role": "elliptical_contrast", "level": 1}
+      ],
+      "difficult_points": ["源文 There 后的连字符属于原始文本异常，英文原样保留。", "they say 是插入语；only tendencies 省略了 there are，与前面的 no... 构成对比。"],
+      "expressions": [{"text": "universal traits", "meaning_zh": "普遍特征"}, {"text": "only tendencies", "meaning_zh": "只有倾向而非绝对规律"}]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 29,
+      "sentence": "And it is a mix of strong and weak tendencies that characterises the 'bio-cultural' mix that we call language.",
+      "translation": "而正是强弱倾向的共同作用，构成了我们称为语言的这种“生物—文化”混合体。",
+      "structure": [
+        {"text": "it is a mix of strong and weak tendencies that characterises the 'bio-cultural' mix", "role": "cleft_construction", "level": 1},
+        {"text": "a mix of strong and weak tendencies", "role": "focused_element", "level": 2},
+        {"text": "that characterises the 'bio-cultural' mix", "role": "cleft_clause", "level": 2},
+        {"text": "that we call language", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["It is...that... 是强调句，强调 a mix of strong and weak tendencies。", "第二个 that 引导定语从句修饰 'bio-cultural' mix，call 的宾语是 that，宾补是 language。"],
+      "expressions": [{"text": "a mix of", "meaning_zh": "……的混合"}, {"text": "strong and weak tendencies", "meaning_zh": "强弱倾向"}, {"text": "characterise", "meaning_zh": "构成……的特征"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 30,
+      "sentence": "According to the two linguists, the strong tendencies explain why many languages display common patterns.",
+      "translation": "这两位语言学家认为，强倾向可以解释为什么许多语言会呈现共同模式。",
+      "structure": [
+        {"text": "According to the two linguists", "role": "source_adverbial", "level": 1},
+        {"text": "the strong tendencies explain", "role": "main_clause", "level": 1},
+        {"text": "why many languages display common patterns", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["According to... 表明观点来源，不是句子主语。", "why 引导 explain 的宾语从句，使用陈述语序。"],
+      "expressions": [{"text": "according to", "meaning_zh": "根据；按照……的观点"}, {"text": "display common patterns", "meaning_zh": "呈现共同模式"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 31,
+      "sentence": "A variety of factors tend to push language in a similar direction, such as the structure of the brain, the biology of speech, and the efficiencies of communication.",
+      "translation": "多种因素往往会把语言推向相似的发展方向，例如大脑结构、言语的生物机制以及交流效率。",
+      "structure": [
+        {"text": "A variety of factors", "role": "subject", "level": 1},
+        {"text": "tend to push language in a similar direction", "role": "predicate", "level": 1},
+        {"text": "such as the structure of the brain, the biology of speech, and the efficiencies of communication", "role": "example_adverbial", "level": 2}
+      ],
+      "difficult_points": ["A variety of factors 强调多种因素，谓语按复数意义使用 tend。", "such as 后列举的是 factors 的具体例子，而非 direction 的例子。"],
+      "expressions": [{"text": "a variety of factors", "meaning_zh": "多种因素"}, {"text": "tend to", "meaning_zh": "往往会"}, {"text": "push ... in a similar direction", "meaning_zh": "推动……朝相似方向发展"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 32,
+      "sentence": "Widely shared linguistic elements may also be ones that build on a particularly human kind of reasoning.",
+      "translation": "广泛共有的语言要素，也可能是建立在人类特有推理方式之上的要素。",
+      "structure": [
+        {"text": "Widely shared linguistic elements", "role": "subject", "level": 1},
+        {"text": "may also be", "role": "linking_predicate", "level": 1},
+        {"text": "ones", "role": "subject_complement", "level": 1},
+        {"text": "that build on a particularly human kind of reasoning", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["ones 替代 linguistic elements，避免重复。", "that 引导定语从句修饰 ones；build on 表示“以……为基础”。"],
+      "expressions": [{"text": "widely shared", "meaning_zh": "广泛共有的"}, {"text": "build on", "meaning_zh": "以……为基础"}, {"text": "a kind of reasoning", "meaning_zh": "一种推理方式"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 33,
+      "sentence": "For example, the fact that before we learn to speak we perceive the world as a place full of things causing actions (agents) and things having actions done to them (patients)explains why most languages deploy these grammatical categories.",
+      "translation": "例如，在学会说话之前，我们就把世界理解为一个充满“施事者”和“受事者”的地方；前者引发动作，后者承受动作。这一事实解释了为什么多数语言都会采用这些语法范畴。",
+      "structure": [
+        {"text": "For example", "role": "example_adverbial", "level": 1},
+        {"text": "the fact", "role": "subject", "level": 1},
+        {"text": "that before we learn to speak we perceive the world as a place full of things causing actions (agents) and things having actions done to them (patients)", "role": "appositive_clause", "level": 2},
+        {"text": "before we learn to speak", "role": "time_clause", "level": 3},
+        {"text": "explains why most languages deploy these grammatical categories", "role": "predicate", "level": 1}
+      ],
+      "difficult_points": ["长主语中心是 the fact，that 从句说明这一事实的具体内容，真正谓语是 explains。", "things causing actions 与 things having actions done to them 并列；后者是 have something done 结构的变体。", "源文在 (patients) 与 explains 之间缺少空格，英文原样保留。"],
+      "expressions": [{"text": "perceive ... as ...", "meaning_zh": "把……理解为……"}, {"text": "have actions done to", "meaning_zh": "承受动作"}, {"text": "deploy grammatical categories", "meaning_zh": "采用语法范畴"}]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 34,
+      "sentence": "Weak tendencies, in contrast, are explained by the idiosyncrasies of different languages.",
+      "translation": "相比之下，弱倾向则由不同语言各自的特殊性来解释。",
+      "structure": [
+        {"text": "Weak tendencies", "role": "subject", "level": 1},
+        {"text": "in contrast", "role": "parenthetical_adverbial", "level": 2},
+        {"text": "are explained by the idiosyncrasies of different languages", "role": "passive_predicate", "level": 1}
+      ],
+      "difficult_points": ["in contrast 是插入式对比状语，将弱倾向与上一段的强倾向对照。", "idiosyncrasies 指各语言独有的特性，而非一般意义上的缺点。"],
+      "expressions": [{"text": "in contrast", "meaning_zh": "相比之下"}, {"text": "be explained by", "meaning_zh": "由……解释"}, {"text": "the idiosyncrasies of", "meaning_zh": "……的独特性"}]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 35,
+      "sentence": "Evans and Levinson argue that many aspects of the particular natural history of a population may affect its language.",
+      "translation": "埃文斯和莱文森认为，一个族群特有的自然发展史，其许多方面都可能影响该族群的语言。",
+      "structure": [
+        {"text": "Evans and Levinson argue", "role": "main_clause", "level": 1},
+        {"text": "that many aspects of the particular natural history of a population may affect its language", "role": "object_clause", "level": 2},
+        {"text": "many aspects of the particular natural history of a population", "role": "embedded_subject", "level": 3},
+        {"text": "may affect its language", "role": "embedded_predicate", "level": 3}
+      ],
+      "difficult_points": ["that 从句是 argue 的宾语，内部主语是较长的 many aspects...。", "its 指代 a population，表示该族群所使用的语言。"],
+      "expressions": [{"text": "many aspects of", "meaning_zh": "……的多个方面"}, {"text": "affect its language", "meaning_zh": "影响其语言"}]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 36,
+      "sentence": "For instance, Andy Butcher at Flinders University in Adelaide, South Australia, has observed that indigenous Australian children have by far the highest incidence of chronic middle-ear infection of any population on the planet, and that most indigenous Australian languages lack many sounds that are common in other languages, but which are hard to hear with a middle-ear infection.",
+      "translation": "例如，南澳大利亚州阿德莱德弗林德斯大学的安迪·布彻观察到，澳大利亚原住民儿童的慢性中耳感染率远高于世界上任何其他人群；同时，大多数澳大利亚原住民语言缺少许多其他语言中常见、但中耳感染者难以听清的声音。",
+      "structure": [
+        {"text": "For instance", "role": "example_adverbial", "level": 1},
+        {"text": "Andy Butcher at Flinders University in Adelaide, South Australia, has observed", "role": "main_clause", "level": 1},
+        {"text": "that indigenous Australian children have by far the highest incidence of chronic middle-ear infection of any population on the planet", "role": "object_clause", "level": 2},
+        {"text": "and that most indigenous Australian languages lack many sounds that are common in other languages, but which are hard to hear with a middle-ear infection", "role": "coordinate_object_clause", "level": 2},
+        {"text": "that are common in other languages, but which are hard to hear with a middle-ear infection", "role": "coordinate_relative_clauses", "level": 3}
+      ],
+      "difficult_points": ["两个 that 从句并列，都是 has observed 的宾语。", "by far 修饰最高级，强调原住民儿童的感染率高出很多。", "that... 与 but which... 是修饰 sounds 的并列定语从句；第二个从句含 hard to hear 结构。"],
+      "expressions": [{"text": "by far the highest incidence", "meaning_zh": "高得多的最高发病率"}, {"text": "chronic middle-ear infection", "meaning_zh": "慢性中耳感染"}, {"text": "lack many sounds", "meaning_zh": "缺少许多语音"}, {"text": "be hard to hear", "meaning_zh": "难以听清"}]
+    },
+    {
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 37,
+      "sentence": "Whether this condition has shaped the sound systems of these languages is unknown, says Evans, but it is important to consider the idea.",
+      "translation": "埃文斯说，这种状况是否塑造了这些语言的语音系统，目前还不得而知，但这一设想值得认真考虑。",
+      "structure": [
+        {"text": "Whether this condition has shaped the sound systems of these languages", "role": "subject_clause", "level": 2},
+        {"text": "is unknown", "role": "main_predicate", "level": 1},
+        {"text": "says Evans", "role": "parenthetical_reporting_clause", "level": 2},
+        {"text": "but it is important to consider the idea", "role": "coordinate_clause", "level": 1}
+      ],
+      "difficult_points": ["Whether 从句整体作主语，谓语是 is unknown。", "this condition 指高发的慢性中耳感染；these languages 指澳大利亚原住民语言。", "后半句 it 是形式主语，真正主语是 to consider the idea。"],
+      "expressions": [{"text": "shape the sound systems", "meaning_zh": "塑造语音系统"}, {"text": "it is important to consider", "meaning_zh": "值得考虑；考虑……很重要"}]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 38,
+      "sentence": "Levinson and Evans are not the first to question the theory of universal grammar, but no one has summarised these ideas quite as persuasively, and given them as much reach.",
+      "translation": "莱文森和埃文斯并非最早质疑普遍语法理论的人，但从未有人如此有说服力地概括这些观点，也未曾让它们产生如此广泛的影响。",
+      "structure": [
+        {"text": "Levinson and Evans are not the first to question the theory of universal grammar", "role": "main_clause", "level": 1},
+        {"text": "but no one has summarised these ideas quite as persuasively", "role": "coordinate_clause", "level": 1},
+        {"text": "and given them as much reach", "role": "coordinate_predicate", "level": 1}
+      ],
+      "difficult_points": ["the first to question 中不定式修饰 the first，表示最早做某事的人。", "summarised 与 given 共用助动词 has；them 指 these ideas。", "give ideas reach 表示使观点传播更广、影响更大。"],
+      "expressions": [{"text": "question a theory", "meaning_zh": "质疑一种理论"}, {"text": "quite as persuasively", "meaning_zh": "如此有说服力地"}, {"text": "give ... reach", "meaning_zh": "扩大……的传播和影响"}]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 39,
+      "sentence": "As a result, their arguments have generated widespread enthusiasm, particularly among those linguists who are tired of trying to squeeze their findings into the straitjacket of 'absolute universals'.",
+      "translation": "因此，他们的论点引发了广泛热情，尤其受到那些已厌倦把研究发现硬塞进“绝对普遍规律”这副紧身框架的语言学家的欢迎。",
+      "structure": [
+        {"text": "As a result", "role": "result_adverbial", "level": 1},
+        {"text": "their arguments have generated widespread enthusiasm", "role": "main_clause", "level": 1},
+        {"text": "particularly among those linguists", "role": "scope_adverbial", "level": 2},
+        {"text": "who are tired of trying to squeeze their findings into the straitjacket of 'absolute universals'", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["who 引导定语从句修饰 those linguists。", "be tired of 后接动名词 trying，trying 后又接不定式 to squeeze。", "straitjacket 是比喻，指“绝对普遍规律”对研究发现的僵化束缚。"],
+      "expressions": [{"text": "as a result", "meaning_zh": "因此"}, {"text": "generate widespread enthusiasm", "meaning_zh": "激起广泛热情"}, {"text": "be tired of doing", "meaning_zh": "厌倦做……"}, {"text": "squeeze ... into ...", "meaning_zh": "把……硬塞进……"}]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 40,
+      "sentence": "To some, it is the final nail in UG's coffin.",
+      "translation": "在一些人看来，这给普遍语法理论判了最终的死刑。",
+      "structure": [
+        {"text": "To some", "role": "viewpoint_adverbial", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "is the final nail in UG's coffin", "role": "linking_predicate", "level": 1}
+      ],
+      "difficult_points": ["it 指 Evans 和 Levinson 的论证及其影响。", "the final nail in...coffin 是比喻，指让某理论彻底失去生命力的最后一击。"],
+      "expressions": [{"text": "the final nail in ... coffin", "meaning_zh": "宣告……彻底终结的最后一击"}, {"text": "to some", "meaning_zh": "在一些人看来"}]
+    },
+    {
+      "id": "I-04", "paragraph_label": "I", "sentence_index": 41,
+      "sentence": "Michael Tomasello, co-director of the Max Planck Institute for Evolutionary Anthropology in Leipzig, Germany, has been a long-standing critic of the idea that all languages conform to a set of rules.",
+      "translation": "迈克尔·托马塞洛是德国莱比锡马克斯·普朗克进化人类学研究所的联合所长，他长期以来一直批评“所有语言都遵循一套规则”这一观点。",
+      "structure": [
+        {"text": "Michael Tomasello", "role": "subject", "level": 1},
+        {"text": "co-director of the Max Planck Institute for Evolutionary Anthropology in Leipzig, Germany", "role": "apposition", "level": 2},
+        {"text": "has been a long-standing critic of the idea", "role": "linking_predicate", "level": 1},
+        {"text": "that all languages conform to a set of rules", "role": "appositive_clause", "level": 2}
+      ],
+      "difficult_points": ["co-director... 是 Michael Tomasello 的同位语，补充其身份。", "现在完成时 has been 表示批评立场长期持续至今。", "that 从句说明 idea 的具体内容，是同位语从句。"],
+      "expressions": [{"text": "a long-standing critic of", "meaning_zh": "长期以来对……持批评态度的人"}, {"text": "conform to a set of rules", "meaning_zh": "遵循一套规则"}]
+    },
+    {
+      "id": "I-05", "paragraph_label": "I", "sentence_index": 42,
+      "sentence": "'Universal grammar is dead,' he says.",
+      "translation": "他说：“普遍语法已经死了。”",
+      "structure": [
+        {"text": "Universal grammar is dead", "role": "quoted_clause", "level": 1},
+        {"text": "he says", "role": "reporting_clause", "level": 1}
+      ],
+      "difficult_points": ["he 指上一句的 Michael Tomasello。", "is dead 是带有修辞色彩的判断，意为该理论已经失去解释力，而非字面死亡。"],
+      "expressions": [{"text": "be dead", "meaning_zh": "已失去生命力；已被淘汰"}]
+    },
+    {
+      "id": "J-01", "paragraph_label": "J", "sentence_index": 43,
+      "sentence": "[1] a unit of sound",
+      "translation": "[1] 一个语音单位",
+      "structure": [
+        {"text": "[1]", "role": "footnote_marker", "level": 1},
+        {"text": "a unit of sound", "role": "noun_phrase_definition", "level": 1}
+      ],
+      "difficult_points": ["这是对前文 syllables[1] 所加的脚注说明，不是完整谓语句。", "a unit of sound 用名词短语定义 syllable 的基本性质。"],
+      "expressions": [{"text": "a unit of sound", "meaning_zh": "一个语音单位"}]
+    }
+  ]
+}

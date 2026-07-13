@@ -1,0 +1,2461 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts5_test3_reading",
+  "passage_id": "ielts5_test3_p1",
+  "passage_title": "Early Childhood Education",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "'Education To Be More' was published last August.",
+      "translation": "《Education To Be More》于去年八月出版。",
+      "structure": [
+        {
+          "text": "'Education To Be More'",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was published",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "last August",
+          "role": "adverbial",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "句首带引号的书名是整句主语。",
+        "was published 是被动语态，强调这本书被出版这一事实。",
+        "last August 表示过去的具体时间。"
+      ],
+      "expressions": [
+        {
+          "text": "be published",
+          "meaning_zh": "被出版；发表"
+        },
+        {
+          "text": "last August",
+          "meaning_zh": "去年八月"
+        }
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "It was the report of the New Zealand Government's Early Childhood Care and Education Working Group.",
+      "translation": "它是新西兰政府早期儿童保育与教育工作组的报告。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the report of the New Zealand Government's Early Childhood Care and Education Working Group",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "of the New Zealand Government's Early Childhood Care and Education Working Group",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指代上一句提到的《Education To Be More》。",
+        "of 后面的长名词短语说明这份报告来自哪个工作组。",
+        "句子用 was 构成系表结构，说明书的性质。"
+      ],
+      "expressions": [
+        {
+          "text": "the report of",
+          "meaning_zh": "……的报告"
+        },
+        {
+          "text": "working group",
+          "meaning_zh": "工作组"
+        }
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "The report argued for enhanced equity of access and better funding for child care and early childhood education institutions.",
+      "translation": "这份报告主张提高入学和使用服务的公平性，并为儿童保育及早期儿童教育机构提供更好的资金支持。",
+      "structure": [
+        {
+          "text": "The report",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "argued for",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "enhanced equity of access and better funding for child care and early childhood education institutions",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "of access",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "for child care and early childhood education institutions",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "argued for 表示“支持、主张”，不是“争吵”。",
+        "enhanced equity of access 和 better funding 是并列宾语内容。",
+        "for child care and early childhood education institutions 修饰 funding，说明资金面向的对象。"
+      ],
+      "expressions": [
+        {
+          "text": "argue for",
+          "meaning_zh": "主张；支持"
+        },
+        {
+          "text": "equity of access",
+          "meaning_zh": "获取机会的公平性"
+        },
+        {
+          "text": "early childhood education",
+          "meaning_zh": "早期儿童教育"
+        }
+      ]
+    },
+    {
+      "id": "A-04",
+      "paragraph_label": "A",
+      "sentence_index": 4,
+      "sentence": "Unquestionably, that's a real need; but since parents don't normally send children to pre-schools until the age of three, are we missing out on the most important years of all?",
+      "translation": "毫无疑问，这确实是一项真实需求；但是，由于父母通常要到孩子三岁时才把他们送去学前机构，我们是否正在错过最重要的那几年呢？",
+      "structure": [
+        {
+          "text": "Unquestionably",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "that's a real need",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "since parents don't normally send children to pre-schools until the age of three",
+          "role": "adverbial_clause",
+          "level": 1
+        },
+        {
+          "text": "parents",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "don't normally send",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "children",
+          "role": "object",
+          "level": 2
+        },
+        {
+          "text": "are we missing out on the most important years of all?",
+          "role": "main_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "that's 指代上一句中报告提出的公平和经费需求。",
+        "since 引导原因状语从句，为后面的疑问提供背景。",
+        "are we missing out on 是疑问句语序，提出作者真正关心的问题。",
+        "the most important years of all 指三岁以前的关键阶段。"
+      ],
+      "expressions": [
+        {
+          "text": "miss out on",
+          "meaning_zh": "错过；未能利用"
+        },
+        {
+          "text": "until the age of three",
+          "meaning_zh": "直到三岁"
+        },
+        {
+          "text": "the most important years of all",
+          "meaning_zh": "所有年份中最重要的几年"
+        }
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "A 13-year study of early childhood development at Harvard University has shown that, by the age of three, most children have the potential to understand about 1000 words - most of the language they will use in ordinary conversation for the rest of their lives.",
+      "translation": "哈佛大学一项为期13年的早期儿童发展研究表明，到三岁时，大多数儿童已经有能力理解大约1000个词——这些词构成了他们余生日常对话中会使用的大部分语言。",
+      "structure": [
+        {
+          "text": "A 13-year study of early childhood development at Harvard University",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has shown",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that, by the age of three, most children have the potential to understand about 1000 words - most of the language they will use in ordinary conversation for the rest of their lives",
+          "role": "object_clause",
+          "level": 1
+        },
+        {
+          "text": "by the age of three",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "most children",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "have the potential to understand about 1000 words",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "most of the language they will use in ordinary conversation for the rest of their lives",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "they will use in ordinary conversation for the rest of their lives",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "主语是 A 13-year study，而不是 Harvard University。",
+        "that 引导宾语从句，说明研究显示的具体内容。",
+        "破折号后的 most of the language 对 about 1000 words 作补充解释。",
+        "they will use 是省略关系代词的定语从句，修饰 language。"
+      ],
+      "expressions": [
+        {
+          "text": "have the potential to",
+          "meaning_zh": "有潜力；有能力去……"
+        },
+        {
+          "text": "ordinary conversation",
+          "meaning_zh": "日常对话"
+        },
+        {
+          "text": "for the rest of their lives",
+          "meaning_zh": "在他们余生中"
+        }
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Furthermore, research has shown that while every child is born with a natural curiosity, it can be suppressed dramatically during the second and third years of life.",
+      "translation": "此外，研究还表明，虽然每个孩子天生都有好奇心，但这种好奇心可能在生命的第二年和第三年被大幅压抑。",
+      "structure": [
+        {
+          "text": "Furthermore",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "research",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "has shown",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that while every child is born with a natural curiosity, it can be suppressed dramatically during the second and third years of life",
+          "role": "object_clause",
+          "level": 1
+        },
+        {
+          "text": "while every child is born with a natural curiosity",
+          "role": "adverbial_clause",
+          "level": 2
+        },
+        {
+          "text": "it can be suppressed dramatically during the second and third years of life",
+          "role": "main_clause",
+          "level": 2
+        },
+        {
+          "text": "can be suppressed",
+          "role": "verb_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Furthermore 表示在上一项研究发现之外继续补充证据。",
+        "while 引导让步关系，意思接近“虽然”。",
+        "it 指代前面的 natural curiosity。",
+        "can be suppressed 是被动结构，说明好奇心可能被外部环境压制。"
+      ],
+      "expressions": [
+        {
+          "text": "be born with",
+          "meaning_zh": "天生具有"
+        },
+        {
+          "text": "be suppressed dramatically",
+          "meaning_zh": "被大幅压抑"
+        },
+        {
+          "text": "during the second and third years of life",
+          "meaning_zh": "在生命的第二年和第三年期间"
+        }
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 7,
+      "sentence": "Researchers claim that the human personality is formed during the first two years of life, and during the first three years children learn the basic skills they will use in all their later learning both at home and at school.",
+      "translation": "研究人员称，人的个性在生命最初两年形成，而在前三年里，儿童会学会他们之后在家庭和学校所有学习中都会用到的基本技能。",
+      "structure": [
+        {
+          "text": "Researchers",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "claim",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that the human personality is formed during the first two years of life, and during the first three years children learn the basic skills they will use in all their later learning both at home and at school",
+          "role": "object_clause",
+          "level": 1
+        },
+        {
+          "text": "the human personality is formed during the first two years of life",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "children learn the basic skills they will use in all their later learning both at home and at school",
+          "role": "coordinate_clause",
+          "level": 2
+        },
+        {
+          "text": "they will use in all their later learning both at home and at school",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "both at home and at school",
+          "role": "correlative_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "claim 后的 that 从句包含两个并列判断。",
+        "is formed 是被动语态，表示人格被塑造形成。",
+        "they will use 是省略关系代词的定语从句，修饰 the basic skills。",
+        "both at home and at school 表示这些技能在家庭和学校两种场景中都会使用。"
+      ],
+      "expressions": [
+        {
+          "text": "be formed during",
+          "meaning_zh": "在……期间形成"
+        },
+        {
+          "text": "the basic skills",
+          "meaning_zh": "基本技能"
+        },
+        {
+          "text": "both at home and at school",
+          "meaning_zh": "在家里和在学校都"
+        }
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 8,
+      "sentence": "Once over the age of three, children continue to expand on existing knowledge of the world.",
+      "translation": "一旦超过三岁，儿童会继续扩展他们已经拥有的世界知识。",
+      "structure": [
+        {
+          "text": "Once over the age of three",
+          "role": "adverbial_phrase",
+          "level": 1
+        },
+        {
+          "text": "children",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "continue to expand on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "existing knowledge of the world",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "of the world",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Once over the age of three 是省略形式，表示“一旦超过三岁”。",
+        "continue to expand on 强调在已有基础上继续扩展。",
+        "existing knowledge of the world 指儿童此前已经形成的认知。"
+      ],
+      "expressions": [
+        {
+          "text": "expand on existing knowledge",
+          "meaning_zh": "扩展已有知识"
+        },
+        {
+          "text": "over the age of three",
+          "meaning_zh": "超过三岁"
+        }
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "It is generally acknowledged that young people from poorer socio-economic backgrounds tend to do less well in our education system.",
+      "translation": "人们普遍承认，来自较贫困社会经济背景的年轻人在我们的教育体系中往往表现较差。",
+      "structure": [
+        {
+          "text": "It is generally acknowledged",
+          "role": "formal_subject_clause",
+          "level": 1
+        },
+        {
+          "text": "that young people from poorer socio-economic backgrounds tend to do less well in our education system",
+          "role": "content_clause",
+          "level": 1
+        },
+        {
+          "text": "young people from poorer socio-economic backgrounds",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "from poorer socio-economic backgrounds",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "tend to do less well",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "in our education system",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的信息在 that 引导的从句中。",
+        "from poorer socio-economic backgrounds 修饰 young people。",
+        "tend to 表示一种通常倾向，而不是绝对结果。",
+        "do less well 是“表现较差”的委婉表达。"
+      ],
+      "expressions": [
+        {
+          "text": "It is generally acknowledged that",
+          "meaning_zh": "人们普遍承认……"
+        },
+        {
+          "text": "socio-economic backgrounds",
+          "meaning_zh": "社会经济背景"
+        },
+        {
+          "text": "tend to",
+          "meaning_zh": "往往；倾向于"
+        }
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 10,
+      "sentence": "That's observed not just in New Zealand, but also in Australia, Britain and America.",
+      "translation": "这一现象不仅在新西兰能观察到，也能在澳大利亚、英国和美国观察到。",
+      "structure": [
+        {
+          "text": "That's observed",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "not just in New Zealand, but also in Australia, Britain and America",
+          "role": "correlative_phrase",
+          "level": 1
+        },
+        {
+          "text": "in New Zealand",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "in Australia, Britain and America",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "That 指代上一句提到的教育表现差距。",
+        "observed 是被动意义，表示这种现象被人们观察到。",
+        "not just ... but also ... 构成递进并列，强调不止一个国家存在类似情况。"
+      ],
+      "expressions": [
+        {
+          "text": "be observed",
+          "meaning_zh": "被观察到"
+        },
+        {
+          "text": "not just in New Zealand, but also in",
+          "meaning_zh": "不只在新西兰，也在……"
+        }
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "In an attempt to overcome that educational under-achievement, a nationwide programme called 'Head Start' was launched in the United States in 1965.",
+      "translation": "为了试图克服这种教育成就不足，一个名为“Head Start”的全国性项目于1965年在美国启动。",
+      "structure": [
+        {
+          "text": "In an attempt to overcome that educational under-achievement",
+          "role": "purpose_phrase",
+          "level": 1
+        },
+        {
+          "text": "to overcome that educational under-achievement",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "a nationwide programme called 'Head Start'",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "called 'Head Start'",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "was launched",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in the United States",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "in 1965",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "In an attempt to 表示目的，说明启动项目的原因。",
+        "that educational under-achievement 指前文提到的贫困背景学生表现较差的问题。",
+        "called 'Head Start' 是过去分词短语，修饰 programme。",
+        "was launched 是被动语态，表示项目被启动。"
+      ],
+      "expressions": [
+        {
+          "text": "in an attempt to",
+          "meaning_zh": "为了试图……"
+        },
+        {
+          "text": "educational under-achievement",
+          "meaning_zh": "教育成就不足"
+        },
+        {
+          "text": "be launched",
+          "meaning_zh": "被启动；推出"
+        }
+      ]
+    },
+    {
+      "id": "C-04",
+      "paragraph_label": "C",
+      "sentence_index": 12,
+      "sentence": "A lot of money was poured into it.",
+      "translation": "大量资金被投入到这个项目中。",
+      "structure": [
+        {
+          "text": "A lot of money",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was poured into",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "it",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "was poured into 是被动语态，表示资金被投入。",
+        "poured into 在这里是比喻用法，强调投入金额大。",
+        "it 指代上一句的 'Head Start' 项目。"
+      ],
+      "expressions": [
+        {
+          "text": "a lot of",
+          "meaning_zh": "大量的"
+        },
+        {
+          "text": "pour money into",
+          "meaning_zh": "向……投入资金"
+        }
+      ]
+    },
+    {
+      "id": "C-05",
+      "paragraph_label": "C",
+      "sentence_index": 13,
+      "sentence": "It took children into pre-school institutions at the age of three and was supposed to help the children of poorer families succeed in school.",
+      "translation": "它在孩子三岁时把他们带入学前机构，并被认为应当帮助较贫困家庭的孩子在学校取得成功。",
+      "structure": [
+        {
+          "text": "It",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "took children into pre-school institutions at the age of three",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "children",
+          "role": "object",
+          "level": 2
+        },
+        {
+          "text": "into pre-school institutions",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "at the age of three",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "was supposed to help the children of poorer families succeed in school",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to help the children of poorer families succeed in school",
+          "role": "infinitive_phrase",
+          "level": 2
+        },
+        {
+          "text": "succeed in school",
+          "role": "object_complement",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "It 指代 'Head Start' 项目。",
+        "and 连接同一主语 It 的两个谓语动作。",
+        "was supposed to 表示预期功能，并不等于实际成功。",
+        "help 后接宾语 the children of poorer families，再接不带 to 的 succeed。"
+      ],
+      "expressions": [
+        {
+          "text": "be supposed to",
+          "meaning_zh": "被认为应该；本应"
+        },
+        {
+          "text": "succeed in school",
+          "meaning_zh": "在学校取得成功"
+        },
+        {
+          "text": "at the age of three",
+          "meaning_zh": "在三岁时"
+        }
+      ]
+    },
+    {
+      "id": "C-06",
+      "paragraph_label": "C",
+      "sentence_index": 14,
+      "sentence": "Despite substantial funding, results have been disappointing.",
+      "translation": "尽管有大量资金支持，结果却令人失望。",
+      "structure": [
+        {
+          "text": "Despite substantial funding",
+          "role": "concessive_phrase",
+          "level": 1
+        },
+        {
+          "text": "results",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "have been",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "disappointing",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Despite 是介词，后面接名词短语 substantial funding，不是完整从句。",
+        "have been 使用现在完成时，表示到目前为止结果一直令人失望。",
+        "disappointing 是表语，描述 results 的性质。"
+      ],
+      "expressions": [
+        {
+          "text": "despite substantial funding",
+          "meaning_zh": "尽管有大量资金支持"
+        },
+        {
+          "text": "substantial funding",
+          "meaning_zh": "大量资金支持"
+        }
+      ]
+    },
+    {
+      "id": "C-07",
+      "paragraph_label": "C",
+      "sentence_index": 15,
+      "sentence": "It is thought that there are two explanations for this.",
+      "translation": "人们认为，对此有两种解释。",
+      "structure": [
+        {
+          "text": "It is thought",
+          "role": "passive_reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "that there are two explanations for this",
+          "role": "content_clause",
+          "level": 1
+        },
+        {
+          "text": "there are two explanations",
+          "role": "existential_clause",
+          "level": 2
+        },
+        {
+          "text": "for this",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It is thought 是被动报道结构，相当于“人们认为”。",
+        "that 从句承接 thought，说明被认为的内容。",
+        "there are 是存在句结构，真正的信息中心是 two explanations。",
+        "this 指代前一句中令人失望的结果。"
+      ],
+      "expressions": [
+        {
+          "text": "It is thought that",
+          "meaning_zh": "人们认为……"
+        },
+        {
+          "text": "explanations for",
+          "meaning_zh": "对……的解释"
+        }
+      ]
+    },
+    {
+      "id": "C-08",
+      "paragraph_label": "C",
+      "sentence_index": 16,
+      "sentence": "First, the programme began too late.",
+      "translation": "首先，这个项目开始得太晚。",
+      "structure": [
+        {
+          "text": "First",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "the programme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "began",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "too late",
+          "role": "adverbial",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "First 标记第一项解释，与后面的 Second 对应。",
+        "too late 中 too 表示超过理想程度，暗示三岁开始已经错过关键期。",
+        "the programme 继续指代 'Head Start'。"
+      ],
+      "expressions": [
+        {
+          "text": "too late",
+          "meaning_zh": "太晚"
+        },
+        {
+          "text": "the programme began",
+          "meaning_zh": "该项目开始"
+        }
+      ]
+    },
+    {
+      "id": "C-09",
+      "paragraph_label": "C",
+      "sentence_index": 17,
+      "sentence": "Many children who entered it at the age of three were already behind their peers in language and measurable intelligence.",
+      "translation": "许多在三岁时进入该项目的儿童，在语言和可测量智力方面已经落后于同龄人。",
+      "structure": [
+        {
+          "text": "Many children who entered it at the age of three",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who entered it at the age of three",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "entered",
+          "role": "verb_phrase",
+          "level": 3
+        },
+        {
+          "text": "it",
+          "role": "object",
+          "level": 3
+        },
+        {
+          "text": "were already behind",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "their peers",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "in language and measurable intelligence",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "who entered it at the age of three 是定语从句，修饰 Many children。",
+        "it 指代 'Head Start' 项目或学前机构体系。",
+        "behind their peers 表示相对于同龄人已经落后。",
+        "in language and measurable intelligence 说明落后的具体方面。"
+      ],
+      "expressions": [
+        {
+          "text": "behind their peers",
+          "meaning_zh": "落后于同龄人"
+        },
+        {
+          "text": "measurable intelligence",
+          "meaning_zh": "可测量的智力"
+        },
+        {
+          "text": "at the age of three",
+          "meaning_zh": "在三岁时"
+        }
+      ]
+    },
+    {
+      "id": "C-10",
+      "paragraph_label": "C",
+      "sentence_index": 18,
+      "sentence": "Second, the parents were not involved.",
+      "translation": "第二，父母没有参与其中。",
+      "structure": [
+        {
+          "text": "Second",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "the parents",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were not involved",
+          "role": "verb_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Second 标记第二项解释。",
+        "were not involved 表示父母没有被纳入项目过程。",
+        "the parents 特指参与项目儿童的父母。"
+      ],
+      "expressions": [
+        {
+          "text": "be involved",
+          "meaning_zh": "参与其中"
+        },
+        {
+          "text": "not involved",
+          "meaning_zh": "没有参与"
+        }
+      ]
+    },
+    {
+      "id": "C-11",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "At the end of each day, 'Head Start' children returned to the same disadvantaged home environment.",
+      "translation": "每天结束时，“Head Start”的孩子们又回到同样处于不利条件的家庭环境中。",
+      "structure": [
+        {
+          "text": "At the end of each day",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "'Head Start' children",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "returned to",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the same disadvantaged home environment",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "At the end of each day 是时间状语，强调每天项目结束之后。",
+        "'Head Start' children 指参加该项目的儿童。",
+        "the same disadvantaged home environment 表示家庭环境并没有因项目而改变。",
+        "returned to 暗示儿童白天离开机构后又回到原来的环境。"
+      ],
+      "expressions": [
+        {
+          "text": "at the end of each day",
+          "meaning_zh": "每天结束时"
+        },
+        {
+          "text": "disadvantaged home environment",
+          "meaning_zh": "处于不利条件的家庭环境"
+        }
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 20,
+      "sentence": "As a result of the growing research evidence of the importance of the first three years of a child's life and the disappointing results from 'Head Start', a pilot programme was launched in Missouri in the US that focused on parents as the child's first teachers.",
+      "translation": "由于越来越多的研究证据显示儿童生命前三年的重要性，也由于“Head Start”的结果令人失望，美国密苏里州启动了一个试点项目，该项目把重点放在父母作为孩子的第一任教师这一点上。",
+      "structure": [
+        {
+          "text": "As a result of the growing research evidence of the importance of the first three years of a child's life and the disappointing results from 'Head Start'",
+          "role": "causal_phrase",
+          "level": 1
+        },
+        {
+          "text": "the growing research evidence of the importance of the first three years of a child's life and the disappointing results from 'Head Start'",
+          "role": "object_of_preposition",
+          "level": 2
+        },
+        {
+          "text": "a pilot programme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was launched",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "in Missouri in the US",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "that focused on parents as the child's first teachers",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "focused on parents",
+          "role": "verb_phrase",
+          "level": 3
+        },
+        {
+          "text": "as the child's first teachers",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "As a result of 引出原因，后面并列两个原因：研究证据增加和 Head Start 结果不佳。",
+        "a pilot programme 是主句主语，前面的长原因短语不是主语。",
+        "was launched 是被动语态，表示试点项目被启动。",
+        "that focused on parents as the child's first teachers 是定语从句，修饰 a pilot programme。"
+      ],
+      "expressions": [
+        {
+          "text": "as a result of",
+          "meaning_zh": "由于；作为……的结果"
+        },
+        {
+          "text": "research evidence",
+          "meaning_zh": "研究证据"
+        },
+        {
+          "text": "focus on",
+          "meaning_zh": "关注；聚焦于"
+        },
+        {
+          "text": "first teachers",
+          "meaning_zh": "第一任教师"
+        }
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 21,
+      "sentence": "The 'Missouri' programme was predicated on research showing that working with the family, rather than bypassing the parents, is the most effective way of helping children get off to the best possible start in life.",
+      "translation": "“Missouri”项目建立在研究基础之上：研究表明，与家庭合作，而不是绕开父母，是帮助儿童在人生中获得最佳开端的最有效方式。",
+      "structure": [
+        {
+          "text": "The 'Missouri' programme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was predicated on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "research showing that working with the family, rather than bypassing the parents, is the most effective way of helping children get off to the best possible start in life",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "showing that working with the family, rather than bypassing the parents, is the most effective way of helping children get off to the best possible start in life",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "that working with the family, rather than bypassing the parents, is the most effective way of helping children get off to the best possible start in life",
+          "role": "content_clause",
+          "level": 3
+        },
+        {
+          "text": "working with the family, rather than bypassing the parents",
+          "role": "gerund_subject",
+          "level": 4
+        },
+        {
+          "text": "is the most effective way",
+          "role": "verb_phrase",
+          "level": 4
+        },
+        {
+          "text": "of helping children get off to the best possible start in life",
+          "role": "prepositional_phrase",
+          "level": 4
+        }
+      ],
+      "difficult_points": [
+        "was predicated on 表示该项目以某项研究结论为基础。",
+        "showing 是现在分词，说明 research 的内容。",
+        "working with the family 是 that 从句中的动名词主语。",
+        "rather than bypassing the parents 构成对比，强调不是绕开父母。"
+      ],
+      "expressions": [
+        {
+          "text": "be predicated on",
+          "meaning_zh": "以……为基础"
+        },
+        {
+          "text": "rather than",
+          "meaning_zh": "而不是"
+        },
+        {
+          "text": "the most effective way of",
+          "meaning_zh": "……的最有效方式"
+        },
+        {
+          "text": "get off to the best possible start",
+          "meaning_zh": "获得尽可能好的开端"
+        }
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 22,
+      "sentence": "The four-year pilot study included 380 families who were about to have their first child and who represented a cross-section of socio-economic status, age and family configurations.",
+      "translation": "这项为期四年的试点研究纳入了380个即将迎来第一个孩子的家庭，这些家庭代表了不同社会经济地位、年龄和家庭结构的横截面。",
+      "structure": [
+        {
+          "text": "The four-year pilot study",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "included",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "380 families who were about to have their first child and who represented a cross-section of socio-economic status, age and family configurations",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "who were about to have their first child",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "who represented a cross-section of socio-economic status, age and family configurations",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "a cross-section of socio-economic status, age and family configurations",
+          "role": "object",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "380 families 后面接两个并列的 who 定语从句。",
+        "were about to 表示“即将”，说明这些家庭正要迎来第一个孩子。",
+        "represented a cross-section 表示这些家庭具有代表性，覆盖多种背景。",
+        "family configurations 指家庭构成或家庭形式。"
+      ],
+      "expressions": [
+        {
+          "text": "be about to",
+          "meaning_zh": "即将"
+        },
+        {
+          "text": "a cross-section of",
+          "meaning_zh": "……的代表性截面"
+        },
+        {
+          "text": "family configurations",
+          "meaning_zh": "家庭结构；家庭构成"
+        }
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 23,
+      "sentence": "They included single-parent and two-parent families, families in which both parents worked, and families with either the mother or father at home.",
+      "translation": "这些家庭包括单亲和双亲家庭、父母双方都工作的家庭，以及母亲或父亲其中一方在家的家庭。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "included",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "single-parent and two-parent families, families in which both parents worked, and families with either the mother or father at home",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "families in which both parents worked",
+          "role": "coordinate_object",
+          "level": 2
+        },
+        {
+          "text": "in which both parents worked",
+          "role": "relative_clause",
+          "level": 3
+        },
+        {
+          "text": "families with either the mother or father at home",
+          "role": "coordinate_object",
+          "level": 2
+        },
+        {
+          "text": "with either the mother or father at home",
+          "role": "prepositional_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "They 指代上一句提到的 380 families。",
+        "included 后面列举三类家庭。",
+        "in which 引导定语从句，修饰 families。",
+        "either the mother or father 表示母亲或父亲二者之一。"
+      ],
+      "expressions": [
+        {
+          "text": "single-parent and two-parent families",
+          "meaning_zh": "单亲和双亲家庭"
+        },
+        {
+          "text": "either the mother or father",
+          "meaning_zh": "母亲或父亲二者之一"
+        }
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 24,
+      "sentence": "The programme involved trained parent-educators visiting the parents' home and working with the parent, or parents, and the child.",
+      "translation": "该项目包括由受过培训的家长教育员上门拜访，并与父亲或母亲，或双亲，以及孩子一起工作。",
+      "structure": [
+        {
+          "text": "The programme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "involved",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "trained parent-educators visiting the parents' home and working with the parent, or parents, and the child",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "trained parent-educators",
+          "role": "logical_subject",
+          "level": 2
+        },
+        {
+          "text": "visiting the parents' home and working with the parent, or parents, and the child",
+          "role": "gerund_phrase",
+          "level": 2
+        },
+        {
+          "text": "visiting the parents' home",
+          "role": "gerund_phrase",
+          "level": 3
+        },
+        {
+          "text": "working with the parent, or parents, and the child",
+          "role": "gerund_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "involved 后接动名词结构，说明项目包含的活动。",
+        "trained parent-educators 是 visiting 和 working 的逻辑执行者。",
+        "the parent, or parents 表示可能是一位家长，也可能是双亲。",
+        "working with 后面并列 parent 或 parents 以及 child。"
+      ],
+      "expressions": [
+        {
+          "text": "involved",
+          "meaning_zh": "包括；涉及"
+        },
+        {
+          "text": "work with",
+          "meaning_zh": "与……合作"
+        },
+        {
+          "text": "trained parent-educators",
+          "meaning_zh": "受过培训的家长教育员"
+        }
+      ]
+    },
+    {
+      "id": "D-06",
+      "paragraph_label": "D",
+      "sentence_index": 25,
+      "sentence": "Information on child development, and guidance on things to look for and expect as the child grows were provided, plus guidance in fostering the child's intellectual, language, social and motor-skill development.",
+      "translation": "项目提供有关儿童发展的信息，也提供关于孩子成长过程中应关注和预期事项的指导，此外还提供促进孩子智力、语言、社会性和运动技能发展的指导。",
+      "structure": [
+        {
+          "text": "Information on child development, and guidance on things to look for and expect as the child grows",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "Information on child development",
+          "role": "coordinate_subject",
+          "level": 2
+        },
+        {
+          "text": "guidance on things to look for and expect as the child grows",
+          "role": "coordinate_subject",
+          "level": 2
+        },
+        {
+          "text": "to look for and expect",
+          "role": "infinitive_phrase",
+          "level": 3
+        },
+        {
+          "text": "as the child grows",
+          "role": "adverbial_clause",
+          "level": 3
+        },
+        {
+          "text": "were provided",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "plus guidance in fostering the child's intellectual, language, social and motor-skill development",
+          "role": "additive_phrase",
+          "level": 1
+        },
+        {
+          "text": "in fostering the child's intellectual, language, social and motor-skill development",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "主语由 Information 和 guidance 两部分构成，所以后面用 were provided。",
+        "on child development 和 on things 分别修饰 Information 与 guidance。",
+        "as the child grows 是时间状语从句，说明要观察和预期的阶段。",
+        "plus guidance in fostering... 补充说明项目还提供另一类指导。"
+      ],
+      "expressions": [
+        {
+          "text": "look for and expect",
+          "meaning_zh": "寻找并预期；关注和预计"
+        },
+        {
+          "text": "as the child grows",
+          "meaning_zh": "随着孩子成长"
+        },
+        {
+          "text": "fostering the child's intellectual, language, social and motor-skill development",
+          "meaning_zh": "促进孩子智力、语言、社会性和运动技能发展"
+        }
+      ]
+    },
+    {
+      "id": "D-07",
+      "paragraph_label": "D",
+      "sentence_index": 26,
+      "sentence": "Periodic check-ups of the child's educational and sensory development (hearing and vision) were made to detect possible handicaps that interfere with growth and development.",
+      "translation": "项目还会定期检查孩子的教育发展和感官发展（听力与视力），以发现可能妨碍成长和发展的障碍。",
+      "structure": [
+        {
+          "text": "Periodic check-ups of the child's educational and sensory development (hearing and vision)",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "of the child's educational and sensory development (hearing and vision)",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "were made",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "to detect possible handicaps that interfere with growth and development",
+          "role": "purpose_infinitive",
+          "level": 1
+        },
+        {
+          "text": "possible handicaps that interfere with growth and development",
+          "role": "object",
+          "level": 2
+        },
+        {
+          "text": "that interfere with growth and development",
+          "role": "relative_clause",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "主语是 Periodic check-ups，后面的 of 短语说明检查内容。",
+        "hearing and vision 是括号中的解释，说明 sensory development 的范围。",
+        "to detect 表示进行检查的目的。",
+        "that interfere with growth and development 是定语从句，修饰 possible handicaps。"
+      ],
+      "expressions": [
+        {
+          "text": "periodic check-ups",
+          "meaning_zh": "定期检查"
+        },
+        {
+          "text": "interfere with",
+          "meaning_zh": "妨碍；干扰"
+        },
+        {
+          "text": "growth and development",
+          "meaning_zh": "成长和发展"
+        }
+      ]
+    },
+    {
+      "id": "D-08",
+      "paragraph_label": "D",
+      "sentence_index": 27,
+      "sentence": "Medical problems were referred to professionals.",
+      "translation": "医疗问题会被转交给专业人员处理。",
+      "structure": [
+        {
+          "text": "Medical problems",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were referred to",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "professionals",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Medical problems 是被转交处理的对象。",
+        "were referred to 是被动语态，表示问题由项目转给专业人员。",
+        "professionals 在语境中指具备医疗专业能力的人。"
+      ],
+      "expressions": [
+        {
+          "text": "refer to professionals",
+          "meaning_zh": "转交给专业人员"
+        }
+      ]
+    },
+    {
+      "id": "D-09",
+      "paragraph_label": "D",
+      "sentence_index": 28,
+      "sentence": "Parent-educators made personal visits to homes and monthly group meetings were held with other new parents to share experience and discuss topics of interest.",
+      "translation": "家长教育员会亲自上门拜访，同时还会与其他新手父母举行每月一次的小组会议，以分享经验并讨论感兴趣的话题。",
+      "structure": [
+        {
+          "text": "Parent-educators made personal visits to homes",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "Parent-educators",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "made personal visits",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "monthly group meetings were held with other new parents",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "monthly group meetings",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "were held",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "with other new parents",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "to share experience and discuss topics of interest",
+          "role": "purpose_infinitive",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "and 连接两个并列分句：上门访问和举行小组会议。",
+        "monthly group meetings were held 是被动语态。",
+        "to share experience and discuss topics of interest 表示会议目的。",
+        "topics of interest 指参与者关心或感兴趣的话题。"
+      ],
+      "expressions": [
+        {
+          "text": "make personal visits",
+          "meaning_zh": "亲自拜访"
+        },
+        {
+          "text": "monthly group meetings",
+          "meaning_zh": "每月小组会议"
+        },
+        {
+          "text": "topics of interest",
+          "meaning_zh": "感兴趣的话题"
+        }
+      ]
+    },
+    {
+      "id": "D-10",
+      "paragraph_label": "D",
+      "sentence_index": 29,
+      "sentence": "Parent resource centres, located in school buildings, offered learning materials for families and facilitators for child care.",
+      "translation": "设在学校建筑内的家长资源中心为家庭提供学习材料，并为儿童照护提供协助人员。",
+      "structure": [
+        {
+          "text": "Parent resource centres, located in school buildings",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "located in school buildings",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "offered",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "learning materials for families and facilitators for child care",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "for families",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "for child care",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "located in school buildings 是插入的过去分词短语，修饰 Parent resource centres。",
+        "offered 后面并列 learning materials 和 facilitators 两类支持。",
+        "for families 修饰 learning materials，for child care 修饰 facilitators。",
+        "facilitators 指帮助推进或支持儿童照护的人。"
+      ],
+      "expressions": [
+        {
+          "text": "resource centres",
+          "meaning_zh": "资源中心"
+        },
+        {
+          "text": "learning materials",
+          "meaning_zh": "学习材料"
+        },
+        {
+          "text": "child care",
+          "meaning_zh": "儿童照护"
+        }
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 30,
+      "sentence": "At the age of three, the children who had been involved in the 'Missouri' programme were evaluated alongside a cross-section of children selected from the same range of socio-economic backgrounds and family situations, and also a random sample of children that age.",
+      "translation": "三岁时，参与过“Missouri”项目的儿童与一组选自相同社会经济背景和家庭情况范围的代表性儿童，以及同龄儿童的随机样本一起接受评估。",
+      "structure": [
+        {
+          "text": "At the age of three",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the children who had been involved in the 'Missouri' programme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "who had been involved in the 'Missouri' programme",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "were evaluated",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "alongside a cross-section of children selected from the same range of socio-economic backgrounds and family situations, and also a random sample of children that age",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "a cross-section of children selected from the same range of socio-economic backgrounds and family situations",
+          "role": "object_of_preposition",
+          "level": 2
+        },
+        {
+          "text": "selected from the same range of socio-economic backgrounds and family situations",
+          "role": "participial_phrase",
+          "level": 3
+        },
+        {
+          "text": "and also a random sample of children that age",
+          "role": "coordinate_object",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "who had been involved in the 'Missouri' programme 是定语从句，限定 the children。",
+        "had been involved 使用过去完成被动，表示评估前已经参与过项目。",
+        "alongside 引出比较对象，说明这些儿童与其他儿童一起被评估。",
+        "selected from... 是过去分词短语，修饰 a cross-section of children。"
+      ],
+      "expressions": [
+        {
+          "text": "be involved in",
+          "meaning_zh": "参与……"
+        },
+        {
+          "text": "be evaluated alongside",
+          "meaning_zh": "与……一起接受评估"
+        },
+        {
+          "text": "a random sample of",
+          "meaning_zh": "……的随机样本"
+        }
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 31,
+      "sentence": "The results were phenomenal.",
+      "translation": "结果非常惊人。",
+      "structure": [
+        {
+          "text": "The results",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "were",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "phenomenal",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "The results 指上一句评估所得的结果。",
+        "phenomenal 是强评价词，表示结果极其显著或惊人。",
+        "were 构成系表结构，后面形容词作表语。"
+      ],
+      "expressions": [
+        {
+          "text": "phenomenal",
+          "meaning_zh": "非凡的；惊人的"
+        }
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 32,
+      "sentence": "By the age of three, the children in the programme were significantly more advanced in language development than their peers, had made greater strides in problem solving and other intellectual skills, and were further along in social development.",
+      "translation": "到三岁时，项目中的儿童在语言发展方面明显比同龄人更先进，在解决问题和其他智力技能方面取得了更大进步，并且在社会性发展方面也走得更远。",
+      "structure": [
+        {
+          "text": "By the age of three",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "the children in the programme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "in the programme",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "were significantly more advanced in language development than their peers",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "had made greater strides in problem solving and other intellectual skills",
+          "role": "predicate",
+          "level": 1
+        },
+        {
+          "text": "were further along in social development",
+          "role": "predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "the children in the programme 是三个并列谓语共同的主语。",
+        "more advanced ... than their peers 是比较结构。",
+        "had made greater strides 使用过去完成时，强调到三岁时已经取得的进步。",
+        "were further along 表示在发展进程中更靠前。"
+      ],
+      "expressions": [
+        {
+          "text": "more advanced in",
+          "meaning_zh": "在……方面更先进"
+        },
+        {
+          "text": "make greater strides in",
+          "meaning_zh": "在……方面取得更大进步"
+        },
+        {
+          "text": "further along in",
+          "meaning_zh": "在……方面进展更远"
+        }
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 33,
+      "sentence": "In fact, the average child on the programme was performing at the level of the top 15 to 20 per cent of their peers in such things as auditory comprehension, verbal ability and language ability.",
+      "translation": "事实上，项目中的普通儿童在听觉理解、口头能力和语言能力等方面，表现达到了同龄人前15%到20%的水平。",
+      "structure": [
+        {
+          "text": "In fact",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "the average child on the programme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "on the programme",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "was performing",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "at the level of the top 15 to 20 per cent of their peers",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "in such things as auditory comprehension, verbal ability and language ability",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "In fact 用来进一步强化上一句的结果。",
+        "the average child on the programme 指项目中的平均水平儿童。",
+        "at the level of the top 15 to 20 per cent 表示达到同龄人前列水平。",
+        "such things as 后面列举具体能力领域。"
+      ],
+      "expressions": [
+        {
+          "text": "at the level of",
+          "meaning_zh": "达到……的水平"
+        },
+        {
+          "text": "the top 15 to 20 per cent",
+          "meaning_zh": "前15%到20%"
+        },
+        {
+          "text": "such things as",
+          "meaning_zh": "诸如……之类的方面"
+        }
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "Most important of all, the traditional measures of 'risk', such as parents' age and education, or whether they were a single parent, bore little or no relationship to the measures of achievement and language development.",
+      "translation": "最重要的是，传统的“风险”衡量指标，例如父母的年龄和教育程度，或者他们是否为单亲，与成就和语言发展的衡量指标几乎没有关系。",
+      "structure": [
+        {
+          "text": "Most important of all",
+          "role": "discourse_marker",
+          "level": 1
+        },
+        {
+          "text": "the traditional measures of 'risk', such as parents' age and education, or whether they were a single parent",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "of 'risk'",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "such as parents' age and education, or whether they were a single parent",
+          "role": "example_phrase",
+          "level": 2
+        },
+        {
+          "text": "whether they were a single parent",
+          "role": "nominal_clause",
+          "level": 3
+        },
+        {
+          "text": "bore little or no relationship to",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the measures of achievement and language development",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "主语是 the traditional measures of 'risk'，中间插入 such as 的例子。",
+        "whether they were a single parent 是名词性从句，作为风险指标的一种。",
+        "bore little or no relationship to 表示几乎没有相关性。",
+        "they 指代 parents，而不是 children。"
+      ],
+      "expressions": [
+        {
+          "text": "most important of all",
+          "meaning_zh": "最重要的是"
+        },
+        {
+          "text": "such as",
+          "meaning_zh": "例如"
+        },
+        {
+          "text": "bear little or no relationship to",
+          "meaning_zh": "与……几乎没有关系"
+        },
+        {
+          "text": "language development",
+          "meaning_zh": "语言发展"
+        }
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 35,
+      "sentence": "Children in the programme performed equally well regardless of socio-economic disadvantages.",
+      "translation": "无论社会经济方面存在何种不利条件，项目中的儿童表现都同样好。",
+      "structure": [
+        {
+          "text": "Children in the programme",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "in the programme",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "performed equally well",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "regardless of socio-economic disadvantages",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "in the programme 修饰 Children，限定对象为项目参与儿童。",
+        "performed equally well 强调不同背景儿童表现相当。",
+        "regardless of 表示“不管、无论”，引出被排除的影响因素。"
+      ],
+      "expressions": [
+        {
+          "text": "perform equally well",
+          "meaning_zh": "表现同样好"
+        },
+        {
+          "text": "regardless of",
+          "meaning_zh": "不管；无论"
+        },
+        {
+          "text": "socio-economic disadvantages",
+          "meaning_zh": "社会经济方面的不利条件"
+        }
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 36,
+      "sentence": "Child abuse was virtually eliminated.",
+      "translation": "虐待儿童的情况几乎被消除了。",
+      "structure": [
+        {
+          "text": "Child abuse",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was virtually eliminated",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "virtually",
+          "role": "adverbial",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "Child abuse 是被消除的对象。",
+        "was eliminated 是被动语态，强调结果。",
+        "virtually 表示“几乎”，不是完全百分之百。"
+      ],
+      "expressions": [
+        {
+          "text": "be virtually eliminated",
+          "meaning_zh": "几乎被消除"
+        }
+      ]
+    },
+    {
+      "id": "E-08",
+      "paragraph_label": "E",
+      "sentence_index": 37,
+      "sentence": "The one factor that was found to affect the child's development was family stress leading to a poor quality of parent-child interaction.",
+      "translation": "被发现会影响儿童发展的唯一因素，是导致亲子互动质量较差的家庭压力。",
+      "structure": [
+        {
+          "text": "The one factor that was found to affect the child's development",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "that was found to affect the child's development",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "was",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "family stress leading to a poor quality of parent-child interaction",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "leading to a poor quality of parent-child interaction",
+          "role": "participial_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "The one factor 强调唯一被发现有影响的因素。",
+        "that was found to affect the child's development 是定语从句，修饰 factor。",
+        "leading to... 是现在分词短语，说明 family stress 的结果。",
+        "parent-child interaction 是复合名词，指亲子互动。"
+      ],
+      "expressions": [
+        {
+          "text": "be found to",
+          "meaning_zh": "被发现会……"
+        },
+        {
+          "text": "leading to",
+          "meaning_zh": "导致"
+        },
+        {
+          "text": "parent-child interaction",
+          "meaning_zh": "亲子互动"
+        }
+      ]
+    },
+    {
+      "id": "E-09",
+      "paragraph_label": "E",
+      "sentence_index": 38,
+      "sentence": "That interaction was not necessarily bad in poorer families.",
+      "translation": "这种互动在较贫困的家庭中并不一定不好。",
+      "structure": [
+        {
+          "text": "That interaction",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was not necessarily",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "bad",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "in poorer families",
+          "role": "prepositional_phrase",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "That interaction 指上一句的 parent-child interaction。",
+        "not necessarily 表示“不一定”，避免把贫困家庭简单等同于差互动。",
+        "in poorer families 限定讨论的家庭类型。"
+      ],
+      "expressions": [
+        {
+          "text": "not necessarily",
+          "meaning_zh": "不一定"
+        },
+        {
+          "text": "poorer families",
+          "meaning_zh": "较贫困的家庭"
+        }
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 39,
+      "sentence": "These research findings are exciting.",
+      "translation": "这些研究发现令人振奋。",
+      "structure": [
+        {
+          "text": "These research findings",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "are",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "exciting",
+          "role": "complement",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "These research findings 指前文关于 Missouri 项目的研究结果。",
+        "findings 表示研究发现，而不是研究方法本身。",
+        "exciting 在这里表示这些发现具有积极意义、令人振奋。"
+      ],
+      "expressions": [
+        {
+          "text": "research findings",
+          "meaning_zh": "研究发现"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 40,
+      "sentence": "There is growing evidence in New Zealand that children from poorer socio-economic backgrounds are arriving at school less well developed and that our school system tends to perpetuate that disadvantage.",
+      "translation": "在新西兰，越来越多的证据表明，来自较贫困社会经济背景的儿童入学时发展程度较低，而且我们的学校体系往往会延续这种不利处境。",
+      "structure": [
+        {
+          "text": "There is growing evidence in New Zealand",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "growing evidence",
+          "role": "notional_subject",
+          "level": 2
+        },
+        {
+          "text": "in New Zealand",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "that children from poorer socio-economic backgrounds are arriving at school less well developed",
+          "role": "content_clause",
+          "level": 1
+        },
+        {
+          "text": "children from poorer socio-economic backgrounds",
+          "role": "subject",
+          "level": 2
+        },
+        {
+          "text": "are arriving at school less well developed",
+          "role": "verb_phrase",
+          "level": 2
+        },
+        {
+          "text": "and that our school system tends to perpetuate that disadvantage",
+          "role": "content_clause",
+          "level": 1
+        },
+        {
+          "text": "tends to perpetuate that disadvantage",
+          "role": "verb_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "There is 是存在句，growing evidence 是实际信息中心。",
+        "evidence 后面接两个 that 从句，分别说明儿童入学状态和学校体系影响。",
+        "less well developed 描述儿童入学时的发展程度较低。",
+        "perpetuate that disadvantage 表示学校体系可能延续这种不利处境。"
+      ],
+      "expressions": [
+        {
+          "text": "growing evidence",
+          "meaning_zh": "越来越多的证据"
+        },
+        {
+          "text": "arrive at school",
+          "meaning_zh": "入学；到学校时"
+        },
+        {
+          "text": "tend to perpetuate",
+          "meaning_zh": "往往会延续"
+        },
+        {
+          "text": "that disadvantage",
+          "meaning_zh": "那种不利处境"
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 41,
+      "sentence": "The initiative outlined above could break that cycle of disadvantage.",
+      "translation": "上述举措可能打破这种不利处境的循环。",
+      "structure": [
+        {
+          "text": "The initiative outlined above",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "outlined above",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "could break",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that cycle of disadvantage",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "outlined above 是过去分词短语，修饰 The initiative。",
+        "could 表示可能性，而不是已经确定发生。",
+        "that cycle of disadvantage 指前文贫困背景与教育劣势持续相互强化的循环。"
+      ],
+      "expressions": [
+        {
+          "text": "break that cycle of disadvantage",
+          "meaning_zh": "打破那种不利循环"
+        },
+        {
+          "text": "outlined above",
+          "meaning_zh": "上文概述的"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 42,
+      "sentence": "The concept of working with parents in their homes, or at their place of work, contrasts quite markedly with the report of the Early Childhood Care and Education Working Group.",
+      "translation": "与父母在家中或工作地点合作这一理念，与早期儿童保育与教育工作组报告中的理念形成了相当明显的对比。",
+      "structure": [
+        {
+          "text": "The concept of working with parents in their homes, or at their place of work",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "of working with parents in their homes, or at their place of work",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "working with parents",
+          "role": "gerund_phrase",
+          "level": 3
+        },
+        {
+          "text": "in their homes, or at their place of work",
+          "role": "prepositional_phrase",
+          "level": 3
+        },
+        {
+          "text": "contrasts quite markedly with",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "the report of the Early Childhood Care and Education Working Group",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "The concept 是主语核心，of working with parents... 解释这个理念的内容。",
+        "in their homes 和 at their place of work 是并列地点。",
+        "contrasts quite markedly with 表示形成非常明显的对比。",
+        "the report 指文章开头提到的工作组报告。"
+      ],
+      "expressions": [
+        {
+          "text": "the concept of",
+          "meaning_zh": "……的理念"
+        },
+        {
+          "text": "working with parents",
+          "meaning_zh": "与父母合作"
+        },
+        {
+          "text": "contrasts quite markedly with",
+          "meaning_zh": "与……形成相当明显的对比"
+        },
+        {
+          "text": "place of work",
+          "meaning_zh": "工作地点"
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 43,
+      "sentence": "Their focus is on getting children and mothers access to child care and institutionalised early childhood education.",
+      "translation": "他们的重点是让儿童和母亲能够获得儿童照护和机构化的早期儿童教育。",
+      "structure": [
+        {
+          "text": "Their focus",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "on getting children and mothers access to child care and institutionalised early childhood education",
+          "role": "complement",
+          "level": 1
+        },
+        {
+          "text": "getting children and mothers access to child care and institutionalised early childhood education",
+          "role": "gerund_phrase",
+          "level": 2
+        },
+        {
+          "text": "children and mothers",
+          "role": "object",
+          "level": 3
+        },
+        {
+          "text": "access to child care and institutionalised early childhood education",
+          "role": "object_complement",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "Their 指 Early Childhood Care and Education Working Group。",
+        "focus is on 后接动名词 getting，说明关注点。",
+        "getting children and mothers access to... 是“让某人获得……”的结构。",
+        "institutionalised early childhood education 指由机构提供的早期儿童教育。"
+      ],
+      "expressions": [
+        {
+          "text": "focus is on",
+          "meaning_zh": "重点在于"
+        },
+        {
+          "text": "access to",
+          "meaning_zh": "获得……的机会"
+        },
+        {
+          "text": "institutionalised early childhood education",
+          "meaning_zh": "机构化的早期儿童教育"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 44,
+      "sentence": "Education from the age of three to five is undoubtedly vital, but without a similar focus on parent education and on the vital importance of the first three years, some evidence indicates that it will not be enough to overcome educational inequity.",
+      "translation": "三到五岁的教育无疑至关重要，但如果没有类似地关注家长教育和生命前三年的关键重要性，一些证据表明，仅靠它还不足以克服教育不公平。",
+      "structure": [
+        {
+          "text": "Education from the age of three to five",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "from the age of three to five",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "is undoubtedly vital",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "but without a similar focus on parent education and on the vital importance of the first three years",
+          "role": "concessive_phrase",
+          "level": 1
+        },
+        {
+          "text": "without a similar focus on parent education and on the vital importance of the first three years",
+          "role": "prepositional_phrase",
+          "level": 2
+        },
+        {
+          "text": "some evidence",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "indicates",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that it will not be enough to overcome educational inequity",
+          "role": "object_clause",
+          "level": 1
+        },
+        {
+          "text": "it will not be enough",
+          "role": "main_clause",
+          "level": 2
+        },
+        {
+          "text": "to overcome educational inequity",
+          "role": "infinitive_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "but 后面转向作者的限制性观点：三到五岁教育重要，但仍不够。",
+        "without a similar focus... 是条件含义的介词短语。",
+        "it 指代前面的 Education from the age of three to five。",
+        "to overcome educational inequity 说明“不够”的目标是什么。"
+      ],
+      "expressions": [
+        {
+          "text": "undoubtedly vital",
+          "meaning_zh": "无疑至关重要"
+        },
+        {
+          "text": "a similar focus on",
+          "meaning_zh": "对……的类似关注"
+        },
+        {
+          "text": "be enough to",
+          "meaning_zh": "足以……"
+        },
+        {
+          "text": "educational inequity",
+          "meaning_zh": "教育不公平"
+        }
+      ]
+    }
+  ]
+}

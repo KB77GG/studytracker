@@ -1,0 +1,581 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts10_test2_reading",
+  "passage_id": "ielts10_test2_p3",
+  "passage_title": "Museums of Fine Art and Their Public",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "One of the most famous works of art in the world is Leonardo da Vinci's Mona Lisa.",
+      "translation": "世界上最著名的艺术作品之一，是 Leonardo da Vinci 的《蒙娜丽莎》。",
+      "structure": [
+        {"text": "One of the most famous works of art in the world", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "Leonardo da Vinci's Mona Lisa", "role": "complement", "level": 1}
+      ],
+      "difficult_points": ["one of 后接复数名词 works，但主语中心是 One，所以谓语用单数 is。", "Leonardo da Vinci's 表示作品的创作者，而非普通所属关系。"],
+      "expressions": [{"text": "one of the most famous", "meaning_zh": "最著名的……之一"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "Nearly everyone who goes to see the original will already be familiar with it from reproductions, but they accept that fine art is more rewardingly viewed in its original form.",
+      "translation": "几乎所有去看原作的人，都已经通过复制品熟悉了它；但他们仍认为，以原作形式欣赏美术作品更有收获。",
+      "structure": [
+        {"text": "Nearly everyone", "role": "subject", "level": 1},
+        {"text": "who goes to see the original", "role": "relative_clause", "level": 2},
+        {"text": "will already be familiar with it from reproductions", "role": "verb_phrase", "level": 1},
+        {"text": "but they accept", "role": "coordinated_clause", "level": 1},
+        {"text": "that fine art is more rewardingly viewed in its original form", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": ["who 引导定语从句修饰 everyone；it 指《蒙娜丽莎》。", "they 回指 everyone，采用意义上的复数指代。", "is...viewed 是被动结构，more rewardingly 表示观看原作能获得更多体验。"],
+      "expressions": [
+        {"text": "be familiar with", "meaning_zh": "熟悉……"},
+        {"text": "in its original form", "meaning_zh": "以其原作形式"}
+      ]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 3,
+      "sentence": "However, if Mona Lisa was a famous novel, few people would bother to go to a museum to read the writer's actual manuscript rather than a printed reproduction.",
+      "translation": "然而，如果《蒙娜丽莎》是一部著名小说，很少有人会特意去博物馆阅读作家的手稿原件，而不读印刷复制本。",
+      "structure": [
+        {"text": "However", "role": "parenthesis", "level": 1},
+        {"text": "if Mona Lisa was a famous novel", "role": "adverbial_clause", "level": 1},
+        {"text": "few people would bother", "role": "main_clause", "level": 1},
+        {"text": "to go to a museum to read the writer's actual manuscript", "role": "non_finite_clause", "level": 2},
+        {"text": "rather than a printed reproduction", "role": "comparative_phrase", "level": 3}
+      ],
+      "difficult_points": ["if...was 与 would 构成与现实相反的假设，用小说类比画作。", "bother to do 表示特意费心做某事。", "rather than 引出被排除的选择 printed reproduction。"],
+      "expressions": [
+        {"text": "bother to do", "meaning_zh": "特意费心做……"},
+        {"text": "rather than", "meaning_zh": "而不是"}
+      ]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 4,
+      "sentence": "This might be explained by the fact that the novel has evolved precisely because of technological developments that made it possible to print out huge numbers of texts, whereas oil paintings have always been produced as unique objects.",
+      "translation": "这或许是因为，小说这种形式正是在技术发展的推动下演变而来的：技术使大量印刷文本成为可能；相比之下，油画一直都是作为独一无二的物件创作的。",
+      "structure": [
+        {"text": "This might be explained by the fact", "role": "main_clause", "level": 1},
+        {"text": "that the novel has evolved precisely because of technological developments", "role": "noun_clause", "level": 2},
+        {"text": "that made it possible to print out huge numbers of texts", "role": "relative_clause", "level": 3},
+        {"text": "it possible to print out huge numbers of texts", "role": "complement", "level": 4},
+        {"text": "whereas oil paintings have always been produced as unique objects", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["第一个 that 说明 fact 的具体内容，第二个 that 修饰 technological developments。", "make it possible to do 中 it 是形式宾语，真正内容是后面的不定式。", "whereas 引出小说大量复制与油画保持唯一性之间的对比。"],
+      "expressions": [
+        {"text": "be explained by the fact that", "meaning_zh": "可以由……这一事实解释"},
+        {"text": "make it possible to", "meaning_zh": "使做……成为可能"},
+        {"text": "whereas", "meaning_zh": "然而；相比之下"}
+      ]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 5,
+      "sentence": "In addition, it could be argued that the practice of interpreting or 'reading' each medium follows different conventions.",
+      "translation": "此外，也可以认为，对每种媒介进行解读或“阅读”的方式遵循不同惯例。",
+      "structure": [
+        {"text": "In addition", "role": "prepositional_phrase", "level": 1},
+        {"text": "it could be argued", "role": "main_clause", "level": 1},
+        {"text": "that the practice of interpreting or 'reading' each medium follows different conventions", "role": "noun_clause", "level": 2},
+        {"text": "of interpreting or 'reading' each medium", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": ["it 是形式主语，that 从句是真正被提出的观点。", "interpreting 与 reading 是并列动名词，引号提示 reading 在此为引申义。"],
+      "expressions": [
+        {"text": "it could be argued that", "meaning_zh": "可以认为……"},
+        {"text": "follow different conventions", "meaning_zh": "遵循不同惯例"}
+      ]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 6,
+      "sentence": "With novels, the reader attends mainly to the meaning of words rather than the way they are printed on the page, whereas the 'reader' of a painting must attend just as closely to the material form of marks and shapes in the picture as to any ideas they may signify.",
+      "translation": "阅读小说时，读者主要关注文字的含义，而不是文字在页面上的印刷形式；但在“阅读”一幅画时，观者既要仔细关注画中笔触和形状的物质形式，也要同样关注它们可能表达的思想。",
+      "structure": [
+        {"text": "With novels", "role": "prepositional_phrase", "level": 1},
+        {"text": "the reader attends mainly to the meaning of words", "role": "main_clause", "level": 1},
+        {"text": "rather than the way they are printed on the page", "role": "comparative_phrase", "level": 2},
+        {"text": "they are printed on the page", "role": "relative_clause", "level": 3},
+        {"text": "whereas the 'reader' of a painting must attend just as closely to the material form of marks and shapes in the picture as to any ideas", "role": "adverbial_clause", "level": 1},
+        {"text": "they may signify", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["第一个 they 指 words，省略关系词的从句修饰 the way。", "whereas 对比小说读者和绘画观者关注的内容。", "just as...as... 表示观者对形式和思想应给予同等密切的关注；第二个 they 指 marks and shapes。"],
+      "expressions": [
+        {"text": "attend to", "meaning_zh": "关注；留意"},
+        {"text": "rather than", "meaning_zh": "而不是"},
+        {"text": "the material form of", "meaning_zh": "……的物质形式"}
+      ]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 7,
+      "sentence": "Yet it has always been possible to make very accurate facsimiles of pretty well any fine art work.",
+      "translation": "然而，人们一直都能为几乎任何美术作品制作高度精确的复制品。",
+      "structure": [
+        {"text": "Yet", "role": "parenthesis", "level": 1},
+        {"text": "it has always been possible", "role": "main_clause", "level": 1},
+        {"text": "to make very accurate facsimiles of pretty well any fine art work", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": ["it 是形式主语，真正主语是 to make... 不定式。", "pretty well 在此表示“几乎、差不多”，并非“相当好地”。"],
+      "expressions": [
+        {"text": "pretty well any", "meaning_zh": "几乎任何……"},
+        {"text": "accurate facsimiles of", "meaning_zh": "……的精确复制品"}
+      ]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 8,
+      "sentence": "The seven surviving versions of Mona Lisa bear witness to the fact that in the 16th century, artists seemed perfectly content to assign the reproduction of their creations to their workshop apprentices as regular 'bread and butter' work.",
+      "translation": "现存的七个《蒙娜丽莎》版本证明，16世纪的艺术家似乎完全乐于把复制自己作品的任务交给工作室学徒，作为日常谋生的常规工作。",
+      "structure": [
+        {"text": "The seven surviving versions of Mona Lisa", "role": "subject", "level": 1},
+        {"text": "bear witness to the fact", "role": "verb_phrase", "level": 1},
+        {"text": "that in the 16th century, artists seemed perfectly content", "role": "noun_clause", "level": 2},
+        {"text": "to assign the reproduction of their creations to their workshop apprentices", "role": "non_finite_clause", "level": 3},
+        {"text": "as regular 'bread and butter' work", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": ["that 从句说明 fact 的具体内容。", "seem content to do 表示似乎乐于做某事；assign A to B 表示把 A 交给 B。", "bread and butter 在此比喻维持生计的日常工作。"],
+      "expressions": [
+        {"text": "bear witness to", "meaning_zh": "证明；见证"},
+        {"text": "assign ... to ...", "meaning_zh": "把……交给……"},
+        {"text": "bread and butter work", "meaning_zh": "赖以谋生的日常工作"}
+      ]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 9,
+      "sentence": "And today the task of reproducing pictures is incomparably more simple and reliable, with reprographic techniques that allow the production of high-quality prints made exactly to the original scale, with faithful colour values, and even with duplication of the surface relief of the painting.",
+      "translation": "如今，复制图画的工作更是前所未有地简单可靠：现代复制技术可以制作严格按原作尺寸印制、色彩还原准确的高质量印刷品，甚至还能复制画作表面的凹凸质感。",
+      "structure": [
+        {"text": "today the task of reproducing pictures", "role": "subject", "level": 1},
+        {"text": "is incomparably more simple and reliable", "role": "verb_phrase", "level": 1},
+        {"text": "with reprographic techniques", "role": "prepositional_phrase", "level": 2},
+        {"text": "that allow the production of high-quality prints", "role": "relative_clause", "level": 3},
+        {"text": "made exactly to the original scale", "role": "participial_phrase", "level": 4},
+        {"text": "with faithful colour values", "role": "prepositional_phrase", "level": 4},
+        {"text": "and even with duplication of the surface relief of the painting", "role": "prepositional_phrase", "level": 4}
+      ],
+      "difficult_points": ["句子主语中心是 task，of reproducing pictures 修饰 task。", "that 引导定语从句修饰 reprographic techniques。", "made...、with faithful... 和 with duplication... 共同说明高质量复制品能达到的效果。"],
+      "expressions": [
+        {"text": "allow the production of", "meaning_zh": "使制作……成为可能"},
+        {"text": "to the original scale", "meaning_zh": "按原作比例"},
+        {"text": "faithful colour values", "meaning_zh": "准确还原的色彩值"}
+      ]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 10,
+      "sentence": "But despite an implicit recognition that the spread of good reproductions can be culturally valuable, museums continue to promote the special status of original work.",
+      "translation": "但是，尽管人们隐约承认优质复制品的传播具有文化价值，博物馆仍继续强调原作的特殊地位。",
+      "structure": [
+        {"text": "despite an implicit recognition", "role": "prepositional_phrase", "level": 1},
+        {"text": "that the spread of good reproductions can be culturally valuable", "role": "noun_clause", "level": 2},
+        {"text": "museums", "role": "subject", "level": 1},
+        {"text": "continue to promote", "role": "verb_phrase", "level": 1},
+        {"text": "the special status of original work", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["despite 后接名词 recognition，而不是完整让步从句。", "that 从句说明 recognition 的具体内容。", "continue to promote 表示博物馆持续强化某种观念。"],
+      "expressions": [
+        {"text": "an implicit recognition that", "meaning_zh": "对……的隐含承认"},
+        {"text": "be culturally valuable", "meaning_zh": "具有文化价值"},
+        {"text": "promote the special status of", "meaning_zh": "强调……的特殊地位"}
+      ]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 11,
+      "sentence": "Unfortunately, this seems to place severe limitations on the kind of experience offered to visitors.",
+      "translation": "遗憾的是，这似乎严重限制了博物馆能为参观者提供的体验类型。",
+      "structure": [
+        {"text": "Unfortunately", "role": "parenthesis", "level": 1},
+        {"text": "this", "role": "subject", "level": 1},
+        {"text": "seems to place severe limitations", "role": "verb_phrase", "level": 1},
+        {"text": "on the kind of experience", "role": "prepositional_phrase", "level": 2},
+        {"text": "offered to visitors", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": ["this 指上一段所说博物馆持续强调原作特殊地位的做法。", "offered to visitors 是过去分词短语，后置修饰 experience。"],
+      "expressions": [
+        {"text": "place severe limitations on", "meaning_zh": "严重限制……"}
+      ]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 12,
+      "sentence": "One limitation is related to the way the museum presents its exhibits.",
+      "translation": "其中一个限制与博物馆展示展品的方式有关。",
+      "structure": [
+        {"text": "One limitation", "role": "subject", "level": 1},
+        {"text": "is related to", "role": "verb_phrase", "level": 1},
+        {"text": "the way", "role": "object", "level": 1},
+        {"text": "the museum presents its exhibits", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["the museum presents... 是省略关系词 that 或 in which 的定语从句，修饰 the way。", "be related to 表示两个事物之间存在关联。"],
+      "expressions": [
+        {"text": "be related to", "meaning_zh": "与……有关"}
+      ]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 13,
+      "sentence": "As repositories of unique historical objects, art museums are often called 'treasure houses'.",
+      "translation": "美术馆收藏着独一无二的历史物件，因此常被称为“宝库”。",
+      "structure": [
+        {"text": "As repositories of unique historical objects", "role": "prepositional_phrase", "level": 1},
+        {"text": "art museums", "role": "subject", "level": 1},
+        {"text": "are often called", "role": "verb_phrase", "level": 1},
+        {"text": "'treasure houses'", "role": "complement", "level": 1}
+      ],
+      "difficult_points": ["As 在此表示身份或性质，可理解为“作为……”。", "are called 是被动语态，treasure houses 是主语补足语。"],
+      "expressions": [
+        {"text": "a repository of", "meaning_zh": "……的收藏地；宝库"},
+        {"text": "be called", "meaning_zh": "被称为"}
+      ]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 14,
+      "sentence": "We are reminded of this even before we view a collection by the presence of security guards, attendants, ropes and display cases to keep us away from the exhibits.",
+      "translation": "甚至在看到藏品之前，保安、工作人员、围绳和展柜的存在就已经提醒我们：这里是一座“宝库”；这些设施让我们与展品保持距离。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "are reminded of this", "role": "verb_phrase", "level": 1},
+        {"text": "even before we view a collection", "role": "adverbial_clause", "level": 2},
+        {"text": "by the presence of security guards, attendants, ropes and display cases", "role": "prepositional_phrase", "level": 2},
+        {"text": "to keep us away from the exhibits", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": ["this 指上一句把美术馆比作 treasure houses 的观念。", "are reminded 是被动结构，by... 引出产生提醒作用的事物。", "to keep... 说明围绳和展柜等设施的用途。"],
+      "expressions": [
+        {"text": "be reminded of", "meaning_zh": "被提醒想起……"},
+        {"text": "keep ... away from ...", "meaning_zh": "使……远离……"}
+      ]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 15,
+      "sentence": "In many cases, the architectural style of the building further reinforces that notion.",
+      "translation": "在许多情况下，建筑本身的风格进一步强化了这种观念。",
+      "structure": [
+        {"text": "In many cases", "role": "prepositional_phrase", "level": 1},
+        {"text": "the architectural style of the building", "role": "subject", "level": 1},
+        {"text": "further reinforces", "role": "verb_phrase", "level": 1},
+        {"text": "that notion", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["主语中心词是 style，而不是 building。", "that notion 仍指美术馆是收藏珍宝之处、展品不可轻易接近的观念。"],
+      "expressions": [
+        {"text": "reinforce a notion", "meaning_zh": "强化一种观念"}
+      ]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 16,
+      "sentence": "In addition, a major collection like that of London's National Gallery is housed in numerous rooms, each with dozens of works, any one of which is likely to be worth more than all the average visitor possesses.",
+      "translation": "此外，像伦敦国家美术馆这样的大型藏品分布在许多展厅中，每个展厅都有数十件作品，其中任何一件的价值都可能超过普通参观者的全部财产。",
+      "structure": [
+        {"text": "a major collection like that of London's National Gallery", "role": "subject", "level": 1},
+        {"text": "is housed in numerous rooms", "role": "verb_phrase", "level": 1},
+        {"text": "each with dozens of works", "role": "absolute_phrase", "level": 2},
+        {"text": "any one of which is likely to be worth more than all the average visitor possesses", "role": "relative_clause", "level": 3},
+        {"text": "all the average visitor possesses", "role": "noun_clause", "level": 4}
+      ],
+      "difficult_points": ["that 代替 collection，避免重复；is housed 表示藏品被安置、陈列。", "each with... 是独立结构，each 指 numerous rooms。", "which 指 dozens of works；all 后是省略关系词 that 的定语从句，表示普通参观者拥有的一切。"],
+      "expressions": [
+        {"text": "be housed in", "meaning_zh": "被安置或收藏于……"},
+        {"text": "be worth more than", "meaning_zh": "价值超过……"}
+      ]
+    },
+    {
+      "id": "F-06", "paragraph_label": "F", "sentence_index": 17,
+      "sentence": "In a society that judges the personal status of the individual so much by their material worth, it is therefore difficult not to be impressed by one's own relative 'worthlessness' in such an environment.",
+      "translation": "在一个如此看重个人物质财富、并据此判断其社会地位的社会里，人身处这样的环境，很难不深感自己相对“微不足道”。",
+      "structure": [
+        {"text": "In a society", "role": "prepositional_phrase", "level": 1},
+        {"text": "that judges the personal status of the individual so much by their material worth", "role": "relative_clause", "level": 2},
+        {"text": "it is therefore difficult", "role": "main_clause", "level": 1},
+        {"text": "not to be impressed by one's own relative 'worthlessness'", "role": "non_finite_clause", "level": 2},
+        {"text": "in such an environment", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": ["that 引导定语从句修饰 society；their 中性指代 the individual。", "it 是形式主语，真正主语是 not to be impressed...。", "worthlessness 与前句作品的 monetary worth 形成双关，突出观者感到自身价值渺小。"],
+      "expressions": [
+        {"text": "judge ... by ...", "meaning_zh": "根据……判断……"},
+        {"text": "material worth", "meaning_zh": "物质财富或价值"}
+      ]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 18,
+      "sentence": "Furthermore, consideration of the 'value' of the original work in its treasure house setting impresses upon the viewer that, since these works were originally produced, they have been assigned a huge monetary value by some person or institution more powerful than themselves.",
+      "translation": "此外，当观者思考原作在“宝库”环境中的“价值”时，会强烈意识到：自这些作品问世以来，某些比作品本身更有权势的个人或机构已经为它们赋予了巨额金钱价值。",
+      "structure": [
+        {"text": "consideration of the 'value' of the original work in its treasure house setting", "role": "subject", "level": 1},
+        {"text": "impresses upon the viewer", "role": "verb_phrase", "level": 1},
+        {"text": "that, since these works were originally produced, they have been assigned a huge monetary value by some person or institution more powerful than themselves", "role": "noun_clause", "level": 2},
+        {"text": "since these works were originally produced", "role": "adverbial_clause", "level": 3},
+        {"text": "they have been assigned a huge monetary value", "role": "main_clause", "level": 3},
+        {"text": "by some person or institution more powerful than themselves", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": ["句子主语中心词是 consideration，谓语是 impresses。", "that 引导 impresses upon the viewer 的内容从句，其中 since 表示从作品创作以来。", "they 与 themselves 都回指 these works；have been assigned 是现在完成时被动语态。"],
+      "expressions": [
+        {"text": "impress upon someone that", "meaning_zh": "使某人深刻意识到……"},
+        {"text": "assign a monetary value to", "meaning_zh": "为……赋予金钱价值"}
+      ]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 19,
+      "sentence": "Evidently, nothing the viewer thinks about the work is going to alter that value, and so today's viewer is deterred from trying to extend that spontaneous, immediate, self-reliant kind of reading which would originally have met the work.",
+      "translation": "显然，无论观者如何看待作品，都不会改变其既定价值；因此，今天的观者不敢尝试展开那种自发、直接而独立的解读，而作品最初本可迎来这样的解读。",
+      "structure": [
+        {"text": "nothing the viewer thinks about the work", "role": "subject", "level": 1},
+        {"text": "the viewer thinks about the work", "role": "relative_clause", "level": 2},
+        {"text": "is going to alter that value", "role": "verb_phrase", "level": 1},
+        {"text": "and so today's viewer is deterred", "role": "coordinated_clause", "level": 1},
+        {"text": "from trying to extend that spontaneous, immediate, self-reliant kind of reading", "role": "prepositional_phrase", "level": 2},
+        {"text": "which would originally have met the work", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["nothing 后接省略关系词 that 的定语从句，表示观者的任何想法都无法改变价值。", "is deterred from doing 是被动结构，表示观者受到阻碍而不敢尝试。", "which 修饰 kind of reading，指作品在最初语境中本会得到的自发解读方式。"],
+      "expressions": [
+        {"text": "alter the value", "meaning_zh": "改变价值"},
+        {"text": "be deterred from doing", "meaning_zh": "因受阻或畏惧而不做……"},
+        {"text": "self-reliant reading", "meaning_zh": "独立自主的解读"}
+      ]
+    },
+    {
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 20,
+      "sentence": "The visitor may then be struck by the strangeness of seeing such diverse paintings, drawings and sculptures brought together in an environment for which they were not originally created.",
+      "translation": "接着，参观者可能会惊讶于这样一种怪异感：如此多样的绘画、素描和雕塑被集中在一个并非为它们而建的环境中。",
+      "structure": [
+        {"text": "The visitor", "role": "subject", "level": 1},
+        {"text": "may then be struck by the strangeness", "role": "verb_phrase", "level": 1},
+        {"text": "of seeing such diverse paintings, drawings and sculptures brought together", "role": "prepositional_phrase", "level": 2},
+        {"text": "brought together", "role": "participial_phrase", "level": 3},
+        {"text": "in an environment", "role": "prepositional_phrase", "level": 3},
+        {"text": "for which they were not originally created", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": ["be struck by 表示对某事感到震撼或惊讶。", "see + 宾语 + 过去分词 brought together 表示看到这些作品被聚集起来。", "for which 引导定语从句修饰 environment；they 指各类艺术作品。"],
+      "expressions": [
+        {"text": "be struck by", "meaning_zh": "对……感到震撼或惊讶"},
+        {"text": "bring together", "meaning_zh": "汇集；集中"}
+      ]
+    },
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 21,
+      "sentence": "This 'displacement effect' is further heightened by the sheer volume of exhibits.",
+      "translation": "展品数量极其庞大，进一步加剧了这种“错置效应”。",
+      "structure": [
+        {"text": "This 'displacement effect'", "role": "subject", "level": 1},
+        {"text": "is further heightened", "role": "verb_phrase", "level": 1},
+        {"text": "by the sheer volume of exhibits", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": ["is heightened 是被动语态，by 引出加剧这种效应的因素。", "sheer 在此强调展品数量之大，而不是“透明的”。"],
+      "expressions": [
+        {"text": "be further heightened by", "meaning_zh": "因……而进一步加剧"},
+        {"text": "the sheer volume of", "meaning_zh": "……极其庞大的数量"}
+      ]
+    },
+    {
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 22,
+      "sentence": "In the case of a major collection, there are probably more works on display than we could realistically view in weeks or even months.",
+      "translation": "就大型藏品而言，展出的作品很可能多到我们即使花上数周甚至数月也看不完。",
+      "structure": [
+        {"text": "In the case of a major collection", "role": "prepositional_phrase", "level": 1},
+        {"text": "there are probably more works on display", "role": "main_clause", "level": 1},
+        {"text": "than we could realistically view in weeks or even months", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": ["there are 是存在句，信息中心是 more works on display。", "more...than... 比较实际展品数量与观者在数周甚至数月内能观看的数量。"],
+      "expressions": [
+        {"text": "in the case of", "meaning_zh": "就……而言"},
+        {"text": "on display", "meaning_zh": "陈列；展出"}
+      ]
+    },
+    {
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 23,
+      "sentence": "This is particularly distressing because time seems to be a vital factor in the appreciation of all art forms.",
+      "translation": "这一点尤其令人苦恼，因为时间似乎是欣赏一切艺术形式的关键因素。",
+      "structure": [
+        {"text": "This is particularly distressing", "role": "main_clause", "level": 1},
+        {"text": "because time seems to be a vital factor in the appreciation of all art forms", "role": "adverbial_clause", "level": 2},
+        {"text": "to be a vital factor in the appreciation of all art forms", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": ["This 指上一段所说展品数量多到难以充分观看的问题。", "seem to be 使用不定式表达较为谨慎的判断。"],
+      "expressions": [
+        {"text": "a vital factor in", "meaning_zh": "……中的关键因素"},
+        {"text": "the appreciation of art", "meaning_zh": "艺术欣赏"}
+      ]
+    },
+    {
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 24,
+      "sentence": "A fundamental difference between paintings and other art forms is that there is no prescribed time over which a painting is viewed.",
+      "translation": "绘画与其他艺术形式的一个根本区别在于，观看一幅画没有规定的时长。",
+      "structure": [
+        {"text": "A fundamental difference between paintings and other art forms", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "that there is no prescribed time", "role": "noun_clause", "level": 2},
+        {"text": "over which a painting is viewed", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["that 引导表语从句，说明根本区别是什么。", "over which 是“介词 + 关系代词”结构，修饰 time，表示观看持续的时间跨度。"],
+      "expressions": [
+        {"text": "a fundamental difference between", "meaning_zh": "……之间的根本区别"},
+        {"text": "prescribed time", "meaning_zh": "规定的时长"}
+      ]
+    },
+    {
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 25,
+      "sentence": "By contrast, the audience encounters an opera or a play over a specific time, which is the duration of the performance.",
+      "translation": "相比之下，观众是在一段明确的时间内体验歌剧或戏剧的，这段时间就是演出的时长。",
+      "structure": [
+        {"text": "By contrast", "role": "prepositional_phrase", "level": 1},
+        {"text": "the audience", "role": "subject", "level": 1},
+        {"text": "encounters an opera or a play", "role": "verb_phrase", "level": 1},
+        {"text": "over a specific time", "role": "prepositional_phrase", "level": 1},
+        {"text": "which is the duration of the performance", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["encounter 在此表示观看、体验一种表演艺术。", "which 指 a specific time，并说明它就是演出的持续时间。"],
+      "expressions": [
+        {"text": "by contrast", "meaning_zh": "相比之下"},
+        {"text": "the duration of", "meaning_zh": "……的持续时间"}
+      ]
+    },
+    {
+      "id": "I-04", "paragraph_label": "I", "sentence_index": 26,
+      "sentence": "Similarly, novels and poems are read in a prescribed temporal sequence, whereas a picture has no clear place at which to start viewing, or at which to finish.",
+      "translation": "同样，小说和诗歌要按照规定的时间顺序阅读；而观看一幅画时，没有明确的起点，也没有明确的终点。",
+      "structure": [
+        {"text": "novels and poems are read in a prescribed temporal sequence", "role": "main_clause", "level": 1},
+        {"text": "whereas a picture has no clear place", "role": "adverbial_clause", "level": 1},
+        {"text": "at which to start viewing", "role": "relative_clause", "level": 2},
+        {"text": "or at which to finish", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["are read 是被动语态，强调小说和诗歌的阅读顺序。", "whereas 引出文字作品与绘画之间的对比。", "两个 at which 都修饰 place，分别说明观看的起点和终点。"],
+      "expressions": [
+        {"text": "in a prescribed sequence", "meaning_zh": "按照规定的顺序"},
+        {"text": "whereas", "meaning_zh": "然而；相比之下"}
+      ]
+    },
+    {
+      "id": "I-05", "paragraph_label": "I", "sentence_index": 27,
+      "sentence": "Thus art works themselves encourage us to view them superficially, without appreciating the richness of detail and labour that is involved.",
+      "translation": "因此，艺术作品本身反而促使我们浮光掠影地观看，而没有体会其中丰富的细节和所投入的劳动。",
+      "structure": [
+        {"text": "art works themselves", "role": "subject", "level": 1},
+        {"text": "encourage us", "role": "verb_phrase", "level": 1},
+        {"text": "to view them superficially", "role": "complement", "level": 2},
+        {"text": "without appreciating the richness of detail and labour", "role": "prepositional_phrase", "level": 2},
+        {"text": "that is involved", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["themselves 强调问题也来自艺术作品没有固定观看顺序这一特性。", "encourage us to do 是“动词 + 宾语 + 不定式宾补”结构。", "that is involved 修饰 detail and labour 所构成的整体内容，表示作品中包含的细节与劳动。"],
+      "expressions": [
+        {"text": "view ... superficially", "meaning_zh": "浮光掠影地观看……"},
+        {"text": "without appreciating", "meaning_zh": "没有充分体会……"}
+      ]
+    },
+    {
+      "id": "J-01", "paragraph_label": "J", "sentence_index": 28,
+      "sentence": "Consequently, the dominant critical approach becomes that of the art historian, a specialized academic approach devoted to 'discovering the meaning' of art within the cultural context of its time.",
+      "translation": "因此，占主导地位的批评方式变成了艺术史家的方式——一种致力于在艺术所处时代的文化背景中“发现其意义”的专业学术方法。",
+      "structure": [
+        {"text": "the dominant critical approach", "role": "subject", "level": 1},
+        {"text": "becomes", "role": "verb_phrase", "level": 1},
+        {"text": "that of the art historian", "role": "complement", "level": 1},
+        {"text": "a specialized academic approach", "role": "apposition", "level": 2},
+        {"text": "devoted to 'discovering the meaning' of art within the cultural context of its time", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": ["that 代替 approach，避免重复，意为“艺术史家的批评方式”。", "a specialized... 是同位语，进一步解释这种方式。", "devoted to 中 to 是介词，后接动名词 discovering。"],
+      "expressions": [
+        {"text": "the dominant approach", "meaning_zh": "占主导地位的方法"},
+        {"text": "be devoted to doing", "meaning_zh": "致力于做……"},
+        {"text": "within the cultural context of", "meaning_zh": "在……的文化背景中"}
+      ]
+    },
+    {
+      "id": "J-02", "paragraph_label": "J", "sentence_index": 29,
+      "sentence": "This is in perfect harmony with the museum's function, since the approach is dedicated to seeking out and conserving 'authentic', 'original' readings of the exhibits.",
+      "translation": "这与博物馆的职能完全一致，因为这种方法致力于寻找并保存对展品“真实”“原初”的解读。",
+      "structure": [
+        {"text": "This is in perfect harmony with the museum's function", "role": "main_clause", "level": 1},
+        {"text": "since the approach is dedicated to seeking out and conserving 'authentic', 'original' readings of the exhibits", "role": "adverbial_clause", "level": 2},
+        {"text": "seeking out and conserving 'authentic', 'original' readings of the exhibits", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": ["This 指上一句所说由艺术史家主导的专业批评方式。", "since 在此引导原因状语从句。", "be dedicated to 中 to 是介词，seeking out 与 conserving 是并列动名词。"],
+      "expressions": [
+        {"text": "be in perfect harmony with", "meaning_zh": "与……完全一致"},
+        {"text": "be dedicated to doing", "meaning_zh": "致力于做……"},
+        {"text": "seek out", "meaning_zh": "寻找；找出"}
+      ]
+    },
+    {
+      "id": "J-03", "paragraph_label": "J", "sentence_index": 30,
+      "sentence": "Again, this seems to put paid to that spontaneous, participatory criticism which can be found in abundance in criticism of classic works of literature, but is absent from most art history.",
+      "translation": "这似乎再次扼杀了那种自发、参与式的批评：它在经典文学作品的评论中大量存在，却在大多数艺术史研究中缺席。",
+      "structure": [
+        {"text": "this", "role": "subject", "level": 1},
+        {"text": "seems to put paid to", "role": "verb_phrase", "level": 1},
+        {"text": "that spontaneous, participatory criticism", "role": "object", "level": 1},
+        {"text": "which can be found in abundance in criticism of classic works of literature", "role": "relative_clause", "level": 2},
+        {"text": "but is absent from most art history", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": ["this 指专业艺术史方法与博物馆职能相互强化的局面。", "put paid to 是固定表达，表示终止或破坏某事。", "which 引导定语从句修饰 criticism，but 后省略了关系代词和主语 which。"],
+      "expressions": [
+        {"text": "put paid to", "meaning_zh": "终止；扼杀"},
+        {"text": "in abundance", "meaning_zh": "大量地"},
+        {"text": "be absent from", "meaning_zh": "在……中缺失"}
+      ]
+    },
+    {
+      "id": "K-01", "paragraph_label": "K", "sentence_index": 31,
+      "sentence": "The displays of art museums serve as a warning of what critical practices can emerge when spontaneous criticism is suppressed.",
+      "translation": "美术馆的陈列方式是一种警示，说明当自发批评受到压制时，会出现怎样的批评惯例。",
+      "structure": [
+        {"text": "The displays of art museums", "role": "subject", "level": 1},
+        {"text": "serve as a warning", "role": "verb_phrase", "level": 1},
+        {"text": "of what critical practices can emerge", "role": "prepositional_phrase", "level": 2},
+        {"text": "what critical practices can emerge", "role": "noun_clause", "level": 3},
+        {"text": "when spontaneous criticism is suppressed", "role": "adverbial_clause", "level": 3}
+      ],
+      "difficult_points": ["what 引导名词性从句作介词 of 的宾语，表示会出现的批评方式。", "when 引导时间兼条件意味的状语从句；is suppressed 是被动语态。"],
+      "expressions": [
+        {"text": "serve as a warning of", "meaning_zh": "构成对……的警示"},
+        {"text": "be suppressed", "meaning_zh": "受到压制"}
+      ]
+    },
+    {
+      "id": "K-02", "paragraph_label": "K", "sentence_index": 32,
+      "sentence": "The museum public, like any other audience, experience art more rewardingly when given the confidence to express their views.",
+      "translation": "与其他观众一样，博物馆公众在获得表达自己观点的信心时，也能从艺术中得到更丰富的体验。",
+      "structure": [
+        {"text": "The museum public", "role": "subject", "level": 1},
+        {"text": "like any other audience", "role": "prepositional_phrase", "level": 2},
+        {"text": "experience art more rewardingly", "role": "verb_phrase", "level": 1},
+        {"text": "when given the confidence to express their views", "role": "adverbial_clause", "level": 2},
+        {"text": "to express their views", "role": "non_finite_clause", "level": 3}
+      ],
+      "difficult_points": ["public 在英式英语中可作集合名词，因此这里使用复数谓语 experience。", "when given... 省略了 they are，是被动形式的状语从句。", "to express... 后置说明 confidence 的具体内容。"],
+      "expressions": [
+        {"text": "be given the confidence to", "meaning_zh": "获得做……的信心"},
+        {"text": "express one's views", "meaning_zh": "表达自己的观点"}
+      ]
+    },
+    {
+      "id": "K-03", "paragraph_label": "K", "sentence_index": 33,
+      "sentence": "If appropriate works of fine art could be rendered permanently accessible to the public by means of high-fidelity reproductions, as literature and music already are, the public may feel somewhat less in awe of them.",
+      "translation": "如果能借助高保真复制品，让合适的美术作品像文学和音乐那样永久向公众开放，公众或许就不会再对它们如此敬畏。",
+      "structure": [
+        {"text": "If appropriate works of fine art could be rendered permanently accessible to the public by means of high-fidelity reproductions", "role": "adverbial_clause", "level": 1},
+        {"text": "could be rendered permanently accessible", "role": "verb_phrase", "level": 2},
+        {"text": "as literature and music already are", "role": "adverbial_clause", "level": 2},
+        {"text": "the public", "role": "subject", "level": 1},
+        {"text": "may feel somewhat less in awe of them", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": ["render A accessible 是“render + 宾语 + 形容词宾补”结构，此处采用被动语态。", "by means of 表示实现永久开放所借助的手段。", "as 从句省略了 accessible to the public；them 指 works of fine art。"],
+      "expressions": [
+        {"text": "render ... accessible to", "meaning_zh": "使……可供……接触"},
+        {"text": "by means of", "meaning_zh": "借助；通过"},
+        {"text": "be in awe of", "meaning_zh": "敬畏……"}
+      ]
+    },
+    {
+      "id": "K-04", "paragraph_label": "K", "sentence_index": 34,
+      "sentence": "Unfortunately, that may be too much to ask from those who seek to maintain and control the art establishment.",
+      "translation": "遗憾的是，对于那些力图维持并控制艺术体制的人而言，这样的要求或许太高了。",
+      "structure": [
+        {"text": "Unfortunately", "role": "parenthesis", "level": 1},
+        {"text": "that", "role": "subject", "level": 1},
+        {"text": "may be too much to ask", "role": "verb_phrase", "level": 1},
+        {"text": "from those", "role": "prepositional_phrase", "level": 2},
+        {"text": "who seek to maintain and control the art establishment", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["that 指上一句提出的让公众通过复制品永久接触艺术作品的设想。", "too much to ask 表示要求过高、难以指望。", "who 引导定语从句修饰 those，maintain 与 control 是并列动词。"],
+      "expressions": [
+        {"text": "be too much to ask", "meaning_zh": "要求过高；难以指望"},
+        {"text": "seek to maintain and control", "meaning_zh": "力图维持并控制"}
+      ]
+    }
+  ]
+}

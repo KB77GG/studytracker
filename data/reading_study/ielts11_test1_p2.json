@@ -1,0 +1,733 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts11_test1_reading",
+  "passage_id": "ielts11_test1_p2",
+  "passage_title": "THE FALKIRK WHEEL",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "The Falkirk Wheel in Scotland is the world's first and only rotating boat lift.",
+      "translation": "苏格兰的福尔柯克轮是世界上第一座也是唯一一座旋转式升船机。",
+      "structure": [
+        {"text": "The Falkirk Wheel in Scotland", "role": "subject", "level": 1},
+        {"text": "is", "role": "verb_phrase", "level": 1},
+        {"text": "the world's first and only rotating boat lift", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "first and only 共同修饰 rotating boat lift，强调其开创性与唯一性。",
+        "rotating 是现在分词作定语，说明升船机通过旋转来工作。"
+      ],
+      "expressions": [
+        {"text": "the world's first and only", "meaning_zh": "世界上第一座也是唯一一座"},
+        {"text": "rotating boat lift", "meaning_zh": "旋转式升船机"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "Opened in 2002, it is central to the ambitious £84.5m Millennium Link project to restore navigability across Scotland by reconnecting the historic waterways of the Forth & Clyde and Union Canals.",
+      "translation": "它于2002年启用，是耗资8450万英镑、雄心勃勃的“千年连接”项目的核心；该项目通过重新连接福斯—克莱德运河与联合运河这两条历史水道，恢复横贯苏格兰的通航能力。",
+      "structure": [
+        {"text": "Opened in 2002", "role": "participial_phrase", "level": 2},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "is central to the ambitious £84.5m Millennium Link project", "role": "verb_phrase", "level": 1},
+        {"text": "to restore navigability across Scotland", "role": "non_finite_clause", "level": 2},
+        {"text": "by reconnecting the historic waterways of the Forth & Clyde and Union Canals", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "Opened in 2002 是过去分词短语，其逻辑主语是 it，表示福尔柯克轮于2002年启用。",
+        "to restore ... 表示项目的目的，by reconnecting ... 进一步说明实现这一目的的方式。",
+        "the historic waterways of ... 指两条运河水道，of 短语具体说明 waterways。"
+      ],
+      "expressions": [
+        {"text": "be central to", "meaning_zh": "是……的核心"},
+        {"text": "restore navigability", "meaning_zh": "恢复通航能力"},
+        {"text": "by reconnecting", "meaning_zh": "通过重新连接"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 3,
+      "sentence": "The major challenge of the project lay in the fact that the Forth & Clyde Canal is situated 35 metres below the level of the Union Canal.",
+      "translation": "该项目的主要挑战在于，福斯—克莱德运河的位置比联合运河水位低35米。",
+      "structure": [
+        {"text": "The major challenge of the project", "role": "subject", "level": 1},
+        {"text": "lay in the fact", "role": "verb_phrase", "level": 1},
+        {"text": "that the Forth & Clyde Canal is situated 35 metres below the level of the Union Canal", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "lay 是 lie 的过去式，lay in the fact that 表示“在于这一事实”。",
+        "that 引导同位语性质的从句，说明 the fact 的具体内容。",
+        "is situated 采用被动形式描述位置，35 metres below 表示垂直高度差。"
+      ],
+      "expressions": [
+        {"text": "lie in the fact that", "meaning_zh": "在于……这一事实"},
+        {"text": "be situated below", "meaning_zh": "位于……下方"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Historically, the two canals had been joined near the town of Falkirk by a sequence of 11 locks - enclosed sections of canal in which the water level could be raised or lowered - that stepped down across a distance of 1.5 km.",
+      "translation": "历史上，这两条运河曾在福尔柯克镇附近由连续11座船闸连接；船闸是水位可以升高或降低的封闭运河段，沿1.5公里的距离逐级下降。",
+      "structure": [
+        {"text": "the two canals", "role": "subject", "level": 1},
+        {"text": "had been joined near the town of Falkirk by a sequence of 11 locks", "role": "verb_phrase", "level": 1},
+        {"text": "enclosed sections of canal", "role": "apposition", "level": 2},
+        {"text": "in which the water level could be raised or lowered", "role": "relative_clause", "level": 3},
+        {"text": "that stepped down across a distance of 1.5 km", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "had been joined 是过去完成时的被动语态，表示这种连接早于后文拆除的时间。",
+        "两个连字符之间的 enclosed sections of canal 是对 locks 的同位解释。",
+        "in which 从句修饰 canal sections，句末 that 从句修饰 a sequence of 11 locks。"
+      ],
+      "expressions": [
+        {"text": "a sequence of", "meaning_zh": "一连串；一系列"},
+        {"text": "raise or lower the water level", "meaning_zh": "升高或降低水位"},
+        {"text": "across a distance of", "meaning_zh": "跨越……的距离"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "This had been dismantled in 1933, thereby breaking the link.",
+      "translation": "这套船闸于1933年被拆除，从而切断了两条运河之间的连接。",
+      "structure": [
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "had been dismantled in 1933", "role": "verb_phrase", "level": 1},
+        {"text": "thereby breaking the link", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "This 回指上一句由11座船闸构成的连接系统。",
+        "thereby breaking ... 是结果性分词短语，表示拆除直接造成连接中断。"
+      ],
+      "expressions": [
+        {"text": "thereby doing", "meaning_zh": "从而做……"},
+        {"text": "break the link", "meaning_zh": "切断连接"}
+      ]
+    },
+    {
+      "id": "B-04",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "When the project was launched in 1994, the British Waterways authority were keen to create a dramatic twenty-first-century landmark which would not only be a fitting commemoration of the Millennium, but also a lasting symbol of the economic regeneration of the region.",
+      "translation": "1994年项目启动时，英国水道管理局希望打造一座引人注目的21世纪地标：它不仅要恰如其分地纪念千禧年，还要成为该地区经济复兴的长久象征。",
+      "structure": [
+        {"text": "When the project was launched in 1994", "role": "adverbial_clause", "level": 2},
+        {"text": "the British Waterways authority", "role": "subject", "level": 1},
+        {"text": "were keen to create a dramatic twenty-first-century landmark", "role": "verb_phrase", "level": 1},
+        {"text": "which would not only be a fitting commemoration of the Millennium, but also a lasting symbol of the economic regeneration of the region", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，was launched 是被动语态，表示项目正式启动。",
+        "which 引导定语从句修饰 landmark，说明这座地标被寄予的双重意义。",
+        "not only ... but also ... 连接两个并列表语：纪念物和象征。"
+      ],
+      "expressions": [
+        {"text": "be keen to", "meaning_zh": "渴望；很想"},
+        {"text": "a fitting commemoration of", "meaning_zh": "对……恰如其分的纪念"},
+        {"text": "economic regeneration", "meaning_zh": "经济复兴"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 7,
+      "sentence": "Numerous ideas were submitted for the project, including concepts ranging from rolling eggs to tilting tanks, from giant seesaws to overhead monorails.",
+      "translation": "人们为该项目提交了大量构想，其中包括从滚动的蛋到倾斜的水箱、从巨型跷跷板到高架单轨等各种概念。",
+      "structure": [
+        {"text": "Numerous ideas", "role": "subject", "level": 1},
+        {"text": "were submitted for the project", "role": "verb_phrase", "level": 1},
+        {"text": "including concepts", "role": "participial_phrase", "level": 2},
+        {"text": "ranging from rolling eggs to tilting tanks, from giant seesaws to overhead monorails", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "were submitted 是被动语态，强调提交的方案而不强调提交者。",
+        "including ... 补充列举 ideas，ranging from ... to ... 进一步说明构想的广泛范围。"
+      ],
+      "expressions": [
+        {"text": "submit ideas for", "meaning_zh": "为……提交构想"},
+        {"text": "range from ... to ...", "meaning_zh": "范围从……到……"}
+      ]
+    },
+    {
+      "id": "C-02",
+      "paragraph_label": "C",
+      "sentence_index": 8,
+      "sentence": "The eventual winner was a plan for the huge rotating steel boat lift which was to become The Falkirk Wheel.",
+      "translation": "最终胜出的方案是一座巨型旋转钢制升船机的设计，它后来成为了福尔柯克轮。",
+      "structure": [
+        {"text": "The eventual winner", "role": "subject", "level": 1},
+        {"text": "was a plan for the huge rotating steel boat lift", "role": "main_clause", "level": 1},
+        {"text": "which was to become The Falkirk Wheel", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "winner 在这里不是人，而是最终获选的设计方案。",
+        "which 修饰 the huge rotating steel boat lift，was to become 表示后来注定或实际成为。"
+      ],
+      "expressions": [
+        {"text": "the eventual winner", "meaning_zh": "最终胜出的方案"},
+        {"text": "be to become", "meaning_zh": "后来成为；注定成为"}
+      ]
+    },
+    {
+      "id": "C-03",
+      "paragraph_label": "C",
+      "sentence_index": 9,
+      "sentence": "The unique shape of the structure is claimed to have been inspired by various sources, both manmade and natural, most notably a Celtic double-headed axe, but also the vast turning propeller of a ship, the ribcage of a whale or the spine of a fish.",
+      "translation": "据称，这座结构的独特造型受到了多种人造和自然事物的启发，其中最突出的是凯尔特双刃斧，也包括船只巨大的旋转螺旋桨、鲸鱼的胸廓以及鱼的脊柱。",
+      "structure": [
+        {"text": "The unique shape of the structure", "role": "subject", "level": 1},
+        {"text": "is claimed to have been inspired by various sources", "role": "verb_phrase", "level": 1},
+        {"text": "both manmade and natural", "role": "apposition", "level": 2},
+        {"text": "most notably a Celtic double-headed axe", "role": "apposition", "level": 2},
+        {"text": "but also the vast turning propeller of a ship, the ribcage of a whale or the spine of a fish", "role": "coordinated_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "is claimed to have been inspired 是“被动报道结构 + 完成时不定式的被动式”，表示据称其灵感来自过去的多种来源。",
+        "both manmade and natural 是 various sources 的补充说明。",
+        "most notably ... but also ... 先突出最重要的灵感来源，再补充列举其他来源。"
+      ],
+      "expressions": [
+        {"text": "be inspired by", "meaning_zh": "受到……启发"},
+        {"text": "both manmade and natural", "meaning_zh": "既有人造的也有自然的"},
+        {"text": "most notably", "meaning_zh": "其中最突出的是"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 10,
+      "sentence": "The various parts of The Falkirk Wheel were all constructed and assembled, like one giant toy building set, at Butterley Engineering's Steelworks in Derbyshire, some 400 km from Falkirk.",
+      "translation": "福尔柯克轮的各个部件都在德比郡的巴特利工程钢铁厂制造并组装，仿佛一套巨型拼装玩具；该厂距福尔柯克约400公里。",
+      "structure": [
+        {"text": "The various parts of The Falkirk Wheel", "role": "subject", "level": 1},
+        {"text": "were all constructed and assembled", "role": "verb_phrase", "level": 1},
+        {"text": "like one giant toy building set", "role": "prepositional_phrase", "level": 2},
+        {"text": "at Butterley Engineering's Steelworks in Derbyshire", "role": "prepositional_phrase", "level": 2},
+        {"text": "some 400 km from Falkirk", "role": "apposition", "level": 3}
+      ],
+      "difficult_points": [
+        "were constructed and assembled 是两个并列的被动谓语。",
+        "like one giant toy building set 是比喻，突出各部件先在异地试装。",
+        "some 400 km from Falkirk 补充说明钢铁厂的位置，some 表示“大约”。"
+      ],
+      "expressions": [
+        {"text": "construct and assemble", "meaning_zh": "制造并组装"},
+        {"text": "some 400 km from", "meaning_zh": "距……约400公里"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 11,
+      "sentence": "A team there carefully assembled the 1,200 tonnes of steel, painstakingly fitting the pieces together to an accuracy of just 10 mm to ensure a perfect final fit.",
+      "translation": "那里的团队仔细组装了1200吨钢材，不辞辛劳地拼合各个部件，将误差控制在仅10毫米，以确保最终严丝合缝。",
+      "structure": [
+        {"text": "A team there", "role": "subject", "level": 1},
+        {"text": "carefully assembled the 1,200 tonnes of steel", "role": "verb_phrase", "level": 1},
+        {"text": "painstakingly fitting the pieces together", "role": "participial_phrase", "level": 2},
+        {"text": "to an accuracy of just 10 mm", "role": "prepositional_phrase", "level": 3},
+        {"text": "to ensure a perfect final fit", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "painstakingly fitting ... 是现在分词短语，补充说明团队组装钢材时的具体操作。",
+        "to an accuracy of just 10 mm 表示达到仅10毫米的精度。",
+        "to ensure ... 是目的状语，说明高精度拼装的目的。"
+      ],
+      "expressions": [
+        {"text": "fit the pieces together", "meaning_zh": "把各部件拼合起来"},
+        {"text": "to an accuracy of", "meaning_zh": "达到……的精度"},
+        {"text": "ensure a perfect fit", "meaning_zh": "确保完美契合"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 12,
+      "sentence": "In the summer of 2001, the structure was then dismantled and transported on 35 lorries to Falkirk, before all being bolted back together again on the ground, and finally lifted into position in five large sections by crane.",
+      "translation": "2001年夏天，这座结构随后被拆开，由35辆卡车运往福尔柯克；所有部件先在地面上重新用螺栓组装，最后再由起重机分成五大部分吊装就位。",
+      "structure": [
+        {"text": "the structure", "role": "subject", "level": 1},
+        {"text": "was then dismantled and transported on 35 lorries to Falkirk", "role": "verb_phrase", "level": 1},
+        {"text": "before all being bolted back together again on the ground", "role": "prepositional_phrase", "level": 2},
+        {"text": "and finally lifted into position in five large sections by crane", "role": "coordinated_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "was dismantled and transported 是被动语态下的并列谓语。",
+        "before all being bolted ... 中 all 指全部部件，being bolted 是动名词的被动形式。",
+        "lifted 与 being bolted 在语义上并列并承接被动关系，表示随后被吊装到位。"
+      ],
+      "expressions": [
+        {"text": "bolt back together", "meaning_zh": "用螺栓重新组装"},
+        {"text": "lift into position", "meaning_zh": "吊装就位"},
+        {"text": "by crane", "meaning_zh": "用起重机"}
+      ]
+    },
+    {
+      "id": "D-04",
+      "paragraph_label": "D",
+      "sentence_index": 13,
+      "sentence": "The Wheel would need to withstand immense and constantly changing stresses as it rotated, so to make the structure more robust, the steel sections were bolted rather than welded together.",
+      "translation": "福尔柯克轮旋转时必须承受巨大且不断变化的应力，因此为了让结构更加坚固，各钢制部分采用螺栓连接，而不是焊接在一起。",
+      "structure": [
+        {"text": "The Wheel would need to withstand immense and constantly changing stresses", "role": "main_clause", "level": 1},
+        {"text": "as it rotated", "role": "adverbial_clause", "level": 2},
+        {"text": "to make the structure more robust", "role": "non_finite_clause", "level": 2},
+        {"text": "the steel sections were bolted rather than welded together", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "as 引导时间状语从句，表示应力是在轮体旋转过程中产生的。",
+        "to make ... 是目的状语，其中 make the structure more robust 是“动词 + 宾语 + 宾补”结构。",
+        "were bolted rather than welded 使用被动语态，rather than 对比两种连接方式。"
+      ],
+      "expressions": [
+        {"text": "withstand immense stresses", "meaning_zh": "承受巨大应力"},
+        {"text": "make the structure more robust", "meaning_zh": "使结构更加坚固"},
+        {"text": "rather than", "meaning_zh": "而不是"}
+      ]
+    },
+    {
+      "id": "D-05",
+      "paragraph_label": "D",
+      "sentence_index": 14,
+      "sentence": "Over 45,000 bolt holes were matched with their bolts, and each bolt was hand-tightened.",
+      "translation": "超过45000个螺栓孔逐一配上对应的螺栓，每颗螺栓都由人工拧紧。",
+      "structure": [
+        {"text": "Over 45,000 bolt holes", "role": "subject", "level": 1},
+        {"text": "were matched with their bolts", "role": "verb_phrase", "level": 1},
+        {"text": "and each bolt was hand-tightened", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "were matched with 表示螺栓孔与相应螺栓逐一配对，而非一般意义上的比赛。",
+        "hand-tightened 是被动形式，强调每颗螺栓均由人工拧紧。"
+      ],
+      "expressions": [
+        {"text": "be matched with", "meaning_zh": "与……相匹配"},
+        {"text": "be hand-tightened", "meaning_zh": "由人工拧紧"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 15,
+      "sentence": "The Wheel consists of two sets of opposing axe-shaped arms, attached about 25 metres apart to a fixed central spine.",
+      "translation": "福尔柯克轮由两组相对的斧形臂构成，这些臂相隔约25米，连接在一根固定的中央轴柱上。",
+      "structure": [
+        {"text": "The Wheel", "role": "subject", "level": 1},
+        {"text": "consists of two sets of opposing axe-shaped arms", "role": "verb_phrase", "level": 1},
+        {"text": "attached about 25 metres apart to a fixed central spine", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "consist of 表示“由……构成”，不能用于被动语态。",
+        "attached ... 是过去分词短语修饰 arms，about 25 metres apart 说明两组臂的间距。"
+      ],
+      "expressions": [
+        {"text": "consist of", "meaning_zh": "由……构成"},
+        {"text": "be attached to", "meaning_zh": "连接在……上"},
+        {"text": "metres apart", "meaning_zh": "相隔……米"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 16,
+      "sentence": "Two diametrically opposed water-filled 'gondolas', each with a capacity of 360,000 litres, are fitted between the ends of the arms.",
+      "translation": "两个直径方向相对、装满水的“吊舱”安装在轮臂末端之间，每个吊舱的容量为36万升。",
+      "structure": [
+        {"text": "Two diametrically opposed water-filled 'gondolas'", "role": "subject", "level": 1},
+        {"text": "each with a capacity of 360,000 litres", "role": "apposition", "level": 2},
+        {"text": "are fitted between the ends of the arms", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "diametrically opposed 表示两者位于圆的直径两端、彼此正对。",
+        "each with ... 是独立的补充结构，说明每个吊舱的容量。",
+        "are fitted 是被动语态，说明吊舱被安装的位置。"
+      ],
+      "expressions": [
+        {"text": "diametrically opposed", "meaning_zh": "在直径方向上相对的"},
+        {"text": "with a capacity of", "meaning_zh": "容量为……"},
+        {"text": "be fitted between", "meaning_zh": "被安装在……之间"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 17,
+      "sentence": "These gondolas always weigh the same, whether or not they are carrying boats.",
+      "translation": "无论是否载有船只，这两个吊舱的重量始终相同。",
+      "structure": [
+        {"text": "These gondolas", "role": "subject", "level": 1},
+        {"text": "always weigh the same", "role": "verb_phrase", "level": 1},
+        {"text": "whether or not they are carrying boats", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "weigh 在这里是系动词，the same 作表语，表示重量相同。",
+        "whether or not 引导让步状语从句，表示不论吊舱是否载船，结论都不变。"
+      ],
+      "expressions": [
+        {"text": "weigh the same", "meaning_zh": "重量相同"},
+        {"text": "whether or not", "meaning_zh": "无论是否"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 18,
+      "sentence": "This is because, according to Archimedes' principle of displacement, floating objects displace their own weight in water.",
+      "translation": "这是因为，根据阿基米德的排水原理，漂浮物体所排开的水与其自身等重。",
+      "structure": [
+        {"text": "This is because", "role": "main_clause", "level": 1},
+        {"text": "according to Archimedes' principle of displacement", "role": "prepositional_phrase", "level": 2},
+        {"text": "floating objects displace their own weight in water", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "This 回指上一句吊舱无论载船与否都同重这一现象。",
+        "because 引出原因，according to ... 是插入其中的依据说明。",
+        "displace their own weight in water 指排开与自身重量相等的水，而不是排开物体自身。"
+      ],
+      "expressions": [
+        {"text": "according to", "meaning_zh": "根据"},
+        {"text": "principle of displacement", "meaning_zh": "排水原理"},
+        {"text": "displace one's own weight in water", "meaning_zh": "排开与自身等重的水"}
+      ]
+    },
+    {
+      "id": "E-05",
+      "paragraph_label": "E",
+      "sentence_index": 19,
+      "sentence": "So when a boat enters a gondola, the amount of water leaving the gondola weighs exactly the same as the boat.",
+      "translation": "因此，当船驶入吊舱时，流出吊舱的那部分水，其重量恰好与船的重量相同。",
+      "structure": [
+        {"text": "when a boat enters a gondola", "role": "adverbial_clause", "level": 2},
+        {"text": "the amount of water", "role": "subject", "level": 1},
+        {"text": "leaving the gondola", "role": "participial_phrase", "level": 2},
+        {"text": "weighs exactly the same as the boat", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "when 引导时间状语从句，说明船进入吊舱时发生的变化。",
+        "leaving the gondola 是现在分词短语，修饰 water。",
+        "主语中心词是单数 amount，因此谓语使用 weighs。"
+      ],
+      "expressions": [
+        {"text": "the amount of", "meaning_zh": "……的量"},
+        {"text": "the same as", "meaning_zh": "与……相同"}
+      ]
+    },
+    {
+      "id": "E-06",
+      "paragraph_label": "E",
+      "sentence_index": 20,
+      "sentence": "This keeps the Wheel balanced and so, despite its enormous mass, it rotates through 180° in five and a half minutes while using very little power.",
+      "translation": "这使福尔柯克轮保持平衡，因此尽管其质量巨大，它仍能在只消耗很少动力的情况下，用五分半钟旋转180度。",
+      "structure": [
+        {"text": "This keeps the Wheel balanced", "role": "main_clause", "level": 1},
+        {"text": "despite its enormous mass", "role": "prepositional_phrase", "level": 2},
+        {"text": "it rotates through 180° in five and a half minutes", "role": "coordinated_clause", "level": 1},
+        {"text": "while using very little power", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "keep the Wheel balanced 是“动词 + 宾语 + 宾补”结构，balanced 表示轮体所处状态。",
+        "despite 后接名词短语，表达让步，不能当作从句连接词。",
+        "while using ... 省略了与主句相同的主语 it，表示旋转同时只需很少动力。"
+      ],
+      "expressions": [
+        {"text": "keep ... balanced", "meaning_zh": "使……保持平衡"},
+        {"text": "despite its enormous mass", "meaning_zh": "尽管其质量巨大"},
+        {"text": "use very little power", "meaning_zh": "消耗很少动力"}
+      ]
+    },
+    {
+      "id": "E-07",
+      "paragraph_label": "E",
+      "sentence_index": 21,
+      "sentence": "It takes just 1.5 kilowatt-hours (5.4 MJ) of energy to rotate the Wheel - roughly the same as boiling eight small domestic kettles of water.",
+      "translation": "旋转福尔柯克轮只需1.5千瓦时（5.4兆焦）的能量，大致相当于用八个小型家用水壶烧水所需的能量。",
+      "structure": [
+        {"text": "It takes just 1.5 kilowatt-hours (5.4 MJ) of energy", "role": "main_clause", "level": 1},
+        {"text": "to rotate the Wheel", "role": "non_finite_clause", "level": 2},
+        {"text": "roughly the same as boiling eight small domestic kettles of water", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "It takes ... to ... 使用形式主语 it，真正说明的动作是 to rotate the Wheel。",
+        "连字符后的短语补充比较耗能水平，roughly the same as 表示“大致相当于”。",
+        "boiling eight small domestic kettles of water 指烧开八小壶水，而非把水壶本身煮沸。"
+      ],
+      "expressions": [
+        {"text": "It takes ... to ...", "meaning_zh": "做……需要……"},
+        {"text": "roughly the same as", "meaning_zh": "大致相当于"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 22,
+      "sentence": "Boats needing to be lifted up enter the canal basin at the level of the Forth & Clyde Canal and then enter the lower gondola of the Wheel.",
+      "translation": "需要被提升的船只先驶入与福斯—克莱德运河同一水位的运河池，然后进入福尔柯克轮下方的吊舱。",
+      "structure": [
+        {"text": "Boats", "role": "subject", "level": 1},
+        {"text": "needing to be lifted up", "role": "participial_phrase", "level": 2},
+        {"text": "enter the canal basin at the level of the Forth & Clyde Canal", "role": "verb_phrase", "level": 1},
+        {"text": "and then enter the lower gondola of the Wheel", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "needing to be lifted up 是现在分词短语修饰 Boats，其中不定式使用被动形式。",
+        "两个 enter 是共同以 Boats 为主语的并列谓语，then 标明先后顺序。",
+        "at the level of 表示运河池与福斯—克莱德运河处于同一水位。"
+      ],
+      "expressions": [
+        {"text": "need to be lifted", "meaning_zh": "需要被提升"},
+        {"text": "at the level of", "meaning_zh": "与……处于同一高度或水位"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 23,
+      "sentence": "Two hydraulic steel gates are raised, so as to seal the gondola off from the water in the canal basin.",
+      "translation": "两道液压钢闸门升起，以便将吊舱与运河池中的水隔开。",
+      "structure": [
+        {"text": "Two hydraulic steel gates", "role": "subject", "level": 1},
+        {"text": "are raised", "role": "verb_phrase", "level": 1},
+        {"text": "so as to seal the gondola off from the water in the canal basin", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "are raised 是被动语态，表示闸门被升起。",
+        "so as to 引导目的状语，seal A off from B 表示把 A 与 B 隔绝。"
+      ],
+      "expressions": [
+        {"text": "so as to", "meaning_zh": "以便；为了"},
+        {"text": "seal ... off from ...", "meaning_zh": "把……与……隔开"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 24,
+      "sentence": "The water between the gates is then pumped out.",
+      "translation": "随后，两道闸门之间的水被抽出。",
+      "structure": [
+        {"text": "The water between the gates", "role": "subject", "level": 1},
+        {"text": "is then pumped out", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "between the gates 是介词短语，后置修饰 water。",
+        "is pumped out 是被动语态，then 表明这是闸门升起之后的下一步。"
+      ],
+      "expressions": [
+        {"text": "pump out", "meaning_zh": "抽出；抽走"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 25,
+      "sentence": "A hydraulic clamp, which prevents the arms of the Wheel moving while the gondola is docked, is removed, allowing the Wheel to turn.",
+      "translation": "一个液压夹具随后被移除；吊舱停靠时，它原本用于防止轮臂移动，而移除后福尔柯克轮便可转动。",
+      "structure": [
+        {"text": "A hydraulic clamp", "role": "subject", "level": 1},
+        {"text": "which prevents the arms of the Wheel moving", "role": "relative_clause", "level": 2},
+        {"text": "while the gondola is docked", "role": "adverbial_clause", "level": 3},
+        {"text": "is removed", "role": "verb_phrase", "level": 1},
+        {"text": "allowing the Wheel to turn", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，说明液压夹具的作用。",
+        "prevent A moving 是“阻止 A 移动”，while 从句说明这一作用发生在吊舱停靠期间。",
+        "allowing ... 是结果性分词短语，表示移除夹具后轮体得以转动。"
+      ],
+      "expressions": [
+        {"text": "prevent ... moving", "meaning_zh": "防止……移动"},
+        {"text": "be docked", "meaning_zh": "停靠；对接"},
+        {"text": "allow ... to turn", "meaning_zh": "使……能够转动"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "In the central machine room an array of ten hydraulic motors then begins to rotate the central axle.",
+      "translation": "随后，中央机房内的一组十台液压马达开始带动中央轴旋转。",
+      "structure": [
+        {"text": "In the central machine room", "role": "prepositional_phrase", "level": 2},
+        {"text": "an array of ten hydraulic motors", "role": "subject", "level": 1},
+        {"text": "then begins to rotate the central axle", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "句首地点状语后未倒装，主语是 an array of ten hydraulic motors。",
+        "主语中心词是单数 array，因此谓语使用 begins。",
+        "rotate 在这里是及物动词，表示马达使中央轴旋转。"
+      ],
+      "expressions": [
+        {"text": "an array of", "meaning_zh": "一组；一系列"},
+        {"text": "begin to rotate", "meaning_zh": "开始使……旋转"}
+      ]
+    },
+    {
+      "id": "F-06",
+      "paragraph_label": "F",
+      "sentence_index": 27,
+      "sentence": "The axle connects to the outer arms of the Wheel, which begin to rotate at a speed of 1/8 of a revolution per minute.",
+      "translation": "中央轴与福尔柯克轮的外臂相连，外臂开始以每分钟八分之一圈的速度旋转。",
+      "structure": [
+        {"text": "The axle", "role": "subject", "level": 1},
+        {"text": "connects to the outer arms of the Wheel", "role": "verb_phrase", "level": 1},
+        {"text": "which begin to rotate at a speed of 1/8 of a revolution per minute", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "which 引导非限制性定语从句，先行词是复数 outer arms，而不是单数 Wheel。",
+        "at a speed of ... per minute 表示旋转速率，即每分钟八分之一圈。"
+      ],
+      "expressions": [
+        {"text": "connect to", "meaning_zh": "与……相连"},
+        {"text": "at a speed of", "meaning_zh": "以……的速度"},
+        {"text": "per minute", "meaning_zh": "每分钟"}
+      ]
+    },
+    {
+      "id": "F-07",
+      "paragraph_label": "F",
+      "sentence_index": 28,
+      "sentence": "As the wheel rotates, the gondolas are kept in the upright position by a simple gearing system.",
+      "translation": "随着轮体旋转，吊舱由一套简单的齿轮系统保持直立。",
+      "structure": [
+        {"text": "As the wheel rotates", "role": "adverbial_clause", "level": 2},
+        {"text": "the gondolas", "role": "subject", "level": 1},
+        {"text": "are kept in the upright position by a simple gearing system", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "As 引导时间状语从句，表示吊舱保持直立与轮体旋转同时发生。",
+        "are kept ... by ... 是被动语态，说明保持吊舱直立的装置是齿轮系统。"
+      ],
+      "expressions": [
+        {"text": "keep ... in the upright position", "meaning_zh": "使……保持直立"},
+        {"text": "gearing system", "meaning_zh": "齿轮传动系统"}
+      ]
+    },
+    {
+      "id": "F-08",
+      "paragraph_label": "F",
+      "sentence_index": 29,
+      "sentence": "Two eight-metre-wide cogs orbit a fixed inner cog of the same width, connected by two smaller cogs travelling in the opposite direction to the outer cogs - so ensuring that the gondolas always remain level.",
+      "translation": "两个八米宽的齿轮环绕一个同样宽的固定内齿轮转动，并由两个朝外侧齿轮相反方向运动的较小齿轮相连，从而确保吊舱始终保持水平。",
+      "structure": [
+        {"text": "Two eight-metre-wide cogs", "role": "subject", "level": 1},
+        {"text": "orbit a fixed inner cog of the same width", "role": "verb_phrase", "level": 1},
+        {"text": "connected by two smaller cogs", "role": "participial_phrase", "level": 2},
+        {"text": "travelling in the opposite direction to the outer cogs", "role": "participial_phrase", "level": 3},
+        {"text": "so ensuring that the gondolas always remain level", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "connected by ... 是过去分词短语，补充说明大齿轮之间的连接方式。",
+        "travelling ... 是现在分词短语，修饰 two smaller cogs。",
+        "so ensuring ... 表示结果，其中 that 从句作 ensuring 的宾语，remain level 表示保持水平。"
+      ],
+      "expressions": [
+        {"text": "in the opposite direction to", "meaning_zh": "朝与……相反的方向"},
+        {"text": "ensure that", "meaning_zh": "确保……"},
+        {"text": "remain level", "meaning_zh": "保持水平"}
+      ]
+    },
+    {
+      "id": "F-09",
+      "paragraph_label": "F",
+      "sentence_index": 30,
+      "sentence": "When the gondola reaches the top, the boat passes straight onto the aqueduct situated 24 metres above the canal basin.",
+      "translation": "当吊舱到达顶部时，船只直接驶上位于运河池上方24米处的渡槽。",
+      "structure": [
+        {"text": "When the gondola reaches the top", "role": "adverbial_clause", "level": 2},
+        {"text": "the boat", "role": "subject", "level": 1},
+        {"text": "passes straight onto the aqueduct", "role": "verb_phrase", "level": 1},
+        {"text": "situated 24 metres above the canal basin", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "When 引导时间状语从句，说明船驶上渡槽的时点。",
+        "situated ... 是过去分词短语，后置修饰 aqueduct。",
+        "passes straight onto 强调船到达顶部后不需转换，直接驶上渡槽。"
+      ],
+      "expressions": [
+        {"text": "reach the top", "meaning_zh": "到达顶部"},
+        {"text": "pass straight onto", "meaning_zh": "直接驶上"},
+        {"text": "be situated above", "meaning_zh": "位于……上方"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 31,
+      "sentence": "The remaining 11 metres of lift needed to reach the Union Canal is achieved by means of a pair of locks.",
+      "translation": "到达联合运河所需的剩余11米提升高度，是借助一对船闸实现的。",
+      "structure": [
+        {"text": "The remaining 11 metres of lift", "role": "subject", "level": 1},
+        {"text": "needed to reach the Union Canal", "role": "participial_phrase", "level": 2},
+        {"text": "is achieved by means of a pair of locks", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "needed ... 是过去分词短语修饰 lift，表示到达联合运河所需的提升高度。",
+        "is achieved 是被动语态，by means of 说明实现剩余提升的手段。",
+        "主语中心概念是 the remaining ... lift，原文因此使用单数谓语 is。"
+      ],
+      "expressions": [
+        {"text": "the remaining ...", "meaning_zh": "剩余的……"},
+        {"text": "be achieved by means of", "meaning_zh": "借助……实现"},
+        {"text": "a pair of locks", "meaning_zh": "一对船闸"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 32,
+      "sentence": "The Wheel could not be constructed to elevate boats over the full 35-metre difference between the two canals, owing to the presence of the historically important Antonine Wall, which was built by the Romans in the second century AD.",
+      "translation": "由于具有重要历史意义的安东尼长城横亘于此，福尔柯克轮无法建成能够跨越两条运河全部35米高差来提升船只的规模；这道长城由罗马人于公元二世纪修建。",
+      "structure": [
+        {"text": "The Wheel", "role": "subject", "level": 1},
+        {"text": "could not be constructed", "role": "verb_phrase", "level": 1},
+        {"text": "to elevate boats over the full 35-metre difference between the two canals", "role": "non_finite_clause", "level": 2},
+        {"text": "owing to the presence of the historically important Antonine Wall", "role": "prepositional_phrase", "level": 2},
+        {"text": "which was built by the Romans in the second century AD", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "could not be constructed 是含情态动词的被动语态，说明工程受客观条件限制。",
+        "to elevate ... 表示建造福尔柯克轮原本要实现的功能，over the full ... difference 指跨越全部高差。",
+        "owing to 引出原因，which 从句修饰 Antonine Wall 并交代其历史来源。"
+      ],
+      "expressions": [
+        {"text": "owing to the presence of", "meaning_zh": "由于……的存在"},
+        {"text": "the full difference between", "meaning_zh": "……之间的全部差距"},
+        {"text": "historically important", "meaning_zh": "具有重要历史意义的"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 33,
+      "sentence": "Boats travel under this wall via a tunnel, then through the locks, and finally on to the Union Canal.",
+      "translation": "船只先经隧道从这道长城下方穿过，再通过船闸，最后驶入联合运河。",
+      "structure": [
+        {"text": "Boats", "role": "subject", "level": 1},
+        {"text": "travel under this wall via a tunnel", "role": "verb_phrase", "level": 1},
+        {"text": "then through the locks", "role": "coordinated_phrase", "level": 1},
+        {"text": "and finally on to the Union Canal", "role": "coordinated_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "then through ... 和 finally on to ... 都省略了重复的谓语 travel。",
+        "via a tunnel 表示穿越长城所借助的路径，under this wall 说明隧道的位置。",
+        "then 与 finally 清楚标示船只依次经过隧道、船闸和联合运河。"
+      ],
+      "expressions": [
+        {"text": "via a tunnel", "meaning_zh": "经由隧道"},
+        {"text": "and finally on to", "meaning_zh": "最后进入……"}
+      ]
+    }
+  ]
+}

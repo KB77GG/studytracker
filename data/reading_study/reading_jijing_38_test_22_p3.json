@@ -1,0 +1,682 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_38_test_22",
+  "passage_id": "reading_jijing_38_test_22_p3",
+  "passage_title": "Theory or Practice? —What is the point of research carried out by biz schools?",
+  "difficulty": "complex",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "Students go to universities and other academic institutions to prepare for their future.",
+      "translation": "学生进入大学及其他学术机构，为自己的未来做准备。",
+      "structure": [
+        {"text": "Students", "role": "subject", "level": 1},
+        {"text": "go to universities and other academic institutions", "role": "predicate", "level": 1},
+        {"text": "to prepare for their future", "role": "purpose_infinitive", "level": 2}
+      ],
+      "difficult_points": ["to prepare 是不定式，说明学生进入这些机构的目的。", "their 指代前面的 Students。"],
+      "expressions": [{"text": "prepare for", "meaning_zh": "为……做准备"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "We pay tuition and struggle through classes in the hopes that we can find a fulfilling and exciting career.",
+      "translation": "我们缴纳学费、努力熬过一门门课程，希望最终能找到一份充实而令人兴奋的职业。",
+      "structure": [
+        {"text": "We", "role": "subject", "level": 1},
+        {"text": "pay tuition and struggle through classes", "role": "compound_predicate", "level": 1},
+        {"text": "in the hopes", "role": "purpose_adverbial", "level": 1},
+        {"text": "that we can find a fulfilling and exciting career", "role": "content_clause", "level": 2}
+      ],
+      "difficult_points": ["pay 与 struggle 构成由 and 连接的并列谓语。", "that 从句具体说明 hopes 的内容。"],
+      "expressions": [{"text": "struggle through", "meaning_zh": "艰难完成；熬过"}, {"text": "in the hopes that", "meaning_zh": "希望……"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "But the choice of your university has a large infiuence on your future.",
+      "translation": "但是，你对大学的选择会对未来产生很大影响。",
+      "structure": [
+        {"text": "the choice of your university", "role": "subject", "level": 1},
+        {"text": "has", "role": "verb", "level": 1},
+        {"text": "a large infiuence", "role": "object", "level": 1},
+        {"text": "on your future", "role": "prepositional_complement", "level": 2}
+      ],
+      "difficult_points": ["of your university 修饰 choice，表示所选择的大学。", "原文 infiuence 为拼写异常，语义按 influence 理解。"],
+      "expressions": [{"text": "have an influence on", "meaning_zh": "对……产生影响"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "How can you know which university will prepare you the best for your future?",
+      "translation": "你怎样才能知道哪所大学能让你为未来做好最充分的准备？",
+      "structure": [
+        {"text": "How can you know", "role": "main_clause", "level": 1},
+        {"text": "which university", "role": "embedded_clause_subject", "level": 2},
+        {"text": "will prepare you the best for your future", "role": "embedded_clause_predicate", "level": 2}
+      ],
+      "difficult_points": ["which university 引导宾语从句，同时在从句中作主语。", "the best 在这里作程度状语，表示“最充分地”。"],
+      "expressions": [{"text": "prepare someone for", "meaning_zh": "使某人为……做好准备"}]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "Like other academic institutions, business schools are judged by the quality of the research carried out by their faculties.",
+      "translation": "与其他学术机构一样，商学院也以其教师所开展研究的质量来接受评判。",
+      "structure": [
+        {"text": "Like other academic institutions", "role": "comparison_adverbial", "level": 1},
+        {"text": "business schools", "role": "subject", "level": 1},
+        {"text": "are judged by the quality of the research", "role": "passive_predicate", "level": 1},
+        {"text": "carried out by their faculties", "role": "past_participle_modifier", "level": 2}
+      ],
+      "difficult_points": ["are judged 使用被动语态，by 后说明评判依据。", "carried out 是过去分词短语，后置修饰 research。"],
+      "expressions": [{"text": "be judged by", "meaning_zh": "以……来评判"}, {"text": "carry out research", "meaning_zh": "开展研究"}]
+    },
+    {
+      "id": "A-06", "paragraph_label": "A", "sentence_index": 6,
+      "sentence": "Professors must both teach students and also produce original research in their own field.",
+      "translation": "教授既要教学生，也必须在自己的领域开展原创研究。",
+      "structure": [
+        {"text": "Professors", "role": "subject", "level": 1},
+        {"text": "must both teach students", "role": "first_parallel_predicate", "level": 1},
+        {"text": "and also produce original research", "role": "second_parallel_predicate", "level": 1},
+        {"text": "in their own field", "role": "scope_adverbial", "level": 1}
+      ],
+      "difficult_points": ["both ... and also ... 连接两个并列的职责。", "their own field 指各位教授各自的专业领域。"],
+      "expressions": [{"text": "produce original research", "meaning_zh": "开展原创研究"}, {"text": "in one's own field", "meaning_zh": "在某人自己的领域"}]
+    },
+    {
+      "id": "A-07", "paragraph_label": "A", "sentence_index": 7,
+      "sentence": "The quality of this research is assessed by academic publications.",
+      "translation": "这类研究的质量通过学术发表成果来评估。",
+      "structure": [
+        {"text": "The quality of this research", "role": "subject", "level": 1},
+        {"text": "is assessed", "role": "passive_predicate", "level": 1},
+        {"text": "by academic publications", "role": "means_adverbial", "level": 1}
+      ],
+      "difficult_points": ["is assessed 是被动语态，意为“被评估”。", "by academic publications 在语境中表示评估所依据的学术发表成果。"],
+      "expressions": [{"text": "be assessed by", "meaning_zh": "依据……评估"}]
+    },
+    {
+      "id": "A-08", "paragraph_label": "A", "sentence_index": 8,
+      "sentence": "At the same time, universities have another responsibility to equip their students for the real world, however that is defined.",
+      "translation": "与此同时，大学还负有另一项责任：让学生具备应对现实世界的能力——无论人们如何界定这个现实世界。",
+      "structure": [
+        {"text": "universities", "role": "subject", "level": 1},
+        {"text": "have another responsibility", "role": "predicate", "level": 1},
+        {"text": "to equip their students for the real world", "role": "infinitive_modifier", "level": 2},
+        {"text": "however that is defined", "role": "concessive_clause", "level": 2}
+      ],
+      "difficult_points": ["to equip ... 具体说明 responsibility 的内容。", "however that is defined 表示让步，其中 that 指代 the real world。"],
+      "expressions": [{"text": "equip someone for", "meaning_zh": "使某人具备应对……的能力"}, {"text": "at the same time", "meaning_zh": "与此同时"}]
+    },
+    {
+      "id": "A-09", "paragraph_label": "A", "sentence_index": 9,
+      "sentence": "Most students learning from professors will not go into academics themselves—so how do academics best prepare them for their future careers, whatever that may be?",
+      "translation": "大多数跟随教授学习的学生自己不会投身学术界——那么，学者究竟怎样才能让他们为未来的职业做好充分准备，无论那是什么职业？",
+      "structure": [
+        {"text": "Most students learning from professors", "role": "subject", "level": 1},
+        {"text": "will not go into academics themselves", "role": "predicate", "level": 1},
+        {"text": "how do academics best prepare them for their future careers", "role": "resulting_question", "level": 1},
+        {"text": "whatever that may be", "role": "concessive_clause", "level": 2}
+      ],
+      "difficult_points": ["learning from professors 是现在分词短语，后置修饰 students。", "whatever that may be 中 that 指 future careers，表示“不论具体是什么”。"],
+      "expressions": [{"text": "go into academics", "meaning_zh": "进入学术界"}, {"text": "prepare someone for a career", "meaning_zh": "使某人为职业生涯做好准备"}]
+    },
+    {
+      "id": "A-10", "paragraph_label": "A", "sentence_index": 10,
+      "sentence": "Whether academic research actually produces anything that is useful to the practice of business, or even whether it is its job to do so, are questions that can provoke vigorous arguments on campus.",
+      "translation": "学术研究是否真的能产出对商业实践有用的东西，乃至这样做是否本就是它的职责，这些问题都会在校园里引发激烈争论。",
+      "structure": [
+        {"text": "Whether academic research actually produces anything that is useful to the practice of business", "role": "first_subject_clause", "level": 2},
+        {"text": "or even whether it is its job to do so", "role": "second_subject_clause", "level": 2},
+        {"text": "are questions", "role": "main_predicate", "level": 1},
+        {"text": "that can provoke vigorous arguments on campus", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["两个 whether 从句由 or even 连接，共同充当句子主语。", "第一个 that 修饰 anything；句末 that 则修饰 questions。", "do so 代指 produce anything useful to business practice。"],
+      "expressions": [{"text": "the practice of business", "meaning_zh": "商业实践"}, {"text": "provoke vigorous arguments", "meaning_zh": "引发激烈争论"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 11,
+      "sentence": "The debate, which first fiared during the 1950s, was reignited in August, when AACSB International. the most widely recognised global accrediting agency for business schools, announced it would consider changing the way it evaluates research.",
+      "translation": "这场争论最早在20世纪50年代爆发，并于8月再度燃起；当时，全球最受认可的商学院认证机构 AACSB International 宣布，将考虑改变其评估研究的方式。",
+      "structure": [
+        {"text": "The debate", "role": "subject", "level": 1},
+        {"text": "which first fiared during the 1950s", "role": "relative_clause", "level": 2},
+        {"text": "was reignited in August", "role": "passive_predicate", "level": 1},
+        {"text": "when AACSB International. the most widely recognised global accrediting agency for business schools, announced it would consider changing the way it evaluates research", "role": "time_clause", "level": 2}
+      ],
+      "difficult_points": ["which 从句补充说明 debate 最早出现的时间。", "when 引导时间从句；机构名称后的句点是源文异常，后面的名词短语实际是同位语。", "it evaluates research 是省略关系词的定语从句，修饰 the way。"],
+      "expressions": [{"text": "reignite a debate", "meaning_zh": "重新引发争论"}, {"text": "consider doing", "meaning_zh": "考虑做某事"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 12,
+      "sentence": "The news followed rather damning criticism in 2002 from Jeffrey Pfefier. a Stanford professor, and Christina Fong of Washington University, which questioned whether business education in its current guise was sustainable.",
+      "translation": "在这则消息之前，2002年斯坦福大学教授 Jeffrey Pfefier 与华盛顿大学的 Christina Fong 曾提出相当尖锐的批评，质疑当时形态下的商科教育能否持续。",
+      "structure": [
+        {"text": "The news", "role": "subject", "level": 1},
+        {"text": "followed rather damning criticism in 2002", "role": "predicate", "level": 1},
+        {"text": "from Jeffrey Pfefier. a Stanford professor, and Christina Fong of Washington University", "role": "source_modifier", "level": 2},
+        {"text": "which questioned whether business education in its current guise was sustainable", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["followed 在时间关系上表示这则消息出现在批评之后。", "Pfefier 后的句点是源文异常，a Stanford professor 实际是同位语。", "whether 引导 questioned 的宾语从句。"],
+      "expressions": [{"text": "damning criticism", "meaning_zh": "严厉且破坏性的批评"}, {"text": "in its current guise", "meaning_zh": "以其当前形态"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 13,
+      "sentence": "The study found that traditional modes of academia were not adequately preparing students for the kind of careers they faced in current times.",
+      "translation": "该研究发现，传统的学术模式未能充分帮助学生为当下所面对的职业类型做好准备。",
+      "structure": [
+        {"text": "The study found", "role": "main_clause", "level": 1},
+        {"text": "that traditional modes of academia were not adequately preparing students", "role": "object_clause", "level": 2},
+        {"text": "for the kind of careers", "role": "prepositional_complement", "level": 2},
+        {"text": "they faced in current times", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["that 从句是 found 的宾语。", "they faced ... 是省略关系词的定语从句，修饰 careers。"],
+      "expressions": [{"text": "traditional modes of academia", "meaning_zh": "传统学术模式"}, {"text": "adequately prepare someone for", "meaning_zh": "使某人为……做好充分准备"}]
+    },
+    {
+      "id": "B-04", "paragraph_label": "B", "sentence_index": 14,
+      "sentence": "The most controversial recommendation in AACSB's draft report (which was sent round to administrators for their comment) is that the schools should be required to demonstrate the value of their faculties'research not simply by listing its citations in journals, but by demonstrating the impact it has in the professional world.",
+      "translation": "AACSB 草案报告中最具争议的建议（该报告曾传阅给管理人员征求意见）是：不应只列举教师研究在期刊中的引用次数，而应展示它在专业领域产生的影响，以此证明研究的价值。",
+      "structure": [
+        {"text": "The most controversial recommendation in AACSB's draft report", "role": "subject", "level": 1},
+        {"text": "which was sent round to administrators for their comment", "role": "relative_clause", "level": 2},
+        {"text": "is that the schools should be required to demonstrate the value of their faculties'research", "role": "predicative_clause", "level": 2},
+        {"text": "not simply by listing its citations in journals, but by demonstrating the impact it has in the professional world", "role": "contrastive_means_adverbial", "level": 3}
+      ],
+      "difficult_points": ["括号内 which 从句修饰 AACSB's draft report。", "that 引导表语从句，说明 recommendation 的具体内容。", "not simply by ... but by ... 对比两种证明研究价值的方式；it has 是修饰 impact 的省略关系词定语从句。"],
+      "expressions": [{"text": "be required to", "meaning_zh": "被要求做……"}, {"text": "demonstrate the value of", "meaning_zh": "证明……的价值"}, {"text": "have an impact in", "meaning_zh": "在……领域产生影响"}]
+    },
+    {
+      "id": "B-05", "paragraph_label": "B", "sentence_index": 15,
+      "sentence": "New qualifiers, such as average incomes, student placement in top firms and business collaborations would now be considered just as important as academic publications.",
+      "translation": "平均收入、学生进入顶尖公司的就业情况以及商业合作等新评估指标，如今将被视为与学术发表同样重要。",
+      "structure": [
+        {"text": "New qualifiers", "role": "subject", "level": 1},
+        {"text": "such as average incomes, student placement in top firms and business collaborations", "role": "example_apposition", "level": 2},
+        {"text": "would now be considered", "role": "passive_predicate", "level": 1},
+        {"text": "just as important as academic publications", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["such as 后列举 qualifiers 的具体例子。", "as important as 构成同级比较，表示这些指标与学术发表同等重要。"],
+      "expressions": [{"text": "be considered as important as", "meaning_zh": "被视为与……同等重要"}, {"text": "student placement", "meaning_zh": "学生就业安置情况"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "AACSB justifies its stance by saying that it wants schools and faculty to play to their strengths, whether they be in pedagogy, in the research of practical applications, or in scholarly endeavor.",
+      "translation": "AACSB 为自身立场辩护称，它希望学校和教师发挥各自优势，无论优势是在教学法、实际应用研究还是学术探索方面。",
+      "structure": [
+        {"text": "AACSB justifies its stance", "role": "main_clause", "level": 1},
+        {"text": "by saying that it wants schools and faculty to play to their strengths", "role": "means_adverbial", "level": 2},
+        {"text": "whether they be in pedagogy, in the research of practical applications, or in scholarly endeavor", "role": "concessive_clause", "level": 2}
+      ],
+      "difficult_points": ["by saying ... 说明 AACSB 为立场辩护的方式。", "whether they be ... 使用虚拟式原形 be，表示“无论这些优势体现在哪里”。", "they 指代 schools and faculty 的 strengths，而非学校和教师本身。"],
+      "expressions": [{"text": "justify one's stance", "meaning_zh": "为某人的立场辩护"}, {"text": "play to one's strengths", "meaning_zh": "发挥某人的优势"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 17,
+      "sentence": "Traditionally, universities operate in a pyramid structure.",
+      "translation": "传统上，大学以金字塔式结构运作。",
+      "structure": [
+        {"text": "Traditionally", "role": "sentence_adverbial", "level": 1},
+        {"text": "universities", "role": "subject", "level": 1},
+        {"text": "operate", "role": "verb", "level": 1},
+        {"text": "in a pyramid structure", "role": "manner_adverbial", "level": 1}
+      ],
+      "difficult_points": ["Traditionally 修饰整句，交代这种模式长期以来如此。", "in a pyramid structure 说明大学的组织运作方式。"],
+      "expressions": [{"text": "operate in a pyramid structure", "meaning_zh": "以金字塔式结构运作"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 18,
+      "sentence": "Everyone enters and stays in an attempt to be successful in their academic field.",
+      "translation": "每个人进入并留在这一体系中，努力在自己的学术领域取得成功。",
+      "structure": [
+        {"text": "Everyone", "role": "subject", "level": 1},
+        {"text": "enters and stays", "role": "compound_predicate", "level": 1},
+        {"text": "in an attempt", "role": "purpose_adverbial", "level": 1},
+        {"text": "to be successful in their academic field", "role": "infinitive_complement", "level": 2}
+      ],
+      "difficult_points": ["enters and stays 省略了语境中可推知的宾语，即大学学术体系。", "to be successful ... 说明 attempt 的具体目标。"],
+      "expressions": [{"text": "in an attempt to", "meaning_zh": "试图；为了"}, {"text": "be successful in", "meaning_zh": "在……方面取得成功"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 19,
+      "sentence": "A psychology professor must publish competi tive research in the top neuroscience journals.",
+      "translation": "一位心理学教授必须在顶尖神经科学期刊上发表有竞争力的研究。",
+      "structure": [
+        {"text": "A psychology professor", "role": "subject", "level": 1},
+        {"text": "must publish", "role": "modal_predicate", "level": 1},
+        {"text": "competi tive research", "role": "object", "level": 1},
+        {"text": "in the top neuroscience journals", "role": "place_adverbial", "level": 1}
+      ],
+      "difficult_points": ["must 表示在该学术体系中的必要要求。", "原文 competi tive 被异常断开，语义按 competitive 理解并保留原文写法。"],
+      "expressions": [{"text": "publish research", "meaning_zh": "发表研究成果"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 20,
+      "sentence": "A Cultural Studies professor must send graduate students on new field research expeditions to be taken seriously.",
+      "translation": "一位文化研究教授必须派研究生开展新的实地考察，才能得到认真对待。",
+      "structure": [
+        {"text": "A Cultural Studies professor", "role": "subject", "level": 1},
+        {"text": "must send graduate students", "role": "predicate", "level": 1},
+        {"text": "on new field research expeditions", "role": "object_complement", "level": 1},
+        {"text": "to be taken seriously", "role": "purpose_infinitive", "level": 2}
+      ],
+      "difficult_points": ["send someone on ... 表示派某人参加某项活动。", "to be taken seriously 是被动不定式，说明教授这样做的目的。"],
+      "expressions": [{"text": "field research", "meaning_zh": "实地研究"}, {"text": "be taken seriously", "meaning_zh": "得到认真对待"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 21,
+      "sentence": "This research is the core of a university's output.",
+      "translation": "这类研究是大学产出的核心。",
+      "structure": [
+        {"text": "This research", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "the core of a university's output", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["This research 回指前两句所描述的竞争性研究和实地研究。", "the core of ... 是表语，强调研究在大学产出中的中心地位。"],
+      "expressions": [{"text": "the core of", "meaning_zh": "……的核心"}]
+    },
+    {
+      "id": "C-07", "paragraph_label": "C", "sentence_index": 22,
+      "sentence": "And research of any kind is expensive—AACSB points out that business schools in America alone spend more than $320m a year on it.",
+      "translation": "而且任何类型的研究都耗资不菲——AACSB 指出，仅美国的商学院每年在研究上的支出就超过3.2亿美元。",
+      "structure": [
+        {"text": "research of any kind is expensive", "role": "first_main_clause", "level": 1},
+        {"text": "AACSB points out", "role": "second_main_clause", "level": 1},
+        {"text": "that business schools in America alone spend more than $320m a year on it", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["破折号连接“研究昂贵”这一判断与 AACSB 提供的证据。", "alone 修饰 in America，强调仅美国一地；it 指代 research。"],
+      "expressions": [{"text": "point out that", "meaning_zh": "指出……"}, {"text": "spend money on", "meaning_zh": "在……上花钱"}]
+    },
+    {
+      "id": "C-08", "paragraph_label": "C", "sentence_index": 23,
+      "sentence": "So it seems legitimate to ask for,'what purpose it is undertaken?",
+      "translation": "因此，追问开展这些研究究竟是为了什么，似乎是合理的。",
+      "structure": [
+        {"text": "it", "role": "dummy_subject", "level": 1},
+        {"text": "seems legitimate", "role": "linking_predicate", "level": 1},
+        {"text": "to ask", "role": "real_subject_infinitive", "level": 2},
+        {"text": "for,'what purpose it is undertaken", "role": "embedded_question", "level": 3}
+      ],
+      "difficult_points": ["it 是形式主语，真正主语是后面的 to ask。", "it is undertaken 使用被动语态，其中 it 指 research。", "for 后的逗号和引号为源文异常，理解为询问 for what purpose。"],
+      "expressions": [{"text": "it seems legitimate to", "meaning_zh": "做……似乎是合理的"}, {"text": "for what purpose", "meaning_zh": "出于什么目的"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 24,
+      "sentence": "If a school chose to specialise in professional outputs rather than academic outputs, it could use such a large sum of money and redirect it into more fruitful programs.",
+      "translation": "如果一所学校选择专注于职业成果而非学术成果，就可以利用这笔巨款，把它转投到更有成效的项目中。",
+      "structure": [
+        {"text": "If a school chose to specialise in professional outputs rather than academic outputs", "role": "conditional_clause", "level": 2},
+        {"text": "it", "role": "main_clause_subject", "level": 1},
+        {"text": "could use such a large sum of money", "role": "first_main_predicate", "level": 1},
+        {"text": "and redirect it into more fruitful programs", "role": "second_main_predicate", "level": 1}
+      ],
+      "difficult_points": ["If 从句用过去式 chose，主句用 could，表达假设情形。", "rather than 对比 professional outputs 与 academic outputs；两个 it 分别指 school 和 money。"],
+      "expressions": [{"text": "specialise in", "meaning_zh": "专注于；专门从事"}, {"text": "rather than", "meaning_zh": "而不是"}, {"text": "redirect ... into", "meaning_zh": "把……转投到……"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 25,
+      "sentence": "For example, if a business school wanted a larger presence of employees at top financial firms, this money may be better spent on a career center which focuses on building the skills of students, rather than paying for more high-level research to be done through the effort of faculty.",
+      "translation": "例如，如果一所商学院希望有更多毕业生进入顶尖金融公司，这笔钱或许更应该用于建设一个着重培养学生技能的就业中心，而不是投入更多资金、依靠教师去完成高水平研究。",
+      "structure": [
+        {"text": "if a business school wanted a larger presence of employees at top financial firms", "role": "conditional_clause", "level": 2},
+        {"text": "this money may be better spent on a career center", "role": "main_clause", "level": 1},
+        {"text": "which focuses on building the skills of students", "role": "relative_clause", "level": 2},
+        {"text": "rather than paying for more high-level research to be done through the effort of faculty", "role": "contrastive_adverbial", "level": 2}
+      ],
+      "difficult_points": ["which 从句修饰 career center，说明其工作重点。", "rather than paying ... 与 be spent on ... 对比两种资金用途。", "to be done 是被动不定式，修饰 research。"],
+      "expressions": [{"text": "be better spent on", "meaning_zh": "更适合花在……上"}, {"text": "focus on doing", "meaning_zh": "专注于做……"}, {"text": "through the effort of", "meaning_zh": "通过……的努力"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 26,
+      "sentence": "A change in evaluation could also open the door to inviting more professionals from different fields to teach as adjuncts.",
+      "translation": "评估方式的改变还可能为邀请更多不同领域的专业人士担任兼职教师打开大门。",
+      "structure": [
+        {"text": "A change in evaluation", "role": "subject", "level": 1},
+        {"text": "could also open the door", "role": "predicate", "level": 1},
+        {"text": "to inviting more professionals from different fields", "role": "prepositional_complement", "level": 2},
+        {"text": "to teach as adjuncts", "role": "purpose_infinitive", "level": 3}
+      ],
+      "difficult_points": ["open the door to 中 to 是介词，因此后接 inviting。", "to teach as adjuncts 说明受邀专业人士要承担的工作。"],
+      "expressions": [{"text": "open the door to", "meaning_zh": "为……创造机会"}, {"text": "teach as adjuncts", "meaning_zh": "担任兼职教师授课"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 27,
+      "sentence": "Students could take accredited courses from people who are currently working in their dream field.",
+      "translation": "学生可以向正在自己理想行业工作的人士学习经认证的课程。",
+      "structure": [
+        {"text": "Students", "role": "subject", "level": 1},
+        {"text": "could take accredited courses", "role": "predicate", "level": 1},
+        {"text": "from people", "role": "source_adverbial", "level": 1},
+        {"text": "who are currently working in their dream field", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["who 引导定语从句，修饰授课的 people。", "their dream field 在语义上指学生向往的行业领域。"],
+      "expressions": [{"text": "take accredited courses", "meaning_zh": "修读经认证的课程"}, {"text": "dream field", "meaning_zh": "理想的职业领域"}]
+    },
+    {
+      "id": "D-05", "paragraph_label": "D", "sentence_index": 28,
+      "sentence": "The AACSB insists that universities answer the question as to why research is the most critical component of traditional education.",
+      "translation": "AACSB 坚持要求大学回答这样一个问题：为什么研究是传统教育中最关键的组成部分。",
+      "structure": [
+        {"text": "The AACSB insists", "role": "main_clause", "level": 1},
+        {"text": "that universities answer the question", "role": "object_clause", "level": 2},
+        {"text": "as to why research is the most critical component of traditional education", "role": "question_content_clause", "level": 3}
+      ],
+      "difficult_points": ["insists 后的 that 从句使用动词原形 answer，体现要求性质的虚拟语气。", "as to why ... 具体说明 the question 的内容。"],
+      "expressions": [{"text": "insist that", "meaning_zh": "坚持要求……"}, {"text": "as to why", "meaning_zh": "关于为什么……"}, {"text": "critical component", "meaning_zh": "关键组成部分"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 29,
+      "sentence": "On one level, the question is simple to answer.",
+      "translation": "从一个层面看，这个问题很容易回答。",
+      "structure": [
+        {"text": "On one level", "role": "perspective_adverbial", "level": 1},
+        {"text": "the question", "role": "subject", "level": 1},
+        {"text": "is simple", "role": "linking_predicate", "level": 1},
+        {"text": "to answer", "role": "adjective_complement", "level": 2}
+      ],
+      "difficult_points": ["On one level 限定判断成立的角度，暗示还有更复杂的另一面。", "to answer 补充说明 simple 的具体方面。"],
+      "expressions": [{"text": "on one level", "meaning_zh": "从一个层面看"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 30,
+      "sentence": "Research in business schools, as anywhere else, is about expanding the boundaries of knowledge; it thrives on answering unasked questions.",
+      "translation": "商学院的研究与其他地方的研究一样，旨在拓展知识边界；它依靠回答尚未有人提出的问题而蓬勃发展。",
+      "structure": [
+        {"text": "Research in business schools", "role": "first_clause_subject", "level": 1},
+        {"text": "as anywhere else", "role": "parenthetical_comparison", "level": 1},
+        {"text": "is about expanding the boundaries of knowledge", "role": "first_clause_predicate", "level": 1},
+        {"text": "it thrives on answering unasked questions", "role": "second_main_clause", "level": 1}
+      ],
+      "difficult_points": ["as anywhere else 是插入性的比较，表示商学院研究与其他领域相同。", "分号连接两个紧密相关的独立分句；it 指代 Research。"],
+      "expressions": [{"text": "expand the boundaries of knowledge", "meaning_zh": "拓展知识边界"}, {"text": "thrive on", "meaning_zh": "依靠……而蓬勃发展"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 31,
+      "sentence": "Surely this pursuit of knowledge is still important to the university system.",
+      "translation": "毫无疑问，这种对知识的追求对大学体系仍然很重要。",
+      "structure": [
+        {"text": "Surely", "role": "stance_adverbial", "level": 1},
+        {"text": "this pursuit of knowledge", "role": "subject", "level": 1},
+        {"text": "is still important", "role": "linking_predicate", "level": 1},
+        {"text": "to the university system", "role": "adjective_complement", "level": 1}
+      ],
+      "difficult_points": ["this pursuit of knowledge 回指上一句所说的拓展知识边界和回答未知问题。", "Surely 表达作者对此判断的强烈肯定。"],
+      "expressions": [{"text": "pursuit of knowledge", "meaning_zh": "对知识的追求"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 32,
+      "sentence": "Our society progresses because we learn how to do things in new ways, a process which depends heavily on research and academics.",
+      "translation": "我们的社会之所以进步，是因为我们学会用新方法做事，而这一过程高度依赖研究和学术界。",
+      "structure": [
+        {"text": "Our society progresses", "role": "main_clause", "level": 1},
+        {"text": "because we learn how to do things in new ways", "role": "reason_clause", "level": 2},
+        {"text": "a process", "role": "apposition", "level": 1},
+        {"text": "which depends heavily on research and academics", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["because 从句解释社会进步的原因，其中 how to do ... 作 learn 的宾语。", "a process 是对前述学习新方法这一过程的同位概括，which 修饰它。"],
+      "expressions": [{"text": "in new ways", "meaning_zh": "以新的方式"}, {"text": "depend heavily on", "meaning_zh": "高度依赖"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 33,
+      "sentence": "But one cannot ignore the other obvious practical uses of research publications.",
+      "translation": "但人们也不能忽视研究成果发表所具有的其他显而易见的现实用途。",
+      "structure": [
+        {"text": "one", "role": "generic_subject", "level": 1},
+        {"text": "cannot ignore", "role": "modal_predicate", "level": 1},
+        {"text": "the other obvious practical uses of research publications", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["one 是泛指代词，表示一般意义上的“人们”。", "other 表明除推动知识进步之外，研究发表还有别的现实作用。"],
+      "expressions": [{"text": "practical uses of", "meaning_zh": "……的实际用途"}, {"text": "cannot ignore", "meaning_zh": "不能忽视"}]
+    },
+    {
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 34,
+      "sentence": "Research is also about cementing schools' and professors' reputations.",
+      "translation": "研究也关乎巩固学校和教授的声誉。",
+      "structure": [
+        {"text": "Research", "role": "subject", "level": 1},
+        {"text": "is also about", "role": "linking_predicate", "level": 1},
+        {"text": "cementing schools' and professors' reputations", "role": "gerund_complement", "level": 2}
+      ],
+      "difficult_points": ["be about 在这里表示研究还具有某种现实功能。", "cementing 是动名词，意为使学校与教授的声誉更加稳固。"],
+      "expressions": [{"text": "cement one's reputation", "meaning_zh": "巩固某人的声誉"}]
+    },
+    {
+      "id": "E-07", "paragraph_label": "E", "sentence_index": 35,
+      "sentence": "Schools gain kudos from their faculties' record of publication: which journals publish them, and how often.",
+      "translation": "学校会凭借教师的发表记录赢得声誉：论文由哪些期刊发表，以及发表频率如何。",
+      "structure": [
+        {"text": "Schools", "role": "subject", "level": 1},
+        {"text": "gain kudos", "role": "predicate", "level": 1},
+        {"text": "from their faculties' record of publication", "role": "source_adverbial", "level": 1},
+        {"text": "which journals publish them, and how often", "role": "explanatory_questions", "level": 2}
+      ],
+      "difficult_points": ["冒号后两个间接疑问成分具体解释 record of publication 包含什么。", "them 在语义上指各校教师的研究论文，而不是 Schools。"],
+      "expressions": [{"text": "gain kudos from", "meaning_zh": "因……赢得赞誉"}, {"text": "record of publication", "meaning_zh": "发表记录"}]
+    },
+    {
+      "id": "E-08", "paragraph_label": "E", "sentence_index": 36,
+      "sentence": "In some cases, such as with government-funded schools in Britain, it can affect how much money they receive.",
+      "translation": "在某些情况下，例如对英国由政府资助的学校而言，发表记录还会影响它们获得多少经费。",
+      "structure": [
+        {"text": "In some cases", "role": "scope_adverbial", "level": 1},
+        {"text": "such as with government-funded schools in Britain", "role": "example_parenthesis", "level": 1},
+        {"text": "it can affect", "role": "main_clause", "level": 1},
+        {"text": "how much money they receive", "role": "object_clause", "level": 2}
+      ],
+      "difficult_points": ["it 回指上一句的 faculties' record of publication。", "how much money ... 是宾语从句；they 指 government-funded schools。"],
+      "expressions": [{"text": "in some cases", "meaning_zh": "在某些情况下"}, {"text": "government-funded", "meaning_zh": "由政府资助的"}]
+    },
+    {
+      "id": "E-09", "paragraph_label": "E", "sentence_index": 37,
+      "sentence": "For professors, the mantra is often \"publish or perish\".",
+      "translation": "对教授而言，常见的信条是“不发表，就出局”。",
+      "structure": [
+        {"text": "For professors", "role": "perspective_adverbial", "level": 1},
+        {"text": "the mantra", "role": "subject", "level": 1},
+        {"text": "is often", "role": "linking_verb", "level": 1},
+        {"text": "publish or perish", "role": "subject_complement", "level": 1}
+      ],
+      "difficult_points": ["publish or perish 是省略主语的并列祈使式表达，概括学术界的生存压力。", "For professors 限定这条信条所针对的群体。"],
+      "expressions": [{"text": "publish or perish", "meaning_zh": "不发表就出局；发表或淘汰"}]
+    },
+    {
+      "id": "E-10", "paragraph_label": "E", "sentence_index": 38,
+      "sentence": "Their careers depend on being seen in the right journals.",
+      "translation": "他们的职业生涯取决于能否在合适的期刊上发表并获得曝光。",
+      "structure": [
+        {"text": "Their careers", "role": "subject", "level": 1},
+        {"text": "depend on", "role": "predicate", "level": 1},
+        {"text": "being seen in the right journals", "role": "passive_gerund_object", "level": 2}
+      ],
+      "difficult_points": ["Their 指上一句的 professors。", "being seen 是被动动名词，语境中指教授的成果出现在认可的期刊上。"],
+      "expressions": [{"text": "depend on doing", "meaning_zh": "取决于做……"}, {"text": "be seen in journals", "meaning_zh": "在期刊上发表并获得曝光"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 39,
+      "sentence": "But at a certain point, one has to wonder whether this research is being done for the benefit of the university or for the students the university aims to teach.",
+      "translation": "但到了一定阶段，人们不得不怀疑，这些研究究竟是为了大学的利益，还是为了大学旨在教育的学生。",
+      "structure": [
+        {"text": "at a certain point", "role": "time_adverbial", "level": 1},
+        {"text": "one has to wonder", "role": "main_clause", "level": 1},
+        {"text": "whether this research is being done for the benefit of the university or for the students", "role": "object_clause", "level": 2},
+        {"text": "the university aims to teach", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": ["whether ... or ... 提出研究服务对象的两种可能。", "is being done 是进行时的被动语态，强调研究正在持续进行。", "the university aims to teach 是省略关系词的定语从句，修饰 students。"],
+      "expressions": [{"text": "at a certain point", "meaning_zh": "到某个阶段"}, {"text": "for the benefit of", "meaning_zh": "为了……的利益"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 40,
+      "sentence": "Greater publications will attract greater funding, which will in turn be spent on better publications.",
+      "translation": "更多、更好的发表成果会吸引更多资金，而这些资金又会反过来用于产出更好的发表成果。",
+      "structure": [
+        {"text": "Greater publications", "role": "subject", "level": 1},
+        {"text": "will attract greater funding", "role": "predicate", "level": 1},
+        {"text": "which will in turn be spent on better publications", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": ["which 指代 greater funding，而不是 publications。", "in turn 表示资金随后又回到发表研究这一环节，形成循环。"],
+      "expressions": [{"text": "in turn", "meaning_zh": "继而；反过来"}, {"text": "be spent on", "meaning_zh": "被花在……上"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 41,
+      "sentence": "Students seeking to enter professions out of academia find this cycle frustrating, and often see their professors as being part of the \"Ivory Tower\" of academia, operating in a self-contained community that has little influence on the outside world.",
+      "translation": "希望进入学术界以外职业领域的学生觉得这种循环令人沮丧，并且常把教授视为学术“象牙塔”的一员：他们身处一个自我封闭、对外部世界影响甚微的群体。",
+      "structure": [
+        {"text": "Students seeking to enter professions out of academia", "role": "subject", "level": 1},
+        {"text": "find this cycle frustrating", "role": "first_predicate", "level": 1},
+        {"text": "and often see their professors as being part of the \"Ivory Tower\" of academia", "role": "second_predicate", "level": 1},
+        {"text": "operating in a self-contained community that has little influence on the outside world", "role": "participle_modifier", "level": 2}
+      ],
+      "difficult_points": ["seeking ... 是现在分词短语，修饰 Students。", "find this cycle frustrating 是“宾语＋宾补”结构；see ... as ... 表示“把……视为……”。", "operating 的逻辑主语是 professors；that 从句修饰 community。"],
+      "expressions": [{"text": "see ... as", "meaning_zh": "把……视为……"}, {"text": "Ivory Tower", "meaning_zh": "脱离现实的象牙塔"}, {"text": "have little influence on", "meaning_zh": "对……几乎没有影响"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 42,
+      "sentence": "The research is almost universally unread by real-world managers.",
+      "translation": "这些研究几乎普遍不被现实商业世界的管理者阅读。",
+      "structure": [
+        {"text": "The research", "role": "subject", "level": 1},
+        {"text": "is almost universally unread", "role": "linking_predicate", "level": 1},
+        {"text": "by real-world managers", "role": "agent_adverbial", "level": 1}
+      ],
+      "difficult_points": ["unread 是形容词化的过去分词，表示研究无人阅读。", "almost universally 强调这种不阅读现象接近普遍存在。"],
+      "expressions": [{"text": "real-world managers", "meaning_zh": "现实商业环境中的管理者"}, {"text": "almost universally", "meaning_zh": "几乎普遍地"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 43,
+      "sentence": "Part of the trouble is that the journals labour under a similar ethos.",
+      "translation": "问题的一部分在于，这些期刊也受类似理念支配。",
+      "structure": [
+        {"text": "Part of the trouble", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "that the journals labour under a similar ethos", "role": "predicative_clause", "level": 2}
+      ],
+      "difficult_points": ["that 从句作表语，具体解释 trouble 的一部分是什么。", "labour under 并非“劳动”，而是指处于某种理念或约束之下。"],
+      "expressions": [{"text": "part of the trouble", "meaning_zh": "问题的一部分"}, {"text": "labour under", "meaning_zh": "受……支配；苦于……"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 44,
+      "sentence": "They publish more than 20,000 articles each year.",
+      "translation": "这些期刊每年发表两万多篇文章。",
+      "structure": [
+        {"text": "They", "role": "subject", "level": 1},
+        {"text": "publish", "role": "verb", "level": 1},
+        {"text": "more than 20,000 articles", "role": "object", "level": 1},
+        {"text": "each year", "role": "time_adverbial", "level": 1}
+      ],
+      "difficult_points": ["They 回指上一句的 the journals。", "more than 修饰数量，强调年发表量超过两万篇。"],
+      "expressions": [{"text": "more than", "meaning_zh": "超过；多于"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 45,
+      "sentence": "Most of the research is highly quantitative, hypothesis-driven and esoteric.",
+      "translation": "大部分研究高度量化、由假设驱动，而且晦涩难懂。",
+      "structure": [
+        {"text": "Most of the research", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "highly quantitative, hypothesis-driven and esoteric", "role": "compound_subject_complement", "level": 1}
+      ],
+      "difficult_points": ["三个并列形容词共同描述 research 的特点。", "hypothesis-driven 是复合形容词，表示研究由假设而非实际问题驱动。"],
+      "expressions": [{"text": "hypothesis-driven", "meaning_zh": "由假设驱动的"}, {"text": "highly quantitative", "meaning_zh": "高度量化的"}]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 46,
+      "sentence": "As a result, it is almost universally unread by real-world managers.",
+      "translation": "因此，现实商业世界的管理者几乎普遍不会阅读这些研究。",
+      "structure": [
+        {"text": "As a result", "role": "result_adverbial", "level": 1},
+        {"text": "it", "role": "subject", "level": 1},
+        {"text": "is almost universally unread", "role": "linking_predicate", "level": 1},
+        {"text": "by real-world managers", "role": "agent_adverbial", "level": 1}
+      ],
+      "difficult_points": ["it 回指上一句的 Most of the research。", "As a result 表明无人阅读是研究过度量化、晦涩等特点造成的结果。"],
+      "expressions": [{"text": "as a result", "meaning_zh": "因此"}]
+    },
+    {
+      "id": "G-06", "paragraph_label": "G", "sentence_index": 47,
+      "sentence": "Much of the research criticises other published research.",
+      "translation": "许多研究的内容是在批评其他已经发表的研究。",
+      "structure": [
+        {"text": "Much of the research", "role": "subject", "level": 1},
+        {"text": "criticises", "role": "verb", "level": 1},
+        {"text": "other published research", "role": "object", "level": 1}
+      ],
+      "difficult_points": ["Much of 后接不可数名词 research，表示其中相当大的一部分。", "published 是过去分词作前置定语，修饰 other research。"],
+      "expressions": [{"text": "published research", "meaning_zh": "已发表的研究"}]
+    },
+    {
+      "id": "G-07", "paragraph_label": "G", "sentence_index": 48,
+      "sentence": "A paper in a 2006 issue of Strategy & Leadership commented that\"research is not designed with managers' needs in mind, nor is it communicated in the journals they read. For the most part, it has become a self-referential closed system irrelevant to corporate performance.\"",
+      "translation": "《Strategy & Leadership》2006年的一期论文评论道：“研究在设计时并未考虑管理者的需求，也没有通过他们阅读的期刊传播。总体而言，它已成为一个自我指涉、与企业绩效无关的封闭体系。”",
+      "structure": [
+        {"text": "A paper in a 2006 issue of Strategy & Leadership commented", "role": "reporting_clause", "level": 1},
+        {"text": "that\"research is not designed with managers' needs in mind", "role": "reported_content", "level": 2},
+        {"text": "nor is it communicated in the journals they read", "role": "inverted_parallel_clause", "level": 2},
+        {"text": "it has become a self-referential closed system irrelevant to corporate performance", "role": "second_reported_clause", "level": 2}
+      ],
+      "difficult_points": ["that 后引出论文评论的直接引语，原文在 that 与引号之间缺少空格。", "否定词 nor 置于句首触发部分倒装，形成 nor is it communicated。", "they read 是省略关系词的定语从句，修饰 journals；irrelevant ... 后置修饰 system。"],
+      "expressions": [{"text": "with someone's needs in mind", "meaning_zh": "考虑到某人的需求"}, {"text": "for the most part", "meaning_zh": "总体上；在很大程度上"}, {"text": "irrelevant to", "meaning_zh": "与……无关"}]
+    },
+    {
+      "id": "G-08", "paragraph_label": "G", "sentence_index": 49,
+      "sentence": "The AACSB demands that this segregation must change for the future of higher education.",
+      "translation": "AACSB 要求，为了高等教育的未来，这种割裂局面必须改变。",
+      "structure": [
+        {"text": "The AACSB demands", "role": "main_clause", "level": 1},
+        {"text": "that this segregation must change", "role": "object_clause", "level": 2},
+        {"text": "for the future of higher education", "role": "purpose_adverbial", "level": 2}
+      ],
+      "difficult_points": ["that 从句说明 AACSB 提出的要求。", "this segregation 指学术研究体系与现实管理实践之间的割裂。"],
+      "expressions": [{"text": "the future of higher education", "meaning_zh": "高等教育的未来"}]
+    },
+    {
+      "id": "G-09", "paragraph_label": "G", "sentence_index": 50,
+      "sentence": "If students must invest thousands of dollars for an education as part of their career path, the academics which serve the students should be more fully incorporated into the professional world.",
+      "translation": "既然学生必须投入数千美元接受教育，并将其作为职业道路的一部分，那么服务学生的学者就应当更充分地融入职业世界。",
+      "structure": [
+        {"text": "If students must invest thousands of dollars for an education as part of their career path", "role": "conditional_clause", "level": 2},
+        {"text": "the academics", "role": "main_clause_subject", "level": 1},
+        {"text": "which serve the students", "role": "relative_clause", "level": 2},
+        {"text": "should be more fully incorporated into the professional world", "role": "passive_main_predicate", "level": 1}
+      ],
+      "difficult_points": ["If 从句在这里不仅是假设，也构成作者提出要求的现实前提。", "which 从句修饰 academics；be incorporated into 是被动结构，表示被纳入职业世界。"],
+      "expressions": [{"text": "invest ... for an education", "meaning_zh": "为接受教育投入……"}, {"text": "as part of", "meaning_zh": "作为……的一部分"}, {"text": "be incorporated into", "meaning_zh": "被纳入；融入"}]
+    },
+    {
+      "id": "G-10", "paragraph_label": "G", "sentence_index": 51,
+      "sentence": "This means that universities must focus on other strengths outside of research, such as professional networks, technology skills, and connections with top business firms around the world.",
+      "translation": "这意味着大学必须关注研究之外的其他优势，例如职业网络、技术技能，以及与全球顶尖企业的联系。",
+      "structure": [
+        {"text": "This means", "role": "main_clause", "level": 1},
+        {"text": "that universities must focus on other strengths outside of research", "role": "object_clause", "level": 2},
+        {"text": "such as professional networks, technology skills, and connections with top business firms around the world", "role": "example_apposition", "level": 3}
+      ],
+      "difficult_points": ["This 回指上一句提出的“学者应更充分融入职业世界”。", "such as 后列举 research 之外的三类优势。"],
+      "expressions": [{"text": "focus on other strengths", "meaning_zh": "关注其他优势"}, {"text": "connections with", "meaning_zh": "与……的联系"}]
+    },
+    {
+      "id": "G-11", "paragraph_label": "G", "sentence_index": 52,
+      "sentence": "Though many universities resisted the report, today's world continues to change.",
+      "translation": "尽管许多大学抵制这份报告，当今世界仍在不断变化。",
+      "structure": [
+        {"text": "Though many universities resisted the report", "role": "concessive_clause", "level": 2},
+        {"text": "today's world", "role": "main_clause_subject", "level": 1},
+        {"text": "continues to change", "role": "main_clause_predicate", "level": 1}
+      ],
+      "difficult_points": ["Though 引导让步状语从句，突出大学的抵制无法阻止世界变化。", "continues to change 强调变化仍在持续，而不是一次性事件。"],
+      "expressions": [{"text": "resist the report", "meaning_zh": "抵制该报告"}, {"text": "continue to change", "meaning_zh": "持续变化"}]
+    },
+    {
+      "id": "G-12", "paragraph_label": "G", "sentence_index": 53,
+      "sentence": "The universities which prepare students for our changing future have little choice but to change with new trends and new standards.",
+      "translation": "那些要帮助学生为不断变化的未来做好准备的大学，几乎别无选择，只能顺应新趋势和新标准作出改变。",
+      "structure": [
+        {"text": "The universities", "role": "subject", "level": 1},
+        {"text": "which prepare students for our changing future", "role": "relative_clause", "level": 2},
+        {"text": "have little choice", "role": "predicate", "level": 1},
+        {"text": "but to change with new trends and new standards", "role": "infinitive_complement", "level": 2}
+      ],
+      "difficult_points": ["which 从句限定 universities，指承担面向未来培养学生职责的大学。", "have little choice but to ... 是固定结构，表示“几乎别无选择，只能……”。"],
+      "expressions": [{"text": "have little choice but to", "meaning_zh": "几乎别无选择，只能……"}, {"text": "change with new trends", "meaning_zh": "顺应新趋势作出改变"}]
+    }
+  ]
+}

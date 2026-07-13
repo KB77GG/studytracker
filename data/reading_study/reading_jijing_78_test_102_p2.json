@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_jijing",
+  "test_id": "reading_jijing_78_test_102",
+  "passage_id": "reading_jijing_78_test_102_p2",
+  "passage_title": "The sense of flavour 2",
+  "difficulty": "medium",
+  "sentences": [
+    {
+      "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
+      "sentence": "Scientists now believe that human beings acquired the sense of taste as a way to avoid being poisoned.",
+      "translation": "科学家如今认为，人类获得味觉，是为了借此避免中毒。",
+      "structure": [{"text": "Scientists now believe", "role": "main_clause", "level": 1}, {"text": "that human beings acquired the sense of taste", "role": "object_clause", "level": 2}, {"text": "as a way to avoid being poisoned", "role": "purpose_complement", "level": 3}],
+      "difficult_points": ["that 从句是 believe 的宾语，说明科学家的观点。", "as a way to... 表示味觉所发挥的生存功能；being poisoned 是动名词被动形式。"],
+      "expressions": [{"text": "acquire the sense of taste", "meaning_zh": "获得味觉"}, {"text": "as a way to", "meaning_zh": "作为……的方法"}, {"text": "avoid being poisoned", "meaning_zh": "避免中毒"}]
+    },
+    {
+      "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
+      "sentence": "Edible plants generally taste sweet; deadly ones, bitter.",
+      "translation": "可食用植物通常味甜，而致命植物味苦。",
+      "structure": [{"text": "Edible plants generally taste sweet", "role": "main_clause", "level": 1}, {"text": "deadly ones, bitter", "role": "elliptical_contrast_clause", "level": 1}],
+      "difficult_points": ["ones 代替 plants，避免重复。", "分号后省略了 generally taste，完整意义是 deadly ones generally taste bitter。"],
+      "expressions": [{"text": "edible plants", "meaning_zh": "可食用植物"}]
+    },
+    {
+      "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
+      "sentence": "Taste is supposed to help us differentiate food that's good for us from food that's not.",
+      "translation": "味觉被认为能帮助我们区分有益于身体的食物与无益的食物。",
+      "structure": [{"text": "Taste is supposed", "role": "passive_reporting_clause", "level": 1}, {"text": "to help us differentiate food", "role": "subject_complement", "level": 2}, {"text": "that's good for us", "role": "relative_clause", "level": 3}, {"text": "from food that's not", "role": "contrast_complement", "level": 3}],
+      "difficult_points": ["be supposed to 在此表示普遍认为的功能，不是义务。", "differentiate A from B 表示区分两类食物；第二个 that's not 省略了 good for us。"],
+      "expressions": [{"text": "be supposed to", "meaning_zh": "被认为会"}, {"text": "differentiate A from B", "meaning_zh": "区分 A 与 B"}, {"text": "be good for", "meaning_zh": "对……有益"}]
+    },
+    {
+      "id": "A-04", "paragraph_label": "A", "sentence_index": 4,
+      "sentence": "The taste buds on our tongues can detect the presence of half a dozen or so basic tastes, including sweet, sour, bitter, salty, and umami (a taste discovered by Japanese researchers, a rich and full sense of deliciousness triggered by amino acids in foods such as shellfish, mushrooms, potatoes, and seaweed).",
+      "translation": "舌头上的味蕾可以检测出大约六种基本味道，包括甜、酸、苦、咸和鲜味；鲜味由日本研究人员发现，是食物中氨基酸触发的一种浓郁、饱满的美味感，例如贝类、蘑菇、土豆和海藻中的氨基酸。",
+      "structure": [{"text": "The taste buds on our tongues can detect the presence of half a dozen or so basic tastes", "role": "main_clause", "level": 1}, {"text": "including sweet, sour, bitter, salty, and umami", "role": "example_supplement", "level": 2}, {"text": "a taste discovered by Japanese researchers", "role": "apposition", "level": 2}, {"text": "a rich and full sense of deliciousness triggered by amino acids in foods such as shellfish, mushrooms, potatoes, and seaweed", "role": "apposition", "level": 2}],
+      "difficult_points": ["including... 列举基本味道；括号内两个同位语解释 umami。", "discovered... 与 triggered... 都是过去分词短语，分别修饰 taste 和 sense。", "such as 后列举富含相关氨基酸的食物。"],
+      "expressions": [{"text": "taste buds", "meaning_zh": "味蕾"}, {"text": "detect the presence of", "meaning_zh": "检测到……的存在"}, {"text": "half a dozen or so", "meaning_zh": "大约六个"}, {"text": "be triggered by", "meaning_zh": "由……触发"}]
+    },
+    {
+      "id": "A-05", "paragraph_label": "A", "sentence_index": 5,
+      "sentence": "Taste buds offers a limited means of detection, however, compared with the human olfactory system, which can perceive thousands of different chemical aromas.",
+      "translation": "不过，与能够感知数千种不同化学气味的人类嗅觉系统相比，味蕾提供的检测能力十分有限。",
+      "structure": [{"text": "Taste buds offers a limited means of detection", "role": "main_clause", "level": 1}, {"text": "compared with the human olfactory system", "role": "comparison_adverbial", "level": 2}, {"text": "which can perceive thousands of different chemical aromas", "role": "nonrestrictive_relative_clause", "level": 2}],
+      "difficult_points": ["compared with... 是过去分词比较结构；which 指 olfactory system。", "原文复数主语 Taste buds 后使用 offers，存在主谓一致异常。"],
+      "expressions": [{"text": "a limited means of detection", "meaning_zh": "有限的检测手段"}, {"text": "compared with", "meaning_zh": "与……相比"}, {"text": "olfactory system", "meaning_zh": "嗅觉系统"}]
+    },
+    {
+      "id": "A-06", "paragraph_label": "A", "sentence_index": 6,
+      "sentence": "Indeed, 'flavor' is primarily the smell of gases being released by the chemicals you've just put in your mouth.",
+      "translation": "事实上，“风味”主要是你刚放入口中的化学物质释放出的气体所产生的气味。",
+      "structure": [{"text": "'flavor' is primarily the smell of gases", "role": "main_clause", "level": 1}, {"text": "being released by the chemicals", "role": "present_participle_passive_modifier", "level": 2}, {"text": "you've just put in your mouth", "role": "relative_clause", "level": 3}],
+      "difficult_points": ["being released... 是被动的现在分词短语，修饰 gases。", "the chemicals 后省略关系代词 that；you've 是 you have，使用现在完成时。"],
+      "expressions": [{"text": "be primarily", "meaning_zh": "主要是"}, {"text": "be released by", "meaning_zh": "由……释放"}, {"text": "put in your mouth", "meaning_zh": "放入口中"}]
+    },
+    {
+      "id": "A-07", "paragraph_label": "A", "sentence_index": 7,
+      "sentence": "The aroma of food can be responsible for as much as 90% of its flavor.",
+      "translation": "食物的香气可能占其风味的多达90%。",
+      "structure": [{"text": "The aroma of food", "role": "subject", "level": 1}, {"text": "can be responsible for", "role": "predicate", "level": 1}, {"text": "as much as 90% of its flavor", "role": "prepositional_complement", "level": 1}],
+      "difficult_points": ["be responsible for 在此表示“构成、造成”，而非承担责任。", "its 指 food；as much as 强调比例可高达90%。"],
+      "expressions": [{"text": "be responsible for", "meaning_zh": "构成；造成"}, {"text": "as much as", "meaning_zh": "多达"}]
+    },
+    {
+      "id": "B-01", "paragraph_label": "B", "sentence_index": 8,
+      "sentence": "The act of drinking, sucking or chewing a substance releases its volatile gases.",
+      "translation": "饮用、吮吸或咀嚼某种物质的动作会释放其中的挥发性气体。",
+      "structure": [{"text": "The act of drinking, sucking or chewing a substance", "role": "subject", "level": 1}, {"text": "releases its volatile gases", "role": "predicate", "level": 1}],
+      "difficult_points": ["主语中心词是单数 act，三个动名词由 or 并列说明动作类型。", "its 指 a substance；volatile gases 指容易挥发的气体成分。"],
+      "expressions": [{"text": "the act of doing", "meaning_zh": "做某事的动作"}, {"text": "volatile gases", "meaning_zh": "挥发性气体"}]
+    },
+    {
+      "id": "B-02", "paragraph_label": "B", "sentence_index": 9,
+      "sentence": "They flow out of the mouth and up the nostrils, or up the passageway at the back of the mouth, to a thin layer of nerve cells called the olfactory epithelium, located at the base of the nose, right between the eyes.",
+      "translation": "这些气体从口腔逸出并向上进入鼻孔，或者沿口腔后部的通道上行，到达一层称为嗅上皮的薄薄神经细胞；它位于鼻底，恰好在两眼之间。",
+      "structure": [{"text": "They flow out of the mouth and up the nostrils", "role": "main_clause", "level": 1}, {"text": "or up the passageway at the back of the mouth", "role": "coordinate_path_adverbial", "level": 2}, {"text": "to a thin layer of nerve cells called the olfactory epithelium", "role": "direction_adverbial", "level": 2}, {"text": "located at the base of the nose, right between the eyes", "role": "past_participle_modifier", "level": 3}],
+      "difficult_points": ["They 指上一句的 volatile gases；多个介词短语描写气体运动路径。", "called... 与 located... 都是过去分词短语，修饰 nerve cells/olfactory epithelium。", "right between the eyes 补充说明嗅上皮所在的精确位置。"],
+      "expressions": [{"text": "flow out of", "meaning_zh": "从……流出"}, {"text": "at the back of", "meaning_zh": "在……后部"}, {"text": "be located at", "meaning_zh": "位于"}, {"text": "olfactory epithelium", "meaning_zh": "嗅上皮"}]
+    },
+    {
+      "id": "B-03", "paragraph_label": "B", "sentence_index": 10,
+      "sentence": "The brain combines the complex smell signals from the epithelium with the simple taste signals from the tongue, assigns a flavor to what's in your mouth, and decides if it's something you want to eat.",
+      "translation": "大脑把来自嗅上皮的复杂气味信号与来自舌头的简单味觉信号结合起来，为口中的东西赋予一种风味，并判断它是不是你想吃的东西。",
+      "structure": [{"text": "The brain combines the complex smell signals from the epithelium with the simple taste signals from the tongue", "role": "main_clause", "level": 1}, {"text": "assigns a flavor to what's in your mouth", "role": "coordinate_predicate", "level": 1}, {"text": "and decides", "role": "coordinate_predicate", "level": 1}, {"text": "if it's something you want to eat", "role": "object_clause", "level": 2}],
+      "difficult_points": ["combines、assigns、decides 是大脑执行的三个并列动作。", "what's in your mouth 是融合关系从句，作 to 的宾语。", "if 引导 decides 的宾语从句；something 后省略关系代词 that。"],
+      "expressions": [{"text": "combine A with B", "meaning_zh": "把 A 与 B 结合"}, {"text": "assign a flavor to", "meaning_zh": "为……赋予风味"}, {"text": "decide if", "meaning_zh": "判断是否"}]
+    },
+    {
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 11,
+      "sentence": "Babies like sweet tastes and reject bitter ones; we know this because scientists have rubbed various flavors inside the mouths of infants and then recorded their facial reactions.",
+      "translation": "婴儿喜欢甜味、排斥苦味；我们之所以知道这一点，是因为科学家把各种味道涂在婴儿口腔内侧，然后记录他们的面部反应。",
+      "structure": [{"text": "Babies like sweet tastes and reject bitter ones", "role": "main_clause", "level": 1}, {"text": "we know this", "role": "coordinate_clause", "level": 1}, {"text": "because scientists have rubbed various flavors inside the mouths of infants", "role": "cause_clause", "level": 2}, {"text": "and then recorded their facial reactions", "role": "coordinate_predicate", "level": 2}],
+      "difficult_points": ["ones 代替 tastes；this 指婴儿偏爱甜味、排斥苦味这一结论。", "because 从句说明证据来源；have rubbed 与 recorded 共用助动词 have。", "their 指 infants。"],
+      "expressions": [{"text": "reject bitter tastes", "meaning_zh": "排斥苦味"}, {"text": "facial reactions", "meaning_zh": "面部反应"}]
+    },
+    {
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 12,
+      "sentence": "A person's food preferences, like his or her personality, are formed during the first few years of life, through a process of socialization.",
+      "translation": "一个人的食物偏好和性格一样，都是在生命最初几年通过社会化过程形成的。",
+      "structure": [{"text": "A person's food preferences", "role": "subject", "level": 1}, {"text": "like his or her personality", "role": "comparison_supplement", "level": 2}, {"text": "are formed during the first few years of life", "role": "passive_predicate", "level": 1}, {"text": "through a process of socialization", "role": "means_adverbial", "level": 2}],
+      "difficult_points": ["like... 是插入式比较，不属于主语，因此谓语与复数 preferences 一致。", "are formed 是被动语态；through 引出偏好形成的社会机制。"],
+      "expressions": [{"text": "food preferences", "meaning_zh": "食物偏好"}, {"text": "the first few years of life", "meaning_zh": "生命最初几年"}, {"text": "a process of socialization", "meaning_zh": "社会化过程"}]
+    },
+    {
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 13,
+      "sentence": "Toddlers can learn to enjoy hot and spicy food, bland health food, or fast food, depending upon what the people around them eat.",
+      "translation": "幼儿可以学会喜欢辛辣食物、清淡的健康食品或快餐，具体取决于周围的人吃什么。",
+      "structure": [{"text": "Toddlers can learn to enjoy hot and spicy food, bland health food, or fast food", "role": "main_clause", "level": 1}, {"text": "depending upon", "role": "present_participle_adverbial", "level": 2}, {"text": "what the people around them eat", "role": "prepositional_object_clause", "level": 3}],
+      "difficult_points": ["learn to enjoy 表示喜好可以后天习得；三类食物由 or 并列。", "depending upon... 是现在分词状语；what 从句作介词 upon 的宾语，them 指 toddlers。"],
+      "expressions": [{"text": "learn to enjoy", "meaning_zh": "学会喜欢"}, {"text": "depending upon", "meaning_zh": "取决于"}, {"text": "the people around them", "meaning_zh": "他们周围的人"}]
+    },
+    {
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 14,
+      "sentence": "The human sense of smell is still not fully understood.",
+      "translation": "人类的嗅觉至今仍未被完全理解。",
+      "structure": [{"text": "The human sense of smell", "role": "subject", "level": 1}, {"text": "is still not fully understood", "role": "passive_predicate", "level": 1}],
+      "difficult_points": ["is understood 是被动结构，表示科学界尚未完全弄清嗅觉机制。", "still 强调这种知识缺口延续到现在。"],
+      "expressions": [{"text": "the sense of smell", "meaning_zh": "嗅觉"}, {"text": "not fully understood", "meaning_zh": "尚未被完全理解"}]
+    },
+    {
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 15,
+      "sentence": "It is greatly affected by psychological factors and expectations.",
+      "translation": "嗅觉会受到心理因素和预期的显著影响。",
+      "structure": [{"text": "It", "role": "subject", "level": 1}, {"text": "is greatly affected", "role": "passive_predicate", "level": 1}, {"text": "by psychological factors and expectations", "role": "cause_adverbial", "level": 2}],
+      "difficult_points": ["It 指上一句的 human sense of smell。", "by 短语说明影响嗅觉的两类非生理因素。"],
+      "expressions": [{"text": "be greatly affected by", "meaning_zh": "受到……的显著影响"}, {"text": "psychological factors", "meaning_zh": "心理因素"}]
+    },
+    {
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 16,
+      "sentence": "The mind filters out the overwhelming majority of chemical aromas that surround us, focusing intently on some, ignoring others.",
+      "translation": "大脑会过滤掉周围绝大多数化学气味，只专注于其中一些而忽略另一些。",
+      "structure": [{"text": "The mind filters out the overwhelming majority of chemical aromas", "role": "main_clause", "level": 1}, {"text": "that surround us", "role": "relative_clause", "level": 2}, {"text": "focusing intently on some", "role": "present_participle_adverbial", "level": 2}, {"text": "ignoring others", "role": "coordinate_participle_adverbial", "level": 2}],
+      "difficult_points": ["that 修饰 chemical aromas；the overwhelming majority 强调被过滤的比例极高。", "focusing 与 ignoring 是两个并列的现在分词状语；some/others 都指 aromas。"],
+      "expressions": [{"text": "filter out", "meaning_zh": "过滤掉"}, {"text": "the overwhelming majority of", "meaning_zh": "绝大多数"}, {"text": "focus intently on", "meaning_zh": "高度专注于"}]
+    },
+    {
+      "id": "C-07", "paragraph_label": "C", "sentence_index": 17,
+      "sentence": "People can grow accustomed to bad smells or good smells; they stop noticing what once seemed overpowering.",
+      "translation": "人们会逐渐习惯难闻或好闻的气味，不再注意那些曾经显得极其强烈的味道。",
+      "structure": [{"text": "People can grow accustomed to bad smells or good smells", "role": "main_clause", "level": 1}, {"text": "they stop noticing", "role": "coordinate_clause", "level": 1}, {"text": "what once seemed overpowering", "role": "object_clause", "level": 2}],
+      "difficult_points": ["grow accustomed to 表示逐渐习惯，to 是介词。", "what once seemed overpowering 是融合关系从句，指曾经强烈到难以忽略的气味。"],
+      "expressions": [{"text": "grow accustomed to", "meaning_zh": "逐渐习惯"}, {"text": "stop noticing", "meaning_zh": "不再注意"}, {"text": "seem overpowering", "meaning_zh": "显得极其强烈"}]
+    },
+    {
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 18,
+      "sentence": "Aroma and memory are somehow inextricably linked.",
+      "translation": "香气与记忆不知为何有着密不可分的联系。",
+      "structure": [{"text": "Aroma and memory", "role": "compound_subject", "level": 1}, {"text": "are somehow inextricably linked", "role": "passive_predicate", "level": 1}],
+      "difficult_points": ["be linked 是被动结构，表示两者存在联系。", "somehow 表示机制尚不明确；inextricably 强调联系无法分割。"],
+      "expressions": [{"text": "be inextricably linked", "meaning_zh": "密不可分地联系在一起"}]
+    },
+    {
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 19,
+      "sentence": "A smell can suddenly evoke a long-forgotten moment.",
+      "translation": "一种气味可能会突然唤起一个被遗忘已久的时刻。",
+      "structure": [{"text": "A smell", "role": "subject", "level": 1}, {"text": "can suddenly evoke", "role": "predicate", "level": 1}, {"text": "a long-forgotten moment", "role": "object", "level": 1}],
+      "difficult_points": ["evoke 表示气味触发并唤起记忆。", "long-forgotten 是复合过去分词形容词，修饰 moment。"],
+      "expressions": [{"text": "evoke a moment", "meaning_zh": "唤起某个时刻的记忆"}, {"text": "long-forgotten", "meaning_zh": "被遗忘已久的"}]
+    },
+    {
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 20,
+      "sentence": "The flavours of childhood foods seem to leave an indelible mark, and adults often return to them, without always knowing why.",
+      "translation": "童年食物的味道似乎会留下不可磨灭的印记，成年人常常再次选择这些食物，却未必知道原因。",
+      "structure": [{"text": "The flavours of childhood foods seem to leave an indelible mark", "role": "main_clause", "level": 1}, {"text": "and adults often return to them", "role": "coordinate_clause", "level": 1}, {"text": "without always knowing why", "role": "negative_accompanying_adverbial", "level": 2}],
+      "difficult_points": ["them 指 childhood foods 或其 flavours；return to 指成年后重新选择。", "without knowing why 中 why 引出省略式宾语，意为不知道为何会重返这些味道。"],
+      "expressions": [{"text": "leave an indelible mark", "meaning_zh": "留下不可磨灭的印记"}, {"text": "return to", "meaning_zh": "重新回到；再次选择"}, {"text": "without knowing why", "meaning_zh": "却不知道为什么"}]
+    },
+    {
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 21,
+      "sentence": "These 'comfort foods' become a source of pleasure and reassurance a fact that fast-food chains work hard to promote Childhood memories of Happy Meals can translate into frequent adult visits to McDonald's', like those of the chain's 'heavy users', the customers who eat there four or five times a week.",
+      "translation": "这些“慰藉食物”会成为快乐和安心的来源，而快餐连锁店努力宣传的正是这一事实。童年对开心乐园餐的记忆，可能转化为成年后频繁光顾麦当劳，就像该连锁店的“重度用户”那样——这些顾客每周会在那里吃四五次。",
+      "structure": [{"text": "These 'comfort foods' become a source of pleasure and reassurance", "role": "main_clause", "level": 1}, {"text": "a fact that fast-food chains work hard to promote", "role": "apposition", "level": 2}, {"text": "Childhood memories of Happy Meals can translate into frequent adult visits to McDonald's'", "role": "coordinate_statement", "level": 1}, {"text": "the customers who eat there four or five times a week", "role": "apposition", "level": 2}],
+      "difficult_points": ["a fact 是前半句结论的同位语，that 从句修饰 fact。", "原文 promote 与 Childhood 之间缺少句号，McDonald's 后也多出撇号，因此两层意思合并保留。", "those 指 frequent visits；the customers... 是 heavy users 的同位语，who 修饰 customers。"],
+      "expressions": [{"text": "comfort foods", "meaning_zh": "慰藉食物"}, {"text": "a source of pleasure and reassurance", "meaning_zh": "快乐与安心的来源"}, {"text": "translate into", "meaning_zh": "转化为"}, {"text": "heavy users", "meaning_zh": "高频消费者；重度用户"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 22,
+      "sentence": "The human craving for flavour has been a large unacknowledged and unexamined force in history.",
+      "translation": "人类对风味的渴望一直是历史上一股强大却未获承认、未经审视的力量。",
+      "structure": [{"text": "The human craving for flavour", "role": "subject", "level": 1}, {"text": "has been", "role": "linking_verb", "level": 1}, {"text": "a large unacknowledged and unexamined force in history", "role": "subject_complement", "level": 1}],
+      "difficult_points": ["has been 使用现在完成时，表示这种影响贯穿历史并延续至今。", "unacknowledged 与 unexamined 并列修饰 force。"],
+      "expressions": [{"text": "craving for", "meaning_zh": "对……的强烈渴望"}, {"text": "an unacknowledged force", "meaning_zh": "未被承认的力量"}]
+    },
+    {
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 23,
+      "sentence": "Royal empires have been built, unexplored lands have been traversed, great religions and philosophies have been forever changed by the spice trade.",
+      "translation": "帝国因香料贸易而建立，未知土地因此被穿越，伟大的宗教和哲学也被永久改变。",
+      "structure": [{"text": "Royal empires have been built", "role": "passive_clause", "level": 1}, {"text": "unexplored lands have been traversed", "role": "coordinate_passive_clause", "level": 1}, {"text": "great religions and philosophies have been forever changed by the spice trade", "role": "coordinate_passive_clause", "level": 1}],
+      "difficult_points": ["三个现在完成时被动分句并列，概括香料贸易的历史影响。", "by the spice trade 明写在最后一项，但语义上统摄前三项。"],
+      "expressions": [{"text": "unexplored lands", "meaning_zh": "未探索的土地"}, {"text": "be forever changed by", "meaning_zh": "被……永久改变"}, {"text": "the spice trade", "meaning_zh": "香料贸易"}]
+    },
+    {
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 24,
+      "sentence": "In 1492, Christopher Columbus set sail in order to try to find new seasonings and thus to make his fortune with this most desired commodity of that time.",
+      "translation": "1492年，克里斯托弗·哥伦布启航，试图寻找新的调味料，并借助当时最受渴求的商品发家致富。",
+      "structure": [{"text": "In 1492, Christopher Columbus set sail", "role": "main_clause", "level": 1}, {"text": "in order to try to find new seasonings", "role": "purpose_adverbial", "level": 2}, {"text": "and thus to make his fortune", "role": "coordinate_purpose_adverbial", "level": 2}, {"text": "with this most desired commodity of that time", "role": "means_adverbial", "level": 3}],
+      "difficult_points": ["源文 Christopher 与 Columbus 之间是换行，按规范化空格保留为同一句。", "两个 to 不定式由 and 连接，分别表示寻找调料和发财的目的。", "this most desired commodity 指香料。"],
+      "expressions": [{"text": "set sail", "meaning_zh": "启航"}, {"text": "in order to", "meaning_zh": "为了"}, {"text": "make one's fortune", "meaning_zh": "发家致富"}, {"text": "desired commodity", "meaning_zh": "备受渴求的商品"}]
+    },
+    {
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 25,
+      "sentence": "Today, the influence of flavour in the world marketplace is no less decisive.",
+      "translation": "如今，风味在全球市场中的影响力依然同样具有决定性。",
+      "structure": [{"text": "Today", "role": "time_adverbial", "level": 1}, {"text": "the influence of flavour in the world marketplace", "role": "subject", "level": 1}, {"text": "is no less decisive", "role": "linking_predicate", "level": 1}],
+      "difficult_points": ["no less decisive 是双重否定式比较，意为与过去一样重要。", "the world marketplace 指全球商业竞争环境。"],
+      "expressions": [{"text": "the influence of", "meaning_zh": "……的影响"}, {"text": "no less decisive", "meaning_zh": "同样具有决定性"}, {"text": "world marketplace", "meaning_zh": "全球市场"}]
+    },
+    {
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 26,
+      "sentence": "The rise and fall of corporate empires – soft-drink companies, snack-food companies, and fast-food chains – is frequently determined by how their products taste.",
+      "translation": "企业帝国——软饮料公司、零食公司和快餐连锁店——的兴衰，往往取决于其产品的味道。",
+      "structure": [{"text": "The rise and fall of corporate empires", "role": "subject", "level": 1}, {"text": "soft-drink companies, snack-food companies, and fast-food chains", "role": "apposition", "level": 2}, {"text": "is frequently determined", "role": "passive_predicate", "level": 1}, {"text": "by how their products taste", "role": "means_clause", "level": 2}],
+      "difficult_points": ["破折号内列举 corporate empires 的具体类型。", "主语中心是不可分割概念 The rise and fall，原文使用单数 is。", "how 从句作介词 by 的宾语；their 指这些企业。"],
+      "expressions": [{"text": "the rise and fall of", "meaning_zh": "……的兴衰"}, {"text": "be determined by", "meaning_zh": "由……决定"}, {"text": "fast-food chains", "meaning_zh": "快餐连锁店"}]
+    },
+    {
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 27,
+      "sentence": "The flavor industry emerged in the mid-1800s, as processed foods began to be manufactured on a large scale.",
+      "translation": "19世纪中期，随着加工食品开始大规模生产，香精香料行业应运而生。",
+      "structure": [{"text": "The flavor industry emerged in the mid-1800s", "role": "main_clause", "level": 1}, {"text": "as processed foods began to be manufactured on a large scale", "role": "time_cause_clause", "level": 2}],
+      "difficult_points": ["as 同时表达时间背景和因果关系。", "began to be manufactured 是不定式被动结构；on a large scale 表示规模化。"],
+      "expressions": [{"text": "emerge", "meaning_zh": "兴起；出现"}, {"text": "processed foods", "meaning_zh": "加工食品"}, {"text": "on a large scale", "meaning_zh": "大规模地"}]
+    },
+    {
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 28,
+      "sentence": "Recognizing the need for flavor additives, the early food processors turned to perfume companies that had years of experience working with essential oils and volatile aromas.",
+      "translation": "早期食品加工商意识到需要风味添加剂，于是求助于那些拥有多年精油和挥发性香气处理经验的香水公司。",
+      "structure": [{"text": "Recognizing the need for flavor additives", "role": "present_participle_adverbial", "level": 2}, {"text": "the early food processors turned to perfume companies", "role": "main_clause", "level": 1}, {"text": "that had years of experience working with essential oils and volatile aromas", "role": "relative_clause", "level": 2}],
+      "difficult_points": ["Recognizing... 是原因状语，逻辑主语为 food processors。", "that 修饰 perfume companies；working with... 修饰 experience，说明经验领域。"],
+      "expressions": [{"text": "recognize the need for", "meaning_zh": "意识到对……的需求"}, {"text": "turn to", "meaning_zh": "求助于"}, {"text": "have years of experience doing", "meaning_zh": "拥有多年做某事的经验"}, {"text": "essential oils", "meaning_zh": "精油"}]
+    },
+    {
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 29,
+      "sentence": "The great perfume houses of England, France, and the Netherlands produced many of the first flavor compounds.",
+      "translation": "英国、法国和荷兰的大型香水公司生产了最早的一批风味化合物。",
+      "structure": [{"text": "The great perfume houses of England, France, and the Netherlands", "role": "subject", "level": 1}, {"text": "produced many of the first flavor compounds", "role": "predicate", "level": 1}],
+      "difficult_points": ["perfume houses 指历史悠久或规模较大的香水企业，不是建筑。", "many of the first... 表示最早出现的一批化合物中有许多由这些公司生产。"],
+      "expressions": [{"text": "perfume houses", "meaning_zh": "香水公司"}, {"text": "flavor compounds", "meaning_zh": "风味化合物"}]
+    },
+    {
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 30,
+      "sentence": "In the early part of the 20th century, Germany's powerful chemical industry assumed the lead in flavour production.",
+      "translation": "20世纪初，实力雄厚的德国化学工业在风味生产领域取得领先地位。",
+      "structure": [{"text": "In the early part of the 20th century", "role": "time_adverbial", "level": 1}, {"text": "Germany's powerful chemical industry", "role": "subject", "level": 1}, {"text": "assumed the lead in flavour production", "role": "predicate", "level": 1}],
+      "difficult_points": ["assume the lead 不是“假定领先”，而是取得并承担领先地位。", "Germany's 修饰 chemical industry，表示德国这一产业整体。"],
+      "expressions": [{"text": "assume the lead in", "meaning_zh": "在……中取得领先"}, {"text": "chemical industry", "meaning_zh": "化学工业"}]
+    },
+    {
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 31,
+      "sentence": "Legend has it that a German scientist discovered methyl anthranilate, one of the first artificial flavours, by accident while mixing chemicals in his laboratory.",
+      "translation": "传说一位德国科学家在实验室混合化学品时，偶然发现了邻氨基苯甲酸甲酯——最早的人造香料之一。",
+      "structure": [{"text": "Legend has it", "role": "reporting_clause", "level": 1}, {"text": "that a German scientist discovered methyl anthranilate", "role": "object_clause", "level": 2}, {"text": "one of the first artificial flavours", "role": "apposition", "level": 3}, {"text": "by accident while mixing chemicals in his laboratory", "role": "manner_time_adverbial", "level": 3}],
+      "difficult_points": ["Legend has it that... 是固定报道结构，表示“传说……”。", "one of... 是 methyl anthranilate 的同位语。", "while mixing... 省略了 he was，逻辑主语是 scientist。"],
+      "expressions": [{"text": "Legend has it that", "meaning_zh": "传说"}, {"text": "by accident", "meaning_zh": "偶然地"}, {"text": "artificial flavours", "meaning_zh": "人造香料"}]
+    },
+    {
+      "id": "F-06", "paragraph_label": "F", "sentence_index": 32,
+      "sentence": "Suddenly, the lab was filled with the sweet smell of grapes.",
+      "translation": "突然，实验室里充满了葡萄的甜香。",
+      "structure": [{"text": "Suddenly", "role": "time_adverbial", "level": 1}, {"text": "the lab", "role": "subject", "level": 1}, {"text": "was filled with the sweet smell of grapes", "role": "passive_predicate", "level": 1}],
+      "difficult_points": ["be filled with 表示整个空间充满某种气味。", "the sweet smell of grapes 是上一句化合物被意外发现的感官线索。"],
+      "expressions": [{"text": "be filled with", "meaning_zh": "充满"}, {"text": "the sweet smell of", "meaning_zh": "……的甜香"}]
+    },
+    {
+      "id": "F-07", "paragraph_label": "F", "sentence_index": 33,
+      "sentence": "Methyl anthranilate later became the chief flavoring compound of manufactured grape juice.",
+      "translation": "邻氨基苯甲酸甲酯后来成为工业生产葡萄汁的主要调味化合物。",
+      "structure": [{"text": "Methyl anthranilate", "role": "subject", "level": 1}, {"text": "later became", "role": "linking_verb", "level": 1}, {"text": "the chief flavoring compound of manufactured grape juice", "role": "subject_complement", "level": 1}],
+      "difficult_points": ["became 是系动词，说明该化合物后来获得的工业用途。", "manufactured 修饰 grape juice，指工业生产的葡萄汁。"],
+      "expressions": [{"text": "the chief flavoring compound", "meaning_zh": "主要调味化合物"}, {"text": "manufactured grape juice", "meaning_zh": "工业生产的葡萄汁"}]
+    },
+    {
+      "id": "G-01", "paragraph_label": "G", "sentence_index": 34,
+      "sentence": "The quality that people seek most of all in a food, its flavour, is usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons.Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers provide a detailed map of a food's flavour components, detecting chemical aromas in amounts as low as one part per billion.",
+      "translation": "人们在食物中最看重的品质——风味——通常含量微乎其微，无法用盎司或茶匙等传统烹饪单位衡量。如今先进的光谱仪、气相色谱仪和顶空蒸气分析仪能够绘制食物风味成分的详细图谱，检测低至十亿分之一含量的化学香气。",
+      "structure": [{"text": "The quality that people seek most of all in a food, its flavour", "role": "subject", "level": 1}, {"text": "is usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons", "role": "predicate", "level": 1}, {"text": "Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers provide a detailed map of a food's flavour components", "role": "coordinate_statement", "level": 1}, {"text": "detecting chemical aromas in amounts as low as one part per billion", "role": "present_participle_adverbial", "level": 2}],
+      "difficult_points": ["that 修饰 quality；its flavour 是 quality 的同位语。", "too...to be measured 表示数量微小到无法用传统烹饪单位衡量。", "原文 teaspoons.Today's 两句之间没有空格，因此合并保留；detecting... 说明仪器的检测能力。"],
+      "expressions": [{"text": "seek most of all", "meaning_zh": "最为看重"}, {"text": "too infinitesimal to", "meaning_zh": "微小到无法……"}, {"text": "provide a detailed map of", "meaning_zh": "提供……的详细图谱"}, {"text": "one part per billion", "meaning_zh": "十亿分之一"}]
+    },
+    {
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 35,
+      "sentence": "The human nose, however, is still more sensitive than any machine yet invented.",
+      "translation": "然而，人类鼻子的灵敏度仍高于迄今发明的任何机器。",
+      "structure": [{"text": "The human nose", "role": "subject", "level": 1}, {"text": "however", "role": "sentence_adverbial", "level": 1}, {"text": "is still more sensitive than any machine", "role": "linking_predicate", "level": 1}, {"text": "yet invented", "role": "past_participle_modifier", "level": 2}],
+      "difficult_points": ["however 对比先进仪器与人类嗅觉的灵敏度。", "yet invented 是过去分词短语，修饰 machine，意为迄今已发明的。"],
+      "expressions": [{"text": "be more sensitive than", "meaning_zh": "比……更灵敏"}, {"text": "any machine yet invented", "meaning_zh": "迄今发明的任何机器"}]
+    },
+    {
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 36,
+      "sentence": "A nose can detect aromas present in quantities of a few parts per trillion.",
+      "translation": "鼻子能够检测出浓度仅为万亿分之几的香气。",
+      "structure": [{"text": "A nose can detect aromas", "role": "main_clause", "level": 1}, {"text": "present in quantities of a few parts per trillion", "role": "adjective_modifier", "level": 2}],
+      "difficult_points": ["present... 是形容词短语，后置修饰 aromas。", "parts per trillion 是浓度单位，a few 表示仅万亿分之几。"],
+      "expressions": [{"text": "be present in quantities of", "meaning_zh": "以……的含量存在"}, {"text": "parts per trillion", "meaning_zh": "万亿分之几"}]
+    },
+    {
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 37,
+      "sentence": "Complex aromas, such as those of coffee or roasted meat, may be composed of gases from nearly a thousand different chemicals.",
+      "translation": "复杂香气，例如咖啡或烤肉的香气，可能由近一千种不同化学物质产生的气体组成。",
+      "structure": [{"text": "Complex aromas", "role": "subject", "level": 1}, {"text": "such as those of coffee or roasted meat", "role": "example_supplement", "level": 2}, {"text": "may be composed of gases", "role": "passive_predicate", "level": 1}, {"text": "from nearly a thousand different chemicals", "role": "prepositional_modifier", "level": 2}],
+      "difficult_points": ["those 代替 aromas，避免重复。", "be composed of 表示由多种气体组成；from... 说明气体来自近千种化学物质。"],
+      "expressions": [{"text": "be composed of", "meaning_zh": "由……组成"}, {"text": "roasted meat", "meaning_zh": "烤肉"}, {"text": "nearly a thousand", "meaning_zh": "近一千种"}]
+    },
+    {
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 38,
+      "sentence": "The chemical that provides the dominant flavour of bell pepper can be tasted in amounts as low as 0.02 parts per billion; one drop is sufficient to add flavour to the amount of water needed to fill five average-sized swimming pools",
+      "translation": "赋予甜椒主要风味的化学物质，即使含量低至十亿分之0.02也能被尝出；只需一滴，就足以为填满五个普通大小游泳池的水增添味道。",
+      "structure": [{"text": "The chemical", "role": "subject", "level": 1}, {"text": "that provides the dominant flavour of bell pepper", "role": "relative_clause", "level": 2}, {"text": "can be tasted in amounts as low as 0.02 parts per billion", "role": "passive_predicate", "level": 1}, {"text": "one drop is sufficient to add flavour to the amount of water needed to fill five average-sized swimming pools", "role": "coordinate_clause", "level": 1}],
+      "difficult_points": ["that 修饰 chemical，说明它提供甜椒的主要风味。", "as low as 强调人类能感知的极低浓度；分号后用一滴与巨大水量作直观比较。", "needed to fill... 是过去分词短语修饰 water；原文句末没有句号。"],
+      "expressions": [{"text": "the dominant flavour of", "meaning_zh": "……的主要风味"}, {"text": "in amounts as low as", "meaning_zh": "含量低至"}, {"text": "be sufficient to", "meaning_zh": "足以"}, {"text": "average-sized", "meaning_zh": "普通大小的"}]
+    }
+  ]
+}

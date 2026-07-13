@@ -1,0 +1,768 @@
+{
+  "schema_version": 1,
+  "generation_standard": "reading_study_v1",
+  "source_kind": "reading_test",
+  "test_id": "ielts12_test6_reading",
+  "passage_id": "ielts12_test6_p1",
+  "passage_title": "The risks agriculture faces in developing countries",
+  "difficulty": "simple",
+  "sentences": [
+    {
+      "id": "A-01",
+      "paragraph_label": "A",
+      "sentence_index": 1,
+      "sentence": "Two things distinguish food production from all other productive activities: first, every single person needs food each day and has a right to it; and second, it is hugely dependent on nature.",
+      "translation": "食品生产与其他一切生产活动相比，有两点与众不同：第一，每个人每天都需要食物，并且享有获得食物的权利；第二，食品生产极大地依赖于自然。",
+      "structure": [
+        {"text": "Two things", "role": "subject", "level": 1},
+        {"text": "distinguish food production from all other productive activities", "role": "verb_phrase", "level": 1},
+        {"text": "first, every single person needs food each day and has a right to it", "role": "apposition", "level": 2},
+        {"text": "and second, it is hugely dependent on nature", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "冒号后的两个分句是对 Two things 的具体解释，用 first 和 second 分别列举。",
+        "has a right to it 中 it 指代 food。",
+        "distinguish A from B 表示“把A与B区分开来”。"
+      ],
+      "expressions": [
+        {"text": "distinguish A from B", "meaning_zh": "把A与B区分开来"},
+        {"text": "have a right to", "meaning_zh": "享有……的权利"},
+        {"text": "be dependent on", "meaning_zh": "依赖于"}
+      ]
+    },
+    {
+      "id": "A-02",
+      "paragraph_label": "A",
+      "sentence_index": 2,
+      "sentence": "These two unique aspects, one political, the other natural, make food production highly vulnerable and different from any other business.",
+      "translation": "这两个独特的方面——一个是政治性的，另一个是自然性的——使食品生产变得极为脆弱，并与其他任何行业都不同。",
+      "structure": [
+        {"text": "These two unique aspects", "role": "subject", "level": 1},
+        {"text": "one political, the other natural", "role": "apposition", "level": 2},
+        {"text": "make", "role": "verb_phrase", "level": 1},
+        {"text": "food production", "role": "object", "level": 1},
+        {"text": "highly vulnerable and different from any other business", "role": "complement", "level": 1}
+      ],
+      "difficult_points": [
+        "one political, the other natural 是插入的同位语，分别对应前文提到的政治与自然两方面。",
+        "make + 宾语 + 形容词 是“使……变得……”的结构。"
+      ],
+      "expressions": [
+        {"text": "one ..., the other ...", "meaning_zh": "一个是……，另一个是……"}
+      ]
+    },
+    {
+      "id": "A-03",
+      "paragraph_label": "A",
+      "sentence_index": 3,
+      "sentence": "At the same time, cultural values are highly entrenched in food and agricultural systems worldwide.",
+      "translation": "与此同时，文化价值观也深深植根于全球的食品与农业体系之中。",
+      "structure": [
+        {"text": "At the same time", "role": "adverbial_phrase", "level": 1},
+        {"text": "cultural values", "role": "subject", "level": 1},
+        {"text": "are highly entrenched in food and agricultural systems worldwide", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "be entrenched in 表示“根深蒂固地存在于……之中”。",
+        "worldwide 作后置状语，修饰 food and agricultural systems。"
+      ],
+      "expressions": [
+        {"text": "be entrenched in", "meaning_zh": "根深蒂固地存在于"}
+      ]
+    },
+    {
+      "id": "B-01",
+      "paragraph_label": "B",
+      "sentence_index": 4,
+      "sentence": "Farmers everywhere face major risks, including extreme weather, long-term climate change, and price volatility in input and product markets.",
+      "translation": "世界各地的农民都面临着重大风险，包括极端天气、长期气候变化，以及投入品和产品市场的价格波动。",
+      "structure": [
+        {"text": "Farmers everywhere", "role": "subject", "level": 1},
+        {"text": "face major risks", "role": "verb_phrase", "level": 1},
+        {"text": "including extreme weather, long-term climate change, and price volatility in input and product markets", "role": "participial_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "including... 是现在分词短语，列举 major risks 的具体内容。",
+        "price volatility in input and product markets 指投入品市场和产品市场两方面的价格波动。"
+      ],
+      "expressions": [
+        {"text": "price volatility", "meaning_zh": "价格波动"}
+      ]
+    },
+    {
+      "id": "B-02",
+      "paragraph_label": "B",
+      "sentence_index": 5,
+      "sentence": "However, smallholder farmers in developing countries must in addition deal with adverse environments, both natural, in terms of soil quality, rainfall, etc., and human, in terms of infrastructure, financial systems, markets, knowledge and technology.",
+      "translation": "然而，发展中国家的小农户还必须额外应对不利的环境，既包括土壤质量、降雨等自然环境，也包括基础设施、金融体系、市场、知识和技术等人为环境。",
+      "structure": [
+        {"text": "smallholder farmers in developing countries", "role": "subject", "level": 1},
+        {"text": "must in addition deal with adverse environments", "role": "verb_phrase", "level": 1},
+        {"text": "both natural, in terms of soil quality, rainfall, etc.", "role": "apposition", "level": 2},
+        {"text": "and human, in terms of infrastructure, financial systems, markets, knowledge and technology", "role": "apposition", "level": 2}
+      ],
+      "difficult_points": [
+        "both...and... 并列说明 adverse environments 的两大类别：自然的与人为的。",
+        "in terms of 引出每一类环境的具体方面。",
+        "must in addition 中 in addition 修饰 must deal with，强调“还必须额外……”。"
+      ],
+      "expressions": [
+        {"text": "deal with", "meaning_zh": "应对；处理"},
+        {"text": "in terms of", "meaning_zh": "就……而言"}
+      ]
+    },
+    {
+      "id": "B-03",
+      "paragraph_label": "B",
+      "sentence_index": 6,
+      "sentence": "Counter-intuitively, hunger is prevalent among many smallholder farmers in the developing world.",
+      "translation": "令人意外的是，饥饿问题在发展中国家的许多小农户中普遍存在。",
+      "structure": [
+        {"text": "Counter-intuitively", "role": "adverbial_phrase", "level": 1},
+        {"text": "hunger", "role": "subject", "level": 1},
+        {"text": "is prevalent among many smallholder farmers in the developing world", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "Counter-intuitively 表示“与直觉相反地”，暗示这一现象出人意料。",
+        "be prevalent among 表示“在……中普遍存在”。"
+      ],
+      "expressions": [
+        {"text": "counter-intuitively", "meaning_zh": "令人意外地；与直觉相反地"},
+        {"text": "be prevalent among", "meaning_zh": "在……中普遍存在"}
+      ]
+    },
+    {
+      "id": "C-01",
+      "paragraph_label": "C",
+      "sentence_index": 7,
+      "sentence": "Participants in the online debate argued that our biggest challenge is to address the underlying causes of the agricultural system's inability to ensure sufficient food for all, and they identified as drivers of this problem our dependency on fossil fuels and unsupportive government policies.",
+      "translation": "参与这场在线辩论的人士认为，我们面临的最大挑战是解决农业系统无法确保所有人获得充足食物这一根本原因，他们还将我们对化石燃料的依赖以及缺乏支持的政府政策视为造成这一问题的驱动因素。",
+      "structure": [
+        {"text": "Participants in the online debate", "role": "subject", "level": 1},
+        {"text": "argued", "role": "verb_phrase", "level": 1},
+        {"text": "that our biggest challenge is to address the underlying causes of the agricultural system's inability to ensure sufficient food for all", "role": "noun_clause", "level": 2},
+        {"text": "to address the underlying causes of the agricultural system's inability to ensure sufficient food for all", "role": "non_finite_clause", "level": 3},
+        {"text": "to ensure sufficient food for all", "role": "non_finite_clause", "level": 4},
+        {"text": "and they identified as drivers of this problem our dependency on fossil fuels and unsupportive government policies", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 argued 的宾语，从句表语是不定式 to address...。",
+        "the agricultural system's inability to ensure sufficient food for all 中不定式修饰 inability，说明“无法做到”的具体内容。",
+        "identify A as B 这里宾语 A（our dependency...and unsupportive government policies）被后置，as drivers of this problem 提前，属于宾语补足语前置的写法。"
+      ],
+      "expressions": [
+        {"text": "address the underlying causes of", "meaning_zh": "解决……的根本原因"},
+        {"text": "identify A as B", "meaning_zh": "将A视为B"},
+        {"text": "dependency on", "meaning_zh": "对……的依赖"}
+      ]
+    },
+    {
+      "id": "D-01",
+      "paragraph_label": "D",
+      "sentence_index": 8,
+      "sentence": "On the question of mitigating the risks farmers face, most essayists called for greater state intervention.",
+      "translation": "关于如何减轻农民面临的风险这一问题，大多数文章作者都呼吁加大国家干预力度。",
+      "structure": [
+        {"text": "On the question of mitigating the risks farmers face", "role": "prepositional_phrase", "level": 1},
+        {"text": "farmers face", "role": "relative_clause", "level": 2},
+        {"text": "most essayists", "role": "subject", "level": 1},
+        {"text": "called for greater state intervention", "role": "verb_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "farmers face 是省略关系代词 that/which 的定语从句，修饰 the risks。",
+        "call for 表示“呼吁；要求”。"
+      ],
+      "expressions": [
+        {"text": "mitigate the risks", "meaning_zh": "减轻风险"},
+        {"text": "call for", "meaning_zh": "呼吁；要求"}
+      ]
+    },
+    {
+      "id": "D-02",
+      "paragraph_label": "D",
+      "sentence_index": 9,
+      "sentence": "In his essay, Kanayo F. Nwanze, President of the International Fund for Agricultural Development, argued that governments can significantly reduce risks for farmers by providing basic services like roads to get produce more efficiently to markets, or water and food storage facilities to reduce losses.",
+      "translation": "国际农业发展基金会主席卡纳约·F·恩万泽在其文章中指出，政府可以通过提供道路等基础服务（以便更高效地将农产品运往市场），或提供供水和粮食储存设施（以减少损耗），来显著降低农民面临的风险。",
+      "structure": [
+        {"text": "In his essay", "role": "prepositional_phrase", "level": 1},
+        {"text": "Kanayo F. Nwanze", "role": "subject", "level": 1},
+        {"text": "President of the International Fund for Agricultural Development", "role": "apposition", "level": 2},
+        {"text": "argued", "role": "verb_phrase", "level": 1},
+        {"text": "that governments can significantly reduce risks for farmers by providing basic services like roads to get produce more efficiently to markets, or water and food storage facilities to reduce losses", "role": "noun_clause", "level": 2},
+        {"text": "by providing basic services like roads", "role": "prepositional_phrase", "level": 3},
+        {"text": "to get produce more efficiently to markets", "role": "non_finite_clause", "level": 4},
+        {"text": "or water and food storage facilities", "role": "coordinated_clause", "level": 3},
+        {"text": "to reduce losses", "role": "non_finite_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "President of the International Fund for Agricultural Development 是同位语，说明 Nwanze 的身份。",
+        "that 引导宾语从句，作 argued 的宾语。",
+        "by providing... 说明政府降低风险的具体方式，两个 to 不定式分别说明提供道路和提供储存设施各自的目的。"
+      ],
+      "expressions": [
+        {"text": "reduce risks for", "meaning_zh": "为……降低风险"},
+        {"text": "get produce to markets", "meaning_zh": "把农产品运到市场"}
+      ]
+    },
+    {
+      "id": "D-03",
+      "paragraph_label": "D",
+      "sentence_index": 10,
+      "sentence": "Sophia Murphy, senior advisor to the Institute for Agriculture and Trade Policy, suggested that the procurement and holding of stocks by governments can also help mitigate wild swings in food prices by alleviating uncertainties about market supply.",
+      "translation": "农业与贸易政策研究所高级顾问索菲娅·墨菲提出，政府对粮食储备的采购和持有，也有助于通过缓解市场供应的不确定性来减轻食品价格的剧烈波动。",
+      "structure": [
+        {"text": "Sophia Murphy", "role": "subject", "level": 1},
+        {"text": "senior advisor to the Institute for Agriculture and Trade Policy", "role": "apposition", "level": 2},
+        {"text": "suggested", "role": "verb_phrase", "level": 1},
+        {"text": "that the procurement and holding of stocks by governments can also help mitigate wild swings in food prices by alleviating uncertainties about market supply", "role": "noun_clause", "level": 2},
+        {"text": "by alleviating uncertainties about market supply", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "senior advisor to... 是同位语，说明 Murphy 的职务身份。",
+        "help (to) mitigate 中 help 后接省略 to 的不定式。",
+        "by alleviating... 说明缓解价格剧烈波动的具体方式。"
+      ],
+      "expressions": [
+        {"text": "wild swings in", "meaning_zh": "……的剧烈波动"},
+        {"text": "alleviate uncertainties about", "meaning_zh": "缓解……方面的不确定性"}
+      ]
+    },
+    {
+      "id": "E-01",
+      "paragraph_label": "E",
+      "sentence_index": 11,
+      "sentence": "Shenggen Fan, Director General of the International Food Policy Research Institute, held up social safety nets and public welfare programmes in Ethiopia, Brazil and Mexico as valuable ways to address poverty among farming families and reduce their vulnerability to agriculture shocks.",
+      "translation": "国际粮食政策研究所总干事范胜根将埃塞俄比亚、巴西和墨西哥的社会安全网与公共福利计划，视为解决农户贫困问题、降低其在农业冲击面前脆弱性的宝贵途径。",
+      "structure": [
+        {"text": "Shenggen Fan", "role": "subject", "level": 1},
+        {"text": "Director General of the International Food Policy Research Institute", "role": "apposition", "level": 2},
+        {"text": "held up", "role": "verb_phrase", "level": 1},
+        {"text": "social safety nets and public welfare programmes in Ethiopia, Brazil and Mexico", "role": "object", "level": 1},
+        {"text": "as valuable ways to address poverty among farming families and reduce their vulnerability to agriculture shocks", "role": "complement", "level": 1},
+        {"text": "to address poverty among farming families and reduce their vulnerability to agriculture shocks", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Director General of... 是同位语，说明范胜根的职务。",
+        "hold up A as B 表示“把A当作B提出来”。",
+        "to address... and reduce... 两个不定式并列，说明这些计划的作用。"
+      ],
+      "expressions": [
+        {"text": "hold up A as B", "meaning_zh": "把A作为B提出"},
+        {"text": "vulnerability to", "meaning_zh": "对……的脆弱性"}
+      ]
+    },
+    {
+      "id": "E-02",
+      "paragraph_label": "E",
+      "sentence_index": 12,
+      "sentence": "However, some commentators responded that cash transfers to poor families do not necessarily translate into increased food security, as these programmes do not always strengthen food production or raise incomes.",
+      "translation": "然而，一些评论者回应称，向贫困家庭发放现金补助并不一定能转化为粮食安全的提升，因为这些计划并不总能促进粮食生产或提高收入。",
+      "structure": [
+        {"text": "some commentators", "role": "subject", "level": 1},
+        {"text": "responded", "role": "verb_phrase", "level": 1},
+        {"text": "that cash transfers to poor families do not necessarily translate into increased food security", "role": "noun_clause", "level": 2},
+        {"text": "as these programmes do not always strengthen food production or raise incomes", "role": "adverbial_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 responded 的宾语。",
+        "translate into 表示“转化为”，并非字面翻译之意。",
+        "as 在此引导原因状语从句，解释现金补助未必带来粮食安全的原因。"
+      ],
+      "expressions": [
+        {"text": "cash transfers", "meaning_zh": "现金补助/转移支付"},
+        {"text": "translate into", "meaning_zh": "转化为"}
+      ]
+    },
+    {
+      "id": "E-03",
+      "paragraph_label": "E",
+      "sentence_index": 13,
+      "sentence": "Regarding state subsidies for agriculture, Rokeya Kabir, Executive Director of Bangladesh Nari Progati Sangha, commented in her essay that these 'have not compensated for the stranglehold exercised by private traders.",
+      "translation": "关于国家对农业的补贴，孟加拉国妇女进步协会执行主任罗克娅·卡比尔在她的文章中评论道，这些补贴“并未弥补私人贸易商所形成的垄断控制”。",
+      "structure": [
+        {"text": "Regarding state subsidies for agriculture", "role": "prepositional_phrase", "level": 1},
+        {"text": "Rokeya Kabir", "role": "subject", "level": 1},
+        {"text": "Executive Director of Bangladesh Nari Progati Sangha", "role": "apposition", "level": 2},
+        {"text": "commented in her essay", "role": "verb_phrase", "level": 1},
+        {"text": "that these 'have not compensated for the stranglehold exercised by private traders", "role": "noun_clause", "level": 2},
+        {"text": "exercised by private traders", "role": "participial_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "Regarding 引导介词短语，表示话题范围，相当于 concerning。",
+        "Executive Director of... 是同位语，说明卡比尔的身份。",
+        "exercised by private traders 是过去分词短语，修饰 the stranglehold，说明这种控制是私人贸易商施加的。"
+      ],
+      "expressions": [
+        {"text": "regarding", "meaning_zh": "关于"},
+        {"text": "compensate for", "meaning_zh": "弥补；补偿"}
+      ]
+    },
+    {
+      "id": "E-04",
+      "paragraph_label": "E",
+      "sentence_index": 14,
+      "sentence": "In fact, studies show that sixty percent of beneficiaries of subsidies are not poor, but rich landowners and non-farmer traders.'",
+      "translation": "“事实上，研究显示，60%的补贴受益者并非贫困人口，而是富裕的土地所有者和非农贸易商。”",
+      "structure": [
+        {"text": "studies", "role": "subject", "level": 1},
+        {"text": "show", "role": "verb_phrase", "level": 1},
+        {"text": "that sixty percent of beneficiaries of subsidies are not poor, but rich landowners and non-farmer traders", "role": "noun_clause", "level": 2},
+        {"text": "not poor, but rich landowners and non-farmer traders", "role": "complement", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 show 的宾语。",
+        "not A but B 表示“不是A而是B”，强调补贴真正受益者的身份。"
+      ],
+      "expressions": [
+        {"text": "not A but B", "meaning_zh": "不是A而是B"},
+        {"text": "beneficiaries of", "meaning_zh": "……的受益者"}
+      ]
+    },
+    {
+      "id": "F-01",
+      "paragraph_label": "F",
+      "sentence_index": 15,
+      "sentence": "Nwanze, Murphy and Fan argued that private risk management tools, like private insurance, commodity futures markets, and rural finance can help small-scale producers mitigate risk and allow for investment in improvements.",
+      "translation": "恩万泽、墨菲和范胜根都认为，私人保险、大宗商品期货市场和农村金融等私人风险管理工具，能够帮助小规模生产者减轻风险，并为改进性投资创造条件。",
+      "structure": [
+        {"text": "Nwanze, Murphy and Fan", "role": "subject", "level": 1},
+        {"text": "argued", "role": "verb_phrase", "level": 1},
+        {"text": "that private risk management tools, like private insurance, commodity futures markets, and rural finance can help small-scale producers mitigate risk and allow for investment in improvements", "role": "noun_clause", "level": 2},
+        {"text": "like private insurance, commodity futures markets, and rural finance", "role": "apposition", "level": 3},
+        {"text": "can help small-scale producers mitigate risk", "role": "verb_phrase", "level": 3},
+        {"text": "and allow for investment in improvements", "role": "coordinated_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 argued 的宾语。",
+        "like... 是插入的举例，说明 private risk management tools 的具体类型。",
+        "help sb do sth 与 allow for 并列，共用主语 private risk management tools。"
+      ],
+      "expressions": [
+        {"text": "help sb (to) do sth", "meaning_zh": "帮助某人做某事"},
+        {"text": "allow for", "meaning_zh": "为……提供空间/条件"}
+      ]
+    },
+    {
+      "id": "F-02",
+      "paragraph_label": "F",
+      "sentence_index": 16,
+      "sentence": "Kabir warned that financial support schemes often encourage the adoption of high-input agricultural practices, which in the medium term may raise production costs beyond the value of their harvests.",
+      "translation": "卡比尔警告说，金融支持计划往往会助长高投入农业方式的采用，而这种方式在中期可能会使生产成本超过收成本身的价值。",
+      "structure": [
+        {"text": "Kabir", "role": "subject", "level": 1},
+        {"text": "warned", "role": "verb_phrase", "level": 1},
+        {"text": "that financial support schemes often encourage the adoption of high-input agricultural practices", "role": "noun_clause", "level": 2},
+        {"text": "which in the medium term may raise production costs beyond the value of their harvests", "role": "relative_clause", "level": 3}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 warned 的宾语。",
+        "which 引导非限定性定语从句，修饰前面整个高投入农业做法及其后果。",
+        "beyond 在此表示“超出、超过”，而非空间意义上的“在……之外”。"
+      ],
+      "expressions": [
+        {"text": "the adoption of", "meaning_zh": "对……的采用"},
+        {"text": "in the medium term", "meaning_zh": "中期而言"}
+      ]
+    },
+    {
+      "id": "F-03",
+      "paragraph_label": "F",
+      "sentence_index": 17,
+      "sentence": "Murphy noted that when futures markets become excessively financialised they can contribute to short-term price volatility, which increases farmers' food insecurity.",
+      "translation": "墨菲指出，当期货市场变得过度金融化时，可能会加剧短期价格波动，而这又会加重农民的粮食不安全感。",
+      "structure": [
+        {"text": "Murphy", "role": "subject", "level": 1},
+        {"text": "noted", "role": "verb_phrase", "level": 1},
+        {"text": "that when futures markets become excessively financialised they can contribute to short-term price volatility, which increases farmers' food insecurity", "role": "noun_clause", "level": 2},
+        {"text": "when futures markets become excessively financialised", "role": "adverbial_clause", "level": 3},
+        {"text": "they can contribute to short-term price volatility", "role": "main_clause", "level": 3},
+        {"text": "which increases farmers' food insecurity", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，内部又嵌套 when 引导的时间状语从句。",
+        "which 引导非限定性定语从句，指代前面整个“加剧短期价格波动”这件事。"
+      ],
+      "expressions": [
+        {"text": "contribute to", "meaning_zh": "导致；加剧"},
+        {"text": "food insecurity", "meaning_zh": "粮食不安全感"}
+      ]
+    },
+    {
+      "id": "F-04",
+      "paragraph_label": "F",
+      "sentence_index": 18,
+      "sentence": "Many participants and commentators emphasised that greater transparency in markets is needed to mitigate the impact of volatility, and make evident whether adequate stocks and supplies are available.",
+      "translation": "许多参与者和评论者都强调，市场需要更高的透明度，以减轻价格波动带来的影响，并明确当前库存和供应是否充足。",
+      "structure": [
+        {"text": "Many participants and commentators", "role": "subject", "level": 1},
+        {"text": "emphasised", "role": "verb_phrase", "level": 1},
+        {"text": "that greater transparency in markets is needed", "role": "noun_clause", "level": 2},
+        {"text": "to mitigate the impact of volatility", "role": "non_finite_clause", "level": 3},
+        {"text": "and make evident whether adequate stocks and supplies are available", "role": "coordinated_clause", "level": 3},
+        {"text": "whether adequate stocks and supplies are available", "role": "noun_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 emphasised 的宾语。",
+        "两个不定式 to mitigate... 和 make evident... 并列，说明提高透明度的目的。",
+        "make evident whether... 中 whether 从句作 evident 的逻辑宾语，说明需要明确的内容。"
+      ],
+      "expressions": [
+        {"text": "greater transparency in", "meaning_zh": "……方面更高的透明度"},
+        {"text": "make evident", "meaning_zh": "使……变得清楚明了"}
+      ]
+    },
+    {
+      "id": "F-05",
+      "paragraph_label": "F",
+      "sentence_index": 19,
+      "sentence": "Others contended that agribusiness companies should be held responsible for paying for negative side effects.",
+      "translation": "还有一些人主张，农业企业应当为其造成的负面影响承担付费责任。",
+      "structure": [
+        {"text": "Others", "role": "subject", "level": 1},
+        {"text": "contended", "role": "verb_phrase", "level": 1},
+        {"text": "that agribusiness companies should be held responsible for paying for negative side effects", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 contended 的宾语。",
+        "be held responsible for 表示“被追究……的责任”。"
+      ],
+      "expressions": [
+        {"text": "be held responsible for", "meaning_zh": "被追究……的责任"},
+        {"text": "negative side effects", "meaning_zh": "负面影响；副作用"}
+      ]
+    },
+    {
+      "id": "G-01",
+      "paragraph_label": "G",
+      "sentence_index": 20,
+      "sentence": "Many essayists mentioned climate change and its consequences for small-scale agriculture.",
+      "translation": "许多文章作者都提到了气候变化及其对小规模农业造成的影响。",
+      "structure": [
+        {"text": "Many essayists", "role": "subject", "level": 1},
+        {"text": "mentioned", "role": "verb_phrase", "level": 1},
+        {"text": "climate change and its consequences for small-scale agriculture", "role": "object", "level": 1}
+      ],
+      "difficult_points": [
+        "its 指代 climate change，consequences for 表示“对……的影响/后果”。",
+        "climate change and its consequences 是并列名词短语，共同作 mentioned 的宾语。"
+      ],
+      "expressions": [
+        {"text": "consequences for", "meaning_zh": "对……的影响/后果"}
+      ]
+    },
+    {
+      "id": "G-02",
+      "paragraph_label": "G",
+      "sentence_index": 21,
+      "sentence": "Fan explained that 'in addition to reducing crop yields, climate change increases the magnitude and the frequency of extreme weather events, which increase smallholder vulnerability.'",
+      "translation": "范胜根解释说：“气候变化除了会降低作物产量之外，还会加大极端天气事件的强度和频率，而这会增加小农户的脆弱性。”",
+      "structure": [
+        {"text": "Fan", "role": "subject", "level": 1},
+        {"text": "explained", "role": "verb_phrase", "level": 1},
+        {"text": "that 'in addition to reducing crop yields, climate change increases the magnitude and the frequency of extreme weather events, which increase smallholder vulnerability.'", "role": "noun_clause", "level": 2},
+        {"text": "in addition to reducing crop yields", "role": "prepositional_phrase", "level": 3},
+        {"text": "climate change increases the magnitude and the frequency of extreme weather events", "role": "main_clause", "level": 3},
+        {"text": "which increase smallholder vulnerability", "role": "relative_clause", "level": 4}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，从句内部还带有引号中的直接引语内容。",
+        "in addition to doing 表示“除了……之外（还）”，to 是介词后接动名词。",
+        "which 引导非限定性定语从句，指代前面“加大极端天气事件的强度和频率”这件事。"
+      ],
+      "expressions": [
+        {"text": "in addition to", "meaning_zh": "除了……之外（还）"},
+        {"text": "the magnitude and frequency of", "meaning_zh": "……的强度和频率"}
+      ]
+    },
+    {
+      "id": "G-03",
+      "paragraph_label": "G",
+      "sentence_index": 22,
+      "sentence": "The growing unpredictability of weather patterns increases farmers' difficulty in managing weather-related risks.",
+      "translation": "天气模式日益增强的不可预测性，加大了农民管理天气相关风险的难度。",
+      "structure": [
+        {"text": "The growing unpredictability of weather patterns", "role": "subject", "level": 1},
+        {"text": "increases", "role": "verb_phrase", "level": 1},
+        {"text": "farmers' difficulty in managing weather-related risks", "role": "object", "level": 1},
+        {"text": "in managing weather-related risks", "role": "prepositional_phrase", "level": 2}
+      ],
+      "difficult_points": [
+        "growing 是现在分词作形容词，修饰 unpredictability，表示“日益增长的”。",
+        "difficulty in doing 表示“做某事的困难/难度”。"
+      ],
+      "expressions": [
+        {"text": "unpredictability of", "meaning_zh": "……的不可预测性"},
+        {"text": "difficulty in doing", "meaning_zh": "做某事的难度"}
+      ]
+    },
+    {
+      "id": "G-04",
+      "paragraph_label": "G",
+      "sentence_index": 23,
+      "sentence": "According to this author, one solution would be to develop crop varieties that are more resilient to new climate trends and extreme weather patterns.",
+      "translation": "据这位作者所言，一个解决办法是培育出对新的气候趋势和极端天气模式更具适应力的作物品种。",
+      "structure": [
+        {"text": "According to this author", "role": "prepositional_phrase", "level": 1},
+        {"text": "one solution", "role": "subject", "level": 1},
+        {"text": "would be", "role": "verb_phrase", "level": 1},
+        {"text": "to develop crop varieties that are more resilient to new climate trends and extreme weather patterns", "role": "complement", "level": 1},
+        {"text": "that are more resilient to new climate trends and extreme weather patterns", "role": "relative_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "would be 表示一种委婉、假设性的建议语气，而非确定的事实陈述。",
+        "that 引导定语从句，修饰 crop varieties，说明这类品种应具备的特性。"
+      ],
+      "expressions": [
+        {"text": "be resilient to", "meaning_zh": "对……具有适应力/抵御力"}
+      ]
+    },
+    {
+      "id": "G-05",
+      "paragraph_label": "G",
+      "sentence_index": 24,
+      "sentence": "Accordingly, Pat Mooney, co-founder and executive director of the ETC Group, suggested that 'if we are to survive climate change, we must adopt policies that let peasants diversify the plant and animal species and varieties/breeds that make up our menus.'",
+      "translation": "因此，ETC集团联合创始人兼执行主任帕特·穆尼提出：“如果我们想在气候变化中生存下来，就必须采取相应政策，让农民能够使我们餐桌上的植物和动物物种及品种更加多样化。”",
+      "structure": [
+        {"text": "Pat Mooney", "role": "subject", "level": 1},
+        {"text": "co-founder and executive director of the ETC Group", "role": "apposition", "level": 2},
+        {"text": "suggested", "role": "verb_phrase", "level": 1},
+        {"text": "that 'if we are to survive climate change, we must adopt policies that let peasants diversify the plant and animal species and varieties/breeds that make up our menus.'", "role": "noun_clause", "level": 2},
+        {"text": "if we are to survive climate change", "role": "adverbial_clause", "level": 3},
+        {"text": "we must adopt policies", "role": "main_clause", "level": 3},
+        {"text": "that let peasants diversify the plant and animal species and varieties/breeds", "role": "relative_clause", "level": 4},
+        {"text": "that make up our menus", "role": "relative_clause", "level": 5}
+      ],
+      "difficult_points": [
+        "co-founder and executive director of... 是同位语，说明穆尼的身份。",
+        "if we are to survive 中 be to do 表示“想要、打算做某事”的条件。",
+        "第一个 that 引导定语从句修饰 policies，第二个 that 引导定语从句修饰 varieties/breeds，两层从句依次嵌套。"
+      ],
+      "expressions": [
+        {"text": "if we are to", "meaning_zh": "如果我们想要（做到某事）"},
+        {"text": "make up", "meaning_zh": "构成"}
+      ]
+    },
+    {
+      "id": "H-01",
+      "paragraph_label": "H",
+      "sentence_index": 25,
+      "sentence": "Some participating authors and commentators argued in favour of community-based and autonomous risk management strategies through collective action groups, co-operatives or producers' groups.",
+      "translation": "一些参与讨论的作者和评论者主张，通过集体行动小组、合作社或生产者团体，采取基于社区的自主风险管理策略。",
+      "structure": [
+        {"text": "Some participating authors and commentators", "role": "subject", "level": 1},
+        {"text": "argued in favour of", "role": "verb_phrase", "level": 1},
+        {"text": "community-based and autonomous risk management strategies", "role": "object", "level": 1},
+        {"text": "through collective action groups, co-operatives or producers' groups", "role": "prepositional_phrase", "level": 1}
+      ],
+      "difficult_points": [
+        "argue in favour of 表示“主张、支持……”。",
+        "through 引导方式状语，说明实现这类风险管理策略的途径。"
+      ],
+      "expressions": [
+        {"text": "argue in favour of", "meaning_zh": "主张；支持"},
+        {"text": "community-based", "meaning_zh": "基于社区的"}
+      ]
+    },
+    {
+      "id": "H-02",
+      "paragraph_label": "H",
+      "sentence_index": 26,
+      "sentence": "Such groups enhance market opportunities for small-scale producers, reduce marketing costs and synchronise buying and selling with seasonal price conditions.",
+      "translation": "这类团体能够增加小规模生产者的市场机会，降低营销成本，并使买卖行为与季节性价格状况保持同步。",
+      "structure": [
+        {"text": "Such groups", "role": "subject", "level": 1},
+        {"text": "enhance market opportunities for small-scale producers", "role": "verb_phrase", "level": 1},
+        {"text": "reduce marketing costs", "role": "coordinated_clause", "level": 1},
+        {"text": "and synchronise buying and selling with seasonal price conditions", "role": "coordinated_clause", "level": 1}
+      ],
+      "difficult_points": [
+        "三个动词短语并列，共用主语 Such groups，分别说明这类团体的三方面作用。",
+        "synchronise A with B 表示“使A与B保持同步”。"
+      ],
+      "expressions": [
+        {"text": "synchronise A with B", "meaning_zh": "使A与B保持同步"}
+      ]
+    },
+    {
+      "id": "H-03",
+      "paragraph_label": "H",
+      "sentence_index": 27,
+      "sentence": "According to Murphy, 'collective action offers an important way for farmers to strengthen their political and economic bargaining power, and to reduce their business risks.'",
+      "translation": "据墨菲所言：“集体行动为农民提供了一条重要途径，能够增强他们的政治和经济议价能力，并降低他们的经营风险。”",
+      "structure": [
+        {"text": "According to Murphy", "role": "prepositional_phrase", "level": 1},
+        {"text": "collective action", "role": "subject", "level": 1},
+        {"text": "offers an important way for farmers", "role": "verb_phrase", "level": 1},
+        {"text": "to strengthen their political and economic bargaining power", "role": "non_finite_clause", "level": 2},
+        {"text": "and to reduce their business risks", "role": "coordinated_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "an important way for farmers to do 中不定式修饰 way，说明这条途径的具体作用。",
+        "两个 to 不定式并列，分别说明集体行动带来的两方面好处。"
+      ],
+      "expressions": [
+        {"text": "bargaining power", "meaning_zh": "议价能力"}
+      ]
+    },
+    {
+      "id": "H-04",
+      "paragraph_label": "H",
+      "sentence_index": 28,
+      "sentence": "One commentator, Giel Ton, warned that collective action does not come as a free good.",
+      "translation": "评论者吉尔·汤警告说，集体行动并非没有代价。",
+      "structure": [
+        {"text": "One commentator", "role": "subject", "level": 1},
+        {"text": "Giel Ton", "role": "apposition", "level": 2},
+        {"text": "warned", "role": "verb_phrase", "level": 1},
+        {"text": "that collective action does not come as a free good", "role": "noun_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "Giel Ton 是 One commentator 的同位语，具体说明是谁。",
+        "come as a free good 是比喻说法，表示“不是免费得来的、是有代价的”。"
+      ],
+      "expressions": [
+        {"text": "come as a free good", "meaning_zh": "不是免费得来的；是有代价的"}
+      ]
+    },
+    {
+      "id": "H-05",
+      "paragraph_label": "H",
+      "sentence_index": 29,
+      "sentence": "It takes time, effort and money to organise, build trust and to experiment.",
+      "translation": "组织协调、建立信任以及不断尝试，都需要投入时间、精力和金钱。",
+      "structure": [
+        {"text": "It", "role": "subject", "level": 1},
+        {"text": "takes time, effort and money", "role": "verb_phrase", "level": 1},
+        {"text": "to organise, build trust and to experiment", "role": "non_finite_clause", "level": 2}
+      ],
+      "difficult_points": [
+        "It 是形式主语，真正的逻辑主语是后面的不定式短语 to organise, build trust and to experiment。",
+        "it takes + 名词 + to do 表示“做某事需要……”。"
+      ],
+      "expressions": [
+        {"text": "it takes ... to do", "meaning_zh": "做某事需要……"}
+      ]
+    },
+    {
+      "id": "H-06",
+      "paragraph_label": "H",
+      "sentence_index": 30,
+      "sentence": "Others, like Marcel Vernooij and Marcel Beukeboom, suggested that in order to 'apply what we already know', all stakeholders, including business, government, scientists and civil society, must work together, starting at the beginning of the value chain.",
+      "translation": "另一些人，例如马塞尔·维尔诺伊和马塞尔·伯克布姆，提出为了“运用我们已经掌握的知识”，包括企业、政府、科学家和公民社会在内的所有利益相关方，必须从价值链的最初环节开始携手合作。",
+      "structure": [
+        {"text": "Others", "role": "subject", "level": 1},
+        {"text": "like Marcel Vernooij and Marcel Beukeboom", "role": "apposition", "level": 2},
+        {"text": "suggested", "role": "verb_phrase", "level": 1},
+        {"text": "that in order to 'apply what we already know', all stakeholders, including business, government, scientists and civil society, must work together, starting at the beginning of the value chain", "role": "noun_clause", "level": 2},
+        {"text": "in order to 'apply what we already know'", "role": "non_finite_clause", "level": 3},
+        {"text": "all stakeholders", "role": "subject", "level": 3},
+        {"text": "including business, government, scientists and civil society", "role": "apposition", "level": 4},
+        {"text": "must work together", "role": "verb_phrase", "level": 3},
+        {"text": "starting at the beginning of the value chain", "role": "participial_phrase", "level": 4}
+      ],
+      "difficult_points": [
+        "like... 是插入的举例，说明 Others 具体指哪些人。",
+        "in order to 引导目的状语，表示“为了……”。",
+        "including... 是插入的举例，具体说明 all stakeholders 包含哪些群体。",
+        "starting at... 是现在分词短语作伴随状语，说明合作的起点。"
+      ],
+      "expressions": [
+        {"text": "in order to", "meaning_zh": "为了"},
+        {"text": "stakeholders", "meaning_zh": "利益相关方"},
+        {"text": "the value chain", "meaning_zh": "价值链"}
+      ]
+    },
+    {
+      "id": "I-01",
+      "paragraph_label": "I",
+      "sentence_index": 31,
+      "sentence": "Some participants explained that market price volatility is often worsened by the presence of intermediary purchasers who, taking advantage of farmers' vulnerability, dictate prices.",
+      "translation": "一些参与者解释说，市场价格波动常常因为中间购买者的存在而加剧，这些中间商利用农民的脆弱处境来操纵价格。",
+      "structure": [
+        {"text": "Some participants", "role": "subject", "level": 1},
+        {"text": "explained", "role": "verb_phrase", "level": 1},
+        {"text": "that market price volatility is often worsened by the presence of intermediary purchasers", "role": "noun_clause", "level": 2},
+        {"text": "who, taking advantage of farmers' vulnerability, dictate prices", "role": "relative_clause", "level": 3},
+        {"text": "taking advantage of farmers' vulnerability", "role": "participial_phrase", "level": 4}
+      ],
+      "difficult_points": [
+        "that 引导宾语从句，作 explained 的宾语。",
+        "who 引导定语从句，修饰 intermediary purchasers，从句中插入了分词短语 taking advantage of...。",
+        "take advantage of 表示“利用”，此处含贬义，指不正当地利用农民的弱势地位。"
+      ],
+      "expressions": [
+        {"text": "take advantage of", "meaning_zh": "利用"},
+        {"text": "dictate prices", "meaning_zh": "操纵/主导价格"}
+      ]
+    },
+    {
+      "id": "I-02",
+      "paragraph_label": "I",
+      "sentence_index": 32,
+      "sentence": "One commentator suggested farmers can gain greater control over prices and minimise price volatility by selling directly to consumers.",
+      "translation": "一位评论者提出，农民通过直接向消费者销售产品，可以获得对价格更大的掌控权，并将价格波动降到最低。",
+      "structure": [
+        {"text": "One commentator", "role": "subject", "level": 1},
+        {"text": "suggested", "role": "verb_phrase", "level": 1},
+        {"text": "farmers can gain greater control over prices and minimise price volatility by selling directly to consumers", "role": "noun_clause", "level": 2},
+        {"text": "by selling directly to consumers", "role": "prepositional_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "suggested 后省略了 that，其后整个句子作宾语从句。",
+        "by selling directly to consumers 说明获得价格掌控权的具体方式。"
+      ],
+      "expressions": [
+        {"text": "gain control over", "meaning_zh": "获得对……的掌控权"},
+        {"text": "sell directly to", "meaning_zh": "直接销售给"}
+      ]
+    },
+    {
+      "id": "I-03",
+      "paragraph_label": "I",
+      "sentence_index": 33,
+      "sentence": "Similarly, Sonali Bisht, founder and advisor to the Institute of Himalayan Environmental Research and Education (INHERE), India, wrote that community-supported agriculture, where consumers invest in local farmers by subscription and guarantee producers a fair price, is a risk-sharing model worth more attention.",
+      "translation": "同样地，印度喜马拉雅环境研究与教育研究所（INHERE）创始人兼顾问索纳莉·比什特写道，社区支持农业——即消费者通过订阅方式投资本地农民，并保证生产者获得公平价格——是一种值得更多关注的风险共担模式。",
+      "structure": [
+        {"text": "Sonali Bisht", "role": "subject", "level": 1},
+        {"text": "founder and advisor to the Institute of Himalayan Environmental Research and Education (INHERE), India", "role": "apposition", "level": 2},
+        {"text": "wrote", "role": "verb_phrase", "level": 1},
+        {"text": "that community-supported agriculture, where consumers invest in local farmers by subscription and guarantee producers a fair price, is a risk-sharing model worth more attention", "role": "noun_clause", "level": 2},
+        {"text": "where consumers invest in local farmers by subscription and guarantee producers a fair price", "role": "relative_clause", "level": 3},
+        {"text": "worth more attention", "role": "adjective_phrase", "level": 3}
+      ],
+      "difficult_points": [
+        "founder and advisor to... 是同位语，说明比什特的身份。",
+        "that 引导宾语从句，其中插入 where 引导的非限定性定语从句解释 community-supported agriculture 的运作方式。",
+        "worth more attention 是形容词短语作后置定语，修饰 a risk-sharing model。"
+      ],
+      "expressions": [
+        {"text": "invest in", "meaning_zh": "投资于"},
+        {"text": "guarantee sb a fair price", "meaning_zh": "保证某人获得公平价格"},
+        {"text": "worth more attention", "meaning_zh": "值得更多关注"}
+      ]
+    },
+    {
+      "id": "I-04",
+      "paragraph_label": "I",
+      "sentence_index": 34,
+      "sentence": "Direct food distribution systems not only encourage small-scale agriculture but also give consumers more control over the food they consume, she wrote.",
+      "translation": "她写道，直接的食品分销系统不仅能促进小规模农业的发展，还能让消费者对自己所食用的食物拥有更大的掌控权。",
+      "structure": [
+        {"text": "Direct food distribution systems", "role": "subject", "level": 1},
+        {"text": "not only encourage small-scale agriculture", "role": "verb_phrase", "level": 1},
+        {"text": "but also give consumers more control over the food", "role": "coordinated_clause", "level": 1},
+        {"text": "they consume", "role": "relative_clause", "level": 2},
+        {"text": "she wrote", "role": "parenthesis", "level": 2}
+      ],
+      "difficult_points": [
+        "not only...but also... 连接两个并列谓语，共用主语 Direct food distribution systems。",
+        "they consume 省略了关系代词 that/which，是定语从句修饰 the food。",
+        "she wrote 是插入语，位于句末，标明这是引用比什特的观点。"
+      ],
+      "expressions": [
+        {"text": "not only ... but also ...", "meaning_zh": "不仅……而且……"},
+        {"text": "have control over", "meaning_zh": "对……有掌控权"}
+      ]
+    }
+  ]
+}
