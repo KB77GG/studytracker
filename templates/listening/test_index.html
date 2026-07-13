@@ -5,118 +5,215 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>剑桥雅思听力真题 · Sage Path</title>
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-{% include "listening/_library_styles.html" %}
+{% include "listening/_test_index_workspace_styles.html" %}
 </head>
-<body>
-<main class="listening-library">
-  <div class="listening-library__header">
-    <div>
-      <p class="listening-library__eyebrow">听力 / 剑雅真题</p>
-      <h1 class="listening-library__title">剑桥雅思听力真题</h1>
-      <p class="listening-library__summary">{{ test_count }} 套 Test · 每套 4 个 Section · 支持题目练习、精听、解析、原文</p>
+<body class="listening-workspace-page">
+<div class="listening-workspace" data-listening-workspace>
+  <header class="listening-workspace__topbar">
+    <div class="listening-workspace__brand-nav">
+      <a class="listening-workspace__brand" href="{{ url_for('index') }}" aria-label="返回 Sage Path 首页">
+        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+        <span>Sage Path</span>
+      </a>
+      <nav class="listening-workspace__subjects" aria-label="科目导航">
+        <a class="is-active" href="{{ url_for('listening_test_index') }}" aria-current="page">听力</a>
+        <a href="{{ url_for('reading_test_index') }}">阅读</a>
+        {% if current_user.is_authenticated %}
+        <a class="listening-workspace__report-link" href="{{ url_for('report_page') }}">学习报告</a>
+        {% endif %}
+      </nav>
     </div>
-    {% if current_user.is_authenticated %}
-    <div class="listening-library__actions">
-      <a class="listening-library__button" href="{{ url_for('index') }}">返回首页</a>
+    <div class="listening-workspace__account">
+      <a href="{{ url_for('index') }}">返回首页</a>
+      {% if current_user.is_authenticated %}
+      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
+      {% endif %}
     </div>
-    {% endif %}
-  </div>
+  </header>
 
-  {% set nav_subject = 'listening' %}
-  {% set nav_active = 'tests' %}
-  {% include "practice/_nav.html" %}
+  <div class="listening-workspace__layout">
+    <aside class="listening-workspace__sidebar" id="listening-catalog" aria-label="听力题库目录">
+      <div class="listening-workspace__sidebar-head">
+        <strong>选择题库</strong>
+        <button type="button" data-close-catalog>关闭</button>
+      </div>
 
-  {% if continue_target %}
-  <section class="practice-continue" aria-label="继续刷题">
-    <span class="practice-continue__label">继续刷题</span>
-    <span class="practice-continue__text">
-      上次：<strong>{{ continue_target.last.label }} Test {{ continue_target.last.test }}</strong>
-      {% if continue_target.last.accuracy is not none %}· {{ continue_target.last.accuracy|round|int }}%{% endif %}
-      {% if continue_target.next %}→ 继续：<strong>{{ continue_target.next.label }} Test {{ continue_target.next.test }}</strong>{% endif %}
-    </span>
-    {% if continue_target.next %}
-    <a class="practice-continue__action" href="{{ continue_target.next.url }}">整卷练习</a>
-    {% else %}
-    <span class="practice-continue__complete">当前系列已全部刷完</span>
-    {% endif %}
-  </section>
-  {% endif %}
+      <nav class="listening-workspace__source-nav">
+        {% for group in sections %}
+        {% set is_default_group = loop.first %}
+        {% set group_total = namespace(value=0) %}
+        {% for grouped_book in group.books %}
+          {% set group_total.value = group_total.value + (grouped_book.tests|length) %}
+        {% endfor %}
+        <section class="listening-workspace__source-group" data-source-group>
+          <button class="listening-workspace__source-toggle{% if is_default_group %} is-active{% endif %}"
+                  type="button"
+                  aria-expanded="{{ 'true' if is_default_group else 'false' }}"
+                  aria-controls="source-items-{{ group.key }}"
+                  data-source-toggle>
+            <span>
+              <strong>{{ '剑桥真题' if group.key == 'cambridge' else group.name }}</strong>
+            </span>
+            <small>{{ group_total.value }} 套</small>
+          </button>
+          <div class="listening-workspace__source-items"
+               id="source-items-{{ group.key }}"
+               {% if not is_default_group %}hidden{% endif %}>
+            {% for book in group.books|reverse %}
+            {% set book_key = book.series ~ '-' ~ book.book %}
+            <button class="listening-workspace__source-item{% if is_default_group and loop.first %} is-selected{% endif %}"
+                    id="book-control-{{ book_key }}"
+                    type="button"
+                    aria-controls="book-{{ book_key }}"
+                    {% if is_default_group and loop.first %}aria-current="page" data-default-book{% endif %}
+                    data-book-target="{{ book_key }}"
+                    {% if group.key == 'cambridge' and loop.index > 5 %}data-older-book hidden{% endif %}>
+              <span>{% if book.series == 'cambridge' %}剑{{ book.book }}{% else %}{{ book.label }}{% endif %}</span>
+              <small>
+                {{ book.progress.done }}/{{ book.progress.total }}
+                {% if book.progress.done == book.progress.total and book.progress.total %} · 完成{% endif %}
+              </small>
+            </button>
+            {% endfor %}
+            {% if group.key == 'cambridge' and group.books|length > 5 %}
+            <button class="listening-workspace__older-toggle" type="button" aria-expanded="false" data-older-toggle>
+              <span data-older-label>剑15 – 剑4</span>
+            </button>
+            {% endif %}
+          </div>
+        </section>
+        {% endfor %}
 
-  {% if sections and sections|length > 1 %}
-  <nav class="listening-series-jump" aria-label="教材目录">
-    {% for group in sections %}
-    <a class="listening-series-jump__link" href="#series-{{ group.key }}">{{ group.name }}</a>
-    {% endfor %}
-  </nav>
-  {% endif %}
+        <section class="listening-workspace__source-group">
+          <a class="listening-workspace__source-toggle listening-workspace__source-link"
+             href="{{ url_for('listening_jijing_index') }}">
+            <span>
+              <strong>机经真题</strong>
+              <em>历年考场原题回忆</em>
+            </span>
+            <small>进入</small>
+          </a>
+        </section>
+      </nav>
+      <span class="listening-workspace__sidebar-watermark" aria-hidden="true">LISTENING</span>
+    </aside>
 
-  {% if not books %}
-  <section class="listening-library__empty">还没有生成剑雅整套练习数据。请先运行 build 脚本。</section>
-  {% else %}
-  {% for group in sections %}
-  <section class="listening-series-section" id="series-{{ group.key }}">
-    <h2 class="listening-series-section__title">{{ group.name }}</h2>
-    <div class="practice-book-list">
-      {% for book in group.books %}
-      <article class="practice-book-row">
-        <header class="practice-book-identity">
-          <span class="practice-book-name">{{ book.label }}</span>
-          <span class="practice-book-progress{% if not book.progress.done %} practice-book-progress--empty{% endif %}">
-            已刷 <strong>{{ book.progress.done }}/{{ book.progress.total }}</strong>
-            {% if book.progress.avg_accuracy is not none %}· 平均 <strong>{{ book.progress.avg_accuracy }}%</strong>{% endif %}
-          </span>
-        </header>
-        <div class="practice-test-chips">
-          {% for test in book.tests %}
-          {% set part_label = "Part" if test.series == "jfdr" else "Section" %}
-          <details class="practice-test-disclosure"
-                   data-test-id="{{ test.id }}"
-                   name="listening-book-{{ group.key }}-{{ book.book }}">
-            <summary class="practice-test-chip{% if test.practice_status %} practice-test-chip--done{% endif %}">
-              <span>Test {{ test.test }}</span>
-              {% if test.practice_status %}
-              <span class="practice-test-chip__score">{{ test.practice_status.accuracy }}%</span>
-              {% endif %}
-            </summary>
-            <div class="practice-test-panel">
-              <a class="practice-test-full-link" href="{{ url_for('listening_test_practice', test_id=test.id) }}">
-                整卷练习
-                <span>{{ test.question_count }} 题</span>
-              </a>
-              <div class="practice-test-parts">
-                {% for part_number in range(1, test.section_count + 1) %}
-                <div class="practice-test-part">
-                  <span class="practice-test-part__name">{{ part_label }} {{ part_number }}</span>
-                  <span class="practice-test-part__actions">
-                    <a class="practice-test-part__action"
-                       href="{{ url_for('listening_test_practice', test_id=test.id, section=part_number) }}">练习</a>
-                    <a class="practice-test-part__action practice-test-part__action--intensive"
-                       href="{{ url_for('listening_player', exercise_id=test.id ~ '_s' ~ part_number) }}">精听</a>
-                  </span>
-                </div>
-                {% endfor %}
+    <button class="listening-workspace__scrim" type="button" aria-label="关闭题库目录" data-catalog-scrim hidden></button>
+
+    <main class="listening-workspace__main">
+      <span class="listening-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+      <button class="listening-workspace__catalog-button"
+              type="button"
+              aria-controls="listening-catalog"
+              aria-expanded="false"
+              data-open-catalog>选择题库</button>
+
+      {% if not books %}
+      <section class="listening-workspace__empty">还没有生成剑雅整套练习数据。请先运行 build 脚本。</section>
+      {% else %}
+      <div class="listening-workspace__book-panels">
+        {% for group in sections %}
+        {% set is_default_panel_group = loop.first %}
+        {% for book in group.books|reverse %}
+        {% set book_key = book.series ~ '-' ~ book.book %}
+        {% set progress_percent = ((book.progress.done / book.progress.total) * 100)|round|int if book.progress.total else 0 %}
+        <section class="listening-workspace__book-panel"
+                 id="book-{{ book_key }}"
+                 aria-labelledby="book-control-{{ book_key }}"
+                 data-book-panel="{{ book_key }}"
+                 {% if not (is_default_panel_group and loop.first) %}hidden{% endif %}>
+          <header class="listening-workspace__page-heading">
+            <div>
+              <p>听力 / {{ '剑桥真题' if book.series == 'cambridge' else group.name }} / {{ book.label }}</p>
+              <div>
+                <h1>{% if book.series == 'cambridge' %}剑桥雅思 {{ book.book }}{% else %}{{ book.label }} 听力{% endif %}</h1>
+                <span>{{ book.tests|length }} Tests · 每套 {{ '4 个 Part' if book.series == 'jfdr' else '40 题' }} / 约 30 分钟</span>
               </div>
             </div>
-          </details>
-          {% endfor %}
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-  </section>
-  {% endfor %}
-  {% endif %}
-</main>
-<script>
-  document.querySelectorAll('.listening-series-jump__link').forEach(function (link) {
-    link.addEventListener('click', function (event) {
-      var target = document.querySelector(link.getAttribute('href'));
-      if (!target) return;
-      event.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      history.replaceState(null, '', link.getAttribute('href'));
-    });
-  });
-</script>
+            <div class="listening-workspace__book-progress">
+              <span>本册进度</span>
+              <span class="listening-workspace__progress-track"
+                    role="progressbar"
+                    aria-label="{{ book.label }} 本册进度"
+                    aria-valuemin="0"
+                    aria-valuemax="{{ book.progress.total }}"
+                    aria-valuenow="{{ book.progress.done }}">
+                <span style="width: {{ progress_percent }}%"></span>
+              </span>
+              <strong>{{ book.progress.done }}/{{ book.progress.total }}</strong>
+            </div>
+          </header>
+
+          {% if continue_target %}
+          <section class="listening-workspace__continue" aria-label="继续刷题">
+            <div>
+              <strong>上次完成 — {{ continue_target.last.label }} Test {{ continue_target.last.test }}</strong>
+              <p>
+                {% if continue_target.last.accuracy is not none %}正确率 {{ continue_target.last.accuracy|round|int }}%{% else %}成绩已保存{% endif %}
+                {% if continue_target.next %} · 下一套：{{ continue_target.next.label }} Test {{ continue_target.next.test }}{% endif %}
+              </p>
+            </div>
+            <div>
+              <a href="{{ continue_target.last.url }}">查看上次</a>
+              {% if continue_target.next %}
+              <a class="is-primary" href="{{ continue_target.next.url }}">继续下一套</a>
+              {% endif %}
+            </div>
+          </section>
+          {% endif %}
+
+          <section class="listening-workspace__test-list" aria-label="{{ book.label }} Test 列表">
+            {% for test in book.tests %}
+            {% set is_done = test.practice_status %}
+            {% set closed_label = '查看练习' if is_done else '开始练习' %}
+            <details class="listening-workspace__test-card{% if is_done %} is-done{% endif %}"
+                     data-test-id="{{ test.id }}"
+                     name="listening-book-{{ book_key }}">
+              <summary class="listening-workspace__test-summary">
+                <span class="listening-workspace__test-number">
+                  <small>TEST</small>
+                  <strong>{{ test.test }}</strong>
+                </span>
+                <span class="listening-workspace__test-copy">
+                  {% if is_done %}
+                  <strong>已完成 · {{ test.practice_status.accuracy }}%</strong>
+                  <small>成绩已保存，可查看题目或重新练习</small>
+                  {% else %}
+                  <strong>未开始</strong>
+                  <small>{{ 'Part' if test.series == 'jfdr' else 'Section' }} 1–{{ test.section_count }} · {{ test.question_count }} 题 · 约 30 分钟 + 10 分钟誊写</small>
+                  {% endif %}
+                </span>
+                <span class="listening-workspace__test-action"
+                      data-closed-label="{{ closed_label }}">{{ closed_label }}</span>
+              </summary>
+              <div class="listening-workspace__test-panel">
+                <a class="listening-workspace__full-practice" href="{{ url_for('listening_test_practice', test_id=test.id) }}">
+                  <strong>整卷练习</strong>
+                  <small>{{ test.question_count }} 题</small>
+                </a>
+                <div class="listening-workspace__parts">
+                  {% for part_number in range(1, test.section_count + 1) %}
+                  <div class="listening-workspace__part">
+                    <strong>{{ 'Part' if test.series == 'jfdr' else 'Section' }} {{ part_number }}</strong>
+                    <span>
+                      <a href="{{ url_for('listening_test_practice', test_id=test.id, section=part_number) }}">练习</a>
+                      <a href="{{ url_for('listening_player', exercise_id=test.id ~ '_s' ~ part_number) }}">精听</a>
+                    </span>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </details>
+            {% endfor %}
+          </section>
+        </section>
+        {% endfor %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    </main>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/listening_test_index.js') }}" defer></script>
 </body>
 </html>
