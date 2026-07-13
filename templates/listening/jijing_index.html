@@ -222,7 +222,7 @@
   <div class="listening-library__header">
     <div>
       <p class="listening-library__eyebrow">听力 / 机经</p>
-      <h1 class="listening-library__title">听力机经练习</h1>
+      <h1 class="listening-library__title">听力机经</h1>
       {% if catalog %}
       <p class="listening-library__summary">{{ catalog.collection_count|default(1) }} 个目录 · {{ catalog.part_count }} 个练习 · 本地音频已接入</p>
       {% endif %}
@@ -234,8 +234,9 @@
     {% endif %}
   </div>
 
-  {% set listening_active = 'jijing' %}
-  {% include "listening/_mode_nav.html" %}
+  {% set nav_subject = 'listening' %}
+  {% set nav_active = 'jijing' %}
+  {% include "practice/_nav.html" %}
 
   {% if not books %}
   <section class="listening-library__empty">还没有生成机经数据。请先运行 build 脚本。</section>

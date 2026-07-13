@@ -1,0 +1,99 @@
+<style>
+.practice-library-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 24px;
+  padding: 10px 12px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+.practice-library-nav__subjects,
+.practice-library-nav__libraries {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.practice-library-nav__subjects {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.practice-library-nav__subject,
+.practice-library-nav__library {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease, background .15s ease;
+}
+.practice-library-nav__subject {
+  min-height: 40px;
+  padding: 8px 22px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
+}
+.practice-library-nav__library {
+  min-height: 34px;
+  padding: 6px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-sm);
+}
+.practice-library-nav__subject:hover,
+.practice-library-nav__library:hover {
+  color: var(--brand-dark);
+  background: var(--brand-tint);
+}
+.practice-library-nav__subject.is-active {
+  color: var(--card);
+  background: var(--brand);
+}
+.practice-library-nav__library.is-active {
+  border-color: var(--brand-light);
+  color: var(--brand-dark);
+  background: var(--brand-soft);
+}
+@media (max-width: 680px) {
+  .practice-library-nav { margin-bottom: 20px; }
+  .practice-library-nav__subject { padding: 7px 18px; }
+  .practice-library-nav__library { padding: 6px 14px; }
+}
+</style>
+<nav class="practice-library-nav" aria-label="刷题库导航">
+  <div class="practice-library-nav__subjects" aria-label="科目">
+    <a class="practice-library-nav__subject {{ 'is-active' if nav_subject == 'listening' else '' }}"
+       href="{{ url_for('listening_test_index') }}"
+       {% if nav_subject == 'listening' %}aria-current="page"{% endif %}>听力</a>
+    <a class="practice-library-nav__subject {{ 'is-active' if nav_subject == 'reading' else '' }}"
+       href="{{ url_for('reading_test_index') }}"
+       {% if nav_subject == 'reading' %}aria-current="page"{% endif %}>阅读</a>
+  </div>
+  <div class="practice-library-nav__libraries" aria-label="题库">
+    {% if nav_subject == 'reading' %}
+    <a class="practice-library-nav__library {{ 'is-active' if nav_active == 'tests' else '' }}"
+       href="{{ url_for('reading_test_index') }}"
+       {% if nav_active == 'tests' %}aria-current="page"{% endif %}>剑雅真题</a>
+    <a class="practice-library-nav__library {{ 'is-active' if nav_active == 'jijing' else '' }}"
+       href="{{ url_for('reading_jijing_index') }}"
+       {% if nav_active == 'jijing' %}aria-current="page"{% endif %}>机经</a>
+    {% else %}
+    <a class="practice-library-nav__library {{ 'is-active' if nav_active == 'tests' else '' }}"
+       href="{{ url_for('listening_test_index') }}"
+       {% if nav_active == 'tests' %}aria-current="page"{% endif %}>剑雅真题</a>
+    <a class="practice-library-nav__library {{ 'is-active' if nav_active == 'jijing' else '' }}"
+       href="{{ url_for('listening_jijing_index') }}"
+       {% if nav_active == 'jijing' %}aria-current="page"{% endif %}>机经</a>
+    <a class="practice-library-nav__library {{ 'is-active' if nav_active == 'intensive' else '' }}"
+       href="{{ url_for('listening_index') }}"
+       {% if nav_active == 'intensive' %}aria-current="page"{% endif %}>精听</a>
+    {% endif %}
+  </div>
+</nav>

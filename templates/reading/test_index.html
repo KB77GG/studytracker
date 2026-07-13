@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>剑桥雅思阅读整套练习 · Sage Path</title>
+<title>剑桥雅思阅读真题 · Sage Path</title>
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 {% include "listening/_library_styles.html" %}
 <style>
@@ -32,8 +32,8 @@
 <main class="listening-library">
   <div class="listening-library__header">
     <div>
-      <p class="listening-library__eyebrow">阅读 / 剑桥雅思</p>
-      <h1 class="listening-library__title">剑桥雅思阅读整套练习</h1>
+      <p class="listening-library__eyebrow">阅读 / 剑雅真题</p>
+      <h1 class="listening-library__title">剑桥雅思阅读真题</h1>
       <p class="listening-library__summary">{{ test_count }} 套 Test · 每套 3 篇 Passage · 支持限时刷题、提交判分、答案解析</p>
     </div>
     <div class="listening-library__actions">
@@ -41,8 +41,9 @@
     </div>
   </div>
 
-  {% set listening_active = 'reading' %}
-  {% include "listening/_mode_nav.html" %}
+  {% set nav_subject = 'reading' %}
+  {% set nav_active = 'tests' %}
+  {% include "practice/_nav.html" %}
 
   {% if not books %}
   <section class="listening-library__empty">还没有生成剑雅阅读练习数据。请先运行 build 脚本。</section>

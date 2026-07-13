@@ -535,8 +535,9 @@
     {% endif %}
   </div>
 
-  {% set listening_active = 'intensive' %}
-  {% include "listening/_mode_nav.html" %}
+  {% set nav_subject = 'listening' %}
+  {% set nav_active = 'intensive' %}
+  {% include "practice/_nav.html" %}
 
   {% if exercises %}
   {{ render_intensive_catalog(intensive_catalog, staff=True, can_manage=show_upload) }}
@@ -596,8 +597,9 @@
     <div class="today-tasks__list" id="todayTasksList"></div>
   </section>
 
-  {% set listening_active = 'intensive' %}
-  {% include "listening/_mode_nav.html" %}
+  {% set nav_subject = 'listening' %}
+  {% set nav_active = 'intensive' %}
+  {% include "practice/_nav.html" %}
 
   {% if exercises %}
   {{ render_intensive_catalog(intensive_catalog, staff=False) }}

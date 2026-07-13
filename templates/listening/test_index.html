@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>剑桥雅思听力整套练习 · Sage Path</title>
+<title>剑桥雅思听力真题 · Sage Path</title>
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 <style>
 .page {
@@ -319,8 +319,8 @@
 <main class="listening-library">
   <div class="listening-library__header">
     <div>
-      <p class="listening-library__eyebrow">听力 / 剑桥雅思</p>
-      <h1 class="listening-library__title">剑桥雅思听力整套练习</h1>
+      <p class="listening-library__eyebrow">听力 / 剑雅真题</p>
+      <h1 class="listening-library__title">剑桥雅思听力真题</h1>
       <p class="listening-library__summary">{{ test_count }} 套 Test · 每套 4 个 Section · 支持题目练习、精听、解析、原文</p>
     </div>
     {% if current_user.is_authenticated %}
@@ -330,8 +330,9 @@
     {% endif %}
   </div>
 
-  {% set listening_active = 'tests' %}
-  {% include "listening/_mode_nav.html" %}
+  {% set nav_subject = 'listening' %}
+  {% set nav_active = 'tests' %}
+  {% include "practice/_nav.html" %}
 
   {% if sections and sections|length > 1 %}
   <nav class="listening-series-jump" aria-label="教材目录">
