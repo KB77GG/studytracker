@@ -7266,8 +7266,8 @@ def exams_library():
     return redirect(url_for("practice_library"))
 
 
-@app.route("/listening")
 @app.route("/practices")
+@app.route("/listening")
 def listening_index():
     """列出所有可用的精听练习（学生通过姓名验证访问）。
 
