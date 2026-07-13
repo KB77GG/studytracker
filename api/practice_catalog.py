@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from urllib.parse import quote
 
 
@@ -43,7 +43,7 @@ def _submitted_timestamp(value) -> float:
     except (TypeError, ValueError):
         return float("-inf")
     if submitted_at.tzinfo is None:
-        submitted_at = submitted_at.replace(tzinfo=UTC)
+        submitted_at = submitted_at.replace(tzinfo=timezone.utc)  # noqa: UP017
     return submitted_at.timestamp()
 
 
