@@ -42,7 +42,7 @@ data/reading_study/*.json ──(scripts/import_reading_study.py: 校验+role归
   - `resolve_role(role: str) -> dict`：返回 `{concept, zh, en, camp}`；带 flavor 的返回如 `zh="目的状语从句", en="Purpose Clause"`（concept 仍是 `adverbial_clause`）
   - `glossary_payload() -> dict`：给前端的完整词典（概念讲解 + camp 中文名）
 - 入库时给每个 structure 项**增加** `concept`/`label_zh`/`label_en` 字段，**保留原始 `role`**（便于日后重归一化）。
-- 概念词表（封闭,共 35）：`subject, verb_phrase, object, predicative, object_complement, complement, main_clause, coordinate_clause, relative_clause, noun_clause, adverbial_clause, prepositional_phrase, participial_phrase, infinitive_phrase, gerund_phrase, non_finite_clause, apposition, parenthesis, adverbial, linking_verb, passive_predicate, existential_clause, reporting_clause, direct_speech, discourse_marker, conjunction, formal_subject, absolute, comparative, cleft, inversion, adjective_phrase, noun_phrase, generic_phrase, heading`。
+- 概念词表（封闭,共 36）：`subject, verb_phrase, object, predicative, object_complement, complement, main_clause, coordinate_clause, relative_clause, noun_clause, adverbial_clause, prepositional_phrase, participial_phrase, infinitive_phrase, gerund_phrase, non_finite_clause, apposition, parenthesis, adverbial, linking_verb, passive_predicate, existential_clause, reporting_clause, direct_speech, attribution, discourse_marker, conjunction, formal_subject, absolute, comparative, cleft, inversion, adjective_phrase, noun_phrase, generic_phrase, heading`。
 
 ## 4. Phase A · 后端
 

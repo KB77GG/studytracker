@@ -195,6 +195,13 @@ CONCEPTS: dict[str, dict] = {
         "desc": "引号里原封不动引用的话，是被引述的内容。它内部自成一个完整句子，按正常句子拆解即可。",
         "ex": "'It appears that…,' says the professor.",
     },
+    "attribution": {
+        "en": "Attribution",
+        "zh": "引述来源",
+        "camp": "structure",
+        "desc": "标明前述观点或直接引语来自谁。它可以是引语后的说话人姓名，也可以是 according to… / as…remarked 这类来源说明；它不属于被引内容本身的句子主干。",
+        "ex": "'I have also bought…' — Doreen Soko → Doreen Soko 是引语署名",
+    },
     "discourse_marker": {
         "en": "Discourse Marker",
         "zh": "连接副词",
@@ -361,6 +368,10 @@ EXACT: dict[str, object] = {
     "reporting_clause": "reporting_clause",
     "quoted_clause": "direct_speech",
     "direct_speech": "direct_speech",
+    "speaker_attribution": ["attribution", "引语署名", "Speaker Attribution"],
+    "attribution_phrase": ["attribution", "来源短语", "Attribution Phrase"],
+    "attribution_adverbial": ["attribution", "来源状语", "Attribution Adverbial"],
+    "attribution_clause": ["attribution", "来源说明从句", "Attribution Clause"],
     "discourse_marker": "discourse_marker",
     "conjunctive_adverb": "discourse_marker",
     "conjunction": "conjunction",
@@ -376,7 +387,7 @@ EXACT: dict[str, object] = {
     "example_phrase": ["adverbial", "举例短语", "Example Phrase"],
 }
 
-# 兜底：无法归入 35 概念之一的 role（browse.html resolveRole 的 base=null 分支）。
+# 兜底：无法归入封闭概念词表的 role（browse.html resolveRole 的 base=null 分支）。
 _FALLBACK = {
     "en": "Grammatical Role",
     "zh": "语法成分",
@@ -425,6 +436,8 @@ def resolve_role(role: str) -> dict:
         prefix = r.split("_")[0]
         if _match("heading", r):
             key = "heading"
+        elif _match("attribution", r):
+            key = "attribution"
         elif _match(r"_clause$|^clause", r):
             if _match("relative|attributive|nonrestrictive", r):
                 key = "relative_clause"

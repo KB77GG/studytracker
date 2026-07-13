@@ -132,6 +132,27 @@ class GlossaryTest(unittest.TestCase):
         self.assertEqual(time_adv["concept"], "adverbial")
         self.assertEqual(time_adv["zh"], "时间状语")
 
+    def test_attribution_roles_are_not_generic_grammar_fallbacks(self):
+        speaker = resolve_role("speaker_attribution")
+        self.assertEqual(speaker["concept"], "attribution")
+        self.assertEqual(speaker["zh"], "引语署名")
+        self.assertEqual(speaker["en"], "Speaker Attribution")
+
+        expected_labels = {
+            "attribution_phrase": "来源短语",
+            "attribution_adverbial": "来源状语",
+            "attribution_clause": "来源说明从句",
+        }
+        for role, expected_zh in expected_labels.items():
+            with self.subTest(role=role):
+                resolved = resolve_role(role)
+                self.assertEqual(resolved["concept"], "attribution")
+                self.assertEqual(resolved["zh"], expected_zh)
+                self.assertNotEqual(resolved["zh"], "语法成分")
+
+        concept = glossary_payload()["concepts"]["attribution"]
+        self.assertIn("不属于被引内容本身", concept["desc"])
+
     def test_unknown_fallback_is_renderable(self):
         out = resolve_role("totally_made_up_role_xyz")
         self.assertEqual(out["zh"], "语法成分")
@@ -143,7 +164,7 @@ class GlossaryTest(unittest.TestCase):
     def test_glossary_payload_covers_every_resolved_concept(self):
         payload = glossary_payload()
         self.assertEqual(set(payload["camps"]), {"noun", "verb", "adj", "adv", "structure"})
-        # 35 closed concepts + 1 fallback
+        # closed concepts + 1 fallback
         self.assertEqual(len(payload["concepts"]), len(CONCEPTS) + 1)
         for role in ["subject", "object_clause", "purpose_clause", "weird_unknown_tag"]:
             self.assertIn(resolve_role(role)["concept"], payload["concepts"])
