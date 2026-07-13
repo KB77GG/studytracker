@@ -224,12 +224,14 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
 }
 .question-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(180px, auto);
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 42%);
   gap: 14px;
   align-items: start;
   padding: 12px 0;
   border-bottom: 1px solid #edf0f2;
 }
+.question-row > * { min-width: 0; }
+.question-row:has(.choice-stack) { grid-template-columns: minmax(0, 1fr); }
 .question-row:last-child { border-bottom: 0; }
 .question-text {
   line-height: 1.55;
@@ -255,7 +257,7 @@ select.answer-control { min-width: 154px; }
   margin: 0 4px;
 }
 .blank-number { color: var(--sage-deep); font-weight: 900; }
-.choice-stack { display: grid; gap: 8px; min-width: 170px; }
+.choice-stack { display: grid; gap: 8px; width: 100%; min-width: 0; }
 .choice-option {
   display: flex;
   align-items: flex-start;
