@@ -48,7 +48,7 @@
     <article class="practice-book-row">
       <header class="practice-book-identity">
         <span class="practice-book-name">剑雅 {{ book.book }}</span>
-        <span class="practice-book-progress">
+        <span class="practice-book-progress{% if not book.progress.done %} practice-book-progress--empty{% endif %}">
           已刷 <strong>{{ book.progress.done }}/{{ book.progress.total }}</strong>
           {% if book.progress.avg_accuracy is not none %}· 平均 <strong>{{ book.progress.avg_accuracy }}%</strong>{% endif %}
         </span>

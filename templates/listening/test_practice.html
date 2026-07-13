@@ -674,8 +674,9 @@ body.exam-mode .bottom-nav { padding-right: 220px; }
 </div>
 
 <main class="page">
-  {% set listening_active = 'tests' %}
-  {% include "listening/_mode_nav.html" %}
+  {% set nav_subject = 'listening' %}
+  {% set nav_active = 'tests' %}
+  {% include "practice/_nav.html" %}
   <nav class="tabs" id="viewTabs" aria-label="练习视图">
     <button class="tab active" type="button" data-view="practice">题目练习</button>
     <button class="tab" type="button" data-view="dictation">精听</button>

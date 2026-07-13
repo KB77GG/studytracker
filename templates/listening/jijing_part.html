@@ -479,8 +479,9 @@ table.practice-table {
   </header>
 
   <main class="page">
-    {% set listening_active = 'jijing' %}
-    {% include "listening/_mode_nav.html" %}
+    {% set nav_subject = 'listening' %}
+    {% set nav_active = 'jijing' %}
+    {% include "practice/_nav.html" %}
     <nav class="tabs" aria-label="练习视图">
       <button class="tab active" data-tab="practice">题目练习</button>
       <button class="tab" data-tab="dictation">精听</button>
