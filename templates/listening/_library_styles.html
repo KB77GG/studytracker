@@ -176,6 +176,58 @@
   background: var(--brand-tint);
   color: var(--brand-dark);
 }
+.practice-continue {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 22px;
+  padding: 12px 16px;
+  border: 1px solid var(--brand-light);
+  border-radius: var(--r);
+  background: var(--brand-tint);
+}
+.practice-continue__label {
+  color: var(--brand-dark);
+  font-size: var(--fs-xs);
+  font-weight: 900;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+.practice-continue__text {
+  color: var(--text);
+  font-size: var(--fs-base);
+}
+.practice-continue__text strong {
+  color: var(--text-strong);
+  font-weight: 900;
+}
+.practice-continue__action,
+.practice-continue__complete {
+  margin-left: auto;
+  font-size: var(--fs-sm);
+  font-weight: 900;
+}
+.practice-continue__action {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 16px;
+  border-radius: var(--r-sm);
+  background: var(--brand);
+  color: var(--card);
+  text-decoration: none;
+}
+.practice-continue__action:hover,
+.practice-continue__action:focus-visible {
+  background: var(--brand-dark);
+  color: var(--card);
+  outline: none;
+}
+.practice-continue__complete {
+  color: var(--brand-dark);
+}
 .listening-series-section {
   margin-bottom: 30px;
   scroll-margin-top: 16px;
@@ -820,6 +872,11 @@ summary.practice-test-chip::-webkit-details-marker {
   .listening-library__actions,
   .listening-library__button {
     width: 100%;
+  }
+  .practice-continue__action,
+  .practice-continue__complete {
+    width: 100%;
+    margin-left: 0;
   }
   .listening-library .exercise-grid,
   .listening-resource-grid {

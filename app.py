@@ -45,6 +45,7 @@ from api import init_app as init_api
 from api.wechat import send_subscribe_message
 from api.tencent_soe import evaluate_pronunciation
 from api.listening_series import parse_intensive_id, parse_test_id, series_name
+from api.practice_catalog import pick_continue_target, summarize_book_progress
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
 from toefl_practice import catalog_summary as _toefl_catalog_summary
 from toefl_practice import toefl_bp
@@ -7575,6 +7576,8 @@ def listening_test_index():
         books,
         _listening_practice_status_map(_current_practice_student_profile()),
     )
+    summarize_book_progress(books)
+    continue_target = pick_continue_target(books)
     test_count = sum(len(book["tests"]) for book in books)
     sections = _listening_series_sections(books)
     return render_template(
@@ -7582,6 +7585,7 @@ def listening_test_index():
         books=books,
         sections=sections,
         test_count=test_count,
+        continue_target=continue_target,
     )
 
 
@@ -7616,8 +7620,15 @@ def reading_test_index():
         books,
         _reading_practice_status_map(_current_practice_student_profile()),
     )
+    summarize_book_progress(books)
+    continue_target = pick_continue_target(books)
     test_count = sum(len(book.get("tests") or []) for book in books)
-    return render_template("reading/test_index.html", books=books, test_count=test_count)
+    return render_template(
+        "reading/test_index.html",
+        books=books,
+        test_count=test_count,
+        continue_target=continue_target,
+    )
 
 
 @app.route("/reading/jijing")

@@ -26,6 +26,22 @@
   {% set nav_active = 'tests' %}
   {% include "practice/_nav.html" %}
 
+  {% if continue_target %}
+  <section class="practice-continue" aria-label="继续刷题">
+    <span class="practice-continue__label">继续刷题</span>
+    <span class="practice-continue__text">
+      上次：<strong>{{ continue_target.last.label }} Test {{ continue_target.last.test }}</strong>
+      {% if continue_target.last.accuracy is not none %}· {{ continue_target.last.accuracy|round|int }}%{% endif %}
+      {% if continue_target.next %}→ 继续：<strong>{{ continue_target.next.label }} Test {{ continue_target.next.test }}</strong>{% endif %}
+    </span>
+    {% if continue_target.next %}
+    <a class="practice-continue__action" href="{{ continue_target.next.url }}">整卷练习</a>
+    {% else %}
+    <span class="practice-continue__complete">当前系列已全部刷完</span>
+    {% endif %}
+  </section>
+  {% endif %}
+
   {% if sections and sections|length > 1 %}
   <nav class="listening-series-jump" aria-label="教材目录">
     {% for group in sections %}
@@ -45,7 +61,10 @@
       <article class="practice-book-row">
         <header class="practice-book-identity">
           <span class="practice-book-name">{{ book.label }}</span>
-          <span class="practice-book-progress">共 {{ book.tests|length }} 套 Test</span>
+          <span class="practice-book-progress">
+            已刷 <strong>{{ book.progress.done }}/{{ book.progress.total }}</strong>
+            {% if book.progress.avg_accuracy is not none %}· 平均 <strong>{{ book.progress.avg_accuracy }}%</strong>{% endif %}
+          </span>
         </header>
         <div class="practice-test-chips">
           {% for test in book.tests %}
