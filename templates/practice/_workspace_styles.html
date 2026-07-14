@@ -126,6 +126,13 @@
   background: var(--lw-neutral-0);
   scrollbar-width: thin;
 }
+.practice-workspace__sidebar--scroll {
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  min-height: 0;
+  overflow-y: auto;
+}
 .practice-workspace__sidebar-head { display: none; }
 .practice-workspace__source-nav { position: relative; z-index: 2; }
 .practice-workspace__source-group + .practice-workspace__source-group { margin-top: 4px; }
@@ -460,6 +467,62 @@
   color: #fff;
 }
 .practice-workspace__flat-actions .practice-workspace__test-action[hidden] { display: none; }
+.practice-workspace__test-card--jijing .practice-workspace__test-summary {
+  min-height: 86px;
+  cursor: default;
+}
+.practice-workspace__jijing-count {
+  color: var(--lw-neutral-500);
+  font-family: var(--lw-font-en);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.practice-workspace__jijing-parts {
+  padding: 0 20px 20px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.practice-workspace__jijing-part {
+  min-width: 0;
+  min-height: 72px;
+  padding: 11px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid var(--lw-neutral-200);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--lw-neutral-700);
+  text-decoration: none;
+}
+.practice-workspace__jijing-part:hover {
+  border-color: var(--lw-green-200);
+  background: var(--lw-green-50);
+  color: var(--lw-green-700);
+}
+.practice-workspace__jijing-part.is-done {
+  border-color: rgba(47, 142, 135, .35);
+  background: var(--lw-green-50);
+}
+.practice-workspace__jijing-part strong {
+  color: var(--lw-neutral-800);
+  font-size: 12px;
+  font-weight: 800;
+}
+.practice-workspace__jijing-part span,
+.practice-workspace__jijing-part small {
+  overflow-wrap: anywhere;
+  color: var(--lw-neutral-500);
+  font-size: 11px;
+  line-height: 1.35;
+}
+.practice-workspace__jijing-part small {
+  color: var(--lw-green-600);
+  font-weight: 800;
+}
 .practice-workspace__test-panel {
   margin: 0 18px 18px;
   padding: 12px;
@@ -543,6 +606,7 @@
     gap: 5px;
   }
   .practice-workspace__parts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .practice-workspace__jijing-parts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 860px) {
@@ -643,6 +707,11 @@
     grid-column: 1 / -1;
   }
   .practice-workspace__flat-actions .practice-workspace__test-action { flex: 1; }
+  .practice-workspace__test-card--jijing .practice-workspace__test-summary {
+    grid-template-columns: 52px minmax(0, 1fr);
+  }
+  .practice-workspace__jijing-count { grid-column: 2; }
+  .practice-workspace__jijing-parts { padding: 0 12px 12px; grid-template-columns: 1fr; }
   .practice-workspace__test-panel { margin: 0 10px 10px; grid-template-columns: 1fr; }
   .practice-workspace__full-practice { min-height: 48px; align-items: center; }
   .practice-workspace__parts { grid-template-columns: repeat(2, minmax(0, 1fr)); }

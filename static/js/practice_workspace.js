@@ -37,7 +37,11 @@
     });
     toggle.setAttribute("aria-expanded", String(expanded));
     var label = toggle.querySelector("[data-older-label]");
-    if (label) label.textContent = expanded ? "收起剑15 – 剑4" : "剑15 – 剑4";
+    if (label) {
+      var collapsedLabel = toggle.getAttribute("data-collapsed-label") || "剑15 – 剑4";
+      var expandedLabel = toggle.getAttribute("data-expanded-label") || "收起剑15 – 剑4";
+      label.textContent = expanded ? expandedLabel : collapsedLabel;
+    }
   }
 
   function selectBook(button, updateHash) {

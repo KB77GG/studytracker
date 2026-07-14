@@ -6,6 +6,7 @@ from api.practice_catalog import (
     decorate_reading_books,
     pick_continue_target,
     summarize_book_progress,
+    summarize_jijing_book_progress,
 )
 
 
@@ -67,6 +68,36 @@ class DecorateReadingBooksTests(unittest.TestCase):
         self.assertEqual(books[1]["series"], "custom")
         self.assertEqual(books[1]["label"], "自定义阅读")
         self.assertEqual(books[1]["tests"][0]["series"], "custom-test")
+
+    def test_supports_reading_jijing_labels_and_series(self):
+        books = [{"book": 57, "tests": [{"id": "reading_jijing_57_test_1"}]}]
+
+        decorate_reading_books(books, series="jijing", label_prefix="机经")
+
+        self.assertEqual(books[0]["series"], "jijing")
+        self.assertEqual(books[0]["label"], "机经 57")
+        self.assertEqual(books[0]["tests"][0]["series"], "jijing")
+
+
+class SummarizeJijingBookProgressTests(unittest.TestCase):
+    def test_counts_completed_parts_across_tests(self):
+        books = [
+            {
+                "tests": [
+                    {
+                        "parts": [
+                            {"id": "part-1", "practice_status": _status(80, None)},
+                            {"id": "part-2"},
+                        ]
+                    },
+                    {"parts": [{"id": "part-3", "practice_status": _status(90, None)}]},
+                ]
+            }
+        ]
+
+        summarize_jijing_book_progress(books)
+
+        self.assertEqual(books[0]["progress"], {"done": 2, "total": 3})
 
 
 class PickContinueTargetTests(unittest.TestCase):

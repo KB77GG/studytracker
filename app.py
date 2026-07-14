@@ -49,6 +49,7 @@ from api.practice_catalog import (
     decorate_reading_books,
     pick_continue_target,
     summarize_book_progress,
+    summarize_jijing_book_progress,
 )
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
 from practice_tables import normalize_practice_tables
@@ -7338,6 +7339,7 @@ def listening_jijing_index():
         books,
         _listening_jijing_status_map(_current_practice_student_profile()),
     )
+    summarize_jijing_book_progress(books)
     return render_template("listening/jijing_index.html", catalog=catalog, books=books)
 
 
@@ -7645,10 +7647,12 @@ def reading_test_index():
 def reading_jijing_index():
     """阅读机经练习列表。"""
     books = _reading_jijing_catalog()
+    decorate_reading_books(books, series="jijing", label_prefix="机经")
     _apply_test_statuses(
         books,
         _reading_practice_status_map(_current_practice_student_profile()),
     )
+    summarize_book_progress(books)
     test_count = sum(len(book.get("tests") or []) for book in books)
     question_count = sum(
         int(test.get("question_count") or 0)

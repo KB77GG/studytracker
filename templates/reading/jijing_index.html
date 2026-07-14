@@ -5,75 +5,174 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>阅读机经 · Sage Path</title>
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-{% include "listening/_library_styles.html" %}
-<style>
-.reading-test-entry { position: relative; min-width: 0; }
-.reading-test-entry .listening-test-link { height: 100%; }
-.reading-study-entry {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-  padding: 4px 8px;
-  border: 1px solid rgba(47, 142, 135, .3);
-  border-radius: 999px;
-  color: var(--brand-dark);
-  background: #fff;
-  font-size: 12px;
-  font-weight: 900;
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-}
-.reading-study-entry[hidden] { display: none; }
-.reading-study-entry:hover { background: var(--brand-soft); }
-</style>
+{% include "practice/_workspace_styles.html" %}
 </head>
-<body>
-<main class="listening-library">
-  <div class="listening-library__header">
-    <div>
-      <p class="listening-library__eyebrow">阅读 / 机经</p>
-      <h1 class="listening-library__title">阅读机经</h1>
-      <p class="listening-library__summary">{{ test_count }} 套 Test · {{ question_count }} 题 · 支持限时刷题、提交判分、答案解析</p>
+<body class="practice-workspace-page">
+<div class="practice-workspace" data-practice-workspace>
+  <header class="practice-workspace__topbar">
+    <div class="practice-workspace__brand-nav">
+      <a class="practice-workspace__brand" href="{{ url_for('index') }}" aria-label="返回 Sage Path 首页">
+        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+        <span>Sage Path</span>
+      </a>
+      <span class="practice-workspace__context">机经</span>
+      <nav class="practice-workspace__subjects" aria-label="科目导航">
+        <a href="{{ url_for('listening_jijing_index') }}">听力</a>
+        <a class="is-active" href="{{ url_for('reading_jijing_index') }}" aria-current="page">阅读</a>
+        {% if current_user.is_authenticated %}
+        <a class="practice-workspace__report-link" href="{{ url_for('report_page') }}">学习报告</a>
+        {% endif %}
+      </nav>
     </div>
-    <div class="listening-library__actions">
-      <a class="listening-library__button" href="{{ url_for('practice_library') }}">刷题 / 模考</a>
+    <div class="practice-workspace__account">
+      <a href="{{ url_for('index') }}">返回首页</a>
+      {% if current_user.is_authenticated %}
+      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
+      {% endif %}
     </div>
-  </div>
+  </header>
 
-  {% set nav_subject = 'reading' %}
-  {% set nav_active = 'jijing' %}
-  {% include "practice/_nav.html" %}
+  <div class="practice-workspace__layout">
+    <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="阅读机经目录">
+      <div class="practice-workspace__sidebar-head">
+        <strong>选择题库</strong>
+        <button type="button" data-close-catalog>关闭</button>
+      </div>
 
-  {% if not books %}
-  <section class="listening-library__empty">还没有生成阅读机经数据。请先导入 idictation 阅读机经。</section>
-  {% else %}
-  <section class="listening-book-grid">
-    {% for book in books %}
-    <article class="listening-book-card">
-      <header class="listening-book-card__header">
-        <span class="listening-book-card__label">阅读机经</span>
-        <span class="listening-book-card__number">{{ book.book }}</span>
-      </header>
-      <div class="listening-test-grid">
-        {% for test in book.tests %}
-        <div class="reading-test-entry">
-          <a class="listening-test-link{% if test.practice_status %} listening-test-link--done{% endif %}" href="{{ url_for('reading_jijing_practice', test_id=test.id) }}">
-            <span class="listening-test-link__name">Test {{ test.test }}</span>
-            <span class="listening-test-link__meta">{{ test.passage_count }} Passage<br>{{ test.question_count }} 题</span>
-            {% if test.practice_status %}
-            <span class="listening-test-link__status">已刷 · {{ test.practice_status.accuracy }}%</span>
+      <nav class="practice-workspace__source-nav">
+        <section class="practice-workspace__source-group" data-source-group>
+          <button class="practice-workspace__source-toggle is-active"
+                  type="button"
+                  aria-expanded="true"
+                  aria-controls="source-items-reading-jijing"
+                  data-source-toggle>
+            <span><strong>阅读机经</strong></span>
+            <small>{{ books|length }} 组</small>
+          </button>
+          <div class="practice-workspace__source-items" id="source-items-reading-jijing">
+            {% for book in books|reverse %}
+            {% set book_key = book.series ~ '-' ~ book.book %}
+            <button class="practice-workspace__source-item{% if loop.first %} is-selected{% endif %}"
+                    id="book-control-{{ book_key }}"
+                    type="button"
+                    aria-controls="book-{{ book_key }}"
+                    {% if loop.first %}aria-current="page" data-default-book{% endif %}
+                    data-book-target="{{ book_key }}"
+                    {% if loop.index > 10 %}data-older-book hidden{% endif %}>
+              <span>机经 {{ book.book }}</span>
+              <small>{{ book.progress.done }}/{{ book.progress.total }}</small>
+            </button>
+            {% endfor %}
+            {% if books|length > 10 %}
+            <button class="practice-workspace__older-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    data-older-toggle
+                    data-collapsed-label="更多机经组"
+                    data-expanded-label="收起机经组">
+              <span data-older-label>更多机经组</span>
+            </button>
             {% endif %}
+          </div>
+        </section>
+
+        <section class="practice-workspace__source-group">
+          <a class="practice-workspace__source-toggle practice-workspace__source-link"
+             href="{{ url_for('reading_test_index') }}">
+            <span>
+              <strong>剑雅真题</strong>
+              <em>返回整套阅读题库</em>
+            </span>
+            <small>进入</small>
           </a>
-          <a class="reading-study-entry" data-reading-study-test="{{ test.id }}" href="/reading/study/{{ test.id }}" hidden>学习</a>
-        </div>
+        </section>
+      </nav>
+      <span class="practice-workspace__sidebar-watermark" aria-hidden="true">READING</span>
+    </aside>
+
+    <button class="practice-workspace__scrim" type="button" aria-label="关闭题库目录" data-catalog-scrim hidden></button>
+
+    <main class="practice-workspace__main">
+      <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+      <button class="practice-workspace__catalog-button"
+              type="button"
+              aria-controls="practice-catalog"
+              aria-expanded="false"
+              data-open-catalog>选择题库</button>
+
+      {% if not books %}
+      <section class="practice-workspace__empty">还没有生成阅读机经数据。请先导入 idictation 阅读机经。</section>
+      {% else %}
+      <div class="practice-workspace__book-panels">
+        {% for book in books|reverse %}
+        {% set book_key = book.series ~ '-' ~ book.book %}
+        {% set book_question_count = book.tests|sum(attribute='question_count') %}
+        {% set progress_percent = ((book.progress.done / book.progress.total) * 100)|round|int if book.progress.total else 0 %}
+        <section class="practice-workspace__book-panel"
+                 id="book-{{ book_key }}"
+                 aria-labelledby="book-control-{{ book_key }}"
+                 data-book-panel="{{ book_key }}"
+                 {% if not loop.first %}hidden{% endif %}>
+          <header class="practice-workspace__page-heading">
+            <div>
+              <p>阅读 / 机经 / {{ book.label }}</p>
+              <div>
+                <h1>阅读机经 {{ book.book }}</h1>
+                <span>{{ book.tests|length }} Tests · {{ book_question_count }} 题</span>
+              </div>
+            </div>
+            <div class="practice-workspace__book-progress">
+              <span>本组进度</span>
+              <span class="practice-workspace__progress-track"
+                    role="progressbar"
+                    aria-label="{{ book.label }} 本组进度"
+                    aria-valuemin="0"
+                    aria-valuemax="{{ book.progress.total }}"
+                    aria-valuenow="{{ book.progress.done }}">
+                <span style="width: {{ progress_percent }}%"></span>
+              </span>
+              <strong>{{ book.progress.done }}/{{ book.progress.total }}</strong>
+            </div>
+          </header>
+
+          <section class="practice-workspace__test-list" aria-label="{{ book.label }} Test 列表">
+            {% for test in book.tests %}
+            <article class="practice-workspace__test-card practice-workspace__test-card--flat{% if test.practice_status %} is-done{% endif %}">
+              <div class="practice-workspace__test-summary">
+                <span class="practice-workspace__test-number">
+                  <small>TEST</small>
+                  <strong>{{ test.test }}</strong>
+                </span>
+                <span class="practice-workspace__test-copy">
+                  {% if test.practice_status %}
+                  <strong>已完成 · {{ test.practice_status.accuracy }}%</strong>
+                  {% else %}
+                  <strong>未开始</strong>
+                  {% endif %}
+                  <small>{{ test.passage_count }} 篇 Passage · {{ test.question_count }} 题 · 约 60 分钟</small>
+                </span>
+                <span class="practice-workspace__flat-actions">
+                  <a class="practice-workspace__test-action is-primary"
+                     href="{{ url_for('reading_jijing_practice', test_id=test.id) }}">
+                    {{ '查看练习' if test.practice_status else '开始练习' }}
+                  </a>
+                  <a class="practice-workspace__test-action"
+                     data-reading-study-test="{{ test.id }}"
+                     href="/reading/study/{{ test.id }}"
+                     hidden>学习</a>
+                </span>
+              </div>
+            </article>
+            {% endfor %}
+          </section>
+        </section>
         {% endfor %}
       </div>
-    </article>
-    {% endfor %}
-  </section>
-  {% endif %}
-</main>
+      {% endif %}
+    </main>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/practice_workspace.js') }}"></script>
 <script>
 (async function revealReadingStudyEntries() {
   try {
