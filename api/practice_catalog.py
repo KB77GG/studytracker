@@ -35,6 +35,16 @@ def summarize_book_progress(books: list[dict]) -> None:
         }
 
 
+def decorate_reading_books(books: list[dict]) -> None:
+    """补齐阅读剑雅目录在共享工作台中使用的系列与展示字段。"""
+    for book in books:
+        book_number = book.get("book")
+        book.setdefault("series", "cambridge")
+        book.setdefault("label", f"剑雅 {book_number}")
+        for test in book.get("tests") or []:
+            test.setdefault("series", book["series"])
+
+
 def _submitted_timestamp(value) -> float:
     if not value:
         return float("-inf")

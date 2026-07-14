@@ -2,7 +2,11 @@
 
 import unittest
 
-from api.practice_catalog import pick_continue_target, summarize_book_progress
+from api.practice_catalog import (
+    decorate_reading_books,
+    pick_continue_target,
+    summarize_book_progress,
+)
 
 
 def _status(accuracy, submitted_at):
@@ -41,6 +45,28 @@ class SummarizeBookProgressTests(unittest.TestCase):
             books[0]["progress"],
             {"done": 2, "total": 3, "avg_accuracy": 82},
         )
+
+
+class DecorateReadingBooksTests(unittest.TestCase):
+    def test_adds_workspace_fields_without_overwriting_existing_values(self):
+        books = [
+            {"book": 12, "tests": [_test(12, 1, reading=True)]},
+            {
+                "book": 13,
+                "series": "custom",
+                "label": "自定义阅读",
+                "tests": [{**_test(13, 1, reading=True), "series": "custom-test"}],
+            },
+        ]
+
+        decorate_reading_books(books)
+
+        self.assertEqual(books[0]["series"], "cambridge")
+        self.assertEqual(books[0]["label"], "剑雅 12")
+        self.assertEqual(books[0]["tests"][0]["series"], "cambridge")
+        self.assertEqual(books[1]["series"], "custom")
+        self.assertEqual(books[1]["label"], "自定义阅读")
+        self.assertEqual(books[1]["tests"][0]["series"], "custom-test")
 
 
 class PickContinueTargetTests(unittest.TestCase):

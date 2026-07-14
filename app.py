@@ -45,7 +45,11 @@ from api import init_app as init_api
 from api.wechat import send_subscribe_message
 from api.tencent_soe import evaluate_pronunciation
 from api.listening_series import parse_intensive_id, parse_test_id, series_name
-from api.practice_catalog import pick_continue_target, summarize_book_progress
+from api.practice_catalog import (
+    decorate_reading_books,
+    pick_continue_target,
+    summarize_book_progress,
+)
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
 from practice_tables import normalize_practice_tables
 from toefl_practice import catalog_summary as _toefl_catalog_summary
@@ -7619,16 +7623,19 @@ def api_listening_test_practice(test_id):
 def reading_test_index():
     """剑桥雅思阅读整套练习列表。"""
     books = _reading_test_catalog()
+    decorate_reading_books(books)
     _apply_test_statuses(
         books,
         _reading_practice_status_map(_current_practice_student_profile()),
     )
     summarize_book_progress(books)
     continue_target = pick_continue_target(books)
+    sections = _listening_series_sections(books)
     test_count = sum(len(book.get("tests") or []) for book in books)
     return render_template(
         "reading/test_index.html",
         books=books,
+        sections=sections,
         test_count=test_count,
         continue_target=continue_target,
     )
