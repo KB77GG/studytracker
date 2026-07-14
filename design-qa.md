@@ -1,3 +1,46 @@
+# 刷题库二期统一工作台 Design QA
+
+## Comparison Target
+
+- 视觉基准：现有 `/listening/tests` 工作台与用户提供的 3a 设计截图。
+- 实现页面：
+  - `http://127.0.0.1:5001/practice`
+  - `http://127.0.0.1:5001/listening/tests`
+  - `http://127.0.0.1:5001/reading/tests`
+  - `http://127.0.0.1:5001/listening/jijing`
+  - `http://127.0.0.1:5001/reading/jijing`
+- 对照证据：
+  - `/tmp/studytracker-workspace-phase2-task1-comparison.png`
+  - `/tmp/studytracker-workspace-phase2-task2-comparison.png`
+  - `/tmp/qa-1280-contact.png`
+  - `/tmp/qa-768-contact.png`
+  - `/tmp/qa-375-contact.png`
+- 视口：1280 × 844、768 × 844、375 × 844。
+- 状态：访客未绑定；剑雅默认书、`#cambridge-12`、`#jfdr-6`；阅读学习入口已渐进显示；阅读机经更多分组展开；移动端目录抽屉打开与关闭。
+
+## Findings
+
+- No actionable P0, P1, or P2 findings remain.
+- 五个页面在三档视口均满足 `scrollWidth === innerWidth`，无页面级横向溢出。
+- 剑雅听力、剑雅阅读和两类机经共用同一顶栏、题库侧栏、内容层级、进度与状态视觉；门户按题库分组后仍保持五个 IELTS 入口一键直达。
+- 阅读 Test 保持平铺主路径；听力机经保持 Part 直达；未为高频操作增加手风琴或中间选择层。
+- 375/768 下侧栏改为抽屉；选择题库、scrim 点击、关闭按钮与 Esc 均可关闭，正文滚动宽度不受影响。
+- 57 组阅读机经默认显示 10 组，其余可展开；听力机经长目录独立滚动，虾滑听力分组可访问。
+- 已刷状态、正确率、继续条、Reading Study 渐进入口、剑雅 hash 直达与 9 分达人分组均保留。
+- Chrome DevTools 控制台在回归页无页面错误；课堂模式仍绕过学生绑定，访客模式仍要求先绑定，未绑定学生不渲染继续条。
+
+## Engineering Guardrails
+
+- 公开 URL 与 Flask endpoint 未改。
+- `test_practice.html`、`jijing_part.html`、`player.html` 及阅读做题模板与改版前一致。
+- `app.py` 只增加目录纯函数调用与模板数据；新聚合逻辑全部位于 `api/practice_catalog.py`。
+- 判分与提交代码未改；旧听力专用类前缀、旧 JS/样式文件名与旧模式导航组件引用均为零。
+- 完整测试：229 tests passed。
+
+final result: passed
+
+---
+
 # TOEFL Formal Exam UI Design QA
 
 ## Comparison Target
