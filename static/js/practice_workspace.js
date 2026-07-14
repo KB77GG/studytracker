@@ -1,10 +1,10 @@
 (function () {
   "use strict";
 
-  var root = document.querySelector("[data-listening-workspace]");
+  var root = document.querySelector("[data-practice-workspace]");
   if (!root) return;
 
-  var sidebar = root.querySelector("#listening-catalog");
+  var sidebar = root.querySelector("#practice-catalog");
   var openCatalogButton = root.querySelector("[data-open-catalog]");
   var closeCatalogButton = root.querySelector("[data-close-catalog]");
   var scrim = root.querySelector("[data-catalog-scrim]");
@@ -22,7 +22,7 @@
 
   function setGroupExpanded(group, expanded) {
     var toggle = group.querySelector("[data-source-toggle]");
-    var items = group.querySelector(".listening-workspace__source-items");
+    var items = group.querySelector(".practice-workspace__source-items");
     if (!toggle || !items) return;
     toggle.setAttribute("aria-expanded", String(expanded));
     toggle.classList.toggle("is-active", expanded);
@@ -90,7 +90,7 @@
     });
   });
 
-  root.querySelectorAll(".listening-workspace__test-card").forEach(function (details) {
+  root.querySelectorAll(".practice-workspace__test-card").forEach(function (details) {
     details.addEventListener("toggle", function () {
       var label = details.querySelector("[data-closed-label]");
       if (!label) return;

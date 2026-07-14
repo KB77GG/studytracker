@@ -14,7 +14,7 @@ class ListeningTestIndexWorkspaceTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         html = response.get_data(as_text=True)
 
-        self.assertIn('data-listening-workspace', html)
+        self.assertIn('data-practice-workspace', html)
         self.assertIn('data-book-target="cambridge-20"', html)
         self.assertIn('data-book-target="jfdr-6"', html)
         self.assertIn('href="/listening/test/ielts20_test1"', html)
@@ -33,12 +33,12 @@ class ListeningTestIndexWorkspaceTest(unittest.TestCase):
             for test in book["tests"]
         )
 
-        self.assertEqual(html.count('class="listening-workspace__test-card'), expected_tests)
-        self.assertEqual(html.count('class="listening-workspace__full-practice"'), expected_tests)
-        self.assertEqual(html.count('class="listening-workspace__part"'), expected_parts)
+        self.assertEqual(html.count('class="practice-workspace__test-card'), expected_tests)
+        self.assertEqual(html.count('class="practice-workspace__full-practice"'), expected_tests)
+        self.assertEqual(html.count('class="practice-workspace__part"'), expected_parts)
 
     def test_workspace_assets_are_served(self):
-        script = self.client.get("/static/js/listening_test_index.js")
+        script = self.client.get("/static/js/practice_workspace.js")
         logo = self.client.get("/static/brand/sagepath-mark.png")
         try:
             self.assertEqual(script.status_code, 200)
