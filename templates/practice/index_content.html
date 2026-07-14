@@ -500,35 +500,30 @@ a.practice-resource:hover {
   <div class="practice-section-heading" id="ieltsPractice">
     <div>
       <h3>IELTS 雅思</h3>
-      <p>按科目选择教材、机经或专项练习。</p>
+      <p>按题库选择听力、阅读或专项练习。</p>
     </div>
   </div>
 
-  <section class="practice-subjects" aria-label="雅思刷题科目">
+  <section class="practice-subjects" aria-label="雅思刷题题库">
     <article class="practice-subject">
       <header class="practice-subject__head">
-        <h3 class="practice-subject__name">听力</h3>
-        <span class="practice-subject__tag">已接入</span>
+        <h3 class="practice-subject__name">剑雅真题</h3>
+        <span class="practice-subject__tag">含 9 分达人</span>
       </header>
       <div class="practice-resource-list">
         <a class="practice-resource js-practice-resource" href="{{ url_for('listening_test_index') }}">
           <div>
-            <p class="practice-resource__label">剑雅真题</p>
+            <p class="practice-resource__label">听力</p>
             <div class="practice-resource__meta">{{ summary.listening.cambridge_books }} 本书 · {{ summary.listening.cambridge_tests }} 套 Test · {{ summary.listening.cambridge_questions }} 题</div>
           </div>
           <span class="practice-resource__cta">进入</span>
         </a>
-        <a class="practice-resource js-practice-resource" href="{{ url_for('listening_jijing_index') }}">
+        <a class="practice-resource js-practice-resource" href="{{ url_for('reading_test_index') }}">
           <div>
-            <p class="practice-resource__label">机经</p>
-            <div class="practice-resource__meta">{{ summary.listening.jijing_books }} 组 · {{ summary.listening.jijing_tests }} 套 · {{ summary.listening.jijing_parts }} 个 Part</div>
-          </div>
-          <span class="practice-resource__cta">进入</span>
-        </a>
-        <a class="practice-resource js-practice-resource" href="{{ url_for('listening_index') }}">
-          <div>
-            <p class="practice-resource__label">精听</p>
-            <div class="practice-resource__meta">{{ summary.listening.intensive_sections }} 个切句材料，支持逐句听写、跟读和任务同步。</div>
+            <p class="practice-resource__label">阅读</p>
+            <div class="practice-resource__meta">
+              {{ summary.reading.cambridge_books }} 本书 · {{ summary.reading.cambridge_tests }} 套 Test · {{ summary.reading.cambridge_questions }} 题
+            </div>
           </div>
           <span class="practice-resource__cta">进入</span>
         </a>
@@ -537,25 +532,37 @@ a.practice-resource:hover {
 
     <article class="practice-subject">
       <header class="practice-subject__head">
-        <h3 class="practice-subject__name">阅读</h3>
-        <span class="practice-subject__tag">导入中</span>
+        <h3 class="practice-subject__name">机经</h3>
       </header>
       <div class="practice-resource-list">
-        <a class="practice-resource js-practice-resource" href="{{ url_for('reading_test_index') }}">
+        <a class="practice-resource js-practice-resource" href="{{ url_for('listening_jijing_index') }}">
           <div>
-            <p class="practice-resource__label">剑雅真题</p>
-            <div class="practice-resource__meta">
-              {{ summary.reading.cambridge_books }} 本书 · {{ summary.reading.cambridge_tests }} 套 Test · {{ summary.reading.cambridge_questions }} 题
-            </div>
+            <p class="practice-resource__label">听力</p>
+            <div class="practice-resource__meta">{{ summary.listening.jijing_books }} 组 · {{ summary.listening.jijing_tests }} 套 · {{ summary.listening.jijing_parts }} 个 Part</div>
           </div>
           <span class="practice-resource__cta">进入</span>
         </a>
         <a class="practice-resource js-practice-resource" href="{{ url_for('reading_jijing_index') }}">
           <div>
-            <p class="practice-resource__label">机经</p>
+            <p class="practice-resource__label">阅读</p>
             <div class="practice-resource__meta">
               {{ summary.reading.jijing_books }} 组 · {{ summary.reading.jijing_tests }} 套 Test · {{ summary.reading.jijing_questions }} 题
             </div>
+          </div>
+          <span class="practice-resource__cta">进入</span>
+        </a>
+      </div>
+    </article>
+
+    <article class="practice-subject">
+      <header class="practice-subject__head">
+        <h3 class="practice-subject__name">精听</h3>
+      </header>
+      <div class="practice-resource-list">
+        <a class="practice-resource js-practice-resource" href="{{ url_for('listening_index') }}">
+          <div>
+            <p class="practice-resource__label">听力</p>
+            <div class="practice-resource__meta">{{ summary.listening.intensive_sections }} 个切句材料，支持逐句听写、跟读和任务同步。</div>
           </div>
           <span class="practice-resource__cta">进入</span>
         </a>
