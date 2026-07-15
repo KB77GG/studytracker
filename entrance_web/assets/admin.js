@@ -33,6 +33,13 @@ const EXAM_LABELS = {
   ielts: 'IELTS', toefl: 'TOEFL', toefl_junior: 'TOEFL Junior', general: '通用英语',
 };
 
+const SESSION_REASON_LABELS = {
+  device_changed: '更换设备',
+  left_too_long: '离开超过2分钟',
+  session_interrupted: '连接中断超过2分钟',
+  session_locked: '会话已锁定',
+};
+
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -133,10 +140,21 @@ async function loadInvitations() {
     tbody.innerHTML = res.invitations.map(inv => {
       const s = STATUS_LABELS[inv.status] || { text: inv.status, cls: 'bg-gray-100' };
       const link = `${location.origin}/entrance/student.html?token=${inv.token}`;
+      const session = inv.session || {};
       let action = `<button class="text-teal-600 hover:underline text-xs" onclick="copyLink('${inv.token}')">复制链接</button>`;
       if (inv.attempt_id && (inv.status === 'submitted' || inv.status === 'graded')) {
         action += ` · <a href="grade.html?attempt_id=${inv.attempt_id}" class="text-teal-600 hover:underline text-xs">批改 / 查看</a>`;
       }
+      if (inv.status === 'in_progress' && session.deadline_at) {
+        action += ` · <button class="${session.is_locked ? 'text-orange-600' : 'text-blue-600'} hover:underline text-xs" onclick="manageEntranceSession(${inv.id}, ${session.is_locked ? 'true' : 'false'})">${session.is_locked ? '解锁' : '会话设置'}</button>`;
+      }
+      const sessionInfo = inv.status === 'in_progress' && session.deadline_at
+        ? `<div class="mt-1 text-[11px] ${session.is_locked ? 'text-orange-600 font-semibold' : 'text-gray-500'}">
+            ${session.is_locked ? `🔒 ${esc(SESSION_REASON_LABELS[session.locked_reason] || '会话已锁定')} · ` : ''}
+            离开 ${session.exit_count || 0} 次 · 换设备 ${session.device_switch_count || 0} 次
+            ${session.last_saved_at ? `<br>保存：${esc(session.last_saved_at.slice(0, 16).replace('T', ' '))}` : ''}
+          </div>`
+        : '';
       return `
         <tr class="border-t hover:bg-gray-50">
           <td class="p-3">
@@ -144,7 +162,7 @@ async function loadInvitations() {
             <div class="text-xs text-gray-500">${esc(inv.student_grade || '')} ${inv.student_age ? inv.student_age + '岁' : ''}</div>
           </td>
           <td class="p-3 text-xs">${esc(inv.paper_title || '—')}<br><span class="text-gray-500">${EXAM_LABELS[inv.target_exam] || ''}</span></td>
-          <td class="p-3"><span class="px-2 py-1 rounded text-xs ${s.cls}">${s.text}</span></td>
+          <td class="p-3"><span class="px-2 py-1 rounded text-xs ${s.cls}">${s.text}</span>${sessionInfo}</td>
           <td class="p-3 text-xs text-gray-500">${(inv.created_at || '').slice(0, 16).replace('T', ' ')}</td>
           <td class="p-3 text-xs text-gray-500">${(inv.submitted_at || '').slice(0, 16).replace('T', ' ')}</td>
           <td class="p-3">${action}</td>
@@ -158,6 +176,35 @@ async function loadInvitations() {
 function copyLink(token) {
   const link = `${location.origin}/entrance/student.html?token=${token}`;
   navigator.clipboard.writeText(link).then(() => alert('已复制：\n' + link));
+}
+
+async function manageEntranceSession(invitationId, isLocked) {
+  const extraRaw = prompt(
+    isLocked ? '解锁并延长多少分钟？填 0 表示不延长。' : '需要延长多少分钟？填 0 仅刷新会话。',
+    isLocked ? '10' : '0',
+  );
+  if (extraRaw == null) return;
+  const extraMinutes = Number.parseInt(extraRaw, 10);
+  if (!Number.isFinite(extraMinutes) || extraMinutes < 0 || extraMinutes > 120) {
+    alert('请输入 0-120 之间的整数分钟数。');
+    return;
+  }
+  const resetAudio = confirm('是否同时重置听力播放记录？\n仅在确认发生播放故障时选择“确定”。');
+  try {
+    await apiFetch(`${API}/admin/invitations/${invitationId}/unlock`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        extra_minutes: extraMinutes,
+        reset_device: isLocked,
+        reset_audio: resetAudio,
+      }),
+    });
+    alert(isLocked ? '测试已解锁。' : '会话设置已更新。');
+    loadInvitations();
+  } catch (e) {
+    alert('操作失败：' + e.message);
+  }
 }
 
 // ============================================================================

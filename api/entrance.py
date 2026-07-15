@@ -18,26 +18,41 @@ import secrets
 from datetime import datetime
 from urllib.parse import quote
 
-from flask import Blueprint, jsonify, request, current_app, render_template, make_response
-from flask_login import login_required, current_user
+from flask import Blueprint, current_app, jsonify, make_response, render_template, request
+from flask_login import current_user, login_required
 
 try:
-    from weasyprint import HTML, CSS
+    from weasyprint import CSS, HTML
 except ImportError:  # pragma: no cover
     HTML = None
     CSS = None
 
-from models import (
-    db,
-    User,
-    EntranceTestPaper,
-    EntranceTestSection,
-    EntranceTestQuestion,
-    EntranceTestInvitation,
-    EntranceTestAttempt,
-    EntranceTestAnswer,
+from api.entrance_session import (
+    EntranceSessionError,
+    draft_answer_map,
+    mark_audio_started,
+    mark_heartbeat,
+    mark_hidden,
+    mark_visible,
+    normalize_answer_map,
+    paper_duration_minutes,
+    save_answers,
+    serialize_draft,
+    start_or_resume,
+    unlock_session,
+    validate_active_session,
 )
-
+from models import (
+    EntranceTestAnswer,
+    EntranceTestAttempt,
+    EntranceTestDraft,
+    EntranceTestInvitation,
+    EntranceTestPaper,
+    EntranceTestQuestion,
+    EntranceTestSection,
+    User,
+    db,
+)
 
 entrance_bp = Blueprint("entrance", __name__, url_prefix="/api/entrance")
 
@@ -198,8 +213,12 @@ def _serialize_paper_for_student(paper):
 def _serialize_paper_full(paper):
     """For admin/teacher viewing — includes answers."""
     data = _serialize_paper_for_student(paper)
-    for section, section_data in zip(paper.sections, data["sections"]):
-        for q, q_data in zip(section.questions, section_data["questions"]):
+    for section, section_data in zip(paper.sections, data["sections"], strict=True):
+        for q, q_data in zip(
+            section.questions,
+            section_data["questions"],
+            strict=True,
+        ):
             q_data["correct_answer"] = q.correct_answer
             q_data["reference_answer"] = q.reference_answer
     return data
@@ -312,6 +331,100 @@ def _grade_objective_question(question, student_answer):
     return is_correct, points
 
 
+def _request_device_id(payload=None):
+    payload = payload if isinstance(payload, dict) else {}
+    return (request.headers.get("X-Entrance-Device") or payload.get("device_id") or "").strip()
+
+
+def _session_error_response(error):
+    # Device-change and interruption locks are state changes and must survive
+    # the rejected request so a teacher can review/unlock them.
+    db.session.commit()
+    return jsonify({"ok": False, "error": error.code}), error.status_code
+
+
+def _paper_question_ids(paper):
+    return {
+        question.id
+        for section in paper.sections
+        for question in section.questions
+    }
+
+
+def _finalize_attempt(invitation, answer_map, submitted_at=None):
+    """Persist and grade a final answer map. Caller commits the transaction."""
+    submitted_at = submitted_at or datetime.utcnow()
+    attempt = EntranceTestAttempt.query.filter_by(invitation_id=invitation.id).first()
+    if attempt is None:
+        attempt = EntranceTestAttempt(
+            invitation_id=invitation.id,
+            paper_id=invitation.paper_id,
+            started_at=invitation.started_at or submitted_at,
+        )
+        db.session.add(attempt)
+        db.session.flush()
+    else:
+        EntranceTestAnswer.query.filter_by(attempt_id=attempt.id).delete()
+
+    listening_score = 0
+    reading_score = 0
+    total_max = 0
+    for section in invitation.paper.sections:
+        for question in section.questions:
+            student_text = answer_map.get(question.id, "")
+            is_correct, points = _grade_objective_question(question, student_text)
+            db.session.add(
+                EntranceTestAnswer(
+                    attempt_id=attempt.id,
+                    question_id=question.id,
+                    answer_text=student_text,
+                    is_correct=is_correct,
+                    points_earned=points,
+                )
+            )
+            if question.question_type == "essay":
+                continue
+            total_max += question.points or 1
+            if not is_correct:
+                continue
+            if section.section_type == "listening":
+                listening_score += question.points or 1
+            elif section.section_type == "reading":
+                reading_score += question.points or 1
+
+    attempt.auto_score_listening = listening_score
+    attempt.auto_score_reading = reading_score
+    attempt.auto_score_total_max = total_max
+    attempt.submitted_at = submitted_at
+    invitation.submitted_at = submitted_at
+    invitation.status = "submitted"
+    if invitation.draft:
+        invitation.draft.hidden_at = None
+        invitation.draft.last_seen_at = submitted_at
+    return attempt, {
+        "listening": listening_score,
+        "reading": reading_score,
+        "total_max": total_max,
+    }
+
+
+def _finalize_expired_draft(invitation, raw_answers=None):
+    answer_map = draft_answer_map(invitation.draft)
+    if raw_answers is not None:
+        normalized = normalize_answer_map(raw_answers, _paper_question_ids(invitation.paper))
+        answer_map.update({int(key): value for key, value in normalized.items()})
+    attempt, scores = _finalize_attempt(invitation, answer_map)
+    db.session.commit()
+    return jsonify(
+        {
+            "ok": False,
+            "error": "time_expired",
+            "attempt_id": attempt.id,
+            "auto_score": scores,
+        }
+    ), 409
+
+
 # ============================================================================
 # Public endpoints (token-based, for the student taking the test)
 # ============================================================================
@@ -319,17 +432,10 @@ def _grade_objective_question(question, student_answer):
 
 @entrance_bp.route("/invitation/<token>", methods=["GET"])
 def get_invitation(token):
-    """Validate token, return student info + paper meta. Marks started_at on first access."""
+    """Validate token and return metadata without starting the timer."""
     inv = EntranceTestInvitation.query.filter_by(token=token).first()
     if not inv:
         return jsonify({"ok": False, "error": "invitation_not_found"}), 404
-
-    # First access → mark started_at
-    if not inv.started_at:
-        inv.started_at = datetime.utcnow()
-        if inv.status == "pending":
-            inv.status = "in_progress"
-        db.session.commit()
 
     paper_meta = None
     if inv.paper:
@@ -339,6 +445,7 @@ def get_invitation(token):
             "exam_type": inv.paper.exam_type,
             "level": inv.paper.level,
             "section_count": inv.paper.sections.count(),
+            "duration_minutes": paper_duration_minutes(inv.paper),
         }
 
     return jsonify(
@@ -360,9 +467,38 @@ def get_invitation(token):
     )
 
 
+@entrance_bp.route("/session/<token>/start", methods=["POST"])
+def start_entrance_session(token):
+    inv = EntranceTestInvitation.query.filter_by(token=token).first()
+    if not inv:
+        return jsonify({"ok": False, "error": "invitation_not_found"}), 404
+    if inv.status in ("submitted", "graded"):
+        return jsonify({"ok": False, "error": "already_submitted"}), 400
+    if not inv.paper:
+        return jsonify({"ok": False, "error": "no_paper_assigned"}), 400
+    if not inv.paper.is_active:
+        return jsonify({"ok": False, "error": "paper_not_active"}), 400
+
+    payload = request.get_json(silent=True) or {}
+    try:
+        draft = start_or_resume(inv, _request_device_id(payload))
+    except EntranceSessionError as error:
+        if error.code == "time_expired" and inv.draft:
+            return _finalize_expired_draft(inv)
+        return _session_error_response(error)
+    db.session.commit()
+    return jsonify(
+        {
+            "ok": True,
+            "paper": _serialize_paper_for_student(inv.paper),
+            "session": serialize_draft(draft),
+        }
+    )
+
+
 @entrance_bp.route("/paper/<token>", methods=["GET"])
 def get_paper(token):
-    """Return the full paper (no answers) for the student to answer."""
+    """Return paper + saved draft for an already-started valid session."""
     inv = EntranceTestInvitation.query.filter_by(token=token).first()
     if not inv:
         return jsonify({"ok": False, "error": "invitation_not_found"}), 404
@@ -372,8 +508,94 @@ def get_paper(token):
         return jsonify({"ok": False, "error": "no_paper_assigned"}), 400
     if not inv.paper.is_active:
         return jsonify({"ok": False, "error": "paper_not_active"}), 400
+    try:
+        draft = validate_active_session(inv, _request_device_id())
+    except EntranceSessionError as error:
+        if error.code == "time_expired" and inv.draft:
+            return _finalize_expired_draft(inv)
+        return _session_error_response(error)
+    db.session.commit()
+    return jsonify(
+        {
+            "ok": True,
+            "paper": _serialize_paper_for_student(inv.paper),
+            "session": serialize_draft(draft),
+        }
+    )
 
-    return jsonify({"ok": True, "paper": _serialize_paper_for_student(inv.paper)})
+
+@entrance_bp.route("/session/<token>/save", methods=["POST"])
+def save_entrance_draft(token):
+    inv = EntranceTestInvitation.query.filter_by(token=token).first()
+    if not inv:
+        return jsonify({"ok": False, "error": "invitation_not_found"}), 404
+    if inv.status in ("submitted", "graded"):
+        return jsonify({"ok": False, "error": "already_submitted"}), 400
+    if not inv.paper:
+        return jsonify({"ok": False, "error": "no_paper_assigned"}), 400
+
+    payload = request.get_json(silent=True) or {}
+    try:
+        draft = save_answers(
+            inv,
+            _request_device_id(payload),
+            payload.get("answers"),
+        )
+    except EntranceSessionError as error:
+        if error.code == "time_expired" and inv.draft:
+            return _finalize_expired_draft(inv, payload.get("answers"))
+        return _session_error_response(error)
+    db.session.commit()
+    return jsonify({"ok": True, "session": serialize_draft(draft)})
+
+
+@entrance_bp.route("/session/<token>/event", methods=["POST"])
+def entrance_session_event(token):
+    inv = EntranceTestInvitation.query.filter_by(token=token).first()
+    if not inv:
+        return jsonify({"ok": False, "error": "invitation_not_found"}), 404
+    if inv.status in ("submitted", "graded"):
+        return jsonify({"ok": True, "submitted": True})
+
+    payload = request.get_json(silent=True) or {}
+    event_type = (payload.get("event") or "").strip().lower()
+    try:
+        if event_type == "hidden":
+            draft = mark_hidden(inv, _request_device_id(payload))
+        elif event_type == "visible":
+            draft = mark_visible(inv, _request_device_id(payload))
+        elif event_type == "heartbeat":
+            draft = mark_heartbeat(inv, _request_device_id(payload))
+        else:
+            return jsonify({"ok": False, "error": "invalid_event"}), 400
+    except EntranceSessionError as error:
+        if error.code == "time_expired" and inv.draft:
+            return _finalize_expired_draft(inv, payload.get("answers"))
+        return _session_error_response(error)
+    db.session.commit()
+    return jsonify({"ok": True, "session": serialize_draft(draft)})
+
+
+@entrance_bp.route("/session/<token>/audio/<int:section_id>/start", methods=["POST"])
+def start_entrance_audio(token, section_id):
+    inv = EntranceTestInvitation.query.filter_by(token=token).first()
+    if not inv:
+        return jsonify({"ok": False, "error": "invitation_not_found"}), 404
+    payload = request.get_json(silent=True) or {}
+    try:
+        draft, started = mark_audio_started(
+            inv,
+            _request_device_id(payload),
+            section_id,
+        )
+    except EntranceSessionError as error:
+        if error.code == "time_expired" and inv.draft:
+            return _finalize_expired_draft(inv, payload.get("answers"))
+        return _session_error_response(error)
+    db.session.commit()
+    if not started:
+        return jsonify({"ok": False, "error": "audio_already_started"}), 409
+    return jsonify({"ok": True, "session": serialize_draft(draft)})
 
 
 @entrance_bp.route("/submit/<token>", methods=["POST"])
@@ -391,81 +613,27 @@ def submit_answers(token):
         return jsonify({"ok": False, "error": "no_paper_assigned"}), 400
 
     payload = request.get_json(silent=True) or {}
-    submitted_answers = payload.get("answers") or []
-    if not isinstance(submitted_answers, list):
-        return jsonify({"ok": False, "error": "invalid_payload"}), 400
-
-    # Build a map: question_id -> answer_text
-    answer_map = {}
-    for item in submitted_answers:
-        if not isinstance(item, dict):
-            continue
-        qid = item.get("question_id")
-        ans = item.get("answer_text", "")
-        if qid is not None:
-            answer_map[int(qid)] = ans
-
-    # Create or get attempt
-    attempt = EntranceTestAttempt.query.filter_by(invitation_id=inv.id).first()
-    if attempt is None:
-        attempt = EntranceTestAttempt(
-            invitation_id=inv.id,
-            paper_id=inv.paper_id,
-            started_at=inv.started_at or datetime.utcnow(),
+    try:
+        draft = validate_active_session(inv, _request_device_id(payload))
+        submitted_map = normalize_answer_map(
+            payload.get("answers") or [],
+            _paper_question_ids(inv.paper),
         )
-        db.session.add(attempt)
-        db.session.flush()
-    else:
-        # Re-submit: clear old answers
-        EntranceTestAnswer.query.filter_by(attempt_id=attempt.id).delete()
+    except EntranceSessionError as error:
+        if error.code == "time_expired" and inv.draft:
+            return _finalize_expired_draft(inv, payload.get("answers"))
+        return _session_error_response(error)
 
-    # Iterate all questions in the paper, grade objective ones
-    listening_score = 0
-    reading_score = 0
-    total_max = 0
-
-    for section in inv.paper.sections:
-        for question in section.questions:
-            student_text = answer_map.get(question.id, "")
-            is_correct, points = _grade_objective_question(question, student_text)
-
-            answer_row = EntranceTestAnswer(
-                attempt_id=attempt.id,
-                question_id=question.id,
-                answer_text=student_text,
-                is_correct=is_correct,
-                points_earned=points,
-            )
-            db.session.add(answer_row)
-
-            # Accumulate scores by section type (only objective)
-            if question.question_type != "essay":
-                total_max += question.points or 1
-                if is_correct:
-                    if section.section_type == "listening":
-                        listening_score += question.points or 1
-                    elif section.section_type == "reading":
-                        reading_score += question.points or 1
-
-    attempt.auto_score_listening = listening_score
-    attempt.auto_score_reading = reading_score
-    attempt.auto_score_total_max = total_max
-    attempt.submitted_at = datetime.utcnow()
-
-    inv.submitted_at = attempt.submitted_at
-    inv.status = "submitted"
-
+    answer_map = draft_answer_map(draft)
+    answer_map.update({int(key): value for key, value in submitted_map.items()})
+    attempt, scores = _finalize_attempt(inv, answer_map)
     db.session.commit()
 
     return jsonify(
         {
             "ok": True,
             "attempt_id": attempt.id,
-            "auto_score": {
-                "listening": listening_score,
-                "reading": reading_score,
-                "total_max": total_max,
-            },
+            "auto_score": scores,
             "message": "提交成功，老师将稍后批改写作部分并联系你安排口语测试。",
         }
     )
@@ -540,6 +708,7 @@ def admin_list_invitations():
     result = []
     for i in invs:
         attempt = i.attempt  # 1:1
+        draft = i.draft
         result.append(
             {
                 "id": i.id,
@@ -555,6 +724,20 @@ def admin_list_invitations():
                 "created_at": i.created_at.isoformat() if i.created_at else None,
                 "submitted_at": i.submitted_at.isoformat() if i.submitted_at else None,
                 "attempt_id": attempt.id if attempt else None,
+                "session": {
+                    "last_saved_at": (
+                        draft.last_saved_at.isoformat() if draft and draft.last_saved_at else None
+                    ),
+                    "deadline_at": (
+                        draft.deadline_at.isoformat() if draft and draft.deadline_at else None
+                    ),
+                    "exit_count": draft.exit_count if draft else 0,
+                    "total_hidden_seconds": draft.total_hidden_seconds if draft else 0,
+                    "device_switch_count": draft.device_switch_count if draft else 0,
+                    "is_locked": bool(draft and draft.is_locked),
+                    "locked_reason": draft.locked_reason if draft else None,
+                    "unlock_count": draft.unlock_count if draft else 0,
+                },
             }
         )
     return jsonify({"ok": True, "invitations": result})
@@ -608,6 +791,36 @@ def admin_create_invitation():
             },
         }
     )
+
+
+@entrance_bp.route("/admin/invitations/<int:invitation_id>/unlock", methods=["POST"])
+@login_required
+def admin_unlock_invitation(invitation_id):
+    err = _admin_required()
+    if err:
+        return err
+    inv = EntranceTestInvitation.query.get_or_404(invitation_id)
+    draft = EntranceTestDraft.query.filter_by(invitation_id=inv.id).first()
+    if not draft:
+        return jsonify({"ok": False, "error": "draft_not_found"}), 404
+    if inv.status in ("submitted", "graded"):
+        return jsonify({"ok": False, "error": "already_submitted"}), 400
+
+    data = request.get_json(silent=True) or {}
+    try:
+        extra_minutes = int(data.get("extra_minutes") or 0)
+    except (TypeError, ValueError):
+        return jsonify({"ok": False, "error": "invalid_extra_minutes"}), 400
+    unlock_session(
+        draft,
+        reviewer_id=current_user.id,
+        extra_minutes=extra_minutes,
+        reset_device=data.get("reset_device", True) is not False,
+    )
+    if data.get("reset_audio"):
+        draft.audio_state_json = "{}"
+    db.session.commit()
+    return jsonify({"ok": True, "session": serialize_draft(draft)})
 
 
 @entrance_bp.route("/admin/attempts/<int:attempt_id>", methods=["GET"])

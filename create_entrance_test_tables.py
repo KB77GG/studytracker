@@ -9,21 +9,22 @@ import sys
 
 from app import app
 from models import (
-    db,
-    EntranceTestPaper,
-    EntranceTestSection,
-    EntranceTestQuestion,
-    EntranceTestInvitation,
-    EntranceTestAttempt,
     EntranceTestAnswer,
+    EntranceTestAttempt,
+    EntranceTestDraft,
+    EntranceTestInvitation,
+    EntranceTestPaper,
+    EntranceTestQuestion,
+    EntranceTestSection,
+    db,
 )
-
 
 TABLES = [
     EntranceTestPaper.__tablename__,
     EntranceTestSection.__tablename__,
     EntranceTestQuestion.__tablename__,
     EntranceTestInvitation.__tablename__,
+    EntranceTestDraft.__tablename__,
     EntranceTestAttempt.__tablename__,
     EntranceTestAnswer.__tablename__,
 ]

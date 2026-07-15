@@ -32,8 +32,9 @@
         <div class="text-xs text-gray-500">入学英语水平测试</div>
       </div>
     </div>
-    <div id="timer" class="text-sm text-gray-600 hidden">
-      建议用时：<span id="duration-total"></span> 分钟
+    <div id="timer" class="text-sm text-gray-600 hidden text-right">
+      <div>剩余时间：<span id="remaining-time" class="font-bold text-teal-700">--:--</span></div>
+      <div id="save-status" class="text-xs text-gray-500">答案将自动保存</div>
     </div>
   </header>
 
@@ -42,6 +43,13 @@
   </div>
 
   <div id="error-box" class="hidden bg-red-50 border-l-4 border-red-500 p-6 rounded text-red-700"></div>
+
+  <div id="session-locked" class="hidden bg-white rounded-2xl shadow-lg p-8 text-center">
+    <div class="text-5xl mb-4">🔒</div>
+    <h2 class="text-2xl font-bold text-orange-700 mb-3">测试已暂停</h2>
+    <p id="session-locked-message" class="text-gray-700 mb-2"></p>
+    <p class="text-gray-500 text-sm">答案已保存在服务器。老师解锁后，请使用老师指定的设备重新打开本链接。</p>
+  </div>
 
   <!-- Welcome -->
   <div id="welcome" class="hidden bg-white rounded-2xl shadow-lg p-8 md:p-10">
@@ -53,8 +61,9 @@
       <ul class="list-disc pl-5 space-y-1">
         <li>测试包含听力、阅读、写作三个部分，建议用时约 <b id="duration-note"></b> 分钟。</li>
         <li>每段听力音频<b>只能播放一次</b>，不能暂停、回放或拖动进度，请准备好后再点击播放。</li>
+        <li>点击开始后连续计时，退出页面不会暂停计时。</li>
+        <li>答案会自动保存；同一设备短时返回可恢复，离开超过2分钟或更换设备需老师解锁。</li>
         <li>提交后不可修改，请确认答案后再提交。</li>
-        <li>本测试不强制计时，请尽力完成。</li>
       </ul>
     </div>
     <button id="btn-start" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-lg shadow">
@@ -75,7 +84,7 @@
   <div id="done" class="hidden bg-white rounded-2xl shadow-lg p-10 text-center">
     <div class="text-5xl mb-4">✅</div>
     <h2 class="text-2xl font-bold text-teal-700 mb-3">测试已提交</h2>
-    <p class="text-gray-600 mb-2">感谢您的参与！</p>
+    <p id="done-message" class="text-gray-600 mb-2">感谢您的参与！</p>
     <p class="text-gray-500 text-sm">我们的老师会在核对后为您出具正式诊断报告。</p>
   </div>
 

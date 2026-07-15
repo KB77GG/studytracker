@@ -1406,6 +1406,51 @@ class EntranceTestInvitation(db.Model, TimestampMixin):
         return f"<EntranceTestInvitation {self.id}: {self.student_name} [{self.status}]>"
 
 
+class EntranceTestDraft(db.Model, TimestampMixin):
+    """Autosaved entrance-test work and server-side session controls."""
+
+    __tablename__ = "entrance_test_draft"
+
+    id = db.Column(db.Integer, primary_key=True)
+    invitation_id = db.Column(
+        db.Integer,
+        db.ForeignKey("entrance_test_invitation.id"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    answers_json = db.Column(db.Text, default="{}", nullable=False)
+    audio_state_json = db.Column(db.Text, default="{}", nullable=False)
+
+    # Browser generates a random device id. Only its SHA-256 hash is stored.
+    device_hash = db.Column(db.String(64), index=True)
+    deadline_at = db.Column(db.DateTime, index=True)
+    last_saved_at = db.Column(db.DateTime)
+    last_seen_at = db.Column(db.DateTime)
+
+    hidden_at = db.Column(db.DateTime)
+    last_exit_at = db.Column(db.DateTime)
+    exit_count = db.Column(db.Integer, default=0, nullable=False)
+    total_hidden_seconds = db.Column(db.Integer, default=0, nullable=False)
+    device_switch_count = db.Column(db.Integer, default=0, nullable=False)
+
+    is_locked = db.Column(db.Boolean, default=False, nullable=False, index=True)
+    locked_reason = db.Column(db.String(50))
+    locked_at = db.Column(db.DateTime)
+    unlock_count = db.Column(db.Integer, default=0, nullable=False)
+    unlocked_at = db.Column(db.DateTime)
+    unlocked_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    invitation = db.relationship(
+        "EntranceTestInvitation",
+        backref=db.backref("draft", uselist=False, cascade="all, delete-orphan"),
+    )
+    unlocker = db.relationship("User", foreign_keys=[unlocked_by])
+
+    def __repr__(self):
+        return f"<EntranceTestDraft invitation={self.invitation_id} locked={self.is_locked}>"
+
+
 class EntranceTestAttempt(db.Model, TimestampMixin):
     """一次完整作答记录（与 invitation 1:1）。"""
 

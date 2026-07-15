@@ -2,6 +2,9 @@
   const API = '/api/entrance';
   const params = new URLSearchParams(location.search);
   const token = params.get('token');
+  const DEVICE_KEY = 'entrance_device_id';
+  const SAVE_DELAY_MS = 900;
+  const HEARTBEAT_MS = 30000;
 
   const $ = (id) => document.getElementById(id);
   const show = (id) => $(id).classList.remove('hidden');
@@ -15,12 +18,45 @@
   }
 
   let paperData = null;
+  let sessionData = null;
+  let saveTimer = null;
+  let countdownTimer = null;
+  let heartbeatTimer = null;
+  let submitting = false;
+  let sessionStarted = false;
 
-  async function fetchJson(url, opts) {
-    const r = await fetch(url, opts);
-    const data = await r.json().catch(() => ({}));
-    if (!r.ok || data.ok === false) {
-      throw new Error(data.error || data.message || `HTTP ${r.status}`);
+  const deviceId = getOrCreateDeviceId();
+
+  class ApiError extends Error {
+    constructor(code, status, data) {
+      super(code || `HTTP ${status}`);
+      this.code = code;
+      this.status = status;
+      this.data = data || {};
+    }
+  }
+
+  function getOrCreateDeviceId() {
+    try {
+      let value = localStorage.getItem(DEVICE_KEY);
+      if (!value) {
+        value = (self.crypto && crypto.randomUUID)
+          ? crypto.randomUUID()
+          : `device-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        localStorage.setItem(DEVICE_KEY, value);
+      }
+      return value;
+    } catch (e) {
+      return `session-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+  }
+
+  async function fetchJson(url, opts = {}) {
+    const headers = { 'X-Entrance-Device': deviceId, ...(opts.headers || {}) };
+    const response = await fetch(url, { ...opts, headers });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.ok === false) {
+      throw new ApiError(data.error || data.message, response.status, data);
     }
     return data;
   }
@@ -29,16 +65,12 @@
     try {
       const inv = await fetchJson(`${API}/invitation/${token}`);
       if (inv.invitation.status === 'submitted' || inv.invitation.status === 'graded') {
-        hide('loading');
-        show('error-box');
-        $('error-box').textContent = '本次测试已提交，如需重新测试请联系老师。';
+        showFatal('本次测试已提交，如需重新测试请联系老师。');
         return;
       }
       renderWelcome(inv);
     } catch (e) {
-      hide('loading');
-      show('error-box');
-      $('error-box').textContent = '加载失败：' + e.message + '（请确认链接是否正确）';
+      showFatal('加载失败：' + errorMessage(e) + '（请确认链接是否正确）');
     }
   }
 
@@ -52,35 +84,45 @@
       general: '通用英语',
     }[i.target_exam] || '—';
     $('welcome-info').innerHTML = `
-      <div>👤 <b>${i.student_name || '—'}</b>　${i.student_grade || ''}　${i.student_age ? i.student_age + ' 岁' : ''}</div>
-      <div>🎯 目标考试：<b>${examLabel}</b>　${i.has_studied_target ? '（已系统学习）' : '（未系统学习）'}</div>
-      <div>📄 试卷：<b>${inv.paper ? inv.paper.title : '—'}</b></div>
+      <div>👤 <b>${escapeHtml(i.student_name || '—')}</b>　${escapeHtml(i.student_grade || '')}　${i.student_age ? i.student_age + ' 岁' : ''}</div>
+      <div>🎯 目标考试：<b>${escapeHtml(examLabel)}</b>　${i.has_studied_target ? '（已系统学习）' : '（未系统学习）'}</div>
+      <div>📄 试卷：<b>${escapeHtml(inv.paper ? inv.paper.title : '—')}</b></div>
     `;
+    $('duration-note').textContent = inv.paper ? inv.paper.duration_minutes : '—';
     show('welcome');
-    $('btn-start').addEventListener('click', startExam);
+    $('btn-start').textContent = i.status === 'in_progress' ? '恢复测试' : '开始测试';
+    $('btn-start').addEventListener('click', startExam, { once: true });
   }
 
   async function startExam() {
     hide('welcome');
     show('loading');
     try {
-      const data = await fetchJson(`${API}/paper/${token}`);
+      const data = await fetchJson(`${API}/session/${token}/start`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ device_id: deviceId }),
+      });
       paperData = data.paper;
-      renderPaper(paperData);
+      sessionData = data.session;
+      sessionStarted = true;
+      renderPaper(paperData, sessionData);
+      installSessionLifecycle();
     } catch (e) {
-      hide('loading');
-      show('error-box');
-      $('error-box').textContent = '加载试卷失败：' + e.message;
+      if (!handleSessionError(e, '加载试卷失败')) {
+        showFatal('加载试卷失败：' + errorMessage(e) + '（请联系老师）');
+      }
     }
   }
 
-  function renderPaper(paper) {
+  function renderPaper(paper, session) {
     hide('loading');
     const form = $('exam-form');
     form.innerHTML = '';
 
     let totalMin = 0;
     const typeLabel = { listening: '🎧 听力', reading: '📖 阅读', writing: '✍️ 写作' };
+    const savedAnswers = session.answers || {};
 
     paper.sections.forEach((sec, si) => {
       totalMin += sec.duration_minutes || 0;
@@ -95,7 +137,7 @@
       `;
 
       if (sec.section_type === 'listening' && sec.audio_url) {
-        secDiv.appendChild(buildOncePlayer(sec));
+        secDiv.appendChild(buildOncePlayer(sec, session.audio_state || {}));
       } else if (sec.section_type === 'listening') {
         const note = document.createElement('div');
         note.className = 'bg-yellow-50 border-l-4 border-yellow-400 p-3 text-sm text-gray-700 mb-4';
@@ -136,25 +178,22 @@
       form.appendChild(secDiv);
     });
 
-    $('duration-total').textContent = totalMin;
+    restoreAnswers(savedAnswers);
     $('duration-note').textContent = totalMin;
     show('timer');
     show('exam-form');
     show('exam-footer');
+    updateSaveStatus(session.last_saved_at ? '已恢复上次答案' : '答案将自动保存', 'text-teal-700');
+    startCountdown(session.remaining_seconds);
 
-    // Word count for essay
-    form.querySelectorAll('textarea').forEach(ta => {
-      ta.addEventListener('input', () => {
-        const counter = form.querySelector(`.word-count[data-for="${ta.name}"]`);
-        if (counter) counter.textContent = ta.value.trim().split(/\s+/).filter(Boolean).length;
-      });
-    });
-
-    $('btn-submit').addEventListener('click', submitExam);
+    form.addEventListener('input', onAnswerChanged);
+    form.addEventListener('change', onAnswerChanged);
+    updateWordCounts();
+    $('btn-submit').addEventListener('click', () => submitExam(false));
   }
 
-  async function submitExam() {
-    if (!confirm('确认提交？提交后无法修改。')) return;
+  function collectAnswers() {
+    if (!paperData) return [];
     const form = $('exam-form');
     const answers = [];
     paperData.sections.forEach(sec => {
@@ -170,24 +209,229 @@
         answers.push({ question_id: q.id, answer_text: val });
       });
     });
+    return answers;
+  }
+
+  function restoreAnswers(savedAnswers) {
+    const form = $('exam-form');
+    Object.entries(savedAnswers || {}).forEach(([questionId, answer]) => {
+      const name = `q_${questionId}`;
+      const radios = form.querySelectorAll(`input[type="radio"][name="${name}"]`);
+      if (radios.length) {
+        radios.forEach(radio => { radio.checked = radio.value === String(answer); });
+        return;
+      }
+      const field = form.querySelector(`[name="${name}"]`);
+      if (field) field.value = String(answer || '');
+    });
+  }
+
+  function onAnswerChanged() {
+    updateWordCounts();
+    updateSaveStatus('保存中...', 'text-gray-500');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => saveDraft(false), SAVE_DELAY_MS);
+  }
+
+  async function saveDraft(useBeacon) {
+    if (!sessionStarted || submitting) return;
+    clearTimeout(saveTimer);
+    const body = JSON.stringify({ device_id: deviceId, answers: collectAnswers() });
+    if (useBeacon && navigator.sendBeacon) {
+      navigator.sendBeacon(
+        `${API}/session/${token}/save`,
+        new Blob([body], { type: 'application/json' }),
+      );
+      return;
+    }
+    try {
+      const data = await fetchJson(`${API}/session/${token}/save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body,
+      });
+      sessionData = data.session;
+      updateSaveStatus('已自动保存', 'text-teal-700');
+    } catch (e) {
+      if (!handleSessionError(e, '自动保存失败', true)) {
+        updateSaveStatus('保存失败，请检查网络', 'text-red-600');
+      }
+    }
+  }
+
+  async function submitExam(autoSubmit) {
+    if (submitting) return;
+    if (!autoSubmit && !confirm('确认提交？提交后无法修改。')) return;
+    submitting = true;
+    clearTimeout(saveTimer);
     $('btn-submit').disabled = true;
-    $('btn-submit').textContent = '提交中...';
+    $('btn-submit').textContent = autoSubmit ? '时间到，正在提交...' : '提交中...';
     try {
       await fetchJson(`${API}/submit/${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers }),
+        body: JSON.stringify({ device_id: deviceId, answers: collectAnswers() }),
       });
-      hide('exam-form');
-      hide('exam-footer');
-      hide('timer');
-      show('done');
-      window.scrollTo(0, 0);
+      finishUi(autoSubmit ? '考试时间已结束，答案已自动提交。' : null);
     } catch (e) {
-      alert('提交失败：' + e.message);
+      if (e.code === 'time_expired' && e.data && e.data.attempt_id) {
+        finishUi('考试时间已结束，已保存的答案已自动提交。');
+        return;
+      }
+      submitting = false;
+      if (!handleSessionError(e, '提交失败', true)) alert('提交失败：' + errorMessage(e));
       $('btn-submit').disabled = false;
       $('btn-submit').textContent = '提交测试';
     }
+  }
+
+  function finishUi(message) {
+    submitting = true;
+    sessionStarted = false;
+    clearInterval(countdownTimer);
+    clearInterval(heartbeatTimer);
+    hide('exam-form');
+    hide('exam-footer');
+    hide('timer');
+    if (message && $('done-message')) $('done-message').textContent = message;
+    show('done');
+    window.scrollTo(0, 0);
+  }
+
+  function installSessionLifecycle() {
+    document.addEventListener('visibilitychange', async () => {
+      if (!sessionStarted || submitting) return;
+      if (document.hidden) {
+        saveDraft(true);
+        sendSessionEvent('hidden', true);
+        return;
+      }
+      try {
+        const data = await sendSessionEvent('visible', false);
+        if (data && data.session) {
+          sessionData = data.session;
+          startCountdown(data.session.remaining_seconds);
+        }
+      } catch (e) {
+        handleSessionError(e, '无法恢复测试');
+      }
+    });
+
+    window.addEventListener('pagehide', () => {
+      if (!sessionStarted || submitting) return;
+      saveDraft(true);
+      sendSessionEvent('hidden', true);
+    });
+
+    heartbeatTimer = setInterval(async () => {
+      if (!sessionStarted || submitting || document.hidden) return;
+      try {
+        const data = await sendSessionEvent('heartbeat', false);
+        if (data && data.session) sessionData = data.session;
+      } catch (e) {
+        handleSessionError(e, '会话连接异常', true);
+      }
+    }, HEARTBEAT_MS);
+  }
+
+  async function sendSessionEvent(event, useBeacon) {
+    const body = JSON.stringify({ device_id: deviceId, event });
+    if (useBeacon && navigator.sendBeacon) {
+      navigator.sendBeacon(
+        `${API}/session/${token}/event`,
+        new Blob([body], { type: 'application/json' }),
+      );
+      return null;
+    }
+    return fetchJson(`${API}/session/${token}/event`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+    });
+  }
+
+  function startCountdown(initialSeconds) {
+    let remaining = Math.max(0, Number(initialSeconds || 0));
+    clearInterval(countdownTimer);
+    renderCountdown(remaining);
+    countdownTimer = setInterval(() => {
+      remaining = Math.max(0, remaining - 1);
+      renderCountdown(remaining);
+      if (remaining <= 0) {
+        clearInterval(countdownTimer);
+        submitExam(true);
+      }
+    }, 1000);
+  }
+
+  function renderCountdown(seconds) {
+    if (!$('remaining-time')) return;
+    $('remaining-time').textContent = formatSeconds(seconds);
+    $('remaining-time').className = seconds <= 300 ? 'font-bold text-red-600' : 'font-bold text-teal-700';
+  }
+
+  function updateSaveStatus(text, cls) {
+    if (!$('save-status')) return;
+    $('save-status').textContent = text;
+    $('save-status').className = `text-xs ${cls || 'text-gray-500'}`;
+  }
+
+  function updateWordCounts() {
+    const form = $('exam-form');
+    form.querySelectorAll('textarea').forEach(ta => {
+      const counter = form.querySelector(`.word-count[data-for="${ta.name}"]`);
+      if (counter) counter.textContent = ta.value.trim().split(/\s+/).filter(Boolean).length;
+    });
+  }
+
+  function handleSessionError(error, prefix, quiet) {
+    const messages = {
+      device_changed: '检测到更换设备，测试已锁定。请联系老师解锁后继续。',
+      left_too_long: '离开测试页面超过2分钟，测试已锁定。请联系老师解锁后继续。',
+      session_interrupted: '测试连接中断超过2分钟，测试已锁定。请联系老师解锁后继续。',
+      session_locked: '测试已锁定，请联系老师解锁后继续。',
+      time_expired: '考试时间已结束，已保存答案将自动提交。',
+      audio_already_started: '本段音频已经播放过，不能重复播放。',
+    };
+    const message = messages[error.code];
+    if (!message) return false;
+    if (error.code === 'time_expired' && error.data && error.data.attempt_id) {
+      finishUi(message);
+      return true;
+    }
+    if (['device_changed', 'left_too_long', 'session_interrupted', 'session_locked'].includes(error.code)) {
+      lockUi(message);
+      return true;
+    }
+    if (!quiet) alert(`${prefix}：${message}`);
+    return true;
+  }
+
+  function lockUi(message) {
+    sessionStarted = false;
+    clearInterval(countdownTimer);
+    clearInterval(heartbeatTimer);
+    hide('loading');
+    hide('welcome');
+    hide('exam-form');
+    hide('exam-footer');
+    hide('timer');
+    show('session-locked');
+    $('session-locked-message').textContent = message;
+  }
+
+  function showFatal(message) {
+    hide('loading');
+    hide('welcome');
+    hide('exam-form');
+    hide('exam-footer');
+    hide('timer');
+    show('error-box');
+    $('error-box').textContent = message;
+  }
+
+  function errorMessage(error) {
+    return error && (error.code || error.message) ? (error.code || error.message) : '未知错误';
   }
 
   function escapeHtml(s) {
@@ -214,10 +458,7 @@
     return `${m}:${String(s).padStart(2, '0')}`;
   }
 
-  // 听力音频只允许播放一次：无原生 controls（不可拖动/回放），
-  // 已播放状态按 token+section 记在 localStorage，刷新页面也不能重播。
-  function buildOncePlayer(sec) {
-    const playedKey = `entrance_audio_played_${token}_${sec.id}`;
+  function buildOncePlayer(sec, audioState) {
     const wrap = document.createElement('div');
     wrap.className = 'bg-teal-50 border border-teal-100 rounded-lg p-3 mb-4';
 
@@ -231,7 +472,6 @@
     const audio = document.createElement('audio');
     audio.src = sec.audio_url;
     audio.preload = 'auto';
-
     let started = false;
 
     function setDone(text) {
@@ -240,22 +480,30 @@
       hint.textContent = text || '每段音频只能播放一次。';
     }
 
-    if (localStorage.getItem(playedKey)) {
-      setDone('本段音频已播放过。如因故障未能完整收听，请联系老师重置测试。');
+    if (audioState[String(sec.id)]) {
+      setDone('服务端记录显示本段音频已播放。如遇技术故障，请联系老师处理。');
     } else {
       btn.textContent = '▶️ 播放听力音频（仅一次）';
-      hint.textContent = '注意：音频只能播放一次，不能暂停、回放或拖动进度，请准备好后再点击。';
-      btn.addEventListener('click', () => {
+      hint.textContent = '音频播放状态由服务端记录，换设备也不能重播。';
+      btn.addEventListener('click', async () => {
         btn.disabled = true;
-        audio.play().then(() => {
+        try {
+          await fetchJson(`${API}/session/${token}/audio/${sec.id}/start`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ device_id: deviceId }),
+          });
+          await audio.play();
           started = true;
-          try { localStorage.setItem(playedKey, '1'); } catch (e) { /* 隐私模式降级：仅本页生效 */ }
           btn.textContent = '🎧 正在播放…';
-        }).catch(() => {
-          btn.disabled = false;
-          hint.textContent = '播放失败，请检查网络后重试。';
-        });
-      });
+        } catch (e) {
+          if (e.code === 'audio_already_started') {
+            setDone('本段音频已经播放过。');
+          } else if (!handleSessionError(e, '音频播放失败', true)) {
+            setDone('播放授权或播放失败，请联系老师处理。');
+          }
+        }
+      }, { once: true });
     }
 
     audio.addEventListener('timeupdate', () => {
@@ -263,22 +511,9 @@
         hint.textContent = `正在播放 ${formatSeconds(audio.currentTime)} / ${formatSeconds(audio.duration)}`;
       }
     });
-    audio.addEventListener('ended', () => {
-      setDone('音频播放完毕，请继续作答。');
-    });
-    // 播放中途出错（如网络中断）：允许从断点继续，但不能回放
+    audio.addEventListener('ended', () => setDone('音频播放完毕，请继续作答。'));
     audio.addEventListener('error', () => {
-      if (!started) return;
-      btn.disabled = false;
-      btn.textContent = '▶️ 继续播放（从中断处）';
-      hint.textContent = '播放中断，点击按钮从中断位置继续。';
-      btn.onclick = () => {
-        btn.disabled = true;
-        audio.play().then(() => { btn.textContent = '🎧 正在播放…'; }).catch(() => {
-          btn.disabled = false;
-          hint.textContent = '仍然无法播放，请联系老师。';
-        });
-      };
+      if (started) setDone('播放中断，服务端已记录为播放过，请联系老师处理。');
     });
 
     wrap.appendChild(btn);
