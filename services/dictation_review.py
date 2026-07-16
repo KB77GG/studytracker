@@ -42,6 +42,11 @@ AUTO_REVIEW_COLLECTION_START_UTC = AUTO_REVIEW_COLLECTION_START_LOCAL.astimezone
 AUTO_REVIEW_QUEUE_START_UTC = AUTO_REVIEW_QUEUE_START_LOCAL.astimezone(UTC).replace(
     tzinfo=None
 )
+# The strict first-answer client shipped on 2026-07-16.  A student can still
+# have an older, partially completed run in WeChat storage: after reopening,
+# only the suffix is synchronized to the new server queue.  Recovery is
+# deliberately restricted to tasks assigned no later than the rollout date.
+LEGACY_RESUME_RECOVERY_LAST_TASK_DATE = date(2026, 7, 16)
 VALID_DICTATION_MODES = {
     "audio_to_en",
     "zh_to_en",
@@ -466,6 +471,137 @@ def _serialize_answer_result(
     }
 
 
+def _legacy_wrong_answer(raw_wrong_words: str, word: str) -> str | None:
+    """Extract one answer from the old client summary string."""
+
+    marker = f"{word} (写成了: "
+    start = raw_wrong_words.find(marker)
+    if start < 0:
+        return None
+    answer_start = start + len(marker)
+    answer_end = raw_wrong_words.find(")", answer_start)
+    if answer_end < 0:
+        return None
+    return raw_wrong_words[answer_start:answer_end].strip() or None
+
+
+def _recover_legacy_resume_prefix(
+    user: User,
+    task: Task,
+    items: list[DictationTaskReview],
+    payload: dict,
+    *,
+    mode: str,
+    now: datetime,
+) -> int:
+    """Recover only a verified old-client prefix before strict finalization.
+
+    Old WeChat progress contains the aggregate accuracy and each first-wrong
+    answer, but it predates per-word server records.  A resumed run therefore
+    has one contiguous missing prefix followed by a fully synchronized suffix.
+    We accept that exact shape only when the aggregate and wrong-word evidence
+    agree with every existing suffix record.
+    """
+
+    if not items:
+        return 0
+    try:
+        task_date = date.fromisoformat(str(task.date))
+    except (TypeError, ValueError):
+        return 0
+    if task_date > LEGACY_RESUME_RECOVERY_LAST_TASK_DATE:
+        return 0
+    missing_indices = [
+        index for index, item in enumerate(items) if item.first_attempt_id is None
+    ]
+    if not missing_indices:
+        return 0
+    prefix_count = len(missing_indices)
+    if (
+        missing_indices != list(range(prefix_count))
+        or prefix_count >= len(items)
+        or any(item.first_is_correct is None for item in items[prefix_count:])
+    ):
+        return 0
+
+    try:
+        supplied_accuracy = float(payload["accuracy"])
+    except (KeyError, TypeError, ValueError):
+        return 0
+    if not 0.0 <= supplied_accuracy <= 100.0:
+        return 0
+
+    total = len(items)
+    total_correct = int(round(supplied_accuracy * total / 100.0))
+    expected_accuracy = round(total_correct / total * 100.0, 1)
+    if abs(expected_accuracy - supplied_accuracy) > 0.11:
+        return 0
+
+    raw_wrong_words = payload.get("wrong_words")
+    if not isinstance(raw_wrong_words, str):
+        return 0
+    labels = [str(item.word.word or "") for item in items if item.word is not None]
+    if len(labels) != total or len(set(labels)) != total:
+        # The legacy summary has no word ids, so duplicate labels are
+        # inherently ambiguous and must stay on the strict rejection path.
+        return 0
+    wrong_answers = {
+        index: answer
+        for index, item in enumerate(items)
+        if (answer := _legacy_wrong_answer(raw_wrong_words, item.word.word)) is not None
+    }
+    if len(wrong_answers) != total - total_correct:
+        return 0
+    for index, item in enumerate(items[prefix_count:], start=prefix_count):
+        if (index in wrong_answers) == bool(item.first_is_correct):
+            return 0
+
+    prefix_wrong_count = sum(index < prefix_count for index in wrong_answers)
+    suffix_correct = sum(bool(item.first_is_correct) for item in items[prefix_count:])
+    if (
+        prefix_wrong_count != prefix_count - (total_correct - suffix_correct)
+        or not 0 <= total_correct - suffix_correct <= prefix_count
+    ):
+        return 0
+
+    for index, item in enumerate(items[:prefix_count]):
+        is_correct = index not in wrong_answers
+        answer = wrong_answers.get(index)
+        if answer is None:
+            answer = item.word.translation if mode == "en_to_zh" else item.word.word
+        attempt_id = f"legacy-resume:{user.id}:{task.id}:{item.word_id}"
+        record = DictationRecord(
+            student_id=user.id,
+            task_id=task.id,
+            book_id=item.book_id,
+            word_id=item.word_id,
+            student_answer=answer[:100],
+            is_correct=is_correct,
+            attempt_id=attempt_id,
+            is_first_attempt=True,
+            task_review_id=item.id,
+        )
+        db.session.add(record)
+        item.first_attempt_id = attempt_id
+        item.first_is_correct = is_correct
+        item.first_answer = answer[:200]
+
+        defer_auto_correct = bool(item.is_auto_review and is_correct)
+        if not defer_auto_correct:
+            _apply_auto_state(
+                student_id=user.id,
+                word=item.word,
+                is_correct=is_correct,
+                mode=mode,
+                is_auto_review=bool(item.is_auto_review),
+                now=now,
+            )
+            item.state_applied = True
+
+    db.session.flush()
+    return prefix_count
+
+
 def submit_dictation_answer(
     user: User,
     payload: dict,
@@ -722,6 +858,15 @@ def _finalize_strict_task(
             invalid_word_ids=invalid_snapshots,
         )
 
+    mode = _resolve_mode(task, task_book)
+    legacy_resume_recovered = _recover_legacy_resume_prefix(
+        user,
+        task,
+        items,
+        payload,
+        mode=mode,
+        now=now,
+    )
     missing = [item.word_id for item in items if item.first_attempt_id is None]
     if missing:
         raise DictationReviewError(
@@ -767,7 +912,6 @@ def _finalize_strict_task(
     # transaction as task completion.  Repeated finalize calls see
     # state_applied=True and cannot add another streak.
     try:
-        mode = _resolve_mode(task, task_book)
         for item in items:
             if item.state_applied or not item.is_auto_review or not item.first_is_correct:
                 continue
@@ -795,7 +939,7 @@ def _finalize_strict_task(
     except Exception:
         db.session.rollback()
         raise
-    return {
+    result = {
         "ok": True,
         "server_scored": True,
         "correct_count": correct,
@@ -803,6 +947,9 @@ def _finalize_strict_task(
         "accuracy": accuracy,
         "queue_token": expected_token,
     }
+    if legacy_resume_recovered:
+        result["legacy_resume_recovered"] = legacy_resume_recovered
+    return result
 
 
 def list_server_wrong_words(user: User, book_id: int | None = None) -> dict:

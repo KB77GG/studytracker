@@ -918,6 +918,89 @@ class DictationReviewFlowTest(unittest.TestCase):
         self.assertEqual(response.status_code, 409)
         self.assertEqual(response.get_json()["error"], "queue_incomplete")
 
+    def test_strict_task_recovers_verified_legacy_resume_prefix(self):
+        with self.app.app_context():
+            task_id = self._task(start=1, end=3)
+        queue = self._queue(task_id)
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            submit_dictation_answer(
+                user,
+                {
+                    "task_id": task_id,
+                    "word_id": self.word_ids[1],
+                    "answer": "brvo",
+                    "attempt_id": "legacy-resume:suffix:bravo",
+                    "strict_queue": True,
+                },
+            )
+            submit_dictation_answer(
+                user,
+                {
+                    "task_id": task_id,
+                    "word_id": self.word_ids[2],
+                    "answer": "charlie",
+                    "attempt_id": "legacy-resume:suffix:charlie",
+                    "strict_queue": True,
+                },
+            )
+            db.session.commit()
+
+        response = self.client.post(
+            f"/api/miniprogram/student/tasks/{task_id}/submit",
+            headers=self.headers,
+            json={
+                "strict_queue": True,
+                "queue_token": queue["queue_token"],
+                "accuracy": "66.7",
+                "wrong_words": "bravo (写成了: brvo)",
+            },
+        )
+        self.assertEqual(response.status_code, 200, response.get_json())
+        result = response.get_json()
+        self.assertEqual(result["legacy_resume_recovered"], 1)
+        self.assertEqual(result["correct_count"], 2)
+        self.assertEqual(result["accuracy"], 66.7)
+        with self.app.app_context():
+            recovered = DictationRecord.query.filter_by(
+                task_id=task_id,
+                word_id=self.word_ids[0],
+                is_first_attempt=True,
+            ).one()
+            self.assertEqual(recovered.student_answer, "alpha")
+            self.assertTrue(recovered.is_correct)
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task_id).count(), 3)
+
+    def test_strict_task_rejects_inconsistent_legacy_resume_evidence(self):
+        with self.app.app_context():
+            task_id = self._task(start=1, end=2)
+        queue = self._queue(task_id)
+        with self.app.app_context():
+            submit_dictation_answer(
+                db.session.get(User, self.student_id),
+                {
+                    "task_id": task_id,
+                    "word_id": self.word_ids[1],
+                    "answer": "bravo",
+                    "attempt_id": "legacy-resume:consistent-suffix",
+                    "strict_queue": True,
+                },
+            )
+            db.session.commit()
+
+        response = self.client.post(
+            f"/api/miniprogram/student/tasks/{task_id}/submit",
+            headers=self.headers,
+            json={
+                "strict_queue": True,
+                "queue_token": queue["queue_token"],
+                "accuracy": "50.0",
+                "wrong_words": "bravo (写成了: brvo)",
+            },
+        )
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(response.get_json()["error"], "queue_incomplete")
+
     def test_all_four_modes_grade_on_server(self):
         answers = {
             "audio_to_en": "alpha",
