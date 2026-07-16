@@ -34,8 +34,8 @@ UTC = timezone.utc  # noqa: UP017 - Python 3.10-compatible replacement.
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 # These are product cutoffs, not deployment-time values.  Database datetimes
 # remain naive UTC; the aware local values make the product boundary explicit.
-AUTO_REVIEW_COLLECTION_START_LOCAL = datetime(2026, 7, 17, 0, 0, tzinfo=SHANGHAI)
-AUTO_REVIEW_QUEUE_START_LOCAL = datetime(2026, 7, 18, 0, 0, tzinfo=SHANGHAI)
+AUTO_REVIEW_COLLECTION_START_LOCAL = datetime(2026, 7, 16, 0, 0, tzinfo=SHANGHAI)
+AUTO_REVIEW_QUEUE_START_LOCAL = datetime(2026, 7, 17, 0, 0, tzinfo=SHANGHAI)
 AUTO_REVIEW_COLLECTION_START_UTC = AUTO_REVIEW_COLLECTION_START_LOCAL.astimezone(UTC).replace(
     tzinfo=None
 )

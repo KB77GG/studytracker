@@ -24,6 +24,7 @@ from services.dictation_review import (
     AUTO_REVIEW_COLLECTION_START_UTC,
     AUTO_REVIEW_QUEUE_START_UTC,
     DictationReviewError,
+    auto_review_collection_enabled,
     auto_review_queue_enabled,
     ensure_incremental_schema,
     finalize_strict_task,
@@ -1036,6 +1037,20 @@ class DictationReviewFlowTest(unittest.TestCase):
     def test_local_midnight_uses_asia_shanghai(self):
         now = datetime(2026, 7, 16, 15, 0)
         self.assertEqual(next_local_midnight(now), datetime(2026, 7, 16, 16, 0))
+
+    def test_auto_review_cutoffs_are_fixed_asia_shanghai_boundaries(self):
+        self.assertEqual(AUTO_REVIEW_COLLECTION_START_UTC, datetime(2026, 7, 15, 16, 0))
+        self.assertEqual(AUTO_REVIEW_QUEUE_START_UTC, datetime(2026, 7, 16, 16, 0))
+        self.assertFalse(
+            auto_review_collection_enabled(
+                AUTO_REVIEW_COLLECTION_START_UTC - timedelta(minutes=1)
+            )
+        )
+        self.assertTrue(auto_review_collection_enabled(AUTO_REVIEW_COLLECTION_START_UTC))
+        self.assertFalse(
+            auto_review_queue_enabled(AUTO_REVIEW_QUEUE_START_UTC - timedelta(minutes=1))
+        )
+        self.assertTrue(auto_review_queue_enabled(AUTO_REVIEW_QUEUE_START_UTC))
 
     def test_incremental_schema_is_idempotent_and_keeps_indexes(self):
         with self.app.app_context():
