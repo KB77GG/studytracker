@@ -15,6 +15,7 @@ def init_app(app):
     from api.speaking_practice import speaking_bp  # Speaking listen & repeat API
     from api.students import api_bp
     from api.tts import tts_bp  # TTS API
+    from api.vocab_review import vocab_review_bp
     from api.wechat import wechat_bp
 
     app.register_blueprint(wechat_bp, url_prefix="/api/wechat")  # Restore url_prefix
@@ -24,6 +25,7 @@ def init_app(app):
     app.register_blueprint(tts_bp)  # Register TTS
     app.register_blueprint(azure_tts_bp)  # Register Azure TTS
     app.register_blueprint(dictation_bp)  # Register Dictation
+    app.register_blueprint(vocab_review_bp)  # Server-owned vocabulary review queue
     app.register_blueprint(eval_bp)  # Register IELTS eval
     app.register_blueprint(speaking_bp)  # Register Speaking practice
     app.register_blueprint(entrance_bp)  # Register Entrance test

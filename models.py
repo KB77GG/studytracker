@@ -1016,6 +1016,13 @@ class DictationRecord(db.Model, TimestampMixin):
     """Student's dictation answer record."""
     
     __tablename__ = "dictation_record"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "attempt_id",
+            name="uq_dictation_record_student_attempt",
+        ),
+    )
     
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
@@ -1024,6 +1031,16 @@ class DictationRecord(db.Model, TimestampMixin):
     word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
     student_answer = db.Column(db.String(100))
     is_correct = db.Column(db.Boolean, nullable=False)
+    # New clients send a durable id for every answer so network retries are
+    # safe.  Legacy rows keep this nullable and continue to work unchanged.
+    attempt_id = db.Column(db.String(96), nullable=True, index=True)
+    is_first_attempt = db.Column(db.Boolean, nullable=False, default=True, index=True)
+    task_review_id = db.Column(
+        db.Integer,
+        db.ForeignKey("dictation_task_review.id"),
+        nullable=True,
+        index=True,
+    )
     
     # Relationships
     student = db.relationship("User", backref=db.backref("dictation_records", lazy="dynamic"))
@@ -1098,6 +1115,22 @@ class StudentWordMastery(db.Model, TimestampMixin):
     next_review_at = db.Column(db.DateTime, nullable=True, index=True)
     last_seen_at = db.Column(db.DateTime, nullable=True)
     last_mode = db.Column(db.String(20), nullable=True)
+
+    # Automatic wrong-word loop.  These fields are intentionally separate from
+    # the older review_level/next_review_at state used by the original review
+    # page, so old clients and existing reports remain compatible.
+    auto_review_active = db.Column(
+        db.Boolean, nullable=False, default=False, index=True
+    )
+    auto_review_due_at = db.Column(db.DateTime, nullable=True, index=True)
+    auto_review_correct_streak = db.Column(
+        db.Integer, nullable=False, default=0
+    )
+    auto_review_last_date = db.Column(db.Date, nullable=True)
+    # Non-null only when the new server loop explicitly captured a mistake or
+    # the student explicitly confirmed a legacy local-word import.  Existing
+    # rows stay NULL so the cutoff cannot silently activate historical data.
+    auto_review_activated_at = db.Column(db.DateTime, nullable=True, index=True)
 
     student = db.relationship("User", backref=db.backref("word_mastery", lazy="dynamic"))
     word = db.relationship("DictationWord", backref=db.backref("mastery_records", lazy="dynamic"))
@@ -1193,6 +1226,51 @@ class StudentWordMastery(db.Model, TimestampMixin):
         if level == 2:
             return "zh_to_en"
         return "audio_to_en"
+
+
+class DictationTaskReview(db.Model, TimestampMixin):
+    """Immutable per-task vocabulary queue snapshot and first-answer state."""
+
+    __tablename__ = "dictation_task_review"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "task_id",
+            "word_id",
+            name="uq_dictation_task_review_student_task_word",
+        ),
+        db.Index(
+            "ix_dictation_task_review_student_book_date",
+            "student_id",
+            "book_id",
+            "review_date",
+        ),
+    )
+
+    SOURCE_ASSIGNED = "assigned"
+    SOURCE_AUTO_REVIEW = "auto_review"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+    word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
+    review_date = db.Column(db.Date, nullable=False, index=True)
+    source = db.Column(db.String(20), nullable=False, default=SOURCE_ASSIGNED)
+    is_auto_review = db.Column(db.Boolean, nullable=False, default=False)
+    queue_index = db.Column(db.Integer, nullable=False, default=0)
+
+    # Filled once by the first answer.  Retries are still recorded in
+    # DictationRecord but never mutate this state or mastery again.
+    first_attempt_id = db.Column(db.String(96), nullable=True, index=True)
+    first_is_correct = db.Column(db.Boolean, nullable=True)
+    first_answer = db.Column(db.String(200), nullable=True)
+    state_applied = db.Column(db.Boolean, nullable=False, default=False, index=True)
+
+    student = db.relationship("User", backref=db.backref("dictation_task_reviews", lazy="dynamic"))
+    task = db.relationship("Task", backref=db.backref("dictation_task_reviews", lazy="dynamic"))
+    book = db.relationship("DictationBook", backref=db.backref("task_review_snapshots", lazy="dynamic"))
+    word = db.relationship("DictationWord", backref=db.backref("task_review_snapshots", lazy="dynamic"))
 
 
 class StudentSavedWord(db.Model, TimestampMixin):

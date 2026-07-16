@@ -1,4 +1,5 @@
 const app = getApp()
+const { request } = require('../../../../utils/request.js')
 const {
     buildGroupPlans,
     findGroupIndex,
@@ -9,7 +10,16 @@ const {
     isEnglishAnswerCorrect,
     stripPartOfSpeechPrefix
 } = require('../../../../utils/dictation-answers.js')
-const { applyDictationOrder } = require('../../../../utils/dictation-order.js')
+const {
+    buildFirstAttemptId,
+    buildRunStorageKey,
+    createAttemptRunId,
+    ensureAttemptPayload,
+    getOrCreateRunId,
+    isSuccessfulResponse,
+    summarizeQueue,
+    queueMode
+} = require('../../../../utils/dictation-review.js')
 
 const MODE_AUDIO_TO_EN = 'audio_to_en'
 const MODE_ZH_TO_EN = 'zh_to_en'
@@ -79,6 +89,7 @@ function directYoudaoAudioUrl(word) {
 Page({
     data: {
         bookId: null,
+        taskId: null,
         bookTitle: '听写练习',
         words: [],
         currentIndex: 0,
@@ -94,6 +105,7 @@ Page({
         practiceStart: null,
         accumulatedSeconds: 0,
         isSubmitting: false,
+        isCheckingFirstAnswer: false,
         displayTime: '00:00',
         ticker: null,
         isLoadingAudio: false,
@@ -133,10 +145,30 @@ Page({
         dictationMode: MODE_AUDIO_TO_EN,
         currentMode: MODE_AUDIO_TO_EN,
         dictationOrder: 'sequence',
+        queueToken: '',
+        assignedCount: 0,
+        reviewCount: 0,
         appealSubmitted: false
     },
 
     onLoad: function (options) {
+        options = options || {};
+        this.firstAttempts = {};
+        this.firstAttemptPayloads = {};
+        this.firstAttemptConfirmed = {};
+        this.firstAttemptResults = {};
+        this.firstAttemptPromises = {};
+        this.firstAttemptSent = {};
+        this.firstAnswerInFlightKey = null;
+        this.attemptRunStorageKey = options.taskId
+            ? null
+            : buildRunStorageKey(options.mode === 'retry_wrong'
+                ? `wrong-${options.source || 'last'}`
+                : `book-${options.id || 'unknown'}`);
+        this.attemptSessionId = options.taskId
+            ? ''
+            : this.getOrCreateAttemptRunId();
+
         if (options.mode === 'retry_wrong') {
             // Launched from notebook or home for wrong-word practice
             this._initRetryWrongWords(options.source || 'last');
@@ -218,195 +250,169 @@ Page({
     fetchTask: function (taskId) {
         wx.showLoading({ title: '加载任务...' });
         this.startBackendTimer(taskId);
-        wx.request({
-            url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${taskId}`,
-            method: 'GET',
-            header: {
-                'Cookie': wx.getStorageSync('cookie'),
-                'Authorization': `Bearer ${wx.getStorageSync('token')}`
-            },
-            success: (res) => {
-                if (res.data.ok) {
-                    const task = res.data.task;
-                    const rawMode = String(task.dictation_mode || '').trim().toLowerCase();
-                    if (rawMode === MODE_SPELLING_DRILL) {
-                        wx.hideLoading();
-                        wx.redirectTo({
-                            url: `/pages/student/dictation/spell/index?taskId=${taskId}`
-                        });
-                        return;
-                    }
-                    const dictationMode = resolveDictationMode(task.dictation_mode, task.dictation_book_type);
-
-                    // Read from root task object
-                    this.setData({
-                        bookTitle: task.task_name,
-                        rangeStart: task.dictation_word_start,
-                        rangeEnd: task.dictation_word_end,
-                        dictationOrder: task.dictation_order || 'sequence',
-                        dictationMode: dictationMode,
-                        currentMode: dictationMode
-                    });
-                    this.setData({ progressKey: this.buildProgressKey(taskId, task.dictation_book_id, task.dictation_word_start, task.dictation_word_end) });
-
-                    if (task.dictation_book_id) {
-                        this.setData({ bookId: task.dictation_book_id });
-                        this.fetchWords(task.dictation_book_id);
-                    } else {
-                        wx.hideLoading();
-                        wx.showToast({ title: '任务配置错误: dictation_book_id missing', icon: 'none' });
-                    }
+        request(`/miniprogram/student/tasks/${taskId}`)
+            .then((res) => {
+                if (!res || !res.ok || !res.task) {
+                    wx.hideLoading();
+                    wx.showToast({ title: '任务加载失败', icon: 'none' });
+                    return;
+                }
+                const task = res.task;
+                const rawMode = String(task.dictation_mode || '').trim().toLowerCase();
+                if (rawMode === MODE_SPELLING_DRILL) {
+                    wx.hideLoading();
+                    wx.redirectTo({ url: `/pages/student/dictation/spell/index?taskId=${taskId}` });
+                    return;
+                }
+                const dictationMode = resolveDictationMode(task.dictation_mode, task.dictation_book_type);
+                this.setData({
+                    bookTitle: task.task_name,
+                    rangeStart: task.dictation_word_start,
+                    rangeEnd: task.dictation_word_end,
+                    dictationOrder: task.dictation_order || 'sequence',
+                    dictationMode,
+                    currentMode: dictationMode,
+                    bookId: task.dictation_book_id,
+                    progressKey: this.buildProgressKey(taskId, task.dictation_book_id, task.dictation_word_start, task.dictation_word_end)
+                });
+                if (task.dictation_book_id) {
+                    this.fetchTaskQueue(taskId);
                 } else {
                     wx.hideLoading();
-                    console.log('API Error Data:', res.data);
-                    let msg = '';
-                    if (typeof res.data === 'string') {
-                        msg = 'Server Error (HTML/String)';
-                    } else {
-                        msg = res.data.message || res.data.error || 'Unknown Error';
-                    }
-                    wx.showToast({ title: 'Err: ' + msg, icon: 'none' });
+                    wx.showToast({ title: '任务配置错误: dictation_book_id missing', icon: 'none' });
                 }
-            },
-            fail: (err) => {
+            })
+            .catch((err) => {
                 wx.hideLoading();
                 console.error(err);
-                wx.showToast({ title: 'Network Error', icon: 'none' });
-            }
-        });
+                wx.showToast({ title: '网络错误', icon: 'none' });
+            });
     },
 
     startBackendTimer(taskId) {
         if (!taskId) return;
-        wx.request({
-            url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${taskId}/timer/start`,
-            method: 'POST',
-            header: {
-                'Cookie': wx.getStorageSync('cookie'),
-                'Authorization': `Bearer ${wx.getStorageSync('token')}`
-            },
-            fail: (err) => {
-                console.warn('start timer failed', err);
+        request(`/miniprogram/student/tasks/${taskId}/timer/start`, { method: 'POST' })
+            .catch((err) => console.warn('start timer failed', err));
+    },
+
+    fetchTaskQueue(taskId) {
+        request(`/miniprogram/student/tasks/${taskId}/dictation-queue`)
+            .then((res) => {
+                wx.hideLoading();
+                if (!res || !res.ok) {
+                    wx.showToast({ title: '加载合并队列失败', icon: 'none' });
+                    return;
+                }
+                const words = (res.words || []).map(item => Object.assign({}, item, {
+                    dictationMode: queueMode(item, res.task_mode)
+                }));
+                const counts = summarizeQueue(words);
+                if (!words.length) {
+                    wx.showToast({ title: '当前任务没有可练单词', icon: 'none' });
+                    return;
+                }
+                this.setData({
+                    words,
+                    totalWords: words.length,
+                    currentIndex: 0,
+                    practiceStart: null,
+                    accumulatedSeconds: 0,
+                    dictationMode: res.task_mode,
+                    currentMode: res.task_mode,
+                    dictationOrder: res.dictation_order || 'sequence',
+                    queueToken: res.queue_token || '',
+                    assignedCount: res.assigned_count != null ? res.assigned_count : counts.assignedCount,
+                    reviewCount: res.auto_review_count != null ? res.auto_review_count : counts.reviewCount
+                });
+                if (res.task_mode === MODE_AUDIO_TO_EN || res.task_mode === MODE_ZH_TO_EN) {
+                    this.requestServerTtsPrewarm(words);
+                    this.prefetchAudioWindow(0);
+                }
+                this.prepareLoadedWords(words);
+            })
+            .catch(() => {
+                wx.hideLoading();
+                wx.showToast({ title: '网络错误', icon: 'none' });
+            });
+    },
+
+    prepareLoadedWords(words) {
+        const groupPlans = buildGroupPlans(words.length);
+        const selectedPlan = groupPlans.find(plan => plan.recommended) || groupPlans[0];
+        this.setData({
+            groupPlans,
+            selectedGroupPlanKey: selectedPlan ? selectedPlan.key : ''
+        });
+        const saved = this.loadProgress(words.length);
+        if (!saved) {
+            this.setData({ phase: 'group_select' });
+            return;
+        }
+        const savedSizes = normalizeGroupSizes(saved.groupSizes, words.length);
+        const savedIndex = Math.max(0, Math.min(Number(saved.index) || 0, words.length - 1));
+        let savedGroupIndex = Number.isInteger(saved.groupIndex)
+            ? saved.groupIndex
+            : findGroupIndex(savedSizes, savedIndex);
+        if (saved.awaitingNextGroup && savedGroupIndex < savedSizes.length - 1) savedGroupIndex += 1;
+        this.activateGroup(savedSizes, savedGroupIndex, {
+            correctStart: saved.awaitingNextGroup ? this.data.correctCount : saved.groupCorrectStart,
+            wrongStart: saved.awaitingNextGroup ? this.data.wrongWordsDetail.length : saved.groupWrongStart
+        }, () => {
+            if (saved.awaitingNextGroup || saved.resumePhase === 'familiarize') {
+                this.enterFamiliarization();
+                return;
             }
+            this.setData({ phase: 'test', practiceStart: Date.now() });
+            this.loadWord(savedIndex);
+            this.startTicker();
         });
     },
 
     fetchWords: function (id) {
-        if (!this.data.taskId) wx.showLoading({ title: '加载单词...' });
-
-        const url = `${app.globalData.baseUrl}/dictation/books/${id}`;
-        console.log("fetchWords Requesting:", url);
-        console.log("Authorization:", `Bearer ${wx.getStorageSync('token')}`);
-
-        wx.request({
-            url: url,
-            method: 'GET',
-            header: {
-                'Cookie': wx.getStorageSync('cookie'),
-                'Authorization': `Bearer ${wx.getStorageSync('token')}`
-            },
-            success: (res) => {
+        wx.showLoading({ title: '加载单词...' });
+        request(`/dictation/books/${id}`)
+            .then((res) => {
                 wx.hideLoading();
-                if (res.data.ok) {
-                    let words = res.data.words;
-                    console.log('Fetched words:', words.length);
-
-                    // Apply Range Filter if set
-                    if (this.data.rangeStart || this.data.rangeEnd) {
-                        const start = (this.data.rangeStart || 1) - 1; // 0-based
-                        const end = this.data.rangeEnd || words.length;
-                        console.log('Filtering range:', start, end);
-                        words = words.slice(start, end);
-                    }
-                    console.log('Final words:', words.length);
-
-                    if (words.length === 0) {
-                        wx.showModal({
-                            title: '提示',
-                            content: '该范围内没有单词 (或加载失败)',
-                            showCancel: false,
-                            success: () => wx.navigateBack()
-                        });
-                        return;
-                    }
-
-                    const bookType = res.data.book.book_type || 'dictation';
-                    const dictationMode = this.data.taskId
-                        ? resolveDictationMode(this.data.dictationMode, bookType)
-                        : resolveDictationMode('', bookType);
-                    if (this.data.taskId) {
-                        words = applyDictationOrder(words, {
-                            order: this.data.dictationOrder,
-                            taskId: this.data.taskId,
-                            bookId: id,
-                            start: this.data.rangeStart,
-                            end: this.data.rangeEnd
-                        });
-                    }
-                    words = words.map(word => ({
-                        ...word,
-                        dictationMode
-                    }))
-
-                    this.setData({
-                        // Only update title if not set by task
-                        bookTitle: this.data.taskId ? this.data.bookTitle : res.data.book.title,
-                        words: words,
-                        totalWords: words.length,
-                        currentIndex: 0,
-                        practiceStart: null,
-                        accumulatedSeconds: 0,
-                        dictationMode,
-                        currentMode: dictationMode
-                    });
-
-                    if (isAudioMode(dictationMode) || dictationMode === MODE_ZH_TO_EN) {
-                        this.requestServerTtsPrewarm(words);
-                        this.prefetchAudioWindow(0);
-                    }
-
-                    const groupPlans = buildGroupPlans(words.length);
-                    const selectedPlan = groupPlans.find(plan => plan.recommended) || groupPlans[0];
-                    this.setData({
-                        groupPlans,
-                        selectedGroupPlanKey: selectedPlan ? selectedPlan.key : ''
-                    });
-
-                    const saved = this.loadProgress(words.length);
-                    if (!saved) {
-                        this.setData({ phase: 'group_select' });
-                        return;
-                    }
-
-                    const savedSizes = normalizeGroupSizes(saved.groupSizes, words.length);
-                    const savedIndex = Math.max(0, Math.min(Number(saved.index) || 0, words.length - 1));
-                    let savedGroupIndex = Number.isInteger(saved.groupIndex)
-                        ? saved.groupIndex
-                        : findGroupIndex(savedSizes, savedIndex);
-                    if (saved.awaitingNextGroup && savedGroupIndex < savedSizes.length - 1) {
-                        savedGroupIndex += 1;
-                    }
-                    this.activateGroup(savedSizes, savedGroupIndex, {
-                        correctStart: saved.awaitingNextGroup ? this.data.correctCount : saved.groupCorrectStart,
-                        wrongStart: saved.awaitingNextGroup ? this.data.wrongWordsDetail.length : saved.groupWrongStart
-                    }, () => {
-                        if (saved.awaitingNextGroup || saved.resumePhase === 'familiarize') {
-                            this.enterFamiliarization();
-                            return;
-                        }
-                        this.setData({ phase: 'test', practiceStart: Date.now() });
-                        this.loadWord(savedIndex);
-                        this.startTicker();
-                    });
-                } else {
+                if (!res || !res.ok) {
                     wx.showToast({ title: '加载失败', icon: 'none' });
+                    return;
                 }
-            },
-            fail: () => {
+                let words = res.words || [];
+                if (this.data.rangeStart || this.data.rangeEnd) {
+                    const start = Math.max(0, (this.data.rangeStart || 1) - 1);
+                    const end = this.data.rangeEnd || words.length;
+                    words = words.slice(start, end);
+                }
+                if (!words.length) {
+                    wx.showModal({ title: '提示', content: '该范围内没有单词', showCancel: false });
+                    return;
+                }
+                const bookType = (res.book && res.book.book_type) || 'dictation';
+                const dictationMode = resolveDictationMode('', bookType);
+                words = words.map(word => Object.assign({}, word, { dictationMode }));
+                const counts = summarizeQueue(words.map(item => Object.assign({}, item, { source: 'assigned' })));
+                this.setData({
+                    bookTitle: res.book && res.book.title ? res.book.title : this.data.bookTitle,
+                    words,
+                    totalWords: words.length,
+                    currentIndex: 0,
+                    practiceStart: null,
+                    accumulatedSeconds: 0,
+                    dictationMode,
+                    currentMode: dictationMode,
+                    assignedCount: counts.assignedCount,
+                    reviewCount: 0
+                });
+                if (isAudioMode(dictationMode) || dictationMode === MODE_ZH_TO_EN) {
+                    this.requestServerTtsPrewarm(words);
+                    this.prefetchAudioWindow(0);
+                }
+                this.prepareLoadedWords(words);
+            })
+            .catch(() => {
                 wx.hideLoading();
                 wx.showToast({ title: '网络错误', icon: 'none' });
-            }
-        });
+            });
     },
 
     refocusAnswerInput(delay = 50) {
@@ -682,21 +688,12 @@ Page({
             targets.push(word);
         });
         if (!targets.length) return;
-        wx.request({
-            url: `${app.globalData.baseUrl}/dictation/tts/prewarm`,
+        request('/dictation/tts/prewarm', {
             method: 'POST',
-            header: {
-                'Cookie': wx.getStorageSync('cookie'),
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${wx.getStorageSync('token')}`
-            },
             data: {
                 words: targets.slice(0, AUDIO_PREWARM_LIMIT)
             },
-            fail: (err) => {
-                console.warn('dictation tts prewarm failed', err);
-            }
-        });
+        }).catch((err) => console.warn('dictation tts prewarm failed', err));
     },
 
     onToggleAutoPlay(e) {
@@ -711,22 +708,10 @@ Page({
     },
 
     checkAnswer: function () {
-        if (this.data.showResult) return;
+        if (this.data.showResult || this.data.isCheckingFirstAnswer) return;
 
         const inputRaw = this.data.inputValue.trim();
         const mode = this.data.currentMode || MODE_AUDIO_TO_EN;
-        let isCorrect = false;
-        if (mode === MODE_AUDIO_TO_EN) {
-            isCorrect = isEnglishAnswerCorrect(inputRaw, this.data.currentWord);
-        } else if (mode === MODE_ZH_TO_EN) {
-            isCorrect = isEnglishAnswerCorrect(inputRaw, this.data.currentWord);
-        } else {
-            const input = normalizeChineseAnswer(inputRaw);
-            isCorrect = chineseVariants(this.data.currentWord.translation).some(variant => (
-                input === variant
-                || (input.length >= 2 && (variant.includes(input) || input.includes(variant)))
-            ));
-        }
         const attempts = this.data.attemptCount || 0;
 
         if (!inputRaw) {
@@ -734,6 +719,52 @@ Page({
             return;
         }
 
+        if (attempts === 0) {
+            const word = this.data.currentWord;
+            const key = String(word.word_id || word.id);
+            if (this.firstAnswerInFlightKey === key) return;
+            this.firstAnswerInFlightKey = key;
+            this.setData({ isCheckingFirstAnswer: true, inputFocus: false });
+            this.submitFirstAttempt(word, inputRaw)
+                .then((res) => {
+                    if (!isSuccessfulResponse(res)) {
+                        throw new Error('first_attempt_not_acknowledged');
+                    }
+                    this.firstAttempts[key] = {
+                        correct: !!res.is_correct,
+                        answer: inputRaw
+                    };
+                    this.firstAnswerInFlightKey = null;
+                    this.persistAttemptState();
+                    this.setData({ isCheckingFirstAnswer: false }, () => {
+                        this.applyAnswerResult(inputRaw, !!res.is_correct, 0);
+                    });
+                })
+                .catch((err) => {
+                    this.firstAnswerInFlightKey = null;
+                    this.setData({ isCheckingFirstAnswer: false, inputValue: inputRaw, inputFocus: true });
+                    wx.showToast({ title: '首答同步失败，请重试', icon: 'none' });
+                    console.warn('submit first attempt failed', err);
+                });
+            return;
+        }
+
+        this.applyAnswerResult(inputRaw, this.isAnswerCorrectLocally(inputRaw, mode), attempts);
+    },
+
+    isAnswerCorrectLocally(inputRaw, mode) {
+        if (mode === MODE_AUDIO_TO_EN || mode === MODE_ZH_TO_EN) {
+            return isEnglishAnswerCorrect(inputRaw, this.data.currentWord);
+        }
+        const input = normalizeChineseAnswer(inputRaw);
+        return chineseVariants(this.data.currentWord.translation).some(variant => (
+            input === variant
+            || (input.length >= 2 && (variant.includes(input) || input.includes(variant)))
+        ));
+    },
+
+    applyAnswerResult(inputRaw, isCorrect, attempts) {
+        const mode = this.data.currentMode || MODE_AUDIO_TO_EN;
         if (isCorrect) {
             if (attempts === 0) {
                 this.setData({ correctCount: this.data.correctCount + 1 });
@@ -764,6 +795,7 @@ Page({
             wrongDetail.push({
                 id: this.data.currentWord.id,
                 word_id: this.data.currentWord.word_id,
+                book_id: this.data.currentWord.book_id || this.data.bookId,
                 word: this.data.currentWord.word,
                 translation: this.data.currentWord.translation,
                 phonetic: this.data.currentWord.phonetic,
@@ -799,28 +831,78 @@ Page({
         if (mode === MODE_ZH_TO_EN) this.playCurrentWord(true);
     },
 
+    submitFirstAttempt(word, answer) {
+        const wordId = word && (word.word_id || word.id);
+        if (!wordId) return Promise.resolve(null);
+        const key = String(wordId);
+        ensureAttemptPayload(this.firstAttemptPayloads, key, {
+            word_id: wordId,
+            book_id: word.book_id || this.data.bookId,
+            task_id: this.data.taskId || null,
+            answer,
+            mode: this.data.currentMode,
+            attempt_id: buildFirstAttemptId(this.data.taskId, this.data.bookId, wordId, this.attemptSessionId),
+            is_first_attempt: true,
+            strict_queue: !!this.data.taskId,
+            enroll: true
+        });
+        this.persistAttemptState();
+        return this.sendFirstAttempt(key);
+    },
+
+    sendFirstAttempt(key) {
+        if (this.firstAttemptConfirmed[key]) {
+            return Promise.resolve(this.firstAttemptResults[key] || {
+                ok: true,
+                is_correct: !!(this.firstAttempts[key] && this.firstAttempts[key].correct)
+            });
+        }
+        if (this.firstAttemptPromises[key]) return this.firstAttemptPromises[key];
+        const payload = this.firstAttemptPayloads[key];
+        if (!payload) return Promise.reject(new Error('missing_first_attempt_payload'));
+        this.firstAttemptSent[key] = true;
+        const promise = request('/dictation/submit', {
+            method: 'POST',
+            data: payload
+        }).then((res) => {
+            if (!isSuccessfulResponse(res)) {
+                const error = new Error((res && res.error) || 'first_attempt_rejected');
+                error.response = res;
+                throw error;
+            }
+            this.firstAttemptConfirmed[key] = true;
+            this.firstAttemptResults[key] = res;
+            delete this.firstAttemptSent[key];
+            delete this.firstAttemptPromises[key];
+            this.persistAttemptState();
+            return res;
+        }).catch((err) => {
+            delete this.firstAttemptSent[key];
+            delete this.firstAttemptPromises[key];
+            this.persistAttemptState();
+            throw err;
+        });
+        this.firstAttemptPromises[key] = promise;
+        return promise;
+    },
+
+    retryPendingFirstAttempts() {
+        const keys = Object.keys(this.firstAttemptPayloads || {})
+            .filter(key => !this.firstAttemptConfirmed[key]);
+        return Promise.all(keys.map(key => this.sendFirstAttempt(key)));
+    },
+
     reportExample: function (e) {
         const wordId = e.currentTarget.dataset.id;
         if (!wordId) return;
-        wx.request({
-            url: `${app.globalData.baseUrl}/dictation/example/report/${wordId}`,
-            method: 'POST',
-            header: {
-                'Cookie': wx.getStorageSync('cookie'),
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${wx.getStorageSync('token')}`
-            },
-            success: (res) => {
-                if (res.data && res.data.ok) {
-                    wx.showToast({ title: '已反馈，助教会复审', icon: 'none' });
-                } else {
-                    wx.showToast({ title: '反馈失败', icon: 'none' });
-                }
-            },
-            fail: () => {
-                wx.showToast({ title: '网络错误', icon: 'none' });
-            }
-        });
+        request(`/dictation/example/report/${wordId}`, { method: 'POST' })
+            .then((res) => {
+                wx.showToast({
+                    title: res && res.ok ? '已反馈，助教会复审' : '反馈失败',
+                    icon: 'none'
+                });
+            })
+            .catch(() => wx.showToast({ title: '网络错误', icon: 'none' }));
     },
 
     submitAnswerAppeal: function () {
@@ -834,33 +916,25 @@ Page({
             confirmText: '提交申诉',
             success: (modalRes) => {
                 if (!modalRes.confirm) return;
-                wx.request({
-                    url: `${app.globalData.baseUrl}/dictation/appeals`,
+                request('/dictation/appeals', {
                     method: 'POST',
-                    header: {
-                        'Cookie': wx.getStorageSync('cookie'),
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${wx.getStorageSync('token')}`
-                    },
                     data: {
                         word_id: word.id,
                         task_id: this.data.taskId,
                         answer: answer,
                         mode: this.data.currentMode
                     },
-                    success: (res) => {
-                        if (res.data && res.data.ok) {
+                }).then((res) => {
+                        if (res && res.ok) {
                             this.setData({ appealSubmitted: true });
                             wx.showToast({ title: '已提交人工审核', icon: 'none' });
                             return;
                         }
-                        const title = res.data && res.data.error === 'answer_already_accepted'
+                        const title = res && res.error === 'answer_already_accepted'
                             ? '该答案现已可接受'
                             : '申诉提交失败';
                         wx.showToast({ title, icon: 'none' });
-                    },
-                    fail: () => wx.showToast({ title: '网络错误', icon: 'none' })
-                });
+                }).catch(() => wx.showToast({ title: '网络错误', icon: 'none' }));
             }
         });
     },
@@ -950,7 +1024,10 @@ Page({
                 title: '错词练习完成',
                 content: msg,
                 showCancel: false,
-                success: () => wx.navigateBack()
+                success: () => {
+                    this.clearAttemptRun();
+                    wx.navigateBack();
+                }
             });
             return;
         }
@@ -974,13 +1051,13 @@ Page({
         if (this.data.taskId) {
             this.submitTaskResult(accuracy, this.data.wrongWords, durationSeconds, {
                 keepOpen: true,
-                onSuccess: () => {
+                onSuccess: (serverResult) => {
                     if (this.data.wrongWordsDetail.length > 0) {
                         this.appendToNotebook(this.data.wrongWordsDetail);
                     }
                     this.setData({
                         finished: true,
-                        summaryInfo
+                        summaryInfo: this.buildServerSummary(serverResult)
                     });
                     wx.showToast({ title: '提交成功', icon: 'success' });
                 }
@@ -1009,25 +1086,23 @@ Page({
         if (this.data.isSubmitting) return;
         this.setData({ isSubmitting: true });
         wx.showLoading({ title: '提交中...' });
-        wx.request({
-            url: `${app.globalData.baseUrl}/miniprogram/student/tasks/${this.data.taskId}/submit`,
-            method: 'POST',
-            header: {
-                'Cookie': wx.getStorageSync('cookie'),
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${wx.getStorageSync('token')}`
-            },
-            data: {
-                accuracy: accuracy,
-                wrong_words: wrongWords.join(', '),
-                duration_seconds: durationSeconds
-            },
-            success: (res) => {
+        this.retryPendingFirstAttempts()
+            .then(() => request(`/miniprogram/student/tasks/${this.data.taskId}/submit`, {
+                method: 'POST',
+                data: {
+                    strict_queue: true,
+                    queue_token: this.data.queueToken,
+                    accuracy,
+                    wrong_words: wrongWords.join(', '),
+                    duration_seconds: durationSeconds
+                }
+            }))
+            .then((res) => {
                 wx.hideLoading();
-                if (res.data.ok) {
+                if (res && res.ok) {
                     this.clearProgress();
                     if (options.onSuccess) {
-                        options.onSuccess();
+                        options.onSuccess(res);
                     }
                     if (!options.keepOpen) {
                         setTimeout(() => wx.navigateBack(), 1500);
@@ -1035,18 +1110,65 @@ Page({
                 } else {
                     wx.showToast({ title: '提交失败', icon: 'none' });
                 }
-            },
-            fail: () => {
+            })
+            .catch((err) => {
                 wx.hideLoading();
-                wx.showToast({ title: '网络错误', icon: 'none' });
-            },
-            complete: () => {
+                console.warn('submit dictation task failed', err);
+                wx.showToast({ title: '提交失败，请重试', icon: 'none' });
+            })
+            .finally(() => {
                 this.setData({ isSubmitting: false });
             }
-        });
+            );
     },
 
     // --- Progress Persistence ---
+    getOrCreateAttemptRunId() {
+        const key = this.attemptRunStorageKey;
+        return getOrCreateRunId(
+            {
+                get: () => wx.getStorageSync(key),
+                set: value => wx.setStorageSync(key, value)
+            },
+            key,
+            () => createAttemptRunId('dictation')
+        );
+    },
+
+    beginNewAttemptRun(scope) {
+        this.attemptRunStorageKey = buildRunStorageKey(scope);
+        this.attemptSessionId = createAttemptRunId('dictation');
+        wx.setStorageSync(this.attemptRunStorageKey, this.attemptSessionId);
+        this.firstAttempts = {};
+        this.firstAttemptPayloads = {};
+        this.firstAttemptConfirmed = {};
+        this.firstAttemptResults = {};
+        this.firstAttemptPromises = {};
+        this.firstAttemptSent = {};
+        this.firstAnswerInFlightKey = null;
+    },
+
+    clearAttemptRun() {
+        if (!this.data.taskId && this.attemptRunStorageKey) {
+            try { wx.removeStorageSync(this.attemptRunStorageKey); } catch (e) {}
+        }
+    },
+
+    persistAttemptState() {
+        if (this.data.progressKey) this.saveProgress(this.data.currentIndex || 0);
+    },
+
+    buildServerSummary(response) {
+        const total = Number(response && response.total_count) || 0;
+        const correct = Number(response && response.correct_count) || 0;
+        return {
+            accuracy: response && response.accuracy != null ? response.accuracy : 0,
+            correct,
+            total,
+            wrongCount: Math.max(0, total - correct)
+        };
+    },
+
     buildProgressKey(taskId, bookId, start, end) {
         const startVal = start || this.data.rangeStart || '';
         const endVal = end || this.data.rangeEnd || '';
@@ -1071,6 +1193,11 @@ Page({
             groupIndex: this.data.currentGroupIndex,
             groupCorrectStart: this.data.groupCorrectStart,
             groupWrongStart: this.data.groupWrongStart,
+            attemptRunId: this.attemptSessionId,
+            firstAttempts: this.firstAttempts,
+            firstAttemptPayloads: this.firstAttemptPayloads,
+            firstAttemptConfirmed: this.firstAttemptConfirmed,
+            firstAttemptResults: this.firstAttemptResults,
             awaitingNextGroup: false,
             resumePhase: 'test'
         }, extraData));
@@ -1092,6 +1219,14 @@ Page({
             if (saved.accumulatedSeconds) {
                 this.setData({ accumulatedSeconds: saved.accumulatedSeconds });
             }
+            if (saved.attemptRunId) this.attemptSessionId = saved.attemptRunId;
+            if (saved.attemptRunId && this.attemptRunStorageKey) {
+                try { wx.setStorageSync(this.attemptRunStorageKey, saved.attemptRunId); } catch (e) {}
+            }
+            this.firstAttempts = saved.firstAttempts || this.firstAttempts || {};
+            this.firstAttemptPayloads = saved.firstAttemptPayloads || this.firstAttemptPayloads || {};
+            this.firstAttemptConfirmed = saved.firstAttemptConfirmed || this.firstAttemptConfirmed || {};
+            this.firstAttemptResults = saved.firstAttemptResults || this.firstAttemptResults || {};
             return Object.assign({}, saved, { index: idx });
         }
         return null;
@@ -1104,6 +1239,7 @@ Page({
         } catch (e) {
             console.warn('Failed to clear progress', e);
         }
+        this.clearAttemptRun();
         this.stopTicker();
     },
 
@@ -1226,6 +1362,7 @@ Page({
             wx.showToast({ title: '没有错词可重练', icon: 'none' });
             return;
         }
+        this.beginNewAttemptRun('wrong-restart');
         const wrongOnly = wrongDetail.map((w, idx) => ({
             id: w.id || w.word_id || null,
             word: w.word,

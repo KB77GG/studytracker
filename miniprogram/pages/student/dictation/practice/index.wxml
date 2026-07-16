@@ -1,5 +1,8 @@
 <view class="practice-container">
   <view style="height: env(safe-area-inset-top);"></view>
+  <view class="queue-source-count" wx:if="{{taskId}}">
+    当日布置 {{assignedCount}} 词 + 自动复习 {{reviewCount}} 词
+  </view>
 
   <!-- ========== GROUP PREPARATION ========== -->
   <block wx:if="{{phase === 'group_select'}}">
@@ -184,6 +187,7 @@
                  placeholder="{{currentMode === 'en_to_zh' ? '输入中文释义' : (currentMode === 'zh_to_en' ? '输入英文表达' : '听音输入单词')}}"
                  focus="{{inputFocus}}"
                  value="{{inputValue}}"
+                 disabled="{{isCheckingFirstAnswer}}"
                  maxlength="-1"
                  bindinput="onInput"
                  confirm-type="done"
@@ -242,7 +246,7 @@
 
       <!-- Action Bar -->
       <view class="action-bar">
-        <button wx:if="{{!showResult}}" class="submit-btn" bindtap="checkAnswer">提交</button>
+        <button wx:if="{{!showResult}}" class="submit-btn" loading="{{isCheckingFirstAnswer}}" disabled="{{isCheckingFirstAnswer}}" bindtap="checkAnswer">提交</button>
         <button wx:else class="submit-btn next" loading="{{isSubmitting}}" disabled="{{isSubmitting}}" bindtap="nextWord">
           {{currentIndex + 1 >= groupEnd ? (hasMoreGroups ? '完成本组' : '完成练习') : '下一个'}}
         </button>

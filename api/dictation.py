@@ -19,7 +19,6 @@ import jwt
 import requests
 from flask import Blueprint, current_app, jsonify, request, send_file
 from flask_login import current_user, login_required
-from werkzeug.utils import secure_filename
 
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
@@ -31,7 +30,6 @@ from models import (
     DictationWord,
     DictationRecord,
     StudentWordMastery,
-    Task,
 )
 from api.qwen import generate_word_enrichment
 from dictation_answers import (
@@ -41,6 +39,7 @@ from dictation_answers import (
     serialize_answer_variants,
     strip_part_of_speech_prefix,
 )
+from services.dictation_review import DictationReviewError, submit_dictation_answer
 
 
 def require_session_or_bearer(fn):
@@ -1176,59 +1175,21 @@ def submit_answer():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
 
     data = request.get_json() or {}
-    word_id = data.get("word_id")
-    student_answer = (data.get("answer") or "").strip().lower()
-    book_id = data.get("book_id")
-    task_id = data.get("task_id")
-    mode = data.get("mode")
-    enroll = bool(data.get("enroll"))
+    try:
+        result = submit_dictation_answer(user, data)
+    except DictationReviewError as error:
+        db.session.rollback()
+        payload = {"ok": False, "error": error.error}
+        payload.update(error.details)
+        return jsonify(payload), error.status_code
 
-    if not word_id or not student_answer:
-        return jsonify({"ok": False, "error": "missing_params"}), 400
-
-    word = DictationWord.query.get_or_404(word_id)
-    normalized_mode = str(mode or "").strip().lower()
-    if normalized_mode == "en_to_zh":
-        is_correct = is_chinese_answer_correct(student_answer, word.translation)
-    else:
-        is_correct = is_english_answer_correct(
-            student_answer,
-            word.word,
-            accepted_answers=word.accepted_answers,
-        )
-
-    # Record the attempt
-    record = DictationRecord(
-        student_id=user.id,
-        task_id=task_id,
-        book_id=book_id or word.book_id,
-        word_id=word_id,
-        student_answer=student_answer,
-        is_correct=is_correct
-    )
-    db.session.add(record)
-
-    mastery = StudentWordMastery.apply_answer(
-        student_id=user.id,
-        word_id=word.id,
-        book_id=book_id or word.book_id,
-        is_correct=is_correct,
-        mode=mode,
-        create_if_missing=enroll,
-    )
-
+    word = db.session.get(DictationWord, int(data.get("word_id")))
     db.session.commit()
-    
-    response = {
-        "ok": True,
-        "is_correct": is_correct,
-        "correct_answer": word.word,
+    response = dict(result)
+    response.update({
         "syllables": _syllabify(word.word),
         "phonetic": word.phonetic,
-        "translation": word.translation,
-        "next_review_at": mastery.next_review_at.isoformat() if mastery and mastery.next_review_at else None,
-        "review_level": mastery.review_level if mastery else None,
-    }
+    })
     response.update(_word_enrichment_payload(word))
     return jsonify(response)
 

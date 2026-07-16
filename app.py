@@ -52,6 +52,7 @@ from api.practice_catalog import (
     summarize_jijing_book_progress,
 )
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
+from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
 from practice_tables import normalize_practice_tables
 from toefl_practice import catalog_summary as _toefl_catalog_summary
 from toefl_practice import toefl_bp
@@ -2505,6 +2506,11 @@ def ensure_legacy_schema() -> None:
         current_app.logger.warning(
             "Failed to ensure TOEFL submission tables exist: %s", exc
         )
+
+    # Vocabulary review owns its incremental columns/tables in a service
+    # module; keep this call here so existing production databases upgrade on
+    # startup without a destructive migration.
+    _ensure_dictation_review_schema(db.engine, current_app.logger)
 
 
 with app.app_context():

@@ -2395,9 +2395,34 @@ def submit_reading_vocab_practice(task_id):
 def submit_task(task_id):
     """学生提交任务"""
     from models import Task
-    
+
     user = request.current_api_user
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
+
+    # New dictation clients submit only a queue token and answer ids.  The
+    # server computes the merged score from persisted first answers; the old
+    # client path below remains unchanged for compatibility.
+    if data.get("strict_queue"):
+        from services.dictation_review import DictationReviewError, finalize_strict_task
+
+        try:
+            result = finalize_strict_task(user, task_id, data)
+        except DictationReviewError as error:
+            db.session.rollback()
+            payload = {"ok": False, "error": error.error}
+            payload.update(error.details)
+            return jsonify(payload), error.status_code
+        task = Task.query.get(task_id)
+        if task:
+            _sync_plan_item_from_legacy_task(
+                task,
+                note=data.get("note"),
+                evidence_files=data.get("evidence_files", []),
+                duration=data.get("duration_seconds", 0),
+            )
+        db.session.commit()
+        return jsonify(result)
+
     note = data.get("note")
     evidence_files = data.get("evidence_files", []) # List of URLs
     duration = data.get("duration_seconds", 0)

@@ -2,7 +2,7 @@
 <view class="container">
   <view class="header">
     <view class="title">听写词库</view>
-    <view class="subtitle">选择词书开始练习</view>
+    <view class="subtitle">选择词书开始练习 · 服务端错词 {{serverWrongCount}} 词会自动回流</view>
   </view>
 
   <view class="book-list">
@@ -17,6 +17,7 @@
         </view>
       </view>
       <view class="book-actions">
+        <view wx:if="{{item.local_wrong_count > 0}}" class="action-btn import" catchtap="confirmImportLegacyWrongWords" data-id="{{item.id}}" data-title="{{item.title}}">导入 {{item.local_wrong_count}}</view>
         <view class="action-btn secondary" catchtap="startSpell" data-id="{{item.id}}" data-title="{{item.title}}">拼写</view>
         <view class="action-btn">练习</view>
       </view>

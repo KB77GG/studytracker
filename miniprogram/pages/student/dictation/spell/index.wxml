@@ -1,5 +1,8 @@
 <view class="spell-page">
   <view class="safe-top" style="height: env(safe-area-inset-top);"></view>
+  <view class="queue-source-count" wx:if="{{taskId}}">
+    当日布置 {{assignedCount}} 词 + 自动复习 {{reviewCount}} 词
+  </view>
 
   <view class="loading" wx:if="{{stage === 'loading'}}">加载中...</view>
 
@@ -81,7 +84,7 @@
         <text wx:if="{{isLoadingAudio}}">···</text>
         <view wx:else class="ic-audio"></view>
       </button>
-      <button class="round-control confirm" bindtap="submitOrNext">
+      <button class="round-control confirm" loading="{{isCheckingFirstAnswer}}" disabled="{{isCheckingFirstAnswer}}" bindtap="submitOrNext">
         {{showResult ? '→' : '✓'}}<text class="key-hint">↵</text>
       </button>
     </view>
@@ -99,6 +102,12 @@
       <view></view>
     </view>
     <view class="tip-strip">💡 快速回顾本组单词吧～</view>
+
+    <view wx:if="{{taskId}}" class="server-score">
+      <text wx:if="{{serverSummary}}">合并准确率：{{serverSummary.accuracy}}%（{{serverSummary.correct}} / {{serverSummary.total}}）</text>
+      <text wx:else>合并成绩同步中...</text>
+    </view>
+    <button wx:if="{{taskId && !serverSummary}}" class="mini-btn ghost" bindtap="submitTaskResultIfNeeded">重试提交成绩</button>
 
     <scroll-view class="summary-list" scroll-y="true">
       <view class="summary-row" wx:for="{{summaryItems}}" wx:key="key">

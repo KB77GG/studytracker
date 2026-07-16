@@ -4,7 +4,16 @@ const {
     isEnglishAnswerCorrect,
     normalizeEnglishAnswer
 } = require('../../../../utils/dictation-answers.js')
-const { applyDictationOrder } = require('../../../../utils/dictation-order.js')
+const {
+    buildFirstAttemptId,
+    buildRunStorageKey,
+    createAttemptRunId,
+    ensureAttemptPayload,
+    getOrCreateRunId,
+    isSuccessfulResponse,
+    summarizeQueue,
+    queueMode
+} = require('../../../../utils/dictation-review.js')
 
 const REINSERT_GAP = 3
 const FIXED_SPELL_CHARS = "-‐‑‒–—'’‘`´.,，。.!！？?；;：:()（）[]{}<>/\\|_+*=~@#$%^&\""
@@ -142,9 +151,14 @@ Page({
         isLoadingAudio: false,
         summaryItems: [],
         remainingCount: 0,
+        serverSummary: null,
+        isCheckingFirstAnswer: false,
         skipSpellInReview: false,
         keyboardHeight: 0,
         dictationOrder: 'sequence',
+        queueToken: '',
+        assignedCount: 0,
+        reviewCount: 0,
         appealSubmitted: false
     },
 
@@ -155,14 +169,25 @@ Page({
     },
 
     onLoad(options) {
+        options = options || {}
         this.completedMap = {}
         this.firstAttempts = {}
+        this.firstAttemptPayloads = {}
+        this.firstAttemptConfirmed = {}
+        this.firstAttemptResults = {}
         this.summaryMap = {}
         this.audioFileCache = {}
         this.playTokenCounter = 0
         this.currentDownloadTask = null
         this.drillStartedAt = null
         this.taskResultSubmitted = false
+        this.firstAttemptPromises = {}
+        this.firstAttemptSent = {}
+        this.firstAnswerInFlightKey = null
+        this.attemptRunStorageKey = options.taskId
+            ? null
+            : buildRunStorageKey(options.mode === 'review' ? 'review' : `book-${options.id || 'unknown'}`)
+        this.attemptSessionId = options.taskId ? '' : this.getOrCreateAttemptRunId()
 
         this.audioCtx = wx.createInnerAudioContext()
         this.audioCtx.obeyMuteSwitch = false
@@ -209,6 +234,35 @@ Page({
         }
     },
 
+    getOrCreateAttemptRunId() {
+        const key = this.attemptRunStorageKey
+        return getOrCreateRunId(
+            {
+                get: () => wx.getStorageSync(key),
+                set: value => wx.setStorageSync(key, value)
+            },
+            key,
+            () => createAttemptRunId('spelling')
+        )
+    },
+
+    clearAttemptRun() {
+        if (!this.data.taskId && this.attemptRunStorageKey) {
+            try { wx.removeStorageSync(this.attemptRunStorageKey) } catch (e) {}
+        }
+    },
+
+    buildServerSummary(response) {
+        const total = Number(response && response.total_count) || 0
+        const correct = Number(response && response.correct_count) || 0
+        return {
+            accuracy: response && response.accuracy != null ? response.accuracy : 0,
+            correct,
+            total,
+            wrongCount: Math.max(0, total - correct)
+        }
+    },
+
     fetchTask(taskId) {
         wx.showLoading({ title: '加载任务...' })
         request(`/miniprogram/student/tasks/${taskId}`)
@@ -226,7 +280,34 @@ Page({
                     rangeEnd: task.dictation_word_end,
                     dictationOrder: task.dictation_order || 'sequence'
                 })
-                this.fetchWords(task.dictation_book_id)
+                this.fetchTaskQueue(taskId)
+            })
+            .catch(() => {
+                wx.hideLoading()
+                wx.showToast({ title: '网络错误', icon: 'none' })
+            })
+    },
+
+    fetchTaskQueue(taskId) {
+        request(`/miniprogram/student/tasks/${taskId}/dictation-queue`)
+            .then((res) => {
+                wx.hideLoading()
+                if (!res || !res.ok) {
+                    wx.showToast({ title: '加载合并队列失败', icon: 'none' })
+                    return
+                }
+                const rawWords = res.words || []
+                const words = rawWords.map(item => Object.assign({}, item, {
+                    dictationMode: queueMode(item, res.task_mode)
+                }))
+                const counts = summarizeQueue(words)
+                this.setData({
+                    dictationOrder: res.dictation_order || 'sequence',
+                    queueToken: res.queue_token || '',
+                    assignedCount: res.assigned_count != null ? res.assigned_count : counts.assignedCount,
+                    reviewCount: res.auto_review_count != null ? res.auto_review_count : counts.reviewCount
+                })
+                this.prepareWords(words, this.data.bookTitle)
             })
             .catch(() => {
                 wx.hideLoading()
@@ -248,15 +329,6 @@ Page({
                     const start = Math.max(0, (this.data.rangeStart || 1) - 1)
                     const end = this.data.rangeEnd || words.length
                     words = words.slice(start, end)
-                }
-                if (this.data.sourceMode === 'task') {
-                    words = applyDictationOrder(words, {
-                        order: this.data.dictationOrder,
-                        taskId: this.data.taskId,
-                        bookId,
-                        start: this.data.rangeStart,
-                        end: this.data.rangeEnd
-                    })
                 }
                 this.prepareWords(words, res.book && res.book.title)
             })
@@ -312,7 +384,8 @@ Page({
             totalWords: words.length,
             completedCount: 0,
             progressDots: buildProgressDots(words.length, 0),
-            bookTitle: this.data.bookTitle || fallbackTitle || '强化拼写'
+            bookTitle: this.data.bookTitle || fallbackTitle || '强化拼写',
+            serverSummary: null
         })
         this.drillStartedAt = null
         this.taskResultSubmitted = false
@@ -378,6 +451,7 @@ Page({
     checkAnswer() {
         const word = this.data.currentWord
         if (!word || !word.word) return
+        if (this.data.isCheckingFirstAnswer) return
         const raw = String(this.data.inputValue || '').trim()
         if (!raw) {
             wx.showToast({ title: '请输入答案', icon: 'none' })
@@ -387,12 +461,36 @@ Page({
         const isCorrect = isEnglishAnswerCorrect(raw, word)
         const key = word._originIndex
         if (!this.firstAttempts[key]) {
-            this.firstAttempts[key] = {
-                correct: isCorrect,
-                answer: isCorrect ? word.word : raw
-            }
+            if (this.firstAnswerInFlightKey === key) return
+            this.firstAnswerInFlightKey = key
+            this.setData({ isCheckingFirstAnswer: true, inputFocus: false })
+            this.submitFirstAttempt(word, raw)
+                .then((res) => {
+                    if (!isSuccessfulResponse(res)) throw new Error('first_attempt_not_acknowledged')
+                    const serverCorrect = !!res.is_correct
+                    this.firstAttempts[key] = {
+                        correct: serverCorrect,
+                        answer: raw
+                    }
+                    this.firstAnswerInFlightKey = null
+                    this.setData({ isCheckingFirstAnswer: false }, () => {
+                        this.applyAnswerResult(word, raw, serverCorrect, true)
+                    })
+                })
+                .catch((err) => {
+                    this.firstAnswerInFlightKey = null
+                    this.setData({ isCheckingFirstAnswer: false, inputValue: raw, inputFocus: true })
+                    wx.showToast({ title: '首答同步失败，请重试', icon: 'none' })
+                    console.warn('submit spell first attempt failed', err)
+                })
+            return
         }
 
+        this.applyAnswerResult(word, raw, isCorrect, false)
+    },
+
+    applyAnswerResult(word, raw, isCorrect, isFirstAttempt) {
+        const key = word._originIndex
         if (isCorrect) {
             const nextCompleted = this.completedMap[key]
                 ? this.data.completedCount
@@ -406,7 +504,7 @@ Page({
                 displayWord: word.syllables || word.word,
                 inputFocus: false
             })
-            this.submitMastery(word)
+            if (!isFirstAttempt) this.submitMastery(word)
             this.playCurrentWord()
             this.dismissKeyboard()
             // Correct: let the green word / syllables / phonetic land, then advance.
@@ -496,37 +594,79 @@ Page({
     submitMastery(word) {
         const key = word._originIndex
         if (this.summaryMap[key] && this.summaryMap[key].submitted) return
-        const first = this.firstAttempts[key] || { correct: true, answer: word.word }
-        const answer = first.correct ? word.word : first.answer
         this.summaryMap[key] = {
             submitted: true,
             word: word.word,
-            reviewLabel: first.correct ? '1天后复习' : '1天后复习'
+            reviewLabel: '已同步首答'
         }
         this.updateSummaryItems()
+    },
 
-        request('/dictation/submit', {
-            method: 'POST',
-            data: {
-                word_id: word.word_id || word.id,
-                book_id: word.book_id || this.data.bookId,
-                task_id: this.data.taskId,
-                answer,
-                mode: 'spelling_drill',
-                enroll: true
-            }
-        }).then((res) => {
-            if (res && res.ok) {
-                this.summaryMap[key] = {
-                    submitted: true,
-                    word: word.word,
-                    reviewLabel: formatNextReview(res.next_review_at)
-                }
-                this.updateSummaryItems()
-            }
-        }).catch((err) => {
-            console.warn('submit spell mastery failed', err)
+    submitFirstAttempt(word, answer) {
+        const wordId = word && (word.word_id || word.id)
+        if (!wordId) return Promise.resolve(null)
+        const key = String(wordId)
+        ensureAttemptPayload(this.firstAttemptPayloads, key, {
+            word_id: wordId,
+            book_id: word.book_id || this.data.bookId,
+            task_id: this.data.taskId || null,
+            answer,
+            mode: 'spelling_drill',
+            attempt_id: buildFirstAttemptId(this.data.taskId, this.data.bookId, wordId, this.attemptSessionId),
+            is_first_attempt: true,
+            strict_queue: !!this.data.taskId,
+            enroll: true
         })
+        return this.sendFirstAttempt(key, word)
+    },
+
+    sendFirstAttempt(key, word) {
+        if (this.firstAttemptConfirmed[key]) {
+            return Promise.resolve(this.firstAttemptResults[key] || {
+                ok: true,
+                is_correct: !!(this.firstAttempts[key] && this.firstAttempts[key].correct)
+            })
+        }
+        if (this.firstAttemptPromises[key]) return this.firstAttemptPromises[key]
+        const payload = this.firstAttemptPayloads[key]
+        if (!payload) return Promise.reject(new Error('missing_first_attempt_payload'))
+        this.firstAttemptSent[key] = true
+        const promise = request('/dictation/submit', {
+            method: 'POST',
+            data: payload
+        }).then((res) => {
+            if (!isSuccessfulResponse(res)) {
+                const error = new Error((res && res.error) || 'first_attempt_rejected')
+                error.response = res
+                throw error
+            }
+            this.firstAttemptConfirmed[key] = true
+            this.firstAttemptResults[key] = res
+            this.summaryMap[word._originIndex] = {
+                submitted: true,
+                word: word.word,
+                reviewLabel: res.next_review_at ? formatNextReview(res.next_review_at) : '无需自动复习'
+            }
+            this.updateSummaryItems()
+            delete this.firstAttemptSent[key]
+            delete this.firstAttemptPromises[key]
+            return res
+        }).catch((err) => {
+            delete this.firstAttemptSent[key]
+            delete this.firstAttemptPromises[key]
+            throw err
+        })
+        this.firstAttemptPromises[key] = promise
+        return promise
+    },
+
+    retryPendingFirstAttempts() {
+        const keys = Object.keys(this.firstAttemptPayloads || {})
+            .filter(key => !this.firstAttemptConfirmed[key])
+        return Promise.all(keys.map(key => {
+            const word = (this.data.words || []).find(item => String(item.word_id || item.id) === String(key)) || {}
+            return this.sendFirstAttempt(key, word)
+        }))
     },
 
     updateSummaryItems() {
@@ -547,6 +687,7 @@ Page({
         this.setData({ stage: 'summary' })
         this.fetchReviewSummary()
         this.submitTaskResultIfNeeded()
+        if (!this.data.taskId) this.clearAttemptRun()
     },
 
     buildTaskResult() {
@@ -556,7 +697,8 @@ Page({
         const wrongWords = []
 
         words.forEach((word, index) => {
-            const first = this.firstAttempts[index]
+            const first = this.firstAttempts[String(word.word_id || word.id)]
+                || this.firstAttempts[index]
             if (first && first.correct) {
                 correct += 1
             } else {
@@ -581,18 +723,22 @@ Page({
         this.taskResultSubmitted = true
 
         const result = this.buildTaskResult()
-        request(`/miniprogram/student/tasks/${this.data.taskId}/submit`, {
+        this.retryPendingFirstAttempts().then(() => request(`/miniprogram/student/tasks/${this.data.taskId}/submit`, {
             method: 'POST',
             data: {
+                strict_queue: true,
+                queue_token: this.data.queueToken,
                 accuracy: result.accuracy,
                 wrong_words: result.wrongWords.join(', '),
                 duration_seconds: result.durationSeconds
             }
-        }).then((res) => {
-            if (!res || !res.ok) {
+        })).then((res) => {
+            if (!isSuccessfulResponse(res)) {
                 this.taskResultSubmitted = false
                 wx.showToast({ title: '任务提交失败', icon: 'none' })
+                return
             }
+            this.setData({ serverSummary: this.buildServerSummary(res) })
         }).catch((err) => {
             this.taskResultSubmitted = false
             console.warn('submit spell task result failed', err)
@@ -624,6 +770,7 @@ Page({
 
     continueReview() {
         if (this.data.sourceMode === 'review') {
+            this.beginNewAttemptRun('review')
             this.fetchReviewWords()
             return
         }
