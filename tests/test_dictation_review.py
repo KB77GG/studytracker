@@ -1,6 +1,6 @@
 import time
 import unittest
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 
 import jwt
 from flask import Flask

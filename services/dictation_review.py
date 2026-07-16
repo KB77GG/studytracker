@@ -8,7 +8,7 @@ wrong-word lifecycle.
 from __future__ import annotations
 
 import hashlib
-from datetime import UTC, date, datetime, time, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 from sqlalchemy import Index, MetaData, Table, inspect, text
@@ -30,6 +30,7 @@ from models import (
     db,
 )
 
+UTC = timezone.utc  # noqa: UP017 - Python 3.10-compatible replacement.
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 # These are product cutoffs, not deployment-time values.  Database datetimes
 # remain naive UTC; the aware local values make the product boundary explicit.
