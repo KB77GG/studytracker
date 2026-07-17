@@ -216,6 +216,7 @@ Page({
                 }
                 this.setData({ bindRequired: false })
                 this.applyScheduleData(list, dashboardList)
+                await this.fetchPracticeStudentCount()
             } else {
                 if (res && res.error === 'missing_scheduler_teacher_id') {
                     this.setData({ bindRequired: true, schedules: [] })
@@ -245,6 +246,23 @@ Page({
         } catch (error) {
             console.warn('teacher pending grading load failed', error)
             this.setData({ pendingReviewCount: 0 })
+        }
+    },
+
+    async fetchPracticeStudentCount() {
+        if (this.data.isGuest || app.globalData.guestMode) return
+        const month = this.formatMonth(new Date())
+        try {
+            const res = await request('/miniprogram/teacher/practice-students', {
+                method: 'GET',
+                data: { month }
+            })
+            if (!res || !res.ok) return
+            this.setData({
+                'dashboardStats.studentCount': Number(res.student_count || 0)
+            })
+        } catch (error) {
+            console.warn('teacher practice student count load failed', error)
         }
     },
 
@@ -660,6 +678,17 @@ Page({
             return
         }
         wx.navigateTo({ url: '/pages/teacher/grading/index' })
+    },
+
+    openStudents() {
+        if (this.data.isGuest || app.globalData.guestMode) {
+            this.promptLogin('查看我的学生并快捷布置刷题需要登录教师账号。')
+            return
+        }
+        const month = this.formatMonth(new Date())
+        wx.navigateTo({
+            url: `/pages/teacher/students/index?month=${encodeURIComponent(month)}`
+        })
     },
 
     showUnavailable(e) {

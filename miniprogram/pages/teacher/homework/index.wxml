@@ -28,7 +28,13 @@
 
   <view class="form source-card">
     <text class="form-label">作业来源</text>
-    <picker range="{{sourceLabels}}" value="{{sourceIndex}}" bindchange="handleSourceChange">
+    <view wx:if="{{quickPracticeInvalid}}" class="locked-source invalid">
+      <text>快捷入口参数无效，请返回“我的学生”重新进入</text>
+    </view>
+    <view wx:elif="{{quickPractice}}" class="locked-source">
+      <text>{{quickSubjectLabel}}（已锁定）</text>
+    </view>
+    <picker wx:else range="{{sourceLabels}}" value="{{sourceIndex}}" bindchange="handleSourceChange">
       <view class="picker-field">{{sourceLabels[sourceIndex]}}</view>
     </picker>
 
@@ -212,5 +218,5 @@
     <view class="counter">{{form.note.length}}/200</view>
   </view>
 
-  <button class="submit-btn" loading="{{saving}}" disabled="{{saving}}" bindtap="submitHomework">{{editingTaskId ? '保存修改' : '保存并提醒学生'}}</button>
+  <button class="submit-btn" loading="{{saving}}" disabled="{{saving || quickPracticeInvalid}}" bindtap="submitHomework">{{editingTaskId ? '保存修改' : '保存并提醒学生'}}</button>
 </view>

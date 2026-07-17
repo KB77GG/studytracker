@@ -23,6 +23,7 @@ from models import (
 )
 from .auth_utils import can_view_all_schedules, require_api_user
 from .listening_series import parse_test_id
+from .teacher_practice_access import validate_quick_practice_request
 from .reading_vocab_grading import grade_reading_vocab_submission
 from .stats_utils import (
     average_accuracy,
@@ -41,6 +42,10 @@ from .tencent_soe import evaluate_pronunciation
 from .aliyun_oral_warrant import create_oral_warrant
 from .aliyun_oral_task import run_oral_task
 from practice_tables import normalize_practice_table
+from services.scheduler_client import (
+    coerce_schedule_list as _shared_coerce_schedule_list,
+    fetch_range_schedules_by_dates as _shared_fetch_range_schedules_by_dates,
+)
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
@@ -3510,29 +3515,7 @@ def _fetch_tomorrow_schedules():
 
 def _fetch_range_schedules_by_dates(start: date, end: date, teacher_id=None):
     """调用排课系统 range 接口，返回指定日期范围内的课表。"""
-    base_url = current_app.config.get("SCHEDULER_BASE_URL")
-    token = current_app.config.get("SCHEDULER_PUSH_TOKEN")
-    if not base_url or not token:
-        return None, "scheduler_config_missing"
-
-    params = {"start": start.isoformat(), "end": end.isoformat()}
-    if teacher_id is not None:
-        params["teacher_id"] = teacher_id
-
-    try:
-        resp = requests.get(
-            f"{base_url}/api/schedules/range",
-            headers={"X-Push-Token": token},
-            params=params,
-            timeout=5,
-        )
-        if resp.status_code != 200:
-            current_app.logger.warning("Scheduler range API error: %s %s", resp.status_code, resp.text)
-            return None, "scheduler_api_error"
-        return resp.json(), None
-    except Exception as exc:  # pragma: no cover
-        current_app.logger.error("Scheduler range API request failed: %s", exc)
-        return None, "scheduler_request_failed"
+    return _shared_fetch_range_schedules_by_dates(start, end, teacher_id=teacher_id)
 
 
 def _fetch_range_schedules(days=7, teacher_id=None):
@@ -3544,9 +3527,7 @@ def _fetch_range_schedules(days=7, teacher_id=None):
 
 
 def _coerce_schedule_list(payload):
-    if isinstance(payload, dict):
-        return payload.get("schedules") or payload.get("data") or []
-    return payload or []
+    return _shared_coerce_schedule_list(payload)
 
 
 def _first_schedule_value(item: dict, *keys):
@@ -4606,14 +4587,20 @@ def get_teacher_homework_result(task_id):
     })
 
 
-@mp_bp.route("/teacher/homework", methods=["POST"])
-@require_api_user(User.ROLE_TEACHER)
-def create_teacher_homework():
-    """老师在小程序内为单个学生布置作业并触发任务提醒。"""
-    data = request.get_json() or {}
+def _create_teacher_homework(data: dict, *, force_quick: bool = False):
+    """Create homework, optionally requiring the signed shortcut context."""
+    data = dict(data or {})
+    if force_quick:
+        data["quick_practice"] = 1
     user = request.current_api_user
 
+    quick_context, quick_error, quick_status = validate_quick_practice_request(user, data)
+    if quick_error:
+        return _teacher_homework_error(quick_error, quick_status)
+
     raw_teacher_id = data.get("teacher_id")
+    if quick_context:
+        raw_teacher_id = quick_context["schedule"].get("teacher_id")
     try:
         schedule_teacher_id = int(raw_teacher_id) if raw_teacher_id not in (None, "") else None
     except (TypeError, ValueError):
@@ -4621,13 +4608,21 @@ def create_teacher_homework():
     if user.scheduler_teacher_id and schedule_teacher_id and schedule_teacher_id != user.scheduler_teacher_id:
         return _teacher_homework_error("forbidden_schedule", 403)
 
-    raw_student_id = data.get("student_id")
+    raw_student_id = (
+        quick_context["scheduler_student_id"]
+        if quick_context
+        else data.get("student_id")
+    )
     try:
         scheduler_student_id = int(raw_student_id) if raw_student_id not in (None, "") else None
     except (TypeError, ValueError):
         scheduler_student_id = None
 
-    student_name = (data.get("student_name") or "").strip()
+    student_name = (
+        quick_context.get("student_name")
+        if quick_context
+        else (data.get("student_name") or "").strip()
+    )
     profile = None
     if scheduler_student_id:
         profile = StudentProfile.query.filter_by(
@@ -4698,15 +4693,38 @@ def create_teacher_homework():
     })
 
 
-@mp_bp.route("/teacher/homework/<int:task_id>", methods=["PATCH"])
+@mp_bp.route("/teacher/homework", methods=["POST"])
 @require_api_user(User.ROLE_TEACHER)
-def update_teacher_homework(task_id):
-    """老师在小程序内修正自己刚布置的作业。"""
-    data = request.get_json() or {}
+def create_teacher_homework():
+    """老师在小程序内为单个学生布置作业并触发任务提醒。"""
+    return _create_teacher_homework(request.get_json(silent=True) or {})
+
+
+@mp_bp.route("/teacher/homework/quick-practice", methods=["POST"])
+@require_api_user(User.ROLE_TEACHER)
+def create_teacher_quick_practice_homework():
+    """快捷刷题专用创建入口，永远要求服务端学科上下文。"""
+    return _create_teacher_homework(
+        request.get_json(silent=True) or {},
+        force_quick=True,
+    )
+
+
+def _update_teacher_homework(task_id: int, data: dict, *, force_quick: bool = False):
+    """Update homework, optionally requiring the signed shortcut context."""
+    data = dict(data or {})
+    if force_quick:
+        data["quick_practice"] = 1
     user = request.current_api_user
     task = Task.query.get_or_404(task_id)
     if task.created_by != user.id:
         return _teacher_homework_error("forbidden_task", 403)
+
+    quick_context, quick_error, quick_status = validate_quick_practice_request(user, data)
+    if quick_error:
+        return _teacher_homework_error(quick_error, quick_status)
+    if quick_context and task.student_name != quick_context["student_name"]:
+        return _teacher_homework_error("forbidden_subject", 403)
 
     include_source = "source_type" in data
     values, error, status = _build_teacher_homework_values(
@@ -4726,6 +4744,27 @@ def update_teacher_homework(task_id):
         "ok": True,
         "task": _serialize_teacher_homework_task(task),
     })
+
+
+@mp_bp.route("/teacher/homework/<int:task_id>", methods=["PATCH"])
+@require_api_user(User.ROLE_TEACHER)
+def update_teacher_homework(task_id):
+    """老师在小程序内修正自己刚布置的作业。"""
+    return _update_teacher_homework(
+        task_id,
+        request.get_json(silent=True) or {},
+    )
+
+
+@mp_bp.route("/teacher/homework/quick-practice/<int:task_id>", methods=["PATCH"])
+@require_api_user(User.ROLE_TEACHER)
+def update_teacher_quick_practice_homework(task_id):
+    """快捷刷题专用修改入口，永远要求服务端学科上下文。"""
+    return _update_teacher_homework(
+        task_id,
+        request.get_json(silent=True) or {},
+        force_quick=True,
+    )
 
 
 @mp_bp.route("/teacher/homework/<int:task_id>", methods=["DELETE"])

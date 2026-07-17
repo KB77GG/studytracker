@@ -1,0 +1,65 @@
+<view class="page">
+  <view class="header">
+    <view>
+      <text class="title">我的学生</text>
+      <text class="subtitle">只显示本月由你授课的雅思听力/阅读学生</text>
+    </view>
+    <text class="month-label">{{month}}</text>
+  </view>
+
+  <view wx:if="{{isGuest}}" class="guest-card">
+    <text>登录教师账号后查看真实学生与学科关系</text>
+  </view>
+
+  <view wx:else class="content">
+    <input
+      class="search"
+      placeholder="搜索学生姓名或学科"
+      value="{{searchText}}"
+      bindinput="handleSearch"
+    />
+
+    <view wx:if="{{loading}}" class="state-card">正在加载学生列表...</view>
+    <view wx:elif="{{errorText}}" class="state-card error">{{errorText}}</view>
+    <view wx:elif="{{!filteredStudents.length}}" class="state-card">
+      <text>{{searchText ? '没有匹配的学生' : '本月暂无可快捷布置刷题的学生'}}</text>
+    </view>
+
+    <view wx:else class="student-list">
+      <view class="student-card" wx:for="{{filteredStudents}}" wx:for-item="student" wx:key="student_id">
+        <view class="student-head">
+          <view>
+            <text class="student-name">{{student.student_name}}</text>
+            <text class="student-id">排课学生 ID：{{student.student_id}}</text>
+          </view>
+          <text class="subject-count">{{student.subjects.length}} 个学科</text>
+        </view>
+        <view class="subject-list">
+          <button
+            class="subject-button {{subject.subject_key}}"
+            wx:for="{{student.subjects}}"
+            wx:for-item="subject"
+            wx:key="subject_key"
+            data-context-token="{{subject.practice_context_token}}"
+            data-subject-key="{{subject.subject_key}}"
+            data-allowed-source="{{subject.allowed_source}}"
+            data-student-id="{{student.student_id}}"
+            data-student-name="{{student.student_name}}"
+            data-schedule-uid="{{subject.schedule.schedule_uid}}"
+            data-schedule-id="{{subject.schedule.schedule_id}}"
+            data-teacher-id="{{subject.schedule.teacher_id}}"
+            data-teacher-name="{{subject.schedule.teacher_name}}"
+            data-course-name="{{subject.schedule.course_name}}"
+            data-start-time="{{subject.schedule.start_time}}"
+            data-end-time="{{subject.schedule.end_time}}"
+            data-schedule-date="{{subject.schedule.schedule_date}}"
+            bindtap="openSubject"
+          >
+            <text>{{subject.subject_label}}</text>
+            <text class="subject-meta">{{subject.schedule.course_name}} · 快捷布置 ›</text>
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

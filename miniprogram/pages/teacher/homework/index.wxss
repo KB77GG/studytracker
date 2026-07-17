@@ -66,6 +66,7 @@
 }
 
 .picker-field,
+.locked-source,
 .input,
 .textarea {
   width: 100%;
@@ -76,6 +77,17 @@
   font-size: 14px;
   color: #0f172a;
   border: 1px solid #e2e8f0;
+}
+
+.locked-source {
+  color: #0f766e;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.locked-source.invalid {
+  color: #b45309;
+  line-height: 1.5;
 }
 
 .source-card {

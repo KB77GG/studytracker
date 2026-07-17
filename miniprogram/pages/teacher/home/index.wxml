@@ -58,7 +58,7 @@
         <text class="kpi-label">待反馈</text>
         <text class="kpi-value">{{dashboardStats.pendingFeedback}}</text>
       </view>
-      <view class="kpi-item">
+      <view class="kpi-item" bindtap="openStudents">
         <view class="kpi-icon green">人</view>
         <text class="kpi-label">学生数</text>
         <text class="kpi-value">{{dashboardStats.studentCount}}</text>

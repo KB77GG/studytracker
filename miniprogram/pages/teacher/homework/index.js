@@ -56,6 +56,12 @@ Page({
         sourceLabels: SOURCE_OPTIONS.map(item => item.label),
         sourceIndex: 0,
         sourceKey: 'custom',
+        quickPractice: false,
+        quickSubjectKey: '',
+        quickSubjectLabel: '',
+        allowedSource: '',
+        practiceContextToken: '',
+        quickPracticeInvalid: false,
         isCustomSource: true,
         isListeningSource: false,
         isReadingSource: false,
@@ -91,6 +97,29 @@ Page({
     },
 
     onLoad(options) {
+        const quickPractice = options.quick_practice === '1'
+            || !!options.practice_context_token
+            || !!options.subject_key
+            || !!options.allowed_source
+        const quickSubjectKey = decodeParam(options.subject_key)
+        const allowedSource = decodeParam(options.allowed_source)
+        const sourceForSubject = {
+            listening: 'cambridge_listening',
+            reading: 'cambridge_reading'
+        }[quickSubjectKey]
+        const lockedSourceKey = quickPractice && sourceForSubject === allowedSource
+            ? allowedSource
+            : ''
+        const practiceContextToken = quickPractice
+            ? decodeParam(options.practice_context_token)
+            : ''
+        const quickPracticeInvalid = quickPractice && (!lockedSourceKey || !practiceContextToken)
+        const sourceOptions = quickPracticeInvalid
+            ? []
+            : lockedSourceKey
+            ? SOURCE_OPTIONS.filter(item => item.key === lockedSourceKey)
+            : SOURCE_OPTIONS
+        const subjectLabels = { listening: '雅思听力', reading: '雅思阅读' }
         const schedule = {
             schedule_uid: decodeParam(options.schedule_uid),
             schedule_id: decodeParam(options.schedule_id),
@@ -106,6 +135,16 @@ Page({
         const courseName = schedule.course_name || '课后作业'
         this.setData({
             schedule,
+            sourceOptions,
+            sourceLabels: sourceOptions.map(item => item.label),
+            sourceIndex: 0,
+            sourceKey: sourceOptions[0] ? sourceOptions[0].key : '',
+            quickPractice,
+            quickPracticeInvalid,
+            quickSubjectKey: lockedSourceKey ? quickSubjectKey : '',
+            quickSubjectLabel: lockedSourceKey ? (subjectLabels[quickSubjectKey] || '') : '',
+            allowedSource,
+            practiceContextToken,
             form: {
                 date: this.getTodayString(),
                 category: courseName.slice(0, 32),
@@ -154,7 +193,8 @@ Page({
     },
 
     refreshPracticeOptions(applySelection = true) {
-        const source = SOURCE_OPTIONS[this.data.sourceIndex] || SOURCE_OPTIONS[0]
+        const sourceOptions = this.data.sourceOptions || SOURCE_OPTIONS
+        const source = sourceOptions[this.data.sourceIndex] || sourceOptions[0] || SOURCE_OPTIONS[0]
         const listeningBooks = this.data.catalog.cambridge_listening || []
         const readingBooks = this.data.catalog.cambridge_reading || []
 
@@ -223,7 +263,8 @@ Page({
     },
 
     getSelectedPractice(context) {
-        const source = context.source || SOURCE_OPTIONS[this.data.sourceIndex] || SOURCE_OPTIONS[0]
+        const sourceOptions = this.data.sourceOptions || SOURCE_OPTIONS
+        const source = context.source || sourceOptions[this.data.sourceIndex] || sourceOptions[0] || SOURCE_OPTIONS[0]
         if (source.key === 'cambridge_listening') {
             const test = context.listeningTest
             const scope = context.listeningScope
@@ -288,7 +329,8 @@ Page({
     },
 
     buildSelectedPracticePayload() {
-        const source = SOURCE_OPTIONS[this.data.sourceIndex] || SOURCE_OPTIONS[0]
+        const sourceOptions = this.data.sourceOptions || SOURCE_OPTIONS
+        const source = sourceOptions[this.data.sourceIndex] || sourceOptions[0] || SOURCE_OPTIONS[0]
         if (source.key === 'custom') {
             return { source_type: 'custom' }
         }
@@ -373,6 +415,7 @@ Page({
     },
 
     handleSourceChange(e) {
+        if (this.data.quickPractice) return
         this.setData({ sourceIndex: Number(e.detail.value) || 0 }, () => this.refreshPracticeOptions(true))
     },
 
@@ -524,7 +567,8 @@ Page({
     },
 
     findSourceIndex(sourceKey) {
-        const index = SOURCE_OPTIONS.findIndex(item => item.key === sourceKey)
+        const sourceOptions = this.data.sourceOptions || SOURCE_OPTIONS
+        const index = sourceOptions.findIndex(item => item.key === sourceKey)
         return index >= 0 ? index : 0
     },
 
@@ -615,6 +659,10 @@ Page({
         }
 
         const sourceKey = task.source_type || 'custom'
+        if (this.data.quickPractice && sourceKey !== this.data.allowedSource) {
+            wx.showToast({ title: '快捷入口只能修改对应学科作业', icon: 'none' })
+            return
+        }
         if (sourceKey === 'cambridge_listening' && !(this.data.catalog.cambridge_listening || []).length) {
             wx.showLoading({ title: '加载目录...' })
             await this.fetchPracticeCatalog()
@@ -668,6 +716,8 @@ Page({
         let msg = code || '保存失败'
         if (msg === 'student_not_found') msg = '未找到学生档案'
         if (msg === 'forbidden_schedule') msg = '当前课表不属于你'
+        if (msg === 'forbidden_subject') msg = '快捷入口的学科权限已失效，请返回学生列表重试'
+        if (msg === 'scheduler_verification_failed') msg = '课表校验失败，请稍后重试'
         if (msg === 'forbidden_task') msg = '只能修改或删除自己布置的作业'
         if (msg === 'invalid_date') msg = '日期格式不正确'
         if (msg === 'invalid_source_type') msg = '作业来源不正确'
@@ -679,7 +729,8 @@ Page({
 
     buildSubmitItems() {
         const { form } = this.data
-        const source = SOURCE_OPTIONS[this.data.sourceIndex] || SOURCE_OPTIONS[0]
+        const sourceOptions = this.data.sourceOptions || SOURCE_OPTIONS
+        const source = sourceOptions[this.data.sourceIndex] || sourceOptions[0] || SOURCE_OPTIONS[0]
         const queued = this.data.selectedPracticeList || []
         if (queued.length > 0) {
             return queued.map(item => ({
@@ -711,7 +762,8 @@ Page({
 
     buildEditSubmitItem() {
         const { form } = this.data
-        const source = SOURCE_OPTIONS[this.data.sourceIndex] || SOURCE_OPTIONS[0]
+        const sourceOptions = this.data.sourceOptions || SOURCE_OPTIONS
+        const source = sourceOptions[this.data.sourceIndex] || sourceOptions[0] || SOURCE_OPTIONS[0]
         if (source.key === 'custom') {
             return {
                 source_type: 'custom',
@@ -731,7 +783,21 @@ Page({
         }
     },
 
+    buildQuickPracticePayload() {
+        if (!this.data.quickPractice) return {}
+        return {
+            quick_practice: 1,
+            subject_key: this.data.quickSubjectKey,
+            allowed_source: this.data.allowedSource,
+            practice_context_token: this.data.practiceContextToken
+        }
+    },
+
     async updateExistingHomework() {
+        if (this.data.quickPracticeInvalid) {
+            wx.showToast({ title: '快捷入口参数无效，请返回“我的学生”重新进入', icon: 'none' })
+            return
+        }
         const { form, schedule, editingTaskId } = this.data
         if (!editingTaskId) return
 
@@ -751,13 +817,17 @@ Page({
             const payload = {
                 ...schedule,
                 ...item,
+                ...this.buildQuickPracticePayload(),
                 date: form.date,
                 category: (item.category || form.category || '').trim(),
                 detail: (item.detail || '').trim(),
                 planned_minutes: Number(item.planned_minutes) || 0,
                 note: (form.note || '').trim()
             }
-            const res = await request(`/miniprogram/teacher/homework/${editingTaskId}`, {
+            const updateUrl = this.data.quickPractice
+                ? `/miniprogram/teacher/homework/quick-practice/${editingTaskId}`
+                : `/miniprogram/teacher/homework/${editingTaskId}`
+            const res = await request(updateUrl, {
                 method: 'PATCH',
                 data: payload
             })
@@ -820,6 +890,10 @@ Page({
     },
 
     async submitHomework() {
+        if (this.data.quickPracticeInvalid) {
+            wx.showToast({ title: '快捷入口参数无效，请返回“我的学生”重新进入', icon: 'none' })
+            return
+        }
         if (this.data.editingTaskId) {
             await this.updateExistingHomework()
             return
@@ -855,13 +929,17 @@ Page({
                 const payload = {
                     ...schedule,
                     ...item,
+                    ...this.buildQuickPracticePayload(),
                     date: form.date,
                     category: (item.category || form.category || '').trim(),
                     detail: (item.detail || '').trim(),
                     planned_minutes: Number(item.planned_minutes) || 0,
                     note: (form.note || '').trim()
                 }
-                const res = await request('/miniprogram/teacher/homework', {
+                const createUrl = this.data.quickPractice
+                    ? '/miniprogram/teacher/homework/quick-practice'
+                    : '/miniprogram/teacher/homework'
+                const res = await request(createUrl, {
                     method: 'POST',
                     data: payload
                 })
