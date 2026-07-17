@@ -59,8 +59,64 @@ class ListeningScoringTest(unittest.TestCase):
 
         self.assertEqual(partial["correct"], 1)
         self.assertFalse(partial["results"][0]["correct"])
+        self.assertEqual(partial["results"][0]["status"], "partial")
+        self.assertEqual(partial["results"][0]["status_label"], "部分正确 1/2")
+        states = {row["key"]: row["status"] for row in partial["results"][0]["option_states"]}
+        self.assertEqual(states["B"], "selected_correct")
+        self.assertEqual(states["C"], "missed_correct")
+        self.assertEqual(states["D"], "selected_wrong")
         self.assertEqual(complete["correct"], 2)
+        self.assertEqual(complete["results"][0]["status"], "correct")
         self.assertEqual(too_many["correct"], 0)
+        self.assertEqual(too_many["results"][0]["selection_error"], "too_many")
+
+    def test_single_checkbox_is_all_or_nothing_but_explains_each_option(self):
+        payload = {
+            "sections": [
+                {
+                    "groups": [
+                        {
+                            "questions": [
+                                {
+                                    "id": 20,
+                                    "number": 20,
+                                    "answer": "A,B",
+                                    "options": [{"title": key} for key in "ABC"],
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+
+        for value, expected in (("A", 0), ("B,A", 1), ("A,C", 0)):
+            grade = _grade_listening_test_answers(payload, {"20": value})
+            self.assertEqual(grade["correct"], expected)
+            self.assertEqual(grade["total"], 1)
+        extra = _grade_listening_test_answers(payload, {"20": "A,C"})["results"][0]
+        states = {row["key"]: row["status"] for row in extra["option_states"]}
+        self.assertEqual(states["C"], "selected_wrong")
+        self.assertEqual(states["B"], "missed_correct")
+
+    def test_slash_separated_letter_alternatives_accept_either_single_answer(self):
+        payload = {
+            "sections": [
+                {
+                    "groups": [
+                        {
+                            "questions": [
+                                {"id": 30, "number": 30, "answer": "A/B"},
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+
+        self.assertEqual(_grade_listening_test_answers(payload, {"30": "A"})["correct"], 1)
+        self.assertEqual(_grade_listening_test_answers(payload, {"30": "B"})["correct"], 1)
+        self.assertEqual(_grade_listening_test_answers(payload, {"30": "C"})["correct"], 0)
 
 
 if __name__ == "__main__":

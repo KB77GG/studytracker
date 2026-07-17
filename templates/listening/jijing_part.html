@@ -281,6 +281,14 @@ audio {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+.option-feedback {
+  display: none;
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.selection-hint { margin-top: 7px; color: var(--muted); font-size: 12px; }
 .table-wrap {
   overflow-x: auto;
   margin-top: 12px;
@@ -360,11 +368,25 @@ table.practice-table {
   border-color: var(--success) !important;
   background: var(--success-soft) !important;
 }
+.is-partial {
+  border-color: #d97706 !important;
+  background: #fffbeb !important;
+}
 .is-wrong {
   border-color: var(--danger) !important;
   background: var(--danger-soft) !important;
 }
+.choice.option-selected-correct { border: 1px solid rgba(22,163,74,.55); background: var(--success-soft); }
+.choice.option-selected-wrong { border: 1px solid rgba(220,38,38,.55); background: var(--danger-soft); }
+.choice.option-missed-correct { border: 1px solid rgba(22,163,74,.55); background: #ecfdf5; }
+.choice.option-selected-correct .option-feedback,
+.choice.option-selected-wrong .option-feedback,
+.choice.option-missed-correct .option-feedback { display: inline; }
+.choice.option-selected-correct .option-feedback,
+.choice.option-missed-correct .option-feedback { color: #15803d; }
+.choice.option-selected-wrong .option-feedback { color: var(--danger); }
 .options-list.is-correct,
+.options-list.is-partial,
 .options-list.is-wrong {
   border-radius: var(--r-sm);
   padding: 8px 10px;
@@ -534,6 +556,7 @@ table.practice-table {
 </div>
 
 <script src="{{ url_for('static', filename='js/practice_table.js') }}"></script>
+<script src="{{ url_for('static', filename='js/practice_scoring.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const listeningTaskId = pageParams.get('task_id') || '';
@@ -626,14 +649,18 @@ function controlForItem(item, group, inline = false) {
 
   if (item.options?.length) {
     const isMulti = String(item.answer || '').includes(',') || group.type === 9;
+    const maxSelections = isMulti ? splitLetters(item.answer || '').length : 0;
+    const hintId = `selection_hint_${item.id || item.number}`;
     return `
-      <div class="answer-unit options-list" data-kind="${isMulti ? 'checkboxes' : 'radio'}" data-answer="${answer}" data-q="${escapeHtml(item.number)}">
+      <div class="answer-unit options-list" data-kind="${isMulti ? 'checkboxes' : 'radio'}" data-answer="${answer}" data-q="${escapeHtml(item.number)}" ${isMulti ? `data-max-selections="${maxSelections}" aria-describedby="${hintId}"` : ''}>
         ${item.options.map(o => `
-          <label class="choice">
+          <label class="choice" data-option-key="${escapeHtml(o.title)}">
             <input type="${isMulti ? 'checkbox' : 'radio'}" name="${qid}" value="${escapeHtml(o.title)}" aria-label="${escapeHtml(`${answerLabel}: ${o.title}`)}">
             <span class="choice-text">${escapeHtml(o.title)}. ${escapeHtml(optionDisplayText(o.title, o.content))}</span>
+            <span class="option-feedback" aria-live="polite"></span>
           </label>
         `).join('')}
+        ${isMulti ? `<div class="selection-hint" id="${hintId}" aria-live="polite">最多选择 ${maxSelections} 项</div>` : ''}
       </div>
     `;
   }
@@ -706,14 +733,17 @@ function isCombinedMulti(group) {
 function renderCombinedMulti(group) {
   const answer = escapeHtml(group.items[0].answer || '');
   const marks = group.items.length;
+  const hintId = `selection_hint_${group.items.map(item => item.number).join('_')}`;
   return `
-    <div class="answer-unit" data-kind="checkbox-set" data-answer="${answer}" data-marks="${marks}" data-q="${escapeHtml(group.desc)}">
+    <div class="answer-unit" data-kind="checkbox-set" data-answer="${answer}" data-marks="${marks}" data-max-selections="${marks}" data-q="${escapeHtml(group.desc)}" aria-describedby="${hintId}">
       ${(group.collect_options?.list || []).map(o => `
-        <label class="choice">
+        <label class="choice" data-option-key="${escapeHtml(o.title)}">
           <input type="checkbox" value="${escapeHtml(o.title)}">
-          ${escapeHtml(o.title)}. ${escapeHtml(optionDisplayText(o.title, o.content))}
+          <span class="choice-text">${escapeHtml(o.title)}. ${escapeHtml(optionDisplayText(o.title, o.content))}</span>
+          <span class="option-feedback" aria-live="polite"></span>
         </label>
       `).join('')}
+      <div class="selection-hint" id="${hintId}" aria-live="polite">最多选择 ${marks} 项</div>
     </div>
   `;
 }
@@ -802,27 +832,52 @@ function markUnit(unit) {
   const answer = unit.dataset.answer || '';
   const value = unitValue(unit);
   const marks = Number(unit.dataset.marks || 1);
-  let correct = false;
-  let awarded = 0;
+  const options = Array.from(unit.querySelectorAll('input')).map(input => ({ key: input.value }));
+  const feedback = PracticeScoring.gradeAnswer(answer, value, { kind, marks, options });
+  applyUnitFeedback(unit, feedback);
+  return { correct: feedback.correct, marks, awarded: feedback.awarded, value, answer, q: unit.dataset.q || '', ...feedback };
+}
 
-  if (kind === 'checkboxes' || kind === 'checkbox-set') {
-    const answers = splitLetters(answer);
-    const values = splitLetters(value);
-    const matched = values.filter(v => answers.includes(v)).length;
-    awarded = values.length > marks ? 0 : Math.min(marks, matched);
-    correct = Boolean(answers.length) && awarded === marks;
-  } else if (/^[A-Z](\s*,\s*[A-Z])+$/.test(answer)) {
-    correct = splitLetters(answer).includes(String(value).trim().toUpperCase());
-    awarded = correct ? marks : 0;
-  } else {
-    const alternatives = splitAlternatives(answer);
-    correct = alternatives.includes(normalizeText(value));
-    awarded = correct ? marks : 0;
+function applyUnitFeedback(unit, feedback) {
+  unit.classList.toggle('is-correct', feedback.status === 'correct');
+  unit.classList.toggle('is-partial', feedback.status === 'partial');
+  unit.classList.toggle('is-wrong', feedback.status === 'incorrect');
+  unit.dataset.status = feedback.status;
+  unit.setAttribute('aria-label', feedback.status_label);
+  const states = new Map((feedback.option_states || []).map(state => [String(state.key).toUpperCase(), state]));
+  unit.querySelectorAll('input').forEach(input => {
+    const label = input.closest('.choice');
+    if (!label) return;
+    const state = states.get(String(input.value || '').trim().toUpperCase());
+    label.classList.remove('option-selected-correct', 'option-selected-wrong', 'option-missed-correct', 'option-unselected-wrong');
+    const feedbackNode = label.querySelector('.option-feedback');
+    if (!state) return;
+    label.classList.add(`option-${state.status.replace('_', '-')}`);
+    if (feedbackNode) feedbackNode.textContent = state.label;
+    const labelText = label.querySelector('.choice-label, .choice-text')?.textContent || label.textContent;
+    label.setAttribute('aria-label', `${labelText.trim()}：${state.label}`);
+  });
+  const hint = unit.querySelector('.selection-hint');
+  if (hint && feedback.selection_error === 'too_many') {
+    hint.textContent = `最多选择 ${feedback.max_selections} 项；本题 ${feedback.awarded}/${feedback.marks}`;
   }
+}
 
-  unit.classList.toggle('is-correct', correct);
-  unit.classList.toggle('is-wrong', !correct);
-  return { correct, marks, awarded, value, answer, q: unit.dataset.q || '' };
+function applyServerResults(results) {
+  const rows = Array.isArray(results) ? results : [];
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    const key = unit.dataset.q || '';
+    const row = rows.find(item => String(item.answer_key || item.q || '') === String(key) || (item.ids || []).map(String).includes(String(key)));
+    if (!row) return;
+    const feedback = row.status
+      ? row
+      : PracticeScoring.gradeAnswer(row.answer || unit.dataset.answer || '', row.value || unitValue(unit), {
+        kind: unit.dataset.kind,
+        marks: Number(row.marks || unit.dataset.marks || 1),
+        options: Array.from(unit.querySelectorAll('input')).map(input => ({ key: input.value }))
+      });
+    applyUnitFeedback(unit, { ...row, ...feedback });
+  });
 }
 
 async function syncJijingSubmission(results, correct, total, baseHtml) {
@@ -850,10 +905,12 @@ async function syncJijingSubmission(results, correct, total, baseHtml) {
     if (!response.ok || !data.ok) {
       throw new Error(data.error || 'sync_failed');
     }
+    const grade = data.result || {};
+    applyServerResults(grade.results || []);
     if (data.synced) {
-      resultBox.innerHTML = `${baseHtml}<br>已同步后台：${correct}/${total}`;
+      resultBox.innerHTML = `${grade.correct}/${grade.total} · 正确率 ${Math.round((grade.accuracy || 0))}%<br>已同步后台记录`;
     } else {
-      resultBox.innerHTML = `${baseHtml}<br><span class="muted">未绑定学生姓名，仅完成本地判分。</span>`;
+      resultBox.innerHTML = `${grade.correct}/${grade.total} · 正确率 ${Math.round((grade.accuracy || 0))}%<br><span class="muted">未绑定学生姓名，仅完成本地判分。</span>`;
     }
   } catch (_error) {
     resultBox.innerHTML = `${baseHtml}<br><span style="color: var(--error);">后台同步失败，请稍后再提交。</span>`;
@@ -880,8 +937,11 @@ async function loadExistingJijingSubmission() {
         setUnitValue(unit, submission.answers[key]);
       }
     });
-    const results = Array.from(document.querySelectorAll('.answer-unit')).map(markUnit);
-    const wrong = submission.wrong_numbers || results.filter(row => !row.correct).map(row => row.q);
+    const results = Array.isArray(submission.results) && submission.results.length
+      ? submission.results
+      : Array.from(document.querySelectorAll('.answer-unit')).map(markUnit);
+    applyServerResults(results);
+    const wrong = submission.wrong_numbers || results.filter(row => row.status !== 'correct' && !row.correct).map(row => row.q);
     document.body.classList.add('show-answers');
     document.getElementById('submitBtn').textContent = '已提交，查看复盘';
     document.getElementById('resultBox').innerHTML = `
@@ -899,6 +959,15 @@ function renderPractice() {
   document.getElementById('groupCount').textContent = part.groups.length;
   document.getElementById('markCount').textContent = Array.from(document.querySelectorAll('.answer-unit'))
     .reduce((sum, unit) => sum + Number(unit.dataset.marks || 1), 0);
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    unit.addEventListener('change', event => {
+      const limited = PracticeScoring.limitSelection(unit, event);
+      if (!limited) {
+        const hint = unit.querySelector('.selection-hint');
+        if (hint) hint.textContent = `最多选择 ${unit.dataset.maxSelections} 项，请先取消一个选择`;
+      }
+    });
+  });
 }
 
 function renderTranscript() {
@@ -955,7 +1024,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   const results = units.map(markUnit);
   const total = results.reduce((sum, row) => sum + row.marks, 0);
   const correct = results.reduce((sum, row) => sum + row.awarded, 0);
-  const wrong = results.filter(row => row.awarded < row.marks);
+  const wrong = results.filter(row => row.status !== 'correct');
   document.body.classList.add('show-answers');
   document.getElementById('submitBtn').textContent = '已提交，查看复盘';
   const baseHtml = `

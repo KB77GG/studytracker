@@ -115,9 +115,10 @@ Page({
     buildFilters(detail) {
         const items = detail.items || []
         const wrongLabel = detail.kind === 'dictation' ? '错词' : '错题'
+        const isWrong = (item) => ['wrong', 'incorrect', 'partial'].includes(item.result_status)
         const candidates = [
             { key: 'all', label: '全部', count: items.length },
-            { key: 'wrong', label: wrongLabel, count: items.filter(item => item.result_status === 'wrong').length },
+            { key: 'wrong', label: wrongLabel, count: items.filter(isWrong).length },
             { key: 'correct', label: '正确', count: items.filter(item => item.result_status === 'correct').length },
             { key: 'pending', label: '待批改', count: items.filter(item => item.result_status === 'pending').length },
             { key: 'unanswered', label: '未作答', count: items.filter(item => item.result_status === 'unanswered').length }
@@ -151,9 +152,10 @@ Page({
     setFilter(e) {
         const key = e.currentTarget.dataset.filter || 'all'
         const items = (this.data.detail && this.data.detail.items) || []
+        const isWrong = (item) => ['wrong', 'incorrect', 'partial'].includes(item.result_status)
         this.setData({
             activeFilter: key,
-            visibleItems: key === 'all' ? items : items.filter(item => item.result_status === key)
+            visibleItems: key === 'all' ? items : items.filter(item => key === 'wrong' ? isWrong(item) : item.result_status === key)
         })
     },
 

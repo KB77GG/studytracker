@@ -321,6 +321,15 @@ body.result-mode .layout {
   word-break: break-word;
 }
 .choice input { margin-right: 8px; }
+.choice-label { min-width: 0; }
+.option-feedback {
+  display: none;
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.selection-hint { margin-top: 7px; color: var(--muted); font-size: 12px; }
 .answer-select {
   min-width: 230px;
   min-height: 38px;
@@ -429,7 +438,17 @@ body.result-mode .layout {
 }
 .note-box.is-open { display: block; }
 .is-correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.is-partial { border-color: #d97706 !important; background: #fffbeb !important; }
 .is-wrong { border-color: var(--error) !important; background: #fff1f2 !important; }
+.choice.option-selected-correct { border-color: rgba(22,163,74,.55); background: #f0fdf4; }
+.choice.option-selected-wrong { border-color: rgba(220,38,38,.55); background: #fff1f2; }
+.choice.option-missed-correct { border-color: rgba(22,163,74,.55); background: #ecfdf5; }
+.choice.option-selected-correct .option-feedback,
+.choice.option-selected-wrong .option-feedback,
+.choice.option-missed-correct .option-feedback { display: inline; }
+.choice.option-selected-correct .option-feedback,
+.choice.option-missed-correct .option-feedback { color: #15803d; }
+.choice.option-selected-wrong .option-feedback { color: var(--error); }
 .analysis {
   display: none;
   margin-top: 8px;
@@ -608,6 +627,7 @@ body.result-mode .transcript-panel { display: block; }
   box-shadow: inset 0 -3px 0 rgba(35,140,135,.22);
 }
 .q-chip.is-right { background: #ecfdf3; border-color: var(--success); color: var(--success); }
+.q-chip.is-partial { background: #fffbeb; border-color: #d97706; color: #b45309; }
 .q-chip.is-wrong { background: #fff1f2; border-color: var(--error); color: var(--error); }
 @media (max-width: 900px) {
   .layout,
@@ -731,6 +751,7 @@ if (window.location.protocol === 'file:') {
 </script>
 
 <script src="{{ url_for('static', filename='js/practice_table.js') }}"></script>
+<script src="{{ url_for('static', filename='js/practice_scoring.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const listeningTaskId = pageParams.get('task_id') || '';
@@ -998,14 +1019,18 @@ function renderCombinedMulti(group) {
   const answer = escapeHtml(questions[0]?.answer || '');
   const ids = questions.map(question => question.id || question.number).join(',');
   const numbers = questions.map(question => question.number).join(',');
+  const maxSelections = questions.length;
+  const hintId = `selection_hint_${ids.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
   return `
-    <div class="answer-unit" data-kind="checkbox-set" data-answer="${answer}" data-marks="${questions.length}" data-id="${escapeHtml(ids)}" data-q="${escapeHtml(numbers)}">
+    <div class="answer-unit" data-kind="checkbox-set" data-answer="${answer}" data-marks="${questions.length}" data-max-selections="${maxSelections}" data-id="${escapeHtml(ids)}" data-q="${escapeHtml(numbers)}" aria-describedby="${hintId}">
       ${(group.collect_option?.list || []).map(option => `
-        <label class="choice">
+        <label class="choice" data-option-key="${escapeHtml(option.title)}">
           <input type="checkbox" value="${escapeHtml(option.title)}">
-          ${escapeHtml(option.title)}. ${escapeHtml(optionDisplayText(option.title, option.content))}
+          <span class="choice-label">${escapeHtml(option.title)}. ${escapeHtml(optionDisplayText(option.title, option.content))}</span>
+          <span class="option-feedback" aria-live="polite"></span>
         </label>
       `).join('')}
+      <div class="selection-hint" id="${hintId}" aria-live="polite">最多选择 ${maxSelections} 项</div>
     </div>
   `;
 }
@@ -1017,14 +1042,18 @@ function controlForQuestion(question, sectionIndex, group = {}, inline = false) 
 
   if (question.options && question.options.length) {
     const isMulti = String(question.answer || '').includes(',') || group.type === 9;
+    const maxSelections = isMulti ? splitLetters(question.answer || '').length : 0;
+    const hintId = `selection_hint_${question.id || question.number}`;
     return `
-      <div class="answer-unit" data-kind="${isMulti ? 'checkboxes' : 'radio'}" ${baseAttrs}>
+      <div class="answer-unit" data-kind="${isMulti ? 'checkboxes' : 'radio'}" ${isMulti ? `data-max-selections="${maxSelections}" aria-describedby="${hintId}"` : ''} ${baseAttrs}>
         ${question.options.map(option => `
-          <label class="choice">
+          <label class="choice" data-option-key="${escapeHtml(option.title)}">
             <input type="${isMulti ? 'checkbox' : 'radio'}" name="${inputName(question)}" value="${escapeHtml(option.title)}" aria-label="Question ${qn} answer: ${escapeHtml(option.title)}">
-            ${escapeHtml(option.title)}. ${escapeHtml(optionDisplayText(option.title, option.content))}
+            <span class="choice-label">${escapeHtml(option.title)}. ${escapeHtml(optionDisplayText(option.title, option.content))}</span>
+            <span class="option-feedback" aria-live="polite"></span>
           </label>
         `).join('')}
+        ${isMulti ? `<div class="selection-hint" id="${hintId}" aria-live="polite">最多选择 ${maxSelections} 项</div>` : ''}
       </div>
     `;
   }
@@ -1159,26 +1188,39 @@ function markUnit(unit) {
   const answer = unit.dataset.answer || '';
   const value = unitValue(unit);
   const marks = Number(unit.dataset.marks || 1);
-  let correct = false;
-  let awarded = 0;
+  const options = Array.from(unit.querySelectorAll('input')).map(input => ({ key: input.value }));
+  const feedback = PracticeScoring.gradeAnswer(answer, value, {
+    kind: unit.dataset.kind,
+    marks,
+    options
+  });
+  applyUnitFeedback(unit, feedback);
+  return { id: unit.dataset.id, q: unit.dataset.q, answer, value, ...feedback };
+}
 
-  if (unit.dataset.kind === 'checkboxes' || unit.dataset.kind === 'checkbox-set') {
-    const answers = splitLetters(answer);
-    const values = splitLetters(value);
-    const matched = values.filter(v => answers.includes(v)).length;
-    awarded = values.length > marks ? 0 : Math.min(marks, matched);
-    correct = Boolean(answers.length) && awarded === marks;
-  } else if (/^[A-Z](\s*[,/]\s*[A-Z])*$/.test(answer.trim())) {
-    correct = splitLetters(answer).includes(String(value).trim().toUpperCase());
-    awarded = correct ? marks : 0;
-  } else {
-    correct = splitAlternatives(answer).includes(normalizeText(value));
-    awarded = correct ? marks : 0;
+function applyUnitFeedback(unit, feedback) {
+  unit.classList.toggle('is-correct', feedback.status === 'correct');
+  unit.classList.toggle('is-partial', feedback.status === 'partial');
+  unit.classList.toggle('is-wrong', feedback.status === 'incorrect');
+  unit.dataset.status = feedback.status;
+  unit.setAttribute('aria-label', feedback.status_label);
+  const states = new Map((feedback.option_states || []).map(state => [String(state.key).toUpperCase(), state]));
+  unit.querySelectorAll('input').forEach(input => {
+    const label = input.closest('.choice');
+    if (!label) return;
+    const state = states.get(String(input.value || '').trim().toUpperCase());
+    label.classList.remove('option-selected-correct', 'option-selected-wrong', 'option-missed-correct', 'option-unselected-wrong');
+    const feedbackNode = label.querySelector('.option-feedback');
+    if (!state) return;
+    label.classList.add(`option-${state.status.replace('_', '-')}`);
+    if (feedbackNode) feedbackNode.textContent = state.label;
+    const labelText = label.querySelector('.choice-label, .choice-text')?.textContent || label.textContent;
+    label.setAttribute('aria-label', `${labelText.trim()}：${state.label}`);
+  });
+  const hint = unit.querySelector('.selection-hint');
+  if (hint && feedback.selection_error === 'too_many') {
+    hint.textContent = `最多选择 ${feedback.max_selections} 项；本题 ${feedback.awarded}/${feedback.marks}`;
   }
-
-  unit.classList.toggle('is-correct', correct);
-  unit.classList.toggle('is-wrong', !correct);
-  return { id: unit.dataset.id, q: unit.dataset.q, answer, value, correct, marks, awarded };
 }
 
 function answerSnapshot() {
@@ -1237,6 +1279,25 @@ function resultHtml(correct, total, wrongLabels, syncedText = '') {
   `;
 }
 
+function applyServerResults(results) {
+  const rows = Array.isArray(results) ? results : [];
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    const ids = String(unit.dataset.id || '').split(',').filter(Boolean);
+    const row = rows.find(item => ids.some(id => (item.ids || [item.id]).map(String).includes(String(id))));
+    if (row) {
+      const feedback = row.status
+        ? row
+        : PracticeScoring.gradeAnswer(row.answer || unit.dataset.answer || '', row.value || unitValue(unit), {
+          kind: unit.dataset.kind,
+          marks: Number(row.marks || unit.dataset.marks || 1),
+          options: Array.from(unit.querySelectorAll('input')).map(input => ({ key: input.value }))
+        });
+      applyUnitFeedback(unit, { ...row, ...feedback });
+    }
+  });
+  syncQuestionNav(rows);
+}
+
 async function syncListeningTestSubmission(baseHtml) {
   const resultBox = document.getElementById('resultBox');
   resultBox.innerHTML = `${baseHtml}<br><span class="muted">正在同步后台成绩...</span>`;
@@ -1260,14 +1321,15 @@ async function syncListeningTestSubmission(baseHtml) {
     if (!response.ok || !data.ok) {
       throw new Error(data.error || 'sync_failed');
     }
-    const summary = data.submission || data.result || {};
-    const band = summary.ielts_score ?? data.result?.ielts_score;
+    const grade = data.result || data.submission || {};
+    applyServerResults(grade.results || []);
+    const band = grade.ielts_score;
     const bandText = band !== undefined && band !== null ? `，IELTS Listening ${band}` : '';
     if (data.synced) {
-      const syncedText = `已同步后台：原始分 ${summary.correct_count ?? data.result?.correct}/${summary.total_count ?? data.result?.total}${bandText}`;
-      resultBox.innerHTML = `${baseHtml}<br>${syncedText}`;
+      const syncedText = `已同步后台：原始分 ${grade.correct_count ?? grade.correct}/${grade.total_count ?? grade.total}${bandText}`;
+      resultBox.innerHTML = `${resultHtml(grade.correct_count ?? grade.correct, grade.total_count ?? grade.total, (grade.results || []).filter(row => row.status !== 'correct').map(row => row.q))}<br>${syncedText}`;
     } else {
-      resultBox.innerHTML = `${baseHtml}<br><span class="muted">未绑定学生姓名，仅完成本地判分。</span>`;
+      resultBox.innerHTML = `${resultHtml(grade.correct, grade.total, (grade.results || []).filter(row => row.status !== 'correct').map(row => row.q))}<br><span class="muted">未绑定学生姓名，仅完成本地判分。</span>`;
     }
   } catch (err) {
     resultBox.innerHTML = `${baseHtml}<br><span style="color: var(--error);">后台同步失败，请稍后再提交。</span>`;
@@ -1293,11 +1355,13 @@ async function loadExistingSubmission() {
     const submission = data.submission;
     applyAnswerRows(submission.answers || {});
     localStorage.setItem(storageKey, JSON.stringify(answerSnapshot()));
-    const results = Array.from(document.querySelectorAll('.answer-unit')).map(markUnit);
+    const results = Array.isArray(submission.results) && submission.results.length
+      ? submission.results
+      : Array.from(document.querySelectorAll('.answer-unit')).map(markUnit);
+    applyServerResults(results);
     document.body.classList.add('show-answers');
     document.body.classList.add('result-mode');
-    syncQuestionNav(results);
-    const wrongLabels = submission.wrong_numbers || results.filter(row => !row.correct).map(row => row.q);
+    const wrongLabels = submission.wrong_numbers || results.filter(row => row.status !== 'correct' && !row.correct).map(row => row.q);
     document.getElementById('submitBtn').textContent = '已提交，查看复盘';
     document.getElementById('resultBox').innerHTML = resultHtml(
       submission.correct_count,
@@ -1421,9 +1485,11 @@ function syncQuestionNav(results = null) {
     button.classList.toggle('is-filled', Boolean(filled));
     button.classList.toggle('is-active', Number(button.dataset.section) === activeSectionIndex);
     if (results) {
-      const result = results.find(row => String(row.id || '').split(',').includes(String(button.dataset.id)));
-      button.classList.toggle('is-right', Boolean(result && result.correct));
-      button.classList.toggle('is-wrong', Boolean(result && !result.correct));
+      const result = results.find(row => (row.ids || String(row.id || '').split(',')).map(String).includes(String(button.dataset.id)));
+      const status = result?.status || (result?.correct ? 'correct' : result ? 'incorrect' : '');
+      button.classList.toggle('is-right', status === 'correct');
+      button.classList.toggle('is-partial', status === 'partial');
+      button.classList.toggle('is-wrong', status === 'incorrect');
     }
   });
 }
@@ -1462,7 +1528,14 @@ function render() {
     });
   });
   document.querySelectorAll('.answer-unit').forEach(unit => {
-    unit.addEventListener('change', saveAnswers);
+    unit.addEventListener('change', event => {
+      const limited = PracticeScoring.limitSelection(unit, event);
+      if (!limited) {
+        const hint = unit.querySelector('.selection-hint');
+        if (hint) hint.textContent = `最多选择 ${unit.dataset.maxSelections} 项，请先取消一个选择`;
+      }
+      saveAnswers();
+    });
     unit.addEventListener('input', saveAnswers);
   });
   renderQuestionNav();
@@ -1476,7 +1549,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   const results = units.map(markUnit);
   const total = results.reduce((sum, row) => sum + row.marks, 0);
   const correct = results.reduce((sum, row) => sum + row.awarded, 0);
-  const wrong = results.filter(row => !row.correct);
+  const wrong = results.filter(row => row.status !== 'correct');
   document.body.classList.add('show-answers');
   document.body.classList.add('result-mode');
   syncQuestionNav(results);

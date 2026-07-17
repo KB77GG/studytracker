@@ -291,6 +291,14 @@ select.answer-control { min-width: 154px; }
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+.choice-option .option-feedback {
+  display: none;
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.selection-hint { margin-top: 7px; color: var(--muted); font-size: 12px; }
 .result-pill {
   display: none;
   margin-left: 8px;
@@ -298,11 +306,23 @@ select.answer-control { min-width: 154px; }
   font-weight: 900;
 }
 .is-correct .result-pill { display: inline; color: var(--success); }
+.is-partial .result-pill { display: inline; color: #b45309; }
 .is-wrong .result-pill { display: inline; color: var(--error); }
 .is-correct .answer-control,
 .is-correct .choice-option:has(input:checked) { border-color: rgba(22,163,74,.45); background: #f0fdf4; }
 .is-wrong .answer-control,
 .is-wrong .choice-option:has(input:checked) { border-color: rgba(220,38,38,.45); background: #fff5f5; }
+.is-partial .answer-control,
+.is-partial .choice-option:has(input:checked) { border-color: rgba(217,119,6,.55); background: #fffbeb; }
+.choice-option.option-selected-correct { border-color: rgba(22,163,74,.55); background: #f0fdf4; }
+.choice-option.option-selected-wrong { border-color: rgba(220,38,38,.55); background: #fff1f2; }
+.choice-option.option-missed-correct { border-color: rgba(22,163,74,.55); background: #ecfdf5; }
+.choice-option.option-selected-correct .option-feedback,
+.choice-option.option-selected-wrong .option-feedback,
+.choice-option.option-missed-correct .option-feedback { display: inline; }
+.choice-option.option-selected-correct .option-feedback,
+.choice-option.option-missed-correct .option-feedback { color: #15803d; }
+.choice-option.option-selected-wrong .option-feedback { color: var(--error); }
 .analysis {
   display: none;
   margin-top: 10px;
@@ -476,6 +496,7 @@ body.exam-mode #resetBtn { display: none; }
 </footer>
 
 <script src="{{ url_for('static', filename='js/practice_table.js') }}"></script>
+<script src="{{ url_for('static', filename='js/practice_scoring.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const rawTestData = {{ test | tojson }};
@@ -646,14 +667,18 @@ function questionControl(question, group) {
   }
   if (shouldUseQuestionOptions(question, group)) {
     const isMulti = String(question.answer || "").includes(",");
+    const maxSelections = isMulti ? PracticeScoring.splitLetters(question.answer || "").length : 0;
+    const hintId = `selection_hint_${question.id}`;
     const selectedValues = splitLetters(value);
-    return `<div class="choice-stack" data-qid="${question.id}">
+    return `<div class="choice-stack" data-qid="${question.id}" ${isMulti ? `data-max-selections="${maxSelections}" aria-describedby="${hintId}"` : ""}>
       ${question.options.map((option) => `
-        <label class="choice-option">
+        <label class="choice-option" data-option-key="${escapeHtml(option.key)}">
           <input type="${isMulti ? "checkbox" : "radio"}" name="q_${question.id}" value="${escapeHtml(option.key)}" aria-label="${escapeHtml(`${answerLabel}: ${option.key}`)}" ${isMulti ? (selectedValues.includes(String(option.key || "").trim().toUpperCase()) ? "checked" : "") : (value === option.key ? "checked" : "")}>
           <span><strong>${escapeHtml(option.key)}</strong> ${escapeHtml(optionDisplayText(option.key, option.text))}</span>
+          <span class="option-feedback" aria-live="polite"></span>
         </label>
       `).join("")}
+      ${isMulti ? `<div class="selection-hint" id="${hintId}" aria-live="polite">最多选择 ${maxSelections} 项</div>` : ""}
     </div>`;
   }
   if (groupOptions.length) {
@@ -760,7 +785,14 @@ function bindInputs() {
     control.addEventListener("change", handleAnswerChange);
   });
   document.querySelectorAll(".choice-stack input").forEach((control) => {
-    control.addEventListener("change", handleAnswerChange);
+    control.addEventListener("change", (event) => {
+      const stack = event.target.closest(".choice-stack");
+      if (!PracticeScoring.limitSelection(stack, event)) {
+        const hint = stack.querySelector(".selection-hint");
+        if (hint) hint.textContent = `最多选择 ${stack.dataset.maxSelections} 项，请先取消一个选择`;
+      }
+      handleAnswerChange(event);
+    });
   });
 }
 
@@ -787,8 +819,9 @@ function handleAnswerChange(event) {
 }
 
 function resultForQuestion(question) {
-  if (!serverResult?.results) return null;
-  return serverResult.results.find((result) =>
+  const source = serverResult || PracticeScoring.gradeReadingTestAnswers(testData, answers);
+  if (!source?.results) return null;
+  return source.results.find((result) =>
     (result.ids || []).map(String).includes(String(question.id))
   ) || null;
 }
@@ -798,38 +831,36 @@ function answerForQuestion(question) {
 }
 
 function isCorrect(question) {
-  const serverRow = resultForQuestion(question);
-  if (serverRow) return Boolean(serverRow.correct);
-  const userValue = answers[question.id] || "";
-  const answer = question.answer || "";
-  const judgmentAnswers = fullJudgmentAnswers(answer, groupForQuestion(question));
-  if (judgmentAnswers.length) {
-    return judgmentAnswers.includes(canonicalJudgmentAnswer(userValue));
-  }
-  if (String(answer).includes(",") && isLetterAnswer(answer)) {
-    const expectedLetters = splitLetters(answer);
-    const submittedLetters = splitLetters(userValue);
-    return Boolean(expectedLetters.length) && expectedLetters.length === submittedLetters.length &&
-      expectedLetters.every((letter) => submittedLetters.includes(letter));
-  }
-  if (isLetterAnswer(answer)) {
-    return splitLetters(answer).includes(String(userValue || "").trim().toUpperCase());
-  }
-  const expected = splitAnswer(answer);
-  if (!expected.length) return false;
-  const normalizedUser = normalizeAnswer(userValue);
-  return expected.includes(normalizedUser);
+  return resultForQuestion(question)?.status === "correct";
+}
+
+function paintOptionStates(question, result) {
+  const states = new Map((result?.option_states || []).map((state) => [String(state.key).toUpperCase(), state]));
+  document.querySelectorAll(`[data-qid="${question.id}"] .choice-option`).forEach((label) => {
+    const input = label.querySelector("input");
+    const state = states.get(String(input?.value || label.dataset.optionKey || "").toUpperCase());
+    label.classList.remove("option-selected-correct", "option-selected-wrong", "option-missed-correct", "option-unselected-wrong");
+    const feedbackNode = label.querySelector(".option-feedback");
+    if (!state) return;
+    label.classList.add(`option-${state.status.replace("_", "-")}`);
+    if (feedbackNode) feedbackNode.textContent = state.label;
+    const labelText = label.querySelector(".choice-label, .choice-text, span:not(.option-feedback)")?.textContent || label.textContent;
+    label.setAttribute("aria-label", `${labelText.trim()}：${state.label}`);
+  });
 }
 
 function paintResults() {
   allQuestions().forEach((question) => {
-    const correct = isCorrect(question);
+    const result = resultForQuestion(question);
+    const status = result?.status || "incorrect";
     document.querySelectorAll(`[data-row-qid="${question.id}"], [data-inline-qid="${question.id}"]`).forEach((row) => {
-      row.classList.toggle("is-correct", correct);
-      row.classList.toggle("is-wrong", !correct);
+      row.classList.toggle("is-correct", status === "correct");
+      row.classList.toggle("is-partial", status === "partial");
+      row.classList.toggle("is-wrong", status === "incorrect");
       const pill = row.querySelector(".result-pill");
-      if (pill) pill.textContent = correct ? "正确" : `答案：${answerForQuestion(question)}`;
+      if (pill) pill.textContent = result?.status_label || `✕ 答案：${answerForQuestion(question)}`;
     });
+    paintOptionStates(question, result);
     document.querySelectorAll(`[data-analysis-qid="${question.id}"]`).forEach((node) => {
       node.innerHTML = `<strong>Q${escapeHtml(question.number)} 答案：${escapeHtml(answerForQuestion(question))}</strong>${question.analysis ? `<br>${escapeHtml(question.analysis).replace(/\n/g, "<br>")}` : ""}`;
     });
@@ -843,7 +874,8 @@ function updateSummary() {
     document.getElementById("scoreSummary").innerHTML = `已答 <strong>${answered}</strong> / ${total}`;
     return;
   }
-  const correct = serverResult?.correct ?? allQuestions().filter(isCorrect).length;
+  const localResult = PracticeScoring.gradeReadingTestAnswers(testData, answers);
+  const correct = serverResult?.correct ?? localResult.correct;
   const accuracy = total ? Math.round(correct / total * 100) : 0;
   const band = serverResult?.ielts_score;
   document.getElementById("scoreSummary").innerHTML = `得分 <strong>${correct}</strong> / ${total} · 正确率 ${accuracy}%${band !== undefined && band !== null ? ` · IELTS ${band}` : ""}`;

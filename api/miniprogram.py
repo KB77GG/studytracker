@@ -3029,7 +3029,13 @@ def _parent_test_task_report(task, submission, kind, include_items):
         question_label = row.get("q") or ",".join(str(item) for item in numbers if item is not None) or str(index + 1)
         lookup_keys = [str(item) for item in ids + numbers if item is not None]
         prompt = next((prompt_map.get(key) for key in lookup_keys if prompt_map.get(key)), "")
-        is_correct = bool(row.get("correct"))
+        status = row.get("status") or ("correct" if row.get("correct") else "incorrect")
+        result_status = "correct" if status == "correct" else "partial" if status == "partial" else "wrong"
+        result_label = row.get("status_label") or (
+            f"部分正确 {row.get('awarded') or 0}/{row.get('marks') or 1}"
+            if status == "partial"
+            else "正确" if status == "correct" else "错误"
+        )
         if include_items:
             items.append({
                 "id": f"test-{index}",
@@ -3037,8 +3043,11 @@ def _parent_test_task_report(task, submission, kind, include_items):
                 "prompt": prompt or f"第 {question_label} 题",
                 "student_answer": str(row.get("value") or "未作答"),
                 "correct_answer": str(row.get("answer") or "暂无参考答案"),
-                "result_status": "correct" if is_correct else "wrong",
-                "result_label": "正确" if is_correct else "错误",
+                "result_status": result_status,
+                "result_label": result_label,
+                "status": status,
+                "awarded": row.get("awarded") or 0,
+                "marks": row.get("marks") or 1,
             })
 
     total = int(detail.get("total_count") or len(rows))
@@ -4183,7 +4192,9 @@ def _teacher_wrong_answer_details(task: Task, kind: str, submission) -> list[dic
     question_map = _teacher_practice_question_map(task, kind)
     details = []
     for row in results:
-        if row.get("correct") is True:
+        if row.get("status") == "correct" or (
+            "status" not in row and row.get("correct") is True
+        ):
             continue
         ids = [str(value) for value in (row.get("ids") or []) if value not in (None, "")]
         numbers = [value for value in (row.get("numbers") or []) if value not in (None, "")]
@@ -4198,6 +4209,13 @@ def _teacher_wrong_answer_details(task: Task, kind: str, submission) -> list[dic
             "analysis": analysis,
             "awarded": row.get("awarded") or 0,
             "marks": row.get("marks") or 1,
+            "status": row.get("status") or ("correct" if row.get("correct") else "incorrect"),
+            "status_label": row.get("status_label")
+            or (
+                f"部分正确 {row.get('awarded') or 0}/{row.get('marks') or 1}"
+                if (row.get("awarded") or 0) > 0
+                else "选择错误"
+            ),
         })
     return details
 
@@ -4223,7 +4241,10 @@ def _serialize_teacher_practice_result(
         "accuracy": submission.accuracy,
         "ielts_score": submission.ielts_score,
         "wrong_numbers": wrong_numbers,
-        "wrong_count": len(wrong_numbers),
+        "wrong_count": max(
+            0,
+            int(submission.total_count or 0) - int(submission.correct_count or 0),
+        ),
         "attempt_count": submission.attempt_count,
         "submitted_at": submission.submitted_at.isoformat() if submission.submitted_at else None,
     }

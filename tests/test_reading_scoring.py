@@ -113,6 +113,8 @@ class ReadingScoringTest(unittest.TestCase):
         self.assertEqual(both_correct["correct"], 2)
         self.assertEqual(duplicate["correct"], 1)
         self.assertEqual(one_wrong["correct"], 1)
+        self.assertEqual(one_wrong["results"][1]["status"], "incorrect")
+        self.assertEqual(both_correct["results"][0]["status"], "correct")
 
     def test_individual_multi_choice_requires_complete_selected_set(self):
         payload = {

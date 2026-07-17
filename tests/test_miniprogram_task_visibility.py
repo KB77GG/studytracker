@@ -325,6 +325,37 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         )
         self.assertEqual(forbidden.status_code, 403)
 
+    def test_partial_group_uses_score_difference_for_wrong_count_and_detail(self):
+        with self.app.app_context():
+            row = ListeningTestSubmission.query.filter_by(task_id=self.completed_listening_id).first()
+            row.correct_count = 1
+            row.total_count = 2
+            row.wrong_numbers_json = json.dumps([1, 2])
+            row.results_json = json.dumps([{
+                "ids": ["1", "2"],
+                "numbers": [1, 2],
+                "q": "1,2",
+                "answer": "B,C",
+                "value": "B,D",
+                "marks": 2,
+                "awarded": 1,
+                "correct": False,
+                "status": "partial",
+                "status_label": "部分正确 1/2",
+            }], ensure_ascii=False)
+            db.session.commit()
+
+        response = self.client.get(
+            f"/api/miniprogram/teacher/homework/{self.completed_listening_id}/result",
+            headers=self._headers(self.teacher_id, User.ROLE_TEACHER),
+        )
+        self.assertEqual(response.status_code, 200)
+        result = response.get_json()["practice_result"]
+        self.assertEqual(result["wrong_count"], 1)
+        self.assertEqual(result["wrong_details"][0]["awarded"], 1)
+        self.assertEqual(result["wrong_details"][0]["marks"], 2)
+        self.assertEqual(result["wrong_details"][0]["status"], "partial")
+
 
 if __name__ == "__main__":
     unittest.main()
