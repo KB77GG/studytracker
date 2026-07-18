@@ -1,10 +1,22 @@
 const { request } = require('../../../utils/request.js')
+const {
+    buildIntensiveQueueItems,
+    findMatchingIntensiveParts
+} = require('../../../utils/teacher-intensive-shortcut.js')
 
 const SOURCE_OPTIONS = [
     { key: 'custom', label: '自定义' },
-    { key: 'cambridge_listening', label: '剑雅听力' },
+    { key: 'cambridge_listening', label: '雅思听力·刷题' },
+    { key: 'listening_intensive', label: '雅思听力·精听' },
     { key: 'cambridge_reading', label: '剑雅阅读' }
 ]
+
+const LISTENING_SOURCE_KEYS = ['cambridge_listening', 'listening_intensive']
+
+const SUBJECT_SOURCE_KEYS = {
+    listening: LISTENING_SOURCE_KEYS,
+    reading: ['cambridge_reading']
+}
 
 const decodeParam = (value) => {
     if (value === undefined || value === null) return ''
@@ -69,6 +81,7 @@ Page({
         catalogLoading: false,
         catalog: {
             cambridge_listening: [],
+            listening_intensive: [],
             cambridge_reading: []
         },
         listeningBookIndex: 0,
@@ -77,6 +90,12 @@ Page({
         listeningBookLabels: [],
         listeningTestLabels: [],
         listeningScopeLabels: [],
+        intensiveBookIndex: 0,
+        intensiveTestIndex: 0,
+        intensivePartIndex: 0,
+        intensiveBookLabels: [],
+        intensiveTestLabels: [],
+        intensivePartLabels: [],
         readingBookIndex: 0,
         readingTestIndex: 0,
         readingScopeIndex: 0,
@@ -107,6 +126,7 @@ Page({
             listening: 'cambridge_listening',
             reading: 'cambridge_reading'
         }[quickSubjectKey]
+        const subjectSourceKeys = SUBJECT_SOURCE_KEYS[quickSubjectKey] || []
         const lockedSourceKey = quickPractice && sourceForSubject === allowedSource
             ? allowedSource
             : ''
@@ -117,7 +137,7 @@ Page({
         const sourceOptions = quickPracticeInvalid
             ? []
             : lockedSourceKey
-            ? SOURCE_OPTIONS.filter(item => item.key === lockedSourceKey)
+            ? SOURCE_OPTIONS.filter(item => subjectSourceKeys.includes(item.key))
             : SOURCE_OPTIONS
         const subjectLabels = { listening: '雅思听力', reading: '雅思阅读' }
         const schedule = {
@@ -178,6 +198,7 @@ Page({
                 await this.setDataAsync({
                     catalog: {
                         cambridge_listening: res.cambridge_listening || [],
+                        listening_intensive: res.listening_intensive || [],
                         cambridge_reading: res.cambridge_reading || []
                     }
                 })
@@ -196,6 +217,7 @@ Page({
         const sourceOptions = this.data.sourceOptions || SOURCE_OPTIONS
         const source = sourceOptions[this.data.sourceIndex] || sourceOptions[0] || SOURCE_OPTIONS[0]
         const listeningBooks = this.data.catalog.cambridge_listening || []
+        const intensiveBooks = this.data.catalog.listening_intensive || []
         const readingBooks = this.data.catalog.cambridge_reading || []
 
         const listeningBookIndex = clampIndex(this.data.listeningBookIndex, listeningBooks.length)
@@ -212,6 +234,14 @@ Page({
             })))
         ]
         const listeningScopeIndex = clampIndex(this.data.listeningScopeIndex, listeningScopes.length)
+
+        const intensiveBookIndex = clampIndex(this.data.intensiveBookIndex, intensiveBooks.length)
+        const intensiveBook = intensiveBooks[intensiveBookIndex] || {}
+        const intensiveTests = intensiveBook.tests || []
+        const intensiveTestIndex = clampIndex(this.data.intensiveTestIndex, intensiveTests.length)
+        const intensiveTest = intensiveTests[intensiveTestIndex] || {}
+        const intensiveParts = intensiveTest.parts || intensiveTest.sections || []
+        const intensivePartIndex = clampIndex(this.data.intensivePartIndex, intensiveParts.length)
 
         const readingBookIndex = clampIndex(this.data.readingBookIndex, readingBooks.length)
         const readingBook = readingBooks[readingBookIndex] || {}
@@ -233,6 +263,9 @@ Page({
             listeningBook,
             listeningTest,
             listeningScope: listeningScopes[listeningScopeIndex],
+            intensiveBook,
+            intensiveTest,
+            intensivePart: intensiveParts[intensivePartIndex],
             readingBook,
             readingTest,
             readingScope: readingScopes[readingScopeIndex]
@@ -241,7 +274,9 @@ Page({
         this.setData({
             sourceKey: source.key,
             isCustomSource: source.key === 'custom',
-            isListeningSource: source.key === 'cambridge_listening',
+            isListeningSource: LISTENING_SOURCE_KEYS.includes(source.key),
+            isCambridgeListeningSource: source.key === 'cambridge_listening',
+            isIntensiveListeningSource: source.key === 'listening_intensive',
             isReadingSource: source.key === 'cambridge_reading',
             isCambridgeSource: source.key === 'cambridge_listening' || source.key === 'cambridge_reading',
             listeningBookIndex,
@@ -250,6 +285,14 @@ Page({
             listeningBookLabels: listeningBooks.map(book => book.label || `剑雅 ${book.book}`),
             listeningTestLabels: listeningTests.map(test => `Test ${test.test}`),
             listeningScopeLabels: listeningScopes.map(item => item.label),
+            intensiveBookIndex,
+            intensiveTestIndex,
+            intensivePartIndex,
+            intensiveBookLabels: intensiveBooks.map(book => book.label || `剑雅 ${book.book}`),
+            intensiveTestLabels: intensiveTests.map(test => `Test ${test.test}`),
+            intensivePartLabels: intensiveParts.map(part => (
+                `${part.part_title || part.title || ('Part ' + part.number)} · ${part.segment_count || 0} 句`
+            )),
             readingBookIndex,
             readingTestIndex,
             readingScopeIndex,
@@ -281,6 +324,25 @@ Page({
                 summary: `${test.label || ('剑雅 ' + test.book)} Test ${test.test} · ${scope.label}`
             }
         }
+        if (source.key === 'listening_intensive') {
+            const test = context.intensiveTest
+            const part = context.intensivePart
+            if (!test || !part || !part.id) return null
+            const bookLabel = (context.intensiveBook && context.intensiveBook.label)
+                || test.label
+                || `剑雅 ${test.book}`
+            const partLabel = part.part_title || part.title || `Part ${part.number}`
+            return {
+                source_type: source.key,
+                practice_exercise_id: part.id,
+                practice_scope: 'part',
+                practice_part_number: part.number || null,
+                category: '雅思-听力-精听',
+                detail: part.title || `${test.title || `Test ${test.test}`} ${partLabel}`,
+                plannedMinutes: 20,
+                summary: `${bookLabel} Test ${test.test} · ${partLabel} · ${part.segment_count || 0} 句`
+            }
+        }
         if (source.key === 'cambridge_reading') {
             const test = context.readingTest
             const scope = context.readingScope
@@ -303,12 +365,16 @@ Page({
     buildPracticeKey(item) {
         const section = item.practice_section_number || ''
         const passage = item.practice_passage_number || ''
+        const exercise = item.practice_exercise_id || ''
+        const part = item.practice_part_number || ''
         return [
             item.source_type || '',
             item.practice_test_id || '',
+            exercise,
             item.practice_scope || '',
             section,
-            passage
+            passage,
+            part
         ].join(':')
     },
 
@@ -317,9 +383,11 @@ Page({
             key: this.buildPracticeKey(selected),
             source_type: selected.source_type,
             practice_test_id: selected.practice_test_id,
+            practice_exercise_id: selected.practice_exercise_id,
             practice_scope: selected.practice_scope,
             practice_section_number: selected.practice_section_number || null,
             practice_passage_number: selected.practice_passage_number || null,
+            practice_part_number: selected.practice_part_number || null,
             category: selected.category,
             detail: selected.detail,
             plannedMinutes: selected.plannedMinutes,
@@ -347,6 +415,11 @@ Page({
             })))
         ]
 
+        const intensiveBooks = this.data.catalog.listening_intensive || []
+        const intensiveBook = intensiveBooks[this.data.intensiveBookIndex] || {}
+        const intensiveTest = (intensiveBook.tests || [])[this.data.intensiveTestIndex] || {}
+        const intensiveParts = intensiveTest.parts || intensiveTest.sections || []
+
         const readingBooks = this.data.catalog.cambridge_reading || []
         const readingBook = readingBooks[this.data.readingBookIndex] || {}
         const readingTest = (readingBook.tests || [])[this.data.readingTestIndex] || {}
@@ -364,6 +437,9 @@ Page({
             listeningBook,
             listeningTest,
             listeningScope: listeningScopes[this.data.listeningScopeIndex],
+            intensiveBook,
+            intensiveTest,
+            intensivePart: intensiveParts[this.data.intensivePartIndex],
             readingBook,
             readingTest,
             readingScope: readingScopes[this.data.readingScopeIndex]
@@ -387,7 +463,7 @@ Page({
             return
         }
         const selected = this.buildSelectedPracticePayload()
-        if (!selected || selected.source_type === 'custom' || !selected.practice_test_id) {
+        if (!selected || selected.source_type === 'custom' || !this.hasPracticeSelection(selected)) {
             wx.showToast({ title: '请选择练习篇目', icon: 'none' })
             return
         }
@@ -399,6 +475,71 @@ Page({
         }
         this.setData({
             selectedPracticeList: [...(this.data.selectedPracticeList || []), item]
+        })
+    },
+
+    canAppendIntensiveListening(task) {
+        if (!task || task.source_type !== 'cambridge_listening') return false
+        if (this.data.editingTaskId) return false
+        return !this.data.quickPractice || this.data.quickSubjectKey === 'listening'
+    },
+
+    async addIntensiveForTask(e) {
+        if (this.data.editingTaskId) {
+            wx.showToast({ title: '修改模式不能追加精听', icon: 'none' })
+            return
+        }
+        if (this.data.quickPractice && this.data.quickSubjectKey !== 'listening') {
+            wx.showToast({ title: '阅读快捷入口不能追加听力精听', icon: 'none' })
+            return
+        }
+
+        const index = Number(e.currentTarget.dataset.index)
+        const task = (this.data.existingTasks || [])[index]
+        if (!this.canAppendIntensiveListening(task)) return
+
+        if (!(this.data.catalog.listening_intensive || []).length) {
+            if (this.data.catalogLoading) {
+                wx.showToast({ title: '正在加载精听目录，请稍后再试', icon: 'none' })
+                return
+            }
+            wx.showLoading({ title: '加载精听目录...' })
+            await this.fetchPracticeCatalog()
+            wx.hideLoading()
+        }
+
+        const items = buildIntensiveQueueItems({
+            catalog: this.data.catalog.listening_intensive || [],
+            listeningTask: task,
+            selectedPracticeList: this.data.selectedPracticeList || [],
+            existingTasks: this.data.existingTasks || [],
+            date: this.data.form.date
+        })
+        if (!items.length) {
+            const hasMaterial = findMatchingIntensiveParts(
+                this.data.catalog.listening_intensive || [],
+                task
+            ).length > 0
+            wx.showToast({
+                title: hasMaterial
+                    ? '该日期的对应精听已布置或已在清单中'
+                    : '该作业暂无对应精听素材',
+                icon: 'none'
+            })
+            return
+        }
+
+        this.setData({
+            selectedPracticeList: [
+                ...(this.data.selectedPracticeList || []),
+                ...items
+            ]
+        }, () => {
+            wx.pageScrollTo({ scrollTop: 0, duration: 300 })
+            wx.showToast({
+                title: `已加入 ${items.length} 项，请查看待布置清单`,
+                icon: 'none'
+            })
         })
     },
 
@@ -415,8 +556,19 @@ Page({
     },
 
     handleSourceChange(e) {
-        if (this.data.quickPractice) return
-        this.setData({ sourceIndex: Number(e.detail.value) || 0 }, () => this.refreshPracticeOptions(true))
+        const sourceIndex = Number(e.detail.value) || 0
+        this.setData({
+            sourceIndex,
+            listeningBookIndex: 0,
+            listeningTestIndex: 0,
+            listeningScopeIndex: 0,
+            intensiveBookIndex: 0,
+            intensiveTestIndex: 0,
+            intensivePartIndex: 0,
+            readingBookIndex: 0,
+            readingTestIndex: 0,
+            readingScopeIndex: 0
+        }, () => this.refreshPracticeOptions(true))
     },
 
     handleListeningBookChange(e) {
@@ -436,6 +588,25 @@ Page({
 
     handleListeningScopeChange(e) {
         this.setData({ listeningScopeIndex: Number(e.detail.value) || 0 }, () => this.refreshPracticeOptions(true))
+    },
+
+    handleIntensiveBookChange(e) {
+        this.setData({
+            intensiveBookIndex: Number(e.detail.value) || 0,
+            intensiveTestIndex: 0,
+            intensivePartIndex: 0
+        }, () => this.refreshPracticeOptions(true))
+    },
+
+    handleIntensiveTestChange(e) {
+        this.setData({
+            intensiveTestIndex: Number(e.detail.value) || 0,
+            intensivePartIndex: 0
+        }, () => this.refreshPracticeOptions(true))
+    },
+
+    handleIntensivePartChange(e) {
+        this.setData({ intensivePartIndex: Number(e.detail.value) || 0 }, () => this.refreshPracticeOptions(true))
     },
 
     handleReadingBookChange(e) {
@@ -484,22 +655,28 @@ Page({
 
     normalizeExistingTask(task) {
         const result = task.practice_result
-        if (!result) return task
-        const parts = [
-            `${result.kind_label || '练习'} ${result.correct_count || 0}/${result.total_count || 0}`,
-            `正确率 ${Number(result.accuracy || 0).toFixed(1).replace(/\.0$/, '')}%`
-        ]
-        if (result.ielts_score !== null && result.ielts_score !== undefined) {
-            parts.push(`IELTS ${result.ielts_score}`)
+        let normalized = { ...task }
+        if (result) {
+            const parts = [
+                `${result.kind_label || '练习'} ${result.correct_count || 0}/${result.total_count || 0}`,
+                `正确率 ${Number(result.accuracy || 0).toFixed(1).replace(/\.0$/, '')}%`
+            ]
+            if (result.ielts_score !== null && result.ielts_score !== undefined) {
+                parts.push(`IELTS ${result.ielts_score}`)
+            }
+            const wrongNumbers = Array.isArray(result.wrong_numbers) ? result.wrong_numbers : []
+            normalized = {
+                ...normalized,
+                practiceResultSummary: parts.join(' ｜ '),
+                practiceWrongSummary: wrongNumbers.length
+                    ? `错题：${wrongNumbers.map(number => `Q${number}`).join('、')}`
+                    : '全部答对',
+                practiceWrongDetails: null
+            }
         }
-        const wrongNumbers = Array.isArray(result.wrong_numbers) ? result.wrong_numbers : []
         return {
-            ...task,
-            practiceResultSummary: parts.join(' ｜ '),
-            practiceWrongSummary: wrongNumbers.length
-                ? `错题：${wrongNumbers.map(number => `Q${number}`).join('、')}`
-                : '全部答对',
-            practiceWrongDetails: null
+            ...normalized,
+            can_append_intensive: this.canAppendIntensiveListening(task)
         }
     },
 
@@ -598,6 +775,19 @@ Page({
         return null
     },
 
+    findIntensiveSelection(task) {
+        const books = this.data.catalog.listening_intensive || []
+        for (let bookIndex = 0; bookIndex < books.length; bookIndex += 1) {
+            const tests = books[bookIndex].tests || []
+            for (let testIndex = 0; testIndex < tests.length; testIndex += 1) {
+                const parts = tests[testIndex].parts || tests[testIndex].sections || []
+                const partIndex = parts.findIndex(part => part.id === task.listening_exercise_id)
+                if (partIndex >= 0) return { bookIndex, testIndex, partIndex }
+            }
+        }
+        return null
+    },
+
     findReadingSelection(task) {
         const books = this.data.catalog.cambridge_reading || []
         for (let bookIndex = 0; bookIndex < books.length; bookIndex += 1) {
@@ -626,7 +816,12 @@ Page({
 
     buildEditSourceUpdate(task) {
         const sourceKey = task.source_type || 'custom'
-        if (!['custom', 'cambridge_listening', 'cambridge_reading'].includes(sourceKey)) return null
+        if (![
+            'custom',
+            'cambridge_listening',
+            'listening_intensive',
+            'cambridge_reading'
+        ].includes(sourceKey)) return null
 
         const update = {
             sourceIndex: this.findSourceIndex(sourceKey),
@@ -638,6 +833,13 @@ Page({
             update.listeningBookIndex = selection.bookIndex
             update.listeningTestIndex = selection.testIndex
             update.listeningScopeIndex = selection.scopeIndex
+        }
+        if (sourceKey === 'listening_intensive') {
+            const selection = this.findIntensiveSelection(task)
+            if (!selection) return null
+            update.intensiveBookIndex = selection.bookIndex
+            update.intensiveTestIndex = selection.testIndex
+            update.intensivePartIndex = selection.partIndex
         }
         if (sourceKey === 'cambridge_reading') {
             const selection = this.findReadingSelection(task)
@@ -659,11 +861,17 @@ Page({
         }
 
         const sourceKey = task.source_type || 'custom'
-        if (this.data.quickPractice && sourceKey !== this.data.allowedSource) {
+        const quickAllowedSources = SUBJECT_SOURCE_KEYS[this.data.quickSubjectKey] || [this.data.allowedSource]
+        if (this.data.quickPractice && !quickAllowedSources.includes(sourceKey)) {
             wx.showToast({ title: '快捷入口只能修改对应学科作业', icon: 'none' })
             return
         }
         if (sourceKey === 'cambridge_listening' && !(this.data.catalog.cambridge_listening || []).length) {
+            wx.showLoading({ title: '加载目录...' })
+            await this.fetchPracticeCatalog()
+            wx.hideLoading()
+        }
+        if (sourceKey === 'listening_intensive' && !(this.data.catalog.listening_intensive || []).length) {
             wx.showLoading({ title: '加载目录...' })
             await this.fetchPracticeCatalog()
             wx.hideLoading()
@@ -750,7 +958,7 @@ Page({
         }
 
         const selected = this.buildSelectedPracticePayload()
-        if (!selected || !selected.practice_test_id) return []
+        if (!selected || !this.hasPracticeSelection(selected)) return []
         return [{
             ...selected,
             key: this.buildPracticeKey(selected),
@@ -774,13 +982,19 @@ Page({
         }
 
         const selected = this.buildSelectedPracticePayload()
-        if (!selected || !selected.practice_test_id) return null
+        if (!selected || !this.hasPracticeSelection(selected)) return null
         return {
             ...selected,
             category: (form.category || selected.category || '').trim(),
             detail: (form.detail || selected.detail || '').trim(),
             planned_minutes: Number(form.plannedMinutes) || selected.plannedMinutes || 0
         }
+    },
+
+    hasPracticeSelection(item) {
+        if (!item || item.source_type === 'custom') return true
+        if (item.source_type === 'listening_intensive') return !!item.practice_exercise_id
+        return !!item.practice_test_id
     },
 
     buildQuickPracticePayload() {
@@ -910,7 +1124,7 @@ Page({
             wx.showToast({ title: '请填写作业内容', icon: 'none' })
             return
         }
-        const missingPractice = submitItems.some(item => item.source_type !== 'custom' && !item.practice_test_id)
+        const missingPractice = submitItems.some(item => !this.hasPracticeSelection(item))
         if (missingPractice) {
             wx.showToast({ title: '请选择练习篇目', icon: 'none' })
             return

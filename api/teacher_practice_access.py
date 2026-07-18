@@ -26,10 +26,12 @@ SUBJECTS = {
     "listening": {
         "label": "雅思听力",
         "allowed_source": "cambridge_listening",
+        "allowed_sources": ["cambridge_listening", "listening_intensive"],
     },
     "reading": {
         "label": "雅思阅读",
         "allowed_source": "cambridge_reading",
+        "allowed_sources": ["cambridge_reading"],
     },
 }
 
@@ -209,6 +211,9 @@ def aggregate_practice_students(
                 "subject_key": subject_key,
                 "subject_label": definition["label"],
                 "allowed_source": definition["allowed_source"],
+                "allowed_sources": list(definition.get("allowed_sources") or [
+                    definition["allowed_source"]
+                ]),
                 "schedule": schedule,
             })
         student["subjects"] = subjects
@@ -326,7 +331,10 @@ def validate_quick_practice_request(user: User, data: dict):
         return None, "forbidden_subject", 403
     if data.get("allowed_source") != definition["allowed_source"]:
         return None, "forbidden_subject", 403
-    if data.get("source_type") != definition["allowed_source"]:
+    allowed_sources = definition.get("allowed_sources") or [
+        definition["allowed_source"]
+    ]
+    if data.get("source_type") not in allowed_sources:
         return None, "forbidden_subject", 403
     if not _value_matches(data.get("student_id"), payload.get("scheduler_student_id")):
         return None, "forbidden_subject", 403

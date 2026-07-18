@@ -101,6 +101,26 @@
   margin-top: 12px;
 }
 
+.mode-hint {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.quick-source-mode {
+  margin-top: 12px;
+}
+
+.quick-source-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #475569;
+  font-size: 13px;
+}
+
 .practice-picker-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -395,6 +415,10 @@
   background: #fef2f2;
   color: #dc2626;
   border-color: #fecaca;
+}
+
+.mini-action.intensive {
+  color: #0f766e;
 }
 
 .empty-hint {

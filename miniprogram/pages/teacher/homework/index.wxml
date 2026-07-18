@@ -37,8 +37,14 @@
     <picker wx:else range="{{sourceLabels}}" value="{{sourceIndex}}" bindchange="handleSourceChange">
       <view class="picker-field">{{sourceLabels[sourceIndex]}}</view>
     </picker>
+    <view wx:if="{{quickPractice && sourceLabels.length > 1}}" class="quick-source-mode">
+      <text class="quick-source-label">练习类型</text>
+      <picker range="{{sourceLabels}}" value="{{sourceIndex}}" bindchange="handleSourceChange">
+        <view class="picker-field">{{sourceLabels[sourceIndex]}}</view>
+      </picker>
+    </view>
 
-    <view wx:if="{{isListeningSource}}" class="practice-picker-stack">
+    <view wx:if="{{isCambridgeListeningSource}}" class="practice-picker-stack">
       <view class="practice-picker-row">
         <picker range="{{listeningBookLabels}}" value="{{listeningBookIndex}}" bindchange="handleListeningBookChange">
           <view class="picker-field compact">{{listeningBookLabels[listeningBookIndex] || '选择书册'}}</view>
@@ -49,6 +55,21 @@
       </view>
       <picker range="{{listeningScopeLabels}}" value="{{listeningScopeIndex}}" bindchange="handleListeningScopeChange">
         <view class="picker-field">{{listeningScopeLabels[listeningScopeIndex] || '选择范围'}}</view>
+      </picker>
+    </view>
+
+    <view wx:elif="{{isIntensiveListeningSource}}" class="practice-picker-stack">
+      <view class="mode-hint">精听每项对应一个现成的 Part 素材，学生进入后逐句完成。</view>
+      <view class="practice-picker-row">
+        <picker range="{{intensiveBookLabels}}" value="{{intensiveBookIndex}}" bindchange="handleIntensiveBookChange">
+          <view class="picker-field compact">{{intensiveBookLabels[intensiveBookIndex] || '选择书册'}}</view>
+        </picker>
+        <picker range="{{intensiveTestLabels}}" value="{{intensiveTestIndex}}" bindchange="handleIntensiveTestChange">
+          <view class="picker-field compact">{{intensiveTestLabels[intensiveTestIndex] || '选择 Test'}}</view>
+        </picker>
+      </view>
+      <picker range="{{intensivePartLabels}}" value="{{intensivePartIndex}}" bindchange="handleIntensivePartChange">
+        <view class="picker-field">{{intensivePartLabels[intensivePartIndex] || '选择 Part'}}</view>
       </picker>
     </view>
 
@@ -69,11 +90,11 @@
     <view class="practice-summary" wx:if="{{selectedPracticeSummary}}">
       <text>{{selectedPracticeSummary}}</text>
     </view>
-    <view class="practice-actions" wx:if="{{isCambridgeSource && !editingTaskId}}">
+    <view class="practice-actions" wx:if="{{(isCambridgeSource || isIntensiveListeningSource) && !editingTaskId}}">
       <button class="queue-btn" size="mini" bindtap="addSelectedPracticeToQueue">加入清单</button>
       <button wx:if="{{selectedPracticeList.length}}" class="queue-btn ghost" size="mini" bindtap="clearPracticeQueue">清空</button>
     </view>
-    <view class="queue-panel" wx:if="{{selectedPracticeList.length}}">
+    <view id="practice-queue" class="queue-panel" wx:if="{{selectedPracticeList.length}}">
       <view class="section-title-row">
         <text class="section-title">待布置清单</text>
         <text class="section-count">{{selectedPracticeList.length}} 项</text>
@@ -144,6 +165,13 @@
         <view class="assigned-side">
           <text class="status-pill">{{item.status_label}}</text>
           <view class="assigned-actions">
+            <button
+              wx:if="{{item.can_append_intensive && !editingTaskId}}"
+              class="mini-action intensive"
+              size="mini"
+              data-index="{{taskIndex}}"
+              bindtap="addIntensiveForTask"
+            >加布精听</button>
             <button wx:if="{{item.can_edit}}" class="mini-action" size="mini" data-id="{{item.id}}" bindtap="startEditExistingTask">修改</button>
             <button
               wx:if="{{item.can_delete}}"
