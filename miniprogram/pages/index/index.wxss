@@ -502,9 +502,30 @@
   line-height: 1.55;
 }
 
-.link {
+.legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 14rpx;
+  padding-left: 56rpx;
+}
+
+.legal-link {
+  width: auto;
+  min-height: 54rpx;
+  margin: 0;
+  padding: 0 18rpx;
+  border: 1rpx solid #b9dcd7;
+  border-radius: 999rpx;
+  background: #ffffff;
   color: #087f77;
+  font-size: 23rpx;
   font-weight: 800;
+  line-height: 52rpx;
+}
+
+.legal-link::after {
+  border: none;
 }
 
 .btn-start,
