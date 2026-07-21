@@ -1,0 +1,46 @@
+.input-mode-switcher {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 4rpx;
+  border-radius: 999rpx;
+  background: rgba(231, 246, 243, 0.9);
+}
+
+.mode-option {
+  min-height: 54rpx;
+  margin: 0;
+  padding: 0 18rpx;
+  border: 0;
+  border-radius: 999rpx;
+  color: #237069;
+  background: transparent;
+  font-size: 22rpx;
+  line-height: 54rpx;
+  white-space: nowrap;
+}
+
+.mode-option::after {
+  border: 0;
+}
+
+.mode-option.selected {
+  color: #fff;
+  background: #087f77;
+  box-shadow: 0 3rpx 8rpx rgba(8, 127, 119, 0.2);
+}
+
+.mode-note {
+  margin-left: 8rpx;
+  color: #8a5a12;
+  font-size: 20rpx;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+@media (max-width: 360px) {
+  .mode-note {
+    max-width: 112px;
+    white-space: normal;
+  }
+}

@@ -46,6 +46,28 @@ function isSuccessfulResponse(response) {
     return !!(response && response.ok === true)
 }
 
+function missingQueueItems(response, queue) {
+    if (!response || response.error !== 'queue_incomplete') return []
+    const missingIds = Array.isArray(response.missing_word_ids)
+        ? response.missing_word_ids
+        : []
+    const items = Array.isArray(queue) ? queue : []
+    const byWordId = new Map(items.map(item => [
+        String(item && (item.word_id || item.id) || ''),
+        item
+    ]))
+    const seen = new Set()
+    return missingIds.reduce((result, wordId) => {
+        const key = String(wordId || '')
+        const item = byWordId.get(key)
+        if (item && !seen.has(key)) {
+            seen.add(key)
+            result.push(item)
+        }
+        return result
+    }, [])
+}
+
 function legacyWrongItemBelongsToBook(item, bookId, bookWords) {
     const source = item || {}
     const explicitBookId = source.book_id != null && source.book_id !== ''
@@ -72,6 +94,7 @@ module.exports = {
     getOrCreateRunId,
     isSuccessfulResponse,
     legacyWrongItemBelongsToBook,
+    missingQueueItems,
     summarizeQueue,
     queueMode
 }

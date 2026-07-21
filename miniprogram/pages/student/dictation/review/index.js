@@ -1,6 +1,15 @@
 const app = getApp()
 const { request } = require('../../../../utils/request.js')
 const { isEnglishAnswerCorrect } = require('../../../../utils/dictation-answers.js')
+const {
+    INPUT_STRICT,
+    answerInputLimit,
+    chooseInputMode,
+    defaultInputPolicy,
+    inputModeStorageKey,
+    isEnglishSpellingMode,
+    normalizeKeyboardKey
+} = require('../../../../utils/dictation-input-policy.js')
 
 const MODE_HINT = {
     en_to_zh: '输入中文释义',
@@ -27,8 +36,12 @@ Page({
         modeHint: '',
         levelLabel: '',
         inputValue: '',
+        inputMode: 'native',
+        inputPolicy: defaultInputPolicy('en_to_zh'),
+        isEnglishSpelling: false,
         showResult: false,
         isCorrect: false,
+        resultRevealed: false,
         correctAnswer: '',
         userAnswer: '',
         correctCount: 0,
@@ -94,15 +107,90 @@ Page({
             modeHint: MODE_HINT[mode] || '输入答案',
             levelLabel: LEVEL_LABEL[word.review_level] || '',
             inputValue: '',
+            inputMode: defaultInputPolicy(mode).defaultInputMode,
+            inputPolicy: defaultInputPolicy(mode),
+            isEnglishSpelling: isEnglishSpellingMode(mode),
             showResult: false,
             isCorrect: false,
+            resultRevealed: false,
             correctAnswer: '',
             userAnswer: '',
             appealSubmitted: false
-        })
+        }, () => this.loadInputPolicy(mode))
         if (mode === 'audio_to_en') {
             setTimeout(() => this.playAudio(), 250)
         }
+    },
+
+    loadInputPolicy(mode) {
+        this.inputPolicyRequestToken = (this.inputPolicyRequestToken || 0) + 1
+        const requestToken = this.inputPolicyRequestToken
+        const fallback = defaultInputPolicy(mode)
+        const storageKey = inputModeStorageKey({ mode })
+        if (!fallback.isEnglishSpelling) return
+        request('/dictation/input-policy', { data: { mode } })
+            .then((res) => {
+                if (requestToken !== this.inputPolicyRequestToken) return
+                const raw = res && res.policy
+                const policy = raw ? {
+                    mode: raw.mode || mode,
+                    isEnglishSpelling: !!raw.is_english_spelling,
+                    defaultInputMode: raw.default_input_mode || INPUT_STRICT,
+                    compatibleAllowed: !!raw.compatible_allowed,
+                    grant: raw.grant || null
+                } : fallback
+                this.setData({
+                    inputPolicy: policy,
+                    inputMode: chooseInputMode(policy, wx.getStorageSync(storageKey))
+                })
+            })
+            .catch(() => {
+                if (requestToken !== this.inputPolicyRequestToken) return
+                this.setData({ inputPolicy: fallback, inputMode: INPUT_STRICT })
+            })
+    },
+
+    onInputModeChange(e) {
+        const nextMode = e && e.detail && e.detail.mode
+        if (!this.data.inputPolicy.compatibleAllowed || !nextMode || nextMode === this.data.inputMode) return
+        const change = () => {
+            wx.setStorageSync(inputModeStorageKey({ mode: this.data.currentMode }), nextMode)
+            this.setData({ inputMode: nextMode, inputValue: '', resultRevealed: false })
+        }
+        if (this.data.inputValue) {
+            wx.showModal({
+                title: '切换输入方式',
+                content: '切换后会清空当前答案，是否继续？',
+                confirmText: '清空并切换',
+                success: res => { if (res.confirm) change() }
+            })
+            return
+        }
+        change()
+    },
+
+    onKeyboardKey(e) {
+        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return
+        const key = normalizeKeyboardKey(e && e.detail && e.detail.key)
+        const answer = String(this.data.currentWord && this.data.currentWord.word || '')
+        const limit = answerInputLimit(answer, this.data.currentWord.accepted_answers)
+        if (!key || this.data.inputValue.length >= limit) return
+        this.setData({ inputValue: `${this.data.inputValue}${key}` })
+    },
+
+    onKeyboardBackspace() {
+        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return
+        this.setData({ inputValue: String(this.data.inputValue || '').slice(0, -1) })
+    },
+
+    retrySpelling() {
+        if (!this.data.showResult || this.data.isCorrect || this.data.resultRevealed) return
+        this.setData({ showResult: false, resultRevealed: false, inputValue: '', userAnswer: '' })
+    },
+
+    skipSpelling() {
+        if (!this.data.showResult || this.data.isCorrect || this.data.resultRevealed) return
+        this.setData({ resultRevealed: true })
     },
 
     playAudio() {
@@ -119,6 +207,7 @@ Page({
     },
 
     onInput(e) {
+        if (this.data.inputMode === INPUT_STRICT) return
         this.setData({ inputValue: e.detail.value })
     },
 
@@ -153,7 +242,9 @@ Page({
                 word_id: word.word_id,
                 book_id: word.book_id,
                 answer: userAns,
-                mode: mode
+                mode: mode,
+                input_mode: this.data.inputMode,
+                input_grant_id: this.data.inputPolicy.grant && this.data.inputPolicy.grant.id
             }
         })
             .then((res) => {
@@ -174,6 +265,7 @@ Page({
                 this.setData({
                     showResult: true,
                     isCorrect: serverCorrect,
+                    resultRevealed: serverCorrect || mode === 'en_to_zh',
                     userAnswer: userAns,
                     correctAnswer: mode === 'en_to_zh' ? (word.translation || '') : (word.word || ''),
                     correctCount: counts.correctCount,
@@ -202,6 +294,7 @@ Page({
 
     replayAudio() {
         this.playAudio()
+        wx.showToast({ title: '已重播', icon: 'none', duration: 800 })
     },
 
     startSpellReview() {

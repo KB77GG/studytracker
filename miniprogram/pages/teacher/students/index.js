@@ -76,6 +76,42 @@ Page({
         this.setData({ filteredStudents })
     },
 
+    authorizeCompatibleInput(e) {
+        const profileId = e.currentTarget.dataset.profileId
+        if (!profileId) {
+            wx.showToast({ title: '该学生尚未绑定账号', icon: 'none' })
+            return
+        }
+        wx.showActionSheet({
+            itemList: ['单词任务原生输入 7 天', '单词任务原生输入 30 天'],
+            success: (choice) => {
+                const durationDays = choice.tapIndex === 1 ? 30 : 7
+                wx.showLoading({ title: '授权中...' })
+                request('/dictation/input-grants', {
+                    method: 'POST',
+                    data: {
+                        student_profile_id: Number(profileId),
+                        duration_days: durationDays,
+                        reason: '教师授权单词任务实体键盘兼容模式'
+                    }
+                }).then((res) => {
+                    if (res && res.ok) {
+                        wx.showToast({ title: `已授权 ${durationDays} 天`, icon: 'success' })
+                    } else {
+                        wx.showToast({
+                            title: res && res.error === 'student_has_no_login'
+                                ? '学生尚未绑定登录账号'
+                                : '授权失败',
+                            icon: 'none'
+                        })
+                    }
+                }).catch(() => {
+                    wx.showToast({ title: '网络错误，请重试', icon: 'none' })
+                }).finally(() => wx.hideLoading())
+            }
+        })
+    },
+
     openSubject(e) {
         const data = e.currentTarget.dataset || {}
         if (!data.contextToken || !data.subjectKey || !data.allowedSource) {

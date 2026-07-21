@@ -1,5 +1,8 @@
 .page {
   min-height: 100vh;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
   padding: 40rpx 32rpx 80rpx;
   background: #f4f6f9;
   box-sizing: border-box;
@@ -128,6 +131,52 @@
   margin-top: 28rpx;
 }
 
+.review-input-mode {
+  margin-top: 26rpx;
+}
+
+.english-wrong-feedback {
+  margin-top: 36rpx;
+}
+
+.wrong-guidance {
+  margin-top: 12rpx;
+  color: #667085;
+  font-size: 26rpx;
+  line-height: 1.55;
+}
+
+.compat-review-actions {
+  display: flex;
+  gap: 16rpx;
+  max-width: 640px;
+  margin: 24rpx auto 0;
+}
+
+.compat-review-actions button {
+  flex: 1;
+  height: 82rpx;
+  line-height: 82rpx;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.compat-review-actions button::after {
+  border: 0;
+}
+
+.compat-skip {
+  color: #237069;
+  background: #eef7f5;
+  border: 2rpx solid rgba(8, 127, 119, 0.35);
+}
+
+.compat-retry {
+  color: #fff;
+  background: #087f77;
+}
+
 .input-row {
   margin-top: 36rpx;
 }
@@ -220,6 +269,9 @@
 }
 
 .vocab-word {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   font-size: 46rpx;
   font-weight: 800;
   color: #102043;
@@ -341,4 +393,11 @@
   display: flex;
   flex-direction: column;
   gap: 16rpx;
+}
+
+@media (max-width: 360px) {
+  .page {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
 }

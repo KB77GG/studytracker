@@ -17,9 +17,21 @@ const {
     ensureAttemptPayload,
     getOrCreateRunId,
     isSuccessfulResponse,
+    missingQueueItems,
     summarizeQueue,
     queueMode
 } = require('../../../../utils/dictation-review.js')
+const {
+    INPUT_COMPATIBLE,
+    INPUT_NATIVE,
+    INPUT_STRICT,
+    answerInputLimit,
+    chooseInputMode,
+    defaultInputPolicy,
+    inputModeStorageKey,
+    isEnglishSpellingMode,
+    normalizeKeyboardKey
+} = require('../../../../utils/dictation-input-policy.js')
 
 const MODE_AUDIO_TO_EN = 'audio_to_en'
 const MODE_ZH_TO_EN = 'zh_to_en'
@@ -106,6 +118,7 @@ Page({
         accumulatedSeconds: 0,
         isSubmitting: false,
         isCheckingFirstAnswer: false,
+        isAdvancingWord: false,
         displayTime: '00:00',
         ticker: null,
         isLoadingAudio: false,
@@ -139,6 +152,7 @@ Page({
         inputValue: '',
         showResult: false,
         isCorrect: false,
+        resultRevealed: false,
         inputFocus: true,
         showHint: false,
         attemptCount: 0,
@@ -148,7 +162,11 @@ Page({
         queueToken: '',
         assignedCount: 0,
         reviewCount: 0,
-        appealSubmitted: false
+        recoveryMissingWordIds: [],
+        appealSubmitted: false,
+        inputMode: INPUT_NATIVE,
+        inputPolicy: defaultInputPolicy(MODE_AUDIO_TO_EN),
+        isEnglishSpelling: true
     },
 
     onLoad: function (options) {
@@ -160,6 +178,8 @@ Page({
         this.firstAttemptPromises = {};
         this.firstAttemptSent = {};
         this.firstAnswerInFlightKey = null;
+        this.wordAdvanceLocked = false;
+        this.taskSubmitLocked = false;
         this.attemptRunStorageKey = options.taskId
             ? null
             : buildRunStorageKey(options.mode === 'retry_wrong'
@@ -416,6 +436,7 @@ Page({
     },
 
     refocusAnswerInput(delay = 50) {
+        if (this.data.inputMode === INPUT_STRICT) return;
         this.setData({ inputFocus: false });
         setTimeout(() => {
             if (this.data.phase !== 'test' || this.data.showResult || this.data.finished) return;
@@ -423,7 +444,112 @@ Page({
         }, delay);
     },
 
-    loadWord: function (index) {
+    loadInputPolicy(mode) {
+        this.inputPolicyRequestToken = (this.inputPolicyRequestToken || 0) + 1;
+        const requestToken = this.inputPolicyRequestToken;
+        const fallback = defaultInputPolicy(mode);
+        const storageKey = inputModeStorageKey({
+            taskId: this.data.taskId,
+            bookId: this.data.bookId,
+            mode
+        });
+        this.setData({
+            inputPolicy: fallback,
+            inputMode: fallback.defaultInputMode,
+            isEnglishSpelling: fallback.isEnglishSpelling
+        });
+        if (!fallback.isEnglishSpelling) return;
+        request('/dictation/input-policy', {
+            data: {
+                mode,
+                task_id: this.data.taskId || undefined
+            }
+        }).then((res) => {
+            if (requestToken !== this.inputPolicyRequestToken) return;
+            const raw = res && res.policy;
+            const policy = raw ? {
+                mode: raw.mode || mode,
+                isEnglishSpelling: !!raw.is_english_spelling,
+                defaultInputMode: raw.default_input_mode || INPUT_STRICT,
+                compatibleAllowed: !!raw.compatible_allowed,
+                grant: raw.grant || null
+            } : fallback;
+            this.setData({
+                inputPolicy: policy,
+                inputMode: chooseInputMode(policy, wx.getStorageSync(storageKey))
+            }, () => this.refocusAnswerInput());
+        }).catch(() => {
+            if (requestToken !== this.inputPolicyRequestToken) return;
+            this.setData({ inputPolicy: fallback, inputMode: INPUT_STRICT });
+        });
+    },
+
+    onInputModeChange(e) {
+        const nextMode = e && e.detail && e.detail.mode;
+        if (!this.data.inputPolicy.compatibleAllowed || !nextMode || nextMode === this.data.inputMode) return;
+        const change = () => {
+            const storageKey = inputModeStorageKey({
+                taskId: this.data.taskId,
+                bookId: this.data.bookId,
+                mode: this.data.currentMode
+            });
+            wx.setStorageSync(storageKey, nextMode);
+            this.setData({
+                inputMode: nextMode,
+                inputValue: '',
+                inputError: false,
+                resultRevealed: false
+            }, () => this.refocusAnswerInput());
+        };
+        if (this.data.inputValue) {
+            wx.showModal({
+                title: '切换输入方式',
+                content: '切换后会清空当前答案，是否继续？',
+                confirmText: '清空并切换',
+                success: res => { if (res.confirm) change(); }
+            });
+            return;
+        }
+        change();
+    },
+
+    onKeyboardKey(e) {
+        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return;
+        const key = normalizeKeyboardKey(e && e.detail && e.detail.key);
+        const answer = String(this.data.currentWord.word || '');
+        const limit = answerInputLimit(answer, this.data.currentWord.accepted_answers);
+        if (!key || this.data.inputValue.length >= limit) return;
+        this.setData({ inputValue: `${this.data.inputValue}${key}`, inputError: false });
+    },
+
+    onKeyboardBackspace() {
+        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return;
+        this.setData({
+            inputValue: String(this.data.inputValue || '').slice(0, -1),
+            inputError: false
+        });
+    },
+
+    retrySpelling() {
+        if (!this.data.showResult || this.data.isCorrect || this.data.resultRevealed) return;
+        this.setData({
+            showResult: false,
+            resultRevealed: false,
+            inputValue: '',
+            userAnswer: '',
+            inputError: false
+        }, () => this.refocusAnswerInput());
+    },
+
+    skipSpelling() {
+        if (!this.data.showResult || this.data.isCorrect || this.data.resultRevealed) return;
+        this.setData({
+            resultRevealed: true,
+            userAnswer: this.data.userAnswer || this.data.inputValue
+        });
+    },
+
+    loadWord: function (index, onReady) {
         const word = this.data.words[index];
         const currentMode = resolveDictationMode(word && word.dictationMode, this.data.dictationMode);
         this.setData({
@@ -433,13 +559,21 @@ Page({
             inputValue: '',
             showResult: false,
             isCorrect: false,
+            resultRevealed: false,
             inputFocus: false,
             inputError: false,
             userAnswer: '',
             showHint: false,
             attemptCount: 0,
-            appealSubmitted: false
-        }, () => this.refocusAnswerInput());
+            appealSubmitted: false,
+            inputMode: defaultInputPolicy(currentMode).defaultInputMode,
+            inputPolicy: defaultInputPolicy(currentMode),
+            isEnglishSpelling: isEnglishSpellingMode(currentMode)
+        }, () => {
+            this.loadInputPolicy(currentMode);
+            this.refocusAnswerInput();
+            if (onReady) onReady();
+        });
         this.saveProgress(index);
 
         // 强化记忆（看中文写英文）默写时也播发音；错词重练一律播发音
@@ -489,6 +623,11 @@ Page({
                 : AUDIO_SLOW_FALLBACK_MS
         });
         this.prefetchAudioWindow(this.nextAudioPrefetchIndex());
+    },
+
+    replayCurrentWord() {
+        this.playCurrentWord(true);
+        wx.showToast({ title: '已重播', icon: 'none', duration: 800 });
     },
 
     abortAudioDownload() {
@@ -701,6 +840,7 @@ Page({
     },
 
     onInput: function (e) {
+        if (this.data.inputMode === INPUT_STRICT) return;
         this.setData({
             inputValue: e.detail.value,
             inputError: false
@@ -772,6 +912,7 @@ Page({
             this.setData({
                 showResult: true,
                 isCorrect: true,
+                resultRevealed: false,
                 userAnswer: inputRaw,
                 inputError: false,
                 attemptCount: attempts + 1
@@ -808,22 +949,37 @@ Page({
                 wrong: inputRaw,
                 dictationMode: mode
             });
-            this.setData({
+            const nextState = {
                 wrongWords: wrongList,
                 wrongWordsDetail: wrongDetail,
                 showHint: mode === MODE_AUDIO_TO_EN,
-                inputValue: '',
                 inputError: true,
-                attemptCount: attempts + 1,
-                inputFocus: false
-            }, () => this.refocusAnswerInput(30));
-            wx.showToast({ title: '再试一次', icon: 'none' });
+                attemptCount: attempts + 1
+            };
+            if (isEnglishSpellingMode(mode)) {
+                Object.assign(nextState, {
+                    showResult: true,
+                    resultRevealed: false,
+                    userAnswer: inputRaw
+                });
+                this.setData(nextState);
+            } else {
+                Object.assign(nextState, {
+                    inputValue: '',
+                    showResult: false,
+                    resultRevealed: false,
+                    inputFocus: false
+                });
+                this.setData(nextState, () => this.refocusAnswerInput(30));
+            }
+            wx.showToast({ title: isEnglishSpellingMode(mode) ? '拼写不正确' : '再试一次', icon: 'none' });
             return;
         }
 
         this.setData({
             showResult: true,
             isCorrect: false,
+            resultRevealed: false,
             userAnswer: inputRaw,
             inputError: true,
             attemptCount: attempts + 1
@@ -841,6 +997,8 @@ Page({
             task_id: this.data.taskId || null,
             answer,
             mode: this.data.currentMode,
+            input_mode: this.data.inputMode,
+            input_grant_id: this.data.inputPolicy.grant && this.data.inputPolicy.grant.id,
             attempt_id: buildFirstAttemptId(this.data.taskId, this.data.bookId, wordId, this.attemptSessionId),
             is_first_attempt: true,
             strict_queue: !!this.data.taskId,
@@ -940,15 +1098,49 @@ Page({
     },
 
     nextWord: function () {
+        if (
+            this.wordAdvanceLocked
+            || this.data.isAdvancingWord
+            || this.data.isCheckingFirstAnswer
+            || !this.data.showResult
+        ) return;
+        this.wordAdvanceLocked = true;
+        this.setData({ isAdvancingWord: true });
+
+        const recoveryIds = this.data.recoveryMissingWordIds || [];
+        if (recoveryIds.length) {
+            const currentId = String(this.data.currentWord.word_id || this.data.currentWord.id || '');
+            const remainingIds = recoveryIds.filter(wordId => String(wordId) !== currentId);
+            this.setData({ recoveryMissingWordIds: remainingIds });
+            if (remainingIds.length) {
+                const nextRecoveryIndex = this.data.words.findIndex(item => (
+                    String(item.word_id || item.id) === String(remainingIds[0])
+                ));
+                if (nextRecoveryIndex >= 0) {
+                    this.loadWord(nextRecoveryIndex, () => this.releaseWordAdvance());
+                    return;
+                }
+            }
+            this.releaseWordAdvance();
+            this.finishPractice();
+            return;
+        }
+
         const nextIndex = this.data.currentIndex + 1;
         const groupEnd = this.data.groupEnd || this.data.totalWords;
         if (nextIndex < groupEnd) {
-            this.loadWord(nextIndex);
+            this.loadWord(nextIndex, () => this.releaseWordAdvance());
         } else if (this.data.hasMoreGroups) {
-            this.finishCurrentGroup();
+            this.finishCurrentGroup(() => this.releaseWordAdvance());
         } else {
+            this.releaseWordAdvance();
             this.finishPractice();
         }
+    },
+
+    releaseWordAdvance() {
+        this.wordAdvanceLocked = false;
+        this.setData({ isAdvancingWord: false });
     },
 
     isFinalPracticeWord() {
@@ -956,7 +1148,7 @@ Page({
         return this.data.currentIndex + 1 >= groupEnd && !this.data.hasMoreGroups;
     },
 
-    finishCurrentGroup() {
+    finishCurrentGroup(onReady) {
         this.pauseTimer();
         this.stopTicker();
         const total = this.data.groupWordCount;
@@ -974,6 +1166,8 @@ Page({
                 accuracy,
                 nextCount: this.data.groupSizes[this.data.currentGroupIndex + 1] || 0
             }
+        }, () => {
+            if (onReady) onReady();
         });
         this.saveProgress(Math.max(this.data.groupStart, this.data.groupEnd - 1), {
             awaitingNextGroup: true,
@@ -1083,7 +1277,8 @@ Page({
     },
 
     submitTaskResult: function (accuracy, wrongWords, durationSeconds = 0, options = {}) {
-        if (this.data.isSubmitting) return;
+        if (this.taskSubmitLocked || this.data.isSubmitting) return;
+        this.taskSubmitLocked = true;
         this.setData({ isSubmitting: true });
         wx.showLoading({ title: '提交中...' });
         this.retryPendingFirstAttempts()
@@ -1100,6 +1295,7 @@ Page({
             .then((res) => {
                 wx.hideLoading();
                 if (res && res.ok) {
+                    this.setData({ recoveryMissingWordIds: [] });
                     this.clearProgress();
                     if (options.onSuccess) {
                         options.onSuccess(res);
@@ -1107,7 +1303,7 @@ Page({
                     if (!options.keepOpen) {
                         setTimeout(() => wx.navigateBack(), 1500);
                     }
-                } else {
+                } else if (!this.recoverMissingTaskWords(res)) {
                     wx.showToast({ title: '提交失败', icon: 'none' });
                 }
             })
@@ -1117,9 +1313,36 @@ Page({
                 wx.showToast({ title: '提交失败，请重试', icon: 'none' });
             })
             .finally(() => {
+                this.taskSubmitLocked = false;
                 this.setData({ isSubmitting: false });
             }
             );
+    },
+
+    recoverMissingTaskWords(response) {
+        const missingWords = missingQueueItems(response, this.data.words);
+        if (!missingWords.length) return false;
+        const missingIds = missingWords.map(item => item.word_id || item.id);
+        const firstIndex = this.data.words.findIndex(item => (
+            String(item.word_id || item.id) === String(missingIds[0])
+        ));
+        if (firstIndex < 0) return false;
+
+        this.setData({
+            finished: false,
+            phase: 'test',
+            recoveryMissingWordIds: missingIds,
+            inputFocus: false
+        }, () => {
+            this.loadWord(firstIndex);
+            this.resumeTimer();
+            wx.showModal({
+                title: '补答后即可提交',
+                content: `检测到 ${missingIds.length} 个单词没有同步，已为你自动定位。`,
+                showCancel: false
+            });
+        });
+        return true;
     },
 
     // --- Progress Persistence ---
@@ -1198,6 +1421,7 @@ Page({
             firstAttemptPayloads: this.firstAttemptPayloads,
             firstAttemptConfirmed: this.firstAttemptConfirmed,
             firstAttemptResults: this.firstAttemptResults,
+            recoveryMissingWordIds: this.data.recoveryMissingWordIds || [],
             awaitingNextGroup: false,
             resumePhase: 'test'
         }, extraData));
@@ -1213,7 +1437,8 @@ Page({
                 this.setData({
                     correctCount: saved.correctCount,
                     wrongWords: saved.wrongWords || [],
-                    wrongWordsDetail: saved.wrongWordsDetail || []
+                    wrongWordsDetail: saved.wrongWordsDetail || [],
+                    recoveryMissingWordIds: saved.recoveryMissingWordIds || []
                 });
             }
             if (saved.accumulatedSeconds) {

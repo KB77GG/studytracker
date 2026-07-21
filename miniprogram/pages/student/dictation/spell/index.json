@@ -1,5 +1,9 @@
 {
   "navigationBarTitleText": "强化拼写",
   "navigationBarBackgroundColor": "#cfe8f3",
-  "navigationBarTextStyle": "black"
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "english-keyboard": "/components/english-keyboard/index",
+    "input-mode-switcher": "/components/input-mode-switcher/index"
+  }
 }

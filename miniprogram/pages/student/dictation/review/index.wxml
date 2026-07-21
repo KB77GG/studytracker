@@ -40,7 +40,16 @@
         <view class="mode-tag">听音 → 写英文单词</view>
       </block>
 
-      <view class="input-row" wx:if="{{!showResult}}">
+      <view class="review-input-mode">
+        <input-mode-switcher
+          wx:if="{{isEnglishSpelling}}"
+          value="{{inputMode}}"
+          allowed="{{inputPolicy.compatibleAllowed}}"
+          bind:change="onInputModeChange"
+        />
+      </view>
+
+      <view class="input-row" wx:if="{{!showResult && (!isEnglishSpelling || inputMode === 'compatible')}}">
         <input class="word-input"
                placeholder="{{modeHint}}"
                value="{{inputValue}}"
@@ -49,7 +58,20 @@
                bindconfirm="checkAnswer"/>
       </view>
 
-      <view class="result" wx:else>
+      <view class="english-wrong-feedback" wx:elif="{{showResult && isEnglishSpelling && !isCorrect && !resultRevealed}}">
+        <view class="result-flag bad">✗ 拼写不正确</view>
+        <view class="answer-block">
+          <view class="answer-row"><text class="label">你的答案：</text>{{userAnswer || '（空）'}}</view>
+          <view class="wrong-guidance">可以重新拼写，或暂时跳过后查看正确拼写。</view>
+          <button class="answer-appeal-btn"
+                  disabled="{{appealSubmitted}}"
+                  bindtap="submitAnswerAppeal">
+            {{appealSubmitted ? '已提交人工审核' : '判分有疑问？申诉'}}
+          </button>
+        </view>
+      </view>
+
+      <view class="result" wx:elif="{{showResult}}">
         <view class="result-flag {{isCorrect ? 'ok' : 'bad'}}">
           {{isCorrect ? '✓ 答对了' : '✗ 答错了'}}
         </view>
@@ -99,9 +121,28 @@
       </view>
     </view>
 
+    <english-keyboard
+      wx:if="{{isEnglishSpelling && inputMode === 'strict'}}"
+      answer="{{currentWord.word}}"
+      value="{{inputValue}}"
+      status="{{showResult ? (isCorrect ? 'correct' : (resultRevealed ? 'revealed' : 'wrong')) : 'idle'}}"
+      can-confirm="{{!!inputValue}}"
+      show-wrong-actions="{{showResult && !isCorrect && !resultRevealed}}"
+      show-next="{{showResult && (isCorrect || resultRevealed)}}"
+      bind:key="onKeyboardKey"
+      bind:backspace="onKeyboardBackspace"
+      bind:confirm="checkAnswer"
+      bind:retry="retrySpelling"
+      bind:skip="skipSpelling"
+      bind:next="nextWord"
+    />
+    <view class="compat-review-actions" wx:if="{{isEnglishSpelling && inputMode === 'compatible' && showResult && !isCorrect && !resultRevealed}}">
+      <button class="compat-skip" bindtap="skipSpelling">暂时跳过</button>
+      <button class="compat-retry" bindtap="retrySpelling">重新拼写</button>
+    </view>
     <view class="action-bar">
-      <button wx:if="{{!showResult}}" class="btn primary" bindtap="checkAnswer">提交</button>
-      <button wx:else class="btn primary" bindtap="nextWord">
+      <button wx:if="{{!showResult && (!isEnglishSpelling || inputMode !== 'strict')}}" class="btn primary" bindtap="checkAnswer">提交</button>
+      <button wx:elif="{{showResult && !(isEnglishSpelling && !isCorrect && !resultRevealed) && (!isEnglishSpelling || inputMode !== 'strict')}}" class="btn primary" bindtap="nextWord">
         {{currentIndex + 1 === totalWords ? '完成本轮' : '下一个'}}
       </button>
     </view>

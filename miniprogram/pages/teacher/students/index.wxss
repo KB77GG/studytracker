@@ -85,6 +85,13 @@
   margin-bottom: 12px;
 }
 
+.student-head-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
 .student-name {
   display: block;
   color: #0f172a;
@@ -100,6 +107,23 @@
   color: #0f766e;
   font-size: 12px;
   white-space: nowrap;
+}
+
+.input-grant-button {
+  min-width: 92px;
+  height: 32px;
+  margin: 0;
+  padding: 0 9px;
+  border: 1px solid rgba(15, 118, 110, 0.35);
+  border-radius: 999px;
+  background: #f0fdfa;
+  color: #0f766e;
+  font-size: 12px;
+  line-height: 30px;
+}
+
+.input-grant-button::after {
+  border: 0;
 }
 
 .subject-list {

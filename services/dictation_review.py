@@ -29,6 +29,7 @@ from models import (
     User,
     db,
 )
+from services.dictation_input_policy import resolve_submission_input
 
 UTC = timezone.utc  # noqa: UP017 - Python 3.10-compatible replacement.
 SHANGHAI = ZoneInfo("Asia/Shanghai")
@@ -451,6 +452,8 @@ def _serialize_answer_result(
         "first_attempt": bool(record.is_first_attempt),
         "idempotent": idempotent,
         "attempt_id": record.attempt_id,
+        "input_mode": record.input_mode,
+        "input_grant_id": record.input_grant_id,
         "correct_answer": word.word,
         "translation": word.translation,
         "phonetic": word.phonetic,
@@ -580,6 +583,7 @@ def _recover_legacy_resume_prefix(
             attempt_id=attempt_id,
             is_first_attempt=True,
             task_review_id=item.id,
+            input_mode="native" if mode == "en_to_zh" else "strict",
         )
         db.session.add(record)
         item.first_attempt_id = attempt_id
@@ -689,6 +693,19 @@ def submit_dictation_answer(
             # request payload; the server-owned task mode is authoritative.
             mode = _resolve_mode(task, task_book)
 
+    try:
+        input_mode, input_grant_id = resolve_submission_input(
+            user,
+            mode,
+            payload.get("input_mode"),
+            task_id=task_id,
+            now=now,
+        )
+    except ValueError as error:
+        raise DictationReviewError("invalid_input_mode", 400) from error
+    except PermissionError as error:
+        raise DictationReviewError("compatible_input_not_authorized", 403) from error
+
     is_correct = _answer_is_correct(word, answer, mode)
     is_first = True
     if snapshot is not None:
@@ -722,6 +739,8 @@ def submit_dictation_answer(
         word_id=word.id,
         student_answer=answer[:100],
         is_correct=is_correct,
+        input_mode=input_mode,
+        input_grant_id=input_grant_id,
         attempt_id=attempt_id,
         is_first_attempt=is_first,
         task_review_id=snapshot.id if snapshot else None,
@@ -1136,8 +1155,18 @@ def ensure_incremental_schema(engine, logger=None, now: datetime | None = None) 
             "attempt_id": "VARCHAR(96)",
             "is_first_attempt": "BOOLEAN NOT NULL DEFAULT 1",
             "task_review_id": "INTEGER",
+            "input_mode": "VARCHAR(20)",
+            "input_grant_id": "INTEGER",
         },
     )
+
+    try:
+        from models import DictationInputGrant
+
+        DictationInputGrant.__table__.create(bind=engine, checkfirst=True)
+    except Exception as exc:  # pragma: no cover - production safeguard
+        if logger:
+            logger.warning("Failed to ensure dictation input grant table: %s", exc)
 
     try:
         from models import DictationTaskReview
@@ -1158,6 +1187,18 @@ def ensure_incremental_schema(engine, logger=None, now: datetime | None = None) 
             "uq_dictation_record_student_attempt",
             ("student_id", "attempt_id"),
             True,
+        ),
+        (
+            "dictation_record",
+            "ix_dictation_record_input_mode",
+            ("input_mode",),
+            False,
+        ),
+        (
+            "dictation_record",
+            "ix_dictation_record_input_grant_id",
+            ("input_grant_id",),
+            False,
         ),
         (
             "student_word_mastery",

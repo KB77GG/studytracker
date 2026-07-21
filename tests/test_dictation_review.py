@@ -1169,6 +1169,12 @@ class DictationReviewFlowTest(unittest.TestCase):
             self.assertIsNone(legacy_without_due.auto_review_due_at)
             self.assertIsNone(legacy_without_due.auto_review_activated_at)
             inspector = sqlalchemy_inspect(db.engine)
+            record_columns = {
+                column["name"] for column in inspector.get_columns("dictation_record")
+            }
+            self.assertIn("input_mode", record_columns)
+            self.assertIn("input_grant_id", record_columns)
+            self.assertIn("dictation_input_grant", inspector.get_table_names())
             record_indexes = {
                 index["name"] for index in inspector.get_indexes("dictation_record")
             }
@@ -1177,6 +1183,8 @@ class DictationReviewFlowTest(unittest.TestCase):
                 for constraint in inspector.get_unique_constraints("dictation_record")
             )
             self.assertIn("uq_dictation_record_student_attempt", record_indexes)
+            self.assertIn("ix_dictation_record_input_mode", record_indexes)
+            self.assertIn("ix_dictation_record_input_grant_id", record_indexes)
             mastery_indexes = {
                 index["name"]
                 for index in inspector.get_indexes("student_word_mastery")

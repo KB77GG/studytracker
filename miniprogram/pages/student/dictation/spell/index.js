@@ -11,9 +11,20 @@ const {
     ensureAttemptPayload,
     getOrCreateRunId,
     isSuccessfulResponse,
+    missingQueueItems,
     summarizeQueue,
     queueMode
 } = require('../../../../utils/dictation-review.js')
+const {
+    INPUT_COMPATIBLE,
+    INPUT_STRICT,
+    answerInputLimit,
+    chooseInputMode,
+    defaultInputPolicy,
+    inputModeStorageKey,
+    isEnglishSpellingMode,
+    normalizeKeyboardKey
+} = require('../../../../utils/dictation-input-policy.js')
 
 const REINSERT_GAP = 3
 const FIXED_SPELL_CHARS = "-‐‑‒–—'’‘`´.,，。.!！？?；;：:()（）[]{}<>/\\|_+*=~@#$%^&\""
@@ -56,7 +67,7 @@ function isSpellSlotChar(char) {
 }
 
 function buildSpellSlots(inputValue, answerWord) {
-    const inputChars = Array.from(String(inputValue || '').replace(/\s+/g, ''))
+    const inputChars = Array.from(String(inputValue || ''))
     const answerChars = Array.from(String(answerWord || ''))
     const slots = []
     let inputIndex = 0
@@ -69,10 +80,19 @@ function buildSpellSlots(inputValue, answerWord) {
         }
 
         if (!isSpellSlotChar(char)) {
+            const typedSeparator = inputChars[inputIndex] || ''
+            const normalizedTyped = typedSeparator === '’' || typedSeparator === '‘'
+                ? "'"
+                : typedSeparator
+            const normalizedExpected = char === '’' || char === '‘' ? "'" : char
+            if (normalizedTyped === normalizedExpected) inputIndex += 1
             slots.push({ type: 'fixed', char })
             return
         }
 
+        while (inputIndex < inputChars.length && !isSpellSlotChar(inputChars[inputIndex])) {
+            inputIndex += 1
+        }
         const inputChar = inputChars[inputIndex] || ''
         inputIndex += inputChar ? 1 : 0
         const slot = {
@@ -143,9 +163,9 @@ Page({
         progressDots: [],
         inputValue: '',
         spellSlots: [],
-        inputFocus: true,
         showResult: false,
         resultCorrect: false,
+        resultRevealed: false,
         displayWord: '',
         diffTop: [],
         isLoadingAudio: false,
@@ -153,19 +173,16 @@ Page({
         remainingCount: 0,
         serverSummary: null,
         isCheckingFirstAnswer: false,
+        isAdvancingWord: false,
         skipSpellInReview: false,
-        keyboardHeight: 0,
+        inputMode: INPUT_STRICT,
+        inputPolicy: defaultInputPolicy('spelling_drill'),
+        isEnglishSpelling: true,
         dictationOrder: 'sequence',
         queueToken: '',
         assignedCount: 0,
         reviewCount: 0,
         appealSubmitted: false
-    },
-
-    onKeyboardHeightChange(e) {
-        const height = (e && e.detail && e.detail.height) || 0
-        if (height === this.data.keyboardHeight) return
-        this.setData({ keyboardHeight: height })
     },
 
     onLoad(options) {
@@ -184,6 +201,7 @@ Page({
         this.firstAttemptPromises = {}
         this.firstAttemptSent = {}
         this.firstAnswerInFlightKey = null
+        this.wordAdvanceLocked = false
         this.attemptRunStorageKey = options.taskId
             ? null
             : buildRunStorageKey(options.mode === 'review' ? 'review' : `book-${options.id || 'unknown'}`)
@@ -389,15 +407,73 @@ Page({
         })
         this.drillStartedAt = null
         this.taskResultSubmitted = false
+        this.loadInputPolicy()
         this.prewarmAudio(words)
     },
 
-    refocusHiddenInput(delay = 50) {
-        this.setData({ inputFocus: false })
-        setTimeout(() => {
-            if (this.data.stage !== 'drill' || this.data.showResult) return
-            this.setData({ inputFocus: true })
-        }, delay)
+    loadInputPolicy() {
+        const mode = 'spelling_drill'
+        const fallback = defaultInputPolicy(mode)
+        const storageKey = inputModeStorageKey({ taskId: this.data.taskId, bookId: this.data.bookId, mode })
+        this.setData({
+            inputMode: INPUT_STRICT,
+            inputPolicy: fallback,
+            isEnglishSpelling: true
+        })
+        request('/dictation/input-policy', {
+            data: {
+                mode,
+                task_id: this.data.taskId || undefined
+            }
+        }).then((res) => {
+            const raw = res && res.policy
+            const policy = raw ? {
+                mode: raw.mode || mode,
+                isEnglishSpelling: !!raw.is_english_spelling,
+                defaultInputMode: raw.default_input_mode || INPUT_STRICT,
+                compatibleAllowed: !!raw.compatible_allowed,
+                grant: raw.grant || null
+            } : fallback
+            const stored = wx.getStorageSync(storageKey)
+            this.setData({
+                inputPolicy: policy,
+                inputMode: chooseInputMode(policy, stored)
+            })
+        }).catch(() => {
+            // Network failure is intentionally strict, never compatible.
+            this.setData({ inputPolicy: fallback, inputMode: INPUT_STRICT })
+        })
+    },
+
+    onInputModeChange(e) {
+        const nextMode = e && e.detail && e.detail.mode
+        if (!this.data.inputPolicy.compatibleAllowed || !nextMode) return
+        if (nextMode === this.data.inputMode) return
+        if (this.data.inputValue) {
+            wx.showModal({
+                title: '切换输入方式',
+                content: '切换后会清空当前拼写，是否继续？',
+                confirmText: '清空并切换',
+                success: (res) => {
+                    if (!res.confirm) return
+                    this.setInputMode(nextMode)
+                }
+            })
+            return
+        }
+        this.setInputMode(nextMode)
+    },
+
+    setInputMode(mode) {
+        if (![INPUT_STRICT, INPUT_COMPATIBLE].includes(mode)) return
+        const storageKey = inputModeStorageKey({ taskId: this.data.taskId, bookId: this.data.bookId, mode: 'spelling_drill' })
+        wx.setStorageSync(storageKey, mode)
+        this.setData({
+            inputMode: mode,
+            inputValue: '',
+            spellSlots: buildSpellSlots('', this.data.currentWord.word),
+            resultRevealed: false
+        })
     },
 
     startDrill() {
@@ -406,9 +482,10 @@ Page({
         this.showNextWord(this.data.queue.slice())
     },
 
-    showNextWord(queue) {
+    showNextWord(queue, onReady) {
         const nextQueue = (queue || []).filter(item => !this.completedMap[item._originIndex])
         if (this.data.completedCount >= this.data.totalWords || !nextQueue.length) {
+            if (onReady) onReady()
             this.finishDrill()
             return
         }
@@ -420,15 +497,18 @@ Page({
             spellSlots: buildSpellSlots('', word.word),
             showResult: false,
             resultCorrect: false,
+            resultRevealed: false,
             displayWord: word.syllables || word.word,
             diffTop: [],
-            inputFocus: false,
             appealSubmitted: false
-        }, () => this.refocusHiddenInput())
-        setTimeout(() => this.playCurrentWord(), 240)
+        }, () => {
+            if (onReady) onReady()
+            setTimeout(() => this.playCurrentWord(true), 240)
+        })
     },
 
     onInput(e) {
+        if (this.data.inputMode !== INPUT_COMPATIBLE) return
         const value = (e && e.detail && e.detail.value) || ''
         this.setData({
             inputValue: value,
@@ -436,8 +516,24 @@ Page({
         })
     },
 
-    focusInput() {
-        this.refocusHiddenInput(30)
+    onKeyboardKey(e) {
+        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return
+        const key = normalizeKeyboardKey(e && e.detail && e.detail.key)
+        const limit = answerInputLimit(
+            this.data.currentWord.word,
+            this.data.currentWord.accepted_answers
+        )
+        if (!key || this.data.inputValue.length >= limit) return
+        this.setData({
+            inputValue: `${this.data.inputValue}${key}`,
+            spellSlots: buildSpellSlots(`${this.data.inputValue}${key}`, this.data.currentWord.word)
+        })
+    },
+
+    onKeyboardBackspace() {
+        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return
+        const value = String(this.data.inputValue || '').slice(0, -1)
+        this.setData({ inputValue: value, spellSlots: buildSpellSlots(value, this.data.currentWord.word) })
     },
 
     submitOrNext() {
@@ -463,7 +559,7 @@ Page({
         if (!this.firstAttempts[key]) {
             if (this.firstAnswerInFlightKey === key) return
             this.firstAnswerInFlightKey = key
-            this.setData({ isCheckingFirstAnswer: true, inputFocus: false })
+            this.setData({ isCheckingFirstAnswer: true })
             this.submitFirstAttempt(word, raw)
                 .then((res) => {
                     if (!isSuccessfulResponse(res)) throw new Error('first_attempt_not_acknowledged')
@@ -479,7 +575,7 @@ Page({
                 })
                 .catch((err) => {
                     this.firstAnswerInFlightKey = null
-                    this.setData({ isCheckingFirstAnswer: false, inputValue: raw, inputFocus: true })
+                    this.setData({ isCheckingFirstAnswer: false, inputValue: raw })
                     wx.showToast({ title: '首答同步失败，请重试', icon: 'none' })
                     console.warn('submit spell first attempt failed', err)
                 })
@@ -501,11 +597,11 @@ Page({
                 progressDots: buildProgressDots(this.data.totalWords, nextCompleted),
                 showResult: true,
                 resultCorrect: true,
+                resultRevealed: false,
                 displayWord: word.syllables || word.word,
-                inputFocus: false
             })
             if (!isFirstAttempt) this.submitMastery(word)
-            this.playCurrentWord()
+            this.playCurrentWord(true)
             this.dismissKeyboard()
             // Correct: let the green word / syllables / phonetic land, then advance.
             this.scheduleAutoAdvance()
@@ -516,11 +612,34 @@ Page({
         this.setData({
             showResult: true,
             resultCorrect: false,
+            resultRevealed: false,
             displayWord: word.syllables || word.word,
             diffTop: buildDiff(raw, word.word),
-            inputFocus: false
         })
         // Wrong: keep the comparison on a clean screen; student taps → when ready.
+        this.dismissKeyboard()
+    },
+
+    retrySpell() {
+        if (!this.data.showResult || this.data.resultCorrect || this.data.resultRevealed) return
+        this.clearAutoAdvance()
+        this.setData({
+            showResult: false,
+            resultCorrect: false,
+            resultRevealed: false,
+            inputValue: '',
+            spellSlots: buildSpellSlots('', this.data.currentWord.word),
+            diffTop: [],
+            appealSubmitted: false
+        })
+    },
+
+    skipSpell() {
+        if (!this.data.showResult || this.data.resultCorrect || this.data.resultRevealed) return
+        this.setData({
+            resultRevealed: true,
+            displayWord: this.data.currentWord.syllables || this.data.currentWord.word
+        })
         this.dismissKeyboard()
     },
 
@@ -586,9 +705,17 @@ Page({
     },
 
     nextAfterResult() {
+        if (this.wordAdvanceLocked || this.data.isAdvancingWord || !this.data.showResult) return
+        this.wordAdvanceLocked = true
+        this.setData({ isAdvancingWord: true })
         this.clearAutoAdvance()
         const queue = this.data.queue.slice(1)
-        this.showNextWord(queue)
+        this.showNextWord(queue, () => this.releaseWordAdvance())
+    },
+
+    releaseWordAdvance() {
+        this.wordAdvanceLocked = false
+        this.setData({ isAdvancingWord: false })
     },
 
     submitMastery(word) {
@@ -612,6 +739,8 @@ Page({
             task_id: this.data.taskId || null,
             answer,
             mode: 'spelling_drill',
+            input_mode: this.data.inputMode,
+            input_grant_id: this.data.inputPolicy.grant && this.data.inputPolicy.grant.id,
             attempt_id: buildFirstAttemptId(this.data.taskId, this.data.bookId, wordId, this.attemptSessionId),
             is_first_attempt: true,
             strict_queue: !!this.data.taskId,
@@ -735,7 +864,9 @@ Page({
         })).then((res) => {
             if (!isSuccessfulResponse(res)) {
                 this.taskResultSubmitted = false
-                wx.showToast({ title: '任务提交失败', icon: 'none' })
+                if (!this.recoverMissingTaskWords(res)) {
+                    wx.showToast({ title: '任务提交失败', icon: 'none' })
+                }
                 return
             }
             this.setData({ serverSummary: this.buildServerSummary(res) })
@@ -744,6 +875,31 @@ Page({
             console.warn('submit spell task result failed', err)
             wx.showToast({ title: '任务提交失败', icon: 'none' })
         })
+    },
+
+    recoverMissingTaskWords(response) {
+        const missingWords = missingQueueItems(response, this.data.words)
+        if (!missingWords.length) return false
+        missingWords.forEach(word => {
+            delete this.completedMap[word._originIndex]
+        })
+        const completedCount = Object.keys(this.completedMap)
+            .filter(key => this.completedMap[key]).length
+        this.clearAutoAdvance()
+        this.setData({
+            stage: 'drill',
+            completedCount,
+            progressDots: buildProgressDots(this.data.totalWords, completedCount),
+            serverSummary: null
+        }, () => {
+            this.showNextWord(missingWords.slice())
+            wx.showModal({
+                title: '补答后即可提交',
+                content: `检测到 ${missingWords.length} 个单词没有同步，已为你自动定位。`,
+                showCancel: false
+            })
+        })
+        return true
     },
 
     fetchReviewSummary() {
@@ -781,10 +937,18 @@ Page({
         wx.navigateBack()
     },
 
-    playCurrentWord() {
+    replayCurrentWord() {
+        this.playCurrentWord(true)
+        wx.showToast({ title: '已重播', icon: 'none', duration: 800 })
+    },
+
+    playCurrentWord(silent = false) {
         const word = this.data.currentWord && this.data.currentWord.word
         if (!word || !this.audioCtx) return
         const text = String(word).trim()
+        if (!silent) {
+            wx.showToast({ title: '已重播', icon: 'none', duration: 800 })
+        }
         const cacheKey = text.toLowerCase()
         this.playTokenCounter += 1
         const token = this.playTokenCounter

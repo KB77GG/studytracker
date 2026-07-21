@@ -1031,6 +1031,15 @@ class DictationRecord(db.Model, TimestampMixin):
     word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
     student_answer = db.Column(db.String(100))
     is_correct = db.Column(db.Boolean, nullable=False)
+    # strict = shared in-page keyboard; compatible = teacher-authorized native
+    # input; native = existing non-English (e.g. Chinese) system input.
+    input_mode = db.Column(db.String(20), nullable=True, index=True)
+    input_grant_id = db.Column(
+        db.Integer,
+        db.ForeignKey("dictation_input_grant.id"),
+        nullable=True,
+        index=True,
+    )
     # New clients send a durable id for every answer so network retries are
     # safe.  Legacy rows keep this nullable and continue to work unchanged.
     attempt_id = db.Column(db.String(96), nullable=True, index=True)
@@ -1047,6 +1056,7 @@ class DictationRecord(db.Model, TimestampMixin):
     book = db.relationship("DictationBook", backref=db.backref("records", lazy="dynamic"))
     word = db.relationship("DictationWord", backref=db.backref("records", lazy="dynamic"))
     task = db.relationship("Task", backref=db.backref("dictation_records", lazy="dynamic"))
+    input_grant = db.relationship("DictationInputGrant")
     
     def __repr__(self):
         return f"<DictationRecord student={self.student_id} word={self.word_id} correct={self.is_correct}>"
@@ -1090,6 +1100,60 @@ class DictationAnswerAppeal(db.Model, TimestampMixin):
 
     def __repr__(self):
         return f"<DictationAnswerAppeal student={self.student_id} word={self.word_id} status={self.status}>"
+
+
+class DictationInputGrant(db.Model, TimestampMixin):
+    """Teacher-issued native-input permission for vocabulary dictation tasks."""
+
+    __tablename__ = "dictation_input_grant"
+    __table_args__ = (
+        db.Index(
+            "ix_dictation_input_grant_student_active",
+            "student_id",
+            "revoked_at",
+            "expires_at",
+        ),
+        db.Index(
+            "ix_dictation_input_grant_task_active",
+            "task_id",
+            "revoked_at",
+            "expires_at",
+        ),
+    )
+
+    SCOPE_STUDENT = "student"
+    SCOPE_TASK = "task"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    student_profile_id = db.Column(
+        db.Integer,
+        db.ForeignKey("student_profile.id"),
+        nullable=False,
+        index=True,
+    )
+    teacher_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=True, index=True)
+    scope = db.Column(db.String(16), nullable=False, default=SCOPE_STUDENT)
+    expires_at = db.Column(db.DateTime, nullable=False, index=True)
+    revoked_at = db.Column(db.DateTime, nullable=True, index=True)
+    reason = db.Column(db.String(255))
+
+    student = db.relationship(
+        "User",
+        foreign_keys=[student_id],
+        backref=db.backref("dictation_input_grants", lazy="dynamic"),
+    )
+    teacher = db.relationship(
+        "User",
+        foreign_keys=[teacher_id],
+        backref=db.backref("issued_dictation_input_grants", lazy="dynamic"),
+    )
+    student_profile = db.relationship("StudentProfile")
+    task = db.relationship("Task")
+
+    def __repr__(self):
+        return f"<DictationInputGrant student={self.student_id} scope={self.scope} expires={self.expires_at}>"
 
 
 class StudentWordMastery(db.Model, TimestampMixin):

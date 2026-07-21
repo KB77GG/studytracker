@@ -6,6 +6,7 @@ const {
     getOrCreateRunId,
     isSuccessfulResponse,
     legacyWrongItemBelongsToBook,
+    missingQueueItems,
     summarizeQueue,
     queueMode
 } = require('../miniprogram/utils/dictation-review.js')
@@ -55,6 +56,15 @@ assert.strictEqual(retry.attempt_id, first.attempt_id)
 assert.strictEqual(retry.answer, 'alpha')
 assert.strictEqual(isSuccessfulResponse({ ok: true }), true)
 assert.strictEqual(isSuccessfulResponse({ ok: false, statusCode: 409 }), false)
+assert.deepStrictEqual(
+    missingQueueItems({
+        ok: false,
+        error: 'queue_incomplete',
+        missing_word_ids: [3, 2, 3, 999]
+    }, queue),
+    [queue[2], queue[1]]
+)
+assert.deepStrictEqual(missingQueueItems({ error: 'queue_changed' }, queue), [])
 const bookWords = [{ id: 1, word: 'alpha' }]
 assert.strictEqual(legacyWrongItemBelongsToBook({ book_id: 8, word: 'alpha' }, 7, bookWords), false)
 assert.strictEqual(legacyWrongItemBelongsToBook({ dictation_book_id: 8, word: 'alpha' }, 7, bookWords), false)

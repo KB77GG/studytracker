@@ -1,11 +1,24 @@
 .spell-page {
   height: 100vh;
+  min-height: 520px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-y: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   background: #cfe8f3;
   color: #172033;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+}
+
+.mode-switch-row {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  min-height: 58rpx;
+  padding: 0 24rpx 4rpx;
 }
 
 .queue-source-count {
@@ -150,6 +163,21 @@
   position: relative;
 }
 
+.compat-input {
+  width: 100%;
+  max-width: 620px;
+  height: 54px;
+  margin: 0 0 18rpx;
+  padding: 0 18px;
+  border: 2rpx solid rgba(8, 127, 119, 0.3);
+  border-radius: 16rpx;
+  color: #0b1830;
+  background: rgba(255, 255, 255, 0.88);
+  font-size: 28rpx;
+  text-align: center;
+  box-sizing: border-box;
+}
+
 .hidden-input {
   position: absolute;
   width: 2rpx;
@@ -172,6 +200,9 @@
 
 .typed-word,
 .answer-word {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   font-size: 58rpx;
   line-height: 1.1;
   font-weight: 800;
@@ -182,6 +213,18 @@
 .answer-word.success,
 .answer-word.answer-small {
   color: #168f7a;
+}
+
+.answer-word.revealed {
+  color: #92520a;
+}
+
+.wrong-copy {
+  max-width: 620rpx;
+  color: #a94728;
+  font-size: 26rpx;
+  line-height: 1.5;
+  text-align: center;
 }
 
 .answer-small {
@@ -348,6 +391,40 @@
   z-index: 20;
 }
 
+.strict-keyboard-wrap {
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 0 12rpx;
+  box-sizing: border-box;
+}
+
+.compat-wrong-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.28fr;
+  gap: 12rpx;
+  padding: 0 40rpx calc(24rpx + env(safe-area-inset-bottom));
+}
+
+.compat-skip,
+.compat-retry {
+  height: 56px;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.compat-skip {
+  border: 2rpx solid rgba(8, 127, 119, 0.5);
+  color: #237069;
+  background: #fff;
+}
+
+.compat-retry {
+  border: 0;
+  color: #fff;
+  background: #087f77;
+}
+
 .round-control {
   pointer-events: auto;
   width: 132rpx;
@@ -431,6 +508,7 @@
   color: #516172;
   font-size: 22rpx;
   z-index: 20;
+  bottom: calc(110rpx + env(safe-area-inset-bottom));
 }
 
 /* ---------- summary ---------- */

@@ -259,6 +259,26 @@ def _student_name_map(student_ids) -> dict[str, str]:
     }
 
 
+def _student_profile_id_map(student_ids) -> dict[str, int]:
+    numeric_ids = []
+    for value in student_ids:
+        try:
+            numeric_ids.append(int(value))
+        except (TypeError, ValueError):
+            continue
+    if not numeric_ids:
+        return {}
+    profiles = StudentProfile.query.filter(
+        StudentProfile.scheduler_student_id.in_(numeric_ids),
+        StudentProfile.is_deleted.is_(False),
+    ).all()
+    return {
+        str(profile.scheduler_student_id): profile.id
+        for profile in profiles
+        if profile.scheduler_student_id
+    }
+
+
 def issue_practice_context_token(user: User, month: str, subject: dict) -> str:
     schedule = subject["schedule"]
     now = int(time.time())
@@ -429,6 +449,9 @@ def get_teacher_practice_students():
         scheduler_teacher_id=user.scheduler_teacher_id,
         student_name_map=_student_name_map(student_ids),
     )
+    profile_id_map = _student_profile_id_map(student_ids)
+    for student in students:
+        student["student_profile_id"] = profile_id_map.get(str(student["student_id"]))
     for student in students:
         for subject in student["subjects"]:
             subject["practice_context_token"] = issue_practice_context_token(

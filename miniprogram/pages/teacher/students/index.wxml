@@ -32,7 +32,15 @@
             <text class="student-name">{{student.student_name}}</text>
             <text class="student-id">排课学生 ID：{{student.student_id}}</text>
           </view>
-          <text class="subject-count">{{student.subjects.length}} 个学科</text>
+          <view class="student-head-actions">
+            <text class="subject-count">{{student.subjects.length}} 个学科</text>
+            <button
+              wx:if="{{student.student_profile_id}}"
+              class="input-grant-button"
+              data-profile-id="{{student.student_profile_id}}"
+              bindtap="authorizeCompatibleInput"
+            >单词任务实体键盘</button>
+          </view>
         </view>
         <view class="subject-list">
           <button

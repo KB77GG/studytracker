@@ -31,30 +31,35 @@
         <text class="tool-star">☆</text>
       </view>
     </view>
+    <view class="mode-switch-row">
+      <input-mode-switcher
+        value="{{inputMode}}"
+        allowed="{{inputPolicy.compatibleAllowed}}"
+        bind:change="onInputModeChange"
+      />
+    </view>
 
-    <view class="drill-center" bindtap="focusInput"
-          style="padding-bottom: {{keyboardHeight > 0 ? (keyboardHeight + 56) + 'px' : '156rpx'}};">
-      <input class="hidden-input"
+    <view class="drill-center">
+      <input wx:if="{{inputMode === 'compatible'}}" class="compat-input"
              value="{{inputValue}}"
-             focus="{{inputFocus}}"
-             adjust-position="{{false}}"
-             cursor-spacing="160"
+             focus="{{!showResult}}"
              confirm-type="done"
-             confirm-hold="{{false}}"
              maxlength="-1"
              bindinput="onInput"
-             bindconfirm="submitOrNext"
-             bindkeyboardheightchange="onKeyboardHeightChange"/>
+             bindconfirm="submitOrNext"/>
 
       <view class="word-display">
         <block wx:if="{{showResult && resultCorrect}}">
           <text class="answer-word success">{{displayWord}}</text><text class="fake-cursor"></text>
         </block>
-        <block wx:elif="{{showResult && !resultCorrect}}">
+        <block wx:elif="{{showResult && !resultCorrect && !resultRevealed}}">
           <view class="diff-row">
             <text wx:for="{{diffTop}}" wx:key="index" class="diff-char {{item.status}}">{{item.char}}</text>
           </view>
-          <view class="answer-word answer-small">{{displayWord}}</view>
+          <view class="wrong-copy">拼写不正确，可以重新尝试或暂时跳过</view>
+        </block>
+        <block wx:elif="{{showResult}}">
+          <text class="answer-word {{resultCorrect ? 'success' : 'revealed'}}">{{displayWord}}</text><text class="fake-cursor"></text>
         </block>
         <block wx:else>
           <view class="slot-row">
@@ -78,19 +83,40 @@
       </button>
     </view>
 
-    <view class="bottom-bar" style="bottom: {{keyboardHeight > 0 ? (keyboardHeight + 16) + 'px' : 'calc(24rpx + env(safe-area-inset-bottom))'}};">
+    <view class="strict-keyboard-wrap" wx:if="{{inputMode === 'strict'}}">
+      <english-keyboard
+        answer="{{currentWord.word}}"
+        value="{{inputValue}}"
+        status="{{showResult ? (resultCorrect ? 'correct' : (resultRevealed ? 'revealed' : 'wrong')) : 'idle'}}"
+        can-confirm="{{!!inputValue && !isCheckingFirstAnswer}}"
+        show-wrong-actions="{{showResult && !resultCorrect && !resultRevealed}}"
+        show-next="{{showResult && (resultCorrect || resultRevealed)}}"
+        disabled="{{isCheckingFirstAnswer || isAdvancingWord}}"
+        bind:key="onKeyboardKey"
+        bind:backspace="onKeyboardBackspace"
+        bind:confirm="checkAnswer"
+        bind:retry="retrySpell"
+        bind:skip="skipSpell"
+        bind:next="nextAfterResult"
+      />
+    </view>
+
+    <view wx:if="{{inputMode === 'compatible' && !(showResult && !resultCorrect && !resultRevealed)}}" class="bottom-bar" style="bottom: calc(24rpx + env(safe-area-inset-bottom));">
       <button class="round-control exit" bindtap="exitPage">×<text class="key-hint">Esc</text></button>
-      <button class="round-control hint" bindtap="playCurrentWord">
+      <button class="round-control hint" bindtap="replayCurrentWord">
         <text wx:if="{{isLoadingAudio}}">···</text>
         <view wx:else class="ic-audio"></view>
       </button>
-      <button class="round-control confirm" loading="{{isCheckingFirstAnswer}}" disabled="{{isCheckingFirstAnswer}}" bindtap="submitOrNext">
+      <button class="round-control confirm" loading="{{isCheckingFirstAnswer || isAdvancingWord}}" disabled="{{isCheckingFirstAnswer || isAdvancingWord}}" bindtap="submitOrNext">
         {{showResult ? '→' : '✓'}}<text class="key-hint">↵</text>
       </button>
     </view>
+    <view wx:if="{{inputMode === 'compatible' && showResult && !resultCorrect && !resultRevealed}}" class="compat-wrong-actions">
+      <button class="compat-skip" bindtap="skipSpell">暂时跳过</button>
+      <button class="compat-retry" bindtap="retrySpell">重新拼写</button>
+    </view>
 
-    <view class="phonetic-pill" wx:if="{{showResult && resultCorrect && currentWord.phonetic}}"
-          style="bottom: {{keyboardHeight > 0 ? (keyboardHeight + 84) + 'px' : 'calc(110rpx + env(safe-area-inset-bottom))'}};">
+    <view class="phonetic-pill" wx:if="{{showResult && resultCorrect && currentWord.phonetic}}">
       {{currentWord.phonetic}}
     </view>
   </block>

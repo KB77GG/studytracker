@@ -1,0 +1,41 @@
+<view class="english-keyboard" aria-label="自定义英文键盘">
+  <view class="growth-line" aria-hidden="true"><view class="growth-line-fill"></view></view>
+
+  <view class="key-row" wx:for="{{letterRows}}" wx:key="index">
+    <button
+      wx:for="{{item}}"
+      wx:key="*this"
+      class="letter-key"
+      data-key="{{item}}"
+      aria-label="{{item}}"
+      disabled="{{disabled || showWrongActions || showNext}}"
+      bindtap="emitKey"
+    >{{item}}</button>
+    <button
+      wx:if="{{index === 2}}"
+      class="letter-key backspace-key"
+      aria-label="退格"
+      disabled="{{disabled || showWrongActions || showNext}}"
+      bindtap="emitBackspace"
+    >⌫</button>
+  </view>
+
+  <view class="separator-row" wx:if="{{separators.length}}">
+    <button
+      wx:for="{{separators}}"
+      wx:key="key"
+      class="separator-key"
+      data-key="{{item.key}}"
+      aria-label="{{item.ariaLabel}}"
+      disabled="{{disabled || showWrongActions || showNext}}"
+      bindtap="emitKey"
+    >{{item.label}}</button>
+  </view>
+
+  <view class="keyboard-actions" wx:if="{{showWrongActions}}">
+    <button class="action-button skip-button" bindtap="emitSkip">暂时跳过</button>
+    <button class="action-button retry-button" bindtap="emitRetry">重新拼写</button>
+  </view>
+  <button wx:elif="{{showNext}}" class="action-button confirm-button" bindtap="emitNext">下一题</button>
+  <button wx:else class="action-button confirm-button" disabled="{{disabled || !canConfirm}}" bindtap="emitConfirm">确认</button>
+</view>

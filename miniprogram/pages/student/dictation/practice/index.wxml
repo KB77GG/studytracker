@@ -152,7 +152,7 @@
             <text class="translation-hint">请写出对应的英文表达</text>
           </view>
           <view class="play-controls">
-            <button class="mini-btn" size="mini" bindtap="playCurrentWord">重播发音</button>
+            <button class="mini-btn" size="mini" bindtap="replayCurrentWord">重播发音</button>
           </view>
         </block>
         <!-- English -> Chinese -->
@@ -163,17 +163,17 @@
             <text class="translation-hint">请写出对应的中文释义</text>
           </view>
           <view class="play-controls" wx:if="{{reviewingWrongWords}}">
-            <button class="mini-btn" size="mini" bindtap="playCurrentWord">重播发音</button>
+            <button class="mini-btn" size="mini" bindtap="replayCurrentWord">重播发音</button>
           </view>
         </block>
         <!-- Audio dictation -->
         <block wx:else>
-          <view class="play-btn" bindtap="playCurrentWord" hover-class="btn-hover">
+          <view class="play-btn" bindtap="replayCurrentWord" hover-class="btn-hover">
             <view class="play-icon"></view>
           </view>
           <view class="play-hint">点击播放单词发音</view>
           <view class="play-controls">
-            <button class="mini-btn" size="mini" bindtap="playCurrentWord">重播</button>
+            <button class="mini-btn" size="mini" bindtap="replayCurrentWord">重播</button>
             <view class="switch-row">
               <text>连播</text>
               <switch checked="{{autoPlay}}" bindchange="onToggleAutoPlay"></switch>
@@ -181,8 +181,17 @@
           </view>
         </block>
 
-        <!-- Input Area (Only show when not revealing answer) -->
-        <view class="input-area" wx:if="{{!showResult}}">
+        <view class="practice-input-mode">
+          <input-mode-switcher
+            wx:if="{{isEnglishSpelling}}"
+            value="{{inputMode}}"
+            allowed="{{inputPolicy.compatibleAllowed}}"
+            bind:change="onInputModeChange"
+          />
+        </view>
+
+        <!-- Input Area (English strict mode has no native input at all.) -->
+        <view class="input-area" wx:if="{{!showResult && (!isEnglishSpelling || inputMode === 'compatible')}}">
           <input class="word-input {{inputError ? 'incorrect' : ''}}"
                  placeholder="{{currentMode === 'en_to_zh' ? '输入中文释义' : (currentMode === 'zh_to_en' ? '输入英文表达' : '听音输入单词')}}"
                  focus="{{inputFocus}}"
@@ -198,8 +207,22 @@
           </view>
         </view>
 
-        <!-- Result Feedback (Show after check) -->
-        <view class="result-feedback" wx:else>
+        <view class="english-wrong-feedback" wx:elif="{{showResult && isEnglishSpelling && !isCorrect && !resultRevealed}}">
+          <view class="result-status bad">✗ 拼写不正确</view>
+          <view class="compare-block">
+            <view class="answer-row wrong">你的答案：{{userAnswer || '（空）'}}</view>
+            <view class="wrong-guidance">可以重新拼写，或暂时跳过后查看正确拼写。</view>
+            <button wx:if="{{!isCorrect}}"
+                    class="answer-appeal-btn"
+                    disabled="{{appealSubmitted}}"
+                    bindtap="submitAnswerAppeal">
+              {{appealSubmitted ? '已提交人工审核' : '判分有疑问？申诉'}}
+            </button>
+          </view>
+        </view>
+
+        <!-- Result Feedback (revealed/correct/native Chinese modes) -->
+        <view class="result-feedback" wx:elif="{{showResult}}">
           <view class="result-status {{isCorrect ? 'ok' : 'bad'}}">
             {{isCorrect ? '✓ 回答正确' : '✗ 回答错误'}}
           </view>
@@ -245,10 +268,30 @@
       </view>
 
       <!-- Action Bar -->
+      <english-keyboard
+        wx:if="{{isEnglishSpelling && inputMode === 'strict'}}"
+        answer="{{currentWord.word}}"
+        value="{{inputValue}}"
+        status="{{showResult ? (isCorrect ? 'correct' : (resultRevealed ? 'revealed' : 'wrong')) : 'idle'}}"
+        can-confirm="{{!!inputValue && !isCheckingFirstAnswer}}"
+        show-wrong-actions="{{showResult && !isCorrect && !resultRevealed}}"
+        show-next="{{showResult && (isCorrect || resultRevealed)}}"
+        disabled="{{isCheckingFirstAnswer || isAdvancingWord}}"
+        bind:key="onKeyboardKey"
+        bind:backspace="onKeyboardBackspace"
+        bind:confirm="checkAnswer"
+        bind:retry="retrySpelling"
+        bind:skip="skipSpelling"
+        bind:next="nextWord"
+      />
+      <view wx:if="{{isEnglishSpelling && inputMode === 'compatible' && showResult && !isCorrect && !resultRevealed}}" class="compat-practice-actions">
+        <button class="compat-skip" bindtap="skipSpelling">暂时跳过</button>
+        <button class="compat-retry" bindtap="retrySpelling">重新拼写</button>
+      </view>
       <view class="action-bar">
-        <button wx:if="{{!showResult}}" class="submit-btn" loading="{{isCheckingFirstAnswer}}" disabled="{{isCheckingFirstAnswer}}" bindtap="checkAnswer">提交</button>
-        <button wx:else class="submit-btn next" loading="{{isSubmitting}}" disabled="{{isSubmitting}}" bindtap="nextWord">
-          {{currentIndex + 1 >= groupEnd ? (hasMoreGroups ? '完成本组' : '完成练习') : '下一个'}}
+        <button wx:if="{{!showResult && (!isEnglishSpelling || inputMode !== 'strict')}}" class="submit-btn" loading="{{isCheckingFirstAnswer}}" disabled="{{isCheckingFirstAnswer}}" bindtap="checkAnswer">提交</button>
+        <button wx:elif="{{showResult && !(isEnglishSpelling && !isCorrect && !resultRevealed) && (!isEnglishSpelling || inputMode !== 'strict')}}" class="submit-btn next" loading="{{isSubmitting || isAdvancingWord}}" disabled="{{isSubmitting || isAdvancingWord}}" bindtap="nextWord">
+          {{recoveryMissingWordIds.length ? (recoveryMissingWordIds.length > 1 ? '补答下一个' : '重新提交') : (currentIndex + 1 >= groupEnd ? (hasMoreGroups ? '完成本组' : '完成练习') : '下一个')}}
         </button>
       </view>
     </block>

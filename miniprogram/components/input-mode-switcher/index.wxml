@@ -1,0 +1,5 @@
+<view class="input-mode-switcher" wx:if="{{allowed}}" aria-label="输入方式">
+  <button class="mode-option {{value === 'strict' ? 'selected' : ''}}" data-mode="strict" bindtap="choose">严格输入</button>
+  <button class="mode-option {{value === 'compatible' ? 'selected' : ''}}" data-mode="compatible" bindtap="choose">实体键盘</button>
+  <text class="mode-note" wx:if="{{value === 'compatible'}}">系统输入的防自动纠错能力较弱</text>
+</view>

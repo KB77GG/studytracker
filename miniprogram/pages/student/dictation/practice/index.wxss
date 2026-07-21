@@ -2,6 +2,9 @@
 
 .practice-container {
   min-height: 100vh;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
   background: #f8f9fa;
   padding: 30rpx;
   box-sizing: border-box;
@@ -158,6 +161,62 @@
   margin-bottom: 20rpx;
 }
 
+.practice-input-mode {
+  width: 100%;
+  margin: 8rpx 0 4rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.english-wrong-feedback {
+  width: 100%;
+  margin-top: 30rpx;
+}
+
+.wrong-guidance {
+  margin-top: 12rpx;
+  color: #667085;
+  font-size: 26rpx;
+  line-height: 1.55;
+}
+
+.strict-keyboard-wrap {
+  width: 100%;
+  padding: 0 12rpx;
+  box-sizing: border-box;
+}
+
+.compat-practice-actions {
+  display: flex;
+  gap: 16rpx;
+  max-width: 640px;
+  margin: 24rpx auto 0;
+}
+
+.compat-practice-actions button {
+  flex: 1;
+  height: 82rpx;
+  line-height: 82rpx;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.compat-practice-actions button::after {
+  border: 0;
+}
+
+.compat-practice-actions .compat-skip {
+  color: #237069;
+  background: #eef7f5;
+  border: 2rpx solid rgba(8, 127, 119, 0.35);
+}
+
+.compat-practice-actions .compat-retry {
+  color: #fff;
+  background: #087f77;
+}
+
 .word-input {
   width: 100%;
   height: 100rpx;
@@ -255,6 +314,9 @@
 }
 
 .correct-word {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   font-size: 48rpx;
   font-weight: 700;
   color: #2c3e50;
@@ -849,4 +911,15 @@
 .translation-hint {
   font-size: 26rpx;
   color: #999;
+}
+
+@media (max-width: 360px) {
+  .practice-container {
+    padding: 16px 12px;
+  }
+
+  .word-card {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
 }
