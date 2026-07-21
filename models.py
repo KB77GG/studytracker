@@ -1103,7 +1103,7 @@ class DictationAnswerAppeal(db.Model, TimestampMixin):
 
 
 class DictationInputGrant(db.Model, TimestampMixin):
-    """Teacher-issued native-input permission for vocabulary dictation tasks."""
+    """Staff-issued native-input permission for vocabulary dictation tasks."""
 
     __tablename__ = "dictation_input_grant"
     __table_args__ = (

@@ -146,17 +146,52 @@ def resolve_submission_input(
     return INPUT_COMPATIBLE, grant.id
 
 
-def teacher_can_manage_student(teacher: User, profile: StudentProfile) -> bool:
-    """Reuse the existing teacher→student relationship model."""
+def staff_can_manage_student(staff: User, profile: StudentProfile) -> bool:
+    """Match the existing back-office student management permissions.
 
-    if teacher.role == User.ROLE_ADMIN:
+    Assistants and admins operate the shared student queue.  Teachers remain
+    restricted to students explicitly assigned to them.
+    """
+
+    if staff.role in {User.ROLE_ADMIN, User.ROLE_ASSISTANT}:
         return True
-    if profile.primary_teacher_id == teacher.id:
+    if staff.role != User.ROLE_TEACHER:
+        return False
+    if profile.primary_teacher_id == staff.id:
         return True
     return TeacherStudentLink.query.filter_by(
-        teacher_id=teacher.id,
+        teacher_id=staff.id,
         student_id=profile.id,
     ).first() is not None
+
+
+def supersede_active_input_grants(
+    profile: StudentProfile,
+    *,
+    task: Task | None = None,
+    now: datetime | None = None,
+) -> None:
+    """Revoke the current grant in the same scope before replacing it."""
+
+    if not profile.user_id:
+        return
+    now = now or datetime.utcnow()
+    query = DictationInputGrant.query.filter(
+        DictationInputGrant.student_id == profile.user_id,
+        DictationInputGrant.revoked_at.is_(None),
+        DictationInputGrant.expires_at > now,
+    )
+    if task:
+        query = query.filter(
+            DictationInputGrant.scope == DictationInputGrant.SCOPE_TASK,
+            DictationInputGrant.task_id == task.id,
+        )
+    else:
+        query = query.filter(
+            DictationInputGrant.scope == DictationInputGrant.SCOPE_STUDENT,
+        )
+    for grant in query.all():
+        grant.revoked_at = now
 
 
 def create_input_grant(
@@ -182,7 +217,7 @@ def create_input_grant(
         task_id=task.id if task else None,
         scope=scope,
         expires_at=expires_at,
-        reason=str(reason or "教师授权单词任务实体键盘")[:255],
+        reason=str(reason or "教务授权单词任务实体键盘")[:255],
     )
     return grant
 

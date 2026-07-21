@@ -1,6 +1,7 @@
 import time
 import unittest
 from datetime import timedelta
+from pathlib import Path
 
 import jwt
 from flask import Flask
@@ -46,13 +47,25 @@ class DictationInputPolicyApiTest(unittest.TestCase):
                 role=User.ROLE_TEACHER,
                 is_active=True,
             )
+            unrelated_teacher = User(
+                username="unrelated_input_policy_teacher",
+                password_hash="test",
+                role=User.ROLE_TEACHER,
+                is_active=True,
+            )
+            assistant = User(
+                username="input_policy_assistant",
+                password_hash="test",
+                role=User.ROLE_ASSISTANT,
+                is_active=True,
+            )
             student = User(
                 username="input_policy_student",
                 password_hash="test",
                 role=User.ROLE_STUDENT,
                 is_active=True,
             )
-            db.session.add_all([teacher, student])
+            db.session.add_all([teacher, unrelated_teacher, assistant, student])
             db.session.flush()
             profile = StudentProfile(
                 user_id=student.id,
@@ -84,6 +97,8 @@ class DictationInputPolicyApiTest(unittest.TestCase):
             db.session.add_all(words)
             db.session.commit()
             self.teacher_id = teacher.id
+            self.unrelated_teacher_id = unrelated_teacher.id
+            self.assistant_id = assistant.id
             self.student_id = student.id
             self.profile_id = profile.id
             self.book_id = book.id
@@ -109,6 +124,11 @@ class DictationInputPolicyApiTest(unittest.TestCase):
             algorithm="HS256",
         )
         return {"Authorization": f"Bearer {token}"}
+
+    def login_session(self, user_id):
+        with self.client.session_transaction() as session:
+            session["_user_id"] = str(user_id)
+            session["_fresh"] = True
 
     def submit(self, word_id, answer, input_mode, attempt_id):
         return self.client.post(
@@ -234,6 +254,80 @@ class DictationInputPolicyApiTest(unittest.TestCase):
         with self.app.app_context():
             grant = db.session.get(DictationInputGrant, grant_id)
             self.assertIsNotNone(grant.revoked_at)
+
+    def test_assistant_back_office_can_replace_and_revoke_shared_student_grant(self):
+        self.login_session(self.assistant_id)
+        initial = self.client.get(
+            f"/api/dictation/staff/input-grants?student_profile_id={self.profile_id}"
+        )
+        self.assertEqual(initial.status_code, 200, initial.get_json())
+        self.assertTrue(initial.get_json()["student_has_login"])
+        self.assertIsNone(initial.get_json()["active_grant"])
+
+        seven_days = self.client.post(
+            "/api/dictation/staff/input-grants",
+            json={"student_profile_id": self.profile_id, "duration_days": 7},
+        )
+        self.assertEqual(seven_days.status_code, 201, seven_days.get_json())
+        first_grant_id = seven_days.get_json()["grant"]["id"]
+
+        thirty_days = self.client.post(
+            "/api/dictation/staff/input-grants",
+            json={"student_profile_id": self.profile_id, "duration_days": 30},
+        )
+        self.assertEqual(thirty_days.status_code, 201, thirty_days.get_json())
+        second_grant_id = thirty_days.get_json()["grant"]["id"]
+
+        listed = self.client.get(
+            f"/api/dictation/staff/input-grants?student_profile_id={self.profile_id}"
+        )
+        self.assertEqual(listed.get_json()["active_grant"]["id"], second_grant_id)
+        with self.app.app_context():
+            first_grant = db.session.get(DictationInputGrant, first_grant_id)
+            self.assertIsNotNone(first_grant.revoked_at)
+
+        revoked = self.client.post(
+            f"/api/dictation/staff/input-grants/{second_grant_id}/revoke"
+        )
+        self.assertEqual(revoked.status_code, 200, revoked.get_json())
+        after_revoke = self.client.get(
+            f"/api/dictation/staff/input-grants?student_profile_id={self.profile_id}"
+        )
+        self.assertIsNone(after_revoke.get_json()["active_grant"])
+
+    def test_back_office_requires_staff_and_keeps_teachers_student_scoped(self):
+        anonymous = self.client.get(
+            f"/api/dictation/staff/input-grants?student_profile_id={self.profile_id}"
+        )
+        self.assertEqual(anonymous.status_code, 401)
+
+        self.login_session(self.student_id)
+        student_attempt = self.client.post(
+            "/api/dictation/staff/input-grants",
+            json={"student_profile_id": self.profile_id, "duration_days": 7},
+        )
+        self.assertEqual(student_attempt.status_code, 403)
+
+        self.login_session(self.unrelated_teacher_id)
+        unrelated_teacher = self.client.post(
+            "/api/dictation/staff/input-grants",
+            json={"student_profile_id": self.profile_id, "duration_days": 7},
+        )
+        self.assertEqual(unrelated_teacher.status_code, 403)
+
+
+class DictationInputBackOfficeMarkupTest(unittest.TestCase):
+    def test_tasks_page_exposes_staff_grant_status_duration_and_revoke_controls(self):
+        markup = (
+            Path(__file__).resolve().parents[1] / "templates/tasks.html"
+        ).read_text(encoding="utf-8")
+        self.assertIn("单词任务输入授权", markup)
+        self.assertIn('data-input-grant-days="7"', markup)
+        self.assertIn('data-input-grant-days="30"', markup)
+        self.assertIn("inputGrantRevoke", markup)
+        self.assertIn("/api/dictation/staff/input-grants", markup)
+        self.assertIn("授权只影响单词任务", markup)
+        self.assertIn("不影响听力、阅读或其他刷题", markup)
 
 
 if __name__ == "__main__":

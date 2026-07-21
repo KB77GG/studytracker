@@ -141,6 +141,38 @@
     </div>
   </section>
 
+  {% if current_user.role in ['admin', 'teacher', 'assistant'] %}
+  <section class="dictation-input-grant-panel" id="dictationInputGrantPanel" aria-labelledby="dictationInputGrantTitle">
+    <div class="dictation-input-grant-panel__header">
+      <div>
+        <h3 id="dictationInputGrantTitle">单词任务输入授权</h3>
+        <p>学生默认使用严格页面键盘；仅对需要实体键盘的学生临时开放原生输入。</p>
+      </div>
+      <label for="inputGrantStudentSelect">
+        <span>学生</span>
+        <select id="inputGrantStudentSelect">
+          <option value="">选择学生</option>
+          {% for student_name, student in student_memos.items() %}
+          <option value="{{ student.id }}" data-student-name="{{ student.name }}">{{ student.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+    <div class="dictation-input-grant-panel__body">
+      <div class="dictation-input-grant-status">
+        <span id="inputGrantBadge" class="input-grant-badge is-empty">请选择学生</span>
+        <p id="inputGrantDetail">授权只影响单词任务，不影响听力、阅读或其他刷题。</p>
+      </div>
+      <div class="dictation-input-grant-actions">
+        <button type="button" data-input-grant-days="7" disabled>授权 7 天</button>
+        <button type="button" data-input-grant-days="30" disabled>授权 30 天</button>
+        <button type="button" id="inputGrantRevoke" class="is-danger" hidden disabled>撤销授权</button>
+      </div>
+    </div>
+    <p class="dictation-input-grant-note">原生输入的防自动纠错能力较弱，授权前请确认学生确有蓝牙键盘、iPad 实体键盘或电脑输入需求。</p>
+  </section>
+  {% endif %}
+
   <form id="taskForm" class="task-form" method="post" action="{{ url_for('tasks_page') }}">
     <div class="task-form-row">
       <div class="field">
@@ -1363,6 +1395,7 @@
 
 	    .task-workspace > .task-form,
 	    .task-workspace > .student-memo-panel,
+	    .task-workspace > .dictation-input-grant-panel,
 	    .task-workspace > .filter-panel,
 	    .task-workspace > .task-accordion,
 	    .task-workspace > .task-review-panel {
@@ -1519,6 +1552,129 @@
 	    .student-memo-panel textarea:disabled {
 	      cursor: not-allowed;
 	      opacity: .6;
+	    }
+
+	    .dictation-input-grant-panel {
+	      margin-top: 16px;
+	      overflow: hidden;
+	      border: 1px solid rgba(32, 117, 111, .24);
+	      border-radius: 8px;
+	      background: #fff;
+	    }
+
+	    .dictation-input-grant-panel__header {
+	      display: flex;
+	      align-items: flex-start;
+	      justify-content: space-between;
+	      gap: 16px;
+	      padding: 16px;
+	      border-bottom: 1px solid var(--task-border);
+	    }
+
+	    .dictation-input-grant-panel__header h3 {
+	      margin: 0;
+	    }
+
+	    .dictation-input-grant-panel__header p,
+	    .dictation-input-grant-status p,
+	    .dictation-input-grant-note {
+	      margin: 4px 0 0;
+	      color: var(--task-muted);
+	      font-size: 13px;
+	      line-height: 1.55;
+	    }
+
+	    .dictation-input-grant-panel__header label {
+	      display: flex;
+	      min-width: 220px;
+	      flex-direction: column;
+	      gap: 6px;
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 800;
+	    }
+
+	    .dictation-input-grant-panel__header select {
+	      min-height: 36px;
+	      padding: 6px 10px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-ink);
+	      font-size: 13px;
+	    }
+
+	    .dictation-input-grant-panel__body {
+	      display: flex;
+	      align-items: center;
+	      justify-content: space-between;
+	      gap: 16px;
+	      padding: 14px 16px;
+	      background: var(--task-surface-soft);
+	    }
+
+	    .dictation-input-grant-status {
+	      min-width: 0;
+	    }
+
+	    .input-grant-badge {
+	      display: inline-flex;
+	      align-items: center;
+	      min-height: 26px;
+	      padding: 4px 9px;
+	      border-radius: 999px;
+	      background: #e8f7f5;
+	      color: var(--task-primary-strong);
+	      font-size: 12px;
+	      font-weight: 800;
+	    }
+
+	    .input-grant-badge.is-strict,
+	    .input-grant-badge.is-empty {
+	      background: #eef2f7;
+	      color: #475569;
+	    }
+
+	    .input-grant-badge.is-error {
+	      background: #fff1f2;
+	      color: #be123c;
+	    }
+
+	    .dictation-input-grant-actions {
+	      display: flex;
+	      flex-wrap: wrap;
+	      justify-content: flex-end;
+	      gap: 8px;
+	    }
+
+	    .dictation-input-grant-actions button {
+	      min-height: 34px;
+	      padding: 7px 11px;
+	      border: 1px solid var(--task-primary);
+	      border-radius: 8px;
+	      background: var(--task-primary);
+	      color: #fff;
+	      font-size: 12px;
+	      font-weight: 800;
+	      cursor: pointer;
+	    }
+
+	    .dictation-input-grant-actions button.is-danger {
+	      border-color: #fecdd3;
+	      background: #fff1f2;
+	      color: #be123c;
+	    }
+
+	    .dictation-input-grant-actions button:disabled {
+	      cursor: not-allowed;
+	      opacity: .55;
+	    }
+
+	    .dictation-input-grant-note {
+	      margin: 0;
+	      padding: 10px 16px 12px;
+	      border-top: 1px solid rgba(32, 117, 111, .12);
+	      background: rgba(232, 247, 245, .42);
 	    }
 
 	    .student-group-memo {
@@ -2256,6 +2412,7 @@
 
 	      .task-workspace > .task-form,
 	      .task-workspace > .student-memo-panel,
+	      .task-workspace > .dictation-input-grant-panel,
 	      .task-workspace > .filter-panel,
 	      .task-workspace > .task-accordion,
 	      .task-workspace > .task-review-panel {
@@ -2268,8 +2425,23 @@
 	        align-items: stretch;
 	      }
 
-	      .student-memo-panel__header label {
+	      .student-memo-panel__header label,
+	      .dictation-input-grant-panel__header label {
 	        min-width: 0;
+	      }
+
+	      .dictation-input-grant-panel__header,
+	      .dictation-input-grant-panel__body {
+	        flex-direction: column;
+	        align-items: stretch;
+	      }
+
+	      .dictation-input-grant-actions {
+	        justify-content: stretch;
+	      }
+
+	      .dictation-input-grant-actions button {
+	        flex: 1 1 120px;
 	      }
 
 	      .student-memo-editor {
@@ -2344,6 +2516,191 @@
     const knownStudentOptions = {{ student_picker_options | tojson }};
     const studentMemoRecordsByName = {{ student_memos | tojson }};
 
+    function setupDictationInputGrant() {
+      const panel = document.getElementById('dictationInputGrantPanel');
+      const select = document.getElementById('inputGrantStudentSelect');
+      const badge = document.getElementById('inputGrantBadge');
+      const detail = document.getElementById('inputGrantDetail');
+      const grantButtons = Array.from(document.querySelectorAll('[data-input-grant-days]'));
+      const revokeButton = document.getElementById('inputGrantRevoke');
+      if (!panel || !select || !badge || !detail || !revokeButton) return;
+
+      let requestVersion = 0;
+      let activeGrantId = null;
+      let studentHasLogin = false;
+      let busy = false;
+
+      const currentStudentName = () => select.selectedOptions[0]?.dataset.studentName || '';
+      const formatExpiry = (value) => {
+        if (!value) return '未知';
+        const text = String(value);
+        const normalized = /(?:Z|[+-]\d{2}:\d{2})$/.test(text) ? text : `${text}Z`;
+        const parsed = new Date(normalized);
+        if (Number.isNaN(parsed.getTime())) return text;
+        return parsed.toLocaleString('zh-CN', {
+          year: 'numeric', month: '2-digit', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', hour12: false
+        });
+      };
+
+      function setBadge(text, state) {
+        badge.textContent = text;
+        badge.className = `input-grant-badge ${state || ''}`.trim();
+      }
+
+      function refreshButtons() {
+        const profileSelected = Boolean(select.value);
+        grantButtons.forEach(button => {
+          button.disabled = busy || !profileSelected || !studentHasLogin;
+        });
+        revokeButton.hidden = !activeGrantId;
+        revokeButton.disabled = busy || !activeGrantId;
+      }
+
+      function showError(message) {
+        activeGrantId = null;
+        studentHasLogin = false;
+        setBadge('加载失败', 'is-error');
+        detail.textContent = message || '无法读取授权状态，请稍后重试。';
+        refreshButtons();
+      }
+
+      async function parseResponse(response) {
+        let data = null;
+        try {
+          data = await response.json();
+        } catch (error) {
+          throw new Error(response.status === 401 ? 'login_required' : 'invalid_response');
+        }
+        if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
+        return data;
+      }
+
+      async function loadGrant() {
+        const profileId = Number(select.value || 0);
+        const version = ++requestVersion;
+        activeGrantId = null;
+        studentHasLogin = false;
+        if (!profileId) {
+          setBadge('请选择学生', 'is-empty');
+          detail.textContent = '授权只影响单词任务，不影响听力、阅读或其他刷题。';
+          refreshButtons();
+          return;
+        }
+        busy = true;
+        setBadge('正在读取', 'is-empty');
+        detail.textContent = `正在读取 ${currentStudentName()} 的单词任务输入授权…`;
+        refreshButtons();
+        try {
+          const response = await fetch(
+            `/api/dictation/staff/input-grants?student_profile_id=${encodeURIComponent(profileId)}`,
+            { credentials: 'same-origin' }
+          );
+          const data = await parseResponse(response);
+          if (version !== requestVersion) return;
+          studentHasLogin = Boolean(data.student_has_login);
+          const active = data.active_grant || null;
+          activeGrantId = active && active.id ? Number(active.id) : null;
+          if (!studentHasLogin) {
+            setBadge('未绑定账号', 'is-error');
+            detail.textContent = '该学生尚未绑定小程序登录账号，暂时不能授权。';
+          } else if (active) {
+            setBadge('实体键盘已授权', 'is-active');
+            detail.textContent = `有效至 ${formatExpiry(active.expires_at)}；学生可在单词任务中切换原生输入。`;
+          } else {
+            setBadge('严格模式', 'is-strict');
+            detail.textContent = '当前无有效授权，学生的英文拼写默认使用页面内键盘。';
+          }
+        } catch (error) {
+          if (version !== requestVersion) return;
+          const message = error.message === 'login_required'
+            ? '登录已失效，请刷新页面后重新登录。'
+            : '无法读取授权状态，请稍后重试。';
+          showError(message);
+        } finally {
+          if (version === requestVersion) {
+            busy = false;
+            refreshButtons();
+          }
+        }
+      }
+
+      async function grantForDays(days) {
+        const profileId = Number(select.value || 0);
+        if (!profileId || !studentHasLogin || busy) return;
+        if (!window.confirm(`确定为 ${currentStudentName()} 开放 ${days} 天的单词任务实体键盘模式？`)) return;
+        busy = true;
+        refreshButtons();
+        detail.textContent = '正在保存授权…';
+        try {
+          const response = await fetch('/api/dictation/staff/input-grants', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              student_profile_id: profileId,
+              duration_days: days,
+              reason: '助教后台授权单词任务实体键盘模式'
+            })
+          });
+          await parseResponse(response);
+          busy = false;
+          await loadGrant();
+        } catch (error) {
+          busy = false;
+          showError(error.message === 'student_has_no_login'
+            ? '学生尚未绑定登录账号。'
+            : '授权保存失败，请重试。');
+        }
+      }
+
+      async function revokeGrant() {
+        const grantId = activeGrantId;
+        if (!grantId || busy) return;
+        if (!window.confirm(`确定撤销 ${currentStudentName()} 的实体键盘授权？`)) return;
+        busy = true;
+        refreshButtons();
+        detail.textContent = '正在撤销授权…';
+        try {
+          const response = await fetch(`/api/dictation/staff/input-grants/${grantId}/revoke`, {
+            method: 'POST',
+            credentials: 'same-origin'
+          });
+          await parseResponse(response);
+          busy = false;
+          await loadGrant();
+        } catch (error) {
+          busy = false;
+          showError('撤销失败，请重试。');
+        }
+      }
+
+      select.addEventListener('change', loadGrant);
+      grantButtons.forEach(button => {
+        button.addEventListener('click', () => grantForDays(Number(button.dataset.inputGrantDays)));
+      });
+      revokeButton.addEventListener('click', revokeGrant);
+
+      window.setDictationGrantStudentByName = function (name) {
+        const normalized = String(name || '').trim();
+        const option = Array.from(select.options).find(
+          item => String(item.dataset.studentName || '').trim() === normalized
+        );
+        if (!option || select.value === option.value) return;
+        select.value = option.value;
+        loadGrant();
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      const initialName = params.get('student_name') || knownStudentOptions[0]?.name || '';
+      const initialOption = Array.from(select.options).find(
+        item => String(item.dataset.studentName || '').trim() === String(initialName).trim()
+      );
+      if (initialOption) select.value = initialOption.value;
+      loadGrant();
+    }
+    setupDictationInputGrant();
+
     function setupStudentMemo() {
       const panel = document.getElementById('studentMemoPanel');
       const select = document.getElementById('memoStudentSelect');
@@ -2408,6 +2765,9 @@
 
       select.addEventListener('change', () => {
         renderMemo(select.value);
+        if (window.setDictationGrantStudentByName) {
+          window.setDictationGrantStudentByName(select.value);
+        }
       });
 
       input.addEventListener('input', () => {
@@ -2486,6 +2846,9 @@
         if (window.setStudentMemoByName) {
           window.setStudentMemoByName(name);
         }
+        if (window.setDictationGrantStudentByName) {
+          window.setDictationGrantStudentByName(name);
+        }
       };
       const renderSuggestions = () => {
         const query = normalize(input.value);
@@ -2532,6 +2895,9 @@
         const exact = studentMemoRecordsByName[input.value.trim()];
         if (exact && window.setStudentMemoByName) {
           window.setStudentMemoByName(exact.name, { keepStatus: true });
+        }
+        if (exact && window.setDictationGrantStudentByName) {
+          window.setDictationGrantStudentByName(exact.name);
         }
       });
       input.addEventListener('focus', renderSuggestions);
