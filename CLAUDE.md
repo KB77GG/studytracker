@@ -3,6 +3,12 @@
 > 本文件是“防止代码变屎山”的硬约定。**任何人或 AI agent 在本仓库写代码前，先读这里。**
 > 详细架构地图见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
 
+## 跨机器进度同步（多台电脑开发）
+
+- **每次会话开工时，先读 [docs/WORKLOG.md](docs/WORKLOG.md)**——最近干了什么、生产现场状态、下一步待办都在那里（本地记忆不跨机器，git 才是同步载体）。
+- 有实质进展的会话**结束时向 WORKLOG.md 顶部追加一条**并随代码一起提交；git 之外的状态（生产库操作、服务器手动步骤）必须记进去。
+- 题库导入类操作照 [docs/IMPORT_PIPELINES.md](docs/IMPORT_PIPELINES.md) 手册执行。
+
 ## 项目是什么
 
 托福/雅思学习追踪系统，两端：
