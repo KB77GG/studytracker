@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ exam.name }} · Writing</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
+<style>
+  .exam-writing { max-width: 1080px; margin: 0 auto; padding: 20px 20px 96px; display: grid; gap: 20px; }
+  .exam-writing__intro { color: #475569; font-size: 14px; margin: 0; }
+  .writing-task { background: #fff; border: 1px solid #e3e8ed; border-radius: 12px; overflow: hidden; }
+  .writing-task__head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding: 14px 18px; background: #f6f8fa; border-bottom: 1px solid #e3e8ed;
+  }
+  .writing-task__head h2 { margin: 0; font-size: 18px; font-weight: 800; }
+  .writing-task__min { color: #64748b; font-size: 13px; }
+  .writing-task__body { padding: 16px 18px; display: grid; gap: 14px; }
+  .writing-task__prompt { margin: 0; line-height: 1.6; font-size: 15px; color: #1f2937; white-space: pre-wrap; }
+  .writing-task__img { max-width: 100%; border: 1px solid #e3e8ed; border-radius: 8px; align-self: start; }
+  .writing-task__editor { display: grid; gap: 6px; }
+  .writing-task__editor textarea {
+    width: 100%; min-height: 260px; resize: vertical; padding: 12px 14px;
+    border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; line-height: 1.7;
+  }
+  .writing-task__editor textarea:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,.15); }
+  .writing-task__count { justify-self: end; font-size: 13px; color: #64748b; font-weight: 600; }
+  .writing-task__count.is-under { color: #d97706; }
+  .writing-task__count.is-ok { color: #16a34a; }
+  .exam-finish-btn {
+    position: fixed; right: 24px; bottom: 18px; z-index: 50;
+    background: #111827; color: #fff; border: none; border-radius: 999px;
+    padding: 12px 26px; font-size: 15px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,.2);
+  }
+  .exam-finish-btn:hover { background: #1f2937; }
+  .exam-finish-btn:disabled { background: #6b7280; cursor: not-allowed; }
+</style>
+</head>
+<body class="exam-mode">
+<header class="exam-mode-shell">
+  <div class="exam-mode-shell__left">
+    <span class="exam-mode-shell__brand">📝</span>
+    <span class="exam-mode-shell__title">{{ exam_context.exam_name }}</span>
+    <span class="exam-mode-shell__sub">{{ exam_context.section_label }} · 考号：{{ exam_context.student_name }}</span>
+  </div>
+  <div class="exam-mode-shell__right">
+    <span class="exam-mode-shell__saved" id="examSavedIndicator">Saved</span>
+    <span class="exam-mode-shell__timer" id="examCountdown">--:--</span>
+    <a class="exam-mode-shell__exit" href="{{ exam_context.exit_url }}">Exit</a>
+  </div>
+</header>
+
+<main class="exam-writing">
+  <p class="exam-writing__intro">两篇作文均由老师人工评分。系统每 30 秒自动保存草稿；到时会自动提交。</p>
+
+  {% for task in test.tasks %}
+  <section class="writing-task">
+    <div class="writing-task__head">
+      <h2>Task {{ task.task }}<span style="font-weight:500; color:#64748b; font-size:14px;"> · {{ task.kind_name }}</span></h2>
+      <span class="writing-task__min">建议 ≥ {{ task.min_words }} 词</span>
+    </div>
+    <div class="writing-task__body">
+      <p class="writing-task__prompt">{{ task.prompt }}</p>
+      {% if task.image %}
+      <img class="writing-task__img" src="{{ url_for('static', filename='writing_tests/' + task.image) }}" alt="Task {{ task.task }} 图表">
+      {% endif %}
+      <div class="writing-task__editor">
+        <textarea
+          id="essayTask{{ task.task }}"
+          data-task="{{ task.task }}"
+          data-min="{{ task.min_words }}"
+          placeholder="在此作答…">{% if task.task == 1 %}{{ essay_task1 }}{% else %}{{ essay_task2 }}{% endif %}</textarea>
+        <span class="writing-task__count" id="countTask{{ task.task }}" data-min="{{ task.min_words }}">0 词</span>
+      </div>
+    </div>
+  </section>
+  {% endfor %}
+</main>
+
+<button type="button" class="exam-finish-btn" id="examFinishBtn">Submit Writing</button>
+
+<script>
+window.EXAM_CONTEXT = {{ exam_context|tojson }};
+const DRAFT_URL = {{ draft_url|tojson }};
+(function () {
+  const ctx = window.EXAM_CONTEXT;
+  const deadlineMs = ctx.deadline_at ? Date.parse(ctx.deadline_at) : 0;
+  const startedAt = Date.now();
+  const countdown = document.getElementById('examCountdown');
+  const saved = document.getElementById('examSavedIndicator');
+  const ta1 = document.getElementById('essayTask1');
+  const ta2 = document.getElementById('essayTask2');
+  let submitted = false;
+  let dirty = false;
+
+  function wordCount(text) {
+    const m = (text || '').trim().match(/\S+/g);
+    return m ? m.length : 0;
+  }
+
+  function updateCount(ta) {
+    const n = wordCount(ta.value);
+    const el = document.getElementById('countTask' + ta.dataset.task);
+    const min = parseInt(el.dataset.min || '0', 10);
+    el.textContent = n + ' 词';
+    el.classList.toggle('is-ok', n >= min);
+    el.classList.toggle('is-under', n < min);
+  }
+
+  function markDirty() { dirty = true; }
+
+  [ta1, ta2].forEach((ta) => {
+    updateCount(ta);
+    ta.addEventListener('input', () => { updateCount(ta); markDirty(); });
+  });
+
+  function payload() {
+    return { essay_task1: ta1.value, essay_task2: ta2.value };
+  }
+
+  async function saveDraft() {
+    if (submitted || !dirty) return;
+    dirty = false;
+    saved.textContent = 'Saving…';
+    try {
+      const resp = await fetch(DRAFT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(payload()),
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.ok) throw new Error(data.error || 'save_failed');
+      saved.textContent = 'Saved';
+    } catch (err) {
+      dirty = true;
+      saved.textContent = '保存失败';
+    }
+  }
+
+  function fmt(ms) {
+    const total = Math.max(0, Math.floor(ms / 1000));
+    const m = Math.floor(total / 60);
+    const s = total % 60;
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+
+  function tick() {
+    if (!deadlineMs) { countdown.textContent = '--:--'; return; }
+    const remaining = deadlineMs - Date.now();
+    countdown.textContent = fmt(remaining);
+    if (remaining < 60000) countdown.classList.add('is-warning');
+    if (remaining <= 0 && !submitted) {
+      submitted = true;
+      forceSubmit();
+    }
+  }
+
+  async function forceSubmit() {
+    const btn = document.getElementById('examFinishBtn');
+    btn.disabled = true;
+    btn.textContent = '提交中…';
+    try {
+      const resp = await fetch(ctx.submit_url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(Object.assign(payload(), {
+          duration_seconds: Math.max(0, Math.round((Date.now() - startedAt) / 1000)),
+        })),
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.ok) throw new Error(data.error || 'submit_failed');
+      window.location.href = data.next_url || ctx.next_url;
+    } catch (err) {
+      submitted = false;
+      btn.disabled = false;
+      btn.textContent = 'Submit Writing';
+      alert('提交失败：' + (err.message || err) + '\n请检查网络后重试。');
+    }
+  }
+
+  document.getElementById('examFinishBtn').addEventListener('click', () => {
+    if (submitted) return;
+    if (!confirm('确定提交写作？提交后无法修改。')) return;
+    submitted = true;
+    forceSubmit();
+  });
+
+  setInterval(saveDraft, 30000);
+  setInterval(tick, 1000);
+  tick();
+})();
+</script>
+</body>
+</html>

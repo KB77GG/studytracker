@@ -108,7 +108,7 @@ class PracticeTableNormalizerTests(unittest.TestCase):
                         for cell in row:
                             self.assertIsInstance(cell["text"], str, path.name)
                             self.assertNotRegex(cell["text"], r"^\[\s*\d+\s*,\s*\d+\s*\]$")
-        self.assertEqual(table_count, 193)
+        self.assertEqual(table_count, 196)
 
 
 if __name__ == "__main__":

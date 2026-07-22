@@ -44,7 +44,18 @@
         </select>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="form-group">
+        <label>写作题目（剑桥，可选）</label>
+        <select name="writing_test_id" class="form-control">
+          <option value="">-- 不考写作（两科模考）--</option>
+          {% for opt in writing_options %}
+          <option value="{{ opt.id }}">{{ opt.label }}{% if opt.task_count %} · {{ opt.task_count }}题{% endif %}</option>
+          {% endfor %}
+        </select>
+        <small style="color: #888;">不选＝仅听力+阅读；选了会在阅读后追加 Writing 科。</small>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
         <div class="form-group">
           <label>听力时长（分钟）</label>
           <input type="number" name="listening_minutes" class="form-control" value="30" min="1" max="180">
@@ -52,6 +63,10 @@
         <div class="form-group">
           <label>阅读时长（分钟）</label>
           <input type="number" name="reading_minutes" class="form-control" value="60" min="1" max="180">
+        </div>
+        <div class="form-group">
+          <label>写作时长（分钟）</label>
+          <input type="number" name="writing_minutes" class="form-control" value="60" min="1" max="180">
         </div>
       </div>
 

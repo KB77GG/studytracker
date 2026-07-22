@@ -71,7 +71,49 @@
         {% endif %}
       </div>
     </section>
+
+    {% if has_writing %}
+    {% set wt = writing_test.tasks if writing_test else [] %}
+    <section class="exam-card">
+      <header class="exam-card__head">
+        <h2>Writing</h2>
+        <span class="exam-card__status {% if session.writing_submitted_at %}is-ok{% endif %}">
+          {% if session.writing_submitted_at %}Submitted{% else %}未提交{% endif %}
+        </span>
+      </header>
+      <div class="exam-card__body">
+        {% if session.writing_submitted_at %}
+          <p>用时：{{ (session.writing_duration_seconds or 0) // 60 }} 分 {{ (session.writing_duration_seconds or 0) % 60 }} 秒{% if session.writing_auto_submitted %}（到时自动提交）{% endif %}</p>
+          <p style="color:var(--exam-muted); font-weight:600;">写作不自动判分，等待老师人工评分。</p>
+
+          <div class="exam-essay">
+            <h3 style="margin:8px 0;">Task 1（{{ session.writing_task1_words or 0 }} 词）</h3>
+            {% if wt and wt[0].prompt %}<p class="exam-essay__prompt">{{ wt[0].prompt }}</p>{% endif %}
+            <pre class="exam-essay__text">{{ session.writing_essay_task1 or '（未作答）' }}</pre>
+          </div>
+
+          <div class="exam-essay">
+            <h3 style="margin:8px 0;">Task 2（{{ session.writing_task2_words or 0 }} 词）</h3>
+            {% if wt and wt[1].prompt %}<p class="exam-essay__prompt">{{ wt[1].prompt }}</p>{% endif %}
+            <pre class="exam-essay__text">{{ session.writing_essay_task2 or '（未作答）' }}</pre>
+          </div>
+        {% else %}
+          <p>尚未提交。</p>
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
   </main>
+
+  <style>
+    .exam-essay { margin-top: 12px; }
+    .exam-essay__prompt { color: var(--exam-muted); font-size: 13px; margin: 0 0 6px; }
+    .exam-essay__text {
+      white-space: pre-wrap; word-break: break-word; font: inherit;
+      background: #f6f8fa; border: 1px solid #e3e8ed; border-radius: 8px;
+      padding: 12px 14px; margin: 0; line-height: 1.6;
+    }
+  </style>
 
   <footer class="exam-bottombar">
     <span class="exam-bottombar__brand">睿然国际教育</span>

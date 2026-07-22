@@ -74,16 +74,39 @@
       </div>
     </section>
 
-    {# Writing 占位 #}
+    {# Writing #}
+    {% if has_writing %}
+    <section class="exam-card" id="cardWriting">
+      <header class="exam-card__head">
+        <h2>Writing</h2>
+        <span class="exam-card__status" id="writingStatus">Not completed</span>
+      </header>
+      <div class="exam-card__body">
+        <p class="exam-card__timing">Timing: {{ exam.writing_minutes }} minutes</p>
+        <details class="exam-collapse">
+          <summary>Test information</summary>
+          <div class="exam-collapse__body">
+            <div class="exam-pretest-banner" style="text-align:center;">
+              <p style="font-size:22px; font-weight:800; margin: 12px 0;">The Writing test has 2 tasks.</p>
+              <p>Task 1 (≥150 词) and Task 2 (≥250 词)，作文由老师人工评分。</p>
+            </div>
+          </div>
+        </details>
+        <a href="{{ writing_url }}" class="exam-btn-dark exam-btn-arrow" id="btnStartWriting" data-disabled="true" aria-disabled="true">→ Start IELTS Online Writing</a>
+        <p class="exam-card__done-summary" id="writingSummary" hidden></p>
+      </div>
+    </section>
+    {% else %}
     <section class="exam-card exam-card--locked">
       <header class="exam-card__head">
         <h2>Writing</h2>
-        <span class="exam-card__status">即将开放</span>
+        <span class="exam-card__status">本次不考</span>
       </header>
       <div class="exam-card__body">
-        <p class="exam-card__timing">Timing: 60 minutes（写作机经收集中，暂未上线）</p>
+        <p class="exam-card__timing">本场为听力+阅读两科模考。</p>
       </div>
     </section>
+    {% endif %}
 
     <div class="exam-process__footer">
       <a href="{{ result_url }}" class="exam-btn-outline" id="btnViewResult" hidden>查看综合成绩</a>
@@ -97,8 +120,10 @@
 
 <script>
 const SESSION = {{ session_payload|tojson }};
+const HAS_WRITING = {{ has_writing|tojson }};
 const LISTENING_URL = {{ listening_url|tojson }};
 const READING_URL = {{ reading_url|tojson }};
+const WRITING_URL = {{ writing_url|tojson }};
 const RESULT_URL = {{ result_url|tojson }};
 
 function fmtScore(section) {
@@ -164,8 +189,34 @@ function applyState() {
     startReading.style.opacity = '';
   }
 
-  // Result link
-  if (SESSION.listening.submitted_at && SESSION.reading.submitted_at) {
+  // Writing section — gated by reading submitted (only when configured)
+  if (HAS_WRITING) {
+    const startWriting = document.getElementById('btnStartWriting');
+    if (SESSION.writing.submitted_at) {
+      const st = document.getElementById('writingStatus');
+      st.textContent = 'Completed';
+      st.classList.add('is-ok');
+      startWriting.setAttribute('data-disabled', 'true');
+      startWriting.style.pointerEvents = 'none';
+      startWriting.style.opacity = '0.5';
+      startWriting.textContent = '已完成';
+      const summary = document.getElementById('writingSummary');
+      const w1 = SESSION.writing.task1_words != null ? SESSION.writing.task1_words : 0;
+      const w2 = SESSION.writing.task2_words != null ? SESSION.writing.task2_words : 0;
+      const auto = SESSION.writing.auto_submitted ? '（到时自动提交）' : '';
+      summary.textContent = `已提交：Task1 ${w1} 词 / Task2 ${w2} 词，待老师评分${auto}`;
+      summary.hidden = false;
+    } else if (SESSION.reading.submitted_at) {
+      startWriting.removeAttribute('data-disabled');
+      startWriting.style.pointerEvents = '';
+      startWriting.style.opacity = '';
+    }
+  }
+
+  // Result link：两科考完（无写作）或三科全部完成
+  const readingDone = SESSION.listening.submitted_at && SESSION.reading.submitted_at;
+  const writingDone = !HAS_WRITING || SESSION.writing.submitted_at;
+  if (readingDone && writingDone) {
     document.getElementById('btnViewResult').hidden = false;
   }
 

@@ -1675,8 +1675,10 @@ class MockExam(db.Model):
     name = db.Column(db.String(120), nullable=False)
     listening_test_id = db.Column(db.String(120), nullable=False)
     reading_test_id = db.Column(db.String(120), nullable=False)
+    writing_test_id = db.Column(db.String(120))  # nullable: 未配写作卷=两科模考
     listening_minutes = db.Column(db.Integer, default=30, nullable=False)
     reading_minutes = db.Column(db.Integer, default=60, nullable=False)
+    writing_minutes = db.Column(db.Integer, default=60, nullable=False)
     pincode = db.Column(db.String(16), nullable=False, index=True)
     is_active = db.Column(db.Boolean, default=True, nullable=False, index=True)
     created_by = db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -1699,6 +1701,7 @@ class MockExamSession(db.Model):
     SECTION_INTRO = "intro"
     SECTION_LISTENING = "listening"
     SECTION_READING = "reading"
+    SECTION_WRITING = "writing"
     SECTION_FINISHED = "finished"
 
     STATUS_IN_PROGRESS = "in_progress"
@@ -1739,6 +1742,17 @@ class MockExamSession(db.Model):
     reading_results_json = db.Column(db.Text)
     reading_wrong_numbers_json = db.Column(db.Text)
     reading_auto_submitted = db.Column(db.Boolean, default=False, nullable=False)
+
+    # 写作：不自动判分，只保存原文 + 词数，供老师人工评分
+    writing_started_at = db.Column(db.DateTime)
+    writing_deadline_at = db.Column(db.DateTime)
+    writing_submitted_at = db.Column(db.DateTime)
+    writing_essay_task1 = db.Column(db.Text)
+    writing_essay_task2 = db.Column(db.Text)
+    writing_task1_words = db.Column(db.Integer)
+    writing_task2_words = db.Column(db.Integer)
+    writing_duration_seconds = db.Column(db.Integer, default=0)
+    writing_auto_submitted = db.Column(db.Boolean, default=False, nullable=False)
 
     exam = db.relationship("MockExam", backref=db.backref("sessions", lazy="dynamic"))
 

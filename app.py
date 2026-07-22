@@ -58,6 +58,7 @@ from services.ielts_practice_scoring import (
     grade_listening_test_answers as _grade_listening_test_answers_shared,
     grade_reading_test_answers as _grade_reading_test_answers_shared,
 )
+from services import mock_exam_writing as _mock_writing
 from practice_tables import normalize_practice_tables
 from toefl_practice import catalog_summary as _toefl_catalog_summary
 from toefl_practice import toefl_bp
@@ -145,6 +146,10 @@ def _reading_test_root() -> Path:
 
 def _reading_jijing_root() -> Path:
     return Path(app.static_folder) / "reading_jijing"
+
+
+def _writing_test_root() -> Path:
+    return Path(app.static_folder) / "writing_tests"
 
 
 def _reading_data_root() -> Path:
@@ -1471,6 +1476,51 @@ def _reading_jijing_catalog() -> list[dict]:
             "test": test_no,
             "passage_count": len(payload.get("passages") or []),
             "question_count": _reading_test_question_count(payload),
+        })
+    return [
+        {"book": book_no, "tests": sorted(tests, key=lambda row: row["test"])}
+        for book_no, tests in sorted(tests_by_book.items())
+    ]
+
+
+def _load_writing_test_payload(test_id: str) -> tuple[dict | None, Path | None, str]:
+    safe_id = secure_filename(test_id)
+    test_path = _writing_test_root() / f"{safe_id}.json"
+    if not test_path.exists():
+        return None, None, safe_id
+    try:
+        payload = json.loads(test_path.read_text(encoding="utf-8"))
+        return payload, test_path, safe_id
+    except Exception:
+        return None, test_path, safe_id
+
+
+def _writing_test_catalog() -> list[dict]:
+    catalog_path = _writing_test_root() / "catalog.json"
+    if catalog_path.exists():
+        try:
+            catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+            return catalog.get("books") or []
+        except Exception:
+            pass
+    tests_by_book = defaultdict(list)
+    for path in sorted(_writing_test_root().glob("ielts*_test*_writing.json")):
+        match = re.match(r"^ielts(?P<book>\d+)_test(?P<test>\d+)_writing\.json$", path.name)
+        if not match:
+            continue
+        book_no = int(match.group("book"))
+        test_no = int(match.group("test"))
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        tasks = payload.get("tasks") or []
+        tests_by_book[book_no].append({
+            "id": path.stem,
+            "book": book_no,
+            "test": test_no,
+            "task_count": len(tasks),
+            "has_image": any(task.get("image") for task in tasks),
         })
     return [
         {"book": book_no, "tests": sorted(tests, key=lambda row: row["test"])}
@@ -7694,6 +7744,10 @@ def _mock_exam_reading_options() -> list[dict]:
     return options
 
 
+def _mock_exam_writing_options() -> list[dict]:
+    return _mock_writing.build_writing_options(_writing_test_catalog())
+
+
 def _generate_mock_exam_pincode() -> str:
     raw = secrets.token_urlsafe(6).upper()
     cleaned = re.sub(r"[^A-Z0-9]", "", raw)
@@ -7706,8 +7760,11 @@ def _serialize_mock_exam(exam: MockExam) -> dict:
         "name": exam.name,
         "listening_test_id": exam.listening_test_id,
         "reading_test_id": exam.reading_test_id,
+        "writing_test_id": exam.writing_test_id,
         "listening_minutes": exam.listening_minutes,
         "reading_minutes": exam.reading_minutes,
+        "writing_minutes": exam.writing_minutes,
+        "has_writing": bool(exam.writing_test_id),
         "pincode": exam.pincode,
         "is_active": bool(exam.is_active),
         "created_at": exam.created_at.strftime("%Y-%m-%d %H:%M") if exam.created_at else "",
@@ -7742,6 +7799,7 @@ def _serialize_mock_exam_session(sess: MockExamSession) -> dict:
             "ielts_score": sess.reading_ielts_score,
             "auto_submitted": bool(sess.reading_auto_submitted),
         },
+        "writing": _mock_writing.serialize_writing_session(sess),
     }
 
 
@@ -7781,6 +7839,7 @@ def admin_mock_exams_create():
         name = (request.form.get("name") or "").strip()
         listening_test_id = (request.form.get("listening_test_id") or "").strip()
         reading_test_id = (request.form.get("reading_test_id") or "").strip()
+        writing_test_id = (request.form.get("writing_test_id") or "").strip()
         pincode = (request.form.get("pincode") or "").strip().upper() or _generate_mock_exam_pincode()
         try:
             listening_minutes = max(1, int(request.form.get("listening_minutes") or 30))
@@ -7790,6 +7849,10 @@ def admin_mock_exams_create():
             reading_minutes = max(1, int(request.form.get("reading_minutes") or 60))
         except (TypeError, ValueError):
             reading_minutes = 60
+        try:
+            writing_minutes = max(1, int(request.form.get("writing_minutes") or 60))
+        except (TypeError, ValueError):
+            writing_minutes = 60
 
         if not name or not listening_test_id or not reading_test_id:
             flash("请填写名称、听力题目、阅读题目。")
@@ -7797,13 +7860,17 @@ def admin_mock_exams_create():
             flash(f"听力题目 {listening_test_id} 不存在。")
         elif _load_reading_test_payload(reading_test_id)[0] is None:
             flash(f"阅读题目 {reading_test_id} 不存在。")
+        elif writing_test_id and _load_writing_test_payload(writing_test_id)[0] is None:
+            flash(f"写作题目 {writing_test_id} 不存在。")
         else:
             exam = MockExam(
                 name=name,
                 listening_test_id=listening_test_id,
                 reading_test_id=reading_test_id,
+                writing_test_id=writing_test_id or None,
                 listening_minutes=listening_minutes,
                 reading_minutes=reading_minutes,
+                writing_minutes=writing_minutes,
                 pincode=pincode,
                 is_active=True,
                 created_by=current_user.id,
@@ -7818,6 +7885,7 @@ def admin_mock_exams_create():
         exam=None,
         listening_options=_mock_exam_listening_options(),
         reading_options=_mock_exam_reading_options(),
+        writing_options=_mock_exam_writing_options(),
         suggested_pincode=_generate_mock_exam_pincode(),
     )
 
@@ -7903,8 +7971,10 @@ def mock_exam_process(exam_id, token):
         exam=exam,
         session=sess,
         session_payload=_serialize_mock_exam_session(sess),
+        has_writing=bool(exam.writing_test_id),
         listening_url=url_for("mock_exam_listening", exam_id=exam.id, token=token),
         reading_url=url_for("mock_exam_reading", exam_id=exam.id, token=token),
+        writing_url=url_for("mock_exam_writing", exam_id=exam.id, token=token),
         result_url=url_for("mock_exam_result", exam_id=exam.id, token=token),
     )
 
@@ -7916,6 +7986,11 @@ def _exam_section_context(exam, sess, section):
         submit_path = url_for("api_mock_exam_submit_listening", exam_id=exam.id, token=sess.access_token)
         section_label = "Listening"
         minutes = exam.listening_minutes
+    elif section == MockExamSession.SECTION_WRITING:
+        deadline = sess.writing_deadline_at
+        submit_path = url_for("api_mock_exam_submit_writing", exam_id=exam.id, token=sess.access_token)
+        section_label = "Writing"
+        minutes = exam.writing_minutes
     else:
         deadline = sess.reading_deadline_at
         submit_path = url_for("api_mock_exam_submit_reading", exam_id=exam.id, token=sess.access_token)
@@ -7993,6 +8068,41 @@ def mock_exam_reading(exam_id, token):
     )
 
 
+@app.route("/exam/<int:exam_id>/session/<token>/writing")
+def mock_exam_writing(exam_id, token):
+    exam, sess, err = _get_mock_exam_session_or_404(exam_id, token)
+    if err:
+        return f"模考会话不存在：{err[0]}", err[1]
+    if not exam.writing_test_id:
+        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+    if not sess.reading_submitted_at:
+        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+    if sess.writing_submitted_at or sess.status == MockExamSession.STATUS_SUBMITTED:
+        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+
+    test, _path, _safe = _load_writing_test_payload(exam.writing_test_id)
+    if not test:
+        return f"写作题目 {exam.writing_test_id} 不存在", 404
+
+    now = datetime.utcnow()
+    if not sess.writing_started_at:
+        sess.writing_started_at = now
+        sess.writing_deadline_at = now + timedelta(minutes=exam.writing_minutes)
+        sess.current_section = MockExamSession.SECTION_WRITING
+        db.session.commit()
+
+    return render_template(
+        "exam/writing.html",
+        test=test,
+        exam=exam,
+        session=sess,
+        exam_context=_exam_section_context(exam, sess, MockExamSession.SECTION_WRITING),
+        draft_url=url_for("api_mock_exam_save_writing_draft", exam_id=exam.id, token=token),
+        essay_task1=sess.writing_essay_task1 or "",
+        essay_task2=sess.writing_essay_task2 or "",
+    )
+
+
 def _persist_mock_exam_section_grade(
     sess: MockExamSession,
     section: str,
@@ -8000,6 +8110,7 @@ def _persist_mock_exam_section_grade(
     answers: dict,
     duration_seconds: int,
     auto_submitted: bool,
+    has_writing: bool = False,
 ):
     now = datetime.utcnow()
     if section == MockExamSession.SECTION_LISTENING:
@@ -8025,9 +8136,13 @@ def _persist_mock_exam_section_grade(
         sess.reading_results_json = json.dumps(grade.get("results") or [], ensure_ascii=False)
         sess.reading_wrong_numbers_json = json.dumps(grade.get("wrong_numbers") or [], ensure_ascii=False)
         sess.reading_auto_submitted = bool(auto_submitted)
-        sess.current_section = MockExamSession.SECTION_FINISHED
-        sess.status = MockExamSession.STATUS_SUBMITTED
-        sess.finished_at = now
+        if has_writing:
+            # 还有写作科：留在进行中，交给写作科收尾
+            sess.current_section = MockExamSession.SECTION_WRITING
+        else:
+            sess.current_section = MockExamSession.SECTION_FINISHED
+            sess.status = MockExamSession.STATUS_SUBMITTED
+            sess.finished_at = now
 
 
 @app.post("/api/exam/<int:exam_id>/session/<token>/submit-listening")
@@ -8103,6 +8218,7 @@ def api_mock_exam_submit_reading(exam_id, token):
         answers,
         duration_seconds,
         auto_submitted,
+        has_writing=bool(exam.writing_test_id),
     )
     db.session.commit()
 
@@ -8110,6 +8226,59 @@ def api_mock_exam_submit_reading(exam_id, token):
         "ok": True,
         "result": grade,
         "next_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+        "auto_submitted": auto_submitted,
+    })
+
+
+@app.post("/api/exam/<int:exam_id>/session/<token>/save-writing-draft")
+def api_mock_exam_save_writing_draft(exam_id, token):
+    exam, sess, err = _get_mock_exam_session_or_404(exam_id, token)
+    if err:
+        return jsonify({"ok": False, "error": err[0]}), err[1]
+    if sess.writing_submitted_at:
+        return jsonify({"ok": True, "already_submitted": True})
+
+    data = request.get_json(silent=True) or {}
+    counts = _mock_writing.apply_writing_draft(sess, data.get("essay_task1"), data.get("essay_task2"))
+    db.session.commit()
+    return jsonify({"ok": True, **counts})
+
+
+@app.post("/api/exam/<int:exam_id>/session/<token>/submit-writing")
+def api_mock_exam_submit_writing(exam_id, token):
+    exam, sess, err = _get_mock_exam_session_or_404(exam_id, token)
+    if err:
+        return jsonify({"ok": False, "error": err[0]}), err[1]
+    if not exam.writing_test_id:
+        return jsonify({"ok": False, "error": "writing_not_configured"}), 400
+    if sess.writing_submitted_at:
+        return jsonify({"ok": True, "already_submitted": True})
+
+    data = request.get_json(silent=True) or {}
+    try:
+        duration_seconds = max(0, int(data.get("duration_seconds") or 0))
+    except (TypeError, ValueError):
+        duration_seconds = 0
+
+    now = datetime.utcnow()
+    auto_submitted = _mock_writing.is_auto_submitted(sess.writing_deadline_at, now)
+    counts = _mock_writing.finalize_writing_submission(
+        sess,
+        data.get("essay_task1"),
+        data.get("essay_task2"),
+        duration_seconds,
+        auto_submitted,
+        now=now,
+    )
+    sess.current_section = MockExamSession.SECTION_FINISHED
+    sess.status = MockExamSession.STATUS_SUBMITTED
+    sess.finished_at = now
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "result": counts,
+        "next_url": url_for("mock_exam_result", exam_id=exam.id, token=sess.access_token),
         "auto_submitted": auto_submitted,
     })
 
@@ -8132,6 +8301,10 @@ def mock_exam_result(exam_id, token):
         except Exception:
             return []
 
+    writing_test = None
+    if exam.writing_test_id:
+        writing_test, _wpath, _wsafe = _load_writing_test_payload(exam.writing_test_id)
+
     return render_template(
         "exam/result.html",
         exam=exam,
@@ -8139,6 +8312,8 @@ def mock_exam_result(exam_id, token):
         listening_wrong=_wrong(sess.listening_wrong_numbers_json),
         reading_wrong=_wrong(sess.reading_wrong_numbers_json),
         overall_band=overall_band,
+        has_writing=bool(exam.writing_test_id),
+        writing_test=writing_test,
     )
 
 
