@@ -1,3 +1,65 @@
+# 强化拼写 Sage Path 视觉 QA
+
+日期：2026-07-23
+目标页面：`pages/student/dictation/spell/index`
+视觉来源：`/Users/zhouxin/Downloads/已生成图像 1 (1).png`
+
+## 对照证据
+
+- 同屏对照（左侧来源、右侧生产实现）：
+  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/source-vs-implementation.png`
+- 390×844 初始空答案：
+  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-390x844-blank.jpeg`
+- 390×844 手动点击 `c`、`o` 后：
+  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-390x844-typed-co.jpeg`
+- 320×568：
+  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-320x568.jpeg`
+- 768×1024：
+  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-768x1024.jpeg`
+- iPad 768×1024、开发者工具 75% 显示比例，手动输入 `c`、`o` 后：
+  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-ipad-75-typed-co-outline-no-caret.png`
+- 方格输入区同屏聚焦对照（左侧来源、右侧修复后实现）：
+  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/cursor-focus-source-vs-final.png`
+
+来源图像为 853×1844 px；iPad 实现由微信开发者工具按 768×1024 CSS 视口、DPR 2、75% 显示比例渲染，工具窗口截图为 1248×768 px。聚焦对照把来源裁区 763×340 px 与实现裁区 380×170 px 等比容纳到各自 720×320 px 画布，避免仅因密度和工具缩放差异产生误判。
+
+## 检查结果
+
+- 视觉层级：Sage Path 品牌头、成长路径进度、中文释义、中央重听、方格答案区、底部键盘均与来源保持同一视觉语言。
+- 输入状态：初始十个方格完全为空；对照图中的 `c`、`o` 是 QA 时逐个点击键盘产生，不是首字母提示或预填。
+- 当前输入位：只用琥珀色描边和轻微外圈标记，不在单字符方格内叠加闪烁竖线，避免出现悬空或偏位的伪光标。
+- 播放入口：页面只有中央“重听”入口；键盘内没有第二个重听按钮。
+- 键盘比例：字母键使用三行紧凑 QWERTY，标签通过独立文本层做光学垂直居中；确认键占满键盘宽度，平板端键盘最大宽度 560px。
+- 响应式：320×568、390×844、768×1024 均完整显示主要操作；窄屏没有横向溢出，平板没有无限拉宽，底部保留安全区。
+- 开发者工具：最终页面 0 error；3 条 warning 均为自动热重载、HarmonyOS 提示和灰度基础库提示，没有页面或组件告警。
+- 字体与排版：中文释义、进度、重听与字母方格的字号、字重和行高保持原 Sage Path 层级，输入后字母在方格中垂直居中。
+- 间距与布局：本次只删除方格内伪光标，不改变进度、释义、重听、答案方格和键盘之间的既有响应式节奏。
+- 颜色与状态：当前格继续使用既有琥珀色状态色，已输入格使用青绿色；没有用闪烁动画重复表达同一状态。
+- 图像质量：品牌图、成长路径背景和功能图标继续使用现有 JPG/SVG 资源，没有新增占位图、文本符号或 CSS 绘制替代物。
+- 文案：页面仍只显示中性“重听”，未增加答案提示、严格模式标签或授权常驻文案。
+
+## 本轮比较历史
+
+- 先前 P2：iPad 空答案状态在当前方格中叠加闪烁竖线，竖线视觉位置不自然，并与方格描边重复表达焦点。
+- 修复：删除 `.slot.active::after` 伪元素；保留 `.slot.active` 的琥珀色描边与轻微外圈。
+- 修复后证据：iPad 空答案与手动输入 `c`、`o` 后均只显示活动方格描边；字母清晰落入前两个方格。聚焦同屏对照未发现新的 P0/P1/P2 差异。
+
+## 有意差异
+
+- 未显示来源图右上角“严格拼写”，遵循已确认产品要求。
+- 未显示来源图键盘上方“实体键盘需教师授权”，授权规则保留在服务端和模式切换逻辑中，不做常驻文案。
+- 来源图的键帽更高；生产实现按学生反馈缩短键帽和操作区，保持手指可点范围并减少页面比例失衡。
+
+## 缺陷分级
+
+- P0：0
+- P1：0
+- P2：0
+
+final result: passed
+
+---
+
 # 刷题库二期统一工作台 Design QA
 
 ## Comparison Target

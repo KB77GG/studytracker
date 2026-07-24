@@ -46,6 +46,59 @@ function isSuccessfulResponse(response) {
     return !!(response && response.ok === true)
 }
 
+function firstAttemptStateFromResponse(response, submittedAnswer) {
+    if (!isSuccessfulResponse(response)) return null
+    const isFirstAttempt = response.first_attempt !== false
+    const historicalAnswer = isFirstAttempt
+        ? response.student_answer
+        : response.first_attempt_answer
+    const hasRecordedAnswer = historicalAnswer !== undefined
+        && historicalAnswer !== null
+    return {
+        correct: isFirstAttempt
+            ? !!response.is_correct
+            : response.first_attempt_is_correct === true,
+        // An idempotent response is a replay of an existing database row.  Do
+        // not fall back to the current input when an old server omits the
+        // answer: that would pair a historical verdict with a new answer.
+        answer: hasRecordedAnswer
+            ? String(historicalAnswer)
+            : (response.idempotent || !isFirstAttempt ? '' : String(submittedAnswer || '')),
+        attemptId: (isFirstAttempt ? response.attempt_id : response.first_attempt_id) || '',
+        idempotent: !!response.idempotent,
+        recovered: !isFirstAttempt || !!response.idempotent
+    }
+}
+
+function firstAttemptStateFromQueueItem(item) {
+    if (!item || !item.first_attempt_id) return null
+    return {
+        correct: item.first_is_correct === true,
+        answer: item.first_answer == null ? '' : String(item.first_answer),
+        attemptId: String(item.first_attempt_id),
+        idempotent: true,
+        recovered: true
+    }
+}
+
+function hydrateQueueFirstAttempts(words) {
+    const states = {}
+    ;(words || []).forEach((item, index) => {
+        const state = firstAttemptStateFromQueueItem(item)
+        if (!state) return
+        const wordId = item.word_id || item.id
+        if (wordId != null) states[String(wordId)] = state
+        states[`index:${index}`] = state
+    })
+    return states
+}
+
+function firstAttemptForWord(states, word) {
+    if (!states || !word) return null
+    const wordId = word.word_id || word.id
+    return states[String(wordId)] || states[`index:${word._originIndex}`] || null
+}
+
 function missingQueueItems(response, queue) {
     if (!response || response.error !== 'queue_incomplete') return []
     const missingIds = Array.isArray(response.missing_word_ids)
@@ -91,7 +144,11 @@ module.exports = {
     buildRunStorageKey,
     createAttemptRunId,
     ensureAttemptPayload,
+    firstAttemptForWord,
+    firstAttemptStateFromQueueItem,
+    firstAttemptStateFromResponse,
     getOrCreateRunId,
+    hydrateQueueFirstAttempts,
     isSuccessfulResponse,
     legacyWrongItemBelongsToBook,
     missingQueueItems,

@@ -1,4 +1,10 @@
 <view class="spell-page">
+  <image
+    wx:if="{{stage === 'drill'}}"
+    class="growth-path-background"
+    src="/images/growth-path-background.jpg"
+    mode="aspectFill"
+  />
   <view class="safe-top" style="height: env(safe-area-inset-top);"></view>
   <view class="queue-source-count" wx:if="{{taskId}}">
     当日布置 {{assignedCount}} 词 + 自动复习 {{reviewCount}} 词
@@ -22,24 +28,49 @@
   </block>
 
   <block wx:elif="{{stage === 'drill'}}">
-    <view class="top-bar">
-      <view class="count-text">{{completedCount}}/{{totalWords}}</view>
-      <view class="dots">
-        <view wx:for="{{progressDots}}" wx:key="index" class="dot {{item.done ? 'done' : ''}}"></view>
-      </view>
-      <view class="tools">
-        <text class="tool-star">☆</text>
+    <view class="sage-header">
+      <image class="sage-logo" src="/images/logo.jpg" mode="aspectFill"/>
+      <view class="mode-switch-row" wx:if="{{inputPolicy.compatibleAllowed}}">
+        <input-mode-switcher
+          value="{{inputMode}}"
+          allowed="{{inputPolicy.compatibleAllowed}}"
+          bind:change="onInputModeChange"
+        />
       </view>
     </view>
-    <view class="mode-switch-row">
-      <input-mode-switcher
-        value="{{inputMode}}"
-        allowed="{{inputPolicy.compatibleAllowed}}"
-        bind:change="onInputModeChange"
-      />
+
+    <view class="growth-progress" aria-label="本组进度 {{completedCount + 1}} / {{totalWords}}">
+      <view class="progress-count">{{completedCount + 1}}/{{totalWords}}</view>
+      <view class="progress-path">
+        <view class="path-endpoint path-start">
+          <image class="path-icon" src="/images/icons/check-outline.svg" mode="aspectFit"/>
+        </view>
+        <view class="path-line">
+          <view
+            wx:for="{{progressDots}}"
+            wx:key="index"
+            class="path-dot {{item.done ? 'done' : ''}} {{item.current ? 'current' : ''}}"
+          ></view>
+        </view>
+        <view class="path-endpoint path-finish">
+          <image class="path-icon" src="/images/icons/flag-outline.svg" mode="aspectFit"/>
+        </view>
+      </view>
     </view>
 
     <view class="drill-center">
+      <view class="translation">{{currentWord.translation || '暂无释义'}}</view>
+      <button
+        class="replay-pill"
+        disabled="{{isLoadingAudio}}"
+        hover-class="replay-pill-pressed"
+        bindtap="replayCurrentWord"
+        aria-label="重听单词发音"
+      >
+        <image class="replay-icon" src="/images/icons/speaker-wave-outline.svg" mode="aspectFit"/>
+        <text>{{isLoadingAudio ? '播放中' : '重听'}}</text>
+      </button>
+
       <input wx:if="{{inputMode === 'compatible'}}" class="compat-input"
              value="{{inputValue}}"
              focus="{{!showResult}}"
@@ -74,7 +105,6 @@
         </block>
       </view>
 
-      <view class="translation">{{currentWord.translation || '暂无释义'}}</view>
       <button wx:if="{{showResult && !resultCorrect}}"
               class="spell-appeal-btn"
               disabled="{{appealSubmitted}}"
@@ -85,9 +115,10 @@
 
     <view class="strict-keyboard-wrap" wx:if="{{inputMode === 'strict'}}">
       <english-keyboard
-        answer="{{currentWord.word}}"
+        answer="{{currentWord.word || ''}}"
         value="{{inputValue}}"
         status="{{showResult ? (resultCorrect ? 'correct' : (resultRevealed ? 'revealed' : 'wrong')) : 'idle'}}"
+        show-value="{{false}}"
         can-confirm="{{!!inputValue && !isCheckingFirstAnswer}}"
         show-wrong-actions="{{showResult && !resultCorrect && !resultRevealed}}"
         show-next="{{showResult && (resultCorrect || resultRevealed)}}"
@@ -103,10 +134,6 @@
 
     <view wx:if="{{inputMode === 'compatible' && !(showResult && !resultCorrect && !resultRevealed)}}" class="bottom-bar" style="bottom: calc(24rpx + env(safe-area-inset-bottom));">
       <button class="round-control exit" bindtap="exitPage">×<text class="key-hint">Esc</text></button>
-      <button class="round-control hint" bindtap="replayCurrentWord">
-        <text wx:if="{{isLoadingAudio}}">···</text>
-        <view wx:else class="ic-audio"></view>
-      </button>
       <button class="round-control confirm" loading="{{isCheckingFirstAnswer || isAdvancingWord}}" disabled="{{isCheckingFirstAnswer || isAdvancingWord}}" bindtap="submitOrNext">
         {{showResult ? '→' : '✓'}}<text class="key-hint">↵</text>
       </button>

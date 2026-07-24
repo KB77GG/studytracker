@@ -3,6 +3,9 @@ const {
     buildFirstAttemptId,
     buildRunStorageKey,
     ensureAttemptPayload,
+    firstAttemptForWord,
+    firstAttemptStateFromResponse,
+    hydrateQueueFirstAttempts,
     getOrCreateRunId,
     isSuccessfulResponse,
     legacyWrongItemBelongsToBook,
@@ -56,6 +59,45 @@ assert.strictEqual(retry.attempt_id, first.attempt_id)
 assert.strictEqual(retry.answer, 'alpha')
 assert.strictEqual(isSuccessfulResponse({ ok: true }), true)
 assert.strictEqual(isSuccessfulResponse({ ok: false, statusCode: 409 }), false)
+const historical = firstAttemptStateFromResponse({
+    ok: true,
+    is_correct: false,
+    idempotent: true,
+    student_answer: 'alhpa',
+    attempt_id: 'task-first'
+}, 'alpha')
+assert.deepStrictEqual(historical, {
+    correct: false,
+    answer: 'alhpa',
+    attemptId: 'task-first',
+    idempotent: true,
+    recovered: true
+})
+assert.strictEqual(
+    firstAttemptStateFromResponse({ ok: true, is_correct: false, idempotent: true }, 'alpha').answer,
+    ''
+)
+const legacyFirst = firstAttemptStateFromResponse({ ok: true, is_correct: true }, 'alpha')
+assert.strictEqual(legacyFirst.answer, 'alpha')
+const recoveredRetry = firstAttemptStateFromResponse({
+    ok: true,
+    first_attempt: false,
+    is_correct: true,
+    student_answer: 'alpha',
+    first_attempt_is_correct: false,
+    first_attempt_answer: 'alhpa',
+    first_attempt_id: 'task-first'
+}, 'alpha')
+assert.strictEqual(recoveredRetry.correct, false)
+assert.strictEqual(recoveredRetry.answer, 'alhpa')
+const recoveredWords = [
+    { id: 41, word: 'alpha', first_attempt_id: 'first-41', first_is_correct: false, first_answer: 'alhpa' },
+    { id: 42, word: 'bravo' }
+]
+const recovered = hydrateQueueFirstAttempts(recoveredWords)
+assert.strictEqual(firstAttemptForWord(recovered, recoveredWords[0]).answer, 'alhpa')
+assert.strictEqual(firstAttemptForWord(recovered, recoveredWords[0]).correct, false)
+assert.strictEqual(firstAttemptForWord(recovered, recoveredWords[1]), null)
 assert.deepStrictEqual(
     missingQueueItems({
         ok: false,

@@ -1,41 +1,68 @@
 <view class="english-keyboard" aria-label="自定义英文键盘">
-  <view class="growth-line" aria-hidden="true"><view class="growth-line-fill"></view></view>
+  <view
+    wx:if="{{showValue && !showWrongActions && !showNext}}"
+    class="typed-answer status-{{status}}"
+    aria-label="你的拼写"
+    aria-live="polite"
+  >
+    <text class="typed-answer-label">你的拼写</text>
+    <view class="typed-answer-value">
+      <text wx:if="{{value}}" class="typed-answer-text">{{value}}</text>
+      <text wx:else class="typed-answer-placeholder">点击字母开始拼写</text>
+      <view wx:if="{{status === 'idle' && !disabled}}" class="typed-answer-cursor"></view>
+    </view>
+  </view>
 
-  <view class="key-row" wx:for="{{letterRows}}" wx:key="index">
+  <block wx:if="{{!showWrongActions && !showNext}}">
+  <view class="key-row key-row-{{index}}" wx:for="{{letterRows}}" wx:key="index">
     <button
       wx:for="{{item}}"
       wx:key="*this"
-      class="letter-key"
+      class="letter-key {{disabled || showWrongActions || showNext ? 'is-disabled' : ''}}"
       data-key="{{item}}"
       aria-label="{{item}}"
-      disabled="{{disabled || showWrongActions || showNext}}"
+      aria-disabled="{{disabled || showWrongActions || showNext}}"
+      hover-class="letter-key-pressed"
+      hover-start-time="0"
+      hover-stay-time="80"
       bindtap="emitKey"
-    >{{item}}</button>
+    ><text class="key-label">{{item}}</text></button>
     <button
       wx:if="{{index === 2}}"
-      class="letter-key backspace-key"
+      class="letter-key backspace-key {{disabled || showWrongActions || showNext ? 'is-disabled' : ''}}"
       aria-label="退格"
-      disabled="{{disabled || showWrongActions || showNext}}"
+      aria-disabled="{{disabled || showWrongActions || showNext}}"
+      hover-class="letter-key-pressed"
+      hover-start-time="0"
+      hover-stay-time="80"
       bindtap="emitBackspace"
-    >⌫</button>
+    ><image class="backspace-icon" src="/images/icons/backspace-outline.svg" mode="aspectFit"/></button>
   </view>
 
   <view class="separator-row" wx:if="{{separators.length}}">
     <button
       wx:for="{{separators}}"
       wx:key="key"
-      class="separator-key"
+      class="separator-key {{disabled || showWrongActions || showNext ? 'is-disabled' : ''}}"
       data-key="{{item.key}}"
       aria-label="{{item.ariaLabel}}"
-      disabled="{{disabled || showWrongActions || showNext}}"
+      aria-disabled="{{disabled || showWrongActions || showNext}}"
+      hover-class="letter-key-pressed"
+      hover-start-time="0"
+      hover-stay-time="80"
       bindtap="emitKey"
-    >{{item.label}}</button>
+    ><text class="key-label separator-label">{{item.label}}</text></button>
   </view>
+  </block>
 
-  <view class="keyboard-actions" wx:if="{{showWrongActions}}">
-    <button class="action-button skip-button" bindtap="emitSkip">暂时跳过</button>
-    <button class="action-button retry-button" bindtap="emitRetry">重新拼写</button>
+  <view class="keyboard-actions wrong-actions" wx:if="{{showWrongActions}}">
+    <button class="action-button skip-button {{disabled ? 'is-disabled' : ''}}" aria-disabled="{{disabled}}" hover-class="action-button-pressed" bindtap="emitSkip"><text class="action-button-label">暂时跳过</text></button>
+    <button class="action-button retry-button {{disabled ? 'is-disabled' : ''}}" aria-disabled="{{disabled}}" hover-class="action-button-pressed" bindtap="emitRetry"><text class="action-button-label">重新拼写</text></button>
   </view>
-  <button wx:elif="{{showNext}}" class="action-button confirm-button" bindtap="emitNext">下一题</button>
-  <button wx:else class="action-button confirm-button" disabled="{{disabled || !canConfirm}}" bindtap="emitConfirm">确认</button>
+  <view wx:elif="{{showNext}}" class="keyboard-actions">
+    <button class="action-button confirm-button {{disabled ? 'is-disabled' : ''}}" aria-disabled="{{disabled}}" hover-class="action-button-pressed" bindtap="emitNext"><text class="action-button-label">下一题</text></button>
+  </view>
+  <view wx:else class="keyboard-actions">
+    <button class="action-button confirm-button {{disabled || !canConfirm ? 'is-disabled' : ''}}" aria-disabled="{{disabled || !canConfirm}}" hover-class="action-button-pressed" bindtap="emitConfirm"><text class="action-button-label">确认</text></button>
+  </view>
 </view>

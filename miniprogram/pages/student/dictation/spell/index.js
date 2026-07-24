@@ -9,7 +9,10 @@ const {
     buildRunStorageKey,
     createAttemptRunId,
     ensureAttemptPayload,
+    firstAttemptForWord,
+    firstAttemptStateFromResponse,
     getOrCreateRunId,
+    hydrateQueueFirstAttempts,
     isSuccessfulResponse,
     missingQueueItems,
     summarizeQueue,
@@ -141,9 +144,18 @@ function formatNextReview(iso) {
 }
 
 function buildProgressDots(total, completed) {
+    const visible = Math.min(Math.max(Number(total) || 0, 0), 10)
+    if (!visible) return []
+    const currentIndex = Math.min(
+        visible - 1,
+        Math.floor((Math.max(Number(completed) || 0, 0) * visible) / Math.max(total, 1))
+    )
     const dots = []
-    for (let i = 0; i < total; i++) {
-        dots.push({ done: i < completed })
+    for (let i = 0; i < visible; i++) {
+        dots.push({
+            done: i < currentIndex,
+            current: i === currentIndex
+        })
     }
     return dots
 }
@@ -395,6 +407,13 @@ Page({
             return
         }
 
+        if (this.data.taskId) {
+            // A reopened task is restored from the durable queue.  Local
+            // progress may be stale or may contain a different input for the
+            // same idempotent attempt, so it cannot override this map.
+            this.firstAttempts = hydrateQueueFirstAttempts(words)
+        }
+
         this.setData({
             stage: 'ready',
             words,
@@ -490,18 +509,36 @@ Page({
             return
         }
         const word = nextQueue[0]
-        this.setData({
+        const recoveredFirst = firstAttemptForWord(this.firstAttempts, word)
+        if (recoveredFirst && recoveredFirst.correct) {
+            this.completedMap[word._originIndex] = true
+            const completedCount = Object.keys(this.completedMap)
+                .filter(key => this.completedMap[key]).length
+            this.setData({
+                completedCount,
+                progressDots: buildProgressDots(this.data.totalWords, completedCount)
+            }, () => this.showNextWord(nextQueue.slice(1), onReady))
+            return
+        }
+        const nextState = {
             queue: nextQueue,
             currentWord: word,
-            inputValue: '',
-            spellSlots: buildSpellSlots('', word.word),
-            showResult: false,
-            resultCorrect: false,
+            inputValue: recoveredFirst ? recoveredFirst.answer : '',
+            spellSlots: buildSpellSlots(recoveredFirst ? recoveredFirst.answer : '', word.word),
+            showResult: !!recoveredFirst,
+            resultCorrect: !!(recoveredFirst && recoveredFirst.correct),
             resultRevealed: false,
             displayWord: word.syllables || word.word,
-            diffTop: [],
+            diffTop: recoveredFirst ? buildDiff(recoveredFirst.answer, word.word) : [],
             appealSubmitted: false
-        }, () => {
+        }
+        if (recoveredFirst && !recoveredFirst.correct) {
+            const tail = nextQueue.slice(1)
+            const insertAt = Math.min(REINSERT_GAP, tail.length)
+            tail.splice(insertAt, 0, Object.assign({}, word))
+            nextState.queue = [word].concat(tail)
+        }
+        this.setData(nextState, () => {
             if (onReady) onReady()
             setTimeout(() => this.playCurrentWord(true), 240)
         })
@@ -563,14 +600,19 @@ Page({
             this.submitFirstAttempt(word, raw)
                 .then((res) => {
                     if (!isSuccessfulResponse(res)) throw new Error('first_attempt_not_acknowledged')
-                    const serverCorrect = !!res.is_correct
-                    this.firstAttempts[key] = {
-                        correct: serverCorrect,
-                        answer: raw
-                    }
+                    const firstState = firstAttemptStateFromResponse(res, raw)
+                    if (!firstState) throw new Error('first_attempt_not_acknowledged')
+                    const serverCorrect = firstState.correct
+                    this.firstAttempts[key] = firstState
                     this.firstAnswerInFlightKey = null
-                    this.setData({ isCheckingFirstAnswer: false }, () => {
-                        this.applyAnswerResult(word, raw, serverCorrect, true)
+                    this.setData({
+                        isCheckingFirstAnswer: false,
+                        // An idempotent response may describe an older
+                        // answer than the text submitted by this request.
+                        inputValue: firstState.answer,
+                        spellSlots: buildSpellSlots(firstState.answer, word.word)
+                    }, () => {
+                        this.applyAnswerResult(word, firstState.answer, serverCorrect, true)
                     })
                 })
                 .catch((err) => {

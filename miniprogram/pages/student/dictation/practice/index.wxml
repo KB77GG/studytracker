@@ -1,4 +1,4 @@
-<view class="practice-container">
+<view class="practice-container {{phase === 'test' && !finished && isEnglishSpelling && inputMode === 'strict' ? 'strict-practice' : ''}}">
   <view style="height: env(safe-area-inset-top);"></view>
   <view class="queue-source-count" wx:if="{{taskId}}">
     当日布置 {{assignedCount}} 词 + 自动复习 {{reviewCount}} 词
@@ -144,7 +144,7 @@
 
     <block wx:if="{{!finished}}">
       <!-- Word Card -->
-      <view class="word-card">
+      <view class="word-card test-word-card {{!showResult ? 'prompt-state' : 'result-state'}}">
         <!-- Chinese -> English -->
         <block wx:if="{{currentMode === 'zh_to_en'}}">
           <view class="translation-prompt">
@@ -181,9 +181,8 @@
           </view>
         </block>
 
-        <view class="practice-input-mode">
+        <view class="practice-input-mode" wx:if="{{isEnglishSpelling && inputPolicy.compatibleAllowed}}">
           <input-mode-switcher
-            wx:if="{{isEnglishSpelling}}"
             value="{{inputMode}}"
             allowed="{{inputPolicy.compatibleAllowed}}"
             bind:change="onInputModeChange"
@@ -268,27 +267,28 @@
       </view>
 
       <!-- Action Bar -->
-      <english-keyboard
-        wx:if="{{isEnglishSpelling && inputMode === 'strict'}}"
-        answer="{{currentWord.word}}"
-        value="{{inputValue}}"
-        status="{{showResult ? (isCorrect ? 'correct' : (resultRevealed ? 'revealed' : 'wrong')) : 'idle'}}"
-        can-confirm="{{!!inputValue && !isCheckingFirstAnswer}}"
-        show-wrong-actions="{{showResult && !isCorrect && !resultRevealed}}"
-        show-next="{{showResult && (isCorrect || resultRevealed)}}"
-        disabled="{{isCheckingFirstAnswer || isAdvancingWord}}"
-        bind:key="onKeyboardKey"
-        bind:backspace="onKeyboardBackspace"
-        bind:confirm="checkAnswer"
-        bind:retry="retrySpelling"
-        bind:skip="skipSpelling"
-        bind:next="nextWord"
-      />
+      <view class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling && inputMode === 'strict'}}">
+        <english-keyboard
+          answer="{{currentWord.word || ''}}"
+          value="{{inputValue}}"
+          status="{{showResult ? (isCorrect ? 'correct' : (resultRevealed ? 'revealed' : 'wrong')) : 'idle'}}"
+          can-confirm="{{!!inputValue && !isCheckingFirstAnswer}}"
+          show-wrong-actions="{{showResult && !isCorrect && !resultRevealed}}"
+          show-next="{{showResult && (isCorrect || resultRevealed)}}"
+          disabled="{{isCheckingFirstAnswer || isAdvancingWord}}"
+          bind:key="onKeyboardKey"
+          bind:backspace="onKeyboardBackspace"
+          bind:confirm="checkAnswer"
+          bind:retry="retrySpelling"
+          bind:skip="skipSpelling"
+          bind:next="nextWord"
+        />
+      </view>
       <view wx:if="{{isEnglishSpelling && inputMode === 'compatible' && showResult && !isCorrect && !resultRevealed}}" class="compat-practice-actions">
         <button class="compat-skip" bindtap="skipSpelling">暂时跳过</button>
         <button class="compat-retry" bindtap="retrySpelling">重新拼写</button>
       </view>
-      <view class="action-bar">
+      <view class="action-bar" wx:if="{{!isEnglishSpelling || inputMode !== 'strict'}}">
         <button wx:if="{{!showResult && (!isEnglishSpelling || inputMode !== 'strict')}}" class="submit-btn" loading="{{isCheckingFirstAnswer}}" disabled="{{isCheckingFirstAnswer}}" bindtap="checkAnswer">提交</button>
         <button wx:elif="{{showResult && !(isEnglishSpelling && !isCorrect && !resultRevealed) && (!isEnglishSpelling || inputMode !== 'strict')}}" class="submit-btn next" loading="{{isSubmitting || isAdvancingWord}}" disabled="{{isSubmitting || isAdvancingWord}}" bindtap="nextWord">
           {{recoveryMissingWordIds.length ? (recoveryMissingWordIds.length > 1 ? '补答下一个' : '重新提交') : (currentIndex + 1 >= groupEnd ? (hasMoreGroups ? '完成本组' : '完成练习') : '下一个')}}

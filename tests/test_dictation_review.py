@@ -767,6 +767,8 @@ class DictationReviewFlowTest(unittest.TestCase):
             self.assertFalse(first["is_correct"])
             self.assertTrue(duplicate["idempotent"])
             self.assertFalse(retry["first_attempt"])
+            self.assertFalse(retry["first_attempt_is_correct"])
+            self.assertEqual(retry["first_attempt_answer"], "alhpa")
             self.assertEqual(DictationRecord.query.filter_by(task_id=task_id).count(), 2)
             mastery = StudentWordMastery.query.filter_by(
                 student_id=self.student_id,
@@ -774,6 +776,58 @@ class DictationReviewFlowTest(unittest.TestCase):
             ).one()
             self.assertTrue(mastery.auto_review_active)
             self.assertEqual(mastery.auto_review_correct_streak, 0)
+
+    def test_idempotent_new_text_returns_historical_answer_and_finalize_keeps_first_score(self):
+        now = AUTO_REVIEW_NOW
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            task_id = self._task(start=1, end=1)
+            queue = get_task_queue(user, task_id, now)
+            first = submit_dictation_answer(
+                user,
+                {
+                    "task_id": task_id,
+                    "word_id": self.word_ids[0],
+                    "answer": "alhpa",
+                    "mode": "spelling_drill",
+                    "attempt_id": "stable-first-attempt",
+                    "strict_queue": True,
+                },
+                now=now,
+            )
+            db.session.commit()
+
+            reopened = get_task_queue(user, task_id, now)
+            recovered = reopened["words"][0]
+            duplicate = submit_dictation_answer(
+                user,
+                {
+                    "task_id": task_id,
+                    "word_id": self.word_ids[0],
+                    "answer": "alpha",
+                    "mode": "spelling_drill",
+                    "attempt_id": "stable-first-attempt",
+                    "strict_queue": True,
+                },
+                now=now,
+            )
+            self.assertFalse(first["is_correct"])
+            self.assertTrue(duplicate["idempotent"])
+            self.assertFalse(duplicate["is_correct"])
+            self.assertEqual(duplicate["student_answer"], "alhpa")
+            self.assertEqual(recovered["first_answer"], "alhpa")
+            self.assertFalse(recovered["first_is_correct"])
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task_id).count(), 1)
+
+            finalized = finalize_strict_task(
+                user,
+                task_id,
+                {"queue_token": queue["queue_token"]},
+                now=now,
+            )
+            self.assertEqual(finalized["correct_count"], 0)
+            self.assertEqual(finalized["accuracy"], 0.0)
+            self.assertEqual(Task.query.get(task_id).accuracy, 0.0)
 
     def test_duplicate_attempt_cannot_cross_task_context(self):
         now = AUTO_REVIEW_NOW

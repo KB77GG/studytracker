@@ -199,6 +199,12 @@ def _word_payload(word: DictationWord, item: DictationTaskReview, mode: str) -> 
         "dictation_mode": mode,
         "source": item.source,
         "is_auto_review": bool(item.is_auto_review),
+        # The queue is the recovery source of truth after a task is reopened.
+        # Keep the answer and verdict together so the client never renders a
+        # new local input beside an old first-answer decision.
+        "first_attempt_id": item.first_attempt_id,
+        "first_is_correct": item.first_is_correct,
+        "first_answer": item.first_answer,
         "review_level": mastery.review_level if mastery else 0,
         "auto_review_active": bool(mastery and mastery.auto_review_active),
         "auto_review_correct_streak": mastery.auto_review_correct_streak if mastery else 0,
@@ -446,6 +452,11 @@ def _serialize_answer_result(
     mastery: StudentWordMastery | None,
     idempotent: bool = False,
 ) -> dict:
+    first_record = record
+    if not record.is_first_attempt and record.task_review_id:
+        snapshot = db.session.get(DictationTaskReview, record.task_review_id)
+        if snapshot:
+            first_record = snapshot
     return {
         "ok": True,
         "is_correct": bool(record.is_correct),
@@ -454,6 +465,22 @@ def _serialize_answer_result(
         "attempt_id": record.attempt_id,
         "input_mode": record.input_mode,
         "input_grant_id": record.input_grant_id,
+        "student_answer": record.student_answer,
+        "first_attempt_id": (
+            first_record.attempt_id
+            if isinstance(first_record, DictationRecord)
+            else first_record.first_attempt_id
+        ),
+        "first_attempt_is_correct": (
+            bool(first_record.is_correct)
+            if isinstance(first_record, DictationRecord)
+            else first_record.first_is_correct
+        ),
+        "first_attempt_answer": (
+            first_record.student_answer
+            if isinstance(first_record, DictationRecord)
+            else first_record.first_answer
+        ),
         "correct_answer": word.word,
         "translation": word.translation,
         "phonetic": word.phonetic,
@@ -588,7 +615,7 @@ def _recover_legacy_resume_prefix(
         db.session.add(record)
         item.first_attempt_id = attempt_id
         item.first_is_correct = is_correct
-        item.first_answer = answer[:200]
+        item.first_answer = answer[:100]
 
         defer_auto_correct = bool(item.is_auto_review and is_correct)
         if not defer_auto_correct:
@@ -778,7 +805,7 @@ def submit_dictation_answer(
     if snapshot is not None and is_first:
         snapshot.first_attempt_id = attempt_id
         snapshot.first_is_correct = is_correct
-        snapshot.first_answer = answer[:200]
+        snapshot.first_answer = answer[:100]
 
     mastery = _mastery(user.id, word.id)
     if is_first:

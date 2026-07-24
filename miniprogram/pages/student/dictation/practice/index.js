@@ -15,7 +15,10 @@ const {
     buildRunStorageKey,
     createAttemptRunId,
     ensureAttemptPayload,
+    firstAttemptForWord,
+    firstAttemptStateFromResponse,
     getOrCreateRunId,
+    hydrateQueueFirstAttempts,
     isSuccessfulResponse,
     missingQueueItems,
     summarizeQueue,
@@ -326,6 +329,7 @@ Page({
                 const words = (res.words || []).map(item => Object.assign({}, item, {
                     dictationMode: queueMode(item, res.task_mode)
                 }));
+                this.serverFirstAttempts = hydrateQueueFirstAttempts(words);
                 const counts = summarizeQueue(words);
                 if (!words.length) {
                     wx.showToast({ title: '当前任务没有可练单词', icon: 'none' });
@@ -364,21 +368,88 @@ Page({
             selectedGroupPlanKey: selectedPlan ? selectedPlan.key : ''
         });
         const saved = this.loadProgress(words.length);
-        if (!saved) {
+        this.serverQueueRecoverySupported = !!this.data.taskId && words.some(word => (
+            Object.prototype.hasOwnProperty.call(word, 'first_attempt_id')
+        ));
+        if (this.data.taskId) {
+            // The durable queue outranks local progress.  A stale local
+            // answer must never be allowed to overwrite a server first
+            // verdict or make an already-completed word look fresh.
+            if (this.serverQueueRecoverySupported) {
+                this.firstAttempts = Object.assign({}, this.serverFirstAttempts);
+            }
+            const hasTaskHistory = words.some(word => firstAttemptForWord(this.firstAttempts, word));
+            const recovered = words.reduce((state, word) => {
+                const first = firstAttemptForWord(this.firstAttempts, word);
+                if (first && first.correct) state.correct += 1;
+                if (first && !first.correct) {
+                    state.wrongWords.push(word.word);
+                    state.wrongWordsDetail.push(Object.assign({}, word, {
+                        wrong: first.answer,
+                        dictationMode: word.dictationMode || this.data.dictationMode
+                    }));
+                }
+                if (!first && state.firstIncompleteIndex < 0) {
+                    state.firstIncompleteIndex = words.indexOf(word);
+                }
+                return state;
+            }, { correct: 0, wrongWords: [], wrongWordsDetail: [], firstIncompleteIndex: -1 });
+            this.setData({
+                correctCount: recovered.correct,
+                wrongWords: recovered.wrongWords,
+                wrongWordsDetail: recovered.wrongWordsDetail
+            });
+            this.serverResumeIndex = recovered.firstIncompleteIndex;
+            this.hasTaskHistory = hasTaskHistory;
+        }
+        if (!saved && !this.hasTaskHistory) {
             this.setData({ phase: 'group_select' });
             return;
         }
-        const savedSizes = normalizeGroupSizes(saved.groupSizes, words.length);
-        const savedIndex = Math.max(0, Math.min(Number(saved.index) || 0, words.length - 1));
-        let savedGroupIndex = Number.isInteger(saved.groupIndex)
-            ? saved.groupIndex
+        const resumeState = saved || {
+            groupSizes: null,
+            groupIndex: this.serverResumeIndex >= 0
+                ? findGroupIndex(normalizeGroupSizes(null, words.length), this.serverResumeIndex)
+                : 0,
+            index: this.serverResumeIndex >= 0 ? this.serverResumeIndex : 0,
+            groupCorrectStart: 0,
+            groupWrongStart: 0,
+            awaitingNextGroup: false,
+            resumePhase: 'test'
+        };
+        const savedSizes = normalizeGroupSizes(resumeState.groupSizes, words.length);
+        const savedIndex = this.data.taskId && this.serverResumeIndex >= 0
+            ? this.serverResumeIndex
+            : Math.max(0, Math.min(Number(resumeState.index) || 0, words.length - 1));
+        let savedGroupIndex = this.data.taskId && this.serverResumeIndex >= 0
+            ? findGroupIndex(savedSizes, this.serverResumeIndex)
+            : Number.isInteger(resumeState.groupIndex)
+            ? resumeState.groupIndex
             : findGroupIndex(savedSizes, savedIndex);
-        if (saved.awaitingNextGroup && savedGroupIndex < savedSizes.length - 1) savedGroupIndex += 1;
+        const resumeFromServer = this.data.taskId
+            && this.serverQueueRecoverySupported
+            && this.serverResumeIndex >= 0;
+        if (!resumeFromServer && resumeState.awaitingNextGroup && savedGroupIndex < savedSizes.length - 1) {
+            savedGroupIndex += 1;
+        }
+        const activeBounds = groupBounds(savedSizes, savedGroupIndex);
+        const serverBaseline = resumeFromServer
+            ? words.slice(0, activeBounds.start).reduce((state, word) => {
+                const first = firstAttemptForWord(this.firstAttempts, word);
+                if (first && first.correct) state.correct += 1;
+                if (first && !first.correct) state.wrong += 1;
+                return state;
+            }, { correct: 0, wrong: 0 })
+            : null;
         this.activateGroup(savedSizes, savedGroupIndex, {
-            correctStart: saved.awaitingNextGroup ? this.data.correctCount : saved.groupCorrectStart,
-            wrongStart: saved.awaitingNextGroup ? this.data.wrongWordsDetail.length : saved.groupWrongStart
+            correctStart: serverBaseline
+                ? serverBaseline.correct
+                : (resumeState.awaitingNextGroup ? this.data.correctCount : resumeState.groupCorrectStart),
+            wrongStart: serverBaseline
+                ? serverBaseline.wrong
+                : (resumeState.awaitingNextGroup ? this.data.wrongWordsDetail.length : resumeState.groupWrongStart)
         }, () => {
-            if (saved.awaitingNextGroup || saved.resumePhase === 'familiarize') {
+            if (!resumeFromServer && (resumeState.awaitingNextGroup || resumeState.resumePhase === 'familiarize')) {
                 this.enterFamiliarization();
                 return;
             }
@@ -544,27 +615,27 @@ Page({
     skipSpelling() {
         if (!this.data.showResult || this.data.isCorrect || this.data.resultRevealed) return;
         this.setData({
-            resultRevealed: true,
-            userAnswer: this.data.userAnswer || this.data.inputValue
+            resultRevealed: true
         });
     },
 
     loadWord: function (index, onReady) {
         const word = this.data.words[index];
         const currentMode = resolveDictationMode(word && word.dictationMode, this.data.dictationMode);
+        const recoveredFirst = firstAttemptForWord(this.firstAttempts, word);
         this.setData({
             currentWord: word,
             currentIndex: index,
             currentMode: currentMode,
-            inputValue: '',
-            showResult: false,
-            isCorrect: false,
+            inputValue: recoveredFirst ? recoveredFirst.answer : '',
+            showResult: !!recoveredFirst,
+            isCorrect: !!(recoveredFirst && recoveredFirst.correct),
             resultRevealed: false,
             inputFocus: false,
-            inputError: false,
-            userAnswer: '',
+            inputError: !!(recoveredFirst && !recoveredFirst.correct),
+            userAnswer: recoveredFirst ? recoveredFirst.answer : '',
             showHint: false,
-            attemptCount: 0,
+            attemptCount: recoveredFirst ? 1 : 0,
             appealSubmitted: false,
             inputMode: defaultInputPolicy(currentMode).defaultInputMode,
             inputPolicy: defaultInputPolicy(currentMode),
@@ -867,17 +938,20 @@ Page({
             this.setData({ isCheckingFirstAnswer: true, inputFocus: false });
             this.submitFirstAttempt(word, inputRaw)
                 .then((res) => {
-                    if (!isSuccessfulResponse(res)) {
+                    const firstState = firstAttemptStateFromResponse(res, inputRaw);
+                    if (!firstState) {
                         throw new Error('first_attempt_not_acknowledged');
                     }
-                    this.firstAttempts[key] = {
-                        correct: !!res.is_correct,
-                        answer: inputRaw
-                    };
+                    this.firstAttempts[key] = firstState;
                     this.firstAnswerInFlightKey = null;
                     this.persistAttemptState();
-                    this.setData({ isCheckingFirstAnswer: false }, () => {
-                        this.applyAnswerResult(inputRaw, !!res.is_correct, 0);
+                    this.setData({
+                        isCheckingFirstAnswer: false,
+                        // For an idempotent retry this is the recorded old
+                        // answer, not the text typed in this request.
+                        inputValue: firstState.answer
+                    }, () => {
+                        this.applyAnswerResult(firstState.answer, firstState.correct, 0);
                     });
                 })
                 .catch((err) => {
