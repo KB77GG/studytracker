@@ -675,11 +675,13 @@ body.exam-mode .submit-btn { display: none; }
 body.exam-mode .bottom-nav { padding-right: 220px; }
 .exam-finish-btn {
   position: fixed; right: 24px; bottom: 18px; z-index: 50;
-  background: var(--exam-orange, #f37021); color: #fff; border: none;
+  background: #2563eb; color: #fff; border: none;
   padding: 10px 22px; border-radius: 4px; font-weight: 800; cursor: pointer;
-  font-size: 14px; box-shadow: 0 6px 16px rgba(243,112,33,.35);
+  font-size: 14px; box-shadow: 0 6px 16px rgba(37,99,235,.3);
 }
-.exam-finish-btn:hover { background: #d9591a; }
+.exam-finish-btn:hover { background: #1d4ed8; }
+.exam-finish-btn.is-final { background: var(--exam-orange, #f37021); box-shadow: 0 6px 16px rgba(243,112,33,.35); }
+.exam-finish-btn.is-final:hover { background: #d9591a; }
 .exam-finish-btn:disabled { background: #6b7280; cursor: not-allowed; }
 </style>
 {% endif %}
@@ -1171,6 +1173,7 @@ function switchSection(index, scroll = true) {
   syncQuestionNav();
   syncTranscriptFromAudio();
   if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (window.__onExamSectionChange) window.__onExamSectionChange(index);
 }
 
 function unitValue(unit) {
@@ -1569,14 +1572,30 @@ render();
 </script>
 
 {% if exam_context %}
-<button type="button" class="exam-finish-btn" id="examFinishBtn">Finish section</button>
+<button type="button" class="exam-finish-btn" id="examFinishBtn">下一部分 →</button>
 <script>
 window.EXAM_CONTEXT = {{ exam_context|tojson }};
 (function() {
   const ctx = window.EXAM_CONTEXT;
   const deadlineMs = ctx.deadline_at ? Date.parse(ctx.deadline_at) : 0;
   const countdown = document.getElementById('examCountdown');
+  const finishBtn = document.getElementById('examFinishBtn');
+  const sectionLabel = ctx.section_label || '本部分';
   let submitted = false;
+
+  function lastPartIndex() {
+    return (typeof test !== 'undefined' && test.sections) ? test.sections.length - 1 : 0;
+  }
+  function isLastPart() {
+    return (typeof activeSectionIndex === 'undefined') || activeSectionIndex >= lastPartIndex();
+  }
+  function updateFinishBtn() {
+    if (submitted) return;
+    const last = isLastPart();
+    finishBtn.textContent = last ? `提交并结束 ${sectionLabel}` : '下一部分 →';
+    finishBtn.classList.toggle('is-final', last);
+  }
+  window.__onExamSectionChange = updateFinishBtn;
 
   function fmt(ms) {
     const total = Math.max(0, Math.floor(ms / 1000));
@@ -1620,13 +1639,18 @@ window.EXAM_CONTEXT = {{ exam_context|tojson }};
     }
   }
 
-  document.getElementById('examFinishBtn').addEventListener('click', () => {
+  finishBtn.addEventListener('click', () => {
     if (submitted) return;
-    if (!confirm('确定提交本部分？提交后无法修改。')) return;
+    if (!isLastPart()) {
+      switchSection(activeSectionIndex + 1);
+      return;
+    }
+    if (!confirm(`确定提交并结束 ${sectionLabel}？提交后无法修改，进入下一科目。`)) return;
     submitted = true;
     forceSubmit();
   });
 
+  updateFinishBtn();
   setInterval(tick, 1000);
   tick();
 })();

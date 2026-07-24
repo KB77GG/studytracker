@@ -425,11 +425,13 @@ body.exam-mode #submitBtn,
 body.exam-mode #resetBtn { display: none; }
 .exam-finish-btn {
   position: fixed; right: 24px; bottom: 18px; z-index: 50;
-  background: var(--exam-orange, #f37021); color: #fff; border: none;
+  background: #2563eb; color: #fff; border: none;
   padding: 10px 22px; border-radius: 4px; font-weight: 800; cursor: pointer;
-  font-size: 14px; box-shadow: 0 6px 16px rgba(243,112,33,.35);
+  font-size: 14px; box-shadow: 0 6px 16px rgba(37,99,235,.3);
 }
-.exam-finish-btn:hover { background: #d9591a; }
+.exam-finish-btn:hover { background: #1d4ed8; }
+.exam-finish-btn.is-final { background: var(--exam-orange, #f37021); box-shadow: 0 6px 16px rgba(243,112,33,.35); }
+.exam-finish-btn.is-final:hover { background: #d9591a; }
 .exam-finish-btn:disabled { background: #6b7280; cursor: not-allowed; }
 </style>
 {% endif %}
@@ -777,6 +779,7 @@ function renderPassage(passage) {
   document.getElementById("questionPanel").innerHTML = (passage.groups || []).map(renderGroup).join("");
   bindInputs();
   if (resultMode) paintResults();
+  if (window.__onExamPassageChange) window.__onExamPassageChange(passage);
 }
 
 function bindInputs() {
@@ -1032,14 +1035,40 @@ revealReadingStudyEntry();
 </script>
 
 {% if exam_context %}
-<button type="button" class="exam-finish-btn" id="examFinishBtn">Finish section</button>
+<button type="button" class="exam-finish-btn" id="examFinishBtn">下一部分 →</button>
 <script>
 window.EXAM_CONTEXT = {{ exam_context|tojson }};
 (function() {
   const ctx = window.EXAM_CONTEXT;
   const deadlineMs = ctx.deadline_at ? Date.parse(ctx.deadline_at) : 0;
   const countdown = document.getElementById('examCountdown');
+  const finishBtn = document.getElementById('examFinishBtn');
+  const sectionLabel = ctx.section_label || '本部分';
   let submitted = false;
+
+  function passageList() {
+    return (typeof testData !== 'undefined' && testData.passages) ? testData.passages : [];
+  }
+  function currentPassageIndex() {
+    return passageList().findIndex((p) => p.id === currentPassageId);
+  }
+  function isLastPassage() {
+    const list = passageList();
+    return list.length === 0 || currentPassageIndex() >= list.length - 1;
+  }
+  function gotoPassage(id) {
+    currentPassageId = id;
+    document.querySelectorAll('[data-passage-tab]').forEach((item) => item.classList.toggle('active', item.dataset.passageTab === id));
+    renderPassage(passageList().find((p) => p.id === id));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function updateFinishBtn() {
+    if (submitted) return;
+    const last = isLastPassage();
+    finishBtn.textContent = last ? `提交并结束 ${sectionLabel}` : '下一部分 →';
+    finishBtn.classList.toggle('is-final', last);
+  }
+  window.__onExamPassageChange = updateFinishBtn;
 
   function fmt(ms) {
     const total = Math.max(0, Math.floor(ms / 1000));
@@ -1082,13 +1111,19 @@ window.EXAM_CONTEXT = {{ exam_context|tojson }};
     }
   }
 
-  document.getElementById('examFinishBtn').addEventListener('click', () => {
+  finishBtn.addEventListener('click', () => {
     if (submitted) return;
-    if (!confirm('确定提交本部分？提交后无法修改。')) return;
+    if (!isLastPassage()) {
+      const next = passageList()[currentPassageIndex() + 1];
+      if (next) gotoPassage(next.id);
+      return;
+    }
+    if (!confirm(`确定提交并结束 ${sectionLabel}？提交后无法修改，进入下一科目。`)) return;
     submitted = true;
     forceSubmit();
   });
 
+  updateFinishBtn();
   setInterval(tick, 1000);
   tick();
 })();
