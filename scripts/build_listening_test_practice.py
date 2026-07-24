@@ -126,6 +126,56 @@ def default_start_time(item: dict):
     return answer_sentence.get("start_time") or item.get("start_time")
 
 
+def parse_location_sentence(value) -> list[int]:
+    """Parse ai_central_sentences.location_sentence into 1-based content indices."""
+    if not isinstance(value, str):
+        return []
+    normalized = value.replace("，", ",")  # tolerate Chinese comma
+    indices = []
+    for token in normalized.split(","):
+        token = token.strip()
+        if not token:
+            continue
+        try:
+            indices.append(int(token))
+        except ValueError:
+            continue
+    return indices
+
+
+def location_span_from_content(item: dict, content: list | None) -> dict:
+    """Derive answer timing from ai_central_sentences.location_sentence.
+
+    Cambridge IELTS 21 items ship without answer_sentences / start_time, but the
+    AI analysis records which transcript sentences (1-based into the part's
+    ``content`` array) hold the answer. Return a dict shaped like Cambridge
+    IELTS 20's answer_sentences ({start_time, end_time, lyc_index:[min, max]},
+    times in ms), or {} when parsing fails / indices go out of bounds.
+    """
+    if not content:
+        return {}
+    acs = item.get("ai_central_sentences")
+    if not isinstance(acs, dict):
+        return {}
+    indices = parse_location_sentence(acs.get("location_sentence"))
+    if not indices:
+        return {}
+    lo, hi = min(indices), max(indices)
+    if lo < 1 or hi > len(content):
+        return {}
+    start_row = content[lo - 1] if isinstance(content[lo - 1], dict) else {}
+    end_row = content[hi - 1] if isinstance(content[hi - 1], dict) else {}
+    start_time = start_row.get("start_time")
+    end_time = end_row.get("end_time")
+    if not start_time and not end_time:
+        return {}
+    return {
+        "start_time": start_time,
+        "end_time": end_time,
+        "lyc_index": [lo, hi],
+    }
+
+
 def analyze_location_question_ids(items: list[dict]) -> set:
     by_start = {}
     for item in items:
@@ -153,7 +203,11 @@ def analyze_location_question_ids(items: list[dict]) -> set:
     return set()
 
 
-def build_question(item: dict, use_analyze_location: bool = False) -> dict:
+def build_question(
+    item: dict,
+    use_analyze_location: bool = False,
+    content: list | None = None,
+) -> dict:
     options = []
     for option in item.get("option") or []:
         options.append(
@@ -177,6 +231,14 @@ def build_question(item: dict, use_analyze_location: bool = False) -> dict:
         for key in ("start_time", "end_time", "lyc_index"):
             if key in source_location:
                 output_answer_sentence[key] = source_location.get(key)
+    if not start_time and not end_time:
+        # 4th-level fallback: no explicit timing (e.g. Cambridge IELTS 21) —
+        # locate the answer via ai_central_sentences.location_sentence.
+        location_span = location_span_from_content(item, content)
+        if location_span:
+            start_time = location_span["start_time"]
+            end_time = location_span["end_time"]
+            output_answer_sentence.update(location_span)
     source_analysis = analysis_text(item.get("analyze"))
     if use_analyze_location and is_usable_analysis(source_analysis):
         analysis = source_analysis
@@ -196,23 +258,28 @@ def build_question(item: dict, use_analyze_location: bool = False) -> dict:
     }
 
 
-def build_group(group: dict, section_id: str) -> dict:
+def build_group(group: dict, section_id: str, content: list | None = None) -> dict:
     img_url = group.get("img_url") or ""
     items = group.get("list") or []
     analyze_location_ids = analyze_location_question_ids(items)
+    collect_option = group.get("collect_option") or {}
+    # Cambridge IELTS 21 leaves the group-level title empty and only stores the
+    # shared multiple-choice stem on collect_option.title — fall back to it so
+    # the render's <h3> shows the question stem.
+    title = (group.get("title") or "").strip() or (collect_option.get("title") or "")
     return {
         "group_id": group.get("group_id"),
         "type": group.get("type"),
-        "title": group.get("title") or "",
+        "title": title,
         "question_title": group.get("question_title") or "",
         "desc": group.get("desc") or "",
         "table": group.get("table"),
         "collect": group.get("collect") or "",
         "img_url": img_url,
         "img_local": localize_image(img_url, section_id),
-        "collect_option": group.get("collect_option") or {},
+        "collect_option": collect_option,
         "questions": [
-            build_question(item, item.get("id") in analyze_location_ids)
+            build_question(item, item.get("id") in analyze_location_ids, content)
             for item in items
         ],
     }
@@ -220,6 +287,7 @@ def build_group(group: dict, section_id: str) -> dict:
 
 def build_section(exercise_id: str, part_id: int, audio: str, raw_parts: dict) -> dict:
     part = unwrap_part(raw_parts, part_id)
+    content = part.get("content") or []
     match = SECTION_RE.match(exercise_id)
     section_no = int(match.group("section")) if match else 0
     return {
@@ -231,7 +299,10 @@ def build_section(exercise_id: str, part_id: int, audio: str, raw_parts: dict) -
         "source_title": part.get("title") or "",
         "question_name": part.get("question_name") or "",
         "question_type": as_list(part.get("question_type")),
-        "groups": [build_group(group, exercise_id) for group in part.get("question") or []],
+        "groups": [
+            build_group(group, exercise_id, content)
+            for group in part.get("question") or []
+        ],
         "transcript": [
             {
                 "order": row.get("order"),
