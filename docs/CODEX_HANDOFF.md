@@ -17,10 +17,10 @@
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
 | 分支 | detached `HEAD`；实现提交已通过安全快进 `HEAD:main` 推送，部署状态文档随后单独提交 |
-| 当前 HEAD | 本次状态记录提交（父提交为实现提交 `d890cfa4`；以 `git log` 为准） |
+| 当前 HEAD | detached `HEAD` 已包含实现提交 `d890cfa4` 及后续部署状态文档提交；精确 tip 以 `git log` 为准 |
 | 远端 | `main` 已包含严格拼写首答恢复、结果态布局和测试；无关未跟踪文件仍未进入提交 |
-| 本次交接提交范围 | 实现提交 `d890cfa4`；本次文档更新记录部署与验证状态 |
-| 后端生产 | GitHub Actions `30082924695` 成功；服务器 `/root/apps/studytracker` 为 `d890cfa4`，`studytracker.service` active，监听 5002 |
+| 本次交接提交范围 | 实现提交 `d890cfa4`；后续文档提交只记录部署与验证状态，不改变业务代码 |
+| 后端生产 | GitHub Actions `30082924695`、`30083176762` 均成功；服务器已部署包含实现提交 `d890cfa4` 的 main，`studytracker.service` active，监听 5002 |
 | 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
 
 ### 本次提交涉及的已跟踪文件
@@ -112,7 +112,7 @@
 ## 发布状态
 
 - 后端和小程序是两条独立链路，详见 `CLAUDE.md`。
-- 后端：实现提交 `d890cfa4` 已推送到 `main`。GitHub Actions [Deploy to Alibaba Cloud · 30082924695](https://github.com/KB77GG/studytracker/actions/runs/30082924695) 成功；生产服务器实际 HEAD 为 `d890cfa4`，`studytracker.service` 为 active，日志确认 `127.0.0.1:5002`，`/listening/tests` 返回 HTTP 200。
+- 后端：实现提交 `d890cfa4` 已推送到 `main`。GitHub Actions [30082924695](https://github.com/KB77GG/studytracker/actions/runs/30082924695) 与后续状态提交的 [30083176762](https://github.com/KB77GG/studytracker/actions/runs/30083176762) 均成功；生产已部署包含 `d890cfa4` 的 main，`studytracker.service` 为 active，日志确认 `127.0.0.1:5002`，`/listening/tests` 返回 HTTP 200。
 - 生产硬约束已核验：`gunicorn.conf.py` 为 `workers = 1`、`worker_class = "gthread"`、`threads = 6`；本次未在生产机运行 Whisper/Kokoro 等重模型。
 - 小程序：此前已准备上传单词防复发改动，但本文没有“已上传/已提审/已发布”的确认记录。
 - 2026-07-23 的键盘体验修复随 `d890cfa4` 一并进入后端仓库，但前端仍须单独通过微信开发者工具上传；后端无数据库迁移。

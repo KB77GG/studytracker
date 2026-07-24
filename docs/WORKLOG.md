@@ -12,7 +12,7 @@
 - 修复：服务端响应新增 `student_answer` 与首答快照字段，任务队列返回已完成词的首答答案/判定；前端恢复优先使用服务端队列，幂等/重试结果用同一条记录的答案与判定映射，丢本地进度后从首个未首答词继续。没有开放学生重开改分入口，正常首答仍不可改写。
 - 结果态继续仅收起严格英文键盘的输入控件，播放按钮保持不压缩；compatible/native、中文模式、音频、自动复习、教师授权、申诉和 finalize/queue_incomplete 流程未改语义。
 - 验证：定向服务端 + 小程序结构 38 项通过；全量 Python 295 项中本次相关用例通过，另有 3 项既有静态音频 fixture/Accept-Ranges 测试失败（测试音频未在该工作树提供，未改无关静态链路）；全部 Node 测试通过，`git diff --check` 和提交检查通过。
-- 发布：实现提交 `d890cfa4` 已 commit/push；GitHub Actions [30082924695](https://github.com/KB77GG/studytracker/actions/runs/30082924695) 成功。生产 `/root/apps/studytracker` 实际 HEAD 为 `d890cfa4`，`studytracker.service` active，`/listening/tests` 在 5002 返回 HTTP 200；gunicorn 已核验 `workers=1`、`gthread`、`threads=6`。
+- 发布：实现提交 `d890cfa4` 已 commit/push；GitHub Actions [30082924695](https://github.com/KB77GG/studytracker/actions/runs/30082924695) 与后续状态提交的 [30083176762](https://github.com/KB77GG/studytracker/actions/runs/30083176762) 均成功。生产已部署包含 `d890cfa4` 的 main，`studytracker.service` active，`/listening/tests` 在 5002 返回 HTTP 200；gunicorn 已核验 `workers=1`、`gthread`、`threads=6`。后续仅文档提交不改变业务代码。
 - 当前状态：小程序尚未上传、提审或发布。无关未跟踪的 `data/reading_study`、`prototypes/`、`docs/dictation_input_policy_proposal.md`、`docs/dictation_strict_result_layout_fix.md` 等继续保留且不进本次提交。
 
 ## 2026-07-24 模考分部导航修复（消除提交按钮误触）
