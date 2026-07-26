@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨电脑开发交接
 
 > 这是滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-07-24（Asia/Shanghai）。
+> 最近更新：2026-07-26（Asia/Shanghai）。
 
 ## 使用规则
 
@@ -16,12 +16,105 @@
 | 项目 | 当前状态 |
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
-| 分支 | detached `HEAD`；实现提交已通过安全快进 `HEAD:main` 推送，部署状态文档随后单独提交 |
-| 当前 HEAD | detached `HEAD` 已包含实现提交 `d890cfa4` 及后续部署状态文档提交；精确 tip 以 `git log` 为准 |
-| 远端 | `main` 已包含严格拼写首答恢复、结果态布局和测试；无关未跟踪文件仍未进入提交 |
-| 本次交接提交范围 | 实现提交 `d890cfa4`；后续文档提交只记录部署与验证状态，不改变业务代码 |
-| 后端生产 | GitHub Actions `30082924695`、`30083176762` 均成功；服务器已部署包含实现提交 `d890cfa4` 的 main，`studytracker.service` active，监听 5002 |
+| 分支 | `codex/toefl-rescue`，从 `main` 的 `78a7721a` 创建 |
+| 分支基线 | 从 `78a7721a 修复剑21精听Section 1时间戳错位` 开始；任务分支当前 tip 以 `git log -1` 为准 |
+| 远端 | 本次 TOEFL 题库抢救工作通过 `origin/codex/toefl-rescue` 同步；精确提交以 `git log -1` 为准 |
+| 本次交接提交范围 | 只包含 TOEFL spec、审计代码/测试、质量数据和交接文档；用户其他未跟踪文件未纳入 |
+| 后端生产 | 本次未检查或改变生产；沿用此前已确认的单 worker/gthread/5002 硬约束 |
 | 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
+
+## 当前进行中：TOEFL 题库抢救与模考系统重做
+
+### 用户目标与额度约束
+
+- 用户要求按 `docs/TOEFL_MOCK_FLOW_SPEC.md` 的四科、自适应、计时和恢复流程完整重做 TOEFL 模考系统。
+- 题库按“一套一套抢救、一套一套人工审阅、通过后再上线”的方式推进。
+- 本次会话只允许使用可用额度的 50%，必须为次日另一台电脑接力保留另外 50%；因此本次停在“审计门禁 + 第一套来源结构档案”，没有展开状态机或前端实现。
+- 禁止模型猜测题目、选项、答案或音频对应关系；无法从来源证据确定的内容保持 `review_required`。
+
+### 本次已完成（随任务分支同步）
+
+- 新增纯逻辑审计模块 `services/toefl_bank_quality.py`：
+  - 检查 manifest 发布状态、题目 ID/题号/Module 覆盖、四选项、答案可用性、填空数量、组句可构造性、音频引用与静态文件；
+  - 检查不同 Listening Module 是否错误复用同一整段音频；
+  - 只有无 critical/high、且来源科目人工标记 `approved` 时才判定为 release-ready。
+- 新增 CLI `scripts/audit_toefl_practice_bank.py`：
+  - 默认生成 `data/toefl_quality/latest_audit.json` 与 `docs/toefl_quality_audit.md`；
+  - `--require-release-ready EXAM_ID` 在目标套卷仍有 critical/high 时以退出码 1 阻断发布。
+- 新增 `data/toefl_quality/source_profiles.json`：
+  - 已为 `2026-01-21_A` 建立源题卷、答案、听力原文、M1/M2 听力和口语音频的相对路径、SHA-256、页数/时长证据；
+  - 四科 `review_status` 均为 `pending`，未冒充已审阅。
+- 新增 `tests/test_toefl_bank_quality.py`，覆盖完整可发布样例、不完整已发布套卷、非四选项、来源缺题、模块共用音频和人工审阅门禁。
+- 原始 PDF 已做视觉页级核对：
+  - `2026-01-21_A` Reading：M1 Q1-Q35、M2 Q1-Q15；
+  - Listening：M1 Q1-Q32、M2 Q1-Q15；
+  - Writing：10 道 Build a Sentence + Email + Academic Discussion；
+  - Speaking：7 道 Listen and Repeat + 4 道 Interview。
+- 重要冲突：用户提供的 wofo 流程 spec 写 Listening M1 18 / M2 16，但第一套原始 PDF 明确是 M1 32 / M2 15。后续引擎必须 definition-driven；在用户审阅前不要把第一套强行裁剪成 spec 数量。
+
+### 审计结果
+
+- 全库：47 套、143 科、2,863 个题目对象、4,033 个计分项。
+- 47 套全部处于 published，其中 32 套仍为 partial（68.1%）。
+- critical 226、high 386、medium 23；严格门禁下 0/143 科可直接发布。
+- 50 道选择题不是完整四选项；99 个自动题缺可靠答案；13 套听力的 M1/M2 复用同一整段音频。
+- `2026-01-21_A` 当前发布门禁有 14 项 critical/high：
+  - Reading M1 缺 Q33；
+  - Listening M1 缺 Q7/Q15/Q18/Q21；
+  - Listening M2 缺 Q3/Q9；
+  - Writing Q2/Q3/Q4/Q5/Q7/Q8/Q10 的正确序列无法由当前展示词块构造；
+  - 四科均未经过人工 `approved`。
+- Listening 当前 `order` 不连续是导入器过滤上述残缺题后未重新编号造成的 medium 问题。
+
+### 已运行验证
+
+```text
+.venv/bin/python -m unittest tests.test_toefl_bank_quality tests.test_import_toefl_real_exams tests.test_toefl_practice
+33 tests passed
+
+.venv/bin/ruff check services/toefl_bank_quality.py scripts/audit_toefl_practice_bank.py tests/test_toefl_bank_quality.py
+All checks passed
+
+git diff --check
+passed
+
+.venv/bin/python scripts/audit_toefl_practice_bank.py \
+  --source-root '/Users/zhouxin/Desktop/新托福资料' \
+  --require-release-ready 2026-01-21_A
+exit 1 as expected; 14 critical/high blockers
+```
+
+### 本次任务分支同步文件
+
+本次新增：
+
+- `services/toefl_bank_quality.py`
+- `scripts/audit_toefl_practice_bank.py`
+- `tests/test_toefl_bank_quality.py`
+- `data/toefl_quality/source_profiles.json`
+- `data/toefl_quality/latest_audit.json`
+- `docs/toefl_quality_audit.md`
+- `docs/TOEFL_MOCK_FLOW_SPEC.md`（此前由 Claude 生成，本次只读取、未改）
+
+本次没有修改现有题库 JSON、`toefl_practice.py`、前端、数据库或生产。
+
+用户既有未跟踪文件仍需保留：
+
+- `data/reading_study/browse.html`
+- `data/reading_study/preview.html`
+- `docs/dictation_input_policy_proposal.md`
+- `docs/dictation_strict_result_layout_fix.md`
+- `prototypes/`
+
+### 次日精确起点
+
+1. 开工先读本文件、`CLAUDE.md`、`docs/TOEFL_MOCK_FLOW_SPEC.md` 和 `docs/toefl_quality_audit.md`，再运行 `git status --short --branch` 与 `git log -5 --oneline`。
+2. 先修 `2026-01-21_A` Reading Q33：从原始 50 页题卷对应页面恢复完整题干/四选项，核对答案 PDF 后写回候选数据；不要直接改已发布文件，建议创建 v2 staging 目录。
+3. 再修 Listening 缺失的 6 题；逐题对照题卷截图、听力原文和独立 M1/M2 音频，建立 group/时间轴，不要沿用只按文件名和题号猜测的旧导入逻辑。
+4. 修复 Writing 7 道 scramble mismatch；以题面词块和答案 PDF 为双证据，无法同时满足时保持 blocked。
+5. 每完成一科就运行审计门禁并生成审阅清单；用户人工确认后才把该科 `review_status` 改为 `approved`。
+6. 第一套四科全部通过后，再开始 `api/toefl_mock.py`、service 状态机和 attempt/response 模型；引擎按 definition 驱动，不硬编码第一套的题数。
+7. 本次任务分支的 commit/push 已获授权；后续合并 `main`、部署和发布仍需单独明确授权。
 
 ### 本次提交涉及的已跟踪文件
 

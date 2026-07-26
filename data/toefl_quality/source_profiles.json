@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "exams": {
+    "2026-01-21_A": {
+      "status": "structure_verified",
+      "sources": [
+        {
+          "role": "exam_pdf",
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "pages": 50
+        },
+        {
+          "role": "answer_pdf",
+          "path": "1.21新托福真题A卷/新托福真题01参考答案.pdf",
+          "sha256": "123e64e47e08b47a346f73a2d2e077b10e7ba8290bc20a111b9a4ab6d2ad8be4",
+          "pages": 4
+        },
+        {
+          "role": "listening_transcript_pdf",
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "pages": 4
+        },
+        {
+          "role": "listening_module_1_audio",
+          "path": "1.21新托福真题A卷/听力合集/1.21新托福真题Listening-Module1.mp3",
+          "sha256": "5d5de53e658605e54c1f3b1642779a0af304d0fa93e6bb4c786dfbd91e883752",
+          "duration_seconds": 576.457
+        },
+        {
+          "role": "listening_module_2_audio",
+          "path": "1.21新托福真题A卷/听力合集/1.21新托福真题Listening-Module2.mp3",
+          "sha256": "b44a5d966b3fc45b1992d4eef9653d1727150e8f0c9c88bddc89f16c8abed627",
+          "duration_seconds": 456.242
+        },
+        {
+          "role": "speaking_audio",
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "duration_seconds": 160.353
+        }
+      ],
+      "subjects": {
+        "reading": {
+          "review_status": "pending",
+          "modules": {
+            "m1": {
+              "question_number_start": 1,
+              "question_number_end": 35
+            },
+            "m2": {
+              "question_number_start": 1,
+              "question_number_end": 15
+            }
+          }
+        },
+        "listening": {
+          "review_status": "pending",
+          "modules": {
+            "m1": {
+              "question_number_start": 1,
+              "question_number_end": 32
+            },
+            "m2": {
+              "question_number_start": 1,
+              "question_number_end": 15
+            }
+          }
+        },
+        "writing": {
+          "review_status": "pending",
+          "modules": {
+            "m1": {
+              "question_number_start": 1,
+              "question_number_end": 12
+            }
+          }
+        },
+        "speaking": {
+          "review_status": "pending",
+          "modules": {
+            "m1": {
+              "question_number_start": 1,
+              "question_number_end": 7
+            },
+            "m2": {
+              "question_number_start": 1,
+              "question_number_end": 4
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -6,6 +6,17 @@
 
 ---
 
+## 2026-07-26 TOEFL 题库抢救启动（任务分支同步，保留 50% 额度次日接力）
+
+- 用户决定按“一套一套抢救、人工审阅后再上线”的方式完整重做 TOEFL 模考，目标流程见未跟踪的 `docs/TOEFL_MOCK_FLOW_SPEC.md`。
+- 本次只完成题库质量门禁和 `2026-01-21_A` 来源结构档案，没有修改现有题库、刷题前后端、数据库或生产。
+- 新增 `services/toefl_bank_quality.py`、`scripts/audit_toefl_practice_bank.py`、`tests/test_toefl_bank_quality.py`、`data/toefl_quality/` 和 `docs/toefl_quality_audit.md`；仅随 `codex/toefl-rescue` 任务分支同步，不触发生产部署。
+- 全库审计：47 套/143 科/2,863 题目对象；32 套 published 但仍 partial；50 道非完整四选项、99 个自动题缺答案、13 套听力 M1/M2 共用同一整段音频；严格门禁下 0 科可直接发布。
+- 第一套源 PDF 页级结构已核对：Reading 35+15、Listening 32+15、Writing 12、Speaking 11。它与 wofo spec 的 Listening 18+16 有冲突，后续引擎必须 definition-driven，不要强行裁剪来源题。
+- 第一套当前阻塞：Reading 缺 Q33；Listening 缺 M1 Q7/15/18/21 与 M2 Q3/9；Writing 7 道组句词块无法构造答案；四科均待人工批准。
+- 验证：相关 33 项 unittest 通过，ruff 通过，`git diff --check` 通过；`--require-release-ready 2026-01-21_A` 按预期退出 1 并报告 14 项 critical/high。
+- 用户要求本次最多使用 50% 可用额度，剩余留到次日在另一台电脑继续；精确文件、命令和下一步见 `docs/CODEX_HANDOFF.md`。
+
 ## 2026-07-24 听写严格拼写首答恢复与结果态修复（后端已部署，待小程序发布）
 
 - 根因：任务首答 attempt id 是稳定幂等键，服务端会正确保留旧首答成绩，但旧幂等响应没有返回历史答案；前端又把本次输入和历史判定拼接，导致“本次输入正确却显示错误”。
