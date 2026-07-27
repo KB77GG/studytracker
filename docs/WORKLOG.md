@@ -6,6 +6,16 @@
 
 ---
 
+## 2026-07-27 TOEFL V2 终审四组问题修复（本地提交，未 push / 未部署）
+
+- 在 `codex/toefl-student-workbench` 追加提交 `cb268bb9`，没有 push、merge、生产部署或小程序发布，也没有修改已发布 JSON。
+- 修复 Listening `back_policy=disabled` 被服务端放行、Writing 子 phase 回退重置计时、audio state PUT 后 resume 丢失、Reading M2 修改 M1 答案四项缺口。
+- 服务端现在保存 per-phase `phaseTimers`，只恢复已访问 phase 的 snapshot；audio state 仅允许 Listening phase 和 `ready/skipped/played` 布尔白名单，preview 外禁止 skipped；答题只接受当前 phase。
+- 将快速输入 flush 抽成实际被前端使用的 `static/js/toefl_response_queue.js`，Node 行为测试验证 pending/in-flight 等待、失败传播和重试值保留。
+- 终审复现结果：Listening forward 200 / forbidden back 409；audio PUT 200 / resume persisted True；Writing `100 → 420 → 100`，再次前进/返回不回满；past-module response 409。
+- 验证：TOEFL v2 + 旧兼容相关 72 passed；Node queue 2 passed；全仓 323 passed，另有 2 个既有静态音频 fixture 缺失导致的 404 失败；Ruff、JS 语法、Python 编译和 diff check 通过。
+- 下一步仍是 source review、音频发布、Speaking timing 证据和真实设备/账号 QA；正式 release gate 通过前不得部署。
+
 ## 2026-07-27 TOEFL V2 学生端工作台重建（本地提交，未 push / 未部署）
 
 - 在 `codex/toefl-student-workbench` 上从 `5801849c` 继续，完成提交 `281ca626`；没有 push、merge、生产部署或小程序发布，旧 TOEFL 路由保持并行可用。

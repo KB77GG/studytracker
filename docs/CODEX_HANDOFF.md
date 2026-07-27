@@ -17,7 +17,7 @@
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
 | 分支 | `codex/toefl-student-workbench`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/f712/studytracker` |
-| 分支基线 | 从已推送的 `codex/toefl-rescue` 后继 `5801849c` 开始；学生端工作台实现已提交为 `281ca626`，本地分支尚未 push |
+| 分支基线 | 从已推送的 `codex/toefl-rescue` 后继 `5801849c` 开始；学生端工作台为 `281ca626`，终审修复为 `cb268bb9`，本地分支尚未 push |
 | 远端 | 本次 TOEFL 题库抢救工作通过 `origin/codex/toefl-rescue` 同步；精确提交以 `git log -1` 为准 |
 | 本次交接范围 | 只改当前独立 worktree；主工作树的用户未跟踪文件未覆盖。现有 `data/toefl_practice` 发布 JSON 零修改 |
 | 后端生产 | 本次未检查或改变生产；沿用此前已确认的单 worker/gthread/5002 硬约束 |
@@ -34,11 +34,19 @@
 - 报告只把 `auto` 客观题纳入分母，blocked 题明确排除，manual 显示 `pending_teacher_review`；报告标注为 staging preview，不冒充正式成绩单。当前 Reading/Listening 仍只返回已验证的 `default` M2，`adaptive_available=false`。
 - 新增结构/API/前端测试覆盖：权限、状态跳转与计时防篡改、route-m2 绕过、快速输入 flush、重复 token、录音题型、resume、单项模式、returnTo、blocked 分母、public definition 不泄露答案/来源路径。
 
+### 终审修复（`cb268bb9`）
+
+- `validate_navigation_state` 现在读取 definition 的 module `navigation.back_policy`：Listening disabled 回退返回 409，Reading/Writing 的 `within_module` 回退仍可用。
+- attempt state 增加服务端维护的 `phaseTimers` 快照；跨 writing 子 phase 返回时恢复已访问 phase 的剩余值，客户端不能把已访问 phase 重置为定义满时长。
+- state 的 audio 只接受 definition 内 Listening phase、`ready/skipped/played` 三个布尔字段；`skipped=true` 只允许 preview，并可通过 PUT → resume 恢复。
+- response/recording 现在只允许当前 phase 的题，不能在 Reading M2 修改 M1；前端 flush 抽为 `toefl_response_queue.js`，实际等待 pending 与已 in-flight 请求，任一失败都会阻止前进并保留重试值。
+- 终审复现新结果：`listening_forward_status=200`、`listening_forbidden_back_status=409 back_navigation_disabled`；`audio_state_put_status=200`、`audio_persisted=True`；Writing `100 → 420 → 100`，再次前进/返回保持 `≤200 / ≤100`；past-module response 为 `409 question_not_current`。
+
 ### 验证与浏览器 QA
 
-- `python3 -m pytest -q tests/test_toefl_mock_v2.py tests/test_toefl_mock_frontend.py`：16 passed。
-- TOEFL v2 + 旧 TOEFL rescue / 题库质量 / 导入 / 审计兼容集：69 passed。
-- 全仓 `python3 -m pytest -q`：320 passed；2 个既有 `tests/test_static_audio_headers.py` 失败，均因该 worktree 缺少测试音频 fixture 而返回 404，未改静态音频链路。
+- `python3 -m pytest -q tests/test_toefl_mock_v2.py tests/test_toefl_mock_frontend.py`：19 passed；`node --test tests/test_toefl_response_queue.js`：2 passed。
+- TOEFL v2 + 旧 TOEFL rescue / 题库质量 / 导入 / 审计兼容集：72 passed。
+- 全仓 `python3 -m pytest -q`：323 passed；2 个既有 `tests/test_static_audio_headers.py` 失败，均因该 worktree 缺少测试音频 fixture 而返回 404，未改静态音频链路。
 - 相关 Ruff、`node --check static/js/toefl_mock.js`、Python 编译检查、`git diff --check` 均通过。
 - 本地 `127.0.0.1:5001` fresh browser session 已走查目录、桌面/390×844 移动布局、Reading 18:00 与 inline 输入、快速输入后切题/刷新恢复、Listening `local_source` 明确跳过且题目仍显示、Writing Build a Sentence 重复 token；fresh session 控制台无 error/warn。真实麦克风权限弹窗和 MediaRecorder 录音未在无测试设备的浏览器中执行。
 
