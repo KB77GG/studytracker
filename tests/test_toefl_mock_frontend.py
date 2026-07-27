@@ -8,6 +8,8 @@ def test_student_workbench_has_preflight_audio_and_recording_contracts():
     script = (ROOT / "static/js/toefl_mock.js").read_text(encoding="utf-8")
     api = (ROOT / "api/toefl_mock.py").read_text(encoding="utf-8")
 
+    assert "toefl_response_queue.js" in template
+
     for marker in (
         "sectionPicker",
         "micCheckButton",
@@ -35,12 +37,14 @@ def test_student_workbench_has_preflight_audio_and_recording_contracts():
 
 def test_fast_text_input_flush_waits_for_pending_and_inflight_saves():
     script = (ROOT / "static/js/toefl_mock.js").read_text(encoding="utf-8")
+    queue = (ROOT / "static/js/toefl_response_queue.js").read_text(encoding="utf-8")
 
     assert "pendingResponseValues" in script
     assert "inFlightResponseSaves" in script
-    assert "Promise.allSettled" in script
     assert "await flushPendingResponses()" in script
     assert "responseSaveChains" in script
+    assert "window.ToeflResponseQueue.flushResponseSaves" in script
+    assert "Promise.allSettled" in queue
 
 
 def test_report_and_blocked_copy_are_explicitly_staging_safe():

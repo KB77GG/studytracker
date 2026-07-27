@@ -47,6 +47,7 @@
   const pendingResponseValues = new Map();
   const responseSaveChains = new Map();
   const inFlightResponseSaves = new Set();
+  const inFlightResponseValues = new Map();
   const audioStates = new Map();
 
   function rebuildDefinitionMaps() {
@@ -435,14 +436,17 @@
     let tracked;
     tracked = operation.finally(() => {
       inFlightResponseSaves.delete(tracked);
+      inFlightResponseValues.delete(tracked);
       if (responseSaveChains.get(questionId) === tracked) responseSaveChains.delete(questionId);
     });
     responseSaveChains.set(questionId, tracked);
     inFlightResponseSaves.add(tracked);
+    inFlightResponseValues.set(tracked, { questionId, value });
     try {
       await tracked;
       setSaveState("已保存");
     } catch (error) {
+      if (!pendingResponseValues.has(questionId)) pendingResponseValues.set(questionId, value);
       setSaveState(`保存失败：${error.message}`, true);
       throw error;
     }
@@ -466,10 +470,22 @@
     pendingResponseValues.clear();
     responseSaveTimers.forEach((timer) => clearTimeout(timer));
     responseSaveTimers.clear();
-    const results = await Promise.allSettled(pending.map(([questionId, value]) => saveResponse(questionId, value)));
-    await Promise.allSettled([...inFlightResponseSaves]);
-    const failed = results.find((result) => result.status === "rejected");
-    if (failed) throw failed.reason;
+    const inFlight = [...inFlightResponseSaves].map((promise) => ({
+      promise,
+      ...(inFlightResponseValues.get(promise) || {}),
+    }));
+    const queueResult = await window.ToeflResponseQueue.flushResponseSaves({
+      pendingEntries: pending,
+      inFlightEntries: inFlight,
+      save: saveResponse,
+    });
+    queueResult.retry.forEach((value, questionId) => {
+      pendingResponseValues.set(questionId, value);
+    });
+    if (!queueResult.ok) {
+      const failed = queueResult.results.find((result) => result.status === "rejected");
+      throw failed.reason;
+    }
   }
 
   function stopActiveRecording(manual = true) {

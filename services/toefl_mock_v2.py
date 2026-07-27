@@ -461,6 +461,19 @@ def phase_group_count(mock_definition: dict[str, Any], phase_index: int) -> int:
     return len(phase.get("group_ids") or [])
 
 
+def phase_navigation_policy(
+    mock_definition: dict[str, Any], phase_index: int
+) -> str | None:
+    phases = mock_definition.get("phases", [])
+    if not 0 <= phase_index < len(phases):
+        return None
+    module_id = phases[phase_index].get("module_id")
+    for module in mock_definition.get("modules", []):
+        if module.get("id") == module_id:
+            return (module.get("navigation") or {}).get("back_policy")
+    return None
+
+
 def validate_navigation_state(
     mock_definition: dict[str, Any],
     current_phase_index: int,
@@ -487,6 +500,12 @@ def validate_navigation_state(
     if phase_delta == 0:
         if abs(target_group_index - current_group_index) > 1:
             return "invalid_navigation_jump"
+        if (
+            target_group_index < current_group_index
+            and phase_navigation_policy(mock_definition, current_phase_index)
+            != "within_module"
+        ):
+            return "back_navigation_disabled"
         return None
     if phase_delta == 1 and target_group_index == 0:
         return None
@@ -495,6 +514,8 @@ def validate_navigation_state(
         previous = phases[target_phase_index]
         if (
             current.get("module_id") == previous.get("module_id")
+            and phase_navigation_policy(mock_definition, current_phase_index)
+            == "within_module"
             and previous.get("group_ids")
             and target_group_index == len(previous["group_ids"]) - 1
         ):

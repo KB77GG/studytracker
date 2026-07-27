@@ -228,6 +228,56 @@ def _refresh_server_clock(
     return attempt.remaining_seconds
 
 
+def _phase_timer_snapshots(state: dict[str, Any]) -> dict[str, int | None]:
+    snapshots = state.get("phaseTimers")
+    if not isinstance(snapshots, dict):
+        return {}
+    return {
+        str(phase_id): value
+        for phase_id, value in snapshots.items()
+        if isinstance(phase_id, str) and (isinstance(value, int) or value is None)
+    }
+
+
+def _save_phase_timer_snapshot(
+    state: dict[str, Any], phase_id: str, remaining_seconds: int | None
+) -> None:
+    snapshots = _phase_timer_snapshots(state)
+    snapshots[phase_id] = remaining_seconds
+    state["phaseTimers"] = snapshots
+
+
+def _validated_audio_state(
+    attempt: ToeflMockAttempt,
+    mock_definition: dict[str, Any],
+    value: Any,
+) -> tuple[dict[str, dict[str, bool]] | None, tuple[dict[str, str], int] | None]:
+    if not isinstance(value, dict):
+        return None, ({"error": "audio_state_invalid"}, 400)
+    listening_phase_ids = {
+        phase.get("id")
+        for phase in mock_definition.get("phases", [])
+        if phase.get("section") == "listening"
+    }
+    allowed_fields = {"ready", "skipped", "played"}
+    validated: dict[str, dict[str, bool]] = {}
+    if len(value) > len(listening_phase_ids):
+        return None, ({"error": "audio_state_invalid"}, 400)
+    for phase_id, state in value.items():
+        if phase_id not in listening_phase_ids or not isinstance(state, dict):
+            return None, ({"error": "audio_state_invalid"}, 400)
+        if set(state) - allowed_fields:
+            return None, ({"error": "audio_state_invalid"}, 400)
+        if any(not isinstance(item, bool) for item in state.values()):
+            return None, ({"error": "audio_state_invalid"}, 400)
+        if state.get("skipped") and not attempt.is_preview:
+            return None, ({"error": "audio_skip_preview_only"}, 409)
+        validated[phase_id] = {
+            key: state[key] for key in allowed_fields if key in state
+        }
+    return validated, None
+
+
 def _question_phase_index(
     mock_definition: dict[str, Any], question_id: str
 ) -> int | None:
@@ -263,7 +313,7 @@ def _require_current_phase_question(
         return None, ({"error": "question_not_in_attempt"}, 400)
     current_phase, _ = _phase_indices(attempt)
     question_phase = _question_phase_index(mock_definition, question_id)
-    if question_phase is None or question_phase > current_phase:
+    if question_phase is None or question_phase != current_phase:
         return None, ({"error": "question_not_current"}, 409)
     return question, None
 
@@ -336,6 +386,9 @@ def start_attempt():
         "questionIndex": 0,
         "returnTo": _safe_return_to(payload.get("returnTo")),
         "phaseStartedAt": now.isoformat() + "Z",
+        "phaseTimers": {
+            first_phase.get("id"): first_phase.get("duration_seconds")
+        },
         "deviceCheck": device_check,
     }
     attempt = ToeflMockAttempt(
@@ -531,7 +584,11 @@ def attempt_state(attempt_id: str):
         mock_definition, current_phase, current_group, target_phase, target_group
     )
     if error:
-        return jsonify({"error": error}), 409 if error == "invalid_navigation_jump" else 400
+        status = 409 if error in {
+            "invalid_navigation_jump",
+            "back_navigation_disabled",
+        } else 400
+        return jsonify({"error": error}), status
     current_phase_definition = mock_definition["phases"][current_phase]
     target_phase_definition = mock_definition["phases"][target_phase]
     if (
@@ -545,6 +602,13 @@ def attempt_state(attempt_id: str):
     target_phase_id = mock_definition["phases"][target_phase]["id"]
     if "currentPhase" in payload and str(payload["currentPhase"] or "") != target_phase_id:
         return jsonify({"error": "invalid_current_phase"}), 400
+    if "audio" in incoming:
+        audio_state, audio_error = _validated_audio_state(
+            attempt, mock_definition, incoming["audio"]
+        )
+        if audio_error:
+            return jsonify(audio_error[0]), audio_error[1]
+        previous["audio"] = audio_state
     if "returnTo" in incoming:
         previous["returnTo"] = _safe_return_to(incoming["returnTo"])
     previous["phaseIndex"] = target_phase
@@ -556,10 +620,21 @@ def attempt_state(attempt_id: str):
             return jsonify({"error": "invalid_attempt_state"}), 400
     phase_changed = target_phase != current_phase
     if phase_changed:
+        current_phase_id = current_phase_definition["id"]
+        _refresh_server_clock(attempt, mock_definition)
+        _save_phase_timer_snapshot(
+            previous, current_phase_id, attempt.remaining_seconds
+        )
+        target_phase_id = target_phase_definition["id"]
+        snapshots = _phase_timer_snapshots(previous)
+        if target_phase_id in snapshots:
+            target_remaining = snapshots[target_phase_id]
+        else:
+            target_remaining = target_phase_definition.get("duration_seconds")
+            _save_phase_timer_snapshot(previous, target_phase_id, target_remaining)
         now = _utcnow_naive()
         previous["phaseStartedAt"] = now.isoformat() + "Z"
-        target_duration = mock_definition["phases"][target_phase].get("duration_seconds")
-        attempt.remaining_seconds = target_duration
+        attempt.remaining_seconds = target_remaining
     else:
         server_remaining = _refresh_server_clock(attempt, mock_definition)
         if "remainingSeconds" in payload:
@@ -577,6 +652,11 @@ def attempt_state(attempt_id: str):
                 attempt.remaining_seconds = (
                     max(0, requested) if server_remaining is not None else None
                 )
+        _save_phase_timer_snapshot(
+            previous,
+            target_phase_definition["id"],
+            attempt.remaining_seconds,
+        )
     attempt.state_json = _json_text(previous)
     attempt.current_phase = target_phase_id
     db.session.commit()

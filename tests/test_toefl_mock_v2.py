@@ -219,6 +219,11 @@ def test_attempt_api_requires_preview_and_supports_save_resume_route_report(app)
         },
     )
     assert advance.status_code == 200
+    past_module_response = client.post(
+        "/api/toefl/responses",
+        json={"attemptId": attempt["id"], "questionId": qid, "response": "A"},
+    )
+    assert past_module_response.status_code == 409
     advance_group = client.put(
         f"/api/toefl/attempts/{attempt['id']}/state",
         json={
@@ -303,6 +308,126 @@ def test_state_rejects_navigation_jump_and_timer_increase(app):
         },
     )
     assert increase.status_code == 409
+
+
+def test_listening_back_policy_disables_same_phase_back_navigation(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-21_A", "sections": ["listening"], "preview": True},
+    ).get_json()["attempt"]
+    attempt_id = started["id"]
+    forward = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 1},
+            "currentPhase": "listening:m1",
+            "remainingSeconds": None,
+        },
+    )
+    assert forward.status_code == 200
+    backward = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0},
+            "currentPhase": "listening:m1",
+            "remainingSeconds": None,
+        },
+    )
+    assert backward.status_code == 409
+    assert backward.get_json()["error"] == "back_navigation_disabled"
+
+
+def test_writing_phase_timer_snapshots_survive_back_and_forward(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-21_A", "sections": ["writing"], "preview": True},
+    ).get_json()["attempt"]
+    attempt_id = started["id"]
+    low_build = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0},
+            "currentPhase": "writing:build_a_sentence",
+            "remainingSeconds": 100,
+        },
+    ).get_json()["attempt"]
+    assert low_build["remaining_seconds"] == 100
+    first_email = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 1, "groupIndex": 0},
+            "currentPhase": "writing:write_email",
+        },
+    ).get_json()["attempt"]
+    assert first_email["remaining_seconds"] <= 420
+    low_email = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 1, "groupIndex": 0},
+            "currentPhase": "writing:write_email",
+            "remainingSeconds": 200,
+        },
+    ).get_json()["attempt"]
+    assert low_email["remaining_seconds"] == 200
+    back_to_build = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0},
+            "currentPhase": "writing:build_a_sentence",
+        },
+    ).get_json()["attempt"]
+    assert back_to_build["remaining_seconds"] <= 100
+    forward_again = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 1, "groupIndex": 0},
+            "currentPhase": "writing:write_email",
+        },
+    ).get_json()["attempt"]
+    assert forward_again["remaining_seconds"] <= 200
+    back_again = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0},
+            "currentPhase": "writing:build_a_sentence",
+        },
+    ).get_json()["attempt"]
+    assert back_again["remaining_seconds"] <= 100
+
+
+def test_audio_state_is_whitelisted_and_survives_resume(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-21_A", "sections": ["listening"], "preview": True},
+    ).get_json()["attempt"]
+    audio = {"listening:m1": {"ready": True, "skipped": True, "played": False}}
+    saved = client.put(
+        f"/api/toefl/attempts/{started['id']}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0, "audio": audio},
+            "currentPhase": "listening:m1",
+            "remainingSeconds": None,
+        },
+    )
+    assert saved.status_code == 200
+    resumed = client.get(f"/api/toefl/attempts/{started['id']}/resume")
+    assert resumed.get_json()["attempt"]["state"]["audio"] == audio
+    invalid = client.put(
+        f"/api/toefl/attempts/{started['id']}/state",
+        json={
+            "state": {
+                "phaseIndex": 0,
+                "groupIndex": 0,
+                "audio": {"reading:m1": {"ready": True}},
+            },
+            "currentPhase": "listening:m1",
+            "remainingSeconds": None,
+        },
+    )
+    assert invalid.status_code == 400
 
 
 def test_response_validation_rejects_wrong_shape_but_allows_repeated_tokens():
