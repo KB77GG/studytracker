@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block page_title %}模考成绩{% endblock %}
+{% block page_subtitle %}Mock Exam Results{% endblock %}
+
+{% block content_dashboard %}
+<div class="container">
+  <div class="header-row">
+    <h1>{{ exam.name }} · 成绩与复盘</h1>
+    <a href="{{ url_for('admin_mock_exams_index') }}" class="btn btn-outline-secondary btn-sm">← 返回模考列表</a>
+  </div>
+
+  <p style="color:#666; margin:8px 0 16px;">
+    听力 <code>{{ exam.listening_test_id }}</code> ·
+    阅读 <code>{{ exam.reading_test_id }}</code>
+    {% if exam.writing_test_id %} · 写作 <code>{{ exam.writing_test_id }}</code>{% endif %}
+    · 共 {{ rows|length }} 人作答（时间为北京时间）
+  </p>
+
+  <div class="card">
+    <div class="table-scroll">
+    <table class="data-table sessions-table">
+      <thead>
+        <tr>
+          <th>学生</th>
+          <th>状态</th>
+          <th>听力</th>
+          <th>阅读</th>
+          {% if exam.writing_test_id %}<th>写作</th>{% endif %}
+          <th>综合 Band</th>
+          <th>时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td><strong>{{ row.student_name }}</strong></td>
+          <td>
+            {% if row.status == 'submitted' %}
+              <span class="badge badge-success">已交卷</span>
+            {% else %}
+              <span class="badge badge-warning">进行中 · {{ row.current_section }}</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if row.listening.submitted %}
+              {{ row.listening.correct }}/{{ row.listening.total }}
+              （{{ '%.1f'|format(row.listening.accuracy or 0) }}%）
+              {% if row.listening.band is not none %}<br><small>Band {{ row.listening.band }}</small>{% endif %}
+              {% if row.listening.auto_submitted %}<br><small style="color:#c0392b;">到时自动交</small>{% endif %}
+            {% else %}<span style="color:#999;">—</span>{% endif %}
+          </td>
+          <td>
+            {% if row.reading.submitted %}
+              {{ row.reading.correct }}/{{ row.reading.total }}
+              （{{ '%.1f'|format(row.reading.accuracy or 0) }}%）
+              {% if row.reading.band is not none %}<br><small>Band {{ row.reading.band }}</small>{% endif %}
+              {% if row.reading.auto_submitted %}<br><small style="color:#c0392b;">到时自动交</small>{% endif %}
+            {% else %}<span style="color:#999;">—</span>{% endif %}
+          </td>
+          {% if exam.writing_test_id %}
+          <td>
+            {% if row.writing.submitted %}
+              {{ row.writing.task1_words }} + {{ row.writing.task2_words }} 词<br><small>待人工评分</small>
+              {% if row.writing.auto_submitted %}<br><small style="color:#c0392b;">到时自动交</small>{% endif %}
+            {% else %}<span style="color:#999;">—</span>{% endif %}
+          </td>
+          {% endif %}
+          <td>{% if row.overall_band is not none %}<strong>{{ row.overall_band }}</strong>{% else %}<span style="color:#999;">—</span>{% endif %}</td>
+          <td>
+            <small>开始 {{ row.started_at_text or '—' }}<br>交卷 {{ row.finished_at_text or '—' }}</small>
+          </td>
+          <td>
+            <a class="btn btn-sm btn-primary"
+               href="{{ url_for('mock_exam_admin.exam_session_detail', exam_id=exam.id, session_id=row.id) }}">复盘</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="{{ 8 if exam.writing_test_id else 7 }}" style="text-align:center; color:#888;">还没有学生作答。</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<style>
+  .table-scroll { overflow-x: auto; }
+  .sessions-table { width: 100%; font-size: 14px; }
+  .sessions-table th, .sessions-table td { vertical-align: middle; white-space: nowrap; padding: 8px 10px; }
+  .sessions-table .btn { white-space: nowrap; }
+</style>
+{% endblock %}

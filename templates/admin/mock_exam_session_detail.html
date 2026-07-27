@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block page_title %}逐题复盘{% endblock %}
+{% block page_subtitle %}Mock Exam Review{% endblock %}
+
+{% macro review_block(title, units, section) -%}
+<div class="card review-card">
+  <div class="review-card__head">
+    <h2>{{ title }}</h2>
+    <div class="review-card__meta">
+      {% if section.submitted %}
+        原始分 <strong>{{ section.correct }}/{{ section.total }}</strong> ·
+        正确率 {{ '%.1f'|format(section.accuracy or 0) }}% ·
+        Band {{ section.band if section.band is not none else '—' }} ·
+        用时 {{ section.duration_text }}
+        {% if section.auto_submitted %}<span class="review-flag">到时自动交卷</span>{% endif %}
+        · 交卷 {{ section.submitted_at_text }}
+      {% else %}
+        <span style="color:#999;">尚未提交</span>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if units %}
+    {% for unit in units %}
+    <div class="review-unit">
+      <h3>{{ unit.label }} <small>{{ unit.correct }}/{{ unit.total }} 分，错 {{ unit.wrong }} 题</small></h3>
+      {% for group in unit.groups %}
+        {% if group.title or group.instruction %}
+        <p class="review-group">
+          {% if group.title %}<strong>{{ group.title }}</strong>{% endif %}
+          {% if group.instruction %}<span>{{ group.instruction }}</span>{% endif %}
+        </p>
+        {% endif %}
+        <table class="review-table">
+          <thead>
+            <tr><th style="width:80px;">题号</th><th>学生答案</th><th>正确答案</th><th style="width:90px;">判定</th></tr>
+          </thead>
+          <tbody>
+            {% for row in group.rows %}
+            <tr class="{% if row.is_correct %}is-correct{% elif row.is_partial %}is-partial{% else %}is-wrong{% endif %}"
+                data-correct="{{ '1' if row.is_correct else '0' }}">
+              <td>{{ row.label }}</td>
+              <td class="{% if not row.answered %}is-blank{% endif %}">{{ row.student_answer }}</td>
+              <td>{{ row.correct_answer }}</td>
+              <td>
+                {% if row.is_correct %}✅
+                {% elif row.is_partial %}{{ row.awarded }}/{{ row.marks }}
+                {% else %}❌{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <p style="color:#888; padding:8px 0;">没有可复盘的作答记录。</p>
+  {% endif %}
+</div>
+{%- endmacro %}
+
+{% block content_dashboard %}
+<div class="container">
+  <div class="header-row">
+    <h1>{{ session.student_name }} · {{ exam.name }}</h1>
+    <a href="{{ url_for('mock_exam_admin.exam_sessions', exam_id=exam.id) }}" class="btn btn-outline-secondary btn-sm">← 返回成绩列表</a>
+  </div>
+
+  <div class="card">
+    <p style="margin:0;">
+      状态：<strong>{{ summary.status_text }}</strong>
+      {% if summary.status != 'submitted' %}（当前：{{ summary.current_section }}）{% endif %}
+      · 开始 {{ summary.started_at_text or '—' }}
+      · 交卷 {{ summary.finished_at_text or '—' }}
+      · 综合 Band
+      <strong>{{ summary.overall_band if summary.overall_band is not none else '—' }}</strong>
+      <span style="color:#888;">（时间为北京时间）</span>
+    </p>
+    <p style="margin:8px 0 0;">
+      <label style="font-weight:600; cursor:pointer;">
+        <input type="checkbox" id="wrongOnly"> 只看错题
+      </label>
+    </p>
+  </div>
+
+  {{ review_block('Listening', listening_units, summary.listening) }}
+  {{ review_block('Reading', reading_units, summary.reading) }}
+
+  {% if has_writing %}
+  <div class="card review-card">
+    <div class="review-card__head">
+      <h2>Writing</h2>
+      <div class="review-card__meta">
+        {% if summary.writing.submitted %}
+          用时 {{ summary.writing.duration_text }} · 交卷 {{ summary.writing.submitted_at_text }}
+          {% if summary.writing.auto_submitted %}<span class="review-flag">到时自动交卷</span>{% endif %}
+          · 写作不自动判分，需人工评分
+        {% else %}
+          <span style="color:#999;">尚未提交</span>
+        {% endif %}
+      </div>
+    </div>
+    {% for index in [0, 1] %}
+    <div class="review-essay">
+      <h3>Task {{ index + 1 }}（{{ summary.writing.task1_words if index == 0 else summary.writing.task2_words }} 词）</h3>
+      {% if writing_tasks|length > index and writing_tasks[index].prompt %}
+        <p class="review-essay__prompt">{{ writing_tasks[index].prompt }}</p>
+      {% endif %}
+      <pre class="review-essay__text">{{ (session.writing_essay_task1 if index == 0 else session.writing_essay_task2) or '（未作答）' }}</pre>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+<style>
+  .review-card { margin-top: 16px; }
+  .review-card__head { border-bottom: 1px solid #e6ebf0; padding-bottom: 10px; margin-bottom: 12px; }
+  .review-card__head h2 { margin: 0 0 4px; font-size: 20px; }
+  .review-card__meta { color: #667; font-size: 13px; }
+  .review-flag { color: #c0392b; font-weight: 600; }
+  .review-unit { margin-bottom: 18px; }
+  .review-unit h3 { font-size: 15px; margin: 12px 0 6px; }
+  .review-unit h3 small { color: #888; font-weight: 400; margin-left: 6px; }
+  .review-group { font-size: 12px; color: #778; margin: 10px 0 4px; }
+  .review-group span { margin-left: 6px; }
+  .review-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .review-table th, .review-table td { border: 1px solid #e6ebf0; padding: 6px 10px; text-align: left; }
+  .review-table th { background: #f6f8fa; font-size: 12px; color: #667; font-weight: 600; }
+  .review-table tr.is-wrong td { background: #fff5f5; }
+  .review-table tr.is-partial td { background: #fffaf0; }
+  .review-table td.is-blank { color: #b0b6bd; }
+  .review-essay { margin-top: 12px; }
+  .review-essay__prompt { color: #667; font-size: 13px; margin: 0 0 6px; }
+  .review-essay__text {
+    white-space: pre-wrap; word-break: break-word; font: inherit;
+    background: #f6f8fa; border: 1px solid #e3e8ed; border-radius: 8px;
+    padding: 12px 14px; margin: 0; line-height: 1.6;
+  }
+</style>
+
+<script>
+document.getElementById('wrongOnly').addEventListener('change', function (event) {
+  const wrongOnly = event.target.checked;
+  document.querySelectorAll('.review-table tbody tr').forEach(function (row) {
+    row.style.display = wrongOnly && row.dataset.correct === '1' ? 'none' : '';
+  });
+});
+</script>
+{% endblock %}

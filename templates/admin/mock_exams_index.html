@@ -20,18 +20,16 @@
   {% endwith %}
 
   <div class="card">
-    <table class="data-table">
+    <div class="table-scroll">
+    <table class="data-table mock-exams-table">
       <thead>
         <tr>
           <th>ID</th>
           <th>名称</th>
-          <th>听力</th>
-          <th>阅读</th>
-          <th>时长 (L/R)</th>
+          <th>配卷</th>
           <th>Pincode</th>
           <th>状态</th>
           <th>分发链接</th>
-          <th>创建时间</th>
           <th>操作</th>
         </tr>
       </thead>
@@ -39,10 +37,15 @@
         {% for exam in exams %}
         <tr>
           <td>{{ exam.id }}</td>
-          <td>{{ exam.name }}</td>
-          <td><code>{{ exam.listening_test_id }}</code></td>
-          <td><code>{{ exam.reading_test_id }}</code></td>
-          <td>{{ exam.listening_minutes }}min / {{ exam.reading_minutes }}min</td>
+          <td>
+            {{ exam.name }}
+            <div class="cell-sub">建于 {{ exam.created_at }}</div>
+          </td>
+          <td class="paper-cell">
+            听力 <code>{{ exam.listening_test_id }}</code> · {{ exam.listening_minutes }}min<br>
+            阅读 <code>{{ exam.reading_test_id }}</code> · {{ exam.reading_minutes }}min
+            {% if exam.writing_test_id %}<br>写作 <code>{{ exam.writing_test_id }}</code> · {{ exam.writing_minutes }}min{% endif %}
+          </td>
           <td><strong style="font-family: monospace;">{{ exam.pincode }}</strong></td>
           <td>
             {% if exam.is_active %}
@@ -51,22 +54,85 @@
               <span class="badge badge-secondary">停用</span>
             {% endif %}
           </td>
-          <td><a href="{{ exam.entry_url }}" target="_blank">{{ exam.entry_url }}</a></td>
-          <td>{{ exam.created_at }}</td>
           <td>
-            <button type="button" class="btn btn-sm btn-outline" onclick="regenPincode({{ exam.id }})">换 pincode</button>
-            <button type="button" class="btn btn-sm btn-outline" onclick="toggleActive({{ exam.id }})">{{ '停用' if exam.is_active else '启用' }}</button>
+            <div class="btn-stack">
+              <button type="button" class="btn btn-sm btn-outline"
+                      data-copy-link="{{ exam.entry_url }}">复制链接</button>
+              <button type="button" class="btn btn-sm btn-outline"
+                      data-copy-link="{{ exam.entry_url }}"
+                      data-copy-name="{{ exam.name }}"
+                      data-copy-pincode="{{ exam.pincode }}">复制邀请语</button>
+              <a href="{{ exam.entry_url }}" target="_blank" class="btn-stack__link">打开考试页</a>
+            </div>
+          </td>
+          <td>
+            <div class="btn-stack">
+              <a class="btn btn-sm btn-primary"
+                 href="{{ url_for('mock_exam_admin.exam_sessions', exam_id=exam.id) }}">成绩 / 复盘（{{ exam.session_count }}）</a>
+              <button type="button" class="btn btn-sm btn-outline" onclick="regenPincode({{ exam.id }})">换 pincode</button>
+              <button type="button" class="btn btn-sm btn-outline" onclick="toggleActive({{ exam.id }})">{{ '停用' if exam.is_active else '启用' }}</button>
+            </div>
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="10" style="text-align:center; color:#888;">暂无模考，点击右上「新建模考」。</td></tr>
+        <tr><td colspan="7" style="text-align:center; color:#888;">暂无模考，点击右上「新建模考」。</td></tr>
         {% endfor %}
       </tbody>
     </table>
+    </div>
   </div>
 </div>
 
+<style>
+  /* 列变多以后窄屏会把每个字挤成一列，这里改成整表横向滚动 */
+  .table-scroll { overflow-x: auto; }
+  .mock-exams-table { width: 100%; min-width: 900px; }
+  .mock-exams-table th, .mock-exams-table td { vertical-align: middle; white-space: nowrap; }
+  .mock-exams-table .btn { white-space: nowrap; }
+  .paper-cell { font-size: 13px; line-height: 1.7; }
+  .cell-sub { font-size: 12px; color: #8a9099; }
+  /* 按钮竖排，避免操作列被挤出可视区 */
+  .btn-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .btn-stack__link { font-size: 12px; }
+</style>
+
 <script>
+async function copyText(text) {
+  // 优先用剪贴板 API；HTTP 或旧浏览器下退回 textarea + execCommand。
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (err) { /* fall through */ }
+  }
+  const area = document.createElement('textarea');
+  area.value = text;
+  area.setAttribute('readonly', '');
+  area.style.position = 'fixed';
+  area.style.opacity = '0';
+  document.body.appendChild(area);
+  area.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+  document.body.removeChild(area);
+  return ok;
+}
+
+document.addEventListener('click', async function (event) {
+  const btn = event.target.closest('[data-copy-link]');
+  if (!btn) return;
+  const url = new URL(btn.dataset.copyLink, location.origin).href;
+  const pincode = btn.dataset.copyPincode;
+  const text = pincode
+    ? `${btn.dataset.copyName}\n考试链接：${url}\n考试口令（pincode）：${pincode}\n（用手机或电脑浏览器打开，输入姓名和口令即可开始）`
+    : url;
+  const ok = await copyText(text);
+  const original = btn.textContent;
+  btn.textContent = ok ? '已复制 ✓' : '复制失败';
+  setTimeout(function () { btn.textContent = original; }, 1500);
+  if (!ok) window.prompt('请手动复制：', text);
+});
+
 async function regenPincode(examId) {
   if (!confirm('换发 pincode 后，旧 pincode 失效。继续？')) return;
   const resp = await fetch(`/admin/mock-exams/${examId}/regenerate-pincode`, { method: 'POST' });

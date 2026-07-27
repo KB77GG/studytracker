@@ -58,6 +58,7 @@ from services.ielts_practice_scoring import (
     grade_listening_test_answers as _grade_listening_test_answers_shared,
     grade_reading_test_answers as _grade_reading_test_answers_shared,
 )
+from services import mock_exam_review as _mock_review
 from services import mock_exam_writing as _mock_writing
 from practice_tables import normalize_practice_tables
 from toefl_practice import catalog_summary as _toefl_catalog_summary
@@ -7758,9 +7759,20 @@ def _generate_mock_exam_pincode() -> str:
     return (cleaned + "PIN")[:5]
 
 
-def _serialize_mock_exam(exam: MockExam) -> dict:
+def _mock_exam_session_counts() -> dict[int, int]:
+    """各模考的作答人数，一次 group by 查完，避免列表页 N+1。"""
+    rows = (
+        db.session.query(MockExamSession.exam_id, func.count(MockExamSession.id))
+        .group_by(MockExamSession.exam_id)
+        .all()
+    )
+    return {exam_id: count for exam_id, count in rows}
+
+
+def _serialize_mock_exam(exam: MockExam, session_count: int = 0) -> dict:
     return {
         "id": exam.id,
+        "session_count": session_count,
         "name": exam.name,
         "listening_test_id": exam.listening_test_id,
         "reading_test_id": exam.reading_test_id,
@@ -7826,9 +7838,10 @@ def admin_mock_exams_index():
         flash("无权限管理模考。")
         return redirect(url_for("index"))
     exams = MockExam.query.order_by(MockExam.created_at.desc()).all()
+    counts = _mock_exam_session_counts()
     return render_template(
         "admin/mock_exams_index.html",
-        exams=[_serialize_mock_exam(e) for e in exams],
+        exams=[_serialize_mock_exam(e, counts.get(e.id, 0)) for e in exams],
     )
 
 
@@ -8293,11 +8306,8 @@ def mock_exam_result(exam_id, token):
     if err:
         return f"模考会话不存在：{err[0]}", err[1]
 
-    listening_band = sess.listening_ielts_score
-    reading_band = sess.reading_ielts_score
-    overall_band = None
-    if listening_band is not None and reading_band is not None:
-        overall_band = round((float(listening_band) + float(reading_band)) / 2 * 2) / 2
+    # 综合分口径与教师复盘页共用一处（雅思规则：.25 / .75 进位）
+    overall_band = _mock_review.overall_band(sess.listening_ielts_score, sess.reading_ielts_score)
 
     def _wrong(json_blob):
         try:
