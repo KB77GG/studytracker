@@ -14,9 +14,11 @@ import json
 import re
 import subprocess
 from collections import Counter
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+UTC = timezone.utc  # noqa: UP017  # Python 3.10 production compatibility.
 
 EXAM_KEY = "2026-01-21_B"
 PROGRESS_KEY = "2026-01-21-B"

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import uuid
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
@@ -174,7 +174,8 @@ def _upsert_response(
 
 
 def _utcnow_naive() -> datetime:
-    return datetime.now(UTC).replace(tzinfo=None)
+    # Production still runs Python 3.10, where datetime.UTC is unavailable.
+    return datetime.now(timezone.utc).replace(tzinfo=None)  # noqa: UP017
 
 
 def _state(attempt: ToeflMockAttempt) -> dict[str, Any]:
@@ -198,7 +199,9 @@ def _phase_started_at(state: dict[str, Any], fallback: datetime) -> datetime:
         try:
             parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
             if parsed.tzinfo:
-                return parsed.astimezone(UTC).replace(tzinfo=None)
+                return parsed.astimezone(timezone.utc).replace(  # noqa: UP017
+                    tzinfo=None
+                )
             return parsed
         except ValueError:
             pass

@@ -21,9 +21,11 @@ import re
 import ssl
 import urllib.parse
 import urllib.request
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+UTC = timezone.utc  # noqa: UP017  # Python 3.10 production compatibility.
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_PATH = ROOT / "data" / "idictation_xyy_listening" / "raw.json"

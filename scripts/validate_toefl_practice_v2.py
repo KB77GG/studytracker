@@ -13,9 +13,11 @@ import hashlib
 import json
 import sys
 from collections import Counter
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+UTC = timezone.utc  # noqa: UP017  # Python 3.10 production compatibility.
 
 FORBIDDEN_PUBLIC_KEYS = {
     "answer",
