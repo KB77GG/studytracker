@@ -18,8 +18,6 @@ WRITING_TIMERS = {
 MODULE_TIMERS = {
     ("reading", "m1"): 1080,
     ("reading", "m2"): 540,
-    ("speaking", "m1"): 420,
-    ("speaking", "m2"): 540,
 }
 
 
@@ -85,7 +83,51 @@ def _release_blockers(
     ]
     if pending:
         blockers.append("source review pending: " + ", ".join(pending))
+    for subject in ("listening", "speaking"):
+        audio_assets = [
+            asset
+            for asset in content.get("assets", [])
+            if asset.get("subject") == subject and asset.get("kind") == "audio"
+        ]
+        unavailable = [
+            asset.get("id", "unknown")
+            for asset in audio_assets
+            if asset.get("delivery", {}).get("status") != "available"
+        ]
+        if unavailable:
+            blockers.append(
+                f"{subject} audio is not published: {', '.join(unavailable)}"
+            )
+    speaking_timing = speaking_timing_blockers(content)
+    if speaking_timing:
+        blockers.extend(speaking_timing)
     return blockers
+
+
+def speaking_timing_blockers(content: dict[str, Any]) -> list[str]:
+    """Return formal-mode blockers when speaking timing is not source-defined.
+
+    The current rescue packages contain phase durations, but not verified
+    per-question preparation/response durations.  A preview may still expose
+    the source-backed prompt, while formal mode must remain unavailable.
+    """
+
+    missing: list[str] = []
+    for question in content.get("questions", []):
+        if question.get("subject") != "speaking":
+            continue
+        config = question.get("input_config") or {}
+        preparation = config.get("preparation_seconds")
+        response = config.get("response_seconds")
+        if not isinstance(preparation, (int, float)) or preparation < 0:
+            missing.append(f"{question.get('id', 'unknown')}: preparation timing")
+        if not isinstance(response, (int, float)) or response <= 0:
+            missing.append(f"{question.get('id', 'unknown')}: response timing")
+    if not missing:
+        return []
+    return [
+        "speaking per-question preparation/response timing is not source-verified"
+    ]
 
 
 def _validation_status(package_dir: Path) -> str:
@@ -157,9 +199,27 @@ def _public_asset(asset: dict[str, Any]) -> dict[str, Any]:
 
 
 def _public_record(record: dict[str, Any]) -> dict[str, Any]:
-    public = deepcopy(record)
-    public.pop("source_refs", None)
-    return public
+    private_keys = {
+        "source_refs",
+        "evidence",
+        "source_folder",
+        "source_path",
+        "sha256",
+        "storage_key",
+    }
+
+    def strip_private(value: Any) -> Any:
+        if isinstance(value, dict):
+            return {
+                key: strip_private(item)
+                for key, item in value.items()
+                if key not in private_keys
+            }
+        if isinstance(value, list):
+            return [strip_private(item) for item in value]
+        return deepcopy(value)
+
+    return strip_private(record)
 
 
 def _phase_plan(
@@ -185,17 +245,35 @@ def _phase_plan(
                         "module_id": module["id"],
                         "label": module.get("label", f"{subject} {module_key}"),
                         "duration_seconds": MODULE_TIMERS.get(
-                            (subject, module_key)
+                            (subject, module_key),
+                            module.get("duration_seconds")
+                            if subject == "speaking"
+                            else None,
                         ),
                         "timer_mode": (
-                            "countdown"
-                            if (subject, module_key) in MODULE_TIMERS
-                            else "audio_driven"
+                            "audio_driven"
+                            if subject == "listening"
+                            else "countdown"
                         ),
                         "adaptive_checkpoint": (
                             module_key == "m1"
                             and subject in {"reading", "listening"}
                         ),
+                        "group_ids": [
+                            item["id"]
+                            for item in sorted(
+                                groups_by_module.get(module["id"], []),
+                                key=lambda item: item.get("order", 0),
+                            )
+                        ],
+                        "question_ids": [
+                            question_id
+                            for item in sorted(
+                                groups_by_module.get(module["id"], []),
+                                key=lambda item: item.get("order", 0),
+                            )
+                            for question_id in item.get("question_ids", [])
+                        ],
                     }
                 )
                 continue
@@ -215,6 +293,8 @@ def _phase_plan(
                         "duration_seconds": WRITING_TIMERS.get(task_type),
                         "timer_mode": "countdown",
                         "adaptive_checkpoint": False,
+                        "group_ids": [group["id"]],
+                        "question_ids": list(group.get("question_ids", [])),
                     }
                 )
     return phases
@@ -251,6 +331,7 @@ def definition(
         if item.get("group_id") in group_ids
     ]
     blockers = _release_blockers(content, manifest)
+    speaking_blockers = speaking_timing_blockers(content)
     exam = content["exam"]
     return {
         "schema_version": "1.0.0",
@@ -298,6 +379,8 @@ def definition(
             "preview_required": bool(blockers),
             "blockers": blockers,
             "validation_status": _validation_status(package_dir),
+            "formal_mode_available": not blockers,
+            "formal_mode_blockers": speaking_blockers,
         },
     }
 
@@ -338,6 +421,87 @@ def answer_is_correct(answer: dict[str, Any], response: Any) -> bool:
     return False
 
 
+def validate_response_value(question: dict[str, Any], response: Any) -> str | None:
+    """Validate a public response shape without consulting the private key."""
+
+    response_type = question.get("response_type")
+    if response_type == "mc":
+        options = {str(item.get("key")) for item in question.get("options", [])}
+        values = response if isinstance(response, list) else [response]
+        if not values or any(str(value) not in options for value in values):
+            return "response_option_invalid"
+        if question.get("input_config", {}).get("selection", "single") == "single" and len(values) != 1:
+            return "response_option_invalid"
+        return None
+    if response_type == "order":
+        if not isinstance(response, list):
+            return "response_tokens_invalid"
+        tokens = [str(item) for item in (question.get("input_config") or {}).get("scramble_tokens", [])]
+        remaining: dict[str, int] = {}
+        for token in tokens:
+            remaining[token] = remaining.get(token, 0) + 1
+        for value in response:
+            token = str(value)
+            if remaining.get(token, 0) <= 0:
+                return "response_tokens_invalid"
+            remaining[token] -= 1
+        return None
+    if response_type in {"text", "free_text"}:
+        if not isinstance(response, str):
+            return "response_text_invalid"
+        limit = 100000 if response_type == "free_text" else 500
+        return "response_text_too_long" if len(response) > limit else None
+    if response_type == "recording":
+        return "recording_upload_required"
+    return "response_type_invalid"
+
+
+def phase_group_count(mock_definition: dict[str, Any], phase_index: int) -> int:
+    phase = mock_definition.get("phases", [])[phase_index]
+    return len(phase.get("group_ids") or [])
+
+
+def validate_navigation_state(
+    mock_definition: dict[str, Any],
+    current_phase_index: int,
+    current_group_index: int,
+    target_phase_index: int,
+    target_group_index: int,
+) -> str | None:
+    """Validate one adjacent client navigation update.
+
+    The client may advance one group, advance one phase, or use the source
+    module's explicit within-module back policy.  Arbitrary jumps are rejected.
+    """
+
+    phases = mock_definition.get("phases", [])
+    if not 0 <= current_phase_index < len(phases):
+        return "invalid_server_state"
+    if not 0 <= target_phase_index < len(phases):
+        return "invalid_attempt_state"
+    if not 0 <= current_group_index < phase_group_count(mock_definition, current_phase_index):
+        return "invalid_server_state"
+    if not 0 <= target_group_index < phase_group_count(mock_definition, target_phase_index):
+        return "invalid_attempt_state"
+    phase_delta = target_phase_index - current_phase_index
+    if phase_delta == 0:
+        if abs(target_group_index - current_group_index) > 1:
+            return "invalid_navigation_jump"
+        return None
+    if phase_delta == 1 and target_group_index == 0:
+        return None
+    if phase_delta == -1:
+        current = phases[current_phase_index]
+        previous = phases[target_phase_index]
+        if (
+            current.get("module_id") == previous.get("module_id")
+            and previous.get("group_ids")
+            and target_group_index == len(previous["group_ids"]) - 1
+        ):
+            return None
+    return "invalid_navigation_jump"
+
+
 def score_responses(
     test_id: str,
     responses: dict[str, Any],
@@ -346,10 +510,17 @@ def score_responses(
     root: Path | None = None,
 ) -> dict[str, Any]:
     answer_key = load_private_answer_key(test_id, root)
+    blocked_ids = {
+        item.get("question_id")
+        for item in answer_key.get("blocked", [])
+        if item.get("question_id")
+    }
     answers = [
         item
         for item in answer_key.get("answers", [])
-        if question_ids is None or item.get("question_id") in question_ids
+        if item.get("grading_status", "auto") == "auto"
+        and item.get("question_id") not in blocked_ids
+        and (question_ids is None or item.get("question_id") in question_ids)
     ]
     results = [
         {

@@ -12,6 +12,8 @@ from services.toefl_mock_v2 import (
     definition,
     load_private_answer_key,
     route_module_two,
+    validate_navigation_state,
+    validate_response_value,
 )
 
 
@@ -127,7 +129,7 @@ def test_attempt_api_requires_preview_and_supports_save_resume_route_report(app)
         "/api/toefl/attempts/start",
         json={"testId": "2026-01-21_A", "sections": ["reading"]},
     )
-    assert blocked.status_code == 409
+    assert blocked.status_code == 401
 
     started = client.post(
         "/api/toefl/attempts/start",
@@ -135,6 +137,7 @@ def test_attempt_api_requires_preview_and_supports_save_resume_route_report(app)
             "testId": "2026-01-21_A",
             "sections": ["reading"],
             "preview": True,
+            "returnTo": "https://evil.example/steal",
         },
     )
     assert started.status_code == 201
@@ -161,7 +164,7 @@ def test_attempt_api_requires_preview_and_supports_save_resume_route_report(app)
     state = client.put(
         f"/api/toefl/attempts/{attempt['id']}/state",
         json={
-            "state": {"phaseIndex": 0, "groupIndex": 4},
+            "state": {"phaseIndex": 0, "groupIndex": 1},
             "currentPhase": "reading:m1",
             "remainingSeconds": 900,
         },
@@ -185,6 +188,15 @@ def test_attempt_api_requires_preview_and_supports_save_resume_route_report(app)
     )
     assert invalid_recording.status_code == 400
 
+    for group_index in range(2, 6):
+        stepped = client.put(
+            f"/api/toefl/attempts/{attempt['id']}/state",
+            json={
+                "state": {"phaseIndex": 0, "groupIndex": group_index},
+                "currentPhase": "reading:m1",
+            },
+        )
+        assert stepped.status_code == 200
     routed = client.post(
         f"/api/toefl/attempts/{attempt['id']}/route-m2",
         json={"subject": "reading"},
@@ -197,6 +209,24 @@ def test_attempt_api_requires_preview_and_supports_save_resume_route_report(app)
     assert resumed_payload["attempt"]["responses"][qid] == "C"
     assert resumed_payload["attempt"]["remaining_seconds"] == 900
 
+    premature = client.post(f"/api/toefl/attempts/{attempt['id']}/complete")
+    assert premature.status_code == 409
+    advance = client.put(
+        f"/api/toefl/attempts/{attempt['id']}/state",
+        json={
+            "state": {"phaseIndex": 1, "groupIndex": 0},
+            "currentPhase": "reading:m2",
+        },
+    )
+    assert advance.status_code == 200
+    advance_group = client.put(
+        f"/api/toefl/attempts/{attempt['id']}/state",
+        json={
+            "state": {"phaseIndex": 1, "groupIndex": 1},
+            "currentPhase": "reading:m2",
+        },
+    )
+    assert advance_group.status_code == 200
     completed = client.post(f"/api/toefl/attempts/{attempt['id']}/complete")
     assert completed.status_code == 200
     report = client.get(f"/api/toefl/attempts/{attempt['id']}/report")
@@ -204,6 +234,19 @@ def test_attempt_api_requires_preview_and_supports_save_resume_route_report(app)
     assert report.get_json()["objective"]["correct"] == 1
     assert report.get_json()["objective"]["auto_total"] == 50
     assert report.get_json()["routes"]["reading"]["route"] == "default"
+    assert report.get_json()["manual"]["total"] == 0
+    assert report.get_json()["release"]["preview_required"] is True
+
+    closed_response = client.post(
+        "/api/toefl/responses",
+        json={"attemptId": attempt["id"], "questionId": qid, "response": "A"},
+    )
+    assert closed_response.status_code == 409
+    closed_route = client.post(
+        f"/api/toefl/attempts/{attempt['id']}/route-m2",
+        json={"subject": "reading"},
+    )
+    assert closed_route.status_code == 409
 
 
 def test_catalog_and_exam_pages_render(app):
@@ -216,3 +259,166 @@ def test_catalog_and_exam_pages_render(app):
     assert "7" in catalog_page.get_data(as_text=True)
     assert exam_page.status_code == 200
     assert "STAGING PREVIEW" in exam_page.get_data(as_text=True)
+
+
+def test_state_rejects_navigation_jump_and_timer_increase(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-21_A", "sections": ["reading"], "preview": True},
+    ).get_json()["attempt"]
+    attempt_id = started["id"]
+    jump = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+                "state": {"phaseIndex": 1, "groupIndex": 1},
+                "currentPhase": "reading:m2",
+        },
+    )
+    assert jump.status_code == 409
+    for group_index in range(1, 6):
+        stepped = client.put(
+            f"/api/toefl/attempts/{attempt_id}/state",
+            json={
+                "state": {"phaseIndex": 0, "groupIndex": group_index},
+                "currentPhase": "reading:m1",
+            },
+        )
+        assert stepped.status_code == 200
+    bypass_route = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 1, "groupIndex": 0},
+            "currentPhase": "reading:m2",
+        },
+    )
+    assert bypass_route.status_code == 409
+    assert bypass_route.get_json()["error"] == "m2_route_required"
+    increase = client.put(
+        f"/api/toefl/attempts/{attempt_id}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0},
+            "currentPhase": "reading:m1",
+            "remainingSeconds": 999999,
+        },
+    )
+    assert increase.status_code == 409
+
+
+def test_response_validation_rejects_wrong_shape_but_allows_repeated_tokens():
+    order = {
+        "response_type": "order",
+        "input_config": {"scramble_tokens": ["a", "the", "the", "."]},
+    }
+    assert validate_response_value(order, ["the", "the"]) is None
+    assert validate_response_value(order, ["the", "the", "the"]) == "response_tokens_invalid"
+    assert validate_response_value(order, ["missing"]) == "response_tokens_invalid"
+    mc = {
+        "response_type": "mc",
+        "options": [{"key": "A"}, {"key": "B"}],
+        "input_config": {"selection": "single"},
+    }
+    assert validate_response_value(mc, "A") is None
+    assert validate_response_value(mc, "C") == "response_option_invalid"
+    recording = {"response_type": "recording"}
+    assert validate_response_value(recording, {"recorded": True}) == "recording_upload_required"
+
+
+def test_blocked_question_is_not_writable_and_stays_out_of_denominator(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-21_A", "sections": ["listening"], "preview": True},
+    ).get_json()["attempt"]
+    blocked_id = "toefl:2026-01-21-a:listening:m1:g03:q15"
+    response = client.post(
+        "/api/toefl/responses",
+        json={"attemptId": started["id"], "questionId": blocked_id, "response": "A"},
+    )
+    assert response.status_code == 409
+    audio_state = client.put(
+        f"/api/toefl/attempts/{started['id']}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0},
+            "currentPhase": "listening:m1",
+            "remainingSeconds": None,
+        },
+    )
+    assert audio_state.status_code == 200
+    assert definition("2026-01-21_A", ["listening"])["questions"]
+    assert route_module_two("2026-01-21_A", "listening", {})["score"]["auto_total"] == 29
+
+
+def test_speaking_requires_device_check_and_recording_question_type(app):
+    client = app.test_client()
+    missing_check = client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-27_A", "sections": ["speaking"], "preview": True},
+    )
+    assert missing_check.status_code == 409
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={
+            "testId": "2026-01-27_A",
+            "sections": ["speaking"],
+            "preview": True,
+            "deviceCheck": {"microphone": "passed"},
+        },
+    ).get_json()["attempt"]
+    writing_qid = "toefl:2026-01-27-a:writing:m1:g02:q08"
+    invalid = client.post(
+        "/api/toefl/recordings",
+        data={
+            "attemptId": started["id"],
+            "questionId": writing_qid,
+            "durationMs": "1000",
+            "audio": (io.BytesIO(b"not audio"), "response.webm"),
+        },
+        content_type="multipart/form-data",
+    )
+    assert invalid.status_code == 400
+
+
+def test_single_section_and_ownership_are_scoped_to_attempt(app):
+    first_client = app.test_client()
+    started = first_client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-28_A", "sections": ["writing"], "preview": True},
+    ).get_json()["attempt"]
+    assert started["sections"] == ["writing"]
+    resumed = first_client.get(f"/api/toefl/attempts/{started['id']}/resume")
+    assert resumed.status_code == 200
+    assert resumed.get_json()["definition"]["sections"] == ["writing"]
+    second_client = app.test_client()
+    assert second_client.get(f"/api/toefl/attempts/{started['id']}/resume").status_code == 404
+
+
+def test_recording_upload_saves_opaque_id_without_returning_file_path(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={
+            "testId": "2026-01-27_A",
+            "sections": ["speaking"],
+            "preview": True,
+            "deviceCheck": {"microphone": "passed"},
+        },
+    ).get_json()["attempt"]
+    qid = "toefl:2026-01-27-a:speaking:m1:g01:q01"
+    saved = client.post(
+        "/api/toefl/recordings",
+        data={
+            "attemptId": started["id"],
+            "questionId": qid,
+            "durationMs": "1000",
+            "audio": (io.BytesIO(b"preview audio bytes"), "response.webm"),
+        },
+        content_type="multipart/form-data",
+    )
+    assert saved.status_code == 200
+    payload = saved.get_json()
+    assert payload["recordingId"]
+    assert "toefl_mock" not in payload["recordingId"]
+    resumed = client.get(f"/api/toefl/attempts/{started['id']}/resume").get_json()
+    assert resumed["attempt"]["responses"][qid]["recorded"] is True
+    assert "toefl_mock" not in json.dumps(resumed["attempt"]["responses"])

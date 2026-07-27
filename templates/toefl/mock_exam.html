@@ -49,20 +49,50 @@
         <strong>为什么只有 Default M2？</strong>
         <p>当前来源每科只有一份可核对的 M2。系统支持路由检查点，但不会编造 easy/hard 分支。</p>
       </div>
-      <button id="reviewButton" class="mock-secondary" type="button">查看当前作答</button>
+      <button id="reviewButton" class="mock-secondary" type="button" hidden>查看当前作答</button>
     </aside>
 
     <section class="mock-stage">
       <div id="welcomePanel" class="mock-welcome">
         <p class="mock-kicker">SPEC-DRIVEN ATTEMPT</p>
-        <h2>按 Reading → Listening → Speaking → Writing 运行</h2>
-        <p>答案增量保存到服务端；刷新后可通过 attemptId 恢复。Reading / Listening M1 结束时调用服务端路由，但当前七套只返回来源可信的 Default M2。</p>
+        <h2>先准备，再进入考试工作台</h2>
+        <p>Reading → Listening → Speaking → Writing。答案逐题增量保存到服务端；刷新后通过 attemptId 恢复。M1 结束时由服务端决定 M2 路由，当前只有来源可信的 Default M2。</p>
+        <div class="mock-preflight-grid">
+          <section class="mock-preflight-card">
+            <p class="mock-kicker">01 · SECTION SELECTION</p>
+            <h3>选择本次要完成的科目</h3>
+            <div id="sectionPicker" class="mock-section-picker">
+              {% for section in definition.section_order %}
+              <label class="mock-section-choice">
+                <input type="checkbox" value="{{ section }}" {% if section in definition.sections %}checked{% endif %}>
+                <span>{{ loop.index }} · {{ section|capitalize }}</span>
+              </label>
+              {% endfor %}
+            </div>
+            <p class="mock-help">单项模考也可从目录直接进入；完整模考按新版四科顺序推进。</p>
+          </section>
+          <section class="mock-preflight-card">
+            <p class="mock-kicker">02 · DEVICE CHECK</p>
+            <h3>检查你的设备</h3>
+            <p>Speaking 正式模式必须先完成麦克风权限与音量测试。浏览器不会上传测试音频。</p>
+            <button id="micCheckButton" class="mock-secondary" type="button">测试麦克风</button>
+            <p id="micCheckStatus" class="mock-check-status" role="status">未测试</p>
+          </section>
+        </div>
         {% if definition.release.blockers %}
         <div class="mock-blockers">
-          <strong>本套尚未通过发布门禁</strong>
+          <strong>本套尚未通过正式发布门禁</strong>
           <ul>{% for blocker in definition.release.blockers %}<li>{{ blocker }}</li>{% endfor %}</ul>
         </div>
         {% endif %}
+        {% if definition.release.formal_mode_blockers %}
+        <div class="mock-blockers mock-blockers--formal">
+          <strong>Speaking 正式模式当前阻断</strong>
+          <ul>{% for blocker in definition.release.formal_mode_blockers %}<li>{{ blocker }}</li>{% endfor %}</ul>
+          <p>当前仅可在明确标识的 staging preview 中检查流程；没有来源定义的逐题时长，不会冒充正式录音考试。</p>
+        </div>
+        {% endif %}
+        <p id="selectionNotice" class="mock-selection-notice" role="status"></p>
         <button id="startButton" class="mock-primary" type="button">
           {{ '开始 Staging 预览' if preview else '开始正式模考' }}
         </button>
@@ -82,7 +112,7 @@
     </section>
   </main>
 
-  <footer class="mock-footer">
+  <footer class="mock-footer" id="mockFooter" hidden>
     <button id="backButton" class="mock-secondary" type="button" disabled>Back</button>
     <span id="routeNotice"></span>
     <button id="nextButton" class="mock-primary" type="button" disabled>Next</button>
