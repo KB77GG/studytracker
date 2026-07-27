@@ -16,21 +16,72 @@
 | 项目 | 当前状态 |
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
-| 分支 | `codex/toefl-rescue`，从 `main` 的 `78a7721a` 创建 |
-| 分支基线 | 从 `78a7721a 修复剑21精听Section 1时间戳错位` 开始；任务分支当前 tip 以 `git log -1` 为准 |
+| 分支 | `codex/toefl-rescue`，独立 worktree 为 `~/.codex/worktrees/toefl-rescue-studytracker` |
+| 分支基线 | 已推送基线为 `79c7051b 恢复托福Q33并建立v2发布门禁`；其后七套整合与新流程当前仍未提交 |
 | 远端 | 本次 TOEFL 题库抢救工作通过 `origin/codex/toefl-rescue` 同步；精确提交以 `git log -1` 为准 |
-| 本次交接提交范围 | 只包含 TOEFL spec、审计代码/测试、质量数据和交接文档；用户其他未跟踪文件未纳入 |
+| 本次交接范围 | 只改 rescue worktree；主工作树的用户未跟踪文件未覆盖。现有 `data/toefl_practice` 发布 JSON 零修改 |
 | 后端生产 | 本次未检查或改变生产；沿用此前已确认的单 worker/gthread/5002 硬约束 |
 | 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
 
 ## 当前进行中：TOEFL 题库抢救与模考系统重做
 
-### 用户目标与额度约束
+### 用户目标与发布约束
 
 - 用户要求按 `docs/TOEFL_MOCK_FLOW_SPEC.md` 的四科、自适应、计时和恢复流程完整重做 TOEFL 模考系统。
 - 题库按“一套一套抢救、一套一套人工审阅、通过后再上线”的方式推进。
-- 本次会话只允许使用可用额度的 50%，必须为次日另一台电脑接力保留另外 50%；因此本次停在“审计门禁 + 第一套来源结构档案”，没有展开状态机或前端实现。
 - 禁止模型猜测题目、选项、答案或音频对应关系；无法从来源证据确定的内容保持 `review_required`。
+- staging 预览不等于线上发布；四科人工来源复核、媒体发布与严格门禁通过前，不得把套题状态改成 published。
+
+### 2026-07-27 七套整合、证据清理与 spec-driven staging 纵向流程（未提交、未部署）
+
+- 七套 v2 包已全部进入 rescue worktree，共 840 个原子题、7 个 source-blocked：
+  - `2026-01-21_A`：120 / blocked 4
+  - `2026-01-21_B`：120 / blocked 1
+  - `2026-01-21_C`：120 / blocked 1
+  - `2026-01-27_A`：120 / blocked 0
+  - `2026-01-27_B`：120 / blocked 1
+  - `2026-01-28_A`：120 / blocked 0
+  - `2026-01-28_B`：120 / blocked 0
+- 清理阶段逐页渲染并复核了原来的 18 个 blocker，其中 11 个有充分来源证据，已固化到通用
+  builder：B 卷 Reading M2 Q13、Listening M1 Q1/Q7 与 M2 Q1；C 卷 Listening M2 Q1/Q5；
+  1 月 27 日 A 卷 Listening M1 Q1/Q2 与 M2 Q1；1 月 28 日 A 卷 Reading M2 Q6 与
+  Listening M1 Q24。后两题的答案 PDF 与其他来源冲突，因此自动判分证据明确改用完整原文/听力原文，
+  不把错误答案 PDF 当作证据。
+- 剩余 7 题没有足够证据，继续 blocked：1 月 21 日 A 卷 Listening M1 Q15/Q18/Q21、M2 Q9；
+  1 月 21 日 B 卷 Reading M2 Q12；1 月 21 日 C 卷 Reading M1 Q24；1 月 27 日 B 卷
+  Listening M1 Q25。
+- 七套均重新用本地原始来源根目录校验 SHA-256、引用、公开/私有答案分离与结构，全部 `pass`；
+  严格 `--require-release-ready` 则七套全部按预期 `blocked`。1 月 27 日 A、1 月 28 日 A/B
+  已达到 0 source-blocked / `publish_status=ready`，但四科人工审阅仍为 `pending`，不能正式发布。
+- 新增 definition-driven 运行层：
+  - `GET /toefl/mock` 七套 staging 目录；
+  - `GET /toefl/mock/<testId>?preview=1` 新流程预览；
+  - `GET /api/toefl/tests/<testId>/definition` 只返回 public-safe definition；
+  - attempt start、response 增量保存、录音、M2 路由、resume、state、complete、report API 已接通；
+  - `ToeflMockAttempt` / `ToeflMockResponse` 保存服务端续考状态，启动时幂等建表。
+- 流程顺序按 spec 为 Reading → Listening → Speaking → Writing；Reading M1/M2 使用 18/9 分钟，
+  写作三个阶段使用 7/7/10 分钟，听力保持 audio-driven。题数从来源 definition 读取，
+  不把第一套 Listening 32+15 强裁成 spec 示例的 18+16。
+- Reading / Listening M1 结束后调用服务端 M2 路由，但七套来源都只有一份可核对 M2；
+  当前明确返回 `route=default`、`adaptive_available=false`，没有跨套拼接或猜造 easy/hard 题。
+- blocked 题在 staging 可见但禁用，不进入判分分母；非 preview attempt 对所有未过门禁套题返回 409。
+- 浏览器实测：
+  - 目录正确显示 7 套 / 840 题与每套 blocked 数；
+  - 1 月 21 日 A 卷可建立 staging attempt，计时从 18:00 开始；
+  - Complete Words 已按 spec 在段落内联输入；
+  - 输入答案后服务端显示“已保存”，刷新通过 URL `attemptId` 恢复答案与计时；
+  - 快速连续填写两个文本题后立即切题，两题均在刷新后恢复；修复了共用 debounce 导致的丢答风险；
+  - Reading M2 第一组的 Back 正确禁用，不能跨 Module 回退；单项完成后 `returnTo` 正确生效；
+  - 导航到 Reading Q33，题干/四选项正确显示，选择 C 后服务端保存；
+  - 浏览器控制台 0 error。
+- 自动化：TOEFL v2、题库审计、旧导入与旧刷题兼容回归共 45 项通过；新服务/API/模型/
+  测试/通用 builder Ruff、前端 JS 语法和 `git diff --check` 均通过。
+- 尚未完成：
+  - 当前改动未 commit/push；用户要求先清理并完成验证，再提交；
+  - 未部署生产，线上仍没有这七套新流程；
+  - 原始音频仍是 `local_source`，未复制到发布存储；staging 只呈现不可用状态；
+  - 剩余 7 个 blocked 题和七套四科人工来源复核仍需逐项完成；
+  - 需要在真实登录学生/教师账号下再做一次权限与人工批改闭环 QA。
 
 ### 2026-07-27 续做：Q33 与 v2 staging（任务分支同步）
 
@@ -51,9 +102,9 @@
   103 auto、13 manual、4 blocked。结构与来源校验 0 error。
 - 严格发布门禁按预期 exit 1：Listening M1 Q15/Q18/Q21、M2 Q9 仍缺来源选项；
   套卷仍是 `pilot` / `blocked`；四科 source review 仍为 `pending`。
-- 本地另一工作树的 v2 重建已有 7 套、840 个原子题：6 套仍有共 18 个 blocked，
-  `2026-01-28_B` 为 0 blocked 的 `ready_for_reintegration` 候选；在接入本门禁后仍需四科人工
-  `approved` 才能成为可发布套卷。
+- 七套 v2 后续已全部整合进本 rescue worktree；清理后总计 840 个原子题、7 个 blocked。
+  `2026-01-27_A`、`2026-01-28_A`、`2026-01-28_B` 已为 0 blocked / `ready` 候选，
+  但仍需四科人工 `approved` 才能成为可发布套卷。详见上一节。
 - 已验证：
 
 ```text
@@ -76,8 +127,8 @@ passed; 120 questions; 0 validation errors
 exit 1 as expected; 4 source-blocked questions + pilot/blocked/pending-review gates
 ```
 
-- 下一步按证据独立复核 staging 已标记为视觉恢复的 Listening M1 Q7 与 M2 Q3；确认后再处理
-  M1 Q15/Q18/Q21、M2 Q9。不得因为本地 v2 已有候选文本就跳过题卷/音频/原文三方核对。
+- 下一步优先处理剩余 7 个明确 blocker；没有新增来源前不得猜补。随后对 0 blocker 的三套逐科
+  做人工抽验并把审阅状态从 `pending` 改为 `approved`。
 
 ### 本次已完成（随任务分支同步）
 
@@ -157,13 +208,13 @@ exit 1 as expected; 14 critical/high blockers
 
 1. 开工先读本文件、`CLAUDE.md`、`docs/TOEFL_MOCK_FLOW_SPEC.md` 和 `docs/toefl_quality_audit.md`，再运行 `git status --short --branch` 与 `git log -5 --oneline`。
 2. Reading Q33 已在 v2 staging 完成双证据恢复；不要写回现有发布 JSON。
-3. 先独立复核 v2 已候选恢复的 Listening M1 Q7 与 M2 Q3，再处理仍 blocked 的
-   M1 Q15/Q18/Q21、M2 Q9；逐题对照题卷截图、听力原文和独立 M1/M2 音频，建立
-   group/时间轴，不要沿用只按文件名和题号猜测的旧导入逻辑。
-4. 修复 Writing 7 道 scramble mismatch；以题面词块和答案 PDF 为双证据，无法同时满足时保持 blocked。
-5. 每完成一科就运行审计门禁并生成审阅清单；用户人工确认后才把该科 `review_status` 改为 `approved`。
-6. 第一套四科全部通过后，再开始 `api/toefl_mock.py`、service 状态机和 attempt/response 模型；引擎按 definition 驱动，不硬编码第一套的题数。
-7. 本次任务分支的 commit/push 已获授权；后续合并 `main`、部署和发布仍需单独明确授权。
+3. 七套 spec-driven staging 运行层已经完成；不要重复实现，也不要把 staging 误写为已上线。
+4. 继续处理剩余 7 个 blocker：A 卷 Listening M1 Q15/Q18/Q21、M2 Q9；B 卷 Reading
+   M2 Q12；C 卷 Reading M1 Q24；1 月 27 日 B 卷 Listening M1 Q25。没有新增题卷页、
+   答案或音频证据时保持 blocked。
+5. 每完成一科就运行审计门禁并生成审阅清单；用户人工确认后才把该科 `subject_reviews` 改为 `approved`。
+6. 0 blocker 的三套先做真实登录学生/教师账号 QA，再处理音频发布存储；严格门禁通过后才考虑生产发布。
+7. 当前变更尚未 commit/push；本轮先完成清理和全量验证。合并 `main`、部署和发布仍需单独明确授权。
 
 ### 本次提交涉及的已跟踪文件
 

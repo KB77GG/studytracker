@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0.0",
+  "exam_id": "toefl:2026-01-28-b",
+  "generated_at": "2026-07-27T03:01:01.955244+00:00",
+  "generator": "scripts/build_toefl_practice_v2_exam.py",
+  "source_root_portability": "All source paths are relative to the configured source root.",
+  "counts": {
+    "questions": 120,
+    "auto": 107,
+    "manual": 13,
+    "blocked": 0,
+    "by_subject": {
+      "reading": 50,
+      "listening": 47,
+      "writing": 12,
+      "speaking": 11
+    }
+  },
+  "quality": {
+    "validation_status": "passed",
+    "publish_status": "ready",
+    "subject_reviews": {
+      "reading": "pending",
+      "listening": "pending",
+      "writing": "pending",
+      "speaking": "pending"
+    },
+    "blocking_reasons": [],
+    "known_blocked_question_ids": []
+  }
+}

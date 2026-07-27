@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "exam_id": "toefl:2026-01-28-b",
+  "generated_at": "2026-07-27T03:01:01.955244+00:00",
+  "counts": {
+    "questions": 120,
+    "auto": 107,
+    "manual": 13,
+    "blocked": 0,
+    "by_subject": {
+      "reading": 50,
+      "listening": 47,
+      "writing": 12,
+      "speaking": 11
+    }
+  },
+  "source_evidence": {
+    "questions_with_source_refs": 120,
+    "questions_total": 120,
+    "answer_entries_with_evidence": 107,
+    "answer_entries_total": 107
+  },
+  "media_coverage": {
+    "audio_assets_expected": 3,
+    "audio_assets_readable": 3
+  },
+  "blockers": [],
+  "checks": [
+    {
+      "id": "atomic-count",
+      "status": "pass",
+      "detail": "120 expected atomic questions are represented."
+    },
+    {
+      "id": "answer-separation",
+      "status": "pass",
+      "detail": "Validator found no public answer leakage."
+    },
+    {
+      "id": "reading-source",
+      "status": "pass",
+      "detail": "Reading content was recovered from rendered raw PDF pages, including documented OCR-number repair."
+    },
+    {
+      "id": "listening-source",
+      "status": "pass",
+      "detail": "Listening prompts/options were reconciled against the raw paper and listening transcript PDF."
+    },
+    {
+      "id": "media",
+      "status": "pass",
+      "detail": "Listening and speaking audio files exist and have readable ffprobe durations."
+    },
+    {
+      "id": "speaking-source",
+      "status": "pass",
+      "detail": "Speaking audio transcript aligns with class-registration and hobbies prompts in the source answer PDF."
+    },
+    {
+      "id": "inline-reading-contract",
+      "status": "pass",
+      "detail": "Complete-the-words groups define inline token rendering without public answer fields."
+    }
+  ],
+  "validation_summary": {
+    "exam_id": "toefl:2026-01-28-b",
+    "questions": 120,
+    "auto": 107,
+    "manual": 13,
+    "blocked": 0,
+    "validation_errors": 0
+  },
+  "validation_errors": []
+}

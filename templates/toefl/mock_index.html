@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% macro mock_catalog_content() %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/toefl_mock.css') }}">
+<section class="mock-library">
+  <div class="mock-library__intro">
+    <div>
+      <p class="mock-eyebrow">TOEFL 2026 · V2 STAGING</p>
+      <h2>来源证据驱动的模考重建</h2>
+      <p>七套本地真题已进入统一 definition 流程。预览可检查题面、模块、计时与续考；正式开考仍由发布门禁控制。</p>
+    </div>
+    <div class="mock-library__metric">
+      <strong>{{ exams|length }}</strong>
+      <span>套题 / {{ exams|sum(attribute='counts.questions') }} 个原子题</span>
+    </div>
+  </div>
+
+  <div class="mock-gate-note">
+    <strong>Staging ≠ 上线。</strong>
+    blocked 题不会被补猜；四科来源复核未批准前，系统只允许带明确标识的预览 attempt。
+  </div>
+
+  <div class="mock-card-grid">
+    {% for exam in exams %}
+    <article class="mock-card">
+      <div class="mock-card__topline">
+        <span>{{ exam.date }} · {{ exam.variant }} 卷</span>
+        <span class="mock-badge {{ 'mock-badge--ready' if exam.release_ready else 'mock-badge--blocked' }}">
+          {{ 'Release ready' if exam.release_ready else 'Staging only' }}
+        </span>
+      </div>
+      <h3>{{ exam.title }}</h3>
+      <div class="mock-counts">
+        <span><b>{{ exam.counts.questions }}</b> 总题</span>
+        <span><b>{{ exam.counts.auto }}</b> 自动判分</span>
+        <span><b>{{ exam.counts.manual }}</b> 人工批改</span>
+        <span class="{{ 'is-blocked' if exam.counts.blocked else '' }}"><b>{{ exam.counts.blocked }}</b> 证据阻塞</span>
+      </div>
+      <p class="mock-card__status">结构校验：{{ exam.validation_status }} · 发布状态：{{ exam.publish_status }}</p>
+      <a class="mock-card__action" href="{{ exam.preview_url }}">按新 spec 预览</a>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endmacro %}
+
+{% block page_subtitle %}TOEFL MOCK REBUILD{% endblock %}
+{% block page_title %}托福模考 Staging{% endblock %}
+{% block content_dashboard %}{{ mock_catalog_content() }}{% endblock %}
+{% block content_public %}{{ mock_catalog_content() }}{% endblock %}
+
+{% block head_extra %}{% endblock %}

@@ -6,6 +6,26 @@
 
 ---
 
+## 2026-07-27 TOEFL 七套 v2 整合、证据清理与新 spec 运行层（本地未提交、未部署）
+
+- rescue worktree 已整合 7 套 / 840 个原子题，不改写旧的已发布 JSON。逐页复核原来的 18 个
+  blocker 后，11 个题目由原题页、完整源文本或听力原文恢复；剩余 7 个无充分证据，继续 blocked。
+- 当前逐套 blocked 为 4 / 1 / 1 / 0 / 1 / 0 / 0。七套来源哈希和结构校验全部通过；
+  严格发布门禁七套仍全部阻塞。`2026-01-27_A`、`2026-01-28_A/B` 虽 0 blocked，
+  仍因四科人工审阅 pending 不能发布。
+- 1 月 28 日 A 卷 Reading M2 Q6 与 Listening M1 Q24 的答案 PDF 和其他来源冲突；
+  修复分别采用能还原 `elaborate` 的完整源文本和明确要求 credited sources 的听力原文，
+  并在私有答案证据中排除冲突的答案 PDF。
+- 新增 `/toefl/mock` staging 目录、public definition、服务端 attempt/response 状态、增量保存、
+  刷新续考、M2 路由、录音、完成与报告 API；流程按 Reading→Listening→Speaking→Writing。
+- 当前来源只有一个可信 M2，路由明确返回 default，不编造 easy/hard；题数按每套 definition，
+  不强行套用 spec 中的示例题数。
+- 相关自动化 45 项通过，Ruff、JS 语法与 diff 检查通过；浏览器实测目录、开考、18 分钟
+  Reading M1 计时、段落内联填词、快速连续两题保存/刷新恢复、M2 禁止跨模块回退、`returnTo`
+  和 Q33=C，控制台 0 error。
+- 当前未 commit/push、未部署；音频未进发布存储，七套仅为 staging 预览。下一步先完成全量
+  回归与真实账号 QA，再逐套完成人工来源复核和剩余 7 个 blocked 项抢救。
+
 ## 2026-07-27 TOEFL Q33 双证据恢复与 v2 staging 门禁（任务分支同步）
 
 - 在独立 `codex/toefl-rescue` worktree 从 `f2b54c00` 继续并随任务分支同步；未合并 `main`、未部署。

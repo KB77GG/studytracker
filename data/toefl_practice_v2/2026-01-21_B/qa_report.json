@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "exam_id": "toefl:2026-01-21-b",
+  "generated_at": "2026-07-27T03:00:59.697113+00:00",
+  "counts": {
+    "questions": 120,
+    "auto": 106,
+    "manual": 13,
+    "blocked": 1,
+    "by_subject": {
+      "reading": 50,
+      "listening": 47,
+      "writing": 12,
+      "speaking": 11
+    }
+  },
+  "source_evidence": {
+    "questions_with_source_refs": 120,
+    "questions_total": 120,
+    "answer_entries_with_evidence": 106,
+    "answer_entries_total": 106
+  },
+  "media_coverage": {
+    "audio_assets_expected": 3,
+    "audio_assets_readable": 3
+  },
+  "blockers": [
+    "Reading M2 Q12 is absent from the current source paper and extraction.",
+    "Speaking audio transcript conflicts with the paper/answer-PDF grocery-store scene and needs manual source review."
+  ],
+  "checks": [
+    {
+      "id": "atomic-count",
+      "status": "pass",
+      "detail": "120 expected atomic questions are represented."
+    },
+    {
+      "id": "answer-separation",
+      "status": "pass",
+      "detail": "Validator found no public answer leakage."
+    },
+    {
+      "id": "reading-source",
+      "status": "blocked",
+      "detail": "Reading M2 Q12 is absent from the source paper/extraction; M2 Q13 was visually recovered from paper page 12."
+    },
+    {
+      "id": "listening-source",
+      "status": "pass",
+      "detail": "Listening M1 Q1/M1 Q7/M2 Q1 options were visually recovered from rendered source pages."
+    },
+    {
+      "id": "media",
+      "status": "pass",
+      "detail": "Listening and speaking audio files exist and have readable ffprobe durations."
+    },
+    {
+      "id": "speaking-source-conflict",
+      "status": "blocked",
+      "detail": "The speaking audio transcript says class registration/hobbies, while the paper and answer PDF indicate grocery store/hobbies."
+    },
+    {
+      "id": "inline-reading-contract",
+      "status": "pass",
+      "detail": "Complete-the-words groups define inline token rendering without public answer fields."
+    }
+  ],
+  "validation_summary": {
+    "exam_id": "toefl:2026-01-21-b",
+    "questions": 120,
+    "auto": 106,
+    "manual": 13,
+    "blocked": 1,
+    "validation_errors": 0
+  },
+  "validation_errors": []
+}

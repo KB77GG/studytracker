@@ -1,10 +1,16 @@
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 
 db = SQLAlchemy()
+
+
+def utcnow_naive() -> datetime:
+    """Return UTC without tzinfo for the repository's legacy DateTime columns."""
+
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 class TimestampMixin:
@@ -727,6 +733,68 @@ class ToeflQuestionResponse(db.Model):
             "submission_id",
             "question_id",
             name="uq_toefl_submission_question",
+        ),
+    )
+
+
+class ToeflMockAttempt(db.Model):
+    """Server-owned state for one spec-driven TOEFL v2 mock attempt."""
+
+    __tablename__ = "toefl_mock_attempt"
+
+    id = db.Column(db.String(36), primary_key=True)
+    student_id = db.Column(
+        db.Integer, db.ForeignKey("student_profile.id"), nullable=True, index=True
+    )
+    actor_key = db.Column(db.String(64), nullable=False, index=True)
+    exam_id = db.Column(db.String(80), nullable=False, index=True)
+    sections_json = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(24), default="in_progress", nullable=False, index=True)
+    is_preview = db.Column(db.Boolean, default=False, nullable=False)
+    current_phase = db.Column(db.String(80))
+    remaining_seconds = db.Column(db.Integer)
+    state_json = db.Column(db.Text, nullable=False, default="{}")
+    routes_json = db.Column(db.Text, nullable=False, default="{}")
+    started_at = db.Column(db.DateTime, default=utcnow_naive, nullable=False)
+    completed_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=utcnow_naive, nullable=False)
+    updated_at = db.Column(
+        db.DateTime, default=utcnow_naive, onupdate=utcnow_naive, nullable=False
+    )
+
+    responses = db.relationship(
+        "ToeflMockResponse",
+        backref="attempt",
+        lazy="selectin",
+        cascade="all, delete-orphan",
+    )
+
+
+class ToeflMockResponse(db.Model):
+    """Incrementally persisted response for a TOEFL v2 mock attempt."""
+
+    __tablename__ = "toefl_mock_response"
+
+    id = db.Column(db.Integer, primary_key=True)
+    attempt_id = db.Column(
+        db.String(36),
+        db.ForeignKey("toefl_mock_attempt.id"),
+        nullable=False,
+        index=True,
+    )
+    question_id = db.Column(db.String(120), nullable=False, index=True)
+    response_json = db.Column(db.Text, nullable=False, default="null")
+    recording_token = db.Column(db.String(500))
+    created_at = db.Column(db.DateTime, default=utcnow_naive, nullable=False)
+    updated_at = db.Column(
+        db.DateTime, default=utcnow_naive, onupdate=utcnow_naive, nullable=False
+    )
+
+    __table_args__ = (
+        db.UniqueConstraint(
+            "attempt_id",
+            "question_id",
+            name="uq_toefl_mock_attempt_question",
         ),
     )
 

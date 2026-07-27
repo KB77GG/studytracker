@@ -1,0 +1,36 @@
+{
+  "schema_version": "2.0.0",
+  "exam_id": "toefl:2026-01-21-b",
+  "generated_at": "2026-07-27T03:00:59.697113+00:00",
+  "generator": "scripts/build_toefl_practice_v2_exam.py",
+  "source_root_portability": "All source paths are relative to the configured source root.",
+  "counts": {
+    "questions": 120,
+    "auto": 106,
+    "manual": 13,
+    "blocked": 1,
+    "by_subject": {
+      "reading": 50,
+      "listening": 47,
+      "writing": 12,
+      "speaking": 11
+    }
+  },
+  "quality": {
+    "validation_status": "passed_with_blocked_source_items",
+    "publish_status": "blocked",
+    "subject_reviews": {
+      "reading": "pending",
+      "listening": "pending",
+      "writing": "pending",
+      "speaking": "pending"
+    },
+    "blocking_reasons": [
+      "Reading M2 Q12 is absent from the current source paper and extraction.",
+      "Speaking audio transcript conflicts with the paper/answer-PDF grocery-store scene and needs manual source review."
+    ],
+    "known_blocked_question_ids": [
+      "toefl:2026-01-21-b:reading:m2:g02:q12"
+    ]
+  }
+}

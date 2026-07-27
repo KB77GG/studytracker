@@ -89,6 +89,8 @@ from models import (
     ListeningRepeatResult,
     ListeningTestSubmission,
     ReadingTestSubmission,
+    ToeflMockAttempt,
+    ToeflMockResponse,
     ToeflQuestionResponse,
     ToeflTestSubmission,
     MockExam,
@@ -2148,9 +2150,11 @@ def ensure_legacy_schema() -> None:
     try:
         ToeflTestSubmission.__table__.create(bind=db.engine, checkfirst=True)
         ToeflQuestionResponse.__table__.create(bind=db.engine, checkfirst=True)
+        ToeflMockAttempt.__table__.create(bind=db.engine, checkfirst=True)
+        ToeflMockResponse.__table__.create(bind=db.engine, checkfirst=True)
     except Exception as exc:  # pragma: no cover
         current_app.logger.warning(
-            "Failed to ensure TOEFL submission tables exist: %s", exc
+            "Failed to ensure TOEFL submission/attempt tables exist: %s", exc
         )
 
     # Vocabulary review owns its incremental columns/tables in a service

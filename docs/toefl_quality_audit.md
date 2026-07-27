@@ -7,6 +7,35 @@
 - 严格门禁下可直接发布的科目为 0/143（0.0%）。未通过来源审阅的科目不会被视为可发布。
 - 发现 critical 226、high 386、medium 23、low 0 项。
 
+## v2 staging 重建状态（与旧发布库隔离）
+
+- rescue 分支已整合 2026-01-21 A/B/C、2026-01-27 A/B、2026-01-28 A/B 七套，
+  共 840 个原子题。
+- 七套 v2 的 schema、引用、来源 SHA-256、自动题私有答案覆盖和公开答案泄漏检查全部通过。
+- 对原来的 18 个 source blocker 完成渲染页复核后，11 题由现有证据恢复；当前合计 7 题，
+  逐套为 4 / 1 / 1 / 0 / 1 / 0 / 0。没有用推测内容填补。
+- 严格发布门禁下七套均为 blocked：1 月 21 日 A/B/C 与 1 月 27 日 B 仍有来源缺口；
+  七套四科人工来源审阅均未 approved。1 月 27 日 A、1 月 28 日 A/B 已达到
+  0 source-blocked / `publish_status=ready`，但仍不是可发布套卷。
+- v2 staging 已接入按 `TOEFL_MOCK_FLOW_SPEC.md` 驱动的预览系统，但本报告不把“可预览”视作
+  “已上线”。现有旧发布 JSON 与本次 staging 数据保持隔离。
+
+### 本轮来源证据清理
+
+| 套卷 | 已恢复 | 依据 | 仍 blocked |
+|---|---|---|---|
+| 2026-01-21_B | Reading M2 Q13；Listening M1 Q1/Q7、M2 Q1 | 渲染题卷页 + 答案 PDF | Reading M2 Q12（题卷缺页） |
+| 2026-01-21_C | Listening M2 Q1/Q5 | 渲染题卷页 + 答案 PDF | Reading M1 Q24（答案 PDF 与可见选项含义冲突） |
+| 2026-01-27_A | Listening M1 Q1/Q2、M2 Q1 | 渲染题卷页 + 答案 PDF | 无 |
+| 2026-01-28_A | Reading M2 Q6；Listening M1 Q24 | 题卷 + 完整源文本；题卷 + 听力原文 | 无 |
+
+2026-01-28_A 两处冲突没有沿用错误答案 PDF：Reading M2 Q6 的 `elab____` 由完整来源句
+`elaborate cathedral architecture` 确认为 `orate`；Listening M1 Q24 由听力原文明确要求
+素材必须原创或注明来源，确认为 A。证据路径与 SHA-256 均写入私有 `answer_key.json`。
+
+仍未恢复的另外五题为 2026-01-21_A Listening M1 Q15/Q18/Q21、M2 Q9，以及
+2026-01-27_B Listening M1 Q25；当前题卷只有相邻题或音频引导页，缺少实际题面和四个选项。
+
 ## 最高风险发现
 
 | 检查项 | 数量 | 发布风险 |

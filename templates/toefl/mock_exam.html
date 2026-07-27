@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ definition.test.title }} · TOEFL V2 Staging</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/toefl_mock.css') }}">
+</head>
+<body>
+  <header class="mock-toolbar">
+    <a class="mock-brand" href="{{ url_for('toefl_mock.mock_catalog') }}">
+      <span class="mock-brand__mark">S</span>
+      <span><strong>SAGE PATH</strong><small>TOEFL 2026 MOCK</small></span>
+    </a>
+    <div class="mock-toolbar__center">
+      <span id="sectionLabel">Ready</span>
+      <strong id="phaseLabel">{{ definition.test.title }}</strong>
+    </div>
+    <div class="mock-toolbar__right">
+      <span id="saveState">尚未开始</span>
+      <strong id="timerDisplay">--:--</strong>
+    </div>
+  </header>
+
+  {% if preview or definition.release.preview_required %}
+  <div class="staging-ribbon">
+    STAGING PREVIEW · 不代表线上发布 · blocked 题只展示缺口，不参与判分
+  </div>
+  {% endif %}
+
+  <div class="mock-progress">
+    {% for section in definition.section_order %}
+      {% if section in definition.sections %}
+      <span data-section="{{ section }}">{{ loop.index }} · {{ section|capitalize }}</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <main class="mock-shell">
+    <aside class="mock-sidebar">
+      <p class="mock-kicker">Test definition</p>
+      <h1>{{ definition.test.date }} {{ definition.test.variant }}卷</h1>
+      <dl>
+        <div><dt>题目</dt><dd>{{ definition.questions|length }}</dd></div>
+        <div><dt>阶段</dt><dd>{{ definition.phases|length }}</dd></div>
+        <div><dt>自适应</dt><dd>Default M2</dd></div>
+      </dl>
+      <div class="mock-source-note">
+        <strong>为什么只有 Default M2？</strong>
+        <p>当前来源每科只有一份可核对的 M2。系统支持路由检查点，但不会编造 easy/hard 分支。</p>
+      </div>
+      <button id="reviewButton" class="mock-secondary" type="button">查看当前作答</button>
+    </aside>
+
+    <section class="mock-stage">
+      <div id="welcomePanel" class="mock-welcome">
+        <p class="mock-kicker">SPEC-DRIVEN ATTEMPT</p>
+        <h2>按 Reading → Listening → Speaking → Writing 运行</h2>
+        <p>答案增量保存到服务端；刷新后可通过 attemptId 恢复。Reading / Listening M1 结束时调用服务端路由，但当前七套只返回来源可信的 Default M2。</p>
+        {% if definition.release.blockers %}
+        <div class="mock-blockers">
+          <strong>本套尚未通过发布门禁</strong>
+          <ul>{% for blocker in definition.release.blockers %}<li>{{ blocker }}</li>{% endfor %}</ul>
+        </div>
+        {% endif %}
+        <button id="startButton" class="mock-primary" type="button">
+          {{ '开始 Staging 预览' if preview else '开始正式模考' }}
+        </button>
+      </div>
+      <div id="questionPanel" hidden>
+        <div class="mock-stage__heading">
+          <div>
+            <p class="mock-kicker" id="groupType"></p>
+            <h2 id="groupTitle"></h2>
+          </div>
+          <span id="groupCounter"></span>
+        </div>
+        <div id="stimulus" class="mock-stimulus"></div>
+        <div id="questions" class="mock-questions"></div>
+      </div>
+      <div id="reportPanel" class="mock-report" hidden></div>
+    </section>
+  </main>
+
+  <footer class="mock-footer">
+    <button id="backButton" class="mock-secondary" type="button" disabled>Back</button>
+    <span id="routeNotice"></span>
+    <button id="nextButton" class="mock-primary" type="button" disabled>Next</button>
+  </footer>
+
+  <dialog id="reviewDialog" class="mock-dialog">
+    <button id="closeReview" type="button" aria-label="关闭">×</button>
+    <h2>当前作答</h2>
+    <div id="reviewList"></div>
+  </dialog>
+
+  <script>
+    window.TOEFL_MOCK = {
+      definition: {{ definition|tojson }},
+      preview: {{ preview|tojson }},
+      returnTo: {{ return_to|tojson }}
+    };
+  </script>
+  <script src="{{ url_for('static', filename='js/toefl_mock.js') }}"></script>
+</body>
+</html>
