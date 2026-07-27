@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "exam_id": "toefl:2026-01-21-a",
+  "generated_at": "2026-07-27T01:52:44.333340+00:00",
+  "checks": [
+    {
+      "id": "atomic-count",
+      "status": "pass",
+      "detail": "120 expected atomic questions are represented."
+    },
+    {
+      "id": "answer-separation",
+      "status": "pass",
+      "detail": "content.json contains no answer keys; answers are private."
+    },
+    {
+      "id": "reading-recovery",
+      "status": "pass",
+      "detail": "Reading M1 Q33 was visually recovered from paper page 7 and mapped to answer C on answer page 1."
+    },
+    {
+      "id": "listening-recovery",
+      "status": "pass",
+      "detail": "Listening M1 Q7 and M2 Q3 were visually recovered."
+    },
+    {
+      "id": "missing-source-options",
+      "status": "blocked",
+      "detail": "Listening M1 Q15/Q18/Q21 and M2 Q9 lack options in the supplied paper."
+    },
+    {
+      "id": "inline-reading-contract",
+      "status": "pass",
+      "detail": "Complete-the-words groups define inline token rendering."
+    }
+  ]
+}

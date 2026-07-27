@@ -1,0 +1,38 @@
+{
+  "schema_version": "2.0.0",
+  "exam_id": "toefl:2026-01-21-a",
+  "generated_at": "2026-07-27T01:52:44.333340+00:00",
+  "generator": "scripts/build_toefl_practice_v2_pilot.py",
+  "source_root_portability": "All source paths are relative to the configured source root.",
+  "counts": {
+    "questions": 120,
+    "auto": 103,
+    "manual": 13,
+    "blocked": 4,
+    "by_subject": {
+      "reading": 50,
+      "listening": 47,
+      "writing": 12,
+      "speaking": 11
+    }
+  },
+  "quality": {
+    "validation_status": "pending_validator",
+    "publish_status": "blocked",
+    "subject_reviews": {
+      "reading": "pending",
+      "listening": "pending",
+      "writing": "pending",
+      "speaking": "pending"
+    },
+    "blocking_reasons": [
+      "Four listening questions have no options in the supplied source PDF."
+    ],
+    "known_blocked_question_ids": [
+      "toefl:2026-01-21-a:listening:m1:g03:q15",
+      "toefl:2026-01-21-a:listening:m1:g04:q18",
+      "toefl:2026-01-21-a:listening:m1:g06:q21",
+      "toefl:2026-01-21-a:listening:m2:g04:q09"
+    ]
+  }
+}

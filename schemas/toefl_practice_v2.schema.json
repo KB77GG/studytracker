@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://studytracker.local/schemas/toefl-practice-v2.schema.json",
+  "title": "StudyTracker TOEFL practice content v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "exam", "assets", "modules", "groups", "questions"],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "exam": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "date", "variant", "source_kind", "expected_question_count", "availability_status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^toefl:[a-z0-9:-]+$"},
+        "title": {"type": "string", "minLength": 1},
+        "date": {"type": "string", "format": "date"},
+        "variant": {"type": "string", "minLength": 1},
+        "source_kind": {"enum": ["real_exam", "official_practice", "mock"]},
+        "source_folder": {"type": "string"},
+        "expected_question_count": {"type": "integer", "minimum": 1},
+        "availability_status": {"enum": ["draft", "pilot", "reviewed", "published", "blocked"]}
+      }
+    },
+    "assets": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "modules": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/module"}},
+    "groups": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/group"}},
+    "questions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/question"}}
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "confidence"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "page": {"type": "integer", "minimum": 1},
+        "module": {"type": "string"},
+        "question_number": {"type": "integer", "minimum": 1},
+        "confidence": {"enum": ["source_exact", "visually_recovered", "reviewed_repair", "source_missing"]}
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "subject", "source", "delivery"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["paper_pdf", "answer_pdf", "transcript_pdf", "audio"]},
+        "subject": {"enum": ["exam", "reading", "listening", "writing", "speaking"]},
+        "module_id": {"type": "string"},
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "size_bytes"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+            "size_bytes": {"type": "integer", "minimum": 1},
+            "duration_seconds": {"type": "number", "minimum": 0}
+          }
+        },
+        "delivery": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["storage_key", "status"],
+          "properties": {
+            "storage_key": {"type": "string"},
+            "status": {"enum": ["local_source", "staged", "published", "blocked"]}
+          }
+        }
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "subject", "module", "order", "label", "duration_seconds", "navigation", "asset_ids", "group_ids"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "subject": {"enum": ["reading", "listening", "writing", "speaking"]},
+        "module": {"enum": ["m1", "m2"]},
+        "order": {"type": "integer", "minimum": 1},
+        "label": {"type": "string", "minLength": 1},
+        "duration_seconds": {"type": "integer", "minimum": 0},
+        "navigation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["back_policy", "review_policy"],
+          "properties": {
+            "back_policy": {"enum": ["within_module", "disabled"]},
+            "review_policy": {"enum": ["within_module", "after_submit", "disabled"]}
+          }
+        },
+        "asset_ids": {"type": "array", "items": {"type": "string"}},
+        "group_ids": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "module_id", "subject", "order", "task_type", "title", "directive", "stimulus", "question_ids", "source_refs"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "module_id": {"type": "string", "minLength": 1},
+        "subject": {"enum": ["reading", "listening", "writing", "speaking"]},
+        "order": {"type": "integer", "minimum": 1},
+        "task_type": {"type": "string", "minLength": 1},
+        "title": {"type": "string"},
+        "directive": {"type": "string"},
+        "stimulus": {
+          "type": ["object", "null"],
+          "additionalProperties": true
+        },
+        "question_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "source_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/sourceRef"}}
+      }
+    },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "text"],
+      "properties": {
+        "key": {"type": "string", "pattern": "^[A-Z]$"},
+        "text": {"type": "string", "minLength": 1}
+      }
+    },
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "module_id", "group_id", "subject", "number", "sequence", "response_type", "prompt", "options", "input_config", "content_status", "grading_status", "source_refs"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "module_id": {"type": "string", "minLength": 1},
+        "group_id": {"type": "string", "minLength": 1},
+        "subject": {"enum": ["reading", "listening", "writing", "speaking"]},
+        "number": {"type": "integer", "minimum": 1},
+        "sequence": {"type": "integer", "minimum": 1},
+        "response_type": {"enum": ["mc", "text", "order", "free_text", "recording"]},
+        "prompt": {"type": "string"},
+        "context_sentence": {"type": "string"},
+        "options": {"type": "array", "items": {"$ref": "#/$defs/option"}},
+        "input_config": {"type": "object", "additionalProperties": true},
+        "content_status": {"enum": ["ready", "missing_options", "reviewed_repair", "needs_review"]},
+        "grading_status": {"enum": ["auto", "manual", "blocked"]},
+        "source_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/sourceRef"}}
+      }
+    }
+  }
+}

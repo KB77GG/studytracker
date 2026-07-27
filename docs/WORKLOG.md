@@ -6,6 +6,21 @@
 
 ---
 
+## 2026-07-27 TOEFL Q33 双证据恢复与 v2 staging 门禁（任务分支同步）
+
+- 在独立 `codex/toefl-rescue` worktree 从 `f2b54c00` 继续并随任务分支同步；未合并 `main`、未部署。
+- `2026-01-21_A` Reading M1 Q33 已按题卷第 7 页恢复完整题干/四选项，按答案 PDF 第 1 页确认 C；
+  两个来源 SHA-256 匹配既有来源档案。现有 `data/toefl_practice` 发布 JSON 零改动。
+- 建立 `data/toefl_practice_v2/2026-01-21_A` staging：120 个原子题，103 auto、13 manual、
+  4 blocked；公开内容与私有答案分离，Q33 记录题卷页和答案页双证据。
+- 接入本地 v2 重建契约/schema/builder/validator，并补真正的 `--require-release-ready` 门禁；
+  四科审阅状态直接复用 `data/toefl_quality/source_profiles.json`。
+- 结构/来源校验 0 error，相关 38 项 unittest 通过；严格发布门禁按预期 exit 1，因为 Listening
+  M1 Q15/Q18/Q21、M2 Q9 仍缺选项，且套卷/四科审阅状态尚未达到发布条件。
+- 本地另一工作树已有 7 套 v2（840 题，合计 18 blocked；仅 `2026-01-28_B` 为 0 blocked 候选）。
+  后续应把 rescue 来源审阅门禁作为所有 v2 包的统一上线前置，不能只看结构 validator。
+- 下一步：独立复核 v2 候选恢复的 Listening M1 Q7、M2 Q3，再处理四道 source-blocked 听力题。
+
 ## 2026-07-26 TOEFL 题库抢救启动（任务分支同步，保留 50% 额度次日接力）
 
 - 用户决定按“一套一套抢救、人工审阅后再上线”的方式完整重做 TOEFL 模考，目标流程见未跟踪的 `docs/TOEFL_MOCK_FLOW_SPEC.md`。

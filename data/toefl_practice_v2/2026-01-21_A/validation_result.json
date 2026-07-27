@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "validated_at": "2026-07-27T02:16:59.479794+00:00",
+  "package_dir": "data/toefl_practice_v2/2026-01-21_A",
+  "source_root_checked": true,
+  "status": "pass",
+  "summary": {
+    "exam_id": "toefl:2026-01-21-a",
+    "questions": 120,
+    "auto": 103,
+    "manual": 13,
+    "blocked": 4,
+    "validation_errors": 0
+  },
+  "errors": [],
+  "release_gate_checked": false,
+  "release_ready": false,
+  "release_blockers": [
+    "4 question(s) remain blocked",
+    "exam availability_status is 'pilot'; expected 'reviewed' or 'published'",
+    "manifest quality.publish_status is 'blocked'; expected 'ready' or 'published'",
+    "subject source review is not approved: listening, reading, speaking, writing"
+  ]
+}

@@ -1,0 +1,6015 @@
+{
+  "schema_version": "2.0.0",
+  "exam": {
+    "id": "toefl:2026-01-21-a",
+    "title": "2026-01-21 TOEFL Real Exam A",
+    "date": "2026-01-21",
+    "variant": "A",
+    "source_kind": "real_exam",
+    "source_folder": "1.21新托福真题A卷",
+    "expected_question_count": 120,
+    "availability_status": "pilot"
+  },
+  "assets": [
+    {
+      "id": "toefl:2026-01-21-a:paper",
+      "kind": "paper_pdf",
+      "subject": "exam",
+      "source": {
+        "path": "1.21新托福真题A卷/新托福真题01.pdf",
+        "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+        "size_bytes": 7594028
+      },
+      "delivery": {
+        "storage_key": "toefl/v2/2026-01-21_A/新托福真题01.pdf",
+        "status": "staged"
+      }
+    },
+    {
+      "id": "toefl:2026-01-21-a:answers",
+      "kind": "answer_pdf",
+      "subject": "exam",
+      "source": {
+        "path": "1.21新托福真题A卷/新托福真题01参考答案.pdf",
+        "sha256": "123e64e47e08b47a346f73a2d2e077b10e7ba8290bc20a111b9a4ab6d2ad8be4",
+        "size_bytes": 90534
+      },
+      "delivery": {
+        "storage_key": "toefl/v2/2026-01-21_A/新托福真题01参考答案.pdf",
+        "status": "staged"
+      }
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening-transcript",
+      "kind": "transcript_pdf",
+      "subject": "listening",
+      "source": {
+        "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+        "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+        "size_bytes": 108448
+      },
+      "delivery": {
+        "storage_key": "toefl/v2/2026-01-21_A/新托福真题01-听力原文.pdf",
+        "status": "staged"
+      }
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1",
+      "kind": "audio",
+      "subject": "listening",
+      "source": {
+        "path": "1.21新托福真题A卷/听力合集/1.21新托福真题Listening-Module1.mp3",
+        "sha256": "5d5de53e658605e54c1f3b1642779a0af304d0fa93e6bb4c786dfbd91e883752",
+        "size_bytes": 13835333,
+        "duration_seconds": 576.457
+      },
+      "delivery": {
+        "storage_key": "toefl/v2/2026-01-21_A/1.21新托福真题Listening-Module1.mp3",
+        "status": "staged"
+      },
+      "module_id": "toefl:2026-01-21-a:listening:m1"
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2",
+      "kind": "audio",
+      "subject": "listening",
+      "source": {
+        "path": "1.21新托福真题A卷/听力合集/1.21新托福真题Listening-Module2.mp3",
+        "sha256": "b44a5d966b3fc45b1992d4eef9653d1727150e8f0c9c88bddc89f16c8abed627",
+        "size_bytes": 10950160,
+        "duration_seconds": 456.242
+      },
+      "delivery": {
+        "storage_key": "toefl/v2/2026-01-21_A/1.21新托福真题Listening-Module2.mp3",
+        "status": "staged"
+      },
+      "module_id": "toefl:2026-01-21-a:listening:m2"
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:full",
+      "kind": "audio",
+      "subject": "listening",
+      "source": {
+        "path": "1.21新托福真题A卷/听力合集/1.21新托福真题Listening（全）.mp3",
+        "sha256": "fd7aa1aa8e4ab51dfbe792fa72ea2a3532c7ad908d4e2acac61b6bf5ed5a3300",
+        "size_bytes": 24855031,
+        "duration_seconds": 1035.585
+      },
+      "delivery": {
+        "storage_key": "toefl/v2/2026-01-21_A/1.21新托福真题Listening（全）.mp3",
+        "status": "staged"
+      }
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking",
+      "kind": "audio",
+      "subject": "speaking",
+      "source": {
+        "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+        "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+        "size_bytes": 3849448,
+        "duration_seconds": 160.353
+      },
+      "delivery": {
+        "storage_key": "toefl/v2/2026-01-21_A/新托福真题01Speaking.mp3",
+        "status": "staged"
+      }
+    }
+  ],
+  "modules": [
+    {
+      "id": "toefl:2026-01-21-a:reading:m1",
+      "subject": "reading",
+      "module": "m1",
+      "order": 1,
+      "label": "Reading Module 1",
+      "duration_seconds": 0,
+      "navigation": {
+        "back_policy": "within_module",
+        "review_policy": "within_module"
+      },
+      "asset_ids": [
+        "toefl:2026-01-21-a:paper"
+      ],
+      "group_ids": [
+        "toefl:2026-01-21-a:reading:m1:g01",
+        "toefl:2026-01-21-a:reading:m1:g02",
+        "toefl:2026-01-21-a:reading:m1:g03",
+        "toefl:2026-01-21-a:reading:m1:g04",
+        "toefl:2026-01-21-a:reading:m1:g05",
+        "toefl:2026-01-21-a:reading:m1:g06"
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2",
+      "subject": "reading",
+      "module": "m2",
+      "order": 2,
+      "label": "Reading Module 2",
+      "duration_seconds": 0,
+      "navigation": {
+        "back_policy": "within_module",
+        "review_policy": "within_module"
+      },
+      "asset_ids": [
+        "toefl:2026-01-21-a:paper"
+      ],
+      "group_ids": [
+        "toefl:2026-01-21-a:reading:m2:g01",
+        "toefl:2026-01-21-a:reading:m2:g02"
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "module": "m1",
+      "order": 1,
+      "label": "Listening Module 1",
+      "duration_seconds": 576,
+      "navigation": {
+        "back_policy": "disabled",
+        "review_policy": "after_submit"
+      },
+      "asset_ids": [
+        "toefl:2026-01-21-a:listening:m1"
+      ],
+      "group_ids": [
+        "toefl:2026-01-21-a:listening:m1:g01",
+        "toefl:2026-01-21-a:listening:m1:g02",
+        "toefl:2026-01-21-a:listening:m1:g03",
+        "toefl:2026-01-21-a:listening:m1:g04",
+        "toefl:2026-01-21-a:listening:m1:g05",
+        "toefl:2026-01-21-a:listening:m1:g06",
+        "toefl:2026-01-21-a:listening:m1:g07",
+        "toefl:2026-01-21-a:listening:m1:g08",
+        "toefl:2026-01-21-a:listening:m1:g09"
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2",
+      "subject": "listening",
+      "module": "m2",
+      "order": 2,
+      "label": "Listening Module 2",
+      "duration_seconds": 456,
+      "navigation": {
+        "back_policy": "disabled",
+        "review_policy": "after_submit"
+      },
+      "asset_ids": [
+        "toefl:2026-01-21-a:listening:m2"
+      ],
+      "group_ids": [
+        "toefl:2026-01-21-a:listening:m2:g01",
+        "toefl:2026-01-21-a:listening:m2:g02",
+        "toefl:2026-01-21-a:listening:m2:g03",
+        "toefl:2026-01-21-a:listening:m2:g04",
+        "toefl:2026-01-21-a:listening:m2:g05"
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1",
+      "subject": "writing",
+      "module": "m1",
+      "order": 1,
+      "label": "Writing",
+      "duration_seconds": 0,
+      "navigation": {
+        "back_policy": "within_module",
+        "review_policy": "within_module"
+      },
+      "asset_ids": [
+        "toefl:2026-01-21-a:paper"
+      ],
+      "group_ids": [
+        "toefl:2026-01-21-a:writing:m1:g01",
+        "toefl:2026-01-21-a:writing:m1:g02",
+        "toefl:2026-01-21-a:writing:m1:g03"
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m1",
+      "subject": "speaking",
+      "module": "m1",
+      "order": 1,
+      "label": "Listen and Repeat",
+      "duration_seconds": 420,
+      "navigation": {
+        "back_policy": "disabled",
+        "review_policy": "after_submit"
+      },
+      "asset_ids": [
+        "toefl:2026-01-21-a:speaking"
+      ],
+      "group_ids": [
+        "toefl:2026-01-21-a:speaking:m1:g01"
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m2",
+      "subject": "speaking",
+      "module": "m2",
+      "order": 2,
+      "label": "Take an Interview",
+      "duration_seconds": 540,
+      "navigation": {
+        "back_policy": "disabled",
+        "review_policy": "after_submit"
+      },
+      "asset_ids": [
+        "toefl:2026-01-21-a:speaking"
+      ],
+      "group_ids": [
+        "toefl:2026-01-21-a:speaking:m2:g01"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "subject": "reading",
+      "order": 1,
+      "task_type": "complete_words",
+      "title": "Glaciers",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "stimulus": {
+        "format": "inline_completion",
+        "display_text": "Glaciers are massive, slow-moving bodies of ice that form in areas where snow accumulates over time and compresses into ice. {q01:Th} can {q02:cha} landscapes {q03:thr} processes {q04:li} erosion {q05:a} deposition. {q06:A} glaciers {q07:mo}, they {q08:ca} out {q09:val} and fjords, {q10:lea} behind distinct geological features. Scientists study glaciers to understand past climate conditions and predict future changes. Glaciers are of particular concern today because their melting contributes to rising sea levels, impacting coastal communities worldwide.",
+        "token_syntax": "{question-local-number:visible-prefix}",
+        "rendering_rule": "Render each token as one inline text input; never detach blanks into a side panel."
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:reading:m1:g01:q01",
+        "toefl:2026-01-21-a:reading:m1:g01:q02",
+        "toefl:2026-01-21-a:reading:m1:g01:q03",
+        "toefl:2026-01-21-a:reading:m1:g01:q04",
+        "toefl:2026-01-21-a:reading:m1:g01:q05",
+        "toefl:2026-01-21-a:reading:m1:g01:q06",
+        "toefl:2026-01-21-a:reading:m1:g01:q07",
+        "toefl:2026-01-21-a:reading:m1:g01:q08",
+        "toefl:2026-01-21-a:reading:m1:g01:q09",
+        "toefl:2026-01-21-a:reading:m1:g01:q10"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 1,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "subject": "reading",
+      "order": 2,
+      "task_type": "complete_words",
+      "title": "The Spix's Macaw",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "stimulus": {
+        "format": "inline_completion",
+        "display_text": "The Spix's Macaw, native to Brazil and famously known as the inspiration for the animated movie Rio, is critically endangered, with fewer than a hundred individuals remaining. The {q11:popul} of {q12:th} vibrant {q13:bl} bird {q14:decl} because {q15:} habitat {q16:lo} and {q17:ill} trapping {q18:} sale {q19:abr}, where {q20:pri} collectors and pet stores spent large sums of money to obtain them. Conservationists have initiated captive breeding programs and habitat restoration efforts to reintroduce the Spix's Macaw into the wild, where it was officially declared extinct in 2019.",
+        "token_syntax": "{question-local-number:visible-prefix}",
+        "rendering_rule": "Render each token as one inline text input; never detach blanks into a side panel."
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:reading:m1:g02:q11",
+        "toefl:2026-01-21-a:reading:m1:g02:q12",
+        "toefl:2026-01-21-a:reading:m1:g02:q13",
+        "toefl:2026-01-21-a:reading:m1:g02:q14",
+        "toefl:2026-01-21-a:reading:m1:g02:q15",
+        "toefl:2026-01-21-a:reading:m1:g02:q16",
+        "toefl:2026-01-21-a:reading:m1:g02:q17",
+        "toefl:2026-01-21-a:reading:m1:g02:q18",
+        "toefl:2026-01-21-a:reading:m1:g02:q19",
+        "toefl:2026-01-21-a:reading:m1:g02:q20"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 2,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g03",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "subject": "reading",
+      "order": 3,
+      "task_type": "read_in_daily_life",
+      "title": "Introduction to Glassblowing",
+      "directive": "Read the material and answer the questions.",
+      "stimulus": {
+        "format": "rich_text",
+        "text": "Introduction to Glassblowing\nThis hands-on class introduces adults (18+) to the art of\nglassblowing. You'll learn safety, shaping, and design techniques\nwhile crafting your own unique work of glass art.\nNo experience needed -just curiosity and closed-toe shoes! Other\nsafety-related equipment will be provided by the instructor.\nRegister now-spaces are limited!\nVisit www.alburcommunitycenter.com/glassblowing."
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:reading:m1:g03:q21",
+        "toefl:2026-01-21-a:reading:m1:g03:q22"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g04",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "subject": "reading",
+      "order": 4,
+      "task_type": "read_in_daily_life",
+      "title": "Flex & Flow",
+      "directive": "Read the material and answer the questions.",
+      "stimulus": {
+        "format": "rich_text",
+        "text": "David White\nI have exciting news for all fitness enthusiasts and those looking to\nstart their wellness journey.\nI am thrilled to announce the opening of my new fitness studio,\nFlex & Flow, located right in the heart of downtown Toronto! Our grand\nopening will be next Saturday, and we have an amazing lineup of\nactivities to celebrate.\nTake advantage of free workout classes, where you can participate in\nyoga, pilates, and strength training. Meet our special guest trainers\nand learn from the best in the business. You can also enjoy free\nnutritious snacks provided by local vendors.\nFlex & Flow is all about creating a supportive community where you\ncan achieve your fitness goals while having fun. Whether you're a\nseasoned athlete or just beginning, we have something for everyone.\nFor more details and to RSVP, visit our website at www.flexandflow.ca.\n& Like\n• Comment"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:reading:m1:g04:q23",
+        "toefl:2026-01-21-a:reading:m1:g04:q24",
+        "toefl:2026-01-21-a:reading:m1:g04:q25"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 3,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g05",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "subject": "reading",
+      "order": 5,
+      "task_type": "academic_passage",
+      "title": "Thinking Outside the Box",
+      "directive": "Read the material and answer the questions.",
+      "stimulus": {
+        "format": "rich_text",
+        "text": "Does the expression \"thinking outside the box\" mean what we think it does? This\n\nmantra instructs us to consciously dispense with constraints, but what if the box\n\nitself prevents us from thinking creatively?\n\n\"Creativity,\" as the theorist Edward de Bono notes, \"is about bringing into being\n\nsomething that was not there before.\" He asserts that creative thinking is not a rare\n\nbiological gift but a skill that enables us to bring new ideas into the world. Our\n\nbrains obtain information by connecting new inputs to patterns of previously stored\n\ndata, so we retain thoughts and ideas that match with what is already in our mental\n\ndatabase. By changing our thought processes, we can block these habitual neural\n\nnetworks from getting activated and alter the self-organizing patterns in our heads.\n\nForcing our minds into taking new routes and abandoning our box is what leads to\n\ninnovative thinking. To achieve this, we can do exercises such as asking what-if\n\nquestions and changing our angle of observation.\n\nReal innovation requires approaching challenges without boxes. Perhaps the best\n\nway to eliminate the box is to \"set the box on fire.\" Once you do, you may be\n\namazed by what innovative ideas come to mind."
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:reading:m1:g05:q26",
+        "toefl:2026-01-21-a:reading:m1:g05:q27",
+        "toefl:2026-01-21-a:reading:m1:g05:q28",
+        "toefl:2026-01-21-a:reading:m1:g05:q29",
+        "toefl:2026-01-21-a:reading:m1:g05:q30"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 4,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g06",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "subject": "reading",
+      "order": 6,
+      "task_type": "academic_passage",
+      "title": "Plant Communication",
+      "directive": "Read the material and answer the questions.",
+      "stimulus": {
+        "format": "rich_text",
+        "text": "The discovery that plants use communication has changed our understanding of\n\nplant behavior and ecology. Traditionally, plants were considered passive\n\norganisms, reacting to environmental changes rather than actively engaging with\n\ntheir surroundings. However, studies have shown that plants can send chemical\n\nsignals through the soil.\n\nThese signals, often carried by root exudates (substances released by the plants'\n\nroots into the soil), can inform neighboring plants about threats like plant-eating\n\nanimals or disease-causing agents. For instance, when a corn plant is attacked by\n\ncaterpillars, it can release specific chemicals that warn nearby corn plants. In\n\nresponse, the neighboring corn plants may release a chemical known as MBOA\n\ninto their tissues, which makes them less palatable to the caterpillars.\n\nPlants also use electrical signals to respond rapidly to environmental changes.\n\nThese signals travel through the plant, allowing it to adjust resource allocation.\n\nSome plants can even detect the presence of other plants through their roots. This\n\nallows them to alter their growth patterns to avoid competition.\n\nDespite these discoveries, the study of plant communication is still in its infancy.\n\nResearchers are continuously uncovering new ways that plants interact with each\n\nother and their environment."
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:reading:m1:g06:q31",
+        "toefl:2026-01-21-a:reading:m1:g06:q32",
+        "toefl:2026-01-21-a:reading:m1:g06:q33",
+        "toefl:2026-01-21-a:reading:m1:g06:q34",
+        "toefl:2026-01-21-a:reading:m1:g06:q35"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 6,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "subject": "reading",
+      "order": 1,
+      "task_type": "complete_words",
+      "title": "Pottery",
+      "directive": "Fill in the missing letters in the paragraph.",
+      "stimulus": {
+        "format": "inline_completion",
+        "display_text": "Pottery is an ancient craft that involves shaping and firing clay in special wood-fired ovens (kilns) to create functional and decorative objects. Early {q01:po} were {q02:sha} by {q03:ha} and {q04:hea} in {q05:sim} kilns, {q06:prod} ceramics {q07:th} lasted {q08:lon}. As {q09:soc} developed, {q10:tech} became more refined, with different cultures creating distinct styles. Over time, pottery evolved into both a practical craft and a significant form of artistic and cultural expression.",
+        "token_syntax": "{question-local-number:visible-prefix}",
+        "rendering_rule": "Render each token as one inline text input; never detach blanks into a side panel."
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:reading:m2:g01:q01",
+        "toefl:2026-01-21-a:reading:m2:g01:q02",
+        "toefl:2026-01-21-a:reading:m2:g01:q03",
+        "toefl:2026-01-21-a:reading:m2:g01:q04",
+        "toefl:2026-01-21-a:reading:m2:g01:q05",
+        "toefl:2026-01-21-a:reading:m2:g01:q06",
+        "toefl:2026-01-21-a:reading:m2:g01:q07",
+        "toefl:2026-01-21-a:reading:m2:g01:q08",
+        "toefl:2026-01-21-a:reading:m2:g01:q09",
+        "toefl:2026-01-21-a:reading:m2:g01:q10"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g02",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "subject": "reading",
+      "order": 2,
+      "task_type": "academic_passage",
+      "title": "Cybernetic Prosthetics",
+      "directive": "Read the material and answer the questions.",
+      "stimulus": {
+        "format": "rich_text",
+        "text": "Cybernetic prosthetics have revolutionized medical technology, offering hope to individuals who have lost limbs. Unlike traditional prosthetics, which are often cumbersome and limited in function, cybernetic versions are designed to integrate seamlessly with the human nervous system. This integration allows for more natural movement and even sensation. A key development in this field has been the use of myelectric sensors, which detect electrical signals generated by muscle movements. One example is a cybernetic hand that can perform delicate tasks such as picking up small objects or typing. This is achieved through advanced algorithms that translate muscle signals into controlled movements. Researchers are also exploring haptic feedback, which would enable users to feel textures and temperatures through their prosthetic limbs. It involves integrating sensors and actuators that mimic the sensation of touch by stimulating the user's nerve endings or skin with electrical signals. This could significantly improve the quality of life for amputees. [A]The high cost of these prosthetics makes them inaccessible to many. [B]Additionally, the technology requires regular maintenance and updates, which can be a barrier. [C]Current battery life is another limitation, as it restricts the user's ability to wear the prosthetic for extended periods. Researchers are continually working to make these devices more affordable and user-friondly. IDI\n\nListening Listening Section\n\nIn the listening section, you will answer 35-45 questions to demonstrate how well you understand spoken English. There are three types of tasks. Description Type of Task Select the best response to the Listen and Choose a Response question or statement. Answer questions about short Conversations conversations. nswer questions abol Announcements and Academic Talks nnouncements and academic tall You WILL NOT be able to return to previous questions. Listening\n\nIn an actual test, the clock will show you how much time you have to complete each question. You can use Next to move to the next question. The first task is Listen and Choose a Response. In this task, you will listen to a sentence or question. You will then read four sentences and choose the option that is the best response."
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:reading:m2:g02:q11",
+        "toefl:2026-01-21-a:reading:m2:g02:q12",
+        "toefl:2026-01-21-a:reading:m2:g02:q13",
+        "toefl:2026-01-21-a:reading:m2:g02:q14",
+        "toefl:2026-01-21-a:reading:m2:g02:q15"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 9,
+          "module": "m2"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "order": 1,
+      "task_type": "listen_and_choose",
+      "title": "Choose the Best Response",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m1",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m1:g01:q01",
+        "toefl:2026-01-21-a:listening:m1:g01:q02",
+        "toefl:2026-01-21-a:listening:m1:g01:q03",
+        "toefl:2026-01-21-a:listening:m1:g01:q04",
+        "toefl:2026-01-21-a:listening:m1:g01:q05",
+        "toefl:2026-01-21-a:listening:m1:g01:q06",
+        "toefl:2026-01-21-a:listening:m1:g01:q07",
+        "toefl:2026-01-21-a:listening:m1:g01:q08",
+        "toefl:2026-01-21-a:listening:m1:g01:q09",
+        "toefl:2026-01-21-a:listening:m1:g01:q10",
+        "toefl:2026-01-21-a:listening:m1:g01:q11",
+        "toefl:2026-01-21-a:listening:m1:g01:q12"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 12,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g02",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "order": 2,
+      "task_type": "conversation",
+      "title": "Store Return",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m1",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m1:g02:q13",
+        "toefl:2026-01-21-a:listening:m1:g02:q14"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 19,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g03",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "order": 3,
+      "task_type": "conversation",
+      "title": "Dinner Party Errand",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m1",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m1:g03:q15",
+        "toefl:2026-01-21-a:listening:m1:g03:q16"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 21,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g04",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "order": 4,
+      "task_type": "conversation",
+      "title": "University Orchestra Concert",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m1",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m1:g04:q17",
+        "toefl:2026-01-21-a:listening:m1:g04:q18"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 23,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g05",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "order": 5,
+      "task_type": "announcement",
+      "title": "School Art Exhibit",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m1",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m1:g05:q19",
+        "toefl:2026-01-21-a:listening:m1:g05:q20"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 24,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g06",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "order": 6,
+      "task_type": "announcement",
+      "title": "Environmental Policy Guest Speaker",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m1",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m1:g06:q21",
+        "toefl:2026-01-21-a:listening:m1:g06:q22"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 25,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g07",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "order": 7,
+      "task_type": "announcement",
+      "title": "Independent Study Course",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m1",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m1:g07:q23",
+        "toefl:2026-01-21-a:listening:m1:g07:q24"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 26,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g08",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "order": 8,
+      "task_type": "lecture",
+      "title": "Inertia and Bicycle Turns",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m1",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m1:g08:q25",
+        "toefl:2026-01-21-a:listening:m1:g08:q26",
+        "toefl:2026-01-21-a:listening:m1:g08:q27",
+        "toefl:2026-01-21-a:listening:m1:g08:q28"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 27,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g09",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "subject": "listening",
+      "order": 9,
+      "task_type": "lecture",
+      "title": "Lean Startup Methodology",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m1",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m1:g09:q29",
+        "toefl:2026-01-21-a:listening:m1:g09:q30",
+        "toefl:2026-01-21-a:listening:m1:g09:q31",
+        "toefl:2026-01-21-a:listening:m1:g09:q32"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 29,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g01",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "subject": "listening",
+      "order": 1,
+      "task_type": "listen_and_choose",
+      "title": "Choose the Best Response",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m2",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m2:g01:q01",
+        "toefl:2026-01-21-a:listening:m2:g01:q02",
+        "toefl:2026-01-21-a:listening:m2:g01:q03"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 31,
+          "module": "m2"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g02",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "subject": "listening",
+      "order": 2,
+      "task_type": "conversation",
+      "title": "Laptop Problem",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m2",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m2:g02:q04",
+        "toefl:2026-01-21-a:listening:m2:g02:q05"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 33,
+          "module": "m2"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g03",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "subject": "listening",
+      "order": 3,
+      "task_type": "conversation",
+      "title": "University Newspaper Interview",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m2",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m2:g03:q06",
+        "toefl:2026-01-21-a:listening:m2:g03:q07"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 35,
+          "module": "m2"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g04",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "subject": "listening",
+      "order": 4,
+      "task_type": "lecture",
+      "title": "Bird Migration",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m2",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m2:g04:q08",
+        "toefl:2026-01-21-a:listening:m2:g04:q09",
+        "toefl:2026-01-21-a:listening:m2:g04:q10",
+        "toefl:2026-01-21-a:listening:m2:g04:q11"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 37,
+          "module": "m2"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g05",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "subject": "listening",
+      "order": 5,
+      "task_type": "lecture",
+      "title": "Bronze Age Mummification",
+      "directive": "Listen once, then choose the best answer.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:listening:m2",
+        "transcript_policy": "review_after_submit"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:listening:m2:g05:q12",
+        "toefl:2026-01-21-a:listening:m2:g05:q13",
+        "toefl:2026-01-21-a:listening:m2:g05:q14",
+        "toefl:2026-01-21-a:listening:m2:g05:q15"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 39,
+          "module": "m2"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "subject": "writing",
+      "order": 1,
+      "task_type": "build_a_sentence",
+      "title": "Build a Sentence",
+      "directive": "Arrange the words to make an appropriate sentence.",
+      "stimulus": null,
+      "question_ids": [
+        "toefl:2026-01-21-a:writing:m1:g01:q01",
+        "toefl:2026-01-21-a:writing:m1:g01:q02",
+        "toefl:2026-01-21-a:writing:m1:g01:q03",
+        "toefl:2026-01-21-a:writing:m1:g01:q04",
+        "toefl:2026-01-21-a:writing:m1:g01:q05",
+        "toefl:2026-01-21-a:writing:m1:g01:q06",
+        "toefl:2026-01-21-a:writing:m1:g01:q07",
+        "toefl:2026-01-21-a:writing:m1:g01:q08",
+        "toefl:2026-01-21-a:writing:m1:g01:q09",
+        "toefl:2026-01-21-a:writing:m1:g01:q10"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 39,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g02",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "subject": "writing",
+      "order": 2,
+      "task_type": "write_email",
+      "title": "Write an Email",
+      "directive": "Write a complete response to the prompt.",
+      "stimulus": null,
+      "question_ids": [
+        "toefl:2026-01-21-a:writing:m1:g02:q11"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 43,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g03",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "subject": "writing",
+      "order": 3,
+      "task_type": "academic_discussion",
+      "title": "Academic Discussion",
+      "directive": "Write a complete response to the prompt.",
+      "stimulus": null,
+      "question_ids": [
+        "toefl:2026-01-21-a:writing:m1:g03:q12"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 45,
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m1:g01",
+      "module_id": "toefl:2026-01-21-a:speaking:m1",
+      "subject": "speaking",
+      "order": 1,
+      "task_type": "listen_and_repeat",
+      "title": "Listen and Repeat",
+      "directive": "Record one response for each prompt.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:speaking",
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:speaking:m1:g01:q01",
+        "toefl:2026-01-21-a:speaking:m1:g01:q02",
+        "toefl:2026-01-21-a:speaking:m1:g01:q03",
+        "toefl:2026-01-21-a:speaking:m1:g01:q04",
+        "toefl:2026-01-21-a:speaking:m1:g01:q05",
+        "toefl:2026-01-21-a:speaking:m1:g01:q06",
+        "toefl:2026-01-21-a:speaking:m1:g01:q07"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 46,
+          "module": "m1"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m1"
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m2:g01",
+      "module_id": "toefl:2026-01-21-a:speaking:m2",
+      "subject": "speaking",
+      "order": 1,
+      "task_type": "take_an_interview",
+      "title": "Take an Interview",
+      "directive": "Record one response for each prompt.",
+      "stimulus": {
+        "format": "audio",
+        "asset_id": "toefl:2026-01-21-a:speaking",
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-21-a:speaking:m2:g01:q01",
+        "toefl:2026-01-21-a:speaking:m2:g01:q02",
+        "toefl:2026-01-21-a:speaking:m2:g01:q03",
+        "toefl:2026-01-21-a:speaking:m2:g01:q04"
+      ],
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 49,
+          "module": "m2"
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m2"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q01",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 1,
+      "sequence": 1,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "Th",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 1,
+          "module": "m1",
+          "question_number": 1
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q02",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 2,
+      "sequence": 2,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "cha",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 1,
+          "module": "m1",
+          "question_number": 2
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q03",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 3,
+      "sequence": 3,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "thr",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 1,
+          "module": "m1",
+          "question_number": 3
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q04",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 4,
+      "sequence": 4,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "li",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 1,
+          "module": "m1",
+          "question_number": 4
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q05",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 5,
+      "sequence": 5,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "a",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 1,
+          "module": "m1",
+          "question_number": 5
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q06",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 6,
+      "sequence": 6,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "A",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 1,
+          "module": "m1",
+          "question_number": 6
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q07",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 7,
+      "sequence": 7,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "mo",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 1,
+          "module": "m1",
+          "question_number": 7
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q08",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 8,
+      "sequence": 8,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "ca",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 1,
+          "module": "m1",
+          "question_number": 8
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q09",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 9,
+      "sequence": 9,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "val",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 1,
+          "module": "m1",
+          "question_number": 9
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g01:q10",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g01",
+      "subject": "reading",
+      "number": 10,
+      "sequence": 10,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "lea",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 1,
+          "module": "m1",
+          "question_number": 10
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q11",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 11,
+      "sequence": 11,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "popul",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 11
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q12",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 12,
+      "sequence": 12,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "th",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 12
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q13",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 13,
+      "sequence": 13,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "bl",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 13
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q14",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 14,
+      "sequence": 14,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "decl",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 14
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q15",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 15,
+      "sequence": 15,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 2,
+          "module": "m1",
+          "question_number": 15
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q16",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 16,
+      "sequence": 16,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "lo",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 16
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q17",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 17,
+      "sequence": 17,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "ill",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 17
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q18",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 18,
+      "sequence": 18,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 2,
+          "module": "m1",
+          "question_number": 18
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q19",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 19,
+      "sequence": 19,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "abr",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 19
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g02:q20",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g02",
+      "subject": "reading",
+      "number": 20,
+      "sequence": 20,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "pri",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 20
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g03:q21",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g03",
+      "subject": "reading",
+      "number": 21,
+      "sequence": 21,
+      "response_type": "mc",
+      "prompt": "Who can register for the course?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Anyone who is at least 18 years old"
+        },
+        {
+          "key": "B",
+          "text": "Anyone who has worked with glass before"
+        },
+        {
+          "key": "C",
+          "text": "Anyone who has read a book on glass art"
+        },
+        {
+          "key": "D",
+          "text": "Anyone who is registered for classes at a university"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 21
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g03:q22",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g03",
+      "subject": "reading",
+      "number": 22,
+      "sequence": 22,
+      "response_type": "mc",
+      "prompt": "It can be inferred that students should wear closed-toed shoes because",
+      "options": [
+        {
+          "key": "A",
+          "text": "they are preferred by the instructor"
+        },
+        {
+          "key": "B",
+          "text": "they offer protection during the process"
+        },
+        {
+          "key": "C",
+          "text": "they are unique to the Albur community"
+        },
+        {
+          "key": "D",
+          "text": "they help reduce the risk of falling"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 2,
+          "module": "m1",
+          "question_number": 22
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g04:q23",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g04",
+      "subject": "reading",
+      "number": 23,
+      "sequence": 23,
+      "response_type": "mc",
+      "prompt": "What is the main purpose of the social media post?",
+      "options": [
+        {
+          "key": "A",
+          "text": "To announce an upcoming fitness competition"
+        },
+        {
+          "key": "B",
+          "text": "To introduce a newly hired fitness trainer"
+        },
+        {
+          "key": "C",
+          "text": "To promote online workout classes"
+        },
+        {
+          "key": "D",
+          "text": "To advertise the opening of a new fitness studio"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 3,
+          "module": "m1",
+          "question_number": 23
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g04:q24",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g04",
+      "subject": "reading",
+      "number": 24,
+      "sequence": 24,
+      "response_type": "mc",
+      "prompt": "What is NOT mentioned as a feature of the event?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Free workout classes"
+        },
+        {
+          "key": "B",
+          "text": "A presentation about nutrition and health"
+        },
+        {
+          "key": "C",
+          "text": "Special guest trainers"
+        },
+        {
+          "key": "D",
+          "text": "Free food"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 3,
+          "module": "m1",
+          "question_number": 24
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g04:q25",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g04",
+      "subject": "reading",
+      "number": 25,
+      "sequence": 25,
+      "response_type": "mc",
+      "prompt": "Who is the social media post intended for?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Local restaurant owners"
+        },
+        {
+          "key": "B",
+          "text": "People who want to be fit"
+        },
+        {
+          "key": "C",
+          "text": "Healthcare professionals"
+        },
+        {
+          "key": "D",
+          "text": "Sports equipment vendors"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 4,
+          "module": "m1",
+          "question_number": 25
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g05:q26",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g05",
+      "subject": "reading",
+      "number": 26,
+      "sequence": 26,
+      "response_type": "mc",
+      "prompt": "Thinking Outside the Box What is the purpose of the first paragraph?",
+      "options": [
+        {
+          "key": "A",
+          "text": "To suggest readers reconsider a popularly held belief"
+        },
+        {
+          "key": "B",
+          "text": "To ask readers to avoid overusing an expression"
+        },
+        {
+          "key": "C",
+          "text": "To raise concerns about outdated instruction methods"
+        },
+        {
+          "key": "D",
+          "text": "To question the importance of thinking creatively"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 4,
+          "module": "m1",
+          "question_number": 26
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g05:q27",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g05",
+      "subject": "reading",
+      "number": 27,
+      "sequence": 27,
+      "response_type": "mc",
+      "prompt": "The word \"mantra\" in the passage is closest in meaning to",
+      "options": [
+        {
+          "key": "A",
+          "text": "a well-respected teacher"
+        },
+        {
+          "key": "B",
+          "text": "a very popular song"
+        },
+        {
+          "key": "C",
+          "text": "a rule that is rarely disobeyed"
+        },
+        {
+          "key": "D",
+          "text": "a phrase that is repeated often"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 5,
+          "module": "m1",
+          "question_number": 27
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g05:q28",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g05",
+      "subject": "reading",
+      "number": 28,
+      "sequence": 28,
+      "response_type": "mc",
+      "prompt": "What does Edward de Bono suggest about creative thinking?",
+      "options": [
+        {
+          "key": "A",
+          "text": "It is crucial for achieving success in life"
+        },
+        {
+          "key": "B",
+          "text": "It is a skill that can be developed"
+        },
+        {
+          "key": "C",
+          "text": "It is a gift that not all people have"
+        },
+        {
+          "key": "D",
+          "text": "It is taught by family members"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 5,
+          "module": "m1",
+          "question_number": 28
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g05:q29",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g05",
+      "subject": "reading",
+      "number": 29,
+      "sequence": 29,
+      "response_type": "mc",
+      "prompt": "What can be inferred from the passage about neural networks?",
+      "options": [
+        {
+          "key": "A",
+          "text": "They are responsible for the way we organize information"
+        },
+        {
+          "key": "B",
+          "text": "They have the capacity to store a limited amount of data"
+        },
+        {
+          "key": "C",
+          "text": "They have a pattern that scientists do not yet understand"
+        },
+        {
+          "key": "D",
+          "text": "They are unable to block our negative thought processes"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 5,
+          "module": "m1",
+          "question_number": 29
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g05:q30",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g05",
+      "subject": "reading",
+      "number": 30,
+      "sequence": 30,
+      "response_type": "mc",
+      "prompt": "At the end of the passage, what does the author recommend that readers do?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Ask for help with new challenges"
+        },
+        {
+          "key": "B",
+          "text": "Get rid of typical ways of thinking"
+        },
+        {
+          "key": "C",
+          "text": "Avoid tasks that are too difficult"
+        },
+        {
+          "key": "D",
+          "text": "Write down innovative ideas"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 6,
+          "module": "m1",
+          "question_number": 30
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g06:q31",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g06",
+      "subject": "reading",
+      "number": 31,
+      "sequence": 31,
+      "response_type": "mc",
+      "prompt": "According to the passage, there used to be a mistaken view that plants",
+      "options": [
+        {
+          "key": "A",
+          "text": "often changed their behavior"
+        },
+        {
+          "key": "B",
+          "text": "released root exudates only in small amounts"
+        },
+        {
+          "key": "C",
+          "text": "were not significantly affected by ecological factors"
+        },
+        {
+          "key": "D",
+          "text": "did not actively interact with other plants"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 6,
+          "module": "m1",
+          "question_number": 31
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g06:q32",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g06",
+      "subject": "reading",
+      "number": 32,
+      "sequence": 32,
+      "response_type": "mc",
+      "prompt": "According to the passage, corn plants may release MBOA into their tissues in response to",
+      "options": [
+        {
+          "key": "A",
+          "text": "harmful chemicals released by caterpillars"
+        },
+        {
+          "key": "B",
+          "text": "electrical signals in the soil"
+        },
+        {
+          "key": "C",
+          "text": "human activities that affect the environment"
+        },
+        {
+          "key": "D",
+          "text": "root exudates produced by other corn plants"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 6,
+          "module": "m1",
+          "question_number": 32
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g06:q33",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g06",
+      "subject": "reading",
+      "number": 33,
+      "sequence": 33,
+      "response_type": "mc",
+      "prompt": "What can be inferred to be the purpose of electrical signals that plants release?",
+      "options": [
+        {
+          "key": "A",
+          "text": "To attract beneficial animals to the plants"
+        },
+        {
+          "key": "B",
+          "text": "To prevent attack by caterpillars on the plants"
+        },
+        {
+          "key": "C",
+          "text": "To help the plants make the best use of available resources"
+        },
+        {
+          "key": "D",
+          "text": "To communicate with other plants across long distances"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "visually_recovered",
+          "page": 7,
+          "module": "m1",
+          "question_number": 33
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g06:q34",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g06",
+      "subject": "reading",
+      "number": 34,
+      "sequence": 34,
+      "response_type": "mc",
+      "prompt": "Knowledge about the presence of other plants can help a plant to",
+      "options": [
+        {
+          "key": "A",
+          "text": "change its growth in a way that reduces competition"
+        },
+        {
+          "key": "B",
+          "text": "prevent major damage to its roots"
+        },
+        {
+          "key": "C",
+          "text": "identify additional resources"
+        },
+        {
+          "key": "D",
+          "text": "determine which chemicals to release into the soil"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 7,
+          "module": "m1",
+          "question_number": 34
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m1:g06:q35",
+      "module_id": "toefl:2026-01-21-a:reading:m1",
+      "group_id": "toefl:2026-01-21-a:reading:m1:g06",
+      "subject": "reading",
+      "number": 35,
+      "sequence": 35,
+      "response_type": "mc",
+      "prompt": "The phrase \"still in its infancy\" in the passage is closest in meaning to",
+      "options": [
+        {
+          "key": "A",
+          "text": "highly controversial"
+        },
+        {
+          "key": "B",
+          "text": "in a difficult period"
+        },
+        {
+          "key": "C",
+          "text": "looking for funding"
+        },
+        {
+          "key": "D",
+          "text": "at an early stage"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 7,
+          "module": "m1",
+          "question_number": 35
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q01",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 1,
+      "sequence": 36,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "po",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 1
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q02",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 2,
+      "sequence": 37,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "sha",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 2
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q03",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 3,
+      "sequence": 38,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "ha",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 3
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q04",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 4,
+      "sequence": 39,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "hea",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 4
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q05",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 5,
+      "sequence": 40,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "sim",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 5
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q06",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 6,
+      "sequence": 41,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "prod",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 6
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q07",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 7,
+      "sequence": 42,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "th",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 7
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q08",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 8,
+      "sequence": 43,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "lon",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 8
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q09",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 9,
+      "sequence": 44,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "soc",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 9
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g01:q10",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g01",
+      "subject": "reading",
+      "number": 10,
+      "sequence": 45,
+      "response_type": "text",
+      "prompt": "Complete the word in context.",
+      "options": [],
+      "input_config": {
+        "visible_prefix": "tech",
+        "accept_full_word_in_practice": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 8,
+          "module": "m2",
+          "question_number": 10
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g02:q11",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g02",
+      "subject": "reading",
+      "number": 11,
+      "sequence": 46,
+      "response_type": "mc",
+      "prompt": "The word \"seamlessly\" in the passage is closest in meaning to",
+      "options": [
+        {
+          "key": "A",
+          "text": "generally"
+        },
+        {
+          "key": "B",
+          "text": "smoothly"
+        },
+        {
+          "key": "C",
+          "text": "repeatedly"
+        },
+        {
+          "key": "D",
+          "text": "slowly"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 9,
+          "module": "m2",
+          "question_number": 11
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g02:q12",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g02",
+      "subject": "reading",
+      "number": 12,
+      "sequence": 47,
+      "response_type": "mc",
+      "prompt": "What can be inferred about myoelectric sensors?",
+      "options": [
+        {
+          "key": "A",
+          "text": "They function less effectively in traditional prosthetics"
+        },
+        {
+          "key": "B",
+          "text": "They rely less on electric signals than other types of sensors do"
+        },
+        {
+          "key": "C",
+          "text": "They allow for more natural movement in cybernetic prosthetics"
+        },
+        {
+          "key": "D",
+          "text": "They make cybernetic prosthetics somewhat cumbersome"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 9,
+          "module": "m2",
+          "question_number": 12
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g02:q13",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g02",
+      "subject": "reading",
+      "number": 13,
+      "sequence": 48,
+      "response_type": "mc",
+      "prompt": "What does the passage indicate about cybernetic hands?",
+      "options": [
+        {
+          "key": "A",
+          "text": "They are very similar in appearance to natural human limbs"
+        },
+        {
+          "key": "B",
+          "text": "They are currently limited in their range of motion"
+        },
+        {
+          "key": "C",
+          "text": "They rely on algorithms that turn muscle signals into movements"
+        },
+        {
+          "key": "D",
+          "text": "They can cause skin irritation if worn for extended periods"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 10,
+          "module": "m2",
+          "question_number": 13
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g02:q14",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g02",
+      "subject": "reading",
+      "number": 14,
+      "sequence": 49,
+      "response_type": "mc",
+      "prompt": "According to the passage, using haptic feedback in artificial limbs involves each of the following EXCEPT",
+      "options": [
+        {
+          "key": "A",
+          "text": "detecting electrical signals from muscles"
+        },
+        {
+          "key": "B",
+          "text": "changing the temperatures of objects"
+        },
+        {
+          "key": "C",
+          "text": "stimulating skin and nerve endings"
+        },
+        {
+          "key": "D",
+          "text": "using multiple sensors and actuators"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 10,
+          "module": "m2",
+          "question_number": 14
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:reading:m2:g02:q15",
+      "module_id": "toefl:2026-01-21-a:reading:m2",
+      "group_id": "toefl:2026-01-21-a:reading:m2:g02",
+      "subject": "reading",
+      "number": 15,
+      "sequence": 50,
+      "response_type": "mc",
+      "prompt": "To take full advantage of these amazing new technologies, a few obstacles need to be overcome.",
+      "options": [
+        {
+          "key": "A",
+          "text": "A"
+        },
+        {
+          "key": "B",
+          "text": "в"
+        },
+        {
+          "key": "C",
+          "text": "c"
+        },
+        {
+          "key": "D",
+          "text": "D"
+        }
+      ],
+      "input_config": {
+        "selection": "single"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 11,
+          "module": "m2",
+          "question_number": 15
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q01",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 1,
+      "sequence": 1,
+      "response_type": "mc",
+      "prompt": "Where can I find the class notes?",
+      "options": [
+        {
+          "key": "A",
+          "text": "After my class."
+        },
+        {
+          "key": "B",
+          "text": "Check on the class website."
+        },
+        {
+          "key": "C",
+          "text": "They are 36 pages long."
+        },
+        {
+          "key": "D",
+          "text": "They use the standard format."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 12,
+          "module": "m1",
+          "question_number": 1
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 1
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q02",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 2,
+      "sequence": 2,
+      "response_type": "mc",
+      "prompt": "Who's handling this year's school fundraiser?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Im not sure what the funds will be used for."
+        },
+        {
+          "key": "B",
+          "text": "Afew candidates are being considered."
+        },
+        {
+          "key": "C",
+          "text": "Last year's fundraiser was quite successful."
+        },
+        {
+          "key": "D",
+          "text": "The school appreciates the additional support."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 12,
+          "module": "m1",
+          "question_number": 2
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 2
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q03",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 3,
+      "sequence": 3,
+      "response_type": "mc",
+      "prompt": "I don't know how many people will join us tonight for study group.",
+      "options": [
+        {
+          "key": "A",
+          "text": "The membership dues."
+        },
+        {
+          "key": "B",
+          "text": "The auditorium on the second floor."
+        },
+        {
+          "key": "C",
+          "text": "Last night it rained a lot."
+        },
+        {
+          "key": "D",
+          "text": "Atleast five said they would come."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 13,
+          "module": "m1",
+          "question_number": 3
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 3
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q04",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 4,
+      "sequence": 4,
+      "response_type": "mc",
+      "prompt": "Peter said he would look for supplies.",
+      "options": [
+        {
+          "key": "A",
+          "text": "What size did you buy?"
+        },
+        {
+          "key": "B",
+          "text": "It was a good-looking design."
+        },
+        {
+          "key": "C",
+          "text": "I'llgive him the list of what we need."
+        },
+        {
+          "key": "D",
+          "text": "This year it starts earlier than usual."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 13,
+          "module": "m1",
+          "question_number": 4
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 4
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q05",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 5,
+      "sequence": 5,
+      "response_type": "mc",
+      "prompt": "Why is the air conditioner in the dorm not working?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Yes, they work every day."
+        },
+        {
+          "key": "B",
+          "text": "I need to contact maintenance."
+        },
+        {
+          "key": "C",
+          "text": "Probably not before work."
+        },
+        {
+          "key": "D",
+          "text": "I will be out next week."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 14,
+          "module": "m1",
+          "question_number": 5
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 5
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q06",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 6,
+      "sequence": 6,
+      "response_type": "mc",
+      "prompt": "Who is the guest lecturer today?",
+      "options": [
+        {
+          "key": "A",
+          "text": "It's on modern technology."
+        },
+        {
+          "key": "B",
+          "text": "Because students requested it."
+        },
+        {
+          "key": "C",
+          "text": "It's part of the lecture series."
+        },
+        {
+          "key": "D",
+          "text": "Avisiting researcher."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 14,
+          "module": "m1",
+          "question_number": 6
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 6
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q07",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 7,
+      "sequence": 7,
+      "response_type": "mc",
+      "prompt": "Who is the tutor in the student success center today?",
+      "options": [
+        {
+          "key": "A",
+          "text": "In the main classroom."
+        },
+        {
+          "key": "B",
+          "text": "I'll be there."
+        },
+        {
+          "key": "C",
+          "text": "Probably the same from last week."
+        },
+        {
+          "key": "D",
+          "text": "She didn't take notes."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "visually_recovered",
+          "page": 15,
+          "module": "m1",
+          "question_number": 7
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 7
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q08",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 8,
+      "sequence": 8,
+      "response_type": "mc",
+      "prompt": "Maybe the power went out for this whole area.",
+      "options": [
+        {
+          "key": "A",
+          "text": "It's a device that runs on solar power."
+        },
+        {
+          "key": "B",
+          "text": "Yes, they usually go out to eat."
+        },
+        {
+          "key": "C",
+          "text": "I thought it was a powerful speech."
+        },
+        {
+          "key": "D",
+          "text": "It looks like the streetlights outside the dorm are still on."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 15,
+          "module": "m1",
+          "question_number": 8
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 8
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q09",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 9,
+      "sequence": 9,
+      "response_type": "mc",
+      "prompt": "Did you go to the university sponsored picnic on Sunday?",
+      "options": [
+        {
+          "key": "A",
+          "text": "It was cancelled because of the rain."
+        },
+        {
+          "key": "B",
+          "text": "Ask for an instruction manual."
+        },
+        {
+          "key": "C",
+          "text": "Buy mea new basket."
+        },
+        {
+          "key": "D",
+          "text": "I need about five more."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 16,
+          "module": "m1",
+          "question_number": 9
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 9
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q10",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 10,
+      "sequence": 10,
+      "response_type": "mc",
+      "prompt": "Did you enjoy the gardening class?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Yes, it was very informative."
+        },
+        {
+          "key": "B",
+          "text": "Plants improve indoor air quality."
+        },
+        {
+          "key": "C",
+          "text": "She waters her garden daily."
+        },
+        {
+          "key": "D",
+          "text": "Teachers enjoy seeing students grow."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 16,
+          "module": "m1",
+          "question_number": 10
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 10
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q11",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 11,
+      "sequence": 11,
+      "response_type": "mc",
+      "prompt": "Can you turn down the volume?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Yes, | think it is."
+        },
+        {
+          "key": "B",
+          "text": "Avery noisy concert."
+        },
+        {
+          "key": "C",
+          "text": "Sure, sorry about that."
+        },
+        {
+          "key": "D",
+          "text": "No, I'm not going to return it."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 17,
+          "module": "m1",
+          "question_number": 11
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 11
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g01:q12",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g01",
+      "subject": "listening",
+      "number": 12,
+      "sequence": 12,
+      "response_type": "mc",
+      "prompt": "Who is in charge of the event?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Dr. West."
+        },
+        {
+          "key": "B",
+          "text": "In the main hall."
+        },
+        {
+          "key": "C",
+          "text": "Sarah can help."
+        },
+        {
+          "key": "D",
+          "text": "It's next week."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 17,
+          "module": "m1",
+          "question_number": 12
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 12
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g02:q13",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g02",
+      "subject": "listening",
+      "number": 13,
+      "sequence": 13,
+      "response_type": "mc",
+      "prompt": "Why is the man returning the sweater?",
+      "options": [
+        {
+          "key": "A",
+          "text": "It is damaged."
+        },
+        {
+          "key": "B",
+          "text": "Itdoes not fit him."
+        },
+        {
+          "key": "C",
+          "text": "He does not like the color."
+        },
+        {
+          "key": "D",
+          "text": "He found it cheaper elsewhere."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 19,
+          "module": "m1",
+          "question_number": 13
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 13
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g02:q14",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g02",
+      "subject": "listening",
+      "number": 14,
+      "sequence": 14,
+      "response_type": "mc",
+      "prompt": "What will the woman most likely do next?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Speak with the store manager."
+        },
+        {
+          "key": "B",
+          "text": "Offer the man a store credit."
+        },
+        {
+          "key": "C",
+          "text": "Check the stock for a larger size."
+        },
+        {
+          "key": "D",
+          "text": "Print a copy of the man's receipt."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 19,
+          "module": "m1",
+          "question_number": 14
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 14
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g03:q15",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g03",
+      "subject": "listening",
+      "number": 15,
+      "sequence": 15,
+      "response_type": "mc",
+      "prompt": "What is the man doing later today?",
+      "options": [],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "missing_options",
+      "grading_status": "blocked",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_missing",
+          "page": 21,
+          "module": "m1",
+          "question_number": 15
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 15
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g03:q16",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g03",
+      "subject": "listening",
+      "number": 16,
+      "sequence": 16,
+      "response_type": "mc",
+      "prompt": "What is the woman likely to do next?",
+      "options": [
+        {
+          "key": "A",
+          "text": "do next?"
+        },
+        {
+          "key": "B",
+          "text": "Make a shopping list for the man"
+        },
+        {
+          "key": "C",
+          "text": "Buy groceries for the man"
+        },
+        {
+          "key": "D",
+          "text": "Go to the post office"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 21,
+          "module": "m1",
+          "question_number": 16
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 16
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g04:q17",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g04",
+      "subject": "listening",
+      "number": 17,
+      "sequence": 17,
+      "response_type": "mc",
+      "prompt": "What are the man and the woman talking about?",
+      "options": [
+        {
+          "key": "A",
+          "text": "The location of a new park"
+        },
+        {
+          "key": "B",
+          "text": "Their favorite types of music"
+        },
+        {
+          "key": "C",
+          "text": "Their plans to attend an event"
+        },
+        {
+          "key": "D",
+          "text": "The best places to listen to music"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 23,
+          "module": "m1",
+          "question_number": 17
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 17
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g04:q18",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g04",
+      "subject": "listening",
+      "number": 18,
+      "sequence": 18,
+      "response_type": "mc",
+      "prompt": "What does the man imply when he says, \"I'll bring a blanket too\"?",
+      "options": [],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "missing_options",
+      "grading_status": "blocked",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_missing",
+          "page": 23,
+          "module": "m1",
+          "question_number": 18
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 18
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g05:q19",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g05",
+      "subject": "listening",
+      "number": 19,
+      "sequence": 19,
+      "response_type": "mc",
+      "prompt": "What is the purpose of the announcement?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Toask for volunteers"
+        },
+        {
+          "key": "B",
+          "text": "To give information about a museum's history"
+        },
+        {
+          "key": "C",
+          "text": "To explain the plan for a tour"
+        },
+        {
+          "key": "D",
+          "text": "To request donations"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 24,
+          "module": "m1",
+          "question_number": 19
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 19
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g05:q20",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g05",
+      "subject": "listening",
+      "number": 20,
+      "sequence": 20,
+      "response_type": "mc",
+      "prompt": "What will the speaker probably do next?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Take students to the next floor"
+        },
+        {
+          "key": "B",
+          "text": "Discuss an artist"
+        },
+        {
+          "key": "C",
+          "text": "Collect feedback from visitors"
+        },
+        {
+          "key": "D",
+          "text": "Hand out some printed information"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 24,
+          "module": "m1",
+          "question_number": 20
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 20
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g06:q21",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g06",
+      "subject": "listening",
+      "number": 21,
+      "sequence": 21,
+      "response_type": "mc",
+      "prompt": "What field does the guest speaker most likely work in?",
+      "options": [],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "missing_options",
+      "grading_status": "blocked",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_missing",
+          "page": 25,
+          "module": "m1",
+          "question_number": 21
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 21
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g06:q22",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g06",
+      "subject": "listening",
+      "number": 22,
+      "sequence": 22,
+      "response_type": "mc",
+      "prompt": "What does the speaker imply about the guest lecturer's talk?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Itwill be useful for an upcoming project."
+        },
+        {
+          "key": "B",
+          "text": "Itwill replace a required assignment."
+        },
+        {
+          "key": "C",
+          "text": "twill be recorded and posted online."
+        },
+        {
+          "key": "D",
+          "text": "Ithas been given in other classes."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 25,
+          "module": "m1",
+          "question_number": 22
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 22
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g07:q23",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g07",
+      "subject": "listening",
+      "number": 23,
+      "sequence": 23,
+      "response_type": "mc",
+      "prompt": "What is available on the speaker's website?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Some topic ideas"
+        },
+        {
+          "key": "B",
+          "text": "Some examples of essays"
+        },
+        {
+          "key": "C",
+          "text": "An updated course schedule"
+        },
+        {
+          "key": "D",
+          "text": "Anew degree requirement"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 26,
+          "module": "m1",
+          "question_number": 23
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 23
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g07:q24",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g07",
+      "subject": "listening",
+      "number": 24,
+      "sequence": 24,
+      "response_type": "mc",
+      "prompt": "Where should the listeners look for theories and strategies?",
+      "options": [
+        {
+          "key": "A",
+          "text": "In books assigned by the speaker"
+        },
+        {
+          "key": "B",
+          "text": "In work from previous classes"
+        },
+        {
+          "key": "C",
+          "text": "In the university library"
+        },
+        {
+          "key": "D",
+          "text": "Onan academic website"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 26,
+          "module": "m1",
+          "question_number": 24
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 24
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g08:q25",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g08",
+      "subject": "listening",
+      "number": 25,
+      "sequence": 25,
+      "response_type": "mc",
+      "prompt": "What is the purpose of the talk?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Te show how easy It is to conduct a physics experiment"
+        },
+        {
+          "key": "B",
+          "text": "To describe the discovery of a law of physics"
+        },
+        {
+          "key": "C",
+          "text": "To explain two physical forces acting on a moving bicycle"
+        },
+        {
+          "key": "D",
+          "text": "To offer reasons why many physicists like bicycle riding"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 27,
+          "module": "m1",
+          "question_number": 25
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 25
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g08:q26",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g08",
+      "subject": "listening",
+      "number": 26,
+      "sequence": 26,
+      "response_type": "mc",
+      "prompt": "What does the speaker suggest about turning?",
+      "options": [
+        {
+          "key": "A",
+          "text": "tis more complicated than it seems."
+        },
+        {
+          "key": "B",
+          "text": "It is the hardest skill to learn."
+        },
+        {
+          "key": "C",
+          "text": "tis easier to tum right than left"
+        },
+        {
+          "key": "D",
+          "text": "It is important to go slowly."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 27,
+          "module": "m1",
+          "question_number": 26
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 26
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g08:q27",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g08",
+      "subject": "listening",
+      "number": 27,
+      "sequence": 27,
+      "response_type": "mc",
+      "prompt": "What does leaning in help a cyclist to do?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Go faster"
+        },
+        {
+          "key": "B",
+          "text": "Avoid falling down"
+        },
+        {
+          "key": "C",
+          "text": "See more clearly around corners"
+        },
+        {
+          "key": "D",
+          "text": "Prevent uneven wear on the wheels"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 28,
+          "module": "m1",
+          "question_number": 27
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 27
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g08:q28",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g08",
+      "subject": "listening",
+      "number": 28,
+      "sequence": 28,
+      "response_type": "mc",
+      "prompt": "What do professional cyclists try to do when turning?",
+      "options": [
+        {
+          "key": "A",
+          "text": "professional cyclists try to do when turning?"
+        },
+        {
+          "key": "B",
+          "text": "Slide out significantly on some turns in the road"
+        },
+        {
+          "key": "C",
+          "text": "Keep their bikes relatively upright at high speeds"
+        },
+        {
+          "key": "D",
+          "text": "Shift their weight just enough to work against inertia"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 28,
+          "module": "m1",
+          "question_number": 28
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 28
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g09:q29",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g09",
+      "subject": "listening",
+      "number": 29,
+      "sequence": 29,
+      "response_type": "mc",
+      "prompt": "What is the main topic of the talk?",
+      "options": [
+        {
+          "key": "A",
+          "text": "The benefits of traditional market research"
+        },
+        {
+          "key": "B",
+          "text": "The principles of the lean start-up methodology"
+        },
+        {
+          "key": "C",
+          "text": "An approach to making business decisions"
+        },
+        {
+          "key": "D",
+          "text": "The challenges of product development"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 29,
+          "module": "m1",
+          "question_number": 29
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 29
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g09:q30",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g09",
+      "subject": "listening",
+      "number": 30,
+      "sequence": 30,
+      "response_type": "mc",
+      "prompt": "According to the talk, what is a minimum viable product, or MVP?",
+      "options": [
+        {
+          "key": "A",
+          "text": "the talk, what is a minimum viable product, or MVP?"
+        },
+        {
+          "key": "B",
+          "text": "Aconcept created to attract investors before product development begins"
+        },
+        {
+          "key": "C",
+          "text": "An early version of a product used for internal testing only"
+        },
+        {
+          "key": "D",
+          "text": "Abasic version of a product that can be released quickly"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 29,
+          "module": "m1",
+          "question_number": 30
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 30
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g09:q31",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g09",
+      "subject": "listening",
+      "number": 31,
+      "sequence": 31,
+      "response_type": "mc",
+      "prompt": "What does the speaker imply about validated learning?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Ithelps ensure that the product meets buyers’ needs."
+        },
+        {
+          "key": "B",
+          "text": "It is less effective than traditional methods."
+        },
+        {
+          "key": "C",
+          "text": "Itinvolves giving surveys about two products."
+        },
+        {
+          "key": "D",
+          "text": "Itrelies on extensive market research."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 29,
+          "module": "m1",
+          "question_number": 31
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 31
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m1:g09:q32",
+      "module_id": "toefl:2026-01-21-a:listening:m1",
+      "group_id": "toefl:2026-01-21-a:listening:m1:g09",
+      "subject": "listening",
+      "number": 32,
+      "sequence": 32,
+      "response_type": "mc",
+      "prompt": "Why does the speaker mention the drawbacks of the lean start-up approach?",
+      "options": [
+        {
+          "key": "A",
+          "text": "To show that the approach is not suitable for all businesses"
+        },
+        {
+          "key": "B",
+          "text": "To contrast the approach with traditional product-development methods"
+        },
+        {
+          "key": "C",
+          "text": "To provide a balanced view of the approach"
+        },
+        {
+          "key": "D",
+          "text": "To suggest that drawbacks should be addressed before a product launch conversations. choose the option that is the best response"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 29,
+          "module": "m1",
+          "question_number": 32
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 32
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g01:q01",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g01",
+      "subject": "listening",
+      "number": 1,
+      "sequence": 33,
+      "response_type": "mc",
+      "prompt": "Who forgot to turn off the lights?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Bruce had a flashlight."
+        },
+        {
+          "key": "B",
+          "text": "The school office will send more lightbulbs."
+        },
+        {
+          "key": "C",
+          "text": "The cleaning crew finished all the rooms."
+        },
+        {
+          "key": "D",
+          "text": "Annie needed to leave in a hurry."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 31,
+          "module": "m2",
+          "question_number": 1
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 1
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g01:q02",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g01",
+      "subject": "listening",
+      "number": 2,
+      "sequence": 34,
+      "response_type": "mc",
+      "prompt": "Would you like to eat at the west dining hall tonight?",
+      "options": [
+        {
+          "key": "A",
+          "text": "My apartment is too small."
+        },
+        {
+          "key": "B",
+          "text": "The new restaurant is open."
+        },
+        {
+          "key": "C",
+          "text": "I've never been to that store."
+        },
+        {
+          "key": "D",
+          "text": "I'll check my schedule."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 32,
+          "module": "m2",
+          "question_number": 2
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 2
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g01:q03",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g01",
+      "subject": "listening",
+      "number": 3,
+      "sequence": 35,
+      "response_type": "mc",
+      "prompt": "Did you enjoy the dean's talk yesterday?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Yes, it was informative."
+        },
+        {
+          "key": "B",
+          "text": "Yes, I plan to attend."
+        },
+        {
+          "key": "C",
+          "text": "Not the greatest reason."
+        },
+        {
+          "key": "D",
+          "text": "Maybe sometimes."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "visually_recovered",
+          "page": 32,
+          "module": "m2",
+          "question_number": 3
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 3
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g02:q04",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g02",
+      "subject": "listening",
+      "number": 4,
+      "sequence": 36,
+      "response_type": "mc",
+      "prompt": "What is the man's problem?",
+      "options": [
+        {
+          "key": "A",
+          "text": "He does not know what to write about in his paper."
+        },
+        {
+          "key": "B",
+          "text": "An item he wants to buy is too expensive."
+        },
+        {
+          "key": "C",
+          "text": "He has a disagreement with his roommate."
+        },
+        {
+          "key": "D",
+          "text": "His computer is not working."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 33,
+          "module": "m2",
+          "question_number": 4
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 4
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g02:q05",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g02",
+      "subject": "listening",
+      "number": 5,
+      "sequence": 37,
+      "response_type": "mc",
+      "prompt": "At the end of the conversation, what is the man's attitude toward the woman's idea?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Confused"
+        },
+        {
+          "key": "B",
+          "text": "Annoyed"
+        },
+        {
+          "key": "C",
+          "text": "Hopeful"
+        },
+        {
+          "key": "D",
+          "text": "Doubtul"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 33,
+          "module": "m2",
+          "question_number": 5
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 5
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g03:q06",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g03",
+      "subject": "listening",
+      "number": 6,
+      "sequence": 38,
+      "response_type": "mc",
+      "prompt": "What can be inferred about the bakery?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Itsells unique products."
+        },
+        {
+          "key": "B",
+          "text": "Ithas been in business for a long time."
+        },
+        {
+          "key": "C",
+          "text": "The owner recently purchased it."
+        },
+        {
+          "key": "D",
+          "text": "Students receive a discount on their purchases."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 35,
+          "module": "m2",
+          "question_number": 6
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 6
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g03:q07",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g03",
+      "subject": "listening",
+      "number": 7,
+      "sequence": 39,
+      "response_type": "mc",
+      "prompt": "Based on the conversation, what will happen during the interview?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pictures will be taken."
+        },
+        {
+          "key": "B",
+          "text": "The kitchen will be temporarily closed."
+        },
+        {
+          "key": "C",
+          "text": "The woman will speak with some customers."
+        },
+        {
+          "key": "D",
+          "text": "The man will provide some bakery itoms to try."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 35,
+          "module": "m2",
+          "question_number": 7
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 7
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g04:q08",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g04",
+      "subject": "listening",
+      "number": 8,
+      "sequence": 40,
+      "response_type": "mc",
+      "prompt": "What is the main topic of the talk?",
+      "options": [
+        {
+          "key": "A",
+          "text": "The impact of light pollution on different bird species"
+        },
+        {
+          "key": "B",
+          "text": "Acomparison of navigational cues used by migratory birds"
+        },
+        {
+          "key": "C",
+          "text": "The impact of climate change on bird habitats"
+        },
+        {
+          "key": "D",
+          "text": "Bird migration and its associated challenges"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 37,
+          "module": "m2",
+          "question_number": 8
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 8
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g04:q09",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g04",
+      "subject": "listening",
+      "number": 9,
+      "sequence": 41,
+      "response_type": "mc",
+      "prompt": "How does a special protein in the eyes of some birds help them navigate?",
+      "options": [],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "missing_options",
+      "grading_status": "blocked",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_missing",
+          "page": 37,
+          "module": "m2",
+          "question_number": 9
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 9
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g04:q10",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g04",
+      "subject": "listening",
+      "number": 10,
+      "sequence": 42,
+      "response_type": "mc",
+      "prompt": "What does the speaker warn may cause imbalances in food webs?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Adecrease in the population of migrating birds"
+        },
+        {
+          "key": "B",
+          "text": "Slight changes in the migratory paths of birds"
+        },
+        {
+          "key": "C",
+          "text": "Increases in the distances traveled by migrating birds"
+        },
+        {
+          "key": "D",
+          "text": "Decreases in the population of pests along migratory paths"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 37,
+          "module": "m2",
+          "question_number": 10
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 10
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g04:q11",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g04",
+      "subject": "listening",
+      "number": 11,
+      "sequence": 43,
+      "response_type": "mc",
+      "prompt": "According to the speaker,what is a measure people can take to protect migrating birds?",
+      "options": [
+        {
+          "key": "A",
+          "text": "the speaker, what is a measure people can take to protect migrating birds?"
+        },
+        {
+          "key": "B",
+          "text": "Producing fewer carbon emissions during the migration season"
+        },
+        {
+          "key": "C",
+          "text": "Tuming off unnecessary lights at night"
+        },
+        {
+          "key": "D",
+          "text": "Making food available to migrating birds"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 37,
+          "module": "m2",
+          "question_number": 11
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 11
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g05:q12",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g05",
+      "subject": "listening",
+      "number": 12,
+      "sequence": 44,
+      "response_type": "mc",
+      "prompt": "What does the speaker mainly discuss?",
+      "options": [
+        {
+          "key": "A",
+          "text": "The differences between Egyptian and Scottish mummies"
+        },
+        {
+          "key": "B",
+          "text": "The discovery of prehistoric mummies in a surprising location"
+        },
+        {
+          "key": "C",
+          "text": "The processes that gradually turn mummies into skeletons"
+        },
+        {
+          "key": "D",
+          "text": "The reasons that Bronze Age people practiced mummification"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 39,
+          "module": "m2",
+          "question_number": 12
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 12
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g05:q13",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g05",
+      "subject": "listening",
+      "number": 13,
+      "sequence": 45,
+      "response_type": "mc",
+      "prompt": "What does the speaker imply about Scotland?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Its climate is not favorable for typical methods of preserving bodies."
+        },
+        {
+          "key": "B",
+          "text": "Its rainy weather makes archaeological research challenging"
+        },
+        {
+          "key": "C",
+          "text": "Its oldest skeletons date back to around 4000 B.C.E."
+        },
+        {
+          "key": "D",
+          "text": "Itmay have many Bronze Age sites similar to Cladh Hallan"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 39,
+          "module": "m2",
+          "question_number": 13
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 13
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g05:q14",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g05",
+      "subject": "listening",
+      "number": 14,
+      "sequence": 46,
+      "response_type": "mc",
+      "prompt": "According to the speaker,what did radiocarbon dating reveal?",
+      "options": [
+        {
+          "key": "A",
+          "text": "the speaker, what did radiocarbon dating reveal?"
+        },
+        {
+          "key": "B",
+          "text": "Apile of bones belonged to two different people."
+        },
+        {
+          "key": "C",
+          "text": "Aman and a woman had died around 1500 B.C.E."
+        },
+        {
+          "key": "D",
+          "text": "Two objects that looked like skeletons were not made of bone."
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 39,
+          "module": "m2",
+          "question_number": 14
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 14
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:listening:m2:g05:q15",
+      "module_id": "toefl:2026-01-21-a:listening:m2",
+      "group_id": "toefl:2026-01-21-a:listening:m2:g05",
+      "subject": "listening",
+      "number": 15,
+      "sequence": 47,
+      "response_type": "mc",
+      "prompt": "Why does the speaker mention butter?",
+      "options": [
+        {
+          "key": "A",
+          "text": "point out an animal fat frequently used to preserve bodies"
+        },
+        {
+          "key": "B",
+          "text": "To show that ancient people understood a property of peat bogs"
+        },
+        {
+          "key": "C",
+          "text": "To help illustrate how swamps break down organic material"
+        },
+        {
+          "key": "D",
+          "text": "To suggest an ingredient possibly used in a prehistoric burial ritual"
+        }
+      ],
+      "input_config": {
+        "selection": "single",
+        "audio_replay_policy": "once_in_test_mode",
+        "audio_scrub_policy": "disabled_in_test_mode"
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 39,
+          "module": "m2",
+          "question_number": 15
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01-听力原文.pdf",
+          "sha256": "9444f6ded9bf53313a0d4ebc41490635808dc8b5997c8a97bf2b53c44813b9b0",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 15
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q01",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 1,
+      "sequence": 1,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "The professor announced a change in the syllabus.",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "know",
+          "?",
+          "do",
+          "have",
+          "been",
+          "updated",
+          "the",
+          "due",
+          "dates",
+          "if",
+          "you"
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "ready",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 39,
+          "module": "m1",
+          "question_number": 1
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q02",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 2,
+      "sequence": 2,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "The Chemistry Department is hosting a seminar next week.",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "Can",
+          "you",
+          "tell",
+          "in-person",
+          "whether",
+          "will",
+          "be",
+          "online",
+          "or",
+          "me",
+          "it",
+          "?"
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 40,
+          "module": "m1",
+          "question_number": 2
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q03",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 3,
+      "sequence": 3,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "Did they discuss the project deadlines in class today?",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "morning",
+          "this",
+          "missed",
+          "class",
+          "the",
+          "I",
+          "."
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 40,
+          "module": "m1",
+          "question_number": 3
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q04",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 4,
+      "sequence": 4,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "The lecture on ancient civilizations was fascinating.",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "aspects",
+          "what",
+          "interesting",
+          "find",
+          "you",
+          "did",
+          "most",
+          "?"
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 40,
+          "module": "m1",
+          "question_number": 4
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q05",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 5,
+      "sequence": 5,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "Did you see the email from our professor?",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "haven't",
+          "any",
+          "emails",
+          "I",
+          "today",
+          "received",
+          "."
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 41,
+          "module": "m1",
+          "question_number": 5
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q06",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 6,
+      "sequence": 6,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "‘Why did you choose this university?",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "science",
+          "offers",
+          ".",
+          "department",
+          "opportunities",
+          "the",
+          "environmental",
+          "research",
+          "and",
+          "internships"
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 41,
+          "module": "m1",
+          "question_number": 6
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q07",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 7,
+      "sequence": 7,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "Why did you pick this topic for your presentation?",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "I",
+          "chose",
+          "the",
+          "has",
+          "new",
+          "study",
+          "report",
+          "it",
+          "because",
+          "it's",
+          "the",
+          "topic",
+          "that",
+          "."
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 41,
+          "module": "m1",
+          "question_number": 7
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q08",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 8,
+      "sequence": 8,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "I'm studying in Japan next semester with the semester abroad program.",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "places",
+          "what",
+          "to",
+          "do",
+          "you",
+          "plan",
+          "visit",
+          "?"
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 42,
+          "module": "m1",
+          "question_number": 8
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q09",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 9,
+      "sequence": 9,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "I'm going to the new student art exhibition this weekend.",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "you",
+          "advance",
+          "?",
+          "tickets",
+          "do",
+          "need",
+          "in",
+          "to",
+          "buy"
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 42,
+          "module": "m1",
+          "question_number": 9
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g01:q10",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g01",
+      "subject": "writing",
+      "number": 10,
+      "sequence": 10,
+      "response_type": "order",
+      "prompt": "Make an appropriate sentence for the situation.",
+      "context_sentence": "‘Why did you choose this university?",
+      "options": [],
+      "input_config": {
+        "scramble_tokens": [
+          "research",
+          "facilities",
+          "the",
+          "campus",
+          "the",
+          "and",
+          "laboratories",
+          "has",
+          "best",
+          "."
+        ],
+        "keyboard_reorder": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "auto",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 42,
+          "module": "m1",
+          "question_number": 10
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g02:q11",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g02",
+      "subject": "writing",
+      "number": 11,
+      "sequence": 11,
+      "response_type": "free_text",
+      "prompt": "You are a university student who recently moved into a new apartment and have noticed several problems. Write an email to your landlord, Mr. Thompson, with the subject ‘Request for apartment repairs.’ Describe the issues, explain how they negatively affect your studies, and request that repairs be arranged soon. Write in complete sentences.",
+      "options": [],
+      "input_config": {
+        "minimum_words": 0,
+        "autosave": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 43,
+          "module": "m1",
+          "question_number": 11
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:writing:m1:g03:q12",
+      "module_id": "toefl:2026-01-21-a:writing:m1",
+      "group_id": "toefl:2026-01-21-a:writing:m1:g03",
+      "subject": "writing",
+      "number": 12,
+      "sequence": 12,
+      "response_type": "free_text",
+      "prompt": "Your business ethics class is discussing corporate transparency. Dr. Achebe asks whether businesses should be completely transparent with employees about their operations or keep some information confidential to protect competitive advantages. State and support your opinion, contribute to the discussion in your own words, and write at least 100 words.",
+      "options": [],
+      "input_config": {
+        "minimum_words": 100,
+        "autosave": true
+      },
+      "content_status": "reviewed_repair",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "reviewed_repair",
+          "page": 45,
+          "module": "m1",
+          "question_number": 12
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m1:g01:q01",
+      "module_id": "toefl:2026-01-21-a:speaking:m1",
+      "group_id": "toefl:2026-01-21-a:speaking:m1:g01",
+      "subject": "speaking",
+      "number": 1,
+      "sequence": 1,
+      "response_type": "recording",
+      "prompt": "Welcome to the help desk.",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 46,
+          "module": "m1",
+          "question_number": 1
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 1
+        }
+      ],
+      "context_sentence": "You're being trained to show students how to use the campus library's printing services."
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m1:g01:q02",
+      "module_id": "toefl:2026-01-21-a:speaking:m1",
+      "group_id": "toefl:2026-01-21-a:speaking:m1:g01",
+      "subject": "speaking",
+      "number": 2,
+      "sequence": 2,
+      "response_type": "recording",
+      "prompt": "First select the printer from your computer.",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 46,
+          "module": "m1",
+          "question_number": 2
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 2
+        }
+      ],
+      "context_sentence": "You're being trained to show students how to use the campus library's printing services."
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m1:g01:q03",
+      "module_id": "toefl:2026-01-21-a:speaking:m1",
+      "group_id": "toefl:2026-01-21-a:speaking:m1:g01",
+      "subject": "speaking",
+      "number": 3,
+      "sequence": 3,
+      "response_type": "recording",
+      "prompt": "Check the paper tray supply before you start.",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 47,
+          "module": "m1",
+          "question_number": 3
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 3
+        }
+      ],
+      "context_sentence": "You're being trained to show students how to use the campus library's printing services."
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m1:g01:q04",
+      "module_id": "toefl:2026-01-21-a:speaking:m1",
+      "group_id": "toefl:2026-01-21-a:speaking:m1:g01",
+      "subject": "speaking",
+      "number": 4,
+      "sequence": 4,
+      "response_type": "recording",
+      "prompt": "You can use your student ID for any other services.",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 47,
+          "module": "m1",
+          "question_number": 4
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 4
+        }
+      ],
+      "context_sentence": "You're being trained to show students how to use the campus library's printing services."
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m1:g01:q05",
+      "module_id": "toefl:2026-01-21-a:speaking:m1",
+      "group_id": "toefl:2026-01-21-a:speaking:m1:g01",
+      "subject": "speaking",
+      "number": 5,
+      "sequence": 5,
+      "response_type": "recording",
+      "prompt": "You can pay at the payment kiosk if you prefer that method.",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 48,
+          "module": "m1",
+          "question_number": 5
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 5
+        }
+      ],
+      "context_sentence": "You're being trained to show students how to use the campus library's printing services."
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m1:g01:q06",
+      "module_id": "toefl:2026-01-21-a:speaking:m1",
+      "group_id": "toefl:2026-01-21-a:speaking:m1:g01",
+      "subject": "speaking",
+      "number": 6,
+      "sequence": 6,
+      "response_type": "recording",
+      "prompt": "The help desk is available if you need assistance.",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 48,
+          "module": "m1",
+          "question_number": 6
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 6
+        }
+      ],
+      "context_sentence": "You're being trained to show students how to use the campus library's printing services."
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m1:g01:q07",
+      "module_id": "toefl:2026-01-21-a:speaking:m1",
+      "group_id": "toefl:2026-01-21-a:speaking:m1:g01",
+      "subject": "speaking",
+      "number": 7,
+      "sequence": 7,
+      "response_type": "recording",
+      "prompt": "When you are ready, simply select print from your computer and retrieve your document.",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 49,
+          "module": "m1",
+          "question_number": 7
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 7
+        }
+      ],
+      "context_sentence": "You're being trained to show students how to use the campus library's printing services."
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m2:g01:q01",
+      "module_id": "toefl:2026-01-21-a:speaking:m2",
+      "group_id": "toefl:2026-01-21-a:speaking:m2:g01",
+      "subject": "speaking",
+      "number": 1,
+      "sequence": 8,
+      "response_type": "recording",
+      "prompt": "First, how often do you listen to music?",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 49,
+          "module": "m2",
+          "question_number": 1
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 1
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m2:g01:q02",
+      "module_id": "toefl:2026-01-21-a:speaking:m2",
+      "group_id": "toefl:2026-01-21-a:speaking:m2:g01",
+      "subject": "speaking",
+      "number": 2,
+      "sequence": 9,
+      "response_type": "recording",
+      "prompt": "Do you listen daily, weekly, or less often?",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 49,
+          "module": "m2",
+          "question_number": 2
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 2
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m2:g01:q03",
+      "module_id": "toefl:2026-01-21-a:speaking:m2",
+      "group_id": "toefl:2026-01-21-a:speaking:m2:g01",
+      "subject": "speaking",
+      "number": 3,
+      "sequence": 10,
+      "response_type": "recording",
+      "prompt": "For example, do you prefer classical, rock or jazz music?",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 50,
+          "module": "m2",
+          "question_number": 3
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 3
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-21-a:speaking:m2:g01:q04",
+      "module_id": "toefl:2026-01-21-a:speaking:m2",
+      "group_id": "toefl:2026-01-21-a:speaking:m2:g01",
+      "subject": "speaking",
+      "number": 4,
+      "sequence": 11,
+      "response_type": "recording",
+      "prompt": "Give details to explain your answer. Interesting, can you tell me about a concert or live music event you would like to attend?",
+      "options": [],
+      "input_config": {
+        "maximum_takes_test_mode": 1,
+        "local_preview_practice_mode": true
+      },
+      "content_status": "ready",
+      "grading_status": "manual",
+      "source_refs": [
+        {
+          "path": "1.21新托福真题A卷/新托福真题01.pdf",
+          "sha256": "f88605f3f38e1f92f8d2026c7bee5e397c93b6f6fb1084c299efbd4231ca96b9",
+          "confidence": "source_exact",
+          "page": 50,
+          "module": "m2",
+          "question_number": 4
+        },
+        {
+          "path": "1.21新托福真题A卷/新托福真题01Speaking.mp3",
+          "sha256": "72aa3acfb7d33d9acce41e3f308c32317f8b441382364084ac267cd3f0d069ab",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 4
+        }
+      ]
+    }
+  ]
+}

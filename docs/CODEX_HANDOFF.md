@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨电脑开发交接
 
 > 这是滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-07-26（Asia/Shanghai）。
+> 最近更新：2026-07-27（Asia/Shanghai）。
 
 ## 使用规则
 
@@ -31,6 +31,53 @@
 - 题库按“一套一套抢救、一套一套人工审阅、通过后再上线”的方式推进。
 - 本次会话只允许使用可用额度的 50%，必须为次日另一台电脑接力保留另外 50%；因此本次停在“审计门禁 + 第一套来源结构档案”，没有展开状态机或前端实现。
 - 禁止模型猜测题目、选项、答案或音频对应关系；无法从来源证据确定的内容保持 `review_required`。
+
+### 2026-07-27 续做：Q33 与 v2 staging（任务分支同步）
+
+- 实际分支仍为 `codex/toefl-rescue`；本段从 `f2b54c00` 继续并随任务分支同步，精确 HEAD 以 `git log -1` 为准。
+- 已视觉核对 `2026-01-21_A` Reading M1 Q33：
+  - 题卷 `1.21新托福真题A卷/新托福真题01.pdf` 第 7 页给出完整题干与四选项；
+  - 答案 `1.21新托福真题A卷/新托福真题01参考答案.pdf` 第 1 页明确为 C；
+  - 两个来源文件 SHA-256 与 `data/toefl_quality/source_profiles.json` 一致。
+- 没有修改 `data/toefl_practice/2026-01-21_A/reading.json` 或其他现有发布 JSON。已建立独立
+  `data/toefl_practice_v2/2026-01-21_A/` staging：公开 `content.json` 不含答案，私有
+  `answer_key.json` 记录 Q33=C 及题卷页/答案页证据。
+- 复用了本地“新托福真题 v2 重建”契约、schema、pilot builder 与 validator，并做了 rescue 融合：
+  - 单套生成不再强制依赖另一工作树的全库 inventory；
+  - 发布门禁新增 `--require-release-ready`，结构通过但仍有 blocked 题时必须非零退出；
+  - 四科人工审阅状态从 `data/toefl_quality/source_profiles.json` 写入 staging manifest，
+    未全部 `approved` 时不能发布。
+- 当前 staging 为 120 个原子题：Reading 50、Listening 47、Writing 12、Speaking 11；
+  103 auto、13 manual、4 blocked。结构与来源校验 0 error。
+- 严格发布门禁按预期 exit 1：Listening M1 Q15/Q18/Q21、M2 Q9 仍缺来源选项；
+  套卷仍是 `pilot` / `blocked`；四科 source review 仍为 `pending`。
+- 本地另一工作树的 v2 重建已有 7 套、840 个原子题：6 套仍有共 18 个 blocked，
+  `2026-01-28_B` 为 0 blocked 的 `ready_for_reintegration` 候选；在接入本门禁后仍需四科人工
+  `approved` 才能成为可发布套卷。
+- 已验证：
+
+```text
+.venv/bin/python -m unittest \
+  tests.test_toefl_practice_v2_rescue \
+  tests.test_toefl_bank_quality \
+  tests.test_import_toefl_real_exams \
+  tests.test_toefl_practice
+38 tests passed
+
+.venv/bin/python scripts/validate_toefl_practice_v2.py \
+  data/toefl_practice_v2/2026-01-21_A \
+  --source-root '/Users/zhouxin/Desktop/新托福资料'
+passed; 120 questions; 0 validation errors
+
+.venv/bin/python scripts/validate_toefl_practice_v2.py \
+  data/toefl_practice_v2/2026-01-21_A \
+  --source-root '/Users/zhouxin/Desktop/新托福资料' \
+  --require-release-ready
+exit 1 as expected; 4 source-blocked questions + pilot/blocked/pending-review gates
+```
+
+- 下一步按证据独立复核 staging 已标记为视觉恢复的 Listening M1 Q7 与 M2 Q3；确认后再处理
+  M1 Q15/Q18/Q21、M2 Q9。不得因为本地 v2 已有候选文本就跳过题卷/音频/原文三方核对。
 
 ### 本次已完成（随任务分支同步）
 
@@ -109,8 +156,10 @@ exit 1 as expected; 14 critical/high blockers
 ### 次日精确起点
 
 1. 开工先读本文件、`CLAUDE.md`、`docs/TOEFL_MOCK_FLOW_SPEC.md` 和 `docs/toefl_quality_audit.md`，再运行 `git status --short --branch` 与 `git log -5 --oneline`。
-2. 先修 `2026-01-21_A` Reading Q33：从原始 50 页题卷对应页面恢复完整题干/四选项，核对答案 PDF 后写回候选数据；不要直接改已发布文件，建议创建 v2 staging 目录。
-3. 再修 Listening 缺失的 6 题；逐题对照题卷截图、听力原文和独立 M1/M2 音频，建立 group/时间轴，不要沿用只按文件名和题号猜测的旧导入逻辑。
+2. Reading Q33 已在 v2 staging 完成双证据恢复；不要写回现有发布 JSON。
+3. 先独立复核 v2 已候选恢复的 Listening M1 Q7 与 M2 Q3，再处理仍 blocked 的
+   M1 Q15/Q18/Q21、M2 Q9；逐题对照题卷截图、听力原文和独立 M1/M2 音频，建立
+   group/时间轴，不要沿用只按文件名和题号猜测的旧导入逻辑。
 4. 修复 Writing 7 道 scramble mismatch；以题面词块和答案 PDF 为双证据，无法同时满足时保持 blocked。
 5. 每完成一科就运行审计门禁并生成审阅清单；用户人工确认后才把该科 `review_status` 改为 `approved`。
 6. 第一套四科全部通过后，再开始 `api/toefl_mock.py`、service 状态机和 attempt/response 模型；引擎按 definition 驱动，不硬编码第一套的题数。
