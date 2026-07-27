@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
@@ -10,7 +10,8 @@ db = SQLAlchemy()
 def utcnow_naive() -> datetime:
     """Return UTC without tzinfo for the repository's legacy DateTime columns."""
 
-    return datetime.now(UTC).replace(tzinfo=None)
+    # Production still runs Python 3.10, where datetime.UTC is unavailable.
+    return datetime.now(timezone.utc).replace(tzinfo=None)  # noqa: UP017
 
 
 class TimestampMixin:
