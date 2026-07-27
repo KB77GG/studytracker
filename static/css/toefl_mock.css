@@ -177,8 +177,11 @@ button { cursor: pointer; font: inherit; }
 .mock-counts .is-blocked b { color: var(--danger); }
 .mock-card__status { color: var(--muted); font-size: 12px; }
 .mock-card__action { display: inline-block; margin-top: 8px; padding: 10px 14px; color: #fff; background: var(--sage); text-decoration: none; border-radius: 4px; font-weight: 800; }
+.mock-library__legacy { margin: -18px 0 34px; color: var(--muted); font-size: 12px; }
+.mock-library__legacy a { margin: 0 3px; color: var(--ink); font-weight: 700; }
 
 @media (max-width: 800px) {
+  body:not(.dashboard-body) > main.container { width: auto; }
   .mock-toolbar { grid-template-columns: 1fr auto; padding: 10px 14px; }
   .mock-toolbar__center { display: none; }
   .mock-toolbar__right span { display: none; }

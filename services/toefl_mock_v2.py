@@ -92,7 +92,7 @@ def _release_blockers(
         unavailable = [
             asset.get("id", "unknown")
             for asset in audio_assets
-            if asset.get("delivery", {}).get("status") != "available"
+            if asset.get("delivery", {}).get("status") != "published"
         ]
         if unavailable:
             blockers.append(
@@ -137,12 +137,37 @@ def _validation_status(package_dir: Path) -> str:
     return str(load_json(path).get("status", "unknown"))
 
 
+def _preview_audio_ready(content: dict[str, Any]) -> bool:
+    audio_assets = [
+        asset
+        for asset in content.get("assets", [])
+        if asset.get("kind") == "audio"
+        and asset.get("subject") in {"listening", "speaking"}
+    ]
+    subjects = {asset.get("subject") for asset in audio_assets}
+    return subjects == {"listening", "speaking"} and all(
+        asset.get("delivery", {}).get("status") == "published"
+        and str(asset.get("delivery", {}).get("url") or "").startswith(
+            "/static/toefl/v2/"
+        )
+        for asset in audio_assets
+    )
+
+
 def catalog(root: Path | None = None) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for package_dir in _package_dirs(root):
         content = load_json(package_dir / "content.json")
         manifest = load_json(package_dir / "manifest.json")
         blockers = _release_blockers(content, manifest)
+        validation_status = _validation_status(package_dir)
+        preview_ready = (
+            validation_status == "pass"
+            and manifest.get("counts", {}).get("blocked", 0) == 0
+            and content.get("exam", {}).get("availability_status")
+            in {"reviewed", "published"}
+            and _preview_audio_ready(content)
+        )
         rows.append(
             {
                 "slug": package_dir.name,
@@ -151,19 +176,26 @@ def catalog(root: Path | None = None) -> list[dict[str, Any]]:
                 "date": content["exam"]["date"],
                 "variant": content["exam"]["variant"],
                 "counts": manifest.get("counts", {}),
-                "validation_status": _validation_status(package_dir),
+                "validation_status": validation_status,
                 "publish_status": manifest.get("quality", {}).get(
                     "publish_status", "unknown"
                 ),
                 "subject_reviews": manifest.get("quality", {}).get(
                     "subject_reviews", {}
                 ),
+                "preview_ready": preview_ready,
                 "release_ready": not blockers,
                 "release_blockers": blockers,
                 "preview_url": f"/toefl/mock/{package_dir.name}?preview=1",
             }
         )
     return rows
+
+
+def public_catalog(root: Path | None = None) -> list[dict[str, Any]]:
+    """Return only source-valid packages whose required audio is online."""
+
+    return [exam for exam in catalog(root) if exam["preview_ready"]]
 
 
 def parse_sections(raw_sections: str | list[str] | None) -> list[str]:

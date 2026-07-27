@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ definition.test.title }} · TOEFL V2 Staging</title>
+  <title>{{ definition.test.title }} · TOEFL V2 Preview</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/toefl_mock.css') }}">
 </head>
 <body>
@@ -24,7 +24,7 @@
 
   {% if preview or definition.release.preview_required %}
   <div class="staging-ribbon">
-    STAGING PREVIEW · 不代表线上发布 · blocked 题只展示缺口，不参与判分
+    ONLINE PREVIEW · 页面与音频已上线 · 不代表正式模考 · blocked 题不参与判分
   </div>
   {% endif %}
 
@@ -89,12 +89,12 @@
         <div class="mock-blockers mock-blockers--formal">
           <strong>Speaking 正式模式当前阻断</strong>
           <ul>{% for blocker in definition.release.formal_mode_blockers %}<li>{{ blocker }}</li>{% endfor %}</ul>
-          <p>当前仅可在明确标识的 staging preview 中检查流程；没有来源定义的逐题时长，不会冒充正式录音考试。</p>
+          <p>当前仅可在明确标识的线上试运行 preview 中检查流程；没有来源定义的逐题时长，不会冒充正式录音考试。</p>
         </div>
         {% endif %}
         <p id="selectionNotice" class="mock-selection-notice" role="status"></p>
         <button id="startButton" class="mock-primary" type="button">
-          {{ '开始 Staging 预览' if preview else '开始正式模考' }}
+          {{ '开始新版预览' if preview else '开始正式模考' }}
         </button>
       </div>
       <div id="questionPanel" hidden>

@@ -11,6 +11,7 @@ from services.toefl_mock_v2 import (
     catalog,
     definition,
     load_private_answer_key,
+    public_catalog,
     route_module_two,
     validate_navigation_state,
     validate_response_value,
@@ -49,6 +50,81 @@ def test_catalog_integrates_all_seven_source_backed_sets():
     assert sum(item["counts"]["blocked"] for item in exams) == 7
     assert all(item["validation_status"] == "pass" for item in exams)
     assert not any(item["release_ready"] for item in exams)
+    assert {
+        item["slug"] for item in exams if item["preview_ready"]
+    } == {"2026-01-27_A", "2026-01-28_A", "2026-01-28_B"}
+
+
+def test_public_catalog_exposes_only_audio_ready_pilots():
+    exams = public_catalog()
+
+    assert [item["slug"] for item in exams] == [
+        "2026-01-27_A",
+        "2026-01-28_A",
+        "2026-01-28_B",
+    ]
+    assert sum(item["counts"]["questions"] for item in exams) == 360
+
+
+def test_published_pilots_keep_visual_ocr_repairs_and_clean_audio_delivery():
+    expected_d_options = {
+        "toefl:2026-01-27-a:listening:m1:g01:q05": "The last stop before Springfield.",
+        "toefl:2026-01-27-a:listening:m1:g01:q06": "I don't have a key.",
+        "toefl:2026-01-27-a:listening:m1:g03:q15": "She thought the man was going to book the flight for her.",
+        "toefl:2026-01-27-a:listening:m1:g03:q16": "The professors will likely not understand her research.",
+        "toefl:2026-01-27-a:listening:m1:g04:q18": "Cook a meal at home",
+        "toefl:2026-01-27-a:listening:m1:g07:q24": "Registering early for workshops",
+        "toefl:2026-01-27-a:listening:m1:g08:q26": "It allows the brain to process emotional experiences.",
+        "toefl:2026-01-27-a:listening:m1:g08:q27": "To illustrate the various stages of sleep",
+        "toefl:2026-01-27-a:listening:m1:g09:q29": "The guidelines for identifying problematic behavior",
+        "toefl:2026-01-27-a:listening:m1:g09:q32": "To describe the consequences of inconsistent feedback",
+        "toefl:2026-01-27-a:listening:m2:g01:q02": "Are you sure?",
+        "toefl:2026-01-27-a:listening:m2:g05:q15": "It allows residents to grow their own produce.",
+        "toefl:2026-01-28-b:reading:m1:g07:q33": "school systems have developed better examinations",
+    }
+    definitions = {
+        slug: definition(slug)
+        for slug in ("2026-01-27_A", "2026-01-28_A", "2026-01-28_B")
+    }
+    questions = {
+        question["id"]: question
+        for payload in definitions.values()
+        for question in payload["questions"]
+    }
+    for question_id, expected in expected_d_options.items():
+        d_option = next(
+            option["text"]
+            for option in questions[question_id]["options"]
+            if option["key"] == "D"
+        )
+        assert d_option == expected
+
+    encoded_options = "\n".join(
+        option["text"]
+        for question in questions.values()
+        for option in question.get("options", [])
+    )
+    for fragment in (
+        "due ee",
+        "eVvIew",
+        "ontinue >",
+        "Next>",
+        "显示 答",
+        "understand spoken English. There are three types of tasks",
+    ):
+        assert fragment not in encoded_options
+    audio_assets = [
+        asset
+        for payload in definitions.values()
+        for asset in payload["assets"]
+        if asset["kind"] == "audio"
+    ]
+    assert len(audio_assets) == 9
+    assert all(asset["delivery"]["status"] == "published" for asset in audio_assets)
+    assert all(
+        asset["delivery"]["url"].startswith("/static/toefl/v2/")
+        for asset in audio_assets
+    )
 
 
 def test_conflicting_answer_pdf_entries_use_corroborating_evidence():
@@ -261,9 +337,14 @@ def test_catalog_and_exam_pages_render(app):
     exam_page = client.get("/toefl/mock/2026-01-28_B?preview=1")
 
     assert catalog_page.status_code == 200
-    assert "7" in catalog_page.get_data(as_text=True)
+    catalog_html = catalog_page.get_data(as_text=True)
+    assert catalog_html.count("开始新版预览") == 3
+    assert "2026-01-27 新托福真题 A 卷" in catalog_html
+    assert "2026-01-28 新托福真题 A 卷" in catalog_html
+    assert "2026-01-28 新托福真题 B 卷" in catalog_html
+    assert "2026-01-21 新托福真题" not in catalog_html
     assert exam_page.status_code == 200
-    assert "STAGING PREVIEW" in exam_page.get_data(as_text=True)
+    assert "ONLINE PREVIEW" in exam_page.get_data(as_text=True)
 
 
 def test_catalog_distinguishes_audit_ready_from_formal_gate(app):

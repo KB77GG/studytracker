@@ -67,8 +67,18 @@
           "required": ["storage_key", "status"],
           "properties": {
             "storage_key": {"type": "string"},
-            "status": {"enum": ["local_source", "staged", "published", "blocked"]}
-          }
+            "status": {"enum": ["local_source", "staged", "published", "blocked"]},
+            "url": {"type": "string", "pattern": "^/static/toefl/v2/"}
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {"status": {"const": "published"}},
+                "required": ["status"]
+              },
+              "then": {"required": ["url"]}
+            }
+          ]
         }
       }
     },

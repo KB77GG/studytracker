@@ -47,12 +47,12 @@ def test_fast_text_input_flush_waits_for_pending_and_inflight_saves():
     assert "Promise.allSettled" in queue
 
 
-def test_report_and_blocked_copy_are_explicitly_staging_safe():
+def test_report_and_blocked_copy_are_explicitly_preview_safe():
     template = (ROOT / "templates/toefl/mock_exam.html").read_text(encoding="utf-8")
     script = (ROOT / "static/js/toefl_mock.js").read_text(encoding="utf-8")
 
-    assert "STAGING PREVIEW" in template
-    assert "blocked 题只展示缺口" in template
+    assert "ONLINE PREVIEW" in template
+    assert "blocked 题不参与判分" in template
     assert "不是正式成绩单" in script
     assert "pending teacher review" in script
     assert "blocked 题不进入分母" in script

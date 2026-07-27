@@ -29,9 +29,9 @@ from models import (
 from services.toefl_mock_v2 import (
     PackageNotFoundError,
     PackageReleaseBlockedError,
-    catalog,
     definition,
     parse_sections,
+    public_catalog,
     require_attempt_allowed,
     route_module_two,
     score_responses,
@@ -335,7 +335,7 @@ def _invalid_request(exc):
 
 @toefl_mock_bp.get("/toefl/mock")
 def mock_catalog():
-    return render_template("toefl/mock_index.html", exams=catalog())
+    return render_template("toefl/mock_index.html", exams=public_catalog())
 
 
 @toefl_mock_bp.get("/toefl/mock/<test_id>")

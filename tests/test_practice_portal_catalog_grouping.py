@@ -37,7 +37,14 @@ class PracticePortalCatalogGroupingTest(unittest.TestCase):
         self.assertIn('id="practiceAssignedTasks"', html)
         self.assertIn('id="practiceIdentityForm"', html)
         self.assertIn('id="toeflPractice"', html)
-        self.assertIn('href="/toefl/tests"', html)
+        self.assertIn('href="/toefl/mock"', html)
+
+    def test_legacy_toefl_catalog_redirects_to_new_workbench(self):
+        response = self.client.get("/toefl/tests")
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.headers["Location"], "/toefl/mock")
+        self.assertEqual(self.client.get("/toefl/tests/legacy").status_code, 200)
 
     def test_guest_identity_gate_remains_enabled(self):
         response = self.client.get("/practice")

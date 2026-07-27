@@ -5,19 +5,19 @@
 <section class="mock-library">
   <div class="mock-library__intro">
     <div>
-      <p class="mock-eyebrow">TOEFL 2026 · V2 STAGING</p>
-      <h2>来源证据驱动的模考重建</h2>
-      <p>七套本地真题已进入统一 definition 流程。预览可检查题面、模块、计时与续考；正式开考仍由发布门禁控制。</p>
+      <p class="mock-eyebrow">TOEFL 2026 · 新版试运行</p>
+      <h2>三套真题，按新 spec 完整跑一遍</h2>
+      <p>本页已替换原托福刷题入口。三套试运行题包的听力与口语音频均已上线，可体验四科流程、模块计时、保存续考和客观题报告。</p>
     </div>
     <div class="mock-library__metric">
       <strong>{{ exams|length }}</strong>
-      <span>套题 / {{ exams|sum(attribute='counts.questions') }} 个原子题</span>
+      <span>套试运行题包 / {{ exams|sum(attribute='counts.questions') }} 个原子题</span>
     </div>
   </div>
 
   <div class="mock-gate-note">
-    <strong>Staging ≠ 上线。</strong>
-    blocked 题不会被补猜；四科来源复核未批准前，系统只允许带明确标识的预览 attempt。
+    <strong>页面与音频已上线，题库仍处于来源审校期。</strong>
+    我们不会补猜缺失内容；四科来源复核和口语逐题时长通过前，只开放带明确标识的预览模式，不冒充正式模考。
   </div>
 
   <div class="mock-card-grid">
@@ -25,11 +25,9 @@
     <article class="mock-card">
       <div class="mock-card__topline">
         <span>{{ exam.date }} · {{ exam.variant }} 卷</span>
-        <span class="mock-badge {{ 'mock-badge--ready' if exam.release_ready else 'mock-badge--blocked' }}">
-          {{ 'Release ready' if exam.release_ready else 'Staging only' }}
-        </span>
+        <span class="mock-badge mock-badge--ready">音频已就绪</span>
       </div>
-      <h3>{{ exam.title }}</h3>
+      <h3>{{ exam.date }} 新托福真题 {{ exam.variant }} 卷</h3>
       <div class="mock-counts">
         <span><b>{{ exam.counts.questions }}</b> 总题</span>
         <span><b>{{ exam.counts.auto }}</b> 自动判分</span>
@@ -40,15 +38,18 @@
         结构校验：{{ exam.validation_status }} · 题包审计：{{ exam.publish_status }} ·
         正式门禁：{{ '通过' if exam.release_ready else '未通过' }}
       </p>
-      <a class="mock-card__action" href="{{ exam.preview_url }}">按新 spec 预览</a>
+      <a class="mock-card__action" href="{{ exam.preview_url }}">开始新版预览</a>
     </article>
     {% endfor %}
   </div>
+  <p class="mock-library__legacy">
+    需要回滚核对时，可进入<a href="/toefl/tests/legacy">旧版题库</a>；旧 JSON 与旧答题路由均未删除。
+  </p>
 </section>
 {% endmacro %}
 
-{% block page_subtitle %}TOEFL MOCK REBUILD{% endblock %}
-{% block page_title %}托福模考 Staging{% endblock %}
+{% block page_subtitle %}TOEFL 2026 MOCK WORKBENCH{% endblock %}
+{% block page_title %}托福 2026 新版模考{% endblock %}
 {% block content_dashboard %}{{ mock_catalog_content() }}{% endblock %}
 {% block content_public %}{{ mock_catalog_content() }}{% endblock %}
 

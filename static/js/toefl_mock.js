@@ -178,7 +178,7 @@
     const title = document.createElement("strong");
     title.textContent = "Listening audio · once in test mode";
     card.appendChild(title);
-    if (!asset || asset.delivery?.status !== "available" || !asset.delivery?.url) {
+    if (!asset || asset.delivery?.status !== "published" || !asset.delivery?.url) {
       card.classList.add("is-unavailable");
       const note = document.createElement("p");
       note.textContent = "当前音频仍是 local_source，尚未进入发布存储；没有使用错误音频，也不会静默标记为已播放。";
@@ -646,7 +646,11 @@
     elements.next.disabled = !canProceed || advancing;
     elements.next.textContent = lastGroup && state.phaseIndex === definition.phases.length - 1 ? "Complete" : "Next";
     if (phase?.section === "listening" && !audioReadyForCurrentGroup()) {
-      elements.route.textContent = "先完成音频播放，或在 Staging 明确跳过 local_source 缺口。";
+      const asset = assetById.get(currentGroup()?.stimulus?.asset_id);
+      const published = asset?.delivery?.status === "published" && asset?.delivery?.url;
+      elements.route.textContent = published
+        ? "先完整播放本 Module 音频，播放结束后才能继续。"
+        : "当前音频未进入发布存储；只可在 Staging 明确跳过缺口。";
     } else if (phase?.section === "speaking" && !currentGroupRecordingsReady()) {
       elements.route.textContent = "每道 Speaking 题都要有可上传的录音后才能继续。";
     }
@@ -752,11 +756,11 @@
     elements.report.replaceChildren();
     const kicker = document.createElement("p");
     kicker.className = "mock-kicker";
-    kicker.textContent = "STAGING ATTEMPT REPORT";
+    kicker.textContent = "PREVIEW ATTEMPT REPORT";
     const heading = document.createElement("h2");
     heading.textContent = "流程已完整结束";
     const note = document.createElement("p");
-    note.textContent = "这是 staging 的结构与交互报告，不是正式成绩单；Speaking/Writing 仍 pending teacher review。";
+    note.textContent = "这是线上试运行的结构与交互报告，不是正式成绩单；Speaking/Writing 仍 pending teacher review。";
     const metrics = document.createElement("div");
     metrics.className = "report-metrics";
     appendMetric(metrics, `${report.objective.correct}/${report.objective.auto_total}`, "客观题正确 / 判分分母");

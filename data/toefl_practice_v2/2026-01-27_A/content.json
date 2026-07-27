@@ -65,7 +65,8 @@
       },
       "delivery": {
         "storage_key": "toefl/v2/2026-01-27_A/新托福2026真题04ListeningModule1.mp3",
-        "status": "local_source"
+        "status": "published",
+        "url": "/static/toefl/v2/2026-01-27_A/新托福2026真题04ListeningModule1.mp3"
       },
       "module_id": "toefl:2026-01-27-a:listening:m1"
     },
@@ -81,7 +82,8 @@
       },
       "delivery": {
         "storage_key": "toefl/v2/2026-01-27_A/新托福2026真题04ListeningModule2.mp3",
-        "status": "local_source"
+        "status": "published",
+        "url": "/static/toefl/v2/2026-01-27_A/新托福2026真题04ListeningModule2.mp3"
       },
       "module_id": "toefl:2026-01-27-a:listening:m2"
     },
@@ -97,7 +99,8 @@
       },
       "delivery": {
         "storage_key": "toefl/v2/2026-01-27_A/新托福2026真题04speakingModule1.mp3",
-        "status": "local_source"
+        "status": "published",
+        "url": "/static/toefl/v2/2026-01-27_A/新托福2026真题04speakingModule1.mp3"
       }
     }
   ],
@@ -3585,7 +3588,7 @@
         },
         {
           "key": "D",
-          "text": "The last stop before Springfield. i < k"
+          "text": "The last stop before Springfield."
         }
       ],
       "input_config": {
@@ -3593,13 +3596,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 15,
           "module": "m1",
           "question_number": 5
@@ -3607,7 +3610,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 5
         },
@@ -3644,7 +3647,7 @@
         },
         {
           "key": "D",
-          "text": "I don't have a key. due ee x “ ox"
+          "text": "I don't have a key."
         }
       ],
       "input_config": {
@@ -3652,13 +3655,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 16,
           "module": "m1",
           "question_number": 6
@@ -3666,7 +3669,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 6
         },
@@ -4175,7 +4178,7 @@
         },
         {
           "key": "D",
-          "text": "She thought the man was going to book the flight for her. y <"
+          "text": "She thought the man was going to book the flight for her."
         }
       ],
       "input_config": {
@@ -4183,13 +4186,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 26,
           "module": "m1",
           "question_number": 15
@@ -4197,7 +4200,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 15
         },
@@ -4234,7 +4237,7 @@
         },
         {
           "key": "D",
-          "text": "The professors will likely not \\ understand her research. Revi olume 《Back ontinue >"
+          "text": "The professors will likely not understand her research."
         }
       ],
       "input_config": {
@@ -4242,13 +4245,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 27,
           "module": "m1",
           "question_number": 16
@@ -4256,7 +4259,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 16
         },
@@ -4352,7 +4355,7 @@
         },
         {
           "key": "D",
-          "text": "Cook a meal at home ey) z 8 < k ti >"
+          "text": "Cook a meal at home"
         }
       ],
       "input_config": {
@@ -4360,13 +4363,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 29,
           "module": "m1",
           "question_number": 18
@@ -4374,7 +4377,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 18
         },
@@ -4706,7 +4709,7 @@
         },
         {
           "key": "D",
-          "text": "Registering early for workshops olume 《Bac ontinue"
+          "text": "Registering early for workshops"
         }
       ],
       "input_config": {
@@ -4714,13 +4717,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 34,
           "module": "m1",
           "question_number": 24
@@ -4728,7 +4731,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 24
         },
@@ -4824,7 +4827,7 @@
         },
         {
           "key": "D",
-          "text": "It allows the brain to process emotional experiences. . i y Ri"
+          "text": "It allows the brain to process emotional experiences."
         }
       ],
       "input_config": {
@@ -4832,13 +4835,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 35,
           "module": "m1",
           "question_number": 26
@@ -4846,7 +4849,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 26
         },
@@ -4883,7 +4886,7 @@
         },
         {
           "key": "D",
-          "text": "To illustrate the various stages of sleep Revi <"
+          "text": "To illustrate the various stages of sleep"
         }
       ],
       "input_config": {
@@ -4891,13 +4894,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 36,
           "module": "m1",
           "question_number": 27
@@ -4905,7 +4908,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 27
         },
@@ -5001,7 +5004,7 @@
         },
         {
           "key": "D",
-          "text": "The guidelines for identifying problematic behavior DAE te eVvIew acl [4"
+          "text": "The guidelines for identifying problematic behavior"
         }
       ],
       "input_config": {
@@ -5009,13 +5012,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 37,
           "module": "m1",
           "question_number": 29
@@ -5023,7 +5026,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 29
         },
@@ -5178,7 +5181,7 @@
         },
         {
           "key": "D",
-          "text": "To describe the consequences of inconsistent feedback = « understand spoken English. There are three types of tasks. conversations. = * question. best response. ."
+          "text": "To describe the consequences of inconsistent feedback"
         }
       ],
       "input_config": {
@@ -5186,13 +5189,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 39,
           "module": "m1",
           "question_number": 32
@@ -5200,7 +5203,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m1",
           "question_number": 32
         },
@@ -5296,7 +5299,7 @@
         },
         {
           "key": "D",
-          "text": "Are you sure? ‘eview olume acl ext"
+          "text": "Are you sure?"
         }
       ],
       "input_config": {
@@ -5304,13 +5307,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 41,
           "module": "m2",
           "question_number": 2
@@ -5318,7 +5321,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m2",
           "question_number": 2
         },
@@ -6063,7 +6066,7 @@
         },
         {
           "key": "D",
-          "text": "It allows residents to grow their own produce. = 和 显示 答 Revi t >"
+          "text": "It allows residents to grow their own produce."
         }
       ],
       "input_config": {
@@ -6071,13 +6074,13 @@
         "audio_replay_policy": "once_in_test_mode",
         "audio_scrub_policy": "disabled_in_test_mode"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.27新托福A卷/新托福2026真题04.pdf",
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "page": 51,
           "module": "m2",
           "question_number": 15
@@ -6085,7 +6088,7 @@
         {
           "path": "新托福分科刷题材料/整理输出/托福真题整理_听力.md",
           "sha256": "8887eff8619dd1992b4a4d2bf8bbb2eb2ced1e034af68ab07eaa6e87121977a6",
-          "confidence": "source_exact",
+          "confidence": "reviewed_repair",
           "module": "m2",
           "question_number": 15
         },

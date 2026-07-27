@@ -65,7 +65,8 @@
       },
       "delivery": {
         "storage_key": "toefl/v2/2026-01-28_B/2026新托福真题01ListeningModule1.mp3",
-        "status": "local_source"
+        "status": "published",
+        "url": "/static/toefl/v2/2026-01-28_B/2026新托福真题01ListeningModule1.mp3"
       },
       "module_id": "toefl:2026-01-28-b:listening:m1"
     },
@@ -81,7 +82,8 @@
       },
       "delivery": {
         "storage_key": "toefl/v2/2026-01-28_B/2026新托福真题01ListeningModule2.mp3",
-        "status": "local_source"
+        "status": "published",
+        "url": "/static/toefl/v2/2026-01-28_B/2026新托福真题01ListeningModule2.mp3"
       },
       "module_id": "toefl:2026-01-28-b:listening:m2"
     },
@@ -97,7 +99,8 @@
       },
       "delivery": {
         "storage_key": "toefl/v2/2026-01-28_B/2026新托福真题01SpeakingModule1.mp3",
-        "status": "local_source"
+        "status": "published",
+        "url": "/static/toefl/v2/2026-01-28_B/2026新托福真题01SpeakingModule1.mp3"
       }
     }
   ],
@@ -2640,19 +2643,19 @@
         },
         {
           "key": "D",
-          "text": "school systems have developed better examinations Next>"
+          "text": "school systems have developed better examinations"
         }
       ],
       "input_config": {
         "selection": "single"
       },
-      "content_status": "ready",
+      "content_status": "reviewed_repair",
       "grading_status": "auto",
       "source_refs": [
         {
           "path": "1.28新托福真题B卷/2.1新托福真题01.pdf",
           "sha256": "4fc81c5a831e02e133f8f0a5fafa119ee06183d31716fc233c7f6350f664b0ca",
-          "confidence": "source_exact",
+          "confidence": "visually_recovered",
           "page": 8,
           "module": "m1",
           "question_number": 33
@@ -2660,7 +2663,7 @@
         {
           "path": "tmp/pdfs/reading_structured/extracted/07_2026_01_28_B.json",
           "sha256": "6aa1c177bfa32f9f92be9eefd767041809f96ada3ea083d5440a59fcee78c64b",
-          "confidence": "source_exact",
+          "confidence": "visually_recovered",
           "module": "m1",
           "question_number": 33
         }

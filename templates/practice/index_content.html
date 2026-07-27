@@ -582,7 +582,7 @@ a.practice-resource:hover {
       <h4>新托福真题套卷</h4>
       <p>{{ summary.toefl.exam_count }} 套已接入 · {{ summary.toefl.subject_count }} 个科目 · {{ summary.toefl.question_count }} 个可作答题。支持模块计时、跨模块不可回退、阅读 Review、写作组句、口语录音与交卷判分。</p>
     </div>
-    <a class="practice-toefl__button js-practice-resource" href="{{ url_for('toefl.index') }}">选择套卷</a>
+    <a class="practice-toefl__button js-practice-resource" href="{{ url_for('toefl_mock.mock_catalog') }}">进入全新模考</a>
   </section>
 </main>
 

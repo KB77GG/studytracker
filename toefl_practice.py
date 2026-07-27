@@ -9,7 +9,16 @@ from difflib import SequenceMatcher
 from pathlib import Path
 
 import requests
-from flask import Blueprint, current_app, jsonify, render_template, request, session
+from flask import (
+    Blueprint,
+    current_app,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 from flask_login import current_user
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 
@@ -22,7 +31,6 @@ from models import (
     User,
     db,
 )
-
 
 toefl_bp = Blueprint("toefl", __name__)
 
@@ -1312,8 +1320,14 @@ def _serialize_question_response(row: ToeflQuestionResponse) -> dict:
     }
 
 
+@toefl_bp.get("/toefl")
 @toefl_bp.get("/toefl/tests")
 def index():
+    return redirect(url_for("toefl_mock.mock_catalog"))
+
+
+@toefl_bp.get("/toefl/tests/legacy")
+def legacy_index():
     return render_template("toefl/index.html", exams=exam_catalog())
 
 
