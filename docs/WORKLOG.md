@@ -6,6 +6,12 @@
 
 ---
 
+## 2026-07-27 TOEFL 目录状态语义澄清（本地提交，未 push / 未部署）
+
+- 在 `codex/toefl-student-workbench` 追加实现提交 `3b1d4fd0`：目录卡片把 manifest 的 `publish_status=ready` 显示为“题包审计：ready”，并单独显示“正式门禁：未通过/通过”（由 `release_ready` 决定）。没有修改数据、其他页面、生产或小程序。
+- 页面测试新增断言：非 release-ready 套题出现“题包审计：ready · 正式门禁：未通过”，且不出现含混的“发布状态：ready”。
+- 验证：`tests/test_toefl_mock_v2.py` + `tests/test_toefl_mock_frontend.py` 20 passed；Ruff 和 `git diff --check` 通过。当前分支仍未 push。
+
 ## 2026-07-27 TOEFL V2 终审四组问题修复（本地提交，未 push / 未部署）
 
 - 在 `codex/toefl-student-workbench` 追加提交 `cb268bb9`，没有 push、merge、生产部署或小程序发布，也没有修改已发布 JSON。
