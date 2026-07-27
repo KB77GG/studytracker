@@ -16,14 +16,39 @@
 | 项目 | 当前状态 |
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
-| 分支 | `codex/toefl-rescue`，独立 worktree 为 `~/.codex/worktrees/toefl-rescue-studytracker` |
-| 分支基线 | 已推送基线为 `79c7051b 恢复托福Q33并建立v2发布门禁`；其后七套整合与新流程当前仍未提交 |
+| 分支 | `codex/toefl-student-workbench`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/f712/studytracker` |
+| 分支基线 | 从已推送的 `codex/toefl-rescue` 后继 `5801849c` 开始；学生端工作台实现已提交为 `281ca626`，本地分支尚未 push |
 | 远端 | 本次 TOEFL 题库抢救工作通过 `origin/codex/toefl-rescue` 同步；精确提交以 `git log -1` 为准 |
-| 本次交接范围 | 只改 rescue worktree；主工作树的用户未跟踪文件未覆盖。现有 `data/toefl_practice` 发布 JSON 零修改 |
+| 本次交接范围 | 只改当前独立 worktree；主工作树的用户未跟踪文件未覆盖。现有 `data/toefl_practice` 发布 JSON 零修改 |
 | 后端生产 | 本次未检查或改变生产；沿用此前已确认的单 worker/gthread/5002 硬约束 |
 | 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
 
-## 当前进行中：TOEFL 题库抢救与模考系统重做
+## 2026-07-27 TOEFL V2 学生端考试工作台（已本地提交，未 push / 未部署）
+
+- 实现提交：`281ca626 重建 TOEFL v2 学生端考试工作台`；当前分支为
+  `codex/toefl-student-workbench`，没有 push、merge、生产部署或小程序上传。
+- 页面保持旧 TOEFL 刷题路由可用，新 `/toefl/mock` 入口继续显式显示 `STAGING PREVIEW`，支持套题目录、考前门禁、科目选择、设备检查、Reading → Listening → Speaking → Writing、resume、完成和报告。
+- 服务端继续使用 v2 package、public definition、`ToeflMockAttempt` / `ToeflMockResponse`；新增/收紧了角色权限、同站 `returnTo`、definition-driven phase/group 导航、服务端倒计时、M1 route-m2 闭环、完成后只读、题型/重复 token 校验、录音时长与 MIME 校验、私有录音 token 隔离。
+- Reading 使用来源 definition 的完整 passage/邮件/notice/inline Complete Words/MC/order；M1/M2 显示 18/9 分钟。Writing 的 Build a Sentence 保留重复 token，Email / Discussion 使用 7/7/10 分钟。
+- Listening 已有真实音频组件契约：单次播放、禁拖动、audio-driven 状态；`local_source` 或不可用资产会明确阻断，并只在 Staging 提供显式跳过。Speaking 有独立麦克风测试、准备/作答倒计时、自动停止上传、失败重试；当前来源缺少可验证的题级 Speaking timing，正式模式仍阻断。
+- 报告只把 `auto` 客观题纳入分母，blocked 题明确排除，manual 显示 `pending_teacher_review`；报告标注为 staging preview，不冒充正式成绩单。当前 Reading/Listening 仍只返回已验证的 `default` M2，`adaptive_available=false`。
+- 新增结构/API/前端测试覆盖：权限、状态跳转与计时防篡改、route-m2 绕过、快速输入 flush、重复 token、录音题型、resume、单项模式、returnTo、blocked 分母、public definition 不泄露答案/来源路径。
+
+### 验证与浏览器 QA
+
+- `python3 -m pytest -q tests/test_toefl_mock_v2.py tests/test_toefl_mock_frontend.py`：16 passed。
+- TOEFL v2 + 旧 TOEFL rescue / 题库质量 / 导入 / 审计兼容集：69 passed。
+- 全仓 `python3 -m pytest -q`：320 passed；2 个既有 `tests/test_static_audio_headers.py` 失败，均因该 worktree 缺少测试音频 fixture 而返回 404，未改静态音频链路。
+- 相关 Ruff、`node --check static/js/toefl_mock.js`、Python 编译检查、`git diff --check` 均通过。
+- 本地 `127.0.0.1:5001` fresh browser session 已走查目录、桌面/390×844 移动布局、Reading 18:00 与 inline 输入、快速输入后切题/刷新恢复、Listening `local_source` 明确跳过且题目仍显示、Writing Build a Sentence 重复 token；fresh session 控制台无 error/warn。真实麦克风权限弹窗和 MediaRecorder 录音未在无测试设备的浏览器中执行。
+
+### 尚未完成 / 下一步
+
+- 七套四科 source review 仍为 pending；现有音频仍是 `local_source`，未进入发布存储；Speaking 题级准备/作答时长证据仍缺；因此正式 release gate 仍不可用。
+- 真实 adaptive easy/hard 分支没有来源证据，不能实现或伪造；当前仅允许 default 路由。
+- 需要在真实学生登录、教师 review 流程和有麦克风/可播放音频的设备上继续 QA。上线前还需逐套完成来源复核、音频发布和正式门禁验证；本提交不包含部署。
+
+## 背景记录：TOEFL 题库抢救与模考系统重做
 
 ### 用户目标与发布约束
 
@@ -32,7 +57,7 @@
 - 禁止模型猜测题目、选项、答案或音频对应关系；无法从来源证据确定的内容保持 `review_required`。
 - staging 预览不等于线上发布；四科人工来源复核、媒体发布与严格门禁通过前，不得把套题状态改成 published。
 
-### 2026-07-27 七套整合、证据清理与 spec-driven staging 纵向流程（未提交、未部署）
+### 2026-07-27 七套整合、证据清理与 spec-driven staging 纵向流程（历史记录；实现已随上方提交落盘）
 
 - 七套 v2 包已全部进入 rescue worktree，共 840 个原子题、7 个 source-blocked：
   - `2026-01-21_A`：120 / blocked 4
@@ -77,7 +102,7 @@
 - 自动化：TOEFL v2、题库审计、旧导入与旧刷题兼容回归共 45 项通过；新服务/API/模型/
   测试/通用 builder Ruff、前端 JS 语法和 `git diff --check` 均通过。
 - 尚未完成：
-  - 当前改动未 commit/push；用户要求先清理并完成验证，再提交；
+  - 学生端工作台实现已由上方 `281ca626` 在本地提交，但当前分支仍未 push；
   - 未部署生产，线上仍没有这七套新流程；
   - 原始音频仍是 `local_source`，未复制到发布存储；staging 只呈现不可用状态；
   - 剩余 7 个 blocked 题和七套四科人工来源复核仍需逐项完成；
@@ -214,7 +239,7 @@ exit 1 as expected; 14 critical/high blockers
    答案或音频证据时保持 blocked。
 5. 每完成一科就运行审计门禁并生成审阅清单；用户人工确认后才把该科 `subject_reviews` 改为 `approved`。
 6. 0 blocker 的三套先做真实登录学生/教师账号 QA，再处理音频发布存储；严格门禁通过后才考虑生产发布。
-7. 当前变更尚未 commit/push；本轮先完成清理和全量验证。合并 `main`、部署和发布仍需单独明确授权。
+7. 学生端工作台已在本地提交 `281ca626`，当前分支仍未 push；合并 `main`、部署和发布仍需单独明确授权。
 
 ### 本次提交涉及的已跟踪文件
 

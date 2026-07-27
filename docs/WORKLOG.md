@@ -6,6 +6,16 @@
 
 ---
 
+## 2026-07-27 TOEFL V2 学生端工作台重建（本地提交，未 push / 未部署）
+
+- 在 `codex/toefl-student-workbench` 上从 `5801849c` 继续，完成提交 `281ca626`；没有 push、merge、生产部署或小程序发布，旧 TOEFL 路由保持并行可用。
+- 重建学生端流程：套题目录、考前门禁、科目选择、Speaking 麦克风测试、Reading / Listening / Speaking / Writing 工作台、resume、完成与 staging 报告。服务端收紧权限、状态迁移、倒计时、M1 route-m2、完成后只读、题型校验、录音上传隔离和 `returnTo` 安全路径。
+- Reading/Listening 继续 definition-driven；Reading 18/9 分钟，Writing 7/7/10 分钟；Listening 对 `local_source` 音频明确显示缺口，不使用错误音频或静默完成；Speaking 无题级可验证 timing 时正式模式阻断。报告排除 blocked/manual 客观题分母，manual 为 `pending_teacher_review`。
+- 新增前端/API 测试覆盖快速输入 flush、重复 token、单项模式、resume、计时防篡改、M2 route 绕过、录音题型和 public definition 脱敏。
+- 验证：相关 16 项通过；TOEFL v2 + 旧兼容相关 69 项通过；全仓 320 项通过，另有 2 个既有静态音频 fixture 缺失导致的 404 失败。Ruff、JS 语法、Python 编译和 diff check 通过。
+- 浏览器 fresh session 已验证目录、桌面/移动布局、Reading 快速输入保存与刷新恢复、Listening 音频缺口显式跳过、Writing 重复 token；控制台无 error/warn。真实麦克风权限和录音设备 QA 尚未完成。
+- 下一步：真实学生/教师账号权限与人工批改闭环、发布音频、补齐 Speaking timing 证据、完成四科人工 review；真实 adaptive 分支仍无证据，不能实现。正式 release gate 通过前不得部署。
+
 ## 2026-07-27 TOEFL 七套 v2 整合、证据清理与新 spec 运行层（本地未提交、未部署）
 
 - rescue worktree 已整合 7 套 / 840 个原子题，不改写旧的已发布 JSON。逐页复核原来的 18 个
