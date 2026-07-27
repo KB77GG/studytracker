@@ -266,6 +266,14 @@ def test_catalog_and_exam_pages_render(app):
     assert "STAGING PREVIEW" in exam_page.get_data(as_text=True)
 
 
+def test_catalog_distinguishes_audit_ready_from_formal_gate(app):
+    page = app.test_client().get("/toefl/mock").get_data(as_text=True)
+
+    assert "题包审计：ready" in page
+    assert "正式门禁：未通过" in page
+    assert "发布状态：ready" not in page
+
+
 def test_state_rejects_navigation_jump_and_timer_increase(app):
     client = app.test_client()
     started = client.post(

@@ -36,7 +36,10 @@
         <span><b>{{ exam.counts.manual }}</b> 人工批改</span>
         <span class="{{ 'is-blocked' if exam.counts.blocked else '' }}"><b>{{ exam.counts.blocked }}</b> 证据阻塞</span>
       </div>
-      <p class="mock-card__status">结构校验：{{ exam.validation_status }} · 发布状态：{{ exam.publish_status }}</p>
+      <p class="mock-card__status">
+        结构校验：{{ exam.validation_status }} · 题包审计：{{ exam.publish_status }} ·
+        正式门禁：{{ '通过' if exam.release_ready else '未通过' }}
+      </p>
       <a class="mock-card__action" href="{{ exam.preview_url }}">按新 spec 预览</a>
     </article>
     {% endfor %}
