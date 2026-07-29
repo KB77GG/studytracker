@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨电脑开发交接
 
 > 这是滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-07-27（Asia/Shanghai）。
+> 最近更新：2026-07-29（Asia/Shanghai）。
 
 ## 使用规则
 
@@ -17,13 +17,34 @@
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
 | 分支 | `codex/toefl-student-workbench`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/f712/studytracker` |
-| 分支基线 | 从已推送的 `codex/toefl-rescue` 后继 `5801849c` 开始；学生端工作台为 `281ca626`，终审修复为 `cb268bb9`，目录语义修复为 `3b1d4fd0`，本地分支尚未 push |
-| 远端 | 本次 TOEFL 题库抢救工作通过 `origin/codex/toefl-rescue` 同步；精确提交以 `git log -1` 为准 |
+| 分支基线 | `a6d20e4a 正式发布三套 TOEFL 2026 刷题流程`，已推送任务分支并进入 `main` |
+| 远端 | `origin/main` 与 `origin/codex/toefl-student-workbench` 均包含 `a6d20e4a`；精确 HEAD 以 `git log -1` 为准 |
 | 本次交接范围 | 只改当前独立 worktree；主工作树的用户未跟踪文件未覆盖。现有 `data/toefl_practice` 发布 JSON 零修改 |
-| 后端生产 | 本次未检查或改变生产；沿用此前已确认的单 worker/gthread/5002 硬约束 |
+| 后端生产 | 已部署 `a6d20e4a`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
 | 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
 
-## 2026-07-27 TOEFL V2 学生端考试工作台（已本地提交，未 push / 未部署）
+## 2026-07-29 三套 TOEFL 2026 正式题包（已上线）
+
+- 正式套题：`2026-01-27_A`、`2026-01-28_A`、`2026-01-28_B`；每套 120 个原子题、0 blocked，manifest 为 `publish_status=published`，runtime 与严格 release gate 均为 ready。
+- 用户明确免除额外来源终审；manifest 用 `release_authorization.status=owner_authorized` 记录发布授权，四科 `subject_reviews` 继续保持真实的 pending，未伪写 approved。
+- Speaking 已按 `docs/TOEFL_MOCK_FLOW_SPEC.md` 重塑为 11 个单题 group：
+  - Q1–Q7 Listen and Repeat：准备 0 秒、录音 12 秒；
+  - Q8–Q11 Take an Interview：准备 0 秒、录音 45 秒；
+  - module 计时 180 + 300 = 480 秒。
+- 逐题 cue 复用现有三条原始 speaking MP3，不转码、不改源文件。范围由转写逐词时间戳生成；Q1/Q8 含 intro/scenario，门禁校验 cue 边界、原音频时长和 ≥0.96 对齐置信度。公开 definition 只给 cue/计时，不给口语原文。
+- 学生端流程为一次点击 → 原题播放一次 → 自动录音 → 到时停止 → 上传 → 自动下一题。服务端按当前 group、题级 response time 与 one-take policy 校验；正式模式不能重录，preview 可失败重试。
+- 线上音频状态：9 条 listening/speaking URL 全部 Range 206；三条 speaking MP3 的生产 SHA-256 与本地来源一致，因此本次没有重复上传音频。
+
+### 验证与发布
+
+- 三套严格 `--require-release-ready` 均通过；七套 source-traceable validator 均通过。
+- 相关 Python 30 passed；全部 Node 14 passed；相关 Ruff、JS syntax、Python compile、diff check 通过。
+- 全仓 Python 329 passed，2 个既有静态音频 fixture 测试因本 worktree 没有目标音频返回 404，与本次 TOEFL 链路无关。
+- CI [30416264782](https://github.com/KB77GG/studytracker/actions/runs/30416264782) 与部署 [30416264768](https://github.com/KB77GG/studytracker/actions/runs/30416264768) 成功；生产仓库 HEAD `a6d20e4a`，服务 active，端口和 gunicorn 约束已复核。
+- 生产浏览器确认目录为 3 套 / 360 题、三卡均 `published / 正式门禁：通过`，Speaking 单项显示 11 题 / 2 phase / 正式模考按钮；控制台无 error/warn。
+- 未在自动化浏览器授权真实麦克风，以免采集环境音。后续真实设备 QA：登录学生完整录完 11 题，再核对教师人工批改、报告与断线恢复。
+
+## 2026-07-27 TOEFL V2 学生端考试工作台（历史记录，已由 2026-07-29 发布取代）
 
 - 实现提交：`281ca626 重建 TOEFL v2 学生端考试工作台`；当前分支为
   `codex/toefl-student-workbench`，没有 push、merge、生产部署或小程序上传。

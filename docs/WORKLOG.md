@@ -6,6 +6,17 @@
 
 ---
 
+## 2026-07-29 三套 TOEFL 2026 正式刷题流程（已部署）
+
+- 已将 `2026-01-27_A`、`2026-01-28_A`、`2026-01-28_B` 从线上 preview 升为正式题包；每套 120 题、0 blocked，目录显示 `published / 正式门禁：通过`。旧 `data/toefl_practice` JSON 和旧版路由未修改。
+- Speaking 重建为 11 个原子题组：Q1–Q7 Listen and Repeat 为 0 秒准备 / 12 秒录音，Q8–Q11 Take an Interview 为 0 秒准备 / 45 秒录音；两阶段 180 + 300 = 480 秒。Q1/Q8 cue 包含任务说明与场景，其余 cue 只播放当前题。
+- cue 由三条原始 MP3 的逐词时间戳生成，门禁要求范围在音频时长内且对齐置信度 ≥0.96；公开 definition 不再下发口语原文。页面单次点击后自动播放、录音、限时停止、上传并进入下一题；服务端拒绝跨题、超时和正式模式第二次录音。
+- 用户明确免除额外四科来源终审，manifest 以 `owner_authorized` 记录这项发布授权，没有伪写四科 review 为 approved。三套严格 `--require-release-ready` 均为 120 questions / 0 errors / pass；七套结构与来源校验仍全部通过。
+- 音频无需重复上传：线上 9 条 listening/speaking MP3 均返回 Range 206；三条 speaking MP3 的线上 SHA-256 与本地来源逐一一致。
+- 验证：相关 Python 30 passed；全部 Node 14 passed；全仓 Python 329 passed，另有 2 个既有 `tests/test_static_audio_headers.py` 因本 worktree 缺少静态 fixture 返回 404；相关 Ruff、JS syntax、Python compile 和 diff check 通过。
+- 发布提交 `a6d20e4a` 已推送任务分支与 `main`；并行的 `fd711f1c` 已保留。CI [30416264782](https://github.com/KB77GG/studytracker/actions/runs/30416264782) 与生产部署 [30416264768](https://github.com/KB77GG/studytracker/actions/runs/30416264768) 成功。服务器 HEAD 为 `a6d20e4a`，`studytracker.service=active`，监听 `127.0.0.1:5002`，gunicorn 保持 `workers=1 / gthread / threads=6`。
+- 生产浏览器已验收三套目录、正式门禁、Speaking 单项入口和前端脚本，无 console error/warn；出于不采集环境音，未在自动化浏览器中授权真实麦克风。下一步应由登录学生在真实设备完成一遍 11 题录音，再验收教师人工批改闭环。
+
 ## 2026-07-27 模考后台「复制链接 + 逐题复盘」与综合分进位修复（已部署）
 
 - 起因：配完卷只能进考试页手动抄网址；教师端看不到学生做题详情。
