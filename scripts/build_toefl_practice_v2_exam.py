@@ -8,6 +8,7 @@ legacy StudyTracker TOEFL data, production routes, or runtime databases.
 from __future__ import annotations
 
 import argparse
+import bisect
 import hashlib
 import importlib.util
 import json
@@ -15,6 +16,7 @@ import re
 import subprocess
 from collections import Counter
 from datetime import datetime, timezone
+from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any
 
@@ -51,6 +53,8 @@ GRADING_BLOCKED_READING: set[tuple[str, int]] = set()
 GRADING_BLOCKED_LISTENING: set[tuple[str, int]] = set()
 ANSWER_EVIDENCE_OVERRIDES: dict[tuple[str, str, int], list[dict[str, Any]]] = {}
 SPEAKING_CONTENT_STATUS = "needs_review"
+AUDIO_ASSETS_PUBLISHED = False
+RELEASE_AUTHORIZATION: dict[str, Any] | None = None
 EXAM_TITLE = "2026-01-21 TOEFL Real Exam B"
 EXAM_DATE = "2026-01-21"
 EXAM_VARIANT = "B"
@@ -662,6 +666,12 @@ A27_EXAM_CONFIG: dict[str, Any] = {
     "EXAM_TITLE": "2026-01-27 TOEFL Real Exam A",
     "EXAM_DATE": "2026-01-27",
     "EXAM_VARIANT": "A",
+    "AUDIO_ASSETS_PUBLISHED": True,
+    "RELEASE_AUTHORIZATION": {
+        "status": "owner_authorized",
+        "scope": ["reading", "listening", "speaking", "writing"],
+        "basis": "Repository owner confirmed that this package is a real-exam set and waived an additional subject-by-subject final review.",
+    },
     "PROGRESS_NOTES": "120 atomic questions rebuilt from source; Listening M1 Q1/M1 Q2/M2 Q1 options and 12 OCR-polluted option tails were visually recovered from rendered source pages.",
     "BLOCKING_REASONS": [],
     "LATEST_BLOCKER_TEXT": "No unresolved source-content blockers; subject review is still required before release.",
@@ -1265,6 +1275,12 @@ A28_EXAM_CONFIG: dict[str, Any] = {
     "EXAM_TITLE": "2026-01-28 TOEFL Real Exam A",
     "EXAM_DATE": "2026-01-28",
     "EXAM_VARIANT": "A",
+    "AUDIO_ASSETS_PUBLISHED": True,
+    "RELEASE_AUTHORIZATION": {
+        "status": "owner_authorized",
+        "scope": ["reading", "listening", "speaking", "writing"],
+        "basis": "Repository owner confirmed that this package is a real-exam set and waived an additional subject-by-subject final review.",
+    },
     "PROGRESS_NOTES": "120 atomic questions rebuilt from source; Reading M2 Q6 and Listening M1 Q24 were repaired from corroborating source text/transcript evidence after the answer PDF conflicted.",
     "BLOCKING_REASONS": [],
     "LATEST_BLOCKER_TEXT": "No unresolved source-content blockers; subject review is still required before release.",
@@ -1587,6 +1603,12 @@ B28_EXAM_CONFIG: dict[str, Any] = {
     "EXAM_TITLE": "2026-01-28 TOEFL Real Exam B",
     "EXAM_DATE": "2026-01-28",
     "EXAM_VARIANT": "B",
+    "AUDIO_ASSETS_PUBLISHED": True,
+    "RELEASE_AUTHORIZATION": {
+        "status": "owner_authorized",
+        "scope": ["reading", "listening", "speaking", "writing"],
+        "basis": "Repository owner confirmed that this package is a real-exam set and waived an additional subject-by-subject final review.",
+    },
     "PROGRESS_NOTES": "120 atomic questions rebuilt directly from B-volume PDF/audio/transcript sources; Reading M1 Q33's OCR navigation tail was removed after visual page review.",
     "BLOCKING_REASONS": [],
     "LATEST_BLOCKER_TEXT": "No unresolved source blockers in this package.",
@@ -1719,8 +1741,10 @@ B28_EXAM_CONFIG: dict[str, Any] = {
 
 
 def configure_exam(progress_key: str) -> None:
-    global ANSWER_EVIDENCE_OVERRIDES
+    global ANSWER_EVIDENCE_OVERRIDES, AUDIO_ASSETS_PUBLISHED, RELEASE_AUTHORIZATION
     ANSWER_EVIDENCE_OVERRIDES = {}
+    RELEASE_AUTHORIZATION = None
+    AUDIO_ASSETS_PUBLISHED = False
     if progress_key == "2026-01-21-B":
         return
     if progress_key == "2026-01-21-C":
@@ -2417,34 +2441,169 @@ def build_writing(hashes: dict[str, str]) -> tuple[list[dict[str, Any]], list[di
     return modules, groups, questions, answers
 
 
-def build_speaking(hashes: dict[str, str]) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+def _normalized_alignment_text(value: str) -> str:
+    return "".join(re.findall(r"[a-z0-9]+", value.lower().replace("’", "'")))
+
+
+def _speaking_cues(source_root: Path) -> dict[int, dict[str, Any]]:
+    """Align the 11 source-backed prompts to word timestamps in the source MP3."""
+
+    transcript = json.loads(
+        (source_root / SPEAKING_TRANSCRIPT_JSON).read_text(encoding="utf-8")
+    )
+    words = [
+        word
+        for segment in transcript.get("segments", [])
+        for word in segment.get("words", [])
+        if _normalized_alignment_text(str(word.get("word") or ""))
+    ]
+    if not words:
+        raise ValueError(f"{EXAM_KEY}: speaking transcript has no word timestamps")
+
+    normalized_words = [
+        _normalized_alignment_text(str(word["word"])) for word in words
+    ]
+    word_starts: list[int] = []
+    normalized_transcript = ""
+    for word in normalized_words:
+        word_starts.append(len(normalized_transcript))
+        normalized_transcript += word
+
+    prompts = (
+        list(SPEAKING_REPEAT_AUDIO_TRANSCRIPT)
+        + list(SPEAKING_INTERVIEW_AUDIO_TRANSCRIPT)
+    )
+    aligned: list[dict[str, Any]] = []
+    cursor_word = 0
+    for number, prompt in enumerate(prompts, 1):
+        target = _normalized_alignment_text(prompt)
+        cursor_char = word_starts[cursor_word] if cursor_word < len(words) else 0
+        exact_start = normalized_transcript.find(target, cursor_char)
+        method = "normalized_exact"
+        score = 1.0
+        if exact_start >= 0:
+            start_word = bisect.bisect_right(word_starts, exact_start) - 1
+            end_char = exact_start + len(target) - 1
+            end_word = bisect.bisect_right(word_starts, end_char) - 1
+            starts_at_boundary = exact_start == word_starts[start_word]
+            ends_at_boundary = (
+                end_char + 1
+                == word_starts[end_word] + len(normalized_words[end_word])
+            )
+            if not starts_at_boundary or not ends_at_boundary:
+                exact_start = -1
+        if exact_start < 0:
+            method = "normalized_fuzzy"
+            target_word_count = len(re.findall(r"[a-z0-9]+", prompt.lower()))
+            best: tuple[float, int, int, int] | None = None
+            for start_word in range(cursor_word, len(words)):
+                for length in range(
+                    max(1, target_word_count - 4),
+                    min(len(words) - start_word, target_word_count + 4) + 1,
+                ):
+                    end_word = start_word + length - 1
+                    candidate = "".join(normalized_words[start_word : end_word + 1])
+                    ratio = SequenceMatcher(None, target, candidate).ratio()
+                    rank = (
+                        ratio,
+                        -abs(len(candidate) - len(target)),
+                        -start_word,
+                        end_word,
+                    )
+                    if best is None or rank > best:
+                        best = rank
+            if best is None or best[0] < 0.96:
+                raise ValueError(
+                    f"{EXAM_KEY} speaking Q{number}: transcript alignment "
+                    f"confidence below gate ({best[0] if best else 0:.3f})"
+                )
+            score, _, negative_start, end_word = best
+            start_word = -negative_start
+
+        aligned.append(
+            {
+                "number": number,
+                "prompt_start_seconds": float(words[start_word]["start"]),
+                "prompt_end_seconds": float(words[end_word]["end"]),
+                "alignment_method": method,
+                "alignment_confidence": round(score, 4),
+            }
+        )
+        cursor_word = end_word + 1
+
+    interview_marker = _normalized_alignment_text("Take an interview")
+    q7_end_word = next(
+        index
+        for index, word in enumerate(words)
+        if float(word["end"]) >= aligned[6]["prompt_end_seconds"]
+    )
+    interview_char = normalized_transcript.find(
+        interview_marker, word_starts[q7_end_word]
+    )
+    if interview_char < 0:
+        raise ValueError(f"{EXAM_KEY}: Take an Interview intro not found")
+    interview_word = bisect.bisect_right(word_starts, interview_char) - 1
+    audio_duration = duration_seconds(source_root / SPEAKING_AUDIO)
+
+    cues: dict[int, dict[str, Any]] = {}
+    for item in aligned:
+        number = item["number"]
+        if number == 1:
+            cue_start = 0.0
+        elif number == 8:
+            cue_start = max(0.0, float(words[interview_word]["start"]) - 0.15)
+        else:
+            cue_start = max(0.0, item["prompt_start_seconds"] - 0.12)
+        cue_end = min(audio_duration, item["prompt_end_seconds"] + 0.25)
+        cues[number] = {
+            **item,
+            "cue_start_seconds": round(cue_start, 3),
+            "cue_end_seconds": round(cue_end, 3),
+        }
+    return cues
+
+
+def build_speaking(source_root: Path, hashes: dict[str, str]) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     groups: list[dict[str, Any]] = []
     questions: list[dict[str, Any]] = []
     modules: list[dict[str, Any]] = []
+    cues = _speaking_cues(source_root)
     specs = [
         ("m1", 1, 7, "listen_and_repeat", "Listen and Repeat", SPEAKING_REPEAT_AUDIO_TRANSCRIPT),
         ("m2", 8, 11, "take_an_interview", "Take an Interview", SPEAKING_INTERVIEW_AUDIO_TRANSCRIPT),
     ]
     for module_order, (module, first, last, task_type, title, prompts) in enumerate(specs, 1):
         mid = module_id("speaking", module)
-        gid = group_id("speaking", module, 1)
-        qids = [question_id("speaking", module, 1, number) for number in range(first, last + 1)]
-        groups.append({
-            "id": gid,
-            "module_id": mid,
-            "subject": "speaking",
-            "order": 1,
-            "task_type": task_type,
-            "title": title,
-            "directive": "Record one response for each prompt.",
-            "stimulus": {"format": "audio", "asset_id": f"{EXAM_ID}:speaking", "recording_policy": "one_take_in_test_mode"},
-            "question_ids": qids,
-            "source_refs": [source_ref(PAPER, hashes, page=SPEAKING_PAGES[first], module=module, confidence="reviewed_repair"), source_ref(SPEAKING_AUDIO, hashes, module=module), source_ref(SPEAKING_TRANSCRIPT_JSON, hashes, module=module, confidence="reviewed_repair")],
-        })
+        module_group_ids: list[str] = []
         for offset, number in enumerate(range(first, last + 1)):
             prompt = prompts[offset]
+            group_order = offset + 1
+            gid = group_id("speaking", module, group_order)
+            qid = question_id("speaking", module, 1, number)
+            cue = cues[number]
+            module_group_ids.append(gid)
+            groups.append({
+                "id": gid,
+                "module_id": mid,
+                "subject": "speaking",
+                "order": group_order,
+                "task_type": task_type,
+                "title": f"{title} · Question {number}",
+                "directive": "Play the source prompt once; recording starts automatically when it ends.",
+                "stimulus": {
+                    "format": "audio_cue",
+                    "asset_id": f"{EXAM_ID}:speaking",
+                    "cue_start_seconds": cue["cue_start_seconds"],
+                    "cue_end_seconds": cue["cue_end_seconds"],
+                    "alignment_method": cue["alignment_method"],
+                    "alignment_confidence": cue["alignment_confidence"],
+                    "recording_policy": "one_take_in_test_mode",
+                },
+                "question_ids": [qid],
+                "source_refs": [source_ref(PAPER, hashes, page=SPEAKING_PAGES[number], module=module, number=number, confidence="reviewed_repair"), source_ref(SPEAKING_AUDIO, hashes, module=module, number=number), source_ref(SPEAKING_TRANSCRIPT_JSON, hashes, module=module, number=number, confidence="reviewed_repair")],
+            })
             questions.append({
-                "id": question_id("speaking", module, 1, number),
+                "id": qid,
                 "module_id": mid,
                 "group_id": gid,
                 "subject": "speaking",
@@ -2454,7 +2613,12 @@ def build_speaking(hashes: dict[str, str]) -> tuple[list[dict[str, Any]], list[d
                 "prompt": "Listen and repeat only once." if task_type == "listen_and_repeat" else prompt,
                 "context_sentence": prompt if task_type == "listen_and_repeat" else "Answer the interviewer question after listening.",
                 "options": [],
-                "input_config": {"maximum_takes_test_mode": 1, "local_preview_practice_mode": True},
+                "input_config": {
+                    "preparation_seconds": 0,
+                    "response_seconds": 12 if task_type == "listen_and_repeat" else 45,
+                    "maximum_takes_test_mode": 1,
+                    "local_preview_practice_mode": True,
+                },
                 "content_status": SPEAKING_CONTENT_STATUS,
                 "grading_status": "manual",
                 "source_refs": [source_ref(PAPER, hashes, page=SPEAKING_PAGES[number], module=module, number=number, confidence="reviewed_repair"), source_ref(SPEAKING_AUDIO, hashes, module=module, number=number), source_ref(SPEAKING_TRANSCRIPT_JSON, hashes, module=module, number=number, confidence="reviewed_repair")],
@@ -2465,10 +2629,10 @@ def build_speaking(hashes: dict[str, str]) -> tuple[list[dict[str, Any]], list[d
             "module": module,
             "order": module_order,
             "label": title,
-            "duration_seconds": 420 if module == "m1" else 540,
+            "duration_seconds": 180 if module == "m1" else 300,
             "navigation": {"back_policy": "disabled", "review_policy": "after_submit"},
             "asset_ids": [f"{EXAM_ID}:speaking"],
-            "group_ids": [gid],
+            "group_ids": module_group_ids,
         })
     return modules, groups, questions
 
@@ -2487,12 +2651,21 @@ def build_assets(source_root: Path, hashes: dict[str, str]) -> list[dict[str, An
         source: dict[str, Any] = {"path": path_value, "sha256": hashes[path_value], "size_bytes": (source_root / path_value).stat().st_size}
         if duration is not None:
             source["duration_seconds"] = duration
+        delivery: dict[str, Any] = {
+            "storage_key": f"toefl/v2/{EXAM_KEY}/{Path(path_value).name}",
+            "status": "local_source",
+        }
+        if kind == "audio" and AUDIO_ASSETS_PUBLISHED:
+            delivery.update({
+                "status": "published",
+                "url": f"/static/toefl/v2/{EXAM_KEY}/{Path(path_value).name}",
+            })
         asset: dict[str, Any] = {
             "id": asset_id,
             "kind": kind,
             "subject": subject,
             "source": source,
-            "delivery": {"storage_key": f"toefl/v2/{EXAM_KEY}/{Path(path_value).name}", "status": "local_source"},
+            "delivery": delivery,
         }
         if linked_module:
             asset["module_id"] = linked_module
@@ -2578,7 +2751,7 @@ def build_package(repo_root: Path, source_root: Path, output_root: Path) -> dict
     reading_modules, reading_groups, reading_questions, reading_answers = build_reading(source_root, hashes)
     listening_modules, listening_groups, listening_questions, listening_answers = build_listening(source_root, hashes)
     writing_modules, writing_groups, writing_questions, writing_answers = build_writing(hashes)
-    speaking_modules, speaking_groups, speaking_questions = build_speaking(hashes)
+    speaking_modules, speaking_groups, speaking_questions = build_speaking(source_root, hashes)
     questions = reading_questions + listening_questions + writing_questions + speaking_questions
     counts = {
         "questions": len(questions),
@@ -2597,7 +2770,13 @@ def build_package(repo_root: Path, source_root: Path, output_root: Path) -> dict
             "source_kind": "real_exam",
             "source_folder": SOURCE_FOLDER,
             "expected_question_count": 120,
-            "availability_status": "blocked" if counts["blocked"] else "reviewed",
+            "availability_status": (
+                "blocked"
+                if counts["blocked"]
+                else "published"
+                if RELEASE_AUTHORIZATION and AUDIO_ASSETS_PUBLISHED
+                else "reviewed"
+            ),
         },
         "assets": build_assets(source_root, hashes),
         "modules": reading_modules + listening_modules + writing_modules + speaking_modules,
@@ -2628,12 +2807,26 @@ def build_package(repo_root: Path, source_root: Path, output_root: Path) -> dict
         "counts": counts,
         "quality": {
             "validation_status": "pending_validator",
-            "publish_status": "blocked" if counts["blocked"] else "ready",
+            "publish_status": (
+                "blocked"
+                if counts["blocked"]
+                else "published"
+                if RELEASE_AUTHORIZATION and AUDIO_ASSETS_PUBLISHED
+                else "ready"
+            ),
             "subject_reviews": {
                 "reading": "pending",
                 "listening": "pending",
                 "writing": "pending",
                 "speaking": "pending",
+            },
+            "release_authorization": RELEASE_AUTHORIZATION,
+            "speaking_timing_policy": {
+                "preparation_seconds": 0,
+                "listen_and_repeat_response_seconds": 12,
+                "take_an_interview_response_seconds": 45,
+                "section_duration_seconds": 480,
+                "basis": "ETS TOEFL iBT 2026 task timing: no preparation, Listen and Repeat up to 8–12 seconds, Take an Interview 45 seconds, Speaking approximately 8 minutes.",
             },
             "blocking_reasons": BLOCKING_REASONS,
             "known_blocked_question_ids": [item["id"] for item in blocked_items],

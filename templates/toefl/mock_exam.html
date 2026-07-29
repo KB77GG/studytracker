@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ definition.test.title }} · TOEFL V2 Preview</title>
+  <title>{{ definition.test.title }} · TOEFL 2026</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/toefl_mock.css') }}">
 </head>
 <body>
@@ -54,9 +54,9 @@
 
     <section class="mock-stage">
       <div id="welcomePanel" class="mock-welcome">
-        <p class="mock-kicker">SPEC-DRIVEN ATTEMPT</p>
+        <p class="mock-kicker">SPEC-DRIVEN TOEFL 2026</p>
         <h2>先准备，再进入考试工作台</h2>
-        <p>Reading → Listening → Speaking → Writing。答案逐题增量保存到服务端；刷新后通过 attemptId 恢复。M1 结束时由服务端决定 M2 路由，当前只有来源可信的 Default M2。</p>
+        <p>Reading → Listening → Speaking → Writing。答案逐题增量保存到服务端；刷新后通过 attemptId 恢复。Speaking 逐题播放原音频，播放结束后自动录音并限时上传。</p>
         <div class="mock-preflight-grid">
           <section class="mock-preflight-card">
             <p class="mock-kicker">01 · SECTION SELECTION</p>
@@ -89,7 +89,7 @@
         <div class="mock-blockers mock-blockers--formal">
           <strong>Speaking 正式模式当前阻断</strong>
           <ul>{% for blocker in definition.release.formal_mode_blockers %}<li>{{ blocker }}</li>{% endfor %}</ul>
-          <p>当前仅可在明确标识的线上试运行 preview 中检查流程；没有来源定义的逐题时长，不会冒充正式录音考试。</p>
+          <p>只有逐题音频切片、计时和录音门禁全部通过后，系统才会开放正式模式。</p>
         </div>
         {% endif %}
         <p id="selectionNotice" class="mock-selection-notice" role="status"></p>

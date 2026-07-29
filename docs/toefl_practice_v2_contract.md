@@ -79,6 +79,16 @@ The situation/context sentence is distinct from the target response. `scramble_t
 
 Prompts and recording behavior belong to content; model answers and grading notes remain private. Test mode supports a one-take policy; practice mode may allow local preview.
 
+The 2026 formal contract requires 11 atomic one-question groups:
+
+- Listen and Repeat Q1–Q7: `preparation_seconds=0`, `response_seconds=12`.
+- Take an Interview Q8–Q11: `preparation_seconds=0`, `response_seconds=45`.
+- The two Speaking module timers must total 480 seconds.
+- Every group must reference a published source audio asset and a bounded
+  `audio_cue` with alignment confidence of at least 0.96.
+- Formal uploads are one-take, current-question only, and bounded by the
+  question response time plus the transport tolerance enforced by the API.
+
 ## Release gate
 
 Run:
@@ -100,7 +110,7 @@ The structural validator can pass a blocked pilot so renderer work can continue.
   --require-release-ready
 ```
 
-This command exits nonzero unless the package has zero structural errors, zero blocked questions, all four subject source reviews are approved, the availability state is reviewed/published, and the manifest state is ready/published.
+This command exits nonzero unless the package has zero structural errors, zero blocked questions, the availability state is reviewed/published, the manifest state is ready/published, and the 2026 Speaking contract is complete. Source review may be satisfied either by four approved subject reviews or by an explicit repository-owner release authorization recorded in the manifest.
 
 ## Pilot result
 

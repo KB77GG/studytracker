@@ -19,6 +19,11 @@ MODULE_TIMERS = {
     ("reading", "m1"): 1080,
     ("reading", "m2"): 540,
 }
+SPEAKING_SECTION_SECONDS = 480
+SPEAKING_RESPONSE_SECONDS = {
+    "listen_and_repeat": 12,
+    "take_an_interview": 45,
+}
 
 
 class PackageNotFoundError(LookupError):
@@ -81,7 +86,13 @@ def _release_blockers(
     pending = [
         subject for subject in SECTION_ORDER if reviews.get(subject) != "approved"
     ]
-    if pending:
+    authorization = manifest.get("quality", {}).get("release_authorization") or {}
+    authorized_scope = set(authorization.get("scope") or [])
+    owner_authorized = (
+        authorization.get("status") == "owner_authorized"
+        and set(SECTION_ORDER).issubset(authorized_scope)
+    )
+    if pending and not owner_authorized:
         blockers.append("source review pending: " + ", ".join(pending))
     for subject in ("listening", "speaking"):
         audio_assets = [
@@ -105,28 +116,68 @@ def _release_blockers(
 
 
 def speaking_timing_blockers(content: dict[str, Any]) -> list[str]:
-    """Return formal-mode blockers when speaking timing is not source-defined.
+    """Return formal-mode blockers for incomplete 2026 Speaking contracts."""
 
-    The current rescue packages contain phase durations, but not verified
-    per-question preparation/response durations.  A preview may still expose
-    the source-backed prompt, while formal mode must remain unavailable.
-    """
-
+    groups = {
+        item.get("id"): item
+        for item in content.get("groups", [])
+        if item.get("subject") == "speaking"
+    }
+    assets = {
+        item.get("id"): item
+        for item in content.get("assets", [])
+        if item.get("subject") == "speaking" and item.get("kind") == "audio"
+    }
+    speaking_questions = [
+        item
+        for item in content.get("questions", [])
+        if item.get("subject") == "speaking"
+    ]
     missing: list[str] = []
-    for question in content.get("questions", []):
-        if question.get("subject") != "speaking":
-            continue
+    if len(speaking_questions) != 11:
+        missing.append("speaking item count")
+    for question in speaking_questions:
         config = question.get("input_config") or {}
         preparation = config.get("preparation_seconds")
         response = config.get("response_seconds")
-        if not isinstance(preparation, (int, float)) or preparation < 0:
+        group = groups.get(question.get("group_id")) or {}
+        task_type = group.get("task_type")
+        expected_response = SPEAKING_RESPONSE_SECONDS.get(task_type)
+        stimulus = group.get("stimulus") or {}
+        cue_start = stimulus.get("cue_start_seconds")
+        cue_end = stimulus.get("cue_end_seconds")
+        asset = assets.get(stimulus.get("asset_id")) or {}
+        asset_duration = asset.get("source", {}).get("duration_seconds")
+        confidence = stimulus.get("alignment_confidence")
+        if preparation != 0:
             missing.append(f"{question.get('id', 'unknown')}: preparation timing")
-        if not isinstance(response, (int, float)) or response <= 0:
+        if response != expected_response:
             missing.append(f"{question.get('id', 'unknown')}: response timing")
+        if (
+            stimulus.get("format") != "audio_cue"
+            or not isinstance(cue_start, (int, float))
+            or not isinstance(cue_end, (int, float))
+            or cue_start < 0
+            or cue_end <= cue_start
+            or not isinstance(asset_duration, (int, float))
+            or cue_end > asset_duration + 0.05
+            or not isinstance(confidence, (int, float))
+            or confidence < 0.96
+        ):
+            missing.append(f"{question.get('id', 'unknown')}: audio cue")
+        if group.get("question_ids") != [question.get("id")]:
+            missing.append(f"{question.get('id', 'unknown')}: atomic group")
+    speaking_duration = sum(
+        int(module.get("duration_seconds") or 0)
+        for module in content.get("modules", [])
+        if module.get("subject") == "speaking"
+    )
+    if speaking_duration != SPEAKING_SECTION_SECONDS:
+        missing.append("speaking section duration")
     if not missing:
         return []
     return [
-        "speaking per-question preparation/response timing is not source-verified"
+        "speaking formal contract is incomplete: " + ", ".join(missing)
     ]
 
 
@@ -187,6 +238,11 @@ def catalog(root: Path | None = None) -> list[dict[str, Any]]:
                 "release_ready": not blockers,
                 "release_blockers": blockers,
                 "preview_url": f"/toefl/mock/{package_dir.name}?preview=1",
+                "start_url": (
+                    f"/toefl/mock/{package_dir.name}"
+                    if not blockers
+                    else f"/toefl/mock/{package_dir.name}?preview=1"
+                ),
             }
         )
     return rows
@@ -252,6 +308,18 @@ def _public_record(record: dict[str, Any]) -> dict[str, Any]:
         return deepcopy(value)
 
     return strip_private(record)
+
+
+def _public_question(question: dict[str, Any]) -> dict[str, Any]:
+    public = _public_record(question)
+    if (
+        public.get("subject") == "speaking"
+        and public.get("response_type") == "recording"
+    ):
+        public["prompt"] = "Listen to the source audio and respond when recording starts."
+        public.pop("context_sentence", None)
+    public["available"] = question.get("grading_status") != "blocked"
+    return public
 
 
 def _phase_plan(
@@ -355,10 +423,7 @@ def definition(
     ]
     group_ids = {item["id"] for item in groups}
     questions = [
-        {
-            **_public_record(item),
-            "available": item.get("grading_status") != "blocked",
-        }
+        _public_question(item)
         for item in content.get("questions", [])
         if item.get("group_id") in group_ids
     ]

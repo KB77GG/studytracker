@@ -131,6 +131,25 @@ speaking-end / speaking-end-session
 
 **麦克风音量测试是独立 phase**，在正式题目前——这个别省，学生录不上音是最常见的模考事故。
 
+#### StudyTracker 已落地的 2026 Speaking 时间定义
+
+三套首发真题统一把时间写入各题 definition，而不是由前端猜测：
+
+| 任务 | 题数 | 准备 | 每题作答 |
+|---|---:|---:|---:|
+| Listen and Repeat | 7 | 0 秒 | 12 秒 |
+| Take an Interview | 4 | 0 秒 | 45 秒 |
+
+- Speaking 两个服务端 phase 为 180 秒 + 300 秒，合计 480 秒（8 分钟）。
+- ETS 对 Listen and Repeat 给出 8–12 秒范围；系统采用 12 秒上限，避免把未公开的逐题差异猜成更短时长。
+- 每题音频范围由原 MP3 的逐词转写时间戳生成；Q1/Q8 的范围包含相应任务说明与场景，之后只播放当前题 cue。
+- 用户点击一次开始本题后，流程固定为：播放一次 → 自动开始录音 → 到时强制停止 → 上传成功 → 自动进入下一题。
+- 正式模式服务端拒绝超出题级时长容差的录音、跨题上传和第二次录音；preview 才允许重试。
+
+时间依据：
+[ETS TOEFL iBT Test Overview](https://www.ets.org/pdfs/toefl/toefl-ibt-test-overview.pdf)；
+[ETS TOEFL iBT Test Specifications (2026)](https://www.ets.org/content/dam/ets-org/pdfs/toefl/toefl-ibt-test-specifications-2026.pdf)。
+
 ### Writing
 
 ```
@@ -202,7 +221,7 @@ finished / completed → 报告页
 
 1. **自适应阈值**具体定多少（wofo 放服务端，看不到）
 2. **计分映射**：raw → scaled 的换算表
-3. 听力/口语每题时限：需要你按自有题库定，wofo 是从卷定义下发的
+3. 听力仍由音频驱动；Speaking 时间已按上方 2026 定义落地并由 release gate 校验
 
 ---
 

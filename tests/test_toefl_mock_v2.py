@@ -6,7 +6,7 @@ from flask import Flask
 from flask_login import LoginManager
 
 from api.toefl_mock import toefl_mock_bp
-from models import db
+from models import ToeflMockAttempt, db
 from services.toefl_mock_v2 import (
     catalog,
     definition,
@@ -49,7 +49,9 @@ def test_catalog_integrates_all_seven_source_backed_sets():
     assert sum(item["counts"]["questions"] for item in exams) == 840
     assert sum(item["counts"]["blocked"] for item in exams) == 7
     assert all(item["validation_status"] == "pass" for item in exams)
-    assert not any(item["release_ready"] for item in exams)
+    assert {
+        item["slug"] for item in exams if item["release_ready"]
+    } == {"2026-01-27_A", "2026-01-28_A", "2026-01-28_B"}
     assert {
         item["slug"] for item in exams if item["preview_ready"]
     } == {"2026-01-27_A", "2026-01-28_A", "2026-01-28_B"}
@@ -175,6 +177,41 @@ def test_definition_follows_spec_section_order_and_does_not_invent_m2():
     assert payload["phases"][1]["duration_seconds"] == 540
     assert payload["adaptive"]["reading"]["branches"] == ["default"]
     assert payload["adaptive"]["reading"]["available"] is False
+
+
+def test_three_released_sets_have_atomic_speaking_cues_and_2026_timing():
+    for slug in ("2026-01-27_A", "2026-01-28_A", "2026-01-28_B"):
+        payload = definition(slug, ["speaking"])
+        phases = payload["phases"]
+        groups = payload["groups"]
+        questions = payload["questions"]
+
+        assert payload["release"]["ready"] is True
+        assert payload["release"]["formal_mode_available"] is True
+        assert [phase["duration_seconds"] for phase in phases] == [180, 300]
+        assert sum(phase["duration_seconds"] for phase in phases) == 480
+        assert len(groups) == len(questions) == 11
+        assert all(len(group["question_ids"]) == 1 for group in groups)
+        assert [
+            question["input_config"]["response_seconds"]
+            for question in questions
+        ] == [12] * 7 + [45] * 4
+        assert all(
+            question["input_config"]["preparation_seconds"] == 0
+            for question in questions
+        )
+        assert all(
+            group["stimulus"]["format"] == "audio_cue"
+            and group["stimulus"]["cue_end_seconds"]
+            > group["stimulus"]["cue_start_seconds"]
+            >= 0
+            and group["stimulus"]["alignment_confidence"] >= 0.96
+            for group in groups
+        )
+        public_json = json.dumps(payload, ensure_ascii=False)
+        assert "Welcome to the wood shop" not in public_json
+        assert "What kind of movies do your family" not in public_json
+        assert "Enter your name and student ID" not in public_json
 
 
 def test_route_m2_scores_module_one_but_returns_only_verified_default():
@@ -338,7 +375,7 @@ def test_catalog_and_exam_pages_render(app):
 
     assert catalog_page.status_code == 200
     catalog_html = catalog_page.get_data(as_text=True)
-    assert catalog_html.count("开始新版预览") == 3
+    assert catalog_html.count("开始正式刷题") == 3
     assert "2026-01-27 新托福真题 A 卷" in catalog_html
     assert "2026-01-28 新托福真题 A 卷" in catalog_html
     assert "2026-01-28 新托福真题 B 卷" in catalog_html
@@ -350,8 +387,8 @@ def test_catalog_and_exam_pages_render(app):
 def test_catalog_distinguishes_audit_ready_from_formal_gate(app):
     page = app.test_client().get("/toefl/mock").get_data(as_text=True)
 
-    assert "题包审计：ready" in page
-    assert "正式门禁：未通过" in page
+    assert "题包审计：published" in page
+    assert "正式门禁：通过" in page
     assert "发布状态：ready" not in page
 
 
@@ -636,3 +673,79 @@ def test_recording_upload_saves_opaque_id_without_returning_file_path(app):
     resumed = client.get(f"/api/toefl/attempts/{started['id']}/resume").get_json()
     assert resumed["attempt"]["responses"][qid]["recorded"] is True
     assert "toefl_mock" not in json.dumps(resumed["attempt"]["responses"])
+
+
+def test_recording_upload_enforces_current_question_and_response_limit(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={
+            "testId": "2026-01-27_A",
+            "sections": ["speaking"],
+            "preview": True,
+            "deviceCheck": {"microphone": "passed"},
+        },
+    ).get_json()["attempt"]
+    next_qid = "toefl:2026-01-27-a:speaking:m1:g01:q02"
+    out_of_order = client.post(
+        "/api/toefl/recordings",
+        data={
+            "attemptId": started["id"],
+            "questionId": next_qid,
+            "durationMs": "1000",
+            "audio": (io.BytesIO(b"preview audio bytes"), "response.webm"),
+        },
+        content_type="multipart/form-data",
+    )
+    assert out_of_order.status_code == 409
+    assert out_of_order.get_json()["error"] == "question_not_current"
+
+    first_qid = "toefl:2026-01-27-a:speaking:m1:g01:q01"
+    over_limit = client.post(
+        "/api/toefl/recordings",
+        data={
+            "attemptId": started["id"],
+            "questionId": first_qid,
+            "durationMs": "14001",
+            "audio": (io.BytesIO(b"preview audio bytes"), "response.webm"),
+        },
+        content_type="multipart/form-data",
+    )
+    assert over_limit.status_code == 400
+    assert over_limit.get_json()["error"] == "recording_duration_invalid"
+
+
+def test_formal_recording_is_one_take(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={
+            "testId": "2026-01-27_A",
+            "sections": ["speaking"],
+            "preview": True,
+            "deviceCheck": {"microphone": "passed"},
+        },
+    ).get_json()["attempt"]
+    with app.app_context():
+        attempt = db.session.get(ToeflMockAttempt, started["id"])
+        attempt.is_preview = False
+        db.session.commit()
+
+    qid = "toefl:2026-01-27-a:speaking:m1:g01:q01"
+
+    def upload():
+        return client.post(
+            "/api/toefl/recordings",
+            data={
+                "attemptId": started["id"],
+                "questionId": qid,
+                "durationMs": "1000",
+                "audio": (io.BytesIO(b"formal audio bytes"), "response.webm"),
+            },
+            content_type="multipart/form-data",
+        )
+
+    assert upload().status_code == 200
+    repeated = upload()
+    assert repeated.status_code == 409
+    assert repeated.get_json()["error"] == "recording_take_limit_reached"

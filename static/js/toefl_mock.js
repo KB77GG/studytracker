@@ -282,10 +282,13 @@
   function responseControl(question) {
     const wrapper = document.createElement("article");
     wrapper.className = `mock-question${question.available ? "" : " is-blocked"}`;
+    const recordingQuestion = questionIsRecording(question);
     const label = document.createElement("label");
-    label.textContent = `${question.number}. ${question.prompt || "Respond to the item."}`;
+    label.textContent = recordingQuestion
+      ? `${question.number}. 听完题目后，系统会立即开始录音。`
+      : `${question.number}. ${question.prompt || "Respond to the item."}`;
     wrapper.appendChild(label);
-    if (question.context_sentence) {
+    if (question.context_sentence && !recordingQuestion) {
       const context = document.createElement("p");
       context.className = "mock-context";
       context.textContent = question.context_sentence;
@@ -364,18 +367,21 @@
       renderOrder();
       return wrapper;
     }
-    if (questionIsRecording(question)) {
+    if (recordingQuestion) {
       const timing = questionTiming(question);
       const timingNote = document.createElement("p");
       timingNote.className = `mock-timing-note${timing ? "" : " is-warning"}`;
       timingNote.textContent = timing
-        ? `准备 ${timing.preparation}s · 作答 ${timing.response}s · 到时自动停止`
-        : "Preview only：来源没有可验证的逐题时长，需手动停止；正式模式已阻断。";
+        ? `无单独准备时间 · 作答 ${timing.response}s · 到时自动停止并上传`
+        : "逐题时长不可用，本题不能开始。";
       wrapper.appendChild(timingNote);
       const button = document.createElement("button");
       button.type = "button";
       button.className = "mock-secondary mock-record-button";
-      button.textContent = value?.recorded ? "重新录音" : "开始录音";
+      button.textContent = value?.recorded
+        ? (attempt?.preview ? "重新完成本题" : "本题已完成")
+        : "播放题目并开始录音";
+      button.disabled = Boolean(value?.recorded && !attempt?.preview);
       button.addEventListener("click", () => recordResponse(question, button));
       wrapper.appendChild(button);
       return wrapper;
@@ -491,11 +497,13 @@
   function stopActiveRecording(manual = true) {
     if (!activeRecording) return;
     const record = activeRecording;
-    if (record.phase === "preparing") {
+    if (record.phase === "prompting") {
+      record.audio?.pause();
       record.stream.getTracks().forEach((track) => track.stop());
       activeRecording = null;
-      record.button.textContent = "开始录音";
-      setSaveState(manual ? "录音已取消，可重试" : "录音未开始", true);
+      record.button.disabled = false;
+      record.button.textContent = "播放题目并开始录音";
+      setSaveState(manual ? "本题已取消，可重新开始" : "本题录音未开始", true);
       record.resolve(false);
       return;
     }
@@ -503,19 +511,39 @@
   }
 
   async function recordResponse(question, button) {
-    if (activeRecording) {
-      if (activeRecording.questionId === question.id) stopActiveRecording(true);
-      return;
-    }
+    if (activeRecording || (responses[question.id]?.recorded && !attempt?.preview)) return;
     if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
       button.textContent = "浏览器不支持录音，重试";
       setSaveState("录音失败：请使用最新版 Chrome 或 Safari", true);
       return;
     }
+    const group = currentGroup();
+    const stimulus = group?.stimulus || {};
+    const asset = assetById.get(stimulus.asset_id);
+    const cueStart = Number(stimulus.cue_start_seconds);
+    const cueEnd = Number(stimulus.cue_end_seconds);
+    const timing = questionTiming(question);
+    if (
+      stimulus.format !== "audio_cue"
+      || !asset?.delivery?.url
+      || asset.delivery.status !== "published"
+      || !Number.isFinite(cueStart)
+      || !Number.isFinite(cueEnd)
+      || cueEnd <= cueStart
+      || !timing
+    ) {
+      button.textContent = "题目音频不可用";
+      button.disabled = true;
+      setSaveState("本题音频或计时定义未通过门禁", true);
+      return;
+    }
     let stream;
+    button.disabled = true;
+    button.textContent = "正在连接麦克风…";
     try {
       stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (error) {
+      button.disabled = false;
       button.textContent = "权限失败，重试";
       setSaveState("录音失败：麦克风权限未开启，可重试", true);
       return;
@@ -526,31 +554,63 @@
       recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
     } catch (error) {
       stream.getTracks().forEach((track) => track.stop());
+      button.disabled = false;
       button.textContent = "录音失败，重试";
       setSaveState("录音失败：无法创建录音器，可重试", true);
       return;
     }
     const chunks = [];
-    const timing = questionTiming(question);
+    const audio = new Audio();
+    audio.preload = "auto";
+    audio.src = asset.delivery.url;
     activeRecording = {
       questionId: question.id,
       recorder,
       stream,
+      audio,
       button,
       chunks,
-      phase: timing && timing.preparation > 0 ? "preparing" : "recording",
+      phase: "prompting",
       startedAt: null,
-      stopAt: timing ? Date.now() + (timing.preparation + timing.response) * 1000 : null,
-      preparationUntil: timing ? Date.now() + timing.preparation * 1000 : null,
+      stopAt: null,
     };
     activeRecording.done = new Promise((resolve) => { activeRecording.resolve = resolve; });
     const record = activeRecording;
+    let cueFinished = false;
+    const failCue = (message) => {
+      if (activeRecording !== record) return;
+      audio.pause();
+      stream.getTracks().forEach((track) => track.stop());
+      activeRecording = null;
+      button.disabled = false;
+      button.textContent = "播放失败，重试";
+      setSaveState(message, true);
+      record.resolve(false);
+    };
+    const beginRecording = () => {
+      if (cueFinished || activeRecording !== record) return;
+      cueFinished = true;
+      audio.pause();
+      record.phase = "recording";
+      record.startedAt = Date.now();
+      record.stopAt = record.startedAt + timing.response * 1000;
+      try {
+        recorder.start(250);
+      } catch (error) {
+        failCue("录音失败：无法启动录音器，可重试");
+        return;
+      }
+      button.textContent = `录音中 · ${timing.response}s 后自动停止`;
+      elements.route.textContent = "正在录音，请持续作答；到时会自动上传并进入下一题。";
+      updateNextState();
+    };
     recorder.addEventListener("dataavailable", (event) => {
       if (event.data.size) chunks.push(event.data);
     });
     recorder.addEventListener("error", () => {
       stream.getTracks().forEach((track) => track.stop());
       activeRecording = null;
+      button.disabled = false;
       button.textContent = "录音失败，重试";
       setSaveState("录音失败，可重试；没有提交损坏文件", true);
       record.resolve(false);
@@ -560,6 +620,7 @@
       activeRecording = null;
       stream.getTracks().forEach((track) => track.stop());
       if (!finished || !finished.startedAt || !chunks.length) {
+        button.disabled = false;
         button.textContent = "录音失败，重试";
         setSaveState("录音失败：没有可验证的音频，可重试", true);
         record.resolve(false);
@@ -571,8 +632,8 @@
       form.append("questionId", question.id);
       form.append("durationMs", String(Math.max(1, Date.now() - finished.startedAt)));
       form.append("audio", blob, "response.webm");
-      button.disabled = true;
       button.textContent = "上传中…";
+      let saved = false;
       try {
         const response = await fetch("/api/toefl/recordings", {
           method: "POST",
@@ -582,24 +643,36 @@
         const payload = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(payload.message || payload.error || `HTTP ${response.status}`);
         responses[question.id] = { recorded: true, durationMs: payload.durationMs };
-        button.textContent = "重新录音";
+        saved = true;
+        button.textContent = attempt?.preview ? "重新完成本题" : "本题已完成";
         setSaveState("录音已保存");
       } catch (error) {
         button.textContent = "上传失败，重试";
         setSaveState(`录音上传失败：${error.message}`, true);
       } finally {
-        button.disabled = false;
+        button.disabled = Boolean(saved && !attempt?.preview);
         updateNextState();
-        record.resolve(Boolean(responses[question.id]?.recorded));
+        record.resolve(saved);
+        if (saved) {
+          window.setTimeout(() => {
+            advance().catch((error) => setSaveState(`自动推进失败：${error.message}`, true));
+          }, 250);
+        }
       }
     });
-    if (activeRecording.phase === "recording") {
-      recorder.start();
-      activeRecording.startedAt = Date.now();
-      button.textContent = timing ? "录音中，到时自动停止" : "停止并保存";
-    } else {
-      button.textContent = `准备中 ${timing.preparation}s…`;
-    }
+    audio.addEventListener("loadedmetadata", () => {
+      if (activeRecording !== record) return;
+      audio.currentTime = cueStart;
+      button.textContent = "题目播放中 · 播放后自动录音";
+      elements.route.textContent = "请仔细听；题目只播放一次，结束后立即录音。";
+      audio.play().catch(() => failCue("浏览器阻止了题目音频播放，请点击重试"));
+    }, { once: true });
+    audio.addEventListener("timeupdate", () => {
+      if (audio.currentTime >= cueEnd - 0.04) beginRecording();
+    });
+    audio.addEventListener("ended", beginRecording, { once: true });
+    audio.addEventListener("error", () => failCue("题目音频加载失败，请检查网络后重试"), { once: true });
+    audio.load();
     updateNextState();
   }
 
@@ -652,7 +725,9 @@
         ? "先完整播放本 Module 音频，播放结束后才能继续。"
         : "当前音频未进入发布存储；只可在 Staging 明确跳过缺口。";
     } else if (phase?.section === "speaking" && !currentGroupRecordingsReady()) {
-      elements.route.textContent = "每道 Speaking 题都要有可上传的录音后才能继续。";
+      if (!activeRecording) {
+        elements.route.textContent = "点击“播放题目并开始录音”；播放结束后会自动录音、上传并进入下一题。";
+      }
     }
   }
 
@@ -756,11 +831,13 @@
     elements.report.replaceChildren();
     const kicker = document.createElement("p");
     kicker.className = "mock-kicker";
-    kicker.textContent = "PREVIEW ATTEMPT REPORT";
+    kicker.textContent = attempt.preview ? "PREVIEW ATTEMPT REPORT" : "TOEFL ATTEMPT REPORT";
     const heading = document.createElement("h2");
     heading.textContent = "流程已完整结束";
     const note = document.createElement("p");
-    note.textContent = "这是线上试运行的结构与交互报告，不是正式成绩单；Speaking/Writing 仍 pending teacher review。";
+    note.textContent = attempt.preview
+      ? "这是预览作答报告，不是正式成绩单；Speaking/Writing 仍 pending teacher review。"
+      : "客观题已自动判分；Speaking/Writing 已提交并等待人工批改。";
     const metrics = document.createElement("div");
     metrics.className = "report-metrics";
     appendMetric(metrics, `${report.objective.correct}/${report.objective.auto_total}`, "客观题正确 / 判分分母");
@@ -897,13 +974,11 @@
     if (!attempt || elements.panel.hidden) return;
     const now = Date.now();
     if (activeRecording) {
-      if (activeRecording.phase === "preparing" && now >= activeRecording.preparationUntil) {
-        activeRecording.phase = "recording";
-        activeRecording.recorder.start();
-        activeRecording.startedAt = now;
-        activeRecording.button.textContent = "录音中，到时自动停止";
+      if (activeRecording.phase === "recording" && activeRecording.stopAt) {
+        const seconds = Math.max(0, Math.ceil((activeRecording.stopAt - now) / 1000));
+        activeRecording.button.textContent = `录音中 · ${seconds}s 后自动停止`;
+        if (now >= activeRecording.stopAt) stopActiveRecording(false);
       }
-      if (activeRecording.stopAt && now >= activeRecording.stopAt) stopActiveRecording(false);
     }
     if (remainingSeconds != null) {
       remainingSeconds = Math.max(0, remainingSeconds - 1);

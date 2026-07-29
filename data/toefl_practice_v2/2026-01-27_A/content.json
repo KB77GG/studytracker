@@ -8,7 +8,7 @@
     "source_kind": "real_exam",
     "source_folder": "1.27新托福A卷",
     "expected_question_count": 120,
-    "availability_status": "reviewed"
+    "availability_status": "published"
   },
   "assets": [
     {
@@ -221,7 +221,7 @@
       "module": "m1",
       "order": 1,
       "label": "Listen and Repeat",
-      "duration_seconds": 420,
+      "duration_seconds": 180,
       "navigation": {
         "back_policy": "disabled",
         "review_policy": "after_submit"
@@ -230,7 +230,13 @@
         "toefl:2026-01-27-a:speaking"
       ],
       "group_ids": [
-        "toefl:2026-01-27-a:speaking:m1:g01"
+        "toefl:2026-01-27-a:speaking:m1:g01",
+        "toefl:2026-01-27-a:speaking:m1:g02",
+        "toefl:2026-01-27-a:speaking:m1:g03",
+        "toefl:2026-01-27-a:speaking:m1:g04",
+        "toefl:2026-01-27-a:speaking:m1:g05",
+        "toefl:2026-01-27-a:speaking:m1:g06",
+        "toefl:2026-01-27-a:speaking:m1:g07"
       ]
     },
     {
@@ -239,7 +245,7 @@
       "module": "m2",
       "order": 2,
       "label": "Take an Interview",
-      "duration_seconds": 540,
+      "duration_seconds": 300,
       "navigation": {
         "back_policy": "disabled",
         "review_policy": "after_submit"
@@ -248,7 +254,10 @@
         "toefl:2026-01-27-a:speaking"
       ],
       "group_ids": [
-        "toefl:2026-01-27-a:speaking:m2:g01"
+        "toefl:2026-01-27-a:speaking:m2:g01",
+        "toefl:2026-01-27-a:speaking:m2:g02",
+        "toefl:2026-01-27-a:speaking:m2:g03",
+        "toefl:2026-01-27-a:speaking:m2:g04"
       ]
     }
   ],
@@ -1213,21 +1222,19 @@
       "subject": "speaking",
       "order": 1,
       "task_type": "listen_and_repeat",
-      "title": "Listen and Repeat",
-      "directive": "Record one response for each prompt.",
+      "title": "Listen and Repeat · Question 1",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
       "stimulus": {
-        "format": "audio",
+        "format": "audio_cue",
         "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 0.0,
+        "cue_end_seconds": 40.19,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
         "recording_policy": "one_take_in_test_mode"
       },
       "question_ids": [
-        "toefl:2026-01-27-a:speaking:m1:g01:q01",
-        "toefl:2026-01-27-a:speaking:m1:g01:q02",
-        "toefl:2026-01-27-a:speaking:m1:g01:q03",
-        "toefl:2026-01-27-a:speaking:m1:g01:q04",
-        "toefl:2026-01-27-a:speaking:m1:g01:q05",
-        "toefl:2026-01-27-a:speaking:m1:g01:q06",
-        "toefl:2026-01-27-a:speaking:m1:g01:q07"
+        "toefl:2026-01-27-a:speaking:m1:g01:q01"
       ],
       "source_refs": [
         {
@@ -1235,19 +1242,292 @@
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
           "confidence": "reviewed_repair",
           "page": 60,
-          "module": "m1"
+          "module": "m1",
+          "question_number": 1
         },
         {
           "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
           "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
           "confidence": "source_exact",
-          "module": "m1"
+          "module": "m1",
+          "question_number": 1
         },
         {
           "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
           "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
           "confidence": "reviewed_repair",
-          "module": "m1"
+          "module": "m1",
+          "question_number": 1
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-27-a:speaking:m1:g02",
+      "module_id": "toefl:2026-01-27-a:speaking:m1",
+      "subject": "speaking",
+      "order": 2,
+      "task_type": "listen_and_repeat",
+      "title": "Listen and Repeat · Question 2",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
+      "stimulus": {
+        "format": "audio_cue",
+        "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 41.14,
+        "cue_end_seconds": 44.83,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-27-a:speaking:m1:g01:q02"
+      ],
+      "source_refs": [
+        {
+          "path": "1.27新托福A卷/新托福2026真题04.pdf",
+          "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
+          "confidence": "reviewed_repair",
+          "page": 61,
+          "module": "m1",
+          "question_number": 2
+        },
+        {
+          "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
+          "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 2
+        },
+        {
+          "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
+          "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
+          "confidence": "reviewed_repair",
+          "module": "m1",
+          "question_number": 2
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-27-a:speaking:m1:g03",
+      "module_id": "toefl:2026-01-27-a:speaking:m1",
+      "subject": "speaking",
+      "order": 3,
+      "task_type": "listen_and_repeat",
+      "title": "Listen and Repeat · Question 3",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
+      "stimulus": {
+        "format": "audio_cue",
+        "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 45.66,
+        "cue_end_seconds": 48.79,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-27-a:speaking:m1:g01:q03"
+      ],
+      "source_refs": [
+        {
+          "path": "1.27新托福A卷/新托福2026真题04.pdf",
+          "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
+          "confidence": "reviewed_repair",
+          "page": 61,
+          "module": "m1",
+          "question_number": 3
+        },
+        {
+          "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
+          "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 3
+        },
+        {
+          "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
+          "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
+          "confidence": "reviewed_repair",
+          "module": "m1",
+          "question_number": 3
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-27-a:speaking:m1:g04",
+      "module_id": "toefl:2026-01-27-a:speaking:m1",
+      "subject": "speaking",
+      "order": 4,
+      "task_type": "listen_and_repeat",
+      "title": "Listen and Repeat · Question 4",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
+      "stimulus": {
+        "format": "audio_cue",
+        "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 49.62,
+        "cue_end_seconds": 53.93,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-27-a:speaking:m1:g01:q04"
+      ],
+      "source_refs": [
+        {
+          "path": "1.27新托福A卷/新托福2026真题04.pdf",
+          "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
+          "confidence": "reviewed_repair",
+          "page": 62,
+          "module": "m1",
+          "question_number": 4
+        },
+        {
+          "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
+          "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 4
+        },
+        {
+          "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
+          "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
+          "confidence": "reviewed_repair",
+          "module": "m1",
+          "question_number": 4
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-27-a:speaking:m1:g05",
+      "module_id": "toefl:2026-01-27-a:speaking:m1",
+      "subject": "speaking",
+      "order": 5,
+      "task_type": "listen_and_repeat",
+      "title": "Listen and Repeat · Question 5",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
+      "stimulus": {
+        "format": "audio_cue",
+        "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 54.58,
+        "cue_end_seconds": 58.95,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-27-a:speaking:m1:g01:q05"
+      ],
+      "source_refs": [
+        {
+          "path": "1.27新托福A卷/新托福2026真题04.pdf",
+          "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
+          "confidence": "reviewed_repair",
+          "page": 62,
+          "module": "m1",
+          "question_number": 5
+        },
+        {
+          "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
+          "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 5
+        },
+        {
+          "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
+          "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
+          "confidence": "reviewed_repair",
+          "module": "m1",
+          "question_number": 5
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-27-a:speaking:m1:g06",
+      "module_id": "toefl:2026-01-27-a:speaking:m1",
+      "subject": "speaking",
+      "order": 6,
+      "task_type": "listen_and_repeat",
+      "title": "Listen and Repeat · Question 6",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
+      "stimulus": {
+        "format": "audio_cue",
+        "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 59.62,
+        "cue_end_seconds": 63.91,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-27-a:speaking:m1:g01:q06"
+      ],
+      "source_refs": [
+        {
+          "path": "1.27新托福A卷/新托福2026真题04.pdf",
+          "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
+          "confidence": "reviewed_repair",
+          "page": 63,
+          "module": "m1",
+          "question_number": 6
+        },
+        {
+          "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
+          "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 6
+        },
+        {
+          "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
+          "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
+          "confidence": "reviewed_repair",
+          "module": "m1",
+          "question_number": 6
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-27-a:speaking:m1:g07",
+      "module_id": "toefl:2026-01-27-a:speaking:m1",
+      "subject": "speaking",
+      "order": 7,
+      "task_type": "listen_and_repeat",
+      "title": "Listen and Repeat · Question 7",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
+      "stimulus": {
+        "format": "audio_cue",
+        "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 64.52,
+        "cue_end_seconds": 69.23,
+        "alignment_method": "normalized_fuzzy",
+        "alignment_confidence": 0.9778,
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-27-a:speaking:m1:g01:q07"
+      ],
+      "source_refs": [
+        {
+          "path": "1.27新托福A卷/新托福2026真题04.pdf",
+          "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
+          "confidence": "reviewed_repair",
+          "page": 63,
+          "module": "m1",
+          "question_number": 7
+        },
+        {
+          "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
+          "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
+          "confidence": "source_exact",
+          "module": "m1",
+          "question_number": 7
+        },
+        {
+          "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
+          "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
+          "confidence": "reviewed_repair",
+          "module": "m1",
+          "question_number": 7
         }
       ]
     },
@@ -1257,18 +1537,19 @@
       "subject": "speaking",
       "order": 1,
       "task_type": "take_an_interview",
-      "title": "Take an Interview",
-      "directive": "Record one response for each prompt.",
+      "title": "Take an Interview · Question 8",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
       "stimulus": {
-        "format": "audio",
+        "format": "audio_cue",
         "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 69.79,
+        "cue_end_seconds": 104.43,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
         "recording_policy": "one_take_in_test_mode"
       },
       "question_ids": [
-        "toefl:2026-01-27-a:speaking:m2:g01:q08",
-        "toefl:2026-01-27-a:speaking:m2:g01:q09",
-        "toefl:2026-01-27-a:speaking:m2:g01:q10",
-        "toefl:2026-01-27-a:speaking:m2:g01:q11"
+        "toefl:2026-01-27-a:speaking:m2:g01:q08"
       ],
       "source_refs": [
         {
@@ -1276,19 +1557,157 @@
           "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
           "confidence": "reviewed_repair",
           "page": 65,
-          "module": "m2"
+          "module": "m2",
+          "question_number": 8
         },
         {
           "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
           "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
           "confidence": "source_exact",
-          "module": "m2"
+          "module": "m2",
+          "question_number": 8
         },
         {
           "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
           "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
           "confidence": "reviewed_repair",
-          "module": "m2"
+          "module": "m2",
+          "question_number": 8
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-27-a:speaking:m2:g02",
+      "module_id": "toefl:2026-01-27-a:speaking:m2",
+      "subject": "speaking",
+      "order": 2,
+      "task_type": "take_an_interview",
+      "title": "Take an Interview · Question 9",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
+      "stimulus": {
+        "format": "audio_cue",
+        "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 106.46,
+        "cue_end_seconds": 112.51,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-27-a:speaking:m2:g01:q09"
+      ],
+      "source_refs": [
+        {
+          "path": "1.27新托福A卷/新托福2026真题04.pdf",
+          "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
+          "confidence": "reviewed_repair",
+          "page": 65,
+          "module": "m2",
+          "question_number": 9
+        },
+        {
+          "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
+          "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 9
+        },
+        {
+          "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
+          "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
+          "confidence": "reviewed_repair",
+          "module": "m2",
+          "question_number": 9
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-27-a:speaking:m2:g03",
+      "module_id": "toefl:2026-01-27-a:speaking:m2",
+      "subject": "speaking",
+      "order": 3,
+      "task_type": "take_an_interview",
+      "title": "Take an Interview · Question 10",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
+      "stimulus": {
+        "format": "audio_cue",
+        "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 114.5,
+        "cue_end_seconds": 123.83,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-27-a:speaking:m2:g01:q10"
+      ],
+      "source_refs": [
+        {
+          "path": "1.27新托福A卷/新托福2026真题04.pdf",
+          "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
+          "confidence": "reviewed_repair",
+          "page": 66,
+          "module": "m2",
+          "question_number": 10
+        },
+        {
+          "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
+          "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 10
+        },
+        {
+          "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
+          "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
+          "confidence": "reviewed_repair",
+          "module": "m2",
+          "question_number": 10
+        }
+      ]
+    },
+    {
+      "id": "toefl:2026-01-27-a:speaking:m2:g04",
+      "module_id": "toefl:2026-01-27-a:speaking:m2",
+      "subject": "speaking",
+      "order": 4,
+      "task_type": "take_an_interview",
+      "title": "Take an Interview · Question 11",
+      "directive": "Play the source prompt once; recording starts automatically when it ends.",
+      "stimulus": {
+        "format": "audio_cue",
+        "asset_id": "toefl:2026-01-27-a:speaking",
+        "cue_start_seconds": 125.8,
+        "cue_end_seconds": 143.17,
+        "alignment_method": "normalized_exact",
+        "alignment_confidence": 1.0,
+        "recording_policy": "one_take_in_test_mode"
+      },
+      "question_ids": [
+        "toefl:2026-01-27-a:speaking:m2:g01:q11"
+      ],
+      "source_refs": [
+        {
+          "path": "1.27新托福A卷/新托福2026真题04.pdf",
+          "sha256": "5ad5b6d398df14b48884ed472b30e5eb8ea7363f6e86a39fd12e9dcca3af3d37",
+          "confidence": "reviewed_repair",
+          "page": 66,
+          "module": "m2",
+          "question_number": 11
+        },
+        {
+          "path": "1.27新托福A卷/新托福2026真题04speakingModule1.mp3",
+          "sha256": "b915474fb1c1b8933838da74564df715bafc3657acc719beb21e2050198aa105",
+          "confidence": "source_exact",
+          "module": "m2",
+          "question_number": 11
+        },
+        {
+          "path": "新托福分科刷题材料/整理输出/口语转写_修订版/transcripts/2026-01-27_A_part1.json",
+          "sha256": "f328946dbff397834e21481b5e1778f38bc63a6cb79b8926650651e659832c41",
+          "confidence": "reviewed_repair",
+          "module": "m2",
+          "question_number": 11
         }
       ]
     }
@@ -6661,6 +7080,8 @@
       "context_sentence": "Welcome to the wood shop.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 12,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -6694,7 +7115,7 @@
     {
       "id": "toefl:2026-01-27-a:speaking:m1:g01:q02",
       "module_id": "toefl:2026-01-27-a:speaking:m1",
-      "group_id": "toefl:2026-01-27-a:speaking:m1:g01",
+      "group_id": "toefl:2026-01-27-a:speaking:m1:g02",
       "subject": "speaking",
       "number": 2,
       "sequence": 2,
@@ -6703,6 +7124,8 @@
       "context_sentence": "This tool box contains everything you should need.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 12,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -6736,7 +7159,7 @@
     {
       "id": "toefl:2026-01-27-a:speaking:m1:g01:q03",
       "module_id": "toefl:2026-01-27-a:speaking:m1",
-      "group_id": "toefl:2026-01-27-a:speaking:m1:g01",
+      "group_id": "toefl:2026-01-27-a:speaking:m1:g03",
       "subject": "speaking",
       "number": 3,
       "sequence": 3,
@@ -6745,6 +7168,8 @@
       "context_sentence": "You will learn to use your saw in our classes.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 12,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -6778,7 +7203,7 @@
     {
       "id": "toefl:2026-01-27-a:speaking:m1:g01:q04",
       "module_id": "toefl:2026-01-27-a:speaking:m1",
-      "group_id": "toefl:2026-01-27-a:speaking:m1:g01",
+      "group_id": "toefl:2026-01-27-a:speaking:m1:g04",
       "subject": "speaking",
       "number": 4,
       "sequence": 4,
@@ -6787,6 +7212,8 @@
       "context_sentence": "Your screwdriver can be used with all of our carpentry machines.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 12,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -6820,7 +7247,7 @@
     {
       "id": "toefl:2026-01-27-a:speaking:m1:g01:q05",
       "module_id": "toefl:2026-01-27-a:speaking:m1",
-      "group_id": "toefl:2026-01-27-a:speaking:m1:g01",
+      "group_id": "toefl:2026-01-27-a:speaking:m1:g05",
       "subject": "speaking",
       "number": 5,
       "sequence": 5,
@@ -6829,6 +7256,8 @@
       "context_sentence": "All wood will need to be smooth, so use the sand paper provided.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 12,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -6862,7 +7291,7 @@
     {
       "id": "toefl:2026-01-27-a:speaking:m1:g01:q06",
       "module_id": "toefl:2026-01-27-a:speaking:m1",
-      "group_id": "toefl:2026-01-27-a:speaking:m1:g01",
+      "group_id": "toefl:2026-01-27-a:speaking:m1:g06",
       "subject": "speaking",
       "number": 6,
       "sequence": 6,
@@ -6871,6 +7300,8 @@
       "context_sentence": "Use only what is needed so that your supplies last all quarter.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 12,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -6904,7 +7335,7 @@
     {
       "id": "toefl:2026-01-27-a:speaking:m1:g01:q07",
       "module_id": "toefl:2026-01-27-a:speaking:m1",
-      "group_id": "toefl:2026-01-27-a:speaking:m1:g01",
+      "group_id": "toefl:2026-01-27-a:speaking:m1:g07",
       "subject": "speaking",
       "number": 7,
       "sequence": 7,
@@ -6913,6 +7344,8 @@
       "context_sentence": "Before you leave the class room, be sure to put all your tools back into the tool box.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 12,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -6955,6 +7388,8 @@
       "context_sentence": "Answer the interviewer question after listening.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 45,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -6988,7 +7423,7 @@
     {
       "id": "toefl:2026-01-27-a:speaking:m2:g01:q09",
       "module_id": "toefl:2026-01-27-a:speaking:m2",
-      "group_id": "toefl:2026-01-27-a:speaking:m2:g01",
+      "group_id": "toefl:2026-01-27-a:speaking:m2:g02",
       "subject": "speaking",
       "number": 9,
       "sequence": 9,
@@ -6997,6 +7432,8 @@
       "context_sentence": "Answer the interviewer question after listening.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 45,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -7030,7 +7467,7 @@
     {
       "id": "toefl:2026-01-27-a:speaking:m2:g01:q10",
       "module_id": "toefl:2026-01-27-a:speaking:m2",
-      "group_id": "toefl:2026-01-27-a:speaking:m2:g01",
+      "group_id": "toefl:2026-01-27-a:speaking:m2:g03",
       "subject": "speaking",
       "number": 10,
       "sequence": 10,
@@ -7039,6 +7476,8 @@
       "context_sentence": "Answer the interviewer question after listening.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 45,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },
@@ -7072,7 +7511,7 @@
     {
       "id": "toefl:2026-01-27-a:speaking:m2:g01:q11",
       "module_id": "toefl:2026-01-27-a:speaking:m2",
-      "group_id": "toefl:2026-01-27-a:speaking:m2:g01",
+      "group_id": "toefl:2026-01-27-a:speaking:m2:g04",
       "subject": "speaking",
       "number": 11,
       "sequence": 11,
@@ -7081,6 +7520,8 @@
       "context_sentence": "Answer the interviewer question after listening.",
       "options": [],
       "input_config": {
+        "preparation_seconds": 0,
+        "response_seconds": 45,
         "maximum_takes_test_mode": 1,
         "local_preview_practice_mode": true
       },

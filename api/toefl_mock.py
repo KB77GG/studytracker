@@ -41,6 +41,8 @@ from services.toefl_mock_v2 import (
 
 toefl_mock_bp = Blueprint("toefl_mock", __name__)
 MAX_RECORDING_BYTES = 20 * 1024 * 1024
+MIN_RECORDING_DURATION_MS = 250
+RECORDING_DURATION_TOLERANCE_MS = 2000
 
 
 def _json_text(value: Any) -> str:
@@ -466,12 +468,48 @@ def save_recording():
         or not upload
     ):
         return jsonify({"error": "invalid_recording_request"}), 400
+    mock_definition = _attempt_definition(attempt)
+    phase_index, group_index = _phase_indices(attempt)
+    phase = mock_definition["phases"][phase_index]
+    current_group_ids = phase.get("group_ids", [])
+    if (
+        not 0 <= group_index < len(current_group_ids)
+        or question.get("group_id") != current_group_ids[group_index]
+    ):
+        return jsonify({"error": "question_not_current"}), 409
+    existing = ToeflMockResponse.query.filter_by(
+        attempt_id=attempt.id,
+        question_id=question_id,
+    ).first()
+    maximum_takes = (question.get("input_config") or {}).get(
+        "maximum_takes_test_mode"
+    )
+    if (
+        not attempt.is_preview
+        and maximum_takes == 1
+        and existing
+        and existing.recording_token
+    ):
+        return jsonify({"error": "recording_take_limit_reached"}), 409
     try:
         duration_ms = int(request.form.get("durationMs") or 0)
     except (TypeError, ValueError):
         return jsonify({"error": "recording_duration_invalid"}), 400
-    if duration_ms <= 0 or duration_ms > 10 * 60 * 1000:
+    response_seconds = (question.get("input_config") or {}).get(
+        "response_seconds"
+    )
+    if not isinstance(response_seconds, (int, float)) or response_seconds <= 0:
+        return jsonify({"error": "recording_timing_unavailable"}), 409
+    maximum_duration_ms = (
+        int(response_seconds * 1000) + RECORDING_DURATION_TOLERANCE_MS
+    )
+    if (
+        duration_ms < MIN_RECORDING_DURATION_MS
+        or duration_ms > maximum_duration_ms
+    ):
         return jsonify({"error": "recording_duration_invalid"}), 400
+    if _refresh_server_clock(attempt, mock_definition) == 0:
+        return jsonify({"error": "phase_expired"}), 409
     payload = upload.read(MAX_RECORDING_BYTES + 1)
     if not payload:
         return jsonify({"error": "recording_empty"}), 400

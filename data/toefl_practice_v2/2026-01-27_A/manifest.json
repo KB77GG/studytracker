@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0.0",
   "exam_id": "toefl:2026-01-27-a",
-  "generated_at": "2026-07-27T05:39:07.329661+00:00",
+  "generated_at": "2026-07-29T02:09:26.576999+00:00",
   "generator": "scripts/build_toefl_practice_v2_exam.py",
   "source_root_portability": "All source paths are relative to the configured source root.",
   "counts": {
@@ -18,12 +18,29 @@
   },
   "quality": {
     "validation_status": "passed",
-    "publish_status": "ready",
+    "publish_status": "published",
     "subject_reviews": {
       "reading": "pending",
       "listening": "pending",
       "writing": "pending",
       "speaking": "pending"
+    },
+    "release_authorization": {
+      "status": "owner_authorized",
+      "scope": [
+        "reading",
+        "listening",
+        "speaking",
+        "writing"
+      ],
+      "basis": "Repository owner confirmed that this package is a real-exam set and waived an additional subject-by-subject final review."
+    },
+    "speaking_timing_policy": {
+      "preparation_seconds": 0,
+      "listen_and_repeat_response_seconds": 12,
+      "take_an_interview_response_seconds": 45,
+      "section_duration_seconds": 480,
+      "basis": "ETS TOEFL iBT 2026 task timing: no preparation, Listen and Repeat up to 8–12 seconds, Take an Interview 45 seconds, Speaking approximately 8 minutes."
     },
     "blocking_reasons": [],
     "known_blocked_question_ids": []

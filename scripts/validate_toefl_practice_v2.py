@@ -30,6 +30,10 @@ FORBIDDEN_PUBLIC_KEYS = {
     "canonical_full_word",
     "ordered_tokens",
 }
+SPEAKING_RESPONSE_SECONDS = {
+    "listen_and_repeat": 12,
+    "take_an_interview": 45,
+}
 
 
 def load_json(path: Path) -> Any:
@@ -137,6 +141,67 @@ def validate_package(package_dir: Path, schema_path: Path, source_root: Path | N
         if question.get("grading_status") == "blocked" and qid in answer_ids:
             errors.append(f"question {qid}: blocked question must not expose a usable answer entry")
 
+    group_by_id = {item["id"]: item for item in groups}
+    asset_by_id = {item["id"]: item for item in assets}
+    speaking_questions = [
+        item for item in questions if item.get("subject") == "speaking"
+    ]
+    release_authorization = (
+        manifest.get("quality", {}).get("release_authorization") or {}
+    )
+    speaking_contract_required = (
+        release_authorization.get("status") == "owner_authorized"
+    )
+    if speaking_questions and speaking_contract_required:
+        if len(speaking_questions) != 11:
+            errors.append(
+                f"speaking must contain 11 atomic questions, found {len(speaking_questions)}"
+            )
+        speaking_duration = sum(
+            int(module.get("duration_seconds") or 0)
+            for module in modules
+            if module.get("subject") == "speaking"
+        )
+        if speaking_duration != 480:
+            errors.append(
+                f"speaking module durations must total 480 seconds, found {speaking_duration}"
+            )
+        for question in speaking_questions:
+            qid = question["id"]
+            group = group_by_id.get(question.get("group_id")) or {}
+            config = question.get("input_config") or {}
+            expected_response = SPEAKING_RESPONSE_SECONDS.get(
+                group.get("task_type")
+            )
+            if config.get("preparation_seconds") != 0:
+                errors.append(f"question {qid}: speaking preparation must be 0 seconds")
+            if config.get("response_seconds") != expected_response:
+                errors.append(
+                    f"question {qid}: response_seconds does not match its task type"
+                )
+            if group.get("question_ids") != [qid]:
+                errors.append(
+                    f"question {qid}: speaking group must contain exactly this question"
+                )
+            stimulus = group.get("stimulus") or {}
+            cue_start = stimulus.get("cue_start_seconds")
+            cue_end = stimulus.get("cue_end_seconds")
+            confidence = stimulus.get("alignment_confidence")
+            asset = asset_by_id.get(stimulus.get("asset_id")) or {}
+            asset_duration = asset.get("source", {}).get("duration_seconds")
+            if (
+                stimulus.get("format") != "audio_cue"
+                or not isinstance(cue_start, (int, float))
+                or not isinstance(cue_end, (int, float))
+                or cue_start < 0
+                or cue_end <= cue_start
+                or not isinstance(asset_duration, (int, float))
+                or cue_end > asset_duration + 0.05
+                or not isinstance(confidence, (int, float))
+                or confidence < 0.96
+            ):
+                errors.append(f"question {qid}: speaking audio cue is invalid")
+
     unknown_answers = sorted(answer_ids - question_ids)
     errors.extend(f"answer references unknown question: {qid}" for qid in unknown_answers)
 
@@ -228,10 +293,89 @@ def release_blockers(
         for subject in required_subjects
         if subject_reviews.get(subject) != "approved"
     )
-    if pending_subjects:
+    authorization = manifest.get("quality", {}).get("release_authorization") or {}
+    authorized_scope = set(authorization.get("scope") or [])
+    owner_authorized = (
+        authorization.get("status") == "owner_authorized"
+        and required_subjects.issubset(authorized_scope)
+    )
+    if pending_subjects and not owner_authorized:
         blockers.append(
             "subject source review is not approved: " + ", ".join(pending_subjects)
         )
+
+    public_audio = [
+        asset
+        for asset in content.get("assets", [])
+        if asset.get("kind") == "audio"
+        and asset.get("subject") in {"listening", "speaking"}
+    ]
+    unavailable_audio = [
+        asset.get("id", "unknown")
+        for asset in public_audio
+        if asset.get("delivery", {}).get("status") != "published"
+        or not str(asset.get("delivery", {}).get("url") or "").startswith(
+            "/static/toefl/v2/"
+        )
+    ]
+    if unavailable_audio:
+        blockers.append(
+            "required audio is not published: " + ", ".join(unavailable_audio)
+        )
+
+    groups = {
+        item.get("id"): item
+        for item in content.get("groups", [])
+        if item.get("subject") == "speaking"
+    }
+    assets = {
+        item.get("id"): item
+        for item in content.get("assets", [])
+        if item.get("subject") == "speaking" and item.get("kind") == "audio"
+    }
+    speaking_questions = [
+        item
+        for item in content.get("questions", [])
+        if item.get("subject") == "speaking"
+    ]
+    speaking_duration = sum(
+        int(module.get("duration_seconds") or 0)
+        for module in content.get("modules", [])
+        if module.get("subject") == "speaking"
+    )
+
+    def speaking_question_ready(question: dict[str, Any]) -> bool:
+        group = groups.get(question.get("group_id")) or {}
+        stimulus = group.get("stimulus") or {}
+        config = question.get("input_config") or {}
+        cue_start = stimulus.get("cue_start_seconds")
+        cue_end = stimulus.get("cue_end_seconds")
+        confidence = stimulus.get("alignment_confidence")
+        asset_duration = (
+            assets.get(stimulus.get("asset_id")) or {}
+        ).get("source", {}).get("duration_seconds")
+        return (
+            config.get("preparation_seconds") == 0
+            and config.get("response_seconds")
+            == SPEAKING_RESPONSE_SECONDS.get(group.get("task_type"))
+            and group.get("question_ids") == [question.get("id")]
+            and stimulus.get("format") == "audio_cue"
+            and isinstance(cue_start, (int, float))
+            and isinstance(cue_end, (int, float))
+            and cue_end > cue_start >= 0
+            and isinstance(confidence, (int, float))
+            and confidence >= 0.96
+            and isinstance(asset_duration, (int, float))
+            and cue_end <= asset_duration + 0.05
+        )
+
+    speaking_contract_ready = (
+        len(speaking_questions) == 11
+        and speaking_duration == 480
+        and all(speaking_question_ready(question) for question in speaking_questions)
+    )
+    if not speaking_contract_ready:
+        blockers.append("speaking 2026 per-question audio/timing contract is incomplete")
 
     blocked_entries = answer_key.get("blocked", [])
     if len(blocked_entries) != blocked_count:

@@ -5,19 +5,19 @@
 <section class="mock-library">
   <div class="mock-library__intro">
     <div>
-      <p class="mock-eyebrow">TOEFL 2026 · 新版试运行</p>
-      <h2>三套真题，按新 spec 完整跑一遍</h2>
-      <p>本页已替换原托福刷题入口。三套试运行题包的听力与口语音频均已上线，可体验四科流程、模块计时、保存续考和客观题报告。</p>
+      <p class="mock-eyebrow">TOEFL 2026 · 正式刷题系统</p>
+      <h2>三套真题，按新版考试流程完整训练</h2>
+      <p>本页已替换原托福刷题入口。听力与口语原音频均已上线；口语按 11 题逐题播放、自动录音、限时收卷并保存续考。</p>
     </div>
     <div class="mock-library__metric">
       <strong>{{ exams|length }}</strong>
-      <span>套试运行题包 / {{ exams|sum(attribute='counts.questions') }} 个原子题</span>
+      <span>套正式题包 / {{ exams|sum(attribute='counts.questions') }} 个原子题</span>
     </div>
   </div>
 
-  <div class="mock-gate-note">
-    <strong>页面与音频已上线，题库仍处于来源审校期。</strong>
-    我们不会补猜缺失内容；四科来源复核和口语逐题时长通过前，只开放带明确标识的预览模式，不冒充正式模考。
+  <div class="mock-gate-note mock-gate-note--ready">
+    <strong>三套题包已通过结构、媒体和逐题计时门禁。</strong>
+    Listen and Repeat 每题 12 秒，Take an Interview 每题 45 秒；口语两阶段合计 8 分钟。
   </div>
 
   <div class="mock-card-grid">
@@ -38,7 +38,9 @@
         结构校验：{{ exam.validation_status }} · 题包审计：{{ exam.publish_status }} ·
         正式门禁：{{ '通过' if exam.release_ready else '未通过' }}
       </p>
-      <a class="mock-card__action" href="{{ exam.preview_url }}">开始新版预览</a>
+      <a class="mock-card__action" href="{{ exam.start_url }}">
+        {{ '开始正式刷题' if exam.release_ready else '开始新版预览' }}
+      </a>
     </article>
     {% endfor %}
   </div>

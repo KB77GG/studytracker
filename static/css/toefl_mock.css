@@ -137,6 +137,7 @@ button { cursor: pointer; font: inherit; }
 .mock-primary { border: 1px solid var(--sage); color: #fff; background: var(--sage); }
 .mock-primary:disabled { opacity: .45; cursor: not-allowed; }
 .mock-secondary { border: 1px solid #91a29e; color: var(--sage-dark); background: transparent; }
+.mock-secondary:disabled { opacity: .55; cursor: not-allowed; }
 .mock-footer {
   position: fixed; right: 0; bottom: 0; left: 0; min-height: 72px;
   display: flex; align-items: center; justify-content: space-between; padding: 12px 28px;
@@ -165,6 +166,7 @@ button { cursor: pointer; font: inherit; }
 .mock-library__metric strong { display: block; font-size: 42px; }
 .mock-library__metric span { color: var(--muted); }
 .mock-gate-note { margin-bottom: 22px; padding: 15px 18px; border-left: 4px solid var(--amber); background: #fff6e6; }
+.mock-gate-note--ready { border-left-color: var(--sage); background: #edf7f3; }
 .mock-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px; padding-bottom: 40px; }
 .mock-card { padding: 22px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
 .mock-card__topline { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; }

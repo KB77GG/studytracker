@@ -1,9 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "validated_at": "2026-07-27T05:41:21.318170+00:00",
+  "validated_at": "2026-07-29T02:09:27.828278+00:00",
   "package_dir": "data/toefl_practice_v2/2026-01-28_A",
   "source_root_checked": true,
-  "status": "blocked",
   "summary": {
     "exam_id": "toefl:2026-01-28-a",
     "questions": 120,
@@ -13,9 +12,8 @@
     "validation_errors": 0
   },
   "errors": [],
+  "status": "pass",
   "release_gate_checked": true,
-  "release_ready": false,
-  "release_blockers": [
-    "subject source review is not approved: listening, reading, speaking, writing"
-  ]
+  "release_ready": true,
+  "release_blockers": []
 }
