@@ -82,6 +82,39 @@ class ReadingScoringTest(unittest.TestCase):
 
         self.assertEqual(grade["correct"], 3)
 
+    def test_split_not_given_option_key_is_accepted_in_judgment_groups(self):
+        payload = {
+            "passages": [
+                {
+                    "groups": [
+                        {
+                            "desc": (
+                                "Do the following statements agree with the information given? "
+                                "Write TRUE, FALSE or NOT GIVEN."
+                            ),
+                            "questions": [
+                                {
+                                    "id": 10,
+                                    "number": 10,
+                                    "answer": "NG",
+                                    "options": [
+                                        {"key": "TRUE", "text": "TRUE"},
+                                        {"key": "FALSE", "text": "FALSE"},
+                                        {"key": "NOT", "text": "GIVEN"},
+                                    ],
+                                }
+                            ],
+                        }
+                    ]
+                }
+            ]
+        }
+
+        grade = _grade_reading_test_answers(payload, {"10": "NOT"})
+
+        self.assertEqual(grade["correct"], 1)
+        self.assertEqual(grade["wrong_numbers"], [])
+
     def test_unordered_multi_letter_groups_score_unique_letters_per_blank(self):
         payload = {
             "passages": [

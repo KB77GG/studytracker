@@ -9,6 +9,7 @@
     N: "NO",
     NO: "NO",
     NG: "NOT GIVEN",
+    NOT: "NOT GIVEN",
     NOTGIVEN: "NOT GIVEN",
     "NOT GIVEN": "NOT GIVEN",
     T: "TRUE",

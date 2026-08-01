@@ -6,6 +6,25 @@
 
 ---
 
+## 2026-08-01 模考复盘上下文、答题隔离与 NOT GIVEN 误判修复（本地已完成/未部署）
+
+- 独立工作树 `/Users/zhouxin/.codex/worktrees/mock-exam-review-isolation/studytracker`，分支
+  `codex/mock-exam-review-isolation`，基于 `origin/main@3d5a74fd`；主工作树及其未跟踪文件未改。
+- 复盘页补完整题组题干、题目选项、题目解析、逐题定位原句；听力按题目时间戳定位 transcript，
+  阅读读取 central sentence，并支持按 Section/Passage 展开完整听力原文或阅读文章；写作 Task 1
+  同时显示题库图表，并可点击查看原图。
+- 根因修复：模考听力草稿原按浏览器旧 `listening_student/guest` 键恢复，阅读还会读取普通刷题的
+  最近提交；现改为严格按模考 `session_token` 隔离，模考模式跳过普通练习历史，阅读增加同会话草稿恢复，
+  成功交卷后清理本会话草稿。
+- 发现并修复独立判分缺陷：部分题库把 `NOT GIVEN` 拆成 `key=NOT/text=GIVEN`，旧判分器不认识
+  `NOT`。新前后端统一映射；教师打开成绩列表/复盘时只对可明确识别的这类历史误判幂等重算。
+  剑21 Test4 截图答案由旧 32/40 校正为 37/40，真实错题为 Q18/Q23/Q37。
+- 验证：定向 Python 30 项、全部 Node 测试、Ruff、Black、模板双模式渲染和 diff check 通过；
+  剑21 Test4 Task 1 图表静态请求返回 200 `image/png`；
+  Chrome headless 1440px 实际渲染复盘页，题组、答案表、逐题原句/解析和阅读/听力两科布局正常；
+  Python 全仓 327 项中 325 通过，2 个既有静态音频 Range 测试因独立工作树缺 mp3 fixture 返回 404。
+- 本地任务分支已完成；未 push、未部署，生产会话尚未变更。上线后首次打开考试 8 成绩列表即可触发窄范围历史修正。
+
 ## 2026-07-29 三套 TOEFL 2026 正式刷题流程（已部署）
 
 - 已将 `2026-01-27_A`、`2026-01-28_A`、`2026-01-28_B` 从线上 preview 升为正式题包；每套 120 题、0 blocked，目录显示 `published / 正式门禁：通过`。旧 `data/toefl_practice` JSON 和旧版路由未修改。

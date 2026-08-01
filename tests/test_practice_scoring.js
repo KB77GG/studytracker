@@ -52,4 +52,25 @@ assert.equal(reading.correct, 1);
 assert.equal(reading.results[0].status, 'correct');
 assert.equal(reading.results[1].status, 'incorrect');
 
+const judgmentPayload = {
+  passages: [{
+    groups: [{
+      desc: 'Do the following statements agree? Write TRUE, FALSE or NOT GIVEN.',
+      questions: [{
+        id: 12,
+        number: 12,
+        answer: 'NG',
+        options: [
+          { key: 'TRUE', text: 'TRUE' },
+          { key: 'FALSE', text: 'FALSE' },
+          { key: 'NOT', text: 'GIVEN' },
+        ],
+      }],
+    }],
+  }],
+};
+const judgment = scoring.gradeReadingTestAnswers(judgmentPayload, { 12: 'NOT' });
+assert.equal(judgment.correct, 1);
+assert.equal(judgment.results[0].status, 'correct');
+
 console.log('practice scoring tests passed');

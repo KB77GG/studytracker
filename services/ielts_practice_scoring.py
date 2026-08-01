@@ -19,6 +19,9 @@ READING_JUDGMENT_ALIASES = {
     "N": "NO",
     "NO": "NO",
     "NG": "NOT GIVEN",
+    # 部分 idictation 题库把界面上的 “NOT GIVEN” 拆成 key=NOT, text=GIVEN。
+    # 浏览器实际提交的是 key，因此 judgment 题组内必须把 NOT 视为 NOT GIVEN。
+    "NOT": "NOT GIVEN",
     "NOTGIVEN": "NOT GIVEN",
     "NOT GIVEN": "NOT GIVEN",
     "T": "TRUE",

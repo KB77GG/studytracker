@@ -756,6 +756,7 @@ if (window.location.protocol === 'file:') {
 <script src="{{ url_for('static', filename='js/practice_scoring.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
+const examContext = {{ exam_context|default(none)|tojson }};
 const listeningTaskId = pageParams.get('task_id') || '';
 const listeningTaskToken = pageParams.get('token') || '';
 const assignedSectionNumber = Number(pageParams.get('section') || 0);
@@ -770,8 +771,13 @@ const test = assignedSectionNumber
 const audio = document.getElementById('audio');
 const audioBase = "{{ url_for('static', filename='listening/') }}";
 const storageScope = assignedSectionNumber ? `section_${assignedSectionNumber}` : 'full';
-const storageKey = `listening_test_answers_${test.id}_${storageScope}_${localStorage.getItem('listening_student') || 'guest'}`;
-const noteStorageKey = `listening_test_error_notes_${test.id}_${storageScope}_${localStorage.getItem('listening_student') || 'guest'}`;
+const practiceStorageOwner = localStorage.getItem('listening_student') || 'guest';
+const storageKey = examContext
+  ? `mock_exam_answers_${examContext.exam_id}_${examContext.session_token}_listening_${test.id}_${storageScope}`
+  : `listening_test_answers_${test.id}_${storageScope}_${practiceStorageOwner}`;
+const noteStorageKey = examContext
+  ? `mock_exam_notes_${examContext.exam_id}_${examContext.session_token}_listening_${test.id}_${storageScope}`
+  : `listening_test_error_notes_${test.id}_${storageScope}_${practiceStorageOwner}`;
 const practiceStartedAt = Date.now();
 let activeSectionIndex = 0;
 let activeView = 'practice';
@@ -1340,6 +1346,8 @@ async function syncListeningTestSubmission(baseHtml) {
 }
 
 async function loadExistingSubmission() {
+  // 模考答案只属于当前 access token；普通刷题的历史提交绝不能灌进模考卷。
+  if (examContext) return;
   try {
     const params = new URLSearchParams();
     if (listeningTaskId && listeningTaskToken) {
@@ -1574,7 +1582,7 @@ render();
 {% if exam_context %}
 <button type="button" class="exam-finish-btn" id="examFinishBtn">下一部分 →</button>
 <script>
-window.EXAM_CONTEXT = {{ exam_context|tojson }};
+window.EXAM_CONTEXT = examContext;
 (function() {
   const ctx = window.EXAM_CONTEXT;
   const deadlineMs = ctx.deadline_at ? Date.parse(ctx.deadline_at) : 0;
@@ -1632,6 +1640,8 @@ window.EXAM_CONTEXT = {{ exam_context|tojson }};
       });
       const data = await resp.json();
       if (!resp.ok || !data.ok) throw new Error(data.error || 'submit_failed');
+      localStorage.removeItem(storageKey);
+      localStorage.removeItem(noteStorageKey);
       window.location.href = data.next_url || ctx.next_url;
     } catch (err) {
       if (finishBtn) { finishBtn.disabled = false; finishBtn.textContent = 'Finish section'; }

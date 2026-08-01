@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨电脑开发交接
 
 > 这是滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-07-29（Asia/Shanghai）。
+> 最近更新：2026-08-01（Asia/Shanghai）。
 
 ## 使用规则
 
@@ -10,6 +10,25 @@
 3. 不覆盖或删除来源不明的本地改动；先确认它们是否属于用户或另一项任务。
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
+
+## 2026-08-01 当前任务：模考复盘与答题状态隔离（本地待发布）
+
+- 工作树：`/Users/zhouxin/.codex/worktrees/mock-exam-review-isolation/studytracker`；分支：
+  `codex/mock-exam-review-isolation`；基线：`origin/main@3d5a74fd`。没有改主工作树或其用户未跟踪文件。
+- 本地实现已完成：复盘页显示完整题目结构、错题题干、选项、定位原句、解析，以及可展开的
+  Section transcript / Passage 全文；“只看错题”会连同上下文一起筛选；写作 Task 1 显示题库图表，
+  并可点击查看原图。
+- 学生端模考草稿改为 `exam_id + session_token + section + test` 隔离；听力不再复用旧姓名/guest 草稿，
+  阅读不再加载普通刷题历史，并新增当前模考会话的本地草稿保存/恢复；成功交卷即清理。
+- `NOT GIVEN` 的题库拆分值 `NOT` 已加入前后端判分别名。仅当历史结果明确为 `answer=NG/NOT GIVEN`、
+  `value=NOT` 且旧判 0 分时，后台成绩列表/复盘才从保存答案幂等重算；其他历史成绩不动。
+  用剑21 Test4 截图答案复现：32/40 → 37/40，Band 7.0 → 8.5，错题只剩 Q18/Q23/Q37。
+- 验证：定向 Python 30 passed；全部 Node passed；Ruff、Black、模板普通/模考双模式渲染、
+  `git diff --check` 通过；剑21 Test4 Task 1 图表静态请求返回 200 `image/png`；Chrome headless 1440px
+  实际渲染复盘页布局正常。全仓 Python 327 项为
+  325 passed + 2 个既有静态音频 fixture 404 失败。
+- 下一步：用两名测试学生同机同卷走一次真实端到端隔离；当前未 push/deploy，后续获明确授权后再推送
+  main 并验证生产 5002。
 
 ## 当前基线
 

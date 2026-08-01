@@ -501,6 +501,7 @@ body.exam-mode #resetBtn { display: none; }
 <script src="{{ url_for('static', filename='js/practice_scoring.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
+const examContext = {{ exam_context|default(none)|tojson }};
 const rawTestData = {{ test | tojson }};
 const readingTaskId = pageParams.get("task_id") || "";
 const readingTaskToken = pageParams.get("token") || "";
@@ -512,10 +513,38 @@ const testData = assignedPassageNumber
     }
   : rawTestData;
 const answers = {};
+const examDraftStorageKey = examContext
+  ? `mock_exam_answers_${examContext.exam_id}_${examContext.session_token}_reading_${testData.id}_full`
+  : "";
 let currentPassageId = testData.passages[0]?.id || "";
 let resultMode = false;
 let startedAt = Date.now();
 let serverResult = null;
+
+function updateExamSavedIndicator(label = "Saved") {
+  const indicator = document.getElementById("examSavedIndicator");
+  if (indicator) indicator.textContent = label;
+}
+
+function persistExamDraft() {
+  if (!examDraftStorageKey) return;
+  try {
+    localStorage.setItem(examDraftStorageKey, JSON.stringify(answers));
+    updateExamSavedIndicator();
+  } catch (_error) {
+    updateExamSavedIndicator("Not saved");
+  }
+}
+
+function restoreExamDraft() {
+  if (!examDraftStorageKey) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem(examDraftStorageKey) || "{}");
+    if (saved && typeof saved === "object" && !Array.isArray(saved)) Object.assign(answers, saved);
+  } catch (_error) {
+    localStorage.removeItem(examDraftStorageKey);
+  }
+}
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({
@@ -544,6 +573,7 @@ const readingJudgmentAliases = {
   N: "NO",
   NO: "NO",
   NG: "NOT GIVEN",
+  NOT: "NOT GIVEN",
   NOTGIVEN: "NOT GIVEN",
   "NOT GIVEN": "NOT GIVEN",
   T: "TRUE",
@@ -813,6 +843,7 @@ function handleAnswerChange(event) {
   } else if (target.dataset.qid) {
     answers[target.dataset.qid] = target.value;
   }
+  persistExamDraft();
   if (resultMode && serverResult) {
     serverResult = null;
     setSyncStatus("答案已修改，需重新提交后才会更新记录和报告", "warn");
@@ -960,6 +991,7 @@ async function submitAnswers() {
 
 function resetAnswers() {
   Object.keys(answers).forEach((key) => delete answers[key]);
+  if (examDraftStorageKey) localStorage.removeItem(examDraftStorageKey);
   serverResult = null;
   resultMode = false;
   document.body.classList.remove("result-mode");
@@ -969,6 +1001,8 @@ function resetAnswers() {
 }
 
 async function loadExistingSubmission() {
+  // 模考按 session token 恢复本地草稿，不读取普通刷题的“上次提交”。
+  if (examContext) return;
   try {
     const params = new URLSearchParams();
     if (readingTaskId && readingTaskToken) {
@@ -1026,6 +1060,7 @@ setInterval(() => {
   document.getElementById("timerValue").textContent = `${mm}:${ss}`;
 }, 1000);
 
+restoreExamDraft();
 renderPassageTabs();
 updatePracticeHeader();
 renderPassage(testData.passages[0]);
@@ -1037,7 +1072,7 @@ revealReadingStudyEntry();
 {% if exam_context %}
 <button type="button" class="exam-finish-btn" id="examFinishBtn">下一部分 →</button>
 <script>
-window.EXAM_CONTEXT = {{ exam_context|tojson }};
+window.EXAM_CONTEXT = examContext;
 (function() {
   const ctx = window.EXAM_CONTEXT;
   const deadlineMs = ctx.deadline_at ? Date.parse(ctx.deadline_at) : 0;
@@ -1104,6 +1139,7 @@ window.EXAM_CONTEXT = {{ exam_context|tojson }};
       });
       const data = await resp.json();
       if (!resp.ok || !data.ok) throw new Error(data.error || 'submit_failed');
+      if (examDraftStorageKey) localStorage.removeItem(examDraftStorageKey);
       window.location.href = data.next_url || ctx.next_url;
     } catch (err) {
       if (finishBtn) { finishBtn.disabled = false; finishBtn.textContent = 'Finish section'; }

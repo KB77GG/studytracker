@@ -2,6 +2,7 @@ import unittest
 from datetime import datetime
 from types import SimpleNamespace
 
+from api.mock_exam_admin import _repair_legacy_not_given_grade
 from services import mock_exam_review as review
 
 
@@ -10,11 +11,36 @@ def _listening_payload():
         "sections": [
             {
                 "title": "Self-drive tours",
+                "source_title": "Part 1",
+                "transcript": [
+                    {
+                        "start": 10.0,
+                        "end": 13.0,
+                        "en": "We grow lettuces here.",
+                        "cn": "我们在这里种生菜。",
+                    },
+                    {
+                        "start": 14.0,
+                        "end": 17.0,
+                        "en": "Herbs grow beside them.",
+                        "cn": "香草种在旁边。",
+                    },
+                ],
                 "groups": [
                     {
                         "title": "SELF-DRIVE TOURS IN THE USA",
                         "desc": "Questions 1-2\nComplete the notes below.\nWrite ONE WORD.",
-                        "questions": [{"id": 1, "number": 1}, {"id": 2, "number": 2}],
+                        "collect": "Plants: $1$ and $2$",
+                        "questions": [
+                            {"id": 1, "number": 1, "start": 10, "end": 13},
+                            {
+                                "id": 2,
+                                "number": 2,
+                                "start": 14,
+                                "end": 17,
+                                "analysis": "Herbs is the plural clue.",
+                            },
+                        ],
                     }
                 ],
             },
@@ -37,11 +63,26 @@ def _reading_payload():
             {
                 "title": "Urban farming in Paris",
                 "question_name": "Q1-13",
+                "content": {
+                    "title": "Urban farming",
+                    "paragraphs": [{"label": "A", "text": "Rooftop farms are expanding."}],
+                },
                 "groups": [
                     {
                         "title": "Urban farming",
                         "desc": "Questions 1-2  Complete the sentences below.",
-                        "questions": [{"id": 1, "number": 1}, {"id": 2, "number": 2}],
+                        "questions": [
+                            {
+                                "id": 1,
+                                "number": 1,
+                                "title": "Rooftop farms are becoming more common.",
+                                "options": [{"key": "TRUE", "text": "TRUE"}],
+                                "central_sentences": {
+                                    "sentences": ["Rooftop farms are expanding."]
+                                },
+                            },
+                            {"id": 2, "number": 2},
+                        ],
                     }
                 ],
             }
@@ -97,13 +138,47 @@ class QuestionIndexTest(unittest.TestCase):
         )
         self.assertEqual(review.build_question_index(None, "reading"), {})
 
-    def test_long_instruction_is_truncated(self):
+    def test_long_instruction_is_preserved(self):
         payload = {
             "sections": [{"groups": [{"desc": "x" * 400, "questions": [{"id": 1, "number": 1}]}]}]
         }
         instruction = review.build_question_index(payload, "listening")["1"]["instruction"]
-        self.assertEqual(len(instruction), review.MAX_INSTRUCTION_CHARS)
-        self.assertTrue(instruction.endswith("…"))
+        self.assertEqual(instruction, "x" * 400)
+
+    def test_question_context_and_source_are_indexed(self):
+        listening = review.build_question_index(_listening_payload(), "listening")
+        self.assertEqual(listening["1"]["group_prompt"], "Plants: 【Q1】 and 【Q2】")
+        self.assertEqual(listening["1"]["evidence"][0]["text"], "We grow lettuces here.")
+        self.assertEqual(listening["1"]["source"]["transcript"][0]["time"], "00:10")
+
+        reading = review.build_question_index(_reading_payload(), "reading")
+        self.assertEqual(reading["1"]["question_stem"], "Rooftop farms are becoming more common.")
+        self.assertEqual(reading["1"]["evidence"][0]["text"], "Rooftop farms are expanding.")
+        self.assertEqual(reading["1"]["source"]["paragraphs"][0]["label"], "A")
+
+
+class WritingReviewTest(unittest.TestCase):
+    def test_writing_image_is_mapped_to_static_asset(self):
+        tasks = review.build_writing_review_tasks(
+            {
+                "tasks": [
+                    {"task": 1, "image": "images/task1.png"},
+                    {"task": 2, "image": None},
+                ]
+            }
+        )
+        self.assertEqual(tasks[0]["image_src"], "/static/writing_tests/images/task1.png")
+        self.assertEqual(tasks[1]["image_src"], "")
+
+    def test_existing_static_prefix_is_not_duplicated(self):
+        tasks = review.build_writing_review_tasks(
+            {"tasks": [{"image": "/static/writing_tests/images/task1.png"}]}
+        )
+        self.assertEqual(tasks[0]["image_src"], "/static/writing_tests/images/task1.png")
+
+    def test_parent_path_is_not_exposed(self):
+        tasks = review.build_writing_review_tasks({"tasks": [{"image": "../secret.png"}]})
+        self.assertEqual(tasks[0]["image_src"], "")
 
 
 class ReviewUnitsTest(unittest.TestCase):
@@ -127,6 +202,10 @@ class ReviewUnitsTest(unittest.TestCase):
         self.assertTrue(rows[0]["is_correct"])
         self.assertFalse(rows[1]["is_correct"])
         self.assertEqual(rows[1]["student_answer"], "herb")
+        self.assertEqual(units[0]["groups"][0]["prompt"], "Plants: 【Q1】 and 【Q2】")
+        self.assertEqual(rows[1]["evidence"][0]["text"], "Herbs grow beside them.")
+        self.assertEqual(rows[1]["question_analysis"], "Herbs is the plural clue.")
+        self.assertTrue(rows[1]["has_context"])
 
         blank_row = units[1]["groups"][0]["rows"][1]
         self.assertFalse(blank_row["answered"])
@@ -154,6 +233,25 @@ class ReviewUnitsTest(unittest.TestCase):
         self.assertEqual(review.parse_json_list("{not json"), [])
         self.assertEqual(review.parse_json_list('{"a": 1}'), [])
         self.assertEqual(review.parse_json_list(None), [])
+        self.assertEqual(review.parse_json_dict("[]"), {})
+        self.assertEqual(review.parse_json_dict("{not json"), {})
+
+    def test_only_legacy_split_not_given_misgrade_is_detected(self):
+        self.assertTrue(
+            review.has_legacy_not_given_misgrade(
+                [{"answer": "NG", "value": "NOT", "marks": 1, "awarded": 0}]
+            )
+        )
+        self.assertFalse(
+            review.has_legacy_not_given_misgrade(
+                [{"answer": "NG", "value": "NOT", "marks": 1, "awarded": 1}]
+            )
+        )
+        self.assertFalse(
+            review.has_legacy_not_given_misgrade(
+                [{"answer": "N", "value": "YES", "marks": 1, "awarded": 0}]
+            )
+        )
 
 
 class SummaryTest(unittest.TestCase):
@@ -215,6 +313,40 @@ class SummaryTest(unittest.TestCase):
         self.assertEqual(summary["reading"]["duration_text"], "60 分 0 秒")
         self.assertFalse(summary["writing"]["submitted"])
         self.assertEqual(summary["writing"]["task1_words"], 0)
+
+
+class LegacyReadingRepairTest(unittest.TestCase):
+    def test_split_not_given_misgrade_is_regraded_from_saved_answers(self):
+        payload = {
+            "passages": [
+                {
+                    "groups": [
+                        {
+                            "desc": "Write TRUE, FALSE or NOT GIVEN.",
+                            "questions": [{"id": 10, "number": 10, "answer": "NG"}],
+                        }
+                    ]
+                }
+            ]
+        }
+        sess = SimpleNamespace(
+            reading_answers_json='{"10": "NOT"}',
+            reading_results_json=(
+                '[{"ids":["10"],"numbers":[10],"q":"10","answer":"NG",'
+                '"value":"NOT","marks":1,"awarded":0}]'
+            ),
+            reading_correct=0,
+            reading_total=1,
+            reading_accuracy=0.0,
+            reading_ielts_score=None,
+            reading_wrong_numbers_json="[10]",
+        )
+
+        self.assertTrue(_repair_legacy_not_given_grade(sess, payload))
+        self.assertEqual(sess.reading_correct, 1)
+        self.assertEqual(sess.reading_accuracy, 100.0)
+        self.assertEqual(sess.reading_wrong_numbers_json, "[]")
+        self.assertFalse(_repair_legacy_not_given_grade(sess, payload))
 
 
 if __name__ == "__main__":
